@@ -1,0 +1,556 @@
+
+<div id="nav" class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="">File</a></li>
+                <li id="header_items_select_menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_select_menu">
+                        Items
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="active"><a class="menu-button" href="#">Button</a></li>
+                        <li><a class="menu-arrow" href="#">Arrow</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Run</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+
+<div id="contents">
+
+<div id="main" class="col-md-12">
+    <div id="main_container" class="stage_container">
+        <div id="main_scroll" class="scroll_x_content">
+            <div id="main-wrapper">
+                <canvas id="canvas_container" class="canvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="sidebar" class="col-md-3" style="display: none">
+<div id="sidebar_container" class="stage_container">
+
+<div id="sidebar-wrapper">
+
+<div id="sidebar-config" class="scroll_y_content">
+<form enctype="multipart/form-data" method="post" id="btn-entryForm">
+
+<div class="config config1">
+    <div id="btn-configBg" class="configBox">
+        <div class="cssedit-headliner">Background</div>
+        <div class="forms">
+            <div class="gradient-color">
+                <div id="btn-bg-color1" class="colorPicker">
+                </div>
+                <div id="btn-bg-color2" class="colorPicker" style="display: none">
+                </div>
+                <div id="btn-bg-color3" class="colorPicker" style="display: none">
+                </div>
+                <div id="btn-bg-color4" class="colorPicker" style="display: none">
+                </div>
+                <div id="btn-bg-color5" class="colorPicker">
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>GradientStep:</label>
+                    <input type="number" value="2" min="2" max="5" id="btn-gradient-step"/>
+                    <div id="btn-slider-gradient"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0;"></a>
+                    </div>
+
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Degree:</label>
+                    <input type="text" class="btn-slider-gradient-deg-value" value="0" min="0" max="315" readonly="">
+
+                    <div id="btn-slider-gradient-deg"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#configBg -->
+</div>
+<div class="config">
+
+    <div id="btn-configBorder" class="configBox">
+        <div class="cssedit-headliner">border / padding</div>
+        <div class="forms">
+            <div>
+                <div id="btn-border-color" class="colorPicker hex">
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Width:</label>
+                    <input type="text" class="btn-slider-border-width-value" value="0" readonly="">
+
+                    <div id="btn-slider-border-width"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Radius:</label>
+                    <input type="text" class="btn-slider-border-radius-value" value="0" readonly="">
+
+                    <div id="btn-slider-border-radius"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#configBorder -->
+</div>
+
+
+<div class="config">
+    <div id="btn-configShadow" class="configBox">
+        <div class="cssedit-headliner">drop shadow</div>
+        <div class="forms">
+            <div>
+                <div id="btn-shadow-color" class="colorPicker rgb">
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Horizontal:</label>
+                    <input type="text" class="btn-slider-shadow-left-value" value="0" readonly="">
+
+                    <div id="btn-slider-shadow-left"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Vertical:</label>
+                    <input type="text" class="btn-slider-shadow-top-value" value="0" readonly="">
+
+                    <div id="btn-slider-shadow-top"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Size:</label>
+                    <input type="text" class="btn-slider-shadow-size-value" value="0" readonly="">
+
+                    <div id="btn-slider-shadow-size"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Opacity:</label>
+                    <input type="text" class="btn-slider-shadow-opacity-value" value="0" readonly="">
+
+                    <div id="btn-slider-shadow-opacity"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#configShadow -->
+</div>
+<div class="config">
+    <div id="btn-configShadowinset" class="configBox">
+        <div class="cssedit-headliner">inner shadow</div>
+        <div class="forms">
+            <div>
+                <div id="btn-shadowinset-color" class="colorPicker">
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Horizontal:</label>
+                    <input type="text" class="btn-slider-shadowinset-left-value" value="0" readonly="">
+
+                    <div id="btn-slider-shadowinset-left"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Vertical:</label>
+                    <input type="text" class="btn-slider-shadowinset-top-value" value="0" readonly="">
+
+                    <div id="btn-slider-shadowinset-top"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Size:</label>
+                    <input type="text" class="btn-slider-shadowinset-size-value" value="0" readonly="">
+
+                    <div id="btn-slider-shadowinset-size"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Opacity:</label>
+                    <input type="text" class="btn-slider-shadowinset-opacity-value" value="0"
+                           readonly="">
+
+                    <div id="btn-slider-shadowinset-opacity"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#configShadowinset -->
+
+</div>
+<!-- /.config -->
+
+<div class="config config2">
+
+    <div id="btn-configText" class="configBox">
+        <div class="cssedit-headliner">text font</div>
+        <div class="forms">
+            <div>
+                <div id="btn-font-color" class="colorPicker">
+                </div>
+            </div>
+            <div class="spin">
+                <div class="meter">
+                    <label>Size:</label>
+                    <input type="text" class="btn-slider-font-size-value" value="0" readonly="">
+
+                    <div id="btn-slider-font-size"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#configText -->
+
+</div>
+<div class="config">
+    <div id="btn-configTextShadow1" class="configBox">
+        <div class="cssedit-headliner">text shadow 1</div>
+        <div class="forms">
+            <div>
+                <div id="btn-text-shadow1-color" class="colorPicker rgb">
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Horizontal:</label>
+                    <input type="text" class="btn-slider-text-shadow1-left-value" value="0" readonly="">
+
+                    <div id="btn-slider-text-shadow1-left"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Vertical:</label>
+                    <input type="text" class="btn-slider-text-shadow1-top-value" value="0" readonly="">
+
+                    <div id="btn-slider-text-shadow1-top"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Size:</label>
+                    <input type="text" class="btn-slider-text-shadow1-size-value" value="0" readonly="">
+
+                    <div id="btn-slider-text-shadow1-size"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Opacity:</label>
+                    <input type="text" class="btn-slider-text-shadow1-opacity-value" value="0"
+                           readonly="">
+
+                    <div id="btn-slider-text-shadow1-opacity"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#configtextshadow1 -->
+
+</div>
+<div class="config">
+    <div id="btn-configTextShadow2" class="configBox">
+        <div class="cssedit-headliner">text shadow 2</div>
+        <div class="forms">
+            <div>
+                <div id="btn-text-shadow2-color" class="colorPicker rgb">
+                </div>
+            </div>
+
+            <div>
+                <div class="meter">
+                    <label>Left+Right:</label>
+                    <input type="text" class="btn-slider-text-shadow2-opacity-value" value="0"
+                           readonly="">
+
+                    <div id="btn-slider-text-shadow2-opacity"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Left+Right:</label>
+                    <input type="text" class="btn-slider-text-shadow2-left-value" value="0" readonly="">
+
+                    <div id="btn-slider-text-shadow2-left"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Left+Right:</label>
+                    <input type="text" class="btn-slider-text-shadow2-top-value" value="0" readonly="">
+
+                    <div id="btn-slider-text-shadow2-top"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="meter">
+                    <label>Left+Right:</label>
+                    <input type="text" class="btn-slider-text-shadow2-size-value" value="0" readonly="">
+
+                    <div id="btn-slider-text-shadow2-size"
+                         class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><a
+                    class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 0%;"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#configtextshadow2 -->
+
+</div>
+<!-- /.config -->
+<input type="hidden" name="btn-bg-color1" value="ffffff" id="btn-bg-color1-input">
+<input type="hidden" name="btn-bg-color2" value="ebebeb" id="btn-bg-color2-input">
+<input type="hidden" name="btn-bg-color3" value="dbdbdb" id="btn-bg-color3-input">
+<input type="hidden" name="btn-bg-color4" value="ffffff" id="btn-bg-color4-input">
+<input type="hidden" name="btn-bg-color5" value="b5b5b5" id="btn-bg-color5-input">
+<input type="hidden" name="btn-border-color" value="949494" id="btn-border-color-input">
+<input type="hidden" name="btn-shadow-color" value="000000" id="btn-shadow-color-input">
+<input type="hidden" name="btn-shadowinset-color" value="ffffff" id="btn-shadowinset-color-input">
+<input type="hidden" name="btn-font-color" value="050505" id="btn-font-color-input">
+<input type="hidden" name="btn-text-shadow1-color" value="000000" id="btn-text-shadow1-color-input">
+<input type="hidden" name="btn-text-shadow2-color" value="ffffff" id="btn-text-shadow2-color-input">
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="cssCode" style="display: none">
+        <pre id="btn-code" class="code">div.css3button {
+            <span class="property">font-family</span>: Arial, Helvetica, sans-serif;
+            <span class="property">font-size</span>: <span class="c btn-slider-font-size-value">14</span>px;
+            <span class="property">color</span>: #<span class="c btn-font-color">ffffff</span>;
+            <span class="property">padding</span>: <span class="s btn-slider-padding-top-value">10</span>px <span class="s btn-slider-padding-left-value">20</span>px;
+            <span class="property">background</span>: <span class="property">-moz-linear-gradient</span>(
+                <span class="btn-slider-gradient-deg-value">0</span>deg,
+                #<span class="c btn-bg-color1">ffbdf5</span> 0%,
+                <span id="btn-bg-color2-moz-flag">
+                    #<span class="c btn-bg-color2">ff82ec</span> <span class="p btn-bg-color2-position">25</span>%,
+                </span>
+                <span id="btn-bg-color3-moz-flag">
+                    #<span class="c btn-bg-color3">fc46e1</span> <span class="p btn-bg-color3-position">50</span>%,
+                </span>
+                <span id="btn-bg-color4-moz-flag">
+                    #<span class="c btn-bg-color4">fc46e1</span> <span class="p btn-bg-color4-position">75</span>%,
+                </span>
+                #<span class="c btn-bg-color5">fc46e1</span> 100%
+            );
+            <span class="property">background</span>: <span class="property">-webkit-gradient</span>(
+                linear, <span class="btn-slider-gradient-deg-value-webkit">left top, left bottom</span>,
+                from(#<span class="c btn-bg-color1">ffbdf5</span>),
+            <span id="btn-bg-color2-webkit-flag">
+                <span>
+                    color-stop(<span class="p">0.<span class="btn-bg-color2-position">25</span></span>,
+                    #<span class="c btn-bg-color2">ff82ec</span>),
+                </span>
+            </span>
+            <span id="btn-bg-color3-webkit-flag">
+                <span>
+                    color-stop(<span class="p">0.<span class="btn-bg-color3-position">50</span></span>,
+                    #<span class="c btn-bg-color3">ff82ec</span>),
+                </span>
+            </span>
+            <span id="btn-bg-color4-webkit-flag">
+                <span>
+                    color-stop(<span class="p">0.<span class="btn-bg-color4-position">75</span></span>,
+                    #<span class="c btn-bg-color4">ff82ec</span>),
+                </span>
+            </span>
+                to(#<span class="c btn-bg-color5">fc46e1</span>));
+            <span class="property">-moz-border-radius</span>: <span class="s btn-slider-border-radius-value">30</span>px;
+            <span class="property">-webkit-border-radius</span>: <span class="s btn-slider-border-radius-value">30</span>px;
+            <span class="property">border-radius</span>: <span class="s btn-slider-border-radius-value">30</span>px;
+            <span class="property">border</span>: <span class="s btn-slider-border-width-value">3</span>px solid #<span
+        class="c btn-border-color">ffffff</span>;
+            <span class="property">-moz-box-shadow</span>:
+                <span class="s btn-slider-shadow-left-value">0</span>px <span class="s btn-slider-shadow-top-value">3</span>px <span
+        class="s btn-slider-shadow-size-value">11</span>px rgba(<span class="c btn-shadow-color">000,000,000</span>,<span
+        class="a btn-slider-shadow-opacity-value">0.5</span>),
+                inset <span class="s btn-slider-shadowinset-left-value">0</span>px <span class="s btn-slider-shadowinset-top-value">0</span>px <span
+        class="s btn-slider-shadowinset-size-value">1</span>px rgba(<span
+        class="c btn-shadowinset-color">255,000,217</span>,<span class="a btn-slider-shadowinset-opacity-value">1</span>);
+            <span class="property">-webkit-box-shadow</span>:
+                <span class="s btn-slider-shadow-left-value">0</span>px <span class="s btn-slider-shadow-top-value">3</span>px <span
+        class="s btn-slider-shadow-size-value">11</span>px rgba(<span class="c btn-shadow-color">000,000,000</span>,<span
+        class="a btn-slider-shadow-opacity-value">0.5</span>),
+                inset <span class="s btn-slider-shadowinset-left-value">0</span>px <span class="s btn-slider-shadowinset-top-value">0</span>px <span
+        class="s btn-slider-shadowinset-size-value">1</span>px rgba(<span
+        class="c btn-shadowinset-color">255,000,217</span>,<span class="a btn-slider-shadowinset-opacity-value">1</span>);
+            <span class="property">box-shadow</span>:
+                <span class="s btn-slider-shadow-left-value">0</span>px <span class="s btn-slider-shadow-top-value">3</span>px <span
+        class="s btn-slider-shadow-size-value">11</span>px rgba(<span class="c btn-shadow-color">000,000,000</span>,<span
+        class="a btn-slider-shadow-opacity-value">0.5</span>),
+                inset <span class="s btn-slider-shadowinset-left-value">0</span>px <span class="s btn-slider-shadowinset-top-value">0</span>px <span
+        class="s btn-slider-shadowinset-size-value">1</span>px rgba(<span
+        class="c btn-shadowinset-color">255,000,217</span>,<span class="a btn-slider-shadowinset-opacity-value">1</span>);
+            <span class="property">text-shadow</span>:
+                <span class="s btn-slider-text-shadow1-left-value">0</span>px <span class="s btn-slider-text-shadow1-top-value">-1</span>px <span
+        class="s btn-slider-text-shadow1-size-value">0</span>px rgba(<span
+        class="c btn-text-shadow1-color">000,000,000</span>,<span class="a btn-slider-text-shadow1-opacity-value">0.2</span>),
+                <span class="s btn-slider-text-shadow2-left-value">0</span>px <span class="s btn-slider-text-shadow2-top-value">1</span>px <span
+        class="s btn-slider-text-shadow2-size-value">0</span>px rgba(<span
+        class="c btn-text-shadow2-color">255,255,255</span>,<span class="a btn-slider-text-shadow2-opacity-value">0.3</span>);
+            display: table;
+            z-index:100;
+            width: 100%;
+            height: 100%;
+        }
+        </pre>
+
+    <!-- #Button CSS -->
+    <style type="text/css" id="btn-CSS" scoped="">div.css3button {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #050505;
+        padding: 10px 20px;
+        background: -moz-linear-gradient(
+                top,
+                #ffffff 0%,
+                #ebebeb 50%,
+                #dbdbdb 50%,
+                #b5b5b5);
+        background: -webkit-gradient(
+                linear, left top, left bottom,
+                from(#ffffff),
+                color-stop(0.50, #ebebeb),
+                color-stop(0.50, #dbdbdb),
+                to(#b5b5b5));
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        border-radius: 10px;
+        border: 1px solid #949494;
+        -moz-box-shadow: 0 1px 3px rgba(000, 000, 000, 0.5),
+        inset 0 0 2px rgba(255, 255, 255, 1);
+        -webkit-box-shadow: 0 1px 3px rgba(000, 000, 000, 0.5),
+        inset 0 0 2px rgba(255, 255, 255, 1);
+        box-shadow: 0 1px 3px rgba(000, 000, 000, 0.5),
+        inset 0 0 2px rgba(255, 255, 255, 1);
+        text-shadow: 0 -1px 0 rgba(000, 000, 000, 0.2),
+        0 1px 0 rgba(255, 255, 255, 1);
+    }
+    </style>
+
+    <div id="codeCache">
+        <div id="btn-bg-color2-moz-cache"></div>
+        <div id="btn-bg-color3-moz-cache"></div>
+        <div id="btn-bg-color4-moz-cache"></div>
+        <div id="btn-bg-color2-webkit-cache"></div>
+        <div id="btn-bg-color3-webkit-cache"></div>
+        <div id="btn-bg-color4-webkit-cache"></div>
+    </div>
+    <!-- /#cache -->
+
+</div>
+
+
+<div class="footer-message warn-message">
+    <div><p></p></div>
+    <input class="footer-message-display" type="hidden" value="0" >
+</div>
+<div class="footer-message error-message">
+    <div><p></p></div>
+    <input class="footer-message-display" type="hidden" value="0" >
+</div>
+<div id="flush_warn">
+    <div><p></p></div>
+</div>
+</div>
