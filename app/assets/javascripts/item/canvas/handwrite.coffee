@@ -4,7 +4,7 @@ $ ->
   item = null
   enableMoveEvent = true
   queueLoc = null
-  contanerStates = new ContainerState()
+  window.contanerStates = new ContainerState()
   zindex = 1
 
   windowToCanvas = (canvas, x, y) ->

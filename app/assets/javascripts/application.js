@@ -13,6 +13,7 @@
 //= require jquery-1.9.1.min
 //= require jquery_ujs
 //= require jquery-ui.min
+//= require turbolinks
 // IDE not aware under vendor/asset/
 //= require ../../../vendor/assets/bootstrap/bootstrap.js
 //= require ../../../vendor/assets/contextmenu/Super-Theme-Switcher/jquery.themeswitcher.js
@@ -26,5 +27,4 @@
 //= require item/canvas/arrow
 //= require item/css/button
 //= require item/canvas/handwrite
-//= require turbolinks
 // require_tree .

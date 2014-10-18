@@ -3,6 +3,7 @@ class Button extends CanvasBase
     super(loc)
     @moveLoc = {x:loc.x, y:loc.y}
     @beforeLoc = {x:@moveLoc.x, y: @moveLoc.y}
+    @css = ""
   getId: ->
     'button_' + super()
   draw: (loc) ->

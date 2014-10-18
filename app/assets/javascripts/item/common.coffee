@@ -2,6 +2,11 @@
 class Constant
   @RESTORE_MARGIN = 5
   @ZINDEX_TOP = 1000
+
+  # 操作履歴保存
+  @OPERATION_STORE_PREFIX = "o_"
+  @OPERATION_STORE_MAX = 30
+
   class @MODE
     @DRAW:0
     @EDIT:1
@@ -9,6 +14,8 @@ class Constant
   class @ItemType
     @ARROW: 0
     @BUTTON: 1
+  class @keyboardKeyCode
+    @z : 90
 
 ### Canvas基底クラス ###
 class CanvasBase
@@ -39,23 +46,38 @@ class CanvasBase
 
 ### コンテナ状態保存 ###
 class ContainerState
+  @storage = localStorage
+
   constructor: ->
     @itemStates = []
-  save: (canvasObj, zindex) ->
-    iState = new ItemState(canvasObj.getRect(), zindex)
+  save: (obj, zindex) ->
+    iState = new ItemState(obj, zindex)
     @itemStates.push(iState)
   dbSave: ->
 
   dbLoad: ->
 
   class ItemState
-    constructor: (rect, zindex) ->
+    constructor: (obj, zindex) ->
       @zindex = zindex
-      @rect = rect # x y width height
+      @obj = obj
       # ↓後回し
       @cssCode = null
 
-      console.log('ItemState constructor: rect:' + @rect.x + ' ' + @rect.y + ' ' + @rect.w + ' ' + @rect.h)
+# 共有変数定義
+initCommonVar = ->
+  window.sidebarWrapper = $("#sidebar-wrapper")
+  window.mainScroll = $('#main_scroll')
+  window.mainWrapper = $('#main-wrapper')
+  window.originalMainContainerSize = {w: mainWrapper.width(), h: mainWrapper.height()}
+  window.cssCode = $("#cssCode")
+  window.codeCache = $("#codeCache")
+  window.messageTimer = null
+  window.flushMessageTimer = null
+  window.drawingCanvas = document.getElementById('canvas_container')
+  window.drawingContext = drawingCanvas.getContext('2d')
+  window.mode = Constant.MODE.DRAW
+  window.selectItemMenu = Constant.ItemType.BUTTON
 
 # JQueryUIのドラッグイベントとリサイズをセット
 initDraggableAndResizable =  ->
@@ -423,19 +445,24 @@ flushWarn = (message) ->
     fw.hide()
   , 100)
 
+#キーイベント
+initKeyEvent = ->
+  $(window).keydown( (e)->
+    e.preventDefault()
+    isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+    if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
+      if e.keyCode == Constant.keyboardKeyCode.z
+        if e.shiftKey
+          # Shift + Ctrl + z → Redo
+          flushWarn("Redo")
+        else
+          # Ctrl + z → Undo
+          flushWarn("Undo")
+  )
+
 $ ->
-  window.sidebarWrapper = $("#sidebar-wrapper")
-  window.mainScroll = $('#main_scroll')
-  window.mainWrapper = $('#main-wrapper')
-  window.originalMainContainerSize = {w: mainWrapper.width(), h: mainWrapper.height()}
-  window.cssCode = $("#cssCode")
-  window.codeCache = $("#codeCache")
-  window.messageTimer = null
-  window.flushMessageTimer = null
-  window.drawingCanvas = document.getElementById('canvas_container')
-  window.drawingContext = drawingCanvas.getContext('2d')
-  window.mode = Constant.MODE.DRAW
-  window.selectItemMenu = Constant.ItemType.BUTTON
+  # 共有変数
+  initCommonVar()
 
   #initDraggableAndResizable()
 
@@ -452,6 +479,9 @@ $ ->
 
   # ヘッダーメニュー
   initHeaderMenu()
+
+  # キーイベント
+  initKeyEvent()
 
   $(document).ready(->
     # コンテキストメニュー
