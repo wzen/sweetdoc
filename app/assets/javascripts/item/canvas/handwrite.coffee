@@ -49,7 +49,7 @@ $ ->
   mouseUpOrTouchEndInDrawingCanvas = (loc) ->
     item.restoreAllDrawingSurface()
     if dragging
-      item.endDraw(loc, contanerStates, zindex)
+      item.endDraw(loc, zindex)
       zindex += 1
     dragging = false
 

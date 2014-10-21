@@ -24,8 +24,12 @@ class CanvasBase
     @drawingSurfaceImageData = null
     @startLoc = {x:loc.x, y:loc.y}
     @rect = null
+    @zindex = 0
+    @storage = localStorage
+    @cssStyle = null
   getId: -> @id
   getRect: -> @rect
+  setZindex: (zindex)-> @zindex = zindex
   saveDrawingSurface : ->
     @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
   restoreAllDrawingSurface : ->
@@ -34,35 +38,19 @@ class CanvasBase
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, rect.x - Constant.RESTORE_MARGIN, rect.y - Constant.RESTORE_MARGIN, rect.w + Constant.RESTORE_MARGIN * 2, rect.h + Constant.RESTORE_MARGIN * 2)
   startDraw: ->
     changeMode(Constant.MODE.DRAW)
-  endDraw: (loc, containerState, zindex) ->
+  endDraw: (loc, zindex) ->
     changeMode(Constant.MODE.EDIT)
     if isClick.call(@, loc)
       return false
-    containerState.save(this, zindex)
+    # 状態を保存
+    this.save()
     return true
   isClick = (loc) ->
     return loc.x == @startLoc.x && loc.y == @startLoc.y
-
-
-### コンテナ状態保存 ###
-class ContainerState
-  @storage = localStorage
-
-  constructor: ->
-    @itemStates = []
-  save: (obj, zindex) ->
-    iState = new ItemState(obj, zindex)
-    @itemStates.push(iState)
-  dbSave: ->
-
-  dbLoad: ->
-
-  class ItemState
-    constructor: (obj, zindex) ->
-      @zindex = zindex
-      @obj = obj
-      # ↓後回し
-      @cssCode = null
+  save: ->
+    # サブクラスでWebStorageの保存を書く
+  load: ->
+    # サブクラスでWebStorageの読み込みを書く
 
 # 共有変数定義
 initCommonVar = ->

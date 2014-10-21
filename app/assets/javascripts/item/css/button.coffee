@@ -23,8 +23,8 @@ class Button extends CanvasBase
       @rect.y = loc.y
     drawingContext.strokeRect(@rect.x, @rect.y, @rect.w, @rect.h)
 
-  endDraw: (loc, containerState, zindex) ->
-    if !super(loc, containerState, zindex)
+  endDraw: (loc, zindex) ->
+    if !super(loc, zindex)
       return false
     emt = $('<div id="' + @getId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)

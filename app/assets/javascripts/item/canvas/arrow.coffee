@@ -46,8 +46,8 @@ class Arrow extends CanvasBase
     # 線の描画
     drawingContext.stroke()
 
-  endDraw: (loc, containerState, zindex) ->
-    if !super(loc, containerState, zindex)
+  endDraw: (loc, zindex) ->
+    if !super(loc, zindex)
       return false
     emt = $('<div id="' + @getId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + zindex + '"><canvas id="' + @getCanvasId() + '" class="arrow canvas" ></canvas></div>').appendTo('#main-wrapper')
     #Canvasサイズ
