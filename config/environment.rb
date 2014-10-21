@@ -6,3 +6,6 @@ Tilt::CoffeeScriptTemplate.default_bare = true
 
 # Initialize the Rails application.
 Rails.application.initialize!
+
+# lib
+require 'common/Constant'

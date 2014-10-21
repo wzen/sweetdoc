@@ -12,8 +12,8 @@ class Constant
     @EDIT:1
     @OPTION:2
   class @ItemType
-    @ARROW: 0
-    @BUTTON: 1
+    @ARROW : 0
+    @BUTTON : 1
   class @keyboardKeyCode
     @z : 90
 

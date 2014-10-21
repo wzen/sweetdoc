@@ -47,3 +47,14 @@ gem 'sprockets-rails', '2.1.3'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+# Use cells
+gem 'cells', '3.11.2'
+
+# Use RSpec
+group :development, :test do
+  gem 'rspec', '3.0.0'
+  gem 'rspec-rails', '3.0.0'
+  gem 'rspec-cells', '0.2.2'
+end
+
+
