@@ -16,6 +16,8 @@ class Constant
     @BUTTON : 1
   class @keyboardKeyCode
     @z : 90
+  class @StorageType
+    @DRAW: 0
 
 ### Canvas基底クラス ###
 class CanvasBase
@@ -25,11 +27,8 @@ class CanvasBase
     @startLoc = {x:loc.x, y:loc.y}
     @rect = null
     @zindex = 0
-    @storage = localStorage
-    @cssStyle = null
-  getId: -> @id
+  getId: -> #Abstract
   getRect: -> @rect
-  setZindex: (zindex)-> @zindex = zindex
   saveDrawingSurface : ->
     @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
   restoreAllDrawingSurface : ->
@@ -39,6 +38,7 @@ class CanvasBase
   startDraw: ->
     changeMode(Constant.MODE.DRAW)
   endDraw: (loc, zindex) ->
+    @zindex = zindex
     changeMode(Constant.MODE.EDIT)
     if isClick.call(@, loc)
       return false
@@ -48,9 +48,9 @@ class CanvasBase
   isClick = (loc) ->
     return loc.x == @startLoc.x && loc.y == @startLoc.y
   save: ->
-    # サブクラスでWebStorageの保存を書く
-  load: ->
-    # サブクラスでWebStorageの読み込みを書く
+    # WebStorageの保存(Abstract)
+  drawByStorage: (id, obj) ->
+    # storageの情報から描画(Abstract)
 
 # 共有変数定義
 initCommonVar = ->
@@ -66,6 +66,9 @@ initCommonVar = ->
   window.drawingContext = drawingCanvas.getContext('2d')
   window.mode = Constant.MODE.DRAW
   window.selectItemMenu = Constant.ItemType.BUTTON
+  window.storage = localStorage
+  window.storageHistory = []
+  window.storageHistoryIndex = 0
 
 # JQueryUIのドラッグイベントとリサイズをセット
 initDraggableAndResizable =  ->
@@ -305,25 +308,19 @@ changeMode = (mode) ->
     $(window.drawingCanvas).css('z-index', Constant.ZINDEX_TOP)
   window.mode = mode
 
-### サイドバー ###
-openSidebar = (scrollWidth = null) ->
+### サイドバーをオープン ###
+openSidebar = (scrollLeft = null) ->
   $('#main').switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
     $('#sidebar').fadeIn('1000')
   )
-  if scrollWidth != null
-    mainScroll.animate({scrollLeft: scrollWidth}, 500)
+  if scrollLeft != null
+    mainScroll.animate({scrollLeft: scrollLeft}, 500)
 
-closeSidebar = ->
-  $('#sidebar').fadeOut('1000', ->
-    mainScroll.animate({scrollLeft: 0}, 500)
-    $('#main').switchClass('col-md-9', 'col-md-12', 500, 'swing')
-  )
-
-### ###
+### サイドバーオープン時のスライド距離を計算 ###
 calMoveScrollLeft = (target) ->
   # col-md-9 → 75% padding → 15px
   targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
-#  viewMiddle = (mainScroll.width() * 0.5)
+  #  viewMiddle = (mainScroll.width() * 0.5)
   scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
   if scrollLeft < 0
     scrollLeft = 0
@@ -331,7 +328,14 @@ calMoveScrollLeft = (target) ->
     scrollLeft =  mainScroll.width() * 0.25
   return scrollLeft
 
-#警告表示
+### サイドバーをクローズ ###
+closeSidebar = ->
+  $('#sidebar').fadeOut('1000', ->
+    mainScroll.animate({scrollLeft: 0}, 500)
+    $('#main').switchClass('col-md-9', 'col-md-12', 500, 'swing')
+  )
+
+### 警告表示 ###
 showWarn = (message) ->
   warnFooter = $('.warn-message')
   errorFooter = $('.error-message')
@@ -373,7 +377,7 @@ showWarn = (message) ->
     , 3000)
   )
 
-#エラー表示
+### エラー表示 ###
 showError = (message) ->
   warnFooter = $('.warn-message')
   errorFooter = $('.error-message')
@@ -416,7 +420,7 @@ showError = (message) ->
     , 3000)
   )
 
-#警告表示(フラッシュ)
+### 警告表示(フラッシュ) ###
 flushWarn = (message) ->
   # 他のメッセージが表示されているときは表示しない
   if(window.messageTimer != null)
@@ -433,7 +437,7 @@ flushWarn = (message) ->
     fw.hide()
   , 100)
 
-#キーイベント
+### キーイベント ###
 initKeyEvent = ->
   $(window).keydown( (e)->
     e.preventDefault()
@@ -442,11 +446,54 @@ initKeyEvent = ->
       if e.keyCode == Constant.keyboardKeyCode.z
         if e.shiftKey
           # Shift + Ctrl + z → Redo
-          flushWarn("Redo")
+          redo()
         else
           # Ctrl + z → Undo
-          flushWarn("Undo")
+          undo()
   )
+
+### undo ###
+undo = ->
+  # オブジェクトを消去
+  storageHistoryIndex -= 1
+  removeId = storageHistory[storageHistoryIndex]
+  obj = JSON.parse(getStorageById(removeId))
+  item = null
+  if obj['itemType'] == Constant.ItemType.BUTTON
+    item = new Button()
+  else if obj['itemType'] == Constant.ItemType.ARROW
+    item = new Arrow()
+  $('#' + item.getId).remove()
+
+### redo ###
+redo = ->
+  redoId = storageHistory[storageHistoryIndex]
+  storageHistoryIndex += 1
+  obj = JSON.parse(getStorageById(redoId))
+  item = null
+  if obj['itemType'] == Constant.ItemType.BUTTON
+    item = new Button()
+  else if obj['itemType'] == Constant.ItemType.ARROW
+    item = new Arrow()
+  item.drawByStorage(redoId, obj)
+
+### Storage ###
+drawItemFromStorage = ->
+
+addStorage = (id, obj) ->
+  storage.setItem(id, $.param(obj))
+
+addStorageKeyItem = (id, key, keyItem) ->
+  item = storage.getItem(id)
+  if item == null
+    obj = {key: keyItem}
+    pushStorage(id, obj)
+  else
+    item[key] = keyItem
+    pushStorage(id, obj)
+
+getStorageById = (id) ->
+  return storage.getItem(id)
 
 $ ->
   # 共有変数

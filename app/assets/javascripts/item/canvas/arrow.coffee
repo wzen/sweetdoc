@@ -78,6 +78,11 @@ class Arrow extends CanvasBase
     drawingContext.stroke()
     return true
 
+  save: ->
+    # WebStorageの保存(Abstract)
+  drawByStorage: (id, obj) ->
+    # storageの情報から描画(Abstract)
+
   ### 座標間の距離を計算する ###
   locLength = (locA, locB) ->
     Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2))

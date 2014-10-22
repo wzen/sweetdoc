@@ -2,8 +2,7 @@ class Button extends CanvasBase
   constructor: (loc) ->
     super(loc)
     @moveLoc = {x:loc.x, y:loc.y}
-    @beforeLoc = {x:@moveLoc.x, y: @moveLoc.y}
-    @css = ""
+    @cssStyle = null
   getId: ->
     'button_' + super()
   draw: (loc) ->
@@ -22,14 +21,31 @@ class Button extends CanvasBase
     else
       @rect.y = loc.y
     drawingContext.strokeRect(@rect.x, @rect.y, @rect.w, @rect.h)
-
   endDraw: (loc, zindex) ->
     if !super(loc, zindex)
       return false
+    this.make()
+  make: ->
     emt = $('<div id="' + @getId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
     setDraggableAndResizable(emt)
     return true
+  save: ->
+    obj = {
+      itemType: Constant.ItemType.BUTTON
+      startLoc: JSON.stringify(@startLoc)
+      rect: JSON.stringify(@rect)
+      zindex: @zindex
+      cssStyle: @cssStyle
+    }
+    addStorage(@id, JSON.stringify(obj))
+    storageHistory[storageHistoryIndex] =  @id
+    storageHistoryIndex += 1
+  drawByStorage: (id, obj) ->
+    @id = id
+    @rect = JSON.parse(obj['rect'])
+    @zindex = obj['zindex']
+    this.make()
 
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)
