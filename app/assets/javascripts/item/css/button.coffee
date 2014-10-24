@@ -1,10 +1,11 @@
 class Button extends CanvasBase
-  constructor: (loc) ->
+  @IDENTITY = "button"
+  constructor: (loc = null) ->
     super(loc)
-    @moveLoc = {x:loc.x, y:loc.y}
+    if loc != null
+      @moveLoc = {x:loc.x, y:loc.y}
     @cssStyle = null
-  getId: ->
-    'button_' + super()
+
   draw: (loc) ->
     if @rect != null
       @restoreDrawingSurface(@rect)
@@ -24,28 +25,32 @@ class Button extends CanvasBase
   endDraw: (loc, zindex) ->
     if !super(loc, zindex)
       return false
-    this.make()
+    @make()
   make: ->
-    emt = $('<div id="' + @getId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
+    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + @zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
     setDraggableAndResizable(emt)
     return true
   save: ->
     obj = {
       itemType: Constant.ItemType.BUTTON
-      startLoc: JSON.stringify(@startLoc)
-      rect: JSON.stringify(@rect)
+      startLoc: @startLoc
+      rect: @rect
       zindex: @zindex
       cssStyle: @cssStyle
     }
-    addStorage(@id, JSON.stringify(obj))
-    storageHistory[storageHistoryIndex] =  @id
+    #console.log(JSON.stringify(obj).length)
+    addStorage(@elementId(), JSON.stringify(obj))
+    storageHistory[storageHistoryIndex] =  @elementId()
     storageHistoryIndex += 1
-  drawByStorage: (id, obj) ->
-    @id = id
-    @rect = JSON.parse(obj['rect'])
+    console.log('save id:' + @elementId())
+
+  drawByStorage: (elementId, obj) ->
+    @id = elementId.slice(@constructor.IDENTITY.length + 1)
+    @rect = obj['rect']
     @zindex = obj['zindex']
-    this.make()
+    @make()
+    console.log('drawByStorage')
 
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)

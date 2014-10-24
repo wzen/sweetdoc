@@ -21,13 +21,16 @@ class Constant
 
 ### Canvas基底クラス ###
 class CanvasBase
-  constructor: (loc)->
+  @IDENTITY = ""
+  constructor: (loc = null)->
     @id = generateId()
     @drawingSurfaceImageData = null
-    @startLoc = {x:loc.x, y:loc.y}
+    if loc != null
+      @startLoc = {x:loc.x, y:loc.y}
     @rect = null
     @zindex = 0
-  getId: -> #Abstract
+  elementId: ->
+    return @constructor.IDENTITY + '_' + @id
   getRect: -> @rect
   saveDrawingSurface : ->
     @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
@@ -43,13 +46,13 @@ class CanvasBase
     if isClick.call(@, loc)
       return false
     # 状態を保存
-    this.save()
+    @save()
     return true
   isClick = (loc) ->
     return loc.x == @startLoc.x && loc.y == @startLoc.y
   save: ->
     # WebStorageの保存(Abstract)
-  drawByStorage: (id, obj) ->
+  drawByStorage: (elementId, obj) ->
     # storageの情報から描画(Abstract)
 
 # 共有変数定義
@@ -67,6 +70,7 @@ initCommonVar = ->
   window.mode = Constant.MODE.DRAW
   window.selectItemMenu = Constant.ItemType.BUTTON
   window.storage = localStorage
+  storage.clear()
   window.storageHistory = []
   window.storageHistoryIndex = 0
 
@@ -454,34 +458,36 @@ initKeyEvent = ->
 
 ### undo ###
 undo = ->
+  if storageHistoryIndex <= 0
+    flushWarn("Can't Undo")
+    return
+
   # オブジェクトを消去
   storageHistoryIndex -= 1
-  removeId = storageHistory[storageHistoryIndex]
-  obj = JSON.parse(getStorageById(removeId))
-  item = null
-  if obj['itemType'] == Constant.ItemType.BUTTON
-    item = new Button()
-  else if obj['itemType'] == Constant.ItemType.ARROW
-    item = new Arrow()
-  $('#' + item.getId).remove()
+  elementId = storageHistory[storageHistoryIndex]
+  $('#' + elementId).remove()
 
 ### redo ###
 redo = ->
-  redoId = storageHistory[storageHistoryIndex]
+  if storageHistory.length <= storageHistoryIndex
+    flushWarn("Can't Redo")
+    return
+
+  elementId = storageHistory[storageHistoryIndex]
   storageHistoryIndex += 1
-  obj = JSON.parse(getStorageById(redoId))
+  obj = JSON.parse(getStorageById(elementId))
   item = null
   if obj['itemType'] == Constant.ItemType.BUTTON
     item = new Button()
   else if obj['itemType'] == Constant.ItemType.ARROW
     item = new Arrow()
-  item.drawByStorage(redoId, obj)
+  item.drawByStorage(elementId, obj)
 
 ### Storage ###
 drawItemFromStorage = ->
 
 addStorage = (id, obj) ->
-  storage.setItem(id, $.param(obj))
+  storage.setItem(id, obj)
 
 addStorageKeyItem = (id, key, keyItem) ->
   item = storage.getItem(id)

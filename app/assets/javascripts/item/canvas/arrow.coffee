@@ -1,9 +1,10 @@
 class Arrow extends CanvasBase
+  @IDENTITY = "arrow"
   TRIANGLE_LENGTH = 30
   TRIANGLE_TOP_LENGTH = TRIANGLE_LENGTH + 5
   ARROW_WIDTH = 10
   ARROW_HALF_WIDTH = ARROW_WIDTH / 2.0
-  constructor : (loc)->
+  constructor : (loc = null)->
     super(loc)
     @locTraces = []
     @lengthTraces = []
@@ -14,10 +15,8 @@ class Arrow extends CanvasBase
     @leftLocs = []
     @rightLocs = []
 
-  getId: ->
-    return 'arrow_' + super()
-  getCanvasId: ->
-    return @getId() + '_canvas'
+  canvasElementId: ->
+    return @elementId() + '_canvas'
 
   ### 描画 ###
   draw : (loc) ->
@@ -49,13 +48,17 @@ class Arrow extends CanvasBase
   endDraw: (loc, zindex) ->
     if !super(loc, zindex)
       return false
-    emt = $('<div id="' + @getId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + zindex + '"><canvas id="' + @getCanvasId() + '" class="arrow canvas" ></canvas></div>').appendTo('#main-wrapper')
+    @make(loc)
+    return true
+
+  make: (loc) ->
+    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + @zindex + '"><canvas id="' + @canvasElementId() + '" class="arrow canvas" ></canvas></div>').appendTo('#main-wrapper')
     #Canvasサイズ
-    $('#' + @getCanvasId()).attr('width', $('#' + emt.attr('id')).width())
-    $('#' + @getCanvasId()).attr('height', $('#' + emt.attr('id')).height())
+    $('#' + @canvasElementId()).attr('width', $('#' + emt.attr('id')).width())
+    $('#' + @canvasElementId()).attr('height', $('#' + emt.attr('id')).height())
     initContextMenu(emt.attr('id'), '.arrow', Constant.ItemType.ARROW)
     setDraggableAndResizable(emt)
-    drawingCanvas = document.getElementById(@getCanvasId())
+    drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.beginPath();
 
@@ -79,9 +82,39 @@ class Arrow extends CanvasBase
     return true
 
   save: ->
-    # WebStorageの保存(Abstract)
-  drawByStorage: (id, obj) ->
-    # storageの情報から描画(Abstract)
+    obj = {
+      itemType: Constant.ItemType.ARROW
+      rect: @rect
+      zindex: @zindex
+      locTraces: @locTraces
+      lengthTraces : @lengthTraces
+      traceTriangelHeadIndex : @traceTriangelHeadIndex - 1
+      allLengthSum : @allLengthSum
+      triangleLengthSum : @triangleLengthSum
+      traceDrawedIndex : @traceDrawedIndex - 1
+      leftLocs : @leftLocs
+      rightLocs : @rightLocs
+    }
+    #console.log(JSON.stringify(obj).length)
+    addStorage(@elementId(), JSON.stringify(obj))
+    storageHistory[storageHistoryIndex] =  @elementId()
+    storageHistoryIndex += 1
+    console.log('save id:' + @elementId())
+
+  drawByStorage: (elementId, obj) ->
+    @id = elementId.slice(@constructor.IDENTITY.length + 1)
+    @rect = obj['rect']
+    @zindex = obj['zindex']
+    @locTraces = obj['locTraces']
+    @lengthTraces = obj['lengthTraces']
+    @traceTriangelHeadIndex = obj['traceTriangelHeadIndex']
+    @allLengthSum = obj['allLengthSum']
+    @triangleLengthSum = obj['triangleLengthSum']
+    @traceDrawedIndex = obj['traceDrawedIndex']
+    @leftLocs = obj['leftLocs']
+    @rightLocs = obj['rightLocs']
+    @make(@locTraces[@locTraces.length - 1])
+    console.log('drawByStorage')
 
   ### 座標間の距離を計算する ###
   locLength = (locA, locB) ->
