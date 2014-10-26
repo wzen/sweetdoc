@@ -57,7 +57,7 @@ class Arrow extends CanvasBase
     $('#' + @canvasElementId()).attr('width', $('#' + emt.attr('id')).width())
     $('#' + @canvasElementId()).attr('height', $('#' + emt.attr('id')).height())
     initContextMenu(emt.attr('id'), '.arrow', Constant.ItemType.ARROW)
-    setDraggableAndResizable(emt)
+    setDraggableAndResizable(@)
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.beginPath();
@@ -81,40 +81,10 @@ class Arrow extends CanvasBase
     drawingContext.stroke()
     return true
 
-  save: ->
-    obj = {
-      itemType: Constant.ItemType.ARROW
-      rect: @rect
-      zindex: @zindex
-      locTraces: @locTraces
-      lengthTraces : @lengthTraces
-      traceTriangelHeadIndex : @traceTriangelHeadIndex - 1
-      allLengthSum : @allLengthSum
-      triangleLengthSum : @triangleLengthSum
-      traceDrawedIndex : @traceDrawedIndex - 1
-      leftLocs : @leftLocs
-      rightLocs : @rightLocs
-    }
-    #console.log(JSON.stringify(obj).length)
-    addStorage(@elementId(), JSON.stringify(obj))
-    storageHistory[storageHistoryIndex] =  @elementId()
-    storageHistoryIndex += 1
-    console.log('save id:' + @elementId())
-
-  drawByStorage: (elementId, obj) ->
-    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @rect = obj['rect']
-    @zindex = obj['zindex']
-    @locTraces = obj['locTraces']
-    @lengthTraces = obj['lengthTraces']
-    @traceTriangelHeadIndex = obj['traceTriangelHeadIndex']
-    @allLengthSum = obj['allLengthSum']
-    @triangleLengthSum = obj['triangleLengthSum']
-    @traceDrawedIndex = obj['traceDrawedIndex']
-    @leftLocs = obj['leftLocs']
-    @rightLocs = obj['rightLocs']
+  reDraw: ->
+    @traceTriangelHeadIndex -= 1
+    @traceDrawedIndex -= 1
     @make(@locTraces[@locTraces.length - 1])
-    console.log('drawByStorage')
 
   ### 座標間の距離を計算する ###
   locLength = (locA, locB) ->

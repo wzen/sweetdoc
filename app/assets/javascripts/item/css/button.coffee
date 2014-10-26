@@ -29,28 +29,10 @@ class Button extends CanvasBase
   make: ->
     emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + @zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
-    setDraggableAndResizable(emt)
+    setDraggableAndResizable(@)
     return true
-  save: ->
-    obj = {
-      itemType: Constant.ItemType.BUTTON
-      startLoc: @startLoc
-      rect: @rect
-      zindex: @zindex
-      cssStyle: @cssStyle
-    }
-    #console.log(JSON.stringify(obj).length)
-    addStorage(@elementId(), JSON.stringify(obj))
-    storageHistory[storageHistoryIndex] =  @elementId()
-    storageHistoryIndex += 1
-    console.log('save id:' + @elementId())
-
-  drawByStorage: (elementId, obj) ->
-    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @rect = obj['rect']
-    @zindex = obj['zindex']
+  reDraw: ->
     @make()
-    console.log('drawByStorage')
 
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)

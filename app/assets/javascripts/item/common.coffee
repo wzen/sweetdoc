@@ -4,7 +4,6 @@ class Constant
   @ZINDEX_TOP = 1000
 
   # 操作履歴保存
-  @OPERATION_STORE_PREFIX = "o_"
   @OPERATION_STORE_MAX = 30
 
   class @MODE
@@ -14,6 +13,10 @@ class Constant
   class @ItemType
     @ARROW : 0
     @BUTTON : 1
+  class @ItemAction
+    @MAKE : 0
+    @MOVE : 1
+    @CHANGE_POTION : 2
   class @keyboardKeyCode
     @z : 90
   class @StorageType
@@ -29,9 +32,21 @@ class CanvasBase
       @startLoc = {x:loc.x, y:loc.y}
     @rect = null
     @zindex = 0
+    @history = []
+    @historyIndex = 0
   elementId: ->
     return @constructor.IDENTITY + '_' + @id
   getRect: -> @rect
+  setRect: (rect) ->
+    @rect = rect
+  pushHistory: (obj)->
+    @history[@historyIndex] = obj
+    @historyIndex += 1
+  incrementHistory: ->
+    @historyIndex += 1
+  popHistory: ->
+    @historyIndex -= 1
+    return @history[@historyIndex]
   saveDrawingSurface : ->
     @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
   restoreAllDrawingSurface : ->
@@ -46,14 +61,21 @@ class CanvasBase
     if isClick.call(@, loc)
       return false
     # 状態を保存
-    @save()
+    @save(Constant.ItemAction.MAKE, @rect)
     return true
   isClick = (loc) ->
     return loc.x == @startLoc.x && loc.y == @startLoc.y
-  save: ->
-    # WebStorageの保存(Abstract)
-  drawByStorage: (elementId, obj) ->
-    # storageの情報から描画(Abstract)
+  save: (action, rect) ->
+    history = {
+      obj: @
+      action : action
+      rect: rect
+    }
+    @pushHistory(operationHistoryIndex - 1)
+    pushOperationHistory(history)
+    console.log('save id:' + @elementId())
+
+  reDraw: -> #Abstract
 
 # 共有変数定義
 initCommonVar = ->
@@ -69,10 +91,10 @@ initCommonVar = ->
   window.drawingContext = drawingCanvas.getContext('2d')
   window.mode = Constant.MODE.DRAW
   window.selectItemMenu = Constant.ItemType.BUTTON
-  window.storage = localStorage
+  window.storage = sessionStorage
   storage.clear()
-  window.storageHistory = []
-  window.storageHistoryIndex = 0
+  window.operationHistory = []
+  window.operationHistoryIndex = 0
 
 # JQueryUIのドラッグイベントとリサイズをセット
 initDraggableAndResizable =  ->
@@ -91,15 +113,19 @@ initDraggableAndResizable =  ->
   rSize.resizable({
     containment: mainWrapper
   })
-setDraggableAndResizable = (emt)->
-#  emt.on('mousedown', (e) ->
-#    e.stopPropagation()
-#  )
-  emt.draggable({
+
+setDraggableAndResizable = (obj)->
+  $('#' + obj.elementId()).draggable({
     containment: mainWrapper
+    stop: (event, ui) ->
+      rect = {x:ui.position.left, y: ui.position.top, w: obj.getRect().w, h: obj.getRect().h}
+      obj.save(Constant.ItemAction.MOVE, rect)
   })
-  emt.resizable({
+  $('#' + obj.elementId()).resizable({
     containment: mainWrapper
+    stop: (event, ui) ->
+      rect = {x: obj.getRect().x, y: obj.getRect().y, w: ui.size.width, h: ui.size.height}
+      obj.save(Constant.ItemAction.MOVE, rect)
   })
 
 generateId = ->
@@ -444,10 +470,10 @@ flushWarn = (message) ->
 ### キーイベント ###
 initKeyEvent = ->
   $(window).keydown( (e)->
-    e.preventDefault()
     isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
     if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
       if e.keyCode == Constant.keyboardKeyCode.z
+        e.preventDefault()
         if e.shiftKey
           # Shift + Ctrl + z → Redo
           redo()
@@ -458,54 +484,65 @@ initKeyEvent = ->
 
 ### undo ###
 undo = ->
-  if storageHistoryIndex <= 0
+  if operationHistoryIndex <= 0
     flushWarn("Can't Undo")
     return
 
-  # オブジェクトを消去
-  storageHistoryIndex -= 1
-  elementId = storageHistory[storageHistoryIndex]
-  $('#' + elementId).remove()
+  history = popOperationHistory()
+  obj = history['obj']
+  pastOperationIndex = obj.popHistory()
+  action = history['action']
+  if action == Constant.ItemAction.MAKE
+    # オブジェクトを消去
+    $('#' + obj.elementId()).remove()
+  else if action == Constant.ItemAction.MOVE
+    $('#' + obj.elementId()).remove()
+    past = operationHistory[pastOperationIndex]
+    obj = past['obj']
+    obj.setRect(past['rect'])
+    obj.reDraw()
 
 ### redo ###
 redo = ->
-  if storageHistory.length <= storageHistoryIndex
+  if operationHistory.length <= operationHistoryIndex
     flushWarn("Can't Redo")
     return
 
-  elementId = storageHistory[storageHistoryIndex]
-  storageHistoryIndex += 1
-  obj = JSON.parse(getStorageById(elementId))
-  item = null
-  if obj['itemType'] == Constant.ItemType.BUTTON
-    item = new Button()
-  else if obj['itemType'] == Constant.ItemType.ARROW
-    item = new Arrow()
-  item.drawByStorage(elementId, obj)
+  history = popOperationHistoryRedo()
+  obj = history['obj']
+  obj.incrementHistory()
+  action = history['action']
+  if action == Constant.ItemAction.MAKE
+    obj.setRect(history['rect'])
+    obj.reDraw()
+  else if action == Constant.ItemAction.MOVE
+    $('#' + obj.elementId()).remove()
+    obj.setRect(history['rect'])
+    obj.reDraw()
 
-### Storage ###
-drawItemFromStorage = ->
+### ローカルファイル ###
+saveToLocalFile = ->
 
-addStorage = (id, obj) ->
-  storage.setItem(id, obj)
 
-addStorageKeyItem = (id, key, keyItem) ->
-  item = storage.getItem(id)
-  if item == null
-    obj = {key: keyItem}
-    pushStorage(id, obj)
-  else
-    item[key] = keyItem
-    pushStorage(id, obj)
+loadFromLocalFile = ->
 
-getStorageById = (id) ->
-  return storage.getItem(id)
+
+### 操作履歴 ###
+pushOperationHistory = (obj) ->
+  operationHistory[operationHistoryIndex] = obj
+  operationHistoryIndex += 1
+popOperationHistory = ->
+  operationHistoryIndex -= 1
+  return operationHistory[operationHistoryIndex]
+popOperationHistoryRedo = ->
+  obj = operationHistory[operationHistoryIndex]
+  operationHistoryIndex += 1
+  return obj
 
 $ ->
+
   # 共有変数
   initCommonVar()
-
-  #initDraggableAndResizable()
 
   #Wrapper & Canvasサイズ
   mainWrapper.css('width', $('#main_container').width())
