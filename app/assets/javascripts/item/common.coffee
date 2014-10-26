@@ -77,6 +77,21 @@ class CanvasBase
 
   reDraw: -> #Abstract
 
+# ブラウザ対応のチェック
+checkBlowserEnvironment = ->
+  if !localStorage
+    return false
+  else
+    try
+      localStorage.setItem('test', 'test')
+      c = localStorage.getItem('test')
+      localStorage.removeItem('test')
+    catch e
+      return false
+  if !File
+    return false
+  return true
+
 # 共有変数定義
 initCommonVar = ->
   window.sidebarWrapper = $("#sidebar-wrapper")
@@ -242,6 +257,18 @@ switchGradientColorSelectorVisible = (gradientStepValue) ->
 
 ### ヘッダーメニュー ここから ###
 initHeaderMenu = ->
+
+  itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
+  $('.menu-open', itemsMenuEmt).on('click', ->
+    loadFromLocalFile()
+  )
+  $('.menu-save', itemsMenuEmt).on('click', ->
+    saveToLocalFile()
+  )
+  $('.menu-saveas', itemsMenuEmt).on('click', ->
+    saveToLocalFile()
+  )
+
   itemsMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
   $('.menu-button', itemsMenuEmt).on('click', ->
     itemsMenuEmt.removeClass('active')
@@ -520,11 +547,11 @@ redo = ->
     obj.setRect(history['rect'])
     obj.reDraw()
 
-### ローカルファイル ###
-saveToLocalFile = ->
+### 保存 & 読み込み ###
+saveToServer = ->
 
 
-loadFromLocalFile = ->
+loadFromServer = ->
 
 
 ### 操作履歴 ###
@@ -540,6 +567,11 @@ popOperationHistoryRedo = ->
   return obj
 
 $ ->
+  # ブラウザ対応チェック
+  if !checkBlowserEnvironment()
+    alert('ブラウザ非対応です。')
+    return
+
 
   # 共有変数
   initCommonVar()

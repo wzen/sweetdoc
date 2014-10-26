@@ -11,7 +11,17 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="">File</a></li>
+                <li id="header_items_file_menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_file_menu">
+                        File
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a class="menu-open" href="#">Open</a></li>
+                        <li><a class="menu-save" href="#">Save</a></li>
+                        <li><a class="menu-saveas" href="#">Save As ..</a></li>
+                    </ul>
+                </li>
                 <li id="header_items_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_select_menu">
                         Items

@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
+  get 'item_state/save'
+
+  get 'item_state/load'
+
   get 'parts/button_css_default'
 
   get 'work_table/index'
+
+  #ajax
+  post 'item_state/save'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
