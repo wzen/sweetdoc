@@ -74,7 +74,8 @@ class CanvasBase
     @pushHistory(operationHistoryIndex - 1)
     pushOperationHistory(history)
     console.log('save id:' + @elementId())
-
+  saveToStorage: -> #Abstract
+  loadFromStorage: -> #Abstract
   reDraw: -> #Abstract
 
 # ブラウザ対応のチェック
@@ -260,13 +261,10 @@ initHeaderMenu = ->
 
   itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
   $('.menu-open', itemsMenuEmt).on('click', ->
-    loadFromLocalFile()
+    loadFromServer()
   )
   $('.menu-save', itemsMenuEmt).on('click', ->
-    saveToLocalFile()
-  )
-  $('.menu-saveas', itemsMenuEmt).on('click', ->
-    saveToLocalFile()
+    saveToServer()
   )
 
   itemsMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
@@ -550,6 +548,25 @@ redo = ->
 ### 保存 & 読み込み ###
 saveToServer = ->
 
+
+
+  $.ajax(
+    {
+      url: "/item_state/save_itemstate"
+      type: "GET"
+      data: {
+        user_id: 0
+        table_id: 0
+        item_id: 1
+        contents: "contents"
+      }
+      dataType: "json"
+      success: (data)->
+        console.log(data.message)
+      error: (data) ->
+        console.log(data.message)
+    }
+  )
 
 loadFromServer = ->
 

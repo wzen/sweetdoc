@@ -1,0 +1,10 @@
+ja:
+  message:
+    database:
+      item_state:
+        save:
+          success: 'アイテムの状態を保存しました。'
+          error: 'アイテムの保存に失敗しました。'
+        load:
+          success: 'アイテムの状態を読み込みました。'
+          error: 'アイテムの読み込みに失敗しました。'

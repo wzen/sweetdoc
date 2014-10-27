@@ -21,3 +21,11 @@
 
 en:
   hello: "Hello world"
+  message:
+    database:
+      item_state:
+        save:
+          success: ""
+          error: ""
+        load:
+          error: ""

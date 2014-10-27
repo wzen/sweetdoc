@@ -34,6 +34,26 @@ class Button extends CanvasBase
   reDraw: ->
     @make()
 
+  saveToStorage: ->
+    obj = {
+      itemType: Constant.ItemType.BUTTON
+      startLoc: @startLoc
+      rect: @rect
+      zindex: @zindex
+      cssStyle: @cssStyle
+    }
+    #console.log(JSON.stringify(obj).length)
+    addStorage(@elementId(), JSON.stringify(obj))
+    storageHistory[storageHistoryIndex] =  @elementId()
+    storageHistoryIndex += 1
+    console.log('save id:' + @elementId())
+
+  loadByStorage: (elementId, obj) ->
+    @id = elementId.slice(@constructor.IDENTITY.length + 1)
+    @rect = obj['rect']
+    @zindex = obj['zindex']
+    @make()
+
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)
   btnCode = $("#btn-code", cssCode)

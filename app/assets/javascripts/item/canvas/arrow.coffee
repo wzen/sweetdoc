@@ -86,6 +86,39 @@ class Arrow extends CanvasBase
     @traceDrawedIndex -= 1
     @make(@locTraces[@locTraces.length - 1])
 
+  saveToStorage: ->
+    obj = {
+      itemType: Constant.ItemType.ARROW
+      rect: @rect
+      zindex: @zindex
+      locTraces: @locTraces
+      lengthTraces : @lengthTraces
+      traceTriangelHeadIndex : @traceTriangelHeadIndex - 1
+      allLengthSum : @allLengthSum
+      triangleLengthSum : @triangleLengthSum
+      traceDrawedIndex : @traceDrawedIndex - 1
+      leftLocs : @leftLocs
+      rightLocs : @rightLocs
+    }
+    addStorage(@elementId(), JSON.stringify(obj))
+    storageHistory[storageHistoryIndex] =  @elementId()
+    storageHistoryIndex += 1
+    console.log('save id:' + @elementId())
+
+  loadByStorage: (elementId, obj) ->
+    @id = elementId.slice(@constructor.IDENTITY.length + 1)
+    @rect = obj['rect']
+    @zindex = obj['zindex']
+    @locTraces = obj['locTraces']
+    @lengthTraces = obj['lengthTraces']
+    @traceTriangelHeadIndex = obj['traceTriangelHeadIndex']
+    @allLengthSum = obj['allLengthSum']
+    @triangleLengthSum = obj['triangleLengthSum']
+    @traceDrawedIndex = obj['traceDrawedIndex']
+    @leftLocs = obj['leftLocs']
+    @rightLocs = obj['rightLocs']
+    @reDraw()
+
   ### 座標間の距離を計算する ###
   locLength = (locA, locB) ->
     Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2))
