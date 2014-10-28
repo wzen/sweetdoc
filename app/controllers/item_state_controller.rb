@@ -1,9 +1,9 @@
 class ItemStateController < ApplicationController
+
+
   def save_itemstate
     p = {
         :user_id => params['user_id'],
-        :table_id => params['table_id'],
-        :item_id => params['item_id'],
         :contents => params['contents']
     }
     item_state = ItemState.new(p)
@@ -12,10 +12,10 @@ class ItemStateController < ApplicationController
     else
       message = t('message.database.item_state.save.error')
     end
-      @data = {
+      data = {
           :message => message
       }
-    render :json => @data
+    render :json => data
   end
 
   def load_itemstate
@@ -27,7 +27,7 @@ class ItemStateController < ApplicationController
       message = t('message.database.item_state.load.success')
     end
     data = {
-        :records => records,
+        :records => records.to_json,
         :message => message
     }
     render :json => data

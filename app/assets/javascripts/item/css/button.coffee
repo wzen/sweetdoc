@@ -34,7 +34,7 @@ class Button extends CanvasBase
   reDraw: ->
     @make()
 
-  saveToStorage: ->
+  jsonSaveToStorage: ->
     obj = {
       itemType: Constant.ItemType.BUTTON
       startLoc: @startLoc
@@ -42,11 +42,7 @@ class Button extends CanvasBase
       zindex: @zindex
       cssStyle: @cssStyle
     }
-    #console.log(JSON.stringify(obj).length)
-    addStorage(@elementId(), JSON.stringify(obj))
-    storageHistory[storageHistoryIndex] =  @elementId()
-    storageHistoryIndex += 1
-    console.log('save id:' + @elementId())
+    return JSON.stringify(obj)
 
   loadByStorage: (elementId, obj) ->
     @id = elementId.slice(@constructor.IDENTITY.length + 1)

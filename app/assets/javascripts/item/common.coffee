@@ -34,6 +34,7 @@ class CanvasBase
     @zindex = 0
     @history = []
     @historyIndex = 0
+  getId: -> @id
   elementId: ->
     return @constructor.IDENTITY + '_' + @id
   getRect: -> @rect
@@ -47,6 +48,8 @@ class CanvasBase
   popHistory: ->
     @historyIndex -= 1
     return @history[@historyIndex]
+  lastestHistory: ->
+    return @history[@history.length - 1]
   saveDrawingSurface : ->
     @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
   restoreAllDrawingSurface : ->
@@ -73,8 +76,10 @@ class CanvasBase
     }
     @pushHistory(operationHistoryIndex - 1)
     pushOperationHistory(history)
+    if action == Constant.ItemAction.MAKE
+      objectList.push(@)
     console.log('save id:' + @elementId())
-  saveToStorage: -> #Abstract
+  jsonSaveToStorage: -> #Abstract
   loadFromStorage: -> #Abstract
   reDraw: -> #Abstract
 
@@ -109,6 +114,7 @@ initCommonVar = ->
   window.selectItemMenu = Constant.ItemType.BUTTON
   window.storage = sessionStorage
   storage.clear()
+  window.objectList = []
   window.operationHistory = []
   window.operationHistoryIndex = 0
 
@@ -547,18 +553,22 @@ redo = ->
 
 ### 保存 & 読み込み ###
 saveToServer = ->
-
-
+  jsonList = []
+  objectList.forEach((obj) ->
+    j = {
+      id: obj.getId()
+      obj: obj.jsonSaveToStorage()
+    }
+    jsonList.push(j)
+  )
 
   $.ajax(
     {
       url: "/item_state/save_itemstate"
-      type: "GET"
+      type: "POST"
       data: {
         user_id: 0
-        table_id: 0
-        item_id: 1
-        contents: "contents"
+        contents: JSON.stringify(jsonList)
       }
       dataType: "json"
       success: (data)->
@@ -569,7 +579,20 @@ saveToServer = ->
   )
 
 loadFromServer = ->
-
+  $.ajax(
+    {
+      url: "/item_state/load_itemstate"
+      type: "GET"
+      data: {
+        user_id: 0
+      }
+      dataType: "json"
+      success: (data)->
+        console.log(data.message)
+      error: (data) ->
+        console.log(data.message)
+    }
+  )
 
 ### 操作履歴 ###
 pushOperationHistory = (obj) ->
@@ -582,6 +605,24 @@ popOperationHistoryRedo = ->
   obj = operationHistory[operationHistoryIndex]
   operationHistoryIndex += 1
   return obj
+
+### Storage保存 ###
+drawItemFromStorage = ->
+
+addStorage = (id, obj) ->
+  storage.setItem(id, obj)
+
+addStorageKeyItem = (id, key, keyItem) ->
+  item = storage.getItem(id)
+  if item == null
+    obj = {key: keyItem}
+    pushStorage(id, obj)
+  else
+    item[key] = keyItem
+    pushStorage(id, obj)
+
+getStorageById = (id) ->
+  return storage.getItem(id)
 
 $ ->
   # ブラウザ対応チェック

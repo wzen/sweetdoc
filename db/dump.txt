@@ -1,0 +1,87 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE "schema_migrations" ("version" varchar(255) NOT NULL);
+INSERT INTO "schema_migrations" VALUES('20141019071337');
+INSERT INTO "schema_migrations" VALUES('20141026160252');
+CREATE TABLE "parts" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "type_cd" integer NOT NULL, "sub_type_cd" integer, "contents" text, "created_at" datetime, "updated_at" datetime);
+INSERT INTO "parts" VALUES(2,1,NULL,'div.css3button {
+<span class="property">font-family</span>: Arial, Helvetica, sans-serif;
+<span class="property">font-size</span>: <span class="c btn-slider-font-size-value">14</span>px;
+<span class="property">color</span>: #<span class="c btn-font-color">ffffff</span>;
+<span class="property">padding</span>: <span class="s btn-slider-padding-top-value">10</span>px <span class="s btn-slider-padding-left-value">20</span>px;
+<span class="property">background</span>: <span class="property">-moz-linear-gradient</span>(
+<span class="btn-slider-gradient-deg-value">0</span>deg,
+#<span class="c btn-bg-color1">ffbdf5</span> 0%,
+<span id="btn-bg-color2-moz-flag">
+#<span class="c btn-bg-color2">ff82ec</span> <span class="p btn-bg-color2-position">25</span>%,</span>
+<span id="btn-bg-color3-moz-flag">#<span class="c btn-bg-color3">fc46e1</span> <span class="p btn-bg-color3-position">50</span>%,</span>
+<span id="btn-bg-color4-moz-flag">#<span class="c btn-bg-color4">fc46e1</span> <span class="p btn-bg-color4-position">75</span>%,</span>
+#<span class="c btn-bg-color5">fc46e1</span> 100%);
+<span class="property">background</span>: <span class="property">-webkit-gradient</span>(
+linear, <span class="btn-slider-gradient-deg-value-webkit">left top, left bottom</span>,
+from(#<span class="c btn-bg-color1">ffbdf5</span>),
+<span id="btn-bg-color2-webkit-flag">
+<span>
+color-stop(<span class="p">0.<span class="btn-bg-color2-position">25</span></span>,
+#<span class="c btn-bg-color2">ff82ec</span>),
+</span>
+</span>
+<span id="btn-bg-color3-webkit-flag">
+<span>
+color-stop(<span class="p">0.<span class="btn-bg-color3-position">50</span></span>,
+#<span class="c btn-bg-color3">ff82ec</span>),
+</span>
+</span>
+<span id="btn-bg-color4-webkit-flag">
+<span>
+color-stop(<span class="p">0.<span class="btn-bg-color4-position">75</span></span>,
+#<span class="c btn-bg-color4">ff82ec</span>),
+</span>
+</span>
+to(#<span class="c btn-bg-color5">fc46e1</span>));
+<span class="property">-moz-border-radius</span>: <span class="s btn-slider-border-radius-value">30</span>px;
+<span class="property">-webkit-border-radius</span>: <span class="s btn-slider-border-radius-value">30</span>px;
+<span class="property">border-radius</span>: <span class="s btn-slider-border-radius-value">30</span>px;
+<span class="property">border</span>: <span class="s btn-slider-border-width-value">3</span>px solid #<span
+class="c btn-border-color">ffffff</span>;
+<span class="property">-moz-box-shadow</span>:
+<span class="s btn-slider-shadow-left-value">0</span>px <span class="s btn-slider-shadow-top-value">3</span>px <span
+class="s btn-slider-shadow-size-value">11</span>px rgba(<span class="c btn-shadow-color">000,000,000</span>,<span
+class="a btn-slider-shadow-opacity-value">0.5</span>),
+inset <span class="s btn-slider-shadowinset-left-value">0</span>px <span class="s btn-slider-shadowinset-top-value">0</span>px <span
+class="s btn-slider-shadowinset-size-value">1</span>px rgba(<span
+class="c btn-shadowinset-color">255,000,217</span>,<span class="a btn-slider-shadowinset-opacity-value">1</span>);
+<span class="property">-webkit-box-shadow</span>:
+<span class="s btn-slider-shadow-left-value">0</span>px <span class="s btn-slider-shadow-top-value">3</span>px <span
+class="s btn-slider-shadow-size-value">11</span>px rgba(<span class="c btn-shadow-color">000,000,000</span>,<span
+class="a btn-slider-shadow-opacity-value">0.5</span>),
+inset <span class="s btn-slider-shadowinset-left-value">0</span>px <span class="s btn-slider-shadowinset-top-value">0</span>px <span
+class="s btn-slider-shadowinset-size-value">1</span>px rgba(<span
+class="c btn-shadowinset-color">255,000,217</span>,<span class="a btn-slider-shadowinset-opacity-value">1</span>);
+<span class="property">box-shadow</span>:
+<span class="s btn-slider-shadow-left-value">0</span>px <span class="s btn-slider-shadow-top-value">3</span>px <span
+class="s btn-slider-shadow-size-value">11</span>px rgba(<span class="c btn-shadow-color">000,000,000</span>,<span
+class="a btn-slider-shadow-opacity-value">0.5</span>),
+inset <span class="s btn-slider-shadowinset-left-value">0</span>px <span class="s btn-slider-shadowinset-top-value">0</span>px <span
+class="s btn-slider-shadowinset-size-value">1</span>px rgba(<span
+class="c btn-shadowinset-color">255,000,217</span>,<span class="a btn-slider-shadowinset-opacity-value">1</span>);
+<span class="property">text-shadow</span>:
+<span class="s btn-slider-text-shadow1-left-value">0</span>px <span class="s btn-slider-text-shadow1-top-value">-1</span>px <span
+class="s btn-slider-text-shadow1-size-value">0</span>px rgba(<span
+class="c btn-text-shadow1-color">000,000,000</span>,<span class="a btn-slider-text-shadow1-opacity-value">0.2</span>),
+<span class="s btn-slider-text-shadow2-left-value">0</span>px <span class="s btn-slider-text-shadow2-top-value">1</span>px <span
+class="s btn-slider-text-shadow2-size-value">0</span>px rgba(<span
+class="c btn-text-shadow2-color">255,255,255</span>,<span class="a btn-slider-text-shadow2-opacity-value">0.3</span>);
+display: table;
+z-index:100;
+width: 100%;
+height: 100%;
+}
+',NULL,NULL);
+CREATE TABLE "item_states" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "contents" text, "created_at" datetime, "updated_at" datetime);
+INSERT INTO "item_states" VALUES(3,0,'[{"id":"FMg35erwOWj","obj":"{\"itemType\":1,\"startLoc\":{\"x\":311,\"y\":156},\"rect\":{\"x\":311,\"y\":156,\"w\":189,\"h\":115},\"zindex\":1,\"cssStyle\":null}"},{"id":"RkXeP5MihXt","obj":"{\"itemType\":0,\"rect\":{\"x\":174,\"y\":106,\"w\":593,\"h\":298},\"zindex\":2,\"locTraces\":[{\"x\":35,\"y\":31},{\"x\":35,\"y\":35},{\"x\":35,\"y\":48},{\"x\":35,\"y\":59},{\"x\":35,\"y\":70},{\"x\":35,\"y\":83},{\"x\":35,\"y\":95},{\"x\":38,\"y\":108},{\"x\":40,\"y\":119},{\"x\":42,\"y\":131},{\"x\":44,\"y\":139},{\"x\":47,\"y\":145},{\"x\":49,\"y\":151},{\"x\":51,\"y\":155},{\"x\":53,\"y\":158},{\"x\":54,\"y\":160},{\"x\":56,\"y\":164},{\"x\":64,\"y\":175},{\"x\":74,\"y\":185},{\"x\":84,\"y\":197},{\"x\":96,\"y\":207},{\"x\":106,\"y\":217},{\"x\":121,\"y\":227},{\"x\":133,\"y\":234},{\"x\":147,\"y\":241},{\"x\":162,\"y\":248},{\"x\":182,\"y\":252},{\"x\":199,\"y\":255},{\"x\":215,\"y\":256},{\"x\":228,\"y\":258},{\"x\":240,\"y\":260},{\"x\":258,\"y\":263},{\"x\":262,\"y\":263},{\"x\":263,\"y\":263},{\"x\":277,\"y\":261},{\"x\":297,\"y\":256},{\"x\":322,\"y\":250},{\"x\":346,\"y\":244},{\"x\":370,\"y\":240},{\"x\":393,\"y\":235},{\"x\":411,\"y\":233},{\"x\":431,\"y\":230},{\"x\":447,\"y\":226},{\"x\":460,\"y\":223},{\"x\":470,\"y\":219},{\"x\":482,\"y\":213},{\"x\":494,\"y\":208},{\"x\":502,\"y\":204},{\"x\":513,\"y\":199},{\"x\":521,\"y\":195},{\"x\":529,\"y\":191},{\"x\":537,\"y\":189},{\"x\":544,\"y\":186},{\"x\":554,\"y\":182},{\"x\":558,\"y\":180}],\"lengthTraces\":[8.246211251235321,7.615773105863909,10.770329614269007,4.47213595499958,4.47213595499958],\"traceTriangelHeadIndex\":49,\"allLengthSum\":689.1837486991554,\"triangleLengthSum\":35.576585881367386,\"traceDrawedIndex\":49,\"leftLocs\":[{\"x\":40,\"y\":31},{\"x\":40,\"y\":48},{\"x\":40,\"y\":59},{\"x\":40,\"y\":70},{\"x\":40,\"y\":83},{\"x\":40,\"y\":83},{\"x\":39.71344262909196,\"y\":93.33162996243078},{\"x\":39.71344262909196,\"y\":93.33162996243078},{\"x\":42.897001744334176,\"y\":106.99035951151515},{\"x\":42.897001744334176,\"y\":106.99035951151515},{\"x\":42.897001744334176,\"y\":106.99035951151515},{\"x\":44.92579272335945,\"y\":118.14176573914867},{\"x\":46.7984577332185,\"y\":129.59472302284723},{\"x\":53.30237232699423,\"y\":148.45253216705012},{\"x\":58.47213593143877,\"y\":157.76393197537863},{\"x\":59.78733872096805,\"y\":160.7356370586811},{\"x\":67.2481483697004,\"y\":171.19874597423262},{\"x\":77.69211278613363,\"y\":181.62830855882862},{\"x\":86.84001903919187,\"y\":192.88487037178322},{\"x\":99.37169144117138,\"y\":203.30788721386637},{\"x\":108.35006198770276,\"y\":212.58670093309388},{\"x\":135.090870010966,\"y\":229.4581652829233},{\"x\":149.0530225338763,\"y\":236.44093228001645},{\"x\":149.0530225338763,\"y\":236.44093228001645},{\"x\":162.38850679833598,\"y\":243.0151166044082},{\"x\":182.81292780945176,\"y\":247.06652775657756},{\"x\":199.03146036985834,\"y\":250.0000989764668},{\"x\":199.03146036985834,\"y\":250.0000989764668},{\"x\":199.03146036985834,\"y\":250.0000989764668},{\"x\":228.79115587950184,\"y\":253.06298953066437},{\"x\":null,\"y\":null},{\"x\":261.9437894040976,\"y\":258.11283116957236},{\"x\":275.53903328205416,\"y\":256.21820365876437},{\"x\":295.81021532072907,\"y\":251.14362147099587},{\"x\":320.7644554092371,\"y\":245.15506144886888},{\"x\":344.9818525171496,\"y\":239.10475989320588},{\"x\":368.8186921657002,\"y\":235.14155253186556},{\"x\":392.19176708341104,\"y\":230.06575643562843},{\"x\":392.19176708341104,\"y\":230.06575643562843},{\"x\":410.1639146777122,\"y\":228.0703994752257},{\"x\":429.55576147333284,\"y\":225.2131247062316},{\"x\":445.8314638950177,\"y\":221.13846491616556},{\"x\":445.8314638950177,\"y\":221.13846491616556},{\"x\":457.7920944443284,\"y\":218.51389332970842},{\"x\":467.5800079314798,\"y\":214.62465562631934},{\"x\":479.9191944779308,\"y\":208.45354551553345},{\"x\":491.6113197256683,\"y\":203.6074828916647},{\"x\":491.6113197256683,\"y\":203.6074828916647},{\"x\":499.8470898435721,\"y\":199.4872427654094},{\"x\":510.6815403061843,\"y\":194.57001753410333}],\"rightLocs\":[{\"x\":30,\"y\":31},{\"x\":30,\"y\":48},{\"x\":30,\"y\":59},{\"x\":30,\"y\":70},{\"x\":30,\"y\":83},{\"x\":30,\"y\":83},{\"x\":30.286557370908042,\"y\":96.66837003756922},{\"x\":30.286557370908042,\"y\":96.66837003756922},{\"x\":33.102998255665824,\"y\":109.00964048848485},{\"x\":33.102998255665824,\"y\":109.00964048848485},{\"x\":33.102998255665824,\"y\":109.00964048848485},{\"x\":35.07420727664055,\"y\":119.85823426085133},{\"x\":37.2015422667815,\"y\":132.40527697715277},{\"x\":44.69762767300577,\"y\":153.5474678329499},{\"x\":49.52786406856123,\"y\":162.23606802462137},{\"x\":52.21266127903195,\"y\":167.2643629413189},{\"x\":60.7518516302996,\"y\":178.80125402576738},{\"x\":70.30788721386637,\"y\":188.37169144117138},{\"x\":81.15998096080813,\"y\":201.11512962821678},{\"x\":92.62830855882862,\"y\":210.69211278613363},{\"x\":103.64993801229724,\"y\":221.41329906690612},{\"x\":130.909129989034,\"y\":238.5418347170767},{\"x\":144.9469774661237,\"y\":245.55906771998355},{\"x\":144.9469774661237,\"y\":245.55906771998355},{\"x\":161.61149320166402,\"y\":252.9848833955918},{\"x\":181.18707219054824,\"y\":256.93347224342244},{\"x\":198.96853963014166,\"y\":259.9999010235332},{\"x\":198.96853963014166,\"y\":259.9999010235332},{\"x\":198.96853963014166,\"y\":259.9999010235332},{\"x\":227.20884412049816,\"y\":262.93701046933563},{\"x\":null,\"y\":null},{\"x\":264.0562105959024,\"y\":267.88716883042764},{\"x\":278.46096671794584,\"y\":265.78179634123563},{\"x\":298.189784679271,\"y\":260.85637852900413},{\"x\":323.2355445907629,\"y\":254.84493855113112},{\"x\":347.0181474828504,\"y\":248.89524010679412},{\"x\":371.1813078342998,\"y\":244.85844746813444},{\"x\":393.80823291658896,\"y\":239.93424356437157},{\"x\":393.80823291658896,\"y\":239.93424356437157},{\"x\":411.8360853222878,\"y\":237.9296005247743},{\"x\":432.44423852666716,\"y\":234.7868752937684},{\"x\":448.1685361049823,\"y\":230.86153508383444},{\"x\":448.1685361049823,\"y\":230.86153508383444},{\"x\":462.2079055556716,\"y\":227.48610667029158},{\"x\":472.4199920685202,\"y\":223.37534437368066},{\"x\":484.0808055220692,\"y\":217.54645448446655},{\"x\":496.3886802743317,\"y\":212.3925171083353},{\"x\":496.3886802743317,\"y\":212.3925171083353},{\"x\":504.1529101564279,\"y\":208.5127572345906},{\"x\":515.3184596938157,\"y\":203.42998246589667}]}"}]','2014-10-28 15:36:32.401140','2014-10-28 15:36:32.401140');
+DELETE FROM sqlite_sequence;
+INSERT INTO "sqlite_sequence" VALUES('parts',2);
+INSERT INTO "sqlite_sequence" VALUES('item_states',3);
+CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version");
+COMMIT;

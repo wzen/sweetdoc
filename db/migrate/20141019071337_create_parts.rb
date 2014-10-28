@@ -3,7 +3,7 @@ class CreateParts < ActiveRecord::Migration
     create_table :parts do |t|
       t.integer :type_cd, :null => false
       t.integer :sub_type_cd
-      t.string :contents
+      t.text :contents
 
       t.timestamps
     end

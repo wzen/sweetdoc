@@ -86,7 +86,7 @@ class Arrow extends CanvasBase
     @traceDrawedIndex -= 1
     @make(@locTraces[@locTraces.length - 1])
 
-  saveToStorage: ->
+  jsonSaveToStorage: ->
     obj = {
       itemType: Constant.ItemType.ARROW
       rect: @rect
@@ -100,10 +100,7 @@ class Arrow extends CanvasBase
       leftLocs : @leftLocs
       rightLocs : @rightLocs
     }
-    addStorage(@elementId(), JSON.stringify(obj))
-    storageHistory[storageHistoryIndex] =  @elementId()
-    storageHistoryIndex += 1
-    console.log('save id:' + @elementId())
+    return JSON.stringify(obj)
 
   loadByStorage: (elementId, obj) ->
     @id = elementId.slice(@constructor.IDENTITY.length + 1)
