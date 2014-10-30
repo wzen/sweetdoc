@@ -80,7 +80,7 @@ class CanvasBase
       objectList.push(@)
     console.log('save id:' + @elementId())
   jsonSaveToStorage: -> #Abstract
-  loadFromStorage: -> #Abstract
+  loadByStorage: (obj) -> #Abstract
   reDraw: -> #Abstract
 
 # ブラウザ対応のチェック
@@ -520,17 +520,17 @@ undo = ->
     return
 
   history = popOperationHistory()
-  obj = history['obj']
+  obj = history.obj
   pastOperationIndex = obj.popHistory()
-  action = history['action']
+  action = history.action
   if action == Constant.ItemAction.MAKE
     # オブジェクトを消去
     $('#' + obj.elementId()).remove()
   else if action == Constant.ItemAction.MOVE
     $('#' + obj.elementId()).remove()
     past = operationHistory[pastOperationIndex]
-    obj = past['obj']
-    obj.setRect(past['rect'])
+    obj = past.obj
+    obj.setRect(past.rect)
     obj.reDraw()
 
 ### redo ###
@@ -540,15 +540,15 @@ redo = ->
     return
 
   history = popOperationHistoryRedo()
-  obj = history['obj']
+  obj = history.obj
   obj.incrementHistory()
-  action = history['action']
+  action = history.action
   if action == Constant.ItemAction.MAKE
-    obj.setRect(history['rect'])
+    obj.setRect(history.rect)
     obj.reDraw()
   else if action == Constant.ItemAction.MOVE
     $('#' + obj.elementId()).remove()
-    obj.setRect(history['rect'])
+    obj.setRect(history.rect)
     obj.reDraw()
 
 ### 保存 & 読み込み ###
@@ -582,13 +582,24 @@ loadFromServer = ->
   $.ajax(
     {
       url: "/item_state/load_itemstate"
-      type: "GET"
+      type: "POST"
       data: {
         user_id: 0
       }
       dataType: "json"
       success: (data)->
-        console.log(data.message)
+        #console.log(data.message)
+        itemState = JSON.parse(data.item_state)
+        contents = JSON.parse(itemState.contents)
+        for j in contents
+          obj = j.obj
+          item = null
+          if obj.itemType == Constant.ItemType.BUTTON
+            item = new Button()
+          else if obj.itemType == Constant.ItemType.ARROW
+            item = new Arrow()
+          item.loadByStorage(obj)
+
       error: (data) ->
         console.log(data.message)
     }

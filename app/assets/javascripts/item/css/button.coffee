@@ -42,13 +42,16 @@ class Button extends CanvasBase
       zindex: @zindex
       cssStyle: @cssStyle
     }
-    return JSON.stringify(obj)
+    return obj
 
-  loadByStorage: (elementId, obj) ->
-    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @rect = obj['rect']
-    @zindex = obj['zindex']
+  loadByStorage: (obj) ->
+    #@id = elementId.slice(@constructor.IDENTITY.length + 1)
+    @startLoc = obj.startLoc
+    @rect = obj.rect
+    @zindex = obj.zindex
+    @cssStyle = obj.cssStyle
     @make()
+    @save()
 
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)

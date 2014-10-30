@@ -100,20 +100,20 @@ class Arrow extends CanvasBase
       leftLocs : @leftLocs
       rightLocs : @rightLocs
     }
-    return JSON.stringify(obj)
+    return obj
 
-  loadByStorage: (elementId, obj) ->
-    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @rect = obj['rect']
-    @zindex = obj['zindex']
-    @locTraces = obj['locTraces']
-    @lengthTraces = obj['lengthTraces']
-    @traceTriangelHeadIndex = obj['traceTriangelHeadIndex']
-    @allLengthSum = obj['allLengthSum']
-    @triangleLengthSum = obj['triangleLengthSum']
-    @traceDrawedIndex = obj['traceDrawedIndex']
-    @leftLocs = obj['leftLocs']
-    @rightLocs = obj['rightLocs']
+  loadByStorage: (obj) ->
+#    @id = elementId.slice(@constructor.IDENTITY.length + 1)
+    @rect = obj.rect
+    @zindex = obj.zindex
+    @locTraces = obj.locTraces
+    @lengthTraces = obj.lengthTraces
+    @traceTriangelHeadIndex = obj.traceTriangelHeadIndex
+    @allLengthSum = obj.allLengthSum
+    @triangleLengthSum = obj.triangleLengthSum
+    @traceDrawedIndex = obj.traceDrawedIndex
+    @leftLocs = obj.leftLocs
+    @rightLocs = obj.rightLocs
     @reDraw()
 
   ### 座標間の距離を計算する ###

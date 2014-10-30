@@ -20,14 +20,14 @@ class ItemStateController < ApplicationController
 
   def load_itemstate
     user_id = params['user_id']
-    records = ItemState.find_by(:user_id => user_id)
-    if records == null
+    item_state = ItemState.find_by(:user_id => user_id)
+    if item_state == nil
       message = t('message.database.item_state.load.error')
     else
       message = t('message.database.item_state.load.success')
     end
     data = {
-        :records => records.to_json,
+        :item_state => item_state.to_json,
         :message => message
     }
     render :json => data
