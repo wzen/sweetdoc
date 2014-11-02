@@ -5,6 +5,7 @@ $ ->
   enableMoveEvent = true
   queueLoc = null
   zindex = 1
+  MOVE_FREQUENCY = 7
 
   windowToCanvas = (canvas, x, y) ->
     bbox = canvas.getBoundingClientRect()
@@ -25,8 +26,7 @@ $ ->
     lastY = loc.y;
 
   mouseMoveOrTouchMoveInDrawingCanvas = (loc) ->
-    # 前と同じ座標の時は無視
-    if dragging && (loc.x != lastX || loc.y != lastY)
+    if dragging && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
       if enableMoveEvent
         enableMoveEvent = false
 

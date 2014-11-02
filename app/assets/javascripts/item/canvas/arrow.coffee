@@ -4,8 +4,8 @@ class Arrow extends CanvasBase
   TRIANGLE_TOP_LENGTH = TRIANGLE_LENGTH + 5
   ARROW_WIDTH = 30
   ARROW_HALF_WIDTH = ARROW_WIDTH / 2.0
-  constructor : (loc = null)->
-    super(loc)
+  constructor : (cood = null)->
+    super(cood)
     @direction = {x: 0, y: 0}  #現在の進行方向を表す
     @coodRegist = []
     @coodDistanceRegist = []
@@ -20,7 +20,7 @@ class Arrow extends CanvasBase
 
   ### 描画 ###
   draw : (clickCood) ->
-    #calDrection(@coodRegist[@coodRegist.length - 1], clickCood)
+    calDrection(@coodRegist[@coodRegist.length - 1], clickCood)
 
     drawingContext.beginPath();
     drawingContext.moveTo(clickCood.x, clickCood.y)
@@ -89,59 +89,62 @@ class Arrow extends CanvasBase
   jsonSaveToStorage: ->
     obj = {
       itemType: Constant.ItemType.ARROW
-      rect: @rect
-      zindex: @zindex
-      coodRegist: @coodRegist
-      coodDistanceRegist : @coodDistanceRegist
-      crTriangleBottomLineIndex : @crTriangleBottomLineIndex - 1
-      arrowTotalLength : @arrowTotalLength
-      triangleTotalLength : @triangleTotalLength
-      coodLeftBodyPart : @coodLeftBodyPart
-      coodRightBodyPart : @coodRightBodyPart
+      a: @rect
+      b: @zindex
+      c: @coodRegist
+      d : @coodDistanceRegist
+      e : @crTriangleBottomLineIndex - 1
+      f : @arrowTotalLength
+      g : @triangleTotalLength
+      h : @coodLeftBodyPart
+      i : @coodRightBodyPart
     }
     return obj
 
   loadByStorage: (obj) ->
 #    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @rect = obj.rect
-    @zindex = obj.zindex
-    @coodRegist = obj.coodRegist
-    @coodDistanceRegist = obj.coodDistanceRegist
-    @crTriangleBottomLineIndex = obj.crTriangleBottomLineIndex
-    @arrowTotalLength = obj.arrowTotalLength
-    @triangleTotalLength = obj.triangleTotalLength
-    @coodLeftBodyPart = obj.coodLeftBodyPart
-    @coodRightBodyPart = obj.coodRightBodyPart
+    @rect = obj.a
+    @zindex = obj.b
+    @coodRegist = obj.c
+    @coodDistanceRegist = obj.d
+    @crTriangleBottomLineIndex = obj.e
+    @arrowTotalLength = obj.f
+    @triangleTotalLength = obj.g
+    @coodLeftBodyPart = obj.h
+    @coodRightBodyPart = obj.i
     @reDraw()
     @save(Constant.ItemAction.MAKE)
 
   ### 座標間の距離を計算する ###
   coodLength = (locA, locB) ->
-    Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2))
+    # 整数にする
+    return parseInt(Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2)))
+    #Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2))
 
   ### 進行方向を設定 ###
-  calDrection = (beforeLoc, loc) ->
-    if !beforeLoc? || !loc?
+  calDrection = (beforeLoc, cood) ->
+    if !beforeLoc? || !cood?
       return
 
-    if beforeLoc.x < loc.x
+    if beforeLoc.x < cood.x
       x = 1
-    else if beforeLoc.x == loc.x
+    else if beforeLoc.x == cood.x
       x = 0
     else
       x = -1
 
-    if beforeLoc.y < loc.y
+    if beforeLoc.y < cood.y
       y = 1
-    else if beforeLoc.y == loc.y
+    else if beforeLoc.y == cood.y
       y = 0
     else
       y = -1
 
+    console.log('direction x:' + x + ' y:' + y)
     @direction = {x: x, y: y}
 
   ### 矢印の頭を作成 ###
-  calTrianglePath = (loc, drawingContext) ->
+  calTrianglePath = (cood, drawingContext) ->
     locBefore = @coodRegist[@coodRegist.length - 2]
     locTop = null
 
@@ -150,7 +153,7 @@ class Arrow extends CanvasBase
 
     ### 計算 ###
     cal = ->
-      length = coodLength.call(@, loc, locBefore)
+      length = coodLength.call(@, cood, locBefore)
       @coodDistanceRegist.push(length)
       @triangleTotalLength += length
       @arrowTotalLength += length
@@ -166,7 +169,7 @@ class Arrow extends CanvasBase
       if parseInt(@arrowTotalLength) < TRIANGLE_LENGTH
         return false
 #      # 角度チェック
-#      locA = {x: loc.x - locBefore.x, y: loc.y - locBefore.y}
+#      locA = {x: cood.x - locBefore.x, y: cood.y - locBefore.y}
 #      locB = {x: locBefore.x - locTop.x, y: locBefore.y - locTop.y}
 #      console.log("locA.x:" + locA.x + " locA.y:" + locA.y)
 #      console.log("locB.x:" + locB.x + " locB.y:" + locB.y)
@@ -181,7 +184,7 @@ class Arrow extends CanvasBase
 
     ### パスの描画 ###
     drawTrianglePath =  ->
-      locBottom = loc
+      locBottom = cood
       drawingContext.save()
       drawingContext.translate(locBottom.x, locBottom.y)
       rad = Math.atan2(locBottom.y - locTop.y, locBottom.x - locTop.x)
@@ -230,56 +233,89 @@ class Arrow extends CanvasBase
 
     ### 3点から引く座標を求める ###
     calCenterBodyCood = (left, center, right) ->
-#      coodLog.call(@, left, 'left:')
-#      coodLog.call(@, center, 'center:')
-#      coodLog.call(@, right, 'right:')
 
       leftLength = coodLength.call(@, left, center)
       rightLength = coodLength.call(@, right, center)
-      #console.log('leftLength:' + leftLength + ' rightLength:' + rightLength)
+
       l = {x: left.x - center.x, y: left.y - center.y}
       r = {x: right.x - center.x, y: right.y - center.y}
-      vectorRad = Math.acos((l.x * r.x + l.y * r.y) / (leftLength * rightLength))
-#      coodLog.call(@, l, 'l')
-#      coodLog.call(@, r, 'r')
-      #console.log('vectorRad:' + vectorRad)
+      cos = (l.x * r.x + l.y * r.y) / (leftLength * rightLength)
+      cos = -1.0 if cos < -1
+      cos = 1.0 if cos > 1
+      vectorRad = Math.acos(cos)
       rad = Math.atan2(r.y, r.x) + (vectorRad / 2.0)
-#      console.log('rad:' + rad)
-#      console.log('locLeft:x ' + Math.cos(rad + Math.PI))
-#      console.log('locLeft:y ' + Math.sin(rad + Math.PI))
-#      console.log('locRight:x ' + Math.cos(rad))
-#      console.log('locRight:x ' + Math.sin(rad))
+
+      coodLog.call(@, left, 'left:')
+      coodLog.call(@, center, 'center:')
+      coodLog.call(@, right, 'right:')
+      coodLog.call(@, l, 'l')
+      coodLog.call(@, r, 'r')
+      console.log('leftLength:' + leftLength + ' rightLength:' + rightLength)
+      console.log('vectorRad:' + vectorRad)
+      console.log('rad:' + rad)
+      console.log('locLeft:x ' + Math.cos(rad + Math.PI))
+      console.log('locLeft:y ' + Math.sin(rad + Math.PI))
+      console.log('locRight:x ' + Math.cos(rad))
+      console.log('locRight:x ' + Math.sin(rad))
+
+      leftX = parseInt(Math.cos(rad + Math.PI) * ARROW_HALF_WIDTH + center.x)
+      leftY = parseInt(Math.sin(rad + Math.PI) * ARROW_HALF_WIDTH + center.y)
+      rightX = parseInt(Math.cos(rad) * ARROW_HALF_WIDTH + center.x)
+      rightY = parseInt(Math.sin(rad) * ARROW_HALF_WIDTH + center.y)
+
       ret =
-        locLeft:
-          x: parseInt(Math.cos(rad + Math.PI) * ARROW_HALF_WIDTH + center.x)
-          y: parseInt(Math.sin(rad + Math.PI) * ARROW_HALF_WIDTH + center.y)
-        locRight:
-          x: parseInt(Math.cos(rad) * ARROW_HALF_WIDTH + center.x)
-          y: parseInt(Math.sin(rad) * ARROW_HALF_WIDTH + center.y)
+        coodLeftPart:
+          x: leftX
+          y: leftY
+        coodRightPart:
+          x: rightX
+          y: rightY
+      return ret
+
+    ### 進行方向から最適化 ###
+    suitCoodBasedDirection = (cood)->
+
+      suitCood = (cood, beforeCood) ->
+        if @direction.x < 0 &&
+          beforeCood.x < cood.x
+            cood.x = beforeCood.x
+        else if @direction.x > 0 &&
+          beforeCood.x > cood.x
+            cood.x = beforeCood.x
+        if @direction.y < 0 &&
+          beforeCood.y < cood.y
+            cood.y = beforeCood.y
+        else if @direction.y > 0 &&
+          beforeCood.y > cood.y
+            cood.y = beforeCood.y
+        return cood
+
+      beforeLeftCood = @coodLeftBodyPart[@coodLeftBodyPart.length - 1]
+      beforeRightCood = @coodRightBodyPart[@coodRightBodyPart.length - 1]
+      leftCood = suitCood.call(@, cood.coodLeftPart, beforeLeftCood)
+      rightCood = suitCood.call(@, cood.coodRightPart, beforeRightCood)
+
+      ret =
+        coodLeftPart: leftCood
+        coodRightPart: rightCood
       return ret
 
     if !validate.call(@)
       return
 
-    #尾の座標を求める
     locLeftBody = @coodLeftBodyPart[@coodLeftBodyPart.length - 1]
     locRightBody = @coodRightBodyPart[@coodRightBodyPart.length - 1]
-    lineToLocs = calCenterBodyCood.call(@, @coodRegist[@crTriangleBottomLineIndex - 3], @coodRegist[@crTriangleBottomLineIndex - 2], @coodRegist[@crTriangleBottomLineIndex - 1])
+    centerBodyCood = calCenterBodyCood.call(@, @coodRegist[@crTriangleBottomLineIndex - 3], @coodRegist[@crTriangleBottomLineIndex - 2], @coodRegist[@crTriangleBottomLineIndex - 1])
+    centerBodyCood = suitCoodBasedDirection.call(@, centerBodyCood)
     console.log('Left')
     coodLog.call(@, locLeftBody, 'moveTo')
-    coodLog.call(@, lineToLocs.locLeft, 'lineTo')
+    coodLog.call(@, centerBodyCood.coodLeftPart, 'lineTo')
     console.log('Right')
     coodLog.call(@, locRightBody, 'moveTo')
-    coodLog.call(@, lineToLocs.locRight, 'lineTo')
+    coodLog.call(@, centerBodyCood.coodRightPart, 'lineTo')
 
-    console.log('length:' + @coodLeftBodyPart.length)
-
-    @coodLeftBodyPart.push(lineToLocs.locLeft)
-    @coodRightBodyPart.push(lineToLocs.locRight)
-
-  ### 本体の座標をセット ###
-  setupBodyLocs = (lineToLocs)->
-
+    @coodLeftBodyPart.push(centerBodyCood.coodLeftPart)
+    @coodRightBodyPart.push(centerBodyCood.coodRightPart)
 
   ### 座標をCanvasに描画 ###
   drawCoodToCanvas = (drawingContext) ->
@@ -300,17 +336,17 @@ class Arrow extends CanvasBase
     @restoreDrawingSurface(@rect)
 
   ### 矢印の範囲更新 ###
-  updateArrowRect = (loc) ->
+  updateArrowRect = (cood) ->
     if @rect == null
-      @rect = {x: loc.x, y: loc.y, w: 0, h: 0}
+      @rect = {x: cood.x, y: cood.y, w: 0, h: 0}
     else
-      minX = loc.x - TRIANGLE_TOP_LENGTH
+      minX = cood.x - TRIANGLE_TOP_LENGTH
       minX = if minX < 0 then 0 else minX
-      minY = loc.y - TRIANGLE_TOP_LENGTH
+      minY = cood.y - TRIANGLE_TOP_LENGTH
       minY = if minY < 0 then 0 else minY
-      maxX = loc.x + TRIANGLE_TOP_LENGTH
+      maxX = cood.x + TRIANGLE_TOP_LENGTH
       maxX = if maxX > drawingCanvas.width then drawingCanvas.width else maxX
-      maxY = loc.y + TRIANGLE_TOP_LENGTH
+      maxY = cood.y + TRIANGLE_TOP_LENGTH
       maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
 
       if @rect.x > minX
@@ -324,5 +360,5 @@ class Arrow extends CanvasBase
       if @rect.y + @rect.h < maxY
         @rect.h += maxY - (@rect.y + @rect.h)
 
-  coodLog = (loc, name) ->
-    console.log(name + 'X:' + loc.x + ' ' + name + 'Y:' + loc.y)
+  coodLog = (cood, name) ->
+    console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)

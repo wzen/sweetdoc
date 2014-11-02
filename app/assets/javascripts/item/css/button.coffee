@@ -1,55 +1,58 @@
 class Button extends CanvasBase
   @IDENTITY = "button"
-  constructor: (loc = null) ->
-    super(loc)
-    if loc != null
-      @moveLoc = {x:loc.x, y:loc.y}
+  constructor: (cood = null) ->
+    super(cood)
+    if cood != null
+      @moveLoc = {x:cood.x, y:cood.y}
     @cssStyle = null
 
-  draw: (loc) ->
+  draw: (cood) ->
     if @rect != null
       @restoreDrawingSurface(@rect)
 
     @rect = {x:null,y:null,w:null,h:null}
-    @rect.w = Math.abs(loc.x - @moveLoc.x);
-    @rect.h = Math.abs(loc.y - @moveLoc.y);
-    if loc.x > @moveLoc.x
+    @rect.w = Math.abs(cood.x - @moveLoc.x);
+    @rect.h = Math.abs(cood.y - @moveLoc.y);
+    if cood.x > @moveLoc.x
       @rect.x = @moveLoc.x
     else
-      @rect.x = loc.x
-    if loc.y > @moveLoc.y
+      @rect.x = cood.x
+    if cood.y > @moveLoc.y
       @rect.y = @moveLoc.y
     else
-      @rect.y = loc.y
+      @rect.y = cood.y
     drawingContext.strokeRect(@rect.x, @rect.y, @rect.w, @rect.h)
-  endDraw: (loc, zindex) ->
-    if !super(loc, zindex)
+
+  endDraw: (cood, zindex) ->
+    if !super(cood, zindex)
       return false
     @make()
+
   make: ->
     emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + @zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
     setDraggableAndResizable(@)
     return true
+
   reDraw: ->
     @make()
 
   jsonSaveToStorage: ->
     obj = {
       itemType: Constant.ItemType.BUTTON
-      startLoc: @startLoc
-      rect: @rect
-      zindex: @zindex
-      cssStyle: @cssStyle
+      a: @startLoc
+      b: @rect
+      c: @zindex
+      d: @cssStyle
     }
     return obj
 
   loadByStorage: (obj) ->
     #@id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @startLoc = obj.startLoc
-    @rect = obj.rect
-    @zindex = obj.zindex
-    @cssStyle = obj.cssStyle
+    @startLoc = obj.a
+    @rect = obj.b
+    @zindex = obj.c
+    @cssStyle = obj.d
     @make()
     @save(Constant.ItemAction.MAKE)
 

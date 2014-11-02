@@ -25,11 +25,11 @@ class Constant
 ### Canvas基底クラス ###
 class CanvasBase
   @IDENTITY = ""
-  constructor: (loc = null)->
+  constructor: (cood = null)->
     @id = generateId()
     @drawingSurfaceImageData = null
-    if loc != null
-      @startLoc = {x:loc.x, y:loc.y}
+    if cood != null
+      @startLoc = {x:cood.x, y:cood.y}
     @rect = null
     @zindex = 0
     @history = []
@@ -58,16 +58,16 @@ class CanvasBase
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, rect.x - Constant.RESTORE_MARGIN, rect.y - Constant.RESTORE_MARGIN, rect.w + Constant.RESTORE_MARGIN * 2, rect.h + Constant.RESTORE_MARGIN * 2)
   startDraw: ->
     changeMode(Constant.MODE.DRAW)
-  endDraw: (loc, zindex) ->
+  endDraw: (cood, zindex) ->
     @zindex = zindex
     changeMode(Constant.MODE.EDIT)
-    if isClick.call(@, loc)
+    if isClick.call(@, cood)
       return false
     # 状態を保存
     @save(Constant.ItemAction.MAKE)
     return true
-  isClick = (loc) ->
-    return loc.x == @startLoc.x && loc.y == @startLoc.y
+  isClick = (cood) ->
+    return cood.x == @startLoc.x && cood.y == @startLoc.y
   save: (action) ->
     history = {
       obj: @
