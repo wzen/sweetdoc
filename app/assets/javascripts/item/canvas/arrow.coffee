@@ -1,4 +1,4 @@
-class Arrow extends CanvasBase
+class Arrow extends ItemBase
   @IDENTITY = "arrow"
   TRIANGLE_LENGTH = 30
   TRIANGLE_TOP_LENGTH = TRIANGLE_LENGTH + 5
@@ -53,7 +53,7 @@ class Arrow extends CanvasBase
     return true
 
   make: (cood) ->
-    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + @zindex + '"><canvas id="' + @canvasElementId() + '" class="arrow canvas" ></canvas></div>').appendTo('#main-wrapper')
+    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @itemSize.y + 'px;left: ' + @itemSize.x + 'px;width:' + @itemSize.w + 'px;height:' + @itemSize.h + 'px;z-index:' + @zindex + '"><canvas id="' + @canvasElementId() + '" class="arrow canvas" ></canvas></div>').appendTo('#main-wrapper')
     #Canvasサイズ
     $('#' + @canvasElementId()).attr('width', $('#' + emt.attr('id')).width())
     $('#' + @canvasElementId()).attr('height', $('#' + emt.attr('id')).height())
@@ -65,31 +65,27 @@ class Arrow extends CanvasBase
 
     # 新しいCanvasに合わせるためにrect分座標を引く
     for l in @coodRegist
-      l.x -= @rect.x
-      l.y -= @rect.y
+      l.x -= @itemSize.x
+      l.y -= @itemSize.y
     for l in @coodLeftBodyPart
-      l.x -= @rect.x
-      l.y -= @rect.y
+      l.x -= @itemSize.x
+      l.y -= @itemSize.y
     for l in @coodRightBodyPart
-      l.x -= @rect.x
-      l.y -= @rect.y
+      l.x -= @itemSize.x
+      l.y -= @itemSize.y
 
     #drawingContext.moveTo(cood.x - @rect.x, cood.y - @rect.y)
 
-    calTrianglePath.call(@, {x:cood.x - @rect.x, y:cood.y - @rect.y}, drawingContext)
+    calTrianglePath.call(@, {x:cood.x - @itemSize.x, y:cood.y - @itemSize.y}, drawingContext)
     drawCoodToCanvas.call(@, drawingContext)
 
     drawingContext.stroke()
     return true
 
-  reDraw: ->
-    @crTriangleBottomLineIndex -= 1
-    @make(@coodRegist[@coodRegist.length - 1])
-
-  jsonSaveToStorage: ->
+  generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.ARROW
-      a: @rect
+      a: @itemSize
       b: @zindex
       c: @coodRegist
       d : @coodDistanceRegist
@@ -101,9 +97,9 @@ class Arrow extends CanvasBase
     }
     return obj
 
-  loadByStorage: (obj) ->
+  loadByMinimumObject: (obj) ->
 #    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @rect = obj.a
+    @itemSize = obj.a
     @zindex = obj.b
     @coodRegist = obj.c
     @coodDistanceRegist = obj.d
@@ -112,8 +108,9 @@ class Arrow extends CanvasBase
     @triangleTotalLength = obj.g
     @coodLeftBodyPart = obj.h
     @coodRightBodyPart = obj.i
-    @reDraw()
-    @save(Constant.ItemAction.MAKE)
+    @crTriangleBottomLineIndex -= 1
+    @make(@coodRegist[@coodRegist.length - 1])
+    @save(Constant.ItemActionType.MAKE)
 
   ### 座標間の距離を計算する ###
   coodLength = (locA, locB) ->
@@ -333,12 +330,12 @@ class Arrow extends CanvasBase
   ### 描画した矢印をクリア ###
   clearArrow = ->
     # 保存したキャンパスを張り付け
-    @restoreDrawingSurface(@rect)
+    @restoreDrawingSurface(@itemSize)
 
   ### 矢印の範囲更新 ###
   updateArrowRect = (cood) ->
-    if @rect == null
-      @rect = {x: cood.x, y: cood.y, w: 0, h: 0}
+    if @itemSize == null
+      @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
     else
       minX = cood.x - TRIANGLE_TOP_LENGTH
       minX = if minX < 0 then 0 else minX
@@ -349,16 +346,16 @@ class Arrow extends CanvasBase
       maxY = cood.y + TRIANGLE_TOP_LENGTH
       maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
 
-      if @rect.x > minX
-        @rect.w += @rect.x - minX
-        @rect.x = minX
-      if @rect.x + @rect.w < maxX
-        @rect.w += maxX - (@rect.x + @rect.w)
-      if @rect.y > minY
-        @rect.h += @rect.y - minY
-        @rect.y = minY
-      if @rect.y + @rect.h < maxY
-        @rect.h += maxY - (@rect.y + @rect.h)
+      if @itemSize.x > minX
+        @itemSize.w += @itemSize.x - minX
+        @itemSize.x = minX
+      if @itemSize.x + @itemSize.w < maxX
+        @itemSize.w += maxX - (@itemSize.x + @itemSize.w)
+      if @itemSize.y > minY
+        @itemSize.h += @itemSize.y - minY
+        @itemSize.y = minY
+      if @itemSize.y + @itemSize.h < maxY
+        @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
   coodLog = (cood, name) ->
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)

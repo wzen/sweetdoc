@@ -1,4 +1,4 @@
-class Button extends CanvasBase
+class Button extends ItemBase
   @IDENTITY = "button"
   constructor: (cood = null) ->
     super(cood)
@@ -7,21 +7,21 @@ class Button extends CanvasBase
     @cssStyle = null
 
   draw: (cood) ->
-    if @rect != null
-      @restoreDrawingSurface(@rect)
+    if @itemSize != null
+      @restoreDrawingSurface(@itemSize)
 
-    @rect = {x:null,y:null,w:null,h:null}
-    @rect.w = Math.abs(cood.x - @moveLoc.x);
-    @rect.h = Math.abs(cood.y - @moveLoc.y);
+    @itemSize = {x:null,y:null,w:null,h:null}
+    @itemSize.w = Math.abs(cood.x - @moveLoc.x);
+    @itemSize.h = Math.abs(cood.y - @moveLoc.y);
     if cood.x > @moveLoc.x
-      @rect.x = @moveLoc.x
+      @itemSize.x = @moveLoc.x
     else
-      @rect.x = cood.x
+      @itemSize.x = cood.x
     if cood.y > @moveLoc.y
-      @rect.y = @moveLoc.y
+      @itemSize.y = @moveLoc.y
     else
-      @rect.y = cood.y
-    drawingContext.strokeRect(@rect.x, @rect.y, @rect.w, @rect.h)
+      @itemSize.y = cood.y
+    drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
   endDraw: (cood, zindex) ->
     if !super(cood, zindex)
@@ -29,32 +29,29 @@ class Button extends CanvasBase
     @make()
 
   make: ->
-    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @rect.y + 'px;left: ' + @rect.x + 'px;width:' + @rect.w + 'px;height:' + @rect.h + 'px;z-index:' + @zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
+    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @itemSize.y + 'px;left: ' + @itemSize.x + 'px;width:' + @itemSize.w + 'px;height:' + @itemSize.h + 'px;z-index:' + @zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
     setDraggableAndResizable(@)
     return true
 
-  reDraw: ->
-    @make()
-
-  jsonSaveToStorage: ->
+  generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.BUTTON
-      a: @startLoc
-      b: @rect
+      a: @mousedownCood
+      b: @itemSize
       c: @zindex
       d: @cssStyle
     }
     return obj
 
-  loadByStorage: (obj) ->
+  loadByMinimumObject: (obj) ->
     #@id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @startLoc = obj.a
-    @rect = obj.b
+    @mousedownCood = obj.a
+    @itemSize = obj.b
     @zindex = obj.c
     @cssStyle = obj.d
     @make()
-    @save(Constant.ItemAction.MAKE)
+    @save(Constant.ItemActionType.MAKE)
 
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)

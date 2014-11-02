@@ -1,87 +1,138 @@
-### 定数 ###
+# 定数クラス
 class Constant
-  @RESTORE_MARGIN = 5
-  @ZINDEX_TOP = 1000
 
-  # 操作履歴保存
+  # Canvasの背景貼り付け時のマージン
+  @SURFACE_IMAGE_MARGIN = 5
+  # z-indexの最大値
+  @ZINDEX_MAX = 1000
+  # 操作履歴保存最大数
   @OPERATION_STORE_MAX = 30
 
+  # 操作モード
   class @MODE
+    # 描画
     @DRAW:0
+    # 画面編集
     @EDIT:1
+    # アイテムオプション
     @OPTION:2
+
+  # アイテム種別
   class @ItemType
+    # 矢印
     @ARROW : 0
+    # ボタン
     @BUTTON : 1
-  class @ItemAction
+
+  # アイテムに対するアクション
+  class @ItemActionType
+    # 作成
     @MAKE : 0
+    # 移動
     @MOVE : 1
-    @CHANGE_POTION : 2
+    # オプション変更
+    @CHANGE_OPTION : 2
+
+  # キーコード
   class @keyboardKeyCode
     @z : 90
-  class @StorageType
-    @DRAW: 0
 
-### Canvas基底クラス ###
-class CanvasBase
+
+# アイテム基底クラス
+class ItemBase
+  # アイテム名
   @IDENTITY = ""
+
+  # コンストラクタ
+  # @param [Array] cood 座標
   constructor: (cood = null)->
+    # ID
     @id = generateId()
+    # 画面を保存する変数
     @drawingSurfaceImageData = null
     if cood != null
-      @startLoc = {x:cood.x, y:cood.y}
-    @rect = null
+      # 初期座標
+      @mousedownCood = {x:cood.x, y:cood.y}
+    # サイズ[x,y,w,h]
+    @itemSize = null
+    # z-index
     @zindex = 0
-    @history = []
-    @historyIndex = 0
+    # 操作履歴Index保存配列
+    @ohiRegist = []
+    # 操作履歴Index保存配列のインデックス
+    @ohiRegistIndex = 0
+
+  # IDを取得
   getId: -> @id
+  # HTML要素IDを取得
   elementId: ->
     return @constructor.IDENTITY + '_' + @id
-  getRect: -> @rect
-  setRect: (rect) ->
-    @rect = rect
-  pushHistory: (obj)->
-    @history[@historyIndex] = obj
-    @historyIndex += 1
-  incrementHistory: ->
-    @historyIndex += 1
-  popHistory: ->
-    @historyIndex -= 1
-    return @history[@historyIndex]
-  lastestHistory: ->
-    return @history[@history.length - 1]
+  # サイズ取得
+  getSize: -> @itemSize
+  # サイズ設定
+  setSize: (rect) ->
+    @itemSize = rect
+  # 操作履歴Indexをプッシュ
+  pushOhi: (obj)->
+    @ohiRegist[@ohiRegistIndex] = obj
+    @ohiRegistIndex += 1
+  # 操作履歴Index保存配列のインデックスをインクリメント
+  incrementOhiRegistIndex: ->
+    @ohiRegistIndex += 1
+  # 操作履歴Indexを取り出す
+  popOhi: ->
+    @ohiRegistIndex -= 1
+    return @ohiRegist[@ohiRegistIndex]
+  # 最後の操作履歴Indexを取得
+  lastestOhi: ->
+    return @ohiRegist[@ohiRegist.length - 1]
+  # 画面を保存(全画面)
   saveDrawingSurface : ->
     @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
+  # 保存した画面を全画面に再設定
   restoreAllDrawingSurface : ->
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0)
-  restoreDrawingSurface : (rect) ->
-    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, rect.x - Constant.RESTORE_MARGIN, rect.y - Constant.RESTORE_MARGIN, rect.w + Constant.RESTORE_MARGIN * 2, rect.h + Constant.RESTORE_MARGIN * 2)
+  # 保存した画面を指定したサイズで再設定
+  restoreDrawingSurface : (size) ->
+    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - Constant.SURFACE_IMAGE_MARGIN, size.y - Constant.SURFACE_IMAGE_MARGIN, size.w + Constant.SURFACE_IMAGE_MARGIN * 2, size.h + Constant.SURFACE_IMAGE_MARGIN * 2)
+  # 描画開始時に呼ばれるメソッド
   startDraw: ->
     changeMode(Constant.MODE.DRAW)
+  # 描画終了時に呼ばれるメソッド
   endDraw: (cood, zindex) ->
     @zindex = zindex
     changeMode(Constant.MODE.EDIT)
     if isClick.call(@, cood)
-      return false
-    # 状態を保存
-    @save(Constant.ItemAction.MAKE)
+      # 枠線を付ける
+    else
+      # 状態を保存
+      @save(Constant.ItemActionType.MAKE)
     return true
-  isClick = (cood) ->
-    return cood.x == @startLoc.x && cood.y == @startLoc.y
+
+  # アイテムの情報をアイテムリストと操作履歴に保存
   save: (action) ->
+    # 操作履歴に保存
     history = {
       obj: @
       action : action
-      rect: @rect
+      itemSize: @itemSize
     }
-    @pushHistory(operationHistoryIndex - 1)
+    @pushOhi(operationHistoryIndex - 1)
     pushOperationHistory(history)
-    if action == Constant.ItemAction.MAKE
-      objectList.push(@)
+    if action == Constant.ItemActionType.MAKE
+      # アイテムリストに保存
+      itemObjectList.push(@)
     console.log('save id:' + @elementId())
-  jsonSaveToStorage: -> #Abstract
-  loadByStorage: (obj) -> #Abstract
-  reDraw: -> #Abstract
+
+  # ストレージとDB保存用の最小限のデータを取得
+  generateMinimumObject: -> #Abstract
+  # 最小限のデータからアイテムを描画
+  loadByMinimumObject: (obj) -> #Abstract
+
+  # マウスクリックか判定 :private
+  isClick = (cood) ->
+    return cood.x == @mousedownCood.x && cood.y == @mousedownCood.y
+
 
 # ブラウザ対応のチェック
 checkBlowserEnvironment = ->
@@ -112,9 +163,10 @@ initCommonVar = ->
   window.drawingContext = drawingCanvas.getContext('2d')
   window.mode = Constant.MODE.DRAW
   window.selectItemMenu = Constant.ItemType.BUTTON
-  window.storage = sessionStorage
+  window.storage = localStorage
+  # WebStorageを初期化する
   storage.clear()
-  window.objectList = []
+  window.itemObjectList = []
   window.operationHistory = []
   window.operationHistoryIndex = 0
 
@@ -136,20 +188,22 @@ initDraggableAndResizable =  ->
     containment: mainWrapper
   })
 
+# JQueryUIのドラッグイベントとリサイズをセット
 setDraggableAndResizable = (obj)->
   $('#' + obj.elementId()).draggable({
     containment: mainWrapper
     stop: (event, ui) ->
-      rect = {x:ui.position.left, y: ui.position.top, w: obj.getRect().w, h: obj.getRect().h}
-      obj.save(Constant.ItemAction.MOVE, rect)
+      rect = {x:ui.position.left, y: ui.position.top, w: obj.getSize().w, h: obj.getSize().h}
+      obj.save(Constant.ItemActionType.MOVE, rect)
   })
   $('#' + obj.elementId()).resizable({
     containment: mainWrapper
     stop: (event, ui) ->
-      rect = {x: obj.getRect().x, y: obj.getRect().y, w: ui.size.width, h: ui.size.height}
-      obj.save(Constant.ItemAction.MOVE, rect)
+      rect = {x: obj.getSize().x, y: obj.getSize().y, w: ui.size.width, h: ui.size.height}
+      obj.save(Constant.ItemActionType.MOVE, rect)
   })
 
+# アイテムのIDを作成
 generateId = ->
   numb = 10 #10文字
   RandomString = '';
@@ -359,17 +413,17 @@ initContextMenu = (id, contextSelector, itemType = null) ->
     }
   )
 
-### モードチェンジ ###
+# モードチェンジ
 changeMode = (mode) ->
   if mode == Constant.MODE.DRAW
-    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_TOP)
+    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
   else if mode == Constant.MODE.EDIT
     $(window.drawingCanvas).css('z-index', 0)
   else if mode == Constant.MODE.OPTION
-    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_TOP)
+    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
   window.mode = mode
 
-### サイドバーをオープン ###
+# サイドバーをオープン
 openSidebar = (scrollLeft = null) ->
   $('#main').switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
     $('#sidebar').fadeIn('1000')
@@ -377,7 +431,7 @@ openSidebar = (scrollLeft = null) ->
   if scrollLeft != null
     mainScroll.animate({scrollLeft: scrollLeft}, 500)
 
-### サイドバーオープン時のスライド距離を計算 ###
+# サイドバーオープン時のスライド距離を計算
 calMoveScrollLeft = (target) ->
   # col-md-9 → 75% padding → 15px
   targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
@@ -389,14 +443,14 @@ calMoveScrollLeft = (target) ->
     scrollLeft =  mainScroll.width() * 0.25
   return scrollLeft
 
-### サイドバーをクローズ ###
+# サイドバーをクローズ
 closeSidebar = ->
   $('#sidebar').fadeOut('1000', ->
     mainScroll.animate({scrollLeft: 0}, 500)
     $('#main').switchClass('col-md-9', 'col-md-12', 500, 'swing')
   )
 
-### 警告表示 ###
+# 警告表示
 showWarn = (message) ->
   warnFooter = $('.warn-message')
   errorFooter = $('.error-message')
@@ -438,7 +492,7 @@ showWarn = (message) ->
     , 3000)
   )
 
-### エラー表示 ###
+# エラー表示
 showError = (message) ->
   warnFooter = $('.warn-message')
   errorFooter = $('.error-message')
@@ -481,7 +535,7 @@ showError = (message) ->
     , 3000)
   )
 
-### 警告表示(フラッシュ) ###
+# 警告表示(フラッシュ)
 flushWarn = (message) ->
   # 他のメッセージが表示されているときは表示しない
   if(window.messageTimer != null)
@@ -498,7 +552,7 @@ flushWarn = (message) ->
     fw.hide()
   , 100)
 
-### キーイベント ###
+# キーイベント初期化
 initKeyEvent = ->
   $(window).keydown( (e)->
     isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
@@ -513,7 +567,7 @@ initKeyEvent = ->
           undo()
   )
 
-### undo ###
+# undo処理
 undo = ->
   if operationHistoryIndex <= 0
     flushWarn("Can't Undo")
@@ -521,19 +575,19 @@ undo = ->
 
   history = popOperationHistory()
   obj = history.obj
-  pastOperationIndex = obj.popHistory()
+  pastOperationIndex = obj.popOhi()
   action = history.action
-  if action == Constant.ItemAction.MAKE
+  if action == Constant.ItemActionType.MAKE
     # オブジェクトを消去
     $('#' + obj.elementId()).remove()
-  else if action == Constant.ItemAction.MOVE
+  else if action == Constant.ItemActionType.MOVE
     $('#' + obj.elementId()).remove()
     past = operationHistory[pastOperationIndex]
     obj = past.obj
-    obj.setRect(past.rect)
+    obj.setSize(past.itemSize)
     obj.reDraw()
 
-### redo ###
+# redo処理
 redo = ->
   if operationHistory.length <= operationHistoryIndex
     flushWarn("Can't Redo")
@@ -541,23 +595,23 @@ redo = ->
 
   history = popOperationHistoryRedo()
   obj = history.obj
-  obj.incrementHistory()
+  obj.incrementOhiRegistIndex()
   action = history.action
-  if action == Constant.ItemAction.MAKE
-    obj.setRect(history.rect)
+  if action == Constant.ItemActionType.MAKE
+    obj.setSize(history.itemSize)
     obj.reDraw()
-  else if action == Constant.ItemAction.MOVE
+  else if action == Constant.ItemActionType.MOVE
     $('#' + obj.elementId()).remove()
-    obj.setRect(history.rect)
+    obj.setSize(history.itemSize)
     obj.reDraw()
 
-### 保存 & 読み込み ###
+# サーバにアイテムの情報を保存
 saveToServer = ->
   jsonList = []
-  objectList.forEach((obj) ->
+  itemObjectList.forEach((obj) ->
     j = {
       id: obj.getId()
-      obj: obj.jsonSaveToStorage()
+      obj: obj.generateMinimumObject()
     }
     jsonList.push(j)
   )
@@ -578,6 +632,7 @@ saveToServer = ->
     }
   )
 
+# サーバからアイテムの情報を取得
 loadFromServer = ->
   $.ajax(
     {
@@ -599,45 +654,42 @@ loadFromServer = ->
             item = new Button()
           else if obj.itemType == Constant.ItemType.ARROW
             item = new Arrow()
-          item.loadByStorage(obj)
+          item.loadByMinimumObject(obj)
       error: (data) ->
         console.log(data.message)
     }
   )
 
 ### 操作履歴 ###
+# 操作履歴をプッシュ
 pushOperationHistory = (obj) ->
   operationHistory[operationHistoryIndex] = obj
   operationHistoryIndex += 1
+# 操作履歴を取り出し
 popOperationHistory = ->
   operationHistoryIndex -= 1
   return operationHistory[operationHistoryIndex]
+# 操作履歴を取り出してIndexを進める(redo処理)
 popOperationHistoryRedo = ->
   obj = operationHistory[operationHistoryIndex]
   operationHistoryIndex += 1
   return obj
 
-### Storage保存 ###
+### WebStorage保存 ###
+# WebStorageから全てのアイテムを描画
 drawItemFromStorage = ->
 
+# WebStorageに設定
 addStorage = (id, obj) ->
   storage.setItem(id, obj)
 
-addStorageKeyItem = (id, key, keyItem) ->
-  item = storage.getItem(id)
-  if item == null
-    obj = {key: keyItem}
-    pushStorage(id, obj)
-  else
-    item[key] = keyItem
-    pushStorage(id, obj)
+# キーでWebStorageから取得
+getStorageByKey = (key) ->
+  return storage.getItem(key)
 
-getStorageById = (id) ->
-  return storage.getItem(id)
-
-### 画面クリア ###
+# 画面のアイテムをクリア
 clearWorkTable = ->
-  objectList.forEach((obj) ->
+  itemObjectList.forEach((obj) ->
     $('#' + obj.elementId()).remove()
   )
 
