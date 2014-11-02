@@ -57,4 +57,8 @@ group :development, :test do
   gem 'rspec-cells', '0.2.2'
 end
 
+# Use HBase
+#normalgem 'massive_record'
+#normal
+
 

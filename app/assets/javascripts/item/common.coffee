@@ -64,15 +64,15 @@ class CanvasBase
     if isClick.call(@, loc)
       return false
     # 状態を保存
-    @save(Constant.ItemAction.MAKE, @rect)
+    @save(Constant.ItemAction.MAKE)
     return true
   isClick = (loc) ->
     return loc.x == @startLoc.x && loc.y == @startLoc.y
-  save: (action, rect) ->
+  save: (action) ->
     history = {
       obj: @
       action : action
-      rect: rect
+      rect: @rect
     }
     @pushHistory(operationHistoryIndex - 1)
     pushOperationHistory(history)
@@ -589,6 +589,7 @@ loadFromServer = ->
       dataType: "json"
       success: (data)->
         #console.log(data.message)
+        clearWorkTable()
         itemState = JSON.parse(data.item_state)
         contents = JSON.parse(itemState.contents)
         for j in contents
@@ -599,7 +600,6 @@ loadFromServer = ->
           else if obj.itemType == Constant.ItemType.ARROW
             item = new Arrow()
           item.loadByStorage(obj)
-
       error: (data) ->
         console.log(data.message)
     }
@@ -634,6 +634,12 @@ addStorageKeyItem = (id, key, keyItem) ->
 
 getStorageById = (id) ->
   return storage.getItem(id)
+
+### 画面クリア ###
+clearWorkTable = ->
+  objectList.forEach((obj) ->
+    $('#' + obj.elementId()).remove()
+  )
 
 $ ->
   # ブラウザ対応チェック

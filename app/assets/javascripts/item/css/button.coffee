@@ -51,7 +51,7 @@ class Button extends CanvasBase
     @zindex = obj.zindex
     @cssStyle = obj.cssStyle
     @make()
-    @save()
+    @save(Constant.ItemAction.MAKE)
 
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)
