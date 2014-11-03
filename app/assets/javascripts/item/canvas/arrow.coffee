@@ -4,7 +4,8 @@ class ArrowItem extends ItemBase
 
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "arrow"
-
+  # @property [String] ITEMTYPE アイテム種別
+  @ITEMTYPE = Constant.ItemType.ARROW
 
   TRIANGLE_LENGTH = 30
   TRIANGLE_TOP_LENGTH = TRIANGLE_LENGTH + 5
@@ -76,7 +77,8 @@ class ArrowItem extends ItemBase
   makeElement: (cood) ->
 
     # Canvasを作成
-    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @itemSize.y + 'px;left: ' + @itemSize.x + 'px;width:' + @itemSize.w + 'px;height:' + @itemSize.h + 'px;z-index:' + @zindex + '"><canvas id="' + @canvasElementId() + '" class="arrow canvas" ></canvas></div>').appendTo('#main-wrapper')
+    e = ElementCode.get().createItemElement(@)
+    emt = $(e).appendTo('#main-wrapper')
     $('#' + @canvasElementId()).attr('width', $('#' + emt.attr('id')).width())
     $('#' + @canvasElementId()).attr('height', $('#' + emt.attr('id')).height())
     initContextMenu(emt.attr('id'), '.arrow', Constant.ItemType.ARROW)

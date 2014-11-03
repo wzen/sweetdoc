@@ -3,6 +3,8 @@
 class ButtonItem extends ItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "button"
+  # @property [String] ITEMTYPE アイテム種別
+  @ITEMTYPE = Constant.ItemType.BUTTON
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -43,7 +45,9 @@ class ButtonItem extends ItemBase
   # HTML要素を作成
   # @return [Boolean] 処理結果
   makeElement: ->
-    emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @itemSize.y + 'px;left: ' + @itemSize.x + 'px;width:' + @itemSize.w + 'px;height:' + @itemSize.h + 'px;z-index:' + @zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
+    g = ElementCode.get()
+    e = g.createItemElement(@)
+    emt = $(e).appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
     setDraggableAndResizable(@)
     return true

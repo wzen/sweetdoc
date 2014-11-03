@@ -44,6 +44,9 @@ class ItemBase
   # @abstract
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
+  # @abstract
+  # @property [ItemType] ITEMTYPE アイテム種別
+  @ITEMTYPE = ""
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -82,6 +85,10 @@ class ItemBase
   # @param [Array] size サイズ
   setSize: (size) ->
     @itemSize = size
+
+  # z-indexを取得
+  # @return [Int] z-index
+  getZIndex: -> @zindex
 
   # 操作履歴Indexをプッシュ
   # @param [ItemBase] obj オブジェクト
@@ -126,13 +133,16 @@ class ItemBase
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
   endDraw: (cood, zindex) ->
-    @zindex = zindex
-    changeMode(Constant.MODE.EDIT)
-    if isClick.call(@, cood)
-      # 枠線を付ける
-    else
-      # 状態を保存
-      @saveObj(Constant.ItemActionType.MAKE)
+    if mode == Constant.MODE.DRAW
+      changeMode(Constant.MODE.EDIT)
+      @zindex = zindex
+      if !isClick.call(@, cood)
+        # 状態を保存
+        @saveObj(Constant.ItemActionType.MAKE)
+    else if mode == Constant.MODE.EDIT
+      if isClick.call(@, cood)
+        # 枠線を付ける
+        $('#' + @elementId())
     return true
 
   # アイテムの情報をアイテムリストと操作履歴に保存
@@ -778,7 +788,6 @@ $ ->
   if !checkBlowserEnvironment()
     alert('ブラウザ非対応です。')
     return
-
 
   # 共有変数
   initCommonVar()
