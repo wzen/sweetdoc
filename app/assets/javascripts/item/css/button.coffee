@@ -1,11 +1,19 @@
-class Button extends ItemBase
+# ボタンアイテム
+# @extend ItemBase
+class ButtonItem extends ItemBase
+  # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "button"
+
+  # コンストラクタ
+  # @param [Array] cood 座標
   constructor: (cood = null) ->
     super(cood)
     if cood != null
       @moveLoc = {x:cood.x, y:cood.y}
     @cssStyle = null
 
+  # 描画
+  # @param [Array] cood 座標
   draw: (cood) ->
     if @itemSize != null
       @restoreDrawingSurface(@itemSize)
@@ -23,17 +31,25 @@ class Button extends ItemBase
       @itemSize.y = cood.y
     drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
+  # 描画終了時に呼ばれるメソッド
+  # @param [Array] cood 座標
+  # @param [Int] zindex z-index
+  # @return [Boolean] 処理結果
   endDraw: (cood, zindex) ->
     if !super(cood, zindex)
       return false
-    @make()
+    @makeElement()
 
-  make: ->
+  # HTML要素を作成
+  # @return [Boolean] 処理結果
+  makeElement: ->
     emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @itemSize.y + 'px;left: ' + @itemSize.x + 'px;width:' + @itemSize.w + 'px;height:' + @itemSize.h + 'px;z-index:' + @zindex + '"><div type="button" class="css3button"><div></div></div></div>').appendTo('#main-wrapper')
     initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
     setDraggableAndResizable(@)
     return true
 
+  # ストレージとDB保存用の最小限のデータを取得
+  # @return [Array] アイテムオブジェクトの最小限データ
   generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.BUTTON
@@ -44,13 +60,15 @@ class Button extends ItemBase
     }
     return obj
 
+  # 最小限のデータからアイテムを描画
+  # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
     #@id = elementId.slice(@constructor.IDENTITY.length + 1)
     @mousedownCood = obj.a
     @itemSize = obj.b
     @zindex = obj.c
     @cssStyle = obj.d
-    @make()
+    @makeElement()
     @save(Constant.ItemActionType.MAKE)
 
 $ ->

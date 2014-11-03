@@ -15,9 +15,9 @@ $ ->
     dragging = true;
 
     if selectItemMenu == Constant.ItemType.ARROW
-      item = new Arrow(loc)
+      item = new ArrowItem(loc)
     else if selectItemMenu == Constant.ItemType.BUTTON
-      item = new Button(loc)
+      item = new ButtonItem(loc)
 
     item.saveDrawingSurface()
     item.startDraw()

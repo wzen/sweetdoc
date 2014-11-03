@@ -1,9 +1,21 @@
-class Arrow extends ItemBase
+# 矢印アイテム
+# @extend ItemBase
+class ArrowItem extends ItemBase
+
+  # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "arrow"
+
+
   TRIANGLE_LENGTH = 30
   TRIANGLE_TOP_LENGTH = TRIANGLE_LENGTH + 5
+
+  # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 30
+  # @property [Int] ARROW_HALF_WIDTH 矢印幅(半分)
   ARROW_HALF_WIDTH = ARROW_WIDTH / 2.0
+
+  # コンストラクタ
+  # @param [Array] cood 座標
   constructor : (cood = null)->
     super(cood)
     @direction = {x: 0, y: 0}  #現在の進行方向を表す
@@ -15,28 +27,31 @@ class Arrow extends ItemBase
     @coodLeftBodyPart = []
     @coodRightBodyPart = []
 
+  # CanvasのHTML要素IDを取得
+  # @return [Int] Canvas要素ID
   canvasElementId: ->
     return @elementId() + '_canvas'
 
-  ### 描画 ###
-  draw : (clickCood) ->
-    calDrection(@coodRegist[@coodRegist.length - 1], clickCood)
+  # 描画
+  # @param [Array] moveCood 画面ドラッグ座標
+  draw : (moveCood) ->
+    calDrection(@coodRegist[@coodRegist.length - 1], moveCood)
 
     drawingContext.beginPath();
-    drawingContext.moveTo(clickCood.x, clickCood.y)
-    @coodRegist.push(clickCood)
+    drawingContext.moveTo(moveCood.x, moveCood.y)
+    @coodRegist.push(moveCood)
 
-    updateArrowRect.call(@, clickCood)
+    updateArrowRect.call(@, moveCood)
 
     # 描画した矢印をクリア
     clearArrow.call(@)
 
     # 頭の部分の座標を計算&描画
-    calTrianglePath.call(@, clickCood, window.drawingContext)
+    calTrianglePath.call(@, moveCood, window.drawingContext)
     # 尾の部分の座標を計算
     calTailDrawPath.call(@)
     # 体の部分の座標を計算
-    calBodyPath.call(@, clickCood)
+    calBodyPath.call(@, moveCood)
 
     #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
 
@@ -46,19 +61,28 @@ class Arrow extends ItemBase
     # 線の描画
     drawingContext.stroke()
 
-  endDraw: (clickCood, zindex) ->
-    if !super(clickCood, zindex)
+  # 描画終了時に呼ばれるメソッド
+  # @param [Array] cood 座標
+  # @param [Int] zindex z-index
+  endDraw: (cood, zindex) ->
+    if !super(cood, zindex)
       return false
-    @make(clickCood)
+    @makeElement(cood)
     return true
 
-  make: (cood) ->
+  # CanvasのHTML要素を作成
+  # @param [Array] cood 座標
+  # @return [Boolean] 処理結果
+  makeElement: (cood) ->
+
+    # Canvasを作成
     emt = $('<div id="' + @elementId() + '" class="draggable resizable" style="position: absolute;top:' + @itemSize.y + 'px;left: ' + @itemSize.x + 'px;width:' + @itemSize.w + 'px;height:' + @itemSize.h + 'px;z-index:' + @zindex + '"><canvas id="' + @canvasElementId() + '" class="arrow canvas" ></canvas></div>').appendTo('#main-wrapper')
-    #Canvasサイズ
     $('#' + @canvasElementId()).attr('width', $('#' + emt.attr('id')).width())
     $('#' + @canvasElementId()).attr('height', $('#' + emt.attr('id')).height())
     initContextMenu(emt.attr('id'), '.arrow', Constant.ItemType.ARROW)
     setDraggableAndResizable(@)
+
+    # 新しいCanvasに描画
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.beginPath();
@@ -74,14 +98,13 @@ class Arrow extends ItemBase
       l.x -= @itemSize.x
       l.y -= @itemSize.y
 
-    #drawingContext.moveTo(cood.x - @rect.x, cood.y - @rect.y)
-
     calTrianglePath.call(@, {x:cood.x - @itemSize.x, y:cood.y - @itemSize.y}, drawingContext)
     drawCoodToCanvas.call(@, drawingContext)
-
     drawingContext.stroke()
     return true
 
+  # ストレージとDB保存用の最小限のデータを取得
+  # @return [Array] アイテムオブジェクトの最小限データ
   generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.ARROW
@@ -97,6 +120,8 @@ class Arrow extends ItemBase
     }
     return obj
 
+  # 最小限のデータからアイテムを描画
+  # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
 #    @id = elementId.slice(@constructor.IDENTITY.length + 1)
     @itemSize = obj.a
@@ -109,16 +134,18 @@ class Arrow extends ItemBase
     @coodLeftBodyPart = obj.h
     @coodRightBodyPart = obj.i
     @crTriangleBottomLineIndex -= 1
-    @make(@coodRegist[@coodRegist.length - 1])
+    @makeElement(@coodRegist[@coodRegist.length - 1])
     @save(Constant.ItemActionType.MAKE)
 
-  ### 座標間の距離を計算する ###
+  # 座標間の距離を計算する
+  # @private
   coodLength = (locA, locB) ->
     # 整数にする
     return parseInt(Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2)))
     #Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2))
 
-  ### 進行方向を設定 ###
+  # 進行方向を設定
+  # @private
   calDrection = (beforeLoc, cood) ->
     if !beforeLoc? || !cood?
       return
@@ -140,7 +167,8 @@ class Arrow extends ItemBase
     console.log('direction x:' + x + ' y:' + y)
     @direction = {x: x, y: y}
 
-  ### 矢印の頭を作成 ###
+  # 矢印の頭を作成
+  # @private
   calTrianglePath = (cood, drawingContext) ->
     locBefore = @coodRegist[@coodRegist.length - 2]
     locTop = null
@@ -205,7 +233,8 @@ class Arrow extends ItemBase
     drawTrianglePath.call(@)
 
 
-  ### 矢印の尾を作成 ###
+  # 矢印の尾を作成
+  # @private
   calTailDrawPath = ->
     ### 検証 ###
     validate = ->
@@ -222,7 +251,8 @@ class Arrow extends ItemBase
     @coodRightBodyPart.push({x: -(Math.sin(rad) * ARROW_HALF_WIDTH) + locTail.x, y: Math.cos(rad) * ARROW_HALF_WIDTH + locTail.y})
     @coodLeftBodyPart.push({x: Math.sin(rad) * ARROW_HALF_WIDTH + locTail.x, y: -(Math.cos(rad) * ARROW_HALF_WIDTH) + locTail.y})
 
-  ### 矢印の本体を作成 ###
+  # 矢印の本体を作成
+  # @private
   calBodyPath = ->
     ### 検証 ###
     validate = ->
@@ -314,7 +344,8 @@ class Arrow extends ItemBase
     @coodLeftBodyPart.push(centerBodyCood.coodLeftPart)
     @coodRightBodyPart.push(centerBodyCood.coodRightPart)
 
-  ### 座標をCanvasに描画 ###
+  # 座標をCanvasに描画
+  # @private
   drawCoodToCanvas = (drawingContext) ->
     if @coodLeftBodyPart.length <= 0 || @coodRightBodyPart.length <= 0
       # 尾が描かれてない場合
@@ -327,12 +358,14 @@ class Arrow extends ItemBase
     for i in [0 .. @coodRightBodyPart.length-1]
       drawingContext.lineTo(@coodRightBodyPart[i].x, @coodRightBodyPart[i].y)
 
-  ### 描画した矢印をクリア ###
+  # 描画した矢印をクリア
+  # @private
   clearArrow = ->
     # 保存したキャンパスを張り付け
     @restoreDrawingSurface(@itemSize)
 
-  ### 矢印の範囲更新 ###
+  # 矢印の範囲更新
+  # @private
   updateArrowRect = (cood) ->
     if @itemSize == null
       @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
@@ -357,5 +390,7 @@ class Arrow extends ItemBase
       if @itemSize.y + @itemSize.h < maxY
         @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
+  # 座標のログを表示
+  # @private
   coodLog = (cood, name) ->
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)

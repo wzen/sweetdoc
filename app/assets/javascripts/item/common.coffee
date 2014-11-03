@@ -1,104 +1,130 @@
-# 定数クラス
+# 定数
 class Constant
 
-  # Canvasの背景貼り付け時のマージン
+  # @property SURFACE_IMAGE_MARGIN Canvasの背景貼り付け時のマージン
   @SURFACE_IMAGE_MARGIN = 5
-  # z-indexの最大値
+  # @porperty ZINDEX_MAX z-indexの最大値
   @ZINDEX_MAX = 1000
-  # 操作履歴保存最大数
+  # @property OPERATION_STORE_MAX 操作履歴保存最大数
   @OPERATION_STORE_MAX = 30
 
   # 操作モード
   class @MODE
-    # 描画
+    # @property [Int] DRAW 描画
     @DRAW:0
-    # 画面編集
+    # @property [Int] EDIT 画面編集
     @EDIT:1
-    # アイテムオプション
+    # @property [Int] OPTION アイテムオプション
     @OPTION:2
 
   # アイテム種別
   class @ItemType
-    # 矢印
+    # @property [Int] ARROW 矢印
     @ARROW : 0
-    # ボタン
+    # @property [Int] BUTTON ボタン
     @BUTTON : 1
 
   # アイテムに対するアクション
   class @ItemActionType
-    # 作成
+    # @property [Int] MAKE 作成
     @MAKE : 0
-    # 移動
+    # @property [Int] MOVE 移動
     @MOVE : 1
-    # オプション変更
+    # @property [int] CHANGE_OPTION オプション変更
     @CHANGE_OPTION : 2
 
   # キーコード
   class @keyboardKeyCode
+    # @property [Int] z zボタン
     @z : 90
 
 
-# アイテム基底クラス
+# アイテム基底
 class ItemBase
-  # アイテム名
+  # @abstract
+  # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
 
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
-    # ID
+
+    # @property [Int] id ID
     @id = generateId()
-    # 画面を保存する変数
+    # @property [Object] drawingSurfaceImageData 画面を保存する変数
     @drawingSurfaceImageData = null
     if cood != null
-      # 初期座標
+      # @property [Array] mousedownCood 初期座標
       @mousedownCood = {x:cood.x, y:cood.y}
-    # サイズ[x,y,w,h]
+    # @property [Array] itemSize サイズ
     @itemSize = null
-    # z-index
+    # @property [Int] zIndex z-index
     @zindex = 0
-    # 操作履歴Index保存配列
+    # @property [Array] ohiRegist 操作履歴Index保存配列
     @ohiRegist = []
-    # 操作履歴Index保存配列のインデックス
+    # @property [Int] ohiRegistIndex 操作履歴Index保存配列のインデックス
     @ohiRegistIndex = 0
 
   # IDを取得
+  # @return [Int] ID
   getId: -> @id
+
   # HTML要素IDを取得
+  # @return [Int] HTML要素ID
   elementId: ->
     return @constructor.IDENTITY + '_' + @id
+
   # サイズ取得
+  # @return [Array] サイズ
   getSize: -> @itemSize
+
   # サイズ設定
-  setSize: (rect) ->
-    @itemSize = rect
+  # @param [Array] size サイズ
+  setSize: (size) ->
+    @itemSize = size
+
   # 操作履歴Indexをプッシュ
+  # @param [ItemBase] obj オブジェクト
   pushOhi: (obj)->
     @ohiRegist[@ohiRegistIndex] = obj
     @ohiRegistIndex += 1
+
   # 操作履歴Index保存配列のインデックスをインクリメント
   incrementOhiRegistIndex: ->
     @ohiRegistIndex += 1
+
   # 操作履歴Indexを取り出す
+  # @return [Int] 操作履歴Index
   popOhi: ->
     @ohiRegistIndex -= 1
     return @ohiRegist[@ohiRegistIndex]
+
   # 最後の操作履歴Indexを取得
+  # @return [Int] 操作履歴Index
   lastestOhi: ->
     return @ohiRegist[@ohiRegist.length - 1]
+
   # 画面を保存(全画面)
   saveDrawingSurface : ->
     @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
+
   # 保存した画面を全画面に再設定
   restoreAllDrawingSurface : ->
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0)
+
   # 保存した画面を指定したサイズで再設定
+  # @param [Array] size サイズ
   restoreDrawingSurface : (size) ->
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - Constant.SURFACE_IMAGE_MARGIN, size.y - Constant.SURFACE_IMAGE_MARGIN, size.w + Constant.SURFACE_IMAGE_MARGIN * 2, size.h + Constant.SURFACE_IMAGE_MARGIN * 2)
+
   # 描画開始時に呼ばれるメソッド
   startDraw: ->
     changeMode(Constant.MODE.DRAW)
+
   # 描画終了時に呼ばれるメソッド
+  # @param [Array] cood 座標
+  # @param [Int] zindex z-index
+  # @return [Boolean] 処理結果
   endDraw: (cood, zindex) ->
     @zindex = zindex
     changeMode(Constant.MODE.EDIT)
@@ -106,11 +132,12 @@ class ItemBase
       # 枠線を付ける
     else
       # 状態を保存
-      @save(Constant.ItemActionType.MAKE)
+      @saveObj(Constant.ItemActionType.MAKE)
     return true
 
   # アイテムの情報をアイテムリストと操作履歴に保存
-  save: (action) ->
+  # @param [ItemActionType] action アクション種別
+  saveObj: (action) ->
     # 操作履歴に保存
     history = {
       obj: @
@@ -125,16 +152,22 @@ class ItemBase
     console.log('save id:' + @elementId())
 
   # ストレージとDB保存用の最小限のデータを取得
-  generateMinimumObject: -> #Abstract
-  # 最小限のデータからアイテムを描画
-  loadByMinimumObject: (obj) -> #Abstract
+  # @abstract
+  generateMinimumObject: ->
 
-  # マウスクリックか判定 :private
+  # 最小限のデータからアイテムを描画
+  # @abstract
+  loadByMinimumObject: (obj) ->
+
+  # マウスクリックか判定
+  # @private
+  # @param [Array] cood マウスクリック座標
   isClick = (cood) ->
     return cood.x == @mousedownCood.x && cood.y == @mousedownCood.y
 
 
 # ブラウザ対応のチェック
+# @return [Boolean] 処理結果
 checkBlowserEnvironment = ->
   if !localStorage
     return false
@@ -189,6 +222,7 @@ initDraggableAndResizable =  ->
   })
 
 # JQueryUIのドラッグイベントとリサイズをセット
+# @param [ItemBase] obj アイテムオブジェクト
 setDraggableAndResizable = (obj)->
   $('#' + obj.elementId()).draggable({
     containment: mainWrapper
@@ -204,6 +238,7 @@ setDraggableAndResizable = (obj)->
   })
 
 # アイテムのIDを作成
+# @return [Int] 生成したID
 generateId = ->
   numb = 10 #10文字
   RandomString = '';
@@ -214,7 +249,14 @@ generateId = ->
   return RandomString
 
 ### スライダーの作成 ###
+
 # 通常スライダーの作成
+# @param [Int] id メーターのElementID
+# @param [Int] min 最小値
+# @param [Int] max 最大値
+# @param [Object] codeEmt コードエレメント
+# @param [Object] previewEmt CSSプレビューのエレメント
+# @param [Int] stepValue 進捗数
 settingSlider = (id, min, max, codeEmt, previewEmt, stepValue) ->
   if typeof stepValue == 'undefined'
     stepValue = 0
@@ -236,7 +278,11 @@ settingSlider = (id, min, max, codeEmt, previewEmt, stepValue) ->
       previewEmt.text(codeEmt.text())
   })
 
-# エレメントでグラデーションスライダーの作成
+# HTML要素からグラデーションスライダーの作成
+# @param [Object] element HTML要素
+# @param [Array] values 値の配列
+# @param [Object] codeEmt コードエレメント
+# @param [Object] previewEmt CSSプレビューのエレメント
 settingGradientSliderByElement = (element, values, codeEmt, previewEmt) ->
   id = element.attr("id")
 
@@ -256,12 +302,21 @@ settingGradientSliderByElement = (element, values, codeEmt, previewEmt) ->
     handleElement.css('display', '')
 
 # グラデーションスライダーの作成
+# @param [Int] id HTML要素のID
+# @param [Array] values 値の配列
+# @param [Object] codeEmt コードエレメント
+# @param [Object] previewEmt CSSプレビューのエレメント
 settingGradientSlider = (id, values, codeEmt, previewEmt) ->
   meterElement = $('#' + id)
   settingGradientSliderByElement(meterElement, values, codeEmt, previewEmt)
 
 
-# グラデーションDegスライダーの作成
+# グラデーション方向スライダーの作成
+# @param [Int] id メーターのElementID
+# @param [Int] min 最小値
+# @param [Int] max 最大値
+# @param [Object] codeEmt コードエレメント
+# @param [Object] previewEmt CSSプレビューのエレメント
 settingGradientDegSlider = (id, min, max, codeEmt, previewEmt) ->
   meterElement = $('#' + id)
   valueElement = $('.' + id + '-value')
@@ -288,7 +343,11 @@ settingGradientDegSlider = (id, min, max, codeEmt, previewEmt) ->
 ### スライダーの作成 ここまで ###
 
 ### グラデーション ###
+
 # グラデーションの表示変更(スライダーのハンドル&カラーピッカー)
+# @param [Object] element HTML要素
+# @param [Object] codeEmt コードエレメント
+# @param [Object] previewEmt CSSプレビューのエレメント
 changeGradientShow = (element, codeEmt, previewEmt) ->
   targetElement = element.currentTarget
   value = parseInt(targetElement.value)
@@ -307,6 +366,7 @@ changeGradientShow = (element, codeEmt, previewEmt) ->
     switchGradientColorSelectorVisible(value)
 
 # グラデーションのカラーピッカー表示切り替え
+# @param [Int] gradientStepValue 現在のグラデーション数
 switchGradientColorSelectorVisible = (gradientStepValue) ->
   for i in [2 .. 4]
     element = $('#btn-bg-color' + i)
@@ -314,11 +374,11 @@ switchGradientColorSelectorVisible = (gradientStepValue) ->
       element.css('display', 'none')
     else
       element.css('display', '')
+
 ### グラデーション ここまで ###
 
-### ヘッダーメニュー ここから ###
+# ヘッダーメニュー初期化
 initHeaderMenu = ->
-
   itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
   $('.menu-open', itemsMenuEmt).on('click', ->
     loadFromServer()
@@ -341,11 +401,12 @@ initHeaderMenu = ->
     changeMode(Constant.MODE.DRAW)
   )
 
-### ヘッダーメニュー ここまで ###
-
 # カラーピッカーの作成
-settingColorPicker = (ele, defaultColor, onChange) ->
-  $(ele).ColorPicker({
+# @param [Object] element HTML要素
+# @param [Color] defaultColor デフォルト色
+# @param [Function] onChange 変更時に呼ばれるメソッド
+settingColorPicker = (element, defaultColor, onChange) ->
+  $(element).ColorPicker({
     color: defaultColor
     onShow: (a) ->
       $(a).show()
@@ -368,7 +429,23 @@ initColorPickerValue = ->
   )
 
 # コンテキストメニュー初期化
+# @param [Int] id コンテキストメニューのID
+# @param [Object] contextSelector コンテキストメニューを設定する要素
+# @param [ItemType] itemType アイテム種別
 initContextMenu = (id, contextSelector, itemType = null) ->
+
+  # サイドバーオープン時のスライド距離を計算
+  # @param [Object] target スクロールビュー
+  calMoveScrollLeft = (target) ->
+    # col-md-9 → 75% padding → 15px
+    targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
+    #  viewMiddle = (mainScroll.width() * 0.5)
+    scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
+    if scrollLeft < 0
+      scrollLeft = 0
+    else if scrollLeft > mainScroll.width() * 0.25
+      scrollLeft =  mainScroll.width() * 0.25
+    return scrollLeft
 
   # 共通メニュー
   menu = [
@@ -378,11 +455,11 @@ initContextMenu = (id, contextSelector, itemType = null) ->
   # アイテム個別メニュー
   if itemType == Constant.ItemType.ARROW
     menu.push(
-      {title: "Arrow", cmd: "cut", uiIcon: "ui-icon-scissors"}
+      {title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"}
     )
   else if itemType == Constant.ItemType.BUTTON
     menu.push(
-      {title: "Button", cmd: "cut", uiIcon: "ui-icon-scissors"}
+      {title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"}
     )
 
   $('#' + id).contextmenu(
@@ -414,6 +491,7 @@ initContextMenu = (id, contextSelector, itemType = null) ->
   )
 
 # モードチェンジ
+# @param [Mode] mode 画面モード
 changeMode = (mode) ->
   if mode == Constant.MODE.DRAW
     $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
@@ -424,24 +502,13 @@ changeMode = (mode) ->
   window.mode = mode
 
 # サイドバーをオープン
+# @param [Array] scrollLeft オープン時にスクロースさせる位置
 openSidebar = (scrollLeft = null) ->
   $('#main').switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
     $('#sidebar').fadeIn('1000')
   )
   if scrollLeft != null
     mainScroll.animate({scrollLeft: scrollLeft}, 500)
-
-# サイドバーオープン時のスライド距離を計算
-calMoveScrollLeft = (target) ->
-  # col-md-9 → 75% padding → 15px
-  targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
-  #  viewMiddle = (mainScroll.width() * 0.5)
-  scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
-  if scrollLeft < 0
-    scrollLeft = 0
-  else if scrollLeft > mainScroll.width() * 0.25
-    scrollLeft =  mainScroll.width() * 0.25
-  return scrollLeft
 
 # サイドバーをクローズ
 closeSidebar = ->
@@ -451,6 +518,7 @@ closeSidebar = ->
   )
 
 # 警告表示
+# @param [String] message メッセージ内容
 showWarn = (message) ->
   warnFooter = $('.warn-message')
   errorFooter = $('.error-message')
@@ -493,6 +561,7 @@ showWarn = (message) ->
   )
 
 # エラー表示
+# @param [String] message メッセージ内容
 showError = (message) ->
   warnFooter = $('.warn-message')
   errorFooter = $('.error-message')
@@ -536,6 +605,7 @@ showError = (message) ->
   )
 
 # 警告表示(フラッシュ)
+# @param [String] message メッセージ内容
 flushWarn = (message) ->
   # 他のメッセージが表示されているときは表示しない
   if(window.messageTimer != null)
@@ -651,9 +721,9 @@ loadFromServer = ->
           obj = j.obj
           item = null
           if obj.itemType == Constant.ItemType.BUTTON
-            item = new Button()
+            item = new ButtonItem()
           else if obj.itemType == Constant.ItemType.ARROW
-            item = new Arrow()
+            item = new ArrowItem()
           item.loadByMinimumObject(obj)
       error: (data) ->
         console.log(data.message)
@@ -661,29 +731,39 @@ loadFromServer = ->
   )
 
 ### 操作履歴 ###
+
 # 操作履歴をプッシュ
+# @param [ItemBase] obj アイテムオブジェクト
 pushOperationHistory = (obj) ->
   operationHistory[operationHistoryIndex] = obj
   operationHistoryIndex += 1
+
 # 操作履歴を取り出し
+# @return [ItemBase] アイテムオブジェクト
 popOperationHistory = ->
   operationHistoryIndex -= 1
   return operationHistory[operationHistoryIndex]
+
 # 操作履歴を取り出してIndexを進める(redo処理)
+# @return [ItemBase] アイテムオブジェクト
 popOperationHistoryRedo = ->
   obj = operationHistory[operationHistoryIndex]
   operationHistoryIndex += 1
   return obj
 
 ### WebStorage保存 ###
+
 # WebStorageから全てのアイテムを描画
 drawItemFromStorage = ->
 
 # WebStorageに設定
+# @param [Int] id キー
+# @param [ItemBase] obj アイテムオブジェクト
 addStorage = (id, obj) ->
   storage.setItem(id, obj)
 
 # キーでWebStorageから取得
+# @return [ItemBase] アイテムオブジェクト
 getStorageByKey = (key) ->
   return storage.getItem(key)
 
