@@ -8,10 +8,16 @@ $ ->
   zindex = 1
   MOVE_FREQUENCY = 7
 
+  # ウィンドウ座標からCanvas座標に変換する
+  # @param [Object] canvas Canvas
+  # @param [Int] x x座標
+  # @param [Int] y y座標
   windowToCanvas = (canvas, x, y) ->
     bbox = canvas.getBoundingClientRect()
     return {x: x - bbox.left * (canvas.width  / bbox.width), y: y - bbox.top  * (canvas.height / bbox.height)}
 
+  # マウスダウン時の描画イベント
+  # @param [Array] loc Canvas座標
   mouseDownDrawing = (loc) ->
     if selectItemMenu == Constant.ItemType.ARROW
       item = new ArrowItem(loc)
@@ -20,6 +26,8 @@ $ ->
     item.saveDrawingSurface()
     item.startDraw()
 
+  # マウスドラッグ時の描画イベント
+  # @param [Array] loc Canvas座標
   mouseMoveDrawing = (loc) ->
     if enableMoveEvent
       enableMoveEvent = false
@@ -37,6 +45,8 @@ $ ->
       # 待ちキューに保存
       queueLoc = loc
 
+  # マウスアップ時の描画イベント
+  # @param [Array] loc Canvas座標
   mouseUpDrawing = (loc) ->
     item.restoreAllDrawingSurface()
     item.endDraw(loc, zindex)
@@ -45,7 +55,7 @@ $ ->
   # 手書きイベントを設定
   handwrite = ->
 
-    # ウィンドウ座標からCanvas座標に変換
+    # 画面のウィンドウ座標からCanvas座標に変換
     # @param [Array] e ウィンドウ座標
     # @return [Array] Canvas座標
     calcCanvasLoc = (e)->
