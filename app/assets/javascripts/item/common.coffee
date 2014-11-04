@@ -194,10 +194,10 @@ class ItemBase
     # アイテム個別メニュー
     if @constructor.ITEMTYPE == Constant.ItemType.ARROW
       menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-      contextSelector = ".css3button"
+      contextSelector = ".arrow"
     else if @constructor.ITEMTYPE == Constant.ItemType.BUTTON
       menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-      contextSelector = ".arrow"
+      contextSelector = ".css3button"
 
     setupContextMenu(@elementId(), contextSelector, menu)
 
