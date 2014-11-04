@@ -1,5 +1,6 @@
 $ ->
   dragging = false
+  clicking = false
   lastX = null; lastY = null
   item = null
   enableMoveEvent = true
@@ -11,78 +12,90 @@ $ ->
     bbox = canvas.getBoundingClientRect()
     return {x: x - bbox.left * (canvas.width  / bbox.width), y: y - bbox.top  * (canvas.height / bbox.height)}
 
-  mouseDownOrTouchStartInDrawingCanvas = (loc) ->
-    dragging = true;
-
+  mouseDownDrawing = (loc) ->
     if selectItemMenu == Constant.ItemType.ARROW
       item = new ArrowItem(loc)
     else if selectItemMenu == Constant.ItemType.BUTTON
       item = new ButtonItem(loc)
-
     item.saveDrawingSurface()
     item.startDraw()
 
-    lastX = loc.x;
-    lastY = loc.y;
+  mouseMoveDrawing = (loc) ->
+    if enableMoveEvent
+      enableMoveEvent = false
+      dragging = true
+      item.draw(loc)
 
-  mouseMoveOrTouchMoveInDrawingCanvas = (loc) ->
-    if dragging && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
-      if enableMoveEvent
-        enableMoveEvent = false
+      # 待ちキューがある場合はもう一度実行
+      if queueLoc != null
+        q = queueLoc
+        queueLoc = null
+        item.draw(q)
 
-        item.draw(loc)
+      enableMoveEvent = true
+    else
+      # 待ちキューに保存
+      queueLoc = loc
 
-        # 待ちキューがある場合はもう一度実行
-        if queueLoc != null
-          q = queueLoc
-          queueLoc = null
-          item.draw(q)
-
-        enableMoveEvent = true
-        lastX = loc.x
-        lastY = loc.y
-      else
-        # 待ちキューに保存
-        queueLoc = loc
-
-  mouseUpOrTouchEndInDrawingCanvas = (loc) ->
+  mouseUpDrawing = (loc) ->
     item.restoreAllDrawingSurface()
-    if dragging
-      item.endDraw(loc, zindex)
-      zindex += 1
-    dragging = false
+    item.endDraw(loc, zindex)
+    zindex += 1
 
+  # 手書きイベントを設定
   handwrite = ->
+
+    # ウィンドウ座標からCanvas座標に変換
+    # @param [Array] e ウィンドウ座標
+    # @return [Array] Canvas座標
+    calcCanvasLoc = (e)->
+      x = e.x || e.clientX
+      y = e.y || e.clientY
+      return windowToCanvas(drawingCanvas, x, y)
+
+    # 座標の状態を保存
+    # @param [Array] loc 座標
+    saveLastLoc = (loc) ->
+      lastX = loc.x
+      lastY = loc.y
+
+    # マウスダウンイベント
+    # @param [Array] e ウィンドウ座標
     drawingCanvas.onmousedown = (e) ->
       if e.which == 1 #左クリック
+        loc = calcCanvasLoc(e)
+        saveLastLoc(loc)
+        clicking = true
         if mode == Constant.MODE.DRAW
-          x = e.x || e.clientX
-          y = e.y || e.clientY
-          loc = windowToCanvas(drawingCanvas, x, y)
           e.preventDefault()
-          mouseDownOrTouchStartInDrawingCanvas(loc)
+          mouseDownDrawing(loc)
         else if mode == Constant.MODE.OPTION
           # サイドバーを閉じる
           closeSidebar()
           changeMode(Constant.MODE.EDIT)
 
+    # マウスドラッグイベント
+    # @param [Array] e ウィンドウ座標
     drawingCanvas.onmousemove = (e) ->
       if e.which == 1 #左クリック
-        if mode == Constant.MODE.DRAW
-          x = e.x || e.clientX
-          y = e.y || e.clientY
-          loc = windowToCanvas(drawingCanvas, x, y)
-          e.preventDefault()
-          mouseMoveOrTouchMoveInDrawingCanvas(loc)
+        loc = calcCanvasLoc(e)
+        if clicking &&
+          Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
+            if mode == Constant.MODE.DRAW
+              e.preventDefault()
+              mouseMoveDrawing(loc)
+            saveLastLoc(loc)
 
+    # マウスアップイベント
+    # @param [Array] e ウィンドウ座標
     drawingCanvas.onmouseup = (e) ->
       if e.which == 1 #左クリック
-        if mode == Constant.MODE.DRAW
-          x = e.x || e.clientX
-          y = e.y || e.clientY
-          loc = windowToCanvas(drawingCanvas, x, y)
+        if dragging && mode == Constant.MODE.DRAW
+          loc = calcCanvasLoc(e)
           e.preventDefault()
-          mouseUpOrTouchEndInDrawingCanvas(loc)
+          mouseUpDrawing(loc)
+      dragging = false
+      clicking = false
 
   handwrite()
 

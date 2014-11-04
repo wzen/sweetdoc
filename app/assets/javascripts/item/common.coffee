@@ -70,7 +70,8 @@ class ItemBase
 
   # IDを取得
   # @return [Int] ID
-  getId: -> @id
+  getId: ->
+    return @id
 
   # HTML要素IDを取得
   # @return [Int] HTML要素ID
@@ -79,7 +80,8 @@ class ItemBase
 
   # サイズ取得
   # @return [Array] サイズ
-  getSize: -> @itemSize
+  getSize: ->
+    return @itemSize
 
   # サイズ設定
   # @param [Array] size サイズ
@@ -88,11 +90,12 @@ class ItemBase
 
   # z-indexを取得
   # @return [Int] z-index
-  getZIndex: -> @zindex
+  getZIndex: ->
+    return @zindex
 
   # 操作履歴Indexをプッシュ
   # @param [ItemBase] obj オブジェクト
-  pushOhi: (obj)->
+  pushOhi: (obj) ->
     @ohiRegist[@ohiRegistIndex] = obj
     @ohiRegistIndex += 1
 
@@ -124,26 +127,30 @@ class ItemBase
   restoreDrawingSurface : (size) ->
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - Constant.SURFACE_IMAGE_MARGIN, size.y - Constant.SURFACE_IMAGE_MARGIN, size.w + Constant.SURFACE_IMAGE_MARGIN * 2, size.h + Constant.SURFACE_IMAGE_MARGIN * 2)
 
-  # 描画開始時に呼ばれるメソッド
+  # 描画開始時の処理
   startDraw: ->
     changeMode(Constant.MODE.DRAW)
 
-  # 描画終了時に呼ばれるメソッド
+  # 描画中の処理
+  # @abstract
+  draw: (cood) ->
+
+  # 描画終了時の処理
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
   endDraw: (cood, zindex) ->
-    if mode == Constant.MODE.DRAW
-      changeMode(Constant.MODE.EDIT)
-      @zindex = zindex
-      if !isClick.call(@, cood)
-        # 状態を保存
-        @saveObj(Constant.ItemActionType.MAKE)
-    else if mode == Constant.MODE.EDIT
-      if isClick.call(@, cood)
-        # 枠線を付ける
-        $('#' + @elementId())
+    changeMode(Constant.MODE.EDIT)
+    @zindex = zindex
+    if !isClick.call(@, cood)
+      # 状態を保存
+      @saveObj(Constant.ItemActionType.MAKE)
     return true
+
+  # インスタンス変数で再描画
+  # データから読み込んで描画する処理に使用
+  # @abstract
+  reDraw: ->
 
   # アイテムの情報をアイテムリストと操作履歴に保存
   # @param [ItemActionType] action アクション種別
@@ -159,7 +166,7 @@ class ItemBase
     if action == Constant.ItemActionType.MAKE
       # アイテムリストに保存
       itemObjectList.push(@)
-    console.log('save id:' + @elementId())
+    console.log('save obj:' + JSON.stringify(@itemSize))
 
   # ストレージとDB保存用の最小限のデータを取得
   # @abstract
@@ -169,12 +176,48 @@ class ItemBase
   # @abstract
   loadByMinimumObject: (obj) ->
 
+  setupEvents: ->
+    setupItemContextMenu.call(@)
+    setupDraggableAndResizable.call(@)
+
   # マウスクリックか判定
   # @private
   # @param [Array] cood マウスクリック座標
   isClick = (cood) ->
     return cood.x == @mousedownCood.x && cood.y == @mousedownCood.y
 
+  # コンテキストメニュー初期化
+  # @private
+  setupItemContextMenu = ->
+    menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+
+    # アイテム個別メニュー
+    if @constructor.ITEMTYPE == Constant.ItemType.ARROW
+      menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+      contextSelector = ".css3button"
+    else if @constructor.ITEMTYPE == Constant.ItemType.BUTTON
+      menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+      contextSelector = ".arrow"
+
+    setupContextMenu(@elementId(), contextSelector, menu)
+
+  # JQueryUIのドラッグイベントとリサイズをセット
+  # @private
+  setupDraggableAndResizable = ->
+    $('#' + @elementId()).draggable({
+      containment: mainWrapper
+      stop: (event, ui) =>
+        rect = {x:ui.position.left, y: ui.position.top, w: @getSize().w, h: @getSize().h}
+        @setSize(rect)
+        @saveObj(Constant.ItemActionType.MOVE)
+    })
+    $('#' + @elementId()).resizable({
+      containment: mainWrapper
+      stop: (event, ui) =>
+        rect = {x: @getSize().x, y: @getSize().y, w: ui.size.width, h: ui.size.height}
+        @setSize(rect)
+        @saveObj(Constant.ItemActionType.MOVE)
+    })
 
 # ブラウザ対応のチェック
 # @return [Boolean] 処理結果
@@ -231,21 +274,53 @@ initDraggableAndResizable =  ->
     containment: mainWrapper
   })
 
-# JQueryUIのドラッグイベントとリサイズをセット
-# @param [ItemBase] obj アイテムオブジェクト
-setDraggableAndResizable = (obj)->
-  $('#' + obj.elementId()).draggable({
-    containment: mainWrapper
-    stop: (event, ui) ->
-      rect = {x:ui.position.left, y: ui.position.top, w: obj.getSize().w, h: obj.getSize().h}
-      obj.save(Constant.ItemActionType.MOVE, rect)
-  })
-  $('#' + obj.elementId()).resizable({
-    containment: mainWrapper
-    stop: (event, ui) ->
-      rect = {x: obj.getSize().x, y: obj.getSize().y, w: ui.size.width, h: ui.size.height}
-      obj.save(Constant.ItemActionType.MOVE, rect)
-  })
+
+# コンテキストメニュー初期化
+# @param [String] elementID HTML要素ID
+# @param [String] contextSelector
+# @param [Array] menu 表示メニュー
+setupContextMenu = (elementId, contextSelector, menu) ->
+
+  # サイドバーオープン時のスライド距離を計算
+  # @param [Object] target スクロールビュー
+  calMoveScrollLeft = (target) ->
+    # col-md-9 → 75% padding → 15px
+    targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
+    #  viewMiddle = (mainScroll.width() * 0.5)
+    scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
+    if scrollLeft < 0
+      scrollLeft = 0
+    else if scrollLeft > mainScroll.width() * 0.25
+      scrollLeft =  mainScroll.width() * 0.25
+    return scrollLeft
+
+  $('#' + elementId).contextmenu(
+    {
+      delegate: contextSelector
+      preventContextMenuForPopup: true
+      preventSelect: true
+      menu: menu
+      select: (event, ui) ->
+        $target = event.target
+        switch ui.cmd
+          when "delete"
+            $target.remove()
+            return
+          when "cut"
+
+          else
+            return
+        openSidebar(calMoveScrollLeft($target))
+        changeMode(Constant.MODE.OPTION)
+
+      beforeOpen: (event, ui) =>
+        $target = ui.target
+        $menu = ui.menu
+        extraData = ui.extraData
+        ui.menu.zIndex( $(event.target).zIndex() + 1)
+    #$('#contents').contextmenu("setEntry", "copy", "Copy '" + $target.text() + "'").contextmenu("setEntry", "paste", "Paste" + (CLIPBOARD ? " '" + CLIPBOARD + "'" : "")).contextmenu("enableEntry", "paste", (CLIPBOARD != ""))
+    }
+  )
 
 # アイテムのIDを作成
 # @return [Int] 生成したID
@@ -438,67 +513,7 @@ initColorPickerValue = ->
     inputEmt.attr('value', color)
   )
 
-# コンテキストメニュー初期化
-# @param [Int] id コンテキストメニューのID
-# @param [Object] contextSelector コンテキストメニューを設定する要素
-# @param [ItemType] itemType アイテム種別
-initContextMenu = (id, contextSelector, itemType = null) ->
 
-  # サイドバーオープン時のスライド距離を計算
-  # @param [Object] target スクロールビュー
-  calMoveScrollLeft = (target) ->
-    # col-md-9 → 75% padding → 15px
-    targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
-    #  viewMiddle = (mainScroll.width() * 0.5)
-    scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
-    if scrollLeft < 0
-      scrollLeft = 0
-    else if scrollLeft > mainScroll.width() * 0.25
-      scrollLeft =  mainScroll.width() * 0.25
-    return scrollLeft
-
-  # 共通メニュー
-  menu = [
-    {title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}
-  ]
-
-  # アイテム個別メニュー
-  if itemType == Constant.ItemType.ARROW
-    menu.push(
-      {title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"}
-    )
-  else if itemType == Constant.ItemType.BUTTON
-    menu.push(
-      {title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"}
-    )
-
-  $('#' + id).contextmenu(
-    {
-      delegate: contextSelector
-      preventContextMenuForPopup: true
-      preventSelect: true
-      menu: menu
-      select: (event, ui) ->
-        $target = event.target
-        switch ui.cmd
-          when "delete"
-            $target.remove()
-            return
-          when "cut"
-
-          else
-            return
-        openSidebar(calMoveScrollLeft($target))
-        changeMode(Constant.MODE.OPTION)
-
-      beforeOpen: (event, ui) =>
-        $target = ui.target
-        $menu = ui.menu
-        extraData = ui.extraData
-        ui.menu.zIndex( $(event.target).zIndex() + 1)
-        #$('#contents').contextmenu("setEntry", "copy", "Copy '" + $target.text() + "'").contextmenu("setEntry", "paste", "Paste" + (CLIPBOARD ? " '" + CLIPBOARD + "'" : "")).contextmenu("enableEntry", "paste", (CLIPBOARD != ""))
-    }
-  )
 
 # モードチェンジ
 # @param [Mode] mode 画面モード
@@ -811,5 +826,6 @@ $ ->
 
   $(document).ready(->
     # コンテキストメニュー
-    initContextMenu('contents', '#main_container')
+    menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
+    setupContextMenu('contents', '#main_container', menu)
   )

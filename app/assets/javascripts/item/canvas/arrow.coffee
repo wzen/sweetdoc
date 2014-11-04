@@ -71,18 +71,20 @@ class ArrowItem extends ItemBase
     @makeElement(cood)
     return true
 
+  # 再描画処理
+  reDraw: ->
+    # 矢印はまだ..
+
   # CanvasのHTML要素を作成
   # @param [Array] cood 座標
   # @return [Boolean] 処理結果
   makeElement: (cood) ->
 
     # Canvasを作成
-    e = ElementCode.get().createItemElement(@)
-    emt = $(e).appendTo('#main-wrapper')
-    $('#' + @canvasElementId()).attr('width', $('#' + emt.attr('id')).width())
-    $('#' + @canvasElementId()).attr('height', $('#' + emt.attr('id')).height())
-    initContextMenu(emt.attr('id'), '.arrow', Constant.ItemType.ARROW)
-    setDraggableAndResizable(@)
+    $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
+    $('#' + @canvasElementId()).attr('width', $('#' + @elementId).width())
+    $('#' + @canvasElementId()).attr('height', $('#' + @elementId).height())
+    @setupEvents()
 
     # 新しいCanvasに描画
     drawingCanvas = document.getElementById(@canvasElementId())

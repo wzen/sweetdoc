@@ -33,7 +33,7 @@ class ButtonItem extends ItemBase
       @itemSize.y = cood.y
     drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
-  # 描画終了時に呼ばれるメソッド
+  # 描画終了時の処理
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
@@ -42,14 +42,15 @@ class ButtonItem extends ItemBase
       return false
     @makeElement()
 
+  # 再描画処理
+  reDraw: ->
+    @makeElement()
+
   # HTML要素を作成
   # @return [Boolean] 処理結果
   makeElement: ->
-    g = ElementCode.get()
-    e = g.createItemElement(@)
-    emt = $(e).appendTo('#main-wrapper')
-    initContextMenu(emt.attr('id'), '.css3button', Constant.ItemType.BUTTON)
-    setDraggableAndResizable(@)
+    $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
+    @setupEvents()
     return true
 
   # ストレージとDB保存用の最小限のデータを取得
