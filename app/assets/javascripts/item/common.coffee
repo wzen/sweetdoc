@@ -190,7 +190,9 @@ class ItemBase
 
     # クリックイベント設定
     do =>
-      @getJQueryElement().on('click', ->
+      @getJQueryElement().mousedown( (e)->
+        e.stopPropagation()
+        $(@).find('.editSelected').remove()
         $(@).append('<div class="editSelected" />')
       )
 
