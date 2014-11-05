@@ -53,7 +53,7 @@ $ ->
     zindex += 1
 
   # 手書きイベントを設定
-  handwrite = ->
+  do =>
 
     # 画面のウィンドウ座標からCanvas座標に変換
     # @param [Array] e ウィンドウ座標
@@ -106,8 +106,6 @@ $ ->
           mouseUpDrawing(loc)
       dragging = false
       clicking = false
-
-  handwrite()
 
 
 

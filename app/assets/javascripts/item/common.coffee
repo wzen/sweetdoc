@@ -11,32 +11,35 @@ class Constant
   # 操作モード
   class @MODE
     # @property [Int] DRAW 描画
-    @DRAW:0
+    @DRAW = 0
     # @property [Int] EDIT 画面編集
-    @EDIT:1
+    @EDIT = 1
     # @property [Int] OPTION アイテムオプション
-    @OPTION:2
+    @OPTION = 2
 
   # アイテム種別
   class @ItemType
     # @property [Int] ARROW 矢印
-    @ARROW : 0
+    @ARROW = 0
     # @property [Int] BUTTON ボタン
-    @BUTTON : 1
+    @BUTTON = 1
 
   # アイテムに対するアクション
   class @ItemActionType
     # @property [Int] MAKE 作成
-    @MAKE : 0
+    @MAKE = 0
     # @property [Int] MOVE 移動
-    @MOVE : 1
+    @MOVE = 1
     # @property [int] CHANGE_OPTION オプション変更
-    @CHANGE_OPTION : 2
+    @CHANGE_OPTION = 2
 
   # キーコード
   class @keyboardKeyCode
     # @property [Int] z zボタン
-    @z : 90
+    @z = 90
+
+  class @CssClassName
+    @EDIT_SELECTED = "editSelected"
 
 
 # アイテム基底
@@ -67,6 +70,8 @@ class ItemBase
     @ohiRegist = []
     # @property [Int] ohiRegistIndex 操作履歴Index保存配列のインデックス
     @ohiRegistIndex = 0
+    # @property [Object] jqueryElement アイテムのjQueryオブジェクト
+    @jqueryElement = null
 
   # IDを取得
   # @return [Int] ID
@@ -75,8 +80,13 @@ class ItemBase
 
   # HTML要素IDを取得
   # @return [Int] HTML要素ID
-  elementId: ->
+  getElementId: ->
     return @constructor.IDENTITY + '_' + @id
+
+  getJQueryElement: ->
+    if @jqueryElement == null
+      @jqueryElement = $('#' + @getElementId())
+    return @jqueryElement
 
   # サイズ取得
   # @return [Array] サイズ
@@ -142,9 +152,8 @@ class ItemBase
   endDraw: (cood, zindex) ->
     changeMode(Constant.MODE.EDIT)
     @zindex = zindex
-    if !isClick.call(@, cood)
-      # 状態を保存
-      @saveObj(Constant.ItemActionType.MAKE)
+    # 状態を保存
+    @saveObj(Constant.ItemActionType.MAKE)
     return true
 
   # インスタンス変数で再描画
@@ -176,48 +185,46 @@ class ItemBase
   # @abstract
   loadByMinimumObject: (obj) ->
 
+  # アイテムにイベントを設定する
   setupEvents: ->
-    setupItemContextMenu.call(@)
-    setupDraggableAndResizable.call(@)
 
-  # マウスクリックか判定
-  # @private
-  # @param [Array] cood マウスクリック座標
-  isClick = (cood) ->
-    return cood.x == @mousedownCood.x && cood.y == @mousedownCood.y
+    # クリックイベント設定
+    do =>
+      @getJQueryElement().on('click', ->
+        $(@).append('<div class="editSelected" />')
+      )
 
-  # コンテキストメニュー初期化
-  # @private
-  setupItemContextMenu = ->
-    menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+    # コンテキストメニュー設定
+    do =>
+      menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+      if @constructor.ITEMTYPE == Constant.ItemType.ARROW
+        menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+        contextSelector = ".arrow"
+      else if @constructor.ITEMTYPE == Constant.ItemType.BUTTON
+        menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+        contextSelector = ".css3button"
+      setupContextMenu(@getJQueryElement(), contextSelector, menu)
 
-    # アイテム個別メニュー
-    if @constructor.ITEMTYPE == Constant.ItemType.ARROW
-      menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-      contextSelector = ".arrow"
-    else if @constructor.ITEMTYPE == Constant.ItemType.BUTTON
-      menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-      contextSelector = ".css3button"
+    # JQueryUIのドラッグイベントとリサイズ設定
+    do =>
+      @getJQueryElement().draggable({
+        containment: mainWrapper
+        stop: (event, ui) =>
+          rect = {x:ui.position.left, y: ui.position.top, w: @getSize().w, h: @getSize().h}
+          @setSize(rect)
+          @saveObj(Constant.ItemActionType.MOVE)
+      })
+      @getJQueryElement().resizable({
+        containment: mainWrapper
+        stop: (event, ui) =>
+          rect = {x: @getSize().x, y: @getSize().y, w: ui.size.width, h: ui.size.height}
+          @setSize(rect)
+          @saveObj(Constant.ItemActionType.MOVE)
+      })
 
-    setupContextMenu(@elementId(), contextSelector, menu)
+  # イベントによって設定したスタイルをクリアする　
+  clearAllEventStyle : ->
 
-  # JQueryUIのドラッグイベントとリサイズをセット
-  # @private
-  setupDraggableAndResizable = ->
-    $('#' + @elementId()).draggable({
-      containment: mainWrapper
-      stop: (event, ui) =>
-        rect = {x:ui.position.left, y: ui.position.top, w: @getSize().w, h: @getSize().h}
-        @setSize(rect)
-        @saveObj(Constant.ItemActionType.MOVE)
-    })
-    $('#' + @elementId()).resizable({
-      containment: mainWrapper
-      stop: (event, ui) =>
-        rect = {x: @getSize().x, y: @getSize().y, w: ui.size.width, h: ui.size.height}
-        @setSize(rect)
-        @saveObj(Constant.ItemActionType.MOVE)
-    })
 
 # ブラウザ対応のチェック
 # @return [Boolean] 処理結果
@@ -279,7 +286,7 @@ initDraggableAndResizable =  ->
 # @param [String] elementID HTML要素ID
 # @param [String] contextSelector
 # @param [Array] menu 表示メニュー
-setupContextMenu = (elementId, contextSelector, menu) ->
+setupContextMenu = (element, contextSelector, menu) ->
 
   # サイドバーオープン時のスライド距離を計算
   # @param [Object] target スクロールビュー
@@ -294,7 +301,7 @@ setupContextMenu = (elementId, contextSelector, menu) ->
       scrollLeft =  mainScroll.width() * 0.25
     return scrollLeft
 
-  $('#' + elementId).contextmenu(
+  element.contextmenu(
     {
       delegate: contextSelector
       preventContextMenuForPopup: true
@@ -513,8 +520,6 @@ initColorPickerValue = ->
     inputEmt.attr('value', color)
   )
 
-
-
 # モードチェンジ
 # @param [Mode] mode 画面モード
 changeMode = (mode) ->
@@ -525,6 +530,12 @@ changeMode = (mode) ->
   else if mode == Constant.MODE.OPTION
     $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
   window.mode = mode
+
+clearAllItemStyle = ->
+  itemObjectList.forEach((obj) ->
+    obj.clearAllEventStyle()
+    $('.editSelected').remove()
+  )
 
 # サイドバーをオープン
 # @param [Array] scrollLeft オープン時にスクロースさせる位置
@@ -674,9 +685,9 @@ undo = ->
   action = history.action
   if action == Constant.ItemActionType.MAKE
     # オブジェクトを消去
-    $('#' + obj.elementId()).remove()
+    obj.getJQueryElement().remove()
   else if action == Constant.ItemActionType.MOVE
-    $('#' + obj.elementId()).remove()
+    obj.getJQueryElement().remove()
     past = operationHistory[pastOperationIndex]
     obj = past.obj
     obj.setSize(past.itemSize)
@@ -696,7 +707,7 @@ redo = ->
     obj.setSize(history.itemSize)
     obj.reDraw()
   else if action == Constant.ItemActionType.MOVE
-    $('#' + obj.elementId()).remove()
+    obj.getJQueryElement().remove()
     obj.setSize(history.itemSize)
     obj.reDraw()
 
@@ -795,7 +806,7 @@ getStorageByKey = (key) ->
 # 画面のアイテムをクリア
 clearWorkTable = ->
   itemObjectList.forEach((obj) ->
-    $('#' + obj.elementId()).remove()
+    obj.getJQueryElement().remove()
   )
 
 $ ->
@@ -824,8 +835,9 @@ $ ->
   # キーイベント
   initKeyEvent()
 
-  $(document).ready(->
-    # コンテキストメニュー
-    menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
-    setupContextMenu('contents', '#main_container', menu)
+  # コンテキストメニュー
+  menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
+  setupContextMenu($('#main'), '#main_container', menu)
+  $('#main').on("mousedown", ->
+    clearAllItemStyle()
   )

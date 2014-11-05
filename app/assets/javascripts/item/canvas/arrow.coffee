@@ -31,7 +31,7 @@ class ArrowItem extends ItemBase
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID
   canvasElementId: ->
-    return @elementId() + '_canvas'
+    return @getElementId() + '_canvas'
 
   # 描画
   # @param [Array] moveCood 画面ドラッグ座標
@@ -82,8 +82,8 @@ class ArrowItem extends ItemBase
 
     # Canvasを作成
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
-    $('#' + @canvasElementId()).attr('width', $('#' + @elementId).width())
-    $('#' + @canvasElementId()).attr('height', $('#' + @elementId).height())
+    $('#' + @canvasElementId()).attr('width', $('#' + @getElementId).width())
+    $('#' + @canvasElementId()).attr('height', $('#' + @getElementId).height())
     @setupEvents()
 
     # 新しいCanvasに描画
