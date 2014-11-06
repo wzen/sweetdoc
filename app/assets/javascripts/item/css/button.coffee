@@ -37,8 +37,8 @@ class ButtonItem extends ItemBase
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
-  endDraw: (cood, zindex) ->
-    if !super(cood, zindex)
+  endDraw: (zindex) ->
+    if !super(zindex)
       return false
     @makeElement()
 

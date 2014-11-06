@@ -47,9 +47,9 @@ $ ->
 
   # マウスアップ時の描画イベント
   # @param [Array] loc Canvas座標
-  mouseUpDrawing = (loc) ->
+  mouseUpDrawing = ->
     item.restoreAllDrawingSurface()
-    item.endDraw(loc, zindex)
+    item.endDraw(zindex)
     zindex += 1
 
   # 手書きイベントを設定
@@ -101,9 +101,8 @@ $ ->
     drawingCanvas.onmouseup = (e) ->
       if e.which == 1 #左クリック
         if dragging && mode == Constant.Mode.DRAW
-          loc = calcCanvasLoc(e)
           e.preventDefault()
-          mouseUpDrawing(loc)
+          mouseUpDrawing()
       dragging = false
       clicking = false
 

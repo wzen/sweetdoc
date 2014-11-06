@@ -40,9 +40,7 @@ class ItemBase
     return @constructor.IDENTITY + '_' + @id
 
   getJQueryElement: ->
-    if @jqueryElement == null
-      @jqueryElement = $('#' + @getElementId())
-    return @jqueryElement
+    return $('#' + @getElementId())
 
   # サイズ取得
   # @return [Array] サイズ
@@ -105,7 +103,7 @@ class ItemBase
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
-  endDraw: (cood, zindex) ->
+  endDraw: (zindex) ->
     changeMode(Constant.Mode.EDIT)
     @zindex = zindex
     # 状態を保存
