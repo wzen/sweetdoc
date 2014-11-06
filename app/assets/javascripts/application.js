@@ -23,6 +23,7 @@
 //= require ../../../vendor/assets/colorpicker/js/utils.js
 //= require ../../../vendor/assets/colorpicker/js/layout.js
 //= require item/generator.jquery.color.js
+//= require constant
 //= require item/code_template
 //= require item/common
 //= require item/canvas/arrow

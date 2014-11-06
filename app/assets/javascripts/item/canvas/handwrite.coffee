@@ -76,13 +76,13 @@ $ ->
         loc = calcCanvasLoc(e)
         saveLastLoc(loc)
         clicking = true
-        if mode == Constant.MODE.DRAW
+        if mode == Constant.Mode.DRAW
           e.preventDefault()
           mouseDownDrawing(loc)
-        else if mode == Constant.MODE.OPTION
+        else if mode == Constant.Mode.OPTION
           # サイドバーを閉じる
           closeSidebar()
-          changeMode(Constant.MODE.EDIT)
+          changeMode(Constant.Mode.EDIT)
 
     # マウスドラッグイベント
     # @param [Array] e ウィンドウ座標
@@ -91,7 +91,7 @@ $ ->
         loc = calcCanvasLoc(e)
         if clicking &&
           Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
-            if mode == Constant.MODE.DRAW
+            if mode == Constant.Mode.DRAW
               e.preventDefault()
               mouseMoveDrawing(loc)
             saveLastLoc(loc)
@@ -100,7 +100,7 @@ $ ->
     # @param [Array] e ウィンドウ座標
     drawingCanvas.onmouseup = (e) ->
       if e.which == 1 #左クリック
-        if dragging && mode == Constant.MODE.DRAW
+        if dragging && mode == Constant.Mode.DRAW
           loc = calcCanvasLoc(e)
           e.preventDefault()
           mouseUpDrawing(loc)

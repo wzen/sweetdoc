@@ -1,47 +1,3 @@
-# 定数
-class Constant
-
-  # @property SURFACE_IMAGE_MARGIN Canvasの背景貼り付け時のマージン
-  @SURFACE_IMAGE_MARGIN = 5
-  # @porperty ZINDEX_MAX z-indexの最大値
-  @ZINDEX_MAX = 1000
-  # @property OPERATION_STORE_MAX 操作履歴保存最大数
-  @OPERATION_STORE_MAX = 30
-
-  # 操作モード
-  class @MODE
-    # @property [Int] DRAW 描画
-    @DRAW = 0
-    # @property [Int] EDIT 画面編集
-    @EDIT = 1
-    # @property [Int] OPTION アイテムオプション
-    @OPTION = 2
-
-  # アイテム種別
-  class @ItemType
-    # @property [Int] ARROW 矢印
-    @ARROW = 0
-    # @property [Int] BUTTON ボタン
-    @BUTTON = 1
-
-  # アイテムに対するアクション
-  class @ItemActionType
-    # @property [Int] MAKE 作成
-    @MAKE = 0
-    # @property [Int] MOVE 移動
-    @MOVE = 1
-    # @property [int] CHANGE_OPTION オプション変更
-    @CHANGE_OPTION = 2
-
-  # キーコード
-  class @keyboardKeyCode
-    # @property [Int] z zボタン
-    @z = 90
-
-  class @CssClassName
-    @EDIT_SELECTED = "editSelected"
-
-
 # アイテム基底
 class ItemBase
   # @abstract
@@ -139,7 +95,7 @@ class ItemBase
 
   # 描画開始時の処理
   startDraw: ->
-    changeMode(Constant.MODE.DRAW)
+    changeMode(Constant.Mode.DRAW)
 
   # 描画中の処理
   # @abstract
@@ -150,7 +106,7 @@ class ItemBase
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
   endDraw: (cood, zindex) ->
-    changeMode(Constant.MODE.EDIT)
+    changeMode(Constant.Mode.EDIT)
     @zindex = zindex
     # 状態を保存
     @saveObj(Constant.ItemActionType.MAKE)
@@ -256,7 +212,7 @@ initCommonVar = ->
   window.flushMessageTimer = null
   window.drawingCanvas = document.getElementById('canvas_container')
   window.drawingContext = drawingCanvas.getContext('2d')
-  window.mode = Constant.MODE.DRAW
+  window.mode = Constant.Mode.DRAW
   window.selectItemMenu = Constant.ItemType.BUTTON
   window.storage = localStorage
   # WebStorageを初期化する
@@ -320,7 +276,7 @@ setupContextMenu = (element, contextSelector, menu) ->
           else
             return
         openSidebar(calMoveScrollLeft($target))
-        changeMode(Constant.MODE.OPTION)
+        changeMode(Constant.Mode.OPTION)
 
       beforeOpen: (event, ui) =>
         $target = ui.target
@@ -486,13 +442,13 @@ initHeaderMenu = ->
     itemsMenuEmt.removeClass('active')
     $(@).parent('li').addClass('active')
     window.selectItemMenu = Constant.ItemType.BUTTON
-    changeMode(Constant.MODE.DRAW)
+    changeMode(Constant.Mode.DRAW)
   )
   $('.menu-arrow', itemsMenuEmt).on('click', ->
     itemsMenuEmt.removeClass('active')
     $(@).parent('li').addClass('active')
     window.selectItemMenu = Constant.ItemType.ARROW
-    changeMode(Constant.MODE.DRAW)
+    changeMode(Constant.Mode.DRAW)
   )
 
 # カラーピッカーの作成
@@ -525,11 +481,11 @@ initColorPickerValue = ->
 # モードチェンジ
 # @param [Mode] mode 画面モード
 changeMode = (mode) ->
-  if mode == Constant.MODE.DRAW
+  if mode == Constant.Mode.DRAW
     $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
-  else if mode == Constant.MODE.EDIT
+  else if mode == Constant.Mode.EDIT
     $(window.drawingCanvas).css('z-index', 0)
-  else if mode == Constant.MODE.OPTION
+  else if mode == Constant.Mode.OPTION
     $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
   window.mode = mode
 
