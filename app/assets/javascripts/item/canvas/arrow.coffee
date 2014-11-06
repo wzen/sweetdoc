@@ -16,18 +16,22 @@ class ArrowItem extends ItemBase
   HEADER_WIDTH = 100
   # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
   HEADER_HEIGHT = 50
-
-  TRIANGLE_TOP_LENGTH = HEADER_WIDTH
+  # @property [Int] PADDING_SIZE 矢印サイズのPadding
+  PADDING_SIZE = HEADER_WIDTH
 
   # コンストラクタ
   # @param [Array] cood 座標
   constructor : (cood = null)->
     super(cood)
-    @direction = {x: 0, y: 0}  #現在の進行方向を表す
+    # @property [Array] direction 矢印の進行方向
+    @direction = {x: 0, y: 0}
+    # @property [Array] coodRegist ドラッグした座標
     @coodRegist = []
-    @arrowLength = 0
+    # @property [Array] coodHeadPart 矢印の頭部の座標
     @coodHeadPart = []
+    # @property [Array] coodLeftBodyPart 矢印の体左部分の座標
     @coodLeftBodyPart = []
+    # @property [Array] coodRightBodyPart 矢印の体右部分の座標
     @coodRightBodyPart = []
 
   # CanvasのHTML要素IDを取得
@@ -118,7 +122,6 @@ class ArrowItem extends ItemBase
       a: @itemSize
       b: @zindex
       c: @coodRegist
-      f : @arrowLength
       g : @coodHeadPart
       h : @coodLeftBodyPart
       i : @coodRightBodyPart
@@ -132,7 +135,6 @@ class ArrowItem extends ItemBase
     @itemSize = obj.a
     @zindex = obj.b
     @coodRegist = obj.c
-    @arrowLength = obj.f
     @coodHeadPart = obj.g
     @coodLeftBodyPart = obj.h
     @coodRightBodyPart = obj.i
@@ -334,19 +336,19 @@ class ArrowItem extends ItemBase
     # 保存したキャンパスを張り付け
     @restoreDrawingSurface(@itemSize)
 
-  # 矢印の範囲更新
+  # 矢印のサイズ更新
   # @private
   updateArrowRect = (cood) ->
     if @itemSize == null
       @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
     else
-      minX = cood.x - TRIANGLE_TOP_LENGTH
+      minX = cood.x - PADDING_SIZE
       minX = if minX < 0 then 0 else minX
-      minY = cood.y - TRIANGLE_TOP_LENGTH
+      minY = cood.y - PADDING_SIZE
       minY = if minY < 0 then 0 else minY
-      maxX = cood.x + TRIANGLE_TOP_LENGTH
+      maxX = cood.x + PADDING_SIZE
       maxX = if maxX > drawingCanvas.width then drawingCanvas.width else maxX
-      maxY = cood.y + TRIANGLE_TOP_LENGTH
+      maxY = cood.y + PADDING_SIZE
       maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
 
       if @itemSize.x > minX
