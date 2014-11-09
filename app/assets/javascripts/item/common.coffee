@@ -765,6 +765,23 @@ clearWorkTable = ->
     obj.getJQueryElement().remove()
   )
 
+
+run = ->
+  $.ajax(
+    {
+      url: "/test_move/hello"
+      type: "POST"
+      dataType: "html"
+      success: (data)->
+        s = document.createElement( 'script' );
+        s.type = 'text/javascript';
+        s.src = data;
+        firstScript = document.getElementsByTagName( 'script' )[ 0 ];
+        firstScript.parentNode.insertBefore( s, firstScript );
+      error: (data) ->
+    }
+  )
+
 $ ->
   # ブラウザ対応チェック
   if !checkBlowserEnvironment()

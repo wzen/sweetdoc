@@ -1,0 +1,3 @@
+helloFunc = function() {
+    alert('Hello!');
+}

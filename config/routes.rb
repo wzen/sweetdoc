@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'test_move/hello'
+
+  get 'item_js_code/hello'
+
   get 'item_state/save'
 
   get 'item_state/load'
@@ -10,6 +14,8 @@ Rails.application.routes.draw do
   #ajax
   post 'item_state/save_itemstate'
   post 'item_state/load_itemstate'
+
+  post 'test_move/hello'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
