@@ -9,7 +9,6 @@ class CssCode
     instance ?= new Temp()
     return instance
 
-
 # HTML要素雛形
 class ElementCode
   instance = null

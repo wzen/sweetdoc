@@ -1,7 +1,6 @@
 # 矢印アイテム
 # @extend ItemBase
 class ArrowItem extends ItemBase
-
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "arrow"
   # @property [String] ITEMTYPE アイテム種別
@@ -65,6 +64,7 @@ class ArrowItem extends ItemBase
     drawCoodToCanvas.call(@, window.drawingContext)
 
     # 線の描画
+    drawingContext.globalAlpha = 0.3
     drawingContext.stroke()
 
   # 描画終了時に呼ばれるメソッド
@@ -102,7 +102,8 @@ class ArrowItem extends ItemBase
 
     # Canvasを作成
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
-    $('#' + @canvasElementId()).attr('width', $('#' + @getElementId()).width())
+    $('#' + @canvasElementId()).attr('width',
+      $('#' + @getElementId()).width())
     $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
     @setupEvents()
 
@@ -111,7 +112,9 @@ class ArrowItem extends ItemBase
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.beginPath();
     drawCoodToCanvas.call(@, drawingContext)
-    drawingContext.stroke()
+    drawingContext.fillStyle = "#00008B"
+    drawingContext.fill()
+
     return true
 
   # ストレージとDB保存用の最小限のデータを取得

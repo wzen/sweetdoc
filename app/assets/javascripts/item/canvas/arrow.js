@@ -52,6 +52,7 @@ ArrowItem = (function(_super) {
     calBodyPath.call(this, moveCood);
     calTrianglePath.call(this, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1], this.coodRightBodyPart[this.coodRightBodyPart.length - 1]);
     drawCoodToCanvas.call(this, window.drawingContext);
+    drawingContext.globalAlpha = 0.3;
     return drawingContext.stroke();
   };
 
@@ -102,7 +103,8 @@ ArrowItem = (function(_super) {
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.beginPath();
     drawCoodToCanvas.call(this, drawingContext);
-    drawingContext.stroke();
+    drawingContext.fillStyle = "#00008B";
+    drawingContext.fill();
     return true;
   };
 

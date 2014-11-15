@@ -1,6 +1,5 @@
 # アイテム基底
 class ItemBase
-
   # @abstract
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
