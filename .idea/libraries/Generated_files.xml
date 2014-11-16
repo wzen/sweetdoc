@@ -8,8 +8,8 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
         <item url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/css/button.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
       </sourceFilesUrls>
     </properties>
@@ -20,8 +20,8 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
       <root url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css/button.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css/button.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
     </CLASSES>
     <JAVADOC />

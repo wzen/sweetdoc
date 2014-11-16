@@ -807,12 +807,19 @@ run = function() {
     type: "POST",
     dataType: "html",
     success: function(data) {
-      var firstScript, s;
+      var firstScript, s, t;
       s = document.createElement('script');
       s.type = 'text/javascript';
       s.src = data;
+      s.id = 'test';
       firstScript = document.getElementsByTagName('script')[0];
-      return firstScript.parentNode.insertBefore(s, firstScript);
+      firstScript.parentNode.insertBefore(s, firstScript);
+      return t = setInterval(function() {
+        if (typeof helloFunc === 'function') {
+          clearInterval(t);
+          return helloFunc();
+        }
+      }, '500');
     },
     error: function(data) {}
   });

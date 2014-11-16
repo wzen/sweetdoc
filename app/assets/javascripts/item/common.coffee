@@ -776,8 +776,14 @@ run = ->
         s = document.createElement( 'script' );
         s.type = 'text/javascript';
         s.src = data;
+        s.id = 'test'
         firstScript = document.getElementsByTagName( 'script' )[ 0 ];
         firstScript.parentNode.insertBefore( s, firstScript );
+        t = setInterval( ->
+          if typeof helloFunc == 'function'
+            clearInterval(t)
+            helloFunc()
+        , '500')
       error: (data) ->
     }
   )
