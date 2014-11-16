@@ -767,6 +767,7 @@ clearWorkTable = ->
 
 
 run = ->
+  # TODO: 認証用コードも付属するようにする
   $.ajax(
     {
       url: "/test_move/hello"
@@ -775,6 +776,7 @@ run = ->
       success: (data)->
         s = document.createElement( 'script' );
         s.type = 'text/javascript';
+        # TODO: 認証コードの比較
         s.src = data;
         s.id = 'test'
         firstScript = document.getElementsByTagName( 'script' )[ 0 ];
