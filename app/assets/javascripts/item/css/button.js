@@ -84,7 +84,7 @@ ButtonItem = (function(_super) {
     this.zindex = obj.c;
     this.cssStyle = obj.d;
     this.makeElement();
-    return this.save(Constant.ItemActionType.MAKE);
+    return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
   return ButtonItem;

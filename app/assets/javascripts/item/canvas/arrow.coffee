@@ -42,11 +42,9 @@ class ArrowItem extends ItemBase
   # @param [Array] moveCood 画面ドラッグ座標
   draw : (moveCood) ->
     calDrection.call(@, @coodRegist[@coodRegist.length - 1], moveCood)
-
-    drawingContext.beginPath();
-    drawingContext.moveTo(moveCood.x, moveCood.y)
     @coodRegist.push(moveCood)
 
+    # 描画範囲の更新
     updateArrowRect.call(@, moveCood)
 
     # 描画した矢印をクリア
@@ -60,8 +58,9 @@ class ArrowItem extends ItemBase
     calTrianglePath.call(@, @coodLeftBodyPart[@coodLeftBodyPart.length - 1], @coodRightBodyPart[@coodRightBodyPart.length - 1])
     #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
 
+    drawingContext.beginPath();
     # 尾と体の座標をCanvasに描画
-    drawCoodToCanvas.call(@, window.drawingContext)
+    drawCoodToCanvas.call(@, true)
 
     # 線の描画
     drawingContext.globalAlpha = 0.3
@@ -73,37 +72,25 @@ class ArrowItem extends ItemBase
   endDraw: (zindex) ->
     if !super(zindex)
       return false
-
-    # 新しいCanvasに合わせるためにrect分座標を引く
-    for l in @coodRegist
-      l.x -= @itemSize.x
-      l.y -= @itemSize.y
-    for l in @coodLeftBodyPart
-      l.x -= @itemSize.x
-      l.y -= @itemSize.y
-    for l in @coodRightBodyPart
-      l.x -= @itemSize.x
-      l.y -= @itemSize.y
-    for l in @coodHeadPart
-      l.x -= @itemSize.x
-      l.y -= @itemSize.y
-
     @makeElement()
     return true
 
   # 再描画処理
-  reDraw: ->
-    @makeElement()
+  # TODO: 無駄な描画処理があるため調整する
+  reDraw: (regist) ->
+    @saveDrawingSurface()
+    for r in regist
+      @draw(r)
+    @restoreDrawingSurface(@itemSize)
+    @endDraw(@zindex)
 
   # CanvasのHTML要素を作成
   # @param [Array] cood 座標
   # @return [Boolean] 処理結果
   makeElement: ->
-
     # Canvasを作成
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
-    $('#' + @canvasElementId()).attr('width',
-      $('#' + @getElementId()).width())
+    $('#' + @canvasElementId()).attr('width',  $('#' + @getElementId()).width())
     $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
     @setupEvents()
 
@@ -111,23 +98,18 @@ class ArrowItem extends ItemBase
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.beginPath();
-    drawCoodToCanvas.call(@, drawingContext)
+    drawCoodToCanvas.call(@, false, drawingContext)
     drawingContext.fillStyle = "#00008B"
     drawingContext.fill()
-
-    return true
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
   generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.ARROW
-      a: @itemSize
+      #a: @itemSize
       b: @zindex
       c: @coodRegist
-      g : @coodHeadPart
-      h : @coodLeftBodyPart
-      i : @coodRightBodyPart
     }
     return obj
 
@@ -135,21 +117,16 @@ class ArrowItem extends ItemBase
   # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
 #    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @itemSize = obj.a
     @zindex = obj.b
-    @coodRegist = obj.c
-    @coodHeadPart = obj.g
-    @coodLeftBodyPart = obj.h
-    @coodRightBodyPart = obj.i
-    @makeElement()
-    @save(Constant.ItemActionType.MAKE)
+    regist = obj.c
+    @reDraw(regist)
+    @saveObj(Constant.ItemActionType.MAKE)
 
   # 座標間の距離を計算する
   # @private
   coodLength = (locA, locB) ->
     # 整数にする
     return parseInt(Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2)))
-  #Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2))
 
   # 進行方向を設定
   # @private
@@ -318,19 +295,28 @@ class ArrowItem extends ItemBase
 
   # 座標をCanvasに描画
   # @private
-  drawCoodToCanvas = (drawingContext) ->
+  # @param [Boolean] isBaseCanvas 基底キャンバスへの描画か
+  drawCoodToCanvas = (isBaseCanvas, dc = null) ->
+    if isBaseCanvas
+      drawingContext = window.drawingContext
+      marginX = 0
+      marginY = 0
+    else if dc != null
+      drawingContext = dc
+      marginX = @itemSize.x
+      marginY = @itemSize.y
     if @coodLeftBodyPart.length <= 0 || @coodRightBodyPart.length <= 0
       # 尾が描かれてない場合
       return
 
-    drawingContext.moveTo(@coodLeftBodyPart[@coodLeftBodyPart.length - 1].x, @coodLeftBodyPart[@coodLeftBodyPart.length - 1].y)
+    drawingContext.moveTo(@coodLeftBodyPart[@coodLeftBodyPart.length - 1].x - marginX, @coodLeftBodyPart[@coodLeftBodyPart.length - 1].y - marginY)
     if @coodLeftBodyPart.length >= 2
       for i in [@coodLeftBodyPart.length - 2 .. 0]
-        drawingContext.lineTo(@coodLeftBodyPart[i].x, @coodLeftBodyPart[i].y)
+        drawingContext.lineTo(@coodLeftBodyPart[i].x - marginX, @coodLeftBodyPart[i].y - marginY)
     for i in [0 .. @coodRightBodyPart.length - 1]
-      drawingContext.lineTo(@coodRightBodyPart[i].x, @coodRightBodyPart[i].y)
+      drawingContext.lineTo(@coodRightBodyPart[i].x - marginX, @coodRightBodyPart[i].y - marginY)
     for i in [0 .. @coodHeadPart.length - 1]
-      drawingContext.lineTo(@coodHeadPart[i].x, @coodHeadPart[i].y)
+      drawingContext.lineTo(@coodHeadPart[i].x - marginX, @coodHeadPart[i].y - marginY)
     drawingContext.closePath()
 
   # 描画した矢印をクリア

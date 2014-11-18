@@ -74,7 +74,7 @@ class ButtonItem extends ItemBase
     @zindex = obj.c
     @cssStyle = obj.d
     @makeElement()
-    @save(Constant.ItemActionType.MAKE)
+    @saveObj(Constant.ItemActionType.MAKE)
 
 $ ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)

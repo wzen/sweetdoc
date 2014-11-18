@@ -43,54 +43,35 @@ ArrowItem = (function(_super) {
 
   ArrowItem.prototype.draw = function(moveCood) {
     calDrection.call(this, this.coodRegist[this.coodRegist.length - 1], moveCood);
-    drawingContext.beginPath();
-    drawingContext.moveTo(moveCood.x, moveCood.y);
     this.coodRegist.push(moveCood);
     updateArrowRect.call(this, moveCood);
     clearArrow.call(this);
     calTailDrawPath.call(this);
     calBodyPath.call(this, moveCood);
     calTrianglePath.call(this, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1], this.coodRightBodyPart[this.coodRightBodyPart.length - 1]);
-    drawCoodToCanvas.call(this, window.drawingContext);
+    drawingContext.beginPath();
+    drawCoodToCanvas.call(this, true);
     drawingContext.globalAlpha = 0.3;
     return drawingContext.stroke();
   };
 
   ArrowItem.prototype.endDraw = function(zindex) {
-    var l, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
     if (!ArrowItem.__super__.endDraw.call(this, zindex)) {
       return false;
-    }
-    _ref = this.coodRegist;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      l = _ref[_i];
-      l.x -= this.itemSize.x;
-      l.y -= this.itemSize.y;
-    }
-    _ref1 = this.coodLeftBodyPart;
-    for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-      l = _ref1[_j];
-      l.x -= this.itemSize.x;
-      l.y -= this.itemSize.y;
-    }
-    _ref2 = this.coodRightBodyPart;
-    for (_k = 0, _len2 = _ref2.length; _k < _len2; _k++) {
-      l = _ref2[_k];
-      l.x -= this.itemSize.x;
-      l.y -= this.itemSize.y;
-    }
-    _ref3 = this.coodHeadPart;
-    for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
-      l = _ref3[_l];
-      l.x -= this.itemSize.x;
-      l.y -= this.itemSize.y;
     }
     this.makeElement();
     return true;
   };
 
-  ArrowItem.prototype.reDraw = function() {
-    return this.makeElement();
+  ArrowItem.prototype.reDraw = function(regist) {
+    var r, _i, _len;
+    this.saveDrawingSurface();
+    for (_i = 0, _len = regist.length; _i < _len; _i++) {
+      r = regist[_i];
+      this.draw(r);
+    }
+    this.restoreDrawingSurface(this.itemSize);
+    return this.endDraw(this.zindex);
   };
 
   ArrowItem.prototype.makeElement = function() {
@@ -102,35 +83,27 @@ ArrowItem = (function(_super) {
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.beginPath();
-    drawCoodToCanvas.call(this, drawingContext);
+    drawCoodToCanvas.call(this, false, drawingContext);
     drawingContext.fillStyle = "#00008B";
-    drawingContext.fill();
-    return true;
+    return drawingContext.fill();
   };
 
   ArrowItem.prototype.generateMinimumObject = function() {
     var obj;
     obj = {
       itemType: Constant.ItemType.ARROW,
-      a: this.itemSize,
       b: this.zindex,
-      c: this.coodRegist,
-      g: this.coodHeadPart,
-      h: this.coodLeftBodyPart,
-      i: this.coodRightBodyPart
+      c: this.coodRegist
     };
     return obj;
   };
 
   ArrowItem.prototype.loadByMinimumObject = function(obj) {
-    this.itemSize = obj.a;
+    var regist;
     this.zindex = obj.b;
-    this.coodRegist = obj.c;
-    this.coodHeadPart = obj.g;
-    this.coodLeftBodyPart = obj.h;
-    this.coodRightBodyPart = obj.i;
-    this.makeElement();
-    return this.save(Constant.ItemActionType.MAKE);
+    regist = obj.c;
+    this.reDraw(regist);
+    return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
   coodLength = function(locA, locB) {
@@ -300,22 +273,34 @@ ArrowItem = (function(_super) {
     return this.coodRightBodyPart.push(centerBodyCood.coodRightPart);
   };
 
-  drawCoodToCanvas = function(drawingContext) {
-    var i, _i, _j, _k, _ref, _ref1, _ref2;
+  drawCoodToCanvas = function(isBaseCanvas, dc) {
+    var drawingContext, i, marginX, marginY, _i, _j, _k, _ref, _ref1, _ref2;
+    if (dc == null) {
+      dc = null;
+    }
+    if (isBaseCanvas) {
+      drawingContext = window.drawingContext;
+      marginX = 0;
+      marginY = 0;
+    } else if (dc !== null) {
+      drawingContext = dc;
+      marginX = this.itemSize.x;
+      marginY = this.itemSize.y;
+    }
     if (this.coodLeftBodyPart.length <= 0 || this.coodRightBodyPart.length <= 0) {
       return;
     }
-    drawingContext.moveTo(this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1].x, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1].y);
+    drawingContext.moveTo(this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1].x - marginX, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1].y - marginY);
     if (this.coodLeftBodyPart.length >= 2) {
       for (i = _i = _ref = this.coodLeftBodyPart.length - 2; _ref <= 0 ? _i <= 0 : _i >= 0; i = _ref <= 0 ? ++_i : --_i) {
-        drawingContext.lineTo(this.coodLeftBodyPart[i].x, this.coodLeftBodyPart[i].y);
+        drawingContext.lineTo(this.coodLeftBodyPart[i].x - marginX, this.coodLeftBodyPart[i].y - marginY);
       }
     }
     for (i = _j = 0, _ref1 = this.coodRightBodyPart.length - 1; 0 <= _ref1 ? _j <= _ref1 : _j >= _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
-      drawingContext.lineTo(this.coodRightBodyPart[i].x, this.coodRightBodyPart[i].y);
+      drawingContext.lineTo(this.coodRightBodyPart[i].x - marginX, this.coodRightBodyPart[i].y - marginY);
     }
     for (i = _k = 0, _ref2 = this.coodHeadPart.length - 1; 0 <= _ref2 ? _k <= _ref2 : _k >= _ref2; i = 0 <= _ref2 ? ++_k : --_k) {
-      drawingContext.lineTo(this.coodHeadPart[i].x, this.coodHeadPart[i].y);
+      drawingContext.lineTo(this.coodHeadPart[i].x - marginX, this.coodHeadPart[i].y - marginY);
     }
     return drawingContext.closePath();
   };

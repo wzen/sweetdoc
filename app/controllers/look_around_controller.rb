@@ -1,0 +1,2 @@
+class LookAroundController < ApplicationController
+end
