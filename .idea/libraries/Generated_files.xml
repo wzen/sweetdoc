@@ -5,29 +5,32 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas/arrow.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas/handwrite.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas/simple_arrow.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_js.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_play.js.js" />
         <item url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/work_table.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/css/button.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/look_around.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_play.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas/arrow.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas/handwrite.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas/simple_arrow.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_play.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/handwrite.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_js.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
       <root url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css/button.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/work_table.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/look_around.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

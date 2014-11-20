@@ -355,3 +355,6 @@ class ArrowItem extends ItemBase
   # @private
   coodLog = (cood, name) ->
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
+
+# 初期化
+window.itemFuncList.arrowInit = ->

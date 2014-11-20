@@ -91,7 +91,7 @@ ButtonItem = (function(_super) {
 
 })(ItemBase);
 
-$(function() {
+window.itemFuncList.buttonInit = function() {
   var btnBgColor, btnCode, btnEntryForm, btnGradientStep, btnPreviewCss, btnShadowColor, configBoxLi;
   btnEntryForm = $("#btn-entryForm", sidebarWrapper);
   btnCode = $("#btn-code", cssCode);
@@ -151,6 +151,6 @@ $(function() {
     });
   });
   return btnPreviewCss.text(btnCode.text());
-});
+};
 
 //# sourceMappingURL=button.js.map

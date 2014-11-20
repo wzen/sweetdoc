@@ -1,19 +1,19 @@
 Rails.application.routes.draw do
+  get 'item_js/index'
+
+  root 'work_table#index'
+  resources :look_around, only:[:index]
+
   get 'test_move/hello'
-
   get 'item_js_code/hello'
-
   get 'item_state/save'
-
   get 'item_state/load'
-
   get 'parts/button_css_default'
-
-  get 'work_table/index'
 
   #ajax
   post 'item_state/save_itemstate'
   post 'item_state/load_itemstate'
+  post 'item_js/index'
 
   post 'test_move/hello'
 

@@ -25,8 +25,9 @@
 //= require item/generator.jquery.color.js
 //= require constant
 //= require item/code_template
-//= require item/common
-//= require item/canvas/arrow
-//= require item/css/button
-//= require item/canvas/handwrite
+//= require item/item_base.js
+//= require work_table.js
+// require item/canvas/arrow
+// require item/css/button
+//= require item/handwrite
 // require_tree .

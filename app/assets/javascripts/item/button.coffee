@@ -76,7 +76,8 @@ class ButtonItem extends ItemBase
     @makeElement()
     @saveObj(Constant.ItemActionType.MAKE)
 
-$ ->
+# 初期化
+window.itemFuncList.buttonInit = ->
   btnEntryForm = $("#btn-entryForm", sidebarWrapper)
   btnCode = $("#btn-code", cssCode)
   btnPreviewCss = $("#btn-CSS", cssCode)
