@@ -8,7 +8,8 @@
 // IDE not aware under vendor/asset/
 //= require constant
 //= require item/code_template
-//= require item/item_base.js
+//= require item/item_base
 //= require item/arrow
 //= require item/button
+//= require look_around
 // require_tree .

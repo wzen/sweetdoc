@@ -357,4 +357,5 @@ class ArrowItem extends ItemBase
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
 
 # 初期化
-window.itemFuncList.arrowInit = ->
+if window.itemFuncList? && !window.itemFuncList.arrowInit?
+  window.itemFuncList.arrowInit = ->
