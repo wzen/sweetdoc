@@ -41,18 +41,26 @@ ArrowItem = (function(_super) {
     return this.getElementId() + '_canvas';
   };
 
-  ArrowItem.prototype.draw = function(moveCood) {
+  ArrowItem.prototype.drawPath = function(moveCood) {
     calDrection.call(this, this.coodRegist[this.coodRegist.length - 1], moveCood);
     this.coodRegist.push(moveCood);
     updateArrowRect.call(this, moveCood);
     clearArrow.call(this);
     calTailDrawPath.call(this);
     calBodyPath.call(this, moveCood);
-    calTrianglePath.call(this, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1], this.coodRightBodyPart[this.coodRightBodyPart.length - 1]);
+    return calTrianglePath.call(this, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1], this.coodRightBodyPart[this.coodRightBodyPart.length - 1]);
+  };
+
+  ArrowItem.prototype.drawLine = function() {
     drawingContext.beginPath();
     drawCoodToCanvas.call(this, true);
     drawingContext.globalAlpha = 0.3;
     return drawingContext.stroke();
+  };
+
+  ArrowItem.prototype.draw = function(moveCood) {
+    this.drawPath(moveCood);
+    return this.drawLine();
   };
 
   ArrowItem.prototype.endDraw = function(zindex) {
@@ -68,8 +76,9 @@ ArrowItem = (function(_super) {
     this.saveDrawingSurface();
     for (_i = 0, _len = regist.length; _i < _len; _i++) {
       r = regist[_i];
-      this.draw(r);
+      this.drawPath(r);
     }
+    this.drawLine();
     this.restoreDrawingSurface(this.itemSize);
     return this.endDraw(this.zindex);
   };

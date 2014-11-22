@@ -24,6 +24,7 @@
 //= require ../../../vendor/assets/colorpicker/js/layout.js
 //= require item/generator.jquery.color.js
 //= require constant
+//= require common
 //= require item/code_template
 //= require item/item_base
 //= require work_table

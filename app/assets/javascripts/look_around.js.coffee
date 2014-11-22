@@ -3,6 +3,8 @@ scrollTimer = -1
 scrollViewHeight = 50000
 scrollEvents = []
 
+arrow = null
+
 initScrollEvents = ->
   # Color Change
   color_max = 256 * 3
@@ -33,13 +35,13 @@ initResize = (wrap, contents) ->
     , 200)
   )
 
-initScroll = (scroll_contents, scrollpoint_container) ->
+initScroll = (scroll_contents) ->
   scroll_contents.scroll( ->
     if scrollTimer != -1
       clearTimeout(scrollTimer)
 
     scrollTimer = setTimeout(scrollFinished, 500)
-    scrollpoint_container.hide()
+    #scrollpoint_container.hide()
 
     # Set ScrollEvents
     sh = Math.floor($(this).scrollTop())
@@ -51,14 +53,14 @@ initScroll = (scroll_contents, scrollpoint_container) ->
   )
 
   scrollFinished = ->
-    scrollpoint_container.show()
+    #scrollpoint_container.show()
 
 $ ->
   wrap = $('#wrap')
   contents = $("#wrap_contents")
   scroll_contents = $("#scroll_contents")
   inside = $("#inside")
-  scrollpoint_container = $("#scrollpoint_container")
+  #scrollpoint_container = $("#scrollpoint_container")
   inside.height(scrollViewHeight)
   scrollEvents = new Array(scrollViewHeight)
 
@@ -67,6 +69,11 @@ $ ->
   contents.height(h - 80)
 
   initResize(wrap, contents)
-  initScroll(scroll_contents, scrollpoint_container)
-  initScrollEvents()
+
+  objList = JSON.parse(sstorage.getItem('lookaround'))
+  arrow = objList.get(0)
+
+  #initScrollEvents()
+  #initScroll(scroll_contents)
+
 

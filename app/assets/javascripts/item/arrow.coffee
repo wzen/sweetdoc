@@ -38,9 +38,9 @@ class ArrowItem extends ItemBase
   canvasElementId: ->
     return @getElementId() + '_canvas'
 
-  # 描画
+  # パスの描画
   # @param [Array] moveCood 画面ドラッグ座標
-  draw : (moveCood) ->
+  drawPath : (moveCood) ->
     calDrection.call(@, @coodRegist[@coodRegist.length - 1], moveCood)
     @coodRegist.push(moveCood)
 
@@ -58,13 +58,21 @@ class ArrowItem extends ItemBase
     calTrianglePath.call(@, @coodLeftBodyPart[@coodLeftBodyPart.length - 1], @coodRightBodyPart[@coodRightBodyPart.length - 1])
     #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
 
+  # 線の描画
+  drawLine : ->
     drawingContext.beginPath();
     # 尾と体の座標をCanvasに描画
     drawCoodToCanvas.call(@, true)
-
-    # 線の描画
     drawingContext.globalAlpha = 0.3
     drawingContext.stroke()
+
+  # 描画(パス+線)
+  # @param [Array] moveCood 画面ドラッグ座標
+  draw : (moveCood) ->
+    # パスの描画
+    @drawPath(moveCood)
+    # 線の描画
+    @drawLine()
 
   # 描画終了時に呼ばれるメソッド
   # @param [Array] cood 座標
@@ -80,7 +88,8 @@ class ArrowItem extends ItemBase
   reDraw: (regist) ->
     @saveDrawingSurface()
     for r in regist
-      @draw(r)
+      @drawPath(r)
+    @drawLine()
     @restoreDrawingSurface(@itemSize)
     @endDraw(@zindex)
 

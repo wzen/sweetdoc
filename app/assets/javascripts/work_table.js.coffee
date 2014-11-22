@@ -255,44 +255,48 @@ initHeaderMenu = ->
 
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
   $('.menu-item', itemsSelectMenuEmt).on('click', ->
-    itemName = $(this).attr('id').replace('menu-item-', '')
+    itemType = parseInt($(this).attr('id').replace('menu-item-', ''))
     itemsSelectMenuEmt.removeClass('active')
     $(@).parent('li').addClass('active')
-    if itemName == 'button'
-      window.selectItemMenu = Constant.ItemType.BUTTON
-    else if itemName == 'arrow'
-      window.selectItemMenu = Constant.ItemType.ARROW
+    window.selectItemMenu = itemType
     changeMode(Constant.Mode.DRAW)
+    loadItemJs(itemType)
+  )
 
-    funcName = itemName + "Init"
-    if window.itemFuncList[funcName]?
-      window.itemFuncList[funcName]()
-      return
+loadItemJs = (itemType, callback = null) ->
+  itemName = itemNameList[itemType]
+  funcName = itemName + "Init"
+  if window.itemFuncList[funcName]?
+    window.itemFuncList[funcName]()
+    if callback?
+      callback()
+    return
 
-    # js読み込み
-    $.ajax(
-      {
-        url: "/item_js/index"
-        type: "POST"
-        dataType: "html"
-        data: {
-          itemName: itemName
-        }
-        success: (data)->
-          s = document.createElement( 'script' );
-          s.type = 'text/javascript';
-          # TODO: 認証コードの比較
-          s.src = data;
-          firstScript = document.getElementsByTagName( 'script' )[ 0 ];
-          firstScript.parentNode.insertBefore( s, firstScript );
-          t = setInterval( ->
-            if window.itemFuncList[funcName]?
-              clearInterval(t)
-              window.itemFuncList[funcName]()
-          , '500')
-        error: (data) ->
+  # js読み込み
+  $.ajax(
+    {
+      url: "/item_js/index"
+      type: "POST"
+      dataType: "html"
+      data: {
+        itemName: itemName
       }
-    )
+      success: (data)->
+        s = document.createElement( 'script' );
+        s.type = 'text/javascript';
+        # TODO: 認証コードの比較
+        s.src = data;
+        firstScript = document.getElementsByTagName( 'script' )[ 0 ];
+        firstScript.parentNode.insertBefore( s, firstScript );
+        t = setInterval( ->
+          if window.itemFuncList[funcName]?
+            clearInterval(t)
+            window.itemFuncList[funcName]()
+            if callback?
+              callback()
+        , '500')
+      error: (data) ->
+    }
   )
 
 # カラーピッカーの作成
@@ -558,11 +562,13 @@ loadFromServer = ->
         for j in contents
           obj = j.obj
           item = null
-          if obj.itemType == Constant.ItemType.BUTTON
-            item = new ButtonItem()
-          else if obj.itemType == Constant.ItemType.ARROW
-            item = new ArrowItem()
-          item.loadByMinimumObject(obj)
+          loadItemJs(obj.itemType, ->
+            if obj.itemType == Constant.ItemType.BUTTON
+              item = new ButtonItem()
+            else if obj.itemType == Constant.ItemType.ARROW
+              item = new ArrowItem()
+              item.loadByMinimumObject(obj)
+          )
       error: (data) ->
         console.log(data.message)
     }
@@ -635,6 +641,19 @@ run = ->
       error: (data) ->
     }
   )
+
+# 閲覧を実行する
+runLookAround = ->
+  # Storageに値を格納
+  # とりあえず矢印だけ
+  objList = []
+  itemObjectList.forEach((item) ->
+    if item.ITEMTYPE == 'arrow'
+      objList.push(item.generateMinimumObject())
+  )
+  sstorage.setItem('lookaround', JSON.stringify(objList))
+
+  window.open('/look_around')
 
 $ ->
   # ブラウザ対応チェック

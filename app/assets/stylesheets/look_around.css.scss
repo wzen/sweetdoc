@@ -7,8 +7,9 @@ html, body {
 
 div#wrap {
   position: relative;
-  width: 100%;
+  #width: 100%;
   min-height: 100%;
+  padding: 5px 15px 5px 15px;
 }
 
 div#wrap_contents {
@@ -16,6 +17,8 @@ div#wrap_contents {
   height: 100%;
   overflow: hidden;
   padding-bottom: 80px;
+  background-color: #FAFAFA;
+  border: 5px solid #e6deca;
 }
 
 div#scroll_contents {
@@ -23,7 +26,7 @@ div#scroll_contents {
   height: 100%;
   overflow: auto;
   padding-right: 30px;
-  background-color: #000000;
+  #background-color: #000000;
 }
 
 div#inside {

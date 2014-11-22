@@ -7,6 +7,7 @@
 //= require turbolinks
 // IDE not aware under vendor/asset/
 //= require constant
+//= require common
 //= require item/code_template
 //= require item/item_base
 //= require item/arrow
