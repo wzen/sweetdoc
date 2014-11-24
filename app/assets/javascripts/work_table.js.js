@@ -39,11 +39,13 @@ initCommonVar = function() {
   window.selectItemMenu = Constant.ItemType.BUTTON;
   window.sstorage = sessionStorage;
   window.lstorage = localStorage;
-  lstorage.clear();
   window.itemObjectList = [];
+  window.itemLoadedJsPathList = [];
   window.itemFuncList = [];
   window.operationHistory = [];
-  return window.operationHistoryIndex = 0;
+  window.operationHistoryIndex = 0;
+  sstorage.clear();
+  return lstorage.clear();
 };
 
 initDraggableAndResizable = function() {
@@ -286,7 +288,7 @@ loadItemJs = function(itemType, callback) {
     type: "POST",
     dataType: "html",
     data: {
-      itemName: itemName
+      itemPath: itemNameList[itemType].replace(/¥-/, '/')
     },
     success: function(data) {
       var firstScript, s, t;
@@ -499,7 +501,7 @@ initKeyEvent = function() {
     var isMac;
     isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     if ((isMac && e.metaKey) || (!isMac && e.ctrlKey)) {
-      if (e.keyCode === Constant.keyboardKeyCode.z) {
+      if (e.keyCode === Constant.KeyboardKeyCode.Z) {
         e.preventDefault();
         if (e.shiftKey) {
           return redo();
@@ -585,7 +587,8 @@ loadFromServer = function() {
     url: "/item_state/load_itemstate",
     type: "POST",
     data: {
-      user_id: 0
+      user_id: 0,
+      loaded_js_path_list: JSON.stringify(itemLoadedJsPathList)
     },
     dataType: "json",
     success: function(data) {
@@ -598,14 +601,14 @@ loadFromServer = function() {
         j = contents[_i];
         obj = j.obj;
         item = null;
-        _results.push(loadItemJs(obj.itemType, function() {
-          if (obj.itemType === Constant.ItemType.BUTTON) {
-            return item = new ButtonItem();
-          } else if (obj.itemType === Constant.ItemType.ARROW) {
-            item = new ArrowItem();
-            return item.loadByMinimumObject(obj);
-          }
-        }));
+        if (obj.itemType === Constant.ItemType.BUTTON) {
+          _results.push(item = new ButtonItem());
+        } else if (obj.itemType === Constant.ItemType.ARROW) {
+          item = new ArrowItem();
+          _results.push(item.loadByMinimumObject(obj));
+        } else {
+          _results.push(void 0);
+        }
       }
       return _results;
     },

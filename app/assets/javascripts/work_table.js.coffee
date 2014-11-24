@@ -30,12 +30,16 @@ initCommonVar = ->
   window.selectItemMenu = Constant.ItemType.BUTTON
   window.sstorage = sessionStorage
   window.lstorage = localStorage
-  # WebStorageを初期化する
-  lstorage.clear()
   window.itemObjectList = []
+  window.itemLoadedJsPathList = []
   window.itemFuncList = []
   window.operationHistory = []
   window.operationHistoryIndex = 0
+
+  # WebStorageを初期化する
+  sstorage.clear()
+  lstorage.clear()
+
 
 # JQueryUIのドラッグイベントとリサイズをセット
 initDraggableAndResizable =  ->
@@ -265,6 +269,7 @@ initHeaderMenu = ->
 
 loadItemJs = (itemType, callback = null) ->
   itemName = itemNameList[itemType]
+  # TODO: ハイフンが途中にあるものはキャメルに変換
   funcName = itemName + "Init"
   if window.itemFuncList[funcName]?
     window.itemFuncList[funcName]()
@@ -279,7 +284,8 @@ loadItemJs = (itemType, callback = null) ->
       type: "POST"
       dataType: "html"
       data: {
-        itemName: itemName
+        # ハイフンを/にしてファイルパスにする
+        itemPath: itemNameList[itemType].replace(/¥-/, '/')
       }
       success: (data)->
         s = document.createElement( 'script' );
@@ -469,7 +475,7 @@ initKeyEvent = ->
   $(window).keydown( (e)->
     isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
     if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
-      if e.keyCode == Constant.keyboardKeyCode.z
+      if e.keyCode == Constant.KeyboardKeyCode.Z
         e.preventDefault()
         if e.shiftKey
           # Shift + Ctrl + z → Redo
@@ -552,6 +558,7 @@ loadFromServer = ->
       type: "POST"
       data: {
         user_id: 0
+        loaded_js_path_list : JSON.stringify(itemLoadedJsPathList)
       }
       dataType: "json"
       success: (data)->
@@ -562,13 +569,11 @@ loadFromServer = ->
         for j in contents
           obj = j.obj
           item = null
-          loadItemJs(obj.itemType, ->
-            if obj.itemType == Constant.ItemType.BUTTON
-              item = new ButtonItem()
-            else if obj.itemType == Constant.ItemType.ARROW
-              item = new ArrowItem()
-              item.loadByMinimumObject(obj)
-          )
+          if obj.itemType == Constant.ItemType.BUTTON
+            item = new ButtonItem()
+          else if obj.itemType == Constant.ItemType.ARROW
+            item = new ArrowItem()
+            item.loadByMinimumObject(obj)
       error: (data) ->
         console.log(data.message)
     }

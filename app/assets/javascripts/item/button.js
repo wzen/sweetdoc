@@ -3,6 +3,8 @@ var ButtonItem,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
+window.itemLoadedJsPathList['button'] = true;
+
 ButtonItem = (function(_super) {
   __extends(ButtonItem, _super);
 
@@ -70,19 +72,19 @@ ButtonItem = (function(_super) {
     var obj;
     obj = {
       itemType: Constant.ItemType.BUTTON,
-      a: this.mousedownCood,
-      b: this.itemSize,
-      c: this.zindex,
-      d: this.cssStyle
+      mousedownCood: this.mousedownCood,
+      itemSize: this.itemSize,
+      zindex: this.zindex,
+      cssStyle: this.cssStyle
     };
     return obj;
   };
 
   ButtonItem.prototype.loadByMinimumObject = function(obj) {
-    this.mousedownCood = obj.a;
-    this.itemSize = obj.b;
-    this.zindex = obj.c;
-    this.cssStyle = obj.d;
+    this.mousedownCood = obj.mousedownCood;
+    this.itemSize = obj.itemSize;
+    this.zindex = obj.zindex;
+    this.cssStyle = obj.cssStyle;
     this.makeElement();
     return this.saveObj(Constant.ItemActionType.MAKE);
   };

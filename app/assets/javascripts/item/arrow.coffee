@@ -1,3 +1,6 @@
+#JS読み込み完了
+window.itemLoadedJsPathList['arrow'] = true
+
 # 矢印アイテム
 # @extend ItemBase
 class ArrowItem extends ItemBase
@@ -84,8 +87,11 @@ class ArrowItem extends ItemBase
     return true
 
   # 再描画処理
-  # TODO: 無駄な描画処理があるため調整する
-  reDraw: (regist) ->
+  reDraw: ->
+    @reDrawByCood(@coodRegist)
+
+  # 座標を指定して再描画
+  reDrawByCood: (regist) ->
     @saveDrawingSurface()
     for r in regist
       @drawPath(r)
@@ -116,9 +122,8 @@ class ArrowItem extends ItemBase
   generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.ARROW
-      #a: @itemSize
-      b: @zindex
-      c: @coodRegist
+      zindex: @zindex
+      coodRegist: @coodRegist
     }
     return obj
 
@@ -126,9 +131,9 @@ class ArrowItem extends ItemBase
   # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
 #    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @zindex = obj.b
-    regist = obj.c
-    @reDraw(regist)
+    @zindex = obj.zindex
+    regist = obj.coodRegist
+    @reDrawByCood(regist)
     @saveObj(Constant.ItemActionType.MAKE)
 
   # 座標間の距離を計算する

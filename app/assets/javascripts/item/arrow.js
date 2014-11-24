@@ -3,6 +3,8 @@ var ArrowItem,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
+window.itemLoadedJsPathList['arrow'] = true;
+
 ArrowItem = (function(_super) {
   var ARROW_HALF_WIDTH, ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, PADDING_SIZE, calBodyPath, calDrection, calTailDrawPath, calTrianglePath, clearArrow, coodLength, coodLog, drawCoodToCanvas, updateArrowRect;
 
@@ -71,7 +73,11 @@ ArrowItem = (function(_super) {
     return true;
   };
 
-  ArrowItem.prototype.reDraw = function(regist) {
+  ArrowItem.prototype.reDraw = function() {
+    return this.reDrawByCood(this.coodRegist);
+  };
+
+  ArrowItem.prototype.reDrawByCood = function(regist) {
     var r, _i, _len;
     this.saveDrawingSurface();
     for (_i = 0, _len = regist.length; _i < _len; _i++) {
@@ -101,17 +107,17 @@ ArrowItem = (function(_super) {
     var obj;
     obj = {
       itemType: Constant.ItemType.ARROW,
-      b: this.zindex,
-      c: this.coodRegist
+      zindex: this.zindex,
+      coodRegist: this.coodRegist
     };
     return obj;
   };
 
   ArrowItem.prototype.loadByMinimumObject = function(obj) {
     var regist;
-    this.zindex = obj.b;
-    regist = obj.c;
-    this.reDraw(regist);
+    this.zindex = obj.zindex;
+    regist = obj.coodRegist;
+    this.reDrawByCood(regist);
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 

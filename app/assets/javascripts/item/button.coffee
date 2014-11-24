@@ -1,3 +1,6 @@
+#JS読み込み完了
+window.itemLoadedJsPathList['button'] = true
+
 # ボタンアイテム
 # @extend ItemBase
 class ButtonItem extends ItemBase
@@ -58,10 +61,10 @@ class ButtonItem extends ItemBase
   generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.BUTTON
-      a: @mousedownCood
-      b: @itemSize
-      c: @zindex
-      d: @cssStyle
+      mousedownCood: @mousedownCood
+      itemSize: @itemSize
+      zindex: @zindex
+      cssStyle: @cssStyle
     }
     return obj
 
@@ -69,10 +72,10 @@ class ButtonItem extends ItemBase
   # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
     #@id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @mousedownCood = obj.a
-    @itemSize = obj.b
-    @zindex = obj.c
-    @cssStyle = obj.d
+    @mousedownCood = obj.mousedownCood
+    @itemSize = obj.itemSize
+    @zindex = obj.zindex
+    @cssStyle = obj.cssStyle
     @makeElement()
     @saveObj(Constant.ItemActionType.MAKE)
 

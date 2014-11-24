@@ -49,6 +49,7 @@ gem 'sprockets-rails', '2.1.3'
 
 # Use cells
 gem 'cells', '3.11.2'
+gem 'gon'
 
 # Use RSpec
 group :development, :test do
