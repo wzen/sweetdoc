@@ -64,7 +64,6 @@ ButtonItem = (function(_super) {
 
   ButtonItem.prototype.makeElement = function() {
     $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
-    this.setupEvents();
     return true;
   };
 

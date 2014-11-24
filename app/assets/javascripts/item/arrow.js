@@ -94,7 +94,6 @@ ArrowItem = (function(_super) {
     $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
     $('#' + this.canvasElementId()).attr('width', $('#' + this.getElementId()).width());
     $('#' + this.canvasElementId()).attr('height', $('#' + this.getElementId()).height());
-    this.setupEvents();
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.beginPath();
@@ -119,6 +118,13 @@ ArrowItem = (function(_super) {
     regist = obj.coodRegist;
     this.reDrawByCood(regist);
     return this.saveObj(Constant.ItemActionType.MAKE);
+  };
+
+  ArrowItem.prototype.drawForLookaround = function(obj) {
+    var regist;
+    this.zindex = obj.zindex;
+    regist = obj.coodRegist;
+    return this.reDrawByCood(regist);
   };
 
   coodLength = function(locA, locB) {

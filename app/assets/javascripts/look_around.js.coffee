@@ -56,22 +56,32 @@ initScroll = (scroll_contents) ->
     #scrollpoint_container.show()
 
 $ ->
-  wrap = $('#wrap')
-  contents = $("#wrap_contents")
+  wrap = $('#main-wrapper')
+  contents = $("#scroll_wrapper")
   scroll_contents = $("#scroll_contents")
   inside = $("#inside")
   #scrollpoint_container = $("#scrollpoint_container")
   inside.height(scrollViewHeight)
   scrollEvents = new Array(scrollViewHeight)
 
-  h = $(window).height()
-  wrap.height(h)
-  contents.height(h - 80)
+#  h = $(window).height()
+#  wrap.height(h)
+#  contents.height(h)
 
+  $('#canvas_container').attr('width', $('#main_container').width())
+  $('#canvas_container').attr('height', $('#main_container').height())
   initResize(wrap, contents)
 
-  objList = JSON.parse(sstorage.getItem('lookaround'))
-  arrow = objList.get(0)
+  window.lstorage = localStorage
+  objList = JSON.parse(lstorage.getItem('lookaround'))
+  objList.forEach( (obj)->
+    if obj.itemType == Constant.ItemType.BUTTON
+      item = new ButtonItem()
+    else if obj.itemType == Constant.ItemType.ARROW
+      item = new ArrowItem()
+    item.drawForLookaround(obj)
+  )
+
 
   #initScrollEvents()
   #initScroll(scroll_contents)

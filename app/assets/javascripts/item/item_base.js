@@ -79,16 +79,12 @@ ItemBase = (function() {
     return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x - Constant.SURFACE_IMAGE_MARGIN, size.y - Constant.SURFACE_IMAGE_MARGIN, size.w + Constant.SURFACE_IMAGE_MARGIN * 2, size.h + Constant.SURFACE_IMAGE_MARGIN * 2);
   };
 
-  ItemBase.prototype.startDraw = function() {
-    return changeMode(Constant.Mode.DRAW);
-  };
+  ItemBase.prototype.startDraw = function() {};
 
   ItemBase.prototype.draw = function(cood) {};
 
   ItemBase.prototype.endDraw = function(zindex) {
-    changeMode(Constant.Mode.EDIT);
     this.zindex = zindex;
-    this.saveObj(Constant.ItemActionType.MAKE);
     return true;
   };
 
@@ -113,6 +109,8 @@ ItemBase = (function() {
 
   ItemBase.prototype.loadByMinimumObject = function(obj) {};
 
+  ItemBase.prototype.drawForLookaround = function(obj) {};
+
   ItemBase.prototype.setupEvents = function() {
     (function(_this) {
       return (function() {
@@ -133,14 +131,14 @@ ItemBase = (function() {
             uiIcon: "ui-icon-scissors"
           }
         ];
-        if (_this.constructor.ITEMTYPE === Constant.ItemType.ARROW) {
+        if ((typeof ArrowItem !== "undefined" && ArrowItem !== null) && _this instanceof ArrowItem) {
           menu.push({
             title: "ArrowItem",
             cmd: "cut",
             uiIcon: "ui-icon-scissors"
           });
           contextSelector = ".arrow";
-        } else if (_this.constructor.ITEMTYPE === Constant.ItemType.BUTTON) {
+        } else if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && _this instanceof ButtonItem) {
           menu.push({
             title: "ButtonItem",
             cmd: "cut",

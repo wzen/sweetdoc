@@ -67,19 +67,27 @@ initScroll = function(scroll_contents) {
 };
 
 $(function() {
-  var contents, h, inside, objList, scroll_contents, wrap;
-  wrap = $('#wrap');
-  contents = $("#wrap_contents");
+  var contents, inside, objList, scroll_contents, wrap;
+  wrap = $('#main-wrapper');
+  contents = $("#scroll_wrapper");
   scroll_contents = $("#scroll_contents");
   inside = $("#inside");
   inside.height(scrollViewHeight);
   scrollEvents = new Array(scrollViewHeight);
-  h = $(window).height();
-  wrap.height(h);
-  contents.height(h - 80);
+  $('#canvas_container').attr('width', $('#main_container').width());
+  $('#canvas_container').attr('height', $('#main_container').height());
   initResize(wrap, contents);
-  objList = JSON.parse(sstorage.getItem('lookaround'));
-  return arrow = objList.get(0);
+  window.lstorage = localStorage;
+  objList = JSON.parse(lstorage.getItem('lookaround'));
+  return objList.forEach(function(obj) {
+    var item;
+    if (obj.itemType === Constant.ItemType.BUTTON) {
+      item = new ButtonItem();
+    } else if (obj.itemType === Constant.ItemType.ARROW) {
+      item = new ArrowItem();
+    }
+    return item.drawForLookaround(obj);
+  });
 });
 
 //# sourceMappingURL=look_around.js.js.map

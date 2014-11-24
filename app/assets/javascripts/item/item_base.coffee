@@ -93,7 +93,6 @@ class ItemBase
 
   # 描画開始時の処理
   startDraw: ->
-    changeMode(Constant.Mode.DRAW)
 
   # 描画中の処理
   # @abstract
@@ -104,10 +103,7 @@ class ItemBase
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
   endDraw: (zindex) ->
-    changeMode(Constant.Mode.EDIT)
     @zindex = zindex
-    # 状態を保存
-    @saveObj(Constant.ItemActionType.MAKE)
     return true
 
   # インスタンス変数で再描画
@@ -139,6 +135,10 @@ class ItemBase
   # @abstract
   loadByMinimumObject: (obj) ->
 
+  # 閲覧モード用の描画
+  # @abstract
+  drawForLookaround: (obj) ->
+
   # アイテムにイベントを設定する
   setupEvents: ->
 
@@ -153,10 +153,10 @@ class ItemBase
     # コンテキストメニュー設定
     do =>
       menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
-      if @constructor.ITEMTYPE == Constant.ItemType.ARROW
+      if ArrowItem? && this instanceof ArrowItem
         menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
         contextSelector = ".arrow"
-      else if @constructor.ITEMTYPE == Constant.ItemType.BUTTON
+      else if ButtonItem? && this instanceof ButtonItem
         menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
         contextSelector = ".css3button"
       setupContextMenu(@getJQueryElement(), contextSelector, menu)

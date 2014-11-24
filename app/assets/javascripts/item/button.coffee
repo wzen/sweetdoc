@@ -53,7 +53,6 @@ class ButtonItem extends ItemBase
   # @return [Boolean] 処理結果
   makeElement: ->
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
-    @setupEvents()
     return true
 
   # ストレージとDB保存用の最小限のデータを取得

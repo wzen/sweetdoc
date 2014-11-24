@@ -1,19 +1,3 @@
-# ブラウザ対応のチェック
-# @return [Boolean] 処理結果
-checkBlowserEnvironment = ->
-  if !localStorage
-    return false
-  else
-    try
-      localStorage.setItem('test', 'test')
-      c = localStorage.getItem('test')
-      localStorage.removeItem('test')
-    catch e
-      return false
-  if !File
-    return false
-  return true
-
 # 共有変数定義
 initCommonVar = ->
   window.sidebarWrapper = $("#sidebar-wrapper")
@@ -24,21 +8,19 @@ initCommonVar = ->
   window.codeCache = $("#codeCache")
   window.messageTimer = null
   window.flushMessageTimer = null
-  window.drawingCanvas = document.getElementById('canvas_container')
-  window.drawingContext = drawingCanvas.getContext('2d')
   window.mode = Constant.Mode.DRAW
-  window.selectItemMenu = Constant.ItemType.BUTTON
-  window.sstorage = sessionStorage
   window.lstorage = localStorage
   window.itemObjectList = []
-  window.itemLoadedJsPathList = {}
   window.itemInitFuncList = []
   window.operationHistory = []
   window.operationHistoryIndex = 0
 
   # WebStorageを初期化する
-  sstorage.clear()
   lstorage.clear()
+
+  # 初期状態としてボタンを選択(暫定)
+  window.selectItemMenu = Constant.ItemType.BUTTON
+  loadItemJs(Constant.ItemType.BUTTON)
 
 
 # JQueryUIのドラッグイベントとリサイズをセット
@@ -59,6 +41,117 @@ initDraggableAndResizable =  ->
     containment: mainWrapper
   })
 
+initHandwrite = ->
+  dragging = false
+  clicking = false
+  lastX = null; lastY = null
+  item = null
+  enableMoveEvent = true
+  queueLoc = null
+  zindex = 1
+  MOVE_FREQUENCY = 7
+
+  # ウィンドウ座標からCanvas座標に変換する
+  # @param [Object] canvas Canvas
+  # @param [Int] x x座標
+  # @param [Int] y y座標
+  windowToCanvas = (canvas, x, y) ->
+    bbox = canvas.getBoundingClientRect()
+    return {x: x - bbox.left * (canvas.width  / bbox.width), y: y - bbox.top  * (canvas.height / bbox.height)}
+
+  # マウスダウン時の描画イベント
+  # @param [Array] loc Canvas座標
+  mouseDownDrawing = (loc) ->
+    if selectItemMenu == Constant.ItemType.ARROW
+      item = new ArrowItem(loc)
+    else if selectItemMenu == Constant.ItemType.BUTTON
+      item = new ButtonItem(loc)
+    item.saveDrawingSurface()
+    changeMode(Constant.Mode.DRAW)
+    item.startDraw()
+
+  # マウスドラッグ時の描画イベント
+  # @param [Array] loc Canvas座標
+  mouseMoveDrawing = (loc) ->
+    if enableMoveEvent
+      enableMoveEvent = false
+      dragging = true
+      item.draw(loc)
+
+      # 待ちキューがある場合はもう一度実行
+      if queueLoc != null
+        q = queueLoc
+        queueLoc = null
+        item.draw(q)
+
+      enableMoveEvent = true
+    else
+      # 待ちキューに保存
+      queueLoc = loc
+
+  # マウスアップ時の描画イベント
+  # @param [Array] loc Canvas座標
+  mouseUpDrawing = ->
+    item.restoreAllDrawingSurface()
+    item.endDraw(zindex)
+    item.setupEvents()
+    changeMode(Constant.Mode.EDIT)
+    item.saveObj(Constant.ItemActionType.MAKE)
+    zindex += 1
+
+  # 手書きイベントを設定
+  do =>
+
+    # 画面のウィンドウ座標からCanvas座標に変換
+    # @param [Array] e ウィンドウ座標
+    # @return [Array] Canvas座標
+    calcCanvasLoc = (e)->
+      x = e.x || e.clientX
+      y = e.y || e.clientY
+      return windowToCanvas(drawingCanvas, x, y)
+
+    # 座標の状態を保存
+    # @param [Array] loc 座標
+    saveLastLoc = (loc) ->
+      lastX = loc.x
+      lastY = loc.y
+
+    # マウスダウンイベント
+    # @param [Array] e ウィンドウ座標
+    drawingCanvas.onmousedown = (e) ->
+      if e.which == 1 #左クリック
+        loc = calcCanvasLoc(e)
+        saveLastLoc(loc)
+        clicking = true
+        if mode == Constant.Mode.DRAW
+          e.preventDefault()
+          mouseDownDrawing(loc)
+        else if mode == Constant.Mode.OPTION
+          # サイドバーを閉じる
+          closeSidebar()
+          changeMode(Constant.Mode.EDIT)
+
+    # マウスドラッグイベント
+    # @param [Array] e ウィンドウ座標
+    drawingCanvas.onmousemove = (e) ->
+      if e.which == 1 #左クリック
+        loc = calcCanvasLoc(e)
+        if clicking &&
+          Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
+            if mode == Constant.Mode.DRAW
+              e.preventDefault()
+              mouseMoveDrawing(loc)
+            saveLastLoc(loc)
+
+    # マウスアップイベント
+    # @param [Array] e ウィンドウ座標
+    drawingCanvas.onmouseup = (e) ->
+      if e.which == 1 #左クリック
+        if dragging && mode == Constant.Mode.DRAW
+          e.preventDefault()
+          mouseUpDrawing()
+      dragging = false
+      clicking = false
 
 # コンテキストメニュー初期化
 # @param [String] elementID HTML要素ID
@@ -106,17 +199,6 @@ setupContextMenu = (element, contextSelector, menu) ->
     #$('#contents').contextmenu("setEntry", "copy", "Copy '" + $target.text() + "'").contextmenu("setEntry", "paste", "Paste" + (CLIPBOARD ? " '" + CLIPBOARD + "'" : "")).contextmenu("enableEntry", "paste", (CLIPBOARD != ""))
     }
   )
-
-# アイテムのIDを作成
-# @return [Int] 生成したID
-generateId = ->
-  numb = 10 #10文字
-  RandomString = '';
-  BaseString ='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  n = 62
-  for i in [0..numb]
-    RandomString += BaseString.charAt( Math.floor( Math.random() * n))
-  return RandomString
 
 ### スライダーの作成 ###
 
@@ -512,6 +594,7 @@ undo = ->
     obj = past.obj
     obj.setSize(past.itemSize)
     obj.reDraw()
+    obj.setupEvents()
 
 # redo処理
 redo = ->
@@ -526,10 +609,12 @@ redo = ->
   if action == Constant.ItemActionType.MAKE
     obj.setSize(history.itemSize)
     obj.reDraw()
+    obj.setupEvents()
   else if action == Constant.ItemActionType.MOVE
     obj.getJQueryElement().remove()
     obj.setSize(history.itemSize)
     obj.reDraw()
+    obj.setupEvents()
 
 # サーバにアイテムの情報を保存
 saveToServer = ->
@@ -687,11 +772,11 @@ runLookAround = ->
   # とりあえず矢印だけ
   objList = []
   itemObjectList.forEach((item) ->
-    if item.ITEMTYPE == 'arrow'
+    if item instanceof ArrowItem
       objList.push(item.generateMinimumObject())
   )
-  sstorage.setItem('lookaround', JSON.stringify(objList))
-
+  lstorage.setItem('lookaround', JSON.stringify(objList))
+  lstorage.setItem('itemLoadedJsPathList', JSON.stringify(itemLoadedJsPathList))
   window.open('/look_around')
 
 $ ->
@@ -719,6 +804,9 @@ $ ->
 
   # キーイベント
   initKeyEvent()
+
+  # ドラッグ描画イベント
+  initHandwrite()
 
   # コンテキストメニュー
   menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]

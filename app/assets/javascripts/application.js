@@ -28,5 +28,4 @@
 //= require item/code_template
 //= require item/item_base
 //= require work_table
-//= require item/handwrite
 // require_tree .

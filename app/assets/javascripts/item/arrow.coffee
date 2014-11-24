@@ -107,7 +107,6 @@ class ArrowItem extends ItemBase
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
     $('#' + @canvasElementId()).attr('width',  $('#' + @getElementId()).width())
     $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
-    @setupEvents()
 
     # 新しいCanvasに描画
     drawingCanvas = document.getElementById(@canvasElementId())
@@ -130,11 +129,16 @@ class ArrowItem extends ItemBase
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
-#    @id = elementId.slice(@constructor.IDENTITY.length + 1)
     @zindex = obj.zindex
     regist = obj.coodRegist
     @reDrawByCood(regist)
     @saveObj(Constant.ItemActionType.MAKE)
+
+  # 閲覧モード用の描画
+  drawForLookaround: (obj) ->
+    @zindex = obj.zindex
+    regist = obj.coodRegist
+    @reDrawByCood(regist)
 
   # 座標間の距離を計算する
   # @private
