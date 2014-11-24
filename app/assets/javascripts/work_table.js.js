@@ -688,7 +688,8 @@ loadFromServer = function() {
           } else if (obj.itemType === Constant.ItemType.ARROW) {
             item = new ArrowItem();
           }
-          _results.push(item.loadByMinimumObject(obj));
+          item.loadByMinimumObject(obj);
+          _results.push(item.setupEvents());
         }
         return _results;
       };

@@ -74,8 +74,8 @@ $(function() {
   inside = $("#inside");
   inside.height(scrollViewHeight);
   scrollEvents = new Array(scrollViewHeight);
-  $('#canvas_container').attr('width', $('#main_container').width());
-  $('#canvas_container').attr('height', $('#main_container').height());
+  $('#canvas_container').attr('width', $('#canvas_wrapper').width());
+  $('#canvas_container').attr('height', $('#canvas_wrapper').height());
   initResize(wrap, contents);
   window.lstorage = localStorage;
   objList = JSON.parse(lstorage.getItem('lookaround'));

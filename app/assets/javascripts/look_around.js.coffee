@@ -68,8 +68,8 @@ $ ->
 #  wrap.height(h)
 #  contents.height(h)
 
-  $('#canvas_container').attr('width', $('#main_container').width())
-  $('#canvas_container').attr('height', $('#main_container').height())
+  $('#canvas_container').attr('width', $('#canvas_wrapper').width())
+  $('#canvas_container').attr('height', $('#canvas_wrapper').height())
   initResize(wrap, contents)
 
   window.lstorage = localStorage

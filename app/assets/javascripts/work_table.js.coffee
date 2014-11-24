@@ -667,6 +667,7 @@ loadFromServer = ->
             else if obj.itemType == Constant.ItemType.ARROW
               item = new ArrowItem()
             item.loadByMinimumObject(obj)
+            item.setupEvents()
 
         jsList = JSON.parse(data.js_list)
         if jsList.length == 0
