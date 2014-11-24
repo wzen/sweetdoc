@@ -85,7 +85,7 @@ ButtonItem = (function(_super) {
     this.itemSize = obj.itemSize;
     this.zindex = obj.zindex;
     this.cssStyle = obj.cssStyle;
-    this.makeElement();
+    this.reDraw();
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
@@ -93,8 +93,8 @@ ButtonItem = (function(_super) {
 
 })(ItemBase);
 
-if ((window.itemFuncList != null) && (window.itemFuncList.buttonInit == null)) {
-  window.itemFuncList.buttonInit = function() {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == null)) {
+  window.itemInitFuncList.buttonInit = function() {
     var btnBgColor, btnCode, btnEntryForm, btnGradientStep, btnPreviewCss, btnShadowColor, configBoxLi;
     btnEntryForm = $("#btn-entryForm", sidebarWrapper);
     btnCode = $("#btn-code", cssCode);

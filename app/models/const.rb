@@ -24,7 +24,7 @@ class Const
     # @property [Int] BUTTON ボタン
     BUTTON = 1
   end
-  ITEM_NAME_LIST = {ItemType::ARROW.to_s.to_sym => 'arrow', ItemType::BUTTON.to_s.to_sym => 'button'}
+  ITEM_PATH_LIST = {ItemType::ARROW.to_s.to_sym => 'arrow', ItemType::BUTTON.to_s.to_sym => 'button'}
 
   # アイテムに対するアクション
   class ItemActionType

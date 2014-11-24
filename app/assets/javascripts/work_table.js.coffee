@@ -31,8 +31,8 @@ initCommonVar = ->
   window.sstorage = sessionStorage
   window.lstorage = localStorage
   window.itemObjectList = []
-  window.itemLoadedJsPathList = []
-  window.itemFuncList = []
+  window.itemLoadedJsPathList = {}
+  window.itemInitFuncList = []
   window.operationHistory = []
   window.operationHistoryIndex = 0
 
@@ -267,12 +267,20 @@ initHeaderMenu = ->
     loadItemJs(itemType)
   )
 
-loadItemJs = (itemType, callback = null) ->
-  itemName = Constant.ITEM_NAME_LIST[itemType]
+# アイテムのJSファイル初期化関数名を取得
+# @param [Int] itemType アイテム種別
+getInitFuncName = (itemType) ->
+  itemName = Constant.ITEM_PATH_LIST[itemType]
   # TODO: ハイフンが途中にあるものはキャメルに変換
-  funcName = itemName + "Init"
-  if window.itemFuncList[funcName]?
-    window.itemFuncList[funcName]()
+  return itemName + "Init"
+
+# JSファイルをサーバから読み込む
+# @param [Int] itemType アイテム種別
+# @param [Function] callback コールバック関数
+loadItemJs = (itemType, callback = null) ->
+  itemInitFuncName = getInitFuncName(itemType)
+  if window.itemInitFuncList[itemInitFuncName]?
+    window.itemInitFuncList[itemInitFuncName]()
     if callback?
       callback()
     return
@@ -285,7 +293,7 @@ loadItemJs = (itemType, callback = null) ->
       dataType: "html"
       data: {
         # ハイフンを/にしてファイルパスにする
-        itemPath: Constant.ITEM_NAME_LIST[itemType].replace(/¥-/, '/')
+        itemPath: Constant.ITEM_PATH_LIST[itemType].replace(/¥-/, '/')
       }
       success: (data)->
         s = document.createElement( 'script' );
@@ -295,9 +303,9 @@ loadItemJs = (itemType, callback = null) ->
         firstScript = document.getElementsByTagName( 'script' )[ 0 ];
         firstScript.parentNode.insertBefore( s, firstScript );
         t = setInterval( ->
-          if window.itemFuncList[funcName]?
+          if window.itemInitFuncList[itemInitFuncName]?
             clearInterval(t)
-            window.itemFuncList[funcName]()
+            window.itemInitFuncList[itemInitFuncName]()
             if callback?
               callback()
         , '500')
@@ -562,18 +570,44 @@ loadFromServer = ->
       }
       dataType: "json"
       success: (data)->
-        #console.log(data.message)
-        clearWorkTable()
-        itemState = JSON.parse(data.item_state)
-        contents = JSON.parse(itemState.contents)
-        for j in contents
-          obj = j.obj
-          item = null
-          if obj.itemType == Constant.ItemType.BUTTON
-            item = new ButtonItem()
-          else if obj.itemType == Constant.ItemType.ARROW
-            item = new ArrowItem()
+        callback = ->
+          clearWorkTable()
+          itemState = JSON.parse(data.item_state)
+          contents = JSON.parse(itemState.contents)
+          for j in contents
+            obj = j.obj
+            item = null
+            if obj.itemType == Constant.ItemType.BUTTON
+              item = new ButtonItem()
+            else if obj.itemType == Constant.ItemType.ARROW
+              item = new ArrowItem()
             item.loadByMinimumObject(obj)
+
+        jsList = JSON.parse(data.js_list)
+        if jsList.length == 0
+          callback()
+          return
+
+        loadedCount = 0
+        jsList.forEach( (js)->
+          s = document.createElement( 'script' );
+          s.type = 'text/javascript';
+          # TODO: 認証コードの比較
+          s.src = js.src;
+          firstScript = document.getElementsByTagName( 'script' )[ 0 ];
+          firstScript.parentNode.insertBefore( s, firstScript );
+          t = setInterval( ->
+            fn = getInitFuncName(js.item_type)
+            if window.itemInitFuncList[fn]?
+              clearInterval(t)
+              window.itemInitFuncList[fn]()
+              loadedCount += 1
+              if loadedCount >= jsList.length
+                callback()
+          , '500')
+        )
+        #console.log(data.message)
+
       error: (data) ->
         console.log(data.message)
     }

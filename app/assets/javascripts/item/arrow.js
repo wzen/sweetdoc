@@ -367,8 +367,8 @@ ArrowItem = (function(_super) {
 
 })(ItemBase);
 
-if ((window.itemFuncList != null) && (window.itemFuncList.arrowInit == null)) {
-  window.itemFuncList.arrowInit = function() {};
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == null)) {
+  window.itemInitFuncList.arrowInit = function() {};
 }
 
 //# sourceMappingURL=arrow.js.map

@@ -76,12 +76,12 @@ class ButtonItem extends ItemBase
     @itemSize = obj.itemSize
     @zindex = obj.zindex
     @cssStyle = obj.cssStyle
-    @makeElement()
+    @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
 
 # 初期化
-if window.itemFuncList? && !window.itemFuncList.buttonInit?
-  window.itemFuncList.buttonInit = ->
+if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
+  window.itemInitFuncList.buttonInit = ->
     btnEntryForm = $("#btn-entryForm", sidebarWrapper)
     btnCode = $("#btn-code", cssCode)
     btnPreviewCss = $("#btn-CSS", cssCode)

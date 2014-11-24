@@ -8,8 +8,8 @@ class Constant
   @ZINDEX_MAX = constant.ZINDEX_MAX
   # @property OPERATION_STORE_MAX 操作履歴保存最大数
   @OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX
-  # @property [Array] ITEM_NAME_LIST JSファイル名
-  @ITEM_NAME_LIST = constant.ITEM_NAME_LIST
+  # @property [Array] ITEM_PATH_LIST JSファイル名
+  @ITEM_PATH_LIST = constant.ITEM_PATH_LIST
 
   # 操作モード
   class @Mode
