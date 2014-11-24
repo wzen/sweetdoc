@@ -274,7 +274,7 @@ loadItemJs = function(itemType, callback) {
   if (callback == null) {
     callback = null;
   }
-  itemName = itemNameList[itemType];
+  itemName = Constant.ITEM_NAME_LIST[itemType];
   funcName = itemName + "Init";
   if (window.itemFuncList[funcName] != null) {
     window.itemFuncList[funcName]();
@@ -288,7 +288,7 @@ loadItemJs = function(itemType, callback) {
     type: "POST",
     dataType: "html",
     data: {
-      itemPath: itemNameList[itemType].replace(/¥-/, '/')
+      itemPath: Constant.ITEM_NAME_LIST[itemType].replace(/¥-/, '/')
     },
     success: function(data) {
       var firstScript, s, t;

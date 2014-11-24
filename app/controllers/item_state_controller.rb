@@ -1,3 +1,5 @@
+require 'const'
+
 class ItemStateController < ApplicationController
   def save_itemstate
     p = {
@@ -25,8 +27,13 @@ class ItemStateController < ApplicationController
     else
       message = t('message.database.item_state.load.success')
       item_list = JSON.parse(item_state)
+      item_js_list = []
       item_list.each do |item|
-        item.itemType == Constant.Item
+        if item.itemType == Const::ItemType::ARROW
+
+        elsif item.itemType == Const::ItemType::BUTTON
+
+        end
       end
     end
     data = {

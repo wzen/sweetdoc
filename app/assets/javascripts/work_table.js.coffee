@@ -268,7 +268,7 @@ initHeaderMenu = ->
   )
 
 loadItemJs = (itemType, callback = null) ->
-  itemName = itemNameList[itemType]
+  itemName = Constant.ITEM_NAME_LIST[itemType]
   # TODO: ハイフンが途中にあるものはキャメルに変換
   funcName = itemName + "Init"
   if window.itemFuncList[funcName]?
@@ -285,7 +285,7 @@ loadItemJs = (itemType, callback = null) ->
       dataType: "html"
       data: {
         # ハイフンを/にしてファイルパスにする
-        itemPath: itemNameList[itemType].replace(/¥-/, '/')
+        itemPath: Constant.ITEM_NAME_LIST[itemType].replace(/¥-/, '/')
       }
       success: (data)->
         s = document.createElement( 'script' );

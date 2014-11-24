@@ -1,11 +1,9 @@
-require 'constant'
+require 'const'
 
 class WorkTableController < ApplicationController
   def index
     # Constantの設定
-    const = []
-    d = const_values(Const, {})
-    gon.const = d
+    gon.const  = const_values(Const, {})
   end
 
   def const_values(const_class, obj)

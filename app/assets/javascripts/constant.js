@@ -12,6 +12,8 @@ Constant = (function() {
 
   Constant.OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX;
 
+  Constant.ITEM_NAME_LIST = constant.ITEM_NAME_LIST;
+
   Constant.Mode = (function() {
     function Mode() {}
 
