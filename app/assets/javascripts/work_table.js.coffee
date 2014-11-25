@@ -94,7 +94,7 @@ initHandwrite = ->
   mouseUpDrawing = ->
     item.restoreAllDrawingSurface()
     item.endDraw(zindex)
-    item.setupEvents()
+    setupEvents(item)
     changeMode(Constant.Mode.EDIT)
     item.saveObj(Constant.ItemActionType.MAKE)
     zindex += 1
@@ -153,6 +153,20 @@ initHandwrite = ->
       dragging = false
       clicking = false
 
+# イベントを設定する
+setupEvents = (item) ->
+  # コンテキストメニュー設定
+  menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+  if ArrowItem? && item instanceof ArrowItem
+    menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+    contextSelector = ".arrow"
+  else if ButtonItem? && item instanceof ButtonItem
+    menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+    contextSelector = ".css3button"
+  setupContextMenu(item.getJQueryElement(), contextSelector, menu)
+
+  item.setupEvents()
+
 # コンテキストメニュー初期化
 # @param [String] elementID HTML要素ID
 # @param [String] contextSelector
@@ -191,7 +205,7 @@ setupContextMenu = (element, contextSelector, menu) ->
         openSidebar(calMoveScrollLeft($target))
         changeMode(Constant.Mode.OPTION)
 
-      beforeOpen: (event, ui) =>
+      beforeOpen: (event, ui) ->
         $target = ui.target
         $menu = ui.menu
         extraData = ui.extraData
@@ -594,7 +608,7 @@ undo = ->
     obj = past.obj
     obj.setSize(past.itemSize)
     obj.reDraw()
-    obj.setupEvents()
+    setupEvents(obj)
 
 # redo処理
 redo = ->
@@ -609,12 +623,12 @@ redo = ->
   if action == Constant.ItemActionType.MAKE
     obj.setSize(history.itemSize)
     obj.reDraw()
-    obj.setupEvents()
+    setupEvents(obj)
   else if action == Constant.ItemActionType.MOVE
     obj.getJQueryElement().remove()
     obj.setSize(history.itemSize)
     obj.reDraw()
-    obj.setupEvents()
+    setupEvents(obj)
 
 # サーバにアイテムの情報を保存
 saveToServer = ->
@@ -667,7 +681,7 @@ loadFromServer = ->
             else if obj.itemType == Constant.ItemType.ARROW
               item = new ArrowItem()
             item.loadByMinimumObject(obj)
-            item.setupEvents()
+            setupEvents(item)
 
         jsList = JSON.parse(data.js_list)
         if jsList.length == 0

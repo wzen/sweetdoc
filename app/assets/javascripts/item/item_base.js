@@ -115,38 +115,12 @@ ItemBase = (function() {
     (function(_this) {
       return (function() {
         return _this.getJQueryElement().mousedown(function(e) {
-          e.stopPropagation();
-          $(this).find('.editSelected').remove();
-          return $(this).append('<div class="editSelected" />');
-        });
-      });
-    })(this)();
-    (function(_this) {
-      return (function() {
-        var contextSelector, menu;
-        menu = [
-          {
-            title: "Delete",
-            cmd: "delete",
-            uiIcon: "ui-icon-scissors"
+          if (e.which === 1) {
+            e.stopPropagation();
+            $(this).find('.editSelected').remove();
+            return $(this).append('<div class="editSelected" />');
           }
-        ];
-        if ((typeof ArrowItem !== "undefined" && ArrowItem !== null) && _this instanceof ArrowItem) {
-          menu.push({
-            title: "ArrowItem",
-            cmd: "cut",
-            uiIcon: "ui-icon-scissors"
-          });
-          contextSelector = ".arrow";
-        } else if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && _this instanceof ButtonItem) {
-          menu.push({
-            title: "ButtonItem",
-            cmd: "cut",
-            uiIcon: "ui-icon-scissors"
-          });
-          contextSelector = ".css3button";
-        }
-        return setupContextMenu(_this.getJQueryElement(), contextSelector, menu);
+        });
       });
     })(this)();
     return (function(_this) {

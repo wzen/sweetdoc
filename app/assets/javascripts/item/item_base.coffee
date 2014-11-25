@@ -145,21 +145,11 @@ class ItemBase
     # クリックイベント設定
     do =>
       @getJQueryElement().mousedown( (e)->
-        e.stopPropagation()
-        $(@).find('.editSelected').remove()
-        $(@).append('<div class="editSelected" />')
+        if e.which == 1 #左クリック
+          e.stopPropagation()
+          $(@).find('.editSelected').remove()
+          $(@).append('<div class="editSelected" />')
       )
-
-    # コンテキストメニュー設定
-    do =>
-      menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
-      if ArrowItem? && this instanceof ArrowItem
-        menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-        contextSelector = ".arrow"
-      else if ButtonItem? && this instanceof ButtonItem
-        menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-        contextSelector = ".css3button"
-      setupContextMenu(@getJQueryElement(), contextSelector, menu)
 
     # JQueryUIのドラッグイベントとリサイズ設定
     do =>
