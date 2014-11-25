@@ -37,6 +37,7 @@ ArrowItem = (function(_super) {
     this.coodHeadPart = [];
     this.coodLeftBodyPart = [];
     this.coodRightBodyPart = [];
+    this.drawCoodRegist = [];
   }
 
   ArrowItem.prototype.canvasElementId = function() {
@@ -44,8 +45,8 @@ ArrowItem = (function(_super) {
   };
 
   ArrowItem.prototype.drawPath = function(moveCood) {
-    calDrection.call(this, this.coodRegist[this.coodRegist.length - 1], moveCood);
-    this.coodRegist.push(moveCood);
+    calDrection.call(this, this.drawCoodRegist[this.drawCoodRegist.length - 1], moveCood);
+    this.drawCoodRegist.push(moveCood);
     updateArrowRect.call(this, moveCood);
     clearArrow.call(this);
     calTailDrawPath.call(this);
@@ -61,6 +62,7 @@ ArrowItem = (function(_super) {
   };
 
   ArrowItem.prototype.draw = function(moveCood) {
+    this.coodRegist.push(moveCood);
     this.drawPath(moveCood);
     return this.drawLine();
   };
@@ -74,14 +76,11 @@ ArrowItem = (function(_super) {
   };
 
   ArrowItem.prototype.reDraw = function() {
-    return this.reDrawByCood(this.coodRegist);
-  };
-
-  ArrowItem.prototype.reDrawByCood = function(regist) {
-    var r, _i, _len;
+    var r, _i, _len, _ref;
     this.saveDrawingSurface();
-    for (_i = 0, _len = regist.length; _i < _len; _i++) {
-      r = regist[_i];
+    _ref = this.coodRegist;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      r = _ref[_i];
       this.drawPath(r);
     }
     this.drawLine();
@@ -113,18 +112,18 @@ ArrowItem = (function(_super) {
   };
 
   ArrowItem.prototype.loadByMinimumObject = function(obj) {
-    var regist;
-    this.zindex = obj.zindex;
-    regist = obj.coodRegist;
-    this.reDrawByCood(regist);
+    this.setMiniumObject(obj);
+    this.reDraw();
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
-  ArrowItem.prototype.drawForLookaround = function(obj) {
-    var regist;
+  ArrowItem.prototype.setMiniumObject = function(obj) {
     this.zindex = obj.zindex;
-    regist = obj.coodRegist;
-    return this.reDrawByCood(regist);
+    return this.coodRegist = obj.coodRegist;
+  };
+
+  ArrowItem.prototype.drawForLookaround = function(scrollPoint) {
+    return this.reDraw();
   };
 
   coodLength = function(locA, locB) {
@@ -192,13 +191,13 @@ ArrowItem = (function(_super) {
     /* 検証 */
     var locSub, locTail, rad, validate;
     validate = function() {
-      return this.coodRegist.length === 2;
+      return this.drawCoodRegist.length === 2;
     };
     if (!validate.call(this)) {
       return;
     }
-    locTail = this.coodRegist[0];
-    locSub = this.coodRegist[1];
+    locTail = this.drawCoodRegist[0];
+    locSub = this.drawCoodRegist[1];
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x);
     this.coodRightBodyPart.push({
       x: -(Math.sin(rad) * ARROW_HALF_WIDTH) + locTail.x,
@@ -215,7 +214,7 @@ ArrowItem = (function(_super) {
     /* 検証 */
     var calCenterBodyCood, centerBodyCood, locLeftBody, locRightBody, suitCoodBasedDirection, validate;
     validate = function() {
-      return this.coodRegist.length >= 3;
+      return this.drawCoodRegist.length >= 3;
     };
 
     /* 3点から引く座標を求める */
@@ -288,7 +287,7 @@ ArrowItem = (function(_super) {
     }
     locLeftBody = this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1];
     locRightBody = this.coodRightBodyPart[this.coodRightBodyPart.length - 1];
-    centerBodyCood = calCenterBodyCood.call(this, this.coodRegist[this.coodRegist.length - 3], this.coodRegist[this.coodRegist.length - 2], this.coodRegist[this.coodRegist.length - 1]);
+    centerBodyCood = calCenterBodyCood.call(this, this.drawCoodRegist[this.drawCoodRegist.length - 3], this.drawCoodRegist[this.drawCoodRegist.length - 2], this.drawCoodRegist[this.drawCoodRegist.length - 1]);
     centerBodyCood = suitCoodBasedDirection.call(this, centerBodyCood);
     this.coodLeftBodyPart.push(centerBodyCood.coodLeftPart);
     return this.coodRightBodyPart.push(centerBodyCood.coodRightPart);

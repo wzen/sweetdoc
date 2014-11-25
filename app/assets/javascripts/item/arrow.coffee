@@ -27,7 +27,7 @@ class ArrowItem extends ItemBase
     super(cood)
     # @property [Array] direction 矢印の進行方向
     @direction = {x: 0, y: 0}
-    # @property [Array] coodRegist ドラッグした座標
+    # @property [Array] coodRegist 矢印のドラッグ座標
     @coodRegist = []
     # @property [Array] coodHeadPart 矢印の頭部の座標
     @coodHeadPart = []
@@ -35,6 +35,10 @@ class ArrowItem extends ItemBase
     @coodLeftBodyPart = []
     # @property [Array] coodRightBodyPart 矢印の体右部分の座標
     @coodRightBodyPart = []
+
+    # @property [Array] drawCoodRegist 矢印のドラッグ座標(描画時のみ使用)
+    # @private
+    @drawCoodRegist = []
 
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID
@@ -44,8 +48,8 @@ class ArrowItem extends ItemBase
   # パスの描画
   # @param [Array] moveCood 画面ドラッグ座標
   drawPath : (moveCood) ->
-    calDrection.call(@, @coodRegist[@coodRegist.length - 1], moveCood)
-    @coodRegist.push(moveCood)
+    calDrection.call(@, @drawCoodRegist[@drawCoodRegist.length - 1], moveCood)
+    @drawCoodRegist.push(moveCood)
 
     # 描画範囲の更新
     updateArrowRect.call(@, moveCood)
@@ -72,6 +76,7 @@ class ArrowItem extends ItemBase
   # 描画(パス+線)
   # @param [Array] moveCood 画面ドラッグ座標
   draw : (moveCood) ->
+    @coodRegist.push(moveCood)
     # パスの描画
     @drawPath(moveCood)
     # 線の描画
@@ -88,12 +93,8 @@ class ArrowItem extends ItemBase
 
   # 再描画処理
   reDraw: ->
-    @reDrawByCood(@coodRegist)
-
-  # 座標を指定して再描画
-  reDrawByCood: (regist) ->
     @saveDrawingSurface()
-    for r in regist
+    for r in @coodRegist
       @drawPath(r)
     @drawLine()
     @restoreDrawingSurface(@itemSize)
@@ -129,16 +130,18 @@ class ArrowItem extends ItemBase
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
-    @zindex = obj.zindex
-    regist = obj.coodRegist
-    @reDrawByCood(regist)
+    @setMiniumObject(obj)
+    @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
 
-  # 閲覧モード用の描画
-  drawForLookaround: (obj) ->
+  # 最小限のデータを設定
+  setMiniumObject: (obj) ->
     @zindex = obj.zindex
-    regist = obj.coodRegist
-    @reDrawByCood(regist)
+    @coodRegist = obj.coodRegist
+
+  # 閲覧モード用の描画
+  drawForLookaround: (scrollPoint) ->
+    @reDraw() # TODO: 部分的に
 
   # 座標間の距離を計算する
   # @private
@@ -205,13 +208,13 @@ class ArrowItem extends ItemBase
   calTailDrawPath = ->
     ### 検証 ###
     validate = ->
-      return @coodRegist.length == 2
+      return @drawCoodRegist.length == 2
 
     if !validate.call(@)
       return
 
-    locTail = @coodRegist[0]
-    locSub = @coodRegist[1]
+    locTail = @drawCoodRegist[0]
+    locSub = @drawCoodRegist[1]
 
     # 座標を保存
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x)
@@ -223,7 +226,7 @@ class ArrowItem extends ItemBase
   calBodyPath = ->
     ### 検証 ###
     validate = ->
-      return @coodRegist.length >= 3
+      return @drawCoodRegist.length >= 3
 
     ### 3点から引く座標を求める ###
     calCenterBodyCood = (left, center, right) ->
@@ -299,7 +302,7 @@ class ArrowItem extends ItemBase
 
     locLeftBody = @coodLeftBodyPart[@coodLeftBodyPart.length - 1]
     locRightBody = @coodRightBodyPart[@coodRightBodyPart.length - 1]
-    centerBodyCood = calCenterBodyCood.call(@, @coodRegist[@coodRegist.length - 3], @coodRegist[@coodRegist.length - 2], @coodRegist[@coodRegist.length - 1])
+    centerBodyCood = calCenterBodyCood.call(@, @drawCoodRegist[@drawCoodRegist.length - 3], @drawCoodRegist[@drawCoodRegist.length - 2], @drawCoodRegist[@drawCoodRegist.length - 1])
     centerBodyCood = suitCoodBasedDirection.call(@, centerBodyCood)
     #    console.log('Left')
     #    coodLog.call(@, locLeftBody, 'moveTo')
