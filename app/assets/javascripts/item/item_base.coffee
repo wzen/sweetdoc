@@ -141,7 +141,6 @@ class ItemBase
 
   # アイテムにイベントを設定する
   setupEvents: ->
-
     # クリックイベント設定
     do =>
       @getJQueryElement().mousedown( (e)->
@@ -167,6 +166,10 @@ class ItemBase
           @setSize(rect)
           @saveObj(Constant.ItemActionType.MOVE)
       })
+
+  # スクロールイベント
+  # @abstract
+  scrollEvent: (distX, distY) ->
 
   # イベントによって設定したスタイルをクリアする　
   clearAllEventStyle : ->

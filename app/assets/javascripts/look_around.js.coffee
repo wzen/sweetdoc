@@ -1,27 +1,19 @@
 resizeTimer = false
 scrollTimer = -1
-scrollViewHeight = 50000
 scrollEvents = []
+item = null
 
-arrow = null
+initCommonVar = ->
+  window.wrap = $('#main-wrapper')
+  window.contents = $("#scroll_wrapper")
+  window.scrollContents = $("#scroll_contents")
+  window.inside = $("#scroll_inside")
+  window.distX = 0
+  window.distY = 0
+  window.scrollViewMag = 20
 
 initScrollEvents = ->
-  # Color Change
-  color_max = 256 * 3
-  colorPerHeight = (color_max) / scrollViewHeight
-  c = 0
-  for i in [0..scrollViewHeight]
-    styles = []
-    c += colorPerHeight
-    cf = Math.floor(c)
-    r = parseInt(cf / 3)
-    g = parseInt((cf + 1) / 3)
-    b = parseInt((cf + 2) / 3)
-    rgb = "rgb(" + r + "," + g + "," + b + ")"
-    style = {name : "background-color", param : rgb}
-    styles.push(style)
-    scrollEvents[i] = styles
-  @
+
 
 initResize = (wrap, contents) ->
   resizeTimer = false;
@@ -31,46 +23,64 @@ initResize = (wrap, contents) ->
     resizeTimer = setTimeout( ->
       h = $(window).height()
       wrap.height(h)
-      contents.height(h - 80)
+      contents.height(h)
     , 200)
   )
 
-initScroll = (scroll_contents) ->
-  scroll_contents.scroll( ->
-    if scrollTimer != -1
-      clearTimeout(scrollTimer)
+initScrollPoint = ->
+  scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5))
+  scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
 
-    scrollTimer = setTimeout(scrollFinished, 500)
-    #scrollpoint_container.hide()
+initScroll = ->
+  lastLeft = null
+  lastTop = null
+  stopTimer = null
 
-    # Set ScrollEvents
-    sh = Math.floor($(this).scrollTop())
-    #console.log("scrollTop:" + sh)
-    styles = scrollEvents[sh]
-    $.each(styles, (i, v)->
-      scroll_contents.css(v["name"], v["param"])
-    )
+  scrollContents.scroll( ->
+    x = $(@).scrollLeft()
+    y = $(@).scrollTop()
+    if lastLeft == null || lastTop == null
+      initScrollPoint()
+      lastLeft = x
+      lastTop = y
+
+    if stopTimer != null
+      clearTimeout(stopTimer)
+    stopTimer = setTimeout(->
+      lastLeft = null
+      lastTop = null
+      clearTimeout(stopTimer)
+      stopTimer = null
+    , 50)
+
+    if lastLeft == null || lastTop == null
+      return
+
+    distX = x - lastLeft
+    distY = y - lastTop
+    lastLeft = x
+    lastTop = y
+
+    #console.log('distX:' + distX + ' distY:' + distY)
+    scrollEvent(distX, distY)
   )
 
   scrollFinished = ->
     #scrollpoint_container.show()
 
-$ ->
-  wrap = $('#main-wrapper')
-  contents = $("#scroll_wrapper")
-  scroll_contents = $("#scroll_contents")
-  inside = $("#inside")
-  #scrollpoint_container = $("#scrollpoint_container")
-  inside.height(scrollViewHeight)
-  scrollEvents = new Array(scrollViewHeight)
+scrollEvent = (distX, distY) ->
+  item.scrollEvent(distX, distY)
 
-#  h = $(window).height()
-#  wrap.height(h)
-#  contents.height(h)
+$ ->
+  initCommonVar()
+
+  inside.width(scrollContents.width() * (scrollViewMag + 1))
+  inside.height(scrollContents.height() * (scrollViewMag + 1))
+  initScrollPoint()
 
   $('#canvas_container').attr('width', $('#canvas_wrapper').width())
   $('#canvas_container').attr('height', $('#canvas_wrapper').height())
-  initResize(wrap, contents)
+  #initResize(wrap, contents)
 
   window.lstorage = localStorage
   objList = JSON.parse(lstorage.getItem('lookaround'))
@@ -79,11 +89,11 @@ $ ->
       item = new ButtonItem()
     else if obj.itemType == Constant.ItemType.ARROW
       item = new ArrowItem()
-    item.drawForLookaround(obj)
+    item.setMiniumObject(obj)
   )
 
 
   #initScrollEvents()
-  #initScroll(scroll_contents)
+  initScroll()
 
 

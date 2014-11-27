@@ -12,5 +12,10 @@
 //= require item/item_base
 //= require item/arrow
 //= require item/button
+//= require lookaround/Actor
+//= require lookaround/Chapter
+//= require lookaround/ScrollChapter
+//= require lookaround/ClickChapter
+//= require lookaround/TimeLine
 //= require look_around
 // require_tree .

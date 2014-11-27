@@ -157,6 +157,8 @@ ItemBase = (function() {
     })(this)();
   };
 
+  ItemBase.prototype.scrollEvent = function(distX, distY) {};
+
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   return ItemBase;

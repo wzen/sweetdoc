@@ -122,7 +122,7 @@ ArrowItem = (function(_super) {
     return this.coodRegist = obj.coodRegist;
   };
 
-  ArrowItem.prototype.drawForLookaround = function(scrollPoint) {
+  ArrowItem.prototype.drawForLookaround = function(scroll) {
     return this.reDraw();
   };
 

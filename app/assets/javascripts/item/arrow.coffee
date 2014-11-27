@@ -140,7 +140,7 @@ class ArrowItem extends ItemBase
     @coodRegist = obj.coodRegist
 
   # 閲覧モード用の描画
-  drawForLookaround: (scrollPoint) ->
+  drawForLookaround: (scroll) ->
     @reDraw() # TODO: 部分的に
 
   # 座標間の距離を計算する
