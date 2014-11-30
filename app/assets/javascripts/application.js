@@ -26,6 +26,8 @@
 //= require constant
 //= require common
 //= require item/code_template
+//= require base/actor
 //= require item/item_base
+//= require test_move
 //= require work_table
 // require_tree .

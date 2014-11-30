@@ -38,6 +38,13 @@ if gon?
       # @property [int] CHANGE_OPTION オプション変更
       @CHANGE_OPTION = constant.ItemActionType.CHANGE_OPTION
 
+    # 閲覧モードのチャプターアクション種類
+    class @ChapterActionType
+      # @property [Int] DRAW 描画
+      @DRAW = constant.ChapterActionType.DRAW
+      # @property [Int] CHANGE 変更
+      @CHANGE = constant.ChapterActionType.CHANGE
+
     # キーコード
     class @KeyboardKeyCode
       # @property [Int] z zボタン

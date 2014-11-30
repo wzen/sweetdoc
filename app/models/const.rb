@@ -32,8 +32,18 @@ class Const
     MAKE = 0
     # @property [Int] MOVE 移動
     MOVE = 1
-    # @property [int] CHANGE_OPTION オプション変更
+    # @property [Int] CHANGE_OPTION オプション変更
     CHANGE_OPTION = 2
+    # @property [Int] DELETE 削除
+    DELETE = 3
+  end
+
+  # 閲覧モードのアクション
+  class ChapterActionType
+    # @property [Int] DRAW 描画
+    DRAW = 0
+    # @property [Int] CHANGE 変更
+    CHANGE = 1
   end
 
   # キーコード

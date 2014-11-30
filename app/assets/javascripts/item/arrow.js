@@ -48,7 +48,6 @@ ArrowItem = (function(_super) {
     calDrection.call(this, this.drawCoodRegist[this.drawCoodRegist.length - 1], moveCood);
     this.drawCoodRegist.push(moveCood);
     updateArrowRect.call(this, moveCood);
-    clearArrow.call(this);
     calTailDrawPath.call(this);
     calBodyPath.call(this, moveCood);
     return calTrianglePath.call(this, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1], this.coodRightBodyPart[this.coodRightBodyPart.length - 1]);
@@ -64,6 +63,7 @@ ArrowItem = (function(_super) {
   ArrowItem.prototype.draw = function(moveCood) {
     this.coodRegist.push(moveCood);
     this.drawPath(moveCood);
+    clearArrow.call(this);
     return this.drawLine();
   };
 
@@ -78,6 +78,7 @@ ArrowItem = (function(_super) {
   ArrowItem.prototype.reDraw = function() {
     var r, _i, _len, _ref;
     this.saveDrawingSurface();
+    this.drawCoodRegist = [];
     _ref = this.coodRegist;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       r = _ref[_i];
@@ -86,6 +87,13 @@ ArrowItem = (function(_super) {
     this.drawLine();
     this.restoreDrawingSurface(this.itemSize);
     return this.endDraw(this.zindex);
+  };
+
+  ArrowItem.prototype.resetDrawPath = function() {
+    this.coodHeadPart = [];
+    this.coodLeftBodyPart = [];
+    this.coodRightBodyPart = [];
+    return this.drawCoodRegist = [];
   };
 
   ArrowItem.prototype.makeElement = function() {
@@ -122,8 +130,30 @@ ArrowItem = (function(_super) {
     return this.coodRegist = obj.coodRegist;
   };
 
-  ArrowItem.prototype.drawForLookaround = function(scroll) {
-    return this.reDraw();
+  ArrowItem.prototype.scrollEvent = function(x, y) {
+    var r, _i, _len, _ref;
+    if (this.scrollValue == null) {
+      console.log('scroll init');
+      this.saveDrawingSurface();
+      this.scrollValue = 0;
+    } else {
+      console.log("y:" + y);
+      this.scrollValue += parseInt(y / 10);
+    }
+    this.scrollValue = this.scrollValue < 0 ? 0 : this.scrollValue;
+    this.scrollValue = this.scrollValue >= this.coodRegist.length ? this.coodRegist.length - 1 : this.scrollValue;
+    console.log("scrollX: " + this.scrollValue);
+    this.resetDrawPath();
+    this.restoreDrawingSurface(this.actorSize);
+    _ref = this.coodRegist.slice(0, this.scrollValue);
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      r = _ref[_i];
+      this.drawPath(r);
+    }
+    drawingContext.beginPath();
+    drawCoodToCanvas.call(this, true);
+    drawingContext.fillStyle = "#00008B";
+    return drawingContext.fill();
   };
 
   coodLength = function(locA, locB) {

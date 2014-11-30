@@ -51,6 +51,17 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ChapterActionType = (function() {
+      function ChapterActionType() {}
+
+      ChapterActionType.DRAW = constant.ChapterActionType.DRAW;
+
+      ChapterActionType.CHANGE = constant.ChapterActionType.CHANGE;
+
+      return ChapterActionType;
+
+    })();
+
     Constant.KeyboardKeyCode = (function() {
       function KeyboardKeyCode() {}
 

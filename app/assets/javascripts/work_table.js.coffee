@@ -781,16 +781,33 @@ run = ->
     }
   )
 
-# 閲覧を実行する
-runLookAround = ->
+# タイムラインのデータをまとめる
+setupTimeLineDatas = ->
+  # 処理は暫定(itemObjectListから取っているが、本当はタイムラインの情報を取る)
+
   # Storageに値を格納
   # とりあえず矢印だけ
   objList = []
   itemObjectList.forEach((item) ->
     if item instanceof ArrowItem
-      objList.push(item.generateMinimumObject())
+      obj = {
+        chapter: 1
+        screen: 1
+        miniObj: item.generateMinimumObject()
+        actorSize: item.getSize()
+        sEvent: (x, y) ->
+          #console.log("sEvent: x=#{x} y=#{y}")
+          @scrollEvent(x, y)
+        cEvent: ->
+      }
+      objList.push(obj)
   )
-  lstorage.setItem('lookaround', JSON.stringify(objList))
+  return objList
+
+# 閲覧を実行する
+runLookAround = ->
+  Function.prototype.toJSON = Function.prototype.toString
+  lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()))
   lstorage.setItem('itemLoadedJsPathList', JSON.stringify(itemLoadedJsPathList))
   window.open('/look_around')
 

@@ -1,5 +1,5 @@
 # アイテム基底
-class ItemBase
+class ItemBase extends Actor
   # @abstract
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
@@ -10,7 +10,6 @@ class ItemBase
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
-
     # @property [Int] id ID
     @id = generateId()
     # @property [Object] drawingSurfaceImageData 画面を保存する変数
@@ -94,7 +93,7 @@ class ItemBase
   # 描画開始時の処理
   startDraw: ->
 
-  # 描画中の処理
+  # ドラッグでの描画処理
   # @abstract
   draw: (cood) ->
 
@@ -106,7 +105,7 @@ class ItemBase
     @zindex = zindex
     return true
 
-  # インスタンス変数で再描画
+  # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
   # @abstract
   reDraw: ->
@@ -166,10 +165,6 @@ class ItemBase
           @setSize(rect)
           @saveObj(Constant.ItemActionType.MOVE)
       })
-
-  # スクロールイベント
-  # @abstract
-  scrollEvent: (distX, distY) ->
 
   # イベントによって設定したスタイルをクリアする　
   clearAllEventStyle : ->

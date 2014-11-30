@@ -1,8 +1,4 @@
-resizeTimer = false
-scrollTimer = -1
-scrollEvents = []
-item = null
-
+# 初期化
 initCommonVar = ->
   window.wrap = $('#main-wrapper')
   window.contents = $("#scroll_wrapper")
@@ -11,9 +7,8 @@ initCommonVar = ->
   window.distX = 0
   window.distY = 0
   window.scrollViewMag = 20
-
-initScrollEvents = ->
-
+  window.resizeTimer = false
+  window.timeLine = null
 
 initResize = (wrap, contents) ->
   resizeTimer = false;
@@ -35,6 +30,11 @@ initScroll = ->
   lastLeft = null
   lastTop = null
   stopTimer = null
+
+  scrollContents.on("mousedown",(e) ->
+    e.preventDefault()
+    console.log('onmousedown')
+  )
 
   scrollContents.scroll( ->
     x = $(@).scrollLeft()
@@ -61,15 +61,12 @@ initScroll = ->
     lastLeft = x
     lastTop = y
 
+    #timeLine.handleScrollEvent(distX, distY)
     #console.log('distX:' + distX + ' distY:' + distY)
-    scrollEvent(distX, distY)
   )
 
   scrollFinished = ->
     #scrollpoint_container.show()
-
-scrollEvent = (distX, distY) ->
-  item.scrollEvent(distX, distY)
 
 $ ->
   initCommonVar()
@@ -82,18 +79,25 @@ $ ->
   $('#canvas_container').attr('height', $('#canvas_wrapper').height())
   #initResize(wrap, contents)
 
+  # アクションのイベントを取得
   window.lstorage = localStorage
-  objList = JSON.parse(lstorage.getItem('lookaround'))
+  objList = JSON.parse(lstorage.getItem('timelineObjList'))
+  actorList = []
   objList.forEach( (obj)->
-    if obj.itemType == Constant.ItemType.BUTTON
+    item = null
+    miniObj = obj.miniObj
+    if miniObj.itemType == Constant.ItemType.BUTTON
       item = new ButtonItem()
-    else if obj.itemType == Constant.ItemType.ARROW
+    else if miniObj.itemType == Constant.ItemType.ARROW
       item = new ArrowItem()
-    item.setMiniumObject(obj)
+    item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent)
+    actorList.push(item)
   )
+  chapterList = []
+  chapter = new Chapter(actorList)
+  chapterList.push(chapter)
+  window.timeLine = new TimeLine(chapterList)
 
-
-  #initScrollEvents()
   initScroll()
 
 

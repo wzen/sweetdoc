@@ -54,9 +54,6 @@ class ArrowItem extends ItemBase
     # 描画範囲の更新
     updateArrowRect.call(@, moveCood)
 
-    # 描画した矢印をクリア
-    clearArrow.call(@)
-
     # 尾の部分の座標を計算
     calTailDrawPath.call(@)
     # 体の部分の座標を計算
@@ -79,6 +76,8 @@ class ArrowItem extends ItemBase
     @coodRegist.push(moveCood)
     # パスの描画
     @drawPath(moveCood)
+    # 描画した矢印をクリア
+    clearArrow.call(@)
     # 線の描画
     @drawLine()
 
@@ -94,11 +93,19 @@ class ArrowItem extends ItemBase
   # 再描画処理
   reDraw: ->
     @saveDrawingSurface()
+    @drawCoodRegist = []
     for r in @coodRegist
       @drawPath(r)
     @drawLine()
     @restoreDrawingSurface(@itemSize)
     @endDraw(@zindex)
+
+  # パスの情報をリセット
+  resetDrawPath: ->
+    @coodHeadPart = []
+    @coodLeftBodyPart = []
+    @coodRightBodyPart = []
+    @drawCoodRegist = []
 
   # CanvasのHTML要素を作成
   # @param [Array] cood 座標
@@ -139,9 +146,29 @@ class ArrowItem extends ItemBase
     @zindex = obj.zindex
     @coodRegist = obj.coodRegist
 
-  # 閲覧モード用の描画
-  drawForLookaround: (scroll) ->
-    @reDraw() # TODO: 部分的に
+  # スクロールイベント
+  scrollEvent : (x, y) ->
+    if !@scrollValue?
+      console.log('scroll init')
+      @saveDrawingSurface()
+      @scrollValue = 0
+    else
+      console.log("y:#{y}")
+      @scrollValue += parseInt(y / 10)
+    @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
+    @scrollValue = if @scrollValue >= @coodRegist.length then @coodRegist.length - 1 else @scrollValue
+    console.log("scrollX: #{@scrollValue}")
+    @resetDrawPath()
+    @restoreDrawingSurface(@actorSize)
+    for r in @coodRegist.slice(0, @scrollValue)
+      @drawPath(r)
+    drawingContext.beginPath();
+    # 尾と体の座標をCanvasに描画
+    drawCoodToCanvas.call(@, true)
+    drawingContext.fillStyle = "#00008B"
+    # 描画した矢印をクリア
+    #console.log("actorSize: #{@actorSize.x} #{@actorSize.y} #{@actorSize.w} #{@actorSize.h}")
+    drawingContext.fill()
 
   # 座標間の距離を計算する
   # @private

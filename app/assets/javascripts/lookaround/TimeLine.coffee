@@ -1,2 +1,0 @@
-# タイムライン
-class TimeLine

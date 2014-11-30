@@ -8,14 +8,15 @@
 // IDE not aware under vendor/asset/
 //= require constant
 //= require common
+//= require base/actor
 //= require item/code_template
 //= require item/item_base
 //= require item/arrow
 //= require item/button
-//= require lookaround/Actor
-//= require lookaround/Chapter
-//= require lookaround/ScrollChapter
-//= require lookaround/ClickChapter
-//= require lookaround/TimeLine
+//= require lookaround/chapter
+//= require lookaround/scroll_chapter
+//= require lookaround/click_chapter
+//= require lookaround/time_line
+//= require test_move
 //= require look_around
 // require_tree .
