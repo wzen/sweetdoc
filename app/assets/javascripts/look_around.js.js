@@ -8,7 +8,7 @@ initCommonVar = function() {
   window.inside = $("#scroll_inside");
   window.distX = 0;
   window.distY = 0;
-  window.scrollViewMag = 20;
+  window.scrollViewMag = 1000;
   window.resizeTimer = false;
   return window.timeLine = null;
 };
@@ -48,7 +48,6 @@ initScroll = function() {
     x = $(this).scrollLeft();
     y = $(this).scrollTop();
     if (lastLeft === null || lastTop === null) {
-      initScrollPoint();
       lastLeft = x;
       lastTop = y;
     }
@@ -56,18 +55,17 @@ initScroll = function() {
       clearTimeout(stopTimer);
     }
     stopTimer = setTimeout(function() {
+      initScrollPoint();
       lastLeft = null;
       lastTop = null;
       clearTimeout(stopTimer);
       return stopTimer = null;
-    }, 50);
-    if (lastLeft === null || lastTop === null) {
-      return;
-    }
+    }, 100);
     distX = x - lastLeft;
     distY = y - lastTop;
     lastLeft = x;
-    return lastTop = y;
+    lastTop = y;
+    return timeLine.handleScrollEvent(distX, distY);
   });
   return scrollFinished = function() {};
 };

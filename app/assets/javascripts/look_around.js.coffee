@@ -6,7 +6,7 @@ initCommonVar = ->
   window.inside = $("#scroll_inside")
   window.distX = 0
   window.distY = 0
-  window.scrollViewMag = 20
+  window.scrollViewMag = 1000
   window.resizeTimer = false
   window.timeLine = null
 
@@ -40,28 +40,25 @@ initScroll = ->
     x = $(@).scrollLeft()
     y = $(@).scrollTop()
     if lastLeft == null || lastTop == null
-      initScrollPoint()
       lastLeft = x
       lastTop = y
 
     if stopTimer != null
       clearTimeout(stopTimer)
     stopTimer = setTimeout(->
+      initScrollPoint()
       lastLeft = null
       lastTop = null
       clearTimeout(stopTimer)
       stopTimer = null
-    , 50)
-
-    if lastLeft == null || lastTop == null
-      return
+    , 100)
 
     distX = x - lastLeft
     distY = y - lastTop
     lastLeft = x
     lastTop = y
 
-    #timeLine.handleScrollEvent(distX, distY)
+    timeLine.handleScrollEvent(distX, distY)
     #console.log('distX:' + distX + ' distY:' + distY)
   )
 
