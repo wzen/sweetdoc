@@ -137,7 +137,6 @@ ArrowItem = (function(_super) {
       this.saveDrawingSurface();
       this.scrollValue = 0;
     } else {
-      console.log("y:" + y);
       this.scrollValue += parseInt(y / 10);
     }
     this.scrollValue = this.scrollValue < 0 ? 0 : this.scrollValue;
@@ -153,7 +152,10 @@ ArrowItem = (function(_super) {
     drawingContext.beginPath();
     drawCoodToCanvas.call(this, true);
     drawingContext.fillStyle = "#00008B";
-    return drawingContext.fill();
+    drawingContext.fill();
+    if (this.scrollValue >= this.coodRegist.length - 1) {
+      return this.nextChapter();
+    }
   };
 
   coodLength = function(locA, locB) {

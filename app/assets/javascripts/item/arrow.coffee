@@ -153,7 +153,7 @@ class ArrowItem extends ItemBase
       @saveDrawingSurface()
       @scrollValue = 0
     else
-      console.log("y:#{y}")
+      #console.log("y:#{y}")
       @scrollValue += parseInt(y / 10)
     @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
     @scrollValue = if @scrollValue >= @coodRegist.length then @coodRegist.length - 1 else @scrollValue
@@ -169,6 +169,9 @@ class ArrowItem extends ItemBase
     # 描画した矢印をクリア
     #console.log("actorSize: #{@actorSize.x} #{@actorSize.y} #{@actorSize.w} #{@actorSize.h}")
     drawingContext.fill()
+
+    if @scrollValue >= @coodRegist.length - 1
+      @nextChapter()
 
   # 座標間の距離を計算する
   # @private

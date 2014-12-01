@@ -35,6 +35,12 @@ Actor = (function() {
     }
   };
 
+  Actor.prototype.nextChapter = function() {
+    if (window.timeLine != null) {
+      return window.timeLine.incrementChapter();
+    }
+  };
+
   return Actor;
 
 })();

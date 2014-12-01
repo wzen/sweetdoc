@@ -71,7 +71,7 @@ initScroll = function() {
 };
 
 $(function() {
-  var actorList, chapter, chapterList, objList;
+  var chapterList, objList;
   initCommonVar();
   inside.width(scrollContents.width() * (scrollViewMag + 1));
   inside.height(scrollContents.height() * (scrollViewMag + 1));
@@ -80,9 +80,10 @@ $(function() {
   $('#canvas_container').attr('height', $('#canvas_wrapper').height());
   window.lstorage = localStorage;
   objList = JSON.parse(lstorage.getItem('timelineObjList'));
-  actorList = [];
+  chapterList = [];
   objList.forEach(function(obj) {
-    var item, miniObj;
+    var actorList, chapter, item, miniObj;
+    actorList = [];
     item = null;
     miniObj = obj.miniObj;
     if (miniObj.itemType === Constant.ItemType.BUTTON) {
@@ -91,11 +92,10 @@ $(function() {
       item = new ArrowItem();
     }
     item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent);
-    return actorList.push(item);
+    actorList.push(item);
+    chapter = new Chapter(actorList);
+    return chapterList.push(chapter);
   });
-  chapterList = [];
-  chapter = new Chapter(actorList);
-  chapterList.push(chapter);
   window.timeLine = new TimeLine(chapterList);
   return initScroll();
 });

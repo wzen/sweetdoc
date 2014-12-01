@@ -7,6 +7,13 @@ TimeLine = (function() {
     this.chapterIndex = 0;
   }
 
+  TimeLine.prototype.incrementChapter = function() {
+    this.chapterIndex += 1;
+    if (this.chapterList.length <= this.chapterIndex) {
+      return this.finishTimeline();
+    }
+  };
+
   TimeLine.prototype.resetChapter = function(chapterIndex) {
     return this.chapterList[chapterIndex].reset();
   };
@@ -17,6 +24,10 @@ TimeLine = (function() {
 
   TimeLine.prototype.handleClickEvent = function() {
     return this.chapterList[this.chapterIndex].clickEvent(e);
+  };
+
+  TimeLine.prototype.finishTimeline = function() {
+    return alert('Finish!');
   };
 
   return TimeLine;

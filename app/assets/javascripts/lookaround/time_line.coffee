@@ -5,6 +5,12 @@ class TimeLine
     @chapterList = chapterList
     @chapterIndex = 0
 
+  # チャプターを進める
+  incrementChapter: ->
+    @chapterIndex += 1
+    if @chapterList.length <= @chapterIndex
+      @finishTimeline()
+
   # チャプターを戻す
   resetChapter: (chapterIndex) ->
     @chapterList[chapterIndex].reset()
@@ -18,3 +24,7 @@ class TimeLine
   # クリックイベントをハンドル
   handleClickEvent: ->
     @chapterList[@chapterIndex].clickEvent(e)
+
+  # タイムライン終了イベント
+  finishTimeline: ->
+    alert('Finish!')

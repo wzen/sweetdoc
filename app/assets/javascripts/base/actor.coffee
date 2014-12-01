@@ -36,3 +36,7 @@ class Actor
     if @clickEventFunc?
       @clickEventFunc(e)
 
+  # チャプターを進める
+  nextChapter: ->
+    if window.timeLine?
+      window.timeLine.incrementChapter()

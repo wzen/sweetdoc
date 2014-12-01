@@ -79,8 +79,9 @@ $ ->
   # アクションのイベントを取得
   window.lstorage = localStorage
   objList = JSON.parse(lstorage.getItem('timelineObjList'))
-  actorList = []
+  chapterList = []
   objList.forEach( (obj)->
+    actorList = []
     item = null
     miniObj = obj.miniObj
     if miniObj.itemType == Constant.ItemType.BUTTON
@@ -89,10 +90,10 @@ $ ->
       item = new ArrowItem()
     item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent)
     actorList.push(item)
+    chapter = new Chapter(actorList)
+    chapterList.push(chapter)
   )
-  chapterList = []
-  chapter = new Chapter(actorList)
-  chapterList.push(chapter)
+
   window.timeLine = new TimeLine(chapterList)
 
   initScroll()
