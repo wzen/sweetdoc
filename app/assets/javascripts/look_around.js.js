@@ -36,35 +36,30 @@ initScrollPoint = function() {
 
 initScroll = function() {
   var lastLeft, lastTop, scrollFinished, stopTimer;
-  lastLeft = null;
-  lastTop = null;
+  lastLeft = scrollContents.scrollLeft();
+  lastTop = scrollContents.scrollTop();
   stopTimer = null;
-  scrollContents.on("mousedown", function(e) {
-    e.preventDefault();
-    return console.log('onmousedown');
-  });
   scrollContents.scroll(function() {
     var distX, distY, x, y;
     x = $(this).scrollLeft();
     y = $(this).scrollTop();
-    if (lastLeft === null || lastTop === null) {
-      lastLeft = x;
-      lastTop = y;
-    }
     if (stopTimer !== null) {
       clearTimeout(stopTimer);
     }
-    stopTimer = setTimeout(function() {
-      initScrollPoint();
-      lastLeft = null;
-      lastTop = null;
-      clearTimeout(stopTimer);
-      return stopTimer = null;
-    }, 100);
+    stopTimer = setTimeout((function(_this) {
+      return function() {
+        initScrollPoint();
+        lastLeft = $(_this).scrollLeft();
+        lastTop = $(_this).scrollTop();
+        clearTimeout(stopTimer);
+        return stopTimer = null;
+      };
+    })(this), 100);
     distX = x - lastLeft;
     distY = y - lastTop;
     lastLeft = x;
     lastTop = y;
+    console.log('distX:' + distX + ' distY:' + distY);
     return timeLine.handleScrollEvent(distX, distY);
   });
   return scrollFinished = function() {};
@@ -88,6 +83,8 @@ $(function() {
     miniObj = obj.miniObj;
     if (miniObj.itemType === Constant.ItemType.BUTTON) {
       item = new ButtonItem();
+      item.setMiniumObject(miniObj);
+      item.reDraw();
     } else if (miniObj.itemType === Constant.ItemType.ARROW) {
       item = new ArrowItem();
     }

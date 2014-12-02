@@ -70,13 +70,21 @@ class ButtonItem extends ItemBase
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ
   loadByMinimumObject: (obj) ->
-    #@id = elementId.slice(@constructor.IDENTITY.length + 1)
+    @setMiniumObject(obj)
+    @reDraw()
+    @saveObj(Constant.ItemActionType.MAKE)
+
+
+  # 最小限のデータを設定
+  setMiniumObject: (obj) ->
     @mousedownCood = obj.mousedownCood
     @itemSize = obj.itemSize
     @zindex = obj.zindex
     @cssStyle = obj.cssStyle
-    @reDraw()
-    @saveObj(Constant.ItemActionType.MAKE)
+
+  # クリックイベント
+  actorClickEvent: (e) ->
+    @nextChapter()
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?

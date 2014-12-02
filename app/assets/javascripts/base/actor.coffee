@@ -9,15 +9,16 @@ class Actor
     # TODO: 必須：セキュリティチェック
     # スクロールイベント
     if sEventStr?
-      @scrollEventFunc = eval('(' + sEventStr + ')')
+      @scrollEvent = eval('(' + sEventStr + ')')
 
     # クリックイベント
     if cEventStr?
-      @clickEventFunc = eval('(' + cEventStr + ')')
+      clickEventFunc = eval('(' + cEventStr + ')')
+      @getJQueryElement().on('click', (e) ->
+        alert('Click!')
+        #clickEventFunc(e)
+      )
 
-  # アクションのオブジェクトサイズ取得
-  getActorSize: ->
-    return @actorSize
 
   # 最小限のデータを設定
   # @abstract
@@ -27,14 +28,10 @@ class Actor
   # @abstract
   reset: ->
 
-  # スクロールイベント
-  scrollEvent : (x, y) ->
-    if @scrollEventFunc?
-      @scrollEventFunc(x, y)
   # クリックイベント
-  clickEvent: (e) ->
-    if @clickEventFunc?
-      @clickEventFunc(e)
+#  clickEvent: (e) ->
+#    if @clickEventFunc?
+#      @clickEventFunc(e)
 
   # チャプターを進める
   nextChapter: ->

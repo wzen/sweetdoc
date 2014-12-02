@@ -632,7 +632,7 @@ undo = function() {
     obj.getJQueryElement().remove();
     past = operationHistory[pastOperationIndex];
     obj = past.obj;
-    obj.setSize(past.itemSize);
+    obj.itemSize = past.itemSize;
     obj.reDraw();
     return setupEvents(obj);
   }
@@ -649,12 +649,12 @@ redo = function() {
   obj.incrementOhiRegistIndex();
   action = history.action;
   if (action === Constant.ItemActionType.MAKE) {
-    obj.setSize(history.itemSize);
+    obj.itemSize = history.itemSize;
     obj.reDraw();
     return setupEvents(obj);
   } else if (action === Constant.ItemActionType.MOVE) {
     obj.getJQueryElement().remove();
-    obj.setSize(history.itemSize);
+    obj.itemSize = history.itemSize;
     obj.reDraw();
     return setupEvents(obj);
   }
@@ -666,7 +666,7 @@ saveToServer = function() {
   itemObjectList.forEach(function(obj) {
     var j;
     j = {
-      id: obj.getId(),
+      id: obj.id,
       obj: obj.generateMinimumObject()
     };
     return jsonList.push(j);
@@ -820,19 +820,23 @@ setupTimeLineDatas = function() {
   objList = [];
   itemObjectList.forEach(function(item) {
     var obj;
-    if (item instanceof ArrowItem) {
-      obj = {
-        chapter: 1,
-        screen: 1,
-        miniObj: item.generateMinimumObject(),
-        actorSize: item.getSize(),
-        sEvent: function(x, y) {
-          return this.scrollEvent(x, y);
-        },
-        cEvent: function() {}
-      };
-      return objList.push(obj);
-    }
+    obj = {
+      chapter: 1,
+      screen: 1,
+      miniObj: item.generateMinimumObject(),
+      actorSize: item.itemSize,
+      sEvent: function(x, y) {
+        if (this.actorScrollEvent != null) {
+          return this.actorScrollEvent(x, y);
+        }
+      },
+      cEvent: function(e) {
+        if (this.actorClickEvent != null) {
+          return this.actorClickEvent(e);
+        }
+      }
+    };
+    return objList.push(obj);
   });
   return objList;
 };

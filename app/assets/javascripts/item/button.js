@@ -80,12 +80,20 @@ ButtonItem = (function(_super) {
   };
 
   ButtonItem.prototype.loadByMinimumObject = function(obj) {
+    this.setMiniumObject(obj);
+    this.reDraw();
+    return this.saveObj(Constant.ItemActionType.MAKE);
+  };
+
+  ButtonItem.prototype.setMiniumObject = function(obj) {
     this.mousedownCood = obj.mousedownCood;
     this.itemSize = obj.itemSize;
     this.zindex = obj.zindex;
-    this.cssStyle = obj.cssStyle;
-    this.reDraw();
-    return this.saveObj(Constant.ItemActionType.MAKE);
+    return this.cssStyle = obj.cssStyle;
+  };
+
+  ButtonItem.prototype.actorClickEvent = function(e) {
+    return this.nextChapter();
   };
 
   return ButtonItem;

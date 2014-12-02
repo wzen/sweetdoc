@@ -5,35 +5,23 @@ Actor = (function() {
   function Actor() {}
 
   Actor.prototype.initActor = function(miniObj, actorSize, sEventStr, cEventStr) {
+    var clickEventFunc;
     this.setMiniumObject(miniObj);
     this.actorSize = actorSize;
     if (sEventStr != null) {
-      this.scrollEventFunc = eval('(' + sEventStr + ')');
+      this.scrollEvent = eval('(' + sEventStr + ')');
     }
     if (cEventStr != null) {
-      return this.clickEventFunc = eval('(' + cEventStr + ')');
+      clickEventFunc = eval('(' + cEventStr + ')');
+      return this.getJQueryElement().on('click', function(e) {
+        return alert('Click!');
+      });
     }
-  };
-
-  Actor.prototype.getActorSize = function() {
-    return this.actorSize;
   };
 
   Actor.prototype.setMiniumObject = function(obj) {};
 
   Actor.prototype.reset = function() {};
-
-  Actor.prototype.scrollEvent = function(x, y) {
-    if (this.scrollEventFunc != null) {
-      return this.scrollEventFunc(x, y);
-    }
-  };
-
-  Actor.prototype.clickEvent = function(e) {
-    if (this.clickEventFunc != null) {
-      return this.clickEventFunc(e);
-    }
-  };
 
   Actor.prototype.nextChapter = function() {
     if (window.timeLine != null) {

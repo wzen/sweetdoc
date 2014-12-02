@@ -29,28 +29,12 @@ ItemBase = (function(_super) {
     this.jqueryElement = null;
   }
 
-  ItemBase.prototype.getId = function() {
-    return this.id;
-  };
-
   ItemBase.prototype.getElementId = function() {
     return this.constructor.IDENTITY + '_' + this.id;
   };
 
   ItemBase.prototype.getJQueryElement = function() {
     return $('#' + this.getElementId());
-  };
-
-  ItemBase.prototype.getSize = function() {
-    return this.itemSize;
-  };
-
-  ItemBase.prototype.setSize = function(size) {
-    return this.itemSize = size;
-  };
-
-  ItemBase.prototype.getZIndex = function() {
-    return this.zindex;
   };
 
   ItemBase.prototype.pushOhi = function(obj) {
@@ -136,10 +120,10 @@ ItemBase = (function(_super) {
             rect = {
               x: ui.position.left,
               y: ui.position.top,
-              w: _this.getSize().w,
-              h: _this.getSize().h
+              w: _this.itemSize.w,
+              h: _this.itemSize.h
             };
-            _this.setSize(rect);
+            _this.itemSize = rect;
             return _this.saveObj(Constant.ItemActionType.MOVE);
           }
         });
@@ -148,12 +132,12 @@ ItemBase = (function(_super) {
           stop: function(event, ui) {
             var rect;
             rect = {
-              x: _this.getSize().x,
-              y: _this.getSize().y,
+              x: _this.itemSize.x,
+              y: _this.itemSize.y,
               w: ui.size.width,
               h: ui.size.height
             };
-            _this.setSize(rect);
+            _this.itemSize = rect;
             return _this.saveObj(Constant.ItemActionType.MOVE);
           }
         });

@@ -86,3 +86,9 @@ div#scrollpoint_container {
     opacity: 1;
   }
 }
+
+div.css3button > div {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}

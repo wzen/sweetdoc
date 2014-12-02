@@ -28,11 +28,6 @@ class ItemBase extends Actor
     # @property [Object] jqueryElement アイテムのjQueryオブジェクト
     @jqueryElement = null
 
-  # IDを取得
-  # @return [Int] ID
-  getId: ->
-    return @id
-
   # HTML要素IDを取得
   # @return [Int] HTML要素ID
   getElementId: ->
@@ -40,21 +35,6 @@ class ItemBase extends Actor
 
   getJQueryElement: ->
     return $('#' + @getElementId())
-
-  # サイズ取得
-  # @return [Array] サイズ
-  getSize: ->
-    return @itemSize
-
-  # サイズ設定
-  # @param [Array] size サイズ
-  setSize: (size) ->
-    @itemSize = size
-
-  # z-indexを取得
-  # @return [Int] z-index
-  getZIndex: ->
-    return @zindex
 
   # 操作履歴Indexをプッシュ
   # @param [ItemBase] obj オブジェクト
@@ -154,15 +134,15 @@ class ItemBase extends Actor
       @getJQueryElement().draggable({
         containment: mainWrapper
         stop: (event, ui) =>
-          rect = {x:ui.position.left, y: ui.position.top, w: @getSize().w, h: @getSize().h}
-          @setSize(rect)
+          rect = {x:ui.position.left, y: ui.position.top, w: @itemSize.w, h: @itemSize.h}
+          @itemSize = rect
           @saveObj(Constant.ItemActionType.MOVE)
       })
       @getJQueryElement().resizable({
         containment: mainWrapper
         stop: (event, ui) =>
-          rect = {x: @getSize().x, y: @getSize().y, w: ui.size.width, h: ui.size.height}
-          @setSize(rect)
+          rect = {x: @itemSize.x, y: @itemSize.y, w: ui.size.width, h: ui.size.height}
+          @itemSize = rect
           @saveObj(Constant.ItemActionType.MOVE)
       })
 

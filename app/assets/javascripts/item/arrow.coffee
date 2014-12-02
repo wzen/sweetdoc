@@ -147,17 +147,20 @@ class ArrowItem extends ItemBase
     @coodRegist = obj.coodRegist
 
   # スクロールイベント
-  scrollEvent : (x, y) ->
+  actorScrollEvent : (x, y) ->
     if !@scrollValue?
       console.log('scroll init')
       @saveDrawingSurface()
       @scrollValue = 0
     else
-      #console.log("y:#{y}")
-      @scrollValue += parseInt(y / 10)
+      console.log("y:#{y}")
+      if y >= 0
+        @scrollValue += parseInt((y + 9) / 10)
+      else
+        @scrollValue += parseInt((y - 9) / 10)
     @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
     @scrollValue = if @scrollValue >= @coodRegist.length then @coodRegist.length - 1 else @scrollValue
-    console.log("scrollX: #{@scrollValue}")
+    console.log("scrollY: #{@scrollValue}")
     @resetDrawPath()
     @restoreDrawingSurface(@actorSize)
     for r in @coodRegist.slice(0, @scrollValue)

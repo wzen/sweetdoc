@@ -130,18 +130,23 @@ ArrowItem = (function(_super) {
     return this.coodRegist = obj.coodRegist;
   };
 
-  ArrowItem.prototype.scrollEvent = function(x, y) {
+  ArrowItem.prototype.actorScrollEvent = function(x, y) {
     var r, _i, _len, _ref;
     if (this.scrollValue == null) {
       console.log('scroll init');
       this.saveDrawingSurface();
       this.scrollValue = 0;
     } else {
-      this.scrollValue += parseInt(y / 10);
+      console.log("y:" + y);
+      if (y >= 0) {
+        this.scrollValue += parseInt((y + 9) / 10);
+      } else {
+        this.scrollValue += parseInt((y - 9) / 10);
+      }
     }
     this.scrollValue = this.scrollValue < 0 ? 0 : this.scrollValue;
     this.scrollValue = this.scrollValue >= this.coodRegist.length ? this.coodRegist.length - 1 : this.scrollValue;
-    console.log("scrollX: " + this.scrollValue);
+    console.log("scrollY: " + this.scrollValue);
     this.resetDrawPath();
     this.restoreDrawingSurface(this.actorSize);
     _ref = this.coodRegist.slice(0, this.scrollValue);

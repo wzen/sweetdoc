@@ -606,7 +606,7 @@ undo = ->
     obj.getJQueryElement().remove()
     past = operationHistory[pastOperationIndex]
     obj = past.obj
-    obj.setSize(past.itemSize)
+    obj.itemSize =  past.itemSize
     obj.reDraw()
     setupEvents(obj)
 
@@ -621,12 +621,12 @@ redo = ->
   obj.incrementOhiRegistIndex()
   action = history.action
   if action == Constant.ItemActionType.MAKE
-    obj.setSize(history.itemSize)
+    obj.itemSize = history.itemSize
     obj.reDraw()
     setupEvents(obj)
   else if action == Constant.ItemActionType.MOVE
     obj.getJQueryElement().remove()
-    obj.setSize(history.itemSize)
+    obj.itemSize = history.itemSize
     obj.reDraw()
     setupEvents(obj)
 
@@ -635,7 +635,7 @@ saveToServer = ->
   jsonList = []
   itemObjectList.forEach((obj) ->
     j = {
-      id: obj.getId()
+      id: obj.id
       obj: obj.generateMinimumObject()
     }
     jsonList.push(j)
@@ -789,18 +789,20 @@ setupTimeLineDatas = ->
   # とりあえず矢印だけ
   objList = []
   itemObjectList.forEach((item) ->
-    if item instanceof ArrowItem
-      obj = {
-        chapter: 1
-        screen: 1
-        miniObj: item.generateMinimumObject()
-        actorSize: item.getSize()
-        sEvent: (x, y) ->
-          #console.log("sEvent: x=#{x} y=#{y}")
-          @scrollEvent(x, y)
-        cEvent: ->
-      }
-      objList.push(obj)
+    obj = {
+      chapter: 1
+      screen: 1
+      miniObj: item.generateMinimumObject()
+      actorSize: item.itemSize
+      sEvent: (x, y) ->
+        #console.log("sEvent: x=#{x} y=#{y}")
+        if @actorScrollEvent?
+          @actorScrollEvent(x, y)
+      cEvent: (e) ->
+        if @actorClickEvent?
+          @actorClickEvent(e)
+    }
+    objList.push(obj)
   )
   return objList
 

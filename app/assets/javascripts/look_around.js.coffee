@@ -27,28 +27,23 @@ initScrollPoint = ->
   scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
 
 initScroll = ->
-  lastLeft = null
-  lastTop = null
+  lastLeft = scrollContents.scrollLeft()
+  lastTop = scrollContents.scrollTop()
   stopTimer = null
-
-  scrollContents.on("mousedown",(e) ->
-    e.preventDefault()
-    console.log('onmousedown')
-  )
 
   scrollContents.scroll( ->
     x = $(@).scrollLeft()
     y = $(@).scrollTop()
-    if lastLeft == null || lastTop == null
-      lastLeft = x
-      lastTop = y
+#    if lastLeft == null || lastTop == null
+#      lastLeft = x
+#      lastTop = y
 
     if stopTimer != null
       clearTimeout(stopTimer)
-    stopTimer = setTimeout(->
+    stopTimer = setTimeout( =>
       initScrollPoint()
-      lastLeft = null
-      lastTop = null
+      lastLeft = $(@).scrollLeft()
+      lastTop = $(@).scrollTop()
       clearTimeout(stopTimer)
       stopTimer = null
     , 100)
@@ -58,8 +53,8 @@ initScroll = ->
     lastLeft = x
     lastTop = y
 
+    console.log('distX:' + distX + ' distY:' + distY)
     timeLine.handleScrollEvent(distX, distY)
-    #console.log('distX:' + distX + ' distY:' + distY)
   )
 
   scrollFinished = ->
@@ -86,6 +81,9 @@ $ ->
     miniObj = obj.miniObj
     if miniObj.itemType == Constant.ItemType.BUTTON
       item = new ButtonItem()
+      # とりあえずボタンの場合はそのまま表示
+      item.setMiniumObject(miniObj)
+      item.reDraw()
     else if miniObj.itemType == Constant.ItemType.ARROW
       item = new ArrowItem()
     item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent)
