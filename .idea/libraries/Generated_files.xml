@@ -29,7 +29,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/screen.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/Chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
