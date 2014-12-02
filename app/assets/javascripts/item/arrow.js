@@ -78,7 +78,7 @@ ArrowItem = (function(_super) {
   ArrowItem.prototype.reDraw = function() {
     var r, _i, _len, _ref;
     this.saveDrawingSurface();
-    this.drawCoodRegist = [];
+    this.resetDrawPath();
     _ref = this.coodRegist;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       r = _ref[_i];

@@ -93,7 +93,7 @@ class ArrowItem extends ItemBase
   # 再描画処理
   reDraw: ->
     @saveDrawingSurface()
-    @drawCoodRegist = []
+    @resetDrawPath()
     for r in @coodRegist
       @drawPath(r)
     @drawLine()
