@@ -9,6 +9,15 @@ initCommonVar = ->
   window.scrollViewMag = 1000
   window.resizeTimer = false
   window.timeLine = null
+  window.scrollViewZindex = 1000
+
+# 画面初期化
+initView = ->
+  $('#canvas_container').attr('width', $('#canvas_wrapper').width())
+  $('#canvas_container').attr('height', $('#canvas_wrapper').height())
+  contents.css('z-index', scrollViewZindex)
+  inside.width(scrollContents.width() * (scrollViewMag + 1))
+  inside.height(scrollContents.height() * (scrollViewMag + 1))
 
 initResize = (wrap, contents) ->
   resizeTimer = false;
@@ -22,10 +31,40 @@ initResize = (wrap, contents) ->
     , 200)
   )
 
+# タイムライン作成
+initTimeline = ->
+  # アクションのイベントを取得
+  window.lstorage = localStorage
+  objList = JSON.parse(lstorage.getItem('timelineObjList'))
+  chapterList = []
+  objList.forEach( (obj)->
+    actorList = []
+    #item = null
+    miniObj = obj.miniObj
+    if miniObj.itemType == Constant.ItemType.BUTTON
+      item = new ButtonItem()
+      # とりあえずボタンの場合はそのまま表示
+      item.setMiniumObject(miniObj)
+      item.reDraw()
+    else if miniObj.itemType == Constant.ItemType.ARROW
+      item = new ArrowItem()
+    item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent)
+    actorList.push(item)
+    # とりあえずここでChapterを分ける
+    if miniObj.itemType == Constant.ItemType.BUTTON
+      chapter = new ClickChapter(actorList)
+    else if miniObj.itemType == Constant.ItemType.ARROW
+      chapter = new ScrollChapter(actorList)
+    chapterList.push(chapter)
+  )
+  window.timeLine = new TimeLine(chapterList)
+
+# スクロール位置の初期化
 initScrollPoint = ->
   scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5))
   scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
 
+# スクロールイベントの初期化
 initScroll = ->
   lastLeft = scrollContents.scrollLeft()
   lastTop = scrollContents.scrollTop()
@@ -62,38 +101,10 @@ initScroll = ->
 
 $ ->
   initCommonVar()
-
-  inside.width(scrollContents.width() * (scrollViewMag + 1))
-  inside.height(scrollContents.height() * (scrollViewMag + 1))
+  initView()
   initScrollPoint()
-
-  $('#canvas_container').attr('width', $('#canvas_wrapper').width())
-  $('#canvas_container').attr('height', $('#canvas_wrapper').height())
   #initResize(wrap, contents)
-
-  # アクションのイベントを取得
-  window.lstorage = localStorage
-  objList = JSON.parse(lstorage.getItem('timelineObjList'))
-  chapterList = []
-  objList.forEach( (obj)->
-    actorList = []
-    item = null
-    miniObj = obj.miniObj
-    if miniObj.itemType == Constant.ItemType.BUTTON
-      item = new ButtonItem()
-      # とりあえずボタンの場合はそのまま表示
-      item.setMiniumObject(miniObj)
-      item.reDraw()
-    else if miniObj.itemType == Constant.ItemType.ARROW
-      item = new ArrowItem()
-    item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent)
-    actorList.push(item)
-    chapter = new Chapter(actorList)
-    chapterList.push(chapter)
-  )
-
-  window.timeLine = new TimeLine(chapterList)
-
+  initTimeline()
   initScroll()
 
 

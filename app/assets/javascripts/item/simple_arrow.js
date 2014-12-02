@@ -8,7 +8,7 @@ SimpleArrowItem = (function(_super) {
 
   __extends(SimpleArrowItem, _super);
 
-  SimpleArrowItem.IDENTITY = "arrow";
+  SimpleArrowItem.IDENTITY = "simplearrow";
 
   SimpleArrowItem.ITEMTYPE = Constant.ItemType.ARROW;
 

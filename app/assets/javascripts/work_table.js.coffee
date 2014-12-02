@@ -798,7 +798,8 @@ setupTimeLineDatas = ->
         #console.log("sEvent: x=#{x} y=#{y}")
         if @actorScrollEvent?
           @actorScrollEvent(x, y)
-      cEvent: (e) ->
+      # ファットアロー必須
+      cEvent: (e) =>
         if @actorClickEvent?
           @actorClickEvent(e)
     }

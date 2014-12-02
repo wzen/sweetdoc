@@ -7,10 +7,18 @@ TimeLine = (function() {
     this.chapterIndex = 0;
   }
 
-  TimeLine.prototype.incrementChapter = function() {
+  TimeLine.prototype.nextChapter = function() {
+    this.chapterList[this.chapterIndex].settleChapter();
     this.chapterIndex += 1;
     if (this.chapterList.length <= this.chapterIndex) {
       return this.finishTimeline();
+    }
+  };
+
+  TimeLine.prototype.backChapter = function() {
+    this.resetChapter(this.chapterIndex);
+    if (this.chapterIndex > 0) {
+      return this.chapterIndex -= 1;
     }
   };
 

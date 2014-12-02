@@ -18,6 +18,8 @@ Chapter = (function() {
     });
   };
 
+  Chapter.prototype.settleChapter = function() {};
+
   return Chapter;
 
 })();

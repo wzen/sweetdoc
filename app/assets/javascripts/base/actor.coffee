@@ -13,11 +13,11 @@ class Actor
 
     # クリックイベント
     if cEventStr?
+      # contextを取るために必要
+      _this = this
+
       clickEventFunc = eval('(' + cEventStr + ')')
-      @getJQueryElement().on('click', (e) ->
-        alert('Click!')
-        #clickEventFunc(e)
-      )
+      @getJQueryElement().on('click', clickEventFunc)
 
 
   # 最小限のデータを設定
@@ -28,6 +28,10 @@ class Actor
   # @abstract
   reset: ->
 
+  # JQueryエレメントを取得
+  # @abstract
+  getJQueryElement: ->
+
   # クリックイベント
 #  clickEvent: (e) ->
 #    if @clickEventFunc?
@@ -36,4 +40,4 @@ class Actor
   # チャプターを進める
   nextChapter: ->
     if window.timeLine?
-      window.timeLine.incrementChapter()
+      window.timeLine.nextChapter()

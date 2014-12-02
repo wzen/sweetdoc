@@ -3,7 +3,7 @@
 class SimpleArrowItem extends ItemBase
 
   # @property [String] IDENTITY アイテム識別名
-  @IDENTITY = "arrow"
+  @IDENTITY = "simplearrow"
   # @property [String] ITEMTYPE アイテム種別
   @ITEMTYPE = Constant.ItemType.ARROW
 

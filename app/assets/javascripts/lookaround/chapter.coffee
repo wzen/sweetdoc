@@ -15,3 +15,8 @@ class Chapter
       actor.clickEvent(e)
     )
 
+  # チャプターの後処理
+  # @abstract
+  settleChapter: ->
+
+

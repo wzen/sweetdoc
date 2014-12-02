@@ -830,11 +830,13 @@ setupTimeLineDatas = function() {
           return this.actorScrollEvent(x, y);
         }
       },
-      cEvent: function(e) {
-        if (this.actorClickEvent != null) {
-          return this.actorClickEvent(e);
-        }
-      }
+      cEvent: (function(_this) {
+        return function(e) {
+          if (_this.actorClickEvent != null) {
+            return _this.actorClickEvent(e);
+          }
+        };
+      })(this)
     };
     return objList.push(obj);
   });

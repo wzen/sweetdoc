@@ -6,12 +6,22 @@ class TimeLine
     @chapterIndex = 0
 
   # チャプターを進める
-  incrementChapter: ->
+  nextChapter: ->
+    # 後処理
+    @chapterList[@chapterIndex].settleChapter()
+    # indexを更新
     @chapterIndex += 1
     if @chapterList.length <= @chapterIndex
       @finishTimeline()
 
   # チャプターを戻す
+  backChapter: ->
+    # リセット
+    @resetChapter(@chapterIndex)
+    if @chapterIndex > 0
+      @chapterIndex -= 1
+
+  # チャプターの内容をリセット
   resetChapter: (chapterIndex) ->
     @chapterList[chapterIndex].reset()
 

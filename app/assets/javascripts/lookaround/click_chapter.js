@@ -6,9 +6,26 @@ var ClickChapter,
 ClickChapter = (function(_super) {
   __extends(ClickChapter, _super);
 
-  function ClickChapter() {
-    return ClickChapter.__super__.constructor.apply(this, arguments);
+  function ClickChapter(actorList) {
+    ClickChapter.__super__.constructor.call(this, actorList);
+    this.riseFrontAllActor();
   }
+
+  ClickChapter.prototype.riseFrontAllActor = function() {
+    return this.actorList.forEach(function(actor) {
+      return actor.getJQueryElement().css('z-index', scrollViewZindex + 1);
+    });
+  };
+
+  ClickChapter.prototype.sinkFrontAllActor = function() {
+    return this.actorList.forEach(function(actor) {
+      return actor.getJQueryElement().css('z-index', 0);
+    });
+  };
+
+  ClickChapter.prototype.settleChapter = function() {
+    return this.sinkFrontAllActor();
+  };
 
   return ClickChapter;
 

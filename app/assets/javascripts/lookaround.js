@@ -14,8 +14,8 @@
 //= require item/arrow
 //= require item/button
 //= require lookaround/chapter
-// require lookaround/scroll_chapter
-// require lookaround/click_chapter
+//= require lookaround/scroll_chapter
+//= require lookaround/click_chapter
 //= require lookaround/time_line
 //= require test_move
 //= require look_around
