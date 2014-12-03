@@ -812,6 +812,7 @@ runLookAround = ->
   Function.prototype.toJSON = Function.prototype.toString
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()))
   lstorage.setItem('itemLoadedJsPathList', JSON.stringify(itemLoadedJsPathList))
+  lstorage.setItem('css', $('#btn-CSS').html())
   window.open('/look_around')
 
 $ ->

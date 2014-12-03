@@ -4,6 +4,7 @@ class TimeLine
   constructor: (chapterList) ->
     @chapterList = chapterList
     @chapterIndex = 0
+    @finished = false
 
   # チャプターを進める
   nextChapter: ->
@@ -29,12 +30,15 @@ class TimeLine
   # @param [Int] x X軸の動作値
   # @param [Int] y Y軸の動作値
   handleScrollEvent: (x, y) ->
-    @chapterList[@chapterIndex].scrollEvent(x, y)
+    if !@finished
+      @chapterList[@chapterIndex].scrollEvent(x, y)
 
   # クリックイベントをハンドル
   handleClickEvent: ->
-    @chapterList[@chapterIndex].clickEvent(e)
+    if !@finished
+      @chapterList[@chapterIndex].clickEvent(e)
 
   # タイムライン終了イベント
   finishTimeline: ->
+    @finished = true
     alert('Finish!')

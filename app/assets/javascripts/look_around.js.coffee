@@ -9,7 +9,8 @@ initCommonVar = ->
   window.scrollViewMag = 1000
   window.resizeTimer = false
   window.timeLine = null
-  window.scrollViewZindex = 1000
+  window.scrollViewZindex = 100
+  window.lstorage = localStorage
 
 # 画面初期化
 initView = ->
@@ -34,7 +35,6 @@ initResize = (wrap, contents) ->
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得
-  window.lstorage = localStorage
   objList = JSON.parse(lstorage.getItem('timelineObjList'))
   chapterList = []
   objList.forEach( (obj)->
@@ -73,9 +73,6 @@ initScroll = ->
   scrollContents.scroll( ->
     x = $(@).scrollLeft()
     y = $(@).scrollTop()
-#    if lastLeft == null || lastTop == null
-#      lastLeft = x
-#      lastTop = y
 
     if stopTimer != null
       clearTimeout(stopTimer)
@@ -106,5 +103,8 @@ $ ->
   #initResize(wrap, contents)
   initTimeline()
   initScroll()
+
+  # CSS
+  $('#btn-CSS').html(lstorage.getItem('css'))
 
 

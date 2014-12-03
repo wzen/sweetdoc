@@ -46,7 +46,8 @@
 				$(cal).data('colorpicker').selector.css('backgroundColor', '#' + HSBToHex({h: hsb.h, s: 100, b: 100}));
 				$(cal).data('colorpicker').selectorIndic.css({
 					left: parseInt(150 * hsb.s/100, 10),
-					top: parseInt(150 * (100-hsb.b)/100, 10)
+					top: parseInt(150 * (100-hsb.b)/100, 10),
+					'z-index': 1000
 				});
 			},
 			setHue = function (hsb, cal) {
@@ -214,7 +215,7 @@
 				if (left + 356 > viewPort.l + viewPort.w) {
 					left -= 356;
 				}
-				cal.css({left: left + 'px', top: top + 'px'});
+				cal.css({left: left + 'px', top: top + 'px', 'z-index': 1000});
 				if (cal.data('colorpicker').onShow.apply(this, [cal.get(0)]) != false) {
 					cal.show();
 				}

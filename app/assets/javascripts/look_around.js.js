@@ -11,7 +11,8 @@ initCommonVar = function() {
   window.scrollViewMag = 1000;
   window.resizeTimer = false;
   window.timeLine = null;
-  return window.scrollViewZindex = 1000;
+  window.scrollViewZindex = 100;
+  return window.lstorage = localStorage;
 };
 
 initView = function() {
@@ -40,7 +41,6 @@ initResize = function(wrap, contents) {
 
 initTimeline = function() {
   var chapterList, objList;
-  window.lstorage = localStorage;
   objList = JSON.parse(lstorage.getItem('timelineObjList'));
   chapterList = [];
   objList.forEach(function(obj) {
@@ -107,7 +107,8 @@ $(function() {
   initView();
   initScrollPoint();
   initTimeline();
-  return initScroll();
+  initScroll();
+  return $('#btn-CSS').html(lstorage.getItem('css'));
 });
 
 //# sourceMappingURL=look_around.js.js.map

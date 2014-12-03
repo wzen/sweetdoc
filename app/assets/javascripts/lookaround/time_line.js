@@ -5,6 +5,7 @@ TimeLine = (function() {
   function TimeLine(chapterList) {
     this.chapterList = chapterList;
     this.chapterIndex = 0;
+    this.finished = false;
   }
 
   TimeLine.prototype.nextChapter = function() {
@@ -27,14 +28,19 @@ TimeLine = (function() {
   };
 
   TimeLine.prototype.handleScrollEvent = function(x, y) {
-    return this.chapterList[this.chapterIndex].scrollEvent(x, y);
+    if (!this.finished) {
+      return this.chapterList[this.chapterIndex].scrollEvent(x, y);
+    }
   };
 
   TimeLine.prototype.handleClickEvent = function() {
-    return this.chapterList[this.chapterIndex].clickEvent(e);
+    if (!this.finished) {
+      return this.chapterList[this.chapterIndex].clickEvent(e);
+    }
   };
 
   TimeLine.prototype.finishTimeline = function() {
+    this.finished = true;
     return alert('Finish!');
   };
 
