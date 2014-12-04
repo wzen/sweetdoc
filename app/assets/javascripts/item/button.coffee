@@ -154,39 +154,39 @@ if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
         btnPreviewCss.text(btnCode.text())
       )
     )
-  #
-  #  # グラデーションStepイベント
-  #  btnGradientStep.on('keyup mouseup', (e) ->
-  #    changeGradientShow(e, btnCode, btnPreviewCss)
-  #    stepValue = parseInt($(e.currentTarget).val())
-  #    for i in [2 .. 4]
-  #      id = 'btn-bg-color' + i; mozFlag = $("#" + id + "-moz-flag"); mozCache = $("#" + id + "-moz-cache"); webkitFlag = $("#" + id + "-webkit-flag"); webkitCache = $("#" + id + "-webkit-cache");
-  #      if i > stepValue - 1
-  #        mh = mozFlag.html()
-  #        if mh.length > 0
-  #          mozCache.html(mh)
-  #        wh = webkitFlag.html()
-  #        if wh.length > 0
-  #          webkitCache.html(wh)
-  #        $(mozFlag).empty()
-  #        $(webkitFlag).empty()
-  #      else
-  #        mozFlag.html(mozCache.html());
-  #        webkitFlag.html(webkitCache.html())
-  #    btnPreviewCss.text(btnCode.text())
-  #  ).each( ->
-  #    stepValue = parseInt($(this).val())
-  #    for i in [2 .. 4]
-  #      id = 'btn-bg-color' + i; mozFlag = $("#" + id + "-moz-flag"); mozCache = $("#" + id + "-moz-cache"); webkitFlag = $("#" + id + "-webkit-flag"); webkitCache = $("#" + id + "-webkit-cache");
-  #      if i > stepValue - 1
-  #        mh = mozFlag.html()
-  #        if mh.length > 0
-  #          mozCache.html(mh)
-  #        wh = webkitFlag.html()
-  #        if wh.length > 0
-  #          webkitCache.html(wh)
-  #        $(mozFlag).empty()
-  #        $(webkitFlag).empty()
-  #    btnPreviewCss.text(btnCode.text())
-  #  )
+
+    # グラデーションStepイベント
+    btnGradientStep.on('keyup mouseup', (e) ->
+      changeGradientShow(e, btnCode, btnPreviewCss)
+      stepValue = parseInt($(e.currentTarget).val())
+      for i in [2 .. 4]
+        id = 'btn-bg-color' + i; mozFlag = $("#" + id + "-moz-flag"); mozCache = $("#" + id + "-moz-cache"); webkitFlag = $("#" + id + "-webkit-flag"); webkitCache = $("#" + id + "-webkit-cache");
+        if i > stepValue - 1
+          mh = mozFlag.html()
+          if mh.length > 0
+            mozCache.html(mh)
+          wh = webkitFlag.html()
+          if wh.length > 0
+            webkitCache.html(wh)
+          $(mozFlag).empty()
+          $(webkitFlag).empty()
+        else
+          mozFlag.html(mozCache.html());
+          webkitFlag.html(webkitCache.html())
+      btnPreviewCss.text(btnCode.text())
+    ).each( ->
+      stepValue = parseInt($(this).val())
+      for i in [2 .. 4]
+        id = 'btn-bg-color' + i; mozFlag = $("#" + id + "-moz-flag"); mozCache = $("#" + id + "-moz-cache"); webkitFlag = $("#" + id + "-webkit-flag"); webkitCache = $("#" + id + "-webkit-cache");
+        if i > stepValue - 1
+          mh = mozFlag.html()
+          if mh.length > 0
+            mozCache.html(mh)
+          wh = webkitFlag.html()
+          if wh.length > 0
+            webkitCache.html(wh)
+          $(mozFlag).empty()
+          $(webkitFlag).empty()
+      btnPreviewCss.text(btnCode.text())
+    )
     btnPreviewCss.text(btnCode.text());

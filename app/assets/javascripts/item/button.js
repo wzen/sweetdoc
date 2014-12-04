@@ -160,6 +160,57 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
         return btnPreviewCss.text(btnCode.text());
       });
     });
+    btnGradientStep.on('keyup mouseup', function(e) {
+      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      changeGradientShow(e, btnCode, btnPreviewCss);
+      stepValue = parseInt($(e.currentTarget).val());
+      for (i = _i = 2; _i <= 4; i = ++_i) {
+        id = 'btn-bg-color' + i;
+        mozFlag = $("#" + id + "-moz-flag");
+        mozCache = $("#" + id + "-moz-cache");
+        webkitFlag = $("#" + id + "-webkit-flag");
+        webkitCache = $("#" + id + "-webkit-cache");
+        if (i > stepValue - 1) {
+          mh = mozFlag.html();
+          if (mh.length > 0) {
+            mozCache.html(mh);
+          }
+          wh = webkitFlag.html();
+          if (wh.length > 0) {
+            webkitCache.html(wh);
+          }
+          $(mozFlag).empty();
+          $(webkitFlag).empty();
+        } else {
+          mozFlag.html(mozCache.html());
+          webkitFlag.html(webkitCache.html());
+        }
+      }
+      return btnPreviewCss.text(btnCode.text());
+    }).each(function() {
+      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      stepValue = parseInt($(this).val());
+      for (i = _i = 2; _i <= 4; i = ++_i) {
+        id = 'btn-bg-color' + i;
+        mozFlag = $("#" + id + "-moz-flag");
+        mozCache = $("#" + id + "-moz-cache");
+        webkitFlag = $("#" + id + "-webkit-flag");
+        webkitCache = $("#" + id + "-webkit-cache");
+        if (i > stepValue - 1) {
+          mh = mozFlag.html();
+          if (mh.length > 0) {
+            mozCache.html(mh);
+          }
+          wh = webkitFlag.html();
+          if (wh.length > 0) {
+            webkitCache.html(wh);
+          }
+          $(mozFlag).empty();
+          $(webkitFlag).empty();
+        }
+      }
+      return btnPreviewCss.text(btnCode.text());
+    });
     return btnPreviewCss.text(btnCode.text());
   };
 }
