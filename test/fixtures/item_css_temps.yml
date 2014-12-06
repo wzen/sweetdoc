@@ -1,0 +1,14 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item_type: 1
+  contents: |
+    <div>
+        <style type="text/css" id="btn-css"></style>
+        <div id="btn-bg-color2-moz-cache"></div>
+        <div id="btn-bg-color3-moz-cache"></div>
+        <div id="btn-bg-color4-moz-cache"></div>
+        <div id="btn-bg-color2-webkit-cache"></div>
+        <div id="btn-bg-color3-webkit-cache"></div>
+        <div id="btn-bg-color4-webkit-cache"></div>
+    </div>

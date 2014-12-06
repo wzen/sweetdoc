@@ -4,7 +4,7 @@ class ItemStateController < ApplicationController
   def save_itemstate
     p = {
         :user_id => params['user_id'],
-        :contents => params['contents']
+        :state => params['state']
     }
     item_state = ItemState.new(p)
     if item_state.save
@@ -20,7 +20,7 @@ class ItemStateController < ApplicationController
 
   def load_itemstate
     user_id = params['user_id']
-    loaded_js_path_list = params['loaded_js_path_list']
-    render :json => ItemState.new.get_js_list_json(user_id, loaded_js_path_list)
+    loaded_item_type_list = JSON.parse(params['loaded_item_type_list'])
+    render :json => ItemState.new.get_js_list_json(user_id, loaded_item_type_list)
   end
 end

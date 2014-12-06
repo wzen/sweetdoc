@@ -11,11 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141026160252) do
+ActiveRecord::Schema.define(version: 20141206145054) do
+
+  create_table "item_css_temps", force: true do |t|
+    t.integer  "item_type",  null: false
+    t.text     "contents"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "item_states", force: true do |t|
     t.integer  "user_id",    null: false
-    t.text     "contents"
+    t.text     "state"
+    t.text     "css_info"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

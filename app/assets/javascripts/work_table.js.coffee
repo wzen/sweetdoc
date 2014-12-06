@@ -376,6 +376,7 @@ getInitFuncName = (itemType) ->
 loadItemJs = (itemType, callback = null) ->
   itemInitFuncName = getInitFuncName(itemType)
   if window.itemInitFuncList[itemInitFuncName]?
+    # 既に読み込まれている場合はコールバックのみ実行
     window.itemInitFuncList[itemInitFuncName]()
     if callback?
       callback()
@@ -386,16 +387,15 @@ loadItemJs = (itemType, callback = null) ->
     {
       url: "/item_js/index"
       type: "POST"
-      dataType: "html"
+      dataType: "json"
       data: {
-        # ハイフンを/にしてファイルパスにする
-        itemPath: Constant.ITEM_PATH_LIST[itemType].replace(/¥-/, '/')
+        itemType: itemType
       }
       success: (data)->
         s = document.createElement( 'script' );
         s.type = 'text/javascript';
         # TODO: 認証コードの比較
-        s.src = data;
+        s.src = data.js_src;
         firstScript = document.getElementsByTagName( 'script' )[ 0 ];
         firstScript.parentNode.insertBefore( s, firstScript );
         t = setInterval( ->
@@ -405,6 +405,10 @@ loadItemJs = (itemType, callback = null) ->
             if callback?
               callback()
         , '500')
+
+        if data.css_info?
+          $('#cssCodeInfo').append(data.css_info)
+
       error: (data) ->
     }
   )
@@ -647,7 +651,7 @@ saveToServer = ->
       type: "POST"
       data: {
         user_id: 0
-        contents: JSON.stringify(jsonList)
+        state: JSON.stringify(jsonList)
       }
       dataType: "json"
       success: (data)->
@@ -657,7 +661,7 @@ saveToServer = ->
     }
   )
 
-# サーバからアイテムの情報を取得
+# サーバからアイテムの情報を取得して描画
 loadFromServer = ->
   $.ajax(
     {
@@ -665,15 +669,16 @@ loadFromServer = ->
       type: "POST"
       data: {
         user_id: 0
-        loaded_js_path_list : JSON.stringify(itemLoadedJsPathList)
+        loaded_item_type_list : JSON.stringify(loadedItemTypeList)
       }
       dataType: "json"
       success: (data)->
+
+        # 全て読み込んだ後のコールバック
         callback = ->
           clearWorkTable()
-          itemState = JSON.parse(data.item_state)
-          contents = JSON.parse(itemState.contents)
-          for j in contents
+          itemList = JSON.parse(data.item_list)
+          for j in itemList
             obj = j.obj
             item = null
             if obj.itemType == Constant.ItemType.BUTTON
@@ -689,7 +694,7 @@ loadFromServer = ->
           return
 
         loadedCount = 0
-        jsList.forEach( (js)->
+        jsList.forEach((js)->
           s = document.createElement( 'script' );
           s.type = 'text/javascript';
           # TODO: 認証コードの比較
@@ -705,8 +710,15 @@ loadFromServer = ->
               if loadedCount >= jsList.length
                 callback()
           , '500')
+
         )
         #console.log(data.message)
+
+        if data.css_info_list?
+          cssInfoList = JSON.parse(data.css_info_list)
+          cssInfoList.forEach((cssInfo)->
+            $('#cssCodeInfo').append(cssInfo)
+          )
 
       error: (data) ->
         console.log(data.message)
@@ -811,8 +823,8 @@ setupTimeLineDatas = ->
 runLookAround = ->
   Function.prototype.toJSON = Function.prototype.toString
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()))
-  lstorage.setItem('itemLoadedJsPathList', JSON.stringify(itemLoadedJsPathList))
-  lstorage.setItem('css', $('#sup_css').html())
+  lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList))
+  lstorage.setItem('css', $('#btn-css').html())
   window.open('/look_around')
 
 $ ->

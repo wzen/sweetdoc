@@ -3,7 +3,7 @@ var ButtonItem,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-window.itemLoadedJsPathList['button'] = true;
+window.loadedItemTypeList.push(Constant.ItemType.BUTTON);
 
 ButtonItem = (function(_super) {
   __extends(ButtonItem, _super);
@@ -105,7 +105,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
     var btnBgColor, btnCode, btnEntryForm, btnGradientStep, btnPreviewCss, btnShadowColor, configBoxLi;
     btnEntryForm = $("#btn-entryForm", sidebarWrapper);
     btnCode = $("#btn-code", cssCode);
-    btnPreviewCss = $("#sup_css", cssCode);
+    btnPreviewCss = $("#btn-css", cssCode);
     configBoxLi = $("div.configBox > div.forms", sidebarWrapper);
     btnGradientStep = $("#btn-gradient-step");
     btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color");

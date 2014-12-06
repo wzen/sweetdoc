@@ -34,7 +34,7 @@ generateId = function() {
 };
 
 (function() {
-  return window.itemLoadedJsPathList = {};
+  return window.loadedItemTypeList = [];
 })();
 
 $(function() {

@@ -3,7 +3,7 @@ var ArrowItem,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-window.itemLoadedJsPathList['arrow'] = true;
+window.loadedItemTypeList.push(Constant.ItemType.ARROW);
 
 ArrowItem = (function(_super) {
   var ARROW_HALF_WIDTH, ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, PADDING_SIZE, calBodyPath, calDrection, calTailDrawPath, calTrianglePath, clearArrow, coodLength, coodLog, drawCoodToCanvas, updateArrowRect;

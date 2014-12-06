@@ -2,43 +2,45 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/actor.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/screen.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/chapter.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/scroll_chapter.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/click_chapter.js" />
-        <item url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/work_table.js.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/time_line.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/look_around.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
+        <item url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/chapter.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/screen.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/scroll_chapter.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/work_table.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/click_chapter.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/actor.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/time_line.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_css_temp.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/actor.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/screen.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/scroll_chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/look_around.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
       <root url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/click_chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/screen.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/work_table.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/actor.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/click_chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/time_line.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/look_around.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_css_temp.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

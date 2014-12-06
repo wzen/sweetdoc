@@ -1,5 +1,5 @@
 #JS読み込み完了
-window.itemLoadedJsPathList['arrow'] = true
+window.loadedItemTypeList.push(Constant.ItemType.ARROW)
 
 # 矢印アイテム
 # @extend ItemBase

@@ -1,25 +1,28 @@
 require 'I18n'
 
 class ItemState < ActiveRecord::Base
-  def get_js_list_json(user_id, loaded_js_path_list)
-    item_state = ItemState.find_by(:user_id => user_id)
+  def get_js_list_json(user_id, loaded_item_type_list)
+    result = ItemState.find_by(:user_id => user_id)
     item_js_list = []
-    if item_state == nil
+    if result == nil
       message = I18n.t('message.database.item_state.load.error')
     else
       message = I18n.t('message.database.item_state.load.success')
-      item_list = JSON.parse(item_state.contents)
+      item_list = JSON.parse(result.state)
       item_list.each do |item|
         it = item['obj']['itemType']
-        js_path = Const::ITEM_PATH_LIST[it.to_s.to_sym]
-        unless loaded_js_path_list.include?(js_path)
-          item_js_list.push({:item_type => it, :src => ItemJs.new.get_lack_js(js_path)})
+        unless loaded_item_type_list.include?(it)
+          item_js_list.push({:item_type => it, :src => ItemJs.new.get_lack_js(it)})
         end
+      end
+      if result.css_info != nil
+        css_info_list = JSON.parse(result.css_info)
       end
     end
     data = {
-        :item_state => item_state.to_json,
+        :item_list => item_list.to_json,
         :js_list => item_js_list.to_json,
+        :css_info_list => css_info_list,
         :message => message
     }
     return data

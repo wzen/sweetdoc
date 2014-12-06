@@ -27,7 +27,7 @@ generateId = ->
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
-  window.itemLoadedJsPathList = {}
+  window.loadedItemTypeList = []
 
 $ ->
   window.drawingCanvas = document.getElementById('canvas_container')

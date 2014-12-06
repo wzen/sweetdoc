@@ -389,18 +389,18 @@ loadItemJs = function(itemType, callback) {
   return $.ajax({
     url: "/item_js/index",
     type: "POST",
-    dataType: "html",
+    dataType: "json",
     data: {
-      itemPath: Constant.ITEM_PATH_LIST[itemType].replace(/¥-/, '/')
+      itemType: itemType
     },
     success: function(data) {
       var firstScript, s, t;
       s = document.createElement('script');
       s.type = 'text/javascript';
-      s.src = data;
+      s.src = data.js_src;
       firstScript = document.getElementsByTagName('script')[0];
       firstScript.parentNode.insertBefore(s, firstScript);
-      return t = setInterval(function() {
+      t = setInterval(function() {
         if (window.itemInitFuncList[itemInitFuncName] != null) {
           clearInterval(t);
           window.itemInitFuncList[itemInitFuncName]();
@@ -409,6 +409,9 @@ loadItemJs = function(itemType, callback) {
           }
         }
       }, '500');
+      if (data.css_info != null) {
+        return $('#cssCodeInfo').append(data.css_info);
+      }
     },
     error: function(data) {}
   });
@@ -676,7 +679,7 @@ saveToServer = function() {
     type: "POST",
     data: {
       user_id: 0,
-      contents: JSON.stringify(jsonList)
+      state: JSON.stringify(jsonList)
     },
     dataType: "json",
     success: function(data) {
@@ -694,19 +697,18 @@ loadFromServer = function() {
     type: "POST",
     data: {
       user_id: 0,
-      loaded_js_path_list: JSON.stringify(itemLoadedJsPathList)
+      loaded_item_type_list: JSON.stringify(loadedItemTypeList)
     },
     dataType: "json",
     success: function(data) {
-      var callback, jsList, loadedCount;
+      var callback, cssInfoList, jsList, loadedCount;
       callback = function() {
-        var contents, item, itemState, j, obj, _i, _len, _results;
+        var item, itemList, j, obj, _i, _len, _results;
         clearWorkTable();
-        itemState = JSON.parse(data.item_state);
-        contents = JSON.parse(itemState.contents);
+        itemList = JSON.parse(data.item_list);
         _results = [];
-        for (_i = 0, _len = contents.length; _i < _len; _i++) {
-          j = contents[_i];
+        for (_i = 0, _len = itemList.length; _i < _len; _i++) {
+          j = itemList[_i];
           obj = j.obj;
           item = null;
           if (obj.itemType === Constant.ItemType.BUTTON) {
@@ -725,7 +727,7 @@ loadFromServer = function() {
         return;
       }
       loadedCount = 0;
-      return jsList.forEach(function(js) {
+      jsList.forEach(function(js) {
         var firstScript, s, t;
         s = document.createElement('script');
         s.type = 'text/javascript';
@@ -745,6 +747,12 @@ loadFromServer = function() {
           }
         }, '500');
       });
+      if (data.css_info_list != null) {
+        cssInfoList = JSON.parse(data.css_info_list);
+        return cssInfoList.forEach(function(cssInfo) {
+          return $('#cssCodeInfo').append(cssInfo);
+        });
+      }
     },
     error: function(data) {
       return console.log(data.message);
@@ -846,8 +854,8 @@ setupTimeLineDatas = function() {
 runLookAround = function() {
   Function.prototype.toJSON = Function.prototype.toString;
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()));
-  lstorage.setItem('itemLoadedJsPathList', JSON.stringify(itemLoadedJsPathList));
-  lstorage.setItem('css', $('#sup_css').html());
+  lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList));
+  lstorage.setItem('css', $('#btn-css').html());
   return window.open('/look_around');
 };
 

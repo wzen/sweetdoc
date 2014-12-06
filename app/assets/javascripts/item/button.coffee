@@ -1,5 +1,5 @@
 #JS読み込み完了
-window.itemLoadedJsPathList['button'] = true
+window.loadedItemTypeList.push(Constant.ItemType.BUTTON)
 
 # ボタンアイテム
 # @extend ItemBase
@@ -91,7 +91,7 @@ if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
   window.itemInitFuncList.buttonInit = ->
     btnEntryForm = $("#btn-entryForm", sidebarWrapper)
     btnCode = $("#btn-code", cssCode)
-    btnPreviewCss = $("#sup_css", cssCode)
+    btnPreviewCss = $("#btn-css", cssCode)
     configBoxLi = $("div.configBox > div.forms", sidebarWrapper)
     btnGradientStep = $("#btn-gradient-step")
     btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color")
