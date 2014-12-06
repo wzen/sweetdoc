@@ -22,10 +22,6 @@
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_play.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_play.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_js.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/actor.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/lookaround/screen.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
