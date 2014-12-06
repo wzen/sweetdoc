@@ -5,11 +5,17 @@ html, body {
   height: 100%;
 }
 
+div#main {
+  margin: 5px 15px 5px 15px;
+  height: 100%;
+}
+
 div#main-wrapper {
   position: relative;
-  #width: 100%;
-  min-height: 100%;
-  margin: 5px 15px 5px 15px;
+  width: 100%;
+  height: 100%;
+  border: 5px solid #e6deca;
+  box-sizing: border-box;
 }
 
 div#canvas_wrapper {
@@ -29,8 +35,7 @@ div#scroll_wrapper {
   height: 100%;
   overflow: hidden;
   background-color: transparent;
-  border: 5px solid #e6deca;
-  box-sizing: border-box;
+
   //z-index: 1000;
 }
 
