@@ -105,7 +105,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
     var btnBgColor, btnCode, btnEntryForm, btnGradientStep, btnPreviewCss, btnShadowColor, configBoxLi;
     btnEntryForm = $("#btn-entryForm", sidebarWrapper);
     btnCode = $("#btn-code", cssCode);
-    btnPreviewCss = $("#btn-CSS", cssCode);
+    btnPreviewCss = $("#sup_css", cssCode);
     configBoxLi = $("div.configBox > div.forms", sidebarWrapper);
     btnGradientStep = $("#btn-gradient-step");
     btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color");

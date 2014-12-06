@@ -13,7 +13,8 @@
  *= require jquery-ui/jquery-ui.min
  *= require css/colorpicker
  *= require css/layout
- *= require bootstrap_gal
- *= require_tree .
- *= require_self
+ *= require bootstrap_custom
+ *= require work_table
+ * require_tree .
+ * require_self
  */
