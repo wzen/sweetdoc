@@ -18,5 +18,3 @@ class Chapter
   # チャプターの後処理
   # @abstract
   settleChapter: ->
-
-

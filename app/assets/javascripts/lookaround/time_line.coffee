@@ -22,6 +22,7 @@ class TimeLine
     if @chapterIndex > 0
       @chapterIndex -= 1
 
+
   # チャプターの内容をリセット
   resetChapter: (chapterIndex) ->
     @chapterList[chapterIndex].reset()

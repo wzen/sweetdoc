@@ -19,7 +19,6 @@ class Actor
       clickEventFunc = eval('(' + cEventStr + ')')
       @getJQueryElement().on('click', clickEventFunc)
 
-
   # 最小限のデータを設定
   # @abstract
   setMiniumObject: (obj) ->

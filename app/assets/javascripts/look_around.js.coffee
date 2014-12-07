@@ -32,6 +32,7 @@ initResize = (wrap, contents) ->
     , 200)
   )
 
+
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得
