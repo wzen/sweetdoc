@@ -106,6 +106,6 @@ $ ->
   initScroll()
 
   # CSS
-  $('#sup_css').html(lstorage.getItem('css'))
+  $('#sup_css').html(lstorage.getItem('itemCssStyle'))
 
 

@@ -515,10 +515,6 @@ ul.forms>li.mini>.mask {
     padding: 0 0 4px
 }
 
-#codeCache {
-    display: none
-}
-
 .code {
     width: 326px;
     color: #999;

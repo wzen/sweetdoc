@@ -108,7 +108,7 @@ $(function() {
   initScrollPoint();
   initTimeline();
   initScroll();
-  return $('#sup_css').html(lstorage.getItem('css'));
+  return $('#sup_css').html(lstorage.getItem('itemCssStyle'));
 });
 
 //# sourceMappingURL=look_around.js.js.map

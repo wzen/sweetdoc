@@ -190,3 +190,6 @@ if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
       btnPreviewCss.text(btnCode.text())
     )
     btnPreviewCss.text(btnCode.text());
+
+    #カラーピッカー値を初期化
+    initColorPickerValue()

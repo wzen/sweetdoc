@@ -35,8 +35,6 @@ div#scroll_wrapper {
   height: 100%;
   overflow: hidden;
   background-color: transparent;
-
-  //z-index: 1000;
 }
 
 div#scroll_contents {
@@ -46,6 +44,7 @@ div#scroll_contents {
   padding-right: 30px;
   padding-bottom: 30px;
   background-color: transparent;
+  box-sizing: content-box;
 }
 /*
 div#scroll_inside {

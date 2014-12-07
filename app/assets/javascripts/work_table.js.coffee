@@ -5,7 +5,6 @@ initCommonVar = ->
   window.mainWrapper = $('#main-wrapper')
   window.originalMainContainerSize = {w: mainWrapper.width(), h: mainWrapper.height()}
   window.cssCode = $("#cssCode")
-  window.codeCache = $("#codeCache")
   window.messageTimer = null
   window.flushMessageTimer = null
   window.mode = Constant.Mode.DRAW
@@ -392,6 +391,9 @@ loadItemJs = (itemType, callback = null) ->
         itemType: itemType
       }
       success: (data)->
+        if data.css_info?
+          $('#css_code_info').append(data.css_info)
+
         s = document.createElement( 'script' );
         s.type = 'text/javascript';
         # TODO: 認証コードの比較
@@ -405,9 +407,6 @@ loadItemJs = (itemType, callback = null) ->
             if callback?
               callback()
         , '500')
-
-        if data.css_info?
-          $('#cssCodeInfo').append(data.css_info)
 
       error: (data) ->
     }
@@ -688,6 +687,12 @@ loadFromServer = ->
             item.loadByMinimumObject(obj)
             setupEvents(item)
 
+        if data.css_info_list?
+          cssInfoList = JSON.parse(data.css_info_list)
+          cssInfoList.forEach((cssInfo)->
+            $('#css_code_info').append(cssInfo)
+          )
+
         jsList = JSON.parse(data.js_list)
         if jsList.length == 0
           callback()
@@ -713,12 +718,6 @@ loadFromServer = ->
 
         )
         #console.log(data.message)
-
-        if data.css_info_list?
-          cssInfoList = JSON.parse(data.css_info_list)
-          cssInfoList.forEach((cssInfo)->
-            $('#cssCodeInfo').append(cssInfo)
-          )
 
       error: (data) ->
         console.log(data.message)
@@ -824,7 +823,11 @@ runLookAround = ->
   Function.prototype.toJSON = Function.prototype.toString
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()))
   lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList))
-  lstorage.setItem('css', $('#btn-css').html())
+  itemCssStyle = ""
+  $('#css_code_info .item_css_style').each( ->
+    itemCssStyle += $(this).html()
+  )
+  lstorage.setItem('itemCssStyle', itemCssStyle)
   window.open('/look_around')
 
 $ ->
@@ -841,8 +844,8 @@ $ ->
   $('#canvas_container').attr('width', $('#main_container').width())
   $('#canvas_container').attr('height', $('#main_container').height())
 
-  # カラーピッカー
-  initColorPickerValue()
+  # カラーピッカー(アイテム毎に初期化する)
+  #initColorPickerValue()
 
   # ドロップダウン
   $('.dropdown-toggle').dropdown()

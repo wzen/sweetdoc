@@ -211,7 +211,8 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
       }
       return btnPreviewCss.text(btnCode.text());
     });
-    return btnPreviewCss.text(btnCode.text());
+    btnPreviewCss.text(btnCode.text());
+    return initColorPickerValue();
   };
 }
 
