@@ -410,6 +410,9 @@ class ArrowItem extends CanvasItemBase
   coodLog = (cood, name) ->
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
 
+
+class WorkTableArrowItem extends ArrowItem
+
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
   window.itemInitFuncList.arrowInit = (option = {}) ->

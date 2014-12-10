@@ -10,20 +10,6 @@ CssItemBase = (function(_super) {
     return CssItemBase.__super__.constructor.apply(this, arguments);
   }
 
-  CssItemBase.prototype.btnEntryForm = $("#btn-entryForm", sidebarWrapper);
-
-  CssItemBase.prototype.configBoxLi = $("div.configBox > div.forms", sidebarWrapper);
-
-  CssItemBase.prototype.btnGradientStep = $("#btn-gradient-step");
-
-  CssItemBase.prototype.btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color");
-
-  CssItemBase.prototype.btnShadowColor = $("#btn-shadow-color,#btn-shadowinset-color,#btn-text-shadow1-color,#btn-text-shadow2-color");
-
-  CssItemBase.prototype.getCssRootElementId = function() {
-    return "css-" + this.id;
-  };
-
   CssItemBase.prototype.setupOptionMenu = function() {};
 
   return CssItemBase;

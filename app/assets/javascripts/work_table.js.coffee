@@ -63,9 +63,9 @@ initHandwrite = ->
   # @param [Array] loc Canvas座標
   mouseDownDrawing = (loc) ->
     if selectItemMenu == Constant.ItemType.ARROW
-      item = new ArrowItem(loc)
+      item = new WorkTableArrowItem(loc)
     else if selectItemMenu == Constant.ItemType.BUTTON
-      item = new ButtonItem(loc)
+      item = new WorkTableButtonItem(loc)
     item.saveDrawingSurface()
     changeMode(Constant.Mode.DRAW)
     item.startDraw()
@@ -223,16 +223,16 @@ setupContextMenu = (element, contextSelector, menu) ->
 # @param [Int] id メーターのElementID
 # @param [Int] min 最小値
 # @param [Int] max 最大値
-# @param [Object] codeEmt コードエレメント
-# @param [Object] previewEmt CSSプレビューのエレメント
+# @param [Object] cssCode コードエレメント
+# @param [Object] cssStyle CSSプレビューのエレメント
 # @param [Int] stepValue 進捗数
-settingSlider = (id, min, max, codeEmt, previewEmt, stepValue) ->
+settingSlider = (id, min, max, cssCode, cssStyle, stepValue) ->
   if typeof stepValue == 'undefined'
     stepValue = 0
 
   meterElement = $('#' + id)
   valueElement = $('.' + id + '-value')
-  d = $('.' + id + '-value', codeEmt)[0]
+  d = $('.' + id + '-value', cssCode)[0]
   defaultValue = $(d).html()
   valueElement.val(defaultValue)
   valueElement.html(defaultValue)
@@ -244,24 +244,24 @@ settingSlider = (id, min, max, codeEmt, previewEmt, stepValue) ->
     slide: (event, ui)->
       valueElement.val(ui.value)
       valueElement.html(ui.value)
-      previewEmt.text(codeEmt.text())
+      cssStyle.text(cssCode.text())
   })
 
 # HTML要素からグラデーションスライダーの作成
 # @param [Object] element HTML要素
 # @param [Array] values 値の配列
-# @param [Object] codeEmt コードエレメント
-# @param [Object] previewEmt CSSプレビューのエレメント
-settingGradientSliderByElement = (element, values, codeEmt, previewEmt) ->
+# @param [Object] cssCode コードエレメント
+# @param [Object] cssStyle CSSプレビューのエレメント
+settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
   id = element.attr("id")
 
   element.slider({
     values: values
     slide: (event, ui) ->
       index = $(ui.handle).index()
-      position = $('.btn-bg-color' + (index + 2) + '-position', codeEmt)
+      position = $('.btn-bg-color' + (index + 2) + '-position', cssCode)
       position.html(ui.value)
-      previewEmt.text(codeEmt.text())
+      cssStyle.text(cssCode.text())
   })
 
   handleElement = element.children('.ui-slider-handle')
@@ -273,24 +273,24 @@ settingGradientSliderByElement = (element, values, codeEmt, previewEmt) ->
 # グラデーションスライダーの作成
 # @param [Int] id HTML要素のID
 # @param [Array] values 値の配列
-# @param [Object] codeEmt コードエレメント
-# @param [Object] previewEmt CSSプレビューのエレメント
-settingGradientSlider = (id, values, codeEmt, previewEmt) ->
+# @param [Object] cssCode コードエレメント
+# @param [Object] cssStyle CSSプレビューのエレメント
+settingGradientSlider = (id, values, cssCode, cssStyle) ->
   meterElement = $('#' + id)
-  settingGradientSliderByElement(meterElement, values, codeEmt, previewEmt)
+  settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
 
 
 # グラデーション方向スライダーの作成
 # @param [Int] id メーターのElementID
 # @param [Int] min 最小値
 # @param [Int] max 最大値
-# @param [Object] codeEmt コードエレメント
-# @param [Object] previewEmt CSSプレビューのエレメント
-settingGradientDegSlider = (id, min, max, codeEmt, previewEmt) ->
+# @param [Object] cssCode コードエレメント
+# @param [Object] cssStyle CSSプレビューのエレメント
+settingGradientDegSlider = (id, min, max, cssCode, cssStyle) ->
   meterElement = $('#' + id)
   valueElement = $('.' + id + '-value')
   webkitValueElement = $('.' + id + '-value-webkit')
-  d = $('.' + id + '-value', codeEmt)[0]
+  d = $('.' + id + '-value', cssCode)[0]
   defaultValue = $(d).html()
   webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
 
@@ -307,7 +307,7 @@ settingGradientDegSlider = (id, min, max, codeEmt, previewEmt) ->
       valueElement.val(ui.value)
       valueElement.html(ui.value)
       webkitValueElement.html(webkitDeg[ui.value])
-      previewEmt.text(codeEmt.text())
+      cssStyle.text(cssCode.text())
   })
 ### スライダーの作成 ここまで ###
 
@@ -315,9 +315,9 @@ settingGradientDegSlider = (id, min, max, codeEmt, previewEmt) ->
 
 # グラデーションの表示変更(スライダーのハンドル&カラーピッカー)
 # @param [Object] element HTML要素
-# @param [Object] codeEmt コードエレメント
-# @param [Object] previewEmt CSSプレビューのエレメント
-changeGradientShow = (element, codeEmt, previewEmt) ->
+# @param [Object] cssCode コードエレメント
+# @param [Object] cssStyle CSSプレビューのエレメント
+changeGradientShow = (element, cssCode, cssStyle) ->
   targetElement = element.currentTarget
   value = parseInt(targetElement.value)
   if value >= 2 && value <= 5
@@ -331,7 +331,7 @@ changeGradientShow = (element, codeEmt, previewEmt) ->
       values = [25, 50, 75]
 
     meterElement.slider("destroy")
-    settingGradientSliderByElement(meterElement, values, codeEmt, previewEmt)
+    settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
     switchGradientColorSelectorVisible(value)
 
 # グラデーションのカラーピッカー表示切り替え

@@ -56,9 +56,9 @@ initHandwrite = function() {
   };
   mouseDownDrawing = function(loc) {
     if (selectItemMenu === Constant.ItemType.ARROW) {
-      item = new ArrowItem(loc);
+      item = new WorkTableArrowItem(loc);
     } else if (selectItemMenu === Constant.ItemType.BUTTON) {
-      item = new ButtonItem(loc);
+      item = new WorkTableButtonItem(loc);
     }
     item.saveDrawingSurface();
     changeMode(Constant.Mode.DRAW);
@@ -218,14 +218,14 @@ setupContextMenu = function(element, contextSelector, menu) {
 
 /* スライダーの作成 */
 
-settingSlider = function(id, min, max, codeEmt, previewEmt, stepValue) {
+settingSlider = function(id, min, max, cssCode, cssStyle, stepValue) {
   var d, defaultValue, meterElement, valueElement;
   if (typeof stepValue === 'undefined') {
     stepValue = 0;
   }
   meterElement = $('#' + id);
   valueElement = $('.' + id + '-value');
-  d = $('.' + id + '-value', codeEmt)[0];
+  d = $('.' + id + '-value', cssCode)[0];
   defaultValue = $(d).html();
   valueElement.val(defaultValue);
   valueElement.html(defaultValue);
@@ -237,12 +237,12 @@ settingSlider = function(id, min, max, codeEmt, previewEmt, stepValue) {
     slide: function(event, ui) {
       valueElement.val(ui.value);
       valueElement.html(ui.value);
-      return previewEmt.text(codeEmt.text());
+      return cssStyle.text(cssCode.text());
     }
   });
 };
 
-settingGradientSliderByElement = function(element, values, codeEmt, previewEmt) {
+settingGradientSliderByElement = function(element, values, cssCode, cssStyle) {
   var handleElement, id;
   id = element.attr("id");
   element.slider({
@@ -250,9 +250,9 @@ settingGradientSliderByElement = function(element, values, codeEmt, previewEmt) 
     slide: function(event, ui) {
       var index, position;
       index = $(ui.handle).index();
-      position = $('.btn-bg-color' + (index + 2) + '-position', codeEmt);
+      position = $('.btn-bg-color' + (index + 2) + '-position', cssCode);
       position.html(ui.value);
-      return previewEmt.text(codeEmt.text());
+      return cssStyle.text(cssCode.text());
     }
   });
   handleElement = element.children('.ui-slider-handle');
@@ -263,18 +263,18 @@ settingGradientSliderByElement = function(element, values, codeEmt, previewEmt) 
   }
 };
 
-settingGradientSlider = function(id, values, codeEmt, previewEmt) {
+settingGradientSlider = function(id, values, cssCode, cssStyle) {
   var meterElement;
   meterElement = $('#' + id);
-  return settingGradientSliderByElement(meterElement, values, codeEmt, previewEmt);
+  return settingGradientSliderByElement(meterElement, values, cssCode, cssStyle);
 };
 
-settingGradientDegSlider = function(id, min, max, codeEmt, previewEmt) {
+settingGradientDegSlider = function(id, min, max, cssCode, cssStyle) {
   var d, defaultValue, meterElement, valueElement, webkitDeg, webkitValueElement;
   meterElement = $('#' + id);
   valueElement = $('.' + id + '-value');
   webkitValueElement = $('.' + id + '-value-webkit');
-  d = $('.' + id + '-value', codeEmt)[0];
+  d = $('.' + id + '-value', cssCode)[0];
   defaultValue = $(d).html();
   webkitDeg = {
     0: 'left top, left bottom',
@@ -298,7 +298,7 @@ settingGradientDegSlider = function(id, min, max, codeEmt, previewEmt) {
       valueElement.val(ui.value);
       valueElement.html(ui.value);
       webkitValueElement.html(webkitDeg[ui.value]);
-      return previewEmt.text(codeEmt.text());
+      return cssStyle.text(cssCode.text());
     }
   });
 };
@@ -309,7 +309,7 @@ settingGradientDegSlider = function(id, min, max, codeEmt, previewEmt) {
 
 /* グラデーション */
 
-changeGradientShow = function(element, codeEmt, previewEmt) {
+changeGradientShow = function(element, cssCode, cssStyle) {
   var meterElement, targetElement, value, values;
   targetElement = element.currentTarget;
   value = parseInt(targetElement.value);
@@ -324,7 +324,7 @@ changeGradientShow = function(element, codeEmt, previewEmt) {
       values = [25, 50, 75];
     }
     meterElement.slider("destroy");
-    settingGradientSliderByElement(meterElement, values, codeEmt, previewEmt);
+    settingGradientSliderByElement(meterElement, values, cssCode, cssStyle);
     return switchGradientColorSelectorVisible(value);
   }
 };
