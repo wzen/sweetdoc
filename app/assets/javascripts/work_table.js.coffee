@@ -40,6 +40,7 @@ initDraggableAndResizable =  ->
     containment: mainWrapper
   })
 
+# 手書きイベント初期化
 initHandwrite = ->
   dragging = false
   clicking = false
@@ -205,6 +206,9 @@ setupContextMenu = (element, contextSelector, menu) ->
         changeMode(Constant.Mode.OPTION)
 
       beforeOpen: (event, ui) ->
+        #カラーピッカー値を初期化
+        initColorPickerValue()
+
         $target = ui.target
         $menu = ui.menu
         extraData = ui.extraData
@@ -392,25 +396,32 @@ loadItemJs = (itemType, callback = null) ->
       }
       success: (data)->
         if data.css_info?
-          $('#css_code_info').append(data.css_info)
+          option = {css_temp: data.css_info}
 
-        s = document.createElement( 'script' );
-        s.type = 'text/javascript';
-        # TODO: 認証コードの比較
-        s.src = data.js_src;
-        firstScript = document.getElementsByTagName( 'script' )[ 0 ];
-        firstScript.parentNode.insertBefore( s, firstScript );
-        t = setInterval( ->
-          if window.itemInitFuncList[itemInitFuncName]?
-            clearInterval(t)
-            window.itemInitFuncList[itemInitFuncName]()
-            if callback?
-              callback()
-        , '500')
+        availJs(itemInitFuncName, data.js_src, option, callback)
 
       error: (data) ->
     }
   )
+
+# JSファイルを設定
+# @param [String] initName アイテム初期化関数名
+# @param [String] jsSrc jsファイル名
+# @param [Function] callback 設定後のコールバック
+availJs = (initName, jsSrc, option = {}, callback = null) ->
+  s = document.createElement( 'script' );
+  s.type = 'text/javascript';
+  # TODO: 認証コードの比較
+  s.src = jsSrc;
+  firstScript = document.getElementsByTagName( 'script' )[ 0 ];
+  firstScript.parentNode.insertBefore( s, firstScript );
+  t = setInterval( ->
+    if window.itemInitFuncList[initName]?
+      clearInterval(t)
+      window.itemInitFuncList[initName](option)
+      if callback?
+        callback()
+  , '500')
 
 # カラーピッカーの作成
 # @param [Object] element HTML要素
@@ -429,7 +440,7 @@ settingColorPicker = (element, defaultColor, onChange) ->
   })
 
 
-#カラーピッカー値の初期化
+#カラーピッカー値の初期化(アイテムのコンテキスト表示時に設定)
 initColorPickerValue = ->
   $('.colorPicker', sidebarWrapper).each( ->
     id = $(this).attr('id')
@@ -450,6 +461,7 @@ changeMode = (mode) ->
     $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
   window.mode = mode
 
+# 選択枠を非表示
 clearAllItemStyle = ->
   itemObjectList.forEach((obj) ->
     obj.clearAllEventStyle()
@@ -640,6 +652,8 @@ saveToServer = ->
     j = {
       id: obj.id
       obj: obj.generateMinimumObject()
+      # TODO: CSS追加
+      #css
     }
     jsonList.push(j)
   )
@@ -687,35 +701,27 @@ loadFromServer = ->
             item.loadByMinimumObject(obj)
             setupEvents(item)
 
+        # CSS情報を設置
         if data.css_info_list?
           cssInfoList = JSON.parse(data.css_info_list)
           cssInfoList.forEach((cssInfo)->
             $('#css_code_info').append(cssInfo)
           )
 
+        # JS読み込み
         jsList = JSON.parse(data.js_list)
         if jsList.length == 0
           callback()
           return
-
         loadedCount = 0
         jsList.forEach((js)->
-          s = document.createElement( 'script' );
-          s.type = 'text/javascript';
-          # TODO: 認証コードの比較
-          s.src = js.src;
-          firstScript = document.getElementsByTagName( 'script' )[ 0 ];
-          firstScript.parentNode.insertBefore( s, firstScript );
-          t = setInterval( ->
-            fn = getInitFuncName(js.item_type)
-            if window.itemInitFuncList[fn]?
-              clearInterval(t)
-              window.itemInitFuncList[fn]()
-              loadedCount += 1
-              if loadedCount >= jsList.length
-                callback()
-          , '500')
-
+          option = {css_temp: js.css_temp}
+          availJs( getInitFuncName(js.item_type), js.src, option, ->
+            loadedCount += 1
+            if loadedCount >= jsList.length
+              # 全て読み込んだ後
+              callback()
+          )
         )
         #console.log(data.message)
 

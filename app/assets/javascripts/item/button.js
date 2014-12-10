@@ -12,6 +12,8 @@ ButtonItem = (function(_super) {
 
   ButtonItem.ITEMTYPE = Constant.ItemType.BUTTON;
 
+  ButtonItem.CSSTEMPID = "button_css_temp";
+
   function ButtonItem(cood) {
     if (cood == null) {
       cood = null;
@@ -63,7 +65,11 @@ ButtonItem = (function(_super) {
   };
 
   ButtonItem.prototype.makeElement = function() {
+    var newEmt;
     $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
+    newEmt = $('#' + ButtonItem.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
+    newEmt.find('.btn-item-id').html(this.getElementId());
+    $('#css_code_info').append(newEmt);
     return true;
   };
 
@@ -96,45 +102,36 @@ ButtonItem = (function(_super) {
     return this.nextChapter();
   };
 
-  return ButtonItem;
-
-})(ItemBase);
-
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == null)) {
-  window.itemInitFuncList.buttonInit = function() {
-    var btnBgColor, btnCode, btnEntryForm, btnGradientStep, btnPreviewCss, btnShadowColor, configBoxLi;
-    btnEntryForm = $("#btn-entryForm", sidebarWrapper);
-    btnCode = $("#btn-code", cssCode);
-    btnPreviewCss = $("#btn-css", cssCode);
-    configBoxLi = $("div.configBox > div.forms", sidebarWrapper);
-    btnGradientStep = $("#btn-gradient-step");
-    btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color");
-    btnShadowColor = $("#btn-shadow-color,#btn-shadowinset-color,#btn-text-shadow1-color,#btn-text-shadow2-color");
+  ButtonItem.prototype.setupOptionMenu = function() {
+    var cssCode, cssRoot, cssStyle;
+    cssRoot = $('#' + this.getCssRootElementId());
+    cssCode = $(".css-code", cssRoot);
+    cssStyle = $(".css-style", cssRoot);
     settingGradientSlider('btn-slider-gradient', null);
-    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-border-radius', 0, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-border-width', 0, 10, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-font-size', 0, 30, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-shadow-left', -100, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, btnCode, btnPreviewCss, 0.1);
-    settingSlider('btn-slider-shadow-size', 0, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-shadow-top', -100, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-shadowinset-left', -100, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, btnCode, btnPreviewCss, 0.1);
-    settingSlider('btn-slider-shadowinset-size', 0, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-shadowinset-top', -100, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-text-shadow1-left', -100, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, btnCode, btnPreviewCss, 0.1);
-    settingSlider('btn-slider-text-shadow1-size', 0, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-text-shadow1-top', -100, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-text-shadow2-left', -100, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, btnCode, btnPreviewCss, 0.1);
-    settingSlider('btn-slider-text-shadow2-size', 0, 100, btnCode, btnPreviewCss);
-    settingSlider('btn-slider-text-shadow2-top', -100, 100, btnCode, btnPreviewCss);
-    btnBgColor.mousedown(function() {
+    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle);
+    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle);
+    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle);
+    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle);
+    this.btnBgColor.mousedown(function() {
       var btnCodeEmt, id, inputEmt, inputValue, self;
       id = $(this).attr("id");
-      inputEmt = btnEntryForm.find("#" + id + "-input");
+      inputEmt = this.btnEntryForm.find("#" + id + "-input");
       inputValue = inputEmt.attr("value");
       btnCodeEmt = cssCode.find("." + id);
       self = $(this);
@@ -142,14 +139,14 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
         self.css("backgroundColor", "#" + b);
         inputEmt.attr("value", b);
         btnCodeEmt.text(b);
-        return btnPreviewCss.text(btnCode.text());
+        return cssStyle.text(cssCode.text());
       });
     });
-    btnShadowColor.mousedown(function() {
+    this.btnShadowColor.mousedown(function() {
       var btnCodeEmt, e, id, inputEmt, inputValue, self;
       id = $(this).attr("id");
-      e = configBoxLi.find("#" + id + " div");
-      inputEmt = btnEntryForm.find("#" + id + "-input");
+      e = this.configBoxLi.find("#" + id + " div");
+      inputEmt = this.btnEntryForm.find("#" + id + "-input");
       inputValue = inputEmt.attr("value");
       btnCodeEmt = cssCode.find("." + id);
       self = $(this);
@@ -157,19 +154,19 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
         self.css("backgroundColor", "#" + b);
         inputEmt.attr("value", b);
         btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
-        return btnPreviewCss.text(btnCode.text());
+        return cssStyle.text(cssCode.text());
       });
     });
-    btnGradientStep.on('keyup mouseup', function(e) {
+    this.btnGradientStep.on('keyup mouseup', function(e) {
       var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
-      changeGradientShow(e, btnCode, btnPreviewCss);
+      changeGradientShow(e, cssCode, cssStyle);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         id = 'btn-bg-color' + i;
-        mozFlag = $("#" + id + "-moz-flag");
-        mozCache = $("#" + id + "-moz-cache");
-        webkitFlag = $("#" + id + "-webkit-flag");
-        webkitCache = $("#" + id + "-webkit-cache");
+        mozFlag = $("." + id + "-moz-flag", cssRoot);
+        mozCache = $("." + id + "-moz-cache", cssRoot);
+        webkitFlag = $("." + id + "-webkit-flag", cssRoot);
+        webkitCache = $("." + id + "-webkit-cache", cssRoot);
         if (i > stepValue - 1) {
           mh = mozFlag.html();
           if (mh.length > 0) {
@@ -186,16 +183,16 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
           webkitFlag.html(webkitCache.html());
         }
       }
-      return btnPreviewCss.text(btnCode.text());
+      return cssStyle.text(cssCode.text());
     }).each(function() {
       var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       stepValue = parseInt($(this).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         id = 'btn-bg-color' + i;
-        mozFlag = $("#" + id + "-moz-flag");
-        mozCache = $("#" + id + "-moz-cache");
-        webkitFlag = $("#" + id + "-webkit-flag");
-        webkitCache = $("#" + id + "-webkit-cache");
+        mozFlag = $("." + id + "-moz-flag", cssRoot);
+        mozCache = $("." + id + "-moz-cache", cssRoot);
+        webkitFlag = $("." + id + "-webkit-flag", cssRoot);
+        webkitCache = $("." + id + "-webkit-cache", cssRoot);
         if (i > stepValue - 1) {
           mh = mozFlag.html();
           if (mh.length > 0) {
@@ -209,10 +206,31 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
           $(webkitFlag).empty();
         }
       }
-      return btnPreviewCss.text(btnCode.text());
+      return cssStyle.text(cssCode.text());
     });
-    btnPreviewCss.text(btnCode.text());
-    return initColorPickerValue();
+    return cssStyle.text(cssCode.text());
+  };
+
+  ButtonItem.showOptionMenu = function() {};
+
+  ButtonItem.hideOptionMenu = function() {};
+
+  return ButtonItem;
+
+})(CssItemBase);
+
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == null)) {
+  window.itemInitFuncList.buttonInit = function(option) {
+    var css_temp, tempEmt;
+    if (option == null) {
+      option = {};
+    }
+    css_temp = option['css_temp'];
+    if (css_temp == null) {
+      console.log('ButtonItemのCSSテンプレートが見つからないエラー');
+    }
+    tempEmt = "<div id='" + ButtonItem.CSSTEMPID + "'>" + css_temp + "</div>";
+    return $('#css_code_info_temp').append(tempEmt);
   };
 }
 

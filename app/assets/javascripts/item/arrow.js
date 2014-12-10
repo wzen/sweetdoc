@@ -407,10 +407,14 @@ ArrowItem = (function(_super) {
 
   return ArrowItem;
 
-})(ItemBase);
+})(CanvasItemBase);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == null)) {
-  window.itemInitFuncList.arrowInit = function() {};
+  window.itemInitFuncList.arrowInit = function(option) {
+    if (option == null) {
+      option = {};
+    }
+  };
 }
 
 //# sourceMappingURL=arrow.js.map

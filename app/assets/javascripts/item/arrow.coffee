@@ -2,8 +2,8 @@
 window.loadedItemTypeList.push(Constant.ItemType.ARROW)
 
 # 矢印アイテム
-# @extend ItemBase
-class ArrowItem extends ItemBase
+# @extend CanvasItemBase
+class ArrowItem extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "arrow"
   # @property [String] ITEMTYPE アイテム種別
@@ -412,4 +412,4 @@ class ArrowItem extends ItemBase
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
-  window.itemInitFuncList.arrowInit = ->
+  window.itemInitFuncList.arrowInit = (option = {}) ->

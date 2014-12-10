@@ -9,11 +9,19 @@ class ItemState < ActiveRecord::Base
     else
       message = I18n.t('message.database.item_state.load.success')
       item_list = JSON.parse(result.state)
+      item_type_list = []
       item_list.each do |item|
-        it = item['obj']['itemType']
-        unless loaded_item_type_list.include?(it)
-          item_js_list.push({:item_type => it, :src => ItemJs.new.get_lack_js(it)})
+        item_type = item['obj']['itemType']
+        unless loaded_item_type_list.include?(item_type)
+          item_type_list << item_type
         end
+      end
+
+      # 必要なCSSテンプレートを読み込み
+      item_css_temps = ItemCssTemp.where(item_type: item_type_list).order(item_type: :arc)
+      item_type_list.sort.each do |item_type|
+        css_temp_content = item_css_temps.find{|f| f.item_type == item_type}.contents
+        item_js_list << {:item_type => item_type, :src => ItemJs.new.get_lack_js(item_type), :css_temp => css_temp_content}
       end
       if result.css_info != nil
         css_info_list = JSON.parse(result.css_info)
