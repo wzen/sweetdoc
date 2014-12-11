@@ -186,6 +186,19 @@ setupContextMenu = (element, contextSelector, menu) ->
       scrollLeft =  mainScroll.width() * 0.25
     return scrollLeft
 
+  # オプションメニューを初期化
+  initOptionMenu = (event) ->
+    emt = $(event.target)
+    obj = null
+    itemObjectList.forEach((o) ->
+      objId = o.getIdByElementId(emt.attr('id'))
+      if objId == o.id
+        obj = o
+    )
+    if obj? && obj.setupOptionMenu?
+      # 初期化関数を呼び出す
+      obj.setupOptionMenu()
+
   element.contextmenu(
     {
       delegate: contextSelector
@@ -202,16 +215,20 @@ setupContextMenu = (element, contextSelector, menu) ->
 
           else
             return
+        # カラーピッカー値を初期化
+        initColorPickerValue()
+        # オプションメニューの値を初期化
+        initOptionMenu(event)
+        # オプションメニューを表示
         openSidebar(calMoveScrollLeft($target))
+        # モードを変更
         changeMode(Constant.Mode.OPTION)
 
       beforeOpen: (event, ui) ->
-        #カラーピッカー値を初期化
-        initColorPickerValue()
-
         $target = ui.target
         $menu = ui.menu
         extraData = ui.extraData
+
         ui.menu.zIndex( $(event.target).zIndex() + 1)
     #$('#contents').contextmenu("setEntry", "copy", "Copy '" + $target.text() + "'").contextmenu("setEntry", "paste", "Paste" + (CLIPBOARD ? " '" + CLIPBOARD + "'" : "")).contextmenu("enableEntry", "paste", (CLIPBOARD != ""))
     }
@@ -236,6 +253,9 @@ settingSlider = (id, min, max, cssCode, cssStyle, stepValue) ->
   defaultValue = $(d).html()
   valueElement.val(defaultValue)
   valueElement.html(defaultValue)
+  try
+    meterElement.slider('destroy')
+  catch
   meterElement.slider({
     min: min,
     max: max,
@@ -255,6 +275,9 @@ settingSlider = (id, min, max, cssCode, cssStyle, stepValue) ->
 settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
   id = element.attr("id")
 
+  try
+    element.slider('destroy')
+  catch
   element.slider({
     values: values
     slide: (event, ui) ->
@@ -298,6 +321,9 @@ settingGradientDegSlider = (id, min, max, cssCode, cssStyle) ->
   valueElement.html(defaultValue)
   webkitValueElement.html(webkitDeg[defaultValue])
 
+  try
+    meterElement.slider('destroy')
+  catch
   meterElement.slider({
     min: min,
     max: max,
@@ -330,7 +356,6 @@ changeGradientShow = (element, cssCode, cssStyle) ->
     else if value == 5
       values = [25, 50, 75]
 
-    meterElement.slider("destroy")
     settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
     switchGradientColorSelectorVisible(value)
 
@@ -396,7 +421,7 @@ loadItemJs = (itemType, callback = null) ->
       }
       success: (data)->
         if data.css_info?
-          option = {css_temp: data.css_info}
+          option = {isWorkTable: true, css_temp: data.css_info}
 
         availJs(itemInitFuncName, data.js_src, option, callback)
 
@@ -425,20 +450,18 @@ availJs = (initName, jsSrc, option = {}, callback = null) ->
 
 # カラーピッカーの作成
 # @param [Object] element HTML要素
-# @param [Color] defaultColor デフォルト色
-# @param [Function] onChange 変更時に呼ばれるメソッド
-settingColorPicker = (element, defaultColor, onChange) ->
-  $(element).ColorPicker({
-    color: defaultColor
-    onShow: (a) ->
-      $(a).show()
-      return false
-    onHide: (a) ->
-      $(a).hide()
-      return false
-    onChange: onChange
-  })
+createColorPicker = (element) ->
 
+  $(element).ColorPicker({})
+
+# カラーピッカーの設定
+# @param [Object] element HTML要素
+# @param [Color] changeColor 変更色
+# @param [Function] onChange 変更時に呼ばれるメソッド
+settingColorPicker = (element, changeColor, onChange) ->
+  emt = $(element)
+  emt.ColorPickerSetColor(changeColor)
+  emt.ColorPickerResetOnChange(onChange)
 
 #カラーピッカー値の初期化(アイテムのコンテキスト表示時に設定)
 initColorPickerValue = ->
@@ -715,7 +738,7 @@ loadFromServer = ->
           return
         loadedCount = 0
         jsList.forEach((js)->
-          option = {css_temp: js.css_temp}
+          option = {isWorkTable: true, css_temp: js.css_temp}
           availJs( getInitFuncName(js.item_type), js.src, option, ->
             loadedCount += 1
             if loadedCount >= jsList.length

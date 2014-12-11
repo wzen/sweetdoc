@@ -127,47 +127,57 @@ class WorkTableButtonItem extends ButtonItem
 
   # CSSボタンコントロール初期化
   setupOptionMenu: ->
+    cssRoot = @cssRoot
+    cssCode = @cssCode
+    cssStyle = @cssStyle
+
     #スライダー
     settingGradientSlider('btn-slider-gradient', null)
-    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, @cssCode, @cssStyle)
-    settingSlider('btn-slider-border-radius', 0, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-border-width', 0, 10, @cssCode, @cssStyle)
-    settingSlider('btn-slider-font-size', 0, 30, @cssCode, @cssStyle)
+    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle)
+    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle)
+    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle)
     #settingSlider('btn-slider-padding-left', 0, 30)
     #settingSlider('btn-slider-padding-top', 0, 30)
-    settingSlider('btn-slider-shadow-left', -100, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, @cssCode, @cssStyle, 0.1)
-    settingSlider('btn-slider-shadow-size', 0, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-shadow-top', -100, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-shadowinset-left', -100, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, @cssCode, @cssStyle, 0.1)
-    settingSlider('btn-slider-shadowinset-size', 0, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-shadowinset-top', -100, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-text-shadow1-left', -100, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, @cssCode, @cssStyle, 0.1)
-    settingSlider('btn-slider-text-shadow1-size', 0, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-text-shadow1-top', -100, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-text-shadow2-left', -100, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, @cssCode, @cssStyle, 0.1)
-    settingSlider('btn-slider-text-shadow2-size', 0, 100, @cssCode, @cssStyle)
-    settingSlider('btn-slider-text-shadow2-top', -100, 100, @cssCode, @cssStyle)
+    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
+    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
+    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
+    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
+    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle)
+    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle)
 
     # カラーピッカーイベント
-    @btnBgColor.mousedown( ->
-      id = $(this).attr("id"); inputEmt = @btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = @cssCode.find("." + id)
-      self = $(this)
-      settingColorPicker(
-        this,
-        inputValue,
-        (a, b, d) ->
-          self.css("backgroundColor", "#" + b)
-          inputEmt.attr("value", b)
-          btnCodeEmt.text(b)
-          @cssStyle.text(@cssCode.text())
-      )
+    id = WorkTableButtonItem.btnBgColor.attr("id"); inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
+    settingColorPicker(
+      WorkTableButtonItem.btnBgColor,
+      inputValue,
+      (a, b, d) ->
+        WorkTableButtonItem.btnBgColor.css("backgroundColor", "#" + b)
+        inputEmt.attr("value", b)
+        btnCodeEmt.text(b)
+        cssStyle.text(cssCode.text())
     )
-    @btnShadowColor.mousedown( ->
-      id = $(this).attr("id"); e = @configBoxLi.find("#" + id + " div"); inputEmt = @btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = @cssCode.find("." + id)
+    WorkTableButtonItem.btnBgColor.unbind()
+    WorkTableButtonItem.btnBgColor.mousedown( (e) ->
+      e.stopPropagation()
+      $(this).ColorPickerHide()
+      $(this).ColorPickerShow()
+    )
+
+    WorkTableButtonItem.btnShadowColor.unbind()
+    WorkTableButtonItem.btnShadowColor.mousedown( (e) ->
+      e.preventDefault()
+      id = $(this).attr("id"); e = WorkTableButtonItem.configBoxLi.find("#" + id + " div"); inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
       self = $(this)
       settingColorPicker(
         this,
@@ -176,13 +186,14 @@ class WorkTableButtonItem extends ButtonItem
           self.css("backgroundColor", "#" + b)
           inputEmt.attr("value", b)
           btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
-          @cssStyle.text(@cssCode.text())
+          cssStyle.text(cssCode.text())
       )
     )
 
     # グラデーションStepイベント
-    @btnGradientStep.on('keyup mouseup', (e) ->
-      changeGradientShow(e, @cssCode, @cssStyle)
+    WorkTableButtonItem.btnGradientStep.off('keyup mouseup')
+    WorkTableButtonItem.btnGradientStep.on('keyup mouseup', (e) ->
+      changeGradientShow(e, cssCode, cssStyle)
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
         id = 'btn-bg-color' + i; mozFlag = $("." + id + "-moz-flag", cssRoot); mozCache = $("." + id + "-moz-cache", cssRoot); webkitFlag = $("." + id + "-webkit-flag", cssRoot); webkitCache = $("." + id + "-webkit-cache", cssRoot);
@@ -198,7 +209,7 @@ class WorkTableButtonItem extends ButtonItem
         else
           mozFlag.html(mozCache.html());
           webkitFlag.html(webkitCache.html())
-      @cssStyle.text(@cssCode.text())
+      cssStyle.text(cssCode.text())
     ).each( ->
       stepValue = parseInt($(this).val())
       for i in [2 .. 4]
@@ -212,9 +223,9 @@ class WorkTableButtonItem extends ButtonItem
             webkitCache.html(wh)
           $(mozFlag).empty()
           $(webkitFlag).empty()
-      @cssStyle.text(@cssCode.text())
+      cssStyle.text(cssCode.text())
     )
-    @cssStyle.text(@cssCode.text())
+    cssStyle.text(cssCode.text())
 
   # オプションメニューを開く
   @showOptionMenu: ->
@@ -226,8 +237,16 @@ class WorkTableButtonItem extends ButtonItem
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
   window.itemInitFuncList.buttonInit = (option = {}) ->
-    # ボタンのCSSテンプレートを設置
-    css_temp = option.css_temp
-    if css_temp?
-      tempEmt = "<div id='#{WorkTableButtonItem.CSSTEMPID}'>#{css_temp}</div>"
-      $('#css_code_info_temp').append(tempEmt)
+    if option.isWorkTable?
+      # ワークテーブルの初期化処理
+      css_temp = option.css_temp
+      if css_temp?
+        # ボタンのCSSテンプレートを設置
+        tempEmt = "<div id='#{WorkTableButtonItem.CSSTEMPID}'>#{css_temp}</div>"
+        $('#css_code_info_temp').append(tempEmt)
+
+
+      # オプションメニューを作成
+      ## カラーピッカー
+      createColorPicker(WorkTableButtonItem.btnBgColor)
+      createColorPicker(WorkTableButtonItem.btnShadowColor)

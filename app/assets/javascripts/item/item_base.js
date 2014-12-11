@@ -33,6 +33,10 @@ ItemBase = (function(_super) {
     return this.constructor.IDENTITY + '_' + this.id;
   };
 
+  ItemBase.prototype.getIdByElementId = function(elementId) {
+    return elementId.replace(this.constructor.IDENTITY + '_', '');
+  };
+
   ItemBase.prototype.getJQueryElement = function() {
     return $('#' + this.getElementId());
   };

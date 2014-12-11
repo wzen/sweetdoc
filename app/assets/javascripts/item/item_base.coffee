@@ -33,6 +33,9 @@ class ItemBase extends Actor
   getElementId: ->
     return @constructor.IDENTITY + '_' + @id
 
+  getIdByElementId : (elementId) ->
+    return elementId.replace(@constructor.IDENTITY + '_', '')
+
   getJQueryElement: ->
     return $('#' + @getElementId())
 

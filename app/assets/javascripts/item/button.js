@@ -143,59 +143,68 @@ WorkTableButtonItem = (function(_super) {
   };
 
   WorkTableButtonItem.prototype.setupOptionMenu = function() {
+    var btnCodeEmt, cssCode, cssRoot, cssStyle, id, inputEmt, inputValue;
+    cssRoot = this.cssRoot;
+    cssCode = this.cssCode;
+    cssStyle = this.cssStyle;
     settingGradientSlider('btn-slider-gradient', null);
-    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-border-radius', 0, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-border-width', 0, 10, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-font-size', 0, 30, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-shadow-left', -100, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, this.cssCode, this.cssStyle, 0.1);
-    settingSlider('btn-slider-shadow-size', 0, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-shadow-top', -100, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-shadowinset-left', -100, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, this.cssCode, this.cssStyle, 0.1);
-    settingSlider('btn-slider-shadowinset-size', 0, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-shadowinset-top', -100, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-text-shadow1-left', -100, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, this.cssCode, this.cssStyle, 0.1);
-    settingSlider('btn-slider-text-shadow1-size', 0, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-text-shadow1-top', -100, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-text-shadow2-left', -100, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, this.cssCode, this.cssStyle, 0.1);
-    settingSlider('btn-slider-text-shadow2-size', 0, 100, this.cssCode, this.cssStyle);
-    settingSlider('btn-slider-text-shadow2-top', -100, 100, this.cssCode, this.cssStyle);
-    this.btnBgColor.mousedown(function() {
-      var btnCodeEmt, id, inputEmt, inputValue, self;
-      id = $(this).attr("id");
-      inputEmt = this.btnEntryForm.find("#" + id + "-input");
-      inputValue = inputEmt.attr("value");
-      btnCodeEmt = this.cssCode.find("." + id);
-      self = $(this);
-      return settingColorPicker(this, inputValue, function(a, b, d) {
-        self.css("backgroundColor", "#" + b);
-        inputEmt.attr("value", b);
-        btnCodeEmt.text(b);
-        return this.cssStyle.text(this.cssCode.text());
-      });
+    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle);
+    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle);
+    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle);
+    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
+    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle);
+    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle);
+    id = WorkTableButtonItem.btnBgColor.attr("id");
+    inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input");
+    inputValue = inputEmt.attr("value");
+    btnCodeEmt = cssCode.find("." + id);
+    settingColorPicker(WorkTableButtonItem.btnBgColor, inputValue, function(a, b, d) {
+      WorkTableButtonItem.btnBgColor.css("backgroundColor", "#" + b);
+      inputEmt.attr("value", b);
+      btnCodeEmt.text(b);
+      return cssStyle.text(cssCode.text());
     });
-    this.btnShadowColor.mousedown(function() {
-      var btnCodeEmt, e, id, inputEmt, inputValue, self;
+    WorkTableButtonItem.btnBgColor.unbind();
+    WorkTableButtonItem.btnBgColor.mousedown(function(e) {
+      e.stopPropagation();
+      $(this).ColorPickerHide();
+      return $(this).ColorPickerShow();
+    });
+    WorkTableButtonItem.btnShadowColor.unbind();
+    WorkTableButtonItem.btnShadowColor.mousedown(function(e) {
+      var self;
+      e.preventDefault();
       id = $(this).attr("id");
-      e = this.configBoxLi.find("#" + id + " div");
-      inputEmt = this.btnEntryForm.find("#" + id + "-input");
+      e = WorkTableButtonItem.configBoxLi.find("#" + id + " div");
+      inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input");
       inputValue = inputEmt.attr("value");
-      btnCodeEmt = this.cssCode.find("." + id);
+      btnCodeEmt = cssCode.find("." + id);
       self = $(this);
       return settingColorPicker(this, inputValue, function(a, b, d) {
         self.css("backgroundColor", "#" + b);
         inputEmt.attr("value", b);
         btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
-        return this.cssStyle.text(this.cssCode.text());
+        return cssStyle.text(cssCode.text());
       });
     });
-    this.btnGradientStep.on('keyup mouseup', function(e) {
-      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
-      changeGradientShow(e, this.cssCode, this.cssStyle);
+    WorkTableButtonItem.btnGradientStep.off('keyup mouseup');
+    WorkTableButtonItem.btnGradientStep.on('keyup mouseup', function(e) {
+      var i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      changeGradientShow(e, cssCode, cssStyle);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         id = 'btn-bg-color' + i;
@@ -219,9 +228,9 @@ WorkTableButtonItem = (function(_super) {
           webkitFlag.html(webkitCache.html());
         }
       }
-      return this.cssStyle.text(this.cssCode.text());
+      return cssStyle.text(cssCode.text());
     }).each(function() {
-      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      var i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       stepValue = parseInt($(this).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         id = 'btn-bg-color' + i;
@@ -242,9 +251,9 @@ WorkTableButtonItem = (function(_super) {
           $(webkitFlag).empty();
         }
       }
-      return this.cssStyle.text(this.cssCode.text());
+      return cssStyle.text(cssCode.text());
     });
-    return this.cssStyle.text(this.cssCode.text());
+    return cssStyle.text(cssCode.text());
   };
 
   WorkTableButtonItem.showOptionMenu = function() {};
@@ -261,10 +270,14 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
     if (option == null) {
       option = {};
     }
-    css_temp = option.css_temp;
-    if (css_temp != null) {
-      tempEmt = "<div id='" + WorkTableButtonItem.CSSTEMPID + "'>" + css_temp + "</div>";
-      return $('#css_code_info_temp').append(tempEmt);
+    if (option.isWorkTable != null) {
+      css_temp = option.css_temp;
+      if (css_temp != null) {
+        tempEmt = "<div id='" + WorkTableButtonItem.CSSTEMPID + "'>" + css_temp + "</div>";
+        $('#css_code_info_temp').append(tempEmt);
+      }
+      createColorPicker(WorkTableButtonItem.btnBgColor);
+      return createColorPicker(WorkTableButtonItem.btnShadowColor);
     }
   };
 }

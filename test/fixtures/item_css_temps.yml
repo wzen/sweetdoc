@@ -5,7 +5,7 @@ one:
   contents: |
     <style type="text/css" class="css-style"></style>
     <pre class="css-code">
-    div#<span class="btn-item-id"></span> {
+    div#<span class="btn-item-id"></span> .css3button {
         <span class="property">font-family</span>: Arial, Helvetica, sans-serif;
         <span class="property">font-size</span>: <span class="c btn-slider-font-size-value">14</span>px;
         <span class="property">color</span>: #<span class="c btn-font-color">ffffff</span>;

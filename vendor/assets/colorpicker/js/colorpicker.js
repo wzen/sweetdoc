@@ -473,6 +473,14 @@
 						setNewColor(col, cal.get(0));
 					}
 				});
+			},
+			resetOnChange: function(fn) {
+				return this.each(function() {
+					if ($(this).data('colorpickerId')) {
+						var cal = $('#' + $(this).data('colorpickerId'));
+						cal.data('colorpicker').onChange = fn;
+					}
+				});
 			}
 		};
 	}();
@@ -480,6 +488,7 @@
 		ColorPicker: ColorPicker.init,
 		ColorPickerHide: ColorPicker.hidePicker,
 		ColorPickerShow: ColorPicker.showPicker,
-		ColorPickerSetColor: ColorPicker.setColor
+		ColorPickerSetColor: ColorPicker.setColor,
+		ColorPickerResetOnChange: ColorPicker.resetOnChange
 	});
 })(jQuery)
