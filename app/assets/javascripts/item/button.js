@@ -23,7 +23,7 @@ ButtonItem = (function(_super) {
         y: cood.y
       };
     }
-    this.cssStyle = null;
+    this.css = null;
   }
 
   ButtonItem.prototype.draw = function(cood) {
@@ -70,11 +70,12 @@ ButtonItem = (function(_super) {
   ButtonItem.prototype.generateMinimumObject = function() {
     var obj;
     obj = {
+      id: this.id,
       itemType: Constant.ItemType.BUTTON,
       mousedownCood: this.mousedownCood,
       itemSize: this.itemSize,
       zindex: this.zindex,
-      cssStyle: this.cssStyle
+      css: this.css
     };
     return obj;
   };
@@ -86,10 +87,11 @@ ButtonItem = (function(_super) {
   };
 
   ButtonItem.prototype.setMiniumObject = function(obj) {
+    this.id = obj.id;
     this.mousedownCood = obj.mousedownCood;
     this.itemSize = obj.itemSize;
     this.zindex = obj.zindex;
-    return this.cssStyle = obj.cssStyle;
+    return this.css = obj.css;
   };
 
   ButtonItem.prototype.actorClickEvent = function(e) {

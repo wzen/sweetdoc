@@ -151,3 +151,16 @@ class ItemBase extends Actor
 
   # イベントによって設定したスタイルをクリアする　
   clearAllEventStyle : ->
+
+
+# CSSアイテム
+# @extend ItemBase
+class CssItemBase extends ItemBase
+
+  # オプションメニューを作成
+  # @abstract
+  setupOptionMenu: ->
+
+# Canvasアイテム
+# @extend ItemBase
+class CanvasItemBase extends ItemBase

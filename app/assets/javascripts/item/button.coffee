@@ -15,7 +15,7 @@ class ButtonItem extends CssItemBase
     super(cood)
     if cood != null
       @moveLoc = {x:cood.x, y:cood.y}
-    @cssStyle = null
+    @css = null
 
   # 描画
   # @param [Array] cood 座標
@@ -59,11 +59,12 @@ class ButtonItem extends CssItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   generateMinimumObject: ->
     obj = {
+      id: @id
       itemType: Constant.ItemType.BUTTON
       mousedownCood: @mousedownCood
       itemSize: @itemSize
       zindex: @zindex
-      cssStyle: @cssStyle
+      css: @css
     }
     return obj
 
@@ -77,10 +78,11 @@ class ButtonItem extends CssItemBase
 
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
+    @id = obj.id # IDも変更
     @mousedownCood = obj.mousedownCood
     @itemSize = obj.itemSize
     @zindex = obj.zindex
-    @cssStyle = obj.cssStyle
+    @css = obj.css
 
   # クリックイベント
   actorClickEvent: (e) ->

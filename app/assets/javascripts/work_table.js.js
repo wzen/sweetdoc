@@ -495,10 +495,11 @@ changeMode = function(mode) {
 };
 
 clearAllItemStyle = function() {
-  return itemObjectList.forEach(function(obj) {
-    obj.clearAllEventStyle();
-    return $('.editSelected').remove();
+  itemObjectList.forEach(function(obj) {
+    return obj.clearAllEventStyle();
   });
+  $('.editSelected').remove();
+  return $('.colorPicker').ColorPickerHide();
 };
 
 openSidebar = function(scrollLeft) {
@@ -890,7 +891,7 @@ runLookAround = function() {
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()));
   lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList));
   itemCssStyle = "";
-  $('#css_code_info .item_css_style').each(function() {
+  $('#css_code_info').find('.css-style').each(function() {
     return itemCssStyle += $(this).html();
   });
   lstorage.setItem('itemCssStyle', itemCssStyle);

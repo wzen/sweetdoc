@@ -28,8 +28,6 @@
 //= require item/code_template
 //= require base/actor
 //= require item/item_base
-//= require item/css_item_base
-//= require item/canvas_item_base
 //= require test_move
 //= require work_table
 // require_tree .

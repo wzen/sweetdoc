@@ -487,9 +487,13 @@ changeMode = (mode) ->
 # 選択枠を非表示
 clearAllItemStyle = ->
   itemObjectList.forEach((obj) ->
+    # オブジェクトのイベントをクリア
     obj.clearAllEventStyle()
-    $('.editSelected').remove()
   )
+  # 選択枠を取る
+  $('.editSelected').remove()
+  # 全てのカラーピッカーを閉じる
+  $('.colorPicker').ColorPickerHide()
 
 # サイドバーをオープン
 # @param [Array] scrollLeft オープン時にスクロースさせる位置
@@ -835,7 +839,6 @@ setupTimeLineDatas = ->
       miniObj: item.generateMinimumObject()
       actorSize: item.itemSize
       sEvent: (x, y) ->
-        #console.log("sEvent: x=#{x} y=#{y}")
         if @actorScrollEvent?
           @actorScrollEvent(x, y)
       # ファットアロー必須
@@ -853,7 +856,7 @@ runLookAround = ->
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()))
   lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList))
   itemCssStyle = ""
-  $('#css_code_info .item_css_style').each( ->
+  $('#css_code_info').find('.css-style').each( ->
     itemCssStyle += $(this).html()
   )
   lstorage.setItem('itemCssStyle', itemCssStyle)
