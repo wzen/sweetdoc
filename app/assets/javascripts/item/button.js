@@ -252,6 +252,8 @@ WorkTableButtonItem = (function(_super) {
       return cssStyle.text(cssCode.text());
     }).each(function() {
       var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      cssCode = base.cssCode;
+      cssStyle = base.cssStyle;
       changeGradientShow(this, cssCode, cssStyle);
       stepValue = parseInt($(this).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {

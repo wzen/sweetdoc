@@ -234,6 +234,8 @@ class WorkTableButtonItem extends ButtonItem
           webkitFlag.html(webkitCache.html())
       cssStyle.text(cssCode.text())
     ).each( ->
+      cssCode = base.cssCode
+      cssStyle = base.cssStyle
       changeGradientShow(@, cssCode, cssStyle)
       stepValue = parseInt($(@).val())
       for i in [2 .. 4]
