@@ -145,7 +145,8 @@ WorkTableButtonItem = (function(_super) {
   };
 
   WorkTableButtonItem.prototype.setupOptionMenu = function() {
-    var btnCodeEmt, cssCode, cssRoot, cssStyle, id, inputEmt, inputValue;
+    var base, cssCode, cssRoot, cssStyle;
+    base = this;
     cssRoot = this.cssRoot;
     cssCode = this.cssCode;
     cssStyle = this.cssStyle;
@@ -170,43 +171,61 @@ WorkTableButtonItem = (function(_super) {
     settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
     settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle);
     settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle);
-    id = WorkTableButtonItem.btnBgColor.attr("id");
-    inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input");
-    inputValue = inputEmt.attr("value");
-    btnCodeEmt = cssCode.find("." + id);
-    settingColorPicker(WorkTableButtonItem.btnBgColor, inputValue, function(a, b, d) {
-      WorkTableButtonItem.btnBgColor.css("backgroundColor", "#" + b);
-      inputEmt.attr("value", b);
-      btnCodeEmt.text(b);
-      return cssStyle.text(cssCode.text());
+    WorkTableButtonItem.btnBgColor.each(function() {
+      var btnCodeEmt, id, inputEmt, inputValue, self;
+      self = $(this);
+      id = self.attr("id");
+      inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input");
+      inputValue = inputEmt.attr("value");
+      btnCodeEmt = cssCode.find("." + id);
+      settingColorPicker(self, inputValue, function(a, b, d) {
+        self.css("backgroundColor", "#" + b);
+        inputEmt.attr("value", b);
+        btnCodeEmt = cssCode.find("." + id);
+        btnCodeEmt.text(b);
+        cssCode = base.cssCode;
+        cssStyle = base.cssStyle;
+        return cssStyle.text(cssCode.text());
+      });
+      self.unbind();
+      return self.mousedown(function(e) {
+        e.stopPropagation();
+        clearAllItemStyle();
+        self.ColorPickerHide();
+        return self.ColorPickerShow();
+      });
     });
-    WorkTableButtonItem.btnBgColor.unbind();
-    WorkTableButtonItem.btnBgColor.mousedown(function(e) {
-      e.stopPropagation();
-      $(this).ColorPickerHide();
-      return $(this).ColorPickerShow();
-    });
-    WorkTableButtonItem.btnShadowColor.unbind();
-    WorkTableButtonItem.btnShadowColor.mousedown(function(e) {
-      var self;
-      e.preventDefault();
-      id = $(this).attr("id");
+    WorkTableButtonItem.btnShadowColor.each(function() {
+      var btnCodeEmt, e, id, inputEmt, inputValue, self;
+      self = $(this);
+      id = self.attr("id");
       e = WorkTableButtonItem.configBoxLi.find("#" + id + " div");
       inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input");
       inputValue = inputEmt.attr("value");
       btnCodeEmt = cssCode.find("." + id);
-      self = $(this);
-      return settingColorPicker(this, inputValue, function(a, b, d) {
+      settingColorPicker(self, inputValue, function(a, b, d) {
         self.css("backgroundColor", "#" + b);
         inputEmt.attr("value", b);
+        btnCodeEmt = cssCode.find("." + id);
         btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
+        cssCode = base.cssCode;
+        cssStyle = base.cssStyle;
         return cssStyle.text(cssCode.text());
+      });
+      self.unbind();
+      return self.mousedown(function(e) {
+        e.stopPropagation();
+        clearAllItemStyle();
+        self.ColorPickerHide();
+        return self.ColorPickerShow();
       });
     });
     WorkTableButtonItem.btnGradientStep.off('keyup mouseup');
-    WorkTableButtonItem.btnGradientStep.on('keyup mouseup', function(e) {
-      var i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
-      changeGradientShow(e, cssCode, cssStyle);
+    return WorkTableButtonItem.btnGradientStep.on('keyup mouseup', function(e) {
+      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      cssCode = base.cssCode;
+      cssStyle = base.cssStyle;
+      changeGradientShow(e.currentTarget, cssCode, cssStyle);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         id = 'btn-bg-color' + i;
@@ -232,7 +251,8 @@ WorkTableButtonItem = (function(_super) {
       }
       return cssStyle.text(cssCode.text());
     }).each(function() {
-      var i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      changeGradientShow(this, cssCode, cssStyle);
       stepValue = parseInt($(this).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         id = 'btn-bg-color' + i;
@@ -255,7 +275,6 @@ WorkTableButtonItem = (function(_super) {
       }
       return cssStyle.text(cssCode.text());
     });
-    return cssStyle.text(cssCode.text());
   };
 
   WorkTableButtonItem.showOptionMenu = function() {};

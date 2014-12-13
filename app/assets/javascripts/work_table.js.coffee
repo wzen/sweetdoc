@@ -343,8 +343,7 @@ settingGradientDegSlider = (id, min, max, cssCode, cssStyle) ->
 # @param [Object] element HTML要素
 # @param [Object] cssCode コードエレメント
 # @param [Object] cssStyle CSSプレビューのエレメント
-changeGradientShow = (element, cssCode, cssStyle) ->
-  targetElement = element.currentTarget
+changeGradientShow = (targetElement, cssCode, cssStyle) ->
   value = parseInt(targetElement.value)
   if value >= 2 && value <= 5
     meterElement = $(targetElement).siblings('.ui-slider:first')
@@ -484,7 +483,7 @@ changeMode = (mode) ->
     $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
   window.mode = mode
 
-# 選択枠を非表示
+# 非表示をクリア
 clearAllItemStyle = ->
   itemObjectList.forEach((obj) ->
     # オブジェクトのイベントをクリア

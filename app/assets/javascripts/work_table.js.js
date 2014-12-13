@@ -340,9 +340,8 @@ settingGradientDegSlider = function(id, min, max, cssCode, cssStyle) {
 
 /* グラデーション */
 
-changeGradientShow = function(element, cssCode, cssStyle) {
-  var meterElement, targetElement, value, values;
-  targetElement = element.currentTarget;
+changeGradientShow = function(targetElement, cssCode, cssStyle) {
+  var meterElement, value, values;
   value = parseInt(targetElement.value);
   if (value >= 2 && value <= 5) {
     meterElement = $(targetElement).siblings('.ui-slider:first');

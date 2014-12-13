@@ -129,6 +129,7 @@ class WorkTableButtonItem extends ButtonItem
 
   # CSSボタンコントロール初期化
   setupOptionMenu: ->
+    base = @
     cssRoot = @cssRoot
     cssCode = @cssCode
     cssStyle = @cssStyle
@@ -159,43 +160,63 @@ class WorkTableButtonItem extends ButtonItem
     settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle)
 
     # カラーピッカーイベント
-    id = WorkTableButtonItem.btnBgColor.attr("id"); inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
-    settingColorPicker(
-      WorkTableButtonItem.btnBgColor,
-      inputValue,
-      (a, b, d) ->
-        WorkTableButtonItem.btnBgColor.css("backgroundColor", "#" + b)
-        inputEmt.attr("value", b)
-        btnCodeEmt.text(b)
-        cssStyle.text(cssCode.text())
-    )
-    WorkTableButtonItem.btnBgColor.unbind()
-    WorkTableButtonItem.btnBgColor.mousedown( (e) ->
-      e.stopPropagation()
-      $(this).ColorPickerHide()
-      $(this).ColorPickerShow()
-    )
-
-    WorkTableButtonItem.btnShadowColor.unbind()
-    WorkTableButtonItem.btnShadowColor.mousedown( (e) ->
-      e.preventDefault()
-      id = $(this).attr("id"); e = WorkTableButtonItem.configBoxLi.find("#" + id + " div"); inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
-      self = $(this)
+    WorkTableButtonItem.btnBgColor.each( ->
+      self = $(@)
+      id = self.attr("id")
+      inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input")
+      inputValue = inputEmt.attr("value")
+      btnCodeEmt = cssCode.find("." + id)
       settingColorPicker(
-        this,
+        self,
         inputValue,
         (a, b, d) ->
           self.css("backgroundColor", "#" + b)
           inputEmt.attr("value", b)
-          btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
+          btnCodeEmt = cssCode.find("." + id)
+          btnCodeEmt.text(b)
+          cssCode = base.cssCode
+          cssStyle = base.cssStyle
           cssStyle.text(cssCode.text())
+      )
+      self.unbind()
+      self.mousedown( (e) ->
+        e.stopPropagation()
+        clearAllItemStyle()
+        self.ColorPickerHide()
+        self.ColorPickerShow()
+      )
+    )
+
+    WorkTableButtonItem.btnShadowColor.each( ->
+      self = $(@)
+      id = self.attr("id"); e = WorkTableButtonItem.configBoxLi.find("#" + id + " div"); inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
+      settingColorPicker(
+        self,
+        inputValue,
+        (a, b, d) ->
+          self.css("backgroundColor", "#" + b)
+          inputEmt.attr("value", b)
+          btnCodeEmt = cssCode.find("." + id)
+          btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
+          cssCode = base.cssCode
+          cssStyle = base.cssStyle
+          cssStyle.text(cssCode.text())
+      )
+      self.unbind()
+      self.mousedown( (e) ->
+        e.stopPropagation()
+        clearAllItemStyle()
+        self.ColorPickerHide()
+        self.ColorPickerShow()
       )
     )
 
     # グラデーションStepイベント
     WorkTableButtonItem.btnGradientStep.off('keyup mouseup')
     WorkTableButtonItem.btnGradientStep.on('keyup mouseup', (e) ->
-      changeGradientShow(e, cssCode, cssStyle)
+      cssCode = base.cssCode
+      cssStyle = base.cssStyle
+      changeGradientShow(e.currentTarget, cssCode, cssStyle)
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
         id = 'btn-bg-color' + i; mozFlag = $("." + id + "-moz-flag", cssRoot); mozCache = $("." + id + "-moz-cache", cssRoot); webkitFlag = $("." + id + "-webkit-flag", cssRoot); webkitCache = $("." + id + "-webkit-cache", cssRoot);
@@ -213,7 +234,8 @@ class WorkTableButtonItem extends ButtonItem
           webkitFlag.html(webkitCache.html())
       cssStyle.text(cssCode.text())
     ).each( ->
-      stepValue = parseInt($(this).val())
+      changeGradientShow(@, cssCode, cssStyle)
+      stepValue = parseInt($(@).val())
       for i in [2 .. 4]
         id = 'btn-bg-color' + i; mozFlag = $("." + id + "-moz-flag", cssRoot); mozCache = $("." + id + "-moz-cache", cssRoot); webkitFlag = $("." + id + "-webkit-flag", cssRoot); webkitCache = $("." + id + "-webkit-cache", cssRoot);
         if i > stepValue - 1
@@ -227,7 +249,7 @@ class WorkTableButtonItem extends ButtonItem
           $(webkitFlag).empty()
       cssStyle.text(cssCode.text())
     )
-    cssStyle.text(cssCode.text())
+    #cssStyle.text(cssCode.text())
 
   # オプションメニューを開く
   @showOptionMenu: ->
