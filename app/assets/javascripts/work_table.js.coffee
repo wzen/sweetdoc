@@ -678,8 +678,6 @@ saveToServer = ->
     j = {
       id: obj.id
       obj: obj.generateMinimumObject()
-      # TODO: CSS追加
-      #css
     }
     jsonList.push(j)
   )
@@ -721,9 +719,9 @@ loadFromServer = ->
             obj = j.obj
             item = null
             if obj.itemType == Constant.ItemType.BUTTON
-              item = new ButtonItem()
+              item = new WorkTableButtonItem()
             else if obj.itemType == Constant.ItemType.ARROW
-              item = new ArrowItem()
+              item = new WorkTableArrowItem()
             item.loadByMinimumObject(obj)
             setupEvents(item)
 

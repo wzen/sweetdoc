@@ -111,13 +111,24 @@ class WorkTableButtonItem extends ButtonItem
   getCssRootElementId: ->
     return "css-" + @id
 
+
+  # ストレージとDB保存用の最小限のデータを取得
+  # @return [Array] アイテムオブジェクトの最小限データ
+  generateMinimumObject: ->
+    obj = super()
+    obj.css = @cssRoot[0].outerHTML
+    return obj
+
   # HTML要素とCSSを作成
   # @return [Boolean] 処理結果
   makeElement: ->
     super()
-    # CSSテンプレートからオブジェクト個別のCSSを作成
-    newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
-    newEmt.find('.btn-item-id').html(@getElementId())
+    if @css?
+      newEmt = $(@css)
+    else
+      # CSSテンプレートからオブジェクト個別のCSSを作成
+      newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
+      newEmt.find('.btn-item-id').html(@getElementId())
     $('#css_code_info').append(newEmt)
 
     @cssRoot = $('#' + @getCssRootElementId())

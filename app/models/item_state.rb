@@ -18,10 +18,12 @@ class ItemState < ActiveRecord::Base
       end
 
       # 必要なCSSテンプレートを読み込み
-      item_css_temps = ItemCssTemp.where(item_type: item_type_list).order(item_type: :arc)
-      item_type_list.sort.each do |item_type|
-        css_temp_content = item_css_temps.find{|f| f.item_type == item_type}.contents
-        item_js_list << {:item_type => item_type, :src => ItemJs.new.get_lack_js(item_type), :css_temp => css_temp_content}
+      if item_type_list.size > 0
+        item_css_temps = ItemCssTemp.where(item_type: item_type_list).order(item_type: :arc)
+        item_type_list.sort.each do |item_type|
+          css_temp_content = item_css_temps.find{|f| f.item_type == item_type}.contents
+          item_js_list << {:item_type => item_type, :src => ItemJs.new.get_lack_js(item_type), :css_temp => css_temp_content}
+        end
       end
       if result.css_info != nil
         css_info_list = JSON.parse(result.css_info)

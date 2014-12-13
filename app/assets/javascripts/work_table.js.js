@@ -752,9 +752,9 @@ loadFromServer = function() {
           obj = j.obj;
           item = null;
           if (obj.itemType === Constant.ItemType.BUTTON) {
-            item = new ButtonItem();
+            item = new WorkTableButtonItem();
           } else if (obj.itemType === Constant.ItemType.ARROW) {
-            item = new ArrowItem();
+            item = new WorkTableArrowItem();
           }
           item.loadByMinimumObject(obj);
           _results.push(setupEvents(item));

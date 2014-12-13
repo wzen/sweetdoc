@@ -131,11 +131,22 @@ WorkTableButtonItem = (function(_super) {
     return "css-" + this.id;
   };
 
+  WorkTableButtonItem.prototype.generateMinimumObject = function() {
+    var obj;
+    obj = WorkTableButtonItem.__super__.generateMinimumObject.call(this);
+    obj.css = this.cssRoot[0].outerHTML;
+    return obj;
+  };
+
   WorkTableButtonItem.prototype.makeElement = function() {
     var newEmt;
     WorkTableButtonItem.__super__.makeElement.call(this);
-    newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
-    newEmt.find('.btn-item-id').html(this.getElementId());
+    if (this.css != null) {
+      newEmt = $(this.css);
+    } else {
+      newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
+      newEmt.find('.btn-item-id').html(this.getElementId());
+    }
     $('#css_code_info').append(newEmt);
     this.cssRoot = $('#' + this.getCssRootElementId());
     this.cssCode = $(".css-code", this.cssRoot);
