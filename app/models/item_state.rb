@@ -2,7 +2,7 @@ require 'I18n'
 
 class ItemState < ActiveRecord::Base
   def get_js_list_json(user_id, loaded_item_type_list)
-    result = ItemState.find_by(:user_id => user_id)
+    result = ItemState.where(:user_id => user_id).order(id: :desc).first
     item_js_list = []
     if result == nil
       message = I18n.t('message.database.item_state.load.error')
@@ -19,10 +19,13 @@ class ItemState < ActiveRecord::Base
 
       # 必要なCSSテンプレートを読み込み
       if item_type_list.size > 0
-        item_css_temps = ItemCssTemp.where(item_type: item_type_list).order(item_type: :arc)
+        item_css_temps = ItemCssTemp.where(item_type: item_type_list).order(item_type: :asc)
         item_type_list.sort.each do |item_type|
-          css_temp_content = item_css_temps.find{|f| f.item_type == item_type}.contents
-          item_js_list << {:item_type => item_type, :src => ItemJs.new.get_lack_js(item_type), :css_temp => css_temp_content}
+          css_temp = item_css_temps.find_by(:item_type => item_type)
+          if css_temp != nil
+            css_temp_contents = css_temp.contents
+          end
+          item_js_list << {:item_type => item_type, :src => ItemJs.new.get_lack_js(item_type), :css_temp => css_temp_contents}
         end
       end
       if result.css_info != nil
