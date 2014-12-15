@@ -40,8 +40,7 @@ TimeLine = (function() {
   };
 
   TimeLine.prototype.finishTimeline = function() {
-    this.finished = true;
-    return alert('Finish!');
+    return this.finished = true;
   };
 
   return TimeLine;

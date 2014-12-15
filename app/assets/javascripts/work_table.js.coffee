@@ -842,6 +842,15 @@ setupTimeLineObjects = ->
       cEvent: (e) =>
         if @actorClickEvent?
           @actorClickEvent(e)
+        @getJQueryElement().on('webkitAnimationStart', (e) ->
+          console.log('css-anim start')
+        )
+        @getJQueryElement().on('webkitAnimationEnd', (e) =>
+          console.log('css-anim end')
+          @nextChapter()
+        )
+        # ボタン凹むアクション
+        @getJQueryElement().addClass('dentButton_' + @id)
     }
     objList.push(obj)
   )
@@ -858,7 +867,7 @@ setupTimeLineCss = ->
   itemObjectList.forEach((item) ->
     if ButtonItem? && item instanceof ButtonItem
       # cssアニメーション
-      itemCssStyle += item.dentButton()
+      itemCssStyle += ButtonItem.dentButton(item)
   )
 
   return itemCssStyle

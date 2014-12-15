@@ -84,25 +84,14 @@ class ButtonItem extends CssItemBase
     @zindex = obj.zindex
     @css = obj.css
 
-  # クリックイベント
+  # 共通クリックイベント
   actorClickEvent: (e) ->
-    @getJQueryElement().on('webkitAnimationStart', (e) ->
-      console.log('dentButton start')
-    )
-    @getJQueryElement().on('webkitAnimationEnd', (e) ->
-      console.log('dentButton end')
-    )
-    # ボタン凹むアクション
-    @getJQueryElement().addClass('dentButton')
 
-    @nextChapter()
-
-
-  # 凹むボタン
-  dentButton : ->
-    funcName = 'dentButton'
-    keyFrameName = "#{funcName}_#{@id}"
-    emt = @getJQueryElement()
+  # CSSアニメーション 凹むボタン
+  @dentButton : (buttonItem) ->
+    funcName = 'dentButton_' + buttonItem.id
+    keyFrameName = "#{funcName}_#{buttonItem.id}"
+    emt = buttonItem.getJQueryElement()
     top = emt.css('top')
     left = emt.css('left')
     width = emt.css('width')
@@ -117,11 +106,23 @@ class ButtonItem extends CssItemBase
         width: #{parseInt(width)}px;
         height: #{parseInt(height)}px;
       }
-      50% {
+      40% {
         top: #{ parseInt(top) + 10 }px;
         left: #{ parseInt(left) + 10 }px;
         width: #{parseInt(width) - 20}px;
         height: #{parseInt(height) - 20}px;
+      }
+      80% {
+        top: #{ parseInt(top)}px;
+        left: #{ parseInt(left)}px;
+        width: #{parseInt(width)}px;
+        height: #{parseInt(height)}px;
+      }
+      90% {
+        top: #{ parseInt(top) + 5 }px;
+        left: #{ parseInt(left) + 5 }px;
+        width: #{parseInt(width) - 10}px;
+        height: #{parseInt(height) - 10}px;
       }
       100% {
         top: #{ parseInt(top)}px;
@@ -138,8 +139,8 @@ class ButtonItem extends CssItemBase
     {
     -webkit-animation-name: #{keyFrameName};
     -moz-animation-name: #{keyFrameName};
-    -webkit-animation-duration: 1s;
-    -moz-animation-duration: 1s;
+    -webkit-animation-duration: 0.5s;
+    -moz-animation-duration: 0.5s;
     }
     """
 

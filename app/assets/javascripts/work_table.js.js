@@ -874,8 +874,16 @@ setupTimeLineObjects = function() {
       cEvent: (function(_this) {
         return function(e) {
           if (_this.actorClickEvent != null) {
-            return _this.actorClickEvent(e);
+            _this.actorClickEvent(e);
           }
+          _this.getJQueryElement().on('webkitAnimationStart', function(e) {
+            return console.log('css-anim start');
+          });
+          _this.getJQueryElement().on('webkitAnimationEnd', function(e) {
+            console.log('css-anim end');
+            return _this.nextChapter();
+          });
+          return _this.getJQueryElement().addClass('dentButton_' + _this.id);
         };
       })(this)
     };
@@ -892,7 +900,7 @@ setupTimeLineCss = function() {
   });
   itemObjectList.forEach(function(item) {
     if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && item instanceof ButtonItem) {
-      return itemCssStyle += item.dentButton();
+      return itemCssStyle += ButtonItem.dentButton(item);
     }
   });
   return itemCssStyle;

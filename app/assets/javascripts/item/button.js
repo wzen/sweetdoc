@@ -94,28 +94,19 @@ ButtonItem = (function(_super) {
     return this.css = obj.css;
   };
 
-  ButtonItem.prototype.actorClickEvent = function(e) {
-    this.getJQueryElement().on('webkitAnimationStart', function(e) {
-      return console.log('dentButton start');
-    });
-    this.getJQueryElement().on('webkitAnimationEnd', function(e) {
-      return console.log('dentButton end');
-    });
-    this.getJQueryElement().addClass('dentButton');
-    return this.nextChapter();
-  };
+  ButtonItem.prototype.actorClickEvent = function(e) {};
 
-  ButtonItem.prototype.dentButton = function() {
+  ButtonItem.dentButton = function(buttonItem) {
     var css, emt, funcName, height, keyFrameName, keyframe, left, top, width;
-    funcName = 'dentButton';
-    keyFrameName = "" + funcName + "_" + this.id;
-    emt = this.getJQueryElement();
+    funcName = 'dentButton_' + buttonItem.id;
+    keyFrameName = "" + funcName + "_" + buttonItem.id;
+    emt = buttonItem.getJQueryElement();
     top = emt.css('top');
     left = emt.css('left');
     width = emt.css('width');
     height = emt.css('height');
-    keyframe = "@-webkit-keyframes " + keyFrameName + " {\n  0% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  50% {\n    top: " + (parseInt(top) + 10) + "px;\n    left: " + (parseInt(left) + 10) + "px;\n    width: " + (parseInt(width) - 20) + "px;\n    height: " + (parseInt(height) - 20) + "px;\n  }\n  100% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n}";
-    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: 1s;\n-moz-animation-duration: 1s;\n}";
+    keyframe = "@-webkit-keyframes " + keyFrameName + " {\n  0% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  40% {\n    top: " + (parseInt(top) + 10) + "px;\n    left: " + (parseInt(left) + 10) + "px;\n    width: " + (parseInt(width) - 20) + "px;\n    height: " + (parseInt(height) - 20) + "px;\n  }\n  80% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  90% {\n    top: " + (parseInt(top) + 5) + "px;\n    left: " + (parseInt(left) + 5) + "px;\n    width: " + (parseInt(width) - 10) + "px;\n    height: " + (parseInt(height) - 10) + "px;\n  }\n  100% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n}";
+    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: 0.5s;\n-moz-animation-duration: 0.5s;\n}";
     return "" + keyframe + " " + css;
   };
 
