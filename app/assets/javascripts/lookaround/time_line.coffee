@@ -42,4 +42,4 @@ class TimeLine
   # タイムライン終了イベント
   finishTimeline: ->
     @finished = true
-    alert('Finish!')
+    #alert('Finish!')

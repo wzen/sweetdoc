@@ -162,6 +162,14 @@ CssItemBase = (function(_super) {
     return CssItemBase.__super__.constructor.apply(this, arguments);
   }
 
+  CssItemBase.prototype.getCssRootElementId = function() {
+    return "css-" + this.id;
+  };
+
+  CssItemBase.prototype.getCssAnimElementId = function() {
+    return "css-anim-style";
+  };
+
   CssItemBase.prototype.setupOptionMenu = function() {};
 
   return CssItemBase;

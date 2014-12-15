@@ -4,6 +4,7 @@ one:
   item_type: 1
   contents: |
     <style type="text/css" class="css-style"></style>
+    <style type="text/css" class="css-anim-style"></style>
     <pre class="css-code">
     div#<span class="btn-item-id"></span> .css3button {
         <span class="property">font-family</span>: Arial, Helvetica, sans-serif;

@@ -156,6 +156,13 @@ class ItemBase extends Actor
 # CSSアイテム
 # @extend ItemBase
 class CssItemBase extends ItemBase
+  # CSSのルートのIDを取得
+  getCssRootElementId: ->
+    return "css-" + @id
+
+  # CSSアニメーションを設置する要素名
+  getCssAnimElementId: ->
+    return "css-anim-style"
 
   # オプションメニューを作成
   # @abstract

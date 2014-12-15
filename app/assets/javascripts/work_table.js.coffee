@@ -822,8 +822,8 @@ run = ->
     }
   )
 
-# タイムラインのデータをまとめる
-setupTimeLineDatas = ->
+# タイムラインのオブジェクトをまとめる
+setupTimeLineObjects = ->
   # 処理は暫定(itemObjectListから取っているが、本当はタイムラインの情報を取る)
 
   # Storageに値を格納
@@ -847,16 +847,28 @@ setupTimeLineDatas = ->
   )
   return objList
 
-# 閲覧を実行する
-runLookAround = ->
-  Function.prototype.toJSON = Function.prototype.toString
-  lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineDatas()))
-  lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList))
+# タイムラインのCSSをまとめる
+setupTimeLineCss = ->
   itemCssStyle = ""
   $('#css_code_info').find('.css-style').each( ->
     itemCssStyle += $(this).html()
   )
-  lstorage.setItem('itemCssStyle', itemCssStyle)
+
+  # 暫定処理
+  itemObjectList.forEach((item) ->
+    if ButtonItem? && item instanceof ButtonItem
+      # cssアニメーション
+      itemCssStyle += item.dentButton()
+  )
+
+  return itemCssStyle
+
+# 閲覧を実行する
+runLookAround = ->
+  Function.prototype.toJSON = Function.prototype.toString
+  lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineObjects()))
+  lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList))
+  lstorage.setItem('itemCssStyle', setupTimeLineCss())
   window.open('/look_around')
 
 $ ->

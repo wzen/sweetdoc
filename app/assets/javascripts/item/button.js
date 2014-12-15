@@ -95,7 +95,28 @@ ButtonItem = (function(_super) {
   };
 
   ButtonItem.prototype.actorClickEvent = function(e) {
+    this.getJQueryElement().on('webkitAnimationStart', function(e) {
+      return console.log('dentButton start');
+    });
+    this.getJQueryElement().on('webkitAnimationEnd', function(e) {
+      return console.log('dentButton end');
+    });
+    this.getJQueryElement().addClass('dentButton');
     return this.nextChapter();
+  };
+
+  ButtonItem.prototype.dentButton = function() {
+    var css, emt, funcName, height, keyFrameName, keyframe, left, top, width;
+    funcName = 'dentButton';
+    keyFrameName = "" + funcName + "_" + this.id;
+    emt = this.getJQueryElement();
+    top = emt.css('top');
+    left = emt.css('left');
+    width = emt.css('width');
+    height = emt.css('height');
+    keyframe = "@-webkit-keyframes " + keyFrameName + " {\n  0% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  50% {\n    top: " + (parseInt(top) + 10) + "px;\n    left: " + (parseInt(left) + 10) + "px;\n    width: " + (parseInt(width) - 20) + "px;\n    height: " + (parseInt(height) - 20) + "px;\n  }\n  100% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n}";
+    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: 1s;\n-moz-animation-duration: 1s;\n}";
+    return "" + keyframe + " " + css;
   };
 
   return ButtonItem;
@@ -126,10 +147,6 @@ WorkTableButtonItem = (function(_super) {
     this.cssCode = null;
     this.cssStyle = null;
   }
-
-  WorkTableButtonItem.prototype.getCssRootElementId = function() {
-    return "css-" + this.id;
-  };
 
   WorkTableButtonItem.prototype.generateMinimumObject = function() {
     var obj;
