@@ -119,7 +119,7 @@ WorkTableButtonItem = (function(_super) {
 
   WorkTableButtonItem.CSSTEMPID = "button_css_temp";
 
-  WorkTableButtonItem.btnEntryForm = $("#btn-entryForm", $("#sidebar-wrapper"));
+  WorkTableButtonItem.cssConfig = $("#css-config", $("#sidebar-wrapper"));
 
   WorkTableButtonItem.configBoxLi = $("div.configBox > div.forms", $("#sidebar-wrapper"));
 
@@ -194,7 +194,7 @@ WorkTableButtonItem = (function(_super) {
       var btnCodeEmt, id, inputEmt, inputValue, self;
       self = $(this);
       id = self.attr("id");
-      inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input");
+      inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input");
       inputValue = inputEmt.attr("value");
       btnCodeEmt = cssCode.find("." + id);
       settingColorPicker(self, inputValue, function(a, b, d) {
@@ -219,7 +219,7 @@ WorkTableButtonItem = (function(_super) {
       self = $(this);
       id = self.attr("id");
       e = WorkTableButtonItem.configBoxLi.find("#" + id + " div");
-      inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input");
+      inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input");
       inputValue = inputEmt.attr("value");
       btnCodeEmt = cssCode.find("." + id);
       settingColorPicker(self, inputValue, function(a, b, d) {

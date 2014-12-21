@@ -154,7 +154,7 @@ class WorkTableButtonItem extends ButtonItem
   @CSSTEMPID = "button_css_temp"
 
   # オプションメニュー
-  @btnEntryForm = $("#btn-entryForm", $("#sidebar-wrapper"))
+  @cssConfig = $("#css-config", $("#sidebar-wrapper"))
   @configBoxLi = $("div.configBox > div.forms", $("#sidebar-wrapper"))
   @btnGradientStep = $("#btn-gradient-step")
   @btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color")
@@ -228,7 +228,7 @@ class WorkTableButtonItem extends ButtonItem
     WorkTableButtonItem.btnBgColor.each( ->
       self = $(@)
       id = self.attr("id")
-      inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input")
+      inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input")
       inputValue = inputEmt.attr("value")
       btnCodeEmt = cssCode.find("." + id)
       settingColorPicker(
@@ -254,7 +254,7 @@ class WorkTableButtonItem extends ButtonItem
 
     WorkTableButtonItem.btnShadowColor.each( ->
       self = $(@)
-      id = self.attr("id"); e = WorkTableButtonItem.configBoxLi.find("#" + id + " div"); inputEmt = WorkTableButtonItem.btnEntryForm.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
+      id = self.attr("id"); e = WorkTableButtonItem.configBoxLi.find("#" + id + " div"); inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
       settingColorPicker(
         self,
         inputValue,

@@ -16,11 +16,11 @@ html, body {
   font-size: 12px;
 }
 
-#contents, #main, #main_container, #main_scroll, #main-wrapper, #sidebar {
+#contents, #main, #main_container, #main_scroll, #main-wrapper, #sidebar, #timeline_container {
   height: 100%;
 }
 
-#main, #sidebar {
+#main, #sidebar, #timeline {
   padding: 5px 15px 5px 15px;
 }
 
@@ -509,4 +509,8 @@ div.css3button > div {
   width: 100%;
   height: 100%;
   border: 3px solid $selectedBorderColor;
+}
+
+#timeline {
+  height: 70px;
 }

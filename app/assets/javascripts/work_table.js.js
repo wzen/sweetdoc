@@ -921,6 +921,7 @@ $(function() {
     return;
   }
   initCommonVar();
+  $('#contents').css('height', $('#contents').height() - $('#nav').height());
   mainWrapper.css('width', $('#main_container').width());
   $('#canvas_container').attr('width', $('#main_container').width());
   $('#canvas_container').attr('height', $('#main_container').height());
