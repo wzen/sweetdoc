@@ -388,7 +388,17 @@ html, body {
     right: 0;
   }
   div.cssedit-headliner {
-    background-image: image-url("sidebar/headline.jpg");
+    background-image: image-url("sidebar/css_option_headline.jpg");
+    background-repeat: no-repeat;
+    -moz-background-size: 100% 100%;
+    background-size: 100% 100%;
+    margin-bottom: 10px;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+  }
+  div.timelineedit-headliner {
+    background-image: image-url("sidebar/timeline_option_headline.jpg");
     background-repeat: no-repeat;
     -moz-background-size: 100% 100%;
     background-size: 100% 100%;

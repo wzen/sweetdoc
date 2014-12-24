@@ -123,11 +123,11 @@ WorkTableButtonItem = (function(_super) {
 
   WorkTableButtonItem.configBoxLi = $("div.configBox > div.forms", $("#sidebar-wrapper"));
 
-  WorkTableButtonItem.btnGradientStep = $("#btn-gradient-step");
+  WorkTableButtonItem.btnGradientStep = $(".btn-gradient-step", WorkTableButtonItem.cssConfig);
 
-  WorkTableButtonItem.btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color");
+  WorkTableButtonItem.btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", WorkTableButtonItem.cssConfig);
 
-  WorkTableButtonItem.btnShadowColor = $("#btn-shadow-color,#btn-shadowinset-color,#btn-text-shadow1-color,#btn-text-shadow2-color");
+  WorkTableButtonItem.btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", WorkTableButtonItem.cssConfig);
 
   function WorkTableButtonItem(cood) {
     if (cood == null) {
@@ -191,16 +191,19 @@ WorkTableButtonItem = (function(_super) {
     settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle);
     settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle);
     WorkTableButtonItem.btnBgColor.each(function() {
-      var btnCodeEmt, id, inputEmt, inputValue, self;
+      var btnCodeEmt, className, colorValue, self;
       self = $(this);
-      id = self.attr("id");
-      inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input");
-      inputValue = inputEmt.attr("value");
-      btnCodeEmt = cssCode.find("." + id);
-      settingColorPicker(self, inputValue, function(a, b, d) {
+      className = self[0].classList[0];
+      btnCodeEmt = cssCode.find("." + className).first();
+      if (btnCodeEmt != null) {
+        colorValue = btnCodeEmt.text();
+      } else {
+        colorValue = "ffffff";
+      }
+      self.css("backgroundColor", "#" + colorValue);
+      settingColorPicker(self, colorValue, function(a, b, d) {
         self.css("backgroundColor", "#" + b);
-        inputEmt.attr("value", b);
-        btnCodeEmt = cssCode.find("." + id);
+        btnCodeEmt = cssCode.find("." + className);
         btnCodeEmt.text(b);
         cssCode = base.cssCode;
         cssStyle = base.cssStyle;
@@ -215,17 +218,19 @@ WorkTableButtonItem = (function(_super) {
       });
     });
     WorkTableButtonItem.btnShadowColor.each(function() {
-      var btnCodeEmt, e, id, inputEmt, inputValue, self;
+      var btnCodeEmt, className, colorValue, self;
       self = $(this);
-      id = self.attr("id");
-      e = WorkTableButtonItem.configBoxLi.find("#" + id + " div");
-      inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input");
-      inputValue = inputEmt.attr("value");
-      btnCodeEmt = cssCode.find("." + id);
-      settingColorPicker(self, inputValue, function(a, b, d) {
+      className = self[0].classList[0];
+      btnCodeEmt = cssCode.find("." + className).first();
+      if (btnCodeEmt != null) {
+        colorValue = btnCodeEmt.text();
+      } else {
+        colorValue = "ffffff";
+      }
+      self.css("backgroundColor", "#" + colorValue);
+      settingColorPicker(self, colorValue, function(a, b, d) {
         self.css("backgroundColor", "#" + b);
-        inputEmt.attr("value", b);
-        btnCodeEmt = cssCode.find("." + id);
+        btnCodeEmt = cssCode.find("." + className);
         btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
         cssCode = base.cssCode;
         cssStyle = base.cssStyle;
@@ -241,17 +246,17 @@ WorkTableButtonItem = (function(_super) {
     });
     WorkTableButtonItem.btnGradientStep.off('keyup mouseup');
     return WorkTableButtonItem.btnGradientStep.on('keyup mouseup', function(e) {
-      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       cssCode = base.cssCode;
       cssStyle = base.cssStyle;
       changeGradientShow(e.currentTarget, cssCode, cssStyle);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
-        id = 'btn-bg-color' + i;
-        mozFlag = $("." + id + "-moz-flag", cssRoot);
-        mozCache = $("." + id + "-moz-cache", cssRoot);
-        webkitFlag = $("." + id + "-webkit-flag", cssRoot);
-        webkitCache = $("." + id + "-webkit-cache", cssRoot);
+        className = 'btn-bg-color' + i;
+        mozFlag = $("." + className + "-moz-flag", cssRoot);
+        mozCache = $("." + className + "-moz-cache", cssRoot);
+        webkitFlag = $("." + className + "-webkit-flag", cssRoot);
+        webkitCache = $("." + className + "-webkit-cache", cssRoot);
         if (i > stepValue - 1) {
           mh = mozFlag.html();
           if (mh.length > 0) {
@@ -270,17 +275,17 @@ WorkTableButtonItem = (function(_super) {
       }
       return cssStyle.text(cssCode.text());
     }).each(function() {
-      var i, id, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
+      var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       cssCode = base.cssCode;
       cssStyle = base.cssStyle;
       changeGradientShow(this, cssCode, cssStyle);
       stepValue = parseInt($(this).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
-        id = 'btn-bg-color' + i;
-        mozFlag = $("." + id + "-moz-flag", cssRoot);
-        mozCache = $("." + id + "-moz-cache", cssRoot);
-        webkitFlag = $("." + id + "-webkit-flag", cssRoot);
-        webkitCache = $("." + id + "-webkit-cache", cssRoot);
+        className = 'btn-bg-color' + i;
+        mozFlag = $("." + className + "-moz-flag", cssRoot);
+        mozCache = $("." + className + "-moz-cache", cssRoot);
+        webkitFlag = $("." + className + "-webkit-flag", cssRoot);
+        webkitCache = $("." + className + "-webkit-cache", cssRoot);
         if (i > stepValue - 1) {
           mh = mozFlag.html();
           if (mh.length > 0) {

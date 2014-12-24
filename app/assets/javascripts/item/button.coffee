@@ -156,9 +156,10 @@ class WorkTableButtonItem extends ButtonItem
   # オプションメニュー
   @cssConfig = $("#css-config", $("#sidebar-wrapper"))
   @configBoxLi = $("div.configBox > div.forms", $("#sidebar-wrapper"))
-  @btnGradientStep = $("#btn-gradient-step")
-  @btnBgColor = $("#btn-bg-color1,#btn-bg-color2,#btn-bg-color3,#btn-bg-color4,#btn-bg-color5,#btn-border-color,#btn-font-color")
-  @btnShadowColor = $("#btn-shadow-color,#btn-shadowinset-color,#btn-text-shadow1-color,#btn-text-shadow2-color");
+  @btnGradientStep = $(".btn-gradient-step", @cssConfig)
+  @btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", @cssConfig)
+  @btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
+
 
   constructor: (cood = null) ->
     super(cood)
@@ -227,17 +228,19 @@ class WorkTableButtonItem extends ButtonItem
     # カラーピッカーイベント
     WorkTableButtonItem.btnBgColor.each( ->
       self = $(@)
-      id = self.attr("id")
-      inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input")
-      inputValue = inputEmt.attr("value")
-      btnCodeEmt = cssCode.find("." + id)
+      className = self[0].classList[0]
+      btnCodeEmt = cssCode.find("." + className).first()
+      if btnCodeEmt?
+        colorValue = btnCodeEmt.text()
+      else
+        colorValue = "ffffff"
+      self.css("backgroundColor", "#" + colorValue)
       settingColorPicker(
         self,
-        inputValue,
+        colorValue,
         (a, b, d) ->
           self.css("backgroundColor", "#" + b)
-          inputEmt.attr("value", b)
-          btnCodeEmt = cssCode.find("." + id)
+          btnCodeEmt = cssCode.find("." + className)
           btnCodeEmt.text(b)
           cssCode = base.cssCode
           cssStyle = base.cssStyle
@@ -254,14 +257,19 @@ class WorkTableButtonItem extends ButtonItem
 
     WorkTableButtonItem.btnShadowColor.each( ->
       self = $(@)
-      id = self.attr("id"); e = WorkTableButtonItem.configBoxLi.find("#" + id + " div"); inputEmt = WorkTableButtonItem.cssConfig.find("#" + id + "-input"); inputValue = inputEmt.attr("value"); btnCodeEmt = cssCode.find("." + id)
+      className = self[0].classList[0]
+      btnCodeEmt = cssCode.find("." + className).first()
+      if btnCodeEmt?
+        colorValue = btnCodeEmt.text()
+      else
+        colorValue = "ffffff"
+      self.css("backgroundColor", "#" + colorValue)
       settingColorPicker(
         self,
-        inputValue,
+        colorValue,
         (a, b, d) ->
           self.css("backgroundColor", "#" + b)
-          inputEmt.attr("value", b)
-          btnCodeEmt = cssCode.find("." + id)
+          btnCodeEmt = cssCode.find("." + className)
           btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
           cssCode = base.cssCode
           cssStyle = base.cssStyle
@@ -284,7 +292,7 @@ class WorkTableButtonItem extends ButtonItem
       changeGradientShow(e.currentTarget, cssCode, cssStyle)
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
-        id = 'btn-bg-color' + i; mozFlag = $("." + id + "-moz-flag", cssRoot); mozCache = $("." + id + "-moz-cache", cssRoot); webkitFlag = $("." + id + "-webkit-flag", cssRoot); webkitCache = $("." + id + "-webkit-cache", cssRoot);
+        className = 'btn-bg-color' + i; mozFlag = $("." + className + "-moz-flag", cssRoot); mozCache = $("." + className + "-moz-cache", cssRoot); webkitFlag = $("." + className + "-webkit-flag", cssRoot); webkitCache = $("." + className + "-webkit-cache", cssRoot);
         if i > stepValue - 1
           mh = mozFlag.html()
           if mh.length > 0
@@ -304,7 +312,7 @@ class WorkTableButtonItem extends ButtonItem
       changeGradientShow(@, cssCode, cssStyle)
       stepValue = parseInt($(@).val())
       for i in [2 .. 4]
-        id = 'btn-bg-color' + i; mozFlag = $("." + id + "-moz-flag", cssRoot); mozCache = $("." + id + "-moz-cache", cssRoot); webkitFlag = $("." + id + "-webkit-flag", cssRoot); webkitCache = $("." + id + "-webkit-cache", cssRoot);
+        className = 'btn-bg-color' + i; mozFlag = $("." + className + "-moz-flag", cssRoot); mozCache = $("." + className + "-moz-cache", cssRoot); webkitFlag = $("." + className + "-webkit-flag", cssRoot); webkitCache = $("." + className + "-webkit-cache", cssRoot);
         if i > stepValue - 1
           mh = mozFlag.html()
           if mh.length > 0
