@@ -340,7 +340,7 @@ settingGradientDegSlider = function(id, min, max, cssCode, cssStyle) {
 
 /* グラデーション */
 
-changeGradientShow = function(targetElement, cssCode, cssStyle) {
+changeGradientShow = function(targetElement, cssCode, cssStyle, cssConfig) {
   var meterElement, value, values;
   value = parseInt(targetElement.value);
   if (value >= 2 && value <= 5) {
@@ -354,15 +354,15 @@ changeGradientShow = function(targetElement, cssCode, cssStyle) {
       values = [25, 50, 75];
     }
     settingGradientSliderByElement(meterElement, values, cssCode, cssStyle);
-    return switchGradientColorSelectorVisible(value);
+    return switchGradientColorSelectorVisible(value, cssConfig);
   }
 };
 
-switchGradientColorSelectorVisible = function(gradientStepValue) {
+switchGradientColorSelectorVisible = function(gradientStepValue, cssConfig) {
   var element, i, _i, _results;
   _results = [];
   for (i = _i = 2; _i <= 4; i = ++_i) {
-    element = $('#btn-bg-color' + i);
+    element = $('.btn-bg-color' + i, cssConfig);
     if (i > gradientStepValue - 1) {
       _results.push(element.css('display', 'none'));
     } else {

@@ -14,16 +14,32 @@ one:
         <span class="property">background</span>: <span class="property">-moz-linear-gradient</span>(
         <span class="btn-slider-gradient-deg-value">0</span>deg,
         #<span class="btn-bg-color1">ffbdf5</span> 0%,
-        <span class="btn-bg-color2-moz-flag"></span>
-        <span class="btn-bg-color3-moz-flag"></span>
-        <span class="btn-bg-color4-moz-flag"></span>
+        <span class="btn-bg-color2-moz-flag">
+        #<span class="btn-bg-color2">ff82ec</span> <span class="btn-bg-color2-position">25</span>%,</span>
+        <span class="btn-bg-color3-moz-flag">#<span class="btn-bg-color3">fc46e1</span> <span class="btn-bg-color3-position">50</span>%,</span>
+        <span class="btn-bg-color4-moz-flag">#<span class="btn-bg-color4">fc46e1</span> <span class="btn-bg-color4-position">75</span>%,</span>
         #<span class="btn-bg-color5">fc46e1</span> 100%);
         <span class="property">background</span>: <span class="property">-webkit-gradient</span>(
         linear, <span class="btn-slider-gradient-deg-value-webkit">left top, left bottom</span>,
         from(#<span class="btn-bg-color1">ffbdf5</span>),
-        <span class="btn-bg-color2-webkit-flag"></span>
-        <span class="btn-bg-color3-webkit-flag"></span>
-        <span class="btn-bg-color4-webkit-flag"></span>
+        <span class="btn-bg-color2-webkit-flag">
+        <span>
+        color-stop(<span class="p">0.<span class="btn-bg-color2-position">25</span></span>,
+        #<span class="btn-bg-color2">ff82ec</span>),
+        </span>
+        </span>
+        <span class="btn-bg-color3-webkit-flag">
+        <span>
+        color-stop(<span class="p">0.<span class="btn-bg-color3-position">50</span></span>,
+        #<span class="btn-bg-color3">ff82ec</span>),
+        </span>
+        </span>
+        <span class="btn-bg-color4-webkit-flag">
+        <span>
+        color-stop(<span class="p">0.<span class="btn-bg-color4-position">75</span></span>,
+        #<span class="btn-bg-color4">ff82ec</span>),
+        </span>
+        </span>
         to(#<span class="btn-bg-color5">fc46e1</span>));
         <span class="property">-moz-border-radius</span>: <span class="btn-slider-border-radius-value">30</span>px;
         <span class="property">-webkit-border-radius</span>: <span class="btn-slider-border-radius-value">30</span>px;

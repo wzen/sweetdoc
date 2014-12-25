@@ -164,6 +164,7 @@ class WorkTableButtonItem extends ButtonItem
   constructor: (cood = null) ->
     super(cood)
     @cssRoot = null
+    @cssCache = null
     @cssCode = null
     @cssStyle = null
 
@@ -187,9 +188,11 @@ class WorkTableButtonItem extends ButtonItem
     $('#css_code_info').append(newEmt)
 
     @cssRoot = $('#' + @getCssRootElementId())
+    @cssCache = $(".css-cache", @cssRoot)
     @cssCode = $(".css-code", @cssRoot)
     @cssStyle = $(".css-style", @cssRoot)
     @cssStyle.text(@cssCode.text())
+
 
     return true
 
@@ -197,11 +200,12 @@ class WorkTableButtonItem extends ButtonItem
   setupOptionMenu: ->
     base = @
     cssRoot = @cssRoot
+    cssCache = @cssCache
     cssCode = @cssCode
     cssStyle = @cssStyle
 
     #スライダー
-    settingGradientSlider('btn-slider-gradient', null)
+    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle)
     settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle)
     settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle)
     settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle)
@@ -289,10 +293,14 @@ class WorkTableButtonItem extends ButtonItem
     WorkTableButtonItem.btnGradientStep.on('keyup mouseup', (e) ->
       cssCode = base.cssCode
       cssStyle = base.cssStyle
-      changeGradientShow(e.currentTarget, cssCode, cssStyle)
+      changeGradientShow(e.currentTarget, cssCode, cssStyle, WorkTableButtonItem.cssConfig)
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
-        className = 'btn-bg-color' + i; mozFlag = $("." + className + "-moz-flag", cssRoot); mozCache = $("." + className + "-moz-cache", cssRoot); webkitFlag = $("." + className + "-webkit-flag", cssRoot); webkitCache = $("." + className + "-webkit-cache", cssRoot);
+        className = 'btn-bg-color' + i
+        mozFlag = $("." + className + "-moz-flag", cssRoot)
+        mozCache = $("." + className + "-moz-cache", cssRoot)
+        webkitFlag = $("." + className + "-webkit-flag", cssRoot)
+        webkitCache = $("." + className + "-webkit-cache", cssRoot)
         if i > stepValue - 1
           mh = mozFlag.html()
           if mh.length > 0
@@ -309,10 +317,14 @@ class WorkTableButtonItem extends ButtonItem
     ).each( ->
       cssCode = base.cssCode
       cssStyle = base.cssStyle
-      changeGradientShow(@, cssCode, cssStyle)
+      changeGradientShow(@, cssCode, cssStyle, WorkTableButtonItem.cssConfig)
       stepValue = parseInt($(@).val())
       for i in [2 .. 4]
-        className = 'btn-bg-color' + i; mozFlag = $("." + className + "-moz-flag", cssRoot); mozCache = $("." + className + "-moz-cache", cssRoot); webkitFlag = $("." + className + "-webkit-flag", cssRoot); webkitCache = $("." + className + "-webkit-cache", cssRoot);
+        className = 'btn-bg-color' + i
+        mozFlag = $("." + className + "-moz-flag", cssRoot)
+        mozCache = $("." + className + "-moz-cache", cssRoot)
+        webkitFlag = $("." + className + "-webkit-flag", cssRoot)
+        webkitCache = $("." + className + "-webkit-cache", cssRoot)
         if i > stepValue - 1
           mh = mozFlag.html()
           if mh.length > 0

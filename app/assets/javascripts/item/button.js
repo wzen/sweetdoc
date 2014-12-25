@@ -135,6 +135,7 @@ WorkTableButtonItem = (function(_super) {
     }
     WorkTableButtonItem.__super__.constructor.call(this, cood);
     this.cssRoot = null;
+    this.cssCache = null;
     this.cssCode = null;
     this.cssStyle = null;
   }
@@ -157,6 +158,7 @@ WorkTableButtonItem = (function(_super) {
     }
     $('#css_code_info').append(newEmt);
     this.cssRoot = $('#' + this.getCssRootElementId());
+    this.cssCache = $(".css-cache", this.cssRoot);
     this.cssCode = $(".css-code", this.cssRoot);
     this.cssStyle = $(".css-style", this.cssRoot);
     this.cssStyle.text(this.cssCode.text());
@@ -164,12 +166,13 @@ WorkTableButtonItem = (function(_super) {
   };
 
   WorkTableButtonItem.prototype.setupOptionMenu = function() {
-    var base, cssCode, cssRoot, cssStyle;
+    var base, cssCache, cssCode, cssRoot, cssStyle;
     base = this;
     cssRoot = this.cssRoot;
+    cssCache = this.cssCache;
     cssCode = this.cssCode;
     cssStyle = this.cssStyle;
-    settingGradientSlider('btn-slider-gradient', null);
+    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle);
     settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle);
     settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle);
     settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle);
@@ -249,7 +252,7 @@ WorkTableButtonItem = (function(_super) {
       var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       cssCode = base.cssCode;
       cssStyle = base.cssStyle;
-      changeGradientShow(e.currentTarget, cssCode, cssStyle);
+      changeGradientShow(e.currentTarget, cssCode, cssStyle, WorkTableButtonItem.cssConfig);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         className = 'btn-bg-color' + i;
@@ -278,7 +281,7 @@ WorkTableButtonItem = (function(_super) {
       var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       cssCode = base.cssCode;
       cssStyle = base.cssStyle;
-      changeGradientShow(this, cssCode, cssStyle);
+      changeGradientShow(this, cssCode, cssStyle, WorkTableButtonItem.cssConfig);
       stepValue = parseInt($(this).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         className = 'btn-bg-color' + i;

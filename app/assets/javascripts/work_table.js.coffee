@@ -343,7 +343,7 @@ settingGradientDegSlider = (id, min, max, cssCode, cssStyle) ->
 # @param [Object] element HTML要素
 # @param [Object] cssCode コードエレメント
 # @param [Object] cssStyle CSSプレビューのエレメント
-changeGradientShow = (targetElement, cssCode, cssStyle) ->
+changeGradientShow = (targetElement, cssCode, cssStyle, cssConfig) ->
   value = parseInt(targetElement.value)
   if value >= 2 && value <= 5
     meterElement = $(targetElement).siblings('.ui-slider:first')
@@ -356,13 +356,13 @@ changeGradientShow = (targetElement, cssCode, cssStyle) ->
       values = [25, 50, 75]
 
     settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
-    switchGradientColorSelectorVisible(value)
+    switchGradientColorSelectorVisible(value, cssConfig)
 
 # グラデーションのカラーピッカー表示切り替え
 # @param [Int] gradientStepValue 現在のグラデーション数
-switchGradientColorSelectorVisible = (gradientStepValue) ->
+switchGradientColorSelectorVisible = (gradientStepValue, cssConfig) ->
   for i in [2 .. 4]
-    element = $('#btn-bg-color' + i)
+    element = $('.btn-bg-color' + i, cssConfig)
     if i > gradientStepValue - 1
       element.css('display', 'none')
     else
