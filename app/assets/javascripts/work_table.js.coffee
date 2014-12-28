@@ -836,21 +836,12 @@ setupTimeLineObjects = ->
       miniObj: item.generateMinimumObject()
       actorSize: item.itemSize
       sEvent: (x, y) ->
-        if @actorScrollEvent?
-          @actorScrollEvent(x, y)
+        if @actionEventFunc.scrollDraw?
+          @actionEventFunc.scrollDraw(x, y)
       # ファットアロー必須
       cEvent: (e) =>
-        if @actorClickEvent?
-          @actorClickEvent(e)
-        @getJQueryElement().on('webkitAnimationStart', (e) ->
-          console.log('css-anim start')
-        )
-        @getJQueryElement().on('webkitAnimationEnd', (e) =>
-          console.log('css-anim end')
-          @nextChapter()
-        )
-        # ボタン凹むアクション
-        @getJQueryElement().addClass('dentButton_' + @id)
+        if @actionEventFunc.defaultClick?
+          @actionEventFunc.defaultClick(e)
     }
     objList.push(obj)
   )

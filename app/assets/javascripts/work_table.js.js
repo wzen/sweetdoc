@@ -867,23 +867,15 @@ setupTimeLineObjects = function() {
       miniObj: item.generateMinimumObject(),
       actorSize: item.itemSize,
       sEvent: function(x, y) {
-        if (this.actorScrollEvent != null) {
-          return this.actorScrollEvent(x, y);
+        if (this.actionEventFunc.scrollDraw != null) {
+          return this.actionEventFunc.scrollDraw(x, y);
         }
       },
       cEvent: (function(_this) {
         return function(e) {
-          if (_this.actorClickEvent != null) {
-            _this.actorClickEvent(e);
+          if (_this.actionEventFunc.defaultClick != null) {
+            return _this.actionEventFunc.defaultClick(e);
           }
-          _this.getJQueryElement().on('webkitAnimationStart', function(e) {
-            return console.log('css-anim start');
-          });
-          _this.getJQueryElement().on('webkitAnimationEnd', function(e) {
-            console.log('css-anim end');
-            return _this.nextChapter();
-          });
-          return _this.getJQueryElement().addClass('dentButton_' + _this.id);
         };
       })(this)
     };

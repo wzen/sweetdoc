@@ -17,6 +17,8 @@ class ButtonItem extends CssItemBase
       @moveLoc = {x:cood.x, y:cood.y}
     @css = null
 
+    @actionEventFunc.defaultClick = @defaultClick
+
   # 描画
   # @param [Array] cood 座標
   draw: (cood) ->
@@ -85,7 +87,13 @@ class ButtonItem extends CssItemBase
     @css = obj.css
 
   # 共通クリックイベント
-  actorClickEvent: (e) ->
+  defaultClick : (e) =>
+    # ボタン凹むアクション
+    @getJQueryElement().addClass('dentButton_' + @id)
+    @getJQueryElement().on('webkitAnimationEnd', (e) =>
+      #console.log('css-anim end')
+      @nextChapter()
+    )
 
   # CSSアニメーション 凹むボタン
   @dentButton : (buttonItem) ->
@@ -193,7 +201,6 @@ class WorkTableButtonItem extends ButtonItem
     @cssStyle = $(".css-style", @cssRoot)
     @cssStyle.text(@cssCode.text())
 
-
     return true
 
   # CSSボタンコントロール初期化
@@ -234,10 +241,7 @@ class WorkTableButtonItem extends ButtonItem
       self = $(@)
       className = self[0].classList[0]
       btnCodeEmt = cssCode.find("." + className).first()
-      if btnCodeEmt?
-        colorValue = btnCodeEmt.text()
-      else
-        colorValue = "ffffff"
+      colorValue = btnCodeEmt.text()
       self.css("backgroundColor", "#" + colorValue)
       settingColorPicker(
         self,
@@ -263,10 +267,7 @@ class WorkTableButtonItem extends ButtonItem
       self = $(@)
       className = self[0].classList[0]
       btnCodeEmt = cssCode.find("." + className).first()
-      if btnCodeEmt?
-        colorValue = btnCodeEmt.text()
-      else
-        colorValue = "ffffff"
+      colorValue = btnCodeEmt.text()
       self.css("backgroundColor", "#" + colorValue)
       settingColorPicker(
         self,

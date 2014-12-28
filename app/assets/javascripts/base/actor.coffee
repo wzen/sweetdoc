@@ -1,5 +1,8 @@
 # アクション情報
 class Actor
+  # コンストラクタ
+  constructor: ->
+    @actionEventFunc = {}
 
   # アクションの初期化(閲覧モードのみ使用される)
   initActor: (miniObj, actorSize, sEventStr, cEventStr) ->
@@ -30,11 +33,6 @@ class Actor
   # JQueryエレメントを取得
   # @abstract
   getJQueryElement: ->
-
-  # クリックイベント
-#  clickEvent: (e) ->
-#    if @clickEventFunc?
-#      @clickEventFunc(e)
 
   # チャプターを進める
   nextChapter: ->

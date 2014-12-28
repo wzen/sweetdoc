@@ -14,6 +14,7 @@ ItemBase = (function(_super) {
     if (cood == null) {
       cood = null;
     }
+    ItemBase.__super__.constructor.call(this);
     this.id = generateId();
     this.drawingSurfaceImageData = null;
     if (cood !== null) {

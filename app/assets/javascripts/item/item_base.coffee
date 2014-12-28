@@ -10,6 +10,7 @@ class ItemBase extends Actor
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
+    super()
     # @property [Int] id ID
     @id = generateId()
     # @property [Object] drawingSurfaceImageData 画面を保存する変数

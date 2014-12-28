@@ -2,7 +2,9 @@
 var Actor;
 
 Actor = (function() {
-  function Actor() {}
+  function Actor() {
+    this.actionEventFunc = {};
+  }
 
   Actor.prototype.initActor = function(miniObj, actorSize, sEventStr, cEventStr) {
     var clickEventFunc, _this;

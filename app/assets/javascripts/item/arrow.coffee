@@ -40,6 +40,8 @@ class ArrowItem extends CanvasItemBase
     # @private
     @drawCoodRegist = []
 
+    @actionEventFunc.scrollDraw = @scrollDraw
+
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID
   canvasElementId: ->
@@ -147,7 +149,7 @@ class ArrowItem extends CanvasItemBase
     @coodRegist = obj.coodRegist
 
   # スクロールイベント
-  actorScrollEvent : (x, y) ->
+  scrollDraw : (x, y) =>
     if !@scrollValue?
       console.log('scroll init')
       @saveDrawingSurface()
