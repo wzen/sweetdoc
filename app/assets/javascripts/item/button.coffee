@@ -168,7 +168,6 @@ class WorkTableButtonItem extends ButtonItem
   @btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", @cssConfig)
   @btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
 
-
   constructor: (cood = null) ->
     super(cood)
     @cssRoot = null

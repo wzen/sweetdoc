@@ -2,6 +2,7 @@
 class Actor
   # コンストラクタ
   constructor: ->
+    # アクションイベント一覧
     @actionEventFunc = {}
 
   # アクションの初期化(閲覧モードのみ使用される)

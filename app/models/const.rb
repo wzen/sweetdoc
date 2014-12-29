@@ -38,7 +38,15 @@ class Const
     DELETE = 3
   end
 
-  # 閲覧モードのアクション
+  # アクションイベント種別
+  class ActionEventType
+    # @property [Int] SCROLL スクロール
+    SCROLL = 0
+    # @property [Int] CLICK クリック
+    CLICK = 1
+  end
+
+  # 閲覧モードのアクション変更種別
   class ChapterActionType
     # @property [Int] DRAW 描画
     DRAW = 0

@@ -1,0 +1,9 @@
+one:
+  locale_id: 1
+  locale_name: English
+  order: 1
+
+two:
+  locale_id: 2
+  locale_name: 日本語
+  order: 2
