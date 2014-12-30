@@ -1,9 +1,9 @@
 class CreateLocales < ActiveRecord::Migration
   def change
     create_table :locales do |t|
-      t.integer :locale_id
-      t.string :locale_name
-      t.integer :order
+      t.string :locale_name, :null => false
+      t.integer :order, :null => false
+      t.string :domain
 
       t.timestamps
     end

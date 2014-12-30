@@ -14,10 +14,10 @@
 ActiveRecord::Schema.define(version: 20141229141229) do
 
   create_table "action_events", force: true do |t|
-    t.integer  "item_type"
-    t.string   "mothod_name"
-    t.integer  "event_type_id"
-    t.integer  "locale_id"
+    t.integer  "item_type",     null: false
+    t.string   "mothod_name",   null: false
+    t.integer  "event_type_id", null: false
+    t.integer  "locale_id",     null: false
     t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -39,9 +39,9 @@ ActiveRecord::Schema.define(version: 20141229141229) do
   end
 
   create_table "locales", force: true do |t|
-    t.integer  "locale_id"
-    t.string   "locale_name"
-    t.integer  "order"
+    t.string   "locale_name", null: false
+    t.integer  "order",       null: false
+    t.string   "domain"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
