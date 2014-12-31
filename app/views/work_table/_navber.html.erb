@@ -1,4 +1,4 @@
-<div id="nav" class="navbar navbar-default" role="navigation">
+<div id="nav" class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -23,7 +23,7 @@
                 </li>
                 <li id="header_items_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_select_menu">
-                        Items
+                        Item
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
@@ -35,7 +35,18 @@
                     </ul>
                 </li>
                 <li><a href="#" onclick="runLookAround()">Run</a></li>
-                <li><a href="#" onclick="helloFunc()">About</a></li>
+                <li id="header_etc_select_menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_etc_select_menu">
+                        Etc
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a class="menu-item" href="#">Language</a></li>
+                        <li class="divider"></li>
+                        <li><a class="menu-item" href="#">Introduction</a></li>
+                        <li><a href="#" onclick="helloFunc()">About</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

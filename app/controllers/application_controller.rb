@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  # Locale
+  before_filter :set_locale
+
   def init_const
     # Constantの設定
     gon.const  = const_values(Const, {})
@@ -20,5 +23,11 @@ class ApplicationController < ActionController::Base
       end
     end
     return obj
+  end
+
+  private
+  def set_locale
+    # TODO: サブドメインから引っ張るように修正
+    I18n.locale = params[:locale] || I18n.default_locale
   end
 end

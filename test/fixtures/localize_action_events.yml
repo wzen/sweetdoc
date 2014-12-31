@@ -13,3 +13,19 @@ two:
   event_type_id: 1
   locale_id: 2
   desc: デフォルトのボタンクリック
+
+three:
+  id: 3
+  item_type: 0
+  mothod_name: scrollDraw
+  event_type_id: 0
+  locale_id: 1
+  desc: Draw by scroll action
+
+four:
+  id: 4
+  item_type: 0
+  mothod_name: scrollDraw
+  event_type_id: 0
+  locale_id: 2
+  desc: スクロールで矢印を描画

@@ -1,9 +1,11 @@
 one:
   id: 1
+  i18n_locale: en
   locale_name: English
   order: 1
 
 two:
   id: 2
+  i18n_locale: ja
   locale_name: 日本語
   order: 2
