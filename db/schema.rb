@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20141231155931) do
     t.datetime "updated_at"
   end
 
-  create_table "localize_action_events", force: true do |t|
+  create_table "localize_item_action_events", force: true do |t|
     t.integer  "item_type",     null: false
     t.string   "mothod_name",   null: false
     t.integer  "event_type_id", null: false

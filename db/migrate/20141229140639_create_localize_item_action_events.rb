@@ -1,6 +1,6 @@
-class CreateLocalizeActionEvents < ActiveRecord::Migration
+class CreateLocalizeItemActionEvents < ActiveRecord::Migration
   def change
-    create_table :localize_action_events do |t|
+    create_table :localize_item_action_events do |t|
       t.integer :item_type, :null => false
       t.string :mothod_name, :null => false
       t.integer :event_type_id, :null => false
