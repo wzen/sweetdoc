@@ -21,6 +21,21 @@
 
 en:
   hello: "Hello world"
+  header_menu:
+    file:
+      file: "File"
+      open: "Open"
+      save: "Save"
+      load: "Load"
+    item:
+      item: "Item"
+      arrow: "Arrow"
+      button: "Button"
+    etc:
+      etc: "Etc"
+      language: "Language"
+      introduction: "introduction"
+      about: "About"
   message:
     database:
       item_state:

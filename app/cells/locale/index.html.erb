@@ -1,3 +1,5 @@
 <% @locales.each do |locale| %>
-<li class="<%= locale.i18n_locale.to_sym == I18n.locale ? 'active':'' %>"><a class="menu-item" href="#"><%= locale.locale_name %></a></li>
+<li class="<%= locale.i18n_locale.to_sym == I18n.locale ? 'active':'' %>">
+    <a class="menu-item" href="#"><%= locale.locale_name %></a>
+</li>
 <% end %>

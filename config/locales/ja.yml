@@ -1,4 +1,20 @@
 ja:
+  hello: "こんにちは"
+  header_menu:
+    file:
+      file: "ファイル"
+      open: "開く"
+      save: "保存"
+      load: "読み込み"
+    item:
+      item: "アイテム"
+      arrow: "矢印"
+      button: "ボタン"
+    etc:
+      etc: "その他"
+      language: "言語"
+      introduction: "自己紹介"
+      about: "このサイトについて"
   message:
     database:
       item_state:

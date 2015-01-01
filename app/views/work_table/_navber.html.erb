@@ -13,43 +13,41 @@
             <ul class="nav navbar-nav">
                 <li id="header_items_file_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_file_menu">
-                        File
+                        <%= t('header_menu.file.file') %>
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a class="menu-open" href="#">Open</a></li>
-                        <li><a class="menu-save" href="#">Save</a></li>
+                        <li><a class="menu-open" href="#"><%= t('header_menu.file.open') %></a></li>
+                        <li><a class="menu-save" href="#"><%= t('header_menu.file.save') %></a></li>
+                        <li><a class="menu-load" href="#"><%= t('header_menu.file.load') %></a></li>
                     </ul>
                 </li>
                 <li id="header_items_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_select_menu">
-                        Item
+                        <%= t('header_menu.item.item') %>
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li class="active"><a id="menu-item-1" class="menu-item" href="#">Button</a></li>
-                        <li><a id="menu-item-0" class="menu-item" href="#">Arrow</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                        <li class="active"><a id="menu-item-1" class="menu-item" href="#"><%= t('header_menu.item.button') %></a></li>
+                        <li><a id="menu-item-0" class="menu-item" href="#"><%= t('header_menu.item.arrow') %></a></li>
                     </ul>
                 </li>
                 <li><a href="#" onclick="runLookAround()">Run</a></li>
                 <li id="header_etc_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_etc_select_menu">
-                        Etc
+                        <%= t('header_menu.etc.etc') %>
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-submenu">
-                            <a href="#">Language</a>
+                            <a href="#"><%= t('header_menu.etc.language') %></a>
                             <ul class="dropdown-menu">
                                 <%= render_cell :locale, :index %>
                             </ul>
                         </li>
                         <li class="divider"></li>
-                        <li><a class="menu-item" href="#">Introduction</a></li>
-                        <li><a href="#" onclick="helloFunc()">About</a></li>
+                        <li><a class="menu-item" href="#"><%= t('header_menu.etc.introduction') %></a></li>
+                        <li><a href="#" onclick="helloFunc()"><%= t('header_menu.etc.about') %></a></li>
                     </ul>
                 </li>
             </ul>

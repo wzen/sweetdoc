@@ -373,7 +373,7 @@ switchGradientColorSelectorVisible = (gradientStepValue, cssConfig) ->
 # ヘッダーメニュー初期化
 initHeaderMenu = ->
   itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
-  $('.menu-open', itemsMenuEmt).on('click', ->
+  $('.menu-load', itemsMenuEmt).on('click', ->
     loadFromServer()
   )
   $('.menu-save', itemsMenuEmt).on('click', ->

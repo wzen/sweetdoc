@@ -378,7 +378,7 @@ switchGradientColorSelectorVisible = function(gradientStepValue, cssConfig) {
 initHeaderMenu = function() {
   var itemsMenuEmt, itemsSelectMenuEmt;
   itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
-  $('.menu-open', itemsMenuEmt).on('click', function() {
+  $('.menu-load', itemsMenuEmt).on('click', function() {
     return loadFromServer();
   });
   $('.menu-save', itemsMenuEmt).on('click', function() {
