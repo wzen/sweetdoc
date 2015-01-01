@@ -41,7 +41,12 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a class="menu-item" href="#">Language</a></li>
+                        <li class="dropdown-submenu">
+                            <a href="#">Language</a>
+                            <ul class="dropdown-menu">
+                                <%= render_cell :locale, :index %>
+                            </ul>
+                        </li>
                         <li class="divider"></li>
                         <li><a class="menu-item" href="#">Introduction</a></li>
                         <li><a href="#" onclick="helloFunc()">About</a></li>
