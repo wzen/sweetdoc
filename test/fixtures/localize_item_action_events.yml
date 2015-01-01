@@ -1,31 +1,23 @@
 one:
   id: 1
-  item_type: 1
-  mothod_name: defaultClick
-  event_type_id: 1
+  item_action_event_id: 1
   locale_id: 1
   desc: Click push action
 
 two:
   id: 2
-  item_type: 1
-  mothod_name: defaultClick
-  event_type_id: 1
+  item_action_event_id: 1
   locale_id: 2
   desc: デフォルトのボタンクリック
 
 three:
   id: 3
-  item_type: 0
-  mothod_name: scrollDraw
-  event_type_id: 0
+  item_action_event_id: 2
   locale_id: 1
   desc: Draw by scroll action
 
 four:
   id: 4
-  item_type: 0
-  mothod_name: scrollDraw
-  event_type_id: 0
+  item_action_event_id: 2
   locale_id: 2
   desc: スクロールで矢印を描画

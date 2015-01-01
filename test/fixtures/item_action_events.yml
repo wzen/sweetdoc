@@ -1,0 +1,11 @@
+one:
+  id: 1
+  item_type: 1
+  event_type_id: 1
+  mothod_name: defaultClick
+
+two:
+  id: 2
+  item_type: 0
+  event_type_id: 0
+  mothod_name: scrollDraw

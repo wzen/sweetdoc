@@ -832,6 +832,9 @@ clearWorkTable = function() {
   });
 };
 
+
+/* デバッグ */
+
 run = function() {
   return $.ajax({
     url: "/test_move/hello",
@@ -855,6 +858,9 @@ run = function() {
     error: function(data) {}
   });
 };
+
+
+/* タイムライン */
 
 setupTimeLineObjects = function() {
   var objList;
@@ -897,6 +903,9 @@ setupTimeLineCss = function() {
   });
   return itemCssStyle;
 };
+
+
+/* 閲覧 */
 
 runLookAround = function() {
   Function.prototype.toJSON = Function.prototype.toString;

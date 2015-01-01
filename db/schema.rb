@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141231155931) do
+ActiveRecord::Schema.define(version: 20150101135655) do
+
+  create_table "item_action_events", force: true do |t|
+    t.integer  "item_type",     null: false
+    t.integer  "event_type_id", null: false
+    t.string   "mothod_name",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "item_css_temps", force: true do |t|
     t.integer  "item_type",  null: false
@@ -38,10 +46,8 @@ ActiveRecord::Schema.define(version: 20141231155931) do
   end
 
   create_table "localize_item_action_events", force: true do |t|
-    t.integer  "item_type",     null: false
-    t.string   "mothod_name",   null: false
-    t.integer  "event_type_id", null: false
-    t.integer  "locale_id",     null: false
+    t.integer  "item_action_event_id", null: false
+    t.integer  "locale_id",            null: false
     t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"

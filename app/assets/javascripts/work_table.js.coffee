@@ -797,7 +797,7 @@ clearWorkTable = ->
     obj.getJQueryElement().remove()
   )
 
-
+### デバッグ ###
 run = ->
   # TODO: 認証用コードも付属するようにする
   $.ajax(
@@ -821,6 +821,8 @@ run = ->
       error: (data) ->
     }
   )
+
+### タイムライン ###
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->
@@ -862,6 +864,9 @@ setupTimeLineCss = ->
   )
 
   return itemCssStyle
+
+
+### 閲覧 ###
 
 # 閲覧を実行する
 runLookAround = ->
