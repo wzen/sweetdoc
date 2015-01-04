@@ -49,12 +49,13 @@ initTimeline = function() {
     miniObj = obj.miniObj;
     if (miniObj.itemType === Constant.ItemType.BUTTON) {
       item = new ButtonItem();
-      item.setMiniumObject(miniObj);
+      item.initActor(miniObj, obj.itemSize, obj.sEvent, obj.cEvent);
       item.reDraw();
     } else if (miniObj.itemType === Constant.ItemType.ARROW) {
       item = new ArrowItem();
+      item.initActor(miniObj, obj.itemSize, obj.sEvent, obj.cEvent);
+      item.reDraw(false);
     }
-    item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent);
     actorList.push(item);
     if (miniObj.itemType === Constant.ItemType.BUTTON) {
       chapter = new ClickChapter(actorList);

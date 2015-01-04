@@ -6,9 +6,9 @@ class Actor
     @actionEventFunc = {}
 
   # アクションの初期化(閲覧モードのみ使用される)
-  initActor: (miniObj, actorSize, sEventStr, cEventStr) ->
+  initActor: (miniObj, itemSize, sEventStr, cEventStr) ->
     @setMiniumObject(miniObj)
-    @actorSize = actorSize
+    @itemSize = itemSize
 
     # TODO: 必須：セキュリティチェック
     # スクロールイベント

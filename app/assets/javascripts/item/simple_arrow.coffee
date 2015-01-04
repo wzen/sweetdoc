@@ -64,7 +64,8 @@ class SimpleArrowItem extends ItemBase
   # 描画終了時に呼ばれるメソッド
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
-  endDraw: (zindex) ->
+  # @param [boolean] show 要素作成後に描画を表示するか
+  endDraw: (zindex, show = true) ->
     if !super(zindex)
       return false
 
@@ -76,17 +77,19 @@ class SimpleArrowItem extends ItemBase
       l.x -= @itemSize.x
       l.y -= @itemSize.y
 
-    @makeElement()
+    @makeElement(show)
     return true
 
   # 再描画処理
-  reDraw: ->
-    @makeElement()
+  # @param [boolean] show 要素作成後に描画を表示するか
+  reDraw: (show = true) ->
+    @makeElement(show)
 
   # CanvasのHTML要素を作成
   # @param [Array] cood 座標
+  # @param [boolean] show 要素作成後に描画を表示するか
   # @return [Boolean] 処理結果
-  makeElement: ->
+  makeElement: (show = true) ->
 
     # Canvasを作成
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
@@ -94,11 +97,11 @@ class SimpleArrowItem extends ItemBase
     $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
     @setupEvents()
 
-    # 新しいCanvasに描画
-    drawingCanvas = document.getElementById(@canvasElementId())
-    drawingContext = drawingCanvas.getContext('2d')
-    drawCoodToCanvas.call(@, drawingContext)
-    return true
+    if show
+      # 新しいCanvasに描画
+      drawingCanvas = document.getElementById(@canvasElementId())
+      drawingContext = drawingCanvas.getContext('2d')
+      drawCoodToCanvas.call(@, drawingContext)
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ

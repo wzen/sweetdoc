@@ -3,9 +3,6 @@ if gon?
   constant = gon.const
 
   class Constant
-
-    # @property SURFACE_IMAGE_MARGIN Canvasの背景貼り付け時のマージン
-    @SURFACE_IMAGE_MARGIN = constant.SURFACE_IMAGE_MARGIN
     # @porperty ZINDEX_MAX z-indexの最大値
     @ZINDEX_MAX = constant.ZINDEX_MAX
     # @property OPERATION_STORE_MAX 操作履歴保存最大数
@@ -39,11 +36,15 @@ if gon?
       @CHANGE_OPTION = constant.ItemActionType.CHANGE_OPTION
 
     # 閲覧モードのチャプターアクション種類
-    class @ChapterActionType
+    class @ActionEventChangeType
       # @property [Int] DRAW 描画
-      @DRAW = constant.ChapterActionType.DRAW
-      # @property [Int] CHANGE 変更
-      @CHANGE = constant.ChapterActionType.CHANGE
+      @DRAW = constant.ActionEventChangeType.DRAW
+      # @property [Int] ANIMATION CSSアニメーション
+      @ANIMATION = constant.ActionEventChangeType.ANIMATION
+      # @property [Int] OPTION_CHANGE デザイン変更
+      @CHANGE_OPTION = constant.ActionEventChangeType.CHANGE_OPTION
+      # @property [Int] DELETE 削除
+      @DELETE = constant.ActionEventChangeType.DELETE
 
     # キーコード
     class @KeyboardKeyCode

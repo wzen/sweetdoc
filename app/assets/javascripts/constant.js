@@ -6,8 +6,6 @@ if (typeof gon !== "undefined" && gon !== null) {
   Constant = (function() {
     function Constant() {}
 
-    Constant.SURFACE_IMAGE_MARGIN = constant.SURFACE_IMAGE_MARGIN;
-
     Constant.ZINDEX_MAX = constant.ZINDEX_MAX;
 
     Constant.OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX;
@@ -51,14 +49,18 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ChapterActionType = (function() {
-      function ChapterActionType() {}
+    Constant.ActionEventChangeType = (function() {
+      function ActionEventChangeType() {}
 
-      ChapterActionType.DRAW = constant.ChapterActionType.DRAW;
+      ActionEventChangeType.DRAW = constant.ActionEventChangeType.DRAW;
 
-      ChapterActionType.CHANGE = constant.ChapterActionType.CHANGE;
+      ActionEventChangeType.ANIMATION = constant.ActionEventChangeType.ANIMATION;
 
-      return ChapterActionType;
+      ActionEventChangeType.CHANGE_OPTION = constant.ActionEventChangeType.CHANGE_OPTION;
+
+      ActionEventChangeType.DELETE = constant.ActionEventChangeType.DELETE;
+
+      return ActionEventChangeType;
 
     })();
 

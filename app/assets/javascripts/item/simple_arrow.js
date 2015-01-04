@@ -57,8 +57,11 @@ SimpleArrowItem = (function(_super) {
     return drawCoodToCanvas.call(this, window.drawingContext);
   };
 
-  SimpleArrowItem.prototype.endDraw = function(zindex) {
+  SimpleArrowItem.prototype.endDraw = function(zindex, show) {
     var l, _i, _j, _len, _len1, _ref, _ref1;
+    if (show == null) {
+      show = true;
+    }
     if (!SimpleArrowItem.__super__.endDraw.call(this, zindex)) {
       return false;
     }
@@ -74,24 +77,31 @@ SimpleArrowItem = (function(_super) {
       l.x -= this.itemSize.x;
       l.y -= this.itemSize.y;
     }
-    this.makeElement();
+    this.makeElement(show);
     return true;
   };
 
-  SimpleArrowItem.prototype.reDraw = function() {
-    return this.makeElement();
+  SimpleArrowItem.prototype.reDraw = function(show) {
+    if (show == null) {
+      show = true;
+    }
+    return this.makeElement(show);
   };
 
-  SimpleArrowItem.prototype.makeElement = function() {
+  SimpleArrowItem.prototype.makeElement = function(show) {
     var drawingCanvas, drawingContext;
+    if (show == null) {
+      show = true;
+    }
     $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
     $('#' + this.canvasElementId()).attr('width', $('#' + this.getElementId()).width());
     $('#' + this.canvasElementId()).attr('height', $('#' + this.getElementId()).height());
     this.setupEvents();
-    drawingCanvas = document.getElementById(this.canvasElementId());
-    drawingContext = drawingCanvas.getContext('2d');
-    drawCoodToCanvas.call(this, drawingContext);
-    return true;
+    if (show) {
+      drawingCanvas = document.getElementById(this.canvasElementId());
+      drawingContext = drawingCanvas.getContext('2d');
+      return drawCoodToCanvas.call(this, drawingContext);
+    }
   };
 
   SimpleArrowItem.prototype.generateMinimumObject = function() {

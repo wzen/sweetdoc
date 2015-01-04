@@ -11,15 +11,10 @@ class ArrowItem extends CanvasItemBase
 
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 37
-  # @property [Int] ARROW_HALF_WIDTH 矢印幅(半分)
-  ARROW_HALF_WIDTH = ARROW_WIDTH / 2.0
-
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100
   # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
   HEADER_HEIGHT = 50
-  # @property [Int] PADDING_SIZE 矢印サイズのPadding
-  PADDING_SIZE = HEADER_WIDTH
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -35,17 +30,25 @@ class ArrowItem extends CanvasItemBase
     @coodLeftBodyPart = []
     # @property [Array] coodRightBodyPart 矢印の体右部分の座標
     @coodRightBodyPart = []
-
+    # @property [Int] arrow_width 矢印幅
+    @arrow_width = ARROW_WIDTH
+    # @property [Int] arrow_half_width 矢印の半分幅
+    @arrow_half_width = @arrow_width / 2.0
+    # @property [Int] header_width 矢印の頭の幅
+    @header_width = HEADER_WIDTH
+    # @property [Int] header_height 矢印の頭の長さ
+    @header_height = HEADER_HEIGHT
+    # @property [Int] padding_size CanvasのPadding
+    @padding_size = @header_width
+    # @property [Array] scale 表示倍率
+    @scale = {w:1.0, h:1.0}
     # @property [Array] drawCoodRegist 矢印のドラッグ座標(描画時のみ使用)
     # @private
     @drawCoodRegist = []
 
+    # アクションイベント
     @actionEventFunc.scrollDraw = @scrollDraw
 
-  # CanvasのHTML要素IDを取得
-  # @return [Int] Canvas要素ID
-  canvasElementId: ->
-    return @getElementId() + '_canvas'
 
   # パスの描画
   # @param [Array] moveCood 画面ドラッグ座標
@@ -68,7 +71,7 @@ class ArrowItem extends CanvasItemBase
   drawLine : ->
     drawingContext.beginPath();
     # 尾と体の座標をCanvasに描画
-    drawCoodToCanvas.call(@, true)
+    drawCoodToBaseCanvas.call(@)
     drawingContext.globalAlpha = 0.3
     drawingContext.stroke()
 
@@ -86,21 +89,33 @@ class ArrowItem extends CanvasItemBase
   # 描画終了時に呼ばれるメソッド
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
-  endDraw: (zindex) ->
+  # @param [boolean] show 要素作成後に描画を表示するか
+  endDraw: (zindex, show = true) ->
     if !super(zindex)
       return false
-    @makeElement()
+    @makeElement(show)
     return true
 
-  # 再描画処理
-  reDraw: ->
-    @saveDrawingSurface()
+  # 再描画処理(新規キャンパスに描画)
+  # @param [boolean] show 要素作成後に描画を表示するか
+  reDraw: (show = true) ->
+    # 新規キャンパス存在チェック
+    canvas = document.getElementById(@canvasElementId())
+    if !canvas?
+      # 新規Canvasを作成
+      @makeNewCanvas()
+    else
+      # 描画をクリア
+      @clearDraw()
+    # 座標をクリア
     @resetDrawPath()
-    for r in @coodRegist
-      @drawPath(r)
-    @drawLine()
-    @restoreDrawingSurface(@itemSize)
-    @endDraw(@zindex)
+
+    if show
+      # 座標を再計算
+      for r in @coodRegist
+        @drawPath(r)
+      # 描画
+      @drawNewCanvas()
 
   # パスの情報をリセット
   resetDrawPath: ->
@@ -110,21 +125,33 @@ class ArrowItem extends CanvasItemBase
     @drawCoodRegist = []
 
   # CanvasのHTML要素を作成
-  # @param [Array] cood 座標
-  # @return [Boolean] 処理結果
-  makeElement: ->
-    # Canvasを作成
-    $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
-    $('#' + @canvasElementId()).attr('width',  $('#' + @getElementId()).width())
-    $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
+  # @param [boolean] show 要素作成後に描画を表示するか
+  makeElement: (show = true) ->
+    # 新規Canvasを作成
+    @makeNewCanvas()
 
-    # 新しいCanvasに描画
-    drawingCanvas = document.getElementById(@canvasElementId())
-    drawingContext = drawingCanvas.getContext('2d')
-    drawingContext.beginPath();
-    drawCoodToCanvas.call(@, false, drawingContext)
-    drawingContext.fillStyle = "#00008B"
-    drawingContext.fill()
+    # 座標を新規キャンパス用に修正
+    do =>
+      @coodRegist.forEach((e) =>
+        e.x -= @itemSize.x
+        e.y -= @itemSize.y
+      )
+      @coodLeftBodyPart.forEach((e) =>
+        e.x -= @itemSize.x
+        e.y -= @itemSize.y
+      )
+      @coodRightBodyPart.forEach((e) =>
+        e.x -= @itemSize.x
+        e.y -= @itemSize.y
+      )
+      @coodHeadPart.forEach((e) =>
+        e.x -= @itemSize.x
+        e.y -= @itemSize.y
+      )
+
+    if show
+      # 新規Canvasに描画
+      @drawNewCanvas()
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
@@ -133,6 +160,10 @@ class ArrowItem extends CanvasItemBase
       itemType: Constant.ItemType.ARROW
       zindex: @zindex
       coodRegist: @coodRegist
+      arrow_width: @arrow_width
+      header_width: @header_width
+      header_height: @header_height
+      scale: @scale
     }
     return obj
 
@@ -147,12 +178,18 @@ class ArrowItem extends CanvasItemBase
   setMiniumObject: (obj) ->
     @zindex = obj.zindex
     @coodRegist = obj.coodRegist
+    @arrow_width = obj.arrow_width
+    @arrow_half_width = @arrow_width / 2.0
+    @header_width = obj.header_width
+    @header_height = obj.header_height
+    @padding_size = @header_width
+    @scale = obj.scale
 
   # スクロールイベント
   scrollDraw : (x, y) =>
     if !@scrollValue?
       console.log('scroll init')
-      @saveDrawingSurface()
+      @saveNewDrawingSurface()
       @scrollValue = 0
     else
       console.log("y:#{y}")
@@ -162,20 +199,16 @@ class ArrowItem extends CanvasItemBase
         @scrollValue += parseInt((y - 9) / 10)
     @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
     @scrollValue = if @scrollValue >= @coodRegist.length then @coodRegist.length - 1 else @scrollValue
-    console.log("scrollY: #{@scrollValue}")
+    #console.log("scrollY: #{@scrollValue}")
     @resetDrawPath()
-    @restoreDrawingSurface(@actorSize)
+    @restoreAllNewDrawingSurface()
     for r in @coodRegist.slice(0, @scrollValue)
       @drawPath(r)
-    drawingContext.beginPath();
     # 尾と体の座標をCanvasに描画
-    drawCoodToCanvas.call(@, true)
-    drawingContext.fillStyle = "#00008B"
-    # 描画した矢印をクリア
-    #console.log("actorSize: #{@actorSize.x} #{@actorSize.y} #{@actorSize.w} #{@actorSize.h}")
-    drawingContext.fill()
+    @drawNewCanvas()
 
     if @scrollValue >= @coodRegist.length - 1
+      console.log('scroll nextChapter')
       @nextChapter()
 
   # 座標間の距離を計算する
@@ -190,6 +223,7 @@ class ArrowItem extends CanvasItemBase
     if !beforeLoc? || !cood?
       return
 
+    x = null
     if beforeLoc.x < cood.x
       x = 1
     else if beforeLoc.x == cood.x
@@ -197,6 +231,7 @@ class ArrowItem extends CanvasItemBase
     else
       x = -1
 
+    y = null
     if beforeLoc.y < cood.y
       y = 1
     else if beforeLoc.y == cood.y
@@ -218,14 +253,14 @@ class ArrowItem extends CanvasItemBase
       y: leftCood.y - rightCood.y
     sita = Math.atan2(r.y, r.x)
     leftTop =
-      x: Math.cos(sita) * (HEADER_WIDTH + ARROW_WIDTH) / 2.0 + rightCood.x
-      y: Math.sin(sita) * (HEADER_WIDTH + ARROW_WIDTH) / 2.0 + rightCood.y
+      x: Math.cos(sita) * (@header_width + @arrow_width) / 2.0 + rightCood.x
+      y: Math.sin(sita) * (@header_width + @arrow_width) / 2.0 + rightCood.y
 
     sitaRight = sita + Math.PI
 
     rightTop =
-      x: Math.cos(sitaRight) * (HEADER_WIDTH - ARROW_WIDTH) / 2.0 + rightCood.x
-      y: Math.sin(sitaRight) * (HEADER_WIDTH - ARROW_WIDTH) / 2.0 + rightCood.y
+      x: Math.cos(sitaRight) * (@header_width - @arrow_width) / 2.0 + rightCood.x
+      y: Math.sin(sitaRight) * (@header_width - @arrow_width) / 2.0 + rightCood.y
 
     sitaTop = sita + Math.PI / 2.0
 
@@ -233,8 +268,8 @@ class ArrowItem extends CanvasItemBase
       x: (leftCood.x + rightCood.x) / 2.0
       y: (leftCood.y + rightCood.y) / 2.0
     top =
-      x: Math.cos(sitaTop) * HEADER_HEIGHT + mid.x
-      y: Math.sin(sitaTop) * HEADER_HEIGHT + mid.y
+      x: Math.cos(sitaTop) * @header_height + mid.x
+      y: Math.sin(sitaTop) * @header_height + mid.y
 
     @coodHeadPart = [rightTop, top, leftTop]
 
@@ -253,8 +288,8 @@ class ArrowItem extends CanvasItemBase
 
     # 座標を保存
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x)
-    @coodRightBodyPart.push({x: -(Math.sin(rad) * ARROW_HALF_WIDTH) + locTail.x, y: Math.cos(rad) * ARROW_HALF_WIDTH + locTail.y})
-    @coodLeftBodyPart.push({x: Math.sin(rad) * ARROW_HALF_WIDTH + locTail.x, y: -(Math.cos(rad) * ARROW_HALF_WIDTH) + locTail.y})
+    @coodRightBodyPart.push({x: -(Math.sin(rad) * @arrow_half_width) + locTail.x, y: Math.cos(rad) * @arrow_half_width + locTail.y})
+    @coodLeftBodyPart.push({x: Math.sin(rad) * @arrow_half_width + locTail.x, y: -(Math.cos(rad) * @arrow_half_width) + locTail.y})
 
   # 矢印の本体を作成
   # @private
@@ -290,10 +325,10 @@ class ArrowItem extends CanvasItemBase
       #      console.log('locRight:x ' + Math.cos(rad))
       #      console.log('locRight:x ' + Math.sin(rad))
 
-      leftX = parseInt(Math.cos(rad + Math.PI) * ARROW_HALF_WIDTH + center.x)
-      leftY = parseInt(Math.sin(rad + Math.PI) * ARROW_HALF_WIDTH + center.y)
-      rightX = parseInt(Math.cos(rad) * ARROW_HALF_WIDTH + center.x)
-      rightY = parseInt(Math.sin(rad) * ARROW_HALF_WIDTH + center.y)
+      leftX = parseInt(Math.cos(rad + Math.PI) * @arrow_half_width + center.x)
+      leftY = parseInt(Math.sin(rad + Math.PI) * @arrow_half_width + center.y)
+      rightX = parseInt(Math.cos(rad) * @arrow_half_width + center.x)
+      rightY = parseInt(Math.sin(rad) * @arrow_half_width + center.y)
 
       ret =
         coodLeftPart:
@@ -351,29 +386,48 @@ class ArrowItem extends CanvasItemBase
 
   # 座標をCanvasに描画
   # @private
-  # @param [Boolean] isBaseCanvas 基底キャンバスへの描画か
-  drawCoodToCanvas = (isBaseCanvas, dc = null) ->
-    if isBaseCanvas
-      drawingContext = window.drawingContext
-      marginX = 0
-      marginY = 0
-    else if dc != null
+  # @param [Object] dc CanvasContext(isBaseCanvasがfalseの場合使用)
+  drawCoodToCanvas = (dc = null) ->
+    drawingContext = null
+    if dc?
       drawingContext = dc
-      marginX = @itemSize.x
-      marginY = @itemSize.y
+    else
+      drawingContext = window.drawingContext
     if @coodLeftBodyPart.length <= 0 || @coodRightBodyPart.length <= 0
       # 尾が描かれてない場合
       return
 
-    drawingContext.moveTo(@coodLeftBodyPart[@coodLeftBodyPart.length - 1].x - marginX, @coodLeftBodyPart[@coodLeftBodyPart.length - 1].y - marginY)
+    drawingContext.moveTo(@coodLeftBodyPart[@coodLeftBodyPart.length - 1].x, @coodLeftBodyPart[@coodLeftBodyPart.length - 1].y)
     if @coodLeftBodyPart.length >= 2
       for i in [@coodLeftBodyPart.length - 2 .. 0]
-        drawingContext.lineTo(@coodLeftBodyPart[i].x - marginX, @coodLeftBodyPart[i].y - marginY)
+        drawingContext.lineTo(@coodLeftBodyPart[i].x, @coodLeftBodyPart[i].y)
     for i in [0 .. @coodRightBodyPart.length - 1]
-      drawingContext.lineTo(@coodRightBodyPart[i].x - marginX, @coodRightBodyPart[i].y - marginY)
+      drawingContext.lineTo(@coodRightBodyPart[i].x, @coodRightBodyPart[i].y)
     for i in [0 .. @coodHeadPart.length - 1]
-      drawingContext.lineTo(@coodHeadPart[i].x - marginX, @coodHeadPart[i].y - marginY)
+      drawingContext.lineTo(@coodHeadPart[i].x, @coodHeadPart[i].y)
     drawingContext.closePath()
+
+  # 座標を基底Canvasに描画
+  # @param [Object] dc Canvasコンテキスト
+  drawCoodToBaseCanvas = ->
+    drawCoodToCanvas.call(@)
+
+  # 座標を新しいCanvasに描画
+  # @param [Object] dc Canvasコンテキスト
+  drawCoodToNewCanvas = ->
+    drawingCanvas = document.getElementById(@canvasElementId())
+    drawingContext = drawingCanvas.getContext('2d')
+    drawCoodToCanvas.call(@, drawingContext)
+
+  # 新しいCanvasに矢印を描画
+  drawNewCanvas : ->
+    drawingCanvas = document.getElementById(@canvasElementId())
+    drawingContext = drawingCanvas.getContext('2d')
+    drawingContext.beginPath();
+    # 尾と体の座標をCanvasに描画
+    drawCoodToNewCanvas.call(@)
+    drawingContext.fillStyle = "#00008B"
+    drawingContext.fill()
 
   # 描画した矢印をクリア
   # @private
@@ -387,13 +441,13 @@ class ArrowItem extends CanvasItemBase
     if @itemSize == null
       @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
     else
-      minX = cood.x - PADDING_SIZE
+      minX = cood.x - @padding_size
       minX = if minX < 0 then 0 else minX
-      minY = cood.y - PADDING_SIZE
+      minY = cood.y - @padding_size
       minY = if minY < 0 then 0 else minY
-      maxX = cood.x + PADDING_SIZE
+      maxX = cood.x + @padding_size
       maxX = if maxX > drawingCanvas.width then drawingCanvas.width else maxX
-      maxY = cood.y + PADDING_SIZE
+      maxY = cood.y + @padding_size
       maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
 
       if @itemSize.x > minX
@@ -414,6 +468,28 @@ class ArrowItem extends CanvasItemBase
 
 
 class WorkTableArrowItem extends ArrowItem
+  # オプションメニューを開く
+  showOptionMenu: ->
+    $('#canvas-config').css('display', '')
+
+  # ドラッグ時のイベント
+  drag: ->
+    element = $('#' + @getElementId())
+    @itemSize.x = element.position().left
+    @itemSize.y = element.position().top
+
+  # リサイズ時のイベント
+  resize: ->
+    canvas = $('#' + @canvasElementId())
+    element = $('#' + @getElementId())
+    @scale.w = element.width() / @itemSize.w
+    @scale.h = element.height() / @itemSize.h
+    canvas.attr('width',  element.width())
+    canvas.attr('height', element.height())
+    drawingCanvas = document.getElementById(@canvasElementId())
+    drawingContext = drawingCanvas.getContext('2d')
+    drawingContext.scale(@scale.w, @scale.h)
+    @drawNewCanvas()
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?

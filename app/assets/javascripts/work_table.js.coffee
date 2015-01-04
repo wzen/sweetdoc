@@ -21,29 +21,10 @@ initCommonVar = ->
   window.selectItemMenu = Constant.ItemType.BUTTON
   loadItemJs(Constant.ItemType.BUTTON)
 
-
-# JQueryUIのドラッグイベントとリサイズをセット
-initDraggableAndResizable =  ->
-  drag = $('.draggable')
-  #  drag.on('mousedown', (e) ->
-  #    e.stopPropagation()
-  #  )
-  drag.draggable({
-    containment: mainWrapper
-  })
-
-  rSize = $('.resizable')
-  #  rSize.on('mousedown', (e) ->
-  #    e.stopPropagation()
-  #  )
-  rSize.resizable({
-    containment: mainWrapper
-  })
-
 # 手書きイベント初期化
 initHandwrite = ->
-  dragging = false
-  clicking = false
+  drag = false
+  click = false
   lastX = null; lastY = null
   item = null
   enableMoveEvent = true
@@ -75,7 +56,7 @@ initHandwrite = ->
   mouseMoveDrawing = (loc) ->
     if enableMoveEvent
       enableMoveEvent = false
-      dragging = true
+      drag = true
       item.draw(loc)
 
       # 待ちキューがある場合はもう一度実行
@@ -122,7 +103,7 @@ initHandwrite = ->
       if e.which == 1 #左クリック
         loc = calcCanvasLoc(e)
         saveLastLoc(loc)
-        clicking = true
+        click = true
         if mode == Constant.Mode.DRAW
           e.preventDefault()
           mouseDownDrawing(loc)
@@ -136,7 +117,7 @@ initHandwrite = ->
     drawingCanvas.onmousemove = (e) ->
       if e.which == 1 #左クリック
         loc = calcCanvasLoc(e)
-        if clicking &&
+        if click &&
           Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
             if mode == Constant.Mode.DRAW
               e.preventDefault()
@@ -147,25 +128,56 @@ initHandwrite = ->
     # @param [Array] e ウィンドウ座標
     drawingCanvas.onmouseup = (e) ->
       if e.which == 1 #左クリック
-        if dragging && mode == Constant.Mode.DRAW
+        if drag && mode == Constant.Mode.DRAW
           e.preventDefault()
           mouseUpDrawing()
-      dragging = false
-      clicking = false
+      drag = false
+      click = false
 
 # イベントを設定する
-setupEvents = (item) ->
+setupEvents = (obj) ->
   # コンテキストメニュー設定
-  menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
-  if ArrowItem? && item instanceof ArrowItem
-    menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-    contextSelector = ".arrow"
-  else if ButtonItem? && item instanceof ButtonItem
-    menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-    contextSelector = ".css3button"
-  setupContextMenu(item.getJQueryElement(), contextSelector, menu)
+  do ->
+    menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+    if ArrowItem? && obj instanceof ArrowItem
+      menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+      contextSelector = ".arrow"
+    else if ButtonItem? && obj instanceof ButtonItem
+      menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+      contextSelector = ".css3button"
+    setupContextMenu(obj.getJQueryElement(), contextSelector, menu)
 
-  item.setupEvents()
+  # クリックイベント設定
+  do ->
+    obj.getJQueryElement().mousedown( (e)->
+      if e.which == 1 #左クリック
+        e.stopPropagation()
+        $(@).find('.editSelected').remove()
+        $(@).append('<div class="editSelected" />')
+    )
+
+  # JQueryUIのドラッグイベントとリサイズ設定
+  do ->
+    obj.getJQueryElement().draggable({
+      containment: mainWrapper
+      drag: (event, ui) ->
+        if obj.drag?
+          obj.drag()
+      stop: (event, ui) ->
+        rect = {x:ui.position.left, y: ui.position.top, w: obj.itemSize.w, h: obj.itemSize.h}
+        obj.itemSize = rect
+        obj.saveObj(Constant.ItemActionType.MOVE)
+    })
+    obj.getJQueryElement().resizable({
+      containment: mainWrapper
+      resize: (event, ui) ->
+        if obj.resize?
+          obj.resize()
+      stop: (event, ui) ->
+        rect = {x: obj.itemSize.x, y: obj.itemSize.y, w: ui.size.width, h: ui.size.height}
+        obj.itemSize = rect
+        obj.saveObj(Constant.ItemActionType.MOVE)
+    })
 
 # コンテキストメニュー初期化
 # @param [String] elementID HTML要素ID
@@ -189,15 +201,13 @@ setupContextMenu = (element, contextSelector, menu) ->
   # オプションメニューを初期化
   initOptionMenu = (event) ->
     emt = $(event.target)
-    obj = null
-    itemObjectList.forEach((o) ->
-      objId = o.getIdByElementId(emt.attr('id'))
-      if objId == o.id
-        obj = o
-    )
+    obj = getObjFromObjectListByElementId(emt.attr('id'))
     if obj? && obj.setupOptionMenu?
       # 初期化関数を呼び出す
       obj.setupOptionMenu()
+    if obj? && obj.showOptionMenu?
+      # オプションメニュー表示処理
+      obj.showOptionMenu()
 
   element.contextmenu(
     {
@@ -220,19 +230,25 @@ setupContextMenu = (element, contextSelector, menu) ->
         # オプションメニューの値を初期化
         initOptionMenu(event)
         # オプションメニューを表示
-        openSidebar(calMoveScrollLeft($target))
+        openConfigSidebar(calMoveScrollLeft($target))
         # モードを変更
         changeMode(Constant.Mode.OPTION)
 
       beforeOpen: (event, ui) ->
-        $target = ui.target
-        $menu = ui.menu
-        extraData = ui.extraData
-
+        # 選択メニューを最前面に表示
         ui.menu.zIndex( $(event.target).zIndex() + 1)
-    #$('#contents').contextmenu("setEntry", "copy", "Copy '" + $target.text() + "'").contextmenu("setEntry", "paste", "Paste" + (CLIPBOARD ? " '" + CLIPBOARD + "'" : "")).contextmenu("enableEntry", "paste", (CLIPBOARD != ""))
     }
   )
+
+# 要素IDでオブジェクトリストから対象のオブジェクトを取得
+getObjFromObjectListByElementId = (emtId) ->
+  obj = null
+  itemObjectList.forEach((o) ->
+    objId = o.constructor.getIdByElementId(emtId)
+    if objId == o.id
+      obj = o
+  )
+  return obj
 
 ### スライダーの作成 ###
 
@@ -496,7 +512,8 @@ clearAllItemStyle = ->
 
 # サイドバーをオープン
 # @param [Array] scrollLeft オープン時にスクロースさせる位置
-openSidebar = (scrollLeft = null) ->
+openConfigSidebar = (scrollLeft = null) ->
+
   $('#main').switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
     $('#sidebar').fadeIn('1000')
   )
@@ -508,6 +525,7 @@ closeSidebar = ->
   $('#sidebar').fadeOut('1000', ->
     mainScroll.animate({scrollLeft: 0}, 500)
     $('#main').switchClass('col-md-9', 'col-md-12', 500, 'swing')
+    $('.sidebar-config').css('display', 'none')
   )
 
 # 警告表示
@@ -836,7 +854,7 @@ setupTimeLineObjects = ->
       chapter: 1
       screen: 1
       miniObj: item.generateMinimumObject()
-      actorSize: item.itemSize
+      itemSize: item.itemSize
       sEvent: (x, y) ->
         if @actionEventFunc.scrollDraw?
           @actionEventFunc.scrollDraw(x, y)

@@ -54,20 +54,31 @@ ButtonItem = (function(_super) {
     return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
   };
 
-  ButtonItem.prototype.endDraw = function(zindex) {
+  ButtonItem.prototype.endDraw = function(zindex, show) {
+    if (show == null) {
+      show = true;
+    }
     if (!ButtonItem.__super__.endDraw.call(this, zindex)) {
       return false;
     }
-    return this.makeElement();
+    return this.makeElement(show);
   };
 
-  ButtonItem.prototype.reDraw = function() {
-    return this.makeElement();
+  ButtonItem.prototype.reDraw = function(show) {
+    if (show == null) {
+      show = true;
+    }
+    return this.makeElement(show);
   };
 
-  ButtonItem.prototype.makeElement = function() {
+  ButtonItem.prototype.makeElement = function(show) {
+    if (show == null) {
+      show = true;
+    }
     $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
-    return true;
+    if (!show) {
+      return false;
+    }
   };
 
   ButtonItem.prototype.generateMinimumObject = function() {
@@ -157,9 +168,12 @@ WorkTableButtonItem = (function(_super) {
     return obj;
   };
 
-  WorkTableButtonItem.prototype.makeElement = function() {
+  WorkTableButtonItem.prototype.makeElement = function(show) {
     var newEmt;
-    WorkTableButtonItem.__super__.makeElement.call(this);
+    if (show == null) {
+      show = true;
+    }
+    WorkTableButtonItem.__super__.makeElement.call(this, show);
     if (this.css != null) {
       newEmt = $(this.css);
     } else {
@@ -308,9 +322,16 @@ WorkTableButtonItem = (function(_super) {
     });
   };
 
-  WorkTableButtonItem.showOptionMenu = function() {};
+  WorkTableButtonItem.prototype.showOptionMenu = function() {
+    return $('#css-config').css('display', '');
+  };
 
-  WorkTableButtonItem.hideOptionMenu = function() {};
+  WorkTableButtonItem.prototype.drag = function() {
+    var element;
+    element = $('#' + this.getElementId());
+    this.itemSize.x = element.position().left;
+    return this.itemSize.y = element.position().top;
+  };
 
   return WorkTableButtonItem;
 

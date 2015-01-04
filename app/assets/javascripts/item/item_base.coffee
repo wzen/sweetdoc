@@ -7,6 +7,10 @@ class ItemBase extends Actor
   # @property [ItemType] ITEMTYPE アイテム種別
   @ITEMTYPE = ""
 
+  # 要素IDからアイテムIDを取得
+  @getIdByElementId : (elementId) ->
+    return elementId.replace(@IDENTITY + '_', '')
+
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
@@ -33,9 +37,6 @@ class ItemBase extends Actor
   # @return [Int] HTML要素ID
   getElementId: ->
     return @constructor.IDENTITY + '_' + @id
-
-  getIdByElementId : (elementId) ->
-    return elementId.replace(@constructor.IDENTITY + '_', '')
 
   getJQueryElement: ->
     return $('#' + @getElementId())
@@ -72,7 +73,7 @@ class ItemBase extends Actor
   # 保存した画面を指定したサイズで再設定
   # @param [Array] size サイズ
   restoreDrawingSurface : (size) ->
-    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - Constant.SURFACE_IMAGE_MARGIN, size.y - Constant.SURFACE_IMAGE_MARGIN, size.w + Constant.SURFACE_IMAGE_MARGIN * 2, size.h + Constant.SURFACE_IMAGE_MARGIN * 2)
+    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x, size.y, size.w, size.h)
 
   # 描画開始時の処理
   startDraw: ->
@@ -122,34 +123,6 @@ class ItemBase extends Actor
   # @abstract
   drawForLookaround: (obj) ->
 
-  # アイテムにイベントを設定する
-  setupEvents: ->
-    # クリックイベント設定
-    do =>
-      @getJQueryElement().mousedown( (e)->
-        if e.which == 1 #左クリック
-          e.stopPropagation()
-          $(@).find('.editSelected').remove()
-          $(@).append('<div class="editSelected" />')
-      )
-
-    # JQueryUIのドラッグイベントとリサイズ設定
-    do =>
-      @getJQueryElement().draggable({
-        containment: mainWrapper
-        stop: (event, ui) =>
-          rect = {x:ui.position.left, y: ui.position.top, w: @itemSize.w, h: @itemSize.h}
-          @itemSize = rect
-          @saveObj(Constant.ItemActionType.MOVE)
-      })
-      @getJQueryElement().resizable({
-        containment: mainWrapper
-        stop: (event, ui) =>
-          rect = {x: @itemSize.x, y: @itemSize.y, w: ui.size.width, h: ui.size.height}
-          @itemSize = rect
-          @saveObj(Constant.ItemActionType.MOVE)
-      })
-
   # イベントによって設定したスタイルをクリアする　
   clearAllEventStyle : ->
 
@@ -172,3 +145,45 @@ class CssItemBase extends ItemBase
 # Canvasアイテム
 # @extend ItemBase
 class CanvasItemBase extends ItemBase
+  # コンストラクタ
+  constructor: ->
+    super()
+    @newDrawingCanvas = null
+    @newDrawingContext = null
+    @newDrawingSurfaceImageData = null
+
+  # CanvasのHTML要素IDを取得
+  # @return [Int] Canvas要素ID
+  canvasElementId: ->
+    return @getElementId() + '_canvas'
+
+  # 新規キャンパスを作成
+  makeNewCanvas: ->
+    $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
+    $('#' + @canvasElementId()).attr('width',  $('#' + @getElementId()).width())
+    $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
+
+    # キャンパスに対する初期化
+    do =>
+      drawingCanvas = document.getElementById(@canvasElementId())
+      drawingContext = drawingCanvas.getContext('2d')
+      # 伸縮率を設定
+      drawingContext.scale(@scale.w, @scale.h)
+
+  # 新規キャンパスの画面を保存
+  saveNewDrawingSurface : ->
+    @newDrawingCanvas = document.getElementById(@canvasElementId());
+    @newDrawingContext = @newDrawingCanvas.getContext('2d');
+    @newDrawingSurfaceImageData = @newDrawingContext.getImageData(0, 0, @newDrawingCanvas.width, @newDrawingCanvas.height)
+
+  # 保存した画面を新規キャンパスの全画面に再設定
+  restoreAllNewDrawingSurface : ->
+    if @newDrawingSurfaceImageData?
+      @newDrawingContext.putImageData(@newDrawingSurfaceImageData, 0, 0)
+
+  # 描画を削除
+  clearDraw: ->
+    drawingCanvas = document.getElementById(@canvasElementId());
+    if drawingCanvas?
+      drawingContext = @newDrawingCanvas.getContext('2d');
+      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)

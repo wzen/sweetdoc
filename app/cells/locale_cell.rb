@@ -1,6 +1,6 @@
 class LocaleCell < Cell::Rails
   def index
-    @locales = Locale.all
+    @locales = Locale.all.order(:order)
     render
   end
 end

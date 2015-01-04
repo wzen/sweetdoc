@@ -41,21 +41,25 @@ class ButtonItem extends CssItemBase
   # 描画終了時の処理
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
+  # @param [boolean] show 要素作成後に描画を表示するか
   # @return [Boolean] 処理結果
-  endDraw: (zindex) ->
+  endDraw: (zindex, show = true) ->
     if !super(zindex)
       return false
-    @makeElement()
+    @makeElement(show)
 
   # 再描画処理
-  reDraw: ->
-    @makeElement()
+  # @param [boolean] show 要素作成後に描画を表示するか
+  reDraw: (show = true)->
+    @makeElement(show)
 
   # HTML要素を作成
-  # @return [Boolean] 処理結果
-  makeElement: ->
+  # @param [boolean] show 要素作成後に描画を表示するか
+  makeElement: (show = true) ->
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
-    return true
+    if !show
+      # TODO: alphaを0にして非表示にする
+      return false
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
@@ -183,9 +187,10 @@ class WorkTableButtonItem extends ButtonItem
     return obj
 
   # HTML要素とCSSを作成
+  # @param [boolean] show 要素作成後に描画を表示するか
   # @return [Boolean] 処理結果
-  makeElement: ->
-    super()
+  makeElement: (show = true) ->
+    super(show)
     if @css?
       newEmt = $(@css)
     else
@@ -336,14 +341,16 @@ class WorkTableButtonItem extends ButtonItem
           $(webkitFlag).empty()
       cssStyle.text(cssCode.text())
     )
-    #cssStyle.text(cssCode.text())
 
   # オプションメニューを開く
-  @showOptionMenu: ->
+  showOptionMenu: ->
+    $('#css-config').css('display', '')
 
-    # オプションメニューを閉じる
-  @hideOptionMenu: ->
-
+  # ドラッグ時のイベント
+  drag: ->
+    element = $('#' + @getElementId())
+    @itemSize.x = element.position().left
+    @itemSize.y = element.position().top
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?

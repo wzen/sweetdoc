@@ -44,11 +44,13 @@ initTimeline = ->
     if miniObj.itemType == Constant.ItemType.BUTTON
       item = new ButtonItem()
       # とりあえずボタンの場合はそのまま表示
-      item.setMiniumObject(miniObj)
+      item.initActor(miniObj, obj.itemSize, obj.sEvent, obj.cEvent)
       item.reDraw()
     else if miniObj.itemType == Constant.ItemType.ARROW
       item = new ArrowItem()
-    item.initActor(miniObj, obj.actorSize, obj.sEvent, obj.cEvent)
+      item.initActor(miniObj, obj.itemSize, obj.sEvent, obj.cEvent)
+      item.reDraw(false)
+
     actorList.push(item)
     # とりあえずここでChapterを分ける
     if miniObj.itemType == Constant.ItemType.BUTTON

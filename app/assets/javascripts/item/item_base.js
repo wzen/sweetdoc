@@ -10,6 +10,10 @@ ItemBase = (function(_super) {
 
   ItemBase.ITEMTYPE = "";
 
+  ItemBase.getIdByElementId = function(elementId) {
+    return elementId.replace(this.IDENTITY + '_', '');
+  };
+
   function ItemBase(cood) {
     if (cood == null) {
       cood = null;
@@ -32,10 +36,6 @@ ItemBase = (function(_super) {
 
   ItemBase.prototype.getElementId = function() {
     return this.constructor.IDENTITY + '_' + this.id;
-  };
-
-  ItemBase.prototype.getIdByElementId = function(elementId) {
-    return elementId.replace(this.constructor.IDENTITY + '_', '');
   };
 
   ItemBase.prototype.getJQueryElement = function() {
@@ -69,7 +69,7 @@ ItemBase = (function(_super) {
   };
 
   ItemBase.prototype.restoreDrawingSurface = function(size) {
-    return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x - Constant.SURFACE_IMAGE_MARGIN, size.y - Constant.SURFACE_IMAGE_MARGIN, size.w + Constant.SURFACE_IMAGE_MARGIN * 2, size.h + Constant.SURFACE_IMAGE_MARGIN * 2);
+    return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x, size.y, size.w, size.h);
   };
 
   ItemBase.prototype.startDraw = function() {};
@@ -104,52 +104,6 @@ ItemBase = (function(_super) {
 
   ItemBase.prototype.drawForLookaround = function(obj) {};
 
-  ItemBase.prototype.setupEvents = function() {
-    (function(_this) {
-      return (function() {
-        return _this.getJQueryElement().mousedown(function(e) {
-          if (e.which === 1) {
-            e.stopPropagation();
-            $(this).find('.editSelected').remove();
-            return $(this).append('<div class="editSelected" />');
-          }
-        });
-      });
-    })(this)();
-    return (function(_this) {
-      return function() {
-        _this.getJQueryElement().draggable({
-          containment: mainWrapper,
-          stop: function(event, ui) {
-            var rect;
-            rect = {
-              x: ui.position.left,
-              y: ui.position.top,
-              w: _this.itemSize.w,
-              h: _this.itemSize.h
-            };
-            _this.itemSize = rect;
-            return _this.saveObj(Constant.ItemActionType.MOVE);
-          }
-        });
-        return _this.getJQueryElement().resizable({
-          containment: mainWrapper,
-          stop: function(event, ui) {
-            var rect;
-            rect = {
-              x: _this.itemSize.x,
-              y: _this.itemSize.y,
-              w: ui.size.width,
-              h: ui.size.height
-            };
-            _this.itemSize = rect;
-            return _this.saveObj(Constant.ItemActionType.MOVE);
-          }
-        });
-      };
-    })(this)();
-  };
-
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   return ItemBase;
@@ -181,8 +135,50 @@ CanvasItemBase = (function(_super) {
   __extends(CanvasItemBase, _super);
 
   function CanvasItemBase() {
-    return CanvasItemBase.__super__.constructor.apply(this, arguments);
+    CanvasItemBase.__super__.constructor.call(this);
+    this.newDrawingCanvas = null;
+    this.newDrawingContext = null;
+    this.newDrawingSurfaceImageData = null;
   }
+
+  CanvasItemBase.prototype.canvasElementId = function() {
+    return this.getElementId() + '_canvas';
+  };
+
+  CanvasItemBase.prototype.makeNewCanvas = function() {
+    $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
+    $('#' + this.canvasElementId()).attr('width', $('#' + this.getElementId()).width());
+    $('#' + this.canvasElementId()).attr('height', $('#' + this.getElementId()).height());
+    return (function(_this) {
+      return function() {
+        var drawingCanvas, drawingContext;
+        drawingCanvas = document.getElementById(_this.canvasElementId());
+        drawingContext = drawingCanvas.getContext('2d');
+        return drawingContext.scale(_this.scale.w, _this.scale.h);
+      };
+    })(this)();
+  };
+
+  CanvasItemBase.prototype.saveNewDrawingSurface = function() {
+    this.newDrawingCanvas = document.getElementById(this.canvasElementId());
+    this.newDrawingContext = this.newDrawingCanvas.getContext('2d');
+    return this.newDrawingSurfaceImageData = this.newDrawingContext.getImageData(0, 0, this.newDrawingCanvas.width, this.newDrawingCanvas.height);
+  };
+
+  CanvasItemBase.prototype.restoreAllNewDrawingSurface = function() {
+    if (this.newDrawingSurfaceImageData != null) {
+      return this.newDrawingContext.putImageData(this.newDrawingSurfaceImageData, 0, 0);
+    }
+  };
+
+  CanvasItemBase.prototype.clearDraw = function() {
+    var drawingCanvas, drawingContext;
+    drawingCanvas = document.getElementById(this.canvasElementId());
+    if (drawingCanvas != null) {
+      drawingContext = this.newDrawingCanvas.getContext('2d');
+      return drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+    }
+  };
 
   return CanvasItemBase;
 
