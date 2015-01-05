@@ -69,7 +69,9 @@ ItemBase = (function(_super) {
   };
 
   ItemBase.prototype.restoreDrawingSurface = function(size) {
-    return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x, size.y, size.w, size.h);
+    var padding;
+    padding = 5;
+    return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
 
   ItemBase.prototype.startDraw = function() {};
@@ -85,11 +87,7 @@ ItemBase = (function(_super) {
 
   ItemBase.prototype.saveObj = function(action) {
     var history;
-    history = {
-      obj: this,
-      action: action,
-      itemSize: this.itemSize
-    };
+    history = this.getHistoryObj(action);
     this.pushOhi(operationHistoryIndex - 1);
     pushOperationHistory(history);
     if (action === Constant.ItemActionType.MAKE) {
@@ -97,6 +95,12 @@ ItemBase = (function(_super) {
     }
     return console.log('save obj:' + JSON.stringify(this.itemSize));
   };
+
+  ItemBase.prototype.getHistoryObj = function(action) {
+    return null;
+  };
+
+  ItemBase.prototype.setHistoryObj = function(historyObj) {};
 
   ItemBase.prototype.generateMinimumObject = function() {};
 
@@ -145,18 +149,24 @@ CanvasItemBase = (function(_super) {
     return this.getElementId() + '_canvas';
   };
 
+  CanvasItemBase.prototype.setScale = function(drawingContext) {
+    drawingContext.scale(this.scale.w, this.scale.h);
+    $('#' + this.getElementId()).width(this.itemSize.w * this.scale.w);
+    return $('#' + this.getElementId()).height(this.itemSize.h * this.scale.h);
+  };
+
+  CanvasItemBase.prototype.initCanvas = function() {
+    var drawingCanvas, drawingContext;
+    drawingCanvas = document.getElementById(this.canvasElementId());
+    drawingContext = drawingCanvas.getContext('2d');
+    return this.setScale(drawingContext);
+  };
+
   CanvasItemBase.prototype.makeNewCanvas = function() {
     $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
     $('#' + this.canvasElementId()).attr('width', $('#' + this.getElementId()).width());
     $('#' + this.canvasElementId()).attr('height', $('#' + this.getElementId()).height());
-    return (function(_this) {
-      return function() {
-        var drawingCanvas, drawingContext;
-        drawingCanvas = document.getElementById(_this.canvasElementId());
-        drawingContext = drawingCanvas.getContext('2d');
-        return drawingContext.scale(_this.scale.w, _this.scale.h);
-      };
-    })(this)();
+    return this.initCanvas();
   };
 
   CanvasItemBase.prototype.saveNewDrawingSurface = function() {
@@ -176,7 +186,8 @@ CanvasItemBase = (function(_super) {
     drawingCanvas = document.getElementById(this.canvasElementId());
     if (drawingCanvas != null) {
       drawingContext = this.newDrawingCanvas.getContext('2d');
-      return drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+      return this.initCanvas();
     }
   };
 

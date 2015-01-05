@@ -176,14 +176,6 @@ setupEvents = function(obj) {
         }
       },
       stop: function(event, ui) {
-        var rect;
-        rect = {
-          x: ui.position.left,
-          y: ui.position.top,
-          w: obj.itemSize.w,
-          h: obj.itemSize.h
-        };
-        obj.itemSize = rect;
         return obj.saveObj(Constant.ItemActionType.MOVE);
       }
     });
@@ -195,14 +187,6 @@ setupEvents = function(obj) {
         }
       },
       stop: function(event, ui) {
-        var rect;
-        rect = {
-          x: obj.itemSize.x,
-          y: obj.itemSize.y,
-          w: ui.size.width,
-          h: ui.size.height
-        };
-        obj.itemSize = rect;
         return obj.saveObj(Constant.ItemActionType.MOVE);
       }
     });
@@ -719,7 +703,7 @@ undo = function() {
     obj.getJQueryElement().remove();
     past = operationHistory[pastOperationIndex];
     obj = past.obj;
-    obj.itemSize = past.itemSize;
+    obj.setHistoryObj(past);
     obj.reDraw();
     return setupEvents(obj);
   }
@@ -736,12 +720,12 @@ redo = function() {
   obj.incrementOhiRegistIndex();
   action = history.action;
   if (action === Constant.ItemActionType.MAKE) {
-    obj.itemSize = history.itemSize;
+    obj.setHistoryObj(history);
     obj.reDraw();
     return setupEvents(obj);
   } else if (action === Constant.ItemActionType.MOVE) {
     obj.getJQueryElement().remove();
-    obj.itemSize = history.itemSize;
+    obj.setHistoryObj(history);
     obj.reDraw();
     return setupEvents(obj);
   }

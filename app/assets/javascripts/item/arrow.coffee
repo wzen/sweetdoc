@@ -82,7 +82,7 @@ class ArrowItem extends CanvasItemBase
     # パスの描画
     @drawPath(moveCood)
     # 描画した矢印をクリア
-    clearArrow.call(@)
+    @restoreDrawingSurface(@itemSize)
     # 線の描画
     @drawLine()
 
@@ -158,12 +158,12 @@ class ArrowItem extends CanvasItemBase
   generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.ARROW
-      zindex: @zindex
-      coodRegist: @coodRegist
-      arrow_width: @arrow_width
-      header_width: @header_width
-      header_height: @header_height
-      scale: @scale
+      zindex: cloneObj(@zindex)
+      coodRegist: cloneObj(@coodRegist)
+      arrow_width: cloneObj(@arrow_width)
+      header_width: cloneObj(@header_width)
+      header_height: cloneObj(@header_height)
+      scale: cloneObj(@scale)
     }
     return obj
 
@@ -176,14 +176,14 @@ class ArrowItem extends CanvasItemBase
 
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
-    @zindex = obj.zindex
-    @coodRegist = obj.coodRegist
-    @arrow_width = obj.arrow_width
-    @arrow_half_width = @arrow_width / 2.0
-    @header_width = obj.header_width
-    @header_height = obj.header_height
-    @padding_size = @header_width
-    @scale = obj.scale
+    @zindex = cloneObj(obj.zindex)
+    @coodRegist = cloneObj(obj.coodRegist)
+    @arrow_width = cloneObj(obj.arrow_width)
+    @arrow_half_width = cloneObj(@arrow_width / 2.0)
+    @header_width = cloneObj(obj.header_width)
+    @header_height = cloneObj(obj.header_height)
+    @padding_size = cloneObj(@header_width)
+    @scale = cloneObj(obj.scale)
 
   # スクロールイベント
   scrollDraw : (x, y) =>
@@ -429,12 +429,6 @@ class ArrowItem extends CanvasItemBase
     drawingContext.fillStyle = "#00008B"
     drawingContext.fill()
 
-  # 描画した矢印をクリア
-  # @private
-  clearArrow = ->
-    # 保存したキャンパスを張り付け
-    @restoreDrawingSurface(@itemSize)
-
   # 矢印のサイズ更新
   # @private
   updateArrowRect = (cood) ->
@@ -490,6 +484,23 @@ class WorkTableArrowItem extends ArrowItem
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.scale(@scale.w, @scale.h)
     @drawNewCanvas()
+
+  # 履歴データを取得
+  # @param [ItemActionType] action アクション種別
+  getHistoryObj: (action) ->
+    obj = {
+      obj: @
+      action : action
+      itemSize: cloneObj(@itemSize)
+      scale: cloneObj(@scale)
+    }
+    console.log("getHistory: scale:#{@scale.w},#{@scale.h}")
+    return obj
+
+  # 履歴データを設定
+  setHistoryObj: (historyObj) ->
+    @itemSize = cloneObj(historyObj.itemSize)
+    @scale = cloneObj(historyObj.scale)
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?

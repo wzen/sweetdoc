@@ -73,7 +73,9 @@ class ItemBase extends Actor
   # 保存した画面を指定したサイズで再設定
   # @param [Array] size サイズ
   restoreDrawingSurface : (size) ->
-    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x, size.y, size.w, size.h)
+    # ボタンのLadderBand用にpaddingを付ける
+    padding = 5
+    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
   # 描画開始時の処理
   startDraw: ->
@@ -99,17 +101,23 @@ class ItemBase extends Actor
   # @param [ItemActionType] action アクション種別
   saveObj: (action) ->
     # 操作履歴に保存
-    history = {
-      obj: @
-      action : action
-      itemSize: @itemSize
-    }
+    history = @getHistoryObj(action)
     @pushOhi(operationHistoryIndex - 1)
     pushOperationHistory(history)
     if action == Constant.ItemActionType.MAKE
       # アイテムリストに保存
       itemObjectList.push(@)
     console.log('save obj:' + JSON.stringify(@itemSize))
+
+  # 履歴データを取得
+  # @abstract
+  # @param [ItemActionType] action アクション種別
+  getHistoryObj: (action) ->
+    return null
+
+  # 履歴データを設定
+  # @abstract
+  setHistoryObj: (historyObj) ->
 
   # ストレージとDB保存用の最小限のデータを取得
   # @abstract
@@ -157,18 +165,28 @@ class CanvasItemBase extends ItemBase
   canvasElementId: ->
     return @getElementId() + '_canvas'
 
+  # 拡大率を設定
+  setScale: (drawingContext) ->
+    # キャンパスの伸縮
+    drawingContext.scale(@scale.w, @scale.h)
+    # 要素の伸縮
+    $('#' + @getElementId()).width(@itemSize.w * @scale.w)
+    $('#' + @getElementId()).height(@itemSize.h * @scale.h)
+
+  # キャンパス初期化処理
+  initCanvas: ->
+    drawingCanvas = document.getElementById(@canvasElementId())
+    drawingContext = drawingCanvas.getContext('2d')
+    # 伸縮率を設定
+    @setScale(drawingContext)
+
   # 新規キャンパスを作成
   makeNewCanvas: ->
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
     $('#' + @canvasElementId()).attr('width',  $('#' + @getElementId()).width())
     $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
-
     # キャンパスに対する初期化
-    do =>
-      drawingCanvas = document.getElementById(@canvasElementId())
-      drawingContext = drawingCanvas.getContext('2d')
-      # 伸縮率を設定
-      drawingContext.scale(@scale.w, @scale.h)
+    @initCanvas()
 
   # 新規キャンパスの画面を保存
   saveNewDrawingSurface : ->
@@ -187,3 +205,7 @@ class CanvasItemBase extends ItemBase
     if drawingCanvas?
       drawingContext = @newDrawingCanvas.getContext('2d');
       drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
+      # キャンパスに対する初期化
+      @initCanvas()
+
+

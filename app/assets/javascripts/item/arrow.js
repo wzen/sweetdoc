@@ -7,7 +7,7 @@ var ArrowItem, WorkTableArrowItem,
 window.loadedItemTypeList.push(Constant.ItemType.ARROW);
 
 ArrowItem = (function(_super) {
-  var ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, calBodyPath, calDrection, calTailDrawPath, calTrianglePath, clearArrow, coodLength, coodLog, drawCoodToBaseCanvas, drawCoodToCanvas, drawCoodToNewCanvas, updateArrowRect;
+  var ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, calBodyPath, calDrection, calTailDrawPath, calTrianglePath, coodLength, coodLog, drawCoodToBaseCanvas, drawCoodToCanvas, drawCoodToNewCanvas, updateArrowRect;
 
   __extends(ArrowItem, _super);
 
@@ -67,7 +67,7 @@ ArrowItem = (function(_super) {
   ArrowItem.prototype.draw = function(moveCood) {
     this.coodRegist.push(moveCood);
     this.drawPath(moveCood);
-    clearArrow.call(this);
+    this.restoreDrawingSurface(this.itemSize);
     return this.drawLine();
   };
 
@@ -145,12 +145,12 @@ ArrowItem = (function(_super) {
     var obj;
     obj = {
       itemType: Constant.ItemType.ARROW,
-      zindex: this.zindex,
-      coodRegist: this.coodRegist,
-      arrow_width: this.arrow_width,
-      header_width: this.header_width,
-      header_height: this.header_height,
-      scale: this.scale
+      zindex: cloneObj(this.zindex),
+      coodRegist: cloneObj(this.coodRegist),
+      arrow_width: cloneObj(this.arrow_width),
+      header_width: cloneObj(this.header_width),
+      header_height: cloneObj(this.header_height),
+      scale: cloneObj(this.scale)
     };
     return obj;
   };
@@ -162,14 +162,14 @@ ArrowItem = (function(_super) {
   };
 
   ArrowItem.prototype.setMiniumObject = function(obj) {
-    this.zindex = obj.zindex;
-    this.coodRegist = obj.coodRegist;
-    this.arrow_width = obj.arrow_width;
-    this.arrow_half_width = this.arrow_width / 2.0;
-    this.header_width = obj.header_width;
-    this.header_height = obj.header_height;
-    this.padding_size = this.header_width;
-    return this.scale = obj.scale;
+    this.zindex = cloneObj(obj.zindex);
+    this.coodRegist = cloneObj(obj.coodRegist);
+    this.arrow_width = cloneObj(obj.arrow_width);
+    this.arrow_half_width = cloneObj(this.arrow_width / 2.0);
+    this.header_width = cloneObj(obj.header_width);
+    this.header_height = cloneObj(obj.header_height);
+    this.padding_size = cloneObj(this.header_width);
+    return this.scale = cloneObj(obj.scale);
   };
 
   ArrowItem.prototype.scrollDraw = function(x, y) {
@@ -421,10 +421,6 @@ ArrowItem = (function(_super) {
     return drawingContext.fill();
   };
 
-  clearArrow = function() {
-    return this.restoreDrawingSurface(this.itemSize);
-  };
-
   updateArrowRect = function(cood) {
     var maxX, maxY, minX, minY;
     if (this.itemSize === null) {
@@ -498,6 +494,23 @@ WorkTableArrowItem = (function(_super) {
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.scale(this.scale.w, this.scale.h);
     return this.drawNewCanvas();
+  };
+
+  WorkTableArrowItem.prototype.getHistoryObj = function(action) {
+    var obj;
+    obj = {
+      obj: this,
+      action: action,
+      itemSize: cloneObj(this.itemSize),
+      scale: cloneObj(this.scale)
+    };
+    console.log("getHistory: scale:" + this.scale.w + "," + this.scale.h);
+    return obj;
+  };
+
+  WorkTableArrowItem.prototype.setHistoryObj = function(historyObj) {
+    this.itemSize = cloneObj(historyObj.itemSize);
+    return this.scale = cloneObj(historyObj.scale);
   };
 
   return WorkTableArrowItem;

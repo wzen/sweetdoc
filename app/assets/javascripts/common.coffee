@@ -25,6 +25,24 @@ generateId = ->
     RandomString += BaseString.charAt( Math.floor( Math.random() * n))
   return RandomString
 
+# オブジェクトの複製
+cloneObj = (obj) ->
+  if not obj? or typeof obj isnt 'object'
+    return obj
+  if obj instanceof Date
+    return new Date(obj.getTime())
+  if obj instanceof RegExp
+    flags = ''
+    flags += 'g' if obj.global?
+    flags += 'i' if obj.ignoreCase?
+    flags += 'm' if obj.multiline?
+    flags += 'y' if obj.sticky?
+    return new RegExp(obj.source, flags)
+  newInstance = new obj.constructor()
+  for key of obj
+    newInstance[key] = clone obj[key]
+  return newInstance
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedItemTypeList = []

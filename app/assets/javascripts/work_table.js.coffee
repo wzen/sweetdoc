@@ -164,8 +164,6 @@ setupEvents = (obj) ->
         if obj.drag?
           obj.drag()
       stop: (event, ui) ->
-        rect = {x:ui.position.left, y: ui.position.top, w: obj.itemSize.w, h: obj.itemSize.h}
-        obj.itemSize = rect
         obj.saveObj(Constant.ItemActionType.MOVE)
     })
     obj.getJQueryElement().resizable({
@@ -174,8 +172,6 @@ setupEvents = (obj) ->
         if obj.resize?
           obj.resize()
       stop: (event, ui) ->
-        rect = {x: obj.itemSize.x, y: obj.itemSize.y, w: ui.size.width, h: ui.size.height}
-        obj.itemSize = rect
         obj.saveObj(Constant.ItemActionType.MOVE)
     })
 
@@ -665,7 +661,8 @@ undo = ->
     obj.getJQueryElement().remove()
     past = operationHistory[pastOperationIndex]
     obj = past.obj
-    obj.itemSize =  past.itemSize
+    #obj.itemSize =  past.itemSize
+    obj.setHistoryObj(past)
     obj.reDraw()
     setupEvents(obj)
 
@@ -680,12 +677,12 @@ redo = ->
   obj.incrementOhiRegistIndex()
   action = history.action
   if action == Constant.ItemActionType.MAKE
-    obj.itemSize = history.itemSize
+    obj.setHistoryObj(history)
     obj.reDraw()
     setupEvents(obj)
   else if action == Constant.ItemActionType.MOVE
     obj.getJQueryElement().remove()
-    obj.itemSize = history.itemSize
+    obj.setHistoryObj(history)
     obj.reDraw()
     setupEvents(obj)
 
