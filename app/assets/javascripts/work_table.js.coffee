@@ -661,10 +661,11 @@ undo = ->
     obj.getJQueryElement().remove()
     past = operationHistory[pastOperationIndex]
     obj = past.obj
-    #obj.itemSize =  past.itemSize
     obj.setHistoryObj(past)
     obj.reDraw()
+    console.log("undo: itemSize: #{JSON.stringify(obj.itemSize)}")
     setupEvents(obj)
+    console.log("undo2: itemSize: #{JSON.stringify(obj.itemSize)}")
 
 # redo処理
 redo = ->

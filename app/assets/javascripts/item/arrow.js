@@ -51,7 +51,6 @@ ArrowItem = (function(_super) {
   ArrowItem.prototype.drawPath = function(moveCood) {
     calDrection.call(this, this.drawCoodRegist[this.drawCoodRegist.length - 1], moveCood);
     this.drawCoodRegist.push(moveCood);
-    updateArrowRect.call(this, moveCood);
     calTailDrawPath.call(this);
     calBodyPath.call(this, moveCood);
     return calTrianglePath.call(this, this.coodLeftBodyPart[this.coodLeftBodyPart.length - 1], this.coodRightBodyPart[this.coodRightBodyPart.length - 1]);
@@ -66,6 +65,7 @@ ArrowItem = (function(_super) {
 
   ArrowItem.prototype.draw = function(moveCood) {
     this.coodRegist.push(moveCood);
+    updateArrowRect.call(this, moveCood);
     this.drawPath(moveCood);
     this.restoreDrawingSurface(this.itemSize);
     return this.drawLine();
@@ -479,7 +479,8 @@ WorkTableArrowItem = (function(_super) {
     var element;
     element = $('#' + this.getElementId());
     this.itemSize.x = element.position().left;
-    return this.itemSize.y = element.position().top;
+    this.itemSize.y = element.position().top;
+    return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
   };
 
   WorkTableArrowItem.prototype.resize = function() {
@@ -493,7 +494,8 @@ WorkTableArrowItem = (function(_super) {
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.scale(this.scale.w, this.scale.h);
-    return this.drawNewCanvas();
+    this.drawNewCanvas();
+    return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
   };
 
   WorkTableArrowItem.prototype.getHistoryObj = function(action) {
@@ -510,7 +512,8 @@ WorkTableArrowItem = (function(_super) {
 
   WorkTableArrowItem.prototype.setHistoryObj = function(historyObj) {
     this.itemSize = cloneObj(historyObj.itemSize);
-    return this.scale = cloneObj(historyObj.scale);
+    this.scale = cloneObj(historyObj.scale);
+    return console.log("setHistoryObj: itemSize: " + (JSON.stringify(this.itemSize)));
   };
 
   return WorkTableArrowItem;

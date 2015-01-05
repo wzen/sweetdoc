@@ -56,9 +56,6 @@ class ArrowItem extends CanvasItemBase
     calDrection.call(@, @drawCoodRegist[@drawCoodRegist.length - 1], moveCood)
     @drawCoodRegist.push(moveCood)
 
-    # 描画範囲の更新
-    updateArrowRect.call(@, moveCood)
-
     # 尾の部分の座標を計算
     calTailDrawPath.call(@)
     # 体の部分の座標を計算
@@ -79,6 +76,8 @@ class ArrowItem extends CanvasItemBase
   # @param [Array] moveCood 画面ドラッグ座標
   draw : (moveCood) ->
     @coodRegist.push(moveCood)
+    # 描画範囲の更新
+    updateArrowRect.call(@, moveCood)
     # パスの描画
     @drawPath(moveCood)
     # 描画した矢印をクリア
@@ -471,6 +470,7 @@ class WorkTableArrowItem extends ArrowItem
     element = $('#' + @getElementId())
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
+    console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
 
   # リサイズ時のイベント
   resize: ->
@@ -484,6 +484,7 @@ class WorkTableArrowItem extends ArrowItem
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.scale(@scale.w, @scale.h)
     @drawNewCanvas()
+    console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
 
   # 履歴データを取得
   # @param [ItemActionType] action アクション種別
@@ -498,9 +499,11 @@ class WorkTableArrowItem extends ArrowItem
     return obj
 
   # 履歴データを設定
+  # @param [Array] historyObj 履歴オブジェクト
   setHistoryObj: (historyObj) ->
     @itemSize = cloneObj(historyObj.itemSize)
     @scale = cloneObj(historyObj.scale)
+    console.log("setHistoryObj: itemSize: #{JSON.stringify(@itemSize)}")
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?

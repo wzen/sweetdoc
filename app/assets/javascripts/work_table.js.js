@@ -705,7 +705,9 @@ undo = function() {
     obj = past.obj;
     obj.setHistoryObj(past);
     obj.reDraw();
-    return setupEvents(obj);
+    console.log("undo: itemSize: " + (JSON.stringify(obj.itemSize)));
+    setupEvents(obj);
+    return console.log("undo2: itemSize: " + (JSON.stringify(obj.itemSize)));
   }
 };
 

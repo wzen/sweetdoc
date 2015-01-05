@@ -165,13 +165,19 @@ class CanvasItemBase extends ItemBase
   canvasElementId: ->
     return @getElementId() + '_canvas'
 
-  # 拡大率を設定
+  # 伸縮率を設定
   setScale: (drawingContext) ->
+    # 要素の伸縮
+    element = $('#' + @getElementId())
+    canvas = $('#' + @canvasElementId())
+    element.width(@itemSize.w * @scale.w)
+    element.height(@itemSize.h * @scale.h)
+    canvas.attr('width',  element.width())
+    canvas.attr('height', element.height())
     # キャンパスの伸縮
     drawingContext.scale(@scale.w, @scale.h)
-    # 要素の伸縮
-    $('#' + @getElementId()).width(@itemSize.w * @scale.w)
-    $('#' + @getElementId()).height(@itemSize.h * @scale.h)
+
+    console.log("setScale: itemSize: #{JSON.stringify(@itemSize)}")
 
   # キャンパス初期化処理
   initCanvas: ->
@@ -183,8 +189,6 @@ class CanvasItemBase extends ItemBase
   # 新規キャンパスを作成
   makeNewCanvas: ->
     $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
-    $('#' + @canvasElementId()).attr('width',  $('#' + @getElementId()).width())
-    $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
     # キャンパスに対する初期化
     @initCanvas()
 

@@ -150,9 +150,15 @@ CanvasItemBase = (function(_super) {
   };
 
   CanvasItemBase.prototype.setScale = function(drawingContext) {
+    var canvas, element;
+    element = $('#' + this.getElementId());
+    canvas = $('#' + this.canvasElementId());
+    element.width(this.itemSize.w * this.scale.w);
+    element.height(this.itemSize.h * this.scale.h);
+    canvas.attr('width', element.width());
+    canvas.attr('height', element.height());
     drawingContext.scale(this.scale.w, this.scale.h);
-    $('#' + this.getElementId()).width(this.itemSize.w * this.scale.w);
-    return $('#' + this.getElementId()).height(this.itemSize.h * this.scale.h);
+    return console.log("setScale: itemSize: " + (JSON.stringify(this.itemSize)));
   };
 
   CanvasItemBase.prototype.initCanvas = function() {
@@ -164,8 +170,6 @@ CanvasItemBase = (function(_super) {
 
   CanvasItemBase.prototype.makeNewCanvas = function() {
     $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
-    $('#' + this.canvasElementId()).attr('width', $('#' + this.getElementId()).width());
-    $('#' + this.canvasElementId()).attr('height', $('#' + this.getElementId()).height());
     return this.initCanvas();
   };
 
