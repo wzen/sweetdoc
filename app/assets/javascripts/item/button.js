@@ -86,10 +86,10 @@ ButtonItem = (function(_super) {
     obj = {
       id: this.id,
       itemType: Constant.ItemType.BUTTON,
-      mousedownCood: cloneObj(this.mousedownCood),
-      itemSize: cloneObj(this.itemSize),
-      zindex: cloneObj(this.zindex),
-      css: cloneObj(this.css)
+      mousedownCood: makeClone(this.mousedownCood),
+      itemSize: makeClone(this.itemSize),
+      zindex: makeClone(this.zindex),
+      css: makeClone(this.css)
     };
     return obj;
   };
@@ -102,10 +102,10 @@ ButtonItem = (function(_super) {
 
   ButtonItem.prototype.setMiniumObject = function(obj) {
     this.id = obj.id;
-    this.mousedownCood = cloneObj(obj.mousedownCood);
-    this.itemSize = cloneObj(obj.itemSize);
-    this.zindex = cloneObj(obj.zindex);
-    return this.css = cloneObj(obj.css);
+    this.mousedownCood = makeClone(obj.mousedownCood);
+    this.itemSize = makeClone(obj.itemSize);
+    this.zindex = makeClone(obj.zindex);
+    return this.css = makeClone(obj.css);
   };
 
   ButtonItem.prototype.defaultClick = function(e) {
@@ -345,13 +345,13 @@ WorkTableButtonItem = (function(_super) {
     obj = {
       obj: this,
       action: action,
-      itemSize: cloneObj(this.itemSize)
+      itemSize: makeClone(this.itemSize)
     };
     return obj;
   };
 
   WorkTableButtonItem.prototype.setHistoryObj = function(historyObj) {
-    return this.itemSize = cloneObj(historyObj.itemSize);
+    return this.itemSize = makeClone(historyObj.itemSize);
   };
 
   return WorkTableButtonItem;

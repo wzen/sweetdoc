@@ -157,12 +157,12 @@ class ArrowItem extends CanvasItemBase
   generateMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.ARROW
-      zindex: cloneObj(@zindex)
-      coodRegist: cloneObj(@coodRegist)
-      arrow_width: cloneObj(@arrow_width)
-      header_width: cloneObj(@header_width)
-      header_height: cloneObj(@header_height)
-      scale: cloneObj(@scale)
+      zindex: makeClone(@zindex)
+      coodRegist: makeClone(@coodRegist)
+      arrow_width: makeClone(@arrow_width)
+      header_width: makeClone(@header_width)
+      header_height: makeClone(@header_height)
+      scale: makeClone(@scale)
     }
     return obj
 
@@ -175,14 +175,14 @@ class ArrowItem extends CanvasItemBase
 
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
-    @zindex = cloneObj(obj.zindex)
-    @coodRegist = cloneObj(obj.coodRegist)
-    @arrow_width = cloneObj(obj.arrow_width)
-    @arrow_half_width = cloneObj(@arrow_width / 2.0)
-    @header_width = cloneObj(obj.header_width)
-    @header_height = cloneObj(obj.header_height)
-    @padding_size = cloneObj(@header_width)
-    @scale = cloneObj(obj.scale)
+    @zindex = makeClone(obj.zindex)
+    @coodRegist = makeClone(obj.coodRegist)
+    @arrow_width = makeClone(obj.arrow_width)
+    @arrow_half_width = makeClone(@arrow_width / 2.0)
+    @header_width = makeClone(obj.header_width)
+    @header_height = makeClone(obj.header_height)
+    @padding_size = makeClone(@header_width)
+    @scale = makeClone(obj.scale)
 
   # スクロールイベント
   scrollDraw : (x, y) =>
@@ -492,8 +492,8 @@ class WorkTableArrowItem extends ArrowItem
     obj = {
       obj: @
       action : action
-      itemSize: cloneObj(@itemSize)
-      scale: cloneObj(@scale)
+      itemSize: makeClone(@itemSize)
+      scale: makeClone(@scale)
     }
     console.log("getHistory: scale:#{@scale.w},#{@scale.h}")
     return obj
@@ -501,8 +501,8 @@ class WorkTableArrowItem extends ArrowItem
   # 履歴データを設定
   # @param [Array] historyObj 履歴オブジェクト
   setHistoryObj: (historyObj) ->
-    @itemSize = cloneObj(historyObj.itemSize)
-    @scale = cloneObj(historyObj.scale)
+    @itemSize = makeClone(historyObj.itemSize)
+    @scale = makeClone(historyObj.scale)
     console.log("setHistoryObj: itemSize: #{JSON.stringify(@itemSize)}")
 
 # 初期化

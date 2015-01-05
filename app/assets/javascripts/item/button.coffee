@@ -67,10 +67,10 @@ class ButtonItem extends CssItemBase
     obj = {
       id: @id
       itemType: Constant.ItemType.BUTTON
-      mousedownCood: cloneObj(@mousedownCood)
-      itemSize: cloneObj(@itemSize)
-      zindex: cloneObj(@zindex)
-      css: cloneObj(@css)
+      mousedownCood: makeClone(@mousedownCood)
+      itemSize: makeClone(@itemSize)
+      zindex: makeClone(@zindex)
+      css: makeClone(@css)
     }
     return obj
 
@@ -83,12 +83,13 @@ class ButtonItem extends CssItemBase
 
 
   # 最小限のデータを設定
+  # @param [Array] obj アイテムオブジェクトの最小限データ
   setMiniumObject: (obj) ->
     @id = obj.id # IDも変更
-    @mousedownCood = cloneObj(obj.mousedownCood)
-    @itemSize = cloneObj(obj.itemSize)
-    @zindex = cloneObj(obj.zindex)
-    @css = cloneObj(obj.css)
+    @mousedownCood = makeClone(obj.mousedownCood)
+    @itemSize = makeClone(obj.itemSize)
+    @zindex = makeClone(obj.zindex)
+    @css = makeClone(obj.css)
 
   # 共通クリックイベント
   defaultClick : (e) =>
@@ -363,13 +364,13 @@ class WorkTableButtonItem extends ButtonItem
     obj = {
       obj: @
       action : action
-      itemSize: cloneObj(@itemSize)
+      itemSize: makeClone(@itemSize)
     }
     return obj
 
   # 履歴データを設定
   setHistoryObj: (historyObj) ->
-    @itemSize = cloneObj(historyObj.itemSize)
+    @itemSize = makeClone(historyObj.itemSize)
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?

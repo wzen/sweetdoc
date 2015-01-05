@@ -145,12 +145,12 @@ ArrowItem = (function(_super) {
     var obj;
     obj = {
       itemType: Constant.ItemType.ARROW,
-      zindex: cloneObj(this.zindex),
-      coodRegist: cloneObj(this.coodRegist),
-      arrow_width: cloneObj(this.arrow_width),
-      header_width: cloneObj(this.header_width),
-      header_height: cloneObj(this.header_height),
-      scale: cloneObj(this.scale)
+      zindex: makeClone(this.zindex),
+      coodRegist: makeClone(this.coodRegist),
+      arrow_width: makeClone(this.arrow_width),
+      header_width: makeClone(this.header_width),
+      header_height: makeClone(this.header_height),
+      scale: makeClone(this.scale)
     };
     return obj;
   };
@@ -162,14 +162,14 @@ ArrowItem = (function(_super) {
   };
 
   ArrowItem.prototype.setMiniumObject = function(obj) {
-    this.zindex = cloneObj(obj.zindex);
-    this.coodRegist = cloneObj(obj.coodRegist);
-    this.arrow_width = cloneObj(obj.arrow_width);
-    this.arrow_half_width = cloneObj(this.arrow_width / 2.0);
-    this.header_width = cloneObj(obj.header_width);
-    this.header_height = cloneObj(obj.header_height);
-    this.padding_size = cloneObj(this.header_width);
-    return this.scale = cloneObj(obj.scale);
+    this.zindex = makeClone(obj.zindex);
+    this.coodRegist = makeClone(obj.coodRegist);
+    this.arrow_width = makeClone(obj.arrow_width);
+    this.arrow_half_width = makeClone(this.arrow_width / 2.0);
+    this.header_width = makeClone(obj.header_width);
+    this.header_height = makeClone(obj.header_height);
+    this.padding_size = makeClone(this.header_width);
+    return this.scale = makeClone(obj.scale);
   };
 
   ArrowItem.prototype.scrollDraw = function(x, y) {
@@ -503,16 +503,16 @@ WorkTableArrowItem = (function(_super) {
     obj = {
       obj: this,
       action: action,
-      itemSize: cloneObj(this.itemSize),
-      scale: cloneObj(this.scale)
+      itemSize: makeClone(this.itemSize),
+      scale: makeClone(this.scale)
     };
     console.log("getHistory: scale:" + this.scale.w + "," + this.scale.h);
     return obj;
   };
 
   WorkTableArrowItem.prototype.setHistoryObj = function(historyObj) {
-    this.itemSize = cloneObj(historyObj.itemSize);
-    this.scale = cloneObj(historyObj.scale);
+    this.itemSize = makeClone(historyObj.itemSize);
+    this.scale = makeClone(historyObj.scale);
     return console.log("setHistoryObj: itemSize: " + (JSON.stringify(this.itemSize)));
   };
 

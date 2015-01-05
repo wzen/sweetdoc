@@ -26,7 +26,9 @@ generateId = ->
   return RandomString
 
 # オブジェクトの複製
-cloneObj = (obj) ->
+# @param [Object] obj 複製対象オブジェクト
+# @return [Object] 複製後オブジェクト
+makeClone = (obj) ->
   if not obj? or typeof obj isnt 'object'
     return obj
   if obj instanceof Date
