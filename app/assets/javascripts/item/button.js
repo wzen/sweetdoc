@@ -84,7 +84,7 @@ ButtonItem = (function(_super) {
   ButtonItem.prototype.generateMinimumObject = function() {
     var obj;
     obj = {
-      id: this.id,
+      id: makeClone(this.id),
       itemType: Constant.ItemType.BUTTON,
       mousedownCood: makeClone(this.mousedownCood),
       itemSize: makeClone(this.itemSize),
@@ -101,7 +101,7 @@ ButtonItem = (function(_super) {
   };
 
   ButtonItem.prototype.setMiniumObject = function(obj) {
-    this.id = obj.id;
+    this.id = makeClone(obj.id);
     this.mousedownCood = makeClone(obj.mousedownCood);
     this.itemSize = makeClone(obj.itemSize);
     this.zindex = makeClone(obj.zindex);

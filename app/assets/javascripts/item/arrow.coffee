@@ -156,7 +156,9 @@ class ArrowItem extends CanvasItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   generateMinimumObject: ->
     obj = {
+      id: makeClone(@id)
       itemType: Constant.ItemType.ARROW
+      itemSize: makeClone(@itemSize)
       zindex: makeClone(@zindex)
       coodRegist: makeClone(@coodRegist)
       arrow_width: makeClone(@arrow_width)
@@ -175,6 +177,8 @@ class ArrowItem extends CanvasItemBase
 
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
+    @id = makeClone(obj.id)
+    @itemSize = makeClone(obj.itemSize)
     @zindex = makeClone(obj.zindex)
     @coodRegist = makeClone(obj.coodRegist)
     @arrow_width = makeClone(obj.arrow_width)

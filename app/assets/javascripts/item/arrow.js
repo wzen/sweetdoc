@@ -144,7 +144,9 @@ ArrowItem = (function(_super) {
   ArrowItem.prototype.generateMinimumObject = function() {
     var obj;
     obj = {
+      id: makeClone(this.id),
       itemType: Constant.ItemType.ARROW,
+      itemSize: makeClone(this.itemSize),
       zindex: makeClone(this.zindex),
       coodRegist: makeClone(this.coodRegist),
       arrow_width: makeClone(this.arrow_width),
@@ -162,6 +164,8 @@ ArrowItem = (function(_super) {
   };
 
   ArrowItem.prototype.setMiniumObject = function(obj) {
+    this.id = makeClone(obj.id);
+    this.itemSize = makeClone(obj.itemSize);
     this.zindex = makeClone(obj.zindex);
     this.coodRegist = makeClone(obj.coodRegist);
     this.arrow_width = makeClone(obj.arrow_width);

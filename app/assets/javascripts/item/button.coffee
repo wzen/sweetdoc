@@ -65,7 +65,7 @@ class ButtonItem extends CssItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   generateMinimumObject: ->
     obj = {
-      id: @id
+      id: makeClone(@id)
       itemType: Constant.ItemType.BUTTON
       mousedownCood: makeClone(@mousedownCood)
       itemSize: makeClone(@itemSize)
@@ -85,7 +85,7 @@ class ButtonItem extends CssItemBase
   # 最小限のデータを設定
   # @param [Array] obj アイテムオブジェクトの最小限データ
   setMiniumObject: (obj) ->
-    @id = obj.id # IDも変更
+    @id = makeClone(obj.id) # IDも変更
     @mousedownCood = makeClone(obj.mousedownCood)
     @itemSize = makeClone(obj.itemSize)
     @zindex = makeClone(obj.zindex)
