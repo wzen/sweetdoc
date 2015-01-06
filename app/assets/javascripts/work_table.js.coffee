@@ -177,7 +177,7 @@ setupEvents = (obj) ->
 # 選択枠を付ける
 # @param [Object] target 対象のオブジェクト
 # @param [String] selectedBorderType 選択タイプ
-setSelectedBorder = (target, selectedBorderType) ->
+setSelectedBorder = (target, selectedBorderType = "edit") ->
   className = null
   if selectedBorderType == "edit"
     className = 'editSelected'
@@ -543,6 +543,27 @@ closeSidebar = ->
 isClosedConfigSidebar = ->
   return $('#main').hasClass('col-md-12')
 
+# サイドバー内容のスイッチ
+# @param [String] configType コンフィグタイプ
+switchSidebarConfig = (configType) ->
+  animation = isOpenedConfigSidebar()
+  $('.sidebar-config').css('display', 'none')
+  if configType == "edit"
+    if animation
+      $('#css-config').show()
+    else
+      $('#css-config').css('display', '')
+  else if configType == "canvas"
+    if animation
+      $('#canvas-config').show()
+    else
+      $('#canvas-config').css('display', '')
+  else if configType == "timeline"
+    if animation
+      $('#timeline-config').show()
+    else
+      $('#timeline-config').css('display', '')
+
 # 対象オブジェクトに対してフォーカスする
 # @param [Object] target 選択対象オブジェクト
 # @param [String] selectedBorderType 選択枠タイプ
@@ -881,11 +902,11 @@ run = ->
 setupTimelineEvents = ->
   $('.timeline_event').off('click')
   $('.timeline_event').on('click', (e) ->
+    setSelectedBorder(@, "timeline")
+    switchSidebarConfig("timeline")
     if !isOpenedConfigSidebar()
       # タイムラインのconfigをオープンする
       openConfigSidebar()
-
-
   )
 
 # タイムラインのオブジェクトをまとめる
@@ -976,3 +997,7 @@ $ ->
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )
+
+  # タイムライン初期化
+  # TODO: 本来はタイムライン表示時に行う
+  setupTimelineEvents()

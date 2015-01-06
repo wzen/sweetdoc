@@ -4,7 +4,7 @@
 $editSelectedBorderColor : #00FF00;
 
 // タイムライン選択時の枠の色
-$timelineSelectedBorderColor : #0000FF;
+$timelineSelectedBorderColor : #00BFFF;
 
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, textarea, p, blockquote {
   margin: 0;
@@ -544,9 +544,11 @@ div.css3button > div {
       height: 100%;
 
       .timeline_event {
+        position: relative;
         width: 30px;
         margin-right: 10px;
         height: 40px;
+        box-sizing: border-box;
 //        border-radius: 3px;
 //        background-color: #212121;
 //        -moz-border-radius: 3px;
@@ -554,7 +556,7 @@ div.css3button > div {
 //        text-align: center;
         font-size: 12px;
         color: #ffffff;
-        #padding: 30px 10px;
+        //padding: 30px 10px;
         border-radius: 4px;
         -moz-border-radius: 4px;
         -webkit-border-radius: 4px;

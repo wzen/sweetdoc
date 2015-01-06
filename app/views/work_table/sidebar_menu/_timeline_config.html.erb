@@ -1,19 +1,24 @@
 <div id="timeline-config" class="sidebar-config" style="display: none">
     <div class="config">
         <div class="configBox">
-            <div class="timelineedit-headliner">ActionType</div>
-            <div class="forms action_type_form">
+            <div class="timelineedit-headliner">Item</div>
+            <div class="forms item_form">
             </div>
         </div>
     </div>
     <div class="config">
         <div class="configBox">
-            <div class="timelineedit-headliner">ActionAdjust</div>
-            <div class="forms">
+            <div class="timelineedit-headliner">ActionType</div>
+            <div class="forms action_type_form">
             </div>
         </div>
     </div>
-    <%= render 'work_table/sidebar_menu/css_config_param' %>
+    <div class="common-config" style="display: none">
+        <%= render 'work_table/sidebar_menu/timeline/common_config' %>
+    </div>
+    <div class="custom-config" style="display: none">
+        <%= render 'work_table/sidebar_menu/timeline/custom_config' %>
+    </div>
     <div class="config">
         <div class="configBox">
             <div class="timelineedit-headliner">Apply</div>
