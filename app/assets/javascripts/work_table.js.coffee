@@ -152,8 +152,7 @@ setupEvents = (obj) ->
     obj.getJQueryElement().mousedown( (e)->
       if e.which == 1 #左クリック
         e.stopPropagation()
-        $(@).find('.editSelected').remove()
-        $(@).append('<div class="editSelected" />')
+        setSelectedBorder(@, "edit")
     )
 
   # JQueryUIのドラッグイベントとリサイズ設定
@@ -175,24 +174,30 @@ setupEvents = (obj) ->
         obj.saveObj(Constant.ItemActionType.MOVE)
     })
 
+# 選択枠を付ける
+# @param [Object] target 対象のオブジェクト
+# @param [String] selectedBorderType 選択タイプ
+setSelectedBorder = (target, selectedBorderType) ->
+  className = null
+  if selectedBorderType == "edit"
+    className = 'editSelected'
+  else if selectedBorderType == "timeline"
+    className = 'timelineSelected'
+
+  # 選択枠を取る
+  $(target).find(".#{className}").remove()
+  # 設定
+  $(target).append("<div class=#{className} />")
+
+# 全ての選択枠を外す
+clearSelectedBorder = ->
+  $('.editSelected, .timelineSelected').remove()
+
 # コンテキストメニュー初期化
 # @param [String] elementID HTML要素ID
 # @param [String] contextSelector
 # @param [Array] menu 表示メニュー
 setupContextMenu = (element, contextSelector, menu) ->
-
-  # サイドバーオープン時のスライド距離を計算
-  # @param [Object] target スクロールビュー
-  calMoveScrollLeft = (target) ->
-    # col-md-9 → 75% padding → 15px
-    targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
-    #  viewMiddle = (mainScroll.width() * 0.5)
-    scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
-    if scrollLeft < 0
-      scrollLeft = 0
-    else if scrollLeft > mainScroll.width() * 0.25
-      scrollLeft =  mainScroll.width() * 0.25
-    return scrollLeft
 
   # オプションメニューを初期化
   initOptionMenu = (event) ->
@@ -226,7 +231,7 @@ setupContextMenu = (element, contextSelector, menu) ->
         # オプションメニューの値を初期化
         initOptionMenu(event)
         # オプションメニューを表示
-        openConfigSidebar(calMoveScrollLeft($target))
+        openConfigSidebar($target)
         # モードを変更
         changeMode(Constant.Mode.OPTION)
 
@@ -502,27 +507,59 @@ clearAllItemStyle = ->
     obj.clearAllEventStyle()
   )
   # 選択枠を取る
-  $('.editSelected').remove()
+  clearSelectedBorder()
   # 全てのカラーピッカーを閉じる
   $('.colorPicker').ColorPickerHide()
 
-# サイドバーをオープン
-# @param [Array] scrollLeft オープン時にスクロースさせる位置
-openConfigSidebar = (scrollLeft = null) ->
+### サイドバー ###
 
-  $('#main').switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
-    $('#sidebar').fadeIn('1000')
-  )
-  if scrollLeft != null
-    mainScroll.animate({scrollLeft: scrollLeft}, 500)
+# サイドバーをオープン
+# @param [Array] target フォーカス対象オブジェクト
+# @param [String] selectedBorderType 選択枠タイプ
+openConfigSidebar = (target = null, selectedBorderType = "edit") ->
+  main = $('#main')
+  if !isOpenedConfigSidebar()
+    main.switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
+      $('#sidebar').fadeIn('1000')
+    )
+    if target != null
+      focusToTarget(target, selectedBorderType)
+
+# サイドバーがオープンしているか
+isOpenedConfigSidebar = ->
+  return $('#main').hasClass('col-md-9')
 
 # サイドバーをクローズ
 closeSidebar = ->
-  $('#sidebar').fadeOut('1000', ->
-    mainScroll.animate({scrollLeft: 0}, 500)
-    $('#main').switchClass('col-md-9', 'col-md-12', 500, 'swing')
-    $('.sidebar-config').css('display', 'none')
-  )
+  main = $('#main')
+  if !isClosedConfigSidebar()
+    $('#sidebar').fadeOut('1000', ->
+      mainScroll.animate({scrollLeft: 0}, 500)
+      main.switchClass('col-md-9', 'col-md-12', 500, 'swing')
+      $('.sidebar-config').css('display', 'none')
+    )
+
+# サイドバーがクローズしているか
+isClosedConfigSidebar = ->
+  return $('#main').hasClass('col-md-12')
+
+# 対象オブジェクトに対してフォーカスする
+# @param [Object] target 選択対象オブジェクト
+# @param [String] selectedBorderType 選択枠タイプ
+focusToTarget = (target, selectedBorderType = "edit") ->
+  # 選択枠設定
+  setSelectedBorder(target, selectedBorderType)
+
+  # col-md-9 → 75% padding → 15px
+  targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
+  #  viewMiddle = (mainScroll.width() * 0.5)
+  scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
+  if scrollLeft < 0
+    scrollLeft = 0
+  else if scrollLeft > mainScroll.width() * 0.25
+    scrollLeft =  mainScroll.width() * 0.25
+  # スライド
+  mainScroll.animate({scrollLeft: scrollLeft}, 500)
 
 # 警告表示
 # @param [String] message メッセージ内容
@@ -692,7 +729,7 @@ saveToServer = ->
   jsonList = []
   itemObjectList.forEach((obj) ->
     j = {
-      id: obj.id
+      id: makeClone(obj.id)
       obj: obj.generateMinimumObject()
     }
     jsonList.push(j)
@@ -839,6 +876,17 @@ run = ->
   )
 
 ### タイムライン ###
+
+# イベント設定
+setupTimelineEvents = ->
+  $('.timeline_event').off('click')
+  $('.timeline_event').on('click', (e) ->
+    if !isOpenedConfigSidebar()
+      # タイムラインのconfigをオープンする
+      openConfigSidebar()
+
+
+  )
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->

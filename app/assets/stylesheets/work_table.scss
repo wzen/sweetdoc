@@ -1,7 +1,10 @@
 @charset "utf-8";
 
-// 選択時の枠の色
-$selectedBorderColor : #00FF00;
+// 編集選択時の枠の色
+$editSelectedBorderColor : #00FF00;
+
+// タイムライン選択時の枠の色
+$timelineSelectedBorderColor : #0000FF;
 
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, textarea, p, blockquote {
   margin: 0;
@@ -517,7 +520,17 @@ div.css3button > div {
   left: 0px;
   width: 100%;
   height: 100%;
-  border: 3px solid $selectedBorderColor;
+  border: 3px solid $editSelectedBorderColor;
+}
+
+.timelineSelected {
+  //padding: 1px !important;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border: 3px solid $timelineSelectedBorderColor;
 }
 
 #timeline {
