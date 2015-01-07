@@ -80,6 +80,8 @@ ItemBase = (function(_super) {
 
   ItemBase.prototype.endDraw = function(zindex) {
     this.zindex = zindex;
+    this.itemSize.x += scrollContents.scrollLeft();
+    this.itemSize.y += scrollContents.scrollTop();
     return true;
   };
 
@@ -169,7 +171,7 @@ CanvasItemBase = (function(_super) {
   };
 
   CanvasItemBase.prototype.makeNewCanvas = function() {
-    $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
+    $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     return this.initCanvas();
   };
 

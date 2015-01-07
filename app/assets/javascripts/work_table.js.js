@@ -3,12 +3,8 @@ var addStorage, availJs, changeGradientShow, changeMode, clearAllItemStyle, clea
 
 initCommonVar = function() {
   window.sidebarWrapper = $("#sidebar-wrapper");
-  window.mainScroll = $('#main_scroll');
-  window.mainWrapper = $('#main-wrapper');
-  window.originalMainContainerSize = {
-    w: mainWrapper.width(),
-    h: mainWrapper.height()
-  };
+  window.scrollContents = $('#scroll_contents');
+  window.scrollInside = $('#scroll_inside');
   window.cssCode = $("#cssCode");
   window.messageTimer = null;
   window.flushMessageTimer = null;
@@ -18,6 +14,7 @@ initCommonVar = function() {
   window.itemInitFuncList = [];
   window.operationHistory = [];
   window.operationHistoryIndex = 0;
+  window.scrollViewMag = 500;
   lstorage.clear();
   window.selectItemMenu = Constant.ItemType.BUTTON;
   return loadItemJs(Constant.ItemType.BUTTON);
@@ -168,7 +165,7 @@ setupEvents = function(obj) {
   })();
   return (function() {
     obj.getJQueryElement().draggable({
-      containment: mainWrapper,
+      containment: scrollInside,
       drag: function(event, ui) {
         if (obj.drag != null) {
           return obj.drag();
@@ -179,7 +176,7 @@ setupEvents = function(obj) {
       }
     });
     return obj.getJQueryElement().resizable({
-      containment: mainWrapper,
+      containment: scrollInside,
       resize: function(event, ui) {
         if (obj.resize != null) {
           return obj.resize();
@@ -566,7 +563,7 @@ closeSidebar = function() {
   main = $('#main');
   if (!isClosedConfigSidebar()) {
     return $('#sidebar').fadeOut('1000', function() {
-      mainScroll.animate({
+      scrollContents.animate({
         scrollLeft: 0
       }, 500);
       main.switchClass('col-md-9', 'col-md-12', 500, 'swing');
@@ -611,13 +608,13 @@ focusToTarget = function(target, selectedBorderType) {
   }
   setSelectedBorder(target, selectedBorderType);
   targetMiddle = $(target).offset().left + $(target).width() * 0.5;
-  scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5;
+  scrollLeft = targetMiddle - scrollContents.width() * 0.75 * 0.5;
   if (scrollLeft < 0) {
     scrollLeft = 0;
-  } else if (scrollLeft > mainScroll.width() * 0.25) {
-    scrollLeft = mainScroll.width() * 0.25;
+  } else if (scrollLeft > scrollContents.width() * 0.25) {
+    scrollLeft = scrollContents.width() * 0.25;
   }
-  return mainScroll.animate({
+  return scrollContents.animate({
     scrollLeft: scrollLeft
   }, 500);
 };
@@ -1034,9 +1031,12 @@ $(function() {
   }
   initCommonVar();
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
-  mainWrapper.css('width', $('#main_container').width());
-  $('#canvas_container').attr('width', $('#main_container').width());
-  $('#canvas_container').attr('height', $('#main_container').height());
+  $('#canvas_container').attr('width', $('#main-wrapper').width());
+  $('#canvas_container').attr('height', $('#main-wrapper').height());
+  scrollInside.width(scrollContents.width() * (scrollViewMag + 1));
+  scrollInside.height(scrollContents.height() * (scrollViewMag + 1));
+  scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5));
+  scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5));
   $('.dropdown-toggle').dropdown();
   initHeaderMenu();
   initKeyEvent();
@@ -1048,7 +1048,7 @@ $(function() {
       uiIcon: "ui-icon-scissors"
     }
   ];
-  setupContextMenu($('#main'), '#main_container', menu);
+  setupContextMenu($('#main'), '#main-wrapper', menu);
   $('#main').on("mousedown", function() {
     return clearAllItemStyle();
   });

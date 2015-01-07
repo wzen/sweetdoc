@@ -5,10 +5,10 @@ initCommonVar = function() {
   window.wrap = $('#main-wrapper');
   window.contents = $("#scroll_wrapper");
   window.scrollContents = $("#scroll_contents");
-  window.inside = $("#scroll_inside");
+  window.scrollInside = $("#scroll_inside");
   window.distX = 0;
   window.distY = 0;
-  window.scrollViewMag = 1000;
+  window.scrollViewMag = 500;
   window.resizeTimer = false;
   window.timeLine = null;
   window.scrollViewZindex = 100;
@@ -19,8 +19,8 @@ initView = function() {
   $('#canvas_container').attr('width', $('#canvas_wrapper').width());
   $('#canvas_container').attr('height', $('#canvas_wrapper').height());
   contents.css('z-index', scrollViewZindex);
-  inside.width(scrollContents.width() * (scrollViewMag + 1));
-  return inside.height(scrollContents.height() * (scrollViewMag + 1));
+  scrollInside.width(scrollContents.width() * (scrollViewMag + 1));
+  return scrollInside.height(scrollContents.height() * (scrollViewMag + 1));
 };
 
 initResize = function(wrap, contents) {

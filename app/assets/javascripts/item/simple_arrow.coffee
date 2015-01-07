@@ -92,7 +92,7 @@ class SimpleArrowItem extends ItemBase
   makeElement: (show = true) ->
 
     # Canvasを作成
-    $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
+    $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     $('#' + @canvasElementId()).attr('width', $('#' + @getElementId()).width())
     $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
     @setupEvents()

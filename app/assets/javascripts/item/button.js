@@ -75,7 +75,7 @@ ButtonItem = (function(_super) {
     if (show == null) {
       show = true;
     }
-    $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
+    $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     if (!show) {
       return false;
     }

@@ -1,9 +1,8 @@
 # 共有変数定義
 initCommonVar = ->
   window.sidebarWrapper = $("#sidebar-wrapper")
-  window.mainScroll = $('#main_scroll')
-  window.mainWrapper = $('#main-wrapper')
-  window.originalMainContainerSize = {w: mainWrapper.width(), h: mainWrapper.height()}
+  window.scrollContents = $('#scroll_contents')
+  window.scrollInside = $('#scroll_inside')
   window.cssCode = $("#cssCode")
   window.messageTimer = null
   window.flushMessageTimer = null
@@ -13,6 +12,7 @@ initCommonVar = ->
   window.itemInitFuncList = []
   window.operationHistory = []
   window.operationHistoryIndex = 0
+  window.scrollViewMag = 500
 
   # WebStorageを初期化する
   lstorage.clear()
@@ -158,7 +158,7 @@ setupEvents = (obj) ->
   # JQueryUIのドラッグイベントとリサイズ設定
   do ->
     obj.getJQueryElement().draggable({
-      containment: mainWrapper
+      containment: scrollInside
       drag: (event, ui) ->
         if obj.drag?
           obj.drag()
@@ -166,7 +166,7 @@ setupEvents = (obj) ->
         obj.saveObj(Constant.ItemActionType.MOVE)
     })
     obj.getJQueryElement().resizable({
-      containment: mainWrapper
+      containment: scrollInside
       resize: (event, ui) ->
         if obj.resize?
           obj.resize()
@@ -534,7 +534,7 @@ closeSidebar = ->
   main = $('#main')
   if !isClosedConfigSidebar()
     $('#sidebar').fadeOut('1000', ->
-      mainScroll.animate({scrollLeft: 0}, 500)
+      scrollContents.animate({scrollLeft: 0}, 500)
       main.switchClass('col-md-9', 'col-md-12', 500, 'swing')
       $('.sidebar-config').css('display', 'none')
     )
@@ -573,14 +573,14 @@ focusToTarget = (target, selectedBorderType = "edit") ->
 
   # col-md-9 → 75% padding → 15px
   targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
-  #  viewMiddle = (mainScroll.width() * 0.5)
-  scrollLeft = targetMiddle - mainScroll.width() * 0.75 * 0.5
+  #  viewMiddle = (scrollContents.width() * 0.5)
+  scrollLeft = targetMiddle - scrollContents.width() * 0.75 * 0.5
   if scrollLeft < 0
     scrollLeft = 0
-  else if scrollLeft > mainScroll.width() * 0.25
-    scrollLeft =  mainScroll.width() * 0.25
+  else if scrollLeft > scrollContents.width() * 0.25
+    scrollLeft =  scrollContents.width() * 0.25
   # スライド
-  mainScroll.animate({scrollLeft: scrollLeft}, 500)
+  scrollContents.animate({scrollLeft: scrollLeft}, 500)
 
 # 警告表示
 # @param [String] message メッセージ内容
@@ -972,9 +972,16 @@ $ ->
 
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
-  mainWrapper.css('width', $('#main_container').width())
-  $('#canvas_container').attr('width', $('#main_container').width())
-  $('#canvas_container').attr('height', $('#main_container').height())
+  #scrollInside.css('width', $('#main-wrapper').width())
+  $('#canvas_container').attr('width', $('#main-wrapper').width())
+  $('#canvas_container').attr('height', $('#main-wrapper').height())
+
+  # スクロールサイズ
+  scrollInside.width(scrollContents.width() * (scrollViewMag + 1))
+  scrollInside.height(scrollContents.height() * (scrollViewMag + 1))
+  # スクロール位置初期化
+  scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5))
+  scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
 
   # カラーピッカー(アイテム毎に初期化する)
   #initColorPickerValue()
@@ -993,7 +1000,7 @@ $ ->
 
   # コンテキストメニュー
   menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
-  setupContextMenu($('#main'), '#main_container', menu)
+  setupContextMenu($('#main'), '#main-wrapper', menu)
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )

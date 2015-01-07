@@ -93,7 +93,7 @@ SimpleArrowItem = (function(_super) {
     if (show == null) {
       show = true;
     }
-    $(ElementCode.get().createItemElement(this)).appendTo('#main-wrapper');
+    $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     $('#' + this.canvasElementId()).attr('width', $('#' + this.getElementId()).width());
     $('#' + this.canvasElementId()).attr('height', $('#' + this.getElementId()).height());
     this.setupEvents();

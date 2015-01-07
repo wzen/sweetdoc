@@ -19,7 +19,7 @@ html, body {
   font-size: 12px;
 }
 
-#contents, #main, #main_container, #main_scroll, #main-wrapper, #sidebar, #timeline_container {
+#contents, #main, #main-wrapper, #scroll_contents, #scroll_inside, #sidebar, #timeline_container {
   height: 100%;
 }
 
@@ -32,6 +32,19 @@ html, body {
 }
 
 #main-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#scroll_contents {
+  overflow: scroll;
+  padding-right: 30px;
+  padding-bottom: 30px;
+}
+
+#scroll_inside {
   position: relative;
 }
 

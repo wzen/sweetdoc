@@ -90,6 +90,9 @@ class ItemBase extends Actor
   # @return [Boolean] 処理結果
   endDraw: (zindex) ->
     @zindex = zindex
+    # スクロールビュー分のxとyを追加
+    @itemSize.x += scrollContents.scrollLeft()
+    @itemSize.y += scrollContents.scrollTop()
     return true
 
   # インスタンス変数で描画
@@ -188,7 +191,7 @@ class CanvasItemBase extends ItemBase
 
   # 新規キャンパスを作成
   makeNewCanvas: ->
-    $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
+    $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     # キャンパスに対する初期化
     @initCanvas()
 

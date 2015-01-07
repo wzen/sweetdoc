@@ -56,7 +56,7 @@ class ButtonItem extends CssItemBase
   # HTML要素を作成
   # @param [boolean] show 要素作成後に描画を表示するか
   makeElement: (show = true) ->
-    $(ElementCode.get().createItemElement(@)).appendTo('#main-wrapper')
+    $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     if !show
       # TODO: alphaを0にして非表示にする
       return false
