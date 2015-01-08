@@ -53,7 +53,6 @@ div#scroll_handle_wrapper {
   padding-bottom: 30px;
   background-color: transparent;
   box-sizing: content-box;
-  z-index: 100;
 }
 
 div#scroll_contents {
@@ -67,6 +66,16 @@ div#scroll_contents {
   padding-bottom: 30px;
   background-color: transparent;
   box-sizing: content-box;
+}
+
+div#scroll_inside, div#scroll_inside_cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+div#scroll_inside_cover {
+  z-index: 1;
 }
 
 div#footer{

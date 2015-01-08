@@ -6,12 +6,14 @@ initCommonVar = ->
   window.scrollHandle = $("#scroll_handle")
   window.scrollContents = $("#scroll_contents")
   window.scrollInside = $("#scroll_inside")
+  window.scrollInsideCover = $('#scroll_inside_cover')
   window.distX = 0
   window.distY = 0
   window.scrollViewMag = 500
   window.resizeTimer = false
   window.timeLine = null
-  window.scrollViewZindex = 100
+  window.scrollViewSwitchZindex = {'on': 100, 'off': 0}
+  window.scrollInsideCoverZindex = 1
   window.lstorage = localStorage
 
 # 画面初期化
@@ -19,11 +21,17 @@ initView = ->
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
   $('#canvas_container').attr('width', $('#canvas_wrapper').width())
   $('#canvas_container').attr('height', $('#canvas_wrapper').height())
-  scrollWrapper.css('z-index', scrollViewZindex)
+  # 暫定でスクロールを上に持ってくる
+  scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
+
+  # スクロールビューの大きさ
   scrollInside.width(scrollContents.width() * (scrollViewMag + 1))
   scrollInside.height(scrollContents.height() * (scrollViewMag + 1))
+  scrollInsideCover.width(scrollContents.width() * (scrollViewMag + 1))
+  scrollInsideCover.height(scrollContents.height() * (scrollViewMag + 1))
   scrollHandle.width(scrollHandleWrapper.width() * (scrollViewMag + 1))
   scrollHandle.height(scrollHandleWrapper.height() * (scrollViewMag + 1))
+
   # スクロール位置初期化
   scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5))
   scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
@@ -53,13 +61,11 @@ initTimeline = ->
     miniObj = obj.miniObj
     if miniObj.itemType == Constant.ItemType.BUTTON
       item = new ButtonItem()
-      # とりあえずボタンの場合はそのまま表示
-      item.initActor(miniObj, obj.itemSize, obj.sEvent, obj.cEvent)
-      item.reDraw()
     else if miniObj.itemType == Constant.ItemType.ARROW
       item = new ArrowItem()
-      item.initActor(miniObj, obj.itemSize, obj.sEvent, obj.cEvent)
-      item.reDraw(false)
+    item.initActor(miniObj, obj.itemSize)
+    item.reDraw(false)
+    item.setEvents(obj.sEvent, obj.cEvent)
     actorList.push(item)
     # とりあえずここでChapterを分ける
     if miniObj.itemType == Constant.ItemType.BUTTON

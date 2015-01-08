@@ -6,10 +6,13 @@ Actor = (function() {
     this.actionEventFunc = {};
   }
 
-  Actor.prototype.initActor = function(miniObj, itemSize, sEventStr, cEventStr) {
-    var clickEventFunc, _this;
+  Actor.prototype.initActor = function(miniObj, itemSize) {
     this.setMiniumObject(miniObj);
-    this.itemSize = itemSize;
+    return this.itemSize = itemSize;
+  };
+
+  Actor.prototype.setEvents = function(sEventStr, cEventStr) {
+    var clickEventFunc, _this;
     if (sEventStr != null) {
       this.scrollEvent = eval('(' + sEventStr + ')');
     }

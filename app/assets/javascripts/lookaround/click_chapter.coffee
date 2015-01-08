@@ -7,12 +7,16 @@ class ClickChapter extends Chapter
 
   # Frontに浮上
   riseFrontAllActor: ->
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
+    scrollContents.css('z-index', scrollViewSwitchZindex.on)
     @actorList.forEach((actor) ->
-      actor.getJQueryElement().css('z-index', scrollViewZindex + 1)
+      actor.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1)
     )
 
   # Frontから沈む
   sinkFrontAllActor: ->
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
+    scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @actorList.forEach((actor) ->
       actor.getJQueryElement().css('z-index', 0)
     )

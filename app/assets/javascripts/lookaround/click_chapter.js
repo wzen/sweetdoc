@@ -12,12 +12,16 @@ ClickChapter = (function(_super) {
   }
 
   ClickChapter.prototype.riseFrontAllActor = function() {
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
+    scrollContents.css('z-index', scrollViewSwitchZindex.on);
     return this.actorList.forEach(function(actor) {
-      return actor.getJQueryElement().css('z-index', scrollViewZindex + 1);
+      return actor.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
     });
   };
 
   ClickChapter.prototype.sinkFrontAllActor = function() {
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
+    scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.actorList.forEach(function(actor) {
       return actor.getJQueryElement().css('z-index', 0);
     });

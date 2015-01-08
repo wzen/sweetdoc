@@ -924,9 +924,11 @@ setupTimeLineObjects = ->
       itemSize: item.itemSize
       sEvent: (x, y) ->
         if @actionEventFunc.scrollDraw?
+          console.log('call sEvent')
           @actionEventFunc.scrollDraw(x, y)
       # ファットアロー必須
       cEvent: (e) =>
+        console.log('call cEvent')
         if @actionEventFunc.defaultClick?
           @actionEventFunc.defaultClick(e)
     }

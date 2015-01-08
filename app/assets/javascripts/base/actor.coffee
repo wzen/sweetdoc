@@ -6,10 +6,11 @@ class Actor
     @actionEventFunc = {}
 
   # アクションの初期化(閲覧モードのみ使用される)
-  initActor: (miniObj, itemSize, sEventStr, cEventStr) ->
+  initActor: (miniObj, itemSize) ->
     @setMiniumObject(miniObj)
     @itemSize = itemSize
 
+  setEvents: (sEventStr, cEventStr) ->
     # TODO: 必須：セキュリティチェック
     # スクロールイベント
     if sEventStr?
@@ -19,7 +20,6 @@ class Actor
     if cEventStr?
       # contextを取るために必要
       _this = this
-
       clickEventFunc = eval('(' + cEventStr + ')')
       @getJQueryElement().on('click', clickEventFunc)
 
