@@ -86,32 +86,11 @@ class ArrowItem extends CanvasItemBase
     @drawLine()
 
   # 描画終了時に呼ばれるメソッド
-  # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @param [boolean] show 要素作成後に描画を表示するか
   endDraw: (zindex, show = true) ->
-    # 座標を新規キャンパス用に修正
-    do =>
-      @coodRegist.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @coodLeftBodyPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @coodRightBodyPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @coodHeadPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-
     if !super(zindex)
       return false
-
     @makeElement(show)
     return true
 

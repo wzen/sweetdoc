@@ -39,14 +39,13 @@ class ButtonItem extends CssItemBase
     drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
   # 描画終了時の処理
-  # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @param [boolean] show 要素作成後に描画を表示するか
-  # @return [Boolean] 処理結果
   endDraw: (zindex, show = true) ->
     if !super(zindex)
       return false
     @makeElement(show)
+    return true
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか

@@ -80,8 +80,6 @@ ItemBase = (function(_super) {
 
   ItemBase.prototype.endDraw = function(zindex) {
     this.zindex = zindex;
-    this.itemSize.x += scrollContents.scrollLeft();
-    this.itemSize.y += scrollContents.scrollTop();
     return true;
   };
 
@@ -133,6 +131,18 @@ CssItemBase = (function(_super) {
 
   CssItemBase.prototype.setupOptionMenu = function() {};
 
+  CssItemBase.prototype.endDraw = function(zindex, show) {
+    if (show == null) {
+      show = true;
+    }
+    if (!CssItemBase.__super__.endDraw.call(this, zindex)) {
+      return false;
+    }
+    this.itemSize.x += scrollContents.scrollLeft();
+    this.itemSize.y += scrollContents.scrollTop();
+    return true;
+  };
+
   return CssItemBase;
 
 })(ItemBase);
@@ -146,6 +156,38 @@ CanvasItemBase = (function(_super) {
     this.newDrawingContext = null;
     this.newDrawingSurfaceImageData = null;
   }
+
+  CanvasItemBase.prototype.endDraw = function(zindex, show) {
+    if (show == null) {
+      show = true;
+    }
+    if (!CanvasItemBase.__super__.endDraw.call(this, zindex)) {
+      return false;
+    }
+    (function(_this) {
+      return (function() {
+        _this.coodRegist.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+        _this.coodLeftBodyPart.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+        _this.coodRightBodyPart.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+        return _this.coodHeadPart.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+      });
+    })(this)();
+    this.itemSize.x += scrollContents.scrollLeft();
+    this.itemSize.y += scrollContents.scrollTop();
+    return true;
+  };
 
   CanvasItemBase.prototype.canvasElementId = function() {
     return this.getElementId() + '_canvas';

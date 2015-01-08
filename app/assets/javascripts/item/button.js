@@ -61,7 +61,8 @@ ButtonItem = (function(_super) {
     if (!ButtonItem.__super__.endDraw.call(this, zindex)) {
       return false;
     }
-    return this.makeElement(show);
+    this.makeElement(show);
+    return true;
   };
 
   ButtonItem.prototype.reDraw = function(show) {

@@ -19,7 +19,7 @@ html, body {
   font-size: 12px;
 }
 
-#contents, #main, #main-wrapper, #scroll_contents, #scroll_inside, #sidebar, #timeline_container {
+#contents, #main, #sidebar, #timeline_container {
   height: 100%;
 }
 
@@ -31,21 +31,37 @@ html, body {
   padding: 5px 15px 5px 15px;
 }
 
-#main-wrapper {
+div#main-wrapper {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-#scroll_contents {
+div#scroll_wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+div#scroll_contents {
+  width: 100%;
+  height: 100%;
   overflow: scroll;
   padding-right: 30px;
   padding-bottom: 30px;
+  background-color: transparent;
+  box-sizing: content-box;
 }
 
-#scroll_inside {
+div#scroll_inside {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .stage_container {
