@@ -260,10 +260,10 @@ div#scroll_inside {
       }
       &.gradient-color {
         display: flex;
-        display: -moz-flex;
-        display: -o-flex;
+        //display: -moz-flex;
+        //display: -o-flex;
         display: -webkit-flex;
-        display: -ms-flex;
+        //display: -ms-flex;
         flex-direction: row;
         -moz-flex-direction: row;
         -o-flex-direction: row;

@@ -23,10 +23,10 @@
 //= require ../../../vendor/assets/colorpicker/js/utils.js
 //= require ../../../vendor/assets/colorpicker/js/layout.js
 //= require item/generator.jquery.color.js
-//= require constant
-//= require common
+//= require base/constant
+//= require base/common
 //= require item/code_template
-//= require base/actor
+//= require item/actor
 //= require item/item_base
 //= require test_move
 //= require worktable/worktable

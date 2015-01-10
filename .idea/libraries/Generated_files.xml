@@ -28,7 +28,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/constant.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
       <root url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
@@ -37,8 +37,8 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/actor.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/actor.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/timeline.js" />
