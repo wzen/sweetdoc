@@ -26,7 +26,6 @@ ButtonItem = (function(_super) {
       };
     }
     this.css = null;
-    this.actionEventFunc.defaultClick = this.defaultClick;
   }
 
   ButtonItem.prototype.draw = function(cood) {

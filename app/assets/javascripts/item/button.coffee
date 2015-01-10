@@ -17,8 +17,6 @@ class ButtonItem extends CssItemBase
       @moveLoc = {x:cood.x, y:cood.y}
     @css = null
 
-    @actionEventFunc.defaultClick = @defaultClick
-
   # 描画
   # @param [Array] cood 座標
   draw: (cood) ->

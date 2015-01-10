@@ -8,13 +8,17 @@ Chapter = (function() {
 
   Chapter.prototype.scrollEvent = function(x, y) {
     return this.actorList.forEach(function(actor) {
-      return actor.scrollEvent(x, y);
+      if (actor.scrollEvent != null) {
+        return actor.scrollEvent(x, y);
+      }
     });
   };
 
   Chapter.prototype.clickEvent = function(e) {
     return this.actorList.forEach(function(actor) {
-      return actor.clickEvent(e);
+      if (actor.clickEvent != null) {
+        return actor.clickEvent(e);
+      }
     });
   };
 

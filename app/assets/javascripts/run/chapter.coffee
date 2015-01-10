@@ -7,12 +7,14 @@ class Chapter
   # スクロールイベント
   scrollEvent : (x, y) ->
     @actorList.forEach((actor) ->
-      actor.scrollEvent(x, y)
+      if actor.scrollEvent?
+        actor.scrollEvent(x, y)
     )
   # クリックイベント
   clickEvent: (e) ->
     @actorList.forEach((actor) ->
-      actor.clickEvent(e)
+      if actor.clickEvent?
+        actor.clickEvent(e)
     )
 
   # チャプターの後処理

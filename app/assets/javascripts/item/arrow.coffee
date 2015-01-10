@@ -46,10 +46,6 @@ class ArrowItem extends CanvasItemBase
     # @private
     @drawCoodRegist = []
 
-    # アクションイベント
-    @actionEventFunc.scrollDraw = @scrollDraw
-
-
   # パスの描画
   # @param [Array] moveCood 画面ドラッグ座標
   drawPath : (moveCood) ->

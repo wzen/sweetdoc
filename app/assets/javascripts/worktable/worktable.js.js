@@ -980,20 +980,8 @@ setupTimeLineObjects = function() {
       screen: 1,
       miniObj: item.generateMinimumObject(),
       itemSize: item.itemSize,
-      sEvent: function(x, y) {
-        if (this.actionEventFunc.scrollDraw != null) {
-          console.log('call sEvent');
-          return this.actionEventFunc.scrollDraw(x, y);
-        }
-      },
-      cEvent: (function(_this) {
-        return function(e) {
-          console.log('call cEvent');
-          if (_this.actionEventFunc.defaultClick != null) {
-            return _this.actionEventFunc.defaultClick(e);
-          }
-        };
-      })(this)
+      sEvent: "scrollDraw",
+      cEvent: "defaultClick"
     };
     return objList.push(obj);
   });

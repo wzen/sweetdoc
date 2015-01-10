@@ -45,7 +45,6 @@ ArrowItem = (function(_super) {
       h: 1.0
     };
     this.drawCoodRegist = [];
-    this.actionEventFunc.scrollDraw = this.scrollDraw;
   }
 
   ArrowItem.prototype.drawPath = function(moveCood) {

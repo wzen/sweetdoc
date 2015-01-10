@@ -2,24 +2,25 @@
 var Actor;
 
 Actor = (function() {
-  function Actor() {
-    this.actionEventFunc = {};
-  }
+  function Actor() {}
 
   Actor.prototype.initActor = function(miniObj, itemSize) {
     this.setMiniumObject(miniObj);
     return this.itemSize = itemSize;
   };
 
-  Actor.prototype.setEvents = function(sEventStr, cEventStr) {
-    var clickEventFunc, _this;
-    if (sEventStr != null) {
-      this.scrollEvent = eval('(' + sEventStr + ')');
+  Actor.prototype.setEvents = function(sEventFuncName, cEventFuncName) {
+    var clickEventFunc;
+    if ((sEventFuncName != null) && (this.constructor.prototype[sEventFuncName] != null)) {
+      this.scrollEvent = this.constructor.prototype[sEventFuncName];
     }
-    if (cEventStr != null) {
-      _this = this;
-      clickEventFunc = eval('(' + cEventStr + ')');
-      return this.getJQueryElement().on('click', clickEventFunc);
+    if ((cEventFuncName != null) && (this.constructor.prototype[cEventFuncName] != null)) {
+      clickEventFunc = this.constructor.prototype[cEventFuncName];
+      return this.getJQueryElement().on('click', (function(_this) {
+        return function(e) {
+          return clickEventFunc.call(_this, e);
+        };
+      })(this));
     }
   };
 
