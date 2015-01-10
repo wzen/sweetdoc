@@ -1,4 +1,4 @@
-class WorkTableController < ApplicationController
+class RunController < ApplicationController
   def index
     # Constantの設定
     init_const

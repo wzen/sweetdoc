@@ -1022,7 +1022,7 @@ runLookAround = function() {
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineObjects()));
   lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList));
   lstorage.setItem('itemCssStyle', setupTimeLineCss());
-  return window.open('/look_around');
+  return window.open('/run');
 };
 
 $(function() {
@@ -1057,4 +1057,4 @@ $(function() {
   return setupTimelineEvents();
 });
 
-//# sourceMappingURL=work_table.js.js.map
+//# sourceMappingURL=worktable.js.js.map

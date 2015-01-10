@@ -961,7 +961,7 @@ runLookAround = ->
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineObjects()))
   lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList))
   lstorage.setItem('itemCssStyle', setupTimeLineCss())
-  window.open('/look_around')
+  window.open('/run')
 
 $ ->
   # ブラウザ対応チェック

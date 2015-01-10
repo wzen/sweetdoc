@@ -14,7 +14,7 @@
  *= require css/colorpicker
  *= require css/layout
  *= require bootstrap_custom
- *= require work_table
+ *= require worktable/worktable
  * require_tree .
  * require_self
  */

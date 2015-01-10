@@ -1,0 +1,17 @@
+<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+<%= render 'worktable/navber' %>
+
+<div id="contents">
+
+    <%= render 'worktable/main' %>
+
+    <%= render 'worktable/sidebar' %>
+
+    <%= render 'worktable/csscode' %>
+
+    <%= render 'worktable/footer_message' %>
+
+</div>
+<%= render 'worktable/timeline' %>

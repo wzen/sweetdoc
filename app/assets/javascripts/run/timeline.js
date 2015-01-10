@@ -40,11 +40,12 @@ TimeLine = (function() {
   };
 
   TimeLine.prototype.finishTimeline = function() {
-    return this.finished = true;
+    this.finished = true;
+    return console.log('Finish!');
   };
 
   return TimeLine;
 
 })();
 
-//# sourceMappingURL=time_line.js.map
+//# sourceMappingURL=timeline.js.map

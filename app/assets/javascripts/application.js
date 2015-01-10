@@ -29,5 +29,5 @@
 //= require base/actor
 //= require item/item_base
 //= require test_move
-//= require work_table
+//= require worktable/worktable
 // require_tree .

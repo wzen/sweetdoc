@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   get 'item_js/index'
 
-  root 'work_table#index'
-  resources :look_around, only:[:index]
+  root 'worktable#index'
+  resources :run, only:[:index]
 
   get 'test_move/hello'
   get 'item_js_code/hello'
