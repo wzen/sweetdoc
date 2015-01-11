@@ -163,7 +163,7 @@ class ArrowItem extends CanvasItemBase
     @padding_size = makeClone(@header_width)
     @scale = makeClone(obj.scale)
 
-  # スクロールイベント
+  # スクロールイベント ※アクションイベント
   scrollDraw : (x, y) =>
     if !@scrollValue?
       console.log('scroll init')

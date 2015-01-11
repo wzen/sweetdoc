@@ -88,7 +88,7 @@ class ButtonItem extends CssItemBase
     @zindex = makeClone(obj.zindex)
     @css = makeClone(obj.css)
 
-  # 共通クリックイベント
+  # 共通クリックイベント ※アクションイベント
   defaultClick : (e) =>
     # ボタン凹むアクション
     @getJQueryElement().addClass('dentButton_' + @id)
