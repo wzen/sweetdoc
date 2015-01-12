@@ -125,11 +125,7 @@ setPageValue = function(key, value, isCache) {
     ret = "";
     for (k in val) {
       v = val[k];
-      if (jQuery.type(v) === "object") {
-        ret += makeElementStr.call(f, k, v);
-      } else {
-        ret += "<input type='hidden' class=" + k + " value=" + v + " />";
-      }
+      ret += makeElementStr.call(f, k, v);
     }
     return "<div class=" + ky + ">" + ret + "</div>";
   };
