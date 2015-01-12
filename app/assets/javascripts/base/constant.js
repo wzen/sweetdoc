@@ -12,6 +12,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.ITEM_PATH_LIST = constant.ITEM_PATH_LIST;
 
+    Constant.PAGE_VALUES_SEPERATOR = ":";
+
     Constant.Mode = (function() {
       function Mode() {}
 

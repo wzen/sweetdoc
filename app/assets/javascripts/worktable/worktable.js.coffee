@@ -572,15 +572,23 @@ focusToTarget = (target, selectedBorderType = "edit") ->
   setSelectedBorder(target, selectedBorderType)
 
   # col-md-9 → 75% padding → 15px
-  targetMiddle = ($(target).offset().left + $(target).width() * 0.5)
+  targetMiddle =
+    top: $(target).offset().top + $(target).height() * 0.5
+    left: $(target).offset().left + $(target).width() * 0.5
   #  viewMiddle = (scrollContents.width() * 0.5)
-  scrollLeft = targetMiddle - scrollContents.width() * 0.75 * 0.5
+  scrollTop = targetMiddle.top - scrollContents.height() * 0.5
+  if scrollTop < 0
+    scrollTop = 0
+  else if scrollTop > scrollContents.height() * 0.25
+    scrollTop =  scrollContents.height() * 0.25
+  scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5
   if scrollLeft < 0
     scrollLeft = 0
   else if scrollLeft > scrollContents.width() * 0.25
     scrollLeft =  scrollContents.width() * 0.25
   # スライド
-  scrollContents.animate({scrollLeft: scrollLeft}, 500)
+  console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
+  scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)
 
 # 警告表示
 # @param [String] message メッセージ内容
@@ -872,29 +880,16 @@ clearWorkTable = ->
   )
 
 ### デバッグ ###
-run = ->
-  # TODO: 認証用コードも付属するようにする
-  $.ajax(
-    {
-      url: "/test_move/hello"
-      type: "POST"
-      dataType: "html"
-      success: (data)->
-        s = document.createElement( 'script' );
-        s.type = 'text/javascript';
-        # TODO: 認証コードの比較
-        s.src = data;
-        s.id = 'test'
-        firstScript = document.getElementsByTagName( 'script' )[ 0 ];
-        firstScript.parentNode.insertBefore( s, firstScript );
-        t = setInterval( ->
-          if typeof helloFunc == 'function'
-            clearInterval(t)
-            helloFunc()
-        , '500')
-      error: (data) ->
-    }
-  )
+runDebug = ->
+  setPageValue('test:ok:desuka', 'OK!!')
+  setPageValue('test:ok:desuka:cache', 'isCache!!', true)
+  setPageValue('test2:test', 1)
+  setPageValue('test3:test', 1, true)
+
+  console.log(getPageValue('test:ok:desuka'))
+  console.log(getPageValue('test:ok:desuka:cache'))
+  console.log(getPageValue('test2:test'))
+  console.log(getPageValue('test3:test'))
 
 ### タイムライン ###
 
@@ -949,7 +944,7 @@ setupTimeLineCss = ->
 ### 閲覧 ###
 
 # 閲覧を実行する
-runLookAround = ->
+run = ->
   Function.prototype.toJSON = Function.prototype.toString
   lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineObjects()))
   lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList))

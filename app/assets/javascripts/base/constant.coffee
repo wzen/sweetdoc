@@ -9,6 +9,8 @@ if gon?
     @OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX
     # @property [Array] ITEM_PATH_LIST JSファイル名
     @ITEM_PATH_LIST = constant.ITEM_PATH_LIST
+    # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
+    @PAGE_VALUES_SEPERATOR = ":"
 
     # 操作モード
     class @Mode

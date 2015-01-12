@@ -45,6 +45,64 @@ makeClone = (obj) ->
     newInstance[key] = clone obj[key]
   return newInstance
 
+# ページが持つ値を取得
+# @param [String] key キー値
+# @return [Object] ハッシュ配列または値で返す
+getPageValue = (key) ->
+  value = null
+  root = $('#page_values')
+  keys = key.split(Constant.PAGE_VALUES_SEPERATOR)
+  keys.forEach((k, index) ->
+    type = ''
+    if keys.length - 1 > index
+      type = 'div'
+    else
+      type = 'input'
+    root = $("#{type}.#{k}", root)
+    if !root? || root.length == 0
+      value = null
+      return
+    if keys.length - 1 == index
+      value = root.val()
+  )
+  return value
+
+# ページが持つ値を設定
+# @param [String] key キー値
+# @param [Object] value 設定値(ハッシュ配列または値)
+# @param [Boolean] isCache このページでのみ保持する値か
+setPageValue = (key, value, isCache = false) ->
+  cacheClassName = 'cache'
+  root = $('#page_values')
+  keys = key.split(Constant.PAGE_VALUES_SEPERATOR)
+  keys.forEach((k, index) ->
+    parent = root
+    type = ''
+    if keys.length - 1 > index
+      type = 'div'
+    else
+      type = 'input'
+    root = $("#{type}.#{k}", parent)
+    if keys.length - 1 > index
+      if !root? || root.length == 0
+        # div作成
+        root = jQuery("<div class=#{k}></div>").appendTo(parent)
+    else
+      if !root? || root.length == 0
+        # input作成
+        root = jQuery("<input type='hidden' value=#{value}></div>").appendTo(parent)
+        root.addClass(k)
+        if isCache
+          root.addClass(cacheClassName)
+      else
+        # 値を上書き
+        root.val(value)
+        if isCache
+          root.addClass(cacheClassName)
+        else
+          root.removeClass(cacheClassName)
+  )
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedItemTypeList = []

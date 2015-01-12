@@ -32,7 +32,7 @@
                         <li><a id="menu-item-0" class="menu-item" href="#"><%= t('header_menu.item.arrow') %></a></li>
                     </ul>
                 </li>
-                <li><a href="#" onclick="runLookAround()">Run</a></li>
+                <li><a href="#" onclick="run()">Run</a></li>
                 <li id="header_etc_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_etc_select_menu">
                         <%= t('header_menu.etc.etc') %>
@@ -47,7 +47,8 @@
                         </li>
                         <li class="divider"></li>
                         <li><a class="menu-item" href="#"><%= t('header_menu.etc.introduction') %></a></li>
-                        <li><a href="#" onclick="helloFunc()"><%= t('header_menu.etc.about') %></a></li>
+                        <li><a href="#"><%= t('header_menu.etc.about') %></a></li>
+                        <li><a href="#" onclick="runDebug()">Debug</a></li>
                     </ul>
                 </li>
             </ul>
