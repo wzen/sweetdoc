@@ -586,6 +586,9 @@ focusToTarget = (target, selectedBorderType = "edit") ->
     scrollLeft = 0
   else if scrollLeft > scrollContents.width() * 0.25
     scrollLeft =  scrollContents.width() * 0.25
+
+  # 変更前の値を保存
+  #setPageValue('focusToTarget:')
   # スライド
   console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
   scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)
@@ -881,15 +884,9 @@ clearWorkTable = ->
 
 ### デバッグ ###
 runDebug = ->
-  setPageValue('test:ok', 'OK!!')
-#  setPageValue('test:ok:desuka:cache', 'isCache!!', true)
-#  setPageValue('test2:test', 1)
-#  setPageValue('test3:test', 1, true)
-#
-#  console.log(getPageValue('test:ok:desuka'))
-#  console.log(getPageValue('test:ok:desuka:cache'))
-#  console.log(getPageValue('test2:test'))
-#  console.log(getPageValue('test3:test'))
+  setPageValue('test:ok:desuka:testcache', {1: "ok1", 2:{3: "ok3", 4: "ok4"}}, true)
+
+  console.log(getPageValue('test:ok:desuka:testcache'))
 
 ### タイムライン ###
 

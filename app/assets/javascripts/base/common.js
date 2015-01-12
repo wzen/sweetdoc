@@ -64,36 +64,72 @@ makeClone = function(obj) {
   return newInstance;
 };
 
-getPageValue = function(key) {
-  var keys, root, value;
+getPageValue = function(key, withRemove) {
+  var f, keys, root, takeValue, value;
+  if (withRemove == null) {
+    withRemove = false;
+  }
+  f = this;
+  takeValue = function(element) {
+    var c, ret;
+    ret = [];
+    c = $(element).children();
+    if ((c != null) && c.length > 0) {
+      $(c).each(function(e) {
+        var v;
+        v = null;
+        if (this.tagName === "INPUT") {
+          v = $(this).val();
+        } else {
+          v = takeValue.call(f, this);
+        }
+        return ret[this.classList[0]] = v;
+      });
+    }
+    return ret;
+  };
   value = null;
   root = $('#page_values');
   keys = key.split(Constant.PAGE_VALUES_SEPERATOR);
   keys.forEach(function(k, index) {
-    var element;
-    element = '';
-    if (keys.length - 1 > index) {
-      element = 'div';
-    } else {
-      element = 'input';
-    }
-    root = $("" + element + "." + k, root);
+    root = $("." + k, root);
     if ((root == null) || root.length === 0) {
       value = null;
       return;
     }
     if (keys.length - 1 === index) {
-      return value = root.val();
+      if (root[0].tagName === "INPUT") {
+        value = root.val();
+      } else {
+        value = takeValue.call(f, root);
+      }
+      if (withRemove) {
+        return root.remove();
+      }
     }
   });
   return value;
 };
 
 setPageValue = function(key, value, isCache) {
-  var cacheClassName, keys, root;
+  var cacheClassName, f, keys, makeElementStr, root;
   if (isCache == null) {
     isCache = false;
   }
+  f = this;
+  makeElementStr = function(ky, val) {
+    var k, ret, v;
+    ret = "";
+    for (k in val) {
+      v = val[k];
+      if (jQuery.type(v) === "object") {
+        ret += makeElementStr.call(f, k, v);
+      } else {
+        ret += "<input type='hidden' class=" + k + " value=" + v + " />";
+      }
+    }
+    return "<div class=" + ky + ">" + ret + "</div>";
+  };
   cacheClassName = 'cache';
   root = $('#page_values');
   keys = key.split(Constant.PAGE_VALUES_SEPERATOR);
@@ -104,7 +140,11 @@ setPageValue = function(key, value, isCache) {
     if (keys.length - 1 > index) {
       element = 'div';
     } else {
-      element = 'input';
+      if (jQuery.type(value) === "object") {
+        element = 'div';
+      } else {
+        element = 'input';
+      }
     }
     root = $("" + element + "." + k, parent);
     if (keys.length - 1 > index) {
@@ -113,17 +153,28 @@ setPageValue = function(key, value, isCache) {
       }
     } else {
       if ((root == null) || root.length === 0) {
-        root = jQuery("<input type='hidden' value=" + value + "></div>").appendTo(parent);
-        root.addClass(k);
+        if (jQuery.type(value) !== "object") {
+          root = jQuery("<input type='hidden' class=" + k + " value=" + value + " />").appendTo(parent);
+        } else {
+          root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent);
+        }
         if (isCache) {
           return root.addClass(cacheClassName);
         }
       } else {
-        root.val(value);
-        if (isCache) {
-          return root.addClass(cacheClassName);
+        if (jQuery.type(value) !== "object") {
+          root.val(value);
+          if (isCache) {
+            return root.addClass(cacheClassName);
+          } else {
+            return root.removeClass(cacheClassName);
+          }
         } else {
-          return root.removeClass(cacheClassName);
+          root.remove();
+          root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent);
+          if (isCache) {
+            return root.addClass(cacheClassName);
+          }
         }
       }
     }
