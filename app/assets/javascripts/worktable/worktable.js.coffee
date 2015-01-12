@@ -889,16 +889,44 @@ runDebug = ->
 
 ### タイムライン ###
 
-# イベント設定
+# タイムラインのイベント設定
 setupTimelineEvents = ->
+
+  # イベントのクリック
   $('.timeline_event').off('click')
   $('.timeline_event').on('click', (e) ->
+    if $(@).is('.ui-draggable-dragging')
+      # ドラッグ中はクリック反応なし
+      return
+
     setSelectedBorder(@, "timeline")
     switchSidebarConfig("timeline")
     if !isOpenedConfigSidebar()
       # タイムラインのconfigをオープンする
       openConfigSidebar()
   )
+
+  # イベントのD&D
+  $('.timeline_event').draggable({
+    revert: true
+    # 横方向のみ
+    axis: 'x'
+    # 範囲枠
+    containment: $('#timeline_events_container')
+    start: (event, ui) ->
+      console.log('a')
+    stop: (event, ui) ->
+      console.log('b')
+  })
+
+  $('.timeline_event').droppable({
+    accept: '.timeline_event'
+    over: (event, ui) ->
+      console.log('over')
+    drop: (event, ui) ->
+      # イベントの並び替え
+      console.log("drop event:#{event} ui:#{ui}")
+  })
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->
@@ -935,6 +963,8 @@ setupTimeLineCss = ->
   )
 
   return itemCssStyle
+
+dragDropTimelineEvents = ->
 
 
 ### 閲覧 ###
