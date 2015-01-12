@@ -13,13 +13,16 @@ TimeLine = (function() {
     this.chapterIndex += 1;
     if (this.chapterList.length <= this.chapterIndex) {
       return this.finishTimeline();
+    } else {
+      return this.chapterList[this.chapterIndex].focusToActor();
     }
   };
 
   TimeLine.prototype.backChapter = function() {
     this.resetChapter(this.chapterIndex);
     if (this.chapterIndex > 0) {
-      return this.chapterIndex -= 1;
+      this.chapterIndex -= 1;
+      return this.chapterList[this.chapterIndex].focusToActor();
     }
   };
 

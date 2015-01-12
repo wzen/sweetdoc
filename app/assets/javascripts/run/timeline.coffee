@@ -14,6 +14,9 @@ class TimeLine
     @chapterIndex += 1
     if @chapterList.length <= @chapterIndex
       @finishTimeline()
+    else
+      # 次のアイテムにフォーカス
+      @chapterList[@chapterIndex].focusToActor()
 
   # チャプターを戻す
   backChapter: ->
@@ -21,7 +24,8 @@ class TimeLine
     @resetChapter(@chapterIndex)
     if @chapterIndex > 0
       @chapterIndex -= 1
-
+      # 前のアイテムにフォーカス
+      @chapterList[@chapterIndex].focusToActor()
 
   # チャプターの内容をリセット
   resetChapter: (chapterIndex) ->

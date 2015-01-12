@@ -55,7 +55,7 @@ initTimeline = ->
   # アクションのイベントを取得
   objList = JSON.parse(lstorage.getItem('timelineObjList'))
   chapterList = []
-  objList.forEach( (obj)->
+  objList.forEach( (obj, idx)->
     actorList = []
     #item = null
     miniObj = obj.miniObj
@@ -73,11 +73,16 @@ initTimeline = ->
     else if miniObj.itemType == Constant.ItemType.ARROW
       chapter = new ScrollChapter(actorList)
     chapterList.push(chapter)
+
+    if idx == 0
+      # TODO: 暫定初期スクロール位置
+      scrollContents.scrollLeft(item.itemSize.x + item.itemSize.w * 0.5 - (scrollContents.width() * 0.5))
+      scrollContents.scrollTop(item.itemSize.y + item.itemSize.h * 0.5 - (scrollContents.height() * 0.5))
   )
   window.timeLine = new TimeLine(chapterList)
 
-# スクロール位置の初期化
-initScrollPoint = ->
+# Handleスクロール位置の初期化
+initHandleScrollPoint = ->
   scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * (scrollViewMag * 0.5))
   scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * (scrollViewMag * 0.5))
 
@@ -94,7 +99,7 @@ setupScrollEvent = ->
     if stopTimer != null
       clearTimeout(stopTimer)
     stopTimer = setTimeout( =>
-      initScrollPoint()
+      initHandleScrollPoint()
       lastLeft = $(@).scrollLeft()
       lastTop = $(@).scrollTop()
       clearTimeout(stopTimer)
@@ -116,7 +121,7 @@ setupScrollEvent = ->
 $ ->
   initCommonVar()
   initView()
-  initScrollPoint()
+  initHandleScrollPoint()
   #initResize(wrap, scrollWrapper)
   initTimeline()
   setupScrollEvent()
