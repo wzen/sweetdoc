@@ -119,6 +119,9 @@ setPageValue = function(key, value, isCache) {
   f = this;
   makeElementStr = function(ky, val) {
     var k, ret, v;
+    if (jQuery.type(val) !== "object") {
+      return "<input type='hidden' class=" + ky + " value=" + val + " />";
+    }
     ret = "";
     for (k in val) {
       v = val[k];
@@ -152,30 +155,12 @@ setPageValue = function(key, value, isCache) {
         return root = jQuery("<div class=" + k + "></div>").appendTo(parent);
       }
     } else {
-      if ((root == null) || root.length === 0) {
-        if (jQuery.type(value) !== "object") {
-          root = jQuery("<input type='hidden' class=" + k + " value=" + value + " />").appendTo(parent);
-        } else {
-          root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent);
-        }
-        if (isCache) {
-          return root.addClass(cacheClassName);
-        }
-      } else {
-        if (jQuery.type(value) !== "object") {
-          root.val(value);
-          if (isCache) {
-            return root.addClass(cacheClassName);
-          } else {
-            return root.removeClass(cacheClassName);
-          }
-        } else {
-          root.remove();
-          root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent);
-          if (isCache) {
-            return root.addClass(cacheClassName);
-          }
-        }
+      if ((root != null) && root.length > 0) {
+        root.remove();
+      }
+      root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent);
+      if (isCache) {
+        return root.addClass(cacheClassName);
       }
     }
   });

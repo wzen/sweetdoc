@@ -884,8 +884,7 @@ clearWorkTable = ->
 
 ### デバッグ ###
 runDebug = ->
-  setPageValue('test:ok:desuka:testcache', {1: "ok1", 2:{3: "ok3", 4: "ok4"}}, true)
-
+  setPageValue('test:ok:desuka:testcache', {1: "ok1", 2:{3: "ok2", 4: "ok3"}, 7: "ok7"}, true)
   console.log(getPageValue('test:ok:desuka:testcache'))
 
 ### タイムライン ###

@@ -81,7 +81,6 @@ getPageValue = (key, withRemove = false) ->
         value = takeValue.call(f,root)
       if withRemove
         root.remove()
-
   )
   return value
 
@@ -93,6 +92,9 @@ setPageValue = (key, value, isCache = false) ->
   f = @
   # ハッシュを要素の文字列に変換
   makeElementStr = (ky, val) ->
+    if jQuery.type(val) != "object"
+      return "<input type='hidden' class=#{ky} value=#{val} />"
+
     ret = ""
     for k, v of val
       if jQuery.type(v) == "object"
@@ -117,33 +119,16 @@ setPageValue = (key, value, isCache = false) ->
     root = $("#{element}.#{k}", parent)
     if keys.length - 1 > index
       if !root? || root.length == 0
-        # div作成
+        # 親要素のdiv作成
         root = jQuery("<div class=#{k}></div>").appendTo(parent)
     else
-      if !root? || root.length == 0
-        # 要素作成
-        if jQuery.type(value) != "object"
-          # input
-          root = jQuery("<input type='hidden' class=#{k} value=#{value} />").appendTo(parent)
-        else
-          # div
-          root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent)
-        if isCache
-          root.addClass(cacheClassName)
-      else
-        # 値を上書き
-        if jQuery.type(value) != "object"
-          root.val(value)
-          if isCache
-            root.addClass(cacheClassName)
-          else
-            root.removeClass(cacheClassName)
-        else
-          # divを再生成
-          root.remove()
-          root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent)
-          if isCache
-            root.addClass(cacheClassName)
+      if root? && root.length > 0
+        # 要素が存在する場合は消去して上書き
+        root.remove()
+      # 要素作成
+      root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent)
+      if isCache
+        root.addClass(cacheClassName)
   )
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
