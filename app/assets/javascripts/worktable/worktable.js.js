@@ -973,13 +973,7 @@ setupTimelineEvents = function() {
   $('.timeline_event').draggable({
     revert: true,
     axis: 'x',
-    containment: $('#timeline_events_container'),
-    start: function(event, ui) {
-      return console.log('a');
-    },
-    stop: function(event, ui) {
-      return console.log('b');
-    }
+    containment: $('#timeline_events_container')
   });
   return $('.timeline_event').droppable({
     accept: '.timeline_event',

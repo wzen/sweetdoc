@@ -896,7 +896,7 @@ setupTimelineEvents = ->
   $('.timeline_event').off('click')
   $('.timeline_event').on('click', (e) ->
     if $(@).is('.ui-draggable-dragging')
-      # ドラッグ中はクリック反応なし
+      # ドラッグの場合はクリック反応なし
       return
 
     setSelectedBorder(@, "timeline")
@@ -913,10 +913,6 @@ setupTimelineEvents = ->
     axis: 'x'
     # 範囲枠
     containment: $('#timeline_events_container')
-    start: (event, ui) ->
-      console.log('a')
-    stop: (event, ui) ->
-      console.log('b')
   })
 
   $('.timeline_event').droppable({
