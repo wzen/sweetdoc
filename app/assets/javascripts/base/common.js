@@ -70,14 +70,14 @@ getPageValue = function(key) {
   root = $('#page_values');
   keys = key.split(Constant.PAGE_VALUES_SEPERATOR);
   keys.forEach(function(k, index) {
-    var type;
-    type = '';
+    var element;
+    element = '';
     if (keys.length - 1 > index) {
-      type = 'div';
+      element = 'div';
     } else {
-      type = 'input';
+      element = 'input';
     }
-    root = $("" + type + "." + k, root);
+    root = $("" + element + "." + k, root);
     if ((root == null) || root.length === 0) {
       value = null;
       return;
@@ -98,15 +98,15 @@ setPageValue = function(key, value, isCache) {
   root = $('#page_values');
   keys = key.split(Constant.PAGE_VALUES_SEPERATOR);
   return keys.forEach(function(k, index) {
-    var parent, type;
+    var element, parent;
     parent = root;
-    type = '';
+    element = '';
     if (keys.length - 1 > index) {
-      type = 'div';
+      element = 'div';
     } else {
-      type = 'input';
+      element = 'input';
     }
-    root = $("" + type + "." + k, parent);
+    root = $("" + element + "." + k, parent);
     if (keys.length - 1 > index) {
       if ((root == null) || root.length === 0) {
         return root = jQuery("<div class=" + k + "></div>").appendTo(parent);

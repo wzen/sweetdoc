@@ -53,12 +53,12 @@ getPageValue = (key) ->
   root = $('#page_values')
   keys = key.split(Constant.PAGE_VALUES_SEPERATOR)
   keys.forEach((k, index) ->
-    type = ''
+    element = ''
     if keys.length - 1 > index
-      type = 'div'
+      element = 'div'
     else
-      type = 'input'
-    root = $("#{type}.#{k}", root)
+      element = 'input'
+    root = $("#{element}.#{k}", root)
     if !root? || root.length == 0
       value = null
       return
@@ -77,12 +77,12 @@ setPageValue = (key, value, isCache = false) ->
   keys = key.split(Constant.PAGE_VALUES_SEPERATOR)
   keys.forEach((k, index) ->
     parent = root
-    type = ''
+    element = ''
     if keys.length - 1 > index
-      type = 'div'
+      element = 'div'
     else
-      type = 'input'
-    root = $("#{type}.#{k}", parent)
+      element = 'input'
+    root = $("#{element}.#{k}", parent)
     if keys.length - 1 > index
       if !root? || root.length == 0
         # div作成

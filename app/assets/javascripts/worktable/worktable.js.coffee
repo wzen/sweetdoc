@@ -881,15 +881,15 @@ clearWorkTable = ->
 
 ### デバッグ ###
 runDebug = ->
-  setPageValue('test:ok:desuka', 'OK!!')
-  setPageValue('test:ok:desuka:cache', 'isCache!!', true)
-  setPageValue('test2:test', 1)
-  setPageValue('test3:test', 1, true)
-
-  console.log(getPageValue('test:ok:desuka'))
-  console.log(getPageValue('test:ok:desuka:cache'))
-  console.log(getPageValue('test2:test'))
-  console.log(getPageValue('test3:test'))
+  setPageValue('test:ok', 'OK!!')
+#  setPageValue('test:ok:desuka:cache', 'isCache!!', true)
+#  setPageValue('test2:test', 1)
+#  setPageValue('test3:test', 1, true)
+#
+#  console.log(getPageValue('test:ok:desuka'))
+#  console.log(getPageValue('test:ok:desuka:cache'))
+#  console.log(getPageValue('test2:test'))
+#  console.log(getPageValue('test3:test'))
 
 ### タイムライン ###
 

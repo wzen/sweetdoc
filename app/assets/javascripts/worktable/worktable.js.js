@@ -944,14 +944,7 @@ clearWorkTable = function() {
 /* デバッグ */
 
 runDebug = function() {
-  setPageValue('test:ok:desuka', 'OK!!');
-  setPageValue('test:ok:desuka:cache', 'isCache!!', true);
-  setPageValue('test2:test', 1);
-  setPageValue('test3:test', 1, true);
-  console.log(getPageValue('test:ok:desuka'));
-  console.log(getPageValue('test:ok:desuka:cache'));
-  console.log(getPageValue('test2:test'));
-  return console.log(getPageValue('test3:test'));
+  return setPageValue('test:ok', 'OK!!');
 };
 
 
