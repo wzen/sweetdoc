@@ -152,6 +152,7 @@ setupEvents = (obj) ->
     obj.getJQueryElement().mousedown( (e)->
       if e.which == 1 #左クリック
         e.stopPropagation()
+        clearSelectedBorder()
         setSelectedBorder(@, "edit")
     )
 
@@ -884,8 +885,9 @@ clearWorkTable = ->
 
 ### デバッグ ###
 runDebug = ->
+  setPageValue('test:ok:desuka', 1, true)
   setPageValue('test:ok:desuka:testcache', {1: "ok1", 2:{3: "ok2", 4: "ok3"}, 7: "ok7"}, true)
-  console.log(getPageValue('test:ok:desuka:testcache'))
+  setPageValue('test2:ok:desuka', 2, true)
 
 ### タイムライン ###
 
@@ -895,7 +897,7 @@ setupTimelineEvents = ->
   # イベントのクリック
   $('.timeline_event').off('click')
   $('.timeline_event').on('click', (e) ->
-    if $(@).is('.ui-draggable-dragging')
+    if $(@).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
       return
 
@@ -907,21 +909,13 @@ setupTimelineEvents = ->
   )
 
   # イベントのD&D
-  $('.timeline_event').draggable({
+  $('#timeline_events').sortable({
     revert: true
-    # 横方向のみ
     axis: 'x'
-    # 範囲枠
     containment: $('#timeline_events_container')
-  })
-
-  $('.timeline_event').droppable({
-    accept: '.timeline_event'
-    over: (event, ui) ->
-      console.log('over')
-    drop: (event, ui) ->
-      # イベントの並び替え
-      console.log("drop event:#{event} ui:#{ui}")
+    items: '.sortable'
+    stop: (event, ui) ->
+      # イベントのソート番号を更新
   })
 
 # タイムラインのオブジェクトをまとめる
@@ -959,9 +953,6 @@ setupTimeLineCss = ->
   )
 
   return itemCssStyle
-
-dragDropTimelineEvents = ->
-
 
 ### 閲覧 ###
 

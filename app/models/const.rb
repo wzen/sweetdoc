@@ -72,8 +72,4 @@ class Const
     Z = 90
   end
 
-  class CssClassName
-    EDIT_SELECTED = 'editSelected'
-  end
-
 end

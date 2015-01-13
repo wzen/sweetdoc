@@ -50,8 +50,17 @@ if gon?
 
     # キーコード
     class @KeyboardKeyCode
-      # @property [Int] z zボタン
+      # @property [Int] Z zボタン
       @Z = constant.KeyboardKeyCode.Z
 
-    class @CssClassName
-      @EDIT_SELECTED = constant.CssClassName.EDIT_SELECTED
+    # ページ値キー
+    class @PageValueKey
+      # @property [String] TE タイムラインイベントRoot
+      @TE = 'timeline_event:@id'
+      # @property [String] TE_SORT ソート番号
+      @TE_SORT = @TE + ':sort'
+      # @property [String] TE_METHODNAME イベント名
+      @TE_METHODNAME = @TE + ':mn'
+      # @property [String] TE_DELAY 遅延
+      @TE_DELAY = @TE + ':delay'
+

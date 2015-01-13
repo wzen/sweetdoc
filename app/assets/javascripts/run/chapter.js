@@ -25,14 +25,20 @@ Chapter = (function() {
   Chapter.prototype.settleChapter = function() {};
 
   Chapter.prototype.focusToActor = function(type) {
-    var item, left, top;
+    var height, item, left, top, width;
     if (type == null) {
       type = "center";
     }
     item = this.actorList[0];
+    width = item.itemSize.w;
+    height = item.itemSize.h;
+    if (item.scale != null) {
+      width *= item.scale.w;
+      height *= item.scale.h;
+    }
     if (type === "center") {
-      left = item.itemSize.x + item.itemSize.w * 0.5 - (scrollContents.width() * 0.5);
-      top = item.itemSize.y + item.itemSize.h * 0.5 - (scrollContents.height() * 0.5);
+      left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5);
+      top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5);
       return scrollContents.animate({
         scrollTop: top,
         scrollLeft: left

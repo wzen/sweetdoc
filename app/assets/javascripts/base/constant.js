@@ -75,12 +75,18 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.CssClassName = (function() {
-      function CssClassName() {}
+    Constant.PageValueKey = (function() {
+      function PageValueKey() {}
 
-      CssClassName.EDIT_SELECTED = constant.CssClassName.EDIT_SELECTED;
+      PageValueKey.TE = 'timeline_event:@id';
 
-      return CssClassName;
+      PageValueKey.TE_SORT = PageValueKey.TE + ':sort';
+
+      PageValueKey.TE_METHODNAME = PageValueKey.TE + ':mn';
+
+      PageValueKey.TE_DELAY = PageValueKey.TE + ':delay';
+
+      return PageValueKey;
 
     })();
 
