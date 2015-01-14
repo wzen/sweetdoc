@@ -961,16 +961,26 @@ runDebug = function() {
 /* タイムライン */
 
 setupTimelineEvents = function() {
-  $('.timeline_event').off('click');
-  $('.timeline_event').on('click', function(e) {
+  var f, initEvents;
+  f = this;
+  initEvents = function() {
     if ($(this).is('.ui-sortable-helper')) {
       return;
     }
     setSelectedBorder(this, "timeline");
     switchSidebarConfig("timeline");
     if (!isOpenedConfigSidebar()) {
-      return openConfigSidebar();
+      openConfigSidebar();
     }
+    if ($(this).hasClass('blank')) {
+
+    } else {
+
+    }
+  };
+  $('.timeline_event').off('click');
+  $('.timeline_event').on('click', function(e) {
+    return initEvents.call(this);
   });
   return $('#timeline_events').sortable({
     revert: true,

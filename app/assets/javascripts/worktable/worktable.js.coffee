@@ -893,19 +893,36 @@ runDebug = ->
 
 # タイムラインのイベント設定
 setupTimelineEvents = ->
+  f = @
 
-  # イベントのクリック
-  $('.timeline_event').off('click')
-  $('.timeline_event').on('click', (e) ->
+  # イベント初期化メソッド
+  initEvents = ->
     if $(@).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
       return
-
     setSelectedBorder(@, "timeline")
     switchSidebarConfig("timeline")
     if !isOpenedConfigSidebar()
       # タイムラインのconfigをオープンする
       openConfigSidebar()
+
+    # コンフィグ初期化
+    if $(@).hasClass('blank')
+      # ブランク
+      # アイテムのリストを表示
+
+
+    else
+      # イベント設定済み
+
+
+
+
+
+  # イベントのクリック
+  $('.timeline_event').off('click')
+  $('.timeline_event').on('click', (e) ->
+    initEvents.call(@)
   )
 
   # イベントのD&D
