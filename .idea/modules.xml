@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PresenceDesk.iml" filepath="$PROJECT_DIR$/PresenceDesk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GetDesk.iml" filepath="$PROJECT_DIR$/GetDesk.iml" />
     </modules>
   </component>
 </project>
