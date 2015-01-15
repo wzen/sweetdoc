@@ -164,7 +164,7 @@ setPageValue = function(key, value, isCache) {
 };
 
 sanitaizeEncode = function(str) {
-  if ((str != null) && !jQuery.isNumeric(str)) {
+  if ((str != null) && typeof str === "string") {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   } else {
     return str;
@@ -172,7 +172,7 @@ sanitaizeEncode = function(str) {
 };
 
 sanitaizeDecode = function(str) {
-  if ((str != null) && !jQuery.isNumeric(str)) {
+  if ((str != null) && typeof str === "string") {
     return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
   } else {
     return str;

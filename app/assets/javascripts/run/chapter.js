@@ -2,22 +2,22 @@
 var Chapter;
 
 Chapter = (function() {
-  function Chapter(actorList) {
-    this.actorList = actorList;
+  function Chapter(eventListenerList) {
+    this.eventListenerList = eventListenerList;
   }
 
   Chapter.prototype.scrollEvent = function(x, y) {
-    return this.actorList.forEach(function(actor) {
-      if (actor.scrollEvent != null) {
-        return actor.scrollEvent(x, y);
+    return this.eventListenerList.forEach(function(eventListener) {
+      if (eventListener.scrollEvent != null) {
+        return eventListener.scrollEvent(x, y);
       }
     });
   };
 
   Chapter.prototype.clickEvent = function(e) {
-    return this.actorList.forEach(function(actor) {
-      if (actor.clickEvent != null) {
-        return actor.clickEvent(e);
+    return this.eventListenerList.forEach(function(eventListener) {
+      if (eventListener.clickEvent != null) {
+        return eventListener.clickEvent(e);
       }
     });
   };
@@ -29,7 +29,7 @@ Chapter = (function() {
     if (type == null) {
       type = "center";
     }
-    item = this.actorList[0];
+    item = this.eventListenerList[0];
     width = item.itemSize.w;
     height = item.itemSize.h;
     if (item.scale != null) {

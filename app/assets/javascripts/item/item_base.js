@@ -138,7 +138,7 @@ ItemBase = (function(_super) {
 
   return ItemBase;
 
-})(Actor);
+})(EventListener);
 
 CssItemBase = (function(_super) {
   __extends(CssItemBase, _super);

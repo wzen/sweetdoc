@@ -6,24 +6,24 @@ var ClickChapter,
 ClickChapter = (function(_super) {
   __extends(ClickChapter, _super);
 
-  function ClickChapter(actorList) {
-    ClickChapter.__super__.constructor.call(this, actorList);
+  function ClickChapter(eventListenerList) {
+    ClickChapter.__super__.constructor.call(this, eventListenerList);
     this.riseFrontAllActor();
   }
 
   ClickChapter.prototype.riseFrontAllActor = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     scrollContents.css('z-index', scrollViewSwitchZindex.on);
-    return this.actorList.forEach(function(actor) {
-      return actor.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
+    return this.eventListenerList.forEach(function(eventListener) {
+      return eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
     });
   };
 
   ClickChapter.prototype.sinkFrontAllActor = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.actorList.forEach(function(actor) {
-      return actor.getJQueryElement().css('z-index', 0);
+    return this.eventListenerList.forEach(function(eventListener) {
+      return eventListener.getJQueryElement().css('z-index', 0);
     });
   };
 

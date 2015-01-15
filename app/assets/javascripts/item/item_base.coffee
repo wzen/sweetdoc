@@ -1,5 +1,5 @@
 # アイテム基底
-class ItemBase extends Actor
+class ItemBase extends EventListener
   # @abstract
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""

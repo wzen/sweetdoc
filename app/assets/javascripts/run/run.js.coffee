@@ -63,7 +63,7 @@ initTimeline = ->
       item = new ButtonItem()
     else if miniObj.itemType == Constant.ItemType.ARROW
       item = new ArrowItem()
-    item.initActor(miniObj, obj.itemSize)
+    item.initListener(miniObj, obj.itemSize)
     item.reDraw(false)
     item.setEvents(obj.sEvent, obj.cEvent)
     actorList.push(item)

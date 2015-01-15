@@ -134,7 +134,7 @@ setPageValue = (key, value, isCache = false) ->
 # サニタイズ エンコード
 # @property [String] str 対象文字列
 sanitaizeEncode =  (str) ->
-  if str? && !jQuery.isNumeric(str)
+  if str? && typeof str == "string"
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   else
     return str
@@ -143,7 +143,7 @@ sanitaizeEncode =  (str) ->
 # サニタイズ デコード
 # @property [String] str 対象文字列
 sanitaizeDecode = (str) ->
-  if str? && !jQuery.isNumeric(str)
+  if str? && typeof str == "string"
     return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
   else
     return str

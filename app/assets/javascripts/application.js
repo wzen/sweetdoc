@@ -26,7 +26,7 @@
 //= require base/constant
 //= require base/common
 //= require item/code_template
-//= require item/actor
+//= require item/event_listener.js
 //= require item/item_base
 //= require test_move
 //= require worktable/worktable

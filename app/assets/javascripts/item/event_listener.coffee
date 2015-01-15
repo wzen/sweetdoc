@@ -1,8 +1,8 @@
 # アクション情報
-class Actor
+class EventListener
 
   # アクションの初期化(閲覧モードのみ使用される)
-  initActor: (miniObj, itemSize) ->
+  initListener: (miniObj, itemSize) ->
     @setMiniumObject(miniObj)
     @itemSize = itemSize
 

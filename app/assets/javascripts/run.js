@@ -8,7 +8,7 @@
 // IDE not aware under vendor/asset/
 //= require base/constant
 //= require base/common
-//= require item/actor
+//= require item/event_listener.js
 //= require item/code_template
 //= require item/item_base
 //= require item/arrow

@@ -1,21 +1,21 @@
 # チャプター(タイムラインの区切り)
 class Chapter
-  constructor: (actorList) ->
-    @actorList = actorList
+  constructor: (eventListenerList) ->
+    @eventListenerList = eventListenerList
 
 
   # スクロールイベント
   scrollEvent : (x, y) ->
-    @actorList.forEach((actor) ->
-      if actor.scrollEvent?
-        actor.scrollEvent(x, y)
+    @eventListenerList.forEach((eventListener) ->
+      if eventListener.scrollEvent?
+        eventListener.scrollEvent(x, y)
     )
 
   # クリックイベント
   clickEvent: (e) ->
-    @actorList.forEach((actor) ->
-      if actor.clickEvent?
-        actor.clickEvent(e)
+    @eventListenerList.forEach((eventListener) ->
+      if eventListener.clickEvent?
+        eventListener.clickEvent(e)
     )
 
   # チャプターの後処理
@@ -25,7 +25,7 @@ class Chapter
   # アイテムにフォーカス
   focusToActor: (type = "center") ->
     # 1つ目のアイテムにフォーカスする
-    item = @actorList[0]
+    item = @eventListenerList[0]
     width = item.itemSize.w
     height = item.itemSize.h
     if item.scale?

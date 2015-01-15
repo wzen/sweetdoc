@@ -30,7 +30,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/actor.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/event_listener.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
