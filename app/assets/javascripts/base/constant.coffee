@@ -55,6 +55,11 @@ if gon?
 
     # ページ値キー
     class @PageValueKey
+      # @property [String] ITEM アイテムRoot
+      @ITEM_VALUE = 'item:@id:value'
+      # @property [String] ITEM アイテムキャッシュRoot
+      @ITEM_VALUE_CACHE = 'item:cache:@id:value'
+
       # @property [String] TE タイムラインイベントRoot
       @TE = 'timeline_event:@id'
       # @property [String] TE_SORT ソート番号

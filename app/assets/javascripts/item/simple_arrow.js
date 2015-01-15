@@ -116,7 +116,7 @@ SimpleArrowItem = (function(_super) {
     return obj;
   };
 
-  SimpleArrowItem.prototype.loadByMinimumObject = function(obj) {
+  SimpleArrowItem.prototype.reDrawByMinimumObject = function(obj) {
     this.itemSize = obj.a;
     this.zindex = obj.b;
     this.coodRegist = obj.c;

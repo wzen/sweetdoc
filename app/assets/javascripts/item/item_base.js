@@ -96,6 +96,32 @@ ItemBase = (function(_super) {
     return console.log('save obj:' + JSON.stringify(this.itemSize));
   };
 
+  ItemBase.prototype.saveObjPageValue = function(isCache) {
+    var obj, prefix_key;
+    if (isCache == null) {
+      isCache = false;
+    }
+    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = prefix_key.replace('@id', this.id);
+    obj = this.generateMinimumObject();
+    return setPageValue(prefix_key, obj);
+  };
+
+  ItemBase.prototype.reDrawByObjPageValue = function(isCache) {
+    var obj, prefix_key;
+    if (isCache == null) {
+      isCache = false;
+    }
+    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = prefix_key.replace('@id', this.id);
+    obj = getPageValue(prefix_key);
+    if (obj != null) {
+      this.reDrawByMinimumObject(obj);
+      return true;
+    }
+    return false;
+  };
+
   ItemBase.prototype.getHistoryObj = function(action) {
     return null;
   };
@@ -104,7 +130,7 @@ ItemBase = (function(_super) {
 
   ItemBase.prototype.generateMinimumObject = function() {};
 
-  ItemBase.prototype.loadByMinimumObject = function(obj) {};
+  ItemBase.prototype.reDrawByMinimumObject = function(obj) {};
 
   ItemBase.prototype.drawForLookaround = function(obj) {};
 

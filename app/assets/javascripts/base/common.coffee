@@ -59,7 +59,8 @@ getPageValue = (key, withRemove = false) ->
       $(c).each((e) ->
         v = null
         if @.tagName == "INPUT"
-          v = $(@).val()
+          # サニタイズをデコードして返却
+          v = sanitaizeDecode($(@).val())
         else
           v = takeValue.call(f, @)
         ret[@.classList[0]] = v
@@ -76,7 +77,7 @@ getPageValue = (key, withRemove = false) ->
       return
     if keys.length - 1 == index
       if root[0].tagName == "INPUT"
-        value = root.val()
+        value = sanitaizeDecode(root.val())
       else
         value = takeValue.call(f,root)
       if withRemove
@@ -93,7 +94,9 @@ setPageValue = (key, value, isCache = false) ->
   # ハッシュを要素の文字列に変換
   makeElementStr = (ky, val) ->
     if jQuery.type(val) != "object"
-      return "<input type='hidden' class=#{ky} value=#{val} />"
+      # サニタイズする
+      val = sanitaizeEncode(val)
+      return "<input type='hidden' class=#{ky} value='#{val}' />"
 
     ret = ""
     for k, v of val
@@ -127,6 +130,24 @@ setPageValue = (key, value, isCache = false) ->
       if isCache
         root.addClass(cacheClassName)
   )
+
+# サニタイズ エンコード
+# @property [String] str 対象文字列
+sanitaizeEncode =  (str) ->
+  if str? && !jQuery.isNumeric(str)
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  else
+    return str
+
+
+# サニタイズ デコード
+# @property [String] str 対象文字列
+sanitaizeDecode = (str) ->
+  if str? && !jQuery.isNumeric(str)
+    return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
+  else
+    return str
+
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

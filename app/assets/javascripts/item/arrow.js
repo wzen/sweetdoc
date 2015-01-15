@@ -136,7 +136,7 @@ ArrowItem = (function(_super) {
     return obj;
   };
 
-  ArrowItem.prototype.loadByMinimumObject = function(obj) {
+  ArrowItem.prototype.reDrawByMinimumObject = function(obj) {
     this.setMiniumObject(obj);
     this.reDraw();
     return this.saveObj(Constant.ItemActionType.MAKE);

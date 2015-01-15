@@ -117,7 +117,7 @@ class SimpleArrowItem extends ItemBase
 
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ
-  loadByMinimumObject: (obj) ->
+  reDrawByMinimumObject: (obj) ->
 #    @id = elementId.slice(@constructor.IDENTITY.length + 1)
     @itemSize = obj.a
     @zindex = obj.b

@@ -71,6 +71,7 @@ initHandwrite = function() {
     setupEvents(item);
     changeMode(Constant.Mode.EDIT);
     item.saveObj(Constant.ItemActionType.MAKE);
+    item.saveObjPageValue();
     return zindex += 1;
   };
   return (function(_this) {
@@ -865,7 +866,7 @@ loadFromServer = function() {
           } else if (obj.itemType === Constant.ItemType.ARROW) {
             item = new WorkTableArrowItem();
           }
-          item.loadByMinimumObject(obj);
+          item.reDrawByMinimumObject(obj);
           _results.push(setupEvents(item));
         }
         return _results;
@@ -945,16 +946,11 @@ clearWorkTable = function() {
 /* デバッグ */
 
 runDebug = function() {
-  setPageValue('test:ok:desuka', 1, true);
-  setPageValue('test:ok:desuka:testcache', {
-    1: "ok1",
-    2: {
-      3: "ok2",
-      4: "ok3"
-    },
-    7: "ok7"
-  }, true);
-  return setPageValue('test2:ok:desuka', 2, true);
+  var item;
+  item = itemObjectList[0];
+  if (item.reDrawByObjPageValue()) {
+    return setupEvents(item);
+  }
 };
 
 

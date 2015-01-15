@@ -78,6 +78,7 @@ initHandwrite = ->
     setupEvents(item)
     changeMode(Constant.Mode.EDIT)
     item.saveObj(Constant.ItemActionType.MAKE)
+    item.saveObjPageValue()
     zindex += 1
 
   # 手書きイベントを設定
@@ -808,7 +809,7 @@ loadFromServer = ->
               item = new WorkTableButtonItem()
             else if obj.itemType == Constant.ItemType.ARROW
               item = new WorkTableArrowItem()
-            item.loadByMinimumObject(obj)
+            item.reDrawByMinimumObject(obj)
             setupEvents(item)
 
         # CSS情報を設置
@@ -885,9 +886,9 @@ clearWorkTable = ->
 
 ### デバッグ ###
 runDebug = ->
-  setPageValue('test:ok:desuka', 1, true)
-  setPageValue('test:ok:desuka:testcache', {1: "ok1", 2:{3: "ok2", 4: "ok3"}, 7: "ok7"}, true)
-  setPageValue('test2:ok:desuka', 2, true)
+  item = itemObjectList[0]
+  if item.reDrawByObjPageValue()
+    setupEvents(item)
 
 ### タイムライン ###
 

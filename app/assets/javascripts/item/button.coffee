@@ -73,7 +73,7 @@ class ButtonItem extends CssItemBase
 
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ
-  loadByMinimumObject: (obj) ->
+  reDrawByMinimumObject: (obj) ->
     @setMiniumObject(obj)
     @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)

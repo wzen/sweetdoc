@@ -94,7 +94,7 @@ ButtonItem = (function(_super) {
     return obj;
   };
 
-  ButtonItem.prototype.loadByMinimumObject = function(obj) {
+  ButtonItem.prototype.reDrawByMinimumObject = function(obj) {
     this.setMiniumObject(obj);
     this.reDraw();
     return this.saveObj(Constant.ItemActionType.MAKE);

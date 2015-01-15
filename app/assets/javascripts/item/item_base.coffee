@@ -109,6 +109,26 @@ class ItemBase extends Actor
       itemObjectList.push(@)
     console.log('save obj:' + JSON.stringify(@itemSize))
 
+  # アイテムの情報をページ値に保存
+  saveObjPageValue: (isCache = false)->
+    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = prefix_key.replace('@id', @id)
+    obj = @generateMinimumObject()
+#    for k, v of obj
+#      setPageValue(prefix_key + k, v)
+    setPageValue(prefix_key, obj)
+
+  # アイテムの情報をページ値から読み込み
+  # @return [Boolean] 処理結果
+  reDrawByObjPageValue: (isCache = false) ->
+    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = prefix_key.replace('@id', @id)
+    obj = getPageValue(prefix_key)
+    if obj?
+      @reDrawByMinimumObject(obj)
+      return true
+    return false
+
   # 履歴データを取得
   # @abstract
   # @param [ItemActionType] action アクション種別
@@ -119,13 +139,13 @@ class ItemBase extends Actor
   # @abstract
   setHistoryObj: (historyObj) ->
 
-  # ストレージとDB保存用の最小限のデータを取得
+  # 保存用の最小限のデータを取得
   # @abstract
   generateMinimumObject: ->
 
   # 最小限のデータからアイテムを描画
   # @abstract
-  loadByMinimumObject: (obj) ->
+  reDrawByMinimumObject: (obj) ->
 
   # 閲覧モード用の描画
   # @abstract

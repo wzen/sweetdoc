@@ -78,6 +78,10 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.PageValueKey = (function() {
       function PageValueKey() {}
 
+      PageValueKey.ITEM_VALUE = 'item:@id:value';
+
+      PageValueKey.ITEM_VALUE_CACHE = 'item:cache:@id:value';
+
       PageValueKey.TE = 'timeline_event:@id';
 
       PageValueKey.TE_SORT = PageValueKey.TE + ':sort';
