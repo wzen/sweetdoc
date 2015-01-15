@@ -25,8 +25,9 @@
 //= require item/generator.jquery.color.js
 //= require base/constant
 //= require base/common
+//= require base/event_listener
+//= require base/general_event
 //= require item/code_template
-//= require item/event_listener.js
 //= require item/item_base
 //= require test_move
 //= require worktable/worktable
