@@ -6,6 +6,9 @@ class EventListener
     @setMiniumObject(miniObj)
     @itemSize = itemSize
 
+    # 共通イベントパラメータ
+    @delay = null
+
   setEvents: (sEventFuncName, cEventFuncName) ->
     # スクロールイベント
     if sEventFuncName? && @constructor.prototype[sEventFuncName]?

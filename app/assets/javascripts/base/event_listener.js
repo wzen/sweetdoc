@@ -6,7 +6,8 @@ EventListener = (function() {
 
   EventListener.prototype.initListener = function(miniObj, itemSize) {
     this.setMiniumObject(miniObj);
-    return this.itemSize = itemSize;
+    this.itemSize = itemSize;
+    return this.delay = null;
   };
 
   EventListener.prototype.setEvents = function(sEventFuncName, cEventFuncName) {
