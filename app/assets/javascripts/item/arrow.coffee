@@ -5,7 +5,7 @@ window.loadedItemTypeList.push(Constant.ItemType.ARROW)
 # @extend CanvasItemBase
 class ArrowItem extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
-  @IDENTITY = "arrow"
+  @IDENTITY = "Arrow"
   # @property [String] ITEMTYPE アイテム種別
   @ITEMTYPE = Constant.ItemType.ARROW
 
@@ -132,6 +132,7 @@ class ArrowItem extends CanvasItemBase
   generateMinimumObject: ->
     obj = {
       id: makeClone(@id)
+      name: makeClone(@name)
       itemType: Constant.ItemType.ARROW
       itemSize: makeClone(@itemSize)
       zindex: makeClone(@zindex)
@@ -153,6 +154,7 @@ class ArrowItem extends CanvasItemBase
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
     @id = makeClone(obj.id)
+    @name = makeClone(obj.name)
     @itemSize = makeClone(obj.itemSize)
     @zindex = makeClone(obj.zindex)
     @coodRegist = makeClone(obj.coodRegist)

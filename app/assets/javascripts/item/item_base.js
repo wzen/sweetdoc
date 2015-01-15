@@ -20,6 +20,7 @@ ItemBase = (function(_super) {
     }
     ItemBase.__super__.constructor.call(this);
     this.id = generateId();
+    this.name = null;
     this.drawingSurfaceImageData = null;
     if (cood !== null) {
       this.mousedownCood = {
@@ -86,11 +87,19 @@ ItemBase = (function(_super) {
   ItemBase.prototype.reDraw = function() {};
 
   ItemBase.prototype.saveObj = function(action) {
-    var history;
+    var history, num, self;
     history = this.getHistoryObj(action);
     this.pushOhi(operationHistoryIndex - 1);
     pushOperationHistory(history);
     if (action === Constant.ItemActionType.MAKE) {
+      num = 1;
+      self = this;
+      itemObjectList.forEach(function(e) {
+        if (self.constructor.IDENTITY === this.constructor.IDENTITY) {
+          return num += 1;
+        }
+      });
+      this.name = this.constructor.IDENTITY + (" " + num);
       itemObjectList.push(this);
     }
     return console.log('save obj:' + JSON.stringify(this.itemSize));

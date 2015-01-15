@@ -17,6 +17,8 @@ class ItemBase extends EventListener
     super()
     # @property [Int] id ID
     @id = generateId()
+    # @property [String] name 名前
+    @name = null
     # @property [Object] drawingSurfaceImageData 画面を保存する変数
     @drawingSurfaceImageData = null
     if cood != null
@@ -105,6 +107,14 @@ class ItemBase extends EventListener
     @pushOhi(operationHistoryIndex - 1)
     pushOperationHistory(history)
     if action == Constant.ItemActionType.MAKE
+      # 名前を付与
+      num = 1
+      self = @
+      itemObjectList.forEach((e) ->
+        if self.constructor.IDENTITY == @constructor.IDENTITY
+          num += 1
+      )
+      @name = @constructor.IDENTITY + " #{num}"
       # アイテムリストに保存
       itemObjectList.push(@)
     console.log('save obj:' + JSON.stringify(@itemSize))
@@ -170,9 +180,9 @@ class CssItemBase extends ItemBase
   # @abstract
   setupOptionMenu: ->
 
-    # 描画終了時に呼ばれるメソッド
-    # @param [Int] zindex z-index
-    # @param [boolean] show 要素作成後に描画を表示するか
+  # 描画終了時に呼ばれるメソッド
+  # @param [Int] zindex z-index
+  # @param [boolean] show 要素作成後に描画を表示するか
   endDraw: (zindex, show = true) ->
     if !super(zindex)
       return false

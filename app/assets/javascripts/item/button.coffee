@@ -5,7 +5,7 @@ window.loadedItemTypeList.push(Constant.ItemType.BUTTON)
 # @extend CssItemBase
 class ButtonItem extends CssItemBase
   # @property [String] IDENTITY アイテム識別名
-  @IDENTITY = "button"
+  @IDENTITY = "Button"
   # @property [String] ITEMTYPE アイテム種別
   @ITEMTYPE = Constant.ItemType.BUTTON
 
@@ -63,6 +63,7 @@ class ButtonItem extends CssItemBase
   generateMinimumObject: ->
     obj = {
       id: makeClone(@id)
+      name: makeClone(@name)
       itemType: Constant.ItemType.BUTTON
       mousedownCood: makeClone(@mousedownCood)
       itemSize: makeClone(@itemSize)
@@ -83,6 +84,7 @@ class ButtonItem extends CssItemBase
   # @param [Array] obj アイテムオブジェクトの最小限データ
   setMiniumObject: (obj) ->
     @id = makeClone(obj.id) # IDも変更
+    @name = makeClone(obj.name)
     @mousedownCood = makeClone(obj.mousedownCood)
     @itemSize = makeClone(obj.itemSize)
     @zindex = makeClone(obj.zindex)
@@ -212,6 +214,9 @@ class WorkTableButtonItem extends ButtonItem
     cssCache = @cssCache
     cssCode = @cssCode
     cssStyle = @cssStyle
+
+    # 名前設定
+    $('.item-name', @cssConfig).val(@name)
 
     #スライダー
     settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle)

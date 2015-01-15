@@ -9,7 +9,7 @@ window.loadedItemTypeList.push(Constant.ItemType.BUTTON);
 ButtonItem = (function(_super) {
   __extends(ButtonItem, _super);
 
-  ButtonItem.IDENTITY = "button";
+  ButtonItem.IDENTITY = "Button";
 
   ButtonItem.ITEMTYPE = Constant.ItemType.BUTTON;
 
@@ -85,6 +85,7 @@ ButtonItem = (function(_super) {
     var obj;
     obj = {
       id: makeClone(this.id),
+      name: makeClone(this.name),
       itemType: Constant.ItemType.BUTTON,
       mousedownCood: makeClone(this.mousedownCood),
       itemSize: makeClone(this.itemSize),
@@ -102,6 +103,7 @@ ButtonItem = (function(_super) {
 
   ButtonItem.prototype.setMiniumObject = function(obj) {
     this.id = makeClone(obj.id);
+    this.name = makeClone(obj.name);
     this.mousedownCood = makeClone(obj.mousedownCood);
     this.itemSize = makeClone(obj.itemSize);
     this.zindex = makeClone(obj.zindex);
@@ -196,6 +198,7 @@ WorkTableButtonItem = (function(_super) {
     cssCache = this.cssCache;
     cssCode = this.cssCode;
     cssStyle = this.cssStyle;
+    $('.item-name', this.cssConfig).val(this.name);
     settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle);
     settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle);
     settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle);

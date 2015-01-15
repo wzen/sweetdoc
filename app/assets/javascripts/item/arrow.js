@@ -11,7 +11,7 @@ ArrowItem = (function(_super) {
 
   __extends(ArrowItem, _super);
 
-  ArrowItem.IDENTITY = "arrow";
+  ArrowItem.IDENTITY = "Arrow";
 
   ArrowItem.ITEMTYPE = Constant.ItemType.ARROW;
 
@@ -124,6 +124,7 @@ ArrowItem = (function(_super) {
     var obj;
     obj = {
       id: makeClone(this.id),
+      name: makeClone(this.name),
       itemType: Constant.ItemType.ARROW,
       itemSize: makeClone(this.itemSize),
       zindex: makeClone(this.zindex),
@@ -144,6 +145,7 @@ ArrowItem = (function(_super) {
 
   ArrowItem.prototype.setMiniumObject = function(obj) {
     this.id = makeClone(obj.id);
+    this.name = makeClone(obj.name);
     this.itemSize = makeClone(obj.itemSize);
     this.zindex = makeClone(obj.zindex);
     this.coodRegist = makeClone(obj.coodRegist);
