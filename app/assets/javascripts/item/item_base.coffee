@@ -120,15 +120,15 @@ class ItemBase extends EventListener
     console.log('save obj:' + JSON.stringify(@itemSize))
 
   # アイテムの情報をページ値に保存
-  saveObjPageValue: (isCache = false)->
+  # @property [Boolean] isCache キャッシュとして保存するか
+  setAllItemPropToPageValue: (isCache = false)->
     prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     obj = @generateMinimumObject()
-#    for k, v of obj
-#      setPageValue(prefix_key + k, v)
     setPageValue(prefix_key, obj)
 
-  # アイテムの情報をページ値から読み込み
+  # アイテムをページ値から再描画
+  # @property [Boolean] isCache キャッシュとして保存するか
   # @return [Boolean] 処理結果
   reDrawByObjPageValue: (isCache = false) ->
     prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
@@ -138,6 +138,23 @@ class ItemBase extends EventListener
       @reDrawByMinimumObject(obj)
       return true
     return false
+
+  # アイテムの情報をページ値から取得
+  # @property [String] prop 変数名
+  # @property [Boolean] isCache キャッシュとして保存するか
+  getItemPropFromPageValue : (prop, isCache = false) ->
+    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = prefix_key.replace('@id', @id)
+    return getPageValue(prefix_key + ":#{prop}")
+
+  # アイテムの情報をページ値から取得
+  # @property [String] prop 変数名
+  # @property [Object] value 値
+  # @property [Boolean] isCache キャッシュとして保存するか
+  setItemPropToPageValue : (prop, value, isCache = false) ->
+    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = prefix_key.replace('@id', @id)
+    setPageValue(prefix_key + ":#{prop}", value)
 
   # 履歴データを取得
   # @abstract

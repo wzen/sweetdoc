@@ -69,3 +69,6 @@ if gon?
       # @property [String] TE_DELAY 遅延
       @TE_DELAY = @TE + ':delay'
 
+      # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
+      @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
+

@@ -105,7 +105,7 @@ ItemBase = (function(_super) {
     return console.log('save obj:' + JSON.stringify(this.itemSize));
   };
 
-  ItemBase.prototype.saveObjPageValue = function(isCache) {
+  ItemBase.prototype.setAllItemPropToPageValue = function(isCache) {
     var obj, prefix_key;
     if (isCache == null) {
       isCache = false;
@@ -129,6 +129,26 @@ ItemBase = (function(_super) {
       return true;
     }
     return false;
+  };
+
+  ItemBase.prototype.getItemPropFromPageValue = function(prop, isCache) {
+    var prefix_key;
+    if (isCache == null) {
+      isCache = false;
+    }
+    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = prefix_key.replace('@id', this.id);
+    return getPageValue(prefix_key + (":" + prop));
+  };
+
+  ItemBase.prototype.setItemPropToPageValue = function(prop, value, isCache) {
+    var prefix_key;
+    if (isCache == null) {
+      isCache = false;
+    }
+    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = prefix_key.replace('@id', this.id);
+    return setPageValue(prefix_key + (":" + prop), value);
   };
 
   ItemBase.prototype.getHistoryObj = function(action) {

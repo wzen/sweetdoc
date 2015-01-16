@@ -71,7 +71,7 @@ initHandwrite = function() {
     setupEvents(item);
     changeMode(Constant.Mode.EDIT);
     item.saveObj(Constant.ItemActionType.MAKE);
-    item.saveObjPageValue();
+    item.setAllItemPropToPageValue();
     return zindex += 1;
   };
   return (function(_this) {
@@ -565,9 +565,14 @@ closeSidebar = function() {
   main = $('#main');
   if (!isClosedConfigSidebar()) {
     return $('#sidebar').fadeOut('1000', function() {
-      scrollContents.animate({
-        scrollLeft: 0
-      }, 500);
+      var s;
+      s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, true);
+      if (s != null) {
+        scrollContents.animate({
+          scrollTop: s.top,
+          scrollLeft: s.left
+        }, 500);
+      }
       main.switchClass('col-md-9', 'col-md-12', 500, 'swing');
       return $('.sidebar-config').css('display', 'none');
     });
@@ -625,6 +630,10 @@ focusToTarget = function(target, selectedBorderType) {
   } else if (scrollLeft > scrollContents.width() * 0.25) {
     scrollLeft = scrollContents.width() * 0.25;
   }
+  setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {
+    top: scrollContents.scrollTop(),
+    left: scrollContents.scrollLeft()
+  }, true);
   console.log("focusToTarget:: scrollTop:" + scrollTop + " scrollLeft:" + scrollLeft);
   return scrollContents.animate({
     scrollTop: scrollContents.scrollTop() + scrollTop,

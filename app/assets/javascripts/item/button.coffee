@@ -155,10 +155,7 @@ class ButtonItem extends CssItemBase
     -moz-animation-duration: 0.5s;
     }
     """
-
     return "#{keyframe} #{css}"
-
-
 
 # ワークテーブル用ボタンクラス
 class WorkTableButtonItem extends ButtonItem
@@ -215,8 +212,13 @@ class WorkTableButtonItem extends ButtonItem
     cssCode = @cssCode
     cssStyle = @cssStyle
 
-    # 名前設定
-    $('.item-name', @cssConfig).val(@name)
+    # アイテム名の変更
+    name = $('.item-name', @cssConfig)
+    name.val(@name)
+    name.off('change').on('change', =>
+      @name = name.val()
+      @setItemPropToPageValue('name', @name)
+    )
 
     #スライダー
     settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle)

@@ -90,6 +90,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.TE_DELAY = PageValueKey.TE + ':delay';
 
+      PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
+
       return PageValueKey;
 
     })();

@@ -78,7 +78,7 @@ initHandwrite = ->
     setupEvents(item)
     changeMode(Constant.Mode.EDIT)
     item.saveObj(Constant.ItemActionType.MAKE)
-    item.saveObjPageValue()
+    item.setAllItemPropToPageValue()
     zindex += 1
 
   # 手書きイベントを設定
@@ -536,7 +536,9 @@ closeSidebar = ->
   main = $('#main')
   if !isClosedConfigSidebar()
     $('#sidebar').fadeOut('1000', ->
-      scrollContents.animate({scrollLeft: 0}, 500)
+      s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, true)
+      if s?
+        scrollContents.animate({scrollTop: s.top, scrollLeft: s.left}, 500)
       main.switchClass('col-md-9', 'col-md-12', 500, 'swing')
       $('.sidebar-config').css('display', 'none')
     )
@@ -577,7 +579,6 @@ focusToTarget = (target, selectedBorderType = "edit") ->
   targetMiddle =
     top: $(target).offset().top + $(target).height() * 0.5
     left: $(target).offset().left + $(target).width() * 0.5
-  #  viewMiddle = (scrollContents.width() * 0.5)
   scrollTop = targetMiddle.top - scrollContents.height() * 0.5
   if scrollTop < 0
     scrollTop = 0
@@ -590,7 +591,7 @@ focusToTarget = (target, selectedBorderType = "edit") ->
     scrollLeft =  scrollContents.width() * 0.25
 
   # 変更前の値を保存
-  #setPageValue('focusToTarget:')
+  setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
   # スライド
   console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
   scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)

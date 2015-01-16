@@ -192,13 +192,20 @@ WorkTableButtonItem = (function(_super) {
   };
 
   WorkTableButtonItem.prototype.setupOptionMenu = function() {
-    var base, cssCache, cssCode, cssRoot, cssStyle;
+    var base, cssCache, cssCode, cssRoot, cssStyle, name;
     base = this;
     cssRoot = this.cssRoot;
     cssCache = this.cssCache;
     cssCode = this.cssCode;
     cssStyle = this.cssStyle;
-    $('.item-name', this.cssConfig).val(this.name);
+    name = $('.item-name', this.cssConfig);
+    name.val(this.name);
+    name.off('change').on('change', (function(_this) {
+      return function() {
+        _this.name = name.val();
+        return _this.setItemPropToPageValue('name', _this.name);
+      };
+    })(this));
     settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle);
     settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle);
     settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle);
