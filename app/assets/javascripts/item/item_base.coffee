@@ -110,8 +110,8 @@ class ItemBase extends EventListener
       # 名前を付与
       num = 1
       self = @
-      itemObjectList.forEach((e) ->
-        if self.constructor.IDENTITY == @constructor.IDENTITY
+      itemObjectList.forEach((obj) ->
+        if self.constructor.IDENTITY == obj.constructor.IDENTITY
           num += 1
       )
       @name = @constructor.IDENTITY + " #{num}"

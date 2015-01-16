@@ -53,7 +53,7 @@ if gon?
       # @property [Int] Z zボタン
       @Z = constant.KeyboardKeyCode.Z
 
-    # ページ値キー
+    # ページ内値保存キー
     class @PageValueKey
       # @property [String] ITEM アイテムRoot
       @ITEM_VALUE = 'item:@id:value'

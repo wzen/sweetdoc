@@ -94,8 +94,8 @@ ItemBase = (function(_super) {
     if (action === Constant.ItemActionType.MAKE) {
       num = 1;
       self = this;
-      itemObjectList.forEach(function(e) {
-        if (self.constructor.IDENTITY === this.constructor.IDENTITY) {
+      itemObjectList.forEach(function(obj) {
+        if (self.constructor.IDENTITY === obj.constructor.IDENTITY) {
           return num += 1;
         }
       });
