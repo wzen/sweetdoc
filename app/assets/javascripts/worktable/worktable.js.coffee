@@ -525,23 +525,25 @@ openConfigSidebar = (target = null, selectedBorderType = "edit") ->
       $('#sidebar').fadeIn('1000')
     )
     if target != null
-      focusToTarget(target, selectedBorderType)
-
-# サイドバーがオープンしているか
-isOpenedConfigSidebar = ->
-  return $('#main').hasClass('col-md-9')
+      focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
 # サイドバーをクローズ
 closeSidebar = ->
   main = $('#main')
   if !isClosedConfigSidebar()
     $('#sidebar').fadeOut('1000', ->
-      s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, true)
+      s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
       if s?
-        scrollContents.animate({scrollTop: s.top, scrollLeft: s.left}, 500)
+        scrollContents.animate({scrollTop: s.top, scrollLeft: s.left}, 500, null, ->
+          removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
+        )
       main.switchClass('col-md-9', 'col-md-12', 500, 'swing')
       $('.sidebar-config').css('display', 'none')
     )
+
+# サイドバーがオープンしているか
+isOpenedConfigSidebar = ->
+  return $('#main').hasClass('col-md-9')
 
 # サイドバーがクローズしているか
 isClosedConfigSidebar = ->
@@ -568,33 +570,15 @@ switchSidebarConfig = (configType) ->
     else
       $('#timeline-config').css('display', '')
 
-# 対象オブジェクトに対してフォーカスする
-# @param [Object] target 選択対象オブジェクト
+# 対象アイテムに対してフォーカスする(サイドバーオープン時)
+# @param [Object] target 対象アイテム
 # @param [String] selectedBorderType 選択枠タイプ
-focusToTarget = (target, selectedBorderType = "edit") ->
+focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
   # 選択枠設定
   setSelectedBorder(target, selectedBorderType)
-
-  # col-md-9 → 75% padding → 15px
-  targetMiddle =
-    top: $(target).offset().top + $(target).height() * 0.5
-    left: $(target).offset().left + $(target).width() * 0.5
-  scrollTop = targetMiddle.top - scrollContents.height() * 0.5
-  if scrollTop < 0
-    scrollTop = 0
-  else if scrollTop > scrollContents.height() * 0.25
-    scrollTop =  scrollContents.height() * 0.25
-  scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5
-  if scrollLeft < 0
-    scrollLeft = 0
-  else if scrollLeft > scrollContents.width() * 0.25
-    scrollLeft =  scrollContents.width() * 0.25
-
-  # 変更前の値を保存
+  # 変更前のスライド値を保存
   setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
-  # スライド
-  console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
-  scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)
+  focusToTarget(target)
 
 # 警告表示
 # @param [String] message メッセージ内容

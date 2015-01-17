@@ -45,6 +45,29 @@ makeClone = (obj) ->
     newInstance[key] = clone obj[key]
   return newInstance
 
+
+# アイテムに対してフォーカスする
+# @param [Object] target 対象アイテム
+focusToTarget = (target) ->
+  # col-md-9 → 75% padding → 15px
+  targetMiddle =
+    top: $(target).offset().top + $(target).height() * 0.5
+    left: $(target).offset().left + $(target).width() * 0.5
+  scrollTop = targetMiddle.top - scrollContents.height() * 0.5
+  if scrollTop < 0
+    scrollTop = 0
+  else if scrollTop > scrollContents.height() * 0.25
+    scrollTop =  scrollContents.height() * 0.25
+  scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5
+  if scrollLeft < 0
+    scrollLeft = 0
+  else if scrollLeft > scrollContents.width() * 0.25
+    scrollLeft =  scrollContents.width() * 0.25
+  # スライド
+  #console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
+  scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)
+
+
 # ページが持つ値を取得
 # @param [String] key キー値
 # @param [Boolean] withRemove 取得後に値を消去するか
@@ -130,6 +153,11 @@ setPageValue = (key, value, isCache = false) ->
       if isCache
         root.addClass(cacheClassName)
   )
+
+# ページが持つ値を削除
+# @param [String] key キー値
+removePageValue = (key) ->
+  getPageValue(key, true)
 
 # サニタイズ エンコード
 # @property [String] str 対象文字列
