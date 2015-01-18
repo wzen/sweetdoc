@@ -1,7 +1,7 @@
 require 'I18n'
 
 class ItemState < ActiveRecord::Base
-  def get_js_list_json(user_id, loaded_item_type_list)
+  def get_item_info_list(user_id, loaded_item_type_list)
     result = ItemState.where(:user_id => user_id).order(id: :desc).first
     item_js_list = []
     if result == nil
