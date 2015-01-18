@@ -572,7 +572,7 @@ switchSidebarConfig = (configType) ->
 
 # 対象アイテムに対してフォーカスする(サイドバーオープン時)
 # @param [Object] target 対象アイテム
-# @param [String] selectedBorderType 選択枠タイプ
+# @param [String] selectedBordfcccccccccccccccerType 選択枠タイプ
 focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
   # 選択枠設定
   setSelectedBorder(target, selectedBorderType)

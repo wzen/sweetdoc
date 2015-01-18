@@ -82,7 +82,7 @@ getPageValue = (key, withRemove = false) ->
       $(c).each((e) ->
         v = null
         if @.tagName == "INPUT"
-          # サニタイズをデコードして返却
+          # サニタイズをデコード
           v = sanitaizeDecode($(@).val())
         else
           v = takeValue.call(f, @)
