@@ -17,10 +17,10 @@ class Const
 
   # アイテム種別
   class ItemType
-    # @property [Int] ARROW 矢印
-    ARROW = 0
     # @property [Int] BUTTON ボタン
     BUTTON = 1
+    # @property [Int] ARROW 矢印
+    ARROW = 2
   end
   ITEM_PATH_LIST = {ItemType::ARROW.to_s.to_sym => 'arrow', ItemType::BUTTON.to_s.to_sym => 'button'}
 

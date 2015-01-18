@@ -19,7 +19,7 @@ class ItemState < ActiveRecord::Base
 
       # 必要なCSSテンプレートを読み込み
       if item_type_list.size > 0
-        item_css_temps = ItemCssTemp.where(item_type: item_type_list).order(item_type: :asc)
+        item_css_temps = ItemCssTemp.where(item_id: item_type_list).order(item_type: :asc)
         item_type_list.sort.each do |item_type|
           css_temp = item_css_temps.find_by(:item_type => item_type)
           if css_temp != nil

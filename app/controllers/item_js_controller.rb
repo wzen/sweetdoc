@@ -6,11 +6,10 @@ class ItemJsController < ApplicationController
     # data = {
     #     :js_src => ItemJs.new.get_lack_js(item_type)
     # }
-    css_temp = ItemCssTemp.find_by_item_type(item_type)
+    css_temp = ItemCssTemp.find_by_item_id(item_type)
     if css_temp != nil
       @css_info = css_temp.contents
     end
-    #render json: data
   end
 
 end

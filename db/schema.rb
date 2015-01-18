@@ -11,18 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150101135655) do
+ActiveRecord::Schema.define(version: 20150118145029) do
 
   create_table "item_action_events", force: true do |t|
-    t.integer  "item_type",     null: false
-    t.integer  "event_type_id", null: false
-    t.string   "mothod_name",   null: false
+    t.integer  "item_id",                     null: false
+    t.integer  "action_event_type_id",        null: false
+    t.integer  "action_event_mothod_type_id", null: false
+    t.integer  "action_event_change_type_id", null: false
+    t.string   "mothod_name",                 null: false
+    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "item_css_temps", force: true do |t|
-    t.integer  "item_type",  null: false
+    t.integer  "item_id",    null: false
     t.text     "contents"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -32,6 +35,15 @@ ActiveRecord::Schema.define(version: 20150101135655) do
     t.integer  "user_id",    null: false
     t.text     "state"
     t.text     "css_info"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "items", force: true do |t|
+    t.integer  "create_user_id", null: false
+    t.integer  "modify_user_id", null: false
+    t.string   "name",           null: false
+    t.string   "src_name",       null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -54,6 +66,9 @@ ActiveRecord::Schema.define(version: 20150101135655) do
   end
 
   create_table "localize_items", force: true do |t|
+    t.integer  "item_id",    null: false
+    t.integer  "locale_id",  null: false
+    t.string   "item_name",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -62,6 +77,13 @@ ActiveRecord::Schema.define(version: 20150101135655) do
     t.integer  "type_cd",     null: false
     t.integer  "sub_type_cd"
     t.text     "contents"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "name",       null: false
+    t.string   "mail"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
