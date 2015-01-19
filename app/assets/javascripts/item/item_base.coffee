@@ -40,6 +40,11 @@ class ItemBase extends EventListener
   getElementId: ->
     return @constructor.IDENTITY + '_' + @id
 
+  # コンフィグメニューの要素IDを取得
+  # @return [Int] HTML要素ID
+  getDesignConfigId: ->
+    return @id + '_designconfig'
+
   getJQueryElement: ->
     return $('#' + @getElementId())
 
@@ -210,6 +215,12 @@ class CssItemBase extends ItemBase
 
     return true
 
+  # デザイン変更コンフィグを作成
+  makeDesignConfig: ->
+    @designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', @getDesignConfigId())
+    @designConfigRoot.removeClass('design_temp')
+    $('#design-config').append(@designConfigRoot)
+
 # Canvasアイテム
 # @extend ItemBase
 class CanvasItemBase extends ItemBase
@@ -303,5 +314,13 @@ class CanvasItemBase extends ItemBase
       drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
       # キャンパスに対する初期化
       @initCanvas()
+
+  # デザイン変更コンフィグを作成
+  makeDesignConfig: ->
+    @designConfigRoot = $('#' + @getDesignConfigId())
+    if !@designConfigRoot?
+      @designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', @getDesignConfigId())
+      @designConfigRoot.removeClass('design_temp')
+      $('#design-config').append(@designConfigRoot)
 
 

@@ -116,8 +116,9 @@ ArrowItem = (function(_super) {
     }
     this.makeNewCanvas();
     if (show) {
-      return this.drawNewCanvas();
+      this.drawNewCanvas();
     }
+    return this.makeDesignConfig();
   };
 
   ArrowItem.prototype.generateMinimumObject = function() {

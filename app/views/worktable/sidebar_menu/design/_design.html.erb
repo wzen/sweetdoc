@@ -1,15 +1,10 @@
-<div class="config">
+<div id="design-config" class="sidebar-config" style="display: none">
 
-    <div id="btn-configBorder" class="configBox">
-        <div class="cssedit-headliner">Name</div>
-        <div class="forms">
-            <div>
-                <input type="text" class="item-name form-control input-sm" />
-            </div>
-        </div>
+    <!-- アイテム作成毎にテンプレートからDivを作成しここに追加 -->
+
+    <!-- 作成するDivのテンプレート -->
+    <div class="design_temp dc">
+        <%= render 'worktable/sidebar_menu/design/temp' %>
     </div>
-    <!-- /#configBorder -->
-</div>
 
-<%= render 'worktable/sidebar_menu/design/css' %>
-<%= render 'worktable/sidebar_menu/design/canvas' %>
+</div>

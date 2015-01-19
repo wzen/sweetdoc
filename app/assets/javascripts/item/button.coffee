@@ -162,13 +162,6 @@ class WorkTableButtonItem extends ButtonItem
   # @property [String] CSSTEMPID CSSテンプレートID
   @CSSTEMPID = "button_css_temp"
 
-  # オプションメニュー
-  @cssConfig = $("#css-config", $("#sidebar-wrapper"))
-  @configBoxLi = $("div.configBox > div.forms", $("#sidebar-wrapper"))
-  @btnGradientStep = $(".btn-gradient-step", @cssConfig)
-  @btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", @cssConfig)
-  @btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
-
   constructor: (cood = null) ->
     super(cood)
     @cssRoot = null
@@ -183,7 +176,7 @@ class WorkTableButtonItem extends ButtonItem
     obj.css = @cssRoot[0].outerHTML
     return obj
 
-  # HTML要素とCSSを作成
+  # HTML要素とCSSとコンフィグを作成
   # @param [boolean] show 要素作成後に描画を表示するか
   # @return [Boolean] 処理結果
   makeElement: (show = true) ->
@@ -202,6 +195,9 @@ class WorkTableButtonItem extends ButtonItem
     @cssStyle = $(".css-style", @cssRoot)
     @cssStyle.text(@cssCode.text())
 
+    # コンフィグ作成
+    @makeDesignConfig()
+
     return true
 
   # CSSボタンコントロール初期化
@@ -212,6 +208,15 @@ class WorkTableButtonItem extends ButtonItem
     cssCode = @cssCode
     cssStyle = @cssStyle
 
+    @designConfigRoot = $('#' + @getDesignConfigId())
+    if !@designConfigRoot?
+      @makeDesignConfig()
+    @cssConfig = $(".css-config", @designConfigRoot)
+    @canvasConfig = $(".canvas-config", @designConfigRoot)
+    btnGradientStep = $(".btn-gradient-step", @cssConfig)
+    btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", @cssConfig)
+    btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
+
     # アイテム名の変更
     name = $('.item-name', @cssConfig)
     name.val(@name)
@@ -221,32 +226,35 @@ class WorkTableButtonItem extends ButtonItem
     )
 
     #スライダー
-    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle)
-    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle)
-    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle)
-    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle)
-    #settingSlider('btn-slider-padding-left', 0, 30)
-    #settingSlider('btn-slider-padding-top', 0, 30)
-    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
-    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
-    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
-    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1)
-    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle)
-    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle)
+    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
+    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+
+    # オプションメニューを作成
+    ## カラーピッカー
+    createColorPicker(btnBgColor)
+    createColorPicker(btnShadowColor)
 
     # カラーピッカーイベント
-    WorkTableButtonItem.btnBgColor.each( ->
+    btnBgColor.each( ->
       self = $(@)
       className = self[0].classList[0]
       btnCodeEmt = cssCode.find("." + className).first()
@@ -272,7 +280,7 @@ class WorkTableButtonItem extends ButtonItem
       )
     )
 
-    WorkTableButtonItem.btnShadowColor.each( ->
+    btnShadowColor.each( ->
       self = $(@)
       className = self[0].classList[0]
       btnCodeEmt = cssCode.find("." + className).first()
@@ -299,8 +307,8 @@ class WorkTableButtonItem extends ButtonItem
     )
 
     # グラデーションStepイベント
-    WorkTableButtonItem.btnGradientStep.off('keyup mouseup')
-    WorkTableButtonItem.btnGradientStep.on('keyup mouseup', (e) ->
+    btnGradientStep.off('keyup mouseup')
+    btnGradientStep.on('keyup mouseup', (e) ->
       cssCode = base.cssCode
       cssStyle = base.cssStyle
       changeGradientShow(e.currentTarget, cssCode, cssStyle, WorkTableButtonItem.cssConfig)
@@ -349,7 +357,7 @@ class WorkTableButtonItem extends ButtonItem
 
   # オプションメニューを開く
   showOptionMenu: ->
-    $('#css-config').css('display', '')
+    @cssConfig.css('display', '')
 
   # ドラッグ時のイベント
   drag: ->
@@ -386,9 +394,3 @@ if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
         # ボタンのCSSテンプレートを設置
         tempEmt = "<div id='#{WorkTableButtonItem.CSSTEMPID}'>#{css_temp}</div>"
         $('#css_code_info_temp').append(tempEmt)
-
-
-      # オプションメニューを作成
-      ## カラーピッカー
-      createColorPicker(WorkTableButtonItem.btnBgColor)
-      createColorPicker(WorkTableButtonItem.btnShadowColor)

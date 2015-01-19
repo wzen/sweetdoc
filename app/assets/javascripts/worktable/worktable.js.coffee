@@ -262,13 +262,10 @@ getObjFromObjectListByElementId = (emtId) ->
 # @param [Object] cssCode コードエレメント
 # @param [Object] cssStyle CSSプレビューのエレメント
 # @param [Int] stepValue 進捗数
-settingSlider = (id, min, max, cssCode, cssStyle, stepValue) ->
-  if typeof stepValue == 'undefined'
-    stepValue = 0
-
-  meterElement = $('#' + id)
-  valueElement = $('.' + id + '-value')
-  d = $('.' + id + '-value', cssCode)[0]
+settingSlider = (className, min, max, cssCode, cssStyle, root, stepValue = 0) ->
+  meterElement = $('.' + className, root)
+  valueElement = $('.' + className + '-value', root)
+  d = $('.' + className + '-value', cssCode)[0]
   defaultValue = $(d).html()
   valueElement.val(defaultValue)
   valueElement.html(defaultValue)
@@ -317,8 +314,8 @@ settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
 # @param [Array] values 値の配列
 # @param [Object] cssCode コードエレメント
 # @param [Object] cssStyle CSSプレビューのエレメント
-settingGradientSlider = (id, values, cssCode, cssStyle) ->
-  meterElement = $('#' + id)
+settingGradientSlider = (className, values, cssCode, cssStyle, root) ->
+  meterElement = $('.' + className, root)
   settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
 
 
@@ -328,11 +325,11 @@ settingGradientSlider = (id, values, cssCode, cssStyle) ->
 # @param [Int] max 最大値
 # @param [Object] cssCode コードエレメント
 # @param [Object] cssStyle CSSプレビューのエレメント
-settingGradientDegSlider = (id, min, max, cssCode, cssStyle) ->
-  meterElement = $('#' + id)
-  valueElement = $('.' + id + '-value')
-  webkitValueElement = $('.' + id + '-value-webkit')
-  d = $('.' + id + '-value', cssCode)[0]
+settingGradientDegSlider = (className, min, max, cssCode, cssStyle, root) ->
+  meterElement = $('.' + className, root)
+  valueElement = $('.' + className + '-value', root)
+  webkitValueElement = $('.' + className + '-value-webkit', root)
+  d = $('.' + className + '-value', cssCode)[0]
   defaultValue = $(d).html()
   webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
 
@@ -552,19 +549,19 @@ isClosedConfigSidebar = ->
 
 # サイドバー内容のスイッチ
 # @param [String] configType コンフィグタイプ
-switchSidebarConfig = (configType) ->
+switchSidebarConfig = (configType, item = null) ->
   animation = isOpenedConfigSidebar()
   $('.sidebar-config').css('display', 'none')
-  if configType == "edit"
+  if configType == "css" && item? && item.cssConfig?
     if animation
-      $('#css-config').show()
+      item.cssConfig.show()
     else
-      $('#css-config').css('display', '')
-  else if configType == "canvas"
+      item.cssConfig.css('display', '')
+  else if configType == "canvas" && item? && item.canvasConfig?
     if animation
-      $('#canvas-config').show()
+      item.canvasConfig.show()
     else
-      $('#canvas-config').css('display', '')
+      item.canvasConfig.css('display', '')
   else if configType == "timeline"
     if animation
       $('#timeline-config').show()

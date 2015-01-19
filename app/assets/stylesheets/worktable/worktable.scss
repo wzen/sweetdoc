@@ -238,7 +238,7 @@ div#scroll_inside {
       -webkit-border-radius: 1px;
     }
   }
-  #btn-configBg .colorPicker {
+  .btn-configBg .colorPicker {
     width: 20px;
     height: 24px;
     border-radius: 3px;
@@ -618,5 +618,9 @@ div.css3button > div {
 }
 
 div#page_values {
+  display: none;
+}
+
+div.timeline_temp, div.design_temp {
   display: none;
 }

@@ -267,14 +267,14 @@ getObjFromObjectListByElementId = function(emtId) {
 
 /* スライダーの作成 */
 
-settingSlider = function(id, min, max, cssCode, cssStyle, stepValue) {
+settingSlider = function(className, min, max, cssCode, cssStyle, root, stepValue) {
   var d, defaultValue, meterElement, valueElement;
-  if (typeof stepValue === 'undefined') {
+  if (stepValue == null) {
     stepValue = 0;
   }
-  meterElement = $('#' + id);
-  valueElement = $('.' + id + '-value');
-  d = $('.' + id + '-value', cssCode)[0];
+  meterElement = $('.' + className, root);
+  valueElement = $('.' + className + '-value', root);
+  d = $('.' + className + '-value', cssCode)[0];
   defaultValue = $(d).html();
   valueElement.val(defaultValue);
   valueElement.html(defaultValue);
@@ -322,18 +322,18 @@ settingGradientSliderByElement = function(element, values, cssCode, cssStyle) {
   }
 };
 
-settingGradientSlider = function(id, values, cssCode, cssStyle) {
+settingGradientSlider = function(className, values, cssCode, cssStyle, root) {
   var meterElement;
-  meterElement = $('#' + id);
+  meterElement = $('.' + className, root);
   return settingGradientSliderByElement(meterElement, values, cssCode, cssStyle);
 };
 
-settingGradientDegSlider = function(id, min, max, cssCode, cssStyle) {
+settingGradientDegSlider = function(className, min, max, cssCode, cssStyle, root) {
   var d, defaultValue, meterElement, valueElement, webkitDeg, webkitValueElement;
-  meterElement = $('#' + id);
-  valueElement = $('.' + id + '-value');
-  webkitValueElement = $('.' + id + '-value-webkit');
-  d = $('.' + id + '-value', cssCode)[0];
+  meterElement = $('.' + className, root);
+  valueElement = $('.' + className + '-value', root);
+  webkitValueElement = $('.' + className + '-value-webkit', root);
+  d = $('.' + className + '-value', cssCode)[0];
   defaultValue = $(d).html();
   webkitDeg = {
     0: 'left top, left bottom',
@@ -585,21 +585,24 @@ isClosedConfigSidebar = function() {
   return $('#main').hasClass('col-md-12');
 };
 
-switchSidebarConfig = function(configType) {
+switchSidebarConfig = function(configType, item) {
   var animation;
+  if (item == null) {
+    item = null;
+  }
   animation = isOpenedConfigSidebar();
   $('.sidebar-config').css('display', 'none');
-  if (configType === "edit") {
+  if (configType === "css" && (item != null) && (item.cssConfig != null)) {
     if (animation) {
-      return $('#css-config').show();
+      return item.cssConfig.show();
     } else {
-      return $('#css-config').css('display', '');
+      return item.cssConfig.css('display', '');
     }
-  } else if (configType === "canvas") {
+  } else if (configType === "canvas" && (item != null) && (item.canvasConfig != null)) {
     if (animation) {
-      return $('#canvas-config').show();
+      return item.canvasConfig.show();
     } else {
-      return $('#canvas-config').css('display', '');
+      return item.canvasConfig.css('display', '');
     }
   } else if (configType === "timeline") {
     if (animation) {

@@ -118,7 +118,7 @@ class ArrowItem extends CanvasItemBase
     @coodRightBodyPart = []
     @drawCoodRegist = []
 
-  # CanvasのHTML要素を作成
+  # CanvasのHTML要素とデザインコンフィグを作成
   # @param [boolean] show 要素作成後に描画を表示するか
   makeElement: (show = true) ->
     # 新規Canvasを作成
@@ -126,6 +126,9 @@ class ArrowItem extends CanvasItemBase
     if show
       # 新規Canvasに描画
       @drawNewCanvas()
+
+    # コンフィグ作成
+    @makeDesignConfig()
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ

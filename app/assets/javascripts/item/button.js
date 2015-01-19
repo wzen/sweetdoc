@@ -142,16 +142,6 @@ WorkTableButtonItem = (function(_super) {
 
   WorkTableButtonItem.CSSTEMPID = "button_css_temp";
 
-  WorkTableButtonItem.cssConfig = $("#css-config", $("#sidebar-wrapper"));
-
-  WorkTableButtonItem.configBoxLi = $("div.configBox > div.forms", $("#sidebar-wrapper"));
-
-  WorkTableButtonItem.btnGradientStep = $(".btn-gradient-step", WorkTableButtonItem.cssConfig);
-
-  WorkTableButtonItem.btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", WorkTableButtonItem.cssConfig);
-
-  WorkTableButtonItem.btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", WorkTableButtonItem.cssConfig);
-
   function WorkTableButtonItem(cood) {
     if (cood == null) {
       cood = null;
@@ -188,16 +178,26 @@ WorkTableButtonItem = (function(_super) {
     this.cssCode = $(".css-code", this.cssRoot);
     this.cssStyle = $(".css-style", this.cssRoot);
     this.cssStyle.text(this.cssCode.text());
+    this.makeDesignConfig();
     return true;
   };
 
   WorkTableButtonItem.prototype.setupOptionMenu = function() {
-    var base, cssCache, cssCode, cssRoot, cssStyle, name;
+    var base, btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, name;
     base = this;
     cssRoot = this.cssRoot;
     cssCache = this.cssCache;
     cssCode = this.cssCode;
     cssStyle = this.cssStyle;
+    this.designConfigRoot = $('#' + this.getDesignConfigId());
+    if (this.designConfigRoot == null) {
+      this.makeDesignConfig();
+    }
+    this.cssConfig = $(".css-config", this.designConfigRoot);
+    this.canvasConfig = $(".canvas-config", this.designConfigRoot);
+    btnGradientStep = $(".btn-gradient-step", this.cssConfig);
+    btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", this.cssConfig);
+    btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", this.cssConfig);
     name = $('.item-name', this.cssConfig);
     name.val(this.name);
     name.off('change').on('change', (function(_this) {
@@ -206,28 +206,30 @@ WorkTableButtonItem = (function(_super) {
         return _this.setItemPropToPageValue('name', _this.name);
       };
     })(this));
-    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle);
-    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle);
-    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle);
-    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle);
-    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
-    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
-    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
-    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, 0.1);
-    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle);
-    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle);
-    WorkTableButtonItem.btnBgColor.each(function() {
+    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, this.designConfigRoot);
+    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    createColorPicker(btnBgColor);
+    createColorPicker(btnShadowColor);
+    btnBgColor.each(function() {
       var btnCodeEmt, className, colorValue, self;
       self = $(this);
       className = self[0].classList[0];
@@ -250,7 +252,7 @@ WorkTableButtonItem = (function(_super) {
         return self.ColorPickerShow();
       });
     });
-    WorkTableButtonItem.btnShadowColor.each(function() {
+    btnShadowColor.each(function() {
       var btnCodeEmt, className, colorValue, self;
       self = $(this);
       className = self[0].classList[0];
@@ -273,8 +275,8 @@ WorkTableButtonItem = (function(_super) {
         return self.ColorPickerShow();
       });
     });
-    WorkTableButtonItem.btnGradientStep.off('keyup mouseup');
-    return WorkTableButtonItem.btnGradientStep.on('keyup mouseup', function(e) {
+    btnGradientStep.off('keyup mouseup');
+    return btnGradientStep.on('keyup mouseup', function(e) {
       var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       cssCode = base.cssCode;
       cssStyle = base.cssStyle;
@@ -333,7 +335,7 @@ WorkTableButtonItem = (function(_super) {
   };
 
   WorkTableButtonItem.prototype.showOptionMenu = function() {
-    return $('#css-config').css('display', '');
+    return this.cssConfig.css('display', '');
   };
 
   WorkTableButtonItem.prototype.drag = function() {
@@ -378,10 +380,8 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
       css_temp = option.css_temp;
       if (css_temp != null) {
         tempEmt = "<div id='" + WorkTableButtonItem.CSSTEMPID + "'>" + css_temp + "</div>";
-        $('#css_code_info_temp').append(tempEmt);
+        return $('#css_code_info_temp').append(tempEmt);
       }
-      createColorPicker(WorkTableButtonItem.btnBgColor);
-      return createColorPicker(WorkTableButtonItem.btnShadowColor);
     }
   };
 }

@@ -39,6 +39,10 @@ ItemBase = (function(_super) {
     return this.constructor.IDENTITY + '_' + this.id;
   };
 
+  ItemBase.prototype.getDesignConfigId = function() {
+    return this.id + '_designconfig';
+  };
+
   ItemBase.prototype.getJQueryElement = function() {
     return $('#' + this.getElementId());
   };
@@ -198,6 +202,12 @@ CssItemBase = (function(_super) {
     return true;
   };
 
+  CssItemBase.prototype.makeDesignConfig = function() {
+    this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
+    this.designConfigRoot.removeClass('design_temp');
+    return $('#design-config').append(this.designConfigRoot);
+  };
+
   return CssItemBase;
 
 })(ItemBase);
@@ -291,6 +301,15 @@ CanvasItemBase = (function(_super) {
       drawingContext = this.newDrawingCanvas.getContext('2d');
       drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
       return this.initCanvas();
+    }
+  };
+
+  CanvasItemBase.prototype.makeDesignConfig = function() {
+    this.designConfigRoot = $('#' + this.getDesignConfigId());
+    if (this.designConfigRoot == null) {
+      this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
+      this.designConfigRoot.removeClass('design_temp');
+      return $('#design-config').append(this.designConfigRoot);
     }
   };
 
