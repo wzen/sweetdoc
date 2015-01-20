@@ -457,48 +457,9 @@ WorkTableArrowItem = (function(_super) {
     return WorkTableArrowItem.__super__.constructor.apply(this, arguments);
   }
 
-  WorkTableArrowItem.include(WorkTableExtend);
+  WorkTableArrowItem.include(WorkTableCommonExtend);
 
-  WorkTableArrowItem.prototype.drag = function() {
-    var element;
-    element = $('#' + this.getElementId());
-    this.itemSize.x = element.position().left;
-    this.itemSize.y = element.position().top;
-    return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
-  };
-
-  WorkTableArrowItem.prototype.resize = function() {
-    var canvas, drawingCanvas, drawingContext, element;
-    canvas = $('#' + this.canvasElementId());
-    element = $('#' + this.getElementId());
-    this.scale.w = element.width() / this.itemSize.w;
-    this.scale.h = element.height() / this.itemSize.h;
-    canvas.attr('width', element.width());
-    canvas.attr('height', element.height());
-    drawingCanvas = document.getElementById(this.canvasElementId());
-    drawingContext = drawingCanvas.getContext('2d');
-    drawingContext.scale(this.scale.w, this.scale.h);
-    this.drawNewCanvas();
-    return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
-  };
-
-  WorkTableArrowItem.prototype.getHistoryObj = function(action) {
-    var obj;
-    obj = {
-      obj: this,
-      action: action,
-      itemSize: makeClone(this.itemSize),
-      scale: makeClone(this.scale)
-    };
-    console.log("getHistory: scale:" + this.scale.w + "," + this.scale.h);
-    return obj;
-  };
-
-  WorkTableArrowItem.prototype.setHistoryObj = function(historyObj) {
-    this.itemSize = makeClone(historyObj.itemSize);
-    this.scale = makeClone(historyObj.scale);
-    return console.log("setHistoryObj: itemSize: " + (JSON.stringify(this.itemSize)));
-  };
+  WorkTableArrowItem.include(WorkTableCanvasItemExtend);
 
   return WorkTableArrowItem;
 

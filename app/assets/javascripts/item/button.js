@@ -140,7 +140,9 @@ ButtonItem = (function(_super) {
 WorkTableButtonItem = (function(_super) {
   __extends(WorkTableButtonItem, _super);
 
-  WorkTableButtonItem.include(WorkTableExtend);
+  WorkTableButtonItem.include(WorkTableCommonExtend);
+
+  WorkTableButtonItem.include(WorkTableCssItemExtend);
 
   WorkTableButtonItem.CSSTEMPID = "button_css_temp";
 
@@ -334,34 +336,6 @@ WorkTableButtonItem = (function(_super) {
       }
       return cssStyle.text(cssCode.text());
     });
-  };
-
-  WorkTableButtonItem.prototype.drag = function() {
-    var element;
-    element = $('#' + this.getElementId());
-    this.itemSize.x = element.position().left;
-    return this.itemSize.y = element.position().top;
-  };
-
-  WorkTableButtonItem.prototype.resize = function() {
-    var element;
-    element = $('#' + this.getElementId());
-    this.itemSize.w = element.width();
-    return this.itemSize.h = element.height();
-  };
-
-  WorkTableButtonItem.prototype.getHistoryObj = function(action) {
-    var obj;
-    obj = {
-      obj: this,
-      action: action,
-      itemSize: makeClone(this.itemSize)
-    };
-    return obj;
-  };
-
-  WorkTableButtonItem.prototype.setHistoryObj = function(historyObj) {
-    return this.itemSize = makeClone(historyObj.itemSize);
   };
 
   return WorkTableButtonItem;

@@ -159,7 +159,8 @@ class ButtonItem extends CssItemBase
 
 # ワークテーブル用ボタンクラス
 class WorkTableButtonItem extends ButtonItem
-  @include WorkTableExtend
+  @include WorkTableCommonExtend
+  @include WorkTableCssItemExtend
 
   # @property [String] CSSTEMPID CSSテンプレートID
   @CSSTEMPID = "button_css_temp"
@@ -356,31 +357,6 @@ class WorkTableButtonItem extends ButtonItem
           $(webkitFlag).empty()
       cssStyle.text(cssCode.text())
     )
-
-  # ドラッグ時のイベント
-  drag: ->
-    element = $('#' + @getElementId())
-    @itemSize.x = element.position().left
-    @itemSize.y = element.position().top
-
-  resize: ->
-    element = $('#' + @getElementId())
-    @itemSize.w = element.width()
-    @itemSize.h = element.height()
-
-  # 履歴データを取得
-  # @param [ItemActionType] action アクション種別
-  getHistoryObj: (action) ->
-    obj = {
-      obj: @
-      action : action
-      itemSize: makeClone(@itemSize)
-    }
-    return obj
-
-  # 履歴データを設定
-  setHistoryObj: (historyObj) ->
-    @itemSize = makeClone(historyObj.itemSize)
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
