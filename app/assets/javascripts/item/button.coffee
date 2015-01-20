@@ -218,7 +218,7 @@ class WorkTableButtonItem extends ButtonItem
     btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
 
     # アイテム名の変更
-    name = $('.item-name', @cssConfig)
+    name = $('.item-name', @designConfigRoot)
     name.val(@name)
     name.off('change').on('change', =>
       @name = name.val()
@@ -311,7 +311,7 @@ class WorkTableButtonItem extends ButtonItem
     btnGradientStep.on('keyup mouseup', (e) ->
       cssCode = base.cssCode
       cssStyle = base.cssStyle
-      changeGradientShow(e.currentTarget, cssCode, cssStyle, WorkTableButtonItem.cssConfig)
+      changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
         className = 'btn-bg-color' + i
@@ -335,7 +335,7 @@ class WorkTableButtonItem extends ButtonItem
     ).each( ->
       cssCode = base.cssCode
       cssStyle = base.cssStyle
-      changeGradientShow(@, cssCode, cssStyle, WorkTableButtonItem.cssConfig)
+      changeGradientShow(@, cssCode, cssStyle, @cssConfig)
       stepValue = parseInt($(@).val())
       for i in [2 .. 4]
         className = 'btn-bg-color' + i
@@ -357,7 +357,11 @@ class WorkTableButtonItem extends ButtonItem
 
   # オプションメニューを開く
   showOptionMenu: ->
-    @cssConfig.css('display', '')
+    sc = $('.sidebar-config')
+    sc.css('display', 'none')
+    $('.dc', sc).css('display', 'none')
+    $('#design-config').css('display', '')
+    $('#' + @getDesignConfigId()).css('display', '')
 
   # ドラッグ時のイベント
   drag: ->

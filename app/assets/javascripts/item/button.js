@@ -198,7 +198,7 @@ WorkTableButtonItem = (function(_super) {
     btnGradientStep = $(".btn-gradient-step", this.cssConfig);
     btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", this.cssConfig);
     btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", this.cssConfig);
-    name = $('.item-name', this.cssConfig);
+    name = $('.item-name', this.designConfigRoot);
     name.val(this.name);
     name.off('change').on('change', (function(_this) {
       return function() {
@@ -280,7 +280,7 @@ WorkTableButtonItem = (function(_super) {
       var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       cssCode = base.cssCode;
       cssStyle = base.cssStyle;
-      changeGradientShow(e.currentTarget, cssCode, cssStyle, WorkTableButtonItem.cssConfig);
+      changeGradientShow(e.currentTarget, cssCode, cssStyle, this.cssConfig);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         className = 'btn-bg-color' + i;
@@ -309,7 +309,7 @@ WorkTableButtonItem = (function(_super) {
       var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
       cssCode = base.cssCode;
       cssStyle = base.cssStyle;
-      changeGradientShow(this, cssCode, cssStyle, WorkTableButtonItem.cssConfig);
+      changeGradientShow(this, cssCode, cssStyle, this.cssConfig);
       stepValue = parseInt($(this).val());
       for (i = _i = 2; _i <= 4; i = ++_i) {
         className = 'btn-bg-color' + i;
@@ -335,7 +335,12 @@ WorkTableButtonItem = (function(_super) {
   };
 
   WorkTableButtonItem.prototype.showOptionMenu = function() {
-    return this.cssConfig.css('display', '');
+    var sc;
+    sc = $('.sidebar-config');
+    sc.css('display', 'none');
+    $('.dc', sc).css('display', 'none');
+    $('#design-config').css('display', '');
+    return $('#' + this.getDesignConfigId()).css('display', '');
   };
 
   WorkTableButtonItem.prototype.drag = function() {

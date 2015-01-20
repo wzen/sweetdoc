@@ -186,7 +186,6 @@ class ItemBase extends EventListener
   # イベントによって設定したスタイルをクリアする　
   clearAllEventStyle : ->
 
-
 # CSSアイテム
 # @extend ItemBase
 class CssItemBase extends ItemBase
@@ -217,9 +216,14 @@ class CssItemBase extends ItemBase
 
   # デザイン変更コンフィグを作成
   makeDesignConfig: ->
-    @designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', @getDesignConfigId())
-    @designConfigRoot.removeClass('design_temp')
-    $('#design-config').append(@designConfigRoot)
+    @designConfigRoot = $('#' + @getDesignConfigId())
+    if !@designConfigRoot? || @designConfigRoot.length == 0
+      @designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', @getDesignConfigId())
+      @designConfigRoot.removeClass('design_temp')
+      cssConfig = @designConfigRoot.find('.css-config')
+      @designConfigRoot.find('.css-config').css('display', '')
+      @designConfigRoot.find('.canvas-config').remove()
+      $('#design-config').append(@designConfigRoot)
 
 # Canvasアイテム
 # @extend ItemBase
@@ -318,9 +322,11 @@ class CanvasItemBase extends ItemBase
   # デザイン変更コンフィグを作成
   makeDesignConfig: ->
     @designConfigRoot = $('#' + @getDesignConfigId())
-    if !@designConfigRoot?
+    if !@designConfigRoot? || @designConfigRoot.length == 0
       @designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', @getDesignConfigId())
       @designConfigRoot.removeClass('design_temp')
+      @designConfigRoot.find('.canvas-config').css('display', '')
+      @designConfigRoot.find('.css-config').remove()
       $('#design-config').append(@designConfigRoot)
 
 

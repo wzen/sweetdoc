@@ -458,7 +458,8 @@ WorkTableArrowItem = (function(_super) {
   }
 
   WorkTableArrowItem.prototype.showOptionMenu = function() {
-    return $('#canvas-config').css('display', '');
+    $('.sidebar-config').css('display', 'none');
+    return $('#design-config').css('display', '');
   };
 
   WorkTableArrowItem.prototype.drag = function() {

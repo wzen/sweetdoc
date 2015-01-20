@@ -447,7 +447,8 @@ class ArrowItem extends CanvasItemBase
 class WorkTableArrowItem extends ArrowItem
   # オプションメニューを開く
   showOptionMenu: ->
-    $('#canvas-config').css('display', '')
+    $('.sidebar-config').css('display', 'none')
+    $('#design-config').css('display', '')
 
   # ドラッグ時のイベント
   drag: ->

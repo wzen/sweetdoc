@@ -203,9 +203,16 @@ CssItemBase = (function(_super) {
   };
 
   CssItemBase.prototype.makeDesignConfig = function() {
-    this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
-    this.designConfigRoot.removeClass('design_temp');
-    return $('#design-config').append(this.designConfigRoot);
+    var cssConfig;
+    this.designConfigRoot = $('#' + this.getDesignConfigId());
+    if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
+      this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
+      this.designConfigRoot.removeClass('design_temp');
+      cssConfig = this.designConfigRoot.find('.css-config');
+      this.designConfigRoot.find('.css-config').css('display', '');
+      this.designConfigRoot.find('.canvas-config').remove();
+      return $('#design-config').append(this.designConfigRoot);
+    }
   };
 
   return CssItemBase;
@@ -306,9 +313,11 @@ CanvasItemBase = (function(_super) {
 
   CanvasItemBase.prototype.makeDesignConfig = function() {
     this.designConfigRoot = $('#' + this.getDesignConfigId());
-    if (this.designConfigRoot == null) {
+    if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
       this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
       this.designConfigRoot.removeClass('design_temp');
+      this.designConfigRoot.find('.canvas-config').css('display', '');
+      this.designConfigRoot.find('.css-config').remove();
       return $('#design-config').append(this.designConfigRoot);
     }
   };
