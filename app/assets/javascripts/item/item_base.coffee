@@ -1,5 +1,7 @@
 # アイテム基底
-class ItemBase extends EventListener
+class ItemBase extends Extend
+  @include EventListener
+
   # @abstract
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
@@ -329,4 +331,13 @@ class CanvasItemBase extends ItemBase
       @designConfigRoot.find('.css-config').remove()
       $('#design-config').append(@designConfigRoot)
 
+
+WorkTableExtend =
+  # オプションメニューを開く
+  showOptionMenu: ->
+    sc = $('.sidebar-config')
+    sc.css('display', 'none')
+    $('.dc', sc).css('display', 'none')
+    $('#design-config').css('display', '')
+    $('#' + @getDesignConfigId()).css('display', '')
 

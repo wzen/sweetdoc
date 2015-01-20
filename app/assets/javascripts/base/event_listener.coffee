@@ -1,6 +1,5 @@
-# アクション情報
-class EventListener
-
+# イベントリスナー Extend
+EventListener =
   # アクションの初期化(閲覧モードのみ使用される)
   initListener: (miniObj, itemSize) ->
     @setMiniumObject(miniObj)

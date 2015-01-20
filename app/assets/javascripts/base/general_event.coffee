@@ -1,5 +1,6 @@
 # 共通イベント
-class GeneralEvent extends EventListener
+class GeneralEvent extends Extend
+  @include EventListener
 
 # 背景変更イベント
 class ChangeBackground extends GeneralEvent

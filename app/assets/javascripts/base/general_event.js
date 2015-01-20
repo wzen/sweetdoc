@@ -10,9 +10,11 @@ GeneralEvent = (function(_super) {
     return GeneralEvent.__super__.constructor.apply(this, arguments);
   }
 
+  GeneralEvent.include(EventListener);
+
   return GeneralEvent;
 
-})(EventListener);
+})(Extend);
 
 ChangeBackground = (function(_super) {
   __extends(ChangeBackground, _super);

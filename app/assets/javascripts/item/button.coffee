@@ -159,6 +159,8 @@ class ButtonItem extends CssItemBase
 
 # ワークテーブル用ボタンクラス
 class WorkTableButtonItem extends ButtonItem
+  @include WorkTableExtend
+
   # @property [String] CSSTEMPID CSSテンプレートID
   @CSSTEMPID = "button_css_temp"
 
@@ -354,14 +356,6 @@ class WorkTableButtonItem extends ButtonItem
           $(webkitFlag).empty()
       cssStyle.text(cssCode.text())
     )
-
-  # オプションメニューを開く
-  showOptionMenu: ->
-    sc = $('.sidebar-config')
-    sc.css('display', 'none')
-    $('.dc', sc).css('display', 'none')
-    $('#design-config').css('display', '')
-    $('#' + @getDesignConfigId()).css('display', '')
 
   # ドラッグ時のイベント
   drag: ->

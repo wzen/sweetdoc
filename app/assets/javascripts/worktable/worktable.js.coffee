@@ -879,7 +879,7 @@ runDebug = ->
 setupTimelineEvents = ->
   f = @
 
-  # イベント初期化メソッド
+  # イベント初期化
   initEvents = ->
     if $(@).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
@@ -890,6 +890,12 @@ setupTimelineEvents = ->
       # タイムラインのconfigをオープンする
       openConfigSidebar()
 
+
+    te_update = getPageValue(Constant.PageValueKey.TE_UPDATE)
+    if !te_update? || !te_update
+      # 内容更新
+      updateTimelineEventContents.call(@)
+
     # コンフィグ初期化
     if $(@).hasClass('blank')
       # ブランク
@@ -899,8 +905,11 @@ setupTimelineEvents = ->
     else
       # イベント設定済み
 
+  # イベント内容更新
+  updateTimelineEventContents = ->
 
 
+    setPageValue(Constant.PageValueKey.TE_UPDATE, true, true)
 
 
   # イベントのクリック

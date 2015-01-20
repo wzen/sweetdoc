@@ -457,10 +457,7 @@ WorkTableArrowItem = (function(_super) {
     return WorkTableArrowItem.__super__.constructor.apply(this, arguments);
   }
 
-  WorkTableArrowItem.prototype.showOptionMenu = function() {
-    $('.sidebar-config').css('display', 'none');
-    return $('#design-config').css('display', '');
-  };
+  WorkTableArrowItem.include(WorkTableExtend);
 
   WorkTableArrowItem.prototype.drag = function() {
     var element;

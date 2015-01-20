@@ -140,6 +140,8 @@ ButtonItem = (function(_super) {
 WorkTableButtonItem = (function(_super) {
   __extends(WorkTableButtonItem, _super);
 
+  WorkTableButtonItem.include(WorkTableExtend);
+
   WorkTableButtonItem.CSSTEMPID = "button_css_temp";
 
   function WorkTableButtonItem(cood) {
@@ -332,15 +334,6 @@ WorkTableButtonItem = (function(_super) {
       }
       return cssStyle.text(cssCode.text());
     });
-  };
-
-  WorkTableButtonItem.prototype.showOptionMenu = function() {
-    var sc;
-    sc = $('.sidebar-config');
-    sc.css('display', 'none');
-    $('.dc', sc).css('display', 'none');
-    $('#design-config').css('display', '');
-    return $('#' + this.getDesignConfigId()).css('display', '');
   };
 
   WorkTableButtonItem.prototype.drag = function() {

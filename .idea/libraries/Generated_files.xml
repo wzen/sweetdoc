@@ -2,8 +2,9 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/common/background.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/general_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/timeline.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />
@@ -29,6 +30,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/css_anim.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/general_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />

@@ -90,6 +90,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.TE_DELAY = PageValueKey.TE + ':delay';
 
+      PageValueKey.TE_UPDATE = 'timeline_event:update';
+
       PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
       return PageValueKey;
