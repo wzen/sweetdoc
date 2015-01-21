@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150118145029) do
+ActiveRecord::Schema.define(version: 20150121133335) do
+
+  create_table "categories", force: true do |t|
+    t.string   "category_name"
+    t.integer  "rating"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "item_action_events", force: true do |t|
     t.integer  "item_id",                     null: false
@@ -20,6 +27,13 @@ ActiveRecord::Schema.define(version: 20150118145029) do
     t.integer  "action_event_change_type_id", null: false
     t.string   "mothod_name",                 null: false
     t.text     "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_categories", force: true do |t|
+    t.integer  "item_id"
+    t.integer  "category_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

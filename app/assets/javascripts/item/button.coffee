@@ -157,206 +157,207 @@ class ButtonItem extends CssItemBase
     """
     return "#{keyframe} #{css}"
 
-# ワークテーブル用ボタンクラス
-class WorkTableButtonItem extends ButtonItem
-  @include WorkTableCommonExtend
-  @include WorkTableCssItemExtend
+if window.worktablePage?
+  # ワークテーブル用ボタンクラス
+  class WorkTableButtonItem extends ButtonItem
+    @include WorkTableCommonExtend
+    @include WorkTableCssItemExtend
 
-  # @property [String] CSSTEMPID CSSテンプレートID
-  @CSSTEMPID = "button_css_temp"
+    # @property [String] CSSTEMPID CSSテンプレートID
+    @CSSTEMPID = "button_css_temp"
 
-  constructor: (cood = null) ->
-    super(cood)
-    @cssRoot = null
-    @cssCache = null
-    @cssCode = null
-    @cssStyle = null
+    constructor: (cood = null) ->
+      super(cood)
+      @cssRoot = null
+      @cssCache = null
+      @cssCode = null
+      @cssStyle = null
 
-  # ストレージとDB保存用の最小限のデータを取得
-  # @return [Array] アイテムオブジェクトの最小限データ
-  generateMinimumObject: ->
-    obj = super()
-    obj.css = @cssRoot[0].outerHTML
-    return obj
+    # ストレージとDB保存用の最小限のデータを取得
+    # @return [Array] アイテムオブジェクトの最小限データ
+    generateMinimumObject: ->
+      obj = super()
+      obj.css = @cssRoot[0].outerHTML
+      return obj
 
-  # HTML要素とCSSとコンフィグを作成
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @return [Boolean] 処理結果
-  makeElement: (show = true) ->
-    super(show)
-    if @css?
-      newEmt = $(@css)
-    else
-      # CSSテンプレートからオブジェクト個別のCSSを作成
-      newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
-      newEmt.find('.btn-item-id').html(@getElementId())
-    $('#css_code_info').append(newEmt)
+    # HTML要素とCSSとコンフィグを作成
+    # @param [boolean] show 要素作成後に描画を表示するか
+    # @return [Boolean] 処理結果
+    makeElement: (show = true) ->
+      super(show)
+      if @css?
+        newEmt = $(@css)
+      else
+        # CSSテンプレートからオブジェクト個別のCSSを作成
+        newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
+        newEmt.find('.btn-item-id').html(@getElementId())
+      $('#css_code_info').append(newEmt)
 
-    @cssRoot = $('#' + @getCssRootElementId())
-    @cssCache = $(".css-cache", @cssRoot)
-    @cssCode = $(".css-code", @cssRoot)
-    @cssStyle = $(".css-style", @cssRoot)
-    @cssStyle.text(@cssCode.text())
+      @cssRoot = $('#' + @getCssRootElementId())
+      @cssCache = $(".css-cache", @cssRoot)
+      @cssCode = $(".css-code", @cssRoot)
+      @cssStyle = $(".css-style", @cssRoot)
+      @cssStyle.text(@cssCode.text())
 
-    # コンフィグ作成
-    @makeDesignConfig()
-
-    return true
-
-  # CSSボタンコントロール初期化
-  setupOptionMenu: ->
-    base = @
-    cssRoot = @cssRoot
-    cssCache = @cssCache
-    cssCode = @cssCode
-    cssStyle = @cssStyle
-
-    @designConfigRoot = $('#' + @getDesignConfigId())
-    if !@designConfigRoot?
+      # コンフィグ作成
       @makeDesignConfig()
-    @cssConfig = $(".css-config", @designConfigRoot)
-    @canvasConfig = $(".canvas-config", @designConfigRoot)
-    btnGradientStep = $(".btn-gradient-step", @cssConfig)
-    btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", @cssConfig)
-    btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
 
-    # アイテム名の変更
-    name = $('.item-name', @designConfigRoot)
-    name.val(@name)
-    name.off('change').on('change', =>
-      @name = name.val()
-      @setItemPropToPageValue('name', @name)
-    )
+      return true
 
-    #スライダー
-    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
-    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    # CSSボタンコントロール初期化
+    setupOptionMenu: ->
+      base = @
+      cssRoot = @cssRoot
+      cssCache = @cssCache
+      cssCode = @cssCode
+      cssStyle = @cssStyle
 
-    # オプションメニューを作成
-    ## カラーピッカー
-    createColorPicker(btnBgColor)
-    createColorPicker(btnShadowColor)
+      @designConfigRoot = $('#' + @getDesignConfigId())
+      if !@designConfigRoot?
+        @makeDesignConfig()
+      @cssConfig = $(".css-config", @designConfigRoot)
+      @canvasConfig = $(".canvas-config", @designConfigRoot)
+      btnGradientStep = $(".btn-gradient-step", @cssConfig)
+      btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", @cssConfig)
+      btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
 
-    # カラーピッカーイベント
-    btnBgColor.each( ->
-      self = $(@)
-      className = self[0].classList[0]
-      btnCodeEmt = cssCode.find("." + className).first()
-      colorValue = btnCodeEmt.text()
-      self.css("backgroundColor", "#" + colorValue)
-      settingColorPicker(
-        self,
-        colorValue,
-        (a, b, d) ->
-          self.css("backgroundColor", "#" + b)
-          btnCodeEmt = cssCode.find("." + className)
-          btnCodeEmt.text(b)
-          cssCode = base.cssCode
-          cssStyle = base.cssStyle
-          cssStyle.text(cssCode.text())
+      # アイテム名の変更
+      name = $('.item-name', @designConfigRoot)
+      name.val(@name)
+      name.off('change').on('change', =>
+        @name = name.val()
+        @setItemPropToPageValue('name', @name)
       )
-      self.unbind()
-      self.mousedown( (e) ->
-        e.stopPropagation()
-        clearAllItemStyle()
-        self.ColorPickerHide()
-        self.ColorPickerShow()
-      )
-    )
 
-    btnShadowColor.each( ->
-      self = $(@)
-      className = self[0].classList[0]
-      btnCodeEmt = cssCode.find("." + className).first()
-      colorValue = btnCodeEmt.text()
-      self.css("backgroundColor", "#" + colorValue)
-      settingColorPicker(
-        self,
-        colorValue,
-        (a, b, d) ->
-          self.css("backgroundColor", "#" + b)
-          btnCodeEmt = cssCode.find("." + className)
-          btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
-          cssCode = base.cssCode
-          cssStyle = base.cssStyle
-          cssStyle.text(cssCode.text())
-      )
-      self.unbind()
-      self.mousedown( (e) ->
-        e.stopPropagation()
-        clearAllItemStyle()
-        self.ColorPickerHide()
-        self.ColorPickerShow()
-      )
-    )
+      #スライダー
+      settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
+      settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
 
-    # グラデーションStepイベント
-    btnGradientStep.off('keyup mouseup')
-    btnGradientStep.on('keyup mouseup', (e) ->
-      cssCode = base.cssCode
-      cssStyle = base.cssStyle
-      changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
-      stepValue = parseInt($(e.currentTarget).val())
-      for i in [2 .. 4]
-        className = 'btn-bg-color' + i
-        mozFlag = $("." + className + "-moz-flag", cssRoot)
-        mozCache = $("." + className + "-moz-cache", cssRoot)
-        webkitFlag = $("." + className + "-webkit-flag", cssRoot)
-        webkitCache = $("." + className + "-webkit-cache", cssRoot)
-        if i > stepValue - 1
-          mh = mozFlag.html()
-          if mh.length > 0
-            mozCache.html(mh)
-          wh = webkitFlag.html()
-          if wh.length > 0
-            webkitCache.html(wh)
-          $(mozFlag).empty()
-          $(webkitFlag).empty()
-        else
-          mozFlag.html(mozCache.html());
-          webkitFlag.html(webkitCache.html())
-      cssStyle.text(cssCode.text())
-    ).each( ->
-      cssCode = base.cssCode
-      cssStyle = base.cssStyle
-      changeGradientShow(@, cssCode, cssStyle, @cssConfig)
-      stepValue = parseInt($(@).val())
-      for i in [2 .. 4]
-        className = 'btn-bg-color' + i
-        mozFlag = $("." + className + "-moz-flag", cssRoot)
-        mozCache = $("." + className + "-moz-cache", cssRoot)
-        webkitFlag = $("." + className + "-webkit-flag", cssRoot)
-        webkitCache = $("." + className + "-webkit-cache", cssRoot)
-        if i > stepValue - 1
-          mh = mozFlag.html()
-          if mh.length > 0
-            mozCache.html(mh)
-          wh = webkitFlag.html()
-          if wh.length > 0
-            webkitCache.html(wh)
-          $(mozFlag).empty()
-          $(webkitFlag).empty()
-      cssStyle.text(cssCode.text())
-    )
+      # オプションメニューを作成
+      ## カラーピッカー
+      createColorPicker(btnBgColor)
+      createColorPicker(btnShadowColor)
+
+      # カラーピッカーイベント
+      btnBgColor.each( ->
+        self = $(@)
+        className = self[0].classList[0]
+        btnCodeEmt = cssCode.find("." + className).first()
+        colorValue = btnCodeEmt.text()
+        self.css("backgroundColor", "#" + colorValue)
+        settingColorPicker(
+          self,
+          colorValue,
+          (a, b, d) ->
+            self.css("backgroundColor", "#" + b)
+            btnCodeEmt = cssCode.find("." + className)
+            btnCodeEmt.text(b)
+            cssCode = base.cssCode
+            cssStyle = base.cssStyle
+            cssStyle.text(cssCode.text())
+        )
+        self.unbind()
+        self.mousedown( (e) ->
+          e.stopPropagation()
+          clearAllItemStyle()
+          self.ColorPickerHide()
+          self.ColorPickerShow()
+        )
+      )
+
+      btnShadowColor.each( ->
+        self = $(@)
+        className = self[0].classList[0]
+        btnCodeEmt = cssCode.find("." + className).first()
+        colorValue = btnCodeEmt.text()
+        self.css("backgroundColor", "#" + colorValue)
+        settingColorPicker(
+          self,
+          colorValue,
+          (a, b, d) ->
+            self.css("backgroundColor", "#" + b)
+            btnCodeEmt = cssCode.find("." + className)
+            btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
+            cssCode = base.cssCode
+            cssStyle = base.cssStyle
+            cssStyle.text(cssCode.text())
+        )
+        self.unbind()
+        self.mousedown( (e) ->
+          e.stopPropagation()
+          clearAllItemStyle()
+          self.ColorPickerHide()
+          self.ColorPickerShow()
+        )
+      )
+
+      # グラデーションStepイベント
+      btnGradientStep.off('keyup mouseup')
+      btnGradientStep.on('keyup mouseup', (e) ->
+        cssCode = base.cssCode
+        cssStyle = base.cssStyle
+        changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
+        stepValue = parseInt($(e.currentTarget).val())
+        for i in [2 .. 4]
+          className = 'btn-bg-color' + i
+          mozFlag = $("." + className + "-moz-flag", cssRoot)
+          mozCache = $("." + className + "-moz-cache", cssRoot)
+          webkitFlag = $("." + className + "-webkit-flag", cssRoot)
+          webkitCache = $("." + className + "-webkit-cache", cssRoot)
+          if i > stepValue - 1
+            mh = mozFlag.html()
+            if mh.length > 0
+              mozCache.html(mh)
+            wh = webkitFlag.html()
+            if wh.length > 0
+              webkitCache.html(wh)
+            $(mozFlag).empty()
+            $(webkitFlag).empty()
+          else
+            mozFlag.html(mozCache.html());
+            webkitFlag.html(webkitCache.html())
+        cssStyle.text(cssCode.text())
+      ).each( ->
+        cssCode = base.cssCode
+        cssStyle = base.cssStyle
+        changeGradientShow(@, cssCode, cssStyle, @cssConfig)
+        stepValue = parseInt($(@).val())
+        for i in [2 .. 4]
+          className = 'btn-bg-color' + i
+          mozFlag = $("." + className + "-moz-flag", cssRoot)
+          mozCache = $("." + className + "-moz-cache", cssRoot)
+          webkitFlag = $("." + className + "-webkit-flag", cssRoot)
+          webkitCache = $("." + className + "-webkit-cache", cssRoot)
+          if i > stepValue - 1
+            mh = mozFlag.html()
+            if mh.length > 0
+              mozCache.html(mh)
+            wh = webkitFlag.html()
+            if wh.length > 0
+              webkitCache.html(wh)
+            $(mozFlag).empty()
+            $(webkitFlag).empty()
+        cssStyle.text(cssCode.text())
+      )
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?

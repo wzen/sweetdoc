@@ -450,20 +450,22 @@ ArrowItem = (function(_super) {
 
 })(CanvasItemBase);
 
-WorkTableArrowItem = (function(_super) {
-  __extends(WorkTableArrowItem, _super);
+if (window.worktablePage != null) {
+  WorkTableArrowItem = (function(_super) {
+    __extends(WorkTableArrowItem, _super);
 
-  function WorkTableArrowItem() {
-    return WorkTableArrowItem.__super__.constructor.apply(this, arguments);
-  }
+    function WorkTableArrowItem() {
+      return WorkTableArrowItem.__super__.constructor.apply(this, arguments);
+    }
 
-  WorkTableArrowItem.include(WorkTableCommonExtend);
+    WorkTableArrowItem.include(WorkTableCommonExtend);
 
-  WorkTableArrowItem.include(WorkTableCanvasItemExtend);
+    WorkTableArrowItem.include(WorkTableCanvasItemExtend);
 
-  return WorkTableArrowItem;
+    return WorkTableArrowItem;
 
-})(ArrowItem);
+  })(ArrowItem);
+}
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == null)) {
   window.itemInitFuncList.arrowInit = function(option) {

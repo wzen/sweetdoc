@@ -1,3 +1,6 @@
+# 閲覧ページ読み込みフラグ
+window.runPage = true
+
 # 初期化
 initCommonVar = ->
   window.wrap = $('#main-wrapper')

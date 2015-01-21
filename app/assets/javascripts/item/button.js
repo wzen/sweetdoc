@@ -137,210 +137,212 @@ ButtonItem = (function(_super) {
 
 })(CssItemBase);
 
-WorkTableButtonItem = (function(_super) {
-  __extends(WorkTableButtonItem, _super);
+if (window.worktablePage != null) {
+  WorkTableButtonItem = (function(_super) {
+    __extends(WorkTableButtonItem, _super);
 
-  WorkTableButtonItem.include(WorkTableCommonExtend);
+    WorkTableButtonItem.include(WorkTableCommonExtend);
 
-  WorkTableButtonItem.include(WorkTableCssItemExtend);
+    WorkTableButtonItem.include(WorkTableCssItemExtend);
 
-  WorkTableButtonItem.CSSTEMPID = "button_css_temp";
+    WorkTableButtonItem.CSSTEMPID = "button_css_temp";
 
-  function WorkTableButtonItem(cood) {
-    if (cood == null) {
-      cood = null;
+    function WorkTableButtonItem(cood) {
+      if (cood == null) {
+        cood = null;
+      }
+      WorkTableButtonItem.__super__.constructor.call(this, cood);
+      this.cssRoot = null;
+      this.cssCache = null;
+      this.cssCode = null;
+      this.cssStyle = null;
     }
-    WorkTableButtonItem.__super__.constructor.call(this, cood);
-    this.cssRoot = null;
-    this.cssCache = null;
-    this.cssCode = null;
-    this.cssStyle = null;
-  }
 
-  WorkTableButtonItem.prototype.generateMinimumObject = function() {
-    var obj;
-    obj = WorkTableButtonItem.__super__.generateMinimumObject.call(this);
-    obj.css = this.cssRoot[0].outerHTML;
-    return obj;
-  };
+    WorkTableButtonItem.prototype.generateMinimumObject = function() {
+      var obj;
+      obj = WorkTableButtonItem.__super__.generateMinimumObject.call(this);
+      obj.css = this.cssRoot[0].outerHTML;
+      return obj;
+    };
 
-  WorkTableButtonItem.prototype.makeElement = function(show) {
-    var newEmt;
-    if (show == null) {
-      show = true;
-    }
-    WorkTableButtonItem.__super__.makeElement.call(this, show);
-    if (this.css != null) {
-      newEmt = $(this.css);
-    } else {
-      newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
-      newEmt.find('.btn-item-id').html(this.getElementId());
-    }
-    $('#css_code_info').append(newEmt);
-    this.cssRoot = $('#' + this.getCssRootElementId());
-    this.cssCache = $(".css-cache", this.cssRoot);
-    this.cssCode = $(".css-code", this.cssRoot);
-    this.cssStyle = $(".css-style", this.cssRoot);
-    this.cssStyle.text(this.cssCode.text());
-    this.makeDesignConfig();
-    return true;
-  };
-
-  WorkTableButtonItem.prototype.setupOptionMenu = function() {
-    var base, btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, name;
-    base = this;
-    cssRoot = this.cssRoot;
-    cssCache = this.cssCache;
-    cssCode = this.cssCode;
-    cssStyle = this.cssStyle;
-    this.designConfigRoot = $('#' + this.getDesignConfigId());
-    if (this.designConfigRoot == null) {
+    WorkTableButtonItem.prototype.makeElement = function(show) {
+      var newEmt;
+      if (show == null) {
+        show = true;
+      }
+      WorkTableButtonItem.__super__.makeElement.call(this, show);
+      if (this.css != null) {
+        newEmt = $(this.css);
+      } else {
+        newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
+        newEmt.find('.btn-item-id').html(this.getElementId());
+      }
+      $('#css_code_info').append(newEmt);
+      this.cssRoot = $('#' + this.getCssRootElementId());
+      this.cssCache = $(".css-cache", this.cssRoot);
+      this.cssCode = $(".css-code", this.cssRoot);
+      this.cssStyle = $(".css-style", this.cssRoot);
+      this.cssStyle.text(this.cssCode.text());
       this.makeDesignConfig();
-    }
-    this.cssConfig = $(".css-config", this.designConfigRoot);
-    this.canvasConfig = $(".canvas-config", this.designConfigRoot);
-    btnGradientStep = $(".btn-gradient-step", this.cssConfig);
-    btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", this.cssConfig);
-    btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", this.cssConfig);
-    name = $('.item-name', this.designConfigRoot);
-    name.val(this.name);
-    name.off('change').on('change', (function(_this) {
-      return function() {
-        _this.name = name.val();
-        return _this.setItemPropToPageValue('name', _this.name);
-      };
-    })(this));
-    settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, this.designConfigRoot);
-    settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    createColorPicker(btnBgColor);
-    createColorPicker(btnShadowColor);
-    btnBgColor.each(function() {
-      var btnCodeEmt, className, colorValue, self;
-      self = $(this);
-      className = self[0].classList[0];
-      btnCodeEmt = cssCode.find("." + className).first();
-      colorValue = btnCodeEmt.text();
-      self.css("backgroundColor", "#" + colorValue);
-      settingColorPicker(self, colorValue, function(a, b, d) {
-        self.css("backgroundColor", "#" + b);
-        btnCodeEmt = cssCode.find("." + className);
-        btnCodeEmt.text(b);
+      return true;
+    };
+
+    WorkTableButtonItem.prototype.setupOptionMenu = function() {
+      var base, btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, name;
+      base = this;
+      cssRoot = this.cssRoot;
+      cssCache = this.cssCache;
+      cssCode = this.cssCode;
+      cssStyle = this.cssStyle;
+      this.designConfigRoot = $('#' + this.getDesignConfigId());
+      if (this.designConfigRoot == null) {
+        this.makeDesignConfig();
+      }
+      this.cssConfig = $(".css-config", this.designConfigRoot);
+      this.canvasConfig = $(".canvas-config", this.designConfigRoot);
+      btnGradientStep = $(".btn-gradient-step", this.cssConfig);
+      btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", this.cssConfig);
+      btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", this.cssConfig);
+      name = $('.item-name', this.designConfigRoot);
+      name.val(this.name);
+      name.off('change').on('change', (function(_this) {
+        return function() {
+          _this.name = name.val();
+          return _this.setItemPropToPageValue('name', _this.name);
+        };
+      })(this));
+      settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, this.designConfigRoot);
+      settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+      settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+      settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+      settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+      settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+      settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+      createColorPicker(btnBgColor);
+      createColorPicker(btnShadowColor);
+      btnBgColor.each(function() {
+        var btnCodeEmt, className, colorValue, self;
+        self = $(this);
+        className = self[0].classList[0];
+        btnCodeEmt = cssCode.find("." + className).first();
+        colorValue = btnCodeEmt.text();
+        self.css("backgroundColor", "#" + colorValue);
+        settingColorPicker(self, colorValue, function(a, b, d) {
+          self.css("backgroundColor", "#" + b);
+          btnCodeEmt = cssCode.find("." + className);
+          btnCodeEmt.text(b);
+          cssCode = base.cssCode;
+          cssStyle = base.cssStyle;
+          return cssStyle.text(cssCode.text());
+        });
+        self.unbind();
+        return self.mousedown(function(e) {
+          e.stopPropagation();
+          clearAllItemStyle();
+          self.ColorPickerHide();
+          return self.ColorPickerShow();
+        });
+      });
+      btnShadowColor.each(function() {
+        var btnCodeEmt, className, colorValue, self;
+        self = $(this);
+        className = self[0].classList[0];
+        btnCodeEmt = cssCode.find("." + className).first();
+        colorValue = btnCodeEmt.text();
+        self.css("backgroundColor", "#" + colorValue);
+        settingColorPicker(self, colorValue, function(a, b, d) {
+          self.css("backgroundColor", "#" + b);
+          btnCodeEmt = cssCode.find("." + className);
+          btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
+          cssCode = base.cssCode;
+          cssStyle = base.cssStyle;
+          return cssStyle.text(cssCode.text());
+        });
+        self.unbind();
+        return self.mousedown(function(e) {
+          e.stopPropagation();
+          clearAllItemStyle();
+          self.ColorPickerHide();
+          return self.ColorPickerShow();
+        });
+      });
+      btnGradientStep.off('keyup mouseup');
+      return btnGradientStep.on('keyup mouseup', function(e) {
+        var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
         cssCode = base.cssCode;
         cssStyle = base.cssStyle;
+        changeGradientShow(e.currentTarget, cssCode, cssStyle, this.cssConfig);
+        stepValue = parseInt($(e.currentTarget).val());
+        for (i = _i = 2; _i <= 4; i = ++_i) {
+          className = 'btn-bg-color' + i;
+          mozFlag = $("." + className + "-moz-flag", cssRoot);
+          mozCache = $("." + className + "-moz-cache", cssRoot);
+          webkitFlag = $("." + className + "-webkit-flag", cssRoot);
+          webkitCache = $("." + className + "-webkit-cache", cssRoot);
+          if (i > stepValue - 1) {
+            mh = mozFlag.html();
+            if (mh.length > 0) {
+              mozCache.html(mh);
+            }
+            wh = webkitFlag.html();
+            if (wh.length > 0) {
+              webkitCache.html(wh);
+            }
+            $(mozFlag).empty();
+            $(webkitFlag).empty();
+          } else {
+            mozFlag.html(mozCache.html());
+            webkitFlag.html(webkitCache.html());
+          }
+        }
         return cssStyle.text(cssCode.text());
-      });
-      self.unbind();
-      return self.mousedown(function(e) {
-        e.stopPropagation();
-        clearAllItemStyle();
-        self.ColorPickerHide();
-        return self.ColorPickerShow();
-      });
-    });
-    btnShadowColor.each(function() {
-      var btnCodeEmt, className, colorValue, self;
-      self = $(this);
-      className = self[0].classList[0];
-      btnCodeEmt = cssCode.find("." + className).first();
-      colorValue = btnCodeEmt.text();
-      self.css("backgroundColor", "#" + colorValue);
-      settingColorPicker(self, colorValue, function(a, b, d) {
-        self.css("backgroundColor", "#" + b);
-        btnCodeEmt = cssCode.find("." + className);
-        btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
+      }).each(function() {
+        var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
         cssCode = base.cssCode;
         cssStyle = base.cssStyle;
+        changeGradientShow(this, cssCode, cssStyle, this.cssConfig);
+        stepValue = parseInt($(this).val());
+        for (i = _i = 2; _i <= 4; i = ++_i) {
+          className = 'btn-bg-color' + i;
+          mozFlag = $("." + className + "-moz-flag", cssRoot);
+          mozCache = $("." + className + "-moz-cache", cssRoot);
+          webkitFlag = $("." + className + "-webkit-flag", cssRoot);
+          webkitCache = $("." + className + "-webkit-cache", cssRoot);
+          if (i > stepValue - 1) {
+            mh = mozFlag.html();
+            if (mh.length > 0) {
+              mozCache.html(mh);
+            }
+            wh = webkitFlag.html();
+            if (wh.length > 0) {
+              webkitCache.html(wh);
+            }
+            $(mozFlag).empty();
+            $(webkitFlag).empty();
+          }
+        }
         return cssStyle.text(cssCode.text());
       });
-      self.unbind();
-      return self.mousedown(function(e) {
-        e.stopPropagation();
-        clearAllItemStyle();
-        self.ColorPickerHide();
-        return self.ColorPickerShow();
-      });
-    });
-    btnGradientStep.off('keyup mouseup');
-    return btnGradientStep.on('keyup mouseup', function(e) {
-      var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
-      cssCode = base.cssCode;
-      cssStyle = base.cssStyle;
-      changeGradientShow(e.currentTarget, cssCode, cssStyle, this.cssConfig);
-      stepValue = parseInt($(e.currentTarget).val());
-      for (i = _i = 2; _i <= 4; i = ++_i) {
-        className = 'btn-bg-color' + i;
-        mozFlag = $("." + className + "-moz-flag", cssRoot);
-        mozCache = $("." + className + "-moz-cache", cssRoot);
-        webkitFlag = $("." + className + "-webkit-flag", cssRoot);
-        webkitCache = $("." + className + "-webkit-cache", cssRoot);
-        if (i > stepValue - 1) {
-          mh = mozFlag.html();
-          if (mh.length > 0) {
-            mozCache.html(mh);
-          }
-          wh = webkitFlag.html();
-          if (wh.length > 0) {
-            webkitCache.html(wh);
-          }
-          $(mozFlag).empty();
-          $(webkitFlag).empty();
-        } else {
-          mozFlag.html(mozCache.html());
-          webkitFlag.html(webkitCache.html());
-        }
-      }
-      return cssStyle.text(cssCode.text());
-    }).each(function() {
-      var className, i, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh, _i;
-      cssCode = base.cssCode;
-      cssStyle = base.cssStyle;
-      changeGradientShow(this, cssCode, cssStyle, this.cssConfig);
-      stepValue = parseInt($(this).val());
-      for (i = _i = 2; _i <= 4; i = ++_i) {
-        className = 'btn-bg-color' + i;
-        mozFlag = $("." + className + "-moz-flag", cssRoot);
-        mozCache = $("." + className + "-moz-cache", cssRoot);
-        webkitFlag = $("." + className + "-webkit-flag", cssRoot);
-        webkitCache = $("." + className + "-webkit-cache", cssRoot);
-        if (i > stepValue - 1) {
-          mh = mozFlag.html();
-          if (mh.length > 0) {
-            mozCache.html(mh);
-          }
-          wh = webkitFlag.html();
-          if (wh.length > 0) {
-            webkitCache.html(wh);
-          }
-          $(mozFlag).empty();
-          $(webkitFlag).empty();
-        }
-      }
-      return cssStyle.text(cssCode.text());
-    });
-  };
+    };
 
-  return WorkTableButtonItem;
+    return WorkTableButtonItem;
 
-})(ButtonItem);
+  })(ButtonItem);
+}
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == null)) {
   window.itemInitFuncList.buttonInit = function(option) {
