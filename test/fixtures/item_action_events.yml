@@ -2,9 +2,8 @@ one:
   id: 1
   item_id: 1
   action_event_type_id: 1
-  action_event_mothod_type_id: 1
   action_event_change_type_id: 1
-  mothod_name: defaultClick
+  method_name: defaultClick
   config_temp: ""
   desc: ""
 
@@ -12,8 +11,25 @@ two:
   id: 2
   item_id: 2
   action_event_type_id: 0
-  action_event_mothod_type_id: 0
   action_event_change_type_id: 0
-  mothod_name: scrollDraw
+  method_name: scrollDraw
+  config_temp: ""
+  desc: ""
+
+three:
+  id: 3
+  item_id: 1
+  action_event_type_id: 1
+  action_event_change_type_id: 1
+  method_name: changeColorScroll
+  config_temp: ""
+  desc: ""
+
+four:
+  id: 4
+  item_id: 2
+  action_event_type_id: 0
+  action_event_change_type_id: 0
+  method_name: changeColorClick
   config_temp: ""
   desc: ""

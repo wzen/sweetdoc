@@ -24,6 +24,14 @@ class Const
   end
   ITEM_PATH_LIST = {ItemType::ARROW.to_s.to_sym => 'arrow', ItemType::BUTTON.to_s.to_sym => 'button'}
 
+  # アイテム種別
+  class ItemDrawType
+    # @property [Int] CANVAS CANVAS
+    CANVAS = 0
+    # @property [Int] CSS CSS
+    CSS = 1
+  end
+
   # アイテムに対する操作アクション(履歴用)
   class ItemActionType
     # @property [Int] MAKE 作成
@@ -36,7 +44,7 @@ class Const
     DELETE = 3
   end
 
-  # アクションイベント種別(タイムライン用)
+  # アクションイベント種別
   class ActionEventType
     # @property [Int] SCROLL スクロール
     SCROLL = 0
@@ -44,17 +52,15 @@ class Const
     CLICK = 1
   end
 
-  # アクション変更方法(タイムライン用)
-  class ActionEventMethodType
-    # @property [Int] CANVAS HTML5Canvas
-    CANVAS = 0
-    # @property [Int] CSS CSS
-    CSS = 1
-    # @property [Int] JQUERY JQuery
-    JQUERY = 2
+  # 共通アクションイベント対象
+  class CommonActionEventTargetType
+    # @property [Int] BACKGROUND 背景
+    BACKGROUND = 0
+    # @property [Int] ZOOM ズーム
+    ZOOM = 1
   end
 
-  # アクション変更種別(タイムライン用)
+  # アクション変更種別
   class ActionEventChangeType
     # @property [Int] DRAW 描画(新規作成 etc.)
     DRAW = 0

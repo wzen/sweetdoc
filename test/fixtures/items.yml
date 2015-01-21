@@ -1,5 +1,6 @@
 one:
   id: 1
+  draw_type: 1
   create_user_id: 1
   modify_user_id: 1
   name: "Button"
@@ -7,6 +8,7 @@ one:
 
 two:
   id: 2
+  draw_type: 0
   create_user_id: 1
   modify_user_id: 1
   name: "Arrow"

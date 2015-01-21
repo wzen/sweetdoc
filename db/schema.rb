@@ -11,11 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121133335) do
+ActiveRecord::Schema.define(version: 20150121150628) do
 
   create_table "categories", force: true do |t|
-    t.string   "category_name"
+    t.string   "category_name", null: false
     t.integer  "rating"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "common_action_events", force: true do |t|
+    t.integer  "common_action_event_target_type_id", null: false
+    t.integer  "action_event_type_id",               null: false
+    t.integer  "action_event_change_type_id",        null: false
+    t.text     "method_name",                        null: false
+    t.text     "config_temp"
+    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -23,9 +34,8 @@ ActiveRecord::Schema.define(version: 20150121133335) do
   create_table "item_action_events", force: true do |t|
     t.integer  "item_id",                     null: false
     t.integer  "action_event_type_id",        null: false
-    t.integer  "action_event_mothod_type_id", null: false
     t.integer  "action_event_change_type_id", null: false
-    t.string   "mothod_name",                 null: false
+    t.string   "method_name",                 null: false
     t.text     "config_temp"
     t.text     "desc"
     t.datetime "created_at"
@@ -33,8 +43,8 @@ ActiveRecord::Schema.define(version: 20150121133335) do
   end
 
   create_table "item_categories", force: true do |t|
-    t.integer  "item_id"
-    t.integer  "category_id"
+    t.integer  "item_id",     null: false
+    t.integer  "category_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -55,10 +65,11 @@ ActiveRecord::Schema.define(version: 20150121133335) do
   end
 
   create_table "items", force: true do |t|
-    t.integer  "create_user_id", null: false
-    t.integer  "modify_user_id", null: false
+    t.integer  "draw_type",      null: false
     t.string   "name",           null: false
     t.string   "src_name",       null: false
+    t.integer  "create_user_id", null: false
+    t.integer  "modify_user_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

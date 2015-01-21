@@ -21,3 +21,28 @@ four:
   item_action_event_id: 2
   locale_id: 2
   desc: スクロールで矢印を描画
+
+five:
+  id: 5
+  item_action_event_id: 3
+  locale_id: 1
+  desc: Scroll and change color
+
+six:
+  id: 6
+  item_action_event_id: 3
+  locale_id: 2
+  desc: スクロール時ボタン色を変更
+
+seven:
+  id: 7
+  item_action_event_id: 4
+  locale_id: 1
+  desc: Click and change color
+
+eight:
+  id: 8
+  item_action_event_id: 4
+  locale_id: 2
+  desc: クリック時矢印色を変更
+
