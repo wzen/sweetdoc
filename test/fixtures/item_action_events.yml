@@ -5,6 +5,7 @@ one:
   action_event_mothod_type_id: 1
   action_event_change_type_id: 1
   mothod_name: defaultClick
+  config_temp: ""
   desc: ""
 
 two:
@@ -14,4 +15,5 @@ two:
   action_event_mothod_type_id: 0
   action_event_change_type_id: 0
   mothod_name: scrollDraw
+  config_temp: ""
   desc: ""

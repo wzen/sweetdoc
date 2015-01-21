@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20150121133335) do
     t.integer  "action_event_mothod_type_id", null: false
     t.integer  "action_event_change_type_id", null: false
     t.string   "mothod_name",                 null: false
+    t.text     "config_temp"
     t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"

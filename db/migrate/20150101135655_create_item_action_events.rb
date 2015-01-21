@@ -6,6 +6,7 @@ class CreateItemActionEvents < ActiveRecord::Migration
       t.integer :action_event_mothod_type_id, :null => false
       t.integer :action_event_change_type_id, :null => false
       t.string :mothod_name, :null => false
+      t.text :config_temp
       t.text :desc
 
       t.timestamps
