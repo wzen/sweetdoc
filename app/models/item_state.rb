@@ -1,6 +1,8 @@
 require 'I18n'
 
 class ItemState < ActiveRecord::Base
+  belongs_to :user
+
   def get_item_info_list(user_id, loaded_item_type_list)
     result = ItemState.where(:user_id => user_id).order(id: :desc).first
     item_js_list = []

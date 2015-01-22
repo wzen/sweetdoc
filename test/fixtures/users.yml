@@ -1,4 +1,5 @@
 one:
   id: 1
-  name: "SportsWare"
+  name: "SWare_test"
+  user_auth_id: 1
   mail: ""

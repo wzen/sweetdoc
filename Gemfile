@@ -56,6 +56,8 @@ group :development, :test do
   gem 'rspec', '3.0.0'
   gem 'rspec-rails', '3.0.0'
   gem 'rspec-cells', '0.2.2'
+
+  gem 'rails-erd', github: 'paulwittmann/rails-erd', branch: 'mavericks'
 end
 
 # Use HBase
