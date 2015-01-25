@@ -176,6 +176,7 @@ DEPENDENCIES
   cells (= 3.11.2)
   coffee-rails (~> 4.0.0)
   gon
+  i18n (= 0.6.11)
   jbuilder (~> 2.0)
   jquery-rails
   less-rails
