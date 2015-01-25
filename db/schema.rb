@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150122135849) do
   create_table "localize_item_action_events", force: true do |t|
     t.integer  "item_action_event_id", null: false
     t.integer  "locale_id",            null: false
+    t.text     "options"
     t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
