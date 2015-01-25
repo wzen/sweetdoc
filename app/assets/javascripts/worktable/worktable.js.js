@@ -555,7 +555,7 @@ loadItemJs = function(itemType, callback) {
     type: "POST",
     dataType: "json",
     data: {
-      itemType: itemType
+      itemId: itemType
     },
     success: function(data) {
       var option;

@@ -44,6 +44,18 @@ class Const
     DELETE = 3
   end
 
+  # アイテムアクションの引数
+  class ItemActionOptionType
+    # @property [Int] INTEGER 数値
+    INTEGER = 0
+    # @property [Int] STRING 文字列
+    STRING = 1
+    # @property [Int] COLOR 色
+    COLOR = 2
+    # @property [Int] DESIGN デザイン
+    DESIGN = 3
+  end
+
   # アクションイベント種別
   class ActionEventType
     # @property [Int] SCROLL スクロール

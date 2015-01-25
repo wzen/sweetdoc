@@ -4,7 +4,6 @@ one:
   action_event_type_id: 1
   action_event_change_type_id: 1
   method_name: defaultClick
-  config_temp: ""
   desc: ""
 
 two:
@@ -13,7 +12,6 @@ two:
   action_event_type_id: 0
   action_event_change_type_id: 0
   method_name: scrollDraw
-  config_temp: ""
   desc: ""
 
 three:
@@ -22,7 +20,7 @@ three:
   action_event_type_id: 1
   action_event_change_type_id: 1
   method_name: changeColorScroll
-  config_temp: ""
+  options: "COLOR"
   desc: ""
 
 four:
@@ -31,5 +29,5 @@ four:
   action_event_type_id: 0
   action_event_change_type_id: 0
   method_name: changeColorClick
-  config_temp: ""
+  options: "COLOR"
   desc: ""

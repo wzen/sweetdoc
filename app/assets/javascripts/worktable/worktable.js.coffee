@@ -537,7 +537,7 @@ loadItemJs = (itemType, callback = null) ->
       type: "POST"
       dataType: "json"
       data: {
-        itemType: itemType
+        itemId: itemType
       }
       success: (data)->
         if data.css_info?

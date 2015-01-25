@@ -5,7 +5,7 @@ one:
   action_event_type_id: 0
   action_event_change_type_id: 2
   method_name: changeBackgroundColor
-  config_temp: ""
+  options: "COLOR"
   desc: ""
 
 two:
@@ -15,5 +15,5 @@ two:
   action_event_type_id: 1
   action_event_change_type_id: 1
   method_name: focusWithZoom
-  config_temp: ""
+  options: "INTEGER"
   desc: ""
