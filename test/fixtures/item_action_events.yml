@@ -20,7 +20,16 @@ three:
   action_event_type_id: 1
   action_event_change_type_id: 1
   method_name: changeColorScroll
-  options: "COLOR"
+  options: |
+            {
+              "option": {
+                "id": "changeColorScroll_Design",
+                "type": "DESIGN",
+                "others": {
+                  "name": "ChangeDesign"
+                }
+              }
+            }
   desc: ""
 
 four:
@@ -29,5 +38,14 @@ four:
   action_event_type_id: 0
   action_event_change_type_id: 0
   method_name: changeColorClick
-  options: "COLOR"
+  options: |
+            {
+              "option": {
+                "id": "changeColorClickl_Design",
+                "type": "DESIGN",
+                "others": {
+                  "name": "ChangeDesign"
+                }
+              }
+            }
   desc: ""

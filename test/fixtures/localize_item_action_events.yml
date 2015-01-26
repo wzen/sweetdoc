@@ -20,6 +20,13 @@ four:
   id: 4
   item_action_event_id: 2
   locale_id: 2
+            {
+              "option": {
+                "others": {
+                  "name": "変更色"
+                }
+              }
+            }
   desc: スクロールで矢印を描画
 
 five:
@@ -32,6 +39,13 @@ six:
   id: 6
   item_action_event_id: 3
   locale_id: 2
+            {
+              "option": {
+                "others": {
+                  "name": "変更色"
+                }
+              }
+            }
   desc: スクロール時ボタン色を変更
 
 seven:
@@ -44,5 +58,13 @@ eight:
   id: 8
   item_action_event_id: 4
   locale_id: 2
+  options: |
+            {
+              "option": {
+                "others": {
+                  "name": "変更色"
+                }
+              }
+            }
   desc: クリック時矢印色を変更
 
