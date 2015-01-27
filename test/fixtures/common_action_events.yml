@@ -8,9 +8,9 @@ one:
   options: |
             {
               "id": "changeBackground",
-              "name": "Change Background"
+              "name": "Change Background",
               "type": "BACKGROUND",
-              "color": "ChangeBackgroundColor"
+              "color": "ChangeBackgroundColor",
               "grid": "ShowGrid"
             }
   desc: ""
@@ -25,12 +25,12 @@ two:
   options: |
             {
               "id": "focusWithZoom",
-              "name": "Zoom"
+              "name": "Zoom",
               "type": "ZOOM",
-              "value": "ZoomValue"
-              "minValue": 0
-              "maxValue": 10
-              "minValueName": "Min"
+              "value": "ZoomValue",
+              "minValue": 0,
+              "maxValue": 10,
+              "minValueName": "Min",
               "maxValueName": "Max"
             }
   desc: ""

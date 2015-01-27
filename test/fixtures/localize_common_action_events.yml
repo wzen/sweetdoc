@@ -10,8 +10,8 @@ two:
   locale_id: 2
   options: |
             {
-              "name": "背景を変更"
-              "color": "背景色"
+              "name": "背景を変更",
+              "color": "背景色",
               "grid": "グリッド線の表示"
             }
   desc: 背景を変更する
@@ -28,9 +28,9 @@ four:
   locale_id: 2
   options: |
             {
-              "name": "アイテムにズームする"
-              "value": "ズーム値"
-              "minValueName": "最小値"
+              "name": "アイテムにズームする",
+              "value": "ズーム値",
+              "minValueName": "最小値",
               "maxValueName": "最大値"
             }
   desc: 画面のズームを行う
