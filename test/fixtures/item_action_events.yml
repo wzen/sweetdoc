@@ -22,13 +22,9 @@ three:
   method_name: changeColorScroll
   options: |
             {
-              "option": {
-                "id": "changeColorScroll_Design",
-                "type": "DESIGN",
-                "others": {
-                  "name": "ChangeDesign"
-                }
-              }
+              "id": "changeColorScroll_Design",
+              "type": "DESIGN",
+              "name": "Change Color by Scroll"
             }
   desc: ""
 
@@ -40,12 +36,8 @@ four:
   method_name: changeColorClick
   options: |
             {
-              "option": {
-                "id": "changeColorClickl_Design",
-                "type": "DESIGN",
-                "others": {
-                  "name": "ChangeDesign"
-                }
-              }
+              "id": "changeColorClickl_Design",
+              "type": "DESIGN",
+              "name": "Change Color by Click"
             }
   desc: ""

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150122135849) do
+ActiveRecord::Schema.define(version: 20150126130235) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -80,6 +80,15 @@ ActiveRecord::Schema.define(version: 20150122135849) do
     t.string   "locale_name", null: false
     t.integer  "order",       null: false
     t.string   "domain"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "localize_common_action_events", force: true do |t|
+    t.integer  "common_action_event_id"
+    t.integer  "locale_id"
+    t.text     "options"
+    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

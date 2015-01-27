@@ -8,6 +8,10 @@ two:
   id: 2
   item_action_event_id: 1
   locale_id: 2
+  options: |
+            {
+              "name": "通常クリック"
+            }
   desc: デフォルトのボタンクリック
 
 three:
@@ -20,12 +24,9 @@ four:
   id: 4
   item_action_event_id: 2
   locale_id: 2
+  options: |
             {
-              "option": {
-                "others": {
-                  "name": "変更色"
-                }
-              }
+              "name": "スクロールで描画"
             }
   desc: スクロールで矢印を描画
 
@@ -39,12 +40,9 @@ six:
   id: 6
   item_action_event_id: 3
   locale_id: 2
+  options: |
             {
-              "option": {
-                "others": {
-                  "name": "変更色"
-                }
-              }
+              "name": "スクロールで色を変更"
             }
   desc: スクロール時ボタン色を変更
 
@@ -60,11 +58,7 @@ eight:
   locale_id: 2
   options: |
             {
-              "option": {
-                "others": {
-                  "name": "変更色"
-                }
-              }
+              "name": "クリックで色を変更"
             }
   desc: クリック時矢印色を変更
 

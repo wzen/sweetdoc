@@ -1,4 +1,9 @@
 class Locale < ActiveRecord::Base
-  has_many :localize_item_action_event
-  has_many :localize_item
+  has_many :localize_common_action_events
+  has_many :localize_item_action_events
+  has_many :localize_items
+
+  scope :available, -> do
+    where(i18n_locale: I18n.locale)
+  end
 end

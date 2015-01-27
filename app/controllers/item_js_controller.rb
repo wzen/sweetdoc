@@ -13,7 +13,7 @@ class ItemJsController < ApplicationController
     # デザインconfig取得
 
     # イベントconfig取得
-    #event_confing = Item.find(item_id, :joins => 'item_action_events')
+    #event_config = Item.find(item_id, :joins => 'item_action_events')
 
   end
 

@@ -1,9 +1,13 @@
 <div class="event">
     <div class="config">
         <div class="configBox">
-            <div class="timelineedit-headliner">Item</div>
+            <div class="timelineedit-headliner">Target</div>
             <div class="forms item_form">
-
+                <!-- イベント対象一覧 -->
+                <!-- ワークスペース読み込み時に設定 -->
+                <%= form_for(@select_forms.first) do |f| %>
+                    <%= f.collection_select(:event_item_list, @select_forms, :value, :name) %>
+                <% end %>
             </div>
         </div>
     </div>

@@ -1,0 +1,36 @@
+one:
+  id: 1
+  common_action_event_id: 1
+  locale_id: 1
+  desc: Change background
+
+two:
+  id: 2
+  common_action_event_id: 1
+  locale_id: 2
+  options: |
+            {
+              "name": "背景を変更"
+              "color": "背景色"
+              "grid": "グリッド線の表示"
+            }
+  desc: 背景を変更する
+
+three:
+  id: 3
+  common_action_event_id: 2
+  locale_id: 1
+  desc: Zoom
+
+four:
+  id: 4
+  common_action_event_id: 2
+  locale_id: 2
+  options: |
+            {
+              "name": "アイテムにズームする"
+              "value": "ズーム値"
+              "minValueName": "最小値"
+              "maxValueName": "最大値"
+            }
+  desc: 画面のズームを行う
