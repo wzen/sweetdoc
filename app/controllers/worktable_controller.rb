@@ -1,3 +1,5 @@
+require 'const'
+
 class WorktableController < ApplicationController
   def index
     # Constantの設定
@@ -9,8 +11,12 @@ class WorktableController < ApplicationController
                         .select('common_action_events.*, localize_common_action_events.options as l_options')
     # アイテム選択
     @select_items = select_items(common_action_events)
+
     # メソッド選択
-    @select_methods = select_methods(common_action_events)
+    @action_event_type_ids = []
+    common_action_events.each do |c|
+      @action_event_type_ids << {id: c.id , action_event_type_id: c.action_event_type_id}
+    end
   end
 
   private
@@ -38,11 +44,5 @@ class WorktableController < ApplicationController
       select << {name: m[:options]['name'], value: "c#{m[:id]}"}
     end
     return select
-  end
-
-  private
-  def select_methods(common_action_events)
-    methods = []
-    merged = merge_options(common_action_events)
   end
 end

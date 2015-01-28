@@ -13,10 +13,11 @@
             </div>
         </div>
     </div>
-    <div class="config">
+    <div class="config" style="display: none">
         <div class="configBox">
-            <div class="timelineedit-headliner">ActionType</div>
-            <div class="forms action_type_form">
+            <div class="timelineedit-headliner">Action</div>
+            <div class="forms">
+                <!-- アクション名 -->
                 <ul class="te_method">
 
 
@@ -24,13 +25,24 @@
             </div>
         </div>
     </div>
-    <div class="common-config" style="display: none">
-        <%= render 'worktable/sidebar_menu/timeline/common' %>
+    <div class="config" style="display: none">
+        <div class="configBox">
+            <div class="timelineedit-headliner">Value</div>
+            <div class="forms te_values">
+                <!-- イベント毎の設定値 -->
+                <% @action_event_type_ids.each do |c| %>
+                    <div class="<%= "c#{c[:id]}_values" %>" style="display: none">
+                      <% if c[:action_event_type_id] == Const::CommonActionEventTargetType::BACKGROUND  %>
+                        <%= render 'worktable/sidebar_menu/timeline/parts/background' %>
+                      <% elsif c[:action_event_type_id] == Const::CommonActionEventTargetType::ZOOM %>
+                            <%= render 'worktable/sidebar_menu/timeline/parts/zoom' %>
+                      <% end %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
     </div>
-    <div class="custom-config" style="display: none">
-        <%= render 'worktable/sidebar_menu/timeline/custom' %>
-    </div>
-    <div class="config">
+    <div class="config" style="display: none;">
         <div class="configBox">
             <div class="timelineedit-headliner">Apply Action</div>
             <div class="forms">
