@@ -2,11 +2,11 @@
     <div class="config">
         <div class="configBox">
             <div class="timelineedit-headliner">Target</div>
-            <div class="forms item_form">
+            <div class="forms">
                 <!-- イベント対象一覧 -->
                 <!-- ワークスペース読み込み時に設定 -->
-                <select>
-                    <% @select_forms.each do |s| %>
+                <select class="te_select_items" name="te_select_items">
+                    <% @select_items.each do |s| %>
                       <option value="<%= s[:value] %>"><%= s[:name] %></option>
                     <% end %>
                 </select>
@@ -17,6 +17,10 @@
         <div class="configBox">
             <div class="timelineedit-headliner">ActionType</div>
             <div class="forms action_type_form">
+                <ul class="te_method">
+
+
+                </ul>
             </div>
         </div>
     </div>
