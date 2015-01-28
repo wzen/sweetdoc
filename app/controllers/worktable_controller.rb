@@ -4,47 +4,45 @@ class WorktableController < ApplicationController
     init_const
 
     # 共通タイムラインイベントの設定
-    common_events = CommonActionEvent
-                        .includes(:localize_common_action_events)
+    common_action_events = CommonActionEvent
                         .joins(:locales).merge(Locale.available)
+                        .select('common_action_events.*, localize_common_action_events.options as l_options')
     # アイテム選択
-    @select_items = select_items(common_events)
+    @select_items = select_items(common_action_events)
     # メソッド選択
-    @select_methods = select_methods(common_events)
+    @select_methods = select_methods(common_action_events)
   end
 
   private
-  def select_items(common_events)
+  def merge_options(common_action_events)
+    options_array = []
+    common_action_events.each do |c|
+      options = {}
+      if c.options
+        options.merge!(JSON.parse(c.options))
+      end
+      if c.l_options
+        options.merge!(JSON.parse(c.l_options))
+      end
+      options_array << {id:c.id, options: options}
+    end
+    return options_array
+  end
+
+  private
+  def select_items(common_action_events)
     select = []
     select << {name: '(Select)', value: ''}
-    common_events.each do |c|
-      name = nil
-      unless c.localize_common_action_events.empty?
-        l_events = c.localize_common_action_events
-        l_events.each do |l|
-          if l.options
-            o = JSON.parse(l.options)
-            if o['name']
-              name = o['name']
-            end
-          end
-        end
-      end
-      if name == nil && c.options
-        o = JSON.parse(c.options)
-        if o['name']
-          name = o['name']
-        end
-      end
-      name ||= ''
-      select << {name: name, value: "c#{c.id}"}
+    merged = merge_options(common_action_events)
+    merged.each do |m|
+      select << {name: m[:options]['name'], value: "c#{m[:id]}"}
     end
     return select
   end
 
   private
-  def select_methods(common_events)
+  def select_methods(common_action_events)
     methods = []
-
+    merged = merge_options(common_action_events)
   end
 end
