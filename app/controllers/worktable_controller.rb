@@ -12,7 +12,7 @@ class WorktableController < ApplicationController
     # アイテム選択
     @select_items = select_items(common_action_events)
 
-    # メソッド選択
+    # イベント設定値用
     @action_event_type_ids = []
     common_action_events.each do |c|
       @action_event_type_ids << {id: c.id , action_event_type_id: c.action_event_type_id}
