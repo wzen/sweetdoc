@@ -38,11 +38,11 @@ ItemBase = (function(_super) {
   }
 
   ItemBase.prototype.getElementId = function() {
-    return this.constructor.IDENTITY + '_' + this.id;
+    return Constant.ElementAttribute.ITEM_ID.replace('@identity', this.constructor.IDENTITY).replace('@id', this.id);
   };
 
   ItemBase.prototype.getDesignConfigId = function() {
-    return this.id + '_designconfig';
+    return Constant.ElementAttribute.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
   };
 
   ItemBase.prototype.getJQueryElement = function() {

@@ -73,3 +73,13 @@ if gon?
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
 
 
+    class @ElementAttribute
+      # @property [String] ITEM_ID アイテム要素ID
+      @ITEM_ID = '@identity_@id'
+      # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
+      @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
+      # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
+      @TE_ITEM_ROOT_ID = 'timelien_event_@id'
+
+
+

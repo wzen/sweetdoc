@@ -40,12 +40,12 @@ class ItemBase extends Extend
   # HTML要素IDを取得
   # @return [Int] HTML要素ID
   getElementId: ->
-    return @constructor.IDENTITY + '_' + @id
+    return Constant.ElementAttribute.ITEM_ID.replace('@identity', @constructor.IDENTITY).replace('@id', @id)
 
   # コンフィグメニューの要素IDを取得
   # @return [Int] HTML要素ID
   getDesignConfigId: ->
-    return @id + '_designconfig'
+    return Constant.ElementAttribute.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)
 
   getJQueryElement: ->
     return $('#' + @getElementId())
