@@ -111,7 +111,7 @@ class ButtonItem extends CssItemBase
 
     # キーフレーム
     keyframe = """
-    @-webkit-keyframes #{keyFrameName} {
+    #{keyFrameName} {
       0% {
         top: #{ parseInt(top)}px;
         left: #{ parseInt(left)}px;
@@ -144,18 +144,20 @@ class ButtonItem extends CssItemBase
       }
     }
     """
+    webkitKeyframe = "@-webkit-keyframes #{keyframe}"
+    mozKeyframe = "@-moz-keyframes #{keyframe}"
 
     # CSSに設定
     css = """
     .#{funcName}
     {
-    -webkit-animation-name: #{keyFrameName};
-    -moz-animation-name: #{keyFrameName};
+    -webkit-animation-name: #{webkitKeyframe};
+    -moz-animation-name: #{mozKeyframe};
     -webkit-animation-duration: 0.5s;
     -moz-animation-duration: 0.5s;
     }
     """
-    return "#{keyframe} #{css}"
+    return "#{webkitKeyframe}#{mozKeyframe} #{css}"
 
 if window.worktablePage?
   # ワークテーブル用ボタンクラス
