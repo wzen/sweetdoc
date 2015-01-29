@@ -3,11 +3,11 @@ class CommonActionEvent < ActiveRecord::Base
   has_many :locales, :through => :localize_common_action_events
 
   def self.get_commonevents_initworktable
-    # 共通タイムラインイベントの設定
+    # 共通タイムラインイベントの取得
     common_action_events = self.joins(:locales).merge(Locale.available)
                                .select('common_action_events.*, localize_common_action_events.options as l_options')
 
-    # optionsをハッシュ化
+    # optionsをJsonString→HashArrayに変更
     common_action_events.each do |c|
       c.options = JSON.parse(c.options)
       if c.l_options
