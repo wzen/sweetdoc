@@ -1052,10 +1052,9 @@ runDebug = function() {
 /* タイムライン */
 
 setupTimelineEvents = function() {
-  var f, initEvents, updateTimelineEventContents;
+  var f, initEvents;
   f = this;
   initEvents = function() {
-    var te_update;
     if ($(this).is('.ui-sortable-helper')) {
       return;
     }
@@ -1069,18 +1068,11 @@ setupTimelineEvents = function() {
     if (!isOpenedConfigSidebar()) {
       openConfigSidebar();
     }
-    te_update = getPageValue(Constant.PageValueKey.TE_UPDATE);
-    if ((te_update == null) || !te_update) {
-      updateTimelineEventContents.call(this);
-    }
     if ($(this).hasClass('blank')) {
 
     } else {
 
     }
-  };
-  updateTimelineEventContents = function() {
-    return setPageValue(Constant.PageValueKey.TE_UPDATE, true, true);
   };
   $('.timeline_event').off('click');
   $('.timeline_event').on('click', function(e) {

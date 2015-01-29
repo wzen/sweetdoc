@@ -989,6 +989,7 @@ setupTimelineEvents = ->
       # ドラッグの場合はクリック反応なし
       return
     setSelectedBorder(@, "timeline")
+
     switchSidebarConfig("timeline")
 
     # イベントメニューの存在チェック
@@ -999,17 +1000,12 @@ setupTimelineEvents = ->
       # イベントメニューの表示
       console.log("")
 
-    # イベントメニューのJSイベント設定
+    # イベントメニューのJSイベント設定(display&ボタン)
 
     if !isOpenedConfigSidebar()
       # タイムラインのconfigをオープンする
       openConfigSidebar()
 
-
-    te_update = getPageValue(Constant.PageValueKey.TE_UPDATE)
-    if !te_update? || !te_update
-      # 内容更新
-      updateTimelineEventContents.call(@)
 
     # コンフィグ初期化
     if $(@).hasClass('blank')
@@ -1019,12 +1015,6 @@ setupTimelineEvents = ->
 
     else
       # イベント設定済み
-
-  # イベント内容更新
-  updateTimelineEventContents = ->
-
-
-    setPageValue(Constant.PageValueKey.TE_UPDATE, true, true)
 
 
   # イベントのクリック

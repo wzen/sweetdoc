@@ -68,8 +68,6 @@ if gon?
       @TE_METHODNAME = @TE + ':mn'
       # @property [String] TE_DELAY 遅延
       @TE_DELAY = @TE + ':delay'
-      # @property [String] TE_UPDATE タイムラインイベント内容の更新フラグ
-      @TE_UPDATE = 'timeline_event:update'
 
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
