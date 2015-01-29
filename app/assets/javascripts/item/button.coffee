@@ -151,13 +151,14 @@ class ButtonItem extends CssItemBase
     css = """
     .#{funcName}
     {
-    -webkit-animation-name: #{webkitKeyframe};
-    -moz-animation-name: #{mozKeyframe};
+    -webkit-animation-name: #{keyFrameName};
+    -moz-animation-name: #{keyFrameName};
     -webkit-animation-duration: 0.5s;
     -moz-animation-duration: 0.5s;
     }
     """
-    return "#{webkitKeyframe}#{mozKeyframe} #{css}"
+    return "#{webkitKeyframe} #{mozKeyframe} #{css}"
+
 
 if window.worktablePage?
   # ワークテーブル用ボタンクラス
