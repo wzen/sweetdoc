@@ -990,6 +990,17 @@ setupTimelineEvents = ->
       return
     setSelectedBorder(@, "timeline")
     switchSidebarConfig("timeline")
+
+    # イベントメニューの存在チェック
+    if true
+      # イベントメニューの作成
+      console.log('')
+    else
+      # イベントメニューの表示
+      console.log("")
+
+    # イベントメニューのJSイベント設定
+
     if !isOpenedConfigSidebar()
       # タイムラインのconfigをオープンする
       openConfigSidebar()
