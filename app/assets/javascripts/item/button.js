@@ -112,7 +112,7 @@ ButtonItem = (function(_super) {
 
   ButtonItem.prototype.defaultClick = function(e) {
     this.getJQueryElement().addClass('dentButton_' + this.id);
-    return this.getJQueryElement().on('webkitAnimationEnd', (function(_this) {
+    return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         return _this.nextChapter();
       };

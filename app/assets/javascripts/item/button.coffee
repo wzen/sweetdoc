@@ -94,7 +94,7 @@ class ButtonItem extends CssItemBase
   defaultClick : (e) =>
     # ボタン凹むアクション
     @getJQueryElement().addClass('dentButton_' + @id)
-    @getJQueryElement().on('webkitAnimationEnd', (e) =>
+    @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
       @nextChapter()
     )
