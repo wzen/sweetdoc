@@ -9,10 +9,6 @@ class ItemBase extends Extend
   # @property [ItemType] ITEMTYPE アイテム種別
   @ITEMTYPE = ""
 
-  # 要素IDからアイテムIDを取得
-  @getIdByElementId : (elementId) ->
-    return elementId.replace(@IDENTITY + '_', '')
-
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
@@ -37,18 +33,13 @@ class ItemBase extends Extend
     # @property [Object] jqueryElement アイテムのjQueryオブジェクト
     @jqueryElement = null
 
-  # HTML要素IDを取得
-  # @return [Int] HTML要素ID
-  getElementId: ->
-    return Constant.ElementAttribute.ITEM_ID.replace('@identity', @constructor.IDENTITY).replace('@id', @id)
-
   # コンフィグメニューの要素IDを取得
   # @return [Int] HTML要素ID
   getDesignConfigId: ->
     return Constant.ElementAttribute.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)
 
   getJQueryElement: ->
-    return $('#' + @getElementId())
+    return $('#' + @id)
 
   # 操作履歴Indexをプッシュ
   # @param [ItemBase] obj オブジェクト
@@ -261,12 +252,12 @@ class CanvasItemBase extends ItemBase
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID
   canvasElementId: ->
-    return @getElementId() + '_canvas'
+    return @id + '_canvas'
 
   # 伸縮率を設定
   setScale: (drawingContext) ->
     # 要素の伸縮
-    element = $('#' + @getElementId())
+    element = $('#' + @id)
     canvas = $('#' + @canvasElementId())
     element.width(@itemSize.w * @scale.w)
     element.height(@itemSize.h * @scale.h)

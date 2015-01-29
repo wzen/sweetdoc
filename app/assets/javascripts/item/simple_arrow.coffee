@@ -33,7 +33,7 @@ class SimpleArrowItem extends ItemBase
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID
   canvasElementId: ->
-    return @getElementId() + '_canvas'
+    return @id + '_canvas'
 
   # 描画
   # @param [Array] moveCood 画面ドラッグ座標
@@ -93,8 +93,8 @@ class SimpleArrowItem extends ItemBase
 
     # Canvasを作成
     $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
-    $('#' + @canvasElementId()).attr('width', $('#' + @getElementId()).width())
-    $('#' + @canvasElementId()).attr('height', $('#' + @getElementId()).height())
+    $('#' + @canvasElementId()).attr('width', $('#' + @id).width())
+    $('#' + @canvasElementId()).attr('height', $('#' + @id).height())
     @setupEvents()
 
     if show

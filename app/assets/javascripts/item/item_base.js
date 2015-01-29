@@ -12,10 +12,6 @@ ItemBase = (function(_super) {
 
   ItemBase.ITEMTYPE = "";
 
-  ItemBase.getIdByElementId = function(elementId) {
-    return elementId.replace(this.IDENTITY + '_', '');
-  };
-
   function ItemBase(cood) {
     if (cood == null) {
       cood = null;
@@ -37,16 +33,12 @@ ItemBase = (function(_super) {
     this.jqueryElement = null;
   }
 
-  ItemBase.prototype.getElementId = function() {
-    return Constant.ElementAttribute.ITEM_ID.replace('@identity', this.constructor.IDENTITY).replace('@id', this.id);
-  };
-
   ItemBase.prototype.getDesignConfigId = function() {
     return Constant.ElementAttribute.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
   };
 
   ItemBase.prototype.getJQueryElement = function() {
-    return $('#' + this.getElementId());
+    return $('#' + this.id);
   };
 
   ItemBase.prototype.pushOhi = function(obj) {
@@ -251,12 +243,12 @@ CanvasItemBase = (function(_super) {
   };
 
   CanvasItemBase.prototype.canvasElementId = function() {
-    return this.getElementId() + '_canvas';
+    return this.id + '_canvas';
   };
 
   CanvasItemBase.prototype.setScale = function(drawingContext) {
     var canvas, element;
-    element = $('#' + this.getElementId());
+    element = $('#' + this.id);
     canvas = $('#' + this.canvasElementId());
     element.width(this.itemSize.w * this.scale.w);
     element.height(this.itemSize.h * this.scale.h);

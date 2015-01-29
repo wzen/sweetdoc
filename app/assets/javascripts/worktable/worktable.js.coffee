@@ -4,7 +4,7 @@ window.worktablePage = true
 # ワークテーブル用アイテム拡張モジュール
 # 共通
 WorkTableCommonExtend =
-# オプションメニューを開く
+  # オプションメニューを開く
   showOptionMenu: ->
     sc = $('.sidebar-config')
     sc.css('display', 'none')
@@ -12,9 +12,12 @@ WorkTableCommonExtend =
     $('#design-config').css('display', '')
     $('#' + @getDesignConfigId()).css('display', '')
 
+  # タイムラインイベントの選択内容を更新
+  updateTimelineEventSelect: ->
+
 # CSS
 WorkTableCssItemExtend =
-# デザイン変更コンフィグを作成
+  # デザイン変更コンフィグを作成
   makeDesignConfig: ->
     @designConfigRoot = $('#' + @getDesignConfigId())
     if !@designConfigRoot? || @designConfigRoot.length == 0
@@ -25,19 +28,19 @@ WorkTableCssItemExtend =
       @designConfigRoot.find('.canvas-config').remove()
       $('#design-config').append(@designConfigRoot)
 
-# ドラッグ時のイベント
+  # ドラッグ時のイベント
   drag: ->
-    element = $('#' + @getElementId())
+    element = $('#' + @id)
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
-
+  # リサイズ時のイベント
   resize: ->
-    element = $('#' + @getElementId())
+    element = $('#' + @id)
     @itemSize.w = element.width()
     @itemSize.h = element.height()
 
-# 履歴データを取得
-# @param [ItemActionType] action アクション種別
+  # 履歴データを取得
+  # @param [ItemActionType] action アクション種別
   getHistoryObj: (action) ->
     obj = {
       obj: @
@@ -46,7 +49,7 @@ WorkTableCssItemExtend =
     }
     return obj
 
-# 履歴データを設定
+  # 履歴データを設定
   setHistoryObj: (historyObj) ->
     @itemSize = makeClone(historyObj.itemSize)
 
@@ -64,7 +67,7 @@ WorkTableCanvasItemExtend =
 
 # ドラッグ時のイベント
   drag: ->
-    element = $('#' + @getElementId())
+    element = $('#' + @id)
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
     console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
@@ -72,7 +75,7 @@ WorkTableCanvasItemExtend =
 # リサイズ時のイベント
   resize: ->
     canvas = $('#' + @canvasElementId())
-    element = $('#' + @getElementId())
+    element = $('#' + @id)
     @scale.w = element.width() / @itemSize.w
     @scale.h = element.height() / @itemSize.h
     canvas.attr('width',  element.width())
@@ -351,8 +354,7 @@ setupContextMenu = (element, contextSelector, menu) ->
 getObjFromObjectListByElementId = (emtId) ->
   obj = null
   itemObjectList.forEach((o) ->
-    objId = o.constructor.getIdByElementId(emtId)
-    if objId == o.id
+    if emtId == o.id
       obj = o
   )
   return obj
@@ -568,10 +570,15 @@ availJs = (initName, jsSrc, option = {}, callback = null) ->
         callback()
   , '500')
 
+# タイムラインイベントのUIを追加
+# @param [String] contents 追加するHTMLの文字列
+addTimelineEventContents: (contents) ->
+
+
+
 # カラーピッカーの作成
 # @param [Object] element HTML要素
 createColorPicker = (element) ->
-
   $(element).ColorPicker({})
 
 # カラーピッカーの設定
@@ -981,26 +988,30 @@ runDebug = ->
 
 # タイムラインのイベント設定
 setupTimelineEvents = ->
-  f = @
-
   # イベント初期化
-  initEvents = ->
+  initEvents = (e) ->
     if $(@).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
       return
-    setSelectedBorder(@, "timeline")
 
+    setSelectedBorder(@, "timeline")
     switchSidebarConfig("timeline")
 
     # イベントメニューの存在チェック
-    if true
+    te_num = $(e).find('input.te_num').val()
+    eId = Constant.ElementAttribute.TE_ITEM_ROOT_ID.replace('@te_num', te_num)
+    emt = $('#' + eId)
+    if emt.length == 0
       # イベントメニューの作成
-      console.log('')
-    else
-      # イベントメニューの表示
-      console.log("")
+      emt = $('#timeline-config .timeline_temp').clone(true).attr('id', eId)
+      $('#timeline-config').append(emt)
 
     # イベントメニューのJSイベント設定(display&ボタン)
+
+
+    # イベントメニューの表示
+    $('#timeline-config .event').css('display', 'none')
+    emt.css('display', '')
 
     if !isOpenedConfigSidebar()
       # タイムラインのconfigをオープンする
@@ -1019,8 +1030,8 @@ setupTimelineEvents = ->
 
   # イベントのクリック
   $('.timeline_event').off('click')
-  $('.timeline_event').on('click', (e) ->
-    initEvents.call(@)
+  $('.timeline_event').on('click', (e) =>
+    initEvents.call(@, _this)
   )
 
   # イベントのD&D
@@ -1059,7 +1070,6 @@ setupTimeLineCss = ->
   $('#css_code_info').find('.css-style').each( ->
     itemCssStyle += $(this).html()
   )
-
   # 暫定処理
   itemObjectList.forEach((item) ->
     if ButtonItem? && item instanceof ButtonItem
@@ -1087,42 +1097,30 @@ $ ->
 
   # 共有変数
   initCommonVar()
-
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
-  #scrollInside.css('width', $('#main-wrapper').width())
   $('#canvas_container').attr('width', $('#main-wrapper').width())
   $('#canvas_container').attr('height', $('#main-wrapper').height())
-
   # スクロールサイズ
   scrollInside.width(scrollContents.width() * (scrollViewMag + 1))
   scrollInside.height(scrollContents.height() * (scrollViewMag + 1))
   # スクロール位置初期化
   scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5))
   scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
-
-  # カラーピッカー(アイテム毎に初期化する)
-  #initColorPickerValue()
-
   # ドロップダウン
   $('.dropdown-toggle').dropdown()
-
   # ヘッダーメニュー
   initHeaderMenu()
-
   # キーイベント
   initKeyEvent()
-
   # ドラッグ描画イベント
   initHandwrite()
-
   # コンテキストメニュー
   menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
   setupContextMenu($('#main'), '#main-wrapper', menu)
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )
-
   # タイムライン初期化
   # TODO: 本来はタイムライン表示時に行う
   setupTimelineEvents()

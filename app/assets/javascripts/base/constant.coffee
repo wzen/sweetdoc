@@ -75,11 +75,11 @@ if gon?
 
     class @ElementAttribute
       # @property [String] ITEM_ID アイテム要素ID
-      @ITEM_ID = '@identity_@id'
+      @ITEM_ID = '@it_@id'
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
       # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
-      @TE_ITEM_ROOT_ID = 'timelien_event_@id'
+      @TE_ITEM_ROOT_ID = 'timelien_event_@te_num'
 
 
 

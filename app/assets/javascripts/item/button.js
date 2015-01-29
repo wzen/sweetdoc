@@ -177,7 +177,7 @@ if (window.worktablePage != null) {
         newEmt = $(this.css);
       } else {
         newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
-        newEmt.find('.btn-item-id').html(this.getElementId());
+        newEmt.find('.btn-item-id').html(this.id);
       }
       $('#css_code_info').append(newEmt);
       this.cssRoot = $('#' + this.getCssRootElementId());
@@ -186,6 +186,7 @@ if (window.worktablePage != null) {
       this.cssStyle = $(".css-style", this.cssRoot);
       this.cssStyle.text(this.cssCode.text());
       this.makeDesignConfig();
+      this.updateTimelineEventSelect();
       return true;
     };
 

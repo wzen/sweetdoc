@@ -193,7 +193,7 @@ if window.worktablePage?
       else
         # CSSテンプレートからオブジェクト個別のCSSを作成
         newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
-        newEmt.find('.btn-item-id').html(@getElementId())
+        newEmt.find('.btn-item-id').html(@id)
       $('#css_code_info').append(newEmt)
 
       @cssRoot = $('#' + @getCssRootElementId())
@@ -204,6 +204,8 @@ if window.worktablePage?
 
       # コンフィグ作成
       @makeDesignConfig()
+      # タイムラインイベント更新
+      @updateTimelineEventSelect()
 
       return true
 

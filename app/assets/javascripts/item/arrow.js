@@ -118,7 +118,8 @@ ArrowItem = (function(_super) {
     if (show) {
       this.drawNewCanvas();
     }
-    return this.makeDesignConfig();
+    this.makeDesignConfig();
+    return this.updateTimelineEventSelect();
   };
 
   ArrowItem.prototype.generateMinimumObject = function() {

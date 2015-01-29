@@ -36,7 +36,7 @@ SimpleArrowItem = (function(_super) {
   }
 
   SimpleArrowItem.prototype.canvasElementId = function() {
-    return this.getElementId() + '_canvas';
+    return this.id + '_canvas';
   };
 
   SimpleArrowItem.prototype.draw = function(moveCood) {
@@ -94,8 +94,8 @@ SimpleArrowItem = (function(_super) {
       show = true;
     }
     $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
-    $('#' + this.canvasElementId()).attr('width', $('#' + this.getElementId()).width());
-    $('#' + this.canvasElementId()).attr('height', $('#' + this.getElementId()).height());
+    $('#' + this.canvasElementId()).attr('width', $('#' + this.id).width());
+    $('#' + this.canvasElementId()).attr('height', $('#' + this.id).height());
     this.setupEvents();
     if (show) {
       drawingCanvas = document.getElementById(this.canvasElementId());

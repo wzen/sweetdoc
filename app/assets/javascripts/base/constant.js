@@ -99,11 +99,11 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ElementAttribute = (function() {
       function ElementAttribute() {}
 
-      ElementAttribute.ITEM_ID = '@identity_@id';
+      ElementAttribute.ITEM_ID = '@it_@id';
 
       ElementAttribute.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
 
-      ElementAttribute.TE_ITEM_ROOT_ID = 'timelien_event_@id';
+      ElementAttribute.TE_ITEM_ROOT_ID = 'timelien_event_@te_num';
 
       return ElementAttribute;
 

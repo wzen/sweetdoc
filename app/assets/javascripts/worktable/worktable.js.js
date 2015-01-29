@@ -11,7 +11,8 @@ WorkTableCommonExtend = {
     $('.dc', sc).css('display', 'none');
     $('#design-config').css('display', '');
     return $('#' + this.getDesignConfigId()).css('display', '');
-  }
+  },
+  updateTimelineEventSelect: function() {}
 };
 
 WorkTableCssItemExtend = {
@@ -29,13 +30,13 @@ WorkTableCssItemExtend = {
   },
   drag: function() {
     var element;
-    element = $('#' + this.getElementId());
+    element = $('#' + this.id);
     this.itemSize.x = element.position().left;
     return this.itemSize.y = element.position().top;
   },
   resize: function() {
     var element;
-    element = $('#' + this.getElementId());
+    element = $('#' + this.id);
     this.itemSize.w = element.width();
     return this.itemSize.h = element.height();
   },
@@ -66,7 +67,7 @@ WorkTableCanvasItemExtend = {
   },
   drag: function() {
     var element;
-    element = $('#' + this.getElementId());
+    element = $('#' + this.id);
     this.itemSize.x = element.position().left;
     this.itemSize.y = element.position().top;
     return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
@@ -74,7 +75,7 @@ WorkTableCanvasItemExtend = {
   resize: function() {
     var canvas, drawingCanvas, drawingContext, element;
     canvas = $('#' + this.canvasElementId());
-    element = $('#' + this.getElementId());
+    element = $('#' + this.id);
     this.scale.w = element.width() / this.itemSize.w;
     this.scale.h = element.height() / this.itemSize.h;
     canvas.attr('width', element.width());
@@ -357,9 +358,7 @@ getObjFromObjectListByElementId = function(emtId) {
   var obj;
   obj = null;
   itemObjectList.forEach(function(o) {
-    var objId;
-    objId = o.constructor.getIdByElementId(emtId);
-    if (objId === o.id) {
+    if (emtId === o.id) {
       return obj = o;
     }
   });
@@ -594,6 +593,10 @@ availJs = function(initName, jsSrc, option, callback) {
     }
   }, '500');
 };
+
+({
+  addTimelineEventContents: function(contents) {}
+});
 
 createColorPicker = function(element) {
   return $(element).ColorPicker({});
@@ -1052,19 +1055,23 @@ runDebug = function() {
 /* タイムライン */
 
 setupTimelineEvents = function() {
-  var f, initEvents;
-  f = this;
-  initEvents = function() {
+  var initEvents;
+  initEvents = function(e) {
+    var eId, emt, te_num;
     if ($(this).is('.ui-sortable-helper')) {
       return;
     }
     setSelectedBorder(this, "timeline");
     switchSidebarConfig("timeline");
-    if (true) {
-      console.log('');
-    } else {
-      console.log("");
+    te_num = $(e).find('input.te_num').val();
+    eId = Constant.ElementAttribute.TE_ITEM_ROOT_ID.replace('@te_num', te_num);
+    emt = $('#' + eId);
+    if (emt.length === 0) {
+      emt = $('#timeline-config .timeline_temp').clone(true).attr('id', eId);
+      $('#timeline-config').append(emt);
     }
+    $('#timeline-config .event').css('display', 'none');
+    emt.css('display', '');
     if (!isOpenedConfigSidebar()) {
       openConfigSidebar();
     }
@@ -1075,9 +1082,11 @@ setupTimelineEvents = function() {
     }
   };
   $('.timeline_event').off('click');
-  $('.timeline_event').on('click', function(e) {
-    return initEvents.call(this);
-  });
+  $('.timeline_event').on('click', (function(_this) {
+    return function(e) {
+      return initEvents.call(_this, _this);
+    };
+  })(this));
   return $('#timeline_events').sortable({
     revert: true,
     axis: 'x',
