@@ -6,8 +6,9 @@
                 <!-- イベント対象一覧 -->
                 <!-- ワークスペース読み込み時に設定 -->
                 <select class="te_select_items" name="te_select_items">
-                    <% @select_items.each do |s| %>
-                      <option value="<%= s[:value] %>"><%= s[:name] %></option>
+                    <option value="0">(Select)</option>
+                    <% @common_action_events.each do |c| %>
+                      <option value="<%= c.id %>"><%= c.options['name'] %></option>
                     <% end %>
                 </select>
             </div>
@@ -30,11 +31,11 @@
             <div class="timelineedit-headliner">Value</div>
             <div class="forms te_values">
                 <!-- イベント毎の設定値 -->
-                <% @action_event_type_ids.each do |c| %>
-                    <div class="<%= "c#{c[:id]}_values" %>" style="display: none">
-                      <% if c[:action_event_type_id] == Const::CommonActionEventTargetType::BACKGROUND  %>
+                <% @common_action_events.each do |c| %>
+                    <div class="<%= "c#{c.id}_values" %>" style="display: none">
+                      <% if c.action_event_type_id == Const::CommonActionEventTargetType::BACKGROUND  %>
                         <%= render 'worktable/sidebar_menu/timeline/parts/background' %>
-                      <% elsif c[:action_event_type_id] == Const::CommonActionEventTargetType::ZOOM %>
+                      <% elsif c.action_event_type_id == Const::CommonActionEventTargetType::ZOOM %>
                             <%= render 'worktable/sidebar_menu/timeline/parts/zoom' %>
                       <% end %>
                     </div>
