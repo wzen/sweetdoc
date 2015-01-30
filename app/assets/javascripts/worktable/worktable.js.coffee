@@ -556,12 +556,12 @@ loadItemJs = (itemType, callback = null) ->
 # @param [String] jsSrc jsファイル名
 # @param [Function] callback 設定後のコールバック
 availJs = (initName, jsSrc, option = {}, callback = null) ->
-  s = document.createElement( 'script' );
+  s = document.createElement('script');
   s.type = 'text/javascript';
   # TODO: 認証コードの比較
   s.src = jsSrc;
-  firstScript = document.getElementsByTagName( 'script' )[ 0 ];
-  firstScript.parentNode.insertBefore( s, firstScript );
+  firstScript = document.getElementsByTagName('script')[0];
+  firstScript.parentNode.insertBefore(s, firstScript);
   t = setInterval( ->
     if window.itemInitFuncList[initName]?
       clearInterval(t)
