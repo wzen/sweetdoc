@@ -1070,6 +1070,21 @@ setupTimelineEvents = function() {
       emt = $('#timeline-config .timeline_temp').clone(true).attr('id', eId);
       $('#timeline-config').append(emt);
     }
+    (function(_this) {
+      return (function() {
+        var selectMethods, selectOptions;
+        selectOptions = $('#timeline-config .te_select_items option');
+        selectOptions.off('onmouseover');
+        selectOptions.on('onmouseover', function(e) {
+          return console.log('mouseover:' + this.attr('class'));
+        });
+        selectOptions.off('click');
+        selectOptions.on('click', function(e) {});
+        selectMethods = $('#timeline-config .te_select_items li');
+        selectMethods.off('click');
+        return selectMethods.on('click', function(e) {});
+      });
+    })(this)();
     $('#timeline-config .event').css('display', 'none');
     emt.css('display', '');
     if (!isOpenedConfigSidebar()) {

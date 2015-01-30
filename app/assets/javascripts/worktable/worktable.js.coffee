@@ -1006,8 +1006,22 @@ setupTimelineEvents = ->
       emt = $('#timeline-config .timeline_temp').clone(true).attr('id', eId)
       $('#timeline-config').append(emt)
 
-    # イベントメニューのJSイベント設定(display&ボタン)
+    do =>
+      # イベントメニューのJSイベント設定(display&ボタン)
+      selectOptions = $('#timeline-config .te_select_items option')
+      selectOptions.off('onmouseover')
+      selectOptions.on('onmouseover', (e) ->
+        console.log('mouseover:' + this.attr('class'))
+      )
+      selectOptions.off('click')
+      selectOptions.on('click', (e) =>
 
+      )
+      selectMethods = $('#timeline-config .te_select_items li')
+      selectMethods.off('click')
+      selectMethods.on('click', (e) ->
+
+      )
 
     # イベントメニューの表示
     $('#timeline-config .event').css('display', 'none')
