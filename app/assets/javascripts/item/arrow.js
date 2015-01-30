@@ -4,8 +4,6 @@ var ArrowItem, WorkTableArrowItem,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-window.loadedItemTypeList.push(Constant.ItemType.ARROW);
-
 ArrowItem = (function(_super) {
   var ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, calBodyPath, calDrection, calTailDrawPath, calTrianglePath, coodLength, coodLog, drawCoodToBaseCanvas, drawCoodToCanvas, drawCoodToNewCanvas, updateArrowRect;
 
@@ -451,6 +449,8 @@ ArrowItem = (function(_super) {
 
 })(CanvasItemBase);
 
+window.loadedClassList.ArrowItem = ArrowItem;
+
 if (window.worktablePage != null) {
   WorkTableArrowItem = (function(_super) {
     __extends(WorkTableArrowItem, _super);
@@ -466,6 +466,7 @@ if (window.worktablePage != null) {
     return WorkTableArrowItem;
 
   })(ArrowItem);
+  window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem;
 }
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == null)) {
@@ -473,6 +474,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == n
     if (option == null) {
       option = {};
     }
+    return window.loadedItemTypeList.push(Constant.ItemType.ARROW);
   };
 }
 

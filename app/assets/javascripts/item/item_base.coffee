@@ -1,4 +1,5 @@
 # アイテム基底
+# @abstract
 class ItemBase extends Extend
   @include EventListener
 
@@ -180,6 +181,7 @@ class ItemBase extends Extend
   clearAllEventStyle : ->
 
 # CSSアイテム
+# @abstract
 # @extend ItemBase
 class CssItemBase extends ItemBase
   # CSSのルートのIDを取得
@@ -208,6 +210,7 @@ class CssItemBase extends ItemBase
     return true
 
 # Canvasアイテム
+# @abstract
 # @extend ItemBase
 class CanvasItemBase extends ItemBase
   # コンストラクタ

@@ -53,6 +53,7 @@ initResize = (wrap, scrollWrapper) ->
     , 200)
   )
 
+
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得

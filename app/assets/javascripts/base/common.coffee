@@ -180,6 +180,7 @@ sanitaizeDecode = (str) ->
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedItemTypeList = []
+  window.loadedClassList = []
 
 $ ->
   window.drawingCanvas = document.getElementById('canvas_container')

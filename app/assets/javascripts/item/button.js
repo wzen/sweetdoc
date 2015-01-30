@@ -4,8 +4,6 @@ var ButtonItem, WorkTableButtonItem,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-window.loadedItemTypeList.push(Constant.ItemType.BUTTON);
-
 ButtonItem = (function(_super) {
   __extends(ButtonItem, _super);
 
@@ -138,6 +136,8 @@ ButtonItem = (function(_super) {
   return ButtonItem;
 
 })(CssItemBase);
+
+window.loadedClassList.ButtonItem = ButtonItem;
 
 if (window.worktablePage != null) {
   WorkTableButtonItem = (function(_super) {
@@ -345,6 +345,7 @@ if (window.worktablePage != null) {
     return WorkTableButtonItem;
 
   })(ButtonItem);
+  window.loadedClassList.WorkTableButtonItem = WorkTableButtonItem;
 }
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == null)) {
@@ -353,6 +354,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
     if (option == null) {
       option = {};
     }
+    window.loadedItemTypeList.push(Constant.ItemType.BUTTON);
     if (option.isWorkTable != null) {
       css_temp = option.css_temp;
       if (css_temp != null) {

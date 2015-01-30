@@ -1,5 +1,3 @@
-#JS読み込み完了
-window.loadedItemTypeList.push(Constant.ItemType.BUTTON)
 
 # ボタンアイテム
 # @extend CssItemBase
@@ -159,6 +157,7 @@ class ButtonItem extends CssItemBase
     """
     return "#{webkitKeyframe} #{mozKeyframe} #{css}"
 
+window.loadedClassList.ButtonItem = ButtonItem
 
 if window.worktablePage?
   # ワークテーブル用ボタンクラス
@@ -364,9 +363,14 @@ if window.worktablePage?
         cssStyle.text(cssCode.text())
       )
 
+  window.loadedClassList.WorkTableButtonItem = WorkTableButtonItem
+
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
   window.itemInitFuncList.buttonInit = (option = {}) ->
+    #JS読み込み完了
+    window.loadedItemTypeList.push(Constant.ItemType.BUTTON)
+
     if option.isWorkTable?
       # ワークテーブルの初期化処理
       css_temp = option.css_temp

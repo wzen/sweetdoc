@@ -1,6 +1,3 @@
-#JS読み込み完了
-window.loadedItemTypeList.push(Constant.ItemType.ARROW)
-
 # 矢印アイテム
 # @extend CanvasItemBase
 class ArrowItem extends CanvasItemBase
@@ -445,12 +442,18 @@ class ArrowItem extends CanvasItemBase
   coodLog = (cood, name) ->
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
 
+window.loadedClassList.ArrowItem = ArrowItem
+
 if window.worktablePage?
   # ワークテーブル用矢印クラス
   class WorkTableArrowItem extends ArrowItem
     @include WorkTableCommonExtend
     @include WorkTableCanvasItemExtend
 
+  window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem
+
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
   window.itemInitFuncList.arrowInit = (option = {}) ->
+    #JS読み込み完了
+    window.loadedItemTypeList.push(Constant.ItemType.ARROW)
