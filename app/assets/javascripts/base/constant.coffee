@@ -80,8 +80,10 @@ if gon?
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
       # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
       @TE_ITEM_ROOT_ID = 'timeline_event_@te_num'
+      # @property [String] TE_ACTION_CLASS タイムラインイベント アクション一覧
+      @TE_ACTION_CLASS = 'timeline_event_action_@itemid'
       # @property [String] TE_VALUES_DIV タイムラインイベント アクションUI
-      @TE_VALUES_DIV = constant.ElementAttribute.TE_VALUES_DIV
+      @TE_VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS
 
 
 

@@ -596,9 +596,14 @@ availJs = function(initName, jsSrc, option, callback) {
 };
 
 addTimelineEventContents = function(te_actions, te_values) {
-  var action_forms;
-  if (te_actions != null) {
+  var action_forms, className, emt;
+  if ((te_actions != null) && te_actions.length > 0) {
+    className = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', te_actions[0].item_id);
     action_forms = $('#timeline-config .action_forms');
+    if (action_forms.find("." + className).length() === 0) {
+      te_actions.each(function(a) {});
+      emt = $("<div class='" + className + "'><ul></ul></div>");
+    }
   }
   if (te_values != null) {
 

@@ -574,12 +574,19 @@ availJs = (initName, jsSrc, option = {}, callback = null) ->
 # タイムラインイベントのUIを追加
 # @param [String] contents 追加するHTMLの文字列
 addTimelineEventContents = (te_actions, te_values) ->
-  if te_actions?
+  if te_actions? && te_actions.length > 0
+    className = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', te_actions[0].item_id)
     action_forms = $('#timeline-config .action_forms')
+    if action_forms.find(".#{className}").length() == 0
 
+      te_actions.each( (a) ->
+
+      )
+
+      emt = $("<div class='#{className}'><ul></ul></div>")
 
   if te_values?
-    return
+
 
 
 # カラーピッカーの作成
