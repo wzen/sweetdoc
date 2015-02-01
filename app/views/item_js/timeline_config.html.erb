@@ -1,0 +1,11 @@
+<div class="<%= @class_name %>">
+    <% if @type == Const::ItemActionOptionType::INTEGER %>
+        <%= render 'worktable/sidebar_menu/timeline/parts/sidebar' %>
+    <% elsif @type == Const::ItemActionOptionType::STRING %>
+        <%= render 'worktable/sidebar_menu/timeline/parts/textbox' %>
+    <% elsif @type == Const::ItemActionOptionType::COLOR %>
+        <%= render 'worktable/sidebar_menu/timeline/parts/color' %>
+    <% elsif @type == Const::ItemActionOptionType::DESIGN %>
+        <%= render 'worktable/sidebar_menu/timeline/parts/design' %>
+    <% end %>
+</div>

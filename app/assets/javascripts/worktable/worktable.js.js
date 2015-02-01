@@ -596,11 +596,12 @@ availJs = function(initName, jsSrc, option, callback) {
 };
 
 addTimelineEventContents = function(te_actions, te_values) {
-  if (te_actions == null) {
-    return;
+  var action_forms;
+  if (te_actions != null) {
+    action_forms = $('#timeline-config .action_forms');
   }
-  if (te_values == null) {
-
+  if (te_values != null) {
+    return;
   }
 };
 

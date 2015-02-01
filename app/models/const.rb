@@ -90,4 +90,7 @@ class Const
     Z = 90
   end
 
+  class ElementAttribute
+    TE_VALUES_DIV = 'timeline_event_value_@itemid_@methodname'
+  end
 end

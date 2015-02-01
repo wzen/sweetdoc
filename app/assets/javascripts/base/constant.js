@@ -105,6 +105,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ElementAttribute.TE_ITEM_ROOT_ID = 'timeline_event_@te_num';
 
+      ElementAttribute.TE_VALUES_DIV = constant.ElementAttribute.TE_VALUES_DIV;
+
       return ElementAttribute;
 
     })();

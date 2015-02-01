@@ -574,9 +574,11 @@ availJs = (initName, jsSrc, option = {}, callback = null) ->
 # タイムラインイベントのUIを追加
 # @param [String] contents 追加するHTMLの文字列
 addTimelineEventContents = (te_actions, te_values) ->
-  if !te_actions?
-    return
-  if !te_values?
+  if te_actions?
+    action_forms = $('#timeline-config .action_forms')
+
+
+  if te_values?
     return
 
 

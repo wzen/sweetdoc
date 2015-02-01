@@ -13,12 +13,33 @@ class ItemJsController < ApplicationController
       # CSS取得
       @css_info = data.first.item_css_temp
     end
+
     # デザインconfig取得
 
-    # タイムラインconfig取得
-    @te_actions = nil
-    @te_values = nil
+    # タイムライン アクション名一覧
+    @te_actions = data.map do |d|
+      {
+          item_id: d.item_id,
+          action_event_type_id: d.action_event_type_id,
+          method_name: d.method_name,
+          options: d.options
+      }
+    end
+    # タイムライン コンフィグUI
+    @te_values = ''
+    data.each do |d|
+      @te_values += timeline_config(d)
+    end
 
+  end
+
+
+  def timeline_config(te_action)
+    @class_name = Const::ElementAttribute::TE_VALUES_DIV
+                      .sub(/@itemId/, te_action[:item_id])
+                      .sub(/@methodname/, te_action[:method_name])
+    @type = te_action.options['type']
+    render_to_string :layout => false
   end
 
 end

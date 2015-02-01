@@ -17,10 +17,11 @@ class ItemJs
       end
       if c.l_options
         # optionsのローカライズをマージ
-        c.options.merge!(JSON.parse(c.l_options))
+        c.options.update(JSON.parse(c.l_options))
       end
     end
 
     return item_action_events
   end
+
 end
