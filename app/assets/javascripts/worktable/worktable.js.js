@@ -1064,7 +1064,7 @@ setupTimelineEvents = function() {
     }
     setSelectedBorder(e, "timeline");
     switchSidebarConfig("timeline");
-    $(".config", emt).css('display', 'none');
+    $(".config.te_div", emt).css('display', 'none');
     te_num = $(e).find('input.te_num').val();
     eId = Constant.ElementAttribute.TE_ITEM_ROOT_ID.replace('@te_num', te_num);
     emt = $('#' + eId);
@@ -1086,7 +1086,7 @@ setupTimelineEvents = function() {
           } else {
             d = "method_div";
           }
-          $(".config", emt).css('display', 'none');
+          $(".config.te_div", emt).css('display', 'none');
           $("." + d + " .forms", emt).children("div").css('display', 'none');
           $("." + d + " ." + v, emt).css('display', '');
           return $("." + d, emt).css('display', '');

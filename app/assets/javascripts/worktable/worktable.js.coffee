@@ -998,7 +998,7 @@ setupTimelineEvents = ->
 
     setSelectedBorder(e, "timeline")
     switchSidebarConfig("timeline")
-    $(".config", emt).css('display', 'none')
+    $(".config.te_div", emt).css('display', 'none')
 
     # イベントメニューの存在チェック
     te_num = $(e).find('input.te_num').val()
@@ -1023,7 +1023,7 @@ setupTimelineEvents = ->
           # アイテム → アクション名一覧を表示
           d = "method_div"
 
-        $(".config", emt).css('display', 'none')
+        $(".config.te_div", emt).css('display', 'none')
         $(".#{d} .forms", emt).children("div").css('display', 'none')
         $(".#{d} .#{v}", emt).css('display', '')
         $(".#{d}", emt).css('display', '')

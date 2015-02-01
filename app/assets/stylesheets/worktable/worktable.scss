@@ -628,7 +628,11 @@ div#timeline-config {
   }
 
   .event {
-
+    .config {
+      &.te_div {
+        margin-top: 15px;
+      }
+    }
   }
   .push {
     -webkit-appearance: none;
@@ -688,7 +692,7 @@ div#timeline-config {
     }
 
     &.button {
-      &.clear {
+      &.reset {
         background: #0000bb;
         -webkit-border-radius: 4px;
         border-radius: 4px;
