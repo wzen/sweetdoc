@@ -600,7 +600,7 @@ addTimelineEventContents = function(te_actions, te_values) {
     return;
   }
   if (te_values == null) {
-    return;
+
   }
 };
 
