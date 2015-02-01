@@ -48,13 +48,6 @@ ActiveRecord::Schema.define(version: 20150126130235) do
     t.datetime "updated_at"
   end
 
-  create_table "item_css_temps", force: true do |t|
-    t.integer  "item_id",    null: false
-    t.text     "contents"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "item_states", force: true do |t|
     t.integer  "user_id",    null: false
     t.text     "state"
@@ -67,6 +60,7 @@ ActiveRecord::Schema.define(version: 20150126130235) do
     t.integer  "draw_type",      null: false
     t.string   "name",           null: false
     t.string   "src_name",       null: false
+    t.text     "css_temp"
     t.integer  "create_user_id", null: false
     t.integer  "modify_user_id", null: false
     t.datetime "created_at"

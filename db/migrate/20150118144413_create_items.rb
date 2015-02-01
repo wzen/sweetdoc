@@ -4,6 +4,7 @@ class CreateItems < ActiveRecord::Migration
       t.integer :draw_type, :null => false
       t.string :name, :null => false
       t.string :src_name, :null => false
+      t.text :css_temp
       t.integer :create_user_id, :null => false
       t.integer :modify_user_id, :null => false
 

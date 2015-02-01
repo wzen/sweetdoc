@@ -5,10 +5,12 @@ class ItemJsController < ApplicationController
 
     # JSファイル取得
     @js_src = ItemJs.get_lack_js(item_id)
+
+    data = ItemJs.item_contents(item_id)
+
     # CSS取得
-    css_temp = ItemCssTemp.find_by_item_id(item_id)
-    if css_temp != nil
-      @css_info = css_temp.contents
+    if data.first.item_css_temp != nil
+      @css_info = data.first.item_css_temp
     end
     # デザインconfig取得
 
