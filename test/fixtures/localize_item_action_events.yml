@@ -2,7 +2,10 @@ one:
   id: 1
   item_action_event_id: 1
   locale_id: 1
-  desc: Click push action
+  options: |
+            {
+              "desc": "Click push action"
+            }
 
 two:
   id: 2
@@ -10,15 +13,18 @@ two:
   locale_id: 2
   options: |
             {
-              "name": "通常クリック"
+              "name": "通常クリック",
+              "desc": "デフォルトのボタンクリック"
             }
-  desc: デフォルトのボタンクリック
 
 three:
   id: 3
   item_action_event_id: 2
   locale_id: 1
-  desc: Draw by scroll action
+  options: |
+            {
+              "desc": "Draw by scroll action"
+            }
 
 four:
   id: 4
@@ -26,15 +32,19 @@ four:
   locale_id: 2
   options: |
             {
-              "name": "スクロールで描画"
+              "name": "スクロールで描画",
+              "desc": "スクロールで矢印を描画"
             }
-  desc: スクロールで矢印を描画
+
 
 five:
   id: 5
   item_action_event_id: 3
   locale_id: 1
-  desc: Scroll and change color
+  options: |
+            {
+              "desc": "Scroll and change color"
+            }
 
 six:
   id: 6
@@ -42,15 +52,18 @@ six:
   locale_id: 2
   options: |
             {
-              "name": "スクロールで色を変更"
+              "name": "スクロールで色を変更",
+              "desc": "スクロール時ボタン色を変更"
             }
-  desc: スクロール時ボタン色を変更
 
 seven:
   id: 7
   item_action_event_id: 4
   locale_id: 1
-  desc: Click and change color
+  options: |
+            {
+              "desc": "Click and change color"
+            }
 
 eight:
   id: 8
@@ -58,7 +71,8 @@ eight:
   locale_id: 2
   options: |
             {
-              "name": "クリックで色を変更"
+              "name": "クリックで色を変更",
+              "desc": "クリック時矢印色を変更"
             }
-  desc: クリック時矢印色を変更
+
 

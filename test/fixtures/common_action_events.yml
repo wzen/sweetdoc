@@ -11,9 +11,8 @@ one:
               "name": "Change Background",
               "type": "BACKGROUND",
               "color": "ChangeBackgroundColor",
-              "grid": "ShowGrid"
+              "grid": "ShowGrid",
             }
-  desc: ""
 
 two:
   id: 2
@@ -33,4 +32,3 @@ two:
               "minValueName": "Min",
               "maxValueName": "Max"
             }
-  desc: ""

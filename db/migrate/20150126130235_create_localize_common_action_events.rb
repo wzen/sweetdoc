@@ -4,7 +4,6 @@ class CreateLocalizeCommonActionEvents < ActiveRecord::Migration
       t.integer :common_action_event_id
       t.integer :locale_id
       t.text :options
-      t.text :desc
 
       t.timestamps
     end

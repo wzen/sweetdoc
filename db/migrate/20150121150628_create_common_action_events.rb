@@ -7,7 +7,6 @@ class CreateCommonActionEvents < ActiveRecord::Migration
       t.integer :action_event_change_type_id, :null => false
       t.text :method_name, :null => false
       t.text :options
-      t.text :desc
 
       t.timestamps
     end

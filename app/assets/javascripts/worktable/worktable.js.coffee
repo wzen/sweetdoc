@@ -546,6 +546,7 @@ loadItemJs = (itemType, callback = null) ->
           option = {isWorkTable: true, css_temp: data.css_info}
 
         availJs(itemInitFuncName, data.js_src, option, callback)
+        addTimelineEventContents(data.te_actions, data.te_values)
 
       error: (data) ->
     }
@@ -572,8 +573,11 @@ availJs = (initName, jsSrc, option = {}, callback = null) ->
 
 # タイムラインイベントのUIを追加
 # @param [String] contents 追加するHTMLの文字列
-addTimelineEventContents: (contents) ->
-
+addTimelineEventContents = (te_actions, te_values) ->
+  if !te_actions?
+    return
+  if !te_values?
+    return
 
 
 # カラーピッカーの作成
@@ -1009,29 +1013,17 @@ setupTimelineEvents = ->
       emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId)
       $('#timeline-config').append(emt)
 
+    # JSイベントの追加
     do =>
-      # イベントメニューのJSイベント設定
-      itemSelect = $('.te_item_select', emt)
-      itemSelect.off('change')
-      itemSelect.on('change', ->
-        v = $(@).val()
-        d = null
-        if v.indexOf('c_') == 0
-          # 共通 → 変更値を表示
-          d = "values_div"
-        else
-          # アイテム → アクション名一覧を表示
-          d = "method_div"
-
-        $(".config.te_div", emt).css('display', 'none')
-        $(".#{d} .forms", emt).children("div").css('display', 'none')
-        $(".#{d} .#{v}", emt).css('display', '')
-        $(".#{d}", emt).css('display', '')
+      em = $('.te_item_select', emt)
+      em.off('change')
+      em.on('change', (e) ->
+        timelineItemSelect(@)
       )
-      selectMethods = $('.te_select_items li', emt)
-      selectMethods.off('click')
-      selectMethods.on('click', (e) ->
-
+      em = $('.push.button.cancel', emt)
+      em.off('click')
+      em.on('click', (e) ->
+        closeSidebar()
       )
 
     # イベントメニューの表示
@@ -1068,6 +1060,30 @@ setupTimelineEvents = ->
     stop: (event, ui) ->
       # イベントのソート番号を更新
   })
+
+# タイムライン アイテム選択イベント
+timelineItemSelect = (e) ->
+  emt = $(e).parents('.event')
+  v = $(e).val()
+  d = null
+  if v.indexOf('c_') == 0
+    # 共通 → 変更値を表示
+    d = "values_div"
+  else
+    # アイテム → アクション名一覧を表示
+    d = "action_div"
+    # フォーカス
+
+
+  $(".config.te_div", emt).css('display', 'none')
+  $(".#{d} .forms", emt).children("div").css('display', 'none')
+  $(".#{d} .#{v}", emt).css('display', '')
+  $(".#{d}", emt).css('display', '')
+
+# タイムライン アクション名選択イベント
+timelineActionSelect = (e) ->
+  emt = $(e).parents('.event')
+
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->

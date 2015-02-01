@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20150126130235) do
     t.integer  "action_event_change_type_id",        null: false
     t.text     "method_name",                        null: false
     t.text     "options"
-    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -38,7 +37,6 @@ ActiveRecord::Schema.define(version: 20150126130235) do
     t.integer  "action_event_change_type_id", null: false
     t.string   "method_name",                 null: false
     t.text     "options"
-    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -88,7 +86,6 @@ ActiveRecord::Schema.define(version: 20150126130235) do
     t.integer  "common_action_event_id"
     t.integer  "locale_id"
     t.text     "options"
-    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -97,7 +94,6 @@ ActiveRecord::Schema.define(version: 20150126130235) do
     t.integer  "item_action_event_id", null: false
     t.integer  "locale_id",            null: false
     t.text     "options"
-    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

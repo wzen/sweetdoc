@@ -4,7 +4,7 @@ class ItemJsController < ApplicationController
     item_id = params['itemId']
 
     # JSファイル取得
-    @js_src = ItemJs.new.get_lack_js(item_id)
+    @js_src = ItemJs.get_lack_js(item_id)
     # CSS取得
     css_temp = ItemCssTemp.find_by_item_id(item_id)
     if css_temp != nil
@@ -12,8 +12,9 @@ class ItemJsController < ApplicationController
     end
     # デザインconfig取得
 
-    # イベントconfig取得
-    #event_config = Item.find(item_id, :joins => 'item_action_events')
+    # タイムラインconfig取得
+    @te_actions = nil
+    @te_values = nil
 
   end
 

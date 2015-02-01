@@ -4,7 +4,6 @@ class CreateLocalizeItemActionEvents < ActiveRecord::Migration
       t.integer :item_action_event_id, :null => false
       t.integer :locale_id, :null => false
       t.text :options
-      t.text :desc
 
       t.timestamps
     end
