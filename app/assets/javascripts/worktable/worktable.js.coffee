@@ -988,14 +988,17 @@ runDebug = ->
 
 # タイムラインのイベント設定
 setupTimelineEvents = ->
+  self = @
+
   # イベント初期化
   initEvents = (e) ->
-    if $(@).is('.ui-sortable-helper')
+    if $(e).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
       return
 
-    setSelectedBorder(@, "timeline")
+    setSelectedBorder(e, "timeline")
     switchSidebarConfig("timeline")
+    $(".config", emt).css('display', 'none')
 
     # イベントメニューの存在チェック
     te_num = $(e).find('input.te_num').val()
@@ -1003,21 +1006,29 @@ setupTimelineEvents = ->
     emt = $('#' + eId)
     if emt.length == 0
       # イベントメニューの作成
-      emt = $('#timeline-config .timeline_temp').clone(true).attr('id', eId)
+      emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId)
       $('#timeline-config').append(emt)
 
     do =>
-      # イベントメニューのJSイベント設定(display&ボタン)
-      selectOptions = $('#timeline-config .te_select_items option')
-      selectOptions.off('onmouseover')
-      selectOptions.on('onmouseover', (e) ->
-        console.log('mouseover:' + this.attr('class'))
-      )
-      selectOptions.off('click')
-      selectOptions.on('click', (e) =>
+      # イベントメニューのJSイベント設定
+      itemSelect = $('.te_item_select', emt)
+      itemSelect.off('change')
+      itemSelect.on('change', ->
+        v = $(@).val()
+        d = null
+        if v.indexOf('c_') == 0
+          # 共通 → 変更値を表示
+          d = "values_div"
+        else
+          # アイテム → アクション名一覧を表示
+          d = "method_div"
 
+        $(".config", emt).css('display', 'none')
+        $(".#{d} .forms", emt).children("div").css('display', 'none')
+        $(".#{d} .#{v}", emt).css('display', '')
+        $(".#{d}", emt).css('display', '')
       )
-      selectMethods = $('#timeline-config .te_select_items li')
+      selectMethods = $('.te_select_items li', emt)
       selectMethods.off('click')
       selectMethods.on('click', (e) ->
 
@@ -1033,7 +1044,7 @@ setupTimelineEvents = ->
 
 
     # コンフィグ初期化
-    if $(@).hasClass('blank')
+    if $(e).hasClass('blank')
       # ブランク
       # アイテムのリストを表示
 
@@ -1044,8 +1055,8 @@ setupTimelineEvents = ->
 
   # イベントのクリック
   $('.timeline_event').off('click')
-  $('.timeline_event').on('click', (e) =>
-    initEvents.call(@, _this)
+  $('.timeline_event').on('click', (e) ->
+    initEvents.call(self, @)
   )
 
   # イベントのD&D

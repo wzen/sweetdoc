@@ -1,11 +1,11 @@
 <div class="event">
-    <div class="config">
+    <div>
         <div class="configBox">
             <div class="timelineedit-headliner">Target</div>
             <div class="forms">
                 <!-- イベント対象一覧 -->
                 <!-- ワークスペース読み込み時に設定 -->
-                <select class="te_select_items" name="te_select_items">
+                <select class="form-control te_item_select" name="te_item_select">
                     <option value="0">(Select)</option>
                     <% @common_action_events.each do |c| %>
                       <option value="c_<%= c.id %>"><%= c.options['name'] %></option>
@@ -14,22 +14,18 @@
             </div>
         </div>
     </div>
-    <div class="config" style="display: none">
+    <div class="config method_div" style="display: none">
         <div class="configBox">
             <div class="timelineedit-headliner">Action</div>
-            <div class="forms">
-                <!-- アクション名 -->
-                <ul class="te_select_methods">
-
-
-                </ul>
+            <div class="forms method_forms">
+                <!-- アクション名一覧 -->
             </div>
         </div>
     </div>
-    <div class="config" style="display: none">
+    <div class="config values_div" style="display: none">
         <div class="configBox">
             <div class="timelineedit-headliner">Value</div>
-            <div class="forms te_values">
+            <div class="forms">
                 <!-- イベント毎の設定値 -->
                 <% @common_action_events.each do |c| %>
                     <div class="<%= "c_#{c.id}" %>" style="display: none">
@@ -40,17 +36,11 @@
                       <% end %>
                     </div>
                 <% end %>
-            </div>
-        </div>
-    </div>
-    <div class="config" style="display: none;">
-        <div class="configBox">
-            <div class="timelineedit-headliner">Apply Action</div>
-            <div class="forms">
-                <button class="btn btn-success btn-block">Apply and Proceed next</button>
-                <button class="btn btn-success btn-block" style="margin-top: 15px">Apply and Close</button>
-                <button class="btn btn-danger btn-block" style="margin-top: 15px">Reset</button>
-                <button class="btn btn-danger btn-block" style="margin-top: 15px">Cancel and Close (Don't apply)</button>
+
+                <button class="push button clear" style="margin-top: 10px">Clear change</button><br/>
+                <button class="push button apply" style="margin-top: 10px">Apply</button><br/>
+                <button class="push button cancel" style="margin-top: 10px">Close(Not apply)</button>
+                <input class="confirm" type="hidden" value="OK?(Confirm)">
             </div>
         </div>
     </div>

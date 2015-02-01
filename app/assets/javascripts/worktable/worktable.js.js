@@ -1055,32 +1055,43 @@ runDebug = function() {
 /* タイムライン */
 
 setupTimelineEvents = function() {
-  var initEvents;
+  var initEvents, self;
+  self = this;
   initEvents = function(e) {
     var eId, emt, te_num;
-    if ($(this).is('.ui-sortable-helper')) {
+    if ($(e).is('.ui-sortable-helper')) {
       return;
     }
-    setSelectedBorder(this, "timeline");
+    setSelectedBorder(e, "timeline");
     switchSidebarConfig("timeline");
+    $(".config", emt).css('display', 'none');
     te_num = $(e).find('input.te_num').val();
     eId = Constant.ElementAttribute.TE_ITEM_ROOT_ID.replace('@te_num', te_num);
     emt = $('#' + eId);
     if (emt.length === 0) {
-      emt = $('#timeline-config .timeline_temp').clone(true).attr('id', eId);
+      emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId);
       $('#timeline-config').append(emt);
     }
     (function(_this) {
       return (function() {
-        var selectMethods, selectOptions;
-        selectOptions = $('#timeline-config .te_select_items option');
-        selectOptions.off('onmouseover');
-        selectOptions.on('onmouseover', function(e) {
-          return console.log('mouseover:' + this.attr('class'));
+        var itemSelect, selectMethods;
+        itemSelect = $('.te_item_select', emt);
+        itemSelect.off('change');
+        itemSelect.on('change', function() {
+          var d, v;
+          v = $(this).val();
+          d = null;
+          if (v.indexOf('c_') === 0) {
+            d = "values_div";
+          } else {
+            d = "method_div";
+          }
+          $(".config", emt).css('display', 'none');
+          $("." + d + " .forms", emt).children("div").css('display', 'none');
+          $("." + d + " ." + v, emt).css('display', '');
+          return $("." + d, emt).css('display', '');
         });
-        selectOptions.off('click');
-        selectOptions.on('click', function(e) {});
-        selectMethods = $('#timeline-config .te_select_items li');
+        selectMethods = $('.te_select_items li', emt);
         selectMethods.off('click');
         return selectMethods.on('click', function(e) {});
       });
@@ -1090,18 +1101,16 @@ setupTimelineEvents = function() {
     if (!isOpenedConfigSidebar()) {
       openConfigSidebar();
     }
-    if ($(this).hasClass('blank')) {
+    if ($(e).hasClass('blank')) {
 
     } else {
 
     }
   };
   $('.timeline_event').off('click');
-  $('.timeline_event').on('click', (function(_this) {
-    return function(e) {
-      return initEvents.call(_this, _this);
-    };
-  })(this));
+  $('.timeline_event').on('click', function(e) {
+    return initEvents.call(self, this);
+  });
   return $('#timeline_events').sortable({
     revert: true,
     axis: 'x',

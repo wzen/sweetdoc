@@ -79,7 +79,7 @@ if gon?
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
       # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
-      @TE_ITEM_ROOT_ID = 'timelien_event_@te_num'
+      @TE_ITEM_ROOT_ID = 'timeline_event_@te_num'
 
 
 
