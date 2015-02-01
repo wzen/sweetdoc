@@ -601,7 +601,7 @@ addTimelineEventContents = function(te_actions, te_values) {
     action_forms = $('#timeline-config .action_forms');
   }
   if (te_values != null) {
-    return;
+
   }
 };
 
