@@ -27,7 +27,7 @@ class ItemState < ActiveRecord::Base
           if item != nil
             css_temp = item.css_temp
           end
-          item_js_list << {:item_type => item_type, :src => ItemJs.get_lack_js(item_type), :css_temp => css_temp}
+          item_js_list << {:item_type => item_type, :src => ItemJs.get_lack_js(item.src_name), :css_temp => css_temp}
         end
       end
       if result.css_info != nil

@@ -1,12 +1,12 @@
 class ItemJs
-  def self.get_lack_js(item_id)
-    return "#{Rails.application.config.assets.prefix}/item/#{Item.find(item_id).src_name}"
+  def self.get_lack_js(src_name)
+    return "#{Rails.application.config.assets.prefix}/item/#{src_name}"
   end
 
   def self.item_contents(item_id)
     item_action_events = ItemActionEvent.joins(:item).where('items.id = ?', item_id)
                              .joins(:locales).merge(Locale.available)
-                             .select('item_action_events.*, localize_item_action_events.options as l_options, items.css_temp as item_css_temp')
+                             .select('item_action_events.*, localize_item_action_events.options as l_options, items.src_name as item_src_name, items.css_temp as item_css_temp')
 
     # optionsをJsonString→HashArrayに変更
     item_action_events.each do |c|
