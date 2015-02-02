@@ -21,13 +21,20 @@ class ItemState < ActiveRecord::Base
 
       # 必要なCSSテンプレートを読み込み
       if item_type_list.size > 0
+
         items = Item.where(id: item_type_list)
         item_type_list.sort.each do |item_type|
           item = items.find(item_type)
           if item != nil
             css_temp = item.css_temp
           end
-          item_js_list << {:item_type => item_type, :src => ItemJs.get_lack_js(item.src_name), :css_temp => css_temp}
+          item_js_list << {
+              :item_type => item_type,
+              :src => ItemJs.get_lack_js(item.src_name),
+              :css_temp => css_temp,
+              :te_actions => nil,
+              :te_values => nil
+          }
         end
       end
       if result.css_info != nil

@@ -33,13 +33,12 @@ class ItemJsController < ApplicationController
 
   end
 
-
   def timeline_config(te_action)
     @class_name = Const::ElementAttribute::TE_VALUES_CLASS
                       .sub(/@itemid/, te_action[:item_id].to_s)
                       .sub(/@methodname/, te_action[:method_name])
     @type = te_action.options['type']
-    render_to_string :layout => false
+    render_to_string :action => 'timeline_config', :layout => false
   end
 
 end

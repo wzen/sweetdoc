@@ -4,7 +4,7 @@ class ItemJs
   end
 
   def self.item_contents(item_id)
-    item_action_events = ItemActionEvent.joins(:item).where('items.id = ?', item_id)
+    item_action_events = ItemActionEvent.joins(:item).where(item_id: item_id)
                              .joins(:locales).merge(Locale.available)
                              .select('item_action_events.*, localize_item_action_events.options as l_options, items.src_name as item_src_name, items.css_temp as item_css_temp')
 

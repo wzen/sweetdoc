@@ -616,7 +616,7 @@ addTimelineEventContents = function(te_actions, te_values) {
     }
   }
   if (te_values != null) {
-    return te_values.appendTo($('#timeline-config .value_forms'));
+    return $(te_values).appendTo($('#timeline-config .value_forms'));
   }
 };
 
@@ -1009,12 +1009,13 @@ loadFromServer = function() {
           isWorkTable: true,
           css_temp: js.css_temp
         };
-        return availJs(getInitFuncName(js.item_type), js.src, option, function() {
+        availJs(getInitFuncName(js.item_type), js.src, option, function() {
           loadedCount += 1;
           if (loadedCount >= jsList.length) {
             return callback();
           }
         });
+        return addTimelineEventContents(js.te_actions, js.te_values);
       });
     },
     error: function(data) {

@@ -591,7 +591,7 @@ addTimelineEventContents = (te_actions, te_values) ->
       $("<div class='#{className}'><ul>#{li}</ul></div>").appendTo(action_forms)
 
   if te_values?
-    te_values.appendTo($('#timeline-config .value_forms'))
+    $(te_values).appendTo($('#timeline-config .value_forms'))
 
 # カラーピッカーの作成
 # @param [Object] element HTML要素
@@ -944,6 +944,7 @@ loadFromServer = ->
               # 全て読み込んだ後
               callback()
           )
+          addTimelineEventContents(js.te_actions, js.te_values)
         )
         #console.log(data.message)
 
