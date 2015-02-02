@@ -8,5 +8,4 @@ class WorktableController < ApplicationController
     @common_action_events = Worktable.init_common_events
   end
 
-
 end

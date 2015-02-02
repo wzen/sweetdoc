@@ -37,6 +37,13 @@ if gon?
       # @property [int] CHANGE_OPTION オプション変更
       @CHANGE_OPTION = constant.ItemActionType.CHANGE_OPTION
 
+    # アクションイベント種別
+    class @ActionEventType
+      # @property [Int] SCROLL スクロール
+      @SCROLL = constant.ActionEventType.SCROLL
+      # @property [Int] CLICK クリック
+      @CLICK = constant.ActionEventType.CLICK
+
     # 閲覧モードのチャプターアクション種類
     class @ActionEventChangeType
       # @property [Int] DRAW 描画

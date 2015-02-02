@@ -596,17 +596,27 @@ availJs = function(initName, jsSrc, option, callback) {
 };
 
 addTimelineEventContents = function(te_actions, te_values) {
-  var action_forms, className, emt;
+  var action_forms, className, li;
   if ((te_actions != null) && te_actions.length > 0) {
     className = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', te_actions[0].item_id);
     action_forms = $('#timeline-config .action_forms');
-    if (action_forms.find("." + className).length() === 0) {
-      te_actions.each(function(a) {});
-      emt = $("<div class='" + className + "'><ul></ul></div>");
+    if (action_forms.find("." + className).length === 0) {
+      li = "";
+      te_actions.forEach(function(a) {
+        var actionType;
+        actionType = null;
+        if (a.action_event_type_id === Constant.ActionEventType.SCROLL) {
+          actionType = "scroll";
+        } else if (a.action_event_type_id === Constant.ActionEventType.CLICK) {
+          actionType = "click";
+        }
+        return li += "<li class='method " + actionType + " " + a.method_name + "'>" + a.options['name'] + "</li>";
+      });
+      $("<div class='" + className + "'><ul>" + li + "</ul></div>").appendTo(action_forms);
     }
   }
   if (te_values != null) {
-
+    return te_values.appendTo($('#timeline-config .value_forms'));
   }
 };
 

@@ -51,6 +51,17 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ActionEventType = (function() {
+      function ActionEventType() {}
+
+      ActionEventType.SCROLL = constant.ActionEventType.SCROLL;
+
+      ActionEventType.CLICK = constant.ActionEventType.CLICK;
+
+      return ActionEventType;
+
+    })();
+
     Constant.ActionEventChangeType = (function() {
       function ActionEventChangeType() {}
 
