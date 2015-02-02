@@ -1,4 +1,4 @@
-json.js_src @js_src
-json.css_info @css_info
-json.te_actions @te_actions
-json.te_values @te_values
+json.js_src @index[:js_src]
+json.css_info @index[:css_info]
+json.te_actions @index[:te_actions]
+json.te_values @index[:te_values]

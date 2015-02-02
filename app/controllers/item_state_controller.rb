@@ -18,6 +18,6 @@ class ItemStateController < ApplicationController
   def load_itemstate
     user_id = params['user_id']
     loaded_item_type_list = JSON.parse(params['loaded_item_type_list'])
-    @item_state_list = ItemState.new.get_item_info_list(user_id, loaded_item_type_list)
+    @item_state_list = ItemJs.get_item_info_list(user_id, loaded_item_type_list)
   end
 end

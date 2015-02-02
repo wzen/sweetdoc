@@ -971,7 +971,8 @@ loadFromServer = function() {
     },
     dataType: "json",
     success: function(data) {
-      var callback, cssInfoList, jsList, loadedCount;
+      var callback, loadedCount, self;
+      self = this;
       callback = function() {
         var item, itemList, j, obj, _i, _len, _results;
         clearWorkTable();
@@ -991,31 +992,35 @@ loadFromServer = function() {
         }
         return _results;
       };
-      if (data.css_info_list != null) {
-        cssInfoList = JSON.parse(data.css_info_list);
-        cssInfoList.forEach(function(cssInfo) {
-          return $('#css_code_info').append(cssInfo);
-        });
-      }
-      jsList = JSON.parse(data.js_list);
-      if (jsList.length === 0) {
-        callback();
+      if (data.length === 0) {
+        callback.call(self);
         return;
       }
       loadedCount = 0;
-      return jsList.forEach(function(js) {
-        var option;
-        option = {
-          isWorkTable: true,
-          css_temp: js.css_temp
-        };
-        availJs(getInitFuncName(js.item_type), js.src, option, function() {
+      return data.forEach(function(d) {
+        var itemInitFuncName, option;
+        itemInitFuncName = getInitFuncName(d.item_id);
+        if (window.itemInitFuncList[itemInitFuncName] != null) {
+          window.itemInitFuncList[itemInitFuncName]();
           loadedCount += 1;
           if (loadedCount >= jsList.length) {
-            return callback();
+            callback.call(self);
+          }
+          return;
+        }
+        if (d.css_info != null) {
+          option = {
+            isWorkTable: true,
+            css_temp: d.css_info
+          };
+        }
+        availJs(itemInitFuncName, d.js_src, option, function() {
+          loadedCount += 1;
+          if (loadedCount >= jsList.length) {
+            return callback.call(self);
           }
         });
-        return addTimelineEventContents(js.te_actions, js.te_values);
+        return addTimelineEventContents(d.te_actions, d.te_values);
       });
     },
     error: function(data) {

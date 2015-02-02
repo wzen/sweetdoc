@@ -908,7 +908,7 @@ loadFromServer = ->
       }
       dataType: "json"
       success: (data)->
-
+        self = @
         # 全て読み込んだ後のコールバック
         callback = ->
           clearWorkTable()
@@ -923,30 +923,33 @@ loadFromServer = ->
             item.reDrawByMinimumObject(obj)
             setupEvents(item)
 
-        # CSS情報を設置
-        if data.css_info_list?
-          cssInfoList = JSON.parse(data.css_info_list)
-          cssInfoList.forEach((cssInfo)->
-            $('#css_code_info').append(cssInfo)
-          )
-
-        # JS読み込み
-        jsList = JSON.parse(data.js_list)
-        if jsList.length == 0
-          callback()
+        if data.length == 0
+          callback.call(self)
           return
+
         loadedCount = 0
-        jsList.forEach((js)->
-          option = {isWorkTable: true, css_temp: js.css_temp}
-          availJs( getInitFuncName(js.item_type), js.src, option, ->
+        data.forEach((d) ->
+          itemInitFuncName = getInitFuncName(d.item_id)
+          if window.itemInitFuncList[itemInitFuncName]?
+            # 既に読み込まれている場合はコールバックのみ実行
+            window.itemInitFuncList[itemInitFuncName]()
             loadedCount += 1
             if loadedCount >= jsList.length
               # 全て読み込んだ後
-              callback()
+              callback.call(self)
+            return
+
+          if d.css_info?
+            option = {isWorkTable: true, css_temp: d.css_info}
+
+          availJs(itemInitFuncName, d.js_src, option, ->
+            loadedCount += 1
+            if loadedCount >= jsList.length
+              # 全て読み込んだ後
+              callback.call(self)
           )
-          addTimelineEventContents(js.te_actions, js.te_values)
+          addTimelineEventContents(d.te_actions, d.te_values)
         )
-        #console.log(data.message)
 
       error: (data) ->
         console.log(data.message)
