@@ -934,7 +934,7 @@ loadFromServer = ->
             # 既に読み込まれている場合はコールバックのみ実行
             window.itemInitFuncList[itemInitFuncName]()
             loadedCount += 1
-            if loadedCount >= jsList.length
+            if loadedCount >= data.length
               # 全て読み込んだ後
               callback.call(self)
             return
@@ -944,7 +944,7 @@ loadFromServer = ->
 
           availJs(itemInitFuncName, d.js_src, option, ->
             loadedCount += 1
-            if loadedCount >= jsList.length
+            if loadedCount >= data.length
               # 全て読み込んだ後
               callback.call(self)
           )

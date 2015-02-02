@@ -1003,7 +1003,7 @@ loadFromServer = function() {
         if (window.itemInitFuncList[itemInitFuncName] != null) {
           window.itemInitFuncList[itemInitFuncName]();
           loadedCount += 1;
-          if (loadedCount >= jsList.length) {
+          if (loadedCount >= data.length) {
             callback.call(self);
           }
           return;
@@ -1016,7 +1016,7 @@ loadFromServer = function() {
         }
         availJs(itemInitFuncName, d.js_src, option, function() {
           loadedCount += 1;
-          if (loadedCount >= jsList.length) {
+          if (loadedCount >= data.length) {
             return callback.call(self);
           }
         });
