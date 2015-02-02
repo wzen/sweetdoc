@@ -601,16 +601,17 @@ addTimelineEventContents = function(te_actions, te_values) {
     className = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', te_actions[0].item_id);
     action_forms = $('#timeline-config .action_forms');
     if (action_forms.find("." + className).length === 0) {
-      li = "";
+      li = '';
       te_actions.forEach(function(a) {
-        var actionType;
+        var actionType, valueClassName;
         actionType = null;
         if (a.action_event_type_id === Constant.ActionEventType.SCROLL) {
           actionType = "scroll";
         } else if (a.action_event_type_id === Constant.ActionEventType.CLICK) {
           actionType = "click";
         }
-        return li += "<li class='method " + actionType + " " + a.method_name + "'>" + a.options['name'] + "</li>";
+        valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', a.item_id).replace('@methodname', a.method_name);
+        return li += "<li class='method " + actionType + " " + a.method_name + "'>\n  " + a.options['name'] + "\n  <input type='hidden' value='" + valueClassName + "'>\n</li>";
       });
       $("<div class='" + className + "'><ul>" + li + "</ul></div>").appendTo(action_forms);
     }
