@@ -2,7 +2,7 @@ class ItemJsController < ApplicationController
 
   def index
     item_id = params['itemId']
-    item_action_events = ItemJs.item_contents(item_id)
+    item_action_events = ItemJs.find_events_by_itemid(item_id)
     return if item_action_events.length == 0
 
     @index = ItemJs.suitable_data(item_action_events)
