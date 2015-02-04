@@ -1,9 +1,13 @@
 class ItemJs
 
+  # アイテムjsファイルのパスを取得
+  # @param [String] src_name ソースファイル名
   def self.js_path(src_name)
     return "#{Rails.application.config.assets.prefix}/item/#{src_name}"
   end
 
+  # item_action_eventレコードからタイムラインイベント用のアクション情報を取り出す
+  # @param [Array] item_action_events item_action_eventレコード配列
   def self.timeline_event_actions(item_action_events)
     return item_action_events.map do |d|
       {
@@ -15,6 +19,8 @@ class ItemJs
     end
   end
 
+  # item_action_eventのレコードからタイムラインイベント用のアクション値情報を取り出す
+  # @param [Array] item_action_events item_action_eventレコード配列
   def self.timeline_event_values(item_action_events)
     values = ''
     item_action_events.each do |d|
@@ -23,7 +29,9 @@ class ItemJs
     return values
   end
 
-  def self.item_contents(item_id)
+  # item_idからタイムラインイベントに必要なレコードを取得
+  # @param [Int] item_id アイテムID
+  def self.find_events_by_itemid(item_id)
     item_action_events = ItemActionEvent.joins(:item).where(item_id: item_id)
                              .joins(:locales).merge(Locale.available)
                              .select('item_action_events.*, localize_item_action_events.options as l_options, items.src_name as item_src_name, items.css_temp as item_css_temp')
@@ -44,7 +52,9 @@ class ItemJs
     return item_action_events
   end
 
-  def self.item_contents_by_itemids(item_ids)
+  # item_idの配列からタイムラインイベントに必要なレコードを取得
+  # @param [Array] item_ids アイテムIDの配列
+  def self.find_events_by_itemids(item_ids)
     item_action_events_all = ItemActionEvent.joins(:item).where(item_id: item_ids)
                              .joins(:locales).merge(Locale.available)
                              .select('item_action_events.*, localize_item_action_events.options as l_options, items.src_name as item_src_name, items.css_temp as item_css_temp')
@@ -87,7 +97,7 @@ class ItemJs
     # タイムライン コンフィグUI
     te_values = self.timeline_event_values(item_action_events)
 
-    return
+    ret =
     {
         item_id: item_action_events.first.item_id,
         js_src: js_src,
@@ -95,6 +105,7 @@ class ItemJs
         te_actions: te_actions,
         te_values: te_values
     }
+    return ret
   end
 
   def self.get_item_info_list(user_id, loaded_item_type_list)
@@ -114,7 +125,7 @@ class ItemJs
         end
       end
 
-      item_action_events_all = ItemJs.item_contents_by_itemids(item_type_list)
+      item_action_events_all = ItemJs.find_events_by_itemids(item_type_list)
       ret = []
       item_action_events_all.each do |item_action_events|
         ret << ItemJs.suitable_data(item_action_events)
