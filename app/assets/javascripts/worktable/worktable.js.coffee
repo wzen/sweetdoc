@@ -910,7 +910,7 @@ loadFromServer = ->
       type: "POST"
       data: {
         user_id: 0
-        loaded_item_type_list : JSON.stringify(loadedItemTypeList)
+        loaded_itemids : JSON.stringify(loadedItemTypeList)
       }
       dataType: "json"
       success: (data)->

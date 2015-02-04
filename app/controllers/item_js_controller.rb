@@ -5,7 +5,7 @@ class ItemJsController < ApplicationController
     item_action_events = ItemJs.find_events_by_itemid(item_id)
     return if item_action_events.length == 0
 
-    @index = ItemJs.suitable_data(item_action_events)
+    @index = ItemJs.extract_iae(item_action_events)
   end
 
   def timeline_config(te_action)

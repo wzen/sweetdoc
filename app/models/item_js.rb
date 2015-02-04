@@ -3,7 +3,7 @@ class ItemJs
   # アイテムjsファイルのパスを取得
   # @param [String] src_name ソースファイル名
   def self.js_path(src_name)
-    return "#{Rails.application.config.assets.prefix}/item/#{src_name}"
+    return "#{Rails.application.config.assets.prefix}/item_state/#{src_name}"
   end
 
   # item_action_eventレコードからタイムラインイベント用のアクション情報を取り出す
@@ -81,7 +81,9 @@ class ItemJs
     return item_action_events_all
   end
 
-  def self.suitable_data(item_action_events)
+  # item_action_eventから情報を抽出する
+  # @param [Array] item_action_events item_action_eventレコード配列
+  def self.extract_iae(item_action_events)
     # JSファイル取得
     js_src = self.js_path(item_action_events.first.item_src_name)
 
@@ -108,7 +110,7 @@ class ItemJs
     return ret
   end
 
-  def self.get_item_info_list(user_id, loaded_item_type_list)
+  def self.get_user_iae_infos(user_id, loaded_itemids)
     result = ItemState.where(:user_id => user_id).order(id: :desc).first
     item_js_list = []
     if result == nil
@@ -116,19 +118,19 @@ class ItemJs
       return nil
     else
       message = I18n.t('message.database.item_state.load.success')
-      item_list = JSON.parse(result.state)
-      item_type_list = []
-      item_list.each do |item|
-        item_type = item['obj']['itemType']
-        unless loaded_item_type_list.include?(item_type)
-          item_type_list << item_type
+      item_states = JSON.parse(result.state)
+      itemids = []
+      item_states.each do |item_state|
+        item_type = item_state['obj']['itemType']
+        unless loaded_itemids.include?(item_type)
+          itemids << item_type
         end
       end
 
-      item_action_events_all = ItemJs.find_events_by_itemids(item_type_list)
+      item_action_events_all = ItemJs.find_events_by_itemids(itemids)
       ret = []
       item_action_events_all.each do |item_action_events|
-        ret << ItemJs.suitable_data(item_action_events)
+        ret << ItemJs.extract_iae(item_action_events)
       end
 
       return ret
