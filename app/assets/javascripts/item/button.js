@@ -79,7 +79,7 @@ ButtonItem = (function(_super) {
     }
   };
 
-  ButtonItem.prototype.generateMinimumObject = function() {
+  ButtonItem.prototype.getMinimumObject = function() {
     var obj;
     obj = {
       id: makeClone(this.id),
@@ -160,9 +160,9 @@ if (window.worktablePage != null) {
       this.cssStyle = null;
     }
 
-    WorkTableButtonItem.prototype.generateMinimumObject = function() {
+    WorkTableButtonItem.prototype.getMinimumObject = function() {
       var obj;
-      obj = WorkTableButtonItem.__super__.generateMinimumObject.call(this);
+      obj = WorkTableButtonItem.__super__.getMinimumObject.call(this);
       obj.css = this.cssRoot[0].outerHTML;
       return obj;
     };
@@ -186,7 +186,6 @@ if (window.worktablePage != null) {
       this.cssStyle = $(".css-style", this.cssRoot);
       this.cssStyle.text(this.cssCode.text());
       this.makeDesignConfig();
-      this.updateTimelineEventSelect();
       return true;
     };
 

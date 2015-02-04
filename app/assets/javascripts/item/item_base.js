@@ -100,6 +100,7 @@ ItemBase = (function(_super) {
       this.name = this.constructor.IDENTITY + (" " + num);
       itemObjectList.push(this);
     }
+    this.setAllItemPropToPageValue();
     return console.log('save obj:' + JSON.stringify(this.itemSize));
   };
 
@@ -110,7 +111,7 @@ ItemBase = (function(_super) {
     }
     prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    obj = this.generateMinimumObject();
+    obj = this.getMinimumObject();
     return setPageValue(prefix_key, obj);
   };
 
@@ -155,7 +156,7 @@ ItemBase = (function(_super) {
 
   ItemBase.prototype.setHistoryObj = function(historyObj) {};
 
-  ItemBase.prototype.generateMinimumObject = function() {};
+  ItemBase.prototype.getMinimumObject = function() {};
 
   ItemBase.prototype.reDrawByMinimumObject = function(obj) {};
 

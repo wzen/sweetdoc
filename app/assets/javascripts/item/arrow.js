@@ -116,11 +116,10 @@ ArrowItem = (function(_super) {
     if (show) {
       this.drawNewCanvas();
     }
-    this.makeDesignConfig();
-    return this.updateTimelineEventSelect();
+    return this.makeDesignConfig();
   };
 
-  ArrowItem.prototype.generateMinimumObject = function() {
+  ArrowItem.prototype.getMinimumObject = function() {
     var obj;
     obj = {
       id: makeClone(this.id),

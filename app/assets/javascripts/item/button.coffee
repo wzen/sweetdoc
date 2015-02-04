@@ -58,7 +58,7 @@ class ButtonItem extends CssItemBase
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
-  generateMinimumObject: ->
+  getMinimumObject: ->
     obj = {
       id: makeClone(@id)
       name: makeClone(@name)
@@ -177,7 +177,7 @@ if window.worktablePage?
 
     # ストレージとDB保存用の最小限のデータを取得
     # @return [Array] アイテムオブジェクトの最小限データ
-    generateMinimumObject: ->
+    getMinimumObject: ->
       obj = super()
       obj.css = @cssRoot[0].outerHTML
       return obj
@@ -203,8 +203,6 @@ if window.worktablePage?
 
       # コンフィグ作成
       @makeDesignConfig()
-      # タイムラインイベント更新
-      @updateTimelineEventSelect()
 
       return true
 

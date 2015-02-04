@@ -105,7 +105,7 @@ class SimpleArrowItem extends ItemBase
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
-  generateMinimumObject: ->
+  getMinimumObject: ->
     obj = {
       itemType: Constant.ItemType.ARROW
       a: @itemSize

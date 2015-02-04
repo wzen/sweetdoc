@@ -126,12 +126,10 @@ class ArrowItem extends CanvasItemBase
 
     # コンフィグ作成
     @makeDesignConfig()
-    # タイムラインイベント更新
-    @updateTimelineEventSelect()
 
-  # ストレージとDB保存用の最小限のデータを取得
+  # アイテムの最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
-  generateMinimumObject: ->
+  getMinimumObject: ->
     obj = {
       id: makeClone(@id)
       name: makeClone(@name)

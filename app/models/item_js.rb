@@ -3,7 +3,7 @@ class ItemJs
   # アイテムjsファイルのパスを取得
   # @param [String] src_name ソースファイル名
   def self.js_path(src_name)
-    return "#{Rails.application.config.assets.prefix}/item_state/#{src_name}"
+    return "#{Rails.application.config.assets.prefix}/item/#{src_name}"
   end
 
   # item_action_eventレコードからタイムラインイベント用のアクション情報を取り出す
@@ -110,6 +110,9 @@ class ItemJs
     return ret
   end
 
+  # ユーザの保存データを読み込む
+  # @param [String] user_id ユーザID
+  # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
   def self.get_user_iae_infos(user_id, loaded_itemids)
     result = ItemState.where(:user_id => user_id).order(id: :desc).first
     item_js_list = []

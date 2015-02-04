@@ -116,6 +116,9 @@ class ItemBase extends Extend
       @name = @constructor.IDENTITY + " #{num}"
       # アイテムリストに保存
       itemObjectList.push(@)
+
+    # ページに保存
+    @setAllItemPropToPageValue()
     console.log('save obj:' + JSON.stringify(@itemSize))
 
   # アイテムの情報をページ値に保存
@@ -123,7 +126,7 @@ class ItemBase extends Extend
   setAllItemPropToPageValue: (isCache = false)->
     prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
-    obj = @generateMinimumObject()
+    obj = @getMinimumObject()
     setPageValue(prefix_key, obj)
 
   # アイテムをページ値から再描画
@@ -146,7 +149,7 @@ class ItemBase extends Extend
     prefix_key = prefix_key.replace('@id', @id)
     return getPageValue(prefix_key + ":#{prop}")
 
-  # アイテムの情報をページ値から取得
+  # アイテムの情報をページ値に設定
   # @property [String] prop 変数名
   # @property [Object] value 値
   # @property [Boolean] isCache キャッシュとして保存するか
@@ -167,7 +170,7 @@ class ItemBase extends Extend
 
   # 保存用の最小限のデータを取得
   # @abstract
-  generateMinimumObject: ->
+  getMinimumObject: ->
 
   # 最小限のデータからアイテムを描画
   # @abstract

@@ -12,9 +12,6 @@ WorkTableCommonExtend =
     $('#design-config').css('display', '')
     $('#' + @getDesignConfigId()).css('display', '')
 
-  # タイムラインイベントの選択内容を更新
-  updateTimelineEventSelect: ->
-
 # CSS
 WorkTableCssItemExtend =
   # デザイン変更コンフィグを作成
@@ -185,7 +182,6 @@ initHandwrite = ->
     setupEvents(item)
     changeMode(Constant.Mode.EDIT)
     item.saveObj(Constant.ItemActionType.MAKE)
-    item.setAllItemPropToPageValue()
     zindex += 1
 
   # 手書きイベントを設定
@@ -881,7 +877,7 @@ saveToServer = ->
   itemObjectList.forEach((obj) ->
     j = {
       id: makeClone(obj.id)
-      obj: obj.generateMinimumObject()
+      obj: obj.getMinimumObject()
     }
     jsonList.push(j)
   )
@@ -1119,7 +1115,7 @@ setupTimeLineObjects = ->
     obj = {
       chapter: 1
       screen: 1
-      miniObj: item.generateMinimumObject()
+      miniObj: item.getMinimumObject()
       itemSize: item.itemSize
       sEvent: "scrollDraw"
       cEvent: "defaultClick"
