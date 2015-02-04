@@ -1015,6 +1015,50 @@ setupTimelineEvents = ->
 
   # イベント初期化
   initEvents = (e) ->
+    ieSelf = @
+
+    # アイテム選択メニューを更新
+    updateSelectItemMenu = ->
+      teItemSelects = $('#timeline-config .te_item_select')
+      teItemSelect = teItemSelects[0]
+      selectOptions = ''
+      items = $('#page_values .item')
+      items.forEach((item) ->
+        id = item.find('input.id')
+        name = item.find('input.name')
+        selectOptions += "<options value='#{id}'>#{name}</options>"
+      )
+      teItemSelects.each((teItemSelect) ->
+        teItemSelect.find('options').each( (options) ->
+          if options.val().indexOf('c_') != 0
+            options.remove()
+        )
+        teItemSelect.append(selectOptions)
+      )
+
+    # アイテム選択イベント
+    selectItem = (e) ->
+      emt = $(e).parents('.event')
+      v = $(e).val()
+      d = null
+      if v.indexOf('c_') == 0
+        # 共通 → 変更値を表示
+        d = "values_div"
+      else
+        # アイテム → アクション名一覧を表示
+        d = "action_div"
+      # フォーカス
+
+
+      $(".config.te_div", emt).css('display', 'none')
+      $(".#{d} .forms", emt).children("div").css('display', 'none')
+      $(".#{d} .#{v}", emt).css('display', '')
+      $(".#{d}", emt).css('display', '')
+
+    # アクション名選択イベント
+    selectAction = (e) ->
+      emt = $(e).parents('.event')
+
     if $(e).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
       return
@@ -1032,12 +1076,15 @@ setupTimelineEvents = ->
       emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId)
       $('#timeline-config').append(emt)
 
+    # アイテム選択メニュー更新
+    updateSelectItemMenu.call(ieSelf)
+
     # JSイベントの追加
     do =>
       em = $('.te_item_select', emt)
       em.off('change')
       em.on('change', (e) ->
-        timelineItemSelect(@)
+        selectItem.call(ieSelf, @)
       )
       em = $('.push.button.cancel', emt)
       em.off('click')
@@ -1079,30 +1126,6 @@ setupTimelineEvents = ->
     stop: (event, ui) ->
       # イベントのソート番号を更新
   })
-
-# タイムライン アイテム選択イベント
-timelineItemSelect = (e) ->
-  emt = $(e).parents('.event')
-  v = $(e).val()
-  d = null
-  if v.indexOf('c_') == 0
-    # 共通 → 変更値を表示
-    d = "values_div"
-  else
-    # アイテム → アクション名一覧を表示
-    d = "action_div"
-    # フォーカス
-
-
-  $(".config.te_div", emt).css('display', 'none')
-  $(".#{d} .forms", emt).children("div").css('display', 'none')
-  $(".#{d} .#{v}", emt).css('display', '')
-  $(".#{d}", emt).css('display', '')
-
-# タイムライン アクション名選択イベント
-timelineActionSelect = (e) ->
-  emt = $(e).parents('.event')
-
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->
