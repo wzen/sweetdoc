@@ -609,7 +609,7 @@ addTimelineEventContents = function(te_actions, te_values) {
           actionType = "click";
         }
         valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', a.item_id).replace('@methodname', a.method_name);
-        return li += "<li class='method " + actionType + " " + a.method_name + "'>\n  " + a.options['name'] + "\n  <input type='hidden' value='" + valueClassName + "'>\n</li>";
+        return li += "<li class='push method " + actionType + " " + a.method_name + "'>\n  " + a.options['name'] + "\n  <input type='hidden' value='" + valueClassName + "'>\n</li>";
       });
       $("<div class='" + className + "'><ul>" + li + "</ul></div>").appendTo(action_forms);
     }
@@ -1123,10 +1123,9 @@ setupTimelineEvents = function() {
       }
       $(".config.te_div", emt).css('display', 'none');
       $("." + d + " .forms", emt).children("div").css('display', 'none');
-      $("." + d + " ." + v, emt).css('display', '');
-      $("." + d, emt).css('display', '');
       teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
-      return $("." + teActionClassName, emt).css('display', '');
+      $("." + teActionClassName, emt).css('display', '');
+      return $("." + d, emt).css('display', '');
     };
     selectAction = function(e) {
       var emt;

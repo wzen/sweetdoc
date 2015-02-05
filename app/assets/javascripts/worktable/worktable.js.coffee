@@ -583,7 +583,7 @@ addTimelineEventContents = (te_actions, te_values) ->
           actionType = "click"
         valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', a.item_id).replace('@methodname', a.method_name)
         li += """
-          <li class='method #{actionType} #{a.method_name}'>
+          <li class='push method #{actionType} #{a.method_name}'>
             #{a.options['name']}
             <input type='hidden' value='#{valueClassName}'>
           </li>
@@ -1059,10 +1059,9 @@ setupTimelineEvents = ->
 
       $(".config.te_div", emt).css('display', 'none')
       $(".#{d} .forms", emt).children("div").css('display', 'none')
-      $(".#{d} .#{v}", emt).css('display', '')
-      $(".#{d}", emt).css('display', '')
       teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
       $(".#{teActionClassName}", emt).css('display', '')
+      $(".#{d}", emt).css('display', '')
 
     # アクション名選択イベント
     selectAction = (e) ->

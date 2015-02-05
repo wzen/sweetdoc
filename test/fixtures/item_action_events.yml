@@ -4,6 +4,11 @@ one:
   action_event_type_id: 1
   action_event_change_type_id: 1
   method_name: defaultClick
+  options: |
+            {
+              "id": "defaultClick",
+              "name": "Default Click Action"
+            }
 
 two:
   id: 2
@@ -11,11 +16,16 @@ two:
   action_event_type_id: 0
   action_event_change_type_id: 0
   method_name: scrollDraw
+  options: |
+            {
+              "id": "drawScroll",
+              "name": "Draw by Scroll"
+            }
 
 three:
   id: 3
   item_id: 1
-  action_event_type_id: 1
+  action_event_type_id: 0
   action_event_change_type_id: 1
   method_name: changeColorScroll
   options: |
@@ -28,12 +38,12 @@ three:
 four:
   id: 4
   item_id: 2
-  action_event_type_id: 0
+  action_event_type_id: 1
   action_event_change_type_id: 0
   method_name: changeColorClick
   options: |
             {
-              "id": "changeColorClickl_Design",
+              "id": "changeColorClick_Design",
               "type": "DESIGN",
               "name": "Change Color by Click"
             }
