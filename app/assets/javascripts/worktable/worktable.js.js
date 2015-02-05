@@ -1093,19 +1093,19 @@ setupTimelineEvents = function() {
       teItemSelect = teItemSelects[0];
       selectOptions = '';
       items = $('#page_values .item');
-      items.forEach(function(item) {
+      items.each(function() {
         var id, name;
-        id = item.find('input.id');
-        name = item.find('input.name');
-        return selectOptions += "<options value='" + id + "'>" + name + "</options>";
+        id = $(this).find('input.id').val();
+        name = $(this).find('input.name').val();
+        return selectOptions += "<option value='" + id + "'>" + name + "</option>";
       });
-      return teItemSelects.each(function(teItemSelect) {
-        teItemSelect.find('options').each(function(options) {
-          if (options.val().indexOf('c_') !== 0) {
-            return options.remove();
+      return teItemSelects.each(function() {
+        $(this).find('option').each(function() {
+          if ($(this).val().length > 0 && $(this).val().indexOf('c_') !== 0) {
+            return $(this).remove();
           }
         });
-        return teItemSelect.append(selectOptions);
+        return $(this).append($(selectOptions));
       });
     };
     selectItem = function(e) {

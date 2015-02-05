@@ -1023,17 +1023,17 @@ setupTimelineEvents = ->
       teItemSelect = teItemSelects[0]
       selectOptions = ''
       items = $('#page_values .item')
-      items.forEach((item) ->
-        id = item.find('input.id')
-        name = item.find('input.name')
-        selectOptions += "<options value='#{id}'>#{name}</options>"
+      items.each( ->
+        id = $(@).find('input.id').val()
+        name = $(@).find('input.name').val()
+        selectOptions += "<option value='#{id}'>#{name}</option>"
       )
-      teItemSelects.each((teItemSelect) ->
-        teItemSelect.find('options').each( (options) ->
-          if options.val().indexOf('c_') != 0
-            options.remove()
+      teItemSelects.each( ->
+        $(@).find('option').each( ->
+          if $(@).val().length > 0 && $(@).val().indexOf('c_') != 0
+            $(@).remove()
         )
-        teItemSelect.append(selectOptions)
+        $(@).append($(selectOptions))
       )
 
     # アイテム選択イベント
