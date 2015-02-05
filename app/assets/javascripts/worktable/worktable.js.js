@@ -1094,10 +1094,11 @@ setupTimelineEvents = function() {
       selectOptions = '';
       items = $('#page_values .item');
       items.each(function() {
-        var id, name;
+        var id, itemType, name;
         id = $(this).find('input.id').val();
         name = $(this).find('input.name').val();
-        return selectOptions += "<option value='" + id + "'>" + name + "</option>";
+        itemType = $(this).find('input.itemType').val();
+        return selectOptions += "<option value='" + id + "&" + itemType + "'>\n  " + name + "\n</option>";
       });
       return teItemSelects.each(function() {
         $(this).find('option').each(function() {
@@ -1109,9 +1110,11 @@ setupTimelineEvents = function() {
       });
     };
     selectItem = function(e) {
-      var d, emt, v;
+      var d, emt, i, teActionClassName, v, values;
       emt = $(e).parents('.event');
-      v = $(e).val();
+      values = $(e).val().split('&');
+      v = values[0];
+      i = values[1];
       d = null;
       if (v.indexOf('c_') === 0) {
         d = "values_div";
@@ -1121,7 +1124,9 @@ setupTimelineEvents = function() {
       $(".config.te_div", emt).css('display', 'none');
       $("." + d + " .forms", emt).children("div").css('display', 'none');
       $("." + d + " ." + v, emt).css('display', '');
-      return $("." + d, emt).css('display', '');
+      $("." + d, emt).css('display', '');
+      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
+      return $("." + teActionClassName, emt).css('display', '');
     };
     selectAction = function(e) {
       var emt;

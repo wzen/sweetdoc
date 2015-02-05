@@ -1026,7 +1026,12 @@ setupTimelineEvents = ->
       items.each( ->
         id = $(@).find('input.id').val()
         name = $(@).find('input.name').val()
-        selectOptions += "<option value='#{id}'>#{name}</option>"
+        itemType = $(@).find('input.itemType').val()
+        selectOptions += """
+          <option value='#{id}&#{itemType}'>
+            #{name}
+          </option>
+        """
       )
       teItemSelects.each( ->
         $(@).find('option').each( ->
@@ -1039,7 +1044,9 @@ setupTimelineEvents = ->
     # アイテム選択イベント
     selectItem = (e) ->
       emt = $(e).parents('.event')
-      v = $(e).val()
+      values = $(e).val().split('&')
+      v = values[0]
+      i = values[1]
       d = null
       if v.indexOf('c_') == 0
         # 共通 → 変更値を表示
@@ -1054,6 +1061,8 @@ setupTimelineEvents = ->
       $(".#{d} .forms", emt).children("div").css('display', 'none')
       $(".#{d} .#{v}", emt).css('display', '')
       $(".#{d}", emt).css('display', '')
+      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
+      $(".#{teActionClassName}", emt).css('display', '')
 
     # アクション名選択イベント
     selectAction = (e) ->
