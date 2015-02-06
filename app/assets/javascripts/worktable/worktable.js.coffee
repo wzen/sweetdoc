@@ -581,11 +581,11 @@ addTimelineEventContents = (te_actions, te_values) ->
           actionType = "scroll"
         else if a.action_event_type_id == Constant.ActionEventType.CLICK
           actionType = "click"
-        valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', a.item_id).replace('@methodname', a.method_name)
         li += """
           <li class='push method #{actionType} #{a.method_name}'>
             #{a.options['name']}
-            <input type='hidden' value='#{valueClassName}'>
+            <input class='item_id' type='hidden' value='#{a.item_id}' >
+            <input class='method_name' type='hidden' value='#{a.method_name}'>
           </li>
         """
       )
@@ -1056,16 +1056,21 @@ setupTimelineEvents = ->
         d = "action_div"
       # フォーカス
 
-
+      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
       $(".config.te_div", emt).css('display', 'none')
       $(".#{d} .forms", emt).children("div").css('display', 'none')
-      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
       $(".#{teActionClassName}", emt).css('display', '')
       $(".#{d}", emt).css('display', '')
 
     # アクション名選択イベント
     selectAction = (e) ->
       emt = $(e).parents('.event')
+      item_id = $(e).find('input.item_id')
+      method_name = $(e).find('input.method_name')
+      valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name)
+      $(".values_div .forms", emt).children("div").css('display', 'none')
+      $(".#{valueClassName}", emt).css('display', '')
+      $(".config.values_div", emt).css('display', '')
 
     if $(e).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
@@ -1073,7 +1078,6 @@ setupTimelineEvents = ->
 
     setSelectedBorder(e, "timeline")
     switchSidebarConfig("timeline")
-    $(".config.te_div", emt).css('display', 'none')
 
     # イベントメニューの存在チェック
     te_num = $(e).find('input.te_num').val()
@@ -1093,6 +1097,11 @@ setupTimelineEvents = ->
       em.off('change')
       em.on('change', (e) ->
         selectItem.call(ieSelf, @)
+      )
+      em = $('.action_forms li', emt)
+      em.off('click')
+      em.on('click', (e) ->
+        selectAction.call(ieSelf, @)
       )
       em = $('.push.button.cancel', emt)
       em.off('click')

@@ -601,15 +601,14 @@ addTimelineEventContents = function(te_actions, te_values) {
     if (action_forms.find("." + className).length === 0) {
       li = '';
       te_actions.forEach(function(a) {
-        var actionType, valueClassName;
+        var actionType;
         actionType = null;
         if (a.action_event_type_id === Constant.ActionEventType.SCROLL) {
           actionType = "scroll";
         } else if (a.action_event_type_id === Constant.ActionEventType.CLICK) {
           actionType = "click";
         }
-        valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', a.item_id).replace('@methodname', a.method_name);
-        return li += "<li class='push method " + actionType + " " + a.method_name + "'>\n  " + a.options['name'] + "\n  <input type='hidden' value='" + valueClassName + "'>\n</li>";
+        return li += "<li class='push method " + actionType + " " + a.method_name + "'>\n  " + a.options['name'] + "\n  <input class='item_id' type='hidden' value='" + a.item_id + "' >\n  <input class='method_name' type='hidden' value='" + a.method_name + "'>\n</li>";
       });
       $("<div class='" + className + "'><ul>" + li + "</ul></div>").appendTo(action_forms);
     }
@@ -1121,22 +1120,27 @@ setupTimelineEvents = function() {
       } else {
         d = "action_div";
       }
+      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
       $(".config.te_div", emt).css('display', 'none');
       $("." + d + " .forms", emt).children("div").css('display', 'none');
-      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
       $("." + teActionClassName, emt).css('display', '');
       return $("." + d, emt).css('display', '');
     };
     selectAction = function(e) {
-      var emt;
-      return emt = $(e).parents('.event');
+      var emt, item_id, method_name, valueClassName;
+      emt = $(e).parents('.event');
+      item_id = $(e).find('input.item_id');
+      method_name = $(e).find('input.method_name');
+      valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
+      $(".values_div .forms", emt).children("div").css('display', 'none');
+      $("." + valueClassName, emt).css('display', '');
+      return $(".config.values_div", emt).css('display', '');
     };
     if ($(e).is('.ui-sortable-helper')) {
       return;
     }
     setSelectedBorder(e, "timeline");
     switchSidebarConfig("timeline");
-    $(".config.te_div", emt).css('display', 'none');
     te_num = $(e).find('input.te_num').val();
     eId = Constant.ElementAttribute.TE_ITEM_ROOT_ID.replace('@te_num', te_num);
     emt = $('#' + eId);
@@ -1152,6 +1156,11 @@ setupTimelineEvents = function() {
         em.off('change');
         em.on('change', function(e) {
           return selectItem.call(ieSelf, this);
+        });
+        em = $('.action_forms li', emt);
+        em.off('click');
+        em.on('click', function(e) {
+          return selectAction.call(ieSelf, this);
         });
         em = $('.push.button.cancel', emt);
         em.off('click');
