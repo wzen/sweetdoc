@@ -1129,8 +1129,8 @@ setupTimelineEvents = function() {
     selectAction = function(e) {
       var emt, item_id, method_name, valueClassName;
       emt = $(e).parents('.event');
-      item_id = $(e).find('input.item_id');
-      method_name = $(e).find('input.method_name');
+      item_id = $(e).find('input.item_id').val();
+      method_name = $(e).find('input.method_name').val();
       valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
       $(".values_div .forms", emt).children("div").css('display', 'none');
       $("." + valueClassName, emt).css('display', '');
