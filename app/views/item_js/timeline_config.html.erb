@@ -1,11 +1,15 @@
 <div class="<%= @class_name %>" style="display:none;">
-    <% if @type == Const::ItemActionOptionType::INTEGER %>
-        <%= render 'worktable/sidebar_menu/timeline/parts/sidebar' %>
-    <% elsif @type == Const::ItemActionOptionType::STRING %>
-        <%= render 'worktable/sidebar_menu/timeline/parts/textbox' %>
-    <% elsif @type == Const::ItemActionOptionType::COLOR %>
-        <%= render 'worktable/sidebar_menu/timeline/parts/color' %>
-    <% elsif @type == Const::ItemActionOptionType::DESIGN %>
-        <%= render 'worktable/sidebar_menu/timeline/parts/design' %>
+    <% if @args %>
+        <% @args.each do |k, v| %>
+            <% if v['type'] == Const::ItemActionOptionType::INTEGER %>
+                <%= render 'worktable/sidebar_menu/timeline/parts/sidebar' %>
+            <% elsif v['type'] == Const::ItemActionOptionType::STRING %>
+                <%= render 'worktable/sidebar_menu/timeline/parts/textbox' %>
+            <% elsif v['type'] == Const::ItemActionOptionType::COLOR %>
+                <%= render 'worktable/sidebar_menu/timeline/parts/color' %>
+            <% elsif v['type'] == Const::ItemActionOptionType::DESIGN %>
+                <%= render 'worktable/sidebar_menu/timeline/parts/design' %>
+            <% end %>
+        <% end %>
     <% end %>
 </div>

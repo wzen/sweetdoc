@@ -52,7 +52,7 @@ WorkTableCssItemExtend =
 
 # Canvas
 WorkTableCanvasItemExtend =
-# デザイン変更コンフィグを作成
+  # デザイン変更コンフィグを作成
   makeDesignConfig: ->
     @designConfigRoot = $('#' + @getDesignConfigId())
     if !@designConfigRoot? || @designConfigRoot.length == 0
