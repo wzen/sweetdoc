@@ -681,8 +681,11 @@ openConfigSidebar = function(target, selectedBorderType) {
   }
 };
 
-closeSidebar = function() {
+closeSidebar = function(callback) {
   var main;
+  if (callback == null) {
+    callback = null;
+  }
   main = $('#main');
   if (!isClosedConfigSidebar()) {
     return $('#sidebar').fadeOut('1000', function() {
@@ -696,7 +699,11 @@ closeSidebar = function() {
           return removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
         });
       }
-      main.switchClass('col-md-9', 'col-md-12', 500, 'swing');
+      main.switchClass('col-md-9', 'col-md-12', 500, 'swing', function() {
+        if (callback != null) {
+          return callback();
+        }
+      });
       return $('.sidebar-config').css('display', 'none');
     });
   }
@@ -1165,7 +1172,9 @@ setupTimelineEvents = function() {
         em = $('.push.button.cancel', emt);
         em.off('click');
         return em.on('click', function(e) {
-          return closeSidebar();
+          return closeSidebar(function() {
+            return $(".config.te_div", emt).css('display', 'none');
+          });
         });
       });
     })(this)();

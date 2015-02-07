@@ -656,7 +656,7 @@ openConfigSidebar = (target = null, selectedBorderType = "edit") ->
       focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
 # サイドバーをクローズ
-closeSidebar = ->
+closeSidebar = (callback = null) ->
   main = $('#main')
   if !isClosedConfigSidebar()
     $('#sidebar').fadeOut('1000', ->
@@ -665,7 +665,10 @@ closeSidebar = ->
         scrollContents.animate({scrollTop: s.top, scrollLeft: s.left}, 500, null, ->
           removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
         )
-      main.switchClass('col-md-9', 'col-md-12', 500, 'swing')
+      main.switchClass('col-md-9', 'col-md-12', 500, 'swing', ->
+        if callback?
+          callback()
+      )
       $('.sidebar-config').css('display', 'none')
     )
 
@@ -1106,7 +1109,9 @@ setupTimelineEvents = ->
       em = $('.push.button.cancel', emt)
       em.off('click')
       em.on('click', (e) ->
-        closeSidebar()
+        closeSidebar( ->
+          $(".config.te_div", emt).css('display', 'none')
+        )
       )
 
     # イベントメニューの表示
