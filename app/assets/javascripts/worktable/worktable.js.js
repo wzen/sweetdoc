@@ -1099,7 +1099,7 @@ setupTimelineEvents = function() {
       teItemSelect = teItemSelects[0];
       selectOptions = '';
       items = $('#page_values .item');
-      items.each(function() {
+      items.children().each(function() {
         var id, itemType, name;
         id = $(this).find('input.id').val();
         name = $(this).find('input.name').val();

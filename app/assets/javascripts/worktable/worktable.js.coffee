@@ -1026,7 +1026,7 @@ setupTimelineEvents = ->
       teItemSelect = teItemSelects[0]
       selectOptions = ''
       items = $('#page_values .item')
-      items.each( ->
+      items.children().each( ->
         id = $(@).find('input.id').val()
         name = $(@).find('input.name').val()
         itemType = $(@).find('input.itemType').val()

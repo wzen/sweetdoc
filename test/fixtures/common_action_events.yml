@@ -9,9 +9,12 @@ one:
             {
               "id": "changeBackground",
               "name": "Change Background",
-              "type": "BACKGROUND",
               "color": "ChangeBackgroundColor",
-              "grid": "ShowGrid"
+              "grid": "ShowGrid",
+              "arg1": {
+                "type": "BACKGROUND",
+                "arg_name": "changeColorParam"
+              }
             }
 
 two:
@@ -30,5 +33,9 @@ two:
               "minValue": 0,
               "maxValue": 10,
               "minValueName": "Min",
-              "maxValueName": "Max"
+              "maxValueName": "Max",
+              "arg1": {
+                "type": "ZOOM",
+                "arg_name": "zoomParam"
+              }
             }

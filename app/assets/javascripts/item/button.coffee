@@ -203,7 +203,7 @@ if window.worktablePage?
 
       # コンフィグ作成
       @makeDesignConfig()
-
+      
       return true
 
     # CSSボタンコントロール初期化
