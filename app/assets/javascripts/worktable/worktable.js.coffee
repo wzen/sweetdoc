@@ -1046,6 +1046,9 @@ setupTimelineEvents = ->
 
     # アイテム選択イベント
     selectItem = (e) ->
+      # 選択枠消去
+      clearSelectedBorder()
+
       emt = $(e).parents('.event')
       values = $(e).val().split('&')
       v = values[0]
@@ -1057,7 +1060,11 @@ setupTimelineEvents = ->
       else
         # アイテム → アクション名一覧を表示
         d = "action_div"
-      # フォーカス
+        vEmt = $('#' + v)
+        # 選択枠設定
+        setSelectedBorder(vEmt, 'timeline')
+        # フォーカス
+        focusToTarget(vEmt)
 
       teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
       $(".config.te_div", emt).css('display', 'none')

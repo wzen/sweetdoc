@@ -1116,7 +1116,8 @@ setupTimelineEvents = function() {
       });
     };
     selectItem = function(e) {
-      var d, emt, i, teActionClassName, v, values;
+      var d, emt, i, teActionClassName, v, vEmt, values;
+      clearSelectedBorder();
       emt = $(e).parents('.event');
       values = $(e).val().split('&');
       v = values[0];
@@ -1126,6 +1127,9 @@ setupTimelineEvents = function() {
         d = "values_div";
       } else {
         d = "action_div";
+        vEmt = $('#' + v);
+        setSelectedBorder(vEmt, 'timeline');
+        focusToTarget(vEmt);
       }
       teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
       $(".config.te_div", emt).css('display', 'none');
