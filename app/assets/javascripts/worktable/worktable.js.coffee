@@ -1075,6 +1075,7 @@ setupTimelineEvents = ->
       $(".#{d} .forms", emt).children("div").css('display', 'none')
       $(".#{teActionClassName}", emt).css('display', '')
       $(".#{d}", emt).css('display', '')
+      $("<input type='hidden' class='obj_id', value='#{v}'>").appendTo($('values', emt))
 
     # アクション名選択イベント
     selectAction = (e) ->
@@ -1085,13 +1086,15 @@ setupTimelineEvents = ->
       $(".values_div .forms", emt).children("div").css('display', 'none')
       $(".#{valueClassName}", emt).css('display', '')
       $(".config.values_div", emt).css('display', '')
+      $("<input type='hidden' class='item_id', value='#{item_id}'>").appendTo($('values', emt))
+      $("<input type='hidden' class='method_name', value='#{method_name}'>").appendTo($('values', emt))
 
-    # アクションを初期化する
+    # イベントの入力値を初期化する
     resetAction = (e) ->
       emt = $(e).parents('.event')
-      $('.values', emt).html('')
+      $('.values .args', emt).html('')
 
-    # アクションを適用する
+    # 入力値を適用する
     applyAction = (e) ->
       emt = $(e).parents('.event')
       h = {}
@@ -1153,18 +1156,21 @@ setupTimelineEvents = ->
       em = $('.push.button.reset', emt)
       em.off('click')
       em.on('click', (e) ->
-        # メニューを全て初期化
+        # UIの入力値を初期化
         resetAction.call(ieSelf, @)
       )
       em = $('.push.button.apply', emt)
       em.off('click')
       em.on('click', (e) ->
-        # メニューを適用する
+        # 入力値を適用する
         applyAction.call(ieSelf, @)
       )
       em = $('.push.button.cancel', emt)
       em.off('click')
       em.on('click', (e) ->
+        # 入力を全てクリアしてサイドバーを閉じる
+        emt = $(e).parents('.event')
+        $('.values', emt).html('')
         closeSidebar( ->
           $(".config.te_div", emt).css('display', 'none')
         )

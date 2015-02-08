@@ -1136,7 +1136,8 @@ setupTimelineEvents = function() {
       $(".config.te_div", emt).css('display', 'none');
       $("." + d + " .forms", emt).children("div").css('display', 'none');
       $("." + teActionClassName, emt).css('display', '');
-      return $("." + d, emt).css('display', '');
+      $("." + d, emt).css('display', '');
+      return $("<input type='hidden' class='obj_id', value='" + v + "'>").appendTo($('values', emt));
     };
     selectAction = function(e) {
       var emt, item_id, method_name, valueClassName;
@@ -1146,12 +1147,14 @@ setupTimelineEvents = function() {
       valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
       $(".values_div .forms", emt).children("div").css('display', 'none');
       $("." + valueClassName, emt).css('display', '');
-      return $(".config.values_div", emt).css('display', '');
+      $(".config.values_div", emt).css('display', '');
+      $("<input type='hidden' class='item_id', value='" + item_id + "'>").appendTo($('values', emt));
+      return $("<input type='hidden' class='method_name', value='" + method_name + "'>").appendTo($('values', emt));
     };
     resetAction = function(e) {
       var emt;
       emt = $(e).parents('.event');
-      return $('.values', emt).html('');
+      return $('.values .args', emt).html('');
     };
     applyAction = function(e) {
       var emt, h, teNum;
@@ -1216,6 +1219,8 @@ setupTimelineEvents = function() {
         em = $('.push.button.cancel', emt);
         em.off('click');
         return em.on('click', function(e) {
+          emt = $(e).parents('.event');
+          $('.values', emt).html('');
           return closeSidebar(function() {
             return $(".config.te_div", emt).css('display', 'none');
           });
