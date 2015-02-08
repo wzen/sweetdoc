@@ -68,7 +68,13 @@ if gon?
       @ITEM_VALUE_CACHE = 'item:cache:@id:value'
 
       # @property [String] TE タイムラインイベントRoot
-      @TE = 'timeline_event:@id'
+      @TE = 'timeline_event:@te_num'
+      # @property [String] TE タイムラインイベント数
+      @TE_NUM = 'timeline_event:num'
+      # @property [String] TE_VALUE タイムラインイベント値
+      @TE_VALUE = @TE + ':value'
+      # @property [String] TE_VALUE タイムライン変更前の値
+      #@TE_ORIGINAL_VALUE = @TE + ':originalvalue'
       # @property [String] TE_SORT ソート番号
       @TE_SORT = @TE + ':sort'
       # @property [String] TE_METHODNAME イベント名

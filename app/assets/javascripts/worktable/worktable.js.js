@@ -687,6 +687,7 @@ closeSidebar = function(callback) {
     callback = null;
   }
   main = $('#main');
+  clearSelectedBorder();
   if (!isClosedConfigSidebar()) {
     return $('#sidebar').fadeOut('1000', function() {
       var s;
@@ -1091,7 +1092,7 @@ setupTimelineEvents = function() {
   var initEvents, self;
   self = this;
   initEvents = function(e) {
-    var eId, emt, ieSelf, selectAction, selectItem, te_num, updateSelectItemMenu;
+    var applyAction, createTimelineEvent, eId, emt, ieSelf, resetAction, selectAction, selectItem, te_num, updateSelectItemMenu;
     ieSelf = this;
     updateSelectItemMenu = function() {
       var items, selectOptions, teItemSelect, teItemSelects;
@@ -1147,6 +1148,35 @@ setupTimelineEvents = function() {
       $("." + valueClassName, emt).css('display', '');
       return $(".config.values_div", emt).css('display', '');
     };
+    resetAction = function(e) {
+      var emt;
+      emt = $(e).parents('.event');
+      return $('.values', emt).html('');
+    };
+    applyAction = function(e) {
+      var emt, h, teNum;
+      emt = $(e).parents('.event');
+      h = {};
+      $('.values input', emt).each(function() {
+        var k, v;
+        v = $(this).val();
+        k = $(this).attr('class');
+        return h[k] = v;
+      });
+      teNum = getPageValue(Constant.PageValueKey.TE_NUM);
+      if (teNum != null) {
+        teNum += 1;
+      } else {
+        teNum = 1;
+      }
+      setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teNum), h);
+      setPageValue(Constant.PageValueKey.TE_NUM, teNum);
+      return createTimelineEvent.call(ieSelf, e);
+    };
+    createTimelineEvent = function(e) {
+      var emt;
+      return emt = $(e).parents('.event');
+    };
     if ($(e).is('.ui-sortable-helper')) {
       return;
     }
@@ -1172,6 +1202,16 @@ setupTimelineEvents = function() {
         em.off('click');
         em.on('click', function(e) {
           return selectAction.call(ieSelf, this);
+        });
+        em = $('.push.button.reset', emt);
+        em.off('click');
+        em.on('click', function(e) {
+          return resetAction.call(ieSelf, this);
+        });
+        em = $('.push.button.apply', emt);
+        em.off('click');
+        em.on('click', function(e) {
+          return applyAction.call(ieSelf, this);
         });
         em = $('.push.button.cancel', emt);
         em.off('click');

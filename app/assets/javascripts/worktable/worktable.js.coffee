@@ -658,6 +658,10 @@ openConfigSidebar = (target = null, selectedBorderType = "edit") ->
 # サイドバーをクローズ
 closeSidebar = (callback = null) ->
   main = $('#main')
+
+  # 選択枠を削除
+  clearSelectedBorder()
+
   if !isClosedConfigSidebar()
     $('#sidebar').fadeOut('1000', ->
       s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
@@ -1082,6 +1086,39 @@ setupTimelineEvents = ->
       $(".#{valueClassName}", emt).css('display', '')
       $(".config.values_div", emt).css('display', '')
 
+    # アクションを初期化する
+    resetAction = (e) ->
+      emt = $(e).parents('.event')
+      $('.values', emt).html('')
+
+    # アクションを適用する
+    applyAction = (e) ->
+      emt = $(e).parents('.event')
+      h = {}
+      $('.values input', emt).each( ->
+        v = $(@).val()
+        k = $(@).attr('class')
+        h[k] = v
+      )
+      # タイムラインイベントの数を更新&タイムラインイベントの値を設定
+      teNum = getPageValue(Constant.PageValueKey.TE_NUM)
+      if teNum?
+        teNum += 1
+      else
+        teNum = 1
+      setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teNum), h)
+      setPageValue(Constant.PageValueKey.TE_NUM, teNum)
+
+      # 次のイベントを作成
+      createTimelineEvent.call(ieSelf, e)
+      # 次のイベントを表示
+
+
+    # タイムラインイベントを作成
+    createTimelineEvent = (e) ->
+      emt = $(e).parents('.event')
+
+
     if $(e).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
       return
@@ -1112,6 +1149,18 @@ setupTimelineEvents = ->
       em.off('click')
       em.on('click', (e) ->
         selectAction.call(ieSelf, @)
+      )
+      em = $('.push.button.reset', emt)
+      em.off('click')
+      em.on('click', (e) ->
+        # メニューを全て初期化
+        resetAction.call(ieSelf, @)
+      )
+      em = $('.push.button.apply', emt)
+      em.off('click')
+      em.on('click', (e) ->
+        # メニューを適用する
+        applyAction.call(ieSelf, @)
       )
       em = $('.push.button.cancel', emt)
       em.off('click')
