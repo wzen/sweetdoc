@@ -1119,7 +1119,7 @@ setupTimelineEvents = function() {
     selectItem = function(e) {
       var d, emt, i, teActionClassName, v, vEmt, values;
       clearSelectedBorder();
-      emt = $(e).parents('.event');
+      emt = $(e).closest('.event');
       values = $(e).val().split('&');
       v = values[0];
       i = values[1];
@@ -1141,7 +1141,7 @@ setupTimelineEvents = function() {
     };
     selectAction = function(e) {
       var emt, item_id, method_name, valueClassName;
-      emt = $(e).parents('.event');
+      emt = $(e).closest('.event');
       item_id = $(e).find('input.item_id').val();
       method_name = $(e).find('input.method_name').val();
       valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
@@ -1152,13 +1152,12 @@ setupTimelineEvents = function() {
       return $("<input type='hidden' class='method_name', value='" + method_name + "'>").appendTo($('values', emt));
     };
     resetAction = function(e) {
-      var emt;
-      emt = $(e).parents('.event');
+      $(e).closest('.event');
       return $('.values .args', emt).html('');
     };
     applyAction = function(e) {
       var emt, h, teNum;
-      emt = $(e).parents('.event');
+      emt = $(e).closest('.event');
       h = {};
       $('.values input', emt).each(function() {
         var k, v;
@@ -1178,7 +1177,7 @@ setupTimelineEvents = function() {
     };
     createTimelineEvent = function(e) {
       var emt;
-      return emt = $(e).parents('.event');
+      return emt = $(e).closest('.event');
     };
     if ($(e).is('.ui-sortable-helper')) {
       return;
@@ -1219,7 +1218,7 @@ setupTimelineEvents = function() {
         em = $('.push.button.cancel', emt);
         em.off('click');
         return em.on('click', function(e) {
-          emt = $(e).parents('.event');
+          emt = $(this).closest('.event');
           $('.values', emt).html('');
           return closeSidebar(function() {
             return $(".config.te_div", emt).css('display', 'none');

@@ -1053,7 +1053,7 @@ setupTimelineEvents = ->
       # 選択枠消去
       clearSelectedBorder()
 
-      emt = $(e).parents('.event')
+      emt = $(e).closest('.event')
       values = $(e).val().split('&')
       v = values[0]
       i = values[1]
@@ -1079,7 +1079,7 @@ setupTimelineEvents = ->
 
     # アクション名選択イベント
     selectAction = (e) ->
-      emt = $(e).parents('.event')
+      emt = $(e).closest('.event')
       item_id = $(e).find('input.item_id').val()
       method_name = $(e).find('input.method_name').val()
       valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name)
@@ -1091,12 +1091,12 @@ setupTimelineEvents = ->
 
     # イベントの入力値を初期化する
     resetAction = (e) ->
-      emt = $(e).parents('.event')
+      $(e).closest('.event')
       $('.values .args', emt).html('')
 
     # 入力値を適用する
     applyAction = (e) ->
-      emt = $(e).parents('.event')
+      emt = $(e).closest('.event')
       h = {}
       $('.values input', emt).each( ->
         v = $(@).val()
@@ -1119,7 +1119,7 @@ setupTimelineEvents = ->
 
     # タイムラインイベントを作成
     createTimelineEvent = (e) ->
-      emt = $(e).parents('.event')
+      emt = $(e).closest('.event')
 
 
     if $(e).is('.ui-sortable-helper')
@@ -1169,7 +1169,7 @@ setupTimelineEvents = ->
       em.off('click')
       em.on('click', (e) ->
         # 入力を全てクリアしてサイドバーを閉じる
-        emt = $(e).parents('.event')
+        emt = $(@).closest('.event')
         $('.values', emt).html('')
         closeSidebar( ->
           $(".config.te_div", emt).css('display', 'none')
