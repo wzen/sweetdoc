@@ -5,4 +5,3 @@ class TestMove
 
   call: ->
     @callFunc()
-

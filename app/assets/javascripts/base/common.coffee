@@ -45,7 +45,6 @@ makeClone = (obj) ->
     newInstance[key] = clone obj[key]
   return newInstance
 
-
 # アイテムに対してフォーカスする
 # @param [Object] target 対象アイテム
 focusToTarget = (target) ->

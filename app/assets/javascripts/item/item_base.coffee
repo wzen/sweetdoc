@@ -306,4 +306,3 @@ class CanvasItemBase extends ItemBase
       drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
       # キャンパスに対する初期化
       @initCanvas()
-

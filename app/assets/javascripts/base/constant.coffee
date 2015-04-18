@@ -85,7 +85,6 @@ if gon?
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
 
-
     class @ElementAttribute
       # @property [String] ITEM_ID アイテム要素ID
       @ITEM_ID = '@it_@id'
