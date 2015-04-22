@@ -47,4 +47,3 @@ class TimeLine
   finishTimeline: ->
     @finished = true
     console.log('Finish!')
-
