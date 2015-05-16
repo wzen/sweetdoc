@@ -36,4 +36,3 @@ class Chapter
       left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5)
       top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5)
       scrollContents.animate({scrollTop: top, scrollLeft: left }, 500)
-

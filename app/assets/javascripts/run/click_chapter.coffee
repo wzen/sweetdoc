@@ -24,4 +24,3 @@ class ClickChapter extends Chapter
   # チャプターの後処理
   settleChapter: ->
     @sinkFrontAllActor()
-

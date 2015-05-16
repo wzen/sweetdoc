@@ -132,4 +132,3 @@ $ ->
 
   # CSS
   $('#sup_css').html(lstorage.getItem('itemCssStyle'))
-
