@@ -455,3 +455,4 @@ if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
   window.itemInitFuncList.arrowInit = (option = {}) ->
     #JS読み込み完了
     window.loadedItemTypeList.push(Constant.ItemType.ARROW)
+

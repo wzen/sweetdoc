@@ -70,7 +70,7 @@ if gon?
       # @property [String] TE タイムラインイベントRoot
       @TE = 'timeline_event:@te_num'
       # @property [String] TE タイムラインイベント数
-      @TE_NUM = 'timeline_event:num'
+      @TE_COUNT = 'timeline_event:count'
       # @property [String] TE_VALUE タイムラインイベント値
       @TE_VALUE = @TE + ':value'
       # @property [String] TE_VALUE タイムライン変更前の値
