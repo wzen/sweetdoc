@@ -84,6 +84,7 @@ initTimeline = ->
       scrollContents.scrollTop(item.itemSize.y + item.itemSize.h * 0.5 - (scrollContents.height() * 0.5))
   )
   window.timeLine = new TimeLine(chapterList)
+  window.timeLine.start()
 
 # Handleスクロール位置の初期化
 initHandleScrollPoint = ->

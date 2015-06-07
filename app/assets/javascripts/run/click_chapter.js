@@ -6,30 +6,15 @@ var ClickChapter,
 ClickChapter = (function(superClass) {
   extend(ClickChapter, superClass);
 
-  function ClickChapter(eventListenerList) {
-    ClickChapter.__super__.constructor.call(this, eventListenerList);
-    this.riseFrontAllActor();
+  function ClickChapter() {
+    return ClickChapter.__super__.constructor.apply(this, arguments);
   }
 
-  ClickChapter.prototype.riseFrontAllActor = function() {
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
-    scrollContents.css('z-index', scrollViewSwitchZindex.on);
-    return this.eventListenerList.forEach(function(eventListener) {
-      return eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
-    });
+  ClickChapter.prototype.willChapter = function() {
+    return this.riseFrontAllActor();
   };
 
-  ClickChapter.prototype.sinkFrontAllActor = function() {
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
-    scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.eventListenerList.forEach(function(eventListener) {
-      return eventListener.getJQueryElement().css('z-index', 0);
-    });
-  };
-
-  ClickChapter.prototype.settleChapter = function() {
-    return this.sinkFrontAllActor();
-  };
+  ClickChapter.prototype.didChapter = function() {};
 
   return ClickChapter;
 

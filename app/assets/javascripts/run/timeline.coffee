@@ -6,15 +6,23 @@ class TimeLine
     @chapterIndex = 0
     @finished = false
 
+
+  # 開始イベント
+  start: ->
+    # チャプター前処理
+    @chapterList[@chapterIndex].willChapter()
+
   # チャプターを進める
   nextChapter: ->
-    # 後処理
-    @chapterList[@chapterIndex].settleChapter()
+    # チャプター後処理
+    @chapterList[@chapterIndex].didChapter()
     # indexを更新
     @chapterIndex += 1
     if @chapterList.length <= @chapterIndex
       @finishTimeline()
     else
+      # チャプター前処理
+      @chapterList[@chapterIndex].willChapter()
       # 次のアイテムにフォーカス
       @chapterList[@chapterIndex].focusToActor()
 

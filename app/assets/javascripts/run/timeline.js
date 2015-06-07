@@ -8,12 +8,17 @@ TimeLine = (function() {
     this.finished = false;
   }
 
+  TimeLine.prototype.start = function() {
+    return this.chapterList[this.chapterIndex].willChapter();
+  };
+
   TimeLine.prototype.nextChapter = function() {
-    this.chapterList[this.chapterIndex].settleChapter();
+    this.chapterList[this.chapterIndex].didChapter();
     this.chapterIndex += 1;
     if (this.chapterList.length <= this.chapterIndex) {
       return this.finishTimeline();
     } else {
+      this.chapterList[this.chapterIndex].willChapter();
       return this.chapterList[this.chapterIndex].focusToActor();
     }
   };

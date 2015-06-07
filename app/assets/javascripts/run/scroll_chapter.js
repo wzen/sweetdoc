@@ -10,6 +10,10 @@ ScrollChapter = (function(superClass) {
     return ScrollChapter.__super__.constructor.apply(this, arguments);
   }
 
+  ScrollChapter.prototype.willChapter = function() {
+    return this.sinkFrontAllActor();
+  };
+
   return ScrollChapter;
 
 })(Chapter);

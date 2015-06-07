@@ -110,7 +110,7 @@ getPageValue = (key, withRemove = false) ->
 # ページが持つ値を設定
 # @param [String] key キー値
 # @param [Object] value 設定値(ハッシュ配列または値)
-# @param [Boolean] isCache このページでのみ保持する値か
+# @param [Boolean] isCache このページでのみ保持させるか
 setPageValue = (key, value, isCache = false) ->
   f = @
   # ハッシュを要素の文字列に変換

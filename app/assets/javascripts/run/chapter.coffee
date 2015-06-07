@@ -18,9 +18,13 @@ class Chapter
         eventListener.clickEvent(e)
     )
 
+  # チャプターの前処理
+  # @abstract
+  willChapter: ->
+
   # チャプターの後処理
   # @abstract
-  settleChapter: ->
+  didChapter: ->
 
   # アイテムにフォーカス
   focusToActor: (type = "center") ->
@@ -36,3 +40,19 @@ class Chapter
       left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5)
       top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5)
       scrollContents.animate({scrollTop: top, scrollLeft: left }, 500)
+
+  # 全てのイベントアイテムをFrontに浮上
+  riseFrontAllActor: ->
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
+    scrollContents.css('z-index', scrollViewSwitchZindex.on)
+    @eventListenerList.forEach((eventListener) ->
+      eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1)
+    )
+
+  # 全てのイベントアイテムをFrontから落とす
+  sinkFrontAllActor: ->
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
+    scrollContents.css('z-index', scrollViewSwitchZindex.off)
+    @eventListenerList.forEach((eventListener) ->
+      eventListener.getJQueryElement().css('z-index', 0)
+    )

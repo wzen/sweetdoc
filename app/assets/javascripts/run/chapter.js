@@ -22,7 +22,9 @@ Chapter = (function() {
     });
   };
 
-  Chapter.prototype.settleChapter = function() {};
+  Chapter.prototype.willChapter = function() {};
+
+  Chapter.prototype.didChapter = function() {};
 
   Chapter.prototype.focusToActor = function(type) {
     var height, item, left, top, width;
@@ -44,6 +46,22 @@ Chapter = (function() {
         scrollLeft: left
       }, 500);
     }
+  };
+
+  Chapter.prototype.riseFrontAllActor = function() {
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
+    scrollContents.css('z-index', scrollViewSwitchZindex.on);
+    return this.eventListenerList.forEach(function(eventListener) {
+      return eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
+    });
+  };
+
+  Chapter.prototype.sinkFrontAllActor = function() {
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
+    scrollContents.css('z-index', scrollViewSwitchZindex.off);
+    return this.eventListenerList.forEach(function(eventListener) {
+      return eventListener.getJQueryElement().css('z-index', 0);
+    });
   };
 
   return Chapter;

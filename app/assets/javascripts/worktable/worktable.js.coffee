@@ -373,7 +373,7 @@ settingSlider = (className, min, max, cssCode, cssStyle, root, stepValue = 0) ->
   valueElement.html(defaultValue)
   try
     meterElement.slider('destroy')
-  catch
+  catch #何もしない
   meterElement.slider({
     min: min,
     max: max,
@@ -395,7 +395,7 @@ settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
 
   try
     element.slider('destroy')
-  catch
+  catch #何もしない
   element.slider({
     values: values
     slide: (event, ui) ->
@@ -441,7 +441,7 @@ settingGradientDegSlider = (className, min, max, cssCode, cssStyle, root) ->
 
   try
     meterElement.slider('destroy')
-  catch
+  catch #何もしない
   meterElement.slider({
     min: min,
     max: max,
@@ -1020,8 +1020,8 @@ runDebug = ->
 setupTimelineEvents = ->
   self = @
 
-  # イベント初期化
-  initEvents = (e) ->
+  # イベント
+  clickTimelineEvent = (e) ->
     ieSelf = @
 
     # アイテム選択メニューを更新
@@ -1104,13 +1104,17 @@ setupTimelineEvents = ->
         h[k] = v
       )
       # タイムラインイベントの数を更新&タイムラインイベントの値を設定
-      teNum = getPageValue(Constant.PageValueKey.TE_NUM)
-      if teNum?
-        teNum += 1
+      teCount = getPageValue(Constant.PageValueKey.TE_COUNT)
+      if teCount?
+        teCount += 1
       else
-        teNum = 1
-      setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teNum), h)
-      setPageValue(Constant.PageValueKey.TE_NUM, teNum)
+        teCount = 1
+      # イベントのIDは暫定で連番とする
+      setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h)
+      setPageValue(Constant.PageValueKey.TE_COUNT, teCount)
+
+      # 色を変更
+
 
       # 次のイベントを作成
       createTimelineEvent.call(ieSelf, e)
@@ -1119,14 +1123,21 @@ setupTimelineEvents = ->
 
     # タイムラインイベントを作成
     createTimelineEvent = (e) ->
-      emt = $(e).closest('.event')
-
+      # tempをクローンしてtimeline_eventsに追加
+      pEmt = $('#timeline_events')
+      newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
+      teNum = getPageValue(Constant.PageValueKey.TE_COUNT) + 1
+      newEmt.find('.te_num').val(teNum)
+      pEmt.append(newEmt)
 
     if $(e).is('.ui-sortable-helper')
       # ドラッグの場合はクリック反応なし
       return
 
+    # 選択枠切り替え
+    clearSelectedBorder()
     setSelectedBorder(e, "timeline")
+    # サイドメニューをタイムラインに切り替え
     switchSidebarConfig("timeline")
 
     # イベントメニューの存在チェック
@@ -1190,7 +1201,6 @@ setupTimelineEvents = ->
       # ブランク
       # アイテムのリストを表示
 
-
     else
       # イベント設定済み
 
@@ -1198,7 +1208,7 @@ setupTimelineEvents = ->
   # イベントのクリック
   $('.timeline_event').off('click')
   $('.timeline_event').on('click', (e) ->
-    initEvents.call(self, @)
+    clickTimelineEvent.call(self, @)
   )
 
   # イベントのD&D

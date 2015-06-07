@@ -85,7 +85,8 @@ initTimeline = function() {
       return scrollContents.scrollTop(item.itemSize.y + item.itemSize.h * 0.5 - (scrollContents.height() * 0.5));
     }
   });
-  return window.timeLine = new TimeLine(chapterList);
+  window.timeLine = new TimeLine(chapterList);
+  return window.timeLine.start();
 };
 
 initHandleScrollPoint = function() {
