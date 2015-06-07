@@ -22,7 +22,9 @@ Chapter = (function() {
     });
   };
 
-  Chapter.prototype.willChapter = function() {};
+  Chapter.prototype.willChapter = function() {
+    return this.focusToActor();
+  };
 
   Chapter.prototype.didChapter = function() {};
 

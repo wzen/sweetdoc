@@ -18,12 +18,12 @@ class Chapter
         eventListener.clickEvent(e)
     )
 
-  # チャプターの前処理
-  # @abstract
+  # チャプター共通の前処理
   willChapter: ->
+    # アイテムにフォーカス
+    @focusToActor()
 
-  # チャプターの後処理
-  # @abstract
+  # チャプター共通の後処理
   didChapter: ->
 
   # アイテムにフォーカス

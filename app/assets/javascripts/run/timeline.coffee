@@ -6,7 +6,6 @@ class TimeLine
     @chapterIndex = 0
     @finished = false
 
-
   # 開始イベント
   start: ->
     # チャプター前処理
@@ -23,8 +22,6 @@ class TimeLine
     else
       # チャプター前処理
       @chapterList[@chapterIndex].willChapter()
-      # 次のアイテムにフォーカス
-      @chapterList[@chapterIndex].focusToActor()
 
   # チャプターを戻す
   backChapter: ->

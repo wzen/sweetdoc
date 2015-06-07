@@ -18,8 +18,7 @@ TimeLine = (function() {
     if (this.chapterList.length <= this.chapterIndex) {
       return this.finishTimeline();
     } else {
-      this.chapterList[this.chapterIndex].willChapter();
-      return this.chapterList[this.chapterIndex].focusToActor();
+      return this.chapterList[this.chapterIndex].willChapter();
     }
   };
 

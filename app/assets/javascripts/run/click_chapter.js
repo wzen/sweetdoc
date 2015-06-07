@@ -11,10 +11,13 @@ ClickChapter = (function(superClass) {
   }
 
   ClickChapter.prototype.willChapter = function() {
+    ClickChapter.__super__.willChapter.call(this);
     return this.riseFrontAllActor();
   };
 
-  ClickChapter.prototype.didChapter = function() {};
+  ClickChapter.prototype.didChapter = function() {
+    return ClickChapter.__super__.didChapter.call(this);
+  };
 
   return ClickChapter;
 

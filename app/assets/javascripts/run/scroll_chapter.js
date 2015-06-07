@@ -11,7 +11,12 @@ ScrollChapter = (function(superClass) {
   }
 
   ScrollChapter.prototype.willChapter = function() {
+    ScrollChapter.__super__.willChapter.call(this);
     return this.sinkFrontAllActor();
+  };
+
+  ScrollChapter.prototype.didChapter = function() {
+    return ScrollChapter.__super__.didChapter.call(this);
   };
 
   return ScrollChapter;
