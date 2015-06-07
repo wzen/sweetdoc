@@ -44,7 +44,7 @@ class TimeLine
       @chapterList[@chapterIndex].scrollEvent(x, y)
 
   # クリックイベントをハンドル
-  handleClickEvent: ->
+  handleClickEvent: (e) ->
     if !@finished
       @chapterList[@chapterIndex].clickEvent(e)
 

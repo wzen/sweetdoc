@@ -38,11 +38,11 @@ if gon?
       @CHANGE_OPTION = constant.ItemActionType.CHANGE_OPTION
 
     # アクションイベント種別
-    class @ActionEventType
+    class @ActionEventHandleType
       # @property [Int] SCROLL スクロール
-      @SCROLL = constant.ActionEventType.SCROLL
+      @SCROLL = constant.ActionEventHandleType.SCROLL
       # @property [Int] CLICK クリック
-      @CLICK = constant.ActionEventType.CLICK
+      @CLICK = constant.ActionEventHandleType.CLICK
 
     # 閲覧モードのチャプターアクション種類
     class @ActionEventChangeType

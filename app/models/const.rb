@@ -57,7 +57,7 @@ class Const
   end
 
   # アクションイベント種別
-  class ActionEventType
+  class ActionEventHandleType
     # @property [Int] SCROLL スクロール
     SCROLL = 0
     # @property [Int] CLICK クリック
@@ -65,7 +65,7 @@ class Const
   end
 
   # 共通アクションイベント対象
-  class CommonActionEventTargetType
+  class CommonActionEventChangeType
     # @property [Int] BACKGROUND 背景
     BACKGROUND = 0
     # @property [Int] ZOOM ズーム

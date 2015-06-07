@@ -29,9 +29,9 @@
                 <!-- イベント毎の設定値 -->
                 <% @common_action_events.each do |c| %>
                     <div class="<%= "c_#{c.id}" %>" style="display: none">
-                      <% if c.action_event_type_id == Const::CommonActionEventTargetType::BACKGROUND  %>
+                      <% if c.action_event_type_id == Const::CommonActionEventChangeType::BACKGROUND  %>
                         <%= render 'worktable/sidebar_menu/timeline/parts/background' %>
-                      <% elsif c.action_event_type_id == Const::CommonActionEventTargetType::ZOOM %>
+                      <% elsif c.action_event_type_id == Const::CommonActionEventChangeType::ZOOM %>
                         <%= render 'worktable/sidebar_menu/timeline/parts/zoom' %>
                       <% end %>
                     </div>

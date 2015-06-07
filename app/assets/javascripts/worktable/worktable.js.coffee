@@ -577,9 +577,9 @@ addTimelineEventContents = (te_actions, te_values) ->
       li = ''
       te_actions.forEach( (a) ->
         actionType = null
-        if a.action_event_type_id == Constant.ActionEventType.SCROLL
+        if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
           actionType = "scroll"
-        else if a.action_event_type_id == Constant.ActionEventType.CLICK
+        else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
           actionType = "click"
         li += """
           <li class='push method #{actionType} #{a.method_name}'>

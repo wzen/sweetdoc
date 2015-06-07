@@ -40,7 +40,7 @@ TimeLine = (function() {
     }
   };
 
-  TimeLine.prototype.handleClickEvent = function() {
+  TimeLine.prototype.handleClickEvent = function(e) {
     if (!this.finished) {
       return this.chapterList[this.chapterIndex].clickEvent(e);
     }

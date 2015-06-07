@@ -603,9 +603,9 @@ addTimelineEventContents = function(te_actions, te_values) {
       te_actions.forEach(function(a) {
         var actionType;
         actionType = null;
-        if (a.action_event_type_id === Constant.ActionEventType.SCROLL) {
+        if (a.action_event_type_id === Constant.ActionEventHandleType.SCROLL) {
           actionType = "scroll";
-        } else if (a.action_event_type_id === Constant.ActionEventType.CLICK) {
+        } else if (a.action_event_type_id === Constant.ActionEventHandleType.CLICK) {
           actionType = "click";
         }
         return li += "<li class='push method " + actionType + " " + a.method_name + "'>\n  " + a.options['name'] + "\n  <input class='item_id' type='hidden' value='" + a.item_id + "' >\n  <input class='method_name' type='hidden' value='" + a.method_name + "'>\n</li>";
