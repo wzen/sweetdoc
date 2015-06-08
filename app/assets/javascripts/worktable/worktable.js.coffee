@@ -1070,10 +1070,18 @@ setupTimelineEvents = ->
         # フォーカス
         focusToTarget(vEmt)
 
-      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
+      # 一度全て非表示にする
       $(".config.te_div", emt).css('display', 'none')
       $(".#{d} .forms", emt).children("div").css('display', 'none')
-      $(".#{teActionClassName}", emt).css('display', '')
+
+      # 表示
+      if d == "values_div"
+        teValueClassNamd = v
+        $(".#{teValueClassNamd}", emt).css('display', '')
+      else
+        teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
+        $(".#{teActionClassName}", emt).css('display', '')
+
       $(".#{d}", emt).css('display', '')
       $("<input type='hidden' class='obj_id', value='#{v}'>").appendTo($('values', emt))
 

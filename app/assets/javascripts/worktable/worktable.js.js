@@ -1117,7 +1117,7 @@ setupTimelineEvents = function() {
       });
     };
     selectItem = function(e) {
-      var d, emt, i, teActionClassName, v, vEmt, values;
+      var d, emt, i, teActionClassName, teValueClassNamd, v, vEmt, values;
       clearSelectedBorder();
       emt = $(e).closest('.event');
       values = $(e).val().split('&');
@@ -1132,10 +1132,15 @@ setupTimelineEvents = function() {
         setSelectedBorder(vEmt, 'timeline');
         focusToTarget(vEmt);
       }
-      teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
       $(".config.te_div", emt).css('display', 'none');
       $("." + d + " .forms", emt).children("div").css('display', 'none');
-      $("." + teActionClassName, emt).css('display', '');
+      if (d === "values_div") {
+        teValueClassNamd = v;
+        $("." + teValueClassNamd, emt).css('display', '');
+      } else {
+        teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
+        $("." + teActionClassName, emt).css('display', '');
+      }
       $("." + d, emt).css('display', '');
       return $("<input type='hidden' class='obj_id', value='" + v + "'>").appendTo($('values', emt));
     };
