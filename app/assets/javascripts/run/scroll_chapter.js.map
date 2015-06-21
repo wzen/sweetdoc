@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "scroll_chapter.js",
+  "sourceRoot": "",
+  "sources": [
+    "scroll_chapter.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA,IAAA,aAAA;EAAA;6BAAA;;AAAA;AAGE,mCAAA,CAAA;;;;GAAA;;AAAA,0BAAA,WAAA,GAAa,SAAA,GAAA;AACX,IAAA,6CAAA,CAAA,CAAA;WACA,IAAC,CAAA,iBAAD,CAAA,EAFW;EAAA,CAAb,CAAA;;AAAA,0BAKA,UAAA,GAAY,SAAA,GAAA;WACV,4CAAA,EADU;EAAA,CALZ,CAAA;;uBAAA;;GAH0B,QAA5B,CAAA"
+}

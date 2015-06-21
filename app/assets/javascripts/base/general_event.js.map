@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "general_event.js",
+  "sourceRoot": "",
+  "sources": [
+    "general_event.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA,IAAA,wCAAA;EAAA;6BAAA;;AAAA;AACE,kCAAA,CAAA;;;;GAAA;;AAAA,EAAA,YAAC,CAAA,OAAD,CAAS,aAAT,CAAA,CAAA;;sBAAA;;GADyB,OAA3B,CAAA;;AAAA;AAIA,sCAAA,CAAA;;;;GAAA;;0BAAA;;GAA+B,aAJ/B,CAAA;;AAAA;AAOA,8BAAA,CAAA;;;;GAAA;;kBAAA;;GAAuB,aAPvB,CAAA"
+}

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "click_chapter.js",
+  "sourceRoot": "",
+  "sources": [
+    "click_chapter.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA,IAAA,YAAA;EAAA;6BAAA;;AAAA;AAGE,kCAAA,CAAA;;;;GAAA;;AAAA,yBAAA,WAAA,GAAa,SAAA,GAAA;AACX,IAAA,4CAAA,CAAA,CAAA;WACA,IAAC,CAAA,iBAAD,CAAA,EAFW;EAAA,CAAb,CAAA;;AAAA,yBAKA,UAAA,GAAY,SAAA,GAAA;WACV,2CAAA,EADU;EAAA,CALZ,CAAA;;sBAAA;;GAHyB,QAA3B,CAAA"
+}

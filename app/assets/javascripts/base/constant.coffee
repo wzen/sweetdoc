@@ -96,7 +96,3 @@ if gon?
       @TE_ACTION_CLASS = 'timeline_event_action_@itemid'
       # @property [String] TE_VALUES_DIV タイムラインイベント アクションUI
       @TE_VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS
-
-
-
-

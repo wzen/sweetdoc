@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "screen.js",
+  "sourceRoot": "",
+  "sources": [
+    "screen.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,MAAA;;AAAA;sBAAA;;gBAAA;;IAAA,CAAA"
+}

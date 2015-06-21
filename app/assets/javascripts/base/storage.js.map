@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "storage.js",
+  "sourceRoot": "",
+  "sources": [
+    "storage.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA,IAAA,gDAAA;;AAAA,mBAAA,GAAsB,SAAA,GAAA,CAAtB,CAAA;;AAAA,UAKA,GAAa,SAAC,EAAD,EAAK,GAAL,GAAA;SACX,QAAQ,CAAC,OAAT,CAAiB,EAAjB,EAAqB,GAArB,EADW;AAAA,CALb,CAAA;;AAAA,eAUA,GAAkB,SAAC,GAAD,GAAA;AAChB,SAAO,QAAQ,CAAC,OAAT,CAAiB,GAAjB,CAAP,CADgB;AAAA,CAVlB,CAAA"
+}
