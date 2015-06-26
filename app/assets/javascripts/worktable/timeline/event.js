@@ -55,14 +55,15 @@ setupTimelineEvents = function() {
       });
     };
     selectItem = function(e) {
-      var d, emt, i, teActionClassName, teValueClassNamd, v, vEmt, values;
+      var d, displayClassName, emt, i, isSelectedCommonEvent, v, vEmt, values;
       clearSelectedBorder();
       emt = $(e).closest('.event');
       values = $(e).val().split('&');
       v = values[0];
       i = values[1];
       d = null;
-      if (v.indexOf('c_') === 0) {
+      isSelectedCommonEvent = v.indexOf('c_') === 0;
+      if (isSelectedCommonEvent) {
         d = "values_div";
       } else {
         d = "action_div";
@@ -72,13 +73,13 @@ setupTimelineEvents = function() {
       }
       $(".config.te_div", emt).css('display', 'none');
       $("." + d + " .forms", emt).children("div").css('display', 'none');
-      if (d === "values_div") {
-        teValueClassNamd = v;
-        $("." + teValueClassNamd, emt).css('display', '');
+      displayClassName = '';
+      if (isSelectedCommonEvent) {
+        displayClassName = v;
       } else {
-        teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
-        $("." + teActionClassName, emt).css('display', '');
+        displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
       }
+      $("." + displayClassName, emt).css('display', '');
       $("." + d, emt).css('display', '');
       return $("<input type='hidden' class='obj_id', value='" + v + "'>").appendTo($('values', emt));
     };

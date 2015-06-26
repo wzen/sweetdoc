@@ -36,6 +36,8 @@ setupTimelineEvents = ->
 
     # アイテム選択メニューを更新
     updateSelectItemMenu = ->
+
+      # 作成されたアイテムの一覧を取得
       teItemSelects = $('#timeline-config .te_item_select')
       teItemSelect = teItemSelects[0]
       selectOptions = ''
@@ -50,6 +52,8 @@ setupTimelineEvents = ->
           </option>
         """
       )
+
+      # メニューを入れ替え
       teItemSelects.each( ->
         $(@).find('option').each( ->
           if $(@).val().length > 0 && $(@).val().indexOf('c_') != 0
@@ -68,11 +72,12 @@ setupTimelineEvents = ->
       v = values[0]
       i = values[1]
       d = null
-      if v.indexOf('c_') == 0
-        # 共通 → 変更値を表示
+      isSelectedCommonEvent = v.indexOf('c_') == 0
+      if isSelectedCommonEvent
+        # 共通のイベントを選択 → 変更値を表示
         d = "values_div"
       else
-        # アイテム → アクション名一覧を表示
+        # アイテムのイベントを選択 → アクション名一覧を表示
         d = "action_div"
         vEmt = $('#' + v)
         # 選択枠設定
@@ -85,13 +90,12 @@ setupTimelineEvents = ->
       $(".#{d} .forms", emt).children("div").css('display', 'none')
 
       # 表示
-      if d == "values_div"
-        teValueClassNamd = v
-        $(".#{teValueClassNamd}", emt).css('display', '')
+      displayClassName = ''
+      if isSelectedCommonEvent
+        displayClassName = v
       else
-        teActionClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
-        $(".#{teActionClassName}", emt).css('display', '')
-
+        displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
+      $(".#{displayClassName}", emt).css('display', '')
       $(".#{d}", emt).css('display', '')
       $("<input type='hidden' class='obj_id', value='#{v}'>").appendTo($('values', emt))
 
@@ -131,7 +135,7 @@ setupTimelineEvents = ->
       setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h)
       setPageValue(Constant.PageValueKey.TE_COUNT, teCount)
 
-      # 色を変更
+      # イベントの色を変更
 
 
       # 次のイベントを作成

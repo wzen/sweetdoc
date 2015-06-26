@@ -1,4 +1,3 @@
-
 # サーバにアイテムの情報を保存
 saveToServer = ->
   jsonList = []
