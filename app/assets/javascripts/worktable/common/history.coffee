@@ -28,7 +28,7 @@ undo = ->
   pastOperationIndex = obj.popOhi()
   action = history.action
   if action == Constant.ItemActionType.MAKE
-# オブジェクトを消去
+    # オブジェクトを消去
     obj.getJQueryElement().remove()
   else if action == Constant.ItemActionType.MOVE
     obj.getJQueryElement().remove()

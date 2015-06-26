@@ -16,6 +16,7 @@ WorkTableCssItemExtend =
     element = $('#' + @id)
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
+
   # リサイズ時のイベント
   resize: ->
     element = $('#' + @id)

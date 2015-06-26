@@ -1,6 +1,6 @@
 # Canvas
 WorkTableCanvasItemExtend =
-# デザイン変更コンフィグを作成
+  # デザイン変更コンフィグを作成
   makeDesignConfig: ->
     @designConfigRoot = $('#' + @getDesignConfigId())
     if !@designConfigRoot? || @designConfigRoot.length == 0
@@ -10,14 +10,14 @@ WorkTableCanvasItemExtend =
       @designConfigRoot.find('.css-config').remove()
       $('#design-config').append(@designConfigRoot)
 
-# ドラッグ時のイベント
+  # ドラッグ時のイベント
   drag: ->
     element = $('#' + @id)
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
     console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
 
-# リサイズ時のイベント
+  # リサイズ時のイベント
   resize: ->
     canvas = $('#' + @canvasElementId())
     element = $('#' + @id)
@@ -31,7 +31,7 @@ WorkTableCanvasItemExtend =
     @drawNewCanvas()
     console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
 
-# 履歴データを取得
+  # 履歴データを取得
   # @param [ItemActionType] action アクション種別
   getHistoryObj: (action) ->
     obj = {
@@ -43,7 +43,7 @@ WorkTableCanvasItemExtend =
     console.log("getHistory: scale:#{@scale.w},#{@scale.h}")
     return obj
 
-# 履歴データを設定
+  # 履歴データを設定
   # @param [Array] historyObj 履歴オブジェクト
   setHistoryObj: (historyObj) ->
     @itemSize = makeClone(historyObj.itemSize)
