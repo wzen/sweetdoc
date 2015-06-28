@@ -27,106 +27,105 @@ addTimelineEventContents = function(te_actions, te_values) {
 };
 
 setupTimelineEvents = function() {
-  var clickTimelineEvent, self;
+  var _applyAction, _clickTimelineEvent, _createTimelineEvent, _resetAction, _selectAction, _selectItem, _updateSelectItemMenu, self;
   self = this;
-  clickTimelineEvent = function(e) {
-    var applyAction, createTimelineEvent, eId, emt, ieSelf, resetAction, selectAction, selectItem, te_num, updateSelectItemMenu;
-    ieSelf = this;
-    updateSelectItemMenu = function() {
-      var items, selectOptions, teItemSelect, teItemSelects;
-      teItemSelects = $('#timeline-config .te_item_select');
-      teItemSelect = teItemSelects[0];
-      selectOptions = '';
-      items = $('#page_values .item');
-      items.children().each(function() {
-        var id, itemType, name;
-        id = $(this).find('input.id').val();
-        name = $(this).find('input.name').val();
-        itemType = $(this).find('input.itemType').val();
-        return selectOptions += "<option value='" + id + "&" + itemType + "'>\n  " + name + "\n</option>";
+  _updateSelectItemMenu = function() {
+    var items, selectOptions, teItemSelect, teItemSelects;
+    teItemSelects = $('#timeline-config .te_item_select');
+    teItemSelect = teItemSelects[0];
+    selectOptions = '';
+    items = $('#page_values .item');
+    items.children().each(function() {
+      var id, itemType, name;
+      id = $(this).find('input.id').val();
+      name = $(this).find('input.name').val();
+      itemType = $(this).find('input.itemType').val();
+      return selectOptions += "<option value='" + id + "&" + itemType + "'>\n  " + name + "\n</option>";
+    });
+    return teItemSelects.each(function() {
+      $(this).find('option').each(function() {
+        if ($(this).val().length > 0 && $(this).val().indexOf('c_') !== 0) {
+          return $(this).remove();
+        }
       });
-      return teItemSelects.each(function() {
-        $(this).find('option').each(function() {
-          if ($(this).val().length > 0 && $(this).val().indexOf('c_') !== 0) {
-            return $(this).remove();
-          }
-        });
-        return $(this).append($(selectOptions));
-      });
-    };
-    selectItem = function(e) {
-      var d, displayClassName, emt, i, isSelectedCommonEvent, v, vEmt, values;
-      clearSelectedBorder();
-      emt = $(e).closest('.event');
-      values = $(e).val().split('&');
-      v = values[0];
-      i = values[1];
-      d = null;
-      isSelectedCommonEvent = v.indexOf('c_') === 0;
-      if (isSelectedCommonEvent) {
-        d = "values_div";
-      } else {
-        d = "action_div";
-        vEmt = $('#' + v);
-        setSelectedBorder(vEmt, 'timeline');
-        focusToTarget(vEmt);
-      }
-      $(".config.te_div", emt).css('display', 'none');
-      $("." + d + " .forms", emt).children("div").css('display', 'none');
-      displayClassName = '';
-      if (isSelectedCommonEvent) {
-        displayClassName = v;
-      } else {
-        displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
-      }
-      $("." + displayClassName, emt).css('display', '');
-      $("." + d, emt).css('display', '');
-      return $("<input type='hidden' class='obj_id', value='" + v + "'>").appendTo($('values', emt));
-    };
-    selectAction = function(e) {
-      var emt, item_id, method_name, valueClassName;
-      emt = $(e).closest('.event');
-      item_id = $(e).find('input.item_id').val();
-      method_name = $(e).find('input.method_name').val();
-      valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
-      $(".values_div .forms", emt).children("div").css('display', 'none');
-      $("." + valueClassName, emt).css('display', '');
-      $(".config.values_div", emt).css('display', '');
-      $("<input type='hidden' class='item_id', value='" + item_id + "'>").appendTo($('values', emt));
-      return $("<input type='hidden' class='method_name', value='" + method_name + "'>").appendTo($('values', emt));
-    };
-    resetAction = function(e) {
-      $(e).closest('.event');
-      return $('.values .args', emt).html('');
-    };
-    applyAction = function(e) {
-      var emt, h, teCount;
-      emt = $(e).closest('.event');
-      h = {};
-      $('.values input', emt).each(function() {
-        var k, v;
-        v = $(this).val();
-        k = $(this).attr('class');
-        return h[k] = v;
-      });
-      teCount = getPageValue(Constant.PageValueKey.TE_COUNT);
-      if (teCount != null) {
-        teCount += 1;
-      } else {
-        teCount = 1;
-      }
-      setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h);
-      setPageValue(Constant.PageValueKey.TE_COUNT, teCount);
-      return createTimelineEvent.call(ieSelf, e);
-    };
-    createTimelineEvent = function(e) {
-      var newEmt, pEmt, teNum;
-      pEmt = $('#timeline_events');
-      newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true);
-      teNum = getPageValue(Constant.PageValueKey.TE_COUNT) + 1;
-      newEmt.find('.te_num').val(teNum);
-      return pEmt.append(newEmt);
-    };
+      return $(this).append($(selectOptions));
+    });
+  };
+  _selectItem = function(e) {
+    var d, displayClassName, emt, i, isSelectedCommonEvent, v, vEmt, values;
+    clearSelectedBorder();
+    emt = $(e).closest('.event');
+    values = $(e).val().split('&');
+    v = values[0];
+    i = values[1];
+    d = null;
+    isSelectedCommonEvent = v.indexOf('c_') === 0;
+    if (isSelectedCommonEvent) {
+      d = "values_div";
+    } else {
+      d = "action_div";
+      vEmt = $('#' + v);
+      setSelectedBorder(vEmt, 'timeline');
+      focusToTarget(vEmt);
+    }
+    $(".config.te_div", emt).css('display', 'none');
+    $("." + d + " .forms", emt).children("div").css('display', 'none');
+    displayClassName = '';
+    if (isSelectedCommonEvent) {
+      displayClassName = v;
+    } else {
+      displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
+    }
+    $("." + displayClassName, emt).css('display', '');
+    $("." + d, emt).css('display', '');
+    return $("<input type='hidden' class='obj_id', value='" + v + "'>").appendTo($('values', emt));
+  };
+  _selectAction = function(e) {
+    var emt, item_id, method_name, valueClassName;
+    emt = $(e).closest('.event');
+    item_id = $(e).find('input.item_id').val();
+    method_name = $(e).find('input.method_name').val();
+    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
+    $(".values_div .forms", emt).children("div").css('display', 'none');
+    $("." + valueClassName, emt).css('display', '');
+    $(".config.values_div", emt).css('display', '');
+    $("<input type='hidden' class='item_id', value='" + item_id + "'>").appendTo($('values', emt));
+    return $("<input type='hidden' class='method_name', value='" + method_name + "'>").appendTo($('values', emt));
+  };
+  _resetAction = function(e) {
+    $(e).closest('.event');
+    return $('.values .args', emt).html('');
+  };
+  _applyAction = function(e) {
+    var emt, h, teCount;
+    emt = $(e).closest('.event');
+    h = {};
+    $('.values input', emt).each(function() {
+      var k, v;
+      v = $(this).val();
+      k = $(this).attr('class');
+      return h[k] = v;
+    });
+    teCount = getPageValue(Constant.PageValueKey.TE_COUNT);
+    if (teCount != null) {
+      teCount += 1;
+    } else {
+      teCount = 1;
+    }
+    setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h);
+    setPageValue(Constant.PageValueKey.TE_COUNT, teCount);
+    return _createTimelineEvent.call(self, e);
+  };
+  _createTimelineEvent = function(e) {
+    var newEmt, pEmt, teNum;
+    pEmt = $('#timeline_events');
+    newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true);
+    teNum = getPageValue(Constant.PageValueKey.TE_COUNT) + 1;
+    newEmt.find('.te_num').val(teNum);
+    return pEmt.append(newEmt);
+  };
+  _clickTimelineEvent = function(e) {
+    var eId, emt, te_num;
     if ($(e).is('.ui-sortable-helper')) {
       return;
     }
@@ -140,29 +139,29 @@ setupTimelineEvents = function() {
       emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId);
       $('#timeline-config').append(emt);
     }
-    updateSelectItemMenu.call(ieSelf);
+    _updateSelectItemMenu.call(self);
     (function(_this) {
       return (function() {
         var em;
         em = $('.te_item_select', emt);
         em.off('change');
         em.on('change', function(e) {
-          return selectItem.call(ieSelf, this);
+          return _selectItem.call(self, this);
         });
         em = $('.action_forms li', emt);
         em.off('click');
         em.on('click', function(e) {
-          return selectAction.call(ieSelf, this);
+          return _selectAction.call(self, this);
         });
         em = $('.push.button.reset', emt);
         em.off('click');
         em.on('click', function(e) {
-          return resetAction.call(ieSelf, this);
+          return _resetAction.call(self, this);
         });
         em = $('.push.button.apply', emt);
         em.off('click');
         em.on('click', function(e) {
-          return applyAction.call(ieSelf, this);
+          return _applyAction.call(self, this);
         });
         em = $('.push.button.cancel', emt);
         em.off('click');
@@ -188,7 +187,7 @@ setupTimelineEvents = function() {
   };
   $('.timeline_event').off('click');
   $('.timeline_event').on('click', function(e) {
-    return clickTimelineEvent.call(self, this);
+    return _clickTimelineEvent.call(self, this);
   });
   return $('#timeline_events').sortable({
     revert: true,

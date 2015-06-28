@@ -9,8 +9,6 @@ one:
             {
               "id": "changeBackground",
               "name": "Change Background",
-              "color": "ChangeBackgroundColor",
-              "grid": "ShowGrid",
               "args": {
                 "arg1": {
                   "type": "BACKGROUND",
@@ -30,16 +28,12 @@ two:
             {
               "id": "focusWithZoom",
               "name": "Zoom",
-              "type": "ZOOM",
-              "value": "ZoomValue",
-              "minValue": 0,
-              "maxValue": 10,
-              "minValueName": "Min",
-              "maxValueName": "Max",
               "args": {
                 "arg1": {
                   "type": "ZOOM",
-                  "arg_name": "zoom"
+                  "arg_name": "zoom",
+                  "minValue": 0,
+                  "maxValue": 10
                 }
               }
             }

@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1321108410">
-    <data-source source="LOCAL" name="Rails Gal: development" uuid="3e2e13d0-897b-4945-9779-52dbdc093362">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db/development.sqlite3</jdbc-url>
-      <libraries>
-        <library>
-          <url>file://$HOME$/Library/Preferences/IntelliJIdea13/jdbc-drivers/xerial-sqlite-license.txt</url>
-        </library>
-        <library>
-          <url>file://$HOME$/Library/Preferences/IntelliJIdea13/jdbc-drivers/sqlite-jdbc-3.7.6.3-20110609.081603-3.jar</url>
-        </library>
-      </libraries>
-    </data-source>
+  <component name="DataSourceManagerImpl" format="xml" hash="1690510285">
     <data-source source="LOCAL" name="Rails GetDesk: development" uuid="a0b8ec55-13c9-4c43-9b6e-05b42936c599">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
