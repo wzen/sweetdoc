@@ -200,8 +200,8 @@ settingGradientSlider = function(className, values, cssCode, cssStyle, root) {
 settingGradientDegSlider = function(className, min, max, cssCode, cssStyle, root) {
   var d, defaultValue, meterElement, valueElement, webkitDeg, webkitValueElement;
   meterElement = $('.' + className, root);
-  valueElement = $('.' + className + '-value', root);
-  webkitValueElement = $('.' + className + '-value-webkit', root);
+  valueElement = $('.' + className + '-value', cssCode);
+  webkitValueElement = $('.' + className + '-value-webkit', cssCode);
   d = $('.' + className + '-value', cssCode)[0];
   defaultValue = $(d).html();
   webkitDeg = {

@@ -189,8 +189,8 @@ settingGradientSlider = (className, values, cssCode, cssStyle, root) ->
 # @param [Object] cssStyle CSSプレビューのエレメント
 settingGradientDegSlider = (className, min, max, cssCode, cssStyle, root) ->
   meterElement = $('.' + className, root)
-  valueElement = $('.' + className + '-value', root)
-  webkitValueElement = $('.' + className + '-value-webkit', root)
+  valueElement = $('.' + className + '-value', cssCode)
+  webkitValueElement = $('.' + className + '-value-webkit', cssCode)
   d = $('.' + className + '-value', cssCode)[0]
   defaultValue = $(d).html()
   webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
