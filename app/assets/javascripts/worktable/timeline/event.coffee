@@ -30,33 +30,7 @@ addTimelineEventContents = (te_actions, te_values) ->
 setupTimelineEvents = ->
   self = @
 
-  # アイテム選択メニューを更新
-  _updateSelectItemMenu = ->
-
-    # 作成されたアイテムの一覧を取得
-    teItemSelects = $('#timeline-config .te_item_select')
-    teItemSelect = teItemSelects[0]
-    selectOptions = ''
-    items = $('#page_values .item')
-    items.children().each( ->
-      id = $(@).find('input.id').val()
-      name = $(@).find('input.name').val()
-      itemType = $(@).find('input.itemType').val()
-      selectOptions += """
-          <option value='#{id}&#{itemType}'>
-            #{name}
-          </option>
-        """
-    )
-
-    # メニューを入れ替え
-    teItemSelects.each( ->
-      $(@).find('option').each( ->
-        if $(@).val().length > 0 && $(@).val().indexOf('c_') != 0
-          $(@).remove()
-      )
-      $(@).append($(selectOptions))
-    )
+  ### private method ここから ###
 
   # アイテム選択イベント
   _selectItem = (e) ->
@@ -72,6 +46,8 @@ setupTimelineEvents = ->
     if isSelectedCommonEvent
       # 共通のイベントを選択 → 変更値を表示
       d = "values_div"
+      # 初期化
+      $(".colorPicker", emt).ColorPicker({})
     else
       # アイテムのイベントを選択 → アクション名一覧を表示
       d = "action_div"
@@ -96,7 +72,7 @@ setupTimelineEvents = ->
     $("<input type='hidden' class='obj_id', value='#{v}'>").appendTo($('values', emt))
 
   # アクション名選択イベント
-  _selectAction = (e) ->
+  _pushMethodName = (e) ->
     emt = $(e).closest('.event')
     item_id = $(e).find('input.item_id').val()
     method_name = $(e).find('input.method_name').val()
@@ -172,7 +148,7 @@ setupTimelineEvents = ->
       $('#timeline-config').append(emt)
 
     # アイテム選択メニュー更新
-    _updateSelectItemMenu.call(self)
+    updateSelectItemMenu()
 
     # JSイベントの追加
     do =>
@@ -184,7 +160,7 @@ setupTimelineEvents = ->
       em = $('.action_forms li', emt)
       em.off('click')
       em.on('click', (e) ->
-        _selectAction.call(self, @)
+        _pushMethodName.call(self, @)
       )
       em = $('.push.button.reset', emt)
       em.off('click')
@@ -227,6 +203,8 @@ setupTimelineEvents = ->
       # イベント設定済み
 
 
+  ### private method ここまで ###
+
   # イベントのクリック
   $('.timeline_event').off('click')
   $('.timeline_event').on('click', (e) ->
@@ -242,6 +220,33 @@ setupTimelineEvents = ->
     stop: (event, ui) ->
       # イベントのソート番号を更新
   })
+
+# アイテム選択メニューを更新
+updateSelectItemMenu = ->
+  # 作成されたアイテムの一覧を取得
+  teItemSelects = $('#timeline-config .te_item_select')
+  teItemSelect = teItemSelects[0]
+  selectOptions = ''
+  items = $('#page_values .item')
+  items.children().each( ->
+    id = $(@).find('input.id').val()
+    name = $(@).find('input.name').val()
+    itemType = $(@).find('input.itemType').val()
+    selectOptions += """
+        <option value='#{id}&#{itemType}'>
+          #{name}
+        </option>
+      """
+  )
+
+  # メニューを入れ替え
+  teItemSelects.each( ->
+    $(@).find('option').each( ->
+      if $(@).val().length > 0 && $(@).val().indexOf('c_') != 0
+        $(@).remove()
+    )
+    $(@).append($(selectOptions))
+  )
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->

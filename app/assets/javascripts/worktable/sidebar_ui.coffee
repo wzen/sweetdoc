@@ -159,7 +159,7 @@ settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
     slide: (event, ui) ->
       index = $(ui.handle).index()
       position = $('.btn-bg-color' + (index + 2) + '-position', cssCode)
-      position.html(ui.value)
+      position.html(("0" + ui.value).slice(-2))
       cssStyle.text(cssCode.text())
   })
 
@@ -245,35 +245,3 @@ switchGradientColorSelectorVisible = (gradientStepValue, cssConfig) ->
       element.css('display', '')
 
 ### グラデーション ここまで ###
-
-### カラーピッカー ここから ###
-
-
-# カラーピッカーの作成
-# @param [Object] element HTML要素
-createColorPicker = (element) ->
-  $(element).ColorPicker({})
-
-# カラーピッカーの設定
-# @param [Object] element HTML要素
-# @param [Color] changeColor 変更色
-# @param [Function] onChange 変更時に呼ばれるメソッド
-settingColorPicker = (element, changeColor, onChange) ->
-  emt = $(element)
-  emt.ColorPickerSetColor(changeColor)
-  emt.ColorPickerResetOnChange(onChange)
-
-#カラーピッカー値の初期化(アイテムのコンテキスト表示時に設定)
-initColorPickerValue = ->
-  $('.colorPicker', sidebarWrapper).each( ->
-    id = $(this).attr('id')
-    color = $('.' + id, cssCode).html()
-    $(this).css('backgroundColor', '#' + color)
-    inputEmt = sidebarWrapper.find('#' + id + '-input')
-    inputEmt.attr('value', color)
-  )
-
-
-### カラーピッカー ここまで ###
-
-

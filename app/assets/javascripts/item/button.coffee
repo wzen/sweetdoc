@@ -208,7 +208,6 @@ if window.worktablePage?
 
     # CSSボタンコントロール初期化
     setupOptionMenu: ->
-      base = @
       cssRoot = @cssRoot
       cssCache = @cssCache
       cssCode = @cssCode
@@ -255,10 +254,6 @@ if window.worktablePage?
       settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
 
       # オプションメニューを作成
-      ## カラーピッカー
-      createColorPicker(btnBgColor)
-      createColorPicker(btnShadowColor)
-
       # カラーピッカーイベント
       btnBgColor.each( ->
         self = $(@)
@@ -266,6 +261,7 @@ if window.worktablePage?
         btnCodeEmt = cssCode.find("." + className).first()
         colorValue = btnCodeEmt.text()
         self.css("backgroundColor", "#" + colorValue)
+        self.ColorPicker({})
         settingColorPicker(
           self,
           colorValue,
@@ -273,8 +269,7 @@ if window.worktablePage?
             self.css("backgroundColor", "#" + b)
             btnCodeEmt = cssCode.find("." + className)
             btnCodeEmt.text(b)
-            cssCode = base.cssCode
-            cssStyle = base.cssStyle
+            #btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
             cssStyle.text(cssCode.text())
         )
         self.unbind()
@@ -292,15 +287,15 @@ if window.worktablePage?
         btnCodeEmt = cssCode.find("." + className).first()
         colorValue = btnCodeEmt.text()
         self.css("backgroundColor", "#" + colorValue)
+        self.ColorPicker({})
         settingColorPicker(
           self,
           colorValue,
           (a, b, d) ->
             self.css("backgroundColor", "#" + b)
             btnCodeEmt = cssCode.find("." + className)
-            btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
-            cssCode = base.cssCode
-            cssStyle = base.cssStyle
+            btnCodeEmt.text(b)
+            #btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
             cssStyle.text(cssCode.text())
         )
         self.unbind()
@@ -315,8 +310,6 @@ if window.worktablePage?
       # グラデーションStepイベント
       btnGradientStep.off('keyup mouseup')
       btnGradientStep.on('keyup mouseup', (e) ->
-        cssCode = base.cssCode
-        cssStyle = base.cssStyle
         changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
         stepValue = parseInt($(e.currentTarget).val())
         for i in [2 .. 4]
@@ -339,8 +332,6 @@ if window.worktablePage?
             webkitFlag.html(webkitCache.html())
         cssStyle.text(cssCode.text())
       ).each( ->
-        cssCode = base.cssCode
-        cssStyle = base.cssStyle
         changeGradientShow(@, cssCode, cssStyle, @cssConfig)
         stepValue = parseInt($(@).val())
         for i in [2 .. 4]

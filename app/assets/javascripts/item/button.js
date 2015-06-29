@@ -190,8 +190,7 @@ if (window.worktablePage != null) {
     };
 
     WorkTableButtonItem.prototype.setupOptionMenu = function() {
-      var base, btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, name;
-      base = this;
+      var btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, name;
       cssRoot = this.cssRoot;
       cssCache = this.cssCache;
       cssCode = this.cssCode;
@@ -234,8 +233,6 @@ if (window.worktablePage != null) {
       settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
       settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
       settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-      createColorPicker(btnBgColor);
-      createColorPicker(btnShadowColor);
       btnBgColor.each(function() {
         var btnCodeEmt, className, colorValue, self;
         self = $(this);
@@ -243,12 +240,11 @@ if (window.worktablePage != null) {
         btnCodeEmt = cssCode.find("." + className).first();
         colorValue = btnCodeEmt.text();
         self.css("backgroundColor", "#" + colorValue);
+        self.ColorPicker({});
         settingColorPicker(self, colorValue, function(a, b, d) {
           self.css("backgroundColor", "#" + b);
           btnCodeEmt = cssCode.find("." + className);
           btnCodeEmt.text(b);
-          cssCode = base.cssCode;
-          cssStyle = base.cssStyle;
           return cssStyle.text(cssCode.text());
         });
         self.unbind();
@@ -266,12 +262,11 @@ if (window.worktablePage != null) {
         btnCodeEmt = cssCode.find("." + className).first();
         colorValue = btnCodeEmt.text();
         self.css("backgroundColor", "#" + colorValue);
+        self.ColorPicker({});
         settingColorPicker(self, colorValue, function(a, b, d) {
           self.css("backgroundColor", "#" + b);
           btnCodeEmt = cssCode.find("." + className);
-          btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
-          cssCode = base.cssCode;
-          cssStyle = base.cssStyle;
+          btnCodeEmt.text(b);
           return cssStyle.text(cssCode.text());
         });
         self.unbind();
@@ -285,8 +280,6 @@ if (window.worktablePage != null) {
       btnGradientStep.off('keyup mouseup');
       return btnGradientStep.on('keyup mouseup', function(e) {
         var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
-        cssCode = base.cssCode;
-        cssStyle = base.cssStyle;
         changeGradientShow(e.currentTarget, cssCode, cssStyle, this.cssConfig);
         stepValue = parseInt($(e.currentTarget).val());
         for (i = j = 2; j <= 4; i = ++j) {
@@ -314,8 +307,6 @@ if (window.worktablePage != null) {
         return cssStyle.text(cssCode.text());
       }).each(function() {
         var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
-        cssCode = base.cssCode;
-        cssStyle = base.cssStyle;
         changeGradientShow(this, cssCode, cssStyle, this.cssConfig);
         stepValue = parseInt($(this).val());
         for (i = j = 2; j <= 4; i = ++j) {

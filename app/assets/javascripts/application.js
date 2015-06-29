@@ -36,6 +36,7 @@
 //= require worktable/common/common_func
 //= require worktable/common/history
 //= require worktable/common/server_storage
+//= require worktable/util/colorpicker
 //= require worktable/header/header
 //= require worktable/item_extend/common_extend
 //= require worktable/item_extend/canvasitem_extend
