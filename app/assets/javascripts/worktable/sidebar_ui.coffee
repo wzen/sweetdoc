@@ -155,6 +155,7 @@ settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
     element.slider('destroy')
   catch #何もしない
   element.slider({
+    # 0%と100%は含まない
     min: 1
     max: 99
     values: values

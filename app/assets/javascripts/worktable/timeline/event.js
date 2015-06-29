@@ -42,7 +42,12 @@ setupTimelineEvents = function() {
     isSelectedCommonEvent = v.indexOf('c_') === 0;
     if (isSelectedCommonEvent) {
       d = "values_div";
-      $(".colorPicker", emt).ColorPicker({});
+      $(".colorPicker", emt).each(function() {
+        self = $(this);
+        if (!self.hasClass('temp')) {
+          return initColorPicker(self, "fff", null);
+        }
+      });
     } else {
       d = "action_div";
       vEmt = $('#' + v);

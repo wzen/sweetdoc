@@ -46,8 +46,13 @@ setupTimelineEvents = ->
     if isSelectedCommonEvent
       # 共通のイベントを選択 → 変更値を表示
       d = "values_div"
-      # 初期化
-      $(".colorPicker", emt).ColorPicker({})
+      # カラーピッカー初期化
+
+      $(".colorPicker", emt).each( ->
+        self = $(@)
+        if !self.hasClass('temp')
+          initColorPicker(self, "fff", null)
+      )
     else
       # アイテムのイベントを選択 → アクション名一覧を表示
       d = "action_div"

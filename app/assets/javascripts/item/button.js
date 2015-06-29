@@ -239,20 +239,10 @@ if (window.worktablePage != null) {
         className = self[0].classList[0];
         btnCodeEmt = cssCode.find("." + className).first();
         colorValue = btnCodeEmt.text();
-        self.css("backgroundColor", "#" + colorValue);
-        self.ColorPicker({});
-        settingColorPicker(self, colorValue, function(a, b, d) {
-          self.css("backgroundColor", "#" + b);
+        return initColorPicker(self, colorValue, function(a, b, d) {
           btnCodeEmt = cssCode.find("." + className);
           btnCodeEmt.text(b);
           return cssStyle.text(cssCode.text());
-        });
-        self.unbind();
-        return self.mousedown(function(e) {
-          e.stopPropagation();
-          clearAllItemStyle();
-          self.ColorPickerHide();
-          return self.ColorPickerShow();
         });
       });
       btnShadowColor.each(function() {
@@ -261,20 +251,10 @@ if (window.worktablePage != null) {
         className = self[0].classList[0];
         btnCodeEmt = cssCode.find("." + className).first();
         colorValue = btnCodeEmt.text();
-        self.css("backgroundColor", "#" + colorValue);
-        self.ColorPicker({});
-        settingColorPicker(self, colorValue, function(a, b, d) {
-          self.css("backgroundColor", "#" + b);
+        return initColorPicker(self, colorValue, function(a, b, d) {
           btnCodeEmt = cssCode.find("." + className);
-          btnCodeEmt.text(b);
+          btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
           return cssStyle.text(cssCode.text());
-        });
-        self.unbind();
-        return self.mousedown(function(e) {
-          e.stopPropagation();
-          clearAllItemStyle();
-          self.ColorPickerHide();
-          return self.ColorPickerShow();
         });
       });
       btnGradientStep.off('keyup mouseup');

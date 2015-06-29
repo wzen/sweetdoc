@@ -230,7 +230,7 @@ if window.worktablePage?
         @setItemPropToPageValue('name', @name)
       )
 
-      #スライダー
+      # スライダー初期化
       settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
       settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
       settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
@@ -260,50 +260,27 @@ if window.worktablePage?
         className = self[0].classList[0]
         btnCodeEmt = cssCode.find("." + className).first()
         colorValue = btnCodeEmt.text()
-        self.css("backgroundColor", "#" + colorValue)
-        self.ColorPicker({})
-        settingColorPicker(
+        initColorPicker(
           self,
           colorValue,
           (a, b, d) ->
-            self.css("backgroundColor", "#" + b)
             btnCodeEmt = cssCode.find("." + className)
             btnCodeEmt.text(b)
-            #btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
             cssStyle.text(cssCode.text())
         )
-        self.unbind()
-        self.mousedown( (e) ->
-          e.stopPropagation()
-          clearAllItemStyle()
-          self.ColorPickerHide()
-          self.ColorPickerShow()
-        )
       )
-
       btnShadowColor.each( ->
         self = $(@)
         className = self[0].classList[0]
         btnCodeEmt = cssCode.find("." + className).first()
         colorValue = btnCodeEmt.text()
-        self.css("backgroundColor", "#" + colorValue)
-        self.ColorPicker({})
-        settingColorPicker(
+        initColorPicker(
           self,
           colorValue,
           (a, b, d) ->
-            self.css("backgroundColor", "#" + b)
             btnCodeEmt = cssCode.find("." + className)
-            btnCodeEmt.text(b)
-            #btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
+            btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
             cssStyle.text(cssCode.text())
-        )
-        self.unbind()
-        self.mousedown( (e) ->
-          e.stopPropagation()
-          clearAllItemStyle()
-          self.ColorPickerHide()
-          self.ColorPickerShow()
         )
       )
 
