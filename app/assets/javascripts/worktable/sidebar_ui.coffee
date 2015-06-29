@@ -155,6 +155,8 @@ settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
     element.slider('destroy')
   catch #何もしない
   element.slider({
+    min: 1
+    max: 99
     values: values
     slide: (event, ui) ->
       index = $(ui.handle).index()

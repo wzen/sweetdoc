@@ -172,6 +172,8 @@ settingGradientSliderByElement = function(element, values, cssCode, cssStyle) {
 
   }
   element.slider({
+    min: 1,
+    max: 99,
     values: values,
     slide: function(event, ui) {
       var index, position;
