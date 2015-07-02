@@ -7,8 +7,8 @@ class ItemBase extends Extend
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
   # @abstract
-  # @property [ItemType] ITEMTYPE アイテム種別
-  @ITEMTYPE = ""
+  # @property [ItemType] ITEM_ID アイテム種別
+  @ITEM_ID = ""
 
   # コンストラクタ
   # @param [Array] cood 座標

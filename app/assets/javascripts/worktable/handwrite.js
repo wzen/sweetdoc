@@ -21,9 +21,9 @@ initHandwrite = function() {
     };
   };
   mouseDownDrawing = function(loc) {
-    if (selectItemMenu === Constant.ItemType.ARROW) {
+    if (selectItemMenu === Constant.ItemId.ARROW) {
       item = new WorkTableArrowItem(loc);
-    } else if (selectItemMenu === Constant.ItemType.BUTTON) {
+    } else if (selectItemMenu === Constant.ItemId.BUTTON) {
       item = new WorkTableButtonItem(loc);
     }
     item.saveDrawingSurface();

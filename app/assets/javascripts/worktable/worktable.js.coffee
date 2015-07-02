@@ -6,6 +6,7 @@ setupEvents = (obj) ->
   # コンテキストメニュー設定
   do ->
     menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+    contextSelector = null
     if ArrowItem? && obj instanceof ArrowItem
       menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
       contextSelector = ".arrow"
@@ -63,9 +64,9 @@ clearSelectedBorder = ->
 
 
 # アイテムのJSファイル初期化関数名を取得
-# @param [Int] itemType アイテム種別
-getInitFuncName = (itemType) ->
-  itemName = Constant.ITEM_PATH_LIST[itemType]
+# @param [Int] itemId アイテム種別
+getInitFuncName = (itemId) ->
+  itemName = Constant.ITEM_PATH_LIST[itemId]
   # TODO: ハイフンが途中にあるものはキャメルに変換
   return itemName + "Init"
 

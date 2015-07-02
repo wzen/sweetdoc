@@ -11,10 +11,10 @@ initHeaderMenu = ->
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
   $('.menu-item', itemsSelectMenuEmt).on('click', ->
     # TODO: 取り方見直す
-    itemType = parseInt($(this).attr('id').replace('menu-item-', ''))
+    itemId = parseInt($(this).attr('id').replace('menu-item-', ''))
     itemsSelectMenuEmt.removeClass('active')
     $(@).parent('li').addClass('active')
-    window.selectItemMenu = itemType
+    window.selectItemMenu = itemId
     changeMode(Constant.Mode.DRAW)
-    loadItemJs(itemType)
+    loadItemJs(itemId)
   )

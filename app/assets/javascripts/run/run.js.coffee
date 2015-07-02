@@ -63,18 +63,18 @@ initTimeline = ->
     actorList = []
     #item = null
     miniObj = obj.miniObj
-    if miniObj.itemType == Constant.ItemType.BUTTON
+    if miniObj.itemId == Constant.ItemId.BUTTON
       item = new ButtonItem()
-    else if miniObj.itemType == Constant.ItemType.ARROW
+    else if miniObj.itemId == Constant.ItemId.ARROW
       item = new ArrowItem()
     item.initListener(miniObj, obj.itemSize)
     item.reDraw(false)
     item.setEvents(obj.sEvent, obj.cEvent)
     actorList.push(item)
     # とりあえずここでChapterを分ける
-    if miniObj.itemType == Constant.ItemType.BUTTON
+    if miniObj.itemId == Constant.ItemId.BUTTON
       chapter = new ClickChapter(actorList)
-    else if miniObj.itemType == Constant.ItemType.ARROW
+    else if miniObj.itemId == Constant.ItemId.ARROW
       chapter = new ScrollChapter(actorList)
     chapterList.push(chapter)
 

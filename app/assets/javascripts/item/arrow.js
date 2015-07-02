@@ -11,7 +11,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.IDENTITY = "Arrow";
 
-  ArrowItem.ITEMTYPE = Constant.ItemType.ARROW;
+  ArrowItem.ITEM_ID = Constant.ItemId.ARROW;
 
   ARROW_WIDTH = 37;
 
@@ -124,7 +124,7 @@ ArrowItem = (function(superClass) {
     obj = {
       id: makeClone(this.id),
       name: makeClone(this.name),
-      itemType: Constant.ItemType.ARROW,
+      itemId: Constant.ItemId.ARROW,
       itemSize: makeClone(this.itemSize),
       zindex: makeClone(this.zindex),
       coodRegist: makeClone(this.coodRegist),
@@ -473,7 +473,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == n
     if (option == null) {
       option = {};
     }
-    return window.loadedItemTypeList.push(Constant.ItemType.ARROW);
+    return window.loadedItemTypeList.push(Constant.ItemId.ARROW);
   };
 }
 

@@ -8,7 +8,7 @@
                 <select class="form-control te_item_select" name="te_item_select">
                     <option value="">(Select)</option>
                     <% @common_action_events.each do |c| %>
-                      <option value="c_<%= c.id %>"><%= c.options['name'] %></option>
+                      <option value="c_<%= c.action_event_type_id %>"><%= c.options['name'] %></option>
                     <% end %>
                 </select>
             </div>
@@ -28,7 +28,7 @@
             <div class="forms value_forms">
                 <!-- イベント毎の設定値 -->
                 <% @common_action_events.each do |c| %>
-                    <div class="<%= "c_#{c.id}" %>" style="display: none">
+                    <div class="<%= "c_#{c.action_event_type_id}" %>" style="display: none">
                       <% if c.action_event_type_id == Const::CommonActionEventChangeType::BACKGROUND  %>
                         <%= render 'worktable/sidebar_menu/timeline/parts/background' %>
                       <% elsif c.action_event_type_id == Const::CommonActionEventChangeType::ZOOM %>

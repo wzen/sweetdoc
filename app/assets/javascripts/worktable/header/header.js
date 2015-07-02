@@ -12,13 +12,13 @@ initHeaderMenu = function() {
   });
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
   return $('.menu-item', itemsSelectMenuEmt).on('click', function() {
-    var itemType;
-    itemType = parseInt($(this).attr('id').replace('menu-item-', ''));
+    var itemId;
+    itemId = parseInt($(this).attr('id').replace('menu-item-', ''));
     itemsSelectMenuEmt.removeClass('active');
     $(this).parent('li').addClass('active');
-    window.selectItemMenu = itemType;
+    window.selectItemMenu = itemId;
     changeMode(Constant.Mode.DRAW);
-    return loadItemJs(itemType);
+    return loadItemJs(itemId);
   });
 };
 

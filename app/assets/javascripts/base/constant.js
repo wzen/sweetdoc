@@ -14,6 +14,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.PAGE_VALUES_SEPERATOR = ":";
 
+    Constant.TIMELINE_ITEM_SEPERATOR = "&";
+
     Constant.Mode = (function() {
       function Mode() {}
 
@@ -27,14 +29,14 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ItemType = (function() {
-      function ItemType() {}
+    Constant.ItemId = (function() {
+      function ItemId() {}
 
-      ItemType.ARROW = constant.ItemType.ARROW;
+      ItemId.ARROW = constant.ItemId.ARROW;
 
-      ItemType.BUTTON = constant.ItemType.BUTTON;
+      ItemId.BUTTON = constant.ItemId.BUTTON;
 
-      return ItemType;
+      return ItemId;
 
     })();
 
@@ -125,6 +127,17 @@ if (typeof gon !== "undefined" && gon !== null) {
       ElementAttribute.TE_VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS;
 
       return ElementAttribute;
+
+    })();
+
+    Constant.CommonActionEventChangeType = (function() {
+      function CommonActionEventChangeType() {}
+
+      CommonActionEventChangeType.BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND;
+
+      CommonActionEventChangeType.ZOOM = constant.CommonActionEventChangeType.ZOOM;
+
+      return CommonActionEventChangeType;
 
     })();
 

@@ -14,6 +14,14 @@ checkBlowserEnvironment = ->
     return false
   return true
 
+typeOfValue = do ->
+  classToType = {}
+  for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
+    classToType["[object " + name + "]"] = name.toLowerCase()
+  (obj) ->
+    strType = Object::toString.call(obj)
+    classToType[strType] or "object"
+
 # アイテムのIDを作成
 # @return [Int] 生成したID
 generateId = ->

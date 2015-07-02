@@ -3,8 +3,8 @@
 class ArrowItem extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Arrow"
-  # @property [String] ITEMTYPE アイテム種別
-  @ITEMTYPE = Constant.ItemType.ARROW
+  # @property [String] ITEM_ID アイテム種別
+  @ITEM_ID = Constant.ItemId.ARROW
 
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 37
@@ -133,7 +133,7 @@ class ArrowItem extends CanvasItemBase
     obj = {
       id: makeClone(@id)
       name: makeClone(@name)
-      itemType: Constant.ItemType.ARROW
+      itemId: Constant.ItemId.ARROW
       itemSize: makeClone(@itemSize)
       zindex: makeClone(@zindex)
       coodRegist: makeClone(@coodRegist)
@@ -454,5 +454,5 @@ if window.worktablePage?
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
   window.itemInitFuncList.arrowInit = (option = {}) ->
     #JS読み込み完了
-    window.loadedItemTypeList.push(Constant.ItemType.ARROW)
+    window.loadedItemTypeList.push(Constant.ItemId.ARROW)
 

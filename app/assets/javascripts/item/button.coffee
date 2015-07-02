@@ -4,8 +4,8 @@
 class ButtonItem extends CssItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Button"
-  # @property [String] ITEMTYPE アイテム種別
-  @ITEMTYPE = Constant.ItemType.BUTTON
+  # @property [String] ITEM_ID アイテム種別
+  @ITEM_ID = Constant.ItemId.BUTTON
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -62,7 +62,7 @@ class ButtonItem extends CssItemBase
     obj = {
       id: makeClone(@id)
       name: makeClone(@name)
-      itemType: Constant.ItemType.BUTTON
+      itemId: Constant.ItemId.BUTTON
       mousedownCood: makeClone(@mousedownCood)
       itemSize: makeClone(@itemSize)
       zindex: makeClone(@zindex)
@@ -335,7 +335,7 @@ if window.worktablePage?
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
   window.itemInitFuncList.buttonInit = (option = {}) ->
     #JS読み込み完了
-    window.loadedItemTypeList.push(Constant.ItemType.BUTTON)
+    window.loadedItemTypeList.push(Constant.ItemId.BUTTON)
 
     if option.isWorkTable?
       # ワークテーブルの初期化処理

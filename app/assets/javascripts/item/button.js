@@ -9,7 +9,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.IDENTITY = "Button";
 
-  ButtonItem.ITEMTYPE = Constant.ItemType.BUTTON;
+  ButtonItem.ITEM_ID = Constant.ItemId.BUTTON;
 
   function ButtonItem(cood) {
     if (cood == null) {
@@ -84,7 +84,7 @@ ButtonItem = (function(superClass) {
     obj = {
       id: makeClone(this.id),
       name: makeClone(this.name),
-      itemType: Constant.ItemType.BUTTON,
+      itemId: Constant.ItemId.BUTTON,
       mousedownCood: makeClone(this.mousedownCood),
       itemSize: makeClone(this.itemSize),
       zindex: makeClone(this.zindex),
@@ -324,7 +324,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
     if (option == null) {
       option = {};
     }
-    window.loadedItemTypeList.push(Constant.ItemType.BUTTON);
+    window.loadedItemTypeList.push(Constant.ItemId.BUTTON);
     if (option.isWorkTable != null) {
       css_temp = option.css_temp;
       if (css_temp != null) {

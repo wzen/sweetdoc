@@ -1,3 +1,76 @@
+class TimelineEvent
+  constructor: (e, eventId = null) ->
+    @emt = $(e).closest('.event')
+    if eventId?
+      @eventId = eventId
+      # FIXME:
+      @configValues = null
+    else
+      @eventId = getPageValue(Constant.PageValueKey.TE_COUNT)
+
+  setSelectEvent: (e, value) ->
+    @isCommonEvent = value.indexOf('c_') != 0
+    if @isCommonEvent
+      @actionEventTypeId = parseInt(value.substring(2))
+    else
+      splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR)
+      @id = splitValues[0]
+      @itemId = splitValues[1]
+
+    # 選択枠消去
+    clearSelectedBorder()
+
+    d = null
+    if @isCommonEvent
+      # 共通のイベントを選択 → 変更値を表示
+      d = "values_div"
+      # 初期化
+      initTimelineEventValue(@emt, parseInt(v.substring(2)), true)
+    else
+      # アイテムのイベントを選択 → アクション名一覧を表示
+      d = "action_div"
+      vEmt = $('#' + @id)
+      # 選択枠設定
+      setSelectedBorder(vEmt, 'timeline')
+      # フォーカス
+      focusToTarget(vEmt)
+
+    # 一度全て非表示にする
+    $(".config.te_div", @emt).css('display', 'none')
+    $(".#{d} .forms", @emt).children("div").css('display', 'none')
+
+    # 表示
+    displayClassName = ''
+    if @isCommonEvent
+      displayClassName = v
+    else
+      displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', @itemId)
+    $(".#{displayClassName}", @emt).css('display', '')
+    $(".#{d}", @emt).css('display', '')
+    $("<input type='hidden' class='obj_id', value='#{@id}'>").appendTo($('values', @emt))
+
+  clickMethod: (e) ->
+    item_id = $(e).find('input.item_id').val()
+    method_name = $(e).find('input.method_name').val()
+    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name)
+    $(".values_div .forms", @emt).children("div").css('display', 'none')
+    $(".#{valueClassName}", @emt).css('display', '')
+    $(".config.values_div", @emt).css('display', '')
+    $("<input type='hidden' class='item_id', value='#{item_id}'>").appendTo($('values', @emt))
+    $("<input type='hidden' class='method_name', value='#{method_name}'>").appendTo($('values', @emt))
+
+
+  setConfigValues: ->
+
+
+
+
+  readFromPageValue: ->
+
+  writeToPageValue: ->
+
+
+
 # タイムラインイベントのConfigを追加
 # @param [String] contents 追加するHTMLの文字列
 addTimelineEventContents = (te_actions, te_values) ->
@@ -30,6 +103,8 @@ addTimelineEventContents = (te_actions, te_values) ->
 setupTimelineEvents = ->
   self = @
 
+
+
   ### private method ここから ###
 
   # アイテム選択イベント
@@ -37,8 +112,14 @@ setupTimelineEvents = ->
     # 選択枠消去
     clearSelectedBorder()
 
+    # デフォルト選択時
+    if $(e).val() == ""
+      # 非表示にする
+      $(".config.te_div", emt).css('display', 'none')
+      return
+
     emt = $(e).closest('.event')
-    values = $(e).val().split('&')
+    values = $(e).val().split(Constant.TIMELINE_ITEM_SEPERATOR)
     v = values[0]
     i = values[1]
     d = null
@@ -46,13 +127,8 @@ setupTimelineEvents = ->
     if isSelectedCommonEvent
       # 共通のイベントを選択 → 変更値を表示
       d = "values_div"
-      # カラーピッカー初期化
-
-      $(".colorPicker", emt).each( ->
-        self = $(@)
-        if !self.hasClass('temp')
-          initColorPicker(self, "fff", null)
-      )
+      # 初期化
+      initTimelineEventValue(emt, parseInt(v.substring(2)), true)
     else
       # アイテムのイベントを選択 → アクション名一覧を表示
       d = "action_div"
@@ -236,9 +312,9 @@ updateSelectItemMenu = ->
   items.children().each( ->
     id = $(@).find('input.id').val()
     name = $(@).find('input.name').val()
-    itemType = $(@).find('input.itemType').val()
+    itemId = $(@).find('input.itemId').val()
     selectOptions += """
-        <option value='#{id}&#{itemType}'>
+        <option value='#{id}#{Constant.TIMELINE_ITEM_SEPERATOR}#{itemId}'>
           #{name}
         </option>
       """
@@ -252,6 +328,32 @@ updateSelectItemMenu = ->
     )
     $(@).append($(selectOptions))
   )
+
+# タイムラインイベントの設定値初期化
+initTimelineEventValue = (element, type, isCommonEvent) ->
+  typeArray = []
+  if typeOfValue(type) != "array"
+    typeArray.push(type)
+  else
+    typeArray = type
+
+  if isCommonEvent
+    $(typeArray).each( ->
+      if @ == Constant.CommonActionEventChangeType.BACKGROUND
+        bgColor = $('#main-wrapper.stage_container').css('backgroundColor')
+        $(".baseColor", $("values_div", element)).css('backgroundColor', bgColor)
+        $(".colorPicker", element).each( ->
+          self = $(@)
+          if !self.hasClass('temp') && !self.hasClass('baseColor')
+            initColorPicker(self, "fff", null)
+        )
+      else if @ == Constant.CommonActionEventChangeType.ZOOM
+        # FIXME:
+        console.log('zoom')
+    )
+  else
+    # FIXME:
+    console.log('通常')
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->

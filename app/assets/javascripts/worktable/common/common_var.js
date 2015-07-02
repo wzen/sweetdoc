@@ -16,8 +16,8 @@ initCommonVar = function() {
   window.operationHistoryIndex = 0;
   window.scrollViewMag = 500;
   lstorage.clear();
-  window.selectItemMenu = Constant.ItemType.BUTTON;
-  return loadItemJs(Constant.ItemType.BUTTON);
+  window.selectItemMenu = Constant.ItemId.BUTTON;
+  return loadItemJs(Constant.ItemId.BUTTON);
 };
 
 //# sourceMappingURL=common_var.js.map

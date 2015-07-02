@@ -45,9 +45,9 @@ loadFromServer = ->
           for j in itemList
             obj = j.obj
             item = null
-            if obj.itemType == Constant.ItemType.BUTTON
+            if obj.itemId == Constant.ItemId.BUTTON
               item = new WorkTableButtonItem()
-            else if obj.itemType == Constant.ItemType.ARROW
+            else if obj.itemId == Constant.ItemId.ARROW
               item = new WorkTableArrowItem()
             item.reDrawByMinimumObject(obj)
             setupEvents(item)

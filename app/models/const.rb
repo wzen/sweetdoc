@@ -16,13 +16,13 @@ class Const
   end
 
   # アイテム種別
-  class ItemType
+  class ItemId
     # @property [Int] BUTTON ボタン
     BUTTON = 1
     # @property [Int] ARROW 矢印
     ARROW = 2
   end
-  ITEM_PATH_LIST = {ItemType::ARROW.to_s.to_sym => 'arrow', ItemType::BUTTON.to_s.to_sym => 'button'}
+  ITEM_PATH_LIST = {ItemId::ARROW.to_s.to_sym => 'arrow', ItemId::BUTTON.to_s.to_sym => 'button'}
 
   # アイテム種別
   class ItemDrawType

@@ -13,6 +13,7 @@ setupEvents = function(obj) {
         uiIcon: "ui-icon-scissors"
       }
     ];
+    contextSelector = null;
     if ((typeof ArrowItem !== "undefined" && ArrowItem !== null) && obj instanceof ArrowItem) {
       menu.push({
         title: "ArrowItem",
@@ -84,9 +85,9 @@ clearSelectedBorder = function() {
   return $('.editSelected, .timelineSelected').remove();
 };
 
-getInitFuncName = function(itemType) {
+getInitFuncName = function(itemId) {
   var itemName;
-  itemName = Constant.ITEM_PATH_LIST[itemType];
+  itemName = Constant.ITEM_PATH_LIST[itemId];
   return itemName + "Init";
 };
 

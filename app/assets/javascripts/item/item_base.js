@@ -10,7 +10,7 @@ ItemBase = (function(superClass) {
 
   ItemBase.IDENTITY = "";
 
-  ItemBase.ITEMTYPE = "";
+  ItemBase.ITEM_ID = "";
 
   function ItemBase(cood) {
     if (cood == null) {

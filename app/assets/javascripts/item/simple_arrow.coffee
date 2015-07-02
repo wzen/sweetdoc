@@ -4,8 +4,8 @@ class SimpleArrowItem extends ItemBase
 
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "simplearrow"
-  # @property [String] ITEMTYPE アイテム種別
-  @ITEMTYPE = Constant.ItemType.ARROW
+  # @property [String] ITEM_ID アイテム種別
+  @ITEM_ID = Constant.ItemId.ARROW
 
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 30
@@ -107,7 +107,7 @@ class SimpleArrowItem extends ItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   getMinimumObject: ->
     obj = {
-      itemType: Constant.ItemType.ARROW
+      itemId: Constant.ItemId.ARROW
       a: @itemSize
       b: @zindex
       c: @coodRegist

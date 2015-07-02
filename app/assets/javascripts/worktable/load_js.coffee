@@ -1,8 +1,8 @@
 # JSファイルをサーバから読み込む
-# @param [Int] itemType アイテム種別
+# @param [Int] itemId アイテム種別
 # @param [Function] callback コールバック関数
-loadItemJs = (itemType, callback = null) ->
-  itemInitFuncName = getInitFuncName(itemType)
+loadItemJs = (itemId, callback = null) ->
+  itemInitFuncName = getInitFuncName(itemId)
   if window.itemInitFuncList[itemInitFuncName]?
     # 既に読み込まれている場合はコールバックのみ実行
     window.itemInitFuncList[itemInitFuncName]()
@@ -17,7 +17,7 @@ loadItemJs = (itemType, callback = null) ->
       type: "POST"
       dataType: "json"
       data: {
-        itemId: itemType
+        itemId: itemId
       }
       success: (data)->
         if data.css_info?

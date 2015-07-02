@@ -11,6 +11,8 @@ if gon?
     @ITEM_PATH_LIST = constant.ITEM_PATH_LIST
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     @PAGE_VALUES_SEPERATOR = ":"
+    # @property [String] TIMELINE_ITEM_SEPERATOR タイムラインイベント(アイテム)値のセパレータ
+    @TIMELINE_ITEM_SEPERATOR = "&"
 
     # 操作モード
     class @Mode
@@ -22,11 +24,11 @@ if gon?
       @OPTION = constant.Mode.OPTION
 
     # アイテム種別
-    class @ItemType
+    class @ItemId
       # @property [Int] ARROW 矢印
-      @ARROW = constant.ItemType.ARROW
+      @ARROW = constant.ItemId.ARROW
       # @property [Int] BUTTON ボタン
-      @BUTTON = constant.ItemType.BUTTON
+      @BUTTON = constant.ItemId.BUTTON
 
     # アイテムに対するアクション
     class @ItemActionType
@@ -96,3 +98,9 @@ if gon?
       @TE_ACTION_CLASS = 'timeline_event_action_@itemid'
       # @property [String] TE_VALUES_DIV タイムラインイベント アクションUI
       @TE_VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS
+
+    class @CommonActionEventChangeType
+      # @property [Int] BACKGROUND 背景
+      @BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND
+      # @property [Int] ZOOM ズーム
+      @ZOOM = constant.CommonActionEventChangeType.ZOOM

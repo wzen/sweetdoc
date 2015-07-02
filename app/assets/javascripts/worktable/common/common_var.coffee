@@ -18,6 +18,6 @@ initCommonVar = ->
   lstorage.clear()
 
   # 初期状態としてボタンを選択(暫定)
-  window.selectItemMenu = Constant.ItemType.BUTTON
-  loadItemJs(Constant.ItemType.BUTTON)
+  window.selectItemMenu = Constant.ItemId.BUTTON
+  loadItemJs(Constant.ItemId.BUTTON)
 
