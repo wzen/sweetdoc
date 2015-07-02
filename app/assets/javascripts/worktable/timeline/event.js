@@ -2,22 +2,30 @@
 var TimelineEvent, addTimelineEventContents, initTimelineEventValue, setupTimeLineCss, setupTimeLineObjects, setupTimelineEvents, updateSelectItemMenu;
 
 TimelineEvent = (function() {
-  function TimelineEvent(e, eventId) {
-    if (eventId == null) {
-      eventId = null;
+  function TimelineEvent(e, teNum) {
+    if (teNum == null) {
+      teNum = null;
     }
     this.emt = $(e).closest('.event');
-    if (eventId != null) {
-      this.eventId = eventId;
+    if (teNum != null) {
+      this.teNum = teNum;
       this.configValues = null;
     } else {
-      this.eventId = getPageValue(Constant.PageValueKey.TE_COUNT);
+      this.teNum = getPageValue(Constant.PageValueKey.TE_COUNT);
+      if (this.teNum == null) {
+        this.teNum = 1;
+      }
     }
   }
 
-  TimelineEvent.prototype.setSelectEvent = function(e, value) {
-    var d, displayClassName, splitValues, vEmt;
-    this.isCommonEvent = value.indexOf('c_') !== 0;
+  TimelineEvent.prototype.selectItem = function(e) {
+    var d, displayClassName, splitValues, vEmt, value;
+    value = $(e).val();
+    if (value === "") {
+      $(".config.te_div", emt).css('display', 'none');
+      return;
+    }
+    this.isCommonEvent = value.indexOf('c_') === 0;
     if (this.isCommonEvent) {
       this.actionEventTypeId = parseInt(value.substring(2));
     } else {
@@ -29,7 +37,7 @@ TimelineEvent = (function() {
     d = null;
     if (this.isCommonEvent) {
       d = "values_div";
-      initTimelineEventValue(this.emt, parseInt(v.substring(2)), true);
+      initTimelineEventValue(this.emt, this.actionEventTypeId, true);
     } else {
       d = "action_div";
       vEmt = $('#' + this.id);
@@ -40,7 +48,7 @@ TimelineEvent = (function() {
     $("." + d + " .forms", this.emt).children("div").css('display', 'none');
     displayClassName = '';
     if (this.isCommonEvent) {
-      displayClassName = v;
+      displayClassName = value;
     } else {
       displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', this.itemId);
     }
@@ -50,18 +58,40 @@ TimelineEvent = (function() {
   };
 
   TimelineEvent.prototype.clickMethod = function(e) {
-    var item_id, method_name, valueClassName;
-    item_id = $(e).find('input.item_id').val();
-    method_name = $(e).find('input.method_name').val();
-    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
+    var valueClassName;
+    this.method_name = $(e).find('input.method_name').val();
+    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.method_name);
     $(".values_div .forms", this.emt).children("div").css('display', 'none');
     $("." + valueClassName, this.emt).css('display', '');
     $(".config.values_div", this.emt).css('display', '');
-    $("<input type='hidden' class='item_id', value='" + item_id + "'>").appendTo($('values', this.emt));
-    return $("<input type='hidden' class='method_name', value='" + method_name + "'>").appendTo($('values', this.emt));
+    $("<input type='hidden' class='item_id', value='" + this.itemId + "'>").appendTo($('values', this.emt));
+    return $("<input type='hidden' class='method_name', value='" + this.method_name + "'>").appendTo($('values', this.emt));
   };
 
   TimelineEvent.prototype.setConfigValues = function() {};
+
+  TimelineEvent.prototype.resetAction = function() {
+    return $('.values .args', this.emt).html('');
+  };
+
+  TimelineEvent.prototype.applyAction = function() {
+    var h, teCount;
+    h = {};
+    $('.values input', this.emt).each(function() {
+      var k, v;
+      v = $(this).val();
+      k = $(this).attr('class');
+      return h[k] = v;
+    });
+    teCount = getPageValue(Constant.PageValueKey.TE_COUNT);
+    if (teCount != null) {
+      teCount += 1;
+    } else {
+      teCount = 1;
+    }
+    setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h);
+    return setPageValue(Constant.PageValueKey.TE_COUNT, teCount);
+  };
 
   TimelineEvent.prototype.readFromPageValue = function() {};
 
@@ -97,80 +127,11 @@ addTimelineEventContents = function(te_actions, te_values) {
 };
 
 setupTimelineEvents = function() {
-  var _applyAction, _clickTimelineEvent, _createTimelineEvent, _pushMethodName, _resetAction, _selectItem, self;
+  var _clickTimelineEvent, _createTimelineEvent, self, te;
   self = this;
+  te = null;
 
   /* private method ここから */
-  _selectItem = function(e) {
-    var d, displayClassName, emt, i, isSelectedCommonEvent, v, vEmt, values;
-    clearSelectedBorder();
-    if ($(e).val() === "") {
-      $(".config.te_div", emt).css('display', 'none');
-      return;
-    }
-    emt = $(e).closest('.event');
-    values = $(e).val().split(Constant.TIMELINE_ITEM_SEPERATOR);
-    v = values[0];
-    i = values[1];
-    d = null;
-    isSelectedCommonEvent = v.indexOf('c_') === 0;
-    if (isSelectedCommonEvent) {
-      d = "values_div";
-      initTimelineEventValue(emt, parseInt(v.substring(2)), true);
-    } else {
-      d = "action_div";
-      vEmt = $('#' + v);
-      setSelectedBorder(vEmt, 'timeline');
-      focusToTarget(vEmt);
-    }
-    $(".config.te_div", emt).css('display', 'none');
-    $("." + d + " .forms", emt).children("div").css('display', 'none');
-    displayClassName = '';
-    if (isSelectedCommonEvent) {
-      displayClassName = v;
-    } else {
-      displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i);
-    }
-    $("." + displayClassName, emt).css('display', '');
-    $("." + d, emt).css('display', '');
-    return $("<input type='hidden' class='obj_id', value='" + v + "'>").appendTo($('values', emt));
-  };
-  _pushMethodName = function(e) {
-    var emt, item_id, method_name, valueClassName;
-    emt = $(e).closest('.event');
-    item_id = $(e).find('input.item_id').val();
-    method_name = $(e).find('input.method_name').val();
-    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name);
-    $(".values_div .forms", emt).children("div").css('display', 'none');
-    $("." + valueClassName, emt).css('display', '');
-    $(".config.values_div", emt).css('display', '');
-    $("<input type='hidden' class='item_id', value='" + item_id + "'>").appendTo($('values', emt));
-    return $("<input type='hidden' class='method_name', value='" + method_name + "'>").appendTo($('values', emt));
-  };
-  _resetAction = function(e) {
-    $(e).closest('.event');
-    return $('.values .args', emt).html('');
-  };
-  _applyAction = function(e) {
-    var emt, h, teCount;
-    emt = $(e).closest('.event');
-    h = {};
-    $('.values input', emt).each(function() {
-      var k, v;
-      v = $(this).val();
-      k = $(this).attr('class');
-      return h[k] = v;
-    });
-    teCount = getPageValue(Constant.PageValueKey.TE_COUNT);
-    if (teCount != null) {
-      teCount += 1;
-    } else {
-      teCount = 1;
-    }
-    setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h);
-    setPageValue(Constant.PageValueKey.TE_COUNT, teCount);
-    return _createTimelineEvent.call(self, e);
-  };
   _createTimelineEvent = function(e) {
     var newEmt, pEmt, teNum;
     pEmt = $('#timeline_events');
@@ -195,28 +156,30 @@ setupTimelineEvents = function() {
       $('#timeline-config').append(emt);
     }
     updateSelectItemMenu();
+    te = new TimelineEvent(emt);
     (function(_this) {
       return (function() {
         var em;
         em = $('.te_item_select', emt);
         em.off('change');
         em.on('change', function(e) {
-          return _selectItem.call(self, this);
+          return te.selectItem(this);
         });
         em = $('.action_forms li', emt);
         em.off('click');
         em.on('click', function(e) {
-          return _pushMethodName.call(self, this);
+          return te.clickMethod(this);
         });
         em = $('.push.button.reset', emt);
         em.off('click');
         em.on('click', function(e) {
-          return _resetAction.call(self, this);
+          return te.resetAction();
         });
         em = $('.push.button.apply', emt);
         em.off('click');
         em.on('click', function(e) {
-          return _applyAction.call(self, this);
+          te.applyAction();
+          return _createTimelineEvent.call(self, e);
         });
         em = $('.push.button.cancel', emt);
         em.off('click');
@@ -287,9 +250,9 @@ initTimelineEventValue = function(element, type, isCommonEvent) {
     typeArray = type;
   }
   if (isCommonEvent) {
-    return $(typeArray).each(function() {
+    return $(typeArray).each(function(e) {
       var bgColor;
-      if (this === Constant.CommonActionEventChangeType.BACKGROUND) {
+      if (e === Constant.CommonActionEventChangeType.BACKGROUND) {
         bgColor = $('#main-wrapper.stage_container').css('backgroundColor');
         $(".baseColor", $("values_div", element)).css('backgroundColor', bgColor);
         return $(".colorPicker", element).each(function() {
@@ -299,7 +262,7 @@ initTimelineEventValue = function(element, type, isCommonEvent) {
             return initColorPicker(self, "fff", null);
           }
         });
-      } else if (this === Constant.CommonActionEventChangeType.ZOOM) {
+      } else if (e === Constant.CommonActionEventChangeType.ZOOM) {
         return console.log('zoom');
       }
     });

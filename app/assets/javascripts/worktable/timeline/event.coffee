@@ -1,15 +1,31 @@
 class TimelineEvent
-  constructor: (e, eventId = null) ->
+  constructor: (e, teNum = null) ->
     @emt = $(e).closest('.event')
-    if eventId?
-      @eventId = eventId
+    if teNum?
+      @teNum = teNum
       # FIXME:
       @configValues = null
     else
-      @eventId = getPageValue(Constant.PageValueKey.TE_COUNT)
+      @teNum = getPageValue(Constant.PageValueKey.TE_COUNT)
+      if !@teNum?
+        @teNum = 1
 
-  setSelectEvent: (e, value) ->
-    @isCommonEvent = value.indexOf('c_') != 0
+    # tempをクローンしてtimeline_eventsに追加
+#    pEmt = $('#timeline_events')
+#    newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
+#    newEmt.find('.te_num').val(@teNum)
+#    pEmt.append(newEmt)
+
+  selectItem: (e) ->
+    value = $(e).val()
+
+    # デフォルト選択時
+    if value == ""
+      # 非表示にする
+      $(".config.te_div", emt).css('display', 'none')
+      return
+
+    @isCommonEvent = value.indexOf('c_') == 0
     if @isCommonEvent
       @actionEventTypeId = parseInt(value.substring(2))
     else
@@ -25,7 +41,7 @@ class TimelineEvent
       # 共通のイベントを選択 → 変更値を表示
       d = "values_div"
       # 初期化
-      initTimelineEventValue(@emt, parseInt(v.substring(2)), true)
+      initTimelineEventValue(@emt, @actionEventTypeId, true)
     else
       # アイテムのイベントを選択 → アクション名一覧を表示
       d = "action_div"
@@ -42,7 +58,7 @@ class TimelineEvent
     # 表示
     displayClassName = ''
     if @isCommonEvent
-      displayClassName = v
+      displayClassName = value
     else
       displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', @itemId)
     $(".#{displayClassName}", @emt).css('display', '')
@@ -50,20 +66,38 @@ class TimelineEvent
     $("<input type='hidden' class='obj_id', value='#{@id}'>").appendTo($('values', @emt))
 
   clickMethod: (e) ->
-    item_id = $(e).find('input.item_id').val()
-    method_name = $(e).find('input.method_name').val()
-    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name)
+    @method_name = $(e).find('input.method_name').val()
+    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @method_name)
     $(".values_div .forms", @emt).children("div").css('display', 'none')
     $(".#{valueClassName}", @emt).css('display', '')
     $(".config.values_div", @emt).css('display', '')
-    $("<input type='hidden' class='item_id', value='#{item_id}'>").appendTo($('values', @emt))
-    $("<input type='hidden' class='method_name', value='#{method_name}'>").appendTo($('values', @emt))
-
+    $("<input type='hidden' class='item_id', value='#{@itemId}'>").appendTo($('values', @emt))
+    $("<input type='hidden' class='method_name', value='#{@method_name}'>").appendTo($('values', @emt))
 
   setConfigValues: ->
 
+  # イベントの入力値を初期化する
+  resetAction: ->
+    $('.values .args', @emt).html('')
 
-
+  # 入力値を適用する
+  applyAction: ->
+    h = {}
+    $('.values input', @emt).each( ->
+      v = $(@).val()
+      k = $(@).attr('class')
+      h[k] = v
+    )
+    # タイムラインイベントの数を更新&タイムラインイベントの値を設定
+    teCount = getPageValue(Constant.PageValueKey.TE_COUNT)
+    if teCount?
+      teCount += 1
+    else
+      teCount = 1
+    # イベントのIDは暫定で連番とする
+    setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h)
+    setPageValue(Constant.PageValueKey.TE_COUNT, teCount)
+    # イベントの色を変更
 
   readFromPageValue: ->
 
@@ -102,100 +136,9 @@ addTimelineEventContents = (te_actions, te_values) ->
 # タイムラインのイベント設定
 setupTimelineEvents = ->
   self = @
-
-
+  te = null
 
   ### private method ここから ###
-
-  # アイテム選択イベント
-  _selectItem = (e) ->
-    # 選択枠消去
-    clearSelectedBorder()
-
-    # デフォルト選択時
-    if $(e).val() == ""
-      # 非表示にする
-      $(".config.te_div", emt).css('display', 'none')
-      return
-
-    emt = $(e).closest('.event')
-    values = $(e).val().split(Constant.TIMELINE_ITEM_SEPERATOR)
-    v = values[0]
-    i = values[1]
-    d = null
-    isSelectedCommonEvent = v.indexOf('c_') == 0
-    if isSelectedCommonEvent
-      # 共通のイベントを選択 → 変更値を表示
-      d = "values_div"
-      # 初期化
-      initTimelineEventValue(emt, parseInt(v.substring(2)), true)
-    else
-      # アイテムのイベントを選択 → アクション名一覧を表示
-      d = "action_div"
-      vEmt = $('#' + v)
-      # 選択枠設定
-      setSelectedBorder(vEmt, 'timeline')
-      # フォーカス
-      focusToTarget(vEmt)
-
-    # 一度全て非表示にする
-    $(".config.te_div", emt).css('display', 'none')
-    $(".#{d} .forms", emt).children("div").css('display', 'none')
-
-    # 表示
-    displayClassName = ''
-    if isSelectedCommonEvent
-      displayClassName = v
-    else
-      displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', i)
-    $(".#{displayClassName}", emt).css('display', '')
-    $(".#{d}", emt).css('display', '')
-    $("<input type='hidden' class='obj_id', value='#{v}'>").appendTo($('values', emt))
-
-  # アクション名選択イベント
-  _pushMethodName = (e) ->
-    emt = $(e).closest('.event')
-    item_id = $(e).find('input.item_id').val()
-    method_name = $(e).find('input.method_name').val()
-    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', method_name)
-    $(".values_div .forms", emt).children("div").css('display', 'none')
-    $(".#{valueClassName}", emt).css('display', '')
-    $(".config.values_div", emt).css('display', '')
-    $("<input type='hidden' class='item_id', value='#{item_id}'>").appendTo($('values', emt))
-    $("<input type='hidden' class='method_name', value='#{method_name}'>").appendTo($('values', emt))
-
-  # イベントの入力値を初期化する
-  _resetAction = (e) ->
-    $(e).closest('.event')
-    $('.values .args', emt).html('')
-
-  # 入力値を適用する
-  _applyAction = (e) ->
-    emt = $(e).closest('.event')
-    h = {}
-    $('.values input', emt).each( ->
-      v = $(@).val()
-      k = $(@).attr('class')
-      h[k] = v
-    )
-    # タイムラインイベントの数を更新&タイムラインイベントの値を設定
-    teCount = getPageValue(Constant.PageValueKey.TE_COUNT)
-    if teCount?
-      teCount += 1
-    else
-      teCount = 1
-    # イベントのIDは暫定で連番とする
-    setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h)
-    setPageValue(Constant.PageValueKey.TE_COUNT, teCount)
-
-    # イベントの色を変更
-
-
-    # 次のイベントを作成
-    _createTimelineEvent.call(self, e)
-
-    # 次のイベントを表示
-
 
   # タイムラインイベントを作成
   _createTimelineEvent = (e) ->
@@ -231,29 +174,33 @@ setupTimelineEvents = ->
     # アイテム選択メニュー更新
     updateSelectItemMenu()
 
-    # JSイベントの追加
+    # イベントクラス作成 & イベントハンドラの設定
+    te = new TimelineEvent(emt)
     do =>
       em = $('.te_item_select', emt)
       em.off('change')
       em.on('change', (e) ->
-        _selectItem.call(self, @)
+        te.selectItem(@)
       )
       em = $('.action_forms li', emt)
       em.off('click')
       em.on('click', (e) ->
-        _pushMethodName.call(self, @)
+        te.clickMethod(@)
       )
       em = $('.push.button.reset', emt)
       em.off('click')
       em.on('click', (e) ->
         # UIの入力値を初期化
-        _resetAction.call(self, @)
+        te.resetAction()
       )
       em = $('.push.button.apply', emt)
       em.off('click')
       em.on('click', (e) ->
         # 入力値を適用する
-        _applyAction.call(self, @)
+        te.applyAction()
+        # 次のイベントを作成
+        _createTimelineEvent.call(self, e)
+        # 次のイベントを表示
       )
       em = $('.push.button.cancel', emt)
       em.off('click')
@@ -274,7 +221,6 @@ setupTimelineEvents = ->
       # タイムラインのconfigをオープンする
       openConfigSidebar()
 
-
     # コンフィグ初期化
     if $(e).hasClass('blank')
       # ブランク
@@ -282,7 +228,6 @@ setupTimelineEvents = ->
 
     else
       # イベント設定済み
-
 
   ### private method ここまで ###
 
@@ -338,8 +283,8 @@ initTimelineEventValue = (element, type, isCommonEvent) ->
     typeArray = type
 
   if isCommonEvent
-    $(typeArray).each( ->
-      if @ == Constant.CommonActionEventChangeType.BACKGROUND
+    $(typeArray).each( (e) ->
+      if e == Constant.CommonActionEventChangeType.BACKGROUND
         bgColor = $('#main-wrapper.stage_container').css('backgroundColor')
         $(".baseColor", $("values_div", element)).css('backgroundColor', bgColor)
         $(".colorPicker", element).each( ->
@@ -347,7 +292,7 @@ initTimelineEventValue = (element, type, isCommonEvent) ->
           if !self.hasClass('temp') && !self.hasClass('baseColor')
             initColorPicker(self, "fff", null)
         )
-      else if @ == Constant.CommonActionEventChangeType.ZOOM
+      else if e == Constant.CommonActionEventChangeType.ZOOM
         # FIXME:
         console.log('zoom')
     )
