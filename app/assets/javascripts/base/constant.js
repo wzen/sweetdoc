@@ -16,6 +16,10 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.TIMELINE_ITEM_SEPERATOR = "&";
 
+    Constant.TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX;
+
+    Constant.TIMELINE_COMMON_ACTION_CLASSNAME = constant.TIMELINE_COMMON_ACTION_CLASSNAME;
+
     Constant.Mode = (function() {
       function Mode() {}
 
@@ -95,19 +99,9 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.ITEM_VALUE_CACHE = 'item:cache:@id:value';
 
-      PageValueKey.TE = 'timeline_event:@te_num';
+      PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
       PageValueKey.TE_COUNT = 'timeline_event:count';
-
-      PageValueKey.TE_VALUE = PageValueKey.TE + ':value';
-
-      PageValueKey.TE_SORT = PageValueKey.TE + ':sort';
-
-      PageValueKey.TE_METHODNAME = PageValueKey.TE + ':mn';
-
-      PageValueKey.TE_DELAY = PageValueKey.TE + ':delay';
-
-      PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
       return PageValueKey;
 
@@ -116,15 +110,7 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ElementAttribute = (function() {
       function ElementAttribute() {}
 
-      ElementAttribute.ITEM_ID = '@it_@id';
-
       ElementAttribute.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
-
-      ElementAttribute.TE_ITEM_ROOT_ID = 'timeline_event_@te_num';
-
-      ElementAttribute.TE_ACTION_CLASS = 'timeline_event_action_@itemid';
-
-      ElementAttribute.TE_VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS;
 
       return ElementAttribute;
 
@@ -135,7 +121,7 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       CommonActionEventChangeType.BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND;
 
-      CommonActionEventChangeType.ZOOM = constant.CommonActionEventChangeType.ZOOM;
+      CommonActionEventChangeType.MOVE = constant.CommonActionEventChangeType.MOVE;
 
       return CommonActionEventChangeType;
 

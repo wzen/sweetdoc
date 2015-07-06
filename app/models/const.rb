@@ -4,6 +4,10 @@ class Const
   ZINDEX_MAX = 1000
   # @property OPERATION_STORE_MAX 操作履歴保存最大数
   OPERATION_STORE_MAX = 30
+  # @property TIMELINE_COMMON_PREFIX 共通タイムラインイベント クラス名プレフィックス
+  TIMELINE_COMMON_PREFIX = 'c_'
+  # @property TIMELINE_COMMON_ACTION_CLASSNAME 共通タイムラインイベント アクションクラス名
+  TIMELINE_COMMON_ACTION_CLASSNAME = 'c_action_method'
 
   # 操作モード
   class Mode
@@ -68,8 +72,8 @@ class Const
   class CommonActionEventChangeType
     # @property [Int] BACKGROUND 背景
     BACKGROUND = 0
-    # @property [Int] ZOOM ズーム
-    ZOOM = 1
+    # @property [Int] MOVE ズーム
+    MOVE = 1
   end
 
   # アクション変更種別

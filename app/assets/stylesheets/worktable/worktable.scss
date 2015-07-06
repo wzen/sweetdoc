@@ -619,6 +619,11 @@ div#timeline-config {
     display: none;
   }
 
+  .timeline_config_error {
+    width: 100%;
+    height: 20px;
+  }
+
   .event {
     .config {
       &.te_div {

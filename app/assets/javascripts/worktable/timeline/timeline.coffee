@@ -1,115 +1,8 @@
-class TimelineEvent
-  constructor: (e, teNum = null) ->
-    @emt = $(e).closest('.event')
-    if teNum?
-      @teNum = teNum
-      # FIXME:
-      @configValues = null
-    else
-      @teNum = getPageValue(Constant.PageValueKey.TE_COUNT)
-      if !@teNum?
-        @teNum = 1
-
-    # tempをクローンしてtimeline_eventsに追加
-#    pEmt = $('#timeline_events')
-#    newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
-#    newEmt.find('.te_num').val(@teNum)
-#    pEmt.append(newEmt)
-
-  selectItem: (e) ->
-    value = $(e).val()
-
-    # デフォルト選択時
-    if value == ""
-      # 非表示にする
-      $(".config.te_div", emt).css('display', 'none')
-      return
-
-    @isCommonEvent = value.indexOf('c_') == 0
-    if @isCommonEvent
-      @actionEventTypeId = parseInt(value.substring(2))
-    else
-      splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR)
-      @id = splitValues[0]
-      @itemId = splitValues[1]
-
-    # 選択枠消去
-    clearSelectedBorder()
-
-    d = null
-    if @isCommonEvent
-      # 共通のイベントを選択 → 変更値を表示
-      d = "values_div"
-      # 初期化
-      initTimelineEventValue(@emt, @actionEventTypeId, true)
-    else
-      # アイテムのイベントを選択 → アクション名一覧を表示
-      d = "action_div"
-      vEmt = $('#' + @id)
-      # 選択枠設定
-      setSelectedBorder(vEmt, 'timeline')
-      # フォーカス
-      focusToTarget(vEmt)
-
-    # 一度全て非表示にする
-    $(".config.te_div", @emt).css('display', 'none')
-    $(".#{d} .forms", @emt).children("div").css('display', 'none')
-
-    # 表示
-    displayClassName = ''
-    if @isCommonEvent
-      displayClassName = value
-    else
-      displayClassName = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', @itemId)
-    $(".#{displayClassName}", @emt).css('display', '')
-    $(".#{d}", @emt).css('display', '')
-    $("<input type='hidden' class='obj_id', value='#{@id}'>").appendTo($('values', @emt))
-
-  clickMethod: (e) ->
-    @method_name = $(e).find('input.method_name').val()
-    valueClassName = Constant.ElementAttribute.TE_VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @method_name)
-    $(".values_div .forms", @emt).children("div").css('display', 'none')
-    $(".#{valueClassName}", @emt).css('display', '')
-    $(".config.values_div", @emt).css('display', '')
-    $("<input type='hidden' class='item_id', value='#{@itemId}'>").appendTo($('values', @emt))
-    $("<input type='hidden' class='method_name', value='#{@method_name}'>").appendTo($('values', @emt))
-
-  setConfigValues: ->
-
-  # イベントの入力値を初期化する
-  resetAction: ->
-    $('.values .args', @emt).html('')
-
-  # 入力値を適用する
-  applyAction: ->
-    h = {}
-    $('.values input', @emt).each( ->
-      v = $(@).val()
-      k = $(@).attr('class')
-      h[k] = v
-    )
-    # タイムラインイベントの数を更新&タイムラインイベントの値を設定
-    teCount = getPageValue(Constant.PageValueKey.TE_COUNT)
-    if teCount?
-      teCount += 1
-    else
-      teCount = 1
-    # イベントのIDは暫定で連番とする
-    setPageValue(Constant.PageValueKey.TE_VALUE.replace('@te_num', teCount), h)
-    setPageValue(Constant.PageValueKey.TE_COUNT, teCount)
-    # イベントの色を変更
-
-  readFromPageValue: ->
-
-  writeToPageValue: ->
-
-
-
 # タイムラインイベントのConfigを追加
 # @param [String] contents 追加するHTMLの文字列
 addTimelineEventContents = (te_actions, te_values) ->
   if te_actions? && te_actions.length > 0
-    className = Constant.ElementAttribute.TE_ACTION_CLASS.replace('@itemid', te_actions[0].item_id)
+    className = TimelineConfig.ACTION_CLASS.replace('@itemid', te_actions[0].item_id)
     action_forms = $('#timeline-config .action_forms')
     if action_forms.find(".#{className}").length == 0
       li = ''
@@ -120,9 +13,10 @@ addTimelineEventContents = (te_actions, te_values) ->
         else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
           actionType = "click"
         li += """
-          <li class='push method #{actionType} #{a.method_name}'>
+          <li class='push method #{actionType}'>
             #{a.options['name']}
             <input class='item_id' type='hidden' value='#{a.item_id}' >
+            <input class='action_type' type='hidden' value='#{actionType}'>
             <input class='method_name' type='hidden' value='#{a.method_name}'>
           </li>
         """
@@ -164,7 +58,7 @@ setupTimelineEvents = ->
 
     # イベントメニューの存在チェック
     te_num = $(e).find('input.te_num').val()
-    eId = Constant.ElementAttribute.TE_ITEM_ROOT_ID.replace('@te_num', te_num)
+    eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
     emt = $('#' + eId)
     if emt.length == 0
       # イベントメニューの作成
@@ -174,8 +68,8 @@ setupTimelineEvents = ->
     # アイテム選択メニュー更新
     updateSelectItemMenu()
 
-    # イベントクラス作成 & イベントハンドラの設定
-    te = new TimelineEvent(emt)
+    # Configクラス作成 & イベントハンドラの設定
+    te = new TimelineConfig(emt, e)
     do =>
       em = $('.te_item_select', emt)
       em.off('change')
@@ -200,7 +94,7 @@ setupTimelineEvents = ->
         te.applyAction()
         # 次のイベントを作成
         _createTimelineEvent.call(self, e)
-        # 次のイベントを表示
+        # 次のイベントConfigを表示
       )
       em = $('.push.button.cancel', emt)
       em.off('click')
@@ -268,37 +162,11 @@ updateSelectItemMenu = ->
   # メニューを入れ替え
   teItemSelects.each( ->
     $(@).find('option').each( ->
-      if $(@).val().length > 0 && $(@).val().indexOf('c_') != 0
+      if $(@).val().length > 0 && $(@).val().indexOf(Constant.TIMELINE_COMMON_PREFIX) != 0
         $(@).remove()
     )
     $(@).append($(selectOptions))
   )
-
-# タイムラインイベントの設定値初期化
-initTimelineEventValue = (element, type, isCommonEvent) ->
-  typeArray = []
-  if typeOfValue(type) != "array"
-    typeArray.push(type)
-  else
-    typeArray = type
-
-  if isCommonEvent
-    $(typeArray).each( (e) ->
-      if e == Constant.CommonActionEventChangeType.BACKGROUND
-        bgColor = $('#main-wrapper.stage_container').css('backgroundColor')
-        $(".baseColor", $("values_div", element)).css('backgroundColor', bgColor)
-        $(".colorPicker", element).each( ->
-          self = $(@)
-          if !self.hasClass('temp') && !self.hasClass('baseColor')
-            initColorPicker(self, "fff", null)
-        )
-      else if e == Constant.CommonActionEventChangeType.ZOOM
-        # FIXME:
-        console.log('zoom')
-    )
-  else
-    # FIXME:
-    console.log('通常')
 
 # タイムラインのオブジェクトをまとめる
 setupTimeLineObjects = ->

@@ -13,6 +13,10 @@ if gon?
     @PAGE_VALUES_SEPERATOR = ":"
     # @property [String] TIMELINE_ITEM_SEPERATOR タイムラインイベント(アイテム)値のセパレータ
     @TIMELINE_ITEM_SEPERATOR = "&"
+    # @property [String] TIMELINE_COMMON_PREFIX 共通タイムラインイベントプレフィックス
+    @TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX
+    # @property TIMELINE_COMMON_ACTION_CLASSNAME 共通タイムラインイベント アクションクラス名
+    @TIMELINE_COMMON_ACTION_CLASSNAME = constant.TIMELINE_COMMON_ACTION_CLASSNAME
 
     # 操作モード
     class @Mode
@@ -68,39 +72,17 @@ if gon?
       @ITEM_VALUE = 'item:@id:value'
       # @property [String] ITEM アイテムキャッシュRoot
       @ITEM_VALUE_CACHE = 'item:cache:@id:value'
-
-      # @property [String] TE タイムラインイベントRoot
-      @TE = 'timeline_event:@te_num'
-      # @property [String] TE タイムラインイベント数
-      @TE_COUNT = 'timeline_event:count'
-      # @property [String] TE_VALUE タイムラインイベント値
-      @TE_VALUE = @TE + ':value'
-      # @property [String] TE_VALUE タイムライン変更前の値
-      #@TE_ORIGINAL_VALUE = @TE + ':originalvalue'
-      # @property [String] TE_SORT ソート番号
-      @TE_SORT = @TE + ':sort'
-      # @property [String] TE_METHODNAME イベント名
-      @TE_METHODNAME = @TE + ':mn'
-      # @property [String] TE_DELAY 遅延
-      @TE_DELAY = @TE + ':delay'
-
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
+      # @property [String] TE タイムラインイベント数
+      @TE_COUNT = 'timeline_event:count'
 
     class @ElementAttribute
-      # @property [String] ITEM_ID アイテム要素ID
-      @ITEM_ID = '@it_@id'
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
-      # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
-      @TE_ITEM_ROOT_ID = 'timeline_event_@te_num'
-      # @property [String] TE_ACTION_CLASS タイムラインイベント アクション一覧
-      @TE_ACTION_CLASS = 'timeline_event_action_@itemid'
-      # @property [String] TE_VALUES_DIV タイムラインイベント アクションUI
-      @TE_VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS
 
     class @CommonActionEventChangeType
       # @property [Int] BACKGROUND 背景
       @BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND
-      # @property [Int] ZOOM ズーム
-      @ZOOM = constant.CommonActionEventChangeType.ZOOM
+      # @property [Int] MOVE ズーム
+      @MOVE = constant.CommonActionEventChangeType.MOVE

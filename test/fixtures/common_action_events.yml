@@ -5,17 +5,7 @@ one:
   action_event_type_id: 0
   action_event_change_type_id: 2
   method_name: changeBackground
-  options: |
-            {
-              "id": "changeBackground",
-              "name": "Change Background",
-              "args": {
-                "arg1": {
-                  "type": "BACKGROUND",
-                  "arg_name": "color"
-                }
-              }
-            }
+  options: {}
 
 two:
   id: 2
@@ -24,16 +14,4 @@ two:
   action_event_type_id: 1
   action_event_change_type_id: 1
   method_name: focusWithZoom
-  options: |
-            {
-              "id": "focusWithZoom",
-              "name": "Zoom",
-              "args": {
-                "arg1": {
-                  "type": "ZOOM",
-                  "arg_name": "zoom",
-                  "minValue": 0,
-                  "maxValue": 10
-                }
-              }
-            }
+  options: {}

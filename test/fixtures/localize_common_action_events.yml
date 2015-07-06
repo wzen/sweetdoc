@@ -4,6 +4,7 @@ one:
   locale_id: 1
   options: |
             {
+              "name": "Change Background",
               "desc": "Change background"
             }
 
@@ -15,7 +16,6 @@ two:
             {
               "name": "背景を変更",
               "color": "背景色",
-              "grid": "グリッド線の表示",
               "desc": "背景を変更する"
             }
 
@@ -26,6 +26,7 @@ three:
   locale_id: 1
   options: |
             {
+              "name": "Zoom",
               "desc": "Zoom"
             }
 
@@ -36,8 +37,5 @@ four:
   options: |
             {
               "name": "アイテムにズームする",
-              "value": "ズーム値",
-              "minValueName": "最小値",
-              "maxValueName": "最大値",
               "desc": "画面のズームを行う"
             }
