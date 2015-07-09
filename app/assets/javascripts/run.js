@@ -16,8 +16,8 @@
 //= require item/arrow
 //= require item/button
 //= require timeline/base/timeline_event.js
-//= require timeline/common_event/background
-//= require timeline/common_event/move
+//= require timeline/common_event/backgroundcolor_change.js
+//= require timeline/common_event/screenposition_change.js
 //= require run/chapter
 //= require run/scroll_chapter
 //= require run/click_chapter

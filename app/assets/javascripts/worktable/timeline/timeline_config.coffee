@@ -12,30 +12,34 @@ class TimelineConfig
   constructor: (e, @teEmt, teNum = null) ->
     @emt = $(e).closest('.event')
     if teNum?
+      # 入力値を読み込んで全て表示
       @teNum = teNum
       @readFromPageValue()
+      @selectItem()
+      @clickMethod()
     else
       @teNum = getPageValue(Constant.PageValueKey.TE_COUNT)
       if !@teNum?
         @teNum = 1
 
   # イベントタイプ選択
-  selectItem: (e) ->
-    value = $(e).val()
+  selectItem: (e = null) ->
+    if e?
+      value = $(e).val()
 
-    # デフォルト選択時
-    if value == ""
-      # 非表示にする
-      $(".config.te_div", @emt).css('display', 'none')
-      return
+      # デフォルト選択時
+      if value == ""
+        # 非表示にする
+        $(".config.te_div", @emt).css('display', 'none')
+        return
 
-    @isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) == 0
-    if @isCommonEvent
-      @actionEventTypeId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length))
-    else
-      splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR)
-      @id = splitValues[0]
-      @itemId = splitValues[1]
+      @isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) == 0
+      if @isCommonEvent
+        @actionEventTypeId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length))
+      else
+        splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR)
+        @id = splitValues[0]
+        @itemId = splitValues[1]
 
     # 選択枠消去
     clearSelectedBorder()
@@ -61,17 +65,19 @@ class TimelineConfig
     $(".action_div", @emt).css('display', '')
 
   # メソッド選択
-  clickMethod: (e) ->
+  clickMethod: (e = null) ->
+    if e?
+      @actionType = $(e).find('input.action_type').val()
+      @methodName = $(e).find('input.method_name').val()
+
     valueClassName = null
-    @actionType = $(e).find('input.action_type').val()
     if @isCommonEvent
       valueClassName = Constant.TIMELINE_COMMON_PREFIX + @actionEventTypeId
     else
-      @methodName = $(e).find('input.method_name').val()
       valueClassName = @constructor.VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
 
     extraClassName = null
-    if @actionType == "scroll"
+    if @actionType == Constant.ActionEventTypeClassName.SCROLL
       extraClassName = "scroll_point_div"
     else
       extraClassName = "click_parallel_div"
@@ -83,30 +89,11 @@ class TimelineConfig
     $(".#{valueClassName}", @emt).css('display', '')
     $(".config.values_div", @emt).css('display', '')
 
-    # 初期化
-    @initConfigUI(@actionEventTypeId)
-
-  # コンフィグUI初期化
-  initConfigUI: (type) ->
-    typeArray = []
-    if typeOfValue(type) != "array"
-      typeArray.push(type)
-    else
-      typeArray = type
-
-    $(typeArray).each((e) ->
-      if e == Constant.CommonActionEventChangeType.BACKGROUND
-        bgColor = $('#main-wrapper.stage_container').css('backgroundColor')
-        $(".baseColor", $("values_div", @emt)).css('backgroundColor', bgColor)
-        $(".colorPicker", @emt).each( ->
-          self = $(@)
-          if !self.hasClass('temp') && !self.hasClass('baseColor')
-            initColorPicker(self, "fff", null)
-        )
-      else if e == Constant.CommonActionEventChangeType.MOVE
-        # FIXME:
-        console.log('move')
-    )
+    if e?
+      # 初期化
+      tle = _timelineEvent.call(@)
+      if tle?
+        tle.initConfigValue(@)
 
   # イベントの入力値を初期化する
   resetAction: ->
@@ -132,22 +119,16 @@ class TimelineConfig
   writeToPageValue: ->
     errorMes = "Not implemented"
     writeValue = null
-    if @isCommonEvent
-      if @actionEventTypeId == Constant.CommonActionEventChangeType.BACKGROUND
-        errorMes = TimelineCommonEventBackground.writeToPageValue(@)
-      else if @actionEventTypeId == Constant.CommonActionEventChangeType.MOVE
-        errorMes = TimelineCommonEventMove.writeToPageValue(@)
-
+    tle = _timelineEvent.call(@)
+    if tle?
+      errorMes = tle.writeToPageValue(@)
     return errorMes
-
 
   # 画面値から読み込み
   readFromPageValue: ->
-    if @isCommonEvent
-      if @actionEventTypeId == Constant.CommonActionEventChangeType.BACKGROUND
-        TimelineCommonEventBackground.readFromPageValue()
-      else if @actionEventTypeId == Constant.CommonActionEventChangeType.MOVE
-        TimelineCommonEventMove.readFromPageValue()
+    tle = _timelineEvent.call(@)
+    if tle?
+      tle.readFromPageValue()
 
   # エラー表示
   showError: (message)->
@@ -160,3 +141,10 @@ class TimelineConfig
     timelineConfigError = $('.timeline_config_error', @emt)
     timelineConfigError.find('p').html('')
     timelineConfigError.css('display', 'none')
+
+  _timelineEvent = ->
+    if @isCommonEvent
+      if @actionEventTypeId == Constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE
+        return TLEBackgroundColorChange
+      else if @actionEventTypeId == Constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE
+        return TLEScreenPositionChange

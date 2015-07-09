@@ -28,34 +28,90 @@ class TimelineEvent
     # @property [String] TE_SCROLL_TIME_SEP スクロール実行時間セパレータ
     @SCROLL_POINT_SEP = '-'
 
+  @initConfigValue = (timelineConfig) ->
+    if timelineConfig.actionType == Constant.ActionEventTypeClassName.SCROLL
+      scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
+      if scrollPointDiv?
+        startDiv = scrollPointDiv.find('.scroll_point_start:first')
+        start = startDiv.val()
+        s = null
+        if start.length == 0
+          s = getPageValue(Constant.PageValueKey.TE_ALL_LENGTH)
+          if s?
+            startDiv.val(s)
+          else
+            s = 0
+            startDiv.val("0")
+            startDiv.prop("disabled", true)
+        endDiv = scrollPointDiv.find('.scroll_point_end:first')
+        end = endDiv.val()
+        if end.length == 0
+          endDiv.val(parseInt(s) + _scrollLength(timelineConfig))
+
   # fixme: 実装予定
-  checkConfigValue: (timelineConfig) ->
+  @checkConfigValue = (timelineConfig) ->
 
-
-  commonWriteValue: (timelineConfig) ->
+  @commonWriteValue = (timelineConfig) ->
     writeValue = {}
-    writeValue[@constructor.PageValueKey.ID] = timelineConfig.id
-    writeValue[@constructor.PageValueKey.ITEM_ID] = timelineConfig.itemId
-    writeValue[@constructor.PageValueKey.ACTION_EVENT_TYPE_ID] = timelineConfig.actionEventTypeId
-    writeValue[@constructor.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent
-    writeValue[@constructor.PageValueKey.METHODNAME] = timelineConfig.methodName
-    writeValue[@constructor.PageValueKey.ACTIONTYPE] = timelineConfig.actionType
+    writeValue[TimelineEvent.PageValueKey.ID] = timelineConfig.id
+    writeValue[TimelineEvent.PageValueKey.ITEM_ID] = timelineConfig.itemId
+    writeValue[TimelineEvent.PageValueKey.ACTION_EVENT_TYPE_ID] = timelineConfig.actionEventTypeId
+    writeValue[TimelineEvent.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent
+    writeValue[TimelineEvent.PageValueKey.METHODNAME] = timelineConfig.methodName
+    writeValue[TimelineEvent.PageValueKey.ACTIONTYPE] = timelineConfig.actionType
 
-    scrollPoint = ""
-    scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
-    if scrollPointDiv?
-      start = scrollPointDiv.find('.scroll_point_start:first').val()
-      end = scrollPointDiv.find('.scroll_point_end:first').val()
-      scrollPoint = start + @constructor.PageValueKey.SCROLL_POINT_SEP + end
-    writeValue[@constructor.PageValueKey.SCROLL_POINT] = scrollPoint
+    if timelineConfig.actionType == Constant.ActionEventTypeClassName.SCROLL
+      scrollPoint = ""
+      scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
+      if scrollPointDiv?
+        start = scrollPointDiv.find('.scroll_point_start:first').val()
+        end = scrollPointDiv.find('.scroll_point_end:first').val()
+        scrollPoint = start + TimelineEvent.PageValueKey.SCROLL_POINT_SEP + end
+      writeValue[TimelineEvent.PageValueKey.SCROLL_POINT] = scrollPoint
 
-    isClickParallel = false
-    clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt)
-    if clickParallel?
-      isClickParallel = clickParallel.is(":checked")
-    writeValue[@constructor.PageValueKey.IS_CLICK_PARALLEL] = isClickParallel
+    else if timelineConfig.actionType == Constant.ActionEventTypeClassName.CLICK
+      isClickParallel = false
+      clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt)
+      if clickParallel?
+        isClickParallel = clickParallel.is(":checked")
+      writeValue[TimelineEvent.PageValueKey.IS_CLICK_PARALLEL] = isClickParallel
 
     return writeValue
+
+  @commonReadValue = (timelineConfig) ->
+    writeValue = getPageValue(TimelineEvent.PageValueKey.te(timelineConfig.teNum))
+    if writeValue?
+      if timelineConfig.actionType == Constant.ActionEventTypeClassName.SCROLL
+        scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
+        scrollPoint = writeValue[TimelineEvent.PageValueKey.SCROLL_POINT]
+        if scrollPointDiv? && scrollPoint?
+          s = scrollPoint.split(TimelineEvent.PageValueKey.SCROLL_POINT_SEP)
+          start = s[0]
+          end = s[1]
+          scrollPointDiv.find('.scroll_point_start:first').val(start)
+          scrollPointDiv.find('.scroll_point_end:first').val(end)
+
+      else if timelineConfig.actionType == Constant.ActionEventTypeClassName.CLICK
+        clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt)
+        isClickParallel = writeValue[TimelineEvent.PageValueKey.IS_CLICK_PARALLEL]
+        if clickParallel? && isClickParallel
+          clickParallel.prop("checked", true)
+
+  _scrollLength = (timelineConfig) ->
+    scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
+    writeValue = getPageValue(TimelineEvent.PageValueKey.te(timelineConfig.teNum))
+    if writeValue?
+      scrollPoint = writeValue[TimelineEvent.PageValueKey.SCROLL_POINT]
+      if scrollPointDiv? && scrollPoint?
+       s = scrollPoint.split(TimelineEvent.PageValueKey.SCROLL_POINT_SEP)
+       start = s[0]
+       end = s[1]
+       return parseInt(end) - parseInt(start)
+
+    return null
+
+
+
 
 
 

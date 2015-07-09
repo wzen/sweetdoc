@@ -131,7 +131,7 @@ settingSlider = (className, min, max, cssCode, cssStyle, root, stepValue = 0) ->
   valueElement.html(defaultValue)
   try
     meterElement.slider('destroy')
-  catch #何もしない
+  catch #例外は握りつぶす
   meterElement.slider({
     min: min,
     max: max,
@@ -153,7 +153,7 @@ settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
 
   try
     element.slider('destroy')
-  catch #何もしない
+  catch #例外は握りつぶす
   element.slider({
     # 0%と100%は含まない
     min: 1
@@ -202,7 +202,7 @@ settingGradientDegSlider = (className, min, max, cssCode, cssStyle, root) ->
 
   try
     meterElement.slider('destroy')
-  catch #何もしない
+  catch #例外は握りつぶす
   meterElement.slider({
     min: min,
     max: max,

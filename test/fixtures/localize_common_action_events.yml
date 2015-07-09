@@ -4,8 +4,8 @@ one:
   locale_id: 1
   options: |
             {
-              "name": "Change Background",
-              "desc": "Change background"
+              "name": "Change background color",
+              "desc": "Change background color"
             }
 
 two:
@@ -26,8 +26,8 @@ three:
   locale_id: 1
   options: |
             {
-              "name": "Zoom",
-              "desc": "Zoom"
+              "name": "Change screen position",
+              "desc": "Change screen position"
             }
 
 four:
@@ -36,6 +36,6 @@ four:
   locale_id: 2
   options: |
             {
-              "name": "アイテムにズームする",
-              "desc": "画面のズームを行う"
+              "name": "画面の表示位置を変更する",
+              "desc": "画面の表示位置を変更する"
             }

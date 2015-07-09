@@ -50,6 +50,13 @@ if gon?
       # @property [Int] CLICK クリック
       @CLICK = constant.ActionEventHandleType.CLICK
 
+    # アクションイベントクラス名
+    class @ActionEventTypeClassName
+      # @property [Int] SCROLL スクロール
+      @SCROLL = 'scroll'
+      # @property [Int] CLICK クリック
+      @CLICK = 'click'
+
     # 閲覧モードのチャプターアクション種類
     class @ActionEventChangeType
       # @property [Int] DRAW 描画
@@ -74,15 +81,17 @@ if gon?
       @ITEM_VALUE_CACHE = 'item:cache:@id:value'
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
-      # @property [String] TE タイムラインイベント数
+      # @property [String] TE_COUNT タイムラインイベント数
       @TE_COUNT = 'timeline_event:count'
+      # @property [String] TE_ALL_LENGTH タイムライン長さ
+      @TE_ALL_LENGTH = 'timeline_event:all_length'
 
     class @ElementAttribute
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
 
     class @CommonActionEventChangeType
-      # @property [Int] BACKGROUND 背景
-      @BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND
-      # @property [Int] MOVE ズーム
-      @MOVE = constant.CommonActionEventChangeType.MOVE
+      # @property [Int] BACKGROUNDCOLOR_CHANGE 背景
+      @BACKGROUNDCOLOR_CHANGE = constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE
+      # @property [Int] SCREENPOSITION_CHANGE ズーム
+      @SCREENPOSITION_CHANGE = constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE

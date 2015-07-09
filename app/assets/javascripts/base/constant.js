@@ -68,6 +68,17 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ActionEventTypeClassName = (function() {
+      function ActionEventTypeClassName() {}
+
+      ActionEventTypeClassName.SCROLL = 'scroll';
+
+      ActionEventTypeClassName.CLICK = 'click';
+
+      return ActionEventTypeClassName;
+
+    })();
+
     Constant.ActionEventChangeType = (function() {
       function ActionEventChangeType() {}
 
@@ -103,6 +114,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.TE_COUNT = 'timeline_event:count';
 
+      PageValueKey.TE_ALL_LENGTH = 'timeline_event:all_length';
+
       return PageValueKey;
 
     })();
@@ -119,9 +132,9 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.CommonActionEventChangeType = (function() {
       function CommonActionEventChangeType() {}
 
-      CommonActionEventChangeType.BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND;
+      CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE = constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE;
 
-      CommonActionEventChangeType.MOVE = constant.CommonActionEventChangeType.MOVE;
+      CommonActionEventChangeType.SCREENPOSITION_CHANGE = constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE;
 
       return CommonActionEventChangeType;
 

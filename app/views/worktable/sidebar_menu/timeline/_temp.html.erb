@@ -62,10 +62,10 @@
                 <!-- イベント毎の設定値 -->
                 <% @common_action_events.each do |c| %>
                     <div class="<%= "c_#{c.action_event_type_id}" %>" style="display: none">
-                      <% if c.action_event_type_id == Const::CommonActionEventChangeType::BACKGROUND  %>
-                        <%= render 'worktable/sidebar_menu/timeline/parts/background' %>
-                      <% elsif c.action_event_type_id == Const::CommonActionEventChangeType::MOVE %>
-                        <%= render 'worktable/sidebar_menu/timeline/parts/move' %>
+                      <% if c.action_event_type_id == Const::CommonActionEventChangeType::BACKGROUNDCOLOR_CHANGE  %>
+                        <%= render 'worktable/sidebar_menu/timeline/parts/backgroundcolor_change' %>
+                      <% elsif c.action_event_type_id == Const::CommonActionEventChangeType::SCREENPOSITION_CHANGE %>
+                        <%= render 'worktable/sidebar_menu/timeline/parts/screenposition_change' %>
                       <% end %>
                     </div>
                 <% end %>

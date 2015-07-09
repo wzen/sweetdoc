@@ -2,6 +2,8 @@
 var TimelineConfig;
 
 TimelineConfig = (function() {
+  var _timelineEvent;
+
   if (typeof gon !== "undefined" && gon !== null) {
     TimelineConfig.ITEM_ROOT_ID = 'timeline_event_@te_num';
     TimelineConfig.ACTION_CLASS = 'timeline_event_action_@itemid';
@@ -17,6 +19,8 @@ TimelineConfig = (function() {
     if (teNum != null) {
       this.teNum = teNum;
       this.readFromPageValue();
+      this.selectItem();
+      this.clickMethod();
     } else {
       this.teNum = getPageValue(Constant.PageValueKey.TE_COUNT);
       if (this.teNum == null) {
@@ -27,18 +31,23 @@ TimelineConfig = (function() {
 
   TimelineConfig.prototype.selectItem = function(e) {
     var displayClassName, splitValues, vEmt, value;
-    value = $(e).val();
-    if (value === "") {
-      $(".config.te_div", this.emt).css('display', 'none');
-      return;
+    if (e == null) {
+      e = null;
     }
-    this.isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) === 0;
-    if (this.isCommonEvent) {
-      this.actionEventTypeId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length));
-    } else {
-      splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR);
-      this.id = splitValues[0];
-      this.itemId = splitValues[1];
+    if (e != null) {
+      value = $(e).val();
+      if (value === "") {
+        $(".config.te_div", this.emt).css('display', 'none');
+        return;
+      }
+      this.isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) === 0;
+      if (this.isCommonEvent) {
+        this.actionEventTypeId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length));
+      } else {
+        splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR);
+        this.id = splitValues[0];
+        this.itemId = splitValues[1];
+      }
     }
     clearSelectedBorder();
     if (!this.isCommonEvent) {
@@ -59,17 +68,22 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.clickMethod = function(e) {
-    var extraClassName, valueClassName;
+    var extraClassName, tle, valueClassName;
+    if (e == null) {
+      e = null;
+    }
+    if (e != null) {
+      this.actionType = $(e).find('input.action_type').val();
+      this.methodName = $(e).find('input.method_name').val();
+    }
     valueClassName = null;
-    this.actionType = $(e).find('input.action_type').val();
     if (this.isCommonEvent) {
       valueClassName = Constant.TIMELINE_COMMON_PREFIX + this.actionEventTypeId;
     } else {
-      this.methodName = $(e).find('input.method_name').val();
       valueClassName = this.constructor.VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.methodName);
     }
     extraClassName = null;
-    if (this.actionType === "scroll") {
+    if (this.actionType === Constant.ActionEventTypeClassName.SCROLL) {
       extraClassName = "scroll_point_div";
     } else {
       extraClassName = "click_parallel_div";
@@ -80,33 +94,12 @@ TimelineConfig = (function() {
     $("." + extraClassName, this.emt).css('display', '');
     $("." + valueClassName, this.emt).css('display', '');
     $(".config.values_div", this.emt).css('display', '');
-    return this.initConfigUI(this.actionEventTypeId);
-  };
-
-  TimelineConfig.prototype.initConfigUI = function(type) {
-    var typeArray;
-    typeArray = [];
-    if (typeOfValue(type) !== "array") {
-      typeArray.push(type);
-    } else {
-      typeArray = type;
-    }
-    return $(typeArray).each(function(e) {
-      var bgColor;
-      if (e === Constant.CommonActionEventChangeType.BACKGROUND) {
-        bgColor = $('#main-wrapper.stage_container').css('backgroundColor');
-        $(".baseColor", $("values_div", this.emt)).css('backgroundColor', bgColor);
-        return $(".colorPicker", this.emt).each(function() {
-          var self;
-          self = $(this);
-          if (!self.hasClass('temp') && !self.hasClass('baseColor')) {
-            return initColorPicker(self, "fff", null);
-          }
-        });
-      } else if (e === Constant.CommonActionEventChangeType.MOVE) {
-        return console.log('move');
+    if (e != null) {
+      tle = _timelineEvent.call(this);
+      if (tle != null) {
+        return tle.initConfigValue(this);
       }
-    });
+    }
   };
 
   TimelineConfig.prototype.resetAction = function() {
@@ -129,26 +122,21 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.writeToPageValue = function() {
-    var errorMes, writeValue;
+    var errorMes, tle, writeValue;
     errorMes = "Not implemented";
     writeValue = null;
-    if (this.isCommonEvent) {
-      if (this.actionEventTypeId === Constant.CommonActionEventChangeType.BACKGROUND) {
-        errorMes = TimelineCommonEventBackground.writeToPageValue(this);
-      } else if (this.actionEventTypeId === Constant.CommonActionEventChangeType.MOVE) {
-        errorMes = TimelineCommonEventMove.writeToPageValue(this);
-      }
+    tle = _timelineEvent.call(this);
+    if (tle != null) {
+      errorMes = tle.writeToPageValue(this);
     }
     return errorMes;
   };
 
   TimelineConfig.prototype.readFromPageValue = function() {
-    if (this.isCommonEvent) {
-      if (this.actionEventTypeId === Constant.CommonActionEventChangeType.BACKGROUND) {
-        return TimelineCommonEventBackground.readFromPageValue();
-      } else if (this.actionEventTypeId === Constant.CommonActionEventChangeType.MOVE) {
-        return TimelineCommonEventMove.readFromPageValue();
-      }
+    var tle;
+    tle = _timelineEvent.call(this);
+    if (tle != null) {
+      return tle.readFromPageValue();
     }
   };
 
@@ -164,6 +152,16 @@ TimelineConfig = (function() {
     timelineConfigError = $('.timeline_config_error', this.emt);
     timelineConfigError.find('p').html('');
     return timelineConfigError.css('display', 'none');
+  };
+
+  _timelineEvent = function() {
+    if (this.isCommonEvent) {
+      if (this.actionEventTypeId === Constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE) {
+        return TLEBackgroundColorChange;
+      } else if (this.actionEventTypeId === Constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE) {
+        return TLEScreenPositionChange;
+      }
+    }
   };
 
   return TimelineConfig;

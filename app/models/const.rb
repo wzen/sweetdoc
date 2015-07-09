@@ -70,10 +70,10 @@ class Const
 
   # 共通アクションイベント対象
   class CommonActionEventChangeType
-    # @property [Int] BACKGROUND 背景
-    BACKGROUND = 0
-    # @property [Int] MOVE ズーム
-    MOVE = 1
+    # @property [Int] BACKGROUNDCOLOR_CHANGE 背景
+    BACKGROUNDCOLOR_CHANGE = 0
+    # @property [Int] SCREENPOSITION_CHANGE ズーム
+    SCREENPOSITION_CHANGE = 1
   end
 
   # アクション変更種別

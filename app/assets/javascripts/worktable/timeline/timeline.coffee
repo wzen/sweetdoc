@@ -9,9 +9,9 @@ addTimelineEventContents = (te_actions, te_values) ->
       te_actions.forEach( (a) ->
         actionType = null
         if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
-          actionType = "scroll"
+          actionType = Constant.ActionEventTypeClassName.SCROLL
         else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
-          actionType = "click"
+          actionType = Constant.ActionEventTypeClassName.CLICK
         li += """
           <li class='push method #{actionType}'>
             #{a.options['name']}

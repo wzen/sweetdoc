@@ -32,8 +32,8 @@
 //= require item/code_template
 //= require item/item_base
 //= require timeline/base/timeline_event.js
-//= require timeline/common_event/background
-//= require timeline/common_event/move
+//= require timeline/common_event/backgroundcolor_change.js
+//= require timeline/common_event/screenposition_change.js
 //= require test_move
 //= require worktable/common/common_var
 //= require worktable/common/common_func
