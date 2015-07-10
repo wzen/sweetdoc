@@ -31,9 +31,10 @@
 //= require base/local_storage
 //= require item/code_template
 //= require item/item_base
-//= require timeline/base/timeline_event.js
-//= require timeline/common_event/backgroundcolor_change.js
-//= require timeline/common_event/screenposition_change.js
+//= require timeline/base/timeline_event
+//= require timeline/common_event/backgroundcolor_change
+//= require timeline/common_event/screenposition_change
+//= require timeline/item_event/item_change
 //= require test_move
 //= require worktable/common/common_var
 //= require worktable/common/common_func
@@ -44,7 +45,7 @@
 //= require worktable/item_extend/common_extend
 //= require worktable/item_extend/canvasitem_extend
 //= require worktable/item_extend/cssitem_extend
-//= require worktable/timeline/timeline_config.js
+//= require worktable/timeline/timeline_config
 //= require worktable/timeline/timeline
 //= require worktable/timeline/run
 //= require worktable/handwrite

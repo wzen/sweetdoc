@@ -203,6 +203,11 @@ if window.worktablePage?
 
       # コンフィグ作成
       @makeDesignConfig()
+
+      # タイムライン作成
+      #fixme: あとでロジックと実装を分けること
+      TLEItemChange.writeDefaultToPageValue(@)
+      TLEItemChange.updateAllScrollLength(@)
       
       return true
 

@@ -186,6 +186,8 @@ if (window.worktablePage != null) {
       this.cssStyle = $(".css-style", this.cssRoot);
       this.cssStyle.text(this.cssCode.text());
       this.makeDesignConfig();
+      TLEItemChange.writeDefaultToPageValue(this);
+      TLEItemChange.updateAllScrollLength(this);
       return true;
     };
 

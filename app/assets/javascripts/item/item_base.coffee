@@ -33,6 +33,8 @@ class ItemBase extends Extend
     @ohiRegistIndex = 0
     # @property [Object] jqueryElement アイテムのjQueryオブジェクト
     @jqueryElement = null
+    # @property [Array] coodRegist ドラッグ座標
+    @coodRegist = []
 
   # コンフィグメニューの要素IDを取得
   # @return [Int] HTML要素ID
@@ -180,8 +182,27 @@ class ItemBase extends Extend
   # @abstract
   drawForLookaround: (obj) ->
 
-  # イベントによって設定したスタイルをクリアする　
-  clearAllEventStyle : ->
+  # イベントによって設定したスタイルをクリアする
+  clearAllEventStyle: ->
+
+  # アイテム作成時に設定されるデフォルトメソッド名
+  @defaultMethodName = ->
+    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
+
+  # アイテム作成時に設定されるデフォルトアクションタイプ
+  @defaultActionType = ->
+    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
+
+  @timelineDefaultConfigValue = ->
+    return null
+
+  timelineConfigValue: ->
+    return null
+
+  # タイムラインに書き込む情報
+  # @abstract
+  objWriteTimeline: ->
+    return null
 
 # CSSアイテム
 # @abstract

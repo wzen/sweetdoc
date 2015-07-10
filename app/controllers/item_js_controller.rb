@@ -6,6 +6,7 @@ class ItemJsController < ApplicationController
     return if item_action_events.length == 0
 
     @index = ItemJs.extract_iae(item_action_events)
+    @index[:item_id] = item_id
   end
 
   def timeline_config(te_action)

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "textbox.js",
+  "sourceRoot": "",
+  "sources": [
+    "textbox.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA"
+}

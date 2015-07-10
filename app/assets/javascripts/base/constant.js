@@ -110,11 +110,15 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.ITEM_VALUE_CACHE = 'item:cache:@id:value';
 
+      PageValueKey.ITEM_DEFAULT_METHODNAME = 'iteminfo:@item_id:default:methodname';
+
+      PageValueKey.ITEM_DEFAULT_ACTIONTYPE = 'iteminfo:@item_id:default:actiontype';
+
       PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
       PageValueKey.TE_COUNT = 'timeline_event:count';
 
-      PageValueKey.TE_ALL_LENGTH = 'timeline_event:all_length';
+      PageValueKey.TE_ALL_SCROLL_LENGTH = 'timeline_event:all_scroll_length';
 
       return PageValueKey;
 

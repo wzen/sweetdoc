@@ -10,7 +10,7 @@ TimelineEvent = (function() {
     function PageValueKey() {}
 
     PageValueKey.te = function(teNum) {
-      return 'timeline_event:' + this.teNum;
+      return 'timeline_event:' + teNum;
     };
 
     PageValueKey.ID = 'id';
@@ -20,6 +20,10 @@ TimelineEvent = (function() {
     PageValueKey.ACTION_EVENT_TYPE_ID = 'action_event_type_id';
 
     PageValueKey.VALUE = 'value';
+
+    PageValueKey.CHAPTER = 'chapter';
+
+    PageValueKey.SCREEN = 'screen';
 
     PageValueKey.IS_COMMON_EVENT = 'is_common_event';
 
@@ -39,7 +43,7 @@ TimelineEvent = (function() {
 
   })();
 
-  TimelineEvent.initConfigValue = function(timelineConfig) {
+  TimelineEvent.initCommonConfigValue = function(timelineConfig) {
     var end, endDiv, s, scrollPointDiv, start, startDiv;
     if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
       scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
@@ -48,7 +52,7 @@ TimelineEvent = (function() {
         start = startDiv.val();
         s = null;
         if (start.length === 0) {
-          s = getPageValue(Constant.PageValueKey.TE_ALL_LENGTH);
+          s = getPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH);
           if (s != null) {
             startDiv.val(s);
           } else {
@@ -60,7 +64,7 @@ TimelineEvent = (function() {
         endDiv = scrollPointDiv.find('.scroll_point_end:first');
         end = endDiv.val();
         if (end.length === 0) {
-          return endDiv.val(parseInt(s) + _scrollLength(timelineConfig));
+          return endDiv.val(parseInt(s) + _scrollLength.call(this, timelineConfig));
         }
       }
     }
@@ -71,41 +75,43 @@ TimelineEvent = (function() {
   TimelineEvent.commonWriteValue = function(timelineConfig) {
     var clickParallel, end, isClickParallel, scrollPoint, scrollPointDiv, start, writeValue;
     writeValue = {};
-    writeValue[TimelineEvent.PageValueKey.ID] = timelineConfig.id;
-    writeValue[TimelineEvent.PageValueKey.ITEM_ID] = timelineConfig.itemId;
-    writeValue[TimelineEvent.PageValueKey.ACTION_EVENT_TYPE_ID] = timelineConfig.actionEventTypeId;
-    writeValue[TimelineEvent.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent;
-    writeValue[TimelineEvent.PageValueKey.METHODNAME] = timelineConfig.methodName;
-    writeValue[TimelineEvent.PageValueKey.ACTIONTYPE] = timelineConfig.actionType;
+    writeValue[this.PageValueKey.ID] = timelineConfig.id;
+    writeValue[this.PageValueKey.ITEM_ID] = timelineConfig.itemId;
+    writeValue[this.PageValueKey.ACTION_EVENT_TYPE_ID] = timelineConfig.actionEventTypeId;
+    writeValue[this.PageValueKey.CHAPTER] = 1;
+    writeValue[this.PageValueKey.CHAPTER] = 1;
+    writeValue[this.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent;
+    writeValue[this.PageValueKey.METHODNAME] = timelineConfig.methodName;
+    writeValue[this.PageValueKey.ACTIONTYPE] = timelineConfig.actionType;
     if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
       scrollPoint = "";
       scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
       if (scrollPointDiv != null) {
         start = scrollPointDiv.find('.scroll_point_start:first').val();
         end = scrollPointDiv.find('.scroll_point_end:first').val();
-        scrollPoint = start + TimelineEvent.PageValueKey.SCROLL_POINT_SEP + end;
+        scrollPoint = start + this.PageValueKey.SCROLL_POINT_SEP + end;
       }
-      writeValue[TimelineEvent.PageValueKey.SCROLL_POINT] = scrollPoint;
+      writeValue[this.PageValueKey.SCROLL_POINT] = scrollPoint;
     } else if (timelineConfig.actionType === Constant.ActionEventTypeClassName.CLICK) {
       isClickParallel = false;
       clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt);
       if (clickParallel != null) {
         isClickParallel = clickParallel.is(":checked");
       }
-      writeValue[TimelineEvent.PageValueKey.IS_CLICK_PARALLEL] = isClickParallel;
+      writeValue[this.PageValueKey.IS_CLICK_PARALLEL] = isClickParallel;
     }
     return writeValue;
   };
 
   TimelineEvent.commonReadValue = function(timelineConfig) {
     var clickParallel, end, isClickParallel, s, scrollPoint, scrollPointDiv, start, writeValue;
-    writeValue = getPageValue(TimelineEvent.PageValueKey.te(timelineConfig.teNum));
+    writeValue = getPageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
       if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
         scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
-        scrollPoint = writeValue[TimelineEvent.PageValueKey.SCROLL_POINT];
+        scrollPoint = writeValue[this.PageValueKey.SCROLL_POINT];
         if ((scrollPointDiv != null) && (scrollPoint != null)) {
-          s = scrollPoint.split(TimelineEvent.PageValueKey.SCROLL_POINT_SEP);
+          s = scrollPoint.split(this.PageValueKey.SCROLL_POINT_SEP);
           start = s[0];
           end = s[1];
           scrollPointDiv.find('.scroll_point_start:first').val(start);
@@ -113,7 +119,7 @@ TimelineEvent = (function() {
         }
       } else if (timelineConfig.actionType === Constant.ActionEventTypeClassName.CLICK) {
         clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt);
-        isClickParallel = writeValue[TimelineEvent.PageValueKey.IS_CLICK_PARALLEL];
+        isClickParallel = writeValue[this.PageValueKey.IS_CLICK_PARALLEL];
         if ((clickParallel != null) && isClickParallel) {
           return clickParallel.prop("checked", true);
         }
@@ -124,11 +130,11 @@ TimelineEvent = (function() {
   _scrollLength = function(timelineConfig) {
     var end, s, scrollPoint, scrollPointDiv, start, writeValue;
     scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
-    writeValue = getPageValue(TimelineEvent.PageValueKey.te(timelineConfig.teNum));
+    writeValue = getPageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
-      scrollPoint = writeValue[TimelineEvent.PageValueKey.SCROLL_POINT];
+      scrollPoint = writeValue[this.PageValueKey.SCROLL_POINT];
       if ((scrollPointDiv != null) && (scrollPoint != null)) {
-        s = scrollPoint.split(TimelineEvent.PageValueKey.SCROLL_POINT_SEP);
+        s = scrollPoint.split(this.PageValueKey.SCROLL_POINT_SEP);
         start = s[0];
         end = s[1];
         return parseInt(end) - parseInt(start);

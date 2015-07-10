@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "slider.js",
+  "sourceRoot": "",
+  "sources": [
+    "slider.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA"
+}

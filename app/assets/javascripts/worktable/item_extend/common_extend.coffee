@@ -8,3 +8,4 @@ WorkTableCommonExtend =
     $('.dc', sc).css('display', 'none')
     $('#design-config').css('display', '')
     $('#' + @getDesignConfigId()).css('display', '')
+

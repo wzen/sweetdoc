@@ -14,6 +14,7 @@ class ItemJs
           item_id: d.item_id,
           action_event_type_id: d.action_event_type_id,
           method_name: d.method_name,
+          is_default: d.is_default,
           options: d.options
       }
     end
@@ -101,7 +102,6 @@ class ItemJs
 
     ret =
     {
-        item_id: item_action_events.first.item_id,
         js_src: js_src,
         css_info: css_info,
         te_actions: te_actions,

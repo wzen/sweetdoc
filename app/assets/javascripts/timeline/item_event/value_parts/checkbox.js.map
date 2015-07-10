@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "checkbox.js",
+  "sourceRoot": "",
+  "sources": [
+    "checkbox.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA"
+}

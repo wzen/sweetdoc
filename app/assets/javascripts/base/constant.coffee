@@ -79,12 +79,16 @@ if gon?
       @ITEM_VALUE = 'item:@id:value'
       # @property [String] ITEM アイテムキャッシュRoot
       @ITEM_VALUE_CACHE = 'item:cache:@id:value'
+      # @property [String] ITEM_DEFAULT_METHODNAME デフォルトメソッド名
+      @ITEM_DEFAULT_METHODNAME = 'iteminfo:@item_id:default:methodname'
+      # @property [String] ITEM_DEFAULT_METHODACTIONTYPE デフォルトアクションタイプ
+      @ITEM_DEFAULT_ACTIONTYPE = 'iteminfo:@item_id:default:actiontype'
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
       # @property [String] TE_COUNT タイムラインイベント数
       @TE_COUNT = 'timeline_event:count'
-      # @property [String] TE_ALL_LENGTH タイムライン長さ
-      @TE_ALL_LENGTH = 'timeline_event:all_length'
+      # @property [String] TE_ALL_SCROLL_LENGTH タイムライン長さ
+      @TE_ALL_SCROLL_LENGTH = 'timeline_event:all_scroll_length'
 
     class @ElementAttribute
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot

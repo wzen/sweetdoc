@@ -31,6 +31,7 @@ ItemBase = (function(superClass) {
     this.ohiRegist = [];
     this.ohiRegistIndex = 0;
     this.jqueryElement = null;
+    this.coodRegist = [];
   }
 
   ItemBase.prototype.getDesignConfigId = function() {
@@ -163,6 +164,26 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.drawForLookaround = function(obj) {};
 
   ItemBase.prototype.clearAllEventStyle = function() {};
+
+  ItemBase.defaultMethodName = function() {
+    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
+  };
+
+  ItemBase.defaultActionType = function() {
+    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
+  };
+
+  ItemBase.timelineDefaultConfigValue = function() {
+    return null;
+  };
+
+  ItemBase.prototype.timelineConfigValue = function() {
+    return null;
+  };
+
+  ItemBase.prototype.objWriteTimeline = function() {
+    return null;
+  };
 
   return ItemBase;
 

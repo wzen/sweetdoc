@@ -1,32 +1,3 @@
-# タイムラインイベントのConfigを追加
-# @param [String] contents 追加するHTMLの文字列
-addTimelineEventContents = (te_actions, te_values) ->
-  if te_actions? && te_actions.length > 0
-    className = TimelineConfig.ACTION_CLASS.replace('@itemid', te_actions[0].item_id)
-    action_forms = $('#timeline-config .action_forms')
-    if action_forms.find(".#{className}").length == 0
-      li = ''
-      te_actions.forEach( (a) ->
-        actionType = null
-        if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
-          actionType = Constant.ActionEventTypeClassName.SCROLL
-        else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
-          actionType = Constant.ActionEventTypeClassName.CLICK
-        li += """
-          <li class='push method #{actionType}'>
-            #{a.options['name']}
-            <input class='item_id' type='hidden' value='#{a.item_id}' >
-            <input class='action_type' type='hidden' value='#{actionType}'>
-            <input class='method_name' type='hidden' value='#{a.method_name}'>
-          </li>
-        """
-      )
-
-      $("<div class='#{className}'><ul>#{li}</ul></div>").appendTo(action_forms)
-
-  if te_values?
-    $(te_values).appendTo($('#timeline-config .value_forms'))
-
 # タイムラインのイベント設定
 setupTimelineEvents = ->
   self = @

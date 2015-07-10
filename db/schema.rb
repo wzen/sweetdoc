@@ -32,10 +32,11 @@ ActiveRecord::Schema.define(version: 20150126130235) do
   end
 
   create_table "item_action_events", force: true do |t|
-    t.integer  "item_id",                     null: false
-    t.integer  "action_event_type_id",        null: false
-    t.integer  "action_event_change_type_id", null: false
-    t.string   "method_name",                 null: false
+    t.integer  "item_id",                                     null: false
+    t.integer  "action_event_type_id",                        null: false
+    t.integer  "action_event_change_type_id",                 null: false
+    t.string   "method_name",                                 null: false
+    t.boolean  "is_default",                  default: false
     t.text     "options"
     t.datetime "created_at"
     t.datetime "updated_at"

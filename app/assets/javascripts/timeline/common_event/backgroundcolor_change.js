@@ -16,7 +16,7 @@ TLEBackgroundColorChange = (function(superClass) {
 
   TLEBackgroundColorChange.initConfigValue = function(timelineConfig) {
     var bgColor;
-    TimelineEvent.initConfigValue(timelineConfig);
+    this.initCommonConfigValue(timelineConfig);
     bgColor = $('#main-wrapper.stage_container').css('backgroundColor');
     $(".baseColor", $("values_div", timelineConfig.emt)).css('backgroundColor', bgColor);
     return $(".colorPicker", timelineConfig.emt).each(function() {
@@ -31,16 +31,16 @@ TLEBackgroundColorChange = (function(superClass) {
   TLEBackgroundColorChange.writeToPageValue = function(timelineConfig) {
     var emt, errorMes, writeValue;
     errorMes = "";
-    writeValue = TimelineEvent.commonWriteValue(timelineConfig);
+    writeValue = this.commonWriteValue(timelineConfig);
     emt = timelineConfig.emt;
-    value[TimelineEvent.BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor');
-    value[TimelineEvent.CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor');
-    if (value[TimelineEvent.BASE_COLOR] === value[TimelineEvent.CHANGE_COLOR]) {
+    value[this.BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor');
+    value[this.CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor');
+    if (value[this.BASE_COLOR] === value[this.CHANGE_COLOR]) {
       errorMes = "同じ色は選択できません";
     }
     if (errorMes.length === 0) {
-      writeValue[TimelineEvent.PageValueKey.VALUE] = value;
-      setPageValue(TimelineEvent.PageValueKey.te(timelineConfig.teNum), writeValue);
+      writeValue[this.PageValueKey.VALUE] = value;
+      setPageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
       setPageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
     }
     return errorMes;
@@ -48,12 +48,12 @@ TLEBackgroundColorChange = (function(superClass) {
 
   TLEBackgroundColorChange.readFromPageValue = function(timelineConfig) {
     var emt, value, writeValue;
-    TimelineEvent.commonReadValue(timelineConfig);
+    this.commonReadValue(timelineConfig);
     emt = timelineConfig.emt;
-    writeValue = getPageValue(TimelineEvent.PageValueKey.te(timelineConfig.teNum));
-    value = writeValue[TimelineEvent.PageValueKey.VALUE];
-    initColorPicker($(".colorPicker.base_color", emt), value[TimelineEvent.BASE_COLOR], null);
-    return initColorPicker($(".colorPicker.change_color", emt), value[TimelineEvent.CHANGE_COLOR], null);
+    writeValue = getPageValue(this.PageValueKey.te(timelineConfig.teNum));
+    value = writeValue[this.PageValueKey.VALUE];
+    initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
+    return initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);
   };
 
   return TLEBackgroundColorChange;

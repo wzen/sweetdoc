@@ -4,6 +4,7 @@ one:
   action_event_type_id: 1
   action_event_change_type_id: 1
   method_name: defaultClick
+  is_default: true
   options: |
             {
               "id": "defaultClick",
@@ -16,6 +17,7 @@ two:
   action_event_type_id: 0
   action_event_change_type_id: 0
   method_name: scrollDraw
+  is_default: true
   options: |
             {
               "id": "drawScroll",
