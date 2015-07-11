@@ -9,8 +9,6 @@ if gon?
     @OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX
     # @property [Array] ITEM_PATH_LIST JSファイル名
     @ITEM_PATH_LIST = constant.ITEM_PATH_LIST
-    # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
-    @PAGE_VALUES_SEPERATOR = ":"
     # @property [String] TIMELINE_ITEM_SEPERATOR タイムラインイベント(アイテム)値のセパレータ
     @TIMELINE_ITEM_SEPERATOR = "&"
     # @property [String] TIMELINE_COMMON_PREFIX 共通タイムラインイベントプレフィックス
@@ -86,9 +84,11 @@ if gon?
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
       # @property [String] TE_COUNT タイムラインイベント数
-      @TE_COUNT = 'timeline_event:count'
-      # @property [String] TE_ALL_SCROLL_LENGTH タイムライン長さ
-      @TE_ALL_SCROLL_LENGTH = 'timeline_event:all_scroll_length'
+      @TE_COUNT = constant.PageValueKey.TE_COUNT
+      # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
+      @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
+      # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
+      @TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX
 
     class @ElementAttribute
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot

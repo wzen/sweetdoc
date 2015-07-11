@@ -22,7 +22,7 @@ TimelineConfig = (function() {
       this.selectItem();
       this.clickMethod();
     } else {
-      this.teNum = getPageValue(Constant.PageValueKey.TE_COUNT);
+      this.teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT);
       if (this.teNum == null) {
         this.teNum = 1;
       }
@@ -73,7 +73,7 @@ TimelineConfig = (function() {
       e = null;
     }
     if (e != null) {
-      this.actionType = $(e).find('input.action_type').val();
+      this.actionType = parseInt($(e).find('input.action_type').val());
       this.methodName = $(e).find('input.method_name').val();
     }
     valueClassName = null;
@@ -83,7 +83,7 @@ TimelineConfig = (function() {
       valueClassName = this.constructor.VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.methodName);
     }
     extraClassName = null;
-    if (this.actionType === Constant.ActionEventTypeClassName.SCROLL) {
+    if (this.actionType === Constant.ActionEventHandleType.SCROLL) {
       extraClassName = "scroll_point_div";
     } else {
       extraClassName = "click_parallel_div";
@@ -113,12 +113,7 @@ TimelineConfig = (function() {
       this.showError(errorMes);
       return;
     }
-    $(this.teEmt).removeClass("blank");
-    if (this.isCommonEvent) {
-      return $(this.teEmt).addClass("common");
-    } else {
-      return $(this.teEmt).addClass(this.actionType);
-    }
+    return changeTimelineColor(this.teNum, this.actionType);
   };
 
   TimelineConfig.prototype.writeToPageValue = function() {

@@ -10,7 +10,7 @@ setupTimelineEvents = ->
     # tempをクローンしてtimeline_eventsに追加
     pEmt = $('#timeline_events')
     newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
-    teNum = getPageValue(Constant.PageValueKey.TE_COUNT) + 1
+    teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT) + 1
     newEmt.find('.te_num').val(teNum)
     pEmt.append(newEmt)
 
@@ -173,3 +173,25 @@ setupTimeLineCss = ->
   )
 
   return itemCssStyle
+
+# アクションタイプからアクションタイプクラス名を取得
+getActionTypeClassNameByActionType = (actionType) ->
+  if parseInt(actionType) == Constant.ActionEventHandleType.CLICK
+    return Constant.ActionEventTypeClassName.CLICK
+  else if parseInt(actionType) == Constant.ActionEventHandleType.SCROLL
+    return Constant.ActionEventTypeClassName.SCROLL
+  return null
+
+# タイムラインイベントの色を変更
+changeTimelineColor = (teNum, actionType) ->
+  # イベントの色を変更
+  teEmt = null
+  $('#timeline_events').children('.timeline_event').each((e) ->
+    if parseInt($(@).find('input.te_num:first').val()) == parseInt(teNum)
+      teEmt = @
+  )
+  $(teEmt).removeClass("blank")
+  $(teEmt).removeClass("click")
+  $(teEmt).removeClass("scroll")
+  $(teEmt).addClass(getActionTypeClassNameByActionType(actionType))
+

@@ -128,7 +128,6 @@ class ArrowItem extends CanvasItemBase
     # タイムライン作成
     #fixme: あとでロジックと実装を分けること
     TLEItemChange.writeDefaultToPageValue(@)
-    TLEItemChange.updateAllScrollLength(@)
 
   # アイテムの最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
@@ -447,7 +446,6 @@ class ArrowItem extends CanvasItemBase
   objWriteTimeline: ->
     obj = {}
     obj[TLEItemChange.minObj] = @getMinimumObject()
-    obj[TLEItemChange.itemSize] = @itemSize
     return obj
 
 window.loadedClassList.ArrowItem = ArrowItem

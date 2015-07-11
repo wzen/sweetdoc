@@ -207,8 +207,7 @@ if window.worktablePage?
       # タイムライン作成
       #fixme: あとでロジックと実装を分けること
       TLEItemChange.writeDefaultToPageValue(@)
-      TLEItemChange.updateAllScrollLength(@)
-      
+
       return true
 
     # CSSボタンコントロール初期化

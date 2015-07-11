@@ -1,36 +1,44 @@
 class TimelineEvent
 
-  class @PageValueKey
-    # @property [String] te タイムラインイベントRoot
-    @te : (teNum) -> 'timeline_event:' + teNum
-    # @property [String] ID アイテムID
-    @ID = 'id'
-    # @property [String] ITEM_ID アイテムタイプID
-    @ITEM_ID = 'item_id'
-    # @property [String] ACTION_EVENT_TYPE_ID アクションイベントID
-    @ACTION_EVENT_TYPE_ID = 'action_event_type_id'
-    # @property [String] VALUE タイムラインイベント値
-    @VALUE = 'value'
-    # @property [String] CHAPTER チャプター
-    @CHAPTER = 'chapter'
-    # @property [String] SCREEN スクリーン
-    @SCREEN = 'screen'
-    # @property [String] IS_COMMON_EVENT タイムライン共通イベント判定
-    @IS_COMMON_EVENT = 'is_common_event'
-    # @property [String] TE_VALUE タイムライン変更前の値
-    #@TE_ORIGINAL_VALUE = @TE + ':originalvalue'
-    # @property [String] ORDER ソート番号
-    @ORDER = 'order'
-    # @property [String] METHODNAME イベント名
-    @METHODNAME = 'methodname'
-    # @property [String] METHODNAME イベント名
-    @ACTIONTYPE = 'actiontype'
-    # @property [String] IS_PARALLEL 同時実行
-    @IS_CLICK_PARALLEL = 'is_click_parallel'
-    # @property [String] SCROLL_TIME スクロール実行時間
-    @SCROLL_POINT = 'scroll_point'
-    # @property [String] TE_SCROLL_TIME_SEP スクロール実行時間セパレータ
-    @SCROLL_POINT_SEP = '-'
+  if gon?
+  # 定数
+    constant = gon.const
+
+    class @PageValueKey
+      # @property [String] te タイムラインイベントRoot
+      @te : (teNum) ->
+        constant.PageValueKey.TE_PREFIX + ':' + Constant.PageValueKey.TE_NUM_PREFIX + teNum
+      # @property [String] ID アイテムID
+      @ID = 'id'
+      # @property [String] ITEM_ID アイテムタイプID
+      @ITEM_ID = 'item_id'
+      # @property [String] ACTION_EVENT_TYPE_ID アクションイベントID
+      @ACTION_EVENT_TYPE_ID = 'action_event_type_id'
+      # @property [String] VALUE タイムラインイベント値
+      @VALUE = 'value'
+      # @property [String] CHAPTER チャプター
+      @CHAPTER = 'chapter'
+      # @property [String] SCREEN スクリーン
+      @SCREEN = 'screen'
+      # @property [String] IS_COMMON_EVENT タイムライン共通イベント判定
+      @IS_COMMON_EVENT = 'is_common_event'
+      # @property [String] TE_VALUE タイムライン変更前の値
+      #@TE_ORIGINAL_VALUE = @TE + ':originalvalue'
+      # @property [String] ORDER ソート番号
+      @ORDER = 'order'
+      # @property [String] METHODNAME イベント名
+      @METHODNAME = 'methodname'
+      # @property [String] METHODNAME イベント名
+      @ACTIONTYPE = 'actiontype'
+      # @property [String] IS_PARALLEL 同時実行
+      @IS_CLICK_PARALLEL = 'is_click_parallel'
+      # @property [String] SCROLL_TIME スクロール実行時間
+      @SCROLL_POINT = 'scroll_point'
+      # @property [String] TE_SCROLL_TIME_SEP スクロール実行時間セパレータ
+      @SCROLL_POINT_SEP = '-'
+
+  @inputTagName = (teNum, key) ->
+    return "#{@PageValueKey.te(teNum)}:#{key}"
 
   @initCommonConfigValue = (timelineConfig) ->
     if timelineConfig.actionType == Constant.ActionEventTypeClassName.SCROLL
@@ -40,12 +48,9 @@ class TimelineEvent
         start = startDiv.val()
         s = null
         if start.length == 0
-          s = getPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH)
-          if s?
-            startDiv.val(s)
-          else
-            s = 0
-            startDiv.val("0")
+          s = TimelineEvent.getAllScrollLength()
+          startDiv.val(s)
+          if s == 0
             startDiv.prop("disabled", true)
         endDiv = scrollPointDiv.find('.scroll_point_end:first')
         end = endDiv.val()
@@ -87,7 +92,7 @@ class TimelineEvent
     return writeValue
 
   @commonReadValue = (timelineConfig) ->
-    writeValue = getPageValue(@PageValueKey.te(timelineConfig.teNum))
+    writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     if writeValue?
       if timelineConfig.actionType == Constant.ActionEventTypeClassName.SCROLL
         scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
@@ -107,7 +112,7 @@ class TimelineEvent
 
   _scrollLength = (timelineConfig) ->
     scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
-    writeValue = getPageValue(@PageValueKey.te(timelineConfig.teNum))
+    writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     if writeValue?
       scrollPoint = writeValue[@PageValueKey.SCROLL_POINT]
       if scrollPointDiv? && scrollPoint?
@@ -117,6 +122,29 @@ class TimelineEvent
        return parseInt(end) - parseInt(start)
 
     return null
+
+  # スクロールの合計の長さを取得
+  @getAllScrollLength = ->
+    self = @
+    maxTeNum = 0
+    scrollPoint = null
+    $('#timeline_page_values .timeline_event').children('div').each((e) ->
+      teNum = parseInt($(@).attr('class'))
+      if teNum > maxTeNum
+        sp = $(@).find(".#{self.PageValueKey.SCROLL_POINT}:first").val()
+        if sp? && sp != "null"
+          maxTeNum = teNum
+          scrollPoint = sp
+    )
+    if !scrollPoint?
+      return 0
+
+    s = scrollPoint.split(@PageValueKey.SCROLL_POINT_SEP)
+    scrollEnd = parseInt(s[1])
+    return scrollEnd
+
+
+
 
 
 

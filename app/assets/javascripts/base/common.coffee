@@ -77,10 +77,24 @@ focusToTarget = (target) ->
 
 # ページが持つ値を取得
 # @param [String] key キー値
-# @param [Boolean] withRemove 取得後に値を消去するか
-# @return [Object] ハッシュ配列または値で返す
+# @param [Object] value 設定値(ハッシュ配列または値)
+# @param [Boolean] isCache このページでのみ保持させるか
 getPageValue = (key, withRemove = false) ->
+  _getPageValue(key, withRemove, false)
+
+# タイムラインの値を取得
+# @param [String] key キー値
+getTimelinePageValue = (key) ->
+  _getPageValue(key, false, true)
+
+# ページが持つ値を取得
+# @param [String] key キー値
+# @param [Boolean] withRemove 取得後に値を消去するか
+# @param [Boolean] isTimeline タイムライン値か
+# @return [Object] ハッシュ配列または値で返す
+_getPageValue = (key, withRemove, isTimeline) ->
   f = @
+  rootId = if isTimeline then "timeline_page_values" else "page_values"
   # div以下の値をハッシュとしてまとめる
   takeValue = (element) ->
     ret = []
@@ -98,8 +112,8 @@ getPageValue = (key, withRemove = false) ->
     return ret
 
   value = null
-  root = $('#page_values')
-  keys = key.split(Constant.PAGE_VALUES_SEPERATOR)
+  root = $("##{rootId}")
+  keys = key.split(Constant.PageValueKey.PAGE_VALUES_SEPERATOR)
   keys.forEach((k, index) ->
     root = $(".#{k}", root)
     if !root? || root.length == 0
@@ -120,22 +134,44 @@ getPageValue = (key, withRemove = false) ->
 # @param [Object] value 設定値(ハッシュ配列または値)
 # @param [Boolean] isCache このページでのみ保持させるか
 setPageValue = (key, value, isCache = false) ->
+  _setPageValue(key, value, isCache, false, null)
+
+# タイムラインの値を設定
+# @param [String] key キー値
+# @param [Object] value 設定値(ハッシュ配列または値)
+# @param [Number] timelineNum タイムラインナンバー
+setTimelinePageValue = (key, value, teNum = null) ->
+  _setPageValue(key, value, false, true, teNum)
+
+# ページが持つ値を設定
+# @param [String] key キー値
+# @param [Object] value 設定値(ハッシュ配列または値)
+# @param [Boolean] isCache このページでのみ保持させるか
+# @param [Boolean] isTimeline タイムラインの数値か
+# @param [Number] timelineNum タイムラインナンバー
+_setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
   f = @
+  rootId = if isTimeline then "timeline_page_values" else "page_values"
   # ハッシュを要素の文字列に変換
-  makeElementStr = (ky, val) ->
-    if jQuery.type(val) != "object"
+  makeElementStr = (ky, val, kyName) ->
+    kyName += Constant.PageValueKey.PAGE_VALUES_SEPERATOR + ky
+    if jQuery.type(val) == "string" || jQuery.type(val) == "number"
       # サニタイズする
       val = sanitaizeEncode(val)
-      return "<input type='hidden' class=#{ky} value='#{val}' />"
+      name = ""
+      if timelineNum?
+        name = "name = #{kyName}"
+      return "<input type='hidden' class='#{ky}' value='#{val}' #{name} />"
 
     ret = ""
     for k, v of val
-      ret += makeElementStr.call(f, k, v)
+      ret += makeElementStr.call(f, k, v, kyName)
     return "<div class=#{ky}>#{ret}</div>"
 
   cacheClassName = 'cache'
-  root = $('#page_values')
-  keys = key.split(Constant.PAGE_VALUES_SEPERATOR)
+  root = $("##{rootId}")
+  parentClassName = null
+  keys = key.split(Constant.PageValueKey.PAGE_VALUES_SEPERATOR)
   keys.forEach((k, index) ->
     parent = root
     element = ''
@@ -151,15 +187,18 @@ setPageValue = (key, value, isCache = false) ->
       if !root? || root.length == 0
         # 親要素のdiv作成
         root = jQuery("<div class=#{k}></div>").appendTo(parent)
+        parentClassName = k
     else
       if root? && root.length > 0
         # 要素が存在する場合は消去して上書き
         root.remove()
       # 要素作成
-      root = jQuery(makeElementStr.call(f, k, value)).appendTo(parent)
+      root = jQuery(makeElementStr.call(f, k, value, parentClassName)).appendTo(parent)
       if isCache
         root.addClass(cacheClassName)
   )
+
+
 
 # ページが持つ値を削除
 # @param [String] key キー値

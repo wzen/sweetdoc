@@ -26,8 +26,8 @@ TLEScreenPositionChange = (function(superClass) {
     value[this.Z] = $('.screenposition_change_z:first', emt).val();
     if (errorMes.length === 0) {
       writeValue[this.PageValueKey.VALUE] = value;
-      setPageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
-      setPageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum);
+      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
     }
     return errorMes;
   };
@@ -35,7 +35,7 @@ TLEScreenPositionChange = (function(superClass) {
   TLEScreenPositionChange.readFromPageValue = function(timelineConfig) {
     var emt, value, writeValue;
     emt = timelineConfig.emt;
-    writeValue = getPageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     this.commonReadValue(timelineConfig, writeValue);
     value = writeValue[this.PageValueKey.VALUE];
     $('.screenposition_change_x:first', emt).val(value[this.constructor.X]);

@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   get 'item_js/index'
 
   root 'worktable#index'
-  resources :run, only:[:index]
+  #resources :run, only:[:index]
+  post 'run' => 'run#index'
 
   get 'test_move/hello'
   get 'item_js_code/hello'

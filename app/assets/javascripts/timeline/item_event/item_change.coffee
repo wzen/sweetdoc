@@ -5,12 +5,6 @@ class TLEItemChange extends TimelineEvent
   @initConfigValue = (timelineConfig, item) ->
     @initCommonConfigValue(timelineConfig)
 
-  @updateAllScrollLength = (item) ->
-    if item.coodRegist.length > 0
-      start = parseInt(getPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH))
-      start += item.coodRegist.length
-      setPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH, start)
-
   @writeDefaultToPageValue = (item) ->
     errorMes = ""
     writeValue = {}
@@ -25,8 +19,9 @@ class TLEItemChange extends TimelineEvent
     writeValue[@PageValueKey.METHODNAME] = item.constructor.defaultMethodName()
     actionType = item.constructor.defaultActionType()
     writeValue[@PageValueKey.ACTIONTYPE] = actionType
-    start = parseInt(getPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH))
+    start = @getAllScrollLength()
     end = start + item.coodRegist.length
+    scrollPoint = null
     if start < end
       scrollPoint = "#{start}#{@PageValueKey.SCROLL_POINT_SEP}#{end}"
     else
@@ -41,13 +36,14 @@ class TLEItemChange extends TimelineEvent
     if errorMes.length == 0
       value = item.constructor.timelineDefaultConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      teNum = getPageValue(Constant.PageValueKey.TE_COUNT)
+      teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
       if teNum?
         teNum = parseInt(teNum) + 1
       else
         teNum = 1
-      setPageValue(@PageValueKey.te(teNum), writeValue)
-      setPageValue(Constant.PageValueKey.TE_COUNT, teNum)
+      setTimelinePageValue(@PageValueKey.te(teNum), writeValue, teNum)
+      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum)
+      changeTimelineColor(teNum, actionType)
 
     return errorMes
 
@@ -61,8 +57,8 @@ class TLEItemChange extends TimelineEvent
     if errorMes.length == 0
       value = item.timelineConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      setPageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
-      setPageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
+      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum)
+      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
 
     return errorMes
 

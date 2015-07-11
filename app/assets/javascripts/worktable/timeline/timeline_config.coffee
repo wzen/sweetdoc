@@ -18,7 +18,7 @@ class TimelineConfig
       @selectItem()
       @clickMethod()
     else
-      @teNum = getPageValue(Constant.PageValueKey.TE_COUNT)
+      @teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
       if !@teNum?
         @teNum = 1
 
@@ -67,7 +67,7 @@ class TimelineConfig
   # メソッド選択
   clickMethod: (e = null) ->
     if e?
-      @actionType = $(e).find('input.action_type').val()
+      @actionType = parseInt($(e).find('input.action_type').val())
       @methodName = $(e).find('input.method_name').val()
 
     valueClassName = null
@@ -77,7 +77,7 @@ class TimelineConfig
       valueClassName = @constructor.VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
 
     extraClassName = null
-    if @actionType == Constant.ActionEventTypeClassName.SCROLL
+    if @actionType == Constant.ActionEventHandleType.SCROLL
       extraClassName = "scroll_point_div"
     else
       extraClassName = "click_parallel_div"
@@ -109,11 +109,7 @@ class TimelineConfig
       return
 
     # イベントの色を変更
-    $(@teEmt).removeClass("blank")
-    if @isCommonEvent
-      $(@teEmt).addClass("common")
-    else
-      $(@teEmt).addClass(@actionType)
+    changeTimelineColor(@teNum, @actionType)
 
   # 画面値に書き込み
   writeToPageValue: ->

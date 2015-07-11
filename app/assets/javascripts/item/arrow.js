@@ -116,8 +116,7 @@ ArrowItem = (function(superClass) {
       this.drawNewCanvas();
     }
     this.makeDesignConfig();
-    TLEItemChange.writeDefaultToPageValue(this);
-    return TLEItemChange.updateAllScrollLength(this);
+    return TLEItemChange.writeDefaultToPageValue(this);
   };
 
   ArrowItem.prototype.getMinimumObject = function() {
@@ -449,7 +448,6 @@ ArrowItem = (function(superClass) {
     var obj;
     obj = {};
     obj[TLEItemChange.minObj] = this.getMinimumObject();
-    obj[TLEItemChange.itemSize] = this.itemSize;
     return obj;
   };
 

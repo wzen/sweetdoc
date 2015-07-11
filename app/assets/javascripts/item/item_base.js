@@ -102,7 +102,8 @@ ItemBase = (function(superClass) {
       itemObjectList.push(this);
     }
     this.setAllItemPropToPageValue();
-    return console.log('save obj:' + JSON.stringify(this.itemSize));
+    console.log('save obj:' + JSON.stringify(this.itemSize));
+    return updateSelectItemMenu();
   };
 
   ItemBase.prototype.setAllItemPropToPageValue = function(isCache) {

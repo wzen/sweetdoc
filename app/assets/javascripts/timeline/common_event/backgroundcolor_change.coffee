@@ -24,15 +24,15 @@ class TLEBackgroundColorChange extends TimelineEvent
 
     if errorMes.length == 0
       writeValue[@PageValueKey.VALUE] = value
-      setPageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
-      setPageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
+      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum)
+      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
 
     return errorMes
 
   @readFromPageValue = (timelineConfig) ->
     @commonReadValue(timelineConfig)
     emt = timelineConfig.emt
-    writeValue = getPageValue(@PageValueKey.te(timelineConfig.teNum))
+    writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
     initColorPicker($(".colorPicker.base_color", emt) ,value[@BASE_COLOR], null)
     initColorPicker($(".colorPicker.change_color", emt) ,value[@CHANGE_COLOR], null)

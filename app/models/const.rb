@@ -97,4 +97,15 @@ class Const
   class ElementAttribute
     TE_VALUES_CLASS = 'timeline_event_value_@itemid_@methodname'
   end
+
+  class PageValueKey
+    # @property [String] TE_PREFIX タイムラインプレフィックス
+    TE_PREFIX = 'timeline_event'
+    # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
+    TE_NUM_PREFIX = 'te_'
+    # @property [String] TE_COUNT タイムライン数
+    TE_COUNT = "#{TE_PREFIX}:count"
+    # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
+    PAGE_VALUES_SEPERATOR = ':'
+  end
 end

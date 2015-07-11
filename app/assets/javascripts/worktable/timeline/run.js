@@ -2,11 +2,11 @@
 var run;
 
 run = function() {
-  Function.prototype.toJSON = Function.prototype.toString;
-  lstorage.setItem('timelineObjList', JSON.stringify(setupTimeLineObjects()));
-  lstorage.setItem('loadedItemTypeList', JSON.stringify(loadedItemTypeList));
-  lstorage.setItem('itemCssStyle', setupTimeLineCss());
-  return window.open('/run');
+  var target;
+  target = "_runwindow";
+  window.open("about:blank", target);
+  document.timeline_run_form.target = target;
+  return document.timeline_run_form.submit();
 };
 
 //# sourceMappingURL=run.js.map

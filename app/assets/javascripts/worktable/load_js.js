@@ -81,13 +81,8 @@ addTimelineEventContents = function(item_id, te_actions, te_values) {
       li = '';
       te_actions.forEach(function(a) {
         var actionType;
-        actionType = null;
-        if (a.action_event_type_id === Constant.ActionEventHandleType.SCROLL) {
-          actionType = Constant.ActionEventTypeClassName.SCROLL;
-        } else if (a.action_event_type_id === Constant.ActionEventHandleType.CLICK) {
-          actionType = Constant.ActionEventTypeClassName.CLICK;
-        }
-        return li += "<li class='push method " + actionType + "'>\n  " + a.options['name'] + "\n</li>";
+        actionType = getActionTypeClassNameByActionType(a.action_event_type_id);
+        return li += "<li class='push method " + actionType + "'>\n  " + a.options['name'] + "\n  <input class='action_type' type='hidden' value='" + a.action_event_type_id + "'>\n  <input class='method_name' type='hidden' value='" + a.method_name + "'>\n</li>";
       });
       $("<div class='" + className + "'><ul>" + li + "</ul></div>").appendTo(action_forms);
     }

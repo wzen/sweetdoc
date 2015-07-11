@@ -12,8 +12,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.ITEM_PATH_LIST = constant.ITEM_PATH_LIST;
 
-    Constant.PAGE_VALUES_SEPERATOR = ":";
-
     Constant.TIMELINE_ITEM_SEPERATOR = "&";
 
     Constant.TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX;
@@ -116,9 +114,11 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
-      PageValueKey.TE_COUNT = 'timeline_event:count';
+      PageValueKey.TE_COUNT = constant.PageValueKey.TE_COUNT;
 
-      PageValueKey.TE_ALL_SCROLL_LENGTH = 'timeline_event:all_scroll_length';
+      PageValueKey.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
+
+      PageValueKey.TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX;
 
       return PageValueKey;
 

@@ -2,46 +2,53 @@
 var TimelineEvent;
 
 TimelineEvent = (function() {
-  var _scrollLength;
+  var _scrollLength, constant;
 
   function TimelineEvent() {}
 
-  TimelineEvent.PageValueKey = (function() {
-    function PageValueKey() {}
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    TimelineEvent.PageValueKey = (function() {
+      function PageValueKey() {}
 
-    PageValueKey.te = function(teNum) {
-      return 'timeline_event:' + teNum;
-    };
+      PageValueKey.te = function(teNum) {
+        return constant.PageValueKey.TE_PREFIX + ':' + Constant.PageValueKey.TE_NUM_PREFIX + teNum;
+      };
 
-    PageValueKey.ID = 'id';
+      PageValueKey.ID = 'id';
 
-    PageValueKey.ITEM_ID = 'item_id';
+      PageValueKey.ITEM_ID = 'item_id';
 
-    PageValueKey.ACTION_EVENT_TYPE_ID = 'action_event_type_id';
+      PageValueKey.ACTION_EVENT_TYPE_ID = 'action_event_type_id';
 
-    PageValueKey.VALUE = 'value';
+      PageValueKey.VALUE = 'value';
 
-    PageValueKey.CHAPTER = 'chapter';
+      PageValueKey.CHAPTER = 'chapter';
 
-    PageValueKey.SCREEN = 'screen';
+      PageValueKey.SCREEN = 'screen';
 
-    PageValueKey.IS_COMMON_EVENT = 'is_common_event';
+      PageValueKey.IS_COMMON_EVENT = 'is_common_event';
 
-    PageValueKey.ORDER = 'order';
+      PageValueKey.ORDER = 'order';
 
-    PageValueKey.METHODNAME = 'methodname';
+      PageValueKey.METHODNAME = 'methodname';
 
-    PageValueKey.ACTIONTYPE = 'actiontype';
+      PageValueKey.ACTIONTYPE = 'actiontype';
 
-    PageValueKey.IS_CLICK_PARALLEL = 'is_click_parallel';
+      PageValueKey.IS_CLICK_PARALLEL = 'is_click_parallel';
 
-    PageValueKey.SCROLL_POINT = 'scroll_point';
+      PageValueKey.SCROLL_POINT = 'scroll_point';
 
-    PageValueKey.SCROLL_POINT_SEP = '-';
+      PageValueKey.SCROLL_POINT_SEP = '-';
 
-    return PageValueKey;
+      return PageValueKey;
 
-  })();
+    })();
+  }
+
+  TimelineEvent.inputTagName = function(teNum, key) {
+    return (this.PageValueKey.te(teNum)) + ":" + key;
+  };
 
   TimelineEvent.initCommonConfigValue = function(timelineConfig) {
     var end, endDiv, s, scrollPointDiv, start, startDiv;
@@ -52,12 +59,9 @@ TimelineEvent = (function() {
         start = startDiv.val();
         s = null;
         if (start.length === 0) {
-          s = getPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH);
-          if (s != null) {
-            startDiv.val(s);
-          } else {
-            s = 0;
-            startDiv.val("0");
+          s = TimelineEvent.getAllScrollLength();
+          startDiv.val(s);
+          if (s === 0) {
             startDiv.prop("disabled", true);
           }
         }
@@ -105,7 +109,7 @@ TimelineEvent = (function() {
 
   TimelineEvent.commonReadValue = function(timelineConfig) {
     var clickParallel, end, isClickParallel, s, scrollPoint, scrollPointDiv, start, writeValue;
-    writeValue = getPageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
       if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
         scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
@@ -130,7 +134,7 @@ TimelineEvent = (function() {
   _scrollLength = function(timelineConfig) {
     var end, s, scrollPoint, scrollPointDiv, start, writeValue;
     scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
-    writeValue = getPageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
       scrollPoint = writeValue[this.PageValueKey.SCROLL_POINT];
       if ((scrollPointDiv != null) && (scrollPoint != null)) {
@@ -141,6 +145,30 @@ TimelineEvent = (function() {
       }
     }
     return null;
+  };
+
+  TimelineEvent.getAllScrollLength = function() {
+    var maxTeNum, s, scrollEnd, scrollPoint, self;
+    self = this;
+    maxTeNum = 0;
+    scrollPoint = null;
+    $('#timeline_page_values .timeline_event').children('div').each(function(e) {
+      var sp, teNum;
+      teNum = parseInt($(this).attr('class'));
+      if (teNum > maxTeNum) {
+        sp = $(this).find("." + self.PageValueKey.SCROLL_POINT + ":first").val();
+        if ((sp != null) && sp !== "null") {
+          maxTeNum = teNum;
+          return scrollPoint = sp;
+        }
+      }
+    });
+    if (scrollPoint == null) {
+      return 0;
+    }
+    s = scrollPoint.split(this.PageValueKey.SCROLL_POINT_SEP);
+    scrollEnd = parseInt(s[1]);
+    return scrollEnd;
   };
 
   return TimelineEvent;

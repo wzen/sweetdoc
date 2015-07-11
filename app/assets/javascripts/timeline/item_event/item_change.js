@@ -18,15 +18,6 @@ TLEItemChange = (function(superClass) {
     return this.initCommonConfigValue(timelineConfig);
   };
 
-  TLEItemChange.updateAllScrollLength = function(item) {
-    var start;
-    if (item.coodRegist.length > 0) {
-      start = parseInt(getPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH));
-      start += item.coodRegist.length;
-      return setPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH, start);
-    }
-  };
-
   TLEItemChange.writeDefaultToPageValue = function(item) {
     var actionType, end, errorMes, itemWriteValue, scrollPoint, start, teNum, value, writeValue;
     errorMes = "";
@@ -40,8 +31,9 @@ TLEItemChange = (function(superClass) {
     writeValue[this.PageValueKey.METHODNAME] = item.constructor.defaultMethodName();
     actionType = item.constructor.defaultActionType();
     writeValue[this.PageValueKey.ACTIONTYPE] = actionType;
-    start = parseInt(getPageValue(Constant.PageValueKey.TE_ALL_SCROLL_LENGTH));
+    start = this.getAllScrollLength();
     end = start + item.coodRegist.length;
+    scrollPoint = null;
     if (start < end) {
       scrollPoint = "" + start + this.PageValueKey.SCROLL_POINT_SEP + end;
     } else {
@@ -54,14 +46,15 @@ TLEItemChange = (function(superClass) {
     if (errorMes.length === 0) {
       value = item.constructor.timelineDefaultConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      teNum = getPageValue(Constant.PageValueKey.TE_COUNT);
+      teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT);
       if (teNum != null) {
         teNum = parseInt(teNum) + 1;
       } else {
         teNum = 1;
       }
-      setPageValue(this.PageValueKey.te(teNum), writeValue);
-      setPageValue(Constant.PageValueKey.TE_COUNT, teNum);
+      setTimelinePageValue(this.PageValueKey.te(teNum), writeValue, teNum);
+      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum);
+      changeTimelineColor(teNum, actionType);
     }
     return errorMes;
   };
@@ -75,8 +68,8 @@ TLEItemChange = (function(superClass) {
     if (errorMes.length === 0) {
       value = item.timelineConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      setPageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
-      setPageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum);
+      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
     }
     return errorMes;
   };

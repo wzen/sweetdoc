@@ -68,14 +68,12 @@ addTimelineEventContents = (item_id, te_actions, te_values) ->
     if action_forms.find(".#{className}").length == 0
       li = ''
       te_actions.forEach( (a) ->
-        actionType = null
-        if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
-          actionType = Constant.ActionEventTypeClassName.SCROLL
-        else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
-          actionType = Constant.ActionEventTypeClassName.CLICK
+        actionType = getActionTypeClassNameByActionType(a.action_event_type_id)
         li += """
           <li class='push method #{actionType}'>
             #{a.options['name']}
+            <input class='action_type' type='hidden' value='#{a.action_event_type_id}'>
+            <input class='method_name' type='hidden' value='#{a.method_name}'>
           </li>
         """
       )
