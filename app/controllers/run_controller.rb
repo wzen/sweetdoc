@@ -5,5 +5,6 @@ class RunController < ApplicationController
 
     # PageValueの書き込み
     @timeline_page_values = Run.init_timeline_pagevalue(params)
+    @is_runwindow_reload = !request.post?
   end
 end

@@ -41,6 +41,12 @@ initView = ->
   scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * (scrollViewMag * 0.5))
   scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * (scrollViewMag * 0.5))
 
+  is_reload = getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
+  if is_reload?
+    loadPageValueFromStorage()
+  else
+    savePageValueToStorage()
+
 initResize = (wrap, scrollWrapper) ->
   resizeTimer = false;
   $(window).resize( ->
@@ -57,7 +63,14 @@ initResize = (wrap, scrollWrapper) ->
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得
-  objList = JSON.parse(lstorage.getItem('timelineObjList'))
+  #objList = JSON.parse(lstorage.getItem('timelineObjList'))
+  timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+  objList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT))
+  timelinePageValues.forEach((k, v) ->
+    objList[k.substring(getTimelinePageValue(Constant.PageValueKey.TE_NUM_PREFIX))] = v
+  )
+  #objList = JSON.parse(lstorage.getItem('timelineObjList'))
+
   chapterList = []
   objList.forEach( (obj, idx)->
     actorList = []
@@ -122,6 +135,17 @@ setupScrollEvent = ->
 
   scrollFinished = ->
     #scrollpoint_container.show()
+
+# ストレージにページ値を保存
+savePageValueToStorage = ->
+  h = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+  lstorage.setItem(Constant.StorageKey.TIMELINE_PAGEVALUES, JSON.stringify(h))
+  console.log('savePageValueToStorage:' + JSON.stringify(h))
+
+# ストレージからページ値を読み込み
+loadPageValueFromStorage = ->
+  h = JSON.parse(lstorage.getItem(Constant.StorageKey.TIMELINE_PAGEVALUES))
+  setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h)
 
 $ ->
   initCommonVar()

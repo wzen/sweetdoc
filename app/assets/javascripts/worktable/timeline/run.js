@@ -3,6 +3,7 @@ var run;
 
 run = function() {
   var target;
+  setupTimeLineCss();
   target = "_runwindow";
   window.open("about:blank", target);
   document.timeline_run_form.target = target;

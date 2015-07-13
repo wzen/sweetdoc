@@ -2,7 +2,7 @@ class Run
   def self.init_timeline_pagevalue(params)
     h = {}
     params.each do |key, value|
-      if key.to_s.start_with?('timeline_event:')
+      if key.to_s.start_with?("#{Const::PageValueKey::TE_PREFIX}#{Const::PageValueKey::PAGE_VALUES_SEPERATOR}")
         h = set_timeline_pagevalue(h, key, value)
       end
     end
@@ -12,7 +12,7 @@ class Run
       if k.to_s.start_with?(Const::PageValueKey::TE_NUM_PREFIX)
         te_num = k.to_s[Const::PageValueKey::TE_NUM_PREFIX.length .. k.to_s.length - 1]
       end
-      html += make_element_str(k, v, te_num)
+      html += make_element_str(k, v, Const::PageValueKey::TE_PREFIX, te_num)
     end
     return html
   end
@@ -34,12 +34,13 @@ class Run
     return hash
   end
 
-  def self.make_element_str(key, value, te_num)
+  def self.make_element_str(key, value, key_name, te_num)
+    key_name += Const::PageValueKey::PAGE_VALUES_SEPERATOR + key
     if value.class == String || value.class == Integer
       # サニタイズ
       val = ERB::Util.html_escape(value)
-      name = "name = #{input_tag_name(te_num, key)}"
-      return "<input type='hidden' class='#{key}' value='#{val}' #{name} />"
+      name = "name = #{key_name}"
+      return "<input type='hidden' class=#{key} value='#{val}' #{name} />"
     end
 
     ret = ''
@@ -49,14 +50,11 @@ class Run
           te_num = k.to_s[Const::PageValueKey::TE_NUM_PREFIX.length .. k.to_s.length - 1]
         end
       end
-      ret += make_element_str(k, v, te_num)
+
+      ret += make_element_str(k, v, key_name, te_num)
     end
 
     return "<div class=#{key}>#{ret}</div>"
-  end
-
-  def self.input_tag_name(timeline_num, key)
-    return "#{Const::PageValueKey::TE_PREFIX}:#{Const::PageValueKey::TE_NUM_PREFIX}#{timeline_num}:#{key}"
   end
 
 end

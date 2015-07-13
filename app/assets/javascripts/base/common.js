@@ -117,10 +117,10 @@ getTimelinePageValue = function(key) {
 _getPageValue = function(key, withRemove, isTimeline) {
   var f, keys, root, rootId, takeValue, value;
   f = this;
-  rootId = isTimeline ? "timeline_page_values" : "page_values";
+  rootId = isTimeline ? Constant.PageValueKey.TE_ROOT : Constant.PageValueKey.PV_ROOT;
   takeValue = function(element) {
     var c, ret;
-    ret = [];
+    ret = {};
     c = $(element).children();
     if ((c != null) && c.length > 0) {
       $(c).each(function(e) {
@@ -133,8 +133,10 @@ _getPageValue = function(key, withRemove, isTimeline) {
         }
         return ret[this.classList[0]] = v;
       });
+      return ret;
+    } else {
+      return null;
     }
-    return ret;
   };
   value = null;
   root = $("#" + rootId);
@@ -176,7 +178,7 @@ setTimelinePageValue = function(key, value, teNum) {
 _setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
   var cacheClassName, f, keys, makeElementStr, parentClassName, root, rootId;
   f = this;
-  rootId = isTimeline ? "timeline_page_values" : "page_values";
+  rootId = isTimeline ? Constant.PageValueKey.TE_ROOT : Constant.PageValueKey.PV_ROOT;
   makeElementStr = function(ky, val, kyName) {
     var k, name, ret, v;
     kyName += Constant.PageValueKey.PAGE_VALUES_SEPERATOR + ky;

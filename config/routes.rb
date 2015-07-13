@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   root 'worktable#index'
   #resources :run, only:[:index]
+  get 'run' => 'run#index'
   post 'run' => 'run#index'
 
   get 'test_move/hello'

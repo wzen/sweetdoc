@@ -73,6 +73,20 @@ if gon?
 
     # ページ内値保存キー
     class @PageValueKey
+      # @property [String] PV_ROOT ページ値ルート
+      @PV_ROOT = constant.PageValueKey.PV_ROOT
+      # @property [String] TE_ROOT タイムライン値ルート
+      @TE_ROOT = constant.PageValueKey.TE_ROOT
+      # @property [String] TE_PREFIX タイムラインプレフィックス
+      @TE_PREFIX = constant.PageValueKey.TE_PREFIX
+      # @property [String] TE_COUNT タイムラインイベント数
+      @TE_COUNT = constant.PageValueKey.TE_COUNT
+      # @property [String] TE_CSS CSSデータ
+      @TE_CSS = constant.PageValueKey.TE_CSS
+      # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
+      @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
+      # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
+      @TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX
       # @property [String] ITEM アイテムRoot
       @ITEM_VALUE = 'item:@id:value'
       # @property [String] ITEM アイテムキャッシュRoot
@@ -83,12 +97,8 @@ if gon?
       @ITEM_DEFAULT_ACTIONTYPE = 'iteminfo:@item_id:default:actiontype'
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
-      # @property [String] TE_COUNT タイムラインイベント数
-      @TE_COUNT = constant.PageValueKey.TE_COUNT
-      # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
-      @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
-      # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
-      @TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX
+      # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
+      @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
 
     class @ElementAttribute
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
@@ -99,3 +109,7 @@ if gon?
       @BACKGROUNDCOLOR_CHANGE = constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE
       # @property [Int] SCREENPOSITION_CHANGE ズーム
       @SCREENPOSITION_CHANGE = constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE
+
+    class @StorageKey
+      # @property [Int] TIMELINE_PAGEVALUES タイムラインページ値
+      @TIMELINE_PAGEVALUES = 'timeline_pagevalues'

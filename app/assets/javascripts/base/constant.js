@@ -104,6 +104,20 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.PageValueKey = (function() {
       function PageValueKey() {}
 
+      PageValueKey.PV_ROOT = constant.PageValueKey.PV_ROOT;
+
+      PageValueKey.TE_ROOT = constant.PageValueKey.TE_ROOT;
+
+      PageValueKey.TE_PREFIX = constant.PageValueKey.TE_PREFIX;
+
+      PageValueKey.TE_COUNT = constant.PageValueKey.TE_COUNT;
+
+      PageValueKey.TE_CSS = constant.PageValueKey.TE_CSS;
+
+      PageValueKey.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
+
+      PageValueKey.TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX;
+
       PageValueKey.ITEM_VALUE = 'item:@id:value';
 
       PageValueKey.ITEM_VALUE_CACHE = 'item:cache:@id:value';
@@ -114,11 +128,7 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
-      PageValueKey.TE_COUNT = constant.PageValueKey.TE_COUNT;
-
-      PageValueKey.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
-
-      PageValueKey.TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX;
+      PageValueKey.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
 
       return PageValueKey;
 
@@ -141,6 +151,15 @@ if (typeof gon !== "undefined" && gon !== null) {
       CommonActionEventChangeType.SCREENPOSITION_CHANGE = constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE;
 
       return CommonActionEventChangeType;
+
+    })();
+
+    Constant.StorageKey = (function() {
+      function StorageKey() {}
+
+      StorageKey.TIMELINE_PAGEVALUES = 'timeline_pagevalues';
+
+      return StorageKey;
 
     })();
 

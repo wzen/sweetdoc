@@ -98,7 +98,7 @@ updateSelectItemMenu = function() {
   teItemSelects = $('#timeline-config .te_item_select');
   teItemSelect = teItemSelects[0];
   selectOptions = '';
-  items = $('#page_values .item');
+  items = $("#" + Constant.PageValueKey.PV_ROOT + " .item");
   items.children().each(function() {
     var id, itemId, name;
     id = $(this).find('input.id').val();
@@ -145,7 +145,7 @@ setupTimeLineCss = function() {
       return itemCssStyle += ButtonItem.dentButton(item);
     }
   });
-  return itemCssStyle;
+  return setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle);
 };
 
 getActionTypeClassNameByActionType = function(actionType) {

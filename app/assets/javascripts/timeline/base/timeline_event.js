@@ -46,10 +46,6 @@ TimelineEvent = (function() {
     })();
   }
 
-  TimelineEvent.inputTagName = function(teNum, key) {
-    return (this.PageValueKey.te(teNum)) + ":" + key;
-  };
-
   TimelineEvent.initCommonConfigValue = function(timelineConfig) {
     var end, endDiv, s, scrollPointDiv, start, startDiv;
     if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
@@ -152,7 +148,7 @@ TimelineEvent = (function() {
     self = this;
     maxTeNum = 0;
     scrollPoint = null;
-    $('#timeline_page_values .timeline_event').children('div').each(function(e) {
+    $("#" + Constant.PageValueKey.TE_ROOT + " ." + Constant.PageValueKey.TE_PREFIX).children('div').each(function(e) {
       var sp, teNum;
       teNum = parseInt($(this).attr('class'));
       if (teNum > maxTeNum) {

@@ -118,7 +118,7 @@ updateSelectItemMenu = ->
   teItemSelects = $('#timeline-config .te_item_select')
   teItemSelect = teItemSelects[0]
   selectOptions = ''
-  items = $('#page_values .item')
+  items = $("##{Constant.PageValueKey.PV_ROOT} .item")
   items.children().each( ->
     id = $(@).find('input.id').val()
     name = $(@).find('input.name').val()
@@ -172,7 +172,8 @@ setupTimeLineCss = ->
       itemCssStyle += ButtonItem.dentButton(item)
   )
 
-  return itemCssStyle
+  setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
+  #return itemCssStyle
 
 # アクションタイプからアクションタイプクラス名を取得
 getActionTypeClassNameByActionType = (actionType) ->

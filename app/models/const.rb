@@ -99,13 +99,21 @@ class Const
   end
 
   class PageValueKey
+    # @property [String] PV_ROOT ページ値ルート
+    PV_ROOT = 'page_values'
+    # @property [String] TE_ROOT タイムライン値ルート
+    TE_ROOT = 'timeline_page_values'
     # @property [String] TE_PREFIX タイムラインプレフィックス
-    TE_PREFIX = 'timeline_event'
+    TE_PREFIX = 'timeline_events'
     # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
     TE_NUM_PREFIX = 'te_'
     # @property [String] TE_COUNT タイムライン数
     TE_COUNT = "#{TE_PREFIX}:count"
+    # @property [String] TE_CSS CSSデータ
+    TE_CSS = "css"
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     PAGE_VALUES_SEPERATOR = ':'
+    # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
+    IS_RUNWINDOW_RELOAD = 'is_runwindow_reload'
   end
 end

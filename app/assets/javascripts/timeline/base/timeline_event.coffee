@@ -37,9 +37,6 @@ class TimelineEvent
       # @property [String] TE_SCROLL_TIME_SEP スクロール実行時間セパレータ
       @SCROLL_POINT_SEP = '-'
 
-  @inputTagName = (teNum, key) ->
-    return "#{@PageValueKey.te(teNum)}:#{key}"
-
   @initCommonConfigValue = (timelineConfig) ->
     if timelineConfig.actionType == Constant.ActionEventTypeClassName.SCROLL
       scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
@@ -128,7 +125,7 @@ class TimelineEvent
     self = @
     maxTeNum = 0
     scrollPoint = null
-    $('#timeline_page_values .timeline_event').children('div').each((e) ->
+    $("##{Constant.PageValueKey.TE_ROOT} .#{Constant.PageValueKey.TE_PREFIX}").children('div').each((e) ->
       teNum = parseInt($(@).attr('class'))
       if teNum > maxTeNum
         sp = $(@).find(".#{self.PageValueKey.SCROLL_POINT}:first").val()

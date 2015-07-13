@@ -94,10 +94,10 @@ getTimelinePageValue = (key) ->
 # @return [Object] ハッシュ配列または値で返す
 _getPageValue = (key, withRemove, isTimeline) ->
   f = @
-  rootId = if isTimeline then "timeline_page_values" else "page_values"
+  rootId = if isTimeline then Constant.PageValueKey.TE_ROOT else Constant.PageValueKey.PV_ROOT
   # div以下の値をハッシュとしてまとめる
   takeValue = (element) ->
-    ret = []
+    ret = {}
     c = $(element).children()
     if c? && c.length > 0
       $(c).each((e) ->
@@ -109,7 +109,9 @@ _getPageValue = (key, withRemove, isTimeline) ->
           v = takeValue.call(f, @)
         ret[@.classList[0]] = v
       )
-    return ret
+      return ret
+    else
+      return null
 
   value = null
   root = $("##{rootId}")
@@ -151,7 +153,7 @@ setTimelinePageValue = (key, value, teNum = null) ->
 # @param [Number] timelineNum タイムラインナンバー
 _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
   f = @
-  rootId = if isTimeline then "timeline_page_values" else "page_values"
+  rootId = if isTimeline then Constant.PageValueKey.TE_ROOT else Constant.PageValueKey.PV_ROOT
   # ハッシュを要素の文字列に変換
   makeElementStr = (ky, val, kyName) ->
     kyName += Constant.PageValueKey.PAGE_VALUES_SEPERATOR + ky
