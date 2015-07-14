@@ -65,25 +65,36 @@ initResize = function(wrap, scrollWrapper) {
 };
 
 initTimeline = function() {
-  var chapterList, objList, timelinePageValues;
+  var chapterList, index, k, objList, timelinePageValues, v;
   timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
   objList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT));
-  timelinePageValues.forEach(function(k, v) {
-    return objList[k.substring(getTimelinePageValue(Constant.PageValueKey.TE_NUM_PREFIX))] = v;
-  });
+  for (k in timelinePageValues) {
+    v = timelinePageValues[k];
+    if (k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) === 0) {
+      index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1;
+      objList[index] = v;
+    }
+  }
   chapterList = [];
-  objList.forEach(function(obj, idx) {
-    var actorList, chapter, item, miniObj;
+  $.each(objList, function(idx, obj) {
+    var actorList, cEvent, chapter, item, miniObj, sEvent;
     actorList = [];
-    miniObj = obj.miniObj;
+    miniObj = obj[TLEItemChange.minObj];
     if (miniObj.itemId === Constant.ItemId.BUTTON) {
       item = new ButtonItem();
     } else if (miniObj.itemId === Constant.ItemId.ARROW) {
       item = new ArrowItem();
     }
-    item.initListener(miniObj, obj.itemSize);
+    item.initListener(miniObj, miniObj.itemSize);
     item.reDraw(false);
-    item.setEvents(obj.sEvent, obj.cEvent);
+    sEvent = null;
+    cEvent = null;
+    if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.SCROLL) {
+      sEvent = obj[TimelineEvent.PageValueKey.METHODNAME];
+    } else {
+      cEvent = obj[TimelineEvent.PageValueKey.METHODNAME];
+    }
+    item.setEvents(sEvent, cEvent);
     actorList.push(item);
     if (miniObj.itemId === Constant.ItemId.BUTTON) {
       chapter = new ClickChapter(actorList);
@@ -139,8 +150,7 @@ setupScrollEvent = function() {
 savePageValueToStorage = function() {
   var h;
   h = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
-  lstorage.setItem(Constant.StorageKey.TIMELINE_PAGEVALUES, JSON.stringify(h));
-  return console.log('savePageValueToStorage:' + JSON.stringify(h));
+  return lstorage.setItem(Constant.StorageKey.TIMELINE_PAGEVALUES, JSON.stringify(h));
 };
 
 loadPageValueFromStorage = function() {
@@ -155,7 +165,8 @@ $(function() {
   initHandleScrollPoint();
   initTimeline();
   setupScrollEvent();
-  return $('#sup_css').html(lstorage.getItem('itemCssStyle'));
+  $('#sup_css').html(lstorage.getItem('itemCssStyle'));
+  return $('#sup_css').html(getTimelinePageValue(Constant.PageValueKey.TE_CSS));
 });
 
 //# sourceMappingURL=run.js.js.map

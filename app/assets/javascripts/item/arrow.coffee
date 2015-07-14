@@ -159,6 +159,10 @@ class ArrowItem extends CanvasItemBase
     @name = makeClone(obj.name)
     @itemSize = makeClone(obj.itemSize)
     @zindex = makeClone(obj.zindex)
+    for key, value of obj.coodRegist
+      for k, v of value
+        if jQuery.type(k) == "string"
+          value[k] = parseInt(v)
     @coodRegist = makeClone(obj.coodRegist)
     @arrow_width = makeClone(obj.arrow_width)
     @arrow_half_width = makeClone(@arrow_width / 2.0)
@@ -441,12 +445,6 @@ class ArrowItem extends CanvasItemBase
   # @private
   _coodLog = (cood, name) ->
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
-
-  # タイムラインに書き込む情報
-  objWriteTimeline: ->
-    obj = {}
-    obj[TLEItemChange.minObj] = @getMinimumObject()
-    return obj
 
 window.loadedClassList.ArrowItem = ArrowItem
 

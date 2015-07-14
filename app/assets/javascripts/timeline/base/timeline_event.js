@@ -12,7 +12,7 @@ TimelineEvent = (function() {
       function PageValueKey() {}
 
       PageValueKey.te = function(teNum) {
-        return constant.PageValueKey.TE_PREFIX + ':' + Constant.PageValueKey.TE_NUM_PREFIX + teNum;
+        return constant.PageValueKey.TE_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.TE_NUM_PREFIX + teNum;
       };
 
       PageValueKey.ID = 'id';

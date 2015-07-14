@@ -143,10 +143,21 @@ ArrowItem = (function(superClass) {
   };
 
   ArrowItem.prototype.setMiniumObject = function(obj) {
+    var k, key, ref, v, value;
     this.id = makeClone(obj.id);
     this.name = makeClone(obj.name);
     this.itemSize = makeClone(obj.itemSize);
     this.zindex = makeClone(obj.zindex);
+    ref = obj.coodRegist;
+    for (key in ref) {
+      value = ref[key];
+      for (k in value) {
+        v = value[k];
+        if (jQuery.type(k) === "string") {
+          value[k] = parseInt(v);
+        }
+      }
+    }
     this.coodRegist = makeClone(obj.coodRegist);
     this.arrow_width = makeClone(obj.arrow_width);
     this.arrow_half_width = makeClone(this.arrow_width / 2.0);
@@ -356,7 +367,7 @@ ArrowItem = (function(superClass) {
   };
 
   _drawCoodToCanvas = function(dc) {
-    var drawingContext, i, j, k, m, ref, ref1, ref2;
+    var drawingContext, i, j, m, n, ref, ref1, ref2;
     if (dc == null) {
       dc = null;
     }
@@ -375,10 +386,10 @@ ArrowItem = (function(superClass) {
         drawingContext.lineTo(this.coodLeftBodyPart[i].x, this.coodLeftBodyPart[i].y);
       }
     }
-    for (i = k = 0, ref1 = this.coodRightBodyPart.length - 1; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
+    for (i = m = 0, ref1 = this.coodRightBodyPart.length - 1; 0 <= ref1 ? m <= ref1 : m >= ref1; i = 0 <= ref1 ? ++m : --m) {
       drawingContext.lineTo(this.coodRightBodyPart[i].x, this.coodRightBodyPart[i].y);
     }
-    for (i = m = 0, ref2 = this.coodHeadPart.length - 1; 0 <= ref2 ? m <= ref2 : m >= ref2; i = 0 <= ref2 ? ++m : --m) {
+    for (i = n = 0, ref2 = this.coodHeadPart.length - 1; 0 <= ref2 ? n <= ref2 : n >= ref2; i = 0 <= ref2 ? ++n : --n) {
       drawingContext.lineTo(this.coodHeadPart[i].x, this.coodHeadPart[i].y);
     }
     return drawingContext.closePath();
@@ -442,13 +453,6 @@ ArrowItem = (function(superClass) {
 
   _coodLog = function(cood, name) {
     return console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y);
-  };
-
-  ArrowItem.prototype.objWriteTimeline = function() {
-    var obj;
-    obj = {};
-    obj[TLEItemChange.minObj] = this.getMinimumObject();
-    return obj;
   };
 
   return ArrowItem;

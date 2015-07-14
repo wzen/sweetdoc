@@ -204,9 +204,10 @@ class ItemBase extends Extend
     return null
 
   # タイムラインに書き込む情報
-  # @abstract
   objWriteTimeline: ->
-    return null
+    obj = {}
+    obj[TLEItemChange.minObj] = @getMinimumObject()
+    return obj
 
 # CSSアイテム
 # @abstract

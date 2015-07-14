@@ -183,7 +183,10 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.objWriteTimeline = function() {
-    return null;
+    var obj;
+    obj = {};
+    obj[TLEItemChange.minObj] = this.getMinimumObject();
+    return obj;
   };
 
   return ItemBase;

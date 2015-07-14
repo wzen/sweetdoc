@@ -66,23 +66,30 @@ initTimeline = ->
   #objList = JSON.parse(lstorage.getItem('timelineObjList'))
   timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
   objList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT))
-  timelinePageValues.forEach((k, v) ->
-    objList[k.substring(getTimelinePageValue(Constant.PageValueKey.TE_NUM_PREFIX))] = v
-  )
+  for k, v of timelinePageValues
+    if k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) == 0
+      index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1
+      objList[index] = v
   #objList = JSON.parse(lstorage.getItem('timelineObjList'))
 
   chapterList = []
-  objList.forEach( (obj, idx)->
+  $.each(objList, (idx, obj)->
     actorList = []
     #item = null
-    miniObj = obj.miniObj
+    miniObj = obj[TLEItemChange.minObj]
     if miniObj.itemId == Constant.ItemId.BUTTON
       item = new ButtonItem()
     else if miniObj.itemId == Constant.ItemId.ARROW
       item = new ArrowItem()
-    item.initListener(miniObj, obj.itemSize)
+    item.initListener(miniObj, miniObj.itemSize)
     item.reDraw(false)
-    item.setEvents(obj.sEvent, obj.cEvent)
+    sEvent = null
+    cEvent = null
+    if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.SCROLL
+      sEvent = obj[TimelineEvent.PageValueKey.METHODNAME]
+    else
+      cEvent = obj[TimelineEvent.PageValueKey.METHODNAME]
+    item.setEvents(sEvent, cEvent)
     actorList.push(item)
     # とりあえずここでChapterを分ける
     if miniObj.itemId == Constant.ItemId.BUTTON
@@ -140,7 +147,6 @@ setupScrollEvent = ->
 savePageValueToStorage = ->
   h = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
   lstorage.setItem(Constant.StorageKey.TIMELINE_PAGEVALUES, JSON.stringify(h))
-  console.log('savePageValueToStorage:' + JSON.stringify(h))
 
 # ストレージからページ値を読み込み
 loadPageValueFromStorage = ->
@@ -157,3 +163,4 @@ $ ->
 
   # CSS
   $('#sup_css').html(lstorage.getItem('itemCssStyle'))
+  $('#sup_css').html(getTimelinePageValue(Constant.PageValueKey.TE_CSS))
