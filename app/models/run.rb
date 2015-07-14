@@ -8,11 +8,7 @@ class Run
     end
     html = ''
     h.each do |k, v|
-      te_num = nil
-      if k.to_s.start_with?(Const::PageValueKey::TE_NUM_PREFIX)
-        te_num = k.to_s[Const::PageValueKey::TE_NUM_PREFIX.length .. k.to_s.length - 1]
-      end
-      html += make_element_str(k, v, Const::PageValueKey::TE_PREFIX, te_num)
+      html += make_element_str(k, v, Const::PageValueKey::TE_PREFIX)
     end
     return html
   end
@@ -34,9 +30,9 @@ class Run
     return hash
   end
 
-  def self.make_element_str(key, value, key_name, te_num)
+  def self.make_element_str(key, value, key_name)
     key_name += Const::PageValueKey::PAGE_VALUES_SEPERATOR + key
-    if value.class == String || value.class == Integer
+    if value.class != Hash && value.class != Array
       # サニタイズ
       val = ERB::Util.html_escape(value)
       name = "name = #{key_name}"
@@ -45,13 +41,7 @@ class Run
 
     ret = ''
     value.each do |k, v|
-      if te_num == nil
-        if k.to_s.start_with?(Const::PageValueKey::TE_NUM_PREFIX)
-          te_num = k.to_s[Const::PageValueKey::TE_NUM_PREFIX.length .. k.to_s.length - 1]
-        end
-      end
-
-      ret += make_element_str(k, v, key_name, te_num)
+      ret += make_element_str(k, v, key_name)
     end
 
     return "<div class=#{key}>#{ret}</div>"

@@ -172,7 +172,8 @@ setupTimeLineCss = ->
       itemCssStyle += ButtonItem.dentButton(item)
   )
 
-  setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
+  if itemCssStyle.length > 0
+    setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
   #return itemCssStyle
 
 # アクションタイプからアクションタイプクラス名を取得

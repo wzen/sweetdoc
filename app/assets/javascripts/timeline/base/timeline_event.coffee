@@ -7,7 +7,7 @@ class TimelineEvent
     class @PageValueKey
       # @property [String] te タイムラインイベントRoot
       @te : (teNum) ->
-        constant.PageValueKey.TE_PREFIX + ':' + Constant.PageValueKey.TE_NUM_PREFIX + teNum
+        constant.PageValueKey.TE_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.TE_NUM_PREFIX + teNum
       # @property [String] ID アイテムID
       @ID = 'id'
       # @property [String] ITEM_ID アイテムタイプID

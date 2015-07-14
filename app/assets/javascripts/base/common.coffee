@@ -97,17 +97,32 @@ _getPageValue = (key, withRemove, isTimeline) ->
   rootId = if isTimeline then Constant.PageValueKey.TE_ROOT else Constant.PageValueKey.PV_ROOT
   # div以下の値をハッシュとしてまとめる
   takeValue = (element) ->
-    ret = {}
+    ret = null
     c = $(element).children()
     if c? && c.length > 0
       $(c).each((e) ->
+        k = @.classList[0]
+        if !ret?
+          if jQuery.isNumeric(k)
+            ret = []
+          else
+            ret = {}
+
         v = null
         if @.tagName == "INPUT"
           # サニタイズをデコード
           v = sanitaizeDecode($(@).val())
+          if jQuery.isNumeric(v)
+            v = parseInt(v)
+          else if v == "true" || v == "false"
+            v = if v == "true" then true else false
         else
           v = takeValue.call(f, @)
-        ret[@.classList[0]] = v
+
+        if jQuery.type(ret) == "array" && jQuery.isNumeric(k)
+          k = parseInt(k)
+        ret[k] = v
+        return true
       )
       return ret
     else
@@ -124,6 +139,8 @@ _getPageValue = (key, withRemove, isTimeline) ->
     if keys.length - 1 == index
       if root[0].tagName == "INPUT"
         value = sanitaizeDecode(root.val())
+        if jQuery.isNumeric(value)
+          value = parseInt(value)
       else
         value = takeValue.call(f,root)
       if withRemove
@@ -156,18 +173,22 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
   rootId = if isTimeline then Constant.PageValueKey.TE_ROOT else Constant.PageValueKey.PV_ROOT
   # ハッシュを要素の文字列に変換
   makeElementStr = (ky, val, kyName) ->
+    if val == null || val == "null"
+      return ''
+
     kyName += Constant.PageValueKey.PAGE_VALUES_SEPERATOR + ky
-    if jQuery.type(val) == "string" || jQuery.type(val) == "number"
+    if jQuery.type(val) != "object" && jQuery.type(val) != "array"
       # サニタイズする
       val = sanitaizeEncode(val)
       name = ""
-      if timelineNum?
+      if isTimeline
         name = "name = #{kyName}"
       return "<input type='hidden' class='#{ky}' value='#{val}' #{name} />"
 
     ret = ""
     for k, v of val
       ret += makeElementStr.call(f, k, v, kyName)
+
     return "<div class=#{ky}>#{ret}</div>"
 
   cacheClassName = 'cache'
@@ -189,7 +210,7 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
       if !root? || root.length == 0
         # 親要素のdiv作成
         root = jQuery("<div class=#{k}></div>").appendTo(parent)
-        parentClassName = k
+      parentClassName = k
     else
       if root? && root.length > 0
         # 要素が存在する場合は消去して上書き

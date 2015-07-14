@@ -127,7 +127,7 @@ ArrowItem = (function(superClass) {
       itemId: Constant.ItemId.ARROW,
       itemSize: makeClone(this.itemSize),
       zindex: makeClone(this.zindex),
-      coodRegist: makeClone(this.coodRegist),
+      coodRegist: JSON.stringify(makeClone(this.coodRegist)),
       arrow_width: makeClone(this.arrow_width),
       header_width: makeClone(this.header_width),
       header_height: makeClone(this.header_height),
@@ -147,7 +147,7 @@ ArrowItem = (function(superClass) {
     this.name = makeClone(obj.name);
     this.itemSize = makeClone(obj.itemSize);
     this.zindex = makeClone(obj.zindex);
-    this.coodRegist = makeClone(obj.coodRegist);
+    this.coodRegist = makeClone(JSON.parse(obj.coodRegist));
     this.arrow_width = makeClone(obj.arrow_width);
     this.arrow_half_width = makeClone(this.arrow_width / 2.0);
     this.header_width = makeClone(obj.header_width);
@@ -442,13 +442,6 @@ ArrowItem = (function(superClass) {
 
   _coodLog = function(cood, name) {
     return console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y);
-  };
-
-  ArrowItem.prototype.objWriteTimeline = function() {
-    var obj;
-    obj = {};
-    obj[TLEItemChange.minObj] = this.getMinimumObject();
-    return obj;
   };
 
   return ArrowItem;

@@ -120,18 +120,35 @@ _getPageValue = function(key, withRemove, isTimeline) {
   rootId = isTimeline ? Constant.PageValueKey.TE_ROOT : Constant.PageValueKey.PV_ROOT;
   takeValue = function(element) {
     var c, ret;
-    ret = {};
+    ret = null;
     c = $(element).children();
     if ((c != null) && c.length > 0) {
       $(c).each(function(e) {
-        var v;
+        var k, v;
+        k = this.classList[0];
+        if (ret == null) {
+          if (jQuery.isNumeric(k)) {
+            ret = [];
+          } else {
+            ret = {};
+          }
+        }
         v = null;
         if (this.tagName === "INPUT") {
           v = sanitaizeDecode($(this).val());
+          if (jQuery.isNumeric(v)) {
+            v = parseInt(v);
+          } else if (v === "true" || v === "false") {
+            v = v === "true" ? true : false;
+          }
         } else {
           v = takeValue.call(f, this);
         }
-        return ret[this.classList[0]] = v;
+        if (jQuery.type(ret) === "array" && jQuery.isNumeric(k)) {
+          k = parseInt(k);
+        }
+        ret[k] = v;
+        return true;
       });
       return ret;
     } else {
@@ -150,6 +167,9 @@ _getPageValue = function(key, withRemove, isTimeline) {
     if (keys.length - 1 === index) {
       if (root[0].tagName === "INPUT") {
         value = sanitaizeDecode(root.val());
+        if (jQuery.isNumeric(value)) {
+          value = parseInt(value);
+        }
       } else {
         value = takeValue.call(f, root);
       }
@@ -181,11 +201,14 @@ _setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
   rootId = isTimeline ? Constant.PageValueKey.TE_ROOT : Constant.PageValueKey.PV_ROOT;
   makeElementStr = function(ky, val, kyName) {
     var k, name, ret, v;
+    if (val === null || val === "null") {
+      return '';
+    }
     kyName += Constant.PageValueKey.PAGE_VALUES_SEPERATOR + ky;
-    if (jQuery.type(val) === "string" || jQuery.type(val) === "number") {
+    if (jQuery.type(val) !== "object" && jQuery.type(val) !== "array") {
       val = sanitaizeEncode(val);
       name = "";
-      if (timelineNum != null) {
+      if (isTimeline) {
         name = "name = " + kyName;
       }
       return "<input type='hidden' class='" + ky + "' value='" + val + "' " + name + " />";
@@ -218,8 +241,8 @@ _setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
     if (keys.length - 1 > index) {
       if ((root == null) || root.length === 0) {
         root = jQuery("<div class=" + k + "></div>").appendTo(parent);
-        return parentClassName = k;
       }
+      return parentClassName = k;
     } else {
       if ((root != null) && root.length > 0) {
         root.remove();

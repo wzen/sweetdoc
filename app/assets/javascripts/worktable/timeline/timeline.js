@@ -145,7 +145,9 @@ setupTimeLineCss = function() {
       return itemCssStyle += ButtonItem.dentButton(item);
     }
   });
-  return setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle);
+  if (itemCssStyle.length > 0) {
+    return setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle);
+  }
 };
 
 getActionTypeClassNameByActionType = function(actionType) {

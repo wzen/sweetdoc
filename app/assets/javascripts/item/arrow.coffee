@@ -138,7 +138,7 @@ class ArrowItem extends CanvasItemBase
       itemId: Constant.ItemId.ARROW
       itemSize: makeClone(@itemSize)
       zindex: makeClone(@zindex)
-      coodRegist: makeClone(@coodRegist)
+      coodRegist: JSON.stringify(makeClone(@coodRegist))
       arrow_width: makeClone(@arrow_width)
       header_width: makeClone(@header_width)
       header_height: makeClone(@header_height)
@@ -159,7 +159,7 @@ class ArrowItem extends CanvasItemBase
     @name = makeClone(obj.name)
     @itemSize = makeClone(obj.itemSize)
     @zindex = makeClone(obj.zindex)
-    @coodRegist = makeClone(obj.coodRegist)
+    @coodRegist = makeClone(JSON.parse(obj.coodRegist))
     @arrow_width = makeClone(obj.arrow_width)
     @arrow_half_width = makeClone(@arrow_width / 2.0)
     @header_width = makeClone(obj.header_width)
@@ -441,12 +441,6 @@ class ArrowItem extends CanvasItemBase
   # @private
   _coodLog = (cood, name) ->
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
-
-  # タイムラインに書き込む情報
-  objWriteTimeline: ->
-    obj = {}
-    obj[TLEItemChange.minObj] = @getMinimumObject()
-    return obj
 
 window.loadedClassList.ArrowItem = ArrowItem
 

@@ -107,13 +107,13 @@ class Const
     TE_PREFIX = 'timeline_events'
     # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
     TE_NUM_PREFIX = 'te_'
-    # @property [String] TE_COUNT タイムライン数
-    TE_COUNT = "#{TE_PREFIX}:count"
-    # @property [String] TE_CSS CSSデータ
-    TE_CSS = "css"
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     PAGE_VALUES_SEPERATOR = ':'
     # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
     IS_RUNWINDOW_RELOAD = 'is_runwindow_reload'
+    # @property [String] TE_COUNT タイムライン数
+    TE_COUNT = "#{TE_PREFIX}#{PAGE_VALUES_SEPERATOR}count"
+    # @property [String] TE_CSS CSSデータ
+    TE_CSS = "#{TE_PREFIX}#{PAGE_VALUES_SEPERATOR}css"
   end
 end
