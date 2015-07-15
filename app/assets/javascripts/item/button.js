@@ -80,32 +80,27 @@ ButtonItem = (function(superClass) {
   };
 
   ButtonItem.prototype.getMinimumObject = function() {
-    var obj;
-    obj = {
-      id: makeClone(this.id),
-      name: makeClone(this.name),
+    var newobj, obj;
+    obj = ButtonItem.__super__.getMinimumObject.call(this);
+    newobj = {
       itemId: Constant.ItemId.BUTTON,
       mousedownCood: makeClone(this.mousedownCood),
-      itemSize: makeClone(this.itemSize),
-      zindex: makeClone(this.zindex),
       css: makeClone(this.css)
     };
+    $.extend(obj, newobj);
     return obj;
+  };
+
+  ButtonItem.prototype.setMiniumObject = function(obj) {
+    ButtonItem.__super__.setMiniumObject.call(this, obj);
+    this.mousedownCood = makeClone(obj.mousedownCood);
+    return this.css = makeClone(obj.css);
   };
 
   ButtonItem.prototype.reDrawByMinimumObject = function(obj) {
     this.setMiniumObject(obj);
     this.reDraw();
     return this.saveObj(Constant.ItemActionType.MAKE);
-  };
-
-  ButtonItem.prototype.setMiniumObject = function(obj) {
-    this.id = makeClone(obj.id);
-    this.name = makeClone(obj.name);
-    this.mousedownCood = makeClone(obj.mousedownCood);
-    this.itemSize = makeClone(obj.itemSize);
-    this.zindex = makeClone(obj.zindex);
-    return this.css = makeClone(obj.css);
   };
 
   ButtonItem.prototype.defaultClick = function(e) {

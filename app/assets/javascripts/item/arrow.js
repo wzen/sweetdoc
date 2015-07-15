@@ -120,40 +120,33 @@ ArrowItem = (function(superClass) {
   };
 
   ArrowItem.prototype.getMinimumObject = function() {
-    var obj;
-    obj = {
-      id: makeClone(this.id),
-      name: makeClone(this.name),
+    var newobj, obj;
+    obj = ArrowItem.__super__.getMinimumObject.call(this);
+    newobj = {
       itemId: Constant.ItemId.ARROW,
-      itemSize: makeClone(this.itemSize),
-      zindex: makeClone(this.zindex),
-      coodRegist: JSON.stringify(makeClone(this.coodRegist)),
       arrow_width: makeClone(this.arrow_width),
       header_width: makeClone(this.header_width),
       header_height: makeClone(this.header_height),
       scale: makeClone(this.scale)
     };
+    $.extend(obj, newobj);
     return obj;
   };
 
-  ArrowItem.prototype.reDrawByMinimumObject = function(obj) {
-    this.setMiniumObject(obj);
-    this.reDraw();
-    return this.saveObj(Constant.ItemActionType.MAKE);
-  };
-
   ArrowItem.prototype.setMiniumObject = function(obj) {
-    this.id = makeClone(obj.id);
-    this.name = makeClone(obj.name);
-    this.itemSize = makeClone(obj.itemSize);
-    this.zindex = makeClone(obj.zindex);
-    this.coodRegist = makeClone(JSON.parse(obj.coodRegist));
+    ArrowItem.__super__.setMiniumObject.call(this, obj);
     this.arrow_width = makeClone(obj.arrow_width);
     this.arrow_half_width = makeClone(this.arrow_width / 2.0);
     this.header_width = makeClone(obj.header_width);
     this.header_height = makeClone(obj.header_height);
     this.padding_size = makeClone(this.header_width);
     return this.scale = makeClone(obj.scale);
+  };
+
+  ArrowItem.prototype.reDrawByMinimumObject = function(obj) {
+    this.setMiniumObject(obj);
+    this.reDraw();
+    return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
   ArrowItem.prototype.scrollDraw = function(x, y) {

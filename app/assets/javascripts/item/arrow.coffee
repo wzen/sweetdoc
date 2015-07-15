@@ -132,19 +132,26 @@ class ArrowItem extends CanvasItemBase
   # アイテムの最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
   getMinimumObject: ->
-    obj = {
-      id: makeClone(@id)
-      name: makeClone(@name)
+    obj = super()
+    newobj = {
       itemId: Constant.ItemId.ARROW
-      itemSize: makeClone(@itemSize)
-      zindex: makeClone(@zindex)
-      coodRegist: JSON.stringify(makeClone(@coodRegist))
       arrow_width: makeClone(@arrow_width)
       header_width: makeClone(@header_width)
       header_height: makeClone(@header_height)
       scale: makeClone(@scale)
     }
+    $.extend(obj, newobj)
     return obj
+
+  # 最小限のデータを設定
+  setMiniumObject: (obj) ->
+    super(obj)
+    @arrow_width = makeClone(obj.arrow_width)
+    @arrow_half_width = makeClone(@arrow_width / 2.0)
+    @header_width = makeClone(obj.header_width)
+    @header_height = makeClone(obj.header_height)
+    @padding_size = makeClone(@header_width)
+    @scale = makeClone(obj.scale)
 
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ
@@ -152,20 +159,6 @@ class ArrowItem extends CanvasItemBase
     @setMiniumObject(obj)
     @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
-
-  # 最小限のデータを設定
-  setMiniumObject: (obj) ->
-    @id = makeClone(obj.id)
-    @name = makeClone(obj.name)
-    @itemSize = makeClone(obj.itemSize)
-    @zindex = makeClone(obj.zindex)
-    @coodRegist = makeClone(JSON.parse(obj.coodRegist))
-    @arrow_width = makeClone(obj.arrow_width)
-    @arrow_half_width = makeClone(@arrow_width / 2.0)
-    @header_width = makeClone(obj.header_width)
-    @header_height = makeClone(obj.header_height)
-    @padding_size = makeClone(@header_width)
-    @scale = makeClone(obj.scale)
 
   # スクロールイベント ※アクションイベント
   scrollDraw : (x, y) =>

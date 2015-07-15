@@ -158,7 +158,25 @@ ItemBase = (function(superClass) {
 
   ItemBase.prototype.setHistoryObj = function(historyObj) {};
 
-  ItemBase.prototype.getMinimumObject = function() {};
+  ItemBase.prototype.getMinimumObject = function() {
+    var obj;
+    obj = {
+      id: makeClone(this.id),
+      name: makeClone(this.name),
+      itemSize: makeClone(this.itemSize),
+      zindex: makeClone(this.zindex),
+      coodRegist: JSON.stringify(makeClone(this.coodRegist))
+    };
+    return obj;
+  };
+
+  ItemBase.prototype.setMiniumObject = function(obj) {
+    this.id = makeClone(obj.id);
+    this.name = makeClone(obj.name);
+    this.itemSize = makeClone(obj.itemSize);
+    this.zindex = makeClone(obj.zindex);
+    return this.coodRegist = makeClone(JSON.parse(obj.coodRegist));
+  };
 
   ItemBase.prototype.reDrawByMinimumObject = function(obj) {};
 

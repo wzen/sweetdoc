@@ -59,16 +59,21 @@ class ButtonItem extends CssItemBase
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
   getMinimumObject: ->
-    obj = {
-      id: makeClone(@id)
-      name: makeClone(@name)
+    obj = super()
+    newobj = {
       itemId: Constant.ItemId.BUTTON
       mousedownCood: makeClone(@mousedownCood)
-      itemSize: makeClone(@itemSize)
-      zindex: makeClone(@zindex)
       css: makeClone(@css)
     }
+    $.extend(obj, newobj)
     return obj
+
+  # 最小限のデータを設定
+  # @param [Array] obj アイテムオブジェクトの最小限データ
+  setMiniumObject: (obj) ->
+    super(obj)
+    @mousedownCood = makeClone(obj.mousedownCood)
+    @css = makeClone(obj.css)
 
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ
@@ -76,17 +81,6 @@ class ButtonItem extends CssItemBase
     @setMiniumObject(obj)
     @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
-
-
-  # 最小限のデータを設定
-  # @param [Array] obj アイテムオブジェクトの最小限データ
-  setMiniumObject: (obj) ->
-    @id = makeClone(obj.id) # IDも変更
-    @name = makeClone(obj.name)
-    @mousedownCood = makeClone(obj.mousedownCood)
-    @itemSize = makeClone(obj.itemSize)
-    @zindex = makeClone(obj.zindex)
-    @css = makeClone(obj.css)
 
   # 共通クリックイベント ※アクションイベント
   defaultClick : (e) =>

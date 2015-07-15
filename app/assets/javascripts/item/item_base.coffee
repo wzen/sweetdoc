@@ -175,8 +175,23 @@ class ItemBase extends Extend
   setHistoryObj: (historyObj) ->
 
   # 保存用の最小限のデータを取得
-  # @abstract
   getMinimumObject: ->
+    obj = {
+      id: makeClone(@id)
+      name: makeClone(@name)
+      itemSize: makeClone(@itemSize)
+      zindex: makeClone(@zindex)
+      coodRegist: JSON.stringify(makeClone(@coodRegist))
+    }
+    return obj
+
+  # 最小限のデータを設定
+  setMiniumObject: (obj) ->
+    @id = makeClone(obj.id)
+    @name = makeClone(obj.name)
+    @itemSize = makeClone(obj.itemSize)
+    @zindex = makeClone(obj.zindex)
+    @coodRegist = makeClone(JSON.parse(obj.coodRegist))
 
   # 最小限のデータからアイテムを描画
   # @abstract
