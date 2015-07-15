@@ -69,6 +69,8 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ActionEventTypeClassName = (function() {
       function ActionEventTypeClassName() {}
 
+      ActionEventTypeClassName.BLANK = 'blank';
+
       ActionEventTypeClassName.SCROLL = 'scroll';
 
       ActionEventTypeClassName.CLICK = 'click';

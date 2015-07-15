@@ -201,6 +201,7 @@ if window.worktablePage?
       # タイムライン作成
       #fixme: あとでロジックと実装を分けること
       TLEItemChange.writeDefaultToPageValue(@)
+      setupTimelineEventConfig()
 
       return true
 

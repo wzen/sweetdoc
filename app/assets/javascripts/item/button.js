@@ -182,6 +182,7 @@ if (window.worktablePage != null) {
       this.cssStyle.text(this.cssCode.text());
       this.makeDesignConfig();
       TLEItemChange.writeDefaultToPageValue(this);
+      setupTimelineEventConfig();
       return true;
     };
 

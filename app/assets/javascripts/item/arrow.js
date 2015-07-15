@@ -116,7 +116,8 @@ ArrowItem = (function(superClass) {
       this.drawNewCanvas();
     }
     this.makeDesignConfig();
-    return TLEItemChange.writeDefaultToPageValue(this);
+    TLEItemChange.writeDefaultToPageValue(this);
+    return setupTimelineEventConfig();
   };
 
   ArrowItem.prototype.getMinimumObject = function() {

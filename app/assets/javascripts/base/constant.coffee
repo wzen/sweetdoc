@@ -50,10 +50,13 @@ if gon?
 
     # アクションイベントクラス名
     class @ActionEventTypeClassName
+      # @property [Int] BLANK ブランク
+      @BLANK = 'blank'
       # @property [Int] SCROLL スクロール
       @SCROLL = 'scroll'
       # @property [Int] CLICK クリック
       @CLICK = 'click'
+
 
     # 閲覧モードのチャプターアクション種類
     class @ActionEventChangeType

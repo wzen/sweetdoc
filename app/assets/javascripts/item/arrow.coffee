@@ -128,6 +128,7 @@ class ArrowItem extends CanvasItemBase
     # タイムライン作成
     #fixme: あとでロジックと実装を分けること
     TLEItemChange.writeDefaultToPageValue(@)
+    setupTimelineEventConfig()
 
   # アイテムの最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
@@ -144,6 +145,7 @@ class ArrowItem extends CanvasItemBase
     return obj
 
   # 最小限のデータを設定
+  # @param [Array] obj アイテムオブジェクトの最小限データ
   setMiniumObject: (obj) ->
     super(obj)
     @arrow_width = makeClone(obj.arrow_width)

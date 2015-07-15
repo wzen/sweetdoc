@@ -164,4 +164,4 @@ $ ->
   )
   # タイムライン初期化
   # TODO: 本来はタイムライン表示時に行う
-  setupTimelineEvents()
+  setupTimelineEventConfig()

@@ -1,18 +1,52 @@
+# タイムラインイベントを作成
+createTimelineEvent = (teNum) ->
+  # 存在チェック
+  emts = $('#timeline_events .timeline_event .te_num')
+  exist = false
+  emts.each( (e) ->
+    if parseInt($(@).val()) == teNum
+      exist = true
+  )
+  if exist
+    return
+
+  # tempをクローンしてtimeline_eventsに追加
+  pEmt = $('#timeline_events')
+  newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
+  $("<input class='te_num' type='hidden' value='#{teNum}' >").appendTo(newEmt)
+  pEmt.append(newEmt)
+
+## タイムラインイベント色を設定
+#setupTimelineEvent = ->
+#  tEmt = $('#timeline_events .timeline_event .te_num')
+#  tEmt.each((e) ->
+#    teNum = parseInt($(@).val())
+#    actionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE)
+#    changeTimelineColor(teNum, actionType)
+#
+#    if e == tEmt.length - 1 && actionType != null
+#      # blankのイベントが無い場合、作成
+#      createTimelineEvent(tEmt.length)
+#  )
+
 # タイムラインのイベント設定
-setupTimelineEvents = ->
+setupTimelineEventConfig = ->
   self = @
   te = null
 
   ### private method ここから ###
 
-  # タイムラインイベントを作成
-  _createTimelineEvent = (e) ->
-    # tempをクローンしてtimeline_eventsに追加
-    pEmt = $('#timeline_events')
-    newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
-    teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT) + 1
-    newEmt.find('.te_num').val(teNum)
-    pEmt.append(newEmt)
+  _setupTimelineEvent = ->
+    tEmt = $('#timeline_events .timeline_event .te_num')
+    tEmt.each((e) ->
+      teNum = parseInt($(@).val())
+      actionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE)
+      changeTimelineColor(teNum, actionType)
+
+      if e == tEmt.length - 1 && actionType != null
+        # blankのイベントが無い場合、作成
+        createTimelineEvent(tEmt.length + 1)
+    )
 
   # イベント
   _clickTimelineEvent = (e) ->
@@ -63,8 +97,8 @@ setupTimelineEvents = ->
       em.on('click', (e) ->
         # 入力値を適用する
         te.applyAction()
-        # 次のイベントを作成
-        _createTimelineEvent.call(self, e)
+        # イベントを更新
+        setupTimelineEventConfig()
         # 次のイベントConfigを表示
       )
       em = $('.push.button.cancel', emt)
@@ -95,6 +129,8 @@ setupTimelineEvents = ->
       # イベント設定済み
 
   ### private method ここまで ###
+
+  _setupTimelineEvent.call(self)
 
   # イベントのクリック
   $('.timeline_event').off('click')
@@ -139,26 +175,6 @@ updateSelectItemMenu = ->
     $(@).append($(selectOptions))
   )
 
-# タイムラインのオブジェクトをまとめる
-setupTimeLineObjects = ->
-  # 処理は暫定(itemObjectListから取っているが、本当はタイムラインの情報を取る)
-
-  # Storageに値を格納
-  # とりあえず矢印だけ
-  objList = []
-  itemObjectList.forEach((item) ->
-    obj = {
-      chapter: 1
-      screen: 1
-      miniObj: item.getMinimumObject()
-      itemSize: item.itemSize
-      sEvent: "scrollDraw"
-      cEvent: "defaultClick"
-    }
-    objList.push(obj)
-  )
-  return objList
-
 # タイムラインのCSSをまとめる
 setupTimeLineCss = ->
   itemCssStyle = ""
@@ -174,7 +190,6 @@ setupTimeLineCss = ->
 
   if itemCssStyle.length > 0
     setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
-  #return itemCssStyle
 
 # アクションタイプからアクションタイプクラス名を取得
 getActionTypeClassNameByActionType = (actionType) ->
@@ -185,15 +200,21 @@ getActionTypeClassNameByActionType = (actionType) ->
   return null
 
 # タイムラインイベントの色を変更
-changeTimelineColor = (teNum, actionType) ->
+changeTimelineColor = (teNum, actionType = null) ->
   # イベントの色を変更
   teEmt = null
   $('#timeline_events').children('.timeline_event').each((e) ->
     if parseInt($(@).find('input.te_num:first').val()) == parseInt(teNum)
       teEmt = @
   )
-  $(teEmt).removeClass("blank")
-  $(teEmt).removeClass("click")
-  $(teEmt).removeClass("scroll")
-  $(teEmt).addClass(getActionTypeClassNameByActionType(actionType))
+
+  for k,v of Constant.ActionEventTypeClassName
+    $(teEmt).removeClass(v)
+#  $(teEmt).removeClass("blank")
+#  $(teEmt).removeClass("click")
+#  $(teEmt).removeClass("scroll")
+  if actionType?
+    $(teEmt).addClass(getActionTypeClassNameByActionType(actionType))
+  else
+    $(teEmt).addClass(Constant.ActionEventTypeClassName.BLANK)
 
