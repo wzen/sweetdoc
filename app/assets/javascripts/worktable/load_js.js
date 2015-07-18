@@ -73,18 +73,18 @@ addItemInfo = function(item_id, te_actions) {
 };
 
 addTimelineEventContents = function(item_id, te_actions, te_values) {
-  var action_forms, className, li;
+  var action_forms, className, select;
   if ((te_actions != null) && te_actions.length > 0) {
     className = TimelineConfig.ACTION_CLASS.replace('@itemid', item_id);
     action_forms = $('#timeline-config .action_forms');
     if (action_forms.find("." + className).length === 0) {
-      li = '';
+      select = '';
       te_actions.forEach(function(a) {
         var actionType;
         actionType = getActionTypeClassNameByActionType(a.action_event_type_id);
-        return li += "<li class='push method " + actionType + "'>\n  " + a.options['name'] + "\n  <input class='action_type' type='hidden' value='" + a.action_event_type_id + "'>\n  <input class='method_name' type='hidden' value='" + a.method_name + "'>\n</li>";
+        return select += "<div class='radio'>\n    <label><input type='radio' name='method'><span class='" + actionType + "'>" + a.options['name'] + "</span></label>\n    <input class='action_type' type='hidden' value='" + a.action_event_type_id + "'>\n    <input class='method_name' type='hidden' value='" + a.method_name + "'>\n    <input class='value_class_name' type='hidden' value='" + Constant.TIMELINE_COMMON_ACTION_PREFIX + item_id + "_" + a.method_name + "'>\n</div>";
       });
-      $("<div class='" + className + "'><ul>" + li + "</ul></div>").appendTo(action_forms);
+      $("<div class='" + className + "'>" + select + "</div>").appendTo(action_forms);
     }
   }
   if (te_values != null) {

@@ -107,10 +107,10 @@ if gon?
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
 
     class @CommonActionEventChangeType
-      # @property [Int] BACKGROUNDCOLOR_CHANGE 背景
-      @BACKGROUNDCOLOR_CHANGE = constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE
-      # @property [Int] SCREENPOSITION_CHANGE ズーム
-      @SCREENPOSITION_CHANGE = constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE
+      # @property [Int] BACKGROUND 背景
+      @BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND
+      # @property [Int] SCREEN 画面表示
+      @SCREEN = constant.CommonActionEventChangeType.SCREEN
 
     class @StorageKey
       # @property [Int] TIMELINE_PAGEVALUES タイムラインページ値

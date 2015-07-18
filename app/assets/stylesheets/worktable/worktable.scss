@@ -630,7 +630,19 @@ div#timeline-config {
         margin-top: 15px;
       }
     }
+
+    .action_forms {
+      .radio {
+        .scroll {
+          color: #0000bb;
+        }
+        .click {
+          color: #bb0000;
+        }
+      }
+    }
   }
+
   .push {
     -webkit-appearance: none;
     -moz-appearance: none;

@@ -63,9 +63,9 @@ setupTimelineEventConfig = function() {
         em.on('change', function(e) {
           return te.selectItem(this);
         });
-        em = $('.action_forms li', emt);
-        em.off('click');
-        em.on('click', function(e) {
+        em = $('.action_forms input[name="method"]:radio', emt);
+        em.off('change');
+        em.on('change', function(e) {
           return te.clickMethod(this);
         });
         em = $('.push.button.reset', emt);
@@ -93,12 +93,7 @@ setupTimelineEventConfig = function() {
     $('#timeline-config .event').css('display', 'none');
     emt.css('display', '');
     if (!isOpenedConfigSidebar()) {
-      openConfigSidebar();
-    }
-    if ($(e).hasClass('blank')) {
-
-    } else {
-
+      return openConfigSidebar();
     }
   };
 

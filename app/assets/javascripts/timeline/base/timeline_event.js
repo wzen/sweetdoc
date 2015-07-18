@@ -19,7 +19,7 @@ TimelineEvent = (function() {
 
       PageValueKey.ITEM_ID = 'item_id';
 
-      PageValueKey.ACTION_EVENT_TYPE_ID = 'action_event_type_id';
+      PageValueKey.COMMON_EVENT_ID = 'common_event_id';
 
       PageValueKey.VALUE = 'value';
 
@@ -77,7 +77,7 @@ TimelineEvent = (function() {
     writeValue = {};
     writeValue[this.PageValueKey.ID] = timelineConfig.id;
     writeValue[this.PageValueKey.ITEM_ID] = timelineConfig.itemId;
-    writeValue[this.PageValueKey.ACTION_EVENT_TYPE_ID] = timelineConfig.actionEventTypeId;
+    writeValue[this.PageValueKey.COMMON_EVENT_ID] = timelineConfig.commonEventId;
     writeValue[this.PageValueKey.CHAPTER] = 1;
     writeValue[this.PageValueKey.SCREEN] = 1;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent;
@@ -109,7 +109,7 @@ TimelineEvent = (function() {
     if (writeValue != null) {
       timelineConfig.id = writeValue[this.PageValueKey.ID];
       timelineConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
-      timelineConfig.actionEventTypeId = writeValue[this.PageValueKey.ACTION_EVENT_TYPE_ID];
+      timelineConfig.commonEventId = writeValue[this.PageValueKey.COMMON_EVENT_ID];
       timelineConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
       timelineConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
       timelineConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];

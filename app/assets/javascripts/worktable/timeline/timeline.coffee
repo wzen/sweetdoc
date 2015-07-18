@@ -81,9 +81,9 @@ setupTimelineEventConfig = ->
       em.on('change', (e) ->
         te.selectItem(@)
       )
-      em = $('.action_forms li', emt)
-      em.off('click')
-      em.on('click', (e) ->
+      em = $('.action_forms input[name="method"]:radio', emt)
+      em.off('change')
+      em.on('change', (e) ->
         te.clickMethod(@)
       )
       em = $('.push.button.reset', emt)
@@ -119,14 +119,6 @@ setupTimelineEventConfig = ->
     if !isOpenedConfigSidebar()
       # タイムラインのconfigをオープンする
       openConfigSidebar()
-
-    # コンフィグ初期化
-    if $(e).hasClass('blank')
-      # ブランク
-      # アイテムのリストを表示
-
-    else
-      # イベント設定済み
 
   ### private method ここまで ###
 

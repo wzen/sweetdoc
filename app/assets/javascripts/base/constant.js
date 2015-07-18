@@ -148,9 +148,9 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.CommonActionEventChangeType = (function() {
       function CommonActionEventChangeType() {}
 
-      CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE = constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE;
+      CommonActionEventChangeType.BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND;
 
-      CommonActionEventChangeType.SCREENPOSITION_CHANGE = constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE;
+      CommonActionEventChangeType.SCREEN = constant.CommonActionEventChangeType.SCREEN;
 
       return CommonActionEventChangeType;
 

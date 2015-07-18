@@ -21,16 +21,14 @@
                 <% @common_actions.each do |c| %>
                     <!-- アクション名一覧 -->
                     <div class="<%= "#{Const::TIMELINE_COMMON_PREFIX}#{c.id.to_s}" %>" style="display: none">
-                        <ul>
-                            <% c.common_action_events.each do |a| %>
-                                <li class="push method <%= TimelineEventHelper.actionTypeClassNameByActionType(a.action_event_type_id) %>">
-                                    <%= a.method_name %>
-                                    <input class='action_type' type='hidden' value="<%= a.action_event_type_id %>">
-                                    <input class='method_name' type='hidden' value="<%= a.method_name %>">
-                                    <input class='value_class_name' type='hidden' value="<%= "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}" %>">
-                                </li>
-                            <% end %>
-                        </ul>
+                        <% c.common_action_events.each do |a| %>
+                            <div class="radio">
+                                <label><input type="radio" name="method"><span class="<%= TimelineEventHelper.actionTypeClassNameByActionType(a.action_event_type_id) %>"><%= a.method_name %></span></label>
+                                <input class='action_type' type='hidden' value="<%= a.action_event_type_id %>">
+                                <input class='method_name' type='hidden' value="<%= a.method_name %>">
+                                <input class='value_class_name' type='hidden' value="<%= "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}" %>">
+                            </div>
+                        <% end %>
                     </div>
                 <% end %>
             </div>

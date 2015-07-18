@@ -66,19 +66,20 @@ addTimelineEventContents = (item_id, te_actions, te_values) ->
     className = TimelineConfig.ACTION_CLASS.replace('@itemid', item_id)
     action_forms = $('#timeline-config .action_forms')
     if action_forms.find(".#{className}").length == 0
-      li = ''
+      select = ''
       te_actions.forEach( (a) ->
         actionType = getActionTypeClassNameByActionType(a.action_event_type_id)
-        li += """
-          <li class='push method #{actionType}'>
-            #{a.options['name']}
-            <input class='action_type' type='hidden' value='#{a.action_event_type_id}'>
-            <input class='method_name' type='hidden' value='#{a.method_name}'>
-          </li>
+        select += """
+          <div class='radio'>
+              <label><input type='radio' name='method'><span class='#{actionType}'>#{a.options['name']}</span></label>
+              <input class='action_type' type='hidden' value='#{a.action_event_type_id}'>
+              <input class='method_name' type='hidden' value='#{a.method_name}'>
+              <input class='value_class_name' type='hidden' value='#{Constant.TIMELINE_COMMON_ACTION_PREFIX}#{item_id}_#{a.method_name}'>
+          </div>
         """
       )
 
-      $("<div class='#{className}'><ul>#{li}</ul></div>").appendTo(action_forms)
+      $("<div class='#{className}'>#{select}</div>").appendTo(action_forms)
 
   if te_values?
     $(te_values).appendTo($('#timeline-config .value_forms'))

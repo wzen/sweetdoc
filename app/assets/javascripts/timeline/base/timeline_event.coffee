@@ -12,8 +12,8 @@ class TimelineEvent
       @ID = 'id'
       # @property [String] ITEM_ID アイテムタイプID
       @ITEM_ID = 'item_id'
-      # @property [String] ACTION_EVENT_TYPE_ID アクションイベントID
-      @ACTION_EVENT_TYPE_ID = 'action_event_type_id'
+      # @property [String] COMMON_EVENT_ID 共通イベントID
+      @COMMON_EVENT_ID = 'common_event_id'
       # @property [String] VALUE タイムラインイベント値
       @VALUE = 'value'
       # @property [String] CHAPTER チャプター
@@ -61,7 +61,7 @@ class TimelineEvent
     writeValue = {}
     writeValue[@PageValueKey.ID] = timelineConfig.id
     writeValue[@PageValueKey.ITEM_ID] = timelineConfig.itemId
-    writeValue[@PageValueKey.ACTION_EVENT_TYPE_ID] = timelineConfig.actionEventTypeId
+    writeValue[@PageValueKey.COMMON_EVENT_ID] = timelineConfig.commonEventId
     # fixme
     writeValue[@PageValueKey.CHAPTER] = 1
     # fixme
@@ -91,10 +91,9 @@ class TimelineEvent
   @readFromPageValue = (timelineConfig) ->
     writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     if writeValue?
-
       timelineConfig.id = writeValue[@PageValueKey.ID]
       timelineConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
-      timelineConfig.actionEventTypeId = writeValue[@PageValueKey.ACTION_EVENT_TYPE_ID]
+      timelineConfig.commonEventId = writeValue[@PageValueKey.COMMON_EVENT_ID]
       # fixme
       #writeValue[@PageValueKey.CHAPTER] = 1
       # fixme

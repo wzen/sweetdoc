@@ -22,14 +22,30 @@ TimelineConfig = (function() {
   }
 
   TimelineConfig.prototype.setupConfigValues = function() {
-    var selectItemValue;
+    var actionFormName, selectItemValue, self;
+    self = this;
     selectItemValue = '';
     if (this.isCommonEvent) {
-      selectItemValue = "" + Constant.TIMELINE_COMMON_PREFIX + this.actionEventTypeId;
+      selectItemValue = "" + Constant.TIMELINE_COMMON_PREFIX + this.commonEventId;
     } else {
       selectItemValue = "" + this.id + Constant.TIMELINE_ITEM_SEPERATOR + this.itemId;
     }
-    return $('.te_item_select', this.emt).val(selectItemValue);
+    $('.te_item_select', this.emt).val(selectItemValue);
+    actionFormName = '';
+    if (this.isCommonEvent) {
+      actionFormName = Constant.TIMELINE_COMMON_PREFIX + this.commonEventId;
+    } else {
+      actionFormName = TimelineConfig.ACTION_CLASS.replace('@itemid', this.itemId);
+    }
+    return $("." + actionFormName + " .radio", this.emt).each(function(e) {
+      var actionType, methodName;
+      actionType = $(this).find('input.action_type').val();
+      methodName = $(this).find('input.method_name').val();
+      if (parseInt(actionType) === self.actionType && methodName === self.methodName) {
+        $(this).find('input[name="method"]').prop('checked', true);
+        return false;
+      }
+    });
   };
 
   TimelineConfig.prototype.selectItem = function(e) {
@@ -45,7 +61,7 @@ TimelineConfig = (function() {
       }
       this.isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) === 0;
       if (this.isCommonEvent) {
-        this.actionEventTypeId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length));
+        this.commonEventId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length));
       } else {
         splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR);
         this.id = splitValues[0];
@@ -71,17 +87,18 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.clickMethod = function(e) {
-    var extraClassName, tle, valueClassName;
+    var extraClassName, parent, tle, valueClassName;
     if (e == null) {
       e = null;
     }
     if (e != null) {
-      this.actionType = parseInt($(e).find('input.action_type').val());
-      this.methodName = $(e).find('input.method_name').val();
+      parent = $(e).closest('.radio');
+      this.actionType = parseInt(parent.find('input.action_type:first').val());
+      this.methodName = parent.find('input.method_name:first').val();
     }
     valueClassName = null;
     if (this.isCommonEvent) {
-      valueClassName = Constant.TIMELINE_COMMON_PREFIX + this.actionEventTypeId;
+      valueClassName = "" + Constant.TIMELINE_COMMON_ACTION_PREFIX + this.commonEventId + "_" + this.methodName;
     } else {
       valueClassName = this.constructor.VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.methodName);
     }
@@ -160,9 +177,9 @@ TimelineConfig = (function() {
       return null;
     }
     if (this.isCommonEvent) {
-      if (this.actionEventTypeId === Constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE) {
+      if (this.commonEventId === Constant.CommonActionEventChangeType.BACKGROUND) {
         return TLEBackgroundColorChange;
-      } else if (this.actionEventTypeId === Constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE) {
+      } else if (this.commonEventId === Constant.CommonActionEventChangeType.SCREEN) {
         return TLEScreenPositionChange;
       }
     } else {

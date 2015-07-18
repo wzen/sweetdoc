@@ -80,10 +80,10 @@ class Const
 
   # 共通アクションイベント対象
   class CommonActionEventChangeType
-    # @property [Int] BACKGROUNDCOLOR_CHANGE 背景
-    BACKGROUNDCOLOR_CHANGE = 1
-    # @property [Int] SCREENPOSITION_CHANGE ズーム
-    SCREENPOSITION_CHANGE = 2
+    # @property [Int] BACKGROUND 背景
+    BACKGROUND = 1
+    # @property [Int] SCREEN 画面表示
+    SCREEN = 2
   end
 
   # アクション変更種別

@@ -18,13 +18,29 @@ class TimelineConfig
 
   # インスタンス値から画面の状態を設定
   setupConfigValues: ->
+    self = @
+
     # 選択イベントタイプ
     selectItemValue = ''
     if @isCommonEvent
-      selectItemValue = "#{Constant.TIMELINE_COMMON_PREFIX}#{@actionEventTypeId}"
+      selectItemValue = "#{Constant.TIMELINE_COMMON_PREFIX}#{@commonEventId}"
     else
       selectItemValue = "#{@id}#{Constant.TIMELINE_ITEM_SEPERATOR}#{@itemId}"
     $('.te_item_select', @emt).val(selectItemValue)
+
+    actionFormName = ''
+    if @isCommonEvent
+      actionFormName = Constant.TIMELINE_COMMON_PREFIX + @commonEventId
+    else
+      actionFormName = TimelineConfig.ACTION_CLASS.replace('@itemid', @itemId)
+
+    $(".#{actionFormName} .radio", @emt).each((e) ->
+      actionType = $(@).find('input.action_type').val()
+      methodName = $(@).find('input.method_name').val()
+      if parseInt(actionType) == self.actionType && methodName == self.methodName
+        $(@).find('input[name="method"]').prop('checked', true)
+        return false
+    )
 
   # イベントタイプ選択
   selectItem: (e = null) ->
@@ -39,7 +55,7 @@ class TimelineConfig
 
       @isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) == 0
       if @isCommonEvent
-        @actionEventTypeId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length))
+        @commonEventId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length))
       else
         splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR)
         @id = splitValues[0]
@@ -71,12 +87,13 @@ class TimelineConfig
   # メソッド選択
   clickMethod: (e = null) ->
     if e?
-      @actionType = parseInt($(e).find('input.action_type').val())
-      @methodName = $(e).find('input.method_name').val()
+      parent = $(e).closest('.radio')
+      @actionType = parseInt(parent.find('input.action_type:first').val())
+      @methodName = parent.find('input.method_name:first').val()
 
     valueClassName = null
     if @isCommonEvent
-      valueClassName = Constant.TIMELINE_COMMON_PREFIX + @actionEventTypeId
+      valueClassName = "#{Constant.TIMELINE_COMMON_ACTION_PREFIX}#{@commonEventId}_#{@methodName}"
     else
       valueClassName = @constructor.VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
 
@@ -149,9 +166,9 @@ class TimelineConfig
       return null
 
     if @isCommonEvent
-      if @actionEventTypeId == Constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE
+      if @commonEventId == Constant.CommonActionEventChangeType.BACKGROUND
         return TLEBackgroundColorChange
-      else if @actionEventTypeId == Constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE
+      else if @commonEventId == Constant.CommonActionEventChangeType.SCREEN
         return TLEScreenPositionChange
     else
       return TLEItemChange
