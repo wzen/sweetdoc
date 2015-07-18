@@ -62,7 +62,7 @@ TLEItemChange = (function(superClass) {
   TLEItemChange.writeToPageValue = function(timelineConfig, item) {
     var errorMes, itemWriteValue, value, writeValue;
     errorMes = "";
-    writeValue = this.commonWriteValue(timelineConfig);
+    writeValue = TLEItemChange.__super__.constructor.writeToPageValue.call(this, timelineConfig);
     itemWriteValue = item.objWriteTimeline();
     $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {
@@ -75,7 +75,9 @@ TLEItemChange = (function(superClass) {
   };
 
   TLEItemChange.readFromPageValue = function(timelineConfig, item) {
-    return this.commonReadValue(timelineConfig);
+    var ret;
+    ret = TLEItemChange.__super__.constructor.readFromPageValue.call(this, timelineConfig);
+    return ret;
   };
 
   return TLEItemChange;

@@ -31,7 +31,7 @@ TLEBackgroundColorChange = (function(superClass) {
   TLEBackgroundColorChange.writeToPageValue = function(timelineConfig) {
     var emt, errorMes, writeValue;
     errorMes = "";
-    writeValue = this.commonWriteValue(timelineConfig);
+    writeValue = TLEBackgroundColorChange.__super__.constructor.writeToPageValue.call(this, timelineConfig);
     emt = timelineConfig.emt;
     value[this.BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor');
     value[this.CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor');
@@ -47,13 +47,17 @@ TLEBackgroundColorChange = (function(superClass) {
   };
 
   TLEBackgroundColorChange.readFromPageValue = function(timelineConfig) {
-    var emt, value, writeValue;
-    this.commonReadValue(timelineConfig);
+    var emt, ret, value, writeValue;
+    ret = TLEBackgroundColorChange.__super__.constructor.readFromPageValue.call(this, timelineConfig);
+    if (!ret) {
+      return false;
+    }
     emt = timelineConfig.emt;
     writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     value = writeValue[this.PageValueKey.VALUE];
     initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
-    return initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);
+    initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);
+    return true;
   };
 
   return TLEBackgroundColorChange;

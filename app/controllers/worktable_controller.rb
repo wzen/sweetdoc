@@ -5,7 +5,7 @@ class WorktableController < ApplicationController
     # Constantの設定
     init_const
 
-    @common_action_events = Worktable.init_common_events
+    @common_actions = Worktable.init_common_events
   end
 
 end

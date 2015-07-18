@@ -16,7 +16,7 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX;
 
-    Constant.TIMELINE_COMMON_ACTION_CLASSNAME = constant.TIMELINE_COMMON_ACTION_CLASSNAME;
+    Constant.TIMELINE_COMMON_ACTION_PREFIX = constant.TIMELINE_COMMON_ACTION_PREFIX;
 
     Constant.Mode = (function() {
       function Mode() {}
@@ -69,11 +69,11 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ActionEventTypeClassName = (function() {
       function ActionEventTypeClassName() {}
 
-      ActionEventTypeClassName.BLANK = 'blank';
+      ActionEventTypeClassName.BLANK = constant.ActionEventTypeClassName.BLANK;
 
-      ActionEventTypeClassName.SCROLL = 'scroll';
+      ActionEventTypeClassName.SCROLL = constant.ActionEventTypeClassName.SCROLL;
 
-      ActionEventTypeClassName.CLICK = 'click';
+      ActionEventTypeClassName.CLICK = constant.ActionEventTypeClassName.CLICK;
 
       return ActionEventTypeClassName;
 

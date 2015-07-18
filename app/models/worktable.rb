@@ -1,22 +1,25 @@
 class Worktable
   def self.init_common_events
     # 共通タイムラインイベントの取得
-    common_action_events = CommonActionEvent.joins(:locales).merge(Locale.available)
-                               .select('common_action_events.*, localize_common_action_events.options as l_options')
+    common_actions = CommonAction.joins(:common_action_events).eager_load(:common_action_events)
+                         .joins(:localize_common_action_events).eager_load(:localize_common_action_events)
+                         .joins(:locales).merge(Locale.available)
 
     # optionsをJsonString→HashArrayに変更
-    common_action_events.each do |c|
-      # if c.options
-      #   c.options = JSON.parse(c.options)
-      # else
-      #   c.options = {}
-      # end
-      if c.l_options
-        # optionsのローカライズをマージ
-        c.options = JSON.parse(c.l_options)
+    common_actions.each do |c|
+      c.common_action_events.each do |a|
+        # if c.options
+        #   c.options = JSON.parse(c.options)
+        # else
+        #   c.options = {}
+        # end
+        if a.localize_common_action_events.first.options
+          # optionsのローカライズをマージ
+          a.options = JSON.parse(a.localize_common_action_events.first.options)
+        end
       end
     end
 
-    return common_action_events
+    return common_actions
   end
 end

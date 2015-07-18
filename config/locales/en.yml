@@ -44,3 +44,6 @@ en:
           error: ""
         load:
           error: ""
+  common_action:
+    background: "Background"
+    screen: "Screen"

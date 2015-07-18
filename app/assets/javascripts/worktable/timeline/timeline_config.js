@@ -12,22 +12,25 @@ TimelineConfig = (function() {
 
   function TimelineConfig(e, teEmt, teNum) {
     this.teEmt = teEmt;
-    if (teNum == null) {
-      teNum = null;
-    }
+    this.teNum = teNum;
     this.emt = $(e).closest('.event');
-    if (teNum != null) {
-      this.teNum = teNum;
-      this.readFromPageValue();
+    if (this.readFromPageValue()) {
+      this.setupConfigValues();
       this.selectItem();
       this.clickMethod();
-    } else {
-      this.teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT);
-      if (this.teNum == null) {
-        this.teNum = 1;
-      }
     }
   }
+
+  TimelineConfig.prototype.setupConfigValues = function() {
+    var selectItemValue;
+    selectItemValue = '';
+    if (this.isCommonEvent) {
+      selectItemValue = "" + Constant.TIMELINE_COMMON_PREFIX + this.actionEventTypeId;
+    } else {
+      selectItemValue = "" + this.id + Constant.TIMELINE_ITEM_SEPERATOR + this.itemId;
+    }
+    return $('.te_item_select', this.emt).val(selectItemValue);
+  };
 
   TimelineConfig.prototype.selectItem = function(e) {
     var displayClassName, splitValues, vEmt, value;
@@ -59,7 +62,7 @@ TimelineConfig = (function() {
     $(".action_div .forms", this.emt).children("div").css('display', 'none');
     displayClassName = '';
     if (this.isCommonEvent) {
-      displayClassName = Constant.TIMELINE_COMMON_ACTION_CLASSNAME;
+      displayClassName = value;
     } else {
       displayClassName = this.constructor.ACTION_CLASS.replace('@itemid', this.itemId);
     }
@@ -129,10 +132,13 @@ TimelineConfig = (function() {
 
   TimelineConfig.prototype.readFromPageValue = function() {
     var tle;
-    tle = _timelineEvent.call(this);
-    if (tle != null) {
-      return tle.readFromPageValue();
+    if (TimelineEvent.readFromPageValue(this)) {
+      tle = _timelineEvent.call(this);
+      if (tle != null) {
+        return tle.readFromPageValue(this);
+      }
     }
+    return false;
   };
 
   TimelineConfig.prototype.showError = function(message) {
@@ -150,12 +156,17 @@ TimelineConfig = (function() {
   };
 
   _timelineEvent = function() {
+    if (this.isCommonEvent === null) {
+      return null;
+    }
     if (this.isCommonEvent) {
       if (this.actionEventTypeId === Constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE) {
         return TLEBackgroundColorChange;
       } else if (this.actionEventTypeId === Constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE) {
         return TLEScreenPositionChange;
       }
+    } else {
+      return TLEItemChange;
     }
   };
 

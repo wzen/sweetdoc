@@ -74,7 +74,7 @@ setupTimelineEventConfig = ->
     updateSelectItemMenu()
 
     # Configクラス作成 & イベントハンドラの設定
-    te = new TimelineConfig(emt, e)
+    te = new TimelineConfig(emt, e, te_num)
     do =>
       em = $('.te_item_select', emt)
       em.off('change')

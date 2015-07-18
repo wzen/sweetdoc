@@ -14,7 +14,7 @@ class TLEBackgroundColorChange extends TimelineEvent
 
   @writeToPageValue = (timelineConfig) ->
     errorMes = ""
-    writeValue = @commonWriteValue(timelineConfig)
+    writeValue = super(timelineConfig)
     emt = timelineConfig.emt
     value[@BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor')
     value[@CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor')
@@ -30,7 +30,9 @@ class TLEBackgroundColorChange extends TimelineEvent
     return errorMes
 
   @readFromPageValue = (timelineConfig) ->
-    @commonReadValue(timelineConfig)
+    ret = super(timelineConfig)
+    if !ret
+      return false
     emt = timelineConfig.emt
     writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
@@ -38,3 +40,4 @@ class TLEBackgroundColorChange extends TimelineEvent
     initColorPicker($(".colorPicker.change_color", emt) ,value[@CHANGE_COLOR], null)
     #$('.base_color:first', emt).css('backgroundColor',value[@BASE_COLOR])
     #$('.change_color:first', emt).css('backgroundColor',value[@CHANGE_COLOR])
+    return true

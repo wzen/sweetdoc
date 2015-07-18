@@ -6,8 +6,8 @@ class Const
   OPERATION_STORE_MAX = 30
   # @property TIMELINE_COMMON_PREFIX 共通タイムラインイベント クラス名プレフィックス
   TIMELINE_COMMON_PREFIX = 'c_'
-  # @property TIMELINE_COMMON_ACTION_CLASSNAME 共通タイムラインイベント アクションクラス名
-  TIMELINE_COMMON_ACTION_CLASSNAME = 'c_action_method'
+  # @property TIMELINE_COMMON_ACTION_PREFIX 共通タイムラインイベント アクション名プレフィックス
+  TIMELINE_COMMON_ACTION_PREFIX = 'ca_'
 
   # 操作モード
   class Mode
@@ -68,12 +68,22 @@ class Const
     CLICK = 1
   end
 
+  # アクションイベントクラス名
+  class ActionEventTypeClassName
+    # @property [Int] BLANK ブランク
+    BLANK = 'blank'
+    # @property [Int] SCROLL スクロール
+    SCROLL = 'scroll'
+    # @property [Int] CLICK クリック
+    CLICK = 'click'
+  end
+
   # 共通アクションイベント対象
   class CommonActionEventChangeType
     # @property [Int] BACKGROUNDCOLOR_CHANGE 背景
-    BACKGROUNDCOLOR_CHANGE = 0
+    BACKGROUNDCOLOR_CHANGE = 1
     # @property [Int] SCREENPOSITION_CHANGE ズーム
-    SCREENPOSITION_CHANGE = 1
+    SCREENPOSITION_CHANGE = 2
   end
 
   # アクション変更種別

@@ -72,18 +72,18 @@ TimelineEvent = (function() {
 
   TimelineEvent.checkConfigValue = function(timelineConfig) {};
 
-  TimelineEvent.commonWriteValue = function(timelineConfig) {
+  TimelineEvent.writeToPageValue = function(timelineConfig) {
     var clickParallel, end, isClickParallel, scrollPoint, scrollPointDiv, start, writeValue;
     writeValue = {};
     writeValue[this.PageValueKey.ID] = timelineConfig.id;
     writeValue[this.PageValueKey.ITEM_ID] = timelineConfig.itemId;
     writeValue[this.PageValueKey.ACTION_EVENT_TYPE_ID] = timelineConfig.actionEventTypeId;
     writeValue[this.PageValueKey.CHAPTER] = 1;
-    writeValue[this.PageValueKey.CHAPTER] = 1;
+    writeValue[this.PageValueKey.SCREEN] = 1;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent;
     writeValue[this.PageValueKey.METHODNAME] = timelineConfig.methodName;
     writeValue[this.PageValueKey.ACTIONTYPE] = timelineConfig.actionType;
-    if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
+    if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
       scrollPoint = "";
       scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
       if (scrollPointDiv != null) {
@@ -92,7 +92,7 @@ TimelineEvent = (function() {
         scrollPoint = start + this.PageValueKey.SCROLL_POINT_SEP + end;
       }
       writeValue[this.PageValueKey.SCROLL_POINT] = scrollPoint;
-    } else if (timelineConfig.actionType === Constant.ActionEventTypeClassName.CLICK) {
+    } else if (timelineConfig.actionType === Constant.ActionEventHandleType.CLICK) {
       isClickParallel = false;
       clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt);
       if (clickParallel != null) {
@@ -103,11 +103,17 @@ TimelineEvent = (function() {
     return writeValue;
   };
 
-  TimelineEvent.commonReadValue = function(timelineConfig) {
+  TimelineEvent.readFromPageValue = function(timelineConfig) {
     var clickParallel, end, isClickParallel, s, scrollPoint, scrollPointDiv, start, writeValue;
     writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
-      if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
+      timelineConfig.id = writeValue[this.PageValueKey.ID];
+      timelineConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
+      timelineConfig.actionEventTypeId = writeValue[this.PageValueKey.ACTION_EVENT_TYPE_ID];
+      timelineConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
+      timelineConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
+      timelineConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
+      if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
         scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
         scrollPoint = writeValue[this.PageValueKey.SCROLL_POINT];
         if ((scrollPointDiv != null) && (scrollPoint != null)) {
@@ -115,15 +121,18 @@ TimelineEvent = (function() {
           start = s[0];
           end = s[1];
           scrollPointDiv.find('.scroll_point_start:first').val(start);
-          return scrollPointDiv.find('.scroll_point_end:first').val(end);
+          scrollPointDiv.find('.scroll_point_end:first').val(end);
         }
-      } else if (timelineConfig.actionType === Constant.ActionEventTypeClassName.CLICK) {
+      } else if (timelineConfig.actionType === Constant.ActionEventHandleType.CLICK) {
         clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt);
         isClickParallel = writeValue[this.PageValueKey.IS_CLICK_PARALLEL];
         if ((clickParallel != null) && isClickParallel) {
-          return clickParallel.prop("checked", true);
+          clickParallel.prop("checked", true);
         }
       }
+      return true;
+    } else {
+      return false;
     }
   };
 

@@ -6,7 +6,7 @@ class TLEScreenPositionChange extends TimelineEvent
   @writeToPageValue = (timelineConfig) ->
     errorMes = ""
     emt = timelineConfig.emt
-    writeValue = @commonWriteValue(timelineConfig)
+    writeValue = super(timelineConfig)
     value[@X] = $('.screenposition_change_x:first', emt).val()
     value[@Y] = $('.screenposition_change_y:first', emt).val()
     value[@Z] = $('.screenposition_change_z:first', emt).val()
@@ -19,10 +19,13 @@ class TLEScreenPositionChange extends TimelineEvent
     return errorMes
 
   @readFromPageValue = (timelineConfig) ->
+    ret = super(timelineConfig)
+    if !ret
+      return false
     emt = timelineConfig.emt
     writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
-    @commonReadValue(timelineConfig, writeValue)
     value = writeValue[@PageValueKey.VALUE]
     $('.screenposition_change_x:first', emt).val(value[@constructor.X])
     $('.screenposition_change_y:first', emt).val(value[@constructor.Y])
     $('.screenposition_change_z:first', emt).val(value[@constructor.Z])
+    return true

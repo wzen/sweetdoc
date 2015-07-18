@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150126130235) do
+ActiveRecord::Schema.define(version: 20150716084839) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -21,12 +21,19 @@ ActiveRecord::Schema.define(version: 20150126130235) do
   end
 
   create_table "common_action_events", force: true do |t|
+    t.integer  "common_action_id",                   null: false
     t.integer  "user_auth_strength_min",             null: false
     t.integer  "common_action_event_target_type_id", null: false
     t.integer  "action_event_type_id",               null: false
     t.integer  "action_event_change_type_id",        null: false
     t.text     "method_name",                        null: false
     t.text     "options"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "common_actions", force: true do |t|
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

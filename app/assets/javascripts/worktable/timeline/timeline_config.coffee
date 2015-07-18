@@ -9,18 +9,22 @@ class TimelineConfig
     @VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS
 
   # コンストラクタ
-  constructor: (e, @teEmt, teNum = null) ->
+  constructor: (e, @teEmt, @teNum) ->
     @emt = $(e).closest('.event')
-    if teNum?
-      # 入力値を読み込んで全て表示
-      @teNum = teNum
-      @readFromPageValue()
+    if @readFromPageValue()
+      @setupConfigValues()
       @selectItem()
       @clickMethod()
+
+  # インスタンス値から画面の状態を設定
+  setupConfigValues: ->
+    # 選択イベントタイプ
+    selectItemValue = ''
+    if @isCommonEvent
+      selectItemValue = "#{Constant.TIMELINE_COMMON_PREFIX}#{@actionEventTypeId}"
     else
-      @teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
-      if !@teNum?
-        @teNum = 1
+      selectItemValue = "#{@id}#{Constant.TIMELINE_ITEM_SEPERATOR}#{@itemId}"
+    $('.te_item_select', @emt).val(selectItemValue)
 
   # イベントタイプ選択
   selectItem: (e = null) ->
@@ -58,7 +62,7 @@ class TimelineConfig
     # 表示
     displayClassName = ''
     if @isCommonEvent
-      displayClassName = Constant.TIMELINE_COMMON_ACTION_CLASSNAME
+      displayClassName = value
     else
       displayClassName = @constructor.ACTION_CLASS.replace('@itemid', @itemId)
     $(".#{displayClassName}", @emt).css('display', '')
@@ -122,9 +126,11 @@ class TimelineConfig
 
   # 画面値から読み込み
   readFromPageValue: ->
-    tle = _timelineEvent.call(@)
-    if tle?
-      tle.readFromPageValue()
+    if TimelineEvent.readFromPageValue(@)
+      tle = _timelineEvent.call(@)
+      if tle?
+        return tle.readFromPageValue(@)
+    return false
 
   # エラー表示
   showError: (message)->
@@ -139,8 +145,13 @@ class TimelineConfig
     timelineConfigError.css('display', 'none')
 
   _timelineEvent = ->
+    if @isCommonEvent == null
+      return null
+
     if @isCommonEvent
       if @actionEventTypeId == Constant.CommonActionEventChangeType.BACKGROUNDCOLOR_CHANGE
         return TLEBackgroundColorChange
       else if @actionEventTypeId == Constant.CommonActionEventChangeType.SCREENPOSITION_CHANGE
         return TLEScreenPositionChange
+    else
+      return TLEItemChange

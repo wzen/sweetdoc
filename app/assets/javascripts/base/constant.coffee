@@ -13,8 +13,8 @@ if gon?
     @TIMELINE_ITEM_SEPERATOR = "&"
     # @property [String] TIMELINE_COMMON_PREFIX 共通タイムラインイベントプレフィックス
     @TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX
-    # @property TIMELINE_COMMON_ACTION_CLASSNAME 共通タイムラインイベント アクションクラス名
-    @TIMELINE_COMMON_ACTION_CLASSNAME = constant.TIMELINE_COMMON_ACTION_CLASSNAME
+    # @property TIMELINE_COMMON_ACTION_PREFIX 共通タイムラインイベント アクション名プレフィックス
+    @TIMELINE_COMMON_ACTION_PREFIX = constant.TIMELINE_COMMON_ACTION_PREFIX
 
     # 操作モード
     class @Mode
@@ -51,12 +51,11 @@ if gon?
     # アクションイベントクラス名
     class @ActionEventTypeClassName
       # @property [Int] BLANK ブランク
-      @BLANK = 'blank'
+      @BLANK = constant.ActionEventTypeClassName.BLANK
       # @property [Int] SCROLL スクロール
-      @SCROLL = 'scroll'
+      @SCROLL = constant.ActionEventTypeClassName.SCROLL
       # @property [Int] CLICK クリック
-      @CLICK = 'click'
-
+      @CLICK = constant.ActionEventTypeClassName.CLICK
 
     # 閲覧モードのチャプターアクション種類
     class @ActionEventChangeType

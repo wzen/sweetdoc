@@ -54,7 +54,7 @@ setupTimelineEventConfig = function() {
       $('#timeline-config').append(emt);
     }
     updateSelectItemMenu();
-    te = new TimelineConfig(emt, e);
+    te = new TimelineConfig(emt, e, te_num);
     (function(_this) {
       return (function() {
         var em;

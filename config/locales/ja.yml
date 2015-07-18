@@ -24,3 +24,6 @@ ja:
         load:
           success: 'アイテムの状態を読み込みました。'
           error: 'アイテムの読み込みに失敗しました。'
+  common_action:
+    background: "背景"
+    screen: "画面表示"
