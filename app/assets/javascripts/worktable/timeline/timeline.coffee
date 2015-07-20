@@ -16,19 +16,6 @@ createTimelineEvent = (teNum) ->
   $("<input class='te_num' type='hidden' value='#{teNum}' >").appendTo(newEmt)
   pEmt.append(newEmt)
 
-## タイムラインイベント色を設定
-#setupTimelineEvent = ->
-#  tEmt = $('#timeline_events .timeline_event .te_num')
-#  tEmt.each((e) ->
-#    teNum = parseInt($(@).val())
-#    actionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE)
-#    changeTimelineColor(teNum, actionType)
-#
-#    if e == tEmt.length - 1 && actionType != null
-#      # blankのイベントが無い場合、作成
-#      createTimelineEvent(tEmt.length)
-#  )
-
 # タイムラインのイベント設定
 setupTimelineEventConfig = ->
   self = @
@@ -47,6 +34,20 @@ setupTimelineEventConfig = ->
         # blankのイベントが無い場合、作成
         createTimelineEvent(tEmt.length + 1)
     )
+    # イベントのクリック
+    $('#timeline_events .timeline_event').off('click')
+    $('#timeline_events .timeline_event').on('click', (e) ->
+      _clickTimelineEvent.call(self, @)
+    )
+    # イベントのD&D
+    $('#timeline_events').sortable({
+      revert: true
+      axis: 'x'
+      containment: $('#timeline_events_container')
+      items: '.sortable'
+      stop: (event, ui) ->
+        # イベントのソート番号を更新
+    })
 
   # イベント
   _clickTimelineEvent = (e) ->
@@ -73,44 +74,8 @@ setupTimelineEventConfig = ->
     # アイテム選択メニュー更新
     updateSelectItemMenu()
 
-    # Configクラス作成 & イベントハンドラの設定
-    te = new TimelineConfig(emt, e, te_num)
-    do =>
-      em = $('.te_item_select', emt)
-      em.off('change')
-      em.on('change', (e) ->
-        te.selectItem(@)
-      )
-      em = $('.action_forms input[name="method"]:radio', emt)
-      em.off('change')
-      em.on('change', (e) ->
-        te.clickMethod(@)
-      )
-      em = $('.push.button.reset', emt)
-      em.off('click')
-      em.on('click', (e) ->
-        # UIの入力値を初期化
-        te.resetAction()
-      )
-      em = $('.push.button.apply', emt)
-      em.off('click')
-      em.on('click', (e) ->
-        # 入力値を適用する
-        te.applyAction()
-        # イベントを更新
-        setupTimelineEventConfig()
-        # 次のイベントConfigを表示
-      )
-      em = $('.push.button.cancel', emt)
-      em.off('click')
-      em.on('click', (e) ->
-        # 入力を全てクリアしてサイドバーを閉じる
-        emt = $(@).closest('.event')
-        $('.values', emt).html('')
-        closeSidebar( ->
-          $(".config.te_div", emt).css('display', 'none')
-        )
-      )
+    # イベントハンドラの設定
+    setupTimelineEventHandler(te_num)
 
     # イベントメニューの表示
     $('#timeline-config .event').css('display', 'none')
@@ -123,22 +88,6 @@ setupTimelineEventConfig = ->
   ### private method ここまで ###
 
   _setupTimelineEvent.call(self)
-
-  # イベントのクリック
-  $('.timeline_event').off('click')
-  $('.timeline_event').on('click', (e) ->
-    _clickTimelineEvent.call(self, @)
-  )
-
-  # イベントのD&D
-  $('#timeline_events').sortable({
-    revert: true
-    axis: 'x'
-    containment: $('#timeline_events_container')
-    items: '.sortable'
-    stop: (event, ui) ->
-      # イベントのソート番号を更新
-  })
 
 # アイテム選択メニューを更新
 updateSelectItemMenu = ->
@@ -166,6 +115,19 @@ updateSelectItemMenu = ->
     )
     $(@).append($(selectOptions))
   )
+
+# イベントハンドラー設定
+setupTimelineEventHandler = (te_num) ->
+  eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+  emt = $('#' + eId)
+  # Configクラス作成 & イベントハンドラの設定
+  te = new TimelineConfig(emt, te_num)
+  do =>
+    em = $('.te_item_select', emt)
+    em.off('change')
+    em.on('change', (e) ->
+      te.selectItem(@)
+    )
 
 # タイムラインのCSSをまとめる
 setupTimeLineCss = ->

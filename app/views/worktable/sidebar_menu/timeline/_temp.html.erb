@@ -22,39 +22,37 @@
                     <!-- アクション名一覧 -->
                     <div class="<%= "#{Const::TIMELINE_COMMON_PREFIX}#{c.id.to_s}" %>" style="display: none">
                         <% c.common_action_events.each do |a| %>
-                            <div class="radio">
-                                <label><input type="radio" name="method"><span class="<%= TimelineEventHelper.actionTypeClassNameByActionType(a.action_event_type_id) %>"><%= a.method_name %></span></label>
-                                <input class='action_type' type='hidden' value="<%= a.action_event_type_id %>">
-                                <input class='method_name' type='hidden' value="<%= a.method_name %>">
-                                <input class='value_class_name' type='hidden' value="<%= "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}" %>">
-                            </div>
+                            <%=
+                                render 'worktable/sidebar_menu/timeline/parts/method',
+                                       action_type: TimelineEventHelper.actionTypeClassNameByActionType(a.action_event_type_id),
+                                       action_event_type_id: a.action_event_type_id,
+                                       method_name: a.method_name,
+                                       radio_name: "#{Const::TIMELINE_COMMON_PREFIX}#{c.id.to_s}",
+                                       value_class_name: "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}"
+                            %>
                         <% end %>
                     </div>
                 <% end %>
             </div>
         </div>
     </div>
-    <div class="config te_div scroll_point_div" style="display: none">
+
+    <div class="config te_div handler_div" style="display: none">
         <div class="configBox">
-            <div class="timelineedit-headliner">ScrollPoint</div>
-            <div class="forms">
-                <!-- スクロールポイント -->
-                <input class="scroll_point_start" type="number" value="" style="float: left" >
-                <div style="float: left"> - </div>
-                <input class="scroll_point_end" type="number" value="" style="float: left" >
-                <br style="clear: both">
-            </div>
-        </div>
+            <% @common_actions.each do |c| %>
+                <% c.common_action_events.each do |a| %>
+                    <div class="<%= "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}" %>" style="display: none">
+                        <% if a.action_event_type_id == Const::ActionEventHandleType::SCROLL  %>
+                            <%= render 'worktable/sidebar_menu/timeline/parts/handler_scroll' %>
+                        <% elsif a.action_event_type_id == Const::ActionEventHandleType::CLICK %>
+                            <%= render 'worktable/sidebar_menu/timeline/parts/handler_click' %>
+                        <% end %>
+                    </div>
+                <% end %>
+            <% end %>
+         </div>
     </div>
-    <div class="config te_div click_parallel_div" style="display: none">
-        <div class="configBox">
-            <div class="timelineedit-headliner">ClickParallel</div>
-            <div class="forms">
-                <!-- クリック同時実行 -->
-                <input class="click_parallel" name="click_parallel" type="checkbox"><label for="click_parallel">Click Parallel</label>
-            </div>
-        </div>
-    </div>
+
     <div class="config te_div values_div" style="display: none">
         <div class="configBox">
             <div class="timelineedit-headliner">Value</div>
@@ -63,9 +61,9 @@
                 <% @common_actions.each do |c| %>
                     <% c.common_action_events.each do |a| %>
                         <div class="<%= "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}" %>" style="display: none">
-                          <% if a.action_event_change_type_id == Const::CommonActionEventChangeType::BACKGROUNDCOLOR_CHANGE  %>
+                          <% if a.action_event_change_type_id == Const::CommonActionEventChangeType::BACKGROUND  %>
                             <%= render 'worktable/sidebar_menu/timeline/parts/backgroundcolor_change' %>
-                          <% elsif a.action_event_change_type_id == Const::CommonActionEventChangeType::SCREENPOSITION_CHANGE %>
+                          <% elsif a.action_event_change_type_id == Const::CommonActionEventChangeType::SCREEN %>
                             <%= render 'worktable/sidebar_menu/timeline/parts/screenposition_change' %>
                           <% end %>
                         </div>
@@ -87,4 +85,15 @@
     </div>
 
     <div class="values"></div>
+</div>
+
+<div class="method_temp">
+    <%= render 'worktable/sidebar_menu/timeline/parts/method' %>
+</div>
+
+<div class="handler_scroll_temp">
+    <%= render 'worktable/sidebar_menu/timeline/parts/handler_scroll' %>
+</div>
+<div class="handler_click_temp">
+    <%= render 'worktable/sidebar_menu/timeline/parts/handler_click' %>
 </div>

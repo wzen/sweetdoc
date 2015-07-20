@@ -9,8 +9,8 @@ class TimelineConfig
     @VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS
 
   # コンストラクタ
-  constructor: (e, @teEmt, @teNum) ->
-    @emt = $(e).closest('.event')
+  constructor: (@emt, @teNum) ->
+    #@emt = $(e).closest('.event')
     if @readFromPageValue()
       @setupConfigValues()
       @selectItem()
@@ -38,7 +38,7 @@ class TimelineConfig
       actionType = $(@).find('input.action_type').val()
       methodName = $(@).find('input.method_name').val()
       if parseInt(actionType) == self.actionType && methodName == self.methodName
-        $(@).find('input[name="method"]').prop('checked', true)
+        $(@).find('input:radio').prop('checked', true)
         return false
     )
 
@@ -84,6 +84,12 @@ class TimelineConfig
     $(".#{displayClassName}", @emt).css('display', '')
     $(".action_div", @emt).css('display', '')
 
+    _setMethodActionEvent.call(@)
+
+    checkedRadioButton = $(".action_forms input:radio[name='#{displayClassName}']:checked", @emt)
+    if checkedRadioButton.val()
+      @clickMethod(checkedRadioButton)
+
   # メソッド選択
   clickMethod: (e = null) ->
     if e?
@@ -97,24 +103,23 @@ class TimelineConfig
     else
       valueClassName = @constructor.VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
 
-    extraClassName = null
-    if @actionType == Constant.ActionEventHandleType.SCROLL
-      extraClassName = "scroll_point_div"
-    else
-      extraClassName = "click_parallel_div"
+    handlerClassName = valueClassName
 
-    $(".scroll_point_div", @emt).css('display', 'none')
-    $(".click_parallel_div", @emt).css('display', 'none')
-    $(".values_div .forms", @emt).children("div").css('display', 'none')
-    $(".#{extraClassName}", @emt).css('display', '')
-    $(".#{valueClassName}", @emt).css('display', '')
+    $(".handler_div .configBox", @emt).children("div").css('display', 'none')
+    $(".handler_div .#{handlerClassName}", @emt).css('display', '')
+    $(".config.handler_div", @emt).css('display', '')
+
+    $(".value_forms", @emt).children("div").css('display', 'none')
+    $(".value_forms .#{valueClassName}", @emt).css('display', '')
     $(".config.values_div", @emt).css('display', '')
 
     if e?
       # 初期化
       tle = _timelineEvent.call(@)
-      if tle?
+      if tle? && tle.initConfigValue?
         tle.initConfigValue(@)
+
+    _setApplyClickEvent.call(@)
 
   # イベントの入力値を初期化する
   resetAction: ->
@@ -172,3 +177,39 @@ class TimelineConfig
         return TLEScreenPositionChange
     else
       return TLEItemChange
+
+  _setMethodActionEvent = ->
+    self = @
+    em = $('.action_forms input:radio', @emt)
+    em.off('change')
+    em.on('change', (e) ->
+      self.clickMethod(@)
+    )
+
+  _setApplyClickEvent = ->
+    self = @
+    em = $('.push.button.reset', @emt)
+    em.off('click')
+    em.on('click', (e) ->
+      # UIの入力値を初期化
+      self.resetAction()
+    )
+    em = $('.push.button.apply', @emt)
+    em.off('click')
+    em.on('click', (e) ->
+      # 入力値を適用する
+      self.applyAction()
+      # イベントを更新
+      setupTimelineEventConfig()
+      # 次のイベントConfigを表示
+    )
+    em = $('.push.button.cancel', @emt)
+    em.off('click')
+    em.on('click', (e) ->
+      # 入力を全てクリアしてサイドバーを閉じる
+      e = $(@).closest('.event')
+      $('.values', e).html('')
+      closeSidebar( ->
+        $(".config.te_div", e).css('display', 'none')
+      )
+    )

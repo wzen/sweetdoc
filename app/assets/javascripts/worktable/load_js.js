@@ -73,18 +73,37 @@ addItemInfo = function(item_id, te_actions) {
 };
 
 addTimelineEventContents = function(item_id, te_actions, te_values) {
-  var action_forms, className, select;
+  var actionParent, action_forms, className, handler_forms;
   if ((te_actions != null) && te_actions.length > 0) {
     className = TimelineConfig.ACTION_CLASS.replace('@itemid', item_id);
+    handler_forms = $('#timeline-config .handler_div .configBox');
     action_forms = $('#timeline-config .action_forms');
     if (action_forms.find("." + className).length === 0) {
-      select = '';
+      actionParent = $("<div class='" + className + "' style='display:none'></div>");
       te_actions.forEach(function(a) {
-        var actionType;
+        var actionType, handlerClone, handlerParent, methodClone, span, valueClassName;
         actionType = getActionTypeClassNameByActionType(a.action_event_type_id);
-        return select += "<div class='radio'>\n    <label><input type='radio' name='method'><span class='" + actionType + "'>" + a.options['name'] + "</span></label>\n    <input class='action_type' type='hidden' value='" + a.action_event_type_id + "'>\n    <input class='method_name' type='hidden' value='" + a.method_name + "'>\n    <input class='value_class_name' type='hidden' value='" + Constant.TIMELINE_COMMON_ACTION_PREFIX + item_id + "_" + a.method_name + "'>\n</div>";
+        methodClone = $('#timeline-config .method_temp').children(':first').clone(true);
+        span = methodClone.find('label:first').children('span:first');
+        span.attr('class', actionType);
+        span.html(a.options['name']);
+        methodClone.find('input.action_type:first').val(a.action_event_type_id);
+        methodClone.find('input.method_name:first').val(a.method_name);
+        valueClassName = TimelineConfig.VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', a.method_name);
+        methodClone.find('input:radio').attr('name', className);
+        methodClone.find('input.value_class_name:first').val(valueClassName);
+        actionParent.append(methodClone);
+        handlerClone = null;
+        if (a.action_event_type_id === Constant.ActionEventHandleType.SCROLL) {
+          handlerClone = $('#timeline-config .handler_scroll_temp').children().clone(true);
+        } else if (a.action_event_type_id === Constant.ActionEventHandleType.CLICK) {
+          handlerClone = $('#timeline-config .handler_click_temp').children().clone(true);
+        }
+        handlerParent = $("<div class='" + valueClassName + "' style='display:none'></div>");
+        handlerParent.append(handlerClone);
+        return handlerParent.appendTo(handler_forms);
       });
-      $("<div class='" + className + "'>" + select + "</div>").appendTo(action_forms);
+      actionParent.appendTo(action_forms);
     }
   }
   if (te_values != null) {

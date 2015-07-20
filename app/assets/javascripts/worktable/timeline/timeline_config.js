@@ -2,7 +2,7 @@
 var TimelineConfig;
 
 TimelineConfig = (function() {
-  var _timelineEvent;
+  var _setApplyClickEvent, _setMethodActionEvent, _timelineEvent;
 
   if (typeof gon !== "undefined" && gon !== null) {
     TimelineConfig.ITEM_ROOT_ID = 'timeline_event_@te_num';
@@ -10,10 +10,9 @@ TimelineConfig = (function() {
     TimelineConfig.VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS;
   }
 
-  function TimelineConfig(e, teEmt, teNum) {
-    this.teEmt = teEmt;
+  function TimelineConfig(emt, teNum) {
+    this.emt = emt;
     this.teNum = teNum;
-    this.emt = $(e).closest('.event');
     if (this.readFromPageValue()) {
       this.setupConfigValues();
       this.selectItem();
@@ -42,14 +41,14 @@ TimelineConfig = (function() {
       actionType = $(this).find('input.action_type').val();
       methodName = $(this).find('input.method_name').val();
       if (parseInt(actionType) === self.actionType && methodName === self.methodName) {
-        $(this).find('input[name="method"]').prop('checked', true);
+        $(this).find('input:radio').prop('checked', true);
         return false;
       }
     });
   };
 
   TimelineConfig.prototype.selectItem = function(e) {
-    var displayClassName, splitValues, vEmt, value;
+    var checkedRadioButton, displayClassName, splitValues, vEmt, value;
     if (e == null) {
       e = null;
     }
@@ -83,11 +82,16 @@ TimelineConfig = (function() {
       displayClassName = this.constructor.ACTION_CLASS.replace('@itemid', this.itemId);
     }
     $("." + displayClassName, this.emt).css('display', '');
-    return $(".action_div", this.emt).css('display', '');
+    $(".action_div", this.emt).css('display', '');
+    _setMethodActionEvent.call(this);
+    checkedRadioButton = $(".action_forms input:radio[name='" + displayClassName + "']:checked", this.emt);
+    if (checkedRadioButton.val()) {
+      return this.clickMethod(checkedRadioButton);
+    }
   };
 
   TimelineConfig.prototype.clickMethod = function(e) {
-    var extraClassName, parent, tle, valueClassName;
+    var handlerClassName, parent, tle, valueClassName;
     if (e == null) {
       e = null;
     }
@@ -102,24 +106,20 @@ TimelineConfig = (function() {
     } else {
       valueClassName = this.constructor.VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.methodName);
     }
-    extraClassName = null;
-    if (this.actionType === Constant.ActionEventHandleType.SCROLL) {
-      extraClassName = "scroll_point_div";
-    } else {
-      extraClassName = "click_parallel_div";
-    }
-    $(".scroll_point_div", this.emt).css('display', 'none');
-    $(".click_parallel_div", this.emt).css('display', 'none');
-    $(".values_div .forms", this.emt).children("div").css('display', 'none');
-    $("." + extraClassName, this.emt).css('display', '');
-    $("." + valueClassName, this.emt).css('display', '');
+    handlerClassName = valueClassName;
+    $(".handler_div .configBox", this.emt).children("div").css('display', 'none');
+    $(".handler_div ." + handlerClassName, this.emt).css('display', '');
+    $(".config.handler_div", this.emt).css('display', '');
+    $(".value_forms", this.emt).children("div").css('display', 'none');
+    $(".value_forms ." + valueClassName, this.emt).css('display', '');
     $(".config.values_div", this.emt).css('display', '');
     if (e != null) {
       tle = _timelineEvent.call(this);
-      if (tle != null) {
-        return tle.initConfigValue(this);
+      if ((tle != null) && (tle.initConfigValue != null)) {
+        tle.initConfigValue(this);
       }
     }
+    return _setApplyClickEvent.call(this);
   };
 
   TimelineConfig.prototype.resetAction = function() {
@@ -185,6 +185,41 @@ TimelineConfig = (function() {
     } else {
       return TLEItemChange;
     }
+  };
+
+  _setMethodActionEvent = function() {
+    var em, self;
+    self = this;
+    em = $('.action_forms input:radio', this.emt);
+    em.off('change');
+    return em.on('change', function(e) {
+      return self.clickMethod(this);
+    });
+  };
+
+  _setApplyClickEvent = function() {
+    var em, self;
+    self = this;
+    em = $('.push.button.reset', this.emt);
+    em.off('click');
+    em.on('click', function(e) {
+      return self.resetAction();
+    });
+    em = $('.push.button.apply', this.emt);
+    em.off('click');
+    em.on('click', function(e) {
+      self.applyAction();
+      return setupTimelineEventConfig();
+    });
+    em = $('.push.button.cancel', this.emt);
+    em.off('click');
+    return em.on('click', function(e) {
+      e = $(this).closest('.event');
+      $('.values', e).html('');
+      return closeSidebar(function() {
+        return $(".config.te_div", e).css('display', 'none');
+      });
+    });
   };
 
   return TimelineConfig;
