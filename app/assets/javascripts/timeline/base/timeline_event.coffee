@@ -38,10 +38,10 @@ class TimelineEvent
       @SCROLL_POINT_SEP = '-'
 
   @initCommonConfigValue = (timelineConfig) ->
-    if timelineConfig.actionType == Constant.ActionEventTypeClassName.SCROLL
-      scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
-      if scrollPointDiv?
-        startDiv = scrollPointDiv.find('.scroll_point_start:first')
+    if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
+      handlerDiv = $('.handler_div', timelineConfig.emt)
+      if handlerDiv?
+        startDiv = handlerDiv.find('.scroll_point_start:first')
         start = startDiv.val()
         s = null
         if start.length == 0
@@ -49,7 +49,7 @@ class TimelineEvent
           startDiv.val(s)
           if s == 0
             startDiv.prop("disabled", true)
-        endDiv = scrollPointDiv.find('.scroll_point_end:first')
+        endDiv = handlerDiv.find('.scroll_point_end:first')
         end = endDiv.val()
         if end.length == 0
           endDiv.val(parseInt(s) + _scrollLength.call(@, timelineConfig))

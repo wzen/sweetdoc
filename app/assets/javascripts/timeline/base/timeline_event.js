@@ -47,11 +47,11 @@ TimelineEvent = (function() {
   }
 
   TimelineEvent.initCommonConfigValue = function(timelineConfig) {
-    var end, endDiv, s, scrollPointDiv, start, startDiv;
-    if (timelineConfig.actionType === Constant.ActionEventTypeClassName.SCROLL) {
-      scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
-      if (scrollPointDiv != null) {
-        startDiv = scrollPointDiv.find('.scroll_point_start:first');
+    var end, endDiv, handlerDiv, s, start, startDiv;
+    if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
+      handlerDiv = $('.handler_div', timelineConfig.emt);
+      if (handlerDiv != null) {
+        startDiv = handlerDiv.find('.scroll_point_start:first');
         start = startDiv.val();
         s = null;
         if (start.length === 0) {
@@ -61,7 +61,7 @@ TimelineEvent = (function() {
             startDiv.prop("disabled", true);
           }
         }
-        endDiv = scrollPointDiv.find('.scroll_point_end:first');
+        endDiv = handlerDiv.find('.scroll_point_end:first');
         end = endDiv.val();
         if (end.length === 0) {
           return endDiv.val(parseInt(s) + _scrollLength.call(this, timelineConfig));

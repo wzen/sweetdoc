@@ -70,6 +70,7 @@ addTimelineEventContents = (item_id, te_actions, te_values) ->
 
       actionParent = $("<div class='#{className}' style='display:none'></div>")
       te_actions.forEach( (a) ->
+        # アクションメソッドConfig追加
         actionType = getActionTypeClassNameByActionType(a.action_event_type_id)
         methodClone = $('#timeline-config .method_temp').children(':first').clone(true)
         span = methodClone.find('label:first').children('span:first')
@@ -82,6 +83,7 @@ addTimelineEventContents = (item_id, te_actions, te_values) ->
         methodClone.find('input.value_class_name:first').val(valueClassName)
         actionParent.append(methodClone)
 
+        # イベントタイプConfig追加
         handlerClone = null
         if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
           handlerClone = $('#timeline-config .handler_scroll_temp').children().clone(true)
