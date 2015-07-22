@@ -32,8 +32,10 @@ class TimelineEvent
       @ACTIONTYPE = 'actiontype'
       # @property [String] IS_PARALLEL 同時実行
       @IS_CLICK_PARALLEL = 'is_click_parallel'
-      # @property [String] SCROLL_TIME スクロール実行時間
-      @SCROLL_POINT = 'scroll_point'
+      # @property [String] SCROLL_TIME スクロール実行開始位置
+      @SCROLL_POINT_START = 'scroll_point_start'
+      # @property [String] SCROLL_TIME スクロール実行終了位置
+      @SCROLL_POINT_END = 'scroll_point_end'
       # @property [String] TE_SCROLL_TIME_SEP スクロール実行時間セパレータ
       @SCROLL_POINT_SEP = '-'
 
@@ -71,17 +73,18 @@ class TimelineEvent
     writeValue[@PageValueKey.ACTIONTYPE] = timelineConfig.actionType
 
     if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-      scrollPoint = ""
-      scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
-      if scrollPointDiv?
-        start = scrollPointDiv.find('.scroll_point_start:first').val()
-        end = scrollPointDiv.find('.scroll_point_end:first').val()
-        scrollPoint = start + @PageValueKey.SCROLL_POINT_SEP + end
-      writeValue[@PageValueKey.SCROLL_POINT] = scrollPoint
+      start = ""
+      end = ""
+      handlerDiv = $('.handler_div', timelineConfig.emt)
+      if handlerDiv?
+        start = handlerDiv.find('.scroll_point_start:first').val()
+        end = handlerDiv.find('.scroll_point_end:first').val()
+      writeValue[@PageValueKey.SCROLL_POINT_START] = start
+      writeValue[@PageValueKey.SCROLL_POINT_END] = end
 
     else if timelineConfig.actionType == Constant.ActionEventHandleType.CLICK
       isClickParallel = false
-      clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt)
+      clickParallel = $('.handler_div .click_parallel', timelineConfig.emt)
       if clickParallel?
         isClickParallel = clickParallel.is(":checked")
       writeValue[@PageValueKey.IS_CLICK_PARALLEL] = isClickParallel
@@ -103,17 +106,16 @@ class TimelineEvent
       timelineConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
 
       if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-        scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
-        scrollPoint = writeValue[@PageValueKey.SCROLL_POINT]
-        if scrollPointDiv? && scrollPoint?
-          s = scrollPoint.split(@PageValueKey.SCROLL_POINT_SEP)
-          start = s[0]
-          end = s[1]
-          scrollPointDiv.find('.scroll_point_start:first').val(start)
-          scrollPointDiv.find('.scroll_point_end:first').val(end)
+
+        handlerDiv = $('.handler_div', timelineConfig.emt)
+        start = writeValue[@PageValueKey.SCROLL_POINT_START]
+        end = writeValue[@PageValueKey.SCROLL_POINT_END]
+        if handlerDiv? && start? && end?
+          handlerDiv.find('.scroll_point_start:first').val(start)
+          handlerDiv.find('.scroll_point_end:first').val(end)
 
       else if timelineConfig.actionType == Constant.ActionEventHandleType.CLICK
-        clickParallel = $('.click_parallel_div .click_parallel', timelineConfig.emt)
+        clickParallel = $('.handler_div .click_parallel', timelineConfig.emt)
         isClickParallel = writeValue[@PageValueKey.IS_CLICK_PARALLEL]
         if clickParallel? && isClickParallel
           clickParallel.prop("checked", true)
@@ -126,11 +128,9 @@ class TimelineEvent
     scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
     writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     if writeValue?
-      scrollPoint = writeValue[@PageValueKey.SCROLL_POINT]
-      if scrollPointDiv? && scrollPoint?
-       s = scrollPoint.split(@PageValueKey.SCROLL_POINT_SEP)
-       start = s[0]
-       end = s[1]
+      start = writeValue[@PageValueKey.SCROLL_POINT_START]
+      end = writeValue[@PageValueKey.SCROLL_POINT_END]
+      if scrollPointDiv? && start? && end?
        return parseInt(end) - parseInt(start)
 
     return null
@@ -139,21 +139,20 @@ class TimelineEvent
   @getAllScrollLength = ->
     self = @
     maxTeNum = 0
-    scrollPoint = null
+    ret = null
     $("##{Constant.PageValueKey.TE_ROOT} .#{Constant.PageValueKey.TE_PREFIX}").children('div').each((e) ->
       teNum = parseInt($(@).attr('class'))
       if teNum > maxTeNum
-        sp = $(@).find(".#{self.PageValueKey.SCROLL_POINT}:first").val()
-        if sp? && sp != "null"
+        start = $(@).find(".#{self.PageValueKey.SCROLL_POINT_START}:first").val()
+        end = $(@).find(".#{self.PageValueKey.SCROLL_POINT_END}:first").val()
+        if start? && start != "null" && end? && end != "null"
           maxTeNum = teNum
-          scrollPoint = sp
+          ret = end
     )
-    if !scrollPoint?
+    if !ret?
       return 0
 
-    s = scrollPoint.split(@PageValueKey.SCROLL_POINT_SEP)
-    scrollEnd = parseInt(s[1])
-    return scrollEnd
+    return ret
 
 
 

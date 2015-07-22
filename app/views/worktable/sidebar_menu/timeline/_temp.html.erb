@@ -28,7 +28,7 @@
                                        action_event_type_id: a.action_event_type_id,
                                        method_name: a.method_name,
                                        radio_name: "#{Const::TIMELINE_COMMON_PREFIX}#{c.id.to_s}",
-                                       value_class_name: "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}"
+                                       value_class_name: Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
                             %>
                         <% end %>
                     </div>
@@ -41,7 +41,7 @@
         <div class="configBox">
             <% @common_actions.each do |c| %>
                 <% c.common_action_events.each do |a| %>
-                    <div class="<%= "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}" %>" style="display: none">
+                    <div class="<%= Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
                         <% if a.action_event_type_id == Const::ActionEventHandleType::SCROLL  %>
                             <%= render 'worktable/sidebar_menu/timeline/parts/handler_scroll' %>
                         <% elsif a.action_event_type_id == Const::ActionEventHandleType::CLICK %>
@@ -60,7 +60,7 @@
                 <!-- イベント毎の設定値 -->
                 <% @common_actions.each do |c| %>
                     <% c.common_action_events.each do |a| %>
-                        <div class="<%= "#{Const::TIMELINE_COMMON_ACTION_PREFIX}#{c.id}_#{a.method_name}" %>" style="display: none">
+                        <div class="<%= Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
                           <% if a.action_event_change_type_id == Const::CommonActionEventChangeType::BACKGROUND  %>
                             <%= render 'worktable/sidebar_menu/timeline/parts/backgroundcolor_change' %>
                           <% elsif a.action_event_change_type_id == Const::CommonActionEventChangeType::SCREEN %>

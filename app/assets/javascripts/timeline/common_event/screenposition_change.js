@@ -17,10 +17,11 @@ TLEScreenPositionChange = (function(superClass) {
   TLEScreenPositionChange.Z = 'z';
 
   TLEScreenPositionChange.writeToPageValue = function(timelineConfig) {
-    var emt, errorMes, writeValue;
+    var emt, errorMes, value, writeValue;
     errorMes = "";
     emt = timelineConfig.emt;
     writeValue = TLEScreenPositionChange.__super__.constructor.writeToPageValue.call(this, timelineConfig);
+    value = {};
     value[this.X] = $('.screenposition_change_x:first', emt).val();
     value[this.Y] = $('.screenposition_change_y:first', emt).val();
     value[this.Z] = $('.screenposition_change_z:first', emt).val();

@@ -19,7 +19,7 @@ TLEItemChange = (function(superClass) {
   };
 
   TLEItemChange.writeDefaultToPageValue = function(item) {
-    var actionType, end, errorMes, itemWriteValue, scrollPoint, start, teNum, value, writeValue;
+    var actionType, end, errorMes, itemWriteValue, start, teNum, value, writeValue;
     errorMes = "";
     writeValue = {};
     writeValue[this.PageValueKey.ID] = item.id;
@@ -33,13 +33,12 @@ TLEItemChange = (function(superClass) {
     writeValue[this.PageValueKey.ACTIONTYPE] = actionType;
     start = this.getAllScrollLength();
     end = start + item.coodRegist.length;
-    scrollPoint = null;
-    if (start < end) {
-      scrollPoint = "" + start + this.PageValueKey.SCROLL_POINT_SEP + end;
-    } else {
-      scrollPoint = null;
+    if (start > end) {
+      start = null;
+      end = null;
     }
-    writeValue[this.PageValueKey.SCROLL_POINT] = scrollPoint;
+    writeValue[this.PageValueKey.SCROLL_POINT_START] = start;
+    writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
     writeValue[this.PageValueKey.IS_CLICK_PARALLEL] = false;
     itemWriteValue = item.objWriteTimeline();
     $.extend(writeValue, itemWriteValue);

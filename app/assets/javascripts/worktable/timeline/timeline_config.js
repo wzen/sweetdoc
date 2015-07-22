@@ -7,7 +7,8 @@ TimelineConfig = (function() {
   if (typeof gon !== "undefined" && gon !== null) {
     TimelineConfig.ITEM_ROOT_ID = 'timeline_event_@te_num';
     TimelineConfig.ACTION_CLASS = 'timeline_event_action_@itemid';
-    TimelineConfig.VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS;
+    TimelineConfig.ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS;
+    TimelineConfig.COMMON_VALUES_CLASS = constant.ElementAttribute.COMMON_VALUES_CLASS;
   }
 
   function TimelineConfig(emt, teNum) {
@@ -100,13 +101,8 @@ TimelineConfig = (function() {
       this.actionType = parseInt(parent.find('input.action_type:first').val());
       this.methodName = parent.find('input.method_name:first').val();
     }
-    valueClassName = null;
-    if (this.isCommonEvent) {
-      valueClassName = "" + Constant.TIMELINE_COMMON_ACTION_PREFIX + this.commonEventId + "_" + this.methodName;
-    } else {
-      valueClassName = this.constructor.VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.methodName);
-    }
-    handlerClassName = valueClassName;
+    handlerClassName = this.methodClassName();
+    valueClassName = this.methodClassName();
     $(".handler_div .configBox", this.emt).children("div").css('display', 'none');
     $(".handler_div ." + handlerClassName, this.emt).css('display', '');
     $(".config.handler_div", this.emt).css('display', '');
@@ -156,6 +152,14 @@ TimelineConfig = (function() {
       }
     }
     return false;
+  };
+
+  TimelineConfig.prototype.methodClassName = function() {
+    if (this.isCommonEvent) {
+      return this.constructor.COMMON_VALUES_CLASS.replace('@commoneventid', this.commonEventId).replace('@methodname', this.methodName);
+    } else {
+      return this.constructor.ITEM_VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.methodName);
+    }
   };
 
   TimelineConfig.prototype.showError = function(message) {

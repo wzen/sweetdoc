@@ -6,8 +6,6 @@ class Const
   OPERATION_STORE_MAX = 30
   # @property TIMELINE_COMMON_PREFIX 共通タイムラインイベント クラス名プレフィックス
   TIMELINE_COMMON_PREFIX = 'c_'
-  # @property TIMELINE_COMMON_ACTION_PREFIX 共通タイムラインイベント アクション名プレフィックス
-  TIMELINE_COMMON_ACTION_PREFIX = 'ca_'
 
   # 操作モード
   class Mode
@@ -105,7 +103,8 @@ class Const
   end
 
   class ElementAttribute
-    TE_VALUES_CLASS = 'timeline_event_value_@itemid_@methodname'
+    ITEM_VALUES_CLASS = 'timeline_event_value_@itemid_@methodname'
+    COMMON_VALUES_CLASS = "common_event_value_@commoneventid_@methodname"
   end
 
   class PageValueKey

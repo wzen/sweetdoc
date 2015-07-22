@@ -3,10 +3,12 @@ class TimelineConfig
   if gon?
     # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
     @ITEM_ROOT_ID = 'timeline_event_@te_num'
-    # @property [String] TE_ACTION_CLASS タイムラインイベント アクション一覧
+    # @property [String] ACTION_CLASS タイムラインイベントクラス名 アクション一覧
     @ACTION_CLASS = 'timeline_event_action_@itemid'
-    # @property [String] TE_VALUES_DIV タイムラインイベント アクションUI
-    @VALUES_CLASS = constant.ElementAttribute.TE_VALUES_CLASS
+    # @property [String] ITEM_VALUES_CLASS アイテムタイムラインイベントクラス名 アクションUI
+    @ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS
+    # @property [String] COMMON_VALUES_CLASS 共通タイムラインイベントクラス名 アクションUI
+    @COMMON_VALUES_CLASS = constant.ElementAttribute.COMMON_VALUES_CLASS
 
   # コンストラクタ
   constructor: (@emt, @teNum) ->
@@ -97,13 +99,8 @@ class TimelineConfig
       @actionType = parseInt(parent.find('input.action_type:first').val())
       @methodName = parent.find('input.method_name:first').val()
 
-    valueClassName = null
-    if @isCommonEvent
-      valueClassName = "#{Constant.TIMELINE_COMMON_ACTION_PREFIX}#{@commonEventId}_#{@methodName}"
-    else
-      valueClassName = @constructor.VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
-
-    handlerClassName = valueClassName
+    handlerClassName = @methodClassName()
+    valueClassName = @methodClassName()
 
     $(".handler_div .configBox", @emt).children("div").css('display', 'none')
     $(".handler_div .#{handlerClassName}", @emt).css('display', '')
@@ -153,6 +150,14 @@ class TimelineConfig
       if tle?
         return tle.readFromPageValue(@)
     return false
+
+  # アクションメソッド & メソッド毎の値のクラス名を取得
+  methodClassName: ->
+    if @isCommonEvent
+      return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @commonEventId).replace('@methodname', @methodName)
+    else
+      return @constructor.ITEM_VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
+
 
   # エラー表示
   showError: (message)->

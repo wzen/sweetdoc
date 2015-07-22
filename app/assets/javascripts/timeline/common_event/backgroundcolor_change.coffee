@@ -16,6 +16,7 @@ class TLEBackgroundColorChange extends TimelineEvent
     errorMes = ""
     writeValue = super(timelineConfig)
     emt = timelineConfig.emt
+    value = {}
     value[@BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor')
     value[@CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor')
 

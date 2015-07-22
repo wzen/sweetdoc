@@ -13,8 +13,6 @@ if gon?
     @TIMELINE_ITEM_SEPERATOR = "&"
     # @property [String] TIMELINE_COMMON_PREFIX 共通タイムラインイベントプレフィックス
     @TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX
-    # @property TIMELINE_COMMON_ACTION_PREFIX 共通タイムラインイベント アクション名プレフィックス
-    @TIMELINE_COMMON_ACTION_PREFIX = constant.TIMELINE_COMMON_ACTION_PREFIX
 
     # 操作モード
     class @Mode

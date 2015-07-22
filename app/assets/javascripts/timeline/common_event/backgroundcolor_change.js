@@ -29,10 +29,11 @@ TLEBackgroundColorChange = (function(superClass) {
   };
 
   TLEBackgroundColorChange.writeToPageValue = function(timelineConfig) {
-    var emt, errorMes, writeValue;
+    var emt, errorMes, value, writeValue;
     errorMes = "";
     writeValue = TLEBackgroundColorChange.__super__.constructor.writeToPageValue.call(this, timelineConfig);
     emt = timelineConfig.emt;
+    value = {};
     value[this.BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor');
     value[this.CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor');
     if (value[this.BASE_COLOR] === value[this.CHANGE_COLOR]) {

@@ -10,7 +10,7 @@ class ItemJsController < ApplicationController
   end
 
   def timeline_config(te_action)
-    @class_name = Const::ElementAttribute::TE_VALUES_CLASS
+    @class_name = Const::ElementAttribute::ITEM_VALUES_CLASS
                       .sub(/@itemid/, te_action[:item_id].to_s)
                       .sub(/@methodname/, te_action[:method_name])
     @args = te_action.options['args']

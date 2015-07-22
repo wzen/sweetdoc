@@ -21,12 +21,11 @@ class TLEItemChange extends TimelineEvent
     writeValue[@PageValueKey.ACTIONTYPE] = actionType
     start = @getAllScrollLength()
     end = start + item.coodRegist.length
-    scrollPoint = null
-    if start < end
-      scrollPoint = "#{start}#{@PageValueKey.SCROLL_POINT_SEP}#{end}"
-    else
-      scrollPoint = null
-    writeValue[@PageValueKey.SCROLL_POINT] = scrollPoint
+    if start > end
+      start = null
+      end = null
+    writeValue[@PageValueKey.SCROLL_POINT_START] = start
+    writeValue[@PageValueKey.SCROLL_POINT_END] = end
     writeValue[@PageValueKey.IS_CLICK_PARALLEL] = false
 
     itemWriteValue = item.objWriteTimeline()

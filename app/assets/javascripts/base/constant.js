@@ -16,8 +16,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX;
 
-    Constant.TIMELINE_COMMON_ACTION_PREFIX = constant.TIMELINE_COMMON_ACTION_PREFIX;
-
     Constant.Mode = (function() {
       function Mode() {}
 
