@@ -3,14 +3,14 @@ class TLEItemChange extends TimelineEvent
   @itemSize = 'item_size'
 
   @initConfigValue = (timelineConfig, item) ->
-    @initCommonConfigValue(timelineConfig)
+    super(timelineConfig)
 
   @writeDefaultToPageValue = (item) ->
     errorMes = ""
     writeValue = {}
     writeValue[@PageValueKey.ID] = item.id
     writeValue[@PageValueKey.ITEM_ID] = item.constructor.ITEM_ID
-    writeValue[@PageValueKey.ACTION_EVENT_TYPE_ID] = null
+    writeValue[@PageValueKey.COMMON_EVENT_ID] = null
     # fixme
     writeValue[@PageValueKey.CHAPTER] = 1
     # fixme
@@ -46,9 +46,10 @@ class TLEItemChange extends TimelineEvent
 
     return errorMes
 
-  @writeToPageValue = (timelineConfig, item) ->
+  @writeToPageValue = (timelineConfig) ->
     errorMes = ""
     writeValue = super(timelineConfig)
+    item = itemObject[timelineConfig.id]
     itemWriteValue = item.objWriteTimeline()
     # マージ
     $.extend(writeValue, itemWriteValue)

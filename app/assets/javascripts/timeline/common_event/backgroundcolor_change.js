@@ -16,7 +16,7 @@ TLEBackgroundColorChange = (function(superClass) {
 
   TLEBackgroundColorChange.initConfigValue = function(timelineConfig) {
     var bgColor;
-    this.initCommonConfigValue(timelineConfig);
+    TLEBackgroundColorChange.__super__.constructor.initConfigValue.call(this, timelineConfig);
     bgColor = $('#main-wrapper.stage_container').css('backgroundColor');
     $(".baseColor", $("values_div", timelineConfig.emt)).css('backgroundColor', bgColor);
     return $(".colorPicker", timelineConfig.emt).each(function() {

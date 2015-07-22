@@ -136,11 +136,10 @@ setupTimeLineCss = ->
     itemCssStyle += $(this).html()
   )
   # 暫定処理
-  itemObjectList.forEach((item) ->
-    if ButtonItem? && item instanceof ButtonItem
+  for k, v of itemObject
+    if ButtonItem? && v instanceof ButtonItem
       # cssアニメーション
-      itemCssStyle += ButtonItem.dentButton(item)
-  )
+      itemCssStyle += ButtonItem.dentButton(v)
 
   if itemCssStyle.length > 0
     setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)

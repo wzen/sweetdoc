@@ -83,10 +83,9 @@ changeMode = (mode) ->
 
 # 非表示をクリア
 clearAllItemStyle = ->
-  itemObjectList.forEach((obj) ->
-    # オブジェクトのイベントをクリア
-    obj.clearAllEventStyle()
-  )
+  for k, v of itemObject
+    v.clearAllEventStyle()
+
   # 選択枠を取る
   clearSelectedBorder()
   # 全てのカラーピッカーを閉じる
@@ -120,13 +119,14 @@ initKeyEvent = ->
 
 # 画面のアイテムをクリア
 clearWorkTable = ->
-  itemObjectList.forEach((obj) ->
-    obj.getJQueryElement().remove()
-  )
+  for k, v of itemObject
+    v.getJQueryElement().remove()
 
 ### デバッグ ###
 runDebug = ->
-  item = itemObjectList[0]
+  for k, v of itemObject
+    item = v
+    return false
   if item.reDrawByObjPageValue()
     setupEvents(item)
 

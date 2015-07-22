@@ -103,9 +103,11 @@ changeMode = function(mode) {
 };
 
 clearAllItemStyle = function() {
-  itemObjectList.forEach(function(obj) {
-    return obj.clearAllEventStyle();
-  });
+  var k, v;
+  for (k in itemObject) {
+    v = itemObject[k];
+    v.clearAllEventStyle();
+  }
   clearSelectedBorder();
   return $('.colorPicker').ColorPickerHide();
 };
@@ -140,17 +142,25 @@ initKeyEvent = function() {
 };
 
 clearWorkTable = function() {
-  return itemObjectList.forEach(function(obj) {
-    return obj.getJQueryElement().remove();
-  });
+  var k, results, v;
+  results = [];
+  for (k in itemObject) {
+    v = itemObject[k];
+    results.push(v.getJQueryElement().remove());
+  }
+  return results;
 };
 
 
 /* デバッグ */
 
 runDebug = function() {
-  var item;
-  item = itemObjectList[0];
+  var item, k, v;
+  for (k in itemObject) {
+    v = itemObject[k];
+    item = v;
+    return false;
+  }
   if (item.reDrawByObjPageValue()) {
     return setupEvents(item);
   }

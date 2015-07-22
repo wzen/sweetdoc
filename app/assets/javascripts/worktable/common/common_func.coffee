@@ -1,13 +1,3 @@
-# 要素IDでオブジェクトリストから対象のオブジェクトを取得
-getObjFromObjectListByElementId = (emtId) ->
-  obj = null
-  itemObjectList.forEach((o) ->
-    if emtId == o.id
-      obj = o
-  )
-  return obj
-
-
 # 警告表示
 # @param [String] message メッセージ内容
 showWarn = (message) ->

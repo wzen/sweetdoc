@@ -74,7 +74,7 @@ setupContextMenu = (element, contextSelector, menu) ->
   # オプションメニューを初期化
   initOptionMenu = (event) ->
     emt = $(event.target)
-    obj = getObjFromObjectListByElementId(emt.attr('id'))
+    obj = itemObject[emt.attr('id')]
     if obj? && obj.setupOptionMenu?
       # 初期化関数を呼び出す
       obj.setupOptionMenu()

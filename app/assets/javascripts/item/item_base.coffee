@@ -111,13 +111,12 @@ class ItemBase extends Extend
       # 名前を付与
       num = 1
       self = @
-      itemObjectList.forEach((obj) ->
-        if self.constructor.IDENTITY == obj.constructor.IDENTITY
+      for k, v of itemObject
+        if self.constructor.IDENTITY == v.constructor.IDENTITY
           num += 1
-      )
       @name = @constructor.IDENTITY + " #{num}"
       # アイテムリストに保存
-      itemObjectList.push(@)
+      itemObject[@id] = @
 
     # ページに保存
     @setAllItemPropToPageValue()

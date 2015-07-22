@@ -86,20 +86,21 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.reDraw = function() {};
 
   ItemBase.prototype.saveObj = function(action) {
-    var history, num, self;
+    var history, k, num, self, v;
     history = this.getHistoryObj(action);
     this.pushOhi(operationHistoryIndex - 1);
     pushOperationHistory(history);
     if (action === Constant.ItemActionType.MAKE) {
       num = 1;
       self = this;
-      itemObjectList.forEach(function(obj) {
-        if (self.constructor.IDENTITY === obj.constructor.IDENTITY) {
-          return num += 1;
+      for (k in itemObject) {
+        v = itemObject[k];
+        if (self.constructor.IDENTITY === v.constructor.IDENTITY) {
+          num += 1;
         }
-      });
+      }
       this.name = this.constructor.IDENTITY + (" " + num);
-      itemObjectList.push(this);
+      itemObject[this.id] = this;
     }
     this.setAllItemPropToPageValue();
     console.log('save obj:' + JSON.stringify(this.itemSize));

@@ -2,16 +2,16 @@
 var loadFromServer, saveToServer;
 
 saveToServer = function() {
-  var jsonList;
+  var j, jsonList, k, v;
   jsonList = [];
-  itemObjectList.forEach(function(obj) {
-    var j;
+  for (k in itemObject) {
+    v = itemObject[k];
     j = {
-      id: makeClone(obj.id),
-      obj: obj.getMinimumObject()
+      id: makeClone(v.id),
+      obj: v.getMinimumObject()
     };
-    return jsonList.push(j);
-  });
+    jsonList.push(j);
+  }
   return $.ajax({
     url: "/item_state/save_itemstate",
     type: "POST",

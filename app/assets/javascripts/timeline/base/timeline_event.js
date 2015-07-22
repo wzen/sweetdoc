@@ -48,10 +48,10 @@ TimelineEvent = (function() {
     })();
   }
 
-  TimelineEvent.initCommonConfigValue = function(timelineConfig) {
+  TimelineEvent.initConfigValue = function(timelineConfig) {
     var end, endDiv, handlerDiv, s, start, startDiv;
     if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
-      handlerDiv = $('.handler_div', timelineConfig.emt);
+      handlerDiv = $(".handler_div ." + (timelineConfig.methodClassName()), timelineConfig.emt);
       if (handlerDiv != null) {
         startDiv = handlerDiv.find('.scroll_point_start:first');
         start = startDiv.val();
@@ -88,7 +88,7 @@ TimelineEvent = (function() {
     if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
       start = "";
       end = "";
-      handlerDiv = $('.handler_div', timelineConfig.emt);
+      handlerDiv = $(".handler_div ." + (timelineConfig.methodClassName()), timelineConfig.emt);
       if (handlerDiv != null) {
         start = handlerDiv.find('.scroll_point_start:first').val();
         end = handlerDiv.find('.scroll_point_end:first').val();
@@ -97,7 +97,7 @@ TimelineEvent = (function() {
       writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
     } else if (timelineConfig.actionType === Constant.ActionEventHandleType.CLICK) {
       isClickParallel = false;
-      clickParallel = $('.handler_div .click_parallel', timelineConfig.emt);
+      clickParallel = $(".handler_div ." + (timelineConfig.methodClassName()) + " .click_parallel", timelineConfig.emt);
       if (clickParallel != null) {
         isClickParallel = clickParallel.is(":checked");
       }
@@ -117,7 +117,7 @@ TimelineEvent = (function() {
       timelineConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
       timelineConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
       if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
-        handlerDiv = $('.handler_div', timelineConfig.emt);
+        handlerDiv = $(".handler_div ." + (timelineConfig.methodClassName()), timelineConfig.emt);
         start = writeValue[this.PageValueKey.SCROLL_POINT_START];
         end = writeValue[this.PageValueKey.SCROLL_POINT_END];
         if ((handlerDiv != null) && (start != null) && (end != null)) {
@@ -125,7 +125,7 @@ TimelineEvent = (function() {
           handlerDiv.find('.scroll_point_end:first').val(end);
         }
       } else if (timelineConfig.actionType === Constant.ActionEventHandleType.CLICK) {
-        clickParallel = $('.handler_div .click_parallel', timelineConfig.emt);
+        clickParallel = $(".handler_div ." + (timelineConfig.methodClassName()) + " .click_parallel", timelineConfig.emt);
         isClickParallel = writeValue[this.PageValueKey.IS_CLICK_PARALLEL];
         if ((clickParallel != null) && isClickParallel) {
           clickParallel.prop("checked", true);
@@ -138,17 +138,16 @@ TimelineEvent = (function() {
   };
 
   _scrollLength = function(timelineConfig) {
-    var end, scrollPointDiv, start, writeValue;
-    scrollPointDiv = $('.scroll_point_div', timelineConfig.emt);
+    var end, start, writeValue;
     writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
       start = writeValue[this.PageValueKey.SCROLL_POINT_START];
       end = writeValue[this.PageValueKey.SCROLL_POINT_END];
-      if ((scrollPointDiv != null) && (start != null) && (end != null)) {
+      if ((start != null) && isNumeric(start) && (end != null) && isNumeric(end)) {
         return parseInt(end) - parseInt(start);
       }
     }
-    return null;
+    return 0;
   };
 
   TimelineEvent.getAllScrollLength = function() {

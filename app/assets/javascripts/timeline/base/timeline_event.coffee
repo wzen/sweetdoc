@@ -39,9 +39,9 @@ class TimelineEvent
       # @property [String] TE_SCROLL_TIME_SEP スクロール実行時間セパレータ
       @SCROLL_POINT_SEP = '-'
 
-  @initCommonConfigValue = (timelineConfig) ->
+  @initConfigValue = (timelineConfig) ->
     if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-      handlerDiv = $('.handler_div', timelineConfig.emt)
+      handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
       if handlerDiv?
         startDiv = handlerDiv.find('.scroll_point_start:first')
         start = startDiv.val()
@@ -75,7 +75,7 @@ class TimelineEvent
     if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
       start = ""
       end = ""
-      handlerDiv = $('.handler_div', timelineConfig.emt)
+      handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
       if handlerDiv?
         start = handlerDiv.find('.scroll_point_start:first').val()
         end = handlerDiv.find('.scroll_point_end:first').val()
@@ -84,7 +84,7 @@ class TimelineEvent
 
     else if timelineConfig.actionType == Constant.ActionEventHandleType.CLICK
       isClickParallel = false
-      clickParallel = $('.handler_div .click_parallel', timelineConfig.emt)
+      clickParallel = $(".handler_div .#{timelineConfig.methodClassName()} .click_parallel", timelineConfig.emt)
       if clickParallel?
         isClickParallel = clickParallel.is(":checked")
       writeValue[@PageValueKey.IS_CLICK_PARALLEL] = isClickParallel
@@ -106,8 +106,7 @@ class TimelineEvent
       timelineConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
 
       if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-
-        handlerDiv = $('.handler_div', timelineConfig.emt)
+        handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
         start = writeValue[@PageValueKey.SCROLL_POINT_START]
         end = writeValue[@PageValueKey.SCROLL_POINT_END]
         if handlerDiv? && start? && end?
@@ -115,7 +114,7 @@ class TimelineEvent
           handlerDiv.find('.scroll_point_end:first').val(end)
 
       else if timelineConfig.actionType == Constant.ActionEventHandleType.CLICK
-        clickParallel = $('.handler_div .click_parallel', timelineConfig.emt)
+        clickParallel = $(".handler_div .#{timelineConfig.methodClassName()} .click_parallel", timelineConfig.emt)
         isClickParallel = writeValue[@PageValueKey.IS_CLICK_PARALLEL]
         if clickParallel? && isClickParallel
           clickParallel.prop("checked", true)
@@ -125,15 +124,14 @@ class TimelineEvent
       return false
 
   _scrollLength = (timelineConfig) ->
-    scrollPointDiv = $('.scroll_point_div', timelineConfig.emt)
     writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     if writeValue?
       start = writeValue[@PageValueKey.SCROLL_POINT_START]
       end = writeValue[@PageValueKey.SCROLL_POINT_END]
-      if scrollPointDiv? && start? && end?
+      if start? && isNumeric(start) && end? && isNumeric(end)
        return parseInt(end) - parseInt(start)
 
-    return null
+    return 0
 
   # スクロールの合計の長さを取得
   @getAllScrollLength = ->

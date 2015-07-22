@@ -15,7 +15,7 @@ TLEItemChange = (function(superClass) {
   TLEItemChange.itemSize = 'item_size';
 
   TLEItemChange.initConfigValue = function(timelineConfig, item) {
-    return this.initCommonConfigValue(timelineConfig);
+    return TLEItemChange.__super__.constructor.initConfigValue.call(this, timelineConfig);
   };
 
   TLEItemChange.writeDefaultToPageValue = function(item) {
@@ -24,7 +24,7 @@ TLEItemChange = (function(superClass) {
     writeValue = {};
     writeValue[this.PageValueKey.ID] = item.id;
     writeValue[this.PageValueKey.ITEM_ID] = item.constructor.ITEM_ID;
-    writeValue[this.PageValueKey.ACTION_EVENT_TYPE_ID] = null;
+    writeValue[this.PageValueKey.COMMON_EVENT_ID] = null;
     writeValue[this.PageValueKey.CHAPTER] = 1;
     writeValue[this.PageValueKey.CHAPTER] = 1;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = false;
@@ -58,10 +58,11 @@ TLEItemChange = (function(superClass) {
     return errorMes;
   };
 
-  TLEItemChange.writeToPageValue = function(timelineConfig, item) {
-    var errorMes, itemWriteValue, value, writeValue;
+  TLEItemChange.writeToPageValue = function(timelineConfig) {
+    var errorMes, item, itemWriteValue, value, writeValue;
     errorMes = "";
     writeValue = TLEItemChange.__super__.constructor.writeToPageValue.call(this, timelineConfig);
+    item = itemObject[timelineConfig.id];
     itemWriteValue = item.objWriteTimeline();
     $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {

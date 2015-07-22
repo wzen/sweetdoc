@@ -1,13 +1,12 @@
 # サーバにアイテムの情報を保存
 saveToServer = ->
   jsonList = []
-  itemObjectList.forEach((obj) ->
+  for k, v of itemObject
     j = {
-      id: makeClone(obj.id)
-      obj: obj.getMinimumObject()
+      id: makeClone(v.id)
+      obj: v.getMinimumObject()
     }
     jsonList.push(j)
-  )
 
   $.ajax(
     {

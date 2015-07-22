@@ -118,16 +118,17 @@ setupTimelineEventHandler = function(te_num) {
 };
 
 setupTimeLineCss = function() {
-  var itemCssStyle;
+  var itemCssStyle, k, v;
   itemCssStyle = "";
   $('#css_code_info').find('.css-style').each(function() {
     return itemCssStyle += $(this).html();
   });
-  itemObjectList.forEach(function(item) {
-    if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && item instanceof ButtonItem) {
-      return itemCssStyle += ButtonItem.dentButton(item);
+  for (k in itemObject) {
+    v = itemObject[k];
+    if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && v instanceof ButtonItem) {
+      itemCssStyle += ButtonItem.dentButton(v);
     }
-  });
+  }
   if (itemCssStyle.length > 0) {
     return setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle);
   }

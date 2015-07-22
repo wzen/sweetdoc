@@ -3,7 +3,7 @@ class TLEBackgroundColorChange extends TimelineEvent
   @CHANGE_COLOR = 'c_color'
 
   @initConfigValue = (timelineConfig) ->
-    @initCommonConfigValue(timelineConfig)
+    super(timelineConfig)
     bgColor = $('#main-wrapper.stage_container').css('backgroundColor')
     $(".baseColor", $("values_div", timelineConfig.emt)).css('backgroundColor', bgColor)
     $(".colorPicker", timelineConfig.emt).each( ->
