@@ -4,6 +4,7 @@ var Chapter;
 Chapter = (function() {
   function Chapter(eventListenerList) {
     this.eventListenerList = eventListenerList;
+    this.sinkFrontAllActor();
   }
 
   Chapter.prototype.scrollEvent = function(x, y) {
@@ -23,30 +24,32 @@ Chapter = (function() {
   };
 
   Chapter.prototype.willChapter = function() {
-    return this.focusToActor();
+    return this.focusToActorIfNeed();
   };
 
   Chapter.prototype.didChapter = function() {};
 
-  Chapter.prototype.focusToActor = function(type) {
+  Chapter.prototype.focusToActorIfNeed = function(type) {
     var height, item, left, top, width;
     if (type == null) {
       type = "center";
     }
-    item = this.eventListenerList[0];
-    width = item.itemSize.w;
-    height = item.itemSize.h;
-    if (item.scale != null) {
-      width *= item.scale.w;
-      height *= item.scale.h;
-    }
-    if (type === "center") {
-      left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5);
-      top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5);
-      return scrollContents.animate({
-        scrollTop: top,
-        scrollLeft: left
-      }, 500);
+    if (this.eventListenerList.length === 1) {
+      item = this.eventListenerList[0];
+      width = item.itemSize.w;
+      height = item.itemSize.h;
+      if (item.scale != null) {
+        width *= item.scale.w;
+        height *= item.scale.h;
+      }
+      if (type === "center") {
+        left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5);
+        top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5);
+        return scrollContents.animate({
+          scrollTop: top,
+          scrollLeft: left
+        }, 500);
+      }
     }
   };
 

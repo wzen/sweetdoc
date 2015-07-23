@@ -111,6 +111,7 @@ setupTimelineEventHandler = function(te_num) {
       em = $('.te_item_select', emt);
       em.off('change');
       return em.on('change', function(e) {
+        te.clearError();
         return te.selectItem(this);
       });
     };

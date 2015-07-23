@@ -126,6 +126,7 @@ setupTimelineEventHandler = (te_num) ->
     em = $('.te_item_select', emt)
     em.off('change')
     em.on('change', (e) ->
+      te.clearError()
       te.selectItem(@)
     )
 
