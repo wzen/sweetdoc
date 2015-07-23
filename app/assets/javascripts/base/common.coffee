@@ -176,7 +176,7 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
     if val == null || val == "null"
       return ''
 
-    kyName += Constant.PageValueKey.PAGE_VALUES_SEPERATOR + ky
+    kyName += "[#{ky}]"
     if jQuery.type(val) != "object" && jQuery.type(val) != "array"
       # サニタイズする
       val = sanitaizeEncode(val)
@@ -220,8 +220,6 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
       if isCache
         root.addClass(cacheClassName)
   )
-
-
 
 # ページが持つ値を削除
 # @param [String] key キー値

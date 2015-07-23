@@ -63,7 +63,7 @@ addItemInfo = (item_id, te_actions) ->
 # @param [String] contents 追加するHTMLの文字列
 addTimelineEventContents = (item_id, te_actions, te_values) ->
   if te_actions? && te_actions.length > 0
-    className = TimelineConfig.ACTION_CLASS.replace('@itemid', item_id)
+    className = TimelineConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id)
     handler_forms = $('#timeline-config .handler_div .configBox')
     action_forms = $('#timeline-config .action_forms')
     if action_forms.find(".#{className}").length == 0

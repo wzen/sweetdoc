@@ -42,9 +42,9 @@ TLEScreenPositionChange = (function(superClass) {
     emt = timelineConfig.emt;
     writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     value = writeValue[this.PageValueKey.VALUE];
-    $('.screenposition_change_x:first', emt).val(value[this.constructor.X]);
-    $('.screenposition_change_y:first', emt).val(value[this.constructor.Y]);
-    $('.screenposition_change_z:first', emt).val(value[this.constructor.Z]);
+    $('.screenposition_change_x:first', emt).val(value[this.X]);
+    $('.screenposition_change_y:first', emt).val(value[this.Y]);
+    $('.screenposition_change_z:first', emt).val(value[this.Z]);
     return true;
   };
 

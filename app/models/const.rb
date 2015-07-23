@@ -103,8 +103,10 @@ class Const
   end
 
   class ElementAttribute
+    COMMON_ACTION_CLASS = "#{Const::TIMELINE_COMMON_PREFIX}@commoneventid"
+    ITEM_ACTION_CLASS = 'timeline_event_action_@itemid'
+    COMMON_VALUES_CLASS = 'common_event_value_@commoneventid_@methodname'
     ITEM_VALUES_CLASS = 'timeline_event_value_@itemid_@methodname'
-    COMMON_VALUES_CLASS = "common_event_value_@commoneventid_@methodname"
   end
 
   class PageValueKey

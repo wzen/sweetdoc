@@ -204,7 +204,7 @@ _setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
     if (val === null || val === "null") {
       return '';
     }
-    kyName += Constant.PageValueKey.PAGE_VALUES_SEPERATOR + ky;
+    kyName += "[" + ky + "]";
     if (jQuery.type(val) !== "object" && jQuery.type(val) !== "array") {
       val = sanitaizeEncode(val);
       name = "";

@@ -1,16 +1,11 @@
 class Run
   def self.init_timeline_pagevalue(params)
-    h = {}
-    params.each do |key, value|
-      if key.to_s.start_with?("#{Const::PageValueKey::TE_PREFIX}#{Const::PageValueKey::PAGE_VALUES_SEPERATOR}")
-        h = set_timeline_pagevalue(h, key, value)
-      end
-    end
+    h = params.require(Const::PageValueKey::TE_PREFIX.to_sym)
     html = ''
     h.each do |k, v|
       html += make_element_str(k, v, Const::PageValueKey::TE_PREFIX)
     end
-    return html
+    return "<div class=#{Const::PageValueKey::TE_PREFIX}>#{html}</div>"
   end
 
   def self.set_timeline_pagevalue(hash, key, value)
@@ -31,8 +26,8 @@ class Run
   end
 
   def self.make_element_str(key, value, key_name)
-    key_name += Const::PageValueKey::PAGE_VALUES_SEPERATOR + key
-    if value.class != Hash && value.class != Array
+    key_name += "[#{key}]"
+    if value.class != ActiveSupport::HashWithIndifferentAccess && value.class != Hash && value.class != Array
       # サニタイズ
       val = ERB::Util.html_escape(value)
       name = "name = #{key_name}"

@@ -3,12 +3,14 @@ class TimelineConfig
   if gon?
     # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
     @ITEM_ROOT_ID = 'timeline_event_@te_num'
-    # @property [String] ACTION_CLASS タイムラインイベントクラス名 アクション一覧
-    @ACTION_CLASS = 'timeline_event_action_@itemid'
-    # @property [String] ITEM_VALUES_CLASS アイテムタイムラインイベントクラス名 アクションUI
-    @ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS
-    # @property [String] COMMON_VALUES_CLASS 共通タイムラインイベントクラス名 アクションUI
+    # @property [String] COMMON_ACTION_CLASS タイムライン共通アクションクラス名
+    @COMMON_ACTION_CLASS = constant.ElementAttribute.COMMON_ACTION_CLASS
+    # @property [String] ITEM_ACTION_CLASS タイムラインアイテムアクションクラス名
+    @ITEM_ACTION_CLASS = constant.ElementAttribute.ITEM_ACTION_CLASS
+    # @property [String] COMMON_VALUES_CLASS 共通タイムラインイベントクラス名
     @COMMON_VALUES_CLASS = constant.ElementAttribute.COMMON_VALUES_CLASS
+    # @property [String] ITEM_VALUES_CLASS アイテムタイムラインイベントクラス名
+    @ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS
 
   # コンストラクタ
   constructor: (@emt, @teNum) ->
@@ -31,7 +33,7 @@ class TimelineConfig
     if @isCommonEvent
       actionFormName = Constant.TIMELINE_COMMON_PREFIX + @commonEventId
     else
-      actionFormName = TimelineConfig.ACTION_CLASS.replace('@itemid', @itemId)
+      actionFormName = TimelineConfig.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
 
     $(".#{actionFormName} .radio", @emt).each((e) ->
       actionType = $(@).find('input.action_type').val()
@@ -77,9 +79,9 @@ class TimelineConfig
     # 表示
     displayClassName = ''
     if @isCommonEvent
-      displayClassName = value
+      displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @commonEventId)
     else
-      displayClassName = @constructor.ACTION_CLASS.replace('@itemid', @itemId)
+      displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
     $(".#{displayClassName}", @emt).css('display', '')
     $(".action_div", @emt).css('display', '')
 

@@ -79,6 +79,7 @@ initTimeline = function() {
   $.each(objList, function(idx, obj) {
     var actorList, cEvent, chapter, item, miniObj, sEvent;
     actorList = [];
+    item = null;
     miniObj = obj[TLEItemChange.minObj];
     if (miniObj.itemId === Constant.ItemId.BUTTON) {
       item = new ButtonItem();
@@ -96,6 +97,7 @@ initTimeline = function() {
     }
     item.setEvents(sEvent, cEvent);
     actorList.push(item);
+    chapter = null;
     if (miniObj.itemId === Constant.ItemId.BUTTON) {
       chapter = new ClickChapter(actorList);
     } else if (miniObj.itemId === Constant.ItemId.ARROW) {

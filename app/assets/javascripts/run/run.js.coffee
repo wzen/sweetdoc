@@ -59,7 +59,6 @@ initResize = (wrap, scrollWrapper) ->
     , 200)
   )
 
-
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得
@@ -75,7 +74,7 @@ initTimeline = ->
   chapterList = []
   $.each(objList, (idx, obj)->
     actorList = []
-    #item = null
+    item = null
     miniObj = obj[TLEItemChange.minObj]
     if miniObj.itemId == Constant.ItemId.BUTTON
       item = new ButtonItem()
@@ -91,6 +90,7 @@ initTimeline = ->
       cEvent = obj[TimelineEvent.PageValueKey.METHODNAME]
     item.setEvents(sEvent, cEvent)
     actorList.push(item)
+    chapter = null
     # とりあえずここでChapterを分ける
     if miniObj.itemId == Constant.ItemId.BUTTON
       chapter = new ClickChapter(actorList)

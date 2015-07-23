@@ -75,7 +75,7 @@ addItemInfo = function(item_id, te_actions) {
 addTimelineEventContents = function(item_id, te_actions, te_values) {
   var actionParent, action_forms, className, handler_forms;
   if ((te_actions != null) && te_actions.length > 0) {
-    className = TimelineConfig.ACTION_CLASS.replace('@itemid', item_id);
+    className = TimelineConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id);
     handler_forms = $('#timeline-config .handler_div .configBox');
     action_forms = $('#timeline-config .action_forms');
     if (action_forms.find("." + className).length === 0) {

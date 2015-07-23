@@ -6,9 +6,10 @@ TimelineConfig = (function() {
 
   if (typeof gon !== "undefined" && gon !== null) {
     TimelineConfig.ITEM_ROOT_ID = 'timeline_event_@te_num';
-    TimelineConfig.ACTION_CLASS = 'timeline_event_action_@itemid';
-    TimelineConfig.ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS;
+    TimelineConfig.COMMON_ACTION_CLASS = constant.ElementAttribute.COMMON_ACTION_CLASS;
+    TimelineConfig.ITEM_ACTION_CLASS = constant.ElementAttribute.ITEM_ACTION_CLASS;
     TimelineConfig.COMMON_VALUES_CLASS = constant.ElementAttribute.COMMON_VALUES_CLASS;
+    TimelineConfig.ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS;
   }
 
   function TimelineConfig(emt, teNum) {
@@ -33,7 +34,7 @@ TimelineConfig = (function() {
     if (this.isCommonEvent) {
       actionFormName = Constant.TIMELINE_COMMON_PREFIX + this.commonEventId;
     } else {
-      actionFormName = TimelineConfig.ACTION_CLASS.replace('@itemid', this.itemId);
+      actionFormName = TimelineConfig.ITEM_ACTION_CLASS.replace('@itemid', this.itemId);
     }
     return $("." + actionFormName + " .radio", this.emt).each(function(e) {
       var actionType, methodName;
@@ -76,9 +77,9 @@ TimelineConfig = (function() {
     $(".action_div .forms", this.emt).children("div").css('display', 'none');
     displayClassName = '';
     if (this.isCommonEvent) {
-      displayClassName = value;
+      displayClassName = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this.commonEventId);
     } else {
-      displayClassName = this.constructor.ACTION_CLASS.replace('@itemid', this.itemId);
+      displayClassName = this.constructor.ITEM_ACTION_CLASS.replace('@itemid', this.itemId);
     }
     $("." + displayClassName, this.emt).css('display', '');
     $(".action_div", this.emt).css('display', '');
