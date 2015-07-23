@@ -64,15 +64,14 @@ initTimeline = ->
   # アクションのイベントを取得
   #objList = JSON.parse(lstorage.getItem('timelineObjList'))
   timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
-  objList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT))
+  timelineList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT))
   for k, v of timelinePageValues
     if k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) == 0
       index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1
-      objList[index] = v
-  #objList = JSON.parse(lstorage.getItem('timelineObjList'))
+      timelineList[index] = v
 
   chapterList = []
-  $.each(objList, (idx, obj)->
+  $.each(timelineList, (idx, obj)->
     actorList = []
     item = null
     miniObj = obj[TLEItemChange.minObj]
@@ -80,21 +79,13 @@ initTimeline = ->
       item = new ButtonItem()
     else if miniObj.itemId == Constant.ItemId.ARROW
       item = new ArrowItem()
-    item.initListener(miniObj, miniObj.itemSize)
-    item.reDraw(false)
-    sEvent = null
-    cEvent = null
-    if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.SCROLL
-      sEvent = obj[TimelineEvent.PageValueKey.METHODNAME]
-    else
-      cEvent = obj[TimelineEvent.PageValueKey.METHODNAME]
-    item.setEvents(sEvent, cEvent)
+    item.initListener(obj)
     actorList.push(item)
     chapter = null
     # とりあえずここでChapterを分ける
-    if miniObj.itemId == Constant.ItemId.BUTTON
+    if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
       chapter = new ClickChapter(actorList)
-    else if miniObj.itemId == Constant.ItemId.ARROW
+    else
       chapter = new ScrollChapter(actorList)
     chapterList.push(chapter)
 

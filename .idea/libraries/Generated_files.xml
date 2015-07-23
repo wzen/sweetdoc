@@ -97,7 +97,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/general_event.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/item_event/item_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_ui.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/item_event/value_parts/slider.js" />

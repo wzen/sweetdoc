@@ -2,6 +2,7 @@
 # @abstract
 class ItemBase extends Extend
   @include EventListener
+  @include ItemEventListener
 
   # @abstract
   # @property [String] IDENTITY アイテム識別名

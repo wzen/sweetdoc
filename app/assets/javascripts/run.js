@@ -10,7 +10,7 @@
 //= require base/common
 //= require base/extend
 //= require base/event_listener
-//= require base/general_event
+//= require common_event/common_event
 //= require item/code_template
 //= require item/item_base
 //= require item/arrow

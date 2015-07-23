@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "common_event.js",
+  "sourceRoot": "",
+  "sources": [
+    "common_event.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA,IAAA,yCAAA;EAAA;6BAAA;;AAAA;AACE,iCAAA,CAAA;;;;GAAA;;AAAA,EAAA,WAAC,CAAA,OAAD,CAAS,aAAT,CAAA,CAAA;;AAAA,EACA,WAAC,CAAA,OAAD,CAAS,mBAAT,CADA,CAAA;;qBAAA;;GADwB,OAA1B,CAAA;;AAAA;AAKA,qCAAA,CAAA;;;;GAAA;;yBAAA;;GAA8B,YAL9B,CAAA;;AAAA;AAQA,iCAAA,CAAA;;;;GAAA;;qBAAA;;GAA0B,YAR1B,CAAA"
+}

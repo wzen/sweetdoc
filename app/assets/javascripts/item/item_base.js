@@ -8,6 +8,8 @@ ItemBase = (function(superClass) {
 
   ItemBase.include(EventListener);
 
+  ItemBase.include(ItemEventListener);
+
   ItemBase.IDENTITY = "";
 
   ItemBase.ITEM_ID = "";

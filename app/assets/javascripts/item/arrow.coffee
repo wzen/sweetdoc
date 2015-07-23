@@ -5,7 +5,6 @@ class ArrowItem extends CanvasItemBase
   @IDENTITY = "Arrow"
   # @property [String] ITEM_ID アイテム種別
   @ITEM_ID = Constant.ItemId.ARROW
-
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 37
   # @property [Int] HEADER_WIDTH 矢印の頭の幅

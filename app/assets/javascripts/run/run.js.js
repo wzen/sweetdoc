@@ -65,19 +65,19 @@ initResize = function(wrap, scrollWrapper) {
 };
 
 initTimeline = function() {
-  var chapterList, index, k, objList, timelinePageValues, v;
+  var chapterList, index, k, timelineList, timelinePageValues, v;
   timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
-  objList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT));
+  timelineList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT));
   for (k in timelinePageValues) {
     v = timelinePageValues[k];
     if (k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) === 0) {
       index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1;
-      objList[index] = v;
+      timelineList[index] = v;
     }
   }
   chapterList = [];
-  $.each(objList, function(idx, obj) {
-    var actorList, cEvent, chapter, item, miniObj, sEvent;
+  $.each(timelineList, function(idx, obj) {
+    var actorList, chapter, item, miniObj;
     actorList = [];
     item = null;
     miniObj = obj[TLEItemChange.minObj];
@@ -86,21 +86,12 @@ initTimeline = function() {
     } else if (miniObj.itemId === Constant.ItemId.ARROW) {
       item = new ArrowItem();
     }
-    item.initListener(miniObj, miniObj.itemSize);
-    item.reDraw(false);
-    sEvent = null;
-    cEvent = null;
-    if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.SCROLL) {
-      sEvent = obj[TimelineEvent.PageValueKey.METHODNAME];
-    } else {
-      cEvent = obj[TimelineEvent.PageValueKey.METHODNAME];
-    }
-    item.setEvents(sEvent, cEvent);
+    item.initListener(obj);
     actorList.push(item);
     chapter = null;
-    if (miniObj.itemId === Constant.ItemId.BUTTON) {
+    if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
       chapter = new ClickChapter(actorList);
-    } else if (miniObj.itemId === Constant.ItemId.ARROW) {
+    } else {
       chapter = new ScrollChapter(actorList);
     }
     chapterList.push(chapter);
