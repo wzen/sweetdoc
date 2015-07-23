@@ -12,11 +12,8 @@ class TimelineConfig
 
   # コンストラクタ
   constructor: (@emt, @teNum) ->
-    #@emt = $(e).closest('.event')
-    if @readFromPageValue()
-      @setupConfigValues()
-      @selectItem()
-      @clickMethod()
+    if @teNum?
+      _setupFromPageValues.call(@)
 
   # インスタンス値から画面の状態を設定
   setupConfigValues: ->
@@ -120,7 +117,7 @@ class TimelineConfig
 
   # イベントの入力値を初期化する
   resetAction: ->
-    $('.values .args', @emt).html('')
+    _setupFromPageValues.call(@)
 
   # 入力値を適用する
   applyAction: ->
@@ -218,3 +215,9 @@ class TimelineConfig
         $(".config.te_div", e).css('display', 'none')
       )
     )
+
+  _setupFromPageValues = ->
+    if @readFromPageValue()
+      @setupConfigValues()
+      @selectItem()
+      @clickMethod()

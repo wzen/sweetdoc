@@ -2,7 +2,7 @@
 var TimelineConfig;
 
 TimelineConfig = (function() {
-  var _setApplyClickEvent, _setMethodActionEvent, _timelineEvent;
+  var _setApplyClickEvent, _setMethodActionEvent, _setupFromPageValues, _timelineEvent;
 
   if (typeof gon !== "undefined" && gon !== null) {
     TimelineConfig.ITEM_ROOT_ID = 'timeline_event_@te_num';
@@ -14,10 +14,8 @@ TimelineConfig = (function() {
   function TimelineConfig(emt, teNum) {
     this.emt = emt;
     this.teNum = teNum;
-    if (this.readFromPageValue()) {
-      this.setupConfigValues();
-      this.selectItem();
-      this.clickMethod();
+    if (this.teNum != null) {
+      _setupFromPageValues.call(this);
     }
   }
 
@@ -119,7 +117,7 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.resetAction = function() {
-    return $('.values .args', this.emt).html('');
+    return _setupFromPageValues.call(this);
   };
 
   TimelineConfig.prototype.applyAction = function() {
@@ -224,6 +222,14 @@ TimelineConfig = (function() {
         return $(".config.te_div", e).css('display', 'none');
       });
     });
+  };
+
+  _setupFromPageValues = function() {
+    if (this.readFromPageValue()) {
+      this.setupConfigValues();
+      this.selectItem();
+      return this.clickMethod();
+    }
   };
 
   return TimelineConfig;
