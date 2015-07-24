@@ -1,17 +1,24 @@
 # イベントリスナー Extend
 EventListener =
-  # アクションの初期化
-  # @abstract
+  # アクションの初期化(閲覧モードのみ使用される)
   initListener: (timelineEvent) ->
+    @timelineEvent = timelineEvent
 
-  setEvents: (sEventFuncName, cEventFuncName) ->
+  # アクションメソッドの設定
+  setEvents: ->
+    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    if !@constructor.prototype[methodName]?
+      # メソッドが見つからない場合
+      return
+
     # スクロールイベント
-    if sEventFuncName? && @constructor.prototype[sEventFuncName]?
-      @scrollEvent = @constructor.prototype[sEventFuncName]
+    if actionType == Constant.ActionEventHandleType.SCROLL
+      @scrollEvent = @constructor.prototype[methodName]
 
     # クリックイベント
-    if cEventFuncName? && @constructor.prototype[cEventFuncName]?
-      clickEventFunc = @constructor.prototype[cEventFuncName]
+    if actionType == Constant.ActionEventHandleType.CLICK
+      clickEventFunc = @constructor.prototype[methodName]
       @getJQueryElement().on('click', (e) =>
         clickEventFunc.call(@, e)
       )
@@ -29,26 +36,30 @@ EventListener =
     if window.timeLine?
       window.timeLine.nextChapter()
 
+  # チャプター開始前イベント
+  # @abstract
+  willChapter: (methodName) ->
+
 CommonEventListener =
   # アクションの初期化(閲覧モードのみ使用される)
   initListener: (timelineEvent) ->
+    @timelineEvent = timelineEvent
+    
+    # アクションメソッドの設定
+    @setEvents()
 
 ItemEventListener =
   # アクションの初期化(閲覧モードのみ使用される)
   initListener: (itemChange) ->
-    miniObj = itemChange[TLEItemChange.minObj]
-    @setMiniumObject(miniObj)
-    @itemSize = miniObj.itemSize
+    @timelineEvent = itemChange
+    @setMiniumObject(itemChange[TLEItemChange.minObj])
 
+    # 描画
     if @reDraw?
       @reDraw(false)
-    sEvent = null
-    cEvent = null
-    if itemChange[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.SCROLL
-      sEvent = itemChange[TimelineEvent.PageValueKey.METHODNAME]
-    else
-      cEvent = itemChange[TimelineEvent.PageValueKey.METHODNAME]
-    @setEvents(sEvent, cEvent)
+
+    # アクションメソッドの設定
+    @setEvents()
 
     # 共通イベントパラメータ
     @delay = null

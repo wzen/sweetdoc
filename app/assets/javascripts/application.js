@@ -28,6 +28,8 @@
 //= require base/extend
 //= require base/event_listener
 //= require base/local_storage
+// require_directory util
+//= require util/color/color_change
 //= require common_event/common_event
 //= require item/code_template
 //= require item/item_base
@@ -35,7 +37,6 @@
 //= require timeline/common_event/backgroundcolor_change
 //= require timeline/common_event/screenposition_change
 //= require timeline/item_event/item_change
-//= require test_move
 //= require worktable/common/common_var
 //= require worktable/common/common_func
 //= require worktable/common/history

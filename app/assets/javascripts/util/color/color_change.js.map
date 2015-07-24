@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "color_change.js",
+  "sourceRoot": "",
+  "sources": [
+    "color_change.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,eAAA;;AAAA;+BAEE;;AAAA,EAAA,eAAC,CAAA,YAAD,GAAgB,SAAC,WAAD,EAAc,UAAd,EAA0B,KAA1B,EAAiC,WAAjC,GAAA,CAAhB,CAAA;;yBAAA;;IAFF,CAAA"
+}

@@ -2,14 +2,21 @@
 var CommonEventListener, EventListener, ItemEventListener;
 
 EventListener = {
-  initListener: function(timelineEvent) {},
-  setEvents: function(sEventFuncName, cEventFuncName) {
-    var clickEventFunc;
-    if ((sEventFuncName != null) && (this.constructor.prototype[sEventFuncName] != null)) {
-      this.scrollEvent = this.constructor.prototype[sEventFuncName];
+  initListener: function(timelineEvent) {
+    return this.timelineEvent = timelineEvent;
+  },
+  setEvents: function() {
+    var actionType, clickEventFunc, methodName;
+    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    if (this.constructor.prototype[methodName] == null) {
+      return;
     }
-    if ((cEventFuncName != null) && (this.constructor.prototype[cEventFuncName] != null)) {
-      clickEventFunc = this.constructor.prototype[cEventFuncName];
+    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+      this.scrollEvent = this.constructor.prototype[methodName];
+    }
+    if (actionType === Constant.ActionEventHandleType.CLICK) {
+      clickEventFunc = this.constructor.prototype[methodName];
       return this.getJQueryElement().on('click', (function(_this) {
         return function(e) {
           return clickEventFunc.call(_this, e);
@@ -23,30 +30,25 @@ EventListener = {
     if (window.timeLine != null) {
       return window.timeLine.nextChapter();
     }
-  }
+  },
+  willChapter: function(methodName) {}
 };
 
 CommonEventListener = {
-  initListener: function(timelineEvent) {}
+  initListener: function(timelineEvent) {
+    this.timelineEvent = timelineEvent;
+    return this.setEvents();
+  }
 };
 
 ItemEventListener = {
   initListener: function(itemChange) {
-    var cEvent, miniObj, sEvent;
-    miniObj = itemChange[TLEItemChange.minObj];
-    this.setMiniumObject(miniObj);
-    this.itemSize = miniObj.itemSize;
+    this.timelineEvent = itemChange;
+    this.setMiniumObject(itemChange[TLEItemChange.minObj]);
     if (this.reDraw != null) {
       this.reDraw(false);
     }
-    sEvent = null;
-    cEvent = null;
-    if (itemChange[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.SCROLL) {
-      sEvent = itemChange[TimelineEvent.PageValueKey.METHODNAME];
-    } else {
-      cEvent = itemChange[TimelineEvent.PageValueKey.METHODNAME];
-    }
-    this.setEvents(sEvent, cEvent);
+    this.setEvents();
     return this.delay = null;
   },
   setMiniumObject: function(obj) {}

@@ -20,6 +20,10 @@ class Chapter
 
   # チャプター共通の前処理
   willChapter: ->
+    @eventListenerList.forEach((eventListener) ->
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      eventListener.willChapter(methodName)
+    )
     @focusToActorIfNeed()
 
   # チャプター共通の後処理

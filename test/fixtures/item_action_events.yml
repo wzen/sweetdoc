@@ -54,7 +54,7 @@ four:
               "name": "Change Color by Click",
               "args": {
                 "arg1": {
-                  "type": "DESIGN",
+                  "type": "COLOR",
                   "arg_name": "color"
                 }
               }

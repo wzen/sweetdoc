@@ -14,6 +14,8 @@ CommonEvent = (function(superClass) {
 
   CommonEvent.include(CommonEventListener);
 
+  CommonEvent.ID = "";
+
   return CommonEvent;
 
 })(Extend);

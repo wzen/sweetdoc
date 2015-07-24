@@ -180,6 +180,8 @@ ArrowItem = (function(superClass) {
     }
   };
 
+  ArrowItem.prototype.changeColorClick = function(e) {};
+
   _coodLength = function(locA, locB) {
     return parseInt(Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2)));
   };

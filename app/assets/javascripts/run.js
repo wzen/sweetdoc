@@ -10,6 +10,8 @@
 //= require base/common
 //= require base/extend
 //= require base/event_listener
+// require_directory util
+//= require util/color/color_change
 //= require common_event/common_event
 //= require item/code_template
 //= require item/item_base

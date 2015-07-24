@@ -24,6 +24,11 @@ Chapter = (function() {
   };
 
   Chapter.prototype.willChapter = function() {
+    this.eventListenerList.forEach(function(eventListener) {
+      var methodName;
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      return eventListener.willChapter(methodName);
+    });
     return this.focusToActorIfNeed();
   };
 

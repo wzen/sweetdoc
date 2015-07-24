@@ -5,6 +5,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/common_func.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/base/timeline_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/run.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/timeline.js" />
@@ -42,7 +43,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/common_var.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/general_event.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/item_event/item_change.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_ui.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/item_event/value_parts/slider.js" />
@@ -60,6 +61,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/common_func.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/base/timeline_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/timeline.js" />
