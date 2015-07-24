@@ -234,7 +234,6 @@ sanitaizeEncode =  (str) ->
   else
     return str
 
-
 # サニタイズ デコード
 # @property [String] str 対象文字列
 sanitaizeDecode = (str) ->
@@ -243,11 +242,51 @@ sanitaizeDecode = (str) ->
   else
     return str
 
+# ハッシュ配列からクラスを取り出し
+getClassFromMap = (isCommon, id) ->
+  c = isCommon
+  i = id
+  if typeof c == "boolean"
+    if c
+      c = "1"
+    else
+      c = "0"
+
+  if typeof i != "string"
+    i = String(id)
+
+  if !window.classMap? || !window.classMap[c]? || !window.classMap[c][i]?
+    return null
+
+  return window.classMap[c][i]
+
+# クラスをハッシュ配列に保存
+setClassToMap = (isCommon, id, value) ->
+  c = isCommon
+  i = id
+  if typeof c == "boolean"
+    if c
+      c = "1"
+    else
+      c = "0"
+
+  if typeof i != "string"
+    i = String(id)
+
+  if !window.classMap?
+    window.classMap = {}
+  if !window.classMap[c]?
+    window.classMap[c] = {}
+
+  window.classMap[c][i] = value
+
+
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedItemTypeList = []
-  window.loadedClassList = []
+  window.loadedClassList = {}
+  window.classMap = {}
 
 $ ->
   window.drawingCanvas = document.getElementById('canvas_container')

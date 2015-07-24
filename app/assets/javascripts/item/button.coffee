@@ -152,6 +152,7 @@ class ButtonItem extends CssItemBase
     return "#{webkitKeyframe} #{mozKeyframe} #{css}"
 
 window.loadedClassList.ButtonItem = ButtonItem
+setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)
 
 if window.worktablePage?
   # ワークテーブル用ボタンクラス

@@ -444,6 +444,8 @@ ArrowItem = (function(superClass) {
 
 window.loadedClassList.ArrowItem = ArrowItem;
 
+setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem);
+
 if (window.worktablePage != null) {
   WorkTableArrowItem = (function(superClass) {
     extend(WorkTableArrowItem, superClass);

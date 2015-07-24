@@ -77,15 +77,11 @@ initTimeline = function() {
   }
   chapterList = [];
   $.each(timelineList, function(idx, obj) {
-    var actorList, chapter, item, miniObj;
+    var actorList, chapter, id, isCommonEvent, item;
     actorList = [];
-    item = null;
-    miniObj = obj[TLEItemChange.minObj];
-    if (miniObj.itemId === Constant.ItemId.BUTTON) {
-      item = new ButtonItem();
-    } else if (miniObj.itemId === Constant.ItemId.ARROW) {
-      item = new ArrowItem();
-    }
+    isCommonEvent = obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT];
+    id = isCommonEvent ? obj[TimelineEvent.PageValueKey.COMMON_EVENT_ID] : obj[TimelineEvent.PageValueKey.ITEM_ID];
+    item = new (getClassFromMap(isCommonEvent, id))();
     item.initListener(obj);
     actorList.push(item);
     chapter = null;

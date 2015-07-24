@@ -134,6 +134,8 @@ ButtonItem = (function(superClass) {
 
 window.loadedClassList.ButtonItem = ButtonItem;
 
+setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem);
+
 if (window.worktablePage != null) {
   WorkTableButtonItem = (function(superClass) {
     extend(WorkTableButtonItem, superClass);

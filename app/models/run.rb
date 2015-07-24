@@ -8,23 +8,6 @@ class Run
     return "<div class=#{Const::PageValueKey::TE_PREFIX}>#{html}</div>"
   end
 
-  def self.set_timeline_pagevalue(hash, key, value)
-    keys = key.to_s.split(Const::PageValueKey::PAGE_VALUES_SEPERATOR)
-    r = hash
-    keys.each_with_index do |key, index|
-      k = key.to_s
-      if keys.length - 1 == index
-        r[k] = value
-      else
-        if r[k] == nil
-          r[k] = {}
-        end
-        r = r[k]
-      end
-    end
-    return hash
-  end
-
   def self.make_element_str(key, value, key_name)
     key_name += "[#{key}]"
     if value.class != ActiveSupport::HashWithIndifferentAccess && value.class != Hash && value.class != Array

@@ -62,7 +62,6 @@ initResize = (wrap, scrollWrapper) ->
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得
-  #objList = JSON.parse(lstorage.getItem('timelineObjList'))
   timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
   timelineList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT))
   for k, v of timelinePageValues
@@ -73,12 +72,9 @@ initTimeline = ->
   chapterList = []
   $.each(timelineList, (idx, obj)->
     actorList = []
-    item = null
-    miniObj = obj[TLEItemChange.minObj]
-    if miniObj.itemId == Constant.ItemId.BUTTON
-      item = new ButtonItem()
-    else if miniObj.itemId == Constant.ItemId.ARROW
-      item = new ArrowItem()
+    isCommonEvent = obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
+    id = if isCommonEvent then obj[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else obj[TimelineEvent.PageValueKey.ITEM_ID]
+    item = new (getClassFromMap(isCommonEvent, id))()
     item.initListener(obj)
     actorList.push(item)
     chapter = null

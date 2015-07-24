@@ -55,6 +55,7 @@ addItemInfo = (item_id, te_actions) ->
   if te_actions? && te_actions.length > 0
     te_actions.forEach( (a) ->
       if a.is_default? && a.is_default
+        # デフォルトメソッド & デフォルトアクションタイプ
         setPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
         setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
     )
