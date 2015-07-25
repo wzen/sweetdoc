@@ -2,18 +2,22 @@
 var Chapter;
 
 Chapter = (function() {
-  function Chapter(eventListenerList) {
-    this.eventListenerList = eventListenerList;
-    this.sinkFrontAllActor();
+  function Chapter(list) {
+    this.eventListenerList = list.eventListenerList;
+    this.timelineList = list.timelineList;
   }
 
   Chapter.prototype.willChapter = function() {
-    this.eventListenerList.forEach(function(eventListener) {
-      var methodName;
+    var eventListener, i, idx, len, methodName, ref;
+    ref = this.eventListenerList;
+    for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
+      eventListener = ref[idx];
+      eventListener.initListener(this.timelineList[idx]);
+      this.sinkFrontAllActor();
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-      return eventListener.willChapter(methodName);
-    });
-    return this.focusToActorIfNeed();
+      eventListener.willChapter(methodName);
+    }
+    return this.focusToActorIfNeed(false);
   };
 
   Chapter.prototype.didChapter = function() {
@@ -24,13 +28,13 @@ Chapter = (function() {
     });
   };
 
-  Chapter.prototype.focusToActorIfNeed = function(type) {
+  Chapter.prototype.focusToActorIfNeed = function(isImmediate, type) {
     var height, item, left, top, width;
     if (type == null) {
       type = "center";
     }
     window.disabledEventHandler = true;
-    if (this.eventListenerList.length === 1 && this.eventListenerList[0].timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+    if (this.eventListenerList.length === 1 && this.timelineList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
       item = this.eventListenerList[0];
       width = item.itemSize.w;
       height = item.itemSize.h;
@@ -38,9 +42,19 @@ Chapter = (function() {
         width *= item.scale.w;
         height *= item.scale.h;
       }
+      left = null;
+      top = null;
       if (type === "center") {
         left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5);
         top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5);
+      }
+      if (isImmediate) {
+        scrollContents.css({
+          scrollTop: top,
+          scrollLeft: left
+        });
+        return window.disabledEventHandler = false;
+      } else {
         return scrollContents.animate({
           scrollTop: top,
           scrollLeft: left

@@ -154,7 +154,7 @@ ArrowItem = (function(superClass) {
     ArrowItem.__super__.willChapter.call(this);
     if (methodName === 'scrollDraw') {
       console.log('scroll init');
-      this.clearDraw();
+      this.reDraw(false);
       return this.saveNewDrawingSurface();
     }
   };

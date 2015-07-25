@@ -75,11 +75,7 @@ ItemEventListener = {
   initListener: function(itemChange) {
     this.timelineEvent = itemChange;
     this.setMiniumObject(itemChange[TLEItemChange.minObj]);
-    if (this.reDraw != null) {
-      this.reDraw(false);
-    }
-    this.setEvents();
-    return this.delay = null;
+    return this.setEvents();
   },
   setMiniumObject: function(obj) {}
 };

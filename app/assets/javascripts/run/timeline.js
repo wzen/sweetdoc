@@ -26,7 +26,7 @@ TimeLine = (function() {
     this.resetChapter(this.chapterIndex);
     if (this.chapterIndex > 0) {
       this.chapterIndex -= 1;
-      return this.chapterList[this.chapterIndex].focusToActorIfNeed();
+      return this.chapterList[this.chapterIndex].focusToActorIfNeed(false);
     }
   };
 

@@ -90,15 +90,8 @@ ItemEventListener =
     @timelineEvent = itemChange
     @setMiniumObject(itemChange[TLEItemChange.minObj])
 
-    # 描画
-    if @reDraw?
-      @reDraw(false)
-
     # アクションメソッドの設定
     @setEvents()
-
-    # 共通イベントパラメータ
-    @delay = null
 
   # 最小限のデータを設定
   # @abstract

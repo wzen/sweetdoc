@@ -30,7 +30,7 @@ class TimeLine
     if @chapterIndex > 0
       @chapterIndex -= 1
       # 前のアイテムにフォーカス
-      @chapterList[@chapterIndex].focusToActorIfNeed()
+      @chapterList[@chapterIndex].focusToActorIfNeed(false)
 
   # チャプターの内容をリセット
   resetChapter: (chapterIndex) ->

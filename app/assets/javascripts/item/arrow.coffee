@@ -166,7 +166,8 @@ class ArrowItem extends CanvasItemBase
     super()
     if methodName == 'scrollDraw'
       console.log('scroll init')
-      @clearDraw()
+      # 描画
+      @reDraw(false)
       @saveNewDrawingSurface()
 
   # スクロールイベント ※アクションイベント

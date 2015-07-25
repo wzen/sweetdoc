@@ -103,6 +103,13 @@ ButtonItem = (function(superClass) {
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
+  ButtonItem.prototype.willChapter = function(methodName) {
+    ButtonItem.__super__.willChapter.call(this);
+    if (methodName === 'defaultClick') {
+      return this.reDraw(false);
+    }
+  };
+
   ButtonItem.prototype.defaultClick = function(e) {
     this.getJQueryElement().addClass('dentButton_' + this.id);
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {

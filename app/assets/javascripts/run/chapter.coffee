@@ -1,16 +1,18 @@
 # チャプター(タイムラインの区切り)
 class Chapter
-  constructor: (eventListenerList) ->
-    @eventListenerList = eventListenerList
-    @sinkFrontAllActor()
+  constructor: (list) ->
+    @eventListenerList = list.eventListenerList
+    @timelineList = list.timelineList
 
   # チャプター共通の前処理
   willChapter: ->
-    @eventListenerList.forEach((eventListener) ->
+    for eventListener, idx in @eventListenerList
+      eventListener.initListener(@timelineList[idx])
+      @sinkFrontAllActor()
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
       eventListener.willChapter(methodName)
-    )
-    @focusToActorIfNeed()
+
+    @focusToActorIfNeed(false)
 
   # チャプター共通の後処理
   didChapter: ->
@@ -20,9 +22,9 @@ class Chapter
     )
 
   # アイテムにフォーカス(アイテムが1つのみの場合)
-  focusToActorIfNeed: (type = "center") ->
+  focusToActorIfNeed: (isImmediate, type = "center") ->
     window.disabledEventHandler = true
-    if @eventListenerList.length == 1 && @eventListenerList[0].timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+    if @eventListenerList.length == 1 && @timelineList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
         item = @eventListenerList[0]
         width = item.itemSize.w
         height = item.itemSize.h
@@ -30,9 +32,16 @@ class Chapter
           width *= item.scale.w
           height *= item.scale.h
 
+        left = null
+        top = null
         if type == "center"
           left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5)
           top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5)
+
+        if isImmediate
+          scrollContents.css({scrollTop: top, scrollLeft: left })
+          window.disabledEventHandler = false
+        else
           scrollContents.animate({scrollTop: top, scrollLeft: left }, 'normal', 'linear', ->
             window.disabledEventHandler = false
           )
