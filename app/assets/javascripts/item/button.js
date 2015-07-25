@@ -66,6 +66,7 @@ ButtonItem = (function(superClass) {
     if (show == null) {
       show = true;
     }
+    this.clearDraw();
     return this.makeElement(show);
   };
 
@@ -77,6 +78,10 @@ ButtonItem = (function(superClass) {
     if (!show) {
       return false;
     }
+  };
+
+  ButtonItem.prototype.clearDraw = function() {
+    return this.getJQueryElement().remove();
   };
 
   ButtonItem.prototype.getMinimumObject = function() {
@@ -114,6 +119,7 @@ ButtonItem = (function(superClass) {
     this.getJQueryElement().addClass('dentButton_' + this.id);
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
+        _this.getJQueryElement().removeClass('dentButton_' + _this.id);
         return _this.nextChapter();
       };
     })(this));
@@ -176,7 +182,6 @@ if (window.worktablePage != null) {
       if (show == null) {
         show = true;
       }
-      WorkTableButtonItem.__super__.makeElement.call(this, show);
       if (this.css != null) {
         newEmt = $(this.css);
       } else {
@@ -189,6 +194,7 @@ if (window.worktablePage != null) {
       this.cssCode = $(".css-code", this.cssRoot);
       this.cssStyle = $(".css-style", this.cssRoot);
       this.cssStyle.text(this.cssCode.text());
+      WorkTableButtonItem.__super__.makeElement.call(this, show);
       this.makeDesignConfig();
       TLEItemChange.writeDefaultToPageValue(this);
       setupTimelineEventConfig();

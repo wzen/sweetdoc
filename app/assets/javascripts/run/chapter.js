@@ -4,7 +4,7 @@ var Chapter;
 Chapter = (function() {
   function Chapter(list) {
     this.eventListenerList = list.eventListenerList;
-    this.timelineList = list.timelineList;
+    this.timelineEventList = list.timelineEventList;
   }
 
   Chapter.prototype.willChapter = function() {
@@ -12,7 +12,7 @@ Chapter = (function() {
     ref = this.eventListenerList;
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       eventListener = ref[idx];
-      eventListener.initListener(this.timelineList[idx]);
+      eventListener.setEvent(this.timelineEventList[idx]);
       this.sinkFrontAllActor();
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
       eventListener.willChapter(methodName);
@@ -34,7 +34,7 @@ Chapter = (function() {
       type = "center";
     }
     window.disabledEventHandler = true;
-    if (this.eventListenerList.length === 1 && this.timelineList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+    if (this.eventListenerList.length === 1 && this.timelineEventList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
       item = this.eventListenerList[0];
       width = item.itemSize.w;
       height = item.itemSize.h;
@@ -49,10 +49,8 @@ Chapter = (function() {
         top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5);
       }
       if (isImmediate) {
-        scrollContents.css({
-          scrollTop: top,
-          scrollLeft: left
-        });
+        scrollContents.scrollTop(top);
+        scrollContents.scrollLeft(left);
         return window.disabledEventHandler = false;
       } else {
         return scrollContents.animate({

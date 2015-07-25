@@ -2,10 +2,11 @@
 var CommonEventListener, EventListener, ItemEventListener;
 
 EventListener = {
-  initListener: function(timelineEvent) {
-    return this.timelineEvent = timelineEvent;
+  setEvent: function(timelineEvent) {
+    this.timelineEvent = timelineEvent;
+    return this.setMethod();
   },
-  setEvents: function() {
+  setMethod: function() {
     var actionType, methodName;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
@@ -65,17 +66,12 @@ EventListener = {
 };
 
 CommonEventListener = {
-  initListener: function(timelineEvent) {
-    this.timelineEvent = timelineEvent;
-    return this.setEvents();
-  }
+  initWithEvent: function(timelineEvent) {}
 };
 
 ItemEventListener = {
-  initListener: function(itemChange) {
-    this.timelineEvent = itemChange;
-    this.setMiniumObject(itemChange[TLEItemChange.minObj]);
-    return this.setEvents();
+  initWithEvent: function(timelineEvent) {
+    return this.setMiniumObject(timelineEvent[TLEItemChange.minObj]);
   },
   setMiniumObject: function(obj) {}
 };

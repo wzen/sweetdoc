@@ -2,12 +2,12 @@
 class Chapter
   constructor: (list) ->
     @eventListenerList = list.eventListenerList
-    @timelineList = list.timelineList
+    @timelineEventList = list.timelineEventList
 
   # チャプター共通の前処理
   willChapter: ->
     for eventListener, idx in @eventListenerList
-      eventListener.initListener(@timelineList[idx])
+      eventListener.setEvent(@timelineEventList[idx])
       @sinkFrontAllActor()
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
       eventListener.willChapter(methodName)
@@ -24,7 +24,7 @@ class Chapter
   # アイテムにフォーカス(アイテムが1つのみの場合)
   focusToActorIfNeed: (isImmediate, type = "center") ->
     window.disabledEventHandler = true
-    if @eventListenerList.length == 1 && @timelineList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+    if @eventListenerList.length == 1 && @timelineEventList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
         item = @eventListenerList[0]
         width = item.itemSize.w
         height = item.itemSize.h
@@ -39,7 +39,8 @@ class Chapter
           top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5)
 
         if isImmediate
-          scrollContents.css({scrollTop: top, scrollLeft: left })
+          scrollContents.scrollTop(top)
+          scrollContents.scrollLeft(left)
           window.disabledEventHandler = false
         else
           scrollContents.animate({scrollTop: top, scrollLeft: left }, 'normal', 'linear', ->

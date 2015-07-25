@@ -23,6 +23,7 @@ initCommonVar = function() {
   window.scrollInsideCoverZindex = 1;
   window.lstorage = localStorage;
   window.disabledEventHandler = false;
+  window.firstItemFocused = false;
   return window.instanceMap = {};
 };
 
@@ -108,21 +109,27 @@ initTimeline = function() {
     isCommonEvent = obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT];
     id = isCommonEvent ? obj[TimelineEvent.PageValueKey.COMMON_EVENT_ID] : obj[TimelineEvent.PageValueKey.ITEM_ID];
     event = getInstanceFromMap(isCommonEvent, id);
+    event.initWithEvent(obj);
     eventList.push(event);
     tList.push(obj);
     chapter = null;
     if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
       chapter = new ClickChapter({
         eventListenerList: eventList,
-        timelineList: tList
+        timelineEventList: tList
       });
     } else {
       chapter = new ScrollChapter({
         eventListenerList: eventList,
-        timelineList: tList
+        timelineEventList: tList
       });
     }
-    return chapterList.push(chapter);
+    chapterList.push(chapter);
+    if (!window.firstItemFocused && !isCommonEvent) {
+      chapter.focusToActorIfNeed(true);
+      window.firstItemFocused = true;
+    }
+    return true;
   });
   window.timeLine = new TimeLine(chapterList);
   return window.timeLine.start();

@@ -46,6 +46,7 @@ class ButtonItem extends CssItemBase
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true)->
+    @clearDraw()
     @makeElement(show)
 
   # HTML要素を作成
@@ -55,6 +56,10 @@ class ButtonItem extends CssItemBase
     if !show
       # TODO: alphaを0にして非表示にする
       return false
+
+  # 描画削除
+  clearDraw: ->
+    @getJQueryElement().remove()
 
   # ストレージとDB保存用の最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
@@ -95,6 +100,7 @@ class ButtonItem extends CssItemBase
     @getJQueryElement().addClass('dentButton_' + @id)
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
+      @getJQueryElement().removeClass('dentButton_' + @id)
       @nextChapter()
     )
 
@@ -188,7 +194,7 @@ if window.worktablePage?
     # @param [boolean] show 要素作成後に描画を表示するか
     # @return [Boolean] 処理結果
     makeElement: (show = true) ->
-      super(show)
+      #CSSを設定
       if @css?
         newEmt = $(@css)
       else
@@ -203,6 +209,9 @@ if window.worktablePage?
       @cssStyle = $(".css-style", @cssRoot)
       @cssStyle.text(@cssCode.text())
 
+      # ボタン設置
+      super(show)
+      
       # コンフィグ作成
       @makeDesignConfig()
 

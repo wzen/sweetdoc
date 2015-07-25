@@ -1,11 +1,13 @@
 # イベントリスナー Extend
 EventListener =
   # アクションの初期化(閲覧モードのみ使用される)
-  initListener: (timelineEvent) ->
+  setEvent: (timelineEvent) ->
     @timelineEvent = timelineEvent
+    # アクションメソッドの設定
+    @setMethod()
 
   # アクションメソッドの設定
-  setEvents: ->
+  setMethod: ->
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
     if !@constructor.prototype[methodName]?
@@ -77,21 +79,18 @@ EventListener =
     return parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
 
 CommonEventListener =
-  # アクションの初期化(閲覧モードのみ使用される)
-  initListener: (timelineEvent) ->
-    @timelineEvent = timelineEvent
-
-    # アクションメソッドの設定
-    @setEvents()
+  # 初期化
+  initWithEvent: (timelineEvent) ->
 
 ItemEventListener =
-  # アクションの初期化(閲覧モードのみ使用される)
-  initListener: (itemChange) ->
-    @timelineEvent = itemChange
-    @setMiniumObject(itemChange[TLEItemChange.minObj])
+  # 初期化
+  initWithEvent: (timelineEvent) ->
+    @setMiniumObject(timelineEvent[TLEItemChange.minObj])
 
-    # アクションメソッドの設定
-    @setEvents()
+    # アイテムを描画
+    # TODO: 設定で初期表示させるか切り替えさせる
+#    if @reDraw?
+#      @reDraw(false)
 
   # 最小限のデータを設定
   # @abstract
