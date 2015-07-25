@@ -13,39 +13,52 @@ BackgroundEvent = (function(superClass) {
   BackgroundEvent.EVENT_ID = '1';
 
   BackgroundEvent.prototype.willChapter = function(methodName) {
-    var b, bColor, bColors, c, cColor, cColors, cf, colorPerHeight, color_max, g, i, j, r, ref, results, rgb, scrollEnd, scrollStart, style, styles;
+    var b, bColor, bColors, bPer, bp, cColor, cColors, g, gPer, gp, i, index, j, k, l, len, len1, r, rPer, ref, rgb, rp, scrollEnd, scrollLength, scrollStart, val;
+    BackgroundEvent.__super__.willChapter.call(this);
     if (methodName === 'changeBackgroundColor') {
       this.scrollEvents = [];
-      bColor = this.timelineEvent[TLEBackgroundColorChange.BASE_COLOR];
-      cColor = this.timelineEvent[TLEBackgroundColorChange.CHANGE_COLOR];
+      bColor = this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEBackgroundColorChange.BASE_COLOR];
+      cColor = this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEBackgroundColorChange.CHANGE_COLOR];
       scrollStart = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
       scrollEnd = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]);
       bColors = bColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
-      cColors = cColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
-      color_max = 256 * 3;
-      colorPerHeight = color_max / scrollViewHeight;
-      c = 0;
-      results = [];
-      for (i = j = 0, ref = scrollEnd - scrollStart; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-        styles = [];
-        c += colorPerHeight;
-        cf = Math.floor(c);
-        r = parseInt(cf / 3);
-        g = parseInt((cf + 1) / 3);
-        b = parseInt((cf + 2) / 3);
-        rgb = "rgb(" + r + "," + g + "," + b + ")";
-        style = {
-          name: "background-color",
-          param: rgb
-        };
-        styles.push(style);
-        results.push(this.scrollEvents[i] = styles);
+      for (index = j = 0, len = bColors.length; j < len; index = ++j) {
+        val = bColors[index];
+        bColors[index] = parseInt(val);
       }
-      return results;
+      cColors = cColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+      for (index = k = 0, len1 = cColors.length; k < len1; index = ++k) {
+        val = cColors[index];
+        cColors[index] = parseInt(val);
+      }
+      scrollLength = scrollEnd - scrollStart;
+      rPer = (cColors[0] - bColors[0]) / scrollLength;
+      gPer = (cColors[1] - bColors[1]) / scrollLength;
+      bPer = (cColors[2] - bColors[2]) / scrollLength;
+      rp = rPer;
+      gp = gPer;
+      bp = bPer;
+      for (i = l = 0, ref = scrollLength; 0 <= ref ? l <= ref : l >= ref; i = 0 <= ref ? ++l : --l) {
+        r = parseInt(bColors[0] + rp);
+        g = parseInt(bColors[1] + gp);
+        b = parseInt(bColors[2] + bp);
+        rgb = "rgb(" + r + "," + g + "," + b + ")";
+        this.scrollEvents[i] = rgb;
+        rp += rPer;
+        gp += gPer;
+        bp += bPer;
+      }
+      return this.targetBackground = $('#main-wrapper');
     }
   };
 
-  BackgroundEvent.prototype.changeBackgroundColor = function(scrollValue) {};
+  BackgroundEvent.prototype.changeBackgroundColor = function(scrollValue) {
+    return this.targetBackground.css('backgroundColor', this.scrollEvents[scrollValue]);
+  };
+
+  BackgroundEvent.prototype.finishedScroll = function(scrollValue) {
+    return scrollValue >= this.scrollLength() - 1;
+  };
 
   return BackgroundEvent;
 

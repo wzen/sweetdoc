@@ -36,7 +36,7 @@ EventListener =
       window.timeLine.nextChapter()
 
   # チャプター開始前イベント
-  willChapter: (methodName) ->
+  willChapter: ->
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollValue = 0
@@ -64,12 +64,17 @@ EventListener =
     else
       @scrollValue += parseInt((y - 9) / 10)
     @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
+    scrollLength = @scrollLength()
+    @scrollValue = if @scrollValue >= scrollLength then scrollLength - 1 else @scrollValue
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
     (@constructor.prototype[methodName]).call(@, @scrollValue)
 
     if @finishedScroll(@scrollValue)
       console.log('scroll nextChapter')
       @nextChapter()
+
+  scrollLength: ->
+    return parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
 
 CommonEventListener =
   # アクションの初期化(閲覧モードのみ使用される)

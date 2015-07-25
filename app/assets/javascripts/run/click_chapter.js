@@ -28,6 +28,9 @@ ClickChapter = (function(superClass) {
   };
 
   ClickChapter.prototype.clickEvent = function(e) {
+    if (window.disabledEventHandler) {
+      return;
+    }
     return this.eventListenerList.forEach(function(eventListener) {
       if (eventListener.clickEvent != null) {
         return eventListener.clickEvent(e);

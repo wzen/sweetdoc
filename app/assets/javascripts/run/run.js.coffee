@@ -18,6 +18,7 @@ initCommonVar = ->
   window.scrollViewSwitchZindex = {'on': 100, 'off': 0}
   window.scrollInsideCoverZindex = 1
   window.lstorage = localStorage
+  window.disabledEventHandler = false
 
 # 画面初期化
 initView = ->
@@ -74,9 +75,9 @@ initTimeline = ->
     actorList = []
     isCommonEvent = obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
     id = if isCommonEvent then obj[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else obj[TimelineEvent.PageValueKey.ITEM_ID]
-    item = new (getClassFromMap(isCommonEvent, id))()
-    item.initListener(obj)
-    actorList.push(item)
+    event = new (getClassFromMap(isCommonEvent, id))()
+    event.initListener(obj)
+    actorList.push(event)
     chapter = null
     # とりあえずここでChapterを分ける
     if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
@@ -85,10 +86,10 @@ initTimeline = ->
       chapter = new ScrollChapter(actorList)
     chapterList.push(chapter)
 
-    if idx == 0
+    if idx == 0 && !event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
       # TODO: 暫定初期スクロール位置
-      scrollContents.scrollLeft(item.itemSize.x + item.itemSize.w * 0.5 - (scrollContents.width() * 0.5))
-      scrollContents.scrollTop(item.itemSize.y + item.itemSize.h * 0.5 - (scrollContents.height() * 0.5))
+      scrollContents.scrollLeft(event.itemSize.x + event.itemSize.w * 0.5 - (scrollContents.width() * 0.5))
+      scrollContents.scrollTop(event.itemSize.y + event.itemSize.h * 0.5 - (scrollContents.height() * 0.5))
   )
   window.timeLine = new TimeLine(chapterList)
   window.timeLine.start()
@@ -105,7 +106,7 @@ setupScrollEvent = ->
   stopTimer = null
 
   scrollHandleWrapper.scroll( ->
-    if !timeLine.isScrollChapter()
+    if timeLine.finished || !timeLine.isScrollChapter()
       return
 
     x = $(@).scrollLeft()

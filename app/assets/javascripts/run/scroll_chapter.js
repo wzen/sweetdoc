@@ -20,6 +20,9 @@ ScrollChapter = (function(superClass) {
   };
 
   ScrollChapter.prototype.scrollEvent = function(x, y) {
+    if (window.disabledEventHandler) {
+      return;
+    }
     return this.eventListenerList.forEach(function(eventListener) {
       if (eventListener.scrollEvent != null) {
         return eventListener.scrollEvent(x, y);

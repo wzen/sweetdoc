@@ -151,7 +151,7 @@ ArrowItem = (function(superClass) {
   };
 
   ArrowItem.prototype.willChapter = function(methodName) {
-    ArrowItem.__super__.willChapter.call(this, methodName);
+    ArrowItem.__super__.willChapter.call(this);
     if (methodName === 'scrollDraw') {
       console.log('scroll init');
       return this.saveNewDrawingSurface();
@@ -160,7 +160,6 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.scrollDraw = function(scrollValue) {
     var j, len, r, ref;
-    scrollValue = scrollValue >= this.coodRegist.length ? this.coodRegist.length - 1 : scrollValue;
     this.resetDrawPath();
     this.restoreAllNewDrawingSurface();
     ref = this.coodRegist.slice(0, scrollValue);
@@ -172,7 +171,7 @@ ArrowItem = (function(superClass) {
   };
 
   ArrowItem.prototype.finishedScroll = function(scrollValue) {
-    return scrollValue >= this.coodRegist.length - 1;
+    return scrollValue >= this.scrollLength() - 1;
   };
 
   ArrowItem.prototype.changeColorClick = function(e) {};

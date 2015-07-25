@@ -21,7 +21,8 @@ initCommonVar = function() {
     'off': 0
   };
   window.scrollInsideCoverZindex = 1;
-  return window.lstorage = localStorage;
+  window.lstorage = localStorage;
+  return window.disabledEventHandler = false;
 };
 
 initView = function() {
@@ -77,13 +78,13 @@ initTimeline = function() {
   }
   chapterList = [];
   $.each(timelineList, function(idx, obj) {
-    var actorList, chapter, id, isCommonEvent, item;
+    var actorList, chapter, event, id, isCommonEvent;
     actorList = [];
     isCommonEvent = obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT];
     id = isCommonEvent ? obj[TimelineEvent.PageValueKey.COMMON_EVENT_ID] : obj[TimelineEvent.PageValueKey.ITEM_ID];
-    item = new (getClassFromMap(isCommonEvent, id))();
-    item.initListener(obj);
-    actorList.push(item);
+    event = new (getClassFromMap(isCommonEvent, id))();
+    event.initListener(obj);
+    actorList.push(event);
     chapter = null;
     if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
       chapter = new ClickChapter(actorList);
@@ -91,9 +92,9 @@ initTimeline = function() {
       chapter = new ScrollChapter(actorList);
     }
     chapterList.push(chapter);
-    if (idx === 0) {
-      scrollContents.scrollLeft(item.itemSize.x + item.itemSize.w * 0.5 - (scrollContents.width() * 0.5));
-      return scrollContents.scrollTop(item.itemSize.y + item.itemSize.h * 0.5 - (scrollContents.height() * 0.5));
+    if (idx === 0 && !event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT]) {
+      scrollContents.scrollLeft(event.itemSize.x + event.itemSize.w * 0.5 - (scrollContents.width() * 0.5));
+      return scrollContents.scrollTop(event.itemSize.y + event.itemSize.h * 0.5 - (scrollContents.height() * 0.5));
     }
   });
   window.timeLine = new TimeLine(chapterList);
@@ -112,7 +113,7 @@ setupScrollEvent = function() {
   stopTimer = null;
   scrollHandleWrapper.scroll(function() {
     var distX, distY, x, y;
-    if (!timeLine.isScrollChapter()) {
+    if (timeLine.finished || !timeLine.isScrollChapter()) {
       return;
     }
     x = $(this).scrollLeft();

@@ -27,7 +27,7 @@ EventListener = {
       return window.timeLine.nextChapter();
     }
   },
-  willChapter: function(methodName) {
+  willChapter: function() {
     var actionType;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
@@ -39,7 +39,7 @@ EventListener = {
     return false;
   },
   scrollRootFunc: function(x, y) {
-    var methodName;
+    var methodName, scrollLength;
     if (this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME] == null) {
       return;
     }
@@ -50,12 +50,17 @@ EventListener = {
       this.scrollValue += parseInt((y - 9) / 10);
     }
     this.scrollValue = this.scrollValue < 0 ? 0 : this.scrollValue;
+    scrollLength = this.scrollLength();
+    this.scrollValue = this.scrollValue >= scrollLength ? scrollLength - 1 : this.scrollValue;
     methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
     this.constructor.prototype[methodName].call(this, this.scrollValue);
     if (this.finishedScroll(this.scrollValue)) {
       console.log('scroll nextChapter');
       return this.nextChapter();
     }
+  },
+  scrollLength: function() {
+    return parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
   }
 };
 

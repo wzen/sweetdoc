@@ -163,14 +163,13 @@ class ArrowItem extends CanvasItemBase
 
   # チャプター動作前イベント
   willChapter: (methodName) ->
-    super(methodName)
+    super()
     if methodName == 'scrollDraw'
       console.log('scroll init')
       @saveNewDrawingSurface()
 
   # スクロールイベント ※アクションイベント
   scrollDraw : (scrollValue) ->
-    scrollValue = if scrollValue >= @coodRegist.length then @coodRegist.length - 1 else scrollValue
     #console.log("scrollY: #{@scrollValue}")
     @resetDrawPath()
     @restoreAllNewDrawingSurface()
@@ -179,9 +178,9 @@ class ArrowItem extends CanvasItemBase
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()
 
-  # チャプター終了判定イベント
+  # スクロールチャプター終了判定
   finishedScroll: (scrollValue) ->
-    return scrollValue >= @coodRegist.length - 1
+    return scrollValue >= @scrollLength() - 1
 
   # クリックイベント ※アクションイベント
   changeColorClick : (e) =>

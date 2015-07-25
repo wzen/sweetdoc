@@ -22,6 +22,9 @@ class ClickChapter extends Chapter
 
   # クリックイベント
   clickEvent: (e) ->
+    if window.disabledEventHandler
+      return
+
     @eventListenerList.forEach((eventListener) ->
       if eventListener.clickEvent?
         eventListener.clickEvent(e)

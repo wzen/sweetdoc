@@ -29,7 +29,8 @@ Chapter = (function() {
     if (type == null) {
       type = "center";
     }
-    if (this.eventListenerList.length === 1) {
+    window.disabledEventHandler = true;
+    if (this.eventListenerList.length === 1 && this.eventListenerList[0].timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
       item = this.eventListenerList[0];
       width = item.itemSize.w;
       height = item.itemSize.h;
@@ -43,8 +44,12 @@ Chapter = (function() {
         return scrollContents.animate({
           scrollTop: top,
           scrollLeft: left
-        }, 500);
+        }, 'normal', 'linear', function() {
+          return window.disabledEventHandler = false;
+        });
       }
+    } else {
+      return window.disabledEventHandler = false;
     }
   };
 
@@ -52,7 +57,9 @@ Chapter = (function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     scrollContents.css('z-index', scrollViewSwitchZindex.on);
     return this.eventListenerList.forEach(function(eventListener) {
-      return eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
+      if (eventListener.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+        return eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
+      }
     });
   };
 
@@ -60,7 +67,9 @@ Chapter = (function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.eventListenerList.forEach(function(eventListener) {
-      return eventListener.getJQueryElement().css('z-index', 0);
+      if (eventListener.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+        return eventListener.getJQueryElement().css('z-index', 0);
+      }
     });
   };
 

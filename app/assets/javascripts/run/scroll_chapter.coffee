@@ -12,6 +12,9 @@ class ScrollChapter extends Chapter
 
   # スクロールイベント
   scrollEvent : (x, y) ->
+    if window.disabledEventHandler
+      return
+
     @eventListenerList.forEach((eventListener) ->
       if eventListener.scrollEvent?
         eventListener.scrollEvent(x, y)
