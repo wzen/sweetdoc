@@ -343,7 +343,7 @@ class CanvasItemBase extends ItemBase
   clearDraw: ->
     drawingCanvas = document.getElementById(@canvasElementId());
     if drawingCanvas?
-      drawingContext = @newDrawingCanvas.getContext('2d');
+      drawingContext = drawingCanvas.getContext('2d');
       drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
       # キャンパスに対する初期化
       @initCanvas()

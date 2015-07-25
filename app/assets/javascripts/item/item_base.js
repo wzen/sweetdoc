@@ -333,7 +333,7 @@ CanvasItemBase = (function(superClass) {
     var drawingCanvas, drawingContext;
     drawingCanvas = document.getElementById(this.canvasElementId());
     if (drawingCanvas != null) {
-      drawingContext = this.newDrawingCanvas.getContext('2d');
+      drawingContext = drawingCanvas.getContext('2d');
       drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
       return this.initCanvas();
     }

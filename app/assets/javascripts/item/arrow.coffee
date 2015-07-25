@@ -166,14 +166,17 @@ class ArrowItem extends CanvasItemBase
     super()
     if methodName == 'scrollDraw'
       console.log('scroll init')
+      @clearDraw()
       @saveNewDrawingSurface()
 
   # スクロールイベント ※アクションイベント
   scrollDraw : (scrollValue) ->
     #console.log("scrollY: #{@scrollValue}")
+    r = scrollValue / @scrollLength()
+
     @resetDrawPath()
     @restoreAllNewDrawingSurface()
-    for r in @coodRegist.slice(0, scrollValue)
+    for r in @coodRegist.slice(0, parseInt((@coodRegist.length - 1) * r))
       @drawPath(r)
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()

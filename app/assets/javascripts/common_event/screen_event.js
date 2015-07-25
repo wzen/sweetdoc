@@ -12,6 +12,8 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.EVENT_ID = '2';
 
+  ScreenEvent.prototype.changeScreenPosition = function() {};
+
   return ScreenEvent;
 
 })(CommonEvent);

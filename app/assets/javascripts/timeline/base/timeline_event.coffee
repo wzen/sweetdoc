@@ -126,7 +126,7 @@ class TimelineEvent
     if writeValue?
       start = writeValue[@PageValueKey.SCROLL_POINT_START]
       end = writeValue[@PageValueKey.SCROLL_POINT_END]
-      if start? && isNumeric(start) && end? && isNumeric(end)
+      if start? && $.isNumeric(start) && end? && $.isNumeric(end)
        return parseInt(end) - parseInt(start)
 
     return 0

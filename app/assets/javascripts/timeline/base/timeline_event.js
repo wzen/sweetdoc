@@ -141,7 +141,7 @@ TimelineEvent = (function() {
     if (writeValue != null) {
       start = writeValue[this.PageValueKey.SCROLL_POINT_START];
       end = writeValue[this.PageValueKey.SCROLL_POINT_END];
-      if ((start != null) && isNumeric(start) && (end != null) && isNumeric(end)) {
+      if ((start != null) && $.isNumeric(start) && (end != null) && $.isNumeric(end)) {
         return parseInt(end) - parseInt(start);
       }
     }

@@ -154,15 +154,17 @@ ArrowItem = (function(superClass) {
     ArrowItem.__super__.willChapter.call(this);
     if (methodName === 'scrollDraw') {
       console.log('scroll init');
+      this.clearDraw();
       return this.saveNewDrawingSurface();
     }
   };
 
   ArrowItem.prototype.scrollDraw = function(scrollValue) {
     var j, len, r, ref;
+    r = scrollValue / this.scrollLength();
     this.resetDrawPath();
     this.restoreAllNewDrawingSurface();
-    ref = this.coodRegist.slice(0, scrollValue);
+    ref = this.coodRegist.slice(0, parseInt((this.coodRegist.length - 1) * r));
     for (j = 0, len = ref.length; j < len; j++) {
       r = ref[j];
       this.drawPath(r);
