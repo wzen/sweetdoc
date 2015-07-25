@@ -19,6 +19,14 @@ ScrollChapter = (function(superClass) {
     return ScrollChapter.__super__.didChapter.call(this);
   };
 
+  ScrollChapter.prototype.scrollEvent = function(x, y) {
+    return this.eventListenerList.forEach(function(eventListener) {
+      if (eventListener.scrollEvent != null) {
+        return eventListener.scrollEvent(x, y);
+      }
+    });
+  };
+
   return ScrollChapter;
 
 })(Chapter);

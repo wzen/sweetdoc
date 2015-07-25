@@ -40,13 +40,17 @@ class TimeLine
   # @param [Int] x X軸の動作値
   # @param [Int] y Y軸の動作値
   handleScrollEvent: (x, y) ->
-    if !@finished
+    if !@finished && @isScrollChapter()
       @chapterList[@chapterIndex].scrollEvent(x, y)
 
+  # スクロールチャプターか判定
+  isScrollChapter: ->
+    return @chapterList[@chapterIndex].scrollEvent?
+
   # クリックイベントをハンドル
-  handleClickEvent: (e) ->
-    if !@finished
-      @chapterList[@chapterIndex].clickEvent(e)
+#  handleClickEvent: (e) ->
+#    if !@finished
+#      @chapterList[@chapterIndex].clickEvent(e)
 
   # タイムライン終了イベント
   finishTimeline: ->

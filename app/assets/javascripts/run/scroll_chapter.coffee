@@ -9,3 +9,10 @@ class ScrollChapter extends Chapter
   # チャプターの後処理
   didChapter: ->
     super()
+
+  # スクロールイベント
+  scrollEvent : (x, y) ->
+    @eventListenerList.forEach((eventListener) ->
+      if eventListener.scrollEvent?
+        eventListener.scrollEvent(x, y)
+    )

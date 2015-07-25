@@ -13,6 +13,8 @@
 // require_directory util
 //= require util/color/color_change
 //= require common_event/common_event
+//= require common_event/background_event
+//= require common_event/screen_event
 //= require item/code_template
 //= require item/item_base
 //= require item/arrow

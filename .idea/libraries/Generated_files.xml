@@ -8,7 +8,9 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/base/timeline_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/run.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/timeline.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/common_event/screenposition_change.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
@@ -64,6 +66,8 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/base/timeline_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/run.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/timeline/common_event/screenposition_change.js" />

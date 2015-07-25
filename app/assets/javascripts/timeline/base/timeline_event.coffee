@@ -36,8 +36,6 @@ class TimelineEvent
       @SCROLL_POINT_START = 'scroll_point_start'
       # @property [String] SCROLL_TIME スクロール実行終了位置
       @SCROLL_POINT_END = 'scroll_point_end'
-      # @property [String] TE_SCROLL_TIME_SEP スクロール実行時間セパレータ
-      @SCROLL_POINT_SEP = '-'
 
   @initConfigValue = (timelineConfig) ->
     if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL

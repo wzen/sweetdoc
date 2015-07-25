@@ -7,22 +7,6 @@ Chapter = (function() {
     this.sinkFrontAllActor();
   }
 
-  Chapter.prototype.scrollEvent = function(x, y) {
-    return this.eventListenerList.forEach(function(eventListener) {
-      if (eventListener.scrollEvent != null) {
-        return eventListener.scrollEvent(x, y);
-      }
-    });
-  };
-
-  Chapter.prototype.clickEvent = function(e) {
-    return this.eventListenerList.forEach(function(eventListener) {
-      if (eventListener.clickEvent != null) {
-        return eventListener.clickEvent(e);
-      }
-    });
-  };
-
   Chapter.prototype.willChapter = function() {
     this.eventListenerList.forEach(function(eventListener) {
       var methodName;
@@ -32,7 +16,13 @@ Chapter = (function() {
     return this.focusToActorIfNeed();
   };
 
-  Chapter.prototype.didChapter = function() {};
+  Chapter.prototype.didChapter = function() {
+    return this.eventListenerList.forEach(function(eventListener) {
+      var methodName;
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      return eventListener.didChapter(methodName);
+    });
+  };
 
   Chapter.prototype.focusToActorIfNeed = function(type) {
     var height, item, left, top, width;

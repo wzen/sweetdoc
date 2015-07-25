@@ -23,7 +23,7 @@ ArrowItem = (function(superClass) {
     if (cood == null) {
       cood = null;
     }
-    this.scrollDraw = bind(this.scrollDraw, this);
+    this.changeColorClick = bind(this.changeColorClick, this);
     ArrowItem.__super__.constructor.call(this, cood);
     this.direction = {
       x: 0,
@@ -150,34 +150,29 @@ ArrowItem = (function(superClass) {
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
-  ArrowItem.prototype.scrollDraw = function(x, y) {
-    var j, len, r, ref;
-    if (this.scrollValue == null) {
+  ArrowItem.prototype.willChapter = function(methodName) {
+    ArrowItem.__super__.willChapter.call(this, methodName);
+    if (methodName === 'scrollDraw') {
       console.log('scroll init');
-      this.saveNewDrawingSurface();
-      this.scrollValue = 0;
-    } else {
-      console.log("y:" + y);
-      if (y >= 0) {
-        this.scrollValue += parseInt((y + 9) / 10);
-      } else {
-        this.scrollValue += parseInt((y - 9) / 10);
-      }
+      return this.saveNewDrawingSurface();
     }
-    this.scrollValue = this.scrollValue < 0 ? 0 : this.scrollValue;
-    this.scrollValue = this.scrollValue >= this.coodRegist.length ? this.coodRegist.length - 1 : this.scrollValue;
+  };
+
+  ArrowItem.prototype.scrollDraw = function(scrollValue) {
+    var j, len, r, ref;
+    scrollValue = scrollValue >= this.coodRegist.length ? this.coodRegist.length - 1 : scrollValue;
     this.resetDrawPath();
     this.restoreAllNewDrawingSurface();
-    ref = this.coodRegist.slice(0, this.scrollValue);
+    ref = this.coodRegist.slice(0, scrollValue);
     for (j = 0, len = ref.length; j < len; j++) {
       r = ref[j];
       this.drawPath(r);
     }
-    this.drawNewCanvas();
-    if (this.scrollValue >= this.coodRegist.length - 1) {
-      console.log('scroll nextChapter');
-      return this.nextChapter();
-    }
+    return this.drawNewCanvas();
+  };
+
+  ArrowItem.prototype.finishedScroll = function(scrollValue) {
+    return scrollValue >= this.coodRegist.length - 1;
   };
 
   ArrowItem.prototype.changeColorClick = function(e) {};

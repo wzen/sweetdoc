@@ -196,7 +196,7 @@ TimelineConfig = (function() {
     em = $('.action_forms input:radio', this.emt);
     em.off('change');
     return em.on('change', function(e) {
-      this.clearError();
+      self.clearError();
       return self.clickMethod(this);
     });
   };
@@ -207,20 +207,20 @@ TimelineConfig = (function() {
     em = $('.push.button.reset', this.emt);
     em.off('click');
     em.on('click', function(e) {
-      this.clearError();
+      self.clearError();
       return self.resetAction();
     });
     em = $('.push.button.apply', this.emt);
     em.off('click');
     em.on('click', function(e) {
-      this.clearError();
+      self.clearError();
       self.applyAction();
       return setupTimelineEventConfig();
     });
     em = $('.push.button.cancel', this.emt);
     em.off('click');
     return em.on('click', function(e) {
-      this.clearError();
+      self.clearError();
       e = $(this).closest('.event');
       $('.values', e).html('');
       return closeSidebar(function() {

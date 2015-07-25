@@ -35,15 +35,13 @@ TimeLine = (function() {
   };
 
   TimeLine.prototype.handleScrollEvent = function(x, y) {
-    if (!this.finished) {
+    if (!this.finished && this.isScrollChapter()) {
       return this.chapterList[this.chapterIndex].scrollEvent(x, y);
     }
   };
 
-  TimeLine.prototype.handleClickEvent = function(e) {
-    if (!this.finished) {
-      return this.chapterList[this.chapterIndex].clickEvent(e);
-    }
+  TimeLine.prototype.isScrollChapter = function() {
+    return this.chapterList[this.chapterIndex].scrollEvent != null;
   };
 
   TimeLine.prototype.finishTimeline = function() {

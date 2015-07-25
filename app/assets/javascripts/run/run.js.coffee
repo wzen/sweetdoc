@@ -105,6 +105,9 @@ setupScrollEvent = ->
   stopTimer = null
 
   scrollHandleWrapper.scroll( ->
+    if !timeLine.isScrollChapter()
+      return
+
     x = $(@).scrollLeft()
     y = $(@).scrollTop()
 

@@ -4,20 +4,6 @@ class Chapter
     @eventListenerList = eventListenerList
     @sinkFrontAllActor()
 
-  # スクロールイベント
-  scrollEvent : (x, y) ->
-    @eventListenerList.forEach((eventListener) ->
-      if eventListener.scrollEvent?
-        eventListener.scrollEvent(x, y)
-    )
-
-  # クリックイベント
-  clickEvent: (e) ->
-    @eventListenerList.forEach((eventListener) ->
-      if eventListener.clickEvent?
-        eventListener.clickEvent(e)
-    )
-
   # チャプター共通の前処理
   willChapter: ->
     @eventListenerList.forEach((eventListener) ->
@@ -28,6 +14,10 @@ class Chapter
 
   # チャプター共通の後処理
   didChapter: ->
+    @eventListenerList.forEach((eventListener) ->
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      eventListener.didChapter(methodName)
+    )
 
   # アイテムにフォーカス(アイテムが1つのみの場合)
   focusToActorIfNeed: (type = "center") ->

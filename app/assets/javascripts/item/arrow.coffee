@@ -161,34 +161,30 @@ class ArrowItem extends CanvasItemBase
     @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
 
-  # スクロールイベント ※アクションイベント
-  scrollDraw : (x, y) =>
-    if !@scrollValue?
+  # チャプター動作前イベント
+  willChapter: (methodName) ->
+    super(methodName)
+    if methodName == 'scrollDraw'
       console.log('scroll init')
       @saveNewDrawingSurface()
-      @scrollValue = 0
-    else
-      console.log("y:#{y}")
-      if y >= 0
-        @scrollValue += parseInt((y + 9) / 10)
-      else
-        @scrollValue += parseInt((y - 9) / 10)
-    @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
-    @scrollValue = if @scrollValue >= @coodRegist.length then @coodRegist.length - 1 else @scrollValue
+
+  # スクロールイベント ※アクションイベント
+  scrollDraw : (scrollValue) ->
+    scrollValue = if scrollValue >= @coodRegist.length then @coodRegist.length - 1 else scrollValue
     #console.log("scrollY: #{@scrollValue}")
     @resetDrawPath()
     @restoreAllNewDrawingSurface()
-    for r in @coodRegist.slice(0, @scrollValue)
+    for r in @coodRegist.slice(0, scrollValue)
       @drawPath(r)
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()
 
-    if @scrollValue >= @coodRegist.length - 1
-      console.log('scroll nextChapter')
-      @nextChapter()
+  # チャプター終了判定イベント
+  finishedScroll: (scrollValue) ->
+    return scrollValue >= @coodRegist.length - 1
 
   # クリックイベント ※アクションイベント
-  changeColorClick : (e) ->
+  changeColorClick : (e) =>
 
 
   # 座標間の距離を計算する

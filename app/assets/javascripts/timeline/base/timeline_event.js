@@ -41,8 +41,6 @@ TimelineEvent = (function() {
 
       PageValueKey.SCROLL_POINT_END = 'scroll_point_end';
 
-      PageValueKey.SCROLL_POINT_SEP = '-';
-
       return PageValueKey;
 
     })();

@@ -187,7 +187,7 @@ class TimelineConfig
     em = $('.action_forms input:radio', @emt)
     em.off('change')
     em.on('change', (e) ->
-      @clearError()
+      self.clearError()
 
       self.clickMethod(@)
     )
@@ -197,7 +197,7 @@ class TimelineConfig
     em = $('.push.button.reset', @emt)
     em.off('click')
     em.on('click', (e) ->
-      @clearError()
+      self.clearError()
 
       # UIの入力値を初期化
       self.resetAction()
@@ -205,7 +205,7 @@ class TimelineConfig
     em = $('.push.button.apply', @emt)
     em.off('click')
     em.on('click', (e) ->
-      @clearError()
+      self.clearError()
 
       # 入力値を適用する
       self.applyAction()
@@ -216,7 +216,7 @@ class TimelineConfig
     em = $('.push.button.cancel', @emt)
     em.off('click')
     em.on('click', (e) ->
-      @clearError()
+      self.clearError()
 
       # 入力を全てクリアしてサイドバーを閉じる
       e = $(@).closest('.event')

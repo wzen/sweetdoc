@@ -11,12 +11,28 @@ ClickChapter = (function(superClass) {
   }
 
   ClickChapter.prototype.willChapter = function() {
+    var self;
     ClickChapter.__super__.willChapter.call(this);
+    self = this;
+    this.eventListenerList.forEach(function(eventListener) {
+      eventListener.getJQueryElement().off('click');
+      return eventListener.getJQueryElement().on('click', function(e) {
+        return self.clickEvent(e);
+      });
+    });
     return this.riseFrontAllActor();
   };
 
   ClickChapter.prototype.didChapter = function() {
     return ClickChapter.__super__.didChapter.call(this);
+  };
+
+  ClickChapter.prototype.clickEvent = function(e) {
+    return this.eventListenerList.forEach(function(eventListener) {
+      if (eventListener.clickEvent != null) {
+        return eventListener.clickEvent(e);
+      }
+    });
   };
 
   return ClickChapter;
