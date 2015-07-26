@@ -62,26 +62,28 @@ initResize = (wrap, scrollWrapper) ->
     , 200)
   )
 
-
-getInstanceFromMap = (isCommon, id) ->
-  c = isCommon
-  i = id
-  if typeof c == "boolean"
-    if c
-      c = "1"
+# インスタンス取得
+getInstanceFromMap = (timelineEvent) ->
+  isCommonEvent = timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
+  id = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ID]
+  classMapId = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ITEM_ID]
+  if typeof isCommonEvent == "boolean"
+    if isCommonEvent
+      isCommonEvent = "1"
     else
-      c = "0"
+      isCommonEvent = "0"
 
-  if typeof i != "string"
-    i = String(id)
+  if typeof id != "string"
+    id = String(id)
 
-  if !window.instanceMap[c]?
-    !window.instanceMap[c] = {}
+  if !window.instanceMap[isCommonEvent]?
+    !window.instanceMap[isCommonEvent] = {}
 
-  if !window.instanceMap[c][i]?
-    window.instanceMap[c][i] = new (getClassFromMap(isCommon, id))()
+  if !window.instanceMap[isCommonEvent][id]?
+    # インスタンスを保存する
+    window.instanceMap[isCommonEvent][id] = new (getClassFromMap(isCommonEvent, classMapId))()
 
-  return window.instanceMap[c][i]
+  return window.instanceMap[isCommonEvent][id]
 
 # タイムライン作成
 initTimeline = ->
@@ -97,9 +99,7 @@ initTimeline = ->
   $.each(timelineList, (idx, obj)->
     eventList = []
     tList = []
-    isCommonEvent = obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
-    id = if isCommonEvent then obj[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else obj[TimelineEvent.PageValueKey.ITEM_ID]
-    event = getInstanceFromMap(isCommonEvent, id)
+    event = getInstanceFromMap(obj)
     event.initWithEvent(obj)
     eventList.push(event)
     tList.push(obj)
@@ -111,7 +111,7 @@ initTimeline = ->
       chapter = new ScrollChapter({eventListenerList: eventList, timelineEventList: tList})
     chapterList.push(chapter)
 
-    if !window.firstItemFocused && !isCommonEvent
+    if !window.firstItemFocused && !obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
       # 最初のアイテムにフォーカスする
       chapter.focusToActorIfNeed(true)
       window.firstItemFocused = true

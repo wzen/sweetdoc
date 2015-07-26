@@ -16,7 +16,7 @@ class ItemBase extends Extend
   constructor: (cood = null)->
     super()
     # @property [Int] id ID
-    @id = @constructor.IDENTITY + "-" + generateId()
+    @id = "i" + @constructor.IDENTITY + generateId()
     # @property [String] name 名前
     @name = null
     # @property [Object] drawingSurfaceImageData 画面を保存する変数

@@ -7,6 +7,7 @@ class Chapter
   # チャプター共通の前処理
   willChapter: ->
     for eventListener, idx in @eventListenerList
+      eventListener.initWithEvent(@timelineEventList[idx])
       eventListener.setEvent(@timelineEventList[idx])
       @sinkFrontAllActor()
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
