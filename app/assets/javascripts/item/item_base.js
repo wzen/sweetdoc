@@ -19,7 +19,7 @@ ItemBase = (function(superClass) {
       cood = null;
     }
     ItemBase.__super__.constructor.call(this);
-    this.id = generateId();
+    this.id = this.constructor.IDENTITY + "-" + generateId();
     this.name = null;
     this.drawingSurfaceImageData = null;
     if (cood !== null) {

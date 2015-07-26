@@ -190,10 +190,11 @@ if window.worktablePage?
       obj.css = @cssRoot[0].outerHTML
       return obj
 
-    # HTML要素とCSSとコンフィグを作成
+    # HTML要素を作成
     # @param [boolean] show 要素作成後に描画を表示するか
     # @return [Boolean] 処理結果
     makeElement: (show = true) ->
+
       #CSSを設定
       if @css?
         newEmt = $(@css)
@@ -202,7 +203,6 @@ if window.worktablePage?
         newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
         newEmt.find('.btn-item-id').html(@id)
       $('#css_code_info').append(newEmt)
-
       @cssRoot = $('#' + @getCssRootElementId())
       @cssCache = $(".css-cache", @cssRoot)
       @cssCode = $(".css-code", @cssRoot)
@@ -211,10 +211,9 @@ if window.worktablePage?
 
       # ボタン設置
       super(show)
-      
+
       # コンフィグ作成
       @makeDesignConfig()
-
       # タイムライン作成
       #fixme: あとでロジックと実装を分けること
       TLEItemChange.writeDefaultToPageValue(@)
