@@ -39,7 +39,7 @@ TLEItemChange = (function(superClass) {
     }
     writeValue[this.PageValueKey.SCROLL_POINT_START] = start;
     writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
-    writeValue[this.PageValueKey.IS_CLICK_PARALLEL] = false;
+    writeValue[this.PageValueKey.IS_PARALLEL] = false;
     itemWriteValue = item.objWriteTimeline();
     $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {
@@ -69,7 +69,9 @@ TLEItemChange = (function(superClass) {
       value = item.timelineConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
       setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum);
-      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      if (parseInt(getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum) {
+        setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      }
     }
     return errorMes;
   };

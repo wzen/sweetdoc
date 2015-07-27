@@ -9,10 +9,11 @@ class Chapter
     for eventListener, idx in @eventListenerList
       eventListener.initWithEvent(@timelineEventList[idx])
       eventListener.setEvent(@timelineEventList[idx])
-      @sinkFrontAllActor()
+
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
       eventListener.willChapter(methodName)
 
+    @sinkFrontAllActor()
     @focusToActorIfNeed(false)
 
   # チャプター共通の後処理
@@ -67,3 +68,14 @@ class Chapter
       if eventListener.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
         eventListener.getJQueryElement().css('z-index', 0)
     )
+
+  # 全てのイベントアイテムのスクロールが終了しているか
+  finishedScrollAllActor: ->
+    ret = true
+    @eventListenerList.forEach((eventListener) ->
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      if !eventListener.finishedScroll(methodName, eventListener.scrollValue)
+        ret = false
+        return false
+    )
+    return ret

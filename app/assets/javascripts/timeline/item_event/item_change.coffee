@@ -26,7 +26,7 @@ class TLEItemChange extends TimelineEvent
       end = null
     writeValue[@PageValueKey.SCROLL_POINT_START] = start
     writeValue[@PageValueKey.SCROLL_POINT_END] = end
-    writeValue[@PageValueKey.IS_CLICK_PARALLEL] = false
+    writeValue[@PageValueKey.IS_PARALLEL] = false
 
     itemWriteValue = item.objWriteTimeline()
     # マージ
@@ -58,7 +58,8 @@ class TLEItemChange extends TimelineEvent
       value = item.timelineConfigValue()
       writeValue[@PageValueKey.VALUE] = value
       setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum)
-      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
+      if parseInt(getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum
+        setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
 
     return errorMes
 

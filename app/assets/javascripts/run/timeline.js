@@ -12,6 +12,10 @@ TimeLine = (function() {
     return this.chapterList[this.chapterIndex].willChapter();
   };
 
+  TimeLine.prototype.getChapter = function() {
+    return this.chapterList[this.chapterIndex];
+  };
+
   TimeLine.prototype.nextChapter = function() {
     this.chapterList[this.chapterIndex].didChapter();
     this.chapterIndex += 1;

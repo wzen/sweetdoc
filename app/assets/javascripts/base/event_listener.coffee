@@ -51,13 +51,18 @@ EventListener =
     return
 
   # スクロール終了判定イベント
-  # @abstract
   finishedScroll: (methodName, scrollValue) ->
-    return false
+    return scrollValue >= @scrollLength() - 1
 
   # スクロール基底メソッド
   scrollRootFunc: (x, y) ->
     if !@timelineEvent[TimelineEvent.PageValueKey.METHODNAME]?
+      # メソッドが無い場合
+      return
+
+    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    if @finishedScroll(methodName, @scrollValue)
+      # 終了済みの場合
       return
 
     console.log("y:#{y}")
@@ -68,12 +73,20 @@ EventListener =
     @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
     scrollLength = @scrollLength()
     @scrollValue = if @scrollValue >= scrollLength then scrollLength - 1 else @scrollValue
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+
+    # スクロール指定範囲外なら反応させない
+    if @scrollValue < parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]) || @scrollValue > parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
+      return
+
     (@constructor.prototype[methodName]).call(@, @scrollValue)
 
     if @finishedScroll(methodName, @scrollValue)
       console.log('scroll nextChapter')
-      @nextChapter()
+      if window.timeLine?
+        chapter = window.timeLine.getChapter()
+        if chapter.finishedScrollAllActor()
+          # 全てのアイテムのスクロールが終了している場合は次のチャプターへ
+          @nextChapter()
 
   scrollLength: ->
     return parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])

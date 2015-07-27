@@ -90,31 +90,44 @@ initTimeline = ->
   # アクションのイベントを取得
   timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
   timelineList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT))
+
+  # ソート
   for k, v of timelinePageValues
     if k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) == 0
       index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1
       timelineList[index] = v
 
+  # チャプターの作成
   chapterList = []
+  eventList = []
+  tList = []
   $.each(timelineList, (idx, obj)->
-    eventList = []
-    tList = []
+
     event = getInstanceFromMap(obj)
     event.initWithEvent(obj)
     eventList.push(event)
     tList.push(obj)
-    chapter = null
-    # とりあえずここでChapterを分ける
-    if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
-      chapter = new ClickChapter({eventListenerList: eventList, timelineEventList: tList})
-    else
-      chapter = new ScrollChapter({eventListenerList: eventList, timelineEventList: tList})
-    chapterList.push(chapter)
 
-    if !window.firstItemFocused && !obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
-      # 最初のアイテムにフォーカスする
-      chapter.focusToActorIfNeed(true)
-      window.firstItemFocused = true
+    parallel = false
+    if idx < timelineList.length - 1
+      beforeTimeline = timelineList[idx + 1]
+      if beforeTimeline[TimelineEvent.PageValueKey.IS_PARALLEL]
+        parallel = true
+
+    if !parallel
+      chapter = null
+      if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
+        chapter = new ClickChapter({eventListenerList: eventList, timelineEventList: tList})
+      else
+        chapter = new ScrollChapter({eventListenerList: eventList, timelineEventList: tList})
+      chapterList.push(chapter)
+      eventList = []
+      tList = []
+
+      if !window.firstItemFocused && !obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
+          # 最初のアイテムにフォーカスする
+          chapter.focusToActorIfNeed(true)
+          window.firstItemFocused = true
 
     return true
   )

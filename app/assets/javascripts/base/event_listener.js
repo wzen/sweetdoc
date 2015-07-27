@@ -37,11 +37,15 @@ EventListener = {
   },
   didChapter: function(methodName) {},
   finishedScroll: function(methodName, scrollValue) {
-    return false;
+    return scrollValue >= this.scrollLength() - 1;
   },
   scrollRootFunc: function(x, y) {
-    var methodName, scrollLength;
+    var chapter, methodName, scrollLength;
     if (this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME] == null) {
+      return;
+    }
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    if (this.finishedScroll(methodName, this.scrollValue)) {
       return;
     }
     console.log("y:" + y);
@@ -53,11 +57,18 @@ EventListener = {
     this.scrollValue = this.scrollValue < 0 ? 0 : this.scrollValue;
     scrollLength = this.scrollLength();
     this.scrollValue = this.scrollValue >= scrollLength ? scrollLength - 1 : this.scrollValue;
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    if (this.scrollValue < parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]) || this.scrollValue > parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])) {
+      return;
+    }
     this.constructor.prototype[methodName].call(this, this.scrollValue);
     if (this.finishedScroll(methodName, this.scrollValue)) {
       console.log('scroll nextChapter');
-      return this.nextChapter();
+      if (window.timeLine != null) {
+        chapter = window.timeLine.getChapter();
+        if (chapter.finishedScrollAllActor()) {
+          return this.nextChapter();
+        }
+      }
     }
   },
   scrollLength: function() {

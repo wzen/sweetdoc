@@ -14,10 +14,10 @@ Chapter = (function() {
       eventListener = ref[idx];
       eventListener.initWithEvent(this.timelineEventList[idx]);
       eventListener.setEvent(this.timelineEventList[idx]);
-      this.sinkFrontAllActor();
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
       eventListener.willChapter(methodName);
     }
+    this.sinkFrontAllActor();
     return this.focusToActorIfNeed(false);
   };
 
@@ -84,6 +84,20 @@ Chapter = (function() {
         return eventListener.getJQueryElement().css('z-index', 0);
       }
     });
+  };
+
+  Chapter.prototype.finishedScrollAllActor = function() {
+    var ret;
+    ret = true;
+    this.eventListenerList.forEach(function(eventListener) {
+      var methodName;
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      if (!eventListener.finishedScroll(methodName, eventListener.scrollValue)) {
+        ret = false;
+        return false;
+      }
+    });
+    return ret;
   };
 
   return Chapter;

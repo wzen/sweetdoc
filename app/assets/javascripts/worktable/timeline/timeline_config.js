@@ -91,7 +91,7 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.clickMethod = function(e) {
-    var handlerClassName, parent, tle, valueClassName;
+    var beforeActionType, handlerClassName, parent, tle, valueClassName;
     if (e == null) {
       e = null;
     }
@@ -102,6 +102,12 @@ TimelineConfig = (function() {
     }
     handlerClassName = this.methodClassName();
     valueClassName = this.methodClassName();
+    if (this.teNum > 1) {
+      beforeActionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE];
+      if (this.actionType === beforeActionType) {
+        $(".config.parallel_div", this.emt).css('display', '');
+      }
+    }
     $(".handler_div .configBox", this.emt).children("div").css('display', 'none');
     $(".handler_div ." + handlerClassName, this.emt).css('display', '');
     $(".config.handler_div", this.emt).css('display', '');

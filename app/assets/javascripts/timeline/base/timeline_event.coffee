@@ -31,7 +31,7 @@ class TimelineEvent
       # @property [String] METHODNAME イベント名
       @ACTIONTYPE = 'actiontype'
       # @property [String] IS_PARALLEL 同時実行
-      @IS_CLICK_PARALLEL = 'is_click_parallel'
+      @IS_PARALLEL = 'is_parallel'
       # @property [String] SCROLL_TIME スクロール実行開始位置
       @SCROLL_POINT_START = 'scroll_point_start'
       # @property [String] SCROLL_TIME スクロール実行終了位置
@@ -70,6 +70,12 @@ class TimelineEvent
     writeValue[@PageValueKey.METHODNAME] = timelineConfig.methodName
     writeValue[@PageValueKey.ACTIONTYPE] = timelineConfig.actionType
 
+    isParallel = false
+    parallel = $(".parallel_div .parallel", timelineConfig.emt)
+    if parallel?
+      isParallel = parallel.is(":checked")
+    writeValue[@PageValueKey.IS_PARALLEL] = isParallel
+
     if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
       start = ""
       end = ""
@@ -79,13 +85,6 @@ class TimelineEvent
         end = handlerDiv.find('.scroll_point_end:first').val()
       writeValue[@PageValueKey.SCROLL_POINT_START] = start
       writeValue[@PageValueKey.SCROLL_POINT_END] = end
-
-    else if timelineConfig.actionType == Constant.ActionEventHandleType.CLICK
-      isClickParallel = false
-      clickParallel = $(".handler_div .#{timelineConfig.methodClassName()} .click_parallel", timelineConfig.emt)
-      if clickParallel?
-        isClickParallel = clickParallel.is(":checked")
-      writeValue[@PageValueKey.IS_CLICK_PARALLEL] = isClickParallel
 
     return writeValue
 
@@ -103,6 +102,11 @@ class TimelineEvent
       timelineConfig.methodName = writeValue[@PageValueKey.METHODNAME]
       timelineConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
 
+      parallel = $(".parallel_div .parallel", timelineConfig.emt)
+      isParallel = writeValue[@PageValueKey.IS_PARALLEL]
+      if parallel? && isParallel
+        parallel.prop("checked", true)
+
       if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
         handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
         start = writeValue[@PageValueKey.SCROLL_POINT_START]
@@ -111,11 +115,7 @@ class TimelineEvent
           handlerDiv.find('.scroll_point_start:first').val(start)
           handlerDiv.find('.scroll_point_end:first').val(end)
 
-      else if timelineConfig.actionType == Constant.ActionEventHandleType.CLICK
-        clickParallel = $(".handler_div .#{timelineConfig.methodClassName()} .click_parallel", timelineConfig.emt)
-        isClickParallel = writeValue[@PageValueKey.IS_CLICK_PARALLEL]
-        if clickParallel? && isClickParallel
-          clickParallel.prop("checked", true)
+
 
       return true
     else

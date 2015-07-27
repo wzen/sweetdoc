@@ -182,13 +182,6 @@ class ArrowItem extends CanvasItemBase
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()
 
-  # スクロールチャプター終了判定
-  finishedScroll: (methodName, scrollValue) ->
-    if methodName == 'scrollDraw'
-      return scrollValue >= @scrollLength() - 1
-
-    return false
-
   # クリックイベント ※アクションイベント
   changeColorClick : (e) =>
 

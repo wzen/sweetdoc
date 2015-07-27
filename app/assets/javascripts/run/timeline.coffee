@@ -11,6 +11,10 @@ class TimeLine
     # チャプター前処理
     @chapterList[@chapterIndex].willChapter()
 
+  # 現在のチャプターを取得
+  getChapter: ->
+    return @chapterList[@chapterIndex]
+
   # チャプターを進める
   nextChapter: ->
     # チャプター後処理

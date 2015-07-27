@@ -101,6 +101,12 @@ class TimelineConfig
     handlerClassName = @methodClassName()
     valueClassName = @methodClassName()
 
+    if @teNum > 1
+      beforeActionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE]
+      if @actionType == beforeActionType
+        # 前のイベントと同じアクションタイプの場合は同時実行を表示
+        $(".config.parallel_div", @emt).css('display', '')
+
     $(".handler_div .configBox", @emt).children("div").css('display', 'none')
     $(".handler_div .#{handlerClassName}", @emt).css('display', '')
     $(".config.handler_div", @emt).css('display', '')

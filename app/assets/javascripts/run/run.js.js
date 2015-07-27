@@ -92,7 +92,7 @@ getInstanceFromMap = function(timelineEvent) {
 };
 
 initTimeline = function() {
-  var chapterList, index, k, timelineList, timelinePageValues, v;
+  var chapterList, eventList, index, k, tList, timelineList, timelinePageValues, v;
   timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
   timelineList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT));
   for (k in timelinePageValues) {
@@ -103,30 +103,41 @@ initTimeline = function() {
     }
   }
   chapterList = [];
+  eventList = [];
+  tList = [];
   $.each(timelineList, function(idx, obj) {
-    var chapter, event, eventList, tList;
-    eventList = [];
-    tList = [];
+    var beforeTimeline, chapter, event, parallel;
     event = getInstanceFromMap(obj);
     event.initWithEvent(obj);
     eventList.push(event);
     tList.push(obj);
-    chapter = null;
-    if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
-      chapter = new ClickChapter({
-        eventListenerList: eventList,
-        timelineEventList: tList
-      });
-    } else {
-      chapter = new ScrollChapter({
-        eventListenerList: eventList,
-        timelineEventList: tList
-      });
+    parallel = false;
+    if (idx < timelineList.length - 1) {
+      beforeTimeline = timelineList[idx + 1];
+      if (beforeTimeline[TimelineEvent.PageValueKey.IS_PARALLEL]) {
+        parallel = true;
+      }
     }
-    chapterList.push(chapter);
-    if (!window.firstItemFocused && !obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]) {
-      chapter.focusToActorIfNeed(true);
-      window.firstItemFocused = true;
+    if (!parallel) {
+      chapter = null;
+      if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
+        chapter = new ClickChapter({
+          eventListenerList: eventList,
+          timelineEventList: tList
+        });
+      } else {
+        chapter = new ScrollChapter({
+          eventListenerList: eventList,
+          timelineEventList: tList
+        });
+      }
+      chapterList.push(chapter);
+      eventList = [];
+      tList = [];
+      if (!window.firstItemFocused && !obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]) {
+        chapter.focusToActorIfNeed(true);
+        window.firstItemFocused = true;
+      }
     }
     return true;
   });
