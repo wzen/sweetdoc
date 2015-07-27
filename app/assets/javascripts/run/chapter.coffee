@@ -9,7 +9,6 @@ class Chapter
     for eventListener, idx in @eventListenerList
       eventListener.initWithEvent(@timelineEventList[idx])
       eventListener.setEvent(@timelineEventList[idx])
-
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
       eventListener.willChapter(methodName)
 
@@ -26,8 +25,14 @@ class Chapter
   # アイテムにフォーカス(アイテムが1つのみの場合)
   focusToActorIfNeed: (isImmediate, type = "center") ->
     window.disabledEventHandler = true
-    if @eventListenerList.length == 1 && @timelineEventList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
-        item = @eventListenerList[0]
+    item = null
+    @eventListenerList.forEach((e, idx) =>
+      if @timelineEventList[idx][TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+        item = e
+        return false
+    )
+
+    if item?
         width = item.itemSize.w
         height = item.itemSize.h
         if item.scale?
@@ -74,7 +79,7 @@ class Chapter
     ret = true
     @eventListenerList.forEach((eventListener) ->
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-      if !eventListener.finishedScroll(methodName, eventListener.scrollValue)
+      if !eventListener.isFinishedEvent
         ret = false
         return false
     )

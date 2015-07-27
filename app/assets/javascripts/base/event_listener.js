@@ -4,6 +4,7 @@ var CommonEventListener, EventListener, ItemEventListener;
 EventListener = {
   setEvent: function(timelineEvent) {
     this.timelineEvent = timelineEvent;
+    this.isFinishedEvent = false;
     return this.setMethod();
   },
   setMethod: function() {
@@ -19,7 +20,9 @@ EventListener = {
       return this.clickEvent = this.constructor.prototype[methodName];
     }
   },
-  reset: function() {},
+  reset: function() {
+    this.isFinishedEvent = false;
+  },
   getJQueryElement: function() {
     return null;
   },
@@ -36,16 +39,13 @@ EventListener = {
     }
   },
   didChapter: function(methodName) {},
-  finishedScroll: function(methodName, scrollValue) {
-    return scrollValue >= this.scrollLength() - 1;
-  },
   scrollRootFunc: function(x, y) {
-    var chapter, methodName, scrollLength;
+    var methodName, scrollLength;
     if (this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME] == null) {
       return;
     }
     methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-    if (this.finishedScroll(methodName, this.scrollValue)) {
+    if (this.isFinishedEvent) {
       return;
     }
     console.log("y:" + y);
@@ -61,13 +61,10 @@ EventListener = {
       return;
     }
     this.constructor.prototype[methodName].call(this, this.scrollValue);
-    if (this.finishedScroll(methodName, this.scrollValue)) {
-      console.log('scroll nextChapter');
+    if (this.scrollValue >= this.scrollLength() - 1) {
+      this.isFinishedEvent = true;
       if (window.timeLine != null) {
-        chapter = window.timeLine.getChapter();
-        if (chapter.finishedScrollAllActor()) {
-          return this.nextChapter();
-        }
+        return window.timeLine.nextChapterIfFinishedAllEvent();
       }
     }
   },

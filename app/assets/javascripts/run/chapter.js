@@ -35,8 +35,16 @@ Chapter = (function() {
       type = "center";
     }
     window.disabledEventHandler = true;
-    if (this.eventListenerList.length === 1 && this.timelineEventList[0][TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
-      item = this.eventListenerList[0];
+    item = null;
+    this.eventListenerList.forEach((function(_this) {
+      return function(e, idx) {
+        if (_this.timelineEventList[idx][TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+          item = e;
+          return false;
+        }
+      };
+    })(this));
+    if (item != null) {
       width = item.itemSize.w;
       height = item.itemSize.h;
       if (item.scale != null) {
@@ -92,7 +100,7 @@ Chapter = (function() {
     this.eventListenerList.forEach(function(eventListener) {
       var methodName;
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-      if (!eventListener.finishedScroll(methodName, eventListener.scrollValue)) {
+      if (!eventListener.isFinishedEvent) {
         ret = false;
         return false;
       }

@@ -120,7 +120,10 @@ ButtonItem = (function(superClass) {
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().removeClass('dentButton_' + _this.id);
-        return _this.nextChapter();
+        _this.isFinishedEvent = true;
+        if (window.timeLine != null) {
+          return window.timeLine.nextChapterIfFinishedAllEvent();
+        }
       };
     })(this));
   };

@@ -6,26 +6,31 @@ class TimeLine
     @chapterIndex = 0
     @finished = false
 
+  # 現在のチャプターを取得
+  thisChapter: ->
+    return @chapterList[@chapterIndex]
+
   # 開始イベント
   start: ->
     # チャプター前処理
-    @chapterList[@chapterIndex].willChapter()
+    @thisChapter().willChapter()
 
-  # 現在のチャプターを取得
-  getChapter: ->
-    return @chapterList[@chapterIndex]
+  # 全てのイベントが終了している場合、チャプターを進める
+  nextChapterIfFinishedAllEvent: ->
+    if @thisChapter().finishedScrollAllActor()
+      @nextChapter()
 
   # チャプターを進める
   nextChapter: ->
     # チャプター後処理
-    @chapterList[@chapterIndex].didChapter()
+    @thisChapter().didChapter()
     # indexを更新
     @chapterIndex += 1
     if @chapterList.length <= @chapterIndex
       @finishTimeline()
     else
       # チャプター前処理
-      @chapterList[@chapterIndex].willChapter()
+      @thisChapter().willChapter()
 
   # チャプターを戻す
   backChapter: ->
@@ -34,7 +39,7 @@ class TimeLine
     if @chapterIndex > 0
       @chapterIndex -= 1
       # 前のアイテムにフォーカス
-      @chapterList[@chapterIndex].focusToActorIfNeed(false)
+      @thisChapter().focusToActorIfNeed(false)
 
   # チャプターの内容をリセット
   resetChapter: (chapterIndex) ->
@@ -45,16 +50,16 @@ class TimeLine
   # @param [Int] y Y軸の動作値
   handleScrollEvent: (x, y) ->
     if !@finished && @isScrollChapter()
-      @chapterList[@chapterIndex].scrollEvent(x, y)
+      @thisChapter().scrollEvent(x, y)
 
   # スクロールチャプターか判定
   isScrollChapter: ->
-    return @chapterList[@chapterIndex].scrollEvent?
+    return @thisChapter().scrollEvent?
 
   # クリックイベントをハンドル
 #  handleClickEvent: (e) ->
 #    if !@finished
-#      @chapterList[@chapterIndex].clickEvent(e)
+#      @thisChapter().clickEvent(e)
 
   # タイムライン終了イベント
   finishTimeline: ->

@@ -3,6 +3,7 @@ EventListener =
   # アクションの初期化(閲覧モードのみ使用される)
   setEvent: (timelineEvent) ->
     @timelineEvent = timelineEvent
+    @isFinishedEvent = false
     # アクションメソッドの設定
     @setMethod()
 
@@ -25,6 +26,7 @@ EventListener =
   # リセット(アクション前に戻す)
   # @abstract
   reset: ->
+    @isFinishedEvent = false
     return
 
   # JQueryエレメントを取得
@@ -50,10 +52,6 @@ EventListener =
   didChapter: (methodName) ->
     return
 
-  # スクロール終了判定イベント
-  finishedScroll: (methodName, scrollValue) ->
-    return scrollValue >= @scrollLength() - 1
-
   # スクロール基底メソッド
   scrollRootFunc: (x, y) ->
     if !@timelineEvent[TimelineEvent.PageValueKey.METHODNAME]?
@@ -61,7 +59,7 @@ EventListener =
       return
 
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-    if @finishedScroll(methodName, @scrollValue)
+    if @isFinishedEvent
       # 終了済みの場合
       return
 
@@ -80,13 +78,10 @@ EventListener =
 
     (@constructor.prototype[methodName]).call(@, @scrollValue)
 
-    if @finishedScroll(methodName, @scrollValue)
-      console.log('scroll nextChapter')
+    if @scrollValue >= @scrollLength() - 1
+      @isFinishedEvent = true
       if window.timeLine?
-        chapter = window.timeLine.getChapter()
-        if chapter.finishedScrollAllActor()
-          # 全てのアイテムのスクロールが終了している場合は次のチャプターへ
-          @nextChapter()
+        window.timeLine.nextChapterIfFinishedAllEvent()
 
   scrollLength: ->
     return parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])

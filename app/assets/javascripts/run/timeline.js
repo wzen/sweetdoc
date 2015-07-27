@@ -8,21 +8,27 @@ TimeLine = (function() {
     this.finished = false;
   }
 
-  TimeLine.prototype.start = function() {
-    return this.chapterList[this.chapterIndex].willChapter();
-  };
-
-  TimeLine.prototype.getChapter = function() {
+  TimeLine.prototype.thisChapter = function() {
     return this.chapterList[this.chapterIndex];
   };
 
+  TimeLine.prototype.start = function() {
+    return this.thisChapter().willChapter();
+  };
+
+  TimeLine.prototype.nextChapterIfFinishedAllEvent = function() {
+    if (this.thisChapter().finishedScrollAllActor()) {
+      return this.nextChapter();
+    }
+  };
+
   TimeLine.prototype.nextChapter = function() {
-    this.chapterList[this.chapterIndex].didChapter();
+    this.thisChapter().didChapter();
     this.chapterIndex += 1;
     if (this.chapterList.length <= this.chapterIndex) {
       return this.finishTimeline();
     } else {
-      return this.chapterList[this.chapterIndex].willChapter();
+      return this.thisChapter().willChapter();
     }
   };
 
@@ -30,7 +36,7 @@ TimeLine = (function() {
     this.resetChapter(this.chapterIndex);
     if (this.chapterIndex > 0) {
       this.chapterIndex -= 1;
-      return this.chapterList[this.chapterIndex].focusToActorIfNeed(false);
+      return this.thisChapter().focusToActorIfNeed(false);
     }
   };
 
@@ -40,12 +46,12 @@ TimeLine = (function() {
 
   TimeLine.prototype.handleScrollEvent = function(x, y) {
     if (!this.finished && this.isScrollChapter()) {
-      return this.chapterList[this.chapterIndex].scrollEvent(x, y);
+      return this.thisChapter().scrollEvent(x, y);
     }
   };
 
   TimeLine.prototype.isScrollChapter = function() {
-    return this.chapterList[this.chapterIndex].scrollEvent != null;
+    return this.thisChapter().scrollEvent != null;
   };
 
   TimeLine.prototype.finishTimeline = function() {

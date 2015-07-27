@@ -185,7 +185,6 @@ class ArrowItem extends CanvasItemBase
   # クリックイベント ※アクションイベント
   changeColorClick : (e) =>
 
-
   # 座標間の距離を計算する
   # @private
   _coodLength = (locA, locB) ->

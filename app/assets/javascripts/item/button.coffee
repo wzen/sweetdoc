@@ -101,7 +101,9 @@ class ButtonItem extends CssItemBase
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
       @getJQueryElement().removeClass('dentButton_' + @id)
-      @nextChapter()
+      @isFinishedEvent = true
+      if window.timeLine?
+        window.timeLine.nextChapterIfFinishedAllEvent()
     )
 
   # CSSアニメーション 凹むボタン
