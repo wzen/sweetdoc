@@ -36,7 +36,7 @@ EventListener = {
     }
   },
   didChapter: function(methodName) {},
-  finishedScroll: function(scrollValue) {
+  finishedScroll: function(methodName, scrollValue) {
     return false;
   },
   scrollRootFunc: function(x, y) {
@@ -55,7 +55,7 @@ EventListener = {
     this.scrollValue = this.scrollValue >= scrollLength ? scrollLength - 1 : this.scrollValue;
     methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
     this.constructor.prototype[methodName].call(this, this.scrollValue);
-    if (this.finishedScroll(this.scrollValue)) {
+    if (this.finishedScroll(methodName, this.scrollValue)) {
       console.log('scroll nextChapter');
       return this.nextChapter();
     }

@@ -56,8 +56,11 @@ BackgroundEvent = (function(superClass) {
     return this.targetBackground.css('backgroundColor', this.scrollEvents[scrollValue]);
   };
 
-  BackgroundEvent.prototype.finishedScroll = function(scrollValue) {
-    return scrollValue >= this.scrollLength() - 1;
+  BackgroundEvent.prototype.finishedScroll = function(methodName, scrollValue) {
+    if (methodName === 'changeBackgroundColor') {
+      return scrollValue >= this.scrollLength() - 1;
+    }
+    return false;
   };
 
   return BackgroundEvent;

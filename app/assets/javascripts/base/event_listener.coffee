@@ -52,7 +52,7 @@ EventListener =
 
   # スクロール終了判定イベント
   # @abstract
-  finishedScroll: (scrollValue) ->
+  finishedScroll: (methodName, scrollValue) ->
     return false
 
   # スクロール基底メソッド
@@ -71,7 +71,7 @@ EventListener =
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
     (@constructor.prototype[methodName]).call(@, @scrollValue)
 
-    if @finishedScroll(@scrollValue)
+    if @finishedScroll(methodName, @scrollValue)
       console.log('scroll nextChapter')
       @nextChapter()
 

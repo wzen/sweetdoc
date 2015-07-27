@@ -172,8 +172,11 @@ ArrowItem = (function(superClass) {
     return this.drawNewCanvas();
   };
 
-  ArrowItem.prototype.finishedScroll = function(scrollValue) {
-    return scrollValue >= this.scrollLength() - 1;
+  ArrowItem.prototype.finishedScroll = function(methodName, scrollValue) {
+    if (methodName === 'scrollDraw') {
+      return scrollValue >= this.scrollLength() - 1;
+    }
+    return false;
   };
 
   ArrowItem.prototype.changeColorClick = function(e) {};

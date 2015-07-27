@@ -44,7 +44,9 @@ class BackgroundEvent extends CommonEvent
     @targetBackground.css('backgroundColor', @scrollEvents[scrollValue])
 
   # スクロールチャプター終了判定
-  finishedScroll: (scrollValue) ->
-    return scrollValue >= @scrollLength() - 1
+  finishedScroll: (methodName, scrollValue) ->
+    if methodName == 'changeBackgroundColor'
+      return scrollValue >= @scrollLength() - 1
+    return false
 
 setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)
