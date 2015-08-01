@@ -111,7 +111,8 @@ ButtonItem = (function(superClass) {
   ButtonItem.prototype.willChapter = function(methodName) {
     ButtonItem.__super__.willChapter.call(this);
     if (methodName === 'defaultClick') {
-      return this.reDraw(false);
+      this.reDraw(false);
+      return this.appendCssIfNeeded();
     }
   };
 
@@ -128,11 +129,15 @@ ButtonItem = (function(superClass) {
     })(this));
   };
 
-  ButtonItem.dentButton = function(buttonItem) {
-    var css, emt, funcName, height, keyFrameName, keyframe, left, mozKeyframe, top, webkitKeyframe, width;
-    funcName = 'dentButton_' + buttonItem.id;
-    keyFrameName = funcName + "_" + buttonItem.id;
-    emt = buttonItem.getJQueryElement();
+  ButtonItem.prototype.appendCssIfNeeded = function() {
+    var css, e, emt, funcName, height, keyFrameName, keyframe, left, mozKeyframe, top, webkitKeyframe, width;
+    funcName = 'dentButton_' + this.id;
+    e = $("." + funcName, window.cssCode);
+    if ((e != null) && e.length > 0) {
+      return;
+    }
+    keyFrameName = funcName + "_frame";
+    emt = this.getJQueryElement();
     top = emt.css('top');
     left = emt.css('left');
     width = emt.css('width');
@@ -141,7 +146,7 @@ ButtonItem = (function(superClass) {
     webkitKeyframe = "@-webkit-keyframes " + keyframe;
     mozKeyframe = "@-moz-keyframes " + keyframe;
     css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: 0.5s;\n-moz-animation-duration: 0.5s;\n}";
-    return webkitKeyframe + " " + mozKeyframe + " " + css;
+    return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + webkitKeyframe + " " + mozKeyframe + " " + css + " </style></div>");
   };
 
   return ButtonItem;

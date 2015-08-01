@@ -136,11 +136,6 @@ setupTimeLineCss = ->
   $('#css_code_info').find('.css-style').each( ->
     itemCssStyle += $(this).html()
   )
-  # 暫定処理
-  for k, v of itemObject
-    if ButtonItem? && v instanceof ButtonItem
-      # cssアニメーション
-      itemCssStyle += ButtonItem.dentButton(v)
 
   if itemCssStyle.length > 0
     setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
@@ -164,9 +159,7 @@ changeTimelineColor = (teNum, actionType = null) ->
 
   for k,v of Constant.ActionEventTypeClassName
     $(teEmt).removeClass(v)
-#  $(teEmt).removeClass("blank")
-#  $(teEmt).removeClass("click")
-#  $(teEmt).removeClass("scroll")
+
   if actionType?
     $(teEmt).addClass(getActionTypeClassNameByActionType(actionType))
   else

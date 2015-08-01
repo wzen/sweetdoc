@@ -11,6 +11,7 @@ initCommonVar = function() {
   window.scrollContents = $("#scroll_contents");
   window.scrollInside = $("#scroll_inside");
   window.scrollInsideCover = $('#scroll_inside_cover');
+  window.cssCode = $("#cssCode");
   window.distX = 0;
   window.distY = 0;
   window.scrollViewMag = 500;

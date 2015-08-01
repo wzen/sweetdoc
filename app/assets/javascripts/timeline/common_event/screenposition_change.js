@@ -16,6 +16,24 @@ TLEScreenPositionChange = (function(superClass) {
 
   TLEScreenPositionChange.Z = 'z';
 
+  TLEScreenPositionChange.initConfigValue = function(timelineConfig) {
+    var height, left, mainTramsform, scale, scroll, top, width;
+    TLEScreenPositionChange.__super__.constructor.initConfigValue.call(this, timelineConfig);
+    scroll = $('#scroll_inside');
+    width = scroll.width();
+    height = scroll.height();
+    top = window.scrollContents.scrollTop();
+    left = window.scrollContents.scrollLeft();
+    scale = 1;
+    mainTramsform = $('#main-wrapper').css('transform');
+    if (mainTramsform != null) {
+      scale = parseInt(mainTramsform.replace('scale', '').replace('(', '').replace(')', ''));
+    }
+    $('.screenposition_change_x:first', timelineConfig.emt).val(parseInt(left + (width / 2)));
+    $('.screenposition_change_y:first', timelineConfig.emt).val(parseInt(top + (height / 2)));
+    return $('.screenposition_change_z:first', timelineConfig.emt).val(scale);
+  };
+
   TLEScreenPositionChange.writeToPageValue = function(timelineConfig) {
     var emt, errorMes, value, writeValue;
     errorMes = "";
@@ -46,6 +64,23 @@ TLEScreenPositionChange = (function(superClass) {
     $('.screenposition_change_y:first', emt).val(value[this.Y]);
     $('.screenposition_change_z:first', emt).val(value[this.Z]);
     return true;
+  };
+
+  TLEScreenPositionChange.zoom = function(zoom, x, y) {
+    $(".content").css({
+      "-moz-transition": "all 0s ease 0",
+      "-webkit-transition": "all 0s ease 0",
+      "-webkit-transform-origin": x + "px " + y + "px",
+      "transform-origin": x + "px " + y + "px"
+    });
+    return setTimeout(function() {
+      return $(".content").css({
+        "-moz-transition": "all 0.5s ease 0",
+        "-webkit-transition": "all 0.5s ease 0",
+        "-webkit-transform": "scale(" + zoom + ")",
+        "transform": "scale(" + zoom + ")"
+      });
+    }, 1);
   };
 
   return TLEScreenPositionChange;

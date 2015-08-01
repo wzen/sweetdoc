@@ -5,4 +5,7 @@ class ScreenEvent extends CommonEvent
 
   changeScreenPosition: ->
 
+
+
+
 setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent)
