@@ -16,6 +16,7 @@ Chapter = (function() {
       eventListener.setEvent(this.timelineEventList[idx]);
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
       eventListener.willChapter(methodName);
+      eventListener.appendCssIfNeeded(methodName);
     }
     this.sinkFrontAllActor();
     return this.focusToActorIfNeed(false);

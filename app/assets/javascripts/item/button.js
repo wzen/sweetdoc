@@ -111,16 +111,15 @@ ButtonItem = (function(superClass) {
   ButtonItem.prototype.willChapter = function(methodName) {
     ButtonItem.__super__.willChapter.call(this);
     if (methodName === 'defaultClick') {
-      this.reDraw(false);
-      return this.appendCssIfNeeded();
+      return this.reDraw(false);
     }
   };
 
   ButtonItem.prototype.defaultClick = function(e) {
-    this.getJQueryElement().addClass('dentButton_' + this.id);
+    this.getJQueryElement().addClass('defaultClick_' + this.id);
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
-        _this.getJQueryElement().removeClass('dentButton_' + _this.id);
+        _this.getJQueryElement().removeClass('defaultClick_' + _this.id);
         _this.isFinishedEvent = true;
         if (window.timeLine != null) {
           return window.timeLine.nextChapterIfFinishedAllEvent();
@@ -129,14 +128,10 @@ ButtonItem = (function(superClass) {
     })(this));
   };
 
-  ButtonItem.prototype.appendCssIfNeeded = function() {
-    var css, e, emt, funcName, height, keyFrameName, keyframe, left, mozKeyframe, top, webkitKeyframe, width;
-    funcName = 'dentButton_' + this.id;
-    e = $("." + funcName, window.cssCode);
-    if ((e != null) && e.length > 0) {
-      return;
-    }
-    keyFrameName = funcName + "_frame";
+  ButtonItem.prototype.cssElement = function(methodName) {
+    var css, emt, funcName, height, keyFrameName, keyframe, left, mozKeyframe, top, webkitKeyframe, width;
+    funcName = methodName + "_" + this.id;
+    keyFrameName = this.id + "_frame";
     emt = this.getJQueryElement();
     top = emt.css('top');
     left = emt.css('left');
@@ -146,7 +141,7 @@ ButtonItem = (function(superClass) {
     webkitKeyframe = "@-webkit-keyframes " + keyframe;
     mozKeyframe = "@-moz-keyframes " + keyframe;
     css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: 0.5s;\n-moz-animation-duration: 0.5s;\n}";
-    return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + webkitKeyframe + " " + mozKeyframe + " " + css + " </style></div>");
+    return webkitKeyframe + " " + mozKeyframe + " " + css;
   };
 
   return ButtonItem;

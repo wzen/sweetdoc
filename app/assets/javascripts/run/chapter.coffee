@@ -11,6 +11,7 @@ class Chapter
       eventListener.setEvent(@timelineEventList[idx])
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
       eventListener.willChapter(methodName)
+      eventListener.appendCssIfNeeded(methodName)
 
     @sinkFrontAllActor()
     @focusToActorIfNeed(false)

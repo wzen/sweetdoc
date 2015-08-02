@@ -94,30 +94,22 @@ class ButtonItem extends CssItemBase
       # 描画
       @reDraw(false)
 
-      # css追加
-      @appendCssIfNeeded()
-
-# 共通クリックイベント ※アクションイベント
+  # 共通クリックイベント ※アクションイベント
   defaultClick : (e) =>
     # ボタン凹むアクション
-    @getJQueryElement().addClass('dentButton_' + @id)
+    @getJQueryElement().addClass('defaultClick_' + @id)
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
-      @getJQueryElement().removeClass('dentButton_' + @id)
+      @getJQueryElement().removeClass('defaultClick_' + @id)
       @isFinishedEvent = true
       if window.timeLine?
         window.timeLine.nextChapterIfFinishedAllEvent()
     )
 
-  # CSSアニメーション 凹むボタン
-  appendCssIfNeeded : ->
-    funcName = 'dentButton_' + @id
-    e = $(".#{funcName}", window.cssCode)
-    if e? && e.length > 0
-      # CSSが存在する場合は何もしない
-      return
-
-    keyFrameName = "#{funcName}_frame"
+  # CSS
+  cssElement : (methodName) ->
+    funcName = "#{methodName}_#{@id}"
+    keyFrameName = "#{@id}_frame"
     emt = @getJQueryElement()
     top = emt.css('top')
     left = emt.css('left')
@@ -173,7 +165,7 @@ class ButtonItem extends CssItemBase
     }
     """
 
-    window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{webkitKeyframe} #{mozKeyframe} #{css} </style></div>")
+    return "#{webkitKeyframe} #{mozKeyframe} #{css}"
 
 window.loadedClassList.ButtonItem = ButtonItem
 setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)

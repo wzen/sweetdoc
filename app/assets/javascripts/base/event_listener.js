@@ -31,7 +31,7 @@ EventListener = {
       return window.timeLine.nextChapter();
     }
   },
-  willChapter: function() {
+  willChapter: function(methodName) {
     var actionType;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
@@ -70,6 +70,21 @@ EventListener = {
   },
   scrollLength: function() {
     return parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
+  },
+  cssElement: function(methodName) {
+    return null;
+  },
+  appendCssIfNeeded: function(methodName) {
+    var ce, e, funcName;
+    funcName = methodName + "_" + this.id;
+    e = $("." + funcName, window.cssCode);
+    if ((e != null) && e.length > 0) {
+      return;
+    }
+    ce = this.cssElement(methodName);
+    if (ce != null) {
+      return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
+    }
   }
 };
 

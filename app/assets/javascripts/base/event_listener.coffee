@@ -40,7 +40,7 @@ EventListener =
       window.timeLine.nextChapter()
 
   # チャプター開始前イベント
-  willChapter: ->
+  willChapter: (methodName) ->
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollValue = 0
@@ -83,8 +83,26 @@ EventListener =
       if window.timeLine?
         window.timeLine.nextChapterIfFinishedAllEvent()
 
+  # スクロールの長さを取得
   scrollLength: ->
     return parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
+
+  # CSS
+  # @abstract
+  cssElement: (methodName) ->
+    return null
+
+  # CSS追加処理
+  appendCssIfNeeded : (methodName) ->
+    funcName = "#{methodName}_#{@id}"
+    e = $(".#{funcName}", window.cssCode)
+    if e? && e.length > 0
+    # CSSが存在する場合は何もしない
+      return
+
+    ce = @cssElement(methodName)
+    if ce?
+      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
 
 CommonEventListener =
   # 初期化

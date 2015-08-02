@@ -48,19 +48,3 @@ class TLEScreenPositionChange extends TimelineEvent
     $('.screenposition_change_z:first', emt).val(value[@Z])
     return true
 
-  @zoom = (zoom, x, y) ->
-    $(".content").css({
-      "-moz-transition": "all 0s ease 0",
-      "-webkit-transition": "all 0s ease 0",
-      "-webkit-transform-origin": x+"px "+y+"px",
-      "transform-origin": x+"px "+y+"px",
-    })
-    setTimeout( ->
-      $(".content").css({
-        "-moz-transition": "all 0.5s ease 0",
-        "-webkit-transition": "all 0.5s ease 0",
-        "-webkit-transform" : "scale("+zoom+")",
-        "transform" : "scale("+zoom+")"
-      })
-    ,1)
-

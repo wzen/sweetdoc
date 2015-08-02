@@ -66,23 +66,6 @@ TLEScreenPositionChange = (function(superClass) {
     return true;
   };
 
-  TLEScreenPositionChange.zoom = function(zoom, x, y) {
-    $(".content").css({
-      "-moz-transition": "all 0s ease 0",
-      "-webkit-transition": "all 0s ease 0",
-      "-webkit-transform-origin": x + "px " + y + "px",
-      "transform-origin": x + "px " + y + "px"
-    });
-    return setTimeout(function() {
-      return $(".content").css({
-        "-moz-transition": "all 0.5s ease 0",
-        "-webkit-transition": "all 0.5s ease 0",
-        "-webkit-transform": "scale(" + zoom + ")",
-        "transform": "scale(" + zoom + ")"
-      });
-    }, 1);
-  };
-
   return TLEScreenPositionChange;
 
 })(TimelineEvent);
