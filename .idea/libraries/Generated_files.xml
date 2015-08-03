@@ -99,7 +99,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/common_var.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />

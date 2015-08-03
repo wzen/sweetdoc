@@ -137,7 +137,12 @@ $ ->
     return
 
   # 共有変数
-  initCommonVar()
+  worktableCommonVar()
+  # WebStorageを初期化する
+  lstorage.clear()
+  # 初期状態としてボタンを選択(暫定)
+  window.selectItemMenu = Constant.ItemId.BUTTON
+  loadItemJs(Constant.ItemId.BUTTON)
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
   $('#canvas_container').attr('width', $('#main-wrapper').width())

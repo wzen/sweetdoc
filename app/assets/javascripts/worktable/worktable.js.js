@@ -172,7 +172,10 @@ $(function() {
     alert('ブラウザ非対応です。');
     return;
   }
-  initCommonVar();
+  worktableCommonVar();
+  lstorage.clear();
+  window.selectItemMenu = Constant.ItemId.BUTTON;
+  loadItemJs(Constant.ItemId.BUTTON);
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
   $('#canvas_container').attr('width', $('#main-wrapper').width());
   $('#canvas_container').attr('height', $('#main-wrapper').height());

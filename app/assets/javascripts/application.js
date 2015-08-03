@@ -27,6 +27,7 @@
 //= require item/generator.jquery.color.js
 //= require base/constant
 //= require base/common
+//= require base/common_var
 //= require base/extend
 //= require base/event_listener
 //= require base/local_storage
@@ -41,7 +42,6 @@
 //= require timeline/common_event/backgroundcolor_change
 //= require timeline/common_event/screenposition_change
 //= require timeline/item_event/item_change
-//= require worktable/common/common_var
 //= require worktable/common/common_func
 //= require worktable/common/history
 //= require worktable/common/server_storage

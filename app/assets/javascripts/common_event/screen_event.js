@@ -12,11 +12,11 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.EVENT_ID = '2';
 
-  ScreenEvent.prototype.changeScreenPosition = function() {
+  ScreenEvent.prototype.changeScreenPosition = function(e) {
     var actionType;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.CLICK) {
-      return $('#main-wrapper');
+      return $('#main-wrapper').addClass('defaultClick_' + this.id);
     }
   };
 

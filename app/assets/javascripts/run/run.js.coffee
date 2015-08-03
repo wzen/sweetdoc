@@ -1,28 +1,6 @@
 # 閲覧ページ読み込みフラグ
 window.runPage = true
 
-# 初期化
-initCommonVar = ->
-  window.wrap = $('#main-wrapper')
-  window.scrollWrapper = $("#scroll_wrapper")
-  window.scrollHandleWrapper = $("#scroll_handle_wrapper")
-  window.scrollHandle = $("#scroll_handle")
-  window.scrollContents = $("#scroll_contents")
-  window.scrollInside = $("#scroll_inside")
-  window.scrollInsideCover = $('#scroll_inside_cover')
-  window.cssCode = $("#cssCode")
-  window.distX = 0
-  window.distY = 0
-  window.scrollViewMag = 500
-  window.resizeTimer = false
-  window.timeLine = null
-  window.scrollViewSwitchZindex = {'on': 100, 'off': 0}
-  window.scrollInsideCoverZindex = 1
-  window.lstorage = localStorage
-  window.disabledEventHandler = false
-  window.firstItemFocused = false
-  window.instanceMap = {}
-
 # 画面初期化
 initView = ->
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
@@ -186,7 +164,7 @@ loadPageValueFromStorage = ->
   setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h)
 
 $ ->
-  initCommonVar()
+  runCommonVar()
   initView()
   initHandleScrollPoint()
   #initResize(wrap, scrollWrapper)

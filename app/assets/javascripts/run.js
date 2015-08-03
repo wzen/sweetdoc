@@ -8,6 +8,7 @@
 // IDE not aware under vendor/asset/
 //= require base/constant
 //= require base/common
+//= require base/common_var
 //= require base/extend
 //= require base/event_listener
 // require_directory util

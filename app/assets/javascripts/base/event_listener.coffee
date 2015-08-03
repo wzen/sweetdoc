@@ -115,8 +115,6 @@ ItemEventListener =
 
     # アイテムを描画
     # TODO: 設定で初期表示させるか切り替えさせる
-#    if @reDraw?
-#      @reDraw(false)
 
   # 最小限のデータを設定
   # @abstract

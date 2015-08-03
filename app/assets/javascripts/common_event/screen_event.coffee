@@ -3,10 +3,11 @@ class ScreenEvent extends CommonEvent
   @EVENT_ID = '2'
 
   # 画面移動イベント
-  changeScreenPosition: ->
+  changeScreenPosition: (e) ->
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.CLICK
-      $('#main-wrapper')
+
+      $('#main-wrapper').addClass('defaultClick_' + @id)
 
 
   # CSS
