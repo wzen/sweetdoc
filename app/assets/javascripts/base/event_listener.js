@@ -38,7 +38,9 @@ EventListener = {
       this.scrollValue = 0;
     }
   },
-  didChapter: function(methodName) {},
+  didChapter: function(methodName) {
+    this.removeCss(methodName);
+  },
   scrollRootFunc: function(x, y) {
     var methodName, scrollLength;
     if (this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME] == null) {
@@ -85,6 +87,11 @@ EventListener = {
     if (ce != null) {
       return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
     }
+  },
+  removeCss: function(methodName) {
+    var funcName;
+    funcName = methodName + "_" + this.id;
+    return window.cssCode.find("." + funcName).remove();
   }
 };
 

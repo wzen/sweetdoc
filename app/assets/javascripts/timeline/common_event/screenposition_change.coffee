@@ -6,19 +6,9 @@ class TLEScreenPositionChange extends TimelineEvent
   @initConfigValue = (timelineConfig) ->
     super(timelineConfig)
 
-    scroll = $('#scroll_inside')
-    width = scroll.width()
-    height = scroll.height()
-    top = window.scrollContents.scrollTop()
-    left = window.scrollContents.scrollLeft()
-    scale = 1
-    mainTramsform = $('#main-wrapper').css('transform')
-    if mainTramsform?
-      scale = parseInt(mainTramsform.replace('scale', '').replace('(', '').replace(')', ''))
-
-    $('.screenposition_change_x:first', timelineConfig.emt).val(parseInt(left + (width / 2)))
-    $('.screenposition_change_y:first', timelineConfig.emt).val(parseInt(top + (height / 2)))
-    $('.screenposition_change_z:first', timelineConfig.emt).val(scale)
+    $('.screenposition_change_x:first', timelineConfig.emt).val(0)
+    $('.screenposition_change_y:first', timelineConfig.emt).val(0)
+    $('.screenposition_change_z:first', timelineConfig.emt).val(0)
 
   @writeToPageValue = (timelineConfig) ->
     errorMes = ""

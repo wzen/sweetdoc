@@ -42,7 +42,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/timeline.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/common_var.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />

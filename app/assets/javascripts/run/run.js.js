@@ -37,7 +37,7 @@ initResize = function(wrap, scrollWrapper) {
     return resizeTimer = setTimeout(function() {
       var h;
       h = $(window).height();
-      wrap.height(h);
+      mainWrapper.height(h);
       return scrollWrapper.height(h);
     }, 200);
   });

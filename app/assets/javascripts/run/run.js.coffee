@@ -36,7 +36,7 @@ initResize = (wrap, scrollWrapper) ->
       clearTimeout(resizeTimer)
     resizeTimer = setTimeout( ->
       h = $(window).height()
-      wrap.height(h)
+      mainWrapper.height(h)
       scrollWrapper.height(h)
     , 200)
   )

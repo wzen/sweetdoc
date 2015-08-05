@@ -2,13 +2,37 @@
 class ScreenEvent extends CommonEvent
   @EVENT_ID = '2'
 
+  constructor: ->
+    @id = @constructor.EVENT_ID
+
+  getJQueryElement: ->
+    return window.mainWrapper
+
   # 画面移動イベント
-  changeScreenPosition: (e) ->
+  changeScreenPosition: (e) =>
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.CLICK
+      finished_count = 0
+      scrollTop = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X]
+      scrollLeft = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y]
+      scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 'normal', 'linear', ->
+        finished_count += 1
+        if finished_count >= 2
+          @isFinishedEvent = true
+          if window.timeLine?
+            window.timeLine.nextChapterIfFinishedAllEvent()
+      )
 
-      $('#main-wrapper').addClass('defaultClick_' + @id)
-
+#      @getJQueryElement().addClass('changeScreenPosition_' + @id)
+#      @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
+#        @getJQueryElement().removeClass('changeScreenPosition_' + @id)
+#
+#        finished_count += 1
+#        if finished_count >= 2
+#          @isFinishedEvent = true
+#          if window.timeLine?
+#            window.timeLine.nextChapterIfFinishedAllEvent()
+#      )
 
   # CSS
   cssElement : (methodName) ->
@@ -18,7 +42,18 @@ class ScreenEvent extends CommonEvent
       if actionType == Constant.ActionEventHandleType.CLICK
 
         funcName = "#{methodName}_#{@id}"
-        zoom = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z]
+
+        scale = null
+        mainTramsform = $('#main-wrapper').css('transform')
+        if mainTramsform?
+          s = parseInt(mainTramsform.replace('scale', '').replace('(', '').replace(')', ''))
+          if s? && !Number.isNaN(s)
+            scale = s
+
+        if scale?
+          zoom = scale + @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z]
+        else
+          zoom = 1
 
         # CSSに設定
         css = """

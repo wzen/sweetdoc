@@ -50,6 +50,7 @@ EventListener =
   # チャプター終了時イベント
   # @abstract
   didChapter: (methodName) ->
+    @removeCss(methodName)
     return
 
   # スクロール基底メソッド
@@ -103,6 +104,10 @@ EventListener =
     ce = @cssElement(methodName)
     if ce?
       window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
+
+  removeCss: (methodName) ->
+    funcName = "#{methodName}_#{@id}"
+    window.cssCode.find(".#{funcName}").remove()
 
 CommonEventListener =
   # 初期化

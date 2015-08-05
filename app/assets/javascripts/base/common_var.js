@@ -23,12 +23,10 @@ worktableCommonVar = function() {
 
 runCommonVar = function() {
   _commonVar();
-  window.wrap = $('#main-wrapper');
+  window.mainWrapper = $('#main-wrapper');
   window.scrollWrapper = $("#scroll_wrapper");
   window.scrollHandleWrapper = $("#scroll_handle_wrapper");
   window.scrollHandle = $("#scroll_handle");
-  window.scrollContents = $("#scroll_contents");
-  window.scrollInside = $("#scroll_inside");
   window.scrollInsideCover = $('#scroll_inside_cover');
   window.distX = 0;
   window.distY = 0;

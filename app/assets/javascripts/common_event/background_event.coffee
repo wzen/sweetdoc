@@ -2,6 +2,9 @@
 class BackgroundEvent extends CommonEvent
   @EVENT_ID = '1'
 
+  constructor: ->
+    @id = @constructor.EVENT_ID
+
   willChapter: (methodName) ->
     super()
 
@@ -32,7 +35,7 @@ class BackgroundEvent extends CommonEvent
         r = parseInt(bColors[0] + rp)
         g = parseInt(bColors[1] + gp)
         b = parseInt(bColors[2] + bp)
-        rgb = "rgb(" + r + "," + g + "," + b + ")"
+        rgb = "rgb(#{r},#{g},#{b})"
         @scrollEvents[i] = rgb
         rp += rPer
         gp += gPer
