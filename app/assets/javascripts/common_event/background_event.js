@@ -6,11 +6,11 @@ var BackgroundEvent,
 BackgroundEvent = (function(superClass) {
   extend(BackgroundEvent, superClass);
 
-  BackgroundEvent.EVENT_ID = '1';
-
   function BackgroundEvent() {
-    this.id = this.constructor.EVENT_ID;
+    return BackgroundEvent.__super__.constructor.apply(this, arguments);
   }
+
+  BackgroundEvent.EVENT_ID = '1';
 
   BackgroundEvent.prototype.willChapter = function(methodName) {
     var b, bColor, bColors, bPer, bp, cColor, cColors, g, gPer, gp, i, index, j, k, l, len, len1, r, rPer, ref, rgb, rp, scrollEnd, scrollLength, scrollStart, val;

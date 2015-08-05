@@ -30,6 +30,20 @@ ScrollChapter = (function(superClass) {
     });
   };
 
+  ScrollChapter.prototype.finishedAllEvent = function() {
+    var ret;
+    ret = true;
+    this.eventListenerList.forEach(function(eventListener) {
+      var methodName;
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      if (!eventListener.isFinishedEvent) {
+        ret = false;
+        return false;
+      }
+    });
+    return ret;
+  };
+
   return ScrollChapter;
 
 })(Chapter);

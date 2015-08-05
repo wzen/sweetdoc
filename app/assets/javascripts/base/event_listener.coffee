@@ -50,7 +50,6 @@ EventListener =
   # チャプター終了時イベント
   # @abstract
   didChapter: (methodName) ->
-    @removeCss(methodName)
     return
 
   # スクロール基底メソッド
@@ -95,19 +94,20 @@ EventListener =
 
   # CSS追加処理
   appendCssIfNeeded : (methodName) ->
-    funcName = "#{methodName}_#{@id}"
-    e = $(".#{funcName}", window.cssCode)
-    if e? && e.length > 0
-    # CSSが存在する場合は何もしない
-      return
-
     ce = @cssElement(methodName)
     if ce?
+      # CSSが存在する場合は削除して入れ替え
+      @removeCss(methodName)
+      funcName = "#{methodName}_#{@id}"
       window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
 
   removeCss: (methodName) ->
     funcName = "#{methodName}_#{@id}"
     window.cssCode.find(".#{funcName}").remove()
+
+  # ページング時
+  clearPaging: (methodName) ->
+    @removeCss(methodName)
 
 CommonEventListener =
   # 初期化

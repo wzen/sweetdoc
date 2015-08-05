@@ -6,15 +6,18 @@ var CommonEvent,
 CommonEvent = (function(superClass) {
   extend(CommonEvent, superClass);
 
-  function CommonEvent() {
-    return CommonEvent.__super__.constructor.apply(this, arguments);
-  }
-
   CommonEvent.include(EventListener);
 
   CommonEvent.include(CommonEventListener);
 
+  CommonEvent.EVENT_ID = '';
+
   CommonEvent.ID = '';
+
+  function CommonEvent() {
+    CommonEvent.__super__.constructor.call(this);
+    this.id = "c" + this.constructor.EVENT_ID + generateId();
+  }
 
   return CommonEvent;
 

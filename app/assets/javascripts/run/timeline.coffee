@@ -17,7 +17,7 @@ class TimeLine
 
   # 全てのイベントが終了している場合、チャプターを進める
   nextChapterIfFinishedAllEvent: ->
-    if @thisChapter().finishedScrollAllActor()
+    if @thisChapter().finishedAllEvent()
       @nextChapter()
 
   # チャプターを進める

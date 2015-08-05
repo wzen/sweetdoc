@@ -4,6 +4,7 @@
 //= require jquery-1.9.1.min
 //= require jquery_ujs
 //= require jquery-ui.min
+//= require jquery.transit.min
 //= require turbolinks
 // IDE not aware under vendor/asset/
 //= require base/constant

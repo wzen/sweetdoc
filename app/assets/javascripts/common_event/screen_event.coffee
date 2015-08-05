@@ -2,9 +2,6 @@
 class ScreenEvent extends CommonEvent
   @EVENT_ID = '2'
 
-  constructor: ->
-    @id = @constructor.EVENT_ID
-
   getJQueryElement: ->
     return window.mainWrapper
 
@@ -23,68 +20,18 @@ class ScreenEvent extends CommonEvent
             window.timeLine.nextChapterIfFinishedAllEvent()
       )
 
-#      @getJQueryElement().addClass('changeScreenPosition_' + @id)
-#      @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
-#        @getJQueryElement().removeClass('changeScreenPosition_' + @id)
-#
-#        finished_count += 1
-#        if finished_count >= 2
-#          @isFinishedEvent = true
-#          if window.timeLine?
-#            window.timeLine.nextChapterIfFinishedAllEvent()
-#      )
+      scale = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z]
+      @getJQueryElement().transition({scale: "+=#{scale}"}, 'normal', 'linear', ->
+        finished_count += 1
+        if finished_count >= 2
+          @isFinishedEvent = true
+          if window.timeLine?
+            window.timeLine.nextChapterIfFinishedAllEvent()
+      )
 
-  # CSS
-  cssElement : (methodName) ->
-    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
-
-    if methodName == 'changeScreenPosition'
-      if actionType == Constant.ActionEventHandleType.CLICK
-
-        funcName = "#{methodName}_#{@id}"
-
-        scale = null
-        mainTramsform = $('#main-wrapper').css('transform')
-        if mainTramsform?
-          s = parseInt(mainTramsform.replace('scale', '').replace('(', '').replace(')', ''))
-          if s? && !Number.isNaN(s)
-            scale = s
-
-        if scale?
-          zoom = scale + @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z]
-        else
-          zoom = 1
-
-        # CSSに設定
-        css = """
-        .#{funcName}
-        {
-        -moz-transition: all 0.5s ease 0;
-        -webkit-transition: all 0.5s ease 0;
-        -webkit-transform : scale(#{zoom});
-        transform : scale(#{zoom});
-        }
-        """
-
-        return css
-
-    return null
-
-  zoom: (zoom, x, y) ->
-    $(".content").css({
-      "-moz-transition": "all 0s ease 0",
-      "-webkit-transition": "all 0s ease 0",
-      "-webkit-transform-origin": x+"px "+y+"px",
-      "transform-origin": x+"px "+y+"px",
-    })
-    setTimeout( ->
-      $(".content").css({
-        "-moz-transition": "all 0.5s ease 0",
-        "-webkit-transition": "all 0.5s ease 0",
-        "-webkit-transform" : "scale("+zoom+")",
-        "transform" : "scale("+zoom+")"
-      })
-    ,1)
-
+  # ページング時
+  clearPaging: (methodName) ->
+    super(methodName)
+    @getJQueryElement().removeClass('changeScreenPosition_' + @id)
 
 setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent)

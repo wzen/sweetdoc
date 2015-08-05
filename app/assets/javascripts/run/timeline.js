@@ -17,7 +17,7 @@ TimeLine = (function() {
   };
 
   TimeLine.prototype.nextChapterIfFinishedAllEvent = function() {
-    if (this.thisChapter().finishedScrollAllActor()) {
+    if (this.thisChapter().finishedAllEvent()) {
       return this.nextChapter();
     }
   };

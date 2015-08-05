@@ -84,9 +84,11 @@ TimelineConfig = (function() {
     $("." + displayClassName, this.emt).css('display', '');
     $(".action_div", this.emt).css('display', '');
     _setMethodActionEvent.call(this);
-    checkedRadioButton = $(".action_forms input:radio[name='" + displayClassName + "']:checked", this.emt);
-    if (checkedRadioButton.val()) {
-      return this.clickMethod(checkedRadioButton);
+    if (e != null) {
+      checkedRadioButton = $(".action_forms input:radio[name='" + displayClassName + "']:checked", this.emt);
+      if (checkedRadioButton.val()) {
+        return this.clickMethod(checkedRadioButton);
+      }
     }
   };
 

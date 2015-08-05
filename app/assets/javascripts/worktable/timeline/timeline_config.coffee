@@ -87,9 +87,11 @@ class TimelineConfig
 
     _setMethodActionEvent.call(@)
 
-    checkedRadioButton = $(".action_forms input:radio[name='#{displayClassName}']:checked", @emt)
-    if checkedRadioButton.val()
-      @clickMethod(checkedRadioButton)
+    if e?
+      # ラジオボタンをクリックした場合
+      checkedRadioButton = $(".action_forms input:radio[name='#{displayClassName}']:checked", @emt)
+      if checkedRadioButton.val()
+        @clickMethod(checkedRadioButton)
 
   # メソッド選択
   clickMethod: (e = null) ->

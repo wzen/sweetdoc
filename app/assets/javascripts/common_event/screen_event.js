@@ -7,27 +7,39 @@ var ScreenEvent,
 ScreenEvent = (function(superClass) {
   extend(ScreenEvent, superClass);
 
-  ScreenEvent.EVENT_ID = '2';
-
   function ScreenEvent() {
     this.changeScreenPosition = bind(this.changeScreenPosition, this);
-    this.id = this.constructor.EVENT_ID;
+    return ScreenEvent.__super__.constructor.apply(this, arguments);
   }
+
+  ScreenEvent.EVENT_ID = '2';
 
   ScreenEvent.prototype.getJQueryElement = function() {
     return window.mainWrapper;
   };
 
   ScreenEvent.prototype.changeScreenPosition = function(e) {
-    var actionType, finished_count, scrollLeft, scrollTop;
+    var actionType, finished_count, scale, scrollLeft, scrollTop;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.CLICK) {
       finished_count = 0;
       scrollTop = this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X];
       scrollLeft = this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y];
-      return scrollContents.animate({
+      scrollContents.animate({
         scrollTop: scrollContents.scrollTop() + scrollTop,
         scrollLeft: scrollContents.scrollLeft() + scrollLeft
+      }, 'normal', 'linear', function() {
+        finished_count += 1;
+        if (finished_count >= 2) {
+          this.isFinishedEvent = true;
+          if (window.timeLine != null) {
+            return window.timeLine.nextChapterIfFinishedAllEvent();
+          }
+        }
+      });
+      scale = this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z];
+      return this.getJQueryElement().transition({
+        scale: "+=" + scale
       }, 'normal', 'linear', function() {
         finished_count += 1;
         if (finished_count >= 2) {
@@ -40,47 +52,9 @@ ScreenEvent = (function(superClass) {
     }
   };
 
-  ScreenEvent.prototype.cssElement = function(methodName) {
-    var actionType, css, funcName, mainTramsform, s, scale, zoom;
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
-    if (methodName === 'changeScreenPosition') {
-      if (actionType === Constant.ActionEventHandleType.CLICK) {
-        funcName = methodName + "_" + this.id;
-        scale = null;
-        mainTramsform = $('#main-wrapper').css('transform');
-        if (mainTramsform != null) {
-          s = parseInt(mainTramsform.replace('scale', '').replace('(', '').replace(')', ''));
-          if ((s != null) && !Number.isNaN(s)) {
-            scale = s;
-          }
-        }
-        if (scale != null) {
-          zoom = scale + this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z];
-        } else {
-          zoom = 1;
-        }
-        css = "." + funcName + "\n{\n-moz-transition: all 0.5s ease 0;\n-webkit-transition: all 0.5s ease 0;\n-webkit-transform : scale(" + zoom + ");\ntransform : scale(" + zoom + ");\n}";
-        return css;
-      }
-    }
-    return null;
-  };
-
-  ScreenEvent.prototype.zoom = function(zoom, x, y) {
-    $(".content").css({
-      "-moz-transition": "all 0s ease 0",
-      "-webkit-transition": "all 0s ease 0",
-      "-webkit-transform-origin": x + "px " + y + "px",
-      "transform-origin": x + "px " + y + "px"
-    });
-    return setTimeout(function() {
-      return $(".content").css({
-        "-moz-transition": "all 0.5s ease 0",
-        "-webkit-transition": "all 0.5s ease 0",
-        "-webkit-transform": "scale(" + zoom + ")",
-        "transform": "scale(" + zoom + ")"
-      });
-    }, 1);
+  ScreenEvent.prototype.clearPaging = function(methodName) {
+    ScreenEvent.__super__.clearPaging.call(this, methodName);
+    return this.getJQueryElement().removeClass('changeScreenPosition_' + this.id);
   };
 
   return ScreenEvent;

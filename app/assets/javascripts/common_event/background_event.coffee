@@ -2,9 +2,6 @@
 class BackgroundEvent extends CommonEvent
   @EVENT_ID = '1'
 
-  constructor: ->
-    @id = @constructor.EVENT_ID
-
   willChapter: (methodName) ->
     super()
 

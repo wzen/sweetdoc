@@ -38,9 +38,7 @@ EventListener = {
       this.scrollValue = 0;
     }
   },
-  didChapter: function(methodName) {
-    this.removeCss(methodName);
-  },
+  didChapter: function(methodName) {},
   scrollRootFunc: function(x, y) {
     var methodName, scrollLength;
     if (this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME] == null) {
@@ -77,14 +75,11 @@ EventListener = {
     return null;
   },
   appendCssIfNeeded: function(methodName) {
-    var ce, e, funcName;
-    funcName = methodName + "_" + this.id;
-    e = $("." + funcName, window.cssCode);
-    if ((e != null) && e.length > 0) {
-      return;
-    }
+    var ce, funcName;
     ce = this.cssElement(methodName);
     if (ce != null) {
+      this.removeCss(methodName);
+      funcName = methodName + "_" + this.id;
       return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
     }
   },
@@ -92,6 +87,9 @@ EventListener = {
     var funcName;
     funcName = methodName + "_" + this.id;
     return window.cssCode.find("." + funcName).remove();
+  },
+  clearPaging: function(methodName) {
+    return this.removeCss(methodName);
   }
 };
 

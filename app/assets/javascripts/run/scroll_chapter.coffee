@@ -19,3 +19,14 @@ class ScrollChapter extends Chapter
       if eventListener.scrollEvent?
         eventListener.scrollEvent(x, y)
     )
+
+  # 全てのイベントアイテムのスクロールが終了しているか
+  finishedAllEvent: ->
+    ret = true
+    @eventListenerList.forEach((eventListener) ->
+      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      if !eventListener.isFinishedEvent
+        ret = false
+        return false
+    )
+    return ret

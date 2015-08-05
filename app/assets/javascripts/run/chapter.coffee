@@ -75,13 +75,6 @@ class Chapter
         eventListener.getJQueryElement().css('z-index', 0)
     )
 
-  # 全てのイベントアイテムのスクロールが終了しているか
-  finishedScrollAllActor: ->
-    ret = true
-    @eventListenerList.forEach((eventListener) ->
-      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-      if !eventListener.isFinishedEvent
-        ret = false
-        return false
-    )
-    return ret
+  # 全てのイベントが終了しているか
+  finishedAllEvent: ->
+    return true
