@@ -49,7 +49,7 @@ class TLEItemChange extends TimelineEvent
   @writeToPageValue = (timelineConfig) ->
     errorMes = ""
     writeValue = super(timelineConfig)
-    item = itemObject[timelineConfig.id]
+    item = createdObject[timelineConfig.id]
     itemWriteValue = item.objWriteTimeline()
     # マージ
     $.extend(writeValue, itemWriteValue)

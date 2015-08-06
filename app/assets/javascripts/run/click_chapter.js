@@ -33,7 +33,11 @@ ClickChapter = (function(superClass) {
     }
     return this.eventListenerList.forEach(function(eventListener) {
       if (eventListener.clickEvent != null) {
-        return eventListener.clickEvent(e);
+        return eventListener.clickEvent(e, function() {
+          if (window.timeLine != null) {
+            return window.timeLine.nextChapterIfFinishedAllEvent();
+          }
+        });
       }
     });
   };

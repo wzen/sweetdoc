@@ -5,6 +5,10 @@ EventListener = {
   setEvent: function(timelineEvent) {
     this.timelineEvent = timelineEvent;
     this.isFinishedEvent = false;
+    if (this.previewTimer != null) {
+      clearInterval(this.previewTimer);
+    }
+    this.previewTimer = null;
     return this.setMethod();
   },
   setMethod: function() {
@@ -23,6 +27,32 @@ EventListener = {
   reset: function() {
     this.isFinishedEvent = false;
   },
+  preview: function(timelineEvent) {
+    var _loop, actionType, func, p;
+    this.setEvent(timelineEvent);
+    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+      p = 0;
+      return this.previewTimer = setInterval((function(_this) {
+        return function() {
+          _this.constructor.prototype[methodName](p);
+          p += 1;
+          if (p >= _this.scrollLength() - 1) {
+            return p = 0;
+          }
+        };
+      })(this), 500);
+    } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+      _loop = function() {
+        if (this.previewTimer != null) {
+          return func(null, func);
+        }
+      };
+      func = this.constructor.prototype[methodName];
+      this.previewTimer = true;
+      return func(null, _loop.call(this));
+    }
+  },
   getJQueryElement: function() {
     return null;
   },
@@ -39,8 +69,11 @@ EventListener = {
     }
   },
   didChapter: function(methodName) {},
-  scrollRootFunc: function(x, y) {
-    var methodName, scrollLength;
+  scrollRootFunc: function(x, y, complete) {
+    var ePoint, methodName, sPoint;
+    if (complete == null) {
+      complete = null;
+    }
     if (this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME] == null) {
       return;
     }
@@ -54,17 +87,18 @@ EventListener = {
     } else {
       this.scrollValue += parseInt((y - 9) / 10);
     }
-    this.scrollValue = this.scrollValue < 0 ? 0 : this.scrollValue;
-    scrollLength = this.scrollLength();
-    this.scrollValue = this.scrollValue >= scrollLength ? scrollLength - 1 : this.scrollValue;
-    if (this.scrollValue < parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]) || this.scrollValue > parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])) {
+    sPoint = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
+    ePoint = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]);
+    if (this.scrollValue < sPoint || this.scrollValue > ePoint) {
       return;
     }
-    this.constructor.prototype[methodName].call(this, this.scrollValue);
-    if (this.scrollValue >= this.scrollLength() - 1) {
+    this.scrollValue = this.scrollValue < sPoint ? sPoint : this.scrollValue;
+    this.scrollValue = this.scrollValue >= ePoint ? ePoint - 1 : this.scrollValue;
+    this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
+    if (this.scrollValue - sPoint >= this.scrollLength() - 1) {
       this.isFinishedEvent = true;
-      if (window.timeLine != null) {
-        return window.timeLine.nextChapterIfFinishedAllEvent();
+      if (complete != null) {
+        return complete();
       }
     }
   },

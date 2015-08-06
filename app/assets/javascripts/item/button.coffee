@@ -95,15 +95,15 @@ class ButtonItem extends CssItemBase
       @reDraw(false)
 
   # 共通クリックイベント ※アクションイベント
-  defaultClick : (e) =>
+  defaultClick : (e, complete) =>
     # ボタン凹むアクション
     @getJQueryElement().addClass('defaultClick_' + @id)
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
       @getJQueryElement().removeClass('defaultClick_' + @id)
       @isFinishedEvent = true
-      if window.timeLine?
-        window.timeLine.nextChapterIfFinishedAllEvent()
+      if complete?
+        complete()
     )
 
   # CSS

@@ -130,13 +130,17 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.applyAction = function() {
-    var errorMes;
+    var errorMes, item;
     errorMes = this.writeToPageValue();
     if ((errorMes != null) && errorMes.length > 0) {
       this.showError(errorMes);
       return;
     }
-    return changeTimelineColor(this.teNum, this.actionType);
+    changeTimelineColor(this.teNum, this.actionType);
+    item = createdObject[this.id];
+    if ((item != null) && (item.preview != null)) {
+      return item.preview();
+    }
   };
 
   TimelineConfig.prototype.writeToPageValue = function() {

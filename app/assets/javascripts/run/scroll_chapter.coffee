@@ -17,7 +17,10 @@ class ScrollChapter extends Chapter
 
     @eventListenerList.forEach((eventListener) ->
       if eventListener.scrollEvent?
-        eventListener.scrollEvent(x, y)
+        eventListener.scrollEvent(x, y, ->
+          if window.timeLine?
+            window.timeLine.nextChapterIfFinishedAllEvent()
+        )
     )
 
   # 全てのイベントアイテムのスクロールが終了しているか

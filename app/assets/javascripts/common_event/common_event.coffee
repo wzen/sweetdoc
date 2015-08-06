@@ -10,3 +10,4 @@ class CommonEvent extends Extend
     super()
     # @property [Int] id ID
     @id = "c" + @constructor.EVENT_ID +  generateId()
+    createdObject[@id] = @

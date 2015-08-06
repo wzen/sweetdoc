@@ -25,7 +25,11 @@ ScrollChapter = (function(superClass) {
     }
     return this.eventListenerList.forEach(function(eventListener) {
       if (eventListener.scrollEvent != null) {
-        return eventListener.scrollEvent(x, y);
+        return eventListener.scrollEvent(x, y, function() {
+          if (window.timeLine != null) {
+            return window.timeLine.nextChapterIfFinishedAllEvent();
+          }
+        });
       }
     });
   };

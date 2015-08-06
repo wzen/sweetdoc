@@ -95,7 +95,7 @@ setupContextMenu = function(element, contextSelector, menu) {
   initOptionMenu = function(event) {
     var emt, obj;
     emt = $(event.target);
-    obj = itemObject[emt.attr('id')];
+    obj = createdObject[emt.attr('id')];
     if ((obj != null) && (obj.setupOptionMenu != null)) {
       obj.setupOptionMenu();
     }

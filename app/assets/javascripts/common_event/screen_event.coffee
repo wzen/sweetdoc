@@ -6,7 +6,7 @@ class ScreenEvent extends CommonEvent
     return window.mainWrapper
 
   # 画面移動イベント
-  changeScreenPosition: (e) =>
+  changeScreenPosition: (e, complete) =>
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.CLICK
       finished_count = 0
@@ -16,8 +16,8 @@ class ScreenEvent extends CommonEvent
         finished_count += 1
         if finished_count >= 2
           @isFinishedEvent = true
-          if window.timeLine?
-            window.timeLine.nextChapterIfFinishedAllEvent()
+          if complete?
+            complete()
       )
 
       scale = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z]
@@ -25,8 +25,8 @@ class ScreenEvent extends CommonEvent
         finished_count += 1
         if finished_count >= 2
           @isFinishedEvent = true
-          if window.timeLine?
-            window.timeLine.nextChapterIfFinishedAllEvent()
+          if complete?
+            complete()
       )
 
   # ページング時

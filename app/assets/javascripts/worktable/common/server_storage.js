@@ -4,8 +4,8 @@ var loadFromServer, saveToServer;
 saveToServer = function() {
   var j, jsonList, k, v;
   jsonList = [];
-  for (k in itemObject) {
-    v = itemObject[k];
+  for (k in createdObject) {
+    v = createdObject[k];
     j = {
       id: makeClone(v.id),
       obj: v.getMinimumObject()

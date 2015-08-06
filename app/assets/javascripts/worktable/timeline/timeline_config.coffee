@@ -141,6 +141,11 @@ class TimelineConfig
     # イベントの色を変更
     changeTimelineColor(@teNum, @actionType)
 
+    # プレビュー開始
+    item = createdObject[@id]
+    if item? && item.preview?
+      item.preview()
+
   # 画面値に書き込み
   writeToPageValue: ->
     errorMes = "Not implemented"

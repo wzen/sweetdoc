@@ -1,7 +1,7 @@
 # サーバにアイテムの情報を保存
 saveToServer = ->
   jsonList = []
-  for k, v of itemObject
+  for k, v of createdObject
     j = {
       id: makeClone(v.id)
       obj: v.getMinimumObject()

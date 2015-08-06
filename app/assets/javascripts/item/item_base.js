@@ -95,14 +95,14 @@ ItemBase = (function(superClass) {
     if (action === Constant.ItemActionType.MAKE) {
       num = 1;
       self = this;
-      for (k in itemObject) {
-        v = itemObject[k];
+      for (k in createdObject) {
+        v = createdObject[k];
         if (self.constructor.IDENTITY === v.constructor.IDENTITY) {
           num += 1;
         }
       }
       this.name = this.constructor.IDENTITY + (" " + num);
-      itemObject[this.id] = this;
+      createdObject[this.id] = this;
     }
     this.setAllItemPropToPageValue();
     console.log('save obj:' + JSON.stringify(this.itemSize));

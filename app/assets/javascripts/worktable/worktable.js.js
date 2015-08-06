@@ -104,8 +104,8 @@ changeMode = function(mode) {
 
 clearAllItemStyle = function() {
   var k, v;
-  for (k in itemObject) {
-    v = itemObject[k];
+  for (k in createdObject) {
+    v = createdObject[k];
     v.clearAllEventStyle();
   }
   clearSelectedBorder();
@@ -144,8 +144,8 @@ initKeyEvent = function() {
 clearWorkTable = function() {
   var k, results, v;
   results = [];
-  for (k in itemObject) {
-    v = itemObject[k];
+  for (k in createdObject) {
+    v = createdObject[k];
     results.push(v.getJQueryElement().remove());
   }
   return results;
@@ -156,8 +156,8 @@ clearWorkTable = function() {
 
 runDebug = function() {
   var item, k, v;
-  for (k in itemObject) {
-    v = itemObject[k];
+  for (k in createdObject) {
+    v = createdObject[k];
     item = v;
     return false;
   }

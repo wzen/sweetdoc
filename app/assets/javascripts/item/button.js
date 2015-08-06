@@ -115,14 +115,14 @@ ButtonItem = (function(superClass) {
     }
   };
 
-  ButtonItem.prototype.defaultClick = function(e) {
+  ButtonItem.prototype.defaultClick = function(e, complete) {
     this.getJQueryElement().addClass('defaultClick_' + this.id);
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().removeClass('defaultClick_' + _this.id);
         _this.isFinishedEvent = true;
-        if (window.timeLine != null) {
-          return window.timeLine.nextChapterIfFinishedAllEvent();
+        if (complete != null) {
+          return complete();
         }
       };
     })(this));

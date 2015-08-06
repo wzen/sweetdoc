@@ -4,6 +4,9 @@ EventListener =
   setEvent: (timelineEvent) ->
     @timelineEvent = timelineEvent
     @isFinishedEvent = false
+    if @previewTimer?
+      clearInterval(@previewTimer)
+    @previewTimer = null
     # アクションメソッドの設定
     @setMethod()
 
@@ -29,6 +32,30 @@ EventListener =
     @isFinishedEvent = false
     return
 
+  # プレビュー
+  preview: (timelineEvent) ->
+    @setEvent(timelineEvent)
+
+    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    # イベントループ
+    if actionType == Constant.ActionEventHandleType.SCROLL
+      p = 0
+      @previewTimer = setInterval( =>
+        (@constructor.prototype[methodName])(p)
+        p += 1
+        if p >= @scrollLength() - 1
+          p = 0
+      , 500)
+
+    else if actionType == Constant.ActionEventHandleType.CLICK
+      _loop = ->
+        if @previewTimer?
+          func(null, func)
+
+      func = @constructor.prototype[methodName]
+      @previewTimer = true # クリックの場合はタイマーに適当な値をセットしておく
+      func(null, _loop.call(@))
+
   # JQueryエレメントを取得
   # @abstract
   getJQueryElement: ->
@@ -53,7 +80,7 @@ EventListener =
     return
 
   # スクロール基底メソッド
-  scrollRootFunc: (x, y) ->
+  scrollRootFunc: (x, y, complete = null) ->
     if !@timelineEvent[TimelineEvent.PageValueKey.METHODNAME]?
       # メソッドが無い場合
       return
@@ -68,20 +95,21 @@ EventListener =
       @scrollValue += parseInt((y + 9) / 10)
     else
       @scrollValue += parseInt((y - 9) / 10)
-    @scrollValue = if @scrollValue < 0 then 0 else @scrollValue
-    scrollLength = @scrollLength()
-    @scrollValue = if @scrollValue >= scrollLength then scrollLength - 1 else @scrollValue
 
+    sPoint = parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
+    ePoint = parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
     # スクロール指定範囲外なら反応させない
-    if @scrollValue < parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]) || @scrollValue > parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
+    if @scrollValue < sPoint || @scrollValue > ePoint
       return
+    @scrollValue = if @scrollValue < sPoint then sPoint else @scrollValue
+    @scrollValue = if @scrollValue >= ePoint then ePoint - 1 else @scrollValue
 
-    (@constructor.prototype[methodName]).call(@, @scrollValue)
+    (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
 
-    if @scrollValue >= @scrollLength() - 1
+    if @scrollValue - sPoint >= @scrollLength() - 1
       @isFinishedEvent = true
-      if window.timeLine?
-        window.timeLine.nextChapterIfFinishedAllEvent()
+      if complete?
+        complete()
 
   # スクロールの長さを取得
   scrollLength: ->

@@ -18,7 +18,7 @@ ScreenEvent = (function(superClass) {
     return window.mainWrapper;
   };
 
-  ScreenEvent.prototype.changeScreenPosition = function(e) {
+  ScreenEvent.prototype.changeScreenPosition = function(e, complete) {
     var actionType, finished_count, scale, scrollLeft, scrollTop;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.CLICK) {
@@ -32,8 +32,8 @@ ScreenEvent = (function(superClass) {
         finished_count += 1;
         if (finished_count >= 2) {
           this.isFinishedEvent = true;
-          if (window.timeLine != null) {
-            return window.timeLine.nextChapterIfFinishedAllEvent();
+          if (complete != null) {
+            return complete();
           }
         }
       });
@@ -44,8 +44,8 @@ ScreenEvent = (function(superClass) {
         finished_count += 1;
         if (finished_count >= 2) {
           this.isFinishedEvent = true;
-          if (window.timeLine != null) {
-            return window.timeLine.nextChapterIfFinishedAllEvent();
+          if (complete != null) {
+            return complete();
           }
         }
       });

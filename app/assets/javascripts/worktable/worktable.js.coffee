@@ -83,7 +83,7 @@ changeMode = (mode) ->
 
 # 非表示をクリア
 clearAllItemStyle = ->
-  for k, v of itemObject
+  for k, v of createdObject
     v.clearAllEventStyle()
 
   # 選択枠を取る
@@ -119,12 +119,12 @@ initKeyEvent = ->
 
 # 画面のアイテムをクリア
 clearWorkTable = ->
-  for k, v of itemObject
+  for k, v of createdObject
     v.getJQueryElement().remove()
 
 ### デバッグ ###
 runDebug = ->
-  for k, v of itemObject
+  for k, v of createdObject
     item = v
     return false
   if item.reDrawByObjPageValue()

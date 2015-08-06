@@ -27,5 +27,8 @@ class ClickChapter extends Chapter
 
     @eventListenerList.forEach((eventListener) ->
       if eventListener.clickEvent?
-        eventListener.clickEvent(e)
+        eventListener.clickEvent(e, ->
+          if window.timeLine?
+            window.timeLine.nextChapterIfFinishedAllEvent()
+        )
     )

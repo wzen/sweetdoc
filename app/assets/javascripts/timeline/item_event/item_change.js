@@ -62,7 +62,7 @@ TLEItemChange = (function(superClass) {
     var errorMes, item, itemWriteValue, value, writeValue;
     errorMes = "";
     writeValue = TLEItemChange.__super__.constructor.writeToPageValue.call(this, timelineConfig);
-    item = itemObject[timelineConfig.id];
+    item = createdObject[timelineConfig.id];
     itemWriteValue = item.objWriteTimeline();
     $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {
