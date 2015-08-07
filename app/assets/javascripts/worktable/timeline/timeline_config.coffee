@@ -141,7 +141,7 @@ class TimelineConfig
     if @actionType == Constant.ActionEventHandleType.SCROLL
       @scrollPointStart = ''
       @scrollPointEnd = ""
-      handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
+      handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
       if handlerDiv?
         @scrollPointStart = handlerDiv.find('.scroll_point_start:first').val()
         @scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val()
@@ -156,7 +156,9 @@ class TimelineConfig
     changeTimelineColor(@teNum, @actionType)
 
     # プレビュー開始
-    _preview.call(@)
+    item = createdObject[@id]
+    if item? && item.preview?
+      item.preview(getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum)))
 
   # 画面値に書き込み
   writeToPageValue: ->
@@ -181,7 +183,6 @@ class TimelineConfig
       return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @commonEventId).replace('@methodname', @methodName)
     else
       return @constructor.ITEM_VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
-
 
   # エラー表示
   showError: (message)->
@@ -256,10 +257,3 @@ class TimelineConfig
       @setupConfigValues()
       @selectItem()
       @clickMethod()
-      _preview.call(@)
-
-  # プレビュー開始
-  _preview = ->
-    item = createdObject[@id]
-    if item? && item.preview?
-      item.preview(getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum)))

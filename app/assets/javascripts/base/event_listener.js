@@ -38,6 +38,7 @@ EventListener = (function(superClass) {
   EventListener.prototype.preview = function(timelineEvent) {
     var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, methodName, p;
     this.setEvent(timelineEvent);
+    this.stopPreview(timelineEvent);
     drawDelay = 30;
     loopDelay = 1000;
     loopMaxCount = 5;
@@ -69,7 +70,7 @@ EventListener = (function(superClass) {
         return function() {
           loopCount += 1;
           if (loopCount >= loopMaxCount) {
-            _this.stopPreview();
+            _this.stopPreview(timelineEvent);
           }
           return setTimeout(function() {
             if (_this.doPreviewLoop) {
@@ -84,7 +85,7 @@ EventListener = (function(superClass) {
         return function() {
           loopCount += 1;
           if (loopCount >= loopMaxCount) {
-            _this.stopPreview();
+            _this.stopPreview(timelineEvent);
           }
           return setTimeout(function() {
             if (_this.doPreviewLoop) {
@@ -97,10 +98,10 @@ EventListener = (function(superClass) {
     }
   };
 
-  EventListener.prototype.stopPreview = function() {
+  EventListener.prototype.stopPreview = function(timelineEvent) {
     var actionType;
     this.doPreviewLoop = false;
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       return this.restoreAllNewDrawedSurface();
     }
@@ -182,6 +183,31 @@ EventListener = (function(superClass) {
     var funcName;
     funcName = methodName + "_" + this.id;
     return window.cssCode.find("." + funcName).remove();
+  };
+
+  EventListener.prototype.updateEventAfter = function() {
+    var actionType, methodName;
+    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+      methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      return this.constructor.prototype[methodName].call(this, this.scrollLength() - 1);
+    } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+      return this.getJQueryElement().css({
+        '-webkit-animation-duration': '0',
+        '-moz-animation-duration': '-moz-animation-duration',
+        '0': '0'
+      });
+    }
+  };
+
+  EventListener.prototype.updateEventBefore = function() {
+    var actionType;
+    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+      return this.willChapter(this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]);
+    } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+      return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
+    }
   };
 
   EventListener.prototype.clearPaging = function(methodName) {

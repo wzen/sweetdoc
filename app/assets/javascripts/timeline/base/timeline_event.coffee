@@ -104,8 +104,6 @@ class TimelineEvent
           handlerDiv.find('.scroll_point_start:first').val(start)
           handlerDiv.find('.scroll_point_end:first').val(end)
 
-
-
       return true
     else
       return false

@@ -33,6 +33,7 @@ class EventListener extends Extend
   # プレビュー
   preview: (timelineEvent) ->
     @setEvent(timelineEvent)
+    @stopPreview(timelineEvent)
     drawDelay = 30 # 0.03秒毎スクロール描画
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
@@ -62,7 +63,7 @@ class EventListener extends Extend
       _loop = =>
         loopCount += 1
         if loopCount >= loopMaxCount
-          @stopPreview()
+          @stopPreview(timelineEvent)
 
         setTimeout( =>
           if @doPreviewLoop
@@ -75,7 +76,7 @@ class EventListener extends Extend
       _loop = =>
         loopCount += 1
         if loopCount >= loopMaxCount
-          @stopPreview()
+          @stopPreview(timelineEvent)
 
         setTimeout( =>
           if @doPreviewLoop
@@ -83,9 +84,9 @@ class EventListener extends Extend
         , loopDelay)
       method.call(@, null, _loop)
 
-  stopPreview: ->
+  stopPreview: (timelineEvent) ->
     @doPreviewLoop = false
-    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.SCROLL
       @restoreAllNewDrawedSurface()
 
@@ -162,9 +163,33 @@ class EventListener extends Extend
       funcName = "#{methodName}_#{@id}"
       window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
 
+  # CSS削除処理
   removeCss: (methodName) ->
     funcName = "#{methodName}_#{@id}"
     window.cssCode.find(".#{funcName}").remove()
+
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    if actionType == Constant.ActionEventHandleType.SCROLL
+      # FIXME: 暫定
+      # とりあえず最後までスクロールした状態
+      methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      (@constructor.prototype[methodName]).call(@, @scrollLength() - 1)
+    else if actionType == Constant.ActionEventHandleType.CLICK
+      # CSSアニメーション前
+      @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    if actionType == Constant.ActionEventHandleType.SCROLL
+      # FIXME: 暫定
+      # チャプター開始前
+      @willChapter(@timelineEvent[TimelineEvent.PageValueKey.METHODNAME])
+    else if actionType == Constant.ActionEventHandleType.CLICK
+      # CSSアニメーション前
+      @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
 
   # ページング時
   clearPaging: (methodName) ->

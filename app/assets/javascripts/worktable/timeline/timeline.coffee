@@ -85,6 +85,26 @@ setupTimelineEventConfig = ->
       # タイムラインのconfigをオープンする
       openConfigSidebar()
 
+    _updateEventState.call(@, te_num)
+
+  # イベントによる表示状態を更新
+  _updateEventState = (te_num) ->
+    te_num = parseInt(te_num)
+    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+    for idx, te of tes
+      if idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0
+        ix = parseInt(idx.replace(Constant.PageValueKey.TE_NUM_PREFIX, ''))
+        item = window.createdObject[te.id]
+        item.setEvent(te)
+        item.stopPreview(te)
+        if ix < te_num
+          item.updateEventAfter()
+        else if ix > te_num
+          item.updateEventBefore()
+        else
+          # プレビュー実行
+          item.preview(te)
+
   ### private method ここまで ###
 
   _setupTimelineEvent.call(self)

@@ -82,7 +82,7 @@ TLEItemChange = (function(superClass) {
     results = [];
     for (idx in tes) {
       te = tes[idx];
-      if (te.id === item.id) {
+      if (idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0 && te.id === item.id) {
         key = "" + Constant.PageValueKey.TE_PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + idx + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.minObj;
         results.push(setTimelinePageValue(key, item.getMinimumObject()));
       } else {

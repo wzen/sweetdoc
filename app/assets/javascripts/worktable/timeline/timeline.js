@@ -20,7 +20,7 @@ createTimelineEvent = function(teNum) {
 };
 
 setupTimelineEventConfig = function() {
-  var _clickTimelineEvent, _setupTimelineEvent, self, te;
+  var _clickTimelineEvent, _setupTimelineEvent, _updateEventState, self, te;
   self = this;
   te = null;
 
@@ -69,8 +69,34 @@ setupTimelineEventConfig = function() {
     $('#timeline-config .event').css('display', 'none');
     emt.css('display', '');
     if (!isOpenedConfigSidebar()) {
-      return openConfigSidebar();
+      openConfigSidebar();
     }
+    return _updateEventState.call(this, te_num);
+  };
+  _updateEventState = function(te_num) {
+    var idx, item, ix, results, tes;
+    te_num = parseInt(te_num);
+    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
+    results = [];
+    for (idx in tes) {
+      te = tes[idx];
+      if (idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0) {
+        ix = parseInt(idx.replace(Constant.PageValueKey.TE_NUM_PREFIX, ''));
+        item = window.createdObject[te.id];
+        item.setEvent(te);
+        item.stopPreview(te);
+        if (ix < te_num) {
+          results.push(item.updateEventAfter());
+        } else if (ix > te_num) {
+          results.push(item.updateEventBefore());
+        } else {
+          results.push(item.preview(te));
+        }
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
   };
 
   /* private method ここまで */
