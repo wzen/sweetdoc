@@ -73,7 +73,7 @@ TimelineEvent = (function() {
   TimelineEvent.checkConfigValue = function(timelineConfig) {};
 
   TimelineEvent.writeToPageValue = function(timelineConfig) {
-    var end, handlerDiv, isParallel, parallel, start, writeValue;
+    var writeValue;
     writeValue = {};
     writeValue[this.PageValueKey.ID] = timelineConfig.id;
     writeValue[this.PageValueKey.ITEM_ID] = timelineConfig.itemId;
@@ -83,22 +83,10 @@ TimelineEvent = (function() {
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent;
     writeValue[this.PageValueKey.METHODNAME] = timelineConfig.methodName;
     writeValue[this.PageValueKey.ACTIONTYPE] = timelineConfig.actionType;
-    isParallel = false;
-    parallel = $(".parallel_div .parallel", timelineConfig.emt);
-    if (parallel != null) {
-      isParallel = parallel.is(":checked");
-    }
-    writeValue[this.PageValueKey.IS_PARALLEL] = isParallel;
+    writeValue[this.PageValueKey.IS_PARALLEL] = timelineConfig.isParallel;
     if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
-      start = "";
-      end = "";
-      handlerDiv = $(".handler_div ." + (timelineConfig.methodClassName()), timelineConfig.emt);
-      if (handlerDiv != null) {
-        start = handlerDiv.find('.scroll_point_start:first').val();
-        end = handlerDiv.find('.scroll_point_end:first').val();
-      }
-      writeValue[this.PageValueKey.SCROLL_POINT_START] = start;
-      writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
+      writeValue[this.PageValueKey.SCROLL_POINT_START] = timelineConfig.scrollPointStart;
+      writeValue[this.PageValueKey.SCROLL_POINT_END] = timelineConfig.scrollPointEnd;
     }
     return writeValue;
   };

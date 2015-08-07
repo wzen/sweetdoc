@@ -2,7 +2,7 @@
 var TimelineConfig;
 
 TimelineConfig = (function() {
-  var _setApplyClickEvent, _setMethodActionEvent, _setupFromPageValues, _timelineEvent;
+  var _preview, _setApplyClickEvent, _setMethodActionEvent, _setupFromPageValues, _timelineEvent;
 
   if (typeof gon !== "undefined" && gon !== null) {
     TimelineConfig.ITEM_ROOT_ID = 'timeline_event_@te_num';
@@ -130,17 +130,28 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.applyAction = function() {
-    var errorMes, item;
+    var errorMes, handlerDiv, parallel;
+    this.isParallel = false;
+    parallel = $(".parallel_div .parallel", this.emt);
+    if (parallel != null) {
+      this.isParallel = parallel.is(":checked");
+    }
+    if (this.actionType === Constant.ActionEventHandleType.SCROLL) {
+      this.scrollPointStart = '';
+      this.scrollPointEnd = "";
+      handlerDiv = $(".handler_div ." + (timelineConfig.methodClassName()), timelineConfig.emt);
+      if (handlerDiv != null) {
+        this.scrollPointStart = handlerDiv.find('.scroll_point_start:first').val();
+        this.scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val();
+      }
+    }
     errorMes = this.writeToPageValue();
     if ((errorMes != null) && errorMes.length > 0) {
       this.showError(errorMes);
       return;
     }
     changeTimelineColor(this.teNum, this.actionType);
-    item = createdObject[this.id];
-    if ((item != null) && (item.preview != null)) {
-      return item.preview();
-    }
+    return _preview.call(this);
   };
 
   TimelineConfig.prototype.writeToPageValue = function() {
@@ -245,7 +256,16 @@ TimelineConfig = (function() {
     if (this.readFromPageValue()) {
       this.setupConfigValues();
       this.selectItem();
-      return this.clickMethod();
+      this.clickMethod();
+      return _preview.call(this);
+    }
+  };
+
+  _preview = function() {
+    var item;
+    item = createdObject[this.id];
+    if ((item != null) && (item.preview != null)) {
+      return item.preview(getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum)));
     }
   };
 

@@ -5,10 +5,7 @@ EventListener = {
   setEvent: function(timelineEvent) {
     this.timelineEvent = timelineEvent;
     this.isFinishedEvent = false;
-    if (this.previewTimer != null) {
-      clearInterval(this.previewTimer);
-    }
-    this.previewTimer = null;
+    this.doPreviewLoop = false;
     return this.setMethod();
   },
   setMethod: function() {
@@ -28,29 +25,52 @@ EventListener = {
     this.isFinishedEvent = false;
   },
   preview: function(timelineEvent) {
-    var _loop, actionType, func, p;
+    var _draw, _loop, actionType, drawDelay, loopDelay, method, methodName, p;
     this.setEvent(timelineEvent);
-    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    drawDelay = 30;
+    loopDelay = 1000;
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    this.appendCssIfNeeded(methodName);
+    method = this.constructor.prototype[methodName];
+    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    this.doPreviewLoop = true;
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       p = 0;
-      return this.previewTimer = setInterval((function(_this) {
+      _draw = (function(_this) {
         return function() {
-          _this.constructor.prototype[methodName](p);
-          p += 1;
-          if (p >= _this.scrollLength() - 1) {
-            return p = 0;
-          }
+          return setTimeout(function() {
+            method.call(_this, p);
+            p += 1;
+            if (p >= _this.scrollLength()) {
+              p = 0;
+              return _loop.call(_this);
+            } else {
+              return _draw.call(_this);
+            }
+          }, drawDelay);
         };
-      })(this), 500);
+      })(this);
+      _loop = (function(_this) {
+        return function() {
+          return setTimeout(function() {
+            if (_this.doPreviewLoop) {
+              return _draw.call(_this);
+            }
+          }, loopDelay);
+        };
+      })(this);
+      return _draw.call(this);
     } else if (actionType === Constant.ActionEventHandleType.CLICK) {
-      _loop = function() {
-        if (this.previewTimer != null) {
-          return func(null, func);
-        }
-      };
-      func = this.constructor.prototype[methodName];
-      this.previewTimer = true;
-      return func(null, _loop.call(this));
+      _loop = (function(_this) {
+        return function() {
+          return setTimeout(function() {
+            if (_this.doPreviewLoop) {
+              return method.call(_this, null, _loop);
+            }
+          }, loopDelay);
+        };
+      })(this);
+      return method.call(this, null, _loop);
     }
   },
   getJQueryElement: function() {

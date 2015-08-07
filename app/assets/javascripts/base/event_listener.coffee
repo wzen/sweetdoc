@@ -4,9 +4,7 @@ EventListener =
   setEvent: (timelineEvent) ->
     @timelineEvent = timelineEvent
     @isFinishedEvent = false
-    if @previewTimer?
-      clearInterval(@previewTimer)
-    @previewTimer = null
+    @doPreviewLoop = false
     # アクションメソッドの設定
     @setMethod()
 
@@ -35,26 +33,44 @@ EventListener =
   # プレビュー
   preview: (timelineEvent) ->
     @setEvent(timelineEvent)
+    drawDelay = 30 # 0.03秒毎スクロール描画
+    loopDelay = 1000 # 1秒毎イベント実行
+    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    @appendCssIfNeeded(methodName)
 
-    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    method = @constructor.prototype[methodName]
+    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     # イベントループ
+    @doPreviewLoop = true
     if actionType == Constant.ActionEventHandleType.SCROLL
+
       p = 0
-      @previewTimer = setInterval( =>
-        (@constructor.prototype[methodName])(p)
-        p += 1
-        if p >= @scrollLength() - 1
-          p = 0
-      , 500)
+      _draw = =>
+        setTimeout( =>
+          method.call(@, p)
+          p += 1
+          if p >= @scrollLength()
+            p = 0
+            _loop.call(@)
+          else
+            _draw.call(@)
+        , drawDelay)
+
+      _loop = =>
+        setTimeout( =>
+          if @doPreviewLoop
+            _draw.call(@)
+        , loopDelay)
+
+      _draw.call(@)
 
     else if actionType == Constant.ActionEventHandleType.CLICK
-      _loop = ->
-        if @previewTimer?
-          func(null, func)
-
-      func = @constructor.prototype[methodName]
-      @previewTimer = true # クリックの場合はタイマーに適当な値をセットしておく
-      func(null, _loop.call(@))
+      _loop = =>
+        setTimeout( =>
+          if @doPreviewLoop
+            method.call(@, null, _loop)
+        , loopDelay)
+      method.call(@, null, _loop)
 
   # JQueryエレメントを取得
   # @abstract

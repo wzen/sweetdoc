@@ -69,22 +69,11 @@ class TimelineEvent
     writeValue[@PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent
     writeValue[@PageValueKey.METHODNAME] = timelineConfig.methodName
     writeValue[@PageValueKey.ACTIONTYPE] = timelineConfig.actionType
-
-    isParallel = false
-    parallel = $(".parallel_div .parallel", timelineConfig.emt)
-    if parallel?
-      isParallel = parallel.is(":checked")
-    writeValue[@PageValueKey.IS_PARALLEL] = isParallel
+    writeValue[@PageValueKey.IS_PARALLEL] = timelineConfig.isParallel
 
     if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-      start = ""
-      end = ""
-      handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
-      if handlerDiv?
-        start = handlerDiv.find('.scroll_point_start:first').val()
-        end = handlerDiv.find('.scroll_point_end:first').val()
-      writeValue[@PageValueKey.SCROLL_POINT_START] = start
-      writeValue[@PageValueKey.SCROLL_POINT_END] = end
+      writeValue[@PageValueKey.SCROLL_POINT_START] = timelineConfig.scrollPointStart
+      writeValue[@PageValueKey.SCROLL_POINT_END] = timelineConfig.scrollPointEnd
 
     return writeValue
 

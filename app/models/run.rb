@@ -11,8 +11,14 @@ class Run
   def self.make_element_str(key, value, key_name)
     key_name += "[#{key}]"
     if value.class != ActiveSupport::HashWithIndifferentAccess && value.class != Hash && value.class != Array
-      # サニタイズ
-      val = ERB::Util.html_escape(value)
+      if value.is_a?(Integer) || value =~ /d+.d+/
+        # 整数 or 小数
+        val = value
+      else
+        # 文字列の場合はサニタイズ
+        val = value # ERB::Util.html_escape(value)
+      end
+
       name = "name = #{key_name}"
       return "<input type='hidden' class=#{key} value='#{val}' #{name} />"
     end

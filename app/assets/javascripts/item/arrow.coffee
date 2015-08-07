@@ -34,8 +34,6 @@ class ArrowItem extends CanvasItemBase
     @header_height = HEADER_HEIGHT
     # @property [Int] padding_size CanvasのPadding
     @padding_size = @header_width
-    # @property [Array] scale 表示倍率
-    @scale = {w:1.0, h:1.0}
     # @property [Array] drawCoodRegist 矢印のドラッグ座標(描画時のみ使用)
     # @private
     @drawCoodRegist = []
@@ -168,6 +166,7 @@ class ArrowItem extends CanvasItemBase
       console.log('scroll init')
       # 描画
       @reDraw(false)
+      # 空Canvas状態を保存
       @saveNewDrawingSurface()
 
   # スクロールイベント ※アクションイベント

@@ -37,10 +37,6 @@ ArrowItem = (function(superClass) {
     this.header_width = HEADER_WIDTH;
     this.header_height = HEADER_HEIGHT;
     this.padding_size = this.header_width;
-    this.scale = {
-      w: 1.0,
-      h: 1.0
-    };
     this.drawCoodRegist = [];
   }
 

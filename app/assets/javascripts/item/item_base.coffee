@@ -263,6 +263,8 @@ class CanvasItemBase extends ItemBase
     @newDrawingCanvas = null
     @newDrawingContext = null
     @newDrawingSurfaceImageData = null
+    # @property [Array] scale 表示倍率
+    @scale = {w:1.0, h:1.0}
 
   # 描画終了時に呼ばれるメソッド
   # @param [Int] zindex z-index
@@ -317,10 +319,10 @@ class CanvasItemBase extends ItemBase
 
   # キャンパス初期化処理
   initCanvas: ->
-    drawingCanvas = document.getElementById(@canvasElementId())
-    drawingContext = drawingCanvas.getContext('2d')
+    canvas = document.getElementById(@canvasElementId());
+    context = canvas.getContext('2d');
     # 伸縮率を設定
-    @setScale(drawingContext)
+    @setScale(context)
 
   # 新規キャンパスを作成
   makeNewCanvas: ->
@@ -330,20 +332,24 @@ class CanvasItemBase extends ItemBase
 
   # 新規キャンパスの画面を保存
   saveNewDrawingSurface : ->
-    @newDrawingCanvas = document.getElementById(@canvasElementId());
-    @newDrawingContext = @newDrawingCanvas.getContext('2d');
-    @newDrawingSurfaceImageData = @newDrawingContext.getImageData(0, 0, @newDrawingCanvas.width, @newDrawingCanvas.height)
+    canvas = document.getElementById(@canvasElementId());
+    if canvas?
+      context = canvas.getContext('2d');
+      @newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
   # 保存した画面を新規キャンパスの全画面に再設定
   restoreAllNewDrawingSurface : ->
     if @newDrawingSurfaceImageData?
-      @newDrawingContext.putImageData(@newDrawingSurfaceImageData, 0, 0)
+      canvas = document.getElementById(@canvasElementId());
+      if canvas?
+        context = canvas.getContext('2d');
+        context.putImageData(@newDrawingSurfaceImageData, 0, 0)
 
   # 描画を削除
   clearDraw: ->
-    drawingCanvas = document.getElementById(@canvasElementId());
-    if drawingCanvas?
-      drawingContext = drawingCanvas.getContext('2d');
-      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
+    canvas = document.getElementById(@canvasElementId());
+    if canvas?
+      context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height)
       # キャンパスに対する初期化
       @initCanvas()

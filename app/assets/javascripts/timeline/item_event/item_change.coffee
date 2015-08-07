@@ -63,6 +63,14 @@ class TLEItemChange extends TimelineEvent
 
     return errorMes
 
+  @writeItemValueToPageValue = (item) ->
+    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+    for idx, te of tes
+      if te.id == item.id
+        # タイムラインのアイテム情報を更新
+        key = "#{Constant.PageValueKey.TE_PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{idx}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@minObj}"
+        setTimelinePageValue(key, item.getMinimumObject())
+
   @readFromPageValue = (timelineConfig, item) ->
     ret = super(timelineConfig)
     return ret

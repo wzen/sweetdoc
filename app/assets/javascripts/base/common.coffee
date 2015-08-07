@@ -113,14 +113,14 @@ _getPageValue = (key, withRemove, isTimeline) ->
           # サニタイズをデコード
           v = sanitaizeDecode($(@).val())
           if jQuery.isNumeric(v)
-            v = parseInt(v)
+            v = Number(v)
           else if v == "true" || v == "false"
             v = if v == "true" then true else false
         else
           v = takeValue.call(f, @)
 
         if jQuery.type(ret) == "array" && jQuery.isNumeric(k)
-          k = parseInt(k)
+          k = Number(k)
         ret[k] = v
         return true
       )
@@ -140,7 +140,7 @@ _getPageValue = (key, withRemove, isTimeline) ->
       if root[0].tagName == "INPUT"
         value = sanitaizeDecode(root.val())
         if jQuery.isNumeric(value)
-          value = parseInt(value)
+          value = Number(value)
       else
         value = takeValue.call(f,root)
       if withRemove
@@ -183,6 +183,10 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
       name = ""
       if isTimeline
         name = "name = #{kyName}"
+
+      if ky == 'w'
+        console.log(val)
+
       return "<input type='hidden' class='#{ky}' value='#{val}' #{name} />"
 
     ret = ""
@@ -210,7 +214,10 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
       if !root? || root.length == 0
         # 親要素のdiv作成
         root = jQuery("<div class=#{k}></div>").appendTo(parent)
-      parentClassName = k
+      if parentClassName == null
+        parentClassName = k
+      else
+        parentClassName += "[#{k}]"
     else
       if root? && root.length > 0
         # 要素が存在する場合は消去して上書き

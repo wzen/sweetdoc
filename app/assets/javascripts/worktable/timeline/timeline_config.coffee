@@ -132,6 +132,20 @@ class TimelineConfig
   # 入力値を適用する
   applyAction: ->
     # 入力値を保存
+
+    @isParallel = false
+    parallel = $(".parallel_div .parallel", @emt)
+    if parallel?
+      @isParallel = parallel.is(":checked")
+
+    if @actionType == Constant.ActionEventHandleType.SCROLL
+      @scrollPointStart = ''
+      @scrollPointEnd = ""
+      handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
+      if handlerDiv?
+        @scrollPointStart = handlerDiv.find('.scroll_point_start:first').val()
+        @scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val()
+
     errorMes = @writeToPageValue()
     if errorMes? && errorMes.length > 0
       # エラー発生時
@@ -142,9 +156,7 @@ class TimelineConfig
     changeTimelineColor(@teNum, @actionType)
 
     # プレビュー開始
-    item = createdObject[@id]
-    if item? && item.preview?
-      item.preview()
+    _preview.call(@)
 
   # 画面値に書き込み
   writeToPageValue: ->
@@ -244,3 +256,10 @@ class TimelineConfig
       @setupConfigValues()
       @selectItem()
       @clickMethod()
+      _preview.call(@)
+
+  # プレビュー開始
+  _preview = ->
+    item = createdObject[@id]
+    if item? && item.preview?
+      item.preview(getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum)))

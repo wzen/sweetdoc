@@ -19,6 +19,10 @@ WorkTableCanvasItemExtend = {
     this.itemSize.y = element.position().top;
     return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
   },
+  dragComplete: function() {
+    this.saveObj(Constant.ItemActionType.MOVE);
+    return TLEItemChange.writeItemValueToPageValue(this);
+  },
   resize: function() {
     var canvas, drawingCanvas, drawingContext, element;
     canvas = $('#' + this.canvasElementId());
@@ -32,6 +36,10 @@ WorkTableCanvasItemExtend = {
     drawingContext.scale(this.scale.w, this.scale.h);
     this.drawNewCanvas();
     return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
+  },
+  resizeComplete: function() {
+    this.saveObj(Constant.ItemActionType.MOVE);
+    return TLEItemChange.writeItemValueToPageValue(this);
   },
   getHistoryObj: function(action) {
     var obj;

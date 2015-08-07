@@ -32,7 +32,8 @@ setupEvents = (obj) ->
         if obj.drag?
           obj.drag()
       stop: (event, ui) ->
-        obj.saveObj(Constant.ItemActionType.MOVE)
+        if obj.dragComplete?
+          obj.dragComplete()
     })
     obj.getJQueryElement().resizable({
       containment: scrollInside
@@ -40,7 +41,8 @@ setupEvents = (obj) ->
         if obj.resize?
           obj.resize()
       stop: (event, ui) ->
-        obj.saveObj(Constant.ItemActionType.MOVE)
+        if obj.resizeComplete?
+          obj.resizeComplete()
     })
 
 # 選択枠を付ける

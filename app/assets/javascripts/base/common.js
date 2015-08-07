@@ -137,7 +137,7 @@ _getPageValue = function(key, withRemove, isTimeline) {
         if (this.tagName === "INPUT") {
           v = sanitaizeDecode($(this).val());
           if (jQuery.isNumeric(v)) {
-            v = parseInt(v);
+            v = Number(v);
           } else if (v === "true" || v === "false") {
             v = v === "true" ? true : false;
           }
@@ -145,7 +145,7 @@ _getPageValue = function(key, withRemove, isTimeline) {
           v = takeValue.call(f, this);
         }
         if (jQuery.type(ret) === "array" && jQuery.isNumeric(k)) {
-          k = parseInt(k);
+          k = Number(k);
         }
         ret[k] = v;
         return true;
@@ -168,7 +168,7 @@ _getPageValue = function(key, withRemove, isTimeline) {
       if (root[0].tagName === "INPUT") {
         value = sanitaizeDecode(root.val());
         if (jQuery.isNumeric(value)) {
-          value = parseInt(value);
+          value = Number(value);
         }
       } else {
         value = takeValue.call(f, root);
@@ -211,6 +211,9 @@ _setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
       if (isTimeline) {
         name = "name = " + kyName;
       }
+      if (ky === 'w') {
+        console.log(val);
+      }
       return "<input type='hidden' class='" + ky + "' value='" + val + "' " + name + " />";
     }
     ret = "";
@@ -242,7 +245,11 @@ _setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
       if ((root == null) || root.length === 0) {
         root = jQuery("<div class=" + k + "></div>").appendTo(parent);
       }
-      return parentClassName = k;
+      if (parentClassName === null) {
+        return parentClassName = k;
+      } else {
+        return parentClassName += "[" + k + "]";
+      }
     } else {
       if ((root != null) && root.length > 0) {
         root.remove();

@@ -10,14 +10,19 @@ WorkTableCanvasItemExtend =
       @designConfigRoot.find('.css-config').remove()
       $('#design-config').append(@designConfigRoot)
 
-  # ドラッグ時のイベント
+  # ドラッグ中イベント
   drag: ->
     element = $('#' + @id)
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
     console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
 
-  # リサイズ時のイベント
+  # ドラッグ完了時イベント
+  dragComplete: ->
+    @saveObj(Constant.ItemActionType.MOVE)
+    TLEItemChange.writeItemValueToPageValue(@)
+
+  # リサイズ中イベント
   resize: ->
     canvas = $('#' + @canvasElementId())
     element = $('#' + @id)
@@ -30,6 +35,11 @@ WorkTableCanvasItemExtend =
     drawingContext.scale(@scale.w, @scale.h)
     @drawNewCanvas()
     console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
+
+  # リサイズ完了時イベント
+  resizeComplete: ->
+    @saveObj(Constant.ItemActionType.MOVE)
+    TLEItemChange.writeItemValueToPageValue(@)
 
   # 履歴データを取得
   # @param [ItemActionType] action アクション種別

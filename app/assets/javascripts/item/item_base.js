@@ -255,6 +255,10 @@ CanvasItemBase = (function(superClass) {
     this.newDrawingCanvas = null;
     this.newDrawingContext = null;
     this.newDrawingSurfaceImageData = null;
+    this.scale = {
+      w: 1.0,
+      h: 1.0
+    };
   }
 
   CanvasItemBase.prototype.endDraw = function(zindex, show) {
@@ -306,10 +310,10 @@ CanvasItemBase = (function(superClass) {
   };
 
   CanvasItemBase.prototype.initCanvas = function() {
-    var drawingCanvas, drawingContext;
-    drawingCanvas = document.getElementById(this.canvasElementId());
-    drawingContext = drawingCanvas.getContext('2d');
-    return this.setScale(drawingContext);
+    var canvas, context;
+    canvas = document.getElementById(this.canvasElementId());
+    context = canvas.getContext('2d');
+    return this.setScale(context);
   };
 
   CanvasItemBase.prototype.makeNewCanvas = function() {
@@ -318,23 +322,31 @@ CanvasItemBase = (function(superClass) {
   };
 
   CanvasItemBase.prototype.saveNewDrawingSurface = function() {
-    this.newDrawingCanvas = document.getElementById(this.canvasElementId());
-    this.newDrawingContext = this.newDrawingCanvas.getContext('2d');
-    return this.newDrawingSurfaceImageData = this.newDrawingContext.getImageData(0, 0, this.newDrawingCanvas.width, this.newDrawingCanvas.height);
+    var canvas, context;
+    canvas = document.getElementById(this.canvasElementId());
+    if (canvas != null) {
+      context = canvas.getContext('2d');
+      return this.newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    }
   };
 
   CanvasItemBase.prototype.restoreAllNewDrawingSurface = function() {
+    var canvas, context;
     if (this.newDrawingSurfaceImageData != null) {
-      return this.newDrawingContext.putImageData(this.newDrawingSurfaceImageData, 0, 0);
+      canvas = document.getElementById(this.canvasElementId());
+      if (canvas != null) {
+        context = canvas.getContext('2d');
+        return context.putImageData(this.newDrawingSurfaceImageData, 0, 0);
+      }
     }
   };
 
   CanvasItemBase.prototype.clearDraw = function() {
-    var drawingCanvas, drawingContext;
-    drawingCanvas = document.getElementById(this.canvasElementId());
-    if (drawingCanvas != null) {
-      drawingContext = drawingCanvas.getContext('2d');
-      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+    var canvas, context;
+    canvas = document.getElementById(this.canvasElementId());
+    if (canvas != null) {
+      context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
       return this.initCanvas();
     }
   };

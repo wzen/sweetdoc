@@ -76,6 +76,22 @@ TLEItemChange = (function(superClass) {
     return errorMes;
   };
 
+  TLEItemChange.writeItemValueToPageValue = function(item) {
+    var idx, key, results, te, tes;
+    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
+    results = [];
+    for (idx in tes) {
+      te = tes[idx];
+      if (te.id === item.id) {
+        key = "" + Constant.PageValueKey.TE_PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + idx + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.minObj;
+        results.push(setTimelinePageValue(key, item.getMinimumObject()));
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
+
   TLEItemChange.readFromPageValue = function(timelineConfig, item) {
     var ret;
     ret = TLEItemChange.__super__.constructor.readFromPageValue.call(this, timelineConfig);

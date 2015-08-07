@@ -49,7 +49,9 @@ setupEvents = function(obj) {
         }
       },
       stop: function(event, ui) {
-        return obj.saveObj(Constant.ItemActionType.MOVE);
+        if (obj.dragComplete != null) {
+          return obj.dragComplete();
+        }
       }
     });
     return obj.getJQueryElement().resizable({
@@ -60,7 +62,9 @@ setupEvents = function(obj) {
         }
       },
       stop: function(event, ui) {
-        return obj.saveObj(Constant.ItemActionType.MOVE);
+        if (obj.resizeComplete != null) {
+          return obj.resizeComplete();
+        }
       }
     });
   })();
