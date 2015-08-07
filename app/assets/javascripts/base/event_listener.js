@@ -36,33 +36,41 @@ EventListener = (function(superClass) {
   };
 
   EventListener.prototype.preview = function(timelineEvent) {
-    var _draw, _loop, actionType, drawDelay, loopDelay, method, methodName, p;
+    var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, methodName, p;
     this.setEvent(timelineEvent);
     drawDelay = 30;
     loopDelay = 1000;
+    loopMaxCount = 5;
     methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
     this.appendCssIfNeeded(methodName);
     method = this.constructor.prototype[methodName];
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     this.doPreviewLoop = true;
+    loopCount = 0;
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       p = 0;
       _draw = (function(_this) {
         return function() {
           return setTimeout(function() {
-            method.call(_this, p);
-            p += 1;
-            if (p >= _this.scrollLength()) {
-              p = 0;
-              return _loop.call(_this);
-            } else {
-              return _draw.call(_this);
+            if (_this.doPreviewLoop) {
+              method.call(_this, p);
+              p += 1;
+              if (p >= _this.scrollLength()) {
+                p = 0;
+                return _loop.call(_this);
+              } else {
+                return _draw.call(_this);
+              }
             }
           }, drawDelay);
         };
       })(this);
       _loop = (function(_this) {
         return function() {
+          loopCount += 1;
+          if (loopCount >= loopMaxCount) {
+            _this.stopPreview();
+          }
           return setTimeout(function() {
             if (_this.doPreviewLoop) {
               return _draw.call(_this);
@@ -74,6 +82,10 @@ EventListener = (function(superClass) {
     } else if (actionType === Constant.ActionEventHandleType.CLICK) {
       _loop = (function(_this) {
         return function() {
+          loopCount += 1;
+          if (loopCount >= loopMaxCount) {
+            _this.stopPreview();
+          }
           return setTimeout(function() {
             if (_this.doPreviewLoop) {
               return method.call(_this, null, _loop);
@@ -82,6 +94,15 @@ EventListener = (function(superClass) {
         };
       })(this);
       return method.call(this, null, _loop);
+    }
+  };
+
+  EventListener.prototype.stopPreview = function() {
+    var actionType;
+    this.doPreviewLoop = false;
+    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+      return this.restoreAllNewDrawedSurface();
     }
   };
 

@@ -346,6 +346,17 @@ CanvasItemBase = (function(superClass) {
     }
   };
 
+  CanvasItemBase.prototype.restoreAllNewDrawedSurface = function() {
+    var canvas, context;
+    if (this.newDrawedSurfaceImageData) {
+      canvas = document.getElementById(this.canvasElementId());
+      if (canvas != null) {
+        context = canvas.getContext('2d');
+        return context.putImageData(this.newDrawedSurfaceImageData, 0, 0);
+      }
+    }
+  };
+
   CanvasItemBase.prototype.clearDraw = function() {
     var canvas, context;
     canvas = document.getElementById(this.canvasElementId());

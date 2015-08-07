@@ -98,6 +98,7 @@ class ButtonItem extends CssItemBase
   defaultClick : (e, complete) =>
     # ボタン凹むアクション
     @getJQueryElement().addClass('defaultClick_' + @id)
+    @getJQueryElement().off('webkitAnimationEnd animationend')
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
       @getJQueryElement().removeClass('defaultClick_' + @id)

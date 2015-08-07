@@ -35,6 +35,7 @@ class EventListener extends Extend
     @setEvent(timelineEvent)
     drawDelay = 30 # 0.03秒毎スクロール描画
     loopDelay = 1000 # 1秒毎イベント実行
+    loopMaxCount = 5 # ループ5回
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
     @appendCssIfNeeded(methodName)
 
@@ -42,21 +43,27 @@ class EventListener extends Extend
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     # イベントループ
     @doPreviewLoop = true
+    loopCount = 0
     if actionType == Constant.ActionEventHandleType.SCROLL
 
       p = 0
       _draw = =>
         setTimeout( =>
-          method.call(@, p)
-          p += 1
-          if p >= @scrollLength()
-            p = 0
-            _loop.call(@)
-          else
-            _draw.call(@)
+          if @doPreviewLoop
+            method.call(@, p)
+            p += 1
+            if p >= @scrollLength()
+              p = 0
+              _loop.call(@)
+            else
+              _draw.call(@)
         , drawDelay)
 
       _loop = =>
+        loopCount += 1
+        if loopCount >= loopMaxCount
+          @stopPreview()
+
         setTimeout( =>
           if @doPreviewLoop
             _draw.call(@)
@@ -66,11 +73,21 @@ class EventListener extends Extend
 
     else if actionType == Constant.ActionEventHandleType.CLICK
       _loop = =>
+        loopCount += 1
+        if loopCount >= loopMaxCount
+          @stopPreview()
+
         setTimeout( =>
           if @doPreviewLoop
             method.call(@, null, _loop)
         , loopDelay)
       method.call(@, null, _loop)
+
+  stopPreview: ->
+    @doPreviewLoop = false
+    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    if actionType == Constant.ActionEventHandleType.SCROLL
+      @restoreAllNewDrawedSurface()
 
   # JQueryエレメントを取得
   # @abstract

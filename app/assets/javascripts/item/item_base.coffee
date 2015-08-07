@@ -349,6 +349,14 @@ class CanvasItemBase extends ItemBase
         context = canvas.getContext('2d');
         context.putImageData(@newDrawingSurfaceImageData, 0, 0)
 
+  # 保存した画面を新規キャンパスの全画面に再設定
+  restoreAllNewDrawedSurface : ->
+    if @newDrawedSurfaceImageData
+      canvas = document.getElementById(@canvasElementId());
+      if canvas?
+        context = canvas.getContext('2d');
+        context.putImageData(@newDrawedSurfaceImageData, 0, 0)
+
   # 描画を削除
   clearDraw: ->
     canvas = document.getElementById(@canvasElementId());

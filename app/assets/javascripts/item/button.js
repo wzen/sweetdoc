@@ -117,6 +117,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.defaultClick = function(e, complete) {
     this.getJQueryElement().addClass('defaultClick_' + this.id);
+    this.getJQueryElement().off('webkitAnimationEnd animationend');
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().removeClass('defaultClick_' + _this.id);
