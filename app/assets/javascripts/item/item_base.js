@@ -6,10 +6,6 @@ var CanvasItemBase, CssItemBase, ItemBase,
 ItemBase = (function(superClass) {
   extend(ItemBase, superClass);
 
-  ItemBase.include(EventListener);
-
-  ItemBase.include(ItemEventListener);
-
   ItemBase.IDENTITY = "";
 
   ItemBase.ITEM_ID = "";
@@ -212,7 +208,7 @@ ItemBase = (function(superClass) {
 
   return ItemBase;
 
-})(Extend);
+})(ItemEventListener);
 
 CssItemBase = (function(superClass) {
   extend(CssItemBase, superClass);
@@ -252,9 +248,8 @@ CanvasItemBase = (function(superClass) {
 
   function CanvasItemBase() {
     CanvasItemBase.__super__.constructor.call(this);
-    this.newDrawingCanvas = null;
-    this.newDrawingContext = null;
     this.newDrawingSurfaceImageData = null;
+    this.newDrawedSurfaceImageData = null;
     this.scale = {
       w: 1.0,
       h: 1.0
@@ -299,8 +294,8 @@ CanvasItemBase = (function(superClass) {
 
   CanvasItemBase.prototype.setScale = function(drawingContext) {
     var canvas, element;
-    element = $('#' + this.id);
-    canvas = $('#' + this.canvasElementId());
+    element = $("#" + this.id);
+    canvas = $("#" + (this.canvasElementId()));
     element.width(this.itemSize.w * this.scale.w);
     element.height(this.itemSize.h * this.scale.h);
     canvas.attr('width', element.width());
@@ -318,7 +313,8 @@ CanvasItemBase = (function(superClass) {
 
   CanvasItemBase.prototype.makeNewCanvas = function() {
     $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
-    return this.initCanvas();
+    this.initCanvas();
+    return this.saveNewDrawingSurface();
   };
 
   CanvasItemBase.prototype.saveNewDrawingSurface = function() {
@@ -327,6 +323,15 @@ CanvasItemBase = (function(superClass) {
     if (canvas != null) {
       context = canvas.getContext('2d');
       return this.newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    }
+  };
+
+  CanvasItemBase.prototype.saveNewDrawedSurface = function() {
+    var canvas, context;
+    canvas = document.getElementById(this.canvasElementId());
+    if (canvas != null) {
+      context = canvas.getContext('2d');
+      return this.newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
     }
   };
 

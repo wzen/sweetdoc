@@ -80,6 +80,8 @@ class ArrowItem extends CanvasItemBase
     if !super(zindex)
       return false
     @makeElement(show)
+    # Canvas状態を保存
+    @saveNewDrawedSurface()
     return true
 
   # 再描画処理(新規キャンパスに描画)
@@ -166,8 +168,6 @@ class ArrowItem extends CanvasItemBase
       console.log('scroll init')
       # 描画
       @reDraw(false)
-      # 空Canvas状態を保存
-      @saveNewDrawingSurface()
 
   # スクロールイベント ※アクションイベント
   scrollDraw : (scrollValue) ->

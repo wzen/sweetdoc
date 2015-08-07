@@ -1,9 +1,6 @@
 # アイテム基底
 # @abstract
-class ItemBase extends Extend
-  @include EventListener
-  @include ItemEventListener
-
+class ItemBase extends ItemEventListener
   # @abstract
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
@@ -260,9 +257,8 @@ class CanvasItemBase extends ItemBase
   # コンストラクタ
   constructor: ->
     super()
-    @newDrawingCanvas = null
-    @newDrawingContext = null
     @newDrawingSurfaceImageData = null
+    @newDrawedSurfaceImageData = null
     # @property [Array] scale 表示倍率
     @scale = {w:1.0, h:1.0}
 
@@ -306,15 +302,14 @@ class CanvasItemBase extends ItemBase
   # 伸縮率を設定
   setScale: (drawingContext) ->
     # 要素の伸縮
-    element = $('#' + @id)
-    canvas = $('#' + @canvasElementId())
+    element = $("##{@id}")
+    canvas = $("##{@canvasElementId()}")
     element.width(@itemSize.w * @scale.w)
     element.height(@itemSize.h * @scale.h)
     canvas.attr('width',  element.width())
     canvas.attr('height', element.height())
     # キャンパスの伸縮
     drawingContext.scale(@scale.w, @scale.h)
-
     console.log("setScale: itemSize: #{JSON.stringify(@itemSize)}")
 
   # キャンパス初期化処理
@@ -329,6 +324,8 @@ class CanvasItemBase extends ItemBase
     $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     # キャンパスに対する初期化
     @initCanvas()
+    # 画面を保存
+    @saveNewDrawingSurface()
 
   # 新規キャンパスの画面を保存
   saveNewDrawingSurface : ->
@@ -336,6 +333,13 @@ class CanvasItemBase extends ItemBase
     if canvas?
       context = canvas.getContext('2d');
       @newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
+
+  # 描画済みの新規キャンパスの画面を保存
+  saveNewDrawedSurface : ->
+    canvas = document.getElementById(@canvasElementId());
+    if canvas?
+      context = canvas.getContext('2d');
+      @newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
   # 保存した画面を新規キャンパスの全画面に再設定
   restoreAllNewDrawingSurface : ->

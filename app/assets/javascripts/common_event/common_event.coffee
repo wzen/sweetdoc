@@ -1,8 +1,5 @@
 # 共通イベント
-class CommonEvent extends Extend
-  @include EventListener
-  @include CommonEventListener
-
+class CommonEvent extends CommonEventListener
   @EVENT_ID = ''
   @ID = ''
 

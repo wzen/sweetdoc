@@ -6,10 +6,6 @@ var CommonEvent,
 CommonEvent = (function(superClass) {
   extend(CommonEvent, superClass);
 
-  CommonEvent.include(EventListener);
-
-  CommonEvent.include(CommonEventListener);
-
   CommonEvent.EVENT_ID = '';
 
   CommonEvent.ID = '';
@@ -22,6 +18,6 @@ CommonEvent = (function(superClass) {
 
   return CommonEvent;
 
-})(Extend);
+})(CommonEventListener);
 
 //# sourceMappingURL=common_event.js.map

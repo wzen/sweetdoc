@@ -1,5 +1,5 @@
 # イベントリスナー Extend
-EventListener =
+class EventListener extends Extend
   # アクションの初期化(閲覧モードのみ使用される)
   setEvent: (timelineEvent) ->
     @timelineEvent = timelineEvent
@@ -153,11 +153,11 @@ EventListener =
   clearPaging: (methodName) ->
     @removeCss(methodName)
 
-CommonEventListener =
+class CommonEventListener extends EventListener
   # 初期化
   initWithEvent: (timelineEvent) ->
 
-ItemEventListener =
+class ItemEventListener extends EventListener
   # 初期化
   initWithEvent: (timelineEvent) ->
     @setMiniumObject(timelineEvent[TLEItemChange.minObj])
