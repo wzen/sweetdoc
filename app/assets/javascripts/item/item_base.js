@@ -208,7 +208,7 @@ ItemBase = (function(superClass) {
 
   return ItemBase;
 
-})(ItemEventListener);
+})(ItemEventBase);
 
 CssItemBase = (function(superClass) {
   extend(CssItemBase, superClass);

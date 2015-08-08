@@ -18,6 +18,6 @@ CommonEvent = (function(superClass) {
 
   return CommonEvent;
 
-})(CommonEventListener);
+})(CommonEventBase);
 
 //# sourceMappingURL=common_event.js.map
