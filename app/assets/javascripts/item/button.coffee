@@ -54,7 +54,7 @@ class ButtonItem extends CssItemBase
   makeElement: (show = true) ->
     $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     if !show
-      # TODO: alphaを0にして非表示にする
+      @getJQueryElement().css('opacity', 0)
       return false
 
   # 描画削除
@@ -159,7 +159,15 @@ class ButtonItem extends CssItemBase
     }
     """
 
+
+
     return "#{webkitKeyframe} #{mozKeyframe} #{css}"
+
+  willChapter: (methodName) ->
+    super(methodName)
+    if methodName == 'defaultClick'
+      # ボタンを表示
+      @getJQueryElement().css('opacity', 1)
 
 window.loadedClassList.ButtonItem = ButtonItem
 setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)

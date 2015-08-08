@@ -76,6 +76,7 @@ ButtonItem = (function(superClass) {
     }
     $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     if (!show) {
+      this.getJQueryElement().css('opacity', 0);
       return false;
     }
   };
@@ -136,6 +137,13 @@ ButtonItem = (function(superClass) {
     mozKeyframe = "@-moz-keyframes " + keyframe;
     css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: 0.5s;\n-moz-animation-duration: 0.5s;\n}";
     return webkitKeyframe + " " + mozKeyframe + " " + css;
+  };
+
+  ButtonItem.prototype.willChapter = function(methodName) {
+    ButtonItem.__super__.willChapter.call(this, methodName);
+    if (methodName === 'defaultClick') {
+      return this.getJQueryElement().css('opacity', 1);
+    }
   };
 
   return ButtonItem;
