@@ -13,7 +13,6 @@ Chapter = (function() {
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       eventListener = ref[idx];
       eventListener.initWithEvent(this.timelineEventList[idx]);
-      eventListener.setEvent(this.timelineEventList[idx]);
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
       eventListener.willChapter(methodName);
       eventListener.appendCssIfNeeded(methodName);

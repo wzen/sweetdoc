@@ -87,13 +87,6 @@ class ButtonItem extends CssItemBase
     @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
 
-  # チャプター動作前イベント
-  willChapter: (methodName) ->
-    super()
-    if methodName == 'defaultClick'
-      # 描画
-      @reDraw(false)
-
   # 共通クリックイベント ※アクションイベント
   defaultClick : (e, complete) =>
     # ボタン凹むアクション

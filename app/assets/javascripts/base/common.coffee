@@ -251,6 +251,9 @@ sanitaizeDecode = (str) ->
 
 # ハッシュ配列からクラスを取り出し
 getClassFromMap = (isCommon, id) ->
+  if !window.classMap?
+    window.classMap = {}
+
   c = isCommon
   i = id
   if typeof c == "boolean"
@@ -262,7 +265,7 @@ getClassFromMap = (isCommon, id) ->
   if typeof i != "string"
     i = String(id)
 
-  if !window.classMap? || !window.classMap[c]? || !window.classMap[c][i]?
+  if !window.classMap[c]? || !window.classMap[c][i]?
     return null
 
   return window.classMap[c][i]
@@ -287,7 +290,50 @@ setClassToMap = (isCommon, id, value) ->
 
   window.classMap[c][i] = value
 
+# インスタンス取得
+getInstanceFromMap = (timelineEvent) ->
+  isCommonEvent = timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
+  id = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ID]
+  classMapId = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ITEM_ID]
 
+  if typeof isCommonEvent == "boolean"
+    if isCommonEvent
+      isCommonEvent = "1"
+    else
+      isCommonEvent = "0"
+
+  if typeof id != "string"
+    id = String(id)
+
+  setInstanceFromMap(isCommonEvent, id, classMapId)
+  return window.instanceMap[isCommonEvent][id]
+
+# インスタンス設定(上書きはしない)
+setInstanceFromMap = (isCommonEvent, id, itemId = id) ->
+  if !window.instanceMap?
+    window.instanceMap = {}
+
+  if typeof isCommonEvent == "boolean"
+    if isCommonEvent
+      isCommonEvent = "1"
+    else
+      isCommonEvent = "0"
+
+  if typeof id != "string"
+    id = String(id)
+
+  if !window.instanceMap[isCommonEvent]?
+    !window.instanceMap[isCommonEvent] = {}
+  if !window.instanceMap[isCommonEvent][id]?
+    # インスタンスを保存する
+    window.instanceMap[isCommonEvent][id] = new (getClassFromMap(isCommonEvent, itemId))()
+
+getCreatedItemObject = ->
+  ret = {}
+  for k, v of createdObject
+    if v instanceof CommonEventBase == false
+      ret[k] = v
+  return ret
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

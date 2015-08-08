@@ -10,6 +10,10 @@ EventBase = (function(superClass) {
     return EventBase.__super__.constructor.apply(this, arguments);
   }
 
+  EventBase.prototype.initWithEvent = function(timelineEvent) {
+    return this.setEvent(timelineEvent);
+  };
+
   EventBase.prototype.setEvent = function(timelineEvent) {
     this.timelineEvent = timelineEvent;
     this.isFinishedEvent = false;
@@ -37,7 +41,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.preview = function(timelineEvent) {
     var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, methodName, p;
-    this.setEvent(timelineEvent);
+    this.initWithEvent(timelineEvent);
     this.stopPreview(timelineEvent);
     drawDelay = 30;
     loopDelay = 1000;
@@ -99,10 +103,8 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.stopPreview = function(timelineEvent) {
-    var actionType;
     this.doPreviewLoop = false;
-    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
-    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+    if (this instanceof CanvasItemBase) {
       return this.restoreAllNewDrawedSurface();
     }
   };
@@ -151,9 +153,9 @@ EventBase = (function(superClass) {
       return;
     }
     this.scrollValue = this.scrollValue < sPoint ? sPoint : this.scrollValue;
-    this.scrollValue = this.scrollValue >= ePoint ? ePoint - 1 : this.scrollValue;
+    this.scrollValue = this.scrollValue > ePoint ? ePoint : this.scrollValue;
     this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
-    if (this.scrollValue - sPoint >= this.scrollLength() - 1) {
+    if (this.scrollValue === ePoint) {
       this.isFinishedEvent = true;
       if (complete != null) {
         return complete();
@@ -186,12 +188,11 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventAfter = function() {
-    var actionType, methodName;
+    var actionType;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
-    if (actionType === Constant.ActionEventHandleType.SCROLL) {
-      methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-      return this.constructor.prototype[methodName].call(this, this.scrollLength() - 1);
-    } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+    if (this instanceof CanvasItemBase) {
+      return this.restoreAllNewDrawedSurface();
+    } else if (this instanceof CssItemBase) {
       return this.getJQueryElement().css({
         '-webkit-animation-duration': '0',
         '-moz-animation-duration': '-moz-animation-duration',
@@ -203,9 +204,9 @@ EventBase = (function(superClass) {
   EventBase.prototype.updateEventBefore = function() {
     var actionType;
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
-    if (actionType === Constant.ActionEventHandleType.SCROLL) {
-      return this.willChapter(this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]);
-    } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+    if (this instanceof CanvasItemBase) {
+      return this.restoreAllNewDrawingSurface();
+    } else if (this instanceof CssItemBase) {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
     }
   };
@@ -225,7 +226,9 @@ CommonEventBase = (function(superClass) {
     return CommonEventBase.__super__.constructor.apply(this, arguments);
   }
 
-  CommonEventBase.prototype.initWithEvent = function(timelineEvent) {};
+  CommonEventBase.prototype.initWithEvent = function(timelineEvent) {
+    return CommonEventBase.__super__.initWithEvent.call(this, timelineEvent);
+  };
 
   return CommonEventBase;
 
@@ -239,7 +242,9 @@ ItemEventBase = (function(superClass) {
   }
 
   ItemEventBase.prototype.initWithEvent = function(timelineEvent) {
-    return this.setMiniumObject(timelineEvent[TLEItemChange.minObj]);
+    ItemEventBase.__super__.initWithEvent.call(this, timelineEvent);
+    this.setMiniumObject(timelineEvent[TLEItemChange.minObj]);
+    return this.reDraw(false);
   };
 
   ItemEventBase.prototype.setMiniumObject = function(obj) {};
@@ -248,4 +253,4 @@ ItemEventBase = (function(superClass) {
 
 })(EventBase);
 
-//# sourceMappingURL=event_listener.js.map
+//# sourceMappingURL=event_base.js.map

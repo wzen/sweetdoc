@@ -161,14 +161,6 @@ class ArrowItem extends CanvasItemBase
     @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
 
-  # チャプター動作前イベント
-  willChapter: (methodName) ->
-    super()
-    if methodName == 'scrollDraw'
-      console.log('scroll init')
-      # 描画
-      @reDraw(false)
-
   # スクロールイベント ※アクションイベント
   scrollDraw : (scrollValue) ->
     #console.log("scrollY: #{@scrollValue}")

@@ -8,7 +8,6 @@ class Chapter
   willChapter: ->
     for eventListener, idx in @eventListenerList
       eventListener.initWithEvent(@timelineEventList[idx])
-      eventListener.setEvent(@timelineEventList[idx])
       methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
       eventListener.willChapter(methodName)
       eventListener.appendCssIfNeeded(methodName)

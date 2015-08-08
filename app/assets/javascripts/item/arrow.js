@@ -147,14 +147,6 @@ ArrowItem = (function(superClass) {
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
-  ArrowItem.prototype.willChapter = function(methodName) {
-    ArrowItem.__super__.willChapter.call(this);
-    if (methodName === 'scrollDraw') {
-      console.log('scroll init');
-      return this.reDraw(false);
-    }
-  };
-
   ArrowItem.prototype.scrollDraw = function(scrollValue) {
     var j, len, r, ref;
     r = scrollValue / this.scrollLength();

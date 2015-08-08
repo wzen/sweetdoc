@@ -57,6 +57,8 @@ class TimelineConfig
       @isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) == 0
       if @isCommonEvent
         @commonEventId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length))
+        commonEvent = getClassFromMap(true, @commonEventId)
+        @id = (new commonEvent()).id
       else
         splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR)
         @id = splitValues[0]

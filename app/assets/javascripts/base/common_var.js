@@ -15,7 +15,6 @@ worktableCommonVar = function() {
   window.messageTimer = null;
   window.flushMessageTimer = null;
   window.mode = Constant.Mode.DRAW;
-  window.createdObject = {};
   window.itemInitFuncList = [];
   window.operationHistory = [];
   return window.operationHistoryIndex = 0;
@@ -39,8 +38,7 @@ runCommonVar = function() {
   window.scrollInsideCoverZindex = 1;
   window.lstorage = localStorage;
   window.disabledEventHandler = false;
-  window.firstItemFocused = false;
-  return window.instanceMap = {};
+  return window.firstItemFocused = false;
 };
 
 //# sourceMappingURL=common_var.js.map

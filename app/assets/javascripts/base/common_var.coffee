@@ -14,7 +14,6 @@ worktableCommonVar = ->
   window.messageTimer = null
   window.flushMessageTimer = null
   window.mode = Constant.Mode.DRAW
-  window.createdObject = {}
   window.itemInitFuncList = []
   window.operationHistory = []
   window.operationHistoryIndex = 0
@@ -22,7 +21,6 @@ worktableCommonVar = ->
 # 実行テーブル共通変数
 runCommonVar = ->
   _commonVar()
-
   window.mainWrapper = $('#main-wrapper')
   window.scrollWrapper = $("#scroll_wrapper")
   window.scrollHandleWrapper = $("#scroll_handle_wrapper")
@@ -37,4 +35,3 @@ runCommonVar = ->
   window.lstorage = localStorage
   window.disabledEventHandler = false
   window.firstItemFocused = false
-  window.instanceMap = {}

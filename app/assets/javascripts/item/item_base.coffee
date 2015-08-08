@@ -109,7 +109,7 @@ class ItemBase extends ItemEventBase
       # 名前を付与
       num = 1
       self = @
-      for k, v of createdObject
+      for k, v of getCreatedItemObject()
         if self.constructor.IDENTITY == v.constructor.IDENTITY
           num += 1
       @name = @constructor.IDENTITY + " #{num}"
@@ -200,6 +200,7 @@ class ItemBase extends ItemEventBase
 
   # イベントによって設定したスタイルをクリアする
   clearAllEventStyle: ->
+    return
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->

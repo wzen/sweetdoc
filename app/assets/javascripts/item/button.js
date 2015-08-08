@@ -108,13 +108,6 @@ ButtonItem = (function(superClass) {
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
-  ButtonItem.prototype.willChapter = function(methodName) {
-    ButtonItem.__super__.willChapter.call(this);
-    if (methodName === 'defaultClick') {
-      return this.reDraw(false);
-    }
-  };
-
   ButtonItem.prototype.defaultClick = function(e, complete) {
     this.getJQueryElement().addClass('defaultClick_' + this.id);
     this.getJQueryElement().off('webkitAnimationEnd animationend');

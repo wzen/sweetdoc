@@ -41,29 +41,6 @@ initResize = (wrap, scrollWrapper) ->
     , 200)
   )
 
-# インスタンス取得
-getInstanceFromMap = (timelineEvent) ->
-  isCommonEvent = timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
-  id = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ID]
-  classMapId = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ITEM_ID]
-  if typeof isCommonEvent == "boolean"
-    if isCommonEvent
-      isCommonEvent = "1"
-    else
-      isCommonEvent = "0"
-
-  if typeof id != "string"
-    id = String(id)
-
-  if !window.instanceMap[isCommonEvent]?
-    !window.instanceMap[isCommonEvent] = {}
-
-  if !window.instanceMap[isCommonEvent][id]?
-    # インスタンスを保存する
-    window.instanceMap[isCommonEvent][id] = new (getClassFromMap(isCommonEvent, classMapId))()
-
-  return window.instanceMap[isCommonEvent][id]
-
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得

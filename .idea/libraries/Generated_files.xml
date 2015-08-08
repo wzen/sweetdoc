@@ -94,7 +94,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/test_move.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_listener.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />

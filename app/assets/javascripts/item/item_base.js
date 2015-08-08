@@ -84,15 +84,16 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.reDraw = function() {};
 
   ItemBase.prototype.saveObj = function(action) {
-    var history, k, num, self, v;
+    var history, k, num, ref, self, v;
     history = this.getHistoryObj(action);
     this.pushOhi(operationHistoryIndex - 1);
     pushOperationHistory(history);
     if (action === Constant.ItemActionType.MAKE) {
       num = 1;
       self = this;
-      for (k in createdObject) {
-        v = createdObject[k];
+      ref = getCreatedItemObject();
+      for (k in ref) {
+        v = ref[k];
         if (self.constructor.IDENTITY === v.constructor.IDENTITY) {
           num += 1;
         }

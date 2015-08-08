@@ -48,7 +48,7 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.selectItem = function(e) {
-    var checkedRadioButton, displayClassName, splitValues, vEmt, value;
+    var checkedRadioButton, commonEvent, displayClassName, splitValues, vEmt, value;
     if (e == null) {
       e = null;
     }
@@ -61,6 +61,8 @@ TimelineConfig = (function() {
       this.isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) === 0;
       if (this.isCommonEvent) {
         this.commonEventId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length));
+        commonEvent = getClassFromMap(true, this.commonEventId);
+        this.id = (new commonEvent()).id;
       } else {
         splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR);
         this.id = splitValues[0];

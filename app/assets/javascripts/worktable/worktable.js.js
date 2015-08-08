@@ -107,9 +107,10 @@ changeMode = function(mode) {
 };
 
 clearAllItemStyle = function() {
-  var k, v;
-  for (k in createdObject) {
-    v = createdObject[k];
+  var k, ref, v;
+  ref = getCreatedItemObject();
+  for (k in ref) {
+    v = ref[k];
     v.clearAllEventStyle();
   }
   clearSelectedBorder();
@@ -146,10 +147,11 @@ initKeyEvent = function() {
 };
 
 clearWorkTable = function() {
-  var k, results, v;
+  var k, ref, results, v;
+  ref = getCreatedItemObject();
   results = [];
-  for (k in createdObject) {
-    v = createdObject[k];
+  for (k in ref) {
+    v = ref[k];
     results.push(v.getJQueryElement().remove());
   }
   return results;
@@ -159,9 +161,10 @@ clearWorkTable = function() {
 /* デバッグ */
 
 runDebug = function() {
-  var item, k, v;
-  for (k in createdObject) {
-    v = createdObject[k];
+  var item, k, ref, v;
+  ref = getCreatedItemObject();
+  for (k in ref) {
+    v = ref[k];
     item = v;
     return false;
   }

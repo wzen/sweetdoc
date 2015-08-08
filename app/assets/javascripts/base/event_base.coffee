@@ -1,5 +1,9 @@
 # イベントリスナー Extend
 class EventBase extends Extend
+  # 初期化
+  initWithEvent: (timelineEvent) ->
+    @setEvent(timelineEvent)
+
   # アクションの初期化(閲覧モードのみ使用される)
   setEvent: (timelineEvent) ->
     @timelineEvent = timelineEvent
@@ -32,7 +36,7 @@ class EventBase extends Extend
 
   # プレビュー
   preview: (timelineEvent) ->
-    @setEvent(timelineEvent)
+    @initWithEvent(timelineEvent)
     @stopPreview(timelineEvent)
     drawDelay = 30 # 0.03秒毎スクロール描画
     loopDelay = 1000 # 1秒毎イベント実行
@@ -86,8 +90,7 @@ class EventBase extends Extend
 
   stopPreview: (timelineEvent) ->
     @doPreviewLoop = false
-    actionType = timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
-    if actionType == Constant.ActionEventHandleType.SCROLL
+    if @ instanceof CanvasItemBase
       @restoreAllNewDrawedSurface()
 
   # JQueryエレメントを取得
@@ -136,11 +139,11 @@ class EventBase extends Extend
     if @scrollValue < sPoint || @scrollValue > ePoint
       return
     @scrollValue = if @scrollValue < sPoint then sPoint else @scrollValue
-    @scrollValue = if @scrollValue >= ePoint then ePoint - 1 else @scrollValue
+    @scrollValue = if @scrollValue > ePoint then ePoint else @scrollValue
 
     (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
 
-    if @scrollValue - sPoint >= @scrollLength() - 1
+    if @scrollValue == ePoint
       @isFinishedEvent = true
       if complete?
         complete()
@@ -171,23 +174,22 @@ class EventBase extends Extend
   # イベント後の表示状態にする
   updateEventAfter: ->
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
-    if actionType == Constant.ActionEventHandleType.SCROLL
-      # FIXME: 暫定
-      # とりあえず最後までスクロールした状態
-      methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-      (@constructor.prototype[methodName]).call(@, @scrollLength() - 1)
-    else if actionType == Constant.ActionEventHandleType.CLICK
-      # CSSアニメーション前
+    if @ instanceof CanvasItemBase
+      # 描画後の状態を表示
+      @restoreAllNewDrawedSurface()
+
+    else if @ instanceof CssItemBase
+      # CSSアニメーション後にする
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
 
   # イベント前の表示状態にする
   updateEventBefore: ->
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
-    if actionType == Constant.ActionEventHandleType.SCROLL
-      # FIXME: 暫定
-      # チャプター開始前
-      @willChapter(@timelineEvent[TimelineEvent.PageValueKey.METHODNAME])
-    else if actionType == Constant.ActionEventHandleType.CLICK
+    if @ instanceof CanvasItemBase
+      # 描画前の状態を表示
+      @restoreAllNewDrawingSurface()
+
+    else if @ instanceof CssItemBase
       # CSSアニメーション前
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
 
@@ -198,14 +200,17 @@ class EventBase extends Extend
 class CommonEventBase extends EventBase
   # 初期化
   initWithEvent: (timelineEvent) ->
+    super(timelineEvent)
 
 class ItemEventBase extends EventBase
   # 初期化
   initWithEvent: (timelineEvent) ->
+    super(timelineEvent)
+    # 値設定
     @setMiniumObject(timelineEvent[TLEItemChange.minObj])
-
-    # アイテムを描画
+    # 描画
     # TODO: 設定で初期表示させるか切り替えさせる
+    @reDraw(false)
 
   # 最小限のデータを設定
   # @abstract
