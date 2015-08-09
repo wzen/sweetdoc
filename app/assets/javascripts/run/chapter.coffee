@@ -1,32 +1,32 @@
 # チャプター(タイムラインの区切り)
 class Chapter
   constructor: (list) ->
-    @eventListenerList = list.eventListenerList
+    @eventList = list.eventList
     @timelineEventList = list.timelineEventList
 
   # チャプター共通の前処理
   willChapter: ->
-    for eventListener, idx in @eventListenerList
-      eventListener.initWithEvent(@timelineEventList[idx])
-      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-      eventListener.willChapter(methodName)
-      eventListener.appendCssIfNeeded(methodName)
+    for event, idx in @eventList
+      event.initWithEvent(@timelineEventList[idx])
+      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      event.willChapter(methodName)
+      event.appendCssIfNeeded(methodName)
 
     @sinkFrontAllActor()
     @focusToActorIfNeed(false)
 
   # チャプター共通の後処理
   didChapter: ->
-    @eventListenerList.forEach((eventListener) ->
-      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-      eventListener.didChapter(methodName)
+    @eventList.forEach((event) ->
+      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      event.didChapter(methodName)
     )
 
   # アイテムにフォーカス(アイテムが1つのみの場合)
   focusToActorIfNeed: (isImmediate, type = "center") ->
     window.disabledEventHandler = true
     item = null
-    @eventListenerList.forEach((e, idx) =>
+    @eventList.forEach((e, idx) =>
       if @timelineEventList[idx][TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
         item = e
         return false
@@ -60,18 +60,18 @@ class Chapter
   riseFrontAllActor: ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
     scrollContents.css('z-index', scrollViewSwitchZindex.on)
-    @eventListenerList.forEach((eventListener) ->
-      if eventListener.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
-        eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1)
+    @eventList.forEach((event) ->
+      if event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+        event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1)
     )
 
   # 全てのイベントアイテムをFrontから落とす
   sinkFrontAllActor: ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
-    @eventListenerList.forEach((eventListener) ->
-      if eventListener.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
-        eventListener.getJQueryElement().css('z-index', 0)
+    @eventList.forEach((event) ->
+      if event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+        event.getJQueryElement().css('z-index', 0)
     )
 
   # 全てのイベントが終了しているか

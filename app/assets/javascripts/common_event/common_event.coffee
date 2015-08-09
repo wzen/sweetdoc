@@ -1,4 +1,4 @@
-# 共通イベント
+# 共通イベント Singleton
 class CommonEvent
   instance = null
   @EVENT_ID = ''

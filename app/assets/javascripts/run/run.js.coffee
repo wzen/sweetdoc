@@ -73,9 +73,9 @@ initTimeline = ->
     if !parallel
       chapter = null
       if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
-        chapter = new ClickChapter({eventListenerList: eventList, timelineEventList: tList})
+        chapter = new ClickChapter({eventList: eventList, timelineEventList: tList})
       else
-        chapter = new ScrollChapter({eventListenerList: eventList, timelineEventList: tList})
+        chapter = new ScrollChapter({eventList: eventList, timelineEventList: tList})
       chapterList.push(chapter)
       eventList = []
       tList = []

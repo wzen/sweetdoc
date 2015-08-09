@@ -3,29 +3,29 @@ var Chapter;
 
 Chapter = (function() {
   function Chapter(list) {
-    this.eventListenerList = list.eventListenerList;
+    this.eventList = list.eventList;
     this.timelineEventList = list.timelineEventList;
   }
 
   Chapter.prototype.willChapter = function() {
-    var eventListener, i, idx, len, methodName, ref;
-    ref = this.eventListenerList;
+    var event, i, idx, len, methodName, ref;
+    ref = this.eventList;
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
-      eventListener = ref[idx];
-      eventListener.initWithEvent(this.timelineEventList[idx]);
-      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-      eventListener.willChapter(methodName);
-      eventListener.appendCssIfNeeded(methodName);
+      event = ref[idx];
+      event.initWithEvent(this.timelineEventList[idx]);
+      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      event.willChapter(methodName);
+      event.appendCssIfNeeded(methodName);
     }
     this.sinkFrontAllActor();
     return this.focusToActorIfNeed(false);
   };
 
   Chapter.prototype.didChapter = function() {
-    return this.eventListenerList.forEach(function(eventListener) {
+    return this.eventList.forEach(function(event) {
       var methodName;
-      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-      return eventListener.didChapter(methodName);
+      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      return event.didChapter(methodName);
     });
   };
 
@@ -36,7 +36,7 @@ Chapter = (function() {
     }
     window.disabledEventHandler = true;
     item = null;
-    this.eventListenerList.forEach((function(_this) {
+    this.eventList.forEach((function(_this) {
       return function(e, idx) {
         if (_this.timelineEventList[idx][TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
           item = e;
@@ -77,9 +77,9 @@ Chapter = (function() {
   Chapter.prototype.riseFrontAllActor = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     scrollContents.css('z-index', scrollViewSwitchZindex.on);
-    return this.eventListenerList.forEach(function(eventListener) {
-      if (eventListener.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
-        return eventListener.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
+    return this.eventList.forEach(function(event) {
+      if (event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+        return event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
       }
     });
   };
@@ -87,9 +87,9 @@ Chapter = (function() {
   Chapter.prototype.sinkFrontAllActor = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.eventListenerList.forEach(function(eventListener) {
-      if (eventListener.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
-        return eventListener.getJQueryElement().css('z-index', 0);
+    return this.eventList.forEach(function(event) {
+      if (event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+        return event.getJQueryElement().css('z-index', 0);
       }
     });
   };

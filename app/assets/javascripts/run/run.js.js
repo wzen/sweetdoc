@@ -74,12 +74,12 @@ initTimeline = function() {
       chapter = null;
       if (obj[TimelineEvent.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
         chapter = new ClickChapter({
-          eventListenerList: eventList,
+          eventList: eventList,
           timelineEventList: tList
         });
       } else {
         chapter = new ScrollChapter({
-          eventListenerList: eventList,
+          eventList: eventList,
           timelineEventList: tList
         });
       }

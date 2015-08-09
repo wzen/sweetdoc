@@ -23,9 +23,9 @@ ScrollChapter = (function(superClass) {
     if (window.disabledEventHandler) {
       return;
     }
-    return this.eventListenerList.forEach(function(eventListener) {
-      if (eventListener.scrollEvent != null) {
-        return eventListener.scrollEvent(x, y, function() {
+    return this.eventList.forEach(function(event) {
+      if (event.scrollEvent != null) {
+        return event.scrollEvent(x, y, function() {
           if (window.timeLine != null) {
             return window.timeLine.nextChapterIfFinishedAllEvent();
           }
@@ -37,10 +37,10 @@ ScrollChapter = (function(superClass) {
   ScrollChapter.prototype.finishedAllEvent = function() {
     var ret;
     ret = true;
-    this.eventListenerList.forEach(function(eventListener) {
+    this.eventList.forEach(function(event) {
       var methodName;
-      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-      if (!eventListener.isFinishedEvent) {
+      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      if (!event.isFinishedEvent) {
         ret = false;
         return false;
       }

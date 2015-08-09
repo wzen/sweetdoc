@@ -15,9 +15,9 @@ class ScrollChapter extends Chapter
     if window.disabledEventHandler
       return
 
-    @eventListenerList.forEach((eventListener) ->
-      if eventListener.scrollEvent?
-        eventListener.scrollEvent(x, y, ->
+    @eventList.forEach((event) ->
+      if event.scrollEvent?
+        event.scrollEvent(x, y, ->
           if window.timeLine?
             window.timeLine.nextChapterIfFinishedAllEvent()
         )
@@ -26,9 +26,9 @@ class ScrollChapter extends Chapter
   # 全てのイベントアイテムのスクロールが終了しているか
   finishedAllEvent: ->
     ret = true
-    @eventListenerList.forEach((eventListener) ->
-      methodName = eventListener.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-      if !eventListener.isFinishedEvent
+    @eventList.forEach((event) ->
+      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      if !event.isFinishedEvent
         ret = false
         return false
     )

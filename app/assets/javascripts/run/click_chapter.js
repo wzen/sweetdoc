@@ -14,9 +14,9 @@ ClickChapter = (function(superClass) {
     var self;
     ClickChapter.__super__.willChapter.call(this);
     self = this;
-    this.eventListenerList.forEach(function(eventListener) {
-      eventListener.getJQueryElement().off('click');
-      return eventListener.getJQueryElement().on('click', function(e) {
+    this.eventList.forEach(function(event) {
+      event.getJQueryElement().off('click');
+      return event.getJQueryElement().on('click', function(e) {
         return self.clickEvent(e);
       });
     });
@@ -31,9 +31,9 @@ ClickChapter = (function(superClass) {
     if (window.disabledEventHandler) {
       return;
     }
-    return this.eventListenerList.forEach(function(eventListener) {
-      if (eventListener.clickEvent != null) {
-        return eventListener.clickEvent(e, function() {
+    return this.eventList.forEach(function(event) {
+      if (event.clickEvent != null) {
+        return event.clickEvent(e, function() {
           if (window.timeLine != null) {
             return window.timeLine.nextChapterIfFinishedAllEvent();
           }
