@@ -60,30 +60,6 @@ class ArrowItem extends CanvasItemBase
     drawingContext.globalAlpha = 0.3
     drawingContext.stroke()
 
-  # 描画(パス+線)
-  # @param [Array] moveCood 画面ドラッグ座標
-  draw : (moveCood) ->
-    @coodRegist.push(moveCood)
-    # 描画範囲の更新
-    _updateArrowRect.call(@, moveCood)
-    # パスの描画
-    @drawPath(moveCood)
-    # 描画した矢印をクリア
-    @restoreDrawingSurface(@itemSize)
-    # 線の描画
-    @drawLine()
-
-  # 描画終了時に呼ばれるメソッド
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
-    if !super(zindex)
-      return false
-    @makeElement(show)
-    # Canvas状態を保存
-    @saveNewDrawedSurface()
-    return true
-
   # 再描画処理(新規キャンパスに描画)
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true) ->
@@ -111,23 +87,6 @@ class ArrowItem extends CanvasItemBase
     @coodLeftBodyPart = []
     @coodRightBodyPart = []
     @drawCoodRegist = []
-
-  # CanvasのHTML要素とデザインコンフィグを作成
-  # @param [boolean] show 要素作成後に描画を表示するか
-  makeElement: (show = true) ->
-    # 新規Canvasを作成
-    @makeNewCanvas()
-    if show
-      # 新規Canvasに描画
-      @drawNewCanvas()
-
-    # コンフィグ作成
-    @makeDesignConfig()
-
-    # タイムライン作成
-    #fixme: あとでロジックと実装を分けること
-    TLEItemChange.writeDefaultToPageValue(@)
-    setupTimelineEventConfig()
 
   # アイテムの最小限のデータを取得
   # @return [Array] アイテムオブジェクトの最小限データ
@@ -394,32 +353,6 @@ class ArrowItem extends CanvasItemBase
     drawingContext.fillStyle = "#00008B"
     drawingContext.fill()
 
-  # 矢印のサイズ更新
-  # @private
-  _updateArrowRect = (cood) ->
-    if @itemSize == null
-      @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
-    else
-      minX = cood.x - @padding_size
-      minX = if minX < 0 then 0 else minX
-      minY = cood.y - @padding_size
-      minY = if minY < 0 then 0 else minY
-      maxX = cood.x + @padding_size
-      maxX = if maxX > drawingCanvas.width then drawingCanvas.width else maxX
-      maxY = cood.y + @padding_size
-      maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
-
-      if @itemSize.x > minX
-        @itemSize.w += @itemSize.x - minX
-        @itemSize.x = minX
-      if @itemSize.x + @itemSize.w < maxX
-        @itemSize.w += maxX - (@itemSize.x + @itemSize.w)
-      if @itemSize.y > minY
-        @itemSize.h += @itemSize.y - minY
-        @itemSize.y = minY
-      if @itemSize.y + @itemSize.h < maxY
-        @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
-
   # 座標のログを表示
   # @private
   _coodLog = (cood, name) ->
@@ -433,6 +366,68 @@ if window.worktablePage?
   class WorkTableArrowItem extends ArrowItem
     @include WorkTableCommonExtend
     @include WorkTableCanvasItemExtend
+
+    # 描画(パス+線)
+    # @param [Array] moveCood 画面ドラッグ座標
+    draw : (moveCood) ->
+      @coodRegist.push(moveCood)
+      # 描画範囲の更新
+      _updateArrowRect.call(@, moveCood)
+      # パスの描画
+      @drawPath(moveCood)
+      # 描画した矢印をクリア
+      @restoreDrawingSurface(@itemSize)
+      # 線の描画
+      @drawLine()
+
+    # 描画終了時に呼ばれるメソッド
+    # @param [Int] zindex z-index
+    # @param [boolean] show 要素作成後に描画を表示するか
+    endDraw: (zindex, show = true) ->
+      if !super(zindex)
+        return false
+      @drawAndMakeConfigs(show)
+      # Canvas状態を保存
+      @saveNewDrawedSurface()
+      return true
+
+    # CanvasのHTML要素とデザインコンフィグを作成
+    # @param [boolean] show 要素作成後に描画を表示するか
+    drawAndMakeConfigs: (show = true) ->
+      @reDraw(show)
+
+      # コンフィグ作成
+      @makeDesignConfig()
+      # タイムライン作成
+      #fixme: あとでロジックと実装を分けること
+      TLEItemChange.writeDefaultToPageValue(@)
+      setupTimelineEventConfig()
+
+    # 矢印のサイズ更新
+    # @private
+    _updateArrowRect = (cood) ->
+      if @itemSize == null
+        @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
+      else
+        minX = cood.x - @padding_size
+        minX = if minX < 0 then 0 else minX
+        minY = cood.y - @padding_size
+        minY = if minY < 0 then 0 else minY
+        maxX = cood.x + @padding_size
+        maxX = if maxX > drawingCanvas.width then drawingCanvas.width else maxX
+        maxY = cood.y + @padding_size
+        maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
+
+        if @itemSize.x > minX
+          @itemSize.w += @itemSize.x - minX
+          @itemSize.x = minX
+        if @itemSize.x + @itemSize.w < maxX
+          @itemSize.w += maxX - (@itemSize.x + @itemSize.w)
+        if @itemSize.y > minY
+          @itemSize.h += @itemSize.y - minY
+          @itemSize.y = minY
+        if @itemSize.y + @itemSize.h < maxY
+          @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
   window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem
 

@@ -77,19 +77,19 @@ class SimpleArrowItem extends ItemBase
       l.x -= @itemSize.x
       l.y -= @itemSize.y
 
-    @makeElement(show)
+    @drawAndMakeConfigs(show)
     return true
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true) ->
-    @makeElement(show)
+    @drawAndMakeConfigs(show)
 
   # CanvasのHTML要素を作成
   # @param [Array] cood 座標
   # @param [boolean] show 要素作成後に描画を表示するか
   # @return [Boolean] 処理結果
-  makeElement: (show = true) ->
+  drawAndMakeConfigs: (show = true) ->
 
     # Canvasを作成
     $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
@@ -123,7 +123,7 @@ class SimpleArrowItem extends ItemBase
     @zindex = obj.b
     @coodRegist = obj.c
     @coodHeadPart = obj.d
-    @makeElement()
+    @drawAndMakeConfigs()
     @save(Constant.ItemActionType.MAKE)
 
   # 座標間の距離を計算する

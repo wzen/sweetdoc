@@ -5,7 +5,7 @@ var ArrowItem, WorkTableArrowItem,
   hasProp = {}.hasOwnProperty;
 
 ArrowItem = (function(superClass) {
-  var ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _updateArrowRect;
+  var ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas;
 
   extend(ArrowItem, superClass);
 
@@ -55,26 +55,6 @@ ArrowItem = (function(superClass) {
     return drawingContext.stroke();
   };
 
-  ArrowItem.prototype.draw = function(moveCood) {
-    this.coodRegist.push(moveCood);
-    _updateArrowRect.call(this, moveCood);
-    this.drawPath(moveCood);
-    this.restoreDrawingSurface(this.itemSize);
-    return this.drawLine();
-  };
-
-  ArrowItem.prototype.endDraw = function(zindex, show) {
-    if (show == null) {
-      show = true;
-    }
-    if (!ArrowItem.__super__.endDraw.call(this, zindex)) {
-      return false;
-    }
-    this.makeElement(show);
-    this.saveNewDrawedSurface();
-    return true;
-  };
-
   ArrowItem.prototype.reDraw = function(show) {
     var canvas, j, len, r, ref;
     if (show == null) {
@@ -102,19 +82,6 @@ ArrowItem = (function(superClass) {
     this.coodLeftBodyPart = [];
     this.coodRightBodyPart = [];
     return this.drawCoodRegist = [];
-  };
-
-  ArrowItem.prototype.makeElement = function(show) {
-    if (show == null) {
-      show = true;
-    }
-    this.makeNewCanvas();
-    if (show) {
-      this.drawNewCanvas();
-    }
-    this.makeDesignConfig();
-    TLEItemChange.writeDefaultToPageValue(this);
-    return setupTimelineEventConfig();
   };
 
   ArrowItem.prototype.getMinimumObject = function() {
@@ -381,41 +348,6 @@ ArrowItem = (function(superClass) {
     return drawingContext.fill();
   };
 
-  _updateArrowRect = function(cood) {
-    var maxX, maxY, minX, minY;
-    if (this.itemSize === null) {
-      return this.itemSize = {
-        x: cood.x,
-        y: cood.y,
-        w: 0,
-        h: 0
-      };
-    } else {
-      minX = cood.x - this.padding_size;
-      minX = minX < 0 ? 0 : minX;
-      minY = cood.y - this.padding_size;
-      minY = minY < 0 ? 0 : minY;
-      maxX = cood.x + this.padding_size;
-      maxX = maxX > drawingCanvas.width ? drawingCanvas.width : maxX;
-      maxY = cood.y + this.padding_size;
-      maxY = maxY > drawingCanvas.height ? drawingCanvas.height : maxY;
-      if (this.itemSize.x > minX) {
-        this.itemSize.w += this.itemSize.x - minX;
-        this.itemSize.x = minX;
-      }
-      if (this.itemSize.x + this.itemSize.w < maxX) {
-        this.itemSize.w += maxX - (this.itemSize.x + this.itemSize.w);
-      }
-      if (this.itemSize.y > minY) {
-        this.itemSize.h += this.itemSize.y - minY;
-        this.itemSize.y = minY;
-      }
-      if (this.itemSize.y + this.itemSize.h < maxY) {
-        return this.itemSize.h += maxY - (this.itemSize.y + this.itemSize.h);
-      }
-    }
-  };
-
   _coodLog = function(cood, name) {
     return console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y);
   };
@@ -430,6 +362,8 @@ setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem);
 
 if (window.worktablePage != null) {
   WorkTableArrowItem = (function(superClass) {
+    var _updateArrowRect;
+
     extend(WorkTableArrowItem, superClass);
 
     function WorkTableArrowItem() {
@@ -439,6 +373,71 @@ if (window.worktablePage != null) {
     WorkTableArrowItem.include(WorkTableCommonExtend);
 
     WorkTableArrowItem.include(WorkTableCanvasItemExtend);
+
+    WorkTableArrowItem.prototype.draw = function(moveCood) {
+      this.coodRegist.push(moveCood);
+      _updateArrowRect.call(this, moveCood);
+      this.drawPath(moveCood);
+      this.restoreDrawingSurface(this.itemSize);
+      return this.drawLine();
+    };
+
+    WorkTableArrowItem.prototype.endDraw = function(zindex, show) {
+      if (show == null) {
+        show = true;
+      }
+      if (!WorkTableArrowItem.__super__.endDraw.call(this, zindex)) {
+        return false;
+      }
+      this.drawAndMakeConfigs(show);
+      this.saveNewDrawedSurface();
+      return true;
+    };
+
+    WorkTableArrowItem.prototype.drawAndMakeConfigs = function(show) {
+      if (show == null) {
+        show = true;
+      }
+      this.reDraw(show);
+      this.makeDesignConfig();
+      TLEItemChange.writeDefaultToPageValue(this);
+      return setupTimelineEventConfig();
+    };
+
+    _updateArrowRect = function(cood) {
+      var maxX, maxY, minX, minY;
+      if (this.itemSize === null) {
+        return this.itemSize = {
+          x: cood.x,
+          y: cood.y,
+          w: 0,
+          h: 0
+        };
+      } else {
+        minX = cood.x - this.padding_size;
+        minX = minX < 0 ? 0 : minX;
+        minY = cood.y - this.padding_size;
+        minY = minY < 0 ? 0 : minY;
+        maxX = cood.x + this.padding_size;
+        maxX = maxX > drawingCanvas.width ? drawingCanvas.width : maxX;
+        maxY = cood.y + this.padding_size;
+        maxY = maxY > drawingCanvas.height ? drawingCanvas.height : maxY;
+        if (this.itemSize.x > minX) {
+          this.itemSize.w += this.itemSize.x - minX;
+          this.itemSize.x = minX;
+        }
+        if (this.itemSize.x + this.itemSize.w < maxX) {
+          this.itemSize.w += maxX - (this.itemSize.x + this.itemSize.w);
+        }
+        if (this.itemSize.y > minY) {
+          this.itemSize.h += this.itemSize.y - minY;
+          this.itemSize.y = minY;
+        }
+        if (this.itemSize.y + this.itemSize.h < maxY) {
+          return this.itemSize.h += maxY - (this.itemSize.y + this.itemSize.h);
+        }
+      }
+    };
 
     return WorkTableArrowItem;
 

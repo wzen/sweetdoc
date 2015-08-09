@@ -41,12 +41,13 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.preview = function(timelineEvent) {
     var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, methodName, p;
-    this.initWithEvent(timelineEvent);
-    this.stopPreview(timelineEvent);
     drawDelay = 30;
     loopDelay = 1000;
     loopMaxCount = 5;
     methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    this.initWithEvent(timelineEvent);
+    this.willChapter(methodName);
+    this.stopPreview(timelineEvent);
     this.appendCssIfNeeded(methodName);
     method = this.constructor.prototype[methodName];
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
@@ -188,8 +189,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventAfter = function() {
-    var actionType;
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    var actionType, methodName;
     if (this instanceof CanvasItemBase) {
       return this.restoreAllNewDrawedSurface();
     } else if (this instanceof CssItemBase) {
@@ -198,16 +198,31 @@ EventBase = (function(superClass) {
         '-moz-animation-duration': '-moz-animation-duration',
         '0': '0'
       });
+    } else if (this instanceof CommonEventBase) {
+      actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+      if (actionType === Constant.ActionEventHandleType.SCROLL) {
+        methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+        return this.constructor.prototype[methodName].call(this, this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]);
+      } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+
+      }
     }
   };
 
   EventBase.prototype.updateEventBefore = function() {
-    var actionType;
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    var actionType, methodName;
     if (this instanceof CanvasItemBase) {
       return this.restoreAllNewDrawingSurface();
     } else if (this instanceof CssItemBase) {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
+    } else if (this instanceof CommonEventBase) {
+      actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+      if (actionType === Constant.ActionEventHandleType.SCROLL) {
+        methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+        return this.constructor.prototype[methodName].call(this, this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
+      } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+
+      }
     }
   };
 

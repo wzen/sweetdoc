@@ -36,12 +36,14 @@ class EventBase extends Extend
 
   # プレビュー
   preview: (timelineEvent) ->
-    @initWithEvent(timelineEvent)
-    @stopPreview(timelineEvent)
     drawDelay = 30 # 0.03秒毎スクロール描画
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+
+    @initWithEvent(timelineEvent)
+    @willChapter(methodName)
+    @stopPreview(timelineEvent)
     @appendCssIfNeeded(methodName)
 
     method = @constructor.prototype[methodName]
@@ -173,7 +175,7 @@ class EventBase extends Extend
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+
     if @ instanceof CanvasItemBase
       # 描画後の状態を表示
       @restoreAllNewDrawedSurface()
@@ -182,9 +184,19 @@ class EventBase extends Extend
       # CSSアニメーション後にする
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
 
+    else if @ instanceof CommonEventBase
+      actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+      # 共通イベントはアクションで判定
+      if actionType == Constant.ActionEventHandleType.SCROLL
+        # 最後までスクロールした状態
+        methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+        (@constructor.prototype[methodName]).call(@, @timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
+      else if actionType == Constant.ActionEventHandleType.CLICK
+        # TODO:
+        return
+
   # イベント前の表示状態にする
   updateEventBefore: ->
-    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if @ instanceof CanvasItemBase
       # 描画前の状態を表示
       @restoreAllNewDrawingSurface()
@@ -192,6 +204,17 @@ class EventBase extends Extend
     else if @ instanceof CssItemBase
       # CSSアニメーション前
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
+
+    else if @ instanceof CommonEventBase
+      actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+      # 共通イベントはアクションで判定
+      if actionType == Constant.ActionEventHandleType.SCROLL
+        # スクロール前
+        methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+        (@constructor.prototype[methodName]).call(@, @timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
+      else if actionType == Constant.ActionEventHandleType.CLICK
+        # TODO:
+        return
 
   # ページング時
   clearPaging: (methodName) ->
@@ -208,8 +231,8 @@ class ItemEventBase extends EventBase
     super(timelineEvent)
     # 値設定
     @setMiniumObject(timelineEvent[TLEItemChange.minObj])
-    # 描画
-    # TODO: 設定で初期表示させるか切り替えさせる
+    # 描画してアイテムを作成
+    # 表示非表示はwillChapterで切り替え
     @reDraw(false)
 
   # 最小限のデータを設定

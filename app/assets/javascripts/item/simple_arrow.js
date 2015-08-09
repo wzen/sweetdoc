@@ -77,7 +77,7 @@ SimpleArrowItem = (function(superClass) {
       l.x -= this.itemSize.x;
       l.y -= this.itemSize.y;
     }
-    this.makeElement(show);
+    this.drawAndMakeConfigs(show);
     return true;
   };
 
@@ -85,10 +85,10 @@ SimpleArrowItem = (function(superClass) {
     if (show == null) {
       show = true;
     }
-    return this.makeElement(show);
+    return this.drawAndMakeConfigs(show);
   };
 
-  SimpleArrowItem.prototype.makeElement = function(show) {
+  SimpleArrowItem.prototype.drawAndMakeConfigs = function(show) {
     var drawingCanvas, drawingContext;
     if (show == null) {
       show = true;
@@ -121,7 +121,7 @@ SimpleArrowItem = (function(superClass) {
     this.zindex = obj.b;
     this.coodRegist = obj.c;
     this.coodHeadPart = obj.d;
-    this.makeElement();
+    this.drawAndMakeConfigs();
     return this.save(Constant.ItemActionType.MAKE);
   };
 

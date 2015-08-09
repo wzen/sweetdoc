@@ -26,54 +26,11 @@ ButtonItem = (function(superClass) {
     this.css = null;
   }
 
-  ButtonItem.prototype.draw = function(cood) {
-    if (this.itemSize !== null) {
-      this.restoreDrawingSurface(this.itemSize);
-    }
-    this.itemSize = {
-      x: null,
-      y: null,
-      w: null,
-      h: null
-    };
-    this.itemSize.w = Math.abs(cood.x - this.moveLoc.x);
-    this.itemSize.h = Math.abs(cood.y - this.moveLoc.y);
-    if (cood.x > this.moveLoc.x) {
-      this.itemSize.x = this.moveLoc.x;
-    } else {
-      this.itemSize.x = cood.x;
-    }
-    if (cood.y > this.moveLoc.y) {
-      this.itemSize.y = this.moveLoc.y;
-    } else {
-      this.itemSize.y = cood.y;
-    }
-    return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
-  };
-
-  ButtonItem.prototype.endDraw = function(zindex, show) {
-    if (show == null) {
-      show = true;
-    }
-    if (!ButtonItem.__super__.endDraw.call(this, zindex)) {
-      return false;
-    }
-    this.makeElement(show);
-    return true;
-  };
-
   ButtonItem.prototype.reDraw = function(show) {
     if (show == null) {
       show = true;
     }
     this.clearDraw();
-    return this.makeElement(show);
-  };
-
-  ButtonItem.prototype.makeElement = function(show) {
-    if (show == null) {
-      show = true;
-    }
     $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     if (!show) {
       this.getJQueryElement().css('opacity', 0);
@@ -175,6 +132,42 @@ if (window.worktablePage != null) {
       this.cssStyle = null;
     }
 
+    WorkTableButtonItem.prototype.draw = function(cood) {
+      if (this.itemSize !== null) {
+        this.restoreDrawingSurface(this.itemSize);
+      }
+      this.itemSize = {
+        x: null,
+        y: null,
+        w: null,
+        h: null
+      };
+      this.itemSize.w = Math.abs(cood.x - this.moveLoc.x);
+      this.itemSize.h = Math.abs(cood.y - this.moveLoc.y);
+      if (cood.x > this.moveLoc.x) {
+        this.itemSize.x = this.moveLoc.x;
+      } else {
+        this.itemSize.x = cood.x;
+      }
+      if (cood.y > this.moveLoc.y) {
+        this.itemSize.y = this.moveLoc.y;
+      } else {
+        this.itemSize.y = cood.y;
+      }
+      return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
+    };
+
+    WorkTableButtonItem.prototype.endDraw = function(zindex, show) {
+      if (show == null) {
+        show = true;
+      }
+      if (!WorkTableButtonItem.__super__.endDraw.call(this, zindex)) {
+        return false;
+      }
+      this.drawAndMakeConfigs(show);
+      return true;
+    };
+
     WorkTableButtonItem.prototype.getMinimumObject = function() {
       var obj;
       obj = WorkTableButtonItem.__super__.getMinimumObject.call(this);
@@ -182,7 +175,7 @@ if (window.worktablePage != null) {
       return obj;
     };
 
-    WorkTableButtonItem.prototype.makeElement = function(show) {
+    WorkTableButtonItem.prototype.drawAndMakeConfigs = function(show) {
       var newEmt;
       if (show == null) {
         show = true;
@@ -199,7 +192,7 @@ if (window.worktablePage != null) {
       this.cssCode = $(".css-code", this.cssRoot);
       this.cssStyle = $(".css-style", this.cssRoot);
       this.cssStyle.text(this.cssCode.text());
-      WorkTableButtonItem.__super__.makeElement.call(this, show);
+      this.reDraw(show);
       this.makeDesignConfig();
       TLEItemChange.writeDefaultToPageValue(this);
       setupTimelineEventConfig();

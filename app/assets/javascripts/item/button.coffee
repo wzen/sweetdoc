@@ -15,43 +15,10 @@ class ButtonItem extends CssItemBase
       @moveLoc = {x:cood.x, y:cood.y}
     @css = null
 
-  # 描画
-  # @param [Array] cood 座標
-  draw: (cood) ->
-    if @itemSize != null
-      @restoreDrawingSurface(@itemSize)
-
-    @itemSize = {x:null,y:null,w:null,h:null}
-    @itemSize.w = Math.abs(cood.x - @moveLoc.x);
-    @itemSize.h = Math.abs(cood.y - @moveLoc.y);
-    if cood.x > @moveLoc.x
-      @itemSize.x = @moveLoc.x
-    else
-      @itemSize.x = cood.x
-    if cood.y > @moveLoc.y
-      @itemSize.y = @moveLoc.y
-    else
-      @itemSize.y = cood.y
-    drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
-
-  # 描画終了時の処理
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
-    if !super(zindex)
-      return false
-    @makeElement(show)
-    return true
-
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true)->
     @clearDraw()
-    @makeElement(show)
-
-  # HTML要素を作成
-  # @param [boolean] show 要素作成後に描画を表示するか
-  makeElement: (show = true) ->
     $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     if !show
       @getJQueryElement().css('opacity', 0)
@@ -158,9 +125,6 @@ class ButtonItem extends CssItemBase
     -moz-animation-duration: 0.5s;
     }
     """
-
-
-
     return "#{webkitKeyframe} #{mozKeyframe} #{css}"
 
   willChapter: (methodName) ->
@@ -188,6 +152,35 @@ if window.worktablePage?
       @cssCode = null
       @cssStyle = null
 
+
+    # ドラッグ描画
+    # @param [Array] cood 座標
+    draw: (cood) ->
+      if @itemSize != null
+        @restoreDrawingSurface(@itemSize)
+
+      @itemSize = {x:null,y:null,w:null,h:null}
+      @itemSize.w = Math.abs(cood.x - @moveLoc.x);
+      @itemSize.h = Math.abs(cood.y - @moveLoc.y);
+      if cood.x > @moveLoc.x
+        @itemSize.x = @moveLoc.x
+      else
+        @itemSize.x = cood.x
+      if cood.y > @moveLoc.y
+        @itemSize.y = @moveLoc.y
+      else
+        @itemSize.y = cood.y
+      drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
+
+    # ドラッグ描画終了
+    # @param [Int] zindex z-index
+    # @param [boolean] show 要素作成後に描画を表示するか
+    endDraw: (zindex, show = true) ->
+      if !super(zindex)
+        return false
+      @drawAndMakeConfigs(show)
+      return true
+
     # ストレージとDB保存用の最小限のデータを取得
     # @return [Array] アイテムオブジェクトの最小限データ
     getMinimumObject: ->
@@ -198,7 +191,7 @@ if window.worktablePage?
     # HTML要素を作成
     # @param [boolean] show 要素作成後に描画を表示するか
     # @return [Boolean] 処理結果
-    makeElement: (show = true) ->
+    drawAndMakeConfigs: (show = true) ->
 
       #CSSを設定
       if @css?
@@ -215,7 +208,7 @@ if window.worktablePage?
       @cssStyle.text(@cssCode.text())
 
       # ボタン設置
-      super(show)
+      @reDraw(show)
 
       # コンフィグ作成
       @makeDesignConfig()

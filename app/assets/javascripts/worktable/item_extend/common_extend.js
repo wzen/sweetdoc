@@ -2,6 +2,13 @@
 var WorkTableCommonExtend;
 
 WorkTableCommonExtend = {
+  startDraw: function() {},
+  draw: function(cood) {},
+  endDraw: function(zindex, show) {
+    if (show == null) {
+      show = true;
+    }
+  },
   showOptionMenu: function() {
     var sc;
     sc = $('.sidebar-config');

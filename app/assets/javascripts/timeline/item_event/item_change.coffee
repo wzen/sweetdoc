@@ -36,10 +36,12 @@ class TLEItemChange extends TimelineEvent
       value = item.constructor.timelineDefaultConfigValue()
       writeValue[@PageValueKey.VALUE] = value
       teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
+
       if teNum?
         teNum = parseInt(teNum) + 1
       else
         teNum = 1
+
       setTimelinePageValue(@PageValueKey.te(teNum), writeValue, teNum)
       setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum)
       changeTimelineColor(teNum, actionType)
