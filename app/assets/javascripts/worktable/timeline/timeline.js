@@ -23,8 +23,6 @@ setupTimelineEventConfig = function() {
   var _clickTimelineEvent, _setupTimelineEvent, _updateEventState, self, te;
   self = this;
   te = null;
-
-  /* private method ここから */
   _setupTimelineEvent = function() {
     var tEmt;
     tEmt = $('#timeline_events .timeline_event .te_num');
@@ -74,32 +72,42 @@ setupTimelineEventConfig = function() {
     return _updateEventState.call(this, te_num);
   };
   _updateEventState = function(te_num) {
-    var idx, item, ix, results, tes;
+    var i, idx, item, ivTimer, previewinitCount, ref, tes;
     te_num = parseInt(te_num);
-    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
-    results = [];
-    for (idx in tes) {
+    tes = getTimelinePageValueSortedListByNum();
+    previewinitCount = 0;
+    for (idx = i = ref = tes.length - 1; i >= 0; idx = i += -1) {
       te = tes[idx];
-      if (idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0) {
-        ix = parseInt(idx.replace(Constant.PageValueKey.TE_NUM_PREFIX, ''));
-        item = window.createdObject[te.id];
-        item.setEvent(te);
-        item.stopPreview(te);
-        if (ix < te_num) {
-          results.push(item.updateEventAfter());
-        } else if (ix > te_num) {
-          results.push(item.updateEventBefore());
-        } else {
-          results.push(item.preview(te));
-        }
-      } else {
-        results.push(void 0);
-      }
+      item = window.createdObject[te.id];
+      item.setEvent(te);
+      item.stopPreview(function() {
+        item.updateEventBefore();
+        return previewinitCount += 1;
+      });
     }
-    return results;
+    return ivTimer = setInterval(function() {
+      var j, len, results;
+      if (previewinitCount >= tes.length) {
+        clearInterval(ivTimer);
+        results = [];
+        for (idx = j = 0, len = tes.length; j < len; idx = ++j) {
+          te = tes[idx];
+          item = window.createdObject[te.id];
+          if (idx < te_num - 1) {
+            item.setEvent(te);
+            results.push(item.updateEventAfter());
+          } else if (idx === te_num - 1) {
+            item.setEvent(te);
+            item.preview(te);
+            break;
+          } else {
+            results.push(void 0);
+          }
+        }
+        return results;
+      }
+    }, 100);
   };
-
-  /* private method ここまで */
   return _setupTimelineEvent.call(self);
 };
 

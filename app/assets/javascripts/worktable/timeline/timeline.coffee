@@ -21,8 +21,6 @@ setupTimelineEventConfig = ->
   self = @
   te = null
 
-  ### private method ここから ###
-
   _setupTimelineEvent = ->
     tEmt = $('#timeline_events .timeline_event .te_num')
     tEmt.each((e) ->
@@ -89,22 +87,33 @@ setupTimelineEventConfig = ->
   # イベントによる表示状態を更新
   _updateEventState = (te_num) ->
     te_num = parseInt(te_num)
-    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
-    for idx, te of tes
-      if idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0
-        ix = parseInt(idx.replace(Constant.PageValueKey.TE_NUM_PREFIX, ''))
-        item = window.createdObject[te.id]
-        item.setEvent(te)
-        item.stopPreview(te)
-        if ix < te_num
-          item.updateEventAfter()
-        else if ix > te_num
-          item.updateEventBefore()
-        else
-          # プレビュー実行
-          item.preview(te)
+    tes = getTimelinePageValueSortedListByNum()
 
-  ### private method ここまで ###
+    # 全てをイベント前に変更
+    previewinitCount = 0
+    for idx in [tes.length - 1 .. 0] by -1
+      te = tes[idx]
+      item = window.createdObject[te.id]
+      item.setEvent(te)
+      item.stopPreview( ->
+        item.updateEventBefore()
+        previewinitCount += 1
+      )
+
+    ivTimer = setInterval( ->
+      if previewinitCount >= tes.length
+        clearInterval(ivTimer)
+        for te, idx in tes
+          item = window.createdObject[te.id]
+          if idx < te_num - 1
+            item.setEvent(te)
+            item.updateEventAfter()
+          else if idx == te_num - 1
+            item.setEvent(te)
+            # プレビュー実行
+            item.preview(te)
+            break
+    , 100)
 
   _setupTimelineEvent.call(self)
 

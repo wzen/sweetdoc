@@ -228,6 +228,23 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
         root.addClass(cacheClassName)
   )
 
+# ソートしたタイムラインリストを取得
+getTimelinePageValueSortedListByNum = ->
+  timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+  if !timelinePageValues?
+    return []
+
+  count = getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
+  timelineList = new Array(count)
+
+  # ソート
+  for k, v of timelinePageValues
+    if k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) == 0
+      index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1
+      timelineList[index] = v
+
+  return timelineList
+
 # ページが持つ値を削除
 # @param [String] key キー値
 removePageValue = (key) ->

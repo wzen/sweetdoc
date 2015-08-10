@@ -4,6 +4,8 @@ var CommonEventBase, EventBase, ItemEventBase,
   hasProp = {}.hasOwnProperty;
 
 EventBase = (function(superClass) {
+  var _preview;
+
   extend(EventBase, superClass);
 
   function EventBase() {
@@ -40,25 +42,37 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.preview = function(timelineEvent) {
+    return this.stopPreview((function(_this) {
+      return function() {
+        return _preview.call(_this, timelineEvent);
+      };
+    })(this));
+  };
+
+  _preview = function(timelineEvent) {
     var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, methodName, p;
     drawDelay = 30;
     loopDelay = 1000;
     loopMaxCount = 5;
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
     this.initWithEvent(timelineEvent);
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
     this.willChapter(methodName);
-    this.stopPreview(timelineEvent);
     this.appendCssIfNeeded(methodName);
     method = this.constructor.prototype[methodName];
     actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
     this.doPreviewLoop = true;
     loopCount = 0;
+    this.previewTimer = null;
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       p = 0;
       _draw = (function(_this) {
         return function() {
-          return setTimeout(function() {
-            if (_this.doPreviewLoop) {
+          if (_this.doPreviewLoop) {
+            if (_this.previewTimer != null) {
+              clearTimeout(_this.previewTimer);
+              _this.previewTimer = null;
+            }
+            return _this.previewTimer = setTimeout(function() {
               method.call(_this, p);
               p += 1;
               if (p >= _this.scrollLength()) {
@@ -67,46 +81,91 @@ EventBase = (function(superClass) {
               } else {
                 return _draw.call(_this);
               }
+            }, drawDelay);
+          } else {
+            if (_this.previewFinished != null) {
+              _this.previewFinished();
+              return _this.previewFinished = null;
             }
-          }, drawDelay);
+          }
         };
       })(this);
       _loop = (function(_this) {
         return function() {
-          loopCount += 1;
-          if (loopCount >= loopMaxCount) {
-            _this.stopPreview(timelineEvent);
-          }
-          return setTimeout(function() {
-            if (_this.doPreviewLoop) {
-              return _draw.call(_this);
+          if (_this.doPreviewLoop) {
+            loopCount += 1;
+            if (loopCount >= loopMaxCount) {
+              _this.stopPreview();
             }
-          }, loopDelay);
+            if (_this.previewTimer != null) {
+              clearTimeout(_this.previewTimer);
+              _this.previewTimer = null;
+            }
+            _this.previewTimer = setTimeout(function() {
+              return _draw.call(_this);
+            }, loopDelay);
+            if (!_this.doPreviewLoop) {
+              return _this.stopPreview();
+            }
+          } else {
+            if (_this.previewFinished != null) {
+              _this.previewFinished();
+              return _this.previewFinished = null;
+            }
+          }
         };
       })(this);
       return _draw.call(this);
     } else if (actionType === Constant.ActionEventHandleType.CLICK) {
       _loop = (function(_this) {
         return function() {
-          loopCount += 1;
-          if (loopCount >= loopMaxCount) {
-            _this.stopPreview(timelineEvent);
-          }
-          return setTimeout(function() {
-            if (_this.doPreviewLoop) {
-              return method.call(_this, null, _loop);
+          if (_this.doPreviewLoop) {
+            loopCount += 1;
+            if (loopCount >= loopMaxCount) {
+              _this.stopPreview();
             }
-          }, loopDelay);
+            if (_this.previewTimer != null) {
+              clearTimeout(_this.previewTimer);
+              _this.previewTimer = null;
+            }
+            return _this.previewTimer = setTimeout(function() {
+              return method.call(_this, null, _loop);
+            }, loopDelay);
+          } else {
+            if (_this.previewFinished != null) {
+              _this.previewFinished();
+              return _this.previewFinished = null;
+            }
+          }
         };
       })(this);
       return method.call(this, null, _loop);
     }
   };
 
-  EventBase.prototype.stopPreview = function(timelineEvent) {
-    this.doPreviewLoop = false;
-    if (this instanceof CanvasItemBase) {
-      return this.restoreAllNewDrawedSurface();
+  EventBase.prototype.stopPreview = function(callback) {
+    var _stop;
+    if (callback == null) {
+      callback = null;
+    }
+    _stop = function() {
+      if (this.previewTimer != null) {
+        clearTimeout(this.previewTimer);
+        this.previewTimer = null;
+      }
+      if (callback != null) {
+        return callback();
+      }
+    };
+    if (this.doPreviewLoop) {
+      this.doPreviewLoop = false;
+      return this.previewFinished = (function(_this) {
+        return function() {
+          return _stop.call(_this);
+        };
+      })(this);
+    } else {
+      return _stop.call(this);
     }
   };
 

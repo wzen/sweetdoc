@@ -44,16 +44,8 @@ initResize = function(wrap, scrollWrapper) {
 };
 
 initTimeline = function() {
-  var chapterList, eventList, index, k, tList, timelineList, timelinePageValues, v;
-  timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
-  timelineList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT));
-  for (k in timelinePageValues) {
-    v = timelinePageValues[k];
-    if (k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) === 0) {
-      index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1;
-      timelineList[index] = v;
-    }
-  }
+  var chapterList, eventList, tList, timelineList;
+  timelineList = getTimelinePageValueSortedListByNum();
   chapterList = [];
   eventList = [];
   tList = [];

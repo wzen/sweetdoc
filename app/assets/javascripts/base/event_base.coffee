@@ -34,16 +34,19 @@ class EventBase extends Extend
     @isFinishedEvent = false
     return
 
-  # プレビュー
+  # プレビュー開始
   preview: (timelineEvent) ->
+    @stopPreview( =>
+      _preview.call(@, timelineEvent)
+    )
+
+  _preview = (timelineEvent) ->
     drawDelay = 30 # 0.03秒毎スクロール描画
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
-
     @initWithEvent(timelineEvent)
+    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
     @willChapter(methodName)
-    @stopPreview(timelineEvent)
     @appendCssIfNeeded(methodName)
 
     method = @constructor.prototype[methodName]
@@ -51,12 +54,16 @@ class EventBase extends Extend
     # イベントループ
     @doPreviewLoop = true
     loopCount = 0
+    @previewTimer = null
     if actionType == Constant.ActionEventHandleType.SCROLL
 
       p = 0
       _draw = =>
-        setTimeout( =>
-          if @doPreviewLoop
+        if @doPreviewLoop
+          if @previewTimer?
+            clearTimeout(@previewTimer)
+            @previewTimer = null
+          @previewTimer = setTimeout( =>
             method.call(@, p)
             p += 1
             if p >= @scrollLength()
@@ -64,36 +71,71 @@ class EventBase extends Extend
               _loop.call(@)
             else
               _draw.call(@)
-        , drawDelay)
+          , drawDelay)
+        else
+          if @previewFinished?
+            @previewFinished()
+            @previewFinished = null
 
       _loop = =>
-        loopCount += 1
-        if loopCount >= loopMaxCount
-          @stopPreview(timelineEvent)
+        if @doPreviewLoop
+          loopCount += 1
+          if loopCount >= loopMaxCount
+            @stopPreview()
 
-        setTimeout( =>
-          if @doPreviewLoop
+          if @previewTimer?
+            clearTimeout(@previewTimer)
+            @previewTimer = null
+          @previewTimer = setTimeout( =>
             _draw.call(@)
-        , loopDelay)
+          , loopDelay)
+          if !@doPreviewLoop
+            @stopPreview()
+        else
+          if @previewFinished?
+            @previewFinished()
+            @previewFinished = null
 
       _draw.call(@)
 
     else if actionType == Constant.ActionEventHandleType.CLICK
       _loop = =>
-        loopCount += 1
-        if loopCount >= loopMaxCount
-          @stopPreview(timelineEvent)
+        if @doPreviewLoop
+          loopCount += 1
+          if loopCount >= loopMaxCount
+            @stopPreview()
 
-        setTimeout( =>
-          if @doPreviewLoop
+          if @previewTimer?
+            clearTimeout(@previewTimer)
+            @previewTimer = null
+          @previewTimer = setTimeout( =>
             method.call(@, null, _loop)
-        , loopDelay)
+          , loopDelay)
+        else
+          if @previewFinished?
+            @previewFinished()
+            @previewFinished = null
+
       method.call(@, null, _loop)
 
-  stopPreview: (timelineEvent) ->
-    @doPreviewLoop = false
-    if @ instanceof CanvasItemBase
-      @restoreAllNewDrawedSurface()
+  # プレビューを停止
+  stopPreview: (callback = null) ->
+    _stop = ->
+      if @previewTimer?
+        clearTimeout(@previewTimer)
+        @previewTimer = null
+      if callback?
+        callback()
+#      if @ instanceof CanvasItemBase
+#        @restoreAllNewDrawedSurface()
+
+    if @doPreviewLoop
+      @doPreviewLoop = false
+      @previewFinished = =>
+        _stop.call(@)
+
+    else
+      _stop.call(@)
 
   # JQueryエレメントを取得
   # @abstract

@@ -44,14 +44,7 @@ initResize = (wrap, scrollWrapper) ->
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得
-  timelinePageValues = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
-  timelineList = new Array(getTimelinePageValue(Constant.PageValueKey.TE_COUNT))
-
-  # ソート
-  for k, v of timelinePageValues
-    if k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) == 0
-      index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1
-      timelineList[index] = v
+  timelineList = getTimelinePageValueSortedListByNum()
 
   # チャプターの作成
   chapterList = []

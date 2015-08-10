@@ -9,13 +9,12 @@ class CommonEvent
   class @PrivateClass extends CommonEventBase
     constructor: ->
       super()
-      # @property [Int] id ID
-      @id = "c" + @constructor.EVENT_ID +  generateId()
-      if !window.createdObject?
-        window.createdObject = {}
-      window.createdObject[@id] = @
 
   @getInstance: ->
     if !instance?
       instance = new @PrivateClass()
+      instance.id = "c" + @EVENT_ID +  generateId()
+      if !window.createdObject?
+        window.createdObject = {}
+      window.createdObject[instance.id] = instance
     return instance

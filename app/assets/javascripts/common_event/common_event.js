@@ -19,11 +19,6 @@ CommonEvent = (function() {
 
     function PrivateClass() {
       PrivateClass.__super__.constructor.call(this);
-      this.id = "c" + this.constructor.EVENT_ID + generateId();
-      if (window.createdObject == null) {
-        window.createdObject = {};
-      }
-      window.createdObject[this.id] = this;
     }
 
     return PrivateClass;
@@ -33,6 +28,11 @@ CommonEvent = (function() {
   CommonEvent.getInstance = function() {
     if (instance == null) {
       instance = new this.PrivateClass();
+      instance.id = "c" + this.EVENT_ID + generateId();
+      if (window.createdObject == null) {
+        window.createdObject = {};
+      }
+      window.createdObject[instance.id] = instance;
     }
     return instance;
   };
