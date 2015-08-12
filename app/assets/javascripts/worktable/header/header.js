@@ -12,6 +12,7 @@ initHeaderMenu = function() {
   });
   $('.menu-setting', itemsMenuEmt).on('click', function() {
     switchSidebarConfig('setting');
+    Setting.initConfig();
     return openConfigSidebar();
   });
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');

@@ -61,10 +61,11 @@ switchSidebarConfig = (configType, item = null) ->
     else
       $('#timeline-config').css('display', '')
   else if configType == 'setting'
+    sc = $("##{Setting.ROOT_ID_NAME}")
     if animation
-      $('#setting-config').show()
+      sc.show()
     else
-      $('#setting-config').css('display', '')
+      sc.css('display', '')
 
 
 ### サイドバー挙動 ここまで ###

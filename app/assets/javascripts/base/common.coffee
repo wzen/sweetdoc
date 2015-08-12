@@ -80,21 +80,25 @@ focusToTarget = (target) ->
 # @param [Object] value 設定値(ハッシュ配列または値)
 # @param [Boolean] isCache このページでのみ保持させるか
 getPageValue = (key, withRemove = false) ->
-  _getPageValue(key, withRemove, false)
+  _getPageValue(key, withRemove, Constant.PageValueKey.PV_ROOT)
 
 # タイムラインの値を取得
 # @param [String] key キー値
 getTimelinePageValue = (key) ->
-  _getPageValue(key, false, true)
+  _getPageValue(key, false, Constant.PageValueKey.TE_ROOT)
+
+# 共通設定値を取得
+# @param [String] key キー値
+getSettingPageValue = (key) ->
+  _getPageValue(key, false, Setting.PageValueKey.ROOT)
 
 # ページが持つ値を取得
 # @param [String] key キー値
 # @param [Boolean] withRemove 取得後に値を消去するか
-# @param [Boolean] isTimeline タイムライン値か
+# @param [String] rootId Root要素ID
 # @return [Object] ハッシュ配列または値で返す
-_getPageValue = (key, withRemove, isTimeline) ->
+_getPageValue = (key, withRemove, rootId) ->
   f = @
-  rootId = if isTimeline then Constant.PageValueKey.TE_ROOT else Constant.PageValueKey.PV_ROOT
   # div以下の値をハッシュとしてまとめる
   takeValue = (element) ->
     ret = null
@@ -161,11 +165,17 @@ setPageValue = (key, value, isCache = false) ->
 setTimelinePageValue = (key, value) ->
   _setPageValue(key, value, false, Constant.PageValueKey.TE_ROOT, true)
 
+# 共通設定値を設定
+# @param [String] key キー値
+# @param [Object] value 設定値(ハッシュ配列または値)
+setSettingPageValue = (key, value) ->
+  _setPageValue(key, value, false, Setting.PageValueKey.ROOT, true)
+
 # ページが持つ値を設定
 # @param [String] key キー値
 # @param [Object] value 設定値(ハッシュ配列または値)
 # @param [Boolean] isCache このページでのみ保持させるか
-# @param [Boolean] rootId Root要素ID
+# @param [String] rootId Root要素ID
 # @param [Boolean] giveName name属性を付与するか
 _setPageValue = (key, value, isCache, rootId, giveName) ->
   f = @

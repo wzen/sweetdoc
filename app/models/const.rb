@@ -116,6 +116,10 @@ class Const
   class PageValueKey
     # @property [String] PV_ROOT ページ値ルート
     PV_ROOT = 'page_values'
+    # @property [String] ST_ROOT 共通設定値ルート
+    ST_ROOT = 'setting_page_values'
+    # @property [String] ST_PREFIX 共通設定プレフィックス
+    ST_PREFIX = 'settings'
     # @property [String] TE_ROOT タイムライン値ルート
     TE_ROOT = 'timeline_page_values'
     # @property [String] TE_PREFIX タイムラインプレフィックス
@@ -130,5 +134,10 @@ class Const
     TE_COUNT = "#{TE_PREFIX}#{PAGE_VALUES_SEPERATOR}count"
     # @property [String] TE_CSS CSSデータ
     TE_CSS = "#{TE_PREFIX}#{PAGE_VALUES_SEPERATOR}css"
+  end
+
+  class Setting
+    ROOT_ID_NAME = 'setting-config'
+    GRID_CLASS_NAME = 'grid'
   end
 end

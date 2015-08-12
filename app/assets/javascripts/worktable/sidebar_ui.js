@@ -62,7 +62,7 @@ isClosedConfigSidebar = function() {
 };
 
 switchSidebarConfig = function(configType, item) {
-  var animation;
+  var animation, sc;
   if (item == null) {
     item = null;
   }
@@ -87,10 +87,11 @@ switchSidebarConfig = function(configType, item) {
       return $('#timeline-config').css('display', '');
     }
   } else if (configType === 'setting') {
+    sc = $("#" + Setting.ROOT_ID_NAME);
     if (animation) {
-      return $('#setting-config').show();
+      return sc.show();
     } else {
-      return $('#setting-config').css('display', '');
+      return sc.css('display', '');
     }
   }
 };

@@ -9,6 +9,7 @@ initHeaderMenu = ->
   )
   $('.menu-setting', itemsMenuEmt).on('click', ->
     switchSidebarConfig('setting')
+    Setting.initConfig()
     openConfigSidebar()
   )
 

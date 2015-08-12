@@ -8,49 +8,83 @@ Setting = (function() {
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
+    Setting.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
+    Setting.GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME;
     Setting.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.ROOT = 'setting';
+      PageValueKey.ROOT = constant.PageValueKey.ST_ROOT;
 
-      PageValueKey.grid = 'grid';
+      PageValueKey.PREFIX = constant.PageValueKey.ST_PREFIX;
+
+      PageValueKey.GRID = 'grid';
 
       return PageValueKey;
 
     })();
+    Setting.SETTING_GRID_CANVAS_ID = 'setting_grid';
   }
 
-  Setting.SETTING_GRID_ID = 'setting_grid';
+  Setting.initConfig = function() {
+    var grid, gridValue, key, root;
+    root = $("#" + Setting.ROOT_ID_NAME);
+    grid = $("." + this.GRID_CLASS_NAME, root);
+    if ((grid != null) && grid.length > 0) {
+      key = "" + this.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
+      gridValue = getSettingPageValue(key);
+      grid.prop('clicked', gridValue);
+      grid.off('click');
+      return grid.on('click', (function(_this) {
+        return function() {
+          key = "" + _this.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
+          gridValue = getSettingPageValue(key);
+          if (gridValue != null) {
+            gridValue = gridValue === 'true';
+          }
+          return _this.drawGrid(!gridValue);
+        };
+      })(this));
+    }
+  };
 
   Setting.drawGrid = function(doDraw) {
-    var color, context, emt, i, j, k, ref, ref1, ref2, ref3, ref4, ref5, results, stepx, stepy;
+    var canvas, color, context, emt, i, j, k, key, ref, ref1, ref2, ref3, ref4, ref5, stepx, stepy;
     color = 'black';
-    stepx = 50;
-    stepy = 50;
-    context = document.getElementById("" + this.SETTING_GRID_ID).getContext('2d');
+    stepx = 10;
+    stepy = 10;
+    canvas = document.getElementById("" + this.SETTING_GRID_CANVAS_ID);
+    context = null;
+    key = "" + this.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
+    if (canvas != null) {
+      context = canvas.getContext('2d');
+    }
     if ((context != null) && doDraw === false) {
-      return $("#" + this.SETTING_GRID_ID).remove();
+      $("#" + this.SETTING_GRID_CANVAS_ID).remove();
+      return setSettingPageValue(key, false);
     } else if ((context == null) && doDraw) {
       $(ElementCode.get().createGridElement()).appendTo('#scroll_inside');
-      context = document.getElementById("" + this.SETTING_GRID_ID).getContext('2d');
+      context = document.getElementById("" + this.SETTING_GRID_CANVAS_ID).getContext('2d');
       context.strokeStyle = color;
       context.lineWidth = 0.5;
-      emt = $("#" + this.SETTING_GRID_ID);
+      emt = $("#" + this.SETTING_GRID_CANVAS_ID);
       emt.css('z-index', Constant.Zindex.GRID);
+      emt.attr('width', 40000);
+      emt.attr('height', 40000);
       for (i = j = ref = stepx + 0.5, ref1 = context.canvas.width, ref2 = stepx; ref2 > 0 ? j <= ref1 : j >= ref1; i = j += ref2) {
         context.beginPath();
         context.moveTo(i, 0);
         context.lineTo(i, context.canvas.height);
         context.stroke();
       }
-      results = [];
       for (i = k = ref3 = stepy + 0.5, ref4 = context.canvas.height, ref5 = stepy; ref5 > 0 ? k <= ref4 : k >= ref4; i = k += ref5) {
         context.beginPath();
         context.moveTo(0, i);
         context.lineTo(context.canvas.width, i);
-        results.push(context.stroke());
+        context.stroke();
       }
-      return results;
+      return setSettingPageValue(key, true);
+    } else {
+      return setSettingPageValue(key, false);
     }
   };
 
