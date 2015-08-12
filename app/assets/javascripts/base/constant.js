@@ -6,8 +6,6 @@ if (typeof gon !== "undefined" && gon !== null) {
   Constant = (function() {
     function Constant() {}
 
-    Constant.ZINDEX_MAX = constant.ZINDEX_MAX;
-
     Constant.OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX;
 
     Constant.ITEM_PATH_LIST = constant.ITEM_PATH_LIST;
@@ -15,6 +13,21 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.TIMELINE_ITEM_SEPERATOR = "&";
 
     Constant.TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX;
+
+    Constant.Zindex = (function() {
+      function Zindex() {}
+
+      Zindex.GRID = 5;
+
+      Zindex.EVENTBOTTOM = 10;
+
+      Zindex.EVENTFLOAT = 100;
+
+      Zindex.MAX = constant.Zindex.MAX;
+
+      return Zindex;
+
+    })();
 
     Constant.Mode = (function() {
       function Mode() {}

@@ -3,8 +3,6 @@ if gon?
   constant = gon.const
 
   class Constant
-    # @porperty ZINDEX_MAX z-indexの最大値
-    @ZINDEX_MAX = constant.ZINDEX_MAX
     # @property OPERATION_STORE_MAX 操作履歴保存最大数
     @OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX
     # @property [Array] ITEM_PATH_LIST JSファイル名
@@ -13,6 +11,15 @@ if gon?
     @TIMELINE_ITEM_SEPERATOR = "&"
     # @property [String] TIMELINE_COMMON_PREFIX 共通タイムラインイベントプレフィックス
     @TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX
+
+    # ZIndex
+    class @Zindex
+      @GRID = 5
+      @EVENTBOTTOM = 10
+      @EVENTFLOAT = 100
+
+      # @porperty ZINDEX_MAX z-indexの最大値
+      @MAX = constant.Zindex.MAX
 
     # 操作モード
     class @Mode

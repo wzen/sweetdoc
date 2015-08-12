@@ -97,11 +97,11 @@ getInitFuncName = function(itemId) {
 
 changeMode = function(mode) {
   if (mode === Constant.Mode.DRAW) {
-    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX);
+    $(window.drawingCanvas).css('z-index', Constant.Zindex.MAX);
   } else if (mode === Constant.Mode.EDIT) {
-    $(window.drawingCanvas).css('z-index', 0);
+    $(window.drawingCanvas).css('z-index', Constant.Zindex.EVENTBOTTOM);
   } else if (mode === Constant.Mode.OPTION) {
-    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX);
+    $(window.drawingCanvas).css('z-index', Constant.Zindex.MAX);
   }
   return window.mode = mode;
 };

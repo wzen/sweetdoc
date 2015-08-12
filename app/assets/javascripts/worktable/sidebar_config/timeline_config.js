@@ -15,9 +15,7 @@ TimelineConfig = (function() {
   function TimelineConfig(emt, teNum) {
     this.emt = emt;
     this.teNum = teNum;
-    if (this.teNum != null) {
-      _setupFromPageValues.call(this);
-    }
+    _setupFromPageValues.call(this);
   }
 
   TimelineConfig.prototype.setupConfigValues = function() {

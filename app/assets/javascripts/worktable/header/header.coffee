@@ -7,6 +7,10 @@ initHeaderMenu = ->
   $('.menu-save', itemsMenuEmt).on('click', ->
     saveToServer()
   )
+  $('.menu-setting', itemsMenuEmt).on('click', ->
+    switchSidebarConfig('setting')
+    openConfigSidebar()
+  )
 
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
   $('.menu-item', itemsSelectMenuEmt).on('click', ->

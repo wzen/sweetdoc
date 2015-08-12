@@ -6,6 +6,7 @@ ja:
       open: "開く"
       save: "保存"
       load: "読み込み"
+      setting: "設定"
     item:
       item: "アイテム"
       arrow: "矢印"

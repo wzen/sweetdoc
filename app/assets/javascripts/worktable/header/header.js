@@ -10,6 +10,10 @@ initHeaderMenu = function() {
   $('.menu-save', itemsMenuEmt).on('click', function() {
     return saveToServer();
   });
+  $('.menu-setting', itemsMenuEmt).on('click', function() {
+    switchSidebarConfig('setting');
+    return openConfigSidebar();
+  });
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
   return $('.menu-item', itemsSelectMenuEmt).on('click', function() {
     var itemId;

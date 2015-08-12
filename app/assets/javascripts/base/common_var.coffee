@@ -5,7 +5,7 @@ _commonVar = ->
   window.scrollInside = $('#scroll_inside')
   window.cssCode = $("#cssCode")
   window.lstorage = localStorage
-  window.scrollViewMag = 500
+  window.scrollViewMag = 30
 
 # 作業テーブル共通変数
 worktableCommonVar = ->
@@ -30,7 +30,7 @@ runCommonVar = ->
   window.distY = 0
   window.resizeTimer = false
   window.timeLine = null
-  window.scrollViewSwitchZindex = {'on': 100, 'off': 0}
+  window.scrollViewSwitchZindex = {'on': Constant.Zindex.EVENTFLOAT, 'off': Constant.Zindex.EVENTBOTTOM}
   window.scrollInsideCoverZindex = 1
   window.lstorage = localStorage
   window.disabledEventHandler = false

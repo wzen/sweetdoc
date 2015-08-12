@@ -153,24 +153,22 @@ _getPageValue = (key, withRemove, isTimeline) ->
 # @param [Object] value 設定値(ハッシュ配列または値)
 # @param [Boolean] isCache このページでのみ保持させるか
 setPageValue = (key, value, isCache = false) ->
-  _setPageValue(key, value, isCache, false, null)
+  _setPageValue(key, value, isCache, Constant.PageValueKey.PV_ROOT, false)
 
 # タイムラインの値を設定
 # @param [String] key キー値
 # @param [Object] value 設定値(ハッシュ配列または値)
-# @param [Number] timelineNum タイムラインナンバー
-setTimelinePageValue = (key, value, teNum = null) ->
-  _setPageValue(key, value, false, true, teNum)
+setTimelinePageValue = (key, value) ->
+  _setPageValue(key, value, false, Constant.PageValueKey.TE_ROOT, true)
 
 # ページが持つ値を設定
 # @param [String] key キー値
 # @param [Object] value 設定値(ハッシュ配列または値)
 # @param [Boolean] isCache このページでのみ保持させるか
-# @param [Boolean] isTimeline タイムラインの数値か
-# @param [Number] timelineNum タイムラインナンバー
-_setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
+# @param [Boolean] rootId Root要素ID
+# @param [Boolean] giveName name属性を付与するか
+_setPageValue = (key, value, isCache, rootId, giveName) ->
   f = @
-  rootId = if isTimeline then Constant.PageValueKey.TE_ROOT else Constant.PageValueKey.PV_ROOT
   # ハッシュを要素の文字列に変換
   makeElementStr = (ky, val, kyName) ->
     if val == null || val == "null"
@@ -181,7 +179,7 @@ _setPageValue = (key, value, isCache, isTimeline, timelineNum) ->
       # サニタイズする
       val = sanitaizeEncode(val)
       name = ""
-      if isTimeline
+      if giveName
         name = "name = #{kyName}"
 
       if ky == 'w'

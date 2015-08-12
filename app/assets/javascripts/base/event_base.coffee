@@ -126,8 +126,6 @@ class EventBase extends Extend
         @previewTimer = null
       if callback?
         callback()
-#      if @ instanceof CanvasItemBase
-#        @restoreAllNewDrawedSurface()
 
     if @doPreviewLoop
       @doPreviewLoop = false

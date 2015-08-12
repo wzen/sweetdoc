@@ -24,6 +24,11 @@ class ElementCode
         return """
           <div id="#{obj.id}" class="item draggable resizable" style="position: absolute;top:#{obj.itemSize.y}px;left:#{obj.itemSize.x}px;width:#{obj.itemSize.w }px;height:#{obj.itemSize.h}px;z-index:#{obj.zindex}"><div type="button" class="css3button"><div></div></div></div>
         """
+
+    createGridElement: ->
+      return """
+          <canvas id="#{Setting.SETTING_GRID_ID}" class="canvas" style="width:100%;height:100%" ></canvas>
+        """
   @get: ->
     instance ?= new Temp()
     return instance

@@ -4,22 +4,21 @@
 # @param [Array] target フォーカス対象オブジェクト
 # @param [String] selectedBorderType 選択枠タイプ
 openConfigSidebar = (target = null, selectedBorderType = "edit") ->
-  main = $('#main')
   if !isOpenedConfigSidebar()
-    main.switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
-      $('#sidebar').fadeIn('1000')
-    )
-    if target != null
-      focusToTargetWhenSidebarOpen(target, selectedBorderType)
+    main = $('#main')
+    if !isOpenedConfigSidebar()
+      main.switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
+        $('#sidebar').fadeIn('1000')
+      )
+      if target != null
+        focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
 # サイドバーをクローズ
 closeSidebar = (callback = null) ->
-  main = $('#main')
-
   # 選択枠を削除
   clearSelectedBorder()
-
   if !isClosedConfigSidebar()
+    main = $('#main')
     $('#sidebar').fadeOut('1000', ->
       s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
       if s?
@@ -61,6 +60,12 @@ switchSidebarConfig = (configType, item = null) ->
       $('#timeline-config').show()
     else
       $('#timeline-config').css('display', '')
+  else if configType == 'setting'
+    if animation
+      $('#setting-config').show()
+    else
+      $('#setting-config').css('display', '')
+
 
 ### サイドバー挙動 ここまで ###
 

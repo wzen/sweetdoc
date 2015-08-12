@@ -78,9 +78,8 @@ setupTimelineEventConfig = ->
     $('#timeline-config .event').css('display', 'none')
     emt.css('display', '')
 
-    if !isOpenedConfigSidebar()
-      # タイムラインのconfigをオープンする
-      openConfigSidebar()
+    # タイムラインのconfigをオープンする
+    openConfigSidebar()
 
     _updateEventState.call(@, te_num)
 

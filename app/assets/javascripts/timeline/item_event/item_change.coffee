@@ -42,7 +42,7 @@ class TLEItemChange extends TimelineEvent
       else
         teNum = 1
 
-      setTimelinePageValue(@PageValueKey.te(teNum), writeValue, teNum)
+      setTimelinePageValue(@PageValueKey.te(teNum), writeValue)
       setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum)
       changeTimelineColor(teNum, actionType)
 
@@ -59,7 +59,7 @@ class TLEItemChange extends TimelineEvent
     if errorMes.length == 0
       value = item.timelineConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum)
+      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
       if parseInt(getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum
         setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
 

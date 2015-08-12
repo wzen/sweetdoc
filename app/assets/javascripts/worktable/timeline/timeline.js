@@ -66,9 +66,7 @@ setupTimelineEventConfig = function() {
     setupTimelineEventHandler(te_num);
     $('#timeline-config .event').css('display', 'none');
     emt.css('display', '');
-    if (!isOpenedConfigSidebar()) {
-      openConfigSidebar();
-    }
+    openConfigSidebar();
     return _updateEventState.call(this, te_num);
   };
   _updateEventState = function(te_num) {

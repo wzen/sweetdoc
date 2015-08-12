@@ -11,13 +11,15 @@ openConfigSidebar = function(target, selectedBorderType) {
   if (selectedBorderType == null) {
     selectedBorderType = "edit";
   }
-  main = $('#main');
   if (!isOpenedConfigSidebar()) {
-    main.switchClass('col-md-12', 'col-md-9', 500, 'swing', function() {
-      return $('#sidebar').fadeIn('1000');
-    });
-    if (target !== null) {
-      return focusToTargetWhenSidebarOpen(target, selectedBorderType);
+    main = $('#main');
+    if (!isOpenedConfigSidebar()) {
+      main.switchClass('col-md-12', 'col-md-9', 500, 'swing', function() {
+        return $('#sidebar').fadeIn('1000');
+      });
+      if (target !== null) {
+        return focusToTargetWhenSidebarOpen(target, selectedBorderType);
+      }
     }
   }
 };
@@ -27,9 +29,9 @@ closeSidebar = function(callback) {
   if (callback == null) {
     callback = null;
   }
-  main = $('#main');
   clearSelectedBorder();
   if (!isClosedConfigSidebar()) {
+    main = $('#main');
     return $('#sidebar').fadeOut('1000', function() {
       var s;
       s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
@@ -83,6 +85,12 @@ switchSidebarConfig = function(configType, item) {
       return $('#timeline-config').show();
     } else {
       return $('#timeline-config').css('display', '');
+    }
+  } else if (configType === 'setting') {
+    if (animation) {
+      return $('#setting-config').show();
+    } else {
+      return $('#setting-config').css('display', '');
     }
   }
 };

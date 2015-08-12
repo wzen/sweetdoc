@@ -51,7 +51,7 @@ TLEItemChange = (function(superClass) {
       } else {
         teNum = 1;
       }
-      setTimelinePageValue(this.PageValueKey.te(teNum), writeValue, teNum);
+      setTimelinePageValue(this.PageValueKey.te(teNum), writeValue);
       setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum);
       changeTimelineColor(teNum, actionType);
     }
@@ -68,7 +68,7 @@ TLEItemChange = (function(superClass) {
     if (errorMes.length === 0) {
       value = item.timelineConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum);
+      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
       if (parseInt(getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum) {
         setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
       }

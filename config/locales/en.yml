@@ -27,6 +27,7 @@ en:
       open: "Open"
       save: "Save"
       load: "Load"
+      setting: "Setting"
     item:
       item: "Item"
       arrow: "Arrow"

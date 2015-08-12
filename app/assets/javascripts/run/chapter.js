@@ -89,7 +89,7 @@ Chapter = (function() {
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.eventList.forEach(function(event) {
       if (event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
-        return event.getJQueryElement().css('z-index', 0);
+        return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM);
       }
     });
   };

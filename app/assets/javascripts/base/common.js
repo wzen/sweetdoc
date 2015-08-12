@@ -185,20 +185,16 @@ setPageValue = function(key, value, isCache) {
   if (isCache == null) {
     isCache = false;
   }
-  return _setPageValue(key, value, isCache, false, null);
+  return _setPageValue(key, value, isCache, Constant.PageValueKey.PV_ROOT, false);
 };
 
-setTimelinePageValue = function(key, value, teNum) {
-  if (teNum == null) {
-    teNum = null;
-  }
-  return _setPageValue(key, value, false, true, teNum);
+setTimelinePageValue = function(key, value) {
+  return _setPageValue(key, value, false, Constant.PageValueKey.TE_ROOT, true);
 };
 
-_setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
-  var cacheClassName, f, keys, makeElementStr, parentClassName, root, rootId;
+_setPageValue = function(key, value, isCache, rootId, giveName) {
+  var cacheClassName, f, keys, makeElementStr, parentClassName, root;
   f = this;
-  rootId = isTimeline ? Constant.PageValueKey.TE_ROOT : Constant.PageValueKey.PV_ROOT;
   makeElementStr = function(ky, val, kyName) {
     var k, name, ret, v;
     if (val === null || val === "null") {
@@ -208,7 +204,7 @@ _setPageValue = function(key, value, isCache, isTimeline, timelineNum) {
     if (jQuery.type(val) !== "object" && jQuery.type(val) !== "array") {
       val = sanitaizeEncode(val);
       name = "";
-      if (isTimeline) {
+      if (giveName) {
         name = "name = " + kyName;
       }
       if (ky === 'w') {

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "setting_config.js",
+  "sourceRoot": "",
+  "sources": [
+    "setting_config.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA"
+}

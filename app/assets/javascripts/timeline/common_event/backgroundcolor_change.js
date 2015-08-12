@@ -41,7 +41,7 @@ TLEBackgroundColorChange = (function(superClass) {
     }
     if (errorMes.length === 0) {
       writeValue[this.PageValueKey.VALUE] = value;
-      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum);
+      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
       setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
     }
     return errorMes;

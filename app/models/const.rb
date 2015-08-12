@@ -1,7 +1,5 @@
 class Const
 
-  # @porperty ZINDEX_MAX z-indexの最大値
-  ZINDEX_MAX = 1000
   # @property OPERATION_STORE_MAX 操作履歴保存最大数
   OPERATION_STORE_MAX = 30
   # @property TIMELINE_COMMON_PREFIX 共通タイムラインイベント クラス名プレフィックス
@@ -15,6 +13,12 @@ class Const
     EDIT = 1
     # @property [Int] OPTION アイテムオプション
     OPTION = 2
+  end
+
+  # ZIndex
+  class Zindex
+    # @porperty ZINDEX_MAX z-indexの最大値
+    MAX = 1000
   end
 
   # アイテム種別

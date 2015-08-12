@@ -32,6 +32,7 @@
 //= require base/extend
 //= require base/event_base
 //= require base/local_storage
+//= require base/setting
 // require_directory util
 //= require util/color/color_change
 //= require common_event/common_event
@@ -51,7 +52,7 @@
 //= require worktable/item_extend/common_extend
 //= require worktable/item_extend/canvasitem_extend
 //= require worktable/item_extend/cssitem_extend
-//= require worktable/timeline/timeline_config
+//= require worktable/sidebar_config/timeline_config
 //= require worktable/timeline/timeline
 //= require worktable/timeline/run
 //= require worktable/handwrite

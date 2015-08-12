@@ -14,8 +14,7 @@ class TimelineConfig
 
   # コンストラクタ
   constructor: (@emt, @teNum) ->
-    if @teNum?
-      _setupFromPageValues.call(@)
+    _setupFromPageValues.call(@)
 
   # インスタンス値から画面の状態を設定
   setupConfigValues: ->

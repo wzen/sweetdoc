@@ -25,7 +25,7 @@ ItemBase = (function(superClass) {
       };
     }
     this.itemSize = null;
-    this.zindex = 0;
+    this.zindex = Constant.Zindex.EVENTBOTTOM;
     this.ohiRegist = [];
     this.ohiRegistIndex = 0;
     this.jqueryElement = null;

@@ -76,11 +76,11 @@ getInitFuncName = (itemId) ->
 # @param [Mode] mode 画面モード
 changeMode = (mode) ->
   if mode == Constant.Mode.DRAW
-    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
+    $(window.drawingCanvas).css('z-index', Constant.Zindex.MAX)
   else if mode == Constant.Mode.EDIT
-    $(window.drawingCanvas).css('z-index', 0)
+    $(window.drawingCanvas).css('z-index', Constant.Zindex.EVENTBOTTOM)
   else if mode == Constant.Mode.OPTION
-    $(window.drawingCanvas).css('z-index', Constant.ZINDEX_MAX)
+    $(window.drawingCanvas).css('z-index', Constant.Zindex.MAX)
   window.mode = mode
 
 # 非表示をクリア
@@ -95,7 +95,7 @@ clearAllItemStyle = ->
 
 # 対象アイテムに対してフォーカスする(サイドバーオープン時)
 # @param [Object] target 対象アイテム
-# @param [String] selectedBordfcccccccccccccccerType 選択枠タイプ
+# @param [String] selectedBorderType 選択枠タイプ
 focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
   # 選択枠設定
   setSelectedBorder(target, selectedBorderType)

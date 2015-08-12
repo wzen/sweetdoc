@@ -71,7 +71,7 @@ class Chapter
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @eventList.forEach((event) ->
       if event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
-        event.getJQueryElement().css('z-index', 0)
+        event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM)
     )
 
   # 全てのイベントが終了しているか

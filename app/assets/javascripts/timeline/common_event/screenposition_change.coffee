@@ -21,7 +21,7 @@ class TLEScreenPositionChange extends TimelineEvent
 
     if errorMes.length == 0
       writeValue[@PageValueKey.VALUE] = value
-      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue, timelineConfig.teNum)
+      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
       setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
 
     return errorMes

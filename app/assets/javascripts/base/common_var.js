@@ -7,7 +7,7 @@ _commonVar = function() {
   window.scrollInside = $('#scroll_inside');
   window.cssCode = $("#cssCode");
   window.lstorage = localStorage;
-  return window.scrollViewMag = 500;
+  return window.scrollViewMag = 30;
 };
 
 worktableCommonVar = function() {
@@ -32,8 +32,8 @@ runCommonVar = function() {
   window.resizeTimer = false;
   window.timeLine = null;
   window.scrollViewSwitchZindex = {
-    'on': 100,
-    'off': 0
+    'on': Constant.Zindex.EVENTFLOAT,
+    'off': Constant.Zindex.EVENTBOTTOM
   };
   window.scrollInsideCoverZindex = 1;
   window.lstorage = localStorage;
