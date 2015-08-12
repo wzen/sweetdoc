@@ -150,11 +150,11 @@ $ ->
   $('#canvas_container').attr('width', $('#main-wrapper').width())
   $('#canvas_container').attr('height', $('#main-wrapper').height())
   # スクロールサイズ
-  scrollInside.width(scrollContents.width() * (scrollViewMag + 1))
-  scrollInside.height(scrollContents.height() * (scrollViewMag + 1))
+  scrollInside.width(window.scrollViewSize)
+  scrollInside.height(window.scrollViewSize)
   # スクロール位置初期化
-  scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5))
-  scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
+  scrollContents.scrollLeft(scrollContents.width() * 0.5)
+  scrollContents.scrollTop(scrollContents.height() * 0.5)
   # ドロップダウン
   $('.dropdown-toggle').dropdown()
   # ヘッダーメニュー

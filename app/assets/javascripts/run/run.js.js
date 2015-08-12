@@ -9,16 +9,16 @@ initView = function() {
   $('#canvas_container').attr('width', $('#canvas_wrapper').width());
   $('#canvas_container').attr('height', $('#canvas_wrapper').height());
   scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
-  scrollInside.width(scrollContents.width() * (scrollViewMag + 1));
-  scrollInside.height(scrollContents.height() * (scrollViewMag + 1));
-  scrollInsideCover.width(scrollContents.width() * (scrollViewMag + 1));
-  scrollInsideCover.height(scrollContents.height() * (scrollViewMag + 1));
-  scrollHandle.width(scrollHandleWrapper.width() * (scrollViewMag + 1));
-  scrollHandle.height(scrollHandleWrapper.height() * (scrollViewMag + 1));
-  scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5));
-  scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5));
-  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * (scrollViewMag * 0.5));
-  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * (scrollViewMag * 0.5));
+  scrollInside.width(window.scrollViewSize);
+  scrollInside.height(window.scrollViewSize);
+  scrollInsideCover.width(window.scrollViewSize);
+  scrollInsideCover.height(window.scrollViewSize);
+  scrollHandle.width(window.scrollViewSize);
+  scrollHandle.height(window.scrollViewSize);
+  scrollContents.scrollLeft(scrollContents.width() * 0.5);
+  scrollContents.scrollTop(scrollContents.height() * 0.5);
+  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5);
+  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5);
   is_reload = getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD);
   if (is_reload != null) {
     return loadPageValueFromStorage();
@@ -90,8 +90,8 @@ initTimeline = function() {
 };
 
 initHandleScrollPoint = function() {
-  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * (scrollViewMag * 0.5));
-  return scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * (scrollViewMag * 0.5));
+  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5);
+  return scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5);
 };
 
 setupScrollEvent = function() {

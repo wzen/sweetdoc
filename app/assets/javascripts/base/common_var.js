@@ -7,7 +7,7 @@ _commonVar = function() {
   window.scrollInside = $('#scroll_inside');
   window.cssCode = $("#cssCode");
   window.lstorage = localStorage;
-  return window.scrollViewMag = 30;
+  return window.scrollViewSize = 10000;
 };
 
 worktableCommonVar = function() {

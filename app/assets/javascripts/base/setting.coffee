@@ -37,8 +37,8 @@ class Setting
   # グリッド線描画
   @drawGrid : (doDraw) ->
     color = 'black'
-    stepx = 10
-    stepy = 10
+    stepx = 12
+    stepy = 12
 
     canvas = document.getElementById("#{@SETTING_GRID_CANVAS_ID}")
     context = null
@@ -58,8 +58,8 @@ class Setting
       context.lineWidth = 0.5;
       emt = $("##{@SETTING_GRID_CANVAS_ID}")
       emt.css('z-index', Constant.Zindex.GRID)
-      emt.attr('width', 40000)
-      emt.attr('height', 40000)
+      emt.attr('width', window.scrollViewSize)
+      emt.attr('height', window.scrollViewSize)
 
       for i in [(stepx + 0.5) .. context.canvas.width] by stepx
         context.beginPath()

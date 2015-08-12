@@ -50,8 +50,8 @@ Setting = (function() {
   Setting.drawGrid = function(doDraw) {
     var canvas, color, context, emt, i, j, k, key, ref, ref1, ref2, ref3, ref4, ref5, stepx, stepy;
     color = 'black';
-    stepx = 10;
-    stepy = 10;
+    stepx = 12;
+    stepy = 12;
     canvas = document.getElementById("" + this.SETTING_GRID_CANVAS_ID);
     context = null;
     key = "" + this.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
@@ -68,8 +68,8 @@ Setting = (function() {
       context.lineWidth = 0.5;
       emt = $("#" + this.SETTING_GRID_CANVAS_ID);
       emt.css('z-index', Constant.Zindex.GRID);
-      emt.attr('width', 40000);
-      emt.attr('height', 40000);
+      emt.attr('width', window.scrollViewSize);
+      emt.attr('height', window.scrollViewSize);
       for (i = j = ref = stepx + 0.5, ref1 = context.canvas.width, ref2 = stepx; ref2 > 0 ? j <= ref1 : j >= ref1; i = j += ref2) {
         context.beginPath();
         context.moveTo(i, 0);

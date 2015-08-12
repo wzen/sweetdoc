@@ -10,18 +10,18 @@ initView = ->
   scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
 
   # スクロールビューの大きさ
-  scrollInside.width(scrollContents.width() * (scrollViewMag + 1))
-  scrollInside.height(scrollContents.height() * (scrollViewMag + 1))
-  scrollInsideCover.width(scrollContents.width() * (scrollViewMag + 1))
-  scrollInsideCover.height(scrollContents.height() * (scrollViewMag + 1))
-  scrollHandle.width(scrollHandleWrapper.width() * (scrollViewMag + 1))
-  scrollHandle.height(scrollHandleWrapper.height() * (scrollViewMag + 1))
+  scrollInside.width(window.scrollViewSize)
+  scrollInside.height(window.scrollViewSize)
+  scrollInsideCover.width(window.scrollViewSize)
+  scrollInsideCover.height(window.scrollViewSize)
+  scrollHandle.width(window.scrollViewSize)
+  scrollHandle.height(window.scrollViewSize)
 
   # スクロール位置初期化
-  scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5))
-  scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5))
-  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * (scrollViewMag * 0.5))
-  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * (scrollViewMag * 0.5))
+  scrollContents.scrollLeft(scrollContents.width() * 0.5)
+  scrollContents.scrollTop(scrollContents.height() * 0.5)
+  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5)
+  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5)
 
   is_reload = getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
   if is_reload?
@@ -85,8 +85,8 @@ initTimeline = ->
 
 # Handleスクロール位置の初期化
 initHandleScrollPoint = ->
-  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * (scrollViewMag * 0.5))
-  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * (scrollViewMag * 0.5))
+  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5)
+  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5)
 
 # スクロールイベントの初期化
 setupScrollEvent = ->

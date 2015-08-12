@@ -186,10 +186,10 @@ $(function() {
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
   $('#canvas_container').attr('width', $('#main-wrapper').width());
   $('#canvas_container').attr('height', $('#main-wrapper').height());
-  scrollInside.width(scrollContents.width() * (scrollViewMag + 1));
-  scrollInside.height(scrollContents.height() * (scrollViewMag + 1));
-  scrollContents.scrollLeft(scrollContents.width() * (scrollViewMag * 0.5));
-  scrollContents.scrollTop(scrollContents.height() * (scrollViewMag * 0.5));
+  scrollInside.width(window.scrollViewSize);
+  scrollInside.height(window.scrollViewSize);
+  scrollContents.scrollLeft(scrollContents.width() * 0.5);
+  scrollContents.scrollTop(scrollContents.height() * 0.5);
   $('.dropdown-toggle').dropdown();
   initHeaderMenu();
   initKeyEvent();
