@@ -153,8 +153,8 @@ $ ->
   scrollInside.width(window.scrollViewSize)
   scrollInside.height(window.scrollViewSize)
   # スクロール位置初期化
-  scrollContents.scrollLeft(scrollContents.width() * 0.5)
-  scrollContents.scrollTop(scrollContents.height() * 0.5)
+  scrollContents.scrollLeft(scrollInside.width() * 0.5)
+  scrollContents.scrollTop(scrollInside.height() * 0.5)
   # ドロップダウン
   $('.dropdown-toggle').dropdown()
   # ヘッダーメニュー

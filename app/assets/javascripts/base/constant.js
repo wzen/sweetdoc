@@ -19,9 +19,9 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       Zindex.GRID = 5;
 
-      Zindex.EVENTBOTTOM = 10;
+      Zindex.EVENTBOTTOM = constant.Zindex.EVENTBOTTOM;
 
-      Zindex.EVENTFLOAT = 100;
+      Zindex.EVENTFLOAT = constant.Zindex.EVENTFLOAT;
 
       Zindex.MAX = constant.Zindex.MAX;
 

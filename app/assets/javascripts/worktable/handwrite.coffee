@@ -6,7 +6,7 @@ initHandwrite = ->
   item = null
   enableMoveEvent = true
   queueLoc = null
-  zindex = 1
+  zindex = Constant.Zindex.EVENTBOTTOM
   MOVE_FREQUENCY = 7
 
   # ウィンドウ座標からCanvas座標に変換する

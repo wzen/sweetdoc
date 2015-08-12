@@ -188,8 +188,8 @@ $(function() {
   $('#canvas_container').attr('height', $('#main-wrapper').height());
   scrollInside.width(window.scrollViewSize);
   scrollInside.height(window.scrollViewSize);
-  scrollContents.scrollLeft(scrollContents.width() * 0.5);
-  scrollContents.scrollTop(scrollContents.height() * 0.5);
+  scrollContents.scrollLeft(scrollInside.width() * 0.5);
+  scrollContents.scrollTop(scrollInside.height() * 0.5);
   $('.dropdown-toggle').dropdown();
   initHeaderMenu();
   initKeyEvent();

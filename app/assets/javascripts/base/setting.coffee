@@ -4,76 +4,125 @@ class Setting
     constant = gon.const
 
     @ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME
-    @GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME
 
     class @PageValueKey
       @ROOT = constant.PageValueKey.ST_ROOT
       @PREFIX = constant.PageValueKey.ST_PREFIX
-      # @property [String] GRID グリッド線
-      @GRID = 'grid'
-
-    @SETTING_GRID_CANVAS_ID = 'setting_grid'
 
   # ConfigOpen時の初期化
   @initConfig: ->
-    root = $("##{Setting.ROOT_ID_NAME}")
+    @Grid.initConfig()
 
-    # グリッド線
-    grid = $(".#{@GRID_CLASS_NAME}", root)
-    if grid? && grid.length > 0
-      key = "#{@PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+  class @Grid
+
+    @GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME
+    @GRID_STEP_CLASS_NAME = constant.Setting.GRID_STEP_CLASS_NAME
+    @SETTING_GRID_ELEMENT_ID = 'setting_grid_element'
+    @SETTING_GRID_CANVAS_ID = 'setting_grid'
+    @GRIDVIEW_SIZE = 10000
+    @STEP_DEFAULT_VALUE = 12
+
+    class @PageValueKey
+      # @property [String] GRID グリッド線表示
+      @GRID = 'grid'
+      # @property [String] GRID グリッド線間隔
+      @GRID_STEP = 'grid_step'
+
+    @initConfig: ->
+      root = $("##{Setting.ROOT_ID_NAME}")
+      # グリッド線表示
+      grid = $(".#{@GRID_CLASS_NAME}", root)
+      key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
       gridValue = getSettingPageValue(key)
+
+      gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
+      key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
+      gridStepValue = getSettingPageValue(key)
+
       grid.prop('clicked', gridValue)
       grid.off('click')
       grid.on('click', =>
-        key = "#{@PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+        key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
         gridValue = getSettingPageValue(key)
         if gridValue?
           gridValue = gridValue == 'true'
+
+        # グリッド間隔の有効無効を切り替え
+        if gridValue
+          gridStep.removeAttr('disabled')
+        else
+          gridStep.attr('disabled', 'disabled')
+
         @drawGrid(!gridValue)
       )
 
+      # グリッド間隔の有効無効を切り替え
+      if gridValue
+        gridStep.removeAttr('disabled')
+      else
+        gridStep.attr('disabled', 'disabled')
 
-  # グリッド線描画
-  @drawGrid : (doDraw) ->
-    color = 'black'
-    stepx = 12
-    stepy = 12
+      # グリッド間隔
+      if !gridStepValue?
+        gridStepValue = @STEP_DEFAULT_VALUE
+      $(".#{@GRID_STEP_CLASS_NAME}", root).val(gridStepValue)
+      gridStep.change( =>
+        key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+        value = getSettingPageValue(key)
+        if value?
+          value = value == 'true'
+        if value
+          @drawGrid(true)
+      )
 
-    canvas = document.getElementById("#{@SETTING_GRID_CANVAS_ID}")
-    context = null
-    key = "#{@PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
-    if canvas?
-      context = canvas.getContext('2d');
-    if context? && doDraw == false
-      # 削除
-      $("##{@SETTING_GRID_CANVAS_ID}").remove()
-      setSettingPageValue(key, false)
+    # グリッド線描画
+    @drawGrid : (doDraw) ->
+      canvas = document.getElementById("#{@SETTING_GRID_CANVAS_ID}")
+      context = null
+      key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+      if canvas?
+        context = canvas.getContext('2d');
+      if context? && doDraw == false
+        # 削除
+        $("##{@SETTING_GRID_ELEMENT_ID}").remove()
+        setSettingPageValue(key, false)
+      else if !context? && doDraw
+        root = $("##{Setting.ROOT_ID_NAME}")
+        step = $(".#{@GRID_STEP_CLASS_NAME}", root).val()
+        stepx = parseInt(step)
+        stepy = parseInt(step)
 
-    else if !context? && doDraw
-      # 描画
-      $(ElementCode.get().createGridElement()).appendTo('#scroll_inside')
-      context = document.getElementById("#{@SETTING_GRID_CANVAS_ID}").getContext('2d');
-      context.strokeStyle = color;
-      context.lineWidth = 0.5;
-      emt = $("##{@SETTING_GRID_CANVAS_ID}")
-      emt.css('z-index', Constant.Zindex.GRID)
-      emt.attr('width', window.scrollViewSize)
-      emt.attr('height', window.scrollViewSize)
+        if !context?
+          # キャンパスを作成
+          top = window.scrollContents.scrollTop() - @GRIDVIEW_SIZE * 0.5
+          top -= top % stepy
+          if top < 0
+            top = 0
+          left = window.scrollContents.scrollLeft() - @GRIDVIEW_SIZE * 0.5
+          left -= left % stepx
+          if left < 0
+            left = 0
+          $(ElementCode.get().createGridElement(top, left)).appendTo('#scroll_inside')
+          context = document.getElementById("#{@SETTING_GRID_CANVAS_ID}").getContext('2d');
+        else
+          # 描画をクリア
+          context.clearRect(0, 0, canvas.width, canvas.height)
 
-      for i in [(stepx + 0.5) .. context.canvas.width] by stepx
-        context.beginPath()
-        context.moveTo(i, 0)
-        context.lineTo(i, context.canvas.height)
-        context.stroke()
+        # 描画
+        context.strokeStyle = 'black';
+        context.lineWidth = 0.5;
+        for i in [(stepx + 0.5) .. context.canvas.width] by stepx
+          context.beginPath()
+          context.moveTo(i, 0)
+          context.lineTo(i, context.canvas.height)
+          context.stroke()
+        for i in [(stepy + 0.5) .. context.canvas.height] by stepy
+          context.beginPath()
+          context.moveTo(0, i)
+          context.lineTo(context.canvas.width, i)
+          context.stroke()
 
-      for i in [(stepy + 0.5) .. context.canvas.height] by stepy
-        context.beginPath()
-        context.moveTo(0, i)
-        context.lineTo(context.canvas.width, i)
-        context.stroke()
+        setSettingPageValue(key, true)
 
-      setSettingPageValue(key, true)
-
-    else
-      setSettingPageValue(key, false)
+      else
+        setSettingPageValue(key, false)

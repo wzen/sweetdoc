@@ -5,7 +5,7 @@ _commonVar = ->
   window.scrollInside = $('#scroll_inside')
   window.cssCode = $("#cssCode")
   window.lstorage = localStorage
-  window.scrollViewSize = 10000
+  window.scrollViewSize = 30000
 
 # 作業テーブル共通変数
 worktableCommonVar = ->

@@ -15,10 +15,8 @@ if gon?
     # ZIndex
     class @Zindex
       @GRID = 5
-      @EVENTBOTTOM = 10
-      @EVENTFLOAT = 100
-
-      # @porperty ZINDEX_MAX z-indexの最大値
+      @EVENTBOTTOM = constant.Zindex.EVENTBOTTOM
+      @EVENTFLOAT = constant.Zindex.EVENTFLOAT
       @MAX = constant.Zindex.MAX
 
     # 操作モード

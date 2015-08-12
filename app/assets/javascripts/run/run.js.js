@@ -15,10 +15,10 @@ initView = function() {
   scrollInsideCover.height(window.scrollViewSize);
   scrollHandle.width(window.scrollViewSize);
   scrollHandle.height(window.scrollViewSize);
-  scrollContents.scrollLeft(scrollContents.width() * 0.5);
-  scrollContents.scrollTop(scrollContents.height() * 0.5);
-  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5);
-  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5);
+  scrollContents.scrollLeft(scrollInside.width() * 0.5);
+  scrollContents.scrollTop(scrollInside.height() * 0.5);
+  scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
+  scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   is_reload = getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD);
   if (is_reload != null) {
     return loadPageValueFromStorage();

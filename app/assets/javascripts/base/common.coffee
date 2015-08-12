@@ -168,8 +168,9 @@ setTimelinePageValue = (key, value) ->
 # 共通設定値を設定
 # @param [String] key キー値
 # @param [Object] value 設定値(ハッシュ配列または値)
-setSettingPageValue = (key, value) ->
-  _setPageValue(key, value, false, Setting.PageValueKey.ROOT, true)
+# @param [Boolean] giveName name属性を付与するか
+setSettingPageValue = (key, value, giveName = false) ->
+  _setPageValue(key, value, false, Setting.PageValueKey.ROOT, giveName)
 
 # ページが持つ値を設定
 # @param [String] key キー値

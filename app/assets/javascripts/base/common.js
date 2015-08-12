@@ -195,8 +195,11 @@ setTimelinePageValue = function(key, value) {
   return _setPageValue(key, value, false, Constant.PageValueKey.TE_ROOT, true);
 };
 
-setSettingPageValue = function(key, value) {
-  return _setPageValue(key, value, false, Setting.PageValueKey.ROOT, true);
+setSettingPageValue = function(key, value, giveName) {
+  if (giveName == null) {
+    giveName = false;
+  }
+  return _setPageValue(key, value, false, Setting.PageValueKey.ROOT, giveName);
 };
 
 _setPageValue = function(key, value, isCache, rootId, giveName) {

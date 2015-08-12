@@ -4,7 +4,11 @@
             <div class="settingedit-headliner">Grid</div>
             <div class="forms">
                 <!-- グリッド線 -->
-                <label><input class="<%= Const::Setting::GRID_CLASS_NAME %>" type="checkbox">Show Grid</label>
+                <div style="float: left;">
+                    <label><input class="<%= Const::Setting::GRID_CLASS_NAME %>" type="checkbox">Show Grid</label>
+                </div>
+                <div style="float: left"><input type="text" class="<%= Const::Setting::GRID_STEP_CLASS_NAME %>">px</div>
+                <br style="clear: both;">
             </div>
         </div>
     </div>

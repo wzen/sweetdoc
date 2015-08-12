@@ -17,7 +17,11 @@ class Const
 
   # ZIndex
   class Zindex
-    # @porperty ZINDEX_MAX z-indexの最大値
+    # @porperty EVENTBOTTOM イベントz-idex最小値
+    EVENTBOTTOM = 10
+    # @porperty EVENTFLOAT イベントz-index最大値
+    EVENTFLOAT = 100
+    # @porperty MAX z-indexの最大値
     MAX = 1000
   end
 
@@ -139,5 +143,6 @@ class Const
   class Setting
     ROOT_ID_NAME = 'setting-config'
     GRID_CLASS_NAME = 'grid'
+    GRID_STEP_CLASS_NAME = 'grid_step'
   end
 end

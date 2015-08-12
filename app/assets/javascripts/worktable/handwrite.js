@@ -10,7 +10,7 @@ initHandwrite = function() {
   item = null;
   enableMoveEvent = true;
   queueLoc = null;
-  zindex = 1;
+  zindex = Constant.Zindex.EVENTBOTTOM;
   MOVE_FREQUENCY = 7;
   windowToCanvas = function(canvas, x, y) {
     var bbox;
