@@ -5,6 +5,7 @@ _commonVar = function() {
   window.sidebarWrapper = $("#sidebar-wrapper");
   window.scrollContents = $('#scroll_contents');
   window.scrollInside = $('#scroll_inside');
+  window.mainWrapper = $('#main-wrapper');
   window.cssCode = $("#cssCode");
   window.lstorage = localStorage;
   return window.scrollViewSize = 30000;
@@ -22,7 +23,6 @@ worktableCommonVar = function() {
 
 runCommonVar = function() {
   _commonVar();
-  window.mainWrapper = $('#main-wrapper');
   window.scrollWrapper = $("#scroll_wrapper");
   window.scrollHandleWrapper = $("#scroll_handle_wrapper");
   window.scrollHandle = $("#scroll_handle");

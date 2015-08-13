@@ -3,6 +3,7 @@ _commonVar = ->
   window.sidebarWrapper = $("#sidebar-wrapper")
   window.scrollContents = $('#scroll_contents')
   window.scrollInside = $('#scroll_inside')
+  window.mainWrapper = $('#main-wrapper')
   window.cssCode = $("#cssCode")
   window.lstorage = localStorage
   window.scrollViewSize = 30000
@@ -21,7 +22,6 @@ worktableCommonVar = ->
 # 実行テーブル共通変数
 runCommonVar = ->
   _commonVar()
-  window.mainWrapper = $('#main-wrapper')
   window.scrollWrapper = $("#scroll_wrapper")
   window.scrollHandleWrapper = $("#scroll_handle_wrapper")
   window.scrollHandle = $("#scroll_handle")

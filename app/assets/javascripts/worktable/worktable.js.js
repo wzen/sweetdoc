@@ -186,8 +186,9 @@ $(function() {
   window.selectItemMenu = Constant.ItemId.BUTTON;
   loadItemJs(Constant.ItemId.BUTTON);
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
-  $('#canvas_container').attr('width', $('#main-wrapper').width());
-  $('#canvas_container').attr('height', $('#main-wrapper').height());
+  window.mainWrapper.height($('#contents').height() - $('#timeline').height() - 25);
+  $('#canvas_container').attr('width', window.mainWrapper.width());
+  $('#canvas_container').attr('height', window.mainWrapper.height());
   scrollInside.width(window.scrollViewSize);
   scrollInside.height(window.scrollViewSize);
   scrollContents.scrollLeft(scrollInside.width() * 0.5);
