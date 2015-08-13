@@ -100,6 +100,7 @@ class TimelineConfig
       parent = $(e).closest('.radio')
       @actionType = parseInt(parent.find('input.action_type:first').val())
       @methodName = parent.find('input.method_name:first').val()
+      @animationType = parent.find('input.animation_type:first').val()
 
     handlerClassName = @methodClassName()
     valueClassName = @methodClassName()

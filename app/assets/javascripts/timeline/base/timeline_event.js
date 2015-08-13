@@ -35,6 +35,8 @@ TimelineEvent = (function() {
 
       PageValueKey.ACTIONTYPE = 'actiontype';
 
+      PageValueKey.ANIAMTIONTYPE = 'animationtype';
+
       PageValueKey.IS_PARALLEL = 'is_parallel';
 
       PageValueKey.SCROLL_POINT_START = 'scroll_point_start';
@@ -83,6 +85,7 @@ TimelineEvent = (function() {
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent;
     writeValue[this.PageValueKey.METHODNAME] = timelineConfig.methodName;
     writeValue[this.PageValueKey.ACTIONTYPE] = timelineConfig.actionType;
+    writeValue[this.PageValueKey.ANIAMTIONTYPE] = timelineConfig.animationType;
     writeValue[this.PageValueKey.IS_PARALLEL] = timelineConfig.isParallel;
     if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
       writeValue[this.PageValueKey.SCROLL_POINT_START] = timelineConfig.scrollPointStart;
@@ -101,6 +104,7 @@ TimelineEvent = (function() {
       timelineConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
       timelineConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
       timelineConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
+      timelineConfig.animationType = writeValue[this.PageValueKey.ANIAMTIONTYPE];
       parallel = $(".parallel_div .parallel", timelineConfig.emt);
       isParallel = writeValue[this.PageValueKey.IS_PARALLEL];
       if ((parallel != null) && isParallel) {

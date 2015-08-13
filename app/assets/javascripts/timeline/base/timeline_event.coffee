@@ -28,8 +28,10 @@ class TimelineEvent
       @ORDER = 'order'
       # @property [String] METHODNAME イベント名
       @METHODNAME = 'methodname'
-      # @property [String] METHODNAME イベント名
+      # @property [String] ACTIONTYPE アクションタイプ名
       @ACTIONTYPE = 'actiontype'
+      # @property [String] ANIAMTIONTYPE アニメーションタイプ名
+      @ANIAMTIONTYPE = 'animationtype'
       # @property [String] IS_PARALLEL 同時実行
       @IS_PARALLEL = 'is_parallel'
       # @property [String] SCROLL_TIME スクロール実行開始位置
@@ -69,6 +71,7 @@ class TimelineEvent
     writeValue[@PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent
     writeValue[@PageValueKey.METHODNAME] = timelineConfig.methodName
     writeValue[@PageValueKey.ACTIONTYPE] = timelineConfig.actionType
+    writeValue[@PageValueKey.ANIAMTIONTYPE] = timelineConfig.animationType
     writeValue[@PageValueKey.IS_PARALLEL] = timelineConfig.isParallel
 
     if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
@@ -90,6 +93,7 @@ class TimelineEvent
       timelineConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
       timelineConfig.methodName = writeValue[@PageValueKey.METHODNAME]
       timelineConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
+      timelineConfig.animationType = writeValue[@PageValueKey.ANIAMTIONTYPE]
 
       parallel = $(".parallel_div .parallel", timelineConfig.emt)
       isParallel = writeValue[@PageValueKey.IS_PARALLEL]

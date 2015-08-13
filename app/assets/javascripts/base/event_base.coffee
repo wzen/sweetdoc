@@ -215,16 +215,16 @@ class EventBase extends Extend
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-
+    animationType = @timelineEvent[TimelineEvent.PageValueKey.ANIAMTIONTYPE]
     if @ instanceof CanvasItemBase
       # 描画後の状態を表示
       @restoreAllNewDrawedSurface()
 
-    else if @ instanceof CssItemBase
+    else if animationType == Constant.ActionAnimationType.CSS3_ANIMATION
       # CSSアニメーション後にする
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
 
-    else if @ instanceof CommonEventBase
+    else if animationType == Constant.ActionAnimationType.JQUERY_ANIMATION
       actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
       # 共通イベントはアクションで判定
       if actionType == Constant.ActionEventHandleType.SCROLL
@@ -237,15 +237,16 @@ class EventBase extends Extend
 
   # イベント前の表示状態にする
   updateEventBefore: ->
+    animationType = @timelineEvent[TimelineEvent.PageValueKey.ANIAMTIONTYPE]
     if @ instanceof CanvasItemBase
       # 描画前の状態を表示
       @restoreAllNewDrawingSurface()
 
-    else if @ instanceof CssItemBase
+    else if animationType == Constant.ActionAnimationType.CSS3_ANIMATION
       # CSSアニメーション前
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
 
-    else if @ instanceof CommonEventBase
+    else if animationType == Constant.ActionAnimationType.JQUERY_ANIMATION
       actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
       # 共通イベントはアクションで判定
       if actionType == Constant.ActionEventHandleType.SCROLL

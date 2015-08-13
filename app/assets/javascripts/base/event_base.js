@@ -248,16 +248,17 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventAfter = function() {
-    var actionType, methodName;
+    var actionType, animationType, methodName;
+    animationType = this.timelineEvent[TimelineEvent.PageValueKey.ANIAMTIONTYPE];
     if (this instanceof CanvasItemBase) {
       return this.restoreAllNewDrawedSurface();
-    } else if (this instanceof CssItemBase) {
+    } else if (animationType === Constant.ActionAnimationType.CSS3_ANIMATION) {
       return this.getJQueryElement().css({
         '-webkit-animation-duration': '0',
         '-moz-animation-duration': '-moz-animation-duration',
         '0': '0'
       });
-    } else if (this instanceof CommonEventBase) {
+    } else if (animationType === Constant.ActionAnimationType.JQUERY_ANIMATION) {
       actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
       if (actionType === Constant.ActionEventHandleType.SCROLL) {
         methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
@@ -269,12 +270,13 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventBefore = function() {
-    var actionType, methodName;
+    var actionType, animationType, methodName;
+    animationType = this.timelineEvent[TimelineEvent.PageValueKey.ANIAMTIONTYPE];
     if (this instanceof CanvasItemBase) {
       return this.restoreAllNewDrawingSurface();
-    } else if (this instanceof CssItemBase) {
+    } else if (animationType === Constant.ActionAnimationType.CSS3_ANIMATION) {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
-    } else if (this instanceof CommonEventBase) {
+    } else if (animationType === Constant.ActionAnimationType.JQUERY_ANIMATION) {
       actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
       if (actionType === Constant.ActionEventHandleType.SCROLL) {
         methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
