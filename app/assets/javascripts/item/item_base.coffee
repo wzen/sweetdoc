@@ -210,6 +210,10 @@ class ItemBase extends ItemEventBase
   @defaultActionType = ->
     return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
 
+  # アイテム作成時に設定されるデフォルトアクションタイプ
+  @defaultAnimationType = ->
+    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
+
   @timelineDefaultConfigValue = ->
     return null
 

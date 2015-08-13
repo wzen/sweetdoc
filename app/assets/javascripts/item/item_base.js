@@ -192,6 +192,10 @@ ItemBase = (function(superClass) {
     return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
+  ItemBase.defaultAnimationType = function() {
+    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
+  };
+
   ItemBase.timelineDefaultConfigValue = function() {
     return null;
   };

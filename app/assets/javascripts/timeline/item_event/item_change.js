@@ -31,6 +31,7 @@ TLEItemChange = (function(superClass) {
     writeValue[this.PageValueKey.METHODNAME] = item.constructor.defaultMethodName();
     actionType = item.constructor.defaultActionType();
     writeValue[this.PageValueKey.ACTIONTYPE] = actionType;
+    writeValue[this.PageValueKey.ANIAMTIONTYPE] = item.constructor.defaultAnimationType();
     start = this.getAllScrollLength();
     end = start + item.coodRegist.length;
     if (start > end) {

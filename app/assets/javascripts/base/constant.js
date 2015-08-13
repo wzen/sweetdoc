@@ -135,6 +135,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.ITEM_DEFAULT_ACTIONTYPE = 'iteminfo:@item_id:default:actiontype';
 
+      PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE = 'iteminfo:@item_id:default:animationtype';
+
       PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
       PageValueKey.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;

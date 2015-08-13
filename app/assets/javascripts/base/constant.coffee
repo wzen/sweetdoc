@@ -96,6 +96,8 @@ if gon?
       @ITEM_DEFAULT_METHODNAME = 'iteminfo:@item_id:default:methodname'
       # @property [String] ITEM_DEFAULT_METHODACTIONTYPE デフォルトアクションタイプ
       @ITEM_DEFAULT_ACTIONTYPE = 'iteminfo:@item_id:default:actiontype'
+      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
+      @ITEM_DEFAULT_ANIMATIONTYPE = 'iteminfo:@item_id:default:animationtype'
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
       # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
