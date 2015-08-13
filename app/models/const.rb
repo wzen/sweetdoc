@@ -144,5 +144,6 @@ class Const
     ROOT_ID_NAME = 'setting-config'
     GRID_CLASS_NAME = 'grid'
     GRID_STEP_CLASS_NAME = 'grid_step'
+    GRID_STEP_DIV_CLASS_NAME = 'grid_div_step'
   end
 end

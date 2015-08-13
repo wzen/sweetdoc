@@ -32,6 +32,8 @@ Setting = (function() {
 
     Grid.GRID_STEP_CLASS_NAME = constant.Setting.GRID_STEP_CLASS_NAME;
 
+    Grid.GRID_STEP_DIV_CLASS_NAME = constant.Setting.GRID_STEP_DIV_CLASS_NAME;
+
     Grid.SETTING_GRID_ELEMENT_ID = 'setting_grid_element';
 
     Grid.SETTING_GRID_CANVAS_ID = 'setting_grid';
@@ -52,7 +54,7 @@ Setting = (function() {
     })();
 
     Grid.initConfig = function() {
-      var grid, gridStep, gridStepValue, gridValue, key, root;
+      var grid, gridStep, gridStepDiv, gridStepValue, gridValue, key, root;
       root = $("#" + Setting.ROOT_ID_NAME);
       grid = $("." + this.GRID_CLASS_NAME, root);
       key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
@@ -60,6 +62,7 @@ Setting = (function() {
       gridStep = $("." + this.GRID_STEP_CLASS_NAME, root);
       key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
       gridStepValue = getSettingPageValue(key);
+      gridStepDiv = $("." + this.GRID_STEP_DIV_CLASS_NAME, root);
       grid.prop('clicked', gridValue);
       grid.off('click');
       grid.on('click', (function(_this) {
@@ -69,18 +72,18 @@ Setting = (function() {
           if (gridValue != null) {
             gridValue = gridValue === 'true';
           }
-          if (gridValue) {
-            gridStep.removeAttr('disabled');
+          if (!gridValue) {
+            gridStepDiv.css('display', '');
           } else {
-            gridStep.attr('disabled', 'disabled');
+            gridStepDiv.css('display', 'none');
           }
           return _this.drawGrid(!gridValue);
         };
       })(this));
       if (gridValue) {
-        gridStep.removeAttr('disabled');
+        gridStepDiv.css('display', '');
       } else {
-        gridStep.attr('disabled', 'disabled');
+        gridStepDiv.css('display', 'none');
       }
       if (gridStepValue == null) {
         gridStepValue = this.STEP_DEFAULT_VALUE;
@@ -112,7 +115,7 @@ Setting = (function() {
       if ((context != null) && doDraw === false) {
         $("#" + this.SETTING_GRID_ELEMENT_ID).remove();
         return setSettingPageValue(key, false);
-      } else if ((context == null) && doDraw) {
+      } else if (doDraw) {
         root = $("#" + Setting.ROOT_ID_NAME);
         step = $("." + this.GRID_STEP_CLASS_NAME, root).val();
         stepx = parseInt(step);
@@ -148,8 +151,6 @@ Setting = (function() {
           context.stroke();
         }
         return setSettingPageValue(key, true);
-      } else {
-        return setSettingPageValue(key, false);
       }
     };
 

@@ -17,6 +17,7 @@ class Setting
 
     @GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME
     @GRID_STEP_CLASS_NAME = constant.Setting.GRID_STEP_CLASS_NAME
+    @GRID_STEP_DIV_CLASS_NAME = constant.Setting.GRID_STEP_DIV_CLASS_NAME
     @SETTING_GRID_ELEMENT_ID = 'setting_grid_element'
     @SETTING_GRID_CANVAS_ID = 'setting_grid'
     @GRIDVIEW_SIZE = 10000
@@ -39,6 +40,8 @@ class Setting
       key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
       gridStepValue = getSettingPageValue(key)
 
+      gridStepDiv = $(".#{@GRID_STEP_DIV_CLASS_NAME}", root)
+
       grid.prop('clicked', gridValue)
       grid.off('click')
       grid.on('click', =>
@@ -48,19 +51,19 @@ class Setting
           gridValue = gridValue == 'true'
 
         # グリッド間隔の有効無効を切り替え
-        if gridValue
-          gridStep.removeAttr('disabled')
+        if !gridValue
+          gridStepDiv.css('display', '')
         else
-          gridStep.attr('disabled', 'disabled')
+          gridStepDiv.css('display', 'none')
 
         @drawGrid(!gridValue)
       )
 
       # グリッド間隔の有効無効を切り替え
       if gridValue
-        gridStep.removeAttr('disabled')
+        gridStepDiv.css('display', '')
       else
-        gridStep.attr('disabled', 'disabled')
+        gridStepDiv.css('display', 'none')
 
       # グリッド間隔
       if !gridStepValue?
@@ -86,7 +89,7 @@ class Setting
         # 削除
         $("##{@SETTING_GRID_ELEMENT_ID}").remove()
         setSettingPageValue(key, false)
-      else if !context? && doDraw
+      else if doDraw
         root = $("##{Setting.ROOT_ID_NAME}")
         step = $(".#{@GRID_STEP_CLASS_NAME}", root).val()
         stepx = parseInt(step)
@@ -123,6 +126,3 @@ class Setting
           context.stroke()
 
         setSettingPageValue(key, true)
-
-      else
-        setSettingPageValue(key, false)
