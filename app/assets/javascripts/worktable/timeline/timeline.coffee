@@ -22,7 +22,8 @@ setupTimelineEventConfig = ->
   te = null
 
   _setupTimelineEvent = ->
-    tEmt = $('#timeline_events .timeline_event .te_num')
+    timelineEvents = $('#timeline_events').children('.timeline_event')
+    tEmt = $('.te_num', timelineEvents)
     tEmt.each((e) ->
       teNum = parseInt($(@).val())
       actionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE)
@@ -30,10 +31,12 @@ setupTimelineEventConfig = ->
       if e == tEmt.length - 1 && actionType != null
         # blankのイベントが無い場合、作成
         createTimelineEvent(tEmt.length + 1)
+        timelineEvents = $('#timeline_events').children('.timeline_event')
+        tEmt = $('.te_num', timelineEvents)
     )
     # イベントのクリック
-    $('#timeline_events .timeline_event').off('click')
-    $('#timeline_events .timeline_event').on('click', (e) ->
+    timelineEvents.off('click')
+    timelineEvents.on('click', (e) ->
       _clickTimelineEvent.call(self, @)
     )
     # イベントのD&D
@@ -45,6 +48,25 @@ setupTimelineEventConfig = ->
       stop: (event, ui) ->
         # イベントのソート番号を更新
     })
+    # イベントの右クリック
+    menu = [{title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors"}]
+    timelineEvents.each((e) ->
+      t = $(@)
+      t.contextmenu(
+        {
+          preventContextMenuForPopup: true
+          preventSelect: true
+          menu: menu
+          select: (event, ui) ->
+            target = event.target
+            switch ui.cmd
+              when "edit"
+                _initTimelineConfig.call(self, target)
+              else
+                return
+        }
+      )
+    )
 
   # イベント
   _clickTimelineEvent = (e) ->
@@ -56,31 +78,13 @@ setupTimelineEventConfig = ->
     # 選択枠切り替え
     clearSelectedBorder()
     setSelectedBorder(e, "timeline")
-    # サイドメニューをタイムラインに切り替え
-    switchSidebarConfig("timeline")
 
-    # イベントメニューの存在チェック
+    if isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)
+      # サイドバー表示時 or Blankの場合はコンフィグを設定&表示
+      _initTimelineConfig.call(@, e)
+
+    # プレビュー
     te_num = $(e).find('input.te_num').val()
-    eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
-    emt = $('#' + eId)
-    if emt.length == 0
-      # イベントメニューの作成
-      emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId)
-      $('#timeline-config').append(emt)
-
-    # アイテム選択メニュー更新
-    updateSelectItemMenu()
-
-    # イベントハンドラの設定
-    setupTimelineEventHandler(te_num)
-
-    # イベントメニューの表示
-    $('#timeline-config .event').css('display', 'none')
-    emt.css('display', '')
-
-    # タイムラインのconfigをオープンする
-    openConfigSidebar()
-
     _updateEventState.call(@, te_num)
 
   # イベントによる表示状態を更新
@@ -113,6 +117,32 @@ setupTimelineEventConfig = ->
             item.preview(te)
             break
     , 100)
+
+  # タイムラインコンフィグの設定&表示
+  _initTimelineConfig = (e) ->
+    # サイドメニューをタイムラインに切り替え
+    switchSidebarConfig("timeline")
+
+    te_num = $(e).find('input.te_num').val()
+    eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+    emt = $('#' + eId)
+    if emt.length == 0
+      # イベントメニューの作成
+      emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId)
+      $('#timeline-config').append(emt)
+
+    # アイテム選択メニュー更新
+    updateSelectItemMenu()
+
+    # イベントハンドラの設定
+    setupTimelineEventHandler(te_num)
+
+    # イベントメニューの表示
+    $('#timeline-config .event').css('display', 'none')
+    emt.css('display', '')
+
+    # サイドバー表示
+    openConfigSidebar()
 
   _setupTimelineEvent.call(self)
 

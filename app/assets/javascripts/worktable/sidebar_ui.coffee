@@ -89,7 +89,6 @@ setupContextMenu = (element, contextSelector, menu) ->
 
   element.contextmenu(
     {
-      delegate: contextSelector
       preventContextMenuForPopup: true
       preventSelect: true
       menu: menu

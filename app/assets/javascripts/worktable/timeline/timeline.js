@@ -20,53 +20,71 @@ createTimelineEvent = function(teNum) {
 };
 
 setupTimelineEventConfig = function() {
-  var _clickTimelineEvent, _setupTimelineEvent, _updateEventState, self, te;
+  var _clickTimelineEvent, _initTimelineConfig, _setupTimelineEvent, _updateEventState, self, te;
   self = this;
   te = null;
   _setupTimelineEvent = function() {
-    var tEmt;
-    tEmt = $('#timeline_events .timeline_event .te_num');
+    var menu, tEmt, timelineEvents;
+    timelineEvents = $('#timeline_events').children('.timeline_event');
+    tEmt = $('.te_num', timelineEvents);
     tEmt.each(function(e) {
       var actionType, teNum;
       teNum = parseInt($(this).val());
       actionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE);
       changeTimelineColor(teNum, actionType);
       if (e === tEmt.length - 1 && actionType !== null) {
-        return createTimelineEvent(tEmt.length + 1);
+        createTimelineEvent(tEmt.length + 1);
+        timelineEvents = $('#timeline_events').children('.timeline_event');
+        return tEmt = $('.te_num', timelineEvents);
       }
     });
-    $('#timeline_events .timeline_event').off('click');
-    $('#timeline_events .timeline_event').on('click', function(e) {
+    timelineEvents.off('click');
+    timelineEvents.on('click', function(e) {
       return _clickTimelineEvent.call(self, this);
     });
-    return $('#timeline_events').sortable({
+    $('#timeline_events').sortable({
       revert: true,
       axis: 'x',
       containment: $('#timeline_events_container'),
       items: '.sortable',
       stop: function(event, ui) {}
     });
+    menu = [
+      {
+        title: "Edit",
+        cmd: "edit",
+        uiIcon: "ui-icon-scissors"
+      }
+    ];
+    return timelineEvents.each(function(e) {
+      var t;
+      t = $(this);
+      return t.contextmenu({
+        preventContextMenuForPopup: true,
+        preventSelect: true,
+        menu: menu,
+        select: function(event, ui) {
+          var target;
+          target = event.target;
+          switch (ui.cmd) {
+            case "edit":
+              return _initTimelineConfig.call(self, target);
+          }
+        }
+      });
+    });
   };
   _clickTimelineEvent = function(e) {
-    var eId, emt, te_num;
+    var te_num;
     if ($(e).is('.ui-sortable-helper')) {
       return;
     }
     clearSelectedBorder();
     setSelectedBorder(e, "timeline");
-    switchSidebarConfig("timeline");
-    te_num = $(e).find('input.te_num').val();
-    eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
-    emt = $('#' + eId);
-    if (emt.length === 0) {
-      emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId);
-      $('#timeline-config').append(emt);
+    if (isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)) {
+      _initTimelineConfig.call(this, e);
     }
-    updateSelectItemMenu();
-    setupTimelineEventHandler(te_num);
-    $('#timeline-config .event').css('display', 'none');
-    emt.css('display', '');
-    openConfigSidebar();
+    te_num = $(e).find('input.te_num').val();
     return _updateEventState.call(this, te_num);
   };
   _updateEventState = function(te_num) {
@@ -105,6 +123,22 @@ setupTimelineEventConfig = function() {
         return results;
       }
     }, 100);
+  };
+  _initTimelineConfig = function(e) {
+    var eId, emt, te_num;
+    switchSidebarConfig("timeline");
+    te_num = $(e).find('input.te_num').val();
+    eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
+    emt = $('#' + eId);
+    if (emt.length === 0) {
+      emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId);
+      $('#timeline-config').append(emt);
+    }
+    updateSelectItemMenu();
+    setupTimelineEventHandler(te_num);
+    $('#timeline-config .event').css('display', 'none');
+    emt.css('display', '');
+    return openConfigSidebar();
   };
   return _setupTimelineEvent.call(self);
 };

@@ -176,7 +176,7 @@ runDebug = function() {
 };
 
 $(function() {
-  var menu;
+  var borderWidth, menu, padding, timelineTopPadding;
   if (!checkBlowserEnvironment()) {
     alert('ブラウザ非対応です。');
     return;
@@ -186,7 +186,10 @@ $(function() {
   window.selectItemMenu = Constant.ItemId.BUTTON;
   loadItemJs(Constant.ItemId.BUTTON);
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
-  window.mainWrapper.height($('#contents').height() - $('#timeline').height() - 25);
+  borderWidth = 5;
+  timelineTopPadding = 5;
+  padding = borderWidth * 4 + timelineTopPadding;
+  window.mainWrapper.height($('#contents').height() - $('#timeline').height() - padding);
   $('#canvas_container').attr('width', window.mainWrapper.width());
   $('#canvas_container').attr('height', window.mainWrapper.height());
   scrollInside.width(window.scrollViewSize);

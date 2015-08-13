@@ -148,7 +148,10 @@ $ ->
   loadItemJs(Constant.ItemId.BUTTON)
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
-  window.mainWrapper.height($('#contents').height() - $('#timeline').height() - 25)
+  borderWidth = 5
+  timelineTopPadding = 5
+  padding = borderWidth * 4 + timelineTopPadding
+  window.mainWrapper.height($('#contents').height() - $('#timeline').height() - padding)
   $('#canvas_container').attr('width', window.mainWrapper.width())
   $('#canvas_container').attr('height', window.mainWrapper.height())
   # スクロールサイズ
