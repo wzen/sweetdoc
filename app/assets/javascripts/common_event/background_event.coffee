@@ -2,11 +2,6 @@
 class BackgroundEvent extends CommonEvent
   @EVENT_ID = '1'
 
-  constructor: ->
-    super()
-    @beforeScrollTop = scrollContents.scrollTop()
-    @beforeScrollLeft = scrollContents.scrollLeft()
-
   initWithEvent: (timelineEvent) ->
     super(timelineEvent)
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]

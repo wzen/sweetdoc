@@ -46,7 +46,7 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.selectItem = function(e) {
-    var checkedRadioButton, commonEvent, displayClassName, splitValues, vEmt, value;
+    var checkedRadioButton, displayClassName, splitValues, vEmt, value;
     if (e == null) {
       e = null;
     }
@@ -59,8 +59,6 @@ TimelineConfig = (function() {
       this.isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) === 0;
       if (this.isCommonEvent) {
         this.commonEventId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length));
-        commonEvent = getClassFromMap(true, this.commonEventId);
-        this.id = (new commonEvent()).id;
       } else {
         splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR);
         this.id = splitValues[0];
@@ -131,7 +129,7 @@ TimelineConfig = (function() {
   };
 
   TimelineConfig.prototype.applyAction = function() {
-    var errorMes, handlerDiv, item, parallel;
+    var commonEvent, errorMes, handlerDiv, item, parallel;
     this.isParallel = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {
@@ -145,6 +143,10 @@ TimelineConfig = (function() {
         this.scrollPointStart = handlerDiv.find('.scroll_point_start:first').val();
         this.scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val();
       }
+    }
+    if (this.isCommonEvent) {
+      commonEvent = getClassFromMap(true, this.commonEventId);
+      this.id = (new commonEvent()).id;
     }
     errorMes = this.writeToPageValue();
     if ((errorMes != null) && errorMes.length > 0) {

@@ -14,23 +14,27 @@ class ScreenEvent extends CommonEvent
   updateEventBefore: ->
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
     if methodName == 'changeScreenPosition'
-      scrollContents.css({scrollTop: @beforeScrollTop, scrollLeft: @beforeScrollLeft})
+      scrollContents.scrollTop(@beforeScrollTop)
+      scrollContents.scrollLeft(@beforeScrollLeft)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
     methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
     if methodName == 'changeScreenPosition'
-      scrollTop = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X]
-      scrollLeft = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y]
-      scrollContents.css({scrollTop: (@beforeScrollTop + scrollTop), scrollLeft: @beforeScrollLeft + scrollLeft})
+      scrollTop = parseInt(@timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X])
+      scrollLeft = parseInt(@timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y])
+      scrollContents.scrollTop(@beforeScrollTop + scrollTop)
+      scrollContents.scrollLeft(@beforeScrollLeft + scrollLeft)
 
   # 画面移動イベント
   changeScreenPosition: (e, complete) =>
+    @updateEventBefore()
+
     actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.CLICK
       finished_count = 0
-      scrollTop = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X]
-      scrollLeft = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y]
+      scrollTop = parseInt(@timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X])
+      scrollLeft = parseInt(@timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y])
       scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 'normal', 'linear', ->
         finished_count += 1
         if finished_count >= 2
@@ -48,6 +52,12 @@ class ScreenEvent extends CommonEvent
             if complete?
               complete()
         )
+      else
+        finished_count += 1
+        if finished_count >= 2
+          @isFinishedEvent = true
+          if complete?
+            complete()
 
   # ページング時
   clearPaging: (methodName) ->
