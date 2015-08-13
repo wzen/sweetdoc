@@ -45,17 +45,19 @@ ScreenEvent = (function(superClass) {
           }
         });
         scale = this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z];
-        return this.getJQueryElement().transition({
-          scale: "+=" + scale
-        }, 'normal', 'linear', function() {
-          finished_count += 1;
-          if (finished_count >= 2) {
-            this.isFinishedEvent = true;
-            if (complete != null) {
-              return complete();
+        if (scale !== 0) {
+          return this.getJQueryElement().transition({
+            scale: "+=" + scale
+          }, 'normal', 'linear', function() {
+            finished_count += 1;
+            if (finished_count >= 2) {
+              this.isFinishedEvent = true;
+              if (complete != null) {
+                return complete();
+              }
             }
-          }
-        });
+          });
+        }
       }
     };
 

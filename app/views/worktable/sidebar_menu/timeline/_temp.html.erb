@@ -27,6 +27,7 @@
                                        action_type: TimelineEventHelper.actionTypeClassNameByActionType(a.action_event_type_id),
                                        action_event_type_id: a.action_event_type_id,
                                        method_name: a.method_name,
+                                       action_animation_type_id: a.action_animation_type_id,
                                        radio_name: Const::ElementAttribute::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
                                        value_class_name: Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
                             %>
@@ -71,9 +72,9 @@
                 <% @common_actions.each do |c| %>
                     <% c.common_action_events.each do |a| %>
                         <div class="<%= Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
-                          <% if a.action_event_change_type_id == Const::CommonActionEventChangeType::BACKGROUND  %>
+                          <% if a.id == Const::CommonActionEventChangeType::BACKGROUND  %>
                             <%= render 'worktable/sidebar_menu/timeline/parts/backgroundcolor_change' %>
-                          <% elsif a.action_event_change_type_id == Const::CommonActionEventChangeType::SCREEN %>
+                          <% elsif a.id == Const::CommonActionEventChangeType::SCREEN %>
                             <%= render 'worktable/sidebar_menu/timeline/parts/screenposition_change' %>
                           <% end %>
                         </div>

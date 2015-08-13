@@ -90,18 +90,14 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ActionEventChangeType = (function() {
-      function ActionEventChangeType() {}
+    Constant.ActionAnimationType = (function() {
+      function ActionAnimationType() {}
 
-      ActionEventChangeType.DRAW = constant.ActionEventChangeType.DRAW;
+      ActionAnimationType.JQUERY_ANIMATION = constant.ActionAnimationType.JQUERY_ANIMATION;
 
-      ActionEventChangeType.ANIMATION = constant.ActionEventChangeType.ANIMATION;
+      ActionAnimationType.CSS3_ANIMATION = constant.ActionAnimationType.CSS3_ANIMATION;
 
-      ActionEventChangeType.CHANGE_OPTION = constant.ActionEventChangeType.CHANGE_OPTION;
-
-      ActionEventChangeType.DELETE = constant.ActionEventChangeType.DELETE;
-
-      return ActionEventChangeType;
+      return ActionAnimationType;
 
     })();
 

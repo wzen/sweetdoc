@@ -2,7 +2,7 @@ one:
   id: 1
   item_id: 1
   action_event_type_id: 1
-  action_event_change_type_id: 1
+  action_animation_type_id: 1
   method_name: defaultClick
   is_default: true
   options: |
@@ -15,7 +15,7 @@ two:
   id: 2
   item_id: 2
   action_event_type_id: 0
-  action_event_change_type_id: 0
+  action_animation_type_id: 0
   method_name: scrollDraw
   is_default: true
   options: |
@@ -28,7 +28,7 @@ three:
   id: 3
   item_id: 1
   action_event_type_id: 0
-  action_event_change_type_id: 1
+  action_animation_type_id: 0
   method_name: changeColorScroll
   options: |
             {
@@ -46,7 +46,7 @@ four:
   id: 4
   item_id: 2
   action_event_type_id: 1
-  action_event_change_type_id: 0
+  action_animation_type_id: 0
   method_name: changeColorClick
   options: |
             {

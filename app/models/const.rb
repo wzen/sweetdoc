@@ -93,15 +93,11 @@ class Const
   end
 
   # アクション変更種別
-  class ActionEventChangeType
-    # @property [Int] DRAW 描画(新規作成 etc.)
-    DRAW = 0
-    # @property [Int] ANIMATION アニメーション(移動、サイズ変更 etc.)
-    ANIMATION = 1
-    # @property [Int] CHANGE_OPTION オプション(デザイン)変更
-    CHANGE_OPTION = 2
-    # @property [Int] DELETE 削除
-    DELETE = 3
+  class ActionAnimationType
+    # @property [Int] JQUERY_ANIMATION JQeury描画
+    JQUERY_ANIMATION = 0
+    # @property [Int] CSS3_ANIMATION CSS3アニメーション
+    CSS3_ANIMATION = 1
   end
 
   # キーコード

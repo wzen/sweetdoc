@@ -23,13 +23,14 @@ class ScreenEvent extends CommonEvent
         )
 
         scale = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z]
-        @getJQueryElement().transition({scale: "+=#{scale}"}, 'normal', 'linear', ->
-          finished_count += 1
-          if finished_count >= 2
-            @isFinishedEvent = true
-            if complete?
-              complete()
-        )
+        if scale != 0
+          @getJQueryElement().transition({scale: "+=#{scale}"}, 'normal', 'linear', ->
+            finished_count += 1
+            if finished_count >= 2
+              @isFinishedEvent = true
+              if complete?
+                complete()
+          )
 
     # ページング時
     clearPaging: (methodName) ->

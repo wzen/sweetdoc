@@ -60,16 +60,12 @@ if gon?
       # @property [Int] CLICK クリック
       @CLICK = constant.ActionEventTypeClassName.CLICK
 
-    # 閲覧モードのチャプターアクション種類
-    class @ActionEventChangeType
-      # @property [Int] DRAW 描画
-      @DRAW = constant.ActionEventChangeType.DRAW
-      # @property [Int] ANIMATION CSSアニメーション
-      @ANIMATION = constant.ActionEventChangeType.ANIMATION
-      # @property [Int] OPTION_CHANGE デザイン変更
-      @CHANGE_OPTION = constant.ActionEventChangeType.CHANGE_OPTION
-      # @property [Int] DELETE 削除
-      @DELETE = constant.ActionEventChangeType.DELETE
+    # イベントアクション種類
+    class @ActionAnimationType
+      # @property [Int] JQUERY_ANIMATION JQeury描画
+      @JQUERY_ANIMATION = constant.ActionAnimationType.JQUERY_ANIMATION
+      # @property [Int] CSS3_ANIMATION CSS3アニメーション
+      @CSS3_ANIMATION = constant.ActionAnimationType.CSS3_ANIMATION
 
     # キーコード
     class @KeyboardKeyCode

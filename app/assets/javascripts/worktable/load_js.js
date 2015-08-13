@@ -89,6 +89,7 @@ addTimelineEventContents = function(item_id, te_actions, te_values) {
         span.html(a.options['name']);
         methodClone.find('input.action_type:first').val(a.action_event_type_id);
         methodClone.find('input.method_name:first').val(a.method_name);
+        methodClone.find('input.animation_type:first').val(a.action_animation_type_id);
         valueClassName = TimelineConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', a.method_name);
         methodClone.find('input:radio').attr('name', className);
         methodClone.find('input.value_class_name:first').val(valueClassName);

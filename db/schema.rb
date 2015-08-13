@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20150716084839) do
     t.integer  "user_auth_strength_min",             null: false
     t.integer  "common_action_event_target_type_id", null: false
     t.integer  "action_event_type_id",               null: false
-    t.integer  "action_event_change_type_id",        null: false
+    t.integer  "action_animation_type_id",           null: false
     t.text     "method_name",                        null: false
     t.text     "options"
     t.datetime "created_at"
@@ -39,11 +39,11 @@ ActiveRecord::Schema.define(version: 20150716084839) do
   end
 
   create_table "item_action_events", force: true do |t|
-    t.integer  "item_id",                                     null: false
-    t.integer  "action_event_type_id",                        null: false
-    t.integer  "action_event_change_type_id",                 null: false
-    t.string   "method_name",                                 null: false
-    t.boolean  "is_default",                  default: false
+    t.integer  "item_id",                                  null: false
+    t.integer  "action_event_type_id",                     null: false
+    t.integer  "action_animation_type_id",                 null: false
+    t.string   "method_name",                              null: false
+    t.boolean  "is_default",               default: false
     t.text     "options"
     t.datetime "created_at"
     t.datetime "updated_at"

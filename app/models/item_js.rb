@@ -14,6 +14,7 @@ class ItemJs
           item_id: d.item_id,
           action_event_type_id: d.action_event_type_id,
           method_name: d.method_name,
+          action_animation_type_id: d.action_animation_type_id,
           is_default: d.is_default,
           options: d.options
       }
