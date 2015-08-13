@@ -86,7 +86,8 @@ changeMode = (mode) ->
 # 非表示をクリア
 clearAllItemStyle = ->
   for k, v of getCreatedItemObject()
-    v.clearAllEventStyle()
+    if v instanceof ItemBase
+      v.clearAllEventStyle()
 
   # 選択枠を取る
   clearSelectedBorder()

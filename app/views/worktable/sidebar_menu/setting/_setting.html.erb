@@ -2,13 +2,14 @@
     <div class="config">
         <div class="configBox">
             <div class="settingedit-headliner">Grid</div>
-            <div class="forms">
+            <div class="forms" style="display:table">
                 <!-- グリッド線 -->
-                <div style="float: left;">
+                <div style="display: table-cell">
                     <label><input class="<%= Const::Setting::GRID_CLASS_NAME %>" type="checkbox">Show Grid</label>
                 </div>
-                <div class="<%= Const::Setting::GRID_STEP_DIV_CLASS_NAME %>" style="float: left"><input type="text" class="<%= Const::Setting::GRID_STEP_CLASS_NAME %>">px</div>
-                <br style="clear: both;">
+                <div class="<%= Const::Setting::GRID_STEP_DIV_CLASS_NAME %>" style="display: table-cell">
+                    <input type="number" min="1" max="99" size="5" pattern="^[0-9]+$" class="<%= Const::Setting::GRID_STEP_CLASS_NAME %>">px (1〜99)
+                </div>
             </div>
         </div>
     </div>

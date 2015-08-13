@@ -105,7 +105,7 @@ Setting = (function() {
     };
 
     Grid.drawGrid = function(doDraw) {
-      var canvas, context, i, j, k, key, left, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepx, stepy, top;
+      var canvas, context, i, j, k, key, left, max, min, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
       canvas = document.getElementById("" + this.SETTING_GRID_CANVAS_ID);
       context = null;
       key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
@@ -117,9 +117,16 @@ Setting = (function() {
         return setSettingPageValue(key, false);
       } else if (doDraw) {
         root = $("#" + Setting.ROOT_ID_NAME);
-        step = $("." + this.GRID_STEP_CLASS_NAME, root).val();
-        stepx = parseInt(step);
-        stepy = parseInt(step);
+        stepInput = $("." + this.GRID_STEP_CLASS_NAME, root);
+        step = stepInput.val();
+        step = parseInt(step);
+        min = parseInt(stepInput.attr('min'));
+        max = parseInt(stepInput.attr('max'));
+        if (step < min || step > max) {
+          return;
+        }
+        stepx = step;
+        stepy = step;
         if (context == null) {
           top = window.scrollContents.scrollTop() - this.GRIDVIEW_SIZE * 0.5;
           top -= top % stepy;

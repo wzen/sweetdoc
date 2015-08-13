@@ -111,7 +111,9 @@ clearAllItemStyle = function() {
   ref = getCreatedItemObject();
   for (k in ref) {
     v = ref[k];
-    v.clearAllEventStyle();
+    if (v instanceof ItemBase) {
+      v.clearAllEventStyle();
+    }
   }
   clearSelectedBorder();
   return $('.colorPicker').ColorPickerHide();

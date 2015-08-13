@@ -91,9 +91,16 @@ class Setting
         setSettingPageValue(key, false)
       else if doDraw
         root = $("##{Setting.ROOT_ID_NAME}")
-        step = $(".#{@GRID_STEP_CLASS_NAME}", root).val()
-        stepx = parseInt(step)
-        stepy = parseInt(step)
+        stepInput = $(".#{@GRID_STEP_CLASS_NAME}", root)
+        step = stepInput.val()
+        step = parseInt(step)
+        min = parseInt(stepInput.attr('min'))
+        max = parseInt(stepInput.attr('max'))
+        if step < min || step > max
+          return
+
+        stepx = step
+        stepy = step
 
         if !context?
           # キャンパスを作成
