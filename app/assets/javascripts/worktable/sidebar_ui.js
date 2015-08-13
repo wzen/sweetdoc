@@ -14,9 +14,9 @@ openConfigSidebar = function(target, selectedBorderType) {
   if (!isOpenedConfigSidebar()) {
     main = $('#main');
     if (!isOpenedConfigSidebar()) {
-      main.switchClass('col-md-12', 'col-md-9', 500, 'swing', function() {
-        return $('#sidebar').fadeIn('1000');
-      });
+      main.removeClass('col-md-12');
+      main.addClass('col-md-9');
+      $('#sidebar').fadeIn('500');
       if (target !== null) {
         return focusToTargetWhenSidebarOpen(target, selectedBorderType);
       }
@@ -32,22 +32,21 @@ closeSidebar = function(callback) {
   clearSelectedBorder();
   if (!isClosedConfigSidebar()) {
     main = $('#main');
-    return $('#sidebar').fadeOut('1000', function() {
+    return $('#sidebar').fadeOut('500', function() {
       var s;
       s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
       if (s != null) {
-        scrollContents.animate({
+        scrollContents.css({
           scrollTop: s.top,
           scrollLeft: s.left
-        }, 500, null, function() {
-          return removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
         });
+        removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
       }
-      main.switchClass('col-md-9', 'col-md-12', 500, 'swing', function() {
-        if (callback != null) {
-          return callback();
-        }
-      });
+      main.removeClass('col-md-9');
+      main.addClass('col-md-12');
+      if (callback != null) {
+        callback();
+      }
       return $('.sidebar-config').css('display', 'none');
     });
   }

@@ -7,9 +7,9 @@ openConfigSidebar = (target = null, selectedBorderType = "edit") ->
   if !isOpenedConfigSidebar()
     main = $('#main')
     if !isOpenedConfigSidebar()
-      main.switchClass('col-md-12', 'col-md-9', 500, 'swing', ->
-        $('#sidebar').fadeIn('1000')
-      )
+      main.removeClass('col-md-12')
+      main.addClass('col-md-9')
+      $('#sidebar').fadeIn('500')
       if target != null
         focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
@@ -19,16 +19,15 @@ closeSidebar = (callback = null) ->
   clearSelectedBorder()
   if !isClosedConfigSidebar()
     main = $('#main')
-    $('#sidebar').fadeOut('1000', ->
+    $('#sidebar').fadeOut('500', ->
       s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
       if s?
-        scrollContents.animate({scrollTop: s.top, scrollLeft: s.left}, 500, null, ->
-          removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
-        )
-      main.switchClass('col-md-9', 'col-md-12', 500, 'swing', ->
-        if callback?
-          callback()
-      )
+        scrollContents.css({scrollTop: s.top, scrollLeft: s.left})
+        removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
+      main.removeClass('col-md-9')
+      main.addClass('col-md-12')
+      if callback?
+        callback()
       $('.sidebar-config').css('display', 'none')
     )
 
