@@ -120,6 +120,19 @@ class ArrowItem extends CanvasItemBase
     @reDraw()
     @saveObj(Constant.ItemActionType.MAKE)
 
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    if methodName == 'scrollDraw'
+      @reDraw(false)
+
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    if methodName == 'scrollDraw'
+      @reDraw(false)
+      (@constructor.prototype[methodName]).call(@, @timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
+
   # スクロールイベント ※アクションイベント
   scrollDraw : (scrollValue) ->
     #console.log("scrollY: #{@scrollValue}")

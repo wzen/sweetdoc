@@ -114,6 +114,23 @@ ArrowItem = (function(superClass) {
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
+  ArrowItem.prototype.updateEventBefore = function() {
+    var methodName;
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    if (methodName === 'scrollDraw') {
+      return this.reDraw(false);
+    }
+  };
+
+  ArrowItem.prototype.updateEventAfter = function() {
+    var methodName;
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    if (methodName === 'scrollDraw') {
+      this.reDraw(false);
+      return this.constructor.prototype[methodName].call(this, this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]);
+    }
+  };
+
   ArrowItem.prototype.scrollDraw = function(scrollValue) {
     var j, len, r, ref;
     r = scrollValue / this.scrollLength();

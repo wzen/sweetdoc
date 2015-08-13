@@ -66,6 +66,26 @@ ButtonItem = (function(superClass) {
     return this.saveObj(Constant.ItemActionType.MAKE);
   };
 
+  ButtonItem.prototype.updateEventBefore = function() {
+    var methodName;
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    if (methodName === 'defaultClick') {
+      return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
+    }
+  };
+
+  ButtonItem.prototype.updateEventAfter = function() {
+    var methodName;
+    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    if (methodName === 'defaultClick') {
+      return this.getJQueryElement().css({
+        '-webkit-animation-duration': '0',
+        '-moz-animation-duration': '-moz-animation-duration',
+        '0': '0'
+      });
+    }
+  };
+
   ButtonItem.prototype.defaultClick = function(e, complete) {
     this.getJQueryElement().addClass('defaultClick_' + this.id);
     this.getJQueryElement().off('webkitAnimationEnd animationend');

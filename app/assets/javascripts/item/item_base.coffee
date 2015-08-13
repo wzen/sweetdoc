@@ -33,6 +33,8 @@ class ItemBase extends ItemEventBase
     @jqueryElement = null
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
+    # アイテムリストに保存
+    createdObject[@id] = @
 
   # コンフィグメニューの要素IDを取得
   # @return [Int] HTML要素ID
@@ -113,8 +115,8 @@ class ItemBase extends ItemEventBase
         if self.constructor.IDENTITY == v.constructor.IDENTITY
           num += 1
       @name = @constructor.IDENTITY + " #{num}"
-      # アイテムリストに保存
-      createdObject[@id] = @
+#      # アイテムリストに保存
+#      createdObject[@id] = @
 
     # ページに保存
     @setAllItemPropToPageValue()

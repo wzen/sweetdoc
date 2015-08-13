@@ -30,6 +30,7 @@ ItemBase = (function(superClass) {
     this.ohiRegistIndex = 0;
     this.jqueryElement = null;
     this.coodRegist = [];
+    createdObject[this.id] = this;
   }
 
   ItemBase.prototype.getDesignConfigId = function() {
@@ -99,7 +100,6 @@ ItemBase = (function(superClass) {
         }
       }
       this.name = this.constructor.IDENTITY + (" " + num);
-      createdObject[this.id] = this;
     }
     this.setAllItemPropToPageValue();
     console.log('save obj:' + JSON.stringify(this.itemSize));

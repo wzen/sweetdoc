@@ -7,6 +7,7 @@ _commonVar = ->
   window.cssCode = $("#cssCode")
   window.lstorage = localStorage
   window.scrollViewSize = 30000
+  window.createdObject = {}
 
 # 作業テーブル共通変数
 worktableCommonVar = ->

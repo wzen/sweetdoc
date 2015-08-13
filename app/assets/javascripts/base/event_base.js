@@ -185,6 +185,7 @@ EventBase = (function(superClass) {
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       this.scrollValue = 0;
     }
+    this.updateEventBefore();
   };
 
   EventBase.prototype.didChapter = function(methodName) {};
@@ -247,45 +248,9 @@ EventBase = (function(superClass) {
     return window.cssCode.find("." + funcName).remove();
   };
 
-  EventBase.prototype.updateEventAfter = function() {
-    var actionType, animationType, methodName;
-    animationType = this.timelineEvent[TimelineEvent.PageValueKey.ANIAMTIONTYPE];
-    if (this instanceof CanvasItemBase) {
-      return this.restoreAllNewDrawedSurface();
-    } else if (animationType === Constant.ActionAnimationType.CSS3_ANIMATION) {
-      return this.getJQueryElement().css({
-        '-webkit-animation-duration': '0',
-        '-moz-animation-duration': '-moz-animation-duration',
-        '0': '0'
-      });
-    } else if (animationType === Constant.ActionAnimationType.JQUERY_ANIMATION) {
-      actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
-      if (actionType === Constant.ActionEventHandleType.SCROLL) {
-        methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-        return this.constructor.prototype[methodName].call(this, this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]);
-      } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+  EventBase.prototype.updateEventAfter = function() {};
 
-      }
-    }
-  };
-
-  EventBase.prototype.updateEventBefore = function() {
-    var actionType, animationType, methodName;
-    animationType = this.timelineEvent[TimelineEvent.PageValueKey.ANIAMTIONTYPE];
-    if (this instanceof CanvasItemBase) {
-      return this.restoreAllNewDrawingSurface();
-    } else if (animationType === Constant.ActionAnimationType.CSS3_ANIMATION) {
-      return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
-    } else if (animationType === Constant.ActionAnimationType.JQUERY_ANIMATION) {
-      actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
-      if (actionType === Constant.ActionEventHandleType.SCROLL) {
-        methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
-        return this.constructor.prototype[methodName].call(this, this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
-      } else if (actionType === Constant.ActionEventHandleType.CLICK) {
-
-      }
-    }
-  };
+  EventBase.prototype.updateEventBefore = function() {};
 
   EventBase.prototype.clearPaging = function(methodName) {
     return this.removeCss(methodName);

@@ -8,7 +8,8 @@ _commonVar = function() {
   window.mainWrapper = $('#main-wrapper');
   window.cssCode = $("#cssCode");
   window.lstorage = localStorage;
-  return window.scrollViewSize = 30000;
+  window.scrollViewSize = 30000;
+  return window.createdObject = {};
 };
 
 worktableCommonVar = function() {
