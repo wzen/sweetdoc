@@ -24,10 +24,11 @@ initView = ->
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
   is_reload = getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
+  ls = new LocalStorage(LocalStorage.Key.RUN_TIMELINE_PAGEVALUES)
   if is_reload?
-    loadPageValueFromStorage()
+    ls.loadTimelinePageValueFromStorage()
   else
-    savePageValueToStorage()
+    ls.saveTimelinePageValueToStorage()
 
 initResize = (wrap, scrollWrapper) ->
   resizeTimer = false;
@@ -123,16 +124,6 @@ setupScrollEvent = ->
   scrollFinished = ->
     #scrollpoint_container.show()
 
-# ストレージにページ値を保存
-savePageValueToStorage = ->
-  h = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
-  lstorage.setItem(Constant.StorageKey.TIMELINE_PAGEVALUES, JSON.stringify(h))
-
-# ストレージからページ値を読み込み
-loadPageValueFromStorage = ->
-  h = JSON.parse(lstorage.getItem(Constant.StorageKey.TIMELINE_PAGEVALUES))
-  setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h)
-
 $ ->
   runCommonVar()
   initView()
@@ -142,5 +133,4 @@ $ ->
   setupScrollEvent()
 
   # CSS
-  $('#sup_css').html(lstorage.getItem('itemCssStyle'))
   $('#sup_css').html(getTimelinePageValue(Constant.PageValueKey.TE_CSS))

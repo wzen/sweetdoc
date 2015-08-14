@@ -361,6 +361,9 @@ getCreatedItemObject = ->
       ret[k] = v
   return ret
 
+
+
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedItemTypeList = []

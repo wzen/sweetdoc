@@ -142,7 +142,7 @@ $ ->
   # 共有変数
   worktableCommonVar()
   # WebStorageを初期化する
-  lstorage.clear()
+  localStorage.clear()
   # 初期状態としてボタンを選択(暫定)
   window.selectItemMenu = Constant.ItemId.BUTTON
   loadItemJs(Constant.ItemId.BUTTON)

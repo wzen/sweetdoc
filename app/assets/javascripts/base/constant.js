@@ -165,15 +165,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.StorageKey = (function() {
-      function StorageKey() {}
-
-      StorageKey.TIMELINE_PAGEVALUES = 'timeline_pagevalues';
-
-      return StorageKey;
-
-    })();
-
     return Constant;
 
   })();

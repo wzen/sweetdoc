@@ -112,7 +112,3 @@ if gon?
       @BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND
       # @property [Int] SCREEN 画面表示
       @SCREEN = constant.CommonActionEventChangeType.SCREEN
-
-    class @StorageKey
-      # @property [Int] TIMELINE_PAGEVALUES タイムラインページ値
-      @TIMELINE_PAGEVALUES = 'timeline_pagevalues'

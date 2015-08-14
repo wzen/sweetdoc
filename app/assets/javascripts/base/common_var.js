@@ -7,7 +7,6 @@ _commonVar = function() {
   window.scrollInside = $('#scroll_inside');
   window.mainWrapper = $('#main-wrapper');
   window.cssCode = $("#cssCode");
-  window.lstorage = localStorage;
   window.scrollViewSize = 30000;
   return window.createdObject = {};
 };
@@ -37,7 +36,6 @@ runCommonVar = function() {
     'off': Constant.Zindex.EVENTBOTTOM
   };
   window.scrollInsideCoverZindex = 1;
-  window.lstorage = localStorage;
   window.disabledEventHandler = false;
   return window.firstItemFocused = false;
 };

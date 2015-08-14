@@ -182,7 +182,7 @@ $(function() {
     return;
   }
   worktableCommonVar();
-  lstorage.clear();
+  localStorage.clear();
   window.selectItemMenu = Constant.ItemId.BUTTON;
   loadItemJs(Constant.ItemId.BUTTON);
   $('#contents').css('height', $('#contents').height() - $('#nav').height());

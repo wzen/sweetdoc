@@ -5,7 +5,6 @@ _commonVar = ->
   window.scrollInside = $('#scroll_inside')
   window.mainWrapper = $('#main-wrapper')
   window.cssCode = $("#cssCode")
-  window.lstorage = localStorage
   window.scrollViewSize = 30000
   window.createdObject = {}
 
@@ -33,6 +32,5 @@ runCommonVar = ->
   window.timeLine = null
   window.scrollViewSwitchZindex = {'on': Constant.Zindex.EVENTFLOAT, 'off': Constant.Zindex.EVENTBOTTOM}
   window.scrollInsideCoverZindex = 1
-  window.lstorage = localStorage
   window.disabledEventHandler = false
   window.firstItemFocused = false
