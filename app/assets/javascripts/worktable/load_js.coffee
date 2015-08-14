@@ -1,14 +1,26 @@
 # JSファイルをサーバから読み込む
 # @param [Int] itemId アイテム種別
 # @param [Function] callback コールバック関数
-loadItemJs = (itemId, callback = null) ->
-  itemInitFuncName = getInitFuncName(itemId)
-  if window.itemInitFuncList[itemInitFuncName]?
-    # 既に読み込まれている場合はコールバックのみ実行
-    window.itemInitFuncList[itemInitFuncName]()
-    if callback?
-      callback()
-    return
+loadItemJs = (itemIds, callback = null) ->
+  if jQuery.type(itemIds) != "array"
+    itemIds = [itemIds]
+
+  callbackCount = 0
+  needReadItemIds = []
+  for itemId in itemIds
+    itemInitFuncName = getInitFuncName(itemId)
+    if window.itemInitFuncList[itemInitFuncName]?
+      # 読み込み済みなアイテムIDの場合
+      window.itemInitFuncList[itemInitFuncName]()
+      callbackCount += 1
+      if callbackCount >= data.length
+        if callback?
+          # 既に全て読み込まれている場合はコールバック実行して終了
+          callback()
+        return
+    else
+      # Ajaxでjs読み込みが必要なアイテムID
+      needReadItemIds.push(itemId)
 
   # js読み込み
   $.ajax(
@@ -17,15 +29,21 @@ loadItemJs = (itemId, callback = null) ->
       type: "POST"
       dataType: "json"
       data: {
-        itemId: itemId
+        itemIds: needReadItemIds
       }
       success: (data)->
-        if data.css_info?
-          option = {isWorkTable: true, css_temp: data.css_info}
+        callbackCount = 0
+        for d in data
+          if d.css_info?
+            option = {isWorkTable: true, css_temp: d.css_info}
 
-        availJs(itemInitFuncName, data.js_src, option, callback)
-        addItemInfo(data.item_id, data.te_actions)
-        addTimelineEventContents(data.item_id, data.te_actions, data.te_values)
+          availJs(getInitFuncName(d.item_id), d.js_src, option, ->
+            callbackCount += 1
+            if callback? && callbackCount >= data.length
+              callback()
+          )
+          addItemInfo(d.item_id, d.te_actions)
+          addTimelineEventContents(d.item_id, d.te_actions, d.te_values)
 
       error: (data) ->
     }

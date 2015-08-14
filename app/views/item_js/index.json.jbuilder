@@ -1,5 +1,5 @@
-json.item_id @index[:item_id]
-json.js_src @index[:js_src]
-json.css_info @index[:css_info]
-json.te_actions @index[:te_actions]
-json.te_values @index[:te_values]
+json.array! @indexes do |index|
+  index.each do |k, v|
+    json.set!(k, v)
+  end
+end
