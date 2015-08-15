@@ -41,8 +41,8 @@ TLEBackgroundColorChange = (function(superClass) {
     }
     if (errorMes.length === 0) {
       writeValue[this.PageValueKey.VALUE] = value;
-      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
-      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      PageValue.setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
+      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
     }
     return errorMes;
   };
@@ -54,7 +54,7 @@ TLEBackgroundColorChange = (function(superClass) {
       return false;
     }
     emt = timelineConfig.emt;
-    writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = PageValue.getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     value = writeValue[this.PageValueKey.VALUE];
     initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
     initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);

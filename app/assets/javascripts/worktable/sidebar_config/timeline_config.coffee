@@ -104,7 +104,7 @@ class TimelineConfig
     valueClassName = @methodClassName()
 
     if @teNum > 1
-      beforeActionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE]
+      beforeActionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE]
       if @actionType == beforeActionType
         # 前のイベントと同じアクションタイプの場合は同時実行を表示
         $(".config.parallel_div", @emt).css('display', '')
@@ -163,7 +163,7 @@ class TimelineConfig
     # プレビュー開始
     item = createdObject[@id]
     if item? && item.preview?
-      item.preview(getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum)))
+      item.preview(PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum)))
 
   # 画面値に書き込み
   writeToPageValue: ->

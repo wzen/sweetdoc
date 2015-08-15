@@ -114,7 +114,7 @@ ItemBase = (function(superClass) {
     prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     obj = this.getMinimumObject();
-    return setPageValue(prefix_key, obj);
+    return PageValue.setPageValue(prefix_key, obj);
   };
 
   ItemBase.prototype.reDrawByObjPageValue = function(isCache) {
@@ -124,7 +124,7 @@ ItemBase = (function(superClass) {
     }
     prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    obj = getPageValue(prefix_key);
+    obj = PageValue.getPageValue(prefix_key);
     if (obj != null) {
       this.reDrawByMinimumObject(obj);
       return true;
@@ -139,7 +139,7 @@ ItemBase = (function(superClass) {
     }
     prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    return getPageValue(prefix_key + (":" + prop));
+    return PageValue.getPageValue(prefix_key + (":" + prop));
   };
 
   ItemBase.prototype.setItemPropToPageValue = function(prop, value, isCache) {
@@ -149,7 +149,7 @@ ItemBase = (function(superClass) {
     }
     prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    return setPageValue(prefix_key + (":" + prop), value);
+    return PageValue.setPageValue(prefix_key + (":" + prop), value);
   };
 
   ItemBase.prototype.getHistoryObj = function(action) {
@@ -185,15 +185,15 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
-    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
+    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultActionType = function() {
-    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
+    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultAnimationType = function() {
-    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
+    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.timelineDefaultConfigValue = function() {

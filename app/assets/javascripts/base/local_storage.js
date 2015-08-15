@@ -20,14 +20,14 @@ LocalStorage = (function() {
 
   LocalStorage.prototype.saveTimelinePageValueToStorage = function() {
     var h;
-    h = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
+    h = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
     return this.lstorage.setItem(this.storageKey, JSON.stringify(h));
   };
 
   LocalStorage.prototype.loadTimelinePageValueFromStorage = function() {
     var h;
     h = JSON.parse(this.lstorage.getItem(this.storageKey));
-    return setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h);
+    return PageValue.setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h);
   };
 
   LocalStorage.prototype.get = function() {

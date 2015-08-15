@@ -46,14 +46,14 @@ TLEItemChange = (function(superClass) {
     if (errorMes.length === 0) {
       value = item.constructor.timelineDefaultConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT);
+      teNum = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT);
       if (teNum != null) {
         teNum = parseInt(teNum) + 1;
       } else {
         teNum = 1;
       }
-      setTimelinePageValue(this.PageValueKey.te(teNum), writeValue);
-      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum);
+      PageValue.setTimelinePageValue(this.PageValueKey.te(teNum), writeValue);
+      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum);
       changeTimelineColor(teNum, actionType);
     }
     return errorMes;
@@ -69,9 +69,9 @@ TLEItemChange = (function(superClass) {
     if (errorMes.length === 0) {
       value = item.timelineConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
-      if (parseInt(getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum) {
-        setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      PageValue.setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
+      if (parseInt(PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum) {
+        PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
       }
     }
     return errorMes;
@@ -79,13 +79,13 @@ TLEItemChange = (function(superClass) {
 
   TLEItemChange.writeItemValueToPageValue = function(item) {
     var idx, key, results, te, tes;
-    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
+    tes = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
     results = [];
     for (idx in tes) {
       te = tes[idx];
       if (idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0 && te.id === item.id) {
         key = "" + Constant.PageValueKey.TE_PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + idx + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.minObj;
-        results.push(setTimelinePageValue(key, item.getMinimumObject()));
+        results.push(PageValue.setTimelinePageValue(key, item.getMinimumObject()));
       } else {
         results.push(void 0);
       }

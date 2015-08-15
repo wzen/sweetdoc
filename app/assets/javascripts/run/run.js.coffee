@@ -23,7 +23,7 @@ initView = ->
   scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
-  is_reload = getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
+  is_reload = PageValue.getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
   ls = new LocalStorage(LocalStorage.Key.RUN_TIMELINE_PAGEVALUES)
   if is_reload?
     ls.loadTimelinePageValueFromStorage()
@@ -45,7 +45,7 @@ initResize = (wrap, scrollWrapper) ->
 # タイムライン作成
 initTimeline = ->
   # アクションのイベントを取得
-  timelineList = getTimelinePageValueSortedListByNum()
+  timelineList = PageValue.getTimelinePageValueSortedListByNum()
 
   # チャプターの作成
   chapterList = []
@@ -133,4 +133,4 @@ $ ->
   setupScrollEvent()
 
   # CSS
-  $('#sup_css').html(getTimelinePageValue(Constant.PageValueKey.TE_CSS))
+  $('#sup_css').html(PageValue.getTimelinePageValue(Constant.PageValueKey.TE_CSS))

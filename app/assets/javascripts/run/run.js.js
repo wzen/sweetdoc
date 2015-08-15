@@ -19,7 +19,7 @@ initView = function() {
   scrollContents.scrollTop(scrollInside.height() * 0.5);
   scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
-  is_reload = getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD);
+  is_reload = PageValue.getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD);
   ls = new LocalStorage(LocalStorage.Key.RUN_TIMELINE_PAGEVALUES);
   if (is_reload != null) {
     return ls.loadTimelinePageValueFromStorage();
@@ -46,7 +46,7 @@ initResize = function(wrap, scrollWrapper) {
 
 initTimeline = function() {
   var chapterList, eventList, tList, timelineList;
-  timelineList = getTimelinePageValueSortedListByNum();
+  timelineList = PageValue.getTimelinePageValueSortedListByNum();
   chapterList = [];
   eventList = [];
   tList = [];
@@ -135,7 +135,7 @@ $(function() {
   initHandleScrollPoint();
   initTimeline();
   setupScrollEvent();
-  return $('#sup_css').html(getTimelinePageValue(Constant.PageValueKey.TE_CSS));
+  return $('#sup_css').html(PageValue.getTimelinePageValue(Constant.PageValueKey.TE_CSS));
 });
 
 //# sourceMappingURL=run.js.js.map

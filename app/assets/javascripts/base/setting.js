@@ -58,17 +58,17 @@ Setting = (function() {
       root = $("#" + Setting.ROOT_ID_NAME);
       grid = $("." + this.GRID_CLASS_NAME, root);
       key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
-      gridValue = getSettingPageValue(key);
+      gridValue = PageValue.getSettingPageValue(key);
       gridStep = $("." + this.GRID_STEP_CLASS_NAME, root);
       key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
-      gridStepValue = getSettingPageValue(key);
+      gridStepValue = PageValue.getSettingPageValue(key);
       gridStepDiv = $("." + this.GRID_STEP_DIV_CLASS_NAME, root);
       grid.prop('clicked', gridValue);
       grid.off('click');
       grid.on('click', (function(_this) {
         return function() {
           key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
-          gridValue = getSettingPageValue(key);
+          gridValue = PageValue.getSettingPageValue(key);
           if (gridValue != null) {
             gridValue = gridValue === 'true';
           }
@@ -93,7 +93,7 @@ Setting = (function() {
         return function() {
           var value;
           key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
-          value = getSettingPageValue(key);
+          value = PageValue.getSettingPageValue(key);
           if (value != null) {
             value = value === 'true';
           }
@@ -114,7 +114,7 @@ Setting = (function() {
       }
       if ((context != null) && doDraw === false) {
         $("#" + this.SETTING_GRID_ELEMENT_ID).remove();
-        return setSettingPageValue(key, false);
+        return PageValue.setSettingPageValue(key, false);
       } else if (doDraw) {
         root = $("#" + Setting.ROOT_ID_NAME);
         stepInput = $("." + this.GRID_STEP_CLASS_NAME, root);
@@ -157,7 +157,7 @@ Setting = (function() {
           context.lineTo(context.canvas.width, i);
           context.stroke();
         }
-        return setSettingPageValue(key, true);
+        return PageValue.setSettingPageValue(key, true);
       }
     };
 

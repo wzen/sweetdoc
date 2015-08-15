@@ -12,13 +12,13 @@ class LocalStorage
 
   # ストレージにページ値を保存
   saveTimelinePageValueToStorage: ->
-    h = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+    h = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
     @lstorage.setItem(@storageKey, JSON.stringify(h))
 
   # ストレージからページ値を読み込み
   loadTimelinePageValueFromStorage: ->
     h = JSON.parse(@lstorage.getItem(@storageKey))
-    setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h)
+    PageValue.setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h)
 
   get: ->
     @lstorage.getItem(@storageKey)

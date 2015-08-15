@@ -34,13 +34,13 @@ closeSidebar = function(callback) {
     main = $('#main');
     return $('#sidebar').fadeOut('500', function() {
       var s;
-      s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
+      s = PageValue.getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
       if (s != null) {
         scrollContents.css({
           scrollTop: s.top,
           scrollLeft: s.left
         });
-        removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
+        PageValue.removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL);
       }
       main.removeClass('col-md-9');
       main.addClass('col-md-12');

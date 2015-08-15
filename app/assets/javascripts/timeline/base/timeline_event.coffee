@@ -81,7 +81,7 @@ class TimelineEvent
     return writeValue
 
   @readFromPageValue = (timelineConfig) ->
-    writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
+    writeValue = PageValue.getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     if writeValue?
       timelineConfig.id = writeValue[@PageValueKey.ID]
       timelineConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
@@ -113,7 +113,7 @@ class TimelineEvent
       return false
 
   _scrollLength = (timelineConfig) ->
-    writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
+    writeValue = PageValue.getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     if writeValue?
       start = writeValue[@PageValueKey.SCROLL_POINT_START]
       end = writeValue[@PageValueKey.SCROLL_POINT_END]

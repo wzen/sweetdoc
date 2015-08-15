@@ -21,8 +21,8 @@ class TLEScreenPositionChange extends TimelineEvent
 
     if errorMes.length == 0
       writeValue[@PageValueKey.VALUE] = value
-      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
-      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
+      PageValue.setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
+      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
 
     return errorMes
 
@@ -31,7 +31,7 @@ class TLEScreenPositionChange extends TimelineEvent
     if !ret
       return false
     emt = timelineConfig.emt
-    writeValue = getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
+    writeValue = PageValue.getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
     $('.screenposition_change_x:first', emt).val(value[@X])
     $('.screenposition_change_y:first', emt).val(value[@Y])

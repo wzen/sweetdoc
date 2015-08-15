@@ -36,15 +36,15 @@ class TLEItemChange extends TimelineEvent
     if errorMes.length == 0
       value = item.constructor.timelineDefaultConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      teNum = getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
+      teNum = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
 
       if teNum?
         teNum = parseInt(teNum) + 1
       else
         teNum = 1
 
-      setTimelinePageValue(@PageValueKey.te(teNum), writeValue)
-      setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum)
+      PageValue.setTimelinePageValue(@PageValueKey.te(teNum), writeValue)
+      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum)
       changeTimelineColor(teNum, actionType)
 
     return errorMes
@@ -60,19 +60,19 @@ class TLEItemChange extends TimelineEvent
     if errorMes.length == 0
       value = item.timelineConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
-      if parseInt(getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum
-        setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
+      PageValue.setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
+      if parseInt(PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum
+        PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
 
     return errorMes
 
   @writeItemValueToPageValue = (item) ->
-    tes = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+    tes = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
     for idx, te of tes
       if idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0 && te.id == item.id
         # タイムラインのアイテム情報を更新
         key = "#{Constant.PageValueKey.TE_PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{idx}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@minObj}"
-        setTimelinePageValue(key, item.getMinimumObject())
+        PageValue.setTimelinePageValue(key, item.getMinimumObject())
 
   @readFromPageValue = (timelineConfig, item) ->
     ret = super(timelineConfig)

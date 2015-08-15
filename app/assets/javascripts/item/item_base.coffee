@@ -132,7 +132,7 @@ class ItemBase extends ItemEventBase
     prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     obj = @getMinimumObject()
-    setPageValue(prefix_key, obj)
+    PageValue.setPageValue(prefix_key, obj)
 
   # アイテムをページ値から再描画
   # @property [Boolean] isCache キャッシュとして保存するか
@@ -140,7 +140,7 @@ class ItemBase extends ItemEventBase
   reDrawByObjPageValue: (isCache = false) ->
     prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
-    obj = getPageValue(prefix_key)
+    obj = PageValue.getPageValue(prefix_key)
     if obj?
       @reDrawByMinimumObject(obj)
       return true
@@ -152,7 +152,7 @@ class ItemBase extends ItemEventBase
   getItemPropFromPageValue : (prop, isCache = false) ->
     prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
-    return getPageValue(prefix_key + ":#{prop}")
+    return PageValue.getPageValue(prefix_key + ":#{prop}")
 
   # アイテムの情報をページ値に設定
   # @property [String] prop 変数名
@@ -161,7 +161,7 @@ class ItemBase extends ItemEventBase
   setItemPropToPageValue : (prop, value, isCache = false) ->
     prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
-    setPageValue(prefix_key + ":#{prop}", value)
+    PageValue.setPageValue(prefix_key + ":#{prop}", value)
 
   # 履歴データを取得
   # @abstract
@@ -206,15 +206,15 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->
-    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
+    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
-    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
+    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultAnimationType = ->
-    return getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
+    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
 
   @timelineDefaultConfigValue = ->
     return null

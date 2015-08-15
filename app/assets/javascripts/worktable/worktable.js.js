@@ -124,7 +124,7 @@ focusToTargetWhenSidebarOpen = function(target, selectedBorderType) {
     selectedBorderType = "edit";
   }
   setSelectedBorder(target, selectedBorderType);
-  setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {
+  PageValue.setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {
     top: scrollContents.scrollTop(),
     left: scrollContents.scrollLeft()
   }, true);

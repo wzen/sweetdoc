@@ -1,6 +1,6 @@
 # 閲覧を実行する
 run = ->
-#  h = getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
+#  h = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
 #  v = JSON.stringify(h)
 #  console.log(v)
 

@@ -30,7 +30,7 @@ setupTimelineEventConfig = function() {
     tEmt.each(function(e) {
       var actionType, teNum;
       teNum = parseInt($(this).val());
-      actionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE);
+      actionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE);
       changeTimelineColor(teNum, actionType);
       if (e === tEmt.length - 1 && actionType !== null) {
         createTimelineEvent(tEmt.length + 1);
@@ -90,7 +90,7 @@ setupTimelineEventConfig = function() {
   _updateEventState = function(te_num) {
     var i, idx, item, ivTimer, previewinitCount, ref, tes;
     te_num = parseInt(te_num);
-    tes = getTimelinePageValueSortedListByNum();
+    tes = PageValue.getTimelinePageValueSortedListByNum();
     previewinitCount = 0;
     for (idx = i = ref = tes.length - 1; i >= 0; idx = i += -1) {
       te = tes[idx];
@@ -191,7 +191,7 @@ setupTimeLineCss = function() {
     return itemCssStyle += $(this).html();
   });
   if (itemCssStyle.length > 0) {
-    return setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle);
+    return PageValue.setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle);
   }
 };
 

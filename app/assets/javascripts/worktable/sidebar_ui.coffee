@@ -20,10 +20,10 @@ closeSidebar = (callback = null) ->
   if !isClosedConfigSidebar()
     main = $('#main')
     $('#sidebar').fadeOut('500', ->
-      s = getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
+      s = PageValue.getPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
       if s?
         scrollContents.css({scrollTop: s.top, scrollLeft: s.left})
-        removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
+        PageValue.removePageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL)
       main.removeClass('col-md-9')
       main.addClass('col-md-12')
       if callback?

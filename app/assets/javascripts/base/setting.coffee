@@ -34,11 +34,11 @@ class Setting
       # グリッド線表示
       grid = $(".#{@GRID_CLASS_NAME}", root)
       key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
-      gridValue = getSettingPageValue(key)
+      gridValue = PageValue.getSettingPageValue(key)
 
       gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
       key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
-      gridStepValue = getSettingPageValue(key)
+      gridStepValue = PageValue.getSettingPageValue(key)
 
       gridStepDiv = $(".#{@GRID_STEP_DIV_CLASS_NAME}", root)
 
@@ -46,7 +46,7 @@ class Setting
       grid.off('click')
       grid.on('click', =>
         key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
-        gridValue = getSettingPageValue(key)
+        gridValue = PageValue.getSettingPageValue(key)
         if gridValue?
           gridValue = gridValue == 'true'
 
@@ -71,7 +71,7 @@ class Setting
       $(".#{@GRID_STEP_CLASS_NAME}", root).val(gridStepValue)
       gridStep.change( =>
         key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
-        value = getSettingPageValue(key)
+        value = PageValue.getSettingPageValue(key)
         if value?
           value = value == 'true'
         if value
@@ -88,7 +88,7 @@ class Setting
       if context? && doDraw == false
         # 削除
         $("##{@SETTING_GRID_ELEMENT_ID}").remove()
-        setSettingPageValue(key, false)
+        PageValue.setSettingPageValue(key, false)
       else if doDraw
         root = $("##{Setting.ROOT_ID_NAME}")
         stepInput = $(".#{@GRID_STEP_CLASS_NAME}", root)
@@ -132,4 +132,4 @@ class Setting
           context.lineTo(context.canvas.width, i)
           context.stroke()
 
-        setSettingPageValue(key, true)
+        PageValue.setSettingPageValue(key, true)

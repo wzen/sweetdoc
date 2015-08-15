@@ -26,7 +26,7 @@ setupTimelineEventConfig = ->
     tEmt = $('.te_num', timelineEvents)
     tEmt.each((e) ->
       teNum = parseInt($(@).val())
-      actionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE)
+      actionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE)
       changeTimelineColor(teNum, actionType)
       if e == tEmt.length - 1 && actionType != null
         # blankのイベントが無い場合、作成
@@ -90,7 +90,7 @@ setupTimelineEventConfig = ->
   # イベントによる表示状態を更新
   _updateEventState = (te_num) ->
     te_num = parseInt(te_num)
-    tes = getTimelinePageValueSortedListByNum()
+    tes = PageValue.getTimelinePageValueSortedListByNum()
 
     # 全てをイベント前に変更
     previewinitCount = 0
@@ -195,7 +195,7 @@ setupTimeLineCss = ->
   )
 
   if itemCssStyle.length > 0
-    setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
+    PageValue.setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
 
 # アクションタイプからアクションタイプクラス名を取得
 getActionTypeClassNameByActionType = (actionType) ->

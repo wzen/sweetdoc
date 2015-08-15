@@ -104,7 +104,7 @@ TimelineConfig = (function() {
     handlerClassName = this.methodClassName();
     valueClassName = this.methodClassName();
     if (this.teNum > 1) {
-      beforeActionType = getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE];
+      beforeActionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE];
       if (this.actionType === beforeActionType) {
         $(".config.parallel_div", this.emt).css('display', '');
       }
@@ -156,7 +156,7 @@ TimelineConfig = (function() {
     changeTimelineColor(this.teNum, this.actionType);
     item = createdObject[this.id];
     if ((item != null) && (item.preview != null)) {
-      return item.preview(getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum)));
+      return item.preview(PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum)));
     }
   };
 

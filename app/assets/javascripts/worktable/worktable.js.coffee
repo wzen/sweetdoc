@@ -101,7 +101,7 @@ focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
   # 選択枠設定
   setSelectedBorder(target, selectedBorderType)
   # 変更前のスライド値を保存
-  setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
+  PageValue.setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
   Common.focusToTarget(target)
 
 

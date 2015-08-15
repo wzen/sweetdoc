@@ -96,7 +96,7 @@ TimelineEvent = (function() {
 
   TimelineEvent.readFromPageValue = function(timelineConfig) {
     var end, handlerDiv, isParallel, parallel, start, writeValue;
-    writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = PageValue.getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
       timelineConfig.id = writeValue[this.PageValueKey.ID];
       timelineConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
@@ -127,7 +127,7 @@ TimelineEvent = (function() {
 
   _scrollLength = function(timelineConfig) {
     var end, start, writeValue;
-    writeValue = getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = PageValue.getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
     if (writeValue != null) {
       start = writeValue[this.PageValueKey.SCROLL_POINT_START];
       end = writeValue[this.PageValueKey.SCROLL_POINT_END];
