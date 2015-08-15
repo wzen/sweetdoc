@@ -46,15 +46,15 @@ WorkTableCanvasItemExtend = {
     obj = {
       obj: this,
       action: action,
-      itemSize: makeClone(this.itemSize),
-      scale: makeClone(this.scale)
+      itemSize: Common.makeClone(this.itemSize),
+      scale: Common.makeClone(this.scale)
     };
     console.log("getHistory: scale:" + this.scale.w + "," + this.scale.h);
     return obj;
   },
   setHistoryObj: function(historyObj) {
-    this.itemSize = makeClone(historyObj.itemSize);
-    this.scale = makeClone(historyObj.scale);
+    this.itemSize = Common.makeClone(historyObj.itemSize);
+    this.scale = Common.makeClone(historyObj.scale);
     return console.log("setHistoryObj: itemSize: " + (JSON.stringify(this.itemSize)));
   }
 };

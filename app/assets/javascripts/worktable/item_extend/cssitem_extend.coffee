@@ -29,10 +29,10 @@ WorkTableCssItemExtend =
     obj = {
       obj: @
       action : action
-      itemSize: makeClone(@itemSize)
+      itemSize: Common.makeClone(@itemSize)
     }
     return obj
 
   # 履歴データを設定
   setHistoryObj: (historyObj) ->
-    @itemSize = makeClone(historyObj.itemSize)
+    @itemSize = Common.makeClone(historyObj.itemSize)

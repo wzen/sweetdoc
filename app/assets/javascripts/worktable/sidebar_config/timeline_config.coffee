@@ -69,7 +69,7 @@ class TimelineConfig
       # 選択枠設定
       setSelectedBorder(vEmt, 'timeline')
       # フォーカス
-      focusToTarget(vEmt)
+      Common.focusToTarget(vEmt)
 
     # 一度全て非表示にする
     $(".config.te_div", @emt).css('display', 'none')

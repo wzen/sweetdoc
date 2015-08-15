@@ -10,7 +10,7 @@ CommonEvent = (function(superClass) {
 
   function CommonEvent() {
     CommonEvent.__super__.constructor.call(this);
-    this.id = "c" + this.constructor.EVENT_ID + generateId();
+    this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
     createdObject[this.id] = this;
   }
 

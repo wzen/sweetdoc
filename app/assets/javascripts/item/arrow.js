@@ -89,10 +89,10 @@ ArrowItem = (function(superClass) {
     obj = ArrowItem.__super__.getMinimumObject.call(this);
     newobj = {
       itemId: Constant.ItemId.ARROW,
-      arrow_width: makeClone(this.arrow_width),
-      header_width: makeClone(this.header_width),
-      header_height: makeClone(this.header_height),
-      scale: makeClone(this.scale)
+      arrow_width: Common.makeClone(this.arrow_width),
+      header_width: Common.makeClone(this.header_width),
+      header_height: Common.makeClone(this.header_height),
+      scale: Common.makeClone(this.scale)
     };
     $.extend(obj, newobj);
     return obj;
@@ -100,12 +100,12 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.setMiniumObject = function(obj) {
     ArrowItem.__super__.setMiniumObject.call(this, obj);
-    this.arrow_width = makeClone(obj.arrow_width);
-    this.arrow_half_width = makeClone(this.arrow_width / 2.0);
-    this.header_width = makeClone(obj.header_width);
-    this.header_height = makeClone(obj.header_height);
-    this.padding_size = makeClone(this.header_width);
-    return this.scale = makeClone(obj.scale);
+    this.arrow_width = Common.makeClone(obj.arrow_width);
+    this.arrow_half_width = Common.makeClone(this.arrow_width / 2.0);
+    this.header_width = Common.makeClone(obj.header_width);
+    this.header_height = Common.makeClone(obj.header_height);
+    this.padding_size = Common.makeClone(this.header_width);
+    return this.scale = Common.makeClone(obj.scale);
   };
 
   ArrowItem.prototype.reDrawByMinimumObject = function(obj) {

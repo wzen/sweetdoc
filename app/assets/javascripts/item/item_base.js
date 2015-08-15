@@ -15,7 +15,7 @@ ItemBase = (function(superClass) {
       cood = null;
     }
     ItemBase.__super__.constructor.call(this);
-    this.id = "i" + this.constructor.IDENTITY + generateId();
+    this.id = "i" + this.constructor.IDENTITY + Common.generateId();
     this.name = null;
     this.drawingSurfaceImageData = null;
     if (cood !== null) {
@@ -161,21 +161,21 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.getMinimumObject = function() {
     var obj;
     obj = {
-      id: makeClone(this.id),
-      name: makeClone(this.name),
-      itemSize: makeClone(this.itemSize),
-      zindex: makeClone(this.zindex),
-      coodRegist: JSON.stringify(makeClone(this.coodRegist))
+      id: Common.makeClone(this.id),
+      name: Common.makeClone(this.name),
+      itemSize: Common.makeClone(this.itemSize),
+      zindex: Common.makeClone(this.zindex),
+      coodRegist: JSON.stringify(Common.makeClone(this.coodRegist))
     };
     return obj;
   };
 
   ItemBase.prototype.setMiniumObject = function(obj) {
-    this.id = makeClone(obj.id);
-    this.name = makeClone(obj.name);
-    this.itemSize = makeClone(obj.itemSize);
-    this.zindex = makeClone(obj.zindex);
-    return this.coodRegist = makeClone(JSON.parse(obj.coodRegist));
+    this.id = Common.makeClone(obj.id);
+    this.name = Common.makeClone(obj.name);
+    this.itemSize = Common.makeClone(obj.itemSize);
+    this.zindex = Common.makeClone(obj.zindex);
+    return this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
   };
 
   ItemBase.prototype.reDrawByMinimumObject = function(obj) {};

@@ -94,10 +94,10 @@ class ArrowItem extends CanvasItemBase
     obj = super()
     newobj = {
       itemId: Constant.ItemId.ARROW
-      arrow_width: makeClone(@arrow_width)
-      header_width: makeClone(@header_width)
-      header_height: makeClone(@header_height)
-      scale: makeClone(@scale)
+      arrow_width: Common.makeClone(@arrow_width)
+      header_width: Common.makeClone(@header_width)
+      header_height: Common.makeClone(@header_height)
+      scale: Common.makeClone(@scale)
     }
     $.extend(obj, newobj)
     return obj
@@ -106,12 +106,12 @@ class ArrowItem extends CanvasItemBase
   # @param [Array] obj アイテムオブジェクトの最小限データ
   setMiniumObject: (obj) ->
     super(obj)
-    @arrow_width = makeClone(obj.arrow_width)
-    @arrow_half_width = makeClone(@arrow_width / 2.0)
-    @header_width = makeClone(obj.header_width)
-    @header_height = makeClone(obj.header_height)
-    @padding_size = makeClone(@header_width)
-    @scale = makeClone(obj.scale)
+    @arrow_width = Common.makeClone(obj.arrow_width)
+    @arrow_half_width = Common.makeClone(@arrow_width / 2.0)
+    @header_width = Common.makeClone(obj.header_width)
+    @header_height = Common.makeClone(obj.header_height)
+    @padding_size = Common.makeClone(@header_width)
+    @scale = Common.makeClone(obj.scale)
 
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ

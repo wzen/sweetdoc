@@ -5,6 +5,6 @@ class CommonEvent extends CommonEventBase
   constructor: ->
     super()
     # @property [Int] id ID
-    @id = "c" + @constructor.EVENT_ID + generateId()
+    @id = "c" + @constructor.EVENT_ID + Common.generateId()
     # アイテムリストに保存
     createdObject[@id] = @

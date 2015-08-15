@@ -34,8 +34,8 @@ class ButtonItem extends CssItemBase
     obj = super()
     newobj = {
       itemId: Constant.ItemId.BUTTON
-      mousedownCood: makeClone(@mousedownCood)
-      css: makeClone(@css)
+      mousedownCood: Common.makeClone(@mousedownCood)
+      css: Common.makeClone(@css)
     }
     $.extend(obj, newobj)
     return obj
@@ -44,8 +44,8 @@ class ButtonItem extends CssItemBase
   # @param [Array] obj アイテムオブジェクトの最小限データ
   setMiniumObject: (obj) ->
     super(obj)
-    @mousedownCood = makeClone(obj.mousedownCood)
-    @css = makeClone(obj.css)
+    @mousedownCood = Common.makeClone(obj.mousedownCood)
+    @css = Common.makeClone(obj.css)
 
   # 最小限のデータからアイテムを描画
   # @param [Array] obj アイテムオブジェクトの最小限データ

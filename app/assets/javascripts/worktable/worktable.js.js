@@ -128,7 +128,7 @@ focusToTargetWhenSidebarOpen = function(target, selectedBorderType) {
     top: scrollContents.scrollTop(),
     left: scrollContents.scrollLeft()
   }, true);
-  return focusToTarget(target);
+  return Common.focusToTarget(target);
 };
 
 initKeyEvent = function() {
@@ -177,7 +177,7 @@ runDebug = function() {
 
 $(function() {
   var borderWidth, menu, padding, timelineTopPadding;
-  if (!checkBlowserEnvironment()) {
+  if (!Common.checkBlowserEnvironment()) {
     alert('ブラウザ非対応です。');
     return;
   }

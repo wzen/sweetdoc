@@ -2,6 +2,7 @@ ja:
   hello: "こんにちは"
   header_menu:
     file:
+      newcreate: "プロジェクトを新規作成"
       file: "ファイル"
       open: "開く"
       save: "保存"

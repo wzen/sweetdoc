@@ -69,7 +69,7 @@ TimelineConfig = (function() {
     if (!this.isCommonEvent) {
       vEmt = $('#' + this.id);
       setSelectedBorder(vEmt, 'timeline');
-      focusToTarget(vEmt);
+      Common.focusToTarget(vEmt);
     }
     $(".config.te_div", this.emt).css('display', 'none');
     $(".action_div .forms", this.emt).children("div").css('display', 'none');

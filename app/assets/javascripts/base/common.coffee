@@ -1,78 +1,79 @@
-# ブラウザ対応のチェック
-# @return [Boolean] 処理結果
-checkBlowserEnvironment = ->
-  if !localStorage
-    return false
-  else
-    try
-      localStorage.setItem('test', 'test')
-      c = localStorage.getItem('test')
-      localStorage.removeItem('test')
-    catch e
+class Common
+  # ブラウザ対応のチェック
+  # @return [Boolean] 処理結果
+  @checkBlowserEnvironment = ->
+    if !localStorage
       return false
-  if !File
-    return false
-  return true
+    else
+      try
+        localStorage.setItem('test', 'test')
+        c = localStorage.getItem('test')
+        localStorage.removeItem('test')
+      catch e
+        return false
+    if !File
+      return false
+    return true
 
-typeOfValue = do ->
-  classToType = {}
-  for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
-    classToType["[object " + name + "]"] = name.toLowerCase()
-  (obj) ->
-    strType = Object::toString.call(obj)
-    classToType[strType] or "object"
+  @typeOfValue = do ->
+    classToType = {}
+    for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
+      classToType["[object " + name + "]"] = name.toLowerCase()
+    (obj) ->
+      strType = Object::toString.call(obj)
+      classToType[strType] or "object"
 
-# アイテムのIDを作成
-# @return [Int] 生成したID
-generateId = ->
-  numb = 10 #10文字
-  RandomString = '';
-  BaseString ='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  n = 62
-  for i in [0..numb]
-    RandomString += BaseString.charAt( Math.floor( Math.random() * n))
-  return RandomString
+  # アイテムのIDを作成
+  # @return [Int] 生成したID
+  @generateId = ->
+    numb = 10 #10文字
+    RandomString = '';
+    BaseString ='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    n = 62
+    for i in [0..numb]
+      RandomString += BaseString.charAt( Math.floor( Math.random() * n))
+    return RandomString
 
-# オブジェクトの複製
-# @param [Object] obj 複製対象オブジェクト
-# @return [Object] 複製後オブジェクト
-makeClone = (obj) ->
-  if not obj? or typeof obj isnt 'object'
-    return obj
-  if obj instanceof Date
-    return new Date(obj.getTime())
-  if obj instanceof RegExp
-    flags = ''
-    flags += 'g' if obj.global?
-    flags += 'i' if obj.ignoreCase?
-    flags += 'm' if obj.multiline?
-    flags += 'y' if obj.sticky?
-    return new RegExp(obj.source, flags)
-  newInstance = new obj.constructor()
-  for key of obj
-    newInstance[key] = clone obj[key]
-  return newInstance
+  # オブジェクトの複製
+  # @param [Object] obj 複製対象オブジェクト
+  # @return [Object] 複製後オブジェクト
+  @makeClone = (obj) ->
+    if not obj? or typeof obj isnt 'object'
+      return obj
+    if obj instanceof Date
+      return new Date(obj.getTime())
+    if obj instanceof RegExp
+      flags = ''
+      flags += 'g' if obj.global?
+      flags += 'i' if obj.ignoreCase?
+      flags += 'm' if obj.multiline?
+      flags += 'y' if obj.sticky?
+      return new RegExp(obj.source, flags)
+    newInstance = new obj.constructor()
+    for key of obj
+      newInstance[key] = clone obj[key]
+    return newInstance
 
-# アイテムに対してフォーカスする
-# @param [Object] target 対象アイテム
-focusToTarget = (target) ->
-  # col-md-9 → 75% padding → 15px
-  targetMiddle =
-    top: $(target).offset().top + $(target).height() * 0.5
-    left: $(target).offset().left + $(target).width() * 0.5
-  scrollTop = targetMiddle.top - scrollContents.height() * 0.5
-  if scrollTop < 0
-    scrollTop = 0
-  else if scrollTop > scrollContents.height() * 0.25
-    scrollTop =  scrollContents.height() * 0.25
-  scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5
-  if scrollLeft < 0
-    scrollLeft = 0
-  else if scrollLeft > scrollContents.width() * 0.25
-    scrollLeft =  scrollContents.width() * 0.25
-  # スライド
-  #console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
-  scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)
+  # アイテムに対してフォーカスする
+  # @param [Object] target 対象アイテム
+  @focusToTarget = (target) ->
+    # col-md-9 → 75% padding → 15px
+    targetMiddle =
+      top: $(target).offset().top + $(target).height() * 0.5
+      left: $(target).offset().left + $(target).width() * 0.5
+    scrollTop = targetMiddle.top - scrollContents.height() * 0.5
+    if scrollTop < 0
+      scrollTop = 0
+    else if scrollTop > scrollContents.height() * 0.25
+      scrollTop =  scrollContents.height() * 0.25
+    scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5
+    if scrollLeft < 0
+      scrollLeft = 0
+    else if scrollLeft > scrollContents.width() * 0.25
+      scrollLeft =  scrollContents.width() * 0.25
+    # スライド
+    #console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
+    scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)
 
 
 # ページが持つ値を取得
@@ -361,6 +362,8 @@ getCreatedItemObject = ->
       ret[k] = v
   return ret
 
+
+clearItemAndEvent = ->
 
 
 

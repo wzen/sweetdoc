@@ -102,7 +102,7 @@ focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
   setSelectedBorder(target, selectedBorderType)
   # 変更前のスライド値を保存
   setPageValue(Constant.PageValueKey.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
-  focusToTarget(target)
+  Common.focusToTarget(target)
 
 
 # キーイベント初期化
@@ -135,7 +135,7 @@ runDebug = ->
 
 $ ->
   # ブラウザ対応チェック
-  if !checkBlowserEnvironment()
+  if !Common.checkBlowserEnvironment()
     alert('ブラウザ非対応です。')
     return
 

@@ -47,8 +47,8 @@ WorkTableCanvasItemExtend =
     obj = {
       obj: @
       action : action
-      itemSize: makeClone(@itemSize)
-      scale: makeClone(@scale)
+      itemSize: Common.makeClone(@itemSize)
+      scale: Common.makeClone(@scale)
     }
     console.log("getHistory: scale:#{@scale.w},#{@scale.h}")
     return obj
@@ -56,6 +56,6 @@ WorkTableCanvasItemExtend =
   # 履歴データを設定
   # @param [Array] historyObj 履歴オブジェクト
   setHistoryObj: (historyObj) ->
-    @itemSize = makeClone(historyObj.itemSize)
-    @scale = makeClone(historyObj.scale)
+    @itemSize = Common.makeClone(historyObj.itemSize)
+    @scale = Common.makeClone(historyObj.scale)
     console.log("setHistoryObj: itemSize: #{JSON.stringify(@itemSize)}")

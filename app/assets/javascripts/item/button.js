@@ -47,8 +47,8 @@ ButtonItem = (function(superClass) {
     obj = ButtonItem.__super__.getMinimumObject.call(this);
     newobj = {
       itemId: Constant.ItemId.BUTTON,
-      mousedownCood: makeClone(this.mousedownCood),
-      css: makeClone(this.css)
+      mousedownCood: Common.makeClone(this.mousedownCood),
+      css: Common.makeClone(this.css)
     };
     $.extend(obj, newobj);
     return obj;
@@ -56,8 +56,8 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.setMiniumObject = function(obj) {
     ButtonItem.__super__.setMiniumObject.call(this, obj);
-    this.mousedownCood = makeClone(obj.mousedownCood);
-    return this.css = makeClone(obj.css);
+    this.mousedownCood = Common.makeClone(obj.mousedownCood);
+    return this.css = Common.makeClone(obj.css);
   };
 
   ButtonItem.prototype.reDrawByMinimumObject = function(obj) {

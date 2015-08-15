@@ -1,11 +1,14 @@
 # ヘッダーメニュー初期化
 initHeaderMenu = ->
   itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
+  $('.menu-newcreate', itemsMenuEmt).on('click', ->
+
+  )
   $('.menu-load', itemsMenuEmt).on('click', ->
-    loadFromServer()
+    ServerStorage.load()
   )
   $('.menu-save', itemsMenuEmt).on('click', ->
-    saveToServer()
+    ServerStorage.save()
   )
   $('.menu-setting', itemsMenuEmt).on('click', ->
     switchSidebarConfig('setting')

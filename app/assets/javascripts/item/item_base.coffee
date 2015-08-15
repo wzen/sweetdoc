@@ -13,7 +13,7 @@ class ItemBase extends ItemEventBase
   constructor: (cood = null)->
     super()
     # @property [Int] id ID
-    @id = "i" + @constructor.IDENTITY + generateId()
+    @id = "i" + @constructor.IDENTITY + Common.generateId()
     # @property [String] name 名前
     @name = null
     # @property [Object] drawingSurfaceImageData 画面を保存する変数
@@ -176,21 +176,21 @@ class ItemBase extends ItemEventBase
   # 保存用の最小限のデータを取得
   getMinimumObject: ->
     obj = {
-      id: makeClone(@id)
-      name: makeClone(@name)
-      itemSize: makeClone(@itemSize)
-      zindex: makeClone(@zindex)
-      coodRegist: JSON.stringify(makeClone(@coodRegist))
+      id: Common.makeClone(@id)
+      name: Common.makeClone(@name)
+      itemSize: Common.makeClone(@itemSize)
+      zindex: Common.makeClone(@zindex)
+      coodRegist: JSON.stringify(Common.makeClone(@coodRegist))
     }
     return obj
 
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
-    @id = makeClone(obj.id)
-    @name = makeClone(obj.name)
-    @itemSize = makeClone(obj.itemSize)
-    @zindex = makeClone(obj.zindex)
-    @coodRegist = makeClone(JSON.parse(obj.coodRegist))
+    @id = Common.makeClone(obj.id)
+    @name = Common.makeClone(obj.name)
+    @itemSize = Common.makeClone(obj.itemSize)
+    @zindex = Common.makeClone(obj.zindex)
+    @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
 
   # 最小限のデータからアイテムを描画
   # @abstract
