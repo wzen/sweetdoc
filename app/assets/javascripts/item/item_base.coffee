@@ -111,7 +111,7 @@ class ItemBase extends ItemEventBase
       # 名前を付与
       num = 1
       self = @
-      for k, v of getCreatedItemObject()
+      for k, v of Common.getCreatedItemObject()
         if self.constructor.IDENTITY == v.constructor.IDENTITY
           num += 1
       @name = @constructor.IDENTITY + " #{num}"

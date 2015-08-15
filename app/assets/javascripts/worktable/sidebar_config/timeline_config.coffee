@@ -148,7 +148,7 @@ class TimelineConfig
 
     if @isCommonEvent
       # 共通イベントはここでインスタンス生成
-      commonEvent = getClassFromMap(true, @commonEventId)
+      commonEvent = Common.getClassFromMap(true, @commonEventId)
       @id = (new commonEvent()).id
 
     errorMes = @writeToPageValue()

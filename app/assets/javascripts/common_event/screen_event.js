@@ -94,6 +94,6 @@ ScreenEvent = (function(superClass) {
 
 })(CommonEvent);
 
-setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent);
+Common.setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent);
 
 //# sourceMappingURL=screen_event.js.map

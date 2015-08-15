@@ -86,6 +86,6 @@ BackgroundEvent = (function(superClass) {
 
 })(CommonEvent);
 
-setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent);
+Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent);
 
 //# sourceMappingURL=background_event.js.map

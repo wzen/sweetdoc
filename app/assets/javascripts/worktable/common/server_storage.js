@@ -7,7 +7,7 @@ ServerStorage = (function() {
   ServerStorage.save = function() {
     var j, jsonList, k, ref, v;
     jsonList = [];
-    ref = getCreatedItemObject();
+    ref = Common.getCreatedItemObject();
     for (k in ref) {
       v = ref[k];
       j = {

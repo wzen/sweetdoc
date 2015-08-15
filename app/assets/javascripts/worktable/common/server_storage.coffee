@@ -2,7 +2,7 @@ class ServerStorage
   # サーバにアイテムの情報を保存
   @save = ->
     jsonList = []
-    for k, v of getCreatedItemObject()
+    for k, v of Common.getCreatedItemObject()
       j = {
         id: Common.makeClone(v.id)
         obj: v.getMinimumObject()

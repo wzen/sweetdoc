@@ -145,7 +145,7 @@ TimelineConfig = (function() {
       }
     }
     if (this.isCommonEvent) {
-      commonEvent = getClassFromMap(true, this.commonEventId);
+      commonEvent = Common.getClassFromMap(true, this.commonEventId);
       this.id = (new commonEvent()).id;
     }
     errorMes = this.writeToPageValue();

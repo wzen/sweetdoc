@@ -52,7 +52,7 @@ initTimeline = function() {
   tList = [];
   $.each(timelineList, function(idx, obj) {
     var beforeTimeline, chapter, event, parallel;
-    event = getInstanceFromMap(obj);
+    event = Common.getInstanceFromMap(obj);
     event.initWithEvent(obj);
     eventList.push(event);
     tList.push(obj);

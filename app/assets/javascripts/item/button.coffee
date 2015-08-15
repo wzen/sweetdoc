@@ -146,7 +146,7 @@ class ButtonItem extends CssItemBase
       @getJQueryElement().css('opacity', 1)
 
 window.loadedClassList.ButtonItem = ButtonItem
-setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)
+Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)
 
 if window.worktablePage?
   # ワークテーブル用ボタンクラス

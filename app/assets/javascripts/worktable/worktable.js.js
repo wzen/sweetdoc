@@ -108,7 +108,7 @@ changeMode = function(mode) {
 
 clearAllItemStyle = function() {
   var k, ref, v;
-  ref = getCreatedItemObject();
+  ref = Common.getCreatedItemObject();
   for (k in ref) {
     v = ref[k];
     if (v instanceof ItemBase) {
@@ -150,7 +150,7 @@ initKeyEvent = function() {
 
 clearWorkTable = function() {
   var k, ref, results, v;
-  ref = getCreatedItemObject();
+  ref = Common.getCreatedItemObject();
   results = [];
   for (k in ref) {
     v = ref[k];
@@ -164,7 +164,7 @@ clearWorkTable = function() {
 
 runDebug = function() {
   var item, k, ref, v;
-  ref = getCreatedItemObject();
+  ref = Common.getCreatedItemObject();
   for (k in ref) {
     v = ref[k];
     item = v;

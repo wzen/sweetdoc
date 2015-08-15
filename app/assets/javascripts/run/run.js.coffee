@@ -53,7 +53,7 @@ initTimeline = ->
   tList = []
   $.each(timelineList, (idx, obj)->
 
-    event = getInstanceFromMap(obj)
+    event = Common.getInstanceFromMap(obj)
     event.initWithEvent(obj)
     eventList.push(event)
     tList.push(obj)

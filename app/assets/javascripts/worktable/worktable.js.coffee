@@ -85,7 +85,7 @@ changeMode = (mode) ->
 
 # 非表示をクリア
 clearAllItemStyle = ->
-  for k, v of getCreatedItemObject()
+  for k, v of Common.getCreatedItemObject()
     if v instanceof ItemBase
       v.clearAllEventStyle()
 
@@ -122,12 +122,12 @@ initKeyEvent = ->
 
 # 画面のアイテムをクリア
 clearWorkTable = ->
-  for k, v of getCreatedItemObject()
+  for k, v of Common.getCreatedItemObject()
     v.getJQueryElement().remove()
 
 ### デバッグ ###
 runDebug = ->
-  for k, v of getCreatedItemObject()
+  for k, v of Common.getCreatedItemObject()
     item = v
     return false
   if item.reDrawByObjPageValue()

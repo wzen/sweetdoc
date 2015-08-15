@@ -372,7 +372,7 @@ class ArrowItem extends CanvasItemBase
     console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
 
 window.loadedClassList.ArrowItem = ArrowItem
-setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
+Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
 
 if window.worktablePage?
   # ワークテーブル用矢印クラス

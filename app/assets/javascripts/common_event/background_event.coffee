@@ -63,4 +63,4 @@ class BackgroundEvent extends CommonEvent
       return scrollValue >= @scrollLength() - 1
     return false
 
-setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)
+Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)

@@ -64,4 +64,4 @@ class ScreenEvent extends CommonEvent
     super(methodName)
     @getJQueryElement().removeClass('changeScreenPosition_' + @id)
 
-setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent)
+Common.setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent)

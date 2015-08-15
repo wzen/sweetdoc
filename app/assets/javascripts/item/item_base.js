@@ -92,7 +92,7 @@ ItemBase = (function(superClass) {
     if (action === Constant.ItemActionType.MAKE) {
       num = 1;
       self = this;
-      ref = getCreatedItemObject();
+      ref = Common.getCreatedItemObject();
       for (k in ref) {
         v = ref[k];
         if (self.constructor.IDENTITY === v.constructor.IDENTITY) {

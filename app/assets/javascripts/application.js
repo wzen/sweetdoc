@@ -29,6 +29,7 @@
 //= require base/constant
 //= require base/common
 //= require base/common_var
+//= require base/page_value
 //= require base/extend
 //= require base/event_base
 //= require base/local_storage
