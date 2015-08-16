@@ -207,7 +207,7 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.objWriteTimeline = function() {
     var obj;
     obj = {};
-    obj[TLEItemChange.minObj] = this.getMinimumObject();
+    obj[EPVItem.minObj] = this.getMinimumObject();
     return obj;
   };
 

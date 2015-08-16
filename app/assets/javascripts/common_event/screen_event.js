@@ -22,7 +22,7 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.prototype.updateEventBefore = function() {
     var methodName;
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'changeScreenPosition') {
       scrollContents.scrollTop(this.beforeScrollTop);
       return scrollContents.scrollLeft(this.beforeScrollLeft);
@@ -31,10 +31,10 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.prototype.updateEventAfter = function() {
     var methodName, scrollLeft, scrollTop;
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'changeScreenPosition') {
-      scrollTop = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X]);
-      scrollLeft = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y]);
+      scrollTop = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
+      scrollLeft = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
       scrollContents.scrollTop(this.beforeScrollTop + scrollTop);
       return scrollContents.scrollLeft(this.beforeScrollLeft + scrollLeft);
     }
@@ -43,11 +43,11 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.prototype.changeScreenPosition = function(e, complete) {
     var actionType, finished_count, scale, scrollLeft, scrollTop;
     this.updateEventBefore();
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    actionType = this.timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.CLICK) {
       finished_count = 0;
-      scrollTop = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.X]);
-      scrollLeft = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Y]);
+      scrollTop = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
+      scrollLeft = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
       scrollContents.animate({
         scrollTop: scrollContents.scrollTop() + scrollTop,
         scrollLeft: scrollContents.scrollLeft() + scrollLeft
@@ -60,7 +60,7 @@ ScreenEvent = (function(superClass) {
           }
         }
       });
-      scale = this.timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEScreenPositionChange.Z];
+      scale = this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z];
       if (scale !== 0) {
         return this.getJQueryElement().transition({
           scale: "+=" + scale

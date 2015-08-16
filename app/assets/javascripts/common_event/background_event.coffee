@@ -4,14 +4,14 @@ class BackgroundEvent extends CommonEvent
 
   initWithEvent: (timelineEvent) ->
     super(timelineEvent)
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'changeBackgroundColor'
       @scrollEvents = []
 
-      bColor = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEBackgroundColorChange.BASE_COLOR]
-      cColor = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEBackgroundColorChange.CHANGE_COLOR]
-      scrollStart = parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
-      scrollEnd = parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
+      bColor = @timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR]
+      cColor = @timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR]
+      scrollStart = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+      scrollEnd = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
 
       # 'rgb(r, g, b)'のフォーマットを分解
       bColors = bColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
@@ -42,16 +42,16 @@ class BackgroundEvent extends CommonEvent
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'changeBackgroundColor'
-      bColor = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEBackgroundColorChange.BASE_COLOR]
+      bColor = @timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR]
       @targetBackground.css('backgroundColor', bColor)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'changeBackgroundColor'
-      cColor = @timelineEvent[TimelineEvent.PageValueKey.VALUE][TLEBackgroundColorChange.CHANGE_COLOR]
+      cColor = @timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR]
       @targetBackground.css('backgroundColor', cColor)
 
   changeBackgroundColor: (scrollValue) ->

@@ -25,8 +25,8 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.setMethod = function() {
     var actionType, methodName;
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    actionType = this.timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE];
+    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
     if (this.constructor.prototype[methodName] == null) {
       return;
     }
@@ -55,11 +55,11 @@ EventBase = (function(superClass) {
     loopDelay = 1000;
     loopMaxCount = 5;
     this.initWithEvent(timelineEvent);
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
     this.willChapter(methodName);
     this.appendCssIfNeeded(methodName);
     method = this.constructor.prototype[methodName];
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    actionType = this.timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE];
     this.doPreviewLoop = true;
     loopCount = 0;
     this.previewTimer = null;
@@ -181,7 +181,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.willChapter = function(methodName) {
     var actionType;
-    actionType = this.timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE];
+    actionType = this.timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       this.scrollValue = 0;
     }
@@ -195,10 +195,10 @@ EventBase = (function(superClass) {
     if (complete == null) {
       complete = null;
     }
-    if (this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME] == null) {
+    if (this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME] == null) {
       return;
     }
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
     if (this.isFinishedEvent) {
       return;
     }
@@ -208,8 +208,8 @@ EventBase = (function(superClass) {
     } else {
       this.scrollValue += parseInt((y - 9) / 10);
     }
-    sPoint = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
-    ePoint = parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]);
+    sPoint = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    ePoint = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     if (this.scrollValue < sPoint || this.scrollValue > ePoint) {
       return;
     }
@@ -225,7 +225,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.scrollLength = function() {
-    return parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START]);
+    return parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
   };
 
   EventBase.prototype.cssElement = function(methodName) {
@@ -284,7 +284,7 @@ ItemEventBase = (function(superClass) {
 
   ItemEventBase.prototype.initWithEvent = function(timelineEvent) {
     ItemEventBase.__super__.initWithEvent.call(this, timelineEvent);
-    this.setMiniumObject(timelineEvent[TLEItemChange.minObj]);
+    this.setMiniumObject(timelineEvent[EPVItem.minObj]);
     return this.reDraw(false);
   };
 

@@ -8,7 +8,7 @@ class Chapter
   willChapter: ->
     for event, idx in @eventList
       event.initWithEvent(@timelineEventList[idx])
-      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
       event.willChapter(methodName)
       event.appendCssIfNeeded(methodName)
 
@@ -18,7 +18,7 @@ class Chapter
   # チャプター共通の後処理
   didChapter: ->
     @eventList.forEach((event) ->
-      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
       event.didChapter(methodName)
     )
 
@@ -27,7 +27,7 @@ class Chapter
     window.disabledEventHandler = true
     item = null
     @eventList.forEach((e, idx) =>
-      if @timelineEventList[idx][TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+      if @timelineEventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         item = e
         return false
     )
@@ -61,7 +61,7 @@ class Chapter
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
     scrollContents.css('z-index', scrollViewSwitchZindex.on)
     @eventList.forEach((event) ->
-      if event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+      if event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1)
     )
 
@@ -70,7 +70,7 @@ class Chapter
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @eventList.forEach((event) ->
-      if event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] == false
+      if event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM)
     )
 

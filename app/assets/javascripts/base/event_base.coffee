@@ -14,8 +14,8 @@ class EventBase extends Extend
 
   # アクションメソッドの設定
   setMethod: ->
-    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    actionType = @timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if !@constructor.prototype[methodName]?
       # メソッドが見つからない場合
       return
@@ -45,12 +45,12 @@ class EventBase extends Extend
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
     @initWithEvent(timelineEvent)
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     @willChapter(methodName)
     @appendCssIfNeeded(methodName)
 
     method = @constructor.prototype[methodName]
-    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    actionType = @timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE]
     # イベントループ
     @doPreviewLoop = true
     loopCount = 0
@@ -147,7 +147,7 @@ class EventBase extends Extend
 
   # チャプター開始前イベント
   willChapter: (methodName) ->
-    actionType = @timelineEvent[TimelineEvent.PageValueKey.ACTIONTYPE]
+    actionType = @timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollValue = 0
 
@@ -161,11 +161,11 @@ class EventBase extends Extend
 
   # スクロール基底メソッド
   scrollRootFunc: (x, y, complete = null) ->
-    if !@timelineEvent[TimelineEvent.PageValueKey.METHODNAME]?
+    if !@timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]?
       # メソッドが無い場合
       return
 
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if @isFinishedEvent
       # 終了済みの場合
       return
@@ -176,8 +176,8 @@ class EventBase extends Extend
     else
       @scrollValue += parseInt((y - 9) / 10)
 
-    sPoint = parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
-    ePoint = parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
+    sPoint = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    ePoint = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
     # スクロール指定範囲外なら反応させない
     if @scrollValue < sPoint || @scrollValue > ePoint
       return
@@ -193,7 +193,7 @@ class EventBase extends Extend
 
   # スクロールの長さを取得
   scrollLength: ->
-    return parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_START])
+    return parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
 
   # CSS
   # @abstract
@@ -236,7 +236,7 @@ class ItemEventBase extends EventBase
   initWithEvent: (timelineEvent) ->
     super(timelineEvent)
     # 値設定
-    @setMiniumObject(timelineEvent[TLEItemChange.minObj])
+    @setMiniumObject(timelineEvent[EPVItem.minObj])
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     @reDraw(false)

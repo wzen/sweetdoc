@@ -1,4 +1,4 @@
-class TLEItemChange extends TimelineEvent
+class EPVItem extends EventPageValueBase
   @minObj = 'item_minobj'
   @itemSize = 'item_size'
 

@@ -24,10 +24,10 @@
 //= require item/item_base
 //= require item/arrow
 //= require item/button
-//= require timeline/base/timeline_event
-//= require timeline/common_event/backgroundcolor_change
-//= require timeline/common_event/screenposition_change
-//= require timeline/item_event/item_change
+//= require event_page_value/base/event_page_value_base.js
+//= require event_page_value/common/backgroundcolor.js
+//= require event_page_value/common/screenposition.js
+//= require event_page_value/item/item.js
 //= require run/chapter
 //= require run/scroll_chapter
 //= require run/click_chapter

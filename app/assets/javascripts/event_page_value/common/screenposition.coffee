@@ -1,4 +1,4 @@
-class TLEScreenPositionChange extends TimelineEvent
+class EPVScreenPosition extends EventPageValueBase
   @X = 'x'
   @Y = 'y'
   @Z = 'z'

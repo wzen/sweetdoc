@@ -56,13 +56,13 @@ class ButtonItem extends CssItemBase
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'defaultClick'
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'defaultClick'
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
 
@@ -226,7 +226,7 @@ if window.worktablePage?
       @makeDesignConfig()
       # タイムライン作成
       #fixme: あとでロジックと実装を分けること
-      TLEItemChange.writeDefaultToPageValue(@)
+      EPVItem.writeDefaultToPageValue(@)
       setupTimelineEventConfig()
 
       return true

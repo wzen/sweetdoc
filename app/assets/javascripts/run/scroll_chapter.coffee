@@ -27,7 +27,7 @@ class ScrollChapter extends Chapter
   finishedAllEvent: ->
     ret = true
     @eventList.forEach((event) ->
-      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
       if !event.isFinishedEvent
         ret = false
         return false

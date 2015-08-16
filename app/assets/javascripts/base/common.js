@@ -170,9 +170,9 @@ Common = (function() {
 
   Common.getInstanceFromMap = function(timelineEvent) {
     var classMapId, id, isCommonEvent;
-    isCommonEvent = timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT];
-    id = isCommonEvent ? timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] : timelineEvent[TimelineEvent.PageValueKey.ID];
-    classMapId = isCommonEvent ? timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] : timelineEvent[TimelineEvent.PageValueKey.ITEM_ID];
+    isCommonEvent = timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+    id = isCommonEvent ? timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : timelineEvent[EventPageValueBase.PageValueKey.ID];
+    classMapId = isCommonEvent ? timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : timelineEvent[EventPageValueBase.PageValueKey.ITEM_ID];
     if (typeof isCommonEvent === "boolean") {
       if (isCommonEvent) {
         isCommonEvent = "1";

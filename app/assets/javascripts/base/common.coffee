@@ -134,9 +134,9 @@ class Common
 
   # インスタンス取得
   @getInstanceFromMap = (timelineEvent) ->
-    isCommonEvent = timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
-    id = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ID]
-    classMapId = if isCommonEvent then timelineEvent[TimelineEvent.PageValueKey.COMMON_EVENT_ID] else timelineEvent[TimelineEvent.PageValueKey.ITEM_ID]
+    isCommonEvent = timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+    id = if isCommonEvent then timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else timelineEvent[EventPageValueBase.PageValueKey.ID]
+    classMapId = if isCommonEvent then timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else timelineEvent[EventPageValueBase.PageValueKey.ITEM_ID]
 
     if typeof isCommonEvent == "boolean"
       if isCommonEvent

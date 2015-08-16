@@ -20,7 +20,7 @@ WorkTableCanvasItemExtend =
   # ドラッグ完了時イベント
   dragComplete: ->
     @saveObj(Constant.ItemActionType.MOVE)
-    TLEItemChange.writeItemValueToPageValue(@)
+    EPVItem.writeItemValueToPageValue(@)
 
   # リサイズ中イベント
   resize: ->
@@ -39,7 +39,7 @@ WorkTableCanvasItemExtend =
   # リサイズ完了時イベント
   resizeComplete: ->
     @saveObj(Constant.ItemActionType.MOVE)
-    TLEItemChange.writeItemValueToPageValue(@)
+    EPVItem.writeItemValueToPageValue(@)
 
   # 履歴データを取得
   # @param [ItemActionType] action アクション種別

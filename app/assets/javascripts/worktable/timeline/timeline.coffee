@@ -29,7 +29,7 @@ setupTimelineEventConfig = ->
     tEmt = $('.te_num', timelineEvents)
     tEmt.each((e) ->
       teNum = parseInt($(@).val())
-      actionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE)
+      actionType = PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
       changeTimelineColor(teNum, actionType)
       if e == tEmt.length - 1 && actionType != null
         # blankのイベントが無い場合、作成

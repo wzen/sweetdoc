@@ -13,7 +13,7 @@ Chapter = (function() {
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
       event.initWithEvent(this.timelineEventList[idx]);
-      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
       event.willChapter(methodName);
       event.appendCssIfNeeded(methodName);
     }
@@ -24,7 +24,7 @@ Chapter = (function() {
   Chapter.prototype.didChapter = function() {
     return this.eventList.forEach(function(event) {
       var methodName;
-      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
       return event.didChapter(methodName);
     });
   };
@@ -38,7 +38,7 @@ Chapter = (function() {
     item = null;
     this.eventList.forEach((function(_this) {
       return function(e, idx) {
-        if (_this.timelineEventList[idx][TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+        if (_this.timelineEventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
           item = e;
           return false;
         }
@@ -78,7 +78,7 @@ Chapter = (function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     scrollContents.css('z-index', scrollViewSwitchZindex.on);
     return this.eventList.forEach(function(event) {
-      if (event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+      if (event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
         return event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
       }
     });
@@ -88,7 +88,7 @@ Chapter = (function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.eventList.forEach(function(event) {
-      if (event.timelineEvent[TimelineEvent.PageValueKey.IS_COMMON_EVENT] === false) {
+      if (event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
         return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM);
       }
     });

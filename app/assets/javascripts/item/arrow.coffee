@@ -122,16 +122,16 @@ class ArrowItem extends CanvasItemBase
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'scrollDraw'
       @reDraw(false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @timelineEvent[TimelineEvent.PageValueKey.METHODNAME]
+    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'scrollDraw'
       @reDraw(false)
-      (@constructor.prototype[methodName]).call(@, @timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END])
+      (@constructor.prototype[methodName]).call(@, @timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
 
   # スクロールイベント ※アクションイベント
   scrollDraw : (scrollValue) ->
@@ -413,7 +413,7 @@ if window.worktablePage?
       @makeDesignConfig()
       # タイムライン作成
       #fixme: あとでロジックと実装を分けること
-      TLEItemChange.writeDefaultToPageValue(@)
+      EPVItem.writeDefaultToPageValue(@)
       setupTimelineEventConfig()
 
     # 矢印のサイズ更新

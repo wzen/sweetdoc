@@ -37,7 +37,7 @@ setupTimelineEventConfig = function() {
     tEmt.each(function(e) {
       var actionType, teNum;
       teNum = parseInt($(this).val());
-      actionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + TimelineEvent.PageValueKey.ACTIONTYPE);
+      actionType = PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE);
       changeTimelineColor(teNum, actionType);
       if (e === tEmt.length - 1 && actionType !== null) {
         createTimelineEvent(tEmt.length + 1);

@@ -39,7 +39,7 @@ ScrollChapter = (function(superClass) {
     ret = true;
     this.eventList.forEach(function(event) {
       var methodName;
-      methodName = event.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
       if (!event.isFinishedEvent) {
         ret = false;
         return false;

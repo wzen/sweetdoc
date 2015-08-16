@@ -225,7 +225,7 @@ class ItemBase extends ItemEventBase
   # タイムラインに書き込む情報
   objWriteTimeline: ->
     obj = {}
-    obj[TLEItemChange.minObj] = @getMinimumObject()
+    obj[EPVItem.minObj] = @getMinimumObject()
     return obj
 
 # CSSアイテム

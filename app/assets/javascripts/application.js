@@ -41,10 +41,10 @@
 //= require common_event/screen_event
 //= require item/code_template
 //= require item/item_base
-//= require timeline/base/timeline_event
-//= require timeline/common_event/backgroundcolor_change
-//= require timeline/common_event/screenposition_change
-//= require timeline/item_event/item_change
+//= require event_page_value/base/event_page_value_base.js
+//= require event_page_value/common/backgroundcolor.js
+//= require event_page_value/common/screenposition.js
+//= require event_page_value/item/item.js
 //= require worktable/common/common_func
 //= require worktable/common/history
 //= require worktable/common/server_storage

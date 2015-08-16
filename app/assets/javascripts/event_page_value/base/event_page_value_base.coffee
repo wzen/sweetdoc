@@ -1,4 +1,4 @@
-class TimelineEvent
+class EventPageValueBase
 
   if gon?
   # 定数
@@ -47,7 +47,7 @@ class TimelineEvent
         start = startDiv.val()
         s = null
         if start.length == 0
-          s = TimelineEvent.getAllScrollLength()
+          s = EventPageValueBase.getAllScrollLength()
           startDiv.val(s)
           if s == 0
             startDiv.prop("disabled", true)

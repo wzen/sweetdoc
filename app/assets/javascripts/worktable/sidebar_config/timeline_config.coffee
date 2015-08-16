@@ -104,7 +104,7 @@ class TimelineConfig
     valueClassName = @methodClassName()
 
     if @teNum > 1
-      beforeActionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE]
+      beforeActionType = PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
       if @actionType == beforeActionType
         # 前のイベントと同じアクションタイプの場合は同時実行を表示
         $(".config.parallel_div", @emt).css('display', '')
@@ -163,7 +163,7 @@ class TimelineConfig
     # プレビュー開始
     item = createdObject[@id]
     if item? && item.preview?
-      item.preview(PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(@teNum)))
+      item.preview(PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(@teNum)))
 
   # 画面値に書き込み
   writeToPageValue: ->
@@ -176,7 +176,7 @@ class TimelineConfig
 
   # 画面値から読み込み
   readFromPageValue: ->
-    if TimelineEvent.readFromPageValue(@)
+    if EventPageValueBase.readFromPageValue(@)
       tle = _timelineEvent.call(@)
       if tle?
         return tle.readFromPageValue(@)
@@ -207,11 +207,11 @@ class TimelineConfig
 
     if @isCommonEvent
       if @commonEventId == Constant.CommonActionEventChangeType.BACKGROUND
-        return TLEBackgroundColorChange
+        return EPVBackgroundColor
       else if @commonEventId == Constant.CommonActionEventChangeType.SCREEN
-        return TLEScreenPositionChange
+        return EPVScreenPosition
     else
-      return TLEItemChange
+      return EPVItem
 
   _setMethodActionEvent = ->
     self = @

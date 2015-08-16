@@ -21,7 +21,7 @@ WorkTableCanvasItemExtend = {
   },
   dragComplete: function() {
     this.saveObj(Constant.ItemActionType.MOVE);
-    return TLEItemChange.writeItemValueToPageValue(this);
+    return EPVItem.writeItemValueToPageValue(this);
   },
   resize: function() {
     var canvas, drawingCanvas, drawingContext, element;
@@ -39,7 +39,7 @@ WorkTableCanvasItemExtend = {
   },
   resizeComplete: function() {
     this.saveObj(Constant.ItemActionType.MOVE);
-    return TLEItemChange.writeItemValueToPageValue(this);
+    return EPVItem.writeItemValueToPageValue(this);
   },
   getHistoryObj: function(action) {
     var obj;

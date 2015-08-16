@@ -104,7 +104,7 @@ TimelineConfig = (function() {
     handlerClassName = this.methodClassName();
     valueClassName = this.methodClassName();
     if (this.teNum > 1) {
-      beforeActionType = PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum - 1))[TimelineEvent.PageValueKey.ACTIONTYPE];
+      beforeActionType = PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
       if (this.actionType === beforeActionType) {
         $(".config.parallel_div", this.emt).css('display', '');
       }
@@ -156,7 +156,7 @@ TimelineConfig = (function() {
     changeTimelineColor(this.teNum, this.actionType);
     item = createdObject[this.id];
     if ((item != null) && (item.preview != null)) {
-      return item.preview(PageValue.getTimelinePageValue(TimelineEvent.PageValueKey.te(this.teNum)));
+      return item.preview(PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(this.teNum)));
     }
   };
 
@@ -173,7 +173,7 @@ TimelineConfig = (function() {
 
   TimelineConfig.prototype.readFromPageValue = function() {
     var tle;
-    if (TimelineEvent.readFromPageValue(this)) {
+    if (EventPageValueBase.readFromPageValue(this)) {
       tle = _timelineEvent.call(this);
       if (tle != null) {
         return tle.readFromPageValue(this);
@@ -210,12 +210,12 @@ TimelineConfig = (function() {
     }
     if (this.isCommonEvent) {
       if (this.commonEventId === Constant.CommonActionEventChangeType.BACKGROUND) {
-        return TLEBackgroundColorChange;
+        return EPVBackgroundColor;
       } else if (this.commonEventId === Constant.CommonActionEventChangeType.SCREEN) {
-        return TLEScreenPositionChange;
+        return EPVScreenPosition;
       }
     } else {
-      return TLEItemChange;
+      return EPVItem;
     }
   };
 

@@ -116,7 +116,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventBefore = function() {
     var methodName;
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'scrollDraw') {
       return this.reDraw(false);
     }
@@ -124,10 +124,10 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventAfter = function() {
     var methodName;
-    methodName = this.timelineEvent[TimelineEvent.PageValueKey.METHODNAME];
+    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'scrollDraw') {
       this.reDraw(false);
-      return this.constructor.prototype[methodName].call(this, this.timelineEvent[TimelineEvent.PageValueKey.SCROLL_POINT_END]);
+      return this.constructor.prototype[methodName].call(this, this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     }
   };
 
@@ -417,7 +417,7 @@ if (window.worktablePage != null) {
       }
       this.reDraw(show);
       this.makeDesignConfig();
-      TLEItemChange.writeDefaultToPageValue(this);
+      EPVItem.writeDefaultToPageValue(this);
       return setupTimelineEventConfig();
     };
 

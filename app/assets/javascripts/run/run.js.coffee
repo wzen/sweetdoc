@@ -61,12 +61,12 @@ initTimeline = ->
     parallel = false
     if idx < timelineList.length - 1
       beforeTimeline = timelineList[idx + 1]
-      if beforeTimeline[TimelineEvent.PageValueKey.IS_PARALLEL]
+      if beforeTimeline[EventPageValueBase.PageValueKey.IS_PARALLEL]
         parallel = true
 
     if !parallel
       chapter = null
-      if obj[TimelineEvent.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
+      if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
         chapter = new ClickChapter({eventList: eventList, timelineEventList: tList})
       else
         chapter = new ScrollChapter({eventList: eventList, timelineEventList: tList})
@@ -74,7 +74,7 @@ initTimeline = ->
       eventList = []
       tList = []
 
-      if !window.firstItemFocused && !obj[TimelineEvent.PageValueKey.IS_COMMON_EVENT]
+      if !window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
           # 最初のアイテムにフォーカスする
           chapter.focusToActorIfNeed(true)
           window.firstItemFocused = true
