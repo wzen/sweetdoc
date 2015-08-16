@@ -193,6 +193,15 @@ PageValue = (function() {
     return this.getPageValue(key, true);
   };
 
+  PageValue.removeAllItemAndTimelineEventPageValue = function() {
+    $("#" + Constant.PageValueKey.PV_ROOT).each(function(e) {
+      return $(this).remove();
+    });
+    return $("#" + Constant.PageValueKey.TE_ROOT).each(function(e) {
+      return $(this).remove();
+    });
+  };
+
   return PageValue;
 
 })();

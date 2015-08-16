@@ -1,3 +1,6 @@
+class TimelineEventMark
+
+
 # タイムラインイベントを作成
 createTimelineEvent = (teNum) ->
   # 存在チェック

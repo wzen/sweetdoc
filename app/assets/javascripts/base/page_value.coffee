@@ -2,8 +2,7 @@ class PageValue
 
   # ページが持つ値を取得
   # @param [String] key キー値
-  # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] isCache このページでのみ保持させるか
+  # @param [Boolean] withRemove 取得後に値を消去するか
   @getPageValue = (key, withRemove = false) ->
     _getPageValue.call(@, key, withRemove, Constant.PageValueKey.PV_ROOT)
 
@@ -182,4 +181,14 @@ class PageValue
   # ページが持つ値を削除
   # @param [String] key キー値
   @removePageValue = (key) ->
+    # 削除ありで取得
     @getPageValue(key, true)
+
+  # アイテムとイベント情報を削除
+  @removeAllItemAndTimelineEventPageValue = ->
+    $("##{Constant.PageValueKey.PV_ROOT}").each((e) ->
+      $(@).remove()
+    )
+    $("##{Constant.PageValueKey.TE_ROOT}").each((e) ->
+      $(@).remove()
+    )

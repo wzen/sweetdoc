@@ -2,7 +2,9 @@
 initHeaderMenu = ->
   itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
   $('.menu-newcreate', itemsMenuEmt).on('click', ->
-
+    if Object.keys(Common.getCreatedItemObject()).length > 0
+      if window.confirm('テーブルに存在するアイテムが全て削除されます。')
+        Common.removeAllItemAndEvent()
   )
   $('.menu-load', itemsMenuEmt).on('click', ->
     ServerStorage.load()

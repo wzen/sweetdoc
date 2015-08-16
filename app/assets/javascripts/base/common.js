@@ -224,7 +224,25 @@ Common = (function() {
     return ret;
   };
 
-  Common.clearItemAndEvent = function() {};
+  Common.removeAllItem = function() {
+    var k, ref, results, v;
+    ref = this.getCreatedItemObject();
+    results = [];
+    for (k in ref) {
+      v = ref[k];
+      if (v.getJQueryElement != null) {
+        results.push(v.getJQueryElement().remove());
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
+
+  Common.removeAllItemAndEvent = function() {
+    this.removeAllItem();
+    return PageValue.removeAllItemAndTimelineEventPageValue();
+  };
 
   return Common;
 

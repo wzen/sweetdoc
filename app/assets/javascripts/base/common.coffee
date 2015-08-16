@@ -170,6 +170,7 @@ class Common
       # インスタンスを保存する
       window.instanceMap[isCommonEvent][id] = new (Common.getClassFromMap(isCommonEvent, itemId))()
 
+  # 生成したインスタンスの中からアイテムのみ取得
   @getCreatedItemObject = ->
     ret = {}
     for k, v of createdObject
@@ -177,9 +178,16 @@ class Common
         ret[k] = v
     return ret
 
+  # 全てのアイテムを削除
+  @removeAllItem = ->
+    for k, v of @getCreatedItemObject()
+      if v.getJQueryElement?
+        v.getJQueryElement().remove()
 
-  @clearItemAndEvent = ->
-
+  # 全てのアイテムとイベントを削除
+  @removeAllItemAndEvent = ->
+    @removeAllItem()
+    PageValue.removeAllItemAndTimelineEventPageValue()
 
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
