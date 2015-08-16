@@ -8,7 +8,7 @@ class ItemJs
 
   # item_action_eventレコードからイベント用のアクション情報を取り出す
   # @param [Array] item_action_events item_action_eventレコード配列
-  def self.timeline_event_actions(item_action_events)
+  def self.event_actions(item_action_events)
     return item_action_events.map do |d|
       {
           item_id: d.item_id,
@@ -23,7 +23,7 @@ class ItemJs
 
   # item_action_eventのレコードからイベント用のアクション値情報を取り出す
   # @param [Array] item_action_events item_action_eventレコード配列
-  def self.timeline_event_values(item_action_events)
+  def self.event_values(item_action_events)
     values = ''
     item_action_events.each do |d|
       values += ItemJsController.new.timeline_config(d)
@@ -73,9 +73,9 @@ class ItemJs
       # TODO: デザインconfig取得
 
       # イベント アクション名一覧
-      te_actions = self.timeline_event_actions(item_action_events)
+      te_actions = self.event_actions(item_action_events)
       # イベント コンフィグUI
-      te_values = self.timeline_event_values(item_action_events)
+      te_values = self.event_values(item_action_events)
 
       ret <<
           {
