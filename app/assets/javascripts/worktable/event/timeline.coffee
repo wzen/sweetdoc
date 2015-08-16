@@ -1,7 +1,7 @@
 class TimelineEventMark
 
 
-# タイムラインイベントを作成
+# タイムラインを作成
 createTimelineEvent = (teNum) ->
   # 存在チェック
   emts = $('#timeline_events .timeline_event .te_num')

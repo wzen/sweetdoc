@@ -6,7 +6,7 @@ class ItemJs
     return "#{Rails.application.config.assets.prefix}/item/#{src_name}"
   end
 
-  # item_action_eventレコードからタイムラインイベント用のアクション情報を取り出す
+  # item_action_eventレコードからイベント用のアクション情報を取り出す
   # @param [Array] item_action_events item_action_eventレコード配列
   def self.timeline_event_actions(item_action_events)
     return item_action_events.map do |d|
@@ -21,7 +21,7 @@ class ItemJs
     end
   end
 
-  # item_action_eventのレコードからタイムラインイベント用のアクション値情報を取り出す
+  # item_action_eventのレコードからイベント用のアクション値情報を取り出す
   # @param [Array] item_action_events item_action_eventレコード配列
   def self.timeline_event_values(item_action_events)
     values = ''
@@ -31,7 +31,7 @@ class ItemJs
     return values
   end
 
-  # item_idからタイムラインイベントに必要なレコードを取得
+  # item_idからイベントに必要なレコードを取得
   # @param [Int] item_id アイテムID
   def self.find_events_by_itemid(item_id)
     item_action_events = ItemActionEvent.joins(:item).where(item_id: item_id)
@@ -72,9 +72,9 @@ class ItemJs
 
       # TODO: デザインconfig取得
 
-      # タイムライン アクション名一覧
+      # イベント アクション名一覧
       te_actions = self.timeline_event_actions(item_action_events)
-      # タイムライン コンフィグUI
+      # イベント コンフィグUI
       te_values = self.timeline_event_values(item_action_events)
 
       ret <<

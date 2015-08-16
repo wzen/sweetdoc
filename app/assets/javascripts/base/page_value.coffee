@@ -6,7 +6,7 @@ class PageValue
   @getPageValue = (key, withRemove = false) ->
     _getPageValue.call(@, key, withRemove, Constant.PageValueKey.PV_ROOT)
 
-  # タイムラインの値を取得
+  # イベントの値を取得
   # @param [String] key キー値
   @getEventPageValue = (key) ->
     _getPageValue.call(@, key, false, Constant.PageValueKey.E_ROOT)
@@ -83,7 +83,7 @@ class PageValue
   @setPageValue = (key, value, isCache = false) ->
     _setPageValue.call(@, key, value, isCache, Constant.PageValueKey.PV_ROOT, false)
 
-  # タイムラインの値を設定
+  # イベントの値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
   @setEventPageValue = (key, value) ->
@@ -161,7 +161,7 @@ class PageValue
           root.addClass(cacheClassName)
     )
 
-  # ソートしたタイムラインリストを取得
+  # ソートしたイベントリストを取得
   @getEventPageValueSortedListByNum = ->
     eventPageValues = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX)
     if !eventPageValues?

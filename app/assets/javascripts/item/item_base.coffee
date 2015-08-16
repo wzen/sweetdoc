@@ -122,7 +122,7 @@ class ItemBase extends ItemEventBase
     @setAllItemPropToPageValue()
     console.log('save obj:' + JSON.stringify(@itemSize))
 
-    # タイムラインの選択項目更新
+    # イベントの選択項目更新
     # fixme: 実行場所について再考
     updateSelectItemMenu()
 
@@ -222,7 +222,7 @@ class ItemBase extends ItemEventBase
   eventConfigValue: ->
     return null
 
-  # タイムラインに書き込む情報
+  # イベントに書き込む情報
   objWriteEvent: ->
     obj = {}
     obj[EPVItem.minObj] = @getMinimumObject()

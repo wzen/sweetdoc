@@ -1,4 +1,4 @@
-# チャプター(タイムラインの区切り)
+# チャプター(イベントの区切り)
 class Chapter
   constructor: (list) ->
     @eventObjList = list.eventObjList

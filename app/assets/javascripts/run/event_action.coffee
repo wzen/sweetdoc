@@ -61,7 +61,7 @@ class EventAction
 #    if !@finished
 #      @thisChapter().clickEvent(e)
 
-  # タイムライン終了イベント
+  # イベント終了イベント
   finishAllEvents: ->
     @finished = true
     console.log('Finish!')

@@ -5,7 +5,7 @@ class EventPageValueBase
     constant = gon.const
 
     class @PageValueKey
-      # @property [String] te タイムラインイベントRoot
+      # @property [String] te イベントRoot
       @te : (teNum) ->
         constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.E_NUM_PREFIX + teNum
       # @property [String] ID アイテムID
@@ -14,16 +14,14 @@ class EventPageValueBase
       @ITEM_ID = 'item_id'
       # @property [String] COMMON_EVENT_ID 共通イベントID
       @COMMON_EVENT_ID = 'common_event_id'
-      # @property [String] VALUE タイムラインイベント値
+      # @property [String] VALUE イベント値
       @VALUE = 'value'
       # @property [String] CHAPTER チャプター
       @CHAPTER = 'chapter'
       # @property [String] SCREEN スクリーン
       @SCREEN = 'screen'
-      # @property [String] IS_COMMON_EVENT タイムライン共通イベント判定
+      # @property [String] IS_COMMON_EVENT 共通イベント判定
       @IS_COMMON_EVENT = 'is_common_event'
-      # @property [String] TE_VALUE タイムライン変更前の値
-      #@TE_ORIGINAL_VALUE = @TE + ':originalvalue'
       # @property [String] ORDER ソート番号
       @ORDER = 'order'
       # @property [String] METHODNAME イベント名

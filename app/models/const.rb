@@ -2,7 +2,7 @@ class Const
 
   # @property OPERATION_STORE_MAX 操作履歴保存最大数
   OPERATION_STORE_MAX = 30
-  # @property EVENT_COMMON_PREFIX 共通タイムラインイベント クラス名プレフィックス
+  # @property EVENT_COMMON_PREFIX 共通イベント クラス名プレフィックス
   EVENT_COMMON_PREFIX = 'c_'
 
   # 操作モード
@@ -120,17 +120,17 @@ class Const
     ST_ROOT = 'setting_page_values'
     # @property [String] ST_PREFIX 共通設定プレフィックス
     ST_PREFIX = 'settings'
-    # @property [String] E_ROOT タイムライン値ルート
+    # @property [String] E_ROOT イベント値ルート
     E_ROOT = 'event_page_values'
-    # @property [String] E_PREFIX タイムラインプレフィックス
-    E_PREFIX = 'event_'
-    # @property [String] E_NUM_PREFIX タイムライン番号プレフィックス
+    # @property [String] E_PREFIX イベントプレフィックス
+    E_PREFIX = 'events'
+    # @property [String] E_NUM_PREFIX イベント番号プレフィックス
     E_NUM_PREFIX = 'te_'
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     PAGE_VALUES_SEPERATOR = ':'
     # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
     IS_RUNWINDOW_RELOAD = 'is_runwindow_reload'
-    # @property [String] E_COUNT タイムライン数
+    # @property [String] E_COUNT イベント数
     E_COUNT = "#{E_PREFIX}#{PAGE_VALUES_SEPERATOR}count"
     # @property [String] E_CSS CSSデータ
     E_CSS = "#{E_PREFIX}#{PAGE_VALUES_SEPERATOR}css"

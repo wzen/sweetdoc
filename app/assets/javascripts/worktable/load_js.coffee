@@ -79,7 +79,7 @@ addItemInfo = (item_id, te_actions) ->
         PageValue.setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
     )
 
-# タイムラインイベントのConfigを追加
+# イベントのConfigを追加
 # @param [String] contents 追加するHTMLの文字列
 addEventConfigContents = (item_id, te_actions, te_values) ->
   if te_actions? && te_actions.length > 0

@@ -1,6 +1,6 @@
 class Worktable
   def self.init_common_events
-    # 共通タイムラインイベントの取得
+    # 共通イベントの取得
     common_actions = CommonAction.joins(:common_action_events).eager_load(:common_action_events)
                          .joins(:localize_common_action_events).eager_load(:localize_common_action_events)
                          .joins(:locales).merge(Locale.available)

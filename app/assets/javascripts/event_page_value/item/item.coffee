@@ -70,7 +70,7 @@ class EPVItem extends EventPageValueBase
     tes = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX)
     for idx, te of tes
       if idx.indexOf(Constant.PageValueKey.E_NUM_PREFIX) >= 0 && te.id == item.id
-        # タイムラインのアイテム情報を更新
+        # イベントのアイテム情報を更新
         key = "#{Constant.PageValueKey.E_PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{idx}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@minObj}"
         PageValue.setEventPageValue(key, item.getMinimumObject())
 

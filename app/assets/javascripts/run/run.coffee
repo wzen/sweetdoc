@@ -42,7 +42,7 @@ initResize = (wrap, scrollWrapper) ->
     , 200)
   )
 
-# タイムライン作成
+# イベント作成
 initEventAction = ->
   # アクションのイベントを取得
   eventPageValueList = PageValue.getEventPageValueSortedListByNum()

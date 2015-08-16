@@ -1,15 +1,15 @@
 class EventConfig
 
   if gon?
-    # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
+    # @property [String] TE_ITEM_ROOT_ID イベントRoot
     @ITEM_ROOT_ID = 'event_@te_num'
-    # @property [String] COMMON_ACTION_CLASS タイムライン共通アクションクラス名
+    # @property [String] COMMON_ACTION_CLASS イベント共通アクションクラス名
     @COMMON_ACTION_CLASS = constant.ElementAttribute.COMMON_ACTION_CLASS
-    # @property [String] ITEM_ACTION_CLASS タイムラインアイテムアクションクラス名
+    # @property [String] ITEM_ACTION_CLASS イベントアイテムアクションクラス名
     @ITEM_ACTION_CLASS = constant.ElementAttribute.ITEM_ACTION_CLASS
-    # @property [String] COMMON_VALUES_CLASS 共通タイムラインイベントクラス名
+    # @property [String] COMMON_VALUES_CLASS 共通イベントクラス名
     @COMMON_VALUES_CLASS = constant.ElementAttribute.COMMON_VALUES_CLASS
-    # @property [String] ITEM_VALUES_CLASS アイテムタイムラインイベントクラス名
+    # @property [String] ITEM_VALUES_CLASS アイテムイベントクラス名
     @ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS
 
   # コンストラクタ

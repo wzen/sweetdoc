@@ -1,9 +1,9 @@
 class LocalStorage
 
   class @Key
-    # @property [Int] WORKTABLE_EVENT_PAGEVALUES タイムラインページ値
+    # @property [Int] WORKTABLE_EVENT_PAGEVALUES イベントページ値
     @WORKTABLE_EVENT_PAGEVALUES = 'worktable_event_pagevalues'
-    # @property [Int] RUN_EVENT_PAGEVALUES タイムラインページ値
+    # @property [Int] RUN_EVENT_PAGEVALUES イベントページ値
     @RUN_EVENT_PAGEVALUES = 'run_event_pagevalues'
 
   constructor: (key) ->
