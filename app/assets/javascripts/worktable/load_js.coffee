@@ -13,7 +13,7 @@ loadItemJs = (itemIds, callback = null) ->
       # 読み込み済みなアイテムIDの場合
       window.itemInitFuncList[itemInitFuncName]()
       callbackCount += 1
-      if callbackCount >= data.length
+      if callbackCount >= itemIds.length
         if callback?
           # 既に全て読み込まれている場合はコールバック実行して終了
           callback()
@@ -43,7 +43,7 @@ loadItemJs = (itemIds, callback = null) ->
               callback()
           )
           addItemInfo(d.item_id, d.te_actions)
-          addTimelineEventContents(d.item_id, d.te_actions, d.te_values)
+          addEventConfigContents(d.item_id, d.te_actions, d.te_values)
 
       error: (data) ->
     }
@@ -81,25 +81,25 @@ addItemInfo = (item_id, te_actions) ->
 
 # タイムラインイベントのConfigを追加
 # @param [String] contents 追加するHTMLの文字列
-addTimelineEventContents = (item_id, te_actions, te_values) ->
+addEventConfigContents = (item_id, te_actions, te_values) ->
   if te_actions? && te_actions.length > 0
-    className = TimelineConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id)
-    handler_forms = $('#timeline-config .handler_div .configBox')
-    action_forms = $('#timeline-config .action_forms')
+    className = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id)
+    handler_forms = $('#event-config .handler_div .configBox')
+    action_forms = $('#event-config .action_forms')
     if action_forms.find(".#{className}").length == 0
 
       actionParent = $("<div class='#{className}' style='display:none'></div>")
       te_actions.forEach( (a) ->
         # アクションメソッドConfig追加
         actionType = getActionTypeClassNameByActionType(a.action_event_type_id)
-        methodClone = $('#timeline-config .method_temp').children(':first').clone(true)
+        methodClone = $('#event-config .method_temp').children(':first').clone(true)
         span = methodClone.find('label:first').children('span:first')
         span.attr('class', actionType)
         span.html(a.options['name'])
         methodClone.find('input.action_type:first').val(a.action_event_type_id)
         methodClone.find('input.method_name:first').val(a.method_name)
         methodClone.find('input.animation_type:first').val(a.action_animation_type_id)
-        valueClassName = TimelineConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', a.method_name)
+        valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', a.method_name)
         methodClone.find('input:radio').attr('name', className)
         methodClone.find('input.value_class_name:first').val(valueClassName)
         actionParent.append(methodClone)
@@ -107,9 +107,9 @@ addTimelineEventContents = (item_id, te_actions, te_values) ->
         # イベントタイプConfig追加
         handlerClone = null
         if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
-          handlerClone = $('#timeline-config .handler_scroll_temp').children().clone(true)
+          handlerClone = $('#event-config .handler_scroll_temp').children().clone(true)
         else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
-          handlerClone = $('#timeline-config .handler_click_temp').children().clone(true)
+          handlerClone = $('#event-config .handler_click_temp').children().clone(true)
         handlerParent = $("<div class='#{valueClassName}' style='display:none'></div>")
         handlerParent.append(handlerClone)
         handlerParent.appendTo(handler_forms)
@@ -118,4 +118,4 @@ addTimelineEventContents = (item_id, te_actions, te_values) ->
       actionParent.appendTo(action_forms)
 
   if te_values?
-    $(te_values).appendTo($('#timeline-config .value_forms'))
+    $(te_values).appendTo($('#event-config .value_forms'))

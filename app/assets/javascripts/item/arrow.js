@@ -116,7 +116,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventBefore = function() {
     var methodName;
-    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'scrollDraw') {
       return this.reDraw(false);
     }
@@ -124,10 +124,10 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventAfter = function() {
     var methodName;
-    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'scrollDraw') {
       this.reDraw(false);
-      return this.constructor.prototype[methodName].call(this, this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
+      return this.constructor.prototype[methodName].call(this, this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     }
   };
 

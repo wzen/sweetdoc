@@ -216,14 +216,14 @@ class ItemBase extends ItemEventBase
   @defaultAnimationType = ->
     return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
 
-  @timelineDefaultConfigValue = ->
+  @defaultEventConfigValue = ->
     return null
 
-  timelineConfigValue: ->
+  eventConfigValue: ->
     return null
 
   # タイムラインに書き込む情報
-  objWriteTimeline: ->
+  objWriteEvent: ->
     obj = {}
     obj[EPVItem.minObj] = @getMinimumObject()
     return obj

@@ -12,16 +12,16 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.EVENT_ID = '1';
 
-  BackgroundEvent.prototype.initWithEvent = function(timelineEvent) {
+  BackgroundEvent.prototype.initWithEvent = function(event) {
     var b, bColor, bColors, bPer, bp, cColor, cColors, g, gPer, gp, i, index, j, k, l, len, len1, methodName, r, rPer, ref, rgb, rp, scrollEnd, scrollLength, scrollStart, val;
-    BackgroundEvent.__super__.initWithEvent.call(this, timelineEvent);
-    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+    BackgroundEvent.__super__.initWithEvent.call(this, event);
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'changeBackgroundColor') {
       this.scrollEvents = [];
-      bColor = this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
-      cColor = this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR];
-      scrollStart = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
-      scrollEnd = parseInt(this.timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
+      bColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
+      cColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR];
+      scrollStart = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+      scrollEnd = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
       bColors = bColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
       for (index = j = 0, len = bColors.length; j < len; index = ++j) {
         val = bColors[index];
@@ -55,18 +55,18 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.prototype.updateEventBefore = function() {
     var bColor, methodName;
-    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'changeBackgroundColor') {
-      bColor = this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
+      bColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
       return this.targetBackground.css('backgroundColor', bColor);
     }
   };
 
   BackgroundEvent.prototype.updateEventAfter = function() {
     var cColor, methodName;
-    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'changeBackgroundColor') {
-      cColor = this.timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR];
+      cColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR];
       return this.targetBackground.css('backgroundColor', cColor);
     }
   };

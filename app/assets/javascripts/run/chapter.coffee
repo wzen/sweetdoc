@@ -1,14 +1,14 @@
 # チャプター(タイムラインの区切り)
 class Chapter
   constructor: (list) ->
+    @eventObjList = list.eventObjList
     @eventList = list.eventList
-    @timelineEventList = list.timelineEventList
 
   # チャプター共通の前処理
   willChapter: ->
-    for event, idx in @eventList
-      event.initWithEvent(@timelineEventList[idx])
-      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    for event, idx in @eventObjList
+      event.initWithEvent(@eventList[idx])
+      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME]
       event.willChapter(methodName)
       event.appendCssIfNeeded(methodName)
 
@@ -17,8 +17,8 @@ class Chapter
 
   # チャプター共通の後処理
   didChapter: ->
-    @eventList.forEach((event) ->
-      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    @eventObjList.forEach((event) ->
+      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME]
       event.didChapter(methodName)
     )
 
@@ -26,8 +26,8 @@ class Chapter
   focusToActorIfNeed: (isImmediate, type = "center") ->
     window.disabledEventHandler = true
     item = null
-    @eventList.forEach((e, idx) =>
-      if @timelineEventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+    @eventObjList.forEach((e, idx) =>
+      if @eventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         item = e
         return false
     )
@@ -60,8 +60,8 @@ class Chapter
   riseFrontAllActor: ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
     scrollContents.css('z-index', scrollViewSwitchZindex.on)
-    @eventList.forEach((event) ->
-      if event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+    @eventObjList.forEach((event) ->
+      if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1)
     )
 
@@ -69,8 +69,8 @@ class Chapter
   sinkFrontAllActor: ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
-    @eventList.forEach((event) ->
-      if event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+    @eventObjList.forEach((event) ->
+      if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM)
     )
 

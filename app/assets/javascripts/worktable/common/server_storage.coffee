@@ -77,7 +77,7 @@ class ServerStorage
                 # 全て読み込んだ後
                 callback.call(self)
             )
-            addTimelineEventContents(d.te_actions, d.te_values)
+            addEventConfigContents(d.te_actions, d.te_values)
           )
 
         error: (data) ->

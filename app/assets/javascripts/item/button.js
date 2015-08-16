@@ -68,7 +68,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.updateEventBefore = function() {
     var methodName;
-    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
     }
@@ -76,7 +76,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.updateEventAfter = function() {
     var methodName;
-    methodName = this.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().css({
         '-webkit-animation-duration': '0',

@@ -12,7 +12,7 @@ EventPageValueBase = (function() {
       function PageValueKey() {}
 
       PageValueKey.te = function(teNum) {
-        return constant.PageValueKey.TE_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.TE_NUM_PREFIX + teNum;
+        return constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.E_NUM_PREFIX + teNum;
       };
 
       PageValueKey.ID = 'id';
@@ -48,10 +48,10 @@ EventPageValueBase = (function() {
     })();
   }
 
-  EventPageValueBase.initConfigValue = function(timelineConfig) {
+  EventPageValueBase.initConfigValue = function(eventConfig) {
     var end, endDiv, handlerDiv, s, start, startDiv;
-    if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
-      handlerDiv = $(".handler_div ." + (timelineConfig.methodClassName()), timelineConfig.emt);
+    if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
+      handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
       if (handlerDiv != null) {
         startDiv = handlerDiv.find('.scroll_point_start:first');
         start = startDiv.val();
@@ -66,52 +66,52 @@ EventPageValueBase = (function() {
         endDiv = handlerDiv.find('.scroll_point_end:first');
         end = endDiv.val();
         if (end.length === 0) {
-          return endDiv.val(parseInt(s) + _scrollLength.call(this, timelineConfig));
+          return endDiv.val(parseInt(s) + _scrollLength.call(this, eventConfig));
         }
       }
     }
   };
 
-  EventPageValueBase.checkConfigValue = function(timelineConfig) {};
+  EventPageValueBase.checkConfigValue = function(eventConfig) {};
 
-  EventPageValueBase.writeToPageValue = function(timelineConfig) {
+  EventPageValueBase.writeToPageValue = function(eventConfig) {
     var writeValue;
     writeValue = {};
-    writeValue[this.PageValueKey.ID] = timelineConfig.id;
-    writeValue[this.PageValueKey.ITEM_ID] = timelineConfig.itemId;
-    writeValue[this.PageValueKey.COMMON_EVENT_ID] = timelineConfig.commonEventId;
+    writeValue[this.PageValueKey.ID] = eventConfig.id;
+    writeValue[this.PageValueKey.ITEM_ID] = eventConfig.itemId;
+    writeValue[this.PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId;
     writeValue[this.PageValueKey.CHAPTER] = 1;
     writeValue[this.PageValueKey.SCREEN] = 1;
-    writeValue[this.PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent;
-    writeValue[this.PageValueKey.METHODNAME] = timelineConfig.methodName;
-    writeValue[this.PageValueKey.ACTIONTYPE] = timelineConfig.actionType;
-    writeValue[this.PageValueKey.ANIAMTIONTYPE] = timelineConfig.animationType;
-    writeValue[this.PageValueKey.IS_PARALLEL] = timelineConfig.isParallel;
-    if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
-      writeValue[this.PageValueKey.SCROLL_POINT_START] = timelineConfig.scrollPointStart;
-      writeValue[this.PageValueKey.SCROLL_POINT_END] = timelineConfig.scrollPointEnd;
+    writeValue[this.PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent;
+    writeValue[this.PageValueKey.METHODNAME] = eventConfig.methodName;
+    writeValue[this.PageValueKey.ACTIONTYPE] = eventConfig.actionType;
+    writeValue[this.PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType;
+    writeValue[this.PageValueKey.IS_PARALLEL] = eventConfig.isParallel;
+    if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
+      writeValue[this.PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart;
+      writeValue[this.PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd;
     }
     return writeValue;
   };
 
-  EventPageValueBase.readFromPageValue = function(timelineConfig) {
+  EventPageValueBase.readFromPageValue = function(eventConfig) {
     var end, handlerDiv, isParallel, parallel, start, writeValue;
-    writeValue = PageValue.getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
     if (writeValue != null) {
-      timelineConfig.id = writeValue[this.PageValueKey.ID];
-      timelineConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
-      timelineConfig.commonEventId = writeValue[this.PageValueKey.COMMON_EVENT_ID];
-      timelineConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
-      timelineConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
-      timelineConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
-      timelineConfig.animationType = writeValue[this.PageValueKey.ANIAMTIONTYPE];
-      parallel = $(".parallel_div .parallel", timelineConfig.emt);
+      eventConfig.id = writeValue[this.PageValueKey.ID];
+      eventConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
+      eventConfig.commonEventId = writeValue[this.PageValueKey.COMMON_EVENT_ID];
+      eventConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
+      eventConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
+      eventConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
+      eventConfig.animationType = writeValue[this.PageValueKey.ANIAMTIONTYPE];
+      parallel = $(".parallel_div .parallel", eventConfig.emt);
       isParallel = writeValue[this.PageValueKey.IS_PARALLEL];
       if ((parallel != null) && isParallel) {
         parallel.prop("checked", true);
       }
-      if (timelineConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
-        handlerDiv = $(".handler_div ." + (timelineConfig.methodClassName()), timelineConfig.emt);
+      if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
+        handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         start = writeValue[this.PageValueKey.SCROLL_POINT_START];
         end = writeValue[this.PageValueKey.SCROLL_POINT_END];
         if ((handlerDiv != null) && (start != null) && (end != null)) {
@@ -125,9 +125,9 @@ EventPageValueBase = (function() {
     }
   };
 
-  _scrollLength = function(timelineConfig) {
+  _scrollLength = function(eventConfig) {
     var end, start, writeValue;
-    writeValue = PageValue.getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
+    writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
     if (writeValue != null) {
       start = writeValue[this.PageValueKey.SCROLL_POINT_START];
       end = writeValue[this.PageValueKey.SCROLL_POINT_END];
@@ -143,7 +143,7 @@ EventPageValueBase = (function() {
     self = this;
     maxTeNum = 0;
     ret = null;
-    $("#" + Constant.PageValueKey.TE_ROOT + " ." + Constant.PageValueKey.TE_PREFIX).children('div').each(function(e) {
+    $("#" + Constant.PageValueKey.E_ROOT + " ." + Constant.PageValueKey.E_PREFIX).children('div').each(function(e) {
       var end, start, teNum;
       teNum = parseInt($(this).attr('class'));
       if (teNum > maxTeNum) {
@@ -165,4 +165,4 @@ EventPageValueBase = (function() {
 
 })();
 
-//# sourceMappingURL=event_page_value_base.js.map
+//# sourceMappingURL=base.js.map

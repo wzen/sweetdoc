@@ -41,7 +41,7 @@
 //= require common_event/screen_event
 //= require item/code_template
 //= require item/item_base
-//= require event_page_value/base/event_page_value_base.js
+//= require event_page_value/base/base.js
 //= require event_page_value/common/backgroundcolor.js
 //= require event_page_value/common/screenposition.js
 //= require event_page_value/item/item.js
@@ -53,9 +53,9 @@
 //= require worktable/item_extend/common_extend
 //= require worktable/item_extend/canvasitem_extend
 //= require worktable/item_extend/cssitem_extend
-//= require worktable/sidebar_config/timeline_config
-//= require worktable/timeline/timeline
-//= require worktable/timeline/run
+//= require worktable/sidebar_config/event_config.js
+//= require worktable/event/timeline
+//= require worktable/event/run
 //= require worktable/handwrite
 //= require worktable/load_js
 //= require worktable/sidebar_ui

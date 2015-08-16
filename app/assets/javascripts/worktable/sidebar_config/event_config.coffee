@@ -1,8 +1,8 @@
-class TimelineConfig
+class EventConfig
 
   if gon?
     # @property [String] TE_ITEM_ROOT_ID タイムラインイベントRoot
-    @ITEM_ROOT_ID = 'timeline_event_@te_num'
+    @ITEM_ROOT_ID = 'event_@te_num'
     # @property [String] COMMON_ACTION_CLASS タイムライン共通アクションクラス名
     @COMMON_ACTION_CLASS = constant.ElementAttribute.COMMON_ACTION_CLASS
     # @property [String] ITEM_ACTION_CLASS タイムラインアイテムアクションクラス名
@@ -23,16 +23,16 @@ class TimelineConfig
     # 選択イベントタイプ
     selectItemValue = ''
     if @isCommonEvent
-      selectItemValue = "#{Constant.TIMELINE_COMMON_PREFIX}#{@commonEventId}"
+      selectItemValue = "#{Constant.EVENT_COMMON_PREFIX}#{@commonEventId}"
     else
-      selectItemValue = "#{@id}#{Constant.TIMELINE_ITEM_SEPERATOR}#{@itemId}"
+      selectItemValue = "#{@id}#{Constant.EVENT_ITEM_SEPERATOR}#{@itemId}"
     $('.te_item_select', @emt).val(selectItemValue)
 
     actionFormName = ''
     if @isCommonEvent
-      actionFormName = Constant.TIMELINE_COMMON_PREFIX + @commonEventId
+      actionFormName = Constant.EVENT_COMMON_PREFIX + @commonEventId
     else
-      actionFormName = TimelineConfig.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
+      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
 
     $(".#{actionFormName} .radio", @emt).each((e) ->
       actionType = $(@).find('input.action_type').val()
@@ -53,11 +53,11 @@ class TimelineConfig
         $(".config.te_div", @emt).css('display', 'none')
         return
 
-      @isCommonEvent = value.indexOf(Constant.TIMELINE_COMMON_PREFIX) == 0
+      @isCommonEvent = value.indexOf(Constant.EVENT_COMMON_PREFIX) == 0
       if @isCommonEvent
-        @commonEventId = parseInt(value.substring(Constant.TIMELINE_COMMON_PREFIX.length))
+        @commonEventId = parseInt(value.substring(Constant.EVENT_COMMON_PREFIX.length))
       else
-        splitValues = value.split(Constant.TIMELINE_ITEM_SEPERATOR)
+        splitValues = value.split(Constant.EVENT_ITEM_SEPERATOR)
         @id = splitValues[0]
         @itemId = splitValues[1]
 
@@ -104,7 +104,7 @@ class TimelineConfig
     valueClassName = @methodClassName()
 
     if @teNum > 1
-      beforeActionType = PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
+      beforeActionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
       if @actionType == beforeActionType
         # 前のイベントと同じアクションタイプの場合は同時実行を表示
         $(".config.parallel_div", @emt).css('display', '')
@@ -119,7 +119,7 @@ class TimelineConfig
 
     if e?
       # 初期化
-      tle = _timelineEvent.call(@)
+      tle = _getEventClass.call(@)
       if tle? && tle.initConfigValue?
         tle.initConfigValue(@)
 
@@ -163,13 +163,13 @@ class TimelineConfig
     # プレビュー開始
     item = createdObject[@id]
     if item? && item.preview?
-      item.preview(PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(@teNum)))
+      item.preview(PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(@teNum)))
 
   # 画面値に書き込み
   writeToPageValue: ->
     errorMes = "Not implemented"
     writeValue = null
-    tle = _timelineEvent.call(@)
+    tle = _getEventClass.call(@)
     if tle?
       errorMes = tle.writeToPageValue(@)
     return errorMes
@@ -177,7 +177,7 @@ class TimelineConfig
   # 画面値から読み込み
   readFromPageValue: ->
     if EventPageValueBase.readFromPageValue(@)
-      tle = _timelineEvent.call(@)
+      tle = _getEventClass.call(@)
       if tle?
         return tle.readFromPageValue(@)
     return false
@@ -191,17 +191,17 @@ class TimelineConfig
 
   # エラー表示
   showError: (message)->
-    timelineConfigError = $('.timeline_config_error', @emt)
-    timelineConfigError.find('p').html(message)
-    timelineConfigError.css('display', '')
+    eventConfigError = $('.timeline_config_error', @emt)
+    eventConfigError.find('p').html(message)
+    eventConfigError.css('display', '')
 
   # エラー非表示
   clearError: ->
-    timelineConfigError = $('.timeline_config_error', @emt)
-    timelineConfigError.find('p').html('')
-    timelineConfigError.css('display', 'none')
+    eventConfigError = $('.timeline_config_error', @emt)
+    eventConfigError.find('p').html('')
+    eventConfigError.css('display', 'none')
 
-  _timelineEvent = ->
+  _getEventClass = ->
     if @isCommonEvent == null
       return null
 

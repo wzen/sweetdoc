@@ -30,7 +30,7 @@ runCommonVar = function() {
   window.distX = 0;
   window.distY = 0;
   window.resizeTimer = false;
-  window.timeLine = null;
+  window.eventAction = null;
   window.scrollViewSwitchZindex = {
     'on': Constant.Zindex.EVENTFLOAT,
     'off': Constant.Zindex.EVENTBOTTOM

@@ -13,8 +13,8 @@ PageValue = (function() {
     return _getPageValue.call(this, key, withRemove, Constant.PageValueKey.PV_ROOT);
   };
 
-  PageValue.getTimelinePageValue = function(key) {
-    return _getPageValue.call(this, key, false, Constant.PageValueKey.TE_ROOT);
+  PageValue.getEventPageValue = function(key) {
+    return _getPageValue.call(this, key, false, Constant.PageValueKey.E_ROOT);
   };
 
   PageValue.getSettingPageValue = function(key) {
@@ -94,8 +94,8 @@ PageValue = (function() {
     return _setPageValue.call(this, key, value, isCache, Constant.PageValueKey.PV_ROOT, false);
   };
 
-  PageValue.setTimelinePageValue = function(key, value) {
-    return _setPageValue.call(this, key, value, false, Constant.PageValueKey.TE_ROOT, true);
+  PageValue.setEventPageValue = function(key, value) {
+    return _setPageValue.call(this, key, value, false, Constant.PageValueKey.E_ROOT, true);
   };
 
   PageValue.setSettingPageValue = function(key, value, giveName) {
@@ -171,33 +171,33 @@ PageValue = (function() {
     });
   };
 
-  PageValue.getTimelinePageValueSortedListByNum = function() {
-    var count, index, k, timelineList, timelinePageValues, v;
-    timelinePageValues = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
-    if (timelinePageValues == null) {
+  PageValue.getEventPageValueSortedListByNum = function() {
+    var count, eventObjList, eventPageValues, index, k, v;
+    eventPageValues = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX);
+    if (eventPageValues == null) {
       return [];
     }
-    count = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT);
-    timelineList = new Array(count);
-    for (k in timelinePageValues) {
-      v = timelinePageValues[k];
-      if (k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) === 0) {
-        index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1;
-        timelineList[index] = v;
+    count = PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT);
+    eventObjList = new Array(count);
+    for (k in eventPageValues) {
+      v = eventPageValues[k];
+      if (k.indexOf(Constant.PageValueKey.E_NUM_PREFIX) === 0) {
+        index = parseInt(k.substring(Constant.PageValueKey.E_NUM_PREFIX.length)) - 1;
+        eventObjList[index] = v;
       }
     }
-    return timelineList;
+    return eventObjList;
   };
 
   PageValue.removePageValue = function(key) {
     return this.getPageValue(key, true);
   };
 
-  PageValue.removeAllItemAndTimelineEventPageValue = function() {
+  PageValue.removeAllItemAndEventPageValue = function() {
     $("#" + Constant.PageValueKey.PV_ROOT).each(function(e) {
       return $(this).remove();
     });
-    return $("#" + Constant.PageValueKey.TE_ROOT).each(function(e) {
+    return $("#" + Constant.PageValueKey.E_ROOT).each(function(e) {
       return $(this).remove();
     });
   };

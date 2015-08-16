@@ -23,11 +23,11 @@ ScrollChapter = (function(superClass) {
     if (window.disabledEventHandler) {
       return;
     }
-    return this.eventList.forEach(function(event) {
+    return this.eventObjList.forEach(function(event) {
       if (event.scrollEvent != null) {
         return event.scrollEvent(x, y, function() {
-          if (window.timeLine != null) {
-            return window.timeLine.nextChapterIfFinishedAllEvent();
+          if (window.eventAction != null) {
+            return window.eventAction.nextChapterIfFinishedAllEvent();
           }
         });
       }
@@ -37,9 +37,9 @@ ScrollChapter = (function(superClass) {
   ScrollChapter.prototype.finishedAllEvent = function() {
     var ret;
     ret = true;
-    this.eventList.forEach(function(event) {
+    this.eventObjList.forEach(function(event) {
       var methodName;
-      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
       if (!event.isFinishedEvent) {
         ret = false;
         return false;

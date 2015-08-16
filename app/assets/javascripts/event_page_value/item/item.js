@@ -14,8 +14,8 @@ EPVItem = (function(superClass) {
 
   EPVItem.itemSize = 'item_size';
 
-  EPVItem.initConfigValue = function(timelineConfig, item) {
-    return EPVItem.__super__.constructor.initConfigValue.call(this, timelineConfig);
+  EPVItem.initConfigValue = function(eventConfig, item) {
+    return EPVItem.__super__.constructor.initConfigValue.call(this, eventConfig);
   };
 
   EPVItem.writeDefaultToPageValue = function(item) {
@@ -41,37 +41,37 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.SCROLL_POINT_START] = start;
     writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
     writeValue[this.PageValueKey.IS_PARALLEL] = false;
-    itemWriteValue = item.objWriteTimeline();
+    itemWriteValue = item.objWriteEvent();
     $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {
-      value = item.constructor.timelineDefaultConfigValue();
+      value = item.constructor.defaultEventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      teNum = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT);
+      teNum = PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT);
       if (teNum != null) {
         teNum = parseInt(teNum) + 1;
       } else {
         teNum = 1;
       }
-      PageValue.setTimelinePageValue(this.PageValueKey.te(teNum), writeValue);
-      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, teNum);
+      PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
+      PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, teNum);
       changeTimelineColor(teNum, actionType);
     }
     return errorMes;
   };
 
-  EPVItem.writeToPageValue = function(timelineConfig) {
+  EPVItem.writeToPageValue = function(eventConfig) {
     var errorMes, item, itemWriteValue, value, writeValue;
     errorMes = "";
-    writeValue = EPVItem.__super__.constructor.writeToPageValue.call(this, timelineConfig);
-    item = createdObject[timelineConfig.id];
-    itemWriteValue = item.objWriteTimeline();
+    writeValue = EPVItem.__super__.constructor.writeToPageValue.call(this, eventConfig);
+    item = createdObject[eventConfig.id];
+    itemWriteValue = item.objWriteEvent();
     $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {
-      value = item.timelineConfigValue();
+      value = item.eventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      PageValue.setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
-      if (parseInt(PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT)) < timelineConfig.teNum) {
-        PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
+      if (parseInt(PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT)) < eventConfig.teNum) {
+        PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, eventConfig.teNum);
       }
     }
     return errorMes;
@@ -79,13 +79,13 @@ EPVItem = (function(superClass) {
 
   EPVItem.writeItemValueToPageValue = function(item) {
     var idx, key, results, te, tes;
-    tes = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
+    tes = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX);
     results = [];
     for (idx in tes) {
       te = tes[idx];
-      if (idx.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) >= 0 && te.id === item.id) {
-        key = "" + Constant.PageValueKey.TE_PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + idx + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.minObj;
-        results.push(PageValue.setTimelinePageValue(key, item.getMinimumObject()));
+      if (idx.indexOf(Constant.PageValueKey.E_NUM_PREFIX) >= 0 && te.id === item.id) {
+        key = "" + Constant.PageValueKey.E_PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + idx + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.minObj;
+        results.push(PageValue.setEventPageValue(key, item.getMinimumObject()));
       } else {
         results.push(void 0);
       }
@@ -93,9 +93,9 @@ EPVItem = (function(superClass) {
     return results;
   };
 
-  EPVItem.readFromPageValue = function(timelineConfig, item) {
+  EPVItem.readFromPageValue = function(eventConfig, item) {
     var ret;
-    ret = EPVItem.__super__.constructor.readFromPageValue.call(this, timelineConfig);
+    ret = EPVItem.__super__.constructor.readFromPageValue.call(this, eventConfig);
     return ret;
   };
 

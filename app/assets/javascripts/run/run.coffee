@@ -24,11 +24,11 @@ initView = ->
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
   is_reload = PageValue.getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
-  ls = new LocalStorage(LocalStorage.Key.RUN_TIMELINE_PAGEVALUES)
+  ls = new LocalStorage(LocalStorage.Key.RUN_EVENT_PAGEVALUES)
   if is_reload?
-    ls.loadTimelinePageValueFromStorage()
+    ls.loadEventPageValueFromStorage()
   else
-    ls.saveTimelinePageValueToStorage()
+    ls.saveEventPageValueToStorage()
 
 initResize = (wrap, scrollWrapper) ->
   resizeTimer = false;
@@ -43,36 +43,36 @@ initResize = (wrap, scrollWrapper) ->
   )
 
 # タイムライン作成
-initTimeline = ->
+initEventAction = ->
   # アクションのイベントを取得
-  timelineList = PageValue.getTimelinePageValueSortedListByNum()
+  eventPageValueList = PageValue.getEventPageValueSortedListByNum()
 
   # チャプターの作成
   chapterList = []
+  eventObjList = []
   eventList = []
-  tList = []
-  $.each(timelineList, (idx, obj)->
+  $.each(eventPageValueList, (idx, obj)->
 
     event = Common.getInstanceFromMap(obj)
     event.initWithEvent(obj)
-    eventList.push(event)
-    tList.push(obj)
+    eventObjList.push(event)
+    eventList.push(obj)
 
     parallel = false
-    if idx < timelineList.length - 1
-      beforeTimeline = timelineList[idx + 1]
-      if beforeTimeline[EventPageValueBase.PageValueKey.IS_PARALLEL]
+    if idx < eventPageValueList.length - 1
+      beforeEvent = eventPageValueList[idx + 1]
+      if beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]
         parallel = true
 
     if !parallel
       chapter = null
       if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
-        chapter = new ClickChapter({eventList: eventList, timelineEventList: tList})
+        chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList})
       else
-        chapter = new ScrollChapter({eventList: eventList, timelineEventList: tList})
+        chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList})
       chapterList.push(chapter)
+      eventObjList = []
       eventList = []
-      tList = []
 
       if !window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
           # 最初のアイテムにフォーカスする
@@ -81,8 +81,8 @@ initTimeline = ->
 
     return true
   )
-  window.timeLine = new TimeLine(chapterList)
-  window.timeLine.start()
+  window.eventAction = new EventAction(chapterList)
+  window.eventAction.start()
 
 # Handleスクロール位置の初期化
 initHandleScrollPoint = ->
@@ -96,7 +96,7 @@ setupScrollEvent = ->
   stopTimer = null
 
   scrollHandleWrapper.scroll( ->
-    if timeLine.finished || !timeLine.isScrollChapter()
+    if eventAction.finished || !eventAction.isScrollChapter()
       return
 
     x = $(@).scrollLeft()
@@ -118,7 +118,7 @@ setupScrollEvent = ->
     lastTop = y
 
     console.log('distX:' + distX + ' distY:' + distY)
-    timeLine.handleScrollEvent(distX, distY)
+    eventAction.handleScrollEvent(distX, distY)
   )
 
   scrollFinished = ->
@@ -129,8 +129,8 @@ $ ->
   initView()
   initHandleScrollPoint()
   #initResize(wrap, scrollWrapper)
-  initTimeline()
+  initEventAction()
   setupScrollEvent()
 
   # CSS
-  $('#sup_css').html(PageValue.getTimelinePageValue(Constant.PageValueKey.TE_CSS))
+  $('#sup_css').html(PageValue.getEventPageValue(Constant.PageValueKey.E_CSS))

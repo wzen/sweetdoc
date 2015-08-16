@@ -3,11 +3,11 @@ var preview, run;
 
 run = function() {
   var target;
-  setupTimeLineCss();
+  setupEventCss();
   target = "_runwindow";
   window.open("about:blank", target);
-  document.timeline_run_form.target = target;
-  return document.timeline_run_form.submit();
+  document.run_form.target = target;
+  return document.run_form.submit();
 };
 
 preview = function() {};

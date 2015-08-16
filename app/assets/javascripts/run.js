@@ -24,14 +24,13 @@
 //= require item/item_base
 //= require item/arrow
 //= require item/button
-//= require event_page_value/base/event_page_value_base.js
+//= require event_page_value/base/base.js
 //= require event_page_value/common/backgroundcolor.js
 //= require event_page_value/common/screenposition.js
 //= require event_page_value/item/item.js
 //= require run/chapter
 //= require run/scroll_chapter
 //= require run/click_chapter
-//= require run/timeline.js
-//= require test_move
+//= require run/event_action.js
 //= require run/run
 // require_tree .

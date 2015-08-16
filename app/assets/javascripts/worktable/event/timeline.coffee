@@ -29,7 +29,7 @@ setupTimelineEventConfig = ->
     tEmt = $('.te_num', timelineEvents)
     tEmt.each((e) ->
       teNum = parseInt($(@).val())
-      actionType = PageValue.getTimelinePageValue(EventPageValueBase.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
+      actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
       changeTimelineColor(teNum, actionType)
       if e == tEmt.length - 1 && actionType != null
         # blankのイベントが無い場合、作成
@@ -93,7 +93,7 @@ setupTimelineEventConfig = ->
   # イベントによる表示状態を更新
   _updateEventState = (te_num) ->
     te_num = parseInt(te_num)
-    tes = PageValue.getTimelinePageValueSortedListByNum()
+    tes = PageValue.getEventPageValueSortedListByNum()
 
     # 全てをイベント前に変更
     previewinitCount = 0
@@ -127,12 +127,12 @@ setupTimelineEventConfig = ->
     switchSidebarConfig("timeline")
 
     te_num = $(e).find('input.te_num').val()
-    eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
     emt = $('#' + eId)
     if emt.length == 0
       # イベントメニューの作成
-      emt = $('#timeline-config .timeline_temp .event').clone(true).attr('id', eId)
-      $('#timeline-config').append(emt)
+      emt = $('#event-config .event_temp .event').clone(true).attr('id', eId)
+      $('#event-config').append(emt)
 
     # アイテム選択メニュー更新
     updateSelectItemMenu()
@@ -141,7 +141,7 @@ setupTimelineEventConfig = ->
     setupTimelineEventHandler(te_num)
 
     # イベントメニューの表示
-    $('#timeline-config .event').css('display', 'none')
+    $('#event-config .event').css('display', 'none')
     emt.css('display', '')
 
     # サイドバー表示
@@ -152,7 +152,7 @@ setupTimelineEventConfig = ->
 # アイテム選択メニューを更新
 updateSelectItemMenu = ->
   # 作成されたアイテムの一覧を取得
-  teItemSelects = $('#timeline-config .te_item_select')
+  teItemSelects = $('#event-config .te_item_select')
   teItemSelect = teItemSelects[0]
   selectOptions = ''
   items = $("##{Constant.PageValueKey.PV_ROOT} .item")
@@ -161,7 +161,7 @@ updateSelectItemMenu = ->
     name = $(@).find('input.name').val()
     itemId = $(@).find('input.itemId').val()
     selectOptions += """
-        <option value='#{id}#{Constant.TIMELINE_ITEM_SEPERATOR}#{itemId}'>
+        <option value='#{id}#{Constant.EVENT_ITEM_SEPERATOR}#{itemId}'>
           #{name}
         </option>
       """
@@ -170,7 +170,7 @@ updateSelectItemMenu = ->
   # メニューを入れ替え
   teItemSelects.each( ->
     $(@).find('option').each( ->
-      if $(@).val().length > 0 && $(@).val().indexOf(Constant.TIMELINE_COMMON_PREFIX) != 0
+      if $(@).val().length > 0 && $(@).val().indexOf(Constant.EVENT_COMMON_PREFIX) != 0
         $(@).remove()
     )
     $(@).append($(selectOptions))
@@ -178,10 +178,10 @@ updateSelectItemMenu = ->
 
 # イベントハンドラー設定
 setupTimelineEventHandler = (te_num) ->
-  eId = TimelineConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+  eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
   emt = $('#' + eId)
   # Configクラス作成 & イベントハンドラの設定
-  te = new TimelineConfig(emt, te_num)
+  te = new EventConfig(emt, te_num)
   do =>
     em = $('.te_item_select', emt)
     em.off('change')
@@ -191,14 +191,14 @@ setupTimelineEventHandler = (te_num) ->
     )
 
 # タイムラインのCSSをまとめる
-setupTimeLineCss = ->
+setupEventCss = ->
   itemCssStyle = ""
   $('#css_code_info').find('.css-style').each( ->
     itemCssStyle += $(this).html()
   )
 
   if itemCssStyle.length > 0
-    PageValue.setTimelinePageValue(Constant.PageValueKey.TE_CSS, itemCssStyle)
+    PageValue.setEventPageValue(Constant.PageValueKey.E_CSS, itemCssStyle)
 
 # アクションタイプからアクションタイプクラス名を取得
 getActionTypeClassNameByActionType = (actionType) ->

@@ -7,7 +7,7 @@ class ClickChapter extends Chapter
 
     # イベント設定
     self = @
-    @eventList.forEach((event) ->
+    @eventObjList.forEach((event) ->
       event.getJQueryElement().off('click')
       event.getJQueryElement().on('click', (e) ->
         self.clickEvent(e)
@@ -25,10 +25,10 @@ class ClickChapter extends Chapter
     if window.disabledEventHandler
       return
 
-    @eventList.forEach((event) ->
+    @eventObjList.forEach((event) ->
       if event.clickEvent?
         event.clickEvent(e, ->
-          if window.timeLine?
-            window.timeLine.nextChapterIfFinishedAllEvent()
+          if window.eventAction?
+            window.eventAction.nextChapterIfFinishedAllEvent()
         )
     )

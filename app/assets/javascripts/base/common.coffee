@@ -133,10 +133,10 @@ class Common
     window.classMap[c][i] = value
 
   # インスタンス取得
-  @getInstanceFromMap = (timelineEvent) ->
-    isCommonEvent = timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-    id = if isCommonEvent then timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else timelineEvent[EventPageValueBase.PageValueKey.ID]
-    classMapId = if isCommonEvent then timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else timelineEvent[EventPageValueBase.PageValueKey.ITEM_ID]
+  @getInstanceFromMap = (event) ->
+    isCommonEvent = event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+    id = if isCommonEvent then event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else event[EventPageValueBase.PageValueKey.ID]
+    classMapId = if isCommonEvent then event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else event[EventPageValueBase.PageValueKey.ITEM_ID]
 
     if typeof isCommonEvent == "boolean"
       if isCommonEvent
@@ -187,7 +187,7 @@ class Common
   # 全てのアイテムとイベントを削除
   @removeAllItemAndEvent = ->
     @removeAllItem()
-    PageValue.removeAllItemAndTimelineEventPageValue()
+    PageValue.removeAllItemAndEventPageValue()
 
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等

@@ -12,17 +12,17 @@ class ScreenEvent extends CommonEvent
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'changeScreenPosition'
       scrollContents.scrollTop(@beforeScrollTop)
       scrollContents.scrollLeft(@beforeScrollLeft)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'changeScreenPosition'
-      scrollTop = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
-      scrollLeft = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
+      scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
+      scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
       scrollContents.scrollTop(@beforeScrollTop + scrollTop)
       scrollContents.scrollLeft(@beforeScrollLeft + scrollLeft)
 
@@ -30,11 +30,11 @@ class ScreenEvent extends CommonEvent
   changeScreenPosition: (e, complete) =>
     @updateEventBefore()
 
-    actionType = @timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.CLICK
       finished_count = 0
-      scrollTop = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
-      scrollLeft = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
+      scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
+      scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
       scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 'normal', 'linear', ->
         finished_count += 1
         if finished_count >= 2
@@ -43,7 +43,7 @@ class ScreenEvent extends CommonEvent
             complete()
       )
 
-      scale = @timelineEvent[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z]
+      scale = @event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z]
       if scale != 0
         @getJQueryElement().transition({scale: "+=#{scale}"}, 'normal', 'linear', ->
           finished_count += 1

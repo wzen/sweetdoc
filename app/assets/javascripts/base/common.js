@@ -168,11 +168,11 @@ Common = (function() {
     return window.classMap[c][i] = value;
   };
 
-  Common.getInstanceFromMap = function(timelineEvent) {
+  Common.getInstanceFromMap = function(event) {
     var classMapId, id, isCommonEvent;
-    isCommonEvent = timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
-    id = isCommonEvent ? timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : timelineEvent[EventPageValueBase.PageValueKey.ID];
-    classMapId = isCommonEvent ? timelineEvent[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : timelineEvent[EventPageValueBase.PageValueKey.ITEM_ID];
+    isCommonEvent = event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+    id = isCommonEvent ? event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : event[EventPageValueBase.PageValueKey.ID];
+    classMapId = isCommonEvent ? event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : event[EventPageValueBase.PageValueKey.ITEM_ID];
     if (typeof isCommonEvent === "boolean") {
       if (isCommonEvent) {
         isCommonEvent = "1";
@@ -241,7 +241,7 @@ Common = (function() {
 
   Common.removeAllItemAndEvent = function() {
     this.removeAllItem();
-    return PageValue.removeAllItemAndTimelineEventPageValue();
+    return PageValue.removeAllItemAndEventPageValue();
   };
 
   return Common;

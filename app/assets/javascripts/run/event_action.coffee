@@ -1,5 +1,5 @@
-# タイムライン
-class TimeLine
+# イベント実行クラス
+class EventAction
   # コンストラクタ
   constructor: (chapterList) ->
     @chapterList = chapterList
@@ -27,7 +27,7 @@ class TimeLine
     # indexを更新
     @chapterIndex += 1
     if @chapterList.length <= @chapterIndex
-      @finishTimeline()
+      @finishAllEvents()
     else
       # チャプター前処理
       @thisChapter().willChapter()
@@ -62,6 +62,6 @@ class TimeLine
 #      @thisChapter().clickEvent(e)
 
   # タイムライン終了イベント
-  finishTimeline: ->
+  finishAllEvents: ->
     @finished = true
     console.log('Finish!')

@@ -14,12 +14,12 @@ EPVBackgroundColor = (function(superClass) {
 
   EPVBackgroundColor.CHANGE_COLOR = 'c_color';
 
-  EPVBackgroundColor.initConfigValue = function(timelineConfig) {
+  EPVBackgroundColor.initConfigValue = function(eventConfig) {
     var bgColor;
-    EPVBackgroundColor.__super__.constructor.initConfigValue.call(this, timelineConfig);
+    EPVBackgroundColor.__super__.constructor.initConfigValue.call(this, eventConfig);
     bgColor = $('#main-wrapper.stage_container').css('backgroundColor');
-    $(".baseColor", $("values_div", timelineConfig.emt)).css('backgroundColor', bgColor);
-    return $(".colorPicker", timelineConfig.emt).each(function() {
+    $(".baseColor", $("values_div", eventConfig.emt)).css('backgroundColor', bgColor);
+    return $(".colorPicker", eventConfig.emt).each(function() {
       var self;
       self = $(this);
       if (!self.hasClass('temp') && !self.hasClass('baseColor')) {
@@ -28,11 +28,11 @@ EPVBackgroundColor = (function(superClass) {
     });
   };
 
-  EPVBackgroundColor.writeToPageValue = function(timelineConfig) {
+  EPVBackgroundColor.writeToPageValue = function(eventConfig) {
     var emt, errorMes, value, writeValue;
     errorMes = "";
-    writeValue = EPVBackgroundColor.__super__.constructor.writeToPageValue.call(this, timelineConfig);
-    emt = timelineConfig.emt;
+    writeValue = EPVBackgroundColor.__super__.constructor.writeToPageValue.call(this, eventConfig);
+    emt = eventConfig.emt;
     value = {};
     value[this.BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor');
     value[this.CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor');
@@ -41,20 +41,20 @@ EPVBackgroundColor = (function(superClass) {
     }
     if (errorMes.length === 0) {
       writeValue[this.PageValueKey.VALUE] = value;
-      PageValue.setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
-      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
+      PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, eventConfig.teNum);
     }
     return errorMes;
   };
 
-  EPVBackgroundColor.readFromPageValue = function(timelineConfig) {
+  EPVBackgroundColor.readFromPageValue = function(eventConfig) {
     var emt, ret, value, writeValue;
-    ret = EPVBackgroundColor.__super__.constructor.readFromPageValue.call(this, timelineConfig);
+    ret = EPVBackgroundColor.__super__.constructor.readFromPageValue.call(this, eventConfig);
     if (!ret) {
       return false;
     }
-    emt = timelineConfig.emt;
-    writeValue = PageValue.getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
+    emt = eventConfig.emt;
+    writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
     value = writeValue[this.PageValueKey.VALUE];
     initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
     initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);

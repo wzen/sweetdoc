@@ -3,17 +3,17 @@ class EPVScreenPosition extends EventPageValueBase
   @Y = 'y'
   @Z = 'z'
 
-  @initConfigValue = (timelineConfig) ->
-    super(timelineConfig)
+  @initConfigValue = (eventConfig) ->
+    super(eventConfig)
 
-    $('.screenposition_change_x:first', timelineConfig.emt).val(0)
-    $('.screenposition_change_y:first', timelineConfig.emt).val(0)
-    $('.screenposition_change_z:first', timelineConfig.emt).val(0)
+    $('.screenposition_change_x:first', eventConfig.emt).val(0)
+    $('.screenposition_change_y:first', eventConfig.emt).val(0)
+    $('.screenposition_change_z:first', eventConfig.emt).val(0)
 
-  @writeToPageValue = (timelineConfig) ->
+  @writeToPageValue = (eventConfig) ->
     errorMes = ""
-    emt = timelineConfig.emt
-    writeValue = super(timelineConfig)
+    emt = eventConfig.emt
+    writeValue = super(eventConfig)
     value = {}
     value[@X] = $('.screenposition_change_x:first', emt).val()
     value[@Y] = $('.screenposition_change_y:first', emt).val()
@@ -21,17 +21,17 @@ class EPVScreenPosition extends EventPageValueBase
 
     if errorMes.length == 0
       writeValue[@PageValueKey.VALUE] = value
-      PageValue.setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
-      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
+      PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
+      PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, eventConfig.teNum)
 
     return errorMes
 
-  @readFromPageValue = (timelineConfig) ->
-    ret = super(timelineConfig)
+  @readFromPageValue = (eventConfig) ->
+    ret = super(eventConfig)
     if !ret
       return false
-    emt = timelineConfig.emt
-    writeValue = PageValue.getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
+    emt = eventConfig.emt
+    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
     $('.screenposition_change_x:first', emt).val(value[@X])
     $('.screenposition_change_y:first', emt).val(value[@Y])

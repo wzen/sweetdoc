@@ -92,7 +92,7 @@ ServerStorage = (function() {
               return callback.call(self);
             }
           });
-          return addTimelineEventContents(d.te_actions, d.te_values);
+          return addEventConfigContents(d.te_actions, d.te_values);
         });
       },
       error: function(data) {

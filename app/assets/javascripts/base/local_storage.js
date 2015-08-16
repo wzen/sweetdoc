@@ -5,9 +5,9 @@ LocalStorage = (function() {
   LocalStorage.Key = (function() {
     function Key() {}
 
-    Key.WORKTABLE_TIMELINE_PAGEVALUES = 'worktable_timeline_pagevalues';
+    Key.WORKTABLE_EVENT_PAGEVALUES = 'worktable_event_pagevalues';
 
-    Key.RUN_TIMELINE_PAGEVALUES = 'run_timeline_pagevalues';
+    Key.RUN_EVENT_PAGEVALUES = 'run_event_pagevalues';
 
     return Key;
 
@@ -18,16 +18,16 @@ LocalStorage = (function() {
     this.storageKey = key;
   }
 
-  LocalStorage.prototype.saveTimelinePageValueToStorage = function() {
+  LocalStorage.prototype.saveEventPageValueToStorage = function() {
     var h;
-    h = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX);
+    h = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX);
     return this.lstorage.setItem(this.storageKey, JSON.stringify(h));
   };
 
-  LocalStorage.prototype.loadTimelinePageValueFromStorage = function() {
+  LocalStorage.prototype.loadEventPageValueFromStorage = function() {
     var h;
     h = JSON.parse(this.lstorage.getItem(this.storageKey));
-    return PageValue.setTimelinePageValue(Constant.PageValueKey.TE_PREFIX, h);
+    return PageValue.setEventPageValue(Constant.PageValueKey.E_PREFIX, h);
   };
 
   LocalStorage.prototype.get = function() {

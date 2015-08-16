@@ -8,8 +8,8 @@ class PageValue
 
   # タイムラインの値を取得
   # @param [String] key キー値
-  @getTimelinePageValue = (key) ->
-    _getPageValue.call(@, key, false, Constant.PageValueKey.TE_ROOT)
+  @getEventPageValue = (key) ->
+    _getPageValue.call(@, key, false, Constant.PageValueKey.E_ROOT)
 
   # 共通設定値を取得
   # @param [String] key キー値
@@ -86,8 +86,8 @@ class PageValue
   # タイムラインの値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  @setTimelinePageValue = (key, value) ->
-    _setPageValue.call(@, key, value, false, Constant.PageValueKey.TE_ROOT, true)
+  @setEventPageValue = (key, value) ->
+    _setPageValue.call(@, key, value, false, Constant.PageValueKey.E_ROOT, true)
 
   # 共通設定値を設定
   # @param [String] key キー値
@@ -162,21 +162,21 @@ class PageValue
     )
 
   # ソートしたタイムラインリストを取得
-  @getTimelinePageValueSortedListByNum = ->
-    timelinePageValues = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_PREFIX)
-    if !timelinePageValues?
+  @getEventPageValueSortedListByNum = ->
+    eventPageValues = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX)
+    if !eventPageValues?
       return []
 
-    count = PageValue.getTimelinePageValue(Constant.PageValueKey.TE_COUNT)
-    timelineList = new Array(count)
+    count = PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT)
+    eventObjList = new Array(count)
 
     # ソート
-    for k, v of timelinePageValues
-      if k.indexOf(Constant.PageValueKey.TE_NUM_PREFIX) == 0
-        index = parseInt(k.substring(Constant.PageValueKey.TE_NUM_PREFIX.length)) - 1
-        timelineList[index] = v
+    for k, v of eventPageValues
+      if k.indexOf(Constant.PageValueKey.E_NUM_PREFIX) == 0
+        index = parseInt(k.substring(Constant.PageValueKey.E_NUM_PREFIX.length)) - 1
+        eventObjList[index] = v
 
-    return timelineList
+    return eventObjList
 
   # ページが持つ値を削除
   # @param [String] key キー値
@@ -185,10 +185,10 @@ class PageValue
     @getPageValue(key, true)
 
   # アイテムとイベント情報を削除
-  @removeAllItemAndTimelineEventPageValue = ->
+  @removeAllItemAndEventPageValue = ->
     $("##{Constant.PageValueKey.PV_ROOT}").each((e) ->
       $(@).remove()
     )
-    $("##{Constant.PageValueKey.TE_ROOT}").each((e) ->
+    $("##{Constant.PageValueKey.E_ROOT}").each((e) ->
       $(@).remove()
     )

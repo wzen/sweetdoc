@@ -2,8 +2,8 @@ class Const
 
   # @property OPERATION_STORE_MAX 操作履歴保存最大数
   OPERATION_STORE_MAX = 30
-  # @property TIMELINE_COMMON_PREFIX 共通タイムラインイベント クラス名プレフィックス
-  TIMELINE_COMMON_PREFIX = 'c_'
+  # @property EVENT_COMMON_PREFIX 共通タイムラインイベント クラス名プレフィックス
+  EVENT_COMMON_PREFIX = 'c_'
 
   # 操作モード
   class Mode
@@ -107,10 +107,10 @@ class Const
   end
 
   class ElementAttribute
-    COMMON_ACTION_CLASS = "#{Const::TIMELINE_COMMON_PREFIX}@commoneventid"
-    ITEM_ACTION_CLASS = 'timeline_event_action_@itemid'
+    COMMON_ACTION_CLASS = "#{Const::EVENT_COMMON_PREFIX}@commoneventid"
+    ITEM_ACTION_CLASS = 'item_event_action_@itemid'
     COMMON_VALUES_CLASS = 'common_event_value_@commoneventid_@methodname'
-    ITEM_VALUES_CLASS = 'timeline_event_value_@itemid_@methodname'
+    ITEM_VALUES_CLASS = 'item_event_value_@itemid_@methodname'
   end
 
   class PageValueKey
@@ -120,20 +120,20 @@ class Const
     ST_ROOT = 'setting_page_values'
     # @property [String] ST_PREFIX 共通設定プレフィックス
     ST_PREFIX = 'settings'
-    # @property [String] TE_ROOT タイムライン値ルート
-    TE_ROOT = 'timeline_page_values'
-    # @property [String] TE_PREFIX タイムラインプレフィックス
-    TE_PREFIX = 'timeline_events'
-    # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
-    TE_NUM_PREFIX = 'te_'
+    # @property [String] E_ROOT タイムライン値ルート
+    E_ROOT = 'event_page_values'
+    # @property [String] E_PREFIX タイムラインプレフィックス
+    E_PREFIX = 'event_'
+    # @property [String] E_NUM_PREFIX タイムライン番号プレフィックス
+    E_NUM_PREFIX = 'te_'
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     PAGE_VALUES_SEPERATOR = ':'
     # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
     IS_RUNWINDOW_RELOAD = 'is_runwindow_reload'
-    # @property [String] TE_COUNT タイムライン数
-    TE_COUNT = "#{TE_PREFIX}#{PAGE_VALUES_SEPERATOR}count"
-    # @property [String] TE_CSS CSSデータ
-    TE_CSS = "#{TE_PREFIX}#{PAGE_VALUES_SEPERATOR}css"
+    # @property [String] E_COUNT タイムライン数
+    E_COUNT = "#{E_PREFIX}#{PAGE_VALUES_SEPERATOR}count"
+    # @property [String] E_CSS CSSデータ
+    E_CSS = "#{E_PREFIX}#{PAGE_VALUES_SEPERATOR}css"
   end
 
   class Setting

@@ -1,12 +1,12 @@
 # イベントリスナー Extend
 class EventBase extends Extend
   # 初期化
-  initWithEvent: (timelineEvent) ->
-    @setEvent(timelineEvent)
+  initWithEvent: (event) ->
+    @setEvent(event)
 
   # アクションの初期化(閲覧モードのみ使用される)
-  setEvent: (timelineEvent) ->
-    @timelineEvent = timelineEvent
+  setEvent: (event) ->
+    @event = event
     @isFinishedEvent = false
     @doPreviewLoop = false
     # アクションメソッドの設定
@@ -14,8 +14,8 @@ class EventBase extends Extend
 
   # アクションメソッドの設定
   setMethod: ->
-    actionType = @timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE]
-    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if !@constructor.prototype[methodName]?
       # メソッドが見つからない場合
       return
@@ -35,22 +35,22 @@ class EventBase extends Extend
     return
 
   # プレビュー開始
-  preview: (timelineEvent) ->
+  preview: (event) ->
     @stopPreview( =>
-      _preview.call(@, timelineEvent)
+      _preview.call(@, event)
     )
 
-  _preview = (timelineEvent) ->
+  _preview = (event) ->
     drawDelay = 30 # 0.03秒毎スクロール描画
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
-    @initWithEvent(timelineEvent)
-    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    @initWithEvent(event)
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     @willChapter(methodName)
     @appendCssIfNeeded(methodName)
 
     method = @constructor.prototype[methodName]
-    actionType = @timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
     # イベントループ
     @doPreviewLoop = true
     loopCount = 0
@@ -142,12 +142,12 @@ class EventBase extends Extend
 
   # チャプターを進める
   nextChapter: ->
-    if window.timeLine?
-      window.timeLine.nextChapter()
+    if window.eventAction?
+      window.eventAction.nextChapter()
 
   # チャプター開始前イベント
   willChapter: (methodName) ->
-    actionType = @timelineEvent[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollValue = 0
 
@@ -161,11 +161,11 @@ class EventBase extends Extend
 
   # スクロール基底メソッド
   scrollRootFunc: (x, y, complete = null) ->
-    if !@timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]?
+    if !@event[EventPageValueBase.PageValueKey.METHODNAME]?
       # メソッドが無い場合
       return
 
-    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if @isFinishedEvent
       # 終了済みの場合
       return
@@ -176,8 +176,8 @@ class EventBase extends Extend
     else
       @scrollValue += parseInt((y - 9) / 10)
 
-    sPoint = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
-    ePoint = parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+    sPoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    ePoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
     # スクロール指定範囲外なら反応させない
     if @scrollValue < sPoint || @scrollValue > ePoint
       return
@@ -193,7 +193,7 @@ class EventBase extends Extend
 
   # スクロールの長さを取得
   scrollLength: ->
-    return parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@timelineEvent[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    return parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
 
   # CSS
   # @abstract
@@ -228,15 +228,15 @@ class EventBase extends Extend
 
 class CommonEventBase extends EventBase
   # 初期化
-  initWithEvent: (timelineEvent) ->
-    super(timelineEvent)
+  initWithEvent: (event) ->
+    super(event)
 
 class ItemEventBase extends EventBase
   # 初期化
-  initWithEvent: (timelineEvent) ->
-    super(timelineEvent)
+  initWithEvent: (event) ->
+    super(event)
     # 値設定
-    @setMiniumObject(timelineEvent[EPVItem.minObj])
+    @setMiniumObject(event[EPVItem.minObj])
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     @reDraw(false)

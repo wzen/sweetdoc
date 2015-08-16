@@ -3,17 +3,17 @@ var Chapter;
 
 Chapter = (function() {
   function Chapter(list) {
+    this.eventObjList = list.eventObjList;
     this.eventList = list.eventList;
-    this.timelineEventList = list.timelineEventList;
   }
 
   Chapter.prototype.willChapter = function() {
     var event, i, idx, len, methodName, ref;
-    ref = this.eventList;
+    ref = this.eventObjList;
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
-      event.initWithEvent(this.timelineEventList[idx]);
-      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+      event.initWithEvent(this.eventList[idx]);
+      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
       event.willChapter(methodName);
       event.appendCssIfNeeded(methodName);
     }
@@ -22,9 +22,9 @@ Chapter = (function() {
   };
 
   Chapter.prototype.didChapter = function() {
-    return this.eventList.forEach(function(event) {
+    return this.eventObjList.forEach(function(event) {
       var methodName;
-      methodName = event.timelineEvent[EventPageValueBase.PageValueKey.METHODNAME];
+      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
       return event.didChapter(methodName);
     });
   };
@@ -36,9 +36,9 @@ Chapter = (function() {
     }
     window.disabledEventHandler = true;
     item = null;
-    this.eventList.forEach((function(_this) {
+    this.eventObjList.forEach((function(_this) {
       return function(e, idx) {
-        if (_this.timelineEventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+        if (_this.eventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
           item = e;
           return false;
         }
@@ -77,8 +77,8 @@ Chapter = (function() {
   Chapter.prototype.riseFrontAllActor = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     scrollContents.css('z-index', scrollViewSwitchZindex.on);
-    return this.eventList.forEach(function(event) {
-      if (event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+    return this.eventObjList.forEach(function(event) {
+      if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
         return event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
       }
     });
@@ -87,8 +87,8 @@ Chapter = (function() {
   Chapter.prototype.sinkFrontAllActor = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.eventList.forEach(function(event) {
-      if (event.timelineEvent[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+    return this.eventObjList.forEach(function(event) {
+      if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
         return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM);
       }
     });

@@ -9,11 +9,11 @@
     <% end %>
 </div>
 
-<%= form_tag("/run", method: "post", name: "timeline_run_form") do %>
+<%= form_tag("/run", method: "post", name: "run_form") do %>
     <div id="<%= Const::PageValueKey::ST_ROOT %>">
     </div>
 
-    <div id="<%= Const::PageValueKey::TE_ROOT %>">
+    <div id="<%= Const::PageValueKey::E_ROOT %>">
         <% if timeline_page_values != nil %>
             <%= timeline_page_values.html_safe %>
         <% end %>

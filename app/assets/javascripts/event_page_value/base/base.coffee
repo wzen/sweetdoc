@@ -7,7 +7,7 @@ class EventPageValueBase
     class @PageValueKey
       # @property [String] te タイムラインイベントRoot
       @te : (teNum) ->
-        constant.PageValueKey.TE_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.TE_NUM_PREFIX + teNum
+        constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.E_NUM_PREFIX + teNum
       # @property [String] ID アイテムID
       @ID = 'id'
       # @property [String] ITEM_ID アイテムタイプID
@@ -39,9 +39,9 @@ class EventPageValueBase
       # @property [String] SCROLL_TIME スクロール実行終了位置
       @SCROLL_POINT_END = 'scroll_point_end'
 
-  @initConfigValue = (timelineConfig) ->
-    if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-      handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
+  @initConfigValue = (eventConfig) ->
+    if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
+      handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
       if handlerDiv?
         startDiv = handlerDiv.find('.scroll_point_start:first')
         start = startDiv.val()
@@ -54,54 +54,54 @@ class EventPageValueBase
         endDiv = handlerDiv.find('.scroll_point_end:first')
         end = endDiv.val()
         if end.length == 0
-          endDiv.val(parseInt(s) + _scrollLength.call(@, timelineConfig))
+          endDiv.val(parseInt(s) + _scrollLength.call(@, eventConfig))
 
   # fixme: 実装予定
-  @checkConfigValue = (timelineConfig) ->
+  @checkConfigValue = (eventConfig) ->
 
-  @writeToPageValue = (timelineConfig) ->
+  @writeToPageValue = (eventConfig) ->
     writeValue = {}
-    writeValue[@PageValueKey.ID] = timelineConfig.id
-    writeValue[@PageValueKey.ITEM_ID] = timelineConfig.itemId
-    writeValue[@PageValueKey.COMMON_EVENT_ID] = timelineConfig.commonEventId
+    writeValue[@PageValueKey.ID] = eventConfig.id
+    writeValue[@PageValueKey.ITEM_ID] = eventConfig.itemId
+    writeValue[@PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId
     # fixme
     writeValue[@PageValueKey.CHAPTER] = 1
     # fixme
     writeValue[@PageValueKey.SCREEN] = 1
-    writeValue[@PageValueKey.IS_COMMON_EVENT] = timelineConfig.isCommonEvent
-    writeValue[@PageValueKey.METHODNAME] = timelineConfig.methodName
-    writeValue[@PageValueKey.ACTIONTYPE] = timelineConfig.actionType
-    writeValue[@PageValueKey.ANIAMTIONTYPE] = timelineConfig.animationType
-    writeValue[@PageValueKey.IS_PARALLEL] = timelineConfig.isParallel
+    writeValue[@PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent
+    writeValue[@PageValueKey.METHODNAME] = eventConfig.methodName
+    writeValue[@PageValueKey.ACTIONTYPE] = eventConfig.actionType
+    writeValue[@PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType
+    writeValue[@PageValueKey.IS_PARALLEL] = eventConfig.isParallel
 
-    if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-      writeValue[@PageValueKey.SCROLL_POINT_START] = timelineConfig.scrollPointStart
-      writeValue[@PageValueKey.SCROLL_POINT_END] = timelineConfig.scrollPointEnd
+    if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
+      writeValue[@PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart
+      writeValue[@PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd
 
     return writeValue
 
-  @readFromPageValue = (timelineConfig) ->
-    writeValue = PageValue.getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
+  @readFromPageValue = (eventConfig) ->
+    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
     if writeValue?
-      timelineConfig.id = writeValue[@PageValueKey.ID]
-      timelineConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
-      timelineConfig.commonEventId = writeValue[@PageValueKey.COMMON_EVENT_ID]
+      eventConfig.id = writeValue[@PageValueKey.ID]
+      eventConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
+      eventConfig.commonEventId = writeValue[@PageValueKey.COMMON_EVENT_ID]
       # fixme
       #writeValue[@PageValueKey.CHAPTER] = 1
       # fixme
       #writeValue[@PageValueKey.SCREEN] = 1
-      timelineConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
-      timelineConfig.methodName = writeValue[@PageValueKey.METHODNAME]
-      timelineConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
-      timelineConfig.animationType = writeValue[@PageValueKey.ANIAMTIONTYPE]
+      eventConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
+      eventConfig.methodName = writeValue[@PageValueKey.METHODNAME]
+      eventConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
+      eventConfig.animationType = writeValue[@PageValueKey.ANIAMTIONTYPE]
 
-      parallel = $(".parallel_div .parallel", timelineConfig.emt)
+      parallel = $(".parallel_div .parallel", eventConfig.emt)
       isParallel = writeValue[@PageValueKey.IS_PARALLEL]
       if parallel? && isParallel
         parallel.prop("checked", true)
 
-      if timelineConfig.actionType == Constant.ActionEventHandleType.SCROLL
-        handlerDiv = $(".handler_div .#{timelineConfig.methodClassName()}", timelineConfig.emt)
+      if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
+        handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
         start = writeValue[@PageValueKey.SCROLL_POINT_START]
         end = writeValue[@PageValueKey.SCROLL_POINT_END]
         if handlerDiv? && start? && end?
@@ -112,8 +112,8 @@ class EventPageValueBase
     else
       return false
 
-  _scrollLength = (timelineConfig) ->
-    writeValue = PageValue.getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
+  _scrollLength = (eventConfig) ->
+    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
     if writeValue?
       start = writeValue[@PageValueKey.SCROLL_POINT_START]
       end = writeValue[@PageValueKey.SCROLL_POINT_END]
@@ -127,7 +127,7 @@ class EventPageValueBase
     self = @
     maxTeNum = 0
     ret = null
-    $("##{Constant.PageValueKey.TE_ROOT} .#{Constant.PageValueKey.TE_PREFIX}").children('div').each((e) ->
+    $("##{Constant.PageValueKey.E_ROOT} .#{Constant.PageValueKey.E_PREFIX}").children('div').each((e) ->
       teNum = parseInt($(@).attr('class'))
       if teNum > maxTeNum
         start = $(@).find(".#{self.PageValueKey.SCROLL_POINT_START}:first").val()

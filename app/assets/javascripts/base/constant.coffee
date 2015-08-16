@@ -7,10 +7,10 @@ if gon?
     @OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX
     # @property [Array] ITEM_PATH_LIST JSファイル名
     @ITEM_PATH_LIST = constant.ITEM_PATH_LIST
-    # @property [String] TIMELINE_ITEM_SEPERATOR タイムラインイベント(アイテム)値のセパレータ
-    @TIMELINE_ITEM_SEPERATOR = "&"
-    # @property [String] TIMELINE_COMMON_PREFIX 共通タイムラインイベントプレフィックス
-    @TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX
+    # @property [String] EVENT_ITEM_SEPERATOR タイムラインイベント(アイテム)値のセパレータ
+    @EVENT_ITEM_SEPERATOR = "&"
+    # @property [String] EVENT_COMMON_PREFIX 共通タイムラインイベントプレフィックス
+    @EVENT_COMMON_PREFIX = constant.EVENT_COMMON_PREFIX
 
     # ZIndex
     class @Zindex
@@ -76,18 +76,18 @@ if gon?
     class @PageValueKey
       # @property [String] PV_ROOT ページ値ルート
       @PV_ROOT = constant.PageValueKey.PV_ROOT
-      # @property [String] TE_ROOT タイムライン値ルート
-      @TE_ROOT = constant.PageValueKey.TE_ROOT
-      # @property [String] TE_PREFIX タイムラインプレフィックス
-      @TE_PREFIX = constant.PageValueKey.TE_PREFIX
-      # @property [String] TE_COUNT タイムラインイベント数
-      @TE_COUNT = constant.PageValueKey.TE_COUNT
-      # @property [String] TE_CSS CSSデータ
-      @TE_CSS = constant.PageValueKey.TE_CSS
+      # @property [String] E_ROOT タイムライン値ルート
+      @E_ROOT = constant.PageValueKey.E_ROOT
+      # @property [String] E_PREFIX タイムラインプレフィックス
+      @E_PREFIX = constant.PageValueKey.E_PREFIX
+      # @property [String] E_COUNT タイムラインイベント数
+      @E_COUNT = constant.PageValueKey.E_COUNT
+      # @property [String] E_CSS CSSデータ
+      @E_CSS = constant.PageValueKey.E_CSS
       # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
       @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
-      # @property [String] TE_NUM_PREFIX タイムライン番号プレフィックス
-      @TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX
+      # @property [String] E_NUM_PREFIX タイムライン番号プレフィックス
+      @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
       # @property [String] ITEM アイテムRoot
       @ITEM_VALUE = 'item:@id:value'
       # @property [String] ITEM アイテムキャッシュRoot

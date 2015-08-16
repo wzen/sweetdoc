@@ -56,9 +56,9 @@ switchSidebarConfig = (configType, item = null) ->
       item.canvasConfig.css('display', '')
   else if configType == "timeline"
     if animation
-      $('#timeline-config').show()
+      $('#event-config').show()
     else
-      $('#timeline-config').css('display', '')
+      $('#event-config').css('display', '')
   else if configType == 'setting'
     sc = $("##{Setting.ROOT_ID_NAME}")
     if animation

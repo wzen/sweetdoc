@@ -2,13 +2,13 @@
     <% if @args %>
         <% @args.each do |k, v| %>
             <% if v['type'] == Const::ItemActionOptionType::INTEGER %>
-                <%= render 'worktable/sidebar_menu/timeline/parts/sidebar' %>
+                <%= render 'worktable/sidebar_menu/event/parts/sidebar' %>
             <% elsif v['type'] == Const::ItemActionOptionType::STRING %>
-                <%= render 'worktable/sidebar_menu/timeline/parts/textbox' %>
+                <%= render 'worktable/sidebar_menu/event/parts/textbox' %>
             <% elsif v['type'] == Const::ItemActionOptionType::COLOR %>
-                <%= render 'worktable/sidebar_menu/timeline/parts/color' %>
+                <%= render 'worktable/sidebar_menu/event/parts/color' %>
             <% elsif v['type'] == Const::ItemActionOptionType::DESIGN %>
-                <%= render 'worktable/sidebar_menu/timeline/parts/design' %>
+                <%= render 'worktable/sidebar_menu/event/parts/design' %>
             <% end %>
         <% end %>
     <% end %>

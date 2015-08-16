@@ -1,11 +1,11 @@
 class Run
   def self.init_timeline_pagevalue(params)
-    h = params.require(Const::PageValueKey::TE_PREFIX.to_sym)
+    h = params.require(Const::PageValueKey::E_PREFIX.to_sym)
     html = ''
     h.each do |k, v|
-      html += make_element_str(k, v, Const::PageValueKey::TE_PREFIX)
+      html += make_element_str(k, v, Const::PageValueKey::E_PREFIX)
     end
-    return "<div class=#{Const::PageValueKey::TE_PREFIX}>#{html}</div>"
+    return "<div class=#{Const::PageValueKey::E_PREFIX}>#{html}</div>"
   end
 
   def self.make_element_str(key, value, key_name)

@@ -10,9 +10,9 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.ITEM_PATH_LIST = constant.ITEM_PATH_LIST;
 
-    Constant.TIMELINE_ITEM_SEPERATOR = "&";
+    Constant.EVENT_ITEM_SEPERATOR = "&";
 
-    Constant.TIMELINE_COMMON_PREFIX = constant.TIMELINE_COMMON_PREFIX;
+    Constant.EVENT_COMMON_PREFIX = constant.EVENT_COMMON_PREFIX;
 
     Constant.Zindex = (function() {
       function Zindex() {}
@@ -115,17 +115,17 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.PV_ROOT = constant.PageValueKey.PV_ROOT;
 
-      PageValueKey.TE_ROOT = constant.PageValueKey.TE_ROOT;
+      PageValueKey.E_ROOT = constant.PageValueKey.E_ROOT;
 
-      PageValueKey.TE_PREFIX = constant.PageValueKey.TE_PREFIX;
+      PageValueKey.E_PREFIX = constant.PageValueKey.E_PREFIX;
 
-      PageValueKey.TE_COUNT = constant.PageValueKey.TE_COUNT;
+      PageValueKey.E_COUNT = constant.PageValueKey.E_COUNT;
 
-      PageValueKey.TE_CSS = constant.PageValueKey.TE_CSS;
+      PageValueKey.E_CSS = constant.PageValueKey.E_CSS;
 
       PageValueKey.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
 
-      PageValueKey.TE_NUM_PREFIX = constant.PageValueKey.TE_NUM_PREFIX;
+      PageValueKey.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
       PageValueKey.ITEM_VALUE = 'item:@id:value';
 

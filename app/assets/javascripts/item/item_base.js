@@ -196,15 +196,15 @@ ItemBase = (function(superClass) {
     return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
-  ItemBase.timelineDefaultConfigValue = function() {
+  ItemBase.defaultEventConfigValue = function() {
     return null;
   };
 
-  ItemBase.prototype.timelineConfigValue = function() {
+  ItemBase.prototype.eventConfigValue = function() {
     return null;
   };
 
-  ItemBase.prototype.objWriteTimeline = function() {
+  ItemBase.prototype.objWriteEvent = function() {
     var obj;
     obj = {};
     obj[EPVItem.minObj] = this.getMinimumObject();

@@ -2,20 +2,20 @@ class EPVBackgroundColor extends EventPageValueBase
   @BASE_COLOR = 'b_color'
   @CHANGE_COLOR = 'c_color'
 
-  @initConfigValue = (timelineConfig) ->
-    super(timelineConfig)
+  @initConfigValue = (eventConfig) ->
+    super(eventConfig)
     bgColor = $('#main-wrapper.stage_container').css('backgroundColor')
-    $(".baseColor", $("values_div", timelineConfig.emt)).css('backgroundColor', bgColor)
-    $(".colorPicker", timelineConfig.emt).each( ->
+    $(".baseColor", $("values_div", eventConfig.emt)).css('backgroundColor', bgColor)
+    $(".colorPicker", eventConfig.emt).each( ->
       self = $(@)
       if !self.hasClass('temp') && !self.hasClass('baseColor')
         initColorPicker(self, bgColor, null)
     )
 
-  @writeToPageValue = (timelineConfig) ->
+  @writeToPageValue = (eventConfig) ->
     errorMes = ""
-    writeValue = super(timelineConfig)
-    emt = timelineConfig.emt
+    writeValue = super(eventConfig)
+    emt = eventConfig.emt
     value = {}
     value[@BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor')
     value[@CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor')
@@ -25,17 +25,17 @@ class EPVBackgroundColor extends EventPageValueBase
 
     if errorMes.length == 0
       writeValue[@PageValueKey.VALUE] = value
-      PageValue.setTimelinePageValue(@PageValueKey.te(timelineConfig.teNum), writeValue)
-      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum)
+      PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
+      PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, eventConfig.teNum)
 
     return errorMes
 
-  @readFromPageValue = (timelineConfig) ->
-    ret = super(timelineConfig)
+  @readFromPageValue = (eventConfig) ->
+    ret = super(eventConfig)
     if !ret
       return false
-    emt = timelineConfig.emt
-    writeValue = PageValue.getTimelinePageValue(@PageValueKey.te(timelineConfig.teNum))
+    emt = eventConfig.emt
+    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
     initColorPicker($(".colorPicker.base_color", emt) ,value[@BASE_COLOR], null)
     initColorPicker($(".colorPicker.change_color", emt) ,value[@CHANGE_COLOR], null)

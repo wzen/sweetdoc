@@ -16,38 +16,38 @@ EPVScreenPosition = (function(superClass) {
 
   EPVScreenPosition.Z = 'z';
 
-  EPVScreenPosition.initConfigValue = function(timelineConfig) {
-    EPVScreenPosition.__super__.constructor.initConfigValue.call(this, timelineConfig);
-    $('.screenposition_change_x:first', timelineConfig.emt).val(0);
-    $('.screenposition_change_y:first', timelineConfig.emt).val(0);
-    return $('.screenposition_change_z:first', timelineConfig.emt).val(0);
+  EPVScreenPosition.initConfigValue = function(eventConfig) {
+    EPVScreenPosition.__super__.constructor.initConfigValue.call(this, eventConfig);
+    $('.screenposition_change_x:first', eventConfig.emt).val(0);
+    $('.screenposition_change_y:first', eventConfig.emt).val(0);
+    return $('.screenposition_change_z:first', eventConfig.emt).val(0);
   };
 
-  EPVScreenPosition.writeToPageValue = function(timelineConfig) {
+  EPVScreenPosition.writeToPageValue = function(eventConfig) {
     var emt, errorMes, value, writeValue;
     errorMes = "";
-    emt = timelineConfig.emt;
-    writeValue = EPVScreenPosition.__super__.constructor.writeToPageValue.call(this, timelineConfig);
+    emt = eventConfig.emt;
+    writeValue = EPVScreenPosition.__super__.constructor.writeToPageValue.call(this, eventConfig);
     value = {};
     value[this.X] = $('.screenposition_change_x:first', emt).val();
     value[this.Y] = $('.screenposition_change_y:first', emt).val();
     value[this.Z] = $('.screenposition_change_z:first', emt).val();
     if (errorMes.length === 0) {
       writeValue[this.PageValueKey.VALUE] = value;
-      PageValue.setTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum), writeValue);
-      PageValue.setTimelinePageValue(Constant.PageValueKey.TE_COUNT, timelineConfig.teNum);
+      PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
+      PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, eventConfig.teNum);
     }
     return errorMes;
   };
 
-  EPVScreenPosition.readFromPageValue = function(timelineConfig) {
+  EPVScreenPosition.readFromPageValue = function(eventConfig) {
     var emt, ret, value, writeValue;
-    ret = EPVScreenPosition.__super__.constructor.readFromPageValue.call(this, timelineConfig);
+    ret = EPVScreenPosition.__super__.constructor.readFromPageValue.call(this, eventConfig);
     if (!ret) {
       return false;
     }
-    emt = timelineConfig.emt;
-    writeValue = PageValue.getTimelinePageValue(this.PageValueKey.te(timelineConfig.teNum));
+    emt = eventConfig.emt;
+    writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
     value = writeValue[this.PageValueKey.VALUE];
     $('.screenposition_change_x:first', emt).val(value[this.X]);
     $('.screenposition_change_y:first', emt).val(value[this.Y]);

@@ -81,9 +81,9 @@ switchSidebarConfig = function(configType, item) {
     }
   } else if (configType === "timeline") {
     if (animation) {
-      return $('#timeline-config').show();
+      return $('#event-config').show();
     } else {
-      return $('#timeline-config').css('display', '');
+      return $('#event-config').css('display', '');
     }
   } else if (configType === 'setting') {
     sc = $("#" + Setting.ROOT_ID_NAME);

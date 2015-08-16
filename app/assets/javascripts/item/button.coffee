@@ -56,13 +56,13 @@ class ButtonItem extends CssItemBase
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'defaultClick'
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @timelineEvent[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'defaultClick'
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
 
