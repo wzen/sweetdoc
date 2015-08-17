@@ -194,10 +194,12 @@ PageValue = (function() {
   };
 
   PageValue.removeAllItemAndEventPageValue = function() {
-    $("#" + Constant.PageValueKey.PV_ROOT).each(function(e) {
-      return $(this).remove();
+    $("#" + Constant.PageValueKey.PV_ROOT).children().each(function(e) {
+      if ($(this).hasClass(Constant.PageValueKey.ITEM_PREFIX)) {
+        return $(this).remove();
+      }
     });
-    return $("#" + Constant.PageValueKey.E_ROOT).each(function(e) {
+    return $("#" + Constant.PageValueKey.E_ROOT).children().each(function(e) {
       return $(this).remove();
     });
   };

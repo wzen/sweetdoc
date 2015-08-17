@@ -91,34 +91,20 @@ class Timeline
 
     # プレビュー実行
     _doPreview = (te_num) ->
-      te_num = parseInt(te_num)
-      tes = PageValue.getEventPageValueSortedListByNum()
-
-      # 全てをイベント前に変更
-      previewinitCount = 0
-      for idx in [tes.length - 1 .. 0] by -1
-        te = tes[idx]
-        item = window.createdObject[te.id]
-        item.setEvent(te)
-        item.stopPreview( ->
-          item.updateEventBefore()
-          previewinitCount += 1
-        )
-
-      ivTimer = setInterval( ->
-        if previewinitCount >= tes.length
-          clearInterval(ivTimer)
-          for te, idx in tes
-            item = window.createdObject[te.id]
-            if idx < te_num - 1
-              item.setEvent(te)
-              item.updateEventAfter()
-            else if idx == te_num - 1
-              item.setEvent(te)
-              # プレビュー実行
-              item.preview(te)
-              break
-      , 100)
+      Common.clearAllEventChange( ->
+        tes = PageValue.getEventPageValueSortedListByNum()
+        te_num = parseInt(te_num)
+        for te, idx in tes
+          item = window.createdObject[te.id]
+          if idx < te_num - 1
+            item.setEvent(te)
+            item.updateEventAfter()
+          else if idx == te_num - 1
+            item.setEvent(te)
+            # プレビュー実行
+            item.preview(te)
+            break
+      )
 
     # イベントコンフィグの設定&表示
     _initEventConfig = (e) ->
@@ -216,3 +202,13 @@ class Timeline
     else
       $(teEmt).addClass(Constant.ActionEventTypeClassName.BLANK)
 
+  # タイムラインを初期状態に
+  @removeAllTimeline: ->
+    pEmt = $('#timeline_events')
+    pEmt.children().each((e) ->
+      emt = $(@)
+      if emt.hasClass('timeline_event_temp') == false
+        emt.remove()
+    )
+    @createTimelineEvent(1)
+    @setupTimelineEventConfig()

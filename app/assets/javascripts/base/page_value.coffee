@@ -186,9 +186,11 @@ class PageValue
 
   # アイテムとイベント情報を削除
   @removeAllItemAndEventPageValue = ->
-    $("##{Constant.PageValueKey.PV_ROOT}").each((e) ->
-      $(@).remove()
+    # page_value消去
+    $("##{Constant.PageValueKey.PV_ROOT}").children().each((e) ->
+      if $(@).hasClass(Constant.PageValueKey.ITEM_PREFIX)
+        $(@).remove()
     )
-    $("##{Constant.PageValueKey.E_ROOT}").each((e) ->
+    $("##{Constant.PageValueKey.E_ROOT}").children().each((e) ->
       $(@).remove()
     )

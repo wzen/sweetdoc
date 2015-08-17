@@ -183,12 +183,31 @@ class Common
     for k, v of @getCreatedItemObject()
       if v.getJQueryElement?
         v.getJQueryElement().remove()
+    window.createdObject = {}
+    window.instanceMap = {}
 
   # 全てのアイテムとイベントを削除
   @removeAllItemAndEvent = ->
-    @removeAllItem()
-    PageValue.removeAllItemAndEventPageValue()
+    @clearAllEventChange( =>
+      @removeAllItem()
+      PageValue.removeAllItemAndEventPageValue()
+      Timeline.removeAllTimeline()
+    )
 
+  # 全てのアクションを元に戻す
+  @clearAllEventChange: (callback = null) ->
+    previewinitCount = 0
+    tes = PageValue.getEventPageValueSortedListByNum()
+    for idx in [tes.length - 1 .. 0] by -1
+      te = tes[idx]
+      item = window.createdObject[te.id]
+      item.setEvent(te)
+      item.stopPreview( ->
+        item.updateEventBefore()
+        previewinitCount += 1
+        if previewinitCount >= tes.length && callback?
+          callback()
+      )
 
   # アクションタイプからアクションタイプクラス名を取得
   @getActionTypeClassNameByActionType = (actionType) ->

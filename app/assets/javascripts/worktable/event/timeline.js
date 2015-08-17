@@ -91,41 +91,27 @@ Timeline = (function() {
       return _doPreview.call(this, te_num);
     };
     _doPreview = function(te_num) {
-      var i, idx, item, ivTimer, previewinitCount, ref, tes;
-      te_num = parseInt(te_num);
-      tes = PageValue.getEventPageValueSortedListByNum();
-      previewinitCount = 0;
-      for (idx = i = ref = tes.length - 1; i >= 0; idx = i += -1) {
-        te = tes[idx];
-        item = window.createdObject[te.id];
-        item.setEvent(te);
-        item.stopPreview(function() {
-          item.updateEventBefore();
-          return previewinitCount += 1;
-        });
-      }
-      return ivTimer = setInterval(function() {
-        var j, len, results;
-        if (previewinitCount >= tes.length) {
-          clearInterval(ivTimer);
-          results = [];
-          for (idx = j = 0, len = tes.length; j < len; idx = ++j) {
-            te = tes[idx];
-            item = window.createdObject[te.id];
-            if (idx < te_num - 1) {
-              item.setEvent(te);
-              results.push(item.updateEventAfter());
-            } else if (idx === te_num - 1) {
-              item.setEvent(te);
-              item.preview(te);
-              break;
-            } else {
-              results.push(void 0);
-            }
+      return Common.clearAllEventChange(function() {
+        var i, idx, item, len, results, tes;
+        tes = PageValue.getEventPageValueSortedListByNum();
+        te_num = parseInt(te_num);
+        results = [];
+        for (idx = i = 0, len = tes.length; i < len; idx = ++i) {
+          te = tes[idx];
+          item = window.createdObject[te.id];
+          if (idx < te_num - 1) {
+            item.setEvent(te);
+            results.push(item.updateEventAfter());
+          } else if (idx === te_num - 1) {
+            item.setEvent(te);
+            item.preview(te);
+            break;
+          } else {
+            results.push(void 0);
           }
-          return results;
         }
-      }, 100);
+        return results;
+      });
     };
     _initEventConfig = function(e) {
       var eId, emt, te_num;
@@ -219,6 +205,20 @@ Timeline = (function() {
     } else {
       return $(teEmt).addClass(Constant.ActionEventTypeClassName.BLANK);
     }
+  };
+
+  Timeline.removeAllTimeline = function() {
+    var pEmt;
+    pEmt = $('#timeline_events');
+    pEmt.children().each(function(e) {
+      var emt;
+      emt = $(this);
+      if (emt.hasClass('timeline_event_temp') === false) {
+        return emt.remove();
+      }
+    });
+    this.createTimelineEvent(1);
+    return this.setupTimelineEventConfig();
   };
 
   return Timeline;

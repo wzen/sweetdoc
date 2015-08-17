@@ -127,15 +127,19 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       PageValueKey.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
-      PageValueKey.ITEM_VALUE = 'item:@id:value';
+      PageValueKey.ITEM_PREFIX = 'item';
 
-      PageValueKey.ITEM_VALUE_CACHE = 'item:cache:@id:value';
+      PageValueKey.ITEM_VALUE = PageValueKey.ITEM_PREFIX + ':@id:value';
 
-      PageValueKey.ITEM_DEFAULT_METHODNAME = 'iteminfo:@item_id:default:methodname';
+      PageValueKey.ITEM_VALUE_CACHE = PageValueKey.ITEM_PREFIX + ':cache:@id:value';
 
-      PageValueKey.ITEM_DEFAULT_ACTIONTYPE = 'iteminfo:@item_id:default:actiontype';
+      PageValueKey.ITEM_INFO_PREFIX = 'iteminfo';
 
-      PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE = 'iteminfo:@item_id:default:animationtype';
+      PageValueKey.ITEM_DEFAULT_METHODNAME = PageValueKey.ITEM_INFO_PREFIX + ':@item_id:default:methodname';
+
+      PageValueKey.ITEM_DEFAULT_ACTIONTYPE = PageValueKey.ITEM_INFO_PREFIX + ':@item_id:default:actiontype';
+
+      PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE = PageValueKey.ITEM_INFO_PREFIX + ':@item_id:default:animationtype';
 
       PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 

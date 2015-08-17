@@ -225,23 +225,49 @@ Common = (function() {
   };
 
   Common.removeAllItem = function() {
-    var k, ref, results, v;
+    var k, ref, v;
     ref = this.getCreatedItemObject();
-    results = [];
     for (k in ref) {
       v = ref[k];
       if (v.getJQueryElement != null) {
-        results.push(v.getJQueryElement().remove());
-      } else {
-        results.push(void 0);
+        v.getJQueryElement().remove();
       }
     }
-    return results;
+    window.createdObject = {};
+    return window.instanceMap = {};
   };
 
   Common.removeAllItemAndEvent = function() {
-    this.removeAllItem();
-    return PageValue.removeAllItemAndEventPageValue();
+    return this.clearAllEventChange((function(_this) {
+      return function() {
+        _this.removeAllItem();
+        PageValue.removeAllItemAndEventPageValue();
+        return Timeline.removeAllTimeline();
+      };
+    })(this));
+  };
+
+  Common.clearAllEventChange = function(callback) {
+    var idx, item, j, previewinitCount, ref, results, te, tes;
+    if (callback == null) {
+      callback = null;
+    }
+    previewinitCount = 0;
+    tes = PageValue.getEventPageValueSortedListByNum();
+    results = [];
+    for (idx = j = ref = tes.length - 1; j >= 0; idx = j += -1) {
+      te = tes[idx];
+      item = window.createdObject[te.id];
+      item.setEvent(te);
+      results.push(item.stopPreview(function() {
+        item.updateEventBefore();
+        previewinitCount += 1;
+        if (previewinitCount >= tes.length && (callback != null)) {
+          return callback();
+        }
+      }));
+    }
+    return results;
   };
 
   Common.getActionTypeClassNameByActionType = function(actionType) {
