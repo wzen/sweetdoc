@@ -252,7 +252,7 @@ class EventConfig
       # 入力を全てクリアしてサイドバーを閉じる
       e = $(@).closest('.event')
       $('.values', e).html('')
-      closeSidebar( ->
+      Sidebar.closeSidebar( ->
         $(".config.te_div", e).css('display', 'none')
       )
     )
@@ -262,3 +262,6 @@ class EventConfig
       @setupConfigValues()
       @selectItem()
       @clickMethod()
+
+  @removeAllConfig: ->
+    $('#event-config').children('.event').remove()

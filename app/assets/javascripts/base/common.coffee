@@ -188,8 +188,10 @@ class Common
 
   # 全てのアイテムとイベントを削除
   @removeAllItemAndEvent = ->
+    Sidebar.closeSidebar()
     @clearAllEventChange( =>
       @removeAllItem()
+      EventConfig.removeAllConfig()
       PageValue.removeAllItemAndEventPageValue()
       Timeline.removeAllTimeline()
     )

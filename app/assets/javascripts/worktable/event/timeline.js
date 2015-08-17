@@ -84,7 +84,7 @@ Timeline = (function() {
       }
       clearSelectedBorder();
       setSelectedBorder(e, "timeline");
-      if (isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)) {
+      if (Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)) {
         _initEventConfig.call(this, e);
       }
       te_num = $(e).find('input.te_num').val();
@@ -115,7 +115,7 @@ Timeline = (function() {
     };
     _initEventConfig = function(e) {
       var eId, emt, te_num;
-      switchSidebarConfig("timeline");
+      Sidebar.switchSidebarConfig("timeline");
       te_num = $(e).find('input.te_num').val();
       eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
       emt = $('#' + eId);
@@ -127,7 +127,7 @@ Timeline = (function() {
       self.setupTimelineEventHandler(te_num);
       $('#event-config .event').css('display', 'none');
       emt.css('display', '');
-      return openConfigSidebar();
+      return Sidebar.openConfigSidebar();
     };
     return _setupTimelineEvent.call(self);
   };

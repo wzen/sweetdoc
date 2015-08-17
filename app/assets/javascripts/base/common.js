@@ -238,9 +238,11 @@ Common = (function() {
   };
 
   Common.removeAllItemAndEvent = function() {
+    Sidebar.closeSidebar();
     return this.clearAllEventChange((function(_this) {
       return function() {
         _this.removeAllItem();
+        EventConfig.removeAllConfig();
         PageValue.removeAllItemAndEventPageValue();
         return Timeline.removeAllTimeline();
       };

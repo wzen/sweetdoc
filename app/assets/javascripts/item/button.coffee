@@ -256,27 +256,27 @@ if window.worktablePage?
       )
 
       # スライダー初期化
-      settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
-      settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
 
       # オプションメニューを作成
       # カラーピッカーイベント
@@ -312,7 +312,7 @@ if window.worktablePage?
       # グラデーションStepイベント
       btnGradientStep.off('keyup mouseup')
       btnGradientStep.on('keyup mouseup', (e) ->
-        changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
+        SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
         stepValue = parseInt($(e.currentTarget).val())
         for i in [2 .. 4]
           className = 'btn-bg-color' + i
@@ -334,7 +334,7 @@ if window.worktablePage?
             webkitFlag.html(webkitCache.html())
         cssStyle.text(cssCode.text())
       ).each( ->
-        changeGradientShow(@, cssCode, cssStyle, @cssConfig)
+        SidebarUI.changeGradientShow(@, cssCode, cssStyle, @cssConfig)
         stepValue = parseInt($(@).val())
         for i in [2 .. 4]
           className = 'btn-bg-color' + i

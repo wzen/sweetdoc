@@ -29,7 +29,7 @@ setupEvents = function(obj) {
       });
       contextSelector = ".css3button";
     }
-    return setupContextMenu(obj.getJQueryElement(), contextSelector, menu);
+    return WorktableCommon.setupContextMenu(obj.getJQueryElement(), contextSelector, menu);
   })();
   (function() {
     return obj.getJQueryElement().mousedown(function(e) {
@@ -199,7 +199,7 @@ $(function() {
   $('.dropdown-toggle').dropdown();
   initHeaderMenu();
   initKeyEvent();
-  initHandwrite();
+  Handwrite.initHandwrite();
   menu = [
     {
       title: "Default",
@@ -207,7 +207,7 @@ $(function() {
       uiIcon: "ui-icon-scissors"
     }
   ];
-  setupContextMenu($('#main'), '#main-wrapper', menu);
+  WorktableCommon.setupContextMenu($('#main'), '#main-wrapper', menu);
   $('#main').on("mousedown", function() {
     return clearAllItemStyle();
   });

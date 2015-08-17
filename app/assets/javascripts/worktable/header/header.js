@@ -18,9 +18,9 @@ initHeaderMenu = function() {
     return ServerStorage.save();
   });
   $('.menu-setting', itemsMenuEmt).on('click', function() {
-    switchSidebarConfig('setting');
+    Sidebar.switchSidebarConfig('setting');
     Setting.initConfig();
-    return openConfigSidebar();
+    return Sidebar.openConfigSidebar();
   });
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
   return $('.menu-item', itemsSelectMenuEmt).on('click', function() {

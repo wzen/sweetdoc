@@ -252,7 +252,7 @@ EventConfig = (function() {
       self.clearError();
       e = $(this).closest('.event');
       $('.values', e).html('');
-      return closeSidebar(function() {
+      return Sidebar.closeSidebar(function() {
         return $(".config.te_div", e).css('display', 'none');
       });
     });
@@ -264,6 +264,10 @@ EventConfig = (function() {
       this.selectItem();
       return this.clickMethod();
     }
+  };
+
+  EventConfig.removeAllConfig = function() {
+    return $('#event-config').children('.event').remove();
   };
 
   return EventConfig;

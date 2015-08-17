@@ -13,7 +13,7 @@ setupEvents = (obj) ->
     else if ButtonItem? && obj instanceof ButtonItem
       menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
       contextSelector = ".css3button"
-    setupContextMenu(obj.getJQueryElement(), contextSelector, menu)
+    WorktableCommon.setupContextMenu(obj.getJQueryElement(), contextSelector, menu)
 
   # クリックイベント設定
   do ->
@@ -167,10 +167,10 @@ $ ->
   # キーイベント
   initKeyEvent()
   # ドラッグ描画イベント
-  initHandwrite()
+  Handwrite.initHandwrite()
   # コンテキストメニュー
   menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
-  setupContextMenu($('#main'), '#main-wrapper', menu)
+  WorktableCommon.setupContextMenu($('#main'), '#main-wrapper', menu)
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )

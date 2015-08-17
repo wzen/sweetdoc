@@ -81,7 +81,7 @@ class Timeline
       clearSelectedBorder()
       setSelectedBorder(e, "timeline")
 
-      if isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)
+      if Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)
         # サイドバー表示時 or Blankの場合はコンフィグを設定&表示
         _initEventConfig.call(@, e)
 
@@ -109,7 +109,7 @@ class Timeline
     # イベントコンフィグの設定&表示
     _initEventConfig = (e) ->
       # サイドメニューをタイムラインに切り替え
-      switchSidebarConfig("timeline")
+      Sidebar.switchSidebarConfig("timeline")
 
       te_num = $(e).find('input.te_num').val()
       eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
@@ -130,7 +130,7 @@ class Timeline
       emt.css('display', '')
 
       # サイドバー表示
-      openConfigSidebar()
+      Sidebar.openConfigSidebar()
 
     _setupTimelineEvent.call(self)
 
