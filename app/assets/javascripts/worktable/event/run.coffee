@@ -4,7 +4,7 @@ run = ->
 #  v = JSON.stringify(h)
 #  console.log(v)
 
-  setupEventCss()
+  Timeline.setupEventCss()
 
   target = "_runwindow"
   window.open("about:blank", target)

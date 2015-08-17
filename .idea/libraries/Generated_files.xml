@@ -114,7 +114,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_ui.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/common_func.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/run.js" />

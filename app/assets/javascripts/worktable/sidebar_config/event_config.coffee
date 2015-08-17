@@ -158,7 +158,7 @@ class EventConfig
       return
 
     # イベントの色を変更
-    changeTimelineColor(@teNum, @actionType)
+    Timeline.changeTimelineColor(@teNum, @actionType)
 
     # プレビュー開始
     item = createdObject[@id]
@@ -241,7 +241,7 @@ class EventConfig
       # 入力値を適用する
       self.applyAction()
       # イベントを更新
-      setupTimelineEventConfig()
+      Timeline.setupTimelineEventConfig()
       # 次のイベントConfigを表示
     )
     em = $('.push.button.cancel', @emt)

@@ -91,7 +91,7 @@ addEventConfigContents = (item_id, te_actions, te_values) ->
       actionParent = $("<div class='#{className}' style='display:none'></div>")
       te_actions.forEach( (a) ->
         # アクションメソッドConfig追加
-        actionType = getActionTypeClassNameByActionType(a.action_event_type_id)
+        actionType = Common.getActionTypeClassNameByActionType(a.action_event_type_id)
         methodClone = $('#event-config .method_temp').children(':first').clone(true)
         span = methodClone.find('label:first').children('span:first')
         span.attr('class', actionType)

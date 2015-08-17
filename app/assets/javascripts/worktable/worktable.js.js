@@ -211,7 +211,7 @@ $(function() {
   $('#main').on("mousedown", function() {
     return clearAllItemStyle();
   });
-  return setupTimelineEventConfig();
+  return Timeline.setupTimelineEventConfig();
 });
 
 //# sourceMappingURL=worktable.js.js.map

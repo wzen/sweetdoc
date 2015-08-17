@@ -215,7 +215,7 @@ if (window.worktablePage != null) {
       this.reDraw(show);
       this.makeDesignConfig();
       EPVItem.writeDefaultToPageValue(this);
-      setupTimelineEventConfig();
+      Timeline.setupTimelineEventConfig();
       return true;
     };
 

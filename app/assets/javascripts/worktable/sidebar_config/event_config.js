@@ -153,7 +153,7 @@ EventConfig = (function() {
       this.showError(errorMes);
       return;
     }
-    changeTimelineColor(this.teNum, this.actionType);
+    Timeline.changeTimelineColor(this.teNum, this.actionType);
     item = createdObject[this.id];
     if ((item != null) && (item.preview != null)) {
       return item.preview(PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(this.teNum)));
@@ -244,7 +244,7 @@ EventConfig = (function() {
     em.on('click', function(e) {
       self.clearError();
       self.applyAction();
-      return setupTimelineEventConfig();
+      return Timeline.setupTimelineEventConfig();
     });
     em = $('.push.button.cancel', this.emt);
     em.off('click');

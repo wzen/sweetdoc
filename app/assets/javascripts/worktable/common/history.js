@@ -21,7 +21,7 @@ popOperationHistoryRedo = function() {
 undo = function() {
   var action, history, obj, past, pastOperationIndex;
   if (operationHistoryIndex <= 0) {
-    flushWarn("Can't Undo");
+    Message.flushWarn("Can't Undo");
     return;
   }
   history = popOperationHistory();
@@ -45,7 +45,7 @@ undo = function() {
 redo = function() {
   var action, history, obj;
   if (operationHistory.length <= operationHistoryIndex) {
-    flushWarn("Can't Redo");
+    Message.flushWarn("Can't Redo");
     return;
   }
   history = popOperationHistoryRedo();

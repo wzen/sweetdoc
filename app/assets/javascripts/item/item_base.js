@@ -103,7 +103,7 @@ ItemBase = (function(superClass) {
     }
     this.setAllItemPropToPageValue();
     console.log('save obj:' + JSON.stringify(this.itemSize));
-    return updateSelectItemMenu();
+    return Timeline.updateSelectItemMenu();
   };
 
   ItemBase.prototype.setAllItemPropToPageValue = function(isCache) {

@@ -20,7 +20,7 @@ popOperationHistoryRedo = ->
 # undo処理
 undo = ->
   if operationHistoryIndex <= 0
-    flushWarn("Can't Undo")
+    Message.flushWarn("Can't Undo")
     return
 
   history = popOperationHistory()
@@ -43,7 +43,7 @@ undo = ->
 # redo処理
 redo = ->
   if operationHistory.length <= operationHistoryIndex
-    flushWarn("Can't Redo")
+    Message.flushWarn("Can't Redo")
     return
 
   history = popOperationHistoryRedo()

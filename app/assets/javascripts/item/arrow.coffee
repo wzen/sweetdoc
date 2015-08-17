@@ -414,7 +414,7 @@ if window.worktablePage?
       # イベント作成
       #fixme: あとでロジックと実装を分けること
       EPVItem.writeDefaultToPageValue(@)
-      setupTimelineEventConfig()
+      Timeline.setupTimelineEventConfig()
 
     # 矢印のサイズ更新
     # @private

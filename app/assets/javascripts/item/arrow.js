@@ -418,7 +418,7 @@ if (window.worktablePage != null) {
       this.reDraw(show);
       this.makeDesignConfig();
       EPVItem.writeDefaultToPageValue(this);
-      return setupTimelineEventConfig();
+      return Timeline.setupTimelineEventConfig();
     };
 
     _updateArrowRect = function(cood) {

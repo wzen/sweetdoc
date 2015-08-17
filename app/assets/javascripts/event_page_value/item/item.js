@@ -54,7 +54,7 @@ EPVItem = (function(superClass) {
       }
       PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
       PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, teNum);
-      changeTimelineColor(teNum, actionType);
+      Timeline.changeTimelineColor(teNum, actionType);
     }
     return errorMes;
   };

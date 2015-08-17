@@ -45,7 +45,7 @@ class EPVItem extends EventPageValueBase
 
       PageValue.setEventPageValue(@PageValueKey.te(teNum), writeValue)
       PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, teNum)
-      changeTimelineColor(teNum, actionType)
+      Timeline.changeTimelineColor(teNum, actionType)
 
     return errorMes
 

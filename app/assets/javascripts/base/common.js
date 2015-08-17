@@ -244,6 +244,15 @@ Common = (function() {
     return PageValue.removeAllItemAndEventPageValue();
   };
 
+  Common.getActionTypeClassNameByActionType = function(actionType) {
+    if (parseInt(actionType) === Constant.ActionEventHandleType.CLICK) {
+      return Constant.ActionEventTypeClassName.CLICK;
+    } else if (parseInt(actionType) === Constant.ActionEventHandleType.SCROLL) {
+      return Constant.ActionEventTypeClassName.SCROLL;
+    }
+    return null;
+  };
+
   return Common;
 
 })();

@@ -3,7 +3,7 @@ var preview, run;
 
 run = function() {
   var target;
-  setupEventCss();
+  Timeline.setupEventCss();
   target = "_runwindow";
   window.open("about:blank", target);
   document.run_form.target = target;

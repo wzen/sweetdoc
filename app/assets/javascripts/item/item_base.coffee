@@ -124,7 +124,7 @@ class ItemBase extends ItemEventBase
 
     # イベントの選択項目更新
     # fixme: 実行場所について再考
-    updateSelectItemMenu()
+    Timeline.updateSelectItemMenu()
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか

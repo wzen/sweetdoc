@@ -190,6 +190,14 @@ class Common
     PageValue.removeAllItemAndEventPageValue()
 
 
+  # アクションタイプからアクションタイプクラス名を取得
+  @getActionTypeClassNameByActionType = (actionType) ->
+    if parseInt(actionType) == Constant.ActionEventHandleType.CLICK
+      return Constant.ActionEventTypeClassName.CLICK
+    else if parseInt(actionType) == Constant.ActionEventHandleType.SCROLL
+      return Constant.ActionEventTypeClassName.SCROLL
+    return null
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedItemTypeList = []
