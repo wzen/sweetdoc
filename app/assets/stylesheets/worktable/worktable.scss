@@ -433,7 +433,7 @@ div#scroll_inside {
     color: #fff;
     text-align: center;
   }
-  div.timelineedit-headliner {
+  div.event-config-headliner {
     background-image: image-url("sidebar/timeline_option_headline.jpg");
     background-repeat: no-repeat;
     -moz-background-size: 100% 100%;
@@ -634,7 +634,7 @@ div#event-config {
     display: none;
   }
 
-  .timeline_config_error {
+  .event_config_error {
     width: 100%;
     height: 20px;
   }

@@ -192,14 +192,14 @@ EventConfig = (function() {
 
   EventConfig.prototype.showError = function(message) {
     var eventConfigError;
-    eventConfigError = $('.timeline_config_error', this.emt);
+    eventConfigError = $('.event_config_error', this.emt);
     eventConfigError.find('p').html(message);
     return eventConfigError.css('display', '');
   };
 
   EventConfig.prototype.clearError = function() {
     var eventConfigError;
-    eventConfigError = $('.timeline_config_error', this.emt);
+    eventConfigError = $('.event_config_error', this.emt);
     eventConfigError.find('p').html('');
     return eventConfigError.css('display', 'none');
   };

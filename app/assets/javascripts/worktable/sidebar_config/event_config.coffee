@@ -191,13 +191,13 @@ class EventConfig
 
   # エラー表示
   showError: (message)->
-    eventConfigError = $('.timeline_config_error', @emt)
+    eventConfigError = $('.event_config_error', @emt)
     eventConfigError.find('p').html(message)
     eventConfigError.css('display', '')
 
   # エラー非表示
   clearError: ->
-    eventConfigError = $('.timeline_config_error', @emt)
+    eventConfigError = $('.event_config_error', @emt)
     eventConfigError.find('p').html('')
     eventConfigError.css('display', 'none')
 

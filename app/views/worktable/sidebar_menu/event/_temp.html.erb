@@ -1,7 +1,7 @@
 <div class="event">
     <div class="config">
         <div class="configBox">
-            <div class="timelineedit-headliner">Target</div>
+            <div class="event-config-headliner">Target</div>
             <div class="forms">
                 <!-- イベント対象一覧 -->
                 <!-- ワークスペース読み込み時に設定 -->
@@ -16,7 +16,7 @@
     </div>
     <div class="config te_div action_div" style="display: none">
         <div class="configBox">
-            <div class="timelineedit-headliner">Action</div>
+            <div class="event-config-headliner">Action</div>
             <div class="forms action_forms">
                 <% @common_actions.each do |c| %>
                     <!-- アクション名一覧 -->
@@ -24,7 +24,7 @@
                         <% c.common_action_events.each do |a| %>
                             <%=
                                 render 'worktable/sidebar_menu/event/parts/method',
-                                       action_type: TimelineEventHelper.actionTypeClassNameByActionType(a.action_event_type_id),
+                                       action_type: EventHelper.actionTypeClassNameByActionType(a.action_event_type_id),
                                        action_event_type_id: a.action_event_type_id,
                                        method_name: a.method_name,
                                        action_animation_type_id: a.action_animation_type_id,
@@ -40,7 +40,7 @@
 
     <div class="config te_div parallel_div" style="display: none">
         <div class="configBox">
-            <div class="timelineedit-headliner">Parallel</div>
+            <div class="event-config-headliner">Parallel</div>
             <div class="forms">
                 <!-- 同時実行 -->
                 <label><input class="parallel" name="parallel" type="checkbox">Parallel</label>
@@ -66,7 +66,7 @@
 
     <div class="config te_div values_div" style="display: none">
         <div class="configBox">
-            <div class="timelineedit-headliner">Value</div>
+            <div class="event-config-headliner">Value</div>
             <div class="forms value_forms">
                 <!-- イベント毎の設定値 -->
                 <% @common_actions.each do |c| %>
@@ -89,7 +89,7 @@
                 <input class="confirm" type="hidden" value="OK?(Confirm)">
 
                 <!-- エラー (暫定でこの位置) -->
-                <div class="timeline_config_error error-message">
+                <div class="event_config_error error-message">
                     <div><p></p></div>
                 </div>
             </div>

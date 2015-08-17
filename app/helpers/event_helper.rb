@@ -1,4 +1,4 @@
-module TimelineEventHelper
+module EventHelper
   def self.actionTypeClassNameByActionType(action_type)
     if action_type == Const::ActionEventHandleType::SCROLL
       return Const::ActionEventTypeClassName::SCROLL
