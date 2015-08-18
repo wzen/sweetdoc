@@ -1,26 +1,65 @@
 class PageValue
 
-  # サーバから読み込んだアイテム情報を追加
+  if gon?
+  # 定数
+    constant = gon.const
+    # ページ内値保存キー
+    class @Key
+      # @property [String] PV_ROOT ページ値ルート
+      @PV_ROOT = constant.PageValueKey.PV_ROOT
+      # @property [String] E_ROOT イベント値ルート
+      @E_ROOT = constant.PageValueKey.E_ROOT
+      # @property [String] E_PREFIX イベントプレフィックス
+      @E_PREFIX = constant.PageValueKey.E_PREFIX
+      # @property [String] E_COUNT イベント数
+      @E_COUNT = constant.PageValueKey.E_COUNT
+      # @property [String] E_CSS CSSデータ
+      @E_CSS = constant.PageValueKey.E_CSS
+      # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
+      @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
+      # @property [String] E_NUM_PREFIX イベント番号プレフィックス
+      @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
+      # @property [String] ITEM_PREFIX アイテムプレフィックス
+      @ITEM_PREFIX = 'item'
+      # @property [String] ITEM アイテムRoot
+      @ITEM_VALUE = @ITEM_PREFIX + ':@id:value'
+      # @property [String] ITEM アイテムキャッシュRoot
+      @ITEM_VALUE_CACHE = @ITEM_PREFIX + ':cache:@id:value'
+      # @property [String] ITEM_INFO_PREFIX アイテム情報プレフィックス
+      @ITEM_INFO_PREFIX = 'iteminfo'
+      # @property [String] ITEM_DEFAULT_METHODNAME デフォルトメソッド名
+      @ITEM_DEFAULT_METHODNAME = @ITEM_INFO_PREFIX + ':@item_id:default:methodname'
+      # @property [String] ITEM_DEFAULT_METHODACTIONTYPE デフォルトアクションタイプ
+      @ITEM_DEFAULT_ACTIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:actiontype'
+      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
+      @ITEM_DEFAULT_ANIMATIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:animationtype'
+      # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
+      @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
+      # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
+      @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
+
+
+# サーバから読み込んだアイテム情報を追加
   @addItemInfo = (item_id, te_actions) ->
     if te_actions? && te_actions.length > 0
       te_actions.forEach( (a) =>
         if a.is_default? && a.is_default
           # デフォルトメソッド & デフォルトアクションタイプ
-          @setPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
-          @setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
-          @setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
+          @setPageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
+          @setPageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
+          @setPageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
       )
 
   # ページが持つ値を取得
   # @param [String] key キー値
   # @param [Boolean] withRemove 取得後に値を消去するか
   @getPageValue = (key, withRemove = false) ->
-    _getPageValue.call(@, key, withRemove, Constant.PageValueKey.PV_ROOT)
+    _getPageValue.call(@, key, withRemove, @Key.PV_ROOT)
 
   # イベントの値を取得
   # @param [String] key キー値
   @getEventPageValue = (key) ->
-    _getPageValue.call(@, key, false, Constant.PageValueKey.E_ROOT)
+    _getPageValue.call(@, key, false, @Key.E_ROOT)
 
   # 共通設定値を取得
   # @param [String] key キー値
@@ -69,7 +108,7 @@ class PageValue
 
     value = null
     root = $("##{rootId}")
-    keys = key.split(Constant.PageValueKey.PAGE_VALUES_SEPERATOR)
+    keys = key.split(@Key.PAGE_VALUES_SEPERATOR)
     keys.forEach((k, index) ->
       root = $(".#{k}", root)
       if !root? || root.length == 0
@@ -92,13 +131,13 @@ class PageValue
   # @param [Object] value 設定値(ハッシュ配列または値)
   # @param [Boolean] isCache このページでのみ保持させるか
   @setPageValue = (key, value, isCache = false) ->
-    _setPageValue.call(@, key, value, isCache, Constant.PageValueKey.PV_ROOT, false)
+    _setPageValue.call(@, key, value, isCache, @Key.PV_ROOT, false)
 
   # イベントの値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
   @setEventPageValue = (key, value) ->
-    _setPageValue.call(@, key, value, false, Constant.PageValueKey.E_ROOT, true)
+    _setPageValue.call(@, key, value, false, @Key.E_ROOT, true)
 
   # 共通設定値を設定
   # @param [String] key キー値
@@ -142,7 +181,7 @@ class PageValue
     cacheClassName = 'cache'
     root = $("##{rootId}")
     parentClassName = null
-    keys = key.split(Constant.PageValueKey.PAGE_VALUES_SEPERATOR)
+    keys = key.split(@Key.PAGE_VALUES_SEPERATOR)
     keys.forEach((k, index) ->
       parent = root
       element = ''
@@ -174,17 +213,17 @@ class PageValue
 
   # ソートしたイベントリストを取得
   @getEventPageValueSortedListByNum = ->
-    eventPageValues = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX)
+    eventPageValues = PageValue.getEventPageValue(@Key.E_PREFIX)
     if !eventPageValues?
       return []
 
-    count = PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT)
+    count = PageValue.getEventPageValue(@Key.E_COUNT)
     eventObjList = new Array(count)
 
     # ソート
     for k, v of eventPageValues
-      if k.indexOf(Constant.PageValueKey.E_NUM_PREFIX) == 0
-        index = parseInt(k.substring(Constant.PageValueKey.E_NUM_PREFIX.length)) - 1
+      if k.indexOf(@Key.E_NUM_PREFIX) == 0
+        index = parseInt(k.substring(@Key.E_NUM_PREFIX.length)) - 1
         eventObjList[index] = v
 
     return eventObjList
@@ -198,5 +237,5 @@ class PageValue
   # アイテムとイベント情報を削除
   @removeAllItemAndEventPageValue = ->
     # page_value消去
-    $("##{Constant.PageValueKey.PV_ROOT}").children(".#{Constant.PageValueKey.ITEM_PREFIX}").remove()
-    $("##{Constant.PageValueKey.E_ROOT}").children().remove()
+    $("##{@Key.PV_ROOT}").children(".#{@Key.ITEM_PREFIX}").remove()
+    $("##{@Key.E_ROOT}").children().remove()

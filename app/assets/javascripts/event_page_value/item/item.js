@@ -46,14 +46,14 @@ EPVItem = (function(superClass) {
     if (errorMes.length === 0) {
       value = item.constructor.defaultEventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      teNum = PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT);
+      teNum = PageValue.getEventPageValue(PageValue.Key.E_COUNT);
       if (teNum != null) {
         teNum = parseInt(teNum) + 1;
       } else {
         teNum = 1;
       }
       PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
-      PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, teNum);
+      PageValue.setEventPageValue(PageValue.Key.E_COUNT, teNum);
       Timeline.changeTimelineColor(teNum, actionType);
     }
     return errorMes;
@@ -70,8 +70,8 @@ EPVItem = (function(superClass) {
       value = item.eventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
       PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
-      if (parseInt(PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT)) < eventConfig.teNum) {
-        PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, eventConfig.teNum);
+      if (parseInt(PageValue.getEventPageValue(PageValue.Key.E_COUNT)) < eventConfig.teNum) {
+        PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum);
       }
     }
     return errorMes;
@@ -79,12 +79,12 @@ EPVItem = (function(superClass) {
 
   EPVItem.writeItemValueToPageValue = function(item) {
     var idx, key, results, te, tes;
-    tes = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX);
+    tes = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
     results = [];
     for (idx in tes) {
       te = tes[idx];
-      if (idx.indexOf(Constant.PageValueKey.E_NUM_PREFIX) >= 0 && te.id === item.id) {
-        key = "" + Constant.PageValueKey.E_PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + idx + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.minObj;
+      if (idx.indexOf(PageValue.Key.E_NUM_PREFIX) >= 0 && te.id === item.id) {
+        key = "" + PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + idx + PageValue.Key.PAGE_VALUES_SEPERATOR + this.minObj;
         results.push(PageValue.setEventPageValue(key, item.getMinimumObject()));
       } else {
         results.push(void 0);

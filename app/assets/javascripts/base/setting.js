@@ -57,17 +57,17 @@ Setting = (function() {
       var grid, gridStep, gridStepDiv, gridStepValue, gridValue, key, root;
       root = $("#" + Setting.ROOT_ID_NAME);
       grid = $("." + this.GRID_CLASS_NAME, root);
-      key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
+      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
       gridValue = PageValue.getSettingPageValue(key);
       gridStep = $("." + this.GRID_STEP_CLASS_NAME, root);
-      key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
+      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
       gridStepValue = PageValue.getSettingPageValue(key);
       gridStepDiv = $("." + this.GRID_STEP_DIV_CLASS_NAME, root);
       grid.prop('clicked', gridValue);
       grid.off('click');
       grid.on('click', (function(_this) {
         return function() {
-          key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
+          key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
           gridValue = PageValue.getSettingPageValue(key);
           if (gridValue != null) {
             gridValue = gridValue === 'true';
@@ -92,7 +92,7 @@ Setting = (function() {
       return gridStep.change((function(_this) {
         return function() {
           var value;
-          key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
+          key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
           value = PageValue.getSettingPageValue(key);
           if (value != null) {
             value = value === 'true';
@@ -108,7 +108,7 @@ Setting = (function() {
       var canvas, context, i, j, k, key, left, max, min, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
       canvas = document.getElementById("" + this.SETTING_GRID_CANVAS_ID);
       context = null;
-      key = "" + Setting.PageValueKey.PREFIX + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
+      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
       if (canvas != null) {
         context = canvas.getContext('2d');
       }

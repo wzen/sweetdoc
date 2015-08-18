@@ -33,11 +33,11 @@ class Setting
       root = $("##{Setting.ROOT_ID_NAME}")
       # グリッド線表示
       grid = $(".#{@GRID_CLASS_NAME}", root)
-      key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
       gridValue = PageValue.getSettingPageValue(key)
 
       gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
-      key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
+      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
       gridStepValue = PageValue.getSettingPageValue(key)
 
       gridStepDiv = $(".#{@GRID_STEP_DIV_CLASS_NAME}", root)
@@ -45,7 +45,7 @@ class Setting
       grid.prop('clicked', gridValue)
       grid.off('click')
       grid.on('click', =>
-        key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
         gridValue = PageValue.getSettingPageValue(key)
         if gridValue?
           gridValue = gridValue == 'true'
@@ -70,7 +70,7 @@ class Setting
         gridStepValue = @STEP_DEFAULT_VALUE
       $(".#{@GRID_STEP_CLASS_NAME}", root).val(gridStepValue)
       gridStep.change( =>
-        key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
         value = PageValue.getSettingPageValue(key)
         if value?
           value = value == 'true'
@@ -82,7 +82,7 @@ class Setting
     @drawGrid : (doDraw) ->
       canvas = document.getElementById("#{@SETTING_GRID_CANVAS_ID}")
       context = null
-      key = "#{Setting.PageValueKey.PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
       if canvas?
         context = canvas.getContext('2d');
       if context? && doDraw == false

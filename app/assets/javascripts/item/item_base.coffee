@@ -98,7 +98,7 @@ class ItemBase extends ItemEventBase
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
   # @abstract
-  reDraw: ->
+  reDraw: (show = true) ->
 
   # アイテムの情報をアイテムリストと操作履歴に保存
   # @param [ItemActionType] action アクション種別
@@ -129,7 +129,7 @@ class ItemBase extends ItemEventBase
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか
   setAllItemPropToPageValue: (isCache = false)->
-    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     obj = @getMinimumObject()
     PageValue.setPageValue(prefix_key, obj)
@@ -138,7 +138,7 @@ class ItemBase extends ItemEventBase
   # @property [Boolean] isCache キャッシュとして保存するか
   # @return [Boolean] 処理結果
   reDrawByObjPageValue: (isCache = false) ->
-    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     obj = PageValue.getPageValue(prefix_key)
     if obj?
@@ -150,7 +150,7 @@ class ItemBase extends ItemEventBase
   # @property [String] prop 変数名
   # @property [Boolean] isCache キャッシュとして保存するか
   getItemPropFromPageValue : (prop, isCache = false) ->
-    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     return PageValue.getPageValue(prefix_key + ":#{prop}")
 
@@ -159,7 +159,7 @@ class ItemBase extends ItemEventBase
   # @property [Object] value 値
   # @property [Boolean] isCache キャッシュとして保存するか
   setItemPropToPageValue : (prop, value, isCache = false) ->
-    prefix_key = if isCache then Constant.PageValueKey.ITEM_VALUE_CACHE else Constant.PageValueKey.ITEM_VALUE
+    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     PageValue.setPageValue(prefix_key + ":#{prop}", value)
 
@@ -206,15 +206,15 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->
-    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
+    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
-    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
+    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultAnimationType = ->
-    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
+    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
 
   @defaultEventConfigValue = ->
     return null

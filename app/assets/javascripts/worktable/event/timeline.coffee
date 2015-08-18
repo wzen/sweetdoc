@@ -28,7 +28,7 @@ class Timeline
       tEmt = $('.te_num', timelineEvents)
       tEmt.each((e) ->
         teNum = parseInt($(@).val())
-        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
+        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + PageValue.Key.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
         Timeline.changeTimelineColor(teNum, actionType)
         if e == tEmt.length - 1 && actionType != null
           # blankのイベントが無い場合、作成
@@ -140,7 +140,7 @@ class Timeline
     teItemSelects = $('#event-config .te_item_select')
     teItemSelect = teItemSelects[0]
     selectOptions = ''
-    items = $("##{Constant.PageValueKey.PV_ROOT} .item")
+    items = $("##{PageValue.Key.PV_ROOT} .item")
     items.children().each( ->
       id = $(@).find('input.id').val()
       name = $(@).find('input.name').val()
@@ -183,7 +183,7 @@ class Timeline
     )
 
     if itemCssStyle.length > 0
-      PageValue.setEventPageValue(Constant.PageValueKey.E_CSS, itemCssStyle)
+      PageValue.setEventPageValue(PageValue.Key.E_CSS, itemCssStyle)
 
   # タイムラインイベントの色を変更
   @changeTimelineColor = (teNum, actionType = null) ->

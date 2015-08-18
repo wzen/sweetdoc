@@ -1,6 +1,6 @@
 # 閲覧を実行する
 run = ->
-#  h = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX)
+#  h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
 #  v = JSON.stringify(h)
 #  console.log(v)
 

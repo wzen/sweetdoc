@@ -72,41 +72,6 @@ if gon?
       # @property [Int] Z zボタン
       @Z = constant.KeyboardKeyCode.Z
 
-    # ページ内値保存キー
-    class @PageValueKey
-      # @property [String] PV_ROOT ページ値ルート
-      @PV_ROOT = constant.PageValueKey.PV_ROOT
-      # @property [String] E_ROOT イベント値ルート
-      @E_ROOT = constant.PageValueKey.E_ROOT
-      # @property [String] E_PREFIX イベントプレフィックス
-      @E_PREFIX = constant.PageValueKey.E_PREFIX
-      # @property [String] E_COUNT イベント数
-      @E_COUNT = constant.PageValueKey.E_COUNT
-      # @property [String] E_CSS CSSデータ
-      @E_CSS = constant.PageValueKey.E_CSS
-      # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
-      @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
-      # @property [String] E_NUM_PREFIX イベント番号プレフィックス
-      @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
-      # @property [String] ITEM_PREFIX アイテムプレフィックス
-      @ITEM_PREFIX = 'item'
-      # @property [String] ITEM アイテムRoot
-      @ITEM_VALUE = @ITEM_PREFIX + ':@id:value'
-      # @property [String] ITEM アイテムキャッシュRoot
-      @ITEM_VALUE_CACHE = @ITEM_PREFIX + ':cache:@id:value'
-      # @property [String] ITEM_INFO_PREFIX アイテム情報プレフィックス
-      @ITEM_INFO_PREFIX = 'iteminfo'
-      # @property [String] ITEM_DEFAULT_METHODNAME デフォルトメソッド名
-      @ITEM_DEFAULT_METHODNAME = @ITEM_INFO_PREFIX + ':@item_id:default:methodname'
-      # @property [String] ITEM_DEFAULT_METHODACTIONTYPE デフォルトアクションタイプ
-      @ITEM_DEFAULT_ACTIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:actiontype'
-      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
-      @ITEM_DEFAULT_ANIMATIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:animationtype'
-      # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
-      @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
-      # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
-      @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
-
     class @ElementAttribute
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'

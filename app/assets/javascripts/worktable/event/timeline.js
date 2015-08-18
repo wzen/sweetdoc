@@ -33,7 +33,7 @@ Timeline = (function() {
       tEmt.each(function(e) {
         var actionType, teNum;
         teNum = parseInt($(this).val());
-        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + Constant.PageValueKey.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE);
+        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + PageValue.Key.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE);
         Timeline.changeTimelineColor(teNum, actionType);
         if (e === tEmt.length - 1 && actionType !== null) {
           self.createTimelineEvent(tEmt.length + 1);
@@ -137,7 +137,7 @@ Timeline = (function() {
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
     selectOptions = '';
-    items = $("#" + Constant.PageValueKey.PV_ROOT + " .item");
+    items = $("#" + PageValue.Key.PV_ROOT + " .item");
     items.children().each(function() {
       var id, itemId, name;
       id = $(this).find('input.id').val();
@@ -180,7 +180,7 @@ Timeline = (function() {
       return itemCssStyle += $(this).html();
     });
     if (itemCssStyle.length > 0) {
-      return PageValue.setEventPageValue(Constant.PageValueKey.E_CSS, itemCssStyle);
+      return PageValue.setEventPageValue(PageValue.Key.E_CSS, itemCssStyle);
     }
   };
 

@@ -2,18 +2,60 @@
 var PageValue;
 
 PageValue = (function() {
-  var _getPageValue, _setPageValue;
+  var _getPageValue, _setPageValue, constant;
 
   function PageValue() {}
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    PageValue.Key = (function() {
+      function Key() {}
+
+      Key.PV_ROOT = constant.PageValueKey.PV_ROOT;
+
+      Key.E_ROOT = constant.PageValueKey.E_ROOT;
+
+      Key.E_PREFIX = constant.PageValueKey.E_PREFIX;
+
+      Key.E_COUNT = constant.PageValueKey.E_COUNT;
+
+      Key.E_CSS = constant.PageValueKey.E_CSS;
+
+      Key.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
+
+      Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
+
+      Key.ITEM_PREFIX = 'item';
+
+      Key.ITEM_VALUE = Key.ITEM_PREFIX + ':@id:value';
+
+      Key.ITEM_VALUE_CACHE = Key.ITEM_PREFIX + ':cache:@id:value';
+
+      Key.ITEM_INFO_PREFIX = 'iteminfo';
+
+      Key.ITEM_DEFAULT_METHODNAME = Key.ITEM_INFO_PREFIX + ':@item_id:default:methodname';
+
+      Key.ITEM_DEFAULT_ACTIONTYPE = Key.ITEM_INFO_PREFIX + ':@item_id:default:actiontype';
+
+      Key.ITEM_DEFAULT_ANIMATIONTYPE = Key.ITEM_INFO_PREFIX + ':@item_id:default:animationtype';
+
+      Key.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
+
+      Key.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
+
+      return Key;
+
+    })();
+  }
 
   PageValue.addItemInfo = function(item_id, te_actions) {
     if ((te_actions != null) && te_actions.length > 0) {
       return te_actions.forEach((function(_this) {
         return function(a) {
           if ((a.is_default != null) && a.is_default) {
-            _this.setPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
-            _this.setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
-            return _this.setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
+            _this.setPageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
+            _this.setPageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
+            return _this.setPageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
           }
         };
       })(this));
@@ -24,11 +66,11 @@ PageValue = (function() {
     if (withRemove == null) {
       withRemove = false;
     }
-    return _getPageValue.call(this, key, withRemove, Constant.PageValueKey.PV_ROOT);
+    return _getPageValue.call(this, key, withRemove, this.Key.PV_ROOT);
   };
 
   PageValue.getEventPageValue = function(key) {
-    return _getPageValue.call(this, key, false, Constant.PageValueKey.E_ROOT);
+    return _getPageValue.call(this, key, false, this.Key.E_ROOT);
   };
 
   PageValue.getSettingPageValue = function(key) {
@@ -77,7 +119,7 @@ PageValue = (function() {
     };
     value = null;
     root = $("#" + rootId);
-    keys = key.split(Constant.PageValueKey.PAGE_VALUES_SEPERATOR);
+    keys = key.split(this.Key.PAGE_VALUES_SEPERATOR);
     keys.forEach(function(k, index) {
       root = $("." + k, root);
       if ((root == null) || root.length === 0) {
@@ -105,11 +147,11 @@ PageValue = (function() {
     if (isCache == null) {
       isCache = false;
     }
-    return _setPageValue.call(this, key, value, isCache, Constant.PageValueKey.PV_ROOT, false);
+    return _setPageValue.call(this, key, value, isCache, this.Key.PV_ROOT, false);
   };
 
   PageValue.setEventPageValue = function(key, value) {
-    return _setPageValue.call(this, key, value, false, Constant.PageValueKey.E_ROOT, true);
+    return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true);
   };
 
   PageValue.setSettingPageValue = function(key, value, giveName) {
@@ -149,7 +191,7 @@ PageValue = (function() {
     cacheClassName = 'cache';
     root = $("#" + rootId);
     parentClassName = null;
-    keys = key.split(Constant.PageValueKey.PAGE_VALUES_SEPERATOR);
+    keys = key.split(this.Key.PAGE_VALUES_SEPERATOR);
     return keys.forEach(function(k, index) {
       var element, parent;
       parent = root;
@@ -187,16 +229,16 @@ PageValue = (function() {
 
   PageValue.getEventPageValueSortedListByNum = function() {
     var count, eventObjList, eventPageValues, index, k, v;
-    eventPageValues = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX);
+    eventPageValues = PageValue.getEventPageValue(this.Key.E_PREFIX);
     if (eventPageValues == null) {
       return [];
     }
-    count = PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT);
+    count = PageValue.getEventPageValue(this.Key.E_COUNT);
     eventObjList = new Array(count);
     for (k in eventPageValues) {
       v = eventPageValues[k];
-      if (k.indexOf(Constant.PageValueKey.E_NUM_PREFIX) === 0) {
-        index = parseInt(k.substring(Constant.PageValueKey.E_NUM_PREFIX.length)) - 1;
+      if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
+        index = parseInt(k.substring(this.Key.E_NUM_PREFIX.length)) - 1;
         eventObjList[index] = v;
       }
     }
@@ -208,8 +250,8 @@ PageValue = (function() {
   };
 
   PageValue.removeAllItemAndEventPageValue = function() {
-    $("#" + Constant.PageValueKey.PV_ROOT).children("." + Constant.PageValueKey.ITEM_PREFIX).remove();
-    return $("#" + Constant.PageValueKey.E_ROOT).children().remove();
+    $("#" + this.Key.PV_ROOT).children("." + this.Key.ITEM_PREFIX).remove();
+    return $("#" + this.Key.E_ROOT).children().remove();
   };
 
   return PageValue;

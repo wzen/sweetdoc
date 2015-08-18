@@ -23,7 +23,7 @@ initView = ->
   scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
-  is_reload = PageValue.getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
+  is_reload = PageValue.getPageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
   ls = new LocalStorage(LocalStorage.Key.RUN_EVENT_PAGEVALUES)
   if is_reload?
     ls.loadEventPageValue()
@@ -133,4 +133,4 @@ $ ->
   setupScrollEvent()
 
   # CSS
-  $('#sup_css').html(PageValue.getEventPageValue(Constant.PageValueKey.E_CSS))
+  $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.E_CSS))

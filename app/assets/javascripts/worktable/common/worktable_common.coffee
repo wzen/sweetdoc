@@ -71,10 +71,19 @@ class WorktableCommon
   @drawAllItemFromEventPageValue: ->
     ePageValues = PageValue.getEventPageValueSortedListByNum()
     needItemIds = []
-    for epv in ePageValues
-      isCommonEvent = epv[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+    for obj in ePageValues
+      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       if !isCommonEvent
-        needItemIds.push(epv[EventPageValueBase.PageValueKey.ITEM_ID])
+        needItemIds.push(obj[EventPageValueBase.PageValueKey.ITEM_ID])
+
+    @loadItemJs(needItemIds, ->
+      for obj in ePageValues
+        event = Common.getInstanceFromMap(obj)
+        event.initWithEvent(obj)
+        isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+        if !isCommonEvent
+          event.reDraw()
+    )
 
   # JSファイルをサーバから読み込む
   # @param [Int] itemId アイテム種別

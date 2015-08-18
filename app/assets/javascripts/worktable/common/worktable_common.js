@@ -71,20 +71,32 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.drawAllItemFromEventPageValue = function() {
-    var ePageValues, epv, i, isCommonEvent, len, needItemIds, results;
+    var ePageValues, i, isCommonEvent, len, needItemIds, obj;
     ePageValues = PageValue.getEventPageValueSortedListByNum();
     needItemIds = [];
-    results = [];
     for (i = 0, len = ePageValues.length; i < len; i++) {
-      epv = ePageValues[i];
-      isCommonEvent = epv[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+      obj = ePageValues[i];
+      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
       if (!isCommonEvent) {
-        results.push(needItemIds.push(epv[EventPageValueBase.PageValueKey.ITEM_ID]));
-      } else {
-        results.push(void 0);
+        needItemIds.push(obj[EventPageValueBase.PageValueKey.ITEM_ID]);
       }
     }
-    return results;
+    return this.loadItemJs(needItemIds, function() {
+      var event, j, len1, results;
+      results = [];
+      for (j = 0, len1 = ePageValues.length; j < len1; j++) {
+        obj = ePageValues[j];
+        event = Common.getInstanceFromMap(obj);
+        event.initWithEvent(obj);
+        isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+        if (!isCommonEvent) {
+          results.push(event.reDraw());
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    });
   };
 
   WorktableCommon.loadItemJs = function(itemIds, callback) {

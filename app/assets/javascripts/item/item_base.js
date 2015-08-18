@@ -82,7 +82,11 @@ ItemBase = (function(superClass) {
     return true;
   };
 
-  ItemBase.prototype.reDraw = function() {};
+  ItemBase.prototype.reDraw = function(show) {
+    if (show == null) {
+      show = true;
+    }
+  };
 
   ItemBase.prototype.saveObj = function(action) {
     var history, k, num, ref, self, v;
@@ -111,7 +115,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     obj = this.getMinimumObject();
     return PageValue.setPageValue(prefix_key, obj);
@@ -122,7 +126,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     obj = PageValue.getPageValue(prefix_key);
     if (obj != null) {
@@ -137,7 +141,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     return PageValue.getPageValue(prefix_key + (":" + prop));
   };
@@ -147,7 +151,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? Constant.PageValueKey.ITEM_VALUE_CACHE : Constant.PageValueKey.ITEM_VALUE;
+    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     return PageValue.setPageValue(prefix_key + (":" + prop), value);
   };
@@ -185,15 +189,15 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
-    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
+    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultActionType = function() {
-    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
+    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultAnimationType = function() {
-    return PageValue.getPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
+    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultEventConfigValue = function() {

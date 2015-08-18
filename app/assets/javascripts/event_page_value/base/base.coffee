@@ -7,7 +7,7 @@ class EventPageValueBase
     class @PageValueKey
       # @property [String] te イベントRoot
       @te : (teNum) ->
-        constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.E_NUM_PREFIX + teNum
+        constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + PageValue.Key.E_NUM_PREFIX + teNum
       # @property [String] ID アイテムID
       @ID = 'id'
       # @property [String] ITEM_ID アイテムタイプID
@@ -125,7 +125,7 @@ class EventPageValueBase
     self = @
     maxTeNum = 0
     ret = null
-    $("##{Constant.PageValueKey.E_ROOT} .#{Constant.PageValueKey.E_PREFIX}").children('div').each((e) ->
+    $("##{PageValue.Key.E_ROOT} .#{PageValue.Key.E_PREFIX}").children('div').each((e) ->
       teNum = parseInt($(@).attr('class'))
       if teNum > maxTeNum
         start = $(@).find(".#{self.PageValueKey.SCROLL_POINT_START}:first").val()

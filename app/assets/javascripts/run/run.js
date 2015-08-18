@@ -19,7 +19,7 @@ initView = function() {
   scrollContents.scrollTop(scrollInside.height() * 0.5);
   scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
-  is_reload = PageValue.getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD);
+  is_reload = PageValue.getPageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
   ls = new LocalStorage(LocalStorage.Key.RUN_EVENT_PAGEVALUES);
   if (is_reload != null) {
     return ls.loadEventPageValue();
@@ -135,7 +135,7 @@ $(function() {
   initHandleScrollPoint();
   initEventAction();
   setupScrollEvent();
-  return $('#sup_css').html(PageValue.getEventPageValue(Constant.PageValueKey.E_CSS));
+  return $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.E_CSS));
 });
 
 //# sourceMappingURL=run.js.map

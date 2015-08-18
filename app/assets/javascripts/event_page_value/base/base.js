@@ -12,7 +12,7 @@ EventPageValueBase = (function() {
       function PageValueKey() {}
 
       PageValueKey.te = function(teNum) {
-        return constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + Constant.PageValueKey.E_NUM_PREFIX + teNum;
+        return constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + PageValue.Key.E_NUM_PREFIX + teNum;
       };
 
       PageValueKey.ID = 'id';
@@ -143,7 +143,7 @@ EventPageValueBase = (function() {
     self = this;
     maxTeNum = 0;
     ret = null;
-    $("#" + Constant.PageValueKey.E_ROOT + " ." + Constant.PageValueKey.E_PREFIX).children('div').each(function(e) {
+    $("#" + PageValue.Key.E_ROOT + " ." + PageValue.Key.E_PREFIX).children('div').each(function(e) {
       var end, start, teNum;
       teNum = parseInt($(this).attr('class'));
       if (teNum > maxTeNum) {

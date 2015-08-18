@@ -55,9 +55,9 @@
 //= require worktable/item_extend/canvasitem_extend
 //= require worktable/item_extend/cssitem_extend
 //= require worktable/sidebar_config/event_config.js
+//= require worktable/sidebar_config/sidebar_ui.js
 //= require worktable/event/timeline
 //= require worktable/event/run
 //= require worktable/handwrite
-//= require worktable/sidebar_ui
 //= require worktable/worktable
 // require_tree .

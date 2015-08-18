@@ -110,45 +110,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.PageValueKey = (function() {
-      function PageValueKey() {}
-
-      PageValueKey.PV_ROOT = constant.PageValueKey.PV_ROOT;
-
-      PageValueKey.E_ROOT = constant.PageValueKey.E_ROOT;
-
-      PageValueKey.E_PREFIX = constant.PageValueKey.E_PREFIX;
-
-      PageValueKey.E_COUNT = constant.PageValueKey.E_COUNT;
-
-      PageValueKey.E_CSS = constant.PageValueKey.E_CSS;
-
-      PageValueKey.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
-
-      PageValueKey.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
-
-      PageValueKey.ITEM_PREFIX = 'item';
-
-      PageValueKey.ITEM_VALUE = PageValueKey.ITEM_PREFIX + ':@id:value';
-
-      PageValueKey.ITEM_VALUE_CACHE = PageValueKey.ITEM_PREFIX + ':cache:@id:value';
-
-      PageValueKey.ITEM_INFO_PREFIX = 'iteminfo';
-
-      PageValueKey.ITEM_DEFAULT_METHODNAME = PageValueKey.ITEM_INFO_PREFIX + ':@item_id:default:methodname';
-
-      PageValueKey.ITEM_DEFAULT_ACTIONTYPE = PageValueKey.ITEM_INFO_PREFIX + ':@item_id:default:actiontype';
-
-      PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE = PageValueKey.ITEM_INFO_PREFIX + ':@item_id:default:animationtype';
-
-      PageValueKey.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
-
-      PageValueKey.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
-
-      return PageValueKey;
-
-    })();
-
     Constant.ElementAttribute = (function() {
       function ElementAttribute() {}
 

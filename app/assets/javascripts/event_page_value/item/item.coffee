@@ -36,7 +36,7 @@ class EPVItem extends EventPageValueBase
     if errorMes.length == 0
       value = item.constructor.defaultEventConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      teNum = PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT)
+      teNum = PageValue.getEventPageValue(PageValue.Key.E_COUNT)
 
       if teNum?
         teNum = parseInt(teNum) + 1
@@ -44,7 +44,7 @@ class EPVItem extends EventPageValueBase
         teNum = 1
 
       PageValue.setEventPageValue(@PageValueKey.te(teNum), writeValue)
-      PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, teNum)
+      PageValue.setEventPageValue(PageValue.Key.E_COUNT, teNum)
       Timeline.changeTimelineColor(teNum, actionType)
 
     return errorMes
@@ -61,17 +61,17 @@ class EPVItem extends EventPageValueBase
       value = item.eventConfigValue()
       writeValue[@PageValueKey.VALUE] = value
       PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
-      if parseInt(PageValue.getEventPageValue(Constant.PageValueKey.E_COUNT)) < eventConfig.teNum
-        PageValue.setEventPageValue(Constant.PageValueKey.E_COUNT, eventConfig.teNum)
+      if parseInt(PageValue.getEventPageValue(PageValue.Key.E_COUNT)) < eventConfig.teNum
+        PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum)
 
     return errorMes
 
   @writeItemValueToPageValue = (item) ->
-    tes = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX)
+    tes = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
     for idx, te of tes
-      if idx.indexOf(Constant.PageValueKey.E_NUM_PREFIX) >= 0 && te.id == item.id
+      if idx.indexOf(PageValue.Key.E_NUM_PREFIX) >= 0 && te.id == item.id
         # イベントのアイテム情報を更新
-        key = "#{Constant.PageValueKey.E_PREFIX}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{idx}#{Constant.PageValueKey.PAGE_VALUES_SEPERATOR}#{@minObj}"
+        key = "#{PageValue.Key.E_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{idx}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@minObj}"
         PageValue.setEventPageValue(key, item.getMinimumObject())
 
   @readFromPageValue = (eventConfig, item) ->

@@ -9,6 +9,8 @@ LocalStorage = (function() {
 
     Key.RUN_EVENT_PAGEVALUES = 'run_event_pagevalues';
 
+    Key.TIME_SUFFIX = '_time';
+
     return Key;
 
   })();
@@ -18,16 +20,29 @@ LocalStorage = (function() {
     this.storageKey = key;
   }
 
-  LocalStorage.prototype.saveEventPageValue = function() {
-    var h;
-    h = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX);
-    return this.lstorage.setItem(this.storageKey, JSON.stringify(h));
+  LocalStorage.prototype.saveEventPageValue = function(saveTime) {
+    var h, key;
+    if (saveTime == null) {
+      saveTime = true;
+    }
+    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    this.lstorage.setItem(this.storageKey, JSON.stringify(h));
+    if (saveTime) {
+      key = this.storageKey + this.TIME_SUFFIX;
+      return this.lstorage.setItem(key, $.now());
+    }
   };
 
   LocalStorage.prototype.loadEventPageValue = function() {
     var h;
     h = JSON.parse(this.lstorage.getItem(this.storageKey));
-    return PageValue.setEventPageValue(Constant.PageValueKey.E_PREFIX, h);
+    return PageValue.setEventPageValue(PageValue.Key.E_PREFIX, h);
+  };
+
+  LocalStorage.prototype.getSavedTime = function() {
+    var key;
+    key = this.storageKey + this.TIME_SUFFIX;
+    return this.lstorage.getItem(key);
   };
 
   LocalStorage.prototype.get = function() {
