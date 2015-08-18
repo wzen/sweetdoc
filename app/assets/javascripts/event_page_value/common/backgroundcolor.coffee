@@ -28,6 +28,10 @@ class EPVBackgroundColor extends EventPageValueBase
       PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
       PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum)
 
+      # Storageに保存
+      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+      st.saveEventPageValue()
+
     return errorMes
 
   @readFromPageValue = (eventConfig) ->

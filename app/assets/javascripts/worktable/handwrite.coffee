@@ -22,42 +22,45 @@ class Handwrite
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
     mouseDownDrawing = (loc) ->
-      if selectItemMenu == Constant.ItemId.ARROW
-        item = new WorkTableArrowItem(loc)
-      else if selectItemMenu == Constant.ItemId.BUTTON
-        item = new WorkTableButtonItem(loc)
-      item.saveDrawingSurface()
-      changeMode(Constant.Mode.DRAW)
-      item.startDraw()
+      if selectItemMenu?
+        if selectItemMenu == Constant.ItemId.ARROW
+          item = new WorkTableArrowItem(loc)
+        else if selectItemMenu == Constant.ItemId.BUTTON
+          item = new WorkTableButtonItem(loc)
+        item.saveDrawingSurface()
+        changeMode(Constant.Mode.DRAW)
+        item.startDraw()
 
     # マウスドラッグ時の描画イベント
     # @param [Array] loc Canvas座標
     mouseMoveDrawing = (loc) ->
-      if enableMoveEvent
-        enableMoveEvent = false
-        drag = true
-        item.draw(loc)
+      if item?
+        if enableMoveEvent
+          enableMoveEvent = false
+          drag = true
+          item.draw(loc)
 
-        # 待ちキューがある場合はもう一度実行
-        if queueLoc != null
-          q = queueLoc
-          queueLoc = null
-          item.draw(q)
+          # 待ちキューがある場合はもう一度実行
+          if queueLoc != null
+            q = queueLoc
+            queueLoc = null
+            item.draw(q)
 
-        enableMoveEvent = true
-      else
-        # 待ちキューに保存
-        queueLoc = loc
+          enableMoveEvent = true
+        else
+          # 待ちキューに保存
+          queueLoc = loc
 
     # マウスアップ時の描画イベント
     # @param [Array] loc Canvas座標
     mouseUpDrawing = ->
-      item.restoreAllDrawingSurface()
-      item.endDraw(zindex)
-      setupEvents(item)
-      changeMode(Constant.Mode.EDIT)
-      item.saveObj(Constant.ItemActionType.MAKE)
-      zindex += 1
+      if item?
+        item.restoreAllDrawingSurface()
+        item.endDraw(zindex)
+        setupEvents(item)
+        changeMode(Constant.Mode.EDIT)
+        item.saveObj(Constant.ItemActionType.MAKE)
+        zindex += 1
 
     # 手書きイベントを設定
     do =>

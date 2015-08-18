@@ -19,7 +19,7 @@ EPVItem = (function(superClass) {
   };
 
   EPVItem.writeDefaultToPageValue = function(item) {
-    var actionType, end, errorMes, itemWriteValue, start, teNum, value, writeValue;
+    var actionType, end, errorMes, itemWriteValue, st, start, teNum, value, writeValue;
     errorMes = "";
     writeValue = {};
     writeValue[this.PageValueKey.ID] = item.id;
@@ -55,12 +55,14 @@ EPVItem = (function(superClass) {
       PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.E_COUNT, teNum);
       Timeline.changeTimelineColor(teNum, actionType);
+      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+      st.saveEventPageValue();
     }
     return errorMes;
   };
 
   EPVItem.writeToPageValue = function(eventConfig) {
-    var errorMes, item, itemWriteValue, value, writeValue;
+    var errorMes, item, itemWriteValue, st, value, writeValue;
     errorMes = "";
     writeValue = EPVItem.__super__.constructor.writeToPageValue.call(this, eventConfig);
     item = createdObject[eventConfig.id];
@@ -73,6 +75,8 @@ EPVItem = (function(superClass) {
       if (parseInt(PageValue.getEventPageValue(PageValue.Key.E_COUNT)) < eventConfig.teNum) {
         PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum);
       }
+      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+      st.saveEventPageValue();
     }
     return errorMes;
   };

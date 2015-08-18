@@ -176,14 +176,12 @@ runDebug = function() {
 };
 
 $(function() {
-  var borderWidth, menu, padding, timelineTopPadding;
+  var borderWidth, menu, padding, st, timelineTopPadding;
   if (!Common.checkBlowserEnvironment()) {
     alert('ブラウザ非対応です。');
     return;
   }
   worktableCommonVar();
-  window.selectItemMenu = Constant.ItemId.BUTTON;
-  WorktableCommon.loadItemJs(Constant.ItemId.BUTTON);
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
   borderWidth = 5;
   timelineTopPadding = 5;
@@ -210,7 +208,14 @@ $(function() {
   $('#main').on("mousedown", function() {
     return clearAllItemStyle();
   });
+  st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+  if (!st.isOverSaveTimeLimit()) {
+    st.loadEventPageValue();
+    WorktableCommon.drawAllItemFromEventPageValue();
+  } else {
+    st.clear();
+  }
   return Timeline.setupTimelineEventConfig();
 });
 
-//# sourceMappingURL=worktable.js.js.map
+//# sourceMappingURL=worktable.js.map

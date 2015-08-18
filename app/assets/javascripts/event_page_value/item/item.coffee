@@ -47,6 +47,10 @@ class EPVItem extends EventPageValueBase
       PageValue.setEventPageValue(PageValue.Key.E_COUNT, teNum)
       Timeline.changeTimelineColor(teNum, actionType)
 
+      # Storageに保存
+      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+      st.saveEventPageValue()
+
     return errorMes
 
   @writeToPageValue = (eventConfig) ->
@@ -63,6 +67,10 @@ class EPVItem extends EventPageValueBase
       PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
       if parseInt(PageValue.getEventPageValue(PageValue.Key.E_COUNT)) < eventConfig.teNum
         PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum)
+
+      # Storageに保存
+      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+      st.saveEventPageValue()
 
     return errorMes
 

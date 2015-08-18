@@ -76,6 +76,7 @@ if gon?
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
 
+    # 共通イベントタイプ
     class @CommonActionEventChangeType
       # @property [Int] BACKGROUND 背景
       @BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND

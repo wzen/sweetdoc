@@ -5,8 +5,12 @@ class LocalStorage
     @WORKTABLE_EVENT_PAGEVALUES = 'worktable_event_pagevalues'
     # @property [Int] RUN_EVENT_PAGEVALUES イベントページ値
     @RUN_EVENT_PAGEVALUES = 'run_event_pagevalues'
-    # @property [Int] TIME_SUFFIX イベントページ値保存時の時間
-    @TIME_SUFFIX = '_time'
+
+  # @property [Int] SAVETIME_SUFFIX イベントページ値保存時の時間
+  @SAVETIME_SUFFIX = '_time'
+  # @property [Int] SAVETIME_LIMIT_MINUTES イベントページ値保存時間
+  @SAVETIME_LIMIT_MINUTES = {}
+  @SAVETIME_LIMIT_MINUTES[@Key.WORKTABLE_EVENT_PAGEVALUES] = 5
 
   constructor: (key) ->
     @lstorage = localStorage
@@ -18,7 +22,7 @@ class LocalStorage
     @lstorage.setItem(@storageKey, JSON.stringify(h))
     if saveTime
       # 現在時刻を保存
-      key = @storageKey + @TIME_SUFFIX
+      key = @storageKey + @constructor.SAVETIME_SUFFIX
       @lstorage.setItem(key, $.now())
 
   # ストレージからページ値を読み込み
@@ -26,12 +30,22 @@ class LocalStorage
     h = JSON.parse(@lstorage.getItem(@storageKey))
     PageValue.setEventPageValue(PageValue.Key.E_PREFIX, h)
 
-  getSavedTime: ->
-    key = @storageKey + @TIME_SUFFIX
-    return @lstorage.getItem(key)
+  # 保存時間が経過しているか
+  isOverSaveTimeLimit: ->
+    key = @storageKey + @constructor.SAVETIME_SUFFIX
+    saveTime = @lstorage.getItem(key)
+    if !saveTime?
+      return true
+    duration = $.now() - saveTime
+    d = new Date(duration)
+    m = d.getMinutes()
+    return parseInt(m) > @constructor.SAVETIME_LIMIT_MINUTES[@storageKey]
 
   get: ->
     @lstorage.getItem(@storageKey)
 
   set: (value) ->
     @lstorage.setItem(@storageKey, value)
+
+  clear: ->
+    @lstorage.setItem(@storageKey, null)

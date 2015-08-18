@@ -10,9 +10,12 @@ ItemBase = (function(superClass) {
 
   ItemBase.ITEM_ID = "";
 
-  function ItemBase(cood) {
+  function ItemBase(cood, id) {
     if (cood == null) {
       cood = null;
+    }
+    if (id == null) {
+      id = null;
     }
     ItemBase.__super__.constructor.call(this);
     this.id = "i" + this.constructor.IDENTITY + Common.generateId();
@@ -175,11 +178,13 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.setMiniumObject = function(obj) {
+    delete window.createdObject[this.id];
     this.id = Common.makeClone(obj.id);
     this.name = Common.makeClone(obj.name);
     this.itemSize = Common.makeClone(obj.itemSize);
     this.zindex = Common.makeClone(obj.zindex);
-    return this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
+    this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
+    return window.createdObject[this.id] = this;
   };
 
   ItemBase.prototype.reDrawByMinimumObject = function(obj) {};

@@ -24,38 +24,44 @@ Handwrite = (function() {
       };
     };
     mouseDownDrawing = function(loc) {
-      if (selectItemMenu === Constant.ItemId.ARROW) {
-        item = new WorkTableArrowItem(loc);
-      } else if (selectItemMenu === Constant.ItemId.BUTTON) {
-        item = new WorkTableButtonItem(loc);
+      if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
+        if (selectItemMenu === Constant.ItemId.ARROW) {
+          item = new WorkTableArrowItem(loc);
+        } else if (selectItemMenu === Constant.ItemId.BUTTON) {
+          item = new WorkTableButtonItem(loc);
+        }
+        item.saveDrawingSurface();
+        changeMode(Constant.Mode.DRAW);
+        return item.startDraw();
       }
-      item.saveDrawingSurface();
-      changeMode(Constant.Mode.DRAW);
-      return item.startDraw();
     };
     mouseMoveDrawing = function(loc) {
       var q;
-      if (enableMoveEvent) {
-        enableMoveEvent = false;
-        drag = true;
-        item.draw(loc);
-        if (queueLoc !== null) {
-          q = queueLoc;
-          queueLoc = null;
-          item.draw(q);
+      if (item != null) {
+        if (enableMoveEvent) {
+          enableMoveEvent = false;
+          drag = true;
+          item.draw(loc);
+          if (queueLoc !== null) {
+            q = queueLoc;
+            queueLoc = null;
+            item.draw(q);
+          }
+          return enableMoveEvent = true;
+        } else {
+          return queueLoc = loc;
         }
-        return enableMoveEvent = true;
-      } else {
-        return queueLoc = loc;
       }
     };
     mouseUpDrawing = function() {
-      item.restoreAllDrawingSurface();
-      item.endDraw(zindex);
-      setupEvents(item);
-      changeMode(Constant.Mode.EDIT);
-      item.saveObj(Constant.ItemActionType.MAKE);
-      return zindex += 1;
+      if (item != null) {
+        item.restoreAllDrawingSurface();
+        item.endDraw(zindex);
+        setupEvents(item);
+        changeMode(Constant.Mode.EDIT);
+        item.saveObj(Constant.ItemActionType.MAKE);
+        return zindex += 1;
+      }
     };
     return (function(_this) {
       return function() {

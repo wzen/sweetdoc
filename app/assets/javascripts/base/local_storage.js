@@ -9,11 +9,15 @@ LocalStorage = (function() {
 
     Key.RUN_EVENT_PAGEVALUES = 'run_event_pagevalues';
 
-    Key.TIME_SUFFIX = '_time';
-
     return Key;
 
   })();
+
+  LocalStorage.SAVETIME_SUFFIX = '_time';
+
+  LocalStorage.SAVETIME_LIMIT_MINUTES = {};
+
+  LocalStorage.SAVETIME_LIMIT_MINUTES[LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES] = 5;
 
   function LocalStorage(key) {
     this.lstorage = localStorage;
@@ -28,7 +32,7 @@ LocalStorage = (function() {
     h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
     this.lstorage.setItem(this.storageKey, JSON.stringify(h));
     if (saveTime) {
-      key = this.storageKey + this.TIME_SUFFIX;
+      key = this.storageKey + this.constructor.SAVETIME_SUFFIX;
       return this.lstorage.setItem(key, $.now());
     }
   };
@@ -39,10 +43,17 @@ LocalStorage = (function() {
     return PageValue.setEventPageValue(PageValue.Key.E_PREFIX, h);
   };
 
-  LocalStorage.prototype.getSavedTime = function() {
-    var key;
-    key = this.storageKey + this.TIME_SUFFIX;
-    return this.lstorage.getItem(key);
+  LocalStorage.prototype.isOverSaveTimeLimit = function() {
+    var d, duration, key, m, saveTime;
+    key = this.storageKey + this.constructor.SAVETIME_SUFFIX;
+    saveTime = this.lstorage.getItem(key);
+    if (saveTime == null) {
+      return true;
+    }
+    duration = $.now() - saveTime;
+    d = new Date(duration);
+    m = d.getMinutes();
+    return parseInt(m) > this.constructor.SAVETIME_LIMIT_MINUTES[this.storageKey];
   };
 
   LocalStorage.prototype.get = function() {
@@ -51,6 +62,10 @@ LocalStorage = (function() {
 
   LocalStorage.prototype.set = function(value) {
     return this.lstorage.setItem(this.storageKey, value);
+  };
+
+  LocalStorage.prototype.clear = function() {
+    return this.lstorage.setItem(this.storageKey, null);
   };
 
   return LocalStorage;

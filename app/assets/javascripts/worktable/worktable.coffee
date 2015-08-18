@@ -142,8 +142,8 @@ $ ->
   # 共有変数
   worktableCommonVar()
   # 初期状態としてボタンを選択(暫定)
-  window.selectItemMenu = Constant.ItemId.BUTTON
-  WorktableCommon.loadItemJs(Constant.ItemId.BUTTON)
+  #window.selectItemMenu = Constant.ItemId.BUTTON
+  #WorktableCommon.loadItemJs(Constant.ItemId.BUTTON)
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
   borderWidth = 5
@@ -172,6 +172,14 @@ $ ->
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )
+
+  # Storageからアイテム描画
+  st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+  if !st.isOverSaveTimeLimit()
+    st.loadEventPageValue()
+    WorktableCommon.drawAllItemFromEventPageValue()
+  else
+    st.clear()
+
   # タイムライン初期化
-  # TODO: 本来はタイムライン表示時に行う
   Timeline.setupTimelineEventConfig()

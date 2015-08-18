@@ -268,7 +268,10 @@ CommonEventBase = (function(superClass) {
   }
 
   CommonEventBase.prototype.initWithEvent = function(event) {
-    return CommonEventBase.__super__.initWithEvent.call(this, event);
+    CommonEventBase.__super__.initWithEvent.call(this, event);
+    delete window.createdObject[this.id];
+    this.id = event[EventPageValueBase.PageValueKey.ID];
+    return window.createdObject[this.id] = this;
   };
 
   return CommonEventBase;

@@ -186,11 +186,15 @@ class ItemBase extends ItemEventBase
 
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
+    delete window.createdObject[@id]
+
     @id = Common.makeClone(obj.id)
     @name = Common.makeClone(obj.name)
     @itemSize = Common.makeClone(obj.itemSize)
     @zindex = Common.makeClone(obj.zindex)
     @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
+
+    window.createdObject[@id] = @
 
   # 最小限のデータからアイテムを描画
   # @abstract

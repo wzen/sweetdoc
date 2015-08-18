@@ -129,7 +129,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.applyAction = function() {
-    var commonEvent, errorMes, handlerDiv, item, parallel, st;
+    var commonEvent, errorMes, handlerDiv, item, parallel;
     this.isParallel = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {
@@ -153,8 +153,6 @@ EventConfig = (function() {
       this.showError(errorMes);
       return;
     }
-    st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
-    st.saveEventPageValue();
     Timeline.changeTimelineColor(this.teNum, this.actionType);
     item = createdObject[this.id];
     if ((item != null) && (item.preview != null)) {

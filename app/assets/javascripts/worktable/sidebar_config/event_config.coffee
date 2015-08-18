@@ -157,10 +157,6 @@ class EventConfig
       @showError(errorMes)
       return
 
-    # Storageに保存
-    st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
-    st.saveEventPageValue()
-
     # イベントの色を変更
     Timeline.changeTimelineColor(@teNum, @actionType)
 
