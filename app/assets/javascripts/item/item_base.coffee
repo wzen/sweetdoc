@@ -115,8 +115,6 @@ class ItemBase extends ItemEventBase
         if self.constructor.IDENTITY == v.constructor.IDENTITY
           num += 1
       @name = @constructor.IDENTITY + " #{num}"
-#      # アイテムリストに保存
-#      createdObject[@id] = @
 
     # ページに保存
     @setAllItemPropToPageValue()

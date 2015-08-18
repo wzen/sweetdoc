@@ -104,7 +104,6 @@ focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
   PageValue.setPageValue(PageValue.Key.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
   Common.focusToTarget(target)
 
-
 # キーイベント初期化
 initKeyEvent = ->
   $(window).keydown( (e)->

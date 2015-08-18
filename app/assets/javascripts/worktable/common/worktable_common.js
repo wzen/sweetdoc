@@ -88,13 +88,13 @@ WorktableCommon = (function() {
         obj = ePageValues[j];
         event = Common.getInstanceFromMap(obj);
         event.initWithEvent(obj);
-        isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
-        if (!isCommonEvent) {
+        if (event instanceof ItemBase) {
           if (event instanceof CssItemBase && (event.makeCss != null)) {
             event.makeCss();
           }
           if (event.drawAndMakeConfigs != null) {
-            results.push(event.drawAndMakeConfigs());
+            event.drawAndMakeConfigs();
+            results.push(event.saveObj());
           } else {
             results.push(void 0);
           }

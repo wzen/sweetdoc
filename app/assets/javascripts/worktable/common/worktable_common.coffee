@@ -80,12 +80,12 @@ class WorktableCommon
       for obj in ePageValues
         event = Common.getInstanceFromMap(obj)
         event.initWithEvent(obj)
-        isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-        if !isCommonEvent
+        if event instanceof ItemBase
           if event instanceof CssItemBase && event.makeCss?
             event.makeCss()
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
+            event.saveObj()
     )
 
   # JSファイルをサーバから読み込む
