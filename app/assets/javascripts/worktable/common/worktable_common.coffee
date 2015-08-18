@@ -82,7 +82,10 @@ class WorktableCommon
         event.initWithEvent(obj)
         isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
         if !isCommonEvent
-          event.reDraw()
+          if event instanceof CssItemBase && event.makeCss?
+            event.makeCss()
+          if event.drawAndMakeConfigs?
+            event.drawAndMakeConfigs()
     )
 
   # JSファイルをサーバから読み込む
@@ -154,7 +157,6 @@ class WorktableCommon
         if callback?
           callback()
     , '500')
-
 
 
 

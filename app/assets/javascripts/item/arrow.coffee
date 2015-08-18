@@ -399,22 +399,10 @@ if window.worktablePage?
     endDraw: (zindex, show = true) ->
       if !super(zindex)
         return false
-      @drawAndMakeConfigs(show)
+      @drawAndMakeConfigsAndWritePageValue(show)
       # Canvas状態を保存
       @saveNewDrawedSurface()
       return true
-
-    # CanvasのHTML要素とデザインコンフィグを作成
-    # @param [boolean] show 要素作成後に描画を表示するか
-    drawAndMakeConfigs: (show = true) ->
-      @reDraw(show)
-
-      # コンフィグ作成
-      @makeDesignConfig()
-      # イベント作成
-      #fixme: あとでロジックと実装を分けること
-      EPVItem.writeDefaultToPageValue(@)
-      Timeline.setupTimelineEventConfig()
 
     # 矢印のサイズ更新
     # @private
@@ -443,6 +431,7 @@ if window.worktablePage?
           @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
   window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem
+  Common.setClassToMap(false, WorkTableArrowItem.ITEM_ID, WorkTableArrowItem)
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?

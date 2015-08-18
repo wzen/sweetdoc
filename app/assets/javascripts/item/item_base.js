@@ -10,12 +10,9 @@ ItemBase = (function(superClass) {
 
   ItemBase.ITEM_ID = "";
 
-  function ItemBase(cood, id) {
+  function ItemBase(cood) {
     if (cood == null) {
       cood = null;
-    }
-    if (id == null) {
-      id = null;
     }
     ItemBase.__super__.constructor.call(this);
     this.id = "i" + this.constructor.IDENTITY + Common.generateId();
@@ -251,6 +248,22 @@ CssItemBase = (function(superClass) {
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
     return true;
+  };
+
+  CssItemBase.prototype.makeCss = function() {
+    var newEmt;
+    if (this.css != null) {
+      newEmt = $(this.css);
+    } else {
+      newEmt = $('#' + this.constructor.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
+      newEmt.find('.btn-item-id').html(this.id);
+    }
+    $('#css_code_info').append(newEmt);
+    this.cssRoot = $('#' + this.getCssRootElementId());
+    this.cssCache = $(".css-cache", this.cssRoot);
+    this.cssCode = $(".css-code", this.cssRoot);
+    this.cssStyle = $(".css-style", this.cssRoot);
+    return this.cssStyle.text(this.cssCode.text());
   };
 
   return CssItemBase;

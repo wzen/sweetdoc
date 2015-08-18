@@ -190,7 +190,8 @@ if window.worktablePage?
     endDraw: (zindex, show = true) ->
       if !super(zindex)
         return false
-      @drawAndMakeConfigs(show)
+      @makeCss()
+      @drawAndMakeConfigsAndWritePageValue(show)
       return true
 
     # ストレージとDB保存用の最小限のデータを取得
@@ -199,37 +200,6 @@ if window.worktablePage?
       obj = super()
       obj.css = @cssRoot[0].outerHTML
       return obj
-
-    # HTML要素を作成
-    # @param [boolean] show 要素作成後に描画を表示するか
-    # @return [Boolean] 処理結果
-    drawAndMakeConfigs: (show = true) ->
-
-      #CSSを設定
-      if @css?
-        newEmt = $(@css)
-      else
-        # CSSテンプレートからオブジェクト個別のCSSを作成
-        newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
-        newEmt.find('.btn-item-id').html(@id)
-      $('#css_code_info').append(newEmt)
-      @cssRoot = $('#' + @getCssRootElementId())
-      @cssCache = $(".css-cache", @cssRoot)
-      @cssCode = $(".css-code", @cssRoot)
-      @cssStyle = $(".css-style", @cssRoot)
-      @cssStyle.text(@cssCode.text())
-
-      # ボタン設置
-      @reDraw(show)
-
-      # コンフィグ作成
-      @makeDesignConfig()
-      # イベント作成
-      #fixme: あとでロジックと実装を分けること
-      EPVItem.writeDefaultToPageValue(@)
-      Timeline.setupTimelineEventConfig()
-
-      return true
 
     # CSSボタンコントロール初期化
     setupOptionMenu: ->
@@ -355,6 +325,7 @@ if window.worktablePage?
       )
 
   window.loadedClassList.WorkTableButtonItem = WorkTableButtonItem
+  Common.setClassToMap(false, WorkTableButtonItem.ITEM_ID, WorkTableButtonItem)
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?

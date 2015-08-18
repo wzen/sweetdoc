@@ -173,6 +173,9 @@ $ ->
     clearAllItemStyle()
   )
 
+  # タイムライン初期化
+  Timeline.setupTimelineEventConfig()
+
   # Storageからアイテム描画
   st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
   if !st.isOverSaveTimeLimit()
@@ -181,5 +184,3 @@ $ ->
   else
     st.clear()
 
-  # タイムライン初期化
-  Timeline.setupTimelineEventConfig()

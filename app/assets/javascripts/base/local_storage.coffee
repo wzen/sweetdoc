@@ -28,7 +28,8 @@ class LocalStorage
   # ストレージからページ値を読み込み
   loadEventPageValue: ->
     h = JSON.parse(@lstorage.getItem(@storageKey))
-    PageValue.setEventPageValue(PageValue.Key.E_PREFIX, h)
+    for k, v of h
+      PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # 保存時間が経過しているか
   isOverSaveTimeLimit: ->

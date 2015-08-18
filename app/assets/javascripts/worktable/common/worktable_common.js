@@ -90,7 +90,14 @@ WorktableCommon = (function() {
         event.initWithEvent(obj);
         isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
         if (!isCommonEvent) {
-          results.push(event.reDraw());
+          if (event instanceof CssItemBase && (event.makeCss != null)) {
+            event.makeCss();
+          }
+          if (event.drawAndMakeConfigs != null) {
+            results.push(event.drawAndMakeConfigs());
+          } else {
+            results.push(void 0);
+          }
         } else {
           results.push(void 0);
         }

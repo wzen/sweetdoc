@@ -38,9 +38,14 @@ LocalStorage = (function() {
   };
 
   LocalStorage.prototype.loadEventPageValue = function() {
-    var h;
+    var h, k, results, v;
     h = JSON.parse(this.lstorage.getItem(this.storageKey));
-    return PageValue.setEventPageValue(PageValue.Key.E_PREFIX, h);
+    results = [];
+    for (k in h) {
+      v = h[k];
+      results.push(PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+    }
+    return results;
   };
 
   LocalStorage.prototype.isOverSaveTimeLimit = function() {

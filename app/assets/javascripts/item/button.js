@@ -184,7 +184,8 @@ if (window.worktablePage != null) {
       if (!WorkTableButtonItem.__super__.endDraw.call(this, zindex)) {
         return false;
       }
-      this.drawAndMakeConfigs(show);
+      this.makeCss();
+      this.drawAndMakeConfigsAndWritePageValue(show);
       return true;
     };
 
@@ -193,30 +194,6 @@ if (window.worktablePage != null) {
       obj = WorkTableButtonItem.__super__.getMinimumObject.call(this);
       obj.css = this.cssRoot[0].outerHTML;
       return obj;
-    };
-
-    WorkTableButtonItem.prototype.drawAndMakeConfigs = function(show) {
-      var newEmt;
-      if (show == null) {
-        show = true;
-      }
-      if (this.css != null) {
-        newEmt = $(this.css);
-      } else {
-        newEmt = $('#' + WorkTableButtonItem.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
-        newEmt.find('.btn-item-id').html(this.id);
-      }
-      $('#css_code_info').append(newEmt);
-      this.cssRoot = $('#' + this.getCssRootElementId());
-      this.cssCache = $(".css-cache", this.cssRoot);
-      this.cssCode = $(".css-code", this.cssRoot);
-      this.cssStyle = $(".css-style", this.cssRoot);
-      this.cssStyle.text(this.cssCode.text());
-      this.reDraw(show);
-      this.makeDesignConfig();
-      EPVItem.writeDefaultToPageValue(this);
-      Timeline.setupTimelineEventConfig();
-      return true;
     };
 
     WorkTableButtonItem.prototype.setupOptionMenu = function() {
@@ -346,6 +323,7 @@ if (window.worktablePage != null) {
 
   })(ButtonItem);
   window.loadedClassList.WorkTableButtonItem = WorkTableButtonItem;
+  Common.setClassToMap(false, WorkTableButtonItem.ITEM_ID, WorkTableButtonItem);
 }
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == null)) {

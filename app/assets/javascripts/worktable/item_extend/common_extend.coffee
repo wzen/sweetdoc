@@ -9,9 +9,31 @@ WorkTableCommonExtend =
   draw: (cood) ->
     return
 
-  # ドラッグ描画終了
-  endDraw: (zindex, show = true) ->
-    return
+  # 描画&コンフィグ作成
+  drawAndMakeConfigsAndWritePageValue: (show = true) ->
+    # ボタン設置
+    @reDraw(show)
+    # コンフィグ作成
+    @makeDesignConfig()
+    # イベント記述
+    EPVItem.writeDefaultToPageValue(@)
+    # タイムライン作成
+    Timeline.setupTimelineEventConfig()
+
+    return true
+
+  # 描画&コンフィグ作成
+  # @param [boolean] show 要素作成後に描画を表示するか
+  # @return [Boolean] 処理結果
+  drawAndMakeConfigs: (show = true) ->
+    # ボタン設置
+    @reDraw(show)
+    # コンフィグ作成
+    @makeDesignConfig()
+    # タイムライン作成
+    Timeline.setupTimelineEventConfig()
+
+    return true
 
   # オプションメニューを開く
   showOptionMenu: ->

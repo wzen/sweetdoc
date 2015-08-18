@@ -261,6 +261,21 @@ class CssItemBase extends ItemBase
 
     return true
 
+  #CSSを設定
+  makeCss: ->
+    if @css?
+      newEmt = $(@css)
+    else
+      # CSSテンプレートからオブジェクト個別のCSSを作成
+      newEmt = $('#' + @constructor.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
+      newEmt.find('.btn-item-id').html(@id)
+    $('#css_code_info').append(newEmt)
+    @cssRoot = $('#' + @getCssRootElementId())
+    @cssCache = $(".css-cache", @cssRoot)
+    @cssCode = $(".css-code", @cssRoot)
+    @cssStyle = $(".css-style", @cssRoot)
+    @cssStyle.text(@cssCode.text())
+
 # Canvasアイテム
 # @abstract
 # @extend ItemBase

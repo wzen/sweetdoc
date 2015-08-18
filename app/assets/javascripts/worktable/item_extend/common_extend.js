@@ -4,10 +4,24 @@ var WorkTableCommonExtend;
 WorkTableCommonExtend = {
   startDraw: function() {},
   draw: function(cood) {},
-  endDraw: function(zindex, show) {
+  drawAndMakeConfigsAndWritePageValue: function(show) {
     if (show == null) {
       show = true;
     }
+    this.reDraw(show);
+    this.makeDesignConfig();
+    EPVItem.writeDefaultToPageValue(this);
+    Timeline.setupTimelineEventConfig();
+    return true;
+  },
+  drawAndMakeConfigs: function(show) {
+    if (show == null) {
+      show = true;
+    }
+    this.reDraw(show);
+    this.makeDesignConfig();
+    Timeline.setupTimelineEventConfig();
+    return true;
   },
   showOptionMenu: function() {
     var sc;

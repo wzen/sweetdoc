@@ -406,19 +406,9 @@ if (window.worktablePage != null) {
       if (!WorkTableArrowItem.__super__.endDraw.call(this, zindex)) {
         return false;
       }
-      this.drawAndMakeConfigs(show);
+      this.drawAndMakeConfigsAndWritePageValue(show);
       this.saveNewDrawedSurface();
       return true;
-    };
-
-    WorkTableArrowItem.prototype.drawAndMakeConfigs = function(show) {
-      if (show == null) {
-        show = true;
-      }
-      this.reDraw(show);
-      this.makeDesignConfig();
-      EPVItem.writeDefaultToPageValue(this);
-      return Timeline.setupTimelineEventConfig();
     };
 
     _updateArrowRect = function(cood) {
@@ -460,6 +450,7 @@ if (window.worktablePage != null) {
 
   })(ArrowItem);
   window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem;
+  Common.setClassToMap(false, WorkTableArrowItem.ITEM_ID, WorkTableArrowItem);
 }
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == null)) {

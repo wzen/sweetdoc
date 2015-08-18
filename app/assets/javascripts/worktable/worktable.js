@@ -208,14 +208,14 @@ $(function() {
   $('#main').on("mousedown", function() {
     return clearAllItemStyle();
   });
+  Timeline.setupTimelineEventConfig();
   st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
   if (!st.isOverSaveTimeLimit()) {
     st.loadEventPageValue();
-    WorktableCommon.drawAllItemFromEventPageValue();
+    return WorktableCommon.drawAllItemFromEventPageValue();
   } else {
-    st.clear();
+    return st.clear();
   }
-  return Timeline.setupTimelineEventConfig();
 });
 
 //# sourceMappingURL=worktable.js.map
