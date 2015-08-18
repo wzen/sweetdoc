@@ -1,5 +1,16 @@
 class PageValue
 
+  # サーバから読み込んだアイテム情報を追加
+  @addItemInfo = (item_id, te_actions) ->
+    if te_actions? && te_actions.length > 0
+      te_actions.forEach( (a) =>
+        if a.is_default? && a.is_default
+          # デフォルトメソッド & デフォルトアクションタイプ
+          @setPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
+          @setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
+          @setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
+      )
+
   # ページが持つ値を取得
   # @param [String] key キー値
   # @param [Boolean] withRemove 取得後に値を消去するか

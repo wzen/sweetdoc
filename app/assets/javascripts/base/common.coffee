@@ -178,24 +178,6 @@ class Common
         ret[k] = v
     return ret
 
-  # 全てのアイテムを削除
-  @removeAllItem = ->
-    for k, v of @getCreatedItemObject()
-      if v.getJQueryElement?
-        v.getJQueryElement().remove()
-    window.createdObject = {}
-    window.instanceMap = {}
-
-  # 全てのアイテムとイベントを削除
-  @removeAllItemAndEvent = ->
-    Sidebar.closeSidebar()
-    @clearAllEventChange( =>
-      @removeAllItem()
-      EventConfig.removeAllConfig()
-      PageValue.removeAllItemAndEventPageValue()
-      Timeline.removeAllTimeline()
-    )
-
   # 全てのアクションを元に戻す
   @clearAllEventChange: (callback = null) ->
     previewinitCount = 0

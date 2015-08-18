@@ -58,7 +58,6 @@
 //= require worktable/event/timeline
 //= require worktable/event/run
 //= require worktable/handwrite
-//= require worktable/load_js
 //= require worktable/sidebar_ui
 //= require worktable/worktable
 // require_tree .

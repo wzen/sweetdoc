@@ -129,7 +129,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.applyAction = function() {
-    var commonEvent, errorMes, handlerDiv, item, parallel;
+    var commonEvent, errorMes, handlerDiv, item, parallel, st;
     this.isParallel = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {
@@ -153,6 +153,8 @@ EventConfig = (function() {
       this.showError(errorMes);
       return;
     }
+    st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+    st.saveEventPageValue();
     Timeline.changeTimelineColor(this.teNum, this.actionType);
     item = createdObject[this.id];
     if ((item != null) && (item.preview != null)) {
@@ -268,6 +270,46 @@ EventConfig = (function() {
 
   EventConfig.removeAllConfig = function() {
     return $('#event-config').children('.event').remove();
+  };
+
+  EventConfig.addEventConfigContents = function(item_id, te_actions, te_values) {
+    var actionParent, action_forms, className, handler_forms;
+    if ((te_actions != null) && te_actions.length > 0) {
+      className = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id);
+      handler_forms = $('#event-config .handler_div .configBox');
+      action_forms = $('#event-config .action_forms');
+      if (action_forms.find("." + className).length === 0) {
+        actionParent = $("<div class='" + className + "' style='display:none'></div>");
+        te_actions.forEach(function(a) {
+          var actionType, handlerClone, handlerParent, methodClone, span, valueClassName;
+          actionType = Common.getActionTypeClassNameByActionType(a.action_event_type_id);
+          methodClone = $('#event-config .method_temp').children(':first').clone(true);
+          span = methodClone.find('label:first').children('span:first');
+          span.attr('class', actionType);
+          span.html(a.options['name']);
+          methodClone.find('input.action_type:first').val(a.action_event_type_id);
+          methodClone.find('input.method_name:first').val(a.method_name);
+          methodClone.find('input.animation_type:first').val(a.action_animation_type_id);
+          valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', a.method_name);
+          methodClone.find('input:radio').attr('name', className);
+          methodClone.find('input.value_class_name:first').val(valueClassName);
+          actionParent.append(methodClone);
+          handlerClone = null;
+          if (a.action_event_type_id === Constant.ActionEventHandleType.SCROLL) {
+            handlerClone = $('#event-config .handler_scroll_temp').children().clone(true);
+          } else if (a.action_event_type_id === Constant.ActionEventHandleType.CLICK) {
+            handlerClone = $('#event-config .handler_click_temp').children().clone(true);
+          }
+          handlerParent = $("<div class='" + valueClassName + "' style='display:none'></div>");
+          handlerParent.append(handlerClone);
+          return handlerParent.appendTo(handler_forms);
+        });
+        actionParent.appendTo(action_forms);
+      }
+    }
+    if (te_values != null) {
+      return $(te_values).appendTo($('#event-config .value_forms'));
+    }
   };
 
   return EventConfig;

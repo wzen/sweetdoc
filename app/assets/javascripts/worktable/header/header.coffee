@@ -4,7 +4,7 @@ initHeaderMenu = ->
   $('.menu-newcreate', itemsMenuEmt).on('click', ->
     if Object.keys(window.createdObject).length > 0
       if window.confirm('テーブルに存在するアイテムは全て削除されます。')
-        Common.removeAllItemAndEvent()
+        WorktableCommon.removeAllItemAndEvent()
   )
   $('.menu-load', itemsMenuEmt).on('click', ->
     ServerStorage.load()
@@ -26,5 +26,5 @@ initHeaderMenu = ->
     $(@).parent('li').addClass('active')
     window.selectItemMenu = itemId
     changeMode(Constant.Mode.DRAW)
-    loadItemJs(itemId)
+    WorktableCommon.loadItemJs(itemId)
   )

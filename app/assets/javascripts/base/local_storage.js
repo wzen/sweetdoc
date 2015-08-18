@@ -18,13 +18,13 @@ LocalStorage = (function() {
     this.storageKey = key;
   }
 
-  LocalStorage.prototype.saveEventPageValueToStorage = function() {
+  LocalStorage.prototype.saveEventPageValue = function() {
     var h;
     h = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX);
     return this.lstorage.setItem(this.storageKey, JSON.stringify(h));
   };
 
-  LocalStorage.prototype.loadEventPageValueFromStorage = function() {
+  LocalStorage.prototype.loadEventPageValue = function() {
     var h;
     h = JSON.parse(this.lstorage.getItem(this.storageKey));
     return PageValue.setEventPageValue(Constant.PageValueKey.E_PREFIX, h);
@@ -37,8 +37,6 @@ LocalStorage = (function() {
   LocalStorage.prototype.set = function(value) {
     return this.lstorage.setItem(this.storageKey, value);
   };
-
-  LocalStorage.drawItemFromStorage = function(key) {};
 
   return LocalStorage;
 

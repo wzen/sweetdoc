@@ -157,6 +157,10 @@ class EventConfig
       @showError(errorMes)
       return
 
+    # Storageに保存
+    st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+    st.saveEventPageValue()
+
     # イベントの色を変更
     Timeline.changeTimelineColor(@teNum, @actionType)
 
@@ -263,5 +267,47 @@ class EventConfig
       @selectItem()
       @clickMethod()
 
+  # 追加されたコンフィグを全て消去
   @removeAllConfig: ->
     $('#event-config').children('.event').remove()
+
+  # イベントのConfigを追加
+  # @param [String] contents 追加するHTMLの文字列
+  @addEventConfigContents = (item_id, te_actions, te_values) ->
+    if te_actions? && te_actions.length > 0
+      className = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id)
+      handler_forms = $('#event-config .handler_div .configBox')
+      action_forms = $('#event-config .action_forms')
+      if action_forms.find(".#{className}").length == 0
+
+        actionParent = $("<div class='#{className}' style='display:none'></div>")
+        te_actions.forEach( (a) ->
+          # アクションメソッドConfig追加
+          actionType = Common.getActionTypeClassNameByActionType(a.action_event_type_id)
+          methodClone = $('#event-config .method_temp').children(':first').clone(true)
+          span = methodClone.find('label:first').children('span:first')
+          span.attr('class', actionType)
+          span.html(a.options['name'])
+          methodClone.find('input.action_type:first').val(a.action_event_type_id)
+          methodClone.find('input.method_name:first').val(a.method_name)
+          methodClone.find('input.animation_type:first').val(a.action_animation_type_id)
+          valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', a.method_name)
+          methodClone.find('input:radio').attr('name', className)
+          methodClone.find('input.value_class_name:first').val(valueClassName)
+          actionParent.append(methodClone)
+
+          # イベントタイプConfig追加
+          handlerClone = null
+          if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
+            handlerClone = $('#event-config .handler_scroll_temp').children().clone(true)
+          else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
+            handlerClone = $('#event-config .handler_click_temp').children().clone(true)
+          handlerParent = $("<div class='#{valueClassName}' style='display:none'></div>")
+          handlerParent.append(handlerClone)
+          handlerParent.appendTo(handler_forms)
+        )
+
+        actionParent.appendTo(action_forms)
+
+    if te_values?
+      $(te_values).appendTo($('#event-config .value_forms'))

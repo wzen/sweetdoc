@@ -224,31 +224,6 @@ Common = (function() {
     return ret;
   };
 
-  Common.removeAllItem = function() {
-    var k, ref, v;
-    ref = this.getCreatedItemObject();
-    for (k in ref) {
-      v = ref[k];
-      if (v.getJQueryElement != null) {
-        v.getJQueryElement().remove();
-      }
-    }
-    window.createdObject = {};
-    return window.instanceMap = {};
-  };
-
-  Common.removeAllItemAndEvent = function() {
-    Sidebar.closeSidebar();
-    return this.clearAllEventChange((function(_this) {
-      return function() {
-        _this.removeAllItem();
-        EventConfig.removeAllConfig();
-        PageValue.removeAllItemAndEventPageValue();
-        return Timeline.removeAllTimeline();
-      };
-    })(this));
-  };
-
   Common.clearAllEventChange = function(callback) {
     var idx, item, j, previewinitCount, ref, results, te, tes;
     if (callback == null) {

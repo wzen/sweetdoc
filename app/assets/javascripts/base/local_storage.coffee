@@ -11,12 +11,12 @@ class LocalStorage
     @storageKey = key
 
   # ストレージにページ値を保存
-  saveEventPageValueToStorage: ->
+  saveEventPageValue: ->
     h = PageValue.getEventPageValue(Constant.PageValueKey.E_PREFIX)
     @lstorage.setItem(@storageKey, JSON.stringify(h))
 
   # ストレージからページ値を読み込み
-  loadEventPageValueFromStorage: ->
+  loadEventPageValue: ->
     h = JSON.parse(@lstorage.getItem(@storageKey))
     PageValue.setEventPageValue(Constant.PageValueKey.E_PREFIX, h)
 
@@ -25,6 +25,3 @@ class LocalStorage
 
   set: (value) ->
     @lstorage.setItem(@storageKey, value)
-
-  # WebStorageから全てのアイテムを描画
-  @drawItemFromStorage = (key) ->

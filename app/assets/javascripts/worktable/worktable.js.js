@@ -182,9 +182,8 @@ $(function() {
     return;
   }
   worktableCommonVar();
-  localStorage.clear();
   window.selectItemMenu = Constant.ItemId.BUTTON;
-  loadItemJs(Constant.ItemId.BUTTON);
+  WorktableCommon.loadItemJs(Constant.ItemId.BUTTON);
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
   borderWidth = 5;
   timelineTopPadding = 5;

@@ -26,9 +26,9 @@ initView = ->
   is_reload = PageValue.getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD)
   ls = new LocalStorage(LocalStorage.Key.RUN_EVENT_PAGEVALUES)
   if is_reload?
-    ls.loadEventPageValueFromStorage()
+    ls.loadEventPageValue()
   else
-    ls.saveEventPageValueToStorage()
+    ls.saveEventPageValue()
 
 initResize = (wrap, scrollWrapper) ->
   resizeTimer = false;

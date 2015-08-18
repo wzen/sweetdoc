@@ -7,7 +7,7 @@ initHeaderMenu = function() {
   $('.menu-newcreate', itemsMenuEmt).on('click', function() {
     if (Object.keys(window.createdObject).length > 0) {
       if (window.confirm('テーブルに存在するアイテムは全て削除されます。')) {
-        return Common.removeAllItemAndEvent();
+        return WorktableCommon.removeAllItemAndEvent();
       }
     }
   });
@@ -30,7 +30,7 @@ initHeaderMenu = function() {
     $(this).parent('li').addClass('active');
     window.selectItemMenu = itemId;
     changeMode(Constant.Mode.DRAW);
-    return loadItemJs(itemId);
+    return WorktableCommon.loadItemJs(itemId);
   });
 };
 

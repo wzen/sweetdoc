@@ -141,11 +141,9 @@ $ ->
 
   # 共有変数
   worktableCommonVar()
-  # WebStorageを初期化する
-  localStorage.clear()
   # 初期状態としてボタンを選択(暫定)
   window.selectItemMenu = Constant.ItemId.BUTTON
-  loadItemJs(Constant.ItemId.BUTTON)
+  WorktableCommon.loadItemJs(Constant.ItemId.BUTTON)
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $('#nav').height())
   borderWidth = 5

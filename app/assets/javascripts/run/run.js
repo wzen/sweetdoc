@@ -22,9 +22,9 @@ initView = function() {
   is_reload = PageValue.getPageValue(Constant.PageValueKey.IS_RUNWINDOW_RELOAD);
   ls = new LocalStorage(LocalStorage.Key.RUN_EVENT_PAGEVALUES);
   if (is_reload != null) {
-    return ls.loadEventPageValueFromStorage();
+    return ls.loadEventPageValue();
   } else {
-    return ls.saveEventPageValueToStorage();
+    return ls.saveEventPageValue();
   }
 };
 

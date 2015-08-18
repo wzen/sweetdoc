@@ -44,6 +44,133 @@ WorktableCommon = (function() {
     });
   };
 
+  WorktableCommon.removeAllItem = function() {
+    var k, ref, v;
+    ref = Common.getCreatedItemObject();
+    for (k in ref) {
+      v = ref[k];
+      if (v.getJQueryElement != null) {
+        v.getJQueryElement().remove();
+      }
+    }
+    window.createdObject = {};
+    return window.instanceMap = {};
+  };
+
+  WorktableCommon.removeAllItemAndEvent = function() {
+    Sidebar.closeSidebar();
+    localStorage.clear();
+    return Common.clearAllEventChange((function(_this) {
+      return function() {
+        _this.removeAllItem();
+        EventConfig.removeAllConfig();
+        PageValue.removeAllItemAndEventPageValue();
+        return Timeline.removeAllTimeline();
+      };
+    })(this));
+  };
+
+  WorktableCommon.drawAllItemFromEventPageValue = function() {
+    var ePageValues, epv, i, isCommonEvent, len, needItemIds, results;
+    ePageValues = PageValue.getEventPageValueSortedListByNum();
+    needItemIds = [];
+    results = [];
+    for (i = 0, len = ePageValues.length; i < len; i++) {
+      epv = ePageValues[i];
+      isCommonEvent = epv[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+      if (!isCommonEvent) {
+        results.push(needItemIds.push(epv[EventPageValueBase.PageValueKey.ITEM_ID]));
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
+
+  WorktableCommon.loadItemJs = function(itemIds, callback) {
+    var callbackCount, i, itemId, itemInitFuncName, len, needReadItemIds;
+    if (callback == null) {
+      callback = null;
+    }
+    if (jQuery.type(itemIds) !== "array") {
+      itemIds = [itemIds];
+    }
+    callbackCount = 0;
+    needReadItemIds = [];
+    for (i = 0, len = itemIds.length; i < len; i++) {
+      itemId = itemIds[i];
+      itemInitFuncName = getInitFuncName(itemId);
+      if (window.itemInitFuncList[itemInitFuncName] != null) {
+        window.itemInitFuncList[itemInitFuncName]();
+        callbackCount += 1;
+        if (callbackCount >= itemIds.length) {
+          if (callback != null) {
+            callback();
+          }
+          return;
+        }
+      } else {
+        needReadItemIds.push(itemId);
+      }
+    }
+    return $.ajax({
+      url: "/item_js/index",
+      type: "POST",
+      dataType: "json",
+      data: {
+        itemIds: needReadItemIds
+      },
+      success: function(data) {
+        var d, j, len1, option, results;
+        callbackCount = 0;
+        results = [];
+        for (j = 0, len1 = data.length; j < len1; j++) {
+          d = data[j];
+          if (d.css_info != null) {
+            option = {
+              isWorkTable: true,
+              css_temp: d.css_info
+            };
+          }
+          WorktableCommon.availJs(getInitFuncName(d.item_id), d.js_src, option, function() {
+            callbackCount += 1;
+            if ((callback != null) && callbackCount >= data.length) {
+              return callback();
+            }
+          });
+          PageValue.addItemInfo(d.item_id, d.te_actions);
+          results.push(EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values));
+        }
+        return results;
+      },
+      error: function(data) {}
+    });
+  };
+
+  WorktableCommon.availJs = function(initName, jsSrc, option, callback) {
+    var firstScript, s, t;
+    if (option == null) {
+      option = {};
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = jsSrc;
+    firstScript = document.getElementsByTagName('script')[0];
+    firstScript.parentNode.insertBefore(s, firstScript);
+    return t = setInterval(function() {
+      if (window.itemInitFuncList[initName] != null) {
+        clearInterval(t);
+        window.itemInitFuncList[initName](option);
+        if (callback != null) {
+          return callback();
+        }
+      }
+    }, '500');
+  };
+
   return WorktableCommon;
 
 })();

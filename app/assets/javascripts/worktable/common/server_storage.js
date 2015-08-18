@@ -86,13 +86,13 @@ ServerStorage = (function() {
               css_temp: d.css_info
             };
           }
-          availJs(itemInitFuncName, d.js_src, option, function() {
+          WorktableCommon.availJs(itemInitFuncName, d.js_src, option, function() {
             loadedCount += 1;
             if (loadedCount >= data.length) {
               return callback.call(self);
             }
           });
-          return addEventConfigContents(d.te_actions, d.te_values);
+          return EventConfig.addEventConfigContents(d.te_actions, d.te_values);
         });
       },
       error: function(data) {

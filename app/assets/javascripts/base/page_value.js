@@ -6,6 +6,20 @@ PageValue = (function() {
 
   function PageValue() {}
 
+  PageValue.addItemInfo = function(item_id, te_actions) {
+    if ((te_actions != null) && te_actions.length > 0) {
+      return te_actions.forEach((function(_this) {
+        return function(a) {
+          if ((a.is_default != null) && a.is_default) {
+            _this.setPageValue(Constant.PageValueKey.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
+            _this.setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
+            return _this.setPageValue(Constant.PageValueKey.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
+          }
+        };
+      })(this));
+    }
+  };
+
   PageValue.getPageValue = function(key, withRemove) {
     if (withRemove == null) {
       withRemove = false;
