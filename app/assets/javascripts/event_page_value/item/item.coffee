@@ -48,15 +48,14 @@ class EPVItem extends EventPageValueBase
       Timeline.changeTimelineColor(teNum, actionType)
 
       # Storageに保存
-      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
-      st.saveEventPageValue()
+      LocalStorage.saveEventPageValue()
 
     return errorMes
 
   @writeToPageValue = (eventConfig) ->
     errorMes = ""
     writeValue = super(eventConfig)
-    item = createdObject[eventConfig.id]
+    item = instanceMap[eventConfig.id]
     itemWriteValue = item.objWriteEvent()
     # マージ
     $.extend(writeValue, itemWriteValue)
@@ -69,8 +68,7 @@ class EPVItem extends EventPageValueBase
         PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum)
 
       # Storageに保存
-      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
-      st.saveEventPageValue()
+      LocalStorage.saveEventPageValue()
 
     return errorMes
 

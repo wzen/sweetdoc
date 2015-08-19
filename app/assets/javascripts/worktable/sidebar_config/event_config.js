@@ -129,7 +129,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.applyAction = function() {
-    var commonEvent, errorMes, handlerDiv, item, parallel;
+    var commonEvent, commonEventClass, errorMes, handlerDiv, item, parallel;
     this.isParallel = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {
@@ -145,8 +145,11 @@ EventConfig = (function() {
       }
     }
     if (this.isCommonEvent) {
-      commonEvent = Common.getClassFromMap(true, this.commonEventId);
-      this.id = (new commonEvent()).id;
+      commonEventClass = Common.getClassFromMap(true, this.commonEventId);
+      commonEvent = new commonEventClass();
+      instanceMap[commonEvent.id] = commonEvent;
+      commonEvent.setItemAllPropToPageValue();
+      this.id = commonEvent.id;
     }
     errorMes = this.writeToPageValue();
     if ((errorMes != null) && errorMes.length > 0) {
@@ -154,7 +157,7 @@ EventConfig = (function() {
       return;
     }
     Timeline.changeTimelineColor(this.teNum, this.actionType);
-    item = createdObject[this.id];
+    item = instanceMap[this.id];
     if ((item != null) && (item.preview != null)) {
       return item.preview(PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(this.teNum)));
     }

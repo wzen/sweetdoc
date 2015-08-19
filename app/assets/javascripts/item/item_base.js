@@ -30,7 +30,6 @@ ItemBase = (function(superClass) {
     this.ohiRegistIndex = 0;
     this.jqueryElement = null;
     this.coodRegist = [];
-    createdObject[this.id] = this;
   }
 
   ItemBase.prototype.getDesignConfigId = function() {
@@ -105,20 +104,10 @@ ItemBase = (function(superClass) {
       }
       this.name = this.constructor.IDENTITY + (" " + num);
     }
-    this.setAllItemPropToPageValue();
+    this.setItemAllPropToPageValue();
+    LocalStorage.saveEventPageValue();
     console.log('save obj:' + JSON.stringify(this.itemSize));
     return Timeline.updateSelectItemMenu();
-  };
-
-  ItemBase.prototype.setAllItemPropToPageValue = function(isCache) {
-    var obj, prefix_key;
-    if (isCache == null) {
-      isCache = false;
-    }
-    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
-    prefix_key = prefix_key.replace('@id', this.id);
-    obj = this.getMinimumObject();
-    return PageValue.setPageValue(prefix_key, obj);
   };
 
   ItemBase.prototype.reDrawByObjPageValue = function(isCache) {
@@ -126,7 +115,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
+    prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     obj = PageValue.getPageValue(prefix_key);
     if (obj != null) {
@@ -141,7 +130,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
+    prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     return PageValue.getPageValue(prefix_key + (":" + prop));
   };
@@ -151,9 +140,10 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? PageValue.Key.ITEM_VALUE_CACHE : PageValue.Key.ITEM_VALUE;
+    prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    return PageValue.setPageValue(prefix_key + (":" + prop), value);
+    PageValue.setPageValue(prefix_key + (":" + prop), value);
+    return LocalStorage.savePageValue();
   };
 
   ItemBase.prototype.getHistoryObj = function(action) {
@@ -166,6 +156,7 @@ ItemBase = (function(superClass) {
     var obj;
     obj = {
       id: Common.makeClone(this.id),
+      itemId: Common.makeClone(this.constructor.ITEM_ID),
       name: Common.makeClone(this.name),
       itemSize: Common.makeClone(this.itemSize),
       zindex: Common.makeClone(this.zindex),
@@ -175,13 +166,13 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.setMiniumObject = function(obj) {
-    delete window.createdObject[this.id];
+    delete window.instanceMap[this.id];
     this.id = Common.makeClone(obj.id);
     this.name = Common.makeClone(obj.name);
     this.itemSize = Common.makeClone(obj.itemSize);
     this.zindex = Common.makeClone(obj.zindex);
     this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
-    return window.createdObject[this.id] = this;
+    return window.instanceMap[this.id] = this;
   };
 
   ItemBase.prototype.reDrawByMinimumObject = function(obj) {};

@@ -9,7 +9,7 @@ WorktableCommon = (function() {
     initOptionMenu = function(event) {
       var emt, obj;
       emt = $(event.target);
-      obj = createdObject[emt.attr('id')];
+      obj = instanceMap[emt.attr('id')];
       if ((obj != null) && (obj.setupOptionMenu != null)) {
         obj.setupOptionMenu();
       }
@@ -53,7 +53,6 @@ WorktableCommon = (function() {
         v.getJQueryElement().remove();
       }
     }
-    window.createdObject = {};
     return window.instanceMap = {};
   };
 
@@ -71,30 +70,35 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.drawAllItemFromEventPageValue = function() {
-    var ePageValues, i, isCommonEvent, len, needItemIds, obj;
-    ePageValues = PageValue.getEventPageValueSortedListByNum();
+    var i, len, needItemIds, obj, pageValues;
+    pageValues = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX);
     needItemIds = [];
-    for (i = 0, len = ePageValues.length; i < len; i++) {
-      obj = ePageValues[i];
-      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
-      if (!isCommonEvent) {
-        needItemIds.push(obj[EventPageValueBase.PageValueKey.ITEM_ID]);
-      }
+    for (i = 0, len = pageValues.length; i < len; i++) {
+      obj = pageValues[i];
+      needItemIds.push(obj.id);
     }
     return this.loadItemJs(needItemIds, function() {
-      var event, j, len1, results;
+      var classMapId, event, id, isCommon, j, len1, results;
       results = [];
-      for (j = 0, len1 = ePageValues.length; j < len1; j++) {
-        obj = ePageValues[j];
-        event = Common.getInstanceFromMap(obj);
-        event.initWithEvent(obj);
+      for (j = 0, len1 = pageValues.length; j < len1; j++) {
+        obj = pageValues[j];
+        isCommon = null;
+        id = obj.id;
+        classMapId = null;
+        if (event instanceof ItemBase) {
+          isCommon = false;
+          classMapId = obj.itemId;
+        } else {
+          isCommon = true;
+          classMapId = obj.eventId;
+        }
+        event = Common.getInstanceFromMap(isCommon, id, classMapId);
         if (event instanceof ItemBase) {
           if (event instanceof CssItemBase && (event.makeCss != null)) {
             event.makeCss();
           }
           if (event.drawAndMakeConfigs != null) {
-            event.drawAndMakeConfigs();
-            results.push(event.saveObj());
+            results.push(event.drawAndMakeConfigs());
           } else {
             results.push(void 0);
           }

@@ -128,6 +128,7 @@ focusToTargetWhenSidebarOpen = function(target, selectedBorderType) {
     top: scrollContents.scrollTop(),
     left: scrollContents.scrollLeft()
   }, true);
+  LocalStorage.savePageValue();
   return Common.focusToTarget(target);
 };
 
@@ -176,7 +177,7 @@ runDebug = function() {
 };
 
 $(function() {
-  var borderWidth, menu, padding, st, timelineTopPadding;
+  var borderWidth, menu, padding, timelineTopPadding;
   if (!Common.checkBlowserEnvironment()) {
     alert('ブラウザ非対応です。');
     return;
@@ -209,12 +210,11 @@ $(function() {
     return clearAllItemStyle();
   });
   Timeline.setupTimelineEventConfig();
-  st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
-  if (!st.isOverSaveTimeLimit()) {
-    st.loadEventPageValue();
+  if (!LocalStorage.isOverWorktableSaveTimeLimit()) {
+    LocalStorage.loadValueForWorktable();
     return WorktableCommon.drawAllItemFromEventPageValue();
   } else {
-    return st.clear();
+    return LocalStorage.clearWorktable();
   }
 });
 

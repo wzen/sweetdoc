@@ -256,6 +256,18 @@ EventBase = (function(superClass) {
     return this.removeCss(methodName);
   };
 
+  EventBase.prototype.setItemAllPropToPageValue = function(isCache) {
+    var obj, prefix_key;
+    if (isCache == null) {
+      isCache = false;
+    }
+    prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
+    prefix_key = prefix_key.replace('@id', this.id);
+    obj = this.getMinimumObject();
+    PageValue.setPageValue(prefix_key, obj);
+    return LocalStorage.savePageValue();
+  };
+
   return EventBase;
 
 })(Extend);

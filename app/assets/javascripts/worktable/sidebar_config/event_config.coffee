@@ -148,8 +148,11 @@ class EventConfig
 
     if @isCommonEvent
       # 共通イベントはここでインスタンス生成
-      commonEvent = Common.getClassFromMap(true, @commonEventId)
-      @id = (new commonEvent()).id
+      commonEventClass = Common.getClassFromMap(true, @commonEventId)
+      commonEvent = new commonEventClass()
+      instanceMap[commonEvent.id] = commonEvent
+      commonEvent.setItemAllPropToPageValue()
+      @id = commonEvent.id
 
     errorMes = @writeToPageValue()
     if errorMes? && errorMes.length > 0
@@ -161,7 +164,7 @@ class EventConfig
     Timeline.changeTimelineColor(@teNum, @actionType)
 
     # プレビュー開始
-    item = createdObject[@id]
+    item = instanceMap[@id]
     if item? && item.preview?
       item.preview(PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(@teNum)))
 

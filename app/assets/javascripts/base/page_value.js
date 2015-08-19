@@ -25,11 +25,11 @@ PageValue = (function() {
 
       Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
-      Key.ITEM_PREFIX = 'item';
+      Key.INSTANCE_PREFIX = 'item';
 
-      Key.ITEM_VALUE = Key.ITEM_PREFIX + ':@id:value';
+      Key.INSTANCE_VALUE = Key.INSTANCE_PREFIX + ':@id:value';
 
-      Key.ITEM_VALUE_CACHE = Key.ITEM_PREFIX + ':cache:@id:value';
+      Key.INSTANCE_VALUE_CACHE = Key.INSTANCE_PREFIX + ':cache:@id:value';
 
       Key.ITEM_INFO_PREFIX = 'iteminfo';
 
@@ -49,16 +49,22 @@ PageValue = (function() {
   }
 
   PageValue.addItemInfo = function(item_id, te_actions) {
+    var isSet;
     if ((te_actions != null) && te_actions.length > 0) {
-      return te_actions.forEach((function(_this) {
+      isSet = false;
+      te_actions.forEach((function(_this) {
         return function(a) {
           if ((a.is_default != null) && a.is_default) {
             _this.setPageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
             _this.setPageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
-            return _this.setPageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
+            _this.setPageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
+            return isSet = true;
           }
         };
       })(this));
+      if (isSet) {
+        return LocalStorage.savePageValue();
+      }
     }
   };
 
@@ -250,7 +256,7 @@ PageValue = (function() {
   };
 
   PageValue.removeAllItemAndEventPageValue = function() {
-    $("#" + this.Key.PV_ROOT).children("." + this.Key.ITEM_PREFIX).remove();
+    $("#" + this.Key.PV_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
     return $("#" + this.Key.E_ROOT).children().remove();
   };
 

@@ -95,7 +95,7 @@ class Timeline
         tes = PageValue.getEventPageValueSortedListByNum()
         te_num = parseInt(te_num)
         for te, idx in tes
-          item = window.createdObject[te.id]
+          item = window.instanceMap[te.id]
           if idx < te_num - 1
             item.setEvent(te)
             item.updateEventAfter()

@@ -9,7 +9,7 @@ class WorktableCommon
     # オプションメニューを初期化
     initOptionMenu = (event) ->
       emt = $(event.target)
-      obj = createdObject[emt.attr('id')]
+      obj = instanceMap[emt.attr('id')]
       if obj? && obj.setupOptionMenu?
         # 初期化関数を呼び出す
         obj.setupOptionMenu()
@@ -52,7 +52,6 @@ class WorktableCommon
     for k, v of Common.getCreatedItemObject()
       if v.getJQueryElement?
         v.getJQueryElement().remove()
-    window.createdObject = {}
     window.instanceMap = {}
 
   # 全てのアイテムとイベントを削除
@@ -69,23 +68,28 @@ class WorktableCommon
 
   # イベントPageValueから全てのアイテムを描画
   @drawAllItemFromEventPageValue: ->
-    ePageValues = PageValue.getEventPageValueSortedListByNum()
+    pageValues = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX)
     needItemIds = []
-    for obj in ePageValues
-      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      if !isCommonEvent
-        needItemIds.push(obj[EventPageValueBase.PageValueKey.ITEM_ID])
+    for obj in pageValues
+      needItemIds.push(obj.id)
 
     @loadItemJs(needItemIds, ->
-      for obj in ePageValues
-        event = Common.getInstanceFromMap(obj)
-        event.initWithEvent(obj)
+      for obj in pageValues
+        isCommon = null
+        id = obj.id
+        classMapId = null
+        if event instanceof ItemBase
+          isCommon = false
+          classMapId = obj.itemId
+        else
+          isCommon = true
+          classMapId = obj.eventId
+        event = Common.getInstanceFromMap(isCommon, id, classMapId)
         if event instanceof ItemBase
           if event instanceof CssItemBase && event.makeCss?
             event.makeCss()
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
-            event.saveObj()
     )
 
   # JSファイルをサーバから読み込む

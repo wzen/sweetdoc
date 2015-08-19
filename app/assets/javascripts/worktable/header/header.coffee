@@ -2,7 +2,7 @@
 initHeaderMenu = ->
   itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
   $('.menu-newcreate', itemsMenuEmt).on('click', ->
-    if Object.keys(window.createdObject).length > 0
+    if Object.keys(window.instanceMap).length > 0
       if window.confirm('テーブルに存在するアイテムは全て削除されます。')
         WorktableCommon.removeAllItemAndEvent()
   )

@@ -98,7 +98,7 @@ Timeline = (function() {
         results = [];
         for (idx = i = 0, len = tes.length; i < len; idx = ++i) {
           te = tes[idx];
-          item = window.createdObject[te.id];
+          item = window.instanceMap[te.id];
           if (idx < te_num - 1) {
             item.setEvent(te);
             results.push(item.updateEventAfter());

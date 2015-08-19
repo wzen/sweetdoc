@@ -1,52 +1,111 @@
 class LocalStorage
 
   class @Key
-    # @property [Int] WORKTABLE_EVENT_PAGEVALUES イベントページ値
+    # @property [Int] WORKTABLE_EVENT_PAGEVALUES アイテム情報
+    @WORKTABLE_PAGEVALUES = 'worktable_pagevalues'
+    # @property [Int] WORKTABLE_EVENT_PAGEVALUES イベント
     @WORKTABLE_EVENT_PAGEVALUES = 'worktable_event_pagevalues'
-    # @property [Int] RUN_EVENT_PAGEVALUES イベントページ値
+    # @property [Int] WORKTABLE_SETTING_PAGEVALUES 共通設定
+    @WORKTABLE_SETTING_PAGEVALUES = 'worktable_setting_pagevalues'
+    # @property [Int] WORKTABLE_EVENT_PAGEVALUES アイテム情報
+    @RUN_PAGEVALUES = 'run_pagevalues'
+    # @property [Int] WORKTABLE_EVENT_PAGEVALUES イベント
     @RUN_EVENT_PAGEVALUES = 'run_event_pagevalues'
+    # @property [Int] WORKTABLE_SETTING_PAGEVALUES 共通設定
+    @RUN_SETTING_PAGEVALUES = 'run_setting_pagevalues'
+    # @property [Int] WORKTABLE_SAVETIME 保存時間
+    @WORKTABLE_SAVETIME = 'worktable_time'
+    # @property [Int] WORKTABLE_SAVETIME 保存時間
+    @RUN_SAVETIME = 'run_time'
 
-  # @property [Int] SAVETIME_SUFFIX イベントページ値保存時の時間
-  @SAVETIME_SUFFIX = '_time'
-  # @property [Int] SAVETIME_LIMIT_MINUTES イベントページ値保存時間
-  @SAVETIME_LIMIT_MINUTES = {}
-  @SAVETIME_LIMIT_MINUTES[@Key.WORKTABLE_EVENT_PAGEVALUES] = 5
+  @WORKTABLE_SAVETIME = 5
+  @RUN_SAVETIME = 9999
 
-  constructor: (key) ->
-    @lstorage = localStorage
-    @storageKey = key
+  @loadValueForWorktable: ->
+    @loadPageValue()
+    @loadEventPageValue()
+    @loadSettingPageValue()
 
-  # ストレージにページ値を保存
-  saveEventPageValue: (saveTime = true) ->
-    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
-    @lstorage.setItem(@storageKey, JSON.stringify(h))
-    if saveTime
-      # 現在時刻を保存
-      key = @storageKey + @constructor.SAVETIME_SUFFIX
-      @lstorage.setItem(key, $.now())
+  @saveValueForRun: ->
+    @savePageValue(true)
+    @saveEventPageValue(true)
+    @saveSettingPageValue(true)
 
-  # ストレージからページ値を読み込み
-  loadEventPageValue: ->
-    h = JSON.parse(@lstorage.getItem(@storageKey))
-    for k, v of h
-      PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+  @loadValueForRun: ->
+    @loadPageValue(true)
+    @loadEventPageValue(true)
+    @loadSettingPageValue(true)
 
   # 保存時間が経過しているか
-  isOverSaveTimeLimit: ->
-    key = @storageKey + @constructor.SAVETIME_SUFFIX
-    saveTime = @lstorage.getItem(key)
+  @isOverWorktableSaveTimeLimit: (isRun = false) ->
+    lstorage = localStorage
+    key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
+    saveTime = lstorage.getItem(key)
     if !saveTime?
       return true
     duration = $.now() - saveTime
     d = new Date(duration)
     m = d.getMinutes()
-    return parseInt(m) > @constructor.SAVETIME_LIMIT_MINUTES[@storageKey]
+    time = if isRun then @RUN_SAVETIME else @WORKTABLE_SAVETIME
+    return parseInt(m) > time
 
-  get: ->
-    @lstorage.getItem(@storageKey)
+  # 保存を消去
+  @clearWorktable: ->
+    lstorage = localStorage
+    lstorage.removeItem(@Key.WORKTABLE_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_SETTING_PAGEVALUES)
 
-  set: (value) ->
-    @lstorage.setItem(@storageKey, value)
+  # ストレージにアイテム値を保存
+  @savePageValue: (isRun = false) ->
+    lstorage = localStorage
+    h = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX)
+    key = if isRun then @Key.RUN_PAGEVALUES else @Key.WORKTABLE_PAGEVALUES
+    lstorage.setItem(key, JSON.stringify(h))
+    # 現在時刻を保存
+    key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
+    lstorage.setItem(key, $.now())
 
-  clear: ->
-    @lstorage.setItem(@storageKey, null)
+  # ストレージからアイテム値を読み込み
+  @loadPageValue: (isRun = false) ->
+    lstorage = localStorage
+    key = if isRun then @Key.RUN_PAGEVALUES else @Key.WORKTABLE_PAGEVALUES
+    h = JSON.parse(lstorage.getItem(key))
+    for k, v of h
+      PageValue.setPageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+
+  # ストレージにイベント値を保存
+  @saveEventPageValue: (isRun = false) ->
+    lstorage = localStorage
+    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
+    lstorage.setItem(key, JSON.stringify(h))
+    # 現在時刻を保存
+    key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
+    lstorage.setItem(key, $.now())
+
+  # ストレージからイベント値を読み込み
+  @loadEventPageValue: (isRun = false) ->
+    lstorage = localStorage
+    key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
+    h = JSON.parse(lstorage.getItem(key))
+    for k, v of h
+      PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+
+  # ストレージに共通設定値を保存
+  @saveSettingPageValue: (isRun = false) ->
+    lstorage = localStorage
+    h = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX)
+    key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
+    lstorage.setItem(key, JSON.stringify(h))
+    # 現在時刻を保存
+    key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
+    lstorage.setItem(key, $.now())
+
+  # ストレージから共通設定値を読み込み
+  @loadSettingPageValue: (isRun = false) ->
+    lstorage = localStorage
+    key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
+    h = JSON.parse(lstorage.getItem(key))
+    for k, v of h
+      PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)

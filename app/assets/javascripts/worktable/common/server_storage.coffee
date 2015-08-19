@@ -44,11 +44,8 @@ class ServerStorage
             itemList = JSON.parse(data.item_list)
             for j in itemList
               obj = j.obj
-              item = null
-              if obj.itemId == Constant.ItemId.BUTTON
-                item = new WorkTableButtonItem()
-              else if obj.itemId == Constant.ItemId.ARROW
-                item = new WorkTableArrowItem()
+              item = new (Common.getClassFromMap(false, obj.itemId))()
+              window.instanceMap[item.id] = item
               item.reDrawByMinimumObject(obj)
               setupEvents(item)
 

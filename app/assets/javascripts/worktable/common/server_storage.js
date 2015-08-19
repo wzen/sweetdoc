@@ -53,12 +53,8 @@ ServerStorage = (function() {
           for (i = 0, len = itemList.length; i < len; i++) {
             j = itemList[i];
             obj = j.obj;
-            item = null;
-            if (obj.itemId === Constant.ItemId.BUTTON) {
-              item = new WorkTableButtonItem();
-            } else if (obj.itemId === Constant.ItemId.ARROW) {
-              item = new WorkTableArrowItem();
-            }
+            item = new (Common.getClassFromMap(false, obj.itemId))();
+            window.instanceMap[item.id] = item;
             item.reDrawByMinimumObject(obj);
             results.push(setupEvents(item));
           }

@@ -6,7 +6,7 @@ _commonVar = ->
   window.mainWrapper = $('#main-wrapper')
   window.cssCode = $("#cssCode")
   window.scrollViewSize = 30000
-  window.createdObject = {}
+  window.instanceMap = {}
 
 # 作業テーブル共通変数
 worktableCommonVar = ->

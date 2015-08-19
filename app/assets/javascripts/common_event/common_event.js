@@ -11,8 +11,16 @@ CommonEvent = (function(superClass) {
   function CommonEvent() {
     CommonEvent.__super__.constructor.call(this);
     this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
-    createdObject[this.id] = this;
   }
+
+  CommonEvent.prototype.getMinimumObject = function() {
+    var obj;
+    obj = {
+      id: Common.makeClone(this.id),
+      eventId: Common.makeClone(this.constructor.EVENT_ID)
+    };
+    return obj;
+  };
 
   return CommonEvent;
 

@@ -25,11 +25,8 @@ Handwrite = (function() {
     };
     mouseDownDrawing = function(loc) {
       if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
-        if (selectItemMenu === Constant.ItemId.ARROW) {
-          item = new WorkTableArrowItem(loc);
-        } else if (selectItemMenu === Constant.ItemId.BUTTON) {
-          item = new WorkTableButtonItem(loc);
-        }
+        item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
+        window.instanceMap[item.id] = item;
         item.saveDrawingSurface();
         changeMode(Constant.Mode.DRAW);
         return item.startDraw();

@@ -8,7 +8,7 @@ _commonVar = function() {
   window.mainWrapper = $('#main-wrapper');
   window.cssCode = $("#cssCode");
   window.scrollViewSize = 30000;
-  return window.createdObject = {};
+  return window.instanceMap = {};
 };
 
 worktableCommonVar = function() {

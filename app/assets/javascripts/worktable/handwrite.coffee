@@ -23,10 +23,8 @@ class Handwrite
     # @param [Array] loc Canvas座標
     mouseDownDrawing = (loc) ->
       if selectItemMenu?
-        if selectItemMenu == Constant.ItemId.ARROW
-          item = new WorkTableArrowItem(loc)
-        else if selectItemMenu == Constant.ItemId.BUTTON
-          item = new WorkTableButtonItem(loc)
+        item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
+        window.instanceMap[item.id] = item
         item.saveDrawingSurface()
         changeMode(Constant.Mode.DRAW)
         item.startDraw()

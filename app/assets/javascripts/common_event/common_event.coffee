@@ -6,5 +6,11 @@ class CommonEvent extends CommonEventBase
     super()
     # @property [Int] id ID
     @id = "c" + @constructor.EVENT_ID + Common.generateId()
-    # アイテムリストに保存
-    createdObject[@id] = @
+
+  # 保存用の最小限のデータを取得
+  getMinimumObject: ->
+    obj = {
+      id: Common.makeClone(@id)
+      eventId: Common.makeClone(@constructor.EVENT_ID)
+    }
+    return obj

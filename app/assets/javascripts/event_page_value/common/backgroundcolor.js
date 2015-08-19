@@ -29,7 +29,7 @@ EPVBackgroundColor = (function(superClass) {
   };
 
   EPVBackgroundColor.writeToPageValue = function(eventConfig) {
-    var emt, errorMes, st, value, writeValue;
+    var emt, errorMes, value, writeValue;
     errorMes = "";
     writeValue = EPVBackgroundColor.__super__.constructor.writeToPageValue.call(this, eventConfig);
     emt = eventConfig.emt;
@@ -43,8 +43,7 @@ EPVBackgroundColor = (function(superClass) {
       writeValue[this.PageValueKey.VALUE] = value;
       PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum);
-      st = new LocalStorage(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
-      st.saveEventPageValue();
+      LocalStorage.saveEventPageValue();
     }
     return errorMes;
   };

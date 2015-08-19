@@ -89,6 +89,7 @@ class Setting
         # 削除
         $("##{@SETTING_GRID_ELEMENT_ID}").remove()
         PageValue.setSettingPageValue(key, false)
+        LocalStorage.saveSettingPageValue()
       else if doDraw
         root = $("##{Setting.ROOT_ID_NAME}")
         stepInput = $(".#{@GRID_STEP_CLASS_NAME}", root)
@@ -133,3 +134,4 @@ class Setting
           context.stroke()
 
         PageValue.setSettingPageValue(key, true)
+        LocalStorage.saveSettingPageValue()

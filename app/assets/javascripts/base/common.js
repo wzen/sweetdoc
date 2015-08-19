@@ -168,11 +168,7 @@ Common = (function() {
     return window.classMap[c][i] = value;
   };
 
-  Common.getInstanceFromMap = function(event) {
-    var classMapId, id, isCommonEvent;
-    isCommonEvent = event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
-    id = isCommonEvent ? event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : event[EventPageValueBase.PageValueKey.ID];
-    classMapId = isCommonEvent ? event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : event[EventPageValueBase.PageValueKey.ITEM_ID];
+  Common.getInstanceFromMap = function(isCommonEvent, id, classMapId) {
     if (typeof isCommonEvent === "boolean") {
       if (isCommonEvent) {
         isCommonEvent = "1";
@@ -184,16 +180,11 @@ Common = (function() {
       id = String(id);
     }
     Common.setInstanceFromMap(isCommonEvent, id, classMapId);
-    return window.instanceMap[isCommonEvent][id];
+    return window.instanceMap[id];
   };
 
-  Common.setInstanceFromMap = function(isCommonEvent, id, itemId) {
-    if (itemId == null) {
-      itemId = id;
-    }
-    if (window.instanceMap == null) {
-      window.instanceMap = {};
-    }
+  Common.setInstanceFromMap = function(isCommonEvent, id, classMapId) {
+    var instance;
     if (typeof isCommonEvent === "boolean") {
       if (isCommonEvent) {
         isCommonEvent = "1";
@@ -204,19 +195,22 @@ Common = (function() {
     if (typeof id !== "string") {
       id = String(id);
     }
-    if (window.instanceMap[isCommonEvent] == null) {
-      !(window.instanceMap[isCommonEvent] = {});
+    if (window.instanceMap == null) {
+      window.instanceMap = {};
     }
-    if (window.instanceMap[isCommonEvent][id] == null) {
-      return window.instanceMap[isCommonEvent][id] = new (Common.getClassFromMap(isCommonEvent, itemId))();
+    if (window.instanceMap[id] == null) {
+      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
+      instance.id = id;
+      window.instanceMap[id] = instance;
+      return instance.setItemAllPropToPageValue();
     }
   };
 
   Common.getCreatedItemObject = function() {
     var k, ret, v;
     ret = {};
-    for (k in createdObject) {
-      v = createdObject[k];
+    for (k in instanceMap) {
+      v = instanceMap[k];
       if (v instanceof CommonEventBase === false) {
         ret[k] = v;
       }
@@ -234,7 +228,7 @@ Common = (function() {
     results = [];
     for (idx = j = ref = tes.length - 1; j >= 0; idx = j += -1) {
       te = tes[idx];
-      item = window.createdObject[te.id];
+      item = window.instanceMap[te.id];
       item.setEvent(te);
       results.push(item.stopPreview(function() {
         item.updateEventBefore();

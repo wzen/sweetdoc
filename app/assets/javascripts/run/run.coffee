@@ -24,11 +24,10 @@ initView = ->
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
   is_reload = PageValue.getPageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
-  ls = new LocalStorage(LocalStorage.Key.RUN_EVENT_PAGEVALUES)
   if is_reload?
-    ls.loadEventPageValue()
+    LocalStorage.loadValueForRun()
   else
-    ls.saveEventPageValue()
+    LocalStorage.saveValueForRun()
 
 initResize = (wrap, scrollWrapper) ->
   resizeTimer = false;
@@ -52,8 +51,10 @@ initEventAction = ->
   eventObjList = []
   eventList = []
   $.each(eventPageValueList, (idx, obj)->
-
-    event = Common.getInstanceFromMap(obj)
+    isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+    id = obj[EventPageValueBase.PageValueKey.ID]
+    classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.ITEM_ID]
+    event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
     event.initWithEvent(obj)
     eventObjList.push(event)
     eventList.push(obj)

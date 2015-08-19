@@ -2,44 +2,129 @@
 var LocalStorage;
 
 LocalStorage = (function() {
+  function LocalStorage() {}
+
   LocalStorage.Key = (function() {
     function Key() {}
 
+    Key.WORKTABLE_PAGEVALUES = 'worktable_pagevalues';
+
     Key.WORKTABLE_EVENT_PAGEVALUES = 'worktable_event_pagevalues';
 
+    Key.WORKTABLE_SETTING_PAGEVALUES = 'worktable_setting_pagevalues';
+
+    Key.RUN_PAGEVALUES = 'run_pagevalues';
+
     Key.RUN_EVENT_PAGEVALUES = 'run_event_pagevalues';
+
+    Key.RUN_SETTING_PAGEVALUES = 'run_setting_pagevalues';
+
+    Key.WORKTABLE_SAVETIME = 'worktable_time';
+
+    Key.RUN_SAVETIME = 'run_time';
 
     return Key;
 
   })();
 
-  LocalStorage.SAVETIME_SUFFIX = '_time';
+  LocalStorage.WORKTABLE_SAVETIME = 5;
 
-  LocalStorage.SAVETIME_LIMIT_MINUTES = {};
+  LocalStorage.RUN_SAVETIME = 9999;
 
-  LocalStorage.SAVETIME_LIMIT_MINUTES[LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES] = 5;
-
-  function LocalStorage(key) {
-    this.lstorage = localStorage;
-    this.storageKey = key;
-  }
-
-  LocalStorage.prototype.saveEventPageValue = function(saveTime) {
-    var h, key;
-    if (saveTime == null) {
-      saveTime = true;
-    }
-    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
-    this.lstorage.setItem(this.storageKey, JSON.stringify(h));
-    if (saveTime) {
-      key = this.storageKey + this.constructor.SAVETIME_SUFFIX;
-      return this.lstorage.setItem(key, $.now());
-    }
+  LocalStorage.loadValueForWorktable = function() {
+    this.loadPageValue();
+    this.loadEventPageValue();
+    return this.loadSettingPageValue();
   };
 
-  LocalStorage.prototype.loadEventPageValue = function() {
-    var h, k, results, v;
-    h = JSON.parse(this.lstorage.getItem(this.storageKey));
+  LocalStorage.saveValueForRun = function() {
+    this.savePageValue(true);
+    this.saveEventPageValue(true);
+    return this.saveSettingPageValue(true);
+  };
+
+  LocalStorage.loadValueForRun = function() {
+    this.loadPageValue(true);
+    this.loadEventPageValue(true);
+    return this.loadSettingPageValue(true);
+  };
+
+  LocalStorage.isOverWorktableSaveTimeLimit = function(isRun) {
+    var d, duration, key, lstorage, m, saveTime, time;
+    if (isRun == null) {
+      isRun = false;
+    }
+    lstorage = localStorage;
+    key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;
+    saveTime = lstorage.getItem(key);
+    if (saveTime == null) {
+      return true;
+    }
+    duration = $.now() - saveTime;
+    d = new Date(duration);
+    m = d.getMinutes();
+    time = isRun ? this.RUN_SAVETIME : this.WORKTABLE_SAVETIME;
+    return parseInt(m) > time;
+  };
+
+  LocalStorage.clearWorktable = function() {
+    var lstorage;
+    lstorage = localStorage;
+    lstorage.removeItem(this.Key.WORKTABLE_PAGEVALUES);
+    lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
+    return lstorage.removeItem(this.Key.WORKTABLE_SETTING_PAGEVALUES);
+  };
+
+  LocalStorage.savePageValue = function(isRun) {
+    var h, key, lstorage;
+    if (isRun == null) {
+      isRun = false;
+    }
+    lstorage = localStorage;
+    h = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX);
+    key = isRun ? this.Key.RUN_PAGEVALUES : this.Key.WORKTABLE_PAGEVALUES;
+    lstorage.setItem(key, JSON.stringify(h));
+    key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;
+    return lstorage.setItem(key, $.now());
+  };
+
+  LocalStorage.loadPageValue = function(isRun) {
+    var h, k, key, lstorage, results, v;
+    if (isRun == null) {
+      isRun = false;
+    }
+    lstorage = localStorage;
+    key = isRun ? this.Key.RUN_PAGEVALUES : this.Key.WORKTABLE_PAGEVALUES;
+    h = JSON.parse(lstorage.getItem(key));
+    results = [];
+    for (k in h) {
+      v = h[k];
+      results.push(PageValue.setPageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+    }
+    return results;
+  };
+
+  LocalStorage.saveEventPageValue = function(isRun) {
+    var h, key, lstorage;
+    if (isRun == null) {
+      isRun = false;
+    }
+    lstorage = localStorage;
+    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    key = isRun ? this.Key.RUN_EVENT_PAGEVALUES : this.Key.WORKTABLE_EVENT_PAGEVALUES;
+    lstorage.setItem(key, JSON.stringify(h));
+    key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;
+    return lstorage.setItem(key, $.now());
+  };
+
+  LocalStorage.loadEventPageValue = function(isRun) {
+    var h, k, key, lstorage, results, v;
+    if (isRun == null) {
+      isRun = false;
+    }
+    lstorage = localStorage;
+    key = isRun ? this.Key.RUN_EVENT_PAGEVALUES : this.Key.WORKTABLE_EVENT_PAGEVALUES;
+    h = JSON.parse(lstorage.getItem(key));
     results = [];
     for (k in h) {
       v = h[k];
@@ -48,29 +133,33 @@ LocalStorage = (function() {
     return results;
   };
 
-  LocalStorage.prototype.isOverSaveTimeLimit = function() {
-    var d, duration, key, m, saveTime;
-    key = this.storageKey + this.constructor.SAVETIME_SUFFIX;
-    saveTime = this.lstorage.getItem(key);
-    if (saveTime == null) {
-      return true;
+  LocalStorage.saveSettingPageValue = function(isRun) {
+    var h, key, lstorage;
+    if (isRun == null) {
+      isRun = false;
     }
-    duration = $.now() - saveTime;
-    d = new Date(duration);
-    m = d.getMinutes();
-    return parseInt(m) > this.constructor.SAVETIME_LIMIT_MINUTES[this.storageKey];
+    lstorage = localStorage;
+    h = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX);
+    key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
+    lstorage.setItem(key, JSON.stringify(h));
+    key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;
+    return lstorage.setItem(key, $.now());
   };
 
-  LocalStorage.prototype.get = function() {
-    return this.lstorage.getItem(this.storageKey);
-  };
-
-  LocalStorage.prototype.set = function(value) {
-    return this.lstorage.setItem(this.storageKey, value);
-  };
-
-  LocalStorage.prototype.clear = function() {
-    return this.lstorage.setItem(this.storageKey, null);
+  LocalStorage.loadSettingPageValue = function(isRun) {
+    var h, k, key, lstorage, results, v;
+    if (isRun == null) {
+      isRun = false;
+    }
+    lstorage = localStorage;
+    key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
+    h = JSON.parse(lstorage.getItem(key));
+    results = [];
+    for (k in h) {
+      v = h[k];
+      results.push(PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+    }
+    return results;
   };
 
   return LocalStorage;

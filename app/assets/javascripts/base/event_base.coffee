@@ -226,6 +226,15 @@ class EventBase extends Extend
   clearPaging: (methodName) ->
     @removeCss(methodName)
 
+  # アイテムの情報をページ値に保存
+  # @property [Boolean] isCache キャッシュとして保存するか
+  setItemAllPropToPageValue: (isCache = false)->
+    prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
+    prefix_key = prefix_key.replace('@id', @id)
+    obj = @getMinimumObject()
+    PageValue.setPageValue(prefix_key, obj)
+    LocalStorage.savePageValue()
+
 class CommonEventBase extends EventBase
   # 初期化
   initWithEvent: (event) ->

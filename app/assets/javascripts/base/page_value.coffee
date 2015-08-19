@@ -19,12 +19,12 @@ class PageValue
       @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
-      # @property [String] ITEM_PREFIX アイテムプレフィックス
-      @ITEM_PREFIX = 'item'
+      # @property [String] INSTANCE_PREFIX アイテムプレフィックス
+      @INSTANCE_PREFIX = 'item'
       # @property [String] ITEM アイテムRoot
-      @ITEM_VALUE = @ITEM_PREFIX + ':@id:value'
+      @INSTANCE_VALUE = @INSTANCE_PREFIX + ':@id:value'
       # @property [String] ITEM アイテムキャッシュRoot
-      @ITEM_VALUE_CACHE = @ITEM_PREFIX + ':cache:@id:value'
+      @INSTANCE_VALUE_CACHE = @INSTANCE_PREFIX + ':cache:@id:value'
       # @property [String] ITEM_INFO_PREFIX アイテム情報プレフィックス
       @ITEM_INFO_PREFIX = 'iteminfo'
       # @property [String] ITEM_DEFAULT_METHODNAME デフォルトメソッド名
@@ -39,16 +39,20 @@ class PageValue
       @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
 
 
-# サーバから読み込んだアイテム情報を追加
+  # サーバから読み込んだアイテム情報を追加
   @addItemInfo = (item_id, te_actions) ->
     if te_actions? && te_actions.length > 0
+      isSet = false
       te_actions.forEach( (a) =>
         if a.is_default? && a.is_default
           # デフォルトメソッド & デフォルトアクションタイプ
           @setPageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
           @setPageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
           @setPageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
+          isSet = true
       )
+      if isSet
+        LocalStorage.savePageValue()
 
   # ページが持つ値を取得
   # @param [String] key キー値
@@ -237,5 +241,5 @@ class PageValue
   # アイテムとイベント情報を削除
   @removeAllItemAndEventPageValue = ->
     # page_value消去
-    $("##{@Key.PV_ROOT}").children(".#{@Key.ITEM_PREFIX}").remove()
+    $("##{@Key.PV_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
     $("##{@Key.E_ROOT}").children().remove()

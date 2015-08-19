@@ -4,7 +4,7 @@ var initEventAction, initHandleScrollPoint, initResize, initView, setupScrollEve
 window.runPage = true;
 
 initView = function() {
-  var is_reload, ls;
+  var is_reload;
   $('#contents').css('height', $('#contents').height() - $('#nav').height());
   $('#canvas_container').attr('width', $('#canvas_wrapper').width());
   $('#canvas_container').attr('height', $('#canvas_wrapper').height());
@@ -20,11 +20,10 @@ initView = function() {
   scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   is_reload = PageValue.getPageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
-  ls = new LocalStorage(LocalStorage.Key.RUN_EVENT_PAGEVALUES);
   if (is_reload != null) {
-    return ls.loadEventPageValue();
+    return LocalStorage.loadValueForRun();
   } else {
-    return ls.saveEventPageValue();
+    return LocalStorage.saveValueForRun();
   }
 };
 
@@ -51,8 +50,11 @@ initEventAction = function() {
   eventObjList = [];
   eventList = [];
   $.each(eventPageValueList, function(idx, obj) {
-    var beforeEvent, chapter, event, parallel;
-    event = Common.getInstanceFromMap(obj);
+    var beforeEvent, chapter, classMapId, event, id, isCommonEvent, parallel;
+    isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+    id = obj[EventPageValueBase.PageValueKey.ID];
+    classMapId = isCommonEvent ? obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : obj[EventPageValueBase.PageValueKey.ITEM_ID];
+    event = Common.getInstanceFromMap(isCommonEvent, id, classMapId);
     event.initWithEvent(obj);
     eventObjList.push(event);
     eventList.push(obj);

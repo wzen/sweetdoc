@@ -114,7 +114,8 @@ Setting = (function() {
       }
       if ((context != null) && doDraw === false) {
         $("#" + this.SETTING_GRID_ELEMENT_ID).remove();
-        return PageValue.setSettingPageValue(key, false);
+        PageValue.setSettingPageValue(key, false);
+        return LocalStorage.saveSettingPageValue();
       } else if (doDraw) {
         root = $("#" + Setting.ROOT_ID_NAME);
         stepInput = $("." + this.GRID_STEP_CLASS_NAME, root);
@@ -157,7 +158,8 @@ Setting = (function() {
           context.lineTo(context.canvas.width, i);
           context.stroke();
         }
-        return PageValue.setSettingPageValue(key, true);
+        PageValue.setSettingPageValue(key, true);
+        return LocalStorage.saveSettingPageValue();
       }
     };
 

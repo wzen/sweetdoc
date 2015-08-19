@@ -33,8 +33,6 @@ class ItemBase extends ItemEventBase
     @jqueryElement = null
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
-    # アイテムリストに保存
-    createdObject[@id] = @
 
   # コンフィグメニューの要素IDを取得
   # @return [Int] HTML要素ID
@@ -117,26 +115,19 @@ class ItemBase extends ItemEventBase
       @name = @constructor.IDENTITY + " #{num}"
 
     # ページに保存
-    @setAllItemPropToPageValue()
+    @setItemAllPropToPageValue()
+    LocalStorage.saveEventPageValue()
     console.log('save obj:' + JSON.stringify(@itemSize))
 
     # イベントの選択項目更新
     # fixme: 実行場所について再考
     Timeline.updateSelectItemMenu()
 
-  # アイテムの情報をページ値に保存
-  # @property [Boolean] isCache キャッシュとして保存するか
-  setAllItemPropToPageValue: (isCache = false)->
-    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
-    prefix_key = prefix_key.replace('@id', @id)
-    obj = @getMinimumObject()
-    PageValue.setPageValue(prefix_key, obj)
-
   # アイテムをページ値から再描画
   # @property [Boolean] isCache キャッシュとして保存するか
   # @return [Boolean] 処理結果
   reDrawByObjPageValue: (isCache = false) ->
-    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
+    prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     obj = PageValue.getPageValue(prefix_key)
     if obj?
@@ -148,7 +139,7 @@ class ItemBase extends ItemEventBase
   # @property [String] prop 変数名
   # @property [Boolean] isCache キャッシュとして保存するか
   getItemPropFromPageValue : (prop, isCache = false) ->
-    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
+    prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     return PageValue.getPageValue(prefix_key + ":#{prop}")
 
@@ -157,9 +148,10 @@ class ItemBase extends ItemEventBase
   # @property [Object] value 値
   # @property [Boolean] isCache キャッシュとして保存するか
   setItemPropToPageValue : (prop, value, isCache = false) ->
-    prefix_key = if isCache then PageValue.Key.ITEM_VALUE_CACHE else PageValue.Key.ITEM_VALUE
+    prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     PageValue.setPageValue(prefix_key + ":#{prop}", value)
+    LocalStorage.savePageValue()
 
   # 履歴データを取得
   # @abstract
@@ -175,6 +167,7 @@ class ItemBase extends ItemEventBase
   getMinimumObject: ->
     obj = {
       id: Common.makeClone(@id)
+      itemId: Common.makeClone(@constructor.ITEM_ID)
       name: Common.makeClone(@name)
       itemSize: Common.makeClone(@itemSize)
       zindex: Common.makeClone(@zindex)
@@ -184,7 +177,7 @@ class ItemBase extends ItemEventBase
 
   # 最小限のデータを設定
   setMiniumObject: (obj) ->
-    delete window.createdObject[@id]
+    delete window.instanceMap[@id]
 
     @id = Common.makeClone(obj.id)
     @name = Common.makeClone(obj.name)
@@ -192,7 +185,7 @@ class ItemBase extends ItemEventBase
     @zindex = Common.makeClone(obj.zindex)
     @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
 
-    window.createdObject[@id] = @
+    window.instanceMap[@id] = @
 
   # 最小限のデータからアイテムを描画
   # @abstract

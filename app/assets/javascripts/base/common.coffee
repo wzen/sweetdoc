@@ -133,11 +133,7 @@ class Common
     window.classMap[c][i] = value
 
   # インスタンス取得
-  @getInstanceFromMap = (event) ->
-    isCommonEvent = event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-    id = if isCommonEvent then event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else event[EventPageValueBase.PageValueKey.ID]
-    classMapId = if isCommonEvent then event[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else event[EventPageValueBase.PageValueKey.ITEM_ID]
-
+  @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
     if typeof isCommonEvent == "boolean"
       if isCommonEvent
         isCommonEvent = "1"
@@ -148,13 +144,10 @@ class Common
       id = String(id)
 
     Common.setInstanceFromMap(isCommonEvent, id, classMapId)
-    return window.instanceMap[isCommonEvent][id]
+    return window.instanceMap[id]
 
   # インスタンス設定(上書きはしない)
-  @setInstanceFromMap = (isCommonEvent, id, itemId = id) ->
-    if !window.instanceMap?
-      window.instanceMap = {}
-
+  @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
     if typeof isCommonEvent == "boolean"
       if isCommonEvent
         isCommonEvent = "1"
@@ -164,16 +157,19 @@ class Common
     if typeof id != "string"
       id = String(id)
 
-    if !window.instanceMap[isCommonEvent]?
-      !window.instanceMap[isCommonEvent] = {}
-    if !window.instanceMap[isCommonEvent][id]?
+    if !window.instanceMap?
+      window.instanceMap = {}
+    if !window.instanceMap[id]?
       # インスタンスを保存する
-      window.instanceMap[isCommonEvent][id] = new (Common.getClassFromMap(isCommonEvent, itemId))()
+      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
+      instance.id = id
+      window.instanceMap[id] = instance
+      instance.setItemAllPropToPageValue()
 
   # 生成したインスタンスの中からアイテムのみ取得
   @getCreatedItemObject = ->
     ret = {}
-    for k, v of createdObject
+    for k, v of instanceMap
       if v instanceof CommonEventBase == false
         ret[k] = v
     return ret
@@ -184,7 +180,7 @@ class Common
     tes = PageValue.getEventPageValueSortedListByNum()
     for idx in [tes.length - 1 .. 0] by -1
       te = tes[idx]
-      item = window.createdObject[te.id]
+      item = window.instanceMap[te.id]
       item.setEvent(te)
       item.stopPreview( ->
         item.updateEventBefore()
