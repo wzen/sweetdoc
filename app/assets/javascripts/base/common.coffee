@@ -180,13 +180,14 @@ class Common
     for idx in [tes.length - 1 .. 0] by -1
       te = tes[idx]
       item = window.instanceMap[te.id]
-      item.setEvent(te)
-      item.stopPreview( ->
-        item.updateEventBefore()
-        previewinitCount += 1
-        if previewinitCount >= tes.length && callback?
-          callback()
-      )
+      if item?
+        item.initWithEvent(te)
+        item.stopPreview( ->
+          item.updateEventBefore()
+          previewinitCount += 1
+          if previewinitCount >= tes.length && callback?
+            callback()
+        )
 
   # アクションタイプからアクションタイプクラス名を取得
   @getActionTypeClassNameByActionType = (actionType) ->

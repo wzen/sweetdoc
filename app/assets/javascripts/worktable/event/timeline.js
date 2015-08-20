@@ -27,20 +27,29 @@ Timeline = (function() {
     self = this;
     te = null;
     _setupTimelineEvent = function() {
-      var menu, tEmt, timelineEvents;
+      var actionType, ePageValues, emt, i, idx, j, l, len, menu, pageValue, ref, ref1, teNum, timelineEvents;
+      ePageValues = PageValue.getEventPageValueSortedListByNum();
       timelineEvents = $('#timeline_events').children('.timeline_event');
-      tEmt = $('.te_num', timelineEvents);
-      tEmt.each(function(e) {
-        var actionType, teNum;
-        teNum = parseInt($(this).val());
-        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + PageValue.Key.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE);
-        Timeline.changeTimelineColor(teNum, actionType);
-        if (e === tEmt.length - 1 && actionType !== null) {
-          self.createTimelineEvent(tEmt.length + 1);
+      for (idx = j = 0, len = ePageValues.length; j < len; idx = ++j) {
+        pageValue = ePageValues[idx];
+        teNum = idx + 1;
+        emt = timelineEvents.eq(idx);
+        if (emt.length === 0) {
+          self.createTimelineEvent(teNum);
           timelineEvents = $('#timeline_events').children('.timeline_event');
-          return tEmt = $('.te_num', timelineEvents);
         }
-      });
+        $('.te_num', emt).val(teNum);
+        actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
+        Timeline.changeTimelineColor(teNum, actionType);
+      }
+      if (ePageValues.length < timelineEvents.length - 1) {
+        for (i = l = ref = ePageValues.length, ref1 = timelineEvents.length - 1; ref <= ref1 ? l <= ref1 : l >= ref1; i = ref <= ref1 ? ++l : --l) {
+          emt = timelineEvents.get(i);
+          emt.remove();
+        }
+      }
+      self.createTimelineEvent(ePageValues.length + 1);
+      timelineEvents = $('#timeline_events').children('.timeline_event');
       timelineEvents.off('click');
       timelineEvents.on('click', function(e) {
         return _clickTimelineEvent.call(self, this);
@@ -92,20 +101,24 @@ Timeline = (function() {
     };
     _doPreview = function(te_num) {
       return Common.clearAllEventChange(function() {
-        var i, idx, item, len, results, tes;
+        var idx, item, j, len, results, tes;
         tes = PageValue.getEventPageValueSortedListByNum();
         te_num = parseInt(te_num);
         results = [];
-        for (idx = i = 0, len = tes.length; i < len; idx = ++i) {
+        for (idx = j = 0, len = tes.length; j < len; idx = ++j) {
           te = tes[idx];
           item = window.instanceMap[te.id];
-          if (idx < te_num - 1) {
-            item.setEvent(te);
-            results.push(item.updateEventAfter());
-          } else if (idx === te_num - 1) {
-            item.setEvent(te);
-            item.preview(te);
-            break;
+          if (item != null) {
+            if (idx < te_num - 1) {
+              item.setEvent(te);
+              results.push(item.updateEventAfter());
+            } else if (idx === te_num - 1) {
+              item.setEvent(te);
+              item.preview(te);
+              break;
+            } else {
+              results.push(void 0);
+            }
           } else {
             results.push(void 0);
           }

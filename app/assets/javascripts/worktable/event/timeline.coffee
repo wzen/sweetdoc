@@ -24,18 +24,45 @@ class Timeline
     te = null
 
     _setupTimelineEvent = ->
+      ePageValues = PageValue.getEventPageValueSortedListByNum()
       timelineEvents = $('#timeline_events').children('.timeline_event')
-      tEmt = $('.te_num', timelineEvents)
-      tEmt.each((e) ->
-        teNum = parseInt($(@).val())
-        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + PageValue.Key.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
-        Timeline.changeTimelineColor(teNum, actionType)
-        if e == tEmt.length - 1 && actionType != null
-          # blankのイベントが無い場合、作成
-          self.createTimelineEvent(tEmt.length + 1)
+      # 色と数値を更新
+      for pageValue, idx in ePageValues
+        teNum = idx + 1
+        emt = timelineEvents.eq(idx)
+        if emt.length == 0
+          # 新規作成
+          self.createTimelineEvent(teNum)
           timelineEvents = $('#timeline_events').children('.timeline_event')
-          tEmt = $('.te_num', timelineEvents)
-      )
+        $('.te_num', emt).val(teNum)
+        actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
+        Timeline.changeTimelineColor(teNum, actionType)
+
+      # 不要なタイムラインイベントを削除
+      if ePageValues.length < timelineEvents.length - 1
+        for i in [(ePageValues.length)..(timelineEvents.length - 1)]
+          emt = timelineEvents.get(i)
+          emt.remove()
+
+      # blankイベントを新規作成
+      self.createTimelineEvent(ePageValues.length + 1)
+
+      # 再取得
+      timelineEvents = $('#timeline_events').children('.timeline_event')
+#
+#      timelineEvents = $('#timeline_events').children('.timeline_event')
+#      tEmt = $('.te_num', timelineEvents)
+#      tEmt.each((e) ->
+#        teNum = parseInt($(@).val())
+#        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + PageValue.Key.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
+#        Timeline.changeTimelineColor(teNum, actionType)
+#        if e == tEmt.length - 1 && actionType != null
+#          # blankのイベントが無い場合、作成
+#          self.createTimelineEvent(tEmt.length + 1)
+#          timelineEvents = $('#timeline_events').children('.timeline_event')
+#      )
+
+
       # イベントのクリック
       timelineEvents.off('click')
       timelineEvents.on('click', (e) ->
@@ -96,14 +123,15 @@ class Timeline
         te_num = parseInt(te_num)
         for te, idx in tes
           item = window.instanceMap[te.id]
-          if idx < te_num - 1
-            item.setEvent(te)
-            item.updateEventAfter()
-          else if idx == te_num - 1
-            item.setEvent(te)
-            # プレビュー実行
-            item.preview(te)
-            break
+          if item?
+            if idx < te_num - 1
+              item.setEvent(te)
+              item.updateEventAfter()
+            else if idx == te_num - 1
+              item.setEvent(te)
+              # プレビュー実行
+              item.preview(te)
+              break
       )
 
     # イベントコンフィグの設定&表示

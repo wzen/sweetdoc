@@ -80,8 +80,7 @@ WorktableCommon = (function() {
       }
     }
     return this.loadItemJs(needItemIds, function() {
-      var classMapId, event, id, isCommon, results;
-      results = [];
+      var classMapId, event, id, isCommon;
       for (k in pageValues) {
         obj = pageValues[k];
         isCommon = null;
@@ -95,8 +94,8 @@ WorktableCommon = (function() {
           classMapId = obj.value.eventId;
         }
         event = Common.getInstanceFromMap(isCommon, id, classMapId);
-        event.setMiniumObject(obj.value);
         if (event instanceof ItemBase) {
+          event.setMiniumObject(obj.value);
           if (event instanceof CssItemBase && (event.makeCss != null)) {
             event.makeCss();
           }
@@ -104,9 +103,9 @@ WorktableCommon = (function() {
             event.drawAndMakeConfigs();
           }
         }
-        results.push(event.setItemAllPropToPageValue());
+        event.setItemAllPropToPageValue();
       }
-      return results;
+      return Timeline.setupTimelineEventConfig();
     });
   };
 

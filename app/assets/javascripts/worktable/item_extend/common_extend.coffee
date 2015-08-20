@@ -30,8 +30,6 @@ WorkTableCommonExtend =
     @reDraw(show)
     # コンフィグ作成
     @makeDesignConfig()
-    # タイムライン作成
-    Timeline.setupTimelineEventConfig()
 
     return true
 

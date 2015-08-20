@@ -228,14 +228,18 @@ Common = (function() {
     for (idx = j = ref = tes.length - 1; j >= 0; idx = j += -1) {
       te = tes[idx];
       item = window.instanceMap[te.id];
-      item.setEvent(te);
-      results.push(item.stopPreview(function() {
-        item.updateEventBefore();
-        previewinitCount += 1;
-        if (previewinitCount >= tes.length && (callback != null)) {
-          return callback();
-        }
-      }));
+      if (item != null) {
+        item.initWithEvent(te);
+        results.push(item.stopPreview(function() {
+          item.updateEventBefore();
+          previewinitCount += 1;
+          if (previewinitCount >= tes.length && (callback != null)) {
+            return callback();
+          }
+        }));
+      } else {
+        results.push(void 0);
+      }
     }
     return results;
   };

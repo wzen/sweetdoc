@@ -86,13 +86,16 @@ class WorktableCommon
           isCommon = true
           classMapId = obj.value.eventId
         event = Common.getInstanceFromMap(isCommon, id, classMapId)
-        event.setMiniumObject(obj.value)
         if event instanceof ItemBase
+          event.setMiniumObject(obj.value)
           if event instanceof CssItemBase && event.makeCss?
             event.makeCss()
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
         event.setItemAllPropToPageValue()
+
+      # タイムライン作成
+      Timeline.setupTimelineEventConfig()
     )
 
   # JSファイルをサーバから読み込む

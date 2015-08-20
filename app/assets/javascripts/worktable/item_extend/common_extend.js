@@ -20,7 +20,6 @@ WorkTableCommonExtend = {
     }
     this.reDraw(show);
     this.makeDesignConfig();
-    Timeline.setupTimelineEventConfig();
     return true;
   },
   showOptionMenu: function() {
