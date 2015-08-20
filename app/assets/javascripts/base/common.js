@@ -201,8 +201,7 @@ Common = (function() {
     if (window.instanceMap[id] == null) {
       instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
       instance.id = id;
-      window.instanceMap[id] = instance;
-      return instance.setItemAllPropToPageValue();
+      return window.instanceMap[id] = instance;
     }
   };
 

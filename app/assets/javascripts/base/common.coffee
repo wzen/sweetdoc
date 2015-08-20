@@ -164,7 +164,6 @@ class Common
       instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
       instance.id = id
       window.instanceMap[id] = instance
-      instance.setItemAllPropToPageValue()
 
   # 生成したインスタンスの中からアイテムのみ取得
   @getCreatedItemObject = ->

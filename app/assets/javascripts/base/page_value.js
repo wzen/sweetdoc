@@ -25,7 +25,7 @@ PageValue = (function() {
 
       Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
-      Key.INSTANCE_PREFIX = 'item';
+      Key.INSTANCE_PREFIX = 'instance';
 
       Key.INSTANCE_VALUE = Key.INSTANCE_PREFIX + ':@id:value';
 

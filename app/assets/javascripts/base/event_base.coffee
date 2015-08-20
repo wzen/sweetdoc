@@ -239,9 +239,6 @@ class CommonEventBase extends EventBase
   # 初期化
   initWithEvent: (event) ->
     super(event)
-    delete window.createdObject[@id]
-    @id = event[EventPageValueBase.PageValueKey.ID]
-    window.createdObject[@id] = @
 
 class ItemEventBase extends EventBase
   # 初期化

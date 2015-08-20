@@ -70,26 +70,29 @@ class WorktableCommon
   @drawAllItemFromEventPageValue: ->
     pageValues = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX)
     needItemIds = []
-    for obj in pageValues
-      needItemIds.push(obj.id)
+    for k, obj of pageValues
+      if $.inArray(obj.value.itemId, needItemIds) < 0
+        needItemIds.push(obj.value.itemId)
 
     @loadItemJs(needItemIds, ->
-      for obj in pageValues
+      for k, obj of pageValues
         isCommon = null
-        id = obj.id
+        id = obj.value.id
         classMapId = null
-        if event instanceof ItemBase
+        if obj.value.itemId?
           isCommon = false
-          classMapId = obj.itemId
+          classMapId = obj.value.itemId
         else
           isCommon = true
-          classMapId = obj.eventId
+          classMapId = obj.value.eventId
         event = Common.getInstanceFromMap(isCommon, id, classMapId)
+        event.setMiniumObject(obj.value)
         if event instanceof ItemBase
           if event instanceof CssItemBase && event.makeCss?
             event.makeCss()
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
+        event.setItemAllPropToPageValue()
     )
 
   # JSファイルをサーバから読み込む

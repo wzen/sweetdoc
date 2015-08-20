@@ -20,7 +20,7 @@ class PageValue
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
       # @property [String] INSTANCE_PREFIX アイテムプレフィックス
-      @INSTANCE_PREFIX = 'item'
+      @INSTANCE_PREFIX = 'instance'
       # @property [String] ITEM アイテムRoot
       @INSTANCE_VALUE = @INSTANCE_PREFIX + ':@id:value'
       # @property [String] ITEM アイテムキャッシュRoot

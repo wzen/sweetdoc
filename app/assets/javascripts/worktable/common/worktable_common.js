@@ -70,41 +70,41 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.drawAllItemFromEventPageValue = function() {
-    var i, len, needItemIds, obj, pageValues;
+    var k, needItemIds, obj, pageValues;
     pageValues = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX);
     needItemIds = [];
-    for (i = 0, len = pageValues.length; i < len; i++) {
-      obj = pageValues[i];
-      needItemIds.push(obj.id);
+    for (k in pageValues) {
+      obj = pageValues[k];
+      if ($.inArray(obj.value.itemId, needItemIds) < 0) {
+        needItemIds.push(obj.value.itemId);
+      }
     }
     return this.loadItemJs(needItemIds, function() {
-      var classMapId, event, id, isCommon, j, len1, results;
+      var classMapId, event, id, isCommon, results;
       results = [];
-      for (j = 0, len1 = pageValues.length; j < len1; j++) {
-        obj = pageValues[j];
+      for (k in pageValues) {
+        obj = pageValues[k];
         isCommon = null;
-        id = obj.id;
+        id = obj.value.id;
         classMapId = null;
-        if (event instanceof ItemBase) {
+        if (obj.value.itemId != null) {
           isCommon = false;
-          classMapId = obj.itemId;
+          classMapId = obj.value.itemId;
         } else {
           isCommon = true;
-          classMapId = obj.eventId;
+          classMapId = obj.value.eventId;
         }
         event = Common.getInstanceFromMap(isCommon, id, classMapId);
+        event.setMiniumObject(obj.value);
         if (event instanceof ItemBase) {
           if (event instanceof CssItemBase && (event.makeCss != null)) {
             event.makeCss();
           }
           if (event.drawAndMakeConfigs != null) {
-            results.push(event.drawAndMakeConfigs());
-          } else {
-            results.push(void 0);
+            event.drawAndMakeConfigs();
           }
-        } else {
-          results.push(void 0);
         }
+        results.push(event.setItemAllPropToPageValue());
       }
       return results;
     });
