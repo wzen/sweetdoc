@@ -68,6 +68,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.updateEventBefore = function() {
     var methodName;
+    this.getJQueryElement().css('opacity', 0);
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
@@ -76,6 +77,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.updateEventAfter = function() {
     var methodName;
+    this.getJQueryElement().css('opacity', 1);
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().css({
