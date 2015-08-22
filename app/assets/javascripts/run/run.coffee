@@ -68,9 +68,9 @@ initEventAction = ->
     if !parallel
       chapter = null
       if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
-        chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList})
+        chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
       else
-        chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList})
+        chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
       chapterList.push(chapter)
       eventObjList = []
       eventList = []

@@ -70,12 +70,14 @@ initEventAction = function() {
       if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
         chapter = new ClickChapter({
           eventObjList: eventObjList,
-          eventList: eventList
+          eventList: eventList,
+          num: idx
         });
       } else {
         chapter = new ScrollChapter({
           eventObjList: eventObjList,
-          eventList: eventList
+          eventList: eventList,
+          num: idx
         });
       }
       chapterList.push(chapter);

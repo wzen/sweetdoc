@@ -1,8 +1,7 @@
 # イベント実行クラス
 class EventAction
   # コンストラクタ
-  constructor: (chapterList) ->
-    @chapterList = chapterList
+  constructor: (@chapterList) ->
     @chapterIndex = 0
     @finished = false
 
@@ -13,6 +12,7 @@ class EventAction
   # 開始イベント
   start: ->
     # チャプター前処理
+    @sinkFrontAllChapterObj()
     @thisChapter().willChapter()
 
   # 全てのイベントが終了している場合、チャプターを進める
@@ -56,10 +56,16 @@ class EventAction
   isScrollChapter: ->
     return @thisChapter().scrollEvent?
 
-  # クリックイベントをハンドル
-#  handleClickEvent: (e) ->
-#    if !@finished
-#      @thisChapter().clickEvent(e)
+  # 全てのイベントアイテムをFrontから落とす
+  sinkFrontAllChapterObj: ->
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
+    scrollContents.css('z-index', scrollViewSwitchZindex.off)
+    @chapterList.forEach((chapter) ->
+      chapter.eventObjList.forEach((event) ->
+        if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+          event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + chapter.num)
+      )
+    )
 
   # イベント終了イベント
   finishAllEvents: ->

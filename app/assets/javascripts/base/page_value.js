@@ -277,6 +277,12 @@ PageValue = (function() {
     });
   };
 
+  PageValue.clearAllUpdateFlg = function() {
+    $("#" + this.Key.IS_ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
+    $("#" + this.Key.E_ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
+    return $("#" + Setting.PageValueKey.ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
+  };
+
   PageValue.getEventPageValueSortedListByNum = function() {
     var count, eventObjList, eventPageValues, index, k, v;
     eventPageValues = PageValue.getEventPageValue(this.Key.E_PREFIX);

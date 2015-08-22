@@ -8,13 +8,13 @@ Rails.application.routes.draw do
 
   get 'test_move/hello'
   get 'item_js_code/hello'
-  get 'item_state/save'
-  get 'item_state/load'
+  #get 'item_state/save'
+  #get 'item_state/load'
   get 'parts/button_css_default'
 
   #ajax
-  post 'item_state/save_itemstate'
-  post 'item_state/load_itemstate'
+  post 'page_value_state/save_state'
+  post 'page_value_state/load_state'
   post 'item_js/index'
 
   post 'test_move/hello'

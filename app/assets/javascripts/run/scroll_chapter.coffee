@@ -4,7 +4,7 @@ class ScrollChapter extends Chapter
   # チャプターの前処理
   willChapter: ->
     super()
-    @sinkFrontAllActor()
+    @sinkFrontAllObj()
 
   # チャプターの後処理
   didChapter: ->

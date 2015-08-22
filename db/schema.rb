@@ -39,23 +39,14 @@ ActiveRecord::Schema.define(version: 20150822000147) do
   end
 
   create_table "event_pagevalues", force: true do |t|
-    t.integer  "user_id",         null: false
-    t.string   "obj_id",          null: false
-    t.integer  "common_event_id", null: false
-    t.integer  "item_id",         null: false
-    t.integer  "chapter_num",     null: false
-    t.integer  "screen_num",      null: false
-    t.boolean  "is_common_event", null: false
+    t.integer  "user_id",    null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "instance_pagevalues", force: true do |t|
-    t.integer  "user_id",         null: false
-    t.string   "obj_id",          null: false
-    t.integer  "common_event_id"
-    t.integer  "item_id"
+    t.integer  "user_id",    null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -75,14 +66,6 @@ ActiveRecord::Schema.define(version: 20150822000147) do
   create_table "item_categories", force: true do |t|
     t.integer  "item_id",     null: false
     t.integer  "category_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "item_states", force: true do |t|
-    t.integer  "user_id",    null: false
-    t.text     "state"
-    t.text     "css_info"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -108,8 +91,8 @@ ActiveRecord::Schema.define(version: 20150822000147) do
   end
 
   create_table "localize_common_action_events", force: true do |t|
-    t.integer  "common_action_event_id"
-    t.integer  "locale_id"
+    t.integer  "common_action_event_id", null: false
+    t.integer  "locale_id",              null: false
     t.text     "options"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -141,8 +124,7 @@ ActiveRecord::Schema.define(version: 20150822000147) do
 
   create_table "setting_pagevalues", force: true do |t|
     t.integer  "user_id",    null: false
-    t.integer  "key_id",     null: false
-    t.text     "value"
+    t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -253,6 +253,12 @@ class PageValue
           root.addClass(cacheClassName)
     )
 
+  # updateが付与しているクラスからupdateクラスを除去する
+  @clearAllUpdateFlg = ->
+    $("##{@Key.IS_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
+    $("##{@Key.E_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
+    $("##{Setting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
+
   # ソートしたイベントリストを取得
   @getEventPageValueSortedListByNum = ->
     eventPageValues = PageValue.getEventPageValue(@Key.E_PREFIX)

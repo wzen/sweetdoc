@@ -2,27 +2,39 @@
 var ServerStorage;
 
 ServerStorage = (function() {
+  var constant;
+
   function ServerStorage() {}
 
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    ServerStorage.Key = (function() {
+      function Key() {}
+
+      Key.USER_ID = constant.ServerStorage.Key.USER_ID;
+
+      Key.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
+
+      Key.EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE;
+
+      Key.SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE;
+
+      return Key;
+
+    })();
+  }
+
   ServerStorage.save = function() {
-    var j, jsonList, k, ref, v;
-    jsonList = [];
-    ref = Common.getCreatedItemObject();
-    for (k in ref) {
-      v = ref[k];
-      j = {
-        id: Common.makeClone(v.id),
-        obj: v.getMinimumObject()
-      };
-      jsonList.push(j);
-    }
+    var data;
+    data = {};
+    data[this.constructor.Key.USER_ID] = 0;
+    data[this.constructor.Key.INSTANCE_PAGE_VALUE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
+    data[this.constructor.Key.EVENT_PAGE_VALUE] = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    data[this.constructor.Key.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX);
     return $.ajax({
-      url: "/item_state/save_itemstate",
+      url: "/page_value_state/save_state",
       type: "POST",
-      data: {
-        user_id: 0,
-        state: JSON.stringify(jsonList)
-      },
+      data: data,
       dataType: "json",
       success: function(data) {
         return console.log(data.message);
@@ -35,7 +47,7 @@ ServerStorage = (function() {
 
   ServerStorage.load = function() {
     return $.ajax({
-      url: "/item_state/load_itemstate",
+      url: "/page_value_state/load_state",
       type: "POST",
       data: {
         user_id: 0,

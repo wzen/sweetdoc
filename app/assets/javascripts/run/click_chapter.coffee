@@ -12,13 +12,14 @@ class ClickChapter extends Chapter
       event.getJQueryElement().on('click', (e) ->
         self.clickEvent(e)
       )
-    )
 
-    @riseFrontAllActor()
+    )
+    @riseFrontAllObj(@eventObjList)
 
   # チャプターの後処理
   didChapter: ->
     super()
+    @sinkFrontAllObj()
 
   # クリックイベント
   clickEvent: (e) ->

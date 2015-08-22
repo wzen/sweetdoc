@@ -3,6 +3,7 @@ class Chapter
   constructor: (list) ->
     @eventObjList = list.eventObjList
     @eventList = list.eventList
+    @num = list.num
 
   # チャプター共通の前処理
   willChapter: ->
@@ -12,7 +13,7 @@ class Chapter
       event.willChapter(methodName)
       event.appendCssIfNeeded(methodName)
 
-    @sinkFrontAllActor()
+    @sinkFrontAllObj()
     @focusToActorIfNeed(false)
 
   # チャプター共通の後処理
@@ -56,22 +57,22 @@ class Chapter
     else
       window.disabledEventHandler = false
 
-  # 全てのイベントアイテムをFrontに浮上
-  riseFrontAllActor: ->
+  # イベントアイテムをFrontに浮上
+  riseFrontAllObj: (eventObjList) ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
     scrollContents.css('z-index', scrollViewSwitchZindex.on)
-    @eventObjList.forEach((event) ->
-      if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-        event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1)
+    eventObjList.forEach((e) ->
+      if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+        e.getJQueryElement().css('z-index', Constant.Zindex.EVENTFLOAT)
     )
 
   # 全てのイベントアイテムをFrontから落とす
-  sinkFrontAllActor: ->
+  sinkFrontAllObj: ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
-    @eventObjList.forEach((event) ->
-      if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-        event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM)
+    @eventObjList.forEach((e) =>
+      if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+        e.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + @num)
     )
 
   # 全てのイベントが終了しているか

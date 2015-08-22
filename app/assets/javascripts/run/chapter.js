@@ -5,6 +5,7 @@ Chapter = (function() {
   function Chapter(list) {
     this.eventObjList = list.eventObjList;
     this.eventList = list.eventList;
+    this.num = list.num;
   }
 
   Chapter.prototype.willChapter = function() {
@@ -17,7 +18,7 @@ Chapter = (function() {
       event.willChapter(methodName);
       event.appendCssIfNeeded(methodName);
     }
-    this.sinkFrontAllActor();
+    this.sinkFrontAllObj();
     return this.focusToActorIfNeed(false);
   };
 
@@ -74,24 +75,26 @@ Chapter = (function() {
     }
   };
 
-  Chapter.prototype.riseFrontAllActor = function() {
+  Chapter.prototype.riseFrontAllObj = function(eventObjList) {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     scrollContents.css('z-index', scrollViewSwitchZindex.on);
-    return this.eventObjList.forEach(function(event) {
-      if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-        return event.getJQueryElement().css('z-index', scrollInsideCoverZindex + 1);
+    return eventObjList.forEach(function(e) {
+      if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+        return e.getJQueryElement().css('z-index', Constant.Zindex.EVENTFLOAT);
       }
     });
   };
 
-  Chapter.prototype.sinkFrontAllActor = function() {
+  Chapter.prototype.sinkFrontAllObj = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.eventObjList.forEach(function(event) {
-      if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-        return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM);
-      }
-    });
+    return this.eventObjList.forEach((function(_this) {
+      return function(e) {
+        if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+          return e.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + _this.num);
+        }
+      };
+    })(this));
   };
 
   Chapter.prototype.finishedAllEvent = function() {

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ItemStateController, :type => :controller do
+RSpec.describe PageValueStateController, :type => :controller do
 
   describe "GET 'save'" do
     it "returns http success" do

@@ -1,24 +1,33 @@
 class ServerStorage
+
+  if gon?
+    # 定数
+    constant = gon.const
+    # ページ内値保存キー
+    class @Key
+      @USER_ID = constant.ServerStorage.Key.USER_ID
+      @INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE
+      @EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE
+      @SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE
+
   # サーバにアイテムの情報を保存
   @save = ->
-    jsonList = []
-    for k, v of Common.getCreatedItemObject()
-      j = {
-        id: Common.makeClone(v.id)
-        obj: v.getMinimumObject()
-      }
-      jsonList.push(j)
+    data = {}
+    data[@constructor.Key.USER_ID] = 0
+    # FIXME: 差分保存 & バッチでフル保存するようにする
+    data[@constructor.Key.INSTANCE_PAGE_VALUE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
+    data[@constructor.Key.EVENT_PAGE_VALUE] = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    data[@constructor.Key.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX)
 
     $.ajax(
       {
-        url: "/item_state/save_itemstate"
+        url: "/page_value_state/save_state"
         type: "POST"
-        data: {
-          user_id: 0
-          state: JSON.stringify(jsonList)
-        }
+        data: data
         dataType: "json"
         success: (data)->
+          # updateフラグ除去
+          #PageValue.clearAllUpdateFlg()
           console.log(data.message)
         error: (data) ->
           console.log(data.message)
@@ -29,7 +38,7 @@ class ServerStorage
   @load = ->
     $.ajax(
       {
-        url: "/item_state/load_itemstate"
+        url: "/page_value_state/load_state"
         type: "POST"
         data: {
           user_id: 0
@@ -81,3 +90,4 @@ class ServerStorage
           console.log(data.message)
       }
     )
+

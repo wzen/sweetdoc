@@ -20,11 +20,12 @@ ClickChapter = (function(superClass) {
         return self.clickEvent(e);
       });
     });
-    return this.riseFrontAllActor();
+    return this.riseFrontAllObj(this.eventObjList);
   };
 
   ClickChapter.prototype.didChapter = function() {
-    return ClickChapter.__super__.didChapter.call(this);
+    ClickChapter.__super__.didChapter.call(this);
+    return this.sinkFrontAllObj();
   };
 
   ClickChapter.prototype.clickEvent = function(e) {

@@ -13,6 +13,7 @@ EventAction = (function() {
   };
 
   EventAction.prototype.start = function() {
+    this.sinkFrontAllChapterObj();
     return this.thisChapter().willChapter();
   };
 
@@ -52,6 +53,18 @@ EventAction = (function() {
 
   EventAction.prototype.isScrollChapter = function() {
     return this.thisChapter().scrollEvent != null;
+  };
+
+  EventAction.prototype.sinkFrontAllChapterObj = function() {
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
+    scrollContents.css('z-index', scrollViewSwitchZindex.off);
+    return this.chapterList.forEach(function(chapter) {
+      return chapter.eventObjList.forEach(function(event) {
+        if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+          return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + chapter.num);
+        }
+      });
+    });
   };
 
   EventAction.prototype.finishAllEvents = function() {
