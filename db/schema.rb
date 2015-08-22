@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716084839) do
+ActiveRecord::Schema.define(version: 20150822000147) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -34,6 +34,29 @@ ActiveRecord::Schema.define(version: 20150716084839) do
 
   create_table "common_actions", force: true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "event_pagevalues", force: true do |t|
+    t.integer  "user_id",         null: false
+    t.string   "obj_id",          null: false
+    t.integer  "common_event_id", null: false
+    t.integer  "item_id",         null: false
+    t.integer  "chapter_num",     null: false
+    t.integer  "screen_num",      null: false
+    t.boolean  "is_common_event", null: false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "instance_pagevalues", force: true do |t|
+    t.integer  "user_id",         null: false
+    t.string   "obj_id",          null: false
+    t.integer  "common_event_id"
+    t.integer  "item_id"
+    t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -112,6 +135,14 @@ ActiveRecord::Schema.define(version: 20150716084839) do
     t.integer  "type_cd",     null: false
     t.integer  "sub_type_cd"
     t.text     "contents"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "setting_pagevalues", force: true do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "key_id",     null: false
+    t.text     "value"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

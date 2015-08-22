@@ -81,7 +81,7 @@ LocalStorage = (function() {
       isRun = false;
     }
     lstorage = localStorage;
-    h = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX);
+    h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
     key = isRun ? this.Key.RUN_PAGEVALUES : this.Key.WORKTABLE_PAGEVALUES;
     lstorage.setItem(key, JSON.stringify(h));
     key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;
@@ -99,7 +99,7 @@ LocalStorage = (function() {
     results = [];
     for (k in h) {
       v = h[k];
-      results.push(PageValue.setPageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+      results.push(PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
     }
     return results;
   };

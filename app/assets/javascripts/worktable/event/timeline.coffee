@@ -26,6 +26,7 @@ class Timeline
     _setupTimelineEvent = ->
       ePageValues = PageValue.getEventPageValueSortedListByNum()
       timelineEvents = $('#timeline_events').children('.timeline_event')
+      emt = null
       # 色と数値を更新
       for pageValue, idx in ePageValues
         teNum = idx + 1
@@ -49,19 +50,6 @@ class Timeline
 
       # 再取得
       timelineEvents = $('#timeline_events').children('.timeline_event')
-#
-#      timelineEvents = $('#timeline_events').children('.timeline_event')
-#      tEmt = $('.te_num', timelineEvents)
-#      tEmt.each((e) ->
-#        teNum = parseInt($(@).val())
-#        actionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(teNum) + PageValue.Key.PAGE_VALUES_SEPERATOR + EventPageValueBase.PageValueKey.ACTIONTYPE)
-#        Timeline.changeTimelineColor(teNum, actionType)
-#        if e == tEmt.length - 1 && actionType != null
-#          # blankのイベントが無い場合、作成
-#          self.createTimelineEvent(tEmt.length + 1)
-#          timelineEvents = $('#timeline_events').children('.timeline_event')
-#      )
-
 
       # イベントのクリック
       timelineEvents.off('click')
@@ -168,7 +156,7 @@ class Timeline
     teItemSelects = $('#event-config .te_item_select')
     teItemSelect = teItemSelects[0]
     selectOptions = ''
-    items = $("##{PageValue.Key.PV_ROOT} .item")
+    items = $("##{PageValue.Key.IS_ROOT} .item")
     items.children().each( ->
       id = $(@).find('input.id').val()
       name = $(@).find('input.name').val()

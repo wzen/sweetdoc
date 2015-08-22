@@ -11,7 +11,7 @@ PageValue = (function() {
     PageValue.Key = (function() {
       function Key() {}
 
-      Key.PV_ROOT = constant.PageValueKey.PV_ROOT;
+      Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
       Key.E_ROOT = constant.PageValueKey.E_ROOT;
 
@@ -43,6 +43,8 @@ PageValue = (function() {
 
       Key.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
 
+      Key.UPDATED = 'updated';
+
       return Key;
 
     })();
@@ -55,9 +57,9 @@ PageValue = (function() {
       te_actions.forEach((function(_this) {
         return function(a) {
           if ((a.is_default != null) && a.is_default) {
-            _this.setPageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
-            _this.setPageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
-            _this.setPageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
             return isSet = true;
           }
         };
@@ -68,32 +70,49 @@ PageValue = (function() {
     }
   };
 
-  PageValue.getPageValue = function(key, withRemove) {
+  PageValue.getInstancePageValue = function(key, updateOnly, withRemove) {
+    if (updateOnly == null) {
+      updateOnly = false;
+    }
     if (withRemove == null) {
       withRemove = false;
     }
-    return _getPageValue.call(this, key, withRemove, this.Key.PV_ROOT);
+    return _getPageValue.call(this, key, withRemove, this.Key.IS_ROOT, updateOnly);
   };
 
-  PageValue.getEventPageValue = function(key) {
-    return _getPageValue.call(this, key, false, this.Key.E_ROOT);
+  PageValue.getEventPageValue = function(key, updateOnly) {
+    if (updateOnly == null) {
+      updateOnly = false;
+    }
+    return _getPageValue.call(this, key, false, this.Key.E_ROOT, updateOnly);
   };
 
-  PageValue.getSettingPageValue = function(key) {
-    return _getPageValue.call(this, key, false, Setting.PageValueKey.ROOT);
+  PageValue.getSettingPageValue = function(key, updateOnly) {
+    if (updateOnly == null) {
+      updateOnly = false;
+    }
+    return _getPageValue.call(this, key, false, Setting.PageValueKey.ROOT, updateOnly);
   };
 
-  _getPageValue = function(key, withRemove, rootId) {
-    var f, keys, root, takeValue, value;
+  _getPageValue = function(key, withRemove, rootId, updateOnly) {
+    var f, hasUpdate, keys, root, takeValue, value;
     f = this;
-    takeValue = function(element) {
+    takeValue = function(element, hasUpdate) {
       var c, ret;
       ret = null;
       c = $(element).children();
       if ((c != null) && c.length > 0) {
         $(c).each(function(e) {
-          var k, v;
-          k = this.classList[0];
+          var cList, hu, k, v;
+          cList = this.classList;
+          hu = hasUpdate;
+          if ($(this).hasClass(PageValue.Key.UPDATED)) {
+            hu = true;
+            cList = cList.filter(function(f) {
+              return f !== PageValue.Key.UPDATED;
+            });
+          }
+          k = cList[0];
           if (ret == null) {
             if (jQuery.isNumeric(k)) {
               ret = [];
@@ -103,43 +122,59 @@ PageValue = (function() {
           }
           v = null;
           if (this.tagName === "INPUT") {
-            v = Common.sanitaizeDecode($(this).val());
-            if (jQuery.isNumeric(v)) {
-              v = Number(v);
-            } else if (v === "true" || v === "false") {
-              v = v === "true" ? true : false;
+            if ((updateOnly && !hasUpdate) === false) {
+              v = Common.sanitaizeDecode($(this).val());
+              if (jQuery.isNumeric(v)) {
+                v = Number(v);
+              } else if (v === "true" || v === "false") {
+                v = v === "true" ? true : false;
+              }
             }
           } else {
-            v = takeValue.call(f, this);
+            v = takeValue.call(f, this, hu);
           }
-          if (jQuery.type(ret) === "array" && jQuery.isNumeric(k)) {
-            k = Number(k);
+          if (v !== null) {
+            if (jQuery.type(ret) === "array" && jQuery.isNumeric(k)) {
+              k = Number(k);
+            }
+            ret[k] = v;
           }
-          ret[k] = v;
           return true;
         });
-        return ret;
+        if ((jQuery.type(ret) === "object" && !$.isEmptyObject(ret)) || (jQuery.type(ret) === "array" && ret.length > 0)) {
+          return ret;
+        } else {
+          return null;
+        }
       } else {
         return null;
       }
     };
     value = null;
+    hasUpdate = false;
     root = $("#" + rootId);
     keys = key.split(this.Key.PAGE_VALUES_SEPERATOR);
     keys.forEach(function(k, index) {
       root = $("." + k, root);
+      if ($(root).hasClass(PageValue.Key.UPDATED)) {
+        hasUpdate = true;
+      }
       if ((root == null) || root.length === 0) {
         value = null;
         return;
       }
       if (keys.length - 1 === index) {
         if (root[0].tagName === "INPUT") {
-          value = Common.sanitaizeDecode(root.val());
-          if (jQuery.isNumeric(value)) {
-            value = Number(value);
+          if ((updateOnly && !hasUpdate) === false) {
+            value = Common.sanitaizeDecode(root.val());
+            if (jQuery.isNumeric(value)) {
+              value = Number(value);
+            }
+          } else {
+            return null;
           }
         } else {
-          value = takeValue.call(f, root);
+          value = takeValue.call(f, root, hasUpdate);
         }
         if (withRemove) {
           return root.remove();
@@ -149,25 +184,31 @@ PageValue = (function() {
     return value;
   };
 
-  PageValue.setPageValue = function(key, value, isCache) {
+  PageValue.setInstancePageValue = function(key, value, isCache, giveUpdate) {
     if (isCache == null) {
       isCache = false;
     }
-    return _setPageValue.call(this, key, value, isCache, this.Key.PV_ROOT, false);
-  };
-
-  PageValue.setEventPageValue = function(key, value) {
-    return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true);
-  };
-
-  PageValue.setSettingPageValue = function(key, value, giveName) {
-    if (giveName == null) {
-      giveName = false;
+    if (giveUpdate == null) {
+      giveUpdate = false;
     }
-    return _setPageValue.call(this, key, value, false, Setting.PageValueKey.ROOT, giveName);
+    return _setPageValue.call(this, key, value, isCache, this.Key.IS_ROOT, false, giveUpdate);
   };
 
-  _setPageValue = function(key, value, isCache, rootId, giveName) {
+  PageValue.setEventPageValue = function(key, value, giveUpdate) {
+    if (giveUpdate == null) {
+      giveUpdate = false;
+    }
+    return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true, giveUpdate);
+  };
+
+  PageValue.setSettingPageValue = function(key, value, giveUpdate) {
+    if (giveUpdate == null) {
+      giveUpdate = false;
+    }
+    return _setPageValue.call(this, key, value, false, Setting.PageValueKey.ROOT, true, giveUpdate);
+  };
+
+  _setPageValue = function(key, value, isCache, rootId, giveName, giveUpdate) {
     var cacheClassName, f, keys, makeElementStr, parentClassName, root;
     f = this;
     makeElementStr = function(ky, val, kyName) {
@@ -225,6 +266,9 @@ PageValue = (function() {
         if ((root != null) && root.length > 0) {
           root.remove();
         }
+        if (giveUpdate) {
+          parent.addClass(PageValue.Key.UPDATED);
+        }
         root = jQuery(makeElementStr.call(f, k, value, parentClassName)).appendTo(parent);
         if (isCache) {
           return root.addClass(cacheClassName);
@@ -252,11 +296,11 @@ PageValue = (function() {
   };
 
   PageValue.removePageValue = function(key) {
-    return this.getPageValue(key, true);
+    return this.getInstancePageValue(key, true);
   };
 
   PageValue.removeAllItemAndEventPageValue = function() {
-    $("#" + this.Key.PV_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
+    $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
     return $("#" + this.Key.E_ROOT).children().remove();
   };
 

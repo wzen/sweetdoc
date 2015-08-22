@@ -23,7 +23,7 @@ initView = ->
   scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
-  is_reload = PageValue.getPageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
+  is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
   if is_reload?
     LocalStorage.loadValueForRun()
   else

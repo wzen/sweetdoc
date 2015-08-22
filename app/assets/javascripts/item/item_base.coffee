@@ -129,7 +129,7 @@ class ItemBase extends ItemEventBase
   reDrawByObjPageValue: (isCache = false) ->
     prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
     prefix_key = prefix_key.replace('@id', @id)
-    obj = PageValue.getPageValue(prefix_key)
+    obj = PageValue.getInstancePageValue(prefix_key)
     if obj?
       @reDrawByMinimumObject(obj)
       return true
@@ -141,7 +141,7 @@ class ItemBase extends ItemEventBase
   getItemPropFromPageValue : (prop, isCache = false) ->
     prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
     prefix_key = prefix_key.replace('@id', @id)
-    return PageValue.getPageValue(prefix_key + ":#{prop}")
+    return PageValue.getInstancePageValue(prefix_key + ":#{prop}")
 
   # アイテムの情報をページ値に設定
   # @property [String] prop 変数名
@@ -150,7 +150,7 @@ class ItemBase extends ItemEventBase
   setItemPropToPageValue : (prop, value, isCache = false) ->
     prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
     prefix_key = prefix_key.replace('@id', @id)
-    PageValue.setPageValue(prefix_key + ":#{prop}", value)
+    PageValue.setInstancePageValue(prefix_key + ":#{prop}", value)
     LocalStorage.savePageValue()
 
   # 履歴データを取得
@@ -201,15 +201,15 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->
-    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
-    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultAnimationType = ->
-    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
 
   @defaultEventConfigValue = ->
     return null
@@ -254,6 +254,7 @@ class CssItemBase extends ItemBase
 
   #CSSを設定
   makeCss: ->
+    newEmt = null
     if @css?
       newEmt = $(@css)
     else

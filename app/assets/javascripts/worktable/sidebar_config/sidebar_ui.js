@@ -35,7 +35,7 @@ Sidebar = (function() {
       main = $('#main');
       return $('#sidebar').fadeOut('500', function() {
         var s;
-        s = PageValue.getPageValue(PageValue.Key.CONFIG_OPENED_SCROLL);
+        s = PageValue.getInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL);
         if (s != null) {
           scrollContents.css({
             scrollTop: s.top,

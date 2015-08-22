@@ -30,6 +30,7 @@ Timeline = (function() {
       var actionType, ePageValues, emt, i, idx, j, l, len, menu, pageValue, ref, ref1, teNum, timelineEvents;
       ePageValues = PageValue.getEventPageValueSortedListByNum();
       timelineEvents = $('#timeline_events').children('.timeline_event');
+      emt = null;
       for (idx = j = 0, len = ePageValues.length; j < len; idx = ++j) {
         pageValue = ePageValues[idx];
         teNum = idx + 1;
@@ -150,7 +151,7 @@ Timeline = (function() {
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
     selectOptions = '';
-    items = $("#" + PageValue.Key.PV_ROOT + " .item");
+    items = $("#" + PageValue.Key.IS_ROOT + " .item");
     items.children().each(function() {
       var id, itemId, name;
       id = $(this).find('input.id').val();

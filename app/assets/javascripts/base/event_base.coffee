@@ -232,7 +232,7 @@ class EventBase extends Extend
     prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
     prefix_key = prefix_key.replace('@id', @id)
     obj = @getMinimumObject()
-    PageValue.setPageValue(prefix_key, obj)
+    PageValue.setInstancePageValue(prefix_key, obj)
     LocalStorage.savePageValue()
 
 class CommonEventBase extends EventBase

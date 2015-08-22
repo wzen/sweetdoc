@@ -114,8 +114,8 @@ class Const
   end
 
   class PageValueKey
-    # @property [String] PV_ROOT ページ値ルート
-    PV_ROOT = 'page_values'
+    # @property [String] IS_ROOT ページ値ルート
+    IS_ROOT = 'instance_page_values'
     # @property [String] ST_ROOT 共通設定値ルート
     ST_ROOT = 'setting_page_values'
     # @property [String] ST_PREFIX 共通設定プレフィックス
@@ -141,5 +141,14 @@ class Const
     GRID_CLASS_NAME = 'grid'
     GRID_STEP_CLASS_NAME = 'grid_step'
     GRID_STEP_DIV_CLASS_NAME = 'grid_div_step'
+  end
+
+  class ServerStorage
+    class Key
+      USER_ID = 'user_id'
+      INSTANCE_PAGE_VALUE = 'i'
+      EVENT_PAGE_VALUE = 'e'
+      SETTING_PAGE_VALUE = 's'
+    end
   end
 end

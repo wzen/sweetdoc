@@ -117,7 +117,7 @@ ItemBase = (function(superClass) {
     }
     prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    obj = PageValue.getPageValue(prefix_key);
+    obj = PageValue.getInstancePageValue(prefix_key);
     if (obj != null) {
       this.reDrawByMinimumObject(obj);
       return true;
@@ -132,7 +132,7 @@ ItemBase = (function(superClass) {
     }
     prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    return PageValue.getPageValue(prefix_key + (":" + prop));
+    return PageValue.getInstancePageValue(prefix_key + (":" + prop));
   };
 
   ItemBase.prototype.setItemPropToPageValue = function(prop, value, isCache) {
@@ -142,7 +142,7 @@ ItemBase = (function(superClass) {
     }
     prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
-    PageValue.setPageValue(prefix_key + (":" + prop), value);
+    PageValue.setInstancePageValue(prefix_key + (":" + prop), value);
     return LocalStorage.savePageValue();
   };
 
@@ -182,15 +182,15 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
-    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultActionType = function() {
-    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultAnimationType = function() {
-    return PageValue.getPageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
   };
 
   ItemBase.defaultEventConfigValue = function() {
@@ -243,6 +243,7 @@ CssItemBase = (function(superClass) {
 
   CssItemBase.prototype.makeCss = function() {
     var newEmt;
+    newEmt = null;
     if (this.css != null) {
       newEmt = $(this.css);
     } else {

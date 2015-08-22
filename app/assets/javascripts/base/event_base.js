@@ -264,7 +264,7 @@ EventBase = (function(superClass) {
     prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
     prefix_key = prefix_key.replace('@id', this.id);
     obj = this.getMinimumObject();
-    PageValue.setPageValue(prefix_key, obj);
+    PageValue.setInstancePageValue(prefix_key, obj);
     return LocalStorage.savePageValue();
   };
 

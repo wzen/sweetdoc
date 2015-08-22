@@ -2,7 +2,7 @@
 <% is_runwindow_reload = false if is_runwindow_reload.nil? %>
 
 <% # ページ値 %>
-<div id="<%= Const::PageValueKey::PV_ROOT %>">
+<div id="<%= Const::PageValueKey::IS_ROOT %>">
     <% # 初期値がある場合はここに書く %>
     <% if is_runwindow_reload %>
         <input type="hidden" class="<%= Const::PageValueKey::IS_RUNWINDOW_RELOAD %>" value="true" >

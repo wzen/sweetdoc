@@ -68,7 +68,7 @@ class WorktableCommon
 
   # イベントPageValueから全てのアイテムを描画
   @drawAllItemFromEventPageValue: ->
-    pageValues = PageValue.getPageValue(PageValue.Key.INSTANCE_PREFIX)
+    pageValues = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
     needItemIds = []
     for k, obj of pageValues
       if $.inArray(obj.value.itemId, needItemIds) < 0

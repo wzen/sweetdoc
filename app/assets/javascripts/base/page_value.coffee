@@ -5,8 +5,8 @@ class PageValue
     constant = gon.const
     # ページ内値保存キー
     class @Key
-      # @property [String] PV_ROOT ページ値ルート
-      @PV_ROOT = constant.PageValueKey.PV_ROOT
+      # @property [String] IS_ROOT ページ値ルート
+      @IS_ROOT = constant.PageValueKey.IS_ROOT
       # @property [String] E_ROOT イベント値ルート
       @E_ROOT = constant.PageValueKey.E_ROOT
       # @property [String] E_PREFIX イベントプレフィックス
@@ -37,7 +37,8 @@ class PageValue
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
       # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
       @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
-
+      # @property [String] UPDATED 更新フラグ
+      @UPDATED = 'updated'
 
   # サーバから読み込んだアイテム情報を追加
   @addItemInfo = (item_id, te_actions) ->
@@ -46,9 +47,9 @@ class PageValue
       te_actions.forEach( (a) =>
         if a.is_default? && a.is_default
           # デフォルトメソッド & デフォルトアクションタイプ
-          @setPageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
-          @setPageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
-          @setPageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
           isSet = true
       )
       if isSet
@@ -56,34 +57,47 @@ class PageValue
 
   # ページが持つ値を取得
   # @param [String] key キー値
+  # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   # @param [Boolean] withRemove 取得後に値を消去するか
-  @getPageValue = (key, withRemove = false) ->
-    _getPageValue.call(@, key, withRemove, @Key.PV_ROOT)
+  @getInstancePageValue = (key, updateOnly = false, withRemove = false) ->
+    _getPageValue.call(@, key, withRemove, @Key.IS_ROOT, updateOnly)
 
   # イベントの値を取得
   # @param [String] key キー値
-  @getEventPageValue = (key) ->
-    _getPageValue.call(@, key, false, @Key.E_ROOT)
+  # @param [Boolean] updateOnly updateクラス付与のみ取得するか
+  @getEventPageValue = (key, updateOnly = false) ->
+    _getPageValue.call(@, key, false, @Key.E_ROOT, updateOnly)
 
   # 共通設定値を取得
   # @param [String] key キー値
-  @getSettingPageValue = (key) ->
-    _getPageValue.call(@, key, false, Setting.PageValueKey.ROOT)
+  # @param [Boolean] updateOnly updateクラス付与のみ取得するか
+  @getSettingPageValue = (key, updateOnly = false) ->
+    _getPageValue.call(@, key, false, Setting.PageValueKey.ROOT, updateOnly)
 
   # ページが持つ値を取得
   # @param [String] key キー値
   # @param [Boolean] withRemove 取得後に値を消去するか
   # @param [String] rootId Root要素ID
+  # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   # @return [Object] ハッシュ配列または値で返す
-  _getPageValue = (key, withRemove, rootId) ->
+  _getPageValue = (key, withRemove, rootId, updateOnly) ->
     f = @
     # div以下の値をハッシュとしてまとめる
-    takeValue = (element) ->
+    takeValue = (element, hasUpdate) ->
       ret = null
       c = $(element).children()
       if c? && c.length > 0
         $(c).each((e) ->
-          k = @.classList[0]
+          cList = @.classList
+          hu = hasUpdate
+          if $(@).hasClass(PageValue.Key.UPDATED)
+            # updateフラグを持っている場合はフラグON & クラス一覧から除外
+            hu = true
+            cList = cList.filter((f) ->
+              return f != PageValue.Key.UPDATED
+            )
+          k = cList[0]
+
           if !ret?
             if jQuery.isNumeric(k)
               ret = []
@@ -92,39 +106,56 @@ class PageValue
 
           v = null
           if @.tagName == "INPUT"
-            # サニタイズをデコード
-            v = Common.sanitaizeDecode($(@).val())
-            if jQuery.isNumeric(v)
-              v = Number(v)
-            else if v == "true" || v == "false"
-              v = if v == "true" then true else false
+            # updateのみ取得 & updateフラグが無い場合はデータ取らない
+            if (updateOnly && !hasUpdate) == false
+              # サニタイズをデコード
+              v = Common.sanitaizeDecode($(@).val())
+              if jQuery.isNumeric(v)
+                v = Number(v)
+              else if v == "true" || v == "false"
+                v = if v == "true" then true else false
           else
-            v = takeValue.call(f, @)
+            v = takeValue.call(f, @, hu)
 
-          if jQuery.type(ret) == "array" && jQuery.isNumeric(k)
-            k = Number(k)
-          ret[k] = v
+          # nullの場合は返却データに含めない
+          if v != null
+            if jQuery.type(ret) == "array" && jQuery.isNumeric(k)
+              k = Number(k)
+            ret[k] = v
+
           return true
         )
-        return ret
+
+        # 空配列の場合はnullとする
+        if (jQuery.type(ret) == "object" && !$.isEmptyObject(ret)) || (jQuery.type(ret) == "array" && ret.length > 0)
+          return ret
+        else
+          return null
       else
         return null
 
     value = null
+    hasUpdate = false
     root = $("##{rootId}")
     keys = key.split(@Key.PAGE_VALUES_SEPERATOR)
     keys.forEach((k, index) ->
       root = $(".#{k}", root)
+      if $(root).hasClass(PageValue.Key.UPDATED)
+        hasUpdate = true
       if !root? || root.length == 0
         value = null
         return
       if keys.length - 1 == index
         if root[0].tagName == "INPUT"
-          value = Common.sanitaizeDecode(root.val())
-          if jQuery.isNumeric(value)
-            value = Number(value)
+          # updateのみ取得 & updateフラグが無い場合はデータ取らない
+          if (updateOnly && !hasUpdate) == false
+            value = Common.sanitaizeDecode(root.val())
+            if jQuery.isNumeric(value)
+              value = Number(value)
+          else
+            return null
         else
-          value = takeValue.call(f,root)
+          value = takeValue.call(f, root, hasUpdate)
         if withRemove
           root.remove()
     )
@@ -134,21 +165,24 @@ class PageValue
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
   # @param [Boolean] isCache このページでのみ保持させるか
-  @setPageValue = (key, value, isCache = false) ->
-    _setPageValue.call(@, key, value, isCache, @Key.PV_ROOT, false)
+  # @param [Boolean] giveUpdate update属性を付与するか
+  @setInstancePageValue = (key, value, isCache = false, giveUpdate = false) ->
+    _setPageValue.call(@, key, value, isCache, @Key.IS_ROOT, false, giveUpdate)
 
   # イベントの値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  @setEventPageValue = (key, value) ->
-    _setPageValue.call(@, key, value, false, @Key.E_ROOT, true)
+  # @param [Boolean] giveUpdate update属性を付与するか
+  @setEventPageValue = (key, value, giveUpdate = false) ->
+    _setPageValue.call(@, key, value, false, @Key.E_ROOT, true, giveUpdate)
 
   # 共通設定値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
   # @param [Boolean] giveName name属性を付与するか
-  @setSettingPageValue = (key, value, giveName = false) ->
-    _setPageValue.call(@, key, value, false, Setting.PageValueKey.ROOT, giveName)
+  # @param [Boolean] giveUpdate update属性を付与するか
+  @setSettingPageValue = (key, value, giveUpdate = false) ->
+    _setPageValue.call(@, key, value, false, Setting.PageValueKey.ROOT, true, giveUpdate)
 
   # ページが持つ値を設定
   # @param [String] key キー値
@@ -156,7 +190,8 @@ class PageValue
   # @param [Boolean] isCache このページでのみ保持させるか
   # @param [String] rootId Root要素ID
   # @param [Boolean] giveName name属性を付与するか
-  _setPageValue = (key, value, isCache, rootId, giveName) ->
+  # @param [Boolean] giveUpdate update属性を付与するか
+  _setPageValue = (key, value, isCache, rootId, giveName, giveUpdate) ->
     f = @
     # ハッシュを要素の文字列に変換
     makeElementStr = (ky, val, kyName) ->
@@ -210,6 +245,9 @@ class PageValue
           # 要素が存在する場合は消去して上書き
           root.remove()
         # 要素作成
+        if giveUpdate
+          # 親要素にupdateクラスを付与
+          parent.addClass(PageValue.Key.UPDATED)
         root = jQuery(makeElementStr.call(f, k, value, parentClassName)).appendTo(parent)
         if isCache
           root.addClass(cacheClassName)
@@ -236,10 +274,10 @@ class PageValue
   # @param [String] key キー値
   @removePageValue = (key) ->
     # 削除ありで取得
-    @getPageValue(key, true)
+    @getInstancePageValue(key, true)
 
   # アイテムとイベント情報を削除
   @removeAllItemAndEventPageValue = ->
     # page_value消去
-    $("##{@Key.PV_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
+    $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
     $("##{@Key.E_ROOT}").children().remove()

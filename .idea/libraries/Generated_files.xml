@@ -34,8 +34,8 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/event_config.js" />
         <item url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/header/header.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/header/header.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
@@ -49,6 +49,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -86,13 +87,37 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/timeline/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/load_js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/server_access.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/run.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/common_extend.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
+      <root url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/event_config.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
@@ -105,35 +130,11 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/slider.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/checkbox.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/common_extend.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/textbox.js" />
-      <root url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/event_config.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/header/header.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

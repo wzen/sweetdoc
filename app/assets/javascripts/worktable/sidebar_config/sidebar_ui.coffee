@@ -20,7 +20,7 @@ class Sidebar
     if !Sidebar.isClosedConfigSidebar()
       main = $('#main')
       $('#sidebar').fadeOut('500', ->
-        s = PageValue.getPageValue(PageValue.Key.CONFIG_OPENED_SCROLL)
+        s = PageValue.getInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL)
         if s?
           scrollContents.css({scrollTop: s.top, scrollLeft: s.left})
           PageValue.removePageValue(PageValue.Key.CONFIG_OPENED_SCROLL)
