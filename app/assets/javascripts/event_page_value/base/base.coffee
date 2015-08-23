@@ -9,33 +9,33 @@ class EventPageValueBase
       @te : (teNum) ->
         constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + PageValue.Key.E_NUM_PREFIX + teNum
       # @property [String] ID アイテムID
-      @ID = 'id'
+      @ID = constant.EventPageValueKey.ID
       # @property [String] ITEM_ID アイテムタイプID
-      @ITEM_ID = 'item_id'
+      @ITEM_ID = constant.EventPageValueKey.ITEM_ID
       # @property [String] COMMON_EVENT_ID 共通イベントID
-      @COMMON_EVENT_ID = 'common_event_id'
+      @COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID
       # @property [String] VALUE イベント値
-      @VALUE = 'value'
+      @VALUE = constant.EventPageValueKey.VALUE
       # @property [String] CHAPTER チャプター
-      @CHAPTER = 'chapter'
+      @CHAPTER = constant.EventPageValueKey.CHAPTER
       # @property [String] SCREEN スクリーン
-      @SCREEN = 'screen'
+      @SCREEN = constant.EventPageValueKey.SCREEN
       # @property [String] IS_COMMON_EVENT 共通イベント判定
-      @IS_COMMON_EVENT = 'is_common_event'
+      @IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT
       # @property [String] ORDER ソート番号
-      @ORDER = 'order'
+      @ORDER = constant.EventPageValueKey.ORDER
       # @property [String] METHODNAME イベント名
-      @METHODNAME = 'methodname'
+      @METHODNAME = constant.EventPageValueKey.METHODNAME
       # @property [String] ACTIONTYPE アクションタイプ名
-      @ACTIONTYPE = 'actiontype'
+      @ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE
       # @property [String] ANIAMTIONTYPE アニメーションタイプ名
-      @ANIAMTIONTYPE = 'animationtype'
+      @ANIAMTIONTYPE = constant.EventPageValueKey.ANIAMTIONTYPE
       # @property [String] IS_PARALLEL 同時実行
-      @IS_PARALLEL = 'is_parallel'
+      @IS_PARALLEL = constant.EventPageValueKey.IS_PARALLEL
       # @property [String] SCROLL_TIME スクロール実行開始位置
-      @SCROLL_POINT_START = 'scroll_point_start'
+      @SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START
       # @property [String] SCROLL_TIME スクロール実行終了位置
-      @SCROLL_POINT_END = 'scroll_point_end'
+      @SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END
 
   @initConfigValue = (eventConfig) ->
     if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL

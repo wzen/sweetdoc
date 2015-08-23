@@ -458,7 +458,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == n
     if (option == null) {
       option = {};
     }
-    return window.loadedItemTypeList.push(Constant.ItemId.ARROW);
+    return console.log('arrow loaded');
   };
 }
 

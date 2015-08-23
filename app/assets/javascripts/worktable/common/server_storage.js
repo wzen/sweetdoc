@@ -27,22 +27,24 @@ ServerStorage = (function() {
   ServerStorage.save = function() {
     var data;
     data = {};
-    data[this.constructor.Key.USER_ID] = 0;
-    data[this.constructor.Key.INSTANCE_PAGE_VALUE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
-    data[this.constructor.Key.EVENT_PAGE_VALUE] = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
-    data[this.constructor.Key.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX);
-    return $.ajax({
-      url: "/page_value_state/save_state",
-      type: "POST",
-      data: data,
-      dataType: "json",
-      success: function(data) {
-        return console.log(data.message);
-      },
-      error: function(data) {
-        return console.log(data.message);
-      }
-    });
+    data[this.Key.USER_ID] = 0;
+    data[this.Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX));
+    data[this.Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.E_PREFIX));
+    data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX));
+    if ((data[this.Key.INSTANCE_PAGE_VALUE] != null) || (data[this.Key.EVENT_PAGE_VALUE] != null) || (data[this.Key.SETTING_PAGE_VALUE] != null)) {
+      return $.ajax({
+        url: "/page_value_state/save_state",
+        type: "POST",
+        data: data,
+        dataType: "json",
+        success: function(data) {
+          return console.log(data.message);
+        },
+        error: function(data) {
+          return console.log(data.message);
+        }
+      });
+    }
   };
 
   ServerStorage.load = function() {
@@ -51,7 +53,7 @@ ServerStorage = (function() {
       type: "POST",
       data: {
         user_id: 0,
-        loaded_itemids: JSON.stringify(loadedItemTypeList)
+        loaded_itemids: JSON.stringify(PageValue.getLoadedItemIds())
       },
       dataType: "json",
       success: function(data) {

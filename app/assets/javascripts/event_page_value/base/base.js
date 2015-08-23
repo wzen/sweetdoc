@@ -15,33 +15,33 @@ EventPageValueBase = (function() {
         return constant.PageValueKey.E_PREFIX + constant.PageValueKey.PAGE_VALUES_SEPERATOR + PageValue.Key.E_NUM_PREFIX + teNum;
       };
 
-      PageValueKey.ID = 'id';
+      PageValueKey.ID = constant.EventPageValueKey.ID;
 
-      PageValueKey.ITEM_ID = 'item_id';
+      PageValueKey.ITEM_ID = constant.EventPageValueKey.ITEM_ID;
 
-      PageValueKey.COMMON_EVENT_ID = 'common_event_id';
+      PageValueKey.COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID;
 
-      PageValueKey.VALUE = 'value';
+      PageValueKey.VALUE = constant.EventPageValueKey.VALUE;
 
-      PageValueKey.CHAPTER = 'chapter';
+      PageValueKey.CHAPTER = constant.EventPageValueKey.CHAPTER;
 
-      PageValueKey.SCREEN = 'screen';
+      PageValueKey.SCREEN = constant.EventPageValueKey.SCREEN;
 
-      PageValueKey.IS_COMMON_EVENT = 'is_common_event';
+      PageValueKey.IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT;
 
-      PageValueKey.ORDER = 'order';
+      PageValueKey.ORDER = constant.EventPageValueKey.ORDER;
 
-      PageValueKey.METHODNAME = 'methodname';
+      PageValueKey.METHODNAME = constant.EventPageValueKey.METHODNAME;
 
-      PageValueKey.ACTIONTYPE = 'actiontype';
+      PageValueKey.ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE;
 
-      PageValueKey.ANIAMTIONTYPE = 'animationtype';
+      PageValueKey.ANIAMTIONTYPE = constant.EventPageValueKey.ANIAMTIONTYPE;
 
-      PageValueKey.IS_PARALLEL = 'is_parallel';
+      PageValueKey.IS_PARALLEL = constant.EventPageValueKey.IS_PARALLEL;
 
-      PageValueKey.SCROLL_POINT_START = 'scroll_point_start';
+      PageValueKey.SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START;
 
-      PageValueKey.SCROLL_POINT_END = 'scroll_point_end';
+      PageValueKey.SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END;
 
       return PageValueKey;
 

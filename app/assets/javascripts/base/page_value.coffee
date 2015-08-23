@@ -276,6 +276,14 @@ class PageValue
 
     return eventObjList
 
+  # 読み込み済みItemId取得
+  @getLoadedItemIds = ->
+    ret = []
+    itemInfoPageValues = PageValue.getEventPageValue(@Key.ITEM_INFO_PREFIX)
+    for k, v of itemInfoPageValues
+      ret.push(parseInt(k))
+    return ret
+
   # ページが持つ値を削除
   # @param [String] key キー値
   @removePageValue = (key) ->

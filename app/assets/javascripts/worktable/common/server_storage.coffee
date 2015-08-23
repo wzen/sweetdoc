@@ -13,26 +13,27 @@ class ServerStorage
   # サーバにアイテムの情報を保存
   @save = ->
     data = {}
-    data[@constructor.Key.USER_ID] = 0
+    data[@Key.USER_ID] = 0
     # FIXME: 差分保存 & バッチでフル保存するようにする
-    data[@constructor.Key.INSTANCE_PAGE_VALUE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
-    data[@constructor.Key.EVENT_PAGE_VALUE] = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
-    data[@constructor.Key.SETTING_PAGE_VALUE] = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX)
+    data[@Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX))
+    data[@Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.E_PREFIX))
+    data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX))
 
-    $.ajax(
-      {
-        url: "/page_value_state/save_state"
-        type: "POST"
-        data: data
-        dataType: "json"
-        success: (data)->
-          # updateフラグ除去
-          #PageValue.clearAllUpdateFlg()
-          console.log(data.message)
-        error: (data) ->
-          console.log(data.message)
-      }
-    )
+    if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
+      $.ajax(
+        {
+          url: "/page_value_state/save_state"
+          type: "POST"
+          data: data
+          dataType: "json"
+          success: (data)->
+            # updateフラグ除去
+            #PageValue.clearAllUpdateFlg()
+            console.log(data.message)
+          error: (data) ->
+            console.log(data.message)
+        }
+      )
 
   # サーバからアイテムの情報を取得して描画
   @load = ->
@@ -42,7 +43,7 @@ class ServerStorage
         type: "POST"
         data: {
           user_id: 0
-          loaded_itemids : JSON.stringify(loadedItemTypeList)
+          loaded_itemids : JSON.stringify(PageValue.getLoadedItemIds())
         }
         dataType: "json"
         success: (data)->

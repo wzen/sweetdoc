@@ -258,7 +258,6 @@ Common = (function() {
 })();
 
 (function() {
-  window.loadedItemTypeList = [];
   window.loadedClassList = {};
   return window.classMap = {};
 })();

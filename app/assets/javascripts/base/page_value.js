@@ -301,6 +301,17 @@ PageValue = (function() {
     return eventObjList;
   };
 
+  PageValue.getLoadedItemIds = function() {
+    var itemInfoPageValues, k, ret, v;
+    ret = [];
+    itemInfoPageValues = PageValue.getEventPageValue(this.Key.ITEM_INFO_PREFIX);
+    for (k in itemInfoPageValues) {
+      v = itemInfoPageValues[k];
+      ret.push(parseInt(k));
+    }
+    return ret;
+  };
+
   PageValue.removePageValue = function(key) {
     return this.getInstancePageValue(key, true);
   };

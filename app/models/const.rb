@@ -151,4 +151,21 @@ class Const
       SETTING_PAGE_VALUE = 's'
     end
   end
+
+  class EventPageValueKey
+    ID = 'id'
+    ITEM_ID = 'item_id'
+    COMMON_EVENT_ID = 'common_event_id'
+    VALUE = 'value'
+    CHAPTER = 'chapter'
+    SCREEN = 'screen'
+    IS_COMMON_EVENT = 'is_common_event'
+    ORDER = 'order'
+    METHODNAME = 'methodname'
+    ACTIONTYPE = 'actiontype'
+    ANIAMTIONTYPE = 'animationtype'
+    IS_PARALLEL = 'is_parallel'
+    SCROLL_POINT_START = 'scroll_point_start'
+    SCROLL_POINT_END = 'scroll_point_end'
+  end
 end

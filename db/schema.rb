@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150822000147) do
+ActiveRecord::Schema.define(version: 20150823015639) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -39,14 +39,12 @@ ActiveRecord::Schema.define(version: 20150822000147) do
   end
 
   create_table "event_pagevalues", force: true do |t|
-    t.integer  "user_id",    null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "instance_pagevalues", force: true do |t|
-    t.integer  "user_id",    null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -123,7 +121,6 @@ ActiveRecord::Schema.define(version: 20150822000147) do
   end
 
   create_table "setting_pagevalues", force: true do |t|
-    t.integer  "user_id",    null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -132,6 +129,15 @@ ActiveRecord::Schema.define(version: 20150822000147) do
   create_table "user_auths", force: true do |t|
     t.string   "name",           null: false
     t.integer  "strength_order", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_pagevalues", force: true do |t|
+    t.integer  "user_id",               null: false
+    t.integer  "instance_pagevalue_id", null: false
+    t.integer  "event_pagevalue_id",    null: false
+    t.integer  "setting_pagevalue_id",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
