@@ -90,29 +90,4 @@ class ItemJs
     return ret
   end
 
-  # ユーザの保存データを読み込む
-  # @param [String] user_id ユーザID
-  # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
-  def self.get_user_iae_infos(user_id, loaded_itemids)
-    pagevalues = UserPagevalue.where({user_id: user_id, del_flg: false}).order('updated_at DESC').first
-                     .includes(:instance_pagevalues, :event_pagevalues, :setting_pagevalues)
-    if pagevalues == nil
-      message = I18n.t('message.database.item_state.load.error')
-      return nil
-    else
-      message = I18n.t('message.database.item_state.load.success')
-      item_states = JSON.parse(result.state)
-      itemids = []
-      pagevalues.event_pagevalues.each do |ep|
-        item_id = ep[Const::EventPageValueKey::ITEM_ID]
-        unless loaded_itemids.include?(item_id)
-          itemids << item_id
-        end
-      end
-
-      item_action_events_all = ItemJs.find_events_by_itemid(itemids)
-      return ItemJs.extract_iae(item_action_events_all), pagevalues.instance_pagevalues.data, pagevalues.event_pagevalues.data, pagevalues.setting_pagevalues.data, message
-    end
-  end
-
 end

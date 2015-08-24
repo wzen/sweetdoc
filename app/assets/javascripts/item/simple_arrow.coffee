@@ -115,17 +115,6 @@ class SimpleArrowItem extends ItemBase
     }
     return obj
 
-  # 最小限のデータからアイテムを描画
-  # @param [Array] obj アイテムオブジェクトの最小限データ
-  reDrawByMinimumObject: (obj) ->
-#    @id = elementId.slice(@constructor.IDENTITY.length + 1)
-    @itemSize = obj.a
-    @zindex = obj.b
-    @coodRegist = obj.c
-    @coodHeadPart = obj.d
-    @drawAndMakeConfigs()
-    @save(Constant.ItemActionType.MAKE)
-
   # 座標間の距離を計算する
   # @private
   coodLength = (locA, locB) ->

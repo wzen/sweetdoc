@@ -27,6 +27,8 @@ PageValue = (function() {
 
       Key.INSTANCE_PREFIX = 'instance';
 
+      Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
+
       Key.INSTANCE_VALUE = Key.INSTANCE_PREFIX + ':@id:value';
 
       Key.INSTANCE_VALUE_CACHE = Key.INSTANCE_PREFIX + ':cache:@id:value';
@@ -304,7 +306,7 @@ PageValue = (function() {
   PageValue.getLoadedItemIds = function() {
     var itemInfoPageValues, k, ret, v;
     ret = [];
-    itemInfoPageValues = PageValue.getEventPageValue(this.Key.ITEM_INFO_PREFIX);
+    itemInfoPageValues = PageValue.getInstancePageValue(this.Key.ITEM_INFO_PREFIX);
     for (k in itemInfoPageValues) {
       v = itemInfoPageValues[k];
       ret.push(parseInt(k));

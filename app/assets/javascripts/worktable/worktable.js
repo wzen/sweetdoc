@@ -163,18 +163,7 @@ clearWorkTable = function() {
 
 /* デバッグ */
 
-runDebug = function() {
-  var item, k, ref, v;
-  ref = Common.getCreatedItemObject();
-  for (k in ref) {
-    v = ref[k];
-    item = v;
-    return false;
-  }
-  if (item.reDrawByObjPageValue()) {
-    return setupEvents(item);
-  }
-};
+runDebug = function() {};
 
 $(function() {
   var borderWidth, menu, padding, timelineTopPadding;

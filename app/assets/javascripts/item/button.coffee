@@ -47,13 +47,6 @@ class ButtonItem extends CssItemBase
     @mousedownCood = Common.makeClone(obj.mousedownCood)
     @css = Common.makeClone(obj.css)
 
-  # 最小限のデータからアイテムを描画
-  # @param [Array] obj アイテムオブジェクトの最小限データ
-  reDrawByMinimumObject: (obj) ->
-    @setMiniumObject(obj)
-    @reDraw()
-    @saveObj(Constant.ItemActionType.MAKE)
-
   # イベント前の表示状態にする
   updateEventBefore: ->
     @getJQueryElement().css('opacity', 0)

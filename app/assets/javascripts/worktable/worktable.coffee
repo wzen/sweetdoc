@@ -127,11 +127,6 @@ clearWorkTable = ->
 
 ### デバッグ ###
 runDebug = ->
-  for k, v of Common.getCreatedItemObject()
-    item = v
-    return false
-  if item.reDrawByObjPageValue()
-    setupEvents(item)
 
 $ ->
   # ブラウザ対応チェック

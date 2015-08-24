@@ -19,8 +19,10 @@ class PageValue
       @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
-      # @property [String] INSTANCE_PREFIX アイテムプレフィックス
+      # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = 'instance'
+      # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
+      @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
       # @property [String] ITEM アイテムRoot
       @INSTANCE_VALUE = @INSTANCE_PREFIX + ':@id:value'
       # @property [String] ITEM アイテムキャッシュRoot
@@ -279,7 +281,7 @@ class PageValue
   # 読み込み済みItemId取得
   @getLoadedItemIds = ->
     ret = []
-    itemInfoPageValues = PageValue.getEventPageValue(@Key.ITEM_INFO_PREFIX)
+    itemInfoPageValues = PageValue.getInstancePageValue(@Key.ITEM_INFO_PREFIX)
     for k, v of itemInfoPageValues
       ret.push(parseInt(k))
     return ret

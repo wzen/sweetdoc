@@ -123,18 +123,6 @@ class ItemBase extends ItemEventBase
     # fixme: 実行場所について再考
     Timeline.updateSelectItemMenu()
 
-  # アイテムをページ値から再描画
-  # @property [Boolean] isCache キャッシュとして保存するか
-  # @return [Boolean] 処理結果
-  reDrawByObjPageValue: (isCache = false) ->
-    prefix_key = if isCache then PageValue.Key.INSTANCE_VALUE_CACHE else PageValue.Key.INSTANCE_VALUE
-    prefix_key = prefix_key.replace('@id', @id)
-    obj = PageValue.getInstancePageValue(prefix_key)
-    if obj?
-      @reDrawByMinimumObject(obj)
-      return true
-    return false
-
   # アイテムの情報をページ値から取得
   # @property [String] prop 変数名
   # @property [Boolean] isCache キャッシュとして保存するか
@@ -186,10 +174,6 @@ class ItemBase extends ItemEventBase
     @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
 
     window.instanceMap[@id] = @
-
-  # 最小限のデータからアイテムを描画
-  # @abstract
-  reDrawByMinimumObject: (obj) ->
 
   # 閲覧モード用の描画
   # @abstract

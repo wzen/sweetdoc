@@ -134,10 +134,11 @@ ActiveRecord::Schema.define(version: 20150823015639) do
   end
 
   create_table "user_pagevalues", force: true do |t|
-    t.integer  "user_id",               null: false
-    t.integer  "instance_pagevalue_id", null: false
-    t.integer  "event_pagevalue_id",    null: false
-    t.integer  "setting_pagevalue_id",  null: false
+    t.integer  "user_id",                               null: false
+    t.integer  "instance_pagevalue_id"
+    t.integer  "event_pagevalue_id"
+    t.integer  "setting_pagevalue_id"
+    t.boolean  "del_flg",               default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

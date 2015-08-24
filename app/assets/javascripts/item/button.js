@@ -60,12 +60,6 @@ ButtonItem = (function(superClass) {
     return this.css = Common.makeClone(obj.css);
   };
 
-  ButtonItem.prototype.reDrawByMinimumObject = function(obj) {
-    this.setMiniumObject(obj);
-    this.reDraw();
-    return this.saveObj(Constant.ItemActionType.MAKE);
-  };
-
   ButtonItem.prototype.updateEventBefore = function() {
     var methodName;
     this.getJQueryElement().css('opacity', 0);

@@ -110,21 +110,6 @@ ItemBase = (function(superClass) {
     return Timeline.updateSelectItemMenu();
   };
 
-  ItemBase.prototype.reDrawByObjPageValue = function(isCache) {
-    var obj, prefix_key;
-    if (isCache == null) {
-      isCache = false;
-    }
-    prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
-    prefix_key = prefix_key.replace('@id', this.id);
-    obj = PageValue.getInstancePageValue(prefix_key);
-    if (obj != null) {
-      this.reDrawByMinimumObject(obj);
-      return true;
-    }
-    return false;
-  };
-
   ItemBase.prototype.getItemPropFromPageValue = function(prop, isCache) {
     var prefix_key;
     if (isCache == null) {
@@ -174,8 +159,6 @@ ItemBase = (function(superClass) {
     this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
     return window.instanceMap[this.id] = this;
   };
-
-  ItemBase.prototype.reDrawByMinimumObject = function(obj) {};
 
   ItemBase.prototype.drawForLookaround = function(obj) {};
 

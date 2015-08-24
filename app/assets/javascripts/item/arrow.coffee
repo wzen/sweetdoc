@@ -113,13 +113,6 @@ class ArrowItem extends CanvasItemBase
     @padding_size = Common.makeClone(@header_width)
     @scale = Common.makeClone(obj.scale)
 
-  # 最小限のデータからアイテムを描画
-  # @param [Array] obj アイテムオブジェクトの最小限データ
-  reDrawByMinimumObject: (obj) ->
-    @setMiniumObject(obj)
-    @reDraw()
-    @saveObj(Constant.ItemActionType.MAKE)
-
   # イベント前の表示状態にする
   updateEventBefore: ->
     methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]

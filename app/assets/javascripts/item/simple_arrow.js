@@ -116,15 +116,6 @@ SimpleArrowItem = (function(superClass) {
     return obj;
   };
 
-  SimpleArrowItem.prototype.reDrawByMinimumObject = function(obj) {
-    this.itemSize = obj.a;
-    this.zindex = obj.b;
-    this.coodRegist = obj.c;
-    this.coodHeadPart = obj.d;
-    this.drawAndMakeConfigs();
-    return this.save(Constant.ItemActionType.MAKE);
-  };
-
   coodLength = function(locA, locB) {
     return parseInt(Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2)));
   };

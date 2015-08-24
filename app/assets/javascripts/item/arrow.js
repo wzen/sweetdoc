@@ -108,12 +108,6 @@ ArrowItem = (function(superClass) {
     return this.scale = Common.makeClone(obj.scale);
   };
 
-  ArrowItem.prototype.reDrawByMinimumObject = function(obj) {
-    this.setMiniumObject(obj);
-    this.reDraw();
-    return this.saveObj(Constant.ItemActionType.MAKE);
-  };
-
   ArrowItem.prototype.updateEventBefore = function() {
     var methodName;
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];

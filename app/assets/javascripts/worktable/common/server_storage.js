@@ -72,35 +72,41 @@ ServerStorage = (function() {
       },
       dataType: "json",
       success: function(data) {
-        var callback, loadedCount, self;
+        var callback, item_js_list, loadedCount, self;
         self = this;
+        item_js_list = data.item_js_list;
         callback = function() {
-          var i, item, itemList, j, len, obj, results;
+          var d, k, v;
           clearWorkTable();
-          itemList = JSON.parse(data.item_list);
-          results = [];
-          for (i = 0, len = itemList.length; i < len; i++) {
-            j = itemList[i];
-            obj = j.obj;
-            item = new (Common.getClassFromMap(false, obj.itemId))();
-            window.instanceMap[item.id] = item;
-            item.reDrawByMinimumObject(obj);
-            results.push(setupEvents(item));
+          if (data.instance_pagevalue_data != null) {
+            d = JSON.parse(data.instance_pagevalue_data);
+            PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
           }
-          return results;
+          if (data.event_pagevalue_data != null) {
+            d = JSON.parse(data.event_pagevalue_data);
+            for (k in d) {
+              v = d[k];
+              PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+            }
+          }
+          if (data.setting_pagevalue_data != null) {
+            d = JSON.parse(data.setting_pagevalue_data);
+            PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d);
+          }
+          return WorktableCommon.drawAllItemFromEventPageValue();
         };
-        if (data.length === 0) {
+        if (item_js_list.length === 0) {
           callback.call(self);
           return;
         }
         loadedCount = 0;
-        return data.forEach(function(d) {
+        return item_js_list.forEach(function(d) {
           var itemInitFuncName, option;
           itemInitFuncName = getInitFuncName(d.item_id);
           if (window.itemInitFuncList[itemInitFuncName] != null) {
             window.itemInitFuncList[itemInitFuncName]();
             loadedCount += 1;
-            if (loadedCount >= data.length) {
+            if (loadedCount >= item_js_list.length) {
               callback.call(self);
             }
             return;
@@ -113,11 +119,12 @@ ServerStorage = (function() {
           }
           WorktableCommon.availJs(itemInitFuncName, d.js_src, option, function() {
             loadedCount += 1;
-            if (loadedCount >= data.length) {
+            if (loadedCount >= item_js_list.length) {
               return callback.call(self);
             }
           });
-          return EventConfig.addEventConfigContents(d.te_actions, d.te_values);
+          PageValue.addItemInfo(d.item_id, d.te_actions);
+          return EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values);
         });
       },
       error: function(data) {
@@ -166,7 +173,7 @@ ServerStorage = (function() {
           $(list).appendTo(loadEmt);
           loadEmt.find('li').click(function(e) {
             var user_pagevalue_id;
-            user_pagevalue_id = $(e).find('.user_pagevalue_id:first').val();
+            user_pagevalue_id = $(this).find('.user_pagevalue_id:first').val();
             return ServerStorage.load(user_pagevalue_id);
           });
           loadEmt.find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();

@@ -59,29 +59,37 @@ class ServerStorage
         dataType: "json"
         success: (data)->
           self = @
+          item_js_list = data.item_js_list
           # 全て読み込んだ後のコールバック
           callback = ->
             clearWorkTable()
-            itemList = JSON.parse(data.item_list)
-            for j in itemList
-              obj = j.obj
-              item = new (Common.getClassFromMap(false, obj.itemId))()
-              window.instanceMap[item.id] = item
-              item.reDrawByMinimumObject(obj)
-              setupEvents(item)
 
-          if data.length == 0
+            # Pagevalue設置
+            if data.instance_pagevalue_data?
+              d = JSON.parse(data.instance_pagevalue_data)
+              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
+            if data.event_pagevalue_data?
+              d = JSON.parse(data.event_pagevalue_data)
+              for k, v of d
+                PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+            if data.setting_pagevalue_data?
+              d = JSON.parse(data.setting_pagevalue_data)
+              PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d)
+
+            WorktableCommon.drawAllItemFromEventPageValue()
+
+          if item_js_list.length == 0
             callback.call(self)
             return
 
           loadedCount = 0
-          data.forEach((d) ->
+          item_js_list.forEach((d) ->
             itemInitFuncName = getInitFuncName(d.item_id)
             if window.itemInitFuncList[itemInitFuncName]?
               # 既に読み込まれている場合はコールバックのみ実行
               window.itemInitFuncList[itemInitFuncName]()
               loadedCount += 1
-              if loadedCount >= data.length
+              if loadedCount >= item_js_list.length
                 # 全て読み込んだ後
                 callback.call(self)
               return
@@ -91,11 +99,12 @@ class ServerStorage
 
             WorktableCommon.availJs(itemInitFuncName, d.js_src, option, ->
               loadedCount += 1
-              if loadedCount >= data.length
+              if loadedCount >= item_js_list.length
                 # 全て読み込んだ後
                 callback.call(self)
             )
-            EventConfig.addEventConfigContents(d.te_actions, d.te_values)
+            PageValue.addItemInfo(d.item_id, d.te_actions)
+            EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values)
           )
 
         error: (data) ->
@@ -140,7 +149,7 @@ class ServerStorage
             $(list).appendTo(loadEmt)
             # クリックイベント設定
             loadEmt.find('li').click((e) ->
-              user_pagevalue_id = $(e).find('.user_pagevalue_id:first').val()
+              user_pagevalue_id = $(@).find('.user_pagevalue_id:first').val()
               ServerStorage.load(user_pagevalue_id)
             )
 

@@ -118,6 +118,8 @@ class Const
   class PageValueKey
     # @property [String] IS_ROOT ページ値ルート
     IS_ROOT = 'instance_page_values'
+    # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
+    INSTANCE_VALUE_ROOT = 'value'
     # @property [String] ST_ROOT 共通設定値ルート
     ST_ROOT = 'setting_page_values'
     # @property [String] ST_PREFIX 共通設定プレフィックス
