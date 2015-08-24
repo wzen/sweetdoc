@@ -37,4 +37,8 @@ class PageValueState
       return t('message.database.item_state.save.error')
     end
   end
+
+  def self.get_user_pagevalue_save_list(user_id)
+    return UserPagevalue.where(user_id: user_id).order('updated_at desc').limit(Const::UserPageValue::GET_LIMIT)
+  end
 end

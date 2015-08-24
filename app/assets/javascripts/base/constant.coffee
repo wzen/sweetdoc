@@ -75,6 +75,8 @@ if gon?
     class @ElementAttribute
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
+      # @property [String] NAVBAR_ROOT ナビヘッダーRoot
+      @NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT
 
     # 共通イベントタイプ
     class @CommonActionEventChangeType

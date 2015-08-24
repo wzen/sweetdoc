@@ -50,7 +50,7 @@ LocalStorage = (function() {
   };
 
   LocalStorage.isOverWorktableSaveTimeLimit = function(isRun) {
-    var d, duration, key, lstorage, m, saveTime, time;
+    var diffTime, key, lstorage, saveTime, time;
     if (isRun == null) {
       isRun = false;
     }
@@ -60,11 +60,9 @@ LocalStorage = (function() {
     if (saveTime == null) {
       return true;
     }
-    duration = $.now() - saveTime;
-    d = new Date(duration);
-    m = d.getMinutes();
+    diffTime = Common.diffTime($.now(), saveTime);
     time = isRun ? this.RUN_SAVETIME : this.WORKTABLE_SAVETIME;
-    return parseInt(m) > time;
+    return parseInt(diffTime.minutes) > time;
   };
 
   LocalStorage.clearWorktable = function() {

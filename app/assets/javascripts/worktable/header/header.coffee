@@ -6,12 +6,15 @@ initHeaderMenu = ->
       if window.confirm('テーブルに存在するアイテムは全て削除されます。')
         WorktableCommon.removeAllItemAndEvent()
   )
-  $('.menu-load', itemsMenuEmt).on('click', ->
-    ServerStorage.load()
+  $('.menu-load', itemsMenuEmt).off('mouseenter')
+  $('.menu-load', itemsMenuEmt).on('mouseenter', ->
+    ServerStorage.get_load_list()
   )
+  $('.menu-save', itemsMenuEmt).off('click')
   $('.menu-save', itemsMenuEmt).on('click', ->
     ServerStorage.save()
   )
+  $('.menu-setting', itemsMenuEmt).off('click')
   $('.menu-setting', itemsMenuEmt).on('click', ->
     Sidebar.switchSidebarConfig('setting')
     Setting.initConfig()

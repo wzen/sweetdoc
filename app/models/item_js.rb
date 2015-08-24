@@ -94,7 +94,7 @@ class ItemJs
   # @param [String] user_id ユーザID
   # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
   def self.get_user_iae_infos(user_id, loaded_itemids)
-    pagevalues = UserPagevalue.find(:last, conditions: {user_id: user_id, del_flg: false})
+    pagevalues = UserPagevalue.where({user_id: user_id, del_flg: false}).order('updated_at DESC').first
                      .includes(:instance_pagevalues, :event_pagevalues, :setting_pagevalues)
     if pagevalues == nil
       message = I18n.t('message.database.item_state.load.error')

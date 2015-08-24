@@ -43,11 +43,9 @@ class LocalStorage
     saveTime = lstorage.getItem(key)
     if !saveTime?
       return true
-    duration = $.now() - saveTime
-    d = new Date(duration)
-    m = d.getMinutes()
+    diffTime = Common.diffTime($.now(), saveTime)
     time = if isRun then @RUN_SAVETIME else @WORKTABLE_SAVETIME
-    return parseInt(m) > time
+    return parseInt(diffTime.minutes) > time
 
   # 保存を消去
   @clearWorktable: ->

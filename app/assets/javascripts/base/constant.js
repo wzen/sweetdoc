@@ -115,6 +115,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ElementAttribute.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
 
+      ElementAttribute.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
+
       return ElementAttribute;
 
     })();

@@ -253,6 +253,84 @@ Common = (function() {
     return null;
   };
 
+  Common.formatDate = function(date, format) {
+    var i, j, length, milliSeconds, ref;
+    if (format == null) {
+      format = 'YYYY-MM-DD hh:mm:ss';
+    }
+    format = format.replace(/YYYY/g, date.getFullYear());
+    format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2));
+    format = format.replace(/DD/g, ('0' + date.getDate()).slice(-2));
+    format = format.replace(/hh/g, ('0' + date.getHours()).slice(-2));
+    format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2));
+    format = format.replace(/ss/g, ('0' + date.getSeconds()).slice(-2));
+    if (format.match(/S/g)) {
+      milliSeconds = ('00' + date.getMilliseconds()).slice(-3);
+      length = format.match(/S/g).length;
+      for (i = j = 0, ref = length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        format = format.replace(/S/, milliSeconds.substring(i, i + 1));
+      }
+    }
+    return format;
+  };
+
+  Common.diffTime = function(future, past) {
+    var diff, ret;
+    diff = future - past;
+    ret = {};
+    ret.seconds = parseInt(diff / 1000);
+    ret.minutes = parseInt(ret.seconds / 60);
+    ret.hours = parseInt(ret.minutes / 60);
+    ret.day = parseInt(ret.hours / 24);
+    ret.week = parseInt(ret.day / 7);
+    ret.month = parseInt(ret.day / 30);
+    ret.year = parseInt(ret.day / 365);
+    return ret;
+  };
+
+  Common.diffAlmostTime = function(future, past) {
+    var day, diffTime, hours, minutes, month, ret, seconds, span, week, year;
+    diffTime = this.diffTime(future, past);
+    span = null;
+    ret = null;
+    seconds = diffTime.seconds;
+    if (seconds > 0) {
+      span = seconds === 1 ? 'second' : 'seconds';
+      ret = seconds + " " + span + " ago";
+    }
+    minutes = diffTime.minutes;
+    if (minutes > 0) {
+      span = minutes === 1 ? 'minute' : 'minutes';
+      ret = minutes + " " + span + " ago";
+    }
+    hours = diffTime.hours;
+    if (hours > 0) {
+      span = hours === 1 ? 'hour' : 'hours';
+      ret = hours + " " + span + " ago";
+    }
+    day = diffTime.day;
+    if (day > 0) {
+      span = day === 1 ? 'day' : 'days';
+      ret = day + " " + span + " ago";
+    }
+    week = diffTime.week;
+    if (week > 0) {
+      span = week === 1 ? 'week' : 'weeks';
+      ret = week + " " + span + " ago";
+    }
+    month = diffTime.month;
+    if (month > 0) {
+      span = month === 1 ? 'month' : 'months';
+      ret = month + " " + span + " ago";
+    }
+    year = diffTime.year;
+    if (year > 0) {
+      span = year === 1 ? 'year' : 'years';
+      ret = year + " " + span + " ago";
+    }
+    return ret;
+  };
+
   return Common;
 
 })();

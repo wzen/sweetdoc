@@ -22,6 +22,19 @@ ServerStorage = (function() {
       return Key;
 
     })();
+    ServerStorage.ElementAttribute = (function() {
+      function ElementAttribute() {}
+
+      ElementAttribute.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
+
+      ElementAttribute.LOAD_LIST_UPDATED_FLG = 'load_list_updated';
+
+      ElementAttribute.LOADED_LOCALTIME = 'loaded_localtime';
+
+      return ElementAttribute;
+
+    })();
+    ServerStorage.LOAD_LIST_INTERVAL_SECONDS = 60;
   }
 
   ServerStorage.save = function() {
@@ -38,6 +51,7 @@ ServerStorage = (function() {
         data: data,
         dataType: "json",
         success: function(data) {
+          $("#" + Constant.ElementAttribute.NAVBAR_ROOT).find("." + this.ElementAttribute.FILE_LOAD_CLASS + " ." + this.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
           return console.log(data.message);
         },
         error: function(data) {
@@ -47,12 +61,13 @@ ServerStorage = (function() {
     }
   };
 
-  ServerStorage.load = function() {
+  ServerStorage.load = function(user_pagevalue_id) {
     return $.ajax({
       url: "/page_value_state/load_state",
       type: "POST",
       data: {
         user_id: 0,
+        user_pagevalue_id: user_pagevalue_id,
         loaded_itemids: JSON.stringify(PageValue.getLoadedItemIds())
       },
       dataType: "json",
@@ -107,6 +122,66 @@ ServerStorage = (function() {
       },
       error: function(data) {
         return console.log(data.message);
+      }
+    });
+  };
+
+  ServerStorage.get_load_list = function() {
+    var diffTime, loadEmt, loadedLocalTime, s, updateFlg;
+    loadEmt = $("#" + Constant.ElementAttribute.NAVBAR_ROOT).find("." + this.ElementAttribute.FILE_LOAD_CLASS);
+    updateFlg = loadEmt.find("." + this.ElementAttribute.LOAD_LIST_UPDATED_FLG).length > 0;
+    if (updateFlg) {
+      loadedLocalTime = loadEmt.find("." + this.ElementAttribute.LOADED_LOCALTIME);
+      if (loadedLocalTime != null) {
+        diffTime = Common.diffTime($.now(), parseInt(loadedLocalTime.val()));
+        s = diffTime.seconds;
+        console.log('loadedLocalTime diff ' + s);
+        if (parseInt(s) <= this.LOAD_LIST_INTERVAL_SECONDS) {
+          return;
+        }
+      }
+    }
+    loadEmt.children().remove();
+    $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt);
+    return $.ajax({
+      url: "/page_value_state/user_pagevalue_list",
+      type: "POST",
+      data: {
+        user_id: 0
+      },
+      dataType: "json",
+      success: function(data) {
+        var d, e, i, len, list, n, p, user_pagevalue_list;
+        user_pagevalue_list = data;
+        if (user_pagevalue_list.length > 0) {
+          list = '';
+          n = $.now();
+          for (i = 0, len = user_pagevalue_list.length; i < len; i++) {
+            p = user_pagevalue_list[i];
+            d = new Date(p.updated_at);
+            e = "<li><a class='menu-item'>" + (Common.diffAlmostTime(n, d.getTime())) + " (" + (Common.formatDate(d)) + ")</a><input type='hidden' class='user_pagevalue_id' value=" + p.user_pagevalue_id + "></li>";
+            list += e;
+          }
+          loadEmt.children().remove();
+          $(list).appendTo(loadEmt);
+          loadEmt.find('li').click(function(e) {
+            var user_pagevalue_id;
+            user_pagevalue_id = $(e).find('.user_pagevalue_id:first').val();
+            return ServerStorage.load(user_pagevalue_id);
+          });
+          loadEmt.find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+          loadEmt.find("." + ServerStorage.ElementAttribute.LOADED_LOCALTIME).remove();
+          $("<input type='hidden' class=" + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG + " value='1'>").appendTo(loadEmt);
+          return $("<input type='hidden' class=" + ServerStorage.ElementAttribute.LOADED_LOCALTIME + " value=" + ($.now()) + ">").appendTo(loadEmt);
+        } else {
+          loadEmt.children().remove();
+          return $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt);
+        }
+      },
+      error: function(data) {
+        console.log(data.responseText);
+        loadEmt.children().remove();
+        return $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt);
       }
     });
   };

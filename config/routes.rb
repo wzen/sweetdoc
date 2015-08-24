@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   #ajax
   post 'page_value_state/save_state'
   post 'page_value_state/load_state'
+  post 'page_value_state/user_pagevalue_list'
   post 'item_js/index'
 
   post 'test_move/hello'

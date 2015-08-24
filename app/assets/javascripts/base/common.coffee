@@ -197,6 +197,68 @@ class Common
       return Constant.ActionEventTypeClassName.SCROLL
     return null
 
+  # 日付フォーマット
+  @formatDate = (date, format = 'YYYY-MM-DD hh:mm:ss') ->
+    format = format.replace(/YYYY/g, date.getFullYear())
+    format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2))
+    format = format.replace(/DD/g, ('0' + date.getDate()).slice(-2))
+    format = format.replace(/hh/g, ('0' + date.getHours()).slice(-2))
+    format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2))
+    format = format.replace(/ss/g, ('0' + date.getSeconds()).slice(-2))
+    if format.match(/S/g)
+      milliSeconds = ('00' + date.getMilliseconds()).slice(-3)
+      length = format.match(/S/g).length
+      for i in [0..length]
+        format = format.replace(/S/, milliSeconds.substring(i, i + 1))
+    return format
+
+  @diffTime = (future, past) ->
+    diff = future - past
+    ret = {}
+    ret.seconds = parseInt(diff / 1000)
+    ret.minutes = parseInt(ret.seconds / 60)
+    ret.hours = parseInt(ret.minutes / 60)
+    ret.day = parseInt(ret.hours / 24)
+    ret.week = parseInt(ret.day / 7)
+    ret.month = parseInt(ret.day / 30)
+    ret.year = parseInt(ret.day / 365)
+    return ret
+
+  # 時間差を表示
+  @diffAlmostTime = (future, past) ->
+    diffTime = @diffTime(future, past)
+    span = null
+    ret = null
+    seconds = diffTime.seconds
+    if seconds > 0
+      span = if seconds == 1 then 'second' else 'seconds'
+      ret = "#{seconds} #{span} ago"
+    minutes = diffTime.minutes
+    if minutes > 0
+      span = if minutes == 1 then 'minute' else 'minutes'
+      ret = "#{minutes} #{span} ago"
+    hours = diffTime.hours
+    if hours > 0
+      span = if hours == 1 then 'hour' else 'hours'
+      ret = "#{hours} #{span} ago"
+    day = diffTime.day
+    if day > 0
+      span = if day == 1 then 'day' else 'days'
+      ret = "#{day} #{span} ago"
+    week = diffTime.week
+    if week > 0
+      span = if week == 1 then 'week' else 'weeks'
+      ret = "#{week} #{span} ago"
+    month = diffTime.month
+    if month > 0
+      span = if month == 1 then 'month' else 'months'
+      ret = "#{month} #{span} ago"
+    year = diffTime.year
+    if year > 0
+      span = if year == 1 then 'year' else 'years'
+      ret = "#{year} #{span} ago"
+    return ret
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedClassList = {}

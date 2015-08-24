@@ -5,7 +5,7 @@ window.runPage = true;
 
 initView = function() {
   var is_reload;
-  $('#contents').css('height', $('#contents').height() - $('#nav').height());
+  $('#contents').css('height', $('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height());
   $('#canvas_container').attr('width', $('#canvas_wrapper').width());
   $('#canvas_container').attr('height', $('#canvas_wrapper').height());
   scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);

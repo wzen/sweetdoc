@@ -7,6 +7,7 @@ class PageValueStateController < ApplicationController
     e_page_values = params[Const::ServerStorage::Key::EVENT_PAGE_VALUE]
     s_page_values = params[Const::ServerStorage::Key::SETTING_PAGE_VALUE]
     @message = PageValueState.save_state(user_id, i_page_values, e_page_values, s_page_values)
+    @user_pagevalue_list = PageValueState.get_user_pagevalue_save_list(user_id)
   end
 
   def load_state
@@ -14,4 +15,10 @@ class PageValueStateController < ApplicationController
     loaded_itemids = JSON.parse(params['loaded_itemids'])
     @item_js_list, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message = ItemJs.get_user_iae_infos(user_id, loaded_itemids)
   end
+
+  def user_pagevalue_list
+    user_id = params[Const::ServerStorage::Key::USER_ID]
+    @user_pagevalue_list = PageValueState.get_user_pagevalue_save_list(user_id)
+  end
+
 end

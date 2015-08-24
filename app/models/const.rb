@@ -107,10 +107,12 @@ class Const
   end
 
   class ElementAttribute
+    NAVBAR_ROOT = 'nav'
     COMMON_ACTION_CLASS = "#{Const::EVENT_COMMON_PREFIX}@commoneventid"
     ITEM_ACTION_CLASS = 'item_event_action_@itemid'
     COMMON_VALUES_CLASS = 'common_event_value_@commoneventid_@methodname'
     ITEM_VALUES_CLASS = 'item_event_value_@itemid_@methodname'
+    FILE_LOAD_CLASS = 'file_load'
   end
 
   class PageValueKey
@@ -167,5 +169,10 @@ class Const
     IS_PARALLEL = 'is_parallel'
     SCROLL_POINT_START = 'scroll_point_start'
     SCROLL_POINT_END = 'scroll_point_end'
+  end
+
+  class UserPageValue
+    # @property [Integer] GET_LIMIT 取得件数(Loadメニューに表示)
+    GET_LIMIT = 10
   end
 end

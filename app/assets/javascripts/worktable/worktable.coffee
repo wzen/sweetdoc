@@ -145,7 +145,7 @@ $ ->
   #window.selectItemMenu = Constant.ItemId.BUTTON
   #WorktableCommon.loadItemJs(Constant.ItemId.BUTTON)
   #Wrapper & Canvasサイズ
-  $('#contents').css('height', $('#contents').height() - $('#nav').height())
+  $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
   borderWidth = 5
   timelineTopPadding = 5
   padding = borderWidth * 4 + timelineTopPadding
