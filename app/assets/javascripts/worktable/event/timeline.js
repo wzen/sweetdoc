@@ -151,7 +151,7 @@ Timeline = (function() {
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
     selectOptions = '';
-    items = $("#" + PageValue.Key.IS_ROOT + " .item");
+    items = $("#" + PageValue.Key.IS_ROOT + " ." + PageValue.Key.INSTANCE_PREFIX);
     items.children().each(function() {
       var id, itemId, name;
       id = $(this).find('input.id').val();
