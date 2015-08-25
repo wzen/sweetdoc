@@ -107,3 +107,4 @@ class LocalStorage
     h = JSON.parse(lstorage.getItem(key))
     for k, v of h
       PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+    Setting.initConfig()

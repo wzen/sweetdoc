@@ -45,29 +45,29 @@ Setting = (function() {
     Grid.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.GRID = 'grid';
+      PageValueKey.ROOT = 'grid';
 
-      PageValueKey.GRID_STEP = 'grid_step';
+      PageValueKey.GRID = 'grid_enable';
+
+      PageValueKey.GRID_STEP = 'step';
 
       return PageValueKey;
 
     })();
 
     Grid.initConfig = function() {
-      var grid, gridStep, gridStepDiv, gridStepValue, gridValue, key, root;
+      var grid, gridStep, gridStepDiv, gridStepValue, gridValue, key, root, self;
       root = $("#" + Setting.ROOT_ID_NAME);
       grid = $("." + this.GRID_CLASS_NAME, root);
-      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
+      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
       gridValue = PageValue.getSettingPageValue(key);
-      gridStep = $("." + this.GRID_STEP_CLASS_NAME, root);
-      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
-      gridStepValue = PageValue.getSettingPageValue(key);
+      gridValue = (gridValue != null) && gridValue === 'true';
       gridStepDiv = $("." + this.GRID_STEP_DIV_CLASS_NAME, root);
-      grid.prop('clicked', gridValue);
+      grid.prop('checked', gridValue ? 'checked' : false);
       grid.off('click');
       grid.on('click', (function(_this) {
         return function() {
-          key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
+          key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
           gridValue = PageValue.getSettingPageValue(key);
           if (gridValue != null) {
             gridValue = gridValue === 'true';
@@ -85,30 +85,39 @@ Setting = (function() {
       } else {
         gridStepDiv.css('display', 'none');
       }
+      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
+      gridStepValue = PageValue.getSettingPageValue(key);
       if (gridStepValue == null) {
         gridStepValue = this.STEP_DEFAULT_VALUE;
       }
-      $("." + this.GRID_STEP_CLASS_NAME, root).val(gridStepValue);
-      return gridStep.change((function(_this) {
-        return function() {
-          var value;
-          key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
-          value = PageValue.getSettingPageValue(key);
-          if (value != null) {
-            value = value === 'true';
+      gridStep = $("." + this.GRID_STEP_CLASS_NAME, root);
+      gridStep.val(gridStepValue);
+      self = this;
+      gridStep.change(function() {
+        var step, stepKey, value;
+        key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.GRID;
+        value = PageValue.getSettingPageValue(key);
+        if (value != null) {
+          value = value === 'true';
+        }
+        if (value) {
+          step = $(this).val();
+          if (step != null) {
+            step = parseInt(step);
+            stepKey = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.GRID_STEP;
+            PageValue.setSettingPageValue(stepKey, step);
+            return self.drawGrid(true);
           }
-          if (value) {
-            return _this.drawGrid(true);
-          }
-        };
-      })(this));
+        }
+      });
+      return this.drawGrid(gridValue);
     };
 
     Grid.drawGrid = function(doDraw) {
       var canvas, context, i, j, k, key, left, max, min, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
       canvas = document.getElementById("" + this.SETTING_GRID_CANVAS_ID);
       context = null;
-      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
+      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
       if (canvas != null) {
         context = canvas.getContext('2d');
       }

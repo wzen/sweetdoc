@@ -9,7 +9,7 @@ class Setting
       @ROOT = constant.PageValueKey.ST_ROOT
       @PREFIX = constant.PageValueKey.ST_PREFIX
 
-  # ConfigOpen時の初期化
+  # Setting初期化
   @initConfig: ->
     @Grid.initConfig()
 
@@ -24,28 +24,25 @@ class Setting
     @STEP_DEFAULT_VALUE = 12
 
     class @PageValueKey
+      @ROOT = 'grid'
       # @property [String] GRID グリッド線表示
-      @GRID = 'grid'
+      @GRID = 'grid_enable'
       # @property [String] GRID グリッド線間隔
-      @GRID_STEP = 'grid_step'
+      @GRID_STEP = 'step'
 
     @initConfig: ->
       root = $("##{Setting.ROOT_ID_NAME}")
       # グリッド線表示
       grid = $(".#{@GRID_CLASS_NAME}", root)
-      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
       gridValue = PageValue.getSettingPageValue(key)
-
-      gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
-      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
-      gridStepValue = PageValue.getSettingPageValue(key)
-
+      gridValue = gridValue? && gridValue == 'true'
       gridStepDiv = $(".#{@GRID_STEP_DIV_CLASS_NAME}", root)
 
-      grid.prop('clicked', gridValue)
+      grid.prop('checked', if gridValue then 'checked' else false)
       grid.off('click')
       grid.on('click', =>
-        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
         gridValue = PageValue.getSettingPageValue(key)
         if gridValue?
           gridValue = gridValue == 'true'
@@ -66,23 +63,35 @@ class Setting
         gridStepDiv.css('display', 'none')
 
       # グリッド間隔
+      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
+      gridStepValue = PageValue.getSettingPageValue(key)
       if !gridStepValue?
         gridStepValue = @STEP_DEFAULT_VALUE
-      $(".#{@GRID_STEP_CLASS_NAME}", root).val(gridStepValue)
-      gridStep.change( =>
-        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+      gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
+      gridStep.val(gridStepValue)
+      self = @
+      gridStep.change( ->
+        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.GRID}"
         value = PageValue.getSettingPageValue(key)
         if value?
           value = value == 'true'
         if value
-          @drawGrid(true)
+          step = $(@).val()
+          if step?
+            step = parseInt(step)
+            stepKey = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.GRID_STEP}"
+            PageValue.setSettingPageValue(stepKey, step)
+            self.drawGrid(true)
       )
+
+      # 描画
+      @drawGrid(gridValue)
 
     # グリッド線描画
     @drawGrid : (doDraw) ->
       canvas = document.getElementById("#{@SETTING_GRID_CANVAS_ID}")
       context = null
-      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
+      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
       if canvas?
         context = canvas.getContext('2d');
       if context? && doDraw == false

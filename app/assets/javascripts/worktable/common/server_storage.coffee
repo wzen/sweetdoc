@@ -77,6 +77,7 @@ class ServerStorage
               PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d)
 
             WorktableCommon.drawAllItemFromEventPageValue()
+            Setting.initConfig()
 
           if item_js_list.length == 0
             callback.call(self)

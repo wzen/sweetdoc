@@ -93,7 +93,8 @@ ServerStorage = (function() {
             d = JSON.parse(data.setting_pagevalue_data);
             PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d);
           }
-          return WorktableCommon.drawAllItemFromEventPageValue();
+          WorktableCommon.drawAllItemFromEventPageValue();
+          return Setting.initConfig();
         };
         if (item_js_list.length === 0) {
           callback.call(self);
