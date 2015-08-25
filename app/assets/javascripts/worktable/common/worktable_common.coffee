@@ -71,8 +71,9 @@ class WorktableCommon
     pageValues = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
     needItemIds = []
     for k, obj of pageValues
-      if $.inArray(obj.value.itemId, needItemIds) < 0
-        needItemIds.push(obj.value.itemId)
+      if obj.value.itemId?
+        if $.inArray(obj.value.itemId, needItemIds) < 0
+          needItemIds.push(obj.value.itemId)
 
     @loadItemJs(needItemIds, ->
       for k, obj of pageValues
@@ -108,19 +109,22 @@ class WorktableCommon
     callbackCount = 0
     needReadItemIds = []
     for itemId in itemIds
-      itemInitFuncName = getInitFuncName(itemId)
-      if window.itemInitFuncList[itemInitFuncName]?
-        # 読み込み済みなアイテムIDの場合
-        window.itemInitFuncList[itemInitFuncName]()
-        callbackCount += 1
-        if callbackCount >= itemIds.length
-          if callback?
-            # 既に全て読み込まれている場合はコールバック実行して終了
-            callback()
-          return
+      if itemId?
+        itemInitFuncName = getInitFuncName(itemId)
+        if window.itemInitFuncList[itemInitFuncName]?
+          # 読み込み済みなアイテムIDの場合
+          window.itemInitFuncList[itemInitFuncName]()
+          callbackCount += 1
+          if callbackCount >= itemIds.length
+            if callback?
+              # 既に全て読み込まれている場合はコールバック実行して終了
+              callback()
+            return
+        else
+          # Ajaxでjs読み込みが必要なアイテムID
+          needReadItemIds.push(itemId)
       else
-        # Ajaxでjs読み込みが必要なアイテムID
-        needReadItemIds.push(itemId)
+        callbackCount += 1
 
     # js読み込み
     $.ajax(

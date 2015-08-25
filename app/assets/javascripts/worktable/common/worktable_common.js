@@ -75,8 +75,10 @@ WorktableCommon = (function() {
     needItemIds = [];
     for (k in pageValues) {
       obj = pageValues[k];
-      if ($.inArray(obj.value.itemId, needItemIds) < 0) {
-        needItemIds.push(obj.value.itemId);
+      if (obj.value.itemId != null) {
+        if ($.inArray(obj.value.itemId, needItemIds) < 0) {
+          needItemIds.push(obj.value.itemId);
+        }
       }
     }
     return this.loadItemJs(needItemIds, function() {
@@ -121,18 +123,22 @@ WorktableCommon = (function() {
     needReadItemIds = [];
     for (i = 0, len = itemIds.length; i < len; i++) {
       itemId = itemIds[i];
-      itemInitFuncName = getInitFuncName(itemId);
-      if (window.itemInitFuncList[itemInitFuncName] != null) {
-        window.itemInitFuncList[itemInitFuncName]();
-        callbackCount += 1;
-        if (callbackCount >= itemIds.length) {
-          if (callback != null) {
-            callback();
+      if (itemId != null) {
+        itemInitFuncName = getInitFuncName(itemId);
+        if (window.itemInitFuncList[itemInitFuncName] != null) {
+          window.itemInitFuncList[itemInitFuncName]();
+          callbackCount += 1;
+          if (callbackCount >= itemIds.length) {
+            if (callback != null) {
+              callback();
+            }
+            return;
           }
-          return;
+        } else {
+          needReadItemIds.push(itemId);
         }
       } else {
-        needReadItemIds.push(itemId);
+        callbackCount += 1;
       }
     }
     return $.ajax({

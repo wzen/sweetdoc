@@ -38,7 +38,7 @@ class ServerStorage
             # updateフラグ除去
             #PageValue.clearAllUpdateFlg()
             # 「Load」マウスオーバーで取得させるためupdateフラグを消去
-            $("##{Constant.ElementAttribute.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS} .#{@ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
+            $("##{Constant.ElementAttribute.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.FILE_LOAD_CLASS} .#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
             console.log(data.message)
           error: (data) ->
             console.log(data.message)

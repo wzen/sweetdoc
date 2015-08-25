@@ -51,7 +51,7 @@ ServerStorage = (function() {
         data: data,
         dataType: "json",
         success: function(data) {
-          $("#" + Constant.ElementAttribute.NAVBAR_ROOT).find("." + this.ElementAttribute.FILE_LOAD_CLASS + " ." + this.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+          $("#" + Constant.ElementAttribute.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS + " ." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
           return console.log(data.message);
         },
         error: function(data) {
