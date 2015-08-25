@@ -20,7 +20,7 @@ class PageValue
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
-      @INSTANCE_PREFIX = 'instance'
+      @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
       # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
       @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
       # @property [String] ITEM アイテムRoot
@@ -169,7 +169,7 @@ class PageValue
   # @param [Boolean] isCache このページでのみ保持させるか
   # @param [Boolean] giveUpdate update属性を付与するか
   @setInstancePageValue = (key, value, isCache = false, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, isCache, @Key.IS_ROOT, false, giveUpdate)
+    _setPageValue.call(@, key, value, isCache, @Key.IS_ROOT, true, giveUpdate)
 
   # イベントの値を設定
   # @param [String] key キー値

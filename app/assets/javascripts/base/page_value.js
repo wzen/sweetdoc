@@ -25,7 +25,7 @@ PageValue = (function() {
 
       Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
-      Key.INSTANCE_PREFIX = 'instance';
+      Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
       Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
 
@@ -193,7 +193,7 @@ PageValue = (function() {
     if (giveUpdate == null) {
       giveUpdate = false;
     }
-    return _setPageValue.call(this, key, value, isCache, this.Key.IS_ROOT, false, giveUpdate);
+    return _setPageValue.call(this, key, value, isCache, this.Key.IS_ROOT, true, giveUpdate);
   };
 
   PageValue.setEventPageValue = function(key, value, giveUpdate) {

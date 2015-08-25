@@ -9,7 +9,7 @@ class RunController < ApplicationController
     @is_runwindow_reload = !request.post?
     unless @is_runwindow_reload
       # PageValueの書き込み
-      @timeline_page_values = Run.init_timeline_pagevalue(params)
+      @instance_pagevalues, @event_pagevalues = Run.init_pagevalue(params)
     end
   end
 end

@@ -295,8 +295,11 @@ ItemEventBase = (function(superClass) {
   }
 
   ItemEventBase.prototype.initWithEvent = function(event) {
+    var instance, objId;
     ItemEventBase.__super__.initWithEvent.call(this, event);
-    this.setMiniumObject(event[EPVItem.minObj]);
+    objId = event[EventPageValueBase.PageValueKey.ID];
+    instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_VALUE.replace('@id', objId));
+    this.setMiniumObject(instance);
     return this.reDraw(false);
   };
 

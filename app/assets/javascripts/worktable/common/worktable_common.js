@@ -57,8 +57,11 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.removeAllItemAndEvent = function() {
+    var lstorage;
     Sidebar.closeSidebar();
-    localStorage.clear();
+    lstorage = localStorage;
+    lstorage.removeItem(this.Key.WORKTABLE_PAGEVALUES);
+    lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
     return Common.clearAllEventChange((function(_this) {
       return function() {
         _this.removeAllItem();

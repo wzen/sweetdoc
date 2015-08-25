@@ -1,5 +1,4 @@
 class EPVItem extends EventPageValueBase
-  @minObj = 'item_minobj'
   @itemSize = 'item_size'
 
   @initConfigValue = (eventConfig, item) ->
@@ -73,12 +72,8 @@ class EPVItem extends EventPageValueBase
     return errorMes
 
   @writeItemValueToPageValue = (item) ->
-    tes = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
-    for idx, te of tes
-      if idx.indexOf(PageValue.Key.E_NUM_PREFIX) >= 0 && te.id == item.id
-        # イベントのアイテム情報を更新
-        key = "#{PageValue.Key.E_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{idx}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@minObj}"
-        PageValue.setEventPageValue(key, item.getMinimumObject())
+    # TODO: アイテムのみの情報をここで保存
+    return
 
   @readFromPageValue = (eventConfig, item) ->
     ret = super(eventConfig)

@@ -244,8 +244,10 @@ class ItemEventBase extends EventBase
   # 初期化
   initWithEvent: (event) ->
     super(event)
-    # 値設定
-    @setMiniumObject(event[EPVItem.minObj])
+    # インスタンス値設定
+    objId = event[EventPageValueBase.PageValueKey.ID]
+    instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_VALUE.replace('@id', objId))
+    @setMiniumObject(instance)
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     @reDraw(false)

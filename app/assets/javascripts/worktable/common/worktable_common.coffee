@@ -57,8 +57,10 @@ class WorktableCommon
   # 全てのアイテムとイベントを削除
   @removeAllItemAndEvent = ->
     Sidebar.closeSidebar()
-    # WebStorageを初期化する
-    localStorage.clear()
+    # WebStorageのアイテム&イベント情報を消去
+    lstorage = localStorage
+    lstorage.removeItem(@Key.WORKTABLE_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
     Common.clearAllEventChange( =>
       @removeAllItem()
       EventConfig.removeAllConfig()

@@ -1,11 +1,17 @@
 class Run
-  def self.init_timeline_pagevalue(params)
-    h = params.require(Const::PageValueKey::E_PREFIX.to_sym)
+  def self.init_pagevalue(params)
+    instance_pagevalue = self.make_pagevalue(params, Const::PageValueKey::INSTANCE_PREFIX)
+    event_pagevalue = self.make_pagevalue(params, Const::PageValueKey::E_PREFIX)
+    return instance_pagevalue, event_pagevalue
+  end
+
+  def self.make_pagevalue(params, pagevalue_root)
+    h = params.require(pagevalue_root.to_sym)
     html = ''
     h.each do |k, v|
-      html += make_element_str(k, v, Const::PageValueKey::E_PREFIX)
+      html += make_element_str(k, v, pagevalue_root)
     end
-    return "<div class=#{Const::PageValueKey::E_PREFIX}>#{html}</div>"
+    return "<div class=#{pagevalue_root}>#{html}</div>"
   end
 
   def self.make_element_str(key, value, key_name)

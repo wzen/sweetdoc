@@ -10,8 +10,6 @@ EPVItem = (function(superClass) {
     return EPVItem.__super__.constructor.apply(this, arguments);
   }
 
-  EPVItem.minObj = 'item_minobj';
-
   EPVItem.itemSize = 'item_size';
 
   EPVItem.initConfigValue = function(eventConfig, item) {
@@ -79,21 +77,7 @@ EPVItem = (function(superClass) {
     return errorMes;
   };
 
-  EPVItem.writeItemValueToPageValue = function(item) {
-    var idx, key, results, te, tes;
-    tes = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
-    results = [];
-    for (idx in tes) {
-      te = tes[idx];
-      if (idx.indexOf(PageValue.Key.E_NUM_PREFIX) >= 0 && te.id === item.id) {
-        key = "" + PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + idx + PageValue.Key.PAGE_VALUES_SEPERATOR + this.minObj;
-        results.push(PageValue.setEventPageValue(key, item.getMinimumObject()));
-      } else {
-        results.push(void 0);
-      }
-    }
-    return results;
-  };
+  EPVItem.writeItemValueToPageValue = function(item) {};
 
   EPVItem.readFromPageValue = function(eventConfig, item) {
     var ret;
