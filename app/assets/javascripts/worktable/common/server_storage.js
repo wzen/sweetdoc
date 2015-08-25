@@ -93,6 +93,7 @@ ServerStorage = (function() {
             d = JSON.parse(data.setting_pagevalue_data);
             PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d);
           }
+          LocalStorage.saveEventPageValue();
           WorktableCommon.drawAllItemFromEventPageValue();
           return Setting.initConfig();
         };
