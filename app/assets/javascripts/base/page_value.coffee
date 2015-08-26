@@ -57,7 +57,7 @@ class PageValue
       if isSet
         LocalStorage.savePageValue()
 
-  # ページが持つ値を取得
+  # インスタンス値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   # @param [Boolean] withRemove 取得後に値を消去するか
@@ -163,7 +163,7 @@ class PageValue
     )
     return value
 
-  # ページが持つ値を設定
+  # インスタンス値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
   # @param [Boolean] isCache このページでのみ保持させるか
@@ -265,6 +265,10 @@ class PageValue
         if isCache
           root.addClass(cacheClassName)
     )
+
+  # インスタンス値を削除
+  @removeInstancePageValue = (instanceId) ->
+    $("##{@Key.IS_ROOT} .#{instanceId}").remove()
 
   # updateが付与しているクラスからupdateクラスを除去する
   @clearAllUpdateFlg = ->

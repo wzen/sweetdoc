@@ -298,6 +298,10 @@ PageValue = (function() {
     });
   };
 
+  PageValue.removeInstancePageValue = function(instanceId) {
+    return $("#" + this.Key.IS_ROOT + " ." + instanceId).remove();
+  };
+
   PageValue.clearAllUpdateFlg = function() {
     $("#" + this.Key.IS_ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
     $("#" + this.Key.E_ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);

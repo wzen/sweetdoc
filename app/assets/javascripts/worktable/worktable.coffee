@@ -20,7 +20,6 @@ setSelectedBorder = (target, selectedBorderType = "edit") ->
 clearSelectedBorder = ->
   $('.editSelected, .timelineSelected').remove()
 
-
 # アイテムのJSファイル初期化関数名を取得
 # @param [Int] itemId アイテム種別
 getInitFuncName = (itemId) ->

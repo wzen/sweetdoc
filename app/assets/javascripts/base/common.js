@@ -224,6 +224,12 @@ Common = (function() {
     }
     previewinitCount = 0;
     tes = PageValue.getEventPageValueSortedListByNum();
+    if (tes.length <= 0) {
+      if (callback != null) {
+        callback();
+        return;
+      }
+    }
     results = [];
     for (idx = j = ref = tes.length - 1; j >= 0; idx = j += -1) {
       te = tes[idx];
@@ -238,7 +244,12 @@ Common = (function() {
           }
         }));
       } else {
-        results.push(void 0);
+        previewinitCount += 1;
+        if (previewinitCount >= tes.length && (callback != null)) {
+          results.push(callback());
+        } else {
+          results.push(void 0);
+        }
       }
     }
     return results;

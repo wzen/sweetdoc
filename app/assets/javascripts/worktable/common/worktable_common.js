@@ -5,38 +5,22 @@ WorktableCommon = (function() {
   function WorktableCommon() {}
 
   WorktableCommon.setupContextMenu = function(element, contextSelector, menu) {
-    var initOptionMenu;
-    initOptionMenu = function(event) {
-      var emt, obj;
-      emt = $(event.target);
-      obj = instanceMap[emt.attr('id')];
-      if ((obj != null) && (obj.setupOptionMenu != null)) {
-        obj.setupOptionMenu();
-      }
-      if ((obj != null) && (obj.showOptionMenu != null)) {
-        return obj.showOptionMenu();
-      }
-    };
     return element.contextmenu({
       preventContextMenuForPopup: true,
       preventSelect: true,
       menu: menu,
       select: function(event, ui) {
-        var $target;
-        $target = event.target;
-        switch (ui.cmd) {
-          case "delete":
-            $target.remove();
-            return;
-          case "cut":
-            break;
-          default:
-            return;
+        var i, len, results, value;
+        results = [];
+        for (i = 0, len = menu.length; i < len; i++) {
+          value = menu[i];
+          if (value.cmd === ui.cmd) {
+            results.push(value.func(event, ui));
+          } else {
+            results.push(void 0);
+          }
         }
-        initColorPickerValue();
-        initOptionMenu(event);
-        Sidebar.openConfigSidebar($target);
-        return changeMode(Constant.Mode.OPTION);
+        return results;
       },
       beforeOpen: function(event, ui) {
         return ui.menu.zIndex($(event.target).zIndex() + 1);

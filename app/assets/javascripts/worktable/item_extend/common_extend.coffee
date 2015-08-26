@@ -46,14 +46,44 @@ WorkTableCommonExtend =
     self = @
     # コンテキストメニュー設定
     do ->
-      menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+      menu = []
       contextSelector = null
       if ArrowItem? && self instanceof ArrowItem
-        menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
         contextSelector = ".arrow"
       else if ButtonItem? && self instanceof ButtonItem
-        menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
         contextSelector = ".css3button"
+      menu.push({title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # オプションメニューを初期化
+        initOptionMenu = (event) ->
+          emt = $(event.target)
+          obj = instanceMap[emt.attr('id')]
+          if obj? && obj.setupOptionMenu?
+            # 初期化関数を呼び出す
+            obj.setupOptionMenu()
+          if obj? && obj.showOptionMenu?
+            # オプションメニュー表示処理
+            obj.showOptionMenu()
+
+        target = event.target
+        # カラーピッカー値を初期化
+        initColorPickerValue()
+        # オプションメニューの値を初期化
+        initOptionMenu(event)
+        # オプションメニューを表示
+        Sidebar.openConfigSidebar(target)
+        # モードを変更
+        changeMode(Constant.Mode.OPTION)
+      })
+      menu.push({title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        target = event.target
+        targetId = $(target).attr('id')
+        PageValue.removeInstancePageValue(targetId)
+        target.remove()
+        PageValue.adjustInstanceAndEvent()
+        Timeline.refreshAllTimeline()
+        LocalStorage.saveEventPageValue()
+        OperationHistory.add()
+      })
       WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu)
 
     # クリックイベント設定

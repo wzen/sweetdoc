@@ -177,6 +177,11 @@ class Common
   @clearAllEventChange: (callback = null) ->
     previewinitCount = 0
     tes = PageValue.getEventPageValueSortedListByNum()
+    if tes.length <= 0
+      if callback?
+        callback()
+        return
+
     for idx in [tes.length - 1 .. 0] by -1
       te = tes[idx]
       item = window.instanceMap[te.id]
@@ -188,6 +193,10 @@ class Common
           if previewinitCount >= tes.length && callback?
             callback()
         )
+      else
+        previewinitCount += 1
+        if previewinitCount >= tes.length && callback?
+          callback()
 
   # アクションタイプからアクションタイプクラス名を取得
   @getActionTypeClassNameByActionType = (actionType) ->

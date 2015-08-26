@@ -35,29 +35,53 @@ WorkTableCommonExtend = {
     self = this;
     (function() {
       var contextSelector, menu;
-      menu = [
-        {
-          title: "Delete",
-          cmd: "delete",
-          uiIcon: "ui-icon-scissors"
-        }
-      ];
+      menu = [];
       contextSelector = null;
       if ((typeof ArrowItem !== "undefined" && ArrowItem !== null) && self instanceof ArrowItem) {
-        menu.push({
-          title: "ArrowItem",
-          cmd: "cut",
-          uiIcon: "ui-icon-scissors"
-        });
         contextSelector = ".arrow";
       } else if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && self instanceof ButtonItem) {
-        menu.push({
-          title: "ButtonItem",
-          cmd: "cut",
-          uiIcon: "ui-icon-scissors"
-        });
         contextSelector = ".css3button";
       }
+      menu.push({
+        title: "Edit",
+        cmd: "edit",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {
+          var initOptionMenu, target;
+          initOptionMenu = function(event) {
+            var emt, obj;
+            emt = $(event.target);
+            obj = instanceMap[emt.attr('id')];
+            if ((obj != null) && (obj.setupOptionMenu != null)) {
+              obj.setupOptionMenu();
+            }
+            if ((obj != null) && (obj.showOptionMenu != null)) {
+              return obj.showOptionMenu();
+            }
+          };
+          target = event.target;
+          initColorPickerValue();
+          initOptionMenu(event);
+          Sidebar.openConfigSidebar(target);
+          return changeMode(Constant.Mode.OPTION);
+        }
+      });
+      menu.push({
+        title: "Delete",
+        cmd: "delete",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {
+          var target, targetId;
+          target = event.target;
+          targetId = $(target).attr('id');
+          PageValue.removeInstancePageValue(targetId);
+          target.remove();
+          PageValue.adjustInstanceAndEvent();
+          Timeline.refreshAllTimeline();
+          LocalStorage.saveEventPageValue();
+          return OperationHistory.add();
+        }
+      });
       return WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu);
     })();
     (function() {
