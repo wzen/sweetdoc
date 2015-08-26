@@ -5,9 +5,9 @@ class OperationHistory
     @EVENT = 'ev'
 
   # 操作履歴を追加
-  # @param [ItemBase] obj アイテムオブジェクト
-  @add = ->
-    if window.operationHistoryIndex?
+  # @param [Boolean] isInit 初期化処理か
+  @add = (isInit = false) ->
+    if window.operationHistoryIndex? && !isInit
       window.operationHistoryIndex = (window.operationHistoryIndex + 1) % window.operationHistoryLimit
     else
       window.operationHistoryIndex = 0
@@ -42,6 +42,9 @@ class OperationHistory
       PageValue.adjustInstanceAndEvent()
       LocalStorage.saveEventPageValue()
       WorktableCommon.drawAllItemFromEventPageValue()
+      return true
+    else
+      return false
 
   # 操作履歴を取り出してIndexを進める(redo処理)
   # @return [Boolean] 処理したか
@@ -64,18 +67,19 @@ class OperationHistory
       PageValue.adjustInstanceAndEvent()
       LocalStorage.saveEventPageValue()
       WorktableCommon.drawAllItemFromEventPageValue()
+      return true
+    else
+      return false
 
   # undo処理
   @undo = ->
     nextTailIndex = (window.operationHistoryTailIndex + 1) % window.operationHistoryLimit
-    if nextTailIndex == window.operationHistoryIndex
+    if nextTailIndex == window.operationHistoryIndex || !_pop.call(@)
       Message.flushWarn("Can't Undo")
       return
-    _pop.call(@)
 
   # redo処理
   @redo = ->
-    if window.operationHistoryTailIndex == window.operationHistoryIndex
+    if window.operationHistoryTailIndex == window.operationHistoryIndex || !_popRedo.call(@)
       Message.flushWarn("Can't Redo")
       return
-    _popRedo.call(@)

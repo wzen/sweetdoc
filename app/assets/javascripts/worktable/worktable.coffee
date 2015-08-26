@@ -131,5 +131,5 @@ $ ->
     Timeline.refreshAllTimeline()
 
   # 履歴に画面初期時を状態を保存
-  OperationHistory.add()
+  OperationHistory.add(true)
 

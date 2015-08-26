@@ -17,9 +17,12 @@ OperationHistory = (function() {
 
   })();
 
-  OperationHistory.add = function() {
+  OperationHistory.add = function(isInit) {
     var obj;
-    if (window.operationHistoryIndex != null) {
+    if (isInit == null) {
+      isInit = false;
+    }
+    if ((window.operationHistoryIndex != null) && !isInit) {
       window.operationHistoryIndex = (window.operationHistoryIndex + 1) % window.operationHistoryLimit;
     } else {
       window.operationHistoryIndex = 0;
@@ -53,7 +56,10 @@ OperationHistory = (function() {
       window.operationHistoryIndex = hIndex;
       PageValue.adjustInstanceAndEvent();
       LocalStorage.saveEventPageValue();
-      return WorktableCommon.drawAllItemFromEventPageValue();
+      WorktableCommon.drawAllItemFromEventPageValue();
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -74,26 +80,25 @@ OperationHistory = (function() {
       window.operationHistoryIndex = hIndex;
       PageValue.adjustInstanceAndEvent();
       LocalStorage.saveEventPageValue();
-      return WorktableCommon.drawAllItemFromEventPageValue();
+      WorktableCommon.drawAllItemFromEventPageValue();
+      return true;
+    } else {
+      return false;
     }
   };
 
   OperationHistory.undo = function() {
     var nextTailIndex;
     nextTailIndex = (window.operationHistoryTailIndex + 1) % window.operationHistoryLimit;
-    if (nextTailIndex === window.operationHistoryIndex) {
+    if (nextTailIndex === window.operationHistoryIndex || !_pop.call(this)) {
       Message.flushWarn("Can't Undo");
-      return;
     }
-    return _pop.call(this);
   };
 
   OperationHistory.redo = function() {
-    if (window.operationHistoryTailIndex === window.operationHistoryIndex) {
+    if (window.operationHistoryTailIndex === window.operationHistoryIndex || !_popRedo.call(this)) {
       Message.flushWarn("Can't Redo");
-      return;
     }
-    return _popRedo.call(this);
   };
 
   return OperationHistory;
