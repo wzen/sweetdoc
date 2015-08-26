@@ -31,23 +31,27 @@ Timeline = (function() {
       ePageValues = PageValue.getEventPageValueSortedListByNum();
       timelineEvents = $('#timeline_events').children('.timeline_event');
       emt = null;
-      for (idx = j = 0, len = ePageValues.length; j < len; idx = ++j) {
-        pageValue = ePageValues[idx];
-        teNum = idx + 1;
-        emt = timelineEvents.eq(idx);
-        if (emt.length === 0) {
-          self.createTimelineEvent(teNum);
-          timelineEvents = $('#timeline_events').children('.timeline_event');
+      if (ePageValues.length > 0) {
+        for (idx = j = 0, len = ePageValues.length; j < len; idx = ++j) {
+          pageValue = ePageValues[idx];
+          teNum = idx + 1;
+          emt = timelineEvents.eq(idx);
+          if (emt.length === 0) {
+            self.createTimelineEvent(teNum);
+            timelineEvents = $('#timeline_events').children('.timeline_event');
+          }
+          $('.te_num', emt).val(teNum);
+          actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
+          Timeline.changeTimelineColor(teNum, actionType);
         }
-        $('.te_num', emt).val(teNum);
-        actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
-        Timeline.changeTimelineColor(teNum, actionType);
-      }
-      if (ePageValues.length < timelineEvents.length - 1) {
-        for (i = l = ref = ePageValues.length, ref1 = timelineEvents.length - 1; ref <= ref1 ? l <= ref1 : l >= ref1; i = ref <= ref1 ? ++l : --l) {
-          emt = timelineEvents.get(i);
-          emt.remove();
+        if (ePageValues.length < timelineEvents.length - 1) {
+          for (i = l = ref = ePageValues.length, ref1 = timelineEvents.length - 1; ref <= ref1 ? l <= ref1 : l >= ref1; i = ref <= ref1 ? ++l : --l) {
+            emt = timelineEvents.get(i);
+            emt.remove();
+          }
         }
+      } else {
+        this.createTimelineEvent(1);
       }
       self.createTimelineEvent(ePageValues.length + 1);
       timelineEvents = $('#timeline_events').children('.timeline_event');
@@ -221,7 +225,7 @@ Timeline = (function() {
     }
   };
 
-  Timeline.removeAllTimeline = function() {
+  Timeline.refreshAllTimeline = function() {
     var pEmt;
     pEmt = $('#timeline_events');
     pEmt.children().each(function(e) {
@@ -231,7 +235,6 @@ Timeline = (function() {
         return emt.remove();
       }
     });
-    this.createTimelineEvent(1);
     return this.setupTimelineEventConfig();
   };
 

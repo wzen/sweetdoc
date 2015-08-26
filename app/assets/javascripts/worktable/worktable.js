@@ -140,9 +140,9 @@ initKeyEvent = function() {
       if (e.keyCode === Constant.KeyboardKeyCode.Z) {
         e.preventDefault();
         if (e.shiftKey) {
-          return redo();
+          return OperationHistory.redo();
         } else {
-          return undo();
+          return OperationHistory.undo();
         }
       }
     }
@@ -198,13 +198,15 @@ $(function() {
   $('#main').on("mousedown", function() {
     return clearAllItemStyle();
   });
-  Timeline.setupTimelineEventConfig();
   if (!LocalStorage.isOverWorktableSaveTimeLimit()) {
     LocalStorage.loadValueForWorktable();
-    return WorktableCommon.drawAllItemFromEventPageValue();
+    PageValue.adjustInstanceAndEvent();
+    WorktableCommon.drawAllItemFromEventPageValue();
   } else {
-    return LocalStorage.clearWorktable();
+    LocalStorage.clearWorktable();
+    Timeline.refreshAllTimeline();
   }
+  return OperationHistory.add();
 });
 
 //# sourceMappingURL=worktable.js.map

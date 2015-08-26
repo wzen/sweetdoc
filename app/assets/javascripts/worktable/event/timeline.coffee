@@ -27,23 +27,26 @@ class Timeline
       ePageValues = PageValue.getEventPageValueSortedListByNum()
       timelineEvents = $('#timeline_events').children('.timeline_event')
       emt = null
-      # 色と数値を更新
-      for pageValue, idx in ePageValues
-        teNum = idx + 1
-        emt = timelineEvents.eq(idx)
-        if emt.length == 0
-          # 新規作成
-          self.createTimelineEvent(teNum)
-          timelineEvents = $('#timeline_events').children('.timeline_event')
-        $('.te_num', emt).val(teNum)
-        actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
-        Timeline.changeTimelineColor(teNum, actionType)
+      if ePageValues.length > 0
+        # 色と数値を更新
+        for pageValue, idx in ePageValues
+          teNum = idx + 1
+          emt = timelineEvents.eq(idx)
+          if emt.length == 0
+            # 新規作成
+            self.createTimelineEvent(teNum)
+            timelineEvents = $('#timeline_events').children('.timeline_event')
+          $('.te_num', emt).val(teNum)
+          actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
+          Timeline.changeTimelineColor(teNum, actionType)
 
-      # 不要なタイムラインイベントを削除
-      if ePageValues.length < timelineEvents.length - 1
-        for i in [(ePageValues.length)..(timelineEvents.length - 1)]
-          emt = timelineEvents.get(i)
-          emt.remove()
+        # 不要なタイムラインイベントを削除
+        if ePageValues.length < timelineEvents.length - 1
+          for i in [(ePageValues.length)..(timelineEvents.length - 1)]
+            emt = timelineEvents.get(i)
+            emt.remove()
+      else
+        @createTimelineEvent(1)
 
       # blankイベントを新規作成
       self.createTimelineEvent(ePageValues.length + 1)
@@ -218,13 +221,12 @@ class Timeline
     else
       $(teEmt).addClass(Constant.ActionEventTypeClassName.BLANK)
 
-  # タイムラインを初期状態に
-  @removeAllTimeline: ->
+  # EventPageValueを参照してタイムラインを更新
+  @refreshAllTimeline: ->
     pEmt = $('#timeline_events')
     pEmt.children().each((e) ->
       emt = $(@)
       if emt.hasClass('timeline_event_temp') == false
         emt.remove()
     )
-    @createTimelineEvent(1)
     @setupTimelineEventConfig()

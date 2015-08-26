@@ -76,7 +76,7 @@ ServerStorage = (function() {
         self = this;
         item_js_list = data.item_js_list;
         callback = function() {
-          var d, k, v;
+          var d;
           clearWorkTable();
           if (data.instance_pagevalue_data != null) {
             d = JSON.parse(data.instance_pagevalue_data);
@@ -84,15 +84,13 @@ ServerStorage = (function() {
           }
           if (data.event_pagevalue_data != null) {
             d = JSON.parse(data.event_pagevalue_data);
-            for (k in d) {
-              v = d[k];
-              PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
-            }
+            PageValue.setEventPageValueByRootHash(d);
           }
           if (data.setting_pagevalue_data != null) {
             d = JSON.parse(data.setting_pagevalue_data);
             PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d);
           }
+          PageValue.adjustInstanceAndEvent();
           LocalStorage.saveEventPageValue();
           WorktableCommon.drawAllItemFromEventPageValue();
           return Setting.initConfig();

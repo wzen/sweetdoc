@@ -42,22 +42,6 @@ class ItemBase extends ItemEventBase
   getJQueryElement: ->
     return $('#' + @id)
 
-  # 操作履歴Indexをプッシュ
-  # @param [ItemBase] obj オブジェクト
-  pushOhi: (obj) ->
-    @ohiRegist[@ohiRegistIndex] = obj
-    @ohiRegistIndex += 1
-
-  # 操作履歴Index保存配列のインデックスをインクリメント
-  incrementOhiRegistIndex: ->
-    @ohiRegistIndex += 1
-
-  # 操作履歴Indexを取り出す
-  # @return [Int] 操作履歴Index
-  popOhi: ->
-    @ohiRegistIndex -= 1
-    return @ohiRegist[@ohiRegistIndex]
-
   # 最後の操作履歴Indexを取得
   # @return [Int] 操作履歴Index
   lastestOhi: ->
@@ -101,10 +85,6 @@ class ItemBase extends ItemEventBase
   # アイテムの情報をアイテムリストと操作履歴に保存
   # @param [ItemActionType] action アクション種別
   saveObj: (action) ->
-    # 操作履歴に保存
-    history = @getHistoryObj(action)
-    @pushOhi(operationHistoryIndex - 1)
-    pushOperationHistory(history)
     if action == Constant.ItemActionType.MAKE
       # 名前を付与
       num = 1
@@ -117,6 +97,8 @@ class ItemBase extends ItemEventBase
     # ページに保存
     @setItemAllPropToPageValue()
     LocalStorage.saveEventPageValue()
+    # 操作履歴に保存
+    OperationHistory.add()
     console.log('save obj:' + JSON.stringify(@itemSize))
 
     # イベントの選択項目更新
@@ -204,7 +186,7 @@ class ItemBase extends ItemEventBase
   # イベントに書き込む情報
   objWriteEvent: ->
     obj = {}
-    obj[EPVItem.minObj] = @getMinimumObject()
+    # TODO: アイテムの共通情報をここに記述
     return obj
 
 # CSSアイテム

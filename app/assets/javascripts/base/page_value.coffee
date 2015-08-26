@@ -178,6 +178,17 @@ class PageValue
   @setEventPageValue = (key, value, giveUpdate = false) ->
     _setPageValue.call(@, key, value, false, @Key.E_ROOT, true, giveUpdate)
 
+  # イベントの値をルート値から設定
+  # @param [Object] value 設定値(E_PREFIXで取得したハッシュ配列または値)
+  # @param [Boolean] refresh イベント要素を全て入れ替える
+  # @param [Boolean] giveUpdate update属性を付与するか
+  @setEventPageValueByRootHash = (value, refresh = true, giveUpdate = false) ->
+    if refresh
+      # イベント内容を全て消去
+      $("##{@Key.E_ROOT}").children().remove()
+    for k, v of value
+      @setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+
   # 共通設定値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
@@ -283,7 +294,8 @@ class PageValue
     ret = []
     itemInfoPageValues = PageValue.getInstancePageValue(@Key.ITEM_INFO_PREFIX)
     for k, v of itemInfoPageValues
-      ret.push(parseInt(k))
+      if $.inArray(parseInt(k), ret) < 0
+        ret.push(parseInt(k))
     return ret
 
   # ページが持つ値を削除
@@ -297,3 +309,24 @@ class PageValue
     # page_value消去
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
     $("##{@Key.E_ROOT}").children().remove()
+
+  # PageValueをチェックして最適化
+  @adjustInstanceAndEvent = ->
+    iPageValues = @getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
+    instanceObjIds = []
+    for k, v of iPageValues
+      if $.inArray(v.value.id, instanceObjIds) < 0
+        instanceObjIds.push(v.value.id)
+    ePageValues = @getEventPageValue(PageValue.Key.E_PREFIX)
+    adjust = {}
+    teCount = 0
+    for k, v of ePageValues
+      if k.indexOf(@Key.E_NUM_PREFIX) == 0
+        if $.inArray(v[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0
+          teCount += 1
+          adjust[@Key.E_NUM_PREFIX + teCount] = v
+      else
+        adjust[k] = v
+
+    @setEventPageValueByRootHash(adjust)
+    PageValue.setEventPageValue(PageValue.Key.E_COUNT, teCount)

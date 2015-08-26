@@ -203,6 +203,25 @@ PageValue = (function() {
     return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true, giveUpdate);
   };
 
+  PageValue.setEventPageValueByRootHash = function(value, refresh, giveUpdate) {
+    var k, results, v;
+    if (refresh == null) {
+      refresh = true;
+    }
+    if (giveUpdate == null) {
+      giveUpdate = false;
+    }
+    if (refresh) {
+      $("#" + this.Key.E_ROOT).children().remove();
+    }
+    results = [];
+    for (k in value) {
+      v = value[k];
+      results.push(this.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
+    }
+    return results;
+  };
+
   PageValue.setSettingPageValue = function(key, value, giveUpdate) {
     if (giveUpdate == null) {
       giveUpdate = false;
@@ -309,7 +328,9 @@ PageValue = (function() {
     itemInfoPageValues = PageValue.getInstancePageValue(this.Key.ITEM_INFO_PREFIX);
     for (k in itemInfoPageValues) {
       v = itemInfoPageValues[k];
-      ret.push(parseInt(k));
+      if ($.inArray(parseInt(k), ret) < 0) {
+        ret.push(parseInt(k));
+      }
     }
     return ret;
   };
@@ -321,6 +342,34 @@ PageValue = (function() {
   PageValue.removeAllItemAndEventPageValue = function() {
     $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
     return $("#" + this.Key.E_ROOT).children().remove();
+  };
+
+  PageValue.adjustInstanceAndEvent = function() {
+    var adjust, ePageValues, iPageValues, instanceObjIds, k, teCount, v;
+    iPageValues = this.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
+    instanceObjIds = [];
+    for (k in iPageValues) {
+      v = iPageValues[k];
+      if ($.inArray(v.value.id, instanceObjIds) < 0) {
+        instanceObjIds.push(v.value.id);
+      }
+    }
+    ePageValues = this.getEventPageValue(PageValue.Key.E_PREFIX);
+    adjust = {};
+    teCount = 0;
+    for (k in ePageValues) {
+      v = ePageValues[k];
+      if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
+        if ($.inArray(v[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0) {
+          teCount += 1;
+          adjust[this.Key.E_NUM_PREFIX + teCount] = v;
+        }
+      } else {
+        adjust[k] = v;
+      }
+    }
+    this.setEventPageValueByRootHash(adjust);
+    return PageValue.setEventPageValue(PageValue.Key.E_COUNT, teCount);
   };
 
   return PageValue;

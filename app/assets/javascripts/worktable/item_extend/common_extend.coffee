@@ -18,7 +18,7 @@ WorkTableCommonExtend =
     # イベント記述
     EPVItem.writeDefaultToPageValue(@)
     # タイムライン作成
-    Timeline.setupTimelineEventConfig()
+    Timeline.refreshAllTimeline()
 
     return true
 

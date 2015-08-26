@@ -70,12 +70,12 @@ class ServerStorage
               PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
             if data.event_pagevalue_data?
               d = JSON.parse(data.event_pagevalue_data)
-              for k, v of d
-                PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+              PageValue.setEventPageValueByRootHash(d)
             if data.setting_pagevalue_data?
               d = JSON.parse(data.setting_pagevalue_data)
               PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d)
 
+            PageValue.adjustInstanceAndEvent()
             LocalStorage.saveEventPageValue()
             WorktableCommon.drawAllItemFromEventPageValue()
             Setting.initConfig()

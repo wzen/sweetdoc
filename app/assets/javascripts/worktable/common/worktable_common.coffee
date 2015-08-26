@@ -59,13 +59,13 @@ class WorktableCommon
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     lstorage = localStorage
-    lstorage.removeItem(@Key.WORKTABLE_PAGEVALUES)
-    lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_PAGEVALUES)
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
     Common.clearAllEventChange( =>
       @removeAllItem()
       EventConfig.removeAllConfig()
       PageValue.removeAllItemAndEventPageValue()
-      Timeline.removeAllTimeline()
+      Timeline.refreshAllTimeline()
     )
 
   # イベントPageValueから全てのアイテムを描画
@@ -98,7 +98,7 @@ class WorktableCommon
         event.setItemAllPropToPageValue()
 
       # タイムライン作成
-      Timeline.setupTimelineEventConfig()
+      Timeline.refreshAllTimeline()
     )
 
   # JSファイルをサーバから読み込む
@@ -173,6 +173,7 @@ class WorktableCommon
         if callback?
           callback()
     , '500')
+
 
 
 

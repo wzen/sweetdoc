@@ -116,19 +116,14 @@ LocalStorage = (function() {
   };
 
   LocalStorage.loadEventPageValue = function(isRun) {
-    var h, k, key, lstorage, results, v;
+    var h, key, lstorage;
     if (isRun == null) {
       isRun = false;
     }
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_EVENT_PAGEVALUES : this.Key.WORKTABLE_EVENT_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
-    results = [];
-    for (k in h) {
-      v = h[k];
-      results.push(PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
-    }
-    return results;
+    return PageValue.setEventPageValueByRootHash(h);
   };
 
   LocalStorage.saveSettingPageValue = function(isRun) {

@@ -18,7 +18,9 @@ worktableCommonVar = function() {
   window.mode = Constant.Mode.DRAW;
   window.itemInitFuncList = [];
   window.operationHistory = [];
-  return window.operationHistoryIndex = 0;
+  window.operationHistoryLimit = 30;
+  window.operationHistoryIndex = null;
+  return window.operationHistoryTailIndex = null;
 };
 
 runCommonVar = function() {

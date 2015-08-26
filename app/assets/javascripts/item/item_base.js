@@ -40,20 +40,6 @@ ItemBase = (function(superClass) {
     return $('#' + this.id);
   };
 
-  ItemBase.prototype.pushOhi = function(obj) {
-    this.ohiRegist[this.ohiRegistIndex] = obj;
-    return this.ohiRegistIndex += 1;
-  };
-
-  ItemBase.prototype.incrementOhiRegistIndex = function() {
-    return this.ohiRegistIndex += 1;
-  };
-
-  ItemBase.prototype.popOhi = function() {
-    this.ohiRegistIndex -= 1;
-    return this.ohiRegist[this.ohiRegistIndex];
-  };
-
   ItemBase.prototype.lastestOhi = function() {
     return this.ohiRegist[this.ohiRegist.length - 1];
   };
@@ -88,10 +74,7 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.saveObj = function(action) {
-    var history, k, num, ref, self, v;
-    history = this.getHistoryObj(action);
-    this.pushOhi(operationHistoryIndex - 1);
-    pushOperationHistory(history);
+    var k, num, ref, self, v;
     if (action === Constant.ItemActionType.MAKE) {
       num = 1;
       self = this;
@@ -106,6 +89,7 @@ ItemBase = (function(superClass) {
     }
     this.setItemAllPropToPageValue();
     LocalStorage.saveEventPageValue();
+    OperationHistory.add();
     console.log('save obj:' + JSON.stringify(this.itemSize));
     return Timeline.updateSelectItemMenu();
   };
@@ -187,7 +171,6 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.objWriteEvent = function() {
     var obj;
     obj = {};
-    obj[EPVItem.minObj] = this.getMinimumObject();
     return obj;
   };
 

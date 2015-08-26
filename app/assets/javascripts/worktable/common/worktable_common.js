@@ -60,14 +60,14 @@ WorktableCommon = (function() {
     var lstorage;
     Sidebar.closeSidebar();
     lstorage = localStorage;
-    lstorage.removeItem(this.Key.WORKTABLE_PAGEVALUES);
-    lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_PAGEVALUES);
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
     return Common.clearAllEventChange((function(_this) {
       return function() {
         _this.removeAllItem();
         EventConfig.removeAllConfig();
         PageValue.removeAllItemAndEventPageValue();
-        return Timeline.removeAllTimeline();
+        return Timeline.refreshAllTimeline();
       };
     })(this));
   };
@@ -110,7 +110,7 @@ WorktableCommon = (function() {
         }
         event.setItemAllPropToPageValue();
       }
-      return Timeline.setupTimelineEventConfig();
+      return Timeline.refreshAllTimeline();
     });
   };
 

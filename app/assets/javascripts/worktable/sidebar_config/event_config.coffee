@@ -244,7 +244,7 @@ class EventConfig
       # 入力値を適用する
       self.applyAction()
       # イベントを更新
-      Timeline.setupTimelineEventConfig()
+      Timeline.refreshAllTimeline()
       # 次のイベントConfigを表示
     )
     em = $('.push.button.cancel', @emt)

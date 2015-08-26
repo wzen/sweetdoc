@@ -114,10 +114,10 @@ initKeyEvent = ->
         e.preventDefault()
         if e.shiftKey
           # Shift + Ctrl + z → Redo
-          redo()
+          OperationHistory.redo()
         else
           # Ctrl + z → Undo
-          undo()
+          OperationHistory.undo()
   )
 
 # 画面のアイテムをクリア
@@ -168,13 +168,15 @@ $ ->
     clearAllItemStyle()
   )
 
-  # タイムライン初期化
-  Timeline.setupTimelineEventConfig()
-
-  # Storageからアイテム描画
   if !LocalStorage.isOverWorktableSaveTimeLimit()
+    # キャッシュが存在する場合アイテム描画
     LocalStorage.loadValueForWorktable()
+    PageValue.adjustInstanceAndEvent()
     WorktableCommon.drawAllItemFromEventPageValue()
   else
     LocalStorage.clearWorktable()
+    Timeline.refreshAllTimeline()
+
+  # 履歴に画面初期時を状態を保存
+  OperationHistory.add()
 

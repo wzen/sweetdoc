@@ -11,7 +11,7 @@ WorkTableCommonExtend = {
     this.reDraw(show);
     this.makeDesignConfig();
     EPVItem.writeDefaultToPageValue(this);
-    Timeline.setupTimelineEventConfig();
+    Timeline.refreshAllTimeline();
     return true;
   },
   drawAndMakeConfigs: function(show) {

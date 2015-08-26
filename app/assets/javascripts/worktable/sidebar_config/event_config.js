@@ -247,7 +247,7 @@ EventConfig = (function() {
     em.on('click', function(e) {
       self.clearError();
       self.applyAction();
-      return Timeline.setupTimelineEventConfig();
+      return Timeline.refreshAllTimeline();
     });
     em = $('.push.button.cancel', this.emt);
     em.off('click');

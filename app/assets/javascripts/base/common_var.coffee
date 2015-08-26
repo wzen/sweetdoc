@@ -17,7 +17,9 @@ worktableCommonVar = ->
   window.mode = Constant.Mode.DRAW
   window.itemInitFuncList = []
   window.operationHistory = []
-  window.operationHistoryIndex = 0
+  window.operationHistoryLimit = 30
+  window.operationHistoryIndex = null
+  window.operationHistoryTailIndex = null
 
 # 実行テーブル共通変数
 runCommonVar = ->

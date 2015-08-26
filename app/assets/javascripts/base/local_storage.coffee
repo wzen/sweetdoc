@@ -87,8 +87,7 @@ class LocalStorage
     lstorage = localStorage
     key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
-    for k, v of h
-      PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+    PageValue.setEventPageValueByRootHash(h)
 
   # ストレージに共通設定値を保存
   @saveSettingPageValue: (isRun = false) ->
