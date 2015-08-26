@@ -29,6 +29,74 @@ WorkTableCommonExtend = {
     $('.dc', sc).css('display', 'none');
     $('#design-config').css('display', '');
     return $('#' + this.getDesignConfigId()).css('display', '');
+  },
+  setupDragAndResizeEvents: function() {
+    var self;
+    self = this;
+    (function() {
+      var contextSelector, menu;
+      menu = [
+        {
+          title: "Delete",
+          cmd: "delete",
+          uiIcon: "ui-icon-scissors"
+        }
+      ];
+      contextSelector = null;
+      if ((typeof ArrowItem !== "undefined" && ArrowItem !== null) && self instanceof ArrowItem) {
+        menu.push({
+          title: "ArrowItem",
+          cmd: "cut",
+          uiIcon: "ui-icon-scissors"
+        });
+        contextSelector = ".arrow";
+      } else if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && self instanceof ButtonItem) {
+        menu.push({
+          title: "ButtonItem",
+          cmd: "cut",
+          uiIcon: "ui-icon-scissors"
+        });
+        contextSelector = ".css3button";
+      }
+      return WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu);
+    })();
+    (function() {
+      return self.getJQueryElement().mousedown(function(e) {
+        if (e.which === 1) {
+          e.stopPropagation();
+          clearSelectedBorder();
+          return setSelectedBorder(this, "edit");
+        }
+      });
+    })();
+    return (function() {
+      self.getJQueryElement().draggable({
+        containment: scrollInside,
+        drag: function(event, ui) {
+          if (self.drag != null) {
+            return self.drag();
+          }
+        },
+        stop: function(event, ui) {
+          if (self.dragComplete != null) {
+            return self.dragComplete();
+          }
+        }
+      });
+      return self.getJQueryElement().resizable({
+        containment: scrollInside,
+        resize: function(event, ui) {
+          if (self.resize != null) {
+            return self.resize();
+          }
+        },
+        stop: function(event, ui) {
+          if (self.resizeComplete != null) {
+            return self.resizeComplete();
+          }
+        }
+      });
+    })();
   }
 };
 

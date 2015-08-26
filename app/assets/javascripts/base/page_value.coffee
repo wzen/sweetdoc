@@ -184,7 +184,7 @@ class PageValue
   # @param [Boolean] giveUpdate update属性を付与するか
   @setEventPageValueByRootHash = (value, refresh = true, giveUpdate = false) ->
     if refresh
-      # イベント内容を全て消去
+      # 内容を一旦全消去
       $("##{@Key.E_ROOT}").children().remove()
     for k, v of value
       @setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
@@ -310,7 +310,7 @@ class PageValue
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
     $("##{@Key.E_ROOT}").children().remove()
 
-  # PageValueをチェックして最適化
+  # InstancePageValueをチェックしてEventPageValueを最適化
   @adjustInstanceAndEvent = ->
     iPageValues = @getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
     instanceObjIds = []

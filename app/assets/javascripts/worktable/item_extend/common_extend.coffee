@@ -41,3 +41,49 @@ WorkTableCommonExtend =
     $('#design-config').css('display', '')
     $('#' + @getDesignConfigId()).css('display', '')
 
+  # アイテムに対してドラッグ&リサイズイベントを設定する
+  setupDragAndResizeEvents: ->
+    self = @
+    # コンテキストメニュー設定
+    do ->
+      menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
+      contextSelector = null
+      if ArrowItem? && self instanceof ArrowItem
+        menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+        contextSelector = ".arrow"
+      else if ButtonItem? && self instanceof ButtonItem
+        menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
+        contextSelector = ".css3button"
+      WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu)
+
+    # クリックイベント設定
+    do ->
+      self.getJQueryElement().mousedown( (e)->
+        if e.which == 1 #左クリック
+          e.stopPropagation()
+          clearSelectedBorder()
+          setSelectedBorder(@, "edit")
+      )
+
+    # JQueryUIのドラッグイベントとリサイズ設定
+    do ->
+      self.getJQueryElement().draggable({
+        containment: scrollInside
+        drag: (event, ui) ->
+          if self.drag?
+            self.drag()
+        stop: (event, ui) ->
+          if self.dragComplete?
+            self.dragComplete()
+      })
+      self.getJQueryElement().resizable({
+        containment: scrollInside
+        resize: (event, ui) ->
+          if self.resize?
+            self.resize()
+        stop: (event, ui) ->
+          if self.resizeComplete?
+            self.resizeComplete()
+      })
+
+

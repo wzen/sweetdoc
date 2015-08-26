@@ -1,50 +1,6 @@
 # ワークテーブル読み込みフラグ
 window.worktablePage = true
 
-# アイテムに対してイベントを設定する
-setupEvents = (obj) ->
-  # コンテキストメニュー設定
-  do ->
-    menu = [{title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors"}]
-    contextSelector = null
-    if ArrowItem? && obj instanceof ArrowItem
-      menu.push({title: "ArrowItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-      contextSelector = ".arrow"
-    else if ButtonItem? && obj instanceof ButtonItem
-      menu.push({title: "ButtonItem", cmd: "cut", uiIcon: "ui-icon-scissors"})
-      contextSelector = ".css3button"
-    WorktableCommon.setupContextMenu(obj.getJQueryElement(), contextSelector, menu)
-
-  # クリックイベント設定
-  do ->
-    obj.getJQueryElement().mousedown( (e)->
-      if e.which == 1 #左クリック
-        e.stopPropagation()
-        clearSelectedBorder()
-        setSelectedBorder(@, "edit")
-    )
-
-  # JQueryUIのドラッグイベントとリサイズ設定
-  do ->
-    obj.getJQueryElement().draggable({
-      containment: scrollInside
-      drag: (event, ui) ->
-        if obj.drag?
-          obj.drag()
-      stop: (event, ui) ->
-        if obj.dragComplete?
-          obj.dragComplete()
-    })
-    obj.getJQueryElement().resizable({
-      containment: scrollInside
-      resize: (event, ui) ->
-        if obj.resize?
-          obj.resize()
-      stop: (event, ui) ->
-        if obj.resizeComplete?
-          obj.resizeComplete()
-    })
-
 # 選択枠を付ける
 # @param [Object] target 対象のオブジェクト
 # @param [String] selectedBorderType 選択タイプ
@@ -136,9 +92,6 @@ $ ->
 
   # 共有変数
   worktableCommonVar()
-  # 初期状態としてボタンを選択(暫定)
-  #window.selectItemMenu = Constant.ItemId.BUTTON
-  #WorktableCommon.loadItemJs(Constant.ItemId.BUTTON)
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
   borderWidth = 5

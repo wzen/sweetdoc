@@ -24,7 +24,7 @@ class ItemBase extends ItemEventBase
     # @property [Array] itemSize サイズ
     @itemSize = null
     # @property [Int] zIndex z-index
-    @zindex = Constant.Zindex.EVENTBOTTOM
+    @zindex = Constant.Zindex.EVENTBOTTOM + 1
     # @property [Array] ohiRegist 操作履歴Index保存配列
     @ohiRegist = []
     # @property [Int] ohiRegistIndex 操作履歴Index保存配列のインデックス
@@ -79,13 +79,12 @@ class ItemBase extends ItemEventBase
 
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
-  # @abstract
   reDraw: (show = true) ->
 
   # アイテムの情報をアイテムリストと操作履歴に保存
-  # @param [ItemActionType] action アクション種別
-  saveObj: (action) ->
-    if action == Constant.ItemActionType.MAKE
+  # @param [Boolean] newCreated 新規作成か
+  saveObj: (newCreated = false) ->
+    if newCreated
       # 名前を付与
       num = 1
       self = @
@@ -94,8 +93,9 @@ class ItemBase extends ItemEventBase
           num += 1
       @name = @constructor.IDENTITY + " #{num}"
 
-    # ページに保存
+    # ページに状態を保存
     @setItemAllPropToPageValue()
+    # キャッシュに保存
     LocalStorage.saveEventPageValue()
     # 操作履歴に保存
     OperationHistory.add()

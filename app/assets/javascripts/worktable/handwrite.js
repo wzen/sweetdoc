@@ -13,7 +13,7 @@ Handwrite = (function() {
     item = null;
     enableMoveEvent = true;
     queueLoc = null;
-    zindex = Constant.Zindex.EVENTBOTTOM;
+    zindex = Constant.Zindex.EVENTBOTTOM + 1;
     MOVE_FREQUENCY = 7;
     windowToCanvas = function(canvas, x, y) {
       var bbox;
@@ -54,9 +54,9 @@ Handwrite = (function() {
       if (item != null) {
         item.restoreAllDrawingSurface();
         item.endDraw(zindex);
-        setupEvents(item);
+        item.setupDragAndResizeEvents();
         changeMode(Constant.Mode.EDIT);
-        item.saveObj(Constant.ItemActionType.MAKE);
+        item.saveObj(true);
         return zindex += 1;
       }
     };

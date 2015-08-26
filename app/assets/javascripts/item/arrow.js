@@ -60,6 +60,7 @@ ArrowItem = (function(superClass) {
     if (show == null) {
       show = true;
     }
+    ArrowItem.__super__.reDraw.call(this, show);
     canvas = document.getElementById(this.canvasElementId());
     if (canvas == null) {
       this.makeNewCanvas();
@@ -73,7 +74,10 @@ ArrowItem = (function(superClass) {
         r = ref[j];
         this.drawPath(r);
       }
-      return this.drawNewCanvas();
+      this.drawNewCanvas();
+    }
+    if (this.setupDragAndResizeEvents != null) {
+      return this.setupDragAndResizeEvents();
     }
   };
 

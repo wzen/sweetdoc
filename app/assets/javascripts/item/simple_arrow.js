@@ -96,7 +96,7 @@ SimpleArrowItem = (function(superClass) {
     $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     $('#' + this.canvasElementId()).attr('width', $('#' + this.id).width());
     $('#' + this.canvasElementId()).attr('height', $('#' + this.id).height());
-    this.setupEvents();
+    this.setupDragAndResizeEvents();
     if (show) {
       drawingCanvas = document.getElementById(this.canvasElementId());
       drawingContext = drawingCanvas.getContext('2d');

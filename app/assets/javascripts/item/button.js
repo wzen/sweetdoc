@@ -30,11 +30,15 @@ ButtonItem = (function(superClass) {
     if (show == null) {
       show = true;
     }
+    ButtonItem.__super__.reDraw.call(this, show);
     this.clearDraw();
     $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     if (!show) {
       this.getJQueryElement().css('opacity', 0);
       return false;
+    }
+    if (this.setupDragAndResizeEvents != null) {
+      return this.setupDragAndResizeEvents();
     }
   };
 

@@ -63,6 +63,7 @@ class ArrowItem extends CanvasItemBase
   # 再描画処理(新規キャンパスに描画)
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true) ->
+    super(show)
     # 新規キャンパス存在チェック
     canvas = document.getElementById(@canvasElementId())
     if !canvas?
@@ -80,6 +81,10 @@ class ArrowItem extends CanvasItemBase
         @drawPath(r)
       # 描画
       @drawNewCanvas()
+
+    if @setupDragAndResizeEvents?
+      # ドラッグ & リサイズイベント設定
+      @setupDragAndResizeEvents()
 
   # パスの情報をリセット
   resetDrawPath: ->

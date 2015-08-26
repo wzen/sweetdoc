@@ -25,7 +25,7 @@ ItemBase = (function(superClass) {
       };
     }
     this.itemSize = null;
-    this.zindex = Constant.Zindex.EVENTBOTTOM;
+    this.zindex = Constant.Zindex.EVENTBOTTOM + 1;
     this.ohiRegist = [];
     this.ohiRegistIndex = 0;
     this.jqueryElement = null;
@@ -73,9 +73,12 @@ ItemBase = (function(superClass) {
     }
   };
 
-  ItemBase.prototype.saveObj = function(action) {
+  ItemBase.prototype.saveObj = function(newCreated) {
     var k, num, ref, self, v;
-    if (action === Constant.ItemActionType.MAKE) {
+    if (newCreated == null) {
+      newCreated = false;
+    }
+    if (newCreated) {
       num = 1;
       self = this;
       ref = Common.getCreatedItemObject();

@@ -18,11 +18,16 @@ class ButtonItem extends CssItemBase
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true)->
+    super(show)
     @clearDraw()
     $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     if !show
       @getJQueryElement().css('opacity', 0)
       return false
+
+    if @setupDragAndResizeEvents?
+      # ドラッグ & リサイズイベント設定
+      @setupDragAndResizeEvents()
 
   # 描画削除
   clearDraw: ->
