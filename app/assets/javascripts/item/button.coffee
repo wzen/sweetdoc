@@ -23,7 +23,6 @@ class ButtonItem extends CssItemBase
     $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
     if !show
       @getJQueryElement().css('opacity', 0)
-      return false
 
     if @setupDragAndResizeEvents?
       # ドラッグ & リサイズイベント設定

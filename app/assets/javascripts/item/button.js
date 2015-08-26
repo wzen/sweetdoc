@@ -35,7 +35,6 @@ ButtonItem = (function(superClass) {
     $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
     if (!show) {
       this.getJQueryElement().css('opacity', 0);
-      return false;
     }
     if (this.setupDragAndResizeEvents != null) {
       return this.setupDragAndResizeEvents();

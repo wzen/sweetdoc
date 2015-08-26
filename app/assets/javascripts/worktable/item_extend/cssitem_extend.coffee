@@ -17,11 +17,19 @@ WorkTableCssItemExtend =
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
 
+  # ドラッグ完了時イベント
+  dragComplete: ->
+    @saveObj()
+
   # リサイズ時のイベント
   resize: ->
     element = $('#' + @id)
     @itemSize.w = element.width()
     @itemSize.h = element.height()
+
+  # リサイズ完了時イベント
+  resizeComplete: ->
+    @saveObj()
 
   # 履歴データを取得
   # @param [ItemActionType] action アクション種別

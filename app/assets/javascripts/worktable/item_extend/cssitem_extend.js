@@ -20,11 +20,17 @@ WorkTableCssItemExtend = {
     this.itemSize.x = element.position().left;
     return this.itemSize.y = element.position().top;
   },
+  dragComplete: function() {
+    return this.saveObj();
+  },
   resize: function() {
     var element;
     element = $('#' + this.id);
     this.itemSize.w = element.width();
     return this.itemSize.h = element.height();
+  },
+  resizeComplete: function() {
+    return this.saveObj();
   },
   getHistoryObj: function(action) {
     var obj;

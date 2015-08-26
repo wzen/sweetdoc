@@ -20,8 +20,7 @@ WorkTableCanvasItemExtend = {
     return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
   },
   dragComplete: function() {
-    this.saveObj();
-    return EPVItem.writeItemValueToPageValue(this);
+    return this.saveObj();
   },
   resize: function() {
     var canvas, drawingCanvas, drawingContext, element;
@@ -38,8 +37,7 @@ WorkTableCanvasItemExtend = {
     return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
   },
   resizeComplete: function() {
-    this.saveObj();
-    return EPVItem.writeItemValueToPageValue(this);
+    return this.saveObj();
   },
   getHistoryObj: function(action) {
     var obj;
