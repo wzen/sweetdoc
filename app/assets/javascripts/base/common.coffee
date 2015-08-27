@@ -270,31 +270,30 @@ class Common
 
   @showModalView = (type) ->
     self = @
-
-    _centering = ->
-      w = $(window).width()
-      h = $(window).height()
-      content = $("#modal-content")
-      cw = content.outerWidth()
-      ch = content.outerHeight()
-      content.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2) + "px"})
-
-    _show = ->
-      $("body").append( '<div id="modal-overlay"></div>' )
-      $("#modal-overlay").css('display', 'block')
-      _centering.call(@)
-      $("#modal-content").css('display', 'block')
-      $("#modal-overlay,#modal-close").unbind().click( ->
-        $("#modal-content,#modal-overlay").css('display', 'none')
-        $('#modal-overlay').remove() ;
-      )
+    emt = $('body').children(".modal-content.#{type}")
 
     $(@).blur()
     if $("#modal-overlay")[0]?
       return false
 
-    emt = $("#modal-content")
-    if !emt[0]?
+    _centering = ->
+      w = $(window).width()
+      h = $(window).height()
+      cw = emt.outerWidth()
+      ch = emt.outerHeight()
+      emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2) + "px"})
+
+    _show = ->
+      $("body").append( '<div id="modal-overlay"></div>' )
+      $("#modal-overlay").css('display', 'block')
+      _centering.call(@)
+      emt.css('display', 'block')
+      $("#modal-overlay,#modal-close").unbind().click( ->
+        $(".modal-content,#modal-overlay").css('display', 'none')
+        $('#modal-overlay').remove() ;
+      )
+
+    if !emt? || emt.length == 0
       $.ajax(
         {
           url: "/modal_view/show"
@@ -305,6 +304,7 @@ class Common
           dataType: "json"
           success: (data)->
             $('body').append(data.modalHtml)
+            emt = $('body').children(".modal-content.#{type}")
             _show.call(self)
           error: (data) ->
         }

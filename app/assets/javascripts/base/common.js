@@ -345,14 +345,18 @@ Common = (function() {
   Common.showModalView = function(type) {
     var _centering, _show, emt, self;
     self = this;
+    emt = $('body').children(".modal-content." + type);
+    $(this).blur();
+    if ($("#modal-overlay")[0] != null) {
+      return false;
+    }
     _centering = function() {
-      var ch, content, cw, h, w;
+      var ch, cw, h, w;
       w = $(window).width();
       h = $(window).height();
-      content = $("#modal-content");
-      cw = content.outerWidth();
-      ch = content.outerHeight();
-      return content.css({
+      cw = emt.outerWidth();
+      ch = emt.outerHeight();
+      return emt.css({
         "left": ((w - cw) / 2) + "px",
         "top": ((h - ch) / 2) + "px"
       });
@@ -361,18 +365,13 @@ Common = (function() {
       $("body").append('<div id="modal-overlay"></div>');
       $("#modal-overlay").css('display', 'block');
       _centering.call(this);
-      $("#modal-content").css('display', 'block');
+      emt.css('display', 'block');
       return $("#modal-overlay,#modal-close").unbind().click(function() {
-        $("#modal-content,#modal-overlay").css('display', 'none');
+        $(".modal-content,#modal-overlay").css('display', 'none');
         return $('#modal-overlay').remove();
       });
     };
-    $(this).blur();
-    if ($("#modal-overlay")[0] != null) {
-      return false;
-    }
-    emt = $("#modal-content");
-    if (emt[0] == null) {
+    if ((emt == null) || emt.length === 0) {
       return $.ajax({
         url: "/modal_view/show",
         type: "GET",
@@ -382,6 +381,7 @@ Common = (function() {
         dataType: "json",
         success: function(data) {
           $('body').append(data.modalHtml);
+          emt = $('body').children(".modal-content." + type);
           return _show.call(self);
         },
         error: function(data) {}
