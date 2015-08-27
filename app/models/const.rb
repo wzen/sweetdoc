@@ -179,4 +179,8 @@ class Const
     # @property [Integer] GET_LIMIT 取得件数(Loadメニューに表示)
     GET_LIMIT = 10
   end
+
+  class ModalViewType
+    ABOUT = 'about'
+  end
 end

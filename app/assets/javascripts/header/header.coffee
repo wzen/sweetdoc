@@ -1,24 +1,30 @@
 # ヘッダーメニュー初期化
 initHeaderMenu = ->
-  itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
-  $('.menu-newcreate', itemsMenuEmt).on('click', ->
+  fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
+  $('.menu-newcreate', fileMenuEmt).on('click', ->
     if Object.keys(window.instanceMap).length > 0
       if window.confirm('テーブルに存在するアイテムは全て削除されます。')
         WorktableCommon.removeAllItemAndEvent()
   )
-  $('.menu-load', itemsMenuEmt).off('mouseenter')
-  $('.menu-load', itemsMenuEmt).on('mouseenter', ->
+  $('.menu-load', fileMenuEmt).off('mouseenter')
+  $('.menu-load', fileMenuEmt).on('mouseenter', ->
     ServerStorage.get_load_list()
   )
-  $('.menu-save', itemsMenuEmt).off('click')
-  $('.menu-save', itemsMenuEmt).on('click', ->
+  $('.menu-save', fileMenuEmt).off('click')
+  $('.menu-save', fileMenuEmt).on('click', ->
     ServerStorage.save()
   )
-  $('.menu-setting', itemsMenuEmt).off('click')
-  $('.menu-setting', itemsMenuEmt).on('click', ->
+  $('.menu-setting', fileMenuEmt).off('click')
+  $('.menu-setting', fileMenuEmt).on('click', ->
     Sidebar.switchSidebarConfig('setting')
     Setting.initConfig()
     Sidebar.openConfigSidebar()
+  )
+
+  etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li')
+  $('.menu-about', etcMenuEmt).off('click')
+  $('.menu-about', etcMenuEmt).on('click', ->
+    Common.showModalView(Constant.ModalViewType.ABOUT)
   )
 
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')

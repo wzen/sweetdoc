@@ -132,6 +132,15 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ModalViewType = (function() {
+      function ModalViewType() {}
+
+      ModalViewType.ABOUT = constant.ModalViewType.ABOUT;
+
+      return ModalViewType;
+
+    })();
+
     return Constant;
 
   })();

@@ -2,28 +2,33 @@
 var initHeaderMenu;
 
 initHeaderMenu = function() {
-  var itemsMenuEmt, itemsSelectMenuEmt;
-  itemsMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
-  $('.menu-newcreate', itemsMenuEmt).on('click', function() {
+  var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt;
+  fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
+  $('.menu-newcreate', fileMenuEmt).on('click', function() {
     if (Object.keys(window.instanceMap).length > 0) {
       if (window.confirm('テーブルに存在するアイテムは全て削除されます。')) {
         return WorktableCommon.removeAllItemAndEvent();
       }
     }
   });
-  $('.menu-load', itemsMenuEmt).off('mouseenter');
-  $('.menu-load', itemsMenuEmt).on('mouseenter', function() {
+  $('.menu-load', fileMenuEmt).off('mouseenter');
+  $('.menu-load', fileMenuEmt).on('mouseenter', function() {
     return ServerStorage.get_load_list();
   });
-  $('.menu-save', itemsMenuEmt).off('click');
-  $('.menu-save', itemsMenuEmt).on('click', function() {
+  $('.menu-save', fileMenuEmt).off('click');
+  $('.menu-save', fileMenuEmt).on('click', function() {
     return ServerStorage.save();
   });
-  $('.menu-setting', itemsMenuEmt).off('click');
-  $('.menu-setting', itemsMenuEmt).on('click', function() {
+  $('.menu-setting', fileMenuEmt).off('click');
+  $('.menu-setting', fileMenuEmt).on('click', function() {
     Sidebar.switchSidebarConfig('setting');
     Setting.initConfig();
     return Sidebar.openConfigSidebar();
+  });
+  etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li');
+  $('.menu-about', etcMenuEmt).off('click');
+  $('.menu-about', etcMenuEmt).on('click', function() {
+    return Common.showModalView(Constant.ModalViewType.ABOUT);
   });
   itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
   return $('.menu-item', itemsSelectMenuEmt).on('click', function() {

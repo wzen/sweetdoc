@@ -435,4 +435,3 @@ if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
   window.itemInitFuncList.arrowInit = (option = {}) ->
     #JS読み込み完了後の処理
     console.log('arrow loaded')
-

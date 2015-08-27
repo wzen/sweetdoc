@@ -145,7 +145,3 @@ class EventPageValueBase
 
 
 
-
-
-
-

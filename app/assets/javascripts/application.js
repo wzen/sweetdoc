@@ -45,12 +45,12 @@
 //= require event_page_value/common/backgroundcolor.js
 //= require event_page_value/common/screenposition.js
 //= require event_page_value/item/item.js
+//= require header/header
 //= require worktable/common/worktable_common
 //= require worktable/common/message.js
 //= require worktable/common/history
 //= require worktable/common/server_storage
 //= require worktable/util/colorpicker
-//= require worktable/header/header
 //= require worktable/item_extend/common_extend
 //= require worktable/item_extend/canvasitem_extend
 //= require worktable/item_extend/cssitem_extend

@@ -37,4 +37,3 @@ class EPVScreenPosition extends EventPageValueBase
     $('.screenposition_change_y:first', emt).val(value[@Y])
     $('.screenposition_change_z:first', emt).val(value[@Z])
     return true
-

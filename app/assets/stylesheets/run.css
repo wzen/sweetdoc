@@ -14,5 +14,6 @@
  *= require css/colorpicker
  *= require css/layout
  *= require bootstrap_custom
+ *= require modal_view
  *= require run/run
  */

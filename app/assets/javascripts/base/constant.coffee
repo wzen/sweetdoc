@@ -84,3 +84,7 @@ if gon?
       @BACKGROUND = constant.CommonActionEventChangeType.BACKGROUND
       # @property [Int] SCREEN 画面表示
       @SCREEN = constant.CommonActionEventChangeType.SCREEN
+
+    # モーダルビュータイプ
+    class @ModalViewType
+      @ABOUT = constant.ModalViewType.ABOUT

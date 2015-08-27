@@ -115,5 +115,3 @@ WorkTableCommonExtend =
           if self.resizeComplete?
             self.resizeComplete()
       })
-
-

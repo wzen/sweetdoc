@@ -268,6 +268,50 @@ class Common
       ret = "#{year} #{span} ago"
     return ret
 
+  @showModalView = (type) ->
+    self = @
+
+    _centering = ->
+      w = $(window).width()
+      h = $(window).height()
+      content = $("#modal-content")
+      cw = content.outerWidth()
+      ch = content.outerHeight()
+      content.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2) + "px"})
+
+    _show = ->
+      $("body").append( '<div id="modal-overlay"></div>' )
+      $("#modal-overlay").css('display', 'block')
+      _centering.call(@)
+      $("#modal-content").css('display', 'block')
+      $("#modal-overlay,#modal-close").unbind().click( ->
+        $("#modal-content,#modal-overlay").css('display', 'none')
+        $('#modal-overlay').remove() ;
+      )
+
+    $(@).blur()
+    if $("#modal-overlay")[0]?
+      return false
+
+    emt = $("#modal-content")
+    if !emt[0]?
+      $.ajax(
+        {
+          url: "/modal_view/show"
+          type: "GET"
+          data: {
+            type: type
+          }
+          dataType: "json"
+          success: (data)->
+            $('body').append(data.modalHtml)
+            _show.call(self)
+          error: (data) ->
+        }
+      )
+    else
+      _show.call(self)
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedClassList = {}

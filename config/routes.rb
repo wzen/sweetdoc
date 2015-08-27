@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'modal_view/show'
+
   get 'item_js/index'
 
   root 'worktable#index'
@@ -17,6 +19,7 @@ Rails.application.routes.draw do
   post 'page_value_state/load_state'
   post 'page_value_state/user_pagevalue_list'
   post 'item_js/index'
+  get  'modal_view/show'
 
   post 'test_move/hello'
 

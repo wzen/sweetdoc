@@ -11,7 +11,6 @@ _commonVar = ->
 # 作業テーブル共通変数
 worktableCommonVar = ->
   _commonVar()
-
   window.messageTimer = null
   window.flushMessageTimer = null
   window.mode = Constant.Mode.DRAW

@@ -131,4 +131,3 @@ $ ->
 
   # 履歴に画面初期時を状態を保存
   OperationHistory.add(true)
-

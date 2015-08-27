@@ -146,5 +146,3 @@ class WorktableCommon
         if callback?
           callback()
     , '500')
-
-
