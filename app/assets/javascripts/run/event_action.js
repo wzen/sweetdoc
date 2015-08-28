@@ -13,6 +13,7 @@ EventAction = (function() {
   };
 
   EventAction.prototype.start = function() {
+    Navbar.setChapterNum(this.chapterIndex + 1);
     this.sinkFrontAllChapterObj();
     return this.thisChapter().willChapter();
   };
@@ -29,20 +30,33 @@ EventAction = (function() {
     if (this.chapterList.length <= this.chapterIndex) {
       return this.finishAllEvents();
     } else {
+      Navbar.setChapterNum(this.chapterIndex + 1);
       return this.thisChapter().willChapter();
     }
   };
 
-  EventAction.prototype.backChapter = function() {
+  EventAction.prototype.rewindChapter = function() {
     this.resetChapter(this.chapterIndex);
-    if (this.chapterIndex > 0) {
+    if (!this.thisChapter().doMoveChapter && this.chapterIndex > 0) {
       this.chapterIndex -= 1;
-      return this.thisChapter().focusToActorIfNeed(false);
+      this.resetChapter(this.chapterIndex);
     }
+    return this.thisChapter().willChapter();
   };
 
   EventAction.prototype.resetChapter = function(chapterIndex) {
     return this.chapterList[chapterIndex].reset();
+  };
+
+  EventAction.prototype.rewindAllChapters = function() {
+    var chapter, i, j, ref;
+    for (i = j = ref = this.chapterList.length - 1; j >= 0; i = j += -1) {
+      chapter = this.chapterList[i];
+      chapter.reset();
+    }
+    this.chapterIndex = 0;
+    this.finished = false;
+    return this.start();
   };
 
   EventAction.prototype.handleScrollEvent = function(x, y) {

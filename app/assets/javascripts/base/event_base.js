@@ -33,11 +33,12 @@ EventBase = (function(superClass) {
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       return this.scrollEvent = this.scrollRootFunc;
     } else if (actionType === Constant.ActionEventHandleType.CLICK) {
-      return this.clickEvent = this.constructor.prototype[methodName];
+      return this.clickEvent = this.clickRootFunc;
     }
   };
 
   EventBase.prototype.reset = function() {
+    this.updateEventBefore();
     this.isFinishedEvent = false;
   };
 
@@ -202,6 +203,9 @@ EventBase = (function(superClass) {
     if (this.isFinishedEvent) {
       return;
     }
+    if (window.eventAction != null) {
+      window.eventAction.thisChapter().doMoveChapter = true;
+    }
     console.log("y:" + y);
     if (y >= 0) {
       this.scrollValue += parseInt((y + 9) / 10);
@@ -226,6 +230,18 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.scrollLength = function() {
     return parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+  };
+
+  EventBase.prototype.clickRootFunc = function(e, complete) {
+    var methodName;
+    if (complete == null) {
+      complete = null;
+    }
+    if (window.eventAction != null) {
+      window.eventAction.thisChapter().doMoveChapter = true;
+    }
+    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    return this.constructor.prototype[methodName].call(this, e, complete);
   };
 
   EventBase.prototype.cssElement = function(methodName) {

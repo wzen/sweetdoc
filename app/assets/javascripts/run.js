@@ -28,10 +28,11 @@
 //= require event_page_value/common/backgroundcolor.js
 //= require event_page_value/common/screenposition.js
 //= require event_page_value/item/item.js
-//= require header/header
+//= require navbar/navbar.js
 //= require run/chapter
 //= require run/scroll_chapter
 //= require run/click_chapter
+//= require run/page
 //= require run/event_action.js
 //= require run/run
 // require_tree .

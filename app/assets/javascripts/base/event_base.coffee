@@ -26,11 +26,12 @@ class EventBase extends Extend
 
     # クリックイベント
     else if actionType == Constant.ActionEventHandleType.CLICK
-      @clickEvent = @constructor.prototype[methodName]
+      @clickEvent = @clickRootFunc
 
   # リセット(アクション前に戻す)
   # @abstract
   reset: ->
+    @updateEventBefore()
     @isFinishedEvent = false
     return
 
@@ -151,6 +152,7 @@ class EventBase extends Extend
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollValue = 0
 
+    # 状態をイベント前に戻す
     @updateEventBefore()
     return
 
@@ -169,6 +171,10 @@ class EventBase extends Extend
     if @isFinishedEvent
       # 終了済みの場合
       return
+
+    # 動作済みフラグON
+    if window.eventAction?
+      window.eventAction.thisChapter().doMoveChapter = true
 
     console.log("y:#{y}")
     if y >= 0
@@ -194,6 +200,14 @@ class EventBase extends Extend
   # スクロールの長さを取得
   scrollLength: ->
     return parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+
+  # スクロール基底メソッド
+  clickRootFunc: (e, complete = null) ->
+    # 動作済みフラグON
+    if window.eventAction?
+      window.eventAction.thisChapter().doMoveChapter = true
+    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    (@constructor.prototype[methodName]).call(@, e, complete)
 
   # CSS
   # @abstract

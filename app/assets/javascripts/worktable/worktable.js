@@ -117,7 +117,7 @@ $(function() {
   scrollContents.scrollLeft(scrollInside.width() * 0.5);
   scrollContents.scrollTop(scrollInside.height() * 0.5);
   $('.dropdown-toggle').dropdown();
-  initHeaderMenu();
+  Navbar.initWorktableNavbar();
   initKeyEvent();
   Handwrite.initHandwrite();
   menu = [

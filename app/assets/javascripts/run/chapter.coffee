@@ -4,6 +4,7 @@ class Chapter
     @eventObjList = list.eventObjList
     @eventList = list.eventList
     @num = list.num
+    @doMoveChapter = false
 
   # チャプター共通の前処理
   willChapter: ->
@@ -12,6 +13,7 @@ class Chapter
       methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME]
       event.willChapter(methodName)
       event.appendCssIfNeeded(methodName)
+      @doMoveChapter = false
 
     @sinkFrontAllObj()
     @focusToActorIfNeed(false)
@@ -78,3 +80,9 @@ class Chapter
   # 全てのイベントが終了しているか
   finishedAllEvent: ->
     return true
+
+  # チャプターのイベントをリセットする
+  reset: ->
+    @eventObjList.forEach((e) =>
+      e.reset()
+    )

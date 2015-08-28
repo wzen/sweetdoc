@@ -90,6 +90,7 @@ initEventAction = function() {
     }
     return true;
   });
+  Navbar.setPageAndChapterMax(0, chapterList.length);
   window.eventAction = new EventAction(chapterList);
   return window.eventAction.start();
 };
@@ -139,6 +140,7 @@ $(function() {
   initHandleScrollPoint();
   initEventAction();
   setupScrollEvent();
+  Navbar.initRunNavbar();
   return $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.E_CSS));
 });
 

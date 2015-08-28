@@ -107,8 +107,8 @@ $ ->
   scrollContents.scrollTop(scrollInside.height() * 0.5)
   # ドロップダウン
   $('.dropdown-toggle').dropdown()
-  # ヘッダーメニュー
-  initHeaderMenu()
+  # ナビバー
+  Navbar.initWorktableNavbar()
   # キーイベント
   initKeyEvent()
   # ドラッグ描画イベント

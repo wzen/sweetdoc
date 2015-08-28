@@ -6,6 +6,7 @@ Chapter = (function() {
     this.eventObjList = list.eventObjList;
     this.eventList = list.eventList;
     this.num = list.num;
+    this.doMoveChapter = false;
   }
 
   Chapter.prototype.willChapter = function() {
@@ -17,6 +18,7 @@ Chapter = (function() {
       methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
       event.willChapter(methodName);
       event.appendCssIfNeeded(methodName);
+      this.doMoveChapter = false;
     }
     this.sinkFrontAllObj();
     return this.focusToActorIfNeed(false);
@@ -99,6 +101,14 @@ Chapter = (function() {
 
   Chapter.prototype.finishedAllEvent = function() {
     return true;
+  };
+
+  Chapter.prototype.reset = function() {
+    return this.eventObjList.forEach((function(_this) {
+      return function(e) {
+        return e.reset();
+      };
+    })(this));
   };
 
   return Chapter;

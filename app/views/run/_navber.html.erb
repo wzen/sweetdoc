@@ -11,9 +11,10 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><p class="navbar-text" style="font-size: 14px">Page 0<%= @nav_page_num %>/0<%= @nav_page_max %></p></li>
-                <li><p class="navbar-text" style="font-size: 14px">Chapter 0<%= @nav_chapter_num %>/0<%= @nav_chapter_max %></p></li>
-                <li><a><%= image_tag("header/rewind.png", size:'20x20') %></a></li>
+                <li><p class="navbar-text" style="font-size: 14px">Page [<span class="nav_page_num"></span>/<span class="nav_page_max"></span>]</p></li>
+                <li><p class="navbar-text" style="font-size: 14px">Chapter [<span class="nav_chapter_num"></span>/<span class="nav_chapter_max"></span>]</p></li>
+                <li><a class="menu-control-rewind-page"><%= image_tag("nav/rewind_page.png", size:'20x20') %></a></li>
+                <li><a class="menu-control-rewind-chapter"><%= image_tag("nav/rewind_chapter.png", size:'20x20') %></a></li>
                 <li><a>Right</a></li>
 
                 <!-- オーバーレイメニュー追加予定 -->

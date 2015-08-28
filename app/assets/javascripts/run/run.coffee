@@ -82,6 +82,11 @@ initEventAction = ->
 
     return true
   )
+
+  # ナビバーのページ数 & チャプター数設定
+  # TODO: ページ数修正
+  Navbar.setPageAndChapterMax(0, chapterList.length)
+
   window.eventAction = new EventAction(chapterList)
   window.eventAction.start()
 
@@ -132,6 +137,7 @@ $ ->
   #initResize(wrap, scrollWrapper)
   initEventAction()
   setupScrollEvent()
+  Navbar.initRunNavbar()
 
   # CSS
   $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.E_CSS))

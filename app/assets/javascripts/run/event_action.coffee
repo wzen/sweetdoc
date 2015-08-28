@@ -11,6 +11,8 @@ class EventAction
 
   # 開始イベント
   start: ->
+    # チャプター数設定
+    Navbar.setChapterNum(@chapterIndex + 1)
     # チャプター前処理
     @sinkFrontAllChapterObj()
     @thisChapter().willChapter()
@@ -29,21 +31,33 @@ class EventAction
     if @chapterList.length <= @chapterIndex
       @finishAllEvents()
     else
+      # チャプター数設定
+      Navbar.setChapterNum(@chapterIndex + 1)
       # チャプター前処理
       @thisChapter().willChapter()
 
   # チャプターを戻す
-  backChapter: ->
-    # リセット
+  rewindChapter: ->
     @resetChapter(@chapterIndex)
-    if @chapterIndex > 0
+    if !@thisChapter().doMoveChapter && @chapterIndex > 0
       @chapterIndex -= 1
-      # 前のアイテムにフォーカス
-      @thisChapter().focusToActorIfNeed(false)
+      @resetChapter(@chapterIndex)
+
+    # チャプター前処理
+    @thisChapter().willChapter()
 
   # チャプターの内容をリセット
   resetChapter: (chapterIndex) ->
     @chapterList[chapterIndex].reset()
+
+  # 全てのチャプターを戻す
+  rewindAllChapters: ->
+    for i in [(@chapterList.length - 1)..0] by -1
+      chapter = @chapterList[i]
+      chapter.reset()
+    @chapterIndex = 0
+    @finished = false
+    @start()
 
   # スクロールイベントをハンドル
   # @param [Int] x X軸の動作値
