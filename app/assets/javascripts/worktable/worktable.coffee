@@ -119,7 +119,7 @@ $ ->
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )
-
+  # PageValue & タイムライン初期化
   if !LocalStorage.isOverWorktableSaveTimeLimit()
     # キャッシュが存在する場合アイテム描画
     LocalStorage.loadValueForWorktable()
@@ -128,6 +128,7 @@ $ ->
   else
     LocalStorage.clearWorktable()
     Timeline.refreshAllTimeline()
-
   # 履歴に画面初期時を状態を保存
   OperationHistory.add(true)
+  # ページング
+  Paging.initPaging()

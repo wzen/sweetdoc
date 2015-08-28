@@ -2,88 +2,65 @@
 var EventAction;
 
 EventAction = (function() {
-  function EventAction(chapterList) {
-    this.chapterList = chapterList;
-    this.chapterIndex = 0;
-    this.finished = false;
+  function EventAction(pageList) {
+    this.pageList = pageList;
+    this.pageIndex = 0;
+    this.finishedAllChapters = false;
   }
 
-  EventAction.prototype.thisChapter = function() {
-    return this.chapterList[this.chapterIndex];
+  EventAction.prototype.thisPage = function() {
+    return this.pageList[this.pageIndex];
   };
 
   EventAction.prototype.start = function() {
-    Navbar.setChapterNum(this.chapterIndex + 1);
-    this.sinkFrontAllChapterObj();
-    return this.thisChapter().willChapter();
+    Navbar.setPageNum(this.pageIndex + 1);
+    return this.thisPage().willPage();
   };
 
-  EventAction.prototype.nextChapterIfFinishedAllEvent = function() {
-    if (this.thisChapter().finishedAllEvent()) {
-      return this.nextChapter();
+  EventAction.prototype.nextPageIfFinishedAllChapter = function() {
+    if (this.thisPage().finishedAllChapters()) {
+      return this.nextPage();
     }
   };
 
-  EventAction.prototype.nextChapter = function() {
-    this.thisChapter().didChapter();
-    this.chapterIndex += 1;
-    if (this.chapterList.length <= this.chapterIndex) {
-      return this.finishAllEvents();
+  EventAction.prototype.nextPage = function() {
+    this.thisPage().didPage();
+    this.pageIndex += 1;
+    if (this.pageList.length <= this.pageIndex) {
+      return this.finishedAllChapters();
     } else {
-      Navbar.setChapterNum(this.chapterIndex + 1);
-      return this.thisChapter().willChapter();
+      Navbar.setPageNum(this.pageIndex + 1);
+      return this.thisPage().willPage();
     }
   };
 
-  EventAction.prototype.rewindChapter = function() {
-    this.resetChapter(this.chapterIndex);
-    if (!this.thisChapter().doMoveChapter && this.chapterIndex > 0) {
-      this.chapterIndex -= 1;
-      this.resetChapter(this.chapterIndex);
+  EventAction.prototype.rewindPage = function() {
+    this.resetPage(this.pageIndex);
+    if (!this.thisChapter().doMovePage && this.pageIndex > 0) {
+      this.pageIndex -= 1;
+      this.resetPage(this.pageIndex);
     }
-    return this.thisChapter().willChapter();
+    return this.thisPage().willPage();
   };
 
-  EventAction.prototype.resetChapter = function(chapterIndex) {
-    return this.chapterList[chapterIndex].reset();
+  EventAction.prototype.resetPage = function(pageIndex) {
+    return this.pageList[pageIndex].reset();
   };
 
-  EventAction.prototype.rewindAllChapters = function() {
-    var chapter, i, j, ref;
-    for (i = j = ref = this.chapterList.length - 1; j >= 0; i = j += -1) {
-      chapter = this.chapterList[i];
-      chapter.reset();
+  EventAction.prototype.rewindAllPages = function() {
+    var i, j, page, ref;
+    for (i = j = ref = this.pageList.length - 1; j >= 0; i = j += -1) {
+      page = this.pageList[i];
+      page.reset();
     }
-    this.chapterIndex = 0;
-    this.finished = false;
+    this.pageIndex = 0;
+    this.finishedAllChapters = false;
     return this.start();
   };
 
-  EventAction.prototype.handleScrollEvent = function(x, y) {
-    if (!this.finished && this.isScrollChapter()) {
-      return this.thisChapter().scrollEvent(x, y);
-    }
-  };
-
-  EventAction.prototype.isScrollChapter = function() {
-    return this.thisChapter().scrollEvent != null;
-  };
-
-  EventAction.prototype.sinkFrontAllChapterObj = function() {
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
-    scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.chapterList.forEach(function(chapter) {
-      return chapter.eventObjList.forEach(function(event) {
-        if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-          return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + chapter.num);
-        }
-      });
-    });
-  };
-
-  EventAction.prototype.finishAllEvents = function() {
-    this.finished = true;
-    return console.log('Finish!');
+  EventAction.prototype.finishAllChapters = function() {
+    this.finishedAllChapters = true;
+    return console.log('Finish All Chapters!');
   };
 
   return EventAction;

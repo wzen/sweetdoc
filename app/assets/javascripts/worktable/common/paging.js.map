@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "paging.js",
+  "sourceRoot": "",
+  "sources": [
+    "paging.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,MAAA;;AAAA;sBAGE;;AAAA,EAAA,MAAC,CAAA,UAAD,GAAa,SAAA,GAAA,CAAb,CAAA;;gBAAA;;IAHF,CAAA"
+}

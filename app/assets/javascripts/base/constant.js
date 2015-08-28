@@ -141,6 +141,25 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.Paging = (function() {
+      function Paging() {}
+
+      Paging.NAV_ROOT_ID = constant.Paging.NAV_ROOT_ID;
+
+      Paging.NAV_SELECTED_CLASS = constant.Paging.NAV_SELECTED_CLASS;
+
+      Paging.NAV_SELECT_ROOT_CLASS = constant.Paging.NAV_SELECT_ROOT_CLASS;
+
+      Paging.NAV_MENU_NAME = 'Page @pagenum';
+
+      Paging.NAV_MENU_CLASS = 'paging-@pagenum';
+
+      Paging.NAV_MENU_ADDPAGE_CLASS = 'paging-new';
+
+      return Paging;
+
+    })();
+
     return Constant;
 
   })();

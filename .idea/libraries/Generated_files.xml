@@ -10,7 +10,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/screen.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
@@ -28,10 +28,9 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/modal_view.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/header/navbar.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
@@ -91,6 +90,8 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/server_access.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/modal_view.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/header/navbar.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/modal_view.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/header/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
@@ -117,10 +118,9 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/modal_view.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/header/navbar.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />

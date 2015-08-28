@@ -183,4 +183,10 @@ class Const
   class ModalViewType
     ABOUT = 'about'
   end
+
+  class Paging
+    NAV_ROOT_ID = 'header-pageing-menu'
+    NAV_SELECTED_CLASS = 'header-pageing-menu-selected'
+    NAV_SELECT_ROOT_CLASS = 'header-pageing-menu-selected'
+  end
 end

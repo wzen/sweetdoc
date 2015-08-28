@@ -102,7 +102,7 @@ setupScrollEvent = ->
   stopTimer = null
 
   scrollHandleWrapper.scroll( ->
-    if eventAction.finished || !eventAction.isScrollChapter()
+    if eventAction.finishedAllChapters || !eventAction.isScrollChapter()
       return
 
     x = $(@).scrollLeft()

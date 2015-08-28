@@ -2,7 +2,102 @@
 var Page;
 
 Page = (function() {
-  function Page() {}
+  function Page(chapterList) {
+    this.chapterList = chapterList;
+    this.chapterIndex = 0;
+    this.doMovePage = false;
+    this.finishedAllChapters = false;
+  }
+
+  Page.prototype.thisChapter = function() {
+    return this.chapterList[this.chapterIndex];
+  };
+
+  Page.prototype.start = function() {
+    Navbar.setChapterNum(this.chapterIndex + 1);
+    this.sinkFrontAllChapterObj();
+    return this.thisChapter().willChapter();
+  };
+
+  Page.prototype.nextChapterIfFinishedAllEvent = function() {
+    if (this.thisChapter().finishedAllEvent()) {
+      return this.nextChapter();
+    }
+  };
+
+  Page.prototype.nextChapter = function() {
+    this.thisChapter().didChapter();
+    this.chapterIndex += 1;
+    if (this.chapterList.length <= this.chapterIndex) {
+      return this.finishAllChapters();
+    } else {
+      Navbar.setChapterNum(this.chapterIndex + 1);
+      return this.thisChapter().willChapter();
+    }
+  };
+
+  Page.prototype.rewindChapter = function() {
+    this.resetChapter(this.chapterIndex);
+    if (!this.thisChapter().doMoveChapter && this.chapterIndex > 0) {
+      this.chapterIndex -= 1;
+      this.resetChapter(this.chapterIndex);
+    }
+    return this.thisChapter().willChapter();
+  };
+
+  Page.prototype.resetChapter = function(chapterIndex) {
+    return this.chapterList[chapterIndex].reset();
+  };
+
+  Page.prototype.rewindAllChapters = function() {
+    var chapter, i, j, ref;
+    for (i = j = ref = this.chapterList.length - 1; j >= 0; i = j += -1) {
+      chapter = this.chapterList[i];
+      chapter.reset();
+    }
+    this.chapterIndex = 0;
+    this.finishedAllChapters = false;
+    return this.start();
+  };
+
+  Page.prototype.handleScrollEvent = function(x, y) {
+    if (!this.finishedAllChapters && this.isScrollChapter()) {
+      return this.thisChapter().scrollEvent(x, y);
+    }
+  };
+
+  Page.prototype.isScrollChapter = function() {
+    return this.thisChapter().scrollEvent != null;
+  };
+
+  Page.prototype.sinkFrontAllChapterObj = function() {
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
+    scrollContents.css('z-index', scrollViewSwitchZindex.off);
+    return this.chapterList.forEach(function(chapter) {
+      return chapter.eventObjList.forEach(function(event) {
+        if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+          return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + chapter.num);
+        }
+      });
+    });
+  };
+
+  Page.prototype.willPage = function() {
+    return this.thisChapter().start();
+  };
+
+  Page.prototype.didPage = function() {};
+
+  Page.prototype.reset = function() {
+    return this.chapterList.forEach(function(chapter) {
+      return chapter.reset();
+    });
+  };
+
+  Page.prototype.finishAllChapters = function() {
+    this.finishedAllChapters = true;
+    return console.log('Finish All Events!');
+  };
 
   return Page;
 

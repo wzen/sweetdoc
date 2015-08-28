@@ -107,7 +107,7 @@ setupScrollEvent = function() {
   stopTimer = null;
   scrollHandleWrapper.scroll(function() {
     var distX, distY, x, y;
-    if (eventAction.finished || !eventAction.isScrollChapter()) {
+    if (eventAction.finishedAllChapters || !eventAction.isScrollChapter()) {
       return;
     }
     x = $(this).scrollLeft();

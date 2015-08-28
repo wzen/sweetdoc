@@ -1,87 +1,63 @@
 # イベント実行クラス
 class EventAction
   # コンストラクタ
-  constructor: (@chapterList) ->
-    @chapterIndex = 0
-    @finished = false
+  constructor: (@pageList) ->
+    @pageIndex = 0
+    @finishedAllChapters = false
 
-  # 現在のチャプターを取得
-  thisChapter: ->
-    return @chapterList[@chapterIndex]
+  # 現在のページを取得
+  thisPage: ->
+    return @pageList[@pageIndex]
 
   # 開始イベント
   start: ->
-    # チャプター数設定
-    Navbar.setChapterNum(@chapterIndex + 1)
-    # チャプター前処理
-    @sinkFrontAllChapterObj()
-    @thisChapter().willChapter()
+    # ページ数設定
+    Navbar.setPageNum(@pageIndex + 1)
+    @thisPage().willPage()
 
-  # 全てのイベントが終了している場合、チャプターを進める
-  nextChapterIfFinishedAllEvent: ->
-    if @thisChapter().finishedAllEvent()
-      @nextChapter()
+  # 全てのチャプターが終了している場合、ページを進める
+  nextPageIfFinishedAllChapter: ->
+    if @thisPage().finishedAllChapters()
+      @nextPage()
 
-  # チャプターを進める
-  nextChapter: ->
-    # チャプター後処理
-    @thisChapter().didChapter()
+  # ページを進める
+  nextPage: ->
+    # ページ後処理
+    @thisPage().didPage()
     # indexを更新
-    @chapterIndex += 1
-    if @chapterList.length <= @chapterIndex
-      @finishAllEvents()
+    @pageIndex += 1
+    if @pageList.length <= @pageIndex
+      @finishedAllChapters()
     else
-      # チャプター数設定
-      Navbar.setChapterNum(@chapterIndex + 1)
-      # チャプター前処理
-      @thisChapter().willChapter()
+      # ページ数設定
+      Navbar.setPageNum(@pageIndex + 1)
+      # ページ前処理
+      @thisPage().willPage()
 
-  # チャプターを戻す
-  rewindChapter: ->
-    @resetChapter(@chapterIndex)
-    if !@thisChapter().doMoveChapter && @chapterIndex > 0
-      @chapterIndex -= 1
-      @resetChapter(@chapterIndex)
+  # ページを戻す
+  rewindPage: ->
+    @resetPage(@pageIndex)
+    if !@thisChapter().doMovePage && @pageIndex > 0
+      @pageIndex -= 1
+      @resetPage(@pageIndex)
 
-    # チャプター前処理
-    @thisChapter().willChapter()
+    # ページ前処理
+    @thisPage().willPage()
 
-  # チャプターの内容をリセット
-  resetChapter: (chapterIndex) ->
-    @chapterList[chapterIndex].reset()
+  # ページの内容をリセット
+  resetPage: (pageIndex) ->
+    @pageList[pageIndex].reset()
 
-  # 全てのチャプターを戻す
-  rewindAllChapters: ->
-    for i in [(@chapterList.length - 1)..0] by -1
-      chapter = @chapterList[i]
-      chapter.reset()
-    @chapterIndex = 0
-    @finished = false
+  # 全てのページを戻す
+  rewindAllPages: ->
+    for i in [(@pageList.length - 1)..0] by -1
+      page = @pageList[i]
+      page.reset()
+    @pageIndex = 0
+    @finishedAllChapters = false
     @start()
 
-  # スクロールイベントをハンドル
-  # @param [Int] x X軸の動作値
-  # @param [Int] y Y軸の動作値
-  handleScrollEvent: (x, y) ->
-    if !@finished && @isScrollChapter()
-      @thisChapter().scrollEvent(x, y)
-
-  # スクロールチャプターか判定
-  isScrollChapter: ->
-    return @thisChapter().scrollEvent?
-
-  # 全てのイベントアイテムをFrontから落とす
-  sinkFrontAllChapterObj: ->
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
-    scrollContents.css('z-index', scrollViewSwitchZindex.off)
-    @chapterList.forEach((chapter) ->
-      chapter.eventObjList.forEach((event) ->
-        if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-          event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + chapter.num)
-      )
-    )
-
-  # イベント終了イベント
-  finishAllEvents: ->
-    @finished = true
-    console.log('Finish!')
+  # 全チャプター終了イベント
+  finishAllChapters: ->
+    @finishedAllChapters = true
+    console.log('Finish All Chapters!')

@@ -139,7 +139,8 @@ $(function() {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();
   }
-  return OperationHistory.add(true);
+  OperationHistory.add(true);
+  return Paging.initPaging();
 });
 
 //# sourceMappingURL=worktable.js.map

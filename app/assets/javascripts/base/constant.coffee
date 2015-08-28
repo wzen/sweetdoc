@@ -88,3 +88,12 @@ if gon?
     # モーダルビュータイプ
     class @ModalViewType
       @ABOUT = constant.ModalViewType.ABOUT
+
+    # ページング
+    class @Paging
+      @NAV_ROOT_ID = constant.Paging.NAV_ROOT_ID
+      @NAV_SELECTED_CLASS = constant.Paging.NAV_SELECTED_CLASS
+      @NAV_SELECT_ROOT_CLASS = constant.Paging.NAV_SELECT_ROOT_CLASS
+      @NAV_MENU_NAME = 'Page @pagenum'
+      @NAV_MENU_CLASS = 'paging-@pagenum'
+      @NAV_MENU_ADDPAGE_CLASS = 'paging-new'
