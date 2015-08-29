@@ -30,6 +30,6 @@ class ClickChapter extends Chapter
       if event.clickEvent?
         event.clickEvent(e, ->
           if window.eventAction?
-            window.eventAction.nextChapterIfFinishedAllEvent()
+            window.eventAction.thisPage().nextChapterIfFinishedAllEvent()
         )
     )

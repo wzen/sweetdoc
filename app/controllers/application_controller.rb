@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # Locale
+  before_action :login
   before_filter :set_locale
 
   def init_const
@@ -26,8 +27,28 @@ class ApplicationController < ActionController::Base
   end
 
   private
+  def login
+    if session[:user_id].blank?
+      user = User.create(name: 'temp', user_auth_id: 3)
+      session[:user_id] = user.id
+    end
+  end
+
+  def current_user
+    @_current_user ||= User.find_by(id: session[:user_id])
+  end
+
+  def destroy_current_user
+    @_current_user = session[:user_id] = nil
+    redirect_to root_url
+  end
+
   def set_locale
     # TODO: サブドメインから引っ張るように修正
     I18n.locale = params[:locale] || I18n.default_locale
   end
+
+
+
+
 end

@@ -83,7 +83,7 @@ Page = (function() {
   };
 
   Page.prototype.willPage = function() {
-    return this.thisChapter().start();
+    return this.thisChapter().reset();
   };
 
   Page.prototype.didPage = function() {};

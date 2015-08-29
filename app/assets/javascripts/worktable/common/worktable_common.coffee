@@ -32,7 +32,7 @@ class WorktableCommon
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     lstorage = localStorage
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_PAGEVALUES)
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
     Common.clearAllEventChange( =>
       @removeAllItem()

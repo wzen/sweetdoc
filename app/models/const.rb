@@ -116,6 +116,10 @@ class Const
   end
 
   class PageValueKey
+    # @property [String] U_ROOT ユーザ情報ルート
+    G_ROOT = 'general_page_values'
+    # @property [String] G_ROOT 汎用情報プレフィックス
+    G_PREFIX = 'generals'
     # @property [String] IS_ROOT ページ値ルート
     IS_ROOT = 'instance_page_values'
     # @property [String] INSTANCE_PREFIX インスタンスプレフィックス

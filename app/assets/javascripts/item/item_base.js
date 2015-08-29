@@ -115,7 +115,7 @@ ItemBase = (function(superClass) {
     prefix_key = isCache ? PageValue.Key.instanceValueCache() : PageValue.Key.instanceValue();
     prefix_key = prefix_key.replace('@id', this.id);
     PageValue.setInstancePageValue(prefix_key + (":" + prop), value);
-    return LocalStorage.savePageValue();
+    return LocalStorage.saveInstancePageValue();
   };
 
   ItemBase.prototype.getHistoryObj = function(action) {

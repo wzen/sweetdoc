@@ -76,7 +76,7 @@ WorkTableCommonExtend = {
           targetId = $(target).attr('id');
           PageValue.removeInstancePageValue(targetId);
           target.remove();
-          PageValue.adjustInstanceAndEvent();
+          PageValue.adjustInstanceAndEventOnThisPage();
           Timeline.refreshAllTimeline();
           LocalStorage.saveEventPageValue();
           return OperationHistory.add();

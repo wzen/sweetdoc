@@ -121,7 +121,7 @@ class ItemBase extends ItemEventBase
     prefix_key = if isCache then PageValue.Key.instanceValueCache() else PageValue.Key.instanceValue()
     prefix_key = prefix_key.replace('@id', @id)
     PageValue.setInstancePageValue(prefix_key + ":#{prop}", value)
-    LocalStorage.savePageValue()
+    LocalStorage.saveInstancePageValue()
 
   # 履歴データを取得
   # @abstract

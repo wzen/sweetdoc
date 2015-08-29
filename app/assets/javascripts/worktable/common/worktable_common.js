@@ -44,7 +44,7 @@ WorktableCommon = (function() {
     var lstorage;
     Sidebar.closeSidebar();
     lstorage = localStorage;
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_PAGEVALUES);
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
     return Common.clearAllEventChange((function(_this) {
       return function() {

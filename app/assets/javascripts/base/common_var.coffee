@@ -15,11 +15,13 @@ worktableCommonVar = ->
   window.flushMessageTimer = null
   window.mode = Constant.Mode.DRAW
   window.itemInitFuncList = []
-  window.operationHistory = []
-  window.operationHistoryLimit = 30
-  window.operationHistoryIndex = null
-  window.operationHistoryTailIndex = null
   window.pageNum = 1
+  window.operationHistories = []
+  window.operationHistories[window.pageNum] = []
+  window.operationHistoryLimit = 30
+  window.operationHistoryTailIndex = null
+  window.operationHistoryIndexes = []
+  window.operationHistoryIndexes[window.pageNum] = null
 
 # 実行テーブル共通変数
 runCommonVar = ->

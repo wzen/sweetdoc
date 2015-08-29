@@ -176,7 +176,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.nextChapter = function() {
     if (window.eventAction != null) {
-      return window.eventAction.nextChapter();
+      return window.eventAction.thisPage().nextChapter();
     }
   };
 
@@ -204,7 +204,7 @@ EventBase = (function(superClass) {
       return;
     }
     if (window.eventAction != null) {
-      window.eventAction.thisChapter().doMoveChapter = true;
+      window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
     console.log("y:" + y);
     if (y >= 0) {
@@ -238,7 +238,7 @@ EventBase = (function(superClass) {
       complete = null;
     }
     if (window.eventAction != null) {
-      window.eventAction.thisChapter().doMoveChapter = true;
+      window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     return this.constructor.prototype[methodName].call(this, e, complete);
@@ -281,7 +281,7 @@ EventBase = (function(superClass) {
     prefix_key = prefix_key.replace('@id', this.id);
     obj = this.getMinimumObject();
     PageValue.setInstancePageValue(prefix_key, obj);
-    return LocalStorage.savePageValue();
+    return LocalStorage.saveInstancePageValue();
   };
 
   return EventBase;

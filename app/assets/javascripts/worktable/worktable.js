@@ -61,7 +61,7 @@ focusToTargetWhenSidebarOpen = function(target, selectedBorderType) {
     top: scrollContents.scrollTop(),
     left: scrollContents.scrollLeft()
   }, true);
-  LocalStorage.savePageValue();
+  LocalStorage.saveInstancePageValue();
   return Common.focusToTarget(target);
 };
 
@@ -133,13 +133,14 @@ $(function() {
   });
   if (!LocalStorage.isOverWorktableSaveTimeLimit()) {
     LocalStorage.loadValueForWorktable();
-    PageValue.adjustInstanceAndEvent();
+    PageValue.adjustInstanceAndEventOnThisPage();
     WorktableCommon.drawAllItemFromEventPageValue();
   } else {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();
   }
   OperationHistory.add(true);
+  PageValue.updatePageCount();
   return Paging.initPaging();
 });
 

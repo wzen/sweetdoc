@@ -7,10 +7,16 @@ class PageValue
     class @Key
       # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
       @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
+      # @property [String] G_ROOT 汎用情報ルート
+      @G_ROOT = constant.PageValueKey.G_ROOT
+      # @property [String] G_ROOT 汎用情報プレフィックス
+      @G_PREFIX = constant.PageValueKey.G_PREFIX
       # @property [String] P_PREFIX ページ番号プレフィックス
       @P_PREFIX = constant.PageValueKey.P_PREFIX
       # @property [return] 現在のページのページ番号プレフィックス
-      @pagePrefix = -> @P_PREFIX + window.pageNum
+      @pagePrefix = (pn = window.pageNum) -> @P_PREFIX + pn
+      # @property [String] PAGE_COUNT ページ総数
+      @PAGE_COUNT = 'page_count'
       # @property [String] IS_ROOT ページ値ルート
       @IS_ROOT = constant.PageValueKey.IS_ROOT
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
@@ -36,9 +42,9 @@ class PageValue
       # @property [String] E_PREFIX イベントプレフィックス
       @E_PREFIX = constant.PageValueKey.E_PREFIX
       # @property [return] イベントページプレフィックス
-      @eventPagePrefix = -> @E_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix()
+      @eventPagePrefix = (pn) -> @E_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
       # @property [return] イベント数
-      @eventCount = -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix()}#{@PAGE_VALUES_SEPERATOR}count"
+      @eventCount = (pn) -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}count"
       # @property [return] CSSデータ
       @eventCss = -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix()}#{@PAGE_VALUES_SEPERATOR}css"
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
@@ -63,7 +69,13 @@ class PageValue
           isSet = true
       )
       if isSet
-        LocalStorage.savePageValue()
+        LocalStorage.saveInstancePageValue()
+
+  # 汎用値を取得
+  # @param [String] key キー値
+  # @param [Boolean] updateOnly updateクラス付与のみ取得するか
+  @getGeneralPageValue = (key, updateOnly = false) ->
+    _getPageValue.call(@, key, @Key.G_ROOT, updateOnly)
 
   # インスタンス値を取得
   # @param [String] key キー値
@@ -167,6 +179,13 @@ class PageValue
     )
     return value
 
+  # 汎用値を設定
+  # @param [String] key キー値
+  # @param [Object] value 設定値(ハッシュ配列または値)
+  # @param [Boolean] giveUpdate update属性を付与するか
+  @setGeneralPageValue = (key, value, giveUpdate = false) ->
+    _setPageValue.call(@, key, value, false, @Key.G_ROOT, true, giveUpdate)
+
   # インスタンス値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
@@ -188,8 +207,20 @@ class PageValue
   # @param [Boolean] giveUpdate update属性を付与するか
   @setEventPageValueByRootHash = (value, refresh = true, giveUpdate = false) ->
     if refresh
-      # 内容を一旦全消去
-      $("##{@Key.E_ROOT}").children().remove()
+      # 内容を一旦消去
+      $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").remove()
+    for k, v of value
+      @setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+
+
+  # イベントの値をページルート値から設定
+  # @param [Object] value 設定値(E_PREFIXで取得したハッシュ配列または値)
+  # @param [Boolean] refresh イベント要素を全て入れ替える
+  # @param [Boolean] giveUpdate update属性を付与するか
+  @setEventPageValueByPageRootHash = (value, refresh = true, giveUpdate = false) ->
+    if refresh
+      # 内容を一旦消去
+      $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
     for k, v of value
       @setEventPageValue(PageValue.Key.eventPagePrefix() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
 
@@ -281,12 +312,12 @@ class PageValue
     $("##{Setting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
 
   # ソートしたイベントリストを取得
-  @getEventPageValueSortedListByNum = ->
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix())
+  @getEventPageValueSortedListByNum = (pn = window.pageNum) ->
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix(pn))
     if !eventPageValues?
       return []
 
-    count = PageValue.getEventPageValue(@Key.eventCount())
+    count = PageValue.getEventPageValue(@Key.eventCount(pn))
     eventObjList = new Array(count)
 
     # ソート
@@ -325,7 +356,7 @@ class PageValue
     $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
 
   # InstancePageValueをチェックしてEventPageValueを最適化
-  @adjustInstanceAndEvent = ->
+  @adjustInstanceAndEventOnThisPage = ->
     iPageValues = @getInstancePageValue(PageValue.Key.instancePagePrefix())
     instanceObjIds = []
     for k, v of iPageValues
@@ -342,5 +373,18 @@ class PageValue
       else
         adjust[k] = v
 
-    @setEventPageValueByRootHash(adjust)
-    PageValue.setEventPageValue(PageValue.Key.eventCount(), teCount)
+    @setEventPageValueByPageRootHash(adjust)
+    PageValue.setEventPageValue(@Key.eventCount(), teCount)
+
+  # ページ総数更新
+  @updatePageCount = ->
+    page_count = 0
+    iPageValues = @getInstancePageValue(@Key.INSTANCE_PREFIX)
+    for k, v of iPageValues
+      if k.indexOf(@Key.P_PREFIX) >= 0
+        page_count += 1
+
+    if page_count == 0
+      # 初期表示時のページ総数は1
+      page_count = 1
+    @setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}", page_count)

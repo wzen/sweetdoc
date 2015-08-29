@@ -27,7 +27,7 @@ ScrollChapter = (function(superClass) {
       if (event.scrollEvent != null) {
         return event.scrollEvent(x, y, function() {
           if (window.eventAction != null) {
-            return window.eventAction.nextChapterIfFinishedAllEvent();
+            return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
           }
         });
       }

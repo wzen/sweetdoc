@@ -10,8 +10,6 @@ Rails.application.routes.draw do
 
   get 'test_move/hello'
   get 'item_js_code/hello'
-  #get 'item_state/save'
-  #get 'item_state/load'
   get 'parts/button_css_default'
 
   #ajax
@@ -20,8 +18,8 @@ Rails.application.routes.draw do
   post 'page_value_state/user_pagevalue_list'
   post 'item_js/index'
   get  'modal_view/show'
-
   post 'test_move/hello'
+  post 'run/paging'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

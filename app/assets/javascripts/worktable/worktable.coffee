@@ -57,7 +57,7 @@ focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
   setSelectedBorder(target, selectedBorderType)
   # 変更前のスライド値を保存
   PageValue.setInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
-  LocalStorage.savePageValue()
+  LocalStorage.saveInstancePageValue()
   Common.focusToTarget(target)
 
 # キーイベント初期化
@@ -123,12 +123,15 @@ $ ->
   if !LocalStorage.isOverWorktableSaveTimeLimit()
     # キャッシュが存在する場合アイテム描画
     LocalStorage.loadValueForWorktable()
-    PageValue.adjustInstanceAndEvent()
+    PageValue.adjustInstanceAndEventOnThisPage()
     WorktableCommon.drawAllItemFromEventPageValue()
   else
     LocalStorage.clearWorktable()
     Timeline.refreshAllTimeline()
+
   # 履歴に画面初期時を状態を保存
   OperationHistory.add(true)
+  # ページ総数更新
+  PageValue.updatePageCount()
   # ページング
   Paging.initPaging()

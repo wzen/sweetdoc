@@ -22,28 +22,34 @@ OperationHistory = (function() {
     if (isInit == null) {
       isInit = false;
     }
-    if ((window.operationHistoryIndex != null) && !isInit) {
-      window.operationHistoryIndex = (window.operationHistoryIndex + 1) % window.operationHistoryLimit;
+    if ((window.operationHistoryIndexes[window.pageNum] != null) && !isInit) {
+      window.operationHistoryIndexes[window.pageNum] = (window.operationHistoryIndexes[window.pageNum] + 1) % window.operationHistoryLimit;
     } else {
-      window.operationHistoryIndex = 0;
+      window.operationHistoryIndexes[window.pageNum] = 0;
     }
-    window.operationHistoryTailIndex = window.operationHistoryIndex;
+    window.operationHistoryTailIndex = window.operationHistoryIndexes[window.pageNum];
     obj = {};
     obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
-    return window.operationHistory[window.operationHistoryIndex] = obj;
+    if (window.operationHistories[window.pageNum] == null) {
+      window.operationHistories[window.pageNum] = [];
+    }
+    return window.operationHistories[window.pageNum][window.operationHistoryIndexes[window.pageNum]] = obj;
   };
 
   _pop = function() {
     var eventPageValue, hIndex, instancePageValue, obj;
-    hIndex = window.operationHistoryIndex;
+    if (window.operationHistoryIndexes[window.pageNum] == null) {
+      return false;
+    }
+    hIndex = window.operationHistoryIndexes[window.pageNum];
     if (hIndex <= 0) {
       hIndex = window.operationHistoryLimit - 1;
     } else {
       hIndex -= 1;
     }
-    obj = window.operationHistory[hIndex];
-    if (obj != null) {
+    if ((window.operationHistories[window.pageNum] != null) && (window.operationHistories[window.pageNum][hIndex] != null)) {
+      obj = window.operationHistories[window.pageNum][hIndex];
       WorktableCommon.removeAllItemAndEvent();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
@@ -51,10 +57,10 @@ OperationHistory = (function() {
         PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
       }
       if (eventPageValue != null) {
-        PageValue.setEventPageValueByRootHash(eventPageValue);
+        PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
-      window.operationHistoryIndex = hIndex;
-      PageValue.adjustInstanceAndEvent();
+      window.operationHistoryIndexes[window.pageNum] = hIndex;
+      PageValue.adjustInstanceAndEventOnThisPage();
       LocalStorage.saveEventPageValue();
       WorktableCommon.drawAllItemFromEventPageValue();
       return true;
@@ -65,9 +71,12 @@ OperationHistory = (function() {
 
   _popRedo = function() {
     var eventPageValue, hIndex, instancePageValue, obj;
-    hIndex = (window.operationHistoryIndex + 1) % window.operationHistoryLimit;
-    obj = window.operationHistory[hIndex];
-    if (obj != null) {
+    if (window.operationHistoryIndexes[window.pageNum] == null) {
+      return false;
+    }
+    hIndex = (window.operationHistoryIndexes[window.pageNum] + 1) % window.operationHistoryLimit;
+    if ((window.operationHistories[window.pageNum] != null) && (window.operationHistories[window.pageNum][hIndex] != null)) {
+      obj = window.operationHistories[window.pageNum][hIndex];
       WorktableCommon.removeAllItemAndEvent();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
@@ -75,10 +84,10 @@ OperationHistory = (function() {
         PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
       }
       if (eventPageValue != null) {
-        PageValue.setEventPageValueByRootHash(eventPageValue);
+        PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
-      window.operationHistoryIndex = hIndex;
-      PageValue.adjustInstanceAndEvent();
+      window.operationHistoryIndexes[window.pageNum] = hIndex;
+      PageValue.adjustInstanceAndEventOnThisPage();
       LocalStorage.saveEventPageValue();
       WorktableCommon.drawAllItemFromEventPageValue();
       return true;
@@ -90,13 +99,13 @@ OperationHistory = (function() {
   OperationHistory.undo = function() {
     var nextTailIndex;
     nextTailIndex = (window.operationHistoryTailIndex + 1) % window.operationHistoryLimit;
-    if (nextTailIndex === window.operationHistoryIndex || !_pop.call(this)) {
+    if ((window.operationHistoryIndexes[window.pageNum] == null) || nextTailIndex === window.operationHistoryIndexes[window.pageNum] || !_pop.call(this)) {
       Message.flushWarn("Can't Undo");
     }
   };
 
   OperationHistory.redo = function() {
-    if (window.operationHistoryTailIndex === window.operationHistoryIndex || !_popRedo.call(this)) {
+    if ((window.operationHistoryIndexes[window.pageNum] == null) || window.operationHistoryTailIndex === window.operationHistoryIndexes[window.pageNum] || !_popRedo.call(this)) {
       Message.flushWarn("Can't Redo");
     }
   };

@@ -44,50 +44,56 @@ initResize = (wrap, scrollWrapper) ->
 # イベント作成
 initEventAction = ->
   # アクションのイベントを取得
-  eventPageValueList = PageValue.getEventPageValueSortedListByNum()
 
-  # チャプターの作成
-  chapterList = []
-  eventObjList = []
-  eventList = []
-  $.each(eventPageValueList, (idx, obj)->
-    isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-    id = obj[EventPageValueBase.PageValueKey.ID]
-    classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.ITEM_ID]
-    event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
-    event.initWithEvent(obj)
-    eventObjList.push(event)
-    eventList.push(obj)
-
-    parallel = false
-    if idx < eventPageValueList.length - 1
-      beforeEvent = eventPageValueList[idx + 1]
-      if beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]
-        parallel = true
-
-    if !parallel
-      chapter = null
-      if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
-        chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
-      else
-        chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
-      chapterList.push(chapter)
+  # ページ総数
+  pageCount = PageValue.getGeneralPageValue("#{PageValue.Key.G_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{PageValue.Key.PAGE_COUNT}")
+  pageList = []
+  for i in [1..pageCount]
+    eventPageValueList = PageValue.getEventPageValueSortedListByNum(i)
+    chapterList = []
+    if eventPageValueList?
       eventObjList = []
       eventList = []
+      $.each(eventPageValueList, (idx, obj)->
+        isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+        id = obj[EventPageValueBase.PageValueKey.ID]
+        classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.ITEM_ID]
+        event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
+        event.initWithEvent(obj)
+        eventObjList.push(event)
+        eventList.push(obj)
 
-      if !window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-          # 最初のアイテムにフォーカスする
-          chapter.focusToActorIfNeed(true)
-          window.firstItemFocused = true
+        parallel = false
+        if idx < eventPageValueList.length - 1
+          beforeEvent = eventPageValueList[idx + 1]
+          if beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]
+            parallel = true
 
-    return true
-  )
+        if !parallel
+          chapter = null
+          if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
+            chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
+          else
+            chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
+          chapterList.push(chapter)
+          eventObjList = []
+          eventList = []
+
+          if !window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+              # 最初のアイテムにフォーカスする
+              chapter.focusToActorIfNeed(true)
+              window.firstItemFocused = true
+
+        return true
+      )
+    page = new Page(chapterList)
+    pageList.push(page)
 
   # ナビバーのページ数 & チャプター数設定
-  # TODO: ページ数修正
-  Navbar.setPageAndChapterMax(0, chapterList.length)
+  Navbar.setPageAndChapterMax(pageCount, chapterList.length)
 
-  window.eventAction = new EventAction(chapterList)
+  # アクション作成
+  window.eventAction = new EventAction(pageList, window.pageNum - 1)
   window.eventAction.start()
 
 # Handleスクロール位置の初期化
@@ -102,7 +108,7 @@ setupScrollEvent = ->
   stopTimer = null
 
   scrollHandleWrapper.scroll( ->
-    if eventAction.finishedAllChapters || !eventAction.isScrollChapter()
+    if eventAction.thisPage().finishedAllChapters || !eventAction.thisPage().isScrollChapter()
       return
 
     x = $(@).scrollLeft()
@@ -124,7 +130,7 @@ setupScrollEvent = ->
     lastTop = y
 
     console.log('distX:' + distX + ' distY:' + distY)
-    eventAction.handleScrollEvent(distX, distY)
+    eventAction.thisPage().handleScrollEvent(distX, distY)
   )
 
   scrollFinished = ->

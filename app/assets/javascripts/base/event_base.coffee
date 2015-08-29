@@ -144,7 +144,7 @@ class EventBase extends Extend
   # チャプターを進める
   nextChapter: ->
     if window.eventAction?
-      window.eventAction.nextChapter()
+      window.eventAction.thisPage().nextChapter()
 
   # チャプター開始前イベント
   willChapter: (methodName) ->
@@ -174,7 +174,7 @@ class EventBase extends Extend
 
     # 動作済みフラグON
     if window.eventAction?
-      window.eventAction.thisChapter().doMoveChapter = true
+      window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
     console.log("y:#{y}")
     if y >= 0
@@ -205,7 +205,7 @@ class EventBase extends Extend
   clickRootFunc: (e, complete = null) ->
     # 動作済みフラグON
     if window.eventAction?
-      window.eventAction.thisChapter().doMoveChapter = true
+      window.eventAction.thisPage().thisChapter().doMoveChapter = true
     methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     (@constructor.prototype[methodName]).call(@, e, complete)
 
@@ -247,7 +247,7 @@ class EventBase extends Extend
     prefix_key = prefix_key.replace('@id', @id)
     obj = @getMinimumObject()
     PageValue.setInstancePageValue(prefix_key, obj)
-    LocalStorage.savePageValue()
+    LocalStorage.saveInstancePageValue()
 
 class CommonEventBase extends EventBase
   # 初期化

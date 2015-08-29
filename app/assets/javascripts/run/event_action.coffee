@@ -1,8 +1,7 @@
 # イベント実行クラス
 class EventAction
   # コンストラクタ
-  constructor: (@pageList) ->
-    @pageIndex = 0
+  constructor: (@pageList, @pageIndex) ->
     @finishedAllChapters = false
 
   # 現在のページを取得
@@ -14,6 +13,7 @@ class EventAction
     # ページ数設定
     Navbar.setPageNum(@pageIndex + 1)
     @thisPage().willPage()
+    @thisPage().start()
 
   # 全てのチャプターが終了している場合、ページを進める
   nextPageIfFinishedAllChapter: ->

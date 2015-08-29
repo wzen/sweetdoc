@@ -19,7 +19,7 @@ class ScrollChapter extends Chapter
       if event.scrollEvent?
         event.scrollEvent(x, y, ->
           if window.eventAction?
-            window.eventAction.nextChapterIfFinishedAllEvent()
+            window.eventAction.thisPage().nextChapterIfFinishedAllEvent()
         )
     )
 

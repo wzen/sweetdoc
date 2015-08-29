@@ -61,6 +61,9 @@ group :development, :test do
   gem 'rails-erd', github: 'paulwittmann/rails-erd', branch: 'mavericks'
 end
 
+# memcacheクライアント
+gem 'dalli', '2.7.4'
+
 # Use HBase
 #normalgem 'massive_record'
 #normal

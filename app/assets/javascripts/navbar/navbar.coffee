@@ -46,12 +46,12 @@ class Navbar
     $('.menu-control-rewind-page', navEmt).off('click')
     $('.menu-control-rewind-page', navEmt).on('click', ->
       if window.eventAction?
-        window.eventAction.rewindAllChapters()
+        window.eventAction.thisPage().rewindAllChapters()
     )
     $('.menu-control-rewind-chapter', navEmt).off('click')
     $('.menu-control-rewind-chapter', navEmt).on('click', ->
       if window.eventAction?
-        window.eventAction.rewindChapter()
+        window.eventAction.thisPage().rewindChapter()
     )
 
   @setPageNum = (value) ->

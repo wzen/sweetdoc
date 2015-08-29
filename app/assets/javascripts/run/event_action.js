@@ -2,9 +2,9 @@
 var EventAction;
 
 EventAction = (function() {
-  function EventAction(pageList) {
+  function EventAction(pageList, pageIndex1) {
     this.pageList = pageList;
-    this.pageIndex = 0;
+    this.pageIndex = pageIndex1;
     this.finishedAllChapters = false;
   }
 
@@ -14,7 +14,8 @@ EventAction = (function() {
 
   EventAction.prototype.start = function() {
     Navbar.setPageNum(this.pageIndex + 1);
-    return this.thisPage().willPage();
+    this.thisPage().willPage();
+    return this.thisPage().start();
   };
 
   EventAction.prototype.nextPageIfFinishedAllChapter = function() {

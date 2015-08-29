@@ -51,13 +51,13 @@ Navbar = (function() {
     $('.menu-control-rewind-page', navEmt).off('click');
     $('.menu-control-rewind-page', navEmt).on('click', function() {
       if (window.eventAction != null) {
-        return window.eventAction.rewindAllChapters();
+        return window.eventAction.thisPage().rewindAllChapters();
       }
     });
     $('.menu-control-rewind-chapter', navEmt).off('click');
     return $('.menu-control-rewind-chapter', navEmt).on('click', function() {
       if (window.eventAction != null) {
-        return window.eventAction.rewindChapter();
+        return window.eventAction.thisPage().rewindChapter();
       }
     });
   };

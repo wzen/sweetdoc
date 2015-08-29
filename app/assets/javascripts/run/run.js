@@ -44,54 +44,62 @@ initResize = function(wrap, scrollWrapper) {
 };
 
 initEventAction = function() {
-  var chapterList, eventList, eventObjList, eventPageValueList;
-  eventPageValueList = PageValue.getEventPageValueSortedListByNum();
-  chapterList = [];
-  eventObjList = [];
-  eventList = [];
-  $.each(eventPageValueList, function(idx, obj) {
-    var beforeEvent, chapter, classMapId, event, id, isCommonEvent, parallel;
-    isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
-    id = obj[EventPageValueBase.PageValueKey.ID];
-    classMapId = isCommonEvent ? obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : obj[EventPageValueBase.PageValueKey.ITEM_ID];
-    event = Common.getInstanceFromMap(isCommonEvent, id, classMapId);
-    event.initWithEvent(obj);
-    eventObjList.push(event);
-    eventList.push(obj);
-    parallel = false;
-    if (idx < eventPageValueList.length - 1) {
-      beforeEvent = eventPageValueList[idx + 1];
-      if (beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]) {
-        parallel = true;
-      }
-    }
-    if (!parallel) {
-      chapter = null;
-      if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
-        chapter = new ClickChapter({
-          eventObjList: eventObjList,
-          eventList: eventList,
-          num: idx
-        });
-      } else {
-        chapter = new ScrollChapter({
-          eventObjList: eventObjList,
-          eventList: eventList,
-          num: idx
-        });
-      }
-      chapterList.push(chapter);
+  var chapterList, eventList, eventObjList, eventPageValueList, i, j, page, pageCount, pageList, ref;
+  pageCount = PageValue.getGeneralPageValue("" + PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + PageValue.Key.PAGE_COUNT);
+  pageList = [];
+  for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
+    eventPageValueList = PageValue.getEventPageValueSortedListByNum(i);
+    chapterList = [];
+    if (eventPageValueList != null) {
       eventObjList = [];
       eventList = [];
-      if (!window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-        chapter.focusToActorIfNeed(true);
-        window.firstItemFocused = true;
-      }
+      $.each(eventPageValueList, function(idx, obj) {
+        var beforeEvent, chapter, classMapId, event, id, isCommonEvent, parallel;
+        isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+        id = obj[EventPageValueBase.PageValueKey.ID];
+        classMapId = isCommonEvent ? obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : obj[EventPageValueBase.PageValueKey.ITEM_ID];
+        event = Common.getInstanceFromMap(isCommonEvent, id, classMapId);
+        event.initWithEvent(obj);
+        eventObjList.push(event);
+        eventList.push(obj);
+        parallel = false;
+        if (idx < eventPageValueList.length - 1) {
+          beforeEvent = eventPageValueList[idx + 1];
+          if (beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]) {
+            parallel = true;
+          }
+        }
+        if (!parallel) {
+          chapter = null;
+          if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
+            chapter = new ClickChapter({
+              eventObjList: eventObjList,
+              eventList: eventList,
+              num: idx
+            });
+          } else {
+            chapter = new ScrollChapter({
+              eventObjList: eventObjList,
+              eventList: eventList,
+              num: idx
+            });
+          }
+          chapterList.push(chapter);
+          eventObjList = [];
+          eventList = [];
+          if (!window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+            chapter.focusToActorIfNeed(true);
+            window.firstItemFocused = true;
+          }
+        }
+        return true;
+      });
     }
-    return true;
-  });
-  Navbar.setPageAndChapterMax(0, chapterList.length);
-  window.eventAction = new EventAction(chapterList);
+    page = new Page(chapterList);
+    pageList.push(page);
+  }
+  Navbar.setPageAndChapterMax(pageCount, chapterList.length);
+  window.eventAction = new EventAction(pageList, window.pageNum - 1);
   return window.eventAction.start();
 };
 
@@ -107,7 +115,7 @@ setupScrollEvent = function() {
   stopTimer = null;
   scrollHandleWrapper.scroll(function() {
     var distX, distY, x, y;
-    if (eventAction.finishedAllChapters || !eventAction.isScrollChapter()) {
+    if (eventAction.thisPage().finishedAllChapters || !eventAction.thisPage().isScrollChapter()) {
       return;
     }
     x = $(this).scrollLeft();
@@ -129,7 +137,7 @@ setupScrollEvent = function() {
     lastLeft = x;
     lastTop = y;
     console.log('distX:' + distX + ' distY:' + distY);
-    return eventAction.handleScrollEvent(distX, distY);
+    return eventAction.thisPage().handleScrollEvent(distX, distY);
   });
   return scrollFinished = function() {};
 };

@@ -13,11 +13,20 @@ PageValue = (function() {
 
       Key.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
 
+      Key.G_ROOT = constant.PageValueKey.G_ROOT;
+
+      Key.G_PREFIX = constant.PageValueKey.G_PREFIX;
+
       Key.P_PREFIX = constant.PageValueKey.P_PREFIX;
 
-      Key.pagePrefix = function() {
-        return this.P_PREFIX + window.pageNum;
+      Key.pagePrefix = function(pn) {
+        if (pn == null) {
+          pn = window.pageNum;
+        }
+        return this.P_PREFIX + pn;
       };
+
+      Key.PAGE_COUNT = 'page_count';
 
       Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
@@ -49,12 +58,12 @@ PageValue = (function() {
 
       Key.E_PREFIX = constant.PageValueKey.E_PREFIX;
 
-      Key.eventPagePrefix = function() {
-        return this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix();
+      Key.eventPagePrefix = function(pn) {
+        return this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix(pn);
       };
 
-      Key.eventCount = function() {
-        return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix()) + this.PAGE_VALUES_SEPERATOR + "count";
+      Key.eventCount = function(pn) {
+        return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
       };
 
       Key.eventCss = function() {
@@ -89,9 +98,16 @@ PageValue = (function() {
         };
       })(this));
       if (isSet) {
-        return LocalStorage.savePageValue();
+        return LocalStorage.saveInstancePageValue();
       }
     }
+  };
+
+  PageValue.getGeneralPageValue = function(key, updateOnly) {
+    if (updateOnly == null) {
+      updateOnly = false;
+    }
+    return _getPageValue.call(this, key, this.Key.G_ROOT, updateOnly);
   };
 
   PageValue.getInstancePageValue = function(key, updateOnly) {
@@ -202,6 +218,13 @@ PageValue = (function() {
     return value;
   };
 
+  PageValue.setGeneralPageValue = function(key, value, giveUpdate) {
+    if (giveUpdate == null) {
+      giveUpdate = false;
+    }
+    return _setPageValue.call(this, key, value, false, this.Key.G_ROOT, true, giveUpdate);
+  };
+
   PageValue.setInstancePageValue = function(key, value, isCache, giveUpdate) {
     if (isCache == null) {
       isCache = false;
@@ -228,7 +251,26 @@ PageValue = (function() {
       giveUpdate = false;
     }
     if (refresh) {
-      $("#" + this.Key.E_ROOT).children().remove();
+      $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).remove();
+    }
+    results = [];
+    for (k in value) {
+      v = value[k];
+      results.push(this.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
+    }
+    return results;
+  };
+
+  PageValue.setEventPageValueByPageRootHash = function(value, refresh, giveUpdate) {
+    var k, results, v;
+    if (refresh == null) {
+      refresh = true;
+    }
+    if (giveUpdate == null) {
+      giveUpdate = false;
+    }
+    if (refresh) {
+      $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).children("." + (this.Key.pagePrefix())).remove();
     }
     results = [];
     for (k in value) {
@@ -324,13 +366,16 @@ PageValue = (function() {
     return $("#" + Setting.PageValueKey.ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
   };
 
-  PageValue.getEventPageValueSortedListByNum = function() {
+  PageValue.getEventPageValueSortedListByNum = function(pn) {
     var count, eventObjList, eventPageValues, index, k, v;
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix());
+    if (pn == null) {
+      pn = window.pageNum;
+    }
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix(pn));
     if (eventPageValues == null) {
       return [];
     }
-    count = PageValue.getEventPageValue(this.Key.eventCount());
+    count = PageValue.getEventPageValue(this.Key.eventCount(pn));
     eventObjList = new Array(count);
     for (k in eventPageValues) {
       v = eventPageValues[k];
@@ -369,7 +414,7 @@ PageValue = (function() {
     return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).children("." + (this.Key.pagePrefix())).remove();
   };
 
-  PageValue.adjustInstanceAndEvent = function() {
+  PageValue.adjustInstanceAndEventOnThisPage = function() {
     var adjust, ePageValues, iPageValues, instanceObjIds, k, teCount, v;
     iPageValues = this.getInstancePageValue(PageValue.Key.instancePagePrefix());
     instanceObjIds = [];
@@ -393,8 +438,24 @@ PageValue = (function() {
         adjust[k] = v;
       }
     }
-    this.setEventPageValueByRootHash(adjust);
-    return PageValue.setEventPageValue(PageValue.Key.eventCount(), teCount);
+    this.setEventPageValueByPageRootHash(adjust);
+    return PageValue.setEventPageValue(this.Key.eventCount(), teCount);
+  };
+
+  PageValue.updatePageCount = function() {
+    var iPageValues, k, page_count, v;
+    page_count = 0;
+    iPageValues = this.getInstancePageValue(this.Key.INSTANCE_PREFIX);
+    for (k in iPageValues) {
+      v = iPageValues[k];
+      if (k.indexOf(this.Key.P_PREFIX) >= 0) {
+        page_count += 1;
+      }
+    }
+    if (page_count === 0) {
+      page_count = 1;
+    }
+    return this.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT, page_count);
   };
 
   return PageValue;

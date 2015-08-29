@@ -36,7 +36,7 @@ ClickChapter = (function(superClass) {
       if (event.clickEvent != null) {
         return event.clickEvent(e, function() {
           if (window.eventAction != null) {
-            return window.eventAction.nextChapterIfFinishedAllEvent();
+            return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
           }
         });
       }

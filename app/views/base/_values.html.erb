@@ -1,8 +1,15 @@
+<% general_pagevalues = nil if general_pagevalues.nil? %>
 <% instance_pagevalues = nil if instance_pagevalues.nil? %>
 <% event_pagevalues = nil if event_pagevalues.nil? %>
 <% is_runwindow_reload = false if is_runwindow_reload.nil? %>
 
 <%= form_tag("/run", method: "post", name: "run_form") do %>
+    <div id="<%= Const::PageValueKey::G_ROOT %>">
+        <% if general_pagevalues != nil %>
+            <%= general_pagevalues.html_safe %>
+        <% end %>
+    </div>
+
     <div id="<%= Const::PageValueKey::IS_ROOT %>">
         <% if is_runwindow_reload %>
             <input type="hidden" class="<%= Const::PageValueKey::IS_RUNWINDOW_RELOAD %>" value="true" >

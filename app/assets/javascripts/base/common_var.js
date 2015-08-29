@@ -17,11 +17,13 @@ worktableCommonVar = function() {
   window.flushMessageTimer = null;
   window.mode = Constant.Mode.DRAW;
   window.itemInitFuncList = [];
-  window.operationHistory = [];
+  window.pageNum = 1;
+  window.operationHistories = [];
+  window.operationHistories[window.pageNum] = [];
   window.operationHistoryLimit = 30;
-  window.operationHistoryIndex = null;
   window.operationHistoryTailIndex = null;
-  return window.pageNum = 1;
+  window.operationHistoryIndexes = [];
+  return window.operationHistoryIndexes[window.pageNum] = null;
 };
 
 runCommonVar = function() {

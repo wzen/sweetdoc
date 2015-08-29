@@ -40,9 +40,8 @@ ServerStorage = (function() {
   ServerStorage.save = function() {
     var data;
     data = {};
-    data[this.Key.USER_ID] = 0;
-    data[this.Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix()));
-    data[this.Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.eventPagePrefix()));
+    data[this.Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX));
+    data[this.Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.E_PREFIX));
     data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX));
     if ((data[this.Key.INSTANCE_PAGE_VALUE] != null) || (data[this.Key.EVENT_PAGE_VALUE] != null) || (data[this.Key.SETTING_PAGE_VALUE] != null)) {
       return $.ajax({
@@ -66,7 +65,6 @@ ServerStorage = (function() {
       url: "/page_value_state/load_state",
       type: "POST",
       data: {
-        user_id: 0,
         user_pagevalue_id: user_pagevalue_id,
         loaded_itemids: JSON.stringify(PageValue.getLoadedItemIds())
       },
@@ -80,7 +78,7 @@ ServerStorage = (function() {
           clearWorkTable();
           if (data.instance_pagevalue_data != null) {
             d = JSON.parse(data.instance_pagevalue_data);
-            PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), d);
+            PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
           }
           if (data.event_pagevalue_data != null) {
             d = JSON.parse(data.event_pagevalue_data);
@@ -90,7 +88,8 @@ ServerStorage = (function() {
             d = JSON.parse(data.setting_pagevalue_data);
             PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d);
           }
-          PageValue.adjustInstanceAndEvent();
+          PageValue.adjustInstanceAndEventOnThisPage();
+          PageValue.updatePageCount();
           LocalStorage.saveEventPageValue();
           WorktableCommon.drawAllItemFromEventPageValue();
           return Setting.initConfig();
@@ -153,9 +152,6 @@ ServerStorage = (function() {
     return $.ajax({
       url: "/page_value_state/user_pagevalue_list",
       type: "POST",
-      data: {
-        user_id: 0
-      },
       dataType: "json",
       success: function(data) {
         var d, e, i, len, list, n, p, user_pagevalue_list;

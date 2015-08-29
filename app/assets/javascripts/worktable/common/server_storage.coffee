@@ -21,10 +21,9 @@ class ServerStorage
   # サーバにアイテムの情報を保存
   @save = ->
     data = {}
-    data[@Key.USER_ID] = 0
     # FIXME: 差分保存 & バッチでフル保存するようにする
-    data[@Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix()))
-    data[@Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.eventPagePrefix()))
+    data[@Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX))
+    data[@Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.E_PREFIX))
     data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX))
 
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
@@ -52,7 +51,6 @@ class ServerStorage
         url: "/page_value_state/load_state"
         type: "POST"
         data: {
-          user_id: 0
           user_pagevalue_id: user_pagevalue_id
           loaded_itemids : JSON.stringify(PageValue.getLoadedItemIds())
         }
@@ -67,7 +65,7 @@ class ServerStorage
             # Pagevalue設置
             if data.instance_pagevalue_data?
               d = JSON.parse(data.instance_pagevalue_data)
-              PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), d)
+              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
             if data.event_pagevalue_data?
               d = JSON.parse(data.event_pagevalue_data)
               PageValue.setEventPageValueByRootHash(d)
@@ -75,7 +73,8 @@ class ServerStorage
               d = JSON.parse(data.setting_pagevalue_data)
               PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d)
 
-            PageValue.adjustInstanceAndEvent()
+            PageValue.adjustInstanceAndEventOnThisPage()
+            PageValue.updatePageCount()
             LocalStorage.saveEventPageValue()
             WorktableCommon.drawAllItemFromEventPageValue()
             Setting.initConfig()
@@ -134,9 +133,6 @@ class ServerStorage
       {
         url: "/page_value_state/user_pagevalue_list"
         type: "POST"
-        data: {
-          user_id: 0
-        }
         dataType: "json"
         success: (data)->
           user_pagevalue_list = data
