@@ -1,7 +1,7 @@
 # 閲覧を実行する
 run = ->
   # イベント存在チェック
-  h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+  h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
   if h?
     Timeline.setupEventCss()
     target = "_runwindow"

@@ -19,6 +19,7 @@ worktableCommonVar = ->
   window.operationHistoryLimit = 30
   window.operationHistoryIndex = null
   window.operationHistoryTailIndex = null
+  window.pageNum = 1
 
 # 実行テーブル共通変数
 runCommonVar = ->
@@ -35,3 +36,5 @@ runCommonVar = ->
   window.scrollInsideCoverZindex = 1
   window.disabledEventHandler = false
   window.firstItemFocused = false
+  # ※ サーバから取得
+  window.pageNum = 1

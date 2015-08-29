@@ -57,7 +57,7 @@ class LocalStorage
   # ストレージにアイテム値を保存
   @savePageValue: (isRun = false) ->
     lstorage = localStorage
-    h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
+    h = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
     key = if isRun then @Key.RUN_PAGEVALUES else @Key.WORKTABLE_PAGEVALUES
     lstorage.setItem(key, JSON.stringify(h))
     # 現在時刻を保存
@@ -70,12 +70,12 @@ class LocalStorage
     key = if isRun then @Key.RUN_PAGEVALUES else @Key.WORKTABLE_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
     for k, v of h
-      PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+      PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # ストレージにイベント値を保存
   @saveEventPageValue: (isRun = false) ->
     lstorage = localStorage
-    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
     key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
     lstorage.setItem(key, JSON.stringify(h))
     # 現在時刻を保存

@@ -132,14 +132,12 @@ class Const
     E_PREFIX = 'events'
     # @property [String] E_NUM_PREFIX イベント番号プレフィックス
     E_NUM_PREFIX = 'te_'
+    # @property [String] PAGE_PREFIX ページ番号プレフィックス
+    P_PREFIX = 'p_'
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     PAGE_VALUES_SEPERATOR = ':'
     # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
     IS_RUNWINDOW_RELOAD = 'is_runwindow_reload'
-    # @property [String] E_COUNT イベント数
-    E_COUNT = "#{E_PREFIX}#{PAGE_VALUES_SEPERATOR}count"
-    # @property [String] E_CSS CSSデータ
-    E_CSS = "#{E_PREFIX}#{PAGE_VALUES_SEPERATOR}css"
   end
 
   class Setting

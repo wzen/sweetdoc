@@ -23,8 +23,8 @@ class ServerStorage
     data = {}
     data[@Key.USER_ID] = 0
     # FIXME: 差分保存 & バッチでフル保存するようにする
-    data[@Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX))
-    data[@Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.E_PREFIX))
+    data[@Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix()))
+    data[@Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.eventPagePrefix()))
     data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX))
 
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
@@ -67,7 +67,7 @@ class ServerStorage
             # Pagevalue設置
             if data.instance_pagevalue_data?
               d = JSON.parse(data.instance_pagevalue_data)
-              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
+              PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), d)
             if data.event_pagevalue_data?
               d = JSON.parse(data.event_pagevalue_data)
               PageValue.setEventPageValueByRootHash(d)

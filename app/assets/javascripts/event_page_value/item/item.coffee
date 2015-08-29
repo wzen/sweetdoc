@@ -35,7 +35,7 @@ class EPVItem extends EventPageValueBase
     if errorMes.length == 0
       value = item.constructor.defaultEventConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      teNum = PageValue.getEventPageValue(PageValue.Key.E_COUNT)
+      teNum = PageValue.getEventPageValue(PageValue.Key.eventCount())
 
       if teNum?
         teNum = parseInt(teNum) + 1
@@ -43,7 +43,7 @@ class EPVItem extends EventPageValueBase
         teNum = 1
 
       PageValue.setEventPageValue(@PageValueKey.te(teNum), writeValue)
-      PageValue.setEventPageValue(PageValue.Key.E_COUNT, teNum)
+      PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum)
       Timeline.changeTimelineColor(teNum, actionType)
 
       # Storageに保存
@@ -63,8 +63,8 @@ class EPVItem extends EventPageValueBase
       value = item.eventConfigValue()
       writeValue[@PageValueKey.VALUE] = value
       PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
-      if parseInt(PageValue.getEventPageValue(PageValue.Key.E_COUNT)) < eventConfig.teNum
-        PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum)
+      if parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
       # Storageに保存
       LocalStorage.saveEventPageValue()

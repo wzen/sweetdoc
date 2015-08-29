@@ -1,3 +1,3 @@
 class EventPagevalue < ActiveRecord::Base
-  has_many :user_pagevalues
+  has_many :event_pagevalue_pagings
 end

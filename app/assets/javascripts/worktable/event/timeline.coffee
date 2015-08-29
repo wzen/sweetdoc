@@ -159,7 +159,7 @@ class Timeline
     teItemSelects = $('#event-config .te_item_select')
     teItemSelect = teItemSelects[0]
     selectOptions = ''
-    items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX}")
+    items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pagePrefix()}")
     items.children().each( ->
       id = $(@).find('input.id').val()
       name = $(@).find('input.name').val()
@@ -202,7 +202,7 @@ class Timeline
     )
 
     if itemCssStyle.length > 0
-      PageValue.setEventPageValue(PageValue.Key.E_CSS, itemCssStyle)
+      PageValue.setEventPageValue(PageValue.Key.eventCss(), itemCssStyle)
 
   # タイムラインイベントの色を変更
   @changeTimelineColor = (teNum, actionType = null) ->

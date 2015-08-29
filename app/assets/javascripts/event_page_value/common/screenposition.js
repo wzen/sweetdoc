@@ -35,7 +35,7 @@ EPVScreenPosition = (function(superClass) {
     if (errorMes.length === 0) {
       writeValue[this.PageValueKey.VALUE] = value;
       PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
-      PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum);
+      PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
     }
     return errorMes;
   };

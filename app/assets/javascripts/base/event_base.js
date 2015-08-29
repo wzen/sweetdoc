@@ -277,7 +277,7 @@ EventBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? PageValue.Key.INSTANCE_VALUE_CACHE : PageValue.Key.INSTANCE_VALUE;
+    prefix_key = isCache ? PageValue.Key.instanceValueCache() : PageValue.Key.instanceValue();
     prefix_key = prefix_key.replace('@id', this.id);
     obj = this.getMinimumObject();
     PageValue.setInstancePageValue(prefix_key, obj);
@@ -314,7 +314,7 @@ ItemEventBase = (function(superClass) {
     var instance, objId;
     ItemEventBase.__super__.initWithEvent.call(this, event);
     objId = event[EventPageValueBase.PageValueKey.ID];
-    instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_VALUE.replace('@id', objId));
+    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue().replace('@id', objId));
     this.setMiniumObject(instance);
     return this.reDraw(false);
   };

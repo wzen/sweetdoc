@@ -141,7 +141,7 @@ $(function() {
   initEventAction();
   setupScrollEvent();
   Navbar.initRunNavbar();
-  return $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.E_CSS));
+  return $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()));
 });
 
 //# sourceMappingURL=run.js.map

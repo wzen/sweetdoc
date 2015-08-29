@@ -26,7 +26,7 @@ class EPVBackgroundColor extends EventPageValueBase
     if errorMes.length == 0
       writeValue[@PageValueKey.VALUE] = value
       PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
-      PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum)
+      PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
       # Storageに保存
       LocalStorage.saveEventPageValue()

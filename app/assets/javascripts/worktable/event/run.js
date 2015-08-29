@@ -3,7 +3,7 @@ var run;
 
 run = function() {
   var h, target;
-  h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+  h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
   if (h != null) {
     Timeline.setupEventCss();
     target = "_runwindow";

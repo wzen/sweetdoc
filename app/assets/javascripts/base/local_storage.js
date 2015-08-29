@@ -79,7 +79,7 @@ LocalStorage = (function() {
       isRun = false;
     }
     lstorage = localStorage;
-    h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
+    h = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     key = isRun ? this.Key.RUN_PAGEVALUES : this.Key.WORKTABLE_PAGEVALUES;
     lstorage.setItem(key, JSON.stringify(h));
     key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;
@@ -97,7 +97,7 @@ LocalStorage = (function() {
     results = [];
     for (k in h) {
       v = h[k];
-      results.push(PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+      results.push(PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
     }
     return results;
   };
@@ -108,7 +108,7 @@ LocalStorage = (function() {
       isRun = false;
     }
     lstorage = localStorage;
-    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
     key = isRun ? this.Key.RUN_EVENT_PAGEVALUES : this.Key.WORKTABLE_EVENT_PAGEVALUES;
     lstorage.setItem(key, JSON.stringify(h));
     key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;

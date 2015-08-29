@@ -44,14 +44,14 @@ EPVItem = (function(superClass) {
     if (errorMes.length === 0) {
       value = item.constructor.defaultEventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      teNum = PageValue.getEventPageValue(PageValue.Key.E_COUNT);
+      teNum = PageValue.getEventPageValue(PageValue.Key.eventCount());
       if (teNum != null) {
         teNum = parseInt(teNum) + 1;
       } else {
         teNum = 1;
       }
       PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
-      PageValue.setEventPageValue(PageValue.Key.E_COUNT, teNum);
+      PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum);
       Timeline.changeTimelineColor(teNum, actionType);
       LocalStorage.saveEventPageValue();
     }
@@ -69,8 +69,8 @@ EPVItem = (function(superClass) {
       value = item.eventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
       PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
-      if (parseInt(PageValue.getEventPageValue(PageValue.Key.E_COUNT)) < eventConfig.teNum) {
-        PageValue.setEventPageValue(PageValue.Key.E_COUNT, eventConfig.teNum);
+      if (parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum) {
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
       }
       LocalStorage.saveEventPageValue();
     }

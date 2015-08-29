@@ -41,8 +41,8 @@ ServerStorage = (function() {
     var data;
     data = {};
     data[this.Key.USER_ID] = 0;
-    data[this.Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX));
-    data[this.Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.E_PREFIX));
+    data[this.Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix()));
+    data[this.Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.eventPagePrefix()));
     data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX));
     if ((data[this.Key.INSTANCE_PAGE_VALUE] != null) || (data[this.Key.EVENT_PAGE_VALUE] != null) || (data[this.Key.SETTING_PAGE_VALUE] != null)) {
       return $.ajax({
@@ -80,7 +80,7 @@ ServerStorage = (function() {
           clearWorkTable();
           if (data.instance_pagevalue_data != null) {
             d = JSON.parse(data.instance_pagevalue_data);
-            PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
+            PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), d);
           }
           if (data.event_pagevalue_data != null) {
             d = JSON.parse(data.event_pagevalue_data);

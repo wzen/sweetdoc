@@ -11,27 +11,31 @@ PageValue = (function() {
     PageValue.Key = (function() {
       function Key() {}
 
-      Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
-
-      Key.E_ROOT = constant.PageValueKey.E_ROOT;
-
-      Key.E_PREFIX = constant.PageValueKey.E_PREFIX;
-
-      Key.E_COUNT = constant.PageValueKey.E_COUNT;
-
-      Key.E_CSS = constant.PageValueKey.E_CSS;
-
       Key.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
 
-      Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
+      Key.P_PREFIX = constant.PageValueKey.P_PREFIX;
+
+      Key.pagePrefix = function() {
+        return this.P_PREFIX + window.pageNum;
+      };
+
+      Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
       Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
+      Key.instancePagePrefix = function() {
+        return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix();
+      };
+
       Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
 
-      Key.INSTANCE_VALUE = Key.INSTANCE_PREFIX + ':@id:value';
+      Key.instanceValue = function() {
+        return this.instancePagePrefix() + ':@id' + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
+      };
 
-      Key.INSTANCE_VALUE_CACHE = Key.INSTANCE_PREFIX + ':cache:@id:value';
+      Key.instanceValueCache = function() {
+        return this.instancePagePrefix() + ':cache:@id' + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
+      };
 
       Key.ITEM_INFO_PREFIX = 'iteminfo';
 
@@ -40,6 +44,24 @@ PageValue = (function() {
       Key.ITEM_DEFAULT_ACTIONTYPE = Key.ITEM_INFO_PREFIX + ':@item_id:default:actiontype';
 
       Key.ITEM_DEFAULT_ANIMATIONTYPE = Key.ITEM_INFO_PREFIX + ':@item_id:default:animationtype';
+
+      Key.E_ROOT = constant.PageValueKey.E_ROOT;
+
+      Key.E_PREFIX = constant.PageValueKey.E_PREFIX;
+
+      Key.eventPagePrefix = function() {
+        return this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix();
+      };
+
+      Key.eventCount = function() {
+        return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix()) + this.PAGE_VALUES_SEPERATOR + "count";
+      };
+
+      Key.eventCss = function() {
+        return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix()) + this.PAGE_VALUES_SEPERATOR + "css";
+      };
+
+      Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
       Key.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
 
@@ -72,31 +94,28 @@ PageValue = (function() {
     }
   };
 
-  PageValue.getInstancePageValue = function(key, updateOnly, withRemove) {
+  PageValue.getInstancePageValue = function(key, updateOnly) {
     if (updateOnly == null) {
       updateOnly = false;
     }
-    if (withRemove == null) {
-      withRemove = false;
-    }
-    return _getPageValue.call(this, key, withRemove, this.Key.IS_ROOT, updateOnly);
+    return _getPageValue.call(this, key, this.Key.IS_ROOT, updateOnly);
   };
 
   PageValue.getEventPageValue = function(key, updateOnly) {
     if (updateOnly == null) {
       updateOnly = false;
     }
-    return _getPageValue.call(this, key, false, this.Key.E_ROOT, updateOnly);
+    return _getPageValue.call(this, key, this.Key.E_ROOT, updateOnly);
   };
 
   PageValue.getSettingPageValue = function(key, updateOnly) {
     if (updateOnly == null) {
       updateOnly = false;
     }
-    return _getPageValue.call(this, key, false, Setting.PageValueKey.ROOT, updateOnly);
+    return _getPageValue.call(this, key, Setting.PageValueKey.ROOT, updateOnly);
   };
 
-  _getPageValue = function(key, withRemove, rootId, updateOnly) {
+  _getPageValue = function(key, rootId, updateOnly) {
     var f, hasUpdate, keys, root, takeValue, value;
     f = this;
     takeValue = function(element, hasUpdate) {
@@ -170,16 +189,13 @@ PageValue = (function() {
           if ((updateOnly && !hasUpdate) === false) {
             value = Common.sanitaizeDecode(root.val());
             if (jQuery.isNumeric(value)) {
-              value = Number(value);
+              return value = Number(value);
             }
           } else {
             return null;
           }
         } else {
-          value = takeValue.call(f, root, hasUpdate);
-        }
-        if (withRemove) {
-          return root.remove();
+          return value = takeValue.call(f, root, hasUpdate);
         }
       }
     });
@@ -217,7 +233,7 @@ PageValue = (function() {
     results = [];
     for (k in value) {
       v = value[k];
-      results.push(this.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
+      results.push(this.setEventPageValue(PageValue.Key.eventPagePrefix() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
     }
     return results;
   };
@@ -310,11 +326,11 @@ PageValue = (function() {
 
   PageValue.getEventPageValueSortedListByNum = function() {
     var count, eventObjList, eventPageValues, index, k, v;
-    eventPageValues = PageValue.getEventPageValue(this.Key.E_PREFIX);
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix());
     if (eventPageValues == null) {
       return [];
     }
-    count = PageValue.getEventPageValue(this.Key.E_COUNT);
+    count = PageValue.getEventPageValue(this.Key.eventCount());
     eventObjList = new Array(count);
     for (k in eventPageValues) {
       v = eventPageValues[k];
@@ -345,12 +361,17 @@ PageValue = (function() {
 
   PageValue.removeAllItemAndEventPageValue = function() {
     $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
-    return $("#" + this.Key.E_ROOT).children().remove();
+    return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).remove();
+  };
+
+  PageValue.removeAllItemAndEventPageValueOnThisPage = function() {
+    $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).children("." + (this.Key.pagePrefix())).remove();
+    return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).children("." + (this.Key.pagePrefix())).remove();
   };
 
   PageValue.adjustInstanceAndEvent = function() {
     var adjust, ePageValues, iPageValues, instanceObjIds, k, teCount, v;
-    iPageValues = this.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
+    iPageValues = this.getInstancePageValue(PageValue.Key.instancePagePrefix());
     instanceObjIds = [];
     for (k in iPageValues) {
       v = iPageValues[k];
@@ -358,7 +379,7 @@ PageValue = (function() {
         instanceObjIds.push(v.value.id);
       }
     }
-    ePageValues = this.getEventPageValue(PageValue.Key.E_PREFIX);
+    ePageValues = this.getEventPageValue(PageValue.Key.eventPagePrefix());
     adjust = {};
     teCount = 0;
     for (k in ePageValues) {
@@ -373,7 +394,7 @@ PageValue = (function() {
       }
     }
     this.setEventPageValueByRootHash(adjust);
-    return PageValue.setEventPageValue(PageValue.Key.E_COUNT, teCount);
+    return PageValue.setEventPageValue(PageValue.Key.eventCount(), teCount);
   };
 
   return PageValue;

@@ -29,8 +29,8 @@ OperationHistory = (function() {
     }
     window.operationHistoryTailIndex = window.operationHistoryIndex;
     obj = {};
-    obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
-    obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
+    obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
     return window.operationHistory[window.operationHistoryIndex] = obj;
   };
 
@@ -48,7 +48,7 @@ OperationHistory = (function() {
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
       if (instancePageValue != null) {
-        PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, instancePageValue);
+        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
       }
       if (eventPageValue != null) {
         PageValue.setEventPageValueByRootHash(eventPageValue);
@@ -72,7 +72,7 @@ OperationHistory = (function() {
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
       if (instancePageValue != null) {
-        PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, instancePageValue);
+        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
       }
       if (eventPageValue != null) {
         PageValue.setEventPageValueByRootHash(eventPageValue);

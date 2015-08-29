@@ -58,7 +58,7 @@ WorktableCommon = (function() {
 
   WorktableCommon.drawAllItemFromEventPageValue = function() {
     var k, needItemIds, obj, pageValues;
-    pageValues = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
+    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     needItemIds = [];
     for (k in pageValues) {
       obj = pageValues[k];

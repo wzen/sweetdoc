@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823015639) do
+ActiveRecord::Schema.define(version: 20150828092454) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -38,8 +38,22 @@ ActiveRecord::Schema.define(version: 20150823015639) do
     t.datetime "updated_at"
   end
 
+  create_table "event_pagevalue_pagings", force: true do |t|
+    t.integer  "paging_num",         null: false
+    t.integer  "event_pagevalue_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "event_pagevalues", force: true do |t|
     t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "instance_pagevalue_pagings", force: true do |t|
+    t.integer  "paging_num",            null: false
+    t.integer  "instance_pagevalue_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -134,11 +148,11 @@ ActiveRecord::Schema.define(version: 20150823015639) do
   end
 
   create_table "user_pagevalues", force: true do |t|
-    t.integer  "user_id",                               null: false
-    t.integer  "instance_pagevalue_id"
-    t.integer  "event_pagevalue_id"
+    t.integer  "user_id",                                      null: false
+    t.integer  "instance_pagevalue_paging_id"
+    t.integer  "event_pagevalue_paging_id"
     t.integer  "setting_pagevalue_id"
-    t.boolean  "del_flg",               default: false, null: false
+    t.boolean  "del_flg",                      default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

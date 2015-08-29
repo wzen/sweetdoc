@@ -1,3 +1,3 @@
 class InstancePagevalue < ActiveRecord::Base
-  has_many :user_pagevalues
+  has_many :instance_pagevalue_pagings
 end

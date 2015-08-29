@@ -13,8 +13,8 @@ class OperationHistory
       window.operationHistoryIndex = 0
     window.operationHistoryTailIndex = window.operationHistoryIndex
     obj = {}
-    obj[@Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
-    obj[@Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    obj[@Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
+    obj[@Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
     window.operationHistory[window.operationHistoryIndex] = obj
 
   # 操作履歴を取り出し
@@ -33,7 +33,7 @@ class OperationHistory
       instancePageValue = obj[@Key.INSTANCE]
       eventPageValue = obj[@Key.EVENT]
       if instancePageValue?
-        PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, instancePageValue)
+        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
       if eventPageValue?
         PageValue.setEventPageValueByRootHash(eventPageValue)
       window.operationHistoryIndex = hIndex
@@ -58,7 +58,7 @@ class OperationHistory
       instancePageValue = obj[@Key.INSTANCE]
       eventPageValue = obj[@Key.EVENT]
       if instancePageValue?
-        PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, instancePageValue)
+        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
       if eventPageValue?
         PageValue.setEventPageValueByRootHash(eventPageValue)
       window.operationHistoryIndex = hIndex

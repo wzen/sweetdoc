@@ -5,28 +5,24 @@ class PageValue
     constant = gon.const
     # ページ内値保存キー
     class @Key
-      # @property [String] IS_ROOT ページ値ルート
-      @IS_ROOT = constant.PageValueKey.IS_ROOT
-      # @property [String] E_ROOT イベント値ルート
-      @E_ROOT = constant.PageValueKey.E_ROOT
-      # @property [String] E_PREFIX イベントプレフィックス
-      @E_PREFIX = constant.PageValueKey.E_PREFIX
-      # @property [String] E_COUNT イベント数
-      @E_COUNT = constant.PageValueKey.E_COUNT
-      # @property [String] E_CSS CSSデータ
-      @E_CSS = constant.PageValueKey.E_CSS
       # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
       @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
-      # @property [String] E_NUM_PREFIX イベント番号プレフィックス
-      @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
+      # @property [String] P_PREFIX ページ番号プレフィックス
+      @P_PREFIX = constant.PageValueKey.P_PREFIX
+      # @property [return] 現在のページのページ番号プレフィックス
+      @pagePrefix = -> @P_PREFIX + window.pageNum
+      # @property [String] IS_ROOT ページ値ルート
+      @IS_ROOT = constant.PageValueKey.IS_ROOT
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
+      # @property [return] インスタンスページプレフィックスを取得
+      @instancePagePrefix = -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix()
       # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
       @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
-      # @property [String] ITEM アイテムRoot
-      @INSTANCE_VALUE = @INSTANCE_PREFIX + ':@id:value'
-      # @property [String] ITEM アイテムキャッシュRoot
-      @INSTANCE_VALUE_CACHE = @INSTANCE_PREFIX + ':cache:@id:value'
+      # @property [return] インスタンス値
+      @instanceValue = -> @instancePagePrefix() + ':@id' + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
+      # @property [return] インスタンスキャッシュ値
+      @instanceValueCache = -> @instancePagePrefix() + ':cache:@id' + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
       # @property [String] ITEM_INFO_PREFIX アイテム情報プレフィックス
       @ITEM_INFO_PREFIX = 'iteminfo'
       # @property [String] ITEM_DEFAULT_METHODNAME デフォルトメソッド名
@@ -35,6 +31,18 @@ class PageValue
       @ITEM_DEFAULT_ACTIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:actiontype'
       # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
       @ITEM_DEFAULT_ANIMATIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:animationtype'
+      # @property [String] E_ROOT イベント値ルート
+      @E_ROOT = constant.PageValueKey.E_ROOT
+      # @property [String] E_PREFIX イベントプレフィックス
+      @E_PREFIX = constant.PageValueKey.E_PREFIX
+      # @property [return] イベントページプレフィックス
+      @eventPagePrefix = -> @E_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix()
+      # @property [return] イベント数
+      @eventCount = -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix()}#{@PAGE_VALUES_SEPERATOR}count"
+      # @property [return] CSSデータ
+      @eventCss = -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix()}#{@PAGE_VALUES_SEPERATOR}css"
+      # @property [String] E_NUM_PREFIX イベント番号プレフィックス
+      @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
       @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
       # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
@@ -60,29 +68,27 @@ class PageValue
   # インスタンス値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
-  # @param [Boolean] withRemove 取得後に値を消去するか
-  @getInstancePageValue = (key, updateOnly = false, withRemove = false) ->
-    _getPageValue.call(@, key, withRemove, @Key.IS_ROOT, updateOnly)
+  @getInstancePageValue = (key, updateOnly = false) ->
+    _getPageValue.call(@, key, @Key.IS_ROOT, updateOnly)
 
   # イベントの値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   @getEventPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, false, @Key.E_ROOT, updateOnly)
+    _getPageValue.call(@, key, @Key.E_ROOT, updateOnly)
 
   # 共通設定値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   @getSettingPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, false, Setting.PageValueKey.ROOT, updateOnly)
+    _getPageValue.call(@, key, Setting.PageValueKey.ROOT, updateOnly)
 
   # ページが持つ値を取得
   # @param [String] key キー値
-  # @param [Boolean] withRemove 取得後に値を消去するか
   # @param [String] rootId Root要素ID
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   # @return [Object] ハッシュ配列または値で返す
-  _getPageValue = (key, withRemove, rootId, updateOnly) ->
+  _getPageValue = (key, rootId, updateOnly) ->
     f = @
     # div以下の値をハッシュとしてまとめる
     takeValue = (element, hasUpdate) ->
@@ -158,8 +164,6 @@ class PageValue
             return null
         else
           value = takeValue.call(f, root, hasUpdate)
-        if withRemove
-          root.remove()
     )
     return value
 
@@ -187,7 +191,7 @@ class PageValue
       # 内容を一旦全消去
       $("##{@Key.E_ROOT}").children().remove()
     for k, v of value
-      @setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+      @setEventPageValue(PageValue.Key.eventPagePrefix() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
 
   # 共通設定値を設定
   # @param [String] key キー値
@@ -278,11 +282,11 @@ class PageValue
 
   # ソートしたイベントリストを取得
   @getEventPageValueSortedListByNum = ->
-    eventPageValues = PageValue.getEventPageValue(@Key.E_PREFIX)
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix())
     if !eventPageValues?
       return []
 
-    count = PageValue.getEventPageValue(@Key.E_COUNT)
+    count = PageValue.getEventPageValue(@Key.eventCount())
     eventObjList = new Array(count)
 
     # ソート
@@ -308,20 +312,26 @@ class PageValue
     # 削除ありで取得
     @getInstancePageValue(key, true)
 
-  # アイテムとイベント情報を削除
+  # アイテムとイベント情報を全削除
   @removeAllItemAndEventPageValue = ->
     # page_value消去
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
-    $("##{@Key.E_ROOT}").children().remove()
+    $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").remove()
+
+  # ページ上のアイテムとイベント情報を全削除
+  @removeAllItemAndEventPageValueOnThisPage = ->
+    # ページ内のpage_value消去
+    $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
+    $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
 
   # InstancePageValueをチェックしてEventPageValueを最適化
   @adjustInstanceAndEvent = ->
-    iPageValues = @getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
+    iPageValues = @getInstancePageValue(PageValue.Key.instancePagePrefix())
     instanceObjIds = []
     for k, v of iPageValues
       if $.inArray(v.value.id, instanceObjIds) < 0
         instanceObjIds.push(v.value.id)
-    ePageValues = @getEventPageValue(PageValue.Key.E_PREFIX)
+    ePageValues = @getEventPageValue(PageValue.Key.eventPagePrefix())
     adjust = {}
     teCount = 0
     for k, v of ePageValues
@@ -333,4 +343,4 @@ class PageValue
         adjust[k] = v
 
     @setEventPageValueByRootHash(adjust)
-    PageValue.setEventPageValue(PageValue.Key.E_COUNT, teCount)
+    PageValue.setEventPageValue(PageValue.Key.eventCount(), teCount)

@@ -140,4 +140,4 @@ $ ->
   Navbar.initRunNavbar()
 
   # CSS
-  $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.E_CSS))
+  $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()))

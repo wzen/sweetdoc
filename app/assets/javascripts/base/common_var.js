@@ -20,7 +20,8 @@ worktableCommonVar = function() {
   window.operationHistory = [];
   window.operationHistoryLimit = 30;
   window.operationHistoryIndex = null;
-  return window.operationHistoryTailIndex = null;
+  window.operationHistoryTailIndex = null;
+  return window.pageNum = 1;
 };
 
 runCommonVar = function() {
@@ -39,7 +40,8 @@ runCommonVar = function() {
   };
   window.scrollInsideCoverZindex = 1;
   window.disabledEventHandler = false;
-  return window.firstItemFocused = false;
+  window.firstItemFocused = false;
+  return window.pageNum = 1;
 };
 
 //# sourceMappingURL=common_var.js.map
