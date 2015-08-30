@@ -83,7 +83,8 @@ Page = (function() {
   };
 
   Page.prototype.willPage = function() {
-    return this.thisChapter().reset();
+    this.thisChapter().reset();
+    return Navbar.setChapterMax(this.chapterList.length);
   };
 
   Page.prototype.didPage = function() {};

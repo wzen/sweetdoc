@@ -56,6 +56,22 @@ WorktableCommon = (function() {
     })(this));
   };
 
+  WorktableCommon.removeAllItemAndEventOnThisPage = function() {
+    var lstorage;
+    Sidebar.closeSidebar();
+    lstorage = localStorage;
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+    return Common.clearAllEventChange((function(_this) {
+      return function() {
+        _this.removeAllItem();
+        EventConfig.removeAllConfig();
+        PageValue.removeAllItemAndEventPageValueOnThisPage();
+        return Timeline.refreshAllTimeline();
+      };
+    })(this));
+  };
+
   WorktableCommon.drawAllItemFromEventPageValue = function() {
     var k, needItemIds, obj, pageValues;
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());

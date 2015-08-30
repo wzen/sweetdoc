@@ -4,7 +4,95 @@ var Paging;
 Paging = (function() {
   function Paging() {}
 
-  Paging.initPaging = function() {};
+  Paging.initPaging = function() {
+    return this.createPageSelectMenu();
+  };
+
+  Paging.createPageSelectMenu = function() {
+    var active, divider, i, j, menu, navMenuClass, navMenuName, newPageMenu, nowMenuName, pageCount, pageMenu, ref, root, selectRoot, self;
+    self = this;
+    pageCount = PageValue.getPageCount();
+    root = $("#" + Constant.Paging.NAV_ROOT_ID);
+    selectRoot = $("." + Constant.Paging.NAV_SELECT_ROOT_CLASS, root);
+    menu = "<li><a class='" + Constant.Paging.NAV_MENU_CLASS + " menu-item'>" + Constant.Paging.NAV_MENU_NAME + "</a></li>";
+    divider = "<li class='divider'></li>";
+    newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>Add next page</a></li>";
+    pageMenu = '';
+    for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
+      navMenuClass = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', i);
+      navMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', i);
+      active = i === window.pageNum ? 'class="active"' : '';
+      pageMenu += "<li " + active + "><a class='" + navMenuClass + " menu-item '>" + navMenuName + "</a></li>";
+    }
+    pageMenu += divider;
+    pageMenu += newPageMenu;
+    selectRoot.children().remove();
+    $(pageMenu).appendTo(selectRoot);
+    nowMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', window.pageNum);
+    $("." + Constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
+    selectRoot.find(".menu-item").off('click');
+    selectRoot.find(".menu-item").on('click', function() {
+      var classList, prefix;
+      prefix = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', '');
+      classList = this.classList;
+      return classList.forEach(function(c) {
+        var pageNum;
+        if (c.indexOf(prefix) >= 0) {
+          pageNum = parseInt(c.replace(prefix, ''));
+          self.selectPage(pageNum);
+          return false;
+        }
+      });
+    });
+    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).off('click');
+    return selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).on('click', function() {
+      return self.createNewPage();
+    });
+  };
+
+  Paging.createNewPage = function() {
+    var lstorage;
+    Sidebar.closeSidebar();
+    lstorage = localStorage;
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+    return Common.clearAllEventChange((function(_this) {
+      return function() {
+        WorktableCommon.removeAllItem();
+        EventConfig.removeAllConfig();
+        window.pageNum += 1;
+        PageValue.adjustInstanceAndEventOnThisPage();
+        WorktableCommon.drawAllItemFromEventPageValue();
+        Timeline.refreshAllTimeline();
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
+        PageValue.updatePageCount();
+        return _this.createPageSelectMenu();
+      };
+    })(this));
+  };
+
+  Paging.selectPage = function(selectedNum) {
+    var lstorage, pageCount;
+    pageCount = PageValue.getPageCount();
+    if (selectedNum < 0 || selectedNum > pageCount) {
+      return;
+    }
+    Sidebar.closeSidebar();
+    lstorage = localStorage;
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+    return Common.clearAllEventChange((function(_this) {
+      return function() {
+        WorktableCommon.removeAllItem();
+        EventConfig.removeAllConfig();
+        window.pageNum = selectedNum;
+        PageValue.adjustInstanceAndEventOnThisPage();
+        WorktableCommon.drawAllItemFromEventPageValue();
+        Timeline.refreshAllTimeline();
+        return _this.createPageSelectMenu();
+      };
+    })(this));
+  };
 
   return Paging;
 

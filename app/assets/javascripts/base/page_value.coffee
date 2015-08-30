@@ -379,8 +379,8 @@ class PageValue
   # ページ総数更新
   @updatePageCount = ->
     page_count = 0
-    iPageValues = @getInstancePageValue(@Key.INSTANCE_PREFIX)
-    for k, v of iPageValues
+    ePageValues = @getEventPageValue(@Key.E_PREFIX)
+    for k, v of ePageValues
       if k.indexOf(@Key.P_PREFIX) >= 0
         page_count += 1
 
@@ -388,3 +388,7 @@ class PageValue
       # 初期表示時のページ総数は1
       page_count = 1
     @setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}", page_count)
+
+  # ページ総数を取得
+  @getPageCount = ->
+    return PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}")

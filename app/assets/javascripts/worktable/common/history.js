@@ -50,7 +50,7 @@ OperationHistory = (function() {
     }
     if ((window.operationHistories[window.pageNum] != null) && (window.operationHistories[window.pageNum][hIndex] != null)) {
       obj = window.operationHistories[window.pageNum][hIndex];
-      WorktableCommon.removeAllItemAndEvent();
+      WorktableCommon.removeAllItemAndEventOnThisPage();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
       if (instancePageValue != null) {
@@ -77,7 +77,7 @@ OperationHistory = (function() {
     hIndex = (window.operationHistoryIndexes[window.pageNum] + 1) % window.operationHistoryLimit;
     if ((window.operationHistories[window.pageNum] != null) && (window.operationHistories[window.pageNum][hIndex] != null)) {
       obj = window.operationHistories[window.pageNum][hIndex];
-      WorktableCommon.removeAllItemAndEvent();
+      WorktableCommon.removeAllItemAndEventOnThisPage();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
       if (instancePageValue != null) {

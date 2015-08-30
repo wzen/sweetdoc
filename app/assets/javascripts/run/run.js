@@ -45,7 +45,7 @@ initResize = function(wrap, scrollWrapper) {
 
 initEventAction = function() {
   var chapterList, eventList, eventObjList, eventPageValueList, i, j, page, pageCount, pageList, ref;
-  pageCount = PageValue.getGeneralPageValue("" + PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + PageValue.Key.PAGE_COUNT);
+  pageCount = PageValue.getPageCount();
   pageList = [];
   for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
     eventPageValueList = PageValue.getEventPageValueSortedListByNum(i);
@@ -98,7 +98,7 @@ initEventAction = function() {
     page = new Page(chapterList);
     pageList.push(page);
   }
-  Navbar.setPageAndChapterMax(pageCount, chapterList.length);
+  Navbar.setPageMax(pageCount);
   window.eventAction = new EventAction(pageList, window.pageNum - 1);
   return window.eventAction.start();
 };

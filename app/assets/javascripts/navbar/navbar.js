@@ -9,8 +9,8 @@ Navbar = (function() {
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     $('.menu-newcreate', fileMenuEmt).on('click', function() {
       if (Object.keys(window.instanceMap).length > 0) {
-        if (window.confirm('テーブルに存在するアイテムは全て削除されます。')) {
-          return WorktableCommon.removeAllItemAndEvent();
+        if (window.confirm('ページ内に存在するアイテムは全て削除されます。')) {
+          return WorktableCommon.removeAllItemAndEventOnThisPage();
         }
       }
     });
@@ -84,15 +84,20 @@ Navbar = (function() {
     }
   };
 
-  Navbar.setPageAndChapterMax = function(page_max, chapter_max) {
+  Navbar.setPageMax = function(page_max) {
     var e, navEmt;
     navEmt = $('#nav');
     e = $('.nav_page_max', navEmt);
     if (e != null) {
-      e.html(page_max);
+      return e.html(page_max);
     } else {
-      e.html('');
+      return e.html('');
     }
+  };
+
+  Navbar.setChapterMax = function(chapter_max) {
+    var e, navEmt;
+    navEmt = $('#nav');
     e = $('.nav_chapter_max', navEmt);
     if (e != null) {
       return e.html(chapter_max);

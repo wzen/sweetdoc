@@ -443,11 +443,11 @@ PageValue = (function() {
   };
 
   PageValue.updatePageCount = function() {
-    var iPageValues, k, page_count, v;
+    var ePageValues, k, page_count, v;
     page_count = 0;
-    iPageValues = this.getInstancePageValue(this.Key.INSTANCE_PREFIX);
-    for (k in iPageValues) {
-      v = iPageValues[k];
+    ePageValues = this.getEventPageValue(this.Key.E_PREFIX);
+    for (k in ePageValues) {
+      v = ePageValues[k];
       if (k.indexOf(this.Key.P_PREFIX) >= 0) {
         page_count += 1;
       }
@@ -456,6 +456,10 @@ PageValue = (function() {
       page_count = 1;
     }
     return this.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT, page_count);
+  };
+
+  PageValue.getPageCount = function() {
+    return PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT);
   };
 
   return PageValue;

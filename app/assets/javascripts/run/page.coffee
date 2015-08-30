@@ -86,6 +86,7 @@ class Page
     # 全てのアイテムを削除 & 次のページデータを読み込み
 
     @thisChapter().reset()
+    Navbar.setChapterMax(@chapterList.length)
 
   # ページ後処理
   didPage: ->

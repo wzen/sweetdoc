@@ -34,7 +34,7 @@ class OperationHistory
     if window.operationHistories[window.pageNum]? && window.operationHistories[window.pageNum][hIndex]?
       obj = window.operationHistories[window.pageNum][hIndex]
       # 全描画を消去
-      WorktableCommon.removeAllItemAndEvent()
+      WorktableCommon.removeAllItemAndEventOnThisPage()
 
       instancePageValue = obj[@Key.INSTANCE]
       eventPageValue = obj[@Key.EVENT]
@@ -62,7 +62,7 @@ class OperationHistory
     if window.operationHistories[window.pageNum]? && window.operationHistories[window.pageNum][hIndex]?
       obj = window.operationHistories[window.pageNum][hIndex]
       # 全描画を消去
-      WorktableCommon.removeAllItemAndEvent()
+      WorktableCommon.removeAllItemAndEventOnThisPage()
 
       instancePageValue = obj[@Key.INSTANCE]
       eventPageValue = obj[@Key.EVENT]

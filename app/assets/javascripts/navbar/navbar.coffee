@@ -5,8 +5,8 @@ class Navbar
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
     $('.menu-newcreate', fileMenuEmt).on('click', ->
       if Object.keys(window.instanceMap).length > 0
-        if window.confirm('テーブルに存在するアイテムは全て削除されます。')
-          WorktableCommon.removeAllItemAndEvent()
+        if window.confirm('ページ内に存在するアイテムは全て削除されます。')
+          WorktableCommon.removeAllItemAndEventOnThisPage()
     )
     $('.menu-load', fileMenuEmt).off('mouseenter')
     $('.menu-load', fileMenuEmt).on('mouseenter', ->
@@ -70,15 +70,20 @@ class Navbar
     else
       e.html('')
 
-  @setPageAndChapterMax = (page_max, chapter_max) ->
+  @setPageMax = (page_max) ->
     navEmt = $('#nav')
     e = $('.nav_page_max', navEmt)
     if e?
       e.html(page_max)
     else
       e.html('')
+
+  @setChapterMax = (chapter_max) ->
+    navEmt = $('#nav')
     e = $('.nav_chapter_max', navEmt)
     if e?
       e.html(chapter_max)
     else
       e.html('')
+
+

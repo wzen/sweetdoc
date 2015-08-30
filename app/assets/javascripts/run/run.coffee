@@ -46,7 +46,7 @@ initEventAction = ->
   # アクションのイベントを取得
 
   # ページ総数
-  pageCount = PageValue.getGeneralPageValue("#{PageValue.Key.G_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{PageValue.Key.PAGE_COUNT}")
+  pageCount = PageValue.getPageCount()
   pageList = []
   for i in [1..pageCount]
     eventPageValueList = PageValue.getEventPageValueSortedListByNum(i)
@@ -90,7 +90,7 @@ initEventAction = ->
     pageList.push(page)
 
   # ナビバーのページ数 & チャプター数設定
-  Navbar.setPageAndChapterMax(pageCount, chapterList.length)
+  Navbar.setPageMax(pageCount)
 
   # アクション作成
   window.eventAction = new EventAction(pageList, window.pageNum - 1)

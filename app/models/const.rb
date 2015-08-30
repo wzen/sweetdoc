@@ -189,6 +189,6 @@ class Const
   class Paging
     NAV_ROOT_ID = 'header-pageing-menu'
     NAV_SELECTED_CLASS = 'header-pageing-menu-selected'
-    NAV_SELECT_ROOT_CLASS = 'header-pageing-menu-selected'
+    NAV_SELECT_ROOT_CLASS = 'header-pageing-menu-root'
   end
 end

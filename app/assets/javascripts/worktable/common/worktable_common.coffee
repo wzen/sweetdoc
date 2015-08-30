@@ -41,6 +41,20 @@ class WorktableCommon
       Timeline.refreshAllTimeline()
     )
 
+  # ページ内の全てのアイテムとイベントを削除
+  @removeAllItemAndEventOnThisPage = ->
+    Sidebar.closeSidebar()
+    # WebStorageのアイテム&イベント情報を消去
+    lstorage = localStorage
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES)
+    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+    Common.clearAllEventChange( =>
+      @removeAllItem()
+      EventConfig.removeAllConfig()
+      PageValue.removeAllItemAndEventPageValueOnThisPage()
+      Timeline.refreshAllTimeline()
+    )
+
   # イベントPageValueから全てのアイテムを描画
   @drawAllItemFromEventPageValue: ->
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
