@@ -119,51 +119,58 @@ class PageValueState
   # @param [String] user_id ユーザID
   # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
   def self.get_saved_pagevalues(user_id, user_pagevalue_id, loaded_itemids)
-    pagevalues = UserPagevalue.joins(:instance_pagevalue_pagings).eager_load(:instance_pagevalue_pagings)
-                     .joins(:instance_pagevalue).eager_load(:instance_pagevalue)
-                     .joins(:event_pagevalue_paging).eager_load(:event_pagevalue_paging)
-                     .joins(:event_pagevalue).eager_load(:event_pagevalue)
-                     .joins(:setting_pagevalue).eager_load(:setting_pagevalue)
-                     .where({id:user_pagevalue_id, user_id: user_id, del_flg: false}).order('updated_at DESC')
+    pagevalues = UserPagevalue.joins(:setting_pagevalue).where({id:user_pagevalue_id, user_id: user_id, del_flg: false})
+                     .order('updated_at DESC')
+                     .select('user_pagevalues.*, setting_pagevalues.data as s_data').first
     if pagevalues == nil
       message = I18n.t('message.database.item_state.load.error')
       return nil
     else
       message = I18n.t('message.database.item_state.load.success')
+
+      instance_pages = InstancePagevaluePaging.joins(:user_pagevalue).where(id: user_pagevalue_id)
+                           .joins(:instance_pagevalue).select('instance_pagevalue_pagings.*, instance_pagevalues.data as data')
+      if instance_pages.size > 0
+        ipd = {}
+        instance_pages.each do |p|
+          key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
+          ipd[key] = p.data
+        end
+      else
+        ipd = nil
+      end
+
       item_js_list = []
-
-      # if pagevalues.instance_pagevalue_paging != nil
-      #   ipd = {}
-      #   pagevalues.instance_pagevalue_paging.each do |p|
-      #     key = Const::PageValueKey::P_PREFIX + p.page_num
-      #     ipd[key] = p.
-      #   end
-      #   ipd = pagevalues.instance_pagevalue.data
-      # else
-      #   ipd = nil
-      # end
-
-      if pagevalues.event_pagevalue != nil
-        epd = pagevalues.event_pagevalue.data
+      event_pages = EventPagevaluePaging.joins(:user_pagevalue).where(id: user_pagevalue_id)
+                           .joins(:event_pagevalue).select('event_pagevalue_pagings.*, event_pagevalues.data as data')
+      if event_pages.size > 0
         itemids = []
-        JSON.parse(epd).each do |k, v|
-          if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-            item_id = v[Const::EventPageValueKey::ITEM_ID]
-            if item_id != nil
-              unless loaded_itemids.include?(item_id)
-                itemids << item_id
+        epd = {}
+        event_pages.each do |p|
+          key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
+          epd[key] = p.data
+
+          # 必要なItemIdを調査
+          JSON.parse(p.data).each do |k, v|
+            if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
+              item_id = v[Const::EventPageValueKey::ITEM_ID]
+              if item_id != nil
+                unless loaded_itemids.include?(item_id)
+                  itemids << item_id
+                end
               end
             end
           end
         end
+
         item_action_events_all = ItemJs.find_events_by_itemid(itemids)
         item_js_list = ItemJs.extract_iae(item_action_events_all)
       else
         epd = nil
       end
 
-      if pagevalues.setting_pagevalue != nil
-        spd = pagevalues.setting_pagevalue.data
+      if pagevalues.s_data != nil
+        spd = pagevalues.s_data
       else
         spd = nil
       end

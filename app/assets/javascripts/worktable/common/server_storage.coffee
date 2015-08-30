@@ -84,10 +84,14 @@ class ServerStorage
 
             # Pagevalue設置
             if data.instance_pagevalue_data?
-              d = JSON.parse(data.instance_pagevalue_data)
+              d = {}
+              for k, v of data.instance_pagevalue_data
+                d[k] = JSON.parse(v)
               PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
             if data.event_pagevalue_data?
-              d = JSON.parse(data.event_pagevalue_data)
+              d = {}
+              for k, v of data.event_pagevalue_data
+                d[k] = JSON.parse(v)
               PageValue.setEventPageValueByRootHash(d)
             if data.setting_pagevalue_data?
               d = JSON.parse(data.setting_pagevalue_data)

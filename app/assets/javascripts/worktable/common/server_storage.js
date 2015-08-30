@@ -94,14 +94,24 @@ ServerStorage = (function() {
         self = this;
         item_js_list = data.item_js_list;
         callback = function() {
-          var d;
+          var d, k, ref, ref1, v;
           clearWorkTable();
           if (data.instance_pagevalue_data != null) {
-            d = JSON.parse(data.instance_pagevalue_data);
+            d = {};
+            ref = data.instance_pagevalue_data;
+            for (k in ref) {
+              v = ref[k];
+              d[k] = JSON.parse(v);
+            }
             PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
           }
           if (data.event_pagevalue_data != null) {
-            d = JSON.parse(data.event_pagevalue_data);
+            d = {};
+            ref1 = data.event_pagevalue_data;
+            for (k in ref1) {
+              v = ref1[k];
+              d[k] = JSON.parse(v);
+            }
             PageValue.setEventPageValueByRootHash(d);
           }
           if (data.setting_pagevalue_data != null) {
