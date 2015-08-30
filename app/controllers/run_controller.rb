@@ -8,7 +8,7 @@ class RunController < ApplicationController
 
     @is_runwindow_reload = !request.post?
     unless @is_runwindow_reload
-      user_id = @_current_user
+      user_id = current_user.id
       general = params.require(Const::PageValueKey::G_PREFIX.to_sym)
       instance = params.require(Const::PageValueKey::INSTANCE_PREFIX.to_sym)
       event = params.require(Const::PageValueKey::E_PREFIX.to_sym)
@@ -25,7 +25,7 @@ class RunController < ApplicationController
     # Constantの設定
     init_const
 
-    user_id = @_current_user
+    user_id = current_user.id
     page_num = params['page_num']
     # cacheから読み込み
     instance = Rails.cache.read("user_id:#{user_id}-instance")

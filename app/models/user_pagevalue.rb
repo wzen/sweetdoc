@@ -1,6 +1,8 @@
 class UserPagevalue < ActiveRecord::Base
   belongs_to :user
-  belongs_to :instance_pagevalue_paging
-  belongs_to :event_pagevalue_paging
+  has_one :instance_pagevalue_paging
+  has_many :instance_pagevalues, through: :instance_pagevalue_paging
+  has_one :event_pagevalue_paging
+  has_many :event_pagevalues, through: :event_pagevalue_paging
   belongs_to :setting_pagevalue
 end

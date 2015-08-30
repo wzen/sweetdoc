@@ -3,49 +3,103 @@ class PageValueState
     begin
       if i_page_values != 'null' || e_page_values != 'null' || s_page_values != 'null'
 
-        user_page_values = UserPagevalue.where(user_id: user_id, del_flg: false).order('updated_at desc').first
-
+        last_user_page_values = UserPagevalue.where(user_id: user_id, del_flg: false).order('updated_at desc').first
         ActiveRecord::Base.transaction do
-          if i_page_values != 'null'
-            ip = InstancePagevalue.new({data: i_page_values})
-            ip.save!
-            ip_id = ip.id
-          else
-            if user_page_values != nil
-              ip_id = user_page_values.instance_pagevalue_id
-            else
-              ip_id = nil
-            end
-          end
-          if e_page_values != 'null'
-            ep = EventPagevalue.new({data: e_page_values})
-            ep.save!
-            ep_id = ep.id
-          else
-            if user_page_values != nil
-              ep_id = user_page_values.event_pagevalue_id
-            else
-              ep_id = nil
-            end
-          end
+
+          # 共通設定保存
           if s_page_values != 'null'
             sp = SettingPagevalue.new({data: s_page_values})
             sp.save!
             sp_id = sp.id
           else
-            if user_page_values != nil
-              sp_id = user_page_values.setting_pagevalue_id
+            if last_user_page_values != nil
+              sp_id = last_user_page_values.setting_pagevalue_id
             else
               sp_id = nil
             end
           end
+
+          # UserPagevalue Insert
           up = UserPagevalue.new({
                                      user_id: user_id,
-                                     instance_pagevalue_id: ip_id,
-                                     event_pagevalue_id: ep_id,
                                      setting_pagevalue_id: sp_id
                                  })
           up.save!
+          created_upv_id = up.id
+
+          if i_page_values != 'null'
+            updated_page_num = []
+            # 新規データをInsert
+            i_page_values.each do |k, v|
+              page_num = v['pageNum']
+              updated_page_num << page_num
+              pagevalue = v['pagevalue']
+
+              ip = InstancePagevalue.new({data: pagevalue})
+              ip.save!
+              ipp = InstancePagevaluePaging.new({
+                                                    user_pagevalue_id: created_upv_id,
+                                                    page_num: page_num,
+                                                    instance_pagevalue_id: ip.id
+                                                })
+              ipp.save!
+            end
+
+            # update対象でないpagenumは古いデータを入れる
+            if last_user_page_values != nil
+              last_ipv_paging = InstancePagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
+              if last_ipv_paging != nil
+                last_ipv_paging.each do |l|
+                  unless updated_page_num.include?(l.page_num)
+                    ipp = InstancePagevaluePaging.new({
+                                                          user_pagevalue_id: created_upv_id,
+                                                          page_num: l.page_num,
+                                                          instance_pagevalue_id: l.instance_pagevalue_id
+                                                      })
+                    ipp.save!
+                  end
+                end
+              end
+            end
+
+          end
+
+          if e_page_values != 'null'
+            updated_page_num = []
+            # 新規データをInsert
+            e_page_values.each do |k, v|
+              page_num = v['pageNum']
+              updated_page_num << page_num
+              pagevalue = v['pagevalue']
+
+              ep = EventPagevalue.new({data: pagevalue})
+              ep.save!
+              epp = EventPagevaluePaging.new({
+                                                    user_pagevalue_id: created_upv_id,
+                                                    page_num: page_num,
+                                                    event_pagevalue_id: ep.id
+                                                })
+              epp.save!
+            end
+
+            # update対象でないpagenumは古いデータを入れる
+            if last_user_page_values != nil
+              last_epv_paging = EventPagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
+              if last_epv_paging != nil
+                last_epv_paging.each do |l|
+                  unless updated_page_num.include?(l.page_num)
+                    epp = EventPagevaluePaging.new({
+                                                       user_pagevalue_id: created_upv_id,
+                                                       page_num: l.page_num,
+                                                       event_pagevalue_id: l.event_pagevalue_id
+                                                   })
+                    epp.save!
+                  end
+                end
+              end
+            end
+          end
+
         end
       end
 
@@ -65,8 +119,12 @@ class PageValueState
   # @param [String] user_id ユーザID
   # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
   def self.get_saved_pagevalues(user_id, user_pagevalue_id, loaded_itemids)
-    pagevalues = UserPagevalue.where({id:user_pagevalue_id, user_id: user_id, del_flg: false}).order('updated_at DESC')
-                     .includes(:instance_pagevalue, :event_pagevalue, :setting_pagevalue).first
+    pagevalues = UserPagevalue.joins(:instance_pagevalue_pagings).eager_load(:instance_pagevalue_pagings)
+                     .joins(:instance_pagevalue).eager_load(:instance_pagevalue)
+                     .joins(:event_pagevalue_paging).eager_load(:event_pagevalue_paging)
+                     .joins(:event_pagevalue).eager_load(:event_pagevalue)
+                     .joins(:setting_pagevalue).eager_load(:setting_pagevalue)
+                     .where({id:user_pagevalue_id, user_id: user_id, del_flg: false}).order('updated_at DESC')
     if pagevalues == nil
       message = I18n.t('message.database.item_state.load.error')
       return nil
@@ -74,11 +132,16 @@ class PageValueState
       message = I18n.t('message.database.item_state.load.success')
       item_js_list = []
 
-      if pagevalues.instance_pagevalue != nil
-        ipd = pagevalues.instance_pagevalue.data
-      else
-        ipd = nil
-      end
+      # if pagevalues.instance_pagevalue_paging != nil
+      #   ipd = {}
+      #   pagevalues.instance_pagevalue_paging.each do |p|
+      #     key = Const::PageValueKey::P_PREFIX + p.page_num
+      #     ipd[key] = p.
+      #   end
+      #   ipd = pagevalues.instance_pagevalue.data
+      # else
+      #   ipd = nil
+      # end
 
       if pagevalues.event_pagevalue != nil
         epd = pagevalues.event_pagevalue.data

@@ -22,8 +22,28 @@ class ServerStorage
   @save = ->
     data = {}
     # FIXME: 差分保存 & バッチでフル保存するようにする
-    data[@Key.INSTANCE_PAGE_VALUE] = JSON.stringify(PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX))
-    data[@Key.EVENT_PAGE_VALUE] = JSON.stringify(PageValue.getEventPageValue(PageValue.Key.E_PREFIX))
+    instancePagevalues = []
+    instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
+    for k, v of instance
+      pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
+      instancePagevalues.push({
+        pageNum: pageNum,
+        pagevalue: JSON.stringify(v)
+
+      })
+    data[@Key.INSTANCE_PAGE_VALUE] = if instancePagevalues.length > 0 then instancePagevalues else null
+
+    eventPagevalues = []
+    event = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    for k, v of event
+      pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
+      eventPagevalues.push({
+        pageNum: pageNum,
+        pagevalue: JSON.stringify(v)
+
+      })
+    data[@Key.EVENT_PAGE_VALUE] = if eventPagevalues.length > 0 then eventPagevalues else null
+
     data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX))
 
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?

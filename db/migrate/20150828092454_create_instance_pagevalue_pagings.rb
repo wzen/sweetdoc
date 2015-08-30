@@ -1,7 +1,8 @@
 class CreateInstancePagevaluePagings < ActiveRecord::Migration
   def change
     create_table :instance_pagevalue_pagings do |t|
-      t.integer :paging_num, :null => false
+      t.integer :user_pagevalue_id, :null => false
+      t.integer :page_num, :null => false
       t.integer :instance_pagevalue_id, :null => false
 
       t.timestamps
