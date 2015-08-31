@@ -89,7 +89,7 @@ Common = (function() {
     pageSection = $("." + sectionClass, root);
     if ((pageSection == null) || pageSection.length === 0) {
       temp = $("#" + Constant.ElementAttribute.MAIN_TEMP_ID).children(':first').clone(true);
-      temp = $(temp).wrap("<section class='" + sectionClass + "'></section>").parent();
+      temp = $(temp).wrap("<div class='" + sectionClass + " section'></div>").parent();
       return root.append(temp);
     }
   };
@@ -408,6 +408,13 @@ Common = (function() {
     } else {
       return _show.call(self);
     }
+  };
+
+  Common.plusPagingZindex = function(zindex, pn) {
+    if (pn == null) {
+      pn = window.pageNum;
+    }
+    return (window.pageNumMax - window.pageNum) * window.pageZindexMax + zindex;
   };
 
   return Common;

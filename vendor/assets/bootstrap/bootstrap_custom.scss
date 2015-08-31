@@ -3725,7 +3725,7 @@ tbody.collapse.in {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: 10000;
+  z-index: 999999999;
   display: none;
   float: left;
   min-width: 160px;
@@ -4588,7 +4588,7 @@ select[multiple].input-group-sm > {
   position: fixed;
   right: 0;
   left: 0;
-  z-index: 1030;
+  z-index: 999999999;
   -webkit-transform: translate3d(0, 0, 0);
   -o-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);

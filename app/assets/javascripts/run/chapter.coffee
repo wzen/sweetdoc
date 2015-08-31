@@ -65,7 +65,7 @@ class Chapter
     scrollContents.css('z-index', scrollViewSwitchZindex.on)
     eventObjList.forEach((e) ->
       if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-        e.getJQueryElement().css('z-index', Constant.Zindex.EVENTFLOAT)
+        e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     )
 
   # 全てのイベントアイテムをFrontから落とす
@@ -74,7 +74,7 @@ class Chapter
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @eventObjList.forEach((e) =>
       if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-        e.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + @num)
+        e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + @num))
     )
 
   # 全てのイベントが終了しているか

@@ -3,6 +3,8 @@ class CommonVar
   # 共有変数定義
   _commonVar = ->
     window.scrollViewSize = 30000
+    window.pageNumMax = 10000
+    window.pageZindexMax = 10000
     window.instanceMap = {}
 
   @updateWorktableBaseElement = (pageNum) ->
@@ -51,7 +53,7 @@ class CommonVar
     window.distY = 0
     window.resizeTimer = false
     window.eventAction = null
-    window.scrollViewSwitchZindex = {'on': Constant.Zindex.EVENTFLOAT, 'off': Constant.Zindex.EVENTBOTTOM}
+    window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)}
     window.scrollInsideCoverZindex = 1
     window.disabledEventHandler = false
     window.firstItemFocused = false

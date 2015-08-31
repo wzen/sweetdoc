@@ -8,6 +8,8 @@ CommonVar = (function() {
 
   _commonVar = function() {
     window.scrollViewSize = 30000;
+    window.pageNumMax = 10000;
+    window.pageZindexMax = 10000;
     return window.instanceMap = {};
   };
 
@@ -61,8 +63,8 @@ CommonVar = (function() {
     window.resizeTimer = false;
     window.eventAction = null;
     window.scrollViewSwitchZindex = {
-      'on': Constant.Zindex.EVENTFLOAT,
-      'off': Constant.Zindex.EVENTBOTTOM
+      'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT),
+      'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)
     };
     window.scrollInsideCoverZindex = 1;
     window.disabledEventHandler = false;

@@ -24,7 +24,7 @@ class ItemBase extends ItemEventBase
     # @property [Array] itemSize サイズ
     @itemSize = null
     # @property [Int] zIndex z-index
-    @zindex = Constant.Zindex.EVENTBOTTOM + 1
+    @zindex = Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1)
     # @property [Array] ohiRegist 操作履歴Index保存配列
     @ohiRegist = []
     # @property [Int] ohiRegistIndex 操作履歴Index保存配列のインデックス

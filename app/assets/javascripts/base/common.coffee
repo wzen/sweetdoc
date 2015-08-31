@@ -62,7 +62,7 @@ class Common
     if !pageSection? || pageSection.length == 0
       # 作成
       temp = $("##{Constant.ElementAttribute.MAIN_TEMP_ID}").children(':first').clone(true)
-      temp = $(temp).wrap("<section class='#{sectionClass}'></section>").parent()
+      temp = $(temp).wrap("<div class='#{sectionClass} section'></div>").parent()
       root.append(temp)
 
   # Mainコンテナを削除
@@ -238,6 +238,7 @@ class Common
         format = format.replace(/S/, milliSeconds.substring(i, i + 1))
     return format
 
+  # 時間差を計算
   @diffTime = (future, past) ->
     diff = future - past
     ret = {}
@@ -328,6 +329,9 @@ class Common
       )
     else
       _show.call(self)
+
+  @plusPagingZindex: (zindex, pn = window.pageNum) ->
+    return (window.pageNumMax - window.pageNum) * window.pageZindexMax + zindex
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

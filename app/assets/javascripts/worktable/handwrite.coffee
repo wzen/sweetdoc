@@ -8,7 +8,7 @@ class Handwrite
     item = null
     enableMoveEvent = true
     queueLoc = null
-    zindex = Constant.Zindex.EVENTBOTTOM + 1
+    zindex = Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1)
     MOVE_FREQUENCY = 7
 
     # ウィンドウ座標からCanvas座標に変換する

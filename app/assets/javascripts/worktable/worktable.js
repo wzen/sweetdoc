@@ -30,11 +30,11 @@ getInitFuncName = function(itemId) {
 
 changeMode = function(mode) {
   if (mode === Constant.Mode.DRAW) {
-    $(window.drawingCanvas).css('z-index', Constant.Zindex.MAX);
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.MAX));
   } else if (mode === Constant.Mode.EDIT) {
-    $(window.drawingCanvas).css('z-index', Constant.Zindex.EVENTBOTTOM);
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
   } else if (mode === Constant.Mode.OPTION) {
-    $(window.drawingCanvas).css('z-index', Constant.Zindex.MAX);
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.MAX));
   }
   return window.mode = mode;
 };
@@ -106,6 +106,7 @@ initMainContainer = function() {
   timelineTopPadding = 5;
   padding = borderWidth * 4 + timelineTopPadding;
   window.mainWrapper.height($('#contents').height() - $('#timeline').height() - padding);
+  $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
   $(window.drawingCanvas).attr('width', window.mainWrapper.width());
   $(window.drawingCanvas).attr('height', window.mainWrapper.height());
   scrollInside.width(window.scrollViewSize);

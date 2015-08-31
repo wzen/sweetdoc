@@ -82,7 +82,7 @@ Chapter = (function() {
     scrollContents.css('z-index', scrollViewSwitchZindex.on);
     return eventObjList.forEach(function(e) {
       if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-        return e.getJQueryElement().css('z-index', Constant.Zindex.EVENTFLOAT);
+        return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       }
     });
   };
@@ -93,7 +93,7 @@ Chapter = (function() {
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
         if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-          return e.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + _this.num);
+          return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + _this.num));
         }
       };
     })(this));
