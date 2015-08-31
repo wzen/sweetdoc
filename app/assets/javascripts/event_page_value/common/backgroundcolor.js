@@ -17,7 +17,7 @@ EPVBackgroundColor = (function(superClass) {
   EPVBackgroundColor.initConfigValue = function(eventConfig) {
     var bgColor;
     EPVBackgroundColor.__super__.constructor.initConfigValue.call(this, eventConfig);
-    bgColor = $('#main-wrapper.stage_container').css('backgroundColor');
+    bgColor = window.mainWrapper.css('backgroundColor');
     $(".baseColor", $("values_div", eventConfig.emt)).css('backgroundColor', bgColor);
     return $(".colorPicker", eventConfig.emt).each(function() {
       var self;

@@ -32,7 +32,7 @@ ButtonItem = (function(superClass) {
     }
     ButtonItem.__super__.reDraw.call(this, show);
     this.clearDraw();
-    $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
+    $(ElementCode.get().createItemElement(this)).appendTo(window.scrollInside);
     if (!show) {
       this.getJQueryElement().css('opacity', 0);
     }

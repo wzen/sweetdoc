@@ -11,7 +11,7 @@ PageFlip = (function() {
     this.PAGE_Y = (this.BOOK_HEIGHT - this.PAGE_HEIGHT) / 2;
     this.CANVAS_PADDING = 60;
     page = 0;
-    $('#main-wrapper').append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>");
+    window.mainWrapper.append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>");
     canvas = document.getElementById("pageflip-canvas");
     this.context = canvas.getContext("2d");
     this.flips = [];

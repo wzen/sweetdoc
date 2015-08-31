@@ -49,7 +49,7 @@ BackgroundEvent = (function(superClass) {
         gp += gPer;
         bp += bPer;
       }
-      return this.targetBackground = $('#main-wrapper');
+      return this.targetBackground = window.mainWrapper;
     }
   };
 

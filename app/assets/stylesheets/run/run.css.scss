@@ -18,7 +18,7 @@ div#main {
   height: 100%;
 }
 
-div#main-wrapper {
+div.main-wrapper {
   position: relative;
   width: 100%;
   height: 100%;
@@ -30,7 +30,7 @@ div#main-wrapper {
   border: 5px solid #e6deca;
 }
 
-div#canvas_wrapper {
+div.canvas_wrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -39,7 +39,7 @@ div#canvas_wrapper {
   background-color: transparent;
 }
 
-div#scroll_wrapper {
+div.scroll_wrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -49,7 +49,7 @@ div#scroll_wrapper {
   background-color: transparent;
 }
 
-div#scroll_handle_wrapper {
+div.scroll_handle_wrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -62,7 +62,7 @@ div#scroll_handle_wrapper {
   box-sizing: content-box;
 }
 
-div#scroll_contents {
+div.scroll_contents {
   position: absolute;
   top: 0;
   left: 0;
@@ -75,13 +75,13 @@ div#scroll_contents {
   box-sizing: content-box;
 }
 
-div#scroll_inside, div#scroll_inside_cover {
+div.scroll_inside, div.scroll_inside_cover {
   position: absolute;
   top: 0;
   left: 0;
 }
 
-div#scroll_inside_cover {
+div.scroll_inside_cover {
   background-color: transparent;
   z-index: 1;
 }
@@ -91,13 +91,6 @@ div#footer{
   bottom:0;
   height:80px;
   width:100%;
-}
-div#scrollpoint_container {
-  position: absolute;
-  left: 50%;
-  width: 70px;
-  height: 75px;
-  margin-left: -35px;
 }
 .scrollpoint {
   position: absolute;
@@ -131,6 +124,7 @@ div.css3button > div {
   vertical-align: middle;
 }
 
-div#page_values {
-  display: none;
+div#pages, section {
+  width: 100%;
+  height: 100%;
 }

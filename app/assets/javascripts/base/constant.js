@@ -113,6 +113,8 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ElementAttribute = (function() {
       function ElementAttribute() {}
 
+      ElementAttribute.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
+
       ElementAttribute.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
 
       ElementAttribute.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
@@ -143,6 +145,10 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.Paging = (function() {
       function Paging() {}
+
+      Paging.ROOT_ID = constant.Paging.ROOT_ID;
+
+      Paging.MAIN_PAGING_SECTION_CLASS = constant.Paging.MAIN_PAGING_SECTION_CLASS;
 
       Paging.NAV_ROOT_ID = constant.Paging.NAV_ROOT_ID;
 

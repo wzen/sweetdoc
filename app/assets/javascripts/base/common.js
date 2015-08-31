@@ -82,6 +82,25 @@ Common = (function() {
     return newInstance;
   };
 
+  Common.createdMainContainerIfNeeded = function(pageNum) {
+    var pageSection, root, sectionClass, temp;
+    root = $("#" + Constant.Paging.ROOT_ID);
+    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    pageSection = $("." + sectionClass, root);
+    if ((pageSection == null) || pageSection.length === 0) {
+      temp = $("#" + Constant.ElementAttribute.MAIN_TEMP_ID).children(':first').clone(true);
+      temp = $(temp).wrap("<section class='" + sectionClass + "'></section>").parent();
+      return root.append(temp);
+    }
+  };
+
+  Common.removeMainContainer = function(pageNum) {
+    var root, sectionClass;
+    root = $("#" + Constant.Paging.ROOT_ID);
+    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    return $("." + sectionClass, root).remove();
+  };
+
   Common.focusToTarget = function(target) {
     var scrollLeft, scrollTop, targetMiddle;
     targetMiddle = {
@@ -399,10 +418,5 @@ Common = (function() {
   window.loadedClassList = {};
   return window.classMap = {};
 })();
-
-$(function() {
-  window.drawingCanvas = document.getElementById('canvas_container');
-  return window.drawingContext = drawingCanvas.getContext('2d');
-});
 
 //# sourceMappingURL=common.js.map

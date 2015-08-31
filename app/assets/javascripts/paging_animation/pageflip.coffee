@@ -18,7 +18,7 @@ class PageFlip
     page = 0;
 
     # アニメーション用Div作成
-    $('#main-wrapper').append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>")
+    window.mainWrapper.append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>")
 
     canvas = document.getElementById("pageflip-canvas");
     @context = canvas.getContext("2d");

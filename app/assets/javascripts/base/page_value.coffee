@@ -16,7 +16,9 @@ class PageValue
       # @property [return] 現在のページのページ番号プレフィックス
       @pagePrefix = (pn = window.pageNum) -> @P_PREFIX + pn
       # @property [String] PAGE_COUNT ページ総数
-      @PAGE_COUNT = 'page_count'
+      @PAGE_COUNT = constant.PageValueKey.PAGE_COUNT
+      # @property [String] PAGE_NUM 現在のページ番号
+      @PAGE_NUM = constant.PageValueKey.PAGE_NUM
       # @property [String] IS_ROOT ページ値ルート
       @IS_ROOT = constant.PageValueKey.IS_ROOT
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
@@ -391,4 +393,16 @@ class PageValue
 
   # ページ総数を取得
   @getPageCount = ->
-    return PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}")
+    ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}")
+    if ret?
+      return parseInt(ret)
+    else
+      return 1
+
+  # 現在のページ番号を取得
+  @getPageNum = ->
+    ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
+    if ret?
+      return parseInt(ret)
+    else
+      return 1

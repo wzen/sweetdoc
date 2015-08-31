@@ -83,22 +83,19 @@ clearWorkTable = ->
 ### デバッグ ###
 runDebug = ->
 
-$ ->
-  # ブラウザ対応チェック
-  if !Common.checkBlowserEnvironment()
-    alert('ブラウザ非対応です。')
-    return
+# Mainコンテナ初期化
+initMainContainer = ->
+  # 変数初期化
+  CommonVar.worktableCommonVar()
 
-  # 共有変数
-  worktableCommonVar()
   #Wrapper & Canvasサイズ
   $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
   borderWidth = 5
   timelineTopPadding = 5
   padding = borderWidth * 4 + timelineTopPadding
   window.mainWrapper.height($('#contents').height() - $('#timeline').height() - padding)
-  $('#canvas_container').attr('width', window.mainWrapper.width())
-  $('#canvas_container').attr('height', window.mainWrapper.height())
+  $(window.drawingCanvas).attr('width', window.mainWrapper.width())
+  $(window.drawingCanvas).attr('height', window.mainWrapper.height())
   # スクロールサイズ
   scrollInside.width(window.scrollViewSize)
   scrollInside.height(window.scrollViewSize)
@@ -115,14 +112,37 @@ $ ->
   Handwrite.initHandwrite()
   # コンテキストメニュー
   menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
-  WorktableCommon.setupContextMenu($('#main'), '#main-wrapper', menu)
+  page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', window.pageNum)
+  WorktableCommon.setupContextMenu($('#main'), "#pages .#{page} .main-wrapper:first", menu)
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )
-  # PageValue & タイムライン初期化
-  if !LocalStorage.isOverWorktableSaveTimeLimit()
+
+$ ->
+  # ブラウザ対応チェック
+  if !Common.checkBlowserEnvironment()
+    alert('ブラウザ非対応です。')
+    return
+
+  # 現在のページ番号
+  window.pageNum = PageValue.getPageNum()
+
+  # キャッシュチェック
+  existedCache = !LocalStorage.isOverWorktableSaveTimeLimit()
+
+  if existedCache
     # キャッシュが存在する場合アイテム描画
     LocalStorage.loadValueForWorktable()
+
+  # 現在のページ番号
+  window.pageNum = PageValue.getPageNum()
+  # Mainコンテナ作成
+  Common.createdMainContainerIfNeeded(window.pageNum)
+  # コンテナ初期化
+  initMainContainer()
+
+  if existedCache
+    # 描画
     PageValue.adjustInstanceAndEventOnThisPage()
     WorktableCommon.drawAllItemFromEventPageValue()
   else

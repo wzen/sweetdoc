@@ -4,8 +4,8 @@ window.runPage = true
 # 画面初期化
 initView = ->
   $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
-  $('#canvas_container').attr('width', $('#canvas_wrapper').width())
-  $('#canvas_container').attr('height', $('#canvas_wrapper').height())
+  $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
+  $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
   # 暫定でスクロールを上に持ってくる
   scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
 
@@ -136,14 +136,22 @@ setupScrollEvent = ->
   scrollFinished = ->
     #scrollpoint_container.show()
 
-$ ->
-  runCommonVar()
+# Mainコンテナ初期化
+initMainContainer = ->
+  CommonVar.runCommonVar()
   initView()
   initHandleScrollPoint()
   #initResize(wrap, scrollWrapper)
   initEventAction()
   setupScrollEvent()
   Navbar.initRunNavbar()
+
+$ ->
+  window.pageNum = PageValue.getPageNum()
+  # Mainコンテナ作成
+  Common.createdMainContainerIfNeeded(window.pageNum)
+  # コンテナ初期化
+  initMainContainer()
 
   # CSS
   $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()))

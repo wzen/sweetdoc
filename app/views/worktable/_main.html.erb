@@ -1,12 +1,15 @@
 <div id="main" class="col-md-12">
-    <div id="main-wrapper" class="stage_container">
-        <div id="scroll_wrapper">
-            <div id="scroll_contents">
-                <div id="scroll_inside"></div>
+    <div id="<%= Const::Paging::ROOT_ID %>"></div>
+    <%= render 'worktable/timeline/timeline' %>
+</div>
+
+<div id="<%= Const::ElementAttribute::MAIN_TEMP_ID %>">
+    <div class="main-wrapper stage_container">
+        <div class="scroll_wrapper">
+            <div class="scroll_contents">
+                <div class="scroll_inside"></div>
             </div>
         </div>
-        <canvas id="canvas_container" class="canvas" style="z-index: <%= Const::Zindex::EVENTBOTTOM %>"></canvas>
+        <canvas class="canvas_container canvas" style="z-index: <%= Const::Zindex::EVENTBOTTOM %>"></canvas>
     </div>
-
-    <%= render 'worktable/timeline/timeline' %>
 </div>

@@ -73,6 +73,8 @@ if gon?
       @Z = constant.KeyboardKeyCode.Z
 
     class @ElementAttribute
+      # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
+      @MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID
       # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
       # @property [String] NAVBAR_ROOT ナビヘッダーRoot
@@ -91,6 +93,8 @@ if gon?
 
     # ページング
     class @Paging
+      @ROOT_ID = constant.Paging.ROOT_ID
+      @MAIN_PAGING_SECTION_CLASS = constant.Paging.MAIN_PAGING_SECTION_CLASS
       @NAV_ROOT_ID = constant.Paging.NAV_ROOT_ID
       @NAV_SELECTED_CLASS = constant.Paging.NAV_SELECTED_CLASS
       @NAV_SELECT_ROOT_CLASS = constant.Paging.NAV_SELECT_ROOT_CLASS

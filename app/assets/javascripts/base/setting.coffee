@@ -122,7 +122,7 @@ class Setting
           left -= left % stepx
           if left < 0
             left = 0
-          $(ElementCode.get().createGridElement(top, left)).appendTo('#scroll_inside')
+          $(ElementCode.get().createGridElement(top, left)).appendTo(window.scrollInside)
           context = document.getElementById("#{@SETTING_GRID_CANVAS_ID}").getContext('2d');
         else
           # 描画をクリア

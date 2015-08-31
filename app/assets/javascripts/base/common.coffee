@@ -54,6 +54,23 @@ class Common
       newInstance[key] = clone obj[key]
     return newInstance
 
+  # Mainコンテナを作成
+  @createdMainContainerIfNeeded: (pageNum) ->
+    root = $("##{Constant.Paging.ROOT_ID}")
+    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    pageSection = $(".#{sectionClass}", root)
+    if !pageSection? || pageSection.length == 0
+      # 作成
+      temp = $("##{Constant.ElementAttribute.MAIN_TEMP_ID}").children(':first').clone(true)
+      temp = $(temp).wrap("<section class='#{sectionClass}'></section>").parent()
+      root.append(temp)
+
+  # Mainコンテナを削除
+  @removeMainContainer: (pageNum) ->
+    root = $("##{Constant.Paging.ROOT_ID}")
+    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+    $(".#{sectionClass}", root).remove()
+
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
   @focusToTarget = (target) ->
@@ -317,6 +334,3 @@ do ->
   window.loadedClassList = {}
   window.classMap = {}
 
-$ ->
-  window.drawingCanvas = document.getElementById('canvas_container')
-  window.drawingContext = drawingCanvas.getContext('2d')

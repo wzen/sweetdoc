@@ -107,6 +107,7 @@ class Const
   end
 
   class ElementAttribute
+    MAIN_TEMP_ID = 'main_temp'
     NAVBAR_ROOT = 'nav'
     COMMON_ACTION_CLASS = "#{Const::EVENT_COMMON_PREFIX}@commoneventid"
     ITEM_ACTION_CLASS = 'item_event_action_@itemid'
@@ -142,6 +143,10 @@ class Const
     PAGE_VALUES_SEPERATOR = ':'
     # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
     IS_RUNWINDOW_RELOAD = 'is_runwindow_reload'
+    # @property [String] PAGE_COUNT ページ総数
+    PAGE_COUNT = 'page_count'
+    # @property [String] PAGE_NUM 現在のページ番号
+    PAGE_NUM = 'page_num'
   end
 
   class Setting
@@ -187,6 +192,8 @@ class Const
   end
 
   class Paging
+    ROOT_ID = 'pages'
+    MAIN_PAGING_SECTION_CLASS = 'pagesection-@pagenum'
     NAV_ROOT_ID = 'header-pageing-menu'
     NAV_SELECTED_CLASS = 'header-pageing-menu-selected'
     NAV_SELECT_ROOT_CLASS = 'header-pageing-menu-root'

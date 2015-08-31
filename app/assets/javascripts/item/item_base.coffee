@@ -305,7 +305,7 @@ class CanvasItemBase extends ItemBase
 
   # 新規キャンパスを作成
   makeNewCanvas: ->
-    $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
+    $(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
     # キャンパスに対する初期化
     @initCanvas()
     # 画面を保存

@@ -26,7 +26,9 @@ PageValue = (function() {
         return this.P_PREFIX + pn;
       };
 
-      Key.PAGE_COUNT = 'page_count';
+      Key.PAGE_COUNT = constant.PageValueKey.PAGE_COUNT;
+
+      Key.PAGE_NUM = constant.PageValueKey.PAGE_NUM;
 
       Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
@@ -459,7 +461,23 @@ PageValue = (function() {
   };
 
   PageValue.getPageCount = function() {
-    return PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT);
+    var ret;
+    ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT);
+    if (ret != null) {
+      return parseInt(ret);
+    } else {
+      return 1;
+    }
+  };
+
+  PageValue.getPageNum = function() {
+    var ret;
+    ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM);
+    if (ret != null) {
+      return parseInt(ret);
+    } else {
+      return 1;
+    }
   };
 
   return PageValue;

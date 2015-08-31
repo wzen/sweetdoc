@@ -38,7 +38,7 @@ class BackgroundEvent extends CommonEvent
         gp += gPer
         bp += bPer
 
-      @targetBackground = $('#main-wrapper')
+      @targetBackground = window.mainWrapper
 
   # イベント前の表示状態にする
   updateEventBefore: ->

@@ -20,7 +20,7 @@ class ButtonItem extends CssItemBase
   reDraw: (show = true)->
     super(show)
     @clearDraw()
-    $(ElementCode.get().createItemElement(@)).appendTo('#scroll_inside')
+    $(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
     if !show
       @getJQueryElement().css('opacity', 0)
 

@@ -46,6 +46,7 @@
 //= require event_page_value/common/screenposition.js
 //= require event_page_value/item/item.js
 //= require navbar/navbar.js
+//= require paging_animation/pageflip
 //= require worktable/common/worktable_common
 //= require worktable/common/message.js
 //= require worktable/common/history

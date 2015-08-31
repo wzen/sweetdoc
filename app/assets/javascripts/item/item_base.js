@@ -300,7 +300,7 @@ CanvasItemBase = (function(superClass) {
   };
 
   CanvasItemBase.prototype.makeNewCanvas = function() {
-    $(ElementCode.get().createItemElement(this)).appendTo('#scroll_inside');
+    $(ElementCode.get().createItemElement(this)).appendTo(window.scrollInside);
     this.initCanvas();
     return this.saveNewDrawingSurface();
   };

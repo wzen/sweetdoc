@@ -123,7 +123,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/paging_animation/pageflip.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
