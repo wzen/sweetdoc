@@ -16,6 +16,7 @@
  *= require bootstrap_custom
  *= require common/common
  *= require common/modal_view.css
+ *= require paging_animation/pageflip
  *= require worktable/worktable
  * require_tree .
  * require_self
