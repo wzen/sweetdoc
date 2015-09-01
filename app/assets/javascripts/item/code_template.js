@@ -45,7 +45,7 @@ ElementCode = (function() {
     };
 
     Temp.prototype.createGridElement = function(top, left) {
-      return "<div id=\"" + Setting.Grid.SETTING_GRID_ELEMENT_ID + "\" style=\"position: absolute;top:" + top + "px;left:" + left + "px;width:" + Setting.Grid.GRIDVIEW_SIZE + "px;height:" + Setting.Grid.GRIDVIEW_SIZE + "px;z-index:" + Constant.Zindex.GRID + "\"><canvas id=\"" + Setting.Grid.SETTING_GRID_CANVAS_ID + "\" class=\"canvas\" width=\"" + Setting.Grid.GRIDVIEW_SIZE + "\" height=\"" + Setting.Grid.GRIDVIEW_SIZE + "\"></canvas></div>";
+      return "<div class=\"" + Setting.Grid.SETTING_GRID_ELEMENT_CLASS + "\" style=\"position: absolute;top:" + top + "px;left:" + left + "px;width:" + Setting.Grid.GRIDVIEW_SIZE + "px;height:" + Setting.Grid.GRIDVIEW_SIZE + "px;z-index:" + (Common.plusPagingZindex(Constant.Zindex.GRID)) + "\"><canvas class=\"" + Setting.Grid.SETTING_GRID_CANVAS_CLASS + "\" class=\"canvas\" width=\"" + Setting.Grid.GRIDVIEW_SIZE + "\" height=\"" + Setting.Grid.GRIDVIEW_SIZE + "\"></canvas></div>";
     };
 
     return Temp;

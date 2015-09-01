@@ -36,6 +36,11 @@ class ApplicationController < ActionController::Base
 
   def current_user
     @_current_user ||= User.find_by(id: session[:user_id])
+    if @_current_user == nil
+      destroy_current_user
+      login
+    end
+    @_current_user ||= User.find_by(id: session[:user_id])
   end
 
   def destroy_current_user

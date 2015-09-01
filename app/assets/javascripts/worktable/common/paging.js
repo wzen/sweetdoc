@@ -51,28 +51,44 @@ Paging = (function() {
   };
 
   Paging.createNewPage = function() {
-    var lstorage;
+    var beforePageNum, lstorage, self;
+    self = this;
+    beforePageNum = window.pageNum;
     Sidebar.closeSidebar();
     lstorage = localStorage;
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
-    return Common.clearAllEventChange((function(_this) {
-      return function() {
-        WorktableCommon.removeAllItem();
-        EventConfig.removeAllConfig();
-        window.pageNum += 1;
-        PageValue.adjustInstanceAndEventOnThisPage();
-        WorktableCommon.drawAllItemFromEventPageValue();
+    return Common.clearAllEventChange(function() {
+      var pageFlip;
+      WorktableCommon.removeAllItem();
+      EventConfig.removeAllConfig();
+      window.pageNum += 1;
+      Common.createdMainContainerIfNeeded(window.pageNum);
+      initMainContainer();
+      PageValue.adjustInstanceAndEventOnThisPage();
+      WorktableCommon.drawAllItemFromEventPageValue();
+      pageFlip = new PageFlip(beforePageNum);
+      return pageFlip.startRender(PageFlip.DIRECTION.FORWARD, function() {
+        var className, section;
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+        section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        section.css('display', 'none');
+        initMainContainer();
         Timeline.refreshAllTimeline();
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
         PageValue.updatePageCount();
-        return _this.createPageSelectMenu();
-      };
-    })(this));
+        return self.createPageSelectMenu();
+      });
+    });
   };
 
   Paging.selectPage = function(selectedNum) {
-    var lstorage, pageCount;
+    var beforePageNum, lstorage, pageCount, self;
+    self = this;
+    if (selectedNum <= 0) {
+      return;
+    }
+    beforePageNum = window.pageNum;
     pageCount = PageValue.getPageCount();
     if (selectedNum < 0 || selectedNum > pageCount) {
       return;
@@ -81,17 +97,30 @@ Paging = (function() {
     lstorage = localStorage;
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
-    return Common.clearAllEventChange((function(_this) {
-      return function() {
-        WorktableCommon.removeAllItem();
-        EventConfig.removeAllConfig();
-        window.pageNum = selectedNum;
-        PageValue.adjustInstanceAndEventOnThisPage();
-        WorktableCommon.drawAllItemFromEventPageValue();
+    return Common.clearAllEventChange(function() {
+      var className, direction, pageFlip, pn, section;
+      WorktableCommon.removeAllItem();
+      EventConfig.removeAllConfig();
+      Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum);
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum);
+      section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+      section.css('display', '');
+      window.pageNum = selectedNum;
+      initMainContainer();
+      PageValue.adjustInstanceAndEventOnThisPage();
+      WorktableCommon.drawAllItemFromEventPageValue();
+      direction = beforePageNum < window.pageNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
+      pn = beforePageNum < window.pageNum ? beforePageNum : window.pageNum;
+      pageFlip = new PageFlip(pn);
+      return pageFlip.startRender(direction, function() {
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+        section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        section.css('display', 'none');
+        initMainContainer();
         Timeline.refreshAllTimeline();
-        return _this.createPageSelectMenu();
-      };
-    })(this));
+        return self.createPageSelectMenu();
+      });
+    });
   };
 
   return Paging;

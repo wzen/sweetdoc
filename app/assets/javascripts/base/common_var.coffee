@@ -1,11 +1,25 @@
 class CommonVar
 
-  # 共有変数定義
-  _commonVar = ->
+  # 初期画面読み込み時に一度だけ実行
+  @initVarWhenLoadedView = ->
+    window.instanceMap = {}
+    window.itemInitFuncList = []
+
+  # 共有変数初期化
+  @initCommonVar = ->
     window.scrollViewSize = 30000
     window.pageNumMax = 10000
     window.pageZindexMax = 10000
-    window.instanceMap = {}
+
+
+  # 操作履歴変数初期化
+  @initHistoryVar = ->
+    window.operationHistories = []
+    window.operationHistories[window.pageNum] = []
+    window.operationHistoryLimit = 30
+    window.operationHistoryTailIndex = null
+    window.operationHistoryIndexes = []
+    window.operationHistoryIndexes[window.pageNum] = null
 
   @updateWorktableBaseElement = (pageNum) ->
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
@@ -33,28 +47,21 @@ class CommonVar
 
   # 作業テーブル共通変数
   @worktableCommonVar = ->
-    _commonVar.call(@)
+    @initCommonVar()
     window.messageTimer = null
     window.flushMessageTimer = null
     window.mode = Constant.Mode.DRAW
-    window.itemInitFuncList = []
-    window.operationHistories = []
-    window.operationHistories[window.pageNum] = []
-    window.operationHistoryLimit = 30
-    window.operationHistoryTailIndex = null
-    window.operationHistoryIndexes = []
-    window.operationHistoryIndexes[window.pageNum] = null
+    @initHistoryVar()
     @updateWorktableBaseElement(window.pageNum)
 
   # 実行テーブル共通変数
   @runCommonVar = ->
-    _commonVar.call(@)
+    @initCommonVar()
     window.distX = 0
     window.distY = 0
     window.resizeTimer = false
     window.eventAction = null
     window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)}
-    window.scrollInsideCoverZindex = 1
     window.disabledEventHandler = false
     window.firstItemFocused = false
     @updateRunBaseElement(window.pageNum)

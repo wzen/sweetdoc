@@ -21,10 +21,11 @@ initView = function() {
   scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
   if (is_reload != null) {
-    return LocalStorage.loadValueForRun();
+    LocalStorage.loadValueForRun();
   } else {
-    return LocalStorage.saveValueForRun();
+    LocalStorage.saveValueForRun();
   }
+  return Setting.initConfig();
 };
 
 initResize = function(wrap, scrollWrapper) {
@@ -154,6 +155,7 @@ initMainContainer = function() {
 $(function() {
   window.pageNum = PageValue.getPageNum();
   Common.createdMainContainerIfNeeded(window.pageNum);
+  CommonVar.initVarWhenLoadedView();
   initMainContainer();
   return $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()));
 });

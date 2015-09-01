@@ -34,9 +34,9 @@ Setting = (function() {
 
     Grid.GRID_STEP_DIV_CLASS_NAME = constant.Setting.GRID_STEP_DIV_CLASS_NAME;
 
-    Grid.SETTING_GRID_ELEMENT_ID = 'setting_grid_element';
+    Grid.SETTING_GRID_ELEMENT_CLASS = 'setting_grid_element';
 
-    Grid.SETTING_GRID_CANVAS_ID = 'setting_grid';
+    Grid.SETTING_GRID_CANVAS_CLASS = 'setting_grid';
 
     Grid.GRIDVIEW_SIZE = 10000;
 
@@ -114,15 +114,16 @@ Setting = (function() {
     };
 
     Grid.drawGrid = function(doDraw) {
-      var canvas, context, i, j, k, key, left, max, min, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
-      canvas = document.getElementById("" + this.SETTING_GRID_CANVAS_ID);
+      var canvas, context, i, j, k, key, left, max, min, page, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
+      page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+      canvas = $("#pages ." + page + " ." + this.SETTING_GRID_CANVAS_CLASS + ":first")[0];
       context = null;
       key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
       if (canvas != null) {
         context = canvas.getContext('2d');
       }
       if ((context != null) && doDraw === false) {
-        $("#" + this.SETTING_GRID_ELEMENT_ID).remove();
+        $("." + this.SETTING_GRID_ELEMENT_CLASS).remove();
         PageValue.setSettingPageValue(key, false);
         return LocalStorage.saveSettingPageValue();
       } else if (doDraw) {
@@ -149,7 +150,8 @@ Setting = (function() {
             left = 0;
           }
           $(ElementCode.get().createGridElement(top, left)).appendTo(window.scrollInside);
-          context = document.getElementById("" + this.SETTING_GRID_CANVAS_ID).getContext('2d');
+          canvas = $("#pages ." + page + " ." + this.SETTING_GRID_CANVAS_CLASS + ":first")[0];
+          context = canvas.getContext('2d');
         } else {
           context.clearRect(0, 0, canvas.width, canvas.height);
         }

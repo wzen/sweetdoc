@@ -18,8 +18,8 @@ class Setting
     @GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME
     @GRID_STEP_CLASS_NAME = constant.Setting.GRID_STEP_CLASS_NAME
     @GRID_STEP_DIV_CLASS_NAME = constant.Setting.GRID_STEP_DIV_CLASS_NAME
-    @SETTING_GRID_ELEMENT_ID = 'setting_grid_element'
-    @SETTING_GRID_CANVAS_ID = 'setting_grid'
+    @SETTING_GRID_ELEMENT_CLASS = 'setting_grid_element'
+    @SETTING_GRID_CANVAS_CLASS = 'setting_grid'
     @GRIDVIEW_SIZE = 10000
     @STEP_DEFAULT_VALUE = 12
 
@@ -89,14 +89,15 @@ class Setting
 
     # グリッド線描画
     @drawGrid : (doDraw) ->
-      canvas = document.getElementById("#{@SETTING_GRID_CANVAS_ID}")
+      page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+      canvas = $("#pages .#{page} .#{@SETTING_GRID_CANVAS_CLASS}:first")[0]
       context = null
       key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
       if canvas?
         context = canvas.getContext('2d');
       if context? && doDraw == false
         # 削除
-        $("##{@SETTING_GRID_ELEMENT_ID}").remove()
+        $(".#{@SETTING_GRID_ELEMENT_CLASS}").remove()
         PageValue.setSettingPageValue(key, false)
         LocalStorage.saveSettingPageValue()
       else if doDraw
@@ -123,7 +124,8 @@ class Setting
           if left < 0
             left = 0
           $(ElementCode.get().createGridElement(top, left)).appendTo(window.scrollInside)
-          context = document.getElementById("#{@SETTING_GRID_CANVAS_ID}").getContext('2d');
+          canvas = $("#pages .#{page} .#{@SETTING_GRID_CANVAS_CLASS}:first")[0]
+          context = canvas.getContext('2d');
         else
           # 描画をクリア
           context.clearRect(0, 0, canvas.width, canvas.height)

@@ -29,6 +29,9 @@ initView = ->
   else
     LocalStorage.saveValueForRun()
 
+  # 共通設定
+  Setting.initConfig()
+
 initResize = (wrap, scrollWrapper) ->
   resizeTimer = false;
   $(window).resize( ->
@@ -150,6 +153,8 @@ $ ->
   window.pageNum = PageValue.getPageNum()
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(window.pageNum)
+  # 変数初期化
+  CommonVar.initVarWhenLoadedView()
   # コンテナ初期化
   initMainContainer()
 

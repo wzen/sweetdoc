@@ -82,14 +82,18 @@ Common = (function() {
     return newInstance;
   };
 
-  Common.createdMainContainerIfNeeded = function(pageNum) {
-    var pageSection, root, sectionClass, temp;
+  Common.createdMainContainerIfNeeded = function(pageNum, collapsed) {
+    var pageSection, root, sectionClass, temp, width;
+    if (collapsed == null) {
+      collapsed = false;
+    }
     root = $("#" + Constant.Paging.ROOT_ID);
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     pageSection = $("." + sectionClass, root);
     if ((pageSection == null) || pageSection.length === 0) {
       temp = $("#" + Constant.ElementAttribute.MAIN_TEMP_ID).children(':first').clone(true);
-      temp = $(temp).wrap("<div class='" + sectionClass + " section'></div>").parent();
+      width = collapsed ? 'style="width: 0px"' : '';
+      temp = $(temp).wrap("<div class='" + sectionClass + " section' " + width + "></div>").parent();
       return root.append(temp);
     }
   };

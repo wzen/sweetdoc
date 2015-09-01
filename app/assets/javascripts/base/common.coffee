@@ -55,14 +55,15 @@ class Common
     return newInstance
 
   # Mainコンテナを作成
-  @createdMainContainerIfNeeded: (pageNum) ->
+  @createdMainContainerIfNeeded: (pageNum, collapsed = false) ->
     root = $("##{Constant.Paging.ROOT_ID}")
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     pageSection = $(".#{sectionClass}", root)
     if !pageSection? || pageSection.length == 0
       # 作成
       temp = $("##{Constant.ElementAttribute.MAIN_TEMP_ID}").children(':first').clone(true)
-      temp = $(temp).wrap("<div class='#{sectionClass} section'></div>").parent()
+      width = if collapsed then 'style="width: 0px"' else ''
+      temp = $(temp).wrap("<div class='#{sectionClass} section' #{width}></div>").parent()
       root.append(temp)
 
   # Mainコンテナを削除

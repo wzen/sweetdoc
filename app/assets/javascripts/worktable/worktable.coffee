@@ -85,15 +85,14 @@ runDebug = ->
 
 # Mainコンテナ初期化
 initMainContainer = ->
-  # 変数初期化
+  # 定数 & レイアウト & イベント系変数の初期化
   CommonVar.worktableCommonVar()
 
   #Wrapper & Canvasサイズ
-  $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
   borderWidth = 5
   timelineTopPadding = 5
   padding = borderWidth * 4 + timelineTopPadding
-  window.mainWrapper.height($('#contents').height() - $('#timeline').height() - padding)
+  $('#pages').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
   $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
   $(window.drawingCanvas).attr('width', window.mainWrapper.width())
   $(window.drawingCanvas).attr('height', window.mainWrapper.height())
@@ -118,6 +117,8 @@ initMainContainer = ->
   $('#main').on("mousedown", ->
     clearAllItemStyle()
   )
+  # 共通設定
+  Setting.initConfig()
 
 $ ->
   # ブラウザ対応チェック
@@ -139,6 +140,8 @@ $ ->
   window.pageNum = PageValue.getPageNum()
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(window.pageNum)
+  # 変数初期化
+  CommonVar.initVarWhenLoadedView()
   # コンテナ初期化
   initMainContainer()
 

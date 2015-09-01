@@ -1,11 +1,9 @@
-//#pages section {
+//div#pages div.section {
 //  background: url("paging_animation/pageflip/paper.png") no-repeat;
 //  display: block;
-//  width: 400px;
-//  height: 250px;
 //  position: absolute;
-//  left: 415px;
-//  top: 5px;
+//  left: 0px;
+//  top: 0px;
 //  overflow: hidden;
 //}
 //#pages section>div {
@@ -26,5 +24,9 @@
 //
 //#pageflip-canvas {
 //  position: absolute;
-//  z-index: 100;
+//  left: 0px;
+//  top: 0px;
+//  width: 100%;
+//  height: 100%;
+//  //z-index: 999999999;
 //}

@@ -176,18 +176,19 @@ LocalStorage = (function() {
   };
 
   LocalStorage.loadSettingPageValue = function(isRun) {
-    var h, k, key, lstorage, v;
+    var h, k, key, lstorage, results, v;
     if (isRun == null) {
       isRun = false;
     }
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
+    results = [];
     for (k in h) {
       v = h[k];
-      PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+      results.push(PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
     }
-    return Setting.initConfig();
+    return results;
   };
 
   return LocalStorage;

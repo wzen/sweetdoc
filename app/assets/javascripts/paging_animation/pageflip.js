@@ -2,62 +2,103 @@
 var PageFlip;
 
 PageFlip = (function() {
-  function PageFlip() {
-    var canvas, i, j, len, page, pages, ref;
-    this.PAGE_WIDTH = 400;
-    this.PAGE_HEIGHT = 250;
-    this.BOOK_WIDTH = 830;
-    this.BOOK_HEIGHT = 260;
-    this.PAGE_Y = (this.BOOK_HEIGHT - this.PAGE_HEIGHT) / 2;
-    this.CANVAS_PADDING = 60;
-    page = 0;
-    window.mainWrapper.append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>");
-    canvas = document.getElementById("pageflip-canvas");
-    this.context = canvas.getContext("2d");
-    this.flips = [];
-    this.root = $('#pageflip-root');
-    pages = this.root.getElementsByTagName("section");
-    len = pages.length;
-    for (i = j = 0, ref = len - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-      pages[i].style.zIndex = len - i;
-      this.flips.push({
-        progress: 1,
-        target: 1,
-        page: pages[i]
-      });
-    }
-    canvas.width = this.BOOK_WIDTH + (this.CANVAS_PADDING * 2);
-    canvas.height = this.BOOK_HEIGHT + (this.CANVAS_PADDING * 2);
-    canvas.style.top = -this.CANVAS_PADDING + "px";
-    canvas.style.left = -this.CANVAS_PADDING + "px";
+  PageFlip.DIRECTION = {};
+
+  PageFlip.DIRECTION.FORWARD = 1;
+
+  PageFlip.DIRECTION.BACK = 2;
+
+  function PageFlip(flipPageNum) {
+    this.flipPageNum = flipPageNum;
+    this.PAGE_WIDTH = $('#pages').width();
+    this.PAGE_HEIGHT = $('#pages').height();
+    this.CANVAS_PADDING = 10;
+    $("#" + Constant.Paging.ROOT_ID).append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>");
+    this.canvas = document.getElementById("pageflip-canvas");
+    this.context = this.canvas.getContext("2d");
+    this.canvas.width = this.PAGE_WIDTH + (this.CANVAS_PADDING * 2);
+    this.canvas.height = this.PAGE_HEIGHT + (this.CANVAS_PADDING * 2);
+    this.canvas.style.top = -this.CANVAS_PADDING + "px";
+    this.canvas.style.left = -this.CANVAS_PADDING + "px";
   }
 
-  PageFlip.prototype.render = function() {
-    var flip, i, j, len, ref, results;
-    this.context.clearRect(0, 0, canvas.width, canvas.height);
-    len = this.flips.length;
-    results = [];
-    for (i = j = 0, ref = len - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-      flip = this.flips[i];
-      flip.target = Math.max(Math.min(mouse.x / this.PAGE_WIDTH, 1), -1);
-      flip.progress += (flip.target - flip.progress) * 0.2;
-      results.push(this.drawFlip(flip));
+  PageFlip.prototype.startRender = function(direction, callback) {
+    var className, pages, point, timer;
+    if (callback == null) {
+      callback = null;
     }
-    return results;
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', this.flipPageNum);
+    pages = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    if (direction === PageFlip.DIRECTION.FORWARD) {
+      this.flip = {
+        progress: 1,
+        target: 1,
+        page: pages
+      };
+      point = this.PAGE_WIDTH;
+      return timer = setInterval((function(_this) {
+        return function() {
+          point -= 50;
+          if (point < 0) {
+            point = 0;
+            _this.flip.progress = 0;
+            _this.render(point);
+            clearInterval(timer);
+            $('#pageflip-root').remove();
+            if (callback != null) {
+              callback();
+            }
+          }
+          return _this.render(point);
+        };
+      })(this), 10);
+    } else if (direction === PageFlip.DIRECTION.BACK) {
+      this.flip = {
+        progress: 0,
+        target: 0,
+        page: pages
+      };
+      point = -this.CANVAS_PADDING;
+      return timer = setInterval((function(_this) {
+        return function() {
+          point += 50;
+          if (point > _this.PAGE_WIDTH) {
+            point = _this.PAGE_WIDTH;
+            _this.flip.progress = 1;
+            _this.render(point);
+            clearInterval(timer);
+            $('#pageflip-root').remove();
+            if (callback != null) {
+              callback();
+            }
+          }
+          return _this.render(point);
+        };
+      })(this), 10);
+    }
+  };
+
+  PageFlip.prototype.render = function(point) {
+    if (point < -this.CANVAS_PADDING || point > this.PAGE_WIDTH) {
+      return;
+    }
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.flip.target = Math.max(Math.min(point / this.PAGE_WIDTH, 1), -1);
+    this.flip.progress += (this.flip.target - this.flip.progress) * 0.2;
+    return this.drawFlip(this.flip);
   };
 
   PageFlip.prototype.drawFlip = function(flip) {
     var foldGradient, foldWidth, foldX, leftShadowGradient, leftShadowWidth, paperShadowWidth, rightShadowGradient, rightShadowWidth, strength, verticalOutdent;
     strength = 1 - Math.abs(flip.progress);
-    foldWidth = (this.PAGE_WIDTH * 0.5) * (1 - flip.progress);
+    foldWidth = 0;
     foldX = this.PAGE_WIDTH * flip.progress + foldWidth;
     verticalOutdent = 20 * strength;
     paperShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(1 - flip.progress, 0.5), 0);
     rightShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);
     leftShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);
-    flip.page.style.width = Math.max(foldX, 0) + "px";
+    flip.page.width(Math.max(foldX, 0) + "px");
     this.context.save();
-    this.context.translate(this.CANVAS_PADDING + (this.BOOK_WIDTH / 2), this.PAGE_Y + this.CANVAS_PADDING);
     this.context.strokeStyle = 'rgba(0,0,0,' + (0.05 * strength) + ')';
     this.context.lineWidth = 30 * strength;
     this.context.beginPath();

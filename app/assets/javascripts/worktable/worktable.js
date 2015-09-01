@@ -101,11 +101,10 @@ runDebug = function() {};
 initMainContainer = function() {
   var borderWidth, menu, padding, page, timelineTopPadding;
   CommonVar.worktableCommonVar();
-  $('#contents').css('height', $('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height());
   borderWidth = 5;
   timelineTopPadding = 5;
   padding = borderWidth * 4 + timelineTopPadding;
-  window.mainWrapper.height($('#contents').height() - $('#timeline').height() - padding);
+  $('#pages').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
   $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
   $(window.drawingCanvas).attr('width', window.mainWrapper.width());
   $(window.drawingCanvas).attr('height', window.mainWrapper.height());
@@ -126,9 +125,10 @@ initMainContainer = function() {
   ];
   page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', window.pageNum);
   WorktableCommon.setupContextMenu($('#main'), "#pages ." + page + " .main-wrapper:first", menu);
-  return $('#main').on("mousedown", function() {
+  $('#main').on("mousedown", function() {
     return clearAllItemStyle();
   });
+  return Setting.initConfig();
 };
 
 $(function() {
@@ -144,6 +144,7 @@ $(function() {
   }
   window.pageNum = PageValue.getPageNum();
   Common.createdMainContainerIfNeeded(window.pageNum);
+  CommonVar.initVarWhenLoadedView();
   initMainContainer();
   if (existedCache) {
     PageValue.adjustInstanceAndEventOnThisPage();

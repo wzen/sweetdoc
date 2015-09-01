@@ -2,15 +2,26 @@
 var CommonVar;
 
 CommonVar = (function() {
-  var _commonVar;
-
   function CommonVar() {}
 
-  _commonVar = function() {
+  CommonVar.initVarWhenLoadedView = function() {
+    window.instanceMap = {};
+    return window.itemInitFuncList = [];
+  };
+
+  CommonVar.initCommonVar = function() {
     window.scrollViewSize = 30000;
     window.pageNumMax = 10000;
-    window.pageZindexMax = 10000;
-    return window.instanceMap = {};
+    return window.pageZindexMax = 10000;
+  };
+
+  CommonVar.initHistoryVar = function() {
+    window.operationHistories = [];
+    window.operationHistories[window.pageNum] = [];
+    window.operationHistoryLimit = 30;
+    window.operationHistoryTailIndex = null;
+    window.operationHistoryIndexes = [];
+    return window.operationHistoryIndexes[window.pageNum] = null;
   };
 
   CommonVar.updateWorktableBaseElement = function(pageNum) {
@@ -42,22 +53,16 @@ CommonVar = (function() {
   };
 
   CommonVar.worktableCommonVar = function() {
-    _commonVar.call(this);
+    this.initCommonVar();
     window.messageTimer = null;
     window.flushMessageTimer = null;
     window.mode = Constant.Mode.DRAW;
-    window.itemInitFuncList = [];
-    window.operationHistories = [];
-    window.operationHistories[window.pageNum] = [];
-    window.operationHistoryLimit = 30;
-    window.operationHistoryTailIndex = null;
-    window.operationHistoryIndexes = [];
-    window.operationHistoryIndexes[window.pageNum] = null;
+    this.initHistoryVar();
     return this.updateWorktableBaseElement(window.pageNum);
   };
 
   CommonVar.runCommonVar = function() {
-    _commonVar.call(this);
+    this.initCommonVar();
     window.distX = 0;
     window.distY = 0;
     window.resizeTimer = false;
@@ -66,7 +71,6 @@ CommonVar = (function() {
       'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT),
       'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)
     };
-    window.scrollInsideCoverZindex = 1;
     window.disabledEventHandler = false;
     window.firstItemFocused = false;
     return this.updateRunBaseElement(window.pageNum);
