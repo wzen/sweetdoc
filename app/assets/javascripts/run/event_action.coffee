@@ -12,7 +12,7 @@ class EventAction
   start: ->
     # ページ数設定
     Navbar.setPageNum(@pageIndex + 1)
-    @thisPage().willPage()
+    @thisPage().willForwardPage()
     @thisPage().start()
 
   # 全てのチャプターが終了している場合、ページを進める
@@ -32,7 +32,7 @@ class EventAction
       # ページ数設定
       Navbar.setPageNum(@pageIndex + 1)
       # ページ前処理
-      @thisPage().willPage()
+      @thisPage().willForwardPage()
 
   # ページを戻す
   rewindPage: ->
@@ -42,7 +42,7 @@ class EventAction
       @resetPage(@pageIndex)
 
     # ページ前処理
-    @thisPage().willPage()
+    @thisPage().willForwardPage()
 
   # ページの内容をリセット
   resetPage: (pageIndex) ->

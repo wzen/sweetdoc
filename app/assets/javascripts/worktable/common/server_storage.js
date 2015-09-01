@@ -95,7 +95,7 @@ ServerStorage = (function() {
         item_js_list = data.item_js_list;
         callback = function() {
           var d, k, ref, ref1, v;
-          clearWorkTable();
+          Worktable.clearWorkTable();
           if (data.instance_pagevalue_data != null) {
             d = {};
             ref = data.instance_pagevalue_data;
@@ -131,7 +131,7 @@ ServerStorage = (function() {
         loadedCount = 0;
         return item_js_list.forEach(function(d) {
           var itemInitFuncName, option;
-          itemInitFuncName = getInitFuncName(d.item_id);
+          itemInitFuncName = WorkTable.getInitFuncName(d.item_id);
           if (window.itemInitFuncList[itemInitFuncName] != null) {
             window.itemInitFuncList[itemInitFuncName]();
             loadedCount += 1;

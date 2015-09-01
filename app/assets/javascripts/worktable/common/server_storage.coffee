@@ -80,7 +80,7 @@ class ServerStorage
           item_js_list = data.item_js_list
           # 全て読み込んだ後のコールバック
           callback = ->
-            clearWorkTable()
+            Worktable.clearWorkTable()
 
             # Pagevalue設置
             if data.instance_pagevalue_data?
@@ -109,7 +109,7 @@ class ServerStorage
 
           loadedCount = 0
           item_js_list.forEach((d) ->
-            itemInitFuncName = getInitFuncName(d.item_id)
+            itemInitFuncName = WorkTable.getInitFuncName(d.item_id)
             if window.itemInitFuncList[itemInitFuncName]?
               # 既に読み込まれている場合はコールバックのみ実行
               window.itemInitFuncList[itemInitFuncName]()

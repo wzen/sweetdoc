@@ -96,8 +96,8 @@ Timeline = (function() {
       if ($(e).is('.ui-sortable-helper')) {
         return;
       }
-      clearSelectedBorder();
-      setSelectedBorder(e, "timeline");
+      Worktable.clearSelectedBorder();
+      Worktable.setSelectedBorder(e, "timeline");
       if (Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)) {
         _initEventConfig.call(this, e);
       }

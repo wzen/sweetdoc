@@ -1,153 +1,155 @@
-# 閲覧ページ読み込みフラグ
-window.runPage = true
+class Run
 
-# 画面初期化
-initView = ->
-  $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
-  $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
-  $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
-  # 暫定でスクロールを上に持ってくる
-  scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
+  # 閲覧ページ読み込みフラグ
+  window.runPage = true
 
-  # スクロールビューの大きさ
-  scrollInside.width(window.scrollViewSize)
-  scrollInside.height(window.scrollViewSize)
-  scrollInsideCover.width(window.scrollViewSize)
-  scrollInsideCover.height(window.scrollViewSize)
-  scrollHandle.width(window.scrollViewSize)
-  scrollHandle.height(window.scrollViewSize)
+  # 画面初期化
+  @initView = ->
+    $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
+    $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
+    $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
+    # 暫定でスクロールを上に持ってくる
+    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
 
-  # スクロール位置初期化
-  scrollContents.scrollLeft(scrollInside.width() * 0.5)
-  scrollContents.scrollTop(scrollInside.height() * 0.5)
-  scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
-  scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
+    # スクロールビューの大きさ
+    scrollInside.width(window.scrollViewSize)
+    scrollInside.height(window.scrollViewSize)
+    scrollInsideCover.width(window.scrollViewSize)
+    scrollInsideCover.height(window.scrollViewSize)
+    scrollHandle.width(window.scrollViewSize)
+    scrollHandle.height(window.scrollViewSize)
 
-  is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
-  if is_reload?
-    LocalStorage.loadValueForRun()
-  else
-    LocalStorage.saveValueForRun()
+    # スクロール位置初期化
+    scrollContents.scrollLeft(scrollInside.width() * 0.5)
+    scrollContents.scrollTop(scrollInside.height() * 0.5)
+    scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
+    scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
-  # 共通設定
-  Setting.initConfig()
+    is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
+    if is_reload?
+      LocalStorage.loadValueForRun()
+    else
+      LocalStorage.saveValueForRun()
 
-initResize = (wrap, scrollWrapper) ->
-  resizeTimer = false;
-  $(window).resize( ->
-    if resizeTimer != false
-      clearTimeout(resizeTimer)
-    resizeTimer = setTimeout( ->
-      h = $(window).height()
-      mainWrapper.height(h)
-      scrollWrapper.height(h)
-    , 200)
-  )
+    # 共通設定
+    Setting.initConfig()
 
-# イベント作成
-initEventAction = ->
-  # アクションのイベントを取得
+  @initResize = (wrap, scrollWrapper) ->
+    resizeTimer = false;
+    $(window).resize( ->
+      if resizeTimer != false
+        clearTimeout(resizeTimer)
+      resizeTimer = setTimeout( ->
+        h = $(window).height()
+        mainWrapper.height(h)
+        scrollWrapper.height(h)
+      , 200)
+    )
 
-  # ページ総数
-  pageCount = PageValue.getPageCount()
-  pageList = []
-  for i in [1..pageCount]
-    eventPageValueList = PageValue.getEventPageValueSortedListByNum(i)
-    chapterList = []
-    if eventPageValueList?
-      eventObjList = []
-      eventList = []
-      $.each(eventPageValueList, (idx, obj)->
-        isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-        id = obj[EventPageValueBase.PageValueKey.ID]
-        classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.ITEM_ID]
-        event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
-        event.initWithEvent(obj)
-        eventObjList.push(event)
-        eventList.push(obj)
+  # イベント作成
+  @initEventAction = ->
+    # アクションのイベントを取得
 
-        parallel = false
-        if idx < eventPageValueList.length - 1
-          beforeEvent = eventPageValueList[idx + 1]
-          if beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]
-            parallel = true
+    # ページ総数
+    pageCount = PageValue.getPageCount()
+    pageList = []
+    for i in [1..pageCount]
+      eventPageValueList = PageValue.getEventPageValueSortedListByNum(i)
+      chapterList = []
+      if eventPageValueList?
+        eventObjList = []
+        eventList = []
+        $.each(eventPageValueList, (idx, obj)->
+          isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+          id = obj[EventPageValueBase.PageValueKey.ID]
+          classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.ITEM_ID]
+          event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
+          event.initWithEvent(obj)
+          eventObjList.push(event)
+          eventList.push(obj)
 
-        if !parallel
-          chapter = null
-          if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
-            chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
-          else
-            chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
-          chapterList.push(chapter)
-          eventObjList = []
-          eventList = []
+          parallel = false
+          if idx < eventPageValueList.length - 1
+            beforeEvent = eventPageValueList[idx + 1]
+            if beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]
+              parallel = true
 
-          if !window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-              # 最初のアイテムにフォーカスする
-              chapter.focusToActorIfNeed(true)
-              window.firstItemFocused = true
+          if !parallel
+            chapter = null
+            if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
+              chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
+            else
+              chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
+            chapterList.push(chapter)
+            eventObjList = []
+            eventList = []
 
-        return true
-      )
-    page = new Page(chapterList)
-    pageList.push(page)
+            if !window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+                # 最初のアイテムにフォーカスする
+                chapter.focusToActorIfNeed(true)
+                window.firstItemFocused = true
 
-  # ナビバーのページ数 & チャプター数設定
-  Navbar.setPageMax(pageCount)
+          return true
+        )
+      page = new Page(chapterList)
+      pageList.push(page)
 
-  # アクション作成
-  window.eventAction = new EventAction(pageList, window.pageNum - 1)
-  window.eventAction.start()
+    # ナビバーのページ数 & チャプター数設定
+    Navbar.setPageMax(pageCount)
 
-# Handleスクロール位置の初期化
-initHandleScrollPoint = ->
-  scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5)
-  scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5)
+    # アクション作成
+    window.eventAction = new EventAction(pageList, window.pageNum - 1)
+    window.eventAction.start()
 
-# スクロールイベントの初期化
-setupScrollEvent = ->
-  lastLeft = scrollHandleWrapper.scrollLeft()
-  lastTop = scrollHandleWrapper.scrollTop()
-  stopTimer = null
+  # Handleスクロール位置の初期化
+  @initHandleScrollPoint = ->
+    scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5)
+    scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5)
 
-  scrollHandleWrapper.scroll( ->
-    if eventAction.thisPage().finishedAllChapters || !eventAction.thisPage().isScrollChapter()
-      return
+  # スクロールイベントの初期化
+  @setupScrollEvent = ->
+    lastLeft = scrollHandleWrapper.scrollLeft()
+    lastTop = scrollHandleWrapper.scrollTop()
+    stopTimer = null
 
-    x = $(@).scrollLeft()
-    y = $(@).scrollTop()
+    scrollHandleWrapper.scroll( ->
+      if eventAction.thisPage().finishedAllChapters || !eventAction.thisPage().isScrollChapter()
+        return
 
-    if stopTimer != null
-      clearTimeout(stopTimer)
-    stopTimer = setTimeout( =>
-      initHandleScrollPoint()
-      lastLeft = $(@).scrollLeft()
-      lastTop = $(@).scrollTop()
-      clearTimeout(stopTimer)
-      stopTimer = null
-    , 100)
+      x = $(@).scrollLeft()
+      y = $(@).scrollTop()
 
-    distX = x - lastLeft
-    distY = y - lastTop
-    lastLeft = x
-    lastTop = y
+      if stopTimer != null
+        clearTimeout(stopTimer)
+      stopTimer = setTimeout( =>
+        Run.initHandleScrollPoint()
+        lastLeft = $(@).scrollLeft()
+        lastTop = $(@).scrollTop()
+        clearTimeout(stopTimer)
+        stopTimer = null
+      , 100)
 
-    console.log('distX:' + distX + ' distY:' + distY)
-    eventAction.thisPage().handleScrollEvent(distX, distY)
-  )
+      distX = x - lastLeft
+      distY = y - lastTop
+      lastLeft = x
+      lastTop = y
 
-  scrollFinished = ->
-    #scrollpoint_container.show()
+      console.log('distX:' + distX + ' distY:' + distY)
+      eventAction.thisPage().handleScrollEvent(distX, distY)
+    )
 
-# Mainコンテナ初期化
-initMainContainer = ->
-  CommonVar.runCommonVar()
-  initView()
-  initHandleScrollPoint()
-  #initResize(wrap, scrollWrapper)
-  initEventAction()
-  setupScrollEvent()
-  Navbar.initRunNavbar()
+    scrollFinished = ->
+      #scrollpoint_container.show()
+
+  # Mainコンテナ初期化
+  @initMainContainer = ->
+    CommonVar.runCommonVar()
+    @initView()
+    @initHandleScrollPoint()
+    #@initResize(wrap, scrollWrapper)
+    @initEventAction()
+    @setupScrollEvent()
+    Navbar.initRunNavbar()
 
 $ ->
   window.pageNum = PageValue.getPageNum()
@@ -156,7 +158,7 @@ $ ->
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   # コンテナ初期化
-  initMainContainer()
+  Run.initMainContainer()
 
   # CSS
   $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()))

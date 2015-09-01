@@ -82,10 +82,17 @@ class Page
     )
 
   # ページ前処理
-  willPage: ->
+  willForwardPage: ->
     # 全てのアイテムを削除 & 次のページデータを読み込み
 
     @thisChapter().reset()
+
+#    # ページング
+#    pn = if beforePageNum < window.pageNum then beforePageNum else window.pageNum
+#    pageFlip = new PageFlip(pn)
+#    pageFlip.startRender(PageFlip.DIRECTION.FORWARD, ->
+#    )
+
     Navbar.setChapterMax(@chapterList.length)
 
   # ページ後処理

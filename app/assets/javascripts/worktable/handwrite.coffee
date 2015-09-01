@@ -26,7 +26,7 @@ class Handwrite
         item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
         window.instanceMap[item.id] = item
         item.saveDrawingSurface()
-        changeMode(Constant.Mode.DRAW)
+        Worktable.changeMode(Constant.Mode.DRAW)
         item.startDraw()
 
     # マウスドラッグ時の描画イベント
@@ -56,7 +56,7 @@ class Handwrite
         item.restoreAllDrawingSurface()
         item.endDraw(zindex)
         item.setupDragAndResizeEvents()
-        changeMode(Constant.Mode.EDIT)
+        Worktable.changeMode(Constant.Mode.EDIT)
         item.saveObj(true)
         zindex += 1
 
@@ -90,7 +90,7 @@ class Handwrite
           else if mode == Constant.Mode.OPTION
       # サイドバーを閉じる
             Sidebar.closeSidebar()
-            changeMode(Constant.Mode.EDIT)
+            Worktable.changeMode(Constant.Mode.EDIT)
 
       # マウスドラッグイベント
       # @param [Array] e ウィンドウ座標

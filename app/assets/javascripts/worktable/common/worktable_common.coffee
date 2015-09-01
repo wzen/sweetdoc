@@ -99,7 +99,7 @@ class WorktableCommon
     needReadItemIds = []
     for itemId in itemIds
       if itemId?
-        itemInitFuncName = getInitFuncName(itemId)
+        itemInitFuncName = Worktable.getInitFuncName(itemId)
         if window.itemInitFuncList[itemInitFuncName]?
           # 読み込み済みなアイテムIDの場合
           window.itemInitFuncList[itemInitFuncName]()
@@ -130,7 +130,7 @@ class WorktableCommon
             if d.css_info?
               option = {isWorkTable: true, css_temp: d.css_info}
 
-            WorktableCommon.availJs(getInitFuncName(d.item_id), d.js_src, option, ->
+            WorktableCommon.availJs(Worktable.getInitFuncName(d.item_id), d.js_src, option, ->
               callbackCount += 1
               if callback? && callbackCount >= data.length
                 callback()

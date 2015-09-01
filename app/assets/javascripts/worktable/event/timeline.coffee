@@ -96,8 +96,8 @@ class Timeline
         return
 
       # 選択枠切り替え
-      clearSelectedBorder()
-      setSelectedBorder(e, "timeline")
+      Worktable.clearSelectedBorder()
+      Worktable.setSelectedBorder(e, "timeline")
 
       if Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)
         # サイドバー表示時 or Blankの場合はコンフィグを設定&表示

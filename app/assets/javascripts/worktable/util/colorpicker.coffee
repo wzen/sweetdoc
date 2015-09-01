@@ -14,7 +14,7 @@ initColorPicker = (element, colorValue, onChange) ->
   element.unbind()
   element.mousedown( (e) ->
     e.stopPropagation()
-    clearAllItemStyle()
+    Worktable.clearAllItemStyle()
     element.ColorPickerHide()
     element.ColorPickerShow()
   )

@@ -14,7 +14,7 @@ EventAction = (function() {
 
   EventAction.prototype.start = function() {
     Navbar.setPageNum(this.pageIndex + 1);
-    this.thisPage().willPage();
+    this.thisPage().willForwardPage();
     return this.thisPage().start();
   };
 
@@ -31,7 +31,7 @@ EventAction = (function() {
       return this.finishedAllChapters();
     } else {
       Navbar.setPageNum(this.pageIndex + 1);
-      return this.thisPage().willPage();
+      return this.thisPage().willForwardPage();
     }
   };
 
@@ -41,7 +41,7 @@ EventAction = (function() {
       this.pageIndex -= 1;
       this.resetPage(this.pageIndex);
     }
-    return this.thisPage().willPage();
+    return this.thisPage().willForwardPage();
   };
 
   EventAction.prototype.resetPage = function(pageIndex) {

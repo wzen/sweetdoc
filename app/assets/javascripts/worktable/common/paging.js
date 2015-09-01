@@ -64,7 +64,7 @@ Paging = (function() {
       EventConfig.removeAllConfig();
       window.pageNum += 1;
       Common.createdMainContainerIfNeeded(window.pageNum);
-      initMainContainer();
+      Worktable.initMainContainer();
       PageValue.adjustInstanceAndEventOnThisPage();
       WorktableCommon.drawAllItemFromEventPageValue();
       pageFlip = new PageFlip(beforePageNum);
@@ -73,7 +73,7 @@ Paging = (function() {
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
         section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
         section.css('display', 'none');
-        initMainContainer();
+        Worktable.initMainContainer();
         Timeline.refreshAllTimeline();
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
         PageValue.updatePageCount();
@@ -106,7 +106,7 @@ Paging = (function() {
       section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
       section.css('display', '');
       window.pageNum = selectedNum;
-      initMainContainer();
+      Worktable.initMainContainer();
       PageValue.adjustInstanceAndEventOnThisPage();
       WorktableCommon.drawAllItemFromEventPageValue();
       direction = beforePageNum < window.pageNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
@@ -116,7 +116,7 @@ Paging = (function() {
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
         section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
         section.css('display', 'none');
-        initMainContainer();
+        Worktable.initMainContainer();
         Timeline.refreshAllTimeline();
         return self.createPageSelectMenu();
       });

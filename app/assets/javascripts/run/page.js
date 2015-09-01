@@ -82,7 +82,7 @@ Page = (function() {
     });
   };
 
-  Page.prototype.willPage = function() {
+  Page.prototype.willForwardPage = function() {
     this.thisChapter().reset();
     return Navbar.setChapterMax(this.chapterList.length);
   };

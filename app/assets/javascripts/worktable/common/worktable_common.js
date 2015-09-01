@@ -127,7 +127,7 @@ WorktableCommon = (function() {
     for (i = 0, len = itemIds.length; i < len; i++) {
       itemId = itemIds[i];
       if (itemId != null) {
-        itemInitFuncName = getInitFuncName(itemId);
+        itemInitFuncName = Worktable.getInitFuncName(itemId);
         if (window.itemInitFuncList[itemInitFuncName] != null) {
           window.itemInitFuncList[itemInitFuncName]();
           callbackCount += 1;
@@ -163,7 +163,7 @@ WorktableCommon = (function() {
               css_temp: d.css_info
             };
           }
-          WorktableCommon.availJs(getInitFuncName(d.item_id), d.js_src, option, function() {
+          WorktableCommon.availJs(Worktable.getInitFuncName(d.item_id), d.js_src, option, function() {
             callbackCount += 1;
             if ((callback != null) && callbackCount >= data.length) {
               return callback();

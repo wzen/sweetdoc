@@ -63,7 +63,7 @@ WorkTableCommonExtend = {
           initColorPickerValue();
           initOptionMenu(event);
           Sidebar.openConfigSidebar(target);
-          return changeMode(Constant.Mode.OPTION);
+          return Worktable.changeMode(Constant.Mode.OPTION);
         }
       });
       menu.push({
@@ -88,8 +88,8 @@ WorkTableCommonExtend = {
       return self.getJQueryElement().mousedown(function(e) {
         if (e.which === 1) {
           e.stopPropagation();
-          clearSelectedBorder();
-          return setSelectedBorder(this, "edit");
+          Worktable.clearSelectedBorder();
+          return Worktable.setSelectedBorder(this, "edit");
         }
       });
     })();

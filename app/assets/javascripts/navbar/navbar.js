@@ -40,7 +40,7 @@ Navbar = (function() {
       itemsSelectMenuEmt.removeClass('active');
       $(this).parent('li').addClass('active');
       window.selectItemMenu = itemId;
-      changeMode(Constant.Mode.DRAW);
+      Worktable.changeMode(Constant.Mode.DRAW);
       return WorktableCommon.loadItemJs(itemId);
     });
   };

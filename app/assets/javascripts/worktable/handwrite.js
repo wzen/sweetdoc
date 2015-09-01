@@ -28,7 +28,7 @@ Handwrite = (function() {
         item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
         window.instanceMap[item.id] = item;
         item.saveDrawingSurface();
-        changeMode(Constant.Mode.DRAW);
+        Worktable.changeMode(Constant.Mode.DRAW);
         return item.startDraw();
       }
     };
@@ -55,7 +55,7 @@ Handwrite = (function() {
         item.restoreAllDrawingSurface();
         item.endDraw(zindex);
         item.setupDragAndResizeEvents();
-        changeMode(Constant.Mode.EDIT);
+        Worktable.changeMode(Constant.Mode.EDIT);
         item.saveObj(true);
         return zindex += 1;
       }
@@ -84,7 +84,7 @@ Handwrite = (function() {
               return mouseDownDrawing(loc);
             } else if (mode === Constant.Mode.OPTION) {
               Sidebar.closeSidebar();
-              return changeMode(Constant.Mode.EDIT);
+              return Worktable.changeMode(Constant.Mode.EDIT);
             }
           }
         };

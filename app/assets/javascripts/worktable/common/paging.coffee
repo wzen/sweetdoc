@@ -65,7 +65,7 @@ class Paging
       # Mainコンテナ作成
       Common.createdMainContainerIfNeeded(window.pageNum)
       # 新規コンテナ初期化
-      initMainContainer()
+      Worktable.initMainContainer()
 
       PageValue.adjustInstanceAndEventOnThisPage()
       WorktableCommon.drawAllItemFromEventPageValue()
@@ -77,7 +77,7 @@ class Paging
         section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
         section.css('display', 'none')
 
-        initMainContainer()
+        Worktable.initMainContainer()
         Timeline.refreshAllTimeline()
         # ページ総数の更新
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
@@ -118,7 +118,7 @@ class Paging
       section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
       section.css('display', '')
       window.pageNum = selectedNum
-      initMainContainer()
+      Worktable.initMainContainer()
       PageValue.adjustInstanceAndEventOnThisPage()
       WorktableCommon.drawAllItemFromEventPageValue()
 
@@ -132,7 +132,7 @@ class Paging
         section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
         section.css('display', 'none')
 
-        initMainContainer()
+        Worktable.initMainContainer()
         Timeline.refreshAllTimeline()
         # 選択メニューの更新
         self.createPageSelectMenu()

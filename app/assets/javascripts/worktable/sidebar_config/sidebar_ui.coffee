@@ -11,12 +11,12 @@ class Sidebar
         main.addClass('col-md-9')
         $('#sidebar').fadeIn('500')
         if target != null
-          focusToTargetWhenSidebarOpen(target, selectedBorderType)
+          Worktable.focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
   # サイドバーをクローズ
   @closeSidebar = (callback = null) ->
     # 選択枠を削除
-    clearSelectedBorder()
+    Worktable.clearSelectedBorder()
     if !Sidebar.isClosedConfigSidebar()
       main = $('#main')
       $('#sidebar').fadeOut('500', ->

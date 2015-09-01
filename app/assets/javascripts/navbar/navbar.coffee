@@ -36,7 +36,7 @@ class Navbar
       itemsSelectMenuEmt.removeClass('active')
       $(@).parent('li').addClass('active')
       window.selectItemMenu = itemId
-      changeMode(Constant.Mode.DRAW)
+      Worktable.changeMode(Constant.Mode.DRAW)
       WorktableCommon.loadItemJs(itemId)
     )
 
