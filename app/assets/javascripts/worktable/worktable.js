@@ -33,11 +33,11 @@ Worktable = (function() {
 
   Worktable.changeMode = function(mode) {
     if (mode === Constant.Mode.DRAW) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.MAX));
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
     } else if (mode === Constant.Mode.EDIT) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
     } else if (mode === Constant.Mode.OPTION) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.MAX));
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
     }
     return window.mode = mode;
   };

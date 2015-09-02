@@ -11,8 +11,7 @@ CommonVar = (function() {
 
   CommonVar.initCommonVar = function() {
     window.scrollViewSize = 30000;
-    window.pageNumMax = 10000;
-    return window.pageZindexMax = 10000;
+    return window.pageNumMax = 10000;
   };
 
   CommonVar.initHistoryVar = function() {

@@ -23,8 +23,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       Zindex.EVENTFLOAT = constant.Zindex.EVENTFLOAT;
 
-      Zindex.MAX = constant.Zindex.MAX;
-
       return Zindex;
 
     })();

@@ -9,7 +9,6 @@ class CommonVar
   @initCommonVar = ->
     window.scrollViewSize = 30000
     window.pageNumMax = 10000
-    window.pageZindexMax = 10000
 
   # 操作履歴変数初期化
   @initHistoryVar = ->

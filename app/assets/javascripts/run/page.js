@@ -76,7 +76,7 @@ Page = (function() {
     return this.chapterList.forEach(function(chapter) {
       return chapter.eventObjList.forEach(function(event) {
         if (event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-          return event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + chapter.num);
+          return event.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + chapter.num));
         }
       });
     });

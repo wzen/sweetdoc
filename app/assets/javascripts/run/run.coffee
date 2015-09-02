@@ -153,10 +153,13 @@ class Run
 
 $ ->
   window.pageNum = PageValue.getPageNum()
-  # Mainコンテナ作成
-  Common.createdMainContainerIfNeeded(window.pageNum)
+  if window.pageNum?
+    window.pageNum = 1
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
+  CommonVar.initCommonVar()
+  # Mainコンテナ作成
+  Common.createdMainContainerIfNeeded(window.pageNum)
   # コンテナ初期化
   Run.initMainContainer()
 

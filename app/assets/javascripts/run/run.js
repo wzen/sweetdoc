@@ -161,8 +161,12 @@ Run = (function() {
 
 $(function() {
   window.pageNum = PageValue.getPageNum();
-  Common.createdMainContainerIfNeeded(window.pageNum);
+  if (window.pageNum != null) {
+    window.pageNum = 1;
+  }
   CommonVar.initVarWhenLoadedView();
+  CommonVar.initCommonVar();
+  Common.createdMainContainerIfNeeded(window.pageNum);
   Run.initMainContainer();
   return $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()));
 });

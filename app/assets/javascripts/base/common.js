@@ -421,7 +421,7 @@ Common = (function() {
     if (pn == null) {
       pn = window.pageNum;
     }
-    return (window.pageNumMax - pn) * window.pageZindexMax + zindex;
+    return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex;
   };
 
   return Common;

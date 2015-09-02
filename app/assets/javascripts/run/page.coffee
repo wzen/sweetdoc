@@ -77,7 +77,7 @@ class Page
     @chapterList.forEach((chapter) ->
       chapter.eventObjList.forEach((event) ->
         if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-          event.getJQueryElement().css('z-index', Constant.Zindex.EVENTBOTTOM + chapter.num)
+          event.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + chapter.num))
       )
     )
 

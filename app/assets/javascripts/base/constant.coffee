@@ -17,7 +17,6 @@ if gon?
       @GRID = 5
       @EVENTBOTTOM = constant.Zindex.EVENTBOTTOM
       @EVENTFLOAT = constant.Zindex.EVENTFLOAT
-      @MAX = constant.Zindex.MAX
 
     # 操作モード
     class @Mode

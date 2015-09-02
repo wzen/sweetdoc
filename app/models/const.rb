@@ -20,9 +20,7 @@ class Const
     # @porperty EVENTBOTTOM イベントz-idex最小値
     EVENTBOTTOM = 10
     # @porperty EVENTFLOAT イベントz-index最大値
-    EVENTFLOAT = 1000
-    # @porperty MAX z-indexの最大値
-    MAX = 5000
+    EVENTFLOAT = 9999
   end
 
   # アイテム種別
