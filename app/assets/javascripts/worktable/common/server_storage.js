@@ -121,8 +121,9 @@ ServerStorage = (function() {
           PageValue.adjustInstanceAndEventOnThisPage();
           PageValue.updatePageCount();
           LocalStorage.saveEventPageValue();
-          WorktableCommon.drawAllItemFromEventPageValue();
-          return Setting.initConfig();
+          return WorktableCommon.drawAllItemFromEventPageValue(function() {
+            return Setting.initConfig();
+          });
         };
         if (item_js_list.length === 0) {
           callback.call(self);

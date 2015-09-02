@@ -58,24 +58,22 @@ class Paging
     lstorage = localStorage
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
-    Common.clearAllEventChange( ->
-      WorktableCommon.removeAllItem()
-      EventConfig.removeAllConfig()
-      window.pageNum += 1
-      # Mainコンテナ作成
-      Common.createdMainContainerIfNeeded(window.pageNum)
-      # 新規コンテナ初期化
-      Worktable.initMainContainer()
-
-      PageValue.adjustInstanceAndEventOnThisPage()
-      WorktableCommon.drawAllItemFromEventPageValue()
-
+    #Common.clearAllEventChange( ->
+    EventConfig.removeAllConfig()
+    window.pageNum += 1
+    # Mainコンテナ作成
+    Common.createdMainContainerIfNeeded(window.pageNum)
+    # 新規コンテナ初期化
+    Worktable.initMainContainer()
+    PageValue.adjustInstanceAndEventOnThisPage()
+    WorktableCommon.drawAllItemFromEventPageValue( =>
       # ページング
       pageFlip = new PageFlip(beforePageNum)
       pageFlip.startRender(PageFlip.DIRECTION.FORWARD, ->
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
         section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
         section.css('display', 'none')
+        WorktableCommon.removeAllItem(beforePageNum)
 
         Worktable.initMainContainer()
         Timeline.refreshAllTimeline()
@@ -86,6 +84,7 @@ class Paging
         self.createPageSelectMenu()
       )
     )
+    #)
 
   # 選択
   @selectPage: (selectedNum) ->
@@ -105,32 +104,33 @@ class Paging
     lstorage = localStorage
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
-    Common.clearAllEventChange( ->
-      #Common.removeMainContainer(beforePageNum)
-      WorktableCommon.removeAllItem()
-      EventConfig.removeAllConfig()
+    #Common.clearAllEventChange( ->
+    #Common.removeMainContainer(beforePageNum)
+    #WorktableCommon.removeAllItem()
+    EventConfig.removeAllConfig()
 
-      # Mainコンテナ作成
-      Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum)
+    # Mainコンテナ作成
+    Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum)
 
-      # 新規表示するコンテナの初期化
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum)
-      section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-      section.css('display', '')
-      window.pageNum = selectedNum
-      Worktable.initMainContainer()
-      PageValue.adjustInstanceAndEventOnThisPage()
-      WorktableCommon.drawAllItemFromEventPageValue()
-
+    # 新規表示するコンテナの初期化
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum)
+    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+    section.css('display', '')
+    window.pageNum = selectedNum
+    Worktable.initMainContainer()
+    PageValue.adjustInstanceAndEventOnThisPage()
+    WorktableCommon.drawAllItemFromEventPageValue( =>
       # ページング
       direction = if beforePageNum < window.pageNum then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
       pn = if beforePageNum < window.pageNum then beforePageNum else window.pageNum
       pageFlip = new PageFlip(pn)
       pageFlip.startRender(direction, ->
-        # 隠した方のビューを非表示にする
+        # 隠したビューを非表示にする
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
         section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
         section.css('display', 'none')
+        # 隠したビューのアイテムを削除
+        WorktableCommon.removeAllItem(beforePageNum)
 
         Worktable.initMainContainer()
         Timeline.refreshAllTimeline()
@@ -138,3 +138,5 @@ class Paging
         self.createPageSelectMenu()
       )
     )
+
+    #)

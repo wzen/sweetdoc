@@ -10,10 +10,13 @@ class PageFlip
     @PAGE_HEIGHT = $('#pages').height()
 
     # The canvas size equals to the book dimensions + this padding
-    @CANVAS_PADDING = 10
+    @CANVAS_PADDING = 0
+
+    @zIndex = Common.plusPagingZindex(0, @flipPageNum)
 
     # アニメーション用Div作成
-    $("##{Constant.Paging.ROOT_ID}").append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>")
+    zIndexMax = Common.plusPagingZindex(0, 0)
+    $("##{Constant.Paging.ROOT_ID}").append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:#{zIndexMax}'><canvas id='pageflip-canvas' style='z-index:#{zIndexMax}'></canvas></div>")
 
     @canvas = document.getElementById("pageflip-canvas")
     @context = @canvas.getContext("2d")
@@ -48,7 +51,7 @@ class PageFlip
           if callback?
             callback()
         @render(point)
-      , 10)
+      , 20)
     else if direction == PageFlip.DIRECTION.BACK
       @flip = {
         progress: 0,
@@ -67,7 +70,7 @@ class PageFlip
           if callback?
             callback()
         @render(point)
-      , 10)
+      , 20)
 
   render: (point)->
     if point < -@CANVAS_PADDING || point > @PAGE_WIDTH
@@ -103,7 +106,7 @@ class PageFlip
     leftShadowWidth = (@PAGE_WIDTH * 0.5)* Math.max(Math.min(strength, 0.5), 0)
 
     # Change page element width to match the x position of the fold
-    flip.page.width(Math.max(foldX, 0)+ "px")
+    flip.page.css({'width': Math.max(foldX, 0)+ "px", 'z-index': @zIndex})
 
     @context.save()
 
@@ -167,5 +170,4 @@ class PageFlip
     @context.stroke()
 
     @context.restore()
-
 

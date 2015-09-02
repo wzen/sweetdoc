@@ -100,8 +100,9 @@ class ServerStorage
             PageValue.adjustInstanceAndEventOnThisPage()
             PageValue.updatePageCount()
             LocalStorage.saveEventPageValue()
-            WorktableCommon.drawAllItemFromEventPageValue()
-            Setting.initConfig()
+            WorktableCommon.drawAllItemFromEventPageValue( ->
+              Setting.initConfig()
+            )
 
           if item_js_list.length == 0
             callback.call(self)

@@ -20,12 +20,21 @@ class WorktableCommon
       }
     )
 
-  # 全てのアイテムを削除
-  @removeAllItem = ->
-    for k, v of Common.getCreatedItemObject()
-      if v.getJQueryElement?
-        v.getJQueryElement().remove()
-    window.instanceMap = {}
+  # アイテムを削除
+  @removeAllItem = (pageNum = null) ->
+    if pageNum?
+      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
+      for k, obj of pageValues
+        objId = obj.value.id
+        itemId = obj.value.itemId
+        if objId?
+          $("##{objId}").remove()
+          delete window.instanceMap[objId]
+    else
+      for k, v of Common.getCreatedItemObject()
+        if v.getJQueryElement?
+          v.getJQueryElement().remove()
+      window.instanceMap = {}
 
   # 全てのアイテムとイベントを削除
   @removeAllItemAndEvent = ->
@@ -56,8 +65,8 @@ class WorktableCommon
     )
 
   # イベントPageValueから全てのアイテムを描画
-  @drawAllItemFromEventPageValue: ->
-    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
+  @drawAllItemFromEventPageValue: (callback = null, pageNum = window.pageNum) ->
+    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
     needItemIds = []
     for k, obj of pageValues
       if obj.value.itemId?
@@ -83,9 +92,14 @@ class WorktableCommon
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
         event.setItemAllPropToPageValue()
+        LocalStorage.saveEventPageValue()
 
       # タイムライン更新
       Timeline.refreshAllTimeline()
+
+      # コールバック
+      if callback?
+        callback()
     )
 
   # JSファイルをサーバから読み込む
@@ -94,6 +108,12 @@ class WorktableCommon
   @loadItemJs = (itemIds, callback = null) ->
     if jQuery.type(itemIds) != "array"
       itemIds = [itemIds]
+
+    # 読み込むIDがない場合はコールバック実行して終了
+    if itemIds.length == 0
+      if callback?
+        callback()
+      return
 
     callbackCount = 0
     needReadItemIds = []

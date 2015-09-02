@@ -28,16 +28,36 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.removeAllItem = function() {
-    var k, ref, v;
-    ref = Common.getCreatedItemObject();
-    for (k in ref) {
-      v = ref[k];
-      if (v.getJQueryElement != null) {
-        v.getJQueryElement().remove();
-      }
+  WorktableCommon.removeAllItem = function(pageNum) {
+    var itemId, k, obj, objId, pageValues, ref, results, v;
+    if (pageNum == null) {
+      pageNum = null;
     }
-    return window.instanceMap = {};
+    if (pageNum != null) {
+      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
+      results = [];
+      for (k in pageValues) {
+        obj = pageValues[k];
+        objId = obj.value.id;
+        itemId = obj.value.itemId;
+        if (objId != null) {
+          $("#" + objId).remove();
+          results.push(delete window.instanceMap[objId]);
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    } else {
+      ref = Common.getCreatedItemObject();
+      for (k in ref) {
+        v = ref[k];
+        if (v.getJQueryElement != null) {
+          v.getJQueryElement().remove();
+        }
+      }
+      return window.instanceMap = {};
+    }
   };
 
   WorktableCommon.removeAllItemAndEvent = function() {
@@ -72,9 +92,15 @@ WorktableCommon = (function() {
     })(this));
   };
 
-  WorktableCommon.drawAllItemFromEventPageValue = function() {
+  WorktableCommon.drawAllItemFromEventPageValue = function(callback, pageNum) {
     var k, needItemIds, obj, pageValues;
-    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
+    if (callback == null) {
+      callback = null;
+    }
+    if (pageNum == null) {
+      pageNum = window.pageNum;
+    }
+    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
     needItemIds = [];
     for (k in pageValues) {
       obj = pageValues[k];
@@ -109,8 +135,12 @@ WorktableCommon = (function() {
           }
         }
         event.setItemAllPropToPageValue();
+        LocalStorage.saveEventPageValue();
       }
-      return Timeline.refreshAllTimeline();
+      Timeline.refreshAllTimeline();
+      if (callback != null) {
+        return callback();
+      }
     });
   };
 
@@ -121,6 +151,12 @@ WorktableCommon = (function() {
     }
     if (jQuery.type(itemIds) !== "array") {
       itemIds = [itemIds];
+    }
+    if (itemIds.length === 0) {
+      if (callback != null) {
+        callback();
+      }
+      return;
     }
     callbackCount = 0;
     needReadItemIds = [];

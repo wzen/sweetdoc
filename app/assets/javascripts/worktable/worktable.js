@@ -141,7 +141,7 @@ Worktable = (function() {
 })();
 
 $(function() {
-  var existedCache;
+  var _callback, existedCache;
   if (!Common.checkBlowserEnvironment()) {
     alert('ブラウザ非対応です。');
     return;
@@ -152,19 +152,23 @@ $(function() {
     LocalStorage.loadValueForWorktable();
   }
   window.pageNum = PageValue.getPageNum();
-  Common.createdMainContainerIfNeeded(window.pageNum);
   CommonVar.initVarWhenLoadedView();
+  CommonVar.initCommonVar();
+  Common.createdMainContainerIfNeeded(window.pageNum);
   Worktable.initMainContainer();
+  _callback = function() {
+    OperationHistory.add(true);
+    PageValue.updatePageCount();
+    return Paging.initPaging();
+  };
   if (existedCache) {
     PageValue.adjustInstanceAndEventOnThisPage();
-    WorktableCommon.drawAllItemFromEventPageValue();
+    return WorktableCommon.drawAllItemFromEventPageValue(_callback);
   } else {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();
+    return _callback.call(this);
   }
-  OperationHistory.add(true);
-  PageValue.updatePageCount();
-  return Paging.initPaging();
 });
 
 //# sourceMappingURL=worktable.js.map

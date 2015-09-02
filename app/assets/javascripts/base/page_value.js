@@ -34,8 +34,11 @@ PageValue = (function() {
 
       Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
-      Key.instancePagePrefix = function() {
-        return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix();
+      Key.instancePagePrefix = function(pn) {
+        if (pn == null) {
+          pn = window.pageNum;
+        }
+        return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix(pn);
       };
 
       Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;

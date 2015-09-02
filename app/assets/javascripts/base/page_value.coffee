@@ -24,7 +24,7 @@ class PageValue
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
       # @property [return] インスタンスページプレフィックスを取得
-      @instancePagePrefix = -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix()
+      @instancePagePrefix = (pn = window.pageNum) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
       # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
       @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
       # @property [return] インスタンス値

@@ -83,7 +83,7 @@ Common = (function() {
   };
 
   Common.createdMainContainerIfNeeded = function(pageNum, collapsed) {
-    var pageSection, root, sectionClass, temp, width;
+    var pageSection, root, sectionClass, style, temp, width;
     if (collapsed == null) {
       collapsed = false;
     }
@@ -92,8 +92,11 @@ Common = (function() {
     pageSection = $("." + sectionClass, root);
     if ((pageSection == null) || pageSection.length === 0) {
       temp = $("#" + Constant.ElementAttribute.MAIN_TEMP_ID).children(':first').clone(true);
-      width = collapsed ? 'style="width: 0px"' : '';
-      temp = $(temp).wrap("<div class='" + sectionClass + " section' " + width + "></div>").parent();
+      style = '';
+      style += "z-index:" + (Common.plusPagingZindex(0, pageNum)) + ";";
+      width = collapsed ? 'width: 0px;' : '';
+      style += width;
+      temp = $(temp).wrap("<div class='" + sectionClass + " section' style='" + style + "'></div>").parent();
       return root.append(temp);
     }
   };
@@ -418,7 +421,7 @@ Common = (function() {
     if (pn == null) {
       pn = window.pageNum;
     }
-    return (window.pageNumMax - window.pageNum) * window.pageZindexMax + zindex;
+    return (window.pageNumMax - pn) * window.pageZindexMax + zindex;
   };
 
   return Common;

@@ -9,11 +9,14 @@ PageFlip = (function() {
   PageFlip.DIRECTION.BACK = 2;
 
   function PageFlip(flipPageNum) {
+    var zIndexMax;
     this.flipPageNum = flipPageNum;
     this.PAGE_WIDTH = $('#pages').width();
     this.PAGE_HEIGHT = $('#pages').height();
-    this.CANVAS_PADDING = 10;
-    $("#" + Constant.Paging.ROOT_ID).append("<div id='pageflip-root'><canvas id='pageflip-canvas'></canvas></div>");
+    this.CANVAS_PADDING = 0;
+    this.zIndex = Common.plusPagingZindex(0, this.flipPageNum);
+    zIndexMax = Common.plusPagingZindex(0, 0);
+    $("#" + Constant.Paging.ROOT_ID).append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:" + zIndexMax + "'><canvas id='pageflip-canvas' style='z-index:" + zIndexMax + "'></canvas></div>");
     this.canvas = document.getElementById("pageflip-canvas");
     this.context = this.canvas.getContext("2d");
     this.canvas.width = this.PAGE_WIDTH + (this.CANVAS_PADDING * 2);
@@ -51,7 +54,7 @@ PageFlip = (function() {
           }
           return _this.render(point);
         };
-      })(this), 10);
+      })(this), 20);
     } else if (direction === PageFlip.DIRECTION.BACK) {
       this.flip = {
         progress: 0,
@@ -74,7 +77,7 @@ PageFlip = (function() {
           }
           return _this.render(point);
         };
-      })(this), 10);
+      })(this), 20);
     }
   };
 
@@ -97,7 +100,10 @@ PageFlip = (function() {
     paperShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(1 - flip.progress, 0.5), 0);
     rightShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);
     leftShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);
-    flip.page.width(Math.max(foldX, 0) + "px");
+    flip.page.css({
+      'width': Math.max(foldX, 0) + "px",
+      'z-index': this.zIndex
+    });
     this.context.save();
     this.context.strokeStyle = 'rgba(0,0,0,' + (0.05 * strength) + ')';
     this.context.lineWidth = 30 * strength;

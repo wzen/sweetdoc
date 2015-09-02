@@ -62,8 +62,11 @@ class Common
     if !pageSection? || pageSection.length == 0
       # 作成
       temp = $("##{Constant.ElementAttribute.MAIN_TEMP_ID}").children(':first').clone(true)
-      width = if collapsed then 'style="width: 0px"' else ''
-      temp = $(temp).wrap("<div class='#{sectionClass} section' #{width}></div>").parent()
+      style = ''
+      style += "z-index:#{Common.plusPagingZindex(0, pageNum)};"
+      width = if collapsed then 'width: 0px;' else ''
+      style += width
+      temp = $(temp).wrap("<div class='#{sectionClass} section' style='#{style}'></div>").parent()
       root.append(temp)
 
   # Mainコンテナを削除
@@ -332,7 +335,7 @@ class Common
       _show.call(self)
 
   @plusPagingZindex: (zindex, pn = window.pageNum) ->
-    return (window.pageNumMax - window.pageNum) * window.pageZindexMax + zindex
+    return (window.pageNumMax - pn) * window.pageZindexMax + zindex
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
