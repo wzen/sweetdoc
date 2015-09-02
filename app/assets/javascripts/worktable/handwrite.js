@@ -13,7 +13,7 @@ Handwrite = (function() {
     item = null;
     enableMoveEvent = true;
     queueLoc = null;
-    zindex = Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1);
+    zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
     MOVE_FREQUENCY = 7;
     windowToCanvas = function(canvas, x, y) {
       var bbox;
