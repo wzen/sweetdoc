@@ -21,14 +21,14 @@ Paging = (function() {
     for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
       navMenuClass = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', i);
       navMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', i);
-      active = i === window.pageNum ? 'class="active"' : '';
+      active = i === PageValue.getPageNum() ? 'class="active"' : '';
       pageMenu += "<li " + active + "><a class='" + navMenuClass + " menu-item '>" + navMenuName + "</a></li>";
     }
     pageMenu += divider;
     pageMenu += newPageMenu;
     selectRoot.children().remove();
     $(pageMenu).appendTo(selectRoot);
-    nowMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', window.pageNum);
+    nowMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', PageValue.getPageNum());
     $("." + Constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
     selectRoot.find(".menu-item").off('click');
     selectRoot.find(".menu-item").on('click', function() {
@@ -53,14 +53,14 @@ Paging = (function() {
   Paging.createNewPage = function() {
     var beforePageNum, lstorage, self;
     self = this;
-    beforePageNum = window.pageNum;
+    beforePageNum = PageValue.getPageNum();
     Sidebar.closeSidebar();
     lstorage = localStorage;
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
     EventConfig.removeAllConfig();
-    window.pageNum += 1;
-    Common.createdMainContainerIfNeeded(window.pageNum);
+    PageValue.addPagenum(1);
+    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
     Worktable.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
     return WorktableCommon.drawAllItemFromEventPageValue((function(_this) {
@@ -89,7 +89,7 @@ Paging = (function() {
     if (selectedNum <= 0) {
       return;
     }
-    beforePageNum = window.pageNum;
+    beforePageNum = PageValue.getPageNum();
     pageCount = PageValue.getPageCount();
     if (selectedNum < 0 || selectedNum > pageCount) {
       return;
@@ -103,14 +103,14 @@ Paging = (function() {
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum);
     section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
     section.css('display', '');
-    window.pageNum = selectedNum;
+    PageValue.setPageNum(selectedNum);
     Worktable.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
     return WorktableCommon.drawAllItemFromEventPageValue((function(_this) {
       return function() {
         var direction, pageFlip, pn;
-        direction = beforePageNum < window.pageNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
-        pn = beforePageNum < window.pageNum ? beforePageNum : window.pageNum;
+        direction = beforePageNum < PageValue.getPageNum() ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
+        pn = beforePageNum < PageValue.getPageNum() ? beforePageNum : PageValue.getPageNum();
         pageFlip = new PageFlip(pn);
         return pageFlip.startRender(direction, function() {
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);

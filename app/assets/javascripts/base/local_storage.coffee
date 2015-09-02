@@ -25,6 +25,12 @@ class LocalStorage
   @WORKTABLE_SAVETIME = 5
   @RUN_SAVETIME = 9999
 
+  @saveValueForWorktable: ->
+    @saveGeneralPageValue()
+    @saveInstancePageValue()
+    @saveEventPageValue()
+    @saveSettingPageValue()
+
   @loadValueForWorktable: ->
     @loadGeneralPageValue()
     @loadInstancePageValue()

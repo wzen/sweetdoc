@@ -98,7 +98,7 @@ WorktableCommon = (function() {
       callback = null;
     }
     if (pageNum == null) {
-      pageNum = window.pageNum;
+      pageNum = PageValue.getPageNum();
     }
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
     needItemIds = [];
@@ -135,7 +135,7 @@ WorktableCommon = (function() {
           }
         }
         event.setItemAllPropToPageValue();
-        LocalStorage.saveEventPageValue();
+        LocalStorage.saveValueForWorktable();
       }
       Timeline.refreshAllTimeline();
       if (callback != null) {

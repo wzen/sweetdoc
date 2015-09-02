@@ -35,6 +35,13 @@ LocalStorage = (function() {
 
   LocalStorage.RUN_SAVETIME = 9999;
 
+  LocalStorage.saveValueForWorktable = function() {
+    this.saveGeneralPageValue();
+    this.saveInstancePageValue();
+    this.saveEventPageValue();
+    return this.saveSettingPageValue();
+  };
+
   LocalStorage.loadValueForWorktable = function() {
     this.loadGeneralPageValue();
     this.loadInstancePageValue();

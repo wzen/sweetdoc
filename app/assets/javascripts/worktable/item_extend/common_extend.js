@@ -78,7 +78,7 @@ WorkTableCommonExtend = {
           target.remove();
           PageValue.adjustInstanceAndEventOnThisPage();
           Timeline.refreshAllTimeline();
-          LocalStorage.saveEventPageValue();
+          LocalStorage.saveValueForWorktable();
           return OperationHistory.add();
         }
       });

@@ -126,7 +126,7 @@ Worktable = (function() {
         uiIcon: "ui-icon-scissors"
       }
     ];
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', window.pageNum);
+    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
     WorktableCommon.setupContextMenu($('#main'), "#pages ." + page + " .main-wrapper:first", menu);
     $('#main').on("mousedown", (function(_this) {
       return function() {
@@ -146,15 +146,13 @@ $(function() {
     alert('ブラウザ非対応です。');
     return;
   }
-  window.pageNum = PageValue.getPageNum();
   existedCache = !LocalStorage.isOverWorktableSaveTimeLimit();
   if (existedCache) {
     LocalStorage.loadValueForWorktable();
   }
-  window.pageNum = PageValue.getPageNum();
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
-  Common.createdMainContainerIfNeeded(window.pageNum);
+  Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   Worktable.initMainContainer();
   _callback = function() {
     OperationHistory.add(true);

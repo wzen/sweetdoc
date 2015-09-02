@@ -49,56 +49,17 @@ class Run
   # イベント作成
   @initEventAction = ->
     # アクションのイベントを取得
-
-    # ページ総数
     pageCount = PageValue.getPageCount()
     pageList = []
     for i in [1..pageCount]
       eventPageValueList = PageValue.getEventPageValueSortedListByNum(i)
-      chapterList = []
-      if eventPageValueList?
-        eventObjList = []
-        eventList = []
-        $.each(eventPageValueList, (idx, obj)->
-          isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-          id = obj[EventPageValueBase.PageValueKey.ID]
-          classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.ITEM_ID]
-          event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
-          event.initWithEvent(obj)
-          eventObjList.push(event)
-          eventList.push(obj)
-
-          parallel = false
-          if idx < eventPageValueList.length - 1
-            beforeEvent = eventPageValueList[idx + 1]
-            if beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]
-              parallel = true
-
-          if !parallel
-            chapter = null
-            if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
-              chapter = new ClickChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
-            else
-              chapter = new ScrollChapter({eventObjList: eventObjList, eventList: eventList, num: idx})
-            chapterList.push(chapter)
-            eventObjList = []
-            eventList = []
-
-            if !window.firstItemFocused && !obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-                # 最初のアイテムにフォーカスする
-                chapter.focusToActorIfNeed(true)
-                window.firstItemFocused = true
-
-          return true
-        )
-      page = new Page(chapterList)
+      page = new Page(eventPageValueList)
       pageList.push(page)
 
     # ナビバーのページ数 & チャプター数設定
     Navbar.setPageMax(pageCount)
-
     # アクション作成
-    window.eventAction = new EventAction(pageList, window.pageNum - 1)
+    window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1)
     window.eventAction.start()
 
   # Handleスクロール位置の初期化
@@ -152,14 +113,11 @@ class Run
     Navbar.initRunNavbar()
 
 $ ->
-  window.pageNum = PageValue.getPageNum()
-  if window.pageNum?
-    window.pageNum = 1
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
   # Mainコンテナ作成
-  Common.createdMainContainerIfNeeded(window.pageNum)
+  Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   Run.initMainContainer()
 

@@ -163,6 +163,9 @@ class EventConfig
     # イベントの色を変更
     Timeline.changeTimelineColor(@teNum, @actionType)
 
+    # キャッシュに保存
+    LocalStorage.saveValueForWorktable()
+
     # プレビュー開始
     item = instanceMap[@id]
     if item? && item.preview?

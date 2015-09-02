@@ -19,7 +19,7 @@ class Paging
     for i in [1..pageCount]
       navMenuClass = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', i)
       navMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', i)
-      active = if i == window.pageNum then 'class="active"' else ''
+      active = if i == PageValue.getPageNum() then 'class="active"' else ''
       pageMenu += "<li #{active}><a class='#{navMenuClass} menu-item '>#{navMenuName}</a></li>"
     pageMenu += divider
     pageMenu += newPageMenu
@@ -27,7 +27,7 @@ class Paging
     $(pageMenu).appendTo(selectRoot)
 
     # 現在のページ
-    nowMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', window.pageNum)
+    nowMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', PageValue.getPageNum())
     $(".#{Constant.Paging.NAV_SELECTED_CLASS}", root).html(nowMenuName)
 
     # イベント設定
@@ -51,7 +51,7 @@ class Paging
   @createNewPage: ->
     self = @
 
-    beforePageNum = window.pageNum
+    beforePageNum = PageValue.getPageNum()
 
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
@@ -60,9 +60,9 @@ class Paging
     lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
     #Common.clearAllEventChange( ->
     EventConfig.removeAllConfig()
-    window.pageNum += 1
+    PageValue.addPagenum(1)
     # Mainコンテナ作成
-    Common.createdMainContainerIfNeeded(window.pageNum)
+    Common.createdMainContainerIfNeeded(PageValue.getPageNum())
     # 新規コンテナ初期化
     Worktable.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
@@ -93,7 +93,7 @@ class Paging
     if selectedNum <= 0
       return
 
-    beforePageNum = window.pageNum
+    beforePageNum = PageValue.getPageNum()
 
     pageCount = PageValue.getPageCount()
     if selectedNum < 0 || selectedNum > pageCount
@@ -116,13 +116,13 @@ class Paging
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum)
     section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
     section.css('display', '')
-    window.pageNum = selectedNum
+    PageValue.setPageNum(selectedNum)
     Worktable.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     WorktableCommon.drawAllItemFromEventPageValue( =>
       # ページング
-      direction = if beforePageNum < window.pageNum then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
-      pn = if beforePageNum < window.pageNum then beforePageNum else window.pageNum
+      direction = if beforePageNum < PageValue.getPageNum() then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
+      pn = if beforePageNum < PageValue.getPageNum() then beforePageNum else PageValue.getPageNum()
       pageFlip = new PageFlip(pn)
       pageFlip.startRender(direction, ->
         # 隠したビューを非表示にする

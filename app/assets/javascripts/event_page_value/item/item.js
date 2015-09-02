@@ -53,7 +53,7 @@ EPVItem = (function(superClass) {
       PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum);
       Timeline.changeTimelineColor(teNum, actionType);
-      LocalStorage.saveEventPageValue();
+      LocalStorage.saveValueForWorktable();
     }
     return errorMes;
   };
@@ -72,7 +72,7 @@ EPVItem = (function(superClass) {
       if (parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum) {
         PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
       }
-      LocalStorage.saveEventPageValue();
+      LocalStorage.saveValueForWorktable();
     }
     return errorMes;
   };

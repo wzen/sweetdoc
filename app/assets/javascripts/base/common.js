@@ -419,7 +419,7 @@ Common = (function() {
 
   Common.plusPagingZindex = function(zindex, pn) {
     if (pn == null) {
-      pn = window.pageNum;
+      pn = PageValue.getPageNum();
     }
     return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex;
   };

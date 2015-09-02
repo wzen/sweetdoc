@@ -1,6 +1,31 @@
 class Page
   # コンストラクタ
-  constructor: (@chapterList) ->
+  constructor: (eventPageValueList) ->
+
+    @chapterList = []
+    if eventPageValueList?
+      eventList = []
+      $.each(eventPageValueList, (idx, obj) =>
+        eventList.push(obj)
+
+        parallel = false
+        if idx < eventPageValueList.length - 1
+          beforeEvent = eventPageValueList[idx + 1]
+          if beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]
+            parallel = true
+
+        if !parallel
+          chapter = null
+          if obj[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionEventHandleType.CLICK
+            chapter = new ClickChapter({eventList: eventList, num: idx})
+          else
+            chapter = new ScrollChapter({eventList: eventList, num: idx})
+          @chapterList.push(chapter)
+          eventList = []
+
+        return true
+      )
+
     @chapterIndex = 0
     @doMovePage = false
     @finishedAllChapters = false
@@ -82,22 +107,45 @@ class Page
     )
 
   # ページ前処理
-  willForwardPage: ->
-    # 全てのアイテムを削除 & 次のページデータを読み込み
+  willPage: ->
+    # チャプターのイベントを初期化
+    @initChapterEvent()
+    # フォーカス
+    @initFocus()
 
+
+    # 全てのアイテムを削除 & 次のページデータを読み込み
     @thisChapter().reset()
 
+    # 次ページ初期化
+
+
+
 #    # ページング
-#    pn = if beforePageNum < window.pageNum then beforePageNum else window.pageNum
+#    pn = if beforePageNum < PageValue.getPageNum() then beforePageNum else PageValue.getPageNum()
 #    pageFlip = new PageFlip(pn)
 #    pageFlip.startRender(PageFlip.DIRECTION.FORWARD, ->
 #    )
 
     Navbar.setChapterMax(@chapterList.length)
+    LocalStorage.saveValueForRun()
 
   # ページ後処理
   didPage: ->
 
+  # チャプターのイベントを初期化
+  initChapterEvent: ->
+    for chapter in @chapterList
+      for i in [0..(chapter.eventObjList.length - 1)]
+        event = chapter.eventObjList[i]
+        event.initWithEvent(chapter.eventList[i])
+
+  # チャプターのフォーカス初期化
+  initFocus: ->
+    for chapter in @chapterList
+      for event in chapter.eventList
+        if !event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+          chapter.focusToActorIfNeed(true)
 
   # 全てのページ内容をリセット
   reset: ->

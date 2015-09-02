@@ -14,7 +14,7 @@ class PageValue
       # @property [String] P_PREFIX ページ番号プレフィックス
       @P_PREFIX = constant.PageValueKey.P_PREFIX
       # @property [return] 現在のページのページ番号プレフィックス
-      @pagePrefix = (pn = window.pageNum) -> @P_PREFIX + pn
+      @pagePrefix = (pn = PageValue.getPageNum()) -> @P_PREFIX + pn
       # @property [String] PAGE_COUNT ページ総数
       @PAGE_COUNT = constant.PageValueKey.PAGE_COUNT
       # @property [String] PAGE_NUM 現在のページ番号
@@ -24,7 +24,7 @@ class PageValue
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
       # @property [return] インスタンスページプレフィックスを取得
-      @instancePagePrefix = (pn = window.pageNum) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
+      @instancePagePrefix = (pn = PageValue.getPageNum()) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
       # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
       @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
       # @property [return] インスタンス値
@@ -314,7 +314,7 @@ class PageValue
     $("##{Setting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
 
   # ソートしたイベントリストを取得
-  @getEventPageValueSortedListByNum = (pn = window.pageNum) ->
+  @getEventPageValueSortedListByNum = (pn = PageValue.getPageNum()) ->
     eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix(pn))
     if !eventPageValues?
       return []
@@ -401,8 +401,24 @@ class PageValue
 
   # 現在のページ番号を取得
   @getPageNum = ->
+    if window.pn?
+      return window.pn
+
     ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
     if ret?
-      return parseInt(ret)
+      ret = parseInt(ret)
     else
-      return 1
+      ret = 1
+      @setPageNum(ret)
+
+    window.pn = ret
+    return ret
+
+  # 現在のページ番号を設定
+  @setPageNum = (num) ->
+    window.pn = null
+    PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
+
+  # 現在のページ番号を追加
+  @addPagenum = (addNum) ->
+    @setPageNum(@getPageNum() + addNum)

@@ -3,9 +3,19 @@ var Chapter;
 
 Chapter = (function() {
   function Chapter(list) {
-    this.eventObjList = list.eventObjList;
+    var classMapId, event, i, id, isCommonEvent, len, obj, ref;
     this.eventList = list.eventList;
     this.num = list.num;
+    this.eventObjList = [];
+    ref = this.eventList;
+    for (i = 0, len = ref.length; i < len; i++) {
+      obj = ref[i];
+      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
+      id = obj[EventPageValueBase.PageValueKey.ID];
+      classMapId = isCommonEvent ? obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : obj[EventPageValueBase.PageValueKey.ITEM_ID];
+      event = Common.getInstanceFromMap(isCommonEvent, id, classMapId);
+      this.eventObjList.push(event);
+    }
     this.doMoveChapter = false;
   }
 
@@ -14,7 +24,6 @@ Chapter = (function() {
     ref = this.eventObjList;
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
-      event.initWithEvent(this.eventList[idx]);
       methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
       event.willChapter(methodName);
       event.appendCssIfNeeded(methodName);
@@ -57,15 +66,15 @@ Chapter = (function() {
       left = null;
       top = null;
       if (type === "center") {
-        left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5);
-        top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5);
+        left = item.itemSize.x + width * 0.5 - (window.scrollContents.width() * 0.5);
+        top = item.itemSize.y + height * 0.5 - (window.scrollContents.height() * 0.5);
       }
       if (isImmediate) {
-        scrollContents.scrollTop(top);
-        scrollContents.scrollLeft(left);
+        window.scrollContents.scrollTop(top);
+        window.scrollContents.scrollLeft(left);
         return window.disabledEventHandler = false;
       } else {
-        return scrollContents.animate({
+        return window.scrollContents.animate({
           scrollTop: top,
           scrollLeft: left
         }, 'normal', 'linear', function() {
@@ -78,8 +87,8 @@ Chapter = (function() {
   };
 
   Chapter.prototype.riseFrontAllObj = function(eventObjList) {
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
-    scrollContents.css('z-index', scrollViewSwitchZindex.on);
+    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
+    window.scrollContents.css('z-index', scrollViewSwitchZindex.on);
     return eventObjList.forEach(function(e) {
       if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
         return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
@@ -88,8 +97,8 @@ Chapter = (function() {
   };
 
   Chapter.prototype.sinkFrontAllObj = function() {
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
-    scrollContents.css('z-index', scrollViewSwitchZindex.off);
+    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
+    window.scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
         if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {

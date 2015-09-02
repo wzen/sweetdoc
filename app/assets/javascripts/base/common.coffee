@@ -334,7 +334,7 @@ class Common
     else
       _show.call(self)
 
-  @plusPagingZindex: (zindex, pn = window.pageNum) ->
+  @plusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
     return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等

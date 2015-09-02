@@ -22,34 +22,34 @@ OperationHistory = (function() {
     if (isInit == null) {
       isInit = false;
     }
-    if ((window.operationHistoryIndexes[window.pageNum] != null) && !isInit) {
-      window.operationHistoryIndexes[window.pageNum] = (window.operationHistoryIndexes[window.pageNum] + 1) % window.operationHistoryLimit;
+    if ((window.operationHistoryIndexes[PageValue.getPageNum()] != null) && !isInit) {
+      window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % window.operationHistoryLimit;
     } else {
-      window.operationHistoryIndexes[window.pageNum] = 0;
+      window.operationHistoryIndexes[PageValue.getPageNum()] = 0;
     }
-    window.operationHistoryTailIndex = window.operationHistoryIndexes[window.pageNum];
+    window.operationHistoryTailIndex = window.operationHistoryIndexes[PageValue.getPageNum()];
     obj = {};
     obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
-    if (window.operationHistories[window.pageNum] == null) {
-      window.operationHistories[window.pageNum] = [];
+    if (window.operationHistories[PageValue.getPageNum()] == null) {
+      window.operationHistories[PageValue.getPageNum()] = [];
     }
-    return window.operationHistories[window.pageNum][window.operationHistoryIndexes[window.pageNum]] = obj;
+    return window.operationHistories[PageValue.getPageNum()][window.operationHistoryIndexes[PageValue.getPageNum()]] = obj;
   };
 
   _pop = function() {
     var eventPageValue, hIndex, instancePageValue, obj;
-    if (window.operationHistoryIndexes[window.pageNum] == null) {
+    if (window.operationHistoryIndexes[PageValue.getPageNum()] == null) {
       return false;
     }
-    hIndex = window.operationHistoryIndexes[window.pageNum];
+    hIndex = window.operationHistoryIndexes[PageValue.getPageNum()];
     if (hIndex <= 0) {
       hIndex = window.operationHistoryLimit - 1;
     } else {
       hIndex -= 1;
     }
-    if ((window.operationHistories[window.pageNum] != null) && (window.operationHistories[window.pageNum][hIndex] != null)) {
-      obj = window.operationHistories[window.pageNum][hIndex];
+    if ((window.operationHistories[PageValue.getPageNum()] != null) && (window.operationHistories[PageValue.getPageNum()][hIndex] != null)) {
+      obj = window.operationHistories[PageValue.getPageNum()][hIndex];
       WorktableCommon.removeAllItemAndEventOnThisPage();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
@@ -59,9 +59,9 @@ OperationHistory = (function() {
       if (eventPageValue != null) {
         PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
-      window.operationHistoryIndexes[window.pageNum] = hIndex;
+      window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
       PageValue.adjustInstanceAndEventOnThisPage();
-      LocalStorage.saveEventPageValue();
+      LocalStorage.saveValueForWorktable();
       WorktableCommon.drawAllItemFromEventPageValue();
       return true;
     } else {
@@ -71,12 +71,12 @@ OperationHistory = (function() {
 
   _popRedo = function() {
     var eventPageValue, hIndex, instancePageValue, obj;
-    if (window.operationHistoryIndexes[window.pageNum] == null) {
+    if (window.operationHistoryIndexes[PageValue.getPageNum()] == null) {
       return false;
     }
-    hIndex = (window.operationHistoryIndexes[window.pageNum] + 1) % window.operationHistoryLimit;
-    if ((window.operationHistories[window.pageNum] != null) && (window.operationHistories[window.pageNum][hIndex] != null)) {
-      obj = window.operationHistories[window.pageNum][hIndex];
+    hIndex = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % window.operationHistoryLimit;
+    if ((window.operationHistories[PageValue.getPageNum()] != null) && (window.operationHistories[PageValue.getPageNum()][hIndex] != null)) {
+      obj = window.operationHistories[PageValue.getPageNum()][hIndex];
       WorktableCommon.removeAllItemAndEventOnThisPage();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
@@ -86,9 +86,9 @@ OperationHistory = (function() {
       if (eventPageValue != null) {
         PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
-      window.operationHistoryIndexes[window.pageNum] = hIndex;
+      window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
       PageValue.adjustInstanceAndEventOnThisPage();
-      LocalStorage.saveEventPageValue();
+      LocalStorage.saveValueForWorktable();
       WorktableCommon.drawAllItemFromEventPageValue();
       return true;
     } else {
@@ -99,13 +99,13 @@ OperationHistory = (function() {
   OperationHistory.undo = function() {
     var nextTailIndex;
     nextTailIndex = (window.operationHistoryTailIndex + 1) % window.operationHistoryLimit;
-    if ((window.operationHistoryIndexes[window.pageNum] == null) || nextTailIndex === window.operationHistoryIndexes[window.pageNum] || !_pop.call(this)) {
+    if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || nextTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(this)) {
       Message.flushWarn("Can't Undo");
     }
   };
 
   OperationHistory.redo = function() {
-    if ((window.operationHistoryIndexes[window.pageNum] == null) || window.operationHistoryTailIndex === window.operationHistoryIndexes[window.pageNum] || !_popRedo.call(this)) {
+    if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || window.operationHistoryTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(this)) {
       Message.flushWarn("Can't Redo");
     }
   };

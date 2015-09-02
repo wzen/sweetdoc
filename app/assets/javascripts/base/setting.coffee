@@ -89,7 +89,7 @@ class Setting
 
     # グリッド線描画
     @drawGrid : (doDraw) ->
-      page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
+      page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
       canvas = $("#pages .#{page} .#{@SETTING_GRID_CANVAS_CLASS}:first")[0]
       context = null
       key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"

@@ -114,7 +114,7 @@ class Worktable
     Handwrite.initHandwrite()
     # コンテキストメニュー
     menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', window.pageNum)
+    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
     WorktableCommon.setupContextMenu($('#main'), "#pages .#{page} .main-wrapper:first", menu)
     $('#main').on("mousedown", =>
       @clearAllItemStyle()
@@ -128,23 +128,17 @@ $ ->
     alert('ブラウザ非対応です。')
     return
 
-  # 現在のページ番号
-  window.pageNum = PageValue.getPageNum()
-
   # キャッシュチェック
   existedCache = !LocalStorage.isOverWorktableSaveTimeLimit()
-
   if existedCache
     # キャッシュが存在する場合アイテム描画
     LocalStorage.loadValueForWorktable()
 
-  # 現在のページ番号
-  window.pageNum = PageValue.getPageNum()
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
   # Mainコンテナ作成
-  Common.createdMainContainerIfNeeded(window.pageNum)
+  Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   Worktable.initMainContainer()
 

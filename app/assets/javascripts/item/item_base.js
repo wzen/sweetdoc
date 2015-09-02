@@ -91,7 +91,7 @@ ItemBase = (function(superClass) {
       this.name = this.constructor.IDENTITY + (" " + num);
     }
     this.setItemAllPropToPageValue();
-    LocalStorage.saveEventPageValue();
+    LocalStorage.saveValueForWorktable();
     OperationHistory.add();
     console.log('save obj:' + JSON.stringify(this.itemSize));
     return Timeline.updateSelectItemMenu();

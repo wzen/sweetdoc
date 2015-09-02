@@ -96,7 +96,7 @@ class ItemBase extends ItemEventBase
     # ページに状態を保存
     @setItemAllPropToPageValue()
     # キャッシュに保存
-    LocalStorage.saveEventPageValue()
+    LocalStorage.saveValueForWorktable()
     # 操作履歴に保存
     OperationHistory.add()
     console.log('save obj:' + JSON.stringify(@itemSize))

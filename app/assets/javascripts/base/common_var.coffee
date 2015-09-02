@@ -13,11 +13,11 @@ class CommonVar
   # 操作履歴変数初期化
   @initHistoryVar = ->
     window.operationHistories = []
-    window.operationHistories[window.pageNum] = []
+    window.operationHistories[PageValue.getPageNum()] = []
     window.operationHistoryLimit = 30
     window.operationHistoryTailIndex = null
     window.operationHistoryIndexes = []
-    window.operationHistoryIndexes[window.pageNum] = null
+    window.operationHistoryIndexes[PageValue.getPageNum()] = null
 
   @updateWorktableBaseElement = (pageNum) ->
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
@@ -50,7 +50,7 @@ class CommonVar
     window.flushMessageTimer = null
     window.mode = Constant.Mode.DRAW
     @initHistoryVar()
-    @updateWorktableBaseElement(window.pageNum)
+    @updateWorktableBaseElement(PageValue.getPageNum())
 
   # 実行テーブル共通変数
   @runCommonVar = ->
@@ -62,4 +62,4 @@ class CommonVar
     window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)}
     window.disabledEventHandler = false
     window.firstItemFocused = false
-    @updateRunBaseElement(window.pageNum)
+    @updateRunBaseElement(PageValue.getPageNum())

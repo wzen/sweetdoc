@@ -115,7 +115,7 @@ Setting = (function() {
 
     Grid.drawGrid = function(doDraw) {
       var canvas, context, i, j, k, key, left, max, min, page, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
-      page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+      page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
       canvas = $("#pages ." + page + " ." + this.SETTING_GRID_CANVAS_CLASS + ":first")[0];
       context = null;
       key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;

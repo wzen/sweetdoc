@@ -247,7 +247,6 @@ class EventBase extends Extend
     prefix_key = prefix_key.replace('@id', @id)
     obj = @getMinimumObject()
     PageValue.setInstancePageValue(prefix_key, obj)
-    LocalStorage.saveInstancePageValue()
 
 class CommonEventBase extends EventBase
   # 初期化

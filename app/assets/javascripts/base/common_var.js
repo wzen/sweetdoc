@@ -16,11 +16,11 @@ CommonVar = (function() {
 
   CommonVar.initHistoryVar = function() {
     window.operationHistories = [];
-    window.operationHistories[window.pageNum] = [];
+    window.operationHistories[PageValue.getPageNum()] = [];
     window.operationHistoryLimit = 30;
     window.operationHistoryTailIndex = null;
     window.operationHistoryIndexes = [];
-    return window.operationHistoryIndexes[window.pageNum] = null;
+    return window.operationHistoryIndexes[PageValue.getPageNum()] = null;
   };
 
   CommonVar.updateWorktableBaseElement = function(pageNum) {
@@ -57,7 +57,7 @@ CommonVar = (function() {
     window.flushMessageTimer = null;
     window.mode = Constant.Mode.DRAW;
     this.initHistoryVar();
-    return this.updateWorktableBaseElement(window.pageNum);
+    return this.updateWorktableBaseElement(PageValue.getPageNum());
   };
 
   CommonVar.runCommonVar = function() {
@@ -72,7 +72,7 @@ CommonVar = (function() {
     };
     window.disabledEventHandler = false;
     window.firstItemFocused = false;
-    return this.updateRunBaseElement(window.pageNum);
+    return this.updateRunBaseElement(PageValue.getPageNum());
   };
 
   return CommonVar;

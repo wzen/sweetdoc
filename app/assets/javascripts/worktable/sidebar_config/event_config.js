@@ -157,6 +157,7 @@ EventConfig = (function() {
       return;
     }
     Timeline.changeTimelineColor(this.teNum, this.actionType);
+    LocalStorage.saveValueForWorktable();
     item = instanceMap[this.id];
     if ((item != null) && (item.preview != null)) {
       return item.preview(PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(this.teNum)));

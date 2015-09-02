@@ -1,15 +1,22 @@
 # チャプター(イベントの区切り)
 class Chapter
   constructor: (list) ->
-    @eventObjList = list.eventObjList
     @eventList = list.eventList
     @num = list.num
+
+    @eventObjList = []
+    for obj in @eventList
+      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      id = obj[EventPageValueBase.PageValueKey.ID]
+      classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.ITEM_ID]
+      event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
+      @eventObjList.push(event)
+
     @doMoveChapter = false
 
   # チャプター共通の前処理
   willChapter: ->
     for event, idx in @eventObjList
-      event.initWithEvent(@eventList[idx])
       methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME]
       event.willChapter(methodName)
       event.appendCssIfNeeded(methodName)
@@ -45,15 +52,15 @@ class Chapter
         left = null
         top = null
         if type == "center"
-          left = item.itemSize.x + width * 0.5 - (scrollContents.width() * 0.5)
-          top = item.itemSize.y + height * 0.5 - (scrollContents.height() * 0.5)
+          left = item.itemSize.x + width * 0.5 - (window.scrollContents.width() * 0.5)
+          top = item.itemSize.y + height * 0.5 - (window.scrollContents.height() * 0.5)
 
         if isImmediate
-          scrollContents.scrollTop(top)
-          scrollContents.scrollLeft(left)
+          window.scrollContents.scrollTop(top)
+          window.scrollContents.scrollLeft(left)
           window.disabledEventHandler = false
         else
-          scrollContents.animate({scrollTop: top, scrollLeft: left }, 'normal', 'linear', ->
+          window.scrollContents.animate({scrollTop: top, scrollLeft: left }, 'normal', 'linear', ->
             window.disabledEventHandler = false
           )
     else
@@ -61,8 +68,8 @@ class Chapter
 
   # イベントアイテムをFrontに浮上
   riseFrontAllObj: (eventObjList) ->
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
-    scrollContents.css('z-index', scrollViewSwitchZindex.on)
+    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
+    window.scrollContents.css('z-index', scrollViewSwitchZindex.on)
     eventObjList.forEach((e) ->
       if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
@@ -70,8 +77,8 @@ class Chapter
 
   # 全てのイベントアイテムをFrontから落とす
   sinkFrontAllObj: ->
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
-    scrollContents.css('z-index', scrollViewSwitchZindex.off)
+    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
+    window.scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @eventObjList.forEach((e) =>
       if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + @num))

@@ -43,7 +43,7 @@ EPVBackgroundColor = (function(superClass) {
       writeValue[this.PageValueKey.VALUE] = value;
       PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
-      LocalStorage.saveEventPageValue();
+      LocalStorage.saveValueForWorktable();
     }
     return errorMes;
   };

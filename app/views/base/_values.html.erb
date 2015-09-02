@@ -7,11 +7,6 @@
     <div id="<%= Const::PageValueKey::G_ROOT %>">
         <% if general_pagevalues != nil %>
             <%= general_pagevalues.html_safe %>
-        <% else %>
-            <div class="<%= Const::PageValueKey::G_PREFIX %>">
-                <input type="hidden" class="<%= Const::PageValueKey::PAGE_COUNT %>" value="1" >
-                <input type="hidden" class="<%= Const::PageValueKey::PAGE_NUM %>" value="1" >
-            </div>
         <% end %>
     </div>
 

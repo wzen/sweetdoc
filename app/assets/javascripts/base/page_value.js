@@ -21,7 +21,7 @@ PageValue = (function() {
 
       Key.pagePrefix = function(pn) {
         if (pn == null) {
-          pn = window.pageNum;
+          pn = PageValue.getPageNum();
         }
         return this.P_PREFIX + pn;
       };
@@ -36,7 +36,7 @@ PageValue = (function() {
 
       Key.instancePagePrefix = function(pn) {
         if (pn == null) {
-          pn = window.pageNum;
+          pn = PageValue.getPageNum();
         }
         return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix(pn);
       };
@@ -374,7 +374,7 @@ PageValue = (function() {
   PageValue.getEventPageValueSortedListByNum = function(pn) {
     var count, eventObjList, eventPageValues, index, k, v;
     if (pn == null) {
-      pn = window.pageNum;
+      pn = PageValue.getPageNum();
     }
     eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix(pn));
     if (eventPageValues == null) {
@@ -475,12 +475,27 @@ PageValue = (function() {
 
   PageValue.getPageNum = function() {
     var ret;
+    if (window.pn != null) {
+      return window.pn;
+    }
     ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM);
     if (ret != null) {
-      return parseInt(ret);
+      ret = parseInt(ret);
     } else {
-      return 1;
+      ret = 1;
+      this.setPageNum(ret);
     }
+    window.pn = ret;
+    return ret;
+  };
+
+  PageValue.setPageNum = function(num) {
+    window.pn = null;
+    return PageValue.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM, parseInt(num));
+  };
+
+  PageValue.addPagenum = function(addNum) {
+    return this.setPageNum(this.getPageNum() + addNum);
   };
 
   return PageValue;

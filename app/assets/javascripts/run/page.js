@@ -2,8 +2,42 @@
 var Page;
 
 Page = (function() {
-  function Page(chapterList) {
-    this.chapterList = chapterList;
+  function Page(eventPageValueList) {
+    var eventList;
+    this.chapterList = [];
+    if (eventPageValueList != null) {
+      eventList = [];
+      $.each(eventPageValueList, (function(_this) {
+        return function(idx, obj) {
+          var beforeEvent, chapter, parallel;
+          eventList.push(obj);
+          parallel = false;
+          if (idx < eventPageValueList.length - 1) {
+            beforeEvent = eventPageValueList[idx + 1];
+            if (beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]) {
+              parallel = true;
+            }
+          }
+          if (!parallel) {
+            chapter = null;
+            if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
+              chapter = new ClickChapter({
+                eventList: eventList,
+                num: idx
+              });
+            } else {
+              chapter = new ScrollChapter({
+                eventList: eventList,
+                num: idx
+              });
+            }
+            _this.chapterList.push(chapter);
+            eventList = [];
+          }
+          return true;
+        };
+      })(this));
+    }
     this.chapterIndex = 0;
     this.doMovePage = false;
     this.finishedAllChapters = false;
@@ -82,12 +116,58 @@ Page = (function() {
     });
   };
 
-  Page.prototype.willForwardPage = function() {
+  Page.prototype.willPage = function() {
+    this.initChapterEvent();
+    this.initFocus();
     this.thisChapter().reset();
-    return Navbar.setChapterMax(this.chapterList.length);
+    Navbar.setChapterMax(this.chapterList.length);
+    return LocalStorage.saveValueForRun();
   };
 
   Page.prototype.didPage = function() {};
+
+  Page.prototype.initChapterEvent = function() {
+    var chapter, event, i, j, len, ref, results;
+    ref = this.chapterList;
+    results = [];
+    for (j = 0, len = ref.length; j < len; j++) {
+      chapter = ref[j];
+      results.push((function() {
+        var k, ref1, results1;
+        results1 = [];
+        for (i = k = 0, ref1 = chapter.eventObjList.length - 1; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
+          event = chapter.eventObjList[i];
+          results1.push(event.initWithEvent(chapter.eventList[i]));
+        }
+        return results1;
+      })());
+    }
+    return results;
+  };
+
+  Page.prototype.initFocus = function() {
+    var chapter, event, j, len, ref, results;
+    ref = this.chapterList;
+    results = [];
+    for (j = 0, len = ref.length; j < len; j++) {
+      chapter = ref[j];
+      results.push((function() {
+        var k, len1, ref1, results1;
+        ref1 = chapter.eventList;
+        results1 = [];
+        for (k = 0, len1 = ref1.length; k < len1; k++) {
+          event = ref1[k];
+          if (!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+            results1.push(chapter.focusToActorIfNeed(true));
+          } else {
+            results1.push(void 0);
+          }
+        }
+        return results1;
+      })());
+    }
+    return results;
+  };
 
   Page.prototype.reset = function() {
     return this.chapterList.forEach(function(chapter) {

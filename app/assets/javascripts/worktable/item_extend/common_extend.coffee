@@ -81,7 +81,7 @@ WorkTableCommonExtend =
         target.remove()
         PageValue.adjustInstanceAndEventOnThisPage()
         Timeline.refreshAllTimeline()
-        LocalStorage.saveEventPageValue()
+        LocalStorage.saveValueForWorktable()
         OperationHistory.add()
       })
       WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu)

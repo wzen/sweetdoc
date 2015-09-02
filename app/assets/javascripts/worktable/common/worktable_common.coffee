@@ -65,7 +65,7 @@ class WorktableCommon
     )
 
   # イベントPageValueから全てのアイテムを描画
-  @drawAllItemFromEventPageValue: (callback = null, pageNum = window.pageNum) ->
+  @drawAllItemFromEventPageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
     needItemIds = []
     for k, obj of pageValues
@@ -92,7 +92,7 @@ class WorktableCommon
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
         event.setItemAllPropToPageValue()
-        LocalStorage.saveEventPageValue()
+        LocalStorage.saveValueForWorktable()
 
       # タイムライン更新
       Timeline.refreshAllTimeline()
