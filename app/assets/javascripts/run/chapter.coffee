@@ -89,7 +89,7 @@ class Chapter
     return true
 
   # チャプターのイベントをリセットする
-  reset: ->
+  resetAllEvents: ->
     @eventObjList.forEach((e) =>
-      e.reset()
+      e.resetEvent()
     )

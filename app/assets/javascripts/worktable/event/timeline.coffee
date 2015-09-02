@@ -194,16 +194,6 @@ class Timeline
         te.selectItem(@)
       )
 
-  # タイムラインのCSSをまとめる
-  @setupEventCss = ->
-    itemCssStyle = ""
-    $('#css_code_info').find('.css-style').each( ->
-      itemCssStyle += $(this).html()
-    )
-
-    if itemCssStyle.length > 0
-      PageValue.setEventPageValue(PageValue.Key.eventCss(), itemCssStyle)
-
   # タイムラインイベントの色を変更
   @changeTimelineColor = (teNum, actionType = null) ->
     # イベントの色を変更

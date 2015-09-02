@@ -337,6 +337,22 @@ class Common
   @plusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
     return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex
 
+  # アイテムを削除
+  @removeAllItem = (pageNum = null) ->
+    if pageNum?
+      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
+      for k, obj of pageValues
+        objId = obj.value.id
+        itemId = obj.value.itemId
+        if objId?
+          $("##{objId}").remove()
+          delete window.instanceMap[objId]
+    else
+      for k, v of Common.getCreatedItemObject()
+        if v.getJQueryElement?
+          v.getJQueryElement().remove()
+      window.instanceMap = {}
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.loadedClassList = {}

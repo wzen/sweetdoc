@@ -1,4 +1,7 @@
 class Page
+
+  @PAGE_CHANGE_SCROLL_DIST = 50
+
   # コンストラクタ
   constructor: (eventPageValueList) ->
 
@@ -29,6 +32,7 @@ class Page
     @chapterIndex = 0
     @doMovePage = false
     @finishedAllChapters = false
+    @finishedScrollDistSum = 0
 
   # 現在のチャプターを取得
   thisChapter: ->
@@ -38,6 +42,7 @@ class Page
   start: ->
     # チャプター数設定
     Navbar.setChapterNum(@chapterIndex + 1)
+
     # チャプター前処理
     @sinkFrontAllChapterObj()
     @thisChapter().willChapter()
@@ -52,10 +57,10 @@ class Page
     # チャプター後処理
     @thisChapter().didChapter()
     # indexを更新
-    @chapterIndex += 1
-    if @chapterList.length <= @chapterIndex
+    if @chapterList.length <= @chapterIndex + 1
       @finishAllChapters()
     else
+      @chapterIndex += 1
       # チャプター数設定
       Navbar.setChapterNum(@chapterIndex + 1)
       # チャプター前処理
@@ -67,20 +72,23 @@ class Page
     if !@thisChapter().doMoveChapter && @chapterIndex > 0
       @chapterIndex -= 1
       @resetChapter(@chapterIndex)
+      Navbar.setChapterNum(@chapterIndex + 1)
 
     # チャプター前処理
     @thisChapter().willChapter()
 
   # チャプターの内容をリセット
   resetChapter: (chapterIndex) ->
-    @chapterList[chapterIndex].reset()
+    @finishedAllChapters = false
+    @chapterList[chapterIndex].resetAllEvents()
 
   # 全てのチャプターを戻す
   rewindAllChapters: ->
     for i in [(@chapterList.length - 1)..0] by -1
       chapter = @chapterList[i]
-      chapter.reset()
+      chapter.resetAllEvents()
     @chapterIndex = 0
+    Navbar.setChapterNum(@chapterIndex + 1)
     @finishedAllChapters = false
     @start()
 
@@ -88,8 +96,22 @@ class Page
   # @param [Int] x X軸の動作値
   # @param [Int] y Y軸の動作値
   handleScrollEvent: (x, y) ->
-    if !@finishedAllChapters && @isScrollChapter()
-      @thisChapter().scrollEvent(x, y)
+    if !@finishedAllChapters
+      if @isScrollChapter()
+        @thisChapter().scrollEvent(x, y)
+    else
+      if stopTimer != null
+        clearTimeout(stopTimer)
+      stopTimer = setTimeout( =>
+        @finishedScrollDistSum = 0
+        clearTimeout(stopTimer)
+        stopTimer = null
+      , 200)
+      @finishedScrollDistSum += x + y
+      console.log('finishedScrollDistSum:' + @finishedScrollDistSum)
+      if @finishedScrollDistSum > Page.PAGE_CHANGE_SCROLL_DIST
+        # 次のページに移動
+        window.eventAction.nextPageIfFinishedAllChapter()
 
   # スクロールチャプターか判定
   isScrollChapter: ->
@@ -112,22 +134,11 @@ class Page
     @initChapterEvent()
     # フォーカス
     @initFocus()
-
-
-    # 全てのアイテムを削除 & 次のページデータを読み込み
-    @thisChapter().reset()
-
-    # 次ページ初期化
-
-
-
-#    # ページング
-#    pn = if beforePageNum < PageValue.getPageNum() then beforePageNum else PageValue.getPageNum()
-#    pageFlip = new PageFlip(pn)
-#    pageFlip.startRender(PageFlip.DIRECTION.FORWARD, ->
-#    )
-
+    # リセット
+    @resetAllChapters()
+    # チャプター最大値設定
     Navbar.setChapterMax(@chapterList.length)
+    # キャッシュ保存
     LocalStorage.saveValueForRun()
 
   # ページ後処理
@@ -147,13 +158,16 @@ class Page
         if !event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
           chapter.focusToActorIfNeed(true)
 
-  # 全てのページ内容をリセット
-  reset: ->
+  # 全てのチャプター内容をリセット
+  resetAllChapters: ->
     @chapterList.forEach((chapter) ->
-      chapter.reset()
+      chapter.resetAllEvents()
     )
 
   # イベント終了イベント
   finishAllChapters: ->
     @finishedAllChapters = true
-    console.log('Finish All Events!')
+    console.log('Finish All Chapters!')
+
+    # ページ移動のためのスクロールイベントを取るようにする
+    @sinkFrontAllChapterObj()

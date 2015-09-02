@@ -5,7 +5,7 @@ EventAction = (function() {
   function EventAction(pageList, pageIndex1) {
     this.pageList = pageList;
     this.pageIndex = pageIndex1;
-    this.finishedAllChapters = false;
+    this.finishedAllPages = false;
   }
 
   EventAction.prototype.thisPage = function() {
@@ -14,55 +14,99 @@ EventAction = (function() {
 
   EventAction.prototype.start = function() {
     Navbar.setPageNum(this.pageIndex + 1);
+    $('#sup_css').html(PageValue.itemCssOnPage());
     this.thisPage().willPage();
     return this.thisPage().start();
   };
 
   EventAction.prototype.nextPageIfFinishedAllChapter = function() {
-    if (this.thisPage().finishedAllChapters()) {
+    if (this.thisPage().finishedAllChapters) {
       return this.nextPage();
     }
   };
 
   EventAction.prototype.nextPage = function() {
+    var beforePageIndex;
     this.thisPage().didPage();
-    this.pageIndex += 1;
-    if (this.pageList.length <= this.pageIndex) {
-      return this.finishedAllChapters();
+    beforePageIndex = this.pageIndex;
+    if (this.pageList.length <= this.pageIndex + 1) {
+      return this.finishedAllPages();
     } else {
+      this.pageIndex += 1;
       Navbar.setPageNum(this.pageIndex + 1);
-      PageValue.setPageNum(this.pageIndex + 1);
-      return this.thisPage().willPage();
+      return this.changePaging(beforePageIndex, this.pageIndex, function() {
+        return Navbar.setPageNum(this.pageIndex + 1);
+      });
     }
   };
 
   EventAction.prototype.rewindPage = function() {
+    var beforePageIndex;
     this.resetPage(this.pageIndex);
+    beforePageIndex = this.pageIndex;
     if (!this.thisChapter().doMovePage && this.pageIndex > 0) {
       this.pageIndex -= 1;
-      this.resetPage(this.pageIndex);
+      Navbar.setPageNum(this.pageIndex + 1);
+      return this.changePaging(beforePageIndex, this.pageIndex, function() {
+        return Navbar.setPageNum(this.pageIndex + 1);
+      });
+    } else {
+      return this.thisPage().willPage();
     }
-    return this.thisPage().willPage();
+  };
+
+  EventAction.prototype.changePaging = function(beforePageIndex, afterPageIndex, callback) {
+    var afterPageNum, beforePageNum, className, direction, pageFlip, pn, section;
+    if (callback == null) {
+      callback = null;
+    }
+    beforePageNum = beforePageIndex + 1;
+    afterPageNum = afterPageIndex + 1;
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
+    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    section.css('display', '');
+    PageValue.setPageNum(afterPageNum);
+    Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
+    Run.initMainContainer();
+    PageValue.adjustInstanceAndEventOnThisPage();
+    this.resetPage(afterPageIndex);
+    $('#sup_css').html(PageValue.itemCssOnPage());
+    this.thisPage().willPage();
+    direction = beforePageNum < PageValue.getPageNum() ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
+    pn = beforePageNum < PageValue.getPageNum() ? beforePageNum : PageValue.getPageNum();
+    pageFlip = new PageFlip(pn);
+    return pageFlip.startRender(direction, function() {
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+      section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+      section.css('display', 'none');
+      Common.removeAllItem(beforePageNum);
+      Run.initMainContainer();
+      Timeline.refreshAllTimeline();
+      if (callback != null) {
+        return callback();
+      }
+    });
   };
 
   EventAction.prototype.resetPage = function(pageIndex) {
-    return this.pageList[pageIndex].reset();
+    return this.pageList[pageIndex].resetAllChapters();
   };
 
   EventAction.prototype.rewindAllPages = function() {
     var i, j, page, ref;
     for (i = j = ref = this.pageList.length - 1; j >= 0; i = j += -1) {
       page = this.pageList[i];
-      page.reset();
+      page.resetAllChapters();
     }
     this.pageIndex = 0;
-    this.finishedAllChapters = false;
+    Navbar.setPageNum(this.pageIndex + 1);
+    this.finishedAllPages = false;
     return this.start();
   };
 
-  EventAction.prototype.finishAllChapters = function() {
-    this.finishedAllChapters = true;
-    return console.log('Finish All Chapters!');
+  EventAction.prototype.finishAllPages = function() {
+    this.finishedAllPages = true;
+    return console.log('Finish All Pages!!!');
   };
 
   return EventAction;

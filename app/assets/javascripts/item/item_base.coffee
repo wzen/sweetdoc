@@ -109,8 +109,7 @@ class ItemBase extends ItemEventBase
   # @property [String] prop 変数名
   # @property [Boolean] isCache キャッシュとして保存するか
   getItemPropFromPageValue : (prop, isCache = false) ->
-    prefix_key = if isCache then PageValue.Key.instanceValueCache() else PageValue.Key.instanceValue()
-    prefix_key = prefix_key.replace('@id', @id)
+    prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     return PageValue.getInstancePageValue(prefix_key + ":#{prop}")
 
   # アイテムの情報をページ値に設定
@@ -118,8 +117,7 @@ class ItemBase extends ItemEventBase
   # @property [Object] value 値
   # @property [Boolean] isCache キャッシュとして保存するか
   setItemPropToPageValue : (prop, value, isCache = false) ->
-    prefix_key = if isCache then PageValue.Key.instanceValueCache() else PageValue.Key.instanceValue()
-    prefix_key = prefix_key.replace('@id', @id)
+    prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     PageValue.setInstancePageValue(prefix_key + ":#{prop}", value)
     LocalStorage.saveInstancePageValue()
 

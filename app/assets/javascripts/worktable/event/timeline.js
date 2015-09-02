@@ -191,17 +191,6 @@ Timeline = (function() {
     })(this)();
   };
 
-  Timeline.setupEventCss = function() {
-    var itemCssStyle;
-    itemCssStyle = "";
-    $('#css_code_info').find('.css-style').each(function() {
-      return itemCssStyle += $(this).html();
-    });
-    if (itemCssStyle.length > 0) {
-      return PageValue.setEventPageValue(PageValue.Key.eventCss(), itemCssStyle);
-    }
-  };
-
   Timeline.changeTimelineColor = function(teNum, actionType) {
     var k, ref, teEmt, v;
     if (actionType == null) {

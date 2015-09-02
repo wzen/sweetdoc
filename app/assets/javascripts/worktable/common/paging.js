@@ -50,6 +50,14 @@ Paging = (function() {
     });
   };
 
+  Paging.switchSectionDisplay = function(pageNum) {
+    var className, section;
+    $("#" + Constant.Paging.ROOT_ID).find(".section").css('display', 'none');
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
+    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    return section.css('display', '');
+  };
+
   Paging.createNewPage = function() {
     var beforePageNum, lstorage, self;
     self = this;
@@ -72,7 +80,7 @@ Paging = (function() {
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
           section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           section.css('display', 'none');
-          WorktableCommon.removeAllItem(beforePageNum);
+          Common.removeAllItem(beforePageNum);
           Worktable.initMainContainer();
           Timeline.refreshAllTimeline();
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
@@ -116,7 +124,7 @@ Paging = (function() {
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
           section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           section.css('display', 'none');
-          WorktableCommon.removeAllItem(beforePageNum);
+          Common.removeAllItem(beforePageNum);
           Worktable.initMainContainer();
           Timeline.refreshAllTimeline();
           return self.createPageSelectMenu();

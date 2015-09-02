@@ -28,9 +28,9 @@ class PageValue
       # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
       @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
       # @property [return] インスタンス値
-      @instanceValue = -> @instancePagePrefix() + ':@id' + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
+      @instanceValue = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
       # @property [return] インスタンスキャッシュ値
-      @instanceValueCache = -> @instancePagePrefix() + ':cache:@id' + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
+      @instanceValueCache = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + 'cache' + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
       # @property [String] ITEM_INFO_PREFIX アイテム情報プレフィックス
       @ITEM_INFO_PREFIX = 'iteminfo'
       # @property [String] ITEM_DEFAULT_METHODNAME デフォルトメソッド名
@@ -47,8 +47,6 @@ class PageValue
       @eventPagePrefix = (pn) -> @E_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
       # @property [return] イベント数
       @eventCount = (pn) -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}count"
-      # @property [return] CSSデータ
-      @eventCss = -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix()}#{@PAGE_VALUES_SEPERATOR}css"
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
@@ -422,3 +420,18 @@ class PageValue
   # 現在のページ番号を追加
   @addPagenum = (addNum) ->
     @setPageNum(@getPageNum() + addNum)
+
+  # アイテムのCSSを取得
+  @itemCssOnPage = ->
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix())
+    css = ''
+    for k, v of eventPageValues
+      if k.indexOf(@Key.E_NUM_PREFIX) == 0
+        index = parseInt(k.substring(@Key.E_NUM_PREFIX.length)) - 1
+        objId = v.id
+        instance = PageValue.getInstancePageValue(@Key.instanceValue(objId))
+        if instance.css?
+          css += instance.css
+    return css
+
+

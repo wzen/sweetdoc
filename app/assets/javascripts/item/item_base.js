@@ -102,8 +102,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? PageValue.Key.instanceValueCache() : PageValue.Key.instanceValue();
-    prefix_key = prefix_key.replace('@id', this.id);
+    prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
     return PageValue.getInstancePageValue(prefix_key + (":" + prop));
   };
 
@@ -112,8 +111,7 @@ ItemBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? PageValue.Key.instanceValueCache() : PageValue.Key.instanceValue();
-    prefix_key = prefix_key.replace('@id', this.id);
+    prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
     PageValue.setInstancePageValue(prefix_key + (":" + prop), value);
     return LocalStorage.saveInstancePageValue();
   };

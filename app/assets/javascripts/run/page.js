@@ -2,6 +2,8 @@
 var Page;
 
 Page = (function() {
+  Page.PAGE_CHANGE_SCROLL_DIST = 50;
+
   function Page(eventPageValueList) {
     var eventList;
     this.chapterList = [];
@@ -41,6 +43,7 @@ Page = (function() {
     this.chapterIndex = 0;
     this.doMovePage = false;
     this.finishedAllChapters = false;
+    this.finishedScrollDistSum = 0;
   }
 
   Page.prototype.thisChapter = function() {
@@ -61,10 +64,10 @@ Page = (function() {
 
   Page.prototype.nextChapter = function() {
     this.thisChapter().didChapter();
-    this.chapterIndex += 1;
-    if (this.chapterList.length <= this.chapterIndex) {
+    if (this.chapterList.length <= this.chapterIndex + 1) {
       return this.finishAllChapters();
     } else {
+      this.chapterIndex += 1;
       Navbar.setChapterNum(this.chapterIndex + 1);
       return this.thisChapter().willChapter();
     }
@@ -75,28 +78,50 @@ Page = (function() {
     if (!this.thisChapter().doMoveChapter && this.chapterIndex > 0) {
       this.chapterIndex -= 1;
       this.resetChapter(this.chapterIndex);
+      Navbar.setChapterNum(this.chapterIndex + 1);
     }
     return this.thisChapter().willChapter();
   };
 
   Page.prototype.resetChapter = function(chapterIndex) {
-    return this.chapterList[chapterIndex].reset();
+    this.finishedAllChapters = false;
+    return this.chapterList[chapterIndex].resetAllEvents();
   };
 
   Page.prototype.rewindAllChapters = function() {
     var chapter, i, j, ref;
     for (i = j = ref = this.chapterList.length - 1; j >= 0; i = j += -1) {
       chapter = this.chapterList[i];
-      chapter.reset();
+      chapter.resetAllEvents();
     }
     this.chapterIndex = 0;
+    Navbar.setChapterNum(this.chapterIndex + 1);
     this.finishedAllChapters = false;
     return this.start();
   };
 
   Page.prototype.handleScrollEvent = function(x, y) {
-    if (!this.finishedAllChapters && this.isScrollChapter()) {
-      return this.thisChapter().scrollEvent(x, y);
+    var stopTimer;
+    if (!this.finishedAllChapters) {
+      if (this.isScrollChapter()) {
+        return this.thisChapter().scrollEvent(x, y);
+      }
+    } else {
+      if (stopTimer !== null) {
+        clearTimeout(stopTimer);
+      }
+      stopTimer = setTimeout((function(_this) {
+        return function() {
+          _this.finishedScrollDistSum = 0;
+          clearTimeout(stopTimer);
+          return stopTimer = null;
+        };
+      })(this), 200);
+      this.finishedScrollDistSum += x + y;
+      console.log('finishedScrollDistSum:' + this.finishedScrollDistSum);
+      if (this.finishedScrollDistSum > Page.PAGE_CHANGE_SCROLL_DIST) {
+        return window.eventAction.nextPageIfFinishedAllChapter();
+      }
     }
   };
 
@@ -119,7 +144,7 @@ Page = (function() {
   Page.prototype.willPage = function() {
     this.initChapterEvent();
     this.initFocus();
-    this.thisChapter().reset();
+    this.resetAllChapters();
     Navbar.setChapterMax(this.chapterList.length);
     return LocalStorage.saveValueForRun();
   };
@@ -169,15 +194,16 @@ Page = (function() {
     return results;
   };
 
-  Page.prototype.reset = function() {
+  Page.prototype.resetAllChapters = function() {
     return this.chapterList.forEach(function(chapter) {
-      return chapter.reset();
+      return chapter.resetAllEvents();
     });
   };
 
   Page.prototype.finishAllChapters = function() {
     this.finishedAllChapters = true;
-    return console.log('Finish All Events!');
+    console.log('Finish All Chapters!');
+    return this.sinkFrontAllChapterObj();
   };
 
   return Page;

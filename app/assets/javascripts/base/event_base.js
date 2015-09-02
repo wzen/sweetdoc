@@ -37,7 +37,7 @@ EventBase = (function(superClass) {
     }
   };
 
-  EventBase.prototype.reset = function() {
+  EventBase.prototype.resetEvent = function() {
     this.updateEventBefore();
     this.isFinishedEvent = false;
   };
@@ -277,8 +277,7 @@ EventBase = (function(superClass) {
     if (isCache == null) {
       isCache = false;
     }
-    prefix_key = isCache ? PageValue.Key.instanceValueCache() : PageValue.Key.instanceValue();
-    prefix_key = prefix_key.replace('@id', this.id);
+    prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
     obj = this.getMinimumObject();
     return PageValue.setInstancePageValue(prefix_key, obj);
   };
@@ -313,7 +312,7 @@ ItemEventBase = (function(superClass) {
     var instance, objId;
     ItemEventBase.__super__.initWithEvent.call(this, event);
     objId = event[EventPageValueBase.PageValueKey.ID];
-    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue().replace('@id', objId));
+    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
     this.setMiniumObject(instance);
     return this.reDraw(false);
   };

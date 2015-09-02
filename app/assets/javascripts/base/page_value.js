@@ -43,12 +43,12 @@ PageValue = (function() {
 
       Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
 
-      Key.instanceValue = function() {
-        return this.instancePagePrefix() + ':@id' + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
+      Key.instanceValue = function(objId) {
+        return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
       };
 
-      Key.instanceValueCache = function() {
-        return this.instancePagePrefix() + ':cache:@id' + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
+      Key.instanceValueCache = function(objId) {
+        return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + 'cache' + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
       };
 
       Key.ITEM_INFO_PREFIX = 'iteminfo';
@@ -69,10 +69,6 @@ PageValue = (function() {
 
       Key.eventCount = function(pn) {
         return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
-      };
-
-      Key.eventCss = function() {
-        return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix()) + this.PAGE_VALUES_SEPERATOR + "css";
       };
 
       Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
@@ -496,6 +492,24 @@ PageValue = (function() {
 
   PageValue.addPagenum = function(addNum) {
     return this.setPageNum(this.getPageNum() + addNum);
+  };
+
+  PageValue.itemCssOnPage = function() {
+    var css, eventPageValues, index, instance, k, objId, v;
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix());
+    css = '';
+    for (k in eventPageValues) {
+      v = eventPageValues[k];
+      if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
+        index = parseInt(k.substring(this.Key.E_NUM_PREFIX.length)) - 1;
+        objId = v.id;
+        instance = PageValue.getInstancePageValue(this.Key.instanceValue(objId));
+        if (instance.css != null) {
+          css += instance.css;
+        }
+      }
+    }
+    return css;
   };
 
   return PageValue;

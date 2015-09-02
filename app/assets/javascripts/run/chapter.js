@@ -112,10 +112,10 @@ Chapter = (function() {
     return true;
   };
 
-  Chapter.prototype.reset = function() {
+  Chapter.prototype.resetAllEvents = function() {
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        return e.reset();
+        return e.resetEvent();
       };
     })(this));
   };

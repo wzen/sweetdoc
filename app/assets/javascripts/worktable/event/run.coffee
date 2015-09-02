@@ -3,7 +3,9 @@ run = ->
   # イベント存在チェック
   h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
   if h?
-    Timeline.setupEventCss()
+    # 1ページから
+    PageValue.setPageNum(1)
+
     target = "_runwindow"
     window.open("about:blank", target)
     document.run_form.target = target

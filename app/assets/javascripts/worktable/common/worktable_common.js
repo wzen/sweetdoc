@@ -28,38 +28,6 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.removeAllItem = function(pageNum) {
-    var itemId, k, obj, objId, pageValues, ref, results, v;
-    if (pageNum == null) {
-      pageNum = null;
-    }
-    if (pageNum != null) {
-      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
-      results = [];
-      for (k in pageValues) {
-        obj = pageValues[k];
-        objId = obj.value.id;
-        itemId = obj.value.itemId;
-        if (objId != null) {
-          $("#" + objId).remove();
-          results.push(delete window.instanceMap[objId]);
-        } else {
-          results.push(void 0);
-        }
-      }
-      return results;
-    } else {
-      ref = Common.getCreatedItemObject();
-      for (k in ref) {
-        v = ref[k];
-        if (v.getJQueryElement != null) {
-          v.getJQueryElement().remove();
-        }
-      }
-      return window.instanceMap = {};
-    }
-  };
-
   WorktableCommon.removeAllItemAndEvent = function() {
     var lstorage;
     Sidebar.closeSidebar();

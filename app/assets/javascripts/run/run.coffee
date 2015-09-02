@@ -74,7 +74,7 @@ class Run
     stopTimer = null
 
     scrollHandleWrapper.scroll( ->
-      if eventAction.thisPage().finishedAllChapters || !eventAction.thisPage().isScrollChapter()
+      if !window.eventAction.thisPage().finishedAllChapters && !window.eventAction.thisPage().isScrollChapter()
         return
 
       x = $(@).scrollLeft()
@@ -96,7 +96,7 @@ class Run
       lastTop = y
 
       console.log('distX:' + distX + ' distY:' + distY)
-      eventAction.thisPage().handleScrollEvent(distX, distY)
+      window.eventAction.thisPage().handleScrollEvent(distX, distY)
     )
 
     scrollFinished = ->
@@ -120,6 +120,3 @@ $ ->
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   Run.initMainContainer()
-
-  # CSS
-  $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()))

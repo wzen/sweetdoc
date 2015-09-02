@@ -5,7 +5,7 @@ run = function() {
   var h, target;
   h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
   if (h != null) {
-    Timeline.setupEventCss();
+    PageValue.setPageNum(1);
     target = "_runwindow";
     window.open("about:blank", target);
     document.run_form.target = target;

@@ -30,7 +30,7 @@ class EventBase extends Extend
 
   # リセット(アクション前に戻す)
   # @abstract
-  reset: ->
+  resetEvent: ->
     @updateEventBefore()
     @isFinishedEvent = false
     return
@@ -243,8 +243,7 @@ class EventBase extends Extend
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか
   setItemAllPropToPageValue: (isCache = false)->
-    prefix_key = if isCache then PageValue.Key.instanceValueCache() else PageValue.Key.instanceValue()
-    prefix_key = prefix_key.replace('@id', @id)
+    prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     obj = @getMinimumObject()
     PageValue.setInstancePageValue(prefix_key, obj)
 
@@ -259,7 +258,7 @@ class ItemEventBase extends EventBase
     super(event)
     # インスタンス値設定
     objId = event[EventPageValueBase.PageValueKey.ID]
-    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue().replace('@id', objId))
+    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
     @setMiniumObject(instance)
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え

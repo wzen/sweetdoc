@@ -73,7 +73,7 @@ Run = (function() {
     stopTimer = null;
     scrollHandleWrapper.scroll(function() {
       var distX, distY, x, y;
-      if (eventAction.thisPage().finishedAllChapters || !eventAction.thisPage().isScrollChapter()) {
+      if (!window.eventAction.thisPage().finishedAllChapters && !window.eventAction.thisPage().isScrollChapter()) {
         return;
       }
       x = $(this).scrollLeft();
@@ -95,7 +95,7 @@ Run = (function() {
       lastLeft = x;
       lastTop = y;
       console.log('distX:' + distX + ' distY:' + distY);
-      return eventAction.thisPage().handleScrollEvent(distX, distY);
+      return window.eventAction.thisPage().handleScrollEvent(distX, distY);
     });
     return scrollFinished = function() {};
   };
@@ -117,8 +117,7 @@ $(function() {
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-  Run.initMainContainer();
-  return $('#sup_css').html(PageValue.getEventPageValue(PageValue.Key.eventCss()));
+  return Run.initMainContainer();
 });
 
 //# sourceMappingURL=run.js.map
