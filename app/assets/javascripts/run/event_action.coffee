@@ -67,7 +67,7 @@ class EventAction
     PageValue.setPageNum(afterPageNum)
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
-    Run.initMainContainer()
+    RunCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     @resetPage(afterPageIndex)
 
@@ -89,7 +89,7 @@ class EventAction
       # 隠したビューのアイテムを削除
       Common.removeAllItem(beforePageNum)
 
-      Run.initMainContainer()
+      RunCommon.initMainContainer()
       Timeline.refreshAllTimeline()
 
       # コールバック

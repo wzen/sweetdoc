@@ -6,109 +6,6 @@ Run = (function() {
 
   window.runPage = true;
 
-  Run.initView = function() {
-    var is_reload;
-    $('#contents').css('height', $('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height());
-    $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
-    $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
-    scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
-    scrollInside.width(window.scrollViewSize);
-    scrollInside.height(window.scrollViewSize);
-    scrollInsideCover.width(window.scrollViewSize);
-    scrollInsideCover.height(window.scrollViewSize);
-    scrollHandle.width(window.scrollViewSize);
-    scrollHandle.height(window.scrollViewSize);
-    scrollContents.scrollLeft(scrollInside.width() * 0.5);
-    scrollContents.scrollTop(scrollInside.height() * 0.5);
-    scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
-    scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
-    is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
-    if (is_reload != null) {
-      LocalStorage.loadValueForRun();
-    } else {
-      LocalStorage.saveValueForRun();
-    }
-    return Setting.initConfig();
-  };
-
-  Run.initResize = function(wrap, scrollWrapper) {
-    var resizeTimer;
-    resizeTimer = false;
-    return $(window).resize(function() {
-      if (resizeTimer !== false) {
-        clearTimeout(resizeTimer);
-      }
-      return resizeTimer = setTimeout(function() {
-        var h;
-        h = $(window).height();
-        mainWrapper.height(h);
-        return scrollWrapper.height(h);
-      }, 200);
-    });
-  };
-
-  Run.initEventAction = function() {
-    var eventPageValueList, i, j, page, pageCount, pageList, ref;
-    pageCount = PageValue.getPageCount();
-    pageList = [];
-    for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-      eventPageValueList = PageValue.getEventPageValueSortedListByNum(i);
-      page = new Page(eventPageValueList);
-      pageList.push(page);
-    }
-    Navbar.setPageMax(pageCount);
-    window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1);
-    return window.eventAction.start();
-  };
-
-  Run.initHandleScrollPoint = function() {
-    scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5);
-    return scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5);
-  };
-
-  Run.setupScrollEvent = function() {
-    var lastLeft, lastTop, scrollFinished, stopTimer;
-    lastLeft = scrollHandleWrapper.scrollLeft();
-    lastTop = scrollHandleWrapper.scrollTop();
-    stopTimer = null;
-    scrollHandleWrapper.scroll(function() {
-      var distX, distY, x, y;
-      if (!window.eventAction.thisPage().finishedAllChapters && !window.eventAction.thisPage().isScrollChapter()) {
-        return;
-      }
-      x = $(this).scrollLeft();
-      y = $(this).scrollTop();
-      if (stopTimer !== null) {
-        clearTimeout(stopTimer);
-      }
-      stopTimer = setTimeout((function(_this) {
-        return function() {
-          Run.initHandleScrollPoint();
-          lastLeft = $(_this).scrollLeft();
-          lastTop = $(_this).scrollTop();
-          clearTimeout(stopTimer);
-          return stopTimer = null;
-        };
-      })(this), 100);
-      distX = x - lastLeft;
-      distY = y - lastTop;
-      lastLeft = x;
-      lastTop = y;
-      console.log('distX:' + distX + ' distY:' + distY);
-      return window.eventAction.thisPage().handleScrollEvent(distX, distY);
-    });
-    return scrollFinished = function() {};
-  };
-
-  Run.initMainContainer = function() {
-    CommonVar.runCommonVar();
-    this.initView();
-    this.initHandleScrollPoint();
-    this.initEventAction();
-    this.setupScrollEvent();
-    return Navbar.initRunNavbar();
-  };
-
   return Run;
 
 })();
@@ -117,7 +14,7 @@ $(function() {
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-  return Run.initMainContainer();
+  return RunCommon.initMainContainer();
 });
 
 //# sourceMappingURL=run.js.map

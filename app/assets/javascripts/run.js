@@ -30,6 +30,7 @@
 //= require event_page_value/item/item.js
 //= require navbar/navbar.js
 //= require paging_animation/pageflip
+//= require run/run_common
 //= require run/chapter
 //= require run/scroll_chapter
 //= require run/click_chapter

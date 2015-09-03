@@ -67,7 +67,7 @@ EventAction = (function() {
     section.css('display', '');
     PageValue.setPageNum(afterPageNum);
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
-    Run.initMainContainer();
+    RunCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
     this.resetPage(afterPageIndex);
     $('#sup_css').html(PageValue.itemCssOnPage());
@@ -80,7 +80,7 @@ EventAction = (function() {
       section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
       section.css('display', 'none');
       Common.removeAllItem(beforePageNum);
-      Run.initMainContainer();
+      RunCommon.initMainContainer();
       Timeline.refreshAllTimeline();
       if (callback != null) {
         return callback();
