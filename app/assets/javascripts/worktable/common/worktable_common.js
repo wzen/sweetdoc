@@ -134,6 +134,19 @@ WorktableCommon = (function() {
     return Setting.initConfig();
   };
 
+  WorktableCommon.recreateMainContainer = function() {
+    this.removeAllItemAndEvent();
+    $('#pages .section').remove();
+    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+    WorktableCommon.initMainContainer();
+    LocalStorage.clearWorktableWithoutSetting();
+    Timeline.refreshAllTimeline();
+    PageValue.setPageNum(1);
+    OperationHistory.add(true);
+    PageValue.updatePageCount();
+    return Paging.initPaging();
+  };
+
   WorktableCommon.setupContextMenu = function(element, contextSelector, menu) {
     return element.contextmenu({
       preventContextMenuForPopup: true,

@@ -15,8 +15,6 @@ class WorktableCommon
     # 設定
     $(target).append("<div class=#{className} />")
 
-
-
   # 全ての選択枠を外す
   @clearSelectedBorder = ->
     $('.editSelected, .timelineSelected').remove()
@@ -120,6 +118,29 @@ class WorktableCommon
     )
     # 共通設定
     Setting.initConfig()
+
+  # Mainコンテナ再作成
+  @recreateMainContainer: ->
+    # アイテムを全消去
+    @removeAllItemAndEvent()
+    # ページを全消去
+    $('#pages .section').remove()
+    # Mainコンテナ作成
+    Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+    # コンテナ初期化
+    WorktableCommon.initMainContainer()
+    # キャッシュ削除
+    LocalStorage.clearWorktableWithoutSetting()
+    # タイムライン更新
+    Timeline.refreshAllTimeline()
+    # ページ数初期化
+    PageValue.setPageNum(1)
+    # 履歴に画面初期時を状態を保存
+    OperationHistory.add(true)
+    # ページ総数更新
+    PageValue.updatePageCount()
+    # ページング
+    Paging.initPaging()
 
   # コンテキストメニュー初期化
   # @param [String] elementID HTML要素ID

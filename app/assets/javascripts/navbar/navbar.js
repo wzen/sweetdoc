@@ -10,8 +10,7 @@ Navbar = (function() {
     $('.menu-newcreate', fileMenuEmt).on('click', function() {
       if (Object.keys(window.instanceMap).length > 0) {
         if (window.confirm('作成中のアイテムは全て削除されます。')) {
-          WorktableCommon.removeAllItemAndEventPageValue();
-          return LocalStorage.clearWorktableWithoutSetting();
+          return WorktableCommon.recreateMainContainer();
         }
       }
     });

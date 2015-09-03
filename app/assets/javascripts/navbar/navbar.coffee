@@ -6,8 +6,7 @@ class Navbar
     $('.menu-newcreate', fileMenuEmt).on('click', ->
       if Object.keys(window.instanceMap).length > 0
         if window.confirm('作成中のアイテムは全て削除されます。')
-          WorktableCommon.removeAllItemAndEventPageValue()
-          LocalStorage.clearWorktableWithoutSetting()
+          WorktableCommon.recreateMainContainer()
     )
     $('.menu-load', fileMenuEmt).off('mouseenter')
     $('.menu-load', fileMenuEmt).on('mouseenter', ->
