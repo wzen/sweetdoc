@@ -55,7 +55,7 @@ Handwrite = (function() {
         item.restoreAllDrawingSurface();
         item.endDraw(zindex);
         item.setupDragAndResizeEvents();
-        WorktableCommon.changeMode(Constant.Mode.EDIT);
+        WorktableCommon.changeMode(Constant.Mode.DRAW);
         item.saveObj(true);
         return zindex += 1;
       }

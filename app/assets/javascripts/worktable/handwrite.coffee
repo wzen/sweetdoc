@@ -56,7 +56,7 @@ class Handwrite
         item.restoreAllDrawingSurface()
         item.endDraw(zindex)
         item.setupDragAndResizeEvents()
-        WorktableCommon.changeMode(Constant.Mode.EDIT)
+        WorktableCommon.changeMode(Constant.Mode.DRAW)
         item.saveObj(true)
         zindex += 1
 
@@ -88,7 +88,7 @@ class Handwrite
             e.preventDefault()
             mouseDownDrawing(loc)
           else if mode == Constant.Mode.OPTION
-      # サイドバーを閉じる
+            # サイドバーを閉じる
             Sidebar.closeSidebar()
             WorktableCommon.changeMode(Constant.Mode.EDIT)
 
