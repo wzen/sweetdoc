@@ -74,6 +74,27 @@ class WorktableCommon
             OperationHistory.undo()
     )
 
+  # 画面の高さ設定
+  @setupWindowHeight = ->
+    borderWidth = 5
+    timelineTopPadding = 5
+    padding = borderWidth * 2 + timelineTopPadding
+    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
+    $(window.drawingCanvas).attr('width', window.mainWrapper.width())
+    $(window.drawingCanvas).attr('height', window.mainWrapper.height())
+
+  # ウィンドウリサイズイベント
+  @initResize = ->
+    resizeTimer = false;
+    $(window).resize( ->
+      if resizeTimer != false
+        clearTimeout(resizeTimer)
+      resizeTimer = setTimeout( ->
+        WorktableCommon.setupWindowHeight()
+        clearTimeout(resizeTimer)
+      , 200)
+    )
+
   # 画面のアイテムをクリア
   @clearWorkTable = ->
     for k, v of Common.getCreatedItemObject()
@@ -86,15 +107,8 @@ class WorktableCommon
   @initMainContainer = ->
     # 定数 & レイアウト & イベント系変数の初期化
     CommonVar.worktableCommonVar()
-
-    #Wrapper & Canvasサイズ
-    borderWidth = 5
-    timelineTopPadding = 5
-    padding = borderWidth * 2 + timelineTopPadding
-    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
+    @setupWindowHeight()
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
-    $(window.drawingCanvas).attr('width', window.mainWrapper.width())
-    $(window.drawingCanvas).attr('height', window.mainWrapper.height())
     # スクロールサイズ
     scrollInside.width(window.scrollViewSize)
     scrollInside.height(window.scrollViewSize)

@@ -6,9 +6,7 @@ RunCommon = (function() {
 
   RunCommon.initView = function() {
     var is_reload;
-    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - 10);
-    $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
-    $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
+    this.setupWindowHeight();
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollInside.width(window.scrollViewSize);
     scrollInside.height(window.scrollViewSize);
@@ -29,7 +27,15 @@ RunCommon = (function() {
     return Setting.initConfig();
   };
 
-  RunCommon.initResize = function(wrap, scrollWrapper) {
+  RunCommon.setupWindowHeight = function() {
+    var padding;
+    padding = 5 * 2;
+    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - padding);
+    $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
+    return $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
+  };
+
+  RunCommon.initResize = function() {
     var resizeTimer;
     resizeTimer = false;
     return $(window).resize(function() {
@@ -37,10 +43,8 @@ RunCommon = (function() {
         clearTimeout(resizeTimer);
       }
       return resizeTimer = setTimeout(function() {
-        var h;
-        h = $(window).height();
-        mainWrapper.height(h);
-        return scrollWrapper.height(h);
+        RunCommon.setupWindowHeight();
+        return clearTimeout(resizeTimer);
       }, 200);
     });
   };
@@ -175,6 +179,7 @@ RunCommon = (function() {
     CommonVar.runCommonVar();
     this.initView();
     this.initHandleScrollPoint();
+    this.initResize();
     this.setupScrollEvent();
     return Navbar.initRunNavbar();
   };

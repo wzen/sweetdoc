@@ -22,6 +22,8 @@ $ ->
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   WorktableCommon.initMainContainer()
+  # リサイズイベント
+  WorktableCommon.initResize()
 
   _callback = ->
     # 履歴に画面初期時を状態を保存

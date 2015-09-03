@@ -83,6 +83,30 @@ WorktableCommon = (function() {
     });
   };
 
+  WorktableCommon.setupWindowHeight = function() {
+    var borderWidth, padding, timelineTopPadding;
+    borderWidth = 5;
+    timelineTopPadding = 5;
+    padding = borderWidth * 2 + timelineTopPadding;
+    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    $(window.drawingCanvas).attr('width', window.mainWrapper.width());
+    return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
+  };
+
+  WorktableCommon.initResize = function() {
+    var resizeTimer;
+    resizeTimer = false;
+    return $(window).resize(function() {
+      if (resizeTimer !== false) {
+        clearTimeout(resizeTimer);
+      }
+      return resizeTimer = setTimeout(function() {
+        WorktableCommon.setupWindowHeight();
+        return clearTimeout(resizeTimer);
+      }, 200);
+    });
+  };
+
   WorktableCommon.clearWorkTable = function() {
     var k, ref, results, v;
     ref = Common.getCreatedItemObject();
@@ -100,15 +124,10 @@ WorktableCommon = (function() {
   WorktableCommon.runDebug = function() {};
 
   WorktableCommon.initMainContainer = function() {
-    var borderWidth, menu, padding, page, timelineTopPadding;
+    var menu, page;
     CommonVar.worktableCommonVar();
-    borderWidth = 5;
-    timelineTopPadding = 5;
-    padding = borderWidth * 2 + timelineTopPadding;
-    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    this.setupWindowHeight();
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
-    $(window.drawingCanvas).attr('width', window.mainWrapper.width());
-    $(window.drawingCanvas).attr('height', window.mainWrapper.height());
     scrollInside.width(window.scrollViewSize);
     scrollInside.height(window.scrollViewSize);
     scrollContents.scrollLeft(scrollInside.width() * 0.5);

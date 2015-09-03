@@ -2,9 +2,7 @@ class RunCommon
 
   # 画面初期化
   @initView = ->
-    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - 10)
-    $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
-    $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
+    @setupWindowHeight()
     # 暫定でスクロールを上に持ってくる
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
 
@@ -31,15 +29,22 @@ class RunCommon
     # 共通設定
     Setting.initConfig()
 
-  @initResize = (wrap, scrollWrapper) ->
+  # ウィンドウの高さ設定
+  @setupWindowHeight = ->
+    padding = 5 * 2
+    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - padding)
+    $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
+    $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
+
+  # ウィンドウリサイズイベント
+  @initResize = ->
     resizeTimer = false;
     $(window).resize( ->
       if resizeTimer != false
         clearTimeout(resizeTimer)
       resizeTimer = setTimeout( ->
-        h = $(window).height()
-        mainWrapper.height(h)
-        scrollWrapper.height(h)
+        RunCommon.setupWindowHeight()
+        clearTimeout(resizeTimer)
       , 200)
     )
 
@@ -157,7 +162,6 @@ class RunCommon
     CommonVar.runCommonVar()
     @initView()
     @initHandleScrollPoint()
-    #@initResize(wrap, scrollWrapper)
-    #@initEventAction()
+    @initResize()
     @setupScrollEvent()
     Navbar.initRunNavbar()

@@ -24,6 +24,7 @@ $(function() {
   CommonVar.initCommonVar();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   WorktableCommon.initMainContainer();
+  WorktableCommon.initResize();
   _callback = function() {
     OperationHistory.add(true);
     PageValue.updatePageCount();
