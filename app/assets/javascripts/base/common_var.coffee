@@ -4,6 +4,7 @@ class CommonVar
   @initVarWhenLoadedView = ->
     window.instanceMap = {}
     window.itemInitFuncList = []
+    window.debug = true
 
   # 共有変数初期化
   @initCommonVar = ->

@@ -254,9 +254,6 @@ class PageValue
         if giveName
           name = "name = #{kyName}"
 
-        if ky == 'w'
-          console.log(val)
-
         return "<input type='hidden' class='#{ky}' value='#{val}' #{name} />"
 
       ret = ""
@@ -400,8 +397,8 @@ class PageValue
 
   # 現在のページ番号を取得
   @getPageNum = ->
-    if window.pn?
-      return window.pn
+#    if window.pn?
+#      return window.pn
 
     ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
     if ret?
@@ -410,12 +407,12 @@ class PageValue
       ret = 1
       @setPageNum(ret)
 
-    window.pn = ret
+    #window.pn = ret
     return ret
 
   # 現在のページ番号を設定
   @setPageNum = (num) ->
-    window.pn = null
+    #window.pn = null
     PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
 
   # 現在のページ番号を追加

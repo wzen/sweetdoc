@@ -103,6 +103,15 @@ LocalStorage = (function() {
     return lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
   };
 
+  LocalStorage.clearRun = function() {
+    var lstorage;
+    lstorage = localStorage;
+    lstorage.removeItem(this.Key.RUN_GENERAL_PAGEVALUES);
+    lstorage.removeItem(this.Key.RUN_INSTANCE_PAGEVALUES);
+    lstorage.removeItem(this.Key.RUN_EVENT_PAGEVALUES);
+    return lstorage.removeItem(this.Key.RUN_SETTING_PAGEVALUES);
+  };
+
   LocalStorage.saveGeneralPageValue = function(isRun) {
     var h, key, lstorage;
     if (isRun == null) {

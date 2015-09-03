@@ -367,7 +367,8 @@ class ArrowItem extends CanvasItemBase
   # 座標のログを表示
   # @private
   _coodLog = (cood, name) ->
-    console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
+    if window.debug
+      console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
 
 window.loadedClassList.ArrowItem = ArrowItem
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
@@ -434,4 +435,5 @@ if window.worktablePage?
 if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
   window.itemInitFuncList.arrowInit = (option = {}) ->
     #JS読み込み完了後の処理
-    console.log('arrow loaded')
+    if window.debug
+      console.log('arrow loaded')

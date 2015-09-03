@@ -93,7 +93,9 @@ ItemBase = (function(superClass) {
     this.setItemAllPropToPageValue();
     LocalStorage.saveValueForWorktable();
     OperationHistory.add();
-    console.log('save obj:' + JSON.stringify(this.itemSize));
+    if (window.debug) {
+      console.log('save obj');
+    }
     return Timeline.updateSelectItemMenu();
   };
 
@@ -287,7 +289,9 @@ CanvasItemBase = (function(superClass) {
     canvas.attr('width', element.width());
     canvas.attr('height', element.height());
     drawingContext.scale(this.scale.w, this.scale.h);
-    return console.log("setScale: itemSize: " + (JSON.stringify(this.itemSize)));
+    if (window.debug) {
+      return console.log("setScale: itemSize: " + (JSON.stringify(this.itemSize)));
+    }
   };
 
   CanvasItemBase.prototype.initCanvas = function() {

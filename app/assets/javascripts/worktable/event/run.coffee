@@ -3,8 +3,8 @@ run = ->
   # イベント存在チェック
   h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
   if h?
-    # 1ページから
-    PageValue.setPageNum(1)
+    # Runのキャッシュを削除
+    LocalStorage.clearRun()
 
     target = "_runwindow"
     window.open("about:blank", target)

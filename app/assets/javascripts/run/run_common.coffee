@@ -94,7 +94,7 @@ class RunCommon
       lastLeft = x
       lastTop = y
 
-      console.log('distX:' + distX + ' distY:' + distY)
+      #console.log('distX:' + distX + ' distY:' + distY)
       window.eventAction.thisPage().handleScrollEvent(distX, distY)
     )
 

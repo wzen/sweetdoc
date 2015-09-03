@@ -99,7 +99,8 @@ class ItemBase extends ItemEventBase
     LocalStorage.saveValueForWorktable()
     # 操作履歴に保存
     OperationHistory.add()
-    console.log('save obj:' + JSON.stringify(@itemSize))
+    if window.debug
+      console.log('save obj')
 
     # イベントの選択項目更新
     # fixme: 実行場所について再考
@@ -292,7 +293,8 @@ class CanvasItemBase extends ItemBase
     canvas.attr('height', element.height())
     # キャンパスの伸縮
     drawingContext.scale(@scale.w, @scale.h)
-    console.log("setScale: itemSize: #{JSON.stringify(@itemSize)}")
+    if window.debug
+      console.log("setScale: itemSize: #{JSON.stringify(@itemSize)}")
 
   # キャンパス初期化処理
   initCanvas: ->

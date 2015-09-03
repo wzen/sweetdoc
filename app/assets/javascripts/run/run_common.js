@@ -95,7 +95,6 @@ RunCommon = (function() {
       distY = y - lastTop;
       lastLeft = x;
       lastTop = y;
-      console.log('distX:' + distX + ' distY:' + distY);
       return window.eventAction.thisPage().handleScrollEvent(distX, distY);
     });
   };

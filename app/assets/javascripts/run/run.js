@@ -14,6 +14,7 @@ $(function() {
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
   window.eventAction = null;
+  PageValue.setPageNum(1);
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   RunCommon.initMainContainer();
   return RunCommon.initEventAction();

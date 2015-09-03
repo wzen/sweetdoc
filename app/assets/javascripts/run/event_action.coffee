@@ -41,7 +41,8 @@ class EventAction
           # Pageインスタンス作成
           eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
           @pageList[@pageIndex] = new Page(eventPageValueList)
-          console.log('created page instance')
+          if window.debug
+            console.log('[nextPage] created page instance')
         @changePaging(beforePageIndex, @pageIndex, =>
         )
       )
@@ -58,7 +59,8 @@ class EventAction
           # Pageインスタンス作成
           eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
           @pageList[@pageIndex] = new Page(eventPageValueList)
-          console.log('created page instance')
+          if window.debug
+            console.log('[rewindPage] created page instance')
         @changePaging(beforePageIndex, @pageIndex, =>
         )
       )
@@ -72,9 +74,14 @@ class EventAction
   changePaging: (beforePageIndex, afterPageIndex, callback = null) ->
     beforePageNum = beforePageIndex + 1
     afterPageNum = afterPageIndex + 1
+    if window.debug
+      console.log('[changePaging] beforePageNum:' + beforePageNum)
+      console.log('[changePaging] afterPageNum:' + afterPageNum)
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
     section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
     section.css('display', '')
+    if window.debug
+      console.log('[changePaging] show page:' + afterPageNum)
     Navbar.setPageNum(afterPageNum)
     PageValue.setPageNum(afterPageNum)
     # Mainコンテナ作成

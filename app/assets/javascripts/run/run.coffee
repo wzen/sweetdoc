@@ -8,6 +8,8 @@ $ ->
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
   window.eventAction = null
+  # 1ページ目から
+  PageValue.setPageNum(1)
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化

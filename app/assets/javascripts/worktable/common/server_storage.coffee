@@ -58,9 +58,11 @@ class ServerStorage
             #PageValue.clearAllUpdateFlg()
             # 「Load」マウスオーバーで取得させるためupdateフラグを消去
             $("##{Constant.ElementAttribute.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.FILE_LOAD_CLASS} .#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
-            console.log(data.message)
+            if window.debug
+              console.log(data.message)
           error: (data) ->
-            console.log(data.message)
+            if window.debug
+              console.log(data.message)
         }
       )
 
@@ -134,7 +136,8 @@ class ServerStorage
           )
 
         error: (data) ->
-          console.log(data.message)
+          if window.debug
+            console.log(data.message)
       }
     )
 
@@ -146,7 +149,8 @@ class ServerStorage
       if loadedLocalTime?
         diffTime = Common.diffTime($.now(), parseInt(loadedLocalTime.val()))
         s = diffTime.seconds
-        console.log('loadedLocalTime diff ' + s)
+        if window.debug
+          console.log('loadedLocalTime diff ' + s)
         if parseInt(s) <= @LOAD_LIST_INTERVAL_SECONDS
           # 読み込んでX秒以内ならロードしない
           return
@@ -186,7 +190,8 @@ class ServerStorage
             loadEmt.children().remove()
             $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt)
         error: (data)->
-          console.log(data.responseText)
+          if window.debug
+            console.log(data.responseText)
           loadEmt.children().remove()
           $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt)
       }

@@ -167,27 +167,26 @@ Page = (function() {
   };
 
   Page.prototype.initFocus = function() {
-    var chapter, event, j, len, ref, results;
+    var chapter, event, flg, j, k, len, len1, ref, ref1;
+    flg = false;
     ref = this.chapterList;
-    results = [];
     for (j = 0, len = ref.length; j < len; j++) {
       chapter = ref[j];
-      results.push((function() {
-        var k, len1, ref1, results1;
-        ref1 = chapter.eventList;
-        results1 = [];
-        for (k = 0, len1 = ref1.length; k < len1; k++) {
-          event = ref1[k];
-          if (!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-            results1.push(chapter.focusToActorIfNeed(true));
-          } else {
-            results1.push(void 0);
-          }
+      if (flg) {
+        return false;
+      }
+      ref1 = chapter.eventList;
+      for (k = 0, len1 = ref1.length; k < len1; k++) {
+        event = ref1[k];
+        if (flg) {
+          return false;
         }
-        return results1;
-      })());
+        if (!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+          chapter.focusToActorIfNeed(true);
+          flg = true;
+        }
+      }
     }
-    return results;
   };
 
   Page.prototype.resetAllChapters = function() {
@@ -198,7 +197,9 @@ Page = (function() {
 
   Page.prototype.finishAllChapters = function() {
     this.finishedAllChapters = true;
-    console.log('Finish All Chapters!');
+    if (window.debug) {
+      console.log('Finish All Chapters!');
+    }
     return this.sinkFrontAllChapterObj();
   };
 

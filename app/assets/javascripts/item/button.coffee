@@ -330,7 +330,8 @@ if window.worktablePage?
 if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
   window.itemInitFuncList.buttonInit = (option = {}) ->
     #JS読み込み完了
-    console.log('button loaded')
+    if window.debug
+      console.log('button loaded')
 
     if option.isWorkTable?
       # ワークテーブルの初期化処理

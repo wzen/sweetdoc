@@ -71,10 +71,14 @@ ServerStorage = (function() {
         dataType: "json",
         success: function(data) {
           $("#" + Constant.ElementAttribute.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS + " ." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
-          return console.log(data.message);
+          if (window.debug) {
+            return console.log(data.message);
+          }
         },
         error: function(data) {
-          return console.log(data.message);
+          if (window.debug) {
+            return console.log(data.message);
+          }
         }
       });
     }
@@ -158,7 +162,9 @@ ServerStorage = (function() {
         });
       },
       error: function(data) {
-        return console.log(data.message);
+        if (window.debug) {
+          return console.log(data.message);
+        }
       }
     });
   };
@@ -172,7 +178,9 @@ ServerStorage = (function() {
       if (loadedLocalTime != null) {
         diffTime = Common.diffTime($.now(), parseInt(loadedLocalTime.val()));
         s = diffTime.seconds;
-        console.log('loadedLocalTime diff ' + s);
+        if (window.debug) {
+          console.log('loadedLocalTime diff ' + s);
+        }
         if (parseInt(s) <= this.LOAD_LIST_INTERVAL_SECONDS) {
           return;
         }
@@ -213,7 +221,9 @@ ServerStorage = (function() {
         }
       },
       error: function(data) {
-        console.log(data.responseText);
+        if (window.debug) {
+          console.log(data.responseText);
+        }
         loadEmt.children().remove();
         return $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt);
       }

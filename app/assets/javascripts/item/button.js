@@ -331,7 +331,9 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == 
     if (option == null) {
       option = {};
     }
-    console.log('button loaded');
+    if (window.debug) {
+      console.log('button loaded');
+    }
     if (option.isWorkTable != null) {
       css_temp = option.css_temp;
       if (css_temp != null) {

@@ -364,7 +364,9 @@ ArrowItem = (function(superClass) {
   };
 
   _coodLog = function(cood, name) {
-    return console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y);
+    if (window.debug) {
+      return console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y);
+    }
   };
 
   return ArrowItem;
@@ -456,7 +458,9 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == n
     if (option == null) {
       option = {};
     }
-    return console.log('arrow loaded');
+    if (window.debug) {
+      return console.log('arrow loaded');
+    }
   };
 }
 

@@ -62,10 +62,16 @@ Paging = (function() {
     var beforePageNum, self;
     self = this;
     beforePageNum = PageValue.getPageNum();
+    if (window.debug) {
+      console.log('[createNewPage] beforePageNum:' + beforePageNum);
+    }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
     EventConfig.removeAllConfig();
     PageValue.setPageNum(PageValue.getPageCount() + 1);
+    if (window.debug) {
+      console.log('[createNewPage createdPageNum:' + PageValue.getPageCount() + 1);
+    }
     Common.createdMainContainerIfNeeded(PageValue.getPageNum());
     WorktableCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
@@ -83,6 +89,7 @@ Paging = (function() {
           Timeline.refreshAllTimeline();
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
           PageValue.updatePageCount();
+          LocalStorage.saveValueForWorktable();
           return self.createPageSelectMenu();
         });
       };
@@ -90,15 +97,25 @@ Paging = (function() {
   };
 
   Paging.selectPage = function(selectedNum) {
-    var beforePageNum, className, pageCount, section, self;
+    var beforePageNum, className, direction, pageCount, section, self;
+    if (window.debug) {
+      console.log('[selectPage] selectedNum:' + selectedNum);
+    }
     self = this;
     if (selectedNum <= 0) {
       return;
     }
-    beforePageNum = PageValue.getPageNum();
     pageCount = PageValue.getPageCount();
     if (selectedNum < 0 || selectedNum > pageCount) {
       return;
+    }
+    beforePageNum = PageValue.getPageNum();
+    if (window.debug) {
+      console.log('[selectPage] beforePageNum:' + beforePageNum);
+    }
+    direction = beforePageNum < selectedNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
+    if (window.debug) {
+      console.log('[selectPage] direction:' + direction);
     }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
@@ -107,21 +124,35 @@ Paging = (function() {
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum);
     section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
     section.css('display', '');
+    if (direction === PageFlip.DIRECTION.FORWARD) {
+      section.css('width', '');
+    } else if (direction === PageFlip.DIRECTION.BACK) {
+      section.css('width', '0');
+    }
+    if (window.debug) {
+      console.log('[selectPage] show pageNum:' + selectedNum);
+    }
     PageValue.setPageNum(selectedNum);
     WorktableCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
     return WorktableCommon.drawAllItemFromEventPageValue((function(_this) {
       return function() {
-        var direction, pageFlip, pn;
-        direction = beforePageNum < PageValue.getPageNum() ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
+        var pageFlip, pn;
         pn = beforePageNum < PageValue.getPageNum() ? beforePageNum : PageValue.getPageNum();
+        if (window.debug) {
+          console.log('[selectPage] pn:' + pn);
+        }
         pageFlip = new PageFlip(pn);
         return pageFlip.startRender(direction, function() {
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
           section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           section.css('display', 'none');
+          if (window.debug) {
+            console.log('[selectPage] deleted pageNum:' + beforePageNum);
+          }
           Common.removeAllItem(beforePageNum);
           Timeline.refreshAllTimeline();
+          LocalStorage.saveValueForWorktable();
           return self.createPageSelectMenu();
         });
       };

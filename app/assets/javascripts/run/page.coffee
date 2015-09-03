@@ -150,10 +150,16 @@ class Page
 
   # チャプターのフォーカス初期化
   initFocus: ->
+    flg = false
     for chapter in @chapterList
+      if flg
+        return false
       for event in chapter.eventList
+        if flg
+          return false
         if !event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
           chapter.focusToActorIfNeed(true)
+          flg = true
 
   # 全てのチャプター内容をリセット
   resetAllChapters: ->
@@ -164,7 +170,8 @@ class Page
   # イベント終了イベント
   finishAllChapters: ->
     @finishedAllChapters = true
-    console.log('Finish All Chapters!')
+    if window.debug
+      console.log('Finish All Chapters!')
 
     # ページ移動のためのスクロールイベントを取るようにする
     @sinkFrontAllChapterObj()

@@ -176,7 +176,7 @@ class EventBase extends Extend
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
-    console.log("y:#{y}")
+    #console.log("y:#{y}")
     if y >= 0
       @scrollValue += parseInt((y + 9) / 10)
     else

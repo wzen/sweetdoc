@@ -206,7 +206,6 @@ EventBase = (function(superClass) {
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    console.log("y:" + y);
     if (y >= 0) {
       this.scrollValue += parseInt((y + 9) / 10);
     } else {

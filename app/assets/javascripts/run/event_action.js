@@ -42,7 +42,9 @@ EventAction = (function() {
           if (_this.thisPage() === null) {
             eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
             _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
-            console.log('created page instance');
+            if (window.debug) {
+              console.log('[nextPage] created page instance');
+            }
           }
           return _this.changePaging(beforePageIndex, _this.pageIndex, function() {});
         };
@@ -62,7 +64,9 @@ EventAction = (function() {
           if (_this.thisPage() === null) {
             eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
             _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
-            console.log('created page instance');
+            if (window.debug) {
+              console.log('[rewindPage] created page instance');
+            }
           }
           return _this.changePaging(beforePageIndex, _this.pageIndex, function() {});
         };
@@ -80,9 +84,16 @@ EventAction = (function() {
     }
     beforePageNum = beforePageIndex + 1;
     afterPageNum = afterPageIndex + 1;
+    if (window.debug) {
+      console.log('[changePaging] beforePageNum:' + beforePageNum);
+      console.log('[changePaging] afterPageNum:' + afterPageNum);
+    }
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
     section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
     section.css('display', '');
+    if (window.debug) {
+      console.log('[changePaging] show page:' + afterPageNum);
+    }
     Navbar.setPageNum(afterPageNum);
     PageValue.setPageNum(afterPageNum);
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);

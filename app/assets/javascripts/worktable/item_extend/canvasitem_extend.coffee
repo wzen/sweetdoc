@@ -15,7 +15,8 @@ WorkTableCanvasItemExtend =
     element = $('#' + @id)
     @itemSize.x = element.position().left
     @itemSize.y = element.position().top
-    console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
+    if window.debug
+      console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
 
   # ドラッグ完了時イベント
   dragComplete: ->
@@ -33,7 +34,8 @@ WorkTableCanvasItemExtend =
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.scale(@scale.w, @scale.h)
     @drawNewCanvas()
-    console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
+    if window.debug
+      console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
 
   # リサイズ完了時イベント
   resizeComplete: ->
@@ -48,7 +50,8 @@ WorkTableCanvasItemExtend =
       itemSize: Common.makeClone(@itemSize)
       scale: Common.makeClone(@scale)
     }
-    console.log("getHistory: scale:#{@scale.w},#{@scale.h}")
+    if window.debug
+      console.log("getHistory: scale:#{@scale.w},#{@scale.h}")
     return obj
 
   # 履歴データを設定
@@ -56,4 +59,5 @@ WorkTableCanvasItemExtend =
   setHistoryObj: (historyObj) ->
     @itemSize = Common.makeClone(historyObj.itemSize)
     @scale = Common.makeClone(historyObj.scale)
-    console.log("setHistoryObj: itemSize: #{JSON.stringify(@itemSize)}")
+    if window.debug
+      console.log("setHistoryObj: itemSize: #{JSON.stringify(@itemSize)}")

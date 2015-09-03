@@ -76,6 +76,12 @@ class LocalStorage
     lstorage = localStorage
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+  @clearRun: ->
+    lstorage = localStorage
+    lstorage.removeItem(@Key.RUN_GENERAL_PAGEVALUES)
+    lstorage.removeItem(@Key.RUN_INSTANCE_PAGEVALUES)
+    lstorage.removeItem(@Key.RUN_EVENT_PAGEVALUES)
+    lstorage.removeItem(@Key.RUN_SETTING_PAGEVALUES)
 
   # ストレージに共通設定値を保存
   @saveGeneralPageValue: (isRun = false) ->

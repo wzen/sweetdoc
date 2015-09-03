@@ -309,9 +309,6 @@ PageValue = (function() {
         if (giveName) {
           name = "name = " + kyName;
         }
-        if (ky === 'w') {
-          console.log(val);
-        }
         return "<input type='hidden' class='" + ky + "' value='" + val + "' " + name + " />";
       }
       ret = "";
@@ -478,9 +475,6 @@ PageValue = (function() {
 
   PageValue.getPageNum = function() {
     var ret;
-    if (window.pn != null) {
-      return window.pn;
-    }
     ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM);
     if (ret != null) {
       ret = parseInt(ret);
@@ -488,12 +482,10 @@ PageValue = (function() {
       ret = 1;
       this.setPageNum(ret);
     }
-    window.pn = ret;
     return ret;
   };
 
   PageValue.setPageNum = function(num) {
-    window.pn = null;
     return PageValue.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM, parseInt(num));
   };
 

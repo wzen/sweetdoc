@@ -17,7 +17,9 @@ WorkTableCanvasItemExtend = {
     element = $('#' + this.id);
     this.itemSize.x = element.position().left;
     this.itemSize.y = element.position().top;
-    return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
+    if (window.debug) {
+      return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
+    }
   },
   dragComplete: function() {
     return this.saveObj();
@@ -34,7 +36,9 @@ WorkTableCanvasItemExtend = {
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.scale(this.scale.w, this.scale.h);
     this.drawNewCanvas();
-    return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
+    if (window.debug) {
+      return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
+    }
   },
   resizeComplete: function() {
     return this.saveObj();
@@ -47,13 +51,17 @@ WorkTableCanvasItemExtend = {
       itemSize: Common.makeClone(this.itemSize),
       scale: Common.makeClone(this.scale)
     };
-    console.log("getHistory: scale:" + this.scale.w + "," + this.scale.h);
+    if (window.debug) {
+      console.log("getHistory: scale:" + this.scale.w + "," + this.scale.h);
+    }
     return obj;
   },
   setHistoryObj: function(historyObj) {
     this.itemSize = Common.makeClone(historyObj.itemSize);
     this.scale = Common.makeClone(historyObj.scale);
-    return console.log("setHistoryObj: itemSize: " + (JSON.stringify(this.itemSize)));
+    if (window.debug) {
+      return console.log("setHistoryObj: itemSize: " + (JSON.stringify(this.itemSize)));
+    }
   }
 };
 

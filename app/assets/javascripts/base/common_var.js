@@ -6,7 +6,8 @@ CommonVar = (function() {
 
   CommonVar.initVarWhenLoadedView = function() {
     window.instanceMap = {};
-    return window.itemInitFuncList = [];
+    window.itemInitFuncList = [];
+    return window.debug = true;
   };
 
   CommonVar.initCommonVar = function() {
