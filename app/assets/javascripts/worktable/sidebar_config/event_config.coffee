@@ -62,12 +62,12 @@ class EventConfig
         @itemId = splitValues[1]
 
     # 選択枠消去
-    Worktable.clearSelectedBorder()
+    WorktableCommon.clearSelectedBorder()
 
     if !@isCommonEvent
       vEmt = $('#' + @id)
       # 選択枠設定
-      Worktable.setSelectedBorder(vEmt, 'timeline')
+      WorktableCommon.setSelectedBorder(vEmt, 'timeline')
       # フォーカス
       Common.focusToTarget(vEmt)
 

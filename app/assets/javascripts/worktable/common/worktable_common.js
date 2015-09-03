@@ -4,6 +4,136 @@ var WorktableCommon;
 WorktableCommon = (function() {
   function WorktableCommon() {}
 
+  WorktableCommon.setSelectedBorder = function(target, selectedBorderType) {
+    var className;
+    if (selectedBorderType == null) {
+      selectedBorderType = "edit";
+    }
+    className = null;
+    if (selectedBorderType === "edit") {
+      className = 'editSelected';
+    } else if (selectedBorderType === "timeline") {
+      className = 'timelineSelected';
+    }
+    $(target).find("." + className).remove();
+    return $(target).append("<div class=" + className + " />");
+  };
+
+  WorktableCommon.clearSelectedBorder = function() {
+    return $('.editSelected, .timelineSelected').remove();
+  };
+
+  WorktableCommon.getInitFuncName = function(itemId) {
+    var itemName;
+    itemName = Constant.ITEM_PATH_LIST[itemId];
+    return itemName + "Init";
+  };
+
+  WorktableCommon.changeMode = function(mode) {
+    if (mode === Constant.Mode.DRAW) {
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+    } else if (mode === Constant.Mode.EDIT) {
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
+    } else if (mode === Constant.Mode.OPTION) {
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+    }
+    return window.mode = mode;
+  };
+
+  WorktableCommon.clearAllItemStyle = function() {
+    var k, ref, v;
+    ref = Common.getCreatedItemObject();
+    for (k in ref) {
+      v = ref[k];
+      if (v instanceof ItemBase) {
+        v.clearAllEventStyle();
+      }
+    }
+    this.clearSelectedBorder();
+    return $('.colorPicker').ColorPickerHide();
+  };
+
+  WorktableCommon.focusToTargetWhenSidebarOpen = function(target, selectedBorderType) {
+    if (selectedBorderType == null) {
+      selectedBorderType = "edit";
+    }
+    this.setSelectedBorder(target, selectedBorderType);
+    PageValue.setInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL, {
+      top: scrollContents.scrollTop(),
+      left: scrollContents.scrollLeft()
+    }, true);
+    LocalStorage.saveInstancePageValue();
+    return Common.focusToTarget(target);
+  };
+
+  WorktableCommon.initKeyEvent = function() {
+    return $(window).keydown(function(e) {
+      var isMac;
+      isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      if ((isMac && e.metaKey) || (!isMac && e.ctrlKey)) {
+        if (e.keyCode === Constant.KeyboardKeyCode.Z) {
+          e.preventDefault();
+          if (e.shiftKey) {
+            return OperationHistory.redo();
+          } else {
+            return OperationHistory.undo();
+          }
+        }
+      }
+    });
+  };
+
+  WorktableCommon.clearWorkTable = function() {
+    var k, ref, results, v;
+    ref = Common.getCreatedItemObject();
+    results = [];
+    for (k in ref) {
+      v = ref[k];
+      results.push(v.getJQueryElement().remove());
+    }
+    return results;
+  };
+
+
+  /* デバッグ */
+
+  WorktableCommon.runDebug = function() {};
+
+  WorktableCommon.initMainContainer = function() {
+    var borderWidth, menu, padding, page, timelineTopPadding;
+    CommonVar.worktableCommonVar();
+    borderWidth = 5;
+    timelineTopPadding = 5;
+    padding = borderWidth * 4 + timelineTopPadding;
+    $('#pages').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
+    $(window.drawingCanvas).attr('width', window.mainWrapper.width());
+    $(window.drawingCanvas).attr('height', window.mainWrapper.height());
+    scrollInside.width(window.scrollViewSize);
+    scrollInside.height(window.scrollViewSize);
+    scrollContents.scrollLeft(scrollInside.width() * 0.5);
+    scrollContents.scrollTop(scrollInside.height() * 0.5);
+    $('.dropdown-toggle').dropdown();
+    Navbar.initWorktableNavbar();
+    this.initKeyEvent();
+    Handwrite.initHandwrite();
+    menu = [
+      {
+        title: "Default",
+        cmd: "default",
+        uiIcon: "ui-icon-scissors"
+      }
+    ];
+    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+    WorktableCommon.setupContextMenu($('#main'), "#pages ." + page + " .main-wrapper:first", menu);
+    $('#main').on("mousedown", (function(_this) {
+      return function() {
+        return _this.clearAllItemStyle();
+      };
+    })(this));
+    return Setting.initConfig();
+  };
+
   WorktableCommon.setupContextMenu = function(element, contextSelector, menu) {
     return element.contextmenu({
       preventContextMenuForPopup: true,
@@ -29,14 +159,11 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.removeAllItemAndEvent = function() {
-    var lstorage;
     Sidebar.closeSidebar();
-    lstorage = localStorage;
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+    LocalStorage.clearWorktableWithoutSetting();
     return Common.clearAllEventChange((function(_this) {
       return function() {
-        _this.removeAllItem();
+        Common.removeAllItem();
         EventConfig.removeAllConfig();
         PageValue.removeAllItemAndEventPageValue();
         return Timeline.refreshAllTimeline();
@@ -45,14 +172,11 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.removeAllItemAndEventOnThisPage = function() {
-    var lstorage;
     Sidebar.closeSidebar();
-    lstorage = localStorage;
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES);
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES);
+    LocalStorage.clearWorktableWithoutGeneralAndSetting();
     return Common.clearAllEventChange((function(_this) {
       return function() {
-        _this.removeAllItem();
+        Common.removeAllItem();
         EventConfig.removeAllConfig();
         PageValue.removeAllItemAndEventPageValueOnThisPage();
         return Timeline.refreshAllTimeline();
@@ -131,7 +255,7 @@ WorktableCommon = (function() {
     for (i = 0, len = itemIds.length; i < len; i++) {
       itemId = itemIds[i];
       if (itemId != null) {
-        itemInitFuncName = Worktable.getInitFuncName(itemId);
+        itemInitFuncName = WorktableCommon.getInitFuncName(itemId);
         if (window.itemInitFuncList[itemInitFuncName] != null) {
           window.itemInitFuncList[itemInitFuncName]();
           callbackCount += 1;
@@ -167,7 +291,7 @@ WorktableCommon = (function() {
               css_temp: d.css_info
             };
           }
-          WorktableCommon.availJs(Worktable.getInitFuncName(d.item_id), d.js_src, option, function() {
+          WorktableCommon.availJs(WorktableCommon.getInitFuncName(d.item_id), d.js_src, option, function() {
             callbackCount += 1;
             if ((callback != null) && callbackCount >= data.length) {
               return callback();

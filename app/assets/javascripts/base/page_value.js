@@ -406,6 +406,7 @@ PageValue = (function() {
   };
 
   PageValue.removeAllItemAndEventPageValue = function() {
+    $("#" + this.Key.G_ROOT).children("." + this.Key.G_PREFIX).remove();
     $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
     return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).remove();
   };

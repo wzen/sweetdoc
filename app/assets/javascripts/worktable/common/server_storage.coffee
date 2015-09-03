@@ -80,7 +80,7 @@ class ServerStorage
           item_js_list = data.item_js_list
           # 全て読み込んだ後のコールバック
           callback = ->
-            Worktable.clearWorkTable()
+            WorktableCommon.clearWorkTable()
 
             # Pagevalue設置
             if data.instance_pagevalue_data?

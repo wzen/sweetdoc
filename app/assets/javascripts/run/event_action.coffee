@@ -54,7 +54,6 @@ class EventAction
       )
     else
       # 動作させている場合はページのアクションを元に戻す
-
       # ページ前処理
       @thisPage().willPage()
 

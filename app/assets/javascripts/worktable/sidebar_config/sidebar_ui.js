@@ -19,7 +19,7 @@ Sidebar = (function() {
         main.addClass('col-md-9');
         $('#sidebar').fadeIn('500');
         if (target !== null) {
-          return Worktable.focusToTargetWhenSidebarOpen(target, selectedBorderType);
+          return WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
         }
       }
     }
@@ -30,7 +30,7 @@ Sidebar = (function() {
     if (callback == null) {
       callback = null;
     }
-    Worktable.clearSelectedBorder();
+    WorktableCommon.clearSelectedBorder();
     if (!Sidebar.isClosedConfigSidebar()) {
       main = $('#main');
       return $('#sidebar').fadeOut('500', function() {

@@ -346,6 +346,7 @@ class PageValue
   # アイテムとイベント情報を全削除
   @removeAllItemAndEventPageValue = ->
     # page_value消去
+    $("##{@Key.G_ROOT}").children(".#{@Key.G_PREFIX}").remove()
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
     $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").remove()
 

@@ -82,9 +82,25 @@ LocalStorage = (function() {
   LocalStorage.clearWorktable = function() {
     var lstorage;
     lstorage = localStorage;
+    lstorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
     lstorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
     lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
     return lstorage.removeItem(this.Key.WORKTABLE_SETTING_PAGEVALUES);
+  };
+
+  LocalStorage.clearWorktableWithoutSetting = function() {
+    var lstorage;
+    lstorage = localStorage;
+    lstorage.removeItem(this.Key.WORKTABLE_GENERAL_PAGEVALUES);
+    lstorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+    return lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
+  };
+
+  LocalStorage.clearWorktableWithoutGeneralAndSetting = function() {
+    var lstorage;
+    lstorage = localStorage;
+    lstorage.removeItem(this.Key.WORKTABLE_INSTANCE_PAGEVALUES);
+    return lstorage.removeItem(this.Key.WORKTABLE_EVENT_PAGEVALUES);
   };
 
   LocalStorage.saveGeneralPageValue = function(isRun) {

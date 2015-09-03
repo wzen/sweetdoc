@@ -65,10 +65,10 @@ EventConfig = (function() {
         this.itemId = splitValues[1];
       }
     }
-    Worktable.clearSelectedBorder();
+    WorktableCommon.clearSelectedBorder();
     if (!this.isCommonEvent) {
       vEmt = $('#' + this.id);
-      Worktable.setSelectedBorder(vEmt, 'timeline');
+      WorktableCommon.setSelectedBorder(vEmt, 'timeline');
       Common.focusToTarget(vEmt);
     }
     $(".config.te_div", this.emt).css('display', 'none');

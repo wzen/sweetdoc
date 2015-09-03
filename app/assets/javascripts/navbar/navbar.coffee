@@ -5,8 +5,9 @@ class Navbar
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
     $('.menu-newcreate', fileMenuEmt).on('click', ->
       if Object.keys(window.instanceMap).length > 0
-        if window.confirm('ページ内に存在するアイテムは全て削除されます。')
-          WorktableCommon.removeAllItemAndEventOnThisPage()
+        if window.confirm('作成中のアイテムは全て削除されます。')
+          WorktableCommon.removeAllItemAndEventPageValue()
+          LocalStorage.clearWorktableWithoutSetting()
     )
     $('.menu-load', fileMenuEmt).off('mouseenter')
     $('.menu-load', fileMenuEmt).on('mouseenter', ->
@@ -36,7 +37,7 @@ class Navbar
       itemsSelectMenuEmt.removeClass('active')
       $(@).parent('li').addClass('active')
       window.selectItemMenu = itemId
-      Worktable.changeMode(Constant.Mode.DRAW)
+      WorktableCommon.changeMode(Constant.Mode.DRAW)
       WorktableCommon.loadItemJs(itemId)
     )
 

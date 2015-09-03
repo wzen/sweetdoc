@@ -72,7 +72,7 @@ WorkTableCommonExtend =
         # オプションメニューを表示
         Sidebar.openConfigSidebar(target)
         # モードを変更
-        Worktable.changeMode(Constant.Mode.OPTION)
+        WorktableCommon.changeMode(Constant.Mode.OPTION)
       })
       menu.push({title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         target = event.target
@@ -91,8 +91,8 @@ WorkTableCommonExtend =
       self.getJQueryElement().mousedown( (e)->
         if e.which == 1 #左クリック
           e.stopPropagation()
-          Worktable.clearSelectedBorder()
-          Worktable.setSelectedBorder(@, "edit")
+          WorktableCommon.clearSelectedBorder()
+          WorktableCommon.setSelectedBorder(@, "edit")
       )
 
     # JQueryUIのドラッグイベントとリサイズ設定

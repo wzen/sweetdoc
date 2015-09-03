@@ -14,7 +14,7 @@ initColorPicker = function(element, colorValue, onChange) {
   element.unbind();
   return element.mousedown(function(e) {
     e.stopPropagation();
-    Worktable.clearAllItemStyle();
+    WorktableCommon.clearAllItemStyle();
     element.ColorPickerHide();
     return element.ColorPickerShow();
   });

@@ -61,16 +61,14 @@ class Paging
 
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
-    lstorage = localStorage
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES)
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+    LocalStorage.clearWorktableWithoutSetting()
     #Common.clearAllEventChange( ->
     EventConfig.removeAllConfig()
     PageValue.addPagenum(1)
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(PageValue.getPageNum())
     # 新規コンテナ初期化
-    Worktable.initMainContainer()
+    WorktableCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     WorktableCommon.drawAllItemFromEventPageValue( =>
       # ページング
@@ -81,7 +79,7 @@ class Paging
         section.css('display', 'none')
         Common.removeAllItem(beforePageNum)
 
-        Worktable.initMainContainer()
+        WorktableCommon.initMainContainer()
         Timeline.refreshAllTimeline()
         # ページ総数の更新
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
@@ -107,9 +105,7 @@ class Paging
 
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
-    lstorage = localStorage
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_INSTANCE_PAGEVALUES)
-    lstorage.removeItem(LocalStorage.Key.WORKTABLE_EVENT_PAGEVALUES)
+    LocalStorage.clearWorktableWithoutSetting()
     EventConfig.removeAllConfig()
 
     # Mainコンテナ作成
@@ -120,7 +116,7 @@ class Paging
     section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
     section.css('display', '')
     PageValue.setPageNum(selectedNum)
-    Worktable.initMainContainer()
+    WorktableCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     WorktableCommon.drawAllItemFromEventPageValue( =>
       # ページング
@@ -135,7 +131,7 @@ class Paging
         # 隠したビューのアイテムを削除
         Common.removeAllItem(beforePageNum)
 
-        Worktable.initMainContainer()
+        WorktableCommon.initMainContainer()
         Timeline.refreshAllTimeline()
         # 選択メニューの更新
         self.createPageSelectMenu()

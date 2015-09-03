@@ -9,8 +9,9 @@ Navbar = (function() {
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     $('.menu-newcreate', fileMenuEmt).on('click', function() {
       if (Object.keys(window.instanceMap).length > 0) {
-        if (window.confirm('ページ内に存在するアイテムは全て削除されます。')) {
-          return WorktableCommon.removeAllItemAndEventOnThisPage();
+        if (window.confirm('作成中のアイテムは全て削除されます。')) {
+          WorktableCommon.removeAllItemAndEventPageValue();
+          return LocalStorage.clearWorktableWithoutSetting();
         }
       }
     });
@@ -40,7 +41,7 @@ Navbar = (function() {
       itemsSelectMenuEmt.removeClass('active');
       $(this).parent('li').addClass('active');
       window.selectItemMenu = itemId;
-      Worktable.changeMode(Constant.Mode.DRAW);
+      WorktableCommon.changeMode(Constant.Mode.DRAW);
       return WorktableCommon.loadItemJs(itemId);
     });
   };

@@ -63,9 +63,19 @@ class LocalStorage
   # 保存を消去
   @clearWorktable: ->
     lstorage = localStorage
+    lstorage.removeItem(@Key.WORKTABLE_GENERAL_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_SETTING_PAGEVALUES)
+  @clearWorktableWithoutSetting: ->
+    lstorage = localStorage
+    lstorage.removeItem(@Key.WORKTABLE_GENERAL_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+  @clearWorktableWithoutGeneralAndSetting: ->
+    lstorage = localStorage
+    lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
 
   # ストレージに共通設定値を保存
   @saveGeneralPageValue: (isRun = false) ->
