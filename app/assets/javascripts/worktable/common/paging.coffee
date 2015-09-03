@@ -64,38 +64,33 @@ class Paging
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutSetting()
-    #Common.clearAllEventChange( ->
     EventConfig.removeAllConfig()
-    PageValue.setPageNum(PageValue.getPageCount() + 1)
-    if window.debug
-      console.log('[createNewPage createdPageNum:' + PageValue.getPageCount() + 1)
+
     # Mainコンテナ作成
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+    Common.createdMainContainerIfNeeded(beforePageNum + 1)
+    # ページングクラス作成
+    pageFlip = new PageFlip(beforePageNum, beforePageNum + 1)
     # 新規コンテナ初期化
+    PageValue.setPageNum(PageValue.getPageCount() + 1)
     WorktableCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     WorktableCommon.drawAllItemFromEventPageValue( =>
       # ページング
-      pageFlip = new PageFlip(beforePageNum)
-      pageFlip.startRender(PageFlip.DIRECTION.FORWARD, ->
+      pageFlip.startRender( ->
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
         section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
         section.css('display', 'none')
         Common.removeAllItem(beforePageNum)
-
-        WorktableCommon.initMainContainer()
         Timeline.refreshAllTimeline()
         # ページ総数の更新
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
         PageValue.updatePageCount()
         # キャッシュ保存
         LocalStorage.saveValueForWorktable()
-
         # 選択メニューの更新
         self.createPageSelectMenu()
       )
     )
-    #)
 
   # 選択
   @selectPage: (selectedNum) ->
@@ -114,10 +109,6 @@ class Paging
     if window.debug
       console.log('[selectPage] beforePageNum:' + beforePageNum)
 
-    direction = if beforePageNum < selectedNum then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
-    if window.debug
-      console.log('[selectPage] direction:' + direction)
-
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutSetting()
@@ -125,30 +116,14 @@ class Paging
 
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum)
-
-    # 新規表示するコンテナの初期化
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum)
-    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-    section.css('display', '')
-    if direction == PageFlip.DIRECTION.FORWARD
-      section.css('width', '')
-    else if direction == PageFlip.DIRECTION.BACK
-      section.css('width', '0')
-
-    if window.debug
-      console.log('[selectPage] show pageNum:' + selectedNum)
-
+    # ページングクラス作成
+    pageFlip = new PageFlip(beforePageNum, selectedNum)
+    # 新規コンテナ初期化
     PageValue.setPageNum(selectedNum)
     WorktableCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     WorktableCommon.drawAllItemFromEventPageValue( =>
-      # ページング
-
-      pn = if beforePageNum < PageValue.getPageNum() then beforePageNum else PageValue.getPageNum()
-      if window.debug
-        console.log('[selectPage] pn:' + pn)
-      pageFlip = new PageFlip(pn)
-      pageFlip.startRender(direction, ->
+      pageFlip.startRender( ->
         # 隠したビューを非表示にする
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
         section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
@@ -158,10 +133,8 @@ class Paging
         # 隠したビューのアイテムを削除
         Common.removeAllItem(beforePageNum)
         Timeline.refreshAllTimeline()
-
         # キャッシュ保存
         LocalStorage.saveValueForWorktable()
-
         # 選択メニューの更新
         self.createPageSelectMenu()
       )

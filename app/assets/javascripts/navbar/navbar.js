@@ -8,8 +8,8 @@ Navbar = (function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt;
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     $('.menu-newcreate', fileMenuEmt).on('click', function() {
-      if (Object.keys(window.instanceMap).length > 0) {
-        if (window.confirm('作成中のアイテムは全て削除されます。')) {
+      if (Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2) {
+        if (window.confirm('作成中のコンテンツは全て削除されます。')) {
           return WorktableCommon.recreateMainContainer();
         }
       }

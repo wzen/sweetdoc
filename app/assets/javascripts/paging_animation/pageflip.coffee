@@ -4,7 +4,7 @@ class PageFlip
   @DIRECTION.FORWARD = 1
   @DIRECTION.BACK = 2
 
-  constructor: (@flipPageNum) ->
+  constructor: (beforePageNum, afterPageNum) ->
     # Dimensions of one page in the book
     @PAGE_WIDTH = $('#pages').width()
     @PAGE_HEIGHT = $('#pages').height()
@@ -29,10 +29,27 @@ class PageFlip
     @canvas.style.top = -@CANVAS_PADDING + "px"
     @canvas.style.left = -@CANVAS_PADDING + "px"
 
-  startRender: (direction, callback = null)->
+    @direction = if beforePageNum < afterPageNum then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
+    if window.debug
+      console.log('[PageFlip constructor] direction:' + @direction)
+
+    @flipPageNum = if beforePageNum < afterPageNum then beforePageNum else afterPageNum
+    if window.debug
+      console.log('[PageFlip constructor] flipPageNum:' + @flipPageNum)
+
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
+    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+    section.css('display', '')
+    if @direction == PageFlip.DIRECTION.FORWARD
+      section.css('width', '')
+    else if @direction == PageFlip.DIRECTION.BACK
+      section.css('width', '0')
+
+  # 描画開始
+  startRender: (callback = null)->
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', @flipPageNum)
     pages = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-    if direction == PageFlip.DIRECTION.FORWARD
+    if @direction == PageFlip.DIRECTION.FORWARD
       @flip = {
         progress: 1,
         target: -0.25,
@@ -52,7 +69,7 @@ class PageFlip
             callback()
         @render(point)
       , 50)
-    else if direction == PageFlip.DIRECTION.BACK
+    else if @direction == PageFlip.DIRECTION.BACK
       @flip = {
         progress: -0.25,
         target: 1,
@@ -72,6 +89,7 @@ class PageFlip
         @render(point)
       , 50)
 
+  # 描画
   render: (point)->
     if point < -@CANVAS_PADDING || point > @PAGE_WIDTH
       return
@@ -81,8 +99,8 @@ class PageFlip
 
     # Ease progress towards the target value
     @flip.progress += (@flip.target - @flip.progress)* 0.2
-    if window.debug
-      console.log('[render] progress: ' + @flip.progress)
+#    if window.debug
+#      console.log('[render] progress: ' + @flip.progress)
 
     @drawFlip(@flip)
 
@@ -94,8 +112,8 @@ class PageFlip
 
     # X position of the folded paper
     foldX = @PAGE_WIDTH * flip.progress + foldWidth
-    if window.debug
-      console.log('[drawFlip] foldX:' + foldX + ' progress:' + flip.progress)
+#    if window.debug
+#      console.log('[drawFlip] foldX:' + foldX + ' progress:' + flip.progress)
 
     # How far the page should outdent vertically due to perspective
     verticalOutdent = 20 * strength

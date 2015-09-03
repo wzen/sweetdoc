@@ -59,7 +59,7 @@ Paging = (function() {
   };
 
   Paging.createNewPage = function() {
-    var beforePageNum, self;
+    var beforePageNum, pageFlip, self;
     self = this;
     beforePageNum = PageValue.getPageNum();
     if (window.debug) {
@@ -68,24 +68,19 @@ Paging = (function() {
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
     EventConfig.removeAllConfig();
+    Common.createdMainContainerIfNeeded(beforePageNum + 1);
+    pageFlip = new PageFlip(beforePageNum, beforePageNum + 1);
     PageValue.setPageNum(PageValue.getPageCount() + 1);
-    if (window.debug) {
-      console.log('[createNewPage createdPageNum:' + PageValue.getPageCount() + 1);
-    }
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
     WorktableCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
     return WorktableCommon.drawAllItemFromEventPageValue((function(_this) {
       return function() {
-        var pageFlip;
-        pageFlip = new PageFlip(beforePageNum);
-        return pageFlip.startRender(PageFlip.DIRECTION.FORWARD, function() {
+        return pageFlip.startRender(function() {
           var className, section;
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
           section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           section.css('display', 'none');
           Common.removeAllItem(beforePageNum);
-          WorktableCommon.initMainContainer();
           Timeline.refreshAllTimeline();
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
           PageValue.updatePageCount();
@@ -97,7 +92,7 @@ Paging = (function() {
   };
 
   Paging.selectPage = function(selectedNum) {
-    var beforePageNum, className, direction, pageCount, section, self;
+    var beforePageNum, pageCount, pageFlip, self;
     if (window.debug) {
       console.log('[selectPage] selectedNum:' + selectedNum);
     }
@@ -113,37 +108,18 @@ Paging = (function() {
     if (window.debug) {
       console.log('[selectPage] beforePageNum:' + beforePageNum);
     }
-    direction = beforePageNum < selectedNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
-    if (window.debug) {
-      console.log('[selectPage] direction:' + direction);
-    }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
     EventConfig.removeAllConfig();
     Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum);
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedNum);
-    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-    section.css('display', '');
-    if (direction === PageFlip.DIRECTION.FORWARD) {
-      section.css('width', '');
-    } else if (direction === PageFlip.DIRECTION.BACK) {
-      section.css('width', '0');
-    }
-    if (window.debug) {
-      console.log('[selectPage] show pageNum:' + selectedNum);
-    }
+    pageFlip = new PageFlip(beforePageNum, selectedNum);
     PageValue.setPageNum(selectedNum);
     WorktableCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
     return WorktableCommon.drawAllItemFromEventPageValue((function(_this) {
       return function() {
-        var pageFlip, pn;
-        pn = beforePageNum < PageValue.getPageNum() ? beforePageNum : PageValue.getPageNum();
-        if (window.debug) {
-          console.log('[selectPage] pn:' + pn);
-        }
-        pageFlip = new PageFlip(pn);
-        return pageFlip.startRender(direction, function() {
+        return pageFlip.startRender(function() {
+          var className, section;
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
           section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           section.css('display', 'none');

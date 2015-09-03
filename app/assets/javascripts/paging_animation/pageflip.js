@@ -8,9 +8,8 @@ PageFlip = (function() {
 
   PageFlip.DIRECTION.BACK = 2;
 
-  function PageFlip(flipPageNum) {
-    var zIndexMax;
-    this.flipPageNum = flipPageNum;
+  function PageFlip(beforePageNum, afterPageNum) {
+    var className, section, zIndexMax;
     this.PAGE_WIDTH = $('#pages').width();
     this.PAGE_HEIGHT = $('#pages').height();
     this.CANVAS_PADDING = 20;
@@ -23,16 +22,32 @@ PageFlip = (function() {
     this.canvas.height = this.PAGE_HEIGHT + (this.CANVAS_PADDING * 2);
     this.canvas.style.top = -this.CANVAS_PADDING + "px";
     this.canvas.style.left = -this.CANVAS_PADDING + "px";
+    this.direction = beforePageNum < afterPageNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
+    if (window.debug) {
+      console.log('[PageFlip constructor] direction:' + this.direction);
+    }
+    this.flipPageNum = beforePageNum < afterPageNum ? beforePageNum : afterPageNum;
+    if (window.debug) {
+      console.log('[PageFlip constructor] flipPageNum:' + this.flipPageNum);
+    }
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
+    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    section.css('display', '');
+    if (this.direction === PageFlip.DIRECTION.FORWARD) {
+      section.css('width', '');
+    } else if (this.direction === PageFlip.DIRECTION.BACK) {
+      section.css('width', '0');
+    }
   }
 
-  PageFlip.prototype.startRender = function(direction, callback) {
+  PageFlip.prototype.startRender = function(callback) {
     var className, pages, point, timer;
     if (callback == null) {
       callback = null;
     }
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', this.flipPageNum);
     pages = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-    if (direction === PageFlip.DIRECTION.FORWARD) {
+    if (this.direction === PageFlip.DIRECTION.FORWARD) {
       this.flip = {
         progress: 1,
         target: -0.25,
@@ -55,7 +70,7 @@ PageFlip = (function() {
           return _this.render(point);
         };
       })(this), 50);
-    } else if (direction === PageFlip.DIRECTION.BACK) {
+    } else if (this.direction === PageFlip.DIRECTION.BACK) {
       this.flip = {
         progress: -0.25,
         target: 1,
@@ -87,9 +102,6 @@ PageFlip = (function() {
     }
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.flip.progress += (this.flip.target - this.flip.progress) * 0.2;
-    if (window.debug) {
-      console.log('[render] progress: ' + this.flip.progress);
-    }
     return this.drawFlip(this.flip);
   };
 
@@ -98,9 +110,6 @@ PageFlip = (function() {
     strength = 1 - Math.abs(flip.progress);
     foldWidth = 0;
     foldX = this.PAGE_WIDTH * flip.progress + foldWidth;
-    if (window.debug) {
-      console.log('[drawFlip] foldX:' + foldX + ' progress:' + flip.progress);
-    }
     verticalOutdent = 20 * strength;
     paperShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(1 - flip.progress, 0.5), 0);
     rightShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);

@@ -15,6 +15,7 @@ class Common
       return false
     return true
 
+  # 変数の型を確認
   @typeOfValue = do ->
     classToType = {}
     for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
@@ -60,10 +61,11 @@ class Common
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     pageSection = $(".#{sectionClass}", root)
     if !pageSection? || pageSection.length == 0
-      # 作成
+      # Tempからコピー
       temp = $("##{Constant.ElementAttribute.MAIN_TEMP_ID}").children(':first').clone(true)
       style = ''
       style += "z-index:#{Common.plusPagingZindex(0, pageNum)};"
+      # TODO: pageflipを変更したら修正すること
       width = if collapsed then 'width: 0px;' else ''
       style += width
       temp = $(temp).wrap("<div class='#{sectionClass} section' style='#{style}'></div>").parent()

@@ -78,7 +78,7 @@ EventAction = (function() {
   };
 
   EventAction.prototype.changePaging = function(beforePageIndex, afterPageIndex, callback) {
-    var afterPageNum, beforePageNum, className, direction, pageFlip, pn, section;
+    var afterPageNum, beforePageNum, pageFlip;
     if (callback == null) {
       callback = null;
     }
@@ -88,24 +88,17 @@ EventAction = (function() {
       console.log('[changePaging] beforePageNum:' + beforePageNum);
       console.log('[changePaging] afterPageNum:' + afterPageNum);
     }
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
-    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-    section.css('display', '');
-    if (window.debug) {
-      console.log('[changePaging] show page:' + afterPageNum);
-    }
     Navbar.setPageNum(afterPageNum);
     PageValue.setPageNum(afterPageNum);
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
+    pageFlip = new PageFlip(beforePageNum, afterPageNum);
     RunCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
     this.thisPage().willPage();
     this.thisPage().start();
     RunCommon.createCssElement(afterPageNum);
-    direction = beforePageNum < PageValue.getPageNum() ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
-    pn = beforePageNum < PageValue.getPageNum() ? beforePageNum : PageValue.getPageNum();
-    pageFlip = new PageFlip(pn);
-    return pageFlip.startRender(direction, function() {
+    return pageFlip.startRender(function() {
+      var className, section;
       className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
       section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
       section.css('display', 'none');

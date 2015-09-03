@@ -77,15 +77,13 @@ class EventAction
     if window.debug
       console.log('[changePaging] beforePageNum:' + beforePageNum)
       console.log('[changePaging] afterPageNum:' + afterPageNum)
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
-    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-    section.css('display', '')
-    if window.debug
-      console.log('[changePaging] show page:' + afterPageNum)
     Navbar.setPageNum(afterPageNum)
     PageValue.setPageNum(afterPageNum)
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
+    # ページングクラス作成
+    pageFlip = new PageFlip(beforePageNum, afterPageNum)
+    # 新規コンテナ初期化
     RunCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     # ページ前処理
@@ -94,10 +92,7 @@ class EventAction
     # CSS作成
     RunCommon.createCssElement(afterPageNum)
     # ページング
-    direction = if beforePageNum < PageValue.getPageNum() then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
-    pn = if beforePageNum < PageValue.getPageNum() then beforePageNum else PageValue.getPageNum()
-    pageFlip = new PageFlip(pn)
-    pageFlip.startRender(direction, ->
+    pageFlip.startRender( ->
       # 隠したビューを非表示にする
       className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
       section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
