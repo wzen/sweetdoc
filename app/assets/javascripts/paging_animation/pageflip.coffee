@@ -10,7 +10,7 @@ class PageFlip
     @PAGE_HEIGHT = $('#pages').height()
 
     # The canvas size equals to the book dimensions + this padding
-    @CANVAS_PADDING = 0
+    @CANVAS_PADDING = 20
 
     @zIndex = Common.plusPagingZindex(0, @flipPageNum)
 
@@ -35,15 +35,15 @@ class PageFlip
     if direction == PageFlip.DIRECTION.FORWARD
       @flip = {
         progress: 1,
-        target: 1,
+        target: -0.25,
         page: pages,
       }
 
       point = @PAGE_WIDTH
       timer = setInterval(=>
         point -= 50
-        if point < 0
-          point = 0
+        if point < -@CANVAS_PADDING
+          point = -@CANVAS_PADDING
           @flip.progress = 0
           @render(point)
           clearInterval(timer)
@@ -51,11 +51,11 @@ class PageFlip
           if callback?
             callback()
         @render(point)
-      , 20)
+      , 50)
     else if direction == PageFlip.DIRECTION.BACK
       @flip = {
-        progress: 0,
-        target: 0,
+        progress: -0.25,
+        target: 1,
         page: pages,
       }
       point = -@CANVAS_PADDING
@@ -70,7 +70,7 @@ class PageFlip
           if callback?
             callback()
         @render(point)
-      , 20)
+      , 50)
 
   render: (point)->
     if point < -@CANVAS_PADDING || point > @PAGE_WIDTH
@@ -79,11 +79,10 @@ class PageFlip
     # Reset all pixels in the canvas
     @context.clearRect(0, 0, @canvas.width, @canvas.height)
 
-    @flip.target = Math.max(Math.min(point / @PAGE_WIDTH, 1), -1)
-
     # Ease progress towards the target value
     @flip.progress += (@flip.target - @flip.progress)* 0.2
-    #console.log('progress: ' + @flip.progress)
+    if window.debug
+      console.log('[render] progress: ' + @flip.progress)
 
     @drawFlip(@flip)
 
@@ -95,7 +94,8 @@ class PageFlip
 
     # X position of the folded paper
     foldX = @PAGE_WIDTH * flip.progress + foldWidth
-    #console.log('foldX:' + foldX + ' progress:' + flip.progress)
+    if window.debug
+      console.log('[drawFlip] foldX:' + foldX + ' progress:' + flip.progress)
 
     # How far the page should outdent vertically due to perspective
     verticalOutdent = 20 * strength

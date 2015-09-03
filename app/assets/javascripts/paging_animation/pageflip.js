@@ -13,7 +13,7 @@ PageFlip = (function() {
     this.flipPageNum = flipPageNum;
     this.PAGE_WIDTH = $('#pages').width();
     this.PAGE_HEIGHT = $('#pages').height();
-    this.CANVAS_PADDING = 0;
+    this.CANVAS_PADDING = 20;
     this.zIndex = Common.plusPagingZindex(0, this.flipPageNum);
     zIndexMax = Common.plusPagingZindex(0, 0);
     $("#" + Constant.Paging.ROOT_ID).append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:" + zIndexMax + "'><canvas id='pageflip-canvas' style='z-index:" + zIndexMax + "'></canvas></div>");
@@ -35,15 +35,15 @@ PageFlip = (function() {
     if (direction === PageFlip.DIRECTION.FORWARD) {
       this.flip = {
         progress: 1,
-        target: 1,
+        target: -0.25,
         page: pages
       };
       point = this.PAGE_WIDTH;
       return timer = setInterval((function(_this) {
         return function() {
           point -= 50;
-          if (point < 0) {
-            point = 0;
+          if (point < -_this.CANVAS_PADDING) {
+            point = -_this.CANVAS_PADDING;
             _this.flip.progress = 0;
             _this.render(point);
             clearInterval(timer);
@@ -54,11 +54,11 @@ PageFlip = (function() {
           }
           return _this.render(point);
         };
-      })(this), 20);
+      })(this), 50);
     } else if (direction === PageFlip.DIRECTION.BACK) {
       this.flip = {
-        progress: 0,
-        target: 0,
+        progress: -0.25,
+        target: 1,
         page: pages
       };
       point = -this.CANVAS_PADDING;
@@ -77,7 +77,7 @@ PageFlip = (function() {
           }
           return _this.render(point);
         };
-      })(this), 20);
+      })(this), 50);
     }
   };
 
@@ -86,8 +86,10 @@ PageFlip = (function() {
       return;
     }
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.flip.target = Math.max(Math.min(point / this.PAGE_WIDTH, 1), -1);
     this.flip.progress += (this.flip.target - this.flip.progress) * 0.2;
+    if (window.debug) {
+      console.log('[render] progress: ' + this.flip.progress);
+    }
     return this.drawFlip(this.flip);
   };
 
@@ -96,6 +98,9 @@ PageFlip = (function() {
     strength = 1 - Math.abs(flip.progress);
     foldWidth = 0;
     foldX = this.PAGE_WIDTH * flip.progress + foldWidth;
+    if (window.debug) {
+      console.log('[drawFlip] foldX:' + foldX + ' progress:' + flip.progress);
+    }
     verticalOutdent = 20 * strength;
     paperShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(1 - flip.progress, 0.5), 0);
     rightShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);
