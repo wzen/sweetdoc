@@ -64,7 +64,7 @@ class Paging
     LocalStorage.clearWorktableWithoutSetting()
     #Common.clearAllEventChange( ->
     EventConfig.removeAllConfig()
-    PageValue.addPagenum(1)
+    PageValue.setPageNum(PageValue.getPageCount() + 1)
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(PageValue.getPageNum())
     # 新規コンテナ初期化
