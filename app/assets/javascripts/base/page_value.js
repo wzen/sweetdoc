@@ -64,10 +64,16 @@ PageValue = (function() {
       Key.E_PREFIX = constant.PageValueKey.E_PREFIX;
 
       Key.eventPagePrefix = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
         return this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix(pn);
       };
 
       Key.eventCount = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
         return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
       };
 
@@ -495,9 +501,9 @@ PageValue = (function() {
     return this.setPageNum(this.getPageNum() + addNum);
   };
 
-  PageValue.itemCssOnPage = function() {
+  PageValue.itemCssOnPage = function(pageNum) {
     var css, eventPageValues, index, instance, k, objId, v;
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix());
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix(pageNum));
     css = '';
     for (k in eventPageValues) {
       v = eventPageValues[k];

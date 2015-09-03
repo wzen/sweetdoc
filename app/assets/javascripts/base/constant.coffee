@@ -78,6 +78,8 @@ if gon?
       @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
       # @property [String] NAVBAR_ROOT ナビヘッダーRoot
       @NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT
+      # @property [String] RUN_CSS CSSスタイルRoot
+      @RUN_CSS = constant.ElementAttribute.RUN_CSS
 
     # 共通イベントタイプ
     class @CommonActionEventChangeType

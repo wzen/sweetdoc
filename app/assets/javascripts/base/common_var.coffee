@@ -58,7 +58,6 @@ class CommonVar
     window.distX = 0
     window.distY = 0
     window.resizeTimer = false
-    window.eventAction = null
     window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)}
     window.disabledEventHandler = false
     window.firstItemFocused = false

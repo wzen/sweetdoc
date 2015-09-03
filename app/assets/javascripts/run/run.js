@@ -13,8 +13,10 @@ Run = (function() {
 $(function() {
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
+  window.eventAction = null;
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-  return RunCommon.initMainContainer();
+  RunCommon.initMainContainer();
+  return RunCommon.initEventAction();
 });
 
 //# sourceMappingURL=run.js.map

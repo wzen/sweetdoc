@@ -122,10 +122,7 @@ class Page
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @chapterList.forEach((chapter) ->
-      chapter.eventObjList.forEach((event) ->
-        if event.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-          event.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + chapter.num))
-      )
+      chapter.sinkFrontAllObj()
     )
 
   # ページ前処理

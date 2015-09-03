@@ -2,7 +2,7 @@ class RunCommon
 
   # 画面初期化
   @initView = ->
-    $('#contents').css('height', $('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
+    $('#pages').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
     # 暫定でスクロールを上に持ってくる
@@ -47,11 +47,13 @@ class RunCommon
   @initEventAction = ->
     # アクションのイベントを取得
     pageCount = PageValue.getPageCount()
-    pageList = []
+    pageList = new Array(pageCount)
     for i in [1..pageCount]
       eventPageValueList = PageValue.getEventPageValueSortedListByNum(i)
-      page = new Page(eventPageValueList)
-      pageList.push(page)
+      page = null
+      if eventPageValueList? && eventPageValueList.length > 0
+        page = new Page(eventPageValueList)
+      pageList[i - 1] = page
 
     # ナビバーのページ数 & チャプター数設定
     Navbar.setPageMax(pageCount)
@@ -71,7 +73,7 @@ class RunCommon
     stopTimer = null
 
     scrollHandleWrapper.scroll( ->
-      if !window.eventAction.thisPage().finishedAllChapters && !window.eventAction.thisPage().isScrollChapter()
+      if !RunCommon.enabledScroll()
         return
 
       x = $(@).scrollLeft()
@@ -96,8 +98,57 @@ class RunCommon
       window.eventAction.thisPage().handleScrollEvent(distX, distY)
     )
 
-    scrollFinished = ->
-      #scrollpoint_container.show()
+  @enabledScroll = ->
+    ret = false
+    if window.eventAction? &&
+      window.eventAction.thisPage()? &&
+      (window.eventAction.thisPage().finishedAllChapters || (window.eventAction.thisPage().thisChapter()? && window.eventAction.thisPage().isScrollChapter()))
+        ret = true
+    return ret
+
+  @createCssElement = (pageNum) ->
+    # CSS作成
+    cssId = Constant.ElementAttribute.RUN_CSS.replace('@pagenum', pageNum)
+    cssEmt = $("##{cssId}")
+    if !cssEmt? || cssEmt.length == 0
+      $("<div id='#{cssId}'></div>").appendTo(window.cssCode)
+      cssEmt = $("##{cssId}")
+    cssEmt.html(PageValue.itemCssOnPage(pageNum))
+
+  @loadPagingPageValue = (firstPageNum, lastPageNum, callback = null, forceUpdate = false) ->
+    targetPages = []
+    for i in [firstPageNum..lastPageNum]
+      if forceUpdate
+        targetPages.push(i)
+      else
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', i)
+        section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+        if !section? || section.length == 0
+          targetPages.push(i)
+
+    $.ajax(
+      {
+        url: "/run/paging"
+        type: "POST"
+        dataType: "json"
+        data: {
+          targetPages: targetPages
+        }
+        success: (data)->
+          if data.instance_pagevalue_hash != null
+            for k, v of data.instance_pagevalue_hash
+              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+          if data.event_pagevalue_hash != null
+            for k, v of data.event_pagevalue_hash
+              PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+
+          # コールバック
+          if callback?
+            callback()
+        error: (data) ->
+      }
+    )
+
 
   # Mainコンテナ初期化
   @initMainContainer = ->
@@ -105,6 +156,6 @@ class RunCommon
     @initView()
     @initHandleScrollPoint()
     #@initResize(wrap, scrollWrapper)
-    @initEventAction()
+    #@initEventAction()
     @setupScrollEvent()
     Navbar.initRunNavbar()

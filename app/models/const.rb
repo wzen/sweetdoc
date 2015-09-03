@@ -112,6 +112,7 @@ class Const
     COMMON_VALUES_CLASS = 'common_event_value_@commoneventid_@methodname'
     ITEM_VALUES_CLASS = 'item_event_value_@itemid_@methodname'
     FILE_LOAD_CLASS = 'file_load'
+    RUN_CSS = 'run_css_@pagenum'
   end
 
   class PageValueKey

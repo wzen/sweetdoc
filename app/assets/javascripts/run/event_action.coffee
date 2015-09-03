@@ -10,10 +10,11 @@ class EventAction
 
   # 開始イベント
   start: ->
+    pageNum = @pageIndex + 1
     # ページ数設定
-    Navbar.setPageNum(@pageIndex + 1)
-    # CSS
-    $('#sup_css').html(PageValue.itemCssOnPage())
+    Navbar.setPageNum(pageNum)
+    # CSS作成
+    RunCommon.createCssElement(pageNum)
 
     @thisPage().willPage()
     @thisPage().start()
@@ -34,28 +35,38 @@ class EventAction
       @finishAllPages()
     else
       @pageIndex += 1
-      Navbar.setPageNum(@pageIndex + 1)
-      @changePaging(beforePageIndex, @pageIndex, ->
-        # ページ数設定
-        Navbar.setPageNum(@pageIndex + 1)
+      pageNum = @pageIndex + 1
+      RunCommon.loadPagingPageValue(pageNum, pageNum, =>
+        if @thisPage() == null
+          # Pageインスタンス作成
+          eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
+          @pageList[@pageIndex] = new Page(eventPageValueList)
+          console.log('created page instance')
+        @changePaging(beforePageIndex, @pageIndex, =>
+        )
       )
 
   # ページを戻す
   rewindPage: ->
-    @resetPage(@pageIndex)
     beforePageIndex = @pageIndex
     if !@thisChapter().doMovePage && @pageIndex > 0
       # 動作させていない場合は前のページに戻す
       @pageIndex -= 1
-      Navbar.setPageNum(@pageIndex + 1)
-      @changePaging(beforePageIndex, @pageIndex, ->
-        # ページ数設定
-        Navbar.setPageNum(@pageIndex + 1)
+      pageNum = @pageIndex + 1
+      RunCommon.loadPagingPageValue(pageNum, pageNum, =>
+        if @thisPage() == null
+          # Pageインスタンス作成
+          eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
+          @pageList[@pageIndex] = new Page(eventPageValueList)
+          console.log('created page instance')
+        @changePaging(beforePageIndex, @pageIndex, =>
+        )
       )
     else
       # 動作させている場合はページのアクションを元に戻す
       # ページ前処理
       @thisPage().willPage()
+      @thisPage().start()
 
   # ページ変更処理
   changePaging: (beforePageIndex, afterPageIndex, callback = null) ->
@@ -64,19 +75,17 @@ class EventAction
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
     section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
     section.css('display', '')
+    Navbar.setPageNum(afterPageNum)
     PageValue.setPageNum(afterPageNum)
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
     RunCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
-    @resetPage(afterPageIndex)
-
-    # CSS
-    $('#sup_css').html(PageValue.itemCssOnPage())
-
     # ページ前処理
     @thisPage().willPage()
-
+    @thisPage().start()
+    # CSS作成
+    RunCommon.createCssElement(afterPageNum)
     # ページング
     direction = if beforePageNum < PageValue.getPageNum() then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
     pn = if beforePageNum < PageValue.getPageNum() then beforePageNum else PageValue.getPageNum()
@@ -88,18 +97,12 @@ class EventAction
       section.css('display', 'none')
       # 隠したビューのアイテムを削除
       Common.removeAllItem(beforePageNum)
-
-      RunCommon.initMainContainer()
-      Timeline.refreshAllTimeline()
-
+      # CSS削除
+      $("##{Constant.ElementAttribute.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
       # コールバック
       if callback?
         callback()
     )
-
-  # ページの内容をリセット
-  resetPage: (pageIndex) ->
-    @pageList[pageIndex].resetAllChapters()
 
   # 全てのページを戻す
   rewindAllPages: ->

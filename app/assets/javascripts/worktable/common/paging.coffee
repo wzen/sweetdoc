@@ -130,8 +130,6 @@ class Paging
         section.css('display', 'none')
         # 隠したビューのアイテムを削除
         Common.removeAllItem(beforePageNum)
-
-        WorktableCommon.initMainContainer()
         Timeline.refreshAllTimeline()
         # 選択メニューの更新
         self.createPageSelectMenu()

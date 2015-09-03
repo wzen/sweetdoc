@@ -117,6 +117,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ElementAttribute.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
 
+      ElementAttribute.RUN_CSS = constant.ElementAttribute.RUN_CSS;
+
       return ElementAttribute;
 
     })();

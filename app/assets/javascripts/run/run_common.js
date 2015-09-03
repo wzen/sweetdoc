@@ -6,7 +6,7 @@ RunCommon = (function() {
 
   RunCommon.initView = function() {
     var is_reload;
-    $('#contents').css('height', $('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height());
+    $('#pages').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height());
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
@@ -48,11 +48,14 @@ RunCommon = (function() {
   RunCommon.initEventAction = function() {
     var eventPageValueList, i, j, page, pageCount, pageList, ref;
     pageCount = PageValue.getPageCount();
-    pageList = [];
+    pageList = new Array(pageCount);
     for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
       eventPageValueList = PageValue.getEventPageValueSortedListByNum(i);
-      page = new Page(eventPageValueList);
-      pageList.push(page);
+      page = null;
+      if ((eventPageValueList != null) && eventPageValueList.length > 0) {
+        page = new Page(eventPageValueList);
+      }
+      pageList[i - 1] = page;
     }
     Navbar.setPageMax(pageCount);
     window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1);
@@ -65,13 +68,13 @@ RunCommon = (function() {
   };
 
   RunCommon.setupScrollEvent = function() {
-    var lastLeft, lastTop, scrollFinished, stopTimer;
+    var lastLeft, lastTop, stopTimer;
     lastLeft = scrollHandleWrapper.scrollLeft();
     lastTop = scrollHandleWrapper.scrollTop();
     stopTimer = null;
-    scrollHandleWrapper.scroll(function() {
+    return scrollHandleWrapper.scroll(function() {
       var distX, distY, x, y;
-      if (!window.eventAction.thisPage().finishedAllChapters && !window.eventAction.thisPage().isScrollChapter()) {
+      if (!RunCommon.enabledScroll()) {
         return;
       }
       x = $(this).scrollLeft();
@@ -95,14 +98,83 @@ RunCommon = (function() {
       console.log('distX:' + distX + ' distY:' + distY);
       return window.eventAction.thisPage().handleScrollEvent(distX, distY);
     });
-    return scrollFinished = function() {};
+  };
+
+  RunCommon.enabledScroll = function() {
+    var ret;
+    ret = false;
+    if ((window.eventAction != null) && (window.eventAction.thisPage() != null) && (window.eventAction.thisPage().finishedAllChapters || ((window.eventAction.thisPage().thisChapter() != null) && window.eventAction.thisPage().isScrollChapter()))) {
+      ret = true;
+    }
+    return ret;
+  };
+
+  RunCommon.createCssElement = function(pageNum) {
+    var cssEmt, cssId;
+    cssId = Constant.ElementAttribute.RUN_CSS.replace('@pagenum', pageNum);
+    cssEmt = $("#" + cssId);
+    if ((cssEmt == null) || cssEmt.length === 0) {
+      $("<div id='" + cssId + "'></div>").appendTo(window.cssCode);
+      cssEmt = $("#" + cssId);
+    }
+    return cssEmt.html(PageValue.itemCssOnPage(pageNum));
+  };
+
+  RunCommon.loadPagingPageValue = function(firstPageNum, lastPageNum, callback, forceUpdate) {
+    var className, i, j, ref, ref1, section, targetPages;
+    if (callback == null) {
+      callback = null;
+    }
+    if (forceUpdate == null) {
+      forceUpdate = false;
+    }
+    targetPages = [];
+    for (i = j = ref = firstPageNum, ref1 = lastPageNum; ref <= ref1 ? j <= ref1 : j >= ref1; i = ref <= ref1 ? ++j : --j) {
+      if (forceUpdate) {
+        targetPages.push(i);
+      } else {
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', i);
+        section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        if ((section == null) || section.length === 0) {
+          targetPages.push(i);
+        }
+      }
+    }
+    return $.ajax({
+      url: "/run/paging",
+      type: "POST",
+      dataType: "json",
+      data: {
+        targetPages: targetPages
+      },
+      success: function(data) {
+        var k, ref2, ref3, v;
+        if (data.instance_pagevalue_hash !== null) {
+          ref2 = data.instance_pagevalue_hash;
+          for (k in ref2) {
+            v = ref2[k];
+            PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+          }
+        }
+        if (data.event_pagevalue_hash !== null) {
+          ref3 = data.event_pagevalue_hash;
+          for (k in ref3) {
+            v = ref3[k];
+            PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+          }
+        }
+        if (callback != null) {
+          return callback();
+        }
+      },
+      error: function(data) {}
+    });
   };
 
   RunCommon.initMainContainer = function() {
     CommonVar.runCommonVar();
     this.initView();
     this.initHandleScrollPoint();
-    this.initEventAction();
     this.setupScrollEvent();
     return Navbar.initRunNavbar();
   };

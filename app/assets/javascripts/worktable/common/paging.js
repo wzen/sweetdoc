@@ -121,7 +121,6 @@ Paging = (function() {
           section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
           section.css('display', 'none');
           Common.removeAllItem(beforePageNum);
-          WorktableCommon.initMainContainer();
           Timeline.refreshAllTimeline();
           return self.createPageSelectMenu();
         });

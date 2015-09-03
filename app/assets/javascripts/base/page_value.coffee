@@ -44,9 +44,9 @@ class PageValue
       # @property [String] E_PREFIX イベントプレフィックス
       @E_PREFIX = constant.PageValueKey.E_PREFIX
       # @property [return] イベントページプレフィックス
-      @eventPagePrefix = (pn) -> @E_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
+      @eventPagePrefix = (pn = PageValue.getPageNum()) -> @E_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
       # @property [return] イベント数
-      @eventCount = (pn) -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}count"
+      @eventCount = (pn = PageValue.getPageNum()) -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}count"
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
       # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
@@ -423,8 +423,8 @@ class PageValue
     @setPageNum(@getPageNum() + addNum)
 
   # アイテムのCSSを取得
-  @itemCssOnPage = ->
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix())
+  @itemCssOnPage = (pageNum) ->
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix(pageNum))
     css = ''
     for k, v of eventPageValues
       if k.indexOf(@Key.E_NUM_PREFIX) == 0

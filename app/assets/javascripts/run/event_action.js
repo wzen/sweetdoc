@@ -2,9 +2,9 @@
 var EventAction;
 
 EventAction = (function() {
-  function EventAction(pageList, pageIndex1) {
+  function EventAction(pageList, pageIndex) {
     this.pageList = pageList;
-    this.pageIndex = pageIndex1;
+    this.pageIndex = pageIndex;
     this.finishedAllPages = false;
   }
 
@@ -13,8 +13,10 @@ EventAction = (function() {
   };
 
   EventAction.prototype.start = function() {
-    Navbar.setPageNum(this.pageIndex + 1);
-    $('#sup_css').html(PageValue.itemCssOnPage());
+    var pageNum;
+    pageNum = this.pageIndex + 1;
+    Navbar.setPageNum(pageNum);
+    RunCommon.createCssElement(pageNum);
     this.thisPage().willPage();
     return this.thisPage().start();
   };
@@ -26,32 +28,48 @@ EventAction = (function() {
   };
 
   EventAction.prototype.nextPage = function() {
-    var beforePageIndex;
+    var beforePageIndex, pageNum;
     this.thisPage().didPage();
     beforePageIndex = this.pageIndex;
     if (this.pageList.length <= this.pageIndex + 1) {
       return this.finishAllPages();
     } else {
       this.pageIndex += 1;
-      Navbar.setPageNum(this.pageIndex + 1);
-      return this.changePaging(beforePageIndex, this.pageIndex, function() {
-        return Navbar.setPageNum(this.pageIndex + 1);
-      });
+      pageNum = this.pageIndex + 1;
+      return RunCommon.loadPagingPageValue(pageNum, pageNum, (function(_this) {
+        return function() {
+          var eventPageValueList;
+          if (_this.thisPage() === null) {
+            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
+            _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
+            console.log('created page instance');
+          }
+          return _this.changePaging(beforePageIndex, _this.pageIndex, function() {});
+        };
+      })(this));
     }
   };
 
   EventAction.prototype.rewindPage = function() {
-    var beforePageIndex;
-    this.resetPage(this.pageIndex);
+    var beforePageIndex, pageNum;
     beforePageIndex = this.pageIndex;
     if (!this.thisChapter().doMovePage && this.pageIndex > 0) {
       this.pageIndex -= 1;
-      Navbar.setPageNum(this.pageIndex + 1);
-      return this.changePaging(beforePageIndex, this.pageIndex, function() {
-        return Navbar.setPageNum(this.pageIndex + 1);
-      });
+      pageNum = this.pageIndex + 1;
+      return RunCommon.loadPagingPageValue(pageNum, pageNum, (function(_this) {
+        return function() {
+          var eventPageValueList;
+          if (_this.thisPage() === null) {
+            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
+            _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
+            console.log('created page instance');
+          }
+          return _this.changePaging(beforePageIndex, _this.pageIndex, function() {});
+        };
+      })(this));
     } else {
-      return this.thisPage().willPage();
+      this.thisPage().willPage();
+      return this.thisPage().start();
     }
   };
 
@@ -65,13 +83,14 @@ EventAction = (function() {
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
     section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
     section.css('display', '');
+    Navbar.setPageNum(afterPageNum);
     PageValue.setPageNum(afterPageNum);
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
     RunCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
-    this.resetPage(afterPageIndex);
-    $('#sup_css').html(PageValue.itemCssOnPage());
     this.thisPage().willPage();
+    this.thisPage().start();
+    RunCommon.createCssElement(afterPageNum);
     direction = beforePageNum < PageValue.getPageNum() ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
     pn = beforePageNum < PageValue.getPageNum() ? beforePageNum : PageValue.getPageNum();
     pageFlip = new PageFlip(pn);
@@ -80,16 +99,11 @@ EventAction = (function() {
       section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
       section.css('display', 'none');
       Common.removeAllItem(beforePageNum);
-      RunCommon.initMainContainer();
-      Timeline.refreshAllTimeline();
+      $("#" + (Constant.ElementAttribute.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
       if (callback != null) {
         return callback();
       }
     });
-  };
-
-  EventAction.prototype.resetPage = function(pageIndex) {
-    return this.pageList[pageIndex].resetAllChapters();
   };
 
   EventAction.prototype.rewindAllPages = function() {
