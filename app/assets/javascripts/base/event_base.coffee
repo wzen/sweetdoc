@@ -187,6 +187,7 @@ class EventBase extends Extend
 
     # スクロール指定範囲外なら反応させない
     if @scrollValue < sPoint
+      @scrollValue = sPoint
       return
     else if @scrollValue >= ePoint
       if !@isFinishedEvent
@@ -196,7 +197,6 @@ class EventBase extends Extend
           complete()
       return
 
-    @scrollValue = if @scrollValue < sPoint then sPoint else @scrollValue
     @scrollValue = if @scrollValue > ePoint then ePoint else @scrollValue
 
     (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)

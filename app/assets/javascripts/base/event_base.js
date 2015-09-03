@@ -214,6 +214,7 @@ EventBase = (function(superClass) {
     sPoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     if (this.scrollValue < sPoint) {
+      this.scrollValue = sPoint;
       return;
     } else if (this.scrollValue >= ePoint) {
       if (!this.isFinishedEvent) {
@@ -224,7 +225,6 @@ EventBase = (function(superClass) {
       }
       return;
     }
-    this.scrollValue = this.scrollValue < sPoint ? sPoint : this.scrollValue;
     this.scrollValue = this.scrollValue > ePoint ? ePoint : this.scrollValue;
     return this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
   };
