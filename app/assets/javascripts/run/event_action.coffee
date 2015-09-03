@@ -31,7 +31,7 @@ class EventAction
     # indexを更新
 
     if @pageList.length <= @pageIndex + 1
-      @finishedAllPages()
+      @finishAllPages()
     else
       @pageIndex += 1
       Navbar.setPageNum(@pageIndex + 1)

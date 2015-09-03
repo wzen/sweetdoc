@@ -30,7 +30,7 @@ EventAction = (function() {
     this.thisPage().didPage();
     beforePageIndex = this.pageIndex;
     if (this.pageList.length <= this.pageIndex + 1) {
-      return this.finishedAllPages();
+      return this.finishAllPages();
     } else {
       this.pageIndex += 1;
       Navbar.setPageNum(this.pageIndex + 1);

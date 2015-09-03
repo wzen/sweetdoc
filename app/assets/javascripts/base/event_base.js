@@ -214,18 +214,20 @@ EventBase = (function(superClass) {
     }
     sPoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
-    if (this.scrollValue < sPoint || this.scrollValue > ePoint) {
+    if (this.scrollValue < sPoint) {
+      return;
+    } else if (this.scrollValue >= ePoint) {
+      if (!this.isFinishedEvent) {
+        this.isFinishedEvent = true;
+        if (complete != null) {
+          complete();
+        }
+      }
       return;
     }
     this.scrollValue = this.scrollValue < sPoint ? sPoint : this.scrollValue;
     this.scrollValue = this.scrollValue > ePoint ? ePoint : this.scrollValue;
-    this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
-    if (this.scrollValue === ePoint) {
-      this.isFinishedEvent = true;
-      if (complete != null) {
-        return complete();
-      }
-    }
+    return this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
   };
 
   EventBase.prototype.scrollLength = function() {

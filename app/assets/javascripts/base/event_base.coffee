@@ -184,18 +184,22 @@ class EventBase extends Extend
 
     sPoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+
     # スクロール指定範囲外なら反応させない
-    if @scrollValue < sPoint || @scrollValue > ePoint
+    if @scrollValue < sPoint
       return
+    else if @scrollValue >= ePoint
+      if !@isFinishedEvent
+        # 終了イベント
+        @isFinishedEvent = true
+        if complete?
+          complete()
+      return
+
     @scrollValue = if @scrollValue < sPoint then sPoint else @scrollValue
     @scrollValue = if @scrollValue > ePoint then ePoint else @scrollValue
 
     (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
-
-    if @scrollValue == ePoint
-      @isFinishedEvent = true
-      if complete?
-        complete()
 
   # スクロールの長さを取得
   scrollLength: ->
