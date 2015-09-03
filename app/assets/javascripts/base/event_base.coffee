@@ -190,14 +190,13 @@ class EventBase extends Extend
       @scrollValue = sPoint
       return
     else if @scrollValue >= ePoint
+      @scrollValue = ePoint
       if !@isFinishedEvent
         # 終了イベント
         @isFinishedEvent = true
         if complete?
           complete()
       return
-
-    @scrollValue = if @scrollValue > ePoint then ePoint else @scrollValue
 
     (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
 

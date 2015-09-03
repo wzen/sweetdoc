@@ -217,6 +217,7 @@ EventBase = (function(superClass) {
       this.scrollValue = sPoint;
       return;
     } else if (this.scrollValue >= ePoint) {
+      this.scrollValue = ePoint;
       if (!this.isFinishedEvent) {
         this.isFinishedEvent = true;
         if (complete != null) {
@@ -225,7 +226,6 @@ EventBase = (function(superClass) {
       }
       return;
     }
-    this.scrollValue = this.scrollValue > ePoint ? ePoint : this.scrollValue;
     return this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
   };
 

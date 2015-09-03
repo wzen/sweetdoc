@@ -90,8 +90,8 @@ class WorktableCommon
     #Wrapper & Canvasサイズ
     borderWidth = 5
     timelineTopPadding = 5
-    padding = borderWidth * 4 + timelineTopPadding
-    $('#pages').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
+    padding = borderWidth * 2 + timelineTopPadding
+    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
     $(window.drawingCanvas).attr('width', window.mainWrapper.width())
     $(window.drawingCanvas).attr('height', window.mainWrapper.height())

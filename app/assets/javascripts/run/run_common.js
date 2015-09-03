@@ -6,7 +6,7 @@ RunCommon = (function() {
 
   RunCommon.initView = function() {
     var is_reload;
-    $('#pages').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height());
+    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - 10);
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
@@ -72,8 +72,9 @@ RunCommon = (function() {
     lastLeft = scrollHandleWrapper.scrollLeft();
     lastTop = scrollHandleWrapper.scrollTop();
     stopTimer = null;
-    return scrollHandleWrapper.scroll(function() {
+    return scrollHandleWrapper.scroll(function(e) {
       var distX, distY, x, y;
+      e.preventDefault();
       if (!RunCommon.enabledScroll()) {
         return;
       }

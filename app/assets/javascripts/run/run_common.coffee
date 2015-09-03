@@ -2,7 +2,7 @@ class RunCommon
 
   # 画面初期化
   @initView = ->
-    $('#pages').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height())
+    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - 10)
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
     # 暫定でスクロールを上に持ってくる
@@ -72,7 +72,9 @@ class RunCommon
     lastTop = scrollHandleWrapper.scrollTop()
     stopTimer = null
 
-    scrollHandleWrapper.scroll( ->
+    scrollHandleWrapper.scroll( (e) ->
+      e.preventDefault()
+
       if !RunCommon.enabledScroll()
         return
 
