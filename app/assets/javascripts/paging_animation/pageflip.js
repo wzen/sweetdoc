@@ -13,6 +13,10 @@ PageFlip = (function() {
     this.PAGE_WIDTH = $('#pages').width();
     this.PAGE_HEIGHT = $('#pages').height();
     this.CANVAS_PADDING = 20;
+    this.flipPageNum = beforePageNum < afterPageNum ? beforePageNum : afterPageNum;
+    if (window.debug) {
+      console.log('[PageFlip constructor] flipPageNum:' + this.flipPageNum);
+    }
     this.zIndex = Common.plusPagingZindex(0, this.flipPageNum);
     zIndexMax = Common.plusPagingZindex(0, 0);
     $("#" + Constant.Paging.ROOT_ID).append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:" + zIndexMax + "'><canvas id='pageflip-canvas' style='z-index:" + zIndexMax + "'></canvas></div>");
@@ -25,10 +29,6 @@ PageFlip = (function() {
     this.direction = beforePageNum < afterPageNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
     if (window.debug) {
       console.log('[PageFlip constructor] direction:' + this.direction);
-    }
-    this.flipPageNum = beforePageNum < afterPageNum ? beforePageNum : afterPageNum;
-    if (window.debug) {
-      console.log('[PageFlip constructor] flipPageNum:' + this.flipPageNum);
     }
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
     section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");

@@ -12,6 +12,10 @@ class PageFlip
     # The canvas size equals to the book dimensions + this padding
     @CANVAS_PADDING = 20
 
+    @flipPageNum = if beforePageNum < afterPageNum then beforePageNum else afterPageNum
+    if window.debug
+      console.log('[PageFlip constructor] flipPageNum:' + @flipPageNum)
+
     @zIndex = Common.plusPagingZindex(0, @flipPageNum)
 
     # アニメーション用Div作成
@@ -32,10 +36,6 @@ class PageFlip
     @direction = if beforePageNum < afterPageNum then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
     if window.debug
       console.log('[PageFlip constructor] direction:' + @direction)
-
-    @flipPageNum = if beforePageNum < afterPageNum then beforePageNum else afterPageNum
-    if window.debug
-      console.log('[PageFlip constructor] flipPageNum:' + @flipPageNum)
 
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
     section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
