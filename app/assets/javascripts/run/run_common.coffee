@@ -23,13 +23,14 @@ class RunCommon
     scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
   # Mainビューの高さ更新
-  @updateMainViewHeight = ->
+  @updateMainViewSize = ->
     padding = 5 * 2
     $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - padding)
+    window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->
-    @updateMainViewHeight()
+    @updateMainViewSize()
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
 

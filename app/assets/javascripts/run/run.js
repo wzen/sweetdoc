@@ -24,7 +24,7 @@ $(function() {
   }
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   RunCommon.initMainContainer();
-  RunCommon.updateMainViewHeight();
+  RunCommon.updateMainViewSize();
   Setting.initConfig();
   return RunCommon.initEventAction();
 });

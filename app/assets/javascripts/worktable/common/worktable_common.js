@@ -83,16 +83,20 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.updateMainViewHeight = function() {
+  WorktableCommon.updateMainViewSize = function() {
     var borderWidth, padding, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
     padding = borderWidth * 2 + timelineTopPadding;
-    return $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    return window.scrollContentsSize = {
+      width: window.scrollContents.width(),
+      height: window.scrollContents.height()
+    };
   };
 
   WorktableCommon.resizeMainContainerEvent = function() {
-    this.updateMainViewHeight();
+    this.updateMainViewSize();
     $(window.drawingCanvas).attr('width', window.mainWrapper.width());
     return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
   };

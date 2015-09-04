@@ -20,14 +20,18 @@ RunCommon = (function() {
     return scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   };
 
-  RunCommon.updateMainViewHeight = function() {
+  RunCommon.updateMainViewSize = function() {
     var padding;
     padding = 5 * 2;
-    return $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - padding);
+    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - padding);
+    return window.scrollContentsSize = {
+      width: window.scrollContents.width(),
+      height: window.scrollContents.height()
+    };
   };
 
   RunCommon.resizeMainContainerEvent = function() {
-    this.updateMainViewHeight();
+    this.updateMainViewSize();
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
     return $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
   };

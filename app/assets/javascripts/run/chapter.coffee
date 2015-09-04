@@ -52,8 +52,8 @@ class Chapter
         left = null
         top = null
         if type == "center"
-          left = item.itemSize.x + width * 0.5 - (window.scrollContents.width() * 0.5)
-          top = item.itemSize.y + height * 0.5 - (window.scrollContents.height() * 0.5)
+          left = item.itemSize.x + width * 0.5 - (window.scrollContentsSize.width * 0.5)
+          top = item.itemSize.y + height * 0.5 - (window.scrollContentsSize.height * 0.5)
 
         if isImmediate
           window.scrollContents.scrollTop(top)

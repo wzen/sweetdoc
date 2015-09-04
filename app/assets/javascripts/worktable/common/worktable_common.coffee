@@ -75,15 +75,16 @@ class WorktableCommon
     )
 
   # Mainビューの高さ更新
-  @updateMainViewHeight = ->
+  @updateMainViewSize = ->
     borderWidth = 5
     timelineTopPadding = 5
     padding = borderWidth * 2 + timelineTopPadding
     $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
+    window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
 
   # 画面の高さ設定
   @resizeMainContainerEvent = ->
-    @updateMainViewHeight()
+    @updateMainViewSize()
     $(window.drawingCanvas).attr('width', window.mainWrapper.width())
     $(window.drawingCanvas).attr('height', window.mainWrapper.height())
 
