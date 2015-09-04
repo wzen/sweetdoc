@@ -5,7 +5,8 @@ RunCommon = (function() {
   function RunCommon() {}
 
   RunCommon.initView = function() {
-    this.setupWindowHeight();
+    $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
+    $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollInside.width(window.scrollViewSize);
     scrollInside.height(window.scrollViewSize);
@@ -19,16 +20,16 @@ RunCommon = (function() {
     return scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   };
 
-  RunCommon.setupWindowHeight = function() {
+  RunCommon.updateMainViewHeight = function() {
     var padding;
     padding = 5 * 2;
-    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - padding);
+    return $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - padding);
+  };
+
+  RunCommon.resizeMainContainerEvent = function() {
+    this.updateMainViewHeight();
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
-    $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
-    return window.scrollContentsSize = {
-      width: scrollContents.width(),
-      height: scrollContents.height()
-    };
+    return $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
   };
 
   RunCommon.initResize = function() {
@@ -39,7 +40,7 @@ RunCommon = (function() {
         clearTimeout(resizeTimer);
       }
       return resizeTimer = setTimeout(function() {
-        RunCommon.setupWindowHeight();
+        RunCommon.resizeMainContainerEvent();
         return clearTimeout(resizeTimer);
       }, 200);
     });

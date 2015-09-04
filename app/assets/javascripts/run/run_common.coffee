@@ -2,7 +2,9 @@ class RunCommon
 
   # 画面初期化
   @initView = ->
-    @setupWindowHeight()
+    # Canvasサイズ設定
+    $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
+    $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
     # 暫定でスクロールを上に持ってくる
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
 
@@ -20,14 +22,16 @@ class RunCommon
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
     scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
-  # ウィンドウの高さ設定
-  @setupWindowHeight = ->
+  # Mainビューの高さ更新
+  @updateMainViewHeight = ->
     padding = 5 * 2
     $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - padding)
+
+  # ウィンドウの高さ設定
+  @resizeMainContainerEvent = ->
+    @updateMainViewHeight()
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
-    # フォーカス処理のために保存
-    window.scrollContentsSize = {width: scrollContents.width(), height: scrollContents.height()}
 
   # ウィンドウリサイズイベント
   @initResize = ->
@@ -36,7 +40,7 @@ class RunCommon
       if resizeTimer != false
         clearTimeout(resizeTimer)
       resizeTimer = setTimeout( ->
-        RunCommon.setupWindowHeight()
+        RunCommon.resizeMainContainerEvent()
         clearTimeout(resizeTimer)
       , 200)
     )

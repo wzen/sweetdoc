@@ -83,18 +83,18 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.setupWindowHeight = function() {
+  WorktableCommon.updateMainViewHeight = function() {
     var borderWidth, padding, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
     padding = borderWidth * 2 + timelineTopPadding;
-    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    return $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+  };
+
+  WorktableCommon.resizeMainContainerEvent = function() {
+    this.updateMainViewHeight();
     $(window.drawingCanvas).attr('width', window.mainWrapper.width());
-    $(window.drawingCanvas).attr('height', window.mainWrapper.height());
-    return window.scrollContentsSize = {
-      width: scrollContents.width(),
-      height: scrollContents.height()
-    };
+    return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
   };
 
   WorktableCommon.initResize = function() {
@@ -105,7 +105,7 @@ WorktableCommon = (function() {
         clearTimeout(resizeTimer);
       }
       return resizeTimer = setTimeout(function() {
-        WorktableCommon.setupWindowHeight();
+        WorktableCommon.resizeMainContainerEvent();
         return clearTimeout(resizeTimer);
       }, 200);
     });
@@ -130,7 +130,8 @@ WorktableCommon = (function() {
   WorktableCommon.initMainContainer = function() {
     var menu, page;
     CommonVar.worktableCommonVar();
-    this.setupWindowHeight();
+    $(window.drawingCanvas).attr('width', window.mainWrapper.width());
+    $(window.drawingCanvas).attr('height', window.mainWrapper.height());
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
     scrollInside.width(window.scrollViewSize);
     scrollInside.height(window.scrollViewSize);
