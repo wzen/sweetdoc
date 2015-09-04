@@ -119,17 +119,17 @@ class PageValueState
   # @param [String] user_id ユーザID
   # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
   def self.get_saved_pagevalues(user_id, user_pagevalue_id, loaded_itemids)
-    pagevalues = UserPagevalue.joins(:setting_pagevalue).where({id:user_pagevalue_id, user_id: user_id, del_flg: false})
+    pagevalues = UserPagevalue.eager_load(:setting_pagevalue).where({id:user_pagevalue_id, user_id: user_id, del_flg: false})
                      .order('updated_at DESC')
-                     .select('user_pagevalues.*, setting_pagevalues.data as s_data').first
+                     .select('user_pagevalues.*, setting_pagevalues.*').first
     if pagevalues == nil
       message = I18n.t('message.database.item_state.load.error')
       return nil
     else
       message = I18n.t('message.database.item_state.load.success')
 
-      instance_pages = InstancePagevaluePaging.joins(:user_pagevalue).where(id: user_pagevalue_id)
-                           .joins(:instance_pagevalue).select('instance_pagevalue_pagings.*, instance_pagevalues.data as data')
+      instance_pages = InstancePagevaluePaging.joins(:user_pagevalue, :instance_pagevalue).where(user_pagevalues: {id: user_pagevalue_id})
+                           .select('instance_pagevalue_pagings.*, instance_pagevalues.data as data')
       if instance_pages.size > 0
         ipd = {}
         instance_pages.each do |p|
@@ -141,8 +141,8 @@ class PageValueState
       end
 
       item_js_list = []
-      event_pages = EventPagevaluePaging.joins(:user_pagevalue).where(id: user_pagevalue_id)
-                           .joins(:event_pagevalue).select('event_pagevalue_pagings.*, event_pagevalues.data as data')
+      event_pages = EventPagevaluePaging.joins(:user_pagevalue, :event_pagevalue).where(user_pagevalues: {id: user_pagevalue_id})
+                           .select('event_pagevalue_pagings.*, event_pagevalues.data as data')
       if event_pages.size > 0
         itemids = []
         epd = {}
@@ -169,8 +169,8 @@ class PageValueState
         epd = nil
       end
 
-      if pagevalues.s_data != nil
-        spd = pagevalues.s_data
+      if pagevalues.setting_pagevalue != nil
+        spd = pagevalues.setting_pagevalue.data
       else
         spd = nil
       end

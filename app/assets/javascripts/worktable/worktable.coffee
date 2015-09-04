@@ -34,7 +34,6 @@ $ ->
     # ページング
     Paging.initPaging()
 
-
   if existedCache
     # 描画
     PageValue.adjustInstanceAndEventOnThisPage()

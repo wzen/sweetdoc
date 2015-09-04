@@ -123,10 +123,11 @@ ServerStorage = (function() {
             PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d);
           }
           PageValue.adjustInstanceAndEventOnThisPage();
-          PageValue.updatePageCount();
           LocalStorage.saveValueForWorktable();
           return WorktableCommon.drawAllItemFromEventPageValue(function() {
-            return Setting.initConfig();
+            Setting.initConfig();
+            PageValue.updatePageCount();
+            return Paging.initPaging();
           });
         };
         if (item_js_list.length === 0) {
@@ -136,7 +137,7 @@ ServerStorage = (function() {
         loadedCount = 0;
         return item_js_list.forEach(function(d) {
           var itemInitFuncName, option;
-          itemInitFuncName = WorkTable.getInitFuncName(d.item_id);
+          itemInitFuncName = WorktableCommon.getInitFuncName(d.item_id);
           if (window.itemInitFuncList[itemInitFuncName] != null) {
             window.itemInitFuncList[itemInitFuncName]();
             loadedCount += 1;

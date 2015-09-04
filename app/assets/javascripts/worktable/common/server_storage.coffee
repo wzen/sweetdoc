@@ -100,10 +100,12 @@ class ServerStorage
               PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d)
 
             PageValue.adjustInstanceAndEventOnThisPage()
-            PageValue.updatePageCount()
             LocalStorage.saveValueForWorktable()
             WorktableCommon.drawAllItemFromEventPageValue( ->
               Setting.initConfig()
+              PageValue.updatePageCount()
+              Paging.initPaging()
+
             )
 
           if item_js_list.length == 0
@@ -112,7 +114,7 @@ class ServerStorage
 
           loadedCount = 0
           item_js_list.forEach((d) ->
-            itemInitFuncName = WorkTable.getInitFuncName(d.item_id)
+            itemInitFuncName = WorktableCommon.getInitFuncName(d.item_id)
             if window.itemInitFuncList[itemInitFuncName]?
               # 既に読み込まれている場合はコールバックのみ実行
               window.itemInitFuncList[itemInitFuncName]()
