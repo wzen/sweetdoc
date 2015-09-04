@@ -15,9 +15,11 @@ EPVBackgroundColor = (function(superClass) {
   EPVBackgroundColor.CHANGE_COLOR = 'c_color';
 
   EPVBackgroundColor.initConfigValue = function(eventConfig) {
-    var bgColor;
+    var bgColor, className, section;
     EPVBackgroundColor.__super__.constructor.initConfigValue.call(this, eventConfig);
-    bgColor = window.mainWrapper.css('backgroundColor');
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    bgColor = section.css('backgroundColor');
     $(".baseColor", $("values_div", eventConfig.emt)).css('backgroundColor', bgColor);
     return $(".colorPicker", eventConfig.emt).each(function() {
       var self;

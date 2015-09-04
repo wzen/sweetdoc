@@ -38,7 +38,9 @@ class BackgroundEvent extends CommonEvent
         gp += gPer
         bp += bPer
 
-      @targetBackground = window.mainWrapper
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+      section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+      @targetBackground = section
 
   # イベント前の表示状態にする
   updateEventBefore: ->

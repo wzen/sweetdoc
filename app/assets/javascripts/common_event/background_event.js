@@ -13,7 +13,7 @@ BackgroundEvent = (function(superClass) {
   BackgroundEvent.EVENT_ID = '1';
 
   BackgroundEvent.prototype.initWithEvent = function(event) {
-    var b, bColor, bColors, bPer, bp, cColor, cColors, g, gPer, gp, i, index, j, k, l, len, len1, methodName, r, rPer, ref, rgb, rp, scrollEnd, scrollLength, scrollStart, val;
+    var b, bColor, bColors, bPer, bp, cColor, cColors, className, g, gPer, gp, i, index, j, k, l, len, len1, methodName, r, rPer, ref, rgb, rp, scrollEnd, scrollLength, scrollStart, section, val;
     BackgroundEvent.__super__.initWithEvent.call(this, event);
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'changeBackgroundColor') {
@@ -49,7 +49,9 @@ BackgroundEvent = (function(superClass) {
         gp += gPer;
         bp += bPer;
       }
-      return this.targetBackground = window.mainWrapper;
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+      section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+      return this.targetBackground = section;
     }
   };
 

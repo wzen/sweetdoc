@@ -4,7 +4,9 @@ class EPVBackgroundColor extends EventPageValueBase
 
   @initConfigValue = (eventConfig) ->
     super(eventConfig)
-    bgColor = window.mainWrapper.css('backgroundColor')
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+    bgColor = section.css('backgroundColor')
     $(".baseColor", $("values_div", eventConfig.emt)).css('backgroundColor', bgColor)
     $(".colorPicker", eventConfig.emt).each( ->
       self = $(@)
