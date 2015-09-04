@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "click.js",
+  "sourceRoot": "",
+  "sources": [
+    "click.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,UAAA;EAAA;6BAAA;;AAAA;AAEE,gCAAA,CAAA;;AAAa,EAAA,oBAAA,GAAA,CAAb;;AAAA,uBAKA,SAAA,GAAW,SAAA,GAAA,CALX,CAAA;;AAAA,uBASA,SAAA,GAAW,SAAA,GAAA,CATX,CAAA;;oBAAA;;GAFuB,UAAzB,CAAA"
+}

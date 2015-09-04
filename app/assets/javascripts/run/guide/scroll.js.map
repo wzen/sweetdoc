@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "scroll.js",
+  "sourceRoot": "",
+  "sources": [
+    "scroll.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,WAAA;EAAA;6BAAA;;AAAA;AAEE,iCAAA,CAAA;;AAAa,EAAA,qBAAA,GAAA,CAAb;;AAAA,wBAKA,SAAA,GAAW,SAAA,GAAA,CALX,CAAA;;AAAA,wBASA,SAAA,GAAW,SAAA,GAAA,CATX,CAAA;;qBAAA;;GAFwB,UAA1B,CAAA"
+}

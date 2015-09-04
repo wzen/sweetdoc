@@ -28,6 +28,8 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
@@ -40,6 +42,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/common_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/run.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/scroll.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/event_config.js" />
@@ -120,6 +123,8 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
@@ -132,6 +137,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/common_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/scroll.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/event_config.js" />

@@ -43,9 +43,7 @@ class ServerStorage
 
       })
     data[@Key.EVENT_PAGE_VALUE] = if eventPagevalues.length > 0 then eventPagevalues else null
-
     data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX))
-
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
       $.ajax(
         {
