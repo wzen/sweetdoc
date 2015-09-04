@@ -82,6 +82,8 @@ class WorktableCommon
     $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
     $(window.drawingCanvas).attr('width', window.mainWrapper.width())
     $(window.drawingCanvas).attr('height', window.mainWrapper.height())
+    # フォーカス処理のために保存
+    window.scrollContentsSize = {width: scrollContents.width(), height: scrollContents.height()}
 
   # ウィンドウリサイズイベント
   @initResize = ->

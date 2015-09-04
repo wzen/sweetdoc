@@ -30,7 +30,6 @@ class Page
       )
 
     @chapterIndex = 0
-    @doMovePage = false
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
 
@@ -69,17 +68,22 @@ class Page
   # チャプターを戻す
   rewindChapter: ->
     @resetChapter(@chapterIndex)
-    if !@thisChapter().doMoveChapter && @chapterIndex > 0
-      @chapterIndex -= 1
-      @resetChapter(@chapterIndex)
-      Navbar.setChapterNum(@chapterIndex + 1)
+    if !@thisChapter().doMoveChapter
+      if @chapterIndex > 0
+        @chapterIndex -= 1
+        @resetChapter(@chapterIndex)
+        Navbar.setChapterNum(@chapterIndex + 1)
+      else
+        window.eventAction.rewindPage()
+        return
 
     # チャプター前処理
     @thisChapter().willChapter()
 
   # チャプターの内容をリセット
-  resetChapter: (chapterIndex) ->
+  resetChapter: (chapterIndex = @chapterIndex) ->
     @finishedAllChapters = false
+    @finishedScrollDistSum = 0
     @chapterList[chapterIndex].resetAllEvents()
 
   # 全てのチャプターを戻す
@@ -90,6 +94,7 @@ class Page
     @chapterIndex = 0
     Navbar.setChapterNum(@chapterIndex + 1)
     @finishedAllChapters = false
+    @finishedScrollDistSum = 0
     @start()
 
   # スクロールイベントをハンドル
@@ -138,6 +143,24 @@ class Page
     # キャッシュ保存
     LocalStorage.saveValueForRun()
 
+  # ページ戻し前処理
+  willPageFromRewind: (beforeScrollWindowSize) ->
+    # チャプターのイベントを初期化
+    @initChapterEvent()
+    # フォーカス
+    @initFocus(false)
+    # 最後のイベント以外リセット
+    @forwardAllChapters()
+    @chapterList[@chapterList.length - 1].resetAllEvents()
+    # チャプター最大値設定
+    Navbar.setChapterMax(@chapterList.length)
+    # インデックスを最後のチャプターに
+    @chapterIndex = @chapterList.length - 1
+    # チャプター初期化
+    @resetChapter()
+    # キャッシュ保存
+    LocalStorage.saveValueForRun()
+
   # ページ後処理
   didPage: ->
 
@@ -149,22 +172,40 @@ class Page
         event.initWithEvent(chapter.eventList[i])
 
   # チャプターのフォーカス初期化
-  initFocus: ->
+  initFocus: (focusToFirst = true) ->
     flg = false
-    for chapter in @chapterList
-      if flg
-        return false
-      for event in chapter.eventList
+    if focusToFirst
+      for chapter in @chapterList
         if flg
           return false
-        if !event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-          chapter.focusToActorIfNeed(true)
-          flg = true
+        for event in chapter.eventList
+          if flg
+            return false
+          if !event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+            chapter.focusToActorIfNeed(true)
+            flg = true
+    else
+      for i in [(@chapterList.length - 1)..0] by -1
+        chapter = @chapterList[i]
+        if flg
+          return false
+        for event in chapter.eventList
+          if flg
+            return false
+          if !event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+            chapter.focusToActorIfNeed(true)
+            flg = true
 
   # 全てのチャプター内容をリセット
   resetAllChapters: ->
     @chapterList.forEach((chapter) ->
       chapter.resetAllEvents()
+    )
+
+  # 全てのチャプター内容を進行
+  forwardAllChapters: ->
+    @chapterList.forEach((chapter) ->
+      chapter.forwardAllEvents()
     )
 
   # イベント終了イベント

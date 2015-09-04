@@ -90,7 +90,11 @@ WorktableCommon = (function() {
     padding = borderWidth * 2 + timelineTopPadding;
     $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
     $(window.drawingCanvas).attr('width', window.mainWrapper.width());
-    return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
+    $(window.drawingCanvas).attr('height', window.mainWrapper.height());
+    return window.scrollContentsSize = {
+      width: scrollContents.width(),
+      height: scrollContents.height()
+    };
   };
 
   WorktableCommon.initResize = function() {

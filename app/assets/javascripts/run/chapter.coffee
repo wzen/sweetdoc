@@ -93,3 +93,9 @@ class Chapter
     @eventObjList.forEach((e) =>
       e.resetEvent()
     )
+
+  # チャプターのイベントを実行後にする
+  forwardAllEvents: ->
+    @eventObjList.forEach((e) =>
+      e.forwardEvent()
+    )

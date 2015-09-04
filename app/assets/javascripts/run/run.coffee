@@ -8,11 +8,21 @@ $ ->
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
   window.eventAction = null
-  # 1ページ目から
+  # デフォルト1ページ目から
   PageValue.setPageNum(1)
+
+  # キャッシュ読み込み
+  is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
+  if is_reload?
+    LocalStorage.loadValueForRun()
+  else
+    LocalStorage.saveValueForRun()
+
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   RunCommon.initMainContainer()
+  # 共通設定
+  Setting.initConfig()
   # イベント初期化
   RunCommon.initEventAction()

@@ -55,7 +55,7 @@ EventAction = (function() {
   EventAction.prototype.rewindPage = function() {
     var beforePageIndex, pageNum;
     beforePageIndex = this.pageIndex;
-    if (!this.thisChapter().doMovePage && this.pageIndex > 0) {
+    if (this.pageIndex > 0) {
       this.pageIndex -= 1;
       pageNum = this.pageIndex + 1;
       return RunCommon.loadPagingPageValue(pageNum, pageNum, (function(_this) {
@@ -94,7 +94,11 @@ EventAction = (function() {
     pageFlip = new PageFlip(beforePageNum, afterPageNum);
     RunCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
-    this.thisPage().willPage();
+    if (beforePageNum > afterPageNum) {
+      this.thisPage().willPageFromRewind();
+    } else {
+      this.thisPage().willPage();
+    }
     this.thisPage().start();
     RunCommon.createCssElement(afterPageNum);
     return pageFlip.startRender(function() {

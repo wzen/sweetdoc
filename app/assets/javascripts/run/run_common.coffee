@@ -20,21 +20,14 @@ class RunCommon
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
     scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
-    is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
-    if is_reload?
-      LocalStorage.loadValueForRun()
-    else
-      LocalStorage.saveValueForRun()
-
-    # 共通設定
-    Setting.initConfig()
-
   # ウィンドウの高さ設定
   @setupWindowHeight = ->
     padding = 5 * 2
     $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - padding)
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
+    # フォーカス処理のために保存
+    window.scrollContentsSize = {width: scrollContents.width(), height: scrollContents.height()}
 
   # ウィンドウリサイズイベント
   @initResize = ->
@@ -132,6 +125,11 @@ class RunCommon
         section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
         if !section? || section.length == 0
           targetPages.push(i)
+
+    if targetPages.length == 0
+      if callback?
+        callback()
+      return
 
     $.ajax(
       {

@@ -41,7 +41,6 @@ Page = (function() {
       })(this));
     }
     this.chapterIndex = 0;
-    this.doMovePage = false;
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
   }
@@ -75,16 +74,25 @@ Page = (function() {
 
   Page.prototype.rewindChapter = function() {
     this.resetChapter(this.chapterIndex);
-    if (!this.thisChapter().doMoveChapter && this.chapterIndex > 0) {
-      this.chapterIndex -= 1;
-      this.resetChapter(this.chapterIndex);
-      Navbar.setChapterNum(this.chapterIndex + 1);
+    if (!this.thisChapter().doMoveChapter) {
+      if (this.chapterIndex > 0) {
+        this.chapterIndex -= 1;
+        this.resetChapter(this.chapterIndex);
+        Navbar.setChapterNum(this.chapterIndex + 1);
+      } else {
+        window.eventAction.rewindPage();
+        return;
+      }
     }
     return this.thisChapter().willChapter();
   };
 
   Page.prototype.resetChapter = function(chapterIndex) {
+    if (chapterIndex == null) {
+      chapterIndex = this.chapterIndex;
+    }
     this.finishedAllChapters = false;
+    this.finishedScrollDistSum = 0;
     return this.chapterList[chapterIndex].resetAllEvents();
   };
 
@@ -97,6 +105,7 @@ Page = (function() {
     this.chapterIndex = 0;
     Navbar.setChapterNum(this.chapterIndex + 1);
     this.finishedAllChapters = false;
+    this.finishedScrollDistSum = 0;
     return this.start();
   };
 
@@ -145,6 +154,17 @@ Page = (function() {
     return LocalStorage.saveValueForRun();
   };
 
+  Page.prototype.willPageFromRewind = function(beforeScrollWindowSize) {
+    this.initChapterEvent();
+    this.initFocus(false);
+    this.forwardAllChapters();
+    this.chapterList[this.chapterList.length - 1].resetAllEvents();
+    Navbar.setChapterMax(this.chapterList.length);
+    this.chapterIndex = this.chapterList.length - 1;
+    this.resetChapter();
+    return LocalStorage.saveValueForRun();
+  };
+
   Page.prototype.didPage = function() {};
 
   Page.prototype.initChapterEvent = function() {
@@ -166,24 +186,47 @@ Page = (function() {
     return results;
   };
 
-  Page.prototype.initFocus = function() {
-    var chapter, event, flg, j, k, len, len1, ref, ref1;
+  Page.prototype.initFocus = function(focusToFirst) {
+    var chapter, event, flg, i, j, k, l, len, len1, len2, m, ref, ref1, ref2, ref3;
+    if (focusToFirst == null) {
+      focusToFirst = true;
+    }
     flg = false;
-    ref = this.chapterList;
-    for (j = 0, len = ref.length; j < len; j++) {
-      chapter = ref[j];
-      if (flg) {
-        return false;
-      }
-      ref1 = chapter.eventList;
-      for (k = 0, len1 = ref1.length; k < len1; k++) {
-        event = ref1[k];
+    if (focusToFirst) {
+      ref = this.chapterList;
+      for (j = 0, len = ref.length; j < len; j++) {
+        chapter = ref[j];
         if (flg) {
           return false;
         }
-        if (!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-          chapter.focusToActorIfNeed(true);
-          flg = true;
+        ref1 = chapter.eventList;
+        for (k = 0, len1 = ref1.length; k < len1; k++) {
+          event = ref1[k];
+          if (flg) {
+            return false;
+          }
+          if (!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+            chapter.focusToActorIfNeed(true);
+            flg = true;
+          }
+        }
+      }
+    } else {
+      for (i = l = ref2 = this.chapterList.length - 1; l >= 0; i = l += -1) {
+        chapter = this.chapterList[i];
+        if (flg) {
+          return false;
+        }
+        ref3 = chapter.eventList;
+        for (m = 0, len2 = ref3.length; m < len2; m++) {
+          event = ref3[m];
+          if (flg) {
+            return false;
+          }
+          if (!event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+            chapter.focusToActorIfNeed(true);
+            flg = true;
+          }
         }
       }
     }
@@ -192,6 +235,12 @@ Page = (function() {
   Page.prototype.resetAllChapters = function() {
     return this.chapterList.forEach(function(chapter) {
       return chapter.resetAllEvents();
+    });
+  };
+
+  Page.prototype.forwardAllChapters = function() {
+    return this.chapterList.forEach(function(chapter) {
+      return chapter.forwardAllEvents();
     });
   };
 

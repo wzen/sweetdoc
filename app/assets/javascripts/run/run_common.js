@@ -5,7 +5,6 @@ RunCommon = (function() {
   function RunCommon() {}
 
   RunCommon.initView = function() {
-    var is_reload;
     this.setupWindowHeight();
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollInside.width(window.scrollViewSize);
@@ -17,14 +16,7 @@ RunCommon = (function() {
     scrollContents.scrollLeft(scrollInside.width() * 0.5);
     scrollContents.scrollTop(scrollInside.height() * 0.5);
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
-    scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
-    is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
-    if (is_reload != null) {
-      LocalStorage.loadValueForRun();
-    } else {
-      LocalStorage.saveValueForRun();
-    }
-    return Setting.initConfig();
+    return scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   };
 
   RunCommon.setupWindowHeight = function() {
@@ -32,7 +24,11 @@ RunCommon = (function() {
     padding = 5 * 2;
     $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - padding);
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
-    return $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
+    $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
+    return window.scrollContentsSize = {
+      width: scrollContents.width(),
+      height: scrollContents.height()
+    };
   };
 
   RunCommon.initResize = function() {
@@ -143,6 +139,12 @@ RunCommon = (function() {
           targetPages.push(i);
         }
       }
+    }
+    if (targetPages.length === 0) {
+      if (callback != null) {
+        callback();
+      }
+      return;
     }
     return $.ajax({
       url: "/run/paging",

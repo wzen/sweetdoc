@@ -39,7 +39,11 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.resetEvent = function() {
     this.updateEventBefore();
-    this.isFinishedEvent = false;
+    return this.isFinishedEvent = false;
+  };
+
+  EventBase.prototype.forwardEvent = function() {
+    return this.updateEventAfter();
   };
 
   EventBase.prototype.preview = function(event) {

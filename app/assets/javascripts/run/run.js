@@ -11,12 +11,20 @@ Run = (function() {
 })();
 
 $(function() {
+  var is_reload;
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
   window.eventAction = null;
   PageValue.setPageNum(1);
+  is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
+  if (is_reload != null) {
+    LocalStorage.loadValueForRun();
+  } else {
+    LocalStorage.saveValueForRun();
+  }
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   RunCommon.initMainContainer();
+  Setting.initConfig();
   return RunCommon.initEventAction();
 });
 

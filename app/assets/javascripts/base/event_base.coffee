@@ -29,11 +29,13 @@ class EventBase extends Extend
       @clickEvent = @clickRootFunc
 
   # リセット(アクション前に戻す)
-  # @abstract
   resetEvent: ->
     @updateEventBefore()
     @isFinishedEvent = false
-    return
+
+  # アクション実行後にする
+  forwardEvent: ->
+    @updateEventAfter()
 
   # プレビュー開始
   preview: (event) ->

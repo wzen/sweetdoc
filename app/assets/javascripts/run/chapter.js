@@ -120,6 +120,14 @@ Chapter = (function() {
     })(this));
   };
 
+  Chapter.prototype.forwardAllEvents = function() {
+    return this.eventObjList.forEach((function(_this) {
+      return function(e) {
+        return e.forwardEvent();
+      };
+    })(this));
+  };
+
   return Chapter;
 
 })();

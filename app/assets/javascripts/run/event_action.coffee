@@ -50,7 +50,7 @@ class EventAction
   # ページを戻す
   rewindPage: ->
     beforePageIndex = @pageIndex
-    if !@thisChapter().doMovePage && @pageIndex > 0
+    if @pageIndex > 0
       # 動作させていない場合は前のページに戻す
       @pageIndex -= 1
       pageNum = @pageIndex + 1
@@ -87,7 +87,10 @@ class EventAction
     RunCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
     # ページ前処理
-    @thisPage().willPage()
+    if beforePageNum > afterPageNum
+      @thisPage().willPageFromRewind()
+    else
+      @thisPage().willPage()
     @thisPage().start()
     # CSS作成
     RunCommon.createCssElement(afterPageNum)
