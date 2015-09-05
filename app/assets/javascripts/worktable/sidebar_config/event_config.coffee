@@ -146,6 +146,23 @@ class EventConfig
         @scrollPointStart = handlerDiv.find('.scroll_point_start:first').val()
         @scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val()
 
+        topEmt = handlerDiv.find('.scroll_enabed_top:first')
+        bottomEmt = handlerDiv.find('scroll_enabed_bottom:first')
+        leftEmt = handlerDiv.find('scroll_enabed_left:first')
+        rightEmt = handlerDiv.find('scroll_enabed_right:first')
+        @scrollEnabledDirection = {
+          top: topEmt.children('.scroll_enabled:first').is(":checked")
+          bottom: bottomEmt.children('.scroll_enabled:first').is(":checked")
+          left: leftEmt.children('.scroll_enabled:first').is(":checked")
+          right: rightEmt.children('.scroll_enabled:first').is(":checked")
+        }
+        @scrollForwardDirection = {
+          top: topEmt.children('.scroll_forward:first').is(":checked")
+          bottom: bottomEmt.children('.scroll_forward:first').is(":checked")
+          left: leftEmt.children('.scroll_forward:first').is(":checked")
+          right: rightEmt.children('.scroll_forward:first').is(":checked")
+        }
+
     if @isCommonEvent
       # 共通イベントはここでインスタンス生成
       commonEventClass = Common.getClassFromMap(true, @commonEventId)

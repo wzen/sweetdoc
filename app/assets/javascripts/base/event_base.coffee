@@ -178,11 +178,32 @@ class EventBase extends Extend
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
+    enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
+    forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
+    # Idleタイマーセット
+    ScrollGuide.setTimer(enabledDirections)
+
+    # スクロール値更新
     #console.log("y:#{y}")
-    if y >= 0
-      @scrollValue += parseInt((y + 9) / 10)
-    else
-      @scrollValue += parseInt((y - 9) / 10)
+    plusX = 0
+    plusY = 0
+    if x > 0 && enabledDirections.right
+      plusX = parseInt((x + 9) / 10)
+    else if x < 0 && enabledDirections.left
+      plusX = parseInt((x - 9) / 10)
+    if y > 0 && enabledDirections.bottom
+      plusY = parseInt((y + 9) / 10)
+    else if y < 0 && enabledDirections.top
+      plusY = parseInt((y - 9) / 10)
+
+    if (plusX > 0 && !forwardDirections.right) ||
+      (plusX < 0 && forwardDirections.left)
+        plusX = -plusX
+    if (plusY > 0 && !forwardDirections.bottom) ||
+      (plusY < 0 && forwardDirections.top)
+        plusY = -plusY
+
+    @scrollValue += plusX + plusY
 
     sPoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
@@ -208,6 +229,8 @@ class EventBase extends Extend
 
   # スクロール基底メソッド
   clickRootFunc: (e, complete = null) ->
+    e.preventDefault()
+
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true

@@ -6,6 +6,20 @@ one:
   action_event_type_id: 0
   action_animation_type_id: 0
   method_name: changeBackgroundColor
+  scroll_enabled_direction: |
+            {
+              "top": true,
+              "bottom": true,
+              "left": false,
+              "right": false
+            }
+  scroll_forward_direction: |
+            {
+              "top": false,
+              "bottom": true,
+              "left": false,
+              "right": false
+            }
   options: {}
 
 two:

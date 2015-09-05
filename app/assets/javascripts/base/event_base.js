@@ -196,7 +196,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.didChapter = function(methodName) {};
 
   EventBase.prototype.scrollRootFunc = function(x, y, complete) {
-    var ePoint, methodName, sPoint;
+    var ePoint, enabledDirections, forwardDirections, methodName, plusX, plusY, sPoint;
     if (complete == null) {
       complete = null;
     }
@@ -210,11 +210,28 @@ EventBase = (function(superClass) {
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    if (y >= 0) {
-      this.scrollValue += parseInt((y + 9) / 10);
-    } else {
-      this.scrollValue += parseInt((y - 9) / 10);
+    enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
+    forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
+    ScrollGuide.setTimer(enabledDirections);
+    plusX = 0;
+    plusY = 0;
+    if (x > 0 && enabledDirections.right) {
+      plusX = parseInt((x + 9) / 10);
+    } else if (x < 0 && enabledDirections.left) {
+      plusX = parseInt((x - 9) / 10);
     }
+    if (y > 0 && enabledDirections.bottom) {
+      plusY = parseInt((y + 9) / 10);
+    } else if (y < 0 && enabledDirections.top) {
+      plusY = parseInt((y - 9) / 10);
+    }
+    if ((plusX > 0 && !forwardDirections.right) || (plusX < 0 && forwardDirections.left)) {
+      plusX = -plusX;
+    }
+    if ((plusY > 0 && !forwardDirections.bottom) || (plusY < 0 && forwardDirections.top)) {
+      plusY = -plusY;
+    }
+    this.scrollValue += plusX + plusY;
     sPoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     if (this.scrollValue < sPoint) {
@@ -242,6 +259,7 @@ EventBase = (function(superClass) {
     if (complete == null) {
       complete = null;
     }
+    e.preventDefault();
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }

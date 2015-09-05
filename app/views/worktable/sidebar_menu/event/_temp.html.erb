@@ -28,6 +28,8 @@
                                        action_event_type_id: a.action_event_type_id,
                                        method_name: a.method_name,
                                        action_animation_type_id: a.action_animation_type_id,
+                                       scroll_enabled_direction: a.scroll_enabled_direction,
+                                       scroll_forward_direction: a.scroll_forward_direction,
                                        radio_name: Const::ElementAttribute::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
                                        value_class_name: Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
                             %>

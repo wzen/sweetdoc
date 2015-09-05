@@ -87,40 +87,191 @@ div.scroll_inside_cover {
   z-index: 1;
 }
 
-div#footer{
-  position: fixed !important;
-  bottom:0;
-  height:80px;
-  width:100%;
-}
-.scrollpoint {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background-image: image-url('base/scroll_point.png');
-  background-size: 70px 75px;
-  width: 100%;
-  height: 100%;
-  opacity: 1;
-
-  -webkit-animation-name: scrollpoint_blink;
-  -webkit-animation-duration: 1.5s;
-  -webkit-animation-iteration-count: infinite;
-}
-
-@-webkit-keyframes scrollpoint_blink {
-  0% {
-    top: -50px;
-    opacity: 0;
-  }
-  100% {
-    top: 0px;
-    opacity: 1;
-  }
-}
-
 div.css3button > div {
   display: table-cell;
   text-align: center;
   vertical-align: middle;
+}
+
+div#guide_top{
+  position: absolute;
+  top:0;
+  height:80px;
+  width:100%;
+
+  .guide_container {
+    height: 100%;
+  }
+}
+div#guide_bottom{
+  position: absolute;
+  bottom:0;
+  height:80px;
+  width:100%;
+
+  .guide_container {
+    height: 100%;
+  }
+}
+div#guide_left{
+  position: absolute;
+  left:0;
+  width:80px;
+  height:100%;
+
+  .guide_container {
+    width: 100%;
+    height: 100%;
+  }
+}
+div#guide_right{
+  position: absolute;
+  right:0;
+  width:80px;
+  height:100%;
+
+  .guide_container {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.guide-view {
+  z-index: 999999999;
+  display: none;
+
+  .guide_container {
+    position: relative;
+
+    .guide_scroll_pointer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+      background-size: 50px 50px;
+      background-repeat: no-repeat;
+
+      -webkit-animation-name: scrollpointer_top_blink;
+      -webkit-animation-duration: 1.5s;
+      -webkit-animation-iteration-count: infinite;
+
+      &.top {
+        background-image: image_url('run_guide/arrow-up.png');
+      }
+      &.bottom {
+        background-image: image_url('run_guide/arrow-down.png');
+      }
+      &.left {
+        background-image: image_url('run_guide/arrow-left.png');
+      }
+      &.right {
+        background-image: image_url('run_guide/arrow-right.png');
+      }
+    }
+    .guide_scroll_win_container {
+      position: relative;
+    }
+    .guide_scroll_image_mac {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      opacity: 1;
+      background-repeat: no-repeat;
+
+      -webkit-animation-duration: 1.5s;
+      -webkit-animation-iteration-count: infinite;
+
+      &.forward {
+        background-image: image_url('run_guide/scroll_forward.png');
+      }
+      &.reverse {
+        background-image: image_url('run_guide/scroll_reverse.png');
+      }
+
+      &.top {
+        width: 80px;
+        height: 100%;
+        -webkit-animation-name: scrollpointer_top_blink;
+      }
+      &.bottom {
+        width: 80px;
+        height: 100%;
+        -webkit-animation-name: scrollpointer_bottom_blink;
+      }
+      &.left {
+        width: 100%;
+        height: 80px;
+        -webkit-animation-name: scrollpointer_left_blink;
+      }
+      &.right {
+        width: 100%;
+        height: 80px;
+        -webkit-animation-name: scrollpointer_right_blink;
+      }
+
+    }
+    .guide_scroll_image_win {
+      z-index: 2;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-image: image_url('run_guide/scroll_win.png');
+    }
+    .guide_scroll_image_win_background {
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: black;
+    }
+  }
+}
+
+@-webkit-keyframes scrollpointer_top_blink {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  100% {
+    top: 50px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes scrollpointer_bottom_blink {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  100% {
+    top: -50px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes scrollpointer_left_blink {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  100% {
+    left: 50px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes scrollpointer_right_blink {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  100% {
+    left: -50px;
+    opacity: 1;
+  }
 }

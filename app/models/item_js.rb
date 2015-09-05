@@ -15,6 +15,8 @@ class ItemJs
           action_event_type_id: d.action_event_type_id,
           method_name: d.method_name,
           action_animation_type_id: d.action_animation_type_id,
+          scroll_enabled_direction: d.scroll_enabled_direction,
+          scroll_forward_direction: d.scroll_forward_direction,
           is_default: d.is_default,
           options: d.options
       }

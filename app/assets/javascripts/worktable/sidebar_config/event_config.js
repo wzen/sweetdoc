@@ -129,7 +129,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.applyAction = function() {
-    var commonEvent, commonEventClass, errorMes, handlerDiv, item, parallel;
+    var bottomEmt, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, rightEmt, topEmt;
     this.isParallel = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {
@@ -142,6 +142,22 @@ EventConfig = (function() {
       if (handlerDiv != null) {
         this.scrollPointStart = handlerDiv.find('.scroll_point_start:first').val();
         this.scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val();
+        topEmt = handlerDiv.find('.scroll_enabed_top:first');
+        bottomEmt = handlerDiv.find('scroll_enabed_bottom:first');
+        leftEmt = handlerDiv.find('scroll_enabed_left:first');
+        rightEmt = handlerDiv.find('scroll_enabed_right:first');
+        this.scrollEnabledDirection = {
+          top: topEmt.children('.scroll_enabled:first').is(":checked"),
+          bottom: bottomEmt.children('.scroll_enabled:first').is(":checked"),
+          left: leftEmt.children('.scroll_enabled:first').is(":checked"),
+          right: rightEmt.children('.scroll_enabled:first').is(":checked")
+        };
+        this.scrollForwardDirection = {
+          top: topEmt.children('.scroll_forward:first').is(":checked"),
+          bottom: bottomEmt.children('.scroll_forward:first').is(":checked"),
+          left: leftEmt.children('.scroll_forward:first').is(":checked"),
+          right: rightEmt.children('.scroll_forward:first').is(":checked")
+        };
       }
     }
     if (this.isCommonEvent) {

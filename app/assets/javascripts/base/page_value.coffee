@@ -39,6 +39,10 @@ class PageValue
       @ITEM_DEFAULT_ACTIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:actiontype'
       # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
       @ITEM_DEFAULT_ANIMATIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:animationtype'
+      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
+      @ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION = @ITEM_INFO_PREFIX + ':@item_id:default:scroll_enabled_direction'
+      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
+      @ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION = @ITEM_INFO_PREFIX + ':@item_id:default:scroll_forward_direction'
       # @property [String] E_ROOT イベント値ルート
       @E_ROOT = constant.PageValueKey.E_ROOT
       # @property [String] E_PREFIX イベントプレフィックス
@@ -66,6 +70,8 @@ class PageValue
           @setInstancePageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
           @setInstancePageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
           @setInstancePageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', item_id), a.scroll_enabled_direction)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', item_id), a.scroll_forward_direction)
           isSet = true
       )
       if isSet

@@ -10,10 +10,6 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.ID] = item.id
     writeValue[@PageValueKey.ITEM_ID] = item.constructor.ITEM_ID
     writeValue[@PageValueKey.COMMON_EVENT_ID] = null
-    # fixme
-    writeValue[@PageValueKey.CHAPTER] = 1
-    # fixme
-    writeValue[@PageValueKey.CHAPTER] = 1
     writeValue[@PageValueKey.IS_COMMON_EVENT] = false
     writeValue[@PageValueKey.METHODNAME] = item.constructor.defaultMethodName()
     actionType = item.constructor.defaultActionType()
@@ -27,6 +23,8 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.SCROLL_POINT_START] = start
     writeValue[@PageValueKey.SCROLL_POINT_END] = end
     writeValue[@PageValueKey.IS_PARALLEL] = false
+    writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection()
+    writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection()
 
     itemWriteValue = item.objWriteEvent()
     # マージ

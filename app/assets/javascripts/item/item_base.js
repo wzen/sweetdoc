@@ -167,6 +167,14 @@ ItemBase = (function(superClass) {
     return null;
   };
 
+  ItemBase.defaultScrollEnabledDirection = function() {
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', this.ITEM_ID));
+  };
+
+  ItemBase.defaultScrollForwardDirection = function() {
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', this.ITEM_ID));
+  };
+
   ItemBase.prototype.eventConfigValue = function() {
     return null;
   };

@@ -23,8 +23,6 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.ID] = item.id;
     writeValue[this.PageValueKey.ITEM_ID] = item.constructor.ITEM_ID;
     writeValue[this.PageValueKey.COMMON_EVENT_ID] = null;
-    writeValue[this.PageValueKey.CHAPTER] = 1;
-    writeValue[this.PageValueKey.CHAPTER] = 1;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = false;
     writeValue[this.PageValueKey.METHODNAME] = item.constructor.defaultMethodName();
     actionType = item.constructor.defaultActionType();
@@ -39,6 +37,8 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.SCROLL_POINT_START] = start;
     writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
     writeValue[this.PageValueKey.IS_PARALLEL] = false;
+    writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection();
+    writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
     itemWriteValue = item.objWriteEvent();
     $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {

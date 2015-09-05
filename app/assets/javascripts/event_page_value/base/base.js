@@ -23,10 +23,6 @@ EventPageValueBase = (function() {
 
       PageValueKey.VALUE = constant.EventPageValueKey.VALUE;
 
-      PageValueKey.CHAPTER = constant.EventPageValueKey.CHAPTER;
-
-      PageValueKey.SCREEN = constant.EventPageValueKey.SCREEN;
-
       PageValueKey.IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT;
 
       PageValueKey.ORDER = constant.EventPageValueKey.ORDER;
@@ -42,6 +38,10 @@ EventPageValueBase = (function() {
       PageValueKey.SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START;
 
       PageValueKey.SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END;
+
+      PageValueKey.SCROLL_ENABLED_DIRECTIONS = constant.EventPageValueKey.SCROLL_ENABLED_DIRECTIONS;
+
+      PageValueKey.SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS;
 
       return PageValueKey;
 
@@ -80,8 +80,6 @@ EventPageValueBase = (function() {
     writeValue[this.PageValueKey.ID] = eventConfig.id;
     writeValue[this.PageValueKey.ITEM_ID] = eventConfig.itemId;
     writeValue[this.PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId;
-    writeValue[this.PageValueKey.CHAPTER] = 1;
-    writeValue[this.PageValueKey.SCREEN] = 1;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent;
     writeValue[this.PageValueKey.METHODNAME] = eventConfig.methodName;
     writeValue[this.PageValueKey.ACTIONTYPE] = eventConfig.actionType;
@@ -90,12 +88,14 @@ EventPageValueBase = (function() {
     if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
       writeValue[this.PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart;
       writeValue[this.PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd;
+      writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection;
+      writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection;
     }
     return writeValue;
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var end, handlerDiv, isParallel, parallel, start, writeValue;
+    var bottomEmt, enabledDirection, end, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, rightEmt, start, topEmt, writeValue;
     writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
     if (writeValue != null) {
       eventConfig.id = writeValue[this.PageValueKey.ID];
@@ -112,11 +112,35 @@ EventPageValueBase = (function() {
       }
       if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
-        start = writeValue[this.PageValueKey.SCROLL_POINT_START];
-        end = writeValue[this.PageValueKey.SCROLL_POINT_END];
-        if ((handlerDiv != null) && (start != null) && (end != null)) {
-          handlerDiv.find('.scroll_point_start:first').val(start);
-          handlerDiv.find('.scroll_point_end:first').val(end);
+        if (handlerDiv != null) {
+          start = writeValue[this.PageValueKey.SCROLL_POINT_START];
+          end = writeValue[this.PageValueKey.SCROLL_POINT_END];
+          if ((start != null) && (end != null)) {
+            handlerDiv.find('.scroll_point_start:first').val(start);
+            handlerDiv.find('.scroll_point_end:first').val(end);
+          }
+          enabledDirection = writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
+          forwardDirection = writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
+          topEmt = handlerDiv.find('.scroll_enabed_top:first');
+          if (topEmt != null) {
+            topEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.top);
+            topEmt.children('.scroll_forward:first').prop("checked", forwardDirection.top);
+          }
+          bottomEmt = handlerDiv.find('scroll_enabed_bottom:first');
+          if (bottomEmt != null) {
+            bottomEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.bottom);
+            bottomEmt.children('.scroll_forward:first').prop("checked", forwardDirection.bottom);
+          }
+          leftEmt = handlerDiv.find('scroll_enabed_left:first');
+          if (leftEmt != null) {
+            leftEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.left);
+            leftEmt.children('.scroll_forward:first').prop("checked", forwardDirection.left);
+          }
+          rightEmt = handlerDiv.find('scroll_enabed_right:first');
+          if (rightEmt != null) {
+            rightEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.right);
+            rightEmt.children('.scroll_forward:first').prop("checked", forwardDirection.right);
+          }
         }
       }
       return true;

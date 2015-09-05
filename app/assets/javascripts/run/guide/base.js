@@ -6,9 +6,9 @@ GuideBase = (function() {
 
   GuideBase.GUIDE_ZINDEX = 199999999;
 
-  GuideBase.prototype.showGuide = function() {};
+  GuideBase.showGuide = function() {};
 
-  GuideBase.prototype.hideGuide = function() {};
+  GuideBase.hideGuide = function() {};
 
   return GuideBase;
 

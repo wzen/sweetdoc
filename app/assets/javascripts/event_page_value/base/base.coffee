@@ -16,10 +16,6 @@ class EventPageValueBase
       @COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID
       # @property [String] VALUE イベント値
       @VALUE = constant.EventPageValueKey.VALUE
-      # @property [String] CHAPTER チャプター
-      @CHAPTER = constant.EventPageValueKey.CHAPTER
-      # @property [String] SCREEN スクリーン
-      @SCREEN = constant.EventPageValueKey.SCREEN
       # @property [String] IS_COMMON_EVENT 共通イベント判定
       @IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT
       # @property [String] ORDER ソート番号
@@ -36,6 +32,10 @@ class EventPageValueBase
       @SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START
       # @property [String] SCROLL_TIME スクロール実行終了位置
       @SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END
+      # @property [String] SCROLL_ENABLED_DIRECTIONS スクロール可能方向
+      @SCROLL_ENABLED_DIRECTIONS = constant.EventPageValueKey.SCROLL_ENABLED_DIRECTIONS
+      # @property [String] SCROLL_FORWARD_DIRECTIONS スクロール進行方向
+      @SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS
 
   @initConfigValue = (eventConfig) ->
     if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
@@ -62,10 +62,6 @@ class EventPageValueBase
     writeValue[@PageValueKey.ID] = eventConfig.id
     writeValue[@PageValueKey.ITEM_ID] = eventConfig.itemId
     writeValue[@PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId
-    # fixme
-    writeValue[@PageValueKey.CHAPTER] = 1
-    # fixme
-    writeValue[@PageValueKey.SCREEN] = 1
     writeValue[@PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent
     writeValue[@PageValueKey.METHODNAME] = eventConfig.methodName
     writeValue[@PageValueKey.ACTIONTYPE] = eventConfig.actionType
@@ -75,6 +71,8 @@ class EventPageValueBase
     if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
       writeValue[@PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart
       writeValue[@PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd
+      writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection
+      writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection
 
     return writeValue
 
@@ -100,11 +98,31 @@ class EventPageValueBase
 
       if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
-        start = writeValue[@PageValueKey.SCROLL_POINT_START]
-        end = writeValue[@PageValueKey.SCROLL_POINT_END]
-        if handlerDiv? && start? && end?
-          handlerDiv.find('.scroll_point_start:first').val(start)
-          handlerDiv.find('.scroll_point_end:first').val(end)
+        if handlerDiv?
+          start = writeValue[@PageValueKey.SCROLL_POINT_START]
+          end = writeValue[@PageValueKey.SCROLL_POINT_END]
+          if start? && end?
+            handlerDiv.find('.scroll_point_start:first').val(start)
+            handlerDiv.find('.scroll_point_end:first').val(end)
+
+          enabledDirection = writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS]
+          forwardDirection = writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS]
+          topEmt = handlerDiv.find('.scroll_enabed_top:first')
+          if topEmt?
+            topEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.top)
+            topEmt.children('.scroll_forward:first').prop("checked", forwardDirection.top)
+          bottomEmt = handlerDiv.find('scroll_enabed_bottom:first')
+          if bottomEmt?
+            bottomEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.bottom)
+            bottomEmt.children('.scroll_forward:first').prop("checked", forwardDirection.bottom)
+          leftEmt = handlerDiv.find('scroll_enabed_left:first')
+          if leftEmt?
+            leftEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.left)
+            leftEmt.children('.scroll_forward:first').prop("checked", forwardDirection.left)
+          rightEmt = handlerDiv.find('scroll_enabed_right:first')
+          if rightEmt?
+            rightEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.right)
+            rightEmt.children('.scroll_forward:first').prop("checked", forwardDirection.right)
 
       return true
     else

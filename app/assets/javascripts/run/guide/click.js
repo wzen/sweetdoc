@@ -6,11 +6,13 @@ var ClickGuide,
 ClickGuide = (function(superClass) {
   extend(ClickGuide, superClass);
 
-  function ClickGuide() {}
+  function ClickGuide() {
+    return ClickGuide.__super__.constructor.apply(this, arguments);
+  }
 
-  ClickGuide.prototype.showGuide = function() {};
+  ClickGuide.showGuide = function() {};
 
-  ClickGuide.prototype.hideGuide = function() {};
+  ClickGuide.hideGuide = function() {};
 
   return ClickGuide;
 

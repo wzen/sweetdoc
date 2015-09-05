@@ -179,6 +179,14 @@ class ItemBase extends ItemEventBase
   @defaultEventConfigValue = ->
     return null
 
+  # スクロールのデフォルト有効方向
+  @defaultScrollEnabledDirection = ->
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', @ITEM_ID))
+
+  # スクロールのデフォルト進行方向
+  @defaultScrollForwardDirection = ->
+    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', @ITEM_ID))
+
   eventConfigValue: ->
     return null
 

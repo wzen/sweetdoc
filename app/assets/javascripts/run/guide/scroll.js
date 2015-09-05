@@ -4,13 +4,69 @@ var ScrollGuide,
   hasProp = {}.hasOwnProperty;
 
 ScrollGuide = (function(superClass) {
+  var constant;
+
   extend(ScrollGuide, superClass);
 
-  function ScrollGuide() {}
+  function ScrollGuide() {
+    return ScrollGuide.__super__.constructor.apply(this, arguments);
+  }
 
-  ScrollGuide.prototype.showGuide = function() {};
+  ScrollGuide.timer = null;
 
-  ScrollGuide.prototype.hideGuide = function() {};
+  ScrollGuide.IDLE_TIMER = 1500;
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    ScrollGuide.TOP_ROOT_ID = constant.RunGuide.TOP_ROOT_ID;
+    ScrollGuide.BOTTOM_ROOT_ID = constant.RunGuide.BOTTOM_ROOT_ID;
+    ScrollGuide.LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID;
+    ScrollGuide.RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID;
+  }
+
+  ScrollGuide.setTimer = function(directions) {
+    if (this.timer != null) {
+      clearTimeout(this.timer);
+    }
+    return this.timer = setTimeout((function(_this) {
+      return function() {
+        return _this.showGuide(directions);
+      };
+    })(this), this.IDLE_TIMER);
+  };
+
+  ScrollGuide.showGuide = function(directions) {
+    if ($.isArray(directions)) {
+      directions = [directions];
+    }
+    this.hideGuide();
+    return directions.forEach((function(_this) {
+      return function(d) {
+        var id;
+        id = null;
+        if (d === Constant.ScrollDirection.TOP) {
+          id = _this.TOP_ROOT_ID;
+        } else if (d === Constant.ScrollDirection.BOTTOM) {
+          id = _this.BOTTOM_ROOT_ID;
+        } else if (d === Constant.ScrollDirection.LEFT) {
+          id = _this.LEFT_ROOT_ID;
+        } else if (d === Constant.ScrollDirection.RIGHT) {
+          id = _this.RIGHT_ROOT_ID;
+        }
+        return $("#" + id).css('display', '');
+      };
+    })(this));
+  };
+
+  ScrollGuide.hideGuide = function() {
+    if (this.timer != null) {
+      clearTimeout(this.timer);
+    }
+    $("#" + this.TOP_ROOT_ID).css('display', 'none');
+    $("#" + this.BOTTOM_ROOT_ID).css('display', 'none');
+    $("#" + this.LEFT_ROOT_ID).css('display', 'none');
+    return $("#" + this.RIGHT_ROOT_ID).css('display', 'none');
+  };
 
   return ScrollGuide;
 

@@ -143,6 +143,21 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ScrollDirection = (function() {
+      function ScrollDirection() {}
+
+      ScrollDirection.TOP = constant.ScrollDirection.TOP;
+
+      ScrollDirection.BOTTOM = constant.ScrollDirection.BOTTOM;
+
+      ScrollDirection.LEFT = constant.ScrollDirection.LEFT;
+
+      ScrollDirection.RIGHT = constant.ScrollDirection.RIGHT;
+
+      return ScrollDirection;
+
+    })();
+
     Constant.Paging = (function() {
       function Paging() {}
 

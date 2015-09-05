@@ -3,8 +3,8 @@ class GuideBase
 
   # ガイド表示
   # @abstract
-  showGuide: ->
+  @showGuide: ->
 
   # ガイド非表示
   # @abstract
-  hideGuide: ->
+  @hideGuide: ->

@@ -1,0 +1,23 @@
+<%
+   type = nil
+   if root == Const::RunGuide::TOP_ROOT_ID
+     type = 'top'
+   elsif root == Const::RunGuide::BOTTOM_ROOT_ID
+     type = 'bottom'
+   elsif root == Const::RunGuide::LEFT_ROOT_ID
+     type = 'left'
+   elsif root == Const::RunGuide::RIGHT_ROOT_ID
+     type = 'right'
+   end
+%>
+
+<div id="<%= root %>" class="guide-view">
+    <div class="guide_container <%= type %>">
+        <!--<div class="guide_scroll_pointer <%= type %>"></div>-->
+        <div class="guide_scroll_image_mac <%= type %>"></div>
+        <!--<div class="guide_scroll_win_container">-->
+            <!--<div class="guide_scroll_image_win"></div>-->
+            <!--<div class="guide_scroll_image_win_background"></div>-->
+        <!--</div>-->
+    </div>
+</div>

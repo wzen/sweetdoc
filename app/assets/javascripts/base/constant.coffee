@@ -92,6 +92,13 @@ if gon?
     class @ModalViewType
       @ABOUT = constant.ModalViewType.ABOUT
 
+    # スクロール方向
+    class @ScrollDirection
+      @TOP = constant.ScrollDirection.TOP
+      @BOTTOM = constant.ScrollDirection.BOTTOM
+      @LEFT = constant.ScrollDirection.LEFT
+      @RIGHT = constant.ScrollDirection.RIGHT
+
     # ページング
     class @Paging
       @ROOT_ID = constant.Paging.ROOT_ID

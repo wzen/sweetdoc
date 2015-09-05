@@ -169,8 +169,6 @@ class Const
     ITEM_ID = 'item_id'
     COMMON_EVENT_ID = 'common_event_id'
     VALUE = 'value'
-    CHAPTER = 'chapter'
-    SCREEN = 'screen'
     IS_COMMON_EVENT = 'is_common_event'
     ORDER = 'order'
     METHODNAME = 'methodname'
@@ -179,6 +177,8 @@ class Const
     IS_PARALLEL = 'is_parallel'
     SCROLL_POINT_START = 'scroll_point_start'
     SCROLL_POINT_END = 'scroll_point_end'
+    SCROLL_ENABLED_DIRECTIONS = 'scroll_enabled_directions'
+    SCROLL_FORWARD_DIRECTIONS = 'scroll_forward_directions'
   end
 
   class UserPageValue
@@ -196,5 +196,19 @@ class Const
     NAV_ROOT_ID = 'header-pageing-menu'
     NAV_SELECTED_CLASS = 'header-pageing-menu-selected'
     NAV_SELECT_ROOT_CLASS = 'header-pageing-menu-root'
+  end
+
+  class ScrollDirection
+    TOP = 0
+    BOTTOM = 1
+    LEFT = 2
+    RIGHT = 3
+  end
+
+  class RunGuide
+    TOP_ROOT_ID = 'guide_top'
+    BOTTOM_ROOT_ID = 'guide_bottom'
+    LEFT_ROOT_ID = 'guide_left'
+    RIGHT_ROOT_ID = 'guide_right'
   end
 end
