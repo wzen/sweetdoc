@@ -9,6 +9,8 @@ class EventBase extends Extend
     @event = event
     @isFinishedEvent = false
     @doPreviewLoop = false
+    @enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
+    @forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
     # アクションメソッドの設定
     @setMethod()
 
@@ -178,27 +180,25 @@ class EventBase extends Extend
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
-    enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
-    forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
 
     # スクロール値更新
     #console.log("y:#{y}")
     plusX = 0
     plusY = 0
-    if x > 0 && enabledDirections.right
+    if x > 0 && @enabledDirections.right
       plusX = parseInt((x + 9) / 10)
-    else if x < 0 && enabledDirections.left
+    else if x < 0 && @enabledDirections.left
       plusX = parseInt((x - 9) / 10)
-    if y > 0 && enabledDirections.bottom
+    if y > 0 && @enabledDirections.bottom
       plusY = parseInt((y + 9) / 10)
-    else if y < 0 && enabledDirections.top
+    else if y < 0 && @enabledDirections.top
       plusY = parseInt((y - 9) / 10)
 
-    if (plusX > 0 && !forwardDirections.right) ||
-      (plusX < 0 && forwardDirections.left)
+    if (plusX > 0 && !@forwardDirections.right) ||
+      (plusX < 0 && @forwardDirections.left)
         plusX = -plusX
-    if (plusY > 0 && !forwardDirections.bottom) ||
-      (plusY < 0 && forwardDirections.top)
+    if (plusY > 0 && !@forwardDirections.bottom) ||
+      (plusY < 0 && @forwardDirections.top)
         plusY = -plusY
 
     @scrollValue += plusX + plusY
@@ -220,10 +220,8 @@ class EventBase extends Extend
           complete()
       return
 
-    # Idleタイマーセット
-    if !@isFinishedEvent
-      tune = 1
-      ScrollGuide.setTimer(enabledDirections, forwardDirections, @scrollValue < ePoint, @scrollValue - tune > sPoint)
+    @canForward = @scrollValue < ePoint
+    @canReverse = @scrollValue > sPoint
 
     (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
 

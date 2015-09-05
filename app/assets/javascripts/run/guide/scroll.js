@@ -12,10 +12,6 @@ ScrollGuide = (function(superClass) {
     return ScrollGuide.__super__.constructor.apply(this, arguments);
   }
 
-  ScrollGuide.timer = null;
-
-  ScrollGuide.IDLE_TIMER = 100;
-
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     ScrollGuide.TOP_ROOT_ID = constant.RunGuide.TOP_ROOT_ID;
@@ -23,18 +19,6 @@ ScrollGuide = (function(superClass) {
     ScrollGuide.LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID;
     ScrollGuide.RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID;
   }
-
-  ScrollGuide.setTimer = function(enableDirection, forwardDirection, canForward, canReverse) {
-    if (this.timer != null) {
-      clearTimeout(this.timer);
-    }
-    this.hideGuide();
-    return this.timer = setTimeout((function(_this) {
-      return function() {
-        return _this.showGuide(enableDirection, forwardDirection, canForward, canReverse);
-      };
-    })(this), this.IDLE_TIMER);
-  };
 
   ScrollGuide.showGuide = function(enableDirection, forwardDirection, canForward, canReverse) {
     var base, emt;
@@ -86,9 +70,6 @@ ScrollGuide = (function(superClass) {
   };
 
   ScrollGuide.hideGuide = function() {
-    if (this.timer != null) {
-      clearTimeout(this.timer);
-    }
     $("#" + this.TOP_ROOT_ID).css('display', 'none');
     $("#" + this.BOTTOM_ROOT_ID).css('display', 'none');
     $("#" + this.LEFT_ROOT_ID).css('display', 'none');

@@ -20,6 +20,8 @@ EventBase = (function(superClass) {
     this.event = event;
     this.isFinishedEvent = false;
     this.doPreviewLoop = false;
+    this.enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
+    this.forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
     return this.setMethod();
   };
 
@@ -196,7 +198,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.didChapter = function(methodName) {};
 
   EventBase.prototype.scrollRootFunc = function(x, y, complete) {
-    var ePoint, enabledDirections, forwardDirections, methodName, plusX, plusY, sPoint, tune;
+    var ePoint, methodName, plusX, plusY, sPoint;
     if (complete == null) {
       complete = null;
     }
@@ -210,24 +212,22 @@ EventBase = (function(superClass) {
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
-    forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
     plusX = 0;
     plusY = 0;
-    if (x > 0 && enabledDirections.right) {
+    if (x > 0 && this.enabledDirections.right) {
       plusX = parseInt((x + 9) / 10);
-    } else if (x < 0 && enabledDirections.left) {
+    } else if (x < 0 && this.enabledDirections.left) {
       plusX = parseInt((x - 9) / 10);
     }
-    if (y > 0 && enabledDirections.bottom) {
+    if (y > 0 && this.enabledDirections.bottom) {
       plusY = parseInt((y + 9) / 10);
-    } else if (y < 0 && enabledDirections.top) {
+    } else if (y < 0 && this.enabledDirections.top) {
       plusY = parseInt((y - 9) / 10);
     }
-    if ((plusX > 0 && !forwardDirections.right) || (plusX < 0 && forwardDirections.left)) {
+    if ((plusX > 0 && !this.forwardDirections.right) || (plusX < 0 && this.forwardDirections.left)) {
       plusX = -plusX;
     }
-    if ((plusY > 0 && !forwardDirections.bottom) || (plusY < 0 && forwardDirections.top)) {
+    if ((plusY > 0 && !this.forwardDirections.bottom) || (plusY < 0 && this.forwardDirections.top)) {
       plusY = -plusY;
     }
     this.scrollValue += plusX + plusY;
@@ -247,10 +247,8 @@ EventBase = (function(superClass) {
       }
       return;
     }
-    if (!this.isFinishedEvent) {
-      tune = 1;
-      ScrollGuide.setTimer(enabledDirections, forwardDirections, this.scrollValue < ePoint, this.scrollValue - tune > sPoint);
-    }
+    this.canForward = this.scrollValue < ePoint;
+    this.canReverse = this.scrollValue > sPoint;
     return this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
   };
 

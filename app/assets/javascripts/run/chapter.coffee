@@ -86,7 +86,12 @@ class Chapter
 
   # 全てのイベントが終了しているか
   finishedAllEvent: ->
-    return true
+    ret = true
+    @eventObjList.forEach((event) ->
+      if !event.isFinishedEvent
+        ret = false
+    )
+    return ret
 
   # チャプターのイベントをリセットする
   resetAllEvents: ->

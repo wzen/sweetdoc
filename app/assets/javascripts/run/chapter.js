@@ -109,7 +109,14 @@ Chapter = (function() {
   };
 
   Chapter.prototype.finishedAllEvent = function() {
-    return true;
+    var ret;
+    ret = true;
+    this.eventObjList.forEach(function(event) {
+      if (!event.isFinishedEvent) {
+        return ret = false;
+      }
+    });
+    return ret;
   };
 
   Chapter.prototype.resetAllEvents = function() {

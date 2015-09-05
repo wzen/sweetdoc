@@ -6,13 +6,16 @@ var ScrollChapter,
 ScrollChapter = (function(superClass) {
   extend(ScrollChapter, superClass);
 
-  function ScrollChapter() {
-    return ScrollChapter.__super__.constructor.apply(this, arguments);
+  ScrollChapter.guideTimer = null;
+
+  function ScrollChapter(list) {
+    ScrollChapter.__super__.constructor.call(this, list);
   }
 
   ScrollChapter.prototype.willChapter = function() {
     ScrollChapter.__super__.willChapter.call(this);
-    return this.sinkFrontAllObj();
+    this.sinkFrontAllObj();
+    return this.showGuide(true);
   };
 
   ScrollChapter.prototype.didChapter = function() {
@@ -23,15 +26,90 @@ ScrollChapter = (function(superClass) {
     if (window.disabledEventHandler) {
       return;
     }
-    return this.eventObjList.forEach(function(event) {
-      if (event.scrollEvent != null) {
-        return event.scrollEvent(x, y, function() {
-          if (window.eventAction != null) {
-            return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
+    this.eventObjList.forEach((function(_this) {
+      return function(event) {
+        if (event.scrollEvent != null) {
+          return event.scrollEvent(x, y, function() {
+            if (_this.constructor.guideTimer != null) {
+              clearTimeout(_this.constructor.guideTimer);
+              _this.constructor.guideTimer = null;
+            }
+            ScrollGuide.hideGuide();
+            if (window.eventAction != null) {
+              return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
+            }
+          });
+        }
+      };
+    })(this));
+    if (!this.finishedAllEvent()) {
+      return this.showGuide();
+    }
+  };
+
+  ScrollChapter.prototype.showGuide = function(willChapter) {
+    if (willChapter == null) {
+      willChapter = false;
+    }
+    if (this.constructor.guideTimer != null) {
+      clearTimeout(this.constructor.guideTimer);
+      this.constructor.guideTimer = null;
+    }
+    ScrollGuide.hideGuide();
+    return this.constructor.guideTimer = setTimeout((function(_this) {
+      return function() {
+        _this.adjustGuideParams(willChapter);
+        return ScrollGuide.showGuide(_this.enabledDirections, _this.forwardDirections, _this.canForward, _this.canReverse);
+      };
+    })(this), ScrollGuide.IDLE_TIMER);
+  };
+
+  ScrollChapter.prototype.adjustGuideParams = function(willChapter) {
+    this.enabledDirections = {
+      top: false,
+      bottom: false,
+      left: false,
+      right: false
+    };
+    this.forwardDirections = {
+      top: false,
+      bottom: false,
+      left: false,
+      right: false
+    };
+    this.canForward = false;
+    this.canReverse = false;
+    this.eventObjList.forEach((function(_this) {
+      return function(event) {
+        var k, ref, ref1, v;
+        ref = event.enabledDirections;
+        for (k in ref) {
+          v = ref[k];
+          if (!_this.enabledDirections[k]) {
+            _this.enabledDirections[k] = v;
           }
-        });
-      }
-    });
+        }
+        ref1 = event.forwardDirections;
+        for (k in ref1) {
+          v = ref1[k];
+          if (!_this.forwardDirections[k]) {
+            _this.forwardDirections[k] = v;
+          }
+        }
+        if (!willChapter) {
+          if ((event.canForward != null) && event.canForward) {
+            _this.canForward = true;
+          }
+          if ((event.canReverse != null) && event.canReverse) {
+            return _this.canReverse = true;
+          }
+        }
+      };
+    })(this));
+    if (willChapter) {
+      this.canForward = true;
+      return this.canReverse = false;
+    }
   };
 
   ScrollChapter.prototype.finishedAllEvent = function() {

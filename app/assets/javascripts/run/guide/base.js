@@ -6,6 +6,10 @@ GuideBase = (function() {
 
   GuideBase.GUIDE_ZINDEX = 199999999;
 
+  GuideBase.timer = null;
+
+  GuideBase.IDLE_TIMER = 1000;
+
   GuideBase.showGuide = function() {};
 
   GuideBase.hideGuide = function() {};

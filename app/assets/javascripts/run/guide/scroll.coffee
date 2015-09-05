@@ -1,8 +1,5 @@
 class ScrollGuide extends GuideBase
 
-  @timer = null
-  @IDLE_TIMER = 100 # 1秒
-
   if gon?
     # 定数
     constant = gon.const
@@ -10,14 +7,6 @@ class ScrollGuide extends GuideBase
     @BOTTOM_ROOT_ID = constant.RunGuide.BOTTOM_ROOT_ID
     @LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID
     @RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID
-
-  @setTimer: (enableDirection, forwardDirection, canForward, canReverse) ->
-    if @timer?
-      clearTimeout(@timer)
-    @hideGuide()
-    @timer = setTimeout( =>
-      @showGuide(enableDirection, forwardDirection, canForward, canReverse)
-    , @IDLE_TIMER)
 
   # ガイド表示
   @showGuide: (enableDirection, forwardDirection, canForward, canReverse) ->
@@ -61,9 +50,6 @@ class ScrollGuide extends GuideBase
 
   # ガイド非表示
   @hideGuide: ->
-    if @timer?
-      clearTimeout(@timer)
-
     $("##{@TOP_ROOT_ID}").css('display', 'none')
     $("##{@BOTTOM_ROOT_ID}").css('display', 'none')
     $("##{@LEFT_ROOT_ID}").css('display', 'none')
