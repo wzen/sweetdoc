@@ -1,7 +1,7 @@
 class ScrollGuide extends GuideBase
 
   @timer = null
-  @IDLE_TIMER = 1500 # 1.5秒
+  @IDLE_TIMER = 100 # 1秒
 
   if gon?
     # 定数
@@ -11,31 +11,53 @@ class ScrollGuide extends GuideBase
     @LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID
     @RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID
 
-  @setTimer: (directions) ->
+  @setTimer: (enableDirection, forwardDirection, canForward, canReverse) ->
     if @timer?
       clearTimeout(@timer)
+    @hideGuide()
     @timer = setTimeout( =>
-      @showGuide(directions)
+      @showGuide(enableDirection, forwardDirection, canForward, canReverse)
     , @IDLE_TIMER)
 
   # ガイド表示
-  @showGuide: (directions) ->
-    if $.isArray(directions)
-      directions = [directions]
-
+  @showGuide: (enableDirection, forwardDirection, canForward, canReverse) ->
     @hideGuide()
-    directions.forEach((d) =>
-      id = null
-      if d == Constant.ScrollDirection.TOP
-        id = @TOP_ROOT_ID
-      else if d == Constant.ScrollDirection.BOTTOM
-        id = @BOTTOM_ROOT_ID
-      else if d == Constant.ScrollDirection.LEFT
-        id = @LEFT_ROOT_ID
-      else if d == Constant.ScrollDirection.RIGHT
-        id = @RIGHT_ROOT_ID
-      $("##{id}").css('display', '')
-    )
+    if enableDirection.top
+      base = $("##{@TOP_ROOT_ID}")
+      emt = base.find('.guide_scroll_image_mac:first')
+      if forwardDirection.top && canForward
+        emt.removeClass('reverse').addClass('forward')
+        base.css('display', 'block')
+      else if !forwardDirection.top && canReverse
+        emt.removeClass('forward').addClass('reverse')
+        base.css('display', 'block')
+    if enableDirection.bottom
+      base = $("##{@BOTTOM_ROOT_ID}")
+      emt = base.find('.guide_scroll_image_mac:first')
+      if forwardDirection.bottom && canForward
+        emt.removeClass('reverse').addClass('forward')
+        base.css('display', 'block')
+      else if !forwardDirection.bottom && canReverse
+        emt.removeClass('forward').addClass('reverse')
+        base.css('display', 'block')
+    if enableDirection.left
+      base = $("##{@LEFT_ROOT_ID}")
+      emt = base.find('.guide_scroll_image_mac:first')
+      if forwardDirection.left && canForward
+        emt.removeClass('reverse').addClass('forward')
+        base.css('display', 'block')
+      else if !forwardDirection.left && canReverse
+        emt.removeClass('forward').addClass('reverse')
+        base.css('display', 'block')
+    if enableDirection.right
+      base = $("##{@RIGHT_ROOT_ID}")
+      emt = base.find('.guide_scroll_image_mac:first')
+      if forwardDirection.right && canForward
+        emt.removeClass('reverse').addClass('forward')
+        base.css('display', 'block')
+      else if !forwardDirection.right && canReverse
+        emt.removeClass('forward').addClass('reverse')
+        base.css('display', 'block')
 
   # ガイド非表示
   @hideGuide: ->

@@ -181,9 +181,6 @@ class EventBase extends Extend
     enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
 
-    # Idleタイマーセット
-    #ScrollGuide.setTimer(enabledDirections)
-
     # スクロール値更新
     #console.log("y:#{y}")
     plusX = 0
@@ -218,9 +215,15 @@ class EventBase extends Extend
       if !@isFinishedEvent
         # 終了イベント
         @isFinishedEvent = true
+        ScrollGuide.hideGuide()
         if complete?
           complete()
       return
+
+    # Idleタイマーセット
+    if !@isFinishedEvent
+      tune = 1
+      ScrollGuide.setTimer(enabledDirections, forwardDirections, @scrollValue < ePoint, @scrollValue - tune > sPoint)
 
     (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
 

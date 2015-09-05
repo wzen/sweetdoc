@@ -36,5 +36,8 @@
 //= require run/click_chapter
 //= require run/page
 //= require run/event_action.js
+//= require run/guide/base
+//= require run/guide/scroll
+//= require run/guide/click
 //= require run/run
 // require_tree .

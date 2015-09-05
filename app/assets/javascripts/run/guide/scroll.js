@@ -14,7 +14,7 @@ ScrollGuide = (function(superClass) {
 
   ScrollGuide.timer = null;
 
-  ScrollGuide.IDLE_TIMER = 1500;
+  ScrollGuide.IDLE_TIMER = 100;
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
@@ -24,38 +24,65 @@ ScrollGuide = (function(superClass) {
     ScrollGuide.RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID;
   }
 
-  ScrollGuide.setTimer = function(directions) {
+  ScrollGuide.setTimer = function(enableDirection, forwardDirection, canForward, canReverse) {
     if (this.timer != null) {
       clearTimeout(this.timer);
     }
+    this.hideGuide();
     return this.timer = setTimeout((function(_this) {
       return function() {
-        return _this.showGuide(directions);
+        return _this.showGuide(enableDirection, forwardDirection, canForward, canReverse);
       };
     })(this), this.IDLE_TIMER);
   };
 
-  ScrollGuide.showGuide = function(directions) {
-    if ($.isArray(directions)) {
-      directions = [directions];
-    }
+  ScrollGuide.showGuide = function(enableDirection, forwardDirection, canForward, canReverse) {
+    var base, emt;
     this.hideGuide();
-    return directions.forEach((function(_this) {
-      return function(d) {
-        var id;
-        id = null;
-        if (d === Constant.ScrollDirection.TOP) {
-          id = _this.TOP_ROOT_ID;
-        } else if (d === Constant.ScrollDirection.BOTTOM) {
-          id = _this.BOTTOM_ROOT_ID;
-        } else if (d === Constant.ScrollDirection.LEFT) {
-          id = _this.LEFT_ROOT_ID;
-        } else if (d === Constant.ScrollDirection.RIGHT) {
-          id = _this.RIGHT_ROOT_ID;
-        }
-        return $("#" + id).css('display', '');
-      };
-    })(this));
+    if (enableDirection.top) {
+      base = $("#" + this.TOP_ROOT_ID);
+      emt = base.find('.guide_scroll_image_mac:first');
+      if (forwardDirection.top && canForward) {
+        emt.removeClass('reverse').addClass('forward');
+        base.css('display', 'block');
+      } else if (!forwardDirection.top && canReverse) {
+        emt.removeClass('forward').addClass('reverse');
+        base.css('display', 'block');
+      }
+    }
+    if (enableDirection.bottom) {
+      base = $("#" + this.BOTTOM_ROOT_ID);
+      emt = base.find('.guide_scroll_image_mac:first');
+      if (forwardDirection.bottom && canForward) {
+        emt.removeClass('reverse').addClass('forward');
+        base.css('display', 'block');
+      } else if (!forwardDirection.bottom && canReverse) {
+        emt.removeClass('forward').addClass('reverse');
+        base.css('display', 'block');
+      }
+    }
+    if (enableDirection.left) {
+      base = $("#" + this.LEFT_ROOT_ID);
+      emt = base.find('.guide_scroll_image_mac:first');
+      if (forwardDirection.left && canForward) {
+        emt.removeClass('reverse').addClass('forward');
+        base.css('display', 'block');
+      } else if (!forwardDirection.left && canReverse) {
+        emt.removeClass('forward').addClass('reverse');
+        base.css('display', 'block');
+      }
+    }
+    if (enableDirection.right) {
+      base = $("#" + this.RIGHT_ROOT_ID);
+      emt = base.find('.guide_scroll_image_mac:first');
+      if (forwardDirection.right && canForward) {
+        emt.removeClass('reverse').addClass('forward');
+        return base.css('display', 'block');
+      } else if (!forwardDirection.right && canReverse) {
+        emt.removeClass('forward').addClass('reverse');
+        return base.css('display', 'block');
+      }
+    }
   };
 
   ScrollGuide.hideGuide = function() {

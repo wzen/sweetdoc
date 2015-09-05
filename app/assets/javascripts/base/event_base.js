@@ -196,7 +196,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.didChapter = function(methodName) {};
 
   EventBase.prototype.scrollRootFunc = function(x, y, complete) {
-    var ePoint, enabledDirections, forwardDirections, methodName, plusX, plusY, sPoint;
+    var ePoint, enabledDirections, forwardDirections, methodName, plusX, plusY, sPoint, tune;
     if (complete == null) {
       complete = null;
     }
@@ -240,11 +240,16 @@ EventBase = (function(superClass) {
       this.scrollValue = ePoint;
       if (!this.isFinishedEvent) {
         this.isFinishedEvent = true;
+        ScrollGuide.hideGuide();
         if (complete != null) {
           complete();
         }
       }
       return;
+    }
+    if (!this.isFinishedEvent) {
+      tune = 1;
+      ScrollGuide.setTimer(enabledDirections, forwardDirections, this.scrollValue < ePoint, this.scrollValue - tune > sPoint);
     }
     return this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
   };
