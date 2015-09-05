@@ -212,7 +212,6 @@ EventBase = (function(superClass) {
     }
     enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
-    ScrollGuide.setTimer(enabledDirections);
     plusX = 0;
     plusY = 0;
     if (x > 0 && enabledDirections.right) {

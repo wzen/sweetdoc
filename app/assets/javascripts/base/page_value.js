@@ -104,8 +104,8 @@ PageValue = (function() {
             _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
             _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
             _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', item_id), a.scroll_enabled_direction);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', item_id), a.scroll_forward_direction);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', item_id), a.scroll_enabled_direction != null ? JSON.parse(a.scroll_enabled_direction) : null);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', item_id), a.scroll_forward_direction != null ? JSON.parse(a.scroll_forward_direction) : null);
             return isSet = true;
           }
         };

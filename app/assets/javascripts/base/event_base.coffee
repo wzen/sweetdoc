@@ -180,8 +180,9 @@ class EventBase extends Extend
 
     enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
+
     # Idleタイマーセット
-    ScrollGuide.setTimer(enabledDirections)
+    #ScrollGuide.setTimer(enabledDirections)
 
     # スクロール値更新
     #console.log("y:#{y}")
