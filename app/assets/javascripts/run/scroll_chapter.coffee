@@ -62,19 +62,20 @@ class ScrollChapter extends Chapter
     @canForward = false
     @canReverse = false
     @eventObjList.forEach((event) =>
-      # trueフラグ優先にまとめる
-      for k, v of event.enabledDirections
-        if !@enabledDirections[k]
-          @enabledDirections[k] = v
-      for k, v of event.forwardDirections
-        if !@forwardDirections[k]
-          @forwardDirections[k] = v
+      if !event.isFinishedEvent
+        # trueフラグ優先にまとめる
+        for k, v of event.enabledDirections
+          if !@enabledDirections[k]
+            @enabledDirections[k] = v
+        for k, v of event.forwardDirections
+          if !@forwardDirections[k]
+            @forwardDirections[k] = v
 
-      if !willChapter
-        if event.canForward? && event.canForward
-          @canForward = true
-        if event.canReverse? && event.canReverse
-          @canReverse = true
+        if !willChapter
+          if event.canForward? && event.canForward
+            @canForward = true
+          if event.canReverse? && event.canReverse
+            @canReverse = true
     )
 
     if willChapter

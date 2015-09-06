@@ -81,26 +81,28 @@ ScrollChapter = (function(superClass) {
     this.eventObjList.forEach((function(_this) {
       return function(event) {
         var k, ref, ref1, v;
-        ref = event.enabledDirections;
-        for (k in ref) {
-          v = ref[k];
-          if (!_this.enabledDirections[k]) {
-            _this.enabledDirections[k] = v;
+        if (!event.isFinishedEvent) {
+          ref = event.enabledDirections;
+          for (k in ref) {
+            v = ref[k];
+            if (!_this.enabledDirections[k]) {
+              _this.enabledDirections[k] = v;
+            }
           }
-        }
-        ref1 = event.forwardDirections;
-        for (k in ref1) {
-          v = ref1[k];
-          if (!_this.forwardDirections[k]) {
-            _this.forwardDirections[k] = v;
+          ref1 = event.forwardDirections;
+          for (k in ref1) {
+            v = ref1[k];
+            if (!_this.forwardDirections[k]) {
+              _this.forwardDirections[k] = v;
+            }
           }
-        }
-        if (!willChapter) {
-          if ((event.canForward != null) && event.canForward) {
-            _this.canForward = true;
-          }
-          if ((event.canReverse != null) && event.canReverse) {
-            return _this.canReverse = true;
+          if (!willChapter) {
+            if ((event.canForward != null) && event.canForward) {
+              _this.canForward = true;
+            }
+            if ((event.canReverse != null) && event.canReverse) {
+              return _this.canReverse = true;
+            }
           }
         }
       };
