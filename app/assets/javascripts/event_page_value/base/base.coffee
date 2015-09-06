@@ -107,22 +107,38 @@ class EventPageValueBase
 
           enabledDirection = writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS]
           forwardDirection = writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS]
-          topEmt = handlerDiv.find('.scroll_enabed_top:first')
+          topEmt = handlerDiv.find('.scroll_enabled_top:first')
           if topEmt?
             topEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.top)
-            topEmt.children('.scroll_forward:first').prop("checked", forwardDirection.top)
-          bottomEmt = handlerDiv.find('scroll_enabed_bottom:first')
+            if enabledDirection.top
+              topEmt.children('.scroll_forward:first').prop("checked", forwardDirection.top)
+            else
+              topEmt.children('.scroll_forward:first').prop("checked", false)
+              topEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
+          bottomEmt = handlerDiv.find('scroll_enabled_bottom:first')
           if bottomEmt?
             bottomEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.bottom)
-            bottomEmt.children('.scroll_forward:first').prop("checked", forwardDirection.bottom)
-          leftEmt = handlerDiv.find('scroll_enabed_left:first')
+            if enabledDirection.bottom
+              bottomEmt.children('.scroll_forward:first').prop("checked", forwardDirection.bottom)
+            else
+              bottomEmt.children('.scroll_forward:first').prop("checked", false)
+              bottomEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
+          leftEmt = handlerDiv.find('scroll_enabled_left:first')
           if leftEmt?
             leftEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.left)
-            leftEmt.children('.scroll_forward:first').prop("checked", forwardDirection.left)
-          rightEmt = handlerDiv.find('scroll_enabed_right:first')
+            if enabledDirection.left
+              leftEmt.children('.scroll_forward:first').prop("checked", forwardDirection.left)
+            else
+              leftEmt.children('.scroll_forward:first').prop("checked", false)
+              leftEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
+          rightEmt = handlerDiv.find('scroll_enabled_right:first')
           if rightEmt?
             rightEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.right)
-            rightEmt.children('.scroll_forward:first').prop("checked", forwardDirection.right)
+            if enabledDirection.right
+              rightEmt.children('.scroll_forward:first').prop("checked", forwardDirection.right)
+            else
+              rightEmt.children('.scroll_forward:first').prop("checked", false)
+              rightEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
 
       return true
     else

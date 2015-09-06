@@ -123,6 +123,7 @@ class EventConfig
       if tle? && tle.initConfigValue?
         tle.initConfigValue(@)
 
+    _setScrollDirectionEvent.call(@)
     _setApplyClickEvent.call(@)
 
   # イベントの入力値を初期化する
@@ -146,21 +147,21 @@ class EventConfig
         @scrollPointStart = handlerDiv.find('.scroll_point_start:first').val()
         @scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val()
 
-        topEmt = handlerDiv.find('.scroll_enabed_top:first')
-        bottomEmt = handlerDiv.find('scroll_enabed_bottom:first')
-        leftEmt = handlerDiv.find('scroll_enabed_left:first')
-        rightEmt = handlerDiv.find('scroll_enabed_right:first')
+        topEmt = handlerDiv.find('.scroll_enabled_top:first')
+        bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first')
+        leftEmt = handlerDiv.find('.scroll_enabled_left:first')
+        rightEmt = handlerDiv.find('.scroll_enabled_right:first')
         @scrollEnabledDirection = {
-          top: topEmt.children('.scroll_enabled:first').is(":checked")
-          bottom: bottomEmt.children('.scroll_enabled:first').is(":checked")
-          left: leftEmt.children('.scroll_enabled:first').is(":checked")
-          right: rightEmt.children('.scroll_enabled:first').is(":checked")
+          top: topEmt.find('.scroll_enabled:first').is(":checked")
+          bottom: bottomEmt.find('.scroll_enabled:first').is(":checked")
+          left: leftEmt.find('.scroll_enabled:first').is(":checked")
+          right: rightEmt.find('.scroll_enabled:first').is(":checked")
         }
         @scrollForwardDirection = {
-          top: topEmt.children('.scroll_forward:first').is(":checked")
-          bottom: bottomEmt.children('.scroll_forward:first').is(":checked")
-          left: leftEmt.children('.scroll_forward:first').is(":checked")
-          right: rightEmt.children('.scroll_forward:first').is(":checked")
+          top: topEmt.find('.scroll_forward:first').is(":checked")
+          bottom: bottomEmt.find('.scroll_forward:first').is(":checked")
+          left: leftEmt.find('.scroll_forward:first').is(":checked")
+          right: rightEmt.find('.scroll_forward:first').is(":checked")
         }
 
     if @isCommonEvent
@@ -242,8 +243,20 @@ class EventConfig
     em.off('change')
     em.on('change', (e) ->
       self.clearError()
-
       self.clickMethod(@)
+    )
+
+  _setScrollDirectionEvent = ->
+    self = 0
+    handler = $('.handler_div', @emt)
+    $('.scroll_enabled', handler).off('click')
+    $('.scroll_enabled').on('click', (e) ->
+      if $(@).is(':checked')
+        $(@).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').css('display', 'block')
+      else
+        emt = $(@).closest('.scroll_enabled_wrapper').find('.scroll_forward:first')
+        emt.parent('label').css('display', 'none')
+        emt.prop('checked', false)
     )
 
   _setApplyClickEvent = ->
@@ -252,7 +265,6 @@ class EventConfig
     em.off('click')
     em.on('click', (e) ->
       self.clearError()
-
       # UIの入力値を初期化
       self.resetAction()
     )

@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _getEventClass, _setApplyClickEvent, _setMethodActionEvent, _setupFromPageValues;
+  var _getEventClass, _setApplyClickEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues;
 
   if (typeof gon !== "undefined" && gon !== null) {
     EventConfig.ITEM_ROOT_ID = 'event_@te_num';
@@ -12,8 +12,8 @@ EventConfig = (function() {
     EventConfig.ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS;
   }
 
-  function EventConfig(emt, teNum) {
-    this.emt = emt;
+  function EventConfig(emt1, teNum) {
+    this.emt = emt1;
     this.teNum = teNum;
     _setupFromPageValues.call(this);
   }
@@ -121,6 +121,7 @@ EventConfig = (function() {
         tle.initConfigValue(this);
       }
     }
+    _setScrollDirectionEvent.call(this);
     return _setApplyClickEvent.call(this);
   };
 
@@ -142,21 +143,21 @@ EventConfig = (function() {
       if (handlerDiv != null) {
         this.scrollPointStart = handlerDiv.find('.scroll_point_start:first').val();
         this.scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val();
-        topEmt = handlerDiv.find('.scroll_enabed_top:first');
-        bottomEmt = handlerDiv.find('scroll_enabed_bottom:first');
-        leftEmt = handlerDiv.find('scroll_enabed_left:first');
-        rightEmt = handlerDiv.find('scroll_enabed_right:first');
+        topEmt = handlerDiv.find('.scroll_enabled_top:first');
+        bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first');
+        leftEmt = handlerDiv.find('.scroll_enabled_left:first');
+        rightEmt = handlerDiv.find('.scroll_enabled_right:first');
         this.scrollEnabledDirection = {
-          top: topEmt.children('.scroll_enabled:first').is(":checked"),
-          bottom: bottomEmt.children('.scroll_enabled:first').is(":checked"),
-          left: leftEmt.children('.scroll_enabled:first').is(":checked"),
-          right: rightEmt.children('.scroll_enabled:first').is(":checked")
+          top: topEmt.find('.scroll_enabled:first').is(":checked"),
+          bottom: bottomEmt.find('.scroll_enabled:first').is(":checked"),
+          left: leftEmt.find('.scroll_enabled:first').is(":checked"),
+          right: rightEmt.find('.scroll_enabled:first').is(":checked")
         };
         this.scrollForwardDirection = {
-          top: topEmt.children('.scroll_forward:first').is(":checked"),
-          bottom: bottomEmt.children('.scroll_forward:first').is(":checked"),
-          left: leftEmt.children('.scroll_forward:first').is(":checked"),
-          right: rightEmt.children('.scroll_forward:first').is(":checked")
+          top: topEmt.find('.scroll_forward:first').is(":checked"),
+          bottom: bottomEmt.find('.scroll_forward:first').is(":checked"),
+          left: leftEmt.find('.scroll_forward:first').is(":checked"),
+          right: rightEmt.find('.scroll_forward:first').is(":checked")
         };
       }
     }
@@ -247,6 +248,23 @@ EventConfig = (function() {
     return em.on('change', function(e) {
       self.clearError();
       return self.clickMethod(this);
+    });
+  };
+
+  _setScrollDirectionEvent = function() {
+    var handler, self;
+    self = 0;
+    handler = $('.handler_div', this.emt);
+    $('.scroll_enabled', handler).off('click');
+    return $('.scroll_enabled').on('click', function(e) {
+      var emt;
+      if ($(this).is(':checked')) {
+        return $(this).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').css('display', 'block');
+      } else {
+        emt = $(this).closest('.scroll_enabled_wrapper').find('.scroll_forward:first');
+        emt.parent('label').css('display', 'none');
+        return emt.prop('checked', false);
+      }
     });
   };
 
