@@ -117,7 +117,7 @@ class WorktableCommon
     CommonVar.worktableCommonVar()
     $(window.drawingCanvas).attr('width', window.mainWrapper.width())
     $(window.drawingCanvas).attr('height', window.mainWrapper.height())
-    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     # スクロールサイズ
     scrollInside.width(window.scrollViewSize)
     scrollInside.height(window.scrollViewSize)

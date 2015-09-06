@@ -139,7 +139,7 @@ WorktableCommon = (function() {
     CommonVar.worktableCommonVar();
     $(window.drawingCanvas).attr('width', window.mainWrapper.width());
     $(window.drawingCanvas).attr('height', window.mainWrapper.height());
-    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
+    $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
     scrollInside.width(window.scrollViewSize);
     scrollInside.height(window.scrollViewSize);
     scrollContents.scrollLeft(scrollInside.width() * 0.5);
