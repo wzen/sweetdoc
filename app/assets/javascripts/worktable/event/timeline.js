@@ -161,7 +161,9 @@ Timeline = (function() {
       id = $(this).find('input.id').val();
       name = $(this).find('input.name').val();
       itemId = $(this).find('input.itemId').val();
-      return selectOptions += "<option value='" + id + Constant.EVENT_ITEM_SEPERATOR + itemId + "'>\n  " + name + "\n</option>";
+      if (itemId != null) {
+        return selectOptions += "<option value='" + id + Constant.EVENT_ITEM_SEPERATOR + itemId + "'>\n  " + name + "\n</option>";
+      }
     });
     return teItemSelects.each(function() {
       $(this).find('option').each(function() {

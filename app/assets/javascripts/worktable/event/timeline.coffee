@@ -164,11 +164,12 @@ class Timeline
       id = $(@).find('input.id').val()
       name = $(@).find('input.name').val()
       itemId = $(@).find('input.itemId').val()
-      selectOptions += """
-          <option value='#{id}#{Constant.EVENT_ITEM_SEPERATOR}#{itemId}'>
-            #{name}
-          </option>
-        """
+      if itemId?
+        selectOptions += """
+            <option value='#{id}#{Constant.EVENT_ITEM_SEPERATOR}#{itemId}'>
+              #{name}
+            </option>
+          """
     )
 
     # メニューを入れ替え

@@ -62,12 +62,6 @@ three:
             {
               "id": "changeColorScroll_Design",
               "name": "Change Color by Scroll",
-              "args": {
-                "arg1": {
-                  "type": "DESIGN",
-                  "arg_name": "color"
-                }
-              }
             }
 
 four:
@@ -80,10 +74,4 @@ four:
             {
               "id": "changeColorClick_Design",
               "name": "Change Color by Click",
-              "args": {
-                "arg1": {
-                  "type": "COLOR",
-                  "arg_name": "color"
-                }
-              }
             }
