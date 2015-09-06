@@ -34,7 +34,7 @@ Navbar = (function() {
       return Common.showModalView(Constant.ModalViewType.ABOUT);
     });
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
-    return $('.menu-item', itemsSelectMenuEmt).on('click', function() {
+    $('.menu-item', itemsSelectMenuEmt).click(function() {
       var itemId;
       itemId = parseInt($(this).attr('id').replace('menu-item-', ''));
       itemsSelectMenuEmt.removeClass('active');
@@ -42,6 +42,14 @@ Navbar = (function() {
       window.selectItemMenu = itemId;
       WorktableCommon.changeMode(Constant.Mode.DRAW);
       return WorktableCommon.loadItemJs(itemId);
+    });
+    $('#header_items_select_menu .menu-item').click(function() {
+      var selected;
+      selected = $(this).html();
+      return $('#header_items_selected_menu_span').html(selected);
+    });
+    return $('#menu-action-edit').click(function() {
+      return WorktableCommon.changeMode(Constant.Mode.EDIT);
     });
   };
 

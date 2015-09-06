@@ -31,10 +31,13 @@ class WorktableCommon
   @changeMode = (mode) ->
     if mode == Constant.Mode.DRAW
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+      window.scrollContents.find('.item.draggable').removeClass('item_edit')
     else if mode == Constant.Mode.EDIT
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
+      window.scrollContents.find('.item.draggable').addClass('item_edit')
     else if mode == Constant.Mode.OPTION
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+      window.scrollContents.find('.item.draggable').removeClass('item_edit')
     window.mode = mode
 
   # 非表示をクリア

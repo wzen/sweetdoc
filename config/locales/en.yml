@@ -29,10 +29,14 @@ en:
       save: "Save"
       load: "Load"
       setting: "Setting"
-    item:
-      item: "Item"
-      arrow: "Arrow"
-      button: "Button"
+    action:
+      action: "Action"
+      select_action: "(Select Action)"
+      draw:
+        draw: "Draw"
+        arrow: "Arrow"
+        button: "Button"
+      edit: "Edit"
     etc:
       etc: "Etc"
       language: "Language"

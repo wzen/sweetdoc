@@ -30,7 +30,7 @@ class Navbar
     )
 
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
-    $('.menu-item', itemsSelectMenuEmt).on('click', ->
+    $('.menu-item', itemsSelectMenuEmt).click( ->
       # TODO: 取り方見直す
       itemId = parseInt($(this).attr('id').replace('menu-item-', ''))
       itemsSelectMenuEmt.removeClass('active')
@@ -38,6 +38,16 @@ class Navbar
       window.selectItemMenu = itemId
       WorktableCommon.changeMode(Constant.Mode.DRAW)
       WorktableCommon.loadItemJs(itemId)
+    )
+
+    #$('#header_items_select_menu .menu-item').off('click')
+    $('#header_items_select_menu .menu-item').click( ->
+      selected = $(@).html()
+      $('#header_items_selected_menu_span').html(selected)
+    )
+
+    $('#menu-action-edit').click( ->
+      WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
 
   # Runナビバー初期化

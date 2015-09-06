@@ -8,10 +8,14 @@ ja:
       save: "保存"
       load: "読み込み"
       setting: "設定"
-    item:
-      item: "アイテム"
-      arrow: "矢印"
-      button: "ボタン"
+    action:
+      action: "アクション"
+      select_action: "(アクションを選択してください)"
+      draw:
+        draw: "描画"
+        arrow: "矢印"
+        button: "ボタン"
+      edit: "編集"
     etc:
       etc: "その他"
       language: "言語"

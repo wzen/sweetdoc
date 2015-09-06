@@ -299,6 +299,25 @@ div.scroll_inside {
         }
       }
     }
+    .scroll_enabled_wrapper:before,
+    .scroll_enabled_wrapper:after {
+      content: "";
+      display: table;
+    }
+
+    .scroll_enabled_wrapper:after {
+      clear: both;
+    }
+    .scroll_enabled_wrapper {
+      display: flex;
+      display: -moz-flex;
+      display: -webkit-flex;
+      -moz-flex-direction: row;
+      -o-flex-direction: row;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
   #htmlCode h2, #cssCode h2 {
     font-family: Arial, Helvetica, sans-serif;
@@ -559,6 +578,9 @@ div.css3button > div {
 
 .item {
   position: relative;
+  &.item_edit {
+    cursor: move !important;
+  }
 }
 
 .editSelected {

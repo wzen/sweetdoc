@@ -29,14 +29,20 @@
                         <li><a class="menu-setting"><%= t('header_menu.file.setting') %></a></li>
                     </ul>
                 </li>
+                <!--<li id="header_action_brand">-->
+                    <!--<a class="navbar-brand"><%= t('header_menu.action.action') %></a>-->
+                <!--</li>-->
                 <li id="header_items_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_select_menu">
-                        <%= t('header_menu.item.item') %>
+                        <span id="header_items_selected_menu_span"><%= t('header_menu.action.select_action') %></span>
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a id="menu-item-1" class="menu-item"><%= t('header_menu.item.button') %></a></li>
-                        <li><a id="menu-item-2" class="menu-item"><%= t('header_menu.item.arrow') %></a></li>
+                        <li class="dropdown-header"><%= t('header_menu.action.draw.draw') %></li>
+                        <li><a id="menu-item-1" class="menu-item"><%= t('header_menu.action.draw.button') %></a></li>
+                        <li><a id="menu-item-2" class="menu-item"><%= t('header_menu.action.draw.arrow') %></a></li>
+                        <li class="divider"></li>
+                        <li><a id="menu-action-edit" class="menu-item"><%= t('header_menu.action.edit') %></a></li>
                     </ul>
                 </li>
                 <li><a onclick="run()">Run</a></li>
