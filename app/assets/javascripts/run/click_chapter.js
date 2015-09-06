@@ -20,15 +20,18 @@ ClickChapter = (function(superClass) {
         return self.clickEvent(e);
       });
     });
-    return this.riseFrontAllObj(this.eventObjList);
+    this.riseFrontAllObj(this.eventObjList);
+    return this.showGuide();
   };
 
   ClickChapter.prototype.didChapter = function() {
     ClickChapter.__super__.didChapter.call(this);
-    return this.sinkFrontAllObj();
+    this.sinkFrontAllObj();
+    return this.hideGuide();
   };
 
   ClickChapter.prototype.clickEvent = function(e) {
+    this.hideGuide();
     if (window.disabledEventHandler) {
       return;
     }
@@ -41,6 +44,30 @@ ClickChapter = (function(superClass) {
         });
       }
     });
+  };
+
+  ClickChapter.prototype.showGuide = function() {
+    this.hideGuide();
+    return this.constructor.guideTimer = setTimeout((function(_this) {
+      return function() {
+        var items;
+        items = [];
+        _this.eventObjList.forEach(function(event) {
+          if (event instanceof ItemBase) {
+            return items.push(event);
+          }
+        });
+        return ClickGuide.showGuide(items);
+      };
+    })(this), ClickGuide.IDLE_TIMER);
+  };
+
+  ClickChapter.prototype.hideGuide = function() {
+    if (this.constructor.guideTimer != null) {
+      clearTimeout(this.constructor.guideTimer);
+      this.constructor.guideTimer = null;
+    }
+    return ClickGuide.hideGuide();
   };
 
   return ClickChapter;

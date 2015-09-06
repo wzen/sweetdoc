@@ -6,10 +6,8 @@ var ScrollChapter,
 ScrollChapter = (function(superClass) {
   extend(ScrollChapter, superClass);
 
-  ScrollChapter.guideTimer = null;
-
-  function ScrollChapter(list) {
-    ScrollChapter.__super__.constructor.call(this, list);
+  function ScrollChapter() {
+    return ScrollChapter.__super__.constructor.apply(this, arguments);
   }
 
   ScrollChapter.prototype.willChapter = function() {
@@ -19,7 +17,8 @@ ScrollChapter = (function(superClass) {
   };
 
   ScrollChapter.prototype.didChapter = function() {
-    return ScrollChapter.__super__.didChapter.call(this);
+    ScrollChapter.__super__.didChapter.call(this);
+    return this.hideGuide();
   };
 
   ScrollChapter.prototype.scrollEvent = function(x, y) {
@@ -30,11 +29,7 @@ ScrollChapter = (function(superClass) {
       return function(event) {
         if (event.scrollEvent != null) {
           return event.scrollEvent(x, y, function() {
-            if (_this.constructor.guideTimer != null) {
-              clearTimeout(_this.constructor.guideTimer);
-              _this.constructor.guideTimer = null;
-            }
-            ScrollGuide.hideGuide();
+            _this.hideGuide();
             if (window.eventAction != null) {
               return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
             }
@@ -51,17 +46,21 @@ ScrollChapter = (function(superClass) {
     if (willChapter == null) {
       willChapter = false;
     }
-    if (this.constructor.guideTimer != null) {
-      clearTimeout(this.constructor.guideTimer);
-      this.constructor.guideTimer = null;
-    }
-    ScrollGuide.hideGuide();
+    this.hideGuide();
     return this.constructor.guideTimer = setTimeout((function(_this) {
       return function() {
         _this.adjustGuideParams(willChapter);
         return ScrollGuide.showGuide(_this.enabledDirections, _this.forwardDirections, _this.canForward, _this.canReverse);
       };
     })(this), ScrollGuide.IDLE_TIMER);
+  };
+
+  ScrollChapter.prototype.hideGuide = function() {
+    if (this.constructor.guideTimer != null) {
+      clearTimeout(this.constructor.guideTimer);
+      this.constructor.guideTimer = null;
+    }
+    return ScrollGuide.hideGuide();
   };
 
   ScrollChapter.prototype.adjustGuideParams = function(willChapter) {

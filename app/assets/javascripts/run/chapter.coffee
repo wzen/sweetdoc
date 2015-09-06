@@ -1,5 +1,8 @@
 # チャプター(イベントの区切り)
 class Chapter
+  # ガイド表示用タイマー
+  @guideTimer = null
+
   constructor: (list) ->
     @eventList = list.eventList
     @num = list.num

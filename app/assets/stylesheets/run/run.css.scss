@@ -156,6 +156,9 @@ div#guide_right{
       -webkit-animation-name: scrollpointer_top_blink;
       -webkit-animation-duration: 1.5s;
       -webkit-animation-iteration-count: infinite;
+      -moz-animation-name: scrollpointer_top_blink;
+      -moz-animation-duration: 1.5s;
+      -moz-animation-iteration-count: infinite;
 
       &.top {
         background-image: image_url('run_guide/arrow-up.png');
@@ -185,6 +188,8 @@ div#guide_right{
 
       -webkit-animation-duration: 1.5s;
       -webkit-animation-iteration-count: infinite;
+      -moz-animation-duration: 1.5s;
+      -moz-animation-iteration-count: infinite;
 
       &.forward {
         background-image: image_url('run_guide/scroll_forward.png');
@@ -197,21 +202,25 @@ div#guide_right{
         width: 80px;
         height: 100%;
         -webkit-animation-name: scrollpointer_top_blink;
+        -moz-animation-name: scrollpointer_top_blink;
       }
       &.bottom {
         width: 80px;
         height: 100%;
         -webkit-animation-name: scrollpointer_bottom_blink;
+        -moz-animation-name: scrollpointer_bottom_blink;
       }
       &.left {
         width: 100%;
         height: 80px;
         -webkit-animation-name: scrollpointer_left_blink;
+        -moz-animation-name: scrollpointer_left_blink;
       }
       &.right {
         width: 100%;
         height: 80px;
         -webkit-animation-name: scrollpointer_right_blink;
+        -moz-animation-name: scrollpointer_right_blink;
       }
 
     }
@@ -229,6 +238,36 @@ div#guide_right{
       left: 0;
       background-color: black;
     }
+  }
+}
+
+.guide_click {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 999999999;
+  opacity: 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  -webkit-animation-duration: 1.5s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-duration: 1.5s;
+  -moz-animation-iteration-count: infinite;
+
+  &.red {
+    background-image: image_url('run_guide/click_red.png');
+  }
+  &.black {
+    background-image: image_url('run_guide/click_black.png');
+  }
+  &.blue {
+    background-image: image_url('run_guide/click_blue.png');
+  }
+  &.yellow {
+    background-image: image_url('run_guide/click_yellow.png');
   }
 }
 

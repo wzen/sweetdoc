@@ -1,10 +1,5 @@
 # スクロール用Chapterクラス
 class ScrollChapter extends Chapter
-  @guideTimer = null
-
-  constructor: (list) ->
-    super(list)
-
   # チャプターの前処理
   willChapter: ->
     super()
@@ -16,6 +11,7 @@ class ScrollChapter extends Chapter
   # チャプターの後処理
   didChapter: ->
     super()
+    @hideGuide()
 
   # スクロールイベント
   scrollEvent : (x, y) ->
@@ -25,11 +21,7 @@ class ScrollChapter extends Chapter
     @eventObjList.forEach((event) =>
       if event.scrollEvent?
         event.scrollEvent(x, y, =>
-          # ガイド停止
-          if @constructor.guideTimer?
-            clearTimeout(@constructor.guideTimer)
-            @constructor.guideTimer = null
-          ScrollGuide.hideGuide()
+          @hideGuide()
           if window.eventAction?
             window.eventAction.thisPage().nextChapterIfFinishedAllEvent()
         )
@@ -39,15 +31,19 @@ class ScrollChapter extends Chapter
 
   # ガイド表示
   showGuide: (willChapter = false) ->
-    if @constructor.guideTimer?
-      clearTimeout(@constructor.guideTimer)
-      @constructor.guideTimer = null
-    ScrollGuide.hideGuide()
+    @hideGuide()
     @constructor.guideTimer = setTimeout( =>
       # ガイド表示
       @adjustGuideParams(willChapter)
       ScrollGuide.showGuide(@enabledDirections, @forwardDirections, @canForward, @canReverse)
     , ScrollGuide.IDLE_TIMER)
+
+  # ガイド非表示
+  hideGuide: ->
+    if @constructor.guideTimer?
+      clearTimeout(@constructor.guideTimer)
+      @constructor.guideTimer = null
+    ScrollGuide.hideGuide()
 
   # ガイドフラグ調整
   adjustGuideParams: (willChapter) ->

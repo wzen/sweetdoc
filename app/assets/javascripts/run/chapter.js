@@ -2,6 +2,8 @@
 var Chapter;
 
 Chapter = (function() {
+  Chapter.guideTimer = null;
+
   function Chapter(list) {
     var classMapId, event, i, id, isCommonEvent, len, obj, ref;
     this.eventList = list.eventList;

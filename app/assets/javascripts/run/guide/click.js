@@ -10,9 +10,95 @@ ClickGuide = (function(superClass) {
     return ClickGuide.__super__.constructor.apply(this, arguments);
   }
 
-  ClickGuide.showGuide = function() {};
+  ClickGuide.addItemKeyFrams = function(items) {
+    var _itemKeyFrames, css, item, j, len;
+    _itemKeyFrames = function(item) {
+      var anim, kf;
+      kf = "click_focus_" + item.id + " {\n      0% {\n        background-size: 100px 100px;\n        opacity: 0;\n      }\n      100% {\n        background-size: 80px 80px;\n        opacity: 1;\n      }\n    }";
+      anim = ".click_guide_" + item.id + "\n{\n-webkit-animation-name: click_focus_" + item.id + ";\n-moz-animation-name: click_focus_" + item.id + ";\n}";
+      return "@-webkit-keyframes " + kf + "\n@-moz-keyframes " + kf + "\n" + anim;
+    };
+    css = '';
+    for (j = 0, len = items.length; j < len; j++) {
+      item = items[j];
+      css += _itemKeyFrames.call(this, item);
+    }
+    this.removeItemKeyFrames();
+    return window.cssCode.append($("<div class='chapter_itemkeyframes'><style type='text/css'>" + css + "</style></div>"));
+  };
 
-  ClickGuide.hideGuide = function() {};
+  ClickGuide.removeItemKeyFrames = function() {
+    return window.cssCode.find('.chapter_itemkeyframes').remove();
+  };
+
+  ClickGuide.showGuide = function(items) {
+    var color, guideClassName, item, j, len, results, style;
+    this.addItemKeyFrams(items);
+    results = [];
+    for (j = 0, len = items.length; j < len; j++) {
+      item = items[j];
+      color = this.focusColor(item);
+      guideClassName = "click_guide_" + item.id;
+      style = '';
+      results.push(item.getJQueryElement().append($("<div class='guide_click " + color + " " + guideClassName + "' style='" + style + "'></div>")));
+    }
+    return results;
+  };
+
+  ClickGuide.hideGuide = function() {
+    this.removeItemKeyFrames();
+    return $('.guide_click').remove();
+  };
+
+  ClickGuide.focusColor = function(item) {
+    var arr, average, background, baseColors, c, colors, count, endIndex, i, j, k, l, len, maxDiff, re, ref, ref1, sixteen, startIndex, targetKey, v;
+    background = item.getJQueryElement().find('.css3button:first').css('background');
+    startIndex = background.indexOf('gradient(') + 'gradient('.length;
+    endIndex = background.length - 1;
+    count = 1;
+    for (i = j = ref = startIndex, ref1 = background.length; ref <= ref1 ? j <= ref1 : j >= ref1; i = ref <= ref1 ? ++j : --j) {
+      c = background.charAt(i);
+      if (c === '(') {
+        count += 1;
+      } else if (c === ')') {
+        count -= 1;
+      }
+      if (count <= 0) {
+        endIndex = i;
+        break;
+      }
+    }
+    background = background.substring(startIndex, endIndex);
+    re = /((2[0-4]\d|25[0-5]|1\d{1,2}|[1-9]\d|\d)( ?, ?)){2}(2[0-4]\d|25[0-5]|1\d{1,2}|[1-9]\d|\d)/g;
+    colors = background.match(re);
+    if (colors == null) {
+      return 'black';
+    }
+    average = 0;
+    for (l = 0, len = colors.length; l < len; l++) {
+      c = colors[l];
+      arr = c.split(',');
+      sixteen = parseInt(arr[0]).toString(16) + parseInt(arr[1]).toString(16) + parseInt(arr[2]).toString(16);
+      average += parseInt(sixteen, 16);
+    }
+    average /= colors.length;
+    baseColors = {
+      red: parseInt('FF0000'.toString(10)),
+      black: parseInt('000000'.toString(10)),
+      blue: parseInt('0000FF'.toString(10)),
+      yellow: parseInt('FFFF00'.toString(10))
+    };
+    maxDiff = 0;
+    targetKey = null;
+    for (k in baseColors) {
+      v = baseColors[k];
+      if (Math.abs(v - average) > maxDiff) {
+        targetKey = k;
+        maxDiff = Math.abs(v - average);
+      }
+    }
+    return targetKey;
+  };
 
   return ClickGuide;
 
