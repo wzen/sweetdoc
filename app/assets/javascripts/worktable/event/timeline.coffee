@@ -28,7 +28,7 @@ class Timeline
       timelineEvents = $('#timeline_events').children('.timeline_event')
       emt = null
       if ePageValues.length > 0
-        # 色と数値を更新
+        # 色、数値、Sync線を更新
         for pageValue, idx in ePageValues
           teNum = idx + 1
           emt = timelineEvents.eq(idx)
@@ -39,6 +39,14 @@ class Timeline
           $('.te_num', emt).val(teNum)
           actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
           Timeline.changeTimelineColor(teNum, actionType)
+
+          # 同期線
+          if pageValue[EventPageValueBase.PageValueKey.IS_PARALLEL]
+            # 線表示
+            timelineEvents.eq(idx).before("<div class='sync_line #{Common.getActionTypeClassNameByActionType(actionType)}'></div>")
+          else
+            # 線消去
+            timelineEvents.eq(idx).prev('.sync_line').remove()
 
         # 不要なタイムラインイベントを削除
         if ePageValues.length < timelineEvents.length - 1

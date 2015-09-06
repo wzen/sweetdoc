@@ -43,6 +43,11 @@ Timeline = (function() {
           $('.te_num', emt).val(teNum);
           actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
           Timeline.changeTimelineColor(teNum, actionType);
+          if (pageValue[EventPageValueBase.PageValueKey.IS_PARALLEL]) {
+            timelineEvents.eq(idx).before("<div class='sync_line " + (Common.getActionTypeClassNameByActionType(actionType)) + "'></div>");
+          } else {
+            timelineEvents.eq(idx).prev('.sync_line').remove();
+          }
         }
         if (ePageValues.length < timelineEvents.length - 1) {
           for (i = l = ref = ePageValues.length, ref1 = timelineEvents.length - 1; ref <= ref1 ? l <= ref1 : l >= ref1; i = ref <= ref1 ? ++l : --l) {
