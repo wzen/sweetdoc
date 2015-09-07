@@ -6,7 +6,9 @@
 //= require jquery-ui.min
 //= require jquery.transit.min
 //= require turbolinks
+//= require i18n
 // IDE not aware under vendor/asset/
+//= require_directory ./i18n
 //= require base/constant
 //= require base/common
 //= require base/common_var

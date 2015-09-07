@@ -3,9 +3,10 @@ class Navbar
   # Worktableナビバー初期化
   @initWorktableNavbar = ->
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
+    $('.menu-newcreate', fileMenuEmt).off('click')
     $('.menu-newcreate', fileMenuEmt).on('click', ->
       if Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2
-        if window.confirm('作成中のコンテンツは全て削除されます。')
+        if window.confirm(I18n.t('message.dialog.new_project'))
           WorktableCommon.recreateMainContainer()
     )
     $('.menu-load', fileMenuEmt).off('mouseenter')

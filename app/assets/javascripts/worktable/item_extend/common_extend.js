@@ -67,19 +67,33 @@ WorkTableCommonExtend = {
         }
       });
       menu.push({
+        title: "Float",
+        cmd: "float",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {}
+      });
+      menu.push({
+        title: "Rear",
+        cmd: "rear",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {}
+      });
+      menu.push({
         title: "Delete",
         cmd: "delete",
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
           var target, targetId;
-          target = event.target;
-          targetId = $(target).attr('id');
-          PageValue.removeInstancePageValue(targetId);
-          target.remove();
-          PageValue.adjustInstanceAndEventOnThisPage();
-          Timeline.refreshAllTimeline();
-          LocalStorage.saveValueForWorktable();
-          return OperationHistory.add();
+          if (window.confirm(I18n.t('message.dialog.delete_item'))) {
+            target = event.target;
+            targetId = $(target).attr('id');
+            PageValue.removeInstancePageValue(targetId);
+            target.remove();
+            PageValue.adjustInstanceAndEventOnThisPage();
+            Timeline.refreshAllTimeline();
+            LocalStorage.saveValueForWorktable();
+            return OperationHistory.add();
+          }
         }
       });
       return WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu);

@@ -43,6 +43,9 @@ en:
       introduction: "introduction"
       about: "About"
   message:
+    dialog:
+      new_project: "All the contents making will delete."
+      delete_item: "The item will delete."
     database:
       item_state:
         save:
@@ -53,3 +56,5 @@ en:
   common_action:
     background: "Background"
     screen: "Screen"
+  test: "testok"
+

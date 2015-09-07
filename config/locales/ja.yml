@@ -22,6 +22,9 @@ ja:
       introduction: "自己紹介"
       about: "このサイトについて"
   message:
+    dialog:
+      new_project: "'作成中のコンテンツは全て削除されます。'"
+      delete_item: "アイテムが削除されます。"
     database:
       item_state:
         save:
