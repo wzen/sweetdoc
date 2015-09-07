@@ -83,16 +83,8 @@ WorkTableCommonExtend = {
         cmd: "delete",
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
-          var target, targetId;
           if (window.confirm(I18n.t('message.dialog.delete_item'))) {
-            target = event.target;
-            targetId = $(target).attr('id');
-            PageValue.removeInstancePageValue(targetId);
-            target.remove();
-            PageValue.adjustInstanceAndEventOnThisPage();
-            Timeline.refreshAllTimeline();
-            LocalStorage.saveValueForWorktable();
-            return OperationHistory.add();
+            return WorktableCommon.removeItem(event.target);
           }
         }
       });

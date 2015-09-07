@@ -99,7 +99,7 @@ ServerStorage = (function() {
         item_js_list = data.item_js_list;
         callback = function() {
           var d, k, ref, ref1, v;
-          WorktableCommon.clearWorkTable();
+          WorktableCommon.removeAllItemOnWorkTable();
           if (data.instance_pagevalue_data != null) {
             d = {};
             ref = data.instance_pagevalue_data;

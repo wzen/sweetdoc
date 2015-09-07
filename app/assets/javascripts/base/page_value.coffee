@@ -53,8 +53,6 @@ class PageValue
       @eventCount = (pn = PageValue.getPageNum()) -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}count"
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
-      # @property [String] CONFIG_OPENED_SCROLL コンフィグ表示時のスクロール位置保存
-      @CONFIG_OPENED_SCROLL = 'config_opened_scroll'
       # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
       @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
       # @property [String] UPDATED 更新フラグ
@@ -308,6 +306,7 @@ class PageValue
   @removeInstancePageValue = (instanceId) ->
     $("##{@Key.IS_ROOT} .#{instanceId}").remove()
 
+
   # updateが付与しているクラスからupdateクラスを除去する
   @clearAllUpdateFlg = ->
     $("##{@Key.IS_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
@@ -340,12 +339,6 @@ class PageValue
         ret.push(parseInt(k))
     return ret
 
-  # ページが持つ値を削除
-  # @param [String] key キー値
-  @removePageValue = (key) ->
-    # 削除ありで取得
-    @getInstancePageValue(key, true)
-
   # アイテムとイベント情報を全削除
   @removeAllItemAndEventPageValue = ->
     # page_value消去
@@ -359,7 +352,7 @@ class PageValue
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
     $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
 
-  # InstancePageValueをチェックしてEventPageValueを最適化
+  # InstancePageValueとEventPageValueを最適化
   @adjustInstanceAndEventOnThisPage = ->
     iPageValues = @getInstancePageValue(PageValue.Key.instancePagePrefix())
     instanceObjIds = []
@@ -403,17 +396,12 @@ class PageValue
 
   # 現在のページ番号を取得
   @getPageNum = ->
-#    if window.pn?
-#      return window.pn
-
     ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
     if ret?
       ret = parseInt(ret)
     else
       ret = 1
       @setPageNum(ret)
-
-    #window.pn = ret
     return ret
 
   # 現在のページ番号を設定
@@ -438,4 +426,18 @@ class PageValue
           css += instance.css
     return css
 
-
+  # 対象アイテムのSyncを解除する
+  @removeEventPageValueSync = (objId) ->
+    tes = @getEventPageValueSortedListByNum()
+    dFlg = false
+    type = null
+    for te, idx in tes
+      if te.id == objId
+        dFlg = true
+        type = te.actiontype
+      else
+        if dFlg && type == te[EventPageValueBase.PageValueKey.ACTIONTYPE]
+          te[EventPageValueBase.PageValueKey.IS_PARALLEL] = false
+          @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), te)
+          dFlg = false
+          type = null

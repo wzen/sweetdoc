@@ -17,7 +17,9 @@ Sidebar = (function() {
       if (!Sidebar.isOpenedConfigSidebar()) {
         main.removeClass('col-md-12');
         main.addClass('col-md-9');
-        $('#sidebar').fadeIn('500');
+        $('#sidebar').fadeIn('500', function() {
+          return WorktableCommon.resizeMainContainerEvent();
+        });
         if (target !== null) {
           return WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
         }
@@ -34,17 +36,9 @@ Sidebar = (function() {
     if (!Sidebar.isClosedConfigSidebar()) {
       main = $('#main');
       return $('#sidebar').fadeOut('500', function() {
-        var s;
-        s = PageValue.getInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL);
-        if (s != null) {
-          scrollContents.css({
-            scrollTop: s.top,
-            scrollLeft: s.left
-          });
-          PageValue.removePageValue(PageValue.Key.CONFIG_OPENED_SCROLL);
-        }
         main.removeClass('col-md-9');
         main.addClass('col-md-12');
+        WorktableCommon.resizeMainContainerEvent();
         if (callback != null) {
           callback();
         }

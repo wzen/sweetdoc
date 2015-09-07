@@ -83,8 +83,6 @@ PageValue = (function() {
 
       Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
-      Key.CONFIG_OPENED_SCROLL = 'config_opened_scroll';
-
       Key.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
 
       Key.UPDATED = 'updated';
@@ -410,10 +408,6 @@ PageValue = (function() {
     return ret;
   };
 
-  PageValue.removePageValue = function(key) {
-    return this.getInstancePageValue(key, true);
-  };
-
   PageValue.removeAllItemAndEventPageValue = function() {
     $("#" + this.Key.G_ROOT).children("." + this.Key.G_PREFIX).remove();
     $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
@@ -515,6 +509,31 @@ PageValue = (function() {
       }
     }
     return css;
+  };
+
+  PageValue.removeEventPageValueSync = function(objId) {
+    var dFlg, i, idx, len, results, te, tes, type;
+    tes = this.getEventPageValueSortedListByNum();
+    dFlg = false;
+    type = null;
+    results = [];
+    for (idx = i = 0, len = tes.length; i < len; idx = ++i) {
+      te = tes[idx];
+      if (te.id === objId) {
+        dFlg = true;
+        results.push(type = te.actiontype);
+      } else {
+        if (dFlg && type === te[EventPageValueBase.PageValueKey.ACTIONTYPE]) {
+          te[EventPageValueBase.PageValueKey.IS_PARALLEL] = false;
+          this.setEventPageValue(this.Key.eventPagePrefix() + this.Key.PAGE_VALUES_SEPERATOR + this.Key.E_NUM_PREFIX + (idx + 1), te);
+          dFlg = false;
+          results.push(type = null);
+        } else {
+          results.push(void 0);
+        }
+      }
+    }
+    return results;
   };
 
   return PageValue;

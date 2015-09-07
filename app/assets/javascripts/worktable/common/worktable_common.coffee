@@ -31,13 +31,16 @@ class WorktableCommon
   @changeMode = (mode) ->
     if mode == Constant.Mode.DRAW
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
-      window.scrollContents.find('.item.draggable').removeClass('item_edit')
+      window.scrollContents.find('.item.draggable').removeClass('edit_mode')
+      window.scrollInside.removeClass('edit_mode')
     else if mode == Constant.Mode.EDIT
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
-      window.scrollContents.find('.item.draggable').addClass('item_edit')
+      window.scrollContents.find('.item.draggable').addClass('edit_mode')
+      window.scrollInside.addClass('edit_mode')
     else if mode == Constant.Mode.OPTION
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
-      window.scrollContents.find('.item.draggable').removeClass('item_edit')
+      window.scrollContents.find('.item.draggable').removeClass('edit_mode')
+      window.scrollInside.removeClass('edit_mode')
     window.mode = mode
 
   # 非表示をクリア
@@ -57,8 +60,6 @@ class WorktableCommon
   @focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
     # 選択枠設定
     @setSelectedBorder(target, selectedBorderType)
-    # 変更前のスライド値を保存
-    PageValue.setInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL, {top: scrollContents.scrollTop(), left: scrollContents.scrollLeft()}, true)
     LocalStorage.saveInstancePageValue()
     Common.focusToTarget(target)
 
@@ -85,7 +86,7 @@ class WorktableCommon
     $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
     window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
 
-  # 画面の高さ設定
+  # 画面サイズ設定
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
     $(window.drawingCanvas).attr('width', window.mainWrapper.width())
@@ -103,8 +104,19 @@ class WorktableCommon
       , 200)
     )
 
-  # 画面のアイテムをクリア
-  @clearWorkTable = ->
+  # アイテムを削除
+  @removeItem = (target) ->
+    targetId = $(target).attr('id')
+    PageValue.removeInstancePageValue(targetId)
+    PageValue.removeEventPageValueSync(targetId)
+    target.remove()
+    PageValue.adjustInstanceAndEventOnThisPage()
+    Timeline.refreshAllTimeline()
+    LocalStorage.saveValueForWorktable()
+    OperationHistory.add()
+
+  # 画面の全アイテムを削除
+  @removeAllItemOnWorkTable = ->
     for k, v of Common.getCreatedItemObject()
       v.getJQueryElement().remove()
 
@@ -119,11 +131,12 @@ class WorktableCommon
     $(window.drawingCanvas).attr('height', window.mainWrapper.height())
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     # スクロールサイズ
-    scrollInside.width(window.scrollViewSize)
-    scrollInside.height(window.scrollViewSize)
+    window.scrollInside.width(window.scrollViewSize)
+    window.scrollInside.height(window.scrollViewSize)
+    window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
     # スクロール位置初期化
-    scrollContents.scrollLeft(scrollInside.width() * 0.5)
-    scrollContents.scrollTop(scrollInside.height() * 0.5)
+    scrollContents.scrollLeft(window.scrollInside.width() * 0.5)
+    scrollContents.scrollTop(window.scrollInside.height() * 0.5)
     # ドロップダウン
     $('.dropdown-toggle').dropdown()
     # ナビバー

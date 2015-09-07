@@ -9,7 +9,9 @@ class Sidebar
       if !Sidebar.isOpenedConfigSidebar()
         main.removeClass('col-md-12')
         main.addClass('col-md-9')
-        $('#sidebar').fadeIn('500')
+        $('#sidebar').fadeIn('500', ->
+          WorktableCommon.resizeMainContainerEvent()
+        )
         if target != null
           WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
@@ -20,12 +22,9 @@ class Sidebar
     if !Sidebar.isClosedConfigSidebar()
       main = $('#main')
       $('#sidebar').fadeOut('500', ->
-        s = PageValue.getInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL)
-        if s?
-          scrollContents.css({scrollTop: s.top, scrollLeft: s.left})
-          PageValue.removePageValue(PageValue.Key.CONFIG_OPENED_SCROLL)
         main.removeClass('col-md-9')
         main.addClass('col-md-12')
+        WorktableCommon.resizeMainContainerEvent()
         if callback?
           callback()
         $('.sidebar-config').css('display', 'none')

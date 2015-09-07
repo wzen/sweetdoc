@@ -32,13 +32,16 @@ WorktableCommon = (function() {
   WorktableCommon.changeMode = function(mode) {
     if (mode === Constant.Mode.DRAW) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-      window.scrollContents.find('.item.draggable').removeClass('item_edit');
+      window.scrollContents.find('.item.draggable').removeClass('edit_mode');
+      window.scrollInside.removeClass('edit_mode');
     } else if (mode === Constant.Mode.EDIT) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
-      window.scrollContents.find('.item.draggable').addClass('item_edit');
+      window.scrollContents.find('.item.draggable').addClass('edit_mode');
+      window.scrollInside.addClass('edit_mode');
     } else if (mode === Constant.Mode.OPTION) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-      window.scrollContents.find('.item.draggable').removeClass('item_edit');
+      window.scrollContents.find('.item.draggable').removeClass('edit_mode');
+      window.scrollInside.removeClass('edit_mode');
     }
     return window.mode = mode;
   };
@@ -61,10 +64,6 @@ WorktableCommon = (function() {
       selectedBorderType = "edit";
     }
     this.setSelectedBorder(target, selectedBorderType);
-    PageValue.setInstancePageValue(PageValue.Key.CONFIG_OPENED_SCROLL, {
-      top: scrollContents.scrollTop(),
-      left: scrollContents.scrollLeft()
-    }, true);
     LocalStorage.saveInstancePageValue();
     return Common.focusToTarget(target);
   };
@@ -118,7 +117,19 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.clearWorkTable = function() {
+  WorktableCommon.removeItem = function(target) {
+    var targetId;
+    targetId = $(target).attr('id');
+    PageValue.removeInstancePageValue(targetId);
+    PageValue.removeEventPageValueSync(targetId);
+    target.remove();
+    PageValue.adjustInstanceAndEventOnThisPage();
+    Timeline.refreshAllTimeline();
+    LocalStorage.saveValueForWorktable();
+    return OperationHistory.add();
+  };
+
+  WorktableCommon.removeAllItemOnWorkTable = function() {
     var k, ref, results, v;
     ref = Common.getCreatedItemObject();
     results = [];
@@ -140,10 +151,11 @@ WorktableCommon = (function() {
     $(window.drawingCanvas).attr('width', window.mainWrapper.width());
     $(window.drawingCanvas).attr('height', window.mainWrapper.height());
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-    scrollInside.width(window.scrollViewSize);
-    scrollInside.height(window.scrollViewSize);
-    scrollContents.scrollLeft(scrollInside.width() * 0.5);
-    scrollContents.scrollTop(scrollInside.height() * 0.5);
+    window.scrollInside.width(window.scrollViewSize);
+    window.scrollInside.height(window.scrollViewSize);
+    window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+    scrollContents.scrollLeft(window.scrollInside.width() * 0.5);
+    scrollContents.scrollTop(window.scrollInside.height() * 0.5);
     $('.dropdown-toggle').dropdown();
     Navbar.initWorktableNavbar();
     this.initKeyEvent();

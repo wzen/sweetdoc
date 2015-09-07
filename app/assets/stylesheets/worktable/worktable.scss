@@ -67,6 +67,10 @@ div.scroll_inside {
   position: relative;
   width: 100%;
   height: 100%;
+
+  &.edit_mode {
+    cursor: move !important;
+  }
 }
 
 .stage_container {
@@ -578,7 +582,7 @@ div.css3button > div {
 
 .item {
   position: relative;
-  &.item_edit {
+  &.edit_mode {
     cursor: move !important;
   }
 }
