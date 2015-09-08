@@ -71,7 +71,8 @@ WorkTableCommonExtend = {
         cmd: "copy",
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
-          return WorktableCommon.copyItem();
+          WorktableCommon.copyItem();
+          return WorktableCommon.setMainContainerContext();
         }
       });
       menu.push({
@@ -79,16 +80,8 @@ WorkTableCommonExtend = {
         cmd: "cut",
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
-          return WorktableCommon.cutItem();
-        }
-      });
-      menu.push({
-        title: I18n.t('context_menu.paste'),
-        cmd: "paste",
-        uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {
-          WorktableCommon.pasteItem();
-          return LocalStorage.saveValueForWorktable();
+          WorktableCommon.cutItem();
+          return WorktableCommon.setMainContainerContext();
         }
       });
       menu.push({
@@ -99,7 +92,8 @@ WorkTableCommonExtend = {
           var objId;
           objId = $(event.target).attr('id');
           WorktableCommon.floatItem(objId);
-          return LocalStorage.saveValueForWorktable();
+          LocalStorage.saveValueForWorktable();
+          return OperationHistory.add();
         }
       });
       menu.push({
@@ -110,7 +104,8 @@ WorkTableCommonExtend = {
           var objId;
           objId = $(event.target).attr('id');
           WorktableCommon.rearItem(objId);
-          return LocalStorage.saveValueForWorktable();
+          LocalStorage.saveValueForWorktable();
+          return OperationHistory.add();
         }
       });
       menu.push({

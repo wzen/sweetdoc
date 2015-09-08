@@ -17,7 +17,7 @@ class WorktableCommon
 
     # 選択アイテムID保存
     if selectedBorderType == "edit"
-      window.selectedObjId = target.id
+      window.selectedObjId = $(target).attr('id')
 
   # 全ての選択枠を外す
   @clearSelectedBorder = ->
@@ -28,21 +28,25 @@ class WorktableCommon
   # アイテムのコピー
   @copyItem = (objId = window.selectedObjId) ->
     if objId?
-      instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
-      if instance? && instance instanceof ItemBase
-        window.copiedInstance = Common.makeClone(instance)
-        window.copiedInstance.id = null
+      pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
+      if pageValue?
+        instance = Common.getInstanceFromMap(false, objId, pageValue.itemId)
+        if instance instanceof ItemBase
+          window.copiedInstance = Common.makeClone(instance.getMinimumObject())
 
   # アイテムの切り取り
   @cutItem = (objId = window.selectedObjId) ->
     @copyItem(objId)
-    @removeItem($("##{window.selectedObjId}"))
+    @removeItem($("##{objId}"))
 
   # アイテムの貼り付け
   @pasteItem = ->
-    if window.copiedInstance? && window.copiedInstance instanceof ItemBase
-      instance = Common.makeClone(window.copiedInstance)
-      instance.id = Common.generateId()
+    if window.copiedInstance?
+      instance = new (Common.getClassFromMap(false, window.copiedInstance.itemId))()
+      id = instance.id
+      instance.setMiniumObject(Common.makeClone(window.copiedInstance))
+      # IDは新規作成したものにする
+      instance.id = id
       # 画面中央に貼り付け
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0)
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0)
@@ -240,14 +244,26 @@ class WorktableCommon
     # ドラッグ描画イベント
     Handwrite.initHandwrite()
     # コンテキストメニュー
-    menu = [{title: "Default", cmd: "default", uiIcon: "ui-icon-scissors"}]
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
-    WorktableCommon.setupContextMenu($('#main'), "#pages .#{page} .main-wrapper:first", menu)
+    @setMainContainerContext()
     $('#main').on("mousedown", =>
       @clearAllItemStyle()
     )
     # 共通設定
     Setting.initConfig()
+
+  # Mainコンテナのコンテキストメニューを設定
+  @setMainContainerContext: ->
+    # コンテキストメニュー
+    menu = []
+    if window.copiedInstance?
+      menu.push({title: I18n.t('context_menu.paste'), cmd: "paste", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # 貼り付け
+        WorktableCommon.pasteItem()
+        # キャッシュ保存
+        LocalStorage.saveValueForWorktable()
+      })
+    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+    WorktableCommon.setupContextMenu($("#pages .#{page} .scroll_inside:first"), "#pages .#{page} .main-wrapper:first", menu)
 
   # Mainコンテナ再作成
   @recreateMainContainer: ->

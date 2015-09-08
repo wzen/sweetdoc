@@ -1,4 +1,3 @@
-
 # ボタンアイテム
 # @extend CssItemBase
 class ButtonItem extends CssItemBase

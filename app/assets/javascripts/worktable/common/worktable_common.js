@@ -18,7 +18,7 @@ WorktableCommon = (function() {
     $(target).find("." + className).remove();
     $(target).append("<div class=" + className + " />");
     if (selectedBorderType === "edit") {
-      return window.selectedObjId = target.id;
+      return window.selectedObjId = $(target).attr('id');
     }
   };
 
@@ -28,15 +28,17 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.copyItem = function(objId) {
-    var instance;
+    var instance, pageValue;
     if (objId == null) {
       objId = window.selectedObjId;
     }
     if (objId != null) {
-      instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
-      if ((instance != null) && instance instanceof ItemBase) {
-        window.copiedInstance = Common.makeClone(instance);
-        return window.copiedInstance.id = null;
+      pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
+      if (pageValue != null) {
+        instance = Common.getInstanceFromMap(false, objId, pageValue.itemId);
+        if (instance instanceof ItemBase) {
+          return window.copiedInstance = Common.makeClone(instance.getMinimumObject());
+        }
       }
     }
   };
@@ -46,14 +48,16 @@ WorktableCommon = (function() {
       objId = window.selectedObjId;
     }
     this.copyItem(objId);
-    return this.removeItem($("#" + window.selectedObjId));
+    return this.removeItem($("#" + objId));
   };
 
   WorktableCommon.pasteItem = function() {
-    var instance;
-    if ((window.copiedInstance != null) && window.copiedInstance instanceof ItemBase) {
-      instance = Common.makeClone(window.copiedInstance);
-      instance.id = Common.generateId();
+    var id, instance;
+    if (window.copiedInstance != null) {
+      instance = new (Common.getClassFromMap(false, window.copiedInstance.itemId))();
+      id = instance.id;
+      instance.setMiniumObject(Common.makeClone(window.copiedInstance));
+      instance.id = id;
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0);
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0);
       if (instance instanceof CssItemBase && (instance.makeCss != null)) {
@@ -266,7 +270,6 @@ WorktableCommon = (function() {
   WorktableCommon.runDebug = function() {};
 
   WorktableCommon.initMainContainer = function() {
-    var menu, page;
     CommonVar.worktableCommonVar();
     $(window.drawingCanvas).attr('width', window.mainWrapper.width());
     $(window.drawingCanvas).attr('height', window.mainWrapper.height());
@@ -280,21 +283,31 @@ WorktableCommon = (function() {
     Navbar.initWorktableNavbar();
     this.initKeyEvent();
     Handwrite.initHandwrite();
-    menu = [
-      {
-        title: "Default",
-        cmd: "default",
-        uiIcon: "ui-icon-scissors"
-      }
-    ];
-    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-    WorktableCommon.setupContextMenu($('#main'), "#pages ." + page + " .main-wrapper:first", menu);
+    this.setMainContainerContext();
     $('#main').on("mousedown", (function(_this) {
       return function() {
         return _this.clearAllItemStyle();
       };
     })(this));
     return Setting.initConfig();
+  };
+
+  WorktableCommon.setMainContainerContext = function() {
+    var menu, page;
+    menu = [];
+    if (window.copiedInstance != null) {
+      menu.push({
+        title: I18n.t('context_menu.paste'),
+        cmd: "paste",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {
+          WorktableCommon.pasteItem();
+          return LocalStorage.saveValueForWorktable();
+        }
+      });
+    }
+    page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+    return WorktableCommon.setupContextMenu($("#pages ." + page + " .scroll_inside:first"), "#pages ." + page + " .main-wrapper:first", menu);
   };
 
   WorktableCommon.recreateMainContainer = function() {
