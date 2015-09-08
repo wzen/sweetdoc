@@ -44,3 +44,22 @@ WorkTableCssItemExtend =
   # 履歴データを設定
   setHistoryObj: (historyObj) ->
     @itemSize = Common.makeClone(historyObj.itemSize)
+
+  # ドラッグ描画
+  # @param [Array] cood 座標
+  draw: (cood) ->
+    if @itemSize != null
+      @restoreDrawingSurface(@itemSize)
+
+    @itemSize = {x:null,y:null,w:null,h:null}
+    @itemSize.w = Math.abs(cood.x - @moveLoc.x);
+    @itemSize.h = Math.abs(cood.y - @moveLoc.y);
+    if cood.x > @moveLoc.x
+      @itemSize.x = @moveLoc.x
+    else
+      @itemSize.x = cood.x
+    if cood.y > @moveLoc.y
+      @itemSize.y = @moveLoc.y
+    else
+      @itemSize.y = cood.y
+    drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)

@@ -194,6 +194,26 @@ Common = (function() {
     return window.classMap[c][i] = value;
   };
 
+  Common.newInstance = function(isCommonEvent, classMapId) {
+    var id, instance;
+    if (typeof isCommonEvent === "boolean") {
+      if (isCommonEvent) {
+        isCommonEvent = "1";
+      } else {
+        isCommonEvent = "0";
+      }
+    }
+    if (typeof id !== "string") {
+      id = String(id);
+    }
+    if (window.instanceMap == null) {
+      window.instanceMap = {};
+    }
+    instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
+    window.instanceMap[instance.id] = instance;
+    return instance;
+  };
+
   Common.getInstanceFromMap = function(isCommonEvent, id, classMapId) {
     if (typeof isCommonEvent === "boolean") {
       if (isCommonEvent) {

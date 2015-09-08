@@ -27,17 +27,23 @@ WorktableCommon = (function() {
     return window.selectedObjId = null;
   };
 
-  WorktableCommon.copyItem = function(objId) {
+  WorktableCommon.copyItem = function(objId, isCopy) {
     var instance, pageValue;
     if (objId == null) {
       objId = window.selectedObjId;
+    }
+    if (isCopy == null) {
+      isCopy = true;
     }
     if (objId != null) {
       pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
       if (pageValue != null) {
         instance = Common.getInstanceFromMap(false, objId, pageValue.itemId);
         if (instance instanceof ItemBase) {
-          return window.copiedInstance = Common.makeClone(instance.getMinimumObject());
+          window.copiedInstance = Common.makeClone(instance.getMinimumObject());
+          if (isCopy) {
+            return window.copiedInstance.isCopy = true;
+          }
         }
       }
     }
@@ -47,20 +53,24 @@ WorktableCommon = (function() {
     if (objId == null) {
       objId = window.selectedObjId;
     }
-    this.copyItem(objId);
+    this.copyItem(objId, false);
     return this.removeItem($("#" + objId));
   };
 
   WorktableCommon.pasteItem = function() {
-    var id, instance;
+    var instance, obj;
     if (window.copiedInstance != null) {
-      instance = new (Common.getClassFromMap(false, window.copiedInstance.itemId))();
-      id = instance.id;
-      instance.setMiniumObject(Common.makeClone(window.copiedInstance));
-      instance.id = id;
+      instance = Common.newInstance(false, window.copiedInstance.itemId);
+      obj = Common.makeClone(window.copiedInstance);
+      obj.id = instance.id;
+      instance.setMiniumObject(obj);
+      if ((obj.isCopy != null) && obj.isCopy) {
+        instance.name = instance.name + ' (Copy)';
+      }
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0);
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0);
       if (instance instanceof CssItemBase && (instance.makeCss != null)) {
+        instance.css = null;
         instance.makeCss();
       }
       if (instance.drawAndMakeConfigs != null) {

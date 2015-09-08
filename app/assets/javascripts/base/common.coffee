@@ -155,6 +155,24 @@ class Common
 
     window.classMap[c][i] = value
 
+  # インスタンス作成
+  @newInstance = (isCommonEvent, classMapId) ->
+    if typeof isCommonEvent == "boolean"
+      if isCommonEvent
+        isCommonEvent = "1"
+      else
+        isCommonEvent = "0"
+
+    if typeof id != "string"
+      id = String(id)
+
+    if !window.instanceMap?
+      window.instanceMap = {}
+    # インスタンスを保存する
+    instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
+    window.instanceMap[instance.id] = instance
+    return instance
+
   # インスタンス取得
   @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
     if typeof isCommonEvent == "boolean"

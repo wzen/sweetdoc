@@ -104,31 +104,6 @@ if (window.worktablePage != null) {
       this.cssStyle = null;
     }
 
-    WorkTableButtonItem.prototype.draw = function(cood) {
-      if (this.itemSize !== null) {
-        this.restoreDrawingSurface(this.itemSize);
-      }
-      this.itemSize = {
-        x: null,
-        y: null,
-        w: null,
-        h: null
-      };
-      this.itemSize.w = Math.abs(cood.x - this.moveLoc.x);
-      this.itemSize.h = Math.abs(cood.y - this.moveLoc.y);
-      if (cood.x > this.moveLoc.x) {
-        this.itemSize.x = this.moveLoc.x;
-      } else {
-        this.itemSize.x = cood.x;
-      }
-      if (cood.y > this.moveLoc.y) {
-        this.itemSize.y = this.moveLoc.y;
-      } else {
-        this.itemSize.y = cood.y;
-      }
-      return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
-    };
-
     WorkTableButtonItem.prototype.endDraw = function(zindex, show) {
       if (show == null) {
         show = true;

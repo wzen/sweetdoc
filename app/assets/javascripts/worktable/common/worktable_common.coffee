@@ -26,31 +26,36 @@ class WorktableCommon
     window.selectedObjId = null
 
   # アイテムのコピー
-  @copyItem = (objId = window.selectedObjId) ->
+  @copyItem = (objId = window.selectedObjId, isCopy = true) ->
     if objId?
       pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
       if pageValue?
         instance = Common.getInstanceFromMap(false, objId, pageValue.itemId)
         if instance instanceof ItemBase
           window.copiedInstance = Common.makeClone(instance.getMinimumObject())
+          if isCopy
+            window.copiedInstance.isCopy = true
 
   # アイテムの切り取り
   @cutItem = (objId = window.selectedObjId) ->
-    @copyItem(objId)
+    @copyItem(objId, false)
     @removeItem($("##{objId}"))
 
   # アイテムの貼り付け
   @pasteItem = ->
     if window.copiedInstance?
-      instance = new (Common.getClassFromMap(false, window.copiedInstance.itemId))()
-      id = instance.id
-      instance.setMiniumObject(Common.makeClone(window.copiedInstance))
-      # IDは新規作成したものにする
-      instance.id = id
+      instance = Common.newInstance(false, window.copiedInstance.itemId)
+      obj = Common.makeClone(window.copiedInstance)
+      obj.id = instance.id
+      instance.setMiniumObject(obj)
+      if obj.isCopy? && obj.isCopy
+        instance.name = instance.name + ' (Copy)'
       # 画面中央に貼り付け
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0)
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0)
       if instance instanceof CssItemBase && instance.makeCss?
+        # CSSを新規作成する
+        instance.css = null
         instance.makeCss()
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
