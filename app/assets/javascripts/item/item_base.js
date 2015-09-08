@@ -192,9 +192,56 @@ ItemBase = (function(superClass) {
 CssItemBase = (function(superClass) {
   extend(CssItemBase, superClass);
 
-  function CssItemBase() {
-    return CssItemBase.__super__.constructor.apply(this, arguments);
+  function CssItemBase(cood) {
+    if (cood == null) {
+      cood = null;
+    }
+    CssItemBase.__super__.constructor.call(this, cood);
+    if (cood !== null) {
+      this.moveLoc = {
+        x: cood.x,
+        y: cood.y
+      };
+    }
+    this.css = null;
   }
+
+  CssItemBase.prototype.reDraw = function(show) {
+    if (show == null) {
+      show = true;
+    }
+    CssItemBase.__super__.reDraw.call(this, show);
+    this.clearDraw();
+    $(ElementCode.get().createItemElement(this)).appendTo(window.scrollInside);
+    if (!show) {
+      this.getJQueryElement().css('opacity', 0);
+    }
+    if (this.setupDragAndResizeEvents != null) {
+      return this.setupDragAndResizeEvents();
+    }
+  };
+
+  CssItemBase.prototype.clearDraw = function() {
+    return this.getJQueryElement().remove();
+  };
+
+  CssItemBase.prototype.getMinimumObject = function() {
+    var newobj, obj;
+    obj = CssItemBase.__super__.getMinimumObject.call(this);
+    newobj = {
+      itemId: Constant.ItemId.BUTTON,
+      mousedownCood: Common.makeClone(this.mousedownCood),
+      css: Common.makeClone(this.css)
+    };
+    $.extend(obj, newobj);
+    return obj;
+  };
+
+  CssItemBase.prototype.setMiniumObject = function(obj) {
+    CssItemBase.__super__.setMiniumObject.call(this, obj);
+    this.mousedownCood = Common.makeClone(obj.mousedownCood);
+    return this.css = Common.makeClone(obj.css);
+  };
 
   CssItemBase.prototype.getCssRootElementId = function() {
     return "css-" + this.id;

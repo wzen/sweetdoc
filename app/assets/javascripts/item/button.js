@@ -7,61 +7,14 @@ var ButtonItem, WorkTableButtonItem,
 ButtonItem = (function(superClass) {
   extend(ButtonItem, superClass);
 
+  function ButtonItem() {
+    this.defaultClick = bind(this.defaultClick, this);
+    return ButtonItem.__super__.constructor.apply(this, arguments);
+  }
+
   ButtonItem.IDENTITY = "Button";
 
   ButtonItem.ITEM_ID = Constant.ItemId.BUTTON;
-
-  function ButtonItem(cood) {
-    if (cood == null) {
-      cood = null;
-    }
-    this.defaultClick = bind(this.defaultClick, this);
-    ButtonItem.__super__.constructor.call(this, cood);
-    if (cood !== null) {
-      this.moveLoc = {
-        x: cood.x,
-        y: cood.y
-      };
-    }
-    this.css = null;
-  }
-
-  ButtonItem.prototype.reDraw = function(show) {
-    if (show == null) {
-      show = true;
-    }
-    ButtonItem.__super__.reDraw.call(this, show);
-    this.clearDraw();
-    $(ElementCode.get().createItemElement(this)).appendTo(window.scrollInside);
-    if (!show) {
-      this.getJQueryElement().css('opacity', 0);
-    }
-    if (this.setupDragAndResizeEvents != null) {
-      return this.setupDragAndResizeEvents();
-    }
-  };
-
-  ButtonItem.prototype.clearDraw = function() {
-    return this.getJQueryElement().remove();
-  };
-
-  ButtonItem.prototype.getMinimumObject = function() {
-    var newobj, obj;
-    obj = ButtonItem.__super__.getMinimumObject.call(this);
-    newobj = {
-      itemId: Constant.ItemId.BUTTON,
-      mousedownCood: Common.makeClone(this.mousedownCood),
-      css: Common.makeClone(this.css)
-    };
-    $.extend(obj, newobj);
-    return obj;
-  };
-
-  ButtonItem.prototype.setMiniumObject = function(obj) {
-    ButtonItem.__super__.setMiniumObject.call(this, obj);
-    this.mousedownCood = Common.makeClone(obj.mousedownCood);
-    return this.css = Common.makeClone(obj.css);
-  };
 
   ButtonItem.prototype.updateEventBefore = function() {
     var methodName;

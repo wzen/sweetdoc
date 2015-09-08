@@ -200,6 +200,50 @@ class ItemBase extends ItemEventBase
 # @abstract
 # @extend ItemBase
 class CssItemBase extends ItemBase
+  # コンストラクタ
+  # @param [Array] cood 座標
+  constructor: (cood = null) ->
+    super(cood)
+    if cood != null
+      @moveLoc = {x:cood.x, y:cood.y}
+    @css = null
+
+  # 再描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
+  reDraw: (show = true)->
+    super(show)
+    @clearDraw()
+    $(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
+    if !show
+      @getJQueryElement().css('opacity', 0)
+
+    if @setupDragAndResizeEvents?
+      # ドラッグ & リサイズイベント設定
+      @setupDragAndResizeEvents()
+
+  # 描画削除
+  clearDraw: ->
+    @getJQueryElement().remove()
+
+  # ストレージとDB保存用の最小限のデータを取得
+  # @return [Array] アイテムオブジェクトの最小限データ
+  getMinimumObject: ->
+    obj = super()
+    newobj = {
+      itemId: Constant.ItemId.BUTTON
+      mousedownCood: Common.makeClone(@mousedownCood)
+      css: Common.makeClone(@css)
+    }
+    $.extend(obj, newobj)
+    return obj
+
+  # 最小限のデータを設定
+  # @param [Array] obj アイテムオブジェクトの最小限データ
+  setMiniumObject: (obj) ->
+    super(obj)
+    @mousedownCood = Common.makeClone(obj.mousedownCood)
+    @css = Common.makeClone(obj.css)
+
   # CSSのルートのIDを取得
   getCssRootElementId: ->
     return "css-" + @id
