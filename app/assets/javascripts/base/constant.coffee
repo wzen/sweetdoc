@@ -70,6 +70,12 @@ if gon?
     class @KeyboardKeyCode
       # @property [Int] Z zボタン
       @Z = constant.KeyboardKeyCode.Z
+      # @property [Int] C cボタン
+      @C = constant.KeyboardKeyCode.C
+      # @property [Int] X xボタン
+      @X = constant.KeyboardKeyCode.X
+      # @property [Int] V vボタン
+      @V = constant.KeyboardKeyCode.V
 
     class @ElementAttribute
       # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート

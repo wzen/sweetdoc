@@ -179,6 +179,22 @@ class WorktableCommon
           else
             # Ctrl + z → Undo
             OperationHistory.undo()
+        else if e.keyCode == Constant.KeyboardKeyCode.C
+          # Ctrl + c -> Copy
+          WorktableCommon.copyItem()
+          WorktableCommon.setMainContainerContext()
+        else if e.keyCode == Constant.KeyboardKeyCode.X
+          # Ctrl + x -> Cut
+          WorktableCommon.cutItem()
+          WorktableCommon.setMainContainerContext()
+        else if e.keyCode == Constant.KeyboardKeyCode.V
+          # 貼り付け
+          WorktableCommon.pasteItem()
+          # キャッシュ保存
+          LocalStorage.saveValueForWorktable()
+          # 履歴保存
+          OperationHistory.add()
+
     )
 
   # Mainビューの高さ更新
@@ -266,6 +282,8 @@ class WorktableCommon
         WorktableCommon.pasteItem()
         # キャッシュ保存
         LocalStorage.saveValueForWorktable()
+        # 履歴保存
+        OperationHistory.add()
       })
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
     WorktableCommon.setupContextMenu($("#pages .#{page} .scroll_inside:first"), "#pages .#{page} .main-wrapper:first", menu)

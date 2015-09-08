@@ -100,8 +100,14 @@ class Const
 
   # キーコード
   class KeyboardKeyCode
-    # @property [Int] z zボタン
+    # @property [Int] Z zボタン
     Z = 90
+    # @property [Int] C cボタン
+    C = 67
+    # @property [Int] X xボタン
+    X = 88
+    # @property [Int] V vボタン
+    V = 86
   end
 
   class ElementAttribute

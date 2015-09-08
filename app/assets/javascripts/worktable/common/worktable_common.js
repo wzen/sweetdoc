@@ -214,6 +214,16 @@ WorktableCommon = (function() {
           } else {
             return OperationHistory.undo();
           }
+        } else if (e.keyCode === Constant.KeyboardKeyCode.C) {
+          WorktableCommon.copyItem();
+          return WorktableCommon.setMainContainerContext();
+        } else if (e.keyCode === Constant.KeyboardKeyCode.X) {
+          WorktableCommon.cutItem();
+          return WorktableCommon.setMainContainerContext();
+        } else if (e.keyCode === Constant.KeyboardKeyCode.V) {
+          WorktableCommon.pasteItem();
+          LocalStorage.saveValueForWorktable();
+          return OperationHistory.add();
         }
       }
     });
@@ -312,7 +322,8 @@ WorktableCommon = (function() {
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
           WorktableCommon.pasteItem();
-          return LocalStorage.saveValueForWorktable();
+          LocalStorage.saveValueForWorktable();
+          return OperationHistory.add();
         }
       });
     }

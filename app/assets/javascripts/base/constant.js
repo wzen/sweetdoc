@@ -104,6 +104,12 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       KeyboardKeyCode.Z = constant.KeyboardKeyCode.Z;
 
+      KeyboardKeyCode.C = constant.KeyboardKeyCode.C;
+
+      KeyboardKeyCode.X = constant.KeyboardKeyCode.X;
+
+      KeyboardKeyCode.V = constant.KeyboardKeyCode.V;
+
       return KeyboardKeyCode;
 
     })();
