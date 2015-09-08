@@ -424,6 +424,13 @@ Common = (function() {
     return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex;
   };
 
+  Common.minusPagingZindex = function(zindex, pn) {
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    return zindex - (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1);
+  };
+
   Common.removeAllItem = function(pageNum) {
     var itemId, k, obj, objId, pageValues, ref, results, v;
     if (pageNum == null) {

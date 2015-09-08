@@ -67,19 +67,54 @@ WorkTableCommonExtend = {
         }
       });
       menu.push({
-        title: "Float",
+        title: I18n.t('context_menu.copy'),
+        cmd: "copy",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {
+          return WorktableCommon.copyItem();
+        }
+      });
+      menu.push({
+        title: I18n.t('context_menu.cut'),
+        cmd: "cut",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {
+          return WorktableCommon.cutItem();
+        }
+      });
+      menu.push({
+        title: I18n.t('context_menu.paste'),
+        cmd: "paste",
+        uiIcon: "ui-icon-scissors",
+        func: function(event, ui) {
+          WorktableCommon.pasteItem();
+          return LocalStorage.saveValueForWorktable();
+        }
+      });
+      menu.push({
+        title: I18n.t('context_menu.float'),
         cmd: "float",
         uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {}
+        func: function(event, ui) {
+          var objId;
+          objId = $(event.target).attr('id');
+          WorktableCommon.floatItem(objId);
+          return LocalStorage.saveValueForWorktable();
+        }
       });
       menu.push({
-        title: "Rear",
+        title: I18n.t('context_menu.rear'),
         cmd: "rear",
         uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {}
+        func: function(event, ui) {
+          var objId;
+          objId = $(event.target).attr('id');
+          WorktableCommon.rearItem(objId);
+          return LocalStorage.saveValueForWorktable();
+        }
       });
       menu.push({
-        title: "Delete",
+        title: I18n.t('context_menu.delete'),
         cmd: "delete",
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {

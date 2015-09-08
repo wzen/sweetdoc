@@ -74,14 +74,35 @@ WorkTableCommonExtend =
         # モードを変更
         WorktableCommon.changeMode(Constant.Mode.OPTION)
       })
-      menu.push({title: "Float", cmd: "float", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+      menu.push({title: I18n.t('context_menu.copy'), cmd: "copy", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # コピー
+        WorktableCommon.copyItem()
+      })
+      menu.push({title: I18n.t('context_menu.cut'), cmd: "cut", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # 切り取り
+        WorktableCommon.cutItem()
+      })
+      menu.push({title: I18n.t('context_menu.paste'), cmd: "paste", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # 貼り付け
+        WorktableCommon.pasteItem()
+        # キャッシュ保存
+        LocalStorage.saveValueForWorktable()
+      })
+      menu.push({title: I18n.t('context_menu.float'), cmd: "float", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # 最前面移動
-
+        objId = $(event.target).attr('id')
+        WorktableCommon.floatItem(objId)
+        # キャッシュ保存
+        LocalStorage.saveValueForWorktable()
       })
-      menu.push({title: "Rear", cmd: "rear", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+      menu.push({title: I18n.t('context_menu.rear'), cmd: "rear", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # 最背面移動
+        objId = $(event.target).attr('id')
+        WorktableCommon.rearItem(objId)
+        # キャッシュ保存
+        LocalStorage.saveValueForWorktable()
       })
-      menu.push({title: "Delete", cmd: "delete", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+      menu.push({title: I18n.t('context_menu.delete'), cmd: "delete", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # アイテム削除
         if window.confirm(I18n.t('message.dialog.delete_item'))
           WorktableCommon.removeItem(event.target)

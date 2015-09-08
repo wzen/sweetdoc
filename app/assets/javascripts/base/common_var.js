@@ -7,7 +7,8 @@ CommonVar = (function() {
   CommonVar.initVarWhenLoadedView = function() {
     window.instanceMap = {};
     window.itemInitFuncList = [];
-    return window.debug = true;
+    window.debug = true;
+    return window.copiedInstance = null;
   };
 
   CommonVar.initCommonVar = function() {
@@ -57,6 +58,7 @@ CommonVar = (function() {
     window.messageTimer = null;
     window.flushMessageTimer = null;
     window.mode = Constant.Mode.DRAW;
+    window.selectedObjId = null;
     this.initHistoryVar();
     return this.updateWorktableBaseElement(PageValue.getPageNum());
   };

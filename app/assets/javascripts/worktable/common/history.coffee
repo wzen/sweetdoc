@@ -47,7 +47,7 @@ class OperationHistory
       # キャッシュ保存 & 描画
       PageValue.adjustInstanceAndEventOnThisPage()
       LocalStorage.saveValueForWorktable()
-      WorktableCommon.drawAllItemFromEventPageValue()
+      WorktableCommon.drawAllItemFromInstancePageValue()
       return true
     else
       return false
@@ -75,7 +75,7 @@ class OperationHistory
       # キャッシュ保存 & 描画
       PageValue.adjustInstanceAndEventOnThisPage()
       LocalStorage.saveValueForWorktable()
-      WorktableCommon.drawAllItemFromEventPageValue()
+      WorktableCommon.drawAllItemFromInstancePageValue()
       return true
     else
       return false

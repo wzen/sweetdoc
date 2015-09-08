@@ -21,6 +21,13 @@ ja:
       language: "言語"
       introduction: "自己紹介"
       about: "このサイトについて"
+  context_menu:
+    copy: "コピー"
+    cut: "切り取り"
+    paste: "貼り付け"
+    float: "最前面に移動"
+    rear: "再背面に移動"
+    delete: "削除"
   message:
     dialog:
       new_project: "'作成中のコンテンツは全て削除されます。'"

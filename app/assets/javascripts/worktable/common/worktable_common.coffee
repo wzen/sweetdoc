@@ -15,9 +15,103 @@ class WorktableCommon
     # 設定
     $(target).append("<div class=#{className} />")
 
+    # 選択アイテムID保存
+    if selectedBorderType == "edit"
+      window.selectedObjId = target.id
+
   # 全ての選択枠を外す
   @clearSelectedBorder = ->
     $('.editSelected, .timelineSelected').remove()
+    # 選択アイテムID解除
+    window.selectedObjId = null
+
+  # アイテムのコピー
+  @copyItem = (objId = window.selectedObjId) ->
+    if objId?
+      instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
+      if instance? && instance instanceof ItemBase
+        window.copiedInstance = Common.makeClone(instance)
+        window.copiedInstance.id = null
+
+  # アイテムの切り取り
+  @cutItem = (objId = window.selectedObjId) ->
+    @copyItem(objId)
+    @removeItem($("##{window.selectedObjId}"))
+
+  # アイテムの貼り付け
+  @pasteItem = ->
+    if window.copiedInstance? && window.copiedInstance instanceof ItemBase
+      instance = Common.makeClone(window.copiedInstance)
+      instance.id = Common.generateId()
+      # 画面中央に貼り付け
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0)
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0)
+      if instance instanceof CssItemBase && instance.makeCss?
+        instance.makeCss()
+      if instance.drawAndMakeConfigs?
+        instance.drawAndMakeConfigs()
+      instance.setItemAllPropToPageValue()
+      LocalStorage.saveValueForWorktable()
+
+  # アイテムを最前面に移動
+  @floatItem = (objId) ->
+    drawedItems = window.scrollInside.find('.item')
+    sorted = []
+    drawedItems.each( -> sorted.push($(@)))
+    i = 0
+    while i <= drawedItems.length - 2
+      j = i + 1
+      while j <= drawedItems.length - 1
+        a = parseInt(sorted[i].css('z-index'))
+        b = parseInt(sorted[j].css('z-index'))
+        if a > b
+          w = sorted[i]
+          sorted[i] = sorted[j]
+          sorted[j] = w
+        j += 1
+      i += 1
+
+    targetZIndex = parseInt($("##{objId}").css('z-index'))
+    i = parseInt(window.scrollInside.css('z-index'))
+    for item in sorted
+      itemId = $(item).attr('id')
+      if objId != itemId
+        item.css('z-index', i)
+        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i))
+        i += 1
+    maxZIndex = i
+    $("##{objId}").css('z-index', maxZIndex)
+    PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(maxZIndex))
+
+  # アイテムを再背面に移動
+  @rearItem = (objId) ->
+    drawedItems = window.scrollInside.find('.item')
+    sorted = []
+    drawedItems.each( -> sorted.push($(@)))
+    i = 0
+    while i <= drawedItems.length - 2
+      j = i + 1
+      while j <= drawedItems.length - 1
+        a = parseInt(sorted[i].css('z-index'))
+        b = parseInt(sorted[j].css('z-index'))
+        if a > b
+          w = sorted[i]
+          sorted[i] = sorted[j]
+          sorted[j] = w
+        j += 1
+      i += 1
+
+    targetZIndex = parseInt($("##{objId}").css('z-index'))
+    i = parseInt(window.scrollInside.css('z-index')) + 1
+    for item in sorted
+      itemId = $(item).attr('id')
+      if objId != itemId
+        item.css('z-index', i)
+        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i))
+        i += 1
+    minZIndex = parseInt(window.scrollInside.css('z-index'))
+    $("##{objId}").css('z-index', minZIndex)
+    PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex))
 
   # アイテムのJSファイル初期化関数名を取得
   # @param [Int] itemId アイテム種別
@@ -105,11 +199,11 @@ class WorktableCommon
     )
 
   # アイテムを削除
-  @removeItem = (target) ->
-    targetId = $(target).attr('id')
+  @removeItem = (itemElement) ->
+    targetId = $(itemElement).attr('id')
     PageValue.removeInstancePageValue(targetId)
     PageValue.removeEventPageValueSync(targetId)
-    target.remove()
+    itemElement.remove()
     PageValue.adjustInstanceAndEventOnThisPage()
     Timeline.refreshAllTimeline()
     LocalStorage.saveValueForWorktable()
@@ -193,8 +287,12 @@ class WorktableCommon
             if value.cmd == ui.cmd
               value.func(event, ui)
         beforeOpen: (event, ui) ->
+          t = $(event.target)
           # 選択メニューを最前面に表示
           ui.menu.zIndex( $(event.target).zIndex() + 1)
+          if window.mode == Constant.Mode.EDIT && $(t).hasClass('item')
+            # 選択状態にする
+            WorktableCommon.setSelectedBorder(t)
       }
     )
 
@@ -223,7 +321,7 @@ class WorktableCommon
     )
 
   # イベントPageValueから全てのアイテムを描画
-  @drawAllItemFromEventPageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
+  @drawAllItemFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
     needItemIds = []
     for k, obj of pageValues
@@ -250,7 +348,6 @@ class WorktableCommon
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
         event.setItemAllPropToPageValue()
-        LocalStorage.saveValueForWorktable()
 
       # タイムライン更新
       Timeline.refreshAllTimeline()

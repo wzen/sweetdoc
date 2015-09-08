@@ -16,11 +16,131 @@ WorktableCommon = (function() {
       className = 'timelineSelected';
     }
     $(target).find("." + className).remove();
-    return $(target).append("<div class=" + className + " />");
+    $(target).append("<div class=" + className + " />");
+    if (selectedBorderType === "edit") {
+      return window.selectedObjId = target.id;
+    }
   };
 
   WorktableCommon.clearSelectedBorder = function() {
-    return $('.editSelected, .timelineSelected').remove();
+    $('.editSelected, .timelineSelected').remove();
+    return window.selectedObjId = null;
+  };
+
+  WorktableCommon.copyItem = function(objId) {
+    var instance;
+    if (objId == null) {
+      objId = window.selectedObjId;
+    }
+    if (objId != null) {
+      instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
+      if ((instance != null) && instance instanceof ItemBase) {
+        window.copiedInstance = Common.makeClone(instance);
+        return window.copiedInstance.id = null;
+      }
+    }
+  };
+
+  WorktableCommon.cutItem = function(objId) {
+    if (objId == null) {
+      objId = window.selectedObjId;
+    }
+    this.copyItem(objId);
+    return this.removeItem($("#" + window.selectedObjId));
+  };
+
+  WorktableCommon.pasteItem = function() {
+    var instance;
+    if ((window.copiedInstance != null) && window.copiedInstance instanceof ItemBase) {
+      instance = Common.makeClone(window.copiedInstance);
+      instance.id = Common.generateId();
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0);
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0);
+      if (instance instanceof CssItemBase && (instance.makeCss != null)) {
+        instance.makeCss();
+      }
+      if (instance.drawAndMakeConfigs != null) {
+        instance.drawAndMakeConfigs();
+      }
+      instance.setItemAllPropToPageValue();
+      return LocalStorage.saveValueForWorktable();
+    }
+  };
+
+  WorktableCommon.floatItem = function(objId) {
+    var a, b, drawedItems, i, item, itemId, j, l, len, maxZIndex, sorted, targetZIndex, w;
+    drawedItems = window.scrollInside.find('.item');
+    sorted = [];
+    drawedItems.each(function() {
+      return sorted.push($(this));
+    });
+    i = 0;
+    while (i <= drawedItems.length - 2) {
+      j = i + 1;
+      while (j <= drawedItems.length - 1) {
+        a = parseInt(sorted[i].css('z-index'));
+        b = parseInt(sorted[j].css('z-index'));
+        if (a > b) {
+          w = sorted[i];
+          sorted[i] = sorted[j];
+          sorted[j] = w;
+        }
+        j += 1;
+      }
+      i += 1;
+    }
+    targetZIndex = parseInt($("#" + objId).css('z-index'));
+    i = parseInt(window.scrollInside.css('z-index'));
+    for (l = 0, len = sorted.length; l < len; l++) {
+      item = sorted[l];
+      itemId = $(item).attr('id');
+      if (objId !== itemId) {
+        item.css('z-index', i);
+        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i));
+        i += 1;
+      }
+    }
+    maxZIndex = i;
+    $("#" + objId).css('z-index', maxZIndex);
+    return PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(maxZIndex));
+  };
+
+  WorktableCommon.rearItem = function(objId) {
+    var a, b, drawedItems, i, item, itemId, j, l, len, minZIndex, sorted, targetZIndex, w;
+    drawedItems = window.scrollInside.find('.item');
+    sorted = [];
+    drawedItems.each(function() {
+      return sorted.push($(this));
+    });
+    i = 0;
+    while (i <= drawedItems.length - 2) {
+      j = i + 1;
+      while (j <= drawedItems.length - 1) {
+        a = parseInt(sorted[i].css('z-index'));
+        b = parseInt(sorted[j].css('z-index'));
+        if (a > b) {
+          w = sorted[i];
+          sorted[i] = sorted[j];
+          sorted[j] = w;
+        }
+        j += 1;
+      }
+      i += 1;
+    }
+    targetZIndex = parseInt($("#" + objId).css('z-index'));
+    i = parseInt(window.scrollInside.css('z-index')) + 1;
+    for (l = 0, len = sorted.length; l < len; l++) {
+      item = sorted[l];
+      itemId = $(item).attr('id');
+      if (objId !== itemId) {
+        item.css('z-index', i);
+        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i));
+        i += 1;
+      }
+    }
+    minZIndex = parseInt(window.scrollInside.css('z-index'));
+    $("#" + objId).css('z-index', minZIndex);
+    return PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex));
   };
 
   WorktableCommon.getInitFuncName = function(itemId) {
@@ -117,12 +237,12 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.removeItem = function(target) {
+  WorktableCommon.removeItem = function(itemElement) {
     var targetId;
-    targetId = $(target).attr('id');
+    targetId = $(itemElement).attr('id');
     PageValue.removeInstancePageValue(targetId);
     PageValue.removeEventPageValueSync(targetId);
-    target.remove();
+    itemElement.remove();
     PageValue.adjustInstanceAndEventOnThisPage();
     Timeline.refreshAllTimeline();
     LocalStorage.saveValueForWorktable();
@@ -196,10 +316,10 @@ WorktableCommon = (function() {
       preventSelect: true,
       menu: menu,
       select: function(event, ui) {
-        var i, len, results, value;
+        var l, len, results, value;
         results = [];
-        for (i = 0, len = menu.length; i < len; i++) {
-          value = menu[i];
+        for (l = 0, len = menu.length; l < len; l++) {
+          value = menu[l];
           if (value.cmd === ui.cmd) {
             results.push(value.func(event, ui));
           } else {
@@ -209,7 +329,12 @@ WorktableCommon = (function() {
         return results;
       },
       beforeOpen: function(event, ui) {
-        return ui.menu.zIndex($(event.target).zIndex() + 1);
+        var t;
+        t = $(event.target);
+        ui.menu.zIndex($(event.target).zIndex() + 1);
+        if (window.mode === Constant.Mode.EDIT && $(t).hasClass('item')) {
+          return WorktableCommon.setSelectedBorder(t);
+        }
       }
     });
   };
@@ -240,7 +365,7 @@ WorktableCommon = (function() {
     })(this));
   };
 
-  WorktableCommon.drawAllItemFromEventPageValue = function(callback, pageNum) {
+  WorktableCommon.drawAllItemFromInstancePageValue = function(callback, pageNum) {
     var k, needItemIds, obj, pageValues;
     if (callback == null) {
       callback = null;
@@ -283,7 +408,6 @@ WorktableCommon = (function() {
           }
         }
         event.setItemAllPropToPageValue();
-        LocalStorage.saveValueForWorktable();
       }
       Timeline.refreshAllTimeline();
       if (callback != null) {
@@ -293,7 +417,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.loadItemJs = function(itemIds, callback) {
-    var callbackCount, i, itemId, itemInitFuncName, len, needReadItemIds;
+    var callbackCount, itemId, itemInitFuncName, l, len, needReadItemIds;
     if (callback == null) {
       callback = null;
     }
@@ -308,8 +432,8 @@ WorktableCommon = (function() {
     }
     callbackCount = 0;
     needReadItemIds = [];
-    for (i = 0, len = itemIds.length; i < len; i++) {
-      itemId = itemIds[i];
+    for (l = 0, len = itemIds.length; l < len; l++) {
+      itemId = itemIds[l];
       if (itemId != null) {
         itemInitFuncName = WorktableCommon.getInitFuncName(itemId);
         if (window.itemInitFuncList[itemInitFuncName] != null) {
@@ -336,11 +460,11 @@ WorktableCommon = (function() {
         itemIds: needReadItemIds
       },
       success: function(data) {
-        var d, j, len1, option, results;
+        var d, len1, m, option, results;
         callbackCount = 0;
         results = [];
-        for (j = 0, len1 = data.length; j < len1; j++) {
-          d = data[j];
+        for (m = 0, len1 = data.length; m < len1; m++) {
+          d = data[m];
           if (d.css_info != null) {
             option = {
               isWorkTable: true,

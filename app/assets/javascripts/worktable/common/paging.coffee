@@ -74,7 +74,7 @@ class Paging
     PageValue.setPageNum(PageValue.getPageCount() + 1)
     WorktableCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
-    WorktableCommon.drawAllItemFromEventPageValue( =>
+    WorktableCommon.drawAllItemFromInstancePageValue( =>
       # ページング
       pageFlip.startRender( ->
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
@@ -122,7 +122,7 @@ class Paging
     PageValue.setPageNum(selectedNum)
     WorktableCommon.initMainContainer()
     PageValue.adjustInstanceAndEventOnThisPage()
-    WorktableCommon.drawAllItemFromEventPageValue( =>
+    WorktableCommon.drawAllItemFromInstancePageValue( =>
       pageFlip.startRender( ->
         # 隠したビューを非表示にする
         className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)

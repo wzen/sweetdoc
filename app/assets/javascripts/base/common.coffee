@@ -339,6 +339,9 @@ class Common
   @plusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
     return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex
 
+  @minusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
+    return zindex - (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1)
+
   # アイテムを削除
   @removeAllItem = (pageNum = null) ->
     if pageNum?

@@ -37,7 +37,7 @@ $ ->
   if existedCache
     # 描画
     PageValue.adjustInstanceAndEventOnThisPage()
-    WorktableCommon.drawAllItemFromEventPageValue(_callback)
+    WorktableCommon.drawAllItemFromInstancePageValue(_callback)
   else
     LocalStorage.clearWorktable()
     Timeline.refreshAllTimeline()

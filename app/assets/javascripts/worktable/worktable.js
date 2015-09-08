@@ -33,7 +33,7 @@ $(function() {
   };
   if (existedCache) {
     PageValue.adjustInstanceAndEventOnThisPage();
-    return WorktableCommon.drawAllItemFromEventPageValue(_callback);
+    return WorktableCommon.drawAllItemFromInstancePageValue(_callback);
   } else {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();

@@ -5,6 +5,7 @@ class CommonVar
     window.instanceMap = {}
     window.itemInitFuncList = []
     window.debug = true
+    window.copiedInstance = null
 
   # 共有変数初期化
   @initCommonVar = ->
@@ -50,6 +51,7 @@ class CommonVar
     window.messageTimer = null
     window.flushMessageTimer = null
     window.mode = Constant.Mode.DRAW
+    window.selectedObjId = null
     @initHistoryVar()
     @updateWorktableBaseElement(PageValue.getPageNum())
 

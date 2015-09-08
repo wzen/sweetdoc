@@ -73,7 +73,7 @@ Paging = (function() {
     PageValue.setPageNum(PageValue.getPageCount() + 1);
     WorktableCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
-    return WorktableCommon.drawAllItemFromEventPageValue((function(_this) {
+    return WorktableCommon.drawAllItemFromInstancePageValue((function(_this) {
       return function() {
         return pageFlip.startRender(function() {
           var className, section;
@@ -116,7 +116,7 @@ Paging = (function() {
     PageValue.setPageNum(selectedNum);
     WorktableCommon.initMainContainer();
     PageValue.adjustInstanceAndEventOnThisPage();
-    return WorktableCommon.drawAllItemFromEventPageValue((function(_this) {
+    return WorktableCommon.drawAllItemFromInstancePageValue((function(_this) {
       return function() {
         return pageFlip.startRender(function() {
           var className, section;

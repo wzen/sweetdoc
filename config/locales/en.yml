@@ -42,6 +42,13 @@ en:
       language: "Language"
       introduction: "introduction"
       about: "About"
+  context_menu:
+    copy: "Copy"
+    cut: "Cut"
+    paste: "Paste"
+    float: "Float"
+    rear: "Rear"
+    delete: "Delete"
   message:
     dialog:
       new_project: "All the contents making will delete."

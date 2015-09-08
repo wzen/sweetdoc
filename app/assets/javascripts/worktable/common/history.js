@@ -62,7 +62,7 @@ OperationHistory = (function() {
       window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
       PageValue.adjustInstanceAndEventOnThisPage();
       LocalStorage.saveValueForWorktable();
-      WorktableCommon.drawAllItemFromEventPageValue();
+      WorktableCommon.drawAllItemFromInstancePageValue();
       return true;
     } else {
       return false;
@@ -89,7 +89,7 @@ OperationHistory = (function() {
       window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
       PageValue.adjustInstanceAndEventOnThisPage();
       LocalStorage.saveValueForWorktable();
-      WorktableCommon.drawAllItemFromEventPageValue();
+      WorktableCommon.drawAllItemFromInstancePageValue();
       return true;
     } else {
       return false;

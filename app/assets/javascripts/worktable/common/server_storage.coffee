@@ -99,7 +99,7 @@ class ServerStorage
 
             PageValue.adjustInstanceAndEventOnThisPage()
             LocalStorage.saveValueForWorktable()
-            WorktableCommon.drawAllItemFromEventPageValue( ->
+            WorktableCommon.drawAllItemFromInstancePageValue( ->
               Setting.initConfig()
               PageValue.updatePageCount()
               Paging.initPaging()
