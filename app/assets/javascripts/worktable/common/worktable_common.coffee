@@ -382,3 +382,17 @@ class WorktableCommon
         callback()
     , pageNum)
 
+  @stopAllInstancePreview: (callback = null) ->
+    count = 0
+    length = Object.keys(window.instanceMap).length
+    for k, v of window.instanceMap
+      if v.stopPreview?
+        v.stopPreview( ->
+          count += 1
+          if length <= count && callback?
+            callback()
+        )
+      else
+        count += 1
+        if length <= count && callback?
+          callback()

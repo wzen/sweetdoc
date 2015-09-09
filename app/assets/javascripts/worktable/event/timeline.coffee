@@ -78,22 +78,19 @@ class Timeline
       })
       # イベントの右クリック
       menu = [{title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors"}]
-      timelineEvents.each((e) ->
-        t = $(@)
-        t.contextmenu(
-          {
-            preventContextMenuForPopup: true
-            preventSelect: true
-            menu: menu
-            select: (event, ui) ->
-              target = event.target
-              switch ui.cmd
-                when "edit"
-                  _initEventConfig.call(self, target)
-                else
-                  return
-          }
-        )
+      timelineEvents.contextmenu(
+        {
+          preventContextMenuForPopup: true
+          preventSelect: true
+          menu: menu
+          select: (event, ui) ->
+            target = event.target
+            switch ui.cmd
+              when "edit"
+                _initEventConfig.call(self, target)
+              else
+                return
+        }
       )
 
     # イベント
@@ -222,10 +219,14 @@ class Timeline
 
   # EventPageValueを参照してタイムラインを更新
   @refreshAllTimeline: ->
-    pEmt = $('#timeline_events')
-    pEmt.children().each((e) ->
-      emt = $(@)
-      if emt.hasClass('timeline_event_temp') == false
-        emt.remove()
-    )
-    @setupTimelineEventConfig()
+    # 非同期で実行
+    setTimeout( =>
+      pEmt = $('#timeline_events')
+      pEmt.children().each((e) ->
+        emt = $(@)
+        if emt.hasClass('timeline_event_temp') == false
+          emt.remove()
+      )
+      @setupTimelineEventConfig()
+    , 0)
+

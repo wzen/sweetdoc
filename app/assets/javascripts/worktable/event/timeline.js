@@ -78,22 +78,18 @@ Timeline = (function() {
           uiIcon: "ui-icon-scissors"
         }
       ];
-      return timelineEvents.each(function(e) {
-        var t;
-        t = $(this);
-        return t.contextmenu({
-          preventContextMenuForPopup: true,
-          preventSelect: true,
-          menu: menu,
-          select: function(event, ui) {
-            var target;
-            target = event.target;
-            switch (ui.cmd) {
-              case "edit":
-                return _initEventConfig.call(self, target);
-            }
+      return timelineEvents.contextmenu({
+        preventContextMenuForPopup: true,
+        preventSelect: true,
+        menu: menu,
+        select: function(event, ui) {
+          var target;
+          target = event.target;
+          switch (ui.cmd) {
+            case "edit":
+              return _initEventConfig.call(self, target);
           }
-        });
+        }
       });
     };
     _clickTimelineEvent = function(e) {
@@ -222,16 +218,20 @@ Timeline = (function() {
   };
 
   Timeline.refreshAllTimeline = function() {
-    var pEmt;
-    pEmt = $('#timeline_events');
-    pEmt.children().each(function(e) {
-      var emt;
-      emt = $(this);
-      if (emt.hasClass('timeline_event_temp') === false) {
-        return emt.remove();
-      }
-    });
-    return this.setupTimelineEventConfig();
+    return setTimeout((function(_this) {
+      return function() {
+        var pEmt;
+        pEmt = $('#timeline_events');
+        pEmt.children().each(function(e) {
+          var emt;
+          emt = $(this);
+          if (emt.hasClass('timeline_event_temp') === false) {
+            return emt.remove();
+          }
+        });
+        return _this.setupTimelineEventConfig();
+      };
+    })(this), 0);
   };
 
   return Timeline;

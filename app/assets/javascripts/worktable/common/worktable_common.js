@@ -433,6 +433,36 @@ WorktableCommon = (function() {
     }, pageNum);
   };
 
+  WorktableCommon.stopAllInstancePreview = function(callback) {
+    var count, k, length, ref, results, v;
+    if (callback == null) {
+      callback = null;
+    }
+    count = 0;
+    length = Object.keys(window.instanceMap).length;
+    ref = window.instanceMap;
+    results = [];
+    for (k in ref) {
+      v = ref[k];
+      if (v.stopPreview != null) {
+        results.push(v.stopPreview(function() {
+          count += 1;
+          if (length <= count && (callback != null)) {
+            return callback();
+          }
+        }));
+      } else {
+        count += 1;
+        if (length <= count && (callback != null)) {
+          results.push(callback());
+        } else {
+          results.push(void 0);
+        }
+      }
+    }
+    return results;
+  };
+
   return WorktableCommon;
 
 })();

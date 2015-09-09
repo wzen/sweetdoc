@@ -2,17 +2,19 @@
 var run;
 
 run = function() {
-  var h, target;
-  h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
-  if (h != null) {
-    LocalStorage.clearRun();
-    target = "_runwindow";
-    window.open("about:blank", target);
-    document.run_form.target = target;
-    return document.run_form.submit();
-  } else {
-    return Message.showWarn('No event');
-  }
+  return WorktableCommon.stopAllInstancePreview(function() {
+    var h, target;
+    h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
+    if (h != null) {
+      LocalStorage.clearRun();
+      target = "_runwindow";
+      window.open("about:blank", target);
+      document.run_form.target = target;
+      return document.run_form.submit();
+    } else {
+      return Message.showWarn('No event');
+    }
+  });
 };
 
 //# sourceMappingURL=run.js.map
