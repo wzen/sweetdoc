@@ -148,11 +148,10 @@ ServerStorage = (function() {
           }
           if (d.css_info != null) {
             option = {
-              isWorkTable: true,
               css_temp: d.css_info
             };
           }
-          WorktableCommon.availJs(itemId, d.js_src, option, function() {
+          Common.availJs(itemId, d.js_src, option, function() {
             loadedCount += 1;
             if (loadedCount >= item_js_list.length) {
               return callback.call(self);

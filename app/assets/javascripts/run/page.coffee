@@ -53,6 +53,9 @@ class Page
 
   # チャプターを進める
   nextChapter: ->
+    # 全ガイド非表示
+    @hideAllGuide()
+
     # チャプター後処理
     @thisChapter().didChapter()
     # indexを更新
@@ -67,6 +70,9 @@ class Page
 
   # チャプターを戻す
   rewindChapter: ->
+    # 全ガイド非表示
+    @hideAllGuide()
+
     @resetChapter(@chapterIndex)
     if !@thisChapter().doMoveChapter
       if @chapterIndex > 0
@@ -206,6 +212,12 @@ class Page
   forwardAllChapters: ->
     @chapterList.forEach((chapter) ->
       chapter.forwardAllEvents()
+    )
+
+  # 全てのチャプターのガイドを非表示
+  hideAllGuide: ->
+    @chapterList.forEach((chapter) ->
+      chapter.hideGuide()
     )
 
   # イベント終了イベント

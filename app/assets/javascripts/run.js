@@ -24,8 +24,6 @@
 //= require common_event/screen_event
 //= require item/code_template
 //= require item/item_base
-//= require item/arrow
-//= require item/button
 //= require event_page_value/base/base.js
 //= require event_page_value/common/backgroundcolor.js
 //= require event_page_value/common/screenposition.js

@@ -62,6 +62,7 @@ Page = (function() {
   };
 
   Page.prototype.nextChapter = function() {
+    this.hideAllGuide();
     this.thisChapter().didChapter();
     if (this.chapterList.length <= this.chapterIndex + 1) {
       return this.finishAllChapters();
@@ -73,6 +74,7 @@ Page = (function() {
   };
 
   Page.prototype.rewindChapter = function() {
+    this.hideAllGuide();
     this.resetChapter(this.chapterIndex);
     if (!this.thisChapter().doMoveChapter) {
       if (this.chapterIndex > 0) {
@@ -241,6 +243,12 @@ Page = (function() {
   Page.prototype.forwardAllChapters = function() {
     return this.chapterList.forEach(function(chapter) {
       return chapter.forwardAllEvents();
+    });
+  };
+
+  Page.prototype.hideAllGuide = function() {
+    return this.chapterList.forEach(function(chapter) {
+      return chapter.hideGuide();
     });
   };
 

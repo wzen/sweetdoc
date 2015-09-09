@@ -159,7 +159,6 @@ class RunCommon
       }
     )
 
-
   # Mainコンテナ初期化
   @initMainContainer = ->
     CommonVar.runCommonVar()

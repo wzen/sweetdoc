@@ -36,14 +36,17 @@ class EventAction
     else
       @pageIndex += 1
       pageNum = @pageIndex + 1
+      Navbar.setPageNum(pageNum)
+      PageValue.setPageNum(pageNum)
       RunCommon.loadPagingPageValue(pageNum, pageNum, =>
-        if @thisPage() == null
-          # Pageインスタンス作成
-          eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
-          @pageList[@pageIndex] = new Page(eventPageValueList)
-          if window.debug
-            console.log('[nextPage] created page instance')
-        @changePaging(beforePageIndex, @pageIndex, =>
+        Common.loadJsFromInstancePageValue( =>
+          if @thisPage() == null
+            # Pageインスタンス作成
+            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
+            @pageList[@pageIndex] = new Page(eventPageValueList)
+            if window.debug
+              console.log('[nextPage] created page instance')
+          @changePaging(beforePageIndex, @pageIndex)
         )
       )
 
@@ -54,15 +57,19 @@ class EventAction
       # 動作させていない場合は前のページに戻す
       @pageIndex -= 1
       pageNum = @pageIndex + 1
+      Navbar.setPageNum(pageNum)
+      PageValue.setPageNum(pageNum)
       RunCommon.loadPagingPageValue(pageNum, pageNum, =>
-        if @thisPage() == null
-          # Pageインスタンス作成
-          eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
-          @pageList[@pageIndex] = new Page(eventPageValueList)
-          if window.debug
-            console.log('[rewindPage] created page instance')
-        @changePaging(beforePageIndex, @pageIndex, =>
+        Common.loadJsFromInstancePageValue( =>
+          if @thisPage() == null
+            # Pageインスタンス作成
+            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
+            @pageList[@pageIndex] = new Page(eventPageValueList)
+            if window.debug
+              console.log('[rewindPage] created page instance')
+          @changePaging(beforePageIndex, @pageIndex)
         )
+
       )
     else
       # 動作させている場合はページのアクションを元に戻す
@@ -77,10 +84,10 @@ class EventAction
     if window.debug
       console.log('[changePaging] beforePageNum:' + beforePageNum)
       console.log('[changePaging] afterPageNum:' + afterPageNum)
-    Navbar.setPageNum(afterPageNum)
-    PageValue.setPageNum(afterPageNum)
+
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
+
     # ページングクラス作成
     pageFlip = new PageFlip(beforePageNum, afterPageNum)
     # 新規コンテナ初期化

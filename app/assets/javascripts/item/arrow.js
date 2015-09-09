@@ -11,7 +11,9 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.IDENTITY = "Arrow";
 
-  ArrowItem.ITEM_ID = Constant.ItemId.ARROW;
+  if (window.loadedItemId != null) {
+    ArrowItem.ITEM_ID = window.loadedItemId;
+  }
 
   ARROW_WIDTH = 37;
 
@@ -373,8 +375,6 @@ ArrowItem = (function(superClass) {
 
 })(CanvasItemBase);
 
-window.loadedClassList.ArrowItem = ArrowItem;
-
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem);
 
 if (window.worktablePage != null) {
@@ -449,7 +449,6 @@ if (window.worktablePage != null) {
     return WorkTableArrowItem;
 
   })(ArrowItem);
-  window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem;
   Common.setClassToMap(false, WorkTableArrowItem.ITEM_ID, WorkTableArrowItem);
 }
 

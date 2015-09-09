@@ -483,12 +483,138 @@ Common = (function() {
     }
   };
 
+  Common.loadItemJs = function(itemIds, callback) {
+    var callbackCount, itemId, j, len, needReadItemIds;
+    if (callback == null) {
+      callback = null;
+    }
+    if (jQuery.type(itemIds) !== "array") {
+      itemIds = [itemIds];
+    }
+    if (itemIds.length === 0) {
+      if (callback != null) {
+        callback();
+      }
+      return;
+    }
+    callbackCount = 0;
+    needReadItemIds = [];
+    for (j = 0, len = itemIds.length; j < len; j++) {
+      itemId = itemIds[j];
+      if (itemId != null) {
+        if (window.itemInitFuncList[itemId] != null) {
+          window.itemInitFuncList[itemId]();
+          callbackCount += 1;
+          if (callbackCount >= itemIds.length) {
+            if (callback != null) {
+              callback();
+            }
+            return;
+          }
+        } else {
+          needReadItemIds.push(itemId);
+        }
+      } else {
+        callbackCount += 1;
+      }
+    }
+    return $.ajax({
+      url: "/item_js/index",
+      type: "POST",
+      dataType: "json",
+      data: {
+        itemIds: needReadItemIds
+      },
+      success: function(data) {
+        var _cb, dataIdx;
+        callbackCount = 0;
+        dataIdx = 0;
+        _cb = function(d) {
+          var option;
+          if (d.css_info != null) {
+            option = {
+              css_temp: d.css_info
+            };
+          }
+          return Common.availJs(d.item_id, d.js_src, option, (function(_this) {
+            return function() {
+              PageValue.addItemInfo(d.item_id, d.te_actions);
+              if (window.isWorkTable && (typeof EventConfig !== "undefined" && EventConfig !== null)) {
+                EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values);
+              }
+              dataIdx += 1;
+              if (dataIdx >= data.length) {
+                if (callback != null) {
+                  return callback();
+                }
+              } else {
+                return _cb.call(_this, data[dataIdx]);
+              }
+            };
+          })(this));
+        };
+        return _cb.call(this, data[dataIdx]);
+      },
+      error: function(data) {}
+    });
+  };
+
+  Common.loadJsFromInstancePageValue = function(callback, pageNum) {
+    var k, needItemIds, obj, pageValues;
+    if (callback == null) {
+      callback = null;
+    }
+    if (pageNum == null) {
+      pageNum = PageValue.getPageNum();
+    }
+    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
+    needItemIds = [];
+    for (k in pageValues) {
+      obj = pageValues[k];
+      if (obj.value.itemId != null) {
+        if ($.inArray(obj.value.itemId, needItemIds) < 0) {
+          needItemIds.push(obj.value.itemId);
+        }
+      }
+    }
+    return this.loadItemJs(needItemIds, function() {
+      if (callback != null) {
+        return callback();
+      }
+    });
+  };
+
+  Common.availJs = function(itemId, jsSrc, option, callback) {
+    var firstScript, s, t;
+    if (option == null) {
+      option = {};
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    window.loadedItemId = itemId;
+    s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.src = jsSrc;
+    firstScript = document.getElementsByTagName('script')[0];
+    firstScript.parentNode.insertBefore(s, firstScript);
+    return t = setInterval(function() {
+      if (window.itemInitFuncList[itemId] != null) {
+        clearInterval(t);
+        window.itemInitFuncList[itemId](option);
+        window.loadedItemId = null;
+        if (callback != null) {
+          return callback();
+        }
+      }
+    }, '500');
+  };
+
   return Common;
 
 })();
 
 (function() {
-  window.loadedClassList = {};
   return window.classMap = {};
 })();
 

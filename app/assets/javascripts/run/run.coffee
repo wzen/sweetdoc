@@ -25,5 +25,8 @@ $ ->
   RunCommon.updateMainViewSize()
   # 共通設定
   Setting.initConfig()
-  # イベント初期化
-  RunCommon.initEventAction()
+  # 必要JS読み込み
+  Common.loadJsFromInstancePageValue(->
+    # イベント初期化
+    RunCommon.initEventAction()
+  )

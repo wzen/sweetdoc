@@ -394,25 +394,15 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.drawAllItemFromInstancePageValue = function(callback, pageNum) {
-    var k, needItemIds, obj, pageValues;
     if (callback == null) {
       callback = null;
     }
     if (pageNum == null) {
       pageNum = PageValue.getPageNum();
     }
-    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
-    needItemIds = [];
-    for (k in pageValues) {
-      obj = pageValues[k];
-      if (obj.value.itemId != null) {
-        if ($.inArray(obj.value.itemId, needItemIds) < 0) {
-          needItemIds.push(obj.value.itemId);
-        }
-      }
-    }
-    return this.loadItemJs(needItemIds, function() {
-      var classMapId, event, id, isCommon;
+    return Common.loadJsFromInstancePageValue(function() {
+      var classMapId, event, id, isCommon, k, obj, pageValues;
+      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
       for (k in pageValues) {
         obj = pageValues[k];
         isCommon = null;
@@ -441,100 +431,7 @@ WorktableCommon = (function() {
       if (callback != null) {
         return callback();
       }
-    });
-  };
-
-  WorktableCommon.loadItemJs = function(itemIds, callback) {
-    var callbackCount, itemId, l, len, needReadItemIds;
-    if (callback == null) {
-      callback = null;
-    }
-    if (jQuery.type(itemIds) !== "array") {
-      itemIds = [itemIds];
-    }
-    if (itemIds.length === 0) {
-      if (callback != null) {
-        callback();
-      }
-      return;
-    }
-    callbackCount = 0;
-    needReadItemIds = [];
-    for (l = 0, len = itemIds.length; l < len; l++) {
-      itemId = itemIds[l];
-      if (itemId != null) {
-        if (window.itemInitFuncList[itemId] != null) {
-          window.itemInitFuncList[itemId]();
-          callbackCount += 1;
-          if (callbackCount >= itemIds.length) {
-            if (callback != null) {
-              callback();
-            }
-            return;
-          }
-        } else {
-          needReadItemIds.push(itemId);
-        }
-      } else {
-        callbackCount += 1;
-      }
-    }
-    return $.ajax({
-      url: "/item_js/index",
-      type: "POST",
-      dataType: "json",
-      data: {
-        itemIds: needReadItemIds
-      },
-      success: function(data) {
-        var d, len1, m, option, results;
-        callbackCount = 0;
-        results = [];
-        for (m = 0, len1 = data.length; m < len1; m++) {
-          d = data[m];
-          if (d.css_info != null) {
-            option = {
-              isWorkTable: true,
-              css_temp: d.css_info
-            };
-          }
-          WorktableCommon.availJs(d.item_id, d.js_src, option, function() {
-            callbackCount += 1;
-            if ((callback != null) && callbackCount >= data.length) {
-              return callback();
-            }
-          });
-          PageValue.addItemInfo(d.item_id, d.te_actions);
-          results.push(EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values));
-        }
-        return results;
-      },
-      error: function(data) {}
-    });
-  };
-
-  WorktableCommon.availJs = function(itemId, jsSrc, option, callback) {
-    var firstScript, s, t;
-    if (option == null) {
-      option = {};
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = jsSrc;
-    firstScript = document.getElementsByTagName('script')[0];
-    firstScript.parentNode.insertBefore(s, firstScript);
-    return t = setInterval(function() {
-      if (window.itemInitFuncList[itemId] != null) {
-        clearInterval(t);
-        window.itemInitFuncList[itemId](option);
-        if (callback != null) {
-          return callback();
-        }
-      }
-    }, '500');
+    }, pageNum);
   };
 
   return WorktableCommon;

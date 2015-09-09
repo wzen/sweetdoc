@@ -4,7 +4,8 @@ class ArrowItem extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Arrow"
   # @property [String] ITEM_ID アイテム種別
-  @ITEM_ID = Constant.ItemId.ARROW
+  if window.loadedItemId?
+    @ITEM_ID = window.loadedItemId
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 37
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
@@ -370,7 +371,6 @@ class ArrowItem extends CanvasItemBase
     if window.debug
       console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
 
-window.loadedClassList.ArrowItem = ArrowItem
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
 
 if window.worktablePage?
@@ -429,7 +429,6 @@ if window.worktablePage?
         if @itemSize.y + @itemSize.h < maxY
           @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
-  window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem
   Common.setClassToMap(false, WorkTableArrowItem.ITEM_ID, WorkTableArrowItem)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ID]?

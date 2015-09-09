@@ -14,7 +14,9 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.IDENTITY = "Button";
 
-  ButtonItem.ITEM_ID = Constant.ItemId.BUTTON;
+  if (window.loadedItemId != null) {
+    ButtonItem.ITEM_ID = window.loadedItemId;
+  }
 
   ButtonItem.prototype.updateEventBefore = function() {
     var methodName;
@@ -78,8 +80,6 @@ ButtonItem = (function(superClass) {
   return ButtonItem;
 
 })(CssItemBase);
-
-window.loadedClassList.ButtonItem = ButtonItem;
 
 Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem);
 
@@ -249,7 +249,6 @@ if (window.worktablePage != null) {
     return WorkTableButtonItem;
 
   })(ButtonItem);
-  window.loadedClassList.WorkTableButtonItem = WorkTableButtonItem;
   Common.setClassToMap(false, WorkTableButtonItem.ITEM_ID, WorkTableButtonItem);
 }
 
@@ -262,7 +261,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ButtonItem.ITE
     if (window.debug) {
       console.log('button loaded');
     }
-    if (option.isWorkTable != null) {
+    if (window.isWorkTable) {
       css_temp = option.css_temp;
       if (css_temp != null) {
         tempEmt = "<div id='" + WorkTableButtonItem.CSSTEMPID + "'>" + css_temp + "</div>";

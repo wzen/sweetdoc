@@ -4,7 +4,8 @@ class ButtonItem extends CssItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Button"
   # @property [String] ITEM_ID アイテム種別
-  @ITEM_ID = Constant.ItemId.BUTTON
+  if window.loadedItemId?
+    @ITEM_ID = window.loadedItemId
 
   # イベント前の表示状態にする
   updateEventBefore: ->
@@ -99,7 +100,6 @@ class ButtonItem extends CssItemBase
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 
-window.loadedClassList.ButtonItem = ButtonItem
 Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)
 
 if window.worktablePage?
@@ -258,7 +258,6 @@ if window.worktablePage?
         cssStyle.text(cssCode.text())
       )
 
-  window.loadedClassList.WorkTableButtonItem = WorkTableButtonItem
   Common.setClassToMap(false, WorkTableButtonItem.ITEM_ID, WorkTableButtonItem)
 
 # 初期化
@@ -268,7 +267,7 @@ if window.itemInitFuncList? && !window.itemInitFuncList[ButtonItem.ITEM_ID]?
     if window.debug
       console.log('button loaded')
 
-    if option.isWorkTable?
+    if window.isWorkTable
       # ワークテーブルの初期化処理
       css_temp = option.css_temp
       if css_temp?

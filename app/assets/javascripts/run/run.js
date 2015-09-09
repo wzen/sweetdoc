@@ -26,7 +26,9 @@ $(function() {
   RunCommon.initMainContainer();
   RunCommon.updateMainViewSize();
   Setting.initConfig();
-  return RunCommon.initEventAction();
+  return Common.loadJsFromInstancePageValue(function() {
+    return RunCommon.initEventAction();
+  });
 });
 
 //# sourceMappingURL=run.js.map

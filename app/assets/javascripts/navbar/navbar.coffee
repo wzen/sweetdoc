@@ -38,7 +38,7 @@ class Navbar
       $(@).parent('li').addClass('active')
       window.selectItemMenu = itemId
       WorktableCommon.changeMode(Constant.Mode.DRAW)
-      WorktableCommon.loadItemJs(itemId)
+      Common.loadItemJs(itemId)
     )
 
     #$('#header_items_select_menu .menu-item').off('click')

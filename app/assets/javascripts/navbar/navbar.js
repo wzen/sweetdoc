@@ -42,7 +42,7 @@ Navbar = (function() {
       $(this).parent('li').addClass('active');
       window.selectItemMenu = itemId;
       WorktableCommon.changeMode(Constant.Mode.DRAW);
-      return WorktableCommon.loadItemJs(itemId);
+      return Common.loadItemJs(itemId);
     });
     $('#header_items_select_menu .menu-item').click(function() {
       var selected;

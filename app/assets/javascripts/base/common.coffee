@@ -429,8 +429,109 @@ class Common
           v.getJQueryElement().remove()
       window.instanceMap = {}
 
+
+  # JSファイルをサーバから読み込む
+  # @param [Int] itemId アイテム種別
+  # @param [Function] callback コールバック関数
+  @loadItemJs = (itemIds, callback = null) ->
+    if jQuery.type(itemIds) != "array"
+      itemIds = [itemIds]
+
+    # 読み込むIDがない場合はコールバック実行して終了
+    if itemIds.length == 0
+      if callback?
+        callback()
+      return
+
+    callbackCount = 0
+    needReadItemIds = []
+    for itemId in itemIds
+      if itemId?
+        if window.itemInitFuncList[itemId]?
+          # 読み込み済みなアイテムIDの場合
+          window.itemInitFuncList[itemId]()
+          callbackCount += 1
+          if callbackCount >= itemIds.length
+            if callback?
+              # 既に全て読み込まれている場合はコールバック実行して終了
+              callback()
+            return
+        else
+          # Ajaxでjs読み込みが必要なアイテムID
+          needReadItemIds.push(itemId)
+      else
+        callbackCount += 1
+
+    # js読み込み
+    $.ajax(
+      {
+        url: "/item_js/index"
+        type: "POST"
+        dataType: "json"
+        data: {
+          itemIds: needReadItemIds
+        }
+        success: (data)->
+          callbackCount = 0
+          dataIdx = 0
+
+          _cb = (d) ->
+            if d.css_info?
+              option = {css_temp: d.css_info}
+            Common.availJs(d.item_id, d.js_src, option, =>
+              PageValue.addItemInfo(d.item_id, d.te_actions)
+              if window.isWorkTable && EventConfig?
+                EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values)
+              dataIdx += 1
+              if dataIdx >= data.length
+                if callback?
+                  callback()
+              else
+                _cb.call(@, data[dataIdx])
+            )
+          _cb.call(@, data[dataIdx])
+
+        error: (data) ->
+      }
+    )
+
+  # イベントPageValueから全てのJSを取得
+  @loadJsFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
+    pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
+    needItemIds = []
+    for k, obj of pageValues
+      if obj.value.itemId?
+        if $.inArray(obj.value.itemId, needItemIds) < 0
+          needItemIds.push(obj.value.itemId)
+
+    @loadItemJs(needItemIds, ->
+      # コールバック
+      if callback?
+        callback()
+    )
+
+  # JSファイルを設定
+  # @param [String] itemId アイテムID
+  # @param [String] jsSrc jsファイル名
+  # @param [Function] callback 設定後のコールバック
+  @availJs = (itemId, jsSrc, option = {}, callback = null) ->
+    window.loadedItemId = itemId
+    s = document.createElement('script');
+    s.type = 'text/javascript';
+    # TODO: 認証コードの比較
+    s.src = jsSrc;
+    firstScript = document.getElementsByTagName('script')[0];
+    firstScript.parentNode.insertBefore(s, firstScript);
+    t = setInterval( ->
+      if window.itemInitFuncList[itemId]?
+        clearInterval(t)
+        window.itemInitFuncList[itemId](option)
+        window.loadedItemId = null
+        if callback?
+          callback()
+    , '500')
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
-  window.loadedClassList = {}
   window.classMap = {}
 

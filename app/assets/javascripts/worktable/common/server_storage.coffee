@@ -123,9 +123,9 @@ class ServerStorage
               return
 
             if d.css_info?
-              option = {isWorkTable: true, css_temp: d.css_info}
+              option = {css_temp: d.css_info}
 
-            WorktableCommon.availJs(itemId, d.js_src, option, ->
+            Common.availJs(itemId, d.js_src, option, ->
               loadedCount += 1
               if loadedCount >= item_js_list.length
                 # 全て読み込んだ後

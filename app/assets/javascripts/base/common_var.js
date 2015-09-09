@@ -58,6 +58,7 @@ CommonVar = (function() {
     window.flushMessageTimer = null;
     window.mode = Constant.Mode.DRAW;
     window.selectedObjId = null;
+    window.isWorkTable = true;
     this.initHistoryVar();
     return this.updateWorktableBaseElement(PageValue.getPageNum());
   };
@@ -73,6 +74,7 @@ CommonVar = (function() {
     };
     window.disabledEventHandler = false;
     window.firstItemFocused = false;
+    window.isWorkTable = false;
     return this.updateRunBaseElement(PageValue.getPageNum());
   };
 

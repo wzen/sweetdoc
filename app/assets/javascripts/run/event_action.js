@@ -36,17 +36,21 @@ EventAction = (function() {
     } else {
       this.pageIndex += 1;
       pageNum = this.pageIndex + 1;
+      Navbar.setPageNum(pageNum);
+      PageValue.setPageNum(pageNum);
       return RunCommon.loadPagingPageValue(pageNum, pageNum, (function(_this) {
         return function() {
-          var eventPageValueList;
-          if (_this.thisPage() === null) {
-            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
-            _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
-            if (window.debug) {
-              console.log('[nextPage] created page instance');
+          return Common.loadJsFromInstancePageValue(function() {
+            var eventPageValueList;
+            if (_this.thisPage() === null) {
+              eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
+              _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
+              if (window.debug) {
+                console.log('[nextPage] created page instance');
+              }
             }
-          }
-          return _this.changePaging(beforePageIndex, _this.pageIndex, function() {});
+            return _this.changePaging(beforePageIndex, _this.pageIndex);
+          });
         };
       })(this));
     }
@@ -58,17 +62,21 @@ EventAction = (function() {
     if (this.pageIndex > 0) {
       this.pageIndex -= 1;
       pageNum = this.pageIndex + 1;
+      Navbar.setPageNum(pageNum);
+      PageValue.setPageNum(pageNum);
       return RunCommon.loadPagingPageValue(pageNum, pageNum, (function(_this) {
         return function() {
-          var eventPageValueList;
-          if (_this.thisPage() === null) {
-            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
-            _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
-            if (window.debug) {
-              console.log('[rewindPage] created page instance');
+          return Common.loadJsFromInstancePageValue(function() {
+            var eventPageValueList;
+            if (_this.thisPage() === null) {
+              eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
+              _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
+              if (window.debug) {
+                console.log('[rewindPage] created page instance');
+              }
             }
-          }
-          return _this.changePaging(beforePageIndex, _this.pageIndex, function() {});
+            return _this.changePaging(beforePageIndex, _this.pageIndex);
+          });
         };
       })(this));
     } else {
@@ -88,8 +96,6 @@ EventAction = (function() {
       console.log('[changePaging] beforePageNum:' + beforePageNum);
       console.log('[changePaging] afterPageNum:' + afterPageNum);
     }
-    Navbar.setPageNum(afterPageNum);
-    PageValue.setPageNum(afterPageNum);
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
     pageFlip = new PageFlip(beforePageNum, afterPageNum);
     RunCommon.initMainContainer();
