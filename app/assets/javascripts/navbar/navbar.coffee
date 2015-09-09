@@ -1,5 +1,7 @@
 class Navbar
 
+  @ITEM_MENU_PREFIX = 'menu-item-'
+
   # Worktableナビバー初期化
   @initWorktableNavbar = ->
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
@@ -32,13 +34,14 @@ class Navbar
 
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     $('.menu-item', itemsSelectMenuEmt).click( ->
-      # TODO: 取り方見直す
-      itemId = parseInt($(this).attr('id').replace('menu-item-', ''))
-      itemsSelectMenuEmt.removeClass('active')
-      $(@).parent('li').addClass('active')
-      window.selectItemMenu = itemId
-      WorktableCommon.changeMode(Constant.Mode.DRAW)
-      Common.loadItemJs(itemId)
+      emtId = $(this).attr('id')
+      if emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0
+        itemId = parseInt(emtId.replace(Navbar.ITEM_MENU_PREFIX, ''))
+        itemsSelectMenuEmt.removeClass('active')
+        $(@).parent('li').addClass('active')
+        window.selectItemMenu = itemId
+        WorktableCommon.changeMode(Constant.Mode.DRAW)
+        Common.loadItemJs(itemId)
     )
 
     #$('#header_items_select_menu .menu-item').off('click')

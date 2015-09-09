@@ -4,6 +4,8 @@ var Navbar;
 Navbar = (function() {
   function Navbar() {}
 
+  Navbar.ITEM_MENU_PREFIX = 'menu-item-';
+
   Navbar.initWorktableNavbar = function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt;
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
@@ -36,13 +38,16 @@ Navbar = (function() {
     });
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
     $('.menu-item', itemsSelectMenuEmt).click(function() {
-      var itemId;
-      itemId = parseInt($(this).attr('id').replace('menu-item-', ''));
-      itemsSelectMenuEmt.removeClass('active');
-      $(this).parent('li').addClass('active');
-      window.selectItemMenu = itemId;
-      WorktableCommon.changeMode(Constant.Mode.DRAW);
-      return Common.loadItemJs(itemId);
+      var emtId, itemId;
+      emtId = $(this).attr('id');
+      if (emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0) {
+        itemId = parseInt(emtId.replace(Navbar.ITEM_MENU_PREFIX, ''));
+        itemsSelectMenuEmt.removeClass('active');
+        $(this).parent('li').addClass('active');
+        window.selectItemMenu = itemId;
+        WorktableCommon.changeMode(Constant.Mode.DRAW);
+        return Common.loadItemJs(itemId);
+      }
     });
     $('#header_items_select_menu .menu-item').click(function() {
       var selected;
