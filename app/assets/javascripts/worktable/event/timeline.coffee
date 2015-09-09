@@ -174,7 +174,7 @@ class Timeline
       itemId = $(@).find('input.itemId').val()
       if itemId?
         selectOptions += """
-            <option value='#{id}#{Constant.EVENT_ITEM_SEPERATOR}#{itemId}'>
+            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{itemId}'>
               #{name}
             </option>
           """
@@ -183,7 +183,7 @@ class Timeline
     # メニューを入れ替え
     teItemSelects.each( ->
       $(@).find('option').each( ->
-        if $(@).val().length > 0 && $(@).val().indexOf(Constant.EVENT_COMMON_PREFIX) != 0
+        if $(@).val().length > 0 && $(@).val().indexOf(EventConfig.EVENT_COMMON_PREFIX) != 0
           $(@).remove()
       )
       $(@).append($(selectOptions))

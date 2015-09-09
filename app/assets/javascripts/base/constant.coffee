@@ -4,11 +4,6 @@ if gon?
 
   # アプリ共通定数
   class Constant
-    # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
-    @EVENT_ITEM_SEPERATOR = "&"
-    # @property [String] EVENT_COMMON_PREFIX 共通イベントプレフィックス
-    @EVENT_COMMON_PREFIX = constant.EVENT_COMMON_PREFIX
-
     # ZIndex
     class @Zindex
       # @property GRID グリッド線

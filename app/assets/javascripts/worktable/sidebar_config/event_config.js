@@ -6,10 +6,12 @@ EventConfig = (function() {
 
   if (typeof gon !== "undefined" && gon !== null) {
     EventConfig.ITEM_ROOT_ID = 'event_@te_num';
-    EventConfig.COMMON_ACTION_CLASS = constant.ElementAttribute.COMMON_ACTION_CLASS;
-    EventConfig.ITEM_ACTION_CLASS = constant.ElementAttribute.ITEM_ACTION_CLASS;
-    EventConfig.COMMON_VALUES_CLASS = constant.ElementAttribute.COMMON_VALUES_CLASS;
-    EventConfig.ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS;
+    EventConfig.EVENT_ITEM_SEPERATOR = "&";
+    EventConfig.COMMON_ACTION_CLASS = constant.EventConfig.COMMON_ACTION_CLASS;
+    EventConfig.ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS;
+    EventConfig.COMMON_VALUES_CLASS = constant.EventConfig.COMMON_VALUES_CLASS;
+    EventConfig.ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS;
+    EventConfig.EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX;
   }
 
   function EventConfig(emt1, teNum) {
@@ -23,14 +25,14 @@ EventConfig = (function() {
     self = this;
     selectItemValue = '';
     if (this.isCommonEvent) {
-      selectItemValue = "" + Constant.EVENT_COMMON_PREFIX + this.commonEventId;
+      selectItemValue = "" + EventConfig.EVENT_COMMON_PREFIX + this.commonEventId;
     } else {
-      selectItemValue = "" + this.id + Constant.EVENT_ITEM_SEPERATOR + this.itemId;
+      selectItemValue = "" + this.id + EventConfig.EVENT_ITEM_SEPERATOR + this.itemId;
     }
     $('.te_item_select', this.emt).val(selectItemValue);
     actionFormName = '';
     if (this.isCommonEvent) {
-      actionFormName = Constant.EVENT_COMMON_PREFIX + this.commonEventId;
+      actionFormName = EventConfig.EVENT_COMMON_PREFIX + this.commonEventId;
     } else {
       actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', this.itemId);
     }
@@ -56,11 +58,11 @@ EventConfig = (function() {
         $(".config.te_div", this.emt).css('display', 'none');
         return;
       }
-      this.isCommonEvent = value.indexOf(Constant.EVENT_COMMON_PREFIX) === 0;
+      this.isCommonEvent = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) === 0;
       if (this.isCommonEvent) {
-        this.commonEventId = parseInt(value.substring(Constant.EVENT_COMMON_PREFIX.length));
+        this.commonEventId = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length));
       } else {
-        splitValues = value.split(Constant.EVENT_ITEM_SEPERATOR);
+        splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
         this.id = splitValues[0];
         this.itemId = splitValues[1];
       }

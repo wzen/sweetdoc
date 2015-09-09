@@ -8,7 +8,7 @@
                 <select class="form-control te_item_select" name="te_item_select">
                     <option value="">(Select)</option>
                     <% @common_actions.each do |c| %>
-                      <option value="<%= Const::ElementAttribute::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>"><%= t(c.name) %></option>
+                      <option value="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>"><%= t(c.name) %></option>
                     <% end %>
                 </select>
             </div>
@@ -20,7 +20,7 @@
             <div class="forms action_forms">
                 <% @common_actions.each do |c| %>
                     <!-- アクション名一覧 -->
-                    <div class="<%= Const::ElementAttribute::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>" style="display: none">
+                    <div class="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>" style="display: none">
                         <% c.common_action_events.each do |a| %>
                             <%=
                                 render 'worktable/sidebar_menu/event/parts/method',
@@ -30,8 +30,8 @@
                                        action_animation_type_id: a.action_animation_type_id,
                                        scroll_enabled_direction: a.scroll_enabled_direction,
                                        scroll_forward_direction: a.scroll_forward_direction,
-                                       radio_name: Const::ElementAttribute::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
-                                       value_class_name: Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
+                                       radio_name: Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
+                                       value_class_name: Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
                             %>
                         <% end %>
                     </div>
@@ -54,7 +54,7 @@
         <div class="configBox">
             <% @common_actions.each do |c| %>
                 <% c.common_action_events.each do |a| %>
-                    <div class="<%= Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
+                    <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
                         <% if a.action_event_type_id == Const::ActionEventHandleType::SCROLL  %>
                             <%= render 'worktable/sidebar_menu/event/parts/handler_scroll' %>
                         <% elsif a.action_event_type_id == Const::ActionEventHandleType::CLICK %>
@@ -73,7 +73,7 @@
                 <!-- イベント毎の設定値 -->
                 <% @common_actions.each do |c| %>
                     <% c.common_action_events.each do |a| %>
-                        <div class="<%= Const::ElementAttribute::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
+                        <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
                           <% if a.id == Const::CommonActionEventChangeType::BACKGROUND  %>
                             <%= render 'worktable/sidebar_menu/event/parts/backgroundcolor_change' %>
                           <% elsif a.id == Const::CommonActionEventChangeType::SCREEN %>

@@ -6,10 +6,6 @@ if (typeof gon !== "undefined" && gon !== null) {
   Constant = (function() {
     function Constant() {}
 
-    Constant.EVENT_ITEM_SEPERATOR = "&";
-
-    Constant.EVENT_COMMON_PREFIX = constant.EVENT_COMMON_PREFIX;
-
     Constant.Zindex = (function() {
       function Zindex() {}
 

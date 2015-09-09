@@ -167,12 +167,12 @@ Timeline = (function() {
       name = $(this).find('input.name').val();
       itemId = $(this).find('input.itemId').val();
       if (itemId != null) {
-        return selectOptions += "<option value='" + id + Constant.EVENT_ITEM_SEPERATOR + itemId + "'>\n  " + name + "\n</option>";
+        return selectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + itemId + "'>\n  " + name + "\n</option>";
       }
     });
     return teItemSelects.each(function() {
       $(this).find('option').each(function() {
-        if ($(this).val().length > 0 && $(this).val().indexOf(Constant.EVENT_COMMON_PREFIX) !== 0) {
+        if ($(this).val().length > 0 && $(this).val().indexOf(EventConfig.EVENT_COMMON_PREFIX) !== 0) {
           return $(this).remove();
         }
       });

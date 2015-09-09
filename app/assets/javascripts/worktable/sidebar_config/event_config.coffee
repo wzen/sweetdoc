@@ -3,14 +3,18 @@ class EventConfig
   if gon?
     # @property [String] TE_ITEM_ROOT_ID イベントRoot
     @ITEM_ROOT_ID = 'event_@te_num'
+    # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
+    @EVENT_ITEM_SEPERATOR = "&"
     # @property [String] COMMON_ACTION_CLASS イベント共通アクションクラス名
-    @COMMON_ACTION_CLASS = constant.ElementAttribute.COMMON_ACTION_CLASS
+    @COMMON_ACTION_CLASS = constant.EventConfig.COMMON_ACTION_CLASS
     # @property [String] ITEM_ACTION_CLASS イベントアイテムアクションクラス名
-    @ITEM_ACTION_CLASS = constant.ElementAttribute.ITEM_ACTION_CLASS
+    @ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS
     # @property [String] COMMON_VALUES_CLASS 共通イベントクラス名
-    @COMMON_VALUES_CLASS = constant.ElementAttribute.COMMON_VALUES_CLASS
+    @COMMON_VALUES_CLASS = constant.EventConfig.COMMON_VALUES_CLASS
     # @property [String] ITEM_VALUES_CLASS アイテムイベントクラス名
-    @ITEM_VALUES_CLASS = constant.ElementAttribute.ITEM_VALUES_CLASS
+    @ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS
+    # @property [String] EVENT_COMMON_PREFIX 共通イベントプレフィックス
+    @EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX
 
   # コンストラクタ
   constructor: (@emt, @teNum) ->
@@ -23,14 +27,14 @@ class EventConfig
     # 選択イベントタイプ
     selectItemValue = ''
     if @isCommonEvent
-      selectItemValue = "#{Constant.EVENT_COMMON_PREFIX}#{@commonEventId}"
+      selectItemValue = "#{EventConfig.EVENT_COMMON_PREFIX}#{@commonEventId}"
     else
-      selectItemValue = "#{@id}#{Constant.EVENT_ITEM_SEPERATOR}#{@itemId}"
+      selectItemValue = "#{@id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{@itemId}"
     $('.te_item_select', @emt).val(selectItemValue)
 
     actionFormName = ''
     if @isCommonEvent
-      actionFormName = Constant.EVENT_COMMON_PREFIX + @commonEventId
+      actionFormName = EventConfig.EVENT_COMMON_PREFIX + @commonEventId
     else
       actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
 
@@ -53,11 +57,11 @@ class EventConfig
         $(".config.te_div", @emt).css('display', 'none')
         return
 
-      @isCommonEvent = value.indexOf(Constant.EVENT_COMMON_PREFIX) == 0
+      @isCommonEvent = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) == 0
       if @isCommonEvent
-        @commonEventId = parseInt(value.substring(Constant.EVENT_COMMON_PREFIX.length))
+        @commonEventId = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length))
       else
-        splitValues = value.split(Constant.EVENT_ITEM_SEPERATOR)
+        splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
         @id = splitValues[0]
         @itemId = splitValues[1]
 
