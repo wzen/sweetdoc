@@ -56,7 +56,7 @@ class LocalStorage
     saveTime = lstorage.getItem(key)
     if !saveTime?
       return true
-    diffTime = Common.diffTime($.now(), saveTime)
+    diffTime = Common.calculateDiffTime($.now(), saveTime)
     time = if isRun then @RUN_SAVETIME else @WORKTABLE_SAVETIME
     return parseInt(diffTime.minutes) > time
 

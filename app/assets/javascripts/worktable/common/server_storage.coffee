@@ -147,7 +147,7 @@ class ServerStorage
     if updateFlg
       loadedLocalTime = loadEmt.find(".#{@ElementAttribute.LOADED_LOCALTIME}")
       if loadedLocalTime?
-        diffTime = Common.diffTime($.now(), parseInt(loadedLocalTime.val()))
+        diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()))
         s = diffTime.seconds
         if window.debug
           console.log('loadedLocalTime diff ' + s)
@@ -170,7 +170,7 @@ class ServerStorage
             n = $.now()
             for p in user_pagevalue_list
               d = new Date(p.updated_at)
-              e = "<li><a class='menu-item'>#{Common.diffAlmostTime(n, d.getTime())} (#{Common.formatDate(d)})</a><input type='hidden' class='user_pagevalue_id' value=#{p.user_pagevalue_id}></li>"
+              e = "<li><a class='menu-item'>#{Common.displayDiffAlmostTime(n, d.getTime())} (#{Common.formatDate(d)})</a><input type='hidden' class='user_pagevalue_id' value=#{p.user_pagevalue_id}></li>"
               list += e
             loadEmt.children().remove()
             $(list).appendTo(loadEmt)

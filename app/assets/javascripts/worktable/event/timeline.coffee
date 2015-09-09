@@ -117,7 +117,7 @@ class Timeline
 
     # プレビュー実行
     _doPreview = (te_num) ->
-      Common.clearAllEventChange( ->
+      Common.clearAllEventAction( ->
         tes = PageValue.getEventPageValueSortedListByNum()
         te_num = parseInt(te_num)
         for te, idx in tes

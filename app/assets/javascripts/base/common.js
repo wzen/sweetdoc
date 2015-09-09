@@ -251,7 +251,7 @@ Common = (function() {
     }
   };
 
-  Common.getCreatedItemObject = function() {
+  Common.getCreatedItemInstances = function() {
     var k, ret, v;
     ret = {};
     for (k in instanceMap) {
@@ -263,7 +263,7 @@ Common = (function() {
     return ret;
   };
 
-  Common.clearAllEventChange = function(callback) {
+  Common.clearAllEventAction = function(callback) {
     var idx, item, j, previewinitCount, ref, results, te, tes;
     if (callback == null) {
       callback = null;
@@ -331,7 +331,7 @@ Common = (function() {
     return format;
   };
 
-  Common.diffTime = function(future, past) {
+  Common.calculateDiffTime = function(future, past) {
     var diff, ret;
     diff = future - past;
     ret = {};
@@ -345,9 +345,9 @@ Common = (function() {
     return ret;
   };
 
-  Common.diffAlmostTime = function(future, past) {
+  Common.displayDiffAlmostTime = function(future, past) {
     var day, diffTime, hours, minutes, month, ret, seconds, span, week, year;
-    diffTime = this.diffTime(future, past);
+    diffTime = this.calculateDiffTime(future, past);
     span = null;
     ret = null;
     seconds = diffTime.seconds;
@@ -472,7 +472,7 @@ Common = (function() {
       }
       return results;
     } else {
-      ref = Common.getCreatedItemObject();
+      ref = Common.getCreatedItemInstances();
       for (k in ref) {
         v = ref[k];
         if (v.getJQueryElement != null) {

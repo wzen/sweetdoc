@@ -104,6 +104,7 @@ class Common
 
   # サニタイズ エンコード
   # @property [String] str 対象文字列
+  # @return [String] 変換後文字列
   @sanitaizeEncode =  (str) ->
     if str? && typeof str == "string"
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -112,6 +113,7 @@ class Common
 
   # サニタイズ デコード
   # @property [String] str 対象文字列
+  # @return [String] 変換後文字列
   @sanitaizeDecode = (str) ->
     if str? && typeof str == "string"
       return str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, '\'').replace(/&amp;/g, '&');
@@ -121,6 +123,7 @@ class Common
   # クラスハッシュ配列からクラスを取り出し
   # @param [Boolean] isCommon 共通イベントか
   # @param [Integer] id EventIdまたはItemId
+  # @return [Object] 対象クラス
   @getClassFromMap = (isCommon, id) ->
     if !window.classMap?
       window.classMap = {}
@@ -226,8 +229,8 @@ class Common
       window.instanceMap[id] = instance
 
   # 生成したインスタンスの中からアイテムのみ取得
-
-  @getCreatedItemObject = ->
+  # @return [Array] アイテムインスタンス配列
+  @getCreatedItemInstances = ->
     ret = {}
     for k, v of instanceMap
       if v instanceof CommonEventBase == false
@@ -235,7 +238,8 @@ class Common
     return ret
 
   # 全てのアクションを元に戻す
-  @clearAllEventChange: (callback = null) ->
+  # @param [Function] callback コールバック
+  @clearAllEventAction: (callback = null) ->
     previewinitCount = 0
     tes = PageValue.getEventPageValueSortedListByNum()
     if tes.length <= 0
@@ -260,6 +264,8 @@ class Common
           callback()
 
   # アクションタイプからアクションタイプクラス名を取得
+  # @param [Integer] actionType アクションタイプID
+  # @return [String] アクションタイプクラス名
   @getActionTypeClassNameByActionType = (actionType) ->
     if parseInt(actionType) == Constant.ActionEventHandleType.CLICK
       return Constant.ActionEventTypeClassName.CLICK
@@ -267,7 +273,10 @@ class Common
       return Constant.ActionEventTypeClassName.SCROLL
     return null
 
-  # 日付フォーマット
+  # 日付をフォーマットで変換
+  # @param [Date] date 対象日付
+  # @param [String] format 変換フォーマット
+  # @return [String] フォーマット後日付
   @formatDate = (date, format = 'YYYY-MM-DD hh:mm:ss') ->
     format = format.replace(/YYYY/g, date.getFullYear())
     format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2))
@@ -283,7 +292,10 @@ class Common
     return format
 
   # 時間差を計算
-  @diffTime = (future, past) ->
+  # @param [Integer] future 未来日ミリ秒
+  # @param [Integer] past 過去日ミリ秒
+  # @return [Object] 差分オブジェクト
+  @calculateDiffTime = (future, past) ->
     diff = future - past
     ret = {}
     ret.seconds = parseInt(diff / 1000)
@@ -296,8 +308,11 @@ class Common
     return ret
 
   # 時間差を表示
-  @diffAlmostTime = (future, past) ->
-    diffTime = @diffTime(future, past)
+  # @param [Integer] future 未来日ミリ秒
+  # @param [Integer] past 過去日ミリ秒
+  # @return [String] 表示
+  @displayDiffAlmostTime = (future, past) ->
+    diffTime = @calculateDiffTime(future, past)
     span = null
     ret = null
     seconds = diffTime.seconds
@@ -330,6 +345,8 @@ class Common
       ret = "#{year} #{span} ago"
     return ret
 
+  # モーダルビュー表示
+  # @param [Integer] type モーダルビュータイプ
   @showModalView = (type) ->
     self = @
     emt = $('body').children(".modal-content.#{type}")
@@ -391,7 +408,7 @@ class Common
           $("##{objId}").remove()
           delete window.instanceMap[objId]
     else
-      for k, v of Common.getCreatedItemObject()
+      for k, v of Common.getCreatedItemInstances()
         if v.getJQueryElement?
           v.getJQueryElement().remove()
       window.instanceMap = {}

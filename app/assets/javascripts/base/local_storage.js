@@ -74,7 +74,7 @@ LocalStorage = (function() {
     if (saveTime == null) {
       return true;
     }
-    diffTime = Common.diffTime($.now(), saveTime);
+    diffTime = Common.calculateDiffTime($.now(), saveTime);
     time = isRun ? this.RUN_SAVETIME : this.WORKTABLE_SAVETIME;
     return parseInt(diffTime.minutes) > time;
   };

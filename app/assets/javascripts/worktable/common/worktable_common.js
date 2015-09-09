@@ -182,7 +182,7 @@ WorktableCommon = (function() {
 
   WorktableCommon.clearAllItemStyle = function() {
     var k, ref, v;
-    ref = Common.getCreatedItemObject();
+    ref = Common.getCreatedItemInstances();
     for (k in ref) {
       v = ref[k];
       if (v instanceof ItemBase) {
@@ -275,7 +275,7 @@ WorktableCommon = (function() {
 
   WorktableCommon.removeAllItemOnWorkTable = function() {
     var k, ref, results, v;
-    ref = Common.getCreatedItemObject();
+    ref = Common.getCreatedItemInstances();
     results = [];
     for (k in ref) {
       v = ref[k];
@@ -376,7 +376,7 @@ WorktableCommon = (function() {
   WorktableCommon.removeAllItemAndEvent = function() {
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
-    return Common.clearAllEventChange((function(_this) {
+    return Common.clearAllEventAction((function(_this) {
       return function() {
         Common.removeAllItem();
         EventConfig.removeAllConfig();
@@ -389,7 +389,7 @@ WorktableCommon = (function() {
   WorktableCommon.removeAllItemAndEventOnThisPage = function() {
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutGeneralAndSetting();
-    return Common.clearAllEventChange((function(_this) {
+    return Common.clearAllEventAction((function(_this) {
       return function() {
         Common.removeAllItem();
         EventConfig.removeAllConfig();

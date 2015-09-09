@@ -81,7 +81,7 @@ ItemBase = (function(superClass) {
     if (newCreated) {
       num = 1;
       self = this;
-      ref = Common.getCreatedItemObject();
+      ref = Common.getCreatedItemInstances();
       for (k in ref) {
         v = ref[k];
         if (self.constructor.IDENTITY === v.constructor.IDENTITY) {

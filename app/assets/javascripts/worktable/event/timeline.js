@@ -110,7 +110,7 @@ Timeline = (function() {
       return _doPreview.call(this, te_num);
     };
     _doPreview = function(te_num) {
-      return Common.clearAllEventChange(function() {
+      return Common.clearAllEventAction(function() {
         var idx, item, j, len, results, tes;
         tes = PageValue.getEventPageValueSortedListByNum();
         te_num = parseInt(te_num);

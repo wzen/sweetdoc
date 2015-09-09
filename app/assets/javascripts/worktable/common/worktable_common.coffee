@@ -148,7 +148,7 @@ class WorktableCommon
 
   # 非表示をクリア
   @clearAllItemStyle = ->
-    for k, v of Common.getCreatedItemObject()
+    for k, v of Common.getCreatedItemInstances()
       if v instanceof ItemBase
         v.clearAllEventStyle()
 
@@ -236,7 +236,7 @@ class WorktableCommon
 
   # 画面の全アイテムを削除
   @removeAllItemOnWorkTable = ->
-    for k, v of Common.getCreatedItemObject()
+    for k, v of Common.getCreatedItemInstances()
       v.getJQueryElement().remove()
 
   ### デバッグ ###
@@ -340,7 +340,7 @@ class WorktableCommon
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutSetting()
-    Common.clearAllEventChange( =>
+    Common.clearAllEventAction( =>
       Common.removeAllItem()
       EventConfig.removeAllConfig()
       PageValue.removeAllItemAndEventPageValue()
@@ -352,7 +352,7 @@ class WorktableCommon
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutGeneralAndSetting()
-    Common.clearAllEventChange( =>
+    Common.clearAllEventAction( =>
       Common.removeAllItem()
       EventConfig.removeAllConfig()
       PageValue.removeAllItemAndEventPageValueOnThisPage()
