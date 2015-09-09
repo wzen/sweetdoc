@@ -6,6 +6,8 @@ OperationHistory = (function() {
 
   function OperationHistory() {}
 
+  OperationHistory.OPERATION_STORE_MAX = 30;
+
   OperationHistory.Key = (function() {
     function Key() {}
 
@@ -23,7 +25,7 @@ OperationHistory = (function() {
       isInit = false;
     }
     if ((window.operationHistoryIndexes[PageValue.getPageNum()] != null) && !isInit) {
-      window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % window.operationHistoryLimit;
+      window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % this.OPERATION_STORE_MAX;
     } else {
       window.operationHistoryIndexes[PageValue.getPageNum()] = 0;
     }
@@ -44,7 +46,7 @@ OperationHistory = (function() {
     }
     hIndex = window.operationHistoryIndexes[PageValue.getPageNum()];
     if (hIndex <= 0) {
-      hIndex = window.operationHistoryLimit - 1;
+      hIndex = this.OPERATION_STORE_MAX - 1;
     } else {
       hIndex -= 1;
     }
@@ -74,7 +76,7 @@ OperationHistory = (function() {
     if (window.operationHistoryIndexes[PageValue.getPageNum()] == null) {
       return false;
     }
-    hIndex = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % window.operationHistoryLimit;
+    hIndex = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % this.OPERATION_STORE_MAX;
     if ((window.operationHistories[PageValue.getPageNum()] != null) && (window.operationHistories[PageValue.getPageNum()][hIndex] != null)) {
       obj = window.operationHistories[PageValue.getPageNum()][hIndex];
       WorktableCommon.removeAllItemAndEventOnThisPage();
@@ -98,7 +100,7 @@ OperationHistory = (function() {
 
   OperationHistory.undo = function() {
     var nextTailIndex;
-    nextTailIndex = (window.operationHistoryTailIndex + 1) % window.operationHistoryLimit;
+    nextTailIndex = (window.operationHistoryTailIndex + 1) % this.OPERATION_STORE_MAX;
     if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || nextTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(this)) {
       Message.flushWarn("Can't Undo");
     }

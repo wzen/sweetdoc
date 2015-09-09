@@ -1,5 +1,8 @@
 class OperationHistory
 
+  # @property OPERATION_STORE_MAX 操作履歴保存最大数
+  @OPERATION_STORE_MAX = 30
+
   class @Key
     @INSTANCE = 'iv'
     @EVENT = 'ev'
@@ -8,7 +11,7 @@ class OperationHistory
   # @param [Boolean] isInit 初期化処理か
   @add = (isInit = false) ->
     if window.operationHistoryIndexes[PageValue.getPageNum()]? && !isInit
-      window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % window.operationHistoryLimit
+      window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % @OPERATION_STORE_MAX
     else
       window.operationHistoryIndexes[PageValue.getPageNum()] = 0
     window.operationHistoryTailIndex = window.operationHistoryIndexes[PageValue.getPageNum()]
@@ -27,7 +30,7 @@ class OperationHistory
 
     hIndex = window.operationHistoryIndexes[PageValue.getPageNum()]
     if hIndex <= 0
-      hIndex = window.operationHistoryLimit - 1
+      hIndex = @OPERATION_STORE_MAX - 1
     else
       hIndex -= 1
 
@@ -58,7 +61,7 @@ class OperationHistory
     if !window.operationHistoryIndexes[PageValue.getPageNum()]?
       return false
 
-    hIndex = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % window.operationHistoryLimit
+    hIndex = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % @OPERATION_STORE_MAX
     if window.operationHistories[PageValue.getPageNum()]? && window.operationHistories[PageValue.getPageNum()][hIndex]?
       obj = window.operationHistories[PageValue.getPageNum()][hIndex]
       # 全描画を消去
@@ -82,7 +85,7 @@ class OperationHistory
 
   # undo処理
   @undo = ->
-    nextTailIndex = (window.operationHistoryTailIndex + 1) % window.operationHistoryLimit
+    nextTailIndex = (window.operationHistoryTailIndex + 1) % @OPERATION_STORE_MAX
 
     if !window.operationHistoryIndexes[PageValue.getPageNum()]? || nextTailIndex == window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(@)
       Message.flushWarn("Can't Undo")

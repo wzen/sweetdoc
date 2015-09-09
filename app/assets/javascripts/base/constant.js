@@ -6,8 +6,6 @@ if (typeof gon !== "undefined" && gon !== null) {
   Constant = (function() {
     function Constant() {}
 
-    Constant.OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX;
-
     Constant.ITEM_PATH_LIST = constant.ITEM_PATH_LIST;
 
     Constant.EVENT_ITEM_SEPERATOR = "&";

@@ -19,7 +19,6 @@ CommonVar = (function() {
   CommonVar.initHistoryVar = function() {
     window.operationHistories = [];
     window.operationHistories[PageValue.getPageNum()] = [];
-    window.operationHistoryLimit = 30;
     window.operationHistoryTailIndex = null;
     window.operationHistoryIndexes = [];
     return window.operationHistoryIndexes[PageValue.getPageNum()] = null;

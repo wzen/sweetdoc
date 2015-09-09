@@ -17,7 +17,6 @@ class CommonVar
   @initHistoryVar = ->
     window.operationHistories = []
     window.operationHistories[PageValue.getPageNum()] = []
-    window.operationHistoryLimit = 30
     window.operationHistoryTailIndex = null
     window.operationHistoryIndexes = []
     window.operationHistoryIndexes[PageValue.getPageNum()] = null

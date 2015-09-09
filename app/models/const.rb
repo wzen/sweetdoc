@@ -1,7 +1,5 @@
 class Const
 
-  # @property OPERATION_STORE_MAX 操作履歴保存最大数
-  OPERATION_STORE_MAX = 30
   # @property EVENT_COMMON_PREFIX 共通イベント クラス名プレフィックス
   EVENT_COMMON_PREFIX = 'c_'
 

@@ -1,10 +1,9 @@
 if gon?
-  # 定数
+
   constant = gon.const
 
+  # アプリ共通定数
   class Constant
-    # @property OPERATION_STORE_MAX 操作履歴保存最大数
-    @OPERATION_STORE_MAX = constant.OPERATION_STORE_MAX
     # @property [Array] ITEM_PATH_LIST JSファイル名
     @ITEM_PATH_LIST = constant.ITEM_PATH_LIST
     # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
@@ -14,8 +13,11 @@ if gon?
 
     # ZIndex
     class @Zindex
+      # @property GRID グリッド線
       @GRID = 5
+      # @property EVENTBOTTOM イベント最底面
       @EVENTBOTTOM = constant.Zindex.EVENTBOTTOM
+      # @property EVENTFLOAT イベント最高面
       @EVENTFLOAT = constant.Zindex.EVENTFLOAT
 
     # 操作モード
