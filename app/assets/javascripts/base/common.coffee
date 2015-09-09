@@ -1,3 +1,4 @@
+# アプリ内の共通メソッドクラス
 class Common
   # ブラウザ対応のチェック
   # @return [Boolean] 処理結果
@@ -240,6 +241,8 @@ class Common
   # 全てのアクションを元に戻す
   # @param [Function] callback コールバック
   @clearAllEventAction: (callback = null) ->
+    # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
+
     previewinitCount = 0
     tes = PageValue.getEventPageValueSortedListByNum()
     if tes.length <= 0
@@ -355,6 +358,7 @@ class Common
     if $("#modal-overlay")[0]?
       return false
 
+    # 中央センタリング
     _centering = ->
       w = $(window).width()
       h = $(window).height()
@@ -362,6 +366,7 @@ class Common
       ch = emt.outerHeight()
       emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2) + "px"})
 
+    # 表示
     _show = ->
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").css('display', 'block')
@@ -372,7 +377,9 @@ class Common
         $('#modal-overlay').remove() ;
       )
 
+    # 表示内容読み込み済みの場合はサーバアクセスなし
     if !emt? || emt.length == 0
+      # サーバから表示内容読み込み
       $.ajax(
         {
           url: "/modal_view/show"
@@ -391,13 +398,22 @@ class Common
     else
       _show.call(self)
 
+  # Zindexにページ分のZindexを加算
+  # @param [Integer] zindex 対象zindex
+  # @param [Integer] pn ページ番号
+  # @return [Integer] 計算後zidnex
   @plusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
     return (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1) + zindex
 
+  # Zindexにページ分のZindexを減算
+  # @param [Integer] zindex 対象zindex
+  # @param [Integer] pn ページ番号
+  # @return [Integer] 計算後zidnex
   @minusPagingZindex: (zindex, pn = PageValue.getPageNum()) ->
     return zindex - (window.pageNumMax - pn) * (Constant.Zindex.EVENTFLOAT + 1)
 
   # アイテムを削除
+  # @param [Integer] pageNum ページ番号
   @removeAllItem = (pageNum = null) ->
     if pageNum?
       pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))

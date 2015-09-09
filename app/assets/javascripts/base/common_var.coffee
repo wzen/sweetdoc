@@ -1,13 +1,14 @@
+# アプリ内共通変数
 class CommonVar
 
-  # 初期画面読み込み時に一度だけ実行
+  # 変数初期化(トップ画面読み込み時に一度だけ実行)
   @initVarWhenLoadedView = ->
     window.instanceMap = {}
     window.itemInitFuncList = []
     window.debug = true
     window.copiedInstance = null
 
-  # 共有変数初期化
+  # 変数初期化(全メニュー共通)
   @initCommonVar = ->
     window.scrollViewSize = 30000
     window.pageNumMax = 10000
@@ -21,6 +22,8 @@ class CommonVar
     window.operationHistoryIndexes = []
     window.operationHistoryIndexes[PageValue.getPageNum()] = null
 
+  # 作業テーブルのJQueryオブジェクト保存
+  # @param [Integer] pageNum ページ番号
   @updateWorktableBaseElement = (pageNum) ->
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     window.sidebarWrapper = $("#sidebar-wrapper")
@@ -31,6 +34,8 @@ class CommonVar
     window.drawingContext = drawingCanvas.getContext('2d')
     window.cssCode = $("#cssCode")
 
+  # 実行画面のJQueryオブジェクト保存
+  # @param [Integer] pageNum ページ番号
   @updateRunBaseElement = (pageNum) ->
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     window.scrollWrapper = $("#sidebar-wrapper")
@@ -55,7 +60,7 @@ class CommonVar
     @initHistoryVar()
     @updateWorktableBaseElement(PageValue.getPageNum())
 
-  # 実行テーブル共通変数
+  # 実行画面共通変数
   @runCommonVar = ->
     @initCommonVar()
     window.distX = 0
