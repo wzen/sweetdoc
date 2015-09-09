@@ -15,7 +15,8 @@ class Common
       return false
     return true
 
-  # 変数の型を確認
+  # 変数の型チェック
+  # @return [string] 型
   @typeOfValue = do ->
     classToType = {}
     for name in "Boolean Number String Function Array Date RegExp Undefined Null".split(" ")
@@ -24,7 +25,7 @@ class Common
       strType = Object::toString.call(obj)
       classToType[strType] or "object"
 
-  # アイテムのIDを作成
+  # イベントのIDを作成
   # @return [Int] 生成したID
   @generateId = ->
     numb = 10 #10文字
@@ -56,6 +57,8 @@ class Common
     return newInstance
 
   # Mainコンテナを作成
+  # @param [Integer] pageNum ページ番号
+  # @param [Boolean] collapsed 初期表示でページを閉じた状態にするか
   @createdMainContainerIfNeeded: (pageNum, collapsed = false) ->
     root = $("##{Constant.Paging.ROOT_ID}")
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
@@ -72,6 +75,7 @@ class Common
       root.append(temp)
 
   # Mainコンテナを削除
+  # @param [Integer] pageNum ページ番号
   @removeMainContainer: (pageNum) ->
     root = $("##{Constant.Paging.ROOT_ID}")
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
@@ -114,7 +118,9 @@ class Common
     else
       return str
 
-  # ハッシュ配列からクラスを取り出し
+  # クラスハッシュ配列からクラスを取り出し
+  # @param [Boolean] isCommon 共通イベントか
+  # @param [Integer] id EventIdまたはItemId
   @getClassFromMap = (isCommon, id) ->
     if !window.classMap?
       window.classMap = {}
@@ -136,6 +142,9 @@ class Common
     return window.classMap[c][i]
 
   # クラスをハッシュ配列に保存
+  # @param [Boolean] isCommon 共通イベントか
+  # @param [Integer] id EventIdまたはItemId
+  # @param [Class] value クラス
   @setClassToMap = (isCommon, id, value) ->
     c = isCommon
     i = id
@@ -156,6 +165,9 @@ class Common
     window.classMap[c][i] = value
 
   # インスタンス作成
+  # @param [Boolean] isCommonEvent 共通イベントか
+  # @param [Integer] classMapId EventIdまたはItemId
+  # @return [Object] インスタンス
   @newInstance = (isCommonEvent, classMapId) ->
     if typeof isCommonEvent == "boolean"
       if isCommonEvent
@@ -174,6 +186,10 @@ class Common
     return instance
 
   # インスタンス取得
+  # @param [Boolean] isCommonEvent 共通イベントか
+  # @param [Integer] id イベントID
+  # @param [Integer] classMapId EventIdまたはItemId
+  # @return [Object] インスタンス
   @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
     if typeof isCommonEvent == "boolean"
       if isCommonEvent
@@ -188,6 +204,9 @@ class Common
     return window.instanceMap[id]
 
   # インスタンス設定(上書きはしない)
+  # @param [Boolean] isCommonEvent 共通イベントか
+  # @param [Integer] id イベントID
+  # @param [Integer] classMapId EventIdまたはItemId
   @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
     if typeof isCommonEvent == "boolean"
       if isCommonEvent
@@ -207,6 +226,7 @@ class Common
       window.instanceMap[id] = instance
 
   # 生成したインスタンスの中からアイテムのみ取得
+
   @getCreatedItemObject = ->
     ret = {}
     for k, v of instanceMap
