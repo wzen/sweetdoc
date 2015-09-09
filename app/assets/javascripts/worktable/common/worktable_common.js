@@ -157,12 +157,6 @@ WorktableCommon = (function() {
     return PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex));
   };
 
-  WorktableCommon.getInitFuncName = function(itemId) {
-    var itemName;
-    itemName = Constant.ITEM_PATH_LIST[itemId];
-    return itemName + "Init";
-  };
-
   WorktableCommon.changeMode = function(mode) {
     if (mode === Constant.Mode.DRAW) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
@@ -451,7 +445,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.loadItemJs = function(itemIds, callback) {
-    var callbackCount, itemId, itemInitFuncName, l, len, needReadItemIds;
+    var callbackCount, itemId, l, len, needReadItemIds;
     if (callback == null) {
       callback = null;
     }
@@ -469,9 +463,8 @@ WorktableCommon = (function() {
     for (l = 0, len = itemIds.length; l < len; l++) {
       itemId = itemIds[l];
       if (itemId != null) {
-        itemInitFuncName = WorktableCommon.getInitFuncName(itemId);
-        if (window.itemInitFuncList[itemInitFuncName] != null) {
-          window.itemInitFuncList[itemInitFuncName]();
+        if (window.itemInitFuncList[itemId] != null) {
+          window.itemInitFuncList[itemId]();
           callbackCount += 1;
           if (callbackCount >= itemIds.length) {
             if (callback != null) {
@@ -505,7 +498,7 @@ WorktableCommon = (function() {
               css_temp: d.css_info
             };
           }
-          WorktableCommon.availJs(WorktableCommon.getInitFuncName(d.item_id), d.js_src, option, function() {
+          WorktableCommon.availJs(d.item_id, d.js_src, option, function() {
             callbackCount += 1;
             if ((callback != null) && callbackCount >= data.length) {
               return callback();
@@ -520,7 +513,7 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.availJs = function(initName, jsSrc, option, callback) {
+  WorktableCommon.availJs = function(itemId, jsSrc, option, callback) {
     var firstScript, s, t;
     if (option == null) {
       option = {};
@@ -534,9 +527,9 @@ WorktableCommon = (function() {
     firstScript = document.getElementsByTagName('script')[0];
     firstScript.parentNode.insertBefore(s, firstScript);
     return t = setInterval(function() {
-      if (window.itemInitFuncList[initName] != null) {
+      if (window.itemInitFuncList[itemId] != null) {
         clearInterval(t);
-        window.itemInitFuncList[initName](option);
+        window.itemInitFuncList[itemId](option);
         if (callback != null) {
           return callback();
         }

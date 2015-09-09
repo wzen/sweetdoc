@@ -253,8 +253,8 @@ if (window.worktablePage != null) {
   Common.setClassToMap(false, WorkTableButtonItem.ITEM_ID, WorkTableButtonItem);
 }
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList.buttonInit == null)) {
-  window.itemInitFuncList.buttonInit = function(option) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ButtonItem.ITEM_ID] == null)) {
+  window.itemInitFuncList[ButtonItem.ITEM_ID] = function(option) {
     var css_temp, tempEmt;
     if (option == null) {
       option = {};

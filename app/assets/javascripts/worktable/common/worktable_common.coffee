@@ -122,13 +122,6 @@ class WorktableCommon
     $("##{objId}").css('z-index', minZIndex)
     PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex))
 
-  # アイテムのJSファイル初期化関数名を取得
-  # @param [Int] itemId アイテム種別
-  @getInitFuncName = (itemId) ->
-    itemName = Constant.ITEM_PATH_LIST[itemId]
-    # TODO: ハイフンが途中にあるものはキャメルに変換
-    return itemName + "Init"
-
   # モードチェンジ
   # @param [Mode] mode 画面モード
   @changeMode = (mode) ->
@@ -413,10 +406,9 @@ class WorktableCommon
     needReadItemIds = []
     for itemId in itemIds
       if itemId?
-        itemInitFuncName = WorktableCommon.getInitFuncName(itemId)
-        if window.itemInitFuncList[itemInitFuncName]?
+        if window.itemInitFuncList[itemId]?
           # 読み込み済みなアイテムIDの場合
-          window.itemInitFuncList[itemInitFuncName]()
+          window.itemInitFuncList[itemId]()
           callbackCount += 1
           if callbackCount >= itemIds.length
             if callback?
@@ -444,7 +436,7 @@ class WorktableCommon
             if d.css_info?
               option = {isWorkTable: true, css_temp: d.css_info}
 
-            WorktableCommon.availJs(WorktableCommon.getInitFuncName(d.item_id), d.js_src, option, ->
+            WorktableCommon.availJs(d.item_id, d.js_src, option, ->
               callbackCount += 1
               if callback? && callbackCount >= data.length
                 callback()
@@ -457,10 +449,10 @@ class WorktableCommon
     )
 
   # JSファイルを設定
-  # @param [String] initName アイテム初期化関数名
+  # @param [String] itemId アイテムID
   # @param [String] jsSrc jsファイル名
   # @param [Function] callback 設定後のコールバック
-  @availJs = (initName, jsSrc, option = {}, callback = null) ->
+  @availJs = (itemId, jsSrc, option = {}, callback = null) ->
     s = document.createElement('script');
     s.type = 'text/javascript';
     # TODO: 認証コードの比較
@@ -468,9 +460,9 @@ class WorktableCommon
     firstScript = document.getElementsByTagName('script')[0];
     firstScript.parentNode.insertBefore(s, firstScript);
     t = setInterval( ->
-      if window.itemInitFuncList[initName]?
+      if window.itemInitFuncList[itemId]?
         clearInterval(t)
-        window.itemInitFuncList[initName](option)
+        window.itemInitFuncList[itemId](option)
         if callback?
           callback()
     , '500')

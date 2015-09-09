@@ -28,7 +28,6 @@ class Const
     # @property [Int] ARROW 矢印
     ARROW = 2
   end
-  ITEM_PATH_LIST = {ItemId::ARROW.to_s.to_sym => 'arrow', ItemId::BUTTON.to_s.to_sym => 'button'}
 
   # アイテム種別
   class ItemDrawType

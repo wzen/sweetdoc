@@ -262,8 +262,8 @@ if window.worktablePage?
   Common.setClassToMap(false, WorkTableButtonItem.ITEM_ID, WorkTableButtonItem)
 
 # 初期化
-if window.itemInitFuncList? && !window.itemInitFuncList.buttonInit?
-  window.itemInitFuncList.buttonInit = (option = {}) ->
+if window.itemInitFuncList? && !window.itemInitFuncList[ButtonItem.ITEM_ID]?
+  window.itemInitFuncList[ButtonItem.ITEM_ID] = (option = {}) ->
     #JS読み込み完了
     if window.debug
       console.log('button loaded')

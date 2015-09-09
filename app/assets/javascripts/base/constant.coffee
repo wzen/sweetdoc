@@ -4,8 +4,6 @@ if gon?
 
   # アプリ共通定数
   class Constant
-    # @property [Array] ITEM_PATH_LIST JSファイル名
-    @ITEM_PATH_LIST = constant.ITEM_PATH_LIST
     # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
     @EVENT_ITEM_SEPERATOR = "&"
     # @property [String] EVENT_COMMON_PREFIX 共通イベントプレフィックス

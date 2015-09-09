@@ -112,10 +112,10 @@ class ServerStorage
 
           loadedCount = 0
           item_js_list.forEach((d) ->
-            itemInitFuncName = WorktableCommon.getInitFuncName(d.item_id)
-            if window.itemInitFuncList[itemInitFuncName]?
+            itemId = d.item_id
+            if window.itemInitFuncList[itemId]?
               # 既に読み込まれている場合はコールバックのみ実行
-              window.itemInitFuncList[itemInitFuncName]()
+              window.itemInitFuncList[itemId]()
               loadedCount += 1
               if loadedCount >= item_js_list.length
                 # 全て読み込んだ後
@@ -125,7 +125,7 @@ class ServerStorage
             if d.css_info?
               option = {isWorkTable: true, css_temp: d.css_info}
 
-            WorktableCommon.availJs(itemInitFuncName, d.js_src, option, ->
+            WorktableCommon.availJs(itemId, d.js_src, option, ->
               loadedCount += 1
               if loadedCount >= item_js_list.length
                 # 全て読み込んだ後

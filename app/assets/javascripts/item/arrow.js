@@ -453,8 +453,8 @@ if (window.worktablePage != null) {
   Common.setClassToMap(false, WorkTableArrowItem.ITEM_ID, WorkTableArrowItem);
 }
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList.arrowInit == null)) {
-  window.itemInitFuncList.arrowInit = function(option) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ArrowItem.ITEM_ID] == null)) {
+  window.itemInitFuncList[ArrowItem.ITEM_ID] = function(option) {
     if (option == null) {
       option = {};
     }

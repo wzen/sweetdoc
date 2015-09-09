@@ -432,8 +432,8 @@ if window.worktablePage?
   window.loadedClassList.WorkTableArrowItem = WorkTableArrowItem
   Common.setClassToMap(false, WorkTableArrowItem.ITEM_ID, WorkTableArrowItem)
 
-if window.itemInitFuncList? && !window.itemInitFuncList.arrowInit?
-  window.itemInitFuncList.arrowInit = (option = {}) ->
+if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ID]?
+  window.itemInitFuncList[ArrowItem.ITEM_ID] = (option = {}) ->
     #JS読み込み完了後の処理
     if window.debug
       console.log('arrow loaded')

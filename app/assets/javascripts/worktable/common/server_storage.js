@@ -136,10 +136,10 @@ ServerStorage = (function() {
         }
         loadedCount = 0;
         return item_js_list.forEach(function(d) {
-          var itemInitFuncName, option;
-          itemInitFuncName = WorktableCommon.getInitFuncName(d.item_id);
-          if (window.itemInitFuncList[itemInitFuncName] != null) {
-            window.itemInitFuncList[itemInitFuncName]();
+          var itemId, option;
+          itemId = d.item_id;
+          if (window.itemInitFuncList[itemId] != null) {
+            window.itemInitFuncList[itemId]();
             loadedCount += 1;
             if (loadedCount >= item_js_list.length) {
               callback.call(self);
@@ -152,7 +152,7 @@ ServerStorage = (function() {
               css_temp: d.css_info
             };
           }
-          WorktableCommon.availJs(itemInitFuncName, d.js_src, option, function() {
+          WorktableCommon.availJs(itemId, d.js_src, option, function() {
             loadedCount += 1;
             if (loadedCount >= item_js_list.length) {
               return callback.call(self);
