@@ -89,7 +89,7 @@ WorkTableCommonExtend =
         objId = $(event.target).attr('id')
         WorktableCommon.floatItem(objId)
         # キャッシュ保存
-        LocalStorage.saveValueForWorktable()
+        LocalStorage.saveAllPageValues()
         # 履歴保存
         OperationHistory.add()
       })
@@ -98,7 +98,7 @@ WorkTableCommonExtend =
         objId = $(event.target).attr('id')
         WorktableCommon.rearItem(objId)
         # キャッシュ保存
-        LocalStorage.saveValueForWorktable()
+        LocalStorage.saveAllPageValues()
         # 履歴保存
         OperationHistory.add()
       })

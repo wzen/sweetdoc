@@ -84,7 +84,7 @@ Paging = (function() {
           Timeline.refreshAllTimeline();
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
           PageValue.updatePageCount();
-          LocalStorage.saveValueForWorktable();
+          LocalStorage.saveAllPageValues();
           return self.createPageSelectMenu();
         });
       };
@@ -128,7 +128,7 @@ Paging = (function() {
           }
           Common.removeAllItem(beforePageNum);
           Timeline.refreshAllTimeline();
-          LocalStorage.saveValueForWorktable();
+          LocalStorage.saveAllPageValues();
           return self.createPageSelectMenu();
         });
       };

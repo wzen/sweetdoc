@@ -31,7 +31,7 @@ class EPVBackgroundColor extends EventPageValueBase
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
       # Storageに保存
-      LocalStorage.saveValueForWorktable()
+      LocalStorage.saveAllPageValues()
 
     return errorMes
 

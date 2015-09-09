@@ -19,14 +19,6 @@ class Const
   end
 
   # アイテム種別
-  class ItemId
-    # @property [Int] BUTTON ボタン
-    BUTTON = 1
-    # @property [Int] ARROW 矢印
-    ARROW = 2
-  end
-
-  # アイテム種別
   class ItemDrawType
     # @property [Int] CANVAS CANVAS
     CANVAS = 0

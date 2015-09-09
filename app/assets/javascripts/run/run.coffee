@@ -4,6 +4,8 @@ class Run
   window.runPage = true
 
 $ ->
+  window.isWorkTable = false
+
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
@@ -14,9 +16,9 @@ $ ->
   # キャッシュ読み込み
   is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
   if is_reload?
-    LocalStorage.loadValueForRun()
+    LocalStorage.loadAllPageValues()
   else
-    LocalStorage.saveValueForRun()
+    LocalStorage.saveAllPageValues()
 
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())

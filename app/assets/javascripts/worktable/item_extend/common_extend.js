@@ -92,7 +92,7 @@ WorkTableCommonExtend = {
           var objId;
           objId = $(event.target).attr('id');
           WorktableCommon.floatItem(objId);
-          LocalStorage.saveValueForWorktable();
+          LocalStorage.saveAllPageValues();
           return OperationHistory.add();
         }
       });
@@ -104,7 +104,7 @@ WorkTableCommonExtend = {
           var objId;
           objId = $(event.target).attr('id');
           WorktableCommon.rearItem(objId);
-          LocalStorage.saveValueForWorktable();
+          LocalStorage.saveAllPageValues();
           return OperationHistory.add();
         }
       });

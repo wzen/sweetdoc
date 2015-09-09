@@ -25,32 +25,21 @@ class LocalStorage
   @WORKTABLE_SAVETIME = 5
   @RUN_SAVETIME = 9999
 
-  @saveValueForWorktable: ->
+  @saveAllPageValues: ->
     @saveGeneralPageValue()
     @saveInstancePageValue()
     @saveEventPageValue()
     @saveSettingPageValue()
 
-  @loadValueForWorktable: ->
+  @loadAllPageValues: ->
     @loadGeneralPageValue()
     @loadInstancePageValue()
     @loadEventPageValue()
     @loadSettingPageValue()
 
-  @saveValueForRun: ->
-    @saveGeneralPageValue(true)
-    @saveInstancePageValue(true)
-    @saveEventPageValue(true)
-    @saveSettingPageValue(true)
-
-  @loadValueForRun: ->
-    @loadGeneralPageValue(true)
-    @loadInstancePageValue(true)
-    @loadEventPageValue(true)
-    @loadSettingPageValue(true)
-
   # 保存時間が経過しているか
-  @isOverWorktableSaveTimeLimit: (isRun = false) ->
+  @isOverWorktableSaveTimeLimit: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
     saveTime = lstorage.getItem(key)
@@ -84,7 +73,8 @@ class LocalStorage
     lstorage.removeItem(@Key.RUN_SETTING_PAGEVALUES)
 
   # ストレージに共通設定値を保存
-  @saveGeneralPageValue: (isRun = false) ->
+  @saveGeneralPageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX)
     key = if isRun then @Key.RUN_GENERAL_PAGEVALUES else @Key.WORKTABLE_GENERAL_PAGEVALUES
@@ -94,7 +84,8 @@ class LocalStorage
     lstorage.setItem(key, $.now())
 
   # ストレージから共通設定値を読み込み
-  @loadGeneralPageValue: (isRun = false) ->
+  @loadGeneralPageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_GENERAL_PAGEVALUES else @Key.WORKTABLE_GENERAL_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
@@ -102,7 +93,8 @@ class LocalStorage
       PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # ストレージにアイテム値を保存
-  @saveInstancePageValue: (isRun = false) ->
+  @saveInstancePageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
     key = if isRun then @Key.RUN_INSTANCE_PAGEVALUES else @Key.WORKTABLE_INSTANCE_PAGEVALUES
@@ -112,7 +104,8 @@ class LocalStorage
     lstorage.setItem(key, $.now())
 
   # ストレージからアイテム値を読み込み
-  @loadInstancePageValue: (isRun = false) ->
+  @loadInstancePageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_INSTANCE_PAGEVALUES else @Key.WORKTABLE_INSTANCE_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
@@ -120,7 +113,8 @@ class LocalStorage
       PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # ストレージにイベント値を保存
-  @saveEventPageValue: (isRun = false) ->
+  @saveEventPageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
     key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
@@ -130,14 +124,16 @@ class LocalStorage
     lstorage.setItem(key, $.now())
 
   # ストレージからイベント値を読み込み
-  @loadEventPageValue: (isRun = false) ->
+  @loadEventPageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
     PageValue.setEventPageValueByRootHash(h)
 
   # ストレージに共通設定値を保存
-  @saveSettingPageValue: (isRun = false) ->
+  @saveSettingPageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX)
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
@@ -147,7 +143,8 @@ class LocalStorage
     lstorage.setItem(key, $.now())
 
   # ストレージから共通設定値を読み込み
-  @loadSettingPageValue: (isRun = false) ->
+  @loadSettingPageValue: ->
+    isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))

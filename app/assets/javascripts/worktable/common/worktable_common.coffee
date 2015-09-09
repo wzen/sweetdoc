@@ -60,7 +60,7 @@ class WorktableCommon
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
       instance.setItemAllPropToPageValue()
-      LocalStorage.saveValueForWorktable()
+      LocalStorage.saveAllPageValues()
 
   # アイテムを最前面に移動
   @floatItem = (objId) ->
@@ -156,7 +156,6 @@ class WorktableCommon
   @focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
     # 選択枠設定
     @setSelectedBorder(target, selectedBorderType)
-    LocalStorage.saveInstancePageValue()
     Common.focusToTarget(target)
 
   # キーイベント初期化
@@ -184,7 +183,7 @@ class WorktableCommon
           # 貼り付け
           WorktableCommon.pasteItem()
           # キャッシュ保存
-          LocalStorage.saveValueForWorktable()
+          LocalStorage.saveAllPageValues()
           # 履歴保存
           OperationHistory.add()
 
@@ -224,7 +223,7 @@ class WorktableCommon
     itemElement.remove()
     PageValue.adjustInstanceAndEventOnThisPage()
     Timeline.refreshAllTimeline()
-    LocalStorage.saveValueForWorktable()
+    LocalStorage.saveAllPageValues()
     OperationHistory.add()
 
   # 画面の全アイテムを削除
@@ -274,7 +273,7 @@ class WorktableCommon
         # 貼り付け
         WorktableCommon.pasteItem()
         # キャッシュ保存
-        LocalStorage.saveValueForWorktable()
+        LocalStorage.saveAllPageValues()
         # 履歴保存
         OperationHistory.add()
       })

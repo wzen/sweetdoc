@@ -56,7 +56,6 @@ class CommonVar
     window.flushMessageTimer = null
     window.mode = Constant.Mode.DRAW
     window.selectedObjId = null
-    window.isWorkTable = true
     @initHistoryVar()
     @updateWorktableBaseElement(PageValue.getPageNum())
 
@@ -69,5 +68,4 @@ class CommonVar
     window.scrollViewSwitchZindex = {'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT), 'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)}
     window.disabledEventHandler = false
     window.firstItemFocused = false
-    window.isWorkTable = false
     @updateRunBaseElement(PageValue.getPageNum())

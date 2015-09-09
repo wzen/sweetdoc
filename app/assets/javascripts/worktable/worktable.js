@@ -12,13 +12,14 @@ Worktable = (function() {
 
 $(function() {
   var _callback, existedCache;
+  window.isWorkTable = true;
   if (!Common.checkBlowserEnvironment()) {
     alert('ブラウザ非対応です。');
     return;
   }
   existedCache = !LocalStorage.isOverWorktableSaveTimeLimit();
   if (existedCache) {
-    LocalStorage.loadValueForWorktable();
+    LocalStorage.loadAllPageValues();
   }
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();

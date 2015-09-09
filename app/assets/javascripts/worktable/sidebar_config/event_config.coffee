@@ -186,7 +186,7 @@ class EventConfig
     Timeline.changeTimelineColor(@teNum, @actionType)
 
     # キャッシュに保存
-    LocalStorage.saveValueForWorktable()
+    LocalStorage.saveAllPageValues()
 
     # プレビュー開始
     item = instanceMap[@id]

@@ -98,7 +98,7 @@ class ServerStorage
               PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d)
 
             PageValue.adjustInstanceAndEventOnThisPage()
-            LocalStorage.saveValueForWorktable()
+            LocalStorage.saveAllPageValues()
             WorktableCommon.drawAllItemFromInstancePageValue( ->
               Setting.initConfig()
               PageValue.updatePageCount()

@@ -96,7 +96,7 @@ class ItemBase extends ItemEventBase
     # ページに状態を保存
     @setItemAllPropToPageValue()
     # キャッシュに保存
-    LocalStorage.saveValueForWorktable()
+    LocalStorage.saveAllPageValues()
     # 操作履歴に保存
     OperationHistory.add()
     if window.debug
@@ -230,7 +230,7 @@ class CssItemBase extends ItemBase
   getMinimumObject: ->
     obj = super()
     newobj = {
-      itemId: Constant.ItemId.BUTTON
+      itemId: @constructor.ITEM_ID
       mousedownCood: Common.makeClone(@mousedownCood)
       css: Common.makeClone(@css)
     }

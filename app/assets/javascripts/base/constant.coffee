@@ -22,13 +22,6 @@ if gon?
       # @property [Int] OPTION アイテムオプション
       @OPTION = constant.Mode.OPTION
 
-    # アイテム種別
-    class @ItemId
-      # @property [Int] ARROW 矢印
-      @ARROW = constant.ItemId.ARROW
-      # @property [Int] BUTTON ボタン
-      @BUTTON = constant.ItemId.BUTTON
-
     # アイテムに対するアクション
     class @ItemActionType
       # @property [Int] MAKE 作成

@@ -32,17 +32,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ItemId = (function() {
-      function ItemId() {}
-
-      ItemId.ARROW = constant.ItemId.ARROW;
-
-      ItemId.BUTTON = constant.ItemId.BUTTON;
-
-      return ItemId;
-
-    })();
-
     Constant.ItemActionType = (function() {
       function ItemActionType() {}
 

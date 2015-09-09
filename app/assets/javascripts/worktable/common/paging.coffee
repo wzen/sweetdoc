@@ -86,7 +86,7 @@ class Paging
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
         PageValue.updatePageCount()
         # キャッシュ保存
-        LocalStorage.saveValueForWorktable()
+        LocalStorage.saveAllPageValues()
         # 選択メニューの更新
         self.createPageSelectMenu()
       )
@@ -134,7 +134,7 @@ class Paging
         Common.removeAllItem(beforePageNum)
         Timeline.refreshAllTimeline()
         # キャッシュ保存
-        LocalStorage.saveValueForWorktable()
+        LocalStorage.saveAllPageValues()
         # 選択メニューの更新
         self.createPageSelectMenu()
       )

@@ -94,7 +94,7 @@ ArrowItem = (function(superClass) {
     var newobj, obj;
     obj = ArrowItem.__super__.getMinimumObject.call(this);
     newobj = {
-      itemId: Constant.ItemId.ARROW,
+      itemId: this.constructor.ITEM_ID,
       arrow_width: Common.makeClone(this.arrow_width),
       header_width: Common.makeClone(this.header_width),
       header_height: Common.makeClone(this.header_height),

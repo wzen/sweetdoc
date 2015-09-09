@@ -153,7 +153,7 @@ Page = (function() {
     this.initFocus();
     this.resetAllChapters();
     Navbar.setChapterMax(this.chapterList.length);
-    return LocalStorage.saveValueForRun();
+    return LocalStorage.saveAllPageValues();
   };
 
   Page.prototype.willPageFromRewind = function(beforeScrollWindowSize) {
@@ -164,7 +164,7 @@ Page = (function() {
     Navbar.setChapterMax(this.chapterList.length);
     this.chapterIndex = this.chapterList.length - 1;
     this.resetChapter();
-    return LocalStorage.saveValueForRun();
+    return LocalStorage.saveAllPageValues();
   };
 
   Page.prototype.didPage = function() {};

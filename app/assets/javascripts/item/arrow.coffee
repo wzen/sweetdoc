@@ -99,7 +99,7 @@ class ArrowItem extends CanvasItemBase
   getMinimumObject: ->
     obj = super()
     newobj = {
-      itemId: Constant.ItemId.ARROW
+      itemId: @constructor.ITEM_ID
       arrow_width: Common.makeClone(@arrow_width)
       header_width: Common.makeClone(@header_width)
       header_height: Common.makeClone(@header_height)

@@ -45,7 +45,7 @@ class EPVItem extends EventPageValueBase
       Timeline.changeTimelineColor(teNum, actionType)
 
       # Storageに保存
-      LocalStorage.saveValueForWorktable()
+      LocalStorage.saveAllPageValues()
 
     return errorMes
 
@@ -65,7 +65,7 @@ class EPVItem extends EventPageValueBase
         PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
       # Storageに保存
-      LocalStorage.saveValueForWorktable()
+      LocalStorage.saveAllPageValues()
 
     return errorMes
 

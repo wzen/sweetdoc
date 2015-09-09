@@ -4,6 +4,8 @@ class Worktable
   window.worktablePage = true
 
 $ ->
+  window.isWorkTable = true
+
   # ブラウザ対応チェック
   if !Common.checkBlowserEnvironment()
     alert('ブラウザ非対応です。')
@@ -13,7 +15,7 @@ $ ->
   existedCache = !LocalStorage.isOverWorktableSaveTimeLimit()
   if existedCache
     # キャッシュが存在する場合アイテム描画
-    LocalStorage.loadValueForWorktable()
+    LocalStorage.loadAllPageValues()
 
   # 変数初期化
   CommonVar.initVarWhenLoadedView()

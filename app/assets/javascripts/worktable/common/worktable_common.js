@@ -77,7 +77,7 @@ WorktableCommon = (function() {
         instance.drawAndMakeConfigs();
       }
       instance.setItemAllPropToPageValue();
-      return LocalStorage.saveValueForWorktable();
+      return LocalStorage.saveAllPageValues();
     }
   };
 
@@ -192,7 +192,6 @@ WorktableCommon = (function() {
       selectedBorderType = "edit";
     }
     this.setSelectedBorder(target, selectedBorderType);
-    LocalStorage.saveInstancePageValue();
     return Common.focusToTarget(target);
   };
 
@@ -216,7 +215,7 @@ WorktableCommon = (function() {
           return WorktableCommon.setMainContainerContext();
         } else if (e.keyCode === Constant.KeyboardKeyCode.V) {
           WorktableCommon.pasteItem();
-          LocalStorage.saveValueForWorktable();
+          LocalStorage.saveAllPageValues();
           return OperationHistory.add();
         }
       }
@@ -263,7 +262,7 @@ WorktableCommon = (function() {
     itemElement.remove();
     PageValue.adjustInstanceAndEventOnThisPage();
     Timeline.refreshAllTimeline();
-    LocalStorage.saveValueForWorktable();
+    LocalStorage.saveAllPageValues();
     return OperationHistory.add();
   };
 
@@ -316,7 +315,7 @@ WorktableCommon = (function() {
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
           WorktableCommon.pasteItem();
-          LocalStorage.saveValueForWorktable();
+          LocalStorage.saveAllPageValues();
           return OperationHistory.add();
         }
       });

@@ -147,7 +147,7 @@ class Page
     # チャプター最大値設定
     Navbar.setChapterMax(@chapterList.length)
     # キャッシュ保存
-    LocalStorage.saveValueForRun()
+    LocalStorage.saveAllPageValues()
 
   # ページ戻し前処理
   willPageFromRewind: (beforeScrollWindowSize) ->
@@ -165,7 +165,7 @@ class Page
     # チャプター初期化
     @resetChapter()
     # キャッシュ保存
-    LocalStorage.saveValueForRun()
+    LocalStorage.saveAllPageValues()
 
   # ページ後処理
   didPage: ->

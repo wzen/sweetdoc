@@ -91,7 +91,7 @@ ItemBase = (function(superClass) {
       this.name = this.constructor.IDENTITY + (" " + num);
     }
     this.setItemAllPropToPageValue();
-    LocalStorage.saveValueForWorktable();
+    LocalStorage.saveAllPageValues();
     OperationHistory.add();
     if (window.debug) {
       console.log('save obj');
@@ -229,7 +229,7 @@ CssItemBase = (function(superClass) {
     var newobj, obj;
     obj = CssItemBase.__super__.getMinimumObject.call(this);
     newobj = {
-      itemId: Constant.ItemId.BUTTON,
+      itemId: this.constructor.ITEM_ID,
       mousedownCood: Common.makeClone(this.mousedownCood),
       css: Common.makeClone(this.css)
     };
