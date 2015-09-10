@@ -121,10 +121,10 @@ class Timeline
           item = window.instanceMap[te.id]
           if item?
             if idx < te_num - 1
-              item.initWithEvent(te)
+              item.initEvent(te)
               item.updateEventAfter()
             else if idx == te_num - 1
-              item.initWithEvent(te)
+              item.initEvent(te)
               # プレビュー実行
               item.preview(te)
               break

@@ -257,7 +257,7 @@ class Common
       te = tes[idx]
       item = window.instanceMap[te.id]
       if item?
-        item.initWithEvent(te)
+        item.initEvent(te)
         item.stopPreview( ->
           item.updateEventBefore()
           previewinitCount += 1

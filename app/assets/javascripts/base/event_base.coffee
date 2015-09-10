@@ -3,7 +3,7 @@ class EventBase extends Extend
 
   # イベントの初期化
   # @param [Object] event 設定イベント
-  initWithEvent: (event) ->
+  initEvent: (event) ->
     @event = event
     @isFinishedEvent = false
     @doPreviewLoop = false
@@ -42,7 +42,7 @@ class EventBase extends Extend
     drawDelay = 30 # 0.03秒毎スクロール描画
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
-    @initWithEvent(event)
+    @initEvent(event)
     methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     @willChapter(methodName)
     @appendCssIfNeeded(methodName)
@@ -272,12 +272,12 @@ class EventBase extends Extend
 
 class CommonEventBase extends EventBase
   # 初期化
-  initWithEvent: (event) ->
+  initEvent: (event) ->
     super(event)
 
 class ItemEventBase extends EventBase
   # 初期化
-  initWithEvent: (event) ->
+  initEvent: (event) ->
     super(event)
     # インスタンス値設定
     objId = event[EventPageValueBase.PageValueKey.ID]

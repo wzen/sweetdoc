@@ -180,7 +180,7 @@ Page = (function() {
         results1 = [];
         for (i = k = 0, ref1 = chapter.eventObjList.length - 1; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
           event = chapter.eventObjList[i];
-          results1.push(event.initWithEvent(chapter.eventList[i]));
+          results1.push(event.initEvent(chapter.eventList[i]));
         }
         return results1;
       })());

@@ -2,7 +2,7 @@
 class BackgroundEvent extends CommonEvent
   @EVENT_ID = '1'
 
-  initWithEvent: (event) ->
+  initEvent: (event) ->
     super(event)
     methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if methodName == 'changeBackgroundColor'

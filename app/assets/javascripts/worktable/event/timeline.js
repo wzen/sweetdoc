@@ -116,10 +116,10 @@ Timeline = (function() {
           item = window.instanceMap[te.id];
           if (item != null) {
             if (idx < te_num - 1) {
-              item.initWithEvent(te);
+              item.initEvent(te);
               results.push(item.updateEventAfter());
             } else if (idx === te_num - 1) {
-              item.initWithEvent(te);
+              item.initEvent(te);
               item.preview(te);
               break;
             } else {

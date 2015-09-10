@@ -175,7 +175,7 @@ class Page
     for chapter in @chapterList
       for i in [0..(chapter.eventObjList.length - 1)]
         event = chapter.eventObjList[i]
-        event.initWithEvent(chapter.eventList[i])
+        event.initEvent(chapter.eventList[i])
 
   # チャプターのフォーカス初期化
   initFocus: (focusToFirst = true) ->

@@ -12,7 +12,7 @@ EventBase = (function(superClass) {
     return EventBase.__super__.constructor.apply(this, arguments);
   }
 
-  EventBase.prototype.initWithEvent = function(event) {
+  EventBase.prototype.initEvent = function(event) {
     var actionType, methodName;
     this.event = event;
     this.isFinishedEvent = false;
@@ -53,7 +53,7 @@ EventBase = (function(superClass) {
     drawDelay = 30;
     loopDelay = 1000;
     loopMaxCount = 5;
-    this.initWithEvent(event);
+    this.initEvent(event);
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     this.willChapter(methodName);
     this.appendCssIfNeeded(methodName);
@@ -310,8 +310,8 @@ CommonEventBase = (function(superClass) {
     return CommonEventBase.__super__.constructor.apply(this, arguments);
   }
 
-  CommonEventBase.prototype.initWithEvent = function(event) {
-    return CommonEventBase.__super__.initWithEvent.call(this, event);
+  CommonEventBase.prototype.initEvent = function(event) {
+    return CommonEventBase.__super__.initEvent.call(this, event);
   };
 
   return CommonEventBase;
@@ -325,9 +325,9 @@ ItemEventBase = (function(superClass) {
     return ItemEventBase.__super__.constructor.apply(this, arguments);
   }
 
-  ItemEventBase.prototype.initWithEvent = function(event) {
+  ItemEventBase.prototype.initEvent = function(event) {
     var instance, objId;
-    ItemEventBase.__super__.initWithEvent.call(this, event);
+    ItemEventBase.__super__.initEvent.call(this, event);
     objId = event[EventPageValueBase.PageValueKey.ID];
     instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
     this.setMiniumObject(instance);

@@ -12,9 +12,9 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.EVENT_ID = '1';
 
-  BackgroundEvent.prototype.initWithEvent = function(event) {
+  BackgroundEvent.prototype.initEvent = function(event) {
     var b, bColor, bColors, bPer, bp, cColor, cColors, className, g, gPer, gp, i, index, j, k, l, len, len1, methodName, r, rPer, ref, rgb, rp, scrollEnd, scrollLength, scrollStart, section, val;
-    BackgroundEvent.__super__.initWithEvent.call(this, event);
+    BackgroundEvent.__super__.initEvent.call(this, event);
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (methodName === 'changeBackgroundColor') {
       this.scrollEvents = [];

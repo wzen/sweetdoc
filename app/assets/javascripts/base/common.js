@@ -283,7 +283,7 @@ Common = (function() {
       te = tes[idx];
       item = window.instanceMap[te.id];
       if (item != null) {
-        item.initWithEvent(te);
+        item.initEvent(te);
         results.push(item.stopPreview(function() {
           item.updateEventBefore();
           previewinitCount += 1;
