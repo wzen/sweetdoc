@@ -1,3 +1,4 @@
+# WebStorage
 class LocalStorage
 
   class @Key
@@ -25,12 +26,14 @@ class LocalStorage
   @WORKTABLE_SAVETIME = 5
   @RUN_SAVETIME = 9999
 
+  # 全てのPageValueを保存
   @saveAllPageValues: ->
     @saveGeneralPageValue()
     @saveInstancePageValue()
     @saveEventPageValue()
     @saveSettingPageValue()
 
+  # 全てのPageValueを読み込み
   @loadAllPageValues: ->
     @loadGeneralPageValue()
     @loadInstancePageValue()
@@ -49,22 +52,28 @@ class LocalStorage
     time = if isRun then @RUN_SAVETIME else @WORKTABLE_SAVETIME
     return parseInt(diffTime.minutes) > time
 
-  # 保存を消去
+  # 全ワークテーブルキャッシュを消去
   @clearWorktable: ->
     lstorage = localStorage
     lstorage.removeItem(@Key.WORKTABLE_GENERAL_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_SETTING_PAGEVALUES)
+
+  # 設定値以外のワークテーブルキャッシュを消去
   @clearWorktableWithoutSetting: ->
     lstorage = localStorage
     lstorage.removeItem(@Key.WORKTABLE_GENERAL_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+
+  # 共通値と設定値以外のワークテーブルキャッシュを消去
   @clearWorktableWithoutGeneralAndSetting: ->
     lstorage = localStorage
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+
+  # 実行画面キャッシュを消去
   @clearRun: ->
     lstorage = localStorage
     lstorage.removeItem(@Key.RUN_GENERAL_PAGEVALUES)
@@ -72,7 +81,7 @@ class LocalStorage
     lstorage.removeItem(@Key.RUN_EVENT_PAGEVALUES)
     lstorage.removeItem(@Key.RUN_SETTING_PAGEVALUES)
 
-  # ストレージに共通設定値を保存
+  # キャッシュに共通値を保存
   @saveGeneralPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
@@ -83,7 +92,7 @@ class LocalStorage
     key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
     lstorage.setItem(key, $.now())
 
-  # ストレージから共通設定値を読み込み
+  # キャッシュから共通値を読み込み
   @loadGeneralPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
@@ -92,7 +101,7 @@ class LocalStorage
     for k, v of h
       PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
-  # ストレージにアイテム値を保存
+  # キャッシュにインスタンス値を保存
   @saveInstancePageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
@@ -103,7 +112,7 @@ class LocalStorage
     key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
     lstorage.setItem(key, $.now())
 
-  # ストレージからアイテム値を読み込み
+  # キャッシュからインスタンス値を読み込み
   @loadInstancePageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
@@ -112,7 +121,7 @@ class LocalStorage
     for k, v of h
       PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
-  # ストレージにイベント値を保存
+  # キャッシュにイベント値を保存
   @saveEventPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
@@ -123,7 +132,7 @@ class LocalStorage
     key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
     lstorage.setItem(key, $.now())
 
-  # ストレージからイベント値を読み込み
+  # キャッシュからイベント値を読み込み
   @loadEventPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
@@ -131,7 +140,7 @@ class LocalStorage
     h = JSON.parse(lstorage.getItem(key))
     PageValue.setEventPageValueByRootHash(h)
 
-  # ストレージに共通設定値を保存
+  # キャッシュに共通設定値を保存
   @saveSettingPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
@@ -142,7 +151,7 @@ class LocalStorage
     key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
     lstorage.setItem(key, $.now())
 
-  # ストレージから共通設定値を読み込み
+  # キャッシュから共通設定値を読み込み
   @loadSettingPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage

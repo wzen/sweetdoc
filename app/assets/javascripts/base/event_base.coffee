@@ -264,12 +264,14 @@ class EventBase extends Extend
     PageValue.setInstancePageValue(prefix_key, obj)
 
 class CommonEventBase extends EventBase
-  # 初期化
+  # イベントの初期化
+  # @param [Object] event 設定イベント
   initEvent: (event) ->
     super(event)
 
 class ItemEventBase extends EventBase
-  # 初期化
+  # イベントの初期化
+  # @param [Object] event 設定イベント
   initEvent: (event) ->
     super(event)
     # インスタンス値設定
