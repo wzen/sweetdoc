@@ -10,7 +10,10 @@ run = ->
       target = "_runwindow"
       window.open("about:blank", target)
       document.run_form.target = target
-      document.run_form.submit()
+      setTimeout( ->
+        document.run_form.submit()
+      , 150)
+
     else
       Message.showWarn('No event')
   )

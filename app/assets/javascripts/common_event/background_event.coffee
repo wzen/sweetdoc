@@ -58,13 +58,9 @@ class BackgroundEvent extends CommonEvent
       cColor = @event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR]
       @targetBackground.css('backgroundColor', cColor)
 
+  # スクロールイベント
+  # @param [Integer] scrollValue スクロール値
   changeBackgroundColor: (scrollValue) ->
     @targetBackground.css('backgroundColor', @scrollEvents[scrollValue])
-
-  # スクロールチャプター終了判定
-  finishedScroll: (methodName, scrollValue) ->
-    if methodName == 'changeBackgroundColor'
-      return scrollValue >= @scrollLength() - 1
-    return false
 
 Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)

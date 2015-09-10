@@ -2,7 +2,7 @@
 var EventPageValueBase;
 
 EventPageValueBase = (function() {
-  var _scrollLength, constant;
+  var constant;
 
   function EventPageValueBase() {}
 
@@ -49,7 +49,19 @@ EventPageValueBase = (function() {
   }
 
   EventPageValueBase.initConfigValue = function(eventConfig) {
-    var end, endDiv, handlerDiv, s, start, startDiv;
+    var _scrollLength, end, endDiv, handlerDiv, s, start, startDiv;
+    _scrollLength = function(eventConfig) {
+      var end, start, writeValue;
+      writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
+      if (writeValue != null) {
+        start = writeValue[this.PageValueKey.SCROLL_POINT_START];
+        end = writeValue[this.PageValueKey.SCROLL_POINT_END];
+        if ((start != null) && $.isNumeric(start) && (end != null) && $.isNumeric(end)) {
+          return parseInt(end) - parseInt(start);
+        }
+      }
+      return 0;
+    };
     if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
       handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
       if (handlerDiv != null) {
@@ -71,8 +83,6 @@ EventPageValueBase = (function() {
       }
     }
   };
-
-  EventPageValueBase.checkConfigValue = function(eventConfig) {};
 
   EventPageValueBase.writeToPageValue = function(eventConfig) {
     var writeValue;
@@ -169,19 +179,6 @@ EventPageValueBase = (function() {
     }
   };
 
-  _scrollLength = function(eventConfig) {
-    var end, start, writeValue;
-    writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
-    if (writeValue != null) {
-      start = writeValue[this.PageValueKey.SCROLL_POINT_START];
-      end = writeValue[this.PageValueKey.SCROLL_POINT_END];
-      if ((start != null) && $.isNumeric(start) && (end != null) && $.isNumeric(end)) {
-        return parseInt(end) - parseInt(start);
-      }
-    }
-    return 0;
-  };
-
   EventPageValueBase.getAllScrollLength = function() {
     var maxTeNum, ret, self;
     self = this;
@@ -202,7 +199,7 @@ EventPageValueBase = (function() {
     if (ret == null) {
       return 0;
     }
-    return ret;
+    return parseInt(ret);
   };
 
   return EventPageValueBase;

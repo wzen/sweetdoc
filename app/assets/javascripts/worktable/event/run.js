@@ -10,7 +10,9 @@ run = function() {
       target = "_runwindow";
       window.open("about:blank", target);
       document.run_form.target = target;
-      return document.run_form.submit();
+      return setTimeout(function() {
+        return document.run_form.submit();
+      }, 150);
     } else {
       return Message.showWarn('No event');
     }

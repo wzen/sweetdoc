@@ -39,8 +39,18 @@ class EventPageValueBase
       @SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS
 
   # コンフィグ初期設定
-  # @param [Object] eventConfig イベントコンフィグ
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
   @initConfigValue = (eventConfig) ->
+    _scrollLength = (eventConfig) ->
+      writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
+      if writeValue?
+        start = writeValue[@PageValueKey.SCROLL_POINT_START]
+        end = writeValue[@PageValueKey.SCROLL_POINT_END]
+        if start? && $.isNumeric(start) && end? && $.isNumeric(end)
+          return parseInt(end) - parseInt(start)
+
+      return 0
+
     if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
       handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
       if handlerDiv?
@@ -57,9 +67,9 @@ class EventPageValueBase
         if end.length == 0
           endDiv.val(parseInt(s) + _scrollLength.call(@, eventConfig))
 
-  # fixme: 実装予定
-  @checkConfigValue = (eventConfig) ->
-
+  # PageValueに書き込みデータを取得
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
+  # @return [Object] 書き込むデータ
   @writeToPageValue = (eventConfig) ->
     writeValue = {}
     writeValue[@PageValueKey.ID] = eventConfig.id
@@ -79,16 +89,15 @@ class EventPageValueBase
 
     return writeValue
 
+  # PageValueからConfigにデータを読み込み
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
+  # @return [Boolean] 読み込み成功したか
   @readFromPageValue = (eventConfig) ->
     writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
     if writeValue?
       eventConfig.id = writeValue[@PageValueKey.ID]
       eventConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
       eventConfig.commonEventId = writeValue[@PageValueKey.COMMON_EVENT_ID]
-      # fixme
-      #writeValue[@PageValueKey.CHAPTER] = 1
-      # fixme
-      #writeValue[@PageValueKey.SCREEN] = 1
       eventConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
       eventConfig.methodName = writeValue[@PageValueKey.METHODNAME]
       eventConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
@@ -147,17 +156,8 @@ class EventPageValueBase
     else
       return false
 
-  _scrollLength = (eventConfig) ->
-    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
-    if writeValue?
-      start = writeValue[@PageValueKey.SCROLL_POINT_START]
-      end = writeValue[@PageValueKey.SCROLL_POINT_END]
-      if start? && $.isNumeric(start) && end? && $.isNumeric(end)
-       return parseInt(end) - parseInt(start)
-
-    return 0
-
   # スクロールの合計の長さを取得
+  # @return [Integer] 取得値
   @getAllScrollLength = ->
     self = @
     maxTeNum = 0
@@ -174,7 +174,7 @@ class EventPageValueBase
     if !ret?
       return 0
 
-    return ret
+    return parseInt(ret)
 
 
 

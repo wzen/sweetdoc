@@ -27,6 +27,8 @@ class ScreenEvent extends CommonEvent
       scrollContents.scrollLeft(@beforeScrollLeft + scrollLeft)
 
   # 画面移動イベント
+  # @param [Object] e クリックオブジェクト
+  # @param [Function] complete 終了コールバック
   changeScreenPosition: (e, complete) =>
     @updateEventBefore()
 
@@ -58,10 +60,5 @@ class ScreenEvent extends CommonEvent
           @isFinishedEvent = true
           if complete?
             complete()
-
-  # ページング時
-  clearPaging: (methodName) ->
-    super(methodName)
-    @getJQueryElement().removeClass('changeScreenPosition_' + @id)
 
 Common.setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent)

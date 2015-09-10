@@ -85,11 +85,6 @@ ScreenEvent = (function(superClass) {
     }
   };
 
-  ScreenEvent.prototype.clearPaging = function(methodName) {
-    ScreenEvent.__super__.clearPaging.call(this, methodName);
-    return this.getJQueryElement().removeClass('changeScreenPosition_' + this.id);
-  };
-
   return ScreenEvent;
 
 })(CommonEvent);

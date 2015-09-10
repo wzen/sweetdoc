@@ -1,4 +1,4 @@
-# 共通イベント
+# 共通イベント基底クラス
 class CommonEvent extends CommonEventBase
   @EVENT_ID = ''
 

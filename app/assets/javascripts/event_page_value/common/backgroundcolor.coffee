@@ -1,3 +1,4 @@
+# EventPageValue Background
 class EPVBackgroundColor extends EventPageValueBase
   @BASE_COLOR = 'b_color'
   @CHANGE_COLOR = 'c_color'
