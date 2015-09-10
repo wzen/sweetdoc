@@ -32,19 +32,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ItemActionType = (function() {
-      function ItemActionType() {}
-
-      ItemActionType.MAKE = constant.ItemActionType.MAKE;
-
-      ItemActionType.MOVE = constant.ItemActionType.MOVE;
-
-      ItemActionType.CHANGE_OPTION = constant.ItemActionType.CHANGE_OPTION;
-
-      return ItemActionType;
-
-    })();
-
     Constant.ActionEventHandleType = (function() {
       function ActionEventHandleType() {}
 

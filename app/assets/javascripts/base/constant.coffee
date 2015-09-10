@@ -22,15 +22,6 @@ if gon?
       # @property [Int] OPTION アイテムオプション
       @OPTION = constant.Mode.OPTION
 
-    # アイテムに対するアクション
-    class @ItemActionType
-      # @property [Int] MAKE 作成
-      @MAKE = constant.ItemActionType.MAKE
-      # @property [Int] MOVE 移動
-      @MOVE = constant.ItemActionType.MOVE
-      # @property [int] CHANGE_OPTION オプション変更
-      @CHANGE_OPTION = constant.ItemActionType.CHANGE_OPTION
-
     # アクションイベント種別
     class @ActionEventHandleType
       # @property [Int] SCROLL スクロール

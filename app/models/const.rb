@@ -26,18 +26,6 @@ class Const
     CSS = 1
   end
 
-  # アイテムに対する操作アクション(履歴用)
-  class ItemActionType
-    # @property [Int] MAKE 作成
-    MAKE = 0
-    # @property [Int] MOVE 移動
-    MOVE = 1
-    # @property [Int] CHANGE_OPTION オプション(デザイン)変更
-    CHANGE_OPTION = 2
-    # @property [Int] DELETE 削除
-    DELETE = 3
-  end
-
   # アイテムアクションの引数
   class ItemActionOptionType
     # @property [Int] INTEGER 数値
