@@ -1,9 +1,16 @@
+# EventPageValue アイテム
 class EPVItem extends EventPageValueBase
   @itemSize = 'item_size'
 
+  # コンフィグ初期設定
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
+  # @param [Object] item アイテムオブジェクト
   @initConfigValue = (eventConfig, item) ->
     super(eventConfig)
 
+  # アイテムのデフォルトイベントをPageValueに書き込み
+  # @param [Object] item アイテムオブジェクト
+  # @return [String] エラーメッセージ
   @writeDefaultToPageValue = (item) ->
     errorMes = ""
     writeValue = {}
@@ -40,15 +47,18 @@ class EPVItem extends EventPageValueBase
       else
         teNum = 1
 
+      # イベントとイベント数をPageValueに書き込み
       PageValue.setEventPageValue(@PageValueKey.te(teNum), writeValue)
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum)
-      Timeline.changeTimelineColor(teNum, actionType)
 
       # Storageに保存
       LocalStorage.saveAllPageValues()
 
     return errorMes
 
+  # PageValueに書き込み
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
+  # @return [String] エラーメッセージ
   @writeToPageValue = (eventConfig) ->
     errorMes = ""
     writeValue = super(eventConfig)
@@ -69,10 +79,10 @@ class EPVItem extends EventPageValueBase
 
     return errorMes
 
-  @writeItemValueToPageValue = (item) ->
-    # TODO: アイテムのみの情報をここで保存
-    return
-
+  # PageValueからConfigにデータを読み込み
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
+  # @param [Object] item アイテムオブジェクト
+  # @return [Boolean] 読み込み成功したか
   @readFromPageValue = (eventConfig, item) ->
     ret = super(eventConfig)
     return ret

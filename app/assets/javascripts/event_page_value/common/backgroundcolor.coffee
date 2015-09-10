@@ -3,6 +3,8 @@ class EPVBackgroundColor extends EventPageValueBase
   @BASE_COLOR = 'b_color'
   @CHANGE_COLOR = 'c_color'
 
+  # コンフィグ初期設定
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
   @initConfigValue = (eventConfig) ->
     super(eventConfig)
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
@@ -15,6 +17,9 @@ class EPVBackgroundColor extends EventPageValueBase
         initColorPicker(self, bgColor, null)
     )
 
+  # PageValueに書き込みデータを取得
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
+  # @return [String] エラーメッセージ
   @writeToPageValue = (eventConfig) ->
     errorMes = ""
     writeValue = super(eventConfig)
@@ -36,6 +41,9 @@ class EPVBackgroundColor extends EventPageValueBase
 
     return errorMes
 
+  # PageValueからConfigにデータを読み込み
+  # @param [Object] eventConfig イベントコンフィグオブジェクト
+  # @return [Boolean] 読み込み成功したか
   @readFromPageValue = (eventConfig) ->
     ret = super(eventConfig)
     if !ret

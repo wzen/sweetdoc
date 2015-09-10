@@ -52,7 +52,6 @@ EPVItem = (function(superClass) {
       }
       PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum);
-      Timeline.changeTimelineColor(teNum, actionType);
       LocalStorage.saveAllPageValues();
     }
     return errorMes;
@@ -76,8 +75,6 @@ EPVItem = (function(superClass) {
     }
     return errorMes;
   };
-
-  EPVItem.writeItemValueToPageValue = function(item) {};
 
   EPVItem.readFromPageValue = function(eventConfig, item) {
     var ret;
