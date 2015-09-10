@@ -32,8 +32,8 @@ EPVScreenPosition = (function(superClass) {
     value[this.X] = $('.screenposition_change_x:first', emt).val();
     value[this.Y] = $('.screenposition_change_y:first', emt).val();
     value[this.Z] = $('.screenposition_change_z:first', emt).val();
+    writeValue[this.PageValueKey.VALUE] = value;
     if (errorMes.length === 0) {
-      writeValue[this.PageValueKey.VALUE] = value;
       PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
     }

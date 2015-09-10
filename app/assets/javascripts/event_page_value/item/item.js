@@ -17,7 +17,7 @@ EPVItem = (function(superClass) {
   };
 
   EPVItem.writeDefaultToPageValue = function(item) {
-    var actionType, end, errorMes, itemWriteValue, start, teNum, value, writeValue;
+    var actionType, end, errorMes, start, teNum, writeValue;
     errorMes = "";
     writeValue = {};
     writeValue[this.PageValueKey.ID] = item.id;
@@ -39,11 +39,8 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.IS_SYNC] = false;
     writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection();
     writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
-    itemWriteValue = item.objWriteEvent();
-    $.extend(writeValue, itemWriteValue);
+    writeValue[this.PageValueKey.VALUE] = item.constructor.defaultEventConfigValue();
     if (errorMes.length === 0) {
-      value = item.constructor.defaultEventConfigValue();
-      writeValue[this.PageValueKey.VALUE] = value;
       teNum = PageValue.getEventPageValue(PageValue.Key.eventCount());
       if (teNum != null) {
         teNum = parseInt(teNum) + 1;
@@ -58,13 +55,11 @@ EPVItem = (function(superClass) {
   };
 
   EPVItem.writeToPageValue = function(eventConfig) {
-    var errorMes, item, itemWriteValue, value, writeValue;
+    var errorMes, item, value, writeValue;
     errorMes = "";
     writeValue = EPVItem.__super__.constructor.writeToPageValue.call(this, eventConfig);
-    item = instanceMap[eventConfig.id];
-    itemWriteValue = item.objWriteEvent();
-    $.extend(writeValue, itemWriteValue);
     if (errorMes.length === 0) {
+      item = instanceMap[eventConfig.id];
       value = item.eventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
       PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);

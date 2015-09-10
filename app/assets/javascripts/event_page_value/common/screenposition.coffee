@@ -22,9 +22,9 @@ class EPVScreenPosition extends EventPageValueBase
     value[@X] = $('.screenposition_change_x:first', emt).val()
     value[@Y] = $('.screenposition_change_y:first', emt).val()
     value[@Z] = $('.screenposition_change_z:first', emt).val()
+    writeValue[@PageValueKey.VALUE] = value
 
     if errorMes.length == 0
-      writeValue[@PageValueKey.VALUE] = value
       PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 

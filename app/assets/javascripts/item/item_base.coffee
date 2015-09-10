@@ -117,6 +117,7 @@ class ItemBase extends ItemEventBase
     LocalStorage.saveInstancePageValue()
 
   # 保存用の最小限のデータを取得
+  # @return [Object] 取得データ
   getMinimumObject: ->
     obj = {
       id: Common.makeClone(@id)
@@ -129,20 +130,17 @@ class ItemBase extends ItemEventBase
     return obj
 
   # 最小限のデータを設定
+  # @param [Object] obj 設定データ
   setMiniumObject: (obj) ->
-    delete window.instanceMap[@id]
+    # ID変更のため一度instanceMapから削除
 
+    delete window.instanceMap[@id]
     @id = Common.makeClone(obj.id)
     @name = Common.makeClone(obj.name)
     @itemSize = Common.makeClone(obj.itemSize)
     @zindex = Common.makeClone(obj.zindex)
     @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
-
     window.instanceMap[@id] = @
-
-  # 閲覧モード用の描画
-  # @abstract
-  drawForLookaround: (obj) ->
 
   # イベントによって設定したスタイルをクリアする
   clearAllEventStyle: ->
@@ -171,14 +169,9 @@ class ItemBase extends ItemEventBase
   @defaultScrollForwardDirection = ->
     return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', @ITEM_ID))
 
+  # イベントに書き込む情報
   eventConfigValue: ->
     return null
-
-  # イベントに書き込む情報
-  objWriteEvent: ->
-    obj = {}
-    # TODO: アイテムの共通情報をここに記述
-    return obj
 
 # CSSアイテム
 # @abstract

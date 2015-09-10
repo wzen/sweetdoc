@@ -26,6 +26,7 @@ Chapter = (function() {
     ref = this.eventObjList;
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
+      event.initEvent(this.eventList[idx]);
       event.willChapter();
       if (event instanceof CssItemBase) {
         event.appendCssIfNeeded();

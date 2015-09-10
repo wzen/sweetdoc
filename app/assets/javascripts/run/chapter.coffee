@@ -20,6 +20,7 @@ class Chapter
   # チャプター共通の前処理
   willChapter: ->
     for event, idx in @eventObjList
+      event.initEvent(@eventList[idx])
       event.willChapter()
       if event instanceof CssItemBase
         event.appendCssIfNeeded()

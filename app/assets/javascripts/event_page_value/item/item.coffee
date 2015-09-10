@@ -32,16 +32,10 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.IS_SYNC] = false
     writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection()
     writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection()
-
-    itemWriteValue = item.objWriteEvent()
-    # マージ
-    $.extend(writeValue, itemWriteValue)
+    writeValue[@PageValueKey.VALUE] = item.constructor.defaultEventConfigValue()
 
     if errorMes.length == 0
-      value = item.constructor.defaultEventConfigValue()
-      writeValue[@PageValueKey.VALUE] = value
       teNum = PageValue.getEventPageValue(PageValue.Key.eventCount())
-
       if teNum?
         teNum = parseInt(teNum) + 1
       else
@@ -62,12 +56,9 @@ class EPVItem extends EventPageValueBase
   @writeToPageValue = (eventConfig) ->
     errorMes = ""
     writeValue = super(eventConfig)
-    item = instanceMap[eventConfig.id]
-    itemWriteValue = item.objWriteEvent()
-    # マージ
-    $.extend(writeValue, itemWriteValue)
 
     if errorMes.length == 0
+      item = instanceMap[eventConfig.id]
       value = item.eventConfigValue()
       writeValue[@PageValueKey.VALUE] = value
       PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)

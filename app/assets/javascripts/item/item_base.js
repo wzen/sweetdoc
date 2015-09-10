@@ -135,8 +135,6 @@ ItemBase = (function(superClass) {
     return window.instanceMap[this.id] = this;
   };
 
-  ItemBase.prototype.drawForLookaround = function(obj) {};
-
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
@@ -165,12 +163,6 @@ ItemBase = (function(superClass) {
 
   ItemBase.prototype.eventConfigValue = function() {
     return null;
-  };
-
-  ItemBase.prototype.objWriteEvent = function() {
-    var obj;
-    obj = {};
-    return obj;
   };
 
   return ItemBase;

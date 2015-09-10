@@ -138,7 +138,7 @@ class Page
 
   # ページ前処理
   willPage: ->
-    # チャプターのイベントを初期化
+    # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
     # フォーカス
     @initFocus()
@@ -151,7 +151,7 @@ class Page
 
   # ページ戻し前処理
   willPageFromRewind: (beforeScrollWindowSize) ->
-    # チャプターのイベントを初期化
+    # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
     # フォーカス
     @initFocus(false)
