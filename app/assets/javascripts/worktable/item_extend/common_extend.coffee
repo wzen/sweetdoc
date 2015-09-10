@@ -6,10 +6,11 @@ WorkTableCommonExtend =
     return
 
   # ドラッグ描画
+  # @param [Array] cood 座標
   draw: (cood) ->
-    return
 
   # 描画&コンフィグ作成
+  # @param [Boolean] show 要素作成後に描画を表示するか
   drawAndMakeConfigsAndWritePageValue: (show = true) ->
     # ボタン設置
     @reDraw(show)
@@ -20,8 +21,6 @@ WorkTableCommonExtend =
     # タイムライン作成
     Timeline.refreshAllTimeline()
 
-    return true
-
   # 描画&コンフィグ作成
   # @param [boolean] show 要素作成後に描画を表示するか
   # @return [Boolean] 処理結果
@@ -31,10 +30,9 @@ WorkTableCommonExtend =
     # コンフィグ作成
     @makeDesignConfig()
 
-    return true
-
   # オプションメニューを開く
   showOptionMenu: ->
+    # 全てのサイドバーを非表示
     sc = $('.sidebar-config')
     sc.css('display', 'none')
     $('.dc', sc).css('display', 'none')

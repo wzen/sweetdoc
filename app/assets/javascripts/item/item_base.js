@@ -42,10 +42,6 @@ ItemBase = (function(superClass) {
     return $('#' + this.id);
   };
 
-  ItemBase.prototype.lastestOhi = function() {
-    return this.ohiRegist[this.ohiRegist.length - 1];
-  };
-
   ItemBase.prototype.saveDrawingSurface = function() {
     return this.drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height);
   };
@@ -59,10 +55,6 @@ ItemBase = (function(superClass) {
     padding = 5;
     return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
-
-  ItemBase.prototype.startDraw = function() {};
-
-  ItemBase.prototype.draw = function(cood) {};
 
   ItemBase.prototype.endDraw = function(zindex) {
     this.zindex = zindex;

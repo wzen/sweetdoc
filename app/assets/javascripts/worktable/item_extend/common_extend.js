@@ -11,16 +11,14 @@ WorkTableCommonExtend = {
     this.reDraw(show);
     this.makeDesignConfig();
     EPVItem.writeDefaultToPageValue(this);
-    Timeline.refreshAllTimeline();
-    return true;
+    return Timeline.refreshAllTimeline();
   },
   drawAndMakeConfigs: function(show) {
     if (show == null) {
       show = true;
     }
     this.reDraw(show);
-    this.makeDesignConfig();
-    return true;
+    return this.makeDesignConfig();
   },
   showOptionMenu: function() {
     var sc;

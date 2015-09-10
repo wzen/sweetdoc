@@ -37,17 +37,14 @@ class ItemBase extends ItemEventBase
     @coodRegist = []
 
   # コンフィグメニューの要素IDを取得
-  # @return [Int] HTML要素ID
+  # @return [String] HTML要素ID
   getDesignConfigId: ->
     return @constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)
 
+  # アイテムのJQuery要素を取得
+  # @return [Object] JQuery要素
   getJQueryElement: ->
     return $('#' + @id)
-
-  # 最後の操作履歴Indexを取得
-  # @return [Int] 操作履歴Index
-  lastestOhi: ->
-    return @ohiRegist[@ohiRegist.length - 1]
 
   # 画面を保存(全画面)
   saveDrawingSurface : ->
@@ -64,13 +61,6 @@ class ItemBase extends ItemEventBase
     padding = 5
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
-  # 描画開始時の処理
-  startDraw: ->
-
-  # ドラッグでの描画処理
-  # @abstract
-  draw: (cood) ->
-
   # 描画終了時の処理
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
@@ -81,6 +71,8 @@ class ItemBase extends ItemEventBase
 
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
+  # @abstract
+  # @param [Boolean] show 要素作成後に表示するか
   reDraw: (show = true) ->
 
   # アイテムの情報をアイテムリストと操作履歴に保存

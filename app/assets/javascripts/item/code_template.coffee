@@ -15,16 +15,24 @@ class ElementCode
   # テンプレート
   # @private
   class Temp
-    createItemElement: (obj) ->
-      if obj instanceof CanvasItemBase
+
+    # アイテム用のテンプレートHTMLを読み込み
+    # @param [Object] item アイテムオブジェクト
+    # @return [String] HTML
+    createItemElement: (item) ->
+      if item instanceof CanvasItemBase
         return """
-          <div id="#{obj.id}" class="item draggable resizable" style="position: absolute;top:#{obj.itemSize.y}px;left:#{obj.itemSize.x}px;width:#{obj.itemSize.w }px;height:#{obj.itemSize.h}px;z-index:#{Common.plusPagingZindex(obj.zindex)}"><canvas id="#{obj.canvasElementId()}" class="arrow canvas" ></canvas></div>
+          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><canvas id="#{item.canvasElementId()}" class="arrow canvas" ></canvas></div>
         """
-      else if obj instanceof CssItemBase
+      else if item instanceof CssItemBase
         return """
-          <div id="#{obj.id}" class="item draggable resizable" style="position: absolute;top:#{obj.itemSize.y}px;left:#{obj.itemSize.x}px;width:#{obj.itemSize.w }px;height:#{obj.itemSize.h}px;z-index:#{Common.plusPagingZindex(obj.zindex)}"><div type="button" class="css3button"><div></div></div></div>
+          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div type="button" class="css3button"><div></div></div></div>
         """
 
+    # グリッド線のテンプレートHTMLを読み込み
+    # @param [Integer] top HTMLを設置するY位置
+    # @param [Integer] left HTMLを設置するX位置
+    # @return [String] HTML
     createGridElement: (top, left) ->
       return """
           <div class="#{Setting.Grid.SETTING_GRID_ELEMENT_CLASS}" style="position: absolute;top:#{top}px;left:#{left}px;width:#{Setting.Grid.GRIDVIEW_SIZE}px;height:#{Setting.Grid.GRIDVIEW_SIZE}px;z-index:#{Common.plusPagingZindex(Constant.Zindex.GRID)}"><canvas class="#{Setting.Grid.SETTING_GRID_CANVAS_CLASS}" class="canvas" width="#{Setting.Grid.GRIDVIEW_SIZE}" height="#{Setting.Grid.GRIDVIEW_SIZE}"></canvas></div>

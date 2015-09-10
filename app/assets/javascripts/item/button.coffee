@@ -3,8 +3,9 @@
 class ButtonItem extends CssItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Button"
-  # @property [String] ITEM_ID アイテム種別
+
   if window.loadedItemId?
+    # @property [String] ITEM_ID アイテム種別
     @ITEM_ID = window.loadedItemId
 
   # イベント前の表示状態にする

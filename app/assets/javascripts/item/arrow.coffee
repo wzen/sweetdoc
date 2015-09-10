@@ -3,9 +3,11 @@
 class ArrowItem extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Arrow"
-  # @property [String] ITEM_ID アイテム種別
+
   if window.loadedItemId?
+    # @property [String] ITEM_ID アイテム種別
     @ITEM_ID = window.loadedItemId
+
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 37
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
@@ -133,6 +135,7 @@ class ArrowItem extends CanvasItemBase
       (@constructor.prototype[methodName]).call(@, @event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
 
   # スクロールイベント ※アクションイベント
+  # @param [Integer] scrollValue スクロール値
   scrollDraw : (scrollValue) ->
     #console.log("scrollY: #{@scrollValue}")
     r = scrollValue / @scrollLength()

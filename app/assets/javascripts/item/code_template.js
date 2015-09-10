@@ -36,11 +36,11 @@ ElementCode = (function() {
   Temp = (function() {
     function Temp() {}
 
-    Temp.prototype.createItemElement = function(obj) {
-      if (obj instanceof CanvasItemBase) {
-        return "<div id=\"" + obj.id + "\" class=\"item draggable resizable\" style=\"position: absolute;top:" + obj.itemSize.y + "px;left:" + obj.itemSize.x + "px;width:" + obj.itemSize.w + "px;height:" + obj.itemSize.h + "px;z-index:" + (Common.plusPagingZindex(obj.zindex)) + "\"><canvas id=\"" + (obj.canvasElementId()) + "\" class=\"arrow canvas\" ></canvas></div>";
-      } else if (obj instanceof CssItemBase) {
-        return "<div id=\"" + obj.id + "\" class=\"item draggable resizable\" style=\"position: absolute;top:" + obj.itemSize.y + "px;left:" + obj.itemSize.x + "px;width:" + obj.itemSize.w + "px;height:" + obj.itemSize.h + "px;z-index:" + (Common.plusPagingZindex(obj.zindex)) + "\"><div type=\"button\" class=\"css3button\"><div></div></div></div>";
+    Temp.prototype.createItemElement = function(item) {
+      if (item instanceof CanvasItemBase) {
+        return "<div id=\"" + item.id + "\" class=\"item draggable resizable\" style=\"position: absolute;top:" + item.itemSize.y + "px;left:" + item.itemSize.x + "px;width:" + item.itemSize.w + "px;height:" + item.itemSize.h + "px;z-index:" + (Common.plusPagingZindex(item.zindex)) + "\"><canvas id=\"" + (item.canvasElementId()) + "\" class=\"arrow canvas\" ></canvas></div>";
+      } else if (item instanceof CssItemBase) {
+        return "<div id=\"" + item.id + "\" class=\"item draggable resizable\" style=\"position: absolute;top:" + item.itemSize.y + "px;left:" + item.itemSize.x + "px;width:" + item.itemSize.w + "px;height:" + item.itemSize.h + "px;z-index:" + (Common.plusPagingZindex(item.zindex)) + "\"><div type=\"button\" class=\"css3button\"><div></div></div></div>";
       }
     };
 
