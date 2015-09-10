@@ -99,7 +99,7 @@ EventAction = (function() {
     Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
     pageFlip = new PageFlip(beforePageNum, afterPageNum);
     RunCommon.initMainContainer();
-    PageValue.adjustInstanceAndEventOnThisPage();
+    PageValue.adjustInstanceAndEventOnPage();
     if (beforePageNum > afterPageNum) {
       this.thisPage().willPageFromRewind();
     } else {

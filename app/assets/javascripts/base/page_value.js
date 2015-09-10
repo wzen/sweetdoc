@@ -408,18 +408,18 @@ PageValue = (function() {
     return ret;
   };
 
-  PageValue.removeAllItemAndEventPageValue = function() {
+  PageValue.removeAllGeneralAndInstanceAndEventPageValue = function() {
     $("#" + this.Key.G_ROOT).children("." + this.Key.G_PREFIX).remove();
     $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
     return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).remove();
   };
 
-  PageValue.removeAllItemAndEventPageValueOnThisPage = function() {
+  PageValue.removeAllInstanceAndEventPageValueOnPage = function() {
     $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).children("." + (this.Key.pagePrefix())).remove();
     return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).children("." + (this.Key.pagePrefix())).remove();
   };
 
-  PageValue.adjustInstanceAndEventOnThisPage = function() {
+  PageValue.adjustInstanceAndEventOnPage = function() {
     var adjust, ePageValues, iPageValues, instanceObjIds, k, teCount, v;
     iPageValues = this.getInstancePageValue(PageValue.Key.instancePagePrefix());
     instanceObjIds = [];

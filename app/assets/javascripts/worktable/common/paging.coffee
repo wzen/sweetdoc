@@ -76,7 +76,7 @@ class Paging
       # 新規コンテナ初期化
       PageValue.setPageNum(PageValue.getPageCount() + 1)
       WorktableCommon.initMainContainer()
-      PageValue.adjustInstanceAndEventOnThisPage()
+      PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.drawAllItemFromInstancePageValue( ->
         # ページング
         pageFlip.startRender( ->
@@ -129,7 +129,7 @@ class Paging
       PageValue.setPageNum(selectedNum)
       # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
-      PageValue.adjustInstanceAndEventOnThisPage()
+      PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.drawAllItemFromInstancePageValue( ->
         pageFlip.startRender( ->
           # 隠したビューを非表示にする

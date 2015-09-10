@@ -344,21 +344,23 @@ class PageValue
         ret.push(parseInt(k))
     return ret
 
-  # アイテムとイベント情報を全削除
-  @removeAllItemAndEventPageValue = ->
+  # 設定値以外の情報を全削除
+  @removeAllGeneralAndInstanceAndEventPageValue = ->
     # page_value消去
     $("##{@Key.G_ROOT}").children(".#{@Key.G_PREFIX}").remove()
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
     $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").remove()
 
-  # ページ上のアイテムとイベント情報を全削除
-  @removeAllItemAndEventPageValueOnThisPage = ->
+  # ページ上のインスタンスとイベント情報を全削除
+  @removeAllInstanceAndEventPageValueOnPage = ->
     # ページ内のpage_value消去
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
     $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
 
   # InstancePageValueとEventPageValueを最適化
-  @adjustInstanceAndEventOnThisPage = ->
+  @adjustInstanceAndEventOnPage = ->
+    # Instanceに無いイベントを削除
+
     iPageValues = @getInstancePageValue(PageValue.Key.instancePagePrefix())
     instanceObjIds = []
     for k, v of iPageValues
@@ -380,6 +382,8 @@ class PageValue
 
   # ページ総数更新
   @updatePageCount = ->
+    # EventPageValueの「p_」を参照してカウント
+
     page_count = 0
     ePageValues = @getEventPageValue(@Key.E_PREFIX)
     for k, v of ePageValues
@@ -392,6 +396,7 @@ class PageValue
     @setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}", page_count)
 
   # ページ総数を取得
+  # @return [Integer] ページ総数
   @getPageCount = ->
     ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}")
     if ret?
@@ -400,6 +405,7 @@ class PageValue
       return 1
 
   # 現在のページ番号を取得
+  # @return [Integer] ページ番号
   @getPageNum = ->
     ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
     if ret?
@@ -410,16 +416,22 @@ class PageValue
     return ret
 
   # 現在のページ番号を設定
+  # @param [Integer] num 設定値
   @setPageNum = (num) ->
     #window.pn = null
     PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
 
   # 現在のページ番号を追加
+  # @param [Integer] addNum 追加値
   @addPagenum = (addNum) ->
     @setPageNum(@getPageNum() + addNum)
 
   # アイテムのCSSを取得
+  # @param [Integer] pageNum ページ番号
+  # @return [String] CSS
   @itemCssOnPage = (pageNum) ->
+    # EventPageValueのcssを一つの文字列にまとめる
+
     eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix(pageNum))
     css = ''
     for k, v of eventPageValues
@@ -432,6 +444,7 @@ class PageValue
     return css
 
   # 対象アイテムのSyncを解除する
+  # @param [Integer] objId オブジェクトID
   @removeEventPageValueSync = (objId) ->
     tes = @getEventPageValueSortedListByNum()
     dFlg = false

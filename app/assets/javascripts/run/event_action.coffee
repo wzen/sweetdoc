@@ -92,7 +92,7 @@ class EventAction
     pageFlip = new PageFlip(beforePageNum, afterPageNum)
     # 新規コンテナ初期化
     RunCommon.initMainContainer()
-    PageValue.adjustInstanceAndEventOnThisPage()
+    PageValue.adjustInstanceAndEventOnPage()
     # ページ前処理
     if beforePageNum > afterPageNum
       @thisPage().willPageFromRewind()

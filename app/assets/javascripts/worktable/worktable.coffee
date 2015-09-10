@@ -38,7 +38,7 @@ $ ->
 
   if existedCache
     # 描画
-    PageValue.adjustInstanceAndEventOnThisPage()
+    PageValue.adjustInstanceAndEventOnPage()
     WorktableCommon.drawAllItemFromInstancePageValue(_callback)
   else
     LocalStorage.clearWorktable()

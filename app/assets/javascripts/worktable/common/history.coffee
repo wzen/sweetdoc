@@ -48,7 +48,7 @@ class OperationHistory
       window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex
 
       # キャッシュ保存 & 描画
-      PageValue.adjustInstanceAndEventOnThisPage()
+      PageValue.adjustInstanceAndEventOnPage()
       LocalStorage.saveAllPageValues()
       WorktableCommon.drawAllItemFromInstancePageValue()
       return true
@@ -76,7 +76,7 @@ class OperationHistory
       window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex
 
       # キャッシュ保存 & 描画
-      PageValue.adjustInstanceAndEventOnThisPage()
+      PageValue.adjustInstanceAndEventOnPage()
       LocalStorage.saveAllPageValues()
       WorktableCommon.drawAllItemFromInstancePageValue()
       return true

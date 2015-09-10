@@ -260,7 +260,7 @@ WorktableCommon = (function() {
     PageValue.removeInstancePageValue(targetId);
     PageValue.removeEventPageValueSync(targetId);
     itemElement.remove();
-    PageValue.adjustInstanceAndEventOnThisPage();
+    PageValue.adjustInstanceAndEventOnPage();
     Timeline.refreshAllTimeline();
     LocalStorage.saveAllPageValues();
     return OperationHistory.add();
@@ -373,7 +373,7 @@ WorktableCommon = (function() {
       return function() {
         Common.removeAllItem();
         EventConfig.removeAllConfig();
-        PageValue.removeAllItemAndEventPageValue();
+        PageValue.removeAllGeneralAndInstanceAndEventPageValue();
         return Timeline.refreshAllTimeline();
       };
     })(this));
@@ -386,7 +386,7 @@ WorktableCommon = (function() {
       return function() {
         Common.removeAllItem();
         EventConfig.removeAllConfig();
-        PageValue.removeAllItemAndEventPageValueOnThisPage();
+        PageValue.removeAllInstanceAndEventPageValueOnPage();
         return Timeline.refreshAllTimeline();
       };
     })(this));

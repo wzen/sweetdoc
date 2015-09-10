@@ -62,7 +62,7 @@ OperationHistory = (function() {
         PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
       window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
-      PageValue.adjustInstanceAndEventOnThisPage();
+      PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
       WorktableCommon.drawAllItemFromInstancePageValue();
       return true;
@@ -89,7 +89,7 @@ OperationHistory = (function() {
         PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
       window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
-      PageValue.adjustInstanceAndEventOnThisPage();
+      PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
       WorktableCommon.drawAllItemFromInstancePageValue();
       return true;

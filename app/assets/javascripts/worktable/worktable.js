@@ -33,7 +33,7 @@ $(function() {
     return Paging.initPaging();
   };
   if (existedCache) {
-    PageValue.adjustInstanceAndEventOnThisPage();
+    PageValue.adjustInstanceAndEventOnPage();
     return WorktableCommon.drawAllItemFromInstancePageValue(_callback);
   } else {
     LocalStorage.clearWorktable();

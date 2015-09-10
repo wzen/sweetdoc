@@ -221,7 +221,7 @@ class WorktableCommon
     PageValue.removeInstancePageValue(targetId)
     PageValue.removeEventPageValueSync(targetId)
     itemElement.remove()
-    PageValue.adjustInstanceAndEventOnThisPage()
+    PageValue.adjustInstanceAndEventOnPage()
     Timeline.refreshAllTimeline()
     LocalStorage.saveAllPageValues()
     OperationHistory.add()
@@ -335,7 +335,7 @@ class WorktableCommon
     Common.clearAllEventAction( =>
       Common.removeAllItem()
       EventConfig.removeAllConfig()
-      PageValue.removeAllItemAndEventPageValue()
+      PageValue.removeAllGeneralAndInstanceAndEventPageValue()
       Timeline.refreshAllTimeline()
     )
 
@@ -347,7 +347,7 @@ class WorktableCommon
     Common.clearAllEventAction( =>
       Common.removeAllItem()
       EventConfig.removeAllConfig()
-      PageValue.removeAllItemAndEventPageValueOnThisPage()
+      PageValue.removeAllInstanceAndEventPageValueOnPage()
       Timeline.refreshAllTimeline()
     )
 
