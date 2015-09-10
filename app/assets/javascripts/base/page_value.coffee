@@ -1,3 +1,4 @@
+# PageValue
 class PageValue
 
   if gon?
@@ -59,17 +60,19 @@ class PageValue
       @UPDATED = 'updated'
 
   # サーバから読み込んだアイテム情報を追加
-  @addItemInfo = (item_id, te_actions) ->
-    if te_actions? && te_actions.length > 0
+  # @param [Integer] itemId アイテムID
+  # @param [Array] itemInfos アイテム情報
+  @addItemInfo = (itemId, itemInfos) ->
+    if itemInfos? && itemInfos.length > 0
       isSet = false
-      te_actions.forEach( (a) =>
-        if a.is_default? && a.is_default
+      itemInfos.forEach( (itemInfo) =>
+        if itemInfo.is_default? && itemInfo.is_default
           # デフォルトメソッド & デフォルトアクションタイプ
-          @setInstancePageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', item_id), if a.scroll_enabled_direction? then JSON.parse(a.scroll_enabled_direction) else null)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', item_id), if a.scroll_forward_direction? then JSON.parse(a.scroll_forward_direction) else null)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', itemId), itemInfo.method_name)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', itemId), itemInfo.action_event_type_id)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', itemId), itemInfo.action_animation_type_id)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', itemId), if itemInfo.scroll_enabled_direction? then JSON.parse(itemInfo.scroll_enabled_direction) else null)
+          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', itemId), if itemInfo.scroll_forward_direction? then JSON.parse(itemInfo.scroll_forward_direction) else null)
           isSet = true
       )
       if isSet
@@ -303,9 +306,9 @@ class PageValue
     )
 
   # インスタンス値を削除
-  @removeInstancePageValue = (instanceId) ->
-    $("##{@Key.IS_ROOT} .#{instanceId}").remove()
-
+  # @param [Integer] objId オブジェクトID
+  @removeInstancePageValue = (objId) ->
+    $("##{@Key.IS_ROOT} .#{objId}").remove()
 
   # updateが付与しているクラスからupdateクラスを除去する
   @clearAllUpdateFlg = ->
@@ -313,7 +316,8 @@ class PageValue
     $("##{@Key.E_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
     $("##{Setting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
 
-  # ソートしたイベントリストを取得
+  # イベント番号で昇順ソートした配列を取得
+  # @param [Integer] pn ページ番号
   @getEventPageValueSortedListByNum = (pn = PageValue.getPageNum()) ->
     eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix(pn))
     if !eventPageValues?
@@ -322,7 +326,7 @@ class PageValue
     count = PageValue.getEventPageValue(@Key.eventCount(pn))
     eventObjList = new Array(count)
 
-    # ソート
+    # 番号でソート
     for k, v of eventPageValues
       if k.indexOf(@Key.E_NUM_PREFIX) == 0
         index = parseInt(k.substring(@Key.E_NUM_PREFIX.length)) - 1
@@ -333,6 +337,7 @@ class PageValue
   # 読み込み済みItemId取得
   @getLoadedItemIds = ->
     ret = []
+    # インスタンスPageValueを参照
     itemInfoPageValues = PageValue.getInstancePageValue(@Key.ITEM_INFO_PREFIX)
     for k, v of itemInfoPageValues
       if $.inArray(parseInt(k), ret) < 0

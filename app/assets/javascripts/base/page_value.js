@@ -92,18 +92,18 @@ PageValue = (function() {
     })();
   }
 
-  PageValue.addItemInfo = function(item_id, te_actions) {
+  PageValue.addItemInfo = function(itemId, itemInfos) {
     var isSet;
-    if ((te_actions != null) && te_actions.length > 0) {
+    if ((itemInfos != null) && itemInfos.length > 0) {
       isSet = false;
-      te_actions.forEach((function(_this) {
-        return function(a) {
-          if ((a.is_default != null) && a.is_default) {
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', item_id), a.method_name);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', item_id), a.action_event_type_id);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', item_id), a.action_animation_type_id);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', item_id), a.scroll_enabled_direction != null ? JSON.parse(a.scroll_enabled_direction) : null);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', item_id), a.scroll_forward_direction != null ? JSON.parse(a.scroll_forward_direction) : null);
+      itemInfos.forEach((function(_this) {
+        return function(itemInfo) {
+          if ((itemInfo.is_default != null) && itemInfo.is_default) {
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', itemId), itemInfo.method_name);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', itemId), itemInfo.action_event_type_id);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', itemId), itemInfo.action_animation_type_id);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', itemId), itemInfo.scroll_enabled_direction != null ? JSON.parse(itemInfo.scroll_enabled_direction) : null);
+            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', itemId), itemInfo.scroll_forward_direction != null ? JSON.parse(itemInfo.scroll_forward_direction) : null);
             return isSet = true;
           }
         };
@@ -364,8 +364,8 @@ PageValue = (function() {
     });
   };
 
-  PageValue.removeInstancePageValue = function(instanceId) {
-    return $("#" + this.Key.IS_ROOT + " ." + instanceId).remove();
+  PageValue.removeInstancePageValue = function(objId) {
+    return $("#" + this.Key.IS_ROOT + " ." + objId).remove();
   };
 
   PageValue.clearAllUpdateFlg = function() {
