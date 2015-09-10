@@ -21,7 +21,8 @@ class Chapter
   willChapter: ->
     for event, idx in @eventObjList
       event.willChapter()
-      event.appendCssIfNeeded()
+      if event instanceof CssItemBase
+        event.appendCssIfNeeded()
       @doMoveChapter = false
 
     @sinkFrontAllObj()
@@ -30,8 +31,7 @@ class Chapter
   # チャプター共通の後処理
   didChapter: ->
     @eventObjList.forEach((event) ->
-      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME]
-      event.didChapter(methodName)
+      event.didChapter()
     )
 
   # アイテムにフォーカス(アイテムが1つのみの場合)

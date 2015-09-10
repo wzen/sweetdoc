@@ -27,7 +27,9 @@ Chapter = (function() {
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
       event.willChapter();
-      event.appendCssIfNeeded();
+      if (event instanceof CssItemBase) {
+        event.appendCssIfNeeded();
+      }
       this.doMoveChapter = false;
     }
     this.sinkFrontAllObj();
@@ -36,9 +38,7 @@ Chapter = (function() {
 
   Chapter.prototype.didChapter = function() {
     return this.eventObjList.forEach(function(event) {
-      var methodName;
-      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
-      return event.didChapter(methodName);
+      return event.didChapter();
     });
   };
 

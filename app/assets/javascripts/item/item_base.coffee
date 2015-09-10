@@ -287,6 +287,27 @@ class CssItemBase extends ItemBase
     @cssStyle = $(".css-style", @cssRoot)
     @cssStyle.text(@cssCode.text())
 
+  # CSS内容
+  # @abstract
+  cssElement: ->
+    return null
+
+  # CSS追加処理
+  appendCssIfNeeded : ->
+    ce = @cssElement()
+    if ce?
+      methodName = @getEventMethodName()
+      # CSSが存在する場合は削除して入れ替え
+      @removeCss()
+      funcName = "#{methodName}_#{@id}"
+      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
+
+  # CSS削除処理
+  removeCss: ->
+    methodName = @getEventMethodName()
+    funcName = "#{methodName}_#{@id}"
+    window.cssCode.find(".#{funcName}").remove()
+
 # Canvasアイテム
 # @abstract
 # @extend ItemBase

@@ -53,7 +53,8 @@ class EventBase extends Extend
       # イベント初期化
       @initEvent(event)
       @willChapter()
-      @appendCssIfNeeded()
+      if @ instanceof CssItemBase
+        @appendCssIfNeeded()
 
       method = @constructor.prototype[@getEventMethodName()]
       actionType = @getEventActionType()
@@ -156,7 +157,6 @@ class EventBase extends Extend
       window.eventAction.thisPage().nextChapter()
 
   # チャプター開始前イベント
-  # @param [String] methodName 対象メソッド名
   willChapter: ->
     actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.SCROLL
@@ -164,14 +164,15 @@ class EventBase extends Extend
 
     # 状態をイベント前に戻す
     @updateEventBefore()
-    return
 
   # チャプター終了時イベント
   # @abstract
-  didChapter: (methodName) ->
-    return
+  didChapter: ->
 
   # スクロール基底メソッド
+  # @param [Integer] x スクロール横座標
+  # @param [Integer] y スクロール縦座標
+  # @param [Function] complete イベント終了後コールバック
   scrollRootFunc: (x, y, complete = null) ->
     if !@event[EventPageValueBase.PageValueKey.METHODNAME]?
       # メソッドが無い場合
@@ -232,38 +233,20 @@ class EventBase extends Extend
     (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
 
   # スクロールの長さを取得
+  # @return [Integer] スクロール長さ
   scrollLength: ->
     return parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
 
   # スクロール基底メソッド
+  # @param [Object] e クリックオブジェクト
+  # @param [Function] complete イベント終了後コールバック
   clickRootFunc: (e, complete = null) ->
     e.preventDefault()
-
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
     methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     (@constructor.prototype[methodName]).call(@, e, complete)
-
-  # CSS
-  # @abstract
-  cssElement: ->
-    return null
-
-  # CSS追加処理
-  appendCssIfNeeded : ->
-    ce = @cssElement()
-    if ce?
-      methodName = @getEventMethodName()
-      # CSSが存在する場合は削除して入れ替え
-      @removeCss(methodName)
-      funcName = "#{methodName}_#{@id}"
-      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
-
-  # CSS削除処理
-  removeCss: (methodName) ->
-    funcName = "#{methodName}_#{@id}"
-    window.cssCode.find(".#{funcName}").remove()
 
   # イベント後の表示状態にする
   # @abstract
@@ -272,10 +255,6 @@ class EventBase extends Extend
   # イベント前の表示状態にする
   # @abstract
   updateEventBefore: ->
-
-  # ページング時
-  clearPaging: (methodName) ->
-    @removeCss(methodName)
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか

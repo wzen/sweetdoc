@@ -284,6 +284,28 @@ CssItemBase = (function(superClass) {
     return this.cssStyle.text(this.cssCode.text());
   };
 
+  CssItemBase.prototype.cssElement = function() {
+    return null;
+  };
+
+  CssItemBase.prototype.appendCssIfNeeded = function() {
+    var ce, funcName, methodName;
+    ce = this.cssElement();
+    if (ce != null) {
+      methodName = this.getEventMethodName();
+      this.removeCss();
+      funcName = methodName + "_" + this.id;
+      return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
+    }
+  };
+
+  CssItemBase.prototype.removeCss = function() {
+    var funcName, methodName;
+    methodName = this.getEventMethodName();
+    funcName = methodName + "_" + this.id;
+    return window.cssCode.find("." + funcName).remove();
+  };
+
   return CssItemBase;
 
 })(ItemBase);

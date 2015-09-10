@@ -56,7 +56,9 @@ EventBase = (function(superClass) {
       loopMaxCount = 5;
       this.initEvent(event);
       this.willChapter();
-      this.appendCssIfNeeded();
+      if (this instanceof CssItemBase) {
+        this.appendCssIfNeeded();
+      }
       method = this.constructor.prototype[this.getEventMethodName()];
       actionType = this.getEventActionType();
       this.doPreviewLoop = true;
@@ -190,10 +192,10 @@ EventBase = (function(superClass) {
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       this.scrollValue = 0;
     }
-    this.updateEventBefore();
+    return this.updateEventBefore();
   };
 
-  EventBase.prototype.didChapter = function(methodName) {};
+  EventBase.prototype.didChapter = function() {};
 
   EventBase.prototype.scrollRootFunc = function(x, y, complete) {
     var ePoint, methodName, plusX, plusY, sPoint;
@@ -267,34 +269,9 @@ EventBase = (function(superClass) {
     return this.constructor.prototype[methodName].call(this, e, complete);
   };
 
-  EventBase.prototype.cssElement = function() {
-    return null;
-  };
-
-  EventBase.prototype.appendCssIfNeeded = function() {
-    var ce, funcName, methodName;
-    ce = this.cssElement();
-    if (ce != null) {
-      methodName = this.getEventMethodName();
-      this.removeCss(methodName);
-      funcName = methodName + "_" + this.id;
-      return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
-    }
-  };
-
-  EventBase.prototype.removeCss = function(methodName) {
-    var funcName;
-    funcName = methodName + "_" + this.id;
-    return window.cssCode.find("." + funcName).remove();
-  };
-
   EventBase.prototype.updateEventAfter = function() {};
 
   EventBase.prototype.updateEventBefore = function() {};
-
-  EventBase.prototype.clearPaging = function(methodName) {
-    return this.removeCss(methodName);
-  };
 
   EventBase.prototype.setItemAllPropToPageValue = function(isCache) {
     var obj, prefix_key;
