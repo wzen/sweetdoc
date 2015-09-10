@@ -7,8 +7,8 @@ class Sidebar
     if !Sidebar.isOpenedConfigSidebar()
       main = $('#main')
       if !Sidebar.isOpenedConfigSidebar()
-        main.removeClass('col-md-12')
-        main.addClass('col-md-9')
+        main.removeClass('col-xs-12')
+        main.addClass('col-xs-9')
         $('#sidebar').fadeIn('500', ->
           WorktableCommon.resizeMainContainerEvent()
         )
@@ -22,8 +22,8 @@ class Sidebar
     if !Sidebar.isClosedConfigSidebar()
       main = $('#main')
       $('#sidebar').fadeOut('500', ->
-        main.removeClass('col-md-9')
-        main.addClass('col-md-12')
+        main.removeClass('col-xs-9')
+        main.addClass('col-xs-12')
         WorktableCommon.resizeMainContainerEvent()
         if callback?
           callback()
@@ -32,11 +32,11 @@ class Sidebar
 
   # サイドバーがオープンしているか
   @isOpenedConfigSidebar = ->
-    return $('#main').hasClass('col-md-9')
+    return $('#main').hasClass('col-xs-9')
 
   # サイドバーがクローズしているか
   @isClosedConfigSidebar = ->
-    return $('#main').hasClass('col-md-12')
+    return $('#main').hasClass('col-xs-12')
 
   # サイドバー内容のスイッチ
   # @param [String] configType コンフィグタイプ

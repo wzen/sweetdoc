@@ -14,6 +14,7 @@
  *= require css/colorpicker
  *= require css/layout
  *= require bootstrap_custom
+ *= require non-responsive
  *= require common/common
  *= require common/modal_view.css
  *= require paging_animation/pageflip

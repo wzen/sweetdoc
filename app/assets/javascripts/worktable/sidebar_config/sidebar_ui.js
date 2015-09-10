@@ -15,8 +15,8 @@ Sidebar = (function() {
     if (!Sidebar.isOpenedConfigSidebar()) {
       main = $('#main');
       if (!Sidebar.isOpenedConfigSidebar()) {
-        main.removeClass('col-md-12');
-        main.addClass('col-md-9');
+        main.removeClass('col-xs-12');
+        main.addClass('col-xs-9');
         $('#sidebar').fadeIn('500', function() {
           return WorktableCommon.resizeMainContainerEvent();
         });
@@ -36,8 +36,8 @@ Sidebar = (function() {
     if (!Sidebar.isClosedConfigSidebar()) {
       main = $('#main');
       return $('#sidebar').fadeOut('500', function() {
-        main.removeClass('col-md-9');
-        main.addClass('col-md-12');
+        main.removeClass('col-xs-9');
+        main.addClass('col-xs-12');
         WorktableCommon.resizeMainContainerEvent();
         if (callback != null) {
           callback();
@@ -48,11 +48,11 @@ Sidebar = (function() {
   };
 
   Sidebar.isOpenedConfigSidebar = function() {
-    return $('#main').hasClass('col-md-9');
+    return $('#main').hasClass('col-xs-9');
   };
 
   Sidebar.isClosedConfigSidebar = function() {
-    return $('#main').hasClass('col-md-12');
+    return $('#main').hasClass('col-xs-12');
   };
 
   Sidebar.switchSidebarConfig = function(configType, item) {

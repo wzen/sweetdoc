@@ -88,7 +88,7 @@ class Common
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
   @focusToTarget = (target) ->
-    # col-md-9 → 75% padding → 15px
+    # col-xs-9 → 75% padding → 15px
     targetMiddle =
       top: $(target).offset().top + $(target).height() * 0.5
       left: $(target).offset().left + $(target).width() * 0.5

@@ -65,6 +65,8 @@ end
 # memcacheクライアント
 gem 'dalli', '2.7.4'
 
+gem 'meta-tags', '2.0.0'
+
 # Use HBase
 #normalgem 'massive_record'
 #normal
