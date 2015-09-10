@@ -163,7 +163,7 @@ class Const
     METHODNAME = 'methodname'
     ACTIONTYPE = 'actiontype'
     ANIAMTIONTYPE = 'animationtype'
-    IS_PARALLEL = 'is_parallel'
+    IS_SYNC = 'is_sync'
     SCROLL_POINT_START = 'scroll_point_start'
     SCROLL_POINT_END = 'scroll_point_end'
     SCROLL_ENABLED_DIRECTIONS = 'scroll_enabled_directions'

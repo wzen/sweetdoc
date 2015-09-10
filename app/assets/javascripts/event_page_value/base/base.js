@@ -33,7 +33,7 @@ EventPageValueBase = (function() {
 
       PageValueKey.ANIAMTIONTYPE = constant.EventPageValueKey.ANIAMTIONTYPE;
 
-      PageValueKey.IS_PARALLEL = constant.EventPageValueKey.IS_PARALLEL;
+      PageValueKey.IS_SYNC = constant.EventPageValueKey.IS_SYNC;
 
       PageValueKey.SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START;
 
@@ -84,7 +84,7 @@ EventPageValueBase = (function() {
     writeValue[this.PageValueKey.METHODNAME] = eventConfig.methodName;
     writeValue[this.PageValueKey.ACTIONTYPE] = eventConfig.actionType;
     writeValue[this.PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType;
-    writeValue[this.PageValueKey.IS_PARALLEL] = eventConfig.isParallel;
+    writeValue[this.PageValueKey.IS_SYNC] = eventConfig.isParallel;
     if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
       writeValue[this.PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart;
       writeValue[this.PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd;
@@ -106,7 +106,7 @@ EventPageValueBase = (function() {
       eventConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
       eventConfig.animationType = writeValue[this.PageValueKey.ANIAMTIONTYPE];
       parallel = $(".parallel_div .parallel", eventConfig.emt);
-      isParallel = writeValue[this.PageValueKey.IS_PARALLEL];
+      isParallel = writeValue[this.PageValueKey.IS_SYNC];
       if ((parallel != null) && isParallel) {
         parallel.prop("checked", true);
       }

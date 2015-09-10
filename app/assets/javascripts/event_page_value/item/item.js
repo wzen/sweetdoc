@@ -36,7 +36,7 @@ EPVItem = (function(superClass) {
     }
     writeValue[this.PageValueKey.SCROLL_POINT_START] = start;
     writeValue[this.PageValueKey.SCROLL_POINT_END] = end;
-    writeValue[this.PageValueKey.IS_PARALLEL] = false;
+    writeValue[this.PageValueKey.IS_SYNC] = false;
     writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection();
     writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
     itemWriteValue = item.objWriteEvent();

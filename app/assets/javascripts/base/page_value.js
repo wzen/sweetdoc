@@ -524,7 +524,7 @@ PageValue = (function() {
         results.push(type = te.actiontype);
       } else {
         if (dFlg && type === te[EventPageValueBase.PageValueKey.ACTIONTYPE]) {
-          te[EventPageValueBase.PageValueKey.IS_PARALLEL] = false;
+          te[EventPageValueBase.PageValueKey.IS_SYNC] = false;
           this.setEventPageValue(this.Key.eventPagePrefix() + this.Key.PAGE_VALUES_SEPERATOR + this.Key.E_NUM_PREFIX + (idx + 1), te);
           dFlg = false;
           results.push(type = null);

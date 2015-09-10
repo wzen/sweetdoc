@@ -41,7 +41,7 @@ class Timeline
           Timeline.changeTimelineColor(teNum, actionType)
 
           # 同期線
-          if pageValue[EventPageValueBase.PageValueKey.IS_PARALLEL]
+          if pageValue[EventPageValueBase.PageValueKey.IS_SYNC]
             # 線表示
             timelineEvents.eq(idx).before("<div class='sync_line #{Common.getActionTypeClassNameByActionType(actionType)}'></div>")
           else

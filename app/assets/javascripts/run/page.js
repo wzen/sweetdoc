@@ -16,7 +16,7 @@ Page = (function() {
           parallel = false;
           if (idx < eventPageValueList.length - 1) {
             beforeEvent = eventPageValueList[idx + 1];
-            if (beforeEvent[EventPageValueBase.PageValueKey.IS_PARALLEL]) {
+            if (beforeEvent[EventPageValueBase.PageValueKey.IS_SYNC]) {
               parallel = true;
             }
           }

@@ -455,7 +455,7 @@ class PageValue
         type = te.actiontype
       else
         if dFlg && type == te[EventPageValueBase.PageValueKey.ACTIONTYPE]
-          te[EventPageValueBase.PageValueKey.IS_PARALLEL] = false
+          te[EventPageValueBase.PageValueKey.IS_SYNC] = false
           @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), te)
           dFlg = false
           type = null

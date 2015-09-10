@@ -22,7 +22,7 @@ class EPVItem extends EventPageValueBase
       end = null
     writeValue[@PageValueKey.SCROLL_POINT_START] = start
     writeValue[@PageValueKey.SCROLL_POINT_END] = end
-    writeValue[@PageValueKey.IS_PARALLEL] = false
+    writeValue[@PageValueKey.IS_SYNC] = false
     writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection()
     writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection()
 

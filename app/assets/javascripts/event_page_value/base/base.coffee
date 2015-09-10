@@ -26,8 +26,8 @@ class EventPageValueBase
       @ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE
       # @property [String] ANIAMTIONTYPE アニメーションタイプ名
       @ANIAMTIONTYPE = constant.EventPageValueKey.ANIAMTIONTYPE
-      # @property [String] IS_PARALLEL 同時実行
-      @IS_PARALLEL = constant.EventPageValueKey.IS_PARALLEL
+      # @property [String] IS_SYNC 同時実行
+      @IS_SYNC = constant.EventPageValueKey.IS_SYNC
       # @property [String] SCROLL_TIME スクロール実行開始位置
       @SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START
       # @property [String] SCROLL_TIME スクロール実行終了位置
@@ -66,7 +66,7 @@ class EventPageValueBase
     writeValue[@PageValueKey.METHODNAME] = eventConfig.methodName
     writeValue[@PageValueKey.ACTIONTYPE] = eventConfig.actionType
     writeValue[@PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType
-    writeValue[@PageValueKey.IS_PARALLEL] = eventConfig.isParallel
+    writeValue[@PageValueKey.IS_SYNC] = eventConfig.isParallel
 
     if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
       writeValue[@PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart
@@ -92,7 +92,7 @@ class EventPageValueBase
       eventConfig.animationType = writeValue[@PageValueKey.ANIAMTIONTYPE]
 
       parallel = $(".parallel_div .parallel", eventConfig.emt)
-      isParallel = writeValue[@PageValueKey.IS_PARALLEL]
+      isParallel = writeValue[@PageValueKey.IS_SYNC]
       if parallel? && isParallel
         parallel.prop("checked", true)
 

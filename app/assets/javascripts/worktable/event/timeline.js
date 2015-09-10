@@ -43,7 +43,7 @@ Timeline = (function() {
           $('.te_num', emt).val(teNum);
           actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
           Timeline.changeTimelineColor(teNum, actionType);
-          if (pageValue[EventPageValueBase.PageValueKey.IS_PARALLEL]) {
+          if (pageValue[EventPageValueBase.PageValueKey.IS_SYNC]) {
             timelineEvents.eq(idx).before("<div class='sync_line " + (Common.getActionTypeClassNameByActionType(actionType)) + "'></div>");
           } else {
             timelineEvents.eq(idx).prev('.sync_line').remove();
