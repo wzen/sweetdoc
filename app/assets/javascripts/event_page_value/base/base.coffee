@@ -1,3 +1,4 @@
+# PageValue基底
 class EventPageValueBase
 
   if gon?
@@ -37,6 +38,8 @@ class EventPageValueBase
       # @property [String] SCROLL_FORWARD_DIRECTIONS スクロール進行方向
       @SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS
 
+  # コンフィグ初期設定
+  # @param [Object] eventConfig イベントコンフィグ
   @initConfigValue = (eventConfig) ->
     if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
       handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)

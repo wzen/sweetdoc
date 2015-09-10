@@ -121,13 +121,13 @@ class ArrowItem extends CanvasItemBase
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @getEventMethodName()
     if methodName == 'scrollDraw'
       @reDraw(false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @getEventMethodName()
     if methodName == 'scrollDraw'
       @reDraw(false)
       (@constructor.prototype[methodName]).call(@, @event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])

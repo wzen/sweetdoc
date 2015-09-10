@@ -188,7 +188,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.willChapter = function() {
     var actionType;
-    actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
+    actionType = this.getEventActionType();
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
       this.scrollValue = 0;
     }
@@ -202,10 +202,10 @@ EventBase = (function(superClass) {
     if (complete == null) {
       complete = null;
     }
-    if (this.event[EventPageValueBase.PageValueKey.METHODNAME] == null) {
+    methodName = this.getEventMethodName();
+    if (methodName == null) {
       return;
     }
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (this.isFinishedEvent) {
       return;
     }
@@ -257,7 +257,6 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.clickRootFunc = function(e, complete) {
-    var methodName;
     if (complete == null) {
       complete = null;
     }
@@ -265,8 +264,7 @@ EventBase = (function(superClass) {
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
-    return this.constructor.prototype[methodName].call(this, e, complete);
+    return this.constructor.prototype[this.getEventMethodName()].call(this, e, complete);
   };
 
   EventBase.prototype.updateEventAfter = function() {};

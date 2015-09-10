@@ -15,7 +15,7 @@ BackgroundEvent = (function(superClass) {
   BackgroundEvent.prototype.initEvent = function(event) {
     var b, bColor, bColors, bPer, bp, cColor, cColors, className, g, gPer, gp, i, index, j, k, l, len, len1, methodName, r, rPer, ref, rgb, rp, scrollEnd, scrollLength, scrollStart, section, val;
     BackgroundEvent.__super__.initEvent.call(this, event);
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.getEventMethodName();
     if (methodName === 'changeBackgroundColor') {
       this.scrollEvents = [];
       bColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
@@ -57,7 +57,7 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.prototype.updateEventBefore = function() {
     var bColor, methodName;
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.getEventMethodName();
     if (methodName === 'changeBackgroundColor') {
       bColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
       return this.targetBackground.css('backgroundColor', bColor);
@@ -66,7 +66,7 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.prototype.updateEventAfter = function() {
     var cColor, methodName;
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.getEventMethodName();
     if (methodName === 'changeBackgroundColor') {
       cColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR];
       return this.targetBackground.css('backgroundColor', cColor);

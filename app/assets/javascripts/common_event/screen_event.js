@@ -22,7 +22,7 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.prototype.updateEventBefore = function() {
     var methodName;
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.getEventMethodName();
     if (methodName === 'changeScreenPosition') {
       scrollContents.scrollTop(this.beforeScrollTop);
       return scrollContents.scrollLeft(this.beforeScrollLeft);
@@ -31,7 +31,7 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.prototype.updateEventAfter = function() {
     var methodName, scrollLeft, scrollTop;
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.getEventMethodName();
     if (methodName === 'changeScreenPosition') {
       scrollTop = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
       scrollLeft = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
@@ -43,7 +43,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.prototype.changeScreenPosition = function(e, complete) {
     var actionType, finished_count, scale, scrollLeft, scrollTop;
     this.updateEventBefore();
-    actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
+    actionType = this.getEventActionType();
     if (actionType === Constant.ActionEventHandleType.CLICK) {
       finished_count = 0;
       scrollTop = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);

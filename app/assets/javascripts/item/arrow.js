@@ -116,7 +116,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventBefore = function() {
     var methodName;
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.getEventMethodName();
     if (methodName === 'scrollDraw') {
       return this.reDraw(false);
     }
@@ -124,7 +124,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventAfter = function() {
     var methodName;
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    methodName = this.getEventMethodName();
     if (methodName === 'scrollDraw') {
       this.reDraw(false);
       return this.constructor.prototype[methodName].call(this, this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);

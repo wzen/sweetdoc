@@ -12,14 +12,14 @@ class ScreenEvent extends CommonEvent
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @getEventMethodName()
     if methodName == 'changeScreenPosition'
       scrollContents.scrollTop(@beforeScrollTop)
       scrollContents.scrollLeft(@beforeScrollLeft)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @getEventMethodName()
     if methodName == 'changeScreenPosition'
       scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
       scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
@@ -30,7 +30,7 @@ class ScreenEvent extends CommonEvent
   changeScreenPosition: (e, complete) =>
     @updateEventBefore()
 
-    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    actionType = @getEventActionType()
     if actionType == Constant.ActionEventHandleType.CLICK
       finished_count = 0
       scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])

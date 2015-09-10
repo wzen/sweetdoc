@@ -158,7 +158,7 @@ class EventBase extends Extend
 
   # チャプター開始前イベント
   willChapter: ->
-    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    actionType = @getEventActionType()
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollValue = 0
 
@@ -174,11 +174,11 @@ class EventBase extends Extend
   # @param [Integer] y スクロール縦座標
   # @param [Function] complete イベント終了後コールバック
   scrollRootFunc: (x, y, complete = null) ->
-    if !@event[EventPageValueBase.PageValueKey.METHODNAME]?
+    methodName = @getEventMethodName()
+    if !methodName?
       # メソッドが無い場合
       return
 
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if @isFinishedEvent
       # 終了済みの場合
       return
@@ -186,7 +186,6 @@ class EventBase extends Extend
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
-
 
     # スクロール値更新
     #console.log("y:#{y}")
@@ -245,8 +244,7 @@ class EventBase extends Extend
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
-    (@constructor.prototype[methodName]).call(@, e, complete)
+    (@constructor.prototype[@getEventMethodName()]).call(@, e, complete)
 
   # イベント後の表示状態にする
   # @abstract

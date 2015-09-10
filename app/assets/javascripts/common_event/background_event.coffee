@@ -2,9 +2,11 @@
 class BackgroundEvent extends CommonEvent
   @EVENT_ID = '1'
 
+  # イベントの初期化
+  # @param [Object] event 設定イベント
   initEvent: (event) ->
     super(event)
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @getEventMethodName()
     if methodName == 'changeBackgroundColor'
       @scrollEvents = []
 
@@ -44,14 +46,14 @@ class BackgroundEvent extends CommonEvent
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @getEventMethodName()
     if methodName == 'changeBackgroundColor'
       bColor = @event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR]
       @targetBackground.css('backgroundColor', bColor)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    methodName = @getEventMethodName()
     if methodName == 'changeBackgroundColor'
       cColor = @event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR]
       @targetBackground.css('backgroundColor', cColor)

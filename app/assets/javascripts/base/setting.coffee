@@ -1,3 +1,4 @@
+# 設定値
 class Setting
   if gon?
     # 定数
@@ -9,10 +10,11 @@ class Setting
       @ROOT = constant.PageValueKey.ST_ROOT
       @PREFIX = constant.PageValueKey.ST_PREFIX
 
-  # Setting初期化
+  # 設定値初期化
   @initConfig: ->
     @Grid.initConfig()
 
+  # グリッド線
   class @Grid
 
     @GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME
@@ -30,6 +32,7 @@ class Setting
       # @property [String] GRID グリッド線間隔
       @GRID_STEP = 'step'
 
+    # グリッド初期化
     @initConfig: ->
       root = $("##{Setting.ROOT_ID_NAME}")
       # グリッド線表示
@@ -88,6 +91,7 @@ class Setting
       @drawGrid(gridValue)
 
     # グリッド線描画
+    # @param [Boolean] doDraw 描画するか
     @drawGrid : (doDraw) ->
       page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
       canvas = $("#pages .#{page} .#{@SETTING_GRID_CANVAS_CLASS}:first")[0]
