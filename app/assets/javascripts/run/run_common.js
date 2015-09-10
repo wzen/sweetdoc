@@ -39,16 +39,8 @@ RunCommon = (function() {
   };
 
   RunCommon.initResize = function() {
-    var resizeTimer;
-    resizeTimer = false;
     return $(window).resize(function() {
-      if (resizeTimer !== false) {
-        clearTimeout(resizeTimer);
-      }
-      return resizeTimer = setTimeout(function() {
-        RunCommon.resizeMainContainerEvent();
-        return clearTimeout(resizeTimer);
-      }, 200);
+      return RunCommon.resizeMainContainerEvent();
     });
   };
 

@@ -228,10 +228,11 @@ WorktableCommon = (function() {
     timelineTopPadding = 5;
     padding = borderWidth * 2 + timelineTopPadding;
     $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
-    return window.scrollContentsSize = {
+    window.scrollContentsSize = {
       width: window.scrollContents.width(),
       height: window.scrollContents.height()
     };
+    return $('#sidebar').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - borderWidth * 2);
   };
 
   WorktableCommon.resizeMainContainerEvent = function() {
@@ -241,16 +242,8 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.initResize = function() {
-    var resizeTimer;
-    resizeTimer = false;
     return $(window).resize(function() {
-      if (resizeTimer !== false) {
-        clearTimeout(resizeTimer);
-      }
-      return resizeTimer = setTimeout(function() {
-        WorktableCommon.resizeMainContainerEvent();
-        return clearTimeout(resizeTimer);
-      }, 200);
+      return WorktableCommon.resizeMainContainerEvent();
     });
   };
 

@@ -38,14 +38,8 @@ class RunCommon
 
   # ウィンドウリサイズイベント
   @initResize = ->
-    resizeTimer = false;
     $(window).resize( ->
-      if resizeTimer != false
-        clearTimeout(resizeTimer)
-      resizeTimer = setTimeout( ->
-        RunCommon.resizeMainContainerEvent()
-        clearTimeout(resizeTimer)
-      , 200)
+      RunCommon.resizeMainContainerEvent()
     )
 
   # イベント作成

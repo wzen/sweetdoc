@@ -196,6 +196,7 @@ class WorktableCommon
     padding = borderWidth * 2 + timelineTopPadding
     $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
     window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
+    $('#sidebar').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - borderWidth * 2)
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
@@ -205,14 +206,8 @@ class WorktableCommon
 
   # ウィンドウリサイズイベント
   @initResize = ->
-    resizeTimer = false;
     $(window).resize( ->
-      if resizeTimer != false
-        clearTimeout(resizeTimer)
-      resizeTimer = setTimeout( ->
-        WorktableCommon.resizeMainContainerEvent()
-        clearTimeout(resizeTimer)
-      , 200)
+      WorktableCommon.resizeMainContainerEvent()
     )
 
   # アイテムを削除
