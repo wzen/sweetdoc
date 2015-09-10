@@ -46,8 +46,8 @@ class Const
     CLICK = 1
   end
 
-  # アクションイベントクラス名
-  class ActionEventTypeClassName
+  # タイムラインアクションクラス名
+  class TimelineActionTypeClassName
     # @property [Int] BLANK ブランク
     BLANK = 'blank'
     # @property [Int] SCROLL スクロール
@@ -185,13 +185,6 @@ class Const
     NAV_ROOT_ID = 'header-pageing-menu'
     NAV_SELECTED_CLASS = 'header-pageing-menu-selected'
     NAV_SELECT_ROOT_CLASS = 'header-pageing-menu-root'
-  end
-
-  class ScrollDirection
-    TOP = 0
-    BOTTOM = 1
-    LEFT = 2
-    RIGHT = 3
   end
 
   class RunGuide

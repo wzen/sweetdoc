@@ -4,6 +4,8 @@ var Navbar;
 Navbar = (function() {
   function Navbar() {}
 
+  Navbar.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
+
   Navbar.ITEM_MENU_PREFIX = 'menu-item-';
 
   Navbar.initWorktableNavbar = function() {

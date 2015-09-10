@@ -1,6 +1,6 @@
 # 閲覧を実行する
 run = ->
-  WorktableCommon.stopAllInstancePreview( ->
+  WorktableCommon.stopAllEventPreview( ->
     # イベント存在チェック
     h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
     if h?

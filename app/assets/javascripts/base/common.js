@@ -4,6 +4,8 @@ var Common;
 Common = (function() {
   function Common() {}
 
+  Common.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
+
   Common.checkBlowserEnvironment = function() {
     var c, e;
     if (!localStorage) {
@@ -91,7 +93,7 @@ Common = (function() {
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     pageSection = $("." + sectionClass, root);
     if ((pageSection == null) || pageSection.length === 0) {
-      temp = $("#" + Constant.ElementAttribute.MAIN_TEMP_ID).children(':first').clone(true);
+      temp = $("#" + Common.MAIN_TEMP_ID).children(':first').clone(true);
       style = '';
       style += "z-index:" + (Common.plusPagingZindex(0, pageNum)) + ";";
       width = collapsed ? 'width: 0px;' : '';
@@ -303,9 +305,9 @@ Common = (function() {
 
   Common.getActionTypeClassNameByActionType = function(actionType) {
     if (parseInt(actionType) === Constant.ActionEventHandleType.CLICK) {
-      return Constant.ActionEventTypeClassName.CLICK;
+      return Constant.TimelineActionTypeClassName.CLICK;
     } else if (parseInt(actionType) === Constant.ActionEventHandleType.SCROLL) {
-      return Constant.ActionEventTypeClassName.SCROLL;
+      return Constant.TimelineActionTypeClassName.SCROLL;
     }
     return null;
   };

@@ -10,6 +10,8 @@ ItemBase = (function(superClass) {
 
   ItemBase.ITEM_ID = "";
 
+  ItemBase.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
+
   function ItemBase(cood) {
     if (cood == null) {
       cood = null;
@@ -33,7 +35,7 @@ ItemBase = (function(superClass) {
   }
 
   ItemBase.prototype.getDesignConfigId = function() {
-    return Constant.ElementAttribute.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
+    return this.constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
   };
 
   ItemBase.prototype.getJQueryElement = function() {

@@ -59,22 +59,23 @@ Paging = (function() {
   };
 
   Paging.createNewPage = function() {
-    var beforePageNum, pageFlip, self;
+    var self;
     self = this;
-    beforePageNum = PageValue.getPageNum();
-    if (window.debug) {
-      console.log('[createNewPage] beforePageNum:' + beforePageNum);
-    }
-    Sidebar.closeSidebar();
-    LocalStorage.clearWorktableWithoutSetting();
-    EventConfig.removeAllConfig();
-    Common.createdMainContainerIfNeeded(beforePageNum + 1);
-    pageFlip = new PageFlip(beforePageNum, beforePageNum + 1);
-    PageValue.setPageNum(PageValue.getPageCount() + 1);
-    WorktableCommon.initMainContainer();
-    PageValue.adjustInstanceAndEventOnThisPage();
-    return WorktableCommon.drawAllItemFromInstancePageValue((function(_this) {
-      return function() {
+    return WorktableCommon.stopAllEventPreview(function() {
+      var beforePageNum, pageFlip;
+      beforePageNum = PageValue.getPageNum();
+      if (window.debug) {
+        console.log('[createNewPage] beforePageNum:' + beforePageNum);
+      }
+      Sidebar.closeSidebar();
+      LocalStorage.clearWorktableWithoutSetting();
+      EventConfig.removeAllConfig();
+      Common.createdMainContainerIfNeeded(beforePageNum + 1);
+      pageFlip = new PageFlip(beforePageNum, beforePageNum + 1);
+      PageValue.setPageNum(PageValue.getPageCount() + 1);
+      WorktableCommon.initMainContainer();
+      PageValue.adjustInstanceAndEventOnThisPage();
+      return WorktableCommon.drawAllItemFromInstancePageValue(function() {
         return pageFlip.startRender(function() {
           var className, section;
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
@@ -87,37 +88,38 @@ Paging = (function() {
           LocalStorage.saveAllPageValues();
           return self.createPageSelectMenu();
         });
-      };
-    })(this));
+      });
+    });
   };
 
   Paging.selectPage = function(selectedNum) {
-    var beforePageNum, pageCount, pageFlip, self;
-    if (window.debug) {
-      console.log('[selectPage] selectedNum:' + selectedNum);
-    }
+    var self;
     self = this;
-    if (selectedNum <= 0) {
-      return;
-    }
-    pageCount = PageValue.getPageCount();
-    if (selectedNum < 0 || selectedNum > pageCount) {
-      return;
-    }
-    beforePageNum = PageValue.getPageNum();
-    if (window.debug) {
-      console.log('[selectPage] beforePageNum:' + beforePageNum);
-    }
-    Sidebar.closeSidebar();
-    LocalStorage.clearWorktableWithoutSetting();
-    EventConfig.removeAllConfig();
-    Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum);
-    pageFlip = new PageFlip(beforePageNum, selectedNum);
-    PageValue.setPageNum(selectedNum);
-    WorktableCommon.initMainContainer();
-    PageValue.adjustInstanceAndEventOnThisPage();
-    return WorktableCommon.drawAllItemFromInstancePageValue((function(_this) {
-      return function() {
+    return WorktableCommon.stopAllEventPreview(function() {
+      var beforePageNum, pageCount, pageFlip;
+      if (window.debug) {
+        console.log('[selectPage] selectedNum:' + selectedNum);
+      }
+      if (selectedNum <= 0) {
+        return;
+      }
+      pageCount = PageValue.getPageCount();
+      if (selectedNum < 0 || selectedNum > pageCount) {
+        return;
+      }
+      beforePageNum = PageValue.getPageNum();
+      if (window.debug) {
+        console.log('[selectPage] beforePageNum:' + beforePageNum);
+      }
+      Sidebar.closeSidebar();
+      LocalStorage.clearWorktableWithoutSetting();
+      EventConfig.removeAllConfig();
+      Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum);
+      pageFlip = new PageFlip(beforePageNum, selectedNum);
+      PageValue.setPageNum(selectedNum);
+      WorktableCommon.initMainContainer();
+      PageValue.adjustInstanceAndEventOnThisPage();
+      return WorktableCommon.drawAllItemFromInstancePageValue(function() {
         return pageFlip.startRender(function() {
           var className, section;
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
@@ -131,8 +133,8 @@ Paging = (function() {
           LocalStorage.saveAllPageValues();
           return self.createPageSelectMenu();
         });
-      };
-    })(this));
+      });
+    });
   };
 
   return Paging;

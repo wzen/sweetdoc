@@ -1,5 +1,6 @@
 class Navbar
-
+  # @property [String] NAVBAR_ROOT ナビヘッダーRoot
+  @NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT
   @ITEM_MENU_PREFIX = 'menu-item-'
 
   # Worktableナビバー初期化

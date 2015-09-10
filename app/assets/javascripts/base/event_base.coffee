@@ -1,31 +1,24 @@
 # イベントリスナー Extend
 class EventBase extends Extend
-  # 初期化
-  initWithEvent: (event) ->
-    @setEvent(event)
 
-  # アクションの初期化(閲覧モードのみ使用される)
-  setEvent: (event) ->
+  # イベントの初期化
+  # @param [Object] event 設定イベント
+  initWithEvent: (event) ->
     @event = event
     @isFinishedEvent = false
     @doPreviewLoop = false
     @enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
-    # アクションメソッドの設定
-    @setMethod()
 
-  # アクションメソッドの設定
-  setMethod: ->
+    # アクションメソッドの設定
     actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
     methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
     if !@constructor.prototype[methodName]?
       # メソッドが見つからない場合
       return
-
     # スクロールイベント
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollEvent = @scrollRootFunc
-
     # クリックイベント
     else if actionType == Constant.ActionEventHandleType.CLICK
       @clickEvent = @clickRootFunc

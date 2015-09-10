@@ -1,4 +1,6 @@
 class RunCommon
+  # @property [String] RUN_CSS CSSスタイルRoot
+  @RUN_CSS = constant.ElementAttribute.RUN_CSS
 
   # 画面初期化
   @initView = ->
@@ -25,7 +27,7 @@ class RunCommon
   # Mainビューの高さ更新
   @updateMainViewSize = ->
     padding = 5 * 2
-    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - padding)
+    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - padding)
     window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
 
   # ウィンドウの高さ設定
@@ -113,7 +115,7 @@ class RunCommon
 
   @createCssElement = (pageNum) ->
     # CSS作成
-    cssId = Constant.ElementAttribute.RUN_CSS.replace('@pagenum', pageNum)
+    cssId = @RUN_CSS.replace('@pagenum', pageNum)
     cssEmt = $("##{cssId}")
     if !cssEmt? || cssEmt.length == 0
       $("<div id='#{cssId}'></div>").appendTo(window.cssCode)

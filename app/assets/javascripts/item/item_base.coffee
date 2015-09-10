@@ -7,6 +7,8 @@ class ItemBase extends ItemEventBase
   # @abstract
   # @property [ItemType] ITEM_ID アイテム種別
   @ITEM_ID = ""
+  # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
+  @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -37,7 +39,7 @@ class ItemBase extends ItemEventBase
   # コンフィグメニューの要素IDを取得
   # @return [Int] HTML要素ID
   getDesignConfigId: ->
-    return Constant.ElementAttribute.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)
+    return @constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)
 
   getJQueryElement: ->
     return $('#' + @id)

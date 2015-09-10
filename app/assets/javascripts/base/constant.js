@@ -43,16 +43,16 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ActionEventTypeClassName = (function() {
-      function ActionEventTypeClassName() {}
+    Constant.TimelineActionTypeClassName = (function() {
+      function TimelineActionTypeClassName() {}
 
-      ActionEventTypeClassName.BLANK = constant.ActionEventTypeClassName.BLANK;
+      TimelineActionTypeClassName.BLANK = constant.TimelineActionTypeClassName.BLANK;
 
-      ActionEventTypeClassName.SCROLL = constant.ActionEventTypeClassName.SCROLL;
+      TimelineActionTypeClassName.SCROLL = constant.TimelineActionTypeClassName.SCROLL;
 
-      ActionEventTypeClassName.CLICK = constant.ActionEventTypeClassName.CLICK;
+      TimelineActionTypeClassName.CLICK = constant.TimelineActionTypeClassName.CLICK;
 
-      return ActionEventTypeClassName;
+      return TimelineActionTypeClassName;
 
     })();
 
@@ -85,14 +85,6 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ElementAttribute = (function() {
       function ElementAttribute() {}
 
-      ElementAttribute.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
-
-      ElementAttribute.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
-
-      ElementAttribute.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
-
-      ElementAttribute.RUN_CSS = constant.ElementAttribute.RUN_CSS;
-
       return ElementAttribute;
 
     })();
@@ -114,21 +106,6 @@ if (typeof gon !== "undefined" && gon !== null) {
       ModalViewType.ABOUT = constant.ModalViewType.ABOUT;
 
       return ModalViewType;
-
-    })();
-
-    Constant.ScrollDirection = (function() {
-      function ScrollDirection() {}
-
-      ScrollDirection.TOP = constant.ScrollDirection.TOP;
-
-      ScrollDirection.BOTTOM = constant.ScrollDirection.BOTTOM;
-
-      ScrollDirection.LEFT = constant.ScrollDirection.LEFT;
-
-      ScrollDirection.RIGHT = constant.ScrollDirection.RIGHT;
-
-      return ScrollDirection;
 
     })();
 

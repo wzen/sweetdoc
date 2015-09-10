@@ -1,5 +1,8 @@
 # アプリ内の共通メソッドクラス
 class Common
+  # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
+  @MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID
+
   # ブラウザ対応のチェック
   # @return [Boolean] 処理結果
   @checkBlowserEnvironment = ->
@@ -66,7 +69,7 @@ class Common
     pageSection = $(".#{sectionClass}", root)
     if !pageSection? || pageSection.length == 0
       # Tempからコピー
-      temp = $("##{Constant.ElementAttribute.MAIN_TEMP_ID}").children(':first').clone(true)
+      temp = $("##{Common.MAIN_TEMP_ID}").children(':first').clone(true)
       style = ''
       style += "z-index:#{Common.plusPagingZindex(0, pageNum)};"
       # TODO: pageflipを変更したら修正すること
@@ -271,9 +274,9 @@ class Common
   # @return [String] アクションタイプクラス名
   @getActionTypeClassNameByActionType = (actionType) ->
     if parseInt(actionType) == Constant.ActionEventHandleType.CLICK
-      return Constant.ActionEventTypeClassName.CLICK
+      return Constant.TimelineActionTypeClassName.CLICK
     else if parseInt(actionType) == Constant.ActionEventHandleType.SCROLL
-      return Constant.ActionEventTypeClassName.SCROLL
+      return Constant.TimelineActionTypeClassName.SCROLL
     return null
 
   # 日付をフォーマットで変換

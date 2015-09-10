@@ -30,13 +30,13 @@ if gon?
       @CLICK = constant.ActionEventHandleType.CLICK
 
     # アクションイベントクラス名
-    class @ActionEventTypeClassName
+    class @TimelineActionTypeClassName
       # @property [Int] BLANK ブランク
-      @BLANK = constant.ActionEventTypeClassName.BLANK
+      @BLANK = constant.TimelineActionTypeClassName.BLANK
       # @property [Int] SCROLL スクロール
-      @SCROLL = constant.ActionEventTypeClassName.SCROLL
+      @SCROLL = constant.TimelineActionTypeClassName.SCROLL
       # @property [Int] CLICK クリック
-      @CLICK = constant.ActionEventTypeClassName.CLICK
+      @CLICK = constant.TimelineActionTypeClassName.CLICK
 
     # イベントアクション種類
     class @ActionAnimationType
@@ -57,14 +57,7 @@ if gon?
       @V = constant.KeyboardKeyCode.V
 
     class @ElementAttribute
-      # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
-      @MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID
-      # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
-      @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
-      # @property [String] NAVBAR_ROOT ナビヘッダーRoot
-      @NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT
-      # @property [String] RUN_CSS CSSスタイルRoot
-      @RUN_CSS = constant.ElementAttribute.RUN_CSS
+
 
     # 共通イベントタイプ
     class @CommonActionEventChangeType
@@ -75,14 +68,8 @@ if gon?
 
     # モーダルビュータイプ
     class @ModalViewType
+      # @property [Int] ABOUT 概要
       @ABOUT = constant.ModalViewType.ABOUT
-
-    # スクロール方向
-    class @ScrollDirection
-      @TOP = constant.ScrollDirection.TOP
-      @BOTTOM = constant.ScrollDirection.BOTTOM
-      @LEFT = constant.ScrollDirection.LEFT
-      @RIGHT = constant.ScrollDirection.RIGHT
 
     # ページング
     class @Paging

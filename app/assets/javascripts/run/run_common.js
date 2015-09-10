@@ -4,6 +4,8 @@ var RunCommon;
 RunCommon = (function() {
   function RunCommon() {}
 
+  RunCommon.RUN_CSS = constant.ElementAttribute.RUN_CSS;
+
   RunCommon.initView = function() {
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
@@ -23,7 +25,7 @@ RunCommon = (function() {
   RunCommon.updateMainViewSize = function() {
     var padding;
     padding = 5 * 2;
-    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - padding);
+    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - padding);
     return window.scrollContentsSize = {
       width: window.scrollContents.width(),
       height: window.scrollContents.height()
@@ -116,7 +118,7 @@ RunCommon = (function() {
 
   RunCommon.createCssElement = function(pageNum) {
     var cssEmt, cssId;
-    cssId = Constant.ElementAttribute.RUN_CSS.replace('@pagenum', pageNum);
+    cssId = this.RUN_CSS.replace('@pagenum', pageNum);
     cssEmt = $("#" + cssId);
     if ((cssEmt == null) || cssEmt.length === 0) {
       $("<div id='" + cssId + "'></div>").appendTo(window.cssCode);

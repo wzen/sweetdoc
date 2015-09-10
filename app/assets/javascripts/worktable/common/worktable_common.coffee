@@ -194,7 +194,7 @@ class WorktableCommon
     borderWidth = 5
     timelineTopPadding = 5
     padding = borderWidth * 2 + timelineTopPadding
-    $('#main').height($('#contents').height() - $("##{Constant.ElementAttribute.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
+    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
     window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
 
   # 画面サイズ設定
@@ -382,7 +382,7 @@ class WorktableCommon
         callback()
     , pageNum)
 
-  @stopAllInstancePreview: (callback = null) ->
+  @stopAllEventPreview: (callback = null) ->
     count = 0
     length = Object.keys(window.instanceMap).length
     for k, v of window.instanceMap

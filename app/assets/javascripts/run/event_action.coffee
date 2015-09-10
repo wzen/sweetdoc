@@ -110,7 +110,7 @@ class EventAction
       # 隠したビューのアイテムを削除
       Common.removeAllItem(beforePageNum)
       # CSS削除
-      $("##{Constant.ElementAttribute.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
+      $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
       # コールバック
       if callback?
         callback()

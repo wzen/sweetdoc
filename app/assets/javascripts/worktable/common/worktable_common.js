@@ -227,7 +227,7 @@ WorktableCommon = (function() {
     borderWidth = 5;
     timelineTopPadding = 5;
     padding = borderWidth * 2 + timelineTopPadding;
-    $('#main').height($('#contents').height() - $("#" + Constant.ElementAttribute.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
     return window.scrollContentsSize = {
       width: window.scrollContents.width(),
       height: window.scrollContents.height()
@@ -433,7 +433,7 @@ WorktableCommon = (function() {
     }, pageNum);
   };
 
-  WorktableCommon.stopAllInstancePreview = function(callback) {
+  WorktableCommon.stopAllEventPreview = function(callback) {
     var count, k, length, ref, results, v;
     if (callback == null) {
       callback = null;

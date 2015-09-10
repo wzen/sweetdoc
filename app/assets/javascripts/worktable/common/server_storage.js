@@ -70,7 +70,7 @@ ServerStorage = (function() {
         data: data,
         dataType: "json",
         success: function(data) {
-          $("#" + Constant.ElementAttribute.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS + " ." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+          $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS + " ." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
           if (window.debug) {
             return console.log(data.message);
           }
@@ -171,7 +171,7 @@ ServerStorage = (function() {
 
   ServerStorage.get_load_list = function() {
     var diffTime, loadEmt, loadedLocalTime, s, updateFlg;
-    loadEmt = $("#" + Constant.ElementAttribute.NAVBAR_ROOT).find("." + this.ElementAttribute.FILE_LOAD_CLASS);
+    loadEmt = $("#" + Navbar.NAVBAR_ROOT).find("." + this.ElementAttribute.FILE_LOAD_CLASS);
     updateFlg = loadEmt.find("." + this.ElementAttribute.LOAD_LIST_UPDATED_FLG).length > 0;
     if (updateFlg) {
       loadedLocalTime = loadEmt.find("." + this.ElementAttribute.LOADED_LOCALTIME);

@@ -2,7 +2,7 @@
 var run;
 
 run = function() {
-  return WorktableCommon.stopAllInstancePreview(function() {
+  return WorktableCommon.stopAllEventPreview(function() {
     var h, target;
     h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
     if (h != null) {

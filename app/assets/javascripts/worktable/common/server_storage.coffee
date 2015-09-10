@@ -55,7 +55,7 @@ class ServerStorage
             # updateフラグ除去
             #PageValue.clearAllUpdateFlg()
             # 「Load」マウスオーバーで取得させるためupdateフラグを消去
-            $("##{Constant.ElementAttribute.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.FILE_LOAD_CLASS} .#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
+            $("##{Navbar.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.FILE_LOAD_CLASS} .#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
             if window.debug
               console.log(data.message)
           error: (data) ->
@@ -142,7 +142,7 @@ class ServerStorage
     )
 
   @get_load_list: ->
-    loadEmt = $("##{Constant.ElementAttribute.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS}")
+    loadEmt = $("##{Navbar.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS}")
     updateFlg = loadEmt.find(".#{@ElementAttribute.LOAD_LIST_UPDATED_FLG}").length > 0
     if updateFlg
       loadedLocalTime = loadEmt.find(".#{@ElementAttribute.LOADED_LOCALTIME}")

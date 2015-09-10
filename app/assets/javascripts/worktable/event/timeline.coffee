@@ -104,7 +104,7 @@ class Timeline
       WorktableCommon.clearSelectedBorder()
       WorktableCommon.setSelectedBorder(e, "timeline")
 
-      if Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)
+      if Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.TimelineActionTypeClassName.BLANK)
         # サイドバー表示時 or Blankの場合はコンフィグを設定&表示
         _initEventConfig.call(@, e)
 
@@ -121,10 +121,10 @@ class Timeline
           item = window.instanceMap[te.id]
           if item?
             if idx < te_num - 1
-              item.setEvent(te)
+              item.initWithEvent(te)
               item.updateEventAfter()
             else if idx == te_num - 1
-              item.setEvent(te)
+              item.initWithEvent(te)
               # プレビュー実行
               item.preview(te)
               break
@@ -209,13 +209,13 @@ class Timeline
         teEmt = @
     )
 
-    for k,v of Constant.ActionEventTypeClassName
+    for k,v of Constant.TimelineActionTypeClassName
       $(teEmt).removeClass(v)
 
     if actionType?
       $(teEmt).addClass(Common.getActionTypeClassNameByActionType(actionType))
     else
-      $(teEmt).addClass(Constant.ActionEventTypeClassName.BLANK)
+      $(teEmt).addClass(Constant.TimelineActionTypeClassName.BLANK)
 
   # EventPageValueを参照してタイムラインを更新
   @refreshAllTimeline: ->

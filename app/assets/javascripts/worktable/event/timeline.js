@@ -99,7 +99,7 @@ Timeline = (function() {
       }
       WorktableCommon.clearSelectedBorder();
       WorktableCommon.setSelectedBorder(e, "timeline");
-      if (Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.ActionEventTypeClassName.BLANK)) {
+      if (Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.TimelineActionTypeClassName.BLANK)) {
         _initEventConfig.call(this, e);
       }
       te_num = $(e).find('input.te_num').val();
@@ -116,10 +116,10 @@ Timeline = (function() {
           item = window.instanceMap[te.id];
           if (item != null) {
             if (idx < te_num - 1) {
-              item.setEvent(te);
+              item.initWithEvent(te);
               results.push(item.updateEventAfter());
             } else if (idx === te_num - 1) {
-              item.setEvent(te);
+              item.initWithEvent(te);
               item.preview(te);
               break;
             } else {
@@ -205,7 +205,7 @@ Timeline = (function() {
         return teEmt = this;
       }
     });
-    ref = Constant.ActionEventTypeClassName;
+    ref = Constant.TimelineActionTypeClassName;
     for (k in ref) {
       v = ref[k];
       $(teEmt).removeClass(v);
@@ -213,7 +213,7 @@ Timeline = (function() {
     if (actionType != null) {
       return $(teEmt).addClass(Common.getActionTypeClassNameByActionType(actionType));
     } else {
-      return $(teEmt).addClass(Constant.ActionEventTypeClassName.BLANK);
+      return $(teEmt).addClass(Constant.TimelineActionTypeClassName.BLANK);
     }
   };
 

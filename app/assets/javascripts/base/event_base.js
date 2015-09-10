@@ -13,20 +13,12 @@ EventBase = (function(superClass) {
   }
 
   EventBase.prototype.initWithEvent = function(event) {
-    return this.setEvent(event);
-  };
-
-  EventBase.prototype.setEvent = function(event) {
+    var actionType, methodName;
     this.event = event;
     this.isFinishedEvent = false;
     this.doPreviewLoop = false;
     this.enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this.forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
-    return this.setMethod();
-  };
-
-  EventBase.prototype.setMethod = function() {
-    var actionType, methodName;
     actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
     methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
     if (this.constructor.prototype[methodName] == null) {
