@@ -42,26 +42,6 @@ WorkTableCanvasItemExtend = {
   },
   resizeComplete: function() {
     return this.saveObj();
-  },
-  getHistoryObj: function(action) {
-    var obj;
-    obj = {
-      obj: this,
-      action: action,
-      itemSize: Common.makeClone(this.itemSize),
-      scale: Common.makeClone(this.scale)
-    };
-    if (window.debug) {
-      console.log("getHistory: scale:" + this.scale.w + "," + this.scale.h);
-    }
-    return obj;
-  },
-  setHistoryObj: function(historyObj) {
-    this.itemSize = Common.makeClone(historyObj.itemSize);
-    this.scale = Common.makeClone(historyObj.scale);
-    if (window.debug) {
-      return console.log("setHistoryObj: itemSize: " + (JSON.stringify(this.itemSize)));
-    }
   }
 };
 

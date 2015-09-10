@@ -32,18 +32,6 @@ WorkTableCssItemExtend = {
   resizeComplete: function() {
     return this.saveObj();
   },
-  getHistoryObj: function(action) {
-    var obj;
-    obj = {
-      obj: this,
-      action: action,
-      itemSize: Common.makeClone(this.itemSize)
-    };
-    return obj;
-  },
-  setHistoryObj: function(historyObj) {
-    return this.itemSize = Common.makeClone(historyObj.itemSize);
-  },
   draw: function(cood) {
     if (this.itemSize !== null) {
       this.restoreDrawingSurface(this.itemSize);

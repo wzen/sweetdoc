@@ -31,20 +31,6 @@ WorkTableCssItemExtend =
   resizeComplete: ->
     @saveObj()
 
-  # 履歴データを取得
-  # @param [ItemActionType] action アクション種別
-  getHistoryObj: (action) ->
-    obj = {
-      obj: @
-      action : action
-      itemSize: Common.makeClone(@itemSize)
-    }
-    return obj
-
-  # 履歴データを設定
-  setHistoryObj: (historyObj) ->
-    @itemSize = Common.makeClone(historyObj.itemSize)
-
   # ドラッグ描画
   # @param [Array] cood 座標
   draw: (cood) ->

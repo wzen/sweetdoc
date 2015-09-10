@@ -116,16 +116,6 @@ class ItemBase extends ItemEventBase
     PageValue.setInstancePageValue(prefix_key + ":#{prop}", value)
     LocalStorage.saveInstancePageValue()
 
-  # 履歴データを取得
-  # @abstract
-  # @param [ItemActionType] action アクション種別
-  getHistoryObj: (action) ->
-    return null
-
-  # 履歴データを設定
-  # @abstract
-  setHistoryObj: (historyObj) ->
-
   # 保存用の最小限のデータを取得
   getMinimumObject: ->
     obj = {

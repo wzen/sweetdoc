@@ -112,12 +112,6 @@ ItemBase = (function(superClass) {
     return LocalStorage.saveInstancePageValue();
   };
 
-  ItemBase.prototype.getHistoryObj = function(action) {
-    return null;
-  };
-
-  ItemBase.prototype.setHistoryObj = function(historyObj) {};
-
   ItemBase.prototype.getMinimumObject = function() {
     var obj;
     obj = {

@@ -40,24 +40,3 @@ WorkTableCanvasItemExtend =
   # リサイズ完了時イベント
   resizeComplete: ->
     @saveObj()
-
-  # 履歴データを取得
-  # @param [ItemActionType] action アクション種別
-  getHistoryObj: (action) ->
-    obj = {
-      obj: @
-      action : action
-      itemSize: Common.makeClone(@itemSize)
-      scale: Common.makeClone(@scale)
-    }
-    if window.debug
-      console.log("getHistory: scale:#{@scale.w},#{@scale.h}")
-    return obj
-
-  # 履歴データを設定
-  # @param [Array] historyObj 履歴オブジェクト
-  setHistoryObj: (historyObj) ->
-    @itemSize = Common.makeClone(historyObj.itemSize)
-    @scale = Common.makeClone(historyObj.scale)
-    if window.debug
-      console.log("setHistoryObj: itemSize: #{JSON.stringify(@itemSize)}")
