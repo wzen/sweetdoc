@@ -57,8 +57,8 @@ EventBase = (function(superClass) {
       this.initEvent(event);
       this.willChapter();
       this.appendCssIfNeeded();
-      method = this.constructor.prototype[methodName];
-      actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
+      method = this.constructor.prototype[this.getEventMethodName()];
+      actionType = this.getEventActionType();
       this.doPreviewLoop = true;
       loopCount = 0;
       this.previewTimer = null;

@@ -50,18 +50,18 @@ class EventBase extends Extend
       loopDelay = 1000 # 1秒毎イベント実行
       loopMaxCount = 5 # ループ5回
 
+      # イベント初期化
       @initEvent(event)
       @willChapter()
       @appendCssIfNeeded()
 
-      method = @constructor.prototype[methodName]
-      actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
+      method = @constructor.prototype[@getEventMethodName()]
+      actionType = @getEventActionType()
       # イベントループ
       @doPreviewLoop = true
       loopCount = 0
       @previewTimer = null
       if actionType == Constant.ActionEventHandleType.SCROLL
-
         p = 0
         _draw = =>
           if @doPreviewLoop
