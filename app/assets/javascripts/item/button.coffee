@@ -35,7 +35,8 @@ class ButtonItem extends CssItemBase
     )
 
   # CSS
-  cssElement : (methodName) ->
+  cssElement : ->
+    methodName = @getEventMethodName()
     funcName = "#{methodName}_#{@id}"
     keyFrameName = "#{@id}_frame"
     emt = @getJQueryElement()
@@ -94,9 +95,9 @@ class ButtonItem extends CssItemBase
     """
     return "#{webkitKeyframe} #{mozKeyframe} #{css}"
 
-  willChapter: (methodName) ->
-    super(methodName)
-    if methodName == 'defaultClick'
+  willChapter: ->
+    super()
+    if @getEventMethodName() == 'defaultClick'
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 

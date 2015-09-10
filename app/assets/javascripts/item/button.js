@@ -54,8 +54,9 @@ ButtonItem = (function(superClass) {
     })(this));
   };
 
-  ButtonItem.prototype.cssElement = function(methodName) {
-    var css, emt, funcName, height, keyFrameName, keyframe, left, mozKeyframe, top, webkitKeyframe, width;
+  ButtonItem.prototype.cssElement = function() {
+    var css, emt, funcName, height, keyFrameName, keyframe, left, methodName, mozKeyframe, top, webkitKeyframe, width;
+    methodName = this.getEventMethodName();
     funcName = methodName + "_" + this.id;
     keyFrameName = this.id + "_frame";
     emt = this.getJQueryElement();
@@ -70,9 +71,9 @@ ButtonItem = (function(superClass) {
     return webkitKeyframe + " " + mozKeyframe + " " + css;
   };
 
-  ButtonItem.prototype.willChapter = function(methodName) {
-    ButtonItem.__super__.willChapter.call(this, methodName);
-    if (methodName === 'defaultClick') {
+  ButtonItem.prototype.willChapter = function() {
+    ButtonItem.__super__.willChapter.call(this);
+    if (this.getEventMethodName() === 'defaultClick') {
       return this.getJQueryElement().css('opacity', 1);
     }
   };

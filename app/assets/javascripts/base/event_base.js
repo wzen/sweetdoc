@@ -4,8 +4,6 @@ var CommonEventBase, EventBase, ItemEventBase,
   hasProp = {}.hasOwnProperty;
 
 EventBase = (function(superClass) {
-  var _preview;
-
   extend(EventBase, superClass);
 
   function EventBase() {
@@ -13,21 +11,30 @@ EventBase = (function(superClass) {
   }
 
   EventBase.prototype.initEvent = function(event) {
-    var actionType, methodName;
     this.event = event;
     this.isFinishedEvent = false;
     this.doPreviewLoop = false;
     this.enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this.forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
-    actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
-    if (this.constructor.prototype[methodName] == null) {
+    if (this.constructor.prototype[this.getEventMethodName()] == null) {
       return;
     }
-    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+    if (this.getEventActionType() === Constant.ActionEventHandleType.SCROLL) {
       return this.scrollEvent = this.scrollRootFunc;
-    } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+    } else if (this.getEventActionType() === Constant.ActionEventHandleType.CLICK) {
       return this.clickEvent = this.clickRootFunc;
+    }
+  };
+
+  EventBase.prototype.getEventMethodName = function() {
+    if (this.event != null) {
+      return this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    }
+  };
+
+  EventBase.prototype.getEventActionType = function() {
+    if (this.event != null) {
+      return this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
     }
   };
 
@@ -41,105 +48,104 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.preview = function(event) {
+    var _preview;
+    _preview = function(event) {
+      var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, p;
+      drawDelay = 30;
+      loopDelay = 1000;
+      loopMaxCount = 5;
+      this.initEvent(event);
+      this.willChapter();
+      this.appendCssIfNeeded();
+      method = this.constructor.prototype[methodName];
+      actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
+      this.doPreviewLoop = true;
+      loopCount = 0;
+      this.previewTimer = null;
+      if (actionType === Constant.ActionEventHandleType.SCROLL) {
+        p = 0;
+        _draw = (function(_this) {
+          return function() {
+            if (_this.doPreviewLoop) {
+              if (_this.previewTimer != null) {
+                clearTimeout(_this.previewTimer);
+                _this.previewTimer = null;
+              }
+              return _this.previewTimer = setTimeout(function() {
+                method.call(_this, p);
+                p += 1;
+                if (p >= _this.scrollLength()) {
+                  p = 0;
+                  return _loop.call(_this);
+                } else {
+                  return _draw.call(_this);
+                }
+              }, drawDelay);
+            } else {
+              if (_this.previewFinished != null) {
+                _this.previewFinished();
+                return _this.previewFinished = null;
+              }
+            }
+          };
+        })(this);
+        _loop = (function(_this) {
+          return function() {
+            if (_this.doPreviewLoop) {
+              loopCount += 1;
+              if (loopCount >= loopMaxCount) {
+                _this.stopPreview();
+              }
+              if (_this.previewTimer != null) {
+                clearTimeout(_this.previewTimer);
+                _this.previewTimer = null;
+              }
+              _this.previewTimer = setTimeout(function() {
+                return _draw.call(_this);
+              }, loopDelay);
+              if (!_this.doPreviewLoop) {
+                return _this.stopPreview();
+              }
+            } else {
+              if (_this.previewFinished != null) {
+                _this.previewFinished();
+                return _this.previewFinished = null;
+              }
+            }
+          };
+        })(this);
+        return _draw.call(this);
+      } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+        _loop = (function(_this) {
+          return function() {
+            if (_this.doPreviewLoop) {
+              loopCount += 1;
+              if (loopCount >= loopMaxCount) {
+                _this.stopPreview();
+              }
+              if (_this.previewTimer != null) {
+                clearTimeout(_this.previewTimer);
+                _this.previewTimer = null;
+              }
+              return _this.previewTimer = setTimeout(function() {
+                return method.call(_this, null, _loop);
+              }, loopDelay);
+            } else {
+              if (_this.previewFinished != null) {
+                _this.previewFinished();
+                return _this.previewFinished = null;
+              }
+            }
+          };
+        })(this);
+        return method.call(this, null, _loop);
+      }
+    };
     return this.stopPreview((function(_this) {
       return function() {
         return _preview.call(_this, event);
       };
     })(this));
-  };
-
-  _preview = function(event) {
-    var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, methodName, p;
-    drawDelay = 30;
-    loopDelay = 1000;
-    loopMaxCount = 5;
-    this.initEvent(event);
-    methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
-    this.willChapter(methodName);
-    this.appendCssIfNeeded(methodName);
-    method = this.constructor.prototype[methodName];
-    actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
-    this.doPreviewLoop = true;
-    loopCount = 0;
-    this.previewTimer = null;
-    if (actionType === Constant.ActionEventHandleType.SCROLL) {
-      p = 0;
-      _draw = (function(_this) {
-        return function() {
-          if (_this.doPreviewLoop) {
-            if (_this.previewTimer != null) {
-              clearTimeout(_this.previewTimer);
-              _this.previewTimer = null;
-            }
-            return _this.previewTimer = setTimeout(function() {
-              method.call(_this, p);
-              p += 1;
-              if (p >= _this.scrollLength()) {
-                p = 0;
-                return _loop.call(_this);
-              } else {
-                return _draw.call(_this);
-              }
-            }, drawDelay);
-          } else {
-            if (_this.previewFinished != null) {
-              _this.previewFinished();
-              return _this.previewFinished = null;
-            }
-          }
-        };
-      })(this);
-      _loop = (function(_this) {
-        return function() {
-          if (_this.doPreviewLoop) {
-            loopCount += 1;
-            if (loopCount >= loopMaxCount) {
-              _this.stopPreview();
-            }
-            if (_this.previewTimer != null) {
-              clearTimeout(_this.previewTimer);
-              _this.previewTimer = null;
-            }
-            _this.previewTimer = setTimeout(function() {
-              return _draw.call(_this);
-            }, loopDelay);
-            if (!_this.doPreviewLoop) {
-              return _this.stopPreview();
-            }
-          } else {
-            if (_this.previewFinished != null) {
-              _this.previewFinished();
-              return _this.previewFinished = null;
-            }
-          }
-        };
-      })(this);
-      return _draw.call(this);
-    } else if (actionType === Constant.ActionEventHandleType.CLICK) {
-      _loop = (function(_this) {
-        return function() {
-          if (_this.doPreviewLoop) {
-            loopCount += 1;
-            if (loopCount >= loopMaxCount) {
-              _this.stopPreview();
-            }
-            if (_this.previewTimer != null) {
-              clearTimeout(_this.previewTimer);
-              _this.previewTimer = null;
-            }
-            return _this.previewTimer = setTimeout(function() {
-              return method.call(_this, null, _loop);
-            }, loopDelay);
-          } else {
-            if (_this.previewFinished != null) {
-              _this.previewFinished();
-              return _this.previewFinished = null;
-            }
-          }
-        };
-      })(this);
-      return method.call(this, null, _loop);
-    }
   };
 
   EventBase.prototype.stopPreview = function(callback) {
@@ -178,7 +184,7 @@ EventBase = (function(superClass) {
     }
   };
 
-  EventBase.prototype.willChapter = function(methodName) {
+  EventBase.prototype.willChapter = function() {
     var actionType;
     actionType = this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
     if (actionType === Constant.ActionEventHandleType.SCROLL) {
@@ -261,14 +267,15 @@ EventBase = (function(superClass) {
     return this.constructor.prototype[methodName].call(this, e, complete);
   };
 
-  EventBase.prototype.cssElement = function(methodName) {
+  EventBase.prototype.cssElement = function() {
     return null;
   };
 
-  EventBase.prototype.appendCssIfNeeded = function(methodName) {
-    var ce, funcName;
-    ce = this.cssElement(methodName);
+  EventBase.prototype.appendCssIfNeeded = function() {
+    var ce, funcName, methodName;
+    ce = this.cssElement();
     if (ce != null) {
+      methodName = this.getEventMethodName();
       this.removeCss(methodName);
       funcName = methodName + "_" + this.id;
       return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");

@@ -11,17 +11,27 @@ class EventBase extends Extend
     @forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
 
     # アクションメソッドの設定
-    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
-    if !@constructor.prototype[methodName]?
-      # メソッドが見つからない場合
+    if !@constructor.prototype[@getEventMethodName()]?
+      # メソッドが見つからない場合は終了
       return
     # スクロールイベント
-    if actionType == Constant.ActionEventHandleType.SCROLL
+    if @getEventActionType() == Constant.ActionEventHandleType.SCROLL
       @scrollEvent = @scrollRootFunc
     # クリックイベント
-    else if actionType == Constant.ActionEventHandleType.CLICK
+    else if @getEventActionType() == Constant.ActionEventHandleType.CLICK
       @clickEvent = @clickRootFunc
+
+  # 設定されているイベントメソッド名を取得
+  # @return [String] メソッド名
+  getEventMethodName: ->
+    if @event?
+      return @event[EventPageValueBase.PageValueKey.METHODNAME]
+
+  # 設定されているイベントアクションタイプを取得
+  # @return [Integer] アクションタイプ
+  getEventActionType: ->
+    if @event?
+      return @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
 
   # リセット(アクション前に戻す)
   resetEvent: ->
@@ -33,90 +43,92 @@ class EventBase extends Extend
     @updateEventAfter()
 
   # プレビュー開始
+  # @param [Object] event 設定イベント
   preview: (event) ->
+    _preview = (event) ->
+      drawDelay = 30 # 0.03秒毎スクロール描画
+      loopDelay = 1000 # 1秒毎イベント実行
+      loopMaxCount = 5 # ループ5回
+
+      @initEvent(event)
+      @willChapter()
+      @appendCssIfNeeded()
+
+      method = @constructor.prototype[methodName]
+      actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
+      # イベントループ
+      @doPreviewLoop = true
+      loopCount = 0
+      @previewTimer = null
+      if actionType == Constant.ActionEventHandleType.SCROLL
+
+        p = 0
+        _draw = =>
+          if @doPreviewLoop
+            if @previewTimer?
+              clearTimeout(@previewTimer)
+              @previewTimer = null
+            @previewTimer = setTimeout( =>
+              method.call(@, p)
+              p += 1
+              if p >= @scrollLength()
+                p = 0
+                _loop.call(@)
+              else
+                _draw.call(@)
+            , drawDelay)
+          else
+            if @previewFinished?
+              @previewFinished()
+              @previewFinished = null
+
+        _loop = =>
+          if @doPreviewLoop
+            loopCount += 1
+            if loopCount >= loopMaxCount
+              @stopPreview()
+
+            if @previewTimer?
+              clearTimeout(@previewTimer)
+              @previewTimer = null
+            @previewTimer = setTimeout( =>
+              _draw.call(@)
+            , loopDelay)
+            if !@doPreviewLoop
+              @stopPreview()
+          else
+            if @previewFinished?
+              @previewFinished()
+              @previewFinished = null
+
+        _draw.call(@)
+
+      else if actionType == Constant.ActionEventHandleType.CLICK
+        _loop = =>
+          if @doPreviewLoop
+            loopCount += 1
+            if loopCount >= loopMaxCount
+              @stopPreview()
+
+            if @previewTimer?
+              clearTimeout(@previewTimer)
+              @previewTimer = null
+            @previewTimer = setTimeout( =>
+              method.call(@, null, _loop)
+            , loopDelay)
+          else
+            if @previewFinished?
+              @previewFinished()
+              @previewFinished = null
+
+        method.call(@, null, _loop)
+
     @stopPreview( =>
       _preview.call(@, event)
     )
 
-  _preview = (event) ->
-    drawDelay = 30 # 0.03秒毎スクロール描画
-    loopDelay = 1000 # 1秒毎イベント実行
-    loopMaxCount = 5 # ループ5回
-    @initEvent(event)
-    methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
-    @willChapter(methodName)
-    @appendCssIfNeeded(methodName)
-
-    method = @constructor.prototype[methodName]
-    actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
-    # イベントループ
-    @doPreviewLoop = true
-    loopCount = 0
-    @previewTimer = null
-    if actionType == Constant.ActionEventHandleType.SCROLL
-
-      p = 0
-      _draw = =>
-        if @doPreviewLoop
-          if @previewTimer?
-            clearTimeout(@previewTimer)
-            @previewTimer = null
-          @previewTimer = setTimeout( =>
-            method.call(@, p)
-            p += 1
-            if p >= @scrollLength()
-              p = 0
-              _loop.call(@)
-            else
-              _draw.call(@)
-          , drawDelay)
-        else
-          if @previewFinished?
-            @previewFinished()
-            @previewFinished = null
-
-      _loop = =>
-        if @doPreviewLoop
-          loopCount += 1
-          if loopCount >= loopMaxCount
-            @stopPreview()
-
-          if @previewTimer?
-            clearTimeout(@previewTimer)
-            @previewTimer = null
-          @previewTimer = setTimeout( =>
-            _draw.call(@)
-          , loopDelay)
-          if !@doPreviewLoop
-            @stopPreview()
-        else
-          if @previewFinished?
-            @previewFinished()
-            @previewFinished = null
-
-      _draw.call(@)
-
-    else if actionType == Constant.ActionEventHandleType.CLICK
-      _loop = =>
-        if @doPreviewLoop
-          loopCount += 1
-          if loopCount >= loopMaxCount
-            @stopPreview()
-
-          if @previewTimer?
-            clearTimeout(@previewTimer)
-            @previewTimer = null
-          @previewTimer = setTimeout( =>
-            method.call(@, null, _loop)
-          , loopDelay)
-        else
-          if @previewFinished?
-            @previewFinished()
-            @previewFinished = null
-
-      method.call(@, null, _loop)
-
   # プレビューを停止
+  # @param [Function] callback コールバック
   stopPreview: (callback = null) ->
     _stop = ->
       if @previewTimer?
@@ -144,7 +156,8 @@ class EventBase extends Extend
       window.eventAction.thisPage().nextChapter()
 
   # チャプター開始前イベント
-  willChapter: (methodName) ->
+  # @param [String] methodName 対象メソッド名
+  willChapter: ->
     actionType = @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
     if actionType == Constant.ActionEventHandleType.SCROLL
       @scrollValue = 0
@@ -234,13 +247,14 @@ class EventBase extends Extend
 
   # CSS
   # @abstract
-  cssElement: (methodName) ->
+  cssElement: ->
     return null
 
   # CSS追加処理
-  appendCssIfNeeded : (methodName) ->
-    ce = @cssElement(methodName)
+  appendCssIfNeeded : ->
+    ce = @cssElement()
     if ce?
+      methodName = @getEventMethodName()
       # CSSが存在する場合は削除して入れ替え
       @removeCss(methodName)
       funcName = "#{methodName}_#{@id}"

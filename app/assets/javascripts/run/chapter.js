@@ -22,13 +22,12 @@ Chapter = (function() {
   }
 
   Chapter.prototype.willChapter = function() {
-    var event, i, idx, len, methodName, ref;
+    var event, i, idx, len, ref;
     ref = this.eventObjList;
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
-      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
-      event.willChapter(methodName);
-      event.appendCssIfNeeded(methodName);
+      event.willChapter();
+      event.appendCssIfNeeded();
       this.doMoveChapter = false;
     }
     this.sinkFrontAllObj();

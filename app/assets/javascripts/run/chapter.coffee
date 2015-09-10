@@ -20,9 +20,8 @@ class Chapter
   # チャプター共通の前処理
   willChapter: ->
     for event, idx in @eventObjList
-      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME]
-      event.willChapter(methodName)
-      event.appendCssIfNeeded(methodName)
+      event.willChapter()
+      event.appendCssIfNeeded()
       @doMoveChapter = false
 
     @sinkFrontAllObj()
