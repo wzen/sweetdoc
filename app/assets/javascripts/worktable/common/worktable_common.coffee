@@ -25,23 +25,26 @@ class WorktableCommon
     # 選択アイテムID解除
     window.selectedObjId = null
 
-  # アイテムのコピー
-  @copyItem = (objId = window.selectedObjId, isCopy = true) ->
+  # 選択アイテムの複製処理 (Ctrl + c)
+  # @param [Integer] objId コピーするアイテムのオブジェクトID
+  # @param [Boolean] isCopyOperation コピー = true, 切り取り = false
+  @copyItem = (objId = window.selectedObjId, isCopyOperation = true) ->
     if objId?
       pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
       if pageValue?
         instance = Common.getInstanceFromMap(false, objId, pageValue.itemId)
         if instance instanceof ItemBase
           window.copiedInstance = Common.makeClone(instance.getMinimumObject())
-          if isCopy
+          if isCopyOperation
             window.copiedInstance.isCopy = true
 
-  # アイテムの切り取り
+  # 選択アイテムの切り取り (Ctrl + x)
+  # @param [Integer] objId コピーするアイテムのオブジェクトID
   @cutItem = (objId = window.selectedObjId) ->
     @copyItem(objId, false)
     @removeItem($("##{objId}"))
 
-  # アイテムの貼り付け
+  # アイテムの貼り付け (Ctrl + v)
   @pasteItem = ->
     if window.copiedInstance?
       instance = Common.newInstance(false, window.copiedInstance.itemId)
@@ -63,6 +66,7 @@ class WorktableCommon
       LocalStorage.saveAllPageValues()
 
   # アイテムを最前面に移動
+  # @param [Integer] objId 対象オブジェクトID
   @floatItem = (objId) ->
     drawedItems = window.scrollInside.find('.item')
     sorted = []
@@ -93,6 +97,7 @@ class WorktableCommon
     PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(maxZIndex))
 
   # アイテムを再背面に移動
+  # @param [Integer] objId 対象オブジェクトID
   @rearItem = (objId) ->
     drawedItems = window.scrollInside.find('.item')
     sorted = []
@@ -160,11 +165,12 @@ class WorktableCommon
 
   # キーイベント初期化
   @initKeyEvent = ->
-    $(window).keydown( (e)->
+    $(window).off('keydown')
+    $(window).on('keydown', (e)->
+      e.preventDefault()
       isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
       if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
         if e.keyCode == Constant.KeyboardKeyCode.Z
-          e.preventDefault()
           if e.shiftKey
             # Shift + Ctrl + z → Redo
             OperationHistory.redo()
@@ -347,6 +353,8 @@ class WorktableCommon
     )
 
   # イベントPageValueから全てのアイテムを描画
+  # @param [Function] callback コールバック
+  # @param [Integer] pageNum 描画するPageValueのページ番号
   @drawAllItemFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     Common.loadJsFromInstancePageValue( ->
       pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
@@ -377,6 +385,8 @@ class WorktableCommon
         callback()
     , pageNum)
 
+  # 全イベントのプレビューを停止
+  # @param [Function] callback コールバック
   @stopAllEventPreview: (callback = null) ->
     count = 0
     length = Object.keys(window.instanceMap).length

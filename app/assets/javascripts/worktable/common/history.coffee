@@ -89,10 +89,8 @@ class OperationHistory
 
     if !window.operationHistoryIndexes[PageValue.getPageNum()]? || nextTailIndex == window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(@)
       Message.flushWarn("Can't Undo")
-      return
 
   # redo処理
   @redo = ->
     if !window.operationHistoryIndexes[PageValue.getPageNum()]? || window.operationHistoryTailIndex == window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(@)
       Message.flushWarn("Can't Redo")
-      return

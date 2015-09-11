@@ -99,6 +99,8 @@ class RunCommon
       window.eventAction.thisPage().handleScrollEvent(distX, distY)
     )
 
+  # スクロールが有効の状態か判定
+  # @return [Boolena] 判定結果
   @enabledScroll = ->
     ret = false
     if window.eventAction? &&
@@ -107,6 +109,8 @@ class RunCommon
         ret = true
     return ret
 
+  # CSS要素作成
+  # @param [Integer] pageNum ページ番号
   @createCssElement = (pageNum) ->
     # CSS作成
     cssId = @RUN_CSS.replace('@pagenum', pageNum)
@@ -116,6 +120,10 @@ class RunCommon
       cssEmt = $("##{cssId}")
     cssEmt.html(PageValue.itemCssOnPage(pageNum))
 
+  # 対象ページのPageValueデータを読み込み
+  # @param [Integer] loadPageNum 読み込むページ番号
+  # @param [Function] callback コールバック
+  # @param [Boolean] forceUpdate 既存データを上書きするか
   @loadPagingPageValue = (loadPageNum, callback = null, forceUpdate = false) ->
     lastPageNum = loadPageNum + Constant.Paging.PRELOAD_PAGEVALUE_NUM
     targetPages = []

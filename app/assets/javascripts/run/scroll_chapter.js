@@ -42,14 +42,14 @@ ScrollChapter = (function(superClass) {
     }
   };
 
-  ScrollChapter.prototype.showGuide = function(willChapter) {
-    if (willChapter == null) {
-      willChapter = false;
+  ScrollChapter.prototype.showGuide = function(calledByWillChapter) {
+    if (calledByWillChapter == null) {
+      calledByWillChapter = false;
     }
     this.hideGuide();
     return this.constructor.guideTimer = setTimeout((function(_this) {
       return function() {
-        _this.adjustGuideParams(willChapter);
+        _this.adjustGuideParams(calledByWillChapter);
         return ScrollGuide.showGuide(_this.enabledDirections, _this.forwardDirections, _this.canForward, _this.canReverse);
       };
     })(this), ScrollGuide.IDLE_TIMER);
@@ -63,7 +63,7 @@ ScrollChapter = (function(superClass) {
     return ScrollGuide.hideGuide();
   };
 
-  ScrollChapter.prototype.adjustGuideParams = function(willChapter) {
+  ScrollChapter.prototype.adjustGuideParams = function(calledByWillChapter) {
     this.enabledDirections = {
       top: false,
       bottom: false,
@@ -96,7 +96,7 @@ ScrollChapter = (function(superClass) {
               _this.forwardDirections[k] = v;
             }
           }
-          if (!willChapter) {
+          if (!calledByWillChapter) {
             if ((event.canForward != null) && event.canForward) {
               _this.canForward = true;
             }
@@ -107,7 +107,7 @@ ScrollChapter = (function(superClass) {
         }
       };
     })(this));
-    if (willChapter) {
+    if (calledByWillChapter) {
       this.canForward = true;
       return this.canReverse = false;
     }

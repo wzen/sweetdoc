@@ -65,6 +65,7 @@ class ServerStorage
       )
 
   # サーバからアイテムの情報を取得して描画
+  # @param [Integer] user_pagevalue_id 取得するUserPageValueのID
   @load = (user_pagevalue_id) ->
     $.ajax(
       {
@@ -141,6 +142,7 @@ class ServerStorage
       }
     )
 
+  # 保存されているデータ一覧を取得して表示
   @get_load_list: ->
     loadEmt = $("##{Navbar.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS}")
     updateFlg = loadEmt.find(".#{@ElementAttribute.LOAD_LIST_UPDATED_FLG}").length > 0

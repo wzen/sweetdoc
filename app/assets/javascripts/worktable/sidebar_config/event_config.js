@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _getEventClass, _setApplyClickEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues;
+  var _getEventPageValueClass, _setApplyClickEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues;
 
   if (typeof gon !== "undefined" && gon !== null) {
     EventConfig.ITEM_ROOT_ID = 'event_@te_num';
@@ -118,7 +118,7 @@ EventConfig = (function() {
     $(".value_forms ." + valueClassName, this.emt).css('display', '');
     $(".config.values_div", this.emt).css('display', '');
     if (e != null) {
-      tle = _getEventClass.call(this);
+      tle = _getEventPageValueClass.call(this);
       if ((tle != null) && (tle.initConfigValue != null)) {
         tle.initConfigValue(this);
       }
@@ -187,7 +187,7 @@ EventConfig = (function() {
     var errorMes, tle, writeValue;
     errorMes = "Not implemented";
     writeValue = null;
-    tle = _getEventClass.call(this);
+    tle = _getEventPageValueClass.call(this);
     if (tle != null) {
       errorMes = tle.writeToPageValue(this);
     }
@@ -197,7 +197,7 @@ EventConfig = (function() {
   EventConfig.prototype.readFromPageValue = function() {
     var tle;
     if (EventPageValueBase.readFromPageValue(this)) {
-      tle = _getEventClass.call(this);
+      tle = _getEventPageValueClass.call(this);
       if (tle != null) {
         return tle.readFromPageValue(this);
       }
@@ -227,7 +227,7 @@ EventConfig = (function() {
     return eventConfigError.css('display', 'none');
   };
 
-  _getEventClass = function() {
+  _getEventPageValueClass = function() {
     if (this.isCommonEvent === null) {
       return null;
     }

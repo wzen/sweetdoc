@@ -1,6 +1,7 @@
 class Timeline
 
   # タイムラインを作成
+  # @param [Integer] teNum 作成するイベント番号
   @createTimelineEvent = (teNum) ->
     # 存在チェック
     emts = $('#timeline_events .timeline_event .te_num')
@@ -23,6 +24,7 @@ class Timeline
     self = @
     te = null
 
+    # 設定開始
     _setupTimelineEvent = ->
       ePageValues = PageValue.getEventPageValueSortedListByNum()
       timelineEvents = $('#timeline_events').children('.timeline_event')
@@ -93,7 +95,8 @@ class Timeline
         }
       )
 
-    # イベント
+    # クリックイベント内容
+    # @param [Object] e イベントオブジェクト
     _clickTimelineEvent = (e) ->
 
       if $(e).is('.ui-sortable-helper')
@@ -113,6 +116,7 @@ class Timeline
       _doPreview.call(@, te_num)
 
     # プレビュー実行
+    # @param [Integer] te_num 実行するイベント番号
     _doPreview = (te_num) ->
       Common.clearAllEventAction( ->
         tes = PageValue.getEventPageValueSortedListByNum()
@@ -130,7 +134,8 @@ class Timeline
               break
       )
 
-    # イベントコンフィグの設定&表示
+    # コンフィグメニュー初期化&表示
+    # @param [Object] e 対象オブジェクト
     _initEventConfig = (e) ->
       # サイドメニューをタイムラインに切り替え
       Sidebar.switchSidebarConfig("timeline")
@@ -187,6 +192,7 @@ class Timeline
     )
 
   # イベントハンドラー設定
+  # @param [Integer] te_num イベント番号
   @setupTimelineEventHandler = (te_num) ->
     eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
     emt = $('#' + eId)
@@ -201,6 +207,8 @@ class Timeline
       )
 
   # タイムラインイベントの色を変更
+  # @param [Integer] teNum イベント番号
+  # @param [Integer] actionType アクションタイプ
   @changeTimelineColor = (teNum, actionType = null) ->
     # イベントの色を変更
     teEmt = null

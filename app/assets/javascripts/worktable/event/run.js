@@ -4,8 +4,8 @@ var run;
 run = function() {
   return WorktableCommon.stopAllEventPreview(function() {
     var h, target;
-    h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
-    if (h != null) {
+    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    if ((h != null) && Object.keys(h).length > 0) {
       LocalStorage.clearRun();
       target = "_runwindow";
       window.open("about:blank", target);

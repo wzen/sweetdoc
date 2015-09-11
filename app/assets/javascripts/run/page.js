@@ -51,7 +51,7 @@ Page = (function() {
 
   Page.prototype.start = function() {
     Navbar.setChapterNum(this.chapterIndex + 1);
-    this.sinkFrontAllChapterObj();
+    this.floatPageScrollHandleCanvas();
     return this.thisChapter().willChapter();
   };
 
@@ -140,7 +140,7 @@ Page = (function() {
     return this.thisChapter().scrollEvent != null;
   };
 
-  Page.prototype.sinkFrontAllChapterObj = function() {
+  Page.prototype.floatPageScrollHandleCanvas = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.chapterList.forEach(function(chapter) {
@@ -257,7 +257,7 @@ Page = (function() {
     if (window.debug) {
       console.log('Finish All Chapters!');
     }
-    return this.sinkFrontAllChapterObj();
+    return this.floatPageScrollHandleCanvas();
   };
 
   return Page;

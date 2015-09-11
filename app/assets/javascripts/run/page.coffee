@@ -3,6 +3,7 @@ class Page
   @PAGE_CHANGE_SCROLL_DIST = 50
 
   # コンストラクタ
+  # @param [Object] eventPageValeuList イベントPageValue
   constructor: (eventPageValueList) ->
 
     @chapterList = []
@@ -43,7 +44,7 @@ class Page
     Navbar.setChapterNum(@chapterIndex + 1)
 
     # チャプター前処理
-    @sinkFrontAllChapterObj()
+    @floatPageScrollHandleCanvas()
     @thisChapter().willChapter()
 
   # 全てのイベントが終了している場合、チャプターを進める
@@ -129,7 +130,7 @@ class Page
     return @thisChapter().scrollEvent?
 
   # 全てのイベントアイテムをFrontから落とす
-  sinkFrontAllChapterObj: ->
+  floatPageScrollHandleCanvas: ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @chapterList.forEach((chapter) ->
@@ -227,4 +228,4 @@ class Page
       console.log('Finish All Chapters!')
 
     # ページ移動のためのスクロールイベントを取るようにする
-    @sinkFrontAllChapterObj()
+    @floatPageScrollHandleCanvas()

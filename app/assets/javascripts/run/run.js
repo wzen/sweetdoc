@@ -13,9 +13,9 @@ Run = (function() {
 $(function() {
   var is_reload;
   window.isWorkTable = false;
+  window.eventAction = null;
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
-  window.eventAction = null;
   PageValue.setPageNum(1);
   is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
   if (is_reload != null) {

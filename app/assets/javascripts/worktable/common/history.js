@@ -102,13 +102,13 @@ OperationHistory = (function() {
     var nextTailIndex;
     nextTailIndex = (window.operationHistoryTailIndex + 1) % this.OPERATION_STORE_MAX;
     if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || nextTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(this)) {
-      Message.flushWarn("Can't Undo");
+      return Message.flushWarn("Can't Undo");
     }
   };
 
   OperationHistory.redo = function() {
     if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || window.operationHistoryTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(this)) {
-      Message.flushWarn("Can't Redo");
+      return Message.flushWarn("Can't Redo");
     }
   };
 

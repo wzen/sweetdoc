@@ -4,6 +4,7 @@ class Paging
   @initPaging: ->
     @createPageSelectMenu()
 
+  # 選択メニュー作成
   @createPageSelectMenu: ->
     self = @
 
@@ -48,6 +49,7 @@ class Paging
     )
 
   # 表示ページ切り替え
+  # @param [Integer] pageNum 変更ページ番号
   @switchSectionDisplay: (pageNum) ->
     $("##{Constant.Paging.ROOT_ID}").find(".section").css('display', 'none')
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
@@ -97,6 +99,7 @@ class Paging
     )
 
   # 選択
+  # @param [Integer] selectedNum 選択ページ番号
   @selectPage: (selectedNum) ->
     self = @
     # プレビュー停止

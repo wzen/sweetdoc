@@ -4,8 +4,8 @@ run = ->
   WorktableCommon.stopAllEventPreview( ->
 
     # イベント存在チェック
-    h = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
-    if h?
+    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    if h? && Object.keys(h).length > 0
       # Runのキャッシュを削除
       LocalStorage.clearRun()
 

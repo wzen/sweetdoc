@@ -5,11 +5,11 @@ class Run
 
 $ ->
   window.isWorkTable = false
+  window.eventAction = null
 
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
-  window.eventAction = null
   # デフォルト1ページ目から
   PageValue.setPageNum(1)
 

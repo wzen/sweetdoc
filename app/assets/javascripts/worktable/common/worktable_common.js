@@ -27,13 +27,13 @@ WorktableCommon = (function() {
     return window.selectedObjId = null;
   };
 
-  WorktableCommon.copyItem = function(objId, isCopy) {
+  WorktableCommon.copyItem = function(objId, isCopyOperation) {
     var instance, pageValue;
     if (objId == null) {
       objId = window.selectedObjId;
     }
-    if (isCopy == null) {
-      isCopy = true;
+    if (isCopyOperation == null) {
+      isCopyOperation = true;
     }
     if (objId != null) {
       pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
@@ -41,7 +41,7 @@ WorktableCommon = (function() {
         instance = Common.getInstanceFromMap(false, objId, pageValue.itemId);
         if (instance instanceof ItemBase) {
           window.copiedInstance = Common.makeClone(instance.getMinimumObject());
-          if (isCopy) {
+          if (isCopyOperation) {
             return window.copiedInstance.isCopy = true;
           }
         }
@@ -196,12 +196,13 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.initKeyEvent = function() {
-    return $(window).keydown(function(e) {
+    $(window).off('keydown');
+    return $(window).on('keydown', function(e) {
       var isMac;
+      e.preventDefault();
       isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       if ((isMac && e.metaKey) || (!isMac && e.ctrlKey)) {
         if (e.keyCode === Constant.KeyboardKeyCode.Z) {
-          e.preventDefault();
           if (e.shiftKey) {
             return OperationHistory.redo();
           } else {

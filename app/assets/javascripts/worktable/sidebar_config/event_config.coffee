@@ -17,6 +17,8 @@ class EventConfig
     @EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX
 
   # コンストラクタ
+  # @param [Object] @emt コンフィグRoot
+  # @param [Integer] @teNum イベント番号
   constructor: (@emt, @teNum) ->
     _setupFromPageValues.call(@)
 
@@ -47,6 +49,7 @@ class EventConfig
     )
 
   # イベントタイプ選択
+  # @param [Object] e 選択オブジェクト
   selectItem: (e = null) ->
     if e?
       value = $(e).val()
@@ -97,6 +100,7 @@ class EventConfig
         @clickMethod(checkedRadioButton)
 
   # メソッド選択
+  # @param [Object] e 選択オブジェクト
   clickMethod: (e = null) ->
     if e?
       parent = $(e).closest('.radio')
@@ -123,7 +127,7 @@ class EventConfig
 
     if e?
       # 初期化
-      tle = _getEventClass.call(@)
+      tle = _getEventPageValueClass.call(@)
       if tle? && tle.initConfigValue?
         tle.initConfigValue(@)
 
@@ -197,7 +201,7 @@ class EventConfig
   writeToPageValue: ->
     errorMes = "Not implemented"
     writeValue = null
-    tle = _getEventClass.call(@)
+    tle = _getEventPageValueClass.call(@)
     if tle?
       errorMes = tle.writeToPageValue(@)
     return errorMes
@@ -205,7 +209,7 @@ class EventConfig
   # 画面値から読み込み
   readFromPageValue: ->
     if EventPageValueBase.readFromPageValue(@)
-      tle = _getEventClass.call(@)
+      tle = _getEventPageValueClass.call(@)
       if tle?
         return tle.readFromPageValue(@)
     return false
@@ -218,6 +222,7 @@ class EventConfig
       return @constructor.ITEM_VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
 
   # エラー表示
+  # @param [String] message メッセージ内容
   showError: (message)->
     eventConfigError = $('.event_config_error', @emt)
     eventConfigError.find('p').html(message)
@@ -229,7 +234,9 @@ class EventConfig
     eventConfigError.find('p').html('')
     eventConfigError.css('display', 'none')
 
-  _getEventClass = ->
+  # 対応するEventPageValueクラスを取得
+  # @return [Class] EventPageValueクラス
+  _getEventPageValueClass = ->
     if @isCommonEvent == null
       return null
 
@@ -306,8 +313,10 @@ class EventConfig
   @removeAllConfig: ->
     $('#event-config').children('.event').remove()
 
-  # イベントのConfigを追加
-  # @param [String] contents 追加するHTMLの文字列
+  # アクションイベント情報をコンフィグ内に追加
+  # @param [Integer] item_id アイテムID
+  # @param [Array] te_actions 追加するアクションデータ
+  # @param [Array] te_values 追加するValueデータ
   @addEventConfigContents = (item_id, te_actions, te_values) ->
     if te_actions? && te_actions.length > 0
       className = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id)

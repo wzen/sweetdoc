@@ -14,6 +14,8 @@ class ScrollChapter extends Chapter
     @hideGuide()
 
   # スクロールイベント
+  # @param [Integer] x 横方向スクロール位置
+  # @param [Integer] y 縦方向スクロール位置
   scrollEvent : (x, y) ->
     if window.disabledEventHandler
       return
@@ -30,11 +32,12 @@ class ScrollChapter extends Chapter
       @showGuide()
 
   # ガイド表示
-  showGuide: (willChapter = false) ->
+  # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
+  showGuide: (calledByWillChapter = false) ->
     @hideGuide()
     @constructor.guideTimer = setTimeout( =>
       # ガイド表示
-      @adjustGuideParams(willChapter)
+      @adjustGuideParams(calledByWillChapter)
       ScrollGuide.showGuide(@enabledDirections, @forwardDirections, @canForward, @canReverse)
     , ScrollGuide.IDLE_TIMER)
 
@@ -46,7 +49,8 @@ class ScrollChapter extends Chapter
     ScrollGuide.hideGuide()
 
   # ガイドフラグ調整
-  adjustGuideParams: (willChapter) ->
+  # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
+  adjustGuideParams: (calledByWillChapter) ->
     @enabledDirections = {
       top: false
       bottom: false
@@ -71,19 +75,20 @@ class ScrollChapter extends Chapter
           if !@forwardDirections[k]
             @forwardDirections[k] = v
 
-        if !willChapter
+        if !calledByWillChapter
           if event.canForward? && event.canForward
             @canForward = true
           if event.canReverse? && event.canReverse
             @canReverse = true
     )
 
-    if willChapter
+    if calledByWillChapter
       # チャプター開始時はForwardのみ
       @canForward = true
       @canReverse = false
 
   # 全てのイベントアイテムのスクロールが終了しているか
+  # @return [Boolean] 判定結果
   finishedAllEvent: ->
     ret = true
     @eventObjList.forEach((event) ->
