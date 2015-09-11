@@ -1,4 +1,4 @@
-# クリック用Chapterクラス
+# クリックチャプター
 class ClickChapter extends Chapter
 
   # チャプターの前処理
@@ -13,16 +13,17 @@ class ClickChapter extends Chapter
         self.clickEvent(e)
       )
     )
-    @riseFrontAllObj(@eventObjList)
+    @floatAllChapterEvents()
     @showGuide()
 
   # チャプターの後処理
   didChapter: ->
     super()
-    @sinkFrontAllObj()
+    @floatScrollHandleCanvas()
     @hideGuide()
 
   # クリックイベント
+  # @param [Object] e クリックオブジェクト
   clickEvent: (e) ->
     @hideGuide()
     if window.disabledEventHandler

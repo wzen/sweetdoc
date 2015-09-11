@@ -1,6 +1,9 @@
+# クリックガイド
 class ClickGuide extends GuideBase
 
   # キーフレーム追加
+  # @param [Array] items アイテムオブジェクト
+  # @return [String] KeyFrame
   @addItemKeyFrams: (items) ->
     _itemKeyFrames = (item) ->
       kf = """
@@ -40,6 +43,7 @@ class ClickGuide extends GuideBase
     window.cssCode.find('.chapter_itemkeyframes').remove()
 
   # ガイド表示
+# @param [Array] items アイテムオブジェクト
   @showGuide: (items) ->
     @addItemKeyFrams(items)
     for item in items
@@ -54,6 +58,7 @@ class ClickGuide extends GuideBase
     $('.guide_click').remove()
 
   # フォーカス時の色を判定
+  # @param [Object] item アイテムオブジェクト
   @focusColor: (item) ->
     background = item.getJQueryElement().find('.css3button:first').css('background')
 

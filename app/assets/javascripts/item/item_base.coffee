@@ -62,7 +62,6 @@ class ItemBase extends ItemEventBase
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
   # 描画終了時の処理
-  # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @return [Boolean] 処理結果
   endDraw: (zindex) ->
@@ -222,10 +221,12 @@ class CssItemBase extends ItemBase
     @css = Common.makeClone(obj.css)
 
   # CSSのルートのIDを取得
+  # @return [String] CSSルートID
   getCssRootElementId: ->
     return "css-" + @id
 
-  # CSSアニメーションを設置する要素名
+  # CSSアニメーションルートID取得
+  # @return [String] CSSアニメーションID
   getCssAnimElementId: ->
     return "css-anim-style"
 
@@ -333,7 +334,7 @@ class CanvasItemBase extends ItemBase
     return @id + '_canvas'
 
   # 伸縮率を設定
-  setScale: (drawingContext) ->
+  setScale: ->
     # 要素の伸縮
     element = $("##{@id}")
     canvas = $("##{@canvasElementId()}")
@@ -342,16 +343,15 @@ class CanvasItemBase extends ItemBase
     canvas.attr('width',  element.width())
     canvas.attr('height', element.height())
     # キャンパスの伸縮
-    drawingContext.scale(@scale.w, @scale.h)
+    context = canvas[0].getContext('2d');
+    context.scale(@scale.w, @scale.h)
     if window.debug
       console.log("setScale: itemSize: #{JSON.stringify(@itemSize)}")
 
   # キャンパス初期化処理
   initCanvas: ->
-    canvas = document.getElementById(@canvasElementId());
-    context = canvas.getContext('2d');
     # 伸縮率を設定
-    @setScale(context)
+    @setScale()
 
   # 新規キャンパスを作成
   makeNewCanvas: ->

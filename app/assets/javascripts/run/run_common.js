@@ -119,16 +119,17 @@ RunCommon = (function() {
     return cssEmt.html(PageValue.itemCssOnPage(pageNum));
   };
 
-  RunCommon.loadPagingPageValue = function(firstPageNum, lastPageNum, callback, forceUpdate) {
-    var className, i, j, ref, ref1, section, targetPages;
+  RunCommon.loadPagingPageValue = function(loadPageNum, callback, forceUpdate) {
+    var className, i, j, lastPageNum, ref, ref1, section, targetPages;
     if (callback == null) {
       callback = null;
     }
     if (forceUpdate == null) {
       forceUpdate = false;
     }
+    lastPageNum = loadPageNum + Constant.Paging.PRELOAD_PAGEVALUE_NUM;
     targetPages = [];
-    for (i = j = ref = firstPageNum, ref1 = lastPageNum; ref <= ref1 ? j <= ref1 : j >= ref1; i = ref <= ref1 ? ++j : --j) {
+    for (i = j = ref = loadPageNum, ref1 = lastPageNum; ref <= ref1 ? j <= ref1 : j >= ref1; i = ref <= ref1 ? ++j : --j) {
       if (forceUpdate) {
         targetPages.push(i);
       } else {

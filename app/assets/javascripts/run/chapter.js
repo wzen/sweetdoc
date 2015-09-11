@@ -33,7 +33,7 @@ Chapter = (function() {
       }
       this.doMoveChapter = false;
     }
-    this.sinkFrontAllObj();
+    this.floatScrollHandleCanvas();
     return this.focusToActorIfNeed(false);
   };
 
@@ -88,17 +88,17 @@ Chapter = (function() {
     }
   };
 
-  Chapter.prototype.riseFrontAllObj = function(eventObjList) {
+  Chapter.prototype.floatAllChapterEvents = function() {
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     window.scrollContents.css('z-index', scrollViewSwitchZindex.on);
-    return eventObjList.forEach(function(e) {
+    return this.eventObjList.forEach(function(e) {
       if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
         return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       }
     });
   };
 
-  Chapter.prototype.sinkFrontAllObj = function() {
+  Chapter.prototype.floatScrollHandleCanvas = function() {
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     window.scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.eventObjList.forEach((function(_this) {

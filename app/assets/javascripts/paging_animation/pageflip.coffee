@@ -4,6 +4,9 @@ class PageFlip
   @DIRECTION.FORWARD = 1
   @DIRECTION.BACK = 2
 
+  # コンストラクタ
+  # @param [Integer] beforePageNum 変更前ページ番号
+  # @param [Integer] afterPageNum 変更後ページ番号
   constructor: (beforePageNum, afterPageNum) ->
     # Dimensions of one page in the book
     @PAGE_WIDTH = $('#pages').width()
@@ -46,6 +49,7 @@ class PageFlip
       section.css('width', '0')
 
   # 描画開始
+  # @param [Function] callback コールバック
   startRender: (callback = null)->
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', @flipPageNum)
     pages = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
@@ -90,6 +94,7 @@ class PageFlip
       , 50)
 
   # 描画
+  # @param [Integer] point 描画X位置
   render: (point)->
     if point < -@CANVAS_PADDING || point > @PAGE_WIDTH
       return

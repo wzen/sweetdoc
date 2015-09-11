@@ -144,7 +144,7 @@ Page = (function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.chapterList.forEach(function(chapter) {
-      return chapter.sinkFrontAllObj();
+      return chapter.floatScrollHandleCanvas();
     });
   };
 

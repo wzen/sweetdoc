@@ -116,9 +116,10 @@ class RunCommon
       cssEmt = $("##{cssId}")
     cssEmt.html(PageValue.itemCssOnPage(pageNum))
 
-  @loadPagingPageValue = (firstPageNum, lastPageNum, callback = null, forceUpdate = false) ->
+  @loadPagingPageValue = (loadPageNum, callback = null, forceUpdate = false) ->
+    lastPageNum = loadPageNum + Constant.Paging.PRELOAD_PAGEVALUE_NUM
     targetPages = []
-    for i in [firstPageNum..lastPageNum]
+    for i in [loadPageNum..lastPageNum]
       if forceUpdate
         targetPages.push(i)
       else

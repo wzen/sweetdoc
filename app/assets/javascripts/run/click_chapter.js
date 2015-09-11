@@ -20,13 +20,13 @@ ClickChapter = (function(superClass) {
         return self.clickEvent(e);
       });
     });
-    this.riseFrontAllObj(this.eventObjList);
+    this.floatAllChapterEvents();
     return this.showGuide();
   };
 
   ClickChapter.prototype.didChapter = function() {
     ClickChapter.__super__.didChapter.call(this);
-    this.sinkFrontAllObj();
+    this.floatScrollHandleCanvas();
     return this.hideGuide();
   };
 

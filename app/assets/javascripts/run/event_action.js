@@ -38,21 +38,7 @@ EventAction = (function() {
       pageNum = this.pageIndex + 1;
       Navbar.setPageNum(pageNum);
       PageValue.setPageNum(pageNum);
-      return RunCommon.loadPagingPageValue(pageNum, pageNum, (function(_this) {
-        return function() {
-          return Common.loadJsFromInstancePageValue(function() {
-            var eventPageValueList;
-            if (_this.thisPage() === null) {
-              eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
-              _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
-              if (window.debug) {
-                console.log('[nextPage] created page instance');
-              }
-            }
-            return _this.changePaging(beforePageIndex, _this.pageIndex);
-          });
-        };
-      })(this));
+      return this.changePaging(beforePageIndex, this.pageIndex);
     }
   };
 
@@ -64,21 +50,7 @@ EventAction = (function() {
       pageNum = this.pageIndex + 1;
       Navbar.setPageNum(pageNum);
       PageValue.setPageNum(pageNum);
-      return RunCommon.loadPagingPageValue(pageNum, pageNum, (function(_this) {
-        return function() {
-          return Common.loadJsFromInstancePageValue(function() {
-            var eventPageValueList;
-            if (_this.thisPage() === null) {
-              eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum);
-              _this.pageList[_this.pageIndex] = new Page(eventPageValueList);
-              if (window.debug) {
-                console.log('[rewindPage] created page instance');
-              }
-            }
-            return _this.changePaging(beforePageIndex, _this.pageIndex);
-          });
-        };
-      })(this));
+      return this.changePaging(beforePageIndex, this.pageIndex);
     } else {
       this.thisPage().willPage();
       return this.thisPage().start();
@@ -86,7 +58,7 @@ EventAction = (function() {
   };
 
   EventAction.prototype.changePaging = function(beforePageIndex, afterPageIndex, callback) {
-    var afterPageNum, beforePageNum, pageFlip;
+    var afterPageNum, beforePageNum;
     if (callback == null) {
       callback = null;
     }
@@ -96,28 +68,42 @@ EventAction = (function() {
       console.log('[changePaging] beforePageNum:' + beforePageNum);
       console.log('[changePaging] afterPageNum:' + afterPageNum);
     }
-    Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
-    pageFlip = new PageFlip(beforePageNum, afterPageNum);
-    RunCommon.initMainContainer();
-    PageValue.adjustInstanceAndEventOnPage();
-    if (beforePageNum > afterPageNum) {
-      this.thisPage().willPageFromRewind();
-    } else {
-      this.thisPage().willPage();
-    }
-    this.thisPage().start();
-    RunCommon.createCssElement(afterPageNum);
-    return pageFlip.startRender(function() {
-      var className, section;
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-      section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-      section.css('display', 'none');
-      Common.removeAllItem(beforePageNum);
-      $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
-      if (callback != null) {
-        return callback();
-      }
-    });
+    return RunCommon.loadPagingPageValue(afterPageNum, (function(_this) {
+      return function() {
+        return Common.loadJsFromInstancePageValue(function() {
+          var eventPageValueList, pageFlip;
+          if (_this.thisPage() === null) {
+            eventPageValueList = PageValue.getEventPageValueSortedListByNum(afterPageNum);
+            _this.pageList[afterPageIndex] = new Page(eventPageValueList);
+            if (window.debug) {
+              console.log('[nextPage] created page instance');
+            }
+          }
+          Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
+          pageFlip = new PageFlip(beforePageNum, afterPageNum);
+          RunCommon.initMainContainer();
+          PageValue.adjustInstanceAndEventOnPage();
+          RunCommon.createCssElement(afterPageNum);
+          if (beforePageNum > afterPageNum) {
+            _this.thisPage().willPageFromRewind();
+          } else {
+            _this.thisPage().willPage();
+          }
+          _this.thisPage().start();
+          return pageFlip.startRender(function() {
+            var className, section;
+            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+            section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+            section.css('display', 'none');
+            Common.removeAllItem(beforePageNum);
+            $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
+            if (callback != null) {
+              return callback();
+            }
+          });
+        });
+      };
+    })(this));
   };
 
   EventAction.prototype.rewindAllPages = function() {

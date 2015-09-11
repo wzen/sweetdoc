@@ -128,6 +128,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       Paging.NAV_MENU_ADDPAGE_CLASS = 'paging-new';
 
+      Paging.PRELOAD_PAGEVALUE_NUM = 0;
+
       return Paging;
 
     })();

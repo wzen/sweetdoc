@@ -81,3 +81,4 @@ if gon?
       @NAV_MENU_NAME = 'Page @pagenum'
       @NAV_MENU_CLASS = 'paging-@pagenum'
       @NAV_MENU_ADDPAGE_CLASS = 'paging-new'
+      @PRELOAD_PAGEVALUE_NUM = 0

@@ -337,25 +337,23 @@ CanvasItemBase = (function(superClass) {
     return this.id + '_canvas';
   };
 
-  CanvasItemBase.prototype.setScale = function(drawingContext) {
-    var canvas, element;
+  CanvasItemBase.prototype.setScale = function() {
+    var canvas, context, element;
     element = $("#" + this.id);
     canvas = $("#" + (this.canvasElementId()));
     element.width(this.itemSize.w * this.scale.w);
     element.height(this.itemSize.h * this.scale.h);
     canvas.attr('width', element.width());
     canvas.attr('height', element.height());
-    drawingContext.scale(this.scale.w, this.scale.h);
+    context = canvas[0].getContext('2d');
+    context.scale(this.scale.w, this.scale.h);
     if (window.debug) {
       return console.log("setScale: itemSize: " + (JSON.stringify(this.itemSize)));
     }
   };
 
   CanvasItemBase.prototype.initCanvas = function() {
-    var canvas, context;
-    canvas = document.getElementById(this.canvasElementId());
-    context = canvas.getContext('2d');
-    return this.setScale(context);
+    return this.setScale();
   };
 
   CanvasItemBase.prototype.makeNewCanvas = function() {

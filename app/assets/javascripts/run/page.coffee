@@ -133,7 +133,7 @@ class Page
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @chapterList.forEach((chapter) ->
-      chapter.sinkFrontAllObj()
+      chapter.floatScrollHandleCanvas()
     )
 
   # ページ前処理

@@ -1,10 +1,13 @@
 # イベント実行クラス
 class EventAction
   # コンストラクタ
+  # @param [Array] @pageList ページオブジェクト
+  # @param [Integer] @pageIndex ページ番号
   constructor: (@pageList, @pageIndex) ->
     @finishedAllPages = false
 
-  # 現在のページを取得
+  # 現在のページオブジェクトを取得
+  # @return [Object] ページオブジェクト
   thisPage: ->
     return @pageList[@pageIndex]
 
@@ -28,27 +31,18 @@ class EventAction
   nextPage: ->
     # ページ後処理
     @thisPage().didPage()
-    beforePageIndex = @pageIndex
-    # indexを更新
 
+    beforePageIndex = @pageIndex
     if @pageList.length <= @pageIndex + 1
+      # 全ページ終了の場合
       @finishAllPages()
     else
       @pageIndex += 1
       pageNum = @pageIndex + 1
+      # ページ番号更新
       Navbar.setPageNum(pageNum)
       PageValue.setPageNum(pageNum)
-      RunCommon.loadPagingPageValue(pageNum, pageNum, =>
-        Common.loadJsFromInstancePageValue( =>
-          if @thisPage() == null
-            # Pageインスタンス作成
-            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
-            @pageList[@pageIndex] = new Page(eventPageValueList)
-            if window.debug
-              console.log('[nextPage] created page instance')
-          @changePaging(beforePageIndex, @pageIndex)
-        )
-      )
+      @changePaging(beforePageIndex, @pageIndex)
 
   # ページを戻す
   rewindPage: ->
@@ -59,18 +53,7 @@ class EventAction
       pageNum = @pageIndex + 1
       Navbar.setPageNum(pageNum)
       PageValue.setPageNum(pageNum)
-      RunCommon.loadPagingPageValue(pageNum, pageNum, =>
-        Common.loadJsFromInstancePageValue( =>
-          if @thisPage() == null
-            # Pageインスタンス作成
-            eventPageValueList = PageValue.getEventPageValueSortedListByNum(pageNum)
-            @pageList[@pageIndex] = new Page(eventPageValueList)
-            if window.debug
-              console.log('[rewindPage] created page instance')
-          @changePaging(beforePageIndex, @pageIndex)
-        )
-
-      )
+      @changePaging(beforePageIndex, @pageIndex)
     else
       # 動作させている場合はページのアクションを元に戻す
       # ページ前処理
@@ -78,6 +61,9 @@ class EventAction
       @thisPage().start()
 
   # ページ変更処理
+  # @param [Integer] beforePageIndex 変更前ページIndex
+  # @param [Integer] afterPageIndex 変更後ページIndex
+  # @param [Function] コールバック
   changePaging: (beforePageIndex, afterPageIndex, callback = null) ->
     beforePageNum = beforePageIndex + 1
     afterPageNum = afterPageIndex + 1
@@ -85,35 +71,47 @@ class EventAction
       console.log('[changePaging] beforePageNum:' + beforePageNum)
       console.log('[changePaging] afterPageNum:' + afterPageNum)
 
-    # Mainコンテナ作成
-    Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
+    # 次ページのPageValue読み込み
+    RunCommon.loadPagingPageValue(afterPageNum, =>
+      # 必要JSファイル読み込み
+      Common.loadJsFromInstancePageValue( =>
+        if @thisPage() == null
+          # 次のページオブジェクトがない場合は作成
+          eventPageValueList = PageValue.getEventPageValueSortedListByNum(afterPageNum)
+          @pageList[afterPageIndex] = new Page(eventPageValueList)
+          if window.debug
+            console.log('[nextPage] created page instance')
 
-    # ページングクラス作成
-    pageFlip = new PageFlip(beforePageNum, afterPageNum)
-    # 新規コンテナ初期化
-    RunCommon.initMainContainer()
-    PageValue.adjustInstanceAndEventOnPage()
-    # ページ前処理
-    if beforePageNum > afterPageNum
-      @thisPage().willPageFromRewind()
-    else
-      @thisPage().willPage()
-    @thisPage().start()
-    # CSS作成
-    RunCommon.createCssElement(afterPageNum)
-    # ページング
-    pageFlip.startRender( ->
-      # 隠したビューを非表示にする
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-      section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-      section.css('display', 'none')
-      # 隠したビューのアイテムを削除
-      Common.removeAllItem(beforePageNum)
-      # CSS削除
-      $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
-      # コールバック
-      if callback?
-        callback()
+        # Mainコンテナ作成
+        Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
+        # ページングクラス作成
+        pageFlip = new PageFlip(beforePageNum, afterPageNum)
+        # 新規コンテナ初期化
+        RunCommon.initMainContainer()
+        PageValue.adjustInstanceAndEventOnPage()
+        # CSS作成
+        RunCommon.createCssElement(afterPageNum)
+        # ページ前処理
+        if beforePageNum > afterPageNum
+          @thisPage().willPageFromRewind()
+        else
+          @thisPage().willPage()
+        @thisPage().start()
+        # ページングアニメーション
+        pageFlip.startRender( ->
+          # 隠したビューを非表示にする
+          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+          section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+          section.css('display', 'none')
+          # 隠したビューのアイテムを削除
+          Common.removeAllItem(beforePageNum)
+          # CSS削除
+          $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
+          # コールバック
+          if callback?
+            callback()
+        )
+      )
     )
 
   # 全てのページを戻す

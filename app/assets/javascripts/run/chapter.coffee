@@ -3,6 +3,8 @@ class Chapter
   # ガイド表示用タイマー
   @guideTimer = null
 
+  # コンストラクタ
+  # @param [Array] list イベント情報
   constructor: (list) ->
     @eventList = list.eventList
     @num = list.num
@@ -17,8 +19,9 @@ class Chapter
 
     @doMoveChapter = false
 
-  # チャプター共通の前処理
+  # チャプター実行前処理
   willChapter: ->
+    # イベントのwillChapter呼び出し & CSS追加
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
       event.willChapter()
@@ -26,7 +29,9 @@ class Chapter
         event.appendCssIfNeeded()
       @doMoveChapter = false
 
-    @sinkFrontAllObj()
+    # Canvasを前面に表示
+    @floatScrollHandleCanvas()
+    # 対象アイテムにフォーカス
     @focusToActorIfNeed(false)
 
   # チャプター共通の後処理
@@ -36,6 +41,8 @@ class Chapter
     )
 
   # アイテムにフォーカス(アイテムが1つのみの場合)
+  # @param [Boolean] isImmediate 即時反映するか
+  # @param [String] フォーカスタイプ
   focusToActorIfNeed: (isImmediate, type = "center") ->
     window.disabledEventHandler = true
     item = null
@@ -69,17 +76,17 @@ class Chapter
     else
       window.disabledEventHandler = false
 
-  # イベントアイテムをFrontに浮上
-  riseFrontAllObj: (eventObjList) ->
+  # イベントアイテムを前面に表示
+  floatAllChapterEvents: ->
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
     window.scrollContents.css('z-index', scrollViewSwitchZindex.on)
-    eventObjList.forEach((e) ->
+    @eventObjList.forEach((e) ->
       if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     )
 
-  # 全てのイベントアイテムをFrontから落とす
-  sinkFrontAllObj: ->
+  # スクロールイベント用のCanvasを前面に表示
+  floatScrollHandleCanvas: ->
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     window.scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @eventObjList.forEach((e) =>
@@ -88,6 +95,7 @@ class Chapter
     )
 
   # 全てのイベントが終了しているか
+  # @return [Boolean] 判定結果
   finishedAllEvent: ->
     ret = true
     @eventObjList.forEach((event) ->

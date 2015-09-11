@@ -3,7 +3,7 @@ class ScrollChapter extends Chapter
   # チャプターの前処理
   willChapter: ->
     super()
-    @sinkFrontAllObj()
+    @floatScrollHandleCanvas()
 
     # ガイド表示
     @showGuide(true)

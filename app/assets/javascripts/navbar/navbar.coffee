@@ -1,6 +1,7 @@
 class Navbar
   # @property [String] NAVBAR_ROOT ナビヘッダーRoot
   @NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT
+  # @property [String] ITEM_MENU_PREFIX アイテムメニュープレフィックス
   @ITEM_MENU_PREFIX = 'menu-item-'
 
   # Worktableナビバー初期化
@@ -69,6 +70,8 @@ class Navbar
         window.eventAction.thisPage().rewindChapter()
     )
 
+  # ヘッダーにページ番号を設定
+  # @param [Integer] value 設定値
   @setPageNum = (value) ->
     navEmt = $('#nav')
     e = $('.nav_page_num', navEmt)
@@ -77,6 +80,8 @@ class Navbar
     else
       e.html('')
 
+  # ヘッダーにチャプター番号を設定
+  # @param [Integer] value 設定値
   @setChapterNum = (value) ->
     navEmt = $('#nav')
     e = $('.nav_chapter_num', navEmt)
@@ -85,6 +90,8 @@ class Navbar
     else
       e.html('')
 
+  # ヘッダーにページ総数を設定
+  # @param [Integer] page_max 設定値
   @setPageMax = (page_max) ->
     navEmt = $('#nav')
     e = $('.nav_page_max', navEmt)
@@ -93,6 +100,8 @@ class Navbar
     else
       e.html('')
 
+  # ヘッダーにチャプター総数を設定
+  # @param [Integer] chapter_max 設定値
   @setChapterMax = (chapter_max) ->
     navEmt = $('#nav')
     e = $('.nav_chapter_max', navEmt)
