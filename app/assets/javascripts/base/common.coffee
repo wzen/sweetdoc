@@ -63,6 +63,7 @@ class Common
   # Mainコンテナを作成
   # @param [Integer] pageNum ページ番号
   # @param [Boolean] collapsed 初期表示でページを閉じた状態にするか
+  # @return [Boolean] ページを作成したか
   @createdMainContainerIfNeeded: (pageNum, collapsed = false) ->
     root = $("##{Constant.Paging.ROOT_ID}")
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
@@ -77,6 +78,9 @@ class Common
       style += width
       temp = $(temp).wrap("<div class='#{sectionClass} section' style='#{style}'></div>").parent()
       root.append(temp)
+      return true
+    else
+      return false
 
   # Mainコンテナを削除
   # @param [Integer] pageNum ページ番号

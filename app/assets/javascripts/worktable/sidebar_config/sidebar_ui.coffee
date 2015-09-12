@@ -16,6 +16,7 @@ class Sidebar
           WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
   # サイドバーをクローズ
+  # @param [Function] callback コールバック
   @closeSidebar = (callback = null) ->
     # 選択枠を削除
     WorktableCommon.clearSelectedBorder()
@@ -31,15 +32,18 @@ class Sidebar
       )
 
   # サイドバーがオープンしているか
+  # @return [Boolean] 判定結果
   @isOpenedConfigSidebar = ->
     return $('#main').hasClass('col-xs-9')
 
   # サイドバーがクローズしているか
+  # @return [Boolean] 判定結果
   @isClosedConfigSidebar = ->
     return $('#main').hasClass('col-xs-12')
 
   # サイドバー内容のスイッチ
   # @param [String] configType コンフィグタイプ
+  # @param [Object] item アイテムオブジェクト
   @switchSidebarConfig = (configType, item = null) ->
     animation = @isOpenedConfigSidebar()
     $('.sidebar-config').css('display', 'none')
@@ -74,10 +78,11 @@ class SidebarUI
   # @param [Int] max 最大値
   # @param [Object] cssCode コードエレメント
   # @param [Object] cssStyle CSSプレビューのエレメント
+  # @param [Object] designConfigRoot デザインコンフィグRoot
   # @param [Int] stepValue 進捗数
-  @settingSlider = (className, min, max, cssCode, cssStyle, root, stepValue = 0) ->
-    meterElement = $('.' + className, root)
-    valueElement = $('.' + className + '-value', root)
+  @settingSlider = (className, min, max, cssCode, cssStyle, designConfigRoot, stepValue = 0) ->
+    meterElement = $('.' + className, designConfigRoot)
+    valueElement = $('.' + className + '-value', designConfigRoot)
     d = $('.' + className + '-value', cssCode)[0]
     defaultValue = $(d).html()
     valueElement.val(defaultValue)
@@ -130,8 +135,9 @@ class SidebarUI
   # @param [Array] values 値の配列
   # @param [Object] cssCode コードエレメント
   # @param [Object] cssStyle CSSプレビューのエレメント
-  @settingGradientSlider = (className, values, cssCode, cssStyle, root) ->
-    meterElement = $('.' + className, root)
+  # @param [Object] designConfigRoot デザインコンフィグRoot
+  @settingGradientSlider = (className, values, cssCode, cssStyle, designConfigRoot) ->
+    meterElement = $('.' + className, designConfigRoot)
     @settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
 
 
@@ -141,8 +147,9 @@ class SidebarUI
   # @param [Int] max 最大値
   # @param [Object] cssCode コードエレメント
   # @param [Object] cssStyle CSSプレビューのエレメント
-  @settingGradientDegSlider = (className, min, max, cssCode, cssStyle, root) ->
-    meterElement = $('.' + className, root)
+  # @param [Object] designConfigRoot デザインコンフィグRoot
+  @settingGradientDegSlider = (className, min, max, cssCode, cssStyle, designConfigRoot) ->
+    meterElement = $('.' + className, designConfigRoot)
     valueElement = $('.' + className + '-value', cssCode)
     webkitValueElement = $('.' + className + '-value-webkit', cssCode)
     d = $('.' + className + '-value', cssCode)[0]
@@ -172,6 +179,7 @@ class SidebarUI
   # @param [Object] element HTML要素
   # @param [Object] cssCode コードエレメント
   # @param [Object] cssStyle CSSプレビューのエレメント
+  # @param [Object] cssConfig CSSコンフィグRoot
   @changeGradientShow = (targetElement, cssCode, cssStyle, cssConfig) ->
     value = parseInt(targetElement.value)
     if value >= 2 && value <= 5
@@ -189,6 +197,7 @@ class SidebarUI
 
   # グラデーションのカラーピッカー表示切り替え
   # @param [Int] gradientStepValue 現在のグラデーション数
+  # @param [Object] cssConfig CSSコンフィグRoot
   @switchGradientColorSelectorVisible = (gradientStepValue, cssConfig) ->
     for i in [2 .. 4]
       element = $('.btn-bg-color' + i, cssConfig)

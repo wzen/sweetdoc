@@ -50,7 +50,6 @@ class Handwrite
           queueLoc = loc
 
     # マウスアップ時の描画イベント
-    # @param [Array] loc Canvas座標
     mouseUpDrawing = ->
       if item?
         item.restoreAllDrawingSurface()

@@ -62,7 +62,7 @@ Paging = (function() {
     var self;
     self = this;
     return WorktableCommon.stopAllEventPreview(function() {
-      var beforePageNum, pageFlip;
+      var beforePageNum, created, pageFlip;
       beforePageNum = PageValue.getPageNum();
       if (window.debug) {
         console.log('[createNewPage] beforePageNum:' + beforePageNum);
@@ -70,7 +70,7 @@ Paging = (function() {
       Sidebar.closeSidebar();
       LocalStorage.clearWorktableWithoutSetting();
       EventConfig.removeAllConfig();
-      Common.createdMainContainerIfNeeded(beforePageNum + 1);
+      created = Common.createdMainContainerIfNeeded(beforePageNum + 1);
       pageFlip = new PageFlip(beforePageNum, beforePageNum + 1);
       PageValue.setPageNum(PageValue.getPageCount() + 1);
       WorktableCommon.initMainContainer();
@@ -85,6 +85,9 @@ Paging = (function() {
           Timeline.refreshAllTimeline();
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
           PageValue.updatePageCount();
+          if (created) {
+            OperationHistory.add(true);
+          }
           LocalStorage.saveAllPageValues();
           return self.createPageSelectMenu();
         });
@@ -96,7 +99,7 @@ Paging = (function() {
     var self;
     self = this;
     return WorktableCommon.stopAllEventPreview(function() {
-      var beforePageNum, pageCount, pageFlip;
+      var beforePageNum, created, pageCount, pageFlip;
       if (window.debug) {
         console.log('[selectPage] selectedNum:' + selectedNum);
       }
@@ -114,7 +117,7 @@ Paging = (function() {
       Sidebar.closeSidebar();
       LocalStorage.clearWorktableWithoutSetting();
       EventConfig.removeAllConfig();
-      Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum);
+      created = Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum);
       pageFlip = new PageFlip(beforePageNum, selectedNum);
       PageValue.setPageNum(selectedNum);
       WorktableCommon.initMainContainer();
@@ -130,6 +133,9 @@ Paging = (function() {
           }
           Common.removeAllItem(beforePageNum);
           Timeline.refreshAllTimeline();
+          if (created) {
+            OperationHistory.add(true);
+          }
           LocalStorage.saveAllPageValues();
           return self.createPageSelectMenu();
         });

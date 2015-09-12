@@ -97,13 +97,13 @@ Sidebar = (function() {
 SidebarUI = (function() {
   function SidebarUI() {}
 
-  SidebarUI.settingSlider = function(className, min, max, cssCode, cssStyle, root, stepValue) {
+  SidebarUI.settingSlider = function(className, min, max, cssCode, cssStyle, designConfigRoot, stepValue) {
     var d, defaultValue, meterElement, valueElement;
     if (stepValue == null) {
       stepValue = 0;
     }
-    meterElement = $('.' + className, root);
-    valueElement = $('.' + className + '-value', root);
+    meterElement = $('.' + className, designConfigRoot);
+    valueElement = $('.' + className + '-value', designConfigRoot);
     d = $('.' + className + '-value', cssCode)[0];
     defaultValue = $(d).html();
     valueElement.val(defaultValue);
@@ -154,15 +154,15 @@ SidebarUI = (function() {
     }
   };
 
-  SidebarUI.settingGradientSlider = function(className, values, cssCode, cssStyle, root) {
+  SidebarUI.settingGradientSlider = function(className, values, cssCode, cssStyle, designConfigRoot) {
     var meterElement;
-    meterElement = $('.' + className, root);
+    meterElement = $('.' + className, designConfigRoot);
     return this.settingGradientSliderByElement(meterElement, values, cssCode, cssStyle);
   };
 
-  SidebarUI.settingGradientDegSlider = function(className, min, max, cssCode, cssStyle, root) {
+  SidebarUI.settingGradientDegSlider = function(className, min, max, cssCode, cssStyle, designConfigRoot) {
     var d, defaultValue, meterElement, valueElement, webkitDeg, webkitValueElement;
-    meterElement = $('.' + className, root);
+    meterElement = $('.' + className, designConfigRoot);
     valueElement = $('.' + className + '-value', cssCode);
     webkitValueElement = $('.' + className + '-value-webkit', cssCode);
     d = $('.' + className + '-value', cssCode)[0];

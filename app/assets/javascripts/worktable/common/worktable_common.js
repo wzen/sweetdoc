@@ -199,22 +199,25 @@ WorktableCommon = (function() {
     $(window).off('keydown');
     return $(window).on('keydown', function(e) {
       var isMac;
-      e.preventDefault();
       isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       if ((isMac && e.metaKey) || (!isMac && e.ctrlKey)) {
         if (e.keyCode === Constant.KeyboardKeyCode.Z) {
+          e.preventDefault();
           if (e.shiftKey) {
             return OperationHistory.redo();
           } else {
             return OperationHistory.undo();
           }
         } else if (e.keyCode === Constant.KeyboardKeyCode.C) {
+          e.preventDefault();
           WorktableCommon.copyItem();
           return WorktableCommon.setMainContainerContext();
         } else if (e.keyCode === Constant.KeyboardKeyCode.X) {
+          e.preventDefault();
           WorktableCommon.cutItem();
           return WorktableCommon.setMainContainerContext();
         } else if (e.keyCode === Constant.KeyboardKeyCode.V) {
+          e.preventDefault();
           WorktableCommon.pasteItem();
           LocalStorage.saveAllPageValues();
           return OperationHistory.add();
@@ -321,6 +324,8 @@ WorktableCommon = (function() {
   WorktableCommon.recreateMainContainer = function() {
     this.removeAllItemAndEvent();
     $('#pages .section').remove();
+    CommonVar.initVarWhenLoadedView();
+    CommonVar.initCommonVar();
     Common.createdMainContainerIfNeeded(PageValue.getPageNum());
     WorktableCommon.initMainContainer();
     LocalStorage.clearWorktableWithoutSetting();

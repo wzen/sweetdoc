@@ -8,20 +8,15 @@ CommonVar = (function() {
     window.instanceMap = {};
     window.itemInitFuncList = [];
     window.debug = true;
-    return window.copiedInstance = null;
+    window.copiedInstance = null;
+    window.operationHistories = {};
+    window.operationHistoryTailIndexes = {};
+    return window.operationHistoryIndexes = {};
   };
 
   CommonVar.initCommonVar = function() {
     window.scrollViewSize = 30000;
     return window.pageNumMax = 10000;
-  };
-
-  CommonVar.initHistoryVar = function() {
-    window.operationHistories = [];
-    window.operationHistories[PageValue.getPageNum()] = [];
-    window.operationHistoryTailIndex = null;
-    window.operationHistoryIndexes = [];
-    return window.operationHistoryIndexes[PageValue.getPageNum()] = null;
   };
 
   CommonVar.updateWorktableBaseElement = function(pageNum) {
@@ -58,7 +53,6 @@ CommonVar = (function() {
     window.flushMessageTimer = null;
     window.mode = Constant.Mode.DRAW;
     window.selectedObjId = null;
-    this.initHistoryVar();
     return this.updateWorktableBaseElement(PageValue.getPageNum());
   };
 

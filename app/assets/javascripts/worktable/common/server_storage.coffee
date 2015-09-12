@@ -104,7 +104,6 @@ class ServerStorage
               Setting.initConfig()
               PageValue.updatePageCount()
               Paging.initPaging()
-
             )
 
           if item_js_list.length == 0

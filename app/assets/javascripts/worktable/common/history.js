@@ -29,7 +29,7 @@ OperationHistory = (function() {
     } else {
       window.operationHistoryIndexes[PageValue.getPageNum()] = 0;
     }
-    window.operationHistoryTailIndex = window.operationHistoryIndexes[PageValue.getPageNum()];
+    window.operationHistoryTailIndexes[PageValue.getPageNum()] = window.operationHistoryIndexes[PageValue.getPageNum()];
     obj = {};
     obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix());
@@ -100,14 +100,14 @@ OperationHistory = (function() {
 
   OperationHistory.undo = function() {
     var nextTailIndex;
-    nextTailIndex = (window.operationHistoryTailIndex + 1) % this.OPERATION_STORE_MAX;
+    nextTailIndex = (window.operationHistoryTailIndexes[PageValue.getPageNum()] + 1) % this.OPERATION_STORE_MAX;
     if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || nextTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(this)) {
       return Message.flushWarn("Can't Undo");
     }
   };
 
   OperationHistory.redo = function() {
-    if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || window.operationHistoryTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(this)) {
+    if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || window.operationHistoryTailIndexes[PageValue.getPageNum()] === window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(this)) {
       return Message.flushWarn("Can't Redo");
     }
   };

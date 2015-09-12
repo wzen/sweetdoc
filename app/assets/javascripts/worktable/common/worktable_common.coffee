@@ -167,10 +167,10 @@ class WorktableCommon
   @initKeyEvent = ->
     $(window).off('keydown')
     $(window).on('keydown', (e)->
-      e.preventDefault()
       isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
       if (isMac && e.metaKey) ||  (!isMac && e.ctrlKey)
         if e.keyCode == Constant.KeyboardKeyCode.Z
+          e.preventDefault()
           if e.shiftKey
             # Shift + Ctrl + z → Redo
             OperationHistory.redo()
@@ -178,21 +178,23 @@ class WorktableCommon
             # Ctrl + z → Undo
             OperationHistory.undo()
         else if e.keyCode == Constant.KeyboardKeyCode.C
+          e.preventDefault()
           # Ctrl + c -> Copy
           WorktableCommon.copyItem()
           WorktableCommon.setMainContainerContext()
         else if e.keyCode == Constant.KeyboardKeyCode.X
+          e.preventDefault()
           # Ctrl + x -> Cut
           WorktableCommon.cutItem()
           WorktableCommon.setMainContainerContext()
         else if e.keyCode == Constant.KeyboardKeyCode.V
+          e.preventDefault()
           # 貼り付け
           WorktableCommon.pasteItem()
           # キャッシュ保存
           LocalStorage.saveAllPageValues()
           # 履歴保存
           OperationHistory.add()
-
     )
 
   # Mainビューの高さ更新
@@ -287,6 +289,9 @@ class WorktableCommon
     @removeAllItemAndEvent()
     # ページを全消去
     $('#pages .section').remove()
+    # 変数初期化
+    CommonVar.initVarWhenLoadedView()
+    CommonVar.initCommonVar()
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(PageValue.getPageNum())
     # コンテナ初期化

@@ -99,7 +99,10 @@ Common = (function() {
       width = collapsed ? 'width: 0px;' : '';
       style += width;
       temp = $(temp).wrap("<div class='" + sectionClass + " section' style='" + style + "'></div>").parent();
-      return root.append(temp);
+      root.append(temp);
+      return true;
+    } else {
+      return false;
     }
   };
 

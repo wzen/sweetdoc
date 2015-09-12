@@ -72,11 +72,12 @@ class Paging
       EventConfig.removeAllConfig()
 
       # Mainコンテナ作成
-      Common.createdMainContainerIfNeeded(beforePageNum + 1)
+      created = Common.createdMainContainerIfNeeded(beforePageNum + 1)
       # ページングクラス作成
       pageFlip = new PageFlip(beforePageNum, beforePageNum + 1)
-      # 新規コンテナ初期化
+      # ページ番号更新
       PageValue.setPageNum(PageValue.getPageCount() + 1)
+      # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.drawAllItemFromInstancePageValue( ->
@@ -90,6 +91,9 @@ class Paging
           # ページ総数の更新
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
           PageValue.updatePageCount()
+          if created
+            # 履歴に画面初期時状態を保存
+            OperationHistory.add(true)
           # キャッシュ保存
           LocalStorage.saveAllPageValues()
           # 選択メニューの更新
@@ -106,29 +110,23 @@ class Paging
     WorktableCommon.stopAllEventPreview( ->
       if window.debug
         console.log('[selectPage] selectedNum:' + selectedNum)
-
-
       if selectedNum <= 0
         return
-
       pageCount = PageValue.getPageCount()
       if selectedNum < 0 || selectedNum > pageCount
         return
-
       beforePageNum = PageValue.getPageNum()
       if window.debug
         console.log('[selectPage] beforePageNum:' + beforePageNum)
-
       Sidebar.closeSidebar()
       # WebStorageのアイテム&イベント情報を消去
       LocalStorage.clearWorktableWithoutSetting()
       EventConfig.removeAllConfig()
-
       # Mainコンテナ作成
-      Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum)
+      created = Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum)
       # ページングクラス作成
       pageFlip = new PageFlip(beforePageNum, selectedNum)
-      # ページ更新
+      # ページ番号更新
       PageValue.setPageNum(selectedNum)
       # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
@@ -144,6 +142,9 @@ class Paging
           # 隠したビューのアイテムを削除
           Common.removeAllItem(beforePageNum)
           Timeline.refreshAllTimeline()
+          if created
+            # 履歴に画面初期時状態を保存
+            OperationHistory.add(true)
           # キャッシュ保存
           LocalStorage.saveAllPageValues()
           # 選択メニューの更新

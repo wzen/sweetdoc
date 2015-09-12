@@ -7,19 +7,14 @@ class CommonVar
     window.itemInitFuncList = []
     window.debug = true
     window.copiedInstance = null
+    window.operationHistories = {}
+    window.operationHistoryTailIndexes = {}
+    window.operationHistoryIndexes = {}
 
   # 変数初期化(全メニュー共通)
   @initCommonVar = ->
     window.scrollViewSize = 30000
     window.pageNumMax = 10000
-
-  # 操作履歴変数初期化
-  @initHistoryVar = ->
-    window.operationHistories = []
-    window.operationHistories[PageValue.getPageNum()] = []
-    window.operationHistoryTailIndex = null
-    window.operationHistoryIndexes = []
-    window.operationHistoryIndexes[PageValue.getPageNum()] = null
 
   # 作業テーブルのJQueryオブジェクト保存
   # @param [Integer] pageNum ページ番号
@@ -56,7 +51,6 @@ class CommonVar
     window.flushMessageTimer = null
     window.mode = Constant.Mode.DRAW
     window.selectedObjId = null
-    @initHistoryVar()
     @updateWorktableBaseElement(PageValue.getPageNum())
 
   # 実行画面共通変数

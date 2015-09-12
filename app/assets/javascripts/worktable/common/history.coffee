@@ -14,7 +14,7 @@ class OperationHistory
       window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % @OPERATION_STORE_MAX
     else
       window.operationHistoryIndexes[PageValue.getPageNum()] = 0
-    window.operationHistoryTailIndex = window.operationHistoryIndexes[PageValue.getPageNum()]
+    window.operationHistoryTailIndexes[PageValue.getPageNum()] = window.operationHistoryIndexes[PageValue.getPageNum()]
     obj = {}
     obj[@Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
     obj[@Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
@@ -85,12 +85,11 @@ class OperationHistory
 
   # undo処理
   @undo = ->
-    nextTailIndex = (window.operationHistoryTailIndex + 1) % @OPERATION_STORE_MAX
-
+    nextTailIndex = (window.operationHistoryTailIndexes[PageValue.getPageNum()] + 1) % @OPERATION_STORE_MAX
     if !window.operationHistoryIndexes[PageValue.getPageNum()]? || nextTailIndex == window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(@)
       Message.flushWarn("Can't Undo")
 
   # redo処理
   @redo = ->
-    if !window.operationHistoryIndexes[PageValue.getPageNum()]? || window.operationHistoryTailIndex == window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(@)
+    if !window.operationHistoryIndexes[PageValue.getPageNum()]? || window.operationHistoryTailIndexes[PageValue.getPageNum()] == window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(@)
       Message.flushWarn("Can't Redo")
