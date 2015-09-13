@@ -49,6 +49,10 @@ en:
     float: "Float"
     rear: "Rear"
     delete: "Delete"
+  config:
+    select_opt_group:
+      common: "Common Event"
+      item: "Item"
   message:
     dialog:
       new_project: "All the contents making will delete."

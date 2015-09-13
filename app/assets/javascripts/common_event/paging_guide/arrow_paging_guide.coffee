@@ -16,7 +16,10 @@ class ArrowPagingGuide
       top = window.mainWrapper.height() - ArrowPagingGuide.CANVAS_HEIGHT
       left = window.mainWrapper.width() - ArrowPagingGuide.CANVAS_WIDTH
       temp = """
-                <div id='arrow_paging_guide' style='position: absolute;top:#{top}px;left:#{left}px;z-index:#{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT - 1)};display:none;'><canvas id='arrow_paging_guide_canvas' class='canvas' width='#{ArrowPagingGuide.CANVAS_WIDTH}' height='#{ArrowPagingGuide.CANVAS_HEIGHT}' style='width:100%;height:100%'></canvas></div>
+                <div id='arrow_paging_guide' style='position: absolute;top:#{top}px;left:#{left}px;z-index:#{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT - 1)};display:none;'>
+                
+                <canvas id='arrow_paging_guide_canvas' class='canvas' width='#{ArrowPagingGuide.CANVAS_WIDTH}' height='#{ArrowPagingGuide.CANVAS_HEIGHT}' style='width:100%;height:100%'></canvas>
+                </div>
               """
       window.mainWrapper.append(temp)
       @canvas = document.getElementById('arrow_paging_guide_canvas')
@@ -78,8 +81,14 @@ class ArrowPagingGuide
     _moveBackground.call(@)
     #console.log('finishedScrollDistSum:' + @finishedScrollDistSum)
     if @finishedScrollDistSum > @constructor.PAGE_CHANGE_SCROLL_DIST
+      if @intervalTimer != null
+        clearInterval(@intervalTimer)
+        @intervalTimer = null
+      if @stopTimer != null
+        clearTimeout(@stopTimer)
+        @stopTimer = null
       # 次のページに移動
       window.eventAction.nextPageIfFinishedAllChapter( ->
         # 矢印削除
-        #$('#arrow_paging_guide').remove()
+        $('#arrow_paging_guide').remove()
       )

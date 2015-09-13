@@ -69,7 +69,24 @@ Timeline = (function() {
         axis: 'x',
         containment: $('#timeline_events_container'),
         items: '.sortable',
-        stop: function(event, ui) {}
+        start: function(arg) {
+          var ui;
+          ui = arg.event;
+          return $('#timeline_events .sync_line').remove();
+        },
+        update: function(event, ui) {
+          var afterNum, beforeNum, target, tes;
+          target = $(event.target);
+          beforeNum = target.find('.te_num:first').val();
+          afterNum = null;
+          tes = $('#timeline_events').children('.timeline_event');
+          tes.each(function(idx) {
+            if ($(this).find('.te_num:first').val() === beforeNum) {
+              return afterNum = idx + 1;
+            }
+          });
+          return Timeline.changeSortTimeline(beforeNum, afterNum);
+        }
       });
       menu = [
         {
@@ -152,7 +169,7 @@ Timeline = (function() {
   };
 
   Timeline.updateSelectItemMenu = function() {
-    var items, selectOptions, teItemSelect, teItemSelects;
+    var itemOptgroupClassName, items, selectOptions, teItemSelect, teItemSelects;
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
     selectOptions = '';
@@ -166,12 +183,10 @@ Timeline = (function() {
         return selectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + itemId + "'>\n  " + name + "\n</option>";
       }
     });
+    itemOptgroupClassName = 'item_optgroup_class_name';
+    selectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + selectOptions + '</optgroup>';
     return teItemSelects.each(function() {
-      $(this).find('option').each(function() {
-        if ($(this).val().length > 0 && $(this).val().indexOf(EventConfig.EVENT_COMMON_PREFIX) !== 0) {
-          return $(this).remove();
-        }
-      });
+      $(this).find("." + itemOptgroupClassName).remove();
       return $(this).append($(selectOptions));
     });
   };
@@ -232,6 +247,13 @@ Timeline = (function() {
         return _this.setupTimelineEventConfig();
       };
     })(this), 0);
+  };
+
+  Timeline.changeSortTimeline = function(beforeNum, afterNum) {
+    if (beforeNum !== afterNum) {
+      PageValue.sortEventPageValue(beforeNum, afterNum);
+    }
+    return this.refreshAllTimeline();
   };
 
   return Timeline;

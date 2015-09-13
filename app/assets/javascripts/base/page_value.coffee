@@ -443,6 +443,26 @@ class PageValue
           css += instance.css
     return css
 
+  # EventPageValueをソート
+  # @param [Integer] beforeNum 移動前イベント番号
+  # @param [Integer] afterNum 移動後イベント番号
+  @sortEventPageValue = (beforeNum, afterNum) ->
+    eventPageValues = PageValue.getEventPageValueSortedListByNum()
+    w = eventPageValues[beforeNum - 1]
+    # Syncを解除する
+    w[EventPageValueBase.PageValueKey.IS_SYNC] = false
+    if beforeNum < afterNum
+      for num in [beforeNum..(afterNum - 1)]
+        i = num - 1
+        eventPageValues[i] = eventPageValues[i + 1]
+    else
+      for num in [beforeNum..(afterNum + 1)] by -1
+        i = num - 1
+        eventPageValues[i] = eventPageValues[i - 1]
+    eventPageValues[afterNum - 1] = w
+    for e, idx in eventPageValues
+      @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), e)
+
   # 対象アイテムのSyncを解除する
   # @param [Integer] objId オブジェクトID
   @removeEventPageValueSync = (objId) ->

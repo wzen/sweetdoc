@@ -28,6 +28,10 @@ ja:
     float: "最前面に移動"
     rear: "再背面に移動"
     delete: "削除"
+  config:
+    select_opt_group:
+      common: "共通イベント"
+      item: "アイテム"
   message:
     dialog:
       new_project: "'作成中のコンテンツは全て削除されます。'"

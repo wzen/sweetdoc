@@ -75,8 +75,20 @@ class Timeline
         axis: 'x'
         containment: $('#timeline_events_container')
         items: '.sortable'
-        stop: (event, ui) ->
+        start: (event: ui) ->
+          # 同期線消去
+          $('#timeline_events .sync_line').remove()
+        update: (event, ui) ->
           # イベントのソート番号を更新
+          target = $(event.target)
+          beforeNum = target.find('.te_num:first').val()
+          afterNum = null
+          tes = $('#timeline_events').children('.timeline_event')
+          tes.each((idx) ->
+            if $(@).find('.te_num:first').val() == beforeNum
+              afterNum = idx + 1
+          )
+          Timeline.changeSortTimeline(beforeNum, afterNum)
       })
       # イベントの右クリック
       menu = [{title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors"}]
@@ -181,13 +193,11 @@ class Timeline
             </option>
           """
     )
-
+    itemOptgroupClassName = 'item_optgroup_class_name'
+    selectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + selectOptions + '</optgroup>'
     # メニューを入れ替え
     teItemSelects.each( ->
-      $(@).find('option').each( ->
-        if $(@).val().length > 0 && $(@).val().indexOf(EventConfig.EVENT_COMMON_PREFIX) != 0
-          $(@).remove()
-      )
+      $(@).find(".#{itemOptgroupClassName}").remove()
       $(@).append($(selectOptions))
     )
 
@@ -237,4 +247,12 @@ class Timeline
       )
       @setupTimelineEventConfig()
     , 0)
+
+  # タイムラインソートイベント
+  @changeSortTimeline: (beforeNum, afterNum) ->
+    if beforeNum != afterNum
+      PageValue.sortEventPageValue(beforeNum, afterNum)
+    @refreshAllTimeline()
+
+
 

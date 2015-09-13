@@ -22,7 +22,7 @@ ArrowPagingGuide = (function() {
     if ((emt == null) || emt.length === 0) {
       top = window.mainWrapper.height() - ArrowPagingGuide.CANVAS_HEIGHT;
       left = window.mainWrapper.width() - ArrowPagingGuide.CANVAS_WIDTH;
-      temp = "<div id='arrow_paging_guide' style='position: absolute;top:" + top + "px;left:" + left + "px;z-index:" + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT - 1)) + ";display:none;'><canvas id='arrow_paging_guide_canvas' class='canvas' width='" + ArrowPagingGuide.CANVAS_WIDTH + "' height='" + ArrowPagingGuide.CANVAS_HEIGHT + "' style='width:100%;height:100%'></canvas></div>";
+      temp = "<div id='arrow_paging_guide' style='position: absolute;top:" + top + "px;left:" + left + "px;z-index:" + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT - 1)) + ";display:none;'>\n\n<canvas id='arrow_paging_guide_canvas' class='canvas' width='" + ArrowPagingGuide.CANVAS_WIDTH + "' height='" + ArrowPagingGuide.CANVAS_HEIGHT + "' style='width:100%;height:100%'></canvas>\n</div>";
       window.mainWrapper.append(temp);
       this.canvas = document.getElementById('arrow_paging_guide_canvas');
       this.context = this.canvas.getContext('2d');
@@ -84,7 +84,17 @@ ArrowPagingGuide = (function() {
     this.finishedScrollDistSum += x + y;
     _moveBackground.call(this);
     if (this.finishedScrollDistSum > this.constructor.PAGE_CHANGE_SCROLL_DIST) {
-      return window.eventAction.nextPageIfFinishedAllChapter(function() {});
+      if (this.intervalTimer !== null) {
+        clearInterval(this.intervalTimer);
+        this.intervalTimer = null;
+      }
+      if (this.stopTimer !== null) {
+        clearTimeout(this.stopTimer);
+        this.stopTimer = null;
+      }
+      return window.eventAction.nextPageIfFinishedAllChapter(function() {
+        return $('#arrow_paging_guide').remove();
+      });
     }
   };
 

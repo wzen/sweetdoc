@@ -511,13 +511,38 @@ PageValue = (function() {
     return css;
   };
 
+  PageValue.sortEventPageValue = function(beforeNum, afterNum) {
+    var e, eventPageValues, i, idx, j, l, len, m, num, ref, ref1, ref2, ref3, results, w;
+    eventPageValues = PageValue.getEventPageValueSortedListByNum();
+    w = eventPageValues[beforeNum - 1];
+    w[EventPageValueBase.PageValueKey.IS_SYNC] = false;
+    if (beforeNum < afterNum) {
+      for (num = j = ref = beforeNum, ref1 = afterNum - 1; ref <= ref1 ? j <= ref1 : j >= ref1; num = ref <= ref1 ? ++j : --j) {
+        i = num - 1;
+        eventPageValues[i] = eventPageValues[i + 1];
+      }
+    } else {
+      for (num = l = ref2 = beforeNum, ref3 = afterNum + 1; l >= ref3; num = l += -1) {
+        i = num - 1;
+        eventPageValues[i] = eventPageValues[i - 1];
+      }
+    }
+    eventPageValues[afterNum - 1] = w;
+    results = [];
+    for (idx = m = 0, len = eventPageValues.length; m < len; idx = ++m) {
+      e = eventPageValues[idx];
+      results.push(this.setEventPageValue(this.Key.eventPagePrefix() + this.Key.PAGE_VALUES_SEPERATOR + this.Key.E_NUM_PREFIX + (idx + 1), e));
+    }
+    return results;
+  };
+
   PageValue.removeEventPageValueSync = function(objId) {
-    var dFlg, i, idx, len, results, te, tes, type;
+    var dFlg, idx, j, len, results, te, tes, type;
     tes = this.getEventPageValueSortedListByNum();
     dFlg = false;
     type = null;
     results = [];
-    for (idx = i = 0, len = tes.length; i < len; idx = ++i) {
+    for (idx = j = 0, len = tes.length; j < len; idx = ++j) {
       te = tes[idx];
       if (te.id === objId) {
         dFlg = true;
