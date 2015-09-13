@@ -1,11 +1,8 @@
 class Page
 
-  @PAGE_CHANGE_SCROLL_DIST = 50
-
   # コンストラクタ
   # @param [Object] eventPageValeuList イベントPageValue
   constructor: (eventPageValueList) ->
-
     @chapterList = []
     if eventPageValueList?
       eventList = []
@@ -40,9 +37,10 @@ class Page
 
   # 開始イベント
   start: ->
+    # ページングガイド作成
+    @pagingGuide = new ArrowPagingGuide()
     # チャプター数設定
     Navbar.setChapterNum(@chapterIndex + 1)
-
     # チャプター前処理
     @floatPageScrollHandleCanvas()
     @thisChapter().willChapter()
@@ -112,18 +110,10 @@ class Page
       if @isScrollChapter()
         @thisChapter().scrollEvent(x, y)
     else
-      if stopTimer != null
-        clearTimeout(stopTimer)
-      stopTimer = setTimeout( =>
-        @finishedScrollDistSum = 0
-        clearTimeout(stopTimer)
-        stopTimer = null
-      , 200)
-      @finishedScrollDistSum += x + y
-      console.log('finishedScrollDistSum:' + @finishedScrollDistSum)
-      if @finishedScrollDistSum > Page.PAGE_CHANGE_SCROLL_DIST
-        # 次のページに移動
-        window.eventAction.nextPageIfFinishedAllChapter()
+      if window.eventAction.hasNextPage()
+        # 次ページ移動ガイドを表示する
+        if @pagingGuide?
+          @pagingGuide.scrollEvent(x, y)
 
   # スクロールチャプターか判定
   isScrollChapter: ->
@@ -227,5 +217,9 @@ class Page
     if window.debug
       console.log('Finish All Chapters!')
 
-    # ページ移動のためのスクロールイベントを取るようにする
-    @floatPageScrollHandleCanvas()
+    if window.eventAction.hasNextPage()
+      # ページ移動のためのスクロールイベントを取るようにする
+      @floatPageScrollHandleCanvas()
+    else
+      # 全ページ終了の場合
+      window.eventAction.finishAllPages()

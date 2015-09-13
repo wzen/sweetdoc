@@ -82,13 +82,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ElementAttribute = (function() {
-      function ElementAttribute() {}
-
-      return ElementAttribute;
-
-    })();
-
     Constant.CommonActionEventChangeType = (function() {
       function CommonActionEventChangeType() {}
 

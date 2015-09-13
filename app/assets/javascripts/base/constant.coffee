@@ -56,9 +56,6 @@ if gon?
       # @property [Int] V vボタン
       @V = constant.KeyboardKeyCode.V
 
-    class @ElementAttribute
-
-
     # 共通イベントタイプ
     class @CommonActionEventChangeType
       # @property [Int] BACKGROUND 背景

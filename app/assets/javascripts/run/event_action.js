@@ -21,14 +21,20 @@ EventAction = (function() {
     return this.thisPage().start();
   };
 
-  EventAction.prototype.nextPageIfFinishedAllChapter = function() {
+  EventAction.prototype.nextPageIfFinishedAllChapter = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     if (this.thisPage().finishedAllChapters) {
-      return this.nextPage();
+      return this.nextPage(callback);
     }
   };
 
-  EventAction.prototype.nextPage = function() {
+  EventAction.prototype.nextPage = function(callback) {
     var beforePageIndex, pageNum;
+    if (callback == null) {
+      callback = null;
+    }
     this.thisPage().didPage();
     beforePageIndex = this.pageIndex;
     if (this.pageList.length <= this.pageIndex + 1) {
@@ -38,19 +44,22 @@ EventAction = (function() {
       pageNum = this.pageIndex + 1;
       Navbar.setPageNum(pageNum);
       PageValue.setPageNum(pageNum);
-      return this.changePaging(beforePageIndex, this.pageIndex);
+      return this.changePaging(beforePageIndex, this.pageIndex, callback);
     }
   };
 
-  EventAction.prototype.rewindPage = function() {
+  EventAction.prototype.rewindPage = function(callback) {
     var beforePageIndex, pageNum;
+    if (callback == null) {
+      callback = null;
+    }
     beforePageIndex = this.pageIndex;
     if (this.pageIndex > 0) {
       this.pageIndex -= 1;
       pageNum = this.pageIndex + 1;
       Navbar.setPageNum(pageNum);
       PageValue.setPageNum(pageNum);
-      return this.changePaging(beforePageIndex, this.pageIndex);
+      return this.changePaging(beforePageIndex, this.pageIndex, callback);
     } else {
       this.thisPage().willPage();
       return this.thisPage().start();
@@ -116,6 +125,10 @@ EventAction = (function() {
     Navbar.setPageNum(this.pageIndex + 1);
     this.finishedAllPages = false;
     return this.start();
+  };
+
+  EventAction.prototype.hasNextPage = function() {
+    return this.pageIndex < this.pageList.length - 1;
   };
 
   EventAction.prototype.finishAllPages = function() {

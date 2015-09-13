@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "paging_guide_base.js",
+  "sourceRoot": "",
+  "sources": [
+    "paging_guide_base.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,yCAAA;EAAA;6BAAA;;AAAA;AAAA,wCAAA,CAAA;;;;GAAA;;4BAAA;;GAAiC,YAAjC,CAAA;;AAAA;AAEA,2CAAA,CAAA;;;;GAAA;;+BAAA;;GAAoC,eAFpC,CAAA"
+}

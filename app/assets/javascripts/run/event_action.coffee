@@ -23,12 +23,14 @@ class EventAction
     @thisPage().start()
 
   # 全てのチャプターが終了している場合、ページを進める
-  nextPageIfFinishedAllChapter: ->
+  # @param [Function] callback コールバック
+  nextPageIfFinishedAllChapter: (callback = null) ->
     if @thisPage().finishedAllChapters
-      @nextPage()
+      @nextPage(callback)
 
   # ページを進める
-  nextPage: ->
+  # @param [Function] callback コールバック
+  nextPage: (callback = null) ->
     # ページ後処理
     @thisPage().didPage()
 
@@ -42,10 +44,11 @@ class EventAction
       # ページ番号更新
       Navbar.setPageNum(pageNum)
       PageValue.setPageNum(pageNum)
-      @changePaging(beforePageIndex, @pageIndex)
+      @changePaging(beforePageIndex, @pageIndex, callback)
 
   # ページを戻す
-  rewindPage: ->
+  # @param [Function] callback コールバック
+  rewindPage: (callback = null) ->
     beforePageIndex = @pageIndex
     if @pageIndex > 0
       # 動作させていない場合は前のページに戻す
@@ -53,7 +56,7 @@ class EventAction
       pageNum = @pageIndex + 1
       Navbar.setPageNum(pageNum)
       PageValue.setPageNum(pageNum)
-      @changePaging(beforePageIndex, @pageIndex)
+      @changePaging(beforePageIndex, @pageIndex, callback)
     else
       # 動作させている場合はページのアクションを元に戻す
       # ページ前処理
@@ -123,6 +126,10 @@ class EventAction
     Navbar.setPageNum(@pageIndex + 1)
     @finishedAllPages = false
     @start()
+
+  # 次のページが存在するか
+  hasNextPage: ->
+    return @pageIndex < @pageList.length - 1
 
   # 全ページ終了イベント
   finishAllPages: ->
