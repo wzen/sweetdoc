@@ -15,7 +15,7 @@ class RunController < ApplicationController
       end
       general = params.require(Const::PageValueKey::G_PREFIX.to_sym)
       instance = params.require(Const::PageValueKey::INSTANCE_PREFIX.to_sym)
-      event = params.require(Const::PageValueKey::E_PREFIX.to_sym)
+      event = params.require(Const::PageValueKey::E_SUB_ROOT.to_sym)
       # cacheに保存
       Rails.cache.write("user_id:#{user_id}-instance", instance, expires_in: 1.hour)
       Rails.cache.write("user_id:#{user_id}-event", event, expires_in: 1.hour)
@@ -24,7 +24,7 @@ class RunController < ApplicationController
 
       @general_pagevalues = Run.make_pagevalue(general, Const::PageValueKey::G_PREFIX)
       @instance_pagevalues = Run.make_pagevalue_with_pagenum(instance, Const::PageValueKey::INSTANCE_PREFIX, page_num)
-      @event_pagevalues = Run.make_pagevalue_with_pagenum(event, Const::PageValueKey::E_PREFIX, page_num)
+      @event_pagevalues = Run.make_pagevalue_with_pagenum(event, Const::PageValueKey::E_SUB_ROOT, page_num)
     end
   end
 

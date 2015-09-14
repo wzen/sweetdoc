@@ -34,7 +34,7 @@ class ServerStorage
     data[@Key.INSTANCE_PAGE_VALUE] = if instancePagevalues.length > 0 then instancePagevalues else null
 
     eventPagevalues = []
-    event = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    event = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
     for k, v of event
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
       eventPagevalues.push({

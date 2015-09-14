@@ -150,7 +150,7 @@ LocalStorage = (function() {
     var h, isRun, key, lstorage;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
-    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
     key = isRun ? this.Key.RUN_EVENT_PAGEVALUES : this.Key.WORKTABLE_EVENT_PAGEVALUES;
     lstorage.setItem(key, JSON.stringify(h));
     key = isRun ? this.Key.RUN_SAVETIME : this.Key.WORKTABLE_SAVETIME;

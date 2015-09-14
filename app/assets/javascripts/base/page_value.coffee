@@ -14,8 +14,8 @@ class PageValue
       @G_PREFIX = constant.PageValueKey.G_PREFIX
       # @property [String] P_PREFIX ページ番号プレフィックス
       @P_PREFIX = constant.PageValueKey.P_PREFIX
-      # @property [return] 現在のページのページ番号プレフィックス
-      @pagePrefix = (pn = PageValue.getPageNum()) -> @P_PREFIX + pn
+      # @property [return] 現在のページのページ番号ルート
+      @pageRoot = (pn = PageValue.getPageNum()) -> @P_PREFIX + pn
       # @property [String] PAGE_COUNT ページ総数
       @PAGE_COUNT = constant.PageValueKey.PAGE_COUNT
       # @property [String] PAGE_NUM 現在のページ番号
@@ -25,7 +25,7 @@ class PageValue
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
       # @property [return] インスタンスページプレフィックスを取得
-      @instancePagePrefix = (pn = PageValue.getPageNum()) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
+      @instancePagePrefix = (pn = PageValue.getPageNum()) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
       # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
       @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
       # @property [return] インスタンス値
@@ -46,14 +46,26 @@ class PageValue
       @ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION = @ITEM_INFO_PREFIX + ':@item_id:default:scroll_forward_direction'
       # @property [String] E_ROOT イベント値ルート
       @E_ROOT = constant.PageValueKey.E_ROOT
-      # @property [String] E_PREFIX イベントプレフィックス
-      @E_PREFIX = constant.PageValueKey.E_PREFIX
+      # @property [String] E_SUB_ROOT イベントプレフィックス
+      @E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT
+      # @property [String] E_CONTENTS_ROOT イベントコンテンツルート
+      @E_CONTENTS_ROOT = constant.PageValueKey.E_CONTENTS_ROOT
+      # @property [String] E_FORK_ROOT イベントフォークルート
+      @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
       # @property [return] イベントページプレフィックス
-      @eventPagePrefix = (pn = PageValue.getPageNum()) -> @E_PREFIX + @PAGE_VALUES_SEPERATOR + @pagePrefix(pn)
+      @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
+      # @property [return] イベントページプレフィックス
+      @eventPageContentsRoot = (pn = PageValue.getPageNum()) -> "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_CONTENTS_ROOT}"
+      # @property [return] イベントページプレフィックス
+      @eventNumber = (num, pn = PageValue.getPageNum()) -> "#{@eventPageContentsRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
       # @property [return] イベント数
-      @eventCount = (pn = PageValue.getPageNum()) -> "#{@E_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}count"
+      @eventCount = (pn = PageValue.getPageNum()) -> "#{@eventPageContentsRoot(pn)}#{@PAGE_VALUES_SEPERATOR}count"
+      # @property [return] イベントフォーク数
+      @eventFork = (pn = PageValue.getPageNum()) -> "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_FORK_ROOT}#{@PAGE_VALUES_SEPERATOR}fork"
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
+      # @property [String] EF_PREFIX イベントフォークプレフィックス
+      @EF_PREFIX = constant.PageValueKey.EF_PREFIX
       # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
       @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
       # @property [String] UPDATED 更新フラグ
@@ -215,9 +227,9 @@ class PageValue
   @setEventPageValueByRootHash = (value, refresh = true, giveUpdate = false) ->
     if refresh
       # 内容を一旦消去
-      $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").remove()
+      $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").remove()
     for k, v of value
-      @setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+      @setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
 
 
   # イベントの値をページルート値から設定
@@ -227,9 +239,9 @@ class PageValue
   @setEventPageValueByPageRootHash = (value, refresh = true, giveUpdate = false) ->
     if refresh
       # 内容を一旦消去
-      $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
+      $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").remove()
     for k, v of value
-      @setEventPageValue(PageValue.Key.eventPagePrefix() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+      @setEventPageValue(PageValue.Key.eventPageContentsRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
 
   # 共通設定値を設定
   # @param [String] key キー値
@@ -319,7 +331,7 @@ class PageValue
   # イベント番号で昇順ソートした配列を取得
   # @param [Integer] pn ページ番号
   @getEventPageValueSortedListByNum = (pn = PageValue.getPageNum()) ->
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix(pn))
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPageContentsRoot(pn))
     if !eventPageValues?
       return []
 
@@ -349,13 +361,13 @@ class PageValue
     # page_value消去
     $("##{@Key.G_ROOT}").children(".#{@Key.G_PREFIX}").remove()
     $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").remove()
-    $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").remove()
+    $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").remove()
 
   # ページ上のインスタンスとイベント情報を全削除
   @removeAllInstanceAndEventPageValueOnPage = ->
     # ページ内のpage_value消去
-    $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
-    $("##{@Key.E_ROOT}").children(".#{@Key.E_PREFIX}").children(".#{@Key.pagePrefix()}").remove()
+    $("##{@Key.IS_ROOT}").children(".#{@Key.INSTANCE_PREFIX}").children(".#{@Key.pageRoot()}").remove()
+    $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").remove()
 
   # InstancePageValueとEventPageValueを最適化
   @adjustInstanceAndEventOnPage = ->
@@ -366,7 +378,7 @@ class PageValue
     for k, v of iPageValues
       if $.inArray(v.value.id, instanceObjIds) < 0
         instanceObjIds.push(v.value.id)
-    ePageValues = @getEventPageValue(PageValue.Key.eventPagePrefix())
+    ePageValues = @getEventPageValue(PageValue.Key.eventPageContentsRoot())
     adjust = {}
     teCount = 0
     for k, v of ePageValues
@@ -385,7 +397,7 @@ class PageValue
     # EventPageValueの「p_」を参照してカウント
 
     page_count = 0
-    ePageValues = @getEventPageValue(@Key.E_PREFIX)
+    ePageValues = @getEventPageValue(@Key.E_SUB_ROOT)
     for k, v of ePageValues
       if k.indexOf(@Key.P_PREFIX) >= 0
         page_count += 1
@@ -432,7 +444,7 @@ class PageValue
   @itemCssOnPage = (pageNum) ->
     # EventPageValueのcssを一つの文字列にまとめる
 
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPagePrefix(pageNum))
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPageContentsRoot(pageNum))
     css = ''
     for k, v of eventPageValues
       if k.indexOf(@Key.E_NUM_PREFIX) == 0
@@ -461,7 +473,7 @@ class PageValue
         eventPageValues[i] = eventPageValues[i - 1]
     eventPageValues[afterNum - 1] = w
     for e, idx in eventPageValues
-      @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), e)
+      @setEventPageValue(@Key.eventNumber(idx + 1), e)
 
   # 対象イベントを削除する
   # @param [Integer] eNum 削除するイベント番号
@@ -472,10 +484,10 @@ class PageValue
         if i >= eNum - 1
           eventPageValues[i] = eventPageValues[i + 1]
 
-    @setEventPageValue(@Key.eventPagePrefix(), {})
+    @setEventPageValue(@Key.eventPageContentsRoot(), {})
     if eventPageValues.length >= 2
       for idx in [0..(eventPageValues.length - 2)]
-        @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), eventPageValues[idx])
+        @setEventPageValue(@Key.eventNumber(idx + 1), eventPageValues[idx])
     PageValue.setEventPageValue(@Key.eventCount(), eventPageValues.length - 1)
 
   # 対象イベントのSyncを解除する
@@ -491,6 +503,6 @@ class PageValue
       else
         if dFlg && type == te[EventPageValueBase.PageValueKey.ACTIONTYPE]
           te[EventPageValueBase.PageValueKey.IS_SYNC] = false
-          @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), te)
+          @setEventPageValue(@Key.eventNumber(idx + 1), te)
           dFlg = false
           type = null

@@ -166,7 +166,7 @@ RunCommon = (function() {
           ref3 = data.event_pagevalue_hash;
           for (k in ref3) {
             v = ref3[k];
-            PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+            PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
           }
         }
         if (callback != null) {

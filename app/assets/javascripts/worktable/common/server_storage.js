@@ -52,7 +52,7 @@ ServerStorage = (function() {
     }
     data[this.Key.INSTANCE_PAGE_VALUE] = instancePagevalues.length > 0 ? instancePagevalues : null;
     eventPagevalues = [];
-    event = PageValue.getEventPageValue(PageValue.Key.E_PREFIX);
+    event = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
     for (k in event) {
       v = event[k];
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));

@@ -19,7 +19,7 @@ PageValue = (function() {
 
       Key.P_PREFIX = constant.PageValueKey.P_PREFIX;
 
-      Key.pagePrefix = function(pn) {
+      Key.pageRoot = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
@@ -38,7 +38,7 @@ PageValue = (function() {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix(pn);
+        return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
       };
 
       Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
@@ -65,23 +65,50 @@ PageValue = (function() {
 
       Key.E_ROOT = constant.PageValueKey.E_ROOT;
 
-      Key.E_PREFIX = constant.PageValueKey.E_PREFIX;
+      Key.E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT;
 
-      Key.eventPagePrefix = function(pn) {
+      Key.E_CONTENTS_ROOT = constant.PageValueKey.E_CONTENTS_ROOT;
+
+      Key.E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT;
+
+      Key.eventPageRoot = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pagePrefix(pn);
+        return "" + this.E_SUB_ROOT + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
+      };
+
+      Key.eventPageContentsRoot = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_CONTENTS_ROOT;
+      };
+
+      Key.eventNumber = function(num, pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.eventPageContentsRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_NUM_PREFIX + num;
       };
 
       Key.eventCount = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + this.E_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
+        return "" + (this.eventPageContentsRoot(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
+      };
+
+      Key.eventFork = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_FORK_ROOT + this.PAGE_VALUES_SEPERATOR + "fork";
       };
 
       Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
+
+      Key.EF_PREFIX = constant.PageValueKey.EF_PREFIX;
 
       Key.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
 
@@ -262,12 +289,12 @@ PageValue = (function() {
       giveUpdate = false;
     }
     if (refresh) {
-      $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).remove();
+      $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).remove();
     }
     results = [];
     for (k in value) {
       v = value[k];
-      results.push(this.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
+      results.push(this.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
     }
     return results;
   };
@@ -281,12 +308,12 @@ PageValue = (function() {
       giveUpdate = false;
     }
     if (refresh) {
-      $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).children("." + (this.Key.pagePrefix())).remove();
+      $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).remove();
     }
     results = [];
     for (k in value) {
       v = value[k];
-      results.push(this.setEventPageValue(PageValue.Key.eventPagePrefix() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
+      results.push(this.setEventPageValue(PageValue.Key.eventPageContentsRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
     }
     return results;
   };
@@ -379,7 +406,7 @@ PageValue = (function() {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix(pn));
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageContentsRoot(pn));
     if (eventPageValues == null) {
       return [];
     }
@@ -411,12 +438,12 @@ PageValue = (function() {
   PageValue.removeAllGeneralAndInstanceAndEventPageValue = function() {
     $("#" + this.Key.G_ROOT).children("." + this.Key.G_PREFIX).remove();
     $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).remove();
-    return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).remove();
+    return $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).remove();
   };
 
   PageValue.removeAllInstanceAndEventPageValueOnPage = function() {
-    $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).children("." + (this.Key.pagePrefix())).remove();
-    return $("#" + this.Key.E_ROOT).children("." + this.Key.E_PREFIX).children("." + (this.Key.pagePrefix())).remove();
+    $("#" + this.Key.IS_ROOT).children("." + this.Key.INSTANCE_PREFIX).children("." + (this.Key.pageRoot())).remove();
+    return $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).remove();
   };
 
   PageValue.adjustInstanceAndEventOnPage = function() {
@@ -429,7 +456,7 @@ PageValue = (function() {
         instanceObjIds.push(v.value.id);
       }
     }
-    ePageValues = this.getEventPageValue(PageValue.Key.eventPagePrefix());
+    ePageValues = this.getEventPageValue(PageValue.Key.eventPageContentsRoot());
     adjust = {};
     teCount = 0;
     for (k in ePageValues) {
@@ -450,7 +477,7 @@ PageValue = (function() {
   PageValue.updatePageCount = function() {
     var ePageValues, k, page_count, v;
     page_count = 0;
-    ePageValues = this.getEventPageValue(this.Key.E_PREFIX);
+    ePageValues = this.getEventPageValue(this.Key.E_SUB_ROOT);
     for (k in ePageValues) {
       v = ePageValues[k];
       if (k.indexOf(this.Key.P_PREFIX) >= 0) {
@@ -495,7 +522,7 @@ PageValue = (function() {
 
   PageValue.itemCssOnPage = function(pageNum) {
     var css, eventPageValues, index, instance, k, objId, v;
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPagePrefix(pageNum));
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageContentsRoot(pageNum));
     css = '';
     for (k in eventPageValues) {
       v = eventPageValues[k];
@@ -531,7 +558,7 @@ PageValue = (function() {
     results = [];
     for (idx = m = 0, len = eventPageValues.length; m < len; idx = ++m) {
       e = eventPageValues[idx];
-      results.push(this.setEventPageValue(this.Key.eventPagePrefix() + this.Key.PAGE_VALUES_SEPERATOR + this.Key.E_NUM_PREFIX + (idx + 1), e));
+      results.push(this.setEventPageValue(this.Key.eventNumber(idx + 1), e));
     }
     return results;
   };
@@ -546,10 +573,10 @@ PageValue = (function() {
         }
       }
     }
-    this.setEventPageValue(this.Key.eventPagePrefix(), {});
+    this.setEventPageValue(this.Key.eventPageContentsRoot(), {});
     if (eventPageValues.length >= 2) {
       for (idx = l = 0, ref1 = eventPageValues.length - 2; 0 <= ref1 ? l <= ref1 : l >= ref1; idx = 0 <= ref1 ? ++l : --l) {
-        this.setEventPageValue(this.Key.eventPagePrefix() + this.Key.PAGE_VALUES_SEPERATOR + this.Key.E_NUM_PREFIX + (idx + 1), eventPageValues[idx]);
+        this.setEventPageValue(this.Key.eventNumber(idx + 1), eventPageValues[idx]);
       }
     }
     return PageValue.setEventPageValue(this.Key.eventCount(), eventPageValues.length - 1);
@@ -569,7 +596,7 @@ PageValue = (function() {
       } else {
         if (dFlg && type === te[EventPageValueBase.PageValueKey.ACTIONTYPE]) {
           te[EventPageValueBase.PageValueKey.IS_SYNC] = false;
-          this.setEventPageValue(this.Key.eventPagePrefix() + this.Key.PAGE_VALUES_SEPERATOR + this.Key.E_NUM_PREFIX + (idx + 1), te);
+          this.setEventPageValue(this.Key.eventNumber(idx + 1), te);
           dFlg = false;
           results.push(type = null);
         } else {

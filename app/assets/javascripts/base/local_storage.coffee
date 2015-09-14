@@ -125,7 +125,7 @@ class LocalStorage
   @saveEventPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
-    h = PageValue.getEventPageValue(PageValue.Key.E_PREFIX)
+    h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
     key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
     lstorage.setItem(key, JSON.stringify(h))
     # 現在時刻を保存

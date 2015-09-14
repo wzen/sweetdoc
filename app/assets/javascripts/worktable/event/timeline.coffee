@@ -199,7 +199,7 @@ class Timeline
     teItemSelects = $('#event-config .te_item_select')
     teItemSelect = teItemSelects[0]
     selectOptions = ''
-    items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pagePrefix()}")
+    items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pageRoot()}")
     items.children().each( ->
       id = $(@).find('input.id').val()
       name = $(@).find('input.name').val()

@@ -119,14 +119,20 @@ class Const
     ST_ROOT = 'setting_page_values'
     # @property [String] ST_PREFIX 共通設定プレフィックス
     ST_PREFIX = 'settings'
-    # @property [String] E_ROOT イベント値ルート
+    # @property [String] E_ROOT イベントルート
     E_ROOT = 'event_page_values'
-    # @property [String] E_PREFIX イベントプレフィックス
-    E_PREFIX = 'events'
+    # @property [String] E_SUB_ROOT イベントサブルート
+    E_SUB_ROOT = 'events'
+    # @property [String] E_CONTENTS_ROOT イベントコンテンツルート
+    E_CONTENTS_ROOT = 'contents'
+    # @property [String] E_FORK_ROOT イベントフォークルート
+    E_FORK_ROOT = 'forks'
     # @property [String] E_NUM_PREFIX イベント番号プレフィックス
     E_NUM_PREFIX = 'te_'
     # @property [String] PAGE_PREFIX ページ番号プレフィックス
     P_PREFIX = 'p_'
+    # @property [String] EF_PREFIX イベントフォークプレフィックス
+    EF_PREFIX = 'ef_'
     # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
     PAGE_VALUES_SEPERATOR = ':'
     # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか

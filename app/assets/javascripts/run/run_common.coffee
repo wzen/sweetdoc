@@ -155,7 +155,7 @@ class RunCommon
               PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
           if data.event_pagevalue_hash != null
             for k, v of data.event_pagevalue_hash
-              PageValue.setEventPageValue(PageValue.Key.E_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+              PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
           # コールバック
           if callback?

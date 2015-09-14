@@ -17,7 +17,7 @@ class OperationHistory
     window.operationHistoryTailIndexes[PageValue.getPageNum()] = window.operationHistoryIndexes[PageValue.getPageNum()]
     obj = {}
     obj[@Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
-    obj[@Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPagePrefix())
+    obj[@Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPageContentsRoot())
     if !window.operationHistories[PageValue.getPageNum()]?
       window.operationHistories[PageValue.getPageNum()] = []
     window.operationHistories[PageValue.getPageNum()][window.operationHistoryIndexes[PageValue.getPageNum()]] = obj
