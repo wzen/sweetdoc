@@ -76,16 +76,18 @@ Timeline = (function() {
         },
         update: function(event, ui) {
           var afterNum, beforeNum, target, tes;
-          target = $(event.target);
-          beforeNum = target.find('.te_num:first').val();
+          target = $(ui.item);
+          beforeNum = parseInt(target.find('.te_num:first').val());
           afterNum = null;
           tes = $('#timeline_events').children('.timeline_event');
           tes.each(function(idx) {
-            if ($(this).find('.te_num:first').val() === beforeNum) {
+            if (parseInt($(this).find('.te_num:first').val()) === beforeNum) {
               return afterNum = idx + 1;
             }
           });
-          return Timeline.changeSortTimeline(beforeNum, afterNum);
+          if (afterNum != null) {
+            return Timeline.changeSortTimeline(beforeNum, afterNum);
+          }
         }
       });
       menu = [
@@ -233,6 +235,7 @@ Timeline = (function() {
   };
 
   Timeline.refreshAllTimeline = function() {
+    Indicator.showIndicator(Indicator.Type.TIMELINE);
     return setTimeout((function(_this) {
       return function() {
         var pEmt;
@@ -244,7 +247,8 @@ Timeline = (function() {
             return emt.remove();
           }
         });
-        return _this.setupTimelineEventConfig();
+        _this.setupTimelineEventConfig();
+        return Indicator.hideIndicator(Indicator.Type.TIMELINE);
       };
     })(this), 0);
   };

@@ -17,6 +17,7 @@
  *= require non-responsive
  *= require common/common
  *= require common/modal_view.css
+ *= require common/indicator
  *= require paging_animation/pageflip
  *= require worktable/worktable
  * require_tree .

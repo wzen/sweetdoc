@@ -24,6 +24,10 @@ html, body {
   height: 100%;
 }
 
+#timeline_container {
+  position: relative;
+}
+
 #contents {
   margin-top: 51px;
 }
@@ -610,11 +614,12 @@ div.css3button > div {
   height: 70px;
 
   #timeline_events_container {
-    margin: 5px 10px;
+    margin: 5px 0;
     padding: 0 3px;
     height: 40px;
 
     #timeline_events {
+      padding-left: 10px;
       height: 100%;
 
       .timeline_event {

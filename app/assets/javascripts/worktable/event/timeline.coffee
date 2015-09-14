@@ -80,15 +80,16 @@ class Timeline
           $('#timeline_events .sync_line').remove()
         update: (event, ui) ->
           # イベントのソート番号を更新
-          target = $(event.target)
-          beforeNum = target.find('.te_num:first').val()
+          target = $(ui.item)
+          beforeNum = parseInt(target.find('.te_num:first').val())
           afterNum = null
           tes = $('#timeline_events').children('.timeline_event')
           tes.each((idx) ->
-            if $(@).find('.te_num:first').val() == beforeNum
+            if parseInt($(@).find('.te_num:first').val()) == beforeNum
               afterNum = idx + 1
           )
-          Timeline.changeSortTimeline(beforeNum, afterNum)
+          if afterNum?
+            Timeline.changeSortTimeline(beforeNum, afterNum)
       })
       # イベントの右クリック
       menu = [{title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors"}]
@@ -237,6 +238,8 @@ class Timeline
 
   # EventPageValueを参照してタイムラインを更新
   @refreshAllTimeline: ->
+    Indicator.showIndicator(Indicator.Type.TIMELINE)
+
     # 非同期で実行
     setTimeout( =>
       pEmt = $('#timeline_events')
@@ -246,6 +249,7 @@ class Timeline
           emt.remove()
       )
       @setupTimelineEventConfig()
+      Indicator.hideIndicator(Indicator.Type.TIMELINE)
     , 0)
 
   # タイムラインソートイベント
