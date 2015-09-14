@@ -123,8 +123,8 @@ class Const
     E_ROOT = 'event_page_values'
     # @property [String] E_SUB_ROOT イベントサブルート
     E_SUB_ROOT = 'events'
-    # @property [String] E_CONTENTS_ROOT イベントコンテンツルート
-    E_CONTENTS_ROOT = 'contents'
+    # @property [String] E_MAIN_ROOT イベントメインルート
+    E_MAIN_ROOT = 'main'
     # @property [String] E_FORK_ROOT イベントフォークルート
     E_FORK_ROOT = 'forks'
     # @property [String] E_NUM_PREFIX イベント番号プレフィックス

@@ -48,18 +48,18 @@ class PageValue
       @E_ROOT = constant.PageValueKey.E_ROOT
       # @property [String] E_SUB_ROOT イベントプレフィックス
       @E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT
-      # @property [String] E_CONTENTS_ROOT イベントコンテンツルート
-      @E_CONTENTS_ROOT = constant.PageValueKey.E_CONTENTS_ROOT
+      # @property [String] E_MAIN_ROOT イベントコンテンツルート
+      @E_MAIN_ROOT = constant.PageValueKey.E_MAIN_ROOT
       # @property [String] E_FORK_ROOT イベントフォークルート
       @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
       # @property [return] イベントページプレフィックス
       @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
       # @property [return] イベントページプレフィックス
-      @eventPageContentsRoot = (pn = PageValue.getPageNum()) -> "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_CONTENTS_ROOT}"
+      @eventPageMainRoot = (pn = PageValue.getPageNum()) -> "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_MAIN_ROOT}"
       # @property [return] イベントページプレフィックス
-      @eventNumber = (num, pn = PageValue.getPageNum()) -> "#{@eventPageContentsRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
+      @eventNumber = (num, pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
       # @property [return] イベント数
-      @eventCount = (pn = PageValue.getPageNum()) -> "#{@eventPageContentsRoot(pn)}#{@PAGE_VALUES_SEPERATOR}count"
+      @eventCount = (pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(pn)}#{@PAGE_VALUES_SEPERATOR}count"
       # @property [return] イベントフォーク数
       @eventFork = (pn = PageValue.getPageNum()) -> "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_FORK_ROOT}#{@PAGE_VALUES_SEPERATOR}fork"
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
@@ -241,7 +241,7 @@ class PageValue
       # 内容を一旦消去
       $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").remove()
     for k, v of value
-      @setEventPageValue(PageValue.Key.eventPageContentsRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+      @setEventPageValue(PageValue.Key.eventPageMainRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
 
   # 共通設定値を設定
   # @param [String] key キー値
@@ -331,7 +331,7 @@ class PageValue
   # イベント番号で昇順ソートした配列を取得
   # @param [Integer] pn ページ番号
   @getEventPageValueSortedListByNum = (pn = PageValue.getPageNum()) ->
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPageContentsRoot(pn))
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPageMainRoot(pn))
     if !eventPageValues?
       return []
 
@@ -378,7 +378,7 @@ class PageValue
     for k, v of iPageValues
       if $.inArray(v.value.id, instanceObjIds) < 0
         instanceObjIds.push(v.value.id)
-    ePageValues = @getEventPageValue(PageValue.Key.eventPageContentsRoot())
+    ePageValues = @getEventPageValue(PageValue.Key.eventPageMainRoot())
     adjust = {}
     teCount = 0
     for k, v of ePageValues
@@ -444,7 +444,7 @@ class PageValue
   @itemCssOnPage = (pageNum) ->
     # EventPageValueのcssを一つの文字列にまとめる
 
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPageContentsRoot(pageNum))
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPageMainRoot(pageNum))
     css = ''
     for k, v of eventPageValues
       if k.indexOf(@Key.E_NUM_PREFIX) == 0
@@ -484,7 +484,7 @@ class PageValue
         if i >= eNum - 1
           eventPageValues[i] = eventPageValues[i + 1]
 
-    @setEventPageValue(@Key.eventPageContentsRoot(), {})
+    @setEventPageValue(@Key.eventPageMainRoot(), {})
     if eventPageValues.length >= 2
       for idx in [0..(eventPageValues.length - 2)]
         @setEventPageValue(@Key.eventNumber(idx + 1), eventPageValues[idx])

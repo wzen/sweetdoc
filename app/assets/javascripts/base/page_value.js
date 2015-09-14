@@ -67,7 +67,7 @@ PageValue = (function() {
 
       Key.E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT;
 
-      Key.E_CONTENTS_ROOT = constant.PageValueKey.E_CONTENTS_ROOT;
+      Key.E_MAIN_ROOT = constant.PageValueKey.E_MAIN_ROOT;
 
       Key.E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT;
 
@@ -78,25 +78,25 @@ PageValue = (function() {
         return "" + this.E_SUB_ROOT + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
       };
 
-      Key.eventPageContentsRoot = function(pn) {
+      Key.eventPageMainRoot = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_CONTENTS_ROOT;
+        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_MAIN_ROOT;
       };
 
       Key.eventNumber = function(num, pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.eventPageContentsRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_NUM_PREFIX + num;
+        return "" + (this.eventPageMainRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_NUM_PREFIX + num;
       };
 
       Key.eventCount = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.eventPageContentsRoot(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
+        return "" + (this.eventPageMainRoot(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
       };
 
       Key.eventFork = function(pn) {
@@ -313,7 +313,7 @@ PageValue = (function() {
     results = [];
     for (k in value) {
       v = value[k];
-      results.push(this.setEventPageValue(PageValue.Key.eventPageContentsRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
+      results.push(this.setEventPageValue(PageValue.Key.eventPageMainRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
     }
     return results;
   };
@@ -406,7 +406,7 @@ PageValue = (function() {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageContentsRoot(pn));
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageMainRoot(pn));
     if (eventPageValues == null) {
       return [];
     }
@@ -456,7 +456,7 @@ PageValue = (function() {
         instanceObjIds.push(v.value.id);
       }
     }
-    ePageValues = this.getEventPageValue(PageValue.Key.eventPageContentsRoot());
+    ePageValues = this.getEventPageValue(PageValue.Key.eventPageMainRoot());
     adjust = {};
     teCount = 0;
     for (k in ePageValues) {
@@ -522,7 +522,7 @@ PageValue = (function() {
 
   PageValue.itemCssOnPage = function(pageNum) {
     var css, eventPageValues, index, instance, k, objId, v;
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageContentsRoot(pageNum));
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageMainRoot(pageNum));
     css = '';
     for (k in eventPageValues) {
       v = eventPageValues[k];
@@ -573,7 +573,7 @@ PageValue = (function() {
         }
       }
     }
-    this.setEventPageValue(this.Key.eventPageContentsRoot(), {});
+    this.setEventPageValue(this.Key.eventPageMainRoot(), {});
     if (eventPageValues.length >= 2) {
       for (idx = l = 0, ref1 = eventPageValues.length - 2; 0 <= ref1 ? l <= ref1 : l >= ref1; idx = 0 <= ref1 ? ++l : --l) {
         this.setEventPageValue(this.Key.eventNumber(idx + 1), eventPageValues[idx]);

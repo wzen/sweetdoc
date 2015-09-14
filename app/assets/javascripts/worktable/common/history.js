@@ -32,7 +32,7 @@ OperationHistory = (function() {
     window.operationHistoryTailIndexes[PageValue.getPageNum()] = window.operationHistoryIndexes[PageValue.getPageNum()];
     obj = {};
     obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
-    obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPageContentsRoot());
+    obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPageMainRoot());
     if (window.operationHistories[PageValue.getPageNum()] == null) {
       window.operationHistories[PageValue.getPageNum()] = [];
     }
