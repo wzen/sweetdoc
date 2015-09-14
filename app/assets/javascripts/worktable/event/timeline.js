@@ -23,7 +23,7 @@ Timeline = (function() {
   };
 
   Timeline.setupTimelineEventConfig = function() {
-    var _clickTimelineEvent, _doPreview, _initEventConfig, _setupTimelineEvent, self, te;
+    var _clickTimelineEvent, _deleteTimeline, _doPreview, _initEventConfig, _setupTimelineEvent, self, te;
     self = this;
     te = null;
     _setupTimelineEvent = function() {
@@ -92,12 +92,19 @@ Timeline = (function() {
       });
       menu = [
         {
-          title: "Edit",
+          title: I18n.t('context_menu.edit'),
           cmd: "edit",
           uiIcon: "ui-icon-scissors"
         }
       ];
-      return timelineEvents.contextmenu({
+      menu.push({
+        title: I18n.t('context_menu.delete'),
+        cmd: "delete",
+        uiIcon: "ui-icon-scissors"
+      });
+      return timelineEvents.filter(function(idx) {
+        return !$(this).hasClass('temp') && !$(this).hasClass('blank');
+      }).contextmenu({
         preventContextMenuForPopup: true,
         preventSelect: true,
         menu: menu,
@@ -107,6 +114,8 @@ Timeline = (function() {
           switch (ui.cmd) {
             case "edit":
               return _initEventConfig.call(self, target);
+            case "delete":
+              return _deleteTimeline.call(self, target);
           }
         }
       });
@@ -150,6 +159,12 @@ Timeline = (function() {
         }
         return results;
       });
+    };
+    _deleteTimeline = function(target) {
+      var eNum;
+      eNum = parseInt($(target).find('.te_num:first').val());
+      PageValue.removeEventPageValue(eNum);
+      return Timeline.refreshAllTimeline();
     };
     _initEventConfig = function(e) {
       var eId, emt, te_num;

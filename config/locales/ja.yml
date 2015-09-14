@@ -28,6 +28,7 @@ ja:
     float: "最前面に移動"
     rear: "再背面に移動"
     delete: "削除"
+    edit: "編集"
   config:
     select_opt_group:
       common: "共通イベント"

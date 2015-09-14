@@ -463,7 +463,22 @@ class PageValue
     for e, idx in eventPageValues
       @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), e)
 
-  # 対象アイテムのSyncを解除する
+  # 対象イベントを削除する
+  # @param [Integer] eNum 削除するイベント番号
+  @removeEventPageValue = (eNum) ->
+    eventPageValues = PageValue.getEventPageValueSortedListByNum()
+    if eventPageValues.length >= 2
+      for i in [0..(eventPageValues.length - 1)]
+        if i >= eNum - 1
+          eventPageValues[i] = eventPageValues[i + 1]
+
+    @setEventPageValue(@Key.eventPagePrefix(), {})
+    if eventPageValues.length >= 2
+      for idx in [0..(eventPageValues.length - 2)]
+        @setEventPageValue(@Key.eventPagePrefix() + @Key.PAGE_VALUES_SEPERATOR + @Key.E_NUM_PREFIX + (idx + 1), eventPageValues[idx])
+    PageValue.setEventPageValue(@Key.eventCount(), eventPageValues.length - 1)
+
+  # 対象イベントのSyncを解除する
   # @param [Integer] objId オブジェクトID
   @removeEventPageValueSync = (objId) ->
     tes = @getEventPageValueSortedListByNum()

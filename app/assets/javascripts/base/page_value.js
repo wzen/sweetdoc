@@ -536,6 +536,25 @@ PageValue = (function() {
     return results;
   };
 
+  PageValue.removeEventPageValue = function(eNum) {
+    var eventPageValues, i, idx, j, l, ref, ref1;
+    eventPageValues = PageValue.getEventPageValueSortedListByNum();
+    if (eventPageValues.length >= 2) {
+      for (i = j = 0, ref = eventPageValues.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+        if (i >= eNum - 1) {
+          eventPageValues[i] = eventPageValues[i + 1];
+        }
+      }
+    }
+    this.setEventPageValue(this.Key.eventPagePrefix(), {});
+    if (eventPageValues.length >= 2) {
+      for (idx = l = 0, ref1 = eventPageValues.length - 2; 0 <= ref1 ? l <= ref1 : l >= ref1; idx = 0 <= ref1 ? ++l : --l) {
+        this.setEventPageValue(this.Key.eventPagePrefix() + this.Key.PAGE_VALUES_SEPERATOR + this.Key.E_NUM_PREFIX + (idx + 1), eventPageValues[idx]);
+      }
+    }
+    return PageValue.setEventPageValue(this.Key.eventCount(), eventPageValues.length - 1);
+  };
+
   PageValue.removeEventPageValueSync = function(objId) {
     var dFlg, idx, j, len, results, te, tes, type;
     tes = this.getEventPageValueSortedListByNum();

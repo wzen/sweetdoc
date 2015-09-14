@@ -92,8 +92,15 @@ class Timeline
             Timeline.changeSortTimeline(beforeNum, afterNum)
       })
       # イベントの右クリック
-      menu = [{title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors"}]
-      timelineEvents.contextmenu(
+      menu = [{title: I18n.t('context_menu.edit'), cmd: "edit", uiIcon: "ui-icon-scissors"}]
+      menu.push({
+        title: I18n.t('context_menu.delete')
+        cmd: "delete"
+        uiIcon: "ui-icon-scissors"
+      })
+      timelineEvents.filter((idx) ->
+        return !$(@).hasClass('temp') && !$(@).hasClass('blank')
+      ).contextmenu(
         {
           preventContextMenuForPopup: true
           preventSelect: true
@@ -103,6 +110,8 @@ class Timeline
             switch ui.cmd
               when "edit"
                 _initEventConfig.call(self, target)
+              when "delete"
+                _deleteTimeline.call(self, target)
               else
                 return
         }
@@ -146,6 +155,14 @@ class Timeline
               item.preview(te)
               break
       )
+
+    # タイムライン削除
+    _deleteTimeline = (target) ->
+      eNum = parseInt($(target).find('.te_num:first').val())
+      # EventPageValueを削除
+      PageValue.removeEventPageValue(eNum)
+      # タイムライン表示更新
+      Timeline.refreshAllTimeline()
 
     # コンフィグメニュー初期化&表示
     # @param [Object] e 対象オブジェクト

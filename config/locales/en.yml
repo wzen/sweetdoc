@@ -49,6 +49,7 @@ en:
     float: "Float"
     rear: "Rear"
     delete: "Delete"
+    edit: "Edit"
   config:
     select_opt_group:
       common: "Common Event"
