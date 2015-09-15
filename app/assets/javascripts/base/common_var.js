@@ -53,6 +53,7 @@ CommonVar = (function() {
     window.flushMessageTimer = null;
     window.mode = Constant.Mode.DRAW;
     window.selectedObjId = null;
+    window.runningPreview = false;
     return this.updateWorktableBaseElement(PageValue.getPageNum());
   };
 

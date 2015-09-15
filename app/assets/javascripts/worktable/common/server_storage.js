@@ -125,8 +125,10 @@ ServerStorage = (function() {
           PageValue.adjustInstanceAndEventOnPage();
           LocalStorage.saveAllPageValues();
           return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+            Timeline.refreshAllTimeline();
             Setting.initConfig();
             PageValue.updatePageCount();
+            PageValue.updateForkCount();
             return Paging.initPaging();
           });
         };

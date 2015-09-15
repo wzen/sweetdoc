@@ -51,6 +51,7 @@ class CommonVar
     window.flushMessageTimer = null
     window.mode = Constant.Mode.DRAW
     window.selectedObjId = null
+    window.runningPreview = false
     @updateWorktableBaseElement(PageValue.getPageNum())
 
   # 実行画面共通変数

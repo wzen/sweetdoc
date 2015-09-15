@@ -333,6 +333,7 @@ WorktableCommon = (function() {
     PageValue.setPageNum(1);
     OperationHistory.add(true);
     PageValue.updatePageCount();
+    PageValue.updateForkCount();
     return Paging.initPaging();
   };
 
@@ -425,7 +426,6 @@ WorktableCommon = (function() {
         }
         event.setItemAllPropToPageValue();
       }
-      Timeline.refreshAllTimeline();
       if (callback != null) {
         return callback();
       }
@@ -433,33 +433,38 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.stopAllEventPreview = function(callback) {
-    var count, k, length, ref, results, v;
+    var count, k, length, ref, v;
     if (callback == null) {
       callback = null;
+    }
+    if (!window.runningPreview) {
+      if (callback != null) {
+        callback();
+        return;
+      }
     }
     count = 0;
     length = Object.keys(window.instanceMap).length;
     ref = window.instanceMap;
-    results = [];
     for (k in ref) {
       v = ref[k];
       if (v.stopPreview != null) {
-        results.push(v.stopPreview(function() {
+        v.stopPreview(function() {
           count += 1;
           if (length <= count && (callback != null)) {
-            return callback();
+            window.runningPreview = false;
+            callback();
           }
-        }));
+        });
       } else {
         count += 1;
         if (length <= count && (callback != null)) {
-          results.push(callback());
-        } else {
-          results.push(void 0);
+          window.runningPreview = false;
+          callback();
+          return;
         }
       }
     }
-    return results;
   };
 
   return WorktableCommon;

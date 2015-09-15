@@ -72,6 +72,7 @@ OperationHistory = (function() {
       PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
       WorktableCommon.drawAllItemFromInstancePageValue();
+      Timeline.refreshAllTimeline();
       return true;
     } else {
       return false;
@@ -99,6 +100,7 @@ OperationHistory = (function() {
       PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
       WorktableCommon.drawAllItemFromInstancePageValue();
+      Timeline.refreshAllTimeline();
       return true;
     } else {
       return false;

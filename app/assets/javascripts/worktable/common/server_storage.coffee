@@ -101,8 +101,10 @@ class ServerStorage
             PageValue.adjustInstanceAndEventOnPage()
             LocalStorage.saveAllPageValues()
             WorktableCommon.drawAllItemFromInstancePageValue( ->
+              Timeline.refreshAllTimeline()
               Setting.initConfig()
               PageValue.updatePageCount()
+              PageValue.updateForkCount()
               Paging.initPaging()
             )
 

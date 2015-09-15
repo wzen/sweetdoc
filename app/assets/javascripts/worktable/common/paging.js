@@ -9,44 +9,67 @@ Paging = (function() {
   };
 
   Paging.createPageSelectMenu = function() {
-    var active, divider, i, j, menu, navMenuClass, navMenuName, newPageMenu, nowMenuName, pageCount, pageMenu, ref, root, selectRoot, self;
+    var divider, forkCount, forkNum, i, j, k, l, menu, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
     self = this;
     pageCount = PageValue.getPageCount();
     root = $("#" + Constant.Paging.NAV_ROOT_ID);
     selectRoot = $("." + Constant.Paging.NAV_SELECT_ROOT_CLASS, root);
-    menu = "<li><a class='" + Constant.Paging.NAV_MENU_CLASS + " menu-item'>" + Constant.Paging.NAV_MENU_NAME + "</a></li>";
+    menu = "<li><a class='" + Constant.Paging.NAV_MENU_PAGE_CLASS + " menu-item'>" + Constant.Paging.NAV_MENU_PAGE_NAME + "</a></li>";
     divider = "<li class='divider'></li>";
     newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>Add next page</a></li>";
+    newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>Add next fork</a></li>";
     pageMenu = '';
-    for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-      navMenuClass = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', i);
-      navMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', i);
-      active = i === PageValue.getPageNum() ? 'class="active"' : '';
-      pageMenu += "<li " + active + "><a class='" + navMenuClass + " menu-item '>" + navMenuName + "</a></li>";
+    for (i = k = 1, ref = pageCount; 1 <= ref ? k <= ref : k >= ref; i = 1 <= ref ? ++k : --k) {
+      navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i);
+      navPageName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', i);
+      forkCount = PageValue.getForkCount(i);
+      forkNum = PageValue.getForkNum(i);
+      subMenu = "<li><a class='" + navPageClass + " menu-item '>Master</a></li>";
+      if (forkCount > 0) {
+        for (j = l = 1, ref1 = forkCount; 1 <= ref1 ? l <= ref1 : l >= ref1; j = 1 <= ref1 ? ++l : --l) {
+          navForkClass = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', j);
+          navForkName = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', j);
+          subActive = j === forkNum ? 'class="active"' : '';
+          subMenu += "<li " + subActive + "><a class='" + navPageClass + " " + navForkClass + " menu-item '>" + navForkName + "</a></li>";
+        }
+      }
+      subMenu += divider + newForkMenu;
+      pageMenu += "<li class=\"dropdown-submenu\">\n    <a>" + navPageName + "</a>\n    <ul class=\"dropdown-menu\">\n        " + subMenu + "\n    </ul>\n</li>";
     }
-    pageMenu += divider;
-    pageMenu += newPageMenu;
+    pageMenu += divider + newPageMenu;
     selectRoot.children().remove();
     $(pageMenu).appendTo(selectRoot);
-    nowMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', PageValue.getPageNum());
+    nowMenuName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', PageValue.getPageNum());
+    if (PageValue.getForkNum() > 0) {
+      nowMenuName += " - (" + (Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', PageValue.getForkNum())) + ")";
+    }
     $("." + Constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
     selectRoot.find(".menu-item").off('click');
     selectRoot.find(".menu-item").on('click', function() {
-      var classList, prefix;
-      prefix = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', '');
+      var classList, forkPrefix, pageNum, pagePrefix;
+      pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '');
+      forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@pagenum', '');
+      pageNum = null;
+      forkNum = null;
       classList = this.classList;
-      return classList.forEach(function(c) {
-        var pageNum;
-        if (c.indexOf(prefix) >= 0) {
-          pageNum = parseInt(c.replace(prefix, ''));
-          self.selectPage(pageNum);
-          return false;
+      classList.forEach(function(c) {
+        if (c.indexOf(pagePrefix) >= 0) {
+          return pageNum = parseInt(c.replace(pagePrefix, ''));
+        } else if (c.indexOf(forkPrefix) >= 0) {
+          return forkNum = parseInt(c.replace(forkPrefix, ''));
         }
       });
+      if (pageNum != null) {
+        return self.selectPage(pageNum, forkNum);
+      }
     });
     selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).off('click');
-    return selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).on('click', function() {
+    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDPAGE_CLASS, root).on('click', function() {
       return self.createNewPage();
+    });
+    selectRoot.find("." + Constant.Paging.NAV_MENU_ADDFORK_CLASS, root).off('click');
+    return selectRoot.find("." + Constant.Paging.NAV_MENU_ADDFORK_CLASS, root).on('click', function() {
+      return self.createNewFork();
     });
   };
 
@@ -76,6 +99,7 @@ Paging = (function() {
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();
       return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+        Timeline.refreshAllTimeline();
         return pageFlip.startRender(function() {
           var className, section;
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
@@ -95,19 +119,32 @@ Paging = (function() {
     });
   };
 
-  Paging.selectPage = function(selectedNum) {
+  Paging.selectPage = function(selectedPageNum, selectedForkNum) {
     var self;
+    if (selectedForkNum == null) {
+      selectedForkNum = null;
+    }
+    if (selectedPageNum === PageValue.getPageNum()) {
+      if (selectedForkNum === PageValue.getForkNum()) {
+        return;
+      } else {
+        this.selectFork(selectedForkNum, function() {
+          return Timeline.refreshAllTimeline();
+        });
+        return;
+      }
+    }
     self = this;
     return WorktableCommon.stopAllEventPreview(function() {
       var beforePageNum, created, pageCount, pageFlip;
       if (window.debug) {
-        console.log('[selectPage] selectedNum:' + selectedNum);
+        console.log('[selectPage] selectedNum:' + selectedPageNum);
       }
-      if (selectedNum <= 0) {
+      if (selectedPageNum <= 0) {
         return;
       }
       pageCount = PageValue.getPageCount();
-      if (selectedNum < 0 || selectedNum > pageCount) {
+      if (selectedPageNum < 0 || selectedPageNum > pageCount) {
         return;
       }
       beforePageNum = PageValue.getPageNum();
@@ -117,28 +154,62 @@ Paging = (function() {
       Sidebar.closeSidebar();
       LocalStorage.clearWorktableWithoutSetting();
       EventConfig.removeAllConfig();
-      created = Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum);
-      pageFlip = new PageFlip(beforePageNum, selectedNum);
-      PageValue.setPageNum(selectedNum);
+      created = Common.createdMainContainerIfNeeded(selectedPageNum, beforePageNum > selectedPageNum);
+      pageFlip = new PageFlip(beforePageNum, selectedPageNum);
+      PageValue.setPageNum(selectedPageNum);
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();
       return WorktableCommon.drawAllItemFromInstancePageValue(function() {
-        return pageFlip.startRender(function() {
-          var className, section;
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-          section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-          section.css('display', 'none');
-          if (window.debug) {
-            console.log('[selectPage] deleted pageNum:' + beforePageNum);
-          }
-          Common.removeAllItem(beforePageNum);
+        return Paging.selectFork(selectedForkNum, function() {
           Timeline.refreshAllTimeline();
-          if (created) {
-            OperationHistory.add(true);
-          }
-          LocalStorage.saveAllPageValues();
-          return self.createPageSelectMenu();
+          return pageFlip.startRender(function() {
+            var className, section;
+            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+            section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+            section.css('display', 'none');
+            if (window.debug) {
+              console.log('[selectPage] deleted pageNum:' + beforePageNum);
+            }
+            Common.removeAllItem(beforePageNum);
+            Timeline.refreshAllTimeline();
+            if (created) {
+              OperationHistory.add(true);
+            }
+            LocalStorage.saveAllPageValues();
+            return self.createPageSelectMenu();
+          });
         });
+      });
+    });
+  };
+
+  Paging.createNewFork = function() {
+    return WorktableCommon.stopAllEventPreview(function() {
+      PageValue.setForkNum(PageValue.getForkCount() + 1);
+      PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
+      PageValue.updateForkCount();
+      OperationHistory.add(true);
+      LocalStorage.saveAllPageValues();
+      self.createPageSelectMenu();
+      return Timeline.refreshAllTimeline();
+    });
+  };
+
+  Paging.selectFork = function(selectedForkNum, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    if ((selectedForkNum == null) || selectedForkNum <= 0) {
+      if (callback != null) {
+        callback();
+      }
+    }
+    return WorktableCommon.stopAllEventPreview(function() {
+      PageValue.setForkNum(selectedForkNum);
+      return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+        if (callback != null) {
+          return callback();
+        }
       });
     });
   };

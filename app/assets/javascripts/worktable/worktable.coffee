@@ -33,6 +33,8 @@ $ ->
     OperationHistory.add(true)
     # ページ総数更新
     PageValue.updatePageCount()
+    # フォーク総数更新
+    PageValue.updateForkCount()
     # ページング
     Paging.initPaging()
 
@@ -40,6 +42,8 @@ $ ->
     # 描画
     PageValue.adjustInstanceAndEventOnPage()
     WorktableCommon.drawAllItemFromInstancePageValue(_callback)
+    # タイムライン更新
+    Timeline.refreshAllTimeline()
   else
     LocalStorage.clearWorktable()
     Timeline.refreshAllTimeline()

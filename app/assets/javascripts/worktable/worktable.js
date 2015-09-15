@@ -30,11 +30,13 @@ $(function() {
   _callback = function() {
     OperationHistory.add(true);
     PageValue.updatePageCount();
+    PageValue.updateForkCount();
     return Paging.initPaging();
   };
   if (existedCache) {
     PageValue.adjustInstanceAndEventOnPage();
-    return WorktableCommon.drawAllItemFromInstancePageValue(_callback);
+    WorktableCommon.drawAllItemFromInstancePageValue(_callback);
+    return Timeline.refreshAllTimeline();
   } else {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();

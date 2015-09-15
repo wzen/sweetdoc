@@ -58,14 +58,16 @@ class PageValue
       @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
       # @property [return] イベントページプレフィックス
       @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
+
       # @property [return] イベントページプレフィックス
       @eventPageMainRoot = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) ->
         root = ''
-        if fn?
+        if fn > 0
           root = @EF_PREFIX + fn
         else
           root = @E_MASTER_ROOT
         return "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{root}"
+
       # @property [return] イベントページプレフィックス
       @eventNumber = (num, fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
       # @property [return] イベント数
@@ -249,7 +251,7 @@ class PageValue
   @setEventPageValueByPageRootHash = (value, fn = @getForkNum(), pn = @getPageNum(), refresh = true, giveUpdate = false) ->
     if refresh
       # 内容を一旦消去
-      contensRoot = if fn? then @Key.EF_PREFIX + fn else @Key.E_MASTER_ROOT
+      contensRoot = if fn > 0 then @Key.EF_PREFIX + fn else @Key.E_MASTER_ROOT
       $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").children(".#{contensRoot}").remove()
     for k, v of value
       @setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn) + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
@@ -422,6 +424,17 @@ class PageValue
       page_count = 1
     @setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_COUNT}", page_count)
 
+  # フォーク総数カウント
+  @updateForkCount = (pn = PageValue.getPageNum()) ->
+    # EventPageValueの「ef_」を参照してカウント
+
+    fork_count = 0
+    ePageValues = @getEventPageValue(@Key.eventPageRoot(pn))
+    for k, v of ePageValues
+      if k.indexOf(@Key.EF_PREFIX) >= 0
+        fork_count += 1
+    PageValue.setEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_COUNT}", fork_count)
+
   # ページ総数を取得
   # @return [Integer] ページ総数
   @getPageCount = ->
@@ -454,11 +467,12 @@ class PageValue
     @setPageNum(@getPageNum() + addNum)
 
   # 現在のフォーク番号を取得
-  @getForkNum = ->
-    ret = PageValue.getEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}")
+  @getForkNum = (pn = @getPageNum()) ->
+    ret = PageValue.getEventPageValue("#{@Key.eventPageRoot(pn)}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}")
     if ret?
-      ret = parseInt(ret)
-    return ret
+      return parseInt(ret)
+    else
+      return 0
 
   # 現在のフォーク番号を設定
   # @param [Integer] num 設定値
@@ -467,17 +481,12 @@ class PageValue
 
   # フォーク総数を取得
   # @return [Integer] ページ総数
-  @getForkCount = ->
-    ret = PageValue.getEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_COUNT}")
+  @getForkCount = (pn = @getPageNum()) ->
+    ret = PageValue.getEventPageValue("#{@Key.eventPageRoot(pn)}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_COUNT}")
     if ret?
       return parseInt(ret)
     else
       return 0
-
-  # フォーク総数を取得
-  # @param [Integer] num 設定値
-  @setForkCount = (num) ->
-    PageValue.setEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_COUNT}", parseInt(num))
 
   # コンテンツルートのハッシュキーか判定
   # @param [String] key ハッシュキー

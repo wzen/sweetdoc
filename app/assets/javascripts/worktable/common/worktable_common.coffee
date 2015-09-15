@@ -306,6 +306,8 @@ class WorktableCommon
     OperationHistory.add(true)
     # ページ総数更新
     PageValue.updatePageCount()
+    # フォーク総数更新
+    PageValue.updateForkCount()
     # ページング
     Paging.initPaging()
 
@@ -382,9 +384,6 @@ class WorktableCommon
             event.drawAndMakeConfigs()
         event.setItemAllPropToPageValue()
 
-      # タイムライン更新
-      Timeline.refreshAllTimeline()
-
       # コールバック
       if callback?
         callback()
@@ -393,6 +392,11 @@ class WorktableCommon
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック
   @stopAllEventPreview: (callback = null) ->
+    if !window.runningPreview
+      if callback?
+        callback()
+        return
+
     count = 0
     length = Object.keys(window.instanceMap).length
     for k, v of window.instanceMap
@@ -400,9 +404,13 @@ class WorktableCommon
         v.stopPreview( ->
           count += 1
           if length <= count && callback?
+            window.runningPreview = false
             callback()
+            return
         )
       else
         count += 1
         if length <= count && callback?
+          window.runningPreview = false
           callback()
+          return

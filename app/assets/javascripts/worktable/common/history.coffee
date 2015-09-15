@@ -52,10 +52,11 @@ class OperationHistory
         PageValue.setEventPageValueByPageRootHash(eventPageValue)
       window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
 
-      # キャッシュ保存 & 描画
+      # キャッシュ保存 & 描画 & タイムライン更新
       PageValue.adjustInstanceAndEventOnPage()
       LocalStorage.saveAllPageValues()
       WorktableCommon.drawAllItemFromInstancePageValue()
+      Timeline.refreshAllTimeline()
       return true
     else
       return false
@@ -80,10 +81,11 @@ class OperationHistory
         PageValue.setEventPageValueByPageRootHash(eventPageValue)
       window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
 
-      # キャッシュ保存 & 描画
+      # キャッシュ保存 & 描画 & タイムライン更新
       PageValue.adjustInstanceAndEventOnPage()
       LocalStorage.saveAllPageValues()
       WorktableCommon.drawAllItemFromInstancePageValue()
+      Timeline.refreshAllTimeline()
       return true
     else
       return false

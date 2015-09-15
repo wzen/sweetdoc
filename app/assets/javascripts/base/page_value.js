@@ -91,7 +91,7 @@ PageValue = (function() {
           pn = PageValue.getPageNum();
         }
         root = '';
-        if (fn != null) {
+        if (fn > 0) {
           root = this.EF_PREFIX + fn;
         } else {
           root = this.E_MASTER_ROOT;
@@ -327,7 +327,7 @@ PageValue = (function() {
       giveUpdate = false;
     }
     if (refresh) {
-      contensRoot = fn != null ? this.Key.EF_PREFIX + fn : this.Key.E_MASTER_ROOT;
+      contensRoot = fn > 0 ? this.Key.EF_PREFIX + fn : this.Key.E_MASTER_ROOT;
       $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).children("." + contensRoot).remove();
     }
     results = [];
@@ -522,6 +522,22 @@ PageValue = (function() {
     return this.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT, page_count);
   };
 
+  PageValue.updateForkCount = function(pn) {
+    var ePageValues, fork_count, k, v;
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    fork_count = 0;
+    ePageValues = this.getEventPageValue(this.Key.eventPageRoot(pn));
+    for (k in ePageValues) {
+      v = ePageValues[k];
+      if (k.indexOf(this.Key.EF_PREFIX) >= 0) {
+        fork_count += 1;
+      }
+    }
+    return PageValue.setEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_COUNT, fork_count);
+  };
+
   PageValue.getPageCount = function() {
     var ret;
     ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_COUNT);
@@ -552,22 +568,12 @@ PageValue = (function() {
     return this.setPageNum(this.getPageNum() + addNum);
   };
 
-  PageValue.getForkNum = function() {
+  PageValue.getForkNum = function(pn) {
     var ret;
-    ret = PageValue.getEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM);
-    if (ret != null) {
-      ret = parseInt(ret);
+    if (pn == null) {
+      pn = this.getPageNum();
     }
-    return ret;
-  };
-
-  PageValue.setForkNum = function(num) {
-    return PageValue.setEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM, parseInt(num));
-  };
-
-  PageValue.getForkCount = function() {
-    var ret;
-    ret = PageValue.getEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_COUNT);
+    ret = PageValue.getEventPageValue("" + (this.Key.eventPageRoot(pn)) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM);
     if (ret != null) {
       return parseInt(ret);
     } else {
@@ -575,8 +581,21 @@ PageValue = (function() {
     }
   };
 
-  PageValue.setForkCount = function(num) {
-    return PageValue.setEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_COUNT, parseInt(num));
+  PageValue.setForkNum = function(num) {
+    return PageValue.setEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM, parseInt(num));
+  };
+
+  PageValue.getForkCount = function(pn) {
+    var ret;
+    if (pn == null) {
+      pn = this.getPageNum();
+    }
+    ret = PageValue.getEventPageValue("" + (this.Key.eventPageRoot(pn)) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_COUNT);
+    if (ret != null) {
+      return parseInt(ret);
+    } else {
+      return 0;
+    }
   };
 
   PageValue.isContentsRoot = function(key) {

@@ -13,39 +13,72 @@ class Paging
     selectRoot = $(".#{Constant.Paging.NAV_SELECT_ROOT_CLASS}", root)
 
     # ページ選択メニュー
-    menu = "<li><a class='#{Constant.Paging.NAV_MENU_CLASS} menu-item'>#{Constant.Paging.NAV_MENU_NAME}</a></li>"
+    menu = "<li><a class='#{Constant.Paging.NAV_MENU_PAGE_CLASS} menu-item'>#{Constant.Paging.NAV_MENU_PAGE_NAME}</a></li>"
     divider = "<li class='divider'></li>"
     newPageMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS} menu-item'>Add next page</a></li>"
+    newForkMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDFORK_CLASS} menu-item'>Add next fork</a></li>"
     pageMenu = ''
     for i in [1..pageCount]
-      navMenuClass = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', i)
-      navMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', i)
-      active = if i == PageValue.getPageNum() then 'class="active"' else ''
-      pageMenu += "<li #{active}><a class='#{navMenuClass} menu-item '>#{navMenuName}</a></li>"
-    pageMenu += divider
-    pageMenu += newPageMenu
+      navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i)
+      navPageName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', i)
+
+      # サブ選択メニュー
+      forkCount = PageValue.getForkCount(i)
+      forkNum = PageValue.getForkNum(i)
+      subMenu = "<li><a class='#{navPageClass} menu-item '>Master</a></li>"
+      if forkCount > 0
+        for j in [1..forkCount]
+          navForkClass = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', j)
+          navForkName = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', j)
+          subActive = if j == forkNum then 'class="active"' else ''
+          subMenu += """
+            <li #{subActive}><a class='#{navPageClass} #{navForkClass} menu-item '>#{navForkName}</a></li>
+          """
+      subMenu += divider + newForkMenu
+
+      pageMenu += """
+            <li class="dropdown-submenu">
+                <a>#{navPageName}</a>
+                <ul class="dropdown-menu">
+                    #{subMenu}
+                </ul>
+            </li>
+        """
+    pageMenu += divider + newPageMenu
     selectRoot.children().remove()
     $(pageMenu).appendTo(selectRoot)
 
     # 現在のページ
-    nowMenuName = Constant.Paging.NAV_MENU_NAME.replace('@pagenum', PageValue.getPageNum())
+    nowMenuName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', PageValue.getPageNum())
+    if PageValue.getForkNum() > 0
+      nowMenuName += " - (#{Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', PageValue.getForkNum())})"
     $(".#{Constant.Paging.NAV_SELECTED_CLASS}", root).html(nowMenuName)
 
     # イベント設定
     selectRoot.find(".menu-item").off('click')
     selectRoot.find(".menu-item").on('click', ->
-      prefix = Constant.Paging.NAV_MENU_CLASS.replace('@pagenum', '')
+      pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '')
+      forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@pagenum', '')
+      pageNum = null
+      forkNum = null
       classList = @.classList
       classList.forEach((c) ->
-        if c.indexOf(prefix) >= 0
-          pageNum = parseInt(c.replace(prefix, ''))
-          self.selectPage(pageNum)
-          return false
+        if c.indexOf(pagePrefix) >= 0
+          pageNum = parseInt(c.replace(pagePrefix, ''))
+        else if c.indexOf(forkPrefix) >= 0
+          forkNum = parseInt(c.replace(forkPrefix, ''))
       )
+      if pageNum?
+        self.selectPage(pageNum, forkNum)
     )
+
     selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS}", root).off('click')
     selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS}", root).on('click', ->
       self.createNewPage()
+    )
+    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDFORK_CLASS}", root).off('click')
+    selectRoot.find(".#{Constant.Paging.NAV_MENU_ADDFORK_CLASS}", root).on('click', ->
+      self.createNewFork()
     )
 
   # 表示ページ切り替え
@@ -81,14 +114,17 @@ class Paging
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.drawAllItemFromInstancePageValue( ->
-        # ページング
+        # タイムライン更新
+        Timeline.refreshAllTimeline()
+
+        # ページめくりアニメーション
         pageFlip.startRender( ->
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
           section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
           section.css('display', 'none')
           Common.removeAllItem(beforePageNum)
           Timeline.refreshAllTimeline()
-          # ページ総数の更新
+          # ページ総数 & フォーク総数の更新
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
           PageValue.updatePageCount()
           if created
@@ -102,18 +138,30 @@ class Paging
       )
     )
 
-  # 選択
+  # ページ選択
   # @param [Integer] selectedNum 選択ページ番号
-  @selectPage: (selectedNum) ->
+  # @param [Integer] selectedNum 選択フォーク番号
+  @selectPage: (selectedPageNum, selectedForkNum = null) ->
+    if selectedPageNum == PageValue.getPageNum()
+      if selectedForkNum == PageValue.getForkNum()
+        # 同じページ & 同じフォークの場合は変更しない
+        return
+      else
+        @selectFork(selectedForkNum, ->
+          # タイムライン更新
+          Timeline.refreshAllTimeline()
+        )
+        return
+
     self = @
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( ->
       if window.debug
-        console.log('[selectPage] selectedNum:' + selectedNum)
-      if selectedNum <= 0
+        console.log('[selectPage] selectedNum:' + selectedPageNum)
+      if selectedPageNum <= 0
         return
       pageCount = PageValue.getPageCount()
-      if selectedNum < 0 || selectedNum > pageCount
+      if selectedPageNum < 0 || selectedPageNum > pageCount
         return
       beforePageNum = PageValue.getPageNum()
       if window.debug
@@ -123,33 +171,78 @@ class Paging
       LocalStorage.clearWorktableWithoutSetting()
       EventConfig.removeAllConfig()
       # Mainコンテナ作成
-      created = Common.createdMainContainerIfNeeded(selectedNum, beforePageNum > selectedNum)
+      created = Common.createdMainContainerIfNeeded(selectedPageNum, beforePageNum > selectedPageNum)
       # ページングクラス作成
-      pageFlip = new PageFlip(beforePageNum, selectedNum)
+      pageFlip = new PageFlip(beforePageNum, selectedPageNum)
       # ページ番号更新
-      PageValue.setPageNum(selectedNum)
+      PageValue.setPageNum(selectedPageNum)
       # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.drawAllItemFromInstancePageValue( ->
-        pageFlip.startRender( ->
-          # 隠したビューを非表示にする
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-          section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-          section.css('display', 'none')
-          if window.debug
-            console.log('[selectPage] deleted pageNum:' + beforePageNum)
-          # 隠したビューのアイテムを削除
-          Common.removeAllItem(beforePageNum)
+        # フォーク内容反映
+        Paging.selectFork(selectedForkNum, ->
+          # タイムライン更新
           Timeline.refreshAllTimeline()
-          if created
-            # 履歴に画面初期時状態を保存
-            OperationHistory.add(true)
-          # キャッシュ保存
-          LocalStorage.saveAllPageValues()
-          # 選択メニューの更新
-          self.createPageSelectMenu()
+
+          # ページめくりアニメーション
+          pageFlip.startRender( ->
+            # 隠したビューを非表示にする
+            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+            section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+            section.css('display', 'none')
+            if window.debug
+              console.log('[selectPage] deleted pageNum:' + beforePageNum)
+            # 隠したビューのアイテムを削除
+            Common.removeAllItem(beforePageNum)
+            Timeline.refreshAllTimeline()
+            if created
+              # 履歴に画面初期時状態を保存
+              OperationHistory.add(true)
+            # キャッシュ保存
+            LocalStorage.saveAllPageValues()
+            # 選択メニューの更新
+            self.createPageSelectMenu()
+          )
         )
       )
     )
 
+  # フォーク追加作成
+  @createNewFork: ->
+    # プレビュー停止
+    WorktableCommon.stopAllEventPreview( ->
+      # フォーク番号更新
+      PageValue.setForkNum(PageValue.getForkCount() + 1)
+      # フォーク総数更新
+      PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
+      PageValue.updateForkCount()
+      # 履歴に画面初期時状態を保存
+      OperationHistory.add(true)
+      # キャッシュ保存
+      LocalStorage.saveAllPageValues()
+      # 選択メニューの更新
+      self.createPageSelectMenu()
+      # タイムライン更新
+      Timeline.refreshAllTimeline()
+    )
+
+  # フォーク選択
+  # @param [Integer] selectedForkNum 選択フォーク番号
+  # @param [Function] コールバック
+  @selectFork: (selectedForkNum, callback = null) ->
+    if !selectedForkNum? || selectedForkNum <= 0
+      # フォーク番号が無い場合は処理なし
+      if callback?
+        callback()
+
+    # プレビュー停止
+    WorktableCommon.stopAllEventPreview( ->
+      # フォーク番号更新
+      PageValue.setForkNum(selectedForkNum)
+      # フォークのアイテムを描画
+      WorktableCommon.drawAllItemFromInstancePageValue( ->
+        if callback?
+          callback()
+      )
+    )

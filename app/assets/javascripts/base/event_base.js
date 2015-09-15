@@ -145,6 +145,7 @@ EventBase = (function(superClass) {
     };
     return this.stopPreview((function(_this) {
       return function() {
+        window.runningPreview = true;
         return _preview.call(_this, event);
       };
     })(this));

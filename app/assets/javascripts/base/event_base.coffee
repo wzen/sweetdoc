@@ -125,6 +125,7 @@ class EventBase extends Extend
         method.call(@, null, _loop)
 
     @stopPreview( =>
+      window.runningPreview = true
       _preview.call(@, event)
     )
 
