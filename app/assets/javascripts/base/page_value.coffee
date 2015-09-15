@@ -455,7 +455,7 @@ class PageValue
 
   # 現在のフォーク番号を取得
   @getForkNum = ->
-    ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}")
+    ret = PageValue.getEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}")
     if ret?
       ret = parseInt(ret)
     return ret
@@ -463,7 +463,21 @@ class PageValue
   # 現在のフォーク番号を設定
   # @param [Integer] num 設定値
   @setForkNum = (num) ->
-    PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}", parseInt(num))
+    PageValue.setEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}", parseInt(num))
+
+  # フォーク総数を取得
+  # @return [Integer] ページ総数
+  @getForkCount = ->
+    ret = PageValue.getEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_COUNT}")
+    if ret?
+      return parseInt(ret)
+    else
+      return 0
+
+  # フォーク総数を取得
+  # @param [Integer] num 設定値
+  @setForkCount = (num) ->
+    PageValue.setEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_COUNT}", parseInt(num))
 
   # コンテンツルートのハッシュキーか判定
   # @param [String] key ハッシュキー

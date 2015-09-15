@@ -554,7 +554,7 @@ PageValue = (function() {
 
   PageValue.getForkNum = function() {
     var ret;
-    ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM);
+    ret = PageValue.getEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM);
     if (ret != null) {
       ret = parseInt(ret);
     }
@@ -562,7 +562,21 @@ PageValue = (function() {
   };
 
   PageValue.setForkNum = function(num) {
-    return PageValue.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM, parseInt(num));
+    return PageValue.setEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM, parseInt(num));
+  };
+
+  PageValue.getForkCount = function() {
+    var ret;
+    ret = PageValue.getEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_COUNT);
+    if (ret != null) {
+      return parseInt(ret);
+    } else {
+      return 0;
+    }
+  };
+
+  PageValue.setForkCount = function(num) {
+    return PageValue.setEventPageValue("" + (this.Key.eventPageRoot()) + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_COUNT, parseInt(num));
   };
 
   PageValue.isContentsRoot = function(key) {
