@@ -42,7 +42,7 @@ class EPVItem extends EventPageValueBase
         teNum = 1
 
       # イベントとイベント数をPageValueに書き込み
-      PageValue.setEventPageValue(@PageValueKey.te(teNum), writeValue)
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum), writeValue)
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum)
 
       # Storageに保存
@@ -61,7 +61,7 @@ class EPVItem extends EventPageValueBase
       item = instanceMap[eventConfig.id]
       value = item.eventConfigValue()
       writeValue[@PageValueKey.VALUE] = value
-      PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue)
       if parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum
         PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 

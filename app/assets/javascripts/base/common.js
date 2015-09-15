@@ -269,39 +269,62 @@ Common = (function() {
   };
 
   Common.clearAllEventAction = function(callback) {
-    var idx, item, j, previewinitCount, ref, results, te, tes;
+    var _callback, callbackCount, forkNum, i, idx, item, j, l, len, previewinitCount, ref, results, self, te, tes, tesArray;
     if (callback == null) {
       callback = null;
     }
-    previewinitCount = 0;
-    tes = PageValue.getEventPageValueSortedListByNum();
-    if (tes.length <= 0) {
-      if (callback != null) {
-        callback();
-        return;
+    self = this;
+    tesArray = [];
+    tesArray.push(PageValue.getEventPageValueSortedListByNum());
+    forkNum = PageValue.getForkNum();
+    if (forkNum != null) {
+      for (i = j = 1, ref = forkNum; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
+        tesArray.push(PageValue.getEventPageValueSortedListByNum(i));
       }
     }
-    results = [];
-    for (idx = j = ref = tes.length - 1; j >= 0; idx = j += -1) {
-      te = tes[idx];
-      item = window.instanceMap[te.id];
-      if (item != null) {
-        item.initEvent(te);
-        results.push(item.stopPreview(function() {
-          item.updateEventBefore();
-          previewinitCount += 1;
-          if (previewinitCount >= tes.length && (callback != null)) {
-            return callback();
-          }
-        }));
-      } else {
-        previewinitCount += 1;
-        if (previewinitCount >= tes.length && (callback != null)) {
-          results.push(callback());
-        } else {
-          results.push(void 0);
+    callbackCount = 0;
+    _callback = function() {
+      callbackCount += 1;
+      if (callbackCount >= tesArray.length) {
+        if (callback != null) {
+          return callback();
         }
       }
+    };
+    results = [];
+    for (l = 0, len = tesArray.length; l < len; l++) {
+      tes = tesArray[l];
+      previewinitCount = 0;
+      if (tes.length <= 0) {
+        _callback.call(self);
+        break;
+      }
+      results.push((function() {
+        var m, ref1, results1;
+        results1 = [];
+        for (idx = m = ref1 = tes.length - 1; m >= 0; idx = m += -1) {
+          te = tes[idx];
+          item = window.instanceMap[te.id];
+          if (item != null) {
+            item.initEvent(te);
+            results1.push(item.stopPreview(function() {
+              item.updateEventBefore();
+              previewinitCount += 1;
+              if (previewinitCount >= tes.length) {
+                return _callback.call(self);
+              }
+            }));
+          } else {
+            previewinitCount += 1;
+            if (previewinitCount >= tes.length) {
+              results1.push(_callback.call(self));
+            } else {
+              results1.push(void 0);
+            }
+          }
+        }
+        return results1;
+      })());
     }
     return results;
   };

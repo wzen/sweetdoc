@@ -43,7 +43,7 @@ EPVBackgroundColor = (function(superClass) {
     }
     if (errorMes.length === 0) {
       writeValue[this.PageValueKey.VALUE] = value;
-      PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
       LocalStorage.saveAllPageValues();
     }
@@ -57,7 +57,7 @@ EPVBackgroundColor = (function(superClass) {
       return false;
     }
     emt = eventConfig.emt;
-    writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
+    writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     value = writeValue[this.PageValueKey.VALUE];
     initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
     initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);

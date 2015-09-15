@@ -106,7 +106,7 @@ EventConfig = (function() {
     handlerClassName = this.methodClassName();
     valueClassName = this.methodClassName();
     if (this.teNum > 1) {
-      beforeActionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
+      beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
       if (this.actionType === beforeActionType) {
         $(".config.parallel_div", this.emt).css('display', '');
       }
@@ -179,7 +179,7 @@ EventConfig = (function() {
     LocalStorage.saveAllPageValues();
     item = instanceMap[this.id];
     if ((item != null) && (item.preview != null)) {
-      return item.preview(PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(this.teNum)));
+      return item.preview(PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum)));
     }
   };
 

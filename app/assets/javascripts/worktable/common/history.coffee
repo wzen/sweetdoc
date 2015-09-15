@@ -7,35 +7,40 @@ class OperationHistory
     @INSTANCE = 'iv'
     @EVENT = 'ev'
 
+  @operationHistoryIndex = ->
+    pageNum = PageValue.getPageNum()
+    forkNum = PageValue.getForkNum()
+    return pageNum + (if forkNum? then '-' + forkNum else '')
+
   # 操作履歴を追加
   # @param [Boolean] isInit 初期化処理か
   @add = (isInit = false) ->
-    if window.operationHistoryIndexes[PageValue.getPageNum()]? && !isInit
-      window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % @OPERATION_STORE_MAX
+    if window.operationHistoryIndexes[@operationHistoryIndex()]? && !isInit
+      window.operationHistoryIndexes[@operationHistoryIndex()] = (window.operationHistoryIndexes[@operationHistoryIndex()] + 1) % @OPERATION_STORE_MAX
     else
-      window.operationHistoryIndexes[PageValue.getPageNum()] = 0
-    window.operationHistoryTailIndexes[PageValue.getPageNum()] = window.operationHistoryIndexes[PageValue.getPageNum()]
+      window.operationHistoryIndexes[@operationHistoryIndex()] = 0
+    window.operationHistoryTailIndexes[@operationHistoryIndex()] = window.operationHistoryIndexes[@operationHistoryIndex()]
     obj = {}
     obj[@Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
     obj[@Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPageMainRoot())
-    if !window.operationHistories[PageValue.getPageNum()]?
-      window.operationHistories[PageValue.getPageNum()] = []
-    window.operationHistories[PageValue.getPageNum()][window.operationHistoryIndexes[PageValue.getPageNum()]] = obj
+    if !window.operationHistories[@operationHistoryIndex()]?
+      window.operationHistories[@operationHistoryIndex()] = []
+    window.operationHistories[@operationHistoryIndex()][window.operationHistoryIndexes[@operationHistoryIndex()]] = obj
 
   # 操作履歴を取り出し
   # @return [Boolean] 処理したか
   _pop = ->
-    if !window.operationHistoryIndexes[PageValue.getPageNum()]?
+    if !window.operationHistoryIndexes[@operationHistoryIndex()]?
       return false
 
-    hIndex = window.operationHistoryIndexes[PageValue.getPageNum()]
+    hIndex = window.operationHistoryIndexes[@operationHistoryIndex()]
     if hIndex <= 0
       hIndex = @OPERATION_STORE_MAX - 1
     else
       hIndex -= 1
 
-    if window.operationHistories[PageValue.getPageNum()]? && window.operationHistories[PageValue.getPageNum()][hIndex]?
-      obj = window.operationHistories[PageValue.getPageNum()][hIndex]
+    if window.operationHistories[@operationHistoryIndex()]? && window.operationHistories[@operationHistoryIndex()][hIndex]?
+      obj = window.operationHistories[@operationHistoryIndex()][hIndex]
       # 全描画を消去
       WorktableCommon.removeAllItemAndEventOnThisPage()
 
@@ -45,7 +50,7 @@ class OperationHistory
         PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
       if eventPageValue?
         PageValue.setEventPageValueByPageRootHash(eventPageValue)
-      window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex
+      window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
 
       # キャッシュ保存 & 描画
       PageValue.adjustInstanceAndEventOnPage()
@@ -58,12 +63,12 @@ class OperationHistory
   # 操作履歴を取り出してIndexを進める(redo処理)
   # @return [Boolean] 処理したか
   _popRedo = ->
-    if !window.operationHistoryIndexes[PageValue.getPageNum()]?
+    if !window.operationHistoryIndexes[@operationHistoryIndex()]?
       return false
 
-    hIndex = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % @OPERATION_STORE_MAX
-    if window.operationHistories[PageValue.getPageNum()]? && window.operationHistories[PageValue.getPageNum()][hIndex]?
-      obj = window.operationHistories[PageValue.getPageNum()][hIndex]
+    hIndex = (window.operationHistoryIndexes[@operationHistoryIndex()] + 1) % @OPERATION_STORE_MAX
+    if window.operationHistories[@operationHistoryIndex()]? && window.operationHistories[@operationHistoryIndex()][hIndex]?
+      obj = window.operationHistories[@operationHistoryIndex()][hIndex]
       # 全描画を消去
       WorktableCommon.removeAllItemAndEventOnThisPage()
 
@@ -73,7 +78,7 @@ class OperationHistory
         PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
       if eventPageValue?
         PageValue.setEventPageValueByPageRootHash(eventPageValue)
-      window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex
+      window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
 
       # キャッシュ保存 & 描画
       PageValue.adjustInstanceAndEventOnPage()
@@ -85,11 +90,11 @@ class OperationHistory
 
   # undo処理
   @undo = ->
-    nextTailIndex = (window.operationHistoryTailIndexes[PageValue.getPageNum()] + 1) % @OPERATION_STORE_MAX
-    if !window.operationHistoryIndexes[PageValue.getPageNum()]? || nextTailIndex == window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(@)
+    nextTailIndex = (window.operationHistoryTailIndexes[@operationHistoryIndex()] + 1) % @OPERATION_STORE_MAX
+    if !window.operationHistoryIndexes[@operationHistoryIndex()]? || nextTailIndex == window.operationHistoryIndexes[@operationHistoryIndex()] || !_pop.call(@)
       Message.flushWarn("Can't Undo")
 
   # redo処理
   @redo = ->
-    if !window.operationHistoryIndexes[PageValue.getPageNum()]? || window.operationHistoryTailIndexes[PageValue.getPageNum()] == window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(@)
+    if !window.operationHistoryIndexes[@operationHistoryIndex()]? || window.operationHistoryTailIndexes[@operationHistoryIndex()] == window.operationHistoryIndexes[@operationHistoryIndex()] || !_popRedo.call(@)
       Message.flushWarn("Can't Redo")

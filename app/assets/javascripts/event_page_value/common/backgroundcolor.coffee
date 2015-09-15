@@ -33,7 +33,7 @@ class EPVBackgroundColor extends EventPageValueBase
 
     if errorMes.length == 0
       writeValue[@PageValueKey.VALUE] = value
-      PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue)
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
       # Storageに保存
@@ -49,7 +49,7 @@ class EPVBackgroundColor extends EventPageValueBase
     if !ret
       return false
     emt = eventConfig.emt
-    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
+    writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
     initColorPicker($(".colorPicker.base_color", emt) ,value[@BASE_COLOR], null)
     initColorPicker($(".colorPicker.change_color", emt) ,value[@CHANGE_COLOR], null)

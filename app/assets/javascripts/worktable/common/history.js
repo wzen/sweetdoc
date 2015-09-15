@@ -19,39 +19,46 @@ OperationHistory = (function() {
 
   })();
 
+  OperationHistory.operationHistoryIndex = function() {
+    var forkNum, pageNum;
+    pageNum = PageValue.getPageNum();
+    forkNum = PageValue.getForkNum();
+    return pageNum + (forkNum != null ? '-' + forkNum : '');
+  };
+
   OperationHistory.add = function(isInit) {
     var obj;
     if (isInit == null) {
       isInit = false;
     }
-    if ((window.operationHistoryIndexes[PageValue.getPageNum()] != null) && !isInit) {
-      window.operationHistoryIndexes[PageValue.getPageNum()] = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % this.OPERATION_STORE_MAX;
+    if ((window.operationHistoryIndexes[this.operationHistoryIndex()] != null) && !isInit) {
+      window.operationHistoryIndexes[this.operationHistoryIndex()] = (window.operationHistoryIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
     } else {
-      window.operationHistoryIndexes[PageValue.getPageNum()] = 0;
+      window.operationHistoryIndexes[this.operationHistoryIndex()] = 0;
     }
-    window.operationHistoryTailIndexes[PageValue.getPageNum()] = window.operationHistoryIndexes[PageValue.getPageNum()];
+    window.operationHistoryTailIndexes[this.operationHistoryIndex()] = window.operationHistoryIndexes[this.operationHistoryIndex()];
     obj = {};
     obj[this.Key.INSTANCE] = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     obj[this.Key.EVENT] = PageValue.getEventPageValue(PageValue.Key.eventPageMainRoot());
-    if (window.operationHistories[PageValue.getPageNum()] == null) {
-      window.operationHistories[PageValue.getPageNum()] = [];
+    if (window.operationHistories[this.operationHistoryIndex()] == null) {
+      window.operationHistories[this.operationHistoryIndex()] = [];
     }
-    return window.operationHistories[PageValue.getPageNum()][window.operationHistoryIndexes[PageValue.getPageNum()]] = obj;
+    return window.operationHistories[this.operationHistoryIndex()][window.operationHistoryIndexes[this.operationHistoryIndex()]] = obj;
   };
 
   _pop = function() {
     var eventPageValue, hIndex, instancePageValue, obj;
-    if (window.operationHistoryIndexes[PageValue.getPageNum()] == null) {
+    if (window.operationHistoryIndexes[this.operationHistoryIndex()] == null) {
       return false;
     }
-    hIndex = window.operationHistoryIndexes[PageValue.getPageNum()];
+    hIndex = window.operationHistoryIndexes[this.operationHistoryIndex()];
     if (hIndex <= 0) {
       hIndex = this.OPERATION_STORE_MAX - 1;
     } else {
       hIndex -= 1;
     }
-    if ((window.operationHistories[PageValue.getPageNum()] != null) && (window.operationHistories[PageValue.getPageNum()][hIndex] != null)) {
-      obj = window.operationHistories[PageValue.getPageNum()][hIndex];
+    if ((window.operationHistories[this.operationHistoryIndex()] != null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] != null)) {
+      obj = window.operationHistories[this.operationHistoryIndex()][hIndex];
       WorktableCommon.removeAllItemAndEventOnThisPage();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
@@ -61,7 +68,7 @@ OperationHistory = (function() {
       if (eventPageValue != null) {
         PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
-      window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
+      window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;
       PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
       WorktableCommon.drawAllItemFromInstancePageValue();
@@ -73,12 +80,12 @@ OperationHistory = (function() {
 
   _popRedo = function() {
     var eventPageValue, hIndex, instancePageValue, obj;
-    if (window.operationHistoryIndexes[PageValue.getPageNum()] == null) {
+    if (window.operationHistoryIndexes[this.operationHistoryIndex()] == null) {
       return false;
     }
-    hIndex = (window.operationHistoryIndexes[PageValue.getPageNum()] + 1) % this.OPERATION_STORE_MAX;
-    if ((window.operationHistories[PageValue.getPageNum()] != null) && (window.operationHistories[PageValue.getPageNum()][hIndex] != null)) {
-      obj = window.operationHistories[PageValue.getPageNum()][hIndex];
+    hIndex = (window.operationHistoryIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
+    if ((window.operationHistories[this.operationHistoryIndex()] != null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] != null)) {
+      obj = window.operationHistories[this.operationHistoryIndex()][hIndex];
       WorktableCommon.removeAllItemAndEventOnThisPage();
       instancePageValue = obj[this.Key.INSTANCE];
       eventPageValue = obj[this.Key.EVENT];
@@ -88,7 +95,7 @@ OperationHistory = (function() {
       if (eventPageValue != null) {
         PageValue.setEventPageValueByPageRootHash(eventPageValue);
       }
-      window.operationHistoryIndexes[PageValue.getPageNum()] = hIndex;
+      window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;
       PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
       WorktableCommon.drawAllItemFromInstancePageValue();
@@ -100,14 +107,14 @@ OperationHistory = (function() {
 
   OperationHistory.undo = function() {
     var nextTailIndex;
-    nextTailIndex = (window.operationHistoryTailIndexes[PageValue.getPageNum()] + 1) % this.OPERATION_STORE_MAX;
-    if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || nextTailIndex === window.operationHistoryIndexes[PageValue.getPageNum()] || !_pop.call(this)) {
+    nextTailIndex = (window.operationHistoryTailIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
+    if ((window.operationHistoryIndexes[this.operationHistoryIndex()] == null) || nextTailIndex === window.operationHistoryIndexes[this.operationHistoryIndex()] || !_pop.call(this)) {
       return Message.flushWarn("Can't Undo");
     }
   };
 
   OperationHistory.redo = function() {
-    if ((window.operationHistoryIndexes[PageValue.getPageNum()] == null) || window.operationHistoryTailIndexes[PageValue.getPageNum()] === window.operationHistoryIndexes[PageValue.getPageNum()] || !_popRedo.call(this)) {
+    if ((window.operationHistoryIndexes[this.operationHistoryIndex()] == null) || window.operationHistoryTailIndexes[this.operationHistoryIndex()] === window.operationHistoryIndexes[this.operationHistoryIndex()] || !_popRedo.call(this)) {
       return Message.flushWarn("Can't Redo");
     }
   };

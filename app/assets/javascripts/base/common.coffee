@@ -250,28 +250,44 @@ class Common
   @clearAllEventAction: (callback = null) ->
     # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
 
-    previewinitCount = 0
-    tes = PageValue.getEventPageValueSortedListByNum()
-    if tes.length <= 0
-      if callback?
-        callback()
-        return
+    self = @
+    tesArray = []
+    tesArray.push(PageValue.getEventPageValueSortedListByNum())
+    forkNum = PageValue.getForkNum()
+    if forkNum?
+      for i in [1..forkNum]
+        # フォークデータを含める
+        tesArray.push(PageValue.getEventPageValueSortedListByNum(i))
 
-    for idx in [tes.length - 1 .. 0] by -1
-      te = tes[idx]
-      item = window.instanceMap[te.id]
-      if item?
-        item.initEvent(te)
-        item.stopPreview( ->
-          item.updateEventBefore()
-          previewinitCount += 1
-          if previewinitCount >= tes.length && callback?
-            callback()
-        )
-      else
-        previewinitCount += 1
-        if previewinitCount >= tes.length && callback?
+    callbackCount = 0
+
+    _callback = ->
+      callbackCount += 1
+      if callbackCount >= tesArray.length
+        if callback?
           callback()
+
+    for tes in tesArray
+      previewinitCount = 0
+      if tes.length <= 0
+        _callback.call(self)
+        break
+
+      for idx in [tes.length - 1 .. 0] by -1
+        te = tes[idx]
+        item = window.instanceMap[te.id]
+        if item?
+          item.initEvent(te)
+          item.stopPreview( ->
+            item.updateEventBefore()
+            previewinitCount += 1
+            if previewinitCount >= tes.length
+              _callback.call(self)
+          )
+        else
+          previewinitCount += 1
+          if previewinitCount >= tes.length
+            _callback.call(self)
 
   # アクションタイプからアクションタイプクラス名を取得
   # @param [Integer] actionType アクションタイプID

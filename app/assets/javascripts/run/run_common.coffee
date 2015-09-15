@@ -48,7 +48,7 @@ class RunCommon
     pageCount = PageValue.getPageCount()
     pageList = new Array(pageCount)
     for i in [1..pageCount]
-      eventPageValueList = PageValue.getEventPageValueSortedListByNum(i)
+      eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, i)
       page = null
       if eventPageValueList? && eventPageValueList.length > 0
         page = new Page(eventPageValueList)

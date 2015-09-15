@@ -141,6 +141,10 @@ class Const
     PAGE_COUNT = 'page_count'
     # @property [String] PAGE_NUM 現在のページ番号
     PAGE_NUM = 'page_num'
+    # @property [String] FORK_COUNT フォーク総数
+    FORK_COUNT = 'fork_count'
+    # @property [String] FORK_NUM 現在のフォーク番号
+    FORK_NUM = 'fork_num'
   end
 
   class Setting

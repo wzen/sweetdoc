@@ -84,7 +84,6 @@ Paging = (function() {
           Common.removeAllItem(beforePageNum);
           Timeline.refreshAllTimeline();
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
-          PageValue.setEventPageValue(PageValue.Key.eventFork(), 0);
           PageValue.updatePageCount();
           if (created) {
             OperationHistory.add(true);

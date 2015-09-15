@@ -112,7 +112,7 @@ class EventConfig
     valueClassName = @methodClassName()
 
     if @teNum > 1
-      beforeActionType = PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
+      beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
       if @actionType == beforeActionType
         # 前のイベントと同じアクションタイプの場合は同時実行を表示
         $(".config.parallel_div", @emt).css('display', '')
@@ -195,7 +195,7 @@ class EventConfig
     # プレビュー開始
     item = instanceMap[@id]
     if item? && item.preview?
-      item.preview(PageValue.getEventPageValue(EventPageValueBase.PageValueKey.te(@teNum)))
+      item.preview(PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum)))
 
   # 画面値に書き込み
   writeToPageValue: ->

@@ -82,7 +82,7 @@ EventAction = (function() {
         return Common.loadJsFromInstancePageValue(function() {
           var eventPageValueList, pageFlip;
           if (_this.thisPage() === null) {
-            eventPageValueList = PageValue.getEventPageValueSortedListByNum(afterPageNum);
+            eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, afterPageNum);
             _this.pageList[afterPageIndex] = new Page(eventPageValueList);
             if (window.debug) {
               console.log('[nextPage] created page instance');

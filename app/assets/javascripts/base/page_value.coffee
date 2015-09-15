@@ -20,6 +20,10 @@ class PageValue
       @PAGE_COUNT = constant.PageValueKey.PAGE_COUNT
       # @property [String] PAGE_NUM 現在のページ番号
       @PAGE_NUM = constant.PageValueKey.PAGE_NUM
+      # @property [String] FORK_NUM フォーク総数
+      @FORK_COUNT = constant.PageValueKey.FORK_COUNT
+      # @property [String] FORK_NUM 現在のページ番号
+      @FORK_NUM = constant.PageValueKey.FORK_NUM
       # @property [String] IS_ROOT ページ値ルート
       @IS_ROOT = constant.PageValueKey.IS_ROOT
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
@@ -55,13 +59,17 @@ class PageValue
       # @property [return] イベントページプレフィックス
       @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
       # @property [return] イベントページプレフィックス
-      @eventPageMainRoot = (pn = PageValue.getPageNum()) -> "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_MAIN_ROOT}"
+      @eventPageMainRoot = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) ->
+        root = ''
+        if fn?
+          root = @EF_PREFIX + fn
+        else
+          root = @E_MAIN_ROOT
+        return "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{root}"
       # @property [return] イベントページプレフィックス
-      @eventNumber = (num, pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
+      @eventNumber = (num, fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
       # @property [return] イベント数
-      @eventCount = (pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(pn)}#{@PAGE_VALUES_SEPERATOR}count"
-      # @property [return] イベントフォーク数
-      @eventFork = (pn = PageValue.getPageNum()) -> "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_FORK_ROOT}#{@PAGE_VALUES_SEPERATOR}fork"
+      @eventCount = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}count"
       # @property [String] E_NUM_PREFIX イベント番号プレフィックス
       @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
       # @property [String] EF_PREFIX イベントフォークプレフィックス
@@ -234,14 +242,17 @@ class PageValue
 
   # イベントの値をページルート値から設定
   # @param [Object] value 設定値(E_PREFIXで取得したハッシュ配列または値)
+  # @param [Integer] fn フォーク番号
+  # @param [Integer] pn ページ番号
   # @param [Boolean] refresh イベント要素を全て入れ替える
   # @param [Boolean] giveUpdate update属性を付与するか
-  @setEventPageValueByPageRootHash = (value, refresh = true, giveUpdate = false) ->
+  @setEventPageValueByPageRootHash = (value, fn = @getForkNum(), pn = @getPageNum(), refresh = true, giveUpdate = false) ->
     if refresh
       # 内容を一旦消去
-      $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").remove()
+      contensRoot = if fn? then @Key.EF_PREFIX + fn else @Key.E_MAIN_ROOT
+      $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").children(".#{contensRoot}").remove()
     for k, v of value
-      @setEventPageValue(PageValue.Key.eventPageMainRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+      @setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn) + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
 
   # 共通設定値を設定
   # @param [String] key キー値
@@ -329,13 +340,14 @@ class PageValue
     $("##{Setting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
 
   # イベント番号で昇順ソートした配列を取得
+  # @param [Integer] fn フォーク番号
   # @param [Integer] pn ページ番号
-  @getEventPageValueSortedListByNum = (pn = PageValue.getPageNum()) ->
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPageMainRoot(pn))
+  @getEventPageValueSortedListByNum = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) ->
+    eventPageValues = PageValue.getEventPageValue(@Key.eventPageMainRoot(fn, pn))
     if !eventPageValues?
       return []
 
-    count = PageValue.getEventPageValue(@Key.eventCount(pn))
+    count = PageValue.getEventPageValue(@Key.eventCount(fn, pn))
     eventObjList = new Array(count)
 
     # 番号でソート
@@ -378,19 +390,22 @@ class PageValue
     for k, v of iPageValues
       if $.inArray(v.value.id, instanceObjIds) < 0
         instanceObjIds.push(v.value.id)
-    ePageValues = @getEventPageValue(PageValue.Key.eventPageMainRoot())
-    adjust = {}
-    teCount = 0
-    for k, v of ePageValues
-      if k.indexOf(@Key.E_NUM_PREFIX) == 0
-        if $.inArray(v[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0
-          teCount += 1
-          adjust[@Key.E_NUM_PREFIX + teCount] = v
-      else
-        adjust[k] = v
 
-    @setEventPageValueByPageRootHash(adjust)
-    PageValue.setEventPageValue(@Key.eventCount(), teCount)
+    ePageValueRoot = @getEventPageValue(PageValue.Key.eventPageRoot())
+    for kk, ePageValues of ePageValueRoot
+      if @isContentsRoot(kk)
+        adjust = {}
+        teCount = 0
+        for k, v of ePageValues
+          if k.indexOf(@Key.E_NUM_PREFIX) == 0
+            if $.inArray(v[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0
+              teCount += 1
+              adjust[@Key.E_NUM_PREFIX + teCount] = v
+          else
+            adjust[k] = v
+
+        @setEventPageValueByPageRootHash(adjust, @getForkNumByRootKey(kk))
+        PageValue.setEventPageValue(@Key.eventCount(@getForkNumByRootKey(kk)), teCount)
 
   # ページ総数更新
   @updatePageCount = ->
@@ -438,21 +453,48 @@ class PageValue
   @addPagenum = (addNum) ->
     @setPageNum(@getPageNum() + addNum)
 
+  # 現在のフォーク番号を取得
+  @getForkNum = ->
+    ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}")
+    if ret?
+      ret = parseInt(ret)
+    return ret
+
+  # 現在のフォーク番号を設定
+  # @param [Integer] num 設定値
+  @setForkNum = (num) ->
+    PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}", parseInt(num))
+
+  # コンテンツルートのハッシュキーか判定
+  # @param [String] key ハッシュキー
+  # @return [Boolean] 判定結果
+  @isContentsRoot = (key) ->
+    return key == @Key.E_MAIN_ROOT || key.indexOf(@Key.EF_PREFIX) >= 0
+
+  # コンテンツルートのハッシュキーからフォーク数を取得
+  # @param [String] key ハッシュキー
+  # @return [Integer] フォーク数 or null
+  @getForkNumByRootKey = (key) ->
+    if key.indexOf(@Key.EF_PREFIX) >= 0
+      return parseInt(key.replace(@Key.EF_PREFIX, ''))
+    return null
+
   # アイテムのCSSを取得
   # @param [Integer] pageNum ページ番号
   # @return [String] CSS
   @itemCssOnPage = (pageNum) ->
     # EventPageValueのcssを一つの文字列にまとめる
-
-    eventPageValues = PageValue.getEventPageValue(@Key.eventPageMainRoot(pageNum))
     css = ''
-    for k, v of eventPageValues
-      if k.indexOf(@Key.E_NUM_PREFIX) == 0
-        index = parseInt(k.substring(@Key.E_NUM_PREFIX.length)) - 1
-        objId = v.id
-        instance = PageValue.getInstancePageValue(@Key.instanceValue(objId))
-        if instance.css?
-          css += instance.css
+    eventPageValueRoot = PageValue.getEventPageValue(@Key.eventPageRoot(pageNum))
+    for kk, eventPageValues of eventPageValueRoot
+      if @isContentsRoot(kk)
+        for k, v of eventPageValues
+          if k.indexOf(@Key.E_NUM_PREFIX) == 0
+            index = parseInt(k.substring(@Key.E_NUM_PREFIX.length)) - 1
+            objId = v.id
+            instance = PageValue.getInstancePageValue(@Key.instanceValue(objId))
+            if instance.css?
+              css += instance.css
     return css
 
   # EventPageValueをソート

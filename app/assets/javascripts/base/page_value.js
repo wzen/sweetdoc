@@ -30,6 +30,10 @@ PageValue = (function() {
 
       Key.PAGE_NUM = constant.PageValueKey.PAGE_NUM;
 
+      Key.FORK_COUNT = constant.PageValueKey.FORK_COUNT;
+
+      Key.FORK_NUM = constant.PageValueKey.FORK_NUM;
+
       Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
       Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
@@ -78,32 +82,41 @@ PageValue = (function() {
         return "" + this.E_SUB_ROOT + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
       };
 
-      Key.eventPageMainRoot = function(pn) {
+      Key.eventPageMainRoot = function(fn, pn) {
+        var root;
+        if (fn == null) {
+          fn = PageValue.getForkNum();
+        }
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_MAIN_ROOT;
+        root = '';
+        if (fn != null) {
+          root = this.EF_PREFIX + fn;
+        } else {
+          root = this.E_MAIN_ROOT;
+        }
+        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + root;
       };
 
-      Key.eventNumber = function(num, pn) {
+      Key.eventNumber = function(num, fn, pn) {
+        if (fn == null) {
+          fn = PageValue.getForkNum();
+        }
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.eventPageMainRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_NUM_PREFIX + num;
+        return "" + (this.eventPageMainRoot(fn, pn)) + this.PAGE_VALUES_SEPERATOR + this.E_NUM_PREFIX + num;
       };
 
-      Key.eventCount = function(pn) {
+      Key.eventCount = function(fn, pn) {
+        if (fn == null) {
+          fn = PageValue.getForkNum();
+        }
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.eventPageMainRoot(pn)) + this.PAGE_VALUES_SEPERATOR + "count";
-      };
-
-      Key.eventFork = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.E_FORK_ROOT + this.PAGE_VALUES_SEPERATOR + "fork";
+        return "" + (this.eventPageMainRoot(fn, pn)) + this.PAGE_VALUES_SEPERATOR + "count";
       };
 
       Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
@@ -299,8 +312,14 @@ PageValue = (function() {
     return results;
   };
 
-  PageValue.setEventPageValueByPageRootHash = function(value, refresh, giveUpdate) {
-    var k, results, v;
+  PageValue.setEventPageValueByPageRootHash = function(value, fn, pn, refresh, giveUpdate) {
+    var contensRoot, k, results, v;
+    if (fn == null) {
+      fn = this.getForkNum();
+    }
+    if (pn == null) {
+      pn = this.getPageNum();
+    }
     if (refresh == null) {
       refresh = true;
     }
@@ -308,12 +327,13 @@ PageValue = (function() {
       giveUpdate = false;
     }
     if (refresh) {
-      $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).remove();
+      contensRoot = fn != null ? this.Key.EF_PREFIX + fn : this.Key.E_MAIN_ROOT;
+      $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).children("." + contensRoot).remove();
     }
     results = [];
     for (k in value) {
       v = value[k];
-      results.push(this.setEventPageValue(PageValue.Key.eventPageMainRoot() + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
+      results.push(this.setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn) + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
     }
     return results;
   };
@@ -401,16 +421,19 @@ PageValue = (function() {
     return $("#" + Setting.PageValueKey.ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
   };
 
-  PageValue.getEventPageValueSortedListByNum = function(pn) {
+  PageValue.getEventPageValueSortedListByNum = function(fn, pn) {
     var count, eventObjList, eventPageValues, index, k, v;
+    if (fn == null) {
+      fn = PageValue.getForkNum();
+    }
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageMainRoot(pn));
+    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageMainRoot(fn, pn));
     if (eventPageValues == null) {
       return [];
     }
-    count = PageValue.getEventPageValue(this.Key.eventCount(pn));
+    count = PageValue.getEventPageValue(this.Key.eventCount(fn, pn));
     eventObjList = new Array(count);
     for (k in eventPageValues) {
       v = eventPageValues[k];
@@ -447,7 +470,7 @@ PageValue = (function() {
   };
 
   PageValue.adjustInstanceAndEventOnPage = function() {
-    var adjust, ePageValues, iPageValues, instanceObjIds, k, teCount, v;
+    var adjust, ePageValueRoot, ePageValues, iPageValues, instanceObjIds, k, kk, results, teCount, v;
     iPageValues = this.getInstancePageValue(PageValue.Key.instancePagePrefix());
     instanceObjIds = [];
     for (k in iPageValues) {
@@ -456,22 +479,31 @@ PageValue = (function() {
         instanceObjIds.push(v.value.id);
       }
     }
-    ePageValues = this.getEventPageValue(PageValue.Key.eventPageMainRoot());
-    adjust = {};
-    teCount = 0;
-    for (k in ePageValues) {
-      v = ePageValues[k];
-      if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
-        if ($.inArray(v[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0) {
-          teCount += 1;
-          adjust[this.Key.E_NUM_PREFIX + teCount] = v;
+    ePageValueRoot = this.getEventPageValue(PageValue.Key.eventPageRoot());
+    results = [];
+    for (kk in ePageValueRoot) {
+      ePageValues = ePageValueRoot[kk];
+      if (this.isContentsRoot(kk)) {
+        adjust = {};
+        teCount = 0;
+        for (k in ePageValues) {
+          v = ePageValues[k];
+          if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
+            if ($.inArray(v[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0) {
+              teCount += 1;
+              adjust[this.Key.E_NUM_PREFIX + teCount] = v;
+            }
+          } else {
+            adjust[k] = v;
+          }
         }
+        this.setEventPageValueByPageRootHash(adjust, this.getForkNumByRootKey(kk));
+        results.push(PageValue.setEventPageValue(this.Key.eventCount(this.getForkNumByRootKey(kk)), teCount));
       } else {
-        adjust[k] = v;
+        results.push(void 0);
       }
     }
-    this.setEventPageValueByPageRootHash(adjust);
-    return PageValue.setEventPageValue(this.Key.eventCount(), teCount);
+    return results;
   };
 
   PageValue.updatePageCount = function() {
@@ -520,18 +552,47 @@ PageValue = (function() {
     return this.setPageNum(this.getPageNum() + addNum);
   };
 
+  PageValue.getForkNum = function() {
+    var ret;
+    ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM);
+    if (ret != null) {
+      ret = parseInt(ret);
+    }
+    return ret;
+  };
+
+  PageValue.setForkNum = function(num) {
+    return PageValue.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.FORK_NUM, parseInt(num));
+  };
+
+  PageValue.isContentsRoot = function(key) {
+    return key === this.Key.E_MAIN_ROOT || key.indexOf(this.Key.EF_PREFIX) >= 0;
+  };
+
+  PageValue.getForkNumByRootKey = function(key) {
+    if (key.indexOf(this.Key.EF_PREFIX) >= 0) {
+      return parseInt(key.replace(this.Key.EF_PREFIX, ''));
+    }
+    return null;
+  };
+
   PageValue.itemCssOnPage = function(pageNum) {
-    var css, eventPageValues, index, instance, k, objId, v;
-    eventPageValues = PageValue.getEventPageValue(this.Key.eventPageMainRoot(pageNum));
+    var css, eventPageValueRoot, eventPageValues, index, instance, k, kk, objId, v;
     css = '';
-    for (k in eventPageValues) {
-      v = eventPageValues[k];
-      if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
-        index = parseInt(k.substring(this.Key.E_NUM_PREFIX.length)) - 1;
-        objId = v.id;
-        instance = PageValue.getInstancePageValue(this.Key.instanceValue(objId));
-        if (instance.css != null) {
-          css += instance.css;
+    eventPageValueRoot = PageValue.getEventPageValue(this.Key.eventPageRoot(pageNum));
+    for (kk in eventPageValueRoot) {
+      eventPageValues = eventPageValueRoot[kk];
+      if (this.isContentsRoot(kk)) {
+        for (k in eventPageValues) {
+          v = eventPageValues[k];
+          if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
+            index = parseInt(k.substring(this.Key.E_NUM_PREFIX.length)) - 1;
+            objId = v.id;
+            instance = PageValue.getInstancePageValue(this.Key.instanceValue(objId));
+            if (instance.css != null) {
+              css += instance.css;
+            }
+          }
         }
       }
     }

@@ -49,7 +49,7 @@ RunCommon = (function() {
     pageCount = PageValue.getPageCount();
     pageList = new Array(pageCount);
     for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-      eventPageValueList = PageValue.getEventPageValueSortedListByNum(i);
+      eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, i);
       page = null;
       if ((eventPageValueList != null) && eventPageValueList.length > 0) {
         page = new Page(eventPageValueList);

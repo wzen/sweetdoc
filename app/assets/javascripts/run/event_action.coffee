@@ -80,7 +80,7 @@ class EventAction
       Common.loadJsFromInstancePageValue( =>
         if @thisPage() == null
           # 次のページオブジェクトがない場合は作成
-          eventPageValueList = PageValue.getEventPageValueSortedListByNum(afterPageNum)
+          eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, afterPageNum)
           @pageList[afterPageIndex] = new Page(eventPageValueList)
           if window.debug
             console.log('[nextPage] created page instance')

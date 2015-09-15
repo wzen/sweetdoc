@@ -11,10 +11,6 @@ EventPageValueBase = (function() {
     EventPageValueBase.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.te = function(teNum) {
-        return PageValue.Key.eventNumber(teNum);
-      };
-
       PageValueKey.ID = constant.EventPageValueKey.ID;
 
       PageValueKey.ITEM_ID = constant.EventPageValueKey.ITEM_ID;
@@ -52,7 +48,7 @@ EventPageValueBase = (function() {
     var _scrollLength, end, endDiv, handlerDiv, s, start, startDiv;
     _scrollLength = function(eventConfig) {
       var end, start, writeValue;
-      writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
+      writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
       if (writeValue != null) {
         start = writeValue[this.PageValueKey.SCROLL_POINT_START];
         end = writeValue[this.PageValueKey.SCROLL_POINT_END];
@@ -106,7 +102,7 @@ EventPageValueBase = (function() {
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
     var bottomEmt, enabledDirection, end, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, rightEmt, start, topEmt, writeValue;
-    writeValue = PageValue.getEventPageValue(this.PageValueKey.te(eventConfig.teNum));
+    writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       eventConfig.id = writeValue[this.PageValueKey.ID];
       eventConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];

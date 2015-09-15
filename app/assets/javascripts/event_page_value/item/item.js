@@ -47,7 +47,7 @@ EPVItem = (function(superClass) {
       } else {
         teNum = 1;
       }
-      PageValue.setEventPageValue(this.PageValueKey.te(teNum), writeValue);
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum);
       LocalStorage.saveAllPageValues();
     }
@@ -62,7 +62,7 @@ EPVItem = (function(superClass) {
       item = instanceMap[eventConfig.id];
       value = item.eventConfigValue();
       writeValue[this.PageValueKey.VALUE] = value;
-      PageValue.setEventPageValue(this.PageValueKey.te(eventConfig.teNum), writeValue);
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue);
       if (parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum) {
         PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
       }

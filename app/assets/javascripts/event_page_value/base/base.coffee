@@ -6,9 +6,6 @@ class EventPageValueBase
     constant = gon.const
 
     class @PageValueKey
-      # @property [String] te イベントRoot
-      @te : (teNum) ->
-        PageValue.Key.eventNumber(teNum)
       # @property [String] ID アイテムID
       @ID = constant.EventPageValueKey.ID
       # @property [String] ITEM_ID アイテムタイプID
@@ -42,7 +39,7 @@ class EventPageValueBase
   # @param [Object] eventConfig イベントコンフィグオブジェクト
   @initConfigValue = (eventConfig) ->
     _scrollLength = (eventConfig) ->
-      writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
+      writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum))
       if writeValue?
         start = writeValue[@PageValueKey.SCROLL_POINT_START]
         end = writeValue[@PageValueKey.SCROLL_POINT_END]
@@ -93,7 +90,7 @@ class EventPageValueBase
   # @param [Object] eventConfig イベントコンフィグオブジェクト
   # @return [Boolean] 読み込み成功したか
   @readFromPageValue = (eventConfig) ->
-    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
+    writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum))
     if writeValue?
       eventConfig.id = writeValue[@PageValueKey.ID]
       eventConfig.itemId = writeValue[@PageValueKey.ITEM_ID]

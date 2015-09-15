@@ -90,8 +90,6 @@ class Paging
           Timeline.refreshAllTimeline()
           # ページ総数の更新
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
-          # フォーク総数の更新
-          PageValue.setEventPageValue(PageValue.Key.eventFork(), 0)
           PageValue.updatePageCount()
           if created
             # 履歴に画面初期時状態を保存

@@ -25,7 +25,7 @@ class EPVScreenPosition extends EventPageValueBase
     writeValue[@PageValueKey.VALUE] = value
 
     if errorMes.length == 0
-      PageValue.setEventPageValue(@PageValueKey.te(eventConfig.teNum), writeValue)
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue)
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
     return errorMes
@@ -38,7 +38,7 @@ class EPVScreenPosition extends EventPageValueBase
     if !ret
       return false
     emt = eventConfig.emt
-    writeValue = PageValue.getEventPageValue(@PageValueKey.te(eventConfig.teNum))
+    writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
     $('.screenposition_change_x:first', emt).val(value[@X])
     $('.screenposition_change_y:first', emt).val(value[@Y])
