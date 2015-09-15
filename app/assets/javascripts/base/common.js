@@ -275,7 +275,7 @@ Common = (function() {
     }
     self = this;
     tesArray = [];
-    tesArray.push(PageValue.getEventPageValueSortedListByNum());
+    tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM));
     forkNum = PageValue.getForkNum();
     if (forkNum != null) {
       for (i = j = 1, ref = forkNum; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {

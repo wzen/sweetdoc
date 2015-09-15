@@ -252,7 +252,7 @@ class Common
 
     self = @
     tesArray = []
-    tesArray.push(PageValue.getEventPageValueSortedListByNum())
+    tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM))
     forkNum = PageValue.getForkNum()
     if forkNum?
       for i in [1..forkNum]
