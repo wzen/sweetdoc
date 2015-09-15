@@ -52,8 +52,8 @@ class PageValue
       @E_ROOT = constant.PageValueKey.E_ROOT
       # @property [String] E_SUB_ROOT イベントプレフィックス
       @E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT
-      # @property [String] E_MAIN_ROOT イベントコンテンツルート
-      @E_MAIN_ROOT = constant.PageValueKey.E_MAIN_ROOT
+      # @property [String] E_MASTER_ROOT イベントコンテンツルート
+      @E_MASTER_ROOT = constant.PageValueKey.E_MASTER_ROOT
       # @property [String] E_FORK_ROOT イベントフォークルート
       @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
       # @property [return] イベントページプレフィックス
@@ -64,7 +64,7 @@ class PageValue
         if fn?
           root = @EF_PREFIX + fn
         else
-          root = @E_MAIN_ROOT
+          root = @E_MASTER_ROOT
         return "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{root}"
       # @property [return] イベントページプレフィックス
       @eventNumber = (num, fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
@@ -249,7 +249,7 @@ class PageValue
   @setEventPageValueByPageRootHash = (value, fn = @getForkNum(), pn = @getPageNum(), refresh = true, giveUpdate = false) ->
     if refresh
       # 内容を一旦消去
-      contensRoot = if fn? then @Key.EF_PREFIX + fn else @Key.E_MAIN_ROOT
+      contensRoot = if fn? then @Key.EF_PREFIX + fn else @Key.E_MASTER_ROOT
       $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").children(".#{contensRoot}").remove()
     for k, v of value
       @setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn) + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
@@ -483,7 +483,7 @@ class PageValue
   # @param [String] key ハッシュキー
   # @return [Boolean] 判定結果
   @isContentsRoot = (key) ->
-    return key == @Key.E_MAIN_ROOT || key.indexOf(@Key.EF_PREFIX) >= 0
+    return key == @Key.E_MASTER_ROOT || key.indexOf(@Key.EF_PREFIX) >= 0
 
   # コンテンツルートのハッシュキーからフォーク数を取得
   # @param [String] key ハッシュキー

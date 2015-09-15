@@ -71,7 +71,7 @@ PageValue = (function() {
 
       Key.E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT;
 
-      Key.E_MAIN_ROOT = constant.PageValueKey.E_MAIN_ROOT;
+      Key.E_MASTER_ROOT = constant.PageValueKey.E_MASTER_ROOT;
 
       Key.E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT;
 
@@ -94,7 +94,7 @@ PageValue = (function() {
         if (fn != null) {
           root = this.EF_PREFIX + fn;
         } else {
-          root = this.E_MAIN_ROOT;
+          root = this.E_MASTER_ROOT;
         }
         return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + root;
       };
@@ -327,7 +327,7 @@ PageValue = (function() {
       giveUpdate = false;
     }
     if (refresh) {
-      contensRoot = fn != null ? this.Key.EF_PREFIX + fn : this.Key.E_MAIN_ROOT;
+      contensRoot = fn != null ? this.Key.EF_PREFIX + fn : this.Key.E_MASTER_ROOT;
       $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).children("." + contensRoot).remove();
     }
     results = [];
@@ -580,7 +580,7 @@ PageValue = (function() {
   };
 
   PageValue.isContentsRoot = function(key) {
-    return key === this.Key.E_MAIN_ROOT || key.indexOf(this.Key.EF_PREFIX) >= 0;
+    return key === this.Key.E_MASTER_ROOT || key.indexOf(this.Key.EF_PREFIX) >= 0;
   };
 
   PageValue.getForkNumByRootKey = function(key) {
