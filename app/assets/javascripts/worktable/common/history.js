@@ -23,7 +23,7 @@ OperationHistory = (function() {
     var forkNum, pageNum;
     pageNum = PageValue.getPageNum();
     forkNum = PageValue.getForkNum();
-    return pageNum + (forkNum != null ? '-' + forkNum : '');
+    return pageNum + '-' + forkNum;
   };
 
   OperationHistory.add = function(isInit) {

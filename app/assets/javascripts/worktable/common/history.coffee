@@ -10,7 +10,7 @@ class OperationHistory
   @operationHistoryIndex = ->
     pageNum = PageValue.getPageNum()
     forkNum = PageValue.getForkNum()
-    return pageNum + (if forkNum? then '-' + forkNum else '')
+    return pageNum + '-' + forkNum
 
   # 操作履歴を追加
   # @param [Boolean] isInit 初期化処理か

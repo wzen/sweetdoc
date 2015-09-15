@@ -24,6 +24,7 @@ Handwrite = (function() {
       };
     };
     mouseDownDrawing = function(loc) {
+      WorktableCommon.reDrawAllInstanceItemIfChanging();
       if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
         item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
         window.instanceMap[item.id] = item;

@@ -254,7 +254,7 @@ class Common
     tesArray = []
     tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM))
     forkNum = PageValue.getForkNum()
-    if forkNum?
+    if forkNum > 0
       for i in [1..forkNum]
         # フォークデータを含める
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i))

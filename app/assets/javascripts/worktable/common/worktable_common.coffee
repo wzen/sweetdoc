@@ -144,6 +144,23 @@ class WorktableCommon
       window.scrollInside.removeClass('edit_mode')
     window.mode = mode
 
+  # アイテム描画が変更されている場合にインスタンス全アイテム再描画
+  # @param [Integer] pn ページ番号
+  @reDrawAllInstanceItemIfChanging = (pn = PageValue.getPageNum()) ->
+    if window.runningPreview
+      # イベント停止
+      @stopAllEventPreview( ->
+        instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn))
+        for k, obj of instances
+          isCommon = null
+          id = obj.value.id
+          classMapId = null
+          if obj.value.itemId?
+            item = Common.getInstanceFromMap(false, id, obj.value.itemId)
+            if item? && item instanceof ItemBase
+              item.reDraw()
+      )
+
   # 非表示をクリア
   @clearAllItemStyle = ->
     for k, v of Common.getCreatedItemInstances()

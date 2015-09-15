@@ -22,6 +22,8 @@ class Handwrite
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
     mouseDownDrawing = (loc) ->
+      # プレビューを停止して再描画
+      WorktableCommon.reDrawAllInstanceItemIfChanging()
       if selectItemMenu?
         item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
         window.instanceMap[item.id] = item

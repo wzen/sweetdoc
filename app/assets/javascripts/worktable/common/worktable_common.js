@@ -174,6 +174,36 @@ WorktableCommon = (function() {
     return window.mode = mode;
   };
 
+  WorktableCommon.reDrawAllInstanceItemIfChanging = function(pn) {
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    if (window.runningPreview) {
+      return this.stopAllEventPreview(function() {
+        var classMapId, id, instances, isCommon, item, k, obj, results;
+        instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn));
+        results = [];
+        for (k in instances) {
+          obj = instances[k];
+          isCommon = null;
+          id = obj.value.id;
+          classMapId = null;
+          if (obj.value.itemId != null) {
+            item = Common.getInstanceFromMap(false, id, obj.value.itemId);
+            if ((item != null) && item instanceof ItemBase) {
+              results.push(item.reDraw());
+            } else {
+              results.push(void 0);
+            }
+          } else {
+            results.push(void 0);
+          }
+        }
+        return results;
+      });
+    }
+  };
+
   WorktableCommon.clearAllItemStyle = function() {
     var k, ref, v;
     ref = Common.getCreatedItemInstances();
