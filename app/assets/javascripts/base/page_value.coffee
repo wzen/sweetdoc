@@ -58,7 +58,6 @@ class PageValue
       @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
       # @property [return] イベントページプレフィックス
       @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
-
       # @property [return] イベントページプレフィックス
       @eventPageMainRoot = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) ->
         root = ''
@@ -67,7 +66,6 @@ class PageValue
         else
           root = @E_MASTER_ROOT
         return "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{root}"
-
       # @property [return] イベントページプレフィックス
       @eventNumber = (num, fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
       # @property [return] イベント数
@@ -78,6 +76,8 @@ class PageValue
       @EF_PREFIX = constant.PageValueKey.EF_PREFIX
       # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
       @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
+      # @property [String] EF_MASTER_FORKNUM Masterのフォーク番号
+      @EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM
       # @property [String] UPDATED 更新フラグ
       @UPDATED = 'updated'
 
@@ -472,7 +472,7 @@ class PageValue
     if ret?
       return parseInt(ret)
     else
-      return 0
+      return parseInt(@Key.EF_MASTER_FORKNUM)
 
   # 現在のフォーク番号を設定
   # @param [Integer] num 設定値

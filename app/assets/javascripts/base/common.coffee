@@ -452,7 +452,6 @@ class Common
           v.getJQueryElement().remove()
       window.instanceMap = {}
 
-
   # JSファイルをサーバから読み込む
   # @param [Int] itemId アイテム種別
   # @param [Function] callback コールバック関数

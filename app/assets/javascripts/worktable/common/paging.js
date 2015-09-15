@@ -9,7 +9,7 @@ Paging = (function() {
   };
 
   Paging.createPageSelectMenu = function() {
-    var divider, forkCount, forkNum, i, j, k, l, menu, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
+    var active, divider, forkCount, forkNum, i, j, k, l, menu, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
     self = this;
     pageCount = PageValue.getPageCount();
     root = $("#" + Constant.Paging.NAV_ROOT_ID);
@@ -24,7 +24,8 @@ Paging = (function() {
       navPageName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', i);
       forkCount = PageValue.getForkCount(i);
       forkNum = PageValue.getForkNum(i);
-      subMenu = "<li><a class='" + navPageClass + " menu-item '>Master</a></li>";
+      active = forkNum === PageValue.Key.EF_MASTER_FORKNUM ? 'class="active"' : '';
+      subMenu = "<li " + active + "><a class='" + navPageClass + " menu-item '>Master</a></li>";
       if (forkCount > 0) {
         for (j = l = 1, ref1 = forkCount; 1 <= ref1 ? l <= ref1 : l >= ref1; j = 1 <= ref1 ? ++l : --l) {
           navForkClass = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', j);
@@ -48,9 +49,9 @@ Paging = (function() {
     selectRoot.find(".menu-item").on('click', function() {
       var classList, forkPrefix, pageNum, pagePrefix;
       pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '');
-      forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@pagenum', '');
+      forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
       pageNum = null;
-      forkNum = null;
+      forkNum = PageValue.Key.EF_MASTER_FORKNUM;
       classList = this.classList;
       classList.forEach(function(c) {
         if (c.indexOf(pagePrefix) >= 0) {
@@ -122,19 +123,21 @@ Paging = (function() {
   Paging.selectPage = function(selectedPageNum, selectedForkNum) {
     var self;
     if (selectedForkNum == null) {
-      selectedForkNum = null;
+      selectedForkNum = PageValue.Key.EF_MASTER_FORKNUM;
     }
+    self = this;
     if (selectedPageNum === PageValue.getPageNum()) {
       if (selectedForkNum === PageValue.getForkNum()) {
         return;
       } else {
         this.selectFork(selectedForkNum, function() {
-          return Timeline.refreshAllTimeline();
+          Timeline.refreshAllTimeline();
+          LocalStorage.saveAllPageValues();
+          return self.createPageSelectMenu();
         });
         return;
       }
     }
-    self = this;
     return WorktableCommon.stopAllEventPreview(function() {
       var beforePageNum, created, pageCount, pageFlip;
       if (window.debug) {
@@ -171,7 +174,6 @@ Paging = (function() {
               console.log('[selectPage] deleted pageNum:' + beforePageNum);
             }
             Common.removeAllItem(beforePageNum);
-            Timeline.refreshAllTimeline();
             if (created) {
               OperationHistory.add(true);
             }
@@ -184,6 +186,8 @@ Paging = (function() {
   };
 
   Paging.createNewFork = function() {
+    var self;
+    self = this;
     return WorktableCommon.stopAllEventPreview(function() {
       PageValue.setForkNum(PageValue.getForkCount() + 1);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
@@ -199,18 +203,24 @@ Paging = (function() {
     if (callback == null) {
       callback = null;
     }
-    if ((selectedForkNum == null) || selectedForkNum <= 0) {
+    if ((selectedForkNum == null) || selectedForkNum === PageValue.getForkNum()) {
       if (callback != null) {
         callback();
       }
     }
     return WorktableCommon.stopAllEventPreview(function() {
       PageValue.setForkNum(selectedForkNum);
-      return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+      if (selectedForkNum === PageValue.Key.EF_MASTER_FORKNUM) {
         if (callback != null) {
           return callback();
         }
-      });
+      } else {
+        return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+          if (callback != null) {
+            return callback();
+          }
+        });
+      }
     });
   };
 

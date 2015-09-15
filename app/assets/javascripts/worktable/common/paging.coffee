@@ -25,7 +25,8 @@ class Paging
       # サブ選択メニュー
       forkCount = PageValue.getForkCount(i)
       forkNum = PageValue.getForkNum(i)
-      subMenu = "<li><a class='#{navPageClass} menu-item '>Master</a></li>"
+      active = if forkNum == PageValue.Key.EF_MASTER_FORKNUM then 'class="active"' else ''
+      subMenu = "<li #{active}><a class='#{navPageClass} menu-item '>Master</a></li>"
       if forkCount > 0
         for j in [1..forkCount]
           navForkClass = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', j)
@@ -58,9 +59,9 @@ class Paging
     selectRoot.find(".menu-item").off('click')
     selectRoot.find(".menu-item").on('click', ->
       pagePrefix = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', '')
-      forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@pagenum', '')
+      forkPrefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
       pageNum = null
-      forkNum = null
+      forkNum = PageValue.Key.EF_MASTER_FORKNUM
       classList = @.classList
       classList.forEach((c) ->
         if c.indexOf(pagePrefix) >= 0
@@ -141,7 +142,9 @@ class Paging
   # ページ選択
   # @param [Integer] selectedNum 選択ページ番号
   # @param [Integer] selectedNum 選択フォーク番号
-  @selectPage: (selectedPageNum, selectedForkNum = null) ->
+  @selectPage: (selectedPageNum, selectedForkNum = PageValue.Key.EF_MASTER_FORKNUM) ->
+    self = @
+
     if selectedPageNum == PageValue.getPageNum()
       if selectedForkNum == PageValue.getForkNum()
         # 同じページ & 同じフォークの場合は変更しない
@@ -150,10 +153,13 @@ class Paging
         @selectFork(selectedForkNum, ->
           # タイムライン更新
           Timeline.refreshAllTimeline()
+          # キャッシュ保存
+          LocalStorage.saveAllPageValues()
+          # 選択メニューの更新
+          self.createPageSelectMenu()
         )
         return
 
-    self = @
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( ->
       if window.debug
@@ -195,7 +201,7 @@ class Paging
               console.log('[selectPage] deleted pageNum:' + beforePageNum)
             # 隠したビューのアイテムを削除
             Common.removeAllItem(beforePageNum)
-            Timeline.refreshAllTimeline()
+            #Timeline.refreshAllTimeline()
             if created
               # 履歴に画面初期時状態を保存
               OperationHistory.add(true)
@@ -210,6 +216,8 @@ class Paging
 
   # フォーク追加作成
   @createNewFork: ->
+    self = @
+
     # プレビュー停止
     WorktableCommon.stopAllEventPreview( ->
       # フォーク番号更新
@@ -231,8 +239,8 @@ class Paging
   # @param [Integer] selectedForkNum 選択フォーク番号
   # @param [Function] コールバック
   @selectFork: (selectedForkNum, callback = null) ->
-    if !selectedForkNum? || selectedForkNum <= 0
-      # フォーク番号が無い場合は処理なし
+    if !selectedForkNum? || selectedForkNum == PageValue.getForkNum()
+      # フォーク番号が同じ場合は処理なし
       if callback?
         callback()
 
@@ -240,9 +248,17 @@ class Paging
     WorktableCommon.stopAllEventPreview( ->
       # フォーク番号更新
       PageValue.setForkNum(selectedForkNum)
-      # フォークのアイテムを描画
-      WorktableCommon.drawAllItemFromInstancePageValue( ->
+      if selectedForkNum == PageValue.Key.EF_MASTER_FORKNUM
+        # Masterに変更する場合
+        # とりあえず何もしない
         if callback?
           callback()
-      )
+      else
+        # Forkに変更
+
+        # フォークのアイテムを描画
+        WorktableCommon.drawAllItemFromInstancePageValue( ->
+          if callback?
+            callback()
+        )
     )

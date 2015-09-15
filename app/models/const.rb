@@ -145,6 +145,8 @@ class Const
     FORK_COUNT = 'fork_count'
     # @property [String] FORK_NUM 現在のフォーク番号
     FORK_NUM = 'fork_num'
+    # @property [String] EF_MASTER_FORKNUM Masterのフォーク番号
+    EF_MASTER_FORKNUM = 0
   end
 
   class Setting

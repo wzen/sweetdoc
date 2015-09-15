@@ -125,6 +125,8 @@ PageValue = (function() {
 
       Key.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
 
+      Key.EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM;
+
       Key.UPDATED = 'updated';
 
       return Key;
@@ -577,7 +579,7 @@ PageValue = (function() {
     if (ret != null) {
       return parseInt(ret);
     } else {
-      return 0;
+      return parseInt(this.Key.EF_MASTER_FORKNUM);
     }
   };
 
