@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _getEventPageValueClass, _setApplyClickEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues;
+  var _getEventPageValueClass, _setApplyClickEvent, _setForkSelect, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues;
 
   if (typeof gon !== "undefined" && gon !== null) {
     EventConfig.ITEM_ROOT_ID = 'event_@te_num';
@@ -123,7 +123,11 @@ EventConfig = (function() {
         tle.initConfigValue(this);
       }
     }
-    _setScrollDirectionEvent.call(this);
+    if (this.actionType === Constant.ActionEventHandleType.SCROLL) {
+      _setScrollDirectionEvent.call(this);
+    } else if (this.actionType === Constant.ActionEventHandleType.CLICK) {
+      _setForkSelect.call(this);
+    }
     return _setApplyClickEvent.call(this);
   };
 
@@ -132,7 +136,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.applyAction = function() {
-    var bottomEmt, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, rightEmt, topEmt;
+    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, topEmt;
     this.isParallel = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {
@@ -161,6 +165,16 @@ EventConfig = (function() {
           left: leftEmt.find('.scroll_forward:first').is(":checked"),
           right: rightEmt.find('.scroll_forward:first').is(":checked")
         };
+      }
+    } else if (this.actionType === Constant.ActionEventHandleType.CLICK) {
+      handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
+      if (handlerDiv != null) {
+        this.forkNum = 0;
+        checked = handlerDiv.find('.enable_fork:first').is(':checked');
+        if ((checked != null) && checked) {
+          prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
+          this.forkNum = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
+        }
       }
     }
     if (this.isCommonEvent) {
@@ -258,7 +272,7 @@ EventConfig = (function() {
     self = 0;
     handler = $('.handler_div', this.emt);
     $('.scroll_enabled', handler).off('click');
-    return $('.scroll_enabled').on('click', function(e) {
+    return $('.scroll_enabled', handler).on('click', function(e) {
       var emt;
       if ($(this).is(':checked')) {
         return $(this).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').css('display', 'block');
@@ -268,6 +282,37 @@ EventConfig = (function() {
         return emt.prop('checked', false);
       }
     });
+  };
+
+  _setForkSelect = function() {
+    var forkCount, forkNum, handler, i, j, name, ref, selectOptions, self, value;
+    self = 0;
+    handler = $('.handler_div', this.emt);
+    $('.enable_fork', handler).off('click');
+    $('.enable_fork', handler).on('click', function(e) {
+      return $('.fork_select', handler).parent('div').css('display', $(this).is(':checked') ? 'block' : 'none');
+    });
+    forkCount = PageValue.getForkCount();
+    if (forkCount > 0) {
+      forkNum = PageValue.getForkNum();
+      selectOptions = '';
+      for (i = j = 1, ref = forkCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
+        if (i !== forkNum) {
+          name = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', i);
+          value = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', i);
+          selectOptions += "<option value='" + value + "'>" + name + "</option>";
+        }
+      }
+      if (selectOptions.length > 0) {
+        $('.fork_select', handler).children().remove();
+        $('.fork_select', handler).append($(selectOptions));
+        return $('.fork_handler_wrapper', handler).css('display', 'block');
+      } else {
+        return $('.fork_handler_wrapper', handler).css('display', 'none');
+      }
+    } else {
+      return $('.fork_handler_wrapper', handler).css('display', 'none');
+    }
   };
 
   _setApplyClickEvent = function() {

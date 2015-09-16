@@ -307,16 +307,16 @@ div.scroll_inside {
         }
       }
     }
-    .scroll_enabled_wrapper:before,
-    .scroll_enabled_wrapper:after {
+    .centering_wrapper:before,
+    .centering_wrapper:after {
       content: "";
       display: table;
     }
 
-    .scroll_enabled_wrapper:after {
+    .centering_wrapper:after {
       clear: both;
     }
-    .scroll_enabled_wrapper {
+    .centering_wrapper {
       display: flex;
       display: -moz-flex;
       display: -webkit-flex;

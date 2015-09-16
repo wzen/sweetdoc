@@ -397,14 +397,27 @@ class PageValue
     for kk, ePageValues of ePageValueRoot
       if @isContentsRoot(kk)
         adjust = {}
-        teCount = 0
+        min = 9999999
+        max = 0
         for k, v of ePageValues
           if k.indexOf(@Key.E_NUM_PREFIX) == 0
-            if $.inArray(v[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0
-              teCount += 1
-              adjust[@Key.E_NUM_PREFIX + teCount] = v
+            kNum = parseInt(k.replace(@Key.E_NUM_PREFIX, ''))
+            if min > kNum
+              min = kNum
+            if max < kNum
+              max = kNum
           else
+            # イベント番号の付いていないキーはそのままにする
             adjust[k] = v
+
+        teCount = 0
+        if min <= max
+          for i in [min..max]
+            if ePageValues[@Key.E_NUM_PREFIX + i]? &&
+              $.inArray(ePageValues[@Key.E_NUM_PREFIX + i][EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0
+                teCount += 1
+                # 番号を連番に振り直し
+                adjust[@Key.E_NUM_PREFIX + teCount] = ePageValues[@Key.E_NUM_PREFIX + i]
 
         @setEventPageValueByPageRootHash(adjust, @getForkNumByRootKey(kk))
         PageValue.setEventPageValue(@Key.eventCount(@getForkNumByRootKey(kk)), teCount)

@@ -180,6 +180,7 @@ class Const
     SCROLL_POINT_END = 'scroll_point_end'
     SCROLL_ENABLED_DIRECTIONS = 'scroll_enabled_directions'
     SCROLL_FORWARD_DIRECTIONS = 'scroll_forward_directions'
+    FORKNUM = 'forknum'
   end
 
   class UserPageValue

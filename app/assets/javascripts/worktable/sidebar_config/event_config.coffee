@@ -131,7 +131,10 @@ class EventConfig
       if tle? && tle.initConfigValue?
         tle.initConfigValue(@)
 
-    _setScrollDirectionEvent.call(@)
+    if @actionType == Constant.ActionEventHandleType.SCROLL
+      _setScrollDirectionEvent.call(@)
+    else if @actionType == Constant.ActionEventHandleType.CLICK
+      _setForkSelect.call(@)
     _setApplyClickEvent.call(@)
 
   # イベントの入力値を初期化する
@@ -171,6 +174,15 @@ class EventConfig
           left: leftEmt.find('.scroll_forward:first').is(":checked")
           right: rightEmt.find('.scroll_forward:first').is(":checked")
         }
+
+    else if @actionType == Constant.ActionEventHandleType.CLICK
+      handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
+      if handlerDiv?
+        @forkNum = 0
+        checked = handlerDiv.find('.enable_fork:first').is(':checked')
+        if checked? && checked
+          prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
+          @forkNum = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
 
     if @isCommonEvent
       # 共通イベントはここでインスタンス生成
@@ -261,7 +273,7 @@ class EventConfig
     self = 0
     handler = $('.handler_div', @emt)
     $('.scroll_enabled', handler).off('click')
-    $('.scroll_enabled').on('click', (e) ->
+    $('.scroll_enabled', handler).on('click', (e) ->
       if $(@).is(':checked')
         $(@).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').css('display', 'block')
       else
@@ -269,6 +281,38 @@ class EventConfig
         emt.parent('label').css('display', 'none')
         emt.prop('checked', false)
     )
+
+  _setForkSelect = ->
+    self = 0
+    handler = $('.handler_div', @emt)
+    $('.enable_fork', handler).off('click')
+    $('.enable_fork', handler).on('click', (e) ->
+      $('.fork_select', handler).parent('div').css('display', if $(@).is(':checked') then 'block' else 'none')
+     )
+
+    # Forkコンフィグ作成
+    forkCount = PageValue.getForkCount()
+    if forkCount > 0
+      forkNum = PageValue.getForkNum()
+      # Fork選択作成
+      selectOptions = ''
+      for i in [1..forkCount]
+        if i != forkNum # 現在のフォークは選択肢に含めない
+          name = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', i)
+          value = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', i)
+          selectOptions += "<option value='#{value}'>#{name}</option>"
+
+      if selectOptions.length > 0
+        $('.fork_select', handler).children().remove()
+        $('.fork_select', handler).append($(selectOptions))
+        # Fork表示
+        $('.fork_handler_wrapper', handler).css('display', 'block')
+      else
+        # 選択肢が無い場合、Fork非表示
+        $('.fork_handler_wrapper', handler).css('display', 'none')
+    else
+      # Fork非表示
+      $('.fork_handler_wrapper', handler).css('display', 'none')
 
   _setApplyClickEvent = ->
     self = @
