@@ -42,29 +42,37 @@ class Page
   # @return [Array] チャプターリスト
   getChapterList: ->
     stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    lastForkNum = stack[stack.length - 1]
-    return @forkChapterList[lastForkNum]
+    if stack? && stack.length > 0
+      lastForkNum = stack[stack.length - 1]
+      return @forkChapterList[lastForkNum]
+    else
+      return []
 
   # チャプターインデックス取得
   # @return [Integer] チャプターインデックス
   getChapterIndex: ->
     stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    lastForkNum = stack[stack.length - 1]
-    return @forkChapterIndex[lastForkNum]
+    if stack? && stack.length > 0
+      lastForkNum = stack[stack.length - 1]
+      return @forkChapterIndex[lastForkNum]
+    else
+      return 0
 
   # チャプターインデックス設定
   # @param [Integer] num 設定値
   setChapterIndex: (num) ->
     stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    lastForkNum = stack[stack.length - 1]
-    @forkChapterIndex[lastForkNum] = num
+    if stack? && stack.length > 0
+      lastForkNum = stack[stack.length - 1]
+      @forkChapterIndex[lastForkNum] = num
 
   # チャプターインデックス追加
   # @param [Integer] addNum 追加値
   addChapterIndex: (addNum) ->
     stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    lastForkNum = stack[stack.length - 1]
-    @forkChapterIndex[lastForkNum] = @forkChapterIndex[lastForkNum] + addNum
+    if stack? && stack.length > 0
+      lastForkNum = stack[stack.length - 1]
+      @forkChapterIndex[lastForkNum] = @forkChapterIndex[lastForkNum] + addNum
 
   # 現在のチャプターインスタンスを取得
   # @return [Object] 現在のチャプターインスタンス

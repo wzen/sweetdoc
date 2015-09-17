@@ -104,6 +104,8 @@ EventAction = (function() {
           if (beforePageNum > afterPageNum) {
             _this.thisPage().willPageFromRewind();
           } else {
+            window.forkNumStacks[afterPageNum] = [PageValue.Key.EF_MASTER_FORKNUM];
+            Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
             _this.thisPage().willPage();
           }
           _this.thisPage().start();

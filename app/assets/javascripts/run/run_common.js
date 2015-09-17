@@ -54,7 +54,7 @@ RunCommon = (function() {
         forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i);
       }
       page = null;
-      if (Object.keys(forkEventPageValueList).length > 0) {
+      if (forkEventPageValueList[PageValue.Key.EF_MASTER_FORKNUM].length > 0) {
         page = new Page({
           forks: forkEventPageValueList
         });

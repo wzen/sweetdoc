@@ -105,10 +105,16 @@ class EventAction
         PageValue.adjustInstanceAndEventOnPage()
         # CSS作成
         RunCommon.createCssElement(afterPageNum)
+
         # ページ前処理
         if beforePageNum > afterPageNum
+          # 前ページ移動 前処理
           @thisPage().willPageFromRewind()
         else
+          # フォークをMasterに設定
+          window.forkNumStacks[afterPageNum] =  [PageValue.Key.EF_MASTER_FORKNUM]
+          Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
+          # 後ページ移動 前処理
           @thisPage().willPage()
         @thisPage().start()
         # ページングアニメーション

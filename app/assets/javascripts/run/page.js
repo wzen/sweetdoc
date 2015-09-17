@@ -56,29 +56,41 @@ Page = (function() {
   Page.prototype.getChapterList = function() {
     var lastForkNum, stack;
     stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    lastForkNum = stack[stack.length - 1];
-    return this.forkChapterList[lastForkNum];
+    if ((stack != null) && stack.length > 0) {
+      lastForkNum = stack[stack.length - 1];
+      return this.forkChapterList[lastForkNum];
+    } else {
+      return [];
+    }
   };
 
   Page.prototype.getChapterIndex = function() {
     var lastForkNum, stack;
     stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    lastForkNum = stack[stack.length - 1];
-    return this.forkChapterIndex[lastForkNum];
+    if ((stack != null) && stack.length > 0) {
+      lastForkNum = stack[stack.length - 1];
+      return this.forkChapterIndex[lastForkNum];
+    } else {
+      return 0;
+    }
   };
 
   Page.prototype.setChapterIndex = function(num) {
     var lastForkNum, stack;
     stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    lastForkNum = stack[stack.length - 1];
-    return this.forkChapterIndex[lastForkNum] = num;
+    if ((stack != null) && stack.length > 0) {
+      lastForkNum = stack[stack.length - 1];
+      return this.forkChapterIndex[lastForkNum] = num;
+    }
   };
 
   Page.prototype.addChapterIndex = function(addNum) {
     var lastForkNum, stack;
     stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    lastForkNum = stack[stack.length - 1];
-    return this.forkChapterIndex[lastForkNum] = this.forkChapterIndex[lastForkNum] + addNum;
+    if ((stack != null) && stack.length > 0) {
+      lastForkNum = stack[stack.length - 1];
+      return this.forkChapterIndex[lastForkNum] = this.forkChapterIndex[lastForkNum] + addNum;
+    }
   };
 
   Page.prototype.thisChapter = function() {

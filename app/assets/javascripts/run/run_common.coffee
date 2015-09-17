@@ -52,7 +52,8 @@ class RunCommon
       for j in [0..PageValue.getForkCount()]
         forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i)
       page = null
-      if Object.keys(forkEventPageValueList).length > 0
+      if forkEventPageValueList[PageValue.Key.EF_MASTER_FORKNUM].length > 0
+        # Masterデータが存在する場合ページを作成
         page = new Page({
           forks: forkEventPageValueList
         })
