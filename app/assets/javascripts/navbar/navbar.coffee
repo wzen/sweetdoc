@@ -113,4 +113,16 @@ class Navbar
     else
       e.html('')
 
+  # フォーク番号を設定
+  # @param [Integer] num 設定値
+  @setForkNum = (num) ->
+    navEmt = $('#nav')
+    e = $('.nav_fork_num', navEmt)
+    if e?
+      e.html(num)
+      e.closest('li').css('display', if num > 0 then 'block' else 'none')
+    else
+      e.html('')
+      e.closest('li').css('display', 'none')
+
 

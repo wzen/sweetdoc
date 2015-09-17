@@ -413,11 +413,12 @@ class PageValue
         teCount = 0
         if min <= max
           for i in [min..max]
-            if ePageValues[@Key.E_NUM_PREFIX + i]? &&
-              $.inArray(ePageValues[@Key.E_NUM_PREFIX + i][EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0
+            obj = ePageValues[@Key.E_NUM_PREFIX + i]
+            if obj? &&
+              $.inArray(obj[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0
                 teCount += 1
                 # 番号を連番に振り直し
-                adjust[@Key.E_NUM_PREFIX + teCount] = ePageValues[@Key.E_NUM_PREFIX + i]
+                adjust[@Key.E_NUM_PREFIX + teCount] = obj
 
         @setEventPageValueByPageRootHash(adjust, @getForkNumByRootKey(kk))
         PageValue.setEventPageValue(@Key.eventCount(@getForkNumByRootKey(kk)), teCount)

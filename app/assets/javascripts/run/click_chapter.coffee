@@ -30,8 +30,13 @@ class ClickChapter extends Chapter
       return
 
     @eventObjList.forEach((event) ->
-      if event.clickEvent?
+      if event.id == $(e.currentTarget).attr('id')
         event.clickEvent(e, ->
+          stack = window.forkNumStacks[window.eventAction.thisPageNum()]
+          if stack[stack.length - 1] != event.getForkNum()
+            # フォーク番号変更
+            stack.push(event.getForkNum())
+            Navbar.setForkNum(event.getForkNum())
           if window.eventAction?
             window.eventAction.thisPage().nextChapterIfFinishedAllEvent()
         )

@@ -6,18 +6,27 @@ class EventAction
   constructor: (@pageList, @pageIndex) ->
     @finishedAllPages = false
 
-  # 現在のページオブジェクトを取得
-  # @return [Object] ページオブジェクト
+
+  # 現在のページインスタンスを取得
+  # @return [Object] 現在のページインスタンス
   thisPage: ->
     return @pageList[@pageIndex]
 
+  # 現在のページ番号を取得
+  # @return [Object] 現在のページ番号
+  thisPageNum: ->
+    return @pageIndex + 1
+
   # 開始イベント
   start: ->
-    pageNum = @pageIndex + 1
+    window.forkNumStacks = {}
     # ページ数設定
-    Navbar.setPageNum(pageNum)
+    Navbar.setPageNum(@thisPageNum())
     # CSS作成
-    RunCommon.createCssElement(pageNum)
+    RunCommon.createCssElement(@thisPageNum())
+    # フォークをMasterに設定
+    window.forkNumStacks[window.eventAction.thisPageNum()] =  [PageValue.Key.EF_MASTER_FORKNUM]
+    Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
 
     @thisPage().willPage()
     @thisPage().start()
@@ -40,10 +49,9 @@ class EventAction
       @finishAllPages()
     else
       @pageIndex += 1
-      pageNum = @pageIndex + 1
       # ページ番号更新
-      Navbar.setPageNum(pageNum)
-      PageValue.setPageNum(pageNum)
+      Navbar.setPageNum(@thisPageNum())
+      PageValue.setPageNum(@thisPageNum())
       @changePaging(beforePageIndex, @pageIndex, callback)
 
   # ページを戻す
@@ -53,9 +61,8 @@ class EventAction
     if @pageIndex > 0
       # 動作させていない場合は前のページに戻す
       @pageIndex -= 1
-      pageNum = @pageIndex + 1
-      Navbar.setPageNum(pageNum)
-      PageValue.setPageNum(pageNum)
+      Navbar.setPageNum(@thisPageNum())
+      PageValue.setPageNum(@thisPageNum())
       @changePaging(beforePageIndex, @pageIndex, callback)
     else
       # 動作させている場合はページのアクションを元に戻す
@@ -80,14 +87,18 @@ class EventAction
       Common.loadJsFromInstancePageValue( =>
         if @thisPage() == null
           # 次のページオブジェクトがない場合は作成
-          eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, afterPageNum)
-          @pageList[afterPageIndex] = new Page(eventPageValueList)
+          forkEventPageValueList = {}
+          for i in [0..PageValue.getForkCount()]
+            forkEventPageValueList[i] = PageValue.getEventPageValueSortedListByNum(i, afterPageNum)
+          @pageList[afterPageIndex] = new Page({
+            forks: forkEventPageValueList
+          })
           if window.debug
             console.log('[nextPage] created page instance')
 
         # Mainコンテナ作成
         Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
-        # ページングクラス作成
+        # ページングアニメーションクラス作成
         pageFlip = new PageFlip(beforePageNum, afterPageNum)
         # 新規コンテナ初期化
         RunCommon.initMainContainer()
@@ -123,7 +134,7 @@ class EventAction
       page = @pageList[i]
       page.resetAllChapters()
     @pageIndex = 0
-    Navbar.setPageNum(@pageIndex + 1)
+    Navbar.setPageNum(@thisPageNum())
     @finishedAllPages = false
     @start()
 

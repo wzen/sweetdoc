@@ -36,8 +36,14 @@ ClickChapter = (function(superClass) {
       return;
     }
     return this.eventObjList.forEach(function(event) {
-      if (event.clickEvent != null) {
+      if (event.id === $(e.currentTarget).attr('id')) {
         return event.clickEvent(e, function() {
+          var stack;
+          stack = window.forkNumStacks[window.eventAction.thisPageNum()];
+          if (stack[stack.length - 1] !== event.getForkNum()) {
+            stack.push(event.getForkNum());
+            Navbar.setForkNum(event.getForkNum());
+          }
           if (window.eventAction != null) {
             return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
           }

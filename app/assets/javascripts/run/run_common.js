@@ -45,14 +45,19 @@ RunCommon = (function() {
   };
 
   RunCommon.initEventAction = function() {
-    var eventPageValueList, i, j, page, pageCount, pageList, ref;
+    var forkEventPageValueList, i, j, l, m, page, pageCount, pageList, ref, ref1;
     pageCount = PageValue.getPageCount();
     pageList = new Array(pageCount);
-    for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-      eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, i);
+    for (i = l = 1, ref = pageCount; 1 <= ref ? l <= ref : l >= ref; i = 1 <= ref ? ++l : --l) {
+      forkEventPageValueList = {};
+      for (j = m = 0, ref1 = PageValue.getForkCount(); 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
+        forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i);
+      }
       page = null;
-      if ((eventPageValueList != null) && eventPageValueList.length > 0) {
-        page = new Page(eventPageValueList);
+      if (Object.keys(forkEventPageValueList).length > 0) {
+        page = new Page({
+          forks: forkEventPageValueList
+        });
       }
       pageList[i - 1] = page;
     }
@@ -120,7 +125,7 @@ RunCommon = (function() {
   };
 
   RunCommon.loadPagingPageValue = function(loadPageNum, callback, forceUpdate) {
-    var className, i, j, lastPageNum, ref, ref1, section, targetPages;
+    var className, i, l, lastPageNum, ref, ref1, section, targetPages;
     if (callback == null) {
       callback = null;
     }
@@ -129,7 +134,7 @@ RunCommon = (function() {
     }
     lastPageNum = loadPageNum + Constant.Paging.PRELOAD_PAGEVALUE_NUM;
     targetPages = [];
-    for (i = j = ref = loadPageNum, ref1 = lastPageNum; ref <= ref1 ? j <= ref1 : j >= ref1; i = ref <= ref1 ? ++j : --j) {
+    for (i = l = ref = loadPageNum, ref1 = lastPageNum; ref <= ref1 ? l <= ref1 : l >= ref1; i = ref <= ref1 ? ++l : --l) {
       if (forceUpdate) {
         targetPages.push(i);
       } else {

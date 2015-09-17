@@ -2,54 +2,96 @@
 var Page;
 
 Page = (function() {
-  function Page(eventPageValueList) {
-    var eventList;
-    this.chapterList = [];
-    if (eventPageValueList != null) {
-      eventList = [];
-      $.each(eventPageValueList, (function(_this) {
-        return function(idx, obj) {
-          var beforeEvent, chapter, parallel;
-          eventList.push(obj);
-          parallel = false;
-          if (idx < eventPageValueList.length - 1) {
-            beforeEvent = eventPageValueList[idx + 1];
-            if (beforeEvent[EventPageValueBase.PageValueKey.IS_SYNC]) {
-              parallel = true;
+  function Page(eventPageValueArray) {
+    var _setupChapterList, forkEventPageValueList, k, ref;
+    _setupChapterList = function(eventPageValueList, chapterList) {
+      var eventList;
+      if (eventPageValueList != null) {
+        eventList = [];
+        return $.each(eventPageValueList, (function(_this) {
+          return function(idx, obj) {
+            var beforeEvent, chapter, sync;
+            eventList.push(obj);
+            sync = false;
+            if (idx < eventPageValueList.length - 1) {
+              beforeEvent = eventPageValueList[idx + 1];
+              if (beforeEvent[EventPageValueBase.PageValueKey.IS_SYNC]) {
+                sync = true;
+              }
             }
-          }
-          if (!parallel) {
-            chapter = null;
-            if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
-              chapter = new ClickChapter({
-                eventList: eventList,
-                num: idx
-              });
-            } else {
-              chapter = new ScrollChapter({
-                eventList: eventList,
-                num: idx
-              });
+            if (!sync) {
+              chapter = null;
+              if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
+                chapter = new ClickChapter({
+                  eventList: eventList,
+                  num: idx
+                });
+              } else {
+                chapter = new ScrollChapter({
+                  eventList: eventList,
+                  num: idx
+                });
+              }
+              chapterList.push(chapter);
+              eventList = [];
             }
-            _this.chapterList.push(chapter);
-            eventList = [];
-          }
-          return true;
-        };
-      })(this));
+            return true;
+          };
+        })(this));
+      }
+    };
+    this.forkChapterList = {};
+    this.forkChapterIndex = {};
+    ref = eventPageValueArray.forks;
+    for (k in ref) {
+      forkEventPageValueList = ref[k];
+      this.forkChapterList[k] = [];
+      this.forkChapterIndex[k] = 0;
+      _setupChapterList.call(this, forkEventPageValueList, this.forkChapterList[k]);
     }
-    this.chapterIndex = 0;
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
   }
 
+  Page.prototype.getChapterList = function() {
+    var lastForkNum, stack;
+    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
+    lastForkNum = stack[stack.length - 1];
+    return this.forkChapterList[lastForkNum];
+  };
+
+  Page.prototype.getChapterIndex = function() {
+    var lastForkNum, stack;
+    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
+    lastForkNum = stack[stack.length - 1];
+    return this.forkChapterIndex[lastForkNum];
+  };
+
+  Page.prototype.setChapterIndex = function(num) {
+    var lastForkNum, stack;
+    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
+    lastForkNum = stack[stack.length - 1];
+    return this.forkChapterIndex[lastForkNum] = num;
+  };
+
+  Page.prototype.addChapterIndex = function(addNum) {
+    var lastForkNum, stack;
+    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
+    lastForkNum = stack[stack.length - 1];
+    return this.forkChapterIndex[lastForkNum] = this.forkChapterIndex[lastForkNum] + addNum;
+  };
+
   Page.prototype.thisChapter = function() {
-    return this.chapterList[this.chapterIndex];
+    return this.getChapterList()[this.getChapterIndex()];
+  };
+
+  Page.prototype.thisChapterNum = function() {
+    return this.getChapterIndex() + 1;
   };
 
   Page.prototype.start = function() {
     this.pagingGuide = new ArrowPagingGuide();
-    Navbar.setChapterNum(this.chapterIndex + 1);
+    Navbar.setChapterNum(this.thisChapterNum());
     this.floatPageScrollHandleCanvas();
     return this.thisChapter().willChapter();
   };
@@ -63,26 +105,35 @@ Page = (function() {
   Page.prototype.nextChapter = function() {
     this.hideAllGuide();
     this.thisChapter().didChapter();
-    if (this.chapterList.length <= this.chapterIndex + 1) {
+    if (this.getChapterList().length <= this.getChapterIndex() + 1) {
       return this.finishAllChapters();
     } else {
-      this.chapterIndex += 1;
-      Navbar.setChapterNum(this.chapterIndex + 1);
+      this.addChapterIndex(1);
+      Navbar.setChapterNum(this.thisChapterNum());
       return this.thisChapter().willChapter();
     }
   };
 
   Page.prototype.rewindChapter = function() {
+    var stack;
     this.hideAllGuide();
-    this.resetChapter(this.chapterIndex);
+    this.resetChapter(this.getChapterIndex());
     if (!this.thisChapter().doMoveChapter) {
-      if (this.chapterIndex > 0) {
-        this.chapterIndex -= 1;
-        this.resetChapter(this.chapterIndex);
-        Navbar.setChapterNum(this.chapterIndex + 1);
+      if (this.getChapterIndex() > 0) {
+        this.addChapterIndex(-1);
+        this.resetChapter(this.getChapterIndex());
+        Navbar.setChapterNum(this.thisChapterNum());
       } else {
-        window.eventAction.rewindPage();
-        return;
+        stack = window.forkNumStacks[window.eventAction.thisPageNum()];
+        if (stack.length > 0) {
+          if (stack[stack.length - 1] !== PageValue.Key.EF_MASTER_FORKNUM) {
+            stack.pop();
+            this.resetChapter(this.getChapterIndex());
+            Navbar.setChapterNum(this.thisChapterNum());
+          } else {
+            window.eventAction.rewindPage();
+          }
+        }
       }
     }
     return this.thisChapter().willChapter();
@@ -90,21 +141,21 @@ Page = (function() {
 
   Page.prototype.resetChapter = function(chapterIndex) {
     if (chapterIndex == null) {
-      chapterIndex = this.chapterIndex;
+      chapterIndex = this.getChapterIndex();
     }
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
-    return this.chapterList[chapterIndex].resetAllEvents();
+    return this.getChapterList()[chapterIndex].resetAllEvents();
   };
 
   Page.prototype.rewindAllChapters = function() {
     var chapter, i, j, ref;
-    for (i = j = ref = this.chapterList.length - 1; j >= 0; i = j += -1) {
-      chapter = this.chapterList[i];
+    for (i = j = ref = this.getChapterList().length - 1; j >= 0; i = j += -1) {
+      chapter = this.getChapterList()[i];
       chapter.resetAllEvents();
     }
-    this.chapterIndex = 0;
-    Navbar.setChapterNum(this.chapterIndex + 1);
+    this.setChapterIndex(0);
+    Navbar.setChapterNum(this.thisChapterNum());
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
     return this.start();
@@ -131,7 +182,7 @@ Page = (function() {
   Page.prototype.floatPageScrollHandleCanvas = function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.chapterList.forEach(function(chapter) {
+    return this.getChapterList().forEach(function(chapter) {
       return chapter.floatScrollHandleCanvas();
     });
   };
@@ -140,7 +191,7 @@ Page = (function() {
     this.initChapterEvent();
     this.initFocus();
     this.resetAllChapters();
-    Navbar.setChapterMax(this.chapterList.length);
+    Navbar.setChapterMax(this.getChapterList().length);
     return LocalStorage.saveAllPageValues();
   };
 
@@ -148,9 +199,9 @@ Page = (function() {
     this.initChapterEvent();
     this.initFocus(false);
     this.forwardAllChapters();
-    this.chapterList[this.chapterList.length - 1].resetAllEvents();
-    Navbar.setChapterMax(this.chapterList.length);
-    this.chapterIndex = this.chapterList.length - 1;
+    this.getChapterList()[this.getChapterList().length - 1].resetAllEvents();
+    Navbar.setChapterMax(this.getChapterList().length);
+    this.setChapterIndex(this.getChapterList().length - 1);
     this.resetChapter();
     return LocalStorage.saveAllPageValues();
   };
@@ -159,14 +210,14 @@ Page = (function() {
 
   Page.prototype.initChapterEvent = function() {
     var chapter, event, i, j, len, ref, results;
-    ref = this.chapterList;
+    ref = this.getChapterList();
     results = [];
     for (j = 0, len = ref.length; j < len; j++) {
       chapter = ref[j];
       results.push((function() {
-        var k, ref1, results1;
+        var l, ref1, results1;
         results1 = [];
-        for (i = k = 0, ref1 = chapter.eventObjList.length - 1; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
+        for (i = l = 0, ref1 = chapter.eventObjList.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; i = 0 <= ref1 ? ++l : --l) {
           event = chapter.eventObjList[i];
           results1.push(event.initEvent(chapter.eventList[i]));
         }
@@ -177,21 +228,21 @@ Page = (function() {
   };
 
   Page.prototype.initFocus = function(focusToFirst) {
-    var chapter, event, flg, i, j, k, l, len, len1, len2, m, ref, ref1, ref2, ref3;
+    var chapter, event, flg, i, j, l, len, len1, len2, m, n, ref, ref1, ref2, ref3;
     if (focusToFirst == null) {
       focusToFirst = true;
     }
     flg = false;
     if (focusToFirst) {
-      ref = this.chapterList;
+      ref = this.getChapterList();
       for (j = 0, len = ref.length; j < len; j++) {
         chapter = ref[j];
         if (flg) {
           return false;
         }
         ref1 = chapter.eventList;
-        for (k = 0, len1 = ref1.length; k < len1; k++) {
-          event = ref1[k];
+        for (l = 0, len1 = ref1.length; l < len1; l++) {
+          event = ref1[l];
           if (flg) {
             return false;
           }
@@ -202,14 +253,14 @@ Page = (function() {
         }
       }
     } else {
-      for (i = l = ref2 = this.chapterList.length - 1; l >= 0; i = l += -1) {
-        chapter = this.chapterList[i];
+      for (i = m = ref2 = this.getChapterList().length - 1; m >= 0; i = m += -1) {
+        chapter = this.getChapterList()[i];
         if (flg) {
           return false;
         }
         ref3 = chapter.eventList;
-        for (m = 0, len2 = ref3.length; m < len2; m++) {
-          event = ref3[m];
+        for (n = 0, len2 = ref3.length; n < len2; n++) {
+          event = ref3[n];
           if (flg) {
             return false;
           }
@@ -223,19 +274,19 @@ Page = (function() {
   };
 
   Page.prototype.resetAllChapters = function() {
-    return this.chapterList.forEach(function(chapter) {
+    return this.getChapterList().forEach(function(chapter) {
       return chapter.resetAllEvents();
     });
   };
 
   Page.prototype.forwardAllChapters = function() {
-    return this.chapterList.forEach(function(chapter) {
+    return this.getChapterList().forEach(function(chapter) {
       return chapter.forwardAllEvents();
     });
   };
 
   Page.prototype.hideAllGuide = function() {
-    return this.chapterList.forEach(function(chapter) {
+    return this.getChapterList().forEach(function(chapter) {
       return chapter.hideGuide();
     });
   };

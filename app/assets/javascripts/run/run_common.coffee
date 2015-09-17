@@ -48,10 +48,14 @@ class RunCommon
     pageCount = PageValue.getPageCount()
     pageList = new Array(pageCount)
     for i in [1..pageCount]
-      eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, i)
+      forkEventPageValueList = {}
+      for j in [0..PageValue.getForkCount()]
+        forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i)
       page = null
-      if eventPageValueList? && eventPageValueList.length > 0
-        page = new Page(eventPageValueList)
+      if Object.keys(forkEventPageValueList).length > 0
+        page = new Page({
+          forks: forkEventPageValueList
+        })
       pageList[i - 1] = page
 
     # ナビバーのページ数 & チャプター数設定

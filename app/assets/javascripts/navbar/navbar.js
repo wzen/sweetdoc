@@ -123,6 +123,19 @@ Navbar = (function() {
     }
   };
 
+  Navbar.setForkNum = function(num) {
+    var e, navEmt;
+    navEmt = $('#nav');
+    e = $('.nav_fork_num', navEmt);
+    if (e != null) {
+      e.html(num);
+      return e.closest('li').css('display', num > 0 ? 'block' : 'none');
+    } else {
+      e.html('');
+      return e.closest('li').css('display', 'none');
+    }
+  };
+
   return Navbar;
 
 })();

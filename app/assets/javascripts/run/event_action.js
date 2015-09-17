@@ -12,11 +12,16 @@ EventAction = (function() {
     return this.pageList[this.pageIndex];
   };
 
+  EventAction.prototype.thisPageNum = function() {
+    return this.pageIndex + 1;
+  };
+
   EventAction.prototype.start = function() {
-    var pageNum;
-    pageNum = this.pageIndex + 1;
-    Navbar.setPageNum(pageNum);
-    RunCommon.createCssElement(pageNum);
+    window.forkNumStacks = {};
+    Navbar.setPageNum(this.thisPageNum());
+    RunCommon.createCssElement(this.thisPageNum());
+    window.forkNumStacks[window.eventAction.thisPageNum()] = [PageValue.Key.EF_MASTER_FORKNUM];
+    Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
     this.thisPage().willPage();
     return this.thisPage().start();
   };
@@ -31,7 +36,7 @@ EventAction = (function() {
   };
 
   EventAction.prototype.nextPage = function(callback) {
-    var beforePageIndex, pageNum;
+    var beforePageIndex;
     if (callback == null) {
       callback = null;
     }
@@ -41,24 +46,22 @@ EventAction = (function() {
       return this.finishAllPages();
     } else {
       this.pageIndex += 1;
-      pageNum = this.pageIndex + 1;
-      Navbar.setPageNum(pageNum);
-      PageValue.setPageNum(pageNum);
+      Navbar.setPageNum(this.thisPageNum());
+      PageValue.setPageNum(this.thisPageNum());
       return this.changePaging(beforePageIndex, this.pageIndex, callback);
     }
   };
 
   EventAction.prototype.rewindPage = function(callback) {
-    var beforePageIndex, pageNum;
+    var beforePageIndex;
     if (callback == null) {
       callback = null;
     }
     beforePageIndex = this.pageIndex;
     if (this.pageIndex > 0) {
       this.pageIndex -= 1;
-      pageNum = this.pageIndex + 1;
-      Navbar.setPageNum(pageNum);
-      PageValue.setPageNum(pageNum);
+      Navbar.setPageNum(this.thisPageNum());
+      PageValue.setPageNum(this.thisPageNum());
       return this.changePaging(beforePageIndex, this.pageIndex, callback);
     } else {
       this.thisPage().willPage();
@@ -80,10 +83,15 @@ EventAction = (function() {
     return RunCommon.loadPagingPageValue(afterPageNum, (function(_this) {
       return function() {
         return Common.loadJsFromInstancePageValue(function() {
-          var eventPageValueList, pageFlip;
+          var forkEventPageValueList, i, j, pageFlip, ref;
           if (_this.thisPage() === null) {
-            eventPageValueList = PageValue.getEventPageValueSortedListByNum(null, afterPageNum);
-            _this.pageList[afterPageIndex] = new Page(eventPageValueList);
+            forkEventPageValueList = {};
+            for (i = j = 0, ref = PageValue.getForkCount(); 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+              forkEventPageValueList[i] = PageValue.getEventPageValueSortedListByNum(i, afterPageNum);
+            }
+            _this.pageList[afterPageIndex] = new Page({
+              forks: forkEventPageValueList
+            });
             if (window.debug) {
               console.log('[nextPage] created page instance');
             }
@@ -122,7 +130,7 @@ EventAction = (function() {
       page.resetAllChapters();
     }
     this.pageIndex = 0;
-    Navbar.setPageNum(this.pageIndex + 1);
+    Navbar.setPageNum(this.thisPageNum());
     this.finishedAllPages = false;
     return this.start();
   };

@@ -472,7 +472,7 @@ PageValue = (function() {
   };
 
   PageValue.adjustInstanceAndEventOnPage = function() {
-    var adjust, ePageValueRoot, ePageValues, i, iPageValues, instanceObjIds, j, k, kNum, kk, max, min, ref, ref1, results, teCount, v;
+    var adjust, ePageValueRoot, ePageValues, i, iPageValues, instanceObjIds, j, k, kNum, kk, max, min, obj, ref, ref1, results, teCount, v;
     iPageValues = this.getInstancePageValue(PageValue.Key.instancePagePrefix());
     instanceObjIds = [];
     for (k in iPageValues) {
@@ -506,9 +506,10 @@ PageValue = (function() {
         teCount = 0;
         if (min <= max) {
           for (i = j = ref = min, ref1 = max; ref <= ref1 ? j <= ref1 : j >= ref1; i = ref <= ref1 ? ++j : --j) {
-            if ((ePageValues[this.Key.E_NUM_PREFIX + i] != null) && $.inArray(ePageValues[this.Key.E_NUM_PREFIX + i][EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0) {
+            obj = ePageValues[this.Key.E_NUM_PREFIX + i];
+            if ((obj != null) && $.inArray(obj[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0) {
               teCount += 1;
-              adjust[this.Key.E_NUM_PREFIX + teCount] = ePageValues[this.Key.E_NUM_PREFIX + i];
+              adjust[this.Key.E_NUM_PREFIX + teCount] = obj;
             }
           }
         }

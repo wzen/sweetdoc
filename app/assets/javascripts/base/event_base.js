@@ -38,6 +38,20 @@ EventBase = (function(superClass) {
     }
   };
 
+  EventBase.prototype.getForkNum = function() {
+    var num;
+    if (this.event != null) {
+      num = this.event[EventPageValueBase.PageValueKey.FORKNUM];
+      if (num != null) {
+        return parseInt(num);
+      } else {
+        return PageValue.Key.EF_MASTER_FORKNUM;
+      }
+    } else {
+      return PageValue.Key.EF_MASTER_FORKNUM;
+    }
+  };
+
   EventBase.prototype.resetEvent = function() {
     this.updateEventBefore();
     return this.isFinishedEvent = false;
