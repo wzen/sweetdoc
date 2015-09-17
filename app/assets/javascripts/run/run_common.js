@@ -182,6 +182,57 @@ RunCommon = (function() {
     });
   };
 
+  RunCommon.initForkStackArray = function(array, pn) {
+    if (window.forkNumStacks == null) {
+      window.forkNumStacks = {};
+    }
+    window.forkNumStacks[pn] = array;
+    PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
+    return true;
+  };
+
+  RunCommon.addForkNumToStack = function(num, pn) {
+    var stack;
+    if (window.forkNumStacks == null) {
+      window.forkNumStacks = {};
+    }
+    stack = window.forkNumStacks[pn];
+    if ((stack != null) && stack[stack.length - 1] !== num) {
+      stack.push(num);
+      PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  RunCommon.getLastForkNumFromStack = function(pn) {
+    var stack;
+    if (window.forkNumStacks == null) {
+      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK);
+      if (window.forkNumStacks == null) {
+        return null;
+      }
+    }
+    stack = window.forkNumStacks[pn];
+    if ((stack != null) && stack.length > 0) {
+      return stack[stack.length - 1];
+    } else {
+      return null;
+    }
+  };
+
+  RunCommon.popLastForkNumInStack = function(pn) {
+    if (window.forkNumStacks == null) {
+      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK);
+      if (window.forkNumStacks == null) {
+        return false;
+      }
+    }
+    window.forkNumStacks[pn].pop();
+    return true;
+  };
+
   RunCommon.initMainContainer = function() {
     CommonVar.runCommonVar();
     this.initView();

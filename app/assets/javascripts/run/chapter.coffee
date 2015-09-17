@@ -8,7 +8,6 @@ class Chapter
   constructor: (list) ->
     @eventList = list.eventList
     @num = list.num
-
     @eventObjList = []
     for obj in @eventList
       isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
@@ -21,6 +20,7 @@ class Chapter
 
   # チャプター実行前処理
   willChapter: ->
+
     # イベントのwillChapter呼び出し & CSS追加
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])

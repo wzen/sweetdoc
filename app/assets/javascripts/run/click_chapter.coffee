@@ -1,6 +1,12 @@
 # クリックチャプター
 class ClickChapter extends Chapter
 
+  # コンストラクタ
+  # @param [Array] list イベント情報
+  constructor: (list) ->
+    super(list)
+    @nextForkNum = null
+
   # チャプターの前処理
   willChapter: ->
     super()
@@ -25,6 +31,8 @@ class ClickChapter extends Chapter
   # クリックイベント
   # @param [Object] e クリックオブジェクト
   clickEvent: (e) ->
+    self = @
+
     @hideGuide()
     if window.disabledEventHandler
       return
@@ -32,12 +40,10 @@ class ClickChapter extends Chapter
     @eventObjList.forEach((event) ->
       if event.id == $(e.currentTarget).attr('id')
         event.clickEvent(e, ->
-          stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-          if stack[stack.length - 1] != event.getForkNum()
-            # フォーク番号変更
-            stack.push(event.getForkNum())
-            Navbar.setForkNum(event.getForkNum())
+          # クリックしたイベントのフォーク番号を保存
+          self.nextForkNum = event.getForkNum()
           if window.eventAction?
+            # 全てのイベントが終了している場合は次のチャプターへ
             window.eventAction.thisPage().nextChapterIfFinishedAllEvent()
         )
     )

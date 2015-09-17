@@ -17,10 +17,9 @@ EventAction = (function() {
   };
 
   EventAction.prototype.start = function() {
-    window.forkNumStacks = {};
     Navbar.setPageNum(this.thisPageNum());
     RunCommon.createCssElement(this.thisPageNum());
-    window.forkNumStacks[window.eventAction.thisPageNum()] = [PageValue.Key.EF_MASTER_FORKNUM];
+    RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], window.eventAction.thisPageNum());
     Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
     this.thisPage().willPage();
     return this.thisPage().start();
@@ -104,7 +103,7 @@ EventAction = (function() {
           if (beforePageNum > afterPageNum) {
             _this.thisPage().willPageFromRewind();
           } else {
-            window.forkNumStacks[afterPageNum] = [PageValue.Key.EF_MASTER_FORKNUM];
+            RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], afterPageNum);
             Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
             _this.thisPage().willPage();
           }

@@ -80,6 +80,8 @@ class PageValue
       @EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM
       # @property [String] UPDATED 更新フラグ
       @UPDATED = 'updated'
+      # @property [String] FORK_STACK フォーク番号スタック
+      @FORK_STACK = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID

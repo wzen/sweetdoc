@@ -41,9 +41,8 @@ class Page
   # チャプターリスト取得
   # @return [Array] チャプターリスト
   getChapterList: ->
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    if stack? && stack.length > 0
-      lastForkNum = stack[stack.length - 1]
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+    if lastForkNum?
       return @forkChapterList[lastForkNum]
     else
       return []
@@ -51,9 +50,8 @@ class Page
   # チャプターインデックス取得
   # @return [Integer] チャプターインデックス
   getChapterIndex: ->
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    if stack? && stack.length > 0
-      lastForkNum = stack[stack.length - 1]
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+    if lastForkNum?
       return @forkChapterIndex[lastForkNum]
     else
       return 0
@@ -61,17 +59,15 @@ class Page
   # チャプターインデックス設定
   # @param [Integer] num 設定値
   setChapterIndex: (num) ->
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    if stack? && stack.length > 0
-      lastForkNum = stack[stack.length - 1]
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+    if lastForkNum?
       @forkChapterIndex[lastForkNum] = num
 
   # チャプターインデックス追加
   # @param [Integer] addNum 追加値
   addChapterIndex: (addNum) ->
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-    if stack? && stack.length > 0
-      lastForkNum = stack[stack.length - 1]
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+    if lastForkNum?
       @forkChapterIndex[lastForkNum] = @forkChapterIndex[lastForkNum] + addNum
 
   # 現在のチャプターインスタンスを取得
@@ -97,7 +93,12 @@ class Page
   # 全てのイベントが終了している場合、チャプターを進める
   nextChapterIfFinishedAllEvent: ->
     if @thisChapter().finishedAllEvent()
-      @nextChapter()
+      if @thisChapter().nextForkNum? && @thisChapter().nextForkNum != RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+        # フォーク変更
+        @switchFork()
+      else
+        # 次のチャプターへ
+        @nextChapter()
 
   # チャプターを進める
   nextChapter: ->
@@ -116,6 +117,24 @@ class Page
       # チャプター前処理
       @thisChapter().willChapter()
 
+  # フォークを変更する
+  switchFork: ->
+    # 全ガイド非表示
+    @hideAllGuide()
+    # チャプター後処理
+    @thisChapter().didChapter()
+    # フォーク番号変更
+    if @thisChapter().nextForkNum?
+      nfn = @thisChapter().nextForkNum
+      if RunCommon.addForkNumToStack(nfn, window.eventAction.thisPageNum())
+        Navbar.setForkNum(nfn)
+    # チャプター数設定
+    Navbar.setChapterNum(@thisChapterNum())
+    # チャプター最大値設定
+    Navbar.setChapterMax(@getChapterList().length)
+    # チャプター前処理
+    @thisChapter().willChapter()
+
   # チャプターを戻す
   rewindChapter: ->
     # 全ガイド非表示
@@ -128,16 +147,17 @@ class Page
         @resetChapter(@getChapterIndex())
         Navbar.setChapterNum(@thisChapterNum())
       else
-        stack = window.forkNumStacks[window.eventAction.thisPageNum()]
-        if stack.length > 0
-          if stack[stack.length - 1] != PageValue.Key.EF_MASTER_FORKNUM
+        lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+        if lastForkNum?
+          if lastForkNum != PageValue.Key.EF_MASTER_FORKNUM
             # フォーク戻し & チャプター開始
-            stack.pop()
+            RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum())
             @resetChapter(@getChapterIndex())
             Navbar.setChapterNum(@thisChapterNum())
           else
             # ページ戻し
             window.eventAction.rewindPage()
+            return
 
     # チャプター前処理
     @thisChapter().willChapter()

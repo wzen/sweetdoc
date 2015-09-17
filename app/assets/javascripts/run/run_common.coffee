@@ -169,6 +169,56 @@ class RunCommon
       }
     )
 
+  # フォーク番号スタック初期化
+  # @return [Boolean] 処理正常終了か
+  @initForkStackArray = (array, pn) ->
+    if !window.forkNumStacks?
+      window.forkNumStacks = {}
+    window.forkNumStacks[pn] = array
+    # PageValueに書き込み
+    PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
+    return true
+
+  # フォーク番号をスタックに追加
+  # @return [Boolean] 処理正常終了か
+  @addForkNumToStack = (num, pn) ->
+    if !window.forkNumStacks?
+      window.forkNumStacks = {}
+    stack = window.forkNumStacks[pn]
+    if stack? && stack[stack.length - 1] != num
+      # フォーク番号追加
+      stack.push(num)
+      # PageValueに書き込み
+      PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
+      return true
+    else
+      return false
+
+  # スタックから最新フォーク番号を取得
+  # @return [Integer] 取得値
+  @getLastForkNumFromStack = (pn) ->
+    if !window.forkNumStacks?
+      # PageValueから読み込み
+      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK)
+      if !window.forkNumStacks?
+        return null
+    stack = window.forkNumStacks[pn]
+    if stack? && stack.length > 0
+      return stack[stack.length - 1]
+    else
+      return null
+
+  # スタックから最新フォーク番号を削除
+  # @return [Boolean] 処理正常終了か
+  @popLastForkNumInStack = (pn) ->
+    if !window.forkNumStacks?
+      # PageValueから読み込み
+      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK)
+      if !window.forkNumStacks?
+        return false
+    window.forkNumStacks[pn].pop()
+    return true
+
   # Mainコンテナ初期化
   @initMainContainer = ->
     CommonVar.runCommonVar()

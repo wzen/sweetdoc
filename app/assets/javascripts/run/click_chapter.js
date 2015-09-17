@@ -6,8 +6,9 @@ var ClickChapter,
 ClickChapter = (function(superClass) {
   extend(ClickChapter, superClass);
 
-  function ClickChapter() {
-    return ClickChapter.__super__.constructor.apply(this, arguments);
+  function ClickChapter(list) {
+    ClickChapter.__super__.constructor.call(this, list);
+    this.nextForkNum = null;
   }
 
   ClickChapter.prototype.willChapter = function() {
@@ -31,6 +32,8 @@ ClickChapter = (function(superClass) {
   };
 
   ClickChapter.prototype.clickEvent = function(e) {
+    var self;
+    self = this;
     this.hideGuide();
     if (window.disabledEventHandler) {
       return;
@@ -38,12 +41,7 @@ ClickChapter = (function(superClass) {
     return this.eventObjList.forEach(function(event) {
       if (event.id === $(e.currentTarget).attr('id')) {
         return event.clickEvent(e, function() {
-          var stack;
-          stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-          if (stack[stack.length - 1] !== event.getForkNum()) {
-            stack.push(event.getForkNum());
-            Navbar.setForkNum(event.getForkNum());
-          }
+          self.nextForkNum = event.getForkNum();
           if (window.eventAction != null) {
             return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
           }

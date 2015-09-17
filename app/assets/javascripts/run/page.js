@@ -54,10 +54,9 @@ Page = (function() {
   }
 
   Page.prototype.getChapterList = function() {
-    var lastForkNum, stack;
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    if ((stack != null) && stack.length > 0) {
-      lastForkNum = stack[stack.length - 1];
+    var lastForkNum;
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
+    if (lastForkNum != null) {
       return this.forkChapterList[lastForkNum];
     } else {
       return [];
@@ -65,10 +64,9 @@ Page = (function() {
   };
 
   Page.prototype.getChapterIndex = function() {
-    var lastForkNum, stack;
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    if ((stack != null) && stack.length > 0) {
-      lastForkNum = stack[stack.length - 1];
+    var lastForkNum;
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
+    if (lastForkNum != null) {
       return this.forkChapterIndex[lastForkNum];
     } else {
       return 0;
@@ -76,19 +74,17 @@ Page = (function() {
   };
 
   Page.prototype.setChapterIndex = function(num) {
-    var lastForkNum, stack;
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    if ((stack != null) && stack.length > 0) {
-      lastForkNum = stack[stack.length - 1];
+    var lastForkNum;
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
+    if (lastForkNum != null) {
       return this.forkChapterIndex[lastForkNum] = num;
     }
   };
 
   Page.prototype.addChapterIndex = function(addNum) {
-    var lastForkNum, stack;
-    stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-    if ((stack != null) && stack.length > 0) {
-      lastForkNum = stack[stack.length - 1];
+    var lastForkNum;
+    lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
+    if (lastForkNum != null) {
       return this.forkChapterIndex[lastForkNum] = this.forkChapterIndex[lastForkNum] + addNum;
     }
   };
@@ -110,7 +106,11 @@ Page = (function() {
 
   Page.prototype.nextChapterIfFinishedAllEvent = function() {
     if (this.thisChapter().finishedAllEvent()) {
-      return this.nextChapter();
+      if ((this.thisChapter().nextForkNum != null) && this.thisChapter().nextForkNum !== RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())) {
+        return this.switchFork();
+      } else {
+        return this.nextChapter();
+      }
     }
   };
 
@@ -126,8 +126,23 @@ Page = (function() {
     }
   };
 
+  Page.prototype.switchFork = function() {
+    var nfn;
+    this.hideAllGuide();
+    this.thisChapter().didChapter();
+    if (this.thisChapter().nextForkNum != null) {
+      nfn = this.thisChapter().nextForkNum;
+      if (RunCommon.addForkNumToStack(nfn, window.eventAction.thisPageNum())) {
+        Navbar.setForkNum(nfn);
+      }
+    }
+    Navbar.setChapterNum(this.thisChapterNum());
+    Navbar.setChapterMax(this.getChapterList().length);
+    return this.thisChapter().willChapter();
+  };
+
   Page.prototype.rewindChapter = function() {
-    var stack;
+    var lastForkNum;
     this.hideAllGuide();
     this.resetChapter(this.getChapterIndex());
     if (!this.thisChapter().doMoveChapter) {
@@ -136,14 +151,15 @@ Page = (function() {
         this.resetChapter(this.getChapterIndex());
         Navbar.setChapterNum(this.thisChapterNum());
       } else {
-        stack = window.forkNumStacks[window.eventAction.thisPageNum()];
-        if (stack.length > 0) {
-          if (stack[stack.length - 1] !== PageValue.Key.EF_MASTER_FORKNUM) {
-            stack.pop();
+        lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
+        if (lastForkNum != null) {
+          if (lastForkNum !== PageValue.Key.EF_MASTER_FORKNUM) {
+            RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum());
             this.resetChapter(this.getChapterIndex());
             Navbar.setChapterNum(this.thisChapterNum());
           } else {
             window.eventAction.rewindPage();
+            return;
           }
         }
       }

@@ -129,6 +129,8 @@ PageValue = (function() {
 
       Key.UPDATED = 'updated';
 
+      Key.FORK_STACK = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "fork_stack";
+
       return Key;
 
     })();

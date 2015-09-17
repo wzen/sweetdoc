@@ -19,13 +19,12 @@ class EventAction
 
   # 開始イベント
   start: ->
-    window.forkNumStacks = {}
     # ページ数設定
     Navbar.setPageNum(@thisPageNum())
     # CSS作成
     RunCommon.createCssElement(@thisPageNum())
     # フォークをMasterに設定
-    window.forkNumStacks[window.eventAction.thisPageNum()] =  [PageValue.Key.EF_MASTER_FORKNUM]
+    RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], window.eventAction.thisPageNum())
     Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
 
     @thisPage().willPage()
@@ -112,7 +111,7 @@ class EventAction
           @thisPage().willPageFromRewind()
         else
           # フォークをMasterに設定
-          window.forkNumStacks[afterPageNum] =  [PageValue.Key.EF_MASTER_FORKNUM]
+          RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], afterPageNum)
           Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
           # 後ページ移動 前処理
           @thisPage().willPage()
