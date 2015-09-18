@@ -19,7 +19,7 @@ EventAction = (function() {
   EventAction.prototype.start = function() {
     Navbar.setPageNum(this.thisPageNum());
     RunCommon.createCssElement(this.thisPageNum());
-    RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], window.eventAction.thisPageNum());
+    RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum());
     Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
     this.thisPage().willPage();
     return this.thisPage().start();
@@ -103,7 +103,7 @@ EventAction = (function() {
           if (beforePageNum > afterPageNum) {
             _this.thisPage().willPageFromRewind();
           } else {
-            RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], afterPageNum);
+            RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum);
             Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
             _this.thisPage().willPage();
           }

@@ -171,32 +171,41 @@ class RunCommon
 
   # フォーク番号スタック初期化
   # @return [Boolean] 処理正常終了か
-  @initForkStackArray = (array, pn) ->
+  @initForkStack = (forkNum, pn) ->
     if !window.forkNumStacks?
       window.forkNumStacks = {}
-    window.forkNumStacks[pn] = array
+    window.forkNumStacks[pn] = [{
+      changedChapterIndex: 0
+      forkNum: forkNum
+    }]
     # PageValueに書き込み
     PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
     return true
 
   # フォーク番号をスタックに追加
   # @return [Boolean] 処理正常終了か
-  @addForkNumToStack = (num, pn) ->
+  @addForkNumToStack = (forkNum, cIndex, pn) ->
     if !window.forkNumStacks?
       window.forkNumStacks = {}
-    stack = window.forkNumStacks[pn]
-    if stack? && stack[stack.length - 1] != num
+    lastForkNum = @getLastForkNumFromStack(pn)
+    if lastForkNum? && lastForkNum != forkNum
       # フォーク番号追加
-      stack.push(num)
+      stack = window.forkNumStacks[pn]
+      stack.push(
+        {
+          changedChapterIndex: cIndex
+          forkNum: forkNum
+        }
+      )
       # PageValueに書き込み
       PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
       return true
     else
       return false
 
-  # スタックから最新フォーク番号を取得
+  # スタックから最新フォークオブジェクトを取得
   # @return [Integer] 取得値
-  @getLastForkNumFromStack = (pn) ->
+  @getLastObjestFromStack = (pn) ->
     if !window.forkNumStacks?
       # PageValueから読み込み
       window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK)
@@ -205,6 +214,29 @@ class RunCommon
     stack = window.forkNumStacks[pn]
     if stack? && stack.length > 0
       return stack[stack.length - 1]
+    else
+      return null
+
+  # スタックから最新フォーク番号を取得
+  # @return [Integer] 取得値
+  @getLastForkNumFromStack = (pn) ->
+    obj = @getLastObjestFromStack(pn)
+    if obj?
+      return obj.forkNum
+    else
+      return null
+
+  # スタックから以前のフォークオブジェクトを取得
+  # @return [Integer] 取得値
+  @getOneBeforeObjestFromStack = (pn) ->
+    if !window.forkNumStacks?
+      # PageValueから読み込み
+      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK)
+      if !window.forkNumStacks?
+        return null
+    stack = window.forkNumStacks[pn]
+    if stack? && stack.length > 1
+      return stack[stack.length - 2]
     else
       return null
 

@@ -126,7 +126,7 @@ class Page
     # フォーク番号変更
     if @thisChapter().nextForkNum?
       nfn = @thisChapter().nextForkNum
-      if RunCommon.addForkNumToStack(nfn, window.eventAction.thisPageNum())
+      if RunCommon.addForkNumToStack(nfn, @getChapterIndex(), window.eventAction.thisPageNum())
         Navbar.setForkNum(nfn)
     # チャプター数設定
     Navbar.setChapterNum(@thisChapterNum())
@@ -147,17 +147,27 @@ class Page
         @resetChapter(@getChapterIndex())
         Navbar.setChapterNum(@thisChapterNum())
       else
-        lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
-        if lastForkNum?
-          if lastForkNum != PageValue.Key.EF_MASTER_FORKNUM
-            # フォーク戻し & チャプター開始
-            RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum())
-            @resetChapter(@getChapterIndex())
-            Navbar.setChapterNum(@thisChapterNum())
-          else
-            # ページ戻し
-            window.eventAction.rewindPage()
-            return
+        oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
+        if oneBeforeForkObj && oneBeforeForkObj.forkNum != PageValue.Key.EF_MASTER_FORKNUM
+          lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum())
+          # 最後のフォークオブジェクトを削除
+          RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum())
+          # フォーク番号変更
+          nfn = oneBeforeForkObj.forkNum
+          if RunCommon.addForkNumToStack(nfn, @getChapterIndex(), window.eventAction.thisPageNum())
+            Navbar.setForkNum(nfn)
+          # チャプター番号をフォーク以前に変更
+          @setChapterIndex(lastForkObj.changedChapterIndex)
+          # チャプターリセット
+          @resetChapter(@getChapterIndex())
+          # チャプター番号設定
+          Navbar.setChapterNum(@thisChapterNum())
+          # チャプター最大値設定
+          Navbar.setChapterMax(@getChapterList().length)
+        else
+          # ページ戻し
+          window.eventAction.rewindPage()
+          return
 
     # チャプター前処理
     @thisChapter().willChapter()

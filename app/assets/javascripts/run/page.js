@@ -132,7 +132,7 @@ Page = (function() {
     this.thisChapter().didChapter();
     if (this.thisChapter().nextForkNum != null) {
       nfn = this.thisChapter().nextForkNum;
-      if (RunCommon.addForkNumToStack(nfn, window.eventAction.thisPageNum())) {
+      if (RunCommon.addForkNumToStack(nfn, this.getChapterIndex(), window.eventAction.thisPageNum())) {
         Navbar.setForkNum(nfn);
       }
     }
@@ -142,7 +142,7 @@ Page = (function() {
   };
 
   Page.prototype.rewindChapter = function() {
-    var lastForkNum;
+    var lastForkObj, nfn, oneBeforeForkObj;
     this.hideAllGuide();
     this.resetChapter(this.getChapterIndex());
     if (!this.thisChapter().doMoveChapter) {
@@ -151,16 +151,21 @@ Page = (function() {
         this.resetChapter(this.getChapterIndex());
         Navbar.setChapterNum(this.thisChapterNum());
       } else {
-        lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum());
-        if (lastForkNum != null) {
-          if (lastForkNum !== PageValue.Key.EF_MASTER_FORKNUM) {
-            RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum());
-            this.resetChapter(this.getChapterIndex());
-            Navbar.setChapterNum(this.thisChapterNum());
-          } else {
-            window.eventAction.rewindPage();
-            return;
+        oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum());
+        if (oneBeforeForkObj && oneBeforeForkObj.forkNum !== PageValue.Key.EF_MASTER_FORKNUM) {
+          lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum());
+          RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum());
+          nfn = oneBeforeForkObj.forkNum;
+          if (RunCommon.addForkNumToStack(nfn, this.getChapterIndex(), window.eventAction.thisPageNum())) {
+            Navbar.setForkNum(nfn);
           }
+          this.setChapterIndex(lastForkObj.changedChapterIndex);
+          this.resetChapter(this.getChapterIndex());
+          Navbar.setChapterNum(this.thisChapterNum());
+          Navbar.setChapterMax(this.getChapterList().length);
+        } else {
+          window.eventAction.rewindPage();
+          return;
         }
       }
     }

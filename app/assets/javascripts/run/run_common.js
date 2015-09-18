@@ -182,23 +182,32 @@ RunCommon = (function() {
     });
   };
 
-  RunCommon.initForkStackArray = function(array, pn) {
+  RunCommon.initForkStack = function(forkNum, pn) {
     if (window.forkNumStacks == null) {
       window.forkNumStacks = {};
     }
-    window.forkNumStacks[pn] = array;
+    window.forkNumStacks[pn] = [
+      {
+        changedChapterIndex: 0,
+        forkNum: forkNum
+      }
+    ];
     PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
     return true;
   };
 
-  RunCommon.addForkNumToStack = function(num, pn) {
-    var stack;
+  RunCommon.addForkNumToStack = function(forkNum, cIndex, pn) {
+    var lastForkNum, stack;
     if (window.forkNumStacks == null) {
       window.forkNumStacks = {};
     }
-    stack = window.forkNumStacks[pn];
-    if ((stack != null) && stack[stack.length - 1] !== num) {
-      stack.push(num);
+    lastForkNum = this.getLastForkNumFromStack(pn);
+    if ((lastForkNum != null) && lastForkNum !== forkNum) {
+      stack = window.forkNumStacks[pn];
+      stack.push({
+        changedChapterIndex: cIndex,
+        forkNum: forkNum
+      });
       PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
       return true;
     } else {
@@ -206,7 +215,7 @@ RunCommon = (function() {
     }
   };
 
-  RunCommon.getLastForkNumFromStack = function(pn) {
+  RunCommon.getLastObjestFromStack = function(pn) {
     var stack;
     if (window.forkNumStacks == null) {
       window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK);
@@ -217,6 +226,32 @@ RunCommon = (function() {
     stack = window.forkNumStacks[pn];
     if ((stack != null) && stack.length > 0) {
       return stack[stack.length - 1];
+    } else {
+      return null;
+    }
+  };
+
+  RunCommon.getLastForkNumFromStack = function(pn) {
+    var obj;
+    obj = this.getLastObjestFromStack(pn);
+    if (obj != null) {
+      return obj.forkNum;
+    } else {
+      return null;
+    }
+  };
+
+  RunCommon.getOneBeforeObjestFromStack = function(pn) {
+    var stack;
+    if (window.forkNumStacks == null) {
+      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK);
+      if (window.forkNumStacks == null) {
+        return null;
+      }
+    }
+    stack = window.forkNumStacks[pn];
+    if ((stack != null) && stack.length > 1) {
+      return stack[stack.length - 2];
     } else {
       return null;
     }

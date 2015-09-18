@@ -24,7 +24,7 @@ class EventAction
     # CSS作成
     RunCommon.createCssElement(@thisPageNum())
     # フォークをMasterに設定
-    RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], window.eventAction.thisPageNum())
+    RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum())
     Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
 
     @thisPage().willPage()
@@ -111,7 +111,7 @@ class EventAction
           @thisPage().willPageFromRewind()
         else
           # フォークをMasterに設定
-          RunCommon.initForkStackArray([PageValue.Key.EF_MASTER_FORKNUM], afterPageNum)
+          RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum)
           Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
           # 後ページ移動 前処理
           @thisPage().willPage()
