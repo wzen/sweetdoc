@@ -123,9 +123,9 @@ EventConfig = (function() {
         tle.initConfigValue(this);
       }
     }
-    if (this.actionType === Constant.ActionEventHandleType.SCROLL) {
+    if (this.actionType === Constant.ActionType.SCROLL) {
       _setScrollDirectionEvent.call(this);
-    } else if (this.actionType === Constant.ActionEventHandleType.CLICK) {
+    } else if (this.actionType === Constant.ActionType.CLICK) {
       _setForkSelect.call(this);
     }
     return _setApplyClickEvent.call(this);
@@ -142,7 +142,7 @@ EventConfig = (function() {
     if (parallel != null) {
       this.isParallel = parallel.is(":checked");
     }
-    if (this.actionType === Constant.ActionEventHandleType.SCROLL) {
+    if (this.actionType === Constant.ActionType.SCROLL) {
       this.scrollPointStart = '';
       this.scrollPointEnd = "";
       handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
@@ -166,7 +166,7 @@ EventConfig = (function() {
           right: rightEmt.find('.scroll_forward:first').is(":checked")
         };
       }
-    } else if (this.actionType === Constant.ActionEventHandleType.CLICK) {
+    } else if (this.actionType === Constant.ActionType.CLICK) {
       handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
       if (handlerDiv != null) {
         this.forkNum = 0;
@@ -378,9 +378,9 @@ EventConfig = (function() {
           methodClone.find('input.value_class_name:first').val(valueClassName);
           actionParent.append(methodClone);
           handlerClone = null;
-          if (a.action_event_type_id === Constant.ActionEventHandleType.SCROLL) {
+          if (a.action_event_type_id === Constant.ActionType.SCROLL) {
             handlerClone = $('#event-config .handler_scroll_temp').children().clone(true);
-          } else if (a.action_event_type_id === Constant.ActionEventHandleType.CLICK) {
+          } else if (a.action_event_type_id === Constant.ActionType.CLICK) {
             handlerClone = $('#event-config .handler_click_temp').children().clone(true);
           }
           handlerParent = $("<div class='" + valueClassName + "' style='display:none'></div>");

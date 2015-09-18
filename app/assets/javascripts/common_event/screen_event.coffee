@@ -33,7 +33,7 @@ class ScreenEvent extends CommonEvent
     @updateEventBefore()
 
     actionType = @getEventActionType()
-    if actionType == Constant.ActionEventHandleType.CLICK
+    if actionType == Constant.ActionType.CLICK
       finished_count = 0
       scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
       scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])

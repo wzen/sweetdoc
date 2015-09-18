@@ -15,10 +15,10 @@ class EventBase extends Extend
       # メソッドが見つからない場合は終了
       return
     # スクロールイベント
-    if @getEventActionType() == Constant.ActionEventHandleType.SCROLL
+    if @getEventActionType() == Constant.ActionType.SCROLL
       @scrollEvent = @scrollRootFunc
     # クリックイベント
-    else if @getEventActionType() == Constant.ActionEventHandleType.CLICK
+    else if @getEventActionType() == Constant.ActionType.CLICK
       @clickEvent = @clickRootFunc
 
   # 設定されているイベントメソッド名を取得
@@ -75,7 +75,7 @@ class EventBase extends Extend
       @doPreviewLoop = true
       loopCount = 0
       @previewTimer = null
-      if actionType == Constant.ActionEventHandleType.SCROLL
+      if actionType == Constant.ActionType.SCROLL
         p = 0
         _draw = =>
           if @doPreviewLoop
@@ -117,7 +117,7 @@ class EventBase extends Extend
 
         _draw.call(@)
 
-      else if actionType == Constant.ActionEventHandleType.CLICK
+      else if actionType == Constant.ActionType.CLICK
         _loop = =>
           if @doPreviewLoop
             loopCount += 1
@@ -173,7 +173,7 @@ class EventBase extends Extend
   # チャプター開始前イベント
   willChapter: ->
     actionType = @getEventActionType()
-    if actionType == Constant.ActionEventHandleType.SCROLL
+    if actionType == Constant.ActionType.SCROLL
       @scrollValue = 0
 
     # 状態をイベント前に戻す

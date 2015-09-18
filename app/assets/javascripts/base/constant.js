@@ -32,14 +32,14 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ActionEventHandleType = (function() {
-      function ActionEventHandleType() {}
+    Constant.ActionType = (function() {
+      function ActionType() {}
 
-      ActionEventHandleType.SCROLL = constant.ActionEventHandleType.SCROLL;
+      ActionType.SCROLL = constant.ActionType.SCROLL;
 
-      ActionEventHandleType.CLICK = constant.ActionEventHandleType.CLICK;
+      ActionType.CLICK = constant.ActionType.CLICK;
 
-      return ActionEventHandleType;
+      return ActionType;
 
     })();
 

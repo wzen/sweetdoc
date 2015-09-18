@@ -19,9 +19,9 @@ EventBase = (function(superClass) {
     if (this.constructor.prototype[this.getEventMethodName()] == null) {
       return;
     }
-    if (this.getEventActionType() === Constant.ActionEventHandleType.SCROLL) {
+    if (this.getEventActionType() === Constant.ActionType.SCROLL) {
       return this.scrollEvent = this.scrollRootFunc;
-    } else if (this.getEventActionType() === Constant.ActionEventHandleType.CLICK) {
+    } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
       return this.clickEvent = this.clickRootFunc;
     }
   };
@@ -78,7 +78,7 @@ EventBase = (function(superClass) {
       this.doPreviewLoop = true;
       loopCount = 0;
       this.previewTimer = null;
-      if (actionType === Constant.ActionEventHandleType.SCROLL) {
+      if (actionType === Constant.ActionType.SCROLL) {
         p = 0;
         _draw = (function(_this) {
           return function() {
@@ -131,7 +131,7 @@ EventBase = (function(superClass) {
           };
         })(this);
         return _draw.call(this);
-      } else if (actionType === Constant.ActionEventHandleType.CLICK) {
+      } else if (actionType === Constant.ActionType.CLICK) {
         _loop = (function(_this) {
           return function() {
             if (_this.doPreviewLoop) {
@@ -204,7 +204,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.willChapter = function() {
     var actionType;
     actionType = this.getEventActionType();
-    if (actionType === Constant.ActionEventHandleType.SCROLL) {
+    if (actionType === Constant.ActionType.SCROLL) {
       this.scrollValue = 0;
     }
     return this.updateEventBefore();

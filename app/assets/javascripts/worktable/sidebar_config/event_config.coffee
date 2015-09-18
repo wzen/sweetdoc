@@ -131,9 +131,9 @@ class EventConfig
       if tle? && tle.initConfigValue?
         tle.initConfigValue(@)
 
-    if @actionType == Constant.ActionEventHandleType.SCROLL
+    if @actionType == Constant.ActionType.SCROLL
       _setScrollDirectionEvent.call(@)
-    else if @actionType == Constant.ActionEventHandleType.CLICK
+    else if @actionType == Constant.ActionType.CLICK
       _setForkSelect.call(@)
     _setApplyClickEvent.call(@)
 
@@ -150,7 +150,7 @@ class EventConfig
     if parallel?
       @isParallel = parallel.is(":checked")
 
-    if @actionType == Constant.ActionEventHandleType.SCROLL
+    if @actionType == Constant.ActionType.SCROLL
       @scrollPointStart = ''
       @scrollPointEnd = ""
       handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
@@ -175,7 +175,7 @@ class EventConfig
           right: rightEmt.find('.scroll_forward:first').is(":checked")
         }
 
-    else if @actionType == Constant.ActionEventHandleType.CLICK
+    else if @actionType == Constant.ActionType.CLICK
       handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
       if handlerDiv?
         @forkNum = 0
@@ -386,9 +386,9 @@ class EventConfig
 
           # イベントタイプConfig追加
           handlerClone = null
-          if a.action_event_type_id == Constant.ActionEventHandleType.SCROLL
+          if a.action_event_type_id == Constant.ActionType.SCROLL
             handlerClone = $('#event-config .handler_scroll_temp').children().clone(true)
-          else if a.action_event_type_id == Constant.ActionEventHandleType.CLICK
+          else if a.action_event_type_id == Constant.ActionType.CLICK
             handlerClone = $('#event-config .handler_click_temp').children().clone(true)
           handlerParent = $("<div class='#{valueClassName}' style='display:none'></div>")
           handlerParent.append(handlerClone)

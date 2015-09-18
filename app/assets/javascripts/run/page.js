@@ -21,7 +21,7 @@ Page = (function() {
             }
             if (!sync) {
               chapter = null;
-              if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionEventHandleType.CLICK) {
+              if (obj[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
                 chapter = new ClickChapter({
                   eventList: eventList,
                   num: idx

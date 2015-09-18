@@ -23,11 +23,11 @@ if gon?
       @OPTION = constant.Mode.OPTION
 
     # アクションイベント種別
-    class @ActionEventHandleType
+    class @ActionType
       # @property [Int] SCROLL スクロール
-      @SCROLL = constant.ActionEventHandleType.SCROLL
+      @SCROLL = constant.ActionType.SCROLL
       # @property [Int] CLICK クリック
-      @CLICK = constant.ActionEventHandleType.CLICK
+      @CLICK = constant.ActionType.CLICK
 
     # アクションイベントクラス名
     class @TimelineActionTypeClassName

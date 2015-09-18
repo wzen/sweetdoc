@@ -15,6 +15,12 @@ class ArrowItem extends CanvasItemBase
   # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
   HEADER_HEIGHT = 50
 
+  @actions: ->
+    {
+      methodName: 'scrollDraw'
+
+    }
+
   # コンストラクタ
   # @param [Array] cood 座標
   constructor : (cood = null)->

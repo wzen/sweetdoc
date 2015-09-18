@@ -39,7 +39,7 @@ class Const
   end
 
   # アクションイベント種別
-  class ActionEventHandleType
+  class ActionType
     # @property [Int] SCROLL スクロール
     SCROLL = 0
     # @property [Int] CLICK クリック

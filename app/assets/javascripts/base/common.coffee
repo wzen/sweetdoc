@@ -293,9 +293,9 @@ class Common
   # @param [Integer] actionType アクションタイプID
   # @return [String] アクションタイプクラス名
   @getActionTypeClassNameByActionType = (actionType) ->
-    if parseInt(actionType) == Constant.ActionEventHandleType.CLICK
+    if parseInt(actionType) == Constant.ActionType.CLICK
       return Constant.TimelineActionTypeClassName.CLICK
-    else if parseInt(actionType) == Constant.ActionEventHandleType.SCROLL
+    else if parseInt(actionType) == Constant.ActionType.SCROLL
       return Constant.TimelineActionTypeClassName.SCROLL
     return null
 

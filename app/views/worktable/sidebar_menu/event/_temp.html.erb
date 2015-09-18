@@ -57,9 +57,9 @@
             <% @common_actions.each do |c| %>
                 <% c.common_action_events.each do |a| %>
                     <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
-                        <% if a.action_event_type_id == Const::ActionEventHandleType::SCROLL  %>
+                        <% if a.action_event_type_id == Const::ActionType::SCROLL  %>
                             <%= render 'worktable/sidebar_menu/event/parts/handler_scroll' %>
-                        <% elsif a.action_event_type_id == Const::ActionEventHandleType::CLICK %>
+                        <% elsif a.action_event_type_id == Const::ActionType::CLICK %>
                             <%= render 'worktable/sidebar_menu/event/parts/handler_click' %>
                         <% end %>
                     </div>

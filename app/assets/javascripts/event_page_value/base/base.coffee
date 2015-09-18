@@ -50,7 +50,7 @@ class EventPageValueBase
 
       return 0
 
-    if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
+    if eventConfig.actionType == Constant.ActionType.SCROLL
       handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
       if handlerDiv?
         startDiv = handlerDiv.find('.scroll_point_start:first')
@@ -80,12 +80,12 @@ class EventPageValueBase
     writeValue[@PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType
     writeValue[@PageValueKey.IS_SYNC] = eventConfig.isParallel
 
-    if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
+    if eventConfig.actionType == Constant.ActionType.SCROLL
       writeValue[@PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart
       writeValue[@PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd
       writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection
       writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection
-    else if eventConfig.actionType == Constant.ActionEventHandleType.CLICK
+    else if eventConfig.actionType == Constant.ActionType.CLICK
       writeValue[@PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum
 
     return writeValue
@@ -109,7 +109,7 @@ class EventPageValueBase
       if parallel? && isParallel
         parallel.prop("checked", true)
 
-      if eventConfig.actionType == Constant.ActionEventHandleType.SCROLL
+      if eventConfig.actionType == Constant.ActionType.SCROLL
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
         if handlerDiv?
           start = writeValue[@PageValueKey.SCROLL_POINT_START]
@@ -153,7 +153,7 @@ class EventPageValueBase
               rightEmt.children('.scroll_forward:first').prop("checked", false)
               rightEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
 
-      else if eventConfig.actionType == Constant.ActionEventHandleType.CLICK
+      else if eventConfig.actionType == Constant.ActionType.CLICK
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
         if handlerDiv?
           forkNum = writeValue[@PageValueKey.CHANGE_FORKNUM]

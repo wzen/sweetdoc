@@ -21,6 +21,12 @@ ArrowItem = (function(superClass) {
 
   HEADER_HEIGHT = 50;
 
+  ArrowItem.actions = function() {
+    return {
+      methodName: 'scrollDraw'
+    };
+  };
+
   function ArrowItem(cood) {
     if (cood == null) {
       cood = null;

@@ -79,7 +79,7 @@ class ItemBase extends ItemEventBase
   saveObj: (newCreated = false) ->
     if newCreated
       # 名前を付与
-      num = 1
+      num = 0
       self = @
       for k, v of Common.getCreatedItemInstances()
         if self.constructor.IDENTITY == v.constructor.IDENTITY

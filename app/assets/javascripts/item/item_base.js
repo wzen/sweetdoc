@@ -73,7 +73,7 @@ ItemBase = (function(superClass) {
       newCreated = false;
     }
     if (newCreated) {
-      num = 1;
+      num = 0;
       self = this;
       ref = Common.getCreatedItemInstances();
       for (k in ref) {

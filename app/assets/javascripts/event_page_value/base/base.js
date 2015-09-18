@@ -60,7 +60,7 @@ EventPageValueBase = (function() {
       }
       return 0;
     };
-    if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
+    if (eventConfig.actionType === Constant.ActionType.SCROLL) {
       handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
       if (handlerDiv != null) {
         startDiv = handlerDiv.find('.scroll_point_start:first');
@@ -93,12 +93,12 @@ EventPageValueBase = (function() {
     writeValue[this.PageValueKey.ACTIONTYPE] = eventConfig.actionType;
     writeValue[this.PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType;
     writeValue[this.PageValueKey.IS_SYNC] = eventConfig.isParallel;
-    if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
+    if (eventConfig.actionType === Constant.ActionType.SCROLL) {
       writeValue[this.PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart;
       writeValue[this.PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd;
       writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection;
       writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection;
-    } else if (eventConfig.actionType === Constant.ActionEventHandleType.CLICK) {
+    } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
       writeValue[this.PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum;
     }
     return writeValue;
@@ -120,7 +120,7 @@ EventPageValueBase = (function() {
       if ((parallel != null) && isParallel) {
         parallel.prop("checked", true);
       }
-      if (eventConfig.actionType === Constant.ActionEventHandleType.SCROLL) {
+      if (eventConfig.actionType === Constant.ActionType.SCROLL) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
           start = writeValue[this.PageValueKey.SCROLL_POINT_START];
@@ -172,7 +172,7 @@ EventPageValueBase = (function() {
             }
           }
         }
-      } else if (eventConfig.actionType === Constant.ActionEventHandleType.CLICK) {
+      } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
           forkNum = writeValue[this.PageValueKey.CHANGE_FORKNUM];

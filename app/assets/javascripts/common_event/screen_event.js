@@ -44,7 +44,7 @@ ScreenEvent = (function(superClass) {
     var actionType, finished_count, scale, scrollLeft, scrollTop;
     this.updateEventBefore();
     actionType = this.getEventActionType();
-    if (actionType === Constant.ActionEventHandleType.CLICK) {
+    if (actionType === Constant.ActionType.CLICK) {
       finished_count = 0;
       scrollTop = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
       scrollLeft = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
