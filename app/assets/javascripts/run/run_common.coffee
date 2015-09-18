@@ -169,15 +169,23 @@ class RunCommon
       }
     )
 
+  @getForkStack = (pn) ->
+    if !window.forkNumStacks?
+      window.forkNumStacks = {}
+    return window.forkNumStacks[pn]
+
+  @setForkStack = (obj, pn) ->
+    if !window.forkNumStacks?
+      window.forkNumStacks = {}
+    window.forkNumStacks[pn] = [obj]
+
   # フォーク番号スタック初期化
   # @return [Boolean] 処理正常終了か
   @initForkStack = (forkNum, pn) ->
-    if !window.forkNumStacks?
-      window.forkNumStacks = {}
-    window.forkNumStacks[pn] = [{
+    @setForkStack({
       changedChapterIndex: 0
       forkNum: forkNum
-    }]
+    }, pn)
     # PageValueに書き込み
     PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
     return true
@@ -185,12 +193,10 @@ class RunCommon
   # フォーク番号をスタックに追加
   # @return [Boolean] 処理正常終了か
   @addForkNumToStack = (forkNum, cIndex, pn) ->
-    if !window.forkNumStacks?
-      window.forkNumStacks = {}
     lastForkNum = @getLastForkNumFromStack(pn)
     if lastForkNum? && lastForkNum != forkNum
       # フォーク番号追加
-      stack = window.forkNumStacks[pn]
+      stack = @getForkStack(pn)
       stack.push(
         {
           changedChapterIndex: cIndex

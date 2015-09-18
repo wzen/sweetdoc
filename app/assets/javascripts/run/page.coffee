@@ -38,14 +38,37 @@ class Page
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
 
-  # チャプターリスト取得
+  # フォーク内のチャプターリスト取得
   # @return [Array] チャプターリスト
-  getChapterList: ->
+  getForkChapterList: ->
     lastForkNum = RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
     if lastForkNum?
       return @forkChapterList[lastForkNum]
     else
       return []
+
+  # 進行するチャプターリスト取得
+  # @return [Array] チャプターリスト
+  getProgressChapterList: ->
+    # フォークスタックを参照してページ内のチャプターリストを取得
+    ret = []
+    stack = RunCommon.getForkStack(window.eventAction.thisPageNum())
+    for s, sIndex in stack
+      for chapter, cIndex in @forkChapterList[s.forkNum]
+        if stack[sIndex + 1]? && cIndex > stack[sIndex + 1].changedChapterIndex
+          break
+        ret.push(chapter)
+    return ret
+
+  # 全チャプターリスト取得
+  # @return [Array] チャプターリスト
+  getAllChapterList: ->
+    # フォークスタックを参照してページ内のチャプターリストを取得
+    ret = []
+    for k, forkList of @forkChapterList
+      for chapter in forkList
+        ret.push(chapter)
+    return ret
 
   # チャプターインデックス取得
   # @return [Integer] チャプターインデックス
@@ -73,7 +96,7 @@ class Page
   # 現在のチャプターインスタンスを取得
   # @return [Object] 現在のチャプターインスタンス
   thisChapter: ->
-    return @getChapterList()[@getChapterIndex()]
+    return @getForkChapterList()[@getChapterIndex()]
 
   # 現在のチャプター番号を取得
   # @return [Integer] 現在のチャプター番号
@@ -108,7 +131,7 @@ class Page
     # チャプター後処理
     @thisChapter().didChapter()
     # indexを更新
-    if @getChapterList().length <= @getChapterIndex() + 1
+    if @getForkChapterList().length <= @getChapterIndex() + 1
       @finishAllChapters()
     else
       @addChapterIndex(1)
@@ -131,7 +154,7 @@ class Page
     # チャプター数設定
     Navbar.setChapterNum(@thisChapterNum())
     # チャプター最大値設定
-    Navbar.setChapterMax(@getChapterList().length)
+    Navbar.setChapterMax(@getForkChapterList().length)
     # チャプター前処理
     @thisChapter().willChapter()
 
@@ -148,14 +171,13 @@ class Page
         Navbar.setChapterNum(@thisChapterNum())
       else
         oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
-        if oneBeforeForkObj && oneBeforeForkObj.forkNum != PageValue.Key.EF_MASTER_FORKNUM
-          lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum())
+        lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum())
+        if oneBeforeForkObj && oneBeforeForkObj.forkNum != lastForkObj.forkNum
           # 最後のフォークオブジェクトを削除
           RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum())
           # フォーク番号変更
           nfn = oneBeforeForkObj.forkNum
-          if RunCommon.addForkNumToStack(nfn, @getChapterIndex(), window.eventAction.thisPageNum())
-            Navbar.setForkNum(nfn)
+          Navbar.setForkNum(nfn)
           # チャプター番号をフォーク以前に変更
           @setChapterIndex(lastForkObj.changedChapterIndex)
           # チャプターリセット
@@ -163,7 +185,7 @@ class Page
           # チャプター番号設定
           Navbar.setChapterNum(@thisChapterNum())
           # チャプター最大値設定
-          Navbar.setChapterMax(@getChapterList().length)
+          Navbar.setChapterMax(@getForkChapterList().length)
         else
           # ページ戻し
           window.eventAction.rewindPage()
@@ -176,12 +198,12 @@ class Page
   resetChapter: (chapterIndex = @getChapterIndex()) ->
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
-    @getChapterList()[chapterIndex].resetAllEvents()
+    @getForkChapterList()[chapterIndex].resetAllEvents()
 
   # 全てのチャプターを戻す
   rewindAllChapters: ->
-    for i in [(@getChapterList().length - 1)..0] by -1
-      chapter = @getChapterList()[i]
+    for i in [(@getForkChapterList().length - 1)..0] by -1
+      chapter = @getForkChapterList()[i]
       chapter.resetAllEvents()
     @setChapterIndex(0)
     Navbar.setChapterNum(@thisChapterNum())
@@ -210,7 +232,7 @@ class Page
   floatPageScrollHandleCanvas: ->
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
-    @getChapterList().forEach((chapter) ->
+    @getForkChapterList().forEach((chapter) ->
       chapter.floatScrollHandleCanvas()
     )
 
@@ -223,7 +245,7 @@ class Page
     # リセット
     @resetAllChapters()
     # チャプター最大値設定
-    Navbar.setChapterMax(@getChapterList().length)
+    Navbar.setChapterMax(@getForkChapterList().length)
     # キャッシュ保存
     LocalStorage.saveAllPageValues()
 
@@ -234,12 +256,12 @@ class Page
     # フォーカス
     @initFocus(false)
     # 最後のイベント以外リセット
-    @forwardAllChapters()
-    @getChapterList()[@getChapterList().length - 1].resetAllEvents()
+    @forwardProgressChapters()
+    @getForkChapterList()[@getForkChapterList().length - 1].resetAllEvents()
     # チャプター最大値設定
-    Navbar.setChapterMax(@getChapterList().length)
+    Navbar.setChapterMax(@getForkChapterList().length)
     # インデックスを最後のチャプターに
-    @setChapterIndex(@getChapterList().length - 1)
+    @setChapterIndex(@getForkChapterList().length - 1)
     # チャプター初期化
     @resetChapter()
     # キャッシュ保存
@@ -250,7 +272,7 @@ class Page
 
   # チャプターのイベントを初期化
   initChapterEvent: ->
-    for chapter in @getChapterList()
+    for chapter in @getProgressChapterList()
       for i in [0..(chapter.eventObjList.length - 1)]
         event = chapter.eventObjList[i]
         event.initEvent(chapter.eventList[i])
@@ -259,7 +281,7 @@ class Page
   initFocus: (focusToFirst = true) ->
     flg = false
     if focusToFirst
-      for chapter in @getChapterList()
+      for chapter in @getForkChapterList()
         if flg
           return false
         for event in chapter.eventList
@@ -269,8 +291,8 @@ class Page
             chapter.focusToActorIfNeed(true)
             flg = true
     else
-      for i in [(@getChapterList().length - 1)..0] by -1
-        chapter = @getChapterList()[i]
+      for i in [(@getForkChapterList().length - 1)..0] by -1
+        chapter = @getForkChapterList()[i]
         if flg
           return false
         for event in chapter.eventList
@@ -280,21 +302,21 @@ class Page
             chapter.focusToActorIfNeed(true)
             flg = true
 
-  # 全てのチャプター内容をリセット
+  # 全てのチャプターをリセット
   resetAllChapters: ->
-    @getChapterList().forEach((chapter) ->
+    @getAllChapterList().forEach((chapter) ->
       chapter.resetAllEvents()
     )
 
-  # 全てのチャプター内容を進行
-  forwardAllChapters: ->
-    @getChapterList().forEach((chapter) ->
+  # 動作予定のチャプターを進行
+  forwardProgressChapters: ->
+    @getProgressChapterList().forEach((chapter) ->
       chapter.forwardAllEvents()
     )
 
   # 全てのチャプターのガイドを非表示
   hideAllGuide: ->
-    @getChapterList().forEach((chapter) ->
+    @getForkChapterList().forEach((chapter) ->
       chapter.hideGuide()
     )
 
