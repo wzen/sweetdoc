@@ -121,7 +121,7 @@ class Page
 
   # 次のチャプター処理
   nextChapter: ->
-    if @thisChapter().nextForkNum? && @thisChapter().nextForkNum != RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+    if @thisChapter().changeForkNum? && @thisChapter().changeForkNum != RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
       # フォーク変更
       @switchFork()
     else
@@ -152,8 +152,8 @@ class Page
     # チャプター後処理
     @thisChapter().didChapter()
     # フォーク番号変更
-    if @thisChapter().nextForkNum?
-      nfn = @thisChapter().nextForkNum
+    if @thisChapter().changeForkNum?
+      nfn = @thisChapter().changeForkNum
       if RunCommon.addForkNumToStack(nfn, @getChapterIndex(), window.eventAction.thisPageNum())
         Navbar.setForkNum(nfn)
     # チャプター数設定
@@ -315,7 +315,7 @@ class Page
       chapter.resetAllEvents()
     )
 
-  # 動作予定のチャプターを進行
+  # フォークを含んだ動作予定のチャプターを進行
   forwardProgressChapters: ->
     @getProgressChapterList().forEach((chapter) ->
       chapter.forwardAllEvents()

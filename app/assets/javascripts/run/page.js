@@ -143,7 +143,7 @@ Page = (function() {
   };
 
   Page.prototype.nextChapter = function() {
-    if ((this.thisChapter().nextForkNum != null) && this.thisChapter().nextForkNum !== RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())) {
+    if ((this.thisChapter().changeForkNum != null) && this.thisChapter().changeForkNum !== RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())) {
       return this.switchFork();
     } else {
       return this.progressChapter();
@@ -166,8 +166,8 @@ Page = (function() {
     var nfn;
     this.hideAllGuide();
     this.thisChapter().didChapter();
-    if (this.thisChapter().nextForkNum != null) {
-      nfn = this.thisChapter().nextForkNum;
+    if (this.thisChapter().changeForkNum != null) {
+      nfn = this.thisChapter().changeForkNum;
       if (RunCommon.addForkNumToStack(nfn, this.getChapterIndex(), window.eventAction.thisPageNum())) {
         Navbar.setForkNum(nfn);
       }

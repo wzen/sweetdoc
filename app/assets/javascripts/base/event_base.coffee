@@ -33,18 +33,18 @@ class EventBase extends Extend
     if @event?
       return @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
 
-  # 設定されているフォーク番号を取得
+  # 変更設定されているフォーク番号を取得
   # @return [Integer] フォーク番号
-  getForkNum: ->
+  getChangeForkNum: ->
     if @event?
-      num = @event[EventPageValueBase.PageValueKey.FORKNUM]
+      num = @event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
       if num?
         return parseInt(num)
       else
-        # forkNumが無い場合はMasterとする
-        PageValue.Key.EF_MASTER_FORKNUM
+        # forkNumが無い場合はNULL
+        return null
     else
-      PageValue.Key.EF_MASTER_FORKNUM
+      return null
 
   # リセット(アクション前に戻す)
   resetEvent: ->

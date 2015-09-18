@@ -39,7 +39,7 @@ EventPageValueBase = (function() {
 
       PageValueKey.SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS;
 
-      PageValueKey.FORKNUM = constant.EventPageValueKey.FORKNUM;
+      PageValueKey.CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM;
 
       return PageValueKey;
 
@@ -99,7 +99,7 @@ EventPageValueBase = (function() {
       writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection;
       writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection;
     } else if (eventConfig.actionType === Constant.ActionEventHandleType.CLICK) {
-      writeValue[this.PageValueKey.FORKNUM] = eventConfig.forkNum;
+      writeValue[this.PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum;
     }
     return writeValue;
   };
@@ -175,7 +175,7 @@ EventPageValueBase = (function() {
       } else if (eventConfig.actionType === Constant.ActionEventHandleType.CLICK) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
-          forkNum = writeValue[this.PageValueKey.FORKNUM];
+          forkNum = writeValue[this.PageValueKey.CHANGE_FORKNUM];
           enabled = (forkNum != null) && forkNum > 0;
           $('.enable_fork:first', handlerDiv).prop('checked', enabled);
           fn = enabled ? forkNum : 1;

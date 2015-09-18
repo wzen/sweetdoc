@@ -34,8 +34,8 @@ class EventPageValueBase
       @SCROLL_ENABLED_DIRECTIONS = constant.EventPageValueKey.SCROLL_ENABLED_DIRECTIONS
       # @property [String] SCROLL_FORWARD_DIRECTIONS スクロール進行方向
       @SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS
-      # @property [String] FORKNUM フォーク番号
-      @FORKNUM = constant.EventPageValueKey.FORKNUM
+      # @property [String] CHANGE_FORKNUM フォーク番号
+      @CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM
 
   # コンフィグ初期設定
   # @param [Object] eventConfig イベントコンフィグオブジェクト
@@ -86,7 +86,7 @@ class EventPageValueBase
       writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection
       writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection
     else if eventConfig.actionType == Constant.ActionEventHandleType.CLICK
-      writeValue[@PageValueKey.FORKNUM] = eventConfig.forkNum
+      writeValue[@PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum
 
     return writeValue
 
@@ -156,7 +156,7 @@ class EventPageValueBase
       else if eventConfig.actionType == Constant.ActionEventHandleType.CLICK
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
         if handlerDiv?
-          forkNum = writeValue[@PageValueKey.FORKNUM]
+          forkNum = writeValue[@PageValueKey.CHANGE_FORKNUM]
           enabled = forkNum? && forkNum > 0
           $('.enable_fork:first', handlerDiv).prop('checked', enabled)
           fn = if enabled then forkNum else 1

@@ -38,17 +38,17 @@ EventBase = (function(superClass) {
     }
   };
 
-  EventBase.prototype.getForkNum = function() {
+  EventBase.prototype.getChangeForkNum = function() {
     var num;
     if (this.event != null) {
-      num = this.event[EventPageValueBase.PageValueKey.FORKNUM];
+      num = this.event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
       if (num != null) {
         return parseInt(num);
       } else {
-        return PageValue.Key.EF_MASTER_FORKNUM;
+        return null;
       }
     } else {
-      return PageValue.Key.EF_MASTER_FORKNUM;
+      return null;
     }
   };
 

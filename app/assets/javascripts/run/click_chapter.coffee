@@ -5,7 +5,7 @@ class ClickChapter extends Chapter
   # @param [Array] list イベント情報
   constructor: (list) ->
     super(list)
-    @nextForkNum = null
+    @changeForkNum = null
 
   # チャプターの前処理
   willChapter: ->
@@ -41,7 +41,7 @@ class ClickChapter extends Chapter
       if event.id == $(e.currentTarget).attr('id')
         event.clickEvent(e, ->
           # クリックしたイベントのフォーク番号を保存
-          self.nextForkNum = event.getForkNum()
+          self.changeForkNum = event.getChangeForkNum()
           if window.eventAction?
             # 次のチャプターへ
             window.eventAction.thisPage().nextChapter()

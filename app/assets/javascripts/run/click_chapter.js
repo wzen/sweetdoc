@@ -8,7 +8,7 @@ ClickChapter = (function(superClass) {
 
   function ClickChapter(list) {
     ClickChapter.__super__.constructor.call(this, list);
-    this.nextForkNum = null;
+    this.changeForkNum = null;
   }
 
   ClickChapter.prototype.willChapter = function() {
@@ -41,7 +41,7 @@ ClickChapter = (function(superClass) {
     return this.eventObjList.forEach(function(event) {
       if (event.id === $(e.currentTarget).attr('id')) {
         return event.clickEvent(e, function() {
-          self.nextForkNum = event.getForkNum();
+          self.changeForkNum = event.getChangeForkNum();
           if (window.eventAction != null) {
             return window.eventAction.thisPage().nextChapter();
           }
