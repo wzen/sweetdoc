@@ -168,7 +168,7 @@ class EventBase extends Extend
   # チャプターを進める
   nextChapter: ->
     if window.eventAction?
-      window.eventAction.thisPage().nextChapter()
+      window.eventAction.thisPage().progressChapter()
 
   # チャプター開始前イベント
   willChapter: ->

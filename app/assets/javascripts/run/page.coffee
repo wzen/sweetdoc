@@ -115,16 +115,21 @@ class Page
 
   # 全てのイベントが終了している場合、チャプターを進める
   nextChapterIfFinishedAllEvent: ->
-    if @thisChapter().finishedAllEvent()
-      if @thisChapter().nextForkNum? && @thisChapter().nextForkNum != RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
-        # フォーク変更
-        @switchFork()
-      else
-        # 次のチャプターへ
-        @nextChapter()
+    if !@thisChapter().finishedAllEvent? || @thisChapter().finishedAllEvent()
+      # イベント終了判定メソッドが無い or 終了判定がTrueの場合に進行
+      @nextChapter()
 
-  # チャプターを進める
+  # 次のチャプター処理
   nextChapter: ->
+    if @thisChapter().nextForkNum? && @thisChapter().nextForkNum != RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())
+      # フォーク変更
+      @switchFork()
+    else
+      # チャプターをすすめる
+      @progressChapter()
+
+  # 現在のフォークでチャプターを進める
+  progressChapter: ->
     # 全ガイド非表示
     @hideAllGuide()
 
@@ -262,6 +267,8 @@ class Page
     Navbar.setChapterMax(@getForkChapterList().length)
     # インデックスを最後のチャプターに
     @setChapterIndex(@getForkChapterList().length - 1)
+    # フォーク番号設定
+    Navbar.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
     # チャプター初期化
     @resetChapter()
     # キャッシュ保存

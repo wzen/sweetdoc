@@ -197,7 +197,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.nextChapter = function() {
     if (window.eventAction != null) {
-      return window.eventAction.thisPage().nextChapter();
+      return window.eventAction.thisPage().progressChapter();
     }
   };
 

@@ -43,8 +43,8 @@ class ClickChapter extends Chapter
           # クリックしたイベントのフォーク番号を保存
           self.nextForkNum = event.getForkNum()
           if window.eventAction?
-            # 全てのイベントが終了している場合は次のチャプターへ
-            window.eventAction.thisPage().nextChapterIfFinishedAllEvent()
+            # 次のチャプターへ
+            window.eventAction.thisPage().nextChapter()
         )
     )
 

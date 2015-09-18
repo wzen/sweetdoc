@@ -137,16 +137,20 @@ Page = (function() {
   };
 
   Page.prototype.nextChapterIfFinishedAllEvent = function() {
-    if (this.thisChapter().finishedAllEvent()) {
-      if ((this.thisChapter().nextForkNum != null) && this.thisChapter().nextForkNum !== RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())) {
-        return this.switchFork();
-      } else {
-        return this.nextChapter();
-      }
+    if ((this.thisChapter().finishedAllEvent == null) || this.thisChapter().finishedAllEvent()) {
+      return this.nextChapter();
     }
   };
 
   Page.prototype.nextChapter = function() {
+    if ((this.thisChapter().nextForkNum != null) && this.thisChapter().nextForkNum !== RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum())) {
+      return this.switchFork();
+    } else {
+      return this.progressChapter();
+    }
+  };
+
+  Page.prototype.progressChapter = function() {
     this.hideAllGuide();
     this.thisChapter().didChapter();
     if (this.getForkChapterList().length <= this.getChapterIndex() + 1) {
@@ -265,6 +269,7 @@ Page = (function() {
     this.getForkChapterList()[this.getForkChapterList().length - 1].resetAllEvents();
     Navbar.setChapterMax(this.getForkChapterList().length);
     this.setChapterIndex(this.getForkChapterList().length - 1);
+    Navbar.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
     this.resetChapter();
     return LocalStorage.saveAllPageValues();
   };

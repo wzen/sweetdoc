@@ -43,7 +43,7 @@ ClickChapter = (function(superClass) {
         return event.clickEvent(e, function() {
           self.nextForkNum = event.getForkNum();
           if (window.eventAction != null) {
-            return window.eventAction.thisPage().nextChapterIfFinishedAllEvent();
+            return window.eventAction.thisPage().nextChapter();
           }
         });
       }

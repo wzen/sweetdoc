@@ -94,16 +94,6 @@ class Chapter
         e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + @num))
     )
 
-  # 全てのイベントが終了しているか
-  # @return [Boolean] 判定結果
-  finishedAllEvent: ->
-    ret = true
-    @eventObjList.forEach((event) ->
-      if !event.isFinishedEvent
-        ret = false
-    )
-    return ret
-
   # チャプターのイベントをリセットする
   resetAllEvents: ->
     @eventObjList.forEach((e) =>

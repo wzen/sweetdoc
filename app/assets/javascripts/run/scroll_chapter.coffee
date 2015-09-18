@@ -98,3 +98,4 @@ class ScrollChapter extends Chapter
         return false
     )
     return ret
+
