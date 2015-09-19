@@ -38,7 +38,7 @@ class ItemJs
           {
               item_id: item.id,
               js_src: self.js_path(item.src_name),
-              css_info: item.css_temp,
+              css_temp: item.css_temp,
           }
     end
 

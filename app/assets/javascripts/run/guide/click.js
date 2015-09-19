@@ -51,7 +51,7 @@ ClickGuide = (function(superClass) {
   };
 
   ClickGuide.focusColor = function(item) {
-    var arr, average, background, baseColors, c, colors, count, endIndex, i, j, k, l, len, maxDiff, re, ref, ref1, sixteen, startIndex, targetKey, v;
+    var arr, averageColors, background, baseColors, c, colors, count, diffs, endIndex, i, j, k, l, len, maxDiff, re, ref, ref1, startIndex, targetKey, v;
     background = item.getJQueryElement().find('.css3button:first').css('background');
     startIndex = background.indexOf('gradient(') + 'gradient('.length;
     endIndex = background.length - 1;
@@ -74,27 +74,31 @@ ClickGuide = (function(superClass) {
     if (colors == null) {
       return 'black';
     }
-    average = 0;
+    averageColors = [0, 0, 0];
     for (l = 0, len = colors.length; l < len; l++) {
       c = colors[l];
       arr = c.split(',');
-      sixteen = parseInt(arr[0]).toString(16) + parseInt(arr[1]).toString(16) + parseInt(arr[2]).toString(16);
-      average += parseInt(sixteen, 16);
+      averageColors[0] += parseInt(arr[0]);
+      averageColors[1] += parseInt(arr[1]);
+      averageColors[2] += parseInt(arr[2]);
     }
-    average /= colors.length;
+    averageColors = $.map(averageColors, function(c) {
+      return parseInt(c / colors.length);
+    });
     baseColors = {
-      red: parseInt('FF0000'.toString(10)),
-      black: parseInt('000000'.toString(10)),
-      blue: parseInt('0000FF'.toString(10)),
-      yellow: parseInt('FFFF00'.toString(10))
+      red: [255, 0, 0],
+      black: [0, 0, 0],
+      blue: [0, 0, 255],
+      yellow: [255, 255, 0]
     };
     maxDiff = 0;
     targetKey = null;
     for (k in baseColors) {
       v = baseColors[k];
-      if (Math.abs(v - average) > maxDiff) {
+      diffs = Math.abs(averageColors[0] - v[0]) + Math.abs(averageColors[1] - v[1]) + Math.abs(averageColors[2] - v[2]);
+      if (diffs > maxDiff) {
         targetKey = k;
-        maxDiff = Math.abs(v - average);
+        maxDiff = diffs;
       }
     }
     return targetKey;

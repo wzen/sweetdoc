@@ -85,25 +85,29 @@ class ClickGuide extends GuideBase
       return 'black'
 
     # グラデーションの平均値計算
-    average = 0
+    averageColors = [0, 0, 0]
     for c in colors
       arr = c.split(',')
-      sixteen = parseInt(arr[0]).toString(16) + parseInt(arr[1]).toString(16) + parseInt(arr[2]).toString(16)
-      average += parseInt(sixteen, 16)
-    average /= colors.length
+      averageColors[0] += parseInt(arr[0])
+      averageColors[1] += parseInt(arr[1])
+      averageColors[2] += parseInt(arr[2])
+    averageColors = $.map(averageColors, (c)->
+      return parseInt(c / colors.length)
+    )
 
     # 最も大きい差分の色を取得
     baseColors = {
-      red: parseInt('FF0000'.toString(10))
-      black: parseInt('000000'.toString(10))
-      blue: parseInt('0000FF'.toString(10))
-      yellow: parseInt('FFFF00'.toString(10))
+      red: [255, 0, 0]
+      black: [0, 0, 0]
+      blue: [0, 0, 255]
+      yellow: [255, 255, 0]
     }
     maxDiff = 0
     targetKey = null
     for k, v of baseColors
-      if Math.abs(v - average) > maxDiff
+      diffs = Math.abs(averageColors[0] - v[0]) + Math.abs(averageColors[1] - v[1]) + Math.abs(averageColors[2] - v[2])
+      if diffs > maxDiff
         targetKey = k
-        maxDiff = Math.abs(v - average)
+        maxDiff = diffs
 
     return targetKey

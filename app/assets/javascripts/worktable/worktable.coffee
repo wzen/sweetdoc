@@ -1,8 +1,4 @@
 class Worktable
-
-  # ワークテーブル読み込みフラグ
-  window.worktablePage = true
-
 $ ->
   window.isWorkTable = true
 

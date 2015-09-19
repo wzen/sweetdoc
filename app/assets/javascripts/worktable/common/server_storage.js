@@ -148,9 +148,9 @@ ServerStorage = (function() {
             }
             return;
           }
-          if (d.css_info != null) {
+          if (d.css_temp != null) {
             option = {
-              css_temp: d.css_info
+              css_temp: d.css_temp
             };
           }
           Common.availJs(itemId, d.js_src, option, function() {

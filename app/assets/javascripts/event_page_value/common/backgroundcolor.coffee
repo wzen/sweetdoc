@@ -14,7 +14,7 @@ class EPVBackgroundColor extends EventPageValueBase
     $(".colorPicker", eventConfig.emt).each( ->
       self = $(@)
       if !self.hasClass('temp') && !self.hasClass('baseColor')
-        initColorPicker(self, bgColor, null)
+        ColorPickerUtil.initColorPicker(self, bgColor, null)
     )
 
   # PageValueに書き込みデータを取得
@@ -51,8 +51,8 @@ class EPVBackgroundColor extends EventPageValueBase
     emt = eventConfig.emt
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum))
     value = writeValue[@PageValueKey.VALUE]
-    initColorPicker($(".colorPicker.base_color", emt) ,value[@BASE_COLOR], null)
-    initColorPicker($(".colorPicker.change_color", emt) ,value[@CHANGE_COLOR], null)
+    ColorPickerUtil.initColorPicker($(".colorPicker.base_color", emt) ,value[@BASE_COLOR], null)
+    ColorPickerUtil.initColorPicker($(".colorPicker.change_color", emt) ,value[@CHANGE_COLOR], null)
     #$('.base_color:first', emt).css('backgroundColor',value[@BASE_COLOR])
     #$('.change_color:first', emt).css('backgroundColor',value[@CHANGE_COLOR])
     return true

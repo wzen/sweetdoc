@@ -67,7 +67,7 @@ class EventBase extends Extend
       @initEvent(event)
       @willChapter()
       if @ instanceof CssItemBase
-        @appendCssIfNeeded()
+        @appendAnimationCssIfNeeded()
 
       method = @constructor.prototype[@getEventMethodName()]
       actionType = @getEventActionType()

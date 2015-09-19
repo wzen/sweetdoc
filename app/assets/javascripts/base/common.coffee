@@ -498,8 +498,8 @@ class Common
           dataIdx = 0
 
           _cb = (d) ->
-            if d.css_info?
-              option = {css_temp: d.css_info}
+            if d.css_temp?
+              option = {css_temp: d.css_temp}
             Common.availJs(d.item_id, d.js_src, option, =>
               PageValue.addItemInfo(d.item_id)
               if window.isWorkTable && EventConfig?

@@ -95,7 +95,7 @@ ButtonItem = (function(superClass) {
     })(this));
   };
 
-  ButtonItem.prototype.cssElement = function() {
+  ButtonItem.prototype.cssAnimationElement = function() {
     var css, emt, funcName, height, keyFrameName, keyframe, left, methodName, mozKeyframe, top, webkitKeyframe, width;
     methodName = this.getEventMethodName();
     funcName = methodName + "_" + this.id;
@@ -125,26 +125,19 @@ ButtonItem = (function(superClass) {
 
 Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem);
 
-if (window.worktablePage != null) {
+if (window.isWorkTable) {
   WorkTableButtonItem = (function(superClass) {
     extend(WorkTableButtonItem, superClass);
+
+    function WorkTableButtonItem() {
+      return WorkTableButtonItem.__super__.constructor.apply(this, arguments);
+    }
 
     WorkTableButtonItem.include(WorkTableCommonExtend);
 
     WorkTableButtonItem.include(WorkTableCssItemExtend);
 
     WorkTableButtonItem.CSSTEMPID = "button_css_temp";
-
-    function WorkTableButtonItem(cood) {
-      if (cood == null) {
-        cood = null;
-      }
-      WorkTableButtonItem.__super__.constructor.call(this, cood);
-      this.cssRoot = null;
-      this.cssCache = null;
-      this.cssCode = null;
-      this.cssStyle = null;
-    }
 
     WorkTableButtonItem.prototype.endDraw = function(zindex, show) {
       if (show == null) {
@@ -153,20 +146,14 @@ if (window.worktablePage != null) {
       if (!WorkTableButtonItem.__super__.endDraw.call(this, zindex)) {
         return false;
       }
-      this.makeCss();
+      this.makeCss(true);
       this.drawAndMakeConfigsAndWritePageValue(show);
       return true;
     };
 
-    WorkTableButtonItem.prototype.getMinimumObject = function() {
-      var obj;
-      obj = WorkTableButtonItem.__super__.getMinimumObject.call(this);
-      obj.css = this.cssRoot[0].outerHTML;
-      return obj;
-    };
-
     WorkTableButtonItem.prototype.setupOptionMenu = function() {
-      var btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, name;
+      var btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, item, name;
+      item = this;
       cssRoot = this.cssRoot;
       cssCache = this.cssCache;
       cssCode = this.cssCode;
@@ -215,10 +202,10 @@ if (window.worktablePage != null) {
         className = self[0].classList[0];
         btnCodeEmt = cssCode.find("." + className).first();
         colorValue = btnCodeEmt.text();
-        return initColorPicker(self, colorValue, function(a, b, d) {
+        return ColorPickerUtil.initColorPicker(self, colorValue, function(a, b, d) {
           btnCodeEmt = cssCode.find("." + className);
           btnCodeEmt.text(b);
-          return cssStyle.text(cssCode.text());
+          return item.reflectCssStyle();
         });
       });
       btnShadowColor.each(function() {
@@ -227,10 +214,10 @@ if (window.worktablePage != null) {
         className = self[0].classList[0];
         btnCodeEmt = cssCode.find("." + className).first();
         colorValue = btnCodeEmt.text();
-        return initColorPicker(self, colorValue, function(a, b, d) {
+        return ColorPickerUtil.initColorPicker(self, colorValue, function(a, b, d) {
           btnCodeEmt = cssCode.find("." + className);
           btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
-          return cssStyle.text(cssCode.text());
+          return item.reflectCssStyle();
         });
       });
       btnGradientStep.off('keyup mouseup');
@@ -260,7 +247,7 @@ if (window.worktablePage != null) {
             webkitFlag.html(webkitCache.html());
           }
         }
-        return cssStyle.text(cssCode.text());
+        return item.reflectCssStyle();
       }).each(function() {
         var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
         SidebarUI.changeGradientShow(this, cssCode, cssStyle, this.cssConfig);
@@ -284,7 +271,7 @@ if (window.worktablePage != null) {
             $(webkitFlag).empty();
           }
         }
-        return cssStyle.text(cssCode.text());
+        return item.reflectCssStyle();
       });
     };
 
@@ -296,19 +283,14 @@ if (window.worktablePage != null) {
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ButtonItem.ITEM_ID] == null)) {
   window.itemInitFuncList[ButtonItem.ITEM_ID] = function(option) {
-    var css_temp, tempEmt;
     if (option == null) {
       option = {};
     }
-    if (window.debug) {
-      console.log('button loaded');
+    if (window.isWorkTable && (WorkTableButtonItem.jsLoaded != null)) {
+      WorkTableButtonItem.jsLoaded(option);
     }
-    if (window.isWorkTable) {
-      css_temp = option.css_temp;
-      if (css_temp != null) {
-        tempEmt = "<div id='" + WorkTableButtonItem.CSSTEMPID + "'>" + css_temp + "</div>";
-        return $('#css_code_info_temp').append(tempEmt);
-      }
+    if (window.debug) {
+      return console.log('button loaded');
     }
   };
 }

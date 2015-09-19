@@ -124,8 +124,8 @@ class ServerStorage
                 callback.call(self)
               return
 
-            if d.css_info?
-              option = {css_temp: d.css_info}
+            if d.css_temp?
+              option = {css_temp: d.css_temp}
 
             Common.availJs(itemId, d.js_src, option, ->
               loadedCount += 1

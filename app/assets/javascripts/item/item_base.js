@@ -196,13 +196,26 @@ ItemBase = (function(superClass) {
 })(ItemEventBase);
 
 CssItemBase = (function(superClass) {
+  var constant;
+
   extend(CssItemBase, superClass);
+
+  CssItemBase.CSSTEMPID = '';
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    CssItemBase.DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME;
+  }
 
   function CssItemBase(cood) {
     if (cood == null) {
       cood = null;
     }
     CssItemBase.__super__.constructor.call(this, cood);
+    this.cssRoot = null;
+    this.cssCache = null;
+    this.cssCode = null;
+    this.cssStyle = null;
     if (cood !== null) {
       this.moveLoc = {
         x: cood.x,
@@ -210,7 +223,17 @@ CssItemBase = (function(superClass) {
       };
     }
     this.css = null;
+    this.cssStypeReflectTimer = null;
   }
+
+  CssItemBase.jsLoaded = function(option) {
+    var css_temp, tempEmt;
+    css_temp = option.css_temp;
+    if (css_temp != null) {
+      tempEmt = "<div id='" + this.CSSTEMPID + "'>" + css_temp + "</div>";
+      return window.cssCodeInfoTemp.append(tempEmt);
+    }
+  };
 
   CssItemBase.prototype.reDraw = function(show) {
     if (show == null) {
@@ -237,7 +260,7 @@ CssItemBase = (function(superClass) {
     newobj = {
       itemId: this.constructor.ITEM_ID,
       mousedownCood: Common.makeClone(this.mousedownCood),
-      css: Common.makeClone(this.css)
+      css: this.cssRoot[0].outerHTML
     };
     $.extend(obj, newobj);
     return obj;
@@ -271,35 +294,62 @@ CssItemBase = (function(superClass) {
     return true;
   };
 
-  CssItemBase.prototype.makeCss = function() {
+  CssItemBase.prototype.makeCss = function(fromTemp) {
     var newEmt;
+    if (fromTemp == null) {
+      fromTemp = false;
+    }
     newEmt = null;
-    if (this.css != null) {
+    $("" + (this.getCssRootElementId())).remove();
+    if (!fromTemp && (this.css != null)) {
       newEmt = $(this.css);
     } else {
       newEmt = $('#' + this.constructor.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
       newEmt.find('.btn-item-id').html(this.id);
     }
-    $('#css_code_info').append(newEmt);
+    window.cssCodeInfo.append(newEmt);
     this.cssRoot = $('#' + this.getCssRootElementId());
     this.cssCache = $(".css-cache", this.cssRoot);
     this.cssCode = $(".css-code", this.cssRoot);
     this.cssStyle = $(".css-style", this.cssRoot);
-    return this.cssStyle.text(this.cssCode.text());
+    return this.reflectCssStyle(false);
   };
 
-  CssItemBase.prototype.cssElement = function() {
+  CssItemBase.prototype.cssAnimationElement = function() {
     return null;
   };
 
-  CssItemBase.prototype.appendCssIfNeeded = function() {
+  CssItemBase.prototype.appendAnimationCssIfNeeded = function() {
     var ce, funcName, methodName;
-    ce = this.cssElement();
+    ce = this.cssAnimationElement();
     if (ce != null) {
       methodName = this.getEventMethodName();
       this.removeCss();
       funcName = methodName + "_" + this.id;
       return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
+    }
+  };
+
+  CssItemBase.prototype.reflectCssStyle = function(doStyleSave) {
+    if (doStyleSave == null) {
+      doStyleSave = true;
+    }
+    this.cssStyle.text(this.cssCode.text());
+    this.css = this.cssRoot[0].outerHTML;
+    if (doStyleSave) {
+      if (this.cssStypeReflectTimer != null) {
+        clearTimeout(this.cssStypeReflectTimer);
+        this.cssStypeReflectTimer = null;
+      }
+      return this.cssStypeReflectTimer = setTimeout((function(_this) {
+        return function() {
+          _this.setItemAllPropToPageValue();
+          LocalStorage.saveAllPageValues();
+          return _this.cssStypeReflectTimer = setTimeout(function() {
+            return OperationHistory.add();
+          }, 1000);
+        };
+      })(this), 500);
     }
   };
 

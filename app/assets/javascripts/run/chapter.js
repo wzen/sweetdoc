@@ -29,7 +29,7 @@ Chapter = (function() {
       event.initEvent(this.eventList[idx]);
       event.willChapter();
       if (event instanceof CssItemBase) {
-        event.appendCssIfNeeded();
+        event.appendAnimationCssIfNeeded();
       }
       this.doMoveChapter = false;
     }

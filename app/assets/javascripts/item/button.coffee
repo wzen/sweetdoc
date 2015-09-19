@@ -77,7 +77,7 @@ class ButtonItem extends CssItemBase
     )
 
   # CSS
-  cssElement : ->
+  cssAnimationElement : ->
     methodName = @getEventMethodName()
     funcName = "#{methodName}_#{@id}"
     keyFrameName = "#{@id}_frame"
@@ -145,7 +145,7 @@ class ButtonItem extends CssItemBase
 
 Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)
 
-if window.worktablePage?
+if window.isWorkTable
   # ワークテーブル用ボタンクラス
   class WorkTableButtonItem extends ButtonItem
     @include WorkTableCommonExtend
@@ -154,32 +154,20 @@ if window.worktablePage?
     # @property [String] CSSTEMPID CSSテンプレートID
     @CSSTEMPID = "button_css_temp"
 
-    constructor: (cood = null) ->
-      super(cood)
-      @cssRoot = null
-      @cssCache = null
-      @cssCode = null
-      @cssStyle = null
-
     # ドラッグ描画終了
     # @param [Int] zindex z-index
     # @param [boolean] show 要素作成後に描画を表示するか
     endDraw: (zindex, show = true) ->
       if !super(zindex)
         return false
-      @makeCss()
+      @makeCss(true)
       @drawAndMakeConfigsAndWritePageValue(show)
       return true
 
-    # ストレージとDB保存用の最小限のデータを取得
-    # @return [Array] アイテムオブジェクトの最小限データ
-    getMinimumObject: ->
-      obj = super()
-      obj.css = @cssRoot[0].outerHTML
-      return obj
-
     # CSSボタンコントロール初期化
     setupOptionMenu: ->
+      item = @
+
       cssRoot = @cssRoot
       cssCache = @cssCache
       cssCode = @cssCode
@@ -232,13 +220,13 @@ if window.worktablePage?
         className = self[0].classList[0]
         btnCodeEmt = cssCode.find("." + className).first()
         colorValue = btnCodeEmt.text()
-        initColorPicker(
+        ColorPickerUtil.initColorPicker(
           self,
           colorValue,
           (a, b, d) ->
             btnCodeEmt = cssCode.find("." + className)
             btnCodeEmt.text(b)
-            cssStyle.text(cssCode.text())
+            item.reflectCssStyle()
         )
       )
       btnShadowColor.each( ->
@@ -246,13 +234,13 @@ if window.worktablePage?
         className = self[0].classList[0]
         btnCodeEmt = cssCode.find("." + className).first()
         colorValue = btnCodeEmt.text()
-        initColorPicker(
+        ColorPickerUtil.initColorPicker(
           self,
           colorValue,
           (a, b, d) ->
             btnCodeEmt = cssCode.find("." + className)
             btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
-            cssStyle.text(cssCode.text())
+            item.reflectCssStyle()
         )
       )
 
@@ -279,7 +267,7 @@ if window.worktablePage?
           else
             mozFlag.html(mozCache.html());
             webkitFlag.html(webkitCache.html())
-        cssStyle.text(cssCode.text())
+        item.reflectCssStyle()
       ).each( ->
         SidebarUI.changeGradientShow(@, cssCode, cssStyle, @cssConfig)
         stepValue = parseInt($(@).val())
@@ -298,7 +286,7 @@ if window.worktablePage?
               webkitCache.html(wh)
             $(mozFlag).empty()
             $(webkitFlag).empty()
-        cssStyle.text(cssCode.text())
+        item.reflectCssStyle()
       )
 
   Common.setClassToMap(false, WorkTableButtonItem.ITEM_ID, WorkTableButtonItem)
@@ -306,14 +294,9 @@ if window.worktablePage?
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList[ButtonItem.ITEM_ID]?
   window.itemInitFuncList[ButtonItem.ITEM_ID] = (option = {}) ->
+    if window.isWorkTable && WorkTableButtonItem.jsLoaded?
+      WorkTableButtonItem.jsLoaded(option)
     #JS読み込み完了
     if window.debug
       console.log('button loaded')
 
-    if window.isWorkTable
-      # ワークテーブルの初期化処理
-      css_temp = option.css_temp
-      if css_temp?
-        # ボタンのCSSテンプレートを設置
-        tempEmt = "<div id='#{WorkTableButtonItem.CSSTEMPID}'>#{css_temp}</div>"
-        $('#css_code_info_temp').append(tempEmt)

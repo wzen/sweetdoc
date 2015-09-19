@@ -48,6 +48,8 @@ class ItemBase extends ItemEventBase
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
 
+
+
   # コンフィグメニューの要素IDを取得
   # @return [String] HTML要素ID
   getDesignConfigId: ->
@@ -188,13 +190,36 @@ class ItemBase extends ItemEventBase
 # @abstract
 # @extend ItemBase
 class CssItemBase extends ItemBase
+
+  # @property [String] CSSTEMPID CSSテンプレートID
+  @CSSTEMPID = ''
+
+  if gon?
+    constant = gon.const
+
+    @DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME
+
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null) ->
     super(cood)
+    @cssRoot = null
+    @cssCache = null
+    @cssCode = null
+    @cssStyle = null
     if cood != null
       @moveLoc = {x:cood.x, y:cood.y}
     @css = null
+    @cssStypeReflectTimer = null
+
+  # JSファイル読み込み時処理
+  @jsLoaded: (option) ->
+    # ワークテーブルの初期化処理
+    css_temp = option.css_temp
+    if css_temp?
+      # CSSテンプレートを設置
+      tempEmt = "<div id='#{@CSSTEMPID}'>#{css_temp}</div>"
+      window.cssCodeInfoTemp.append(tempEmt)
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -220,7 +245,7 @@ class CssItemBase extends ItemBase
     newobj = {
       itemId: @constructor.ITEM_ID
       mousedownCood: Common.makeClone(@mousedownCood)
-      css: Common.makeClone(@css)
+      css: @cssRoot[0].outerHTML
     }
     $.extend(obj, newobj)
     return obj
@@ -256,39 +281,66 @@ class CssItemBase extends ItemBase
     # スクロールビュー分のxとyを追加
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
-
     return true
 
   #CSSを設定
-  makeCss: ->
+  makeCss: (fromTemp = false) ->
     newEmt = null
-    if @css?
+
+    # 存在する場合消去して上書き
+    $("#{@getCssRootElementId()}").remove()
+
+    if !fromTemp && @css?
+      # 設定済みのCSSプロパティから作成
       newEmt = $(@css)
     else
-      # CSSテンプレートからオブジェクト個別のCSSを作成
+      # CSSテンプレートから作成
       newEmt = $('#' + @constructor.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
       newEmt.find('.btn-item-id').html(@id)
-    $('#css_code_info').append(newEmt)
+    window.cssCodeInfo.append(newEmt)
     @cssRoot = $('#' + @getCssRootElementId())
     @cssCache = $(".css-cache", @cssRoot)
     @cssCode = $(".css-code", @cssRoot)
     @cssStyle = $(".css-style", @cssRoot)
-    @cssStyle.text(@cssCode.text())
+
+    @reflectCssStyle(false)
 
   # CSS内容
   # @abstract
-  cssElement: ->
+  cssAnimationElement: ->
     return null
 
-  # CSS追加処理
-  appendCssIfNeeded : ->
-    ce = @cssElement()
+  # アニメーションCSS追加処理
+  appendAnimationCssIfNeeded : ->
+    ce = @cssAnimationElement()
     if ce?
       methodName = @getEventMethodName()
       # CSSが存在する場合は削除して入れ替え
       @removeCss()
       funcName = "#{methodName}_#{@id}"
       window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
+
+  # CSSのスタイルを反映
+  reflectCssStyle: (doStyleSave = true) ->
+    @cssStyle.text(@cssCode.text())
+    @css = @cssRoot[0].outerHTML
+
+    if doStyleSave
+      # 頻繁に呼ばれるためタイマーでPageValueに書き込む
+      if @cssStypeReflectTimer?
+        clearTimeout(@cssStypeReflectTimer)
+        @cssStypeReflectTimer = null
+      @cssStypeReflectTimer = setTimeout( =>
+        # 0.5秒後に反映
+        # ページに状態を保存
+        @setItemAllPropToPageValue()
+        # キャッシュに保存
+        LocalStorage.saveAllPageValues()
+        @cssStypeReflectTimer = setTimeout( ->
+          # 1秒後に操作履歴に保存
+          OperationHistory.add()
+        , 1000)
+      , 500)
 
   # CSS削除処理
   removeCss: ->

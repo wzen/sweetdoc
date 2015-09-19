@@ -95,13 +95,21 @@ Sidebar = (function() {
 })();
 
 SidebarUI = (function() {
+  var _reflectStyle, constant;
+
   function SidebarUI() {}
 
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    SidebarUI.DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME;
+  }
+
   SidebarUI.settingSlider = function(className, min, max, cssCode, cssStyle, designConfigRoot, stepValue) {
-    var d, defaultValue, meterElement, valueElement;
+    var d, defaultValue, meterElement, self, valueElement;
     if (stepValue == null) {
       stepValue = 0;
     }
+    self = this;
     meterElement = $('.' + className, designConfigRoot);
     valueElement = $('.' + className + '-value', designConfigRoot);
     d = $('.' + className + '-value', cssCode)[0];
@@ -121,13 +129,14 @@ SidebarUI = (function() {
       slide: function(event, ui) {
         valueElement.val(ui.value);
         valueElement.html(ui.value);
-        return cssStyle.text(cssCode.text());
+        return _reflectStyle.call(self, event.target);
       }
     });
   };
 
   SidebarUI.settingGradientSliderByElement = function(element, values, cssCode, cssStyle) {
-    var handleElement, id;
+    var handleElement, id, self;
+    self = this;
     id = element.attr("id");
     try {
       element.slider('destroy');
@@ -143,7 +152,7 @@ SidebarUI = (function() {
         index = $(ui.handle).index();
         position = $('.btn-bg-color' + (index + 2) + '-position', cssCode);
         position.html(("0" + ui.value).slice(-2));
-        return cssStyle.text(cssCode.text());
+        return _reflectStyle.call(self, event.target);
       }
     });
     handleElement = element.children('.ui-slider-handle');
@@ -161,7 +170,8 @@ SidebarUI = (function() {
   };
 
   SidebarUI.settingGradientDegSlider = function(className, min, max, cssCode, cssStyle, designConfigRoot) {
-    var d, defaultValue, meterElement, valueElement, webkitDeg, webkitValueElement;
+    var d, defaultValue, meterElement, self, valueElement, webkitDeg, webkitValueElement;
+    self = this;
     meterElement = $('.' + className, designConfigRoot);
     valueElement = $('.' + className + '-value', cssCode);
     webkitValueElement = $('.' + className + '-value-webkit', cssCode);
@@ -194,7 +204,7 @@ SidebarUI = (function() {
         valueElement.val(ui.value);
         valueElement.html(ui.value);
         webkitValueElement.html(webkitDeg[ui.value]);
-        return cssStyle.text(cssCode.text());
+        return _reflectStyle.call(self, event.target);
       }
     });
   };
@@ -229,6 +239,16 @@ SidebarUI = (function() {
       }
     }
     return results;
+  };
+
+  _reflectStyle = function(eventTarget) {
+    var item, objId, prefix;
+    prefix = ItemBase.DESIGN_CONFIG_ROOT_ID.replace('@id', '');
+    objId = $(eventTarget).closest("." + CssItemBase.DESIGN_ROOT_CLASSNAME).attr('id').replace(prefix, '');
+    item = window.instanceMap[objId];
+    if ((item != null) && item instanceof CssItemBase) {
+      return item.reflectCssStyle();
+    }
   };
 
   return SidebarUI;

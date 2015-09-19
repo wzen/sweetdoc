@@ -91,6 +91,10 @@ class Const
     RUN_CSS = 'run_css_@pagenum'
   end
 
+  class DesignConfig
+    ROOT_CLASSNAME = 'dc'
+  end
+
   class EventConfig
     # @property EVENT_COMMON_PREFIX 共通イベント クラス名プレフィックス
     EVENT_COMMON_PREFIX = 'c_'

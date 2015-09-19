@@ -71,7 +71,7 @@ EventBase = (function(superClass) {
       this.initEvent(event);
       this.willChapter();
       if (this instanceof CssItemBase) {
-        this.appendCssIfNeeded();
+        this.appendAnimationCssIfNeeded();
       }
       method = this.constructor.prototype[this.getEventMethodName()];
       actionType = this.getEventActionType();

@@ -418,7 +418,7 @@ ArrowItem = (function(superClass) {
 
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem);
 
-if (window.worktablePage != null) {
+if (window.isWorkTable) {
   WorkTableArrowItem = (function(superClass) {
     var _updateArrowRect;
 

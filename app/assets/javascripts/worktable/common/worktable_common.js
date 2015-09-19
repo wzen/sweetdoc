@@ -69,9 +69,8 @@ WorktableCommon = (function() {
       }
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0);
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0);
-      if (instance instanceof CssItemBase && (instance.makeCss != null)) {
-        instance.css = null;
-        instance.makeCss();
+      if (instance instanceof CssItemBase) {
+        instance.makeCss(true);
       }
       if (instance.drawAndMakeConfigs != null) {
         instance.drawAndMakeConfigs();
@@ -447,7 +446,7 @@ WorktableCommon = (function() {
         event = Common.getInstanceFromMap(isCommon, id, classMapId);
         if (event instanceof ItemBase) {
           event.setMiniumObject(obj.value);
-          if (event instanceof CssItemBase && (event.makeCss != null)) {
+          if (event instanceof CssItemBase) {
             event.makeCss();
           }
           if (event.drawAndMakeConfigs != null) {

@@ -69,8 +69,12 @@ class Sidebar
       else
         sc.css('display', '')
 
-
 class SidebarUI
+
+  if gon?
+    constant = gon.const
+
+    @DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME
 
   # 通常スライダーの作成
   # @param [Int] id メーターのElementID
@@ -81,6 +85,8 @@ class SidebarUI
   # @param [Object] designConfigRoot デザインコンフィグRoot
   # @param [Int] stepValue 進捗数
   @settingSlider = (className, min, max, cssCode, cssStyle, designConfigRoot, stepValue = 0) ->
+    self = @
+
     meterElement = $('.' + className, designConfigRoot)
     valueElement = $('.' + className + '-value', designConfigRoot)
     d = $('.' + className + '-value', cssCode)[0]
@@ -98,7 +104,7 @@ class SidebarUI
       slide: (event, ui)->
         valueElement.val(ui.value)
         valueElement.html(ui.value)
-        cssStyle.text(cssCode.text())
+        _reflectStyle.call(self, event.target)
     })
 
   # HTML要素からグラデーションスライダーの作成
@@ -107,8 +113,9 @@ class SidebarUI
   # @param [Object] cssCode コードエレメント
   # @param [Object] cssStyle CSSプレビューのエレメント
   @settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
-    id = element.attr("id")
+    self = @
 
+    id = element.attr("id")
     try
       element.slider('destroy')
     catch #例外は握りつぶす
@@ -121,7 +128,7 @@ class SidebarUI
         index = $(ui.handle).index()
         position = $('.btn-bg-color' + (index + 2) + '-position', cssCode)
         position.html(("0" + ui.value).slice(-2))
-        cssStyle.text(cssCode.text())
+        _reflectStyle.call(self, event.target)
     })
 
     handleElement = element.children('.ui-slider-handle')
@@ -149,6 +156,8 @@ class SidebarUI
   # @param [Object] cssStyle CSSプレビューのエレメント
   # @param [Object] designConfigRoot デザインコンフィグRoot
   @settingGradientDegSlider = (className, min, max, cssCode, cssStyle, designConfigRoot) ->
+    self = @
+
     meterElement = $('.' + className, designConfigRoot)
     valueElement = $('.' + className + '-value', cssCode)
     webkitValueElement = $('.' + className + '-value-webkit', cssCode)
@@ -172,7 +181,7 @@ class SidebarUI
         valueElement.val(ui.value)
         valueElement.html(ui.value)
         webkitValueElement.html(webkitDeg[ui.value])
-        cssStyle.text(cssCode.text())
+        _reflectStyle.call(self, event.target)
     })
 
   # グラデーションの表示変更(スライダーのハンドル&カラーピッカー)
@@ -205,3 +214,10 @@ class SidebarUI
         element.css('display', 'none')
       else
         element.css('display', '')
+
+  _reflectStyle = (eventTarget) ->
+    prefix = ItemBase.DESIGN_CONFIG_ROOT_ID.replace('@id', '')
+    objId = $(eventTarget).closest(".#{CssItemBase.DESIGN_ROOT_CLASSNAME}").attr('id').replace(prefix, '')
+    item = window.instanceMap[objId]
+    if item? && item instanceof CssItemBase
+      item.reflectCssStyle()

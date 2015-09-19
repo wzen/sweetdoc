@@ -559,9 +559,9 @@ Common = (function() {
         dataIdx = 0;
         _cb = function(d) {
           var option;
-          if (d.css_info != null) {
+          if (d.css_temp != null) {
             option = {
-              css_temp: d.css_info
+              css_temp: d.css_temp
             };
           }
           return Common.availJs(d.item_id, d.js_src, option, (function(_this) {

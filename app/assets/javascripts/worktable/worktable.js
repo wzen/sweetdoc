@@ -4,8 +4,6 @@ var Worktable;
 Worktable = (function() {
   function Worktable() {}
 
-  window.worktablePage = true;
-
   return Worktable;
 
 })();

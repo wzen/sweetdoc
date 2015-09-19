@@ -25,7 +25,7 @@ EPVBackgroundColor = (function(superClass) {
       var self;
       self = $(this);
       if (!self.hasClass('temp') && !self.hasClass('baseColor')) {
-        return initColorPicker(self, bgColor, null);
+        return ColorPickerUtil.initColorPicker(self, bgColor, null);
       }
     });
   };
@@ -59,8 +59,8 @@ EPVBackgroundColor = (function(superClass) {
     emt = eventConfig.emt;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     value = writeValue[this.PageValueKey.VALUE];
-    initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
-    initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);
+    ColorPickerUtil.initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
+    ColorPickerUtil.initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);
     return true;
   };
 

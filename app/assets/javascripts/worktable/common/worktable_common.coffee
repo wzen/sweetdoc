@@ -56,10 +56,9 @@ class WorktableCommon
       # 画面中央に貼り付け
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0)
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0)
-      if instance instanceof CssItemBase && instance.makeCss?
+      if instance instanceof CssItemBase
         # CSSを新規作成する
-        instance.css = null
-        instance.makeCss()
+        instance.makeCss(true)
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
       instance.setItemAllPropToPageValue()
@@ -395,7 +394,7 @@ class WorktableCommon
         event = Common.getInstanceFromMap(isCommon, id, classMapId)
         if event instanceof ItemBase
           event.setMiniumObject(obj.value)
-          if event instanceof CssItemBase && event.makeCss?
+          if event instanceof CssItemBase
             event.makeCss()
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()

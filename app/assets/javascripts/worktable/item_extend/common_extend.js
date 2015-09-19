@@ -10,8 +10,10 @@ WorkTableCommonExtend = {
     }
     this.reDraw(show);
     this.makeDesignConfig();
-    EPVItem.writeDefaultToPageValue(this);
-    return Timeline.refreshAllTimeline();
+    if (this.constructor.defaultMethodName() != null) {
+      EPVItem.writeDefaultToPageValue(this);
+      return Timeline.refreshAllTimeline();
+    }
   },
   drawAndMakeConfigs: function(show) {
     if (show == null) {
@@ -24,7 +26,7 @@ WorkTableCommonExtend = {
     var sc;
     sc = $('.sidebar-config');
     sc.css('display', 'none');
-    $('.dc', sc).css('display', 'none');
+    $("." + SidebarUI.DESIGN_ROOT_CLASSNAME, sc).css('display', 'none');
     $('#design-config').css('display', '');
     return $('#' + this.getDesignConfigId()).css('display', '');
   },
@@ -58,7 +60,7 @@ WorkTableCommonExtend = {
             }
           };
           target = event.target;
-          initColorPickerValue();
+          ColorPickerUtil.initColorPickerValue();
           initOptionMenu(event);
           Sidebar.openConfigSidebar(target);
           return WorktableCommon.changeMode(Constant.Mode.OPTION);

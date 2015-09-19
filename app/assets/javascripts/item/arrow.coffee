@@ -387,12 +387,10 @@ class ArrowItem extends CanvasItemBase
     drawingContext.closePath()
 
   # 座標を基底Canvasに描画
-  # @param [Object] dc Canvasコンテキスト
   _drawCoodToBaseCanvas = ->
     _drawCoodToCanvas.call(@)
 
   # 座標を新しいCanvasに描画
-  # @param [Object] dc Canvasコンテキスト
   _drawCoodToNewCanvas = ->
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
@@ -416,7 +414,7 @@ class ArrowItem extends CanvasItemBase
 
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
 
-if window.worktablePage?
+if window.isWorkTable
   # ワークテーブル用矢印クラス
   class WorkTableArrowItem extends ArrowItem
     @include WorkTableCommonExtend

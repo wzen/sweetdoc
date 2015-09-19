@@ -16,10 +16,12 @@ WorkTableCommonExtend =
     @reDraw(show)
     # コンフィグ作成
     @makeDesignConfig()
-    # イベント記述
-    EPVItem.writeDefaultToPageValue(@)
-    # タイムライン作成
-    Timeline.refreshAllTimeline()
+
+    if @constructor.defaultMethodName()?
+      # デフォルトイベントがある場合はイベント作成
+      EPVItem.writeDefaultToPageValue(@)
+      # タイムライン更新
+      Timeline.refreshAllTimeline()
 
   # 描画&コンフィグ作成
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -35,7 +37,7 @@ WorkTableCommonExtend =
     # 全てのサイドバーを非表示
     sc = $('.sidebar-config')
     sc.css('display', 'none')
-    $('.dc', sc).css('display', 'none')
+    $(".#{SidebarUI.DESIGN_ROOT_CLASSNAME}", sc).css('display', 'none')
     $('#design-config').css('display', '')
     $('#' + @getDesignConfigId()).css('display', '')
 
@@ -64,7 +66,7 @@ WorkTableCommonExtend =
 
         target = event.target
         # カラーピッカー値を初期化
-        initColorPickerValue()
+        ColorPickerUtil.initColorPickerValue()
         # オプションメニューの値を初期化
         initOptionMenu(event)
         # オプションメニューを表示
