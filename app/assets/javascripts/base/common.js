@@ -566,9 +566,9 @@ Common = (function() {
           }
           return Common.availJs(d.item_id, d.js_src, option, (function(_this) {
             return function() {
-              PageValue.addItemInfo(d.item_id, d.te_actions);
+              PageValue.addItemInfo(d.item_id);
               if (window.isWorkTable && (typeof EventConfig !== "undefined" && EventConfig !== null)) {
-                EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values);
+                EventConfig.addEventConfigContents(d.item_id);
               }
               dataIdx += 1;
               if (dataIdx >= data.length) {

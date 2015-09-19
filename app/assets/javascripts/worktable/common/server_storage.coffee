@@ -133,8 +133,8 @@ class ServerStorage
                 # 全て読み込んだ後
                 callback.call(self)
             )
-            PageValue.addItemInfo(d.item_id, d.te_actions)
-            EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values)
+            PageValue.addItemInfo(d.item_id)
+            EventConfig.addEventConfigContents(d.item_id)
           )
 
         error: (data) ->

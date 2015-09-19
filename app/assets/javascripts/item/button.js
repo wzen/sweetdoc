@@ -18,6 +18,42 @@ ButtonItem = (function(superClass) {
     ButtonItem.ITEM_ID = window.loadedItemId;
   }
 
+  ButtonItem.actionProperties = function() {
+    return {
+      defaultMethod: 'defaultClick',
+      methods: {
+        defaultClick: {
+          actionType: Constant.ActionType.CLICK,
+          actionAnimationType: Constant.ActionAnimationType.CSS3_ANIMATION,
+          options: {
+            id: 'defaultClick',
+            name: 'Default click action'
+          }
+        },
+        changeColorScroll: {
+          actionType: Constant.ActionType.SCROLL,
+          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION,
+          scrollEnabledDirection: {
+            top: true,
+            bottom: true,
+            left: false,
+            right: false
+          },
+          scrollForwardDirection: {
+            top: false,
+            bottom: true,
+            left: false,
+            right: false
+          },
+          options: {
+            id: 'changeColorScroll_Design',
+            name: 'Changing color by click'
+          }
+        }
+      }
+    };
+  };
+
   ButtonItem.prototype.updateEventBefore = function() {
     var methodName;
     this.getJQueryElement().css('opacity', 0);

@@ -10,6 +10,18 @@ class ItemBase extends ItemEventBase
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
   @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
 
+  if gon?
+    constant = gon.const
+
+    class @ActionPropertiesKey
+      @METHODS = constant.ItemActionPropertiesKey.METHODS
+      @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
+      @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
+      @ANIMATION_TYPE = constant.ItemActionPropertiesKey.ANIMATION_TYPE
+      @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
+      @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
+      @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
+
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
@@ -147,26 +159,26 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', @ITEM_ID))
+    return @actionProperties()[@ActionPropertiesKey.DEFAULT_METHOD]
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', @ITEM_ID))
+    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ACTION_TYPE]
 
-  # アイテム作成時に設定されるデフォルトアクションタイプ
+  # アイテム作成時に設定されるデフォルトアニメーションタイプ
   @defaultAnimationType = ->
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', @ITEM_ID))
+    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ANIMATION_TYPE]
 
   @defaultEventConfigValue = ->
     return null
 
   # スクロールのデフォルト有効方向
   @defaultScrollEnabledDirection = ->
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', @ITEM_ID))
+    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_ENABLED_DIRECTION]
 
   # スクロールのデフォルト進行方向
   @defaultScrollForwardDirection = ->
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', @ITEM_ID))
+    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
 
   # イベントに書き込む情報
   eventConfigValue: ->

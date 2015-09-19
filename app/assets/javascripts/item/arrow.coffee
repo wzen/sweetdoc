@@ -15,10 +15,39 @@ class ArrowItem extends CanvasItemBase
   # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
   HEADER_HEIGHT = 50
 
-  @actions: ->
+  @actionProperties: ->
     {
-      methodName: 'scrollDraw'
-
+      defaultMethod: 'scrollDraw'
+      methods : {
+        scrollDraw: {
+          actionType: Constant.ActionType.SCROLL
+          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION
+          scrollEnabledDirection: {
+            top: true
+            bottom: true
+            left: false
+            right: false
+          }
+          scrollForwardDirection: {
+            top: false
+            bottom: true
+            left: false
+            right: false
+          }
+          options: {
+            id: 'drawScroll'
+            name: 'Drawing by scroll'
+          }
+        }
+        changeColorClick: {
+          actionType: Constant.ActionType.CLICK
+          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION
+          options: {
+            id: 'changeColorClick_Design'
+            name: 'Changing color by click'
+          }
+        }
+      }
     }
 
   # コンストラクタ

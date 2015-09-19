@@ -159,8 +159,8 @@ ServerStorage = (function() {
               return callback.call(self);
             }
           });
-          PageValue.addItemInfo(d.item_id, d.te_actions);
-          return EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values);
+          PageValue.addItemInfo(d.item_id);
+          return EventConfig.addEventConfigContents(d.item_id);
         });
       },
       error: function(data) {

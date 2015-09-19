@@ -206,4 +206,14 @@ class Const
     LEFT_ROOT_ID = 'guide_left'
     RIGHT_ROOT_ID = 'guide_right'
   end
+
+  class ItemActionPropertiesKey
+    METHODS = 'methods'
+    DEFAULT_METHOD = 'defaultMethod'
+    ACTION_TYPE = 'actionType'
+    ANIMATION_TYPE = 'actionAnimationType'
+    SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'
+    SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
+    OPTIONS = 'options'
+  end
 end

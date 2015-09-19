@@ -36,18 +36,9 @@ class PageValue
       @instanceValue = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
       # @property [return] インスタンスキャッシュ値
       @instanceValueCache = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + 'cache' + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
-      # @property [String] ITEM_INFO_PREFIX アイテム情報プレフィックス
-      @ITEM_INFO_PREFIX = 'iteminfo'
-      # @property [String] ITEM_DEFAULT_METHODNAME デフォルトメソッド名
-      @ITEM_DEFAULT_METHODNAME = @ITEM_INFO_PREFIX + ':@item_id:default:methodname'
-      # @property [String] ITEM_DEFAULT_METHODACTIONTYPE デフォルトアクションタイプ
-      @ITEM_DEFAULT_ACTIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:actiontype'
-      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
-      @ITEM_DEFAULT_ANIMATIONTYPE = @ITEM_INFO_PREFIX + ':@item_id:default:animationtype'
-      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
-      @ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION = @ITEM_INFO_PREFIX + ':@item_id:default:scroll_enabled_direction'
-      # @property [String] ITEM_DEFAULT_ANIMATIONTYPE デフォルトアニメーションタイプ
-      @ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION = @ITEM_INFO_PREFIX + ':@item_id:default:scroll_forward_direction'
+      # @property [String] ITEM_LOADED_PREFIX アイテム読み込み済みプレフィックス
+      @ITEM_LOADED_PREFIX = 'itemloaded'
+      @itemLoaded = (itemId) -> "#{@ITEM_LOADED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{itemId}"
       # @property [String] E_ROOT イベント値ルート
       @E_ROOT = constant.PageValueKey.E_ROOT
       # @property [String] E_SUB_ROOT イベントプレフィックス
@@ -85,22 +76,8 @@ class PageValue
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID
-  # @param [Array] itemInfos アイテム情報
-  @addItemInfo = (itemId, itemInfos) ->
-    if itemInfos? && itemInfos.length > 0
-      isSet = false
-      itemInfos.forEach( (itemInfo) =>
-        if itemInfo.is_default? && itemInfo.is_default
-          # デフォルトメソッド & デフォルトアクションタイプ
-          @setInstancePageValue(@Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', itemId), itemInfo.method_name)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', itemId), itemInfo.action_event_type_id)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', itemId), itemInfo.action_animation_type_id)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', itemId), if itemInfo.scroll_enabled_direction? then JSON.parse(itemInfo.scroll_enabled_direction) else null)
-          @setInstancePageValue(@Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', itemId), if itemInfo.scroll_forward_direction? then JSON.parse(itemInfo.scroll_forward_direction) else null)
-          isSet = true
-      )
-      if isSet
-        LocalStorage.saveInstancePageValue()
+  @addItemInfo = (itemId) ->
+    @setInstancePageValue(@Key.itemLoaded(itemId), true)
 
   # 汎用値を取得
   # @param [String] key キー値
@@ -366,7 +343,7 @@ class PageValue
   @getLoadedItemIds = ->
     ret = []
     # インスタンスPageValueを参照
-    itemInfoPageValues = PageValue.getInstancePageValue(@Key.ITEM_INFO_PREFIX)
+    itemInfoPageValues = PageValue.getInstancePageValue(@Key.ITEM_LOADED_PREFIX)
     for k, v of itemInfoPageValues
       if $.inArray(parseInt(k), ret) < 0
         ret.push(parseInt(k))

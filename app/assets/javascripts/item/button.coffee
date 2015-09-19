@@ -8,6 +8,42 @@ class ButtonItem extends CssItemBase
     # @property [String] ITEM_ID アイテム種別
     @ITEM_ID = window.loadedItemId
 
+  @actionProperties: ->
+    {
+      defaultMethod: 'defaultClick'
+      methods: {
+        defaultClick: {
+          actionType: Constant.ActionType.CLICK
+          actionAnimationType: Constant.ActionAnimationType.CSS3_ANIMATION
+          options: {
+            id: 'defaultClick'
+            name: 'Default click action'
+          }
+        }
+
+        changeColorScroll: {
+          actionType: Constant.ActionType.SCROLL
+          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION
+          scrollEnabledDirection: {
+            top: true
+            bottom: true
+            left: false
+            right: false
+          }
+          scrollForwardDirection: {
+            top: false
+            bottom: true
+            left: false
+            right: false
+          }
+          options: {
+            id: 'changeColorScroll_Design'
+            name: 'Changing color by click'
+          }
+        }
+      }
+    }
+
   # イベント前の表示状態にする
   updateEventBefore: ->
     @getJQueryElement().css('opacity', 0)

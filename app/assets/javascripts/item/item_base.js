@@ -4,6 +4,8 @@ var CanvasItemBase, CssItemBase, ItemBase,
   hasProp = {}.hasOwnProperty;
 
 ItemBase = (function(superClass) {
+  var constant;
+
   extend(ItemBase, superClass);
 
   ItemBase.IDENTITY = "";
@@ -11,6 +13,30 @@ ItemBase = (function(superClass) {
   ItemBase.ITEM_ID = "";
 
   ItemBase.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    ItemBase.ActionPropertiesKey = (function() {
+      function ActionPropertiesKey() {}
+
+      ActionPropertiesKey.METHODS = constant.ItemActionPropertiesKey.METHODS;
+
+      ActionPropertiesKey.DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD;
+
+      ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
+
+      ActionPropertiesKey.ANIMATION_TYPE = constant.ItemActionPropertiesKey.ANIMATION_TYPE;
+
+      ActionPropertiesKey.SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION;
+
+      ActionPropertiesKey.SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION;
+
+      ActionPropertiesKey.OPTIONS = constant.ItemActionPropertiesKey.OPTIONS;
+
+      return ActionPropertiesKey;
+
+    })();
+  }
 
   function ItemBase(cood) {
     if (cood == null) {
@@ -138,15 +164,15 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', this.ITEM_ID));
+    return this.actionProperties()[this.ActionPropertiesKey.DEFAULT_METHOD];
   };
 
   ItemBase.defaultActionType = function() {
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', this.ITEM_ID));
+    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ACTION_TYPE];
   };
 
   ItemBase.defaultAnimationType = function() {
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', this.ITEM_ID));
+    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ANIMATION_TYPE];
   };
 
   ItemBase.defaultEventConfigValue = function() {
@@ -154,11 +180,11 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.defaultScrollEnabledDirection = function() {
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', this.ITEM_ID));
+    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
   };
 
   ItemBase.defaultScrollForwardDirection = function() {
-    return PageValue.getInstancePageValue(PageValue.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', this.ITEM_ID));
+    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
   };
 
   ItemBase.prototype.eventConfigValue = function() {

@@ -501,9 +501,9 @@ class Common
             if d.css_info?
               option = {css_temp: d.css_info}
             Common.availJs(d.item_id, d.js_src, option, =>
-              PageValue.addItemInfo(d.item_id, d.te_actions)
+              PageValue.addItemInfo(d.item_id)
               if window.isWorkTable && EventConfig?
-                EventConfig.addEventConfigContents(d.item_id, d.te_actions, d.te_values)
+                EventConfig.addEventConfigContents(d.item_id)
               dataIdx += 1
               if dataIdx >= data.length
                 if callback?

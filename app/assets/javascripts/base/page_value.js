@@ -55,17 +55,11 @@ PageValue = (function() {
         return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + 'cache' + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
       };
 
-      Key.ITEM_INFO_PREFIX = 'iteminfo';
+      Key.ITEM_LOADED_PREFIX = 'itemloaded';
 
-      Key.ITEM_DEFAULT_METHODNAME = Key.ITEM_INFO_PREFIX + ':@item_id:default:methodname';
-
-      Key.ITEM_DEFAULT_ACTIONTYPE = Key.ITEM_INFO_PREFIX + ':@item_id:default:actiontype';
-
-      Key.ITEM_DEFAULT_ANIMATIONTYPE = Key.ITEM_INFO_PREFIX + ':@item_id:default:animationtype';
-
-      Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION = Key.ITEM_INFO_PREFIX + ':@item_id:default:scroll_enabled_direction';
-
-      Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION = Key.ITEM_INFO_PREFIX + ':@item_id:default:scroll_forward_direction';
+      Key.itemLoaded = function(itemId) {
+        return "" + this.ITEM_LOADED_PREFIX + this.PAGE_VALUES_SEPERATOR + itemId;
+      };
 
       Key.E_ROOT = constant.PageValueKey.E_ROOT;
 
@@ -136,26 +130,8 @@ PageValue = (function() {
     })();
   }
 
-  PageValue.addItemInfo = function(itemId, itemInfos) {
-    var isSet;
-    if ((itemInfos != null) && itemInfos.length > 0) {
-      isSet = false;
-      itemInfos.forEach((function(_this) {
-        return function(itemInfo) {
-          if ((itemInfo.is_default != null) && itemInfo.is_default) {
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_METHODNAME.replace('@item_id', itemId), itemInfo.method_name);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ACTIONTYPE.replace('@item_id', itemId), itemInfo.action_event_type_id);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_ANIMATIONTYPE.replace('@item_id', itemId), itemInfo.action_animation_type_id);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_ENABLED_DIRECTION.replace('@item_id', itemId), itemInfo.scroll_enabled_direction != null ? JSON.parse(itemInfo.scroll_enabled_direction) : null);
-            _this.setInstancePageValue(_this.Key.ITEM_DEFAULT_SCROLL_FORWARD_DIRECTION.replace('@item_id', itemId), itemInfo.scroll_forward_direction != null ? JSON.parse(itemInfo.scroll_forward_direction) : null);
-            return isSet = true;
-          }
-        };
-      })(this));
-      if (isSet) {
-        return LocalStorage.saveInstancePageValue();
-      }
-    }
+  PageValue.addItemInfo = function(itemId) {
+    return this.setInstancePageValue(this.Key.itemLoaded(itemId), true);
   };
 
   PageValue.getGeneralPageValue = function(key, updateOnly) {
@@ -452,7 +428,7 @@ PageValue = (function() {
   PageValue.getLoadedItemIds = function() {
     var itemInfoPageValues, k, ret, v;
     ret = [];
-    itemInfoPageValues = PageValue.getInstancePageValue(this.Key.ITEM_INFO_PREFIX);
+    itemInfoPageValues = PageValue.getInstancePageValue(this.Key.ITEM_LOADED_PREFIX);
     for (k in itemInfoPageValues) {
       v = itemInfoPageValues[k];
       if ($.inArray(parseInt(k), ret) < 0) {
