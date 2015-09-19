@@ -17,7 +17,7 @@ run = ->
       # submit詰まり防止のため少し遅延させる
       setTimeout( ->
         document.run_form.submit()
-      , 150)
+      , 300)
 
     else
       # イベントが存在しない場合は表示しない

@@ -12,7 +12,7 @@ run = function() {
       document.run_form.target = target;
       return setTimeout(function() {
         return document.run_form.submit();
-      }, 150);
+      }, 300);
     } else {
       return Message.showWarn('No event');
     }
