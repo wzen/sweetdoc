@@ -48,8 +48,6 @@ class ItemBase extends ItemEventBase
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
 
-
-
   # コンフィグメニューの要素IDを取得
   # @return [String] HTML要素ID
   getDesignConfigId: ->
@@ -256,6 +254,11 @@ class CssItemBase extends ItemBase
     super(obj)
     @mousedownCood = Common.makeClone(obj.mousedownCood)
     @css = Common.makeClone(obj.css)
+
+  # CSS内のオブジェクトIDを自身のものに変更
+  changeCssId: (oldObjId) ->
+    reg = new RegExp(oldObjId, 'g')
+    @css = @css.replace(reg, @id)
 
   # CSSのルートのIDを取得
   # @return [String] CSSルートID

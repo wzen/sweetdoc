@@ -16,8 +16,8 @@ Paging = (function() {
     selectRoot = $("." + Constant.Paging.NAV_SELECT_ROOT_CLASS, root);
     menu = "<li><a class='" + Constant.Paging.NAV_MENU_PAGE_CLASS + " menu-item'>" + Constant.Paging.NAV_MENU_PAGE_NAME + "</a></li>";
     divider = "<li class='divider'></li>";
-    newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>Add next page</a></li>";
-    newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>Add next fork</a></li>";
+    newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>Add page</a></li>";
+    newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>Add fork</a></li>";
     pageMenu = '';
     for (i = k = 1, ref = pageCount; 1 <= ref ? k <= ref : k >= ref; i = 1 <= ref ? ++k : --k) {
       navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i);

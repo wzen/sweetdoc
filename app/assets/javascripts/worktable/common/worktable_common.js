@@ -70,7 +70,8 @@ WorktableCommon = (function() {
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0);
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0);
       if (instance instanceof CssItemBase) {
-        instance.makeCss(true);
+        instance.changeCssId(window.copiedInstance.id);
+        instance.makeCss();
       }
       if (instance.drawAndMakeConfigs != null) {
         instance.drawAndMakeConfigs();

@@ -57,8 +57,9 @@ class WorktableCommon
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0)
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0)
       if instance instanceof CssItemBase
-        # CSSを新規作成する
-        instance.makeCss(true)
+        # CSSを作成する ※CSSのIDをコピー先に変更
+        instance.changeCssId(window.copiedInstance.id)
+        instance.makeCss()
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
       instance.setItemAllPropToPageValue()

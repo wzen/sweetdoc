@@ -272,6 +272,12 @@ CssItemBase = (function(superClass) {
     return this.css = Common.makeClone(obj.css);
   };
 
+  CssItemBase.prototype.changeCssId = function(oldObjId) {
+    var reg;
+    reg = new RegExp(oldObjId, 'g');
+    return this.css = this.css.replace(reg, this.id);
+  };
+
   CssItemBase.prototype.getCssRootElementId = function() {
     return "css-" + this.id;
   };
