@@ -96,12 +96,8 @@ class Const
     EVENT_COMMON_PREFIX = 'c_'
     # @property [String] COMMON_ACTION_CLASS イベント共通アクションクラス名
     COMMON_ACTION_CLASS = "#{EVENT_COMMON_PREFIX}@commoneventid"
-    # @property [String] ITEM_ACTION_CLASS イベントアイテムアクションクラス名
-    ITEM_ACTION_CLASS = 'item_event_action_@itemid'
     # @property [String] COMMON_VALUES_CLASS 共通イベントクラス名
     COMMON_VALUES_CLASS = 'common_event_value_@commoneventid_@methodname'
-    # @property [String] ITEM_VALUES_CLASS アイテムイベントクラス名
-    ITEM_VALUES_CLASS = 'item_event_value_@itemid_@methodname'
   end
 
   class PageValueKey

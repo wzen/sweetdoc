@@ -27,7 +27,12 @@ ButtonItem = (function(superClass) {
           actionAnimationType: Constant.ActionAnimationType.CSS3_ANIMATION,
           options: {
             id: 'defaultClick',
-            name: 'Default click action'
+            name: 'Default click action',
+            desc: "Click push action",
+            ja: {
+              name: '通常クリック',
+              desc: 'デフォルトのボタンクリック'
+            }
           }
         },
         changeColorScroll: {

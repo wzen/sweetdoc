@@ -68,19 +68,6 @@ ActiveRecord::Schema.define(version: 20150828092454) do
     t.datetime "updated_at"
   end
 
-  create_table "item_action_events", force: true do |t|
-    t.integer  "item_id",                                  null: false
-    t.integer  "action_event_type_id",                     null: false
-    t.integer  "action_animation_type_id",                 null: false
-    t.string   "method_name",                              null: false
-    t.text     "scroll_enabled_direction"
-    t.text     "scroll_forward_direction"
-    t.boolean  "is_default",               default: false
-    t.text     "options"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "item_categories", force: true do |t|
     t.integer  "item_id",     null: false
     t.integer  "category_id", null: false
@@ -111,14 +98,6 @@ ActiveRecord::Schema.define(version: 20150828092454) do
   create_table "localize_common_action_events", force: true do |t|
     t.integer  "common_action_event_id", null: false
     t.integer  "locale_id",              null: false
-    t.text     "options"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "localize_item_action_events", force: true do |t|
-    t.integer  "item_action_event_id", null: false
-    t.integer  "locale_id",            null: false
     t.text     "options"
     t.datetime "created_at"
     t.datetime "updated_at"

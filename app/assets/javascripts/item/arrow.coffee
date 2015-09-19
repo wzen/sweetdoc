@@ -37,6 +37,11 @@ class ArrowItem extends CanvasItemBase
           options: {
             id: 'drawScroll'
             name: 'Drawing by scroll'
+            desc: "Draw by scroll action"
+            ja: {
+              name: 'スクロールで描画'
+              desc: 'スクロールで矢印を描画'
+            }
           }
         }
         changeColorClick: {

@@ -6,33 +6,6 @@ class ItemJs
     return "#{Rails.application.config.assets.prefix}/item/#{src_name}"
   end
 
-  # item_action_eventレコードからイベント用のアクション情報を取り出す
-  # @param [Array] item_action_events item_action_eventレコード配列
-  def self.event_actions(item_action_events)
-    return item_action_events.map do |d|
-      {
-          item_id: d.item_id,
-          action_event_type_id: d.action_event_type_id,
-          method_name: d.method_name,
-          action_animation_type_id: d.action_animation_type_id,
-          scroll_enabled_direction: d.scroll_enabled_direction,
-          scroll_forward_direction: d.scroll_forward_direction,
-          is_default: d.is_default,
-          options: d.options
-      }
-    end
-  end
-
-  # item_action_eventのレコードからイベント用のアクション値情報を取り出す
-  # @param [Array] item_action_events item_action_eventレコード配列
-  def self.event_values(item_action_events)
-    values = ''
-    item_action_events.each do |d|
-      values += ItemJsController.new.timeline_config(d)
-    end
-    return values
-  end
-
   # item_idからイベントに必要なレコードを取得
   # @param [Int] item_id アイテムID
   def self.find_events_by_itemid(item_id)
@@ -56,36 +29,16 @@ class ItemJs
     return item_action_events
   end
 
-  # item_action_eventから情報を抽出する
-  # @param [Array] item_action_events_all item_action_eventレコード配列
-  def self.extract_iae(item_action_events_all)
-    item_ids = item_action_events_all.pluck(:item_id).uniq
-
+  # itemレコードから情報を抽出する
+  # @param [Array] item_all itemレコード配列
+  def self.extract_iteminfo(item_all)
     ret = []
-    item_ids.each do |item_id|
-      item_action_events = item_action_events_all.select{|c| c.item_id == item_id }
-      # JSファイル取得
-      js_src = self.js_path(item_action_events.first.item_src_name)
-
-      if item_action_events.first.item_css_temp
-        # CSS取得
-        css_info = item_action_events.first.item_css_temp
-      end
-
-      # TODO: デザインconfig取得
-
-      # イベント アクション名一覧
-      te_actions = self.event_actions(item_action_events)
-      # イベント コンフィグUI
-      te_values = self.event_values(item_action_events)
-
+    item_all.each do |item|
       ret <<
           {
-              item_id: item_id,
-              js_src: js_src,
-              css_info: css_info,
-              te_actions: te_actions,
-              te_values: te_values
+              item_id: item.id,
+              js_src: self.js_path(item.src_name),
+              css_info: item.css_temp,
           }
     end
 

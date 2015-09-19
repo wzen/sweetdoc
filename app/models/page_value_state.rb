@@ -163,8 +163,7 @@ class PageValueState
           end
         end
 
-        item_action_events_all = ItemJs.find_events_by_itemid(itemids)
-        item_js_list = ItemJs.extract_iae(item_action_events_all)
+        item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
       else
         epd = nil
       end
