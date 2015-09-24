@@ -1,5 +1,5 @@
 class PageValueState
-  def self.save_state(user_id, i_page_values, e_page_values, s_page_values)
+  def self.save_state(user_id, page_count, i_page_values, e_page_values, s_page_values)
     begin
       if i_page_values != 'null' || e_page_values != 'null' || s_page_values != 'null'
 
@@ -32,7 +32,7 @@ class PageValueState
             # 新規データをInsert
             i_page_values.each do |k, v|
               page_num = v['pageNum']
-              updated_page_num << page_num
+              updated_page_num << page_num.to_i
               pagevalue = v['pagevalue']
 
               ip = InstancePagevalue.new({data: pagevalue})
@@ -44,13 +44,12 @@ class PageValueState
                                                 })
               ipp.save!
             end
-
             # update対象でないpagenumは古いデータを入れる
             if last_user_page_values != nil
               last_ipv_paging = InstancePagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
               if last_ipv_paging != nil
                 last_ipv_paging.each do |l|
-                  unless updated_page_num.include?(l.page_num)
+                  if !updated_page_num.include?(l.page_num) && l.page_num <= page_count.to_i
                     ipp = InstancePagevaluePaging.new({
                                                           user_pagevalue_id: created_upv_id,
                                                           page_num: l.page_num,
@@ -69,7 +68,7 @@ class PageValueState
             # 新規データをInsert
             e_page_values.each do |k, v|
               page_num = v['pageNum']
-              updated_page_num << page_num
+              updated_page_num << page_num.to_i
               pagevalue = v['pagevalue']
 
               ep = EventPagevalue.new({data: pagevalue})
@@ -87,7 +86,7 @@ class PageValueState
               last_epv_paging = EventPagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
               if last_epv_paging != nil
                 last_epv_paging.each do |l|
-                  unless updated_page_num.include?(l.page_num)
+                  if !updated_page_num.include?(l.page_num) && l.page_num <= page_count.to_i
                     epp = EventPagevaluePaging.new({
                                                        user_pagevalue_id: created_upv_id,
                                                        page_num: l.page_num,

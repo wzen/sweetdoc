@@ -163,6 +163,7 @@ class Const
   class ServerStorage
     class Key
       USER_ID = 'user_id'
+      PAGE_COUNT = 'page_count'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       SETTING_PAGE_VALUE = 's'

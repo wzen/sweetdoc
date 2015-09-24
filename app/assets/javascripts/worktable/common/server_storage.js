@@ -11,7 +11,7 @@ ServerStorage = (function() {
     ServerStorage.Key = (function() {
       function Key() {}
 
-      Key.USER_ID = constant.ServerStorage.Key.USER_ID;
+      Key.PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT;
 
       Key.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
 
@@ -40,6 +40,7 @@ ServerStorage = (function() {
   ServerStorage.save = function() {
     var data, event, eventPagevalues, instance, instancePagevalues, k, pageNum, v;
     data = {};
+    data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
     instancePagevalues = [];
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
     for (k in instance) {

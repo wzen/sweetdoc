@@ -5,7 +5,7 @@ class ServerStorage
     constant = gon.const
     # ページ内値保存キー
     class @Key
-      @USER_ID = constant.ServerStorage.Key.USER_ID
+      @PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT
       @INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE
       @EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE
       @SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE
@@ -21,6 +21,7 @@ class ServerStorage
   # サーバにアイテムの情報を保存
   @save = ->
     data = {}
+    data[@Key.PAGE_COUNT] = parseInt(PageValue.getPageCount())
     # FIXME: 差分保存 & バッチでフル保存するようにする
     instancePagevalues = []
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
