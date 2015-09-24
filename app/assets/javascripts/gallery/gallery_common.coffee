@@ -2,26 +2,25 @@ class GalleryCommon
 
   # ビュー初期化
   @initView: ->
+    # 変数初期化
+    @initCommonVar()
     # リサイズ
     @initResize()
     # グリッドビュー
     @initGridView()
 
+  @initCommonVar: ->
+    window.mainWrapper = $('#main_wrapper')
+    window.contentsWrapper = $('#contents_wrapper')
+    window.gridWrapper = $('#grid_wrapper')
+
   # グリッド初期化
   @initGridView: ->
-
-    mas = new Masonry('#grid_wrapper', {
+    window.gridWrapper.masonry({
       itemSelector: '.grid_contents_wrapper'
       columnWidth: 380
       isFitWidth: true
     })
-    mas.layout()
-
-  # グリッドビューサイズ設定
-  @updateGridViewSize: ->
-    contentsWrapper = $('#contents_wrapper')
-    sidebarCollapseWidth = 50
-    $('#grid_wrapper').width(contentsWrapper.width() - sidebarCollapseWidth)
 
   # リサイズ初期化
   @initResize: ->
@@ -31,6 +30,6 @@ class GalleryCommon
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
-    @updateGridViewSize()
+
 
 

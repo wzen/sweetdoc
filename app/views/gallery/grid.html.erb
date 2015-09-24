@@ -1,25 +1,28 @@
 <%= stylesheet_link_tag 'gallery', media: 'all', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'gallery', 'data-turbolinks-track' => true %>
 
-<div id="contents_wrapper">
-    <div id="grid_wrapper" style="float: left">
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
-        <%= render 'gallery/grid_contents' %>
+<div id="main_wrapper">
+    <div id="contents_wrapper" style="float: left;">
+        <div id="grid_centering_wrapper">
+            <div id="grid_wrapper">
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+                <%= render 'gallery/grid_contents' %>
+            </div>
+        </div>
     </div>
-
     <div id="sidebar_wrapper" class="collapse" style="float: left">
         <%= render 'gallery/sidebar/sidebar' %>
     </div>

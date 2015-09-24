@@ -5,25 +5,23 @@ GalleryCommon = (function() {
   function GalleryCommon() {}
 
   GalleryCommon.initView = function() {
+    this.initCommonVar();
     this.initResize();
     return this.initGridView();
   };
 
+  GalleryCommon.initCommonVar = function() {
+    window.mainWrapper = $('#main_wrapper');
+    window.contentsWrapper = $('#contents_wrapper');
+    return window.gridWrapper = $('#grid_wrapper');
+  };
+
   GalleryCommon.initGridView = function() {
-    var mas;
-    mas = new Masonry('#grid_wrapper', {
+    return window.gridWrapper.masonry({
       itemSelector: '.grid_contents_wrapper',
       columnWidth: 380,
       isFitWidth: true
     });
-    return mas.layout();
-  };
-
-  GalleryCommon.updateGridViewSize = function() {
-    var contentsWrapper, sidebarCollapseWidth;
-    contentsWrapper = $('#contents_wrapper');
-    sidebarCollapseWidth = 50;
-    return $('#grid_wrapper').width(contentsWrapper.width() - sidebarCollapseWidth);
   };
 
   GalleryCommon.initResize = function() {
@@ -32,9 +30,7 @@ GalleryCommon = (function() {
     });
   };
 
-  GalleryCommon.resizeMainContainerEvent = function() {
-    return this.updateGridViewSize();
-  };
+  GalleryCommon.resizeMainContainerEvent = function() {};
 
   return GalleryCommon;
 
