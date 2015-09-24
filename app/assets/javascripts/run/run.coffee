@@ -1,11 +1,7 @@
-class Run
-
-  # 閲覧ページ読み込みフラグ
-  window.runPage = true
-
 $ ->
   window.isWorkTable = false
   window.eventAction = null
+  window.runPage = true
 
   # 変数初期化
   CommonVar.initVarWhenLoadedView()

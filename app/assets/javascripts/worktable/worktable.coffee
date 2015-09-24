@@ -1,4 +1,3 @@
-class Worktable
 $ ->
   window.isWorkTable = true
 

@@ -18,7 +18,7 @@
 //= require i18n
 // IDE not aware under vendor/asset/
 //= require ../../../vendor/assets/bootstrap/bootstrap.js
-//= require ../../../vendor/assets/contextmenu/Super-Theme-Switcher/jquery.themeswitcher.js
+// require ../../../vendor/assets/contextmenu/Super-Theme-Switcher/jquery.themeswitcher.js
 //= require ../../../vendor/assets/contextmenu/jquery.ui-contextmenu.js
 //= require_directory ../../../vendor/assets/colorpicker/js
 // require ../../../vendor/assets/colorpicker/js/colorpicker.js

@@ -1,0 +1,3 @@
+$ ->
+  GalleryCommon.initView()
+

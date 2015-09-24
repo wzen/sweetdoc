@@ -7,6 +7,7 @@
 //= require jquery.transit.min
 //= require turbolinks
 //= require i18n
+//= require ../../../vendor/assets/html2canvas/html2canvas.min
 // IDE not aware under vendor/asset/
 //= require_directory ./i18n
 //= require base/constant
