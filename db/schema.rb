@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828092454) do
+ActiveRecord::Schema.define(version: 20150924230556) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -50,6 +50,51 @@ ActiveRecord::Schema.define(version: 20150828092454) do
 
   create_table "event_pagevalues", force: true do |t|
     t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "galleries", force: true do |t|
+    t.integer  "user_id",                              null: false
+    t.integer  "gallery_tags_id"
+    t.integer  "gallery_instance_pagevalue_paging_id"
+    t.integer  "gallery_event_pagevalue_paging_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_event_pagevalue_pagings", force: true do |t|
+    t.integer  "gallery_id",                 null: false
+    t.integer  "page_num",                   null: false
+    t.integer  "gallery_event_pagevalue_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_event_pagevalues", force: true do |t|
+    t.integer  "page_num",   null: false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_instance_pagevalue_pagings", force: true do |t|
+    t.integer  "gallery_id",                    null: false
+    t.integer  "page_num",                      null: false
+    t.integer  "gallery_instance_pagevalue_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_instance_pagevalues", force: true do |t|
+    t.integer  "page_num",   null: false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_tags", force: true do |t|
+    t.text     "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
