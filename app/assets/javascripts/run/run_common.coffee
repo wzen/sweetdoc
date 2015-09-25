@@ -257,6 +257,41 @@ class RunCommon
     window.forkNumStacks[pn].pop()
     return true
 
+  # ギャラリーアップロード確認クリック
+  @updateGalleryConfirm = ->
+    # おすすめタグ一覧を表示
+    # 重み付けから取得
+
+    # TODO: 作成物の入力値から単語を取得(別スレッド)
+
+  # ギャラリーアップロード
+  @uploadGallery = (callback = null) ->
+
+    # 確認ダイアログ
+
+
+    # ギャラリー保存処理
+    _saveGallery = ->
+      data = {}
+
+      $.ajax(
+        {
+          url: "/gallery/save_state"
+          type: "POST"
+          dataType: "json"
+          data: data
+          success: (data)->
+            # 正常完了処理
+
+            # コールバック
+            if callback?
+              callback()
+          error: (data) ->
+        }
+      )
+
+
+
   # Mainコンテナ初期化
   @initMainContainer = ->
     CommonVar.runCommonVar()

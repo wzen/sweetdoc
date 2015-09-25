@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150924230556) do
+ActiveRecord::Schema.define(version: 20150925055739) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -55,10 +55,9 @@ ActiveRecord::Schema.define(version: 20150924230556) do
   end
 
   create_table "galleries", force: true do |t|
-    t.integer  "user_id",                              null: false
-    t.integer  "gallery_tags_id"
-    t.integer  "gallery_instance_pagevalue_paging_id"
-    t.integer  "gallery_event_pagevalue_paging_id"
+    t.integer  "user_id",    null: false
+    t.string   "title"
+    t.text     "caption"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -93,8 +92,16 @@ ActiveRecord::Schema.define(version: 20150924230556) do
     t.datetime "updated_at"
   end
 
+  create_table "gallery_tag_maps", force: true do |t|
+    t.integer  "gallery_id",     null: false
+    t.integer  "gallery_tag_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "gallery_tags", force: true do |t|
-    t.text     "name"
+    t.string   "name",       null: false
+    t.integer  "weight"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

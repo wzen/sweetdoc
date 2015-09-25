@@ -33,6 +33,10 @@ ja:
     select_opt_group:
       common: "共通イベント"
       item: "アイテム"
+  upload_confirm:
+    title: "タイトル"
+    caption: "キャプション"
+    version: "バージョン"
   message:
     dialog:
       new_project: "'作成中のコンテンツは全て削除されます。'"
@@ -45,6 +49,11 @@ ja:
         load:
           success: 'アイテムの状態を読み込みました。'
           error: 'アイテムの読み込みに失敗しました。'
+    gallery:
+      upload:
+        save:
+          success: ""
+          error: ""
   common_action:
     background: "背景"
     screen: "画面表示"

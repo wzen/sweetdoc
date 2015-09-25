@@ -274,6 +274,31 @@ RunCommon = (function() {
     return true;
   };
 
+  RunCommon.updateGalleryConfirm = function() {};
+
+  RunCommon.uploadGallery = function(callback) {
+    var _saveGallery;
+    if (callback == null) {
+      callback = null;
+    }
+    return _saveGallery = function() {
+      var data;
+      data = {};
+      return $.ajax({
+        url: "/gallery/save_state",
+        type: "POST",
+        dataType: "json",
+        data: data,
+        success: function(data) {
+          if (callback != null) {
+            return callback();
+          }
+        },
+        error: function(data) {}
+      });
+    };
+  };
+
   RunCommon.initMainContainer = function() {
     CommonVar.runCommonVar();
     this.initView();

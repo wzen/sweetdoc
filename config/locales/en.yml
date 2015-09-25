@@ -54,6 +54,10 @@ en:
     select_opt_group:
       common: "Common Event"
       item: "Item"
+  upload_confirm:
+    title: "Title"
+    caption: "Caption"
+    version: "Version"
   message:
     dialog:
       new_project: "All the contents making will delete."
@@ -64,6 +68,11 @@ en:
           success: ""
           error: ""
         load:
+          error: ""
+    gallery:
+      upload:
+        save:
+          success: ""
           error: ""
   common_action:
     background: "Background"
