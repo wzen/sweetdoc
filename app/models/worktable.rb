@@ -1,3 +1,8 @@
+require 'action_event/common_action'
+require 'action_event/common_action_event'
+require 'action_event/localize_common_action_event'
+require 'common/locale'
+
 class Worktable
   def self.init_common_events
     # 共通イベントの取得

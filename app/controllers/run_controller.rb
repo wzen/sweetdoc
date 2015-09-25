@@ -1,3 +1,5 @@
+require 'common/const'
+
 class RunController < ApplicationController
   def index
     # リクエストサイズ表示

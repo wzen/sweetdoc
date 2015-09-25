@@ -1,3 +1,5 @@
+require 'common/const'
+
 class Run
 
   def self.make_pagevalue(root, pagevalue_root)

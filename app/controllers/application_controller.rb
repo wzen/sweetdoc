@@ -1,4 +1,5 @@
-require 'const'
+require 'common/const'
+require 'user/user'
 
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.

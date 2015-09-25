@@ -1,3 +1,11 @@
+require 'common/const'
+require 'pagevalue/event_pagevalue'
+require 'pagevalue/event_pagevalue_paging'
+require 'pagevalue/instance_pagevalue'
+require 'pagevalue/instance_pagevalue_paging'
+require 'pagevalue/setting_pagevalue'
+require 'pagevalue/user_pagevalue'
+
 class PageValueState
   def self.save_state(user_id, page_count, i_page_values, e_page_values, s_page_values)
     begin

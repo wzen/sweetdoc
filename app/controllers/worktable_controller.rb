@@ -1,4 +1,4 @@
-require 'const'
+require 'common/const'
 
 class WorktableController < ApplicationController
   def index

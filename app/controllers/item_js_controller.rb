@@ -1,3 +1,6 @@
+require 'item/item'
+require 'item/item_js'
+
 class ItemJsController < ApplicationController
 
   def index

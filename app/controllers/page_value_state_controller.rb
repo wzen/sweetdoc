@@ -1,4 +1,6 @@
-require 'const'
+require 'common/const'
+require 'pagevalue/page_value_state'
+
 
 class PageValueStateController < ApplicationController
   def save_state
