@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150925055739) do
+ActiveRecord::Schema.define(version: 20150926120415) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -41,81 +41,113 @@ ActiveRecord::Schema.define(version: 20150925055739) do
   end
 
   create_table "event_pagevalue_pagings", force: true do |t|
-    t.integer  "user_pagevalue_id",  null: false
-    t.integer  "page_num",           null: false
-    t.integer  "event_pagevalue_id", null: false
+    t.integer  "user_pagevalue_id",                  null: false
+    t.integer  "page_num",                           null: false
+    t.integer  "event_pagevalue_id",                 null: false
+    t.boolean  "del_flg",            default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "event_pagevalues", force: true do |t|
     t.text     "data"
+    t.integer  "retain",     default: 1,     null: false
+    t.boolean  "del_flg",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "galleries", force: true do |t|
-    t.integer  "user_id",    null: false
+    t.integer  "user_id",                       null: false
     t.string   "title"
     t.text     "caption"
+    t.string   "thumbnail_url"
+    t.boolean  "del_flg",       default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_bookmarks", force: true do |t|
+    t.integer  "user_id",    null: false
+    t.integer  "gallery_id", null: false
+    t.text     "note"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gallery_event_pagevalue_pagings", force: true do |t|
-    t.integer  "gallery_id",                 null: false
-    t.integer  "page_num",                   null: false
-    t.integer  "gallery_event_pagevalue_id", null: false
+    t.integer  "gallery_id",                                 null: false
+    t.integer  "page_num",                                   null: false
+    t.integer  "gallery_event_pagevalue_id",                 null: false
+    t.boolean  "del_flg",                    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gallery_event_pagevalues", force: true do |t|
-    t.integer  "page_num",   null: false
+    t.integer  "page_num",                   null: false
     t.text     "data"
+    t.integer  "retain",     default: 1,     null: false
+    t.boolean  "del_flg",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gallery_instance_pagevalue_pagings", force: true do |t|
-    t.integer  "gallery_id",                    null: false
-    t.integer  "page_num",                      null: false
-    t.integer  "gallery_instance_pagevalue_id", null: false
+    t.integer  "gallery_id",                                    null: false
+    t.integer  "page_num",                                      null: false
+    t.integer  "gallery_instance_pagevalue_id",                 null: false
+    t.boolean  "del_flg",                       default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gallery_instance_pagevalues", force: true do |t|
-    t.integer  "page_num",   null: false
+    t.integer  "page_num",                   null: false
     t.text     "data"
+    t.integer  "retain",     default: 1,     null: false
+    t.boolean  "del_flg",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gallery_tag_maps", force: true do |t|
-    t.integer  "gallery_id",     null: false
-    t.integer  "gallery_tag_id", null: false
+    t.integer  "gallery_id",                     null: false
+    t.integer  "gallery_tag_id",                 null: false
+    t.boolean  "del_flg",        default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gallery_tags", force: true do |t|
-    t.string   "name",       null: false
+    t.string   "name",                       null: false
     t.integer  "weight"
+    t.boolean  "del_flg",    default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_view_statistics", force: true do |t|
+    t.integer  "gallery_id",             null: false
+    t.integer  "count",      default: 0
+    t.date     "view_day"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "instance_pagevalue_pagings", force: true do |t|
-    t.integer  "user_pagevalue_id",     null: false
-    t.integer  "page_num",              null: false
-    t.integer  "instance_pagevalue_id", null: false
+    t.integer  "user_pagevalue_id",                     null: false
+    t.integer  "page_num",                              null: false
+    t.integer  "instance_pagevalue_id",                 null: false
+    t.boolean  "del_flg",               default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "instance_pagevalues", force: true do |t|
     t.text     "data"
+    t.integer  "retain",     default: 1,     null: false
+    t.boolean  "del_flg",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -173,6 +205,7 @@ ActiveRecord::Schema.define(version: 20150925055739) do
 
   create_table "setting_pagevalues", force: true do |t|
     t.text     "data"
+    t.boolean  "del_flg",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -2,9 +2,14 @@
 var RunCommon;
 
 RunCommon = (function() {
+  var constant;
+
   function RunCommon() {}
 
-  RunCommon.RUN_CSS = constant.ElementAttribute.RUN_CSS;
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    RunCommon.RUN_CSS = constant.ElementAttribute.RUN_CSS;
+  }
 
   RunCommon.initView = function() {
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());

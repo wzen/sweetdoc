@@ -17,7 +17,7 @@ class PageValueStateController < ApplicationController
     user_id = current_user.id
     user_pagevalue_id = params['user_pagevalue_id']
     loaded_itemids = JSON.parse(params['loaded_itemids'])
-    @item_js_list, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message = PageValueState.get_saved_pagevalues(user_id, user_pagevalue_id, loaded_itemids)
+    @item_js_list, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message = PageValueState.load_state(user_id, user_pagevalue_id, loaded_itemids)
   end
 
   def user_pagevalue_list

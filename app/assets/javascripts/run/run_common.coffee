@@ -1,6 +1,9 @@
 class RunCommon
-  # @property [String] RUN_CSS CSSスタイルRoot
-  @RUN_CSS = constant.ElementAttribute.RUN_CSS
+  if gon?
+    # 定数
+    constant = gon.const
+    # @property [String] RUN_CSS CSSスタイルRoot
+    @RUN_CSS = constant.ElementAttribute.RUN_CSS
 
   # 画面初期化
   @initView = ->

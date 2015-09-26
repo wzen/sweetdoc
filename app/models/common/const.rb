@@ -174,6 +174,18 @@ class Const
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
+      SEARCH_TYPE = 'search_type'
+      SHOW_HEAD = 'show_head'
+      SHOW_LIMIT = 'show_limit'
+      THUMBNAIL_URL = 'thumbnail_url'
+      TITLE = 'title'
+      CAPTION = 'caption'
+    end
+
+    class SearchType
+      VIEW_COUNT = 'view_count'
+      BOOKMARK_COUNT = 'bookmark_count'
+      CREATED = 'created'
     end
   end
 

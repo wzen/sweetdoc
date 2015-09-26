@@ -4,6 +4,7 @@ class CreateEventPagevaluePagings < ActiveRecord::Migration
       t.integer :user_pagevalue_id, :null => false
       t.integer :page_num, :null => false
       t.integer :event_pagevalue_id, :null => false
+      t.boolean :del_flg, :null => false, :default => false
 
       t.timestamps
     end

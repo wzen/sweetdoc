@@ -125,7 +125,7 @@ class PageValueState
   # ユーザの保存データを読み込む
   # @param [String] user_id ユーザID
   # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
-  def self.get_saved_pagevalues(user_id, user_pagevalue_id, loaded_itemids)
+  def self.load_state(user_id, user_pagevalue_id, loaded_itemids)
     pagevalues = UserPagevalue.eager_load(:setting_pagevalue).where({id:user_pagevalue_id, user_id: user_id, del_flg: false})
                      .order('updated_at DESC')
                      .select('user_pagevalues.*, setting_pagevalues.*').first
