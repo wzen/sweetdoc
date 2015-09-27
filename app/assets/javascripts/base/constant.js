@@ -98,6 +98,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ModalViewType.ABOUT = constant.ModalViewType.ABOUT;
 
+      ModalViewType.UPLOAD_GALLERY_CONFIRM = constant.ModalViewType.UPLOAD_GALLERY_CONFIRM;
+
       return ModalViewType;
 
     })();

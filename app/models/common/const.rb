@@ -219,6 +219,7 @@ class Const
 
   class ModalViewType
     ABOUT = 'about'
+    UPLOAD_GALLERY_CONFIRM = 'upload_gallery_confirm'
   end
 
   class Paging

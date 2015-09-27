@@ -260,6 +260,8 @@ class RunCommon
     window.forkNumStacks[pn].pop()
     return true
 
+
+
   # ギャラリーアップロード確認クリック
   @updateGalleryConfirm = ->
     # おすすめタグ一覧を表示

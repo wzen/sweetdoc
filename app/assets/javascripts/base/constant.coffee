@@ -67,6 +67,8 @@ if gon?
     class @ModalViewType
       # @property [Int] ABOUT 概要
       @ABOUT = constant.ModalViewType.ABOUT
+      # @property [Int] UPLOAD_GALLERY_CONFIRM ギャラリーアップロード
+      @UPLOAD_GALLERY_CONFIRM = constant.ModalViewType.UPLOAD_GALLERY_CONFIRM
 
     # ページング
     class @Paging
