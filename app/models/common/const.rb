@@ -174,12 +174,17 @@ class Const
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
-      SEARCH_TYPE = 'search_type'
-      SHOW_HEAD = 'show_head'
-      SHOW_LIMIT = 'show_limit'
       THUMBNAIL_URL = 'thumbnail_url'
       TITLE = 'title'
       CAPTION = 'caption'
+    end
+
+    class SearchKey
+      SHOW_HEAD = 'show_head'
+      SHOW_LIMIT = 'show_limit'
+      SEARCH_TYPE = 'search_type'
+      TAG_ID = 'tag_id'
+      DATE = 'date'
     end
 
     class SearchType

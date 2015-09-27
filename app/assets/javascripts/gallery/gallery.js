@@ -17,12 +17,6 @@ Gallery = (function() {
 
       Key.EVENT_PAGE_VALUE = constant.Gallery.Key.EVENT_PAGE_VALUE;
 
-      Key.SHOW_HEAD = constant.Gallery.Key.SHOW_HEAD;
-
-      Key.SHOW_LIMIT = constant.Gallery.Key.SHOW_LIMIT;
-
-      Key.SEARCH_TYPE = constant.Gallery.Key.SEARCH_TYPE;
-
       Key.THUMBNAIL_URL = constant.Gallery.Key.THUMBNAIL_URL;
 
       Key.TITLE = constant.Gallery.Key.TITLE;
@@ -30,6 +24,22 @@ Gallery = (function() {
       Key.CAPTION = constant.Gallery.Key.CAPTION;
 
       return Key;
+
+    })();
+    Gallery.SearchKey = (function() {
+      function SearchKey() {}
+
+      SearchKey.SHOW_HEAD = constant.Gallery.SearchKey.SHOW_HEAD;
+
+      SearchKey.SHOW_LIMIT = constant.Gallery.SearchKey.SHOW_LIMIT;
+
+      SearchKey.SEARCH_TYPE = constant.Gallery.SearchKey.SEARCH_TYPE;
+
+      SearchKey.TAG_ID = constant.Gallery.SearchKey.TAG_ID;
+
+      SearchKey.DATE = constant.Gallery.SearchKey.DATE;
+
+      return SearchKey;
 
     })();
     Gallery.SearchType = (function() {

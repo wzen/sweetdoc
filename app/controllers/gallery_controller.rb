@@ -25,15 +25,17 @@ class GalleryController < ApplicationController
   end
 
   def grid_contents
-    show_head = params[Const::Gallery::Key::SHOW_HEAD]
-    show_limit = params[Const::Gallery::Key::SHOW_LIMIT]
-    search_type = params[Const::Gallery::Key::SEARCH_TYPE]
+    show_head = params[Const::Gallery::SearchKey::SHOW_HEAD]
+    show_limit = params[Const::Gallery::SearchKey::SHOW_LIMIT]
+    search_type = params[Const::Gallery::SearchKey::SEARCH_TYPE]
+    tag_id = params[Const::Gallery::SearchKey::TAG_ID]
+    date = params[Const::Gallery::SearchKey::DATE]
     if search_type == Const::Gallery::SearchType::CREATED
-      @contents = Gallery.grid_contents_sorted_by_createdate(show_head, show_limit)
+      @contents = Gallery.grid_contents_sorted_by_createdate(show_head, show_limit, tag_id)
     elsif search_type == Const::Gallery::SearchType::VIEW_COUNT
-      @contents = Gallery.grid_contents_sorted_by_viewcount(show_head, show_limit)
+      @contents = Gallery.grid_contents_sorted_by_viewcount(show_head, show_limit, date, tag_id)
     elsif search_type == Const::Gallery::SearchType::BOOKMARK_COUNT
-      @contents = Gallery.grid_contents_sorted_by_bookmarkcount(show_head, show_limit)
+      @contents = Gallery.grid_contents_sorted_by_bookmarkcount(show_head, show_limit, date, tag_id)
     end
   end
 

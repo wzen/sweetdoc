@@ -5,6 +5,7 @@ class Gallery < ActiveRecord::Base
   has_many :gallery_tag_maps
   has_many :gallery_bookmarks
   has_many :gallery_view_statistics
+  has_many :gallery_bookmark_statistics
 
   def self.save_state(user_id, tags, i_page_values, e_page_values)
     begin
@@ -276,8 +277,13 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.grid_contents_sorted_by_createdate(head, show_limit)
-    sql = "SELECT * FROM (SELECT * FROM galleries ORDER BY created_at DESC LIMIT #{head}, #{show_limit}) AS g INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id"
+  def self.grid_contents_sorted_by_createdate(head, show_limit, tag_id)
+    table = "(SELECT * FROM galleries ORDER BY created_at DESC LIMIT #{head}, #{show_limit})"
+    if tag_id != nil
+      table = "(SELECT g.* FROM galleries g INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id WHERE gt.id = #{tag_id} ORDER BY g.created_at DESC LIMIT #{head}, #{show_limit})"
+    end
+
+    sql = "SELECT * FROM #{table} AS g INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id"
     contents = ActiveRecord::Base.connection.select_all(sql)
     if contents != nil
       ch = contents.to_hash
@@ -286,12 +292,57 @@ class Gallery < ActiveRecord::Base
     return null
   end
 
-  def self.grid_contents_sorted_by_viewcount(head, show_limit)
+  def self.grid_contents_sorted_by_viewcount(head, show_limit, date, tag_id)
+    cond = ''
+    if date != nil || tag_id != nil
+      if date != nil
+        cond = "DATEDIFF(#{date}, gvs.view_day) == 0"
+      end
+      if tag_id != nil
+        if cond.length > 0
+          cond += " AND gt.id = #{tag_id}"
+        else
+          cond = "gt.id = #{tag_id}"
+        end
+      end
+      cond = "WHERE #{cond}"
+    end
+    where = "#{cond} ORDER BY gvs.count DESC LIMIT #{head}, #{show_limit}"
+    if tag_id != nil
+      where = "WHERE DATEDIFF(#{date}, gvs.view_day) == 0 AND gt.id = #{tag_id} ORDER BY gvs.count DESC LIMIT #{head}, #{show_limit}"
+    end
+    sql = "SELECT g.* FROM galleries g INNER JOIN gallery_view_statistics as gvs ON g.id = gvs.gallery_id INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id #{where}"
+    contents = ActiveRecord::Base.connection.select_all(sql)
+    if contents != nil
+      ch = contents.to_hash
 
+    end
+    return null
   end
 
-  def self.grid_contents_sorted_by_bookmarkcount(head, show_limit)
+  def self.grid_contents_sorted_by_bookmarkcount(head, show_limit, date, tag_id)
+    cond = ''
+    if date != nil || tag_id != nil
+      if date != nil
+        cond = "DATEDIFF(#{date}, gbs.view_day) == 0"
+      end
+      if tag_id != nil
+        if cond.length > 0
+          cond += " AND gt.id = #{tag_id}"
+        else
+          cond = "gt.id = #{tag_id}"
+        end
+      end
+      cond = "WHERE #{cond}"
+    end
+    where = "#{cond} ORDER BY gbs.count DESC LIMIT #{head}, #{show_limit}"
+    sql = "SELECT g.* FROM galleries g INNER JOIN gallery_bookmark_statistics as gbs ON g.id = gbs.gallery_id INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id #{where}"
+    contents = ActiveRecord::Base.connection.select_all(sql)
+    if contents != nil
+      ch = contents.to_hash
 
+    end
+    return null
   end
 
   private_class_method :save_tag
