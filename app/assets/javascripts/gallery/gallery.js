@@ -8,8 +8,13 @@ Gallery = (function() {
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
+    Gallery.TAG_MAX = constant.Gallery.TAG_MAX;
     Gallery.Key = (function() {
       function Key() {}
+
+      Key.MESSAGE = constant.Gallery.Key.MESSAGE;
+
+      Key.GALLERY_ID = constant.Gallery.Key.GALLERY_ID;
 
       Key.TAGS = constant.Gallery.Key.TAGS;
 
@@ -22,6 +27,14 @@ Gallery = (function() {
       Key.TITLE = constant.Gallery.Key.TITLE;
 
       Key.CAPTION = constant.Gallery.Key.CAPTION;
+
+      Key.ITEM_JS_LIST = constant.Gallery.Key.ITEM_JS_LIST;
+
+      Key.VIEW_COUNT = constant.Gallery.Key.VIEW_COUNT;
+
+      Key.BOOKMARK_COUNT = constant.Gallery.Key.BOOKMARK_COUNT;
+
+      Key.RECOMMEND_SOURCE_WORD = constant.Gallery.Key.RECOMMEND_SOURCE_WORD;
 
       return Key;
 

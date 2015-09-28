@@ -268,12 +268,33 @@ class RunCommon
       $('.caption_markup', modalEmt).markItUpRemove()
     $('.caption_markup', modalEmt).markItUp(mySettings)
 
-  # ギャラリーアップロード確認クリック
-  @updateGalleryConfirm = ->
-    # おすすめタグ一覧を表示
-    # 重み付けから取得
+    # タグクリックイベント設定
+    @prepareUploadGalleryTagEvent(modalEmt)
 
-    # TODO: 作成物の入力値から単語を取得(別スレッド)
+    # Inputイベント
+    $('.select_tag_input', modalEmt).off('keypress')
+    $('.select_tag_input', modalEmt).on('keypress', (e) =>
+      if e.keyCode == 13
+        # Enterキーを押した場合、選択タグに追加
+        @addUploadGallerySelectTag(modalEmt, $(e).val())
+        if $('.select_tag ul', modalEmt).length >= Gallery.TAG_MAX
+          # タグ数が最大数になった場合, Inputを非表示
+          $(e).css('display', 'none')
+    )
+
+  # タグクリックイベント
+  @prepareUploadGalleryTagEvent = (modalEmt) ->
+    $('.popular_tag a, .recommend_tag a', modalEmt).off('click')
+    $('.popular_tag a, .recommend_tag a', modalEmt).on('click', =>
+      # 選択タグに追加
+      @addUploadGallerySelectTag(modalEmt, $(e).html())
+    )
+
+  @addUploadGallerySelectTag = (modalEmt, tagname) ->
+    ul = $('.select_tag ul', modalEmt)
+    if ul.children().length >= Gallery.TAG_MAX
+      return
+    ul.append($("<li><a href='#'>#{tagname}</a></li>"))
 
   # ギャラリーアップロード
   @uploadGallery = (callback = null) ->

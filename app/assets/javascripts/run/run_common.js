@@ -285,10 +285,38 @@ RunCommon = (function() {
     if ((mark != null) && mark.length > 0) {
       $('.caption_markup', modalEmt).markItUpRemove();
     }
-    return $('.caption_markup', modalEmt).markItUp(mySettings);
+    $('.caption_markup', modalEmt).markItUp(mySettings);
+    this.prepareUploadGalleryTagEvent(modalEmt);
+    $('.select_tag_input', modalEmt).off('keypress');
+    return $('.select_tag_input', modalEmt).on('keypress', (function(_this) {
+      return function(e) {
+        if (e.keyCode === 13) {
+          _this.addUploadGallerySelectTag(modalEmt, $(e).val());
+          if ($('.select_tag ul', modalEmt).length >= Gallery.TAG_MAX) {
+            return $(e).css('display', 'none');
+          }
+        }
+      };
+    })(this));
   };
 
-  RunCommon.updateGalleryConfirm = function() {};
+  RunCommon.prepareUploadGalleryTagEvent = function(modalEmt) {
+    $('.popular_tag a, .recommend_tag a', modalEmt).off('click');
+    return $('.popular_tag a, .recommend_tag a', modalEmt).on('click', (function(_this) {
+      return function() {
+        return _this.addUploadGallerySelectTag(modalEmt, $(e).html());
+      };
+    })(this));
+  };
+
+  RunCommon.addUploadGallerySelectTag = function(modalEmt, tagname) {
+    var ul;
+    ul = $('.select_tag ul', modalEmt);
+    if (ul.children().length >= Gallery.TAG_MAX) {
+      return;
+    }
+    return ul.append($("<li><a href='#'>" + tagname + "</a></li>"));
+  };
 
   RunCommon.uploadGallery = function(callback) {
     var _saveGallery;

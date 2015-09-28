@@ -19,20 +19,34 @@
             </div>
             <br style="clear: both">
         </div>
-        <div class="select_tag_wrapper" style="display: none">
+        <div class="select_tag_wrapper">
             <div class="select_tag_label"><%= i18n.t('upload_confirm.tags') %></div>
-            <div class="select_tag tagcloud"></div>
+            <div class="select_tag tagcloud">
+                <ul>
+                </ul>
+                <input class="select_tag_input" value="" >
+            </div>
         </div>
 
         <button class="upload_button"></button>
 
         <div class="popular_tag_wrapper" style="display: none">
             <div class="popular_tag_label"><%= i18n.t('upload_confirm.popular_tags') %></div>
-            <div class="popular_tag tagcloud"></div>
+            <div class="popular_tag tagcloud">
+                <ul>
+                    <li><a href="#">tag1</a></li>
+                    <li><a href="#">tag2</a></li>
+                </ul>
+            </div>
         </div>
         <div class="recommend_tag_wrapper" style="display: none">
             <div class="recommend_tag_label"><%= i18n.t('upload_confirm.recommend_tags') %></div>
-            <div class="recommend_tag tagcloud"></div>
+            <div class="recommend_tag tagcloud">
+                <ul>
+                    <li><a href="#">tag3</a></li>
+                    <li><a href="#">tag4</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

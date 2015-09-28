@@ -187,6 +187,9 @@ class Gallery < ActiveRecord::Base
   def self.save_tag(tags, gallery_id)
     begin
       if tags != nil && tags.length > 0
+        # タグ数がMAX以上のものは削除
+        tags = tags.take(Const::Gallery::TAG_MAX)
+
         # タグテーブル処理
         tag_ids = []
         tags.each do |tag|

@@ -25,6 +25,10 @@ class GalleryTag < ActiveRecord::Base
   end
 
   def self.get_recommend_tags(got_popular_tags, recommend_source_word)
+    if recommend_source_word == nil || recommend_source_word.length == 0
+      return []
+    end
+
     # はてなキーワードでカテゴリを調査
     client = XMLRPC::Client.new2("http://d.hatena.ne.jp/xmlrpc")
     result = client.call("hatena.setKeywordLink", {

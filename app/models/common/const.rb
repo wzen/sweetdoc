@@ -170,6 +170,8 @@ class Const
   end
 
   class Gallery
+    TAG_MAX = 3
+
     class Key
       MESSAGE = 'message'
       GALLERY_ID = 'gid'
