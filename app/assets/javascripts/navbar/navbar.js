@@ -72,10 +72,14 @@ Navbar = (function() {
       }
     });
     $('.menu-control-rewind-chapter', navEmt).off('click');
-    return $('.menu-control-rewind-chapter', navEmt).on('click', function() {
+    $('.menu-control-rewind-chapter', navEmt).on('click', function() {
       if (window.eventAction != null) {
         return window.eventAction.thisPage().rewindChapter();
       }
+    });
+    $('.menu-control-rewind-upload-gallery', navEmt).off('click');
+    return $('.menu-control-rewind-upload-gallery', navEmt).on('click', function() {
+      return Common.showModalView(Constant.ModalViewType.UPLOAD_GALLERY_CONFIRM, RunCommon.prepareUploadGalleryConfirm);
     });
   };
 

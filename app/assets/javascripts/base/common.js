@@ -416,10 +416,14 @@ Common = (function() {
     return ret;
   };
 
-  Common.showModalView = function(type) {
-    var _centering, _show, emt, self;
+  Common.showModalView = function(type, prepareShowFunc) {
+    var _centering, _show, emt, heightRate, self;
+    if (prepareShowFunc == null) {
+      prepareShowFunc = null;
+    }
     self = this;
     emt = $('body').children(".modal-content." + type);
+    heightRate = 0.7;
     $(this).blur();
     if ($("#modal-overlay")[0] != null) {
       return false;
@@ -430,15 +434,22 @@ Common = (function() {
       h = $(window).height();
       cw = emt.outerWidth();
       ch = emt.outerHeight();
+      if (ch > h * heightRate) {
+        ch = h * heightRate;
+      }
       return emt.css({
         "left": ((w - cw) / 2) + "px",
         "top": ((h - ch) / 2) + "px"
       });
     };
     _show = function() {
+      if (prepareShowFunc != null) {
+        prepareShowFunc(emt);
+      }
       $("body").append('<div id="modal-overlay"></div>');
       $("#modal-overlay").css('display', 'block');
       _centering.call(this);
+      emt.css('max-height', $(window).height() * heightRate);
       emt.css('display', 'block');
       return $("#modal-overlay,#modal-close").unbind().click(function() {
         $(".modal-content,#modal-overlay").css('display', 'none');

@@ -1,13 +1,11 @@
 Rails.application.routes.draw do
-  get 'modal_view/show'
-
-  get 'item_js/index'
-
   root 'worktable#index'
+  get 'modal_view/show'
+  get 'item_js/index'
   #resources :run, only:[:index]
   get 'run' => 'run#index'
   post 'run' => 'run#index'
-
+  get 'run/markitup_preview'
   get 'test_move/hello'
   get 'item_js_code/hello'
   get 'parts/button_css_default'

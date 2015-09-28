@@ -51,4 +51,8 @@ class RunController < ApplicationController
     @instance_pagevalue_hash = ins
     @event_pagevalue_hash = ent
   end
+
+  def markitup_preview
+    render layout: false
+  end
 end

@@ -1,26 +1,28 @@
 <div class="modal-content <%= Const::ModalViewType::UPLOAD_GALLERY_CONFIRM %>">
-    <div class="title">
-        <div style="float: left;">
-            <label>Title</label>
+    <div class="content">
+        <div class="title">
+            <div style="float: left;">
+                <label>Title</label>
+            </div>
+            <div style="float: left">
+                <input class="title" />
+            </div>
+            <br style="clear: both">
         </div>
-        <div style="float: left">
-            <input class="title" />
-        </div>
-        <br style="clear: both">
-    </div>
 
-    <div class="caption">
-        <div style="float: left;">
-            <label>Caption</label>
+        <div class="caption">
+            <div style="float: left;">
+                <label>Caption</label>
+            </div>
+            <div style="float: left">
+                <textarea class="caption_markup"></textarea>
+            </div>
+            <br style="clear: both">
         </div>
-        <div style="float: left">
-            <textarea class="caption_markup"></textarea>
-        </div>
-        <br style="clear: both">
-    </div>
 
-    <div class="recommend_popular_wrapper" style="display: none">
-    </div>
-    <div class="recommend_tag_wrapper" style="display: none">
+        <div class="recommend_popular_wrapper" style="display: none">
+        </div>
+        <div class="recommend_tag_wrapper" style="display: none">
+        </div>
     </div>
 </div>

@@ -373,9 +373,12 @@ class Common
 
   # モーダルビュー表示
   # @param [Integer] type モーダルビュータイプ
-  @showModalView = (type) ->
+  # @param [Function] prepareShowFunc 表示前処理
+  @showModalView = (type, prepareShowFunc = null) ->
     self = @
     emt = $('body').children(".modal-content.#{type}")
+    # ビューの高さ比
+    heightRate = 0.7
 
     $(@).blur()
     if $("#modal-overlay")[0]?
@@ -387,13 +390,20 @@ class Common
       h = $(window).height()
       cw = emt.outerWidth()
       ch = emt.outerHeight()
+      if ch > h * heightRate
+        ch = h * heightRate
       emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2) + "px"})
 
     # 表示
     _show = ->
+      if prepareShowFunc?
+        prepareShowFunc(emt)
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").css('display', 'block')
+      # センタリング
       _centering.call(@)
+      # ビューの高さ
+      emt.css('max-height', $(window).height() * heightRate)
       emt.css('display', 'block')
       $("#modal-overlay,#modal-close").unbind().click( ->
         $(".modal-content,#modal-overlay").css('display', 'none')

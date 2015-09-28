@@ -9,7 +9,7 @@
 //= require i18n
 //= require ../../../vendor/assets/html2canvas/html2canvas.min
 //= require ../../../vendor/assets/markitup/markitup/jquery.markitup
-//= require ../../../vendor/assets/markitup/markitup/sets/default/set
+//= require ../../../vendor/assets/markitup/markitup/sets/html/set
 // IDE not aware under vendor/asset/
 //= require_directory ./i18n
 //= require base/constant

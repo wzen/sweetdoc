@@ -279,6 +279,15 @@ RunCommon = (function() {
     return true;
   };
 
+  RunCommon.prepareUploadGalleryConfirm = function(modalEmt) {
+    var mark;
+    mark = $('.markItUp', modalEmt);
+    if ((mark != null) && mark.length > 0) {
+      $('.caption_markup', modalEmt).markItUpRemove();
+    }
+    return $('.caption_markup', modalEmt).markItUp(mySettings);
+  };
+
   RunCommon.updateGalleryConfirm = function() {};
 
   RunCommon.uploadGallery = function(callback) {

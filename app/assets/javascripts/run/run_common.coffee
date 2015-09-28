@@ -260,7 +260,13 @@ class RunCommon
     window.forkNumStacks[pn].pop()
     return true
 
-
+  # ギャラリーアップロードビュー表示前処理
+  @prepareUploadGalleryConfirm = (modalEmt) ->
+    # マークアップ入力フォーム初期化
+    mark = $('.markItUp', modalEmt)
+    if mark? && mark.length > 0
+      $('.caption_markup', modalEmt).markItUpRemove()
+    $('.caption_markup', modalEmt).markItUp(mySettings)
 
   # ギャラリーアップロード確認クリック
   @updateGalleryConfirm = ->

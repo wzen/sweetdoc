@@ -72,6 +72,10 @@ class Navbar
       if window.eventAction?
         window.eventAction.thisPage().rewindChapter()
     )
+    $('.menu-control-rewind-upload-gallery', navEmt).off('click')
+    $('.menu-control-rewind-upload-gallery', navEmt).on('click', ->
+      Common.showModalView(Constant.ModalViewType.UPLOAD_GALLERY_CONFIRM, RunCommon.prepareUploadGalleryConfirm)
+    )
 
   # ヘッダーにページ番号を設定
   # @param [Integer] value 設定値
@@ -124,5 +128,4 @@ class Navbar
     else
       e.html('')
       e.closest('li').css('display', 'none')
-
 
