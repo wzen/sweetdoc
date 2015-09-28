@@ -200,19 +200,8 @@ class Gallery < ActiveRecord::Base
 
           if tag['is_new']
             # タグを新規作成
-
-            # はてなキーワードでカテゴリを調べる
-            client = XMLRPC::Client.new2("http://d.hatena.ne.jp/xmlrpc")
-            result = client.call("hatena.setKeywordLink", {
-                                                            body: tag['value'],
-                                                            mode: 'lite',
-                                                            score: 10
-                                                        })
-            category = result['wordlist'].first['cname']
-
             tag = GalleryTag.new({
-                                     name: tag['value'],
-                                     category: category
+                                     name: tag['value']
                                  })
             tag.save!
             tag_ids << tag.id
@@ -236,6 +225,9 @@ class Gallery < ActiveRecord::Base
                                       gallery_tag_id: tag_id
                                   })
         end
+
+        # タグカテゴリ設定
+        GalleryTag.save_tag_category(tags)
       end
 
     rescue => e

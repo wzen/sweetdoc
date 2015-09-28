@@ -88,6 +88,7 @@ GEM
     mime-types (2.6.1)
     minitest (5.7.0)
     multi_json (1.11.1)
+    parallel (1.6.1)
     rack (1.5.5)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -191,6 +192,7 @@ DEPENDENCIES
   less-rails
   libv8 (= 3.16.14.3)
   meta-tags (= 2.0.0)
+  parallel (= 1.6.1)
   rails (= 4.1.6)
   rails-erd!
   rspec (= 3.0.0)

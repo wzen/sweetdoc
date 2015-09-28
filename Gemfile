@@ -64,8 +64,10 @@ end
 
 # memcacheクライアント
 gem 'dalli', '2.7.4'
-
+# Metaタグ
 gem 'meta-tags', '2.0.0'
+# マルチスレッド
+gem 'parallel', '1.6.1'
 
 #gem 'rmagick', '2.15.4', require: 'RMagick'
 
