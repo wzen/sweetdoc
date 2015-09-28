@@ -34,8 +34,11 @@ ja:
       common: "共通イベント"
       item: "アイテム"
   upload_confirm:
-    title: "タイトル"
-    caption: "キャプション"
+    title: "タイトル名"
+    caption: "説明"
+    tags: "タグ"
+    popular_tags: "人気のタグ"
+    recommend_tags: "おすすめのタグ"
     version: "バージョン"
   message:
     dialog:

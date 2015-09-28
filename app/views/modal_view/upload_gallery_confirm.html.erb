@@ -2,7 +2,7 @@
     <div class="content">
         <div class="title">
             <div style="float: left;">
-                <label>Title</label>
+                <label><%= i18n.t('upload_confirm.title') %></label>
             </div>
             <div style="float: left">
                 <input class="title" />
@@ -12,17 +12,27 @@
 
         <div class="caption">
             <div style="float: left;">
-                <label>Caption</label>
+                <label><%= i18n.t('upload_confirm.caption') %></label>
             </div>
             <div style="float: left">
                 <textarea class="caption_markup"></textarea>
             </div>
             <br style="clear: both">
         </div>
+        <div class="select_tag_wrapper" style="display: none">
+            <div class="select_tag_label"><%= i18n.t('upload_confirm.tags') %></div>
+            <div class="select_tag tagcloud"></div>
+        </div>
 
-        <div class="recommend_popular_wrapper" style="display: none">
+        <button class="upload_button"></button>
+
+        <div class="popular_tag_wrapper" style="display: none">
+            <div class="popular_tag_label"><%= i18n.t('upload_confirm.popular_tags') %></div>
+            <div class="popular_tag tagcloud"></div>
         </div>
         <div class="recommend_tag_wrapper" style="display: none">
+            <div class="recommend_tag_label"><%= i18n.t('upload_confirm.recommend_tags') %></div>
+            <div class="recommend_tag tagcloud"></div>
         </div>
     </div>
 </div>

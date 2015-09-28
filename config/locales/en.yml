@@ -55,8 +55,11 @@ en:
       common: "Common Event"
       item: "Item"
   upload_confirm:
-    title: "Title"
+    title: "Title name"
     caption: "Caption"
+    tags: "Tags"
+    popular_tags: "Popular tags"
+    recommend_tags: "Recommend tags"
     version: "Version"
   message:
     dialog:

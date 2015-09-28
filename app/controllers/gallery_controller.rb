@@ -7,6 +7,11 @@ class GalleryController < ApplicationController
 
   end
 
+  def detail
+    galiery_id = params[Const::Gallery::Key::GALLERY_ID]
+    @contents_detail = Gallery.load_contents_detail(galiery_id)
+  end
+
   def save_state
     user_id = current_user.id
     tags = params[Const::Gallery::Key::TAGS]
@@ -26,9 +31,10 @@ class GalleryController < ApplicationController
     @message = Gallery.update_last_state(user_id, tags, i_page_values, e_page_values)
   end
 
-  def load_data
+  def load_state
     user_id = current_user.id
-    @item_js_list, @instance_pagevalue_data, @event_pagevalue_data, @message = Gallery.load_state(user_id)
+    galiery_id = params[Const::Gallery::Key::GALLERY_ID]
+    @contents_detail = Gallery.load_state(galiery_id, user_id)
   end
 
   def get_contents
@@ -46,8 +52,10 @@ class GalleryController < ApplicationController
     end
   end
 
-  def get_popular_tags
-    @tags = GalleryTag.get_popular_tags
+  def get_popular_and_recommend_tags
+    recommend_source_word = params[Const::Gallery::Key::RECOMMEND_SOURCE_WORD]
+    @popular_tags = GalleryTag.get_popular_tags
+    @recommend_tags = GalleryTag.get_recommend_tags(@popular_tags, recommend_source_word)
   end
 
 end

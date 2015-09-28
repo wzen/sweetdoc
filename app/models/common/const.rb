@@ -171,12 +171,18 @@ class Const
 
   class Gallery
     class Key
+      MESSAGE = 'message'
+      GALLERY_ID = 'gid'
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
-      THUMBNAIL_IMG = 'thumbnail_img'
+      THUMBNAIL_IMG = 'tbimg'
       TITLE = 'title'
       CAPTION = 'caption'
+      ITEM_JS_LIST = 'item_js_list'
+      VIEW_COUNT = 'view_count'
+      BOOKMARK_COUNT = 'bookmark_count'
+      RECOMMEND_SOURCE_WORD = 'recommend_source_word'
     end
 
     class SearchKey

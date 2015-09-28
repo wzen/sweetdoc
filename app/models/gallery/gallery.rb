@@ -1,3 +1,5 @@
+require 'xmlrpc/client'
+
 class Gallery < ActiveRecord::Base
   belongs_to :user
   has_many :gallery_instance_pagevalue_pagings
@@ -195,8 +197,19 @@ class Gallery < ActiveRecord::Base
 
           if tag['is_new']
             # タグを新規作成
+
+            # はてなキーワードでカテゴリを調べる
+            client = XMLRPC::Client.new2("http://d.hatena.ne.jp/xmlrpc")
+            result = client.call("hatena.setKeywordLink", {
+                                                            body: tag['value'],
+                                                            mode: 'lite',
+                                                            score: 10
+                                                        })
+            category = result['wordlist'].first['cname']
+
             tag = GalleryTag.new({
-                                     name: tag['value']
+                                     name: tag['value'],
+                                     category: category
                                  })
             tag.save!
             tag_ids << tag.id
@@ -227,56 +240,59 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.load_state(user_id)
-    last_gallery = self.where({user_id: user_id, del_flg: false})
-                     .order('updated_at DESC').first
-    if last_gallery == nil
+  def self.load_contents_detail(gallery_id)
+    gallery = self.where({id: gallery_id, del_flg: false})
+    if gallery == nil
       message = I18n.t('message.database.item_state.load.error')
       return nil
     else
       message = I18n.t('message.database.item_state.load.success')
 
-      gallery_instance_pages = GalleryInstancePagevaluePaging.joins(:gallery, :gallery_instance_pagevalue).where(gallery: {id: last_gallery.id})
-                           .select('gallery_instance_pagevalue_pagings.*, gallery_instance_pagevalues.data as data')
-      if gallery_instance_pages.size > 0
-        ipd = {}
-        gallery_instance_pages.each do |p|
-          key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
-          ipd[key] = p.data
-        end
-      else
-        ipd = nil
+      # PageValue
+      ipd = load_instance_pagevalue(gallery_id)
+      epd, item_js_list = load_event_pagevalue_and_jslist(gallery_id)
+
+      # 閲覧数 & ブックマーク数を取得
+      gallery_view_count, gallery_bookmark_count  = load_viewcount_and_bookmarkcount(gallery_id)
+
+      contents_detail = {}
+      contents_detail[Const::Gallery::Key::MESSAGE] = message
+      contents_detail[Const::Gallery::Key::TITLE] = gallery.title
+      contents_detail[Const::Gallery::Key::CAPTION] = gallery.caption
+      contents_detail[Const::Gallery::Key::ITEM_JS_LIST] = item_js_list
+      contents_detail[Const::Gallery::Key::INSTANCE_PAGE_VALUE] = ipd
+      contents_detail[Const::Gallery::Key::EVENT_PAGE_VALUE] = epd
+      contents_detail[Const::Gallery::Key::VIEW_COUNT] = gallery_view_count
+      contents_detail[Const::Gallery::Key::BOOKMARK_COUNT] = gallery_bookmark_count
+      return contents_detail
+    end
+  end
+
+  def self.load_state(gallery_id, user_id)
+    gallery = self.where({id: gallery_id, del_flg: false})
+    if gallery == nil
+      message = I18n.t('message.database.item_state.load.error')
+      return nil
+    else
+      # ユーザIDのチェック
+      if user_id != nil && gallery.user_id != user_id
+        message = I18n.t('message.database.item_state.load.error')
+        return nil
       end
 
-      item_js_list = []
-      gallery_event_pages = GalleryEventPagevaluePaging.joins(:gallery, :gallery_event_pagevalue).where(gallery: {id: last_gallery.id})
-                        .select('gallery_event_pagevalue_pagings.*, gallery_event_pagevalues.data as data')
-      if gallery_event_pages.size > 0
-        itemids = []
-        epd = {}
-        gallery_event_pages.each do |p|
-          key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
-          epd[key] = p.data
+      message = I18n.t('message.database.item_state.load.success')
 
-          # 必要なItemIdを調査
-          JSON.parse(p.data).each do |k, v|
-            if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-              item_id = v[Const::EventPageValueKey::ITEM_ID]
-              if item_id != nil
-                unless loaded_itemids.include?(item_id)
-                  itemids << item_id
-                end
-              end
-            end
-          end
-        end
+      # PageValue
+      ipd = load_instance_pagevalue(gallery_id)
+      epd, item_js_list = load_event_pagevalue_and_jslist(gallery_id)
 
-        item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-      else
-        epd = nil
-      end
-
-      return item_js_list, ipd, epd, message
+      contents_detail = {}
+      contents_detail[Const::Gallery::Key::MESSAGE] = message
+      contents_detail[Const::Gallery::Key::TITLE] = gallery.title
+      contents_detail[Const::Gallery::Key::ITEM_JS_LIST] = item_js_list
+      contents_detail[Const::Gallery::Key::INSTANCE_PAGE_VALUE] = ipd
+      contents_detail[Const::Gallery::Key::EVENT_PAGE_VALUE] = epd
+      return contents_detail
     end
   end
 
@@ -351,5 +367,57 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  private_class_method :save_tag, :send_imagedata
+  def self.load_instance_pagevalue(gallery_id)
+    ipd = null
+    gallery_instance_pages = GalleryInstancePagevaluePaging.joins(:gallery, :gallery_instance_pagevalue).where(gallery: {id: gallery_id})
+                                 .select('gallery_instance_pagevalue_pagings.*, gallery_instance_pagevalues.data as data')
+    if gallery_instance_pages.size > 0
+      ipd = {}
+      gallery_instance_pages.each do |p|
+        key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
+        ipd[key] = p.data
+      end
+    end
+    return ipd
+  end
+
+  def self.load_event_pagevalue_and_jslist(gallery_id)
+    item_js_list = []
+    epd = null
+    # EventPageValue
+    gallery_event_pages = GalleryEventPagevaluePaging.joins(:gallery, :gallery_event_pagevalue).where(gallery: {id: gallery_id})
+                              .select('gallery_event_pagevalue_pagings.*, gallery_event_pagevalues.data as data')
+    if gallery_event_pages.size > 0
+      itemids = []
+      epd = {}
+      gallery_event_pages.each do |p|
+        key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
+        epd[key] = p.data
+
+        # JSの読み込みが必要なItemIdを調査
+        JSON.parse(p.data).each do |k, v|
+          if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
+            item_id = v[Const::EventPageValueKey::ITEM_ID]
+            if item_id != nil
+              unless itemids.include?(item_id)
+                itemids << item_id
+              end
+            end
+          end
+        end
+      end
+
+      item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
+    end
+
+    return epd, item_js_list
+  end
+
+  def self.load_viewcount_and_bookmarkcount(gallery_id)
+    gallery_view_statistic = GalleryViewStatistic.find_by_gallery_id(gallery_id).first
+    gallery_bookmark_statistic = GalleryBookmarkStatistic.find_by_gallery_id(gallery_id).first
+    return gallery_view_statistic.count, gallery_bookmark_statistic.count
+  end
+
+  private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount
 end
