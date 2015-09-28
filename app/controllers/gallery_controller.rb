@@ -3,12 +3,19 @@ class GalleryController < ApplicationController
 
   end
 
+  def grid
+
+  end
+
   def save_state
     user_id = current_user.id
     tags = params[Const::Gallery::Key::TAGS]
+    title = params[Const::Gallery::Key::TITLE]
+    caption = params[Const::Gallery::Key::CAPTION]
+    thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
     i_page_values = params[Const::Gallery::Key::INSTANCE_PAGE_VALUE]
     e_page_values = params[Const::Gallery::Key::EVENT_PAGE_VALUE]
-    @message = Gallery.save_state(user_id, tags, i_page_values, e_page_values)
+    @message = Gallery.save_state(user_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
   end
 
   def update_last_state
@@ -24,7 +31,7 @@ class GalleryController < ApplicationController
     @item_js_list, @instance_pagevalue_data, @event_pagevalue_data, @message = Gallery.load_state(user_id)
   end
 
-  def grid_contents
+  def get_contents
     show_head = params[Const::Gallery::SearchKey::SHOW_HEAD]
     show_limit = params[Const::Gallery::SearchKey::SHOW_LIMIT]
     search_type = params[Const::Gallery::SearchKey::SEARCH_TYPE]
@@ -39,8 +46,8 @@ class GalleryController < ApplicationController
     end
   end
 
-  def get_recommend_tags
-
+  def get_popular_tags
+    @tags = GalleryTag.get_popular_tags
   end
 
 end

@@ -4,7 +4,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.integer :user_id, :null => false
       t.string :title
       t.text :caption
-      t.string :thumbnail_url
+      t.binary :thumbnail_img
       t.boolean :del_flg, :null => false, :default => false
 
       t.timestamps

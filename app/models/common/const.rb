@@ -174,7 +174,7 @@ class Const
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
-      THUMBNAIL_URL = 'thumbnail_url'
+      THUMBNAIL_IMG = 'thumbnail_img'
       TITLE = 'title'
       CAPTION = 'caption'
     end

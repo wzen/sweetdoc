@@ -1,14 +1,30 @@
+<% content = '' if content.nil? %>
+
 <div class="grid_contents_wrapper">
     <div class="grid_img_wrapper">
         <div class="loading_wrapper">
             <img class="loading" />
         </div>
         <div style="display:none;">
-            <img class="grid_img" />
+            <% if content.nil? %>
+                <img class="thumbnail_img" src="gallery/image_notfound.png" />
+            <% else %>
+                <img class="thumbnail_img" src="<%= content[Const::Gallery::Key::THUMBNAIL_IMG] %>" />
+            <% end %>
         </div>
     </div>
     
     <div class="info">
-
+        <div class="title_wrapper">
+            <%= content.title %>
+        </div>
+        <div class="caption_wrapper">
+            <%= content.caption %>
+        </div>
+        <div class="tags_wrapper">
+            <% content.tags.each do |tag| %>
+                <%= tag.name %>
+            <% end %>
+        </div>
     </div>
 </div>

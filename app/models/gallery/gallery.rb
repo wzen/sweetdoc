@@ -7,14 +7,17 @@ class Gallery < ActiveRecord::Base
   has_many :gallery_view_statistics
   has_many :gallery_bookmark_statistics
 
-  def self.save_state(user_id, tags, i_page_values, e_page_values)
+  def self.save_state(user_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
     begin
       if i_page_values != 'null' && e_page_values != 'null'
 
         ActiveRecord::Base.transaction do
           # Gallery レコード追加
           g = self.new({
-                           user_id: user_id
+                           user_id: user_id,
+                           title: title,
+                           caption: caption,
+                           thumbnail_img: thumbnail_img
                        })
           g.save!
           gallery_id = g.id
@@ -286,8 +289,7 @@ class Gallery < ActiveRecord::Base
     sql = "SELECT * FROM #{table} AS g INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id"
     contents = ActiveRecord::Base.connection.select_all(sql)
     if contents != nil
-      ch = contents.to_hash
-
+      return contents.to_hash
     end
     return null
   end
@@ -314,8 +316,7 @@ class Gallery < ActiveRecord::Base
     sql = "SELECT g.* FROM galleries g INNER JOIN gallery_view_statistics as gvs ON g.id = gvs.gallery_id INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id #{where}"
     contents = ActiveRecord::Base.connection.select_all(sql)
     if contents != nil
-      ch = contents.to_hash
-
+      return contents.to_hash
     end
     return null
   end
@@ -339,11 +340,16 @@ class Gallery < ActiveRecord::Base
     sql = "SELECT g.* FROM galleries g INNER JOIN gallery_bookmark_statistics as gbs ON g.id = gbs.gallery_id INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id #{where}"
     contents = ActiveRecord::Base.connection.select_all(sql)
     if contents != nil
-      ch = contents.to_hash
-
+      return contents.to_hash
     end
     return null
   end
 
-  private_class_method :save_tag
+  def self.send_imagedata(contents)
+    contents.each do |content|
+      send_data contents[Const::Gallery::Key::THUMBNAIL_IMG], :type => 'image/jpeg', :disposition => 'inline'
+    end
+  end
+
+  private_class_method :save_tag, :send_imagedata
 end

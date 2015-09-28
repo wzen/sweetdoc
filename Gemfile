@@ -67,6 +67,8 @@ gem 'dalli', '2.7.4'
 
 gem 'meta-tags', '2.0.0'
 
+#gem 'rmagick', '2.15.4', require: 'RMagick'
+
 # Use HBase
 #normalgem 'massive_record'
 #normal

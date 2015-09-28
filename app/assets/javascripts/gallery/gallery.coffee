@@ -7,7 +7,7 @@ class Gallery
       @TAGS = constant.Gallery.Key.TAGS
       @INSTANCE_PAGE_VALUE = constant.Gallery.Key.INSTANCE_PAGE_VALUE
       @EVENT_PAGE_VALUE = constant.Gallery.Key.EVENT_PAGE_VALUE
-      @THUMBNAIL_URL = constant.Gallery.Key.THUMBNAIL_URL
+      @THUMBNAIL_IMG = constant.Gallery.Key.THUMBNAIL_IMG
       @TITLE = constant.Gallery.Key.TITLE
       @CAPTION = constant.Gallery.Key.CAPTION
 

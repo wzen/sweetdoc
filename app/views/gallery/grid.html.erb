@@ -5,21 +5,9 @@
     <div id="contents_wrapper" style="float: left;">
         <div id="grid_centering_wrapper">
             <div id="grid_wrapper">
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
-                <%= render 'gallery/grid_contents' %>
+                <% @contents.each do |content| %>
+                    <%= render 'gallery/grid_contents', content: content %>
+                <% end %>
             </div>
         </div>
     </div>

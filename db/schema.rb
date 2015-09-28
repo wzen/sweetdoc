@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20150927001905) do
     t.integer  "user_id",                       null: false
     t.string   "title"
     t.text     "caption"
-    t.string   "thumbnail_url"
+    t.binary   "thumbnail_img"
     t.boolean  "del_flg",       default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"

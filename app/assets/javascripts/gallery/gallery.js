@@ -17,7 +17,7 @@ Gallery = (function() {
 
       Key.EVENT_PAGE_VALUE = constant.Gallery.Key.EVENT_PAGE_VALUE;
 
-      Key.THUMBNAIL_URL = constant.Gallery.Key.THUMBNAIL_URL;
+      Key.THUMBNAIL_IMG = constant.Gallery.Key.THUMBNAIL_IMG;
 
       Key.TITLE = constant.Gallery.Key.TITLE;
 
