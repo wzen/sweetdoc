@@ -170,7 +170,7 @@ class Const
   end
 
   class Gallery
-    TAG_MAX = 3
+    TAG_MAX = 5
 
     class Key
       MESSAGE = 'message'
@@ -185,6 +185,7 @@ class Const
       VIEW_COUNT = 'view_count'
       BOOKMARK_COUNT = 'bookmark_count'
       RECOMMEND_SOURCE_WORD = 'recommend_source_word'
+      NOTE = 'note'
     end
 
     class SearchKey
@@ -226,6 +227,7 @@ class Const
   end
 
   class ModalViewType
+    INIT = 'init'
     ABOUT = 'about'
     UPLOAD_GALLERY_CONFIRM = 'upload_gallery_confirm'
   end

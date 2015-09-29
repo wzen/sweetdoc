@@ -4,11 +4,14 @@ class GalleryController < ApplicationController
   end
 
   def grid
-
+    @contents = nil
   end
 
   def detail
     galiery_id = params[Const::Gallery::Key::GALLERY_ID]
+    # ViewCountをupdate
+    Gallery.add_view_statistic_count(galiery_id, Date.today)
+    # データを取得
     @contents_detail = Gallery.load_contents_detail(galiery_id)
   end
 
@@ -62,6 +65,13 @@ class GalleryController < ApplicationController
     recommend_source_word = params[Const::Gallery::Key::RECOMMEND_SOURCE_WORD]
     @popular_tags = GalleryTag.get_popular_tags
     @recommend_tags = GalleryTag.get_recommend_tags(@popular_tags, recommend_source_word)
+  end
+
+  def add_bookmark
+    user_id = current_user.id
+    galiery_id = params[Const::Gallery::Key::GALLERY_ID]
+    note = params[Const::Gallery::Key::NOTE]
+    Gallery.add_bookmark(user_id, galiery_id, note, Date.today)
   end
 
 end

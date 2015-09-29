@@ -10,8 +10,8 @@ class GalleryCommon
     @initGridView()
 
   @initCommonVar: ->
-    window.mainWrapper = $('#main_wrapper')
-    window.contentsWrapper = $('#contents_wrapper')
+    window.mainGalleryWrapper = $('#main_gallery_wrapper')
+    window.galleryContentsWrapper = $('#gallery_contents_wrapper')
     window.gridWrapper = $('#grid_wrapper')
 
   # グリッド初期化

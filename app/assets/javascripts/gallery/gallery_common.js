@@ -11,8 +11,8 @@ GalleryCommon = (function() {
   };
 
   GalleryCommon.initCommonVar = function() {
-    window.mainWrapper = $('#main_wrapper');
-    window.contentsWrapper = $('#contents_wrapper');
+    window.mainGalleryWrapper = $('#main_gallery_wrapper');
+    window.galleryContentsWrapper = $('#gallery_contents_wrapper');
     return window.gridWrapper = $('#grid_wrapper');
   };
 

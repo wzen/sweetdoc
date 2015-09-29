@@ -33,7 +33,67 @@
   opacity: 0.3;
 }
 
+.modal-content.init {
+  label {
+    width:60px;
+    float:left;
+    font-size:12px;
+    line-height:24px;
+    font-weight:bold;
+
+  }
+
+  input {
+    line-height:18px;
+  }
+
+  /*Text, email & tel input fields*/
+  input[type=text],
+  input[type=email],
+  input[type=tel] {
+    width:300px;
+    margin-bottom:8px;
+    padding:2px 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #CCC;
+  }
+  /*Just the tel field*/
+  input[type=tel] {
+    width:150px;
+  }
+  /*The Submit Button */
+  input[type=button] {
+    margin-top:5px;
+    margin-left:60px;
+    padding:2px 20px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border:2px solid #06C;
+    background-color:#09F;
+    color:#fff;
+    font-weight:bold;
+  }
+}
+
 .modal-content.upload_gallery_confirm {
+  .title, .caption {
+    &:before {
+      display: table;
+    }
+    > div {
+      display: table-cell;
+    }
+  }
+
+  .caption {
+    .caption_label_warpper {
+      vertical-align: top;
+    }
+  }
+
   .select_tag, .popular_tag, .recommend_tag {
 
     li {
@@ -63,6 +123,19 @@
         p {
           margin: 0;
         }
+      }
+    }
+  }
+
+  .select_tag_wrapper {
+    .select_tag_input_wrapper {
+      vertical-align: middle;
+    }
+    .select_tag_table {
+      display: table;
+
+      > * {
+        display: table-cell;
       }
     }
   }

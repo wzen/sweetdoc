@@ -67,6 +67,58 @@ class Gallery < ActiveRecord::Base
     end
   end
 
+  def self.add_view_statistic_count(gallery_id, date)
+    begin
+        gvs = GalleryViewStatistic.where({gallery_id: gallery_id, view_day: date})
+        if gvs == nil
+          # 新規作成
+          gvs = GalleryViewStatistic.new({
+                                             gallery_id: gallery_id,
+                                             view_day: date
+                                         })
+        else
+          gvs.count += 1
+        end
+        gvs.save!
+    rescue => e
+      # 更新失敗
+      return I18n.t('message.database.item_state.save.error')
+    end
+  end
+
+  def self.add_bookmark(user_id, gallery_id, note, date)
+    begin
+      ActiveRecord::Base.transaction do
+        gb = GalleryBookmark.where({gallery_id: gallery_id, user_id: user_id})
+        # 既にブックマークが存在する場合は処理なし
+        if gb == nil
+          gb = GalleryBookmark.new({
+                                       gallery_id: gallery_id,
+                                       user_id: user_id,
+                                       note: note
+                                   })
+          gb.save!
+
+          gbs = GalleryBookmarkStatistic.where({gallery_id: gallery_id, view_day: date})
+          if gbs == nil
+            # 新規作成
+            gbs = GalleryBookmarkStatistic.new({
+                                                   gallery_id: gallery_id,
+                                                   view_day: date
+                                               })
+          else
+            gbs.count += 1
+          end
+          gbs.save!
+        end
+      end
+    rescue => e
+      # 更新失敗
+      return I18n.t('message.database.item_state.save.error')
+    end
+  end
+
+
   def self.update_last_state(user_id, tags, i_page_values, e_page_values)
     begin
       if i_page_values != 'null' && e_page_values != 'null'
@@ -305,7 +357,7 @@ class Gallery < ActiveRecord::Base
     cond = ''
     if date != nil || tag_id != nil
       if date != nil
-        cond = "DATEDIFF(#{date}, gvs.view_day) == 0"
+        cond = "DATEDIFF(#{date}, gbs.view_day) == 0"
       end
       if tag_id != nil
         if cond.length > 0
@@ -316,11 +368,11 @@ class Gallery < ActiveRecord::Base
       end
       cond = "WHERE #{cond}"
     end
-    where = "#{cond} ORDER BY gvs.count DESC LIMIT #{head}, #{show_limit}"
+    where = "#{cond} ORDER BY gbs.count DESC LIMIT #{head}, #{show_limit}"
     if tag_id != nil
-      where = "WHERE DATEDIFF(#{date}, gvs.view_day) == 0 AND gt.id = #{tag_id} ORDER BY gvs.count DESC LIMIT #{head}, #{show_limit}"
+      where = "WHERE DATEDIFF(#{date}, gbs.view_day) == 0 AND gt.id = #{tag_id} ORDER BY gbs.count DESC LIMIT #{head}, #{show_limit}"
     end
-    sql = "SELECT g.* FROM galleries g INNER JOIN gallery_view_statistics as gvs ON g.id = gvs.gallery_id INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id #{where}"
+    sql = "SELECT g.* FROM galleries g INNER JOIN gallery_view_statistics as gbs ON g.id = gbs.gallery_id INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id #{where}"
     contents = ActiveRecord::Base.connection.select_all(sql)
     if contents != nil
       return contents.to_hash
@@ -405,9 +457,9 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.load_viewcount_and_bookmarkcount(gallery_id)
-    gallery_view_statistic = GalleryViewStatistic.find_by_gallery_id(gallery_id).first
-    gallery_bookmark_statistic = GalleryBookmarkStatistic.find_by_gallery_id(gallery_id).first
-    return gallery_view_statistic.count, gallery_bookmark_statistic.count
+    gallery_view_statistic_count = GalleryViewStatistic.find_by_gallery_id(gallery_id).group(:gallery_id).sum(:count)
+    gallery_bookmark_statistic_count = GalleryBookmarkStatistic.find_by_gallery_id(gallery_id).group(:gallery_id).sum(:count)
+    return gallery_view_statistic_count, gallery_bookmark_statistic_count
   end
 
   private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount

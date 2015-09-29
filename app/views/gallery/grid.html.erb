@@ -1,19 +1,7 @@
-<%= stylesheet_link_tag 'gallery', media: 'all', 'data-turbolinks-track' => true %>
-<%= javascript_include_tag 'gallery', 'data-turbolinks-track' => true %>
-
-<div id="main_wrapper">
-    <div id="contents_wrapper" style="float: left;">
-        <div id="grid_centering_wrapper">
-            <div id="grid_wrapper">
-                <% @contents.each do |content| %>
-                    <%= render 'gallery/grid_contents', content: content %>
-                <% end %>
-            </div>
-        </div>
+<div id="grid_centering_wrapper">
+    <div id="grid_wrapper">
+        <% @contents.each do |content| %>
+            <%= render 'gallery/grid_contents', content: content %>
+        <% end %>
     </div>
-    <div id="sidebar_wrapper" class="collapse" style="float: left">
-        <%= render 'gallery/sidebar/sidebar' %>
-    </div>
-
-    <br style="clear: both">
 </div>
