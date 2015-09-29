@@ -73,7 +73,7 @@ class GalleryTag < ActiveRecord::Base
         # はてなキーワードでカテゴリを調べる
         client = XMLRPC::Client.new2("http://d.hatena.ne.jp/xmlrpc")
         result = client.call("hatena.setKeywordLink", {
-                                                        body: tag['value'],
+                                                        body: tag,
                                                         mode: 'lite',
                                                         score: 10
                                                     })

@@ -17,6 +17,8 @@ class Common
         return false
     if !File
       return false
+    if !window.URL
+      return false
     return true
 
   # 変数の型チェック
@@ -562,6 +564,17 @@ class Common
         if callback?
           callback()
     , '500')
+
+  # CanvasをBlobに変換
+  @canvasToBlob = (canvas) ->
+    type = 'image/jpeg'
+    dataurl = canvas.toDataURL(type)
+    bin = atob(dataurl.split(',')[1]);
+    buffer = new Uint8Array(bin.length);
+    for i in [0..(bin.length - 1)]
+      buffer[i] = bin.charCodeAt(i)
+    return new Blob([buffer.buffer], {type: type});
+
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

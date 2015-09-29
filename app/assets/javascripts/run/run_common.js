@@ -279,6 +279,15 @@ RunCommon = (function() {
     return true;
   };
 
+  RunCommon.showUploadGalleryConfirm = function() {
+    return html2canvas(document.body, {
+      onrendered: function(canvas) {
+        window.captureCanvas = canvas;
+        return Common.showModalView(Constant.ModalViewType.UPLOAD_GALLERY_CONFIRM, RunCommon.prepareUploadGalleryConfirm);
+      }
+    });
+  };
+
   RunCommon.prepareUploadGalleryConfirm = function(modalEmt) {
     var mark;
     mark = $('.markItUp', modalEmt);
@@ -286,58 +295,127 @@ RunCommon = (function() {
       $('.caption_markup', modalEmt).markItUpRemove();
     }
     $('.caption_markup', modalEmt).markItUp(mySettings);
-    this.prepareUploadGalleryTagEvent(modalEmt);
+    RunCommon.prepareUploadGalleryTagEvent(modalEmt);
     $('.select_tag_input', modalEmt).off('keypress');
-    return $('.select_tag_input', modalEmt).on('keypress', (function(_this) {
-      return function(e) {
-        if (e.keyCode === 13) {
-          _this.addUploadGallerySelectTag(modalEmt, $(e).val());
-          if ($('.select_tag ul', modalEmt).length >= Gallery.TAG_MAX) {
-            return $(e).css('display', 'none');
-          }
-        }
-      };
-    })(this));
+    $('.select_tag_input', modalEmt).on('keypress', function(e) {
+      if (e.keyCode === 13) {
+        RunCommon.addUploadGallerySelectTag(modalEmt, $(this).val());
+        return $(this).val('');
+      }
+    });
+    $('.upload_button', modalEmt).off('click');
+    return $('.upload_button', modalEmt).on('click', function() {
+      return RunCommon.uploadGallery(modalEmt);
+    });
   };
 
   RunCommon.prepareUploadGalleryTagEvent = function(modalEmt) {
-    $('.popular_tag a, .recommend_tag a', modalEmt).off('click');
-    return $('.popular_tag a, .recommend_tag a', modalEmt).on('click', (function(_this) {
-      return function() {
-        return _this.addUploadGallerySelectTag(modalEmt, $(e).html());
-      };
-    })(this));
+    var tags;
+    tags = $('.popular_tag a, .recommend_tag a', modalEmt);
+    tags.off('click');
+    tags.on('click', function() {
+      return RunCommon.addUploadGallerySelectTag(modalEmt, $(this).html());
+    });
+    tags.off('mouseenter');
+    tags.on('mouseenter', function(e) {
+      var li;
+      li = this.closest('li');
+      $(li).append($("<div class='add_pop' style='display:none'><p>Add tag(click)</p></div>"));
+      $('.add_pop', li).css({
+        top: $(li).height(),
+        left: $(li).width()
+      });
+      return $('.add_pop', li).css('display', 'block');
+    });
+    tags.off('mouseleave');
+    return tags.on('mouseleave', function(e) {
+      var ul;
+      ul = this.closest('ul');
+      return $('.add_pop', ul).remove();
+    });
   };
 
   RunCommon.addUploadGallerySelectTag = function(modalEmt, tagname) {
-    var ul;
+    var tags, ul;
     ul = $('.select_tag ul', modalEmt);
-    if (ul.children().length >= Gallery.TAG_MAX) {
+    tags = $.map(ul.children(), function(n) {
+      return $('a', n).html();
+    });
+    if (tags.length >= Constant.Gallery.TAG_MAX || $.inArray(tagname, tags) >= 0) {
       return;
     }
-    return ul.append($("<li><a href='#'>" + tagname + "</a></li>"));
+    ul.append($("<li><a href='#'>" + tagname + "</a></li>"));
+    $('a', ul).off('click');
+    $('a', ul).on('click', function(e) {
+      this.closest('li').remove();
+      if ($('.select_tag ul li', modalEmt).length < Constant.Gallery.TAG_MAX) {
+        return $('.select_tag_input', modalEmt).css('display', 'block');
+      }
+    });
+    $('a', ul).off('mouseenter');
+    $('a', ul).on('mouseenter', function(e) {
+      var li;
+      li = this.closest('li');
+      $(li).append($("<div class='delete_pop' style='display:none'><p>Delete tag(click)</p></div>"));
+      $('.delete_pop', li).css({
+        top: $(li).height(),
+        left: $(li).width()
+      });
+      return $('.delete_pop', li).css('display', 'block');
+    });
+    $('a', ul).off('mouseleave');
+    $('a', ul).on('mouseleave', function(e) {
+      return $('li .delete_pop', ul).remove();
+    });
+    if ($('.select_tag ul li', modalEmt).length >= Constant.Gallery.TAG_MAX) {
+      return $('.select_tag_input', modalEmt).css('display', 'none');
+    }
   };
 
-  RunCommon.uploadGallery = function(callback) {
-    var _saveGallery;
+  RunCommon.uploadGallery = function(modalEmt, callback) {
+    var _saveGallery, title;
     if (callback == null) {
       callback = null;
     }
+    title = $('.title:first', modalEmt).val();
+    if (title.length === 0) {
+      return;
+    }
+    if (window.confirm(I18n.t('message.dialog.update_gallery'))) {
+      _saveGallery.call(this);
+    }
     return _saveGallery = function() {
-      var data;
-      data = {};
-      return $.ajax({
-        url: "/gallery/save_state",
-        type: "POST",
-        dataType: "json",
-        data: data,
-        success: function(data) {
-          if (callback != null) {
-            return callback();
-          }
-        },
-        error: function(data) {}
-      });
+      var _callback;
+      _callback = function(blob) {
+        var data;
+        if (blob == null) {
+          blob = null;
+        }
+        data = {};
+        data[Constant.Gallery.Key.TITLE] = title;
+        data[Constant.Gallery.Key.CAPTION] = $('.caption_markup:first', modalEmt).val();
+        data[Constant.Gallery.Key.THUMBNAIL_IMG] = blob;
+        data[Constant.Gallery.Key.TAGS] = $('.select_tag a', modalEmt).html();
+        data[Constant.Gallery.Key.INSTANCE_PAGE_VALUE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
+        data[Constant.Gallery.Key.EVENT_PAGE_VALUE] = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
+        return $.ajax({
+          url: "/gallery/save_state",
+          type: "POST",
+          dataType: "json",
+          data: data,
+          success: function(data) {
+            if (callback != null) {
+              return callback();
+            }
+          },
+          error: function(data) {}
+        });
+      };
+      if (window.captureCanvas != null) {
+        return window.captureCanvas.toBlob(_callback);
+      } else {
+        return _callback.call(this);
+      }
     };
   };
 

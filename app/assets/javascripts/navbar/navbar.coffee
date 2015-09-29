@@ -74,7 +74,7 @@ class Navbar
     )
     $('.menu-control-rewind-upload-gallery', navEmt).off('click')
     $('.menu-control-rewind-upload-gallery', navEmt).on('click', ->
-      Common.showModalView(Constant.ModalViewType.UPLOAD_GALLERY_CONFIRM, RunCommon.prepareUploadGalleryConfirm)
+      RunCommon.showUploadGalleryConfirm()
     )
 
   # ヘッダーにページ番号を設定

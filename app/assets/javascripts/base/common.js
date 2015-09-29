@@ -23,6 +23,9 @@ Common = (function() {
     if (!File) {
       return false;
     }
+    if (!window.URL) {
+      return false;
+    }
     return true;
   };
 
@@ -647,6 +650,20 @@ Common = (function() {
         }
       }
     }, '500');
+  };
+
+  Common.canvasToBlob = function(canvas) {
+    var bin, buffer, dataurl, i, j, ref, type;
+    type = 'image/jpeg';
+    dataurl = canvas.toDataURL(type);
+    bin = atob(dataurl.split(',')[1]);
+    buffer = new Uint8Array(bin.length);
+    for (i = j = 0, ref = bin.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+      buffer[i] = bin.charCodeAt(i);
+    }
+    return new Blob([buffer.buffer], {
+      type: type
+    });
   };
 
   return Common;

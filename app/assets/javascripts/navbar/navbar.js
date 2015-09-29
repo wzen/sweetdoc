@@ -79,7 +79,7 @@ Navbar = (function() {
     });
     $('.menu-control-rewind-upload-gallery', navEmt).off('click');
     return $('.menu-control-rewind-upload-gallery', navEmt).on('click', function() {
-      return Common.showModalView(Constant.ModalViewType.UPLOAD_GALLERY_CONFIRM, RunCommon.prepareUploadGalleryConfirm);
+      return RunCommon.showUploadGalleryConfirm();
     });
   };
 

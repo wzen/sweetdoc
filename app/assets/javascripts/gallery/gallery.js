@@ -2,72 +2,7 @@
 var Gallery;
 
 Gallery = (function() {
-  var constant;
-
   function Gallery() {}
-
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    Gallery.TAG_MAX = constant.Gallery.TAG_MAX;
-    Gallery.Key = (function() {
-      function Key() {}
-
-      Key.MESSAGE = constant.Gallery.Key.MESSAGE;
-
-      Key.GALLERY_ID = constant.Gallery.Key.GALLERY_ID;
-
-      Key.TAGS = constant.Gallery.Key.TAGS;
-
-      Key.INSTANCE_PAGE_VALUE = constant.Gallery.Key.INSTANCE_PAGE_VALUE;
-
-      Key.EVENT_PAGE_VALUE = constant.Gallery.Key.EVENT_PAGE_VALUE;
-
-      Key.THUMBNAIL_IMG = constant.Gallery.Key.THUMBNAIL_IMG;
-
-      Key.TITLE = constant.Gallery.Key.TITLE;
-
-      Key.CAPTION = constant.Gallery.Key.CAPTION;
-
-      Key.ITEM_JS_LIST = constant.Gallery.Key.ITEM_JS_LIST;
-
-      Key.VIEW_COUNT = constant.Gallery.Key.VIEW_COUNT;
-
-      Key.BOOKMARK_COUNT = constant.Gallery.Key.BOOKMARK_COUNT;
-
-      Key.RECOMMEND_SOURCE_WORD = constant.Gallery.Key.RECOMMEND_SOURCE_WORD;
-
-      return Key;
-
-    })();
-    Gallery.SearchKey = (function() {
-      function SearchKey() {}
-
-      SearchKey.SHOW_HEAD = constant.Gallery.SearchKey.SHOW_HEAD;
-
-      SearchKey.SHOW_LIMIT = constant.Gallery.SearchKey.SHOW_LIMIT;
-
-      SearchKey.SEARCH_TYPE = constant.Gallery.SearchKey.SEARCH_TYPE;
-
-      SearchKey.TAG_ID = constant.Gallery.SearchKey.TAG_ID;
-
-      SearchKey.DATE = constant.Gallery.SearchKey.DATE;
-
-      return SearchKey;
-
-    })();
-    Gallery.SearchType = (function() {
-      function SearchType() {}
-
-      SearchType.VIEW_COUNT = constant.Gallery.SearchType.VIEW_COUNT;
-
-      SearchType.BOOKMARK_COUNT = constant.Gallery.SearchType.BOOKMARK_COUNT;
-
-      SearchType.CREATED = constant.Gallery.SearchType.CREATED;
-
-      return SearchType;
-
-    })();
-  }
 
   return Gallery;
 

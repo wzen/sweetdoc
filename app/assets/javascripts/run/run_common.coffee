@@ -260,6 +260,15 @@ class RunCommon
     window.forkNumStacks[pn].pop()
     return true
 
+  # ギャラリーアップロードビュー表示処理
+  @showUploadGalleryConfirm = ->
+    # オーバーレイ前の画面をキャプチャ
+    html2canvas(document.body, {
+      onrendered: (canvas) ->
+        window.captureCanvas = canvas
+        Common.showModalView(Constant.ModalViewType.UPLOAD_GALLERY_CONFIRM, RunCommon.prepareUploadGalleryConfirm)
+    })
+
   # ギャラリーアップロードビュー表示前処理
   @prepareUploadGalleryConfirm = (modalEmt) ->
     # マークアップ入力フォーム初期化
@@ -269,60 +278,128 @@ class RunCommon
     $('.caption_markup', modalEmt).markItUp(mySettings)
 
     # タグクリックイベント設定
-    @prepareUploadGalleryTagEvent(modalEmt)
+    RunCommon.prepareUploadGalleryTagEvent(modalEmt)
 
     # Inputイベント
     $('.select_tag_input', modalEmt).off('keypress')
-    $('.select_tag_input', modalEmt).on('keypress', (e) =>
+    $('.select_tag_input', modalEmt).on('keypress', (e) ->
       if e.keyCode == 13
         # Enterキーを押した場合、選択タグに追加
-        @addUploadGallerySelectTag(modalEmt, $(e).val())
-        if $('.select_tag ul', modalEmt).length >= Gallery.TAG_MAX
-          # タグ数が最大数になった場合, Inputを非表示
-          $(e).css('display', 'none')
+        RunCommon.addUploadGallerySelectTag(modalEmt, $(@).val())
+        $(@).val('')
+    )
+
+    # Updateイベント
+    $('.upload_button', modalEmt).off('click')
+    $('.upload_button', modalEmt).on('click', ->
+      RunCommon.uploadGallery(modalEmt)
     )
 
   # タグクリックイベント
   @prepareUploadGalleryTagEvent = (modalEmt) ->
-    $('.popular_tag a, .recommend_tag a', modalEmt).off('click')
-    $('.popular_tag a, .recommend_tag a', modalEmt).on('click', =>
+    tags = $('.popular_tag a, .recommend_tag a', modalEmt)
+    tags.off('click')
+    tags.on('click', ->
       # 選択タグに追加
-      @addUploadGallerySelectTag(modalEmt, $(e).html())
+      RunCommon.addUploadGallerySelectTag(modalEmt, $(@).html())
+    )
+
+    # マウスオーバーイベント
+    tags.off('mouseenter')
+    tags.on('mouseenter', (e) ->
+      li = @closest('li')
+      $(li).append($("<div class='add_pop' style='display:none'><p>Add tag(click)</p></div>"))
+      $('.add_pop', li).css({top: $(li).height(), left: $(li).width()})
+      $('.add_pop', li).css('display', 'block')
+    )
+    tags.off('mouseleave')
+    tags.on('mouseleave', (e) ->
+      ul = @closest('ul')
+      $('.add_pop', ul).remove()
     )
 
   @addUploadGallerySelectTag = (modalEmt, tagname) ->
     ul = $('.select_tag ul', modalEmt)
-    if ul.children().length >= Gallery.TAG_MAX
+    tags = $.map(ul.children(), (n) ->
+      return $('a', n).html()
+    )
+
+    if tags.length >= Constant.Gallery.TAG_MAX || $.inArray(tagname, tags) >= 0
       return
     ul.append($("<li><a href='#'>#{tagname}</a></li>"))
 
+    # タグ クリックイベント
+    $('a', ul).off('click')
+    $('a', ul).on('click', (e) ->
+      # タグ削除
+      @closest('li').remove()
+      if $('.select_tag ul li', modalEmt).length < Constant.Gallery.TAG_MAX
+        $('.select_tag_input', modalEmt).css('display', 'block')
+    )
+
+    # タグ マウスオーバーイベント
+    $('a', ul).off('mouseenter')
+    $('a', ul).on('mouseenter', (e) ->
+      li = @closest('li')
+      $(li).append($("<div class='delete_pop' style='display:none'><p>Delete tag(click)</p></div>"))
+      $('.delete_pop', li).css({top: $(li).height(), left: $(li).width()})
+      $('.delete_pop', li).css('display', 'block')
+    )
+    $('a', ul).off('mouseleave')
+    $('a', ul).on('mouseleave', (e) ->
+      $('li .delete_pop', ul).remove()
+    )
+
+    if $('.select_tag ul li', modalEmt).length >= Constant.Gallery.TAG_MAX
+      # タグ数が最大数になった場合, Inputを非表示
+      $('.select_tag_input', modalEmt).css('display', 'none')
+
   # ギャラリーアップロード
-  @uploadGallery = (callback = null) ->
+  @uploadGallery = (modalEmt, callback = null) ->
+
+    # 入力値バリデーションチェック
+    title = $('.title:first', modalEmt).val()
+    if title.length == 0
+      return
 
     # 確認ダイアログ
-
+    if window.confirm(I18n.t('message.dialog.update_gallery'))
+      _saveGallery.call(@)
 
     # ギャラリー保存処理
     _saveGallery = ->
-      data = {}
+      _callback = (blob = null) ->
+        data = {}
+        data[Constant.Gallery.Key.TITLE] = title
+        data[Constant.Gallery.Key.CAPTION] = $('.caption_markup:first', modalEmt).val()
+        data[Constant.Gallery.Key.THUMBNAIL_IMG] = blob
+        data[Constant.Gallery.Key.TAGS] = $('.select_tag a', modalEmt).html()
+        data[Constant.Gallery.Key.INSTANCE_PAGE_VALUE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
+        data[Constant.Gallery.Key.EVENT_PAGE_VALUE] = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
+        $.ajax(
+          {
+            url: "/gallery/save_state"
+            type: "POST"
+            dataType: "json"
+            data: data
+            success: (data)->
+              # 正常完了処理
 
-      $.ajax(
-        {
-          url: "/gallery/save_state"
-          type: "POST"
-          dataType: "json"
-          data: data
-          success: (data)->
-            # 正常完了処理
+              # コールバック
+              if callback?
+                callback()
 
-            # コールバック
-            if callback?
-              callback()
-          error: (data) ->
-        }
-      )
+              # 詳細画面に遷移
 
+            error: (data) ->
+          }
+        )
 
+      if window.captureCanvas?
+        # Blob作成
+        window.captureCanvas.toBlob(_callback)
+      else
+        _callback.call(@)
 
   # Mainコンテナ初期化
   @initMainContainer = ->

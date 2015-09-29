@@ -16,6 +16,12 @@ class GalleryController < ApplicationController
     user_id = current_user.id
     tags = params[Const::Gallery::Key::TAGS]
     title = params[Const::Gallery::Key::TITLE]
+    if title == nil || title.length == 0
+      # エラー
+      @message = I18n.t('message.database.item_state.save.error')
+      render
+    end
+
     caption = params[Const::Gallery::Key::CAPTION]
     thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
     i_page_values = params[Const::Gallery::Key::INSTANCE_PAGE_VALUE]

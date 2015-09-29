@@ -44,6 +44,7 @@ ja:
     dialog:
       new_project: "'作成中のコンテンツは全て削除されます。'"
       delete_item: "アイテムが削除されます。"
+      update_gallery: "アップロードします。"
     database:
       item_state:
         save:

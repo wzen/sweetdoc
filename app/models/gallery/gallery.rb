@@ -193,21 +193,17 @@ class Gallery < ActiveRecord::Base
         # タグテーブル処理
         tag_ids = []
         tags.each do |tag|
-          if tag['is_new'] == nil || tag['value'] == nil
-            # 例外をスロー
-            raise
-          end
-
-          if tag['is_new']
+          tag = GalleryTag.find_by_name(tag).first
+          if tag == nil
             # タグを新規作成
             tag = GalleryTag.new({
-                                     name: tag['value']
+                                     name: tag
                                  })
             tag.save!
             tag_ids << tag.id
+
           else
             # タグの重み付けを加算
-            tag = GalleryTag.find(tag['value'].to_i)
             tag.weight += 1
             tag.save!
             tag_ids << tag.id

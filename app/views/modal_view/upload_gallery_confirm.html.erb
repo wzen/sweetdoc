@@ -2,17 +2,17 @@
     <div class="content">
         <div class="title">
             <div style="float: left;">
-                <label><%= i18n.t('upload_confirm.title') %></label>
+                <label><%= I18n.t('upload_confirm.title') %></label>
             </div>
             <div style="float: left">
-                <input class="title" />
+                <input class="title" required>
             </div>
             <br style="clear: both">
         </div>
 
         <div class="caption">
             <div style="float: left;">
-                <label><%= i18n.t('upload_confirm.caption') %></label>
+                <label><%= I18n.t('upload_confirm.caption') %></label>
             </div>
             <div style="float: left">
                 <textarea class="caption_markup"></textarea>
@@ -20,18 +20,22 @@
             <br style="clear: both">
         </div>
         <div class="select_tag_wrapper">
-            <div class="select_tag_label"><%= i18n.t('upload_confirm.tags') %></div>
-            <div class="select_tag tagcloud">
+            <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
+            <div class="select_tag tagcloud" style="float: left">
                 <ul>
                 </ul>
+
+            </div>
+            <div style="float: left">
                 <input class="select_tag_input" value="" >
             </div>
+            <br style="clear: both">
         </div>
 
-        <button class="upload_button"></button>
+        <button class="upload_button" value="Upload"></button>
 
-        <div class="popular_tag_wrapper" style="display: none">
-            <div class="popular_tag_label"><%= i18n.t('upload_confirm.popular_tags') %></div>
+        <div class="popular_tag_wrapper" style="display: block">
+            <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
             <div class="popular_tag tagcloud">
                 <ul>
                     <li><a href="#">tag1</a></li>
@@ -39,8 +43,8 @@
                 </ul>
             </div>
         </div>
-        <div class="recommend_tag_wrapper" style="display: none">
-            <div class="recommend_tag_label"><%= i18n.t('upload_confirm.recommend_tags') %></div>
+        <div class="recommend_tag_wrapper" style="display: block">
+            <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
             <div class="recommend_tag tagcloud">
                 <ul>
                     <li><a href="#">tag3</a></li>
