@@ -87,12 +87,19 @@ if gon?
       @NAV_MENU_ADDFORK_CLASS = 'fork-new'
       @PRELOAD_PAGEVALUE_NUM = 0
 
+    class @Project
+      class @Key
+        TITLE = constant.Project.Key.TITLE
+        SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH
+        SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT
+
     class @Gallery
       @TAG_MAX = constant.Gallery.TAG_MAX
 
       class @Key
         @MESSAGE = constant.Gallery.Key.MESSAGE
         @GALLERY_ID = constant.Gallery.Key.GALLERY_ID
+        @PROJECT_ID = constant.Gallery.Key.PROJECT_ID
         @TAGS = constant.Gallery.Key.TAGS
         @INSTANCE_PAGE_VALUE = constant.Gallery.Key.INSTANCE_PAGE_VALUE
         @EVENT_PAGE_VALUE = constant.Gallery.Key.EVENT_PAGE_VALUE

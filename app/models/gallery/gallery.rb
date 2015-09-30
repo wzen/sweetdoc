@@ -8,21 +8,31 @@ class Gallery < ActiveRecord::Base
   has_many :gallery_bookmarks
   has_many :gallery_view_statistics
   has_many :gallery_bookmark_statistics
+  has_many :projects
+  has_many :project_gallery_maps
 
-  def self.save_state(user_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
+  def self.save_state(user_id, project_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
     begin
       if i_page_values != 'null' && e_page_values != 'null'
 
         ActiveRecord::Base.transaction do
+          # Project取得
+          p = Project.find(project_id)
           # Gallery レコード追加
           g = self.new({
                            user_id: user_id,
                            title: title,
                            caption: caption,
-                           thumbnail_img: thumbnail_img
+                           thumbnail_img: thumbnail_img,
+                           screen_width: p.screen_width,
+                           screen_height: p.screen_height
                        })
           g.save!
           gallery_id = g.id
+
+          # ProjectGalelryMap追加
+          pgm = ProjectGalleryMap.new({project_id: project_id, gallery_id: g.id})
+          pgm.save!
 
           # Instance レコード追加
           i_page_values.each do |k, v|

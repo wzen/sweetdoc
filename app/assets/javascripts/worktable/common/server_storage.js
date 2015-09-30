@@ -11,6 +11,8 @@ ServerStorage = (function() {
     ServerStorage.Key = (function() {
       function Key() {}
 
+      Key.PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID;
+
       Key.PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT;
 
       Key.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
@@ -41,6 +43,7 @@ ServerStorage = (function() {
     var data, event, eventPagevalues, instance, instancePagevalues, k, pageNum, v;
     data = {};
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
+    data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     instancePagevalues = [];
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
     for (k in instance) {

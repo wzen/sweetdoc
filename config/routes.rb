@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root 'worktable#index'
+  post 'worktable/create_project'
   get 'modal_view/show'
   get 'item_js/index'
   #resources :run, only:[:index]
@@ -19,8 +20,16 @@ Rails.application.routes.draw do
   post 'test_move/hello'
   post 'run/paging'
 
+  # Gallery
   get 'gallery/index'
   get 'gallery/grid'
+  get 'gallery/detail'
+  post 'gallery/save_state'
+  post 'gallery/update_last_state'
+  post 'gallery/load_state'
+  get 'gallery/get_contents'
+  get 'gallery/get_popular_and_recommend_tags'
+  post 'gallery/add_bookmark'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

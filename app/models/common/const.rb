@@ -162,10 +162,19 @@ class Const
 
   class ServerStorage
     class Key
+      PROJECT_ID = 'project_id'
       PAGE_COUNT = 'page_count'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       SETTING_PAGE_VALUE = 's'
+    end
+  end
+
+  class Project
+    class Key
+      TITLE = 'title'
+      SCREEN_WIDTH = 'screen_width'
+      SCREEN_HEIGHT = 'screen_height'
     end
   end
 
@@ -175,6 +184,7 @@ class Const
     class Key
       MESSAGE = 'message'
       GALLERY_ID = 'gid'
+      PROJECT_ID = 'pid'
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'

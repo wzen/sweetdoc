@@ -137,6 +137,28 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.Project = (function() {
+      function Project() {}
+
+      Project.Key = (function() {
+        var SCREEN_HEIGHT, SCREEN_WIDTH, TITLE;
+
+        function Key() {}
+
+        TITLE = constant.Project.Key.TITLE;
+
+        SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH;
+
+        SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT;
+
+        return Key;
+
+      })();
+
+      return Project;
+
+    })();
+
     Constant.Gallery = (function() {
       function Gallery() {}
 
@@ -148,6 +170,8 @@ if (typeof gon !== "undefined" && gon !== null) {
         Key.MESSAGE = constant.Gallery.Key.MESSAGE;
 
         Key.GALLERY_ID = constant.Gallery.Key.GALLERY_ID;
+
+        Key.PROJECT_ID = constant.Gallery.Key.PROJECT_ID;
 
         Key.TAGS = constant.Gallery.Key.TAGS;
 

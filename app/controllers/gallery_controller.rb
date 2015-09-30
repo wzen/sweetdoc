@@ -19,7 +19,8 @@ class GalleryController < ApplicationController
     user_id = current_user.id
     tags = params[Const::Gallery::Key::TAGS]
     title = params[Const::Gallery::Key::TITLE]
-    if title == nil || title.length == 0
+    project_id = params[Const::Gallery::Key::PROJECT_ID]
+    if project_id == nil || title == nil || title.length == 0
       # エラー
       @message = I18n.t('message.database.item_state.save.error')
       render
@@ -29,7 +30,7 @@ class GalleryController < ApplicationController
     thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
     i_page_values = params[Const::Gallery::Key::INSTANCE_PAGE_VALUE]
     e_page_values = params[Const::Gallery::Key::EVENT_PAGE_VALUE]
-    @message = Gallery.save_state(user_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
+    @message = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
   end
 
   def update_last_state

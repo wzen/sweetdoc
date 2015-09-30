@@ -392,6 +392,7 @@ RunCommon = (function() {
           blob = null;
         }
         data = {};
+        data[Constant.Gallery.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
         data[Constant.Gallery.Key.TITLE] = title;
         data[Constant.Gallery.Key.CAPTION] = $('.caption_markup:first', modalEmt).val();
         data[Constant.Gallery.Key.THUMBNAIL_IMG] = blob;
