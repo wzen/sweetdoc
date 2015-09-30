@@ -227,7 +227,7 @@ class Const
   end
 
   class ModalViewType
-    INIT = 'init'
+    INIT_PROJECT = 'init_project'
     ABOUT = 'about'
     UPLOAD_GALLERY_CONFIRM = 'upload_gallery_confirm'
   end

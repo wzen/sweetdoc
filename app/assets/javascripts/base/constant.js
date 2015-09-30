@@ -96,6 +96,8 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ModalViewType = (function() {
       function ModalViewType() {}
 
+      ModalViewType.INIT_PROJECT = constant.ModalViewType.INIT_PROJECT;
+
       ModalViewType.ABOUT = constant.ModalViewType.ABOUT;
 
       ModalViewType.UPLOAD_GALLERY_CONFIRM = constant.ModalViewType.UPLOAD_GALLERY_CONFIRM;

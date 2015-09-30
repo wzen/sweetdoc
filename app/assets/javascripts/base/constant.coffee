@@ -65,6 +65,8 @@ if gon?
 
     # モーダルビュータイプ
     class @ModalViewType
+      # @property [Int] INIT 画面初期表示
+      @INIT_PROJECT = constant.ModalViewType.INIT_PROJECT
       # @property [Int] ABOUT 概要
       @ABOUT = constant.ModalViewType.ABOUT
       # @property [Int] UPLOAD_GALLERY_CONFIRM ギャラリーアップロード

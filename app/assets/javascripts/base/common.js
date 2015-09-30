@@ -56,6 +56,19 @@ Common = (function() {
     return RandomString;
   };
 
+  Common.initProjectSize = function() {
+    var size;
+    size = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_SIZE);
+    if ((size != null) && (size.width != null) && (size.height != null)) {
+      return $('#project_wrapper').css({
+        width: size.width,
+        height: size.height
+      });
+    } else {
+      return $('#project_wrapper').removeAttr('style');
+    }
+  };
+
   Common.makeClone = function(obj) {
     var flags, key, newInstance;
     if ((obj == null) || typeof obj !== 'object') {

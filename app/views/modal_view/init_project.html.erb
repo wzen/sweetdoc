@@ -1,0 +1,36 @@
+<div class="modal-content <%= Const::ModalViewType::INIT_PROJECT %>">
+    <div class="content">
+        <div>
+            <div>
+                <label>Project Name:</label>
+            </div>
+            <div>
+                <input name="project_name" class="project_name" type="text" /><br />
+            </div>
+        </div>
+        <div>
+            <div>
+                <label>Display Size:</label>
+            </div>
+            <div class="display_size_wrapper">
+                <label>
+                    <input type="radio" name="default" checked>
+                </label>
+                <label>
+                    <input type="radio" name="input">
+                </label>
+                <div class="display_size_input_wrapper" style="display: none">
+                    <div style="display: inline-block">
+                        Width:<input class="display_size_input_width" type="number" value="" maxlength="4">
+                    </div>
+                    <div style="display: inline-block">
+                        Height:<input class="display_size_input_height" type="number" value="" maxlength="4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button class="create_button" value="Create"></button>
+        </div>
+    </div>
+</div>

@@ -44,3 +44,7 @@ $ ->
     Timeline.refreshAllTimeline()
     _callback.call(@)
 
+    # 初期モーダル表示
+    Common.showModalView(Constant.ModalViewType.INIT, WorktableCommon.initProjectModal)
+
+

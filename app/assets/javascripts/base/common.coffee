@@ -42,7 +42,16 @@ class Common
       RandomString += BaseString.charAt( Math.floor( Math.random() * n))
     return RandomString
 
-  # オブジェクトの複製
+  # プロジェクト表示サイズ設定
+  @initProjectSize = ->
+    size = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_SIZE)
+    if size? && size.width? && size.height?
+      $('#project_wrapper').css({width: size.width, height: size.height})
+    else
+      # width,height -> 100%
+      $('#project_wrapper').removeAttr('style')
+
+# オブジェクトの複製
   # @param [Object] obj 複製対象オブジェクト
   # @return [Object] 複製後オブジェクト
   @makeClone = (obj) ->

@@ -1,5 +1,34 @@
 class WorktableCommon
 
+  # プロジェクト作成時モーダルビュー初期化
+  @initProjectModal = (modalEmt) ->
+    # ラジオボタンイベント
+    $('.display_size_wrapper input[type=radio]', modalEmt).off('click')
+    $('.display_size_wrapper input[type=radio]', modalEmt).on('click', ->
+      $('.display_size_input_wrapper', modalEmt).css('display', if $(@).attr('name') == 'input' then 'block' else 'none')
+    )
+
+    # Createボタンイベント
+    $('.init_button', modalEmt).off('click')
+    $('.init_button', modalEmt).on('click', ->
+      projectName = $('.project_name').val()
+      if !projectName? || projectName.length == 0
+        # エラー
+        return
+        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName)
+      if $('.display_size_wrapper input[name=input]').is(':checked')
+        width = $('.display_size_input_width', modalEmt).val()
+        height = $('.display_size_input_height', modalEmt).val()
+        if !width? || width.length == 0 || !height? || height.length == 0
+          # エラー
+          return
+          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
+            width: parseInt(width)
+            height: parseInt(height)
+          })
+      Common.initProjectSize()
+    )
+
   # 選択枠を付ける
   # @param [Object] target 対象のオブジェクト
   # @param [String] selectedBorderType 選択タイプ

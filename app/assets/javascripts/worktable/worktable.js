@@ -29,7 +29,8 @@ $(function() {
   } else {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();
-    return _callback.call(this);
+    _callback.call(this);
+    return Common.showModalView(Constant.ModalViewType.INIT, WorktableCommon.initProjectModal);
   }
 });
 

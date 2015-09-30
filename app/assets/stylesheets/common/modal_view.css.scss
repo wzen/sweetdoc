@@ -33,7 +33,16 @@
   opacity: 0.3;
 }
 
-.modal-content.init {
+.modal-content.init_project {
+  .content {
+    > div {
+      display: table;
+      > div {
+        display: table-cell;
+      }
+    }
+  }
+
   label {
     width:60px;
     float:left;
@@ -48,9 +57,7 @@
   }
 
   /*Text, email & tel input fields*/
-  input[type=text],
-  input[type=email],
-  input[type=tel] {
+  input[type=text] {
     width:300px;
     margin-bottom:8px;
     padding:2px 5px;
@@ -59,12 +66,8 @@
     border-radius: 5px;
     border:1px solid #CCC;
   }
-  /*Just the tel field*/
-  input[type=tel] {
-    width:150px;
-  }
   /*The Submit Button */
-  input[type=button] {
+  .create_button {
     margin-top:5px;
     margin-left:60px;
     padding:2px 20px;
@@ -134,7 +137,7 @@
     .select_tag_table {
       display: table;
 
-      > * {
+      > div {
         display: table-cell;
       }
     }

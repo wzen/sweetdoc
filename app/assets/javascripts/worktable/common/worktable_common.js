@@ -4,6 +4,34 @@ var WorktableCommon;
 WorktableCommon = (function() {
   function WorktableCommon() {}
 
+  WorktableCommon.initProjectModal = function(modalEmt) {
+    $('.display_size_wrapper input[type=radio]', modalEmt).off('click');
+    $('.display_size_wrapper input[type=radio]', modalEmt).on('click', function() {
+      return $('.display_size_input_wrapper', modalEmt).css('display', $(this).attr('name') === 'input' ? 'block' : 'none');
+    });
+    $('.init_button', modalEmt).off('click');
+    return $('.init_button', modalEmt).on('click', function() {
+      var height, projectName, width;
+      projectName = $('.project_name').val();
+      if ((projectName == null) || projectName.length === 0) {
+        return;
+        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
+      }
+      if ($('.display_size_wrapper input[name=input]').is(':checked')) {
+        width = $('.display_size_input_width', modalEmt).val();
+        height = $('.display_size_input_height', modalEmt).val();
+        if ((width == null) || width.length === 0 || (height == null) || height.length === 0) {
+          return;
+          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
+            width: parseInt(width),
+            height: parseInt(height)
+          });
+        }
+      }
+      return Common.initProjectSize();
+    });
+  };
+
   WorktableCommon.setSelectedBorder = function(target, selectedBorderType) {
     var className;
     if (selectedBorderType == null) {
