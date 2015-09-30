@@ -45,6 +45,6 @@ $ ->
     _callback.call(@)
 
     # 初期モーダル表示
-    Common.showModalView(Constant.ModalViewType.INIT, WorktableCommon.initProjectModal)
+    Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false)
 
 

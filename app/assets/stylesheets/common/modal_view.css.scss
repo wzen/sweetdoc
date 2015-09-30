@@ -39,12 +39,13 @@
       display: table;
       > div {
         display: table-cell;
+        vertical-align: top;
       }
     }
   }
 
   label {
-    width:60px;
+    width:100%;
     float:left;
     font-size:12px;
     line-height:24px;
@@ -56,7 +57,6 @@
     line-height:18px;
   }
 
-  /*Text, email & tel input fields*/
   input[type=text] {
     width:300px;
     margin-bottom:8px;
@@ -66,7 +66,6 @@
     border-radius: 5px;
     border:1px solid #CCC;
   }
-  /*The Submit Button */
   .create_button {
     margin-top:5px;
     margin-left:60px;

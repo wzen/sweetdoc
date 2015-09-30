@@ -30,7 +30,7 @@ $(function() {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();
     _callback.call(this);
-    return Common.showModalView(Constant.ModalViewType.INIT, WorktableCommon.initProjectModal);
+    return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false);
   }
 });
 

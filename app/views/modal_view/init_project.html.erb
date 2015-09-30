@@ -1,24 +1,36 @@
 <div class="modal-content <%= Const::ModalViewType::INIT_PROJECT %>">
     <div class="content">
         <div>
-            <div>
-                <label>Project Name:</label>
+            <div class="project_create_wrapper">
+                <label style="display: inline-block">
+                    <input type="radio" name="project_create" value="new" checked>Create
+                </label>
+                <label style="display: inline-block">
+                    <input type="radio" name="project_create" value="select" disabled>Select
+                </label>
+            </div>
+        </div>
+        <div class="display_project_new_wrapper">
+            <div class="cell_label">
+                <label>Project name:</label>
             </div>
             <div>
                 <input name="project_name" class="project_name" type="text" /><br />
             </div>
         </div>
-        <div>
+        <div class="display_project_new_wrapper">
             <div>
                 <label>Display Size:</label>
             </div>
-            <div class="display_size_wrapper">
-                <label>
-                    <input type="radio" name="default" checked>
-                </label>
-                <label>
-                    <input type="radio" name="input">
-                </label>
+            <div>
+                <div class="display_size_wrapper">
+                    <label>
+                        <input type="radio" name="project_size" value="default" checked>Default
+                    </label>
+                    <label>
+                        <input type="radio" name="project_size" value="input">Input Size
+                    </label>
+                </div>
                 <div class="display_size_input_wrapper" style="display: none">
                     <div style="display: inline-block">
                         Width:<input class="display_size_input_width" type="number" value="" maxlength="4">
@@ -29,8 +41,18 @@
                 </div>
             </div>
         </div>
+        <div class="display_project_select_wrapper" style="display: none">
+            <div class="cell_label">
+                <label>Select project:</label>
+            </div>
+            <div>
+                <select class="project_select"></select>
+            </div>
+        </div>
         <div>
-            <button class="create_button" value="Create"></button>
+            <div>
+                <button class="create_button" value="Create">Create</button>
+            </div>
         </div>
     </div>
 </div>

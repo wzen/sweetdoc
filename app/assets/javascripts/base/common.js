@@ -432,10 +432,13 @@ Common = (function() {
     return ret;
   };
 
-  Common.showModalView = function(type, prepareShowFunc) {
+  Common.showModalView = function(type, prepareShowFunc, enableOverlayClose) {
     var _centering, _show, emt, heightRate, self;
     if (prepareShowFunc == null) {
       prepareShowFunc = null;
+    }
+    if (enableOverlayClose == null) {
+      enableOverlayClose = true;
     }
     self = this;
     emt = $('body').children(".modal-content." + type);
@@ -468,8 +471,10 @@ Common = (function() {
       emt.css('max-height', $(window).height() * heightRate);
       emt.css('display', 'block');
       return $("#modal-overlay,#modal-close").unbind().click(function() {
-        $(".modal-content,#modal-overlay").css('display', 'none');
-        return $('#modal-overlay').remove();
+        if (enableOverlayClose) {
+          $(".modal-content,#modal-overlay").css('display', 'none');
+          return $('#modal-overlay').remove();
+        }
       });
     };
     if ((emt == null) || emt.length === 0) {

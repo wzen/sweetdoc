@@ -385,7 +385,7 @@ class Common
   # モーダルビュー表示
   # @param [Integer] type モーダルビュータイプ
   # @param [Function] prepareShowFunc 表示前処理
-  @showModalView = (type, prepareShowFunc = null) ->
+  @showModalView = (type, prepareShowFunc = null, enableOverlayClose = true) ->
     self = @
     emt = $('body').children(".modal-content.#{type}")
     # ビューの高さ比
@@ -417,8 +417,9 @@ class Common
       emt.css('max-height', $(window).height() * heightRate)
       emt.css('display', 'block')
       $("#modal-overlay,#modal-close").unbind().click( ->
-        $(".modal-content,#modal-overlay").css('display', 'none')
-        $('#modal-overlay').remove() ;
+        if enableOverlayClose
+          $(".modal-content,#modal-overlay").css('display', 'none')
+          $('#modal-overlay').remove() ;
       )
 
     # 表示内容読み込み済みの場合はサーバアクセスなし

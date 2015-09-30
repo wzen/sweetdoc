@@ -67,7 +67,7 @@ class ServerStorage
 
   # サーバからアイテムの情報を取得して描画
   # @param [Integer] user_pagevalue_id 取得するUserPageValueのID
-  @load = (user_pagevalue_id) ->
+  @load = (user_pagevalue_id, callback = null) ->
     $.ajax(
       {
         url: "/page_value_state/load_state"
@@ -81,7 +81,7 @@ class ServerStorage
           self = @
           item_js_list = data.item_js_list
           # 全て読み込んだ後のコールバック
-          callback = ->
+          _callback = ->
             WorktableCommon.removeAllItemOnWorkTable()
 
             # Pagevalue設置
@@ -107,10 +107,12 @@ class ServerStorage
               PageValue.updatePageCount()
               PageValue.updateForkCount()
               Paging.initPaging()
+              if callback?
+                callback()
             )
 
           if item_js_list.length == 0
-            callback.call(self)
+            _callback.call(self)
             return
 
           loadedCount = 0
@@ -122,7 +124,7 @@ class ServerStorage
               loadedCount += 1
               if loadedCount >= item_js_list.length
                 # 全て読み込んだ後
-                callback.call(self)
+                _callback.call(self)
               return
 
             if d.css_temp?
@@ -132,7 +134,7 @@ class ServerStorage
               loadedCount += 1
               if loadedCount >= item_js_list.length
                 # 全て読み込んだ後
-                callback.call(self)
+                _callback.call(self)
             )
             PageValue.addItemInfo(d.item_id)
             EventConfig.addEventConfigContents(d.item_id)
@@ -145,58 +147,73 @@ class ServerStorage
     )
 
   # 保存されているデータ一覧を取得して表示
-  @get_load_list: ->
-    loadEmt = $("##{Navbar.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS}")
-    updateFlg = loadEmt.find(".#{@ElementAttribute.LOAD_LIST_UPDATED_FLG}").length > 0
-    if updateFlg
-      loadedLocalTime = loadEmt.find(".#{@ElementAttribute.LOADED_LOCALTIME}")
-      if loadedLocalTime?
-        diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()))
-        s = diffTime.seconds
-        if window.debug
-          console.log('loadedLocalTime diff ' + s)
-        if parseInt(s) <= @LOAD_LIST_INTERVAL_SECONDS
-          # 読み込んでX秒以内ならロードしない
-          return
+#  @get_load_list: ->
+#    loadEmt = $("##{Navbar.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS}")
+#    updateFlg = loadEmt.find(".#{@ElementAttribute.LOAD_LIST_UPDATED_FLG}").length > 0
+#    if updateFlg
+#      loadedLocalTime = loadEmt.find(".#{@ElementAttribute.LOADED_LOCALTIME}")
+#      if loadedLocalTime?
+#        diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()))
+#        s = diffTime.seconds
+#        if window.debug
+#          console.log('loadedLocalTime diff ' + s)
+#        if parseInt(s) <= @LOAD_LIST_INTERVAL_SECONDS
+#          # 読み込んでX秒以内ならロードしない
+#          return
+#
+#    loadEmt.children().remove()
+#    $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt)
+#
+#    $.ajax(
+#      {
+#        url: "/page_value_state/user_pagevalue_list"
+#        type: "POST"
+#        dataType: "json"
+#        success: (data)->
+#          user_pagevalue_list = data
+#          if user_pagevalue_list.length > 0
+#            list = ''
+#            n = $.now()
+#            for p in user_pagevalue_list
+#              d = new Date(p.updated_at)
+#              e = "<li><a class='menu-item'>#{Common.displayDiffAlmostTime(n, d.getTime())} (#{Common.formatDate(d)})</a><input type='hidden' class='user_pagevalue_id' value=#{p.user_pagevalue_id}></li>"
+#              list += e
+#            loadEmt.children().remove()
+#            $(list).appendTo(loadEmt)
+#            # クリックイベント設定
+#            loadEmt.find('li').click((e) ->
+#              user_pagevalue_id = $(@).find('.user_pagevalue_id:first').val()
+#              ServerStorage.load(user_pagevalue_id)
+#            )
+#
+#            # ロード済みに変更 & 現在時間を記録
+#            loadEmt.find(".#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
+#            loadEmt.find(".#{ServerStorage.ElementAttribute.LOADED_LOCALTIME}").remove()
+#            $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG} value='1'>").appendTo(loadEmt)
+#            $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOADED_LOCALTIME} value=#{$.now()}>").appendTo(loadEmt)
+#
+#          else
+#            loadEmt.children().remove()
+#            $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt)
+#        error: (data)->
+#          if window.debug
+#            console.log(data.responseText)
+#          loadEmt.children().remove()
+#          $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt)
+#      }
+#    )
 
-    loadEmt.children().remove()
-    $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt)
-
+  @get_load_data: (successCallback = null, errorCallback = null) ->
     $.ajax(
       {
         url: "/page_value_state/user_pagevalue_list"
         type: "POST"
         dataType: "json"
         success: (data)->
-          user_pagevalue_list = data
-          if user_pagevalue_list.length > 0
-            list = ''
-            n = $.now()
-            for p in user_pagevalue_list
-              d = new Date(p.updated_at)
-              e = "<li><a class='menu-item'>#{Common.displayDiffAlmostTime(n, d.getTime())} (#{Common.formatDate(d)})</a><input type='hidden' class='user_pagevalue_id' value=#{p.user_pagevalue_id}></li>"
-              list += e
-            loadEmt.children().remove()
-            $(list).appendTo(loadEmt)
-            # クリックイベント設定
-            loadEmt.find('li').click((e) ->
-              user_pagevalue_id = $(@).find('.user_pagevalue_id:first').val()
-              ServerStorage.load(user_pagevalue_id)
-            )
-
-            # ロード済みに変更 & 現在時間を記録
-            loadEmt.find(".#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
-            loadEmt.find(".#{ServerStorage.ElementAttribute.LOADED_LOCALTIME}").remove()
-            $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG} value='1'>").appendTo(loadEmt)
-            $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOADED_LOCALTIME} value=#{$.now()}>").appendTo(loadEmt)
-
-          else
-            loadEmt.children().remove()
-            $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt)
+          if successCallback?
+            successCallback(data)
         error: (data)->
-          if window.debug
-            console.log(data.responseText)
-          loadEmt.children().remove()
-          $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt)
+          if errorCallback?
+            errorCallback()
       }
     )

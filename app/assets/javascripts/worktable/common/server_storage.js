@@ -85,7 +85,10 @@ ServerStorage = (function() {
     }
   };
 
-  ServerStorage.load = function(user_pagevalue_id) {
+  ServerStorage.load = function(user_pagevalue_id, callback) {
+    if (callback == null) {
+      callback = null;
+    }
     return $.ajax({
       url: "/page_value_state/load_state",
       type: "POST",
@@ -95,10 +98,10 @@ ServerStorage = (function() {
       },
       dataType: "json",
       success: function(data) {
-        var callback, item_js_list, loadedCount, self;
+        var _callback, item_js_list, loadedCount, self;
         self = this;
         item_js_list = data.item_js_list;
-        callback = function() {
+        _callback = function() {
           var d, k, ref, ref1, v;
           WorktableCommon.removeAllItemOnWorkTable();
           if (data.instance_pagevalue_data != null) {
@@ -130,11 +133,14 @@ ServerStorage = (function() {
             Setting.initConfig();
             PageValue.updatePageCount();
             PageValue.updateForkCount();
-            return Paging.initPaging();
+            Paging.initPaging();
+            if (callback != null) {
+              return callback();
+            }
           });
         };
         if (item_js_list.length === 0) {
-          callback.call(self);
+          _callback.call(self);
           return;
         }
         loadedCount = 0;
@@ -145,7 +151,7 @@ ServerStorage = (function() {
             window.itemInitFuncList[itemId]();
             loadedCount += 1;
             if (loadedCount >= item_js_list.length) {
-              callback.call(self);
+              _callback.call(self);
             }
             return;
           }
@@ -157,7 +163,7 @@ ServerStorage = (function() {
           Common.availJs(itemId, d.js_src, option, function() {
             loadedCount += 1;
             if (loadedCount >= item_js_list.length) {
-              return callback.call(self);
+              return _callback.call(self);
             }
           });
           PageValue.addItemInfo(d.item_id);
@@ -172,63 +178,26 @@ ServerStorage = (function() {
     });
   };
 
-  ServerStorage.get_load_list = function() {
-    var diffTime, loadEmt, loadedLocalTime, s, updateFlg;
-    loadEmt = $("#" + Navbar.NAVBAR_ROOT).find("." + this.ElementAttribute.FILE_LOAD_CLASS);
-    updateFlg = loadEmt.find("." + this.ElementAttribute.LOAD_LIST_UPDATED_FLG).length > 0;
-    if (updateFlg) {
-      loadedLocalTime = loadEmt.find("." + this.ElementAttribute.LOADED_LOCALTIME);
-      if (loadedLocalTime != null) {
-        diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()));
-        s = diffTime.seconds;
-        if (window.debug) {
-          console.log('loadedLocalTime diff ' + s);
-        }
-        if (parseInt(s) <= this.LOAD_LIST_INTERVAL_SECONDS) {
-          return;
-        }
-      }
+  ServerStorage.get_load_data = function(successCallback, errorCallback) {
+    if (successCallback == null) {
+      successCallback = null;
     }
-    loadEmt.children().remove();
-    $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt);
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
     return $.ajax({
       url: "/page_value_state/user_pagevalue_list",
       type: "POST",
       dataType: "json",
       success: function(data) {
-        var d, e, i, len, list, n, p, user_pagevalue_list;
-        user_pagevalue_list = data;
-        if (user_pagevalue_list.length > 0) {
-          list = '';
-          n = $.now();
-          for (i = 0, len = user_pagevalue_list.length; i < len; i++) {
-            p = user_pagevalue_list[i];
-            d = new Date(p.updated_at);
-            e = "<li><a class='menu-item'>" + (Common.displayDiffAlmostTime(n, d.getTime())) + " (" + (Common.formatDate(d)) + ")</a><input type='hidden' class='user_pagevalue_id' value=" + p.user_pagevalue_id + "></li>";
-            list += e;
-          }
-          loadEmt.children().remove();
-          $(list).appendTo(loadEmt);
-          loadEmt.find('li').click(function(e) {
-            var user_pagevalue_id;
-            user_pagevalue_id = $(this).find('.user_pagevalue_id:first').val();
-            return ServerStorage.load(user_pagevalue_id);
-          });
-          loadEmt.find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
-          loadEmt.find("." + ServerStorage.ElementAttribute.LOADED_LOCALTIME).remove();
-          $("<input type='hidden' class=" + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG + " value='1'>").appendTo(loadEmt);
-          return $("<input type='hidden' class=" + ServerStorage.ElementAttribute.LOADED_LOCALTIME + " value=" + ($.now()) + ">").appendTo(loadEmt);
-        } else {
-          loadEmt.children().remove();
-          return $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt);
+        if (successCallback != null) {
+          return successCallback(data);
         }
       },
       error: function(data) {
-        if (window.debug) {
-          console.log(data.responseText);
+        if (errorCallback != null) {
+          return errorCallback();
         }
-        loadEmt.children().remove();
-        return $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt);
       }
     });
   };
