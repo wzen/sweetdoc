@@ -1,7 +1,6 @@
 require 'common/const'
 require 'pagevalue/page_value_state'
 
-
 class PageValueStateController < ApplicationController
   def save_state
     user_id = current_user.id

@@ -23,4 +23,9 @@ class Project < ActiveRecord::Base
       return I18n.t('message.database.item_state.save.error'), null
     end
   end
+
+  def self.list(user_id)
+
+  end
+
 end

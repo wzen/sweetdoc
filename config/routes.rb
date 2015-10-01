@@ -1,22 +1,23 @@
 Rails.application.routes.draw do
   root 'worktable#index'
-  post 'worktable/create_project'
-  get 'modal_view/show'
-  get 'item_js/index'
-  #resources :run, only:[:index]
+
+  post 'project/create'
+
   get 'run' => 'run#index'
   post 'run' => 'run#index'
   get 'run/markitup_preview'
   get 'test_move/hello'
-  get 'item_js_code/hello'
+
   get 'parts/button_css_default'
 
   #ajax
   post 'page_value_state/save_state'
   post 'page_value_state/load_state'
   post 'page_value_state/user_pagevalue_list'
+  get 'item_js/index'
   post 'item_js/index'
-  get  'modal_view/show'
+  get 'item_js_code/hello'
+  get 'modal_view/show'
   post 'test_move/hello'
   post 'run/paging'
 

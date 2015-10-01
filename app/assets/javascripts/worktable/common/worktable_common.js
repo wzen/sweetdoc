@@ -58,7 +58,7 @@ WorktableCommon = (function() {
           height: parseInt(height)
         });
         Navbar.setTitle(projectName);
-        return WorktableCommon.createProject(projectName, width, height, function() {
+        return Project.create(projectName, width, height, function() {
           $(".modal-content,#modal-overlay").css('display', 'none');
           return $('#modal-overlay').remove();
         });
@@ -70,30 +70,6 @@ WorktableCommon = (function() {
           return $('#modal-overlay').remove();
         });
       }
-    });
-  };
-
-  WorktableCommon.createProject = function(title, screenWidth, screenHeight, callback) {
-    var data;
-    if (callback == null) {
-      callback = null;
-    }
-    data = {};
-    data[Constant.Project.Key.TITLE] = title;
-    data[Constant.Project.Key.SCREEN_WIDTH] = screenWidth;
-    data[Constant.Project.Key.SCREEN_HEIGHT] = screenHeight;
-    return $.ajax({
-      url: "/worktable/create_project",
-      type: "POST",
-      data: data,
-      dataType: "json",
-      success: function(data) {
-        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id);
-        if (callback != null) {
-          return callback();
-        }
-      },
-      error: function(data) {}
     });
   };
 

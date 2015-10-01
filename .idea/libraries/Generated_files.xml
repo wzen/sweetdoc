@@ -36,9 +36,11 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/project.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
@@ -136,9 +138,11 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/project.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />

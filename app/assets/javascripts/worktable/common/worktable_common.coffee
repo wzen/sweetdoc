@@ -60,7 +60,7 @@ class WorktableCommon
         Navbar.setTitle(projectName)
 
         # プロジェクト作成リクエスト
-        WorktableCommon.createProject(projectName, width, height, ->
+        Project.create(projectName, width, height, ->
           # モーダルを削除
           $(".modal-content,#modal-overlay").css('display', 'none')
           $('#modal-overlay').remove()
@@ -74,27 +74,6 @@ class WorktableCommon
           $(".modal-content,#modal-overlay").css('display', 'none')
           $('#modal-overlay').remove()
         )
-    )
-
-  # プロジェクト新規作成リクエスト
-  @createProject = (title, screenWidth, screenHeight, callback = null) ->
-    data = {}
-    data[Constant.Project.Key.TITLE] = title
-    data[Constant.Project.Key.SCREEN_WIDTH] = screenWidth
-    data[Constant.Project.Key.SCREEN_HEIGHT] = screenHeight
-    $.ajax(
-      {
-        url: "/worktable/create_project"
-        type: "POST"
-        data: data
-        dataType: "json"
-        success: (data) ->
-          # PageValue設定
-          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
-          if callback?
-            callback()
-        error: (data) ->
-      }
     )
 
   # 選択枠を付ける
