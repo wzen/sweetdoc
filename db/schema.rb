@@ -223,15 +223,16 @@ ActiveRecord::Schema.define(version: 20150930235014) do
 
   create_table "projects", force: true do |t|
     t.string   "title"
-    t.integer  "screen_width",  null: false
-    t.integer  "screen_height", null: false
+    t.integer  "screen_width",                  null: false
+    t.integer  "screen_height",                 null: false
+    t.boolean  "del_flg",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "setting_pagevalues", force: true do |t|
     t.text     "data"
-    t.boolean  "del_flg",    default: false, null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -246,14 +247,15 @@ ActiveRecord::Schema.define(version: 20150930235014) do
   create_table "user_pagevalues", force: true do |t|
     t.integer  "user_project_map_id",                  null: false
     t.integer  "setting_pagevalue_id"
-    t.boolean  "del_flg",              default: false, null: false
+    t.boolean  "del_flg",              default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "user_project_maps", force: true do |t|
-    t.integer  "user",       null: false
-    t.integer  "project_id", null: false
+    t.integer  "user_id",                    null: false
+    t.integer  "project_id",                 null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

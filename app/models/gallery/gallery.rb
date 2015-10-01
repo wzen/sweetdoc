@@ -255,7 +255,7 @@ class Gallery < ActiveRecord::Base
         # タグテーブル処理
         tag_ids = []
         tags.each do |tag|
-          tag = GalleryTag.find_by_name(tag).first
+          tag = GalleryTag.find_by(name: tag)
           if tag == nil
             # タグを新規作成
             tag = GalleryTag.new({
@@ -294,7 +294,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.load_contents_detail(gallery_id)
-    gallery = self.where({id: gallery_id, del_flg: false})
+    gallery = self.where(id: gallery_id, del_flg: false)
     if gallery == nil
       message = I18n.t('message.database.item_state.load.error')
       return nil
@@ -322,7 +322,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.load_state(gallery_id, user_id)
-    gallery = self.where({id: gallery_id, del_flg: false})
+    gallery = self.where(id: gallery_id, del_flg: false)
     if gallery == nil
       message = I18n.t('message.database.item_state.load.error')
       return nil
@@ -467,8 +467,8 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.load_viewcount_and_bookmarkcount(gallery_id)
-    gallery_view_statistic_count = GalleryViewStatistic.find_by_gallery_id(gallery_id).group(:gallery_id).sum(:count)
-    gallery_bookmark_statistic_count = GalleryBookmarkStatistic.find_by_gallery_id(gallery_id).group(:gallery_id).sum(:count)
+    gallery_view_statistic_count = GalleryViewStatistic.where({gallery_id: gallery_id}).group(:gallery_id).sum(:count)
+    gallery_bookmark_statistic_count = GalleryBookmarkStatistic.where({gallery_id: gallery_id}).group(:gallery_id).sum(:count)
     return gallery_view_statistic_count, gallery_bookmark_statistic_count
   end
 

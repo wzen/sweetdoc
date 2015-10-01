@@ -7,111 +7,31 @@ require 'pagevalue/setting_pagevalue'
 require 'pagevalue/user_pagevalue'
 
 class PageValueState
-  def self.save_state(user_id, project_id, page_count, i_page_values, e_page_values, s_page_values)
+  def self.save_state(user_id, project_id, i_page_values, e_page_values, s_page_values)
     begin
       if i_page_values != 'null' || e_page_values != 'null' || s_page_values != 'null'
 
-        last_user_page_values = UserPagevalue.where(user_id: user_id, del_flg: false).order('updated_at desc').first
+        #last_user_page_values = UserPagevalue.where(user_id: user_id, del_flg: false).order('updated_at desc').first
         ActiveRecord::Base.transaction do
-
-          # 共通設定保存
-          if s_page_values != 'null'
-            sp = SettingPagevalue.new({data: s_page_values})
-            sp.save!
-            sp_id = sp.id
-          else
-            if last_user_page_values != nil
-              sp_id = last_user_page_values.setting_pagevalue_id
-            else
-              sp_id = nil
-            end
-          end
 
           # UserPagevalue Update or Insert
           up = UserPagevalue.includes(:user_project_map).readonly(false).where(user_project_maps: {user_id: user_id, project_id: project_id}).references(:user_project_maps)
           if up == nil
+            # 共通設定作成
+            sp_id = save_setting_pagevalue(s_page_values)
             up = UserPagevalue.new({
                                        user_project_map_id: up.user_project_maps.id,
                                        setting_pagevalue_id: sp_id
                                    })
+            up.save!
           else
-            up.setting_pagevalue_id = sp_id
-          end
-          up.save!
-          created_upv_id = up.id
-
-          if i_page_values != 'null'
-            updated_page_num = []
-            # 新規データをInsert
-            i_page_values.each do |k, v|
-              page_num = v['pageNum']
-              updated_page_num << page_num.to_i
-              pagevalue = v['pagevalue']
-
-              ip = InstancePagevalue.new({data: pagevalue})
-              ip.save!
-              ipp = InstancePagevaluePaging.new({
-                                                    user_pagevalue_id: created_upv_id,
-                                                    page_num: page_num,
-                                                    instance_pagevalue_id: ip.id
-                                                })
-              ipp.save!
-            end
-            # update対象でないpagenumは古いデータを入れる
-            if last_user_page_values != nil
-              last_ipv_paging = InstancePagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
-              if last_ipv_paging != nil
-                last_ipv_paging.each do |l|
-                  if !updated_page_num.include?(l.page_num) && l.page_num <= page_count.to_i
-                    ipp = InstancePagevaluePaging.new({
-                                                          user_pagevalue_id: created_upv_id,
-                                                          page_num: l.page_num,
-                                                          instance_pagevalue_id: l.instance_pagevalue_id
-                                                      })
-                    ipp.save!
-                  end
-                end
-              end
-            end
-
+            # 共通設定更新
+            save_setting_pagevalue(s_page_values, up.setting_pagevalue_id)
           end
 
-          if e_page_values != 'null'
-            updated_page_num = []
-            # 新規データをInsert
-            e_page_values.each do |k, v|
-              page_num = v['pageNum']
-              updated_page_num << page_num.to_i
-              pagevalue = v['pagevalue']
-
-              ep = EventPagevalue.new({data: pagevalue})
-              ep.save!
-              epp = EventPagevaluePaging.new({
-                                                    user_pagevalue_id: created_upv_id,
-                                                    page_num: page_num,
-                                                    event_pagevalue_id: ep.id
-                                                })
-              epp.save!
-            end
-
-            # update対象でないpagenumは古いデータを入れる
-            if last_user_page_values != nil
-              last_epv_paging = EventPagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
-              if last_epv_paging != nil
-                last_epv_paging.each do |l|
-                  if !updated_page_num.include?(l.page_num) && l.page_num <= page_count.to_i
-                    epp = EventPagevaluePaging.new({
-                                                       user_pagevalue_id: created_upv_id,
-                                                       page_num: l.page_num,
-                                                       event_pagevalue_id: l.event_pagevalue_id
-                                                   })
-                    epp.save!
-                  end
-                end
-              end
-            end
-          end
-
+          # PageValue保存
+          save_instance_pagevalue(i_page_values, up.id)
+          save_event_pagevalue(e_page_values, up.id)
         end
       end
 
@@ -200,44 +120,180 @@ class PageValueState
     end
   end
 
-  def self.last_user_pagevalue_search_sql(user_id, project_id = null)
+  def self.last_user_pagevalue_search_sql(user_id, project_id = nil)
     project_filter = ''
-    if project_id != nil
+    if project_id != nil && project_id != ''
       project_filter = "AND ump_sub.project_id = #{project_id}"
     end
 
     return <<-"SQL"
       SELECT
-        user_pagevalues.*
+      up.*
       FROM
-        user_pagevalues up
+      user_pagevalues up
       INNER JOIN
-        setting_pagevalues sp ON up.setting_pagevalue_id = sp.id
+      setting_pagevalues sp ON up.setting_pagevalue_id = sp.id
       INNER JOIN
-        user_project_maps upm ON up.user_project_map_id = ump.id
+      user_project_maps upm ON up.user_project_map_id = upm.id
       INNER JOIN
-        projects p ON ump.project_id = p.id
+      projects p ON upm.project_id = p.id
       INNER JOIN
-        (
-          SELECT upm_sub.project_id as user_project_map_project_id, MAX(up.updated_at) as user_pagevalue_updated_at_max
-            FROM user_pagevalues up_sub
-            INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
-            WHERE upm_sub.user_id = #{user_id}
-            #{project_filter}
-            AND up_sub.del_flg = false
-            AND upm_sub.del_flg = false
-            GROUP BY upm_sub.project_id
-        ) sub ON ump.project_id = sub.user_project_map_project_id AND up.updated_at = sub.user_pagevalue_updated_at_max
+      (
+        SELECT upm_sub.project_id as user_project_map_project_id, MAX(up_sub.updated_at) as user_pagevalue_updated_at_max
+        FROM user_pagevalues up_sub
+        INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
+        WHERE upm_sub.user_id = 2
+
+        AND up_sub.del_flg = 0
+        AND upm_sub.del_flg = 0
+        GROUP BY upm_sub.project_id
+      ) sub ON upm.project_id = sub.user_project_map_project_id AND up.updated_at = sub.user_pagevalue_updated_at_max
       WHERE
-        up.del_flg = false
+      up.del_flg = 0
       AND
-        sp.del_flg = false
+      sp.del_flg = 0
       AND
-        ump.del_flg = false
+      upm.del_flg = 0
       AND
-        p.del_flg = false
+      p.del_flg = 0
     SQL
   end
 
-  private_class_method :last_user_pagevalue_search_sql
+  def self.save_setting_pagevalue(save_value, update_id = nil)
+    ret_id = nil
+
+    # 共通設定作成
+    if save_value != 'null'
+      if update_id == nil
+        # Insert
+        sp = SettingPagevalue.new({data: save_value})
+        sp.save!
+        ret_id = sp.id
+      else
+        # Update
+        sp = SettingPagevalue.find(update_id)
+        if sp != nil
+          sp.data = save_value
+          sp.save!
+          ret_id = sp.id
+        end
+      end
+    end
+
+    return ret_id
+  end
+
+  def self.save_instance_pagevalue(save_value, update_user_pagevalue_id = nil)
+    if save_value != 'null'
+      updated_page_num = []
+
+      # 保存済みデータ取得
+      saved_record = InstancePagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id).attributes
+
+      # 新規データをInsert
+      save_value.each do |k, v|
+        page_num = v['pageNum']
+        updated_page_num << page_num.to_i
+        pagevalue = v['pagevalue']
+
+        select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+
+        if select_saved_record == nil
+          # 新規作成
+          ip = InstancePagevalue.new({data: pagevalue})
+          ip.save!
+          ipp = InstancePagevaluePaging.new({
+                                                user_pagevalue_id: update_user_pagevalue_id,
+                                                page_num: page_num,
+                                                instance_pagevalue_id: ip.id
+                                            })
+          ipp.save!
+
+        else
+          # 更新
+          instance_pagevalue_id = select_saved_record['instance_pagevalue_id']
+          ip = InstancePagevalue.find(instance_pagevalue_id)
+          ip.data = pagevalue
+          ip.save!
+        end
+
+      end
+
+      # TODO: データ更新のデバッグ終了するまで残しておく
+      # # update対象でないpagenumは古いデータを入れる
+      # if last_user_page_values != nil
+      #   last_ipv_paging = InstancePagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
+      #   if last_ipv_paging != nil
+      #     last_ipv_paging.each do |l|
+      #       if !updated_page_num.include?(l.page_num) && l.page_num <= page_count.to_i
+      #         ipp = InstancePagevaluePaging.new({
+      #                                               user_pagevalue_id: update_user_pagevalue_id,
+      #                                               page_num: l.page_num,
+      #                                               instance_pagevalue_id: l.instance_pagevalue_id
+      #                                           })
+      #         ipp.save!
+      #       end
+      #     end
+      #   end
+      # end
+
+    end
+  end
+
+  def self.save_event_pagevalue(save_value, update_user_pagevalue_id = nil)
+    if save_value != 'null'
+      updated_page_num = []
+      # 保存済みデータ取得
+      saved_record = EventPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id).attributes
+
+      # 新規データをInsert
+      save_value.each do |k, v|
+        page_num = v['pageNum']
+        updated_page_num << page_num.to_i
+        pagevalue = v['pagevalue']
+
+        select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+
+        if select_saved_record == nil
+          # 新規作成
+          ep = EventPagevalue.new({data: pagevalue})
+          ep.save!
+          epp = EventPagevaluePaging.new({
+                                                user_pagevalue_id: update_user_pagevalue_id,
+                                                page_num: page_num,
+                                                event_pagevalue_id: ep.id
+                                            })
+          epp.save!
+
+        else
+          # 更新
+          event_pagevalue_id = select_saved_record['event_pagevalue_id']
+          ep = EventPagevalue.find(event_pagevalue_id)
+          ep.data = pagevalue
+          ep.save!
+        end
+
+      end
+
+      # TODO: データ更新のデバッグ終了するまで残しておく
+      # # update対象でないpagenumは古いデータを入れる
+      # if last_user_page_values != nil
+      #   last_epv_paging = EventPagevaluePaging.where(user_pagevalue_id: last_user_page_values.id)
+      #   if last_epv_paging != nil
+      #     last_epv_paging.each do |l|
+      #       if !updated_page_num.include?(l.page_num) && l.page_num <= page_count.to_i
+      #         epp = EventPagevaluePaging.new({
+      #                                            user_pagevalue_id: update_user_pagevalue_id,
+      #                                            page_num: l.page_num,
+      #                                            event_pagevalue_id: l.event_pagevalue_id
+      #                                        })
+      #         epp.save!
+      #       end
+      #     end
+      #   end
+      # end
+    end
+  end
+
+  private_class_method :last_user_pagevalue_search_sql, :save_setting_pagevalue, :save_instance_pagevalue, :save_event_pagevalue
 end
