@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150927001905) do
+ActiveRecord::Schema.define(version: 20150930235014) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -62,6 +62,8 @@ ActiveRecord::Schema.define(version: 20150927001905) do
     t.string   "title"
     t.text     "caption"
     t.binary   "thumbnail_img"
+    t.integer  "screen_width",                  null: false
+    t.integer  "screen_height",                 null: false
     t.boolean  "del_flg",       default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -130,6 +132,7 @@ ActiveRecord::Schema.define(version: 20150927001905) do
   create_table "gallery_tags", force: true do |t|
     t.string   "name",                       null: false
     t.integer  "weight"
+    t.string   "category"
     t.boolean  "del_flg",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -211,6 +214,21 @@ ActiveRecord::Schema.define(version: 20150927001905) do
     t.datetime "updated_at"
   end
 
+  create_table "project_gallery_maps", force: true do |t|
+    t.integer  "project_id", null: false
+    t.integer  "gallery_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "projects", force: true do |t|
+    t.string   "title"
+    t.integer  "screen_width",  null: false
+    t.integer  "screen_height", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "setting_pagevalues", force: true do |t|
     t.text     "data"
     t.boolean  "del_flg",    default: false, null: false
@@ -226,9 +244,16 @@ ActiveRecord::Schema.define(version: 20150927001905) do
   end
 
   create_table "user_pagevalues", force: true do |t|
-    t.integer  "user_id",                              null: false
+    t.integer  "user_project_map_id",                  null: false
     t.integer  "setting_pagevalue_id"
     t.boolean  "del_flg",              default: false, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_project_maps", force: true do |t|
+    t.integer  "user",       null: false
+    t.integer  "project_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

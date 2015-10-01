@@ -87,6 +87,9 @@ class ServerStorage
             WorktableCommon.removeAllItemOnWorkTable()
 
             # Pagevalue設置
+            if data.project_pagevalue_data?
+              PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.project_pagevalue_data)
+              Navbar.setTitle(data.project_pagevalue_data.title)
             if data.instance_pagevalue_data?
               d = {}
               for k, v of data.instance_pagevalue_data
@@ -206,11 +209,14 @@ class ServerStorage
 #    )
 
   @get_load_data: (successCallback = null, errorCallback = null) ->
+    data = {}
+    data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
     $.ajax(
       {
         url: "/page_value_state/user_pagevalue_list"
         type: "POST"
         dataType: "json"
+        data: data
         success: (data)->
           if successCallback?
             successCallback(data)

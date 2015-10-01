@@ -26,35 +26,45 @@ class WorktableCommon
           list += e
         projectSelect.children().remove()
         $(list).appendTo(projectSelect)
-        $('.project_create_wrapper input[type=radio, value=select]').removeAttr('disabled')
+        $('.project_create_wrapper', modalEmt).show()
       else
         projectSelect.children().remove()
-        $('.project_create_wrapper input[type=radio, value=select]').attr('disabled', 'disabled')
+        $('.project_create_wrapper', modalEmt).hide()
     )
 
     # Createボタンイベント
-    $('.init_button', modalEmt).off('click')
-    $('.init_button', modalEmt).on('click', ->
-      if $('input[name=project_create,value=new]').is('checked')
+    $('.create_button', modalEmt).off('click')
+    $('.create_button', modalEmt).on('click', ->
+      if $('input[name=project_create][value=new]').is(':checked')
         # プロジェクト新規作成
         projectName = $('.project_name').val()
+        width = $('#main').width()
+        height = $('#main').height()
         if !projectName? || projectName.length == 0
           # エラー
           return
-          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName)
         if $('.display_size_wrapper input[value=input]').is(':checked')
           width = $('.display_size_input_width', modalEmt).val()
           height = $('.display_size_input_height', modalEmt).val()
           if !width? || width.length == 0 || !height? || height.length == 0
             # エラー
             return
-            PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
-              width: parseInt(width)
-              height: parseInt(height)
-            })
-        # モーダルを削除
-        $(".modal-content,#modal-overlay").css('display', 'none')
-        $('#modal-overlay').remove()
+
+        # PageValue設定
+        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName)
+        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
+          width: parseInt(width)
+          height: parseInt(height)
+        })
+        # タイトル設定
+        Navbar.setTitle(projectName)
+
+        # プロジェクト作成リクエスト
+        WorktableCommon.createProject(projectName, width, height, ->
+          # モーダルを削除
+          $(".modal-content,#modal-overlay").css('display', 'none')
+          $('#modal-overlay').remove()
+        )
       else
         # プロジェクト選択
         user_pagevalue_id = $('.project_select', modalEmt).val()
@@ -64,6 +74,27 @@ class WorktableCommon
           $(".modal-content,#modal-overlay").css('display', 'none')
           $('#modal-overlay').remove()
         )
+    )
+
+  # プロジェクト新規作成リクエスト
+  @createProject = (title, screenWidth, screenHeight, callback = null) ->
+    data = {}
+    data[Constant.Project.Key.TITLE] = title
+    data[Constant.Project.Key.SCREEN_WIDTH] = screenWidth
+    data[Constant.Project.Key.SCREEN_HEIGHT] = screenHeight
+    $.ajax(
+      {
+        url: "/worktable/create_project"
+        type: "POST"
+        data: data
+        dataType: "json"
+        success: (data) ->
+          # PageValue設定
+          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
+          if callback?
+            callback()
+        error: (data) ->
+      }
     )
 
   # 選択枠を付ける

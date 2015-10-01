@@ -74,11 +74,11 @@ class PageValue
       # @property [String] FORK_STACK フォーク番号スタック
       @FORK_STACK = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
       # @property [String] PROJECT_NAME プロジェクトID
-      @PROJECT_ID = "#{@G_ROOT}#{@PAGE_VALUES_SEPERATOR}project_id"
+      @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}project_id"
       # @property [String] PROJECT_NAME プロジェクト名
-      @PROJECT_NAME = "#{@G_ROOT}#{@PAGE_VALUES_SEPERATOR}project_name"
+      @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}project_name"
       # @property [String] PROJECT_SIZE プロジェクトサイズ
-      @PROJECT_SIZE = "#{@G_ROOT}#{@PAGE_VALUES_SEPERATOR}project_size"
+      @PROJECT_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}project_size"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID

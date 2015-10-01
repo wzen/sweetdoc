@@ -79,6 +79,13 @@ class Navbar
       RunCommon.showUploadGalleryConfirm()
     )
 
+  # ヘッダーにタイトルを設定
+  @setTitle = (title_name) ->
+    if !window.isWorkTable
+      title_name += '(Preview)'
+    $("##{Navbar.NAVBAR_ROOT}").find('.nav_title').html(title_name)
+    document.title = title_name + '| Revolver'
+
   # ヘッダーにページ番号を設定
   # @param [Integer] value 設定値
   @setPageNum = (value) ->

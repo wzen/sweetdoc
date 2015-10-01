@@ -29,34 +29,39 @@ WorktableCommon = (function() {
         }
         projectSelect.children().remove();
         $(list).appendTo(projectSelect);
-        return $('.project_create_wrapper input[type=radio, value=select]').removeAttr('disabled');
+        return $('.project_create_wrapper', modalEmt).show();
       } else {
         projectSelect.children().remove();
-        return $('.project_create_wrapper input[type=radio, value=select]').attr('disabled', 'disabled');
+        return $('.project_create_wrapper', modalEmt).hide();
       }
     });
-    $('.init_button', modalEmt).off('click');
-    return $('.init_button', modalEmt).on('click', function() {
+    $('.create_button', modalEmt).off('click');
+    return $('.create_button', modalEmt).on('click', function() {
       var height, projectName, user_pagevalue_id, width;
-      if ($('input[name=project_create,value=new]').is('checked')) {
+      if ($('input[name=project_create][value=new]').is(':checked')) {
         projectName = $('.project_name').val();
+        width = $('#main').width();
+        height = $('#main').height();
         if ((projectName == null) || projectName.length === 0) {
           return;
-          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
         }
         if ($('.display_size_wrapper input[value=input]').is(':checked')) {
           width = $('.display_size_input_width', modalEmt).val();
           height = $('.display_size_input_height', modalEmt).val();
           if ((width == null) || width.length === 0 || (height == null) || height.length === 0) {
             return;
-            PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
-              width: parseInt(width),
-              height: parseInt(height)
-            });
           }
         }
-        $(".modal-content,#modal-overlay").css('display', 'none');
-        return $('#modal-overlay').remove();
+        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
+        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
+          width: parseInt(width),
+          height: parseInt(height)
+        });
+        Navbar.setTitle(projectName);
+        return WorktableCommon.createProject(projectName, width, height, function() {
+          $(".modal-content,#modal-overlay").css('display', 'none');
+          return $('#modal-overlay').remove();
+        });
       } else {
         user_pagevalue_id = $('.project_select', modalEmt).val();
         return ServerStorage.load(user_pagevalue_id, function() {
@@ -65,6 +70,30 @@ WorktableCommon = (function() {
           return $('#modal-overlay').remove();
         });
       }
+    });
+  };
+
+  WorktableCommon.createProject = function(title, screenWidth, screenHeight, callback) {
+    var data;
+    if (callback == null) {
+      callback = null;
+    }
+    data = {};
+    data[Constant.Project.Key.TITLE] = title;
+    data[Constant.Project.Key.SCREEN_WIDTH] = screenWidth;
+    data[Constant.Project.Key.SCREEN_HEIGHT] = screenHeight;
+    return $.ajax({
+      url: "/worktable/create_project",
+      type: "POST",
+      data: data,
+      dataType: "json",
+      success: function(data) {
+        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id);
+        if (callback != null) {
+          return callback();
+        }
+      },
+      error: function(data) {}
     });
   };
 

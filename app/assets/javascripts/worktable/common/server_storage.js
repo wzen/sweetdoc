@@ -107,6 +107,10 @@ ServerStorage = (function() {
         _callback = function() {
           var d, k, ref, ref1, v;
           WorktableCommon.removeAllItemOnWorkTable();
+          if (data.project_pagevalue_data != null) {
+            PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.project_pagevalue_data);
+            Navbar.setTitle(data.project_pagevalue_data.title);
+          }
           if (data.instance_pagevalue_data != null) {
             d = {};
             ref = data.instance_pagevalue_data;
@@ -182,16 +186,20 @@ ServerStorage = (function() {
   };
 
   ServerStorage.get_load_data = function(successCallback, errorCallback) {
+    var data;
     if (successCallback == null) {
       successCallback = null;
     }
     if (errorCallback == null) {
       errorCallback = null;
     }
+    data = {};
+    data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     return $.ajax({
       url: "/page_value_state/user_pagevalue_list",
       type: "POST",
       dataType: "json",
+      data: data,
       success: function(data) {
         if (successCallback != null) {
           return successCallback(data);

@@ -141,15 +141,13 @@ if (typeof gon !== "undefined" && gon !== null) {
       function Project() {}
 
       Project.Key = (function() {
-        var SCREEN_HEIGHT, SCREEN_WIDTH, TITLE;
-
         function Key() {}
 
-        TITLE = constant.Project.Key.TITLE;
+        Key.TITLE = constant.Project.Key.TITLE;
 
-        SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH;
+        Key.SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH;
 
-        SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT;
+        Key.SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT;
 
         return Key;
 

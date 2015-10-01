@@ -125,11 +125,11 @@ PageValue = (function() {
 
       Key.FORK_STACK = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "fork_stack";
 
-      Key.PROJECT_ID = "" + Key.G_ROOT + Key.PAGE_VALUES_SEPERATOR + "project_id";
+      Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "project_id";
 
-      Key.PROJECT_NAME = "" + Key.G_ROOT + Key.PAGE_VALUES_SEPERATOR + "project_name";
+      Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "project_name";
 
-      Key.PROJECT_SIZE = "" + Key.G_ROOT + Key.PAGE_VALUES_SEPERATOR + "project_size";
+      Key.PROJECT_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "project_size";
 
       return Key;
 

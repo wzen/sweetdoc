@@ -7,7 +7,7 @@ require 'pagevalue/setting_pagevalue'
 require 'pagevalue/user_pagevalue'
 
 class PageValueState
-  def self.save_state(user_id, page_count, i_page_values, e_page_values, s_page_values)
+  def self.save_state(user_id, project_id, page_count, i_page_values, e_page_values, s_page_values)
     begin
       if i_page_values != 'null' || e_page_values != 'null' || s_page_values != 'null'
 
@@ -27,11 +27,16 @@ class PageValueState
             end
           end
 
-          # UserPagevalue Insert
-          up = UserPagevalue.new({
-                                     user_id: user_id,
-                                     setting_pagevalue_id: sp_id
-                                 })
+          # UserPagevalue Update or Insert
+          up = UserPagevalue.includes(:user_project_map).readonly(false).where(user_project_maps: {user_id: user_id, project_id: project_id}).references(:user_project_maps)
+          if up == nil
+            up = UserPagevalue.new({
+                                       user_project_map_id: up.user_project_maps.id,
+                                       setting_pagevalue_id: sp_id
+                                   })
+          else
+            up.setting_pagevalue_id = sp_id
+          end
           up.save!
           created_upv_id = up.id
 
@@ -117,10 +122,11 @@ class PageValueState
     end
   end
 
-  def self.get_user_pagevalue_save_list(user_id)
-    return UserPagevalue.where(user_id: user_id).order('updated_at desc').limit(Const::UserPageValue::GET_LIMIT)
+  def self.get_user_pagevalue_save_list(user_id, project_id)
+    sql = last_user_pagevalue_search_sql(user_id, project_id)
+    ret = ActiveRecord::Base.connection.select_all(sql).to_hash
+    return ret
   end
-
 
   # ユーザの保存データを読み込む
   # @param [String] user_id ユーザID
@@ -134,6 +140,15 @@ class PageValueState
       return nil
     else
       message = I18n.t('message.database.item_state.load.success')
+
+      if pagevalues.projects != nil
+        ppd = {}
+        ppd[Const::Project::Key::TITLE] = pagevalues.projects.title
+        ppd[Const::Project::Key::SCREEN_WIDTH] = pagevalues.projects.screen_width
+        ppd[Const::Project::Key::SCREEN_HEIGHT] = pagevalues.projects.screen_height
+      else
+        ppd = nil
+      end
 
       instance_pages = InstancePagevaluePaging.joins(:user_pagevalue, :instance_pagevalue).where(user_pagevalues: {id: user_pagevalue_id})
                            .select('instance_pagevalue_pagings.*, instance_pagevalues.data as data')
@@ -181,7 +196,48 @@ class PageValueState
         spd = nil
       end
 
-      return item_js_list, ipd, epd, spd, message
+      return item_js_list, ppd, ipd, epd, spd, message
     end
   end
+
+  def self.last_user_pagevalue_search_sql(user_id, project_id = null)
+    project_filter = ''
+    if project_id != nil
+      project_filter = "AND ump_sub.project_id = #{project_id}"
+    end
+
+    return <<-"SQL"
+      SELECT
+        user_pagevalues.*
+      FROM
+        user_pagevalues up
+      INNER JOIN
+        setting_pagevalues sp ON up.setting_pagevalue_id = sp.id
+      INNER JOIN
+        user_project_maps upm ON up.user_project_map_id = ump.id
+      INNER JOIN
+        projects p ON ump.project_id = p.id
+      INNER JOIN
+        (
+          SELECT upm_sub.project_id as user_project_map_project_id, MAX(up.updated_at) as user_pagevalue_updated_at_max
+            FROM user_pagevalues up_sub
+            INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
+            WHERE upm_sub.user_id = #{user_id}
+            #{project_filter}
+            AND up_sub.del_flg = false
+            AND upm_sub.del_flg = false
+            GROUP BY upm_sub.project_id
+        ) sub ON ump.project_id = sub.user_project_map_project_id AND up.updated_at = sub.user_pagevalue_updated_at_max
+      WHERE
+        up.del_flg = false
+      AND
+        sp.del_flg = false
+      AND
+        ump.del_flg = false
+      AND
+        p.del_flg = false
+    SQL
+  end
+
+  private_class_method :last_user_pagevalue_search_sql
 end

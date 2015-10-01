@@ -171,6 +171,8 @@ class Const
   end
 
   class Project
+    USER_CREATE_MAX = 5
+
     class Key
       TITLE = 'title'
       SCREEN_WIDTH = 'screen_width'
@@ -238,6 +240,7 @@ class Const
 
   class ModalViewType
     INIT_PROJECT = 'init_project'
+    ADMIN_PROJECTS = 'admin_projects'
     ABOUT = 'about'
     UPLOAD_GALLERY_CONFIRM = 'upload_gallery_confirm'
   end

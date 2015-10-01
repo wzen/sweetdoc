@@ -84,6 +84,14 @@ Navbar = (function() {
     });
   };
 
+  Navbar.setTitle = function(title_name) {
+    if (!window.isWorkTable) {
+      title_name += '(Preview)';
+    }
+    $("#" + Navbar.NAVBAR_ROOT).find('.nav_title').html(title_name);
+    return document.title = title_name + '| Revolver';
+  };
+
   Navbar.setPageNum = function(value) {
     var e, navEmt;
     navEmt = $('#nav');

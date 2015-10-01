@@ -89,9 +89,9 @@ if gon?
 
     class @Project
       class @Key
-        TITLE = constant.Project.Key.TITLE
-        SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH
-        SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT
+        @TITLE = constant.Project.Key.TITLE
+        @SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH
+        @SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT
 
     class @Gallery
       @TAG_MAX = constant.Gallery.TAG_MAX
