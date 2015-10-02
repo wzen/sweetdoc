@@ -61,6 +61,7 @@ class WorktableCommon
 
         # プロジェクト作成リクエスト
         Project.create(projectName, width, height, ->
+          Common.initProjectSize()
           # モーダルを削除
           $(".modal-content,#modal-overlay").css('display', 'none')
           $('#modal-overlay').remove()

@@ -46,7 +46,11 @@ class Common
   @initProjectSize = ->
     size = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_SIZE)
     if size? && size.width? && size.height?
-      $('#project_wrapper').css({width: size.width, height: size.height})
+      css = {
+        width: size.width
+        height: size.height
+      }
+      $('#project_wrapper').css(css)
     else
       # width,height -> 100%
       $('#project_wrapper').removeAttr('style')

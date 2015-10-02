@@ -59,6 +59,7 @@ WorktableCommon = (function() {
         });
         Navbar.setTitle(projectName);
         return Project.create(projectName, width, height, function() {
+          Common.initProjectSize();
           $(".modal-content,#modal-overlay").css('display', 'none');
           return $('#modal-overlay').remove();
         });

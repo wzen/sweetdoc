@@ -57,13 +57,14 @@ Common = (function() {
   };
 
   Common.initProjectSize = function() {
-    var size;
+    var css, size;
     size = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_SIZE);
     if ((size != null) && (size.width != null) && (size.height != null)) {
-      return $('#project_wrapper').css({
+      css = {
         width: size.width,
         height: size.height
-      });
+      };
+      return $('#project_wrapper').css(css);
     } else {
       return $('#project_wrapper').removeAttr('style');
     }

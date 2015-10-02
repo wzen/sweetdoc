@@ -78,10 +78,10 @@ class PageValueState
       LEFT JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
       INNER JOIN user_project_maps upm ON up.user_project_map_id = upm.id
       INNER JOIN projects p ON upm.project_id = p.id
-      INNER JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id
-      INNER JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id
-      INNER JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num
-      INNER JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id
+      LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
+      LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
+      LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
+      LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
       WHERE
         up.id = #{user_pagevalue_id}
       AND
@@ -90,14 +90,6 @@ class PageValueState
         upm.del_flg = 0
       AND
         p.del_flg = 0
-      AND
-        ipp.del_flg = 0
-      AND
-        ip.del_flg = 0
-      AND
-        epp.del_flg = 0
-      AND
-        ep.del_flg = 0
     SQL
 
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
