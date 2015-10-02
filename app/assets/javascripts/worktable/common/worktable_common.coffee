@@ -52,7 +52,7 @@ class WorktableCommon
 
         # PageValue設定
         PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName)
-        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
+        PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
           width: parseInt(width)
           height: parseInt(height)
         })
@@ -61,7 +61,7 @@ class WorktableCommon
 
         # プロジェクト作成リクエスト
         Project.create(projectName, width, height, ->
-          Common.initProjectSize()
+          Common.initScreenSize()
           # モーダルを削除
           $(".modal-content,#modal-overlay").css('display', 'none')
           $('#modal-overlay').remove()
@@ -70,7 +70,7 @@ class WorktableCommon
         # プロジェクト選択
         user_pagevalue_id = $('.project_select', modalEmt).val()
         ServerStorage.load(user_pagevalue_id, ->
-          Common.initProjectSize()
+          Common.initScreenSize()
           # モーダルを削除
           $(".modal-content,#modal-overlay").css('display', 'none')
           $('#modal-overlay').remove()

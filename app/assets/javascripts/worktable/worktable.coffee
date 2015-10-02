@@ -20,6 +20,7 @@ $ ->
   # コンテナ初期化
   WorktableCommon.initMainContainer()
   WorktableCommon.updateMainViewSize()
+  Common.applyGeneralPagevalue()
   # リサイズイベント
   WorktableCommon.initResize()
 

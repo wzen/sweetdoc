@@ -53,20 +53,20 @@ WorktableCommon = (function() {
           }
         }
         PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
-        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_SIZE, {
+        PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
           width: parseInt(width),
           height: parseInt(height)
         });
         Navbar.setTitle(projectName);
         return Project.create(projectName, width, height, function() {
-          Common.initProjectSize();
+          Common.initScreenSize();
           $(".modal-content,#modal-overlay").css('display', 'none');
           return $('#modal-overlay').remove();
         });
       } else {
         user_pagevalue_id = $('.project_select', modalEmt).val();
         return ServerStorage.load(user_pagevalue_id, function() {
-          Common.initProjectSize();
+          Common.initScreenSize();
           $(".modal-content,#modal-overlay").css('display', 'none');
           return $('#modal-overlay').remove();
         });

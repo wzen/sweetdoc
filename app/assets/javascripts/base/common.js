@@ -56,9 +56,14 @@ Common = (function() {
     return RandomString;
   };
 
-  Common.initProjectSize = function() {
+  Common.applyGeneralPagevalue = function() {
+    Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
+    return this.initScreenSize();
+  };
+
+  Common.initScreenSize = function() {
     var css, size;
-    size = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_SIZE);
+    size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     if ((size != null) && (size.width != null) && (size.height != null)) {
       css = {
         width: size.width,

@@ -42,9 +42,13 @@ class Common
       RandomString += BaseString.charAt( Math.floor( Math.random() * n))
     return RandomString
 
+  @applyGeneralPagevalue = ->
+    Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME))
+    @initScreenSize()
+
   # プロジェクト表示サイズ設定
-  @initProjectSize = ->
-    size = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_SIZE)
+  @initScreenSize = ->
+    size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     if size? && size.width? && size.height?
       css = {
         width: size.width
@@ -55,7 +59,7 @@ class Common
       # width,height -> 100%
       $('#project_wrapper').removeAttr('style')
 
-# オブジェクトの複製
+  # オブジェクトの複製
   # @param [Object] obj 複製対象オブジェクト
   # @return [Object] 複製後オブジェクト
   @makeClone = (obj) ->

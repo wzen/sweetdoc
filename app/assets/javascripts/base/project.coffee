@@ -18,8 +18,10 @@ class Project
   @create = (title, screenWidth, screenHeight, callback = null) ->
     data = {}
     data[Constant.Project.Key.TITLE] = title
-    data[Constant.Project.Key.SCREEN_WIDTH] = screenWidth
-    data[Constant.Project.Key.SCREEN_HEIGHT] = screenHeight
+    data[Constant.Project.Key.SCREEN_SIZE] = {
+      width: screenWidth
+      height: screenHeight
+    }
     $.ajax(
       {
         url: "/project/create"

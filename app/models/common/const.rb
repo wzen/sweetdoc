@@ -175,9 +175,9 @@ class Const
     USER_CREATE_MAX = 50
 
     class Key
+      PROJECT_ID = 'project_id'
       TITLE = 'title'
-      SCREEN_WIDTH = 'screen_width'
-      SCREEN_HEIGHT = 'screen_height'
+      SCREEN_SIZE = 'screen_size'
       USER_PAGEVALUE_ID = 'user_pagevalue_id'
       USER_PAGEVALUE_UPDATED_AT = 'user_pagevalue_updated_at'
     end

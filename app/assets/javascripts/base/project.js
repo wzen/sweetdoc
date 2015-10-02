@@ -35,8 +35,10 @@ Project = (function() {
     }
     data = {};
     data[Constant.Project.Key.TITLE] = title;
-    data[Constant.Project.Key.SCREEN_WIDTH] = screenWidth;
-    data[Constant.Project.Key.SCREEN_HEIGHT] = screenHeight;
+    data[Constant.Project.Key.SCREEN_SIZE] = {
+      width: screenWidth,
+      height: screenHeight
+    };
     return $.ajax({
       url: "/project/create",
       type: "POST",

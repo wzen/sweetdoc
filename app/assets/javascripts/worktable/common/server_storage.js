@@ -99,26 +99,30 @@ ServerStorage = (function() {
         self = this;
         item_js_list = data.item_js_list;
         _callback = function() {
-          var d, k, ref, ref1, v;
+          var d, k, ref, ref1, ref2, v;
           WorktableCommon.removeAllItemOnWorkTable();
           if (data.project_pagevalue_data != null) {
-            PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.project_pagevalue_data);
+            ref = data.project_pagevalue_data;
+            for (k in ref) {
+              v = ref[k];
+              PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+            }
             Navbar.setTitle(data.project_pagevalue_data.title);
           }
           if (data.instance_pagevalue_data != null) {
             d = {};
-            ref = data.instance_pagevalue_data;
-            for (k in ref) {
-              v = ref[k];
+            ref1 = data.instance_pagevalue_data;
+            for (k in ref1) {
+              v = ref1[k];
               d[k] = JSON.parse(v);
             }
             PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
           }
           if (data.event_pagevalue_data != null) {
             d = {};
-            ref1 = data.event_pagevalue_data;
-            for (k in ref1) {
-              v = ref1[k];
+            ref2 = data.event_pagevalue_data;
+            for (k in ref2) {
+              v = ref2[k];
               d[k] = JSON.parse(v);
             }
             PageValue.setEventPageValueByRootHash(d);

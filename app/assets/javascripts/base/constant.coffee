@@ -89,9 +89,9 @@ if gon?
 
     class @Project
       class @Key
+        @PROJECT_ID = constant.Project.Key.PROJECT_ID
         @TITLE = constant.Project.Key.TITLE
-        @SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH
-        @SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT
+        @SCREEN_SIZE = constant.Project.Key.SCREEN_SIZE
         @USER_PAGEVALUE_ID = constant.Project.Key.USER_PAGEVALUE_ID
         @USER_PAGEVALUE_UPDATED_AT = constant.Project.Key.USER_PAGEVALUE_UPDATED_AT
 

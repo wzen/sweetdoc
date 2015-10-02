@@ -71,7 +71,7 @@ class PageValueState
   # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
   def self.load_state(user_id, user_pagevalue_id, loaded_itemids)
     sql = <<-"SQL"
-      SELECT p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
+      SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
              ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, sp.data as setting_pagevalue_data,
              ipp.page_num as page_num
       FROM user_pagevalues up
@@ -102,9 +102,12 @@ class PageValueState
       message = I18n.t('message.database.item_state.load.success')
 
       ppd = {}
+      ppd[Const::Project::Key::PROJECT_ID] = pagevalues.first['project_id']
       ppd[Const::Project::Key::TITLE] = pagevalues.first['project_title']
-      ppd[Const::Project::Key::SCREEN_WIDTH] = pagevalues.first['project_screen_width']
-      ppd[Const::Project::Key::SCREEN_HEIGHT] = pagevalues.first['project_screen_height']
+      ppd[Const::Project::Key::SCREEN_SIZE] = {
+          width: pagevalues.first['project_screen_width'],
+          height: pagevalues.first['project_screen_height']
+      }
       spd = pagevalues.first['setting_pagevalue_data']
 
       ipd = {}

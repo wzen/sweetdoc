@@ -143,11 +143,11 @@ if (typeof gon !== "undefined" && gon !== null) {
       Project.Key = (function() {
         function Key() {}
 
+        Key.PROJECT_ID = constant.Project.Key.PROJECT_ID;
+
         Key.TITLE = constant.Project.Key.TITLE;
 
-        Key.SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH;
-
-        Key.SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT;
+        Key.SCREEN_SIZE = constant.Project.Key.SCREEN_SIZE;
 
         Key.USER_PAGEVALUE_ID = constant.Project.Key.USER_PAGEVALUE_ID;
 
