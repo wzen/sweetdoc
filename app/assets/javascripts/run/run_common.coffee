@@ -373,8 +373,6 @@ class RunCommon
         data[Constant.Gallery.Key.CAPTION] = $('.caption_markup:first', modalEmt).val()
         data[Constant.Gallery.Key.THUMBNAIL_IMG] = blob
         data[Constant.Gallery.Key.TAGS] = $('.select_tag a', modalEmt).html()
-        data[Constant.Gallery.Key.INSTANCE_PAGE_VALUE] = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
-        data[Constant.Gallery.Key.EVENT_PAGE_VALUE] = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
         $.ajax(
           {
             url: "/gallery/save_state"

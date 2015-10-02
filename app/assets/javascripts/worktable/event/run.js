@@ -10,9 +10,11 @@ run = function() {
       target = "_runwindow";
       window.open("about:blank", target);
       document.run_form.target = target;
-      return setTimeout(function() {
-        return document.run_form.submit();
-      }, 300);
+      return ServerStorage.save(function() {
+        return setTimeout(function() {
+          return document.run_form.submit();
+        }, 200);
+      });
     } else {
       return Message.showWarn('No event');
     }

@@ -39,8 +39,11 @@ ServerStorage = (function() {
     ServerStorage.LOAD_LIST_INTERVAL_SECONDS = 60;
   }
 
-  ServerStorage.save = function() {
+  ServerStorage.save = function(callback) {
     var data, event, eventPagevalues, instance, instancePagevalues, k, pageNum, v;
+    if (callback == null) {
+      callback = null;
+    }
     data = {};
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
     data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
@@ -70,7 +73,10 @@ ServerStorage = (function() {
         success: function(data) {
           $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS + " ." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
           if (window.debug) {
-            return console.log(data.message);
+            console.log(data.message);
+          }
+          if (callback != null) {
+            return callback();
           }
         },
         error: function(data) {

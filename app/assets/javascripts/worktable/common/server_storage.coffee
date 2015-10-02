@@ -20,7 +20,7 @@ class ServerStorage
     @LOAD_LIST_INTERVAL_SECONDS = 60
 
   # サーバにアイテムの情報を保存
-  @save = ->
+  @save = (callback = null) ->
     data = {}
     data[@Key.PAGE_COUNT] = parseInt(PageValue.getPageCount())
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
@@ -53,6 +53,8 @@ class ServerStorage
             $("##{Navbar.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.FILE_LOAD_CLASS} .#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
             if window.debug
               console.log(data.message)
+            if callback?
+              callback()
           error: (data) ->
             if window.debug
               console.log(data.message)

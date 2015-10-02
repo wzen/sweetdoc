@@ -29,9 +29,7 @@ class GalleryController < ApplicationController
 
     caption = params[Const::Gallery::Key::CAPTION]
     thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
-    i_page_values = params[Const::Gallery::Key::INSTANCE_PAGE_VALUE]
-    e_page_values = params[Const::Gallery::Key::EVENT_PAGE_VALUE]
-    @message = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
+    @message = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img)
   end
 
   def update_last_state

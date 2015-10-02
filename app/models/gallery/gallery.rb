@@ -1,7 +1,10 @@
 require 'xmlrpc/client'
+require 'project/project'
+require 'project/project_gallery_map'
+require 'project/user_project_map'
 
 class Gallery < ActiveRecord::Base
-  belongs_to :user
+  belongs_to :user_project_map
   has_many :gallery_instance_pagevalue_pagings
   has_many :gallery_event_pagevalue_pagings
   has_many :gallery_tag_maps
@@ -11,7 +14,7 @@ class Gallery < ActiveRecord::Base
   has_many :projects
   has_many :project_gallery_maps
 
-  def self.save_state(user_id, project_id, tags, title, caption, thumbnail_img, i_page_values, e_page_values)
+  def self.save_state(user_id, project_id, tags, title, caption, thumbnail_img)
     begin
       if i_page_values != 'null' && e_page_values != 'null'
 
@@ -20,7 +23,6 @@ class Gallery < ActiveRecord::Base
           p = Project.find(project_id)
           # Gallery レコード追加
           g = self.new({
-                           user_id: user_id,
                            title: title,
                            caption: caption,
                            thumbnail_img: thumbnail_img,
@@ -30,38 +32,51 @@ class Gallery < ActiveRecord::Base
           g.save!
           gallery_id = g.id
 
+          # UserProjectMap取得
+          upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
           # ProjectGalelryMap追加
-          pgm = ProjectGalleryMap.new({project_id: project_id, gallery_id: g.id})
+          pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
           pgm.save!
 
-          # Instance レコード追加
-          i_page_values.each do |k, v|
-            page_num = v['pageNum']
-            pagevalue = v['pagevalue']
+          # Pagevalueレコード取得
+          sql = <<-"SQL"
+            SELECT ip.data as i_pagevalue_data, ep.data as e_pagevalue_data, ipp.page_num as page_num
+            FROM user_pagevalues up
+            LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
+            LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
+            LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
+            LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
+            WHERE
+              up.user_project_map_id = #{upm.id}
+            AND
+              up.del_flg = 0
+          SQL
+          ret = ActiveRecord::Base.connection.select_all(sql).to_hash
+          ret.each do |record|
+            page_num = record['pageNum']
+            i_pagevalue_data = record['i_pagevalue_data']
+            if i_pagevalue_data != nil
+              ip = GalleryInstancePagevalue.new({data: i_pagevalue_data})
+              ip.save!
+              ipp = GalleryInstancePagevaluePaging.new({
+                                                           gallery_id: gallery_id,
+                                                           page_num: page_num,
+                                                           instance_pagevalue_id: ip.id
+                                                       })
+              ipp.save!
+            end
 
-            ip = GalleryInstancePagevalue.new({data: pagevalue})
-            ip.save!
-            ipp = GalleryInstancePagevaluePaging.new({
-                                                  gallery_id: gallery_id,
-                                                  page_num: page_num,
-                                                  instance_pagevalue_id: ip.id
-                                              })
-            ipp.save!
-          end
-
-          # Event レコード追加
-          e_page_values.each do |k, v|
-            page_num = v['pageNum']
-            pagevalue = v['pagevalue']
-
-            ep = GalleryEventPagevalue.new({data: pagevalue})
-            ep.save!
-            epp = GalleryEventPagevaluePaging.new({
-                                               gallery_id: gallery_id,
-                                               page_num: page_num,
-                                               event_pagevalue_id: ep.id
-                                           })
-            epp.save!
+            e_pagevalue_data = record['e_pagevalue_data']
+            if e_pagevalue_data != nil
+              ep = GalleryEventPagevalue.new({data: e_pagevalue_data})
+              ep.save!
+              epp = GalleryEventPagevaluePaging.new({
+                                                        gallery_id: gallery_id,
+                                                        page_num: page_num,
+                                                        event_pagevalue_id: ep.id
+                                                    })
+              epp.save!
+            end
           end
 
           # Tag レコード追加

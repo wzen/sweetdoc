@@ -13,11 +13,13 @@ run = ->
       target = "_runwindow"
       window.open("about:blank", target)
       document.run_form.target = target
-
-      # submit詰まり防止のため少し遅延させる
-      setTimeout( ->
-        document.run_form.submit()
-      , 300)
+      # データ保存処理
+      ServerStorage.save( ->
+        # submit詰まり防止のため少し遅延させる
+        setTimeout( ->
+          document.run_form.submit()
+        , 200)
+      )
 
     else
       # イベントが存在しない場合は表示しない

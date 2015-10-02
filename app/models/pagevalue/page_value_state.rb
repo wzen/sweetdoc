@@ -7,6 +7,7 @@ require 'pagevalue/instance_pagevalue'
 require 'pagevalue/instance_pagevalue_paging'
 require 'pagevalue/setting_pagevalue'
 require 'pagevalue/user_pagevalue'
+require 'project/user_project_map'
 
 class PageValueState
   def self.save_state(user_id, project_id, page_count, i_page_values, e_page_values, s_page_values)

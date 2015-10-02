@@ -1,4 +1,5 @@
 require 'pagevalue/user_pagevalue'
+require 'project/user_project_map'
 
 class Project < ActiveRecord::Base
   has_many :project_gallery_maps
