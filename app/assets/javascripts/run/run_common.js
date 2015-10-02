@@ -43,10 +43,8 @@ RunCommon = (function() {
     return $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
   };
 
-  RunCommon.initResize = function() {
-    return $(window).resize(function() {
-      return RunCommon.resizeMainContainerEvent();
-    });
+  RunCommon.resizeEvent = function() {
+    return RunCommon.resizeMainContainerEvent();
   };
 
   RunCommon.initEventAction = function() {
@@ -424,7 +422,7 @@ RunCommon = (function() {
     CommonVar.runCommonVar();
     this.initView();
     this.initHandleScrollPoint();
-    this.initResize();
+    Common.initResize(this.resizeEvent);
     this.setupScrollEvent();
     return Navbar.initRunNavbar();
   };

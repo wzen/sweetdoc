@@ -60,15 +60,13 @@ WorktableCommon = (function() {
         Navbar.setTitle(projectName);
         return Project.create(projectName, width, height, function() {
           Common.initScreenSize();
-          $(".modal-content,#modal-overlay").css('display', 'none');
-          return $('#modal-overlay').remove();
+          return Common.hideModalView();
         });
       } else {
         user_pagevalue_id = $('.project_select', modalEmt).val();
         return ServerStorage.load(user_pagevalue_id, function() {
           Common.initScreenSize();
-          $(".modal-content,#modal-overlay").css('display', 'none');
-          return $('#modal-overlay').remove();
+          return Common.hideModalView();
         });
       }
     });
@@ -345,10 +343,8 @@ WorktableCommon = (function() {
     return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
   };
 
-  WorktableCommon.initResize = function() {
-    return $(window).resize(function() {
-      return WorktableCommon.resizeMainContainerEvent();
-    });
+  WorktableCommon.resizeEvent = function() {
+    return WorktableCommon.resizeMainContainerEvent();
   };
 
   WorktableCommon.removeItem = function(itemElement) {

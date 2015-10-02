@@ -93,6 +93,15 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ModalView = (function() {
+      function ModalView() {}
+
+      ModalView.HEIGHT_RATE = 0.7;
+
+      return ModalView;
+
+    })();
+
     Constant.ModalViewType = (function() {
       function ModalViewType() {}
 

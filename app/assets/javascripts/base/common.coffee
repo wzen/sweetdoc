@@ -66,6 +66,16 @@ class Common
       $('#project_wrapper').removeAttr('style')
       PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
 
+  # リサイズイベント設定
+  @initResize = (resizeEvent = null) ->
+    $(window).resize( ->
+      # モーダル中央寄せ
+      Common.modalCentering()
+
+      if resizeEvent?
+        resizeEvent()
+    )
+
   # オブジェクトの複製
   # @param [Object] obj 複製対象オブジェクト
   # @return [Object] 複製後オブジェクト
@@ -403,22 +413,10 @@ class Common
   @showModalView = (type, prepareShowFunc = null, enableOverlayClose = true) ->
     self = @
     emt = $('body').children(".modal-content.#{type}")
-    # ビューの高さ比
-    heightRate = 0.7
 
     $(@).blur()
     if $("#modal-overlay")[0]?
       return false
-
-    # 中央センタリング
-    _centering = ->
-      w = $(window).width()
-      h = $(window).height()
-      cw = emt.outerWidth()
-      ch = emt.outerHeight()
-      if ch > h * heightRate
-        ch = h * heightRate
-      emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2) + "px"})
 
     # 表示
     _show = ->
@@ -427,14 +425,13 @@ class Common
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").css('display', 'block')
       # センタリング
-      _centering.call(@)
+      Common.modalCentering.call(@)
       # ビューの高さ
-      emt.css('max-height', $(window).height() * heightRate)
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
       emt.css('display', 'block')
       $("#modal-overlay,#modal-close").unbind().click( ->
         if enableOverlayClose
-          $(".modal-content,#modal-overlay").css('display', 'none')
-          $('#modal-overlay').remove() ;
+          Common.hideModalView()
       )
 
     # 表示内容読み込み済みの場合はサーバアクセスなし
@@ -457,6 +454,23 @@ class Common
       )
     else
       _show.call(self)
+
+  # 中央センタリング
+  @modalCentering = ->
+    emt = $('body').children(".modal-content")
+    if emt?
+      w = $(window).width()
+      h = $(window).height()
+      cw = emt.outerWidth()
+      ch = emt.outerHeight()
+      if ch > h * Constant.ModalView.HEIGHT_RATE
+        ch = h * Constant.ModalView.HEIGHT_RATE
+      emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2) + "px"})
+
+  # モーダル非表示
+  @hideModalView = ->
+    $(".modal-content,#modal-overlay").css('display', 'none')
+    $('#modal-overlay').remove()
 
   # Zindexにページ分のZindexを加算
   # @param [Integer] zindex 対象zindex

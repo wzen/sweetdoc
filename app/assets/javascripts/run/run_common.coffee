@@ -40,10 +40,8 @@ class RunCommon
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
 
   # ウィンドウリサイズイベント
-  @initResize = ->
-    $(window).resize( ->
-      RunCommon.resizeMainContainerEvent()
-    )
+  @resizeEvent = ->
+    RunCommon.resizeMainContainerEvent()
 
   # イベント作成
   @initEventAction = ->
@@ -407,6 +405,6 @@ class RunCommon
     CommonVar.runCommonVar()
     @initView()
     @initHandleScrollPoint()
-    @initResize()
+    Common.initResize(@resizeEvent)
     @setupScrollEvent()
     Navbar.initRunNavbar()

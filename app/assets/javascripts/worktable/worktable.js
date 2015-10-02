@@ -16,7 +16,7 @@ $(function() {
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   WorktableCommon.initMainContainer();
   WorktableCommon.updateMainViewSize();
-  WorktableCommon.initResize();
+  Common.initResize(WorktableCommon.resizeEvent);
   _callback = function() {
     OperationHistory.add(true);
     PageValue.updatePageCount();

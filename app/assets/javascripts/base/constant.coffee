@@ -63,6 +63,10 @@ if gon?
       # @property [Int] SCREEN 画面表示
       @SCREEN = constant.CommonActionEventChangeType.SCREEN
 
+    # モーダルビュー
+    class @ModalView
+      @HEIGHT_RATE = 0.7
+
     # モーダルビュータイプ
     class @ModalViewType
       # @property [Int] INIT 画面初期表示

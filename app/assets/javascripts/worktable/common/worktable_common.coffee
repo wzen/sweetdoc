@@ -63,8 +63,7 @@ class WorktableCommon
         Project.create(projectName, width, height, ->
           Common.initScreenSize()
           # モーダルを削除
-          $(".modal-content,#modal-overlay").css('display', 'none')
-          $('#modal-overlay').remove()
+          Common.hideModalView()
         )
       else
         # プロジェクト選択
@@ -72,8 +71,7 @@ class WorktableCommon
         ServerStorage.load(user_pagevalue_id, ->
           Common.initScreenSize()
           # モーダルを削除
-          $(".modal-content,#modal-overlay").css('display', 'none')
-          $('#modal-overlay').remove()
+          Common.hideModalView()
         )
     )
 
@@ -307,10 +305,8 @@ class WorktableCommon
     $(window.drawingCanvas).attr('height', window.mainWrapper.height())
 
   # ウィンドウリサイズイベント
-  @initResize = ->
-    $(window).resize( ->
-      WorktableCommon.resizeMainContainerEvent()
-    )
+  @resizeEvent = ->
+    WorktableCommon.resizeMainContainerEvent()
 
   # アイテムを削除
   @removeItem = (itemElement) ->

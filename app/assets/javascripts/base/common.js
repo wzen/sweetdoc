@@ -84,6 +84,18 @@ Common = (function() {
     }
   };
 
+  Common.initResize = function(resizeEvent) {
+    if (resizeEvent == null) {
+      resizeEvent = null;
+    }
+    return $(window).resize(function() {
+      Common.modalCentering();
+      if (resizeEvent != null) {
+        return resizeEvent();
+      }
+    });
+  };
+
   Common.makeClone = function(obj) {
     var flags, key, newInstance;
     if ((obj == null) || typeof obj !== 'object') {
@@ -448,7 +460,7 @@ Common = (function() {
   };
 
   Common.showModalView = function(type, prepareShowFunc, enableOverlayClose) {
-    var _centering, _show, emt, heightRate, self;
+    var _show, emt, self;
     if (prepareShowFunc == null) {
       prepareShowFunc = null;
     }
@@ -457,38 +469,22 @@ Common = (function() {
     }
     self = this;
     emt = $('body').children(".modal-content." + type);
-    heightRate = 0.7;
     $(this).blur();
     if ($("#modal-overlay")[0] != null) {
       return false;
     }
-    _centering = function() {
-      var ch, cw, h, w;
-      w = $(window).width();
-      h = $(window).height();
-      cw = emt.outerWidth();
-      ch = emt.outerHeight();
-      if (ch > h * heightRate) {
-        ch = h * heightRate;
-      }
-      return emt.css({
-        "left": ((w - cw) / 2) + "px",
-        "top": ((h - ch) / 2) + "px"
-      });
-    };
     _show = function() {
       if (prepareShowFunc != null) {
         prepareShowFunc(emt);
       }
       $("body").append('<div id="modal-overlay"></div>');
       $("#modal-overlay").css('display', 'block');
-      _centering.call(this);
-      emt.css('max-height', $(window).height() * heightRate);
+      Common.modalCentering.call(this);
+      emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
       emt.css('display', 'block');
       return $("#modal-overlay,#modal-close").unbind().click(function() {
         if (enableOverlayClose) {
-          $(".modal-content,#modal-overlay").css('display', 'none');
-          return $('#modal-overlay').remove();
+          return Common.hideModalView();
         }
       });
     };
@@ -510,6 +506,29 @@ Common = (function() {
     } else {
       return _show.call(self);
     }
+  };
+
+  Common.modalCentering = function() {
+    var ch, cw, emt, h, w;
+    emt = $('body').children(".modal-content");
+    if (emt != null) {
+      w = $(window).width();
+      h = $(window).height();
+      cw = emt.outerWidth();
+      ch = emt.outerHeight();
+      if (ch > h * Constant.ModalView.HEIGHT_RATE) {
+        ch = h * Constant.ModalView.HEIGHT_RATE;
+      }
+      return emt.css({
+        "left": ((w - cw) / 2) + "px",
+        "top": ((h - ch) / 2) + "px"
+      });
+    }
+  };
+
+  Common.hideModalView = function() {
+    $(".modal-content,#modal-overlay").css('display', 'none');
+    return $('#modal-overlay').remove();
   };
 
   Common.plusPagingZindex = function(zindex, pn) {
