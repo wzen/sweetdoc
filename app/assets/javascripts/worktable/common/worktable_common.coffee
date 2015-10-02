@@ -383,6 +383,8 @@ class WorktableCommon
     @removeAllItemAndEvent()
     # ページを全消去
     $('#pages .section').remove()
+    # 環境をリセット
+    Common.resetEnvironment()
     # 変数初期化
     CommonVar.initVarWhenLoadedView()
     CommonVar.initCommonVar()

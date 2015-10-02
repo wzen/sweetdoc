@@ -56,22 +56,31 @@ Common = (function() {
     return RandomString;
   };
 
-  Common.applyGeneralPagevalue = function() {
+  Common.applyEnvironmentFromPagevalue = function() {
     Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     return this.initScreenSize();
   };
 
-  Common.initScreenSize = function() {
+  Common.resetEnvironment = function() {
+    Navbar.setTitle('');
+    return this.initScreenSize(true);
+  };
+
+  Common.initScreenSize = function(reset) {
     var css, size;
+    if (reset == null) {
+      reset = false;
+    }
     size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-    if ((size != null) && (size.width != null) && (size.height != null)) {
+    if (!reset && (size != null) && (size.width != null) && (size.height != null)) {
       css = {
         width: size.width,
         height: size.height
       };
       return $('#project_wrapper').css(css);
     } else {
-      return $('#project_wrapper').removeAttr('style');
+      $('#project_wrapper').removeAttr('style');
+      return PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
     }
   };
 

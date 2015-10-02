@@ -11,6 +11,7 @@ $ ->
   if existedCache
     # キャッシュが存在する場合アイテム描画
     LocalStorage.loadAllPageValues()
+    Common.applyEnvironmentFromPagevalue()
 
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
@@ -19,7 +20,6 @@ $ ->
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   WorktableCommon.initMainContainer()
-  Common.applyGeneralPagevalue()
   WorktableCommon.updateMainViewSize()
   # リサイズイベント
   WorktableCommon.initResize()

@@ -9,12 +9,12 @@ $(function() {
   existedCache = !LocalStorage.isOverWorktableSaveTimeLimit();
   if (existedCache) {
     LocalStorage.loadAllPageValues();
+    Common.applyEnvironmentFromPagevalue();
   }
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   WorktableCommon.initMainContainer();
-  Common.applyGeneralPagevalue();
   WorktableCommon.updateMainViewSize();
   WorktableCommon.initResize();
   _callback = function() {

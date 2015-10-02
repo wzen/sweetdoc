@@ -13,6 +13,7 @@ $ ->
   is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
   if is_reload?
     LocalStorage.loadAllPageValues()
+    Common.applyEnvironmentFromPagevalue()
   else
     LocalStorage.saveAllPageValues()
 
@@ -20,7 +21,6 @@ $ ->
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   RunCommon.initMainContainer()
-  Common.applyGeneralPagevalue()
   RunCommon.updateMainViewSize()
   # 共通設定
   Setting.initConfig()

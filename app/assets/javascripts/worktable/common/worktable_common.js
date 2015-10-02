@@ -424,6 +424,7 @@ WorktableCommon = (function() {
   WorktableCommon.recreateMainContainer = function() {
     this.removeAllItemAndEvent();
     $('#pages .section').remove();
+    Common.resetEnvironment();
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
     Common.createdMainContainerIfNeeded(PageValue.getPageNum());

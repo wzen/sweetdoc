@@ -42,14 +42,20 @@ class Common
       RandomString += BaseString.charAt( Math.floor( Math.random() * n))
     return RandomString
 
-  @applyGeneralPagevalue = ->
+  # Pagevalueから環境を反映
+  @applyEnvironmentFromPagevalue = ->
     Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME))
     @initScreenSize()
 
+  # 環境の反映をリセット
+  @resetEnvironment = ->
+    Navbar.setTitle('')
+    @initScreenSize(true)
+
   # プロジェクト表示サイズ設定
-  @initScreenSize = ->
+  @initScreenSize = (reset = false) ->
     size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-    if size? && size.width? && size.height?
+    if !reset && size? && size.width? && size.height?
       css = {
         width: size.width
         height: size.height
@@ -58,6 +64,7 @@ class Common
     else
       # width,height -> 100%
       $('#project_wrapper').removeAttr('style')
+      PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
 
   # オブジェクトの複製
   # @param [Object] obj 複製対象オブジェクト
