@@ -38,8 +38,8 @@ class WorktableCommon
       if $('input[name=project_create][value=new]').is(':checked')
         # プロジェクト新規作成
         projectName = $('.project_name').val()
-        width = $('#main').width()
-        height = $('#main').height()
+        width = $('#screen_wrapper').width()
+        height = $('#screen_wrapper').height()
         if !projectName? || projectName.length == 0
           # エラー
           return
@@ -355,7 +355,7 @@ class WorktableCommon
     Handwrite.initHandwrite()
     # コンテキストメニュー
     @setMainContainerContext()
-    $('#main').on("mousedown", =>
+    $('#project_wrapper').on("mousedown", =>
       @clearAllItemStyle()
     )
     # 共通設定

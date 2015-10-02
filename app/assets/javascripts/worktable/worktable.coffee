@@ -19,8 +19,8 @@ $ ->
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   WorktableCommon.initMainContainer()
-  WorktableCommon.updateMainViewSize()
   Common.applyGeneralPagevalue()
+  WorktableCommon.updateMainViewSize()
   # リサイズイベント
   WorktableCommon.initResize()
 

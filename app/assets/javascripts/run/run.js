@@ -15,8 +15,8 @@ $(function() {
   }
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   RunCommon.initMainContainer();
-  RunCommon.updateMainViewSize();
   Common.applyGeneralPagevalue();
+  RunCommon.updateMainViewSize();
   Setting.initConfig();
   return Common.loadJsFromInstancePageValue(function() {
     return RunCommon.initEventAction();

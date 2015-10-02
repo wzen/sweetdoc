@@ -40,8 +40,8 @@ WorktableCommon = (function() {
       var height, projectName, user_pagevalue_id, width;
       if ($('input[name=project_create][value=new]').is(':checked')) {
         projectName = $('.project_name').val();
-        width = $('#main').width();
-        height = $('#main').height();
+        width = $('#screen_wrapper').width();
+        height = $('#screen_wrapper').height();
         if ((projectName == null) || projectName.length === 0) {
           return;
         }
@@ -394,7 +394,7 @@ WorktableCommon = (function() {
     this.initKeyEvent();
     Handwrite.initHandwrite();
     this.setMainContainerContext();
-    $('#main').on("mousedown", (function(_this) {
+    $('#project_wrapper').on("mousedown", (function(_this) {
       return function() {
         return _this.clearAllItemStyle();
       };
