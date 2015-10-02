@@ -10,10 +10,10 @@ $(function() {
   is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
   if (is_reload != null) {
     LocalStorage.loadAllPageValues();
-    Common.applyEnvironmentFromPagevalue();
   } else {
     LocalStorage.saveAllPageValues();
   }
+  Common.applyEnvironmentFromPagevalue();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   RunCommon.initMainContainer();
   RunCommon.updateMainViewSize();

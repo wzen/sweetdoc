@@ -13,10 +13,11 @@ $ ->
   is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
   if is_reload?
     LocalStorage.loadAllPageValues()
-    Common.applyEnvironmentFromPagevalue()
   else
     LocalStorage.saveAllPageValues()
 
+  # 環境設定
+  Common.applyEnvironmentFromPagevalue()
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
