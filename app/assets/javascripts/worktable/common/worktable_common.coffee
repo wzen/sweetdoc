@@ -14,15 +14,15 @@ class WorktableCommon
     )
 
     # 作成済みプロジェクト一覧取得
-    ServerStorage.get_load_data((data) ->
-      user_pagevalue_list = data
+    Project.load_data((data) ->
+      user_pagevalue_list = data.list
       projectSelect = $('.project_select', modalEmt)
       if user_pagevalue_list.length > 0
         list = ''
         n = $.now()
         for p in user_pagevalue_list
-          d = new Date(p.updated_at)
-          e = "<option value='#{p.user_pagevalue_id}'>#{Common.displayDiffAlmostTime(n, d.getTime())} (#{Common.formatDate(d)})</option>"
+          d = new Date(p[Constant.Project.Key.USER_PAGEVALUE_UPDATED_AT])
+          e = "<option value='#{p[Constant.Project.Key.USER_PAGEVALUE_ID]}'>#{p[Constant.Project.Key.TITLE]} - #{Common.displayDiffAlmostTime(n, d.getTime())}</option>"
           list += e
         projectSelect.children().remove()
         $(list).appendTo(projectSelect)

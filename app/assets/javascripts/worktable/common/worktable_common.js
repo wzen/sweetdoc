@@ -14,17 +14,17 @@ WorktableCommon = (function() {
     $('.display_size_wrapper input[type=radio]', modalEmt).on('click', function() {
       return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
     });
-    ServerStorage.get_load_data(function(data) {
+    Project.load_data(function(data) {
       var d, e, l, len, list, n, p, projectSelect, user_pagevalue_list;
-      user_pagevalue_list = data;
+      user_pagevalue_list = data.list;
       projectSelect = $('.project_select', modalEmt);
       if (user_pagevalue_list.length > 0) {
         list = '';
         n = $.now();
         for (l = 0, len = user_pagevalue_list.length; l < len; l++) {
           p = user_pagevalue_list[l];
-          d = new Date(p.updated_at);
-          e = "<option value='" + p.user_pagevalue_id + "'>" + (Common.displayDiffAlmostTime(n, d.getTime())) + " (" + (Common.formatDate(d)) + ")</option>";
+          d = new Date(p[Constant.Project.Key.USER_PAGEVALUE_UPDATED_AT]);
+          e = "<option value='" + p[Constant.Project.Key.USER_PAGEVALUE_ID] + "'>" + p[Constant.Project.Key.TITLE] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
           list += e;
         }
         projectSelect.children().remove();

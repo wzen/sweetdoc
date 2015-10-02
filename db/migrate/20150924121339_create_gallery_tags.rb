@@ -4,7 +4,7 @@ class CreateGalleryTags < ActiveRecord::Migration
       t.string :name, :null => false
       t.integer :weight, :defaults => 0
       t.string :category
-      t.boolean :del_flg, :null => false, :default => false
+      t.boolean :del_flg, :default => false
 
       t.timestamps
     end

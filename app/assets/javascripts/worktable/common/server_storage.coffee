@@ -25,27 +25,19 @@ class ServerStorage
     data[@Key.PAGE_COUNT] = parseInt(PageValue.getPageCount())
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
     # FIXME: 差分保存 & バッチでフル保存するようにする
-    instancePagevalues = []
+    instancePagevalues = {}
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
     for k, v of instance
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
-      instancePagevalues.push({
-        pageNum: pageNum,
-        pagevalue: JSON.stringify(v)
+      instancePagevalues[pageNum] = JSON.stringify(v)
+    data[@Key.INSTANCE_PAGE_VALUE] = if Object.keys(instancePagevalues).length > 0 then instancePagevalues else null
 
-      })
-    data[@Key.INSTANCE_PAGE_VALUE] = if instancePagevalues.length > 0 then instancePagevalues else null
-
-    eventPagevalues = []
+    eventPagevalues = {}
     event = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
     for k, v of event
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
-      eventPagevalues.push({
-        pageNum: pageNum,
-        pagevalue: JSON.stringify(v)
-
-      })
-    data[@Key.EVENT_PAGE_VALUE] = if eventPagevalues.length > 0 then eventPagevalues else null
+      eventPagevalues[pageNum] = JSON.stringify(v)
+    data[@Key.EVENT_PAGE_VALUE] = if Object.keys(eventPagevalues).length > 0 then eventPagevalues else null
     data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX))
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
       $.ajax(

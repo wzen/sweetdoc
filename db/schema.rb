@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20150930235014) do
     t.integer  "user_pagevalue_id",                  null: false
     t.integer  "page_num",                           null: false
     t.integer  "event_pagevalue_id",                 null: false
-    t.boolean  "del_flg",            default: false, null: false
+    t.boolean  "del_flg",            default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20150930235014) do
   create_table "event_pagevalues", force: true do |t|
     t.text     "data"
     t.integer  "retain",     default: 1,     null: false
-    t.boolean  "del_flg",    default: false, null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -64,7 +64,7 @@ ActiveRecord::Schema.define(version: 20150930235014) do
     t.binary   "thumbnail_img"
     t.integer  "screen_width",                  null: false
     t.integer  "screen_height",                 null: false
-    t.boolean  "del_flg",       default: false, null: false
+    t.boolean  "del_flg",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20150930235014) do
     t.integer  "page_num",                   null: false
     t.text     "data"
     t.integer  "retain",     default: 1,     null: false
-    t.boolean  "del_flg",    default: false, null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -133,7 +133,7 @@ ActiveRecord::Schema.define(version: 20150930235014) do
     t.string   "name",                       null: false
     t.integer  "weight"
     t.string   "category"
-    t.boolean  "del_flg",    default: false, null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 20150930235014) do
     t.integer  "user_pagevalue_id",                     null: false
     t.integer  "page_num",                              null: false
     t.integer  "instance_pagevalue_id",                 null: false
-    t.boolean  "del_flg",               default: false, null: false
+    t.boolean  "del_flg",               default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -158,7 +158,7 @@ ActiveRecord::Schema.define(version: 20150930235014) do
   create_table "instance_pagevalues", force: true do |t|
     t.text     "data"
     t.integer  "retain",     default: 1,     null: false
-    t.boolean  "del_flg",    default: false, null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -215,8 +215,9 @@ ActiveRecord::Schema.define(version: 20150930235014) do
   end
 
   create_table "project_gallery_maps", force: true do |t|
-    t.integer  "project_id", null: false
-    t.integer  "gallery_id", null: false
+    t.integer  "project_id",                 null: false
+    t.integer  "gallery_id",                 null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

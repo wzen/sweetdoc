@@ -7,6 +7,8 @@ gem 'i18n', '0.6.11'
 gem "i18n-js", '2.1.2'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
+# Mysql
+gem 'mysql2', '~> 0.3.20'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 

@@ -171,12 +171,15 @@ class Const
   end
 
   class Project
-    USER_CREATE_MAX = 5
+    # FIXME:
+    USER_CREATE_MAX = 50
 
     class Key
       TITLE = 'title'
       SCREEN_WIDTH = 'screen_width'
       SCREEN_HEIGHT = 'screen_height'
+      USER_PAGEVALUE_ID = 'user_pagevalue_id'
+      USER_PAGEVALUE_UPDATED_AT = 'user_pagevalue_updated_at'
     end
   end
 

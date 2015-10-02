@@ -149,6 +149,10 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         Key.SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT;
 
+        Key.USER_PAGEVALUE_ID = constant.Project.Key.USER_PAGEVALUE_ID;
+
+        Key.USER_PAGEVALUE_UPDATED_AT = constant.Project.Key.USER_PAGEVALUE_UPDATED_AT;
+
         return Key;
 
       })();

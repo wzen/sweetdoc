@@ -4,21 +4,17 @@ var Project;
 Project = (function() {
   function Project() {}
 
-  Project.get_load_data = function(successCallback, errorCallback) {
-    var data;
+  Project.load_data = function(successCallback, errorCallback) {
     if (successCallback == null) {
       successCallback = null;
     }
     if (errorCallback == null) {
       errorCallback = null;
     }
-    data = {};
-    data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     return $.ajax({
-      url: "/page_value_state/user_pagevalue_list",
-      type: "POST",
+      url: "/project/list",
+      type: "GET",
       dataType: "json",
-      data: data,
       success: function(data) {
         if (successCallback != null) {
           return successCallback(data);

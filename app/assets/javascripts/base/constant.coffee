@@ -92,6 +92,8 @@ if gon?
         @TITLE = constant.Project.Key.TITLE
         @SCREEN_WIDTH = constant.Project.Key.SCREEN_WIDTH
         @SCREEN_HEIGHT = constant.Project.Key.SCREEN_HEIGHT
+        @USER_PAGEVALUE_ID = constant.Project.Key.USER_PAGEVALUE_ID
+        @USER_PAGEVALUE_UPDATED_AT = constant.Project.Key.USER_PAGEVALUE_UPDATED_AT
 
     class @Gallery
       @TAG_MAX = constant.Gallery.TAG_MAX

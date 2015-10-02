@@ -8,7 +8,7 @@ class GalleryController < ApplicationController
   end
 
   def detail
-    galiery_id = params[Const::Gallery::Key::GALLERY_ID]
+    galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
     # ViewCountをupdate
     Gallery.add_view_statistic_count(galiery_id, Date.today)
     # データを取得
@@ -25,6 +25,7 @@ class GalleryController < ApplicationController
       @message = I18n.t('message.database.item_state.save.error')
       render
     end
+    project_id = project_id.to_i
 
     caption = params[Const::Gallery::Key::CAPTION]
     thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
@@ -43,15 +44,15 @@ class GalleryController < ApplicationController
 
   def load_state
     user_id = current_user.id
-    galiery_id = params[Const::Gallery::Key::GALLERY_ID]
+    galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
     @contents_detail = Gallery.load_state(galiery_id, user_id)
   end
 
   def get_contents
-    show_head = params[Const::Gallery::SearchKey::SHOW_HEAD]
-    show_limit = params[Const::Gallery::SearchKey::SHOW_LIMIT]
+    show_head = params[Const::Gallery::SearchKey::SHOW_HEAD].to_i
+    show_limit = params[Const::Gallery::SearchKey::SHOW_LIMIT].to_i
     search_type = params[Const::Gallery::SearchKey::SEARCH_TYPE]
-    tag_id = params[Const::Gallery::SearchKey::TAG_ID]
+    tag_id = params[Const::Gallery::SearchKey::TAG_ID].to_i
     date = params[Const::Gallery::SearchKey::DATE]
     if search_type == Const::Gallery::SearchType::CREATED
       @contents = Gallery.grid_contents_sorted_by_createdate(show_head, show_limit, tag_id)
@@ -70,7 +71,7 @@ class GalleryController < ApplicationController
 
   def add_bookmark
     user_id = current_user.id
-    galiery_id = params[Const::Gallery::Key::GALLERY_ID]
+    galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
     note = params[Const::Gallery::Key::NOTE]
     Gallery.add_bookmark(user_id, galiery_id, note, Date.today)
   end

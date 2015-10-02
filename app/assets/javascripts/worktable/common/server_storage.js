@@ -44,28 +44,22 @@ ServerStorage = (function() {
     data = {};
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
     data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
-    instancePagevalues = [];
+    instancePagevalues = {};
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
     for (k in instance) {
       v = instance[k];
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));
-      instancePagevalues.push({
-        pageNum: pageNum,
-        pagevalue: JSON.stringify(v)
-      });
+      instancePagevalues[pageNum] = JSON.stringify(v);
     }
-    data[this.Key.INSTANCE_PAGE_VALUE] = instancePagevalues.length > 0 ? instancePagevalues : null;
-    eventPagevalues = [];
+    data[this.Key.INSTANCE_PAGE_VALUE] = Object.keys(instancePagevalues).length > 0 ? instancePagevalues : null;
+    eventPagevalues = {};
     event = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
     for (k in event) {
       v = event[k];
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));
-      eventPagevalues.push({
-        pageNum: pageNum,
-        pagevalue: JSON.stringify(v)
-      });
+      eventPagevalues[pageNum] = JSON.stringify(v);
     }
-    data[this.Key.EVENT_PAGE_VALUE] = eventPagevalues.length > 0 ? eventPagevalues : null;
+    data[this.Key.EVENT_PAGE_VALUE] = Object.keys(eventPagevalues).length > 0 ? eventPagevalues : null;
     data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX));
     if ((data[this.Key.INSTANCE_PAGE_VALUE] != null) || (data[this.Key.EVENT_PAGE_VALUE] != null) || (data[this.Key.SETTING_PAGE_VALUE] != null)) {
       return $.ajax({

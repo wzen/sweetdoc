@@ -4,7 +4,7 @@ class CreateInstancePagevaluePagings < ActiveRecord::Migration
       t.integer :user_pagevalue_id, :null => false
       t.integer :page_num, :null => false
       t.integer :instance_pagevalue_id, :null => false
-      t.boolean :del_flg, :null => false, :default => false
+      t.boolean :del_flg, :default => false
 
       t.timestamps
     end

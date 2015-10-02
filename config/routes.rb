@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root 'worktable#index'
 
   post 'project/create'
+  get 'project/list'
 
   get 'run' => 'run#index'
   post 'run' => 'run#index'

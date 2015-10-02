@@ -7,7 +7,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.binary :thumbnail_img
       t.integer :screen_width, :null => false
       t.integer :screen_height, :null => false
-      t.boolean :del_flg, :null => false, :default => false
+      t.boolean :del_flg, :default => false
 
       t.timestamps
     end

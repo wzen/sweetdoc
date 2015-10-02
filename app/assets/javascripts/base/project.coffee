@@ -1,13 +1,10 @@
 class Project
-  @get_load_data: (successCallback = null, errorCallback = null) ->
-    data = {}
-    data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
+  @load_data: (successCallback = null, errorCallback = null) ->
     $.ajax(
       {
-        url: "/page_value_state/user_pagevalue_list"
-        type: "POST"
+        url: "/project/list"
+        type: "GET"
         dataType: "json"
-        data: data
         success: (data)->
           if successCallback?
             successCallback(data)
@@ -37,3 +34,4 @@ class Project
         error: (data) ->
       }
     )
+
