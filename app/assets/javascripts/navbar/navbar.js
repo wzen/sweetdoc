@@ -18,6 +18,9 @@ Navbar = (function() {
           WorktableCommon.recreateMainContainer();
           return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false);
         }
+      } else {
+        WorktableCommon.recreateMainContainer();
+        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false);
       }
     });
     $('.menu-load', fileMenuEmt).off('mouseenter');

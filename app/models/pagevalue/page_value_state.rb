@@ -1,4 +1,6 @@
 require 'common/const'
+require 'item/item'
+require 'item/item_js'
 require 'pagevalue/event_pagevalue'
 require 'pagevalue/event_pagevalue_paging'
 require 'pagevalue/instance_pagevalue'
@@ -73,7 +75,7 @@ class PageValueState
              ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, sp.data as setting_pagevalue_data,
              ipp.page_num as page_num
       FROM user_pagevalues up
-      INNER JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id
+      LEFT JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
       INNER JOIN user_project_maps upm ON up.user_project_map_id = upm.id
       INNER JOIN projects p ON upm.project_id = p.id
       INNER JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id
@@ -84,8 +86,6 @@ class PageValueState
         up.id = #{user_pagevalue_id}
       AND
         up.del_flg = 0
-      AND
-        sp.del_flg = 0
       AND
         upm.del_flg = 0
       AND
@@ -110,24 +110,24 @@ class PageValueState
       message = I18n.t('message.database.item_state.load.success')
 
       ppd = {}
-      ppd[Const::Project::Key::TITLE] = pagevalues.first.project_title
-      ppd[Const::Project::Key::SCREEN_WIDTH] = pagevalues.first.project_screen_width
-      ppd[Const::Project::Key::SCREEN_HEIGHT] = pagevalues.first.project_screen_height
-      spd = pagevalues.first.setting_pagevalue_data
+      ppd[Const::Project::Key::TITLE] = pagevalues.first['project_title']
+      ppd[Const::Project::Key::SCREEN_WIDTH] = pagevalues.first['project_screen_width']
+      ppd[Const::Project::Key::SCREEN_HEIGHT] = pagevalues.first['project_screen_height']
+      spd = pagevalues.first['setting_pagevalue_data']
 
       ipd = {}
       epd = {}
       itemids = []
       pagevalues.each do |pagevalue|
-        key = Const::PageValueKey::P_PREFIX + pagevalue.page_num
-        if pagevalue.instance_pagevalue_data != nil
-          ipd[key] = pagevalue.instance_pagevalue_data
+        key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
+        if pagevalue['instance_pagevalue_data'] != nil
+          ipd[key] = pagevalue['instance_pagevalue_data']
         end
-        if pagevalue.event_pagevalue_data != nil
-          epd[key] = pagevalue.event_pagevalue_data
+        if pagevalue['event_pagevalue_data'] != nil
+          epd[key] = pagevalue['event_pagevalue_data']
 
           # 必要なItemIdを調査
-          JSON.parse(p.data).each do |k, v|
+          JSON.parse(epd[key]).each do |k, v|
             if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
               item_id = v[Const::EventPageValueKey::ITEM_ID]
               if item_id != nil
@@ -141,48 +141,6 @@ class PageValueState
         end
       end
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-
-      # instance_pages = InstancePagevaluePaging.joins(:user_pagevalue, :instance_pagevalue).where(user_pagevalues: {id: user_pagevalue_id})
-      #                      .select('instance_pagevalue_pagings.*, instance_pagevalues.data as data')
-      # if instance_pages.size > 0
-      #   ipd = {}
-      #   instance_pages.each do |p|
-      #     key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
-      #     ipd[key] = p.data
-      #   end
-      # else
-      #   ipd = nil
-      # end
-      #
-      # item_js_list = []
-      # event_pages = EventPagevaluePaging.joins(:user_pagevalue, :event_pagevalue).where(user_pagevalues: {id: user_pagevalue_id})
-      #                      .select('event_pagevalue_pagings.*, event_pagevalues.data as data')
-      # if event_pages.size > 0
-      #   itemids = []
-      #   epd = {}
-      #   event_pages.each do |p|
-      #     key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
-      #     epd[key] = p.data
-      #
-      #     # 必要なItemIdを調査
-      #     JSON.parse(p.data).each do |k, v|
-      #       if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-      #         item_id = v[Const::EventPageValueKey::ITEM_ID]
-      #         if item_id != nil
-      #           unless loaded_itemids.include?(item_id)
-      #             itemids << item_id
-      #           end
-      #         end
-      #       end
-      #     end
-      #   end
-      #
-      #   item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-      # else
-      #   epd = nil
-      # end
-
-
       return item_js_list, ppd, ipd, epd, spd, message
     end
   end

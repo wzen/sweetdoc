@@ -14,6 +14,10 @@ class Navbar
           WorktableCommon.recreateMainContainer()
           # 初期モーダル表示
           Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false)
+      else
+        WorktableCommon.recreateMainContainer()
+        # 初期モーダル表示
+        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false)
     )
     $('.menu-load', fileMenuEmt).off('mouseenter')
     $('.menu-load', fileMenuEmt).on('mouseenter', ->
