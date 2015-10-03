@@ -36,8 +36,7 @@ class RunCommon
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
-    $(window.drawingCanvas).attr('width', window.canvasWrapper.width())
-    $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
+    Common.updateCanvasSize()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->

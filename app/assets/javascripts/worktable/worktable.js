@@ -9,10 +9,10 @@ $(function() {
   existedCache = !LocalStorage.isOverWorktableSaveTimeLimit();
   if (existedCache) {
     LocalStorage.loadAllPageValues();
-    Common.applyEnvironmentFromPagevalue();
   }
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
+  Common.applyEnvironmentFromPagevalue();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   WorktableCommon.initMainContainer();
   WorktableCommon.updateMainViewSize();
@@ -31,7 +31,7 @@ $(function() {
     LocalStorage.clearWorktable();
     Timeline.refreshAllTimeline();
     _callback.call(this);
-    return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false);
+    return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false);
   }
 });
 

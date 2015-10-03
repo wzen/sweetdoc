@@ -4,74 +4,6 @@ var WorktableCommon;
 WorktableCommon = (function() {
   function WorktableCommon() {}
 
-  WorktableCommon.initProjectModal = function(modalEmt) {
-    $('.project_create_wrapper input[type=radio]', modalEmt).off('click');
-    $('.project_create_wrapper input[type=radio]', modalEmt).on('click', function() {
-      $('.display_project_new_wrapper', modalEmt).css('display', $(this).val() === 'new' ? 'block' : 'none');
-      return $('.display_project_select_wrapper', modalEmt).css('display', $(this).val() === 'select' ? 'block' : 'none');
-    });
-    $('.display_size_wrapper input[type=radio]', modalEmt).off('click');
-    $('.display_size_wrapper input[type=radio]', modalEmt).on('click', function() {
-      return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
-    });
-    Project.load_data(function(data) {
-      var d, e, l, len, list, n, p, projectSelect, user_pagevalue_list;
-      user_pagevalue_list = data.list;
-      projectSelect = $('.project_select', modalEmt);
-      if (user_pagevalue_list.length > 0) {
-        list = '';
-        n = $.now();
-        for (l = 0, len = user_pagevalue_list.length; l < len; l++) {
-          p = user_pagevalue_list[l];
-          d = new Date(p[Constant.Project.Key.USER_PAGEVALUE_UPDATED_AT]);
-          e = "<option value='" + p[Constant.Project.Key.USER_PAGEVALUE_ID] + "'>" + p[Constant.Project.Key.TITLE] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
-          list += e;
-        }
-        projectSelect.children().remove();
-        $(list).appendTo(projectSelect);
-        return $('.project_create_wrapper', modalEmt).show();
-      } else {
-        projectSelect.children().remove();
-        return $('.project_create_wrapper', modalEmt).hide();
-      }
-    });
-    $('.create_button', modalEmt).off('click');
-    return $('.create_button', modalEmt).on('click', function() {
-      var height, projectName, user_pagevalue_id, width;
-      if ($('input[name=project_create][value=new]').is(':checked')) {
-        projectName = $('.project_name').val();
-        width = $('#screen_wrapper').width();
-        height = $('#screen_wrapper').height();
-        if ((projectName == null) || projectName.length === 0) {
-          return;
-        }
-        if ($('.display_size_wrapper input[value=input]').is(':checked')) {
-          width = $('.display_size_input_width', modalEmt).val();
-          height = $('.display_size_input_height', modalEmt).val();
-          if ((width == null) || width.length === 0 || (height == null) || height.length === 0) {
-            return;
-          }
-        }
-        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
-        PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
-          width: parseInt(width),
-          height: parseInt(height)
-        });
-        Navbar.setTitle(projectName);
-        return Project.create(projectName, width, height, function() {
-          Common.initScreenSize();
-          return Common.hideModalView();
-        });
-      } else {
-        user_pagevalue_id = $('.project_select', modalEmt).val();
-        return ServerStorage.load(user_pagevalue_id, function() {
-          Common.initScreenSize();
-          return Common.hideModalView();
-        });
-      }
-    });
-  };
-
   WorktableCommon.setSelectedBorder = function(target, selectedBorderType) {
     var className;
     if (selectedBorderType == null) {
@@ -339,8 +271,7 @@ WorktableCommon = (function() {
 
   WorktableCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
-    $(window.drawingCanvas).attr('width', window.mainWrapper.width());
-    return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
+    return Common.updateCanvasSize();
   };
 
   WorktableCommon.resizeEvent = function() {

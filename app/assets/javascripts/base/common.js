@@ -77,10 +77,18 @@ Common = (function() {
         width: size.width,
         height: size.height
       };
-      return $('#project_wrapper').css(css);
+      $('#project_wrapper').css(css);
     } else {
       $('#project_wrapper').removeAttr('style');
-      return PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
+      PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
+    }
+    return this.updateCanvasSize();
+  };
+
+  Common.updateCanvasSize = function() {
+    if ((window.mainWrapper != null) && (window.drawingCanvas != null)) {
+      $(window.drawingCanvas).attr('width', window.mainWrapper.width());
+      return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
     }
   };
 

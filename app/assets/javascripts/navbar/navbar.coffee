@@ -13,15 +13,11 @@ class Navbar
         if window.confirm(I18n.t('message.dialog.new_project'))
           WorktableCommon.recreateMainContainer()
           # 初期モーダル表示
-          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false)
+          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)
       else
         WorktableCommon.recreateMainContainer()
         # 初期モーダル表示
-        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false)
-    )
-    $('.menu-load', fileMenuEmt).off('mouseenter')
-    $('.menu-load', fileMenuEmt).on('mouseenter', ->
-      Navbar.get_load_list()
+        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)
     )
     $('.menu-save', fileMenuEmt).off('click')
     $('.menu-save', fileMenuEmt).on('click', ->
@@ -55,7 +51,6 @@ class Navbar
         Common.loadItemJs(itemId)
     )
 
-    #$('#header_items_select_menu .menu-item').off('click')
     $('#header_items_select_menu .menu-item').click( ->
       selected = $(@).html()
       $('#header_items_selected_menu_span').html(selected)
@@ -148,54 +143,55 @@ class Navbar
       e.html('')
       e.closest('li').css('display', 'none')
 
-  # 保存されているデータ一覧を取得して表示
-  @get_load_list: ->
-    loadEmt = $("##{Navbar.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS}")
-    updateFlg = loadEmt.find(".#{@ElementAttribute.LOAD_LIST_UPDATED_FLG}").length > 0
-    if updateFlg
-      loadedLocalTime = loadEmt.find(".#{@ElementAttribute.LOADED_LOCALTIME}")
-      if loadedLocalTime?
-        diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()))
-        s = diffTime.seconds
-        if window.debug
-          console.log('loadedLocalTime diff ' + s)
-        if parseInt(s) <= @LOAD_LIST_INTERVAL_SECONDS
-          # 読み込んでX秒以内ならロードしない
-          return
-
-    loadEmt.children().remove()
-    $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt)
-
-    ServerStorage.get_load_data((data) ->
-      user_pagevalue_list = data
-      if user_pagevalue_list.length > 0
-        list = ''
-        n = $.now()
-        for p in user_pagevalue_list
-          d = new Date(p.updated_at)
-          e = "<li><a class='menu-item'>#{Common.displayDiffAlmostTime(n, d.getTime())} (#{Common.formatDate(d)})</a><input type='hidden' class='user_pagevalue_id' value=#{p.user_pagevalue_id}></li>"
-          list += e
-        loadEmt.children().remove()
-        $(list).appendTo(loadEmt)
-        # クリックイベント設定
-        loadEmt.find('li').click((e) ->
-          user_pagevalue_id = $(@).find('.user_pagevalue_id:first').val()
-          ServerStorage.load(user_pagevalue_id)
-        )
-
-        # ロード済みに変更 & 現在時間を記録
-        loadEmt.find(".#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
-        loadEmt.find(".#{ServerStorage.ElementAttribute.LOADED_LOCALTIME}").remove()
-        $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG} value='1'>").appendTo(loadEmt)
-        $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOADED_LOCALTIME} value=#{$.now()}>").appendTo(loadEmt)
-
-      else
-        loadEmt.children().remove()
-        $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt)
-    ,
-    ->
-      if window.debug
-        console.log(data.responseText)
-      loadEmt.children().remove()
-      $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt)
-    )
+  # 保存されているデータ一覧を取得してNavbarに一覧で表示
+  # FIXME: 現在未使用だが残しておく
+#  @get_load_list: ->
+#    loadEmt = $("##{Navbar.NAVBAR_ROOT}").find(".#{@ElementAttribute.FILE_LOAD_CLASS}")
+#    updateFlg = loadEmt.find(".#{@ElementAttribute.LOAD_LIST_UPDATED_FLG}").length > 0
+#    if updateFlg
+#      loadedLocalTime = loadEmt.find(".#{@ElementAttribute.LOADED_LOCALTIME}")
+#      if loadedLocalTime?
+#        diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()))
+#        s = diffTime.seconds
+#        if window.debug
+#          console.log('loadedLocalTime diff ' + s)
+#        if parseInt(s) <= @LOAD_LIST_INTERVAL_SECONDS
+#          # 読み込んでX秒以内ならロードしない
+#          return
+#
+#    loadEmt.children().remove()
+#    $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt)
+#
+#    ServerStorage.get_load_data((data) ->
+#      user_pagevalue_list = data
+#      if user_pagevalue_list.length > 0
+#        list = ''
+#        n = $.now()
+#        for p in user_pagevalue_list
+#          d = new Date(p.updated_at)
+#          e = "<li><a class='menu-item'>#{Common.displayDiffAlmostTime(n, d.getTime())} (#{Common.formatDate(d)})</a><input type='hidden' class='user_pagevalue_id' value=#{p.user_pagevalue_id}></li>"
+#          list += e
+#        loadEmt.children().remove()
+#        $(list).appendTo(loadEmt)
+#        # クリックイベント設定
+#        loadEmt.find('li').click((e) ->
+#          user_pagevalue_id = $(@).find('.user_pagevalue_id:first').val()
+#          ServerStorage.load(user_pagevalue_id)
+#        )
+#
+#        # ロード済みに変更 & 現在時間を記録
+#        loadEmt.find(".#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
+#        loadEmt.find(".#{ServerStorage.ElementAttribute.LOADED_LOCALTIME}").remove()
+#        $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG} value='1'>").appendTo(loadEmt)
+#        $("<input type='hidden' class=#{ServerStorage.ElementAttribute.LOADED_LOCALTIME} value=#{$.now()}>").appendTo(loadEmt)
+#
+#      else
+#        loadEmt.children().remove()
+#        $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt)
+#    ,
+#    ->
+#      if window.debug
+#        console.log(data.responseText)
+#      loadEmt.children().remove()
+#      $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt)
+#    )

@@ -11,11 +11,12 @@ $ ->
   if existedCache
     # キャッシュが存在する場合アイテム描画
     LocalStorage.loadAllPageValues()
-    Common.applyEnvironmentFromPagevalue()
 
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
+  # 環境設定
+  Common.applyEnvironmentFromPagevalue()
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
@@ -46,6 +47,6 @@ $ ->
     _callback.call(@)
 
     # 初期モーダル表示
-    Common.showModalView(Constant.ModalViewType.INIT_PROJECT, WorktableCommon.initProjectModal, false)
+    Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)
 
 

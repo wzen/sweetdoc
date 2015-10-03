@@ -87,7 +87,6 @@ class Const
   class ElementAttribute
     MAIN_TEMP_ID = 'main_temp'
     NAVBAR_ROOT = 'nav'
-    FILE_LOAD_CLASS = 'file_load'
     RUN_CSS = 'run_css_@pagenum'
   end
 

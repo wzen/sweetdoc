@@ -66,6 +66,15 @@ class Common
       $('#project_wrapper').removeAttr('style')
       PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
 
+    # Canvasサイズ更新
+    @updateCanvasSize()
+
+  # Canvasサイズ更新
+  @updateCanvasSize = ->
+    if window.mainWrapper? && window.drawingCanvas?
+      $(window.drawingCanvas).attr('width', window.mainWrapper.width())
+      $(window.drawingCanvas).attr('height', window.mainWrapper.height())
+
   # リサイズイベント設定
   @initResize = (resizeEvent = null) ->
     $(window).resize( ->

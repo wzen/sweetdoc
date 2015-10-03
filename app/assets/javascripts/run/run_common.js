@@ -39,8 +39,7 @@ RunCommon = (function() {
 
   RunCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
-    $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
-    return $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
+    return Common.updateCanvasSize();
   };
 
   RunCommon.resizeEvent = function() {
