@@ -62,7 +62,7 @@ class Navbar
 
     $('#menu_sidebar_toggle').off('click')
     $('#menu_sidebar_toggle').on('click', ->
-      Sidebar.switchSidebarConfig(Sidebar.Type.GENERAL)
+      Sidebar.switchSidebarConfig(Sidebar.Type.STATE)
       Sidebar.openConfigSidebar()
     )
 

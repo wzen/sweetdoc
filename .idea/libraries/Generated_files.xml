@@ -7,6 +7,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/state_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
@@ -36,7 +37,6 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/project.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
@@ -104,12 +104,14 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/modal_view.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/header/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/paging_guide/paging_guide_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/project.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/state_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
@@ -138,7 +140,6 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/project.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />

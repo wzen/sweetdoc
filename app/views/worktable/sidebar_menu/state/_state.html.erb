@@ -1,0 +1,35 @@
+<div id="<%= Const::StateConfig::ROOT_ID_NAME %>" class="sidebar-config" style="display: none">
+    <div class="config">
+        <div class="configBox">
+            <div class="settingedit-headliner"><%= I18n.t('config.state.page_num') %></div>
+            <div>
+                <!-- ページ番号 -->
+                <div style="display: table-cell">
+                    <%= I18n.t('config.state.page_num') %>: <span class="page_num"></span>
+                </div>
+            </div>
+        </div>
+        <div class="configBox">
+            <div class="settingedit-headliner"><%= I18n.t('config.state.display_position') %></div>
+            <div class="forms" style="display:table">
+                <!-- ワークテーブル座標 -->
+                <div style="display: table-cell">
+                    X: <input type="number" class="display_position_x" value="">
+                </div>
+                <div style="display: table-cell">
+                    Y: <input type="number" class="display_position_y" value="">
+                </div>
+            </div>
+        </div>
+        <div class="configBox">
+            <div class="settingedit-headliner"><%= I18n.t('config.state.created_item_list') %></div>
+            <div class="forms" style="display:table">
+                <div style="display: table-cell">
+                    <!-- 作成アイテム一覧 -->
+                    <ul class="created_item_list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

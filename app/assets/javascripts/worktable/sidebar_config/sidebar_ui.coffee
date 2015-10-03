@@ -1,7 +1,7 @@
 class Sidebar
 
   class @Type
-    @GENERAL = 'general'
+    @STATE = 'state'
     @CSS = 'css'
     @CANVAS = 'canvas'
     @TIMELINE = 'timeline'
@@ -55,7 +55,13 @@ class Sidebar
     animation = @isOpenedConfigSidebar()
     $('.sidebar-config').css('display', 'none')
 
-    if configType == @Type.CSS && item? && item.cssConfig?
+    if configType == @Type.STATE
+      sc = $("##{StateConfig.ROOT_ID_NAME}")
+      if animation
+        sc.show()
+      else
+        sc.css('display', '')
+    else if configType == @Type.CSS && item? && item.cssConfig?
       if animation
         item.cssConfig.show()
       else

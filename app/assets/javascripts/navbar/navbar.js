@@ -62,7 +62,7 @@ Navbar = (function() {
     });
     $('#menu_sidebar_toggle').off('click');
     return $('#menu_sidebar_toggle').on('click', function() {
-      Sidebar.switchSidebarConfig(Sidebar.Type.GENERAL);
+      Sidebar.switchSidebarConfig(Sidebar.Type.STATE);
       return Sidebar.openConfigSidebar();
     });
   };

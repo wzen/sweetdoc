@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "state_config.js",
+  "sourceRoot": "",
+  "sources": [
+    "state_config.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,WAAA;;AAAA;AACE,MAAA,QAAA;;2BAAA;;AAAA,EAAA,IAAG,0CAAH;AAEE,IAAA,QAAA,GAAW,GAAG,CAAC,OAAD,CAAd,CAAA;AAAA,IACA,WAAC,CAAA,YAAD,GAAgB,QAAQ,CAAC,OAAO,CAAC,YADjC,CAFF;GAAA;;AAAA,EAMA,WAAC,CAAA,UAAD,GAAc,SAAA,GAAA,CANd,CAAA;;qBAAA;;IADF,CAAA"
+}

@@ -30,6 +30,11 @@ ja:
     delete: "削除"
     edit: "編集"
   config:
+    state:
+      page_num: "ページ番号"
+      display_position: "表示位置"
+      zoom: "表示倍率"
+      created_item_list: "作成アイテム一覧"
     select_opt_group:
       common: "共通イベント"
       item: "アイテム"

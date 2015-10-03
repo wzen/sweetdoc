@@ -7,7 +7,7 @@ Sidebar = (function() {
   Sidebar.Type = (function() {
     function Type() {}
 
-    Type.GENERAL = 'general';
+    Type.STATE = 'state';
 
     Type.CSS = 'css';
 
@@ -79,7 +79,14 @@ Sidebar = (function() {
     }
     animation = this.isOpenedConfigSidebar();
     $('.sidebar-config').css('display', 'none');
-    if (configType === this.Type.CSS && (item != null) && (item.cssConfig != null)) {
+    if (configType === this.Type.STATE) {
+      sc = $("#" + StateConfig.ROOT_ID_NAME);
+      if (animation) {
+        return sc.show();
+      } else {
+        return sc.css('display', '');
+      }
+    } else if (configType === this.Type.CSS && (item != null) && (item.cssConfig != null)) {
       if (animation) {
         return item.cssConfig.show();
       } else {

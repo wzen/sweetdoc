@@ -51,6 +51,11 @@ en:
     delete: "Delete"
     edit: "Edit"
   config:
+    state:
+      page_num: "Page number"
+      display_position: "Display Position"
+      zoom: "Zoom rate"
+      created_item_list: "Created item's list"
     select_opt_group:
       common: "Common Event"
       item: "Item"

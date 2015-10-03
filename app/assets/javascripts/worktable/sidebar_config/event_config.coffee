@@ -1,6 +1,8 @@
 class EventConfig
 
   if gon?
+    # 定数
+    constant = gon.const
     # @property [String] TE_ITEM_ROOT_ID イベントRoot
     @ITEM_ROOT_ID = 'event_@te_num'
     # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ

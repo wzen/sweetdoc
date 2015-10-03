@@ -2,9 +2,10 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _getEventPageValueClass, _setApplyClickEvent, _setForkSelect, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues;
+  var _getEventPageValueClass, _setApplyClickEvent, _setForkSelect, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
   if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
     EventConfig.ITEM_ROOT_ID = 'event_@te_num';
     EventConfig.EVENT_ITEM_SEPERATOR = "&";
     EventConfig.COMMON_ACTION_CLASS = constant.EventConfig.COMMON_ACTION_CLASS;

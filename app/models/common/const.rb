@@ -152,6 +152,10 @@ class Const
     EF_MASTER_FORKNUM = 0
   end
 
+  class StateConfig
+    ROOT_ID_NAME = 'state-config'
+  end
+
   class Setting
     ROOT_ID_NAME = 'setting-config'
     GRID_CLASS_NAME = 'grid'
