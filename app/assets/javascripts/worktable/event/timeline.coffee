@@ -168,7 +168,7 @@ class Timeline
     # @param [Object] e 対象オブジェクト
     _initEventConfig = (e) ->
       # サイドメニューをタイムラインに切り替え
-      Sidebar.switchSidebarConfig("timeline")
+      Sidebar.switchSidebarConfig(Sidebar.Type.TIMELINE)
 
       te_num = $(e).find('input.te_num').val()
       eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)

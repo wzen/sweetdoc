@@ -1,5 +1,12 @@
 class Sidebar
 
+  class @Type
+    @GENERAL = 'general'
+    @CSS = 'css'
+    @CANVAS = 'canvas'
+    @TIMELINE = 'timeline'
+    @SETTING = 'setting'
+
   # サイドバーをオープン
   # @param [Array] target フォーカス対象オブジェクト
   # @param [String] selectedBorderType 選択枠タイプ
@@ -47,22 +54,23 @@ class Sidebar
   @switchSidebarConfig = (configType, item = null) ->
     animation = @isOpenedConfigSidebar()
     $('.sidebar-config').css('display', 'none')
-    if configType == "css" && item? && item.cssConfig?
+
+    if configType == @Type.CSS && item? && item.cssConfig?
       if animation
         item.cssConfig.show()
       else
         item.cssConfig.css('display', '')
-    else if configType == "canvas" && item? && item.canvasConfig?
+    else if configType == @Type.CANVAS && item? && item.canvasConfig?
       if animation
         item.canvasConfig.show()
       else
         item.canvasConfig.css('display', '')
-    else if configType == "timeline"
+    else if configType == @Type.TIMELINE
       if animation
         $('#event-config').show()
       else
         $('#event-config').css('display', '')
-    else if configType == 'setting'
+    else if configType == @Type.SETTING
       sc = $("##{Setting.ROOT_ID_NAME}")
       if animation
         sc.show()

@@ -29,7 +29,7 @@ class Navbar
     )
     $('.menu-setting', fileMenuEmt).off('click')
     $('.menu-setting', fileMenuEmt).on('click', ->
-      Sidebar.switchSidebarConfig('setting')
+      Sidebar.switchSidebarConfig(Sidebar.Type.SETTING)
       Setting.initConfig()
       Sidebar.openConfigSidebar()
     )
@@ -63,6 +63,12 @@ class Navbar
 
     $('#menu-action-edit').click( ->
       WorktableCommon.changeMode(Constant.Mode.EDIT)
+    )
+
+    $('#menu_sidebar_toggle').off('click')
+    $('#menu_sidebar_toggle').on('click', ->
+      Sidebar.switchSidebarConfig(Sidebar.Type.GENERAL)
+      Sidebar.openConfigSidebar()
     )
 
   # Runナビバー初期化

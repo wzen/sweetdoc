@@ -168,7 +168,7 @@ Timeline = (function() {
     };
     _initEventConfig = function(e) {
       var eId, emt, te_num;
-      Sidebar.switchSidebarConfig("timeline");
+      Sidebar.switchSidebarConfig(Sidebar.Type.TIMELINE);
       te_num = $(e).find('input.te_num').val();
       eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
       emt = $('#' + eId);

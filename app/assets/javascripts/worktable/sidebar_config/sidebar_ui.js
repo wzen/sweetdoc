@@ -4,6 +4,23 @@ var Sidebar, SidebarUI;
 Sidebar = (function() {
   function Sidebar() {}
 
+  Sidebar.Type = (function() {
+    function Type() {}
+
+    Type.GENERAL = 'general';
+
+    Type.CSS = 'css';
+
+    Type.CANVAS = 'canvas';
+
+    Type.TIMELINE = 'timeline';
+
+    Type.SETTING = 'setting';
+
+    return Type;
+
+  })();
+
   Sidebar.openConfigSidebar = function(target, selectedBorderType) {
     var main;
     if (target == null) {
@@ -62,25 +79,25 @@ Sidebar = (function() {
     }
     animation = this.isOpenedConfigSidebar();
     $('.sidebar-config').css('display', 'none');
-    if (configType === "css" && (item != null) && (item.cssConfig != null)) {
+    if (configType === this.Type.CSS && (item != null) && (item.cssConfig != null)) {
       if (animation) {
         return item.cssConfig.show();
       } else {
         return item.cssConfig.css('display', '');
       }
-    } else if (configType === "canvas" && (item != null) && (item.canvasConfig != null)) {
+    } else if (configType === this.Type.CANVAS && (item != null) && (item.canvasConfig != null)) {
       if (animation) {
         return item.canvasConfig.show();
       } else {
         return item.canvasConfig.css('display', '');
       }
-    } else if (configType === "timeline") {
+    } else if (configType === this.Type.TIMELINE) {
       if (animation) {
         return $('#event-config').show();
       } else {
         return $('#event-config').css('display', '');
       }
-    } else if (configType === 'setting') {
+    } else if (configType === this.Type.SETTING) {
       sc = $("#" + Setting.ROOT_ID_NAME);
       if (animation) {
         return sc.show();

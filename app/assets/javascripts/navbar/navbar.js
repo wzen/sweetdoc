@@ -33,7 +33,7 @@ Navbar = (function() {
     });
     $('.menu-setting', fileMenuEmt).off('click');
     $('.menu-setting', fileMenuEmt).on('click', function() {
-      Sidebar.switchSidebarConfig('setting');
+      Sidebar.switchSidebarConfig(Sidebar.Type.SETTING);
       Setting.initConfig();
       return Sidebar.openConfigSidebar();
     });
@@ -61,8 +61,13 @@ Navbar = (function() {
       selected = $(this).html();
       return $('#header_items_selected_menu_span').html(selected);
     });
-    return $('#menu-action-edit').click(function() {
+    $('#menu-action-edit').click(function() {
       return WorktableCommon.changeMode(Constant.Mode.EDIT);
+    });
+    $('#menu_sidebar_toggle').off('click');
+    return $('#menu_sidebar_toggle').on('click', function() {
+      Sidebar.switchSidebarConfig(Sidebar.Type.GENERAL);
+      return Sidebar.openConfigSidebar();
     });
   };
 
