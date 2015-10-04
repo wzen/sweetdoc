@@ -59,16 +59,12 @@ Project = (function() {
         });
         Navbar.setTitle(projectName);
         return Project.create(projectName, width, height, function() {
-          Common.initScreenSize();
-          Common.hideModalView();
-          return Common.updateScrollContentsFromPagevalue();
+          return Common.hideModalView();
         });
       } else {
         user_pagevalue_id = $('.project_select', modalEmt).val();
         return ServerStorage.load(user_pagevalue_id, function() {
-          Common.initScreenSize();
-          Common.hideModalView();
-          return Common.updateScrollContentsFromPagevalue();
+          return Common.hideModalView();
         });
       }
     });

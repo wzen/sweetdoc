@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150930235014) do
+ActiveRecord::Schema.define(version: 20151004155155) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -51,15 +51,13 @@ ActiveRecord::Schema.define(version: 20150930235014) do
 
   create_table "event_pagevalues", force: true do |t|
     t.text     "data"
-    t.integer  "retain",     default: 1,     null: false
     t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "galleries", force: true do |t|
-    t.integer  "user_id",                       null: false
-    t.string   "title"
+    t.string   "title",                         null: false
     t.text     "caption"
     t.binary   "thumbnail_img"
     t.integer  "screen_width",                  null: false
@@ -146,6 +144,22 @@ ActiveRecord::Schema.define(version: 20150930235014) do
     t.datetime "updated_at"
   end
 
+  create_table "general_pagevalue_pagings", force: true do |t|
+    t.integer  "user_pagevalue_id",                    null: false
+    t.integer  "page_num",                             null: false
+    t.integer  "general_pagevalue_id",                 null: false
+    t.boolean  "del_flg",              default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "general_pagevalues", force: true do |t|
+    t.text     "data"
+    t.boolean  "del_flg",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "instance_pagevalue_pagings", force: true do |t|
     t.integer  "user_pagevalue_id",                     null: false
     t.integer  "page_num",                              null: false
@@ -157,7 +171,6 @@ ActiveRecord::Schema.define(version: 20150930235014) do
 
   create_table "instance_pagevalues", force: true do |t|
     t.text     "data"
-    t.integer  "retain",     default: 1,     null: false
     t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -215,9 +228,9 @@ ActiveRecord::Schema.define(version: 20150930235014) do
   end
 
   create_table "project_gallery_maps", force: true do |t|
-    t.integer  "project_id",                 null: false
-    t.integer  "gallery_id",                 null: false
-    t.boolean  "del_flg",    default: false
+    t.integer  "user_project_map_id",                 null: false
+    t.integer  "gallery_id",                          null: false
+    t.boolean  "del_flg",             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

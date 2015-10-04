@@ -61,24 +61,17 @@ class Project
 
         # プロジェクト作成リクエスト
         Project.create(projectName, width, height, ->
-          Common.initScreenSize()
           # モーダルを削除
           Common.hideModalView()
-          # スクロール位置初期化
-          Common.updateScrollContentsFromPagevalue()
         )
       else
         # プロジェクト選択
         user_pagevalue_id = $('.project_select', modalEmt).val()
         ServerStorage.load(user_pagevalue_id, ->
-          Common.initScreenSize()
           # モーダルを削除
           Common.hideModalView()
-          # スクロール位置初期化
-          Common.updateScrollContentsFromPagevalue()
         )
     )
-
 
   @load_data: (successCallback = null, errorCallback = null) ->
     $.ajax(

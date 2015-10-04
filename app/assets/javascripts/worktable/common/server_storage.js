@@ -15,6 +15,8 @@ ServerStorage = (function() {
 
       Key.PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT;
 
+      Key.GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE;
+
       Key.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
 
       Key.EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE;
@@ -40,13 +42,23 @@ ServerStorage = (function() {
   }
 
   ServerStorage.save = function(callback) {
-    var data, event, eventPagevalues, instance, instancePagevalues, k, pageNum, v;
+    var data, event, eventPagevalues, general, generalPagevalues, instance, instancePagevalues, k, pageNum, v;
     if (callback == null) {
       callback = null;
     }
     data = {};
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
     data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
+    generalPagevalues = {};
+    general = PageValue.getInstancePageValue(PageValue.Key.G_PREFIX);
+    for (k in general) {
+      v = general[k];
+      if (k.indexOf(PageValue.Key.P_PREFIX) > 0) {
+        pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));
+        generalPagevalues[pageNum] = JSON.stringify(v);
+      }
+    }
+    data[this.Key.GENERAL_PAGE_VALUE] = Object.keys(generalPagevalues).length > 0 ? generalPagevalues : null;
     instancePagevalues = {};
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
     for (k in instance) {
@@ -105,30 +117,39 @@ ServerStorage = (function() {
         self = this;
         item_js_list = data.item_js_list;
         _callback = function() {
-          var d, k, ref, ref1, ref2, v;
+          var d, k, ref, ref1, ref2, ref3, v;
           WorktableCommon.removeAllItemOnWorkTable();
-          if (data.project_pagevalue_data != null) {
-            ref = data.project_pagevalue_data;
+          if (data.general_pagevalue_data != null) {
+            d = {};
+            ref = data.general_pagevalue_data;
             for (k in ref) {
               v = ref[k];
+              d[k] = JSON.parse(v);
+            }
+            PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, d);
+          }
+          if (data.project_pagevalue_data != null) {
+            ref1 = data.project_pagevalue_data;
+            for (k in ref1) {
+              v = ref1[k];
               PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
             }
             Navbar.setTitle(data.project_pagevalue_data.title);
           }
           if (data.instance_pagevalue_data != null) {
             d = {};
-            ref1 = data.instance_pagevalue_data;
-            for (k in ref1) {
-              v = ref1[k];
+            ref2 = data.instance_pagevalue_data;
+            for (k in ref2) {
+              v = ref2[k];
               d[k] = JSON.parse(v);
             }
             PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
           }
           if (data.event_pagevalue_data != null) {
             d = {};
-            ref2 = data.event_pagevalue_data;
-            for (k in ref2) {
-              v = ref2[k];
+            ref3 = data.event_pagevalue_data;
+            for (k in ref3) {
+              v = ref3[k];
               d[k] = JSON.parse(v);
             }
             PageValue.setEventPageValueByRootHash(d);
@@ -145,6 +166,7 @@ ServerStorage = (function() {
             PageValue.updatePageCount();
             PageValue.updateForkCount();
             Paging.initPaging();
+            Common.applyEnvironmentFromPagevalue();
             if (callback != null) {
               return callback();
             }

@@ -7,6 +7,7 @@ class ServerStorage
     class @Key
       @PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID
       @PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT
+      @GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE
       @INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE
       @EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE
       @SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE
@@ -24,7 +25,15 @@ class ServerStorage
     data = {}
     data[@Key.PAGE_COUNT] = parseInt(PageValue.getPageCount())
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
-    # FIXME: 差分保存 & バッチでフル保存するようにする
+
+    generalPagevalues = {}
+    general = PageValue.getInstancePageValue(PageValue.Key.G_PREFIX)
+    for k, v of general
+      if k.indexOf(PageValue.Key.P_PREFIX) > 0
+        pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
+        generalPagevalues[pageNum] = JSON.stringify(v)
+    data[@Key.GENERAL_PAGE_VALUE] = if Object.keys(generalPagevalues).length > 0 then generalPagevalues else null
+
     instancePagevalues = {}
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
     for k, v of instance
@@ -81,6 +90,11 @@ class ServerStorage
             WorktableCommon.removeAllItemOnWorkTable()
 
             # Pagevalue設置
+            if data.general_pagevalue_data?
+              d = {}
+              for k, v of data.general_pagevalue_data
+                d[k] = JSON.parse(v)
+              PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, d)
             if data.project_pagevalue_data?
               for k, v of data.project_pagevalue_data
                 PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
@@ -107,6 +121,7 @@ class ServerStorage
               PageValue.updatePageCount()
               PageValue.updateForkCount()
               Paging.initPaging()
+              Common.applyEnvironmentFromPagevalue()
               if callback?
                 callback()
             )

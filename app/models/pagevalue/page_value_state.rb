@@ -10,9 +10,12 @@ require 'pagevalue/user_pagevalue'
 require 'project/user_project_map'
 
 class PageValueState
-  def self.save_state(user_id, project_id, page_count, i_page_values, e_page_values, s_page_values)
+  def self.save_state(user_id, project_id, page_count, g_page_values, i_page_values, e_page_values, s_page_values)
     begin
-      if i_page_values != 'null' || e_page_values != 'null' || s_page_values != 'null'
+      if g_page_values != 'null' ||
+          i_page_values != 'null' ||
+          e_page_values != 'null' ||
+          s_page_values != 'null'
 
         ActiveRecord::Base.transaction do
 
@@ -42,6 +45,7 @@ class PageValueState
           end
 
           # PageValue保存
+          save_general_pagevalue(g_page_values, page_count, updated_user_pagevalue_id)
           save_instance_pagevalue(i_page_values, page_count, updated_user_pagevalue_id)
           save_event_pagevalue(e_page_values, page_count, updated_user_pagevalue_id)
 
@@ -73,12 +77,14 @@ class PageValueState
   def self.load_state(user_id, user_pagevalue_id, loaded_itemids)
     sql = <<-"SQL"
       SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
-             ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, sp.data as setting_pagevalue_data,
+             ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, gp.data as general_pagevalue_data,, sp.data as setting_pagevalue_data,
              ipp.page_num as page_num
       FROM user_pagevalues up
       LEFT JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
       INNER JOIN user_project_maps upm ON up.user_project_map_id = upm.id
       INNER JOIN projects p ON upm.project_id = p.id
+      LEFT JOIN general_pagevalue_pagings gpp ON up.id = gpp.user_pagevalue_id AND gpp.del_flg = 0
+      LEFT JOIN general_pagevalues gp ON gpp.general_pagevalue_id = gp.id AND gp.del_flg = 0
       LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
       LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
       LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
@@ -111,11 +117,15 @@ class PageValueState
       }
       spd = pagevalues.first['setting_pagevalue_data']
 
+      gpd = {}
       ipd = {}
       epd = {}
       itemids = []
       pagevalues.each do |pagevalue|
         key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
+        if pagevalue['general_pagevalue_data'] != nil
+          gpd[key] = pagevalue['general_pagevalue_data']
+        end
         if pagevalue['instance_pagevalue_data'] != nil
           ipd[key] = pagevalue['instance_pagevalue_data']
         end
@@ -137,7 +147,7 @@ class PageValueState
         end
       end
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-      return item_js_list, ppd, ipd, epd, spd, message
+      return item_js_list, ppd, gpd, ipd, epd, spd, message
     end
   end
 
@@ -153,7 +163,7 @@ class PageValueState
       FROM
       user_pagevalues up
       INNER JOIN
-      setting_pagevalues sp ON up.setting_pagevalue_id = sp.id
+      setting_pagevalues gp ON up.setting_pagevalue_id = gp.id
       INNER JOIN
       user_project_maps upm ON up.user_project_map_id = upm.id
       INNER JOIN
@@ -172,7 +182,7 @@ class PageValueState
       WHERE
       up.del_flg = 0
       AND
-      sp.del_flg = 0
+      gp.del_flg = 0
       AND
       upm.del_flg = 0
       AND
@@ -202,6 +212,45 @@ class PageValueState
     end
 
     return ret_id
+  end
+
+  def self.save_general_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
+    if save_value != 'null'
+      # 保存済みデータ取得
+      if update_user_pagevalue_id == nil
+        saved_record = []
+      else
+        saved_record = GeneralPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id)
+      end
+
+      # 新規データをInsert
+      (1..page_count).each do |page_num|
+        pagevalue = save_value[page_num.to_s]
+        select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+
+        if select_saved_record == nil
+          # 新規作成
+          ip = GeneralPagevalue.new({data: pagevalue})
+          ip.save!
+          ipp = GeneralPagevaluePaging.new({
+                                                user_pagevalue_id: update_user_pagevalue_id,
+                                                page_num: page_num,
+                                                general_pagevalue_id: ip.id
+                                            })
+          ipp.save!
+
+        else
+          # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
+          if pagevalue != nil
+            # 更新
+            general_pagevalue_id = select_saved_record['general_pagevalue_id']
+            ip = GeneralPagevalue.find(general_pagevalue_id)
+            ip.data = pagevalue
+            ip.save!
+          end
+        end
+      end
+    end
   end
 
   def self.save_instance_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
@@ -282,5 +331,5 @@ class PageValueState
     end
   end
 
-  private_class_method :last_user_pagevalue_search_sql, :save_setting_pagevalue, :save_instance_pagevalue, :save_event_pagevalue
+  private_class_method :last_user_pagevalue_search_sql, :save_general_pagevalue, :save_setting_pagevalue, :save_instance_pagevalue, :save_event_pagevalue
 end

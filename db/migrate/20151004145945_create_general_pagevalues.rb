@@ -1,6 +1,6 @@
-class CreateEventPagevalues < ActiveRecord::Migration
+class CreateGeneralPagevalues < ActiveRecord::Migration
   def change
-    create_table :event_pagevalues do |t|
+    create_table :general_pagevalues do |t|
       t.text :data
       t.boolean :del_flg, :default => false
 

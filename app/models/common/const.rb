@@ -168,6 +168,7 @@ class Const
     class Key
       PROJECT_ID = 'project_id'
       PAGE_COUNT = 'page_count'
+      GENERAL_PAGE_VALUE = 'g'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       SETTING_PAGE_VALUE = 's'
