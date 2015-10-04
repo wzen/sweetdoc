@@ -13,24 +13,49 @@ StateConfig = (function() {
   }
 
   StateConfig.initConfig = function() {
-    var createdItemList, items, k, results, rootEmt, temp, v;
+    var createdItemList, items, k, rootEmt, temp, v;
     rootEmt = $("#" + this.ROOT_ID_NAME);
     createdItemList = $('.created_item_list', rootEmt);
+    createdItemList.children().remove();
     items = PageValue.getCreatedItems();
     if (Object.keys(items).length > 0) {
       createdItemList.closest('.configBox').show();
-      results = [];
       for (k in items) {
         v = items[k];
         temp = $("." + this.ITEM_TEMP_CLASS_NAME, rootEmt).children(':first').clone(true);
+        temp.find('.item_obj_id').val(k);
         temp.find('.name').html(v.value.name);
         if (!$("#" + k).is(':visible')) {
-          temp.find('.visible').hide();
-          temp.find('.invisible').show();
+          temp.find('.item_visible').hide();
+          temp.find('.item_invisible').show();
         }
-        results.push(createdItemList.append(temp));
+        createdItemList.append(temp);
       }
-      return results;
+      $('a.item_edit', rootEmt).off('click');
+      $('a.item_edit', rootEmt).on('click', function() {
+        var objId;
+        objId = $(this).closest('.wrapper').find('.item_obj_id').val();
+        return Sidebar.openItemEditConfig($("#" + objId));
+      });
+      $('.item_visible > a, .item_invisible > a', rootEmt).off('click');
+      return $('.item_visible > a, .item_invisible > a', rootEmt).on('click', function(e) {
+        return StateConfig.clickToggleVisible(this);
+      });
+    }
+  };
+
+  StateConfig.clickToggleVisible = function(target) {
+    var emt, objId, parent;
+    objId = $(target).closest('.wrapper').find('.item_obj_id').val();
+    emt = $("#" + objId);
+    emt.toggle();
+    parent = $(target.closest('.buttons'));
+    if (emt.is(':visible')) {
+      parent.find('.item_visible').show();
+      return parent.find('.item_invisible').hide();
+    } else {
+      parent.find('.item_visible').hide();
+      return parent.find('.item_invisible').show();
     }
   };
 

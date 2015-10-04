@@ -182,14 +182,14 @@ div.scroll_inside {
     border-top: solid 1px #dedede;
     border-bottom: solid 1px #dedede;
   }
-  a {
-    color: #ffa800;
-    text-decoration: underline;
-    outline: 0;
-    &:hover {
-      color: #ffa800;
-    }
-  }
+  //a {
+  //  color: #ffa800;
+  //  text-decoration: underline;
+  //  outline: 0;
+  //  &:hover {
+  //    color: #ffa800;
+  //  }
+  //}
   #sidebar-wrapper ul#nav li#homeBtn {
     border-bottom: solid 5px #ffcc00;
   }
@@ -852,7 +852,7 @@ div#state-config {
     width: 100%;
   }
 
-  span.invisible {
+  span.item_invisible {
     display: none;
   }
 
@@ -862,9 +862,12 @@ div#state-config {
   }
 
   .wrapper {
-    width: 300px;
+    width: 100%;
 
     &:after {
+      display: table;
+      content: '';
+      line-height: 0;
       clear: both;
     }
 

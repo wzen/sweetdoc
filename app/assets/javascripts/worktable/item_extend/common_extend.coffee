@@ -53,26 +53,8 @@ WorkTableCommonExtend =
       else if ButtonItem? && self instanceof ButtonItem
         contextSelector = ".css3button"
       menu.push({title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
-        # オプションメニューを初期化
-        initOptionMenu = (event) ->
-          emt = $(event.target)
-          obj = instanceMap[emt.attr('id')]
-          if obj? && obj.setupOptionMenu?
-            # 初期化関数を呼び出す
-            obj.setupOptionMenu()
-          if obj? && obj.showOptionMenu?
-            # オプションメニュー表示処理
-            obj.showOptionMenu()
-
-        target = event.target
-        # カラーピッカー値を初期化
-        ColorPickerUtil.initColorPickerValue()
-        # オプションメニューの値を初期化
-        initOptionMenu(event)
-        # オプションメニューを表示
-        Sidebar.openConfigSidebar(target)
-        # モードを変更
-        WorktableCommon.changeMode(Constant.Mode.OPTION)
+        # アイテム編集
+        Sidebar.openItemEditConfig(event.target)
       })
       menu.push({title: I18n.t('context_menu.copy'), cmd: "copy", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # コピー

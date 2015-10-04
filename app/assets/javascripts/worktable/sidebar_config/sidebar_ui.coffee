@@ -52,36 +52,67 @@ class Sidebar
   # @param [String] configType コンフィグタイプ
   # @param [Object] item アイテムオブジェクト
   @switchSidebarConfig = (configType, item = null) ->
-    animation = @isOpenedConfigSidebar()
+    # FIXME: 未使用
+    #animation = @isOpenedConfigSidebar()
+    animation = false
     $('.sidebar-config').hide()
 
     if configType == @Type.STATE
       sc = $("##{StateConfig.ROOT_ID_NAME}")
       if animation
-        sc.show()
+        sc.show('fast')
       else
         sc.show()
     else if configType == @Type.CSS && item? && item.cssConfig?
       if animation
-        item.cssConfig.show('slow')
+        item.cssConfig.show('fast')
       else
         item.cssConfig.show()
     else if configType == @Type.CANVAS && item? && item.canvasConfig?
       if animation
-        item.canvasConfig.show('slow')
+        item.canvasConfig.show('fast')
       else
         item.canvasConfig.show()
     else if configType == @Type.TIMELINE
       if animation
-        $('#event-config').show('slow')
+        $('#event-config').show('fast')
       else
         $('#event-config').show()
     else if configType == @Type.SETTING
       sc = $("##{Setting.ROOT_ID_NAME}")
       if animation
-        sc.show('slow')
+        sc.show('fast')
       else
         sc.show()
+
+  # アイテム編集メニュー表示
+  @openItemEditConfig = (target) ->
+    emt = $(target)
+    obj = instanceMap[emt.attr('id')]
+
+    # オプションメニューを初期化
+    _initOptionMenu = ->
+      if obj? && obj.setupOptionMenu?
+        # 初期化関数を呼び出す
+        obj.setupOptionMenu()
+      if obj? && obj.showOptionMenu?
+        # オプションメニュー表示処理
+        obj.showOptionMenu()
+
+    # コンフィグ表示切り替え
+    if obj instanceof CssItemBase
+      @switchSidebarConfig(@Type.CSS)
+    else if obj instanceof CanvasItemBase
+      @switchSidebarConfig(@Type.CANVAS)
+
+    # カラーピッカー値を初期化
+    ColorPickerUtil.initColorPickerValue()
+    # オプションメニューの値を初期化
+    _initOptionMenu()
+    # オプションメニューを表示
+    @openConfigSidebar(target)
+    # モードを変更
+    WorktableCommon.changeMode(Constant.Mode.OPTION)
 
 class SidebarUI
 

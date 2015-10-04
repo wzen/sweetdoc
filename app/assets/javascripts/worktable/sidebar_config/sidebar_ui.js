@@ -77,41 +77,64 @@ Sidebar = (function() {
     if (item == null) {
       item = null;
     }
-    animation = this.isOpenedConfigSidebar();
+    animation = false;
     $('.sidebar-config').hide();
     if (configType === this.Type.STATE) {
       sc = $("#" + StateConfig.ROOT_ID_NAME);
       if (animation) {
-        return sc.show();
+        return sc.show('fast');
       } else {
         return sc.show();
       }
     } else if (configType === this.Type.CSS && (item != null) && (item.cssConfig != null)) {
       if (animation) {
-        return item.cssConfig.show('slow');
+        return item.cssConfig.show('fast');
       } else {
         return item.cssConfig.show();
       }
     } else if (configType === this.Type.CANVAS && (item != null) && (item.canvasConfig != null)) {
       if (animation) {
-        return item.canvasConfig.show('slow');
+        return item.canvasConfig.show('fast');
       } else {
         return item.canvasConfig.show();
       }
     } else if (configType === this.Type.TIMELINE) {
       if (animation) {
-        return $('#event-config').show('slow');
+        return $('#event-config').show('fast');
       } else {
         return $('#event-config').show();
       }
     } else if (configType === this.Type.SETTING) {
       sc = $("#" + Setting.ROOT_ID_NAME);
       if (animation) {
-        return sc.show('slow');
+        return sc.show('fast');
       } else {
         return sc.show();
       }
     }
+  };
+
+  Sidebar.openItemEditConfig = function(target) {
+    var _initOptionMenu, emt, obj;
+    emt = $(target);
+    obj = instanceMap[emt.attr('id')];
+    _initOptionMenu = function() {
+      if ((obj != null) && (obj.setupOptionMenu != null)) {
+        obj.setupOptionMenu();
+      }
+      if ((obj != null) && (obj.showOptionMenu != null)) {
+        return obj.showOptionMenu();
+      }
+    };
+    if (obj instanceof CssItemBase) {
+      this.switchSidebarConfig(this.Type.CSS);
+    } else if (obj instanceof CanvasItemBase) {
+      this.switchSidebarConfig(this.Type.CANVAS);
+    }
+    ColorPickerUtil.initColorPickerValue();
+    _initOptionMenu();
+    this.openConfigSidebar(target);
+    return WorktableCommon.changeMode(Constant.Mode.OPTION);
   };
 
   return Sidebar;

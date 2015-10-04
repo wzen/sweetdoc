@@ -13,14 +13,38 @@ class StateConfig
 
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
+    createdItemList.children().remove()
     items = PageValue.getCreatedItems()
     if Object.keys(items).length > 0
       createdItemList.closest('.configBox').show()
       for k, v of items
         temp = $(".#{@ITEM_TEMP_CLASS_NAME}", rootEmt).children(':first').clone(true)
+        temp.find('.item_obj_id').val(k)
         temp.find('.name').html(v.value.name)
         if !$("##{k}").is(':visible')
-          temp.find('.visible').hide()
-          temp.find('.invisible').show()
+          temp.find('.item_visible').hide()
+          temp.find('.item_invisible').show()
         createdItemList.append(temp)
 
+      $('a.item_edit', rootEmt).off('click')
+      $('a.item_edit', rootEmt).on('click', ->
+        objId = $(@).closest('.wrapper').find('.item_obj_id').val()
+        Sidebar.openItemEditConfig($("##{objId}"))
+      )
+
+      $('.item_visible > a, .item_invisible > a', rootEmt).off('click')
+      $('.item_visible > a, .item_invisible > a', rootEmt).on('click', (e) ->
+        StateConfig.clickToggleVisible(@)
+      )
+
+  @clickToggleVisible = (target) ->
+    objId = $(target).closest('.wrapper').find('.item_obj_id').val()
+    emt = $("##{objId}")
+    emt.toggle()
+    parent = $(target.closest('.buttons'))
+    if emt.is(':visible')
+      parent.find('.item_visible').show()
+      parent.find('.item_invisible').hide()
+    else
+      parent.find('.item_visible').hide()
+      parent.find('.item_invisible').show()

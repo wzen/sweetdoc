@@ -2,13 +2,20 @@
     <div class="wrapper">
         <div class="name"></div>
         <div class="buttons">
-            <%= image_tag("sidebar/state/edit.png", size:'10x10') %>
-            <span class="visible">
-                <%= image_tag("sidebar/state/eye_visible.png", size:'10x10') %>
+            <a class="item_edit">
+                <%= image_tag("sidebar/state/edit.png", size:'20x20') %>
+            </a>
+            <span class="item_visible">
+                <a>
+                    <%= image_tag("sidebar/state/eye_visible.png", size:'20x20') %>
+                </a>
             </span>
-            <span class="invisible">
-                <%= image_tag("sidebar/state/eye_invisible.png", size:'10x10') %>
+            <span class="item_invisible">
+                <a>
+                    <%= image_tag("sidebar/state/eye_invisible.png", size:'20x20') %>
+                </a>
             </span>
         </div>
+        <input class="item_obj_id" type="hidden" value="">
     </div>
 </div>

@@ -47,23 +47,7 @@ WorkTableCommonExtend = {
         cmd: "edit",
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
-          var initOptionMenu, target;
-          initOptionMenu = function(event) {
-            var emt, obj;
-            emt = $(event.target);
-            obj = instanceMap[emt.attr('id')];
-            if ((obj != null) && (obj.setupOptionMenu != null)) {
-              obj.setupOptionMenu();
-            }
-            if ((obj != null) && (obj.showOptionMenu != null)) {
-              return obj.showOptionMenu();
-            }
-          };
-          target = event.target;
-          ColorPickerUtil.initColorPickerValue();
-          initOptionMenu(event);
-          Sidebar.openConfigSidebar(target);
-          return WorktableCommon.changeMode(Constant.Mode.OPTION);
+          return Sidebar.openItemEditConfig(event.target);
         }
       });
       menu.push({
