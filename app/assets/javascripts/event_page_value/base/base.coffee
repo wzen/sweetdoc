@@ -127,7 +127,7 @@ class EventPageValueBase
               topEmt.children('.scroll_forward:first').prop("checked", forwardDirection.top)
             else
               topEmt.children('.scroll_forward:first').prop("checked", false)
-              topEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
+              topEmt.children('.scroll_forward:first').parent('label').hide()
           bottomEmt = handlerDiv.find('scroll_enabled_bottom:first')
           if bottomEmt?
             bottomEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.bottom)
@@ -135,7 +135,7 @@ class EventPageValueBase
               bottomEmt.children('.scroll_forward:first').prop("checked", forwardDirection.bottom)
             else
               bottomEmt.children('.scroll_forward:first').prop("checked", false)
-              bottomEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
+              bottomEmt.children('.scroll_forward:first').parent('label').hide()
           leftEmt = handlerDiv.find('scroll_enabled_left:first')
           if leftEmt?
             leftEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.left)
@@ -143,7 +143,7 @@ class EventPageValueBase
               leftEmt.children('.scroll_forward:first').prop("checked", forwardDirection.left)
             else
               leftEmt.children('.scroll_forward:first').prop("checked", false)
-              leftEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
+              leftEmt.children('.scroll_forward:first').parent('label').hide()
           rightEmt = handlerDiv.find('scroll_enabled_right:first')
           if rightEmt?
             rightEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.right)
@@ -151,7 +151,7 @@ class EventPageValueBase
               rightEmt.children('.scroll_forward:first').prop("checked", forwardDirection.right)
             else
               rightEmt.children('.scroll_forward:first').prop("checked", false)
-              rightEmt.children('.scroll_forward:first').parent('label').css('display', 'none')
+              rightEmt.children('.scroll_forward:first').parent('label').hide()
 
       else if eventConfig.actionType == Constant.ActionType.CLICK
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)

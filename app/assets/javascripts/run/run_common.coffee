@@ -307,7 +307,7 @@ class RunCommon
       li = @closest('li')
       $(li).append($("<div class='add_pop' style='display:none'><p>Add tag(click)</p></div>"))
       $('.add_pop', li).css({top: $(li).height(), left: $(li).width()})
-      $('.add_pop', li).css('display', 'block')
+      $('.add_pop', li).show()
     )
     tags.off('mouseleave')
     tags.on('mouseleave', (e) ->
@@ -331,7 +331,7 @@ class RunCommon
       # タグ削除
       @closest('li').remove()
       if $('.select_tag ul li', modalEmt).length < Constant.Gallery.TAG_MAX
-        $('.select_tag_input', modalEmt).css('display', 'block')
+        $('.select_tag_input', modalEmt).show()
     )
 
     # タグ マウスオーバーイベント
@@ -340,7 +340,7 @@ class RunCommon
       li = @closest('li')
       $(li).append($("<div class='delete_pop' style='display:none'><p>Delete tag(click)</p></div>"))
       $('.delete_pop', li).css({top: $(li).height(), left: $(li).width()})
-      $('.delete_pop', li).css('display', 'block')
+      $('.delete_pop', li).show()
     )
     $('a', ul).off('mouseleave')
     $('a', ul).on('mouseleave', (e) ->
@@ -349,7 +349,7 @@ class RunCommon
 
     if $('.select_tag ul li', modalEmt).length >= Constant.Gallery.TAG_MAX
       # タグ数が最大数になった場合, Inputを非表示
-      $('.select_tag_input', modalEmt).css('display', 'none')
+      $('.select_tag_input', modalEmt).hide()
 
   # ギャラリーアップロード
   @uploadGallery = (modalEmt, callback = null) ->

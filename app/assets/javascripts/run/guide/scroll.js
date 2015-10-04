@@ -28,10 +28,10 @@ ScrollGuide = (function(superClass) {
       emt = base.find('.guide_scroll_image_mac:first');
       if (forwardDirection.top && canForward) {
         emt.removeClass('reverse').addClass('forward');
-        base.css('display', 'block');
+        base.show();
       } else if (!forwardDirection.top && canReverse) {
         emt.removeClass('forward').addClass('reverse');
-        base.css('display', 'block');
+        base.show();
       }
     }
     if (enableDirection.bottom) {
@@ -39,10 +39,10 @@ ScrollGuide = (function(superClass) {
       emt = base.find('.guide_scroll_image_mac:first');
       if (forwardDirection.bottom && canForward) {
         emt.removeClass('reverse').addClass('forward');
-        base.css('display', 'block');
+        base.show();
       } else if (!forwardDirection.bottom && canReverse) {
         emt.removeClass('forward').addClass('reverse');
-        base.css('display', 'block');
+        base.show();
       }
     }
     if (enableDirection.left) {
@@ -50,10 +50,10 @@ ScrollGuide = (function(superClass) {
       emt = base.find('.guide_scroll_image_mac:first');
       if (forwardDirection.left && canForward) {
         emt.removeClass('reverse').addClass('forward');
-        base.css('display', 'block');
+        base.show();
       } else if (!forwardDirection.left && canReverse) {
         emt.removeClass('forward').addClass('reverse');
-        base.css('display', 'block');
+        base.show();
       }
     }
     if (enableDirection.right) {
@@ -61,19 +61,19 @@ ScrollGuide = (function(superClass) {
       emt = base.find('.guide_scroll_image_mac:first');
       if (forwardDirection.right && canForward) {
         emt.removeClass('reverse').addClass('forward');
-        return base.css('display', 'block');
+        return base.show();
       } else if (!forwardDirection.right && canReverse) {
         emt.removeClass('forward').addClass('reverse');
-        return base.css('display', 'block');
+        return base.show();
       }
     }
   };
 
   ScrollGuide.hideGuide = function() {
-    $("#" + this.TOP_ROOT_ID).css('display', 'none');
-    $("#" + this.BOTTOM_ROOT_ID).css('display', 'none');
-    $("#" + this.LEFT_ROOT_ID).css('display', 'none');
-    return $("#" + this.RIGHT_ROOT_ID).css('display', 'none');
+    $("#" + this.TOP_ROOT_ID).hide();
+    $("#" + this.BOTTOM_ROOT_ID).hide();
+    $("#" + this.LEFT_ROOT_ID).hide();
+    return $("#" + this.RIGHT_ROOT_ID).hide();
   };
 
   return ScrollGuide;

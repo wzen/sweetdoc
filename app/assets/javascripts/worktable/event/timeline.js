@@ -178,8 +178,8 @@ Timeline = (function() {
       }
       self.updateSelectItemMenu();
       self.setupTimelineEventHandler(te_num);
-      $('#event-config .event').css('display', 'none');
-      emt.css('display', '');
+      $('#event-config .event').hide();
+      emt.show();
       return Sidebar.openConfigSidebar();
     };
     return _setupTimelineEvent.call(self);

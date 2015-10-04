@@ -52,18 +52,18 @@ class Setting
 
         # グリッド間隔の有効無効を切り替え
         if !gridValue
-          gridStepDiv.css('display', '')
+          gridStepDiv.show()
         else
-          gridStepDiv.css('display', 'none')
+          gridStepDiv.hide()
 
         @drawGrid(!gridValue)
       )
 
       # グリッド間隔の有効無効を切り替え
       if gridValue
-        gridStepDiv.css('display', '')
+        gridStepDiv.show()
       else
-        gridStepDiv.css('display', 'none')
+        gridStepDiv.hide()
 
       # グリッド間隔
       key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"

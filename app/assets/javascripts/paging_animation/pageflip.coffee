@@ -42,7 +42,7 @@ class PageFlip
 
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
     section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-    section.css('display', '')
+    section.show()
     if @direction == PageFlip.DIRECTION.FORWARD
       section.css('width', '')
     else if @direction == PageFlip.DIRECTION.BACK

@@ -21,7 +21,7 @@ Indicator = (function() {
       rootEmt = $('#timeline_events_container');
     }
     if (rootEmt != null) {
-      temp = $('.indicator_overlay_temp').clone(true).attr('class', 'indicator_overlay').css('display', 'block');
+      temp = $('.indicator_overlay_temp').clone(true).attr('class', 'indicator_overlay').show();
       rootEmt.append(temp);
       $('.indicator_overlay', rootEmt).off('click');
       return $('.indicator_overlay', rootEmt).on('click', function() {

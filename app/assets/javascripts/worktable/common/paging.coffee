@@ -85,10 +85,10 @@ class Paging
   # 表示ページ切り替え
   # @param [Integer] pageNum 変更ページ番号
   @switchSectionDisplay: (pageNum) ->
-    $("##{Constant.Paging.ROOT_ID}").find(".section").css('display', 'none')
+    $("##{Constant.Paging.ROOT_ID}").find(".section").hide()
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-    section.css('display', '')
+    section.show()
 
   # ページ追加作成
   @createNewPage: ->
@@ -122,7 +122,7 @@ class Paging
         pageFlip.startRender( ->
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
           section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-          section.css('display', 'none')
+          section.hide()
           Common.removeAllItem(beforePageNum)
           Timeline.refreshAllTimeline()
           # ページ総数 & フォーク総数の更新
@@ -196,7 +196,7 @@ class Paging
             # 隠したビューを非表示にする
             className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
             section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-            section.css('display', 'none')
+            section.hide()
             if window.debug
               console.log('[selectPage] deleted pageNum:' + beforePageNum)
             # 隠したビューのアイテムを削除

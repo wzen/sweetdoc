@@ -7,7 +7,7 @@ WorkTableCanvasItemExtend = {
     if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
       this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
       this.designConfigRoot.removeClass('design_temp');
-      this.designConfigRoot.find('.canvas-config').css('display', '');
+      this.designConfigRoot.find('.canvas-config').show();
       this.designConfigRoot.find('.css-config').remove();
       return $('#design-config').append(this.designConfigRoot);
     }

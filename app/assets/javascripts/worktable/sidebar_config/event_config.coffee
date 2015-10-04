@@ -59,7 +59,7 @@ class EventConfig
       # デフォルト選択時
       if value == ""
         # 非表示にする
-        $(".config.te_div", @emt).css('display', 'none')
+        $(".config.te_div", @emt).hide()
         return
 
       @isCommonEvent = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) == 0
@@ -81,8 +81,8 @@ class EventConfig
       Common.focusToTarget(vEmt)
 
     # 一度全て非表示にする
-    $(".config.te_div", @emt).css('display', 'none')
-    $(".action_div .forms", @emt).children("div").css('display', 'none')
+    $(".config.te_div", @emt).hide()
+    $(".action_div .forms", @emt).children("div").hide()
 
     # 表示
     displayClassName = ''
@@ -90,8 +90,8 @@ class EventConfig
       displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @commonEventId)
     else
       displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
-    $(".#{displayClassName}", @emt).css('display', '')
-    $(".action_div", @emt).css('display', '')
+    $(".#{displayClassName}", @emt).show()
+    $(".action_div", @emt).show()
 
     _setMethodActionEvent.call(@)
 
@@ -117,15 +117,15 @@ class EventConfig
       beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
       if @actionType == beforeActionType
         # 前のイベントと同じアクションタイプの場合は同時実行を表示
-        $(".config.parallel_div", @emt).css('display', '')
+        $(".config.parallel_div", @emt).show()
 
-    $(".handler_div .configBox", @emt).children("div").css('display', 'none')
-    $(".handler_div .#{handlerClassName}", @emt).css('display', '')
-    $(".config.handler_div", @emt).css('display', '')
+    $(".handler_div .configBox", @emt).children("div").hide()
+    $(".handler_div .#{handlerClassName}", @emt).show()
+    $(".config.handler_div", @emt).show()
 
-    $(".value_forms", @emt).children("div").css('display', 'none')
-    $(".value_forms .#{valueClassName}", @emt).css('display', '')
-    $(".config.values_div", @emt).css('display', '')
+    $(".value_forms", @emt).children("div").hide()
+    $(".value_forms .#{valueClassName}", @emt).show()
+    $(".config.values_div", @emt).show()
 
     if e?
       # 初期化
@@ -240,13 +240,13 @@ class EventConfig
   showError: (message)->
     eventConfigError = $('.event_config_error', @emt)
     eventConfigError.find('p').html(message)
-    eventConfigError.css('display', '')
+    eventConfigError.show()
 
   # エラー非表示
   clearError: ->
     eventConfigError = $('.event_config_error', @emt)
     eventConfigError.find('p').html('')
-    eventConfigError.css('display', 'none')
+    eventConfigError.hide()
 
   # 対応するEventPageValueクラスを取得
   # @return [Class] EventPageValueクラス
@@ -277,10 +277,10 @@ class EventConfig
     $('.scroll_enabled', handler).off('click')
     $('.scroll_enabled', handler).on('click', (e) ->
       if $(@).is(':checked')
-        $(@).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').css('display', 'block')
+        $(@).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').show()
       else
         emt = $(@).closest('.scroll_enabled_wrapper').find('.scroll_forward:first')
-        emt.parent('label').css('display', 'none')
+        emt.parent('label').hide()
         emt.prop('checked', false)
     )
 
@@ -308,13 +308,13 @@ class EventConfig
         $('.fork_select', handler).children().remove()
         $('.fork_select', handler).append($(selectOptions))
         # Fork表示
-        $('.fork_handler_wrapper', handler).css('display', 'block')
+        $('.fork_handler_wrapper', handler).show()
       else
         # 選択肢が無い場合、Fork非表示
-        $('.fork_handler_wrapper', handler).css('display', 'none')
+        $('.fork_handler_wrapper', handler).hide()
     else
       # Fork非表示
-      $('.fork_handler_wrapper', handler).css('display', 'none')
+      $('.fork_handler_wrapper', handler).hide()
 
   _setApplyClickEvent = ->
     self = @
@@ -345,7 +345,7 @@ class EventConfig
       e = $(@).closest('.event')
       $('.values', e).html('')
       Sidebar.closeSidebar( ->
-        $(".config.te_div", e).css('display', 'none')
+        $(".config.te_div", e).hide()
       )
     )
 

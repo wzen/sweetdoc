@@ -138,7 +138,7 @@ EventPageValueBase = (function() {
               topEmt.children('.scroll_forward:first').prop("checked", forwardDirection.top);
             } else {
               topEmt.children('.scroll_forward:first').prop("checked", false);
-              topEmt.children('.scroll_forward:first').parent('label').css('display', 'none');
+              topEmt.children('.scroll_forward:first').parent('label').hide();
             }
           }
           bottomEmt = handlerDiv.find('scroll_enabled_bottom:first');
@@ -148,7 +148,7 @@ EventPageValueBase = (function() {
               bottomEmt.children('.scroll_forward:first').prop("checked", forwardDirection.bottom);
             } else {
               bottomEmt.children('.scroll_forward:first').prop("checked", false);
-              bottomEmt.children('.scroll_forward:first').parent('label').css('display', 'none');
+              bottomEmt.children('.scroll_forward:first').parent('label').hide();
             }
           }
           leftEmt = handlerDiv.find('scroll_enabled_left:first');
@@ -158,7 +158,7 @@ EventPageValueBase = (function() {
               leftEmt.children('.scroll_forward:first').prop("checked", forwardDirection.left);
             } else {
               leftEmt.children('.scroll_forward:first').prop("checked", false);
-              leftEmt.children('.scroll_forward:first').parent('label').css('display', 'none');
+              leftEmt.children('.scroll_forward:first').parent('label').hide();
             }
           }
           rightEmt = handlerDiv.find('scroll_enabled_right:first');
@@ -168,7 +168,7 @@ EventPageValueBase = (function() {
               rightEmt.children('.scroll_forward:first').prop("checked", forwardDirection.right);
             } else {
               rightEmt.children('.scroll_forward:first').prop("checked", false);
-              rightEmt.children('.scroll_forward:first').parent('label').css('display', 'none');
+              rightEmt.children('.scroll_forward:first').parent('label').hide();
             }
           }
         }

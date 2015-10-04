@@ -486,10 +486,10 @@ Common = (function() {
         prepareShowFunc(emt);
       }
       $("body").append('<div id="modal-overlay"></div>');
-      $("#modal-overlay").css('display', 'block');
+      $("#modal-overlay").show();
       Common.modalCentering.call(this);
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
-      emt.css('display', 'block');
+      emt.show();
       return $("#modal-overlay,#modal-close").unbind().click(function() {
         if (enableOverlayClose) {
           return Common.hideModalView();
@@ -535,7 +535,7 @@ Common = (function() {
   };
 
   Common.hideModalView = function() {
-    $(".modal-content,#modal-overlay").css('display', 'none');
+    $(".modal-content,#modal-overlay").hide();
     return $('#modal-overlay').remove();
   };
 

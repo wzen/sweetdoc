@@ -27,7 +27,7 @@ ArrowPagingGuide = (function() {
       this.canvas = document.getElementById('arrow_paging_guide_canvas');
       this.context = this.canvas.getContext('2d');
     }
-    return $('#arrow_paging_guide').css('display', 'block');
+    return $('#arrow_paging_guide').show();
   };
 
   _moveBackground = function() {
@@ -76,7 +76,7 @@ ArrowPagingGuide = (function() {
             _this.finishedScrollDistSum = 0;
             clearInterval(_this.intervalTimer);
             _this.intervalTimer = null;
-            return $('#arrow_paging_guide').css('display', 'none');
+            return $('#arrow_paging_guide').hide();
           }
         }, 10);
       };

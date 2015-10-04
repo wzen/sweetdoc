@@ -25,7 +25,7 @@ class ArrowPagingGuide
       @canvas = document.getElementById('arrow_paging_guide_canvas')
       @context = @canvas.getContext('2d')
 
-    $('#arrow_paging_guide').css('display', 'block')
+    $('#arrow_paging_guide').show()
 
   _moveBackground = ->
     x = ArrowPagingGuide.CANVAS_WIDTH * @finishedScrollDistSum / ArrowPagingGuide.PAGE_CHANGE_SCROLL_DIST
@@ -74,7 +74,7 @@ class ArrowPagingGuide
           @finishedScrollDistSum = 0
           clearInterval(@intervalTimer)
           @intervalTimer = null
-          $('#arrow_paging_guide').css('display', 'none')
+          $('#arrow_paging_guide').hide()
       , 10)
     , 200)
     @finishedScrollDistSum += x + y

@@ -121,7 +121,7 @@ class EventAction
           # 隠したビューを非表示にする
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
           section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-          section.css('display', 'none')
+          section.hide()
           # 隠したビューのアイテムを削除
           Common.removeAllItem(beforePageNum)
           # CSS削除

@@ -35,7 +35,7 @@ class Sidebar
         WorktableCommon.resizeMainContainerEvent()
         if callback?
           callback()
-        $('.sidebar-config').css('display', 'none')
+        $('.sidebar-config').hide()
       )
 
   # サイドバーがオープンしているか
@@ -53,35 +53,35 @@ class Sidebar
   # @param [Object] item アイテムオブジェクト
   @switchSidebarConfig = (configType, item = null) ->
     animation = @isOpenedConfigSidebar()
-    $('.sidebar-config').css('display', 'none')
+    $('.sidebar-config').hide()
 
     if configType == @Type.STATE
       sc = $("##{StateConfig.ROOT_ID_NAME}")
       if animation
         sc.show()
       else
-        sc.css('display', '')
+        sc.show()
     else if configType == @Type.CSS && item? && item.cssConfig?
       if animation
-        item.cssConfig.show()
+        item.cssConfig.show('slow')
       else
-        item.cssConfig.css('display', '')
+        item.cssConfig.show()
     else if configType == @Type.CANVAS && item? && item.canvasConfig?
       if animation
-        item.canvasConfig.show()
+        item.canvasConfig.show('slow')
       else
-        item.canvasConfig.css('display', '')
+        item.canvasConfig.show()
     else if configType == @Type.TIMELINE
       if animation
-        $('#event-config').show()
+        $('#event-config').show('slow')
       else
-        $('#event-config').css('display', '')
+        $('#event-config').show()
     else if configType == @Type.SETTING
       sc = $("##{Setting.ROOT_ID_NAME}")
       if animation
-        sc.show()
+        sc.show('slow')
       else
-        sc.css('display', '')
+        sc.show()
 
 class SidebarUI
 
@@ -147,9 +147,9 @@ class SidebarUI
 
     handleElement = element.children('.ui-slider-handle')
     if values == null
-      handleElement.css('display', 'none')
+      handleElement.hide()
     else
-      handleElement.css('display', '')
+      handleElement.show()
 
   # グラデーションスライダーの作成
   # @param [Int] id HTML要素のID
@@ -225,9 +225,9 @@ class SidebarUI
     for i in [2 .. 4]
       element = $('.btn-bg-color' + i, cssConfig)
       if i > gradientStepValue - 1
-        element.css('display', 'none')
+        element.hide()
       else
-        element.css('display', '')
+        element.show()
 
   _reflectStyle = (eventTarget) ->
     prefix = ItemBase.DESIGN_CONFIG_ROOT_ID.replace('@id', '')

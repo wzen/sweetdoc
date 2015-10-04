@@ -322,7 +322,7 @@ RunCommon = (function() {
         top: $(li).height(),
         left: $(li).width()
       });
-      return $('.add_pop', li).css('display', 'block');
+      return $('.add_pop', li).show();
     });
     tags.off('mouseleave');
     return tags.on('mouseleave', function(e) {
@@ -346,7 +346,7 @@ RunCommon = (function() {
     $('a', ul).on('click', function(e) {
       this.closest('li').remove();
       if ($('.select_tag ul li', modalEmt).length < Constant.Gallery.TAG_MAX) {
-        return $('.select_tag_input', modalEmt).css('display', 'block');
+        return $('.select_tag_input', modalEmt).show();
       }
     });
     $('a', ul).off('mouseenter');
@@ -358,14 +358,14 @@ RunCommon = (function() {
         top: $(li).height(),
         left: $(li).width()
       });
-      return $('.delete_pop', li).css('display', 'block');
+      return $('.delete_pop', li).show();
     });
     $('a', ul).off('mouseleave');
     $('a', ul).on('mouseleave', function(e) {
       return $('li .delete_pop', ul).remove();
     });
     if ($('.select_tag ul li', modalEmt).length >= Constant.Gallery.TAG_MAX) {
-      return $('.select_tag_input', modalEmt).css('display', 'none');
+      return $('.select_tag_input', modalEmt).hide();
     }
   };
 

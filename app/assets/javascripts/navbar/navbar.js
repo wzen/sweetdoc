@@ -154,7 +154,7 @@ Navbar = (function() {
       return e.closest('li').css('display', num > 0 ? 'block' : 'none');
     } else {
       e.html('');
-      return e.closest('li').css('display', 'none');
+      return e.closest('li').hide();
     }
   };
 

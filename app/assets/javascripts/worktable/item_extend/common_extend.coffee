@@ -36,10 +36,10 @@ WorkTableCommonExtend =
   showOptionMenu: ->
     # 全てのサイドバーを非表示
     sc = $('.sidebar-config')
-    sc.css('display', 'none')
-    $(".#{SidebarUI.DESIGN_ROOT_CLASSNAME}", sc).css('display', 'none')
-    $('#design-config').css('display', '')
-    $('#' + @getDesignConfigId()).css('display', '')
+    sc.hide()
+    $(".#{SidebarUI.DESIGN_ROOT_CLASSNAME}", sc).hide()
+    $('#design-config').show()
+    $('#' + @getDesignConfigId()).show()
 
   # アイテムに対してドラッグ&リサイズイベントを設定する
   setupDragAndResizeEvents: ->

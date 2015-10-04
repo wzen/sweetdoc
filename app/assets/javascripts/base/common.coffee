@@ -432,12 +432,12 @@ class Common
       if prepareShowFunc?
         prepareShowFunc(emt)
       $("body").append( '<div id="modal-overlay"></div>' )
-      $("#modal-overlay").css('display', 'block')
+      $("#modal-overlay").show()
       # センタリング
       Common.modalCentering.call(@)
       # ビューの高さ
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
-      emt.css('display', 'block')
+      emt.show()
       $("#modal-overlay,#modal-close").unbind().click( ->
         if enableOverlayClose
           Common.hideModalView()
@@ -478,7 +478,7 @@ class Common
 
   # モーダル非表示
   @hideModalView = ->
-    $(".modal-content,#modal-overlay").css('display', 'none')
+    $(".modal-content,#modal-overlay").hide()
     $('#modal-overlay').remove()
 
   # Zindexにページ分のZindexを加算

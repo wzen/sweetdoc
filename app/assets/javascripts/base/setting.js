@@ -73,17 +73,17 @@ Setting = (function() {
             gridValue = gridValue === 'true';
           }
           if (!gridValue) {
-            gridStepDiv.css('display', '');
+            gridStepDiv.show();
           } else {
-            gridStepDiv.css('display', 'none');
+            gridStepDiv.hide();
           }
           return _this.drawGrid(!gridValue);
         };
       })(this));
       if (gridValue) {
-        gridStepDiv.css('display', '');
+        gridStepDiv.show();
       } else {
-        gridStepDiv.css('display', 'none');
+        gridStepDiv.hide();
       }
       key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
       gridStepValue = PageValue.getSettingPageValue(key);

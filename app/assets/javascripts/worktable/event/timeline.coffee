@@ -185,8 +185,8 @@ class Timeline
       self.setupTimelineEventHandler(te_num)
 
       # イベントメニューの表示
-      $('#event-config .event').css('display', 'none')
-      emt.css('display', '')
+      $('#event-config .event').hide()
+      emt.show()
 
       # サイドバー表示
       Sidebar.openConfigSidebar()

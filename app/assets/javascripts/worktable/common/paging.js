@@ -76,10 +76,10 @@ Paging = (function() {
 
   Paging.switchSectionDisplay = function(pageNum) {
     var className, section;
-    $("#" + Constant.Paging.ROOT_ID).find(".section").css('display', 'none');
+    $("#" + Constant.Paging.ROOT_ID).find(".section").hide();
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-    return section.css('display', '');
+    return section.show();
   };
 
   Paging.createNewPage = function() {
@@ -105,7 +105,7 @@ Paging = (function() {
           var className, section;
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
           section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-          section.css('display', 'none');
+          section.hide();
           Common.removeAllItem(beforePageNum);
           Timeline.refreshAllTimeline();
           PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
@@ -169,7 +169,7 @@ Paging = (function() {
             var className, section;
             className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
             section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-            section.css('display', 'none');
+            section.hide();
             if (window.debug) {
               console.log('[selectPage] deleted pageNum:' + beforePageNum);
             }

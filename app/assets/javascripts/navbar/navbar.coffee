@@ -145,7 +145,7 @@ class Navbar
       e.closest('li').css('display', if num > 0 then 'block' else 'none')
     else
       e.html('')
-      e.closest('li').css('display', 'none')
+      e.closest('li').hide()
 
   # 保存されているデータ一覧を取得してNavbarに一覧で表示
   # FIXME: 現在未使用だが残しておく

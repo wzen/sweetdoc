@@ -56,7 +56,7 @@ EventConfig = (function() {
     if (e != null) {
       value = $(e).val();
       if (value === "") {
-        $(".config.te_div", this.emt).css('display', 'none');
+        $(".config.te_div", this.emt).hide();
         return;
       }
       this.isCommonEvent = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) === 0;
@@ -74,16 +74,16 @@ EventConfig = (function() {
       WorktableCommon.setSelectedBorder(vEmt, 'timeline');
       Common.focusToTarget(vEmt);
     }
-    $(".config.te_div", this.emt).css('display', 'none');
-    $(".action_div .forms", this.emt).children("div").css('display', 'none');
+    $(".config.te_div", this.emt).hide();
+    $(".action_div .forms", this.emt).children("div").hide();
     displayClassName = '';
     if (this.isCommonEvent) {
       displayClassName = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this.commonEventId);
     } else {
       displayClassName = this.constructor.ITEM_ACTION_CLASS.replace('@itemid', this.itemId);
     }
-    $("." + displayClassName, this.emt).css('display', '');
-    $(".action_div", this.emt).css('display', '');
+    $("." + displayClassName, this.emt).show();
+    $(".action_div", this.emt).show();
     _setMethodActionEvent.call(this);
     if (e != null) {
       checkedRadioButton = $(".action_forms input:radio[name='" + displayClassName + "']:checked", this.emt);
@@ -109,15 +109,15 @@ EventConfig = (function() {
     if (this.teNum > 1) {
       beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
       if (this.actionType === beforeActionType) {
-        $(".config.parallel_div", this.emt).css('display', '');
+        $(".config.parallel_div", this.emt).show();
       }
     }
-    $(".handler_div .configBox", this.emt).children("div").css('display', 'none');
-    $(".handler_div ." + handlerClassName, this.emt).css('display', '');
-    $(".config.handler_div", this.emt).css('display', '');
-    $(".value_forms", this.emt).children("div").css('display', 'none');
-    $(".value_forms ." + valueClassName, this.emt).css('display', '');
-    $(".config.values_div", this.emt).css('display', '');
+    $(".handler_div .configBox", this.emt).children("div").hide();
+    $(".handler_div ." + handlerClassName, this.emt).show();
+    $(".config.handler_div", this.emt).show();
+    $(".value_forms", this.emt).children("div").hide();
+    $(".value_forms ." + valueClassName, this.emt).show();
+    $(".config.values_div", this.emt).show();
     if (e != null) {
       tle = _getEventPageValueClass.call(this);
       if ((tle != null) && (tle.initConfigValue != null)) {
@@ -232,14 +232,14 @@ EventConfig = (function() {
     var eventConfigError;
     eventConfigError = $('.event_config_error', this.emt);
     eventConfigError.find('p').html(message);
-    return eventConfigError.css('display', '');
+    return eventConfigError.show();
   };
 
   EventConfig.prototype.clearError = function() {
     var eventConfigError;
     eventConfigError = $('.event_config_error', this.emt);
     eventConfigError.find('p').html('');
-    return eventConfigError.css('display', 'none');
+    return eventConfigError.hide();
   };
 
   _getEventPageValueClass = function() {
@@ -276,10 +276,10 @@ EventConfig = (function() {
     return $('.scroll_enabled', handler).on('click', function(e) {
       var emt;
       if ($(this).is(':checked')) {
-        return $(this).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').css('display', 'block');
+        return $(this).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').show();
       } else {
         emt = $(this).closest('.scroll_enabled_wrapper').find('.scroll_forward:first');
-        emt.parent('label').css('display', 'none');
+        emt.parent('label').hide();
         return emt.prop('checked', false);
       }
     });
@@ -307,12 +307,12 @@ EventConfig = (function() {
       if (selectOptions.length > 0) {
         $('.fork_select', handler).children().remove();
         $('.fork_select', handler).append($(selectOptions));
-        return $('.fork_handler_wrapper', handler).css('display', 'block');
+        return $('.fork_handler_wrapper', handler).show();
       } else {
-        return $('.fork_handler_wrapper', handler).css('display', 'none');
+        return $('.fork_handler_wrapper', handler).hide();
       }
     } else {
-      return $('.fork_handler_wrapper', handler).css('display', 'none');
+      return $('.fork_handler_wrapper', handler).hide();
     }
   };
 
@@ -339,7 +339,7 @@ EventConfig = (function() {
       e = $(this).closest('.event');
       $('.values', e).html('');
       return Sidebar.closeSidebar(function() {
-        return $(".config.te_div", e).css('display', 'none');
+        return $(".config.te_div", e).hide();
       });
     });
   };

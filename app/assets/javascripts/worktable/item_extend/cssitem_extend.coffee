@@ -7,7 +7,7 @@ WorkTableCssItemExtend =
       @designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', @getDesignConfigId())
       @designConfigRoot.removeClass('design_temp')
       cssConfig = @designConfigRoot.find('.css-config')
-      @designConfigRoot.find('.css-config').css('display', '')
+      @designConfigRoot.find('.css-config').show()
       @designConfigRoot.find('.canvas-config').remove()
       $('#design-config').append(@designConfigRoot)
 

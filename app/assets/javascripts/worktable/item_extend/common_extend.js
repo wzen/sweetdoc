@@ -25,10 +25,10 @@ WorkTableCommonExtend = {
   showOptionMenu: function() {
     var sc;
     sc = $('.sidebar-config');
-    sc.css('display', 'none');
-    $("." + SidebarUI.DESIGN_ROOT_CLASSNAME, sc).css('display', 'none');
-    $('#design-config').css('display', '');
-    return $('#' + this.getDesignConfigId()).css('display', '');
+    sc.hide();
+    $("." + SidebarUI.DESIGN_ROOT_CLASSNAME, sc).hide();
+    $('#design-config').show();
+    return $('#' + this.getDesignConfigId()).show();
   },
   setupDragAndResizeEvents: function() {
     var self;

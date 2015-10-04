@@ -16,41 +16,41 @@ class ScrollGuide extends GuideBase
       emt = base.find('.guide_scroll_image_mac:first')
       if forwardDirection.top && canForward
         emt.removeClass('reverse').addClass('forward')
-        base.css('display', 'block')
+        base.show()
       else if !forwardDirection.top && canReverse
         emt.removeClass('forward').addClass('reverse')
-        base.css('display', 'block')
+        base.show()
     if enableDirection.bottom
       base = $("##{@BOTTOM_ROOT_ID}")
       emt = base.find('.guide_scroll_image_mac:first')
       if forwardDirection.bottom && canForward
         emt.removeClass('reverse').addClass('forward')
-        base.css('display', 'block')
+        base.show()
       else if !forwardDirection.bottom && canReverse
         emt.removeClass('forward').addClass('reverse')
-        base.css('display', 'block')
+        base.show()
     if enableDirection.left
       base = $("##{@LEFT_ROOT_ID}")
       emt = base.find('.guide_scroll_image_mac:first')
       if forwardDirection.left && canForward
         emt.removeClass('reverse').addClass('forward')
-        base.css('display', 'block')
+        base.show()
       else if !forwardDirection.left && canReverse
         emt.removeClass('forward').addClass('reverse')
-        base.css('display', 'block')
+        base.show()
     if enableDirection.right
       base = $("##{@RIGHT_ROOT_ID}")
       emt = base.find('.guide_scroll_image_mac:first')
       if forwardDirection.right && canForward
         emt.removeClass('reverse').addClass('forward')
-        base.css('display', 'block')
+        base.show()
       else if !forwardDirection.right && canReverse
         emt.removeClass('forward').addClass('reverse')
-        base.css('display', 'block')
+        base.show()
 
   # ガイド非表示
   @hideGuide: ->
-    $("##{@TOP_ROOT_ID}").css('display', 'none')
-    $("##{@BOTTOM_ROOT_ID}").css('display', 'none')
-    $("##{@LEFT_ROOT_ID}").css('display', 'none')
-    $("##{@RIGHT_ROOT_ID}").css('display', 'none')
+    $("##{@TOP_ROOT_ID}").hide()
+    $("##{@BOTTOM_ROOT_ID}").hide()
+    $("##{@LEFT_ROOT_ID}").hide()
+    $("##{@RIGHT_ROOT_ID}").hide()

@@ -112,7 +112,7 @@ EventAction = (function() {
             var className, section;
             className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
             section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-            section.css('display', 'none');
+            section.hide();
             Common.removeAllItem(beforePageNum);
             $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
             if (callback != null) {

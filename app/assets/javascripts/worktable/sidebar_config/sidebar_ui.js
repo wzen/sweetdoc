@@ -59,7 +59,7 @@ Sidebar = (function() {
         if (callback != null) {
           callback();
         }
-        return $('.sidebar-config').css('display', 'none');
+        return $('.sidebar-config').hide();
       });
     }
   };
@@ -78,38 +78,38 @@ Sidebar = (function() {
       item = null;
     }
     animation = this.isOpenedConfigSidebar();
-    $('.sidebar-config').css('display', 'none');
+    $('.sidebar-config').hide();
     if (configType === this.Type.STATE) {
       sc = $("#" + StateConfig.ROOT_ID_NAME);
       if (animation) {
         return sc.show();
       } else {
-        return sc.css('display', '');
+        return sc.show();
       }
     } else if (configType === this.Type.CSS && (item != null) && (item.cssConfig != null)) {
       if (animation) {
-        return item.cssConfig.show();
+        return item.cssConfig.show('slow');
       } else {
-        return item.cssConfig.css('display', '');
+        return item.cssConfig.show();
       }
     } else if (configType === this.Type.CANVAS && (item != null) && (item.canvasConfig != null)) {
       if (animation) {
-        return item.canvasConfig.show();
+        return item.canvasConfig.show('slow');
       } else {
-        return item.canvasConfig.css('display', '');
+        return item.canvasConfig.show();
       }
     } else if (configType === this.Type.TIMELINE) {
       if (animation) {
-        return $('#event-config').show();
+        return $('#event-config').show('slow');
       } else {
-        return $('#event-config').css('display', '');
+        return $('#event-config').show();
       }
     } else if (configType === this.Type.SETTING) {
       sc = $("#" + Setting.ROOT_ID_NAME);
       if (animation) {
-        return sc.show();
+        return sc.show('slow');
       } else {
-        return sc.css('display', '');
+        return sc.show();
       }
     }
   };
@@ -181,9 +181,9 @@ SidebarUI = (function() {
     });
     handleElement = element.children('.ui-slider-handle');
     if (values === null) {
-      return handleElement.css('display', 'none');
+      return handleElement.hide();
     } else {
-      return handleElement.css('display', '');
+      return handleElement.show();
     }
   };
 
@@ -257,9 +257,9 @@ SidebarUI = (function() {
     for (i = j = 2; j <= 4; i = ++j) {
       element = $('.btn-bg-color' + i, cssConfig);
       if (i > gradientStepValue - 1) {
-        results.push(element.css('display', 'none'));
+        results.push(element.hide());
       } else {
-        results.push(element.css('display', ''));
+        results.push(element.show());
       }
     }
     return results;

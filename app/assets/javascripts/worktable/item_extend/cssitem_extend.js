@@ -9,7 +9,7 @@ WorkTableCssItemExtend = {
       this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
       this.designConfigRoot.removeClass('design_temp');
       cssConfig = this.designConfigRoot.find('.css-config');
-      this.designConfigRoot.find('.css-config').css('display', '');
+      this.designConfigRoot.find('.css-config').show();
       this.designConfigRoot.find('.canvas-config').remove();
       return $('#design-config').append(this.designConfigRoot);
     }
