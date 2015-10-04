@@ -324,11 +324,25 @@ WorktableCommon = (function() {
     window.scrollInside.height(window.scrollViewSize);
     window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     Common.updateScrollContentsPosition(window.scrollInside.width() * 0.5, window.scrollInside.height() * 0.5);
+    window.scrollContents.off('scroll');
+    window.scrollContents.on('scroll', function(e) {
+      e.preventDefault();
+      if (window.scrollContentsScrollTimer != null) {
+        clearTimeout(window.scrollContentsScrollTimer);
+      }
+      return window.scrollContentsScrollTimer = setTimeout(function() {
+        return PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {
+          top: window.scrollContents.scrollTop(),
+          left: window.scrollContents.scrollLeft()
+        });
+      }, 500);
+    });
     $('.dropdown-toggle').dropdown();
     Navbar.initWorktableNavbar();
     this.initKeyEvent();
     Handwrite.initHandwrite();
     this.setMainContainerContext();
+    $('#project_wrapper').off("mousedown");
     $('#project_wrapper').on("mousedown", (function(_this) {
       return function() {
         return _this.clearAllItemStyle();

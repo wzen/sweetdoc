@@ -67,16 +67,17 @@ class RunCommon
 
   # Handleスクロール位置の初期化
   @initHandleScrollPoint = ->
-    scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5)
-    scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5)
+    window.scrollHandleWrapper.scrollLeft(window.scrollHandleWrapper.width() * 0.5)
+    window.scrollHandleWrapper.scrollTop(window.scrollHandleWrapper.height() * 0.5)
 
   # スクロールイベントの初期化
   @setupScrollEvent = ->
-    lastLeft = scrollHandleWrapper.scrollLeft()
-    lastTop = scrollHandleWrapper.scrollTop()
+    lastLeft = window.scrollHandleWrapper.scrollLeft()
+    lastTop = window.scrollHandleWrapper.scrollTop()
     stopTimer = null
 
-    scrollHandleWrapper.scroll( (e) ->
+    window.scrollHandleWrapper.off('scroll')
+    window.scrollHandleWrapper.on('scroll', (e) ->
       e.preventDefault()
 
       if !RunCommon.enabledScroll()

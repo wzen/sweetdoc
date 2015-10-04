@@ -274,6 +274,16 @@ class WorktableCommon
     window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
     # スクロール位置初期化
     Common.updateScrollContentsPosition(window.scrollInside.width() * 0.5, window.scrollInside.height() * 0.5)
+    # スクロールイベント設定
+    window.scrollContents.off('scroll')
+    window.scrollContents.on('scroll', (e) ->
+      e.preventDefault()
+      if window.scrollContentsScrollTimer?
+        clearTimeout(window.scrollContentsScrollTimer)
+      window.scrollContentsScrollTimer = setTimeout( ->
+        PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {top: window.scrollContents.scrollTop(), left: window.scrollContents.scrollLeft()})
+      , 500)
+    )
     # ドロップダウン
     $('.dropdown-toggle').dropdown()
     # ナビバー
@@ -284,6 +294,7 @@ class WorktableCommon
     Handwrite.initHandwrite()
     # コンテキストメニュー
     @setMainContainerContext()
+    $('#project_wrapper').off("mousedown")
     $('#project_wrapper').on("mousedown", =>
       @clearAllItemStyle()
     )

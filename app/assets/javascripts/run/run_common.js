@@ -68,16 +68,17 @@ RunCommon = (function() {
   };
 
   RunCommon.initHandleScrollPoint = function() {
-    scrollHandleWrapper.scrollLeft(scrollHandleWrapper.width() * 0.5);
-    return scrollHandleWrapper.scrollTop(scrollHandleWrapper.height() * 0.5);
+    window.scrollHandleWrapper.scrollLeft(window.scrollHandleWrapper.width() * 0.5);
+    return window.scrollHandleWrapper.scrollTop(window.scrollHandleWrapper.height() * 0.5);
   };
 
   RunCommon.setupScrollEvent = function() {
     var lastLeft, lastTop, stopTimer;
-    lastLeft = scrollHandleWrapper.scrollLeft();
-    lastTop = scrollHandleWrapper.scrollTop();
+    lastLeft = window.scrollHandleWrapper.scrollLeft();
+    lastTop = window.scrollHandleWrapper.scrollTop();
     stopTimer = null;
-    return scrollHandleWrapper.scroll(function(e) {
+    window.scrollHandleWrapper.off('scroll');
+    return window.scrollHandleWrapper.on('scroll', function(e) {
       var distX, distY, x, y;
       e.preventDefault();
       if (!RunCommon.enabledScroll()) {
