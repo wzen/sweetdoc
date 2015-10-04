@@ -166,12 +166,21 @@ WorktableCommon = (function() {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
       window.scrollContents.find('.item.draggable').addClass('edit_mode');
       window.scrollInside.addClass('edit_mode');
+      Navbar.setModeEdit();
     } else if (mode === Constant.Mode.OPTION) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInside.removeClass('edit_mode');
     }
+    window.beforeMode = window.mode;
     return window.mode = mode;
+  };
+
+  WorktableCommon.putbackMode = function() {
+    if (window.beforeMode != null) {
+      this.changeMode(window.beforeMode);
+      return window.beforeMode = null;
+    }
   };
 
   WorktableCommon.reDrawAllInstanceItemIfChanging = function(pn) {
@@ -314,8 +323,7 @@ WorktableCommon = (function() {
     window.scrollInside.width(window.scrollViewSize);
     window.scrollInside.height(window.scrollViewSize);
     window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
-    scrollContents.scrollLeft(window.scrollInside.width() * 0.5);
-    scrollContents.scrollTop(window.scrollInside.height() * 0.5);
+    Common.updateScrollContentsPosition(window.scrollInside.width() * 0.5, window.scrollInside.height() * 0.5);
     $('.dropdown-toggle').dropdown();
     Navbar.initWorktableNavbar();
     this.initKeyEvent();

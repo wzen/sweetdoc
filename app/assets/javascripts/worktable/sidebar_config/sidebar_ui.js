@@ -30,6 +30,7 @@ Sidebar = (function() {
       selectedBorderType = "edit";
     }
     if (!Sidebar.isOpenedConfigSidebar()) {
+      WorktableCommon.changeMode(Constant.Mode.OPTION);
       main = $('#main');
       if (!Sidebar.isOpenedConfigSidebar()) {
         main.removeClass('col-xs-12');
@@ -133,8 +134,7 @@ Sidebar = (function() {
     }
     ColorPickerUtil.initColorPickerValue();
     _initOptionMenu();
-    this.openConfigSidebar(target);
-    return WorktableCommon.changeMode(Constant.Mode.OPTION);
+    return this.openConfigSidebar(target);
   };
 
   return Sidebar;

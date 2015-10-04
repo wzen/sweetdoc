@@ -71,18 +71,9 @@ Chapter = (function() {
         left = item.itemSize.x + width * 0.5 - (window.scrollContentsSize.width * 0.5);
         top = item.itemSize.y + height * 0.5 - (window.scrollContentsSize.height * 0.5);
       }
-      if (isImmediate) {
-        window.scrollContents.scrollTop(top);
-        window.scrollContents.scrollLeft(left);
+      return Common.updateScrollContentsPosition(top, left, isImmediate, function() {
         return window.disabledEventHandler = false;
-      } else {
-        return window.scrollContents.animate({
-          scrollTop: top,
-          scrollLeft: left
-        }, 'normal', 'linear', function() {
-          return window.disabledEventHandler = false;
-        });
-      }
+      });
     } else {
       return window.disabledEventHandler = false;
     }

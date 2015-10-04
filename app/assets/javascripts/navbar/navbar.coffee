@@ -40,15 +40,11 @@ class Navbar
     $('.menu-item', itemsSelectMenuEmt).click( ->
       # プレビューを停止して再描画
       WorktableCommon.reDrawAllInstanceItemIfChanging()
-
       emtId = $(this).attr('id')
       if emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0
         itemId = parseInt(emtId.replace(Navbar.ITEM_MENU_PREFIX, ''))
-        itemsSelectMenuEmt.removeClass('active')
-        $(@).parent('li').addClass('active')
-        window.selectItemMenu = itemId
+        Navbar.setModeDraw(itemId)
         WorktableCommon.changeMode(Constant.Mode.DRAW)
-        Common.loadItemJs(itemId)
     )
 
     $('#header_items_select_menu .menu-item').click( ->
@@ -57,6 +53,7 @@ class Navbar
     )
 
     $('#menu-action-edit').click( ->
+      Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
 
@@ -84,6 +81,21 @@ class Navbar
     $('.menu-control-rewind-upload-gallery', navEmt).on('click', ->
       RunCommon.showUploadGalleryConfirm()
     )
+
+  # Drawモードに設定
+  @setModeDraw = (itemId, callback = null) ->
+    itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
+    itemsSelectMenuEmt.removeClass('active')
+    emtId = "menu-item-" + itemId
+    $("##{emtId}").parent('li').addClass('active')
+    window.selectItemMenu = itemId
+    Common.loadItemJs(itemId, callback)
+
+  # Editモードに設定
+  @setModeEdit = ->
+    itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
+    itemsSelectMenuEmt.removeClass('active')
+    $('#menu-action-edit').parent('li').addClass('active')
 
   # ヘッダーにタイトルを設定
   @setTitle = (title_name) ->

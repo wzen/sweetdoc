@@ -14,8 +14,7 @@ class ScreenEvent extends CommonEvent
   updateEventBefore: ->
     methodName = @getEventMethodName()
     if methodName == 'changeScreenPosition'
-      scrollContents.scrollTop(@beforeScrollTop)
-      scrollContents.scrollLeft(@beforeScrollLeft)
+      Common.updateScrollContentsPosition(@beforeScrollTop, @beforeScrollLeft)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
@@ -23,8 +22,7 @@ class ScreenEvent extends CommonEvent
     if methodName == 'changeScreenPosition'
       scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
       scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
-      scrollContents.scrollTop(@beforeScrollTop + scrollTop)
-      scrollContents.scrollLeft(@beforeScrollLeft + scrollLeft)
+      Common.updateScrollContentsPosition(@beforeScrollTop + scrollTop, @beforeScrollLeft + scrollLeft)
 
   # 画面移動イベント
   # @param [Object] e クリックオブジェクト
@@ -37,7 +35,7 @@ class ScreenEvent extends CommonEvent
       finished_count = 0
       scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
       scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
-      scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 'normal', 'linear', ->
+      Common.updateScrollContentsPosition(scrollContents.scrollTop() + scrollTop, scrollContents.scrollLeft() + scrollLeft, false, ->
         finished_count += 1
         if finished_count >= 2
           @isFinishedEvent = true

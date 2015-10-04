@@ -10,7 +10,8 @@ class StateConfig
     rootEmt = $("##{@ROOT_ID_NAME}")
 
     # 画面座標
-
+    $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft())
+    $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop())
 
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
@@ -31,7 +32,11 @@ class StateConfig
       $('.focus_enabled > a').on('click', (e) ->
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         # アイテムにフォーカス
-        Common.focusToTarget($("##{objId}"))
+        Common.focusToTarget($("##{objId}"), ->
+          rootEmt = $("##{StateConfig.ROOT_ID_NAME}")
+          $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft())
+          $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop())
+        )
       )
 
       $('a.item_edit', rootEmt).off('click')

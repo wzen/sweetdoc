@@ -164,18 +164,47 @@ Common = (function() {
     return $("." + sectionClass, root).remove();
   };
 
-  Common.focusToTarget = function(target) {
+  Common.focusToTarget = function(target, callback) {
     var scrollLeft, scrollTop, targetMiddle;
+    if (callback == null) {
+      callback = null;
+    }
     targetMiddle = {
       top: $(target).offset().top + $(target).height() * 0.5,
       left: $(target).offset().left + $(target).width() * 0.5
     };
     scrollTop = targetMiddle.top - scrollContents.height() * 0.5;
     scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5;
-    return scrollContents.animate({
-      scrollTop: scrollContents.scrollTop() + scrollTop,
-      scrollLeft: scrollContents.scrollLeft() + scrollLeft
-    }, 500);
+    return this.updateScrollContentsPosition(scrollContents.scrollTop() + scrollTop, scrollContents.scrollLeft() + scrollLeft, false, callback);
+  };
+
+  Common.updateScrollContentsPosition = function(top, left, immediate, callback) {
+    if (immediate == null) {
+      immediate = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {
+      top: top,
+      left: left
+    });
+    if (immediate) {
+      window.scrollContents.scrollTop(top);
+      window.scrollContents.scrollLeft(left);
+      if (callback != null) {
+        return callback();
+      }
+    } else {
+      return window.scrollContents.animate({
+        scrollTop: top,
+        scrollLeft: left
+      }, 500, function() {
+        if (callback != null) {
+          return callback();
+        }
+      });
+    }
   };
 
   Common.sanitaizeEncode = function(str) {

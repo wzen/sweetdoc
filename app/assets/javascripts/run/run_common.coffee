@@ -22,8 +22,8 @@ class RunCommon
     scrollHandle.height(window.scrollViewSize)
 
     # スクロール位置初期化
-    scrollContents.scrollLeft(scrollInside.width() * 0.5)
-    scrollContents.scrollTop(scrollInside.height() * 0.5)
+    Common.updateScrollContentsPosition(scrollInside.width() * 0.5, scrollInside.height() * 0.5)
+
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
     scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 

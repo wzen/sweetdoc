@@ -91,7 +91,8 @@ class Handwrite
           else if mode == Constant.Mode.OPTION
             # サイドバーを閉じる
             Sidebar.closeSidebar()
-            WorktableCommon.changeMode(Constant.Mode.EDIT)
+            # モードを変更以前に戻す
+            WorktableCommon.putbackMode()
 
       # マウスドラッグイベント
       # @param [Array] e ウィンドウ座標

@@ -65,14 +65,10 @@ class Chapter
           left = item.itemSize.x + width * 0.5 - (window.scrollContentsSize.width * 0.5)
           top = item.itemSize.y + height * 0.5 - (window.scrollContentsSize.height * 0.5)
 
-        if isImmediate
-          window.scrollContents.scrollTop(top)
-          window.scrollContents.scrollLeft(left)
+        Common.updateScrollContentsPosition(top, left, isImmediate, ->
           window.disabledEventHandler = false
-        else
-          window.scrollContents.animate({scrollTop: top, scrollLeft: left }, 'normal', 'linear', ->
-            window.disabledEventHandler = false
-          )
+        )
+
     else
       window.disabledEventHandler = false
 

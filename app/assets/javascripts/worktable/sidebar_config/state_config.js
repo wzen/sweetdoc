@@ -15,6 +15,8 @@ StateConfig = (function() {
   StateConfig.initConfig = function() {
     var createdItemList, items, k, rootEmt, temp, v;
     rootEmt = $("#" + this.ROOT_ID_NAME);
+    $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft());
+    $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop());
     createdItemList = $('.created_item_list', rootEmt);
     createdItemList.children().remove();
     items = PageValue.getCreatedItems();
@@ -35,7 +37,11 @@ StateConfig = (function() {
       $('.focus_enabled > a').on('click', function(e) {
         var objId;
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
-        return Common.focusToTarget($("#" + objId));
+        return Common.focusToTarget($("#" + objId), function() {
+          rootEmt = $("#" + StateConfig.ROOT_ID_NAME);
+          $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft());
+          return $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop());
+        });
       });
       $('a.item_edit', rootEmt).off('click');
       $('a.item_edit', rootEmt).on('click', function(e) {

@@ -85,7 +85,7 @@ Handwrite = (function() {
               return mouseDownDrawing(loc);
             } else if (mode === Constant.Mode.OPTION) {
               Sidebar.closeSidebar();
-              return WorktableCommon.changeMode(Constant.Mode.EDIT);
+              return WorktableCommon.putbackMode();
             }
           }
         };

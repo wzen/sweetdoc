@@ -12,6 +12,8 @@ class Sidebar
   # @param [String] selectedBorderType 選択枠タイプ
   @openConfigSidebar = (target = null, selectedBorderType = "edit") ->
     if !Sidebar.isOpenedConfigSidebar()
+      # モードを変更
+      WorktableCommon.changeMode(Constant.Mode.OPTION)
       main = $('#main')
       if !Sidebar.isOpenedConfigSidebar()
         main.removeClass('col-xs-12')
@@ -111,8 +113,6 @@ class Sidebar
     _initOptionMenu()
     # オプションメニューを表示
     @openConfigSidebar(target)
-    # モードを変更
-    WorktableCommon.changeMode(Constant.Mode.OPTION)
 
 class SidebarUI
 

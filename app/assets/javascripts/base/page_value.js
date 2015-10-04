@@ -131,6 +131,10 @@ PageValue = (function() {
 
       Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.SCREEN_SIZE;
 
+      Key.DISPLAY_POSITION = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "display_position";
+
+      Key.ITEM_VISIBLE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "item_visible";
+
       return Key;
 
     })();

@@ -137,11 +137,22 @@ class WorktableCommon
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
       window.scrollContents.find('.item.draggable').addClass('edit_mode')
       window.scrollInside.addClass('edit_mode')
+      # ヘッダーをEditに
+      Navbar.setModeEdit()
     else if mode == Constant.Mode.OPTION
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInside.removeClass('edit_mode')
+
+    # 変更前のモードを保存
+    window.beforeMode = window.mode
     window.mode = mode
+
+  # モードを一つ前に戻す
+  @putbackMode = ->
+    if window.beforeMode?
+      @changeMode(window.beforeMode)
+      window.beforeMode = null
 
   # アイテム描画が変更されている場合にインスタンス全アイテム再描画
   # @param [Integer] pn ページ番号
@@ -262,8 +273,7 @@ class WorktableCommon
     window.scrollInside.height(window.scrollViewSize)
     window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
     # スクロール位置初期化
-    scrollContents.scrollLeft(window.scrollInside.width() * 0.5)
-    scrollContents.scrollTop(window.scrollInside.height() * 0.5)
+    Common.updateScrollContentsPosition(window.scrollInside.width() * 0.5, window.scrollInside.height() * 0.5)
     # ドロップダウン
     $('.dropdown-toggle').dropdown()
     # ナビバー

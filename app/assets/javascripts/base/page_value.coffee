@@ -79,6 +79,10 @@ class PageValue
       @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.TITLE}"
       # @property [String] SCREEN_SIZE プロジェクトサイズ
       @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
+      # @property [String] DISPLAY_POSITION プロジェクト表示位置
+      @DISPLAY_POSITION = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}display_position"
+      # @property [String] ITEM_VISIBLE アイテム表示状態
+      @ITEM_VISIBLE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}item_visible"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID

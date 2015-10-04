@@ -24,8 +24,7 @@ ScreenEvent = (function(superClass) {
     var methodName;
     methodName = this.getEventMethodName();
     if (methodName === 'changeScreenPosition') {
-      scrollContents.scrollTop(this.beforeScrollTop);
-      return scrollContents.scrollLeft(this.beforeScrollLeft);
+      return Common.updateScrollContentsPosition(this.beforeScrollTop, this.beforeScrollLeft);
     }
   };
 
@@ -35,8 +34,7 @@ ScreenEvent = (function(superClass) {
     if (methodName === 'changeScreenPosition') {
       scrollTop = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
       scrollLeft = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
-      scrollContents.scrollTop(this.beforeScrollTop + scrollTop);
-      return scrollContents.scrollLeft(this.beforeScrollLeft + scrollLeft);
+      return Common.updateScrollContentsPosition(this.beforeScrollTop + scrollTop, this.beforeScrollLeft + scrollLeft);
     }
   };
 
@@ -48,10 +46,7 @@ ScreenEvent = (function(superClass) {
       finished_count = 0;
       scrollTop = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
       scrollLeft = parseInt(this.event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
-      scrollContents.animate({
-        scrollTop: scrollContents.scrollTop() + scrollTop,
-        scrollLeft: scrollContents.scrollLeft() + scrollLeft
-      }, 'normal', 'linear', function() {
+      Common.updateScrollContentsPosition(scrollContents.scrollTop() + scrollTop, scrollContents.scrollLeft() + scrollLeft, false, function() {
         finished_count += 1;
         if (finished_count >= 2) {
           this.isFinishedEvent = true;

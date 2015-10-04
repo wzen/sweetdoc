@@ -21,8 +21,7 @@ RunCommon = (function() {
     scrollInsideCover.height(window.scrollViewSize);
     scrollHandle.width(window.scrollViewSize);
     scrollHandle.height(window.scrollViewSize);
-    scrollContents.scrollLeft(scrollInside.width() * 0.5);
-    scrollContents.scrollTop(scrollInside.height() * 0.5);
+    Common.updateScrollContentsPosition(scrollInside.width() * 0.5, scrollInside.height() * 0.5);
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
     return scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   };

@@ -136,7 +136,8 @@ class Common
 
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
-  @focusToTarget = (target) ->
+  # @param [Fucntion] callback コールバック
+  @focusToTarget = (target, callback = null) ->
     # col-xs-9 → 75% padding → 15px
     targetMiddle =
       top: $(target).offset().top + $(target).height() * 0.5
@@ -153,7 +154,26 @@ class Common
 #      scrollLeft =  scrollContents.width() * 0.25
     # スライド
     #console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
-    scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)
+    @updateScrollContentsPosition(scrollContents.scrollTop() + scrollTop, scrollContents.scrollLeft() + scrollLeft, false, callback)
+
+  # スクロール位置の更新
+  @updateScrollContentsPosition: (top, left, immediate = true, callback = null) ->
+    PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {top: top, left: left})
+    if immediate
+      window.scrollContents.scrollTop(top)
+      window.scrollContents.scrollLeft(left)
+      if callback?
+        callback()
+    else
+      window.scrollContents.animate(
+        {
+          scrollTop: top
+          scrollLeft: left
+        }
+      , 500, ->
+        if callback?
+          callback()
+      )
 
   # サニタイズ エンコード
   # @property [String] str 対象文字列
