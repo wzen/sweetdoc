@@ -539,10 +539,21 @@ class PageValue
     for e, idx in eventPageValues
       @setEventPageValue(@Key.eventNumber(idx + 1), e)
 
+  # 作成アイテム一覧を取得
+  # @param [Integer] pn 取得するページ番号
+  @getCreatedItems = (pn = null) ->
+    instances = @getInstancePageValue(@Key.instancePagePrefix(pn))
+    ret = {}
+    for k, v of instances
+      if window.instanceMap[k]? && window.instanceMap[k] instanceof ItemBase
+        ret[k] = v
+
+    return ret
+
   # 対象イベントを削除する
   # @param [Integer] eNum 削除するイベント番号
   @removeEventPageValue = (eNum) ->
-    eventPageValues = PageValue.getEventPageValueSortedListByNum()
+    eventPageValues = @getEventPageValueSortedListByNum()
     if eventPageValues.length >= 2
       for i in [0..(eventPageValues.length - 1)]
         if i >= eNum - 1

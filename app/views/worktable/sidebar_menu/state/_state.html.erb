@@ -2,7 +2,7 @@
     <div class="config">
         <div class="configBox">
             <div class="settingedit-headliner"><%= I18n.t('config.state.page_num') %></div>
-            <div>
+            <div style="display:table">
                 <!-- ページ番号 -->
                 <div style="display: table-cell">
                     <%= I18n.t('config.state.page_num') %>: <span class="page_num"></span>
@@ -11,23 +11,24 @@
         </div>
         <div class="configBox">
             <div class="settingedit-headliner"><%= I18n.t('config.state.display_position') %></div>
-            <div class="forms" style="display:table">
+            <div class="forms">
                 <!-- ワークテーブル座標 -->
-                <div style="display: table-cell">
+                <div>
                     X: <input type="number" class="display_position_x" value="">
                 </div>
-                <div style="display: table-cell">
+                <div>
                     Y: <input type="number" class="display_position_y" value="">
                 </div>
             </div>
         </div>
-        <div class="configBox">
+        <div class="configBox" style="display: none;">
             <div class="settingedit-headliner"><%= I18n.t('config.state.created_item_list') %></div>
             <div class="forms" style="display:table">
                 <div style="display: table-cell">
                     <!-- 作成アイテム一覧 -->
-                    <ul class="created_item_list">
-                    </ul>
+                    <div class="created_item_list">
+                    </div>
+                    <%= render 'worktable/sidebar_menu/state/item_temp' %>
                 </div>
             </div>
         </div>

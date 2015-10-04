@@ -13,6 +13,7 @@ class CommonVar
 
   # 変数初期化(全メニュー共通)
   @initCommonVar = ->
+    window.appName = 'Revolver'
     window.scrollViewSize = 30000
     window.pageNumMax = 10000
 

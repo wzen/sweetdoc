@@ -846,3 +846,38 @@ div#event-config {
     line-height: 24px;
   }
 }
+
+div#state-config {
+  div.forms > div {
+    width: 100%;
+  }
+
+  span.invisible {
+    display: none;
+  }
+
+  div.created_item_list {
+    width: 100%;
+    text-align: center;
+  }
+
+  .wrapper {
+    width: 300px;
+
+    &:after {
+      clear: both;
+    }
+
+    .name {
+      float: left;
+      margin-left: 3px;
+    }
+    .buttons {
+      float: right;
+      margin-right: 3px;
+    }
+  }
+  div.item_temp {
+    display: none;
+  }
+}

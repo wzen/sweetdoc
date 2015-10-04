@@ -8,10 +8,31 @@ StateConfig = (function() {
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
-    StateConfig.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
+    StateConfig.ROOT_ID_NAME = constant.StateConfig.ROOT_ID_NAME;
+    StateConfig.ITEM_TEMP_CLASS_NAME = constant.StateConfig.ITEM_TEMP_CLASS_NAME;
   }
 
-  StateConfig.initConfig = function() {};
+  StateConfig.initConfig = function() {
+    var createdItemList, items, k, results, rootEmt, temp, v;
+    rootEmt = $("#" + this.ROOT_ID_NAME);
+    createdItemList = $('.created_item_list', rootEmt);
+    items = PageValue.getCreatedItems();
+    if (Object.keys(items).length > 0) {
+      createdItemList.closest('.configBox').show();
+      results = [];
+      for (k in items) {
+        v = items[k];
+        temp = $("." + this.ITEM_TEMP_CLASS_NAME, rootEmt).children(':first').clone(true);
+        temp.find('.name').html(v.value.name);
+        if (!$("#" + k).is(':visible')) {
+          temp.find('.visible').hide();
+          temp.find('.invisible').show();
+        }
+        results.push(createdItemList.append(temp));
+      }
+      return results;
+    }
+  };
 
   return StateConfig;
 

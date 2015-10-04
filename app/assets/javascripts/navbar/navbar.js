@@ -63,6 +63,7 @@ Navbar = (function() {
     $('#menu_sidebar_toggle').off('click');
     return $('#menu_sidebar_toggle').on('click', function() {
       Sidebar.switchSidebarConfig(Sidebar.Type.STATE);
+      StateConfig.initConfig();
       return Sidebar.openConfigSidebar();
     });
   };
@@ -93,7 +94,11 @@ Navbar = (function() {
       title_name += '(Preview)';
     }
     $("#" + Navbar.NAVBAR_ROOT).find('.nav_title').html(title_name);
-    return document.title = title_name + '| Revolver';
+    if ((title_name != null) && title_name.length > 0) {
+      return document.title = title_name + (" | " + window.appName);
+    } else {
+      return document.title = window.appName;
+    }
   };
 
   Navbar.setPageNum = function(value) {

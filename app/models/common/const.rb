@@ -154,6 +154,7 @@ class Const
 
   class StateConfig
     ROOT_ID_NAME = 'state-config'
+    ITEM_TEMP_CLASS_NAME = 'item_temp'
   end
 
   class Setting

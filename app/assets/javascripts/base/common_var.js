@@ -15,6 +15,7 @@ CommonVar = (function() {
   };
 
   CommonVar.initCommonVar = function() {
+    window.appName = 'Revolver';
     window.scrollViewSize = 30000;
     return window.pageNumMax = 10000;
   };

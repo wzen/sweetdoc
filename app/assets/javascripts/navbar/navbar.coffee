@@ -63,6 +63,7 @@ class Navbar
     $('#menu_sidebar_toggle').off('click')
     $('#menu_sidebar_toggle').on('click', ->
       Sidebar.switchSidebarConfig(Sidebar.Type.STATE)
+      StateConfig.initConfig()
       Sidebar.openConfigSidebar()
     )
 
@@ -89,7 +90,10 @@ class Navbar
     if !window.isWorkTable
       title_name += '(Preview)'
     $("##{Navbar.NAVBAR_ROOT}").find('.nav_title').html(title_name)
-    document.title = title_name + '| Revolver'
+    if title_name? && title_name.length > 0
+      document.title = title_name + " | #{window.appName}"
+    else
+      document.title = window.appName
 
   # ヘッダーにページ番号を設定
   # @param [Integer] value 設定値

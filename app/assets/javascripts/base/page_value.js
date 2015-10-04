@@ -657,9 +657,25 @@ PageValue = (function() {
     return results;
   };
 
+  PageValue.getCreatedItems = function(pn) {
+    var instances, k, ret, v;
+    if (pn == null) {
+      pn = null;
+    }
+    instances = this.getInstancePageValue(this.Key.instancePagePrefix(pn));
+    ret = {};
+    for (k in instances) {
+      v = instances[k];
+      if ((window.instanceMap[k] != null) && window.instanceMap[k] instanceof ItemBase) {
+        ret[k] = v;
+      }
+    }
+    return ret;
+  };
+
   PageValue.removeEventPageValue = function(eNum) {
     var eventPageValues, i, idx, j, l, ref, ref1;
-    eventPageValues = PageValue.getEventPageValueSortedListByNum();
+    eventPageValues = this.getEventPageValueSortedListByNum();
     if (eventPageValues.length >= 2) {
       for (i = j = 0, ref = eventPageValues.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
         if (i >= eNum - 1) {
