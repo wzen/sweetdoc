@@ -60,13 +60,15 @@ Project = (function() {
         Navbar.setTitle(projectName);
         return Project.create(projectName, width, height, function() {
           Common.initScreenSize();
-          return Common.hideModalView();
+          Common.hideModalView();
+          return Common.updateScrollContentsFromPagevalue();
         });
       } else {
         user_pagevalue_id = $('.project_select', modalEmt).val();
         return ServerStorage.load(user_pagevalue_id, function() {
           Common.initScreenSize();
-          return Common.hideModalView();
+          Common.hideModalView();
+          return Common.updateScrollContentsFromPagevalue();
         });
       }
     });

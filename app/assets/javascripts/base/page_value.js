@@ -637,7 +637,7 @@ PageValue = (function() {
   };
 
   PageValue.sortEventPageValue = function(beforeNum, afterNum) {
-    var e, eventPageValues, i, idx, j, l, len, m, num, ref, ref1, ref2, ref3, results, w;
+    var e, eventPageValues, i, idx, j, len, m, n, num, ref, ref1, ref2, ref3, results, w;
     eventPageValues = PageValue.getEventPageValueSortedListByNum();
     w = eventPageValues[beforeNum - 1];
     w[EventPageValueBase.PageValueKey.IS_SYNC] = false;
@@ -647,14 +647,14 @@ PageValue = (function() {
         eventPageValues[i] = eventPageValues[i + 1];
       }
     } else {
-      for (num = l = ref2 = beforeNum, ref3 = afterNum + 1; l >= ref3; num = l += -1) {
+      for (num = m = ref2 = beforeNum, ref3 = afterNum + 1; m >= ref3; num = m += -1) {
         i = num - 1;
         eventPageValues[i] = eventPageValues[i - 1];
       }
     }
     eventPageValues[afterNum - 1] = w;
     results = [];
-    for (idx = m = 0, len = eventPageValues.length; m < len; idx = ++m) {
+    for (idx = n = 0, len = eventPageValues.length; n < len; idx = ++n) {
       e = eventPageValues[idx];
       results.push(this.setEventPageValue(this.Key.eventNumber(idx + 1), e));
     }
@@ -677,8 +677,53 @@ PageValue = (function() {
     return ret;
   };
 
+  PageValue.getScrollContentsPosition = function() {
+    var l, position, screenSize, t;
+    if (window.scrollContents != null) {
+      position = this.getGeneralPageValue(this.Key.DISPLAY_POSITION);
+      if (position == null) {
+        position = {
+          top: 0,
+          left: 0
+        };
+      }
+      screenSize = this.getGeneralPageValue(this.Key.SCREEN_SIZE);
+      if (screenSize == null) {
+        screenSize = {
+          width: window.mainWrapper.width(),
+          height: window.mainWrapper.height()
+        };
+      }
+      t = (window.scrollInside.height() + screenSize.height) * 0.5 - position.top;
+      l = (window.scrollInside.width() + screenSize.width) * 0.5 - position.left;
+      return {
+        top: t,
+        left: l
+      };
+    } else {
+      return null;
+    }
+  };
+
+  PageValue.setDisplayPosition = function(top, left) {
+    var l, screenSize, t;
+    screenSize = this.getGeneralPageValue(this.Key.SCREEN_SIZE);
+    if (screenSize == null) {
+      screenSize = {
+        width: window.mainWrapper.width(),
+        height: window.mainWrapper.height()
+      };
+    }
+    t = parseInt((window.scrollInside.height() + screenSize.height) * 0.5 - top);
+    l = parseInt((window.scrollInside.width() + screenSize.width) * 0.5 - left);
+    return this.setGeneralPageValue(this.Key.DISPLAY_POSITION, {
+      top: t,
+      left: l
+    });
+  };
+
   PageValue.removeEventPageValue = function(eNum) {
-    var eventPageValues, i, idx, j, l, ref, ref1;
+    var eventPageValues, i, idx, j, m, ref, ref1;
     eventPageValues = this.getEventPageValueSortedListByNum();
     if (eventPageValues.length >= 2) {
       for (i = j = 0, ref = eventPageValues.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
@@ -689,7 +734,7 @@ PageValue = (function() {
     }
     this.setEventPageValue(this.Key.eventPageMainRoot(), {});
     if (eventPageValues.length >= 2) {
-      for (idx = l = 0, ref1 = eventPageValues.length - 2; 0 <= ref1 ? l <= ref1 : l >= ref1; idx = 0 <= ref1 ? ++l : --l) {
+      for (idx = m = 0, ref1 = eventPageValues.length - 2; 0 <= ref1 ? m <= ref1 : m >= ref1; idx = 0 <= ref1 ? ++m : --m) {
         this.setEventPageValue(this.Key.eventNumber(idx + 1), eventPageValues[idx]);
       }
     }

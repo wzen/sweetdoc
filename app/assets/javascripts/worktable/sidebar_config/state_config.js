@@ -13,10 +13,11 @@ StateConfig = (function() {
   }
 
   StateConfig.initConfig = function() {
-    var createdItemList, items, k, rootEmt, temp, v;
+    var createdItemList, items, k, position, rootEmt, temp, v;
     rootEmt = $("#" + this.ROOT_ID_NAME);
-    $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft());
-    $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop());
+    position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION);
+    $('.display_position_x', rootEmt).val(position.left);
+    $('.display_position_y', rootEmt).val(position.top);
     createdItemList = $('.created_item_list', rootEmt);
     createdItemList.children().remove();
     items = PageValue.getCreatedItems();
@@ -39,8 +40,9 @@ StateConfig = (function() {
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
         return Common.focusToTarget($("#" + objId), function() {
           rootEmt = $("#" + StateConfig.ROOT_ID_NAME);
-          $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft());
-          return $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop());
+          position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION);
+          $('.display_position_x', rootEmt).val(position.left);
+          return $('.display_position_y', rootEmt).val(position.top);
         });
       });
       $('a.item_edit', rootEmt).off('click');

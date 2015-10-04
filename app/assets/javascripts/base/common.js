@@ -58,7 +58,8 @@ Common = (function() {
 
   Common.applyEnvironmentFromPagevalue = function() {
     Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
-    return this.initScreenSize();
+    this.initScreenSize();
+    return this.initScrollContentsPosition();
   };
 
   Common.resetEnvironment = function() {
@@ -83,6 +84,14 @@ Common = (function() {
       PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
     }
     return this.updateCanvasSize();
+  };
+
+  Common.initScrollContentsPosition = function() {
+    var position;
+    position = PageValue.getScrollContentsPosition();
+    if (position != null) {
+      return this.updateScrollContentsPosition(position.top, position.left);
+    }
   };
 
   Common.updateCanvasSize = function() {
@@ -185,10 +194,7 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {
-      top: top,
-      left: left
-    });
+    PageValue.setDisplayPosition(top, left);
     if (immediate) {
       window.scrollContents.scrollTop(top);
       window.scrollContents.scrollLeft(left);
@@ -205,6 +211,19 @@ Common = (function() {
         }
       });
     }
+  };
+
+  Common.updateScrollContentsFromPagevalue = function() {
+    var position;
+    position = PageValue.getScrollContentsPosition();
+    if (position == null) {
+      position = {
+        top: window.scrollInside.height() * 0.5,
+        left: window.scrollInside.width() * 0.5
+      };
+      PageValue.setDisplayPosition(position.top, position.left);
+    }
+    return this.updateScrollContentsPosition(position.top, position.left);
   };
 
   Common.sanitaizeEncode = function(str) {

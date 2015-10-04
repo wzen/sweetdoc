@@ -237,6 +237,7 @@ class WorktableCommon
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
     Common.updateCanvasSize()
+    Common.updateScrollContentsFromPagevalue()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->
@@ -272,8 +273,6 @@ class WorktableCommon
     window.scrollInside.width(window.scrollViewSize)
     window.scrollInside.height(window.scrollViewSize)
     window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
-    # スクロール位置初期化
-    Common.updateScrollContentsPosition(window.scrollInside.width() * 0.5, window.scrollInside.height() * 0.5)
     # スクロールイベント設定
     window.scrollContents.off('scroll')
     window.scrollContents.on('scroll', (e) ->
@@ -281,7 +280,8 @@ class WorktableCommon
       if window.scrollContentsScrollTimer?
         clearTimeout(window.scrollContentsScrollTimer)
       window.scrollContentsScrollTimer = setTimeout( ->
-        PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {top: window.scrollContents.scrollTop(), left: window.scrollContents.scrollLeft()})
+        PageValue.setDisplayPosition(window.scrollContents.scrollTop(), window.scrollContents.scrollLeft())
+        window.scrollContentsScrollTimer = null
       , 500)
     )
     # ドロップダウン

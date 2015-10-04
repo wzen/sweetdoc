@@ -37,6 +37,7 @@ class RunCommon
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
     Common.updateCanvasSize()
+    Common.updateScrollContentsFromPagevalue()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->

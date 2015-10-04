@@ -280,7 +280,8 @@ WorktableCommon = (function() {
 
   WorktableCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
-    return Common.updateCanvasSize();
+    Common.updateCanvasSize();
+    return Common.updateScrollContentsFromPagevalue();
   };
 
   WorktableCommon.resizeEvent = function() {
@@ -323,7 +324,6 @@ WorktableCommon = (function() {
     window.scrollInside.width(window.scrollViewSize);
     window.scrollInside.height(window.scrollViewSize);
     window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
-    Common.updateScrollContentsPosition(window.scrollInside.width() * 0.5, window.scrollInside.height() * 0.5);
     window.scrollContents.off('scroll');
     window.scrollContents.on('scroll', function(e) {
       e.preventDefault();
@@ -331,10 +331,8 @@ WorktableCommon = (function() {
         clearTimeout(window.scrollContentsScrollTimer);
       }
       return window.scrollContentsScrollTimer = setTimeout(function() {
-        return PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {
-          top: window.scrollContents.scrollTop(),
-          left: window.scrollContents.scrollLeft()
-        });
+        PageValue.setDisplayPosition(window.scrollContents.scrollTop(), window.scrollContents.scrollLeft());
+        return window.scrollContentsScrollTimer = null;
       }, 500);
     });
     $('.dropdown-toggle').dropdown();

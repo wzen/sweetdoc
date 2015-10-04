@@ -10,8 +10,9 @@ class StateConfig
     rootEmt = $("##{@ROOT_ID_NAME}")
 
     # 画面座標
-    $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft())
-    $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop())
+    position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION)
+    $('.display_position_x', rootEmt).val(position.left)
+    $('.display_position_y', rootEmt).val(position.top)
 
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
@@ -34,8 +35,9 @@ class StateConfig
         # アイテムにフォーカス
         Common.focusToTarget($("##{objId}"), ->
           rootEmt = $("##{StateConfig.ROOT_ID_NAME}")
-          $('.display_position_x', rootEmt).val(window.scrollContents.scrollLeft())
-          $('.display_position_y', rootEmt).val(window.scrollContents.scrollTop())
+          position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION)
+          $('.display_position_x', rootEmt).val(position.left)
+          $('.display_position_y', rootEmt).val(position.top)
         )
       )
 

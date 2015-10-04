@@ -44,8 +44,12 @@ class Common
 
   # Pagevalueから環境を反映
   @applyEnvironmentFromPagevalue = ->
+    # タイトル名設定
     Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME))
+    # 画面サイズ設定
     @initScreenSize()
+    # スクロール位置設定
+    @initScrollContentsPosition()
 
   # 環境の反映をリセット
   @resetEnvironment = ->
@@ -68,6 +72,11 @@ class Common
 
     # Canvasサイズ更新
     @updateCanvasSize()
+
+  @initScrollContentsPosition = ->
+    position = PageValue.getScrollContentsPosition()
+    if position?
+      @updateScrollContentsPosition(position.top, position.left)
 
   # Canvasサイズ更新
   @updateCanvasSize = ->
@@ -158,7 +167,7 @@ class Common
 
   # スクロール位置の更新
   @updateScrollContentsPosition: (top, left, immediate = true, callback = null) ->
-    PageValue.setGeneralPageValue(PageValue.Key.DISPLAY_POSITION, {top: top, left: left})
+    PageValue.setDisplayPosition(top, left)
     if immediate
       window.scrollContents.scrollTop(top)
       window.scrollContents.scrollLeft(left)
@@ -174,6 +183,13 @@ class Common
         if callback?
           callback()
       )
+
+  @updateScrollContentsFromPagevalue: ->
+    position = PageValue.getScrollContentsPosition()
+    if !position?
+      position = {top: window.scrollInside.height() * 0.5, left: window.scrollInside.width() * 0.5}
+      PageValue.setDisplayPosition(position.top, position.left)
+    @updateScrollContentsPosition(position.top, position.left)
 
   # サニタイズ エンコード
   # @property [String] str 対象文字列

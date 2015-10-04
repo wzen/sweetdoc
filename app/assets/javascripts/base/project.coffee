@@ -64,6 +64,8 @@ class Project
           Common.initScreenSize()
           # モーダルを削除
           Common.hideModalView()
+          # スクロール位置初期化
+          Common.updateScrollContentsFromPagevalue()
         )
       else
         # プロジェクト選択
@@ -72,6 +74,8 @@ class Project
           Common.initScreenSize()
           # モーダルを削除
           Common.hideModalView()
+          # スクロール位置初期化
+          Common.updateScrollContentsFromPagevalue()
         )
     )
 

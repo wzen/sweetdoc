@@ -554,6 +554,33 @@ class PageValue
 
     return ret
 
+  # 画面表示位置を取得する
+  @getScrollContentsPosition = ->
+    if window.scrollContents?
+      position = @getGeneralPageValue(@Key.DISPLAY_POSITION)
+      if !position?
+        position = {top: 0, left: 0}
+      screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
+      if !screenSize?
+        screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
+      t = (window.scrollInside.height() + screenSize.height) * 0.5 - position.top
+      l = (window.scrollInside.width() + screenSize.width) * 0.5 - position.left
+      return {top: t, left: l}
+    else
+      return null
+
+  # 画面表示位置を設定する
+  # @param [Float] top ScrollViewのY座標
+  # @param [Float] left ScrollViewのX座標
+  @setDisplayPosition = (top, left) ->
+    screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
+    if !screenSize?
+      screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
+    t = parseInt((window.scrollInside.height() + screenSize.height) * 0.5 - top)
+    l = parseInt((window.scrollInside.width() + screenSize.width) * 0.5 - left)
+    # 中央位置からの差を設定
+    @setGeneralPageValue(@Key.DISPLAY_POSITION, {top: t, left: l})
+
   # 対象イベントを削除する
   # @param [Integer] eNum 削除するイベント番号
   @removeEventPageValue = (eNum) ->
