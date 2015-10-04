@@ -83,7 +83,9 @@
 .modal-content.upload_gallery_confirm {
   .title, .caption {
     &:before {
+      content: '';
       display: table;
+      line-height: 0;
     }
     > div {
       display: table-cell;

@@ -142,15 +142,15 @@ class Common
       top: $(target).offset().top + $(target).height() * 0.5
       left: $(target).offset().left + $(target).width() * 0.5
     scrollTop = targetMiddle.top - scrollContents.height() * 0.5
-    if scrollTop < 0
-      scrollTop = 0
-    else if scrollTop > scrollContents.height() * 0.25
-      scrollTop =  scrollContents.height() * 0.25
+#    if scrollTop < 0
+#      scrollTop = 0
+#    else if scrollTop > scrollContents.height() * 0.25
+#      scrollTop =  scrollContents.height() * 0.25
     scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5
-    if scrollLeft < 0
-      scrollLeft = 0
-    else if scrollLeft > scrollContents.width() * 0.25
-      scrollLeft =  scrollContents.width() * 0.25
+#    if scrollLeft < 0
+#      scrollLeft = 0
+#    else if scrollLeft > scrollContents.width() * 0.25
+#      scrollLeft =  scrollContents.width() * 0.25
     # スライド
     #console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
     scrollContents.animate({scrollTop: (scrollContents.scrollTop() + scrollTop), scrollLeft: (scrollContents.scrollLeft() + scrollLeft) }, 500)

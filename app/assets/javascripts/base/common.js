@@ -171,17 +171,7 @@ Common = (function() {
       left: $(target).offset().left + $(target).width() * 0.5
     };
     scrollTop = targetMiddle.top - scrollContents.height() * 0.5;
-    if (scrollTop < 0) {
-      scrollTop = 0;
-    } else if (scrollTop > scrollContents.height() * 0.25) {
-      scrollTop = scrollContents.height() * 0.25;
-    }
     scrollLeft = targetMiddle.left - scrollContents.width() * 0.75 * 0.5;
-    if (scrollLeft < 0) {
-      scrollLeft = 0;
-    } else if (scrollLeft > scrollContents.width() * 0.25) {
-      scrollLeft = scrollContents.width() * 0.25;
-    }
     return scrollContents.animate({
       scrollTop: scrollContents.scrollTop() + scrollTop,
       scrollLeft: scrollContents.scrollLeft() + scrollLeft

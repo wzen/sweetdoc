@@ -31,14 +31,22 @@ StateConfig = (function() {
         }
         createdItemList.append(temp);
       }
-      $('a.item_edit', rootEmt).off('click');
-      $('a.item_edit', rootEmt).on('click', function() {
+      $('.focus_enabled > a').off('click');
+      $('.focus_enabled > a').on('click', function(e) {
         var objId;
+        objId = $(this).closest('.wrapper').find('.item_obj_id').val();
+        return Common.focusToTarget($("#" + objId));
+      });
+      $('a.item_edit', rootEmt).off('click');
+      $('a.item_edit', rootEmt).on('click', function(e) {
+        var objId;
+        e.preventDefault();
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
         return Sidebar.openItemEditConfig($("#" + objId));
       });
       $('.item_visible > a, .item_invisible > a', rootEmt).off('click');
       return $('.item_visible > a, .item_invisible > a', rootEmt).on('click', function(e) {
+        e.preventDefault();
         return StateConfig.clickToggleVisible(this);
       });
     }
@@ -52,10 +60,14 @@ StateConfig = (function() {
     parent = $(target.closest('.buttons'));
     if (emt.is(':visible')) {
       parent.find('.item_visible').show();
-      return parent.find('.item_invisible').hide();
+      parent.find('.item_invisible').hide();
+      parent.find('.focus_enabled').show();
+      return parent.find('.focus_disabled').hide();
     } else {
       parent.find('.item_visible').hide();
-      return parent.find('.item_invisible').show();
+      parent.find('.item_invisible').show();
+      parent.find('.focus_enabled').hide();
+      return parent.find('.focus_disabled').show();
     }
   };
 

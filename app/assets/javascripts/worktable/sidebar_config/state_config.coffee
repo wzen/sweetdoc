@@ -11,6 +11,7 @@ class StateConfig
 
     # 画面座標
 
+
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
     createdItemList.children().remove()
@@ -26,14 +27,23 @@ class StateConfig
           temp.find('.item_invisible').show()
         createdItemList.append(temp)
 
+      $('.focus_enabled > a').off('click')
+      $('.focus_enabled > a').on('click', (e) ->
+        objId = $(@).closest('.wrapper').find('.item_obj_id').val()
+        # アイテムにフォーカス
+        Common.focusToTarget($("##{objId}"))
+      )
+
       $('a.item_edit', rootEmt).off('click')
-      $('a.item_edit', rootEmt).on('click', ->
+      $('a.item_edit', rootEmt).on('click', (e) ->
+        e.preventDefault()
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         Sidebar.openItemEditConfig($("##{objId}"))
       )
 
       $('.item_visible > a, .item_invisible > a', rootEmt).off('click')
       $('.item_visible > a, .item_invisible > a', rootEmt).on('click', (e) ->
+        e.preventDefault()
         StateConfig.clickToggleVisible(@)
       )
 
@@ -45,6 +55,10 @@ class StateConfig
     if emt.is(':visible')
       parent.find('.item_visible').show()
       parent.find('.item_invisible').hide()
+      parent.find('.focus_enabled').show()
+      parent.find('.focus_disabled').hide()
     else
       parent.find('.item_visible').hide()
       parent.find('.item_invisible').show()
+      parent.find('.focus_enabled').hide()
+      parent.find('.focus_disabled').show()
