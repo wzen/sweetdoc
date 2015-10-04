@@ -576,8 +576,8 @@ class PageValue
     screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
     if !screenSize?
       screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
-    t = parseInt((window.scrollInside.height() + screenSize.height) * 0.5 - top)
-    l = parseInt((window.scrollInside.width() + screenSize.width) * 0.5 - left)
+    t = (window.scrollInside.height() + screenSize.height) * 0.5 - top
+    l = (window.scrollInside.width() + screenSize.width) * 0.5 - left
     # 中央位置からの差を設定
     @setGeneralPageValue(@Key.DISPLAY_POSITION, {top: t, left: l})
 

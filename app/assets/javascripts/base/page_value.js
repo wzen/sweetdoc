@@ -714,8 +714,8 @@ PageValue = (function() {
         height: window.mainWrapper.height()
       };
     }
-    t = parseInt((window.scrollInside.height() + screenSize.height) * 0.5 - top);
-    l = parseInt((window.scrollInside.width() + screenSize.width) * 0.5 - left);
+    t = (window.scrollInside.height() + screenSize.height) * 0.5 - top;
+    l = (window.scrollInside.width() + screenSize.width) * 0.5 - left;
     return this.setGeneralPageValue(this.Key.DISPLAY_POSITION, {
       top: t,
       left: l
