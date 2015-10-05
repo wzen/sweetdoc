@@ -10,19 +10,19 @@ class Handwrite
     queueLoc = null
     zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
     MOVE_FREQUENCY = 7
-    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
+    @zoom = 1
 
     # ウィンドウ座標からCanvas座標に変換する
     # @param [Object] canvas Canvas
     # @param [Int] x x座標
     # @param [Int] y y座標
-    windowToCanvas = (canvas, x, y) ->
+    _windowToCanvas = (canvas, x, y) ->
       bbox = canvas.getBoundingClientRect()
       return {x: x - bbox.left * (canvas.width  / bbox.width), y: y - bbox.top  * (canvas.height / bbox.height)}
 
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
-    mouseDownDrawing = (loc) ->
+    _mouseDownDrawing = (loc) ->
       # プレビューを停止して再描画
       WorktableCommon.reDrawAllInstanceItemIfChanging()
       if selectItemMenu?
@@ -34,7 +34,7 @@ class Handwrite
 
     # マウスドラッグ時の描画イベント
     # @param [Array] loc Canvas座標
-    mouseMoveDrawing = (loc) ->
+    _mouseMoveDrawing = (loc) ->
       if item?
         if enableMoveEvent
           enableMoveEvent = false
@@ -53,7 +53,7 @@ class Handwrite
           queueLoc = loc
 
     # マウスアップ時の描画イベント
-    mouseUpDrawing = ->
+    _mouseUpDrawing = ->
       if item?
         item.restoreAllDrawingSurface()
         item.endDraw(zindex)
@@ -68,14 +68,14 @@ class Handwrite
       # 画面のウィンドウ座標からCanvas座標に変換
       # @param [Array] e ウィンドウ座標
       # @return [Array] Canvas座標
-      calcCanvasLoc = (e)->
-        x = (e.x || e.clientX) / zoom
-        y = (e.y || e.clientY) / zoom
-        return windowToCanvas(drawingCanvas, x, y)
+      _calcCanvasLoc = (e) ->
+        x = (e.x || e.clientX) / @zoom
+        y = (e.y || e.clientY) / @zoom
+        return _windowToCanvas(drawingCanvas, x, y)
 
       # 座標の状態を保存
       # @param [Array] loc 座標
-      saveLastLoc = (loc) ->
+      _saveLastLoc = (loc) ->
         lastX = loc.x
         lastY = loc.y
 
@@ -83,12 +83,13 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmousedown = (e) ->
         if e.which == 1 #左クリック
-          loc = calcCanvasLoc(e)
-          saveLastLoc(loc)
+          @zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
+          loc = _calcCanvasLoc.call(@, e)
+          _saveLastLoc(loc)
           click = true
           if mode == Constant.Mode.DRAW
             e.preventDefault()
-            mouseDownDrawing(loc)
+            _mouseDownDrawing(loc)
           else if mode == Constant.Mode.OPTION
             # サイドバーを閉じる
             Sidebar.closeSidebar()
@@ -99,13 +100,13 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmousemove = (e) ->
         if e.which == 1 #左クリック
-          loc = calcCanvasLoc(e)
+          loc = _calcCanvasLoc.call(@, e)
           if click &&
               Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
             if mode == Constant.Mode.DRAW
               e.preventDefault()
-              mouseMoveDrawing(loc)
-            saveLastLoc(loc)
+              _mouseMoveDrawing(loc)
+            _saveLastLoc(loc)
 
       # マウスアップイベント
       # @param [Array] e ウィンドウ座標
@@ -113,6 +114,6 @@ class Handwrite
         if e.which == 1 #左クリック
           if drag && mode == Constant.Mode.DRAW
             e.preventDefault()
-            mouseUpDrawing()
+            _mouseUpDrawing()
         drag = false
         click = false

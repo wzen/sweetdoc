@@ -5,7 +5,7 @@ Handwrite = (function() {
   function Handwrite() {}
 
   Handwrite.initHandwrite = function() {
-    var MOVE_FREQUENCY, click, drag, enableMoveEvent, item, lastX, lastY, mouseDownDrawing, mouseMoveDrawing, mouseUpDrawing, queueLoc, windowToCanvas, zindex, zoom;
+    var MOVE_FREQUENCY, _mouseDownDrawing, _mouseMoveDrawing, _mouseUpDrawing, _windowToCanvas, click, drag, enableMoveEvent, item, lastX, lastY, queueLoc, zindex;
     drag = false;
     click = false;
     lastX = null;
@@ -15,8 +15,8 @@ Handwrite = (function() {
     queueLoc = null;
     zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
     MOVE_FREQUENCY = 7;
-    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
-    windowToCanvas = function(canvas, x, y) {
+    this.zoom = 1;
+    _windowToCanvas = function(canvas, x, y) {
       var bbox;
       bbox = canvas.getBoundingClientRect();
       return {
@@ -24,7 +24,7 @@ Handwrite = (function() {
         y: y - bbox.top * (canvas.height / bbox.height)
       };
     };
-    mouseDownDrawing = function(loc) {
+    _mouseDownDrawing = function(loc) {
       WorktableCommon.reDrawAllInstanceItemIfChanging();
       if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
         item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
@@ -34,7 +34,7 @@ Handwrite = (function() {
         return item.startDraw();
       }
     };
-    mouseMoveDrawing = function(loc) {
+    _mouseMoveDrawing = function(loc) {
       var q;
       if (item != null) {
         if (enableMoveEvent) {
@@ -52,7 +52,7 @@ Handwrite = (function() {
         }
       }
     };
-    mouseUpDrawing = function() {
+    _mouseUpDrawing = function() {
       if (item != null) {
         item.restoreAllDrawingSurface();
         item.endDraw(zindex);
@@ -64,26 +64,27 @@ Handwrite = (function() {
     };
     return (function(_this) {
       return function() {
-        var calcCanvasLoc, saveLastLoc;
-        calcCanvasLoc = function(e) {
+        var _calcCanvasLoc, _saveLastLoc;
+        _calcCanvasLoc = function(e) {
           var x, y;
-          x = (e.x || e.clientX) / zoom;
-          y = (e.y || e.clientY) / zoom;
-          return windowToCanvas(drawingCanvas, x, y);
+          x = (e.x || e.clientX) / this.zoom;
+          y = (e.y || e.clientY) / this.zoom;
+          return _windowToCanvas(drawingCanvas, x, y);
         };
-        saveLastLoc = function(loc) {
+        _saveLastLoc = function(loc) {
           lastX = loc.x;
           return lastY = loc.y;
         };
         drawingCanvas.onmousedown = function(e) {
           var loc;
           if (e.which === 1) {
-            loc = calcCanvasLoc(e);
-            saveLastLoc(loc);
+            this.zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
+            loc = _calcCanvasLoc.call(this, e);
+            _saveLastLoc(loc);
             click = true;
             if (mode === Constant.Mode.DRAW) {
               e.preventDefault();
-              return mouseDownDrawing(loc);
+              return _mouseDownDrawing(loc);
             } else if (mode === Constant.Mode.OPTION) {
               Sidebar.closeSidebar();
               return WorktableCommon.putbackMode();
@@ -93,13 +94,13 @@ Handwrite = (function() {
         drawingCanvas.onmousemove = function(e) {
           var loc;
           if (e.which === 1) {
-            loc = calcCanvasLoc(e);
+            loc = _calcCanvasLoc.call(this, e);
             if (click && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY) {
               if (mode === Constant.Mode.DRAW) {
                 e.preventDefault();
-                mouseMoveDrawing(loc);
+                _mouseMoveDrawing(loc);
               }
-              return saveLastLoc(loc);
+              return _saveLastLoc(loc);
             }
           }
         };
@@ -107,7 +108,7 @@ Handwrite = (function() {
           if (e.which === 1) {
             if (drag && mode === Constant.Mode.DRAW) {
               e.preventDefault();
-              mouseUpDrawing();
+              _mouseUpDrawing();
             }
           }
           drag = false;
