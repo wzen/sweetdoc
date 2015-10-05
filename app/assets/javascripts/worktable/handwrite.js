@@ -5,7 +5,7 @@ Handwrite = (function() {
   function Handwrite() {}
 
   Handwrite.initHandwrite = function() {
-    var MOVE_FREQUENCY, click, drag, enableMoveEvent, item, lastX, lastY, mouseDownDrawing, mouseMoveDrawing, mouseUpDrawing, queueLoc, windowToCanvas, zindex;
+    var MOVE_FREQUENCY, click, drag, enableMoveEvent, item, lastX, lastY, mouseDownDrawing, mouseMoveDrawing, mouseUpDrawing, queueLoc, windowToCanvas, zindex, zoom;
     drag = false;
     click = false;
     lastX = null;
@@ -15,6 +15,7 @@ Handwrite = (function() {
     queueLoc = null;
     zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
     MOVE_FREQUENCY = 7;
+    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
     windowToCanvas = function(canvas, x, y) {
       var bbox;
       bbox = canvas.getBoundingClientRect();
@@ -66,8 +67,8 @@ Handwrite = (function() {
         var calcCanvasLoc, saveLastLoc;
         calcCanvasLoc = function(e) {
           var x, y;
-          x = e.x || e.clientX;
-          y = e.y || e.clientY;
+          x = (e.x || e.clientX) / zoom;
+          y = (e.y || e.clientY) / zoom;
           return windowToCanvas(drawingCanvas, x, y);
         };
         saveLastLoc = function(loc) {

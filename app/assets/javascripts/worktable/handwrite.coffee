@@ -10,6 +10,7 @@ class Handwrite
     queueLoc = null
     zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
     MOVE_FREQUENCY = 7
+    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
 
     # ウィンドウ座標からCanvas座標に変換する
     # @param [Object] canvas Canvas
@@ -68,8 +69,8 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       # @return [Array] Canvas座標
       calcCanvasLoc = (e)->
-        x = e.x || e.clientX
-        y = e.y || e.clientY
+        x = (e.x || e.clientX) / zoom
+        y = (e.y || e.clientY) / zoom
         return windowToCanvas(drawingCanvas, x, y)
 
       # 座標の状態を保存
