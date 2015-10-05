@@ -13,6 +13,7 @@ class Setting
   # 設定値初期化
   @initConfig: ->
     @Grid.initConfig()
+    @IdleSaveTimer.initConfig()
 
   # グリッド線
   class @Grid
@@ -28,25 +29,23 @@ class Setting
     class @PageValueKey
       @ROOT = 'grid'
       # @property [String] GRID グリッド線表示
-      @GRID = 'grid_enable'
+      @GRID = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_enable"
       # @property [String] GRID グリッド線間隔
-      @GRID_STEP = 'step'
+      @GRID_STEP = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_step"
 
     # グリッド初期化
     @initConfig: ->
       root = $("##{Setting.ROOT_ID_NAME}")
       # グリッド線表示
       grid = $(".#{@GRID_CLASS_NAME}", root)
-      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
-      gridValue = PageValue.getSettingPageValue(key)
+      gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
       gridValue = gridValue? && gridValue == 'true'
       gridStepDiv = $(".#{@GRID_STEP_DIV_CLASS_NAME}", root)
 
       grid.prop('checked', if gridValue then 'checked' else false)
       grid.off('click')
       grid.on('click', =>
-        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
-        gridValue = PageValue.getSettingPageValue(key)
+        gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
         if gridValue?
           gridValue = gridValue == 'true'
 
@@ -66,24 +65,21 @@ class Setting
         gridStepDiv.hide()
 
       # グリッド間隔
-      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID_STEP}"
-      gridStepValue = PageValue.getSettingPageValue(key)
+      gridStepValue = PageValue.getSettingPageValue(Setting.Grid.PageValueKey.GRID_STEP)
       if !gridStepValue?
         gridStepValue = @STEP_DEFAULT_VALUE
       gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
       gridStep.val(gridStepValue)
       self = @
       gridStep.change( ->
-        key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.GRID}"
-        value = PageValue.getSettingPageValue(key)
+        value = PageValue.getSettingPageValue(Setting.Grid.PageValueKey.GRID)
         if value?
           value = value == 'true'
         if value
           step = $(@).val()
           if step?
             step = parseInt(step)
-            stepKey = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{self.PageValueKey.GRID_STEP}"
-            PageValue.setSettingPageValue(stepKey, step)
+            PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID_STEP, step)
             self.drawGrid(true)
       )
 
@@ -96,13 +92,12 @@ class Setting
       page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
       canvas = $("#pages .#{page} .#{@SETTING_GRID_CANVAS_CLASS}:first")[0]
       context = null
-      key = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.ROOT}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{@PageValueKey.GRID}"
       if canvas?
         context = canvas.getContext('2d');
       if context? && doDraw == false
         # 削除
         $(".#{@SETTING_GRID_ELEMENT_CLASS}").remove()
-        PageValue.setSettingPageValue(key, false)
+        PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID, false)
         LocalStorage.saveSettingPageValue()
       else if doDraw
         root = $("##{Setting.ROOT_ID_NAME}")
@@ -117,20 +112,22 @@ class Setting
         stepx = step
         stepy = step
 
+        top = window.scrollContents.scrollTop() - @GRIDVIEW_SIZE * 0.5
+        top -= top % stepy
+        if top < 0
+          top = 0
+        left = window.scrollContents.scrollLeft() - @GRIDVIEW_SIZE * 0.5
+        left -= left % stepx
+        if left < 0
+          left = 0
         if !context?
           # キャンパスを作成
-          top = window.scrollContents.scrollTop() - @GRIDVIEW_SIZE * 0.5
-          top -= top % stepy
-          if top < 0
-            top = 0
-          left = window.scrollContents.scrollLeft() - @GRIDVIEW_SIZE * 0.5
-          left -= left % stepx
-          if left < 0
-            left = 0
           $(ElementCode.get().createGridElement(top, left)).appendTo(window.scrollInside)
           canvas = $("#pages .#{page} .#{@SETTING_GRID_CANVAS_CLASS}:first")[0]
           context = canvas.getContext('2d');
         else
+          emt = $("#pages .#{page} .#{@SETTING_GRID_ELEMENT_CLASS}:first")
+          emt.css({top: "#{top}px", left: "#{left}px"})
           # 描画をクリア
           context.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -148,5 +145,10 @@ class Setting
           context.lineTo(context.canvas.width, i)
           context.stroke()
 
-        PageValue.setSettingPageValue(key, true)
+        PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID, true)
         LocalStorage.saveSettingPageValue()
+
+  # 自動保存
+  class @IdleSaveTimer
+    @initConfig: ->
+

@@ -13,6 +13,9 @@ class Project
       $('.display_size_input_wrapper', modalEmt).css('display', if $(@).val() == 'input' then 'block' else 'none')
     )
 
+    # ウィンドウサイズ
+    $('.default_window_size', modalEmt).html("#{window.mainWrapper.width()} X #{window.mainWrapper.height()}")
+
     # 作成済みプロジェクト一覧取得
     Project.load_data((data) ->
       user_pagevalue_list = data.list

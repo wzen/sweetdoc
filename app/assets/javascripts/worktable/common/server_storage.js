@@ -162,11 +162,11 @@ ServerStorage = (function() {
           LocalStorage.saveAllPageValues();
           return WorktableCommon.drawAllItemFromInstancePageValue(function() {
             Timeline.refreshAllTimeline();
-            Setting.initConfig();
             PageValue.updatePageCount();
             PageValue.updateForkCount();
             Paging.initPaging();
             Common.applyEnvironmentFromPagevalue();
+            Setting.initConfig();
             if (callback != null) {
               return callback();
             }
@@ -238,6 +238,8 @@ ServerStorage = (function() {
       }
     });
   };
+
+  ServerStorage.startSaveIdleTimer = function() {};
 
   return ServerStorage;
 

@@ -22,7 +22,8 @@ Setting = (function() {
   }
 
   Setting.initConfig = function() {
-    return this.Grid.initConfig();
+    this.Grid.initConfig();
+    return this.IdleSaveTimer.initConfig();
   };
 
   Setting.Grid = (function() {
@@ -47,28 +48,26 @@ Setting = (function() {
 
       PageValueKey.ROOT = 'grid';
 
-      PageValueKey.GRID = 'grid_enable';
+      PageValueKey.GRID = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_enable";
 
-      PageValueKey.GRID_STEP = 'step';
+      PageValueKey.GRID_STEP = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_step";
 
       return PageValueKey;
 
     })();
 
     Grid.initConfig = function() {
-      var grid, gridStep, gridStepDiv, gridStepValue, gridValue, key, root, self;
+      var grid, gridStep, gridStepDiv, gridStepValue, gridValue, root, self;
       root = $("#" + Setting.ROOT_ID_NAME);
       grid = $("." + this.GRID_CLASS_NAME, root);
-      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
-      gridValue = PageValue.getSettingPageValue(key);
+      gridValue = PageValue.getSettingPageValue(this.PageValueKey.GRID);
       gridValue = (gridValue != null) && gridValue === 'true';
       gridStepDiv = $("." + this.GRID_STEP_DIV_CLASS_NAME, root);
       grid.prop('checked', gridValue ? 'checked' : false);
       grid.off('click');
       grid.on('click', (function(_this) {
         return function() {
-          key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + _this.PageValueKey.GRID;
-          gridValue = PageValue.getSettingPageValue(key);
+          gridValue = PageValue.getSettingPageValue(_this.PageValueKey.GRID);
           if (gridValue != null) {
             gridValue = gridValue === 'true';
           }
@@ -85,8 +84,7 @@ Setting = (function() {
       } else {
         gridStepDiv.hide();
       }
-      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID_STEP;
-      gridStepValue = PageValue.getSettingPageValue(key);
+      gridStepValue = PageValue.getSettingPageValue(Setting.Grid.PageValueKey.GRID_STEP);
       if (gridStepValue == null) {
         gridStepValue = this.STEP_DEFAULT_VALUE;
       }
@@ -94,9 +92,8 @@ Setting = (function() {
       gridStep.val(gridStepValue);
       self = this;
       gridStep.change(function() {
-        var step, stepKey, value;
-        key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.GRID;
-        value = PageValue.getSettingPageValue(key);
+        var step, value;
+        value = PageValue.getSettingPageValue(Setting.Grid.PageValueKey.GRID);
         if (value != null) {
           value = value === 'true';
         }
@@ -104,8 +101,7 @@ Setting = (function() {
           step = $(this).val();
           if (step != null) {
             step = parseInt(step);
-            stepKey = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + self.PageValueKey.GRID_STEP;
-            PageValue.setSettingPageValue(stepKey, step);
+            PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID_STEP, step);
             return self.drawGrid(true);
           }
         }
@@ -114,17 +110,16 @@ Setting = (function() {
     };
 
     Grid.drawGrid = function(doDraw) {
-      var canvas, context, i, j, k, key, left, max, min, page, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
+      var canvas, context, emt, i, j, k, left, max, min, page, ref, ref1, ref2, ref3, ref4, ref5, root, step, stepInput, stepx, stepy, top;
       page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
       canvas = $("#pages ." + page + " ." + this.SETTING_GRID_CANVAS_CLASS + ":first")[0];
       context = null;
-      key = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + this.PageValueKey.GRID;
       if (canvas != null) {
         context = canvas.getContext('2d');
       }
       if ((context != null) && doDraw === false) {
         $("." + this.SETTING_GRID_ELEMENT_CLASS).remove();
-        PageValue.setSettingPageValue(key, false);
+        PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID, false);
         return LocalStorage.saveSettingPageValue();
       } else if (doDraw) {
         root = $("#" + Setting.ROOT_ID_NAME);
@@ -138,21 +133,26 @@ Setting = (function() {
         }
         stepx = step;
         stepy = step;
+        top = window.scrollContents.scrollTop() - this.GRIDVIEW_SIZE * 0.5;
+        top -= top % stepy;
+        if (top < 0) {
+          top = 0;
+        }
+        left = window.scrollContents.scrollLeft() - this.GRIDVIEW_SIZE * 0.5;
+        left -= left % stepx;
+        if (left < 0) {
+          left = 0;
+        }
         if (context == null) {
-          top = window.scrollContents.scrollTop() - this.GRIDVIEW_SIZE * 0.5;
-          top -= top % stepy;
-          if (top < 0) {
-            top = 0;
-          }
-          left = window.scrollContents.scrollLeft() - this.GRIDVIEW_SIZE * 0.5;
-          left -= left % stepx;
-          if (left < 0) {
-            left = 0;
-          }
           $(ElementCode.get().createGridElement(top, left)).appendTo(window.scrollInside);
           canvas = $("#pages ." + page + " ." + this.SETTING_GRID_CANVAS_CLASS + ":first")[0];
           context = canvas.getContext('2d');
         } else {
+          emt = $("#pages ." + page + " ." + this.SETTING_GRID_ELEMENT_CLASS + ":first");
+          emt.css({
+            top: top + "px",
+            left: left + "px"
+          });
           context.clearRect(0, 0, canvas.width, canvas.height);
         }
         context.strokeStyle = 'black';
@@ -169,12 +169,21 @@ Setting = (function() {
           context.lineTo(context.canvas.width, i);
           context.stroke();
         }
-        PageValue.setSettingPageValue(key, true);
+        PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID, true);
         return LocalStorage.saveSettingPageValue();
       }
     };
 
     return Grid;
+
+  })();
+
+  Setting.IdleSaveTimer = (function() {
+    function IdleSaveTimer() {}
+
+    IdleSaveTimer.initConfig = function() {};
+
+    return IdleSaveTimer;
 
   })();
 

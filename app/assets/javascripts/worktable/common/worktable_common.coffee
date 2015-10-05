@@ -298,12 +298,12 @@ class WorktableCommon
     $('#project_wrapper').on("mousedown", =>
       @clearAllItemStyle()
     )
-    # 共通設定
-    Setting.initConfig()
     # Mainビュー高さ設定
     @updateMainViewSize()
     # 環境設定
     Common.applyEnvironmentFromPagevalue()
+    # 共通設定
+    Setting.initConfig()
 
   # Mainコンテナのコンテキストメニューを設定
   @setMainContainerContext: ->

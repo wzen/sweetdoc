@@ -346,9 +346,9 @@ WorktableCommon = (function() {
         return _this.clearAllItemStyle();
       };
     })(this));
-    Setting.initConfig();
     this.updateMainViewSize();
-    return Common.applyEnvironmentFromPagevalue();
+    Common.applyEnvironmentFromPagevalue();
+    return Setting.initConfig();
   };
 
   WorktableCommon.setMainContainerContext = function() {

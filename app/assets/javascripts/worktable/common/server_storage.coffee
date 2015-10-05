@@ -117,11 +117,11 @@ class ServerStorage
             LocalStorage.saveAllPageValues()
             WorktableCommon.drawAllItemFromInstancePageValue( ->
               Timeline.refreshAllTimeline()
-              Setting.initConfig()
               PageValue.updatePageCount()
               PageValue.updateForkCount()
               Paging.initPaging()
               Common.applyEnvironmentFromPagevalue()
+              Setting.initConfig()
               if callback?
                 callback()
             )
@@ -178,3 +178,12 @@ class ServerStorage
             errorCallback()
       }
     )
+
+  @startSaveIdleTimer = ->
+#    time = 5.0 # 5秒後セーブ
+#
+#    if window.saveIdleTimer?
+#      clearTimeout(window.saveIdleTimer)
+#    window.saveIdleTimer = setTimeout(->
+#
+#    , time)
