@@ -423,7 +423,8 @@ RunCommon = (function() {
     Common.initResize(this.resizeEvent);
     this.setupScrollEvent();
     Navbar.initRunNavbar();
-    return RunCommon.updateMainViewSize();
+    RunCommon.updateMainViewSize();
+    return Common.applyEnvironmentFromPagevalue();
   };
 
   return RunCommon;

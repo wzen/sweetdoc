@@ -408,3 +408,4 @@ class RunCommon
     @setupScrollEvent()
     Navbar.initRunNavbar()
     RunCommon.updateMainViewSize()
+    Common.applyEnvironmentFromPagevalue()

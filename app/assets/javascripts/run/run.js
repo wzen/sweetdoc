@@ -13,7 +13,6 @@ $(function() {
   } else {
     LocalStorage.saveAllPageValues();
   }
-  Common.applyEnvironmentFromPagevalue();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   RunCommon.initMainContainer();
   Setting.initConfig();
