@@ -74,6 +74,8 @@ class Const
 
   # キーコード
   class KeyboardKeyCode
+    # @property [Int] ENTER エンターキー
+    ENTER = 13
     # @property [Int] Z zボタン
     Z = 90
     # @property [Int] C cボタン

@@ -282,7 +282,7 @@ class RunCommon
     # Inputイベント
     $('.select_tag_input', modalEmt).off('keypress')
     $('.select_tag_input', modalEmt).on('keypress', (e) ->
-      if e.keyCode == 13
+      if e.keyCode == Constant.KeyboardKeyCode.ENTER
         # Enterキーを押した場合、選択タグに追加
         RunCommon.addUploadGallerySelectTag(modalEmt, $(@).val())
         $(@).val('')

@@ -70,6 +70,8 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.KeyboardKeyCode = (function() {
       function KeyboardKeyCode() {}
 
+      KeyboardKeyCode.ENTER = constant.KeyboardKeyCode.ENTER;
+
       KeyboardKeyCode.Z = constant.KeyboardKeyCode.Z;
 
       KeyboardKeyCode.C = constant.KeyboardKeyCode.C;

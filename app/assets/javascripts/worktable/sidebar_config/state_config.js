@@ -16,8 +16,21 @@ StateConfig = (function() {
     var createdItemList, items, k, position, rootEmt, temp, v;
     rootEmt = $("#" + this.ROOT_ID_NAME);
     position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
-    $('.display_position_x', rootEmt).val(position.left);
-    $('.display_position_y', rootEmt).val(position.top);
+    $('.display_position_x', rootEmt).val(parseInt(position.left));
+    $('.display_position_y', rootEmt).val(parseInt(position.top));
+    $('.display_position_x, .display_position_y', rootEmt).off('keypress');
+    $('.display_position_x, .display_position_y', rootEmt).on('keypress', function(e) {
+      var left, top;
+      if (e.keyCode === Constant.KeyboardKeyCode.ENTER) {
+        left = $('.display_position_x', rootEmt).val();
+        top = $('.display_position_y', rootEmt).val();
+        PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {
+          top: top,
+          left: left
+        });
+        return Common.updateScrollContentsFromPagevalue();
+      }
+    });
     createdItemList = $('.created_item_list', rootEmt);
     createdItemList.children().remove();
     items = PageValue.getCreatedItems();
@@ -41,8 +54,8 @@ StateConfig = (function() {
         return Common.focusToTarget($("#" + objId), function() {
           rootEmt = $("#" + StateConfig.ROOT_ID_NAME);
           position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
-          $('.display_position_x', rootEmt).val(position.left);
-          return $('.display_position_y', rootEmt).val(position.top);
+          $('.display_position_x', rootEmt).val(parseInt(position.left));
+          return $('.display_position_y', rootEmt).val(parseInt(position.top));
         });
       });
       $('a.item_edit', rootEmt).off('click');

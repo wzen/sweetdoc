@@ -47,6 +47,8 @@ if gon?
 
     # キーコード
     class @KeyboardKeyCode
+      # @property [Int] ENTER エンターキー
+      @ENTER = constant.KeyboardKeyCode.ENTER
       # @property [Int] Z zボタン
       @Z = constant.KeyboardKeyCode.Z
       # @property [Int] C cボタン
