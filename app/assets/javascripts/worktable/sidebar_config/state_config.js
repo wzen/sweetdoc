@@ -15,7 +15,7 @@ StateConfig = (function() {
   StateConfig.initConfig = function() {
     var createdItemList, items, k, position, rootEmt, temp, v;
     rootEmt = $("#" + this.ROOT_ID_NAME);
-    position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION);
+    position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
     $('.display_position_x', rootEmt).val(position.left);
     $('.display_position_y', rootEmt).val(position.top);
     createdItemList = $('.created_item_list', rootEmt);
@@ -40,7 +40,7 @@ StateConfig = (function() {
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
         return Common.focusToTarget($("#" + objId), function() {
           rootEmt = $("#" + StateConfig.ROOT_ID_NAME);
-          position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION);
+          position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
           $('.display_position_x', rootEmt).val(position.left);
           return $('.display_position_y', rootEmt).val(position.top);
         });

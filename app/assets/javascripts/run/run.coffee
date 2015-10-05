@@ -22,7 +22,7 @@ $ ->
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   RunCommon.initMainContainer()
-  RunCommon.updateMainViewSize()
+
   # 共通設定
   Setting.initConfig()
   # 必要JS読み込み

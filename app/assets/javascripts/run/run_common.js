@@ -422,7 +422,8 @@ RunCommon = (function() {
     this.initHandleScrollPoint();
     Common.initResize(this.resizeEvent);
     this.setupScrollEvent();
-    return Navbar.initRunNavbar();
+    Navbar.initRunNavbar();
+    return RunCommon.updateMainViewSize();
   };
 
   return RunCommon;

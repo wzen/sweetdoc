@@ -300,6 +300,10 @@ class WorktableCommon
     )
     # 共通設定
     Setting.initConfig()
+    # Mainビュー高さ設定
+    @updateMainViewSize()
+    # スクロール位置初期化
+    Common.updateScrollContentsFromPagevalue()
 
   # Mainコンテナのコンテキストメニューを設定
   @setMainContainerContext: ->

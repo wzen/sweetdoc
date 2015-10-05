@@ -27,9 +27,9 @@ class ServerStorage
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
 
     generalPagevalues = {}
-    general = PageValue.getInstancePageValue(PageValue.Key.G_PREFIX)
+    general = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX)
     for k, v of general
-      if k.indexOf(PageValue.Key.P_PREFIX) > 0
+      if k.indexOf(PageValue.Key.P_PREFIX) >= 0
         pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
         generalPagevalues[pageNum] = JSON.stringify(v)
     data[@Key.GENERAL_PAGE_VALUE] = if Object.keys(generalPagevalues).length > 0 then generalPagevalues else null

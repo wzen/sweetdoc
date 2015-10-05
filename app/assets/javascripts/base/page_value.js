@@ -36,6 +36,14 @@ PageValue = (function() {
 
       Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
+      Key.FORK_STACK = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "fork_stack";
+
+      Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.PROJECT_ID;
+
+      Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.TITLE;
+
+      Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.SCREEN_SIZE;
+
       Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
       Key.instancePagePrefix = function(pn) {
@@ -123,17 +131,26 @@ PageValue = (function() {
 
       Key.UPDATED = 'updated';
 
-      Key.FORK_STACK = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "fork_stack";
+      Key.generalPagePrefix = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return this.G_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
+      };
 
-      Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.PROJECT_ID;
+      Key.displayPosition = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "display_position";
+      };
 
-      Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.TITLE;
-
-      Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.SCREEN_SIZE;
-
-      Key.DISPLAY_POSITION = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "display_position";
-
-      Key.ITEM_VISIBLE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "item_visible";
+      Key.itemVisible = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "item_visible";
+      };
 
       return Key;
 
@@ -680,7 +697,7 @@ PageValue = (function() {
   PageValue.getScrollContentsPosition = function() {
     var l, position, screenSize, t;
     if (window.scrollContents != null) {
-      position = this.getGeneralPageValue(this.Key.DISPLAY_POSITION);
+      position = this.getGeneralPageValue(this.Key.displayPosition());
       if (position == null) {
         position = {
           top: 0,
@@ -716,7 +733,7 @@ PageValue = (function() {
     }
     t = (window.scrollInside.height() + screenSize.height) * 0.5 - top;
     l = (window.scrollInside.width() + screenSize.width) * 0.5 - left;
-    return this.setGeneralPageValue(this.Key.DISPLAY_POSITION, {
+    return this.setGeneralPageValue(this.Key.displayPosition(), {
       top: t,
       left: l
     });

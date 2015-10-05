@@ -10,7 +10,7 @@ class StateConfig
     rootEmt = $("##{@ROOT_ID_NAME}")
 
     # 画面座標
-    position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION)
+    position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
     $('.display_position_x', rootEmt).val(position.left)
     $('.display_position_y', rootEmt).val(position.top)
 
@@ -35,7 +35,7 @@ class StateConfig
         # アイテムにフォーカス
         Common.focusToTarget($("##{objId}"), ->
           rootEmt = $("##{StateConfig.ROOT_ID_NAME}")
-          position = PageValue.getGeneralPageValue(PageValue.Key.DISPLAY_POSITION)
+          position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
           $('.display_position_x', rootEmt).val(position.left)
           $('.display_position_y', rootEmt).val(position.top)
         )

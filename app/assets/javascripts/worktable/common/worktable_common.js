@@ -346,7 +346,9 @@ WorktableCommon = (function() {
         return _this.clearAllItemStyle();
       };
     })(this));
-    return Setting.initConfig();
+    Setting.initConfig();
+    this.updateMainViewSize();
+    return Common.updateScrollContentsFromPagevalue();
   };
 
   WorktableCommon.setMainContainerContext = function() {

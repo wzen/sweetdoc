@@ -407,3 +407,4 @@ class RunCommon
     Common.initResize(@resizeEvent)
     @setupScrollEvent()
     Navbar.initRunNavbar()
+    RunCommon.updateMainViewSize()

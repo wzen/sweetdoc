@@ -21,10 +21,6 @@ $ ->
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化
   WorktableCommon.initMainContainer()
-  WorktableCommon.updateMainViewSize()
-  # スクロール位置初期化
-  Common.updateScrollContentsFromPagevalue()
-
   # リサイズイベント
   Common.initResize(WorktableCommon.resizeEvent)
 

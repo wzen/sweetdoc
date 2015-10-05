@@ -26,6 +26,14 @@ class PageValue
       @FORK_NUM = constant.PageValueKey.FORK_NUM
       # @property [String] IS_ROOT ページ値ルート
       @IS_ROOT = constant.PageValueKey.IS_ROOT
+      # @property [String] FORK_STACK フォーク番号スタック
+      @FORK_STACK = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
+      # @property [String] PROJECT_NAME プロジェクトID
+      @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.PROJECT_ID}"
+      # @property [String] PROJECT_NAME プロジェクト名
+      @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.TITLE}"
+      # @property [String] SCREEN_SIZE プロジェクトサイズ
+      @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
       # @property [return] インスタンスページプレフィックスを取得
@@ -47,7 +55,7 @@ class PageValue
       @E_MASTER_ROOT = constant.PageValueKey.E_MASTER_ROOT
       # @property [String] E_FORK_ROOT イベントフォークルート
       @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
-      # @property [return] イベントページプレフィックス
+      # @property [return] イベントページルート
       @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
       # @property [return] イベントページプレフィックス
       @eventPageMainRoot = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) ->
@@ -71,18 +79,12 @@ class PageValue
       @EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM
       # @property [String] UPDATED 更新フラグ
       @UPDATED = 'updated'
-      # @property [String] FORK_STACK フォーク番号スタック
-      @FORK_STACK = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
-      # @property [String] PROJECT_NAME プロジェクトID
-      @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.PROJECT_ID}"
-      # @property [String] PROJECT_NAME プロジェクト名
-      @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.TITLE}"
-      # @property [String] SCREEN_SIZE プロジェクトサイズ
-      @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
-      # @property [String] DISPLAY_POSITION プロジェクト表示位置
-      @DISPLAY_POSITION = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}display_position"
+      # @property [return] 設定値ページプレフィックスを取得
+      @generalPagePrefix = (pn = PageValue.getPageNum()) -> @G_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
+       # @property [String] DISPLAY_POSITION プロジェクト表示位置
+      @displayPosition = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}display_position"
       # @property [String] ITEM_VISIBLE アイテム表示状態
-      @ITEM_VISIBLE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}item_visible"
+      @itemVisible = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}item_visible"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID
@@ -557,7 +559,7 @@ class PageValue
   # 画面表示位置を取得する
   @getScrollContentsPosition = ->
     if window.scrollContents?
-      position = @getGeneralPageValue(@Key.DISPLAY_POSITION)
+      position = @getGeneralPageValue(@Key.displayPosition())
       if !position?
         position = {top: 0, left: 0}
       screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
@@ -579,7 +581,7 @@ class PageValue
     t = (window.scrollInside.height() + screenSize.height) * 0.5 - top
     l = (window.scrollInside.width() + screenSize.width) * 0.5 - left
     # 中央位置からの差を設定
-    @setGeneralPageValue(@Key.DISPLAY_POSITION, {top: t, left: l})
+    @setGeneralPageValue(@Key.displayPosition(), {top: t, left: l})
 
   # 対象イベントを削除する
   # @param [Integer] eNum 削除するイベント番号

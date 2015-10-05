@@ -50,10 +50,10 @@ ServerStorage = (function() {
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
     data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     generalPagevalues = {};
-    general = PageValue.getInstancePageValue(PageValue.Key.G_PREFIX);
+    general = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX);
     for (k in general) {
       v = general[k];
-      if (k.indexOf(PageValue.Key.P_PREFIX) > 0) {
+      if (k.indexOf(PageValue.Key.P_PREFIX) >= 0) {
         pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));
         generalPagevalues[pageNum] = JSON.stringify(v);
       }
