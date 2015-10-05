@@ -27,7 +27,6 @@ class Setting
     @STEP_DEFAULT_VALUE = 12
 
     class @PageValueKey
-      @ROOT = 'grid'
       # @property [String] GRID グリッド線表示
       @GRID = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_enable"
       # @property [String] GRID グリッド線間隔
@@ -150,5 +149,74 @@ class Setting
 
   # 自動保存
   class @IdleSaveTimer
-    @initConfig: ->
+    @AUTOSAVE_CLASS_NAME = constant.Setting.AUTOSAVE_CLASS_NAME
+    @AUTOSAVE_TIME_CLASS_NAME = constant.Setting.AUTOSAVE_TIME_CLASS_NAME
+    @AUTOSAVE_TIME_DIV_CLASS_NAME = constant.Setting.AUTOSAVE_TIME_DIV_CLASS_NAME
+    @AUTOSAVE_TIME_DEFAULT = 10 # 10秒
 
+    class @PageValueKey
+      # @property [String] AUTOSAVE AutoSave
+      @AUTOSAVE = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave"
+      # @property [String] AUTOSAVE_TIME AutoSave間隔
+      @AUTOSAVE_TIME = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave_time"
+
+
+    @initConfig: ->
+      root = $("##{Setting.ROOT_ID_NAME}")
+      # Autosave表示
+      enable = $(".#{@AUTOSAVE_CLASS_NAME}", root)
+      enableValue = PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE)
+      if !enableValue?
+        enableValue = 'true'
+        PageValue.setSettingPageValue(@PageValueKey.AUTOSAVE, enableValue)
+      enableValue = enableValue? && enableValue == 'true'
+      autosaveTimeDiv = $(".#{@AUTOSAVE_TIME_DIV_CLASS_NAME}", root)
+
+      enable.prop('checked', if enableValue then 'checked' else false)
+      enable.off('click')
+      enable.on('click', =>
+        enableValue = PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE)
+        if enableValue?
+          enableValue = enableValue == 'true'
+
+        # グリッド間隔の有効無効を切り替え
+        if !enableValue
+          autosaveTimeDiv.show()
+        else
+          autosaveTimeDiv.hide()
+      )
+
+      # Autosaveの有効無効を切り替え
+      if enableValue
+        autosaveTimeDiv.show()
+      else
+        autosaveTimeDiv.hide()
+
+      # Autosave間隔
+      autosaveTimeValue = PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE_TIME)
+      if !autosaveTimeValue?
+        autosaveTimeValue = @AUTOSAVE_TIME_DEFAULT
+        PageValue.setSettingPageValue(@PageValueKey.AUTOSAVE_TIME, autosaveTimeValue)
+      autosaveTime = $(".#{@AUTOSAVE_TIME_CLASS_NAME}", root)
+      autosaveTime.val(autosaveTimeValue)
+      self = @
+      autosaveTime.change( ->
+        value = PageValue.getSettingPageValue(Setting.IdleSaveTimer.PageValueKey.AUTOSAVE)
+        if value?
+          value = value == 'true'
+        if value
+          step = $(@).val()
+          if step?
+            step = parseInt(step)
+            PageValue.setSettingPageValue(Setting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step)
+      )
+
+    @isEnabled: ->
+      enableValue = PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE)
+      if enableValue?
+        return enableValue == 'true'
+      else
+        return false
+
+    @idleTime: ->
+      return PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE_TIME)

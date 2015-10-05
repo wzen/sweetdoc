@@ -56,10 +56,10 @@ class ServerStorage
           data: data
           dataType: "json"
           success: (data)->
-            # updateフラグ除去
-            #PageValue.clearAllUpdateFlg()
             # 「Load」マウスオーバーで取得させるためupdateフラグを消去
             $("##{Navbar.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.FILE_LOAD_CLASS} .#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
+            # 最終保存時刻更新
+            PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time)
             if window.debug
               console.log(data.message)
             if callback?
@@ -161,29 +161,17 @@ class ServerStorage
       }
     )
 
-  @get_load_data: (successCallback = null, errorCallback = null) ->
-    data = {}
-    data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
-    $.ajax(
-      {
-        url: "/page_value_state/user_pagevalue_list"
-        type: "POST"
-        dataType: "json"
-        data: data
-        success: (data)->
-          if successCallback?
-            successCallback(data)
-        error: (data)->
-          if errorCallback?
-            errorCallback()
-      }
-    )
-
   @startSaveIdleTimer = ->
-#    time = 5.0 # 5秒後セーブ
-#
-#    if window.saveIdleTimer?
-#      clearTimeout(window.saveIdleTimer)
-#    window.saveIdleTimer = setTimeout(->
-#
-#    , time)
+    if window.workingAutoSave? && window.workingAutoSave
+      return
+
+    if window.saveIdleTimer?
+      clearTimeout(window.saveIdleTimer)
+    if Setting.IdleSaveTimer.isEnabled()
+      time = parseFloat(Setting.IdleSaveTimer.idleTime()) * 1000
+      window.saveIdleTimer = setTimeout( ->
+        window.workingAutoSave = true
+        ServerStorage.save( ->
+          window.workingAutoSave = false
+        )
+      , time)

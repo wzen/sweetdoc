@@ -164,6 +164,9 @@ class Const
     GRID_CLASS_NAME = 'grid'
     GRID_STEP_CLASS_NAME = 'grid_step'
     GRID_STEP_DIV_CLASS_NAME = 'grid_div_step'
+    AUTOSAVE_CLASS_NAME = 'autosave'
+    AUTOSAVE_TIME_CLASS_NAME = 'autosave_time'
+    AUTOSAVE_TIME_DIV_CLASS_NAME = 'autosave_time_div'
   end
 
   class ServerStorage

@@ -318,7 +318,7 @@ RunCommon = (function() {
     tags.on('mouseenter', function(e) {
       var li;
       li = this.closest('li');
-      $(li).append($("<div class='add_pop' style='display:none'><p>Add tag(click)</p></div>"));
+      $(li).append($("<div class='add_pop pop' style='display:none'><p>Add tag(click)</p></div>"));
       $('.add_pop', li).css({
         top: $(li).height(),
         left: $(li).width()
@@ -354,7 +354,7 @@ RunCommon = (function() {
     $('a', ul).on('mouseenter', function(e) {
       var li;
       li = this.closest('li');
-      $(li).append($("<div class='delete_pop' style='display:none'><p>Delete tag(click)</p></div>"));
+      $(li).append($("<div class='delete_pop pop' style='display:none'><p>Delete tag(click)</p></div>"));
       $('.delete_pop', li).css({
         top: $(li).height(),
         left: $(li).width()

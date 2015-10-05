@@ -19,6 +19,8 @@ class PageValueState
           e_page_values != 'null' ||
           s_page_values != 'null'
 
+        last_save_time = nil
+
         ActiveRecord::Base.transaction do
 
           # UserPagevalue Update or Insert
@@ -56,14 +58,15 @@ class PageValueState
           if up != nil
             up.touch
             up.save!
+            last_save_time = up.updated_at
           end
         end
       end
 
-      return I18n.t('message.database.item_state.save.success')
+      return I18n.t('message.database.item_state.save.success'), last_save_time
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error')
+      return I18n.t('message.database.item_state.save.error'), nil
     end
   end
 

@@ -84,6 +84,7 @@ ServerStorage = (function() {
         dataType: "json",
         success: function(data) {
           $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS + " ." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+          PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time);
           if (window.debug) {
             console.log(data.message);
           }
@@ -211,35 +212,24 @@ ServerStorage = (function() {
     });
   };
 
-  ServerStorage.get_load_data = function(successCallback, errorCallback) {
-    var data;
-    if (successCallback == null) {
-      successCallback = null;
+  ServerStorage.startSaveIdleTimer = function() {
+    var time;
+    if ((window.workingAutoSave != null) && window.workingAutoSave) {
+      return;
     }
-    if (errorCallback == null) {
-      errorCallback = null;
+    if (window.saveIdleTimer != null) {
+      clearTimeout(window.saveIdleTimer);
     }
-    data = {};
-    data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
-    return $.ajax({
-      url: "/page_value_state/user_pagevalue_list",
-      type: "POST",
-      dataType: "json",
-      data: data,
-      success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
-        }
-      },
-      error: function(data) {
-        if (errorCallback != null) {
-          return errorCallback();
-        }
-      }
-    });
+    if (Setting.IdleSaveTimer.isEnabled()) {
+      time = parseFloat(Setting.IdleSaveTimer.idleTime()) * 1000;
+      return window.saveIdleTimer = setTimeout(function() {
+        window.workingAutoSave = true;
+        return ServerStorage.save(function() {
+          return window.workingAutoSave = false;
+        });
+      }, time);
+    }
   };
-
-  ServerStorage.startSaveIdleTimer = function() {};
 
   return ServerStorage;
 

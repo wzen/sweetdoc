@@ -34,6 +34,8 @@ class PageValue
       @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.TITLE}"
       # @property [String] SCREEN_SIZE プロジェクトサイズ
       @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
+      # @property [String] LAST_SAVE_TIME 最終保存時刻
+      @LAST_SAVE_TIME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}last_save_time"
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
       # @property [return] インスタンスページプレフィックスを取得
@@ -322,6 +324,10 @@ class PageValue
         if isCache
           root.addClass(cacheClassName)
     )
+
+    if window.isWorkTable
+      # 自動保存実行
+      ServerStorage.startSaveIdleTimer()
 
   # インスタンス値を削除
   # @param [Integer] objId オブジェクトID

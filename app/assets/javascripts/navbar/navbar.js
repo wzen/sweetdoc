@@ -9,7 +9,7 @@ Navbar = (function() {
   Navbar.ITEM_MENU_PREFIX = 'menu-item-';
 
   Navbar.initWorktableNavbar = function() {
-    var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt;
+    var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt, menuSave;
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     $('.menu-newcreate', fileMenuEmt).off('click');
     $('.menu-newcreate', fileMenuEmt).on('click', function() {
@@ -23,9 +23,32 @@ Navbar = (function() {
         return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false);
       }
     });
-    $('.menu-save', fileMenuEmt).off('click');
-    $('.menu-save', fileMenuEmt).on('click', function() {
+    menuSave = $('.menu-save', fileMenuEmt);
+    menuSave.off('click');
+    menuSave.on('click', function() {
       return ServerStorage.save();
+    });
+    menuSave.off('mouseenter');
+    menuSave.on('mouseenter', function(e) {
+      var d, lastSaveTime, li, n;
+      lastSaveTime = PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME);
+      if (lastSaveTime != null) {
+        n = $.now();
+        d = new Date(lastSaveTime);
+        li = this.closest('li');
+        $(li).append($("<div class='pop' style='display:none'><p>Last Save " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</p></div>"));
+        $('.pop', li).css({
+          top: $(li).height() + 30,
+          left: $(li).width()
+        });
+        return $('.pop', li).show();
+      }
+    });
+    menuSave.off('mouseleave');
+    menuSave.on('mouseleave', function(e) {
+      var ul;
+      ul = this.closest('ul');
+      return $('.pop', ul).remove();
     });
     $('.menu-setting', fileMenuEmt).off('click');
     $('.menu-setting', fileMenuEmt).on('click', function() {

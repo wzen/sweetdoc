@@ -99,35 +99,8 @@
   }
 
   .select_tag, .popular_tag, .recommend_tag {
-
     li {
       position: relative;
-
-      .delete_pop {
-        position: absolute;
-        text-align: center;
-        width: 90px;
-        background: white;
-        color: #000000;
-        border: 1px solid #1a1a1a;
-        font-size: 90%;
-        p {
-          margin: 0;
-        }
-      }
-
-      .add_pop {
-        position: absolute;
-        text-align: center;
-        width: 90px;
-        background: white;
-        color: #000000;
-        border: 1px solid #1a1a1a;
-        font-size: 90%;
-        p {
-          margin: 0;
-        }
-      }
     }
   }
 

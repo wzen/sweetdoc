@@ -307,7 +307,7 @@ class RunCommon
     tags.off('mouseenter')
     tags.on('mouseenter', (e) ->
       li = @closest('li')
-      $(li).append($("<div class='add_pop' style='display:none'><p>Add tag(click)</p></div>"))
+      $(li).append($("<div class='add_pop pop' style='display:none'><p>Add tag(click)</p></div>"))
       $('.add_pop', li).css({top: $(li).height(), left: $(li).width()})
       $('.add_pop', li).show()
     )
@@ -340,7 +340,7 @@ class RunCommon
     $('a', ul).off('mouseenter')
     $('a', ul).on('mouseenter', (e) ->
       li = @closest('li')
-      $(li).append($("<div class='delete_pop' style='display:none'><p>Delete tag(click)</p></div>"))
+      $(li).append($("<div class='delete_pop pop' style='display:none'><p>Delete tag(click)</p></div>"))
       $('.delete_pop', li).css({top: $(li).height(), left: $(li).width()})
       $('.delete_pop', li).show()
     )

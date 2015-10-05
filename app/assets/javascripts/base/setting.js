@@ -46,8 +46,6 @@ Setting = (function() {
     Grid.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.ROOT = 'grid';
-
       PageValueKey.GRID = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_enable";
 
       PageValueKey.GRID_STEP = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_step";
@@ -181,7 +179,93 @@ Setting = (function() {
   Setting.IdleSaveTimer = (function() {
     function IdleSaveTimer() {}
 
-    IdleSaveTimer.initConfig = function() {};
+    IdleSaveTimer.AUTOSAVE_CLASS_NAME = constant.Setting.AUTOSAVE_CLASS_NAME;
+
+    IdleSaveTimer.AUTOSAVE_TIME_CLASS_NAME = constant.Setting.AUTOSAVE_TIME_CLASS_NAME;
+
+    IdleSaveTimer.AUTOSAVE_TIME_DIV_CLASS_NAME = constant.Setting.AUTOSAVE_TIME_DIV_CLASS_NAME;
+
+    IdleSaveTimer.AUTOSAVE_TIME_DEFAULT = 10;
+
+    IdleSaveTimer.PageValueKey = (function() {
+      function PageValueKey() {}
+
+      PageValueKey.AUTOSAVE = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave";
+
+      PageValueKey.AUTOSAVE_TIME = "" + Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave_time";
+
+      return PageValueKey;
+
+    })();
+
+    IdleSaveTimer.initConfig = function() {
+      var autosaveTime, autosaveTimeDiv, autosaveTimeValue, enable, enableValue, root, self;
+      root = $("#" + Setting.ROOT_ID_NAME);
+      enable = $("." + this.AUTOSAVE_CLASS_NAME, root);
+      enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
+      if (enableValue == null) {
+        enableValue = 'true';
+        PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE, enableValue);
+      }
+      enableValue = (enableValue != null) && enableValue === 'true';
+      autosaveTimeDiv = $("." + this.AUTOSAVE_TIME_DIV_CLASS_NAME, root);
+      enable.prop('checked', enableValue ? 'checked' : false);
+      enable.off('click');
+      enable.on('click', (function(_this) {
+        return function() {
+          enableValue = PageValue.getSettingPageValue(_this.PageValueKey.AUTOSAVE);
+          if (enableValue != null) {
+            enableValue = enableValue === 'true';
+          }
+          if (!enableValue) {
+            return autosaveTimeDiv.show();
+          } else {
+            return autosaveTimeDiv.hide();
+          }
+        };
+      })(this));
+      if (enableValue) {
+        autosaveTimeDiv.show();
+      } else {
+        autosaveTimeDiv.hide();
+      }
+      autosaveTimeValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE_TIME);
+      if (autosaveTimeValue == null) {
+        autosaveTimeValue = this.AUTOSAVE_TIME_DEFAULT;
+        PageValue.setSettingPageValue(this.PageValueKey.AUTOSAVE_TIME, autosaveTimeValue);
+      }
+      autosaveTime = $("." + this.AUTOSAVE_TIME_CLASS_NAME, root);
+      autosaveTime.val(autosaveTimeValue);
+      self = this;
+      return autosaveTime.change(function() {
+        var step, value;
+        value = PageValue.getSettingPageValue(Setting.IdleSaveTimer.PageValueKey.AUTOSAVE);
+        if (value != null) {
+          value = value === 'true';
+        }
+        if (value) {
+          step = $(this).val();
+          if (step != null) {
+            step = parseInt(step);
+            return PageValue.setSettingPageValue(Setting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step);
+          }
+        }
+      });
+    };
+
+    IdleSaveTimer.isEnabled = function() {
+      var enableValue;
+      enableValue = PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE);
+      if (enableValue != null) {
+        return enableValue === 'true';
+      } else {
+        return false;
+      }
+    };
+
+    IdleSaveTimer.idleTime = function() {
+      return PageValue.getSettingPageValue(this.PageValueKey.AUTOSAVE_TIME);
+    };
 
     return IdleSaveTimer;
 

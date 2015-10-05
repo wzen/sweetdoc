@@ -44,6 +44,8 @@ PageValue = (function() {
 
       Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.SCREEN_SIZE;
 
+      Key.LAST_SAVE_TIME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "last_save_time";
+
       Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
       Key.instancePagePrefix = function(pn) {
@@ -387,7 +389,7 @@ PageValue = (function() {
     root = $("#" + rootId);
     parentClassName = null;
     keys = key.split(this.Key.PAGE_VALUES_SEPERATOR);
-    return keys.forEach(function(k, index) {
+    keys.forEach(function(k, index) {
       var element, parent;
       parent = root;
       element = '';
@@ -423,6 +425,9 @@ PageValue = (function() {
         }
       }
     });
+    if (window.isWorkTable) {
+      return ServerStorage.startSaveIdleTimer();
+    }
   };
 
   PageValue.removeInstancePageValue = function(objId) {
