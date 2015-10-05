@@ -23,6 +23,9 @@ class StateConfig
         PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: top, left: left})
         Common.updateScrollContentsFromPagevalue()
     )
+    # 座標Limit
+    limit = "(#{-window.scrollViewSize * 0.5} 〜 #{window.scrollViewSize * 0.5})"
+    $('.display_position_limit', rootEmt).html(limit)
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
     createdItemList.children().remove()

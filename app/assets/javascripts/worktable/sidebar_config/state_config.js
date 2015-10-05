@@ -13,7 +13,7 @@ StateConfig = (function() {
   }
 
   StateConfig.initConfig = function() {
-    var createdItemList, items, k, position, rootEmt, temp, v;
+    var createdItemList, items, k, limit, position, rootEmt, temp, v;
     rootEmt = $("#" + this.ROOT_ID_NAME);
     position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
     $('.display_position_x', rootEmt).val(parseInt(position.left));
@@ -31,6 +31,8 @@ StateConfig = (function() {
         return Common.updateScrollContentsFromPagevalue();
       }
     });
+    limit = "(" + (-window.scrollViewSize * 0.5) + " 〜 " + (window.scrollViewSize * 0.5) + ")";
+    $('.display_position_limit', rootEmt).html(limit);
     createdItemList = $('.created_item_list', rootEmt);
     createdItemList.children().remove();
     items = PageValue.getCreatedItems();

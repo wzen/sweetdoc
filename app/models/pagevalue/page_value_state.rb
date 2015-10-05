@@ -3,6 +3,8 @@ require 'item/item'
 require 'item/item_js'
 require 'pagevalue/event_pagevalue'
 require 'pagevalue/event_pagevalue_paging'
+require 'pagevalue/general_pagevalue'
+require 'pagevalue/general_pagevalue_paging'
 require 'pagevalue/instance_pagevalue'
 require 'pagevalue/instance_pagevalue_paging'
 require 'pagevalue/setting_pagevalue'
@@ -77,7 +79,7 @@ class PageValueState
   def self.load_state(user_id, user_pagevalue_id, loaded_itemids)
     sql = <<-"SQL"
       SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
-             ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, gp.data as general_pagevalue_data,, sp.data as setting_pagevalue_data,
+             ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, gp.data as general_pagevalue_data, sp.data as setting_pagevalue_data,
              ipp.page_num as page_num
       FROM user_pagevalues up
       LEFT JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
@@ -85,7 +87,7 @@ class PageValueState
       INNER JOIN projects p ON upm.project_id = p.id
       LEFT JOIN general_pagevalue_pagings gpp ON up.id = gpp.user_pagevalue_id AND gpp.del_flg = 0
       LEFT JOIN general_pagevalues gp ON gpp.general_pagevalue_id = gp.id AND gp.del_flg = 0
-      LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
+      LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND gpp.page_num = ipp.page_num AND ipp.del_flg = 0
       LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
       LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
       LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
