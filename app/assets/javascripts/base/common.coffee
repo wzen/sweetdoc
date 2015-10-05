@@ -50,6 +50,8 @@ class Common
     @initScreenSize()
     # スクロール位置設定
     @initScrollContentsPosition()
+    # Zoom
+    @initZoom()
 
   # 環境の反映をリセット
   @resetEnvironment = ->
@@ -77,6 +79,15 @@ class Common
     position = PageValue.getScrollContentsPosition()
     if position?
       @updateScrollContentsPosition(position.top, position.left)
+    else
+      PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: 0, left: 0})
+
+  @initZoom = ->
+    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
+    if zoom?
+      window.mainWrapper.css('transform', "scale(#{zoom}, #{zoom})")
+    else
+      PageValue.setGeneralPageValue(PageValue.Key.zoom(), 1)
 
   # Canvasサイズ更新
   @updateCanvasSize = ->

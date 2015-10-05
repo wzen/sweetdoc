@@ -59,7 +59,8 @@ Common = (function() {
   Common.applyEnvironmentFromPagevalue = function() {
     Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();
-    return this.initScrollContentsPosition();
+    this.initScrollContentsPosition();
+    return this.initZoom();
   };
 
   Common.resetEnvironment = function() {
@@ -91,6 +92,21 @@ Common = (function() {
     position = PageValue.getScrollContentsPosition();
     if (position != null) {
       return this.updateScrollContentsPosition(position.top, position.left);
+    } else {
+      return PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {
+        top: 0,
+        left: 0
+      });
+    }
+  };
+
+  Common.initZoom = function() {
+    var zoom;
+    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
+    if (zoom != null) {
+      return window.mainWrapper.css('transform', "scale(" + zoom + ", " + zoom + ")");
+    } else {
+      return PageValue.setGeneralPageValue(PageValue.Key.zoom(), 1);
     }
   };
 

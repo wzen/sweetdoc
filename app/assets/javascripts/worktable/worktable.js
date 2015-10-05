@@ -12,7 +12,6 @@ $(function() {
   }
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
-  Common.applyEnvironmentFromPagevalue();
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   WorktableCommon.initMainContainer();
   Common.initResize(WorktableCommon.resizeEvent);

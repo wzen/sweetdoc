@@ -145,6 +145,13 @@ PageValue = (function() {
         return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "display_position";
       };
 
+      Key.zoom = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "zoom";
+      };
+
       Key.itemVisible = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();

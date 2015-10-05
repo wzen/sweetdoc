@@ -81,9 +81,11 @@ class PageValue
       @UPDATED = 'updated'
       # @property [return] 設定値ページプレフィックスを取得
       @generalPagePrefix = (pn = PageValue.getPageNum()) -> @G_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
-       # @property [String] DISPLAY_POSITION プロジェクト表示位置
+       # @property [return] プロジェクト表示位置
       @displayPosition = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}display_position"
-      # @property [String] ITEM_VISIBLE アイテム表示状態
+      # @property [return] Zoom
+      @zoom = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}zoom"
+      # @property [return] アイテム表示状態
       @itemVisible = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}item_visible"
 
   # サーバから読み込んだアイテム情報を追加

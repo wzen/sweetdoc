@@ -15,8 +15,6 @@ $ ->
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
-  # 環境設定
-  Common.applyEnvironmentFromPagevalue()
   # Mainコンテナ作成
   Common.createdMainContainerIfNeeded(PageValue.getPageNum())
   # コンテナ初期化

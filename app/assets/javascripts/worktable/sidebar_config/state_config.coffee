@@ -13,19 +13,55 @@ class StateConfig
     position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
     $('.display_position_x', rootEmt).val(parseInt(position.left))
     $('.display_position_y', rootEmt).val(parseInt(position.top))
+    leftMin = -window.scrollInside.width() * 0.5
+    leftMax = window.scrollInside.width() * 0.5
+    topMin = -window.scrollInside.height() * 0.5
+    topMax = window.scrollInside.height() * 0.5
     # Inputイベント
-    $('.display_position_x, .display_position_y', rootEmt).off('keypress')
-    $('.display_position_x, .display_position_y', rootEmt).on('keypress', (e) ->
-      if e.keyCode == Constant.KeyboardKeyCode.ENTER
-        # Enterキーを押した場合、スクロール位置変更
+    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout')
+    $('.display_position_x, .display_position_y', rootEmt).on('keypress focusout', (e) ->
+      if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
+        # スクロール位置変更
         left = $('.display_position_x', rootEmt).val()
         top = $('.display_position_y', rootEmt).val()
+        if left < leftMin
+          left = leftMin
+        else if left > leftMax
+          left = leftMax
+        if top < topMin
+          top = topMin
+        else if top > topMax
+          top = topMax
+        $('.display_position_x', rootEmt).val(left)
+        $('.display_position_y', rootEmt).val(top)
         PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: top, left: left})
         Common.updateScrollContentsFromPagevalue()
+        LocalStorage.saveGeneralPageValue()
     )
-    # 座標Limit
-    limit = "(#{-window.scrollViewSize * 0.5} 〜 #{window.scrollViewSize * 0.5})"
-    $('.display_position_limit', rootEmt).html(limit)
+
+    # Zoom (1〜5)
+    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
+    $('.zoom', rootEmt).val(zoom)
+    $('.zoom', rootEmt).off('keypress focusout')
+    $('.zoom', rootEmt).on('keypress focusout', (e) ->
+      if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
+        # Zoom実行
+        zoom = $('.zoom', rootEmt).val()
+        if zoom < 1
+          zoom = 1
+        else if zoom > 5
+          zoom = 5
+
+        $('.zoom', rootEmt).val(zoom)
+        PageValue.setGeneralPageValue(PageValue.Key.zoom(), zoom)
+        window.mainWrapper.css('transform', "scale(#{zoom}, #{zoom})")
+        LocalStorage.saveGeneralPageValue()
+    )
+
+    # limit
+    $('.display_position_left_limit', rootEmt).html("(#{leftMin} 〜 #{leftMax})")
+    $('.display_position_top_limit', rootEmt).html("(#{topMin} 〜 #{topMax})")
+    $('.display_position_zoom_limit', rootEmt).html("(1 〜 5)")
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
     createdItemList.children().remove()

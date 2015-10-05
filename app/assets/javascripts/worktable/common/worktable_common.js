@@ -348,7 +348,7 @@ WorktableCommon = (function() {
     })(this));
     Setting.initConfig();
     this.updateMainViewSize();
-    return Common.updateScrollContentsFromPagevalue();
+    return Common.applyEnvironmentFromPagevalue();
   };
 
   WorktableCommon.setMainContainerContext = function() {
