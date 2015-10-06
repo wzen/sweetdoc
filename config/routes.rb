@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'coding/item'
+
   get 'user/show'
 
   get 'user/new'
