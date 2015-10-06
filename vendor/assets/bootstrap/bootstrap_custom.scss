@@ -14,7 +14,7 @@ $mediaMaxWidth3 : 1199px;
 
 
 html {
-  font-family: sans-serif;
+  //font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
@@ -117,7 +117,7 @@ pre {
 }
 
 code, kbd, pre, samp {
-  font-family: monospace, monospace;
+  //font-family: monospace, monospace;
   font-size: 1em;
 }
 
@@ -287,7 +287,7 @@ td, th {
 }
 
 @font-face {
-  font-family: 'Glyphicons Halflings';
+  //font-family: 'Glyphicons Halflings';
   src: image-url('../fonts/glyphicons-halflings-regular.eot');
   src: image-url('../fonts/glyphicons-halflings-regular.eot?#iefix') format("embedded-opentype"), url('../../fonts/glyphicons-halflings-regular.woff') format("woff"), url('../../fonts/glyphicons-halflings-regular.ttf') format("truetype"), url('../../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format("svg");
 }
@@ -297,7 +297,7 @@ td, th {
   position: relative;
   top: 1px;
   display: inline-block;
-  font-family: 'Glyphicons Halflings';
+  //font-family: 'Glyphicons Halflings';
   font-style: normal;
   font-weight: normal;
   line-height: 1;
@@ -1122,7 +1122,7 @@ html {
 }
 
 body {
-//  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+//  //font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 //  font-size: 14px;
   line-height: 1.42857143;
   color: #333;
@@ -1130,7 +1130,7 @@ body {
 }
 
 input, button, select, textarea {
-  font-family: inherit;
+  //font-family: inherit;
   font-size: inherit;
   line-height: inherit;
 }
@@ -1237,7 +1237,7 @@ hr {
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: inherit;
+  //font-family: inherit;
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
@@ -1566,7 +1566,7 @@ address {
 }
 
 code, kbd, pre, samp {
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  //font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 code {
@@ -6721,7 +6721,7 @@ button.close {
     width: 20px;
     height: 20px;
     margin-top: -10px;
-    font-family: serif;
+    //font-family: serif;
   }
   .icon-prev:before {
     content: '\2039';

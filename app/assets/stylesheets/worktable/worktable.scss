@@ -15,7 +15,7 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, 
 html, body {
   height: 100%;
   background-color: #F9F6EA;
-  font-family: Arial, Helvetica, sans-serif;
+  //font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
   overflow: hidden;
 }
@@ -122,7 +122,7 @@ div.scroll_inside {
     overflow: auto;
   }
   table, pre, code, kbd, samp, tt {
-    font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
+    //font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
     font-size: 13px;
     line-height: 1.22;
   }
@@ -155,10 +155,10 @@ div.scroll_inside {
     box-sizing: border-box;
   }
   .font-ja {
-    font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
+    //font-family: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
   }
   .font-en {
-    font-family: 'Arial', sans-serif;
+    //font-family: 'Arial', sans-serif;
   }
   .text-trim {
     white-space: nowrap;
@@ -209,7 +209,7 @@ div.scroll_inside {
       width: 100%;
     }
     > div > h2 {
-      font-family: Arial, Helvetica, sans-serif;
+      //font-family: Arial, Helvetica, sans-serif;
       font-size: 10px;
       line-height: 1.1;
       color: #fff;
@@ -261,7 +261,7 @@ div.scroll_inside {
     text-align: center;
   }
   div.forms {
-    font-family: Arial, Helvetica, sans-serif;
+    //font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     width: 100%;
     text-align: center;
@@ -328,7 +328,7 @@ div.scroll_inside {
     }
   }
   #htmlCode h2, #cssCode h2 {
-    font-family: Arial, Helvetica, sans-serif;
+    //font-family: Arial, Helvetica, sans-serif;
     font-size: 10px;
     line-height: 1;
     font-weight: normal;
@@ -339,7 +339,7 @@ div.scroll_inside {
     color: #999;
     padding: 5px;
     margin: 0 0 15px;
-    font-family: Arial, Helvetica, sans-serif;
+    //font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     line-height: 1.2;
     -moz-box-shadow: inset 0 1px 3px #000;
@@ -413,7 +413,7 @@ div.scroll_inside {
   }
   ul.pager {
     width: 896px;
-    font-family: Arial, Helvetica, sans-serif;
+    //font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     text-align: right;
     text-transform: uppercase;
@@ -441,7 +441,7 @@ div.scroll_inside {
     }
   }
   #reload {
-    font-family: Arial, Helvetica, sans-serif;
+    //font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     text-align: right;
     text-transform: uppercase;
@@ -492,7 +492,7 @@ div.scroll_inside {
       width: 50px;
     }
     label {
-      font-family: "Trebuchet MS";
+      //font-family: "Trebuchet MS";
       font-size: 12px;
       color: #666;
       display: inline;
