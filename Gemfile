@@ -71,6 +71,9 @@ gem 'meta-tags', '2.0.0'
 # マルチスレッド
 gem 'parallel', '1.6.1'
 
+# ユーザ登録機能
+gem 'devise', '3.5.2'
+
 #gem 'rmagick', '2.15.4', require: 'RMagick'
 
 # Use HBase

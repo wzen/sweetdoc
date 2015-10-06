@@ -584,7 +584,7 @@ Common = (function() {
       }
       return emt.css({
         "left": ((w - cw) / 2) + "px",
-        "top": (((h - ch) - 80) / 2) + "px"
+        "top": ((h - ch) / 2 - 80) + "px"
       });
     }
   };

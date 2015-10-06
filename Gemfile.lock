@@ -39,6 +39,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    bcrypt (3.1.10)
     builder (3.2.2)
     cells (3.11.2)
       actionpack (>= 3.0)
@@ -54,6 +55,13 @@ GEM
     coffee-script-source (1.9.1.1)
     commonjs (0.2.7)
     dalli (2.7.4)
+    devise (3.5.2)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     erubis (2.7.0)
     execjs (2.5.2)
@@ -89,6 +97,7 @@ GEM
     minitest (5.7.0)
     multi_json (1.11.1)
     mysql2 (0.3.20)
+    orm_adapter (0.5.0)
     parallel (1.6.1)
     rack (1.5.5)
     rack-test (0.6.3)
@@ -113,6 +122,8 @@ GEM
       json (~> 1.4)
     ref (1.0.5)
     request_store (1.1.0)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
       rspec-expectations (~> 3.0.0)
@@ -177,6 +188,8 @@ GEM
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    warden (1.2.3)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
@@ -185,6 +198,7 @@ DEPENDENCIES
   cells (= 3.11.2)
   coffee-rails (~> 4.0.0)
   dalli (= 2.7.4)
+  devise (= 3.5.2)
   gon
   i18n (= 0.6.11)
   i18n-js (= 2.1.2)

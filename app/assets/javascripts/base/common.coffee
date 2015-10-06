@@ -515,7 +515,7 @@ class Common
       ch = emt.outerHeight()
       if ch > h * Constant.ModalView.HEIGHT_RATE
         ch = h * Constant.ModalView.HEIGHT_RATE
-      emt.css({"left": ((w - cw)/2) + "px","top": (((h - ch) - 80)/2) + "px"})
+      emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2 - 80) + "px"})
 
   # モーダル非表示
   @hideModalView = ->
