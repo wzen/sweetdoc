@@ -59,12 +59,14 @@ Project = (function() {
           height: parseInt(height)
         });
         Navbar.setTitle(projectName);
+        Common.applyEnvironmentFromPagevalue();
         return Project.create(projectName, width, height, function() {
           return Common.hideModalView();
         });
       } else {
         user_pagevalue_id = $('.project_select', modalEmt).val();
         return ServerStorage.load(user_pagevalue_id, function() {
+          Common.applyEnvironmentFromPagevalue();
           return Common.hideModalView();
         });
       }

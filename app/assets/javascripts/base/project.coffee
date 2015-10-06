@@ -62,6 +62,9 @@ class Project
         # タイトル設定
         Navbar.setTitle(projectName)
 
+        # 環境設定
+        Common.applyEnvironmentFromPagevalue()
+
         # プロジェクト作成リクエスト
         Project.create(projectName, width, height, ->
           # モーダルを削除
@@ -71,6 +74,8 @@ class Project
         # プロジェクト選択
         user_pagevalue_id = $('.project_select', modalEmt).val()
         ServerStorage.load(user_pagevalue_id, ->
+          # 環境設定
+          Common.applyEnvironmentFromPagevalue()
           # モーダルを削除
           Common.hideModalView()
         )

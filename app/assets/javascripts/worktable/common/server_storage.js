@@ -212,24 +212,7 @@ ServerStorage = (function() {
     });
   };
 
-  ServerStorage.startSaveIdleTimer = function() {
-    var time;
-    if ((window.workingAutoSave != null) && window.workingAutoSave) {
-      return;
-    }
-    if (window.saveIdleTimer != null) {
-      clearTimeout(window.saveIdleTimer);
-    }
-    if (Setting.IdleSaveTimer.isEnabled()) {
-      time = parseFloat(Setting.IdleSaveTimer.idleTime()) * 1000;
-      return window.saveIdleTimer = setTimeout(function() {
-        window.workingAutoSave = true;
-        return ServerStorage.save(function() {
-          return window.workingAutoSave = false;
-        });
-      }, time);
-    }
-  };
+  ServerStorage.startSaveIdleTimer = function() {};
 
   return ServerStorage;
 
