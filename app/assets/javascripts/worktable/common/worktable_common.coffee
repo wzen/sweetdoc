@@ -277,10 +277,14 @@ class WorktableCommon
     window.scrollContents.off('scroll')
     window.scrollContents.on('scroll', (e) ->
       e.preventDefault()
+      top = window.scrollContents.scrollTop()
+      left = window.scrollContents.scrollLeft()
+      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
       if window.scrollContentsScrollTimer?
         clearTimeout(window.scrollContentsScrollTimer)
       window.scrollContentsScrollTimer = setTimeout( ->
-        PageValue.setDisplayPosition(window.scrollContents.scrollTop(), window.scrollContents.scrollLeft())
+        PageValue.setDisplayPosition(top, left)
+        FloatView.hide()
         window.scrollContentsScrollTimer = null
       , 500)
     )

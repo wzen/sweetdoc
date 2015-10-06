@@ -78,37 +78,37 @@ Sidebar = (function() {
     if (item == null) {
       item = null;
     }
-    animation = false;
+    animation = this.isOpenedConfigSidebar();
     $('.sidebar-config').hide();
     if (configType === this.Type.STATE) {
       sc = $("#" + StateConfig.ROOT_ID_NAME);
       if (animation) {
-        return sc.show('fast');
+        return sc.fadeIn('fast');
       } else {
         return sc.show();
       }
     } else if (configType === this.Type.CSS && (item != null) && (item.cssConfig != null)) {
       if (animation) {
-        return item.cssConfig.show('fast');
+        return item.cssConfig.fadeIn('fast');
       } else {
         return item.cssConfig.show();
       }
     } else if (configType === this.Type.CANVAS && (item != null) && (item.canvasConfig != null)) {
       if (animation) {
-        return item.canvasConfig.show('fast');
+        return item.canvasConfig.fadeIn('fast');
       } else {
         return item.canvasConfig.show();
       }
     } else if (configType === this.Type.TIMELINE) {
       if (animation) {
-        return $('#event-config').show('fast');
+        return $('#event-config').fadeIn('fast');
       } else {
         return $('#event-config').show();
       }
     } else if (configType === this.Type.SETTING) {
       sc = $("#" + Setting.ROOT_ID_NAME);
       if (animation) {
-        return sc.show('fast');
+        return sc.fadeIn('fast');
       } else {
         return sc.show();
       }

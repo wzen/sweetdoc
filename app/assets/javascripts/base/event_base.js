@@ -78,6 +78,7 @@ EventBase = (function(superClass) {
       this.doPreviewLoop = true;
       loopCount = 0;
       this.previewTimer = null;
+      FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW);
       if (actionType === Constant.ActionType.SCROLL) {
         p = 0;
         _draw = (function(_this) {
@@ -173,6 +174,7 @@ EventBase = (function(superClass) {
     _stop = function() {
       if (this.previewTimer != null) {
         clearTimeout(this.previewTimer);
+        FloatView.hide();
         this.previewTimer = null;
       }
       if (callback != null) {

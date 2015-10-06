@@ -75,6 +75,8 @@ class EventBase extends Extend
       @doPreviewLoop = true
       loopCount = 0
       @previewTimer = null
+      # FloatView表示
+      FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW)
       if actionType == Constant.ActionType.SCROLL
         p = 0
         _draw = =>
@@ -148,6 +150,7 @@ class EventBase extends Extend
     _stop = ->
       if @previewTimer?
         clearTimeout(@previewTimer)
+        FloatView.hide()
         @previewTimer = null
       if callback?
         callback()

@@ -54,36 +54,34 @@ class Sidebar
   # @param [String] configType コンフィグタイプ
   # @param [Object] item アイテムオブジェクト
   @switchSidebarConfig = (configType, item = null) ->
-    # FIXME: 未使用
-    #animation = @isOpenedConfigSidebar()
-    animation = false
+    animation = @isOpenedConfigSidebar()
     $('.sidebar-config').hide()
 
     if configType == @Type.STATE
       sc = $("##{StateConfig.ROOT_ID_NAME}")
       if animation
-        sc.show('fast')
+        sc.fadeIn('fast')
       else
         sc.show()
     else if configType == @Type.CSS && item? && item.cssConfig?
       if animation
-        item.cssConfig.show('fast')
+        item.cssConfig.fadeIn('fast')
       else
         item.cssConfig.show()
     else if configType == @Type.CANVAS && item? && item.canvasConfig?
       if animation
-        item.canvasConfig.show('fast')
+        item.canvasConfig.fadeIn('fast')
       else
         item.canvasConfig.show()
     else if configType == @Type.TIMELINE
       if animation
-        $('#event-config').show('fast')
+        $('#event-config').fadeIn('fast')
       else
         $('#event-config').show()
     else if configType == @Type.SETTING
       sc = $("##{Setting.ROOT_ID_NAME}")
       if animation
-        sc.show('fast')
+        sc.fadeIn('fast')
       else
         sc.show()
 

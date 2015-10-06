@@ -326,12 +326,17 @@ WorktableCommon = (function() {
     window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll');
     window.scrollContents.on('scroll', function(e) {
+      var left, top;
       e.preventDefault();
+      top = window.scrollContents.scrollTop();
+      left = window.scrollContents.scrollLeft();
+      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
       if (window.scrollContentsScrollTimer != null) {
         clearTimeout(window.scrollContentsScrollTimer);
       }
       return window.scrollContentsScrollTimer = setTimeout(function() {
-        PageValue.setDisplayPosition(window.scrollContents.scrollTop(), window.scrollContents.scrollLeft());
+        PageValue.setDisplayPosition(top, left);
+        FloatView.hide();
         return window.scrollContentsScrollTimer = null;
       }, 500);
     });
