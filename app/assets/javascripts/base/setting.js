@@ -218,10 +218,11 @@ Setting = (function() {
             enableValue = enableValue === 'true';
           }
           if (!enableValue) {
-            return autosaveTimeDiv.show();
+            autosaveTimeDiv.show();
           } else {
-            return autosaveTimeDiv.hide();
+            autosaveTimeDiv.hide();
           }
+          return PageValue.setSettingPageValue(_this.PageValueKey.AUTOSAVE, !enableValue);
         };
       })(this));
       if (enableValue) {

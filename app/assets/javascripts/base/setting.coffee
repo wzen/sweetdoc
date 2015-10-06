@@ -184,6 +184,8 @@ class Setting
           autosaveTimeDiv.show()
         else
           autosaveTimeDiv.hide()
+
+        PageValue.setSettingPageValue(@PageValueKey.AUTOSAVE, !enableValue)
       )
 
       # Autosaveの有効無効を切り替え
