@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'user/show'
+
+  get 'user/new'
+
+  get 'user/edit'
+
   root 'worktable#index'
 
   post 'project/create'
