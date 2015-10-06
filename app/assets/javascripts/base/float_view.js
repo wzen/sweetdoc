@@ -17,7 +17,7 @@ FloatView = (function() {
 
   FloatView.show = function(message, type) {
     var messageCss, root, rootCss, screenWrapper;
-    if (type === this.Type.DISPLAY_POSITION && PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE) === null) {
+    if (!window.initDone) {
       return;
     }
     screenWrapper = $('#screen_wrapper');
@@ -60,6 +60,9 @@ FloatView = (function() {
 
   FloatView.scrollMessage = function(top, left) {
     var l, screenSize, t;
+    if (!window.initDone) {
+      return '';
+    }
     screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     if (screenSize != null) {
       t = (window.scrollInside.height() + screenSize.height) * 0.5 - top;

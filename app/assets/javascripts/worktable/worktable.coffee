@@ -1,5 +1,6 @@
 $ ->
   window.isWorkTable = true
+  window.initDone = false
 
   # ブラウザ対応チェック
   if !Common.checkBlowserEnvironment()
@@ -31,6 +32,8 @@ $ ->
     PageValue.updateForkCount()
     # ページング
     Paging.initPaging()
+    # 初期化終了
+    window.initDone = true
 
   if existedCache
     # 描画

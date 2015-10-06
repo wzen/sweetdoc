@@ -4,7 +4,7 @@ class FloatView
     @DISPLAY_POSITION = 'display_position'
 
   @show = (message, type) ->
-    if type == @Type.DISPLAY_POSITION && PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE) == null
+    if !window.initDone
       return
 
     screenWrapper = $('#screen_wrapper')
@@ -45,6 +45,8 @@ class FloatView
     $(".float_view").fadeOut('fast')
 
   @scrollMessage = (top, left) ->
+    if !window.initDone
+      return ''
     screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     if screenSize?
       t = (window.scrollInside.height() + screenSize.height) * 0.5 - top

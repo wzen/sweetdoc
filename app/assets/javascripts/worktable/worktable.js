@@ -2,6 +2,7 @@
 $(function() {
   var _callback, existedCache;
   window.isWorkTable = true;
+  window.initDone = false;
   if (!Common.checkBlowserEnvironment()) {
     alert('ブラウザ非対応です。');
     return;
@@ -19,7 +20,8 @@ $(function() {
     OperationHistory.add(true);
     PageValue.updatePageCount();
     PageValue.updateForkCount();
-    return Paging.initPaging();
+    Paging.initPaging();
+    return window.initDone = true;
   };
   if (existedCache) {
     PageValue.adjustInstanceAndEventOnPage();

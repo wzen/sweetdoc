@@ -4,6 +4,7 @@ $(function() {
   window.isWorkTable = false;
   window.eventAction = null;
   window.runPage = true;
+  window.initDone = false;
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
   PageValue.setPageNum(1);
@@ -17,7 +18,8 @@ $(function() {
   RunCommon.initMainContainer();
   Setting.initConfig();
   return Common.loadJsFromInstancePageValue(function() {
-    return RunCommon.initEventAction();
+    RunCommon.initEventAction();
+    return window.initDone = true;
   });
 });
 

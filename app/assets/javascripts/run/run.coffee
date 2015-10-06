@@ -2,6 +2,7 @@ $ ->
   window.isWorkTable = false
   window.eventAction = null
   window.runPage = true
+  window.initDone = false
 
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
@@ -27,4 +28,6 @@ $ ->
   Common.loadJsFromInstancePageValue(->
     # イベント初期化
     RunCommon.initEventAction()
+    # 初期化終了
+    window.initDone = true
   )
