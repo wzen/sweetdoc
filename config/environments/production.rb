@@ -88,6 +88,9 @@ Rails.application.configure do
   # Memcached
   config.cache_store = :dalli_store
 
+  # FIXME:
+  #config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
   # passengerの場合
   if defined?(PhusionPassenger)
     PhusionPassenger.on_event(:starting_worker_process) do |forked|

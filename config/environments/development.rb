@@ -37,4 +37,6 @@ Rails.application.configure do
 
   # Memcached
   config.cache_store = :dalli_store
+
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 end

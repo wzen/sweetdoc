@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root :to => 'gallery#index'
+
   get 'coding/item'
 
   get 'user/login'
@@ -7,7 +9,7 @@ Rails.application.routes.draw do
   get 'user/new'
   get 'user/edit'
 
-  root 'worktable#index'
+  #root 'worktable#index'
 
   post 'project/create'
   get 'project/list'

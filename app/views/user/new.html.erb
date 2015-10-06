@@ -1,2 +1,52 @@
-<h1>User#new</h1>
-<p>Find me in app/views/user/new.html.erb</p>
+<div id="wrapper">
+    <div class="content_wrapper">
+        <div id="form-wrapper">
+            <div id="header">Sign In</div>
+            <p class="notice"><%= notice %></p>
+            <p class="alert"><%= alert %></p>
+            <form>
+                <div class="form-item">
+                    <label for="email"></label>
+                    <input type="email" name="email" required="required" placeholder="Email Address"></input>
+                </div>
+                <div class="form-item">
+                    <label for="password"></label>
+                    <input type="password" name="password" required="required" placeholder="Password"></input>
+                </div>
+                <div class="button-panel">
+                    <input type="submit" class="button" title="Sign In" value="Sign In"></input>
+                </div>
+            </form>
+            <div class="form-footer">
+                <p><a href="#">Create an account</a></p>
+                <p><a href="#">Forgot password?</a></p>
+            </div>
+        </div>
+
+        <div id="orSeparator">
+            <div id="socialSeparatorTop"></div>
+            <div id="or">or</div>
+            <div id="socialSeparatorBottom"></div>
+        </div>
+
+        <div id="socialLogin">
+            <div id="header">
+                Sign In with a Social Network
+            </div>
+            <button type="button" id="fblogin">
+                f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
+                <span id="fbtext">Sign In with Facebook</span>
+            </button>
+
+            <button type="button" id="gpluslogin">
+                g+<em id="gpname"></em>
+                <span id="gptext">Sign In with Google</span>
+            </button>
+
+            <button type="button" id="twtrlogin">
+                t&nbsp;&nbsp;&nbsp;<em id="twtrname"></em>
+                <span id="twtrtext">Sign In with Twitter</span>
+            </button>
+        </div>
+    </div>
+</div>
