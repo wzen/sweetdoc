@@ -68,8 +68,8 @@ Chapter = (function() {
       left = null;
       top = null;
       if (type === "center") {
-        left = item.itemSize.x + width * 0.5 - (window.scrollContentsSize.width * 0.5);
-        top = item.itemSize.y + height * 0.5 - (window.scrollContentsSize.height * 0.5);
+        left = item.itemSize.x + width * 0.5 - (window.mainWrapper.width() * 0.5);
+        top = item.itemSize.y + height * 0.5 - (window.mainWrapper.height() * 0.5);
       }
       return Common.updateScrollContentsPosition(top, left, isImmediate, function() {
         return window.disabledEventHandler = false;

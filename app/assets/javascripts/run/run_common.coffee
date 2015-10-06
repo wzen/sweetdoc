@@ -31,7 +31,6 @@ class RunCommon
   @updateMainViewSize = ->
     padding = 5 * 2
     $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - padding)
-    window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->

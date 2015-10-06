@@ -29,11 +29,7 @@ RunCommon = (function() {
   RunCommon.updateMainViewSize = function() {
     var padding;
     padding = 5 * 2;
-    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - padding);
-    return window.scrollContentsSize = {
-      width: window.scrollContents.width(),
-      height: window.scrollContents.height()
-    };
+    return $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - padding);
   };
 
   RunCommon.resizeMainContainerEvent = function() {
