@@ -1,4 +1,12 @@
 class UserController < ApplicationController
+  def login
+
+  end
+
+  def login_modal
+
+  end
+
   def show
   end
 
