@@ -43,6 +43,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
@@ -58,7 +59,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/document.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/doc/document.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/arrow.js" />
@@ -148,6 +149,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />

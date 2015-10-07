@@ -1,4 +1,4 @@
-<div id="wrapper">
+<div class="wrapper">
     <div class="user_wrapper">
         <!-- User -->
         <% if user_signed_in? %>
@@ -6,12 +6,13 @@
             Login
         <% else %>
         <!-- 未ログイン-->
-            NotLogin
+            <div class="circle not_login blur"></div>
         <% end %>
     </div>
 
     <div class="logo_wrapper">
-    <!-- logo -->
+        <!-- logo -->
+        <div class="circle logo blur"></div>
     </div>
     <div class="doc"></div>
 </div>

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "gallery_sidebar.js",
+  "sourceRoot": "",
+  "sources": [
+    "gallery_sidebar.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,cAAA;;AAAA;8BAAA;;wBAAA;;IAAA,CAAA"
+}
