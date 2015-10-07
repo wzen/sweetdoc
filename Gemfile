@@ -71,8 +71,13 @@ gem 'meta-tags', '2.0.0'
 # マルチスレッド
 gem 'parallel', '1.6.1'
 
-# ユーザ登録機能
+# ユーザ登録
 gem 'devise', '3.5.2'
+# OAuth
+gem 'omniauth', '1.2.2'
+gem 'omniauth-facebook', '2.0.1'
+gem 'omniauth-twitter', '1.2.1'
+gem 'omniauth-google-oauth2', '0.2.8'
 
 #gem 'rmagick', '2.15.4', require: 'RMagick'
 
