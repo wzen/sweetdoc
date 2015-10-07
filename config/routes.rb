@@ -12,8 +12,6 @@ Rails.application.routes.draw do
   get 'user/new'
   get 'user/edit'
 
-  #root 'worktable#index'
-
   post 'project/create'
   get 'project/list'
 
@@ -45,6 +43,15 @@ Rails.application.routes.draw do
   get 'gallery/get_contents'
   get 'gallery/get_popular_and_recommend_tags'
   post 'gallery/add_bookmark'
+
+  # Document
+  get 'document/terms'
+  get 'document/privacy'
+  get 'document/help'
+  get 'document/inquiry'
+  get 'document/about'
+  get 'document/referense'
+  get 'document/info'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
