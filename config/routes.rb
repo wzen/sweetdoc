@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   devise_for :user
   root :to => 'gallery#index'
+  get 'worktable' => 'worktable#index'
+  post 'worktable' => 'worktable#index'
 
   get 'coding/item'
 
