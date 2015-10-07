@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # Locale
-  before_action :login
+  before_action :my_login
   before_filter :set_locale
 
   def init_const
@@ -27,23 +27,23 @@ class ApplicationController < ActionController::Base
   end
 
   private
-  def login
+  def my_login
     if session[:user_id].blank?
       user = User.create(name: 'temp', user_auth_id: 3)
       session[:user_id] = user.id
     end
   end
 
-  def current_user
+  def my_current_user
     @_current_user ||= User.find_by(id: session[:user_id])
     if @_current_user == nil
-      destroy_current_user
-      login
+      my_destroy_current_user
+      my_login
     end
     @_current_user ||= User.find_by(id: session[:user_id])
   end
 
-  def destroy_current_user
+  def my_destroy_current_user
     @_current_user = session[:user_id] = nil
     redirect_to root_url
   end

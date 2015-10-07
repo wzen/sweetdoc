@@ -1,4 +1,6 @@
 class GalleryController < ApplicationController
+  #before_filter :authenticate_user!
+
   def index
 
   end
@@ -16,7 +18,7 @@ class GalleryController < ApplicationController
   end
 
   def save_state
-    user_id = current_user.id
+    user_id = my_current_user.id
     tags = params[Const::Gallery::Key::TAGS]
     title = params[Const::Gallery::Key::TITLE]
     project_id = params[Const::Gallery::Key::PROJECT_ID]
@@ -33,7 +35,7 @@ class GalleryController < ApplicationController
   end
 
   def update_last_state
-    user_id = current_user.id
+    user_id = my_current_user.id
     tags = params[Const::Gallery::Key::TAGS]
     i_page_values = params[Const::Gallery::Key::INSTANCE_PAGE_VALUE]
     e_page_values = params[Const::Gallery::Key::EVENT_PAGE_VALUE]
@@ -41,7 +43,7 @@ class GalleryController < ApplicationController
   end
 
   def load_state
-    user_id = current_user.id
+    user_id = my_current_user.id
     galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
     @contents_detail = Gallery.load_state(galiery_id, user_id)
   end
@@ -68,7 +70,7 @@ class GalleryController < ApplicationController
   end
 
   def add_bookmark
-    user_id = current_user.id
+    user_id = my_current_user.id
     galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
     note = params[Const::Gallery::Key::NOTE]
     Gallery.add_bookmark(user_id, galiery_id, note, Date.today)

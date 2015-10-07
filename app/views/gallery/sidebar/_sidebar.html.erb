@@ -1,5 +1,17 @@
-<div>
-    <!-- User -->
+<div id="wrapper">
+    <div class="user_wrapper">
+        <!-- User -->
+        <% if user_signed_in? %>
+        <!-- ログイン済み -->
+            Login
+        <% else %>
+        <!-- 未ログイン-->
+            NotLogin
+        <% end %>
+    </div>
 
+    <div class="logo_wrapper">
     <!-- logo -->
+    </div>
+    <div class="doc"></div>
 </div>

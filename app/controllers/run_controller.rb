@@ -10,7 +10,7 @@ class RunController < ApplicationController
 
     @is_runwindow_reload = !request.post?
     unless @is_runwindow_reload
-      user_id = current_user.id
+      user_id = my_current_user.id
       page_num = params['page_num']
       if page_num == nil
         page_num = 1
@@ -34,7 +34,7 @@ class RunController < ApplicationController
     # Constantの設定
     init_const
 
-    user_id = current_user.id
+    user_id = my_current_user.id
     target_pages = params['targetPages']
     # cacheから読み込み
     instance = Rails.cache.read("user_id:#{user_id}-instance")
