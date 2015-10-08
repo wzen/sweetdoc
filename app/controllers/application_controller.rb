@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   private
   def my_login
     if session[:user_id].blank?
-      user = User.create(name: 'temp', user_auth_id: 3)
+      user = User.create(name: 'temp', user_auth_id: 3, email: 'wzen@example.com', password: 'aaaaaaaaaa')
       session[:user_id] = user.id
     end
   end
@@ -39,8 +39,9 @@ class ApplicationController < ActionController::Base
     if @_current_user == nil
       my_destroy_current_user
       my_login
+      @_current_user ||= User.find_by(id: session[:user_id])
     end
-    @_current_user ||= User.find_by(id: session[:user_id])
+    return @_current_user
   end
 
   def my_destroy_current_user
