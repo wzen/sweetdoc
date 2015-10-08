@@ -3,24 +3,24 @@
         <!-- User -->
         <% if user_signed_in? %>
         <!-- ログイン済み -->
-            <div class="circle blur"></div>
+            <div class="circle <%= Const::Gallery::Sidebar::USER %>"></div>
         <% else %>
         <!-- 未ログイン-->
-            <div class="circle not_login blur"></div>
+            <div class="circle not_login <%= Const::Gallery::Sidebar::USER %>"></div>
         <% end %>
     </div>
     <div class="view_wrapper">
         <!-- logo -->
-        <div class="circle blur grid"></div>
+        <div class="circle grid <%= Const::Gallery::Sidebar::VIEW %>"></div>
     </div>
     <div class="search_wrapper">
         <!-- logo -->
-        <div class="circle blur"></div>
+        <div class="circle <%= Const::Gallery::Sidebar::SEARCH %>"></div>
     </div>
 
     <div class="logo_wrapper">
         <!-- logo -->
-        <div class="circle blur"></div>
+        <div class="circle <%= Const::Gallery::Sidebar::LOGO %>"></div>
     </div>
     <div class="doc"></div>
 </div>

@@ -2,14 +2,21 @@ class GalleryController < ApplicationController
   #before_filter :authenticate_user!
 
   def index
-
+    # Constantの設定
+    init_const
   end
 
   def grid
+    # Constantの設定
+    init_const
+
     @contents = nil
   end
 
   def detail
+    # Constantの設定
+    init_const
+
     galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
     # ViewCountをupdate
     Gallery.add_view_statistic_count(galiery_id, Date.today)

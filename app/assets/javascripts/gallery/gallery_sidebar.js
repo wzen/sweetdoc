@@ -2,10 +2,82 @@
 var GallerySidebar;
 
 GallerySidebar = (function() {
+  var constant;
+
   function GallerySidebar() {}
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    GallerySidebar.USER = constant.Gallery.Sidebar.USER;
+    GallerySidebar.VIEW = constant.Gallery.Sidebar.VIEW;
+    GallerySidebar.SEARCH = constant.Gallery.Sidebar.SEARCH;
+    GallerySidebar.LOGO = constant.Gallery.Sidebar.LOGO;
+  }
+
+  GallerySidebar.initMenu = function() {
+    var root;
+    root = $('#sidebar_wrapper');
+    return $('.wrapper .circle', root).hover(function(e) {
+      var popup;
+      popup = $('#gallery_contents_wrapper .sidebar_popup');
+      popup.css(GallerySidebar.popupCss($(this)));
+      GallerySidebar.addArrowClass($(this), popup);
+      popup.stop(true, true).fadeIn(400, 'linear');
+      return $(this).stop().animate({
+        opacity: 1
+      }, 400, 'linear');
+    }, function(e) {
+      $('#gallery_contents_wrapper .sidebar_popup').stop(true, true).fadeOut(200, 'linear');
+      return $(this).stop().animate({
+        opacity: 0.3
+      }, 200, 'linear');
+    });
+  };
+
+  GallerySidebar.popupCss = function(e) {
+    var top;
+    top = e.parent().position().top + 12;
+    if (e.hasClass(this.USER)) {
+      return {
+        top: "2px",
+        bottom: ''
+      };
+    } else if (e.hasClass(this.VIEW)) {
+      return {
+        top: top + "px",
+        bottom: ''
+      };
+    } else if (e.hasClass(this.SEARCH)) {
+      return {
+        top: top + "px",
+        bottom: ''
+      };
+    } else if (e.hasClass(this.LOGO)) {
+      return {
+        top: '',
+        bottom: "2px"
+      };
+    }
+  };
+
+  GallerySidebar.addArrowClass = function(e, popup) {
+    var wrapper;
+    wrapper = popup.find('.wrapper');
+    if (e.hasClass(this.USER)) {
+      return wrapper.removeClass('arrow_middle arrow_bottom').addClass('arrow_top');
+    } else if (e.hasClass(this.LOGO)) {
+      return wrapper.removeClass('arrow_top arrow_middle').addClass('arrow_bottom');
+    } else {
+      return wrapper.removeClass('arrow_top arrow_bottom').addClass('arrow_middle');
+    }
+  };
 
   return GallerySidebar;
 
 })();
+
+$(function() {
+  return GallerySidebar.initMenu();
+});
 
 //# sourceMappingURL=gallery_sidebar.js.map

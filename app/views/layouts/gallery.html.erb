@@ -19,7 +19,10 @@
     <%= javascript_include_tag 'gallery', 'data-turbolinks-track' => true %>
     <div id="main_gallery_wrapper">
         <div id="gallery_contents_wrapper">
-            <%= yield %>
+            <div class="wrapper">
+                <%= yield %>
+                <div class="sidebar_popup"><div class="wrapper">ok</div></div>
+            </div>
         </div>
         <div id="sidebar_wrapper" class="collapse">
             <%= render 'gallery/sidebar/sidebar' %>

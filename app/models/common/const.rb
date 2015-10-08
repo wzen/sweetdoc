@@ -226,6 +226,13 @@ class Const
       BOOKMARK_COUNT = 'bookmark_count'
       CREATED = 'created'
     end
+
+    class Sidebar
+      USER = 'user'
+      VIEW = 'view'
+      SEARCH = 'search'
+      LOGO = 'logo'
+    end
   end
 
   class EventPageValueKey

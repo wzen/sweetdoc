@@ -8,4 +8,5 @@
 //= require ../../../vendor/assets/masonry/masonry.pkgd.min.js
 //= require_directory ./i18n
 //= require gallery/gallery_common
+//= require gallery/gallery_sidebar
 //= require gallery/gallery
