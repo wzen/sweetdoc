@@ -3,16 +3,24 @@
         <!-- User -->
         <% if user_signed_in? %>
         <!-- ログイン済み -->
-            Login
+            <div class="circle blur"></div>
         <% else %>
         <!-- 未ログイン-->
             <div class="circle not_login blur"></div>
         <% end %>
     </div>
+    <div class="view_wrapper">
+        <!-- logo -->
+        <div class="circle blur grid"></div>
+    </div>
+    <div class="search_wrapper">
+        <!-- logo -->
+        <div class="circle blur"></div>
+    </div>
 
     <div class="logo_wrapper">
         <!-- logo -->
-        <div class="circle logo blur"></div>
+        <div class="circle blur"></div>
     </div>
     <div class="doc"></div>
 </div>

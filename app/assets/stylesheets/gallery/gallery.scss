@@ -57,11 +57,45 @@ div#sidebar_wrapper {
       margin-top: 10px;
       text-align: center;
 
-      .not_login {
-        background-image: image-url("base/default_user_64.png");
+      > div {
         background-repeat: no-repeat;
         -moz-background-size: 50px 50px;
         background-size: 50px 50px;
+      }
+
+      .not_login {
+        background-image: image-url("gallery/sidebar/default_user.png");
+      }
+    }
+
+    .search_wrapper {
+      margin-top: 10px;
+      text-align: center;
+
+      > div {
+        background-repeat: no-repeat;
+        -moz-background-size: 50px 50px;
+        background-size: 50px 50px;
+        background-image: image-url("gallery/sidebar/search.png");
+      }
+    }
+
+    .view_wrapper {
+      margin-top: 10px;
+      text-align: center;
+      > div {
+        background-repeat: no-repeat;
+        -moz-background-size: 50px 50px;
+        background-size: 50px 50px;
+      }
+      .index {
+        background-image: image-url("gallery/sidebar/index.png");
+      }
+      .grid {
+        background-image: image-url("gallery/sidebar/grid.png");
+      }
+      .list {
+        background-image: image-url("gallery/sidebar/list.png");
       }
     }
 
@@ -78,8 +112,7 @@ div#sidebar_wrapper {
     }
 
     .blur {
-      opacity: 0.6;
-      background-color: #585858 !important;
+      opacity: 0.3;
     }
 
     .logo_wrapper {
@@ -89,8 +122,8 @@ div#sidebar_wrapper {
       right: 0;
       text-align: center;
 
-      .logo {
-        background-image: image-url("base/logo.png");
+      > div {
+        background-image: image-url("gallery/sidebar/logo.png");
         background-repeat: no-repeat;
         -moz-background-size: 50px 50px;
         background-size: 50px 50px;
