@@ -1,0 +1,23 @@
+<p class="notice"><%= notice %></p>
+<p class="alert"><%= alert %></p>
+<%= form_for(@user) do |u| %>
+    <div class="form-item">
+        <label for="name"></label>
+        <%= u.text_field :name, html:{required: 'required', placeholder: 'User Name'}  %>
+    </div>
+    <div class="form-item">
+        <label for="email"></label>
+        <%= u.text_field :email, html:{required: 'required', placeholder: 'Email Address'}  %>
+    </div>
+    <div class="form-item">
+        <label for="password"></label>
+        <%= u.email_field :password, html:{required: 'required', placeholder: 'Password'}  %>
+    </div>
+    <div class="form-item">
+        <label for="confirm_password"></label>
+        <%= u.email_field :confirm_password, html:{required: 'required', placeholder: 'Confirm Password'}  %>
+    </div>
+    <div class="button-panel">
+        <%= u.submit html: {class: 'button', title: 'Create', value: 'Create'} %>
+    </div>
+<% end %>

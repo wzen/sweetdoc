@@ -6,11 +6,12 @@ Rails.application.routes.draw do
 
   get 'coding/item'
 
-  get 'user/login'
-  get 'user/login_modal'
-  get 'user/show'
-  get 'user/new'
-  get 'user/edit'
+  # get 'user/login'
+  # get 'user/login_modal'
+  # get 'user/show'
+  # get 'user/new'
+  # get 'user/edit'
+  resources :users
 
   post 'project/create'
   get 'project/list'

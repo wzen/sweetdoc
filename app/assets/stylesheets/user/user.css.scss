@@ -83,7 +83,7 @@ body {
 }
 
 /* Form Layout */
-#form-wrapper {
+#login-wrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -455,6 +455,16 @@ form {
 
 .form-footer a:hover {
   border-bottom: 1px dotted black;
+}
+
+#new-wrapper {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 115px;
+  width: 290px;
 }
 
 /*
