@@ -49,4 +49,13 @@ Rails.application.configure do
   config.cache_store = :dalli_store
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  # Devise
+  config.to_prepare do
+    Devise::SessionsController.layout "user"
+    Devise::RegistrationsController.layout "user"
+    Devise::ConfirmationsController.layout "user"
+    Devise::UnlocksController.layout "user"
+    Devise::PasswordsController.layout "user"
+  end
 end

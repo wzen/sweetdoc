@@ -2,25 +2,28 @@
     <div class="content_wrapper">
         <div id="login-wrapper">
             <div id="header">Sign In</div>
-            <%= devise_error_messages! %>
             <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
                 <div class="form-item">
-                    <label for="email"></label>
-                    <%= f.email_field :email, autofocus: true, required: 'required', placeholder: 'Email Address' %>
+                    <%= f.label :email %><br />
+                    <%= f.email_field :email, autofocus: true %>
                 </div>
+
                 <div class="form-item">
-                    <label for="password"></label>
-                    <%= f.password_field :password, autofocus: "off", required: 'required', placeholder: 'Password' %>
+                    <%= f.label :password %><br />
+                    <%= f.password_field :password, autocomplete: "off" %>
                 </div>
+
+                <% if devise_mapping.rememberable? -%>
+                    <div class="form-item">
+                        <%= f.check_box :remember_me %>
+                        <%= f.label :remember_me %>
+                    </div>
+                <% end -%>
 
                 <div class="button-panel">
                     <%= f.submit 'Sign In', class:'button', title:'Sign In' %>
                 </div>
             <% end %>
-            <div class="form-footer">
-                <p><a href="/user/new">Create an account</a></p>
-                <p><a href="#">Forgot password?</a></p>
-            </div>
         </div>
 
         <div id="orSeparator">
@@ -54,6 +57,9 @@
                     <span id="twtrtext">Sign In with Twitter</span>
                 <% end %>
             <% end %>
+        </div>
+        <div class="sign_up_footer">
+            <%= render "user/shared/links" %>
         </div>
     </div>
 </div>

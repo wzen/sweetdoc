@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
 The MIT License (MIT)
 
@@ -21,44 +22,40 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
-@charset "utf-8";
-
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400);
 @import url(http://weloveiconfonts.com/api/?family=fontawesome);
 [class*="fontawesome-"]:before {
-  font-family: 'FontAwesome', sans-serif;
-}
+  font-family: 'FontAwesome', sans-serif; }
 
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, textarea, p, blockquote {
   margin: 0;
   padding: 0;
-  display: block;
-}
+  display: block; }
 
 html, body {
   height: 100%;
   background-color: #F9F6EA;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
-  overflow: hidden;
-}
+  overflow: hidden; }
 
 /* Simple Reset */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
 
 /* body */
 body {
   background: #FAFAFA;
   color: black;
-  font: 400 87.5%/1.5em 'Open Sans', sans-serif;
-}
+  font: 400 87.5%/1.5em 'Open Sans', sans-serif; }
 
 #wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
-  .content_wrapper {
+  height: 100%; }
+  #wrapper .content_wrapper {
     position: absolute;
     top: -80px;
     bottom: 0;
@@ -66,9 +63,7 @@ body {
     right: 0;
     margin: auto;
     width: 640px;
-    height: 300px;
-  }
-}
+    height: 300px; }
 
 /* Social Login Buttons */
 #loginHead {
@@ -78,9 +73,7 @@ body {
   width: 500px;
   color: #FFFFFF;
   text-align: center;
-  font-size: 18px;
-
-}
+  font-size: 18px; }
 
 /* Form Layout */
 #login-wrapper {
@@ -88,16 +81,14 @@ body {
   top: 0;
   left: 0;
   height: 115px;
-  width: 290px;
-}
+  width: 290px; }
 
 #orSeparator {
   position: absolute;
   top: 0;
   left: 290px;
   height: 115px;
-  width: 60px;
-}
+  width: 60px; }
 
 #socialSeparatorTop {
   position: absolute;
@@ -105,8 +96,7 @@ body {
   left: 29px;
   height: 115px;
   width: 3px;
-  background-color: #666;
-}
+  background-color: #666; }
 
 #or {
   position: absolute;
@@ -119,8 +109,7 @@ body {
   border: 4px solid #666;
   color: #666;
   font-weight: bold;
-  text-align: center;
-}
+  text-align: center; }
 
 #socialSeparatorBottom {
   position: absolute;
@@ -128,24 +117,21 @@ body {
   left: 29px;
   height: 130px;
   width: 3px;
-  background-color: #666;
-}
+  background-color: #666; }
 
 #socialLogin {
   position: absolute;
   top: 0;
   left: 350px;
   height: 300px;
-  width: 290px;
-}
+  width: 290px; }
 
 #header {
   width: 100%;
   color: #666;
   text-align: center;
   font-size: 18px;
-  margin-bottom: 30px;
-}
+  margin-bottom: 30px; }
 
 #socialNote {
   position: absolute;
@@ -153,11 +139,10 @@ body {
   left: 0;
   width: 280px;
   color: #666;
-  text-align: left;
-}
+  text-align: left; }
 
 #fblogin {
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
   display: block;
   float: left;
@@ -166,72 +151,69 @@ body {
   height: 50px;
   position: absolute;
   text-align: left;
-  text-decoration: none solid rgb(68, 68, 68);
-  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  text-decoration: none solid #444444;
+  text-shadow: white 0px 1px 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 290px;
-  background: rgba(0, 0, 0, 0) -webkit-linear-gradient(rgb(86, 120, 188), rgb(49, 74, 123)) repeat scroll 0% 0% / auto padding-box border-box;
-  background: rgba(0, 0, 0, 0) linear-gradient(rgb(86, 120, 188), rgb(49, 74, 123)) repeat scroll 0% 0% / auto padding-box border-box;
-  border-top: 1px solid rgb(49, 74, 123);
-  border-right: 1px solid rgb(42, 64, 105);
-  border-bottom: 1px solid rgb(42, 64, 105);
-  border-left: 1px solid rgb(42, 64, 105);
+  background: rgba(0, 0, 0, 0) -webkit-linear-gradient(#5678bc, #314a7b) repeat scroll 0% 0%/auto padding-box border-box;
+  background: rgba(0, 0, 0, 0) linear-gradient(#5678bc, #314a7b) repeat scroll 0% 0%/auto padding-box border-box;
+  border-top: 1px solid #314a7b;
+  border-right: 1px solid #2a4069;
+  border-bottom: 1px solid #2a4069;
+  border-left: 1px solid #2a4069;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border-radius: 8px;
   font: normal normal 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
   font-size: 16px;
   margin: 0px;
-  outline: rgb(68, 68, 68) none 0px;
+  outline: #444444 none 0px;
   overflow: hidden;
-  padding: 10px 18px;
-}
+  padding: 10px 18px; }
 
 #fbname {
   background-position: 0px 0px;
   bottom: 0px;
-  box-shadow: rgba(0, 0, 0, 0.0470588) 1px 0px 0px 0px;
-  color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.04706) 1px 0px 0px 0px;
+  color: white;
   cursor: pointer;
   display: block;
   height: 48px;
   left: 0px;
   position: absolute;
   text-align: center;
-  text-decoration: none solid rgb(68, 68, 68);
-  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  text-decoration: none solid #444444;
+  text-shadow: white 0px 1px 0px;
   top: 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 50px;
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.0784314) no-repeat scroll 0px 0px / auto padding-box border-box;
-  border: 0px none rgb(68, 68, 68);
+  background: rgba(255, 255, 255, 0.07843) no-repeat scroll 0px 0px/auto padding-box border-box;
+  border: 0px none #444444;
   font: normal normal 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
-  outline: rgb(68, 68, 68) none 0px;
-}
+  outline: #444444 none 0px; }
 
 #fbtext {
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
   display: inline-block;
   height: 17px;
   text-align: left;
-  text-decoration: none solid rgb(255, 255, 255);
-  text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+  text-decoration: none solid white;
+  text-shadow: rgba(0, 0, 0, 0.24706) 0px -1px 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 150px;
   align-self: flex-start;
-  border: 0px none rgb(255, 255, 255);
+  border: 0px none white;
   font: normal normal bold 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
   margin: -3px 0px 0px 42px;
-  outline: rgb(255, 255, 255) none 0px;
-}
+  outline: white none 0px; }
 
 #gpluslogin {
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
   display: block;
   float: left;
@@ -240,73 +222,70 @@ body {
   height: 50px;
   position: absolute;
   text-align: left;
-  text-decoration: none solid rgb(68, 68, 68);
-  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  text-decoration: none solid #444444;
+  text-shadow: white 0px 1px 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 290px;
   background-color: #DD4B39;
-  background: -webkit-linear-gradient(#DD4B39,#D14836);
-  background: linear-gradient(#DD4B39,#D14836);
-  border-top: 1px solid rgb(230, 88, 88);
-  border-right: 1px solid rgb(227, 66, 66);
-  border-bottom: 1px solid rgb(227, 66, 66);
-  border-left: 1px solid rgb(227, 66, 66);
+  background: -webkit-linear-gradient(#dd4b39, #d14836);
+  background: linear-gradient(#dd4b39, #d14836);
+  border-top: 1px solid #e65858;
+  border-right: 1px solid #e34242;
+  border-bottom: 1px solid #e34242;
+  border-left: 1px solid #e34242;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border-radius: 8px;
   font: normal normal 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
   font-size: 16px;
   margin: 0px;
-  outline: rgb(68, 68, 68) none 0px;
+  outline: #444444 none 0px;
   overflow: hidden;
-  padding: 10px 18px;
-}
+  padding: 10px 18px; }
 
 #gpname {
   background-position: 0px 0px;
   bottom: 0px;
-  box-shadow: rgba(0, 0, 0, 0.0470588) 1px 0px 0px 0px;
-  color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.04706) 1px 0px 0px 0px;
+  color: white;
   cursor: pointer;
   display: block;
   height: 48px;
   left: 0px;
   position: absolute;
   text-align: center;
-  text-decoration: none solid rgb(68, 68, 68);
-  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  text-decoration: none solid #444444;
+  text-shadow: white 0px 1px 0px;
   top: 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 50px;
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.0666667) no-repeat scroll -43px -44px / auto padding-box border-box;
-  border: 0px none rgb(68, 68, 68);
+  background: rgba(255, 255, 255, 0.06667) no-repeat scroll -43px -44px/auto padding-box border-box;
+  border: 0px none #444444;
   font: normal normal 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
-  outline: rgb(68, 68, 68) none 0px;
-}
+  outline: #444444 none 0px; }
 
 #gptext {
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
   display: inline-block;
   height: 17px;
   text-align: left;
-  text-decoration: none solid rgb(255, 255, 255);
-  text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+  text-decoration: none solid white;
+  text-shadow: rgba(0, 0, 0, 0.24706) 0px -1px 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 133px;
   align-self: flex-start;
-  border: 0px none rgb(255, 255, 255);
+  border: 0px none white;
   font: normal normal bold 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
   margin: -3px 0px 0px 42px;
-  outline: rgb(255, 255, 255) none 0px;
-}
+  outline: white none 0px; }
 
 #twtrlogin {
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
   display: block;
   float: left;
@@ -315,8 +294,8 @@ body {
   height: 50px;
   position: absolute;
   text-align: left;
-  text-decoration: none solid rgb(68, 68, 68);
-  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  text-decoration: none solid #444444;
+  text-shadow: white 0px 1px 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 290px;
@@ -326,106 +305,92 @@ body {
   border: 1px solid #1c82a7;
   border-top-color: #2091bd;
   text-shadow: 0 1px #ffffff;
-  border-top: 1px solid rgb(32, 145, 189);
-  border-right: 1px solid rgb(28, 130, 167);
-  border-bottom: 1px solid rgb(28, 130, 167);
-  border-left: 1px solid rgb(28, 130, 167);
+  border-top: 1px solid #2091bd;
+  border-right: 1px solid #1c82a7;
+  border-bottom: 1px solid #1c82a7;
+  border-left: 1px solid #1c82a7;
   -moz-border-radius: 8px;
   -webkit-border-radius: 8px;
   border-radius: 8px;
   font: normal normal 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
   font-size: 16px;
   margin: 0px;
-  outline: rgb(68, 68, 68) none 0px;
+  outline: #444444 none 0px;
   overflow: hidden;
-  padding: 10px 18px;
-}
+  padding: 10px 18px; }
 
 #twtrname {
   background-position: 0px 0px;
   bottom: 0px;
-  box-shadow: rgba(0, 0, 0, 0.0470588) 1px 0px 0px 0px;
-  color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.04706) 1px 0px 0px 0px;
+  color: white;
   cursor: pointer;
   display: block;
   height: 48px;
   left: 0px;
   position: absolute;
   text-align: center;
-  text-decoration: none solid rgb(68, 68, 68);
-  text-shadow: rgb(255, 255, 255) 0px 1px 0px;
+  text-decoration: none solid #444444;
+  text-shadow: white 0px 1px 0px;
   top: 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 50px;
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.0666667) no-repeat scroll -43px -44px / auto padding-box border-box;
-  border: 0px none rgb(68, 68, 68);
+  background: rgba(255, 255, 255, 0.06667) no-repeat scroll -43px -44px/auto padding-box border-box;
+  border: 0px none #444444;
   font: normal normal 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
-  outline: rgb(68, 68, 68) none 0px;
-}
+  outline: #444444 none 0px; }
 
 #twtrtext {
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
   display: inline-block;
   height: 17px;
   text-align: left;
-  text-decoration: none solid rgb(255, 255, 255);
-  text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+  text-decoration: none solid white;
+  text-shadow: rgba(0, 0, 0, 0.24706) 0px -1px 0px;
   vertical-align: middle;
   white-space: nowrap;
   width: 133px;
   align-self: flex-start;
-  border: 0px none rgb(255, 255, 255);
+  border: 0px none white;
   font: normal normal bold 16px/normal 'Helvetica Neue', Helvetica, 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, 'ＭＳ Ｐゴシック', arial, sans-serif;
   margin: -3px 0px 0px 42px;
-  outline: rgb(255, 255, 255) none 0px;
-}
+  outline: white none 0px; }
 
 h1 {
   text-align: center;
-  padding: 1em 0;
-}
+  padding: 1em 0; }
 
 form {
-  padding: 0 1.5em;
-}
+  padding: 0 1.5em; }
 
 .form-item {
   margin-bottom: 0.75em;
-  width: 100%;
-}
+  width: 100%; }
 
-.form-item {
-  input[type="text"], input[type="email"], input[type="password"] {
-    background: #fafafa;
-    border: none;
-    border-bottom: 2px solid #e9e9e9;
-    color: #666;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1em;
-    height: 50px;
-    transition: border-color 0.3s;
-    width: 100%;
-  }
-}
+.form-item input[type="text"], .form-item input[type="email"], .form-item input[type="password"] {
+  background: #fafafa;
+  border: none;
+  border-bottom: 2px solid #e9e9e9;
+  color: #666;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  height: 50px;
+  transition: border-color 0.3s;
+  width: 100%; }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px #fafafa inset;
-}
+  -webkit-box-shadow: 0 0 0 1000px #fafafa inset; }
 
-.form-item {
-  input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
-    border-bottom: 2px solid #c0c0c0;
-    outline: none;
-  }
-}
+.form-item input[type="text"]:focus, .form-item input[type="email"]:focus, .form-item input[type="password"]:focus {
+  border-bottom: 2px solid #c0c0c0;
+  outline: none; }
 
 .button-panel {
   margin: 2em 0 0;
-  width: 100%;
-}
+  width: 100%; }
 
 .button-panel .button {
   background: #f16272;
@@ -439,35 +404,29 @@ input:-webkit-autofill {
   text-align: center;
   text-transform: uppercase;
   transition: background 0.3s ease-in-out;
-  width: 100%;
-}
+  width: 100%; }
 
 .button:hover {
-  background: #ee3e52;
-}
+  background: #ee3e52; }
 
 .form-footer {
   font-size: 1em;
   padding: 2em 0;
-  text-align: center;
-}
+  text-align: center; }
 
 .form-footer a {
   color: black;
   text-decoration: none;
-  transition: border-color 0.3s;
-}
+  transition: border-color 0.3s; }
 
 .form-footer a:hover {
-  border-bottom: 1px dotted black;
-}
+  border-bottom: 1px dotted black; }
 
 .sign_up_footer {
   position: absolute;
   top: 300px;
   left: 0;
-  right: 0;
-}
+  right: 0; }
 
 #new-wrapper {
   position: absolute;
@@ -476,8 +435,7 @@ input:-webkit-autofill {
   right: 0;
   margin: auto;
   height: 115px;
-  width: 290px;
-}
+  width: 290px; }
 
 /*
 © <2015> <John Bowie> http://codepen.io/bowie/
