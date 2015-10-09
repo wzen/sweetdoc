@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :user
+  devise_for :user, controllers: {
+      sessions: 'users/sessions',
+      registrations: 'users/registrations'
+  }
   root to: 'gallery#index'
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
