@@ -2,8 +2,7 @@
     <div class="content_wrapper">
         <div id="login-wrapper">
             <div id="header">Sign In</div>
-            <p class="notice"><%= notice %></p>
-            <p class="alert"><%= alert %></p>
+            <%= devise_error_messages! %>
             <form>
                 <div class="form-item">
                     <label for="email"></label>

@@ -4,7 +4,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       ## Database authenticatable
       t.string :name
       t.string :uid
-      t.integer :user_auth_id, :null => 0
+      t.integer :user_auth_id, null: false, default: 3
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
       t.string :provider

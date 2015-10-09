@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get 'user/show'
   get 'user/new'
   get 'user/edit'
+  post 'user/confirm'
 
   post 'project/create'
   get 'project/list'

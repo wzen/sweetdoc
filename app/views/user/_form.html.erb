@@ -1,6 +1,5 @@
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
-<%= form_for(@user, url: 'user_path') do |u| %>
+<%= devise_error_messages! %>
+<%= form_for(@user, url: {action: "confirm"}) do |u| %>
     <div class="form-item">
         <label for="name"></label>
         <%= u.text_field :name, required: 'required', placeholder: 'User Name' %>
@@ -14,8 +13,8 @@
         <%= u.password_field :password, required: 'required', placeholder: 'Password' %>
     </div>
     <div class="form-item">
-        <label for="confirm_password"></label>
-        <%= u.password_field :confirm_password, required: 'required', placeholder: 'Confirm Password' %>
+        <label for="password_confirmation"></label>
+        <%= u.password_field :password_confirmation, required: 'required', placeholder: 'Confirm Password' %>
     </div>
     <div class="button-panel">
         <%= u.submit class: 'button', title: 'Create', value: 'Create' %>

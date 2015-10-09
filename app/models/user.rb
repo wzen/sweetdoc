@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   has_many :galleries
   has_many :gallery_bookmarks
 
+  validates_confirmation_of :password
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, omniauth_providers: [:twitter, :facebook, :google]

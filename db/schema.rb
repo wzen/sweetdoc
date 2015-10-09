@@ -277,7 +277,7 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   create_table "users", force: true do |t|
     t.string   "name"
     t.string   "uid"
-    t.integer  "user_auth_id"
+    t.integer  "user_auth_id",           default: 3,  null: false
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "provider"
