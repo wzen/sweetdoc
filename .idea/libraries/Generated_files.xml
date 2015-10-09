@@ -1,0 +1,26 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

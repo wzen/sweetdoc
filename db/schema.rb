@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(version: 20151006163105) do
     t.integer  "user_auth_id",           default: 3,  null: false
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
+    t.string   "password_digest",                     null: false
     t.string   "provider"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"

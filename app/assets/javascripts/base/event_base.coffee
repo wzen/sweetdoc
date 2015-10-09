@@ -300,3 +300,4 @@ class ItemEventBase extends EventBase
   # 最小限のデータを設定
   # @abstract
   setMiniumObject: (obj) ->
+

@@ -67,3 +67,4 @@ class CommonVar
     window.disabledEventHandler = false
     window.firstItemFocused = false
     @updateRunBaseElement(PageValue.getPageNum())
+

@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   # Locale
-  before_action :my_login
+  #before_action :my_login
   before_filter :set_locale
 
   def init_const
@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   private
   def my_login
     if session[:user_id].blank?
-      user = User.create(name: 'temp', user_auth_id: 3, email: 'wzen@example.com', password: 'aaaaaaaaaa')
+      user = User.create(name: 'temp', user_auth_id: 3, email: 'my_login@example.com', password: 'aaaaaaaaaa')
       session[:user_id] = user.id
     end
   end

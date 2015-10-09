@@ -15,13 +15,13 @@ class UserController < ApplicationController
   end
 
   def confirm
-    p = params.require(:user).permit(:name, :email, :password)
+    p = params.require(:user).permit(:name, :email, :password, :password_confirmation)
     @user = User.new(p)
     if @user.valid?
       @user.save!
-      render template: 'gallery/index', layout: 'gallery'
+      redirect_to controller: 'gallery', action: 'index'
     else
-      render action: 'new'
+      redirect_to action: 'new'
     end
   end
 
