@@ -103,6 +103,18 @@ div#sidebar_wrapper {
       }
     }
 
+    .worktable_wrapper {
+      margin-top: 10px;
+      text-align: center;
+
+      > div {
+        background-repeat: no-repeat;
+        -moz-background-size: 50px 50px;
+        background-size: 50px 50px;
+        background-image: image-url("gallery/sidebar/worktable.png");
+      }
+    }
+
     .circle {
       display: inline-block;
       width: 50px;
@@ -164,11 +176,14 @@ div#gallery_contents_wrapper {
       top: 5px;
       width: 100px;
     }
-    &.view {
+    &.worktable {
       top: 68px;
     }
-    &.search {
+    &.view {
       top: 132px;
+    }
+    &.search {
+      top: 196px;
     }
     &.logo {
       bottom: 5px;

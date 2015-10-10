@@ -229,6 +229,7 @@ class Const
 
     class Sidebar
       USER = 'user'
+      WORKTABLE = 'worktable'
       VIEW = 'view'
       SEARCH = 'search'
       LOGO = 'logo'

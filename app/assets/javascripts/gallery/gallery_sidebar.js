@@ -9,6 +9,7 @@ GallerySidebar = (function() {
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     GallerySidebar.USER = constant.Gallery.Sidebar.USER;
+    GallerySidebar.WORKTABLE = constant.Gallery.Sidebar.WORKTABLE;
     GallerySidebar.VIEW = constant.Gallery.Sidebar.VIEW;
     GallerySidebar.SEARCH = constant.Gallery.Sidebar.SEARCH;
     GallerySidebar.LOGO = constant.Gallery.Sidebar.LOGO;
@@ -22,6 +23,8 @@ GallerySidebar = (function() {
       type = '';
       if ($(this).hasClass(GallerySidebar.USER)) {
         type = GallerySidebar.USER;
+      } else if ($(this).hasClass(GallerySidebar.WORKTABLE)) {
+        type = GallerySidebar.WORKTABLE;
       } else if ($(this).hasClass(GallerySidebar.VIEW)) {
         type = GallerySidebar.VIEW;
       } else if ($(this).hasClass(GallerySidebar.SEARCH)) {
@@ -50,31 +53,35 @@ GallerySidebar = (function() {
     });
     return $('.wrapper .circle', root).click(function(e) {
       var popup, self, type;
-      type = _type.call(this);
-      popup = $("#gallery_contents_wrapper .sidebar_popup" + type);
-      if (popup.is(':visible')) {
-        type = _type.call(this);
-        popup.stop(true, true).fadeOut(100, 'linear');
-        $(this).stop().animate({
-          opacity: 0.7
-        }, 100, 'linear');
-        return $('.overlay').remove();
+      if ($(this).hasClass(GallerySidebar.WORKTABLE)) {
+        return window.location.href = '/worktable';
       } else {
-        $("#gallery_contents_wrapper .sidebar_popup").hide();
-        self = $(this);
-        $('.wrapper .circle', root).filter(function(s) {
-          return $(this).attr('class') !== self.attr('class');
-        }).css('opacity', 0.3);
-        popup.stop(true, true).fadeIn(200, 'linear');
-        $(this).stop().animate({
-          opacity: 1
-        }, 200, 'linear');
-        $('#gallery_contents_wrapper').append('<div class="overlay"></div>');
-        return $('.overlay').click(function() {
-          $('.wrapper .circle', root).css('opacity', 0.3);
-          $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100);
+        type = _type.call(this);
+        popup = $("#gallery_contents_wrapper .sidebar_popup" + type);
+        if (popup.is(':visible')) {
+          type = _type.call(this);
+          popup.stop(true, true).fadeOut(100, 'linear');
+          $(this).stop().animate({
+            opacity: 0.7
+          }, 100, 'linear');
           return $('.overlay').remove();
-        });
+        } else {
+          $("#gallery_contents_wrapper .sidebar_popup").hide();
+          self = $(this);
+          $('.wrapper .circle', root).filter(function(s) {
+            return $(this).attr('class') !== self.attr('class');
+          }).css('opacity', 0.3);
+          popup.stop(true, true).fadeIn(200, 'linear');
+          $(this).stop().animate({
+            opacity: 1
+          }, 200, 'linear');
+          $('#gallery_contents_wrapper').append('<div class="overlay"></div>');
+          return $('.overlay').click(function() {
+            $('.wrapper .circle', root).css('opacity', 0.3);
+            $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100);
+            return $('.overlay').remove();
+          });
+        }
       }
     });
   };

@@ -3,6 +3,7 @@ class GallerySidebar
     # 定数
     constant = gon.const
     @USER = constant.Gallery.Sidebar.USER
+    @WORKTABLE = constant.Gallery.Sidebar.WORKTABLE
     @VIEW = constant.Gallery.Sidebar.VIEW
     @SEARCH = constant.Gallery.Sidebar.SEARCH
     @LOGO = constant.Gallery.Sidebar.LOGO
@@ -14,6 +15,8 @@ class GallerySidebar
       type = ''
       if $(@).hasClass(GallerySidebar.USER)
         type = GallerySidebar.USER
+      else if $(@).hasClass(GallerySidebar.WORKTABLE)
+        type = GallerySidebar.WORKTABLE
       else if $(@).hasClass(GallerySidebar.VIEW)
         type = GallerySidebar.VIEW
       else if $(@).hasClass(GallerySidebar.SEARCH)
@@ -33,25 +36,28 @@ class GallerySidebar
     )
 
     $('.wrapper .circle', root).click((e) ->
-      type = _type.call(@)
-      popup = $("#gallery_contents_wrapper .sidebar_popup#{type}")
-      if popup.is(':visible')
-        type = _type.call(@)
-        popup.stop(true, true).fadeOut(100, 'linear')
-        $(@).stop().animate({opacity: 0.7}, 100, 'linear')
-        $('.overlay').remove()
+      if $(@).hasClass(GallerySidebar.WORKTABLE)
+        window.location.href = '/worktable';
       else
-        $("#gallery_contents_wrapper .sidebar_popup").hide()
-        self = $(@)
-        $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.3)
-        popup.stop(true, true).fadeIn(200, 'linear')
-        $(@).stop().animate({opacity: 1}, 200, 'linear')
-        $('#gallery_contents_wrapper').append('<div class="overlay"></div>')
-        $('.overlay').click( ->
-          $('.wrapper .circle', root).css('opacity', 0.3)
-          $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100)
+        type = _type.call(@)
+        popup = $("#gallery_contents_wrapper .sidebar_popup#{type}")
+        if popup.is(':visible')
+          type = _type.call(@)
+          popup.stop(true, true).fadeOut(100, 'linear')
+          $(@).stop().animate({opacity: 0.7}, 100, 'linear')
           $('.overlay').remove()
-        )
+        else
+          $("#gallery_contents_wrapper .sidebar_popup").hide()
+          self = $(@)
+          $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.3)
+          popup.stop(true, true).fadeIn(200, 'linear')
+          $(@).stop().animate({opacity: 1}, 200, 'linear')
+          $('#gallery_contents_wrapper').append('<div class="overlay"></div>')
+          $('.overlay').click( ->
+            $('.wrapper .circle', root).css('opacity', 0.3)
+            $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100)
+            $('.overlay').remove()
+          )
     )
 
 $ ->
