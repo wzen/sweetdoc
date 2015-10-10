@@ -80,6 +80,10 @@ class Project
           Common.hideModalView()
         )
     )
+    $('.back_button', modalEmt).off('click')
+    $('.back_button', modalEmt).on('click', ->
+      window.location.href = '/'
+    )
 
   @load_data: (successCallback = null, errorCallback = null) ->
     $.ajax(

@@ -37,6 +37,7 @@ class GallerySidebar
 
     $('.wrapper .circle', root).click((e) ->
       if $(@).hasClass(GallerySidebar.WORKTABLE)
+        # Worktableに遷移
         window.location.href = '/worktable';
       else
         type = _type.call(@)
