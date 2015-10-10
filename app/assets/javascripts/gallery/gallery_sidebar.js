@@ -58,7 +58,7 @@ GallerySidebar = (function() {
         $(this).stop().animate({
           opacity: 0.7
         }, 100, 'linear');
-        return $('#overlay').remove();
+        return $('.overlay').remove();
       } else {
         $("#gallery_contents_wrapper .sidebar_popup").hide();
         self = $(this);
@@ -69,26 +69,14 @@ GallerySidebar = (function() {
         $(this).stop().animate({
           opacity: 1
         }, 200, 'linear');
-        $('#gallery_contents_wrapper').append('<div id="overlay"></div>');
-        return $('#overlay').click(function() {
+        $('#gallery_contents_wrapper').append('<div class="overlay"></div>');
+        return $('.overlay').click(function() {
           $('.wrapper .circle', root).css('opacity', 0.3);
           $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100);
-          return $('#overlay').remove();
+          return $('.overlay').remove();
         });
       }
     });
-  };
-
-  GallerySidebar.addArrowClass = function(e, popup) {
-    var wrapper;
-    wrapper = popup.find('.wrapper');
-    if (e.hasClass(this.USER)) {
-      return wrapper.removeClass('arrow_middle arrow_bottom').addClass('arrow_top');
-    } else if (e.hasClass(this.LOGO)) {
-      return wrapper.removeClass('arrow_top arrow_middle').addClass('arrow_bottom');
-    } else {
-      return wrapper.removeClass('arrow_top arrow_bottom').addClass('arrow_middle');
-    }
   };
 
   return GallerySidebar;

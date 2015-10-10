@@ -27,9 +27,9 @@
         </div>
 
         <div id="orSeparator">
-            <div id="socialSeparatorTop"></div>
-            <div id="or">or</div>
-            <div id="socialSeparatorBottom"></div>
+            <div class="socialSeparatorTop"></div>
+            <div class="or">or</div>
+            <div class="socialSeparatorBottom"></div>
         </div>
 
         <div id="socialLogin">
@@ -37,26 +37,28 @@
                 Sign In with a Social Network
             </div>
 
-            <%= form_tag(user_omniauth_authorize_path(:facebook)) do %>
-                <%= button_tag id: 'fblogin', type: 'submit' do %>
-                    f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
-                    <span id="fbtext">Sign In with Facebook</span>
+            <div class="social_wrapper">
+                <%= form_tag(user_omniauth_authorize_path(:facebook)) do %>
+                    <%= button_tag id: 'fblogin', type: 'submit' do %>
+                        f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
+                        <span id="fbtext">Sign In with Facebook</span>
+                    <% end %>
                 <% end %>
-            <% end %>
 
-            <%= form_tag(user_omniauth_authorize_path(:google)) do %>
-                <%= button_tag id: 'gpluslogin', type: 'submit' do %>
-                    g+<em id="gpname"></em>
-                    <span id="gptext">Sign In with Google</span>
+                <%= form_tag(user_omniauth_authorize_path(:google)) do %>
+                    <%= button_tag id: 'gpluslogin', type: 'submit' do %>
+                        g+<em id="gpname"></em>
+                        <span id="gptext">Sign In with Google</span>
+                    <% end %>
                 <% end %>
-            <% end %>
 
-            <%= form_tag(user_omniauth_authorize_path(:twitter)) do %>
-                <%= button_tag id: 'twtrlogin', type: 'submit' do %>
-                    t&nbsp;&nbsp;&nbsp;<em id="twtrname"></em>
-                    <span id="twtrtext">Sign In with Twitter</span>
+                <%= form_tag(user_omniauth_authorize_path(:twitter)) do %>
+                    <%= button_tag id: 'twtrlogin', type: 'submit' do %>
+                        t&nbsp;&nbsp;&nbsp;<em id="twtrname"></em>
+                        <span id="twtrtext">Sign In with Twitter</span>
+                    <% end %>
                 <% end %>
-            <% end %>
+            </div>
         </div>
         <div class="sign_up_footer">
             <%= render "user/shared/links" %>
