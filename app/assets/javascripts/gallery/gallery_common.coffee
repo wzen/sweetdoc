@@ -31,5 +31,3 @@ class GalleryCommon
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
 
-
-

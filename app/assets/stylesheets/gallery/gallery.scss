@@ -160,6 +160,19 @@ div#gallery_contents_wrapper {
     z-index: 10000;
     display: none;
 
+    &.user {
+      top: 5px;
+    }
+    &.view {
+      top: 68px;
+    }
+    &.search {
+      top: 132px;
+    }
+    &.logo {
+      bottom: 5px;
+    }
+
     .wrapper {
       position: relative;
       background: #ffffff;

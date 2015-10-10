@@ -9,40 +9,43 @@ class GallerySidebar
 
   @initMenu = ->
     root = $('#sidebar_wrapper')
+
+    _type = ->
+      type = ''
+      if $(@).hasClass(GallerySidebar.USER)
+        type = GallerySidebar.USER
+      else if $(@).hasClass(GallerySidebar.VIEW)
+        type = GallerySidebar.VIEW
+      else if $(@).hasClass(GallerySidebar.SEARCH)
+        type = GallerySidebar.SEARCH
+      else if $(@).hasClass(GallerySidebar.LOGO)
+        type = GallerySidebar.LOGO
+      return ".#{type}"
+
     $('.wrapper .circle', root).hover((e) ->
-      popup = $('#gallery_contents_wrapper .sidebar_popup')
-      popup.css(GallerySidebar.popupCss($(@)))
-      GallerySidebar.addArrowClass($(@), popup)
-      popup.stop(true, true).fadeIn(400, 'linear')
-      $(@).stop().animate({opacity: 1}, 400, 'linear')
+      type = _type.call(@)
+      if !$("#gallery_contents_wrapper .sidebar_popup#{type}").is(':visible')
+        $(@).stop().animate({opacity: 0.7}, 200, 'linear')
     , (e) ->
-      $('#gallery_contents_wrapper .sidebar_popup').stop(true, true).fadeOut(200, 'linear')
-      $(@).stop().animate({opacity: 0.3}, 200, 'linear')
+      type = _type.call(@)
+      if !$("#gallery_contents_wrapper .sidebar_popup#{type}").is(':visible')
+        $(@).stop().animate({opacity: 0.3}, 100, 'linear')
     )
 
-  @popupCss = (e) ->
-    top = e.parent().position().top + 12
-
-    if e.hasClass(@USER)
-      return {
-        top: "2px"
-        bottom: ''
-      }
-    else if e.hasClass(@VIEW)
-      return {
-        top: "#{top}px"
-        bottom: ''
-      }
-    else if e.hasClass(@SEARCH)
-      return {
-        top: "#{top}px"
-        bottom: ''
-      }
-    else if e.hasClass(@LOGO)
-      return {
-        top: ''
-        bottom: "2px"
-      }
+    $('.wrapper .circle', root).click((e) ->
+      type = _type.call(@)
+      popup = $("#gallery_contents_wrapper .sidebar_popup#{type}")
+      if popup.is(':visible')
+        type = _type.call(@)
+        popup.stop(true, true).fadeOut(100, 'linear')
+        $(@).stop().animate({opacity: 0.7}, 100, 'linear')
+      else
+        $("#gallery_contents_wrapper .sidebar_popup").hide()
+        self = $(@)
+        $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.3)
+        popup.stop(true, true).fadeIn(200, 'linear')
+        $(@).stop().animate({opacity: 1}, 200, 'linear')
+    )
 
   @addArrowClass = (e, popup) ->
     wrapper = popup.find('.wrapper')
