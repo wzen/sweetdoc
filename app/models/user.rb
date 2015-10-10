@@ -11,4 +11,18 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, omniauth_providers: [:twitter, :facebook, :google]
+
+  def self.new_guest
+    new do |u|
+      u.name = "Guest"
+      u.email    = "guest_#{Time.now.to_i}#{rand(100)}@example.com"
+      u.encrypted_password = [*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
+      u.guest    = true
+    end
+  end
+
+  def active_for_authentication?
+    return true
+  end
+
 end

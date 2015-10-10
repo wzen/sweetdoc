@@ -63,8 +63,12 @@ div#sidebar_wrapper {
         background-size: 50px 50px;
       }
 
-      .not_login {
+      .default_user {
         background-image: image-url("gallery/sidebar/default_user.png");
+      }
+
+      .guest_user {
+        background-image: image-url("gallery/sidebar/guest_user.png");
       }
     }
 

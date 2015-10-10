@@ -3,10 +3,10 @@
         <!-- User -->
         <% if user_signed_in? %>
         <!-- ログイン済み -->
-            <div class="circle <%= Const::Gallery::Sidebar::USER %>"></div>
+            <div class="circle default_user <%= Const::Gallery::Sidebar::USER %>"></div>
         <% else %>
         <!-- 未ログイン-->
-            <div class="circle not_login <%= Const::Gallery::Sidebar::USER %>"></div>
+            <div class="circle guest_user <%= Const::Gallery::Sidebar::USER %>"></div>
         <% end %>
     </div>
     <div class="view_wrapper">
