@@ -39,12 +39,19 @@ class GallerySidebar
         type = _type.call(@)
         popup.stop(true, true).fadeOut(100, 'linear')
         $(@).stop().animate({opacity: 0.7}, 100, 'linear')
+        $('#overlay').remove()
       else
         $("#gallery_contents_wrapper .sidebar_popup").hide()
         self = $(@)
         $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.3)
         popup.stop(true, true).fadeIn(200, 'linear')
         $(@).stop().animate({opacity: 1}, 200, 'linear')
+        $('#gallery_contents_wrapper').append('<div id="overlay"></div>')
+        $('#overlay').click( ->
+          $('.wrapper .circle', root).css('opacity', 0.3)
+          $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100)
+          $('#overlay').remove()
+        )
     )
 
   @addArrowClass = (e, popup) ->

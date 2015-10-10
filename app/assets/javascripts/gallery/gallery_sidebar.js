@@ -55,9 +55,10 @@ GallerySidebar = (function() {
       if (popup.is(':visible')) {
         type = _type.call(this);
         popup.stop(true, true).fadeOut(100, 'linear');
-        return $(this).stop().animate({
+        $(this).stop().animate({
           opacity: 0.7
         }, 100, 'linear');
+        return $('#overlay').remove();
       } else {
         $("#gallery_contents_wrapper .sidebar_popup").hide();
         self = $(this);
@@ -65,9 +66,15 @@ GallerySidebar = (function() {
           return $(this).attr('class') !== self.attr('class');
         }).css('opacity', 0.3);
         popup.stop(true, true).fadeIn(200, 'linear');
-        return $(this).stop().animate({
+        $(this).stop().animate({
           opacity: 1
         }, 200, 'linear');
+        $('#gallery_contents_wrapper').append('<div id="overlay"></div>');
+        return $('#overlay').click(function() {
+          $('.wrapper .circle', root).css('opacity', 0.3);
+          $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100);
+          return $('#overlay').remove();
+        });
       }
     });
   };
