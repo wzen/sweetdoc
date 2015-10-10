@@ -1,3 +1,16 @@
+<div id="detail_wrapper">
+    <div id="main">
+        <div id="screen_wrapper">
+            <div id="project_wrapper">
+                <div id="<%= Const::Paging::ROOT_ID %>" class="stage_container">
+                    <%= render 'run/guide/guide' %>
+                </div>
+            </div>
+            <%= render 'base/floatview' %>
+        </div>
+    </div>
+    <%= render 'base/run_contents_temp' %>
+</div>
 
-
-<%= render 'base/run_contents_temp' %>
+<%= stylesheet_link_tag 'gallery', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'gallery_with_run', 'data-turbolinks-track' => true %>

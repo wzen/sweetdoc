@@ -11,5 +11,8 @@
  * file per style scope.
  *
  *= require bootstrap.min
+ *= require common/common
+ *= require paging_animation/pageflip
+ *= require run/run
  *= require gallery/gallery
  */

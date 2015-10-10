@@ -24,6 +24,11 @@ class GalleryController < ApplicationController
     @contents_detail = Gallery.load_contents_detail(galiery_id)
   end
 
+  def run_window
+    # Constantの設定
+    init_const
+  end
+
   def save_state
     user_id = current_or_guest_user.id
     tags = params[Const::Gallery::Key::TAGS]
