@@ -470,8 +470,6 @@ class Common
 
     # 表示
     _show = ->
-      if prepareShowFunc?
-        prepareShowFunc(emt)
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").show()
       # センタリング
@@ -498,7 +496,13 @@ class Common
           success: (data)->
             $('body').append(data.modalHtml)
             emt = $('body').children(".modal-content.#{type}")
-            _show.call(self)
+            emt.hide()
+            if prepareShowFunc?
+              prepareShowFunc(emt, ->
+                _show.call(self)
+              )
+            else
+              _show.call(self)
           error: (data) ->
         }
       )
@@ -506,16 +510,32 @@ class Common
       _show.call(self)
 
   # 中央センタリング
-  @modalCentering = ->
+  @modalCentering = (animation = false, b = null, c = null) ->
     emt = $('body').children(".modal-content")
     if emt?
       w = $(window).width()
       h = $(window).height()
-      cw = emt.outerWidth()
-      ch = emt.outerHeight()
+
+      callback = null
+      width = emt.outerWidth()
+      height = emt.outerHeight()
+      if b?
+        if $.type(b) == 'function'
+          callback = b
+        else if $.type(b) == 'object'
+          width = b.width
+          height = b.height
+      if c?
+        callback = c
+      cw = width
+      ch = height
       if ch > h * Constant.ModalView.HEIGHT_RATE
         ch = h * Constant.ModalView.HEIGHT_RATE
-      emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2 - 80) + "px"})
+
+      if animation
+        emt.animate({"left": ((w - cw)/2) + "px","top": ((h - ch)/2 - 80) + "px"}, 300, 'linear', callback)
+      else
+        emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2 - 80) + "px"})
 
   # モーダル非表示
   @hideModalView = ->

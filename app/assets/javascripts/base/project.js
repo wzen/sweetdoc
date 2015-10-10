@@ -4,11 +4,41 @@ var Project;
 Project = (function() {
   function Project() {}
 
-  Project.initProjectModal = function(modalEmt) {
+  Project.initProjectModal = function(modalEmt, callback) {
+    var _modalSize;
+    if (callback == null) {
+      callback = null;
+    }
+    _modalSize = function(type) {
+      var height, width;
+      if (type === 'new') {
+        width = 424;
+        height = 179;
+      } else {
+        width = 259;
+        height = 118;
+      }
+      return {
+        width: width,
+        height: height
+      };
+    };
     $('.project_create_wrapper input[type=radio]', modalEmt).off('click');
     $('.project_create_wrapper input[type=radio]', modalEmt).on('click', function() {
+      var size;
       $('.display_project_new_wrapper', modalEmt).css('display', $(this).val() === 'new' ? 'block' : 'none');
-      return $('.display_project_select_wrapper', modalEmt).css('display', $(this).val() === 'select' ? 'block' : 'none');
+      $('.display_project_select_wrapper', modalEmt).css('display', $(this).val() === 'select' ? 'block' : 'none');
+      size = _modalSize($(this).val());
+      modalEmt.animate({
+        width: size.width + "px",
+        height: size.height + "px"
+      }, {
+        duration: 300,
+        queue: false
+      });
+      Common.modalCentering(true, size);
+      $('.button_wrapper span', modalEmt).hide();
+      return $(".button_wrapper ." + ($(this).val()), modalEmt).show();
     });
     $('.display_size_wrapper input[type=radio]', modalEmt).off('click');
     $('.display_size_wrapper input[type=radio]', modalEmt).on('click', function() {
@@ -16,7 +46,7 @@ Project = (function() {
     });
     $('.default_window_size', modalEmt).html((window.mainWrapper.width()) + " X " + (window.mainWrapper.height()));
     Project.load_data(function(data) {
-      var d, e, i, len, list, n, p, projectSelect, user_pagevalue_list;
+      var d, e, i, len, list, n, p, projectSelect, size, user_pagevalue_list;
       user_pagevalue_list = data.list;
       projectSelect = $('.project_select', modalEmt);
       if (user_pagevalue_list.length > 0) {
@@ -30,46 +60,70 @@ Project = (function() {
         }
         projectSelect.children().remove();
         $(list).appendTo(projectSelect);
-        return $('.project_create_wrapper', modalEmt).show();
+        $('.display_project_new_wrapper', modalEmt).hide();
+        $('.display_project_select_wrapper', modalEmt).show();
+        $(".button_wrapper .select", modalEmt).show();
+        size = _modalSize('select');
+        modalEmt.css({
+          width: size.width,
+          height: size.height
+        });
+        $('.project_create_wrapper', modalEmt).show();
+        Common.modalCentering();
+        if (callback != null) {
+          return callback();
+        }
       } else {
         projectSelect.children().remove();
-        return $('.project_create_wrapper', modalEmt).hide();
+        $('.display_project_new_wrapper', modalEmt).show();
+        $('.display_project_select_wrapper', modalEmt).hide();
+        $(".button_wrapper .new", modalEmt).show();
+        size = _modalSize('new');
+        modalEmt.css({
+          width: size.width,
+          height: size.height
+        });
+        Common.modalCentering();
+        if (callback != null) {
+          return callback();
+        }
       }
     });
     $('.create_button', modalEmt).off('click');
     $('.create_button', modalEmt).on('click', function() {
-      var height, projectName, user_pagevalue_id, width;
-      if ($('input[name=project_create][value=new]').is(':checked')) {
-        projectName = $('.project_name').val();
-        width = $('#screen_wrapper').width();
-        height = $('#screen_wrapper').height();
-        if ((projectName == null) || projectName.length === 0) {
+      var height, projectName, width;
+      projectName = $('.project_name').val();
+      width = $('#screen_wrapper').width();
+      height = $('#screen_wrapper').height();
+      if ((projectName == null) || projectName.length === 0) {
+        return;
+      }
+      if ($('.display_size_wrapper input[value=input]').is(':checked')) {
+        width = $('.display_size_input_width', modalEmt).val();
+        height = $('.display_size_input_height', modalEmt).val();
+        if ((width == null) || width.length === 0 || (height == null) || height.length === 0) {
           return;
         }
-        if ($('.display_size_wrapper input[value=input]').is(':checked')) {
-          width = $('.display_size_input_width', modalEmt).val();
-          height = $('.display_size_input_height', modalEmt).val();
-          if ((width == null) || width.length === 0 || (height == null) || height.length === 0) {
-            return;
-          }
-        }
-        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
-        PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
-          width: parseInt(width),
-          height: parseInt(height)
-        });
-        Navbar.setTitle(projectName);
-        Common.applyEnvironmentFromPagevalue();
-        return Project.create(projectName, width, height, function() {
-          return Common.hideModalView();
-        });
-      } else {
-        user_pagevalue_id = $('.project_select', modalEmt).val();
-        return ServerStorage.load(user_pagevalue_id, function() {
-          Common.applyEnvironmentFromPagevalue();
-          return Common.hideModalView();
-        });
       }
+      PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
+      PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
+        width: parseInt(width),
+        height: parseInt(height)
+      });
+      Navbar.setTitle(projectName);
+      Common.applyEnvironmentFromPagevalue();
+      return Project.create(projectName, width, height, function() {
+        return Common.hideModalView();
+      });
+    });
+    $('.open_button', modalEmt).off('click');
+    $('.open_button', modalEmt).on('click', function() {
+      var user_pagevalue_id;
+      user_pagevalue_id = $('.project_select', modalEmt).val();
+      return ServerStorage.load(user_pagevalue_id, function() {
+        Common.applyEnvironmentFromPagevalue();
+        return Common.hideModalView();
+      });
     });
     $('.back_button', modalEmt).off('click');
     return $('.back_button', modalEmt).on('click', function() {

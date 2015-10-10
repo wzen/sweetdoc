@@ -1,12 +1,12 @@
 <div class="modal-content <%= Const::ModalViewType::INIT_PROJECT %>">
     <div class="content">
-        <div class="project_create_wrapper" style="display: none">
+        <div class="project_create_wrapper">
             <div>
                 <div style="display: inline-block">
-                    <input type="radio" name="project_create" value="new" checked>Create
+                    <input type="radio" name="project_create" value="select" checked>Select
                 </div>
                 <div style="display: inline-block">
-                    <input type="radio" name="project_create" value="select">Select
+                    <input type="radio" name="project_create" value="new">Create
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class="display_project_select_wrapper" style="display: none">
+        <div class="display_project_select_wrapper">
             <div class="cell_label">
                 <label>Select project:</label>
             </div>
@@ -51,7 +51,8 @@
         </div>
         <div class="button_wrapper">
             <div>
-                <button class="create_button" value="Create">Create</button>
+                <span class="new"><button class="create_button" value="Create">Create</button></span>
+                <span class="select"><button class="open_button" value="Open">Open</button></span>
                 <button class="back_button" value="Back to MainPage">Back to MainPage</button>
             </div>
         </div>

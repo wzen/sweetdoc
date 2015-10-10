@@ -42,6 +42,7 @@ en:
       language: "Language"
       introduction: "introduction"
       about: "About"
+      back_to_mainpage: "Back to MainPage"
   context_menu:
     copy: "Copy"
     cut: "Cut"

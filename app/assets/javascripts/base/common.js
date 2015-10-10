@@ -537,9 +537,6 @@ Common = (function() {
       return false;
     }
     _show = function() {
-      if (prepareShowFunc != null) {
-        prepareShowFunc(emt);
-      }
       $("body").append('<div id="modal-overlay"></div>');
       $("#modal-overlay").show();
       Common.modalCentering.call(this);
@@ -562,7 +559,14 @@ Common = (function() {
         success: function(data) {
           $('body').append(data.modalHtml);
           emt = $('body').children(".modal-content." + type);
-          return _show.call(self);
+          emt.hide();
+          if (prepareShowFunc != null) {
+            return prepareShowFunc(emt, function() {
+              return _show.call(self);
+            });
+          } else {
+            return _show.call(self);
+          }
         },
         error: function(data) {}
       });
@@ -571,21 +575,51 @@ Common = (function() {
     }
   };
 
-  Common.modalCentering = function() {
-    var ch, cw, emt, h, w;
+  Common.modalCentering = function(animation, b, c) {
+    var callback, ch, cw, emt, h, height, w, width;
+    if (animation == null) {
+      animation = false;
+    }
+    if (b == null) {
+      b = null;
+    }
+    if (c == null) {
+      c = null;
+    }
     emt = $('body').children(".modal-content");
     if (emt != null) {
       w = $(window).width();
       h = $(window).height();
-      cw = emt.outerWidth();
-      ch = emt.outerHeight();
+      callback = null;
+      width = emt.outerWidth();
+      height = emt.outerHeight();
+      if (b != null) {
+        if ($.type(b) === 'function') {
+          callback = b;
+        } else if ($.type(b) === 'object') {
+          width = b.width;
+          height = b.height;
+        }
+      }
+      if (c != null) {
+        callback = c;
+      }
+      cw = width;
+      ch = height;
       if (ch > h * Constant.ModalView.HEIGHT_RATE) {
         ch = h * Constant.ModalView.HEIGHT_RATE;
       }
-      return emt.css({
-        "left": ((w - cw) / 2) + "px",
-        "top": ((h - ch) / 2 - 80) + "px"
-      });
+      if (animation) {
+        return emt.animate({
+          "left": ((w - cw) / 2) + "px",
+          "top": ((h - ch) / 2 - 80) + "px"
+        }, 300, 'linear', callback);
+      } else {
+        return emt.css({
+          "left": ((w - cw) / 2) + "px",
+          "top": ((h - ch) / 2 - 80) + "px"
+        });
+      }
     }
   };
 

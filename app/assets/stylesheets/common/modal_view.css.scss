@@ -34,6 +34,7 @@
 }
 
 .modal-content.init_project {
+
   .content {
     > div {
       display: table;
@@ -67,11 +68,20 @@
     border:1px solid #CCC;
   }
 
+  .project_create_wrapper {
+    display: none;
+  }
+
   .button_wrapper {
     width: 100%;
     text-align: center;
+    margin-top: 15px;
 
-    .create_button {
+    span {
+      display: none;
+    }
+
+    .create_button, .open_button {
       background: #e62e4d;
       background-image: -webkit-linear-gradient(top, #e62e4d, #c91414);
       background-image: -moz-linear-gradient(top, #e62e4d, #c91414);

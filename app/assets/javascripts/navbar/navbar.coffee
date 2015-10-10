@@ -54,6 +54,10 @@ class Navbar
     $('.menu-about', etcMenuEmt).on('click', ->
       Common.showModalView(Constant.ModalViewType.ABOUT)
     )
+    $('.menu-backtomainpage', etcMenuEmt).off('click')
+    $('.menu-backtomainpage', etcMenuEmt).on('click', ->
+      window.location.href = '/'
+    )
 
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     $('.menu-item', itemsSelectMenuEmt).click( ->
