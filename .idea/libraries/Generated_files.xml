@@ -2,39 +2,27 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

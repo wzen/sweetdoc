@@ -75,7 +75,7 @@ ServerStorage = (function() {
       eventPagevalues[pageNum] = JSON.stringify(v);
     }
     data[this.Key.EVENT_PAGE_VALUE] = Object.keys(eventPagevalues).length > 0 ? eventPagevalues : null;
-    data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX));
+    data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX));
     if ((data[this.Key.INSTANCE_PAGE_VALUE] != null) || (data[this.Key.EVENT_PAGE_VALUE] != null) || (data[this.Key.SETTING_PAGE_VALUE] != null)) {
       return $.ajax({
         url: "/page_value_state/save_state",
@@ -157,7 +157,7 @@ ServerStorage = (function() {
           }
           if (data.setting_pagevalue_data != null) {
             d = JSON.parse(data.setting_pagevalue_data);
-            PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d);
+            PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX, d);
           }
           PageValue.adjustInstanceAndEventOnPage();
           LocalStorage.saveAllPageValues();
@@ -167,7 +167,7 @@ ServerStorage = (function() {
             PageValue.updateForkCount();
             Paging.initPaging();
             Common.applyEnvironmentFromPagevalue();
-            Setting.initConfig();
+            WorktableSetting.initConfig();
             if (callback != null) {
               return callback();
             }
@@ -220,8 +220,8 @@ ServerStorage = (function() {
     if (window.saveIdleTimer != null) {
       clearTimeout(window.saveIdleTimer);
     }
-    if (Setting.IdleSaveTimer.isEnabled()) {
-      time = parseFloat(Setting.IdleSaveTimer.idleTime()) * 1000;
+    if (WorktableSetting.IdleSaveTimer.isEnabled()) {
+      time = parseFloat(WorktableSetting.IdleSaveTimer.idleTime()) * 1000;
       return window.saveIdleTimer = setTimeout(function() {
         window.workingAutoSave = true;
         return ServerStorage.save(function() {

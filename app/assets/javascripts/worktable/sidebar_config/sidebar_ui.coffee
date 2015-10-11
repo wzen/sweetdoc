@@ -79,7 +79,7 @@ class Sidebar
       else
         $('#event-config').show()
     else if configType == @Type.SETTING
-      sc = $("##{Setting.ROOT_ID_NAME}")
+      sc = $("##{WorktableSetting.ROOT_ID_NAME}")
       if animation
         sc.fadeIn('fast')
       else

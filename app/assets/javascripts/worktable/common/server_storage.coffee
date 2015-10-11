@@ -47,7 +47,7 @@ class ServerStorage
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
       eventPagevalues[pageNum] = JSON.stringify(v)
     data[@Key.EVENT_PAGE_VALUE] = if Object.keys(eventPagevalues).length > 0 then eventPagevalues else null
-    data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX))
+    data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX))
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
       $.ajax(
         {
@@ -111,7 +111,7 @@ class ServerStorage
               PageValue.setEventPageValueByRootHash(d)
             if data.setting_pagevalue_data?
               d = JSON.parse(data.setting_pagevalue_data)
-              PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX, d)
+              PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX, d)
 
             PageValue.adjustInstanceAndEventOnPage()
             LocalStorage.saveAllPageValues()
@@ -121,7 +121,7 @@ class ServerStorage
               PageValue.updateForkCount()
               Paging.initPaging()
               Common.applyEnvironmentFromPagevalue()
-              Setting.initConfig()
+              WorktableSetting.initConfig()
               if callback?
                 callback()
             )
@@ -167,8 +167,8 @@ class ServerStorage
 
     if window.saveIdleTimer?
       clearTimeout(window.saveIdleTimer)
-    if Setting.IdleSaveTimer.isEnabled()
-      time = parseFloat(Setting.IdleSaveTimer.idleTime()) * 1000
+    if WorktableSetting.IdleSaveTimer.isEnabled()
+      time = parseFloat(WorktableSetting.IdleSaveTimer.idleTime()) * 1000
       window.saveIdleTimer = setTimeout( ->
         window.workingAutoSave = true
         ServerStorage.save( ->

@@ -307,7 +307,7 @@ class WorktableCommon
     # 環境設定
     Common.applyEnvironmentFromPagevalue()
     # 共通設定
-    Setting.initConfig()
+    WorktableSetting.initConfig()
 
   # Mainコンテナのコンテキストメニューを設定
   @setMainContainerContext: ->

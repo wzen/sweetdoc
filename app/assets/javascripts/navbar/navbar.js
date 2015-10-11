@@ -53,7 +53,7 @@ Navbar = (function() {
     $('.menu-setting', fileMenuEmt).off('click');
     $('.menu-setting', fileMenuEmt).on('click', function() {
       Sidebar.switchSidebarConfig(Sidebar.Type.SETTING);
-      Setting.initConfig();
+      WorktableSetting.initConfig();
       return Sidebar.openConfigSidebar();
     });
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li');

@@ -148,7 +148,7 @@ class LocalStorage
   @saveSettingPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
-    h = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX)
+    h = PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX)
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     lstorage.setItem(key, JSON.stringify(h))
 
@@ -159,4 +159,4 @@ class LocalStorage
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
     for k, v of h
-      PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+      PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)

@@ -117,7 +117,7 @@ class PageValue
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   @getSettingPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, Setting.PageValueKey.ROOT, updateOnly)
+    _getPageValue.call(@, key, WorktableSetting.PageValueKey.ROOT, updateOnly)
 
   # ページが持つ値を取得
   # @param [String] key キー値
@@ -257,7 +257,7 @@ class PageValue
   # @param [Boolean] giveName name属性を付与するか
   # @param [Boolean] giveUpdate update属性を付与するか
   @setSettingPageValue = (key, value, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, false, Setting.PageValueKey.ROOT, true, giveUpdate)
+    _setPageValue.call(@, key, value, false, WorktableSetting.PageValueKey.ROOT, true, giveUpdate)
 
   # ページが持つ値を設定
   # @param [String] key キー値
@@ -338,7 +338,7 @@ class PageValue
   @clearAllUpdateFlg = ->
     $("##{@Key.IS_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
     $("##{@Key.E_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
-    $("##{Setting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
+    $("##{WorktableSetting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
 
   # イベント番号で昇順ソートした配列を取得
   # @param [Integer] fn フォーク番号

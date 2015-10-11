@@ -45,7 +45,7 @@ class Navbar
     $('.menu-setting', fileMenuEmt).off('click')
     $('.menu-setting', fileMenuEmt).on('click', ->
       Sidebar.switchSidebarConfig(Sidebar.Type.SETTING)
-      Setting.initConfig()
+      WorktableSetting.initConfig()
       Sidebar.openConfigSidebar()
     )
 

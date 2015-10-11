@@ -1,5 +1,5 @@
 # 設定値
-class Setting
+class WorktableSetting
   if gon?
     # 定数
     constant = gon.const
@@ -28,13 +28,13 @@ class Setting
 
     class @PageValueKey
       # @property [String] GRID グリッド線表示
-      @GRID = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_enable"
+      @GRID = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_enable"
       # @property [String] GRID グリッド線間隔
-      @GRID_STEP = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_step"
+      @GRID_STEP = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_step"
 
     # グリッド初期化
     @initConfig: ->
-      root = $("##{Setting.ROOT_ID_NAME}")
+      root = $("##{WorktableSetting.ROOT_ID_NAME}")
       # グリッド線表示
       grid = $(".#{@GRID_CLASS_NAME}", root)
       gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
@@ -64,21 +64,21 @@ class Setting
         gridStepDiv.hide()
 
       # グリッド間隔
-      gridStepValue = PageValue.getSettingPageValue(Setting.Grid.PageValueKey.GRID_STEP)
+      gridStepValue = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP)
       if !gridStepValue?
         gridStepValue = @STEP_DEFAULT_VALUE
       gridStep = $(".#{@GRID_STEP_CLASS_NAME}", root)
       gridStep.val(gridStepValue)
       self = @
       gridStep.change( ->
-        value = PageValue.getSettingPageValue(Setting.Grid.PageValueKey.GRID)
+        value = PageValue.getSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID)
         if value?
           value = value == 'true'
         if value
           step = $(@).val()
           if step?
             step = parseInt(step)
-            PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID_STEP, step)
+            PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID_STEP, step)
             self.drawGrid(true)
       )
 
@@ -96,10 +96,10 @@ class Setting
       if context? && doDraw == false
         # 削除
         $(".#{@SETTING_GRID_ELEMENT_CLASS}").remove()
-        PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID, false)
+        PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, false)
         LocalStorage.saveSettingPageValue()
       else if doDraw
-        root = $("##{Setting.ROOT_ID_NAME}")
+        root = $("##{WorktableSetting.ROOT_ID_NAME}")
         stepInput = $(".#{@GRID_STEP_CLASS_NAME}", root)
         step = stepInput.val()
         step = parseInt(step)
@@ -144,7 +144,7 @@ class Setting
           context.lineTo(context.canvas.width, i)
           context.stroke()
 
-        PageValue.setSettingPageValue(Setting.Grid.PageValueKey.GRID, true)
+        PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, true)
         LocalStorage.saveSettingPageValue()
 
   # 自動保存
@@ -156,13 +156,13 @@ class Setting
 
     class @PageValueKey
       # @property [String] AUTOSAVE AutoSave
-      @AUTOSAVE = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave"
+      @AUTOSAVE = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave"
       # @property [String] AUTOSAVE_TIME AutoSave間隔
-      @AUTOSAVE_TIME = "#{Setting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave_time"
+      @AUTOSAVE_TIME = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave_time"
 
 
     @initConfig: ->
-      root = $("##{Setting.ROOT_ID_NAME}")
+      root = $("##{WorktableSetting.ROOT_ID_NAME}")
       # Autosave表示
       enable = $(".#{@AUTOSAVE_CLASS_NAME}", root)
       enableValue = PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE)
@@ -203,14 +203,14 @@ class Setting
       autosaveTime.val(autosaveTimeValue)
       self = @
       autosaveTime.change( ->
-        value = PageValue.getSettingPageValue(Setting.IdleSaveTimer.PageValueKey.AUTOSAVE)
+        value = PageValue.getSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE)
         if value?
           value = value == 'true'
         if value
           step = $(@).val()
           if step?
             step = parseInt(step)
-            PageValue.setSettingPageValue(Setting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step)
+            PageValue.setSettingPageValue(WorktableSetting.IdleSaveTimer.PageValueKey.AUTOSAVE_TIME, step)
       )
 
     @isEnabled: ->

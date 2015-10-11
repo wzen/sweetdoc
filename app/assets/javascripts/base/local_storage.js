@@ -174,7 +174,7 @@ LocalStorage = (function() {
     var h, isRun, key, lstorage;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
-    h = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX);
+    h = PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX);
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
     return lstorage.setItem(key, JSON.stringify(h));
   };
@@ -188,7 +188,7 @@ LocalStorage = (function() {
     results = [];
     for (k in h) {
       v = h[k];
-      results.push(PageValue.setSettingPageValue(Setting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+      results.push(PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
     }
     return results;
   };
