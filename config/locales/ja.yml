@@ -23,7 +23,7 @@ ja:
       about: "このサイトについて"
       back_to_mainpage: "メインページに戻る"
     setting:
-      show_guide: "モーションガイド表示"
+      show_guide: "モーションガイド切り替え"
   context_menu:
     copy: "コピー"
     cut: "切り取り"

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'upload/index'
+
   devise_for :user, controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations'

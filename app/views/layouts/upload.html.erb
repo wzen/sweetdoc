@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DDesk Upload</title>
+    <%= favicon_link_tag '/assets/favicon.ico' %>
+    <%= include_gon %>
+    <%= csrf_meta_tag %>
+    <%= display_meta_tags({
+                                  title: "DDesk Upload" ,
+                                  description: '',
+                                  viewport: "width=device-width, initial-scale=1"
+                          })
+    %>
+</head>
+<body>
+<%= stylesheet_link_tag 'upload', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'upload', 'data-turbolinks-track' => true %>
+
+<%= yield %>
+
+<script type="text/javascript">
+    I18n.defaultLocale = "<%= I18n.default_locale %>";
+    I18n.locale = "<%= I18n.locale %>";
+    I18n.fallbacks = true;
+</script>
+</body>
+</html>

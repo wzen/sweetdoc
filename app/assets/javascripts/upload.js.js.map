@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "upload.js.js",
+  "sourceRoot": "",
+  "sources": [
+    "upload.js.coffee"
+  ],
+  "names": [],
+  "mappings": ""
+}
