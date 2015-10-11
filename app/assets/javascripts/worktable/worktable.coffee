@@ -48,5 +48,3 @@ $ ->
 
     # 初期モーダル表示
     Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)
-
-

@@ -31,16 +31,14 @@ class LocalStorage
     @saveGeneralPageValue()
     @saveInstancePageValue()
     @saveEventPageValue()
-    if window.isWorkTable
-      @saveSettingPageValue()
+    @saveSettingPageValue()
 
   # 全てのPageValueを読み込み
   @loadAllPageValues: ->
     @loadGeneralPageValue()
     @loadInstancePageValue()
     @loadEventPageValue()
-    if window.isWorkTable
-      @loadSettingPageValue()
+    @loadSettingPageValue()
 
   # 保存時間が経過しているか
   @isOverWorktableSaveTimeLimit: ->
@@ -150,7 +148,8 @@ class LocalStorage
   @saveSettingPageValue: ->
     isRun = !window.isWorkTable
     lstorage = localStorage
-    h = PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX)
+    prefix = if isRun then RunSetting.PageValueKey.PREFIX else WorktableSetting.PageValueKey.PREFIX
+    h = PageValue.getSettingPageValue(prefix)
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     lstorage.setItem(key, JSON.stringify(h))
 
@@ -160,5 +159,6 @@ class LocalStorage
     lstorage = localStorage
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
+    prefix = if isRun then RunSetting.PageValueKey.PREFIX else WorktableSetting.PageValueKey.PREFIX
     for k, v of h
-      PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+      PageValue.setSettingPageValue(prefix + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)

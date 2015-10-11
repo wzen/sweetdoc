@@ -6,7 +6,6 @@ class EventAction
   constructor: (@pageList, @pageIndex) ->
     @finishedAllPages = false
 
-
   # 現在のページインスタンスを取得
   # @return [Object] 現在のページインスタンス
   thisPage: ->

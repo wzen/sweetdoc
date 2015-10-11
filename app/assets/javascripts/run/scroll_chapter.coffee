@@ -34,6 +34,8 @@ class ScrollChapter extends Chapter
   # ガイド表示
   # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
   showGuide: (calledByWillChapter = false) ->
+    if !super(calledByWillChapter)
+      return false
     @hideGuide()
     @constructor.guideTimer = setTimeout( =>
       # ガイド表示

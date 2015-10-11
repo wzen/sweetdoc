@@ -186,10 +186,3 @@ class EventPageValueBase
       return 0
 
     return parseInt(ret)
-
-
-
-
-
-
-

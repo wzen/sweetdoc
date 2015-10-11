@@ -50,6 +50,8 @@ class ClickChapter extends Chapter
 
   # ガイド表示
   showGuide: ->
+    if !super()
+      return false
     @hideGuide()
     @constructor.guideTimer = setTimeout( =>
       # ガイド表示

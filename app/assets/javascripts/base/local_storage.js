@@ -39,18 +39,14 @@ LocalStorage = (function() {
     this.saveGeneralPageValue();
     this.saveInstancePageValue();
     this.saveEventPageValue();
-    if (window.isWorkTable) {
-      return this.saveSettingPageValue();
-    }
+    return this.saveSettingPageValue();
   };
 
   LocalStorage.loadAllPageValues = function() {
     this.loadGeneralPageValue();
     this.loadInstancePageValue();
     this.loadEventPageValue();
-    if (window.isWorkTable) {
-      return this.loadSettingPageValue();
-    }
+    return this.loadSettingPageValue();
   };
 
   LocalStorage.isOverWorktableSaveTimeLimit = function() {
@@ -175,24 +171,26 @@ LocalStorage = (function() {
   };
 
   LocalStorage.saveSettingPageValue = function() {
-    var h, isRun, key, lstorage;
+    var h, isRun, key, lstorage, prefix;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
-    h = PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX);
+    prefix = isRun ? RunSetting.PageValueKey.PREFIX : WorktableSetting.PageValueKey.PREFIX;
+    h = PageValue.getSettingPageValue(prefix);
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
     return lstorage.setItem(key, JSON.stringify(h));
   };
 
   LocalStorage.loadSettingPageValue = function() {
-    var h, isRun, k, key, lstorage, results, v;
+    var h, isRun, k, key, lstorage, prefix, results, v;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
+    prefix = isRun ? RunSetting.PageValueKey.PREFIX : WorktableSetting.PageValueKey.PREFIX;
     results = [];
     for (k in h) {
       v = h[k];
-      results.push(PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+      results.push(PageValue.setSettingPageValue(prefix + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
     }
     return results;
   };

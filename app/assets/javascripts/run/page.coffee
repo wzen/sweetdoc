@@ -1,5 +1,4 @@
 class Page
-
   # コンストラクタ
   # @param [Object] eventPageValeuList イベントPageValue
   constructor: (eventPageValueArray) ->

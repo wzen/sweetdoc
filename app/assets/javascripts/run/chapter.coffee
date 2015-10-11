@@ -101,3 +101,8 @@ class Chapter
     @eventObjList.forEach((e) =>
       e.forwardEvent()
     )
+
+  # ガイド表示
+  # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
+  showGuide: (calledByWillChapter = false) ->
+    return RunSetting.isShowGuide()
