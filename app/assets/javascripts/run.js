@@ -19,7 +19,6 @@
 //= require base/extend
 //= require base/event_base
 //= require base/local_storage
-//= require base/setting
 //= require base/float_view
 // require_directory util
 //= require util/color/color_change

@@ -22,8 +22,6 @@ $ ->
   # コンテナ初期化
   RunCommon.initMainContainer()
 
-  # 共通設定
-  WorktableSetting.initConfig()
   # 必要JS読み込み
   Common.loadJsFromInstancePageValue(->
     # イベント初期化

@@ -16,7 +16,6 @@ $(function() {
   }
   Common.createdMainContainerIfNeeded(PageValue.getPageNum());
   RunCommon.initMainContainer();
-  WorktableSetting.initConfig();
   return Common.loadJsFromInstancePageValue(function() {
     RunCommon.initEventAction();
     return window.initDone = true;

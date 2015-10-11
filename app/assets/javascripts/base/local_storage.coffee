@@ -31,14 +31,16 @@ class LocalStorage
     @saveGeneralPageValue()
     @saveInstancePageValue()
     @saveEventPageValue()
-    @saveSettingPageValue()
+    if window.isWorkTable
+      @saveSettingPageValue()
 
   # 全てのPageValueを読み込み
   @loadAllPageValues: ->
     @loadGeneralPageValue()
     @loadInstancePageValue()
     @loadEventPageValue()
-    @loadSettingPageValue()
+    if window.isWorkTable
+      @loadSettingPageValue()
 
   # 保存時間が経過しているか
   @isOverWorktableSaveTimeLimit: ->

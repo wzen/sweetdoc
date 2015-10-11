@@ -39,14 +39,18 @@ LocalStorage = (function() {
     this.saveGeneralPageValue();
     this.saveInstancePageValue();
     this.saveEventPageValue();
-    return this.saveSettingPageValue();
+    if (window.isWorkTable) {
+      return this.saveSettingPageValue();
+    }
   };
 
   LocalStorage.loadAllPageValues = function() {
     this.loadGeneralPageValue();
     this.loadInstancePageValue();
     this.loadEventPageValue();
-    return this.loadSettingPageValue();
+    if (window.isWorkTable) {
+      return this.loadSettingPageValue();
+    }
   };
 
   LocalStorage.isOverWorktableSaveTimeLimit = function() {
