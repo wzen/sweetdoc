@@ -41,6 +41,7 @@ class Project < ActiveRecord::Base
         upm.del_flg = 0
       AND
         up.del_flg = 0
+      ORDER BY up.updated_at DESC
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     if ret_sql != nil

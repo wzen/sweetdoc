@@ -11,9 +11,10 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -26,9 +27,10 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -8,7 +8,7 @@ class Project
         width = 424
         height = 179
       else
-        width = 259
+        width = 424
         height = 118
       return {width: width, height: height}
 

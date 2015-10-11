@@ -59,6 +59,7 @@ class LocalStorage
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_SETTING_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_SAVETIME)
 
   # 設定値以外のワークテーブルキャッシュを消去
   @clearWorktableWithoutSetting: ->
@@ -66,12 +67,14 @@ class LocalStorage
     lstorage.removeItem(@Key.WORKTABLE_GENERAL_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_SAVETIME)
 
   # 共通値と設定値以外のワークテーブルキャッシュを消去
   @clearWorktableWithoutGeneralAndSetting: ->
     lstorage = localStorage
     lstorage.removeItem(@Key.WORKTABLE_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.WORKTABLE_EVENT_PAGEVALUES)
+    lstorage.removeItem(@Key.WORKTABLE_SAVETIME)
 
   # 実行画面キャッシュを消去
   @clearRun: ->
@@ -80,6 +83,7 @@ class LocalStorage
     lstorage.removeItem(@Key.RUN_INSTANCE_PAGEVALUES)
     lstorage.removeItem(@Key.RUN_EVENT_PAGEVALUES)
     lstorage.removeItem(@Key.RUN_SETTING_PAGEVALUES)
+    lstorage.removeItem(@Key.RUN_SAVETIME)
 
   # キャッシュに共通値を保存
   @saveGeneralPageValue: ->
@@ -147,9 +151,6 @@ class LocalStorage
     h = PageValue.getSettingPageValue(Setting.PageValueKey.PREFIX)
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     lstorage.setItem(key, JSON.stringify(h))
-    # 現在時刻を保存
-    key = if isRun then @Key.RUN_SAVETIME else @Key.WORKTABLE_SAVETIME
-    lstorage.setItem(key, $.now())
 
   # キャッシュから共通設定値を読み込み
   @loadSettingPageValue: ->
