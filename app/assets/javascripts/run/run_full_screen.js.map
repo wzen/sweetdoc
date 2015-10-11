@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "run_full_screen.js",
+  "sourceRoot": "",
+  "sources": [
+    "run_full_screen.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,CAAA,CAAE,SAAA,GAAA,CAAF"
+}

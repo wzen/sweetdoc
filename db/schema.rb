@@ -57,12 +57,15 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   end
 
   create_table "galleries", force: true do |t|
-    t.string   "title",                         null: false
+    t.string   "title",                            null: false
     t.text     "caption"
     t.binary   "thumbnail_img"
-    t.integer  "screen_width",                  null: false
-    t.integer  "screen_height",                 null: false
-    t.boolean  "del_flg",       default: false
+    t.integer  "screen_width",                     null: false
+    t.integer  "screen_height",                    null: false
+    t.boolean  "show_guide"
+    t.boolean  "show_page_num"
+    t.boolean  "show_chapter_num"
+    t.boolean  "del_flg",          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

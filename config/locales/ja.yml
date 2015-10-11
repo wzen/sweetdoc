@@ -16,6 +16,10 @@ ja:
         arrow: "矢印"
         button: "ボタン"
       edit: "編集"
+    motion_check:
+      title: "動作確認"
+      newtab: "新タブで実行"
+      newwindow: "新ウィンドウで実行"
     etc:
       etc: "その他"
       language: "言語"

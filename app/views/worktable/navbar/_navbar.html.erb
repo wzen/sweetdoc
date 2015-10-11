@@ -40,7 +40,16 @@
                         <li><a id="menu-action-edit" class="menu-item"><%= t('header_menu.action.edit') %></a></li>
                     </ul>
                 </li>
-                <li><a onclick="run()">Run</a></li>
+                <li id="header_motion_check_menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_motion_check_menu">
+                        <span id="header_items_selected_menu_span"><%= t('header_menu.motion_check.title') %></span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a class="menu-item" onclick="MotionCheck.run(false)"><%= t('header_menu.motion_check.newtab') %></a></li>
+                        <li><a class="menu-item" onclick="MotionCheck.run(true)"><%= t('header_menu.motion_check.newwindow') %></a></li>
+                    </ul>
+                </li>
                 <li id="header_etc_select_menu">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#header_etc_select_menu">
                         <%= t('header_menu.etc.etc') %>

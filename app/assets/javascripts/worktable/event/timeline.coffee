@@ -75,7 +75,7 @@ class Timeline
         axis: 'x'
         containment: $('#timeline_events_container')
         items: '.sortable'
-        start: (event: ui) ->
+        start: (event, ui) ->
           # 同期線消去
           $('#timeline_events .sync_line').remove()
         update: (event, ui) ->

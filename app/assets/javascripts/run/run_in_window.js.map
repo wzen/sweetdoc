@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "run_in_window.js",
+  "sourceRoot": "",
+  "sources": [
+    "run_in_window.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,CAAA,CAAE,SAAA,GAAA,CAAF"
+}

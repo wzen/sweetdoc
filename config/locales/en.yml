@@ -37,6 +37,10 @@ en:
         arrow: "Arrow"
         button: "Button"
       edit: "Edit"
+    motion_check:
+      title: "Motion Check"
+      newtab: "New Tab"
+      newwindow: "New Window"
     etc:
       etc: "Etc"
       language: "Language"
