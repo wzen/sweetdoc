@@ -35,7 +35,6 @@
 //= require base/extend
 //= require base/event_base
 //= require base/local_storage
-//= require base/setting
 //= require base/indicator
 //= require base/project
 //= require base/float_view
@@ -57,6 +56,7 @@
 //= require worktable/common/history
 //= require worktable/common/server_storage
 //= require worktable/common/paging
+//= require worktable/common/worktable_setting
 //= require worktable/util/colorpicker
 //= require worktable/item_extend/common_extend
 //= require worktable/item_extend/canvasitem_extend

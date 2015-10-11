@@ -222,3 +222,4 @@ class WorktableSetting
 
     @idleTime: ->
       return PageValue.getSettingPageValue(@PageValueKey.AUTOSAVE_TIME)
+

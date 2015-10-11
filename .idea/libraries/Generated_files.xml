@@ -21,7 +21,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/setting.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
     </CLASSES>
     <JAVADOC />
