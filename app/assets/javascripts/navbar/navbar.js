@@ -69,6 +69,7 @@ Navbar = (function() {
     $('.menu-item', itemsSelectMenuEmt).click(function() {
       var emtId, itemId;
       WorktableCommon.reDrawAllInstanceItemIfChanging();
+      WorktableCommon.clearSelectedBorder();
       emtId = $(this).attr('id');
       if (emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0) {
         itemId = parseInt(emtId.replace(Navbar.ITEM_MENU_PREFIX, ''));

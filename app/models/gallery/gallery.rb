@@ -2,6 +2,12 @@ require 'xmlrpc/client'
 require 'project/project'
 require 'project/project_gallery_map'
 require 'project/user_project_map'
+require 'gallery/gallery_tag'
+require 'gallery/gallery_tag_map'
+require 'gallery/gallery_instance_pagevalue'
+require 'gallery/gallery_instance_pagevalue_paging'
+require 'gallery/gallery_event_pagevalue'
+require 'gallery/gallery_event_pagevalue_paging'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
@@ -16,73 +22,70 @@ class Gallery < ActiveRecord::Base
 
   def self.save_state(user_id, project_id, tags, title, caption, thumbnail_img)
     begin
-      if i_page_values != 'null' && e_page_values != 'null'
+      ActiveRecord::Base.transaction do
+        # Project取得
+        p = Project.find(project_id)
+        # Gallery レコード追加
+        g = self.new({
+                         title: title,
+                         caption: caption,
+                         thumbnail_img: thumbnail_img.read,
+                         screen_width: p.screen_width,
+                         screen_height: p.screen_height
+                     })
+        g.save!
+        gallery_id = g.id
 
-        ActiveRecord::Base.transaction do
-          # Project取得
-          p = Project.find(project_id)
-          # Gallery レコード追加
-          g = self.new({
-                           title: title,
-                           caption: caption,
-                           thumbnail_img: thumbnail_img,
-                           screen_width: p.screen_width,
-                           screen_height: p.screen_height
-                       })
-          g.save!
-          gallery_id = g.id
+        # UserProjectMap取得
+        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+        # ProjectGalelryMap追加
+        pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
+        pgm.save!
 
-          # UserProjectMap取得
-          upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
-          # ProjectGalelryMap追加
-          pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
-          pgm.save!
-
-          # Pagevalueレコード取得
-          sql = <<-"SQL"
-            SELECT ip.data as i_pagevalue_data, ep.data as e_pagevalue_data, ipp.page_num as page_num
-            FROM user_pagevalues up
-            LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
-            LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
-            LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
-            LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
-            WHERE
-              up.user_project_map_id = #{upm.id}
-            AND
-              up.del_flg = 0
-          SQL
-          ret = ActiveRecord::Base.connection.select_all(sql).to_hash
-          ret.each do |record|
-            page_num = record['pageNum']
-            i_pagevalue_data = record['i_pagevalue_data']
-            if i_pagevalue_data != nil
-              ip = GalleryInstancePagevalue.new({data: i_pagevalue_data})
-              ip.save!
-              ipp = GalleryInstancePagevaluePaging.new({
-                                                           gallery_id: gallery_id,
-                                                           page_num: page_num,
-                                                           instance_pagevalue_id: ip.id
-                                                       })
-              ipp.save!
-            end
-
-            e_pagevalue_data = record['e_pagevalue_data']
-            if e_pagevalue_data != nil
-              ep = GalleryEventPagevalue.new({data: e_pagevalue_data})
-              ep.save!
-              epp = GalleryEventPagevaluePaging.new({
-                                                        gallery_id: gallery_id,
-                                                        page_num: page_num,
-                                                        event_pagevalue_id: ep.id
-                                                    })
-              epp.save!
-            end
+        # Pagevalueレコード取得
+        sql = <<-"SQL"
+          SELECT ip.data as i_pagevalue_data, ep.data as e_pagevalue_data, ipp.page_num as page_num
+          FROM user_pagevalues up
+          LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
+          LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
+          LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
+          LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
+          WHERE
+            up.user_project_map_id = #{upm.id}
+          AND
+            up.del_flg = 0
+        SQL
+        ret = ActiveRecord::Base.connection.select_all(sql).to_hash
+        ret.each do |record|
+          page_num = record['page_num']
+          i_pagevalue_data = record['i_pagevalue_data']
+          if i_pagevalue_data != nil
+            ip = GalleryInstancePagevalue.new({data: i_pagevalue_data})
+            ip.save!
+            ipp = GalleryInstancePagevaluePaging.new({
+                                                         gallery_id: gallery_id,
+                                                         page_num: page_num,
+                                                         gallery_instance_pagevalue_id: ip.id
+                                                     })
+            ipp.save!
           end
 
-          # Tag レコード追加
-          save_tag(tags, gallery_id)
-
+          e_pagevalue_data = record['e_pagevalue_data']
+          if e_pagevalue_data != nil
+            ep = GalleryEventPagevalue.new({data: e_pagevalue_data})
+            ep.save!
+            epp = GalleryEventPagevaluePaging.new({
+                                                      gallery_id: gallery_id,
+                                                      page_num: page_num,
+                                                      gallery_event_pagevalue_id: ep.id
+                                                  })
+            epp.save!
+          end
         end
+
+        # Tag レコード追加
+        save_tag(tags, gallery_id)
+
       end
 
       return I18n.t('message.database.item_state.save.success')
@@ -263,7 +266,7 @@ class Gallery < ActiveRecord::Base
   # タグ名のレコードを新規作成
   def self.save_tag(tags, gallery_id)
     begin
-      if tags != nil && tags.length > 0
+      if tags != 'null' && tags.length > 0
         # タグ数がMAX以上のものは削除
         tags = tags.take(Const::Gallery::TAG_MAX)
 

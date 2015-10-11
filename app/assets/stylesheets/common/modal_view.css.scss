@@ -68,10 +68,6 @@
     border:1px solid #CCC;
   }
 
-  .project_create_wrapper {
-    display: none;
-  }
-
   .button_wrapper {
     width: 100%;
     text-align: center;
@@ -150,6 +146,27 @@
       > div {
         display: table-cell;
       }
+    }
+  }
+
+  .button_wrapper {
+    text-align: right;
+
+    .upload_button {
+      background: #e62e4d;
+      background-image: -webkit-linear-gradient(top, #e62e4d, #c91414);
+      background-image: -moz-linear-gradient(top, #e62e4d, #c91414);
+      background-image: -ms-linear-gradient(top, #e62e4d, #c91414);
+      background-image: -o-linear-gradient(top, #e62e4d, #c91414);
+      background-image: linear-gradient(to bottom, #e62e4d, #c91414);
+      -webkit-border-radius: 8px;
+      -moz-border-radius: 8px;
+      border-radius: 8px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 13px;
+      padding: 5px 10px 5px 10px;
+      border: solid #e62e4d 1px;
     }
   }
 }

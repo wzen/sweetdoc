@@ -93,9 +93,7 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   end
 
   create_table "gallery_event_pagevalues", force: true do |t|
-    t.integer  "page_num",                   null: false
     t.text     "data"
-    t.integer  "retain",     default: 1,     null: false
     t.boolean  "del_flg",    default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -111,9 +109,7 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   end
 
   create_table "gallery_instance_pagevalues", force: true do |t|
-    t.integer  "page_num",                   null: false
     t.text     "data"
-    t.integer  "retain",     default: 1,     null: false
     t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -278,8 +274,8 @@ ActiveRecord::Schema.define(version: 20151006163105) do
     t.string   "name"
     t.string   "uid"
     t.integer  "user_auth_id",           default: 3,     null: false
-    t.string   "email",                  default: "",    null: false
-    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "email",                                  null: false
+    t.string   "encrypted_password",                     null: false
     t.boolean  "guest",                  default: false
     t.string   "provider"
     t.string   "reset_password_token"

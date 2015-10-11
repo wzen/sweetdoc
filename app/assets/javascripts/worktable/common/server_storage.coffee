@@ -162,16 +162,16 @@ class ServerStorage
     )
 
   @startSaveIdleTimer = ->
-#    if window.workingAutoSave? && window.workingAutoSave
-#      return
-#
-#    if window.saveIdleTimer?
-#      clearTimeout(window.saveIdleTimer)
-#    if Setting.IdleSaveTimer.isEnabled()
-#      time = parseFloat(Setting.IdleSaveTimer.idleTime()) * 1000
-#      window.saveIdleTimer = setTimeout( ->
-#        window.workingAutoSave = true
-#        ServerStorage.save( ->
-#          window.workingAutoSave = false
-#        )
-#      , time)
+    if window.workingAutoSave? && window.workingAutoSave
+      return
+
+    if window.saveIdleTimer?
+      clearTimeout(window.saveIdleTimer)
+    if Setting.IdleSaveTimer.isEnabled()
+      time = parseFloat(Setting.IdleSaveTimer.idleTime()) * 1000
+      window.saveIdleTimer = setTimeout( ->
+        window.workingAutoSave = true
+        ServerStorage.save( ->
+          window.workingAutoSave = false
+        )
+      , time)

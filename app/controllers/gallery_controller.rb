@@ -1,3 +1,5 @@
+require 'gallery/gallery'
+
 class GalleryController < ApplicationController
   #before_filter :authenticate_user!
 

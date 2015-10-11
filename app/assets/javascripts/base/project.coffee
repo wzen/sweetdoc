@@ -61,6 +61,7 @@ class Project
         $(".button_wrapper .new", modalEmt).show()
         size = _modalSize('new')
         modalEmt.css({width: size.width, height: size.height})
+        $('.project_create_wrapper', modalEmt).hide()
         Common.modalCentering()
         if callback?
           callback()

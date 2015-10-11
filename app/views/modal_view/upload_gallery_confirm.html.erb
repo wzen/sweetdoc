@@ -1,6 +1,6 @@
 <div class="modal-content <%= Const::ModalViewType::UPLOAD_GALLERY_CONFIRM %>">
     <div class="content">
-        <div class="title">
+        <div class="title_wrapper">
             <div>
                 <label><%= I18n.t('upload_confirm.title') %></label>
             </div>
@@ -30,7 +30,11 @@
             </div>
         </div>
 
-        <button class="upload_button" value="Upload"></button>
+        <div class="button_wrapper">
+            <div>
+                <button class="upload_button" value="Upload">Upload</button>
+            </div>
+        </div>
 
         <div class="popular_tag_wrapper" style="display: block">
             <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
