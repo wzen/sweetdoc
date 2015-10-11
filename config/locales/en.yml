@@ -40,7 +40,7 @@ en:
     motion_check:
       title: "Motion Check"
       newtab: "New Tab"
-      newwindow: "New Window"
+      newwindow: "Run with Window"
     etc:
       etc: "Etc"
       language: "Language"

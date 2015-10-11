@@ -33,6 +33,7 @@
 //= require base/indicator
 //= require base/project
 //= require base/float_view
+//= require base/motion_check
 // require_directory util
 //= require util/color/color_change
 //= require common_event/common_event
@@ -60,7 +61,6 @@
 //= require worktable/sidebar_config/sidebar_ui.js
 //= require worktable/sidebar_config/state_config.js
 //= require worktable/event/timeline
-//= require worktable/motion_check
 //= require worktable/handwrite
 //= require worktable/worktable
 // require_tree .

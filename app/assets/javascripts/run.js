@@ -21,6 +21,7 @@
 //= require base/event_base
 //= require base/local_storage
 //= require base/float_view
+//= require base/motion_check
 // require_directory util
 //= require util/color/color_change
 //= require common_event/common_event

@@ -140,7 +140,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/motion_check.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/motion_check.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />

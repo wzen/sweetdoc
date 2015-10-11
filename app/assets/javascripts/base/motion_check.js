@@ -5,35 +5,49 @@ MotionCheck = (function() {
   function MotionCheck() {}
 
   MotionCheck.run = function(newWindow) {
+    var _operation;
     if (newWindow == null) {
       newWindow = false;
     }
-    return WorktableCommon.stopAllEventPreview(function() {
+    _operation = function() {
       var h, left, size, target, top;
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
       if ((h != null) && Object.keys(h).length > 0) {
         LocalStorage.clearRun();
-        target = "_runwindow";
+        target = '';
         if (newWindow) {
           size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
           left = Number((window.screen.width - size.width) / 2);
           top = Number((window.screen.height - size.height) / 2);
+          target = "_runwindow";
           window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + size.height + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
-          document.run_form.action = '/run/new_window';
+          document.run_form.action = '/run';
         } else {
+          target = "_runtab";
           window.open("about:blank", target);
           document.run_form.action = '/run';
         }
         document.run_form.target = target;
-        return ServerStorage.save(function() {
+        if (window.isWorkTable) {
+          return ServerStorage.save(function() {
+            return setTimeout(function() {
+              return document.run_form.submit();
+            }, 200);
+          });
+        } else {
           return setTimeout(function() {
             return document.run_form.submit();
           }, 200);
-        });
+        }
       } else {
         return Message.showWarn('No event');
       }
-    });
+    };
+    if (window.isWorkTable) {
+      return WorktableCommon.stopAllEventPreview(_operation);
+    } else {
+      return _operation.call(this);
+    }
   };
 
   return MotionCheck;
