@@ -92,6 +92,11 @@ class Navbar
   # Runナビバー初期化
   @initRunNavbar = ->
     navEmt = $('#nav')
+
+    $('.menu-showguide', navEmt).off('click')
+    $('.menu-showguide', navEmt).on('click', ->
+      RunSetting.toggleShowGuide()
+    )
     $('.menu-control-rewind-page', navEmt).off('click')
     $('.menu-control-rewind-page', navEmt).on('click', ->
       if window.eventAction?

@@ -7,6 +7,7 @@
 //= require jquery.transit.min
 //= require turbolinks
 //= require i18n
+//= require ../../../vendor/assets/bootstrap/bootstrap.js
 //= require ../../../vendor/assets/html2canvas/html2canvas.min
 //= require ../../../vendor/assets/markitup/markitup/jquery.markitup
 //= require ../../../vendor/assets/markitup/markitup/sets/html/set
@@ -34,6 +35,7 @@
 //= require event_page_value/item/item.js
 //= require navbar/navbar.js
 //= require paging_animation/pageflip
+//= require run/common/run_setting
 //= require run/run_common
 //= require run/chapter
 //= require run/scroll_chapter

@@ -12,11 +12,7 @@ RunSetting = (function() {
     RunSetting.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.ROOT = constant.PageValueKey.ST_ROOT;
-
-      PageValueKey.PREFIX = constant.PageValueKey.ST_PREFIX;
-
-      PageValueKey.SHOW_GUIDE = 'show_guide';
+      PageValueKey.SHOW_GUIDE = PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + 'show_guide';
 
       return PageValueKey;
 
@@ -24,19 +20,21 @@ RunSetting = (function() {
   }
 
   RunSetting.isShowGuide = function() {
-    var showGuide;
-    showGuide = PageValue.getSettingPageValue(PageValue.setSettingPageValue(this.PageValueKey.SHOW_GUIDE));
-    if ((showGuide == null) || showGuide) {
-      return true;
-    } else {
-      return false;
-    }
+    var ret;
+    ret = PageValue.getSettingPageValue(this.PageValueKey.SHOW_GUIDE);
+    ret = (ret == null) || ret === 'true';
+    return ret;
   };
 
   RunSetting.toggleShowGuide = function() {
-    var showGuide;
-    showGuide = PageValue.getSettingPageValue(PageValue.setSettingPageValue(this.PageValueKey.SHOW_GUIDE));
-    return PageValue.setSettingPageValue(this.PageValueKey.SHOW_GUIDE);
+    PageValue.setSettingPageValue(this.PageValueKey.SHOW_GUIDE, !this.isShowGuide());
+    if (window.eventAction != null) {
+      if (this.isShowGuide()) {
+        return window.eventAction.thisPage().thisChapter().showGuide();
+      } else {
+        return window.eventAction.thisPage().thisChapter().hideGuide();
+      }
+    }
   };
 
   return RunSetting;

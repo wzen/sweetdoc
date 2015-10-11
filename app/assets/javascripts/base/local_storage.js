@@ -171,26 +171,24 @@ LocalStorage = (function() {
   };
 
   LocalStorage.saveSettingPageValue = function() {
-    var h, isRun, key, lstorage, prefix;
+    var h, isRun, key, lstorage;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
-    prefix = isRun ? RunSetting.PageValueKey.PREFIX : WorktableSetting.PageValueKey.PREFIX;
-    h = PageValue.getSettingPageValue(prefix);
+    h = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX);
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
     return lstorage.setItem(key, JSON.stringify(h));
   };
 
   LocalStorage.loadSettingPageValue = function() {
-    var h, isRun, k, key, lstorage, prefix, results, v;
+    var h, isRun, k, key, lstorage, results, v;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
-    prefix = isRun ? RunSetting.PageValueKey.PREFIX : WorktableSetting.PageValueKey.PREFIX;
     results = [];
     for (k in h) {
       v = h[k];
-      results.push(PageValue.setSettingPageValue(prefix + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+      results.push(PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
     }
     return results;
   };

@@ -43,6 +43,8 @@ en:
       introduction: "introduction"
       about: "About"
       back_to_mainpage: "Back to MainPage"
+    setting:
+      show_guide: "Show Guide"
   context_menu:
     copy: "Copy"
     cut: "Cut"

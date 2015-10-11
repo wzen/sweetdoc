@@ -10,6 +10,17 @@
             <a class="navbar-brand nav_title">(Preview)</a>
         </div>
         <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li id="header_menu_setting">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_menu_setting">
+                        <%= t('header_menu.file.setting') %>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a class="menu-showguide"><%= t('header_menu.setting.show_guide') %></a></li>
+                    </ul>
+                </li>
+            </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><p class="navbar-text" style="font-size: 14px">Page [<span class="nav_page_num"></span>/<span class="nav_page_max"></span>]</p></li>
                 <li style="display: none"><p class="navbar-text" style="font-size: 14px;color:#FF8C00">Fork <span class="nav_fork_num"></span></p></li>

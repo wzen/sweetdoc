@@ -47,7 +47,7 @@ class ServerStorage
       pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
       eventPagevalues[pageNum] = JSON.stringify(v)
     data[@Key.EVENT_PAGE_VALUE] = if Object.keys(eventPagevalues).length > 0 then eventPagevalues else null
-    data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX))
+    data[@Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX))
     if data[@Key.INSTANCE_PAGE_VALUE]? || data[@Key.EVENT_PAGE_VALUE]? || data[@Key.SETTING_PAGE_VALUE]?
       $.ajax(
         {
@@ -111,7 +111,7 @@ class ServerStorage
               PageValue.setEventPageValueByRootHash(d)
             if data.setting_pagevalue_data?
               d = JSON.parse(data.setting_pagevalue_data)
-              PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX, d)
+              PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d)
 
             PageValue.adjustInstanceAndEventOnPage()
             LocalStorage.saveAllPageValues()

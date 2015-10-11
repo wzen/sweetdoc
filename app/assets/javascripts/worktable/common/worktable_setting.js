@@ -9,16 +9,6 @@ WorktableSetting = (function() {
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     WorktableSetting.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
-    WorktableSetting.PageValueKey = (function() {
-      function PageValueKey() {}
-
-      PageValueKey.ROOT = constant.PageValueKey.ST_ROOT;
-
-      PageValueKey.PREFIX = constant.PageValueKey.ST_PREFIX;
-
-      return PageValueKey;
-
-    })();
   }
 
   WorktableSetting.initConfig = function() {
@@ -46,9 +36,9 @@ WorktableSetting = (function() {
     Grid.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.GRID = "" + WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_enable";
+      PageValueKey.GRID = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_enable";
 
-      PageValueKey.GRID_STEP = "" + WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_step";
+      PageValueKey.GRID_STEP = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_step";
 
       return PageValueKey;
 
@@ -190,9 +180,9 @@ WorktableSetting = (function() {
     IdleSaveTimer.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.AUTOSAVE = "" + WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave";
+      PageValueKey.AUTOSAVE = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave";
 
-      PageValueKey.AUTOSAVE_TIME = "" + WorktableSetting.PageValueKey.PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave_time";
+      PageValueKey.AUTOSAVE_TIME = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave_time";
 
       return PageValueKey;
 

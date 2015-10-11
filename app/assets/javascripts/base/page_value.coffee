@@ -16,6 +16,10 @@ class PageValue
       @P_PREFIX = constant.PageValueKey.P_PREFIX
       # @property [return] 現在のページのページ番号ルート
       @pageRoot = (pn = PageValue.getPageNum()) -> @P_PREFIX + pn
+      # @property [String] ST_ROOT 設定Root
+      @ST_ROOT = constant.PageValueKey.ST_ROOT
+      # @property [String] ST_PREFIX 設定プレフィックス
+      @ST_PREFIX = constant.PageValueKey.ST_PREFIX
       # @property [String] PAGE_COUNT ページ総数
       @PAGE_COUNT = constant.PageValueKey.PAGE_COUNT
       # @property [String] PAGE_NUM 現在のページ番号
@@ -117,7 +121,7 @@ class PageValue
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   @getSettingPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, WorktableSetting.PageValueKey.ROOT, updateOnly)
+    _getPageValue.call(@, key, @Key.ST_ROOT, updateOnly)
 
   # ページが持つ値を取得
   # @param [String] key キー値
@@ -125,6 +129,9 @@ class PageValue
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   # @return [Object] ハッシュ配列または値で返す
   _getPageValue = (key, rootId, updateOnly) ->
+    if !key?
+      console.log('')
+
     f = @
     # div以下の値をハッシュとしてまとめる
     takeValue = (element, hasUpdate) ->
@@ -257,7 +264,7 @@ class PageValue
   # @param [Boolean] giveName name属性を付与するか
   # @param [Boolean] giveUpdate update属性を付与するか
   @setSettingPageValue = (key, value, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, false, WorktableSetting.PageValueKey.ROOT, true, giveUpdate)
+    _setPageValue.call(@, key, value, false, @Key.ST_ROOT, true, giveUpdate)
 
   # ページが持つ値を設定
   # @param [String] key キー値
@@ -338,7 +345,7 @@ class PageValue
   @clearAllUpdateFlg = ->
     $("##{@Key.IS_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
     $("##{@Key.E_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
-    $("##{WorktableSetting.PageValueKey.ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
+    $("##{@Key.ST_ROOT}").find(".#{PageValue.Key.UPDATED}").removeClass(PageValue.Key.UPDATED)
 
   # イベント番号で昇順ソートした配列を取得
   # @param [Integer] fn フォーク番号

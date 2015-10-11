@@ -22,6 +22,8 @@ ja:
       introduction: "自己紹介"
       about: "このサイトについて"
       back_to_mainpage: "メインページに戻る"
+    setting:
+      show_guide: "モーションガイド表示"
   context_menu:
     copy: "コピー"
     cut: "切り取り"

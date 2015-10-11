@@ -3,12 +3,7 @@ class WorktableSetting
   if gon?
     # 定数
     constant = gon.const
-
     @ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME
-
-    class @PageValueKey
-      @ROOT = constant.PageValueKey.ST_ROOT
-      @PREFIX = constant.PageValueKey.ST_PREFIX
 
   # 設定値初期化
   @initConfig: ->
@@ -17,7 +12,6 @@ class WorktableSetting
 
   # グリッド線
   class @Grid
-
     @GRID_CLASS_NAME = constant.Setting.GRID_CLASS_NAME
     @GRID_STEP_CLASS_NAME = constant.Setting.GRID_STEP_CLASS_NAME
     @GRID_STEP_DIV_CLASS_NAME = constant.Setting.GRID_STEP_DIV_CLASS_NAME
@@ -28,9 +22,9 @@ class WorktableSetting
 
     class @PageValueKey
       # @property [String] GRID グリッド線表示
-      @GRID = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_enable"
+      @GRID = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_enable"
       # @property [String] GRID グリッド線間隔
-      @GRID_STEP = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_step"
+      @GRID_STEP = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_step"
 
     # グリッド初期化
     @initConfig: ->
@@ -156,9 +150,9 @@ class WorktableSetting
 
     class @PageValueKey
       # @property [String] AUTOSAVE AutoSave
-      @AUTOSAVE = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave"
+      @AUTOSAVE = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave"
       # @property [String] AUTOSAVE_TIME AutoSave間隔
-      @AUTOSAVE_TIME = "#{WorktableSetting.PageValueKey.PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave_time"
+      @AUTOSAVE_TIME = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave_time"
 
 
     @initConfig: ->

@@ -26,6 +26,10 @@ PageValue = (function() {
         return this.P_PREFIX + pn;
       };
 
+      Key.ST_ROOT = constant.PageValueKey.ST_ROOT;
+
+      Key.ST_PREFIX = constant.PageValueKey.ST_PREFIX;
+
       Key.PAGE_COUNT = constant.PageValueKey.PAGE_COUNT;
 
       Key.PAGE_NUM = constant.PageValueKey.PAGE_NUM;
@@ -195,11 +199,14 @@ PageValue = (function() {
     if (updateOnly == null) {
       updateOnly = false;
     }
-    return _getPageValue.call(this, key, WorktableSetting.PageValueKey.ROOT, updateOnly);
+    return _getPageValue.call(this, key, this.Key.ST_ROOT, updateOnly);
   };
 
   _getPageValue = function(key, rootId, updateOnly) {
     var f, hasUpdate, keys, root, takeValue, value;
+    if (key == null) {
+      console.log('');
+    }
     f = this;
     takeValue = function(element, hasUpdate) {
       var c, ret;
@@ -358,7 +365,7 @@ PageValue = (function() {
     if (giveUpdate == null) {
       giveUpdate = false;
     }
-    return _setPageValue.call(this, key, value, false, WorktableSetting.PageValueKey.ROOT, true, giveUpdate);
+    return _setPageValue.call(this, key, value, false, this.Key.ST_ROOT, true, giveUpdate);
   };
 
   _setPageValue = function(key, value, isCache, rootId, giveName, giveUpdate) {
@@ -437,7 +444,7 @@ PageValue = (function() {
   PageValue.clearAllUpdateFlg = function() {
     $("#" + this.Key.IS_ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
     $("#" + this.Key.E_ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
-    return $("#" + WorktableSetting.PageValueKey.ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
+    return $("#" + this.Key.ST_ROOT).find("." + PageValue.Key.UPDATED).removeClass(PageValue.Key.UPDATED);
   };
 
   PageValue.getEventPageValueSortedListByNum = function(fn, pn) {

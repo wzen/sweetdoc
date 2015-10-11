@@ -97,6 +97,10 @@ Navbar = (function() {
   Navbar.initRunNavbar = function() {
     var navEmt;
     navEmt = $('#nav');
+    $('.menu-showguide', navEmt).off('click');
+    $('.menu-showguide', navEmt).on('click', function() {
+      return RunSetting.toggleShowGuide();
+    });
     $('.menu-control-rewind-page', navEmt).off('click');
     $('.menu-control-rewind-page', navEmt).on('click', function() {
       if (window.eventAction != null) {

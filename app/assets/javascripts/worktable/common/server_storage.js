@@ -75,7 +75,7 @@ ServerStorage = (function() {
       eventPagevalues[pageNum] = JSON.stringify(v);
     }
     data[this.Key.EVENT_PAGE_VALUE] = Object.keys(eventPagevalues).length > 0 ? eventPagevalues : null;
-    data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(WorktableSetting.PageValueKey.PREFIX));
+    data[this.Key.SETTING_PAGE_VALUE] = JSON.stringify(PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX));
     if ((data[this.Key.INSTANCE_PAGE_VALUE] != null) || (data[this.Key.EVENT_PAGE_VALUE] != null) || (data[this.Key.SETTING_PAGE_VALUE] != null)) {
       return $.ajax({
         url: "/page_value_state/save_state",
@@ -157,7 +157,7 @@ ServerStorage = (function() {
           }
           if (data.setting_pagevalue_data != null) {
             d = JSON.parse(data.setting_pagevalue_data);
-            PageValue.setSettingPageValue(WorktableSetting.PageValueKey.PREFIX, d);
+            PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d);
           }
           PageValue.adjustInstanceAndEventOnPage();
           LocalStorage.saveAllPageValues();
