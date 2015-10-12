@@ -415,17 +415,14 @@ form {
     transition: border-color 0.3s;
     width: 100%;
   }
-}
-
-input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 1000px #fafafa inset;
-}
-
-.form-item {
   input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
     border-bottom: 2px solid #c0c0c0;
     outline: none;
   }
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #fafafa inset;
 }
 
 .button-panel {

@@ -18,7 +18,9 @@
 <%= stylesheet_link_tag 'upload', media: 'all', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'upload', 'data-turbolinks-track' => true %>
 
-<%= yield %>
+<div id="contents">
+    <%= yield %>
+</div>
 
 <script type="text/javascript">
     I18n.defaultLocale = "<%= I18n.default_locale %>";

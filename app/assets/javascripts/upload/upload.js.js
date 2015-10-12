@@ -4,7 +4,7 @@ var Upload;
 Upload = (function() {
   function Upload() {}
 
-  Upload.init = function() {
+  Upload.initEvent = function() {
     var mark, root;
     root = $('#upload_wrapper');
     mark = $('.markItUp', root);
@@ -161,9 +161,22 @@ Upload = (function() {
   };
 
   Upload.makeCapture = function(canvas) {
-    var root;
+    var height, root, width;
     root = $('#upload_wrapper');
-    return $(".capture", root).attr('src', canvas.toDataURL('image/png'));
+    $(".capture", root).attr('src', canvas.toDataURL('image/png'));
+    width = $(canvas).width();
+    height = $(canvas).height();
+    if (width > height) {
+      return $(".capture", root).css({
+        width: '100%',
+        height: 'auto'
+      });
+    } else {
+      return $(".capture", root).css({
+        width: 'auto',
+        height: '100%'
+      });
+    }
   };
 
   return Upload;
@@ -171,7 +184,7 @@ Upload = (function() {
 })();
 
 $(function() {
-  Upload.init();
+  Upload.initEvent();
   if (window.opener != null) {
     return setTimeout(function() {
       var body;

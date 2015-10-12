@@ -1,9 +1,12 @@
+<%= form_tag('gallery/save_state', method: :post) do  %>
 <div id="upload_wrapper">
-    <%= form_tag('gallery/save_state', method: :post) do  %>
+    <div>
         <div class="capture_wrapper">
             <img class="capture" src="" >
         </div>
-        <div class="content">
+    </div>
+    <div>
+        <div class="input_wrapper">
             <div class="title_wrapper">
                 <div>
                     <label><%= I18n.t('upload_confirm.title') %></label>
@@ -59,6 +62,7 @@
                 </div>
             </div>
         </div>
-        <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
-    <% end %>
+    </div>
+    <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
 </div>
+<% end %>

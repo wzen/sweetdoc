@@ -1,7 +1,7 @@
 class Upload
 
   # ギャラリーアップロードビュー表示前処理
-  @init = ->
+  @initEvent = ->
     root = $('#upload_wrapper')
     # マークアップ入力フォーム初期化
     mark = $('.markItUp', root)
@@ -159,6 +159,12 @@ class Upload
   @makeCapture = (canvas) ->
     root = $('#upload_wrapper')
     $(".capture", root).attr('src', canvas.toDataURL('image/png'))
+    width = $(canvas).width()
+    height = $(canvas).height()
+    if width > height
+      $(".capture", root).css({width: '100%', height: 'auto'})
+    else
+      $(".capture", root).css({width: 'auto', height: '100%'})
 
 #    # blob作成
 #    _toBlob = (canvas) ->
@@ -189,7 +195,7 @@ class Upload
 #      _callback.call(@, blob)
 
 $ ->
-  Upload.init()
+  Upload.initEvent()
 
   if window.opener?
     setTimeout( ->

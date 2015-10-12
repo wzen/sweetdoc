@@ -100,3 +100,4 @@ class OperationHistory
   @redo = ->
     if !window.operationHistoryIndexes[@operationHistoryIndex()]? || window.operationHistoryTailIndexes[@operationHistoryIndex()] == window.operationHistoryIndexes[@operationHistoryIndex()] || !_popRedo.call(@)
       Message.flushWarn("Can't Redo")
+
