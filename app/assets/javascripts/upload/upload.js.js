@@ -175,7 +175,7 @@ $(function() {
   if (window.opener != null) {
     return setTimeout(function() {
       var body;
-      body = $(window.opener.document.getElementById('project_wrapper'));
+      body = window.opener.document.getElementById('pages');
       return html2canvas(body, {
         onrendered: function(canvas) {
           return Upload.makeCapture(canvas);
