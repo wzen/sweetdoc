@@ -11,7 +11,6 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/test.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/generator.jquery.color.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/checkbox.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_in_window.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/color.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/design.js" />
@@ -56,8 +55,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_setting.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/motion_check.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
@@ -137,10 +135,10 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_setting.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/motion_check.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/motion_check.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />

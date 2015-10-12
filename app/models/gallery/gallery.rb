@@ -29,7 +29,7 @@ class Gallery < ActiveRecord::Base
         g = self.new({
                          title: title,
                          caption: caption,
-                         thumbnail_img: thumbnail_img.read,
+                         thumbnail_img: thumbnail_img,
                          screen_width: p.screen_width,
                          screen_height: p.screen_height
                      })

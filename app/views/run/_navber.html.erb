@@ -28,7 +28,16 @@
                 <li><p class="navbar-text" style="font-size: 14px">Chapter [<span class="nav_chapter_num"></span>/<span class="nav_chapter_max"></span>]</p></li>
                 <li><a class="menu-control-rewind-page" title="Rewind Page"><%= image_tag("nav/rewind_page.png", size:'20x20') %></a></li>
                 <li><a class="menu-control-rewind-chapter" title="Rewind Chapter"><%= image_tag("nav/rewind_chapter.png", size:'20x20') %></a></li>
-                <li><a class="menu-control-rewind-upload-gallery" title="Upload Document"><%= image_tag("nav/upload.png", size:'24x24') %></a></li>
+                <li>
+                    <a class="menu-upload-gallery" title="Upload Document"><%= image_tag("nav/upload.png", size:'24x24') %></a>
+                    <div style="display: none">
+                        <%= form_tag('/upload', method: :post, id: 'upload_gallery_form') do %>
+                            <input class="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="">
+                            <input class="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
+                        <% end %>
+                    </div>
+                </li>
+                </ul>
             </ul>
         </div>
     </div>

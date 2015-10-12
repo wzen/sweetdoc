@@ -113,8 +113,8 @@ Navbar = (function() {
         return window.eventAction.thisPage().rewindChapter();
       }
     });
-    $('.menu-control-rewind-upload-gallery', navEmt).off('click');
-    return $('.menu-control-rewind-upload-gallery', navEmt).on('click', function() {
+    $('.menu-upload-gallery', navEmt).off('click');
+    return $('.menu-upload-gallery', navEmt).on('click', function() {
       return RunCommon.showUploadGalleryConfirm();
     });
   };

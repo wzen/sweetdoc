@@ -37,7 +37,7 @@
 //= require navbar/navbar.js
 //= require paging_animation/pageflip
 //= require run/common/run_setting
-//= require run/run_common
+//= require run/common/run_common
 //= require run/chapter
 //= require run/scroll_chapter
 //= require run/click_chapter

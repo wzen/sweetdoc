@@ -290,7 +290,7 @@ class RunCommon
     # Updateイベント
     $('.upload_button', modalEmt).off('click')
     $('.upload_button', modalEmt).on('click', ->
-      RunCommon.uploadGallery(modalEmt)
+      RunCommon.showUploadPage(modalEmt)
     )
 
     if callback?
@@ -356,12 +356,7 @@ class RunCommon
       $('.select_tag_input', modalEmt).hide()
 
   # ギャラリーアップロード
-  @uploadGallery = (modalEmt, callback = null) ->
-
-    # 入力値バリデーションチェック
-    title = $('.title:first', modalEmt).val()
-    if title.length == 0
-      return
+  @showUploadPage = (modalEmt, callback = null) ->
 
     # ギャラリー保存処理
     _saveGallery = ->
@@ -380,35 +375,16 @@ class RunCommon
         return blob
 
       _callback = (outputBlob = null) ->
-        fd = new FormData()
-        fd.append(Constant.Gallery.Key.PROJECT_ID, PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
-        fd.append(Constant.Gallery.Key.TITLE, title)
-        fd.append(Constant.Gallery.Key.CAPTION, $('.caption_markup:first', modalEmt).val())
-        fd.append(Constant.Gallery.Key.THUMBNAIL_IMG, outputBlob);
-        tags = $('.select_tag a', modalEmt).html()
-        if tags?
-          fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', modalEmt).html())
-        else
-          fd.append(Constant.Gallery.Key.TAGS, null)
-        $.ajax(
-          {
-            url: "/gallery/save_state"
-            type: "POST"
-            data: fd
-            processData: false
-            contentType: false
-            success: (data)->
-              # 正常完了処理
+        root = $('#nav')
+        $(".#{Constant.Gallery.Key.PROJECT_ID}", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+        $(".#{Constant.Gallery.Key.THUMBNAIL_IMG}", root).val(outputBlob)
 
-              # コールバック
-              if callback?
-                callback()
-
-              # 詳細画面に遷移
-
-            error: (data) ->
-          }
-        )
+        target = '_uploadgallery'
+        document.upload_gallery_form.target = target
+        window.open("about:blank", target)
+        setTimeout( ->
+          document.upload_gallery_form.submit()
+        , 200)
 
       if window.captureCanvas?
         # Blob作成

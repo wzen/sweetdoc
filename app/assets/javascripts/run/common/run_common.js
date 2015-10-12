@@ -302,7 +302,7 @@ RunCommon = (function() {
     });
     $('.upload_button', modalEmt).off('click');
     $('.upload_button', modalEmt).on('click', function() {
-      return RunCommon.uploadGallery(modalEmt);
+      return RunCommon.showUploadPage(modalEmt);
     });
     if (callback != null) {
       return callback();
@@ -372,14 +372,10 @@ RunCommon = (function() {
     }
   };
 
-  RunCommon.uploadGallery = function(modalEmt, callback) {
-    var _saveGallery, title;
+  RunCommon.showUploadPage = function(modalEmt, callback) {
+    var _saveGallery;
     if (callback == null) {
       callback = null;
-    }
-    title = $('.title:first', modalEmt).val();
-    if (title.length === 0) {
-      return;
     }
     _saveGallery = function() {
       var _callback, _toBlob, blob, ua;
@@ -397,34 +393,19 @@ RunCommon = (function() {
         return blob;
       };
       _callback = function(outputBlob) {
-        var fd, tags;
+        var root, target;
         if (outputBlob == null) {
           outputBlob = null;
         }
-        fd = new FormData();
-        fd.append(Constant.Gallery.Key.PROJECT_ID, PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-        fd.append(Constant.Gallery.Key.TITLE, title);
-        fd.append(Constant.Gallery.Key.CAPTION, $('.caption_markup:first', modalEmt).val());
-        fd.append(Constant.Gallery.Key.THUMBNAIL_IMG, outputBlob);
-        tags = $('.select_tag a', modalEmt).html();
-        if (tags != null) {
-          fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', modalEmt).html());
-        } else {
-          fd.append(Constant.Gallery.Key.TAGS, null);
-        }
-        return $.ajax({
-          url: "/gallery/save_state",
-          type: "POST",
-          data: fd,
-          processData: false,
-          contentType: false,
-          success: function(data) {
-            if (callback != null) {
-              return callback();
-            }
-          },
-          error: function(data) {}
-        });
+        root = $('#nav');
+        $("." + Constant.Gallery.Key.PROJECT_ID, root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+        $("." + Constant.Gallery.Key.THUMBNAIL_IMG, root).val(outputBlob);
+        target = '_uploadgallery';
+        document.upload_gallery_form.target = target;
+        window.open("about:blank", target);
+        return setTimeout(function() {
+          return document.upload_gallery_form.submit();
+        }, 200);
       };
       if (window.captureCanvas != null) {
         ua = window.navigator.userAgent.toLowerCase();

@@ -107,8 +107,8 @@ class Navbar
       if window.eventAction?
         window.eventAction.thisPage().rewindChapter()
     )
-    $('.menu-control-rewind-upload-gallery', navEmt).off('click')
-    $('.menu-control-rewind-upload-gallery', navEmt).on('click', ->
+    $('.menu-upload-gallery', navEmt).off('click')
+    $('.menu-upload-gallery', navEmt).on('click', ->
       RunCommon.showUploadGalleryConfirm()
     )
 

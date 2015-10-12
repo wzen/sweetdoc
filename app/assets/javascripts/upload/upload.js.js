@@ -4,8 +4,85 @@ var Upload;
 Upload = (function() {
   function Upload() {}
 
+  Upload.init = function() {};
+
+  Upload.showUploadPage = function(modalEmt, callback) {
+    var _saveGallery, title;
+    if (callback == null) {
+      callback = null;
+    }
+    title = $('.title:first', modalEmt).val();
+    if (title.length === 0) {
+      return;
+    }
+    _saveGallery = function() {
+      var _callback, _toBlob, blob, ua;
+      _toBlob = function(canvas) {
+        var base64, bin, blob, buffer, i, j, ref;
+        base64 = canvas.toDataURL('image/png');
+        bin = atob(base64.replace(/^.*,/, ''));
+        buffer = new Uint8Array(bin.length);
+        for (i = j = 0, ref = bin.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+          buffer[i] = bin.charCodeAt(i);
+        }
+        blob = new Blob([buffer.buffer], {
+          type: 'text/plain'
+        });
+        return blob;
+      };
+      _callback = function(outputBlob) {
+        var fd, tags;
+        if (outputBlob == null) {
+          outputBlob = null;
+        }
+        fd = new FormData();
+        fd.append(Constant.Gallery.Key.PROJECT_ID, PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+        fd.append(Constant.Gallery.Key.TITLE, title);
+        fd.append(Constant.Gallery.Key.CAPTION, $('.caption_markup:first', modalEmt).val());
+        fd.append(Constant.Gallery.Key.THUMBNAIL_IMG, outputBlob);
+        tags = $('.select_tag a', modalEmt).html();
+        if (tags != null) {
+          fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', modalEmt).html());
+        } else {
+          fd.append(Constant.Gallery.Key.TAGS, null);
+        }
+        return $.ajax({
+          url: "/gallery/save_state",
+          type: "POST",
+          data: fd,
+          processData: false,
+          contentType: false,
+          success: function(data) {
+            if (callback != null) {
+              return callback();
+            }
+          },
+          error: function(data) {}
+        });
+      };
+      if (window.captureCanvas != null) {
+        ua = window.navigator.userAgent.toLowerCase();
+        if (ua.indexOf('firefox') >= 0) {
+          return window.captureCanvas.toBlob(_callback);
+        } else {
+          blob = _toBlob(window.captureCanvas);
+          return _callback.call(this, blob);
+        }
+      } else {
+        return _callback.call(this);
+      }
+    };
+    if (window.confirm(I18n.t('message.dialog.update_gallery'))) {
+      return _saveGallery.call(this);
+    }
+  };
+
   return Upload;
 
 })();
+
+$(function() {
+  return Upload.init();
+});
 
 //# sourceMappingURL=upload.js.js.map

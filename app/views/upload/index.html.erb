@@ -1,58 +1,62 @@
 <div class="upload_wrapper">
-    <div class="content">
-        <div class="title_wrapper">
-            <div>
-                <label><%= I18n.t('upload_confirm.title') %></label>
+    <%= form_tag('gallery/save_state', method: :post) do  %>
+        <div class="content">
+            <div class="title_wrapper">
+                <div>
+                    <label><%= I18n.t('upload_confirm.title') %></label>
+                </div>
+                <div>
+                    <input class="title" required>
+                </div>
             </div>
-            <div>
-                <input class="title" required>
-            </div>
-        </div>
 
-        <div class="caption">
-            <div class="caption_label_warpper">
-                <label><%= I18n.t('upload_confirm.caption') %></label>
+            <div class="caption">
+                <div class="caption_label_warpper">
+                    <label><%= I18n.t('upload_confirm.caption') %></label>
+                </div>
+                <div>
+                    <textarea class="caption_markup"></textarea>
+                </div>
             </div>
-            <div>
-                <textarea class="caption_markup"></textarea>
+            <div class="select_tag_wrapper">
+                <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
+                <div class="select_tag_table">
+                    <div class="select_tag tagcloud" style="float: left">
+                        <ul>
+                        </ul>
+                    </div>
+                    <div class="select_tag_input_wrapper">
+                        <input class="select_tag_input" value="" >
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="select_tag_wrapper">
-            <div class="select_tag_label"><%= I18n.t('upload_confirm.tags') %></div>
-            <div class="select_tag_table">
-                <div class="select_tag tagcloud" style="float: left">
+
+            <div class="popular_tag_wrapper" style="display: block">
+                <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
+                <div class="popular_tag tagcloud">
                     <ul>
+                        <li><a href="#">tag1</a></li>
+                        <li><a href="#">tag2</a></li>
                     </ul>
                 </div>
-                <div class="select_tag_input_wrapper">
-                    <input class="select_tag_input" value="" >
+            </div>
+            <div class="recommend_tag_wrapper" style="display: block">
+                <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
+                <div class="recommend_tag tagcloud">
+                    <ul>
+                        <li><a href="#">tag3</a></li>
+                        <li><a href="#">tag4</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="button_wrapper">
+                <div>
+                    <button class="upload_button" value="Upload">Upload</button>
                 </div>
             </div>
         </div>
-
-        <div class="button_wrapper">
-            <div>
-                <button class="upload_button" value="Upload">Upload</button>
-            </div>
-        </div>
-
-        <div class="popular_tag_wrapper" style="display: block">
-            <div class="popular_tag_label"><%= I18n.t('upload_confirm.popular_tags') %></div>
-            <div class="popular_tag tagcloud">
-                <ul>
-                    <li><a href="#">tag1</a></li>
-                    <li><a href="#">tag2</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="recommend_tag_wrapper" style="display: block">
-            <div class="recommend_tag_label"><%= I18n.t('upload_confirm.recommend_tags') %></div>
-            <div class="recommend_tag tagcloud">
-                <ul>
-                    <li><a href="#">tag3</a></li>
-                    <li><a href="#">tag4</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+        <input name="<%= Constant.Gallery.Key.PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
+        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="<%= @thumbnail_img.read %>">
+    <% end %>
 </div>
