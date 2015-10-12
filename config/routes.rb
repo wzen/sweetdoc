@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
-  get 'upload/index'
+  root to: 'gallery#index'
 
   devise_for :user, controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations'
   }
-  root to: 'gallery#index'
+
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
 
@@ -42,6 +42,10 @@ Rails.application.routes.draw do
   get 'gallery/get_contents'
   get 'gallery/get_popular_and_recommend_tags'
   post 'gallery/add_bookmark'
+
+  # Upload
+  post 'upload/index'
+  post 'upload' => 'upload#index'
 
   # Document
   get 'document/terms'

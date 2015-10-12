@@ -4,14 +4,97 @@ var Upload;
 Upload = (function() {
   function Upload() {}
 
-  Upload.init = function() {};
+  Upload.init = function() {
+    var mark, root;
+    root = $('#upload_wrapper');
+    mark = $('.markItUp', root);
+    if ((mark != null) && mark.length > 0) {
+      $('.caption_markup', root).markItUpRemove();
+    }
+    $('.caption_markup', root).markItUp(mySettings);
+    this.prepareUploadGalleryTagEvent(root);
+    $('.select_tag_input', root).off('keypress');
+    $('.select_tag_input', root).on('keypress', function(e) {
+      if (e.keyCode === Constant.KeyboardKeyCode.ENTER) {
+        Upload.addUploadGallerySelectTag(root, $(this).val());
+        return $(this).val('');
+      }
+    });
+    $('.upload_button', root).off('click');
+    return $('.upload_button', root).on('click', function() {
+      return Upload.makeCapture(root);
+    });
+  };
 
-  Upload.showUploadPage = function(modalEmt, callback) {
+  Upload.prepareUploadGalleryTagEvent = function(root) {
+    var tags;
+    tags = $('.popular_tag a, .recommend_tag a', root);
+    tags.off('click');
+    tags.on('click', function() {
+      return RunCommon.addUploadGallerySelectTag(root, $(this).html());
+    });
+    tags.off('mouseenter');
+    tags.on('mouseenter', function(e) {
+      var li;
+      li = this.closest('li');
+      $(li).append($("<div class='add_pop pop' style='display:none'><p>Add tag(click)</p></div>"));
+      $('.add_pop', li).css({
+        top: $(li).height(),
+        left: $(li).width()
+      });
+      return $('.add_pop', li).show();
+    });
+    tags.off('mouseleave');
+    return tags.on('mouseleave', function(e) {
+      var ul;
+      ul = this.closest('ul');
+      return $('.add_pop', ul).remove();
+    });
+  };
+
+  Upload.addUploadGallerySelectTag = function(root, tagname) {
+    var tags, ul;
+    ul = $('.select_tag ul', root);
+    tags = $.map(ul.children(), function(n) {
+      return $('a', n).html();
+    });
+    if (tags.length >= Constant.Gallery.TAG_MAX || $.inArray(tagname, tags) >= 0) {
+      return;
+    }
+    ul.append($("<li><a href='#'>" + tagname + "</a></li>"));
+    $('a', ul).off('click');
+    $('a', ul).on('click', function(e) {
+      this.closest('li').remove();
+      if ($('.select_tag ul li', root).length < Constant.Gallery.TAG_MAX) {
+        return $('.select_tag_input', root).show();
+      }
+    });
+    $('a', ul).off('mouseenter');
+    $('a', ul).on('mouseenter', function(e) {
+      var li;
+      li = this.closest('li');
+      $(li).append($("<div class='delete_pop pop' style='display:none'><p>Delete tag(click)</p></div>"));
+      $('.delete_pop', li).css({
+        top: $(li).height(),
+        left: $(li).width()
+      });
+      return $('.delete_pop', li).show();
+    });
+    $('a', ul).off('mouseleave');
+    $('a', ul).on('mouseleave', function(e) {
+      return $('li .delete_pop', ul).remove();
+    });
+    if ($('.select_tag ul li', root).length >= Constant.Gallery.TAG_MAX) {
+      return $('.select_tag_input', root).hide();
+    }
+  };
+
+  Upload.makeCapture = function(root, callback) {
     var _saveGallery, title;
     if (callback == null) {
       callback = null;
     }
-    title = $('.title:first', modalEmt).val();
+    title = $('.title:first', root).val();
     if (title.length === 0) {
       return;
     }
@@ -38,11 +121,11 @@ Upload = (function() {
         fd = new FormData();
         fd.append(Constant.Gallery.Key.PROJECT_ID, PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
         fd.append(Constant.Gallery.Key.TITLE, title);
-        fd.append(Constant.Gallery.Key.CAPTION, $('.caption_markup:first', modalEmt).val());
+        fd.append(Constant.Gallery.Key.CAPTION, $('.caption_markup:first', root).val());
         fd.append(Constant.Gallery.Key.THUMBNAIL_IMG, outputBlob);
-        tags = $('.select_tag a', modalEmt).html();
+        tags = $('.select_tag a', root).html();
         if (tags != null) {
-          fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', modalEmt).html());
+          fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html());
         } else {
           fd.append(Constant.Gallery.Key.TAGS, null);
         }
@@ -77,12 +160,29 @@ Upload = (function() {
     }
   };
 
+  Upload.makeCapture = function(canvas) {
+    var root;
+    root = $('#upload_wrapper');
+    return $(".capture", root).attr('src', canvas.toDataURL('image/png'));
+  };
+
   return Upload;
 
 })();
 
 $(function() {
-  return Upload.init();
+  Upload.init();
+  if (window.opener != null) {
+    return setTimeout(function() {
+      var body;
+      body = $(window.opener.document.getElementById('project_wrapper'));
+      return html2canvas(body, {
+        onrendered: function(canvas) {
+          return Upload.makeCapture(canvas);
+        }
+      });
+    });
+  }
 });
 
 //# sourceMappingURL=upload.js.js.map

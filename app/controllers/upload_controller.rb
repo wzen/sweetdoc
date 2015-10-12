@@ -8,6 +8,5 @@ class UploadController < ApplicationController
       render
     end
     @project_id = project_id.to_i
-    @thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG].read
   end
 end

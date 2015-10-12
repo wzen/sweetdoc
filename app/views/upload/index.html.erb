@@ -1,5 +1,8 @@
-<div class="upload_wrapper">
+<div id="upload_wrapper">
     <%= form_tag('gallery/save_state', method: :post) do  %>
+        <div class="capture_wrapper">
+            <img class="capture" src="" >
+        </div>
         <div class="content">
             <div class="title_wrapper">
                 <div>
@@ -56,7 +59,6 @@
                 </div>
             </div>
         </div>
-        <input name="<%= Constant.Gallery.Key.PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="<%= @thumbnail_img.read %>">
+        <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
     <% end %>
 </div>

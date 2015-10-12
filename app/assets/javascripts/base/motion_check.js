@@ -21,7 +21,7 @@ MotionCheck = (function() {
           top = Number((window.screen.height - size.height) / 2);
           target = "_runwindow";
           window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + size.height + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
-          document.run_form.action = '/run';
+          document.run_form.action = '/run/new_window';
         } else {
           target = "_runtab";
           window.open("about:blank", target);
