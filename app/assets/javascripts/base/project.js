@@ -111,7 +111,7 @@ Project = (function() {
         width: parseInt(width),
         height: parseInt(height)
       });
-      RunCommon.setTitle(projectName);
+      Navbar.setTitle(projectName);
       Common.applyEnvironmentFromPagevalue();
       return Project.create(projectName, width, height, function() {
         return Common.hideModalView();

@@ -190,18 +190,15 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback) {
-    var scrollLeft, scrollTop, targetMiddle, zoom;
+    var diff;
     if (callback == null) {
       callback = null;
     }
-    targetMiddle = {
-      top: $(target).offset().top + $(target).height() * 0.5,
-      left: $(target).offset().left + $(target).width() * 0.5
+    diff = {
+      top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
+      left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
     };
-    scrollTop = targetMiddle.top - scrollContents.height() * 0.5;
-    scrollLeft = targetMiddle.left - scrollContents.width() * 0.5;
-    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
-    return this.updateScrollContentsPosition(scrollContents.scrollTop() + (scrollTop / zoom), scrollContents.scrollLeft() + (scrollLeft / zoom), false, callback);
+    return this.updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, false, callback);
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, callback) {

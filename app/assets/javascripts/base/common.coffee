@@ -159,16 +159,12 @@ class Common
   # @param [Fucntion] callback コールバック
   @focusToTarget = (target, callback = null) ->
     # col-xs-9 → 75% padding → 15px
-    targetMiddle =
-      top: $(target).offset().top + $(target).height() * 0.5
-      left: $(target).offset().left + $(target).width() * 0.5
 
-    scrollTop = targetMiddle.top - scrollContents.height() * 0.5
-    scrollLeft = targetMiddle.left - scrollContents.width() * 0.5
-    # スライド
-    #console.log("focusToTarget:: scrollTop:#{scrollTop} scrollLeft:#{scrollLeft}")
-    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
-    @updateScrollContentsPosition(scrollContents.scrollTop() + (scrollTop / zoom), scrollContents.scrollLeft() + (scrollLeft / zoom), false, callback)
+    diff =
+      top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop
+      left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+
+    @updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, false, callback)
 
   # スクロール位置の更新
   @updateScrollContentsPosition: (top, left, immediate = true, callback = null) ->
