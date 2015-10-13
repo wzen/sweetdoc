@@ -162,7 +162,8 @@ class ServerStorage
     )
 
   @startSaveIdleTimer = ->
-    if window.workingAutoSave? && window.workingAutoSave
+    if (window.workingAutoSave? && window.workingAutoSave) || !window.initDone
+      # AutoSave実行中 or 画面初期化時は実行しない
       return
 
     if window.saveIdleTimer?

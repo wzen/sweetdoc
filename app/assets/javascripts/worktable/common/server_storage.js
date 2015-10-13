@@ -214,7 +214,7 @@ ServerStorage = (function() {
 
   ServerStorage.startSaveIdleTimer = function() {
     var time;
-    if ((window.workingAutoSave != null) && window.workingAutoSave) {
+    if (((window.workingAutoSave != null) && window.workingAutoSave) || !window.initDone) {
       return;
     }
     if (window.saveIdleTimer != null) {
