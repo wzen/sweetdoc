@@ -13,10 +13,11 @@ class MotionCheckCommon
         if newWindow
           # 実行確認ページを新規ウィンドウで表示
           size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+          navbarHeight = $('#nav').height()
           left = Number((window.screen.width - size.width)/2);
-          top = Number((window.screen.height - size.height)/2);
+          top = Number((window.screen.height - (size.height + navbarHeight))/2);
           target = "_runwindow"
-          window.open("about:blank", target, "top=#{top},left=#{left},width=#{size.width},height=#{size.height},menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no")
+          window.open("about:blank", target, "top=#{top},left=#{left},width=#{size.width},height=#{size.height + navbarHeight},menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no")
           document.run_form.action = '/motion_check/new_window'
         else
           # 実行確認ページを新規タブで表示

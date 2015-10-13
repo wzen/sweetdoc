@@ -17,6 +17,9 @@ html, body {
 div#main {
   padding: 5px 15px 5px 15px;
   height: 100%;
+  &.fullscreen {
+    padding: 0;
+  }
 }
 
 div.main-wrapper {

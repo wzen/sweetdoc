@@ -1,7 +1,5 @@
 class MotionCheckNewWindow
 
-
-
 $ ->
   window.isWorkTable = false
   window.eventAction = null

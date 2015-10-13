@@ -10,17 +10,18 @@ MotionCheckCommon = (function() {
       newWindow = false;
     }
     _operation = function() {
-      var h, left, size, target, top;
+      var h, left, navbarHeight, size, target, top;
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
       if ((h != null) && Object.keys(h).length > 0) {
         LocalStorage.clearRun();
         target = '';
         if (newWindow) {
           size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+          navbarHeight = $('#nav').height();
           left = Number((window.screen.width - size.width) / 2);
-          top = Number((window.screen.height - size.height) / 2);
+          top = Number((window.screen.height - (size.height + navbarHeight)) / 2);
           target = "_runwindow";
-          window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + size.height + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
+          window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + (size.height + navbarHeight) + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
           document.run_form.action = '/motion_check/new_window';
         } else {
           target = "_runtab";
