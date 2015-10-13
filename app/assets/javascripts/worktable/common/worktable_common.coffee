@@ -228,8 +228,7 @@ class WorktableCommon
   @updateMainViewSize = ->
     borderWidth = 5
     timelineTopPadding = 5
-    padding = borderWidth * 2 + timelineTopPadding
-    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - $('#timeline').height() - padding)
+    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").outerHeight(true) - $('#timeline').height() - timelineTopPadding)
     window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
     $('#sidebar').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - borderWidth * 2)
 

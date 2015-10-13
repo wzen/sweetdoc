@@ -11,6 +11,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/test.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/generator.jquery.color.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/checkbox.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_full_screen.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/color.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/design.js" />

@@ -1,0 +1,17 @@
+<div id="popup_info_wrapper">
+    <div class="wrapper">
+        <div class="close_wrapper">
+            <a title="Close" onclick="RunFullScreen.hidePopupInfo()"><%= image_tag("run/close_24.png", size:'24x24') %></a>
+        </div>
+        <div class="info_contents">
+            <%= render 'run/creator_info' %>
+            <div class="caption">
+                chapter
+            </div>
+            <div class="tags">
+                tags
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-overlay"></div>

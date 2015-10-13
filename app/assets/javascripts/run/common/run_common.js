@@ -27,9 +27,7 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    var padding;
-    padding = 5 * 2;
-    return $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - padding);
+    return $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).outerHeight(true));
   };
 
   RunCommon.resizeMainContainerEvent = function() {

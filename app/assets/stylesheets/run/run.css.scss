@@ -19,6 +19,13 @@ div#main {
   height: 100%;
   &.fullscreen {
     padding: 0;
+
+    .info_wrapper {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 1999999998;
+    }
   }
 }
 
@@ -152,10 +159,10 @@ div#guide_right{
       background-repeat: no-repeat;
 
       -webkit-animation-name: scrollpointer_top_blink;
-      -webkit-animation-duration: 1.5s;
+      -webkit-animation-duration: 3.0s;
       -webkit-animation-iteration-count: infinite;
       -moz-animation-name: scrollpointer_top_blink;
-      -moz-animation-duration: 1.5s;
+      -moz-animation-duration: 3.0s;
       -moz-animation-iteration-count: infinite;
 
       &.top {
@@ -184,9 +191,9 @@ div#guide_right{
       opacity: 1;
       background-repeat: no-repeat;
 
-      -webkit-animation-duration: 1.5s;
+      -webkit-animation-duration: 3.0s;
       -webkit-animation-iteration-count: infinite;
-      -moz-animation-duration: 1.5s;
+      -moz-animation-duration: 3.0s;
       -moz-animation-iteration-count: infinite;
 
       &.forward {
@@ -250,9 +257,9 @@ div#guide_right{
   opacity: 0;
   background-repeat: no-repeat;
   background-position: center center;
-  -webkit-animation-duration: 1.5s;
+  -webkit-animation-duration: 3.0s;
   -webkit-animation-iteration-count: infinite;
-  -moz-animation-duration: 1.5s;
+  -moz-animation-duration: 3.0s;
   -moz-animation-iteration-count: infinite;
 
   &.red {
@@ -274,6 +281,10 @@ div#guide_right{
     top: 0;
     opacity: 0;
   }
+  30% {
+    top: 0;
+    opacity: 0;
+  }
   100% {
     top: 50px;
     opacity: 1;
@@ -282,6 +293,10 @@ div#guide_right{
 
 @-webkit-keyframes scrollpointer_bottom_blink {
   0% {
+    top: 0;
+    opacity: 0;
+  }
+  30% {
     top: 0;
     opacity: 0;
   }
@@ -296,6 +311,10 @@ div#guide_right{
     left: 0;
     opacity: 0;
   }
+  30% {
+    left: 0;
+    opacity: 0;
+  }
   100% {
     left: 50px;
     opacity: 1;
@@ -307,8 +326,89 @@ div#guide_right{
     left: 0;
     opacity: 0;
   }
+  30% {
+    left: 0;
+    opacity: 0;
+  }
   100% {
     left: -50px;
     opacity: 1;
   }
+}
+
+div#popup_info_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 90%;
+  height: 90%;
+  padding: 2px;
+  display: none;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  z-index:1999999999;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  .wrapper {
+    width: 100%;
+    height: 100%;
+
+    .close_wrapper {
+      text-align: right;
+    }
+    .caption {
+      color: white;
+    }
+    .tags {
+
+    }
+  }
+}
+
+div.popup_creator_wrapper {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 90%;
+  height: 90%;
+  margin: auto;
+  padding: 2px;
+  display: none;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  z-index:1999999999;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+div.creator_info_wrapper {
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  .name {
+    color: white;
+  }
+  .page {
+    color: white;
+  }
+  .chapter {
+    color: white;
+  }
+}
+
+#modal-overlay{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  z-index:1999999998;
+  background-color: transparent;
 }

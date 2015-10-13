@@ -14,7 +14,7 @@ ClickGuide = (function(superClass) {
     var _itemKeyFrames, css, item, j, len;
     _itemKeyFrames = function(item) {
       var anim, kf;
-      kf = "click_focus_" + item.id + " {\n      0% {\n        background-size: 100px 100px;\n        opacity: 0;\n      }\n      100% {\n        background-size: 80px 80px;\n        opacity: 1;\n      }\n    }";
+      kf = "click_focus_" + item.id + " {\n      0% {\n        background-size: 100px 100px;\n        opacity: 0;\n      }\n      50% {\n        background-size: 100px 100px;\n        opacity: 0;\n      }\n      100% {\n        background-size: 80px 80px;\n        opacity: 1;\n      }\n    }";
       anim = ".click_guide_" + item.id + "\n{\n-webkit-animation-name: click_focus_" + item.id + ";\n-moz-animation-name: click_focus_" + item.id + ";\n}";
       return "@-webkit-keyframes " + kf + "\n@-moz-keyframes " + kf + "\n" + anim;
     };

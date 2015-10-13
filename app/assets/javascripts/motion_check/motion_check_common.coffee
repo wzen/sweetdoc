@@ -13,7 +13,7 @@ class MotionCheckCommon
         if newWindow
           # 実行確認ページを新規ウィンドウで表示
           size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-          navbarHeight = $('#nav').height()
+          navbarHeight = $("##{Navbar.NAVBAR_ROOT}").outerHeight(true)
           left = Number((window.screen.width - size.width)/2);
           top = Number((window.screen.height - (size.height + navbarHeight))/2);
           target = "_runwindow"

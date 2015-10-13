@@ -266,11 +266,10 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.updateMainViewSize = function() {
-    var borderWidth, padding, timelineTopPadding;
+    var borderWidth, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
-    padding = borderWidth * 2 + timelineTopPadding;
-    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - $('#timeline').height() - padding);
+    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).outerHeight(true) - $('#timeline').height() - timelineTopPadding);
     window.scrollContentsSize = {
       width: window.scrollContents.width(),
       height: window.scrollContents.height()

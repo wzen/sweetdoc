@@ -8,7 +8,7 @@ GuideBase = (function() {
 
   GuideBase.timer = null;
 
-  GuideBase.IDLE_TIMER = 1000;
+  GuideBase.IDLE_TIMER = 3000;
 
   GuideBase.showGuide = function() {};
 

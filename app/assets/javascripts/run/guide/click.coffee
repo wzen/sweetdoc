@@ -12,6 +12,10 @@ class ClickGuide extends GuideBase
                 background-size: 100px 100px;
                 opacity: 0;
               }
+              50% {
+                background-size: 100px 100px;
+                opacity: 0;
+              }
               100% {
                 background-size: 80px 80px;
                 opacity: 1;
