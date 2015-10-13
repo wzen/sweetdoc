@@ -9,10 +9,9 @@ class MotionCheckCommon
       if h? && Object.keys(h).length > 0
         # Runのキャッシュを削除
         LocalStorage.clearRun()
-        # 実行用の新規タブを表示
-
         target = ''
         if newWindow
+          # 実行確認ページを新規ウィンドウで表示
           size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
           left = Number((window.screen.width - size.width)/2);
           top = Number((window.screen.height - size.height)/2);
@@ -20,13 +19,14 @@ class MotionCheckCommon
           window.open("about:blank", target, "top=#{top},left=#{left},width=#{size.width},height=#{size.height},menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no")
           document.run_form.action = '/motion_check/new_window'
         else
+          # 実行確認ページを新規タブで表示
           target = "_runtab"
           window.open("about:blank", target)
           document.run_form.action = '/motion_check'
         document.run_form.target = target
 
         if window.isWorkTable
-          # データ保存処理
+          # データ保存
           ServerStorage.save( ->
             # submit詰まり防止のため少し遅延させる
             setTimeout( ->

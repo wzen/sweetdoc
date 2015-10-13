@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   get 'motion_check' => 'motion_check#index'
   post 'motion_check' => 'motion_check#index'
+  post 'motion_check/new_window'
 
   get 'run/markitup_preview'
   get 'test_move/hello'
@@ -45,7 +46,6 @@ Rails.application.routes.draw do
   post 'gallery/add_bookmark'
 
   # Upload
-  post 'upload/index'
   post 'upload' => 'upload#index'
 
   # Document
