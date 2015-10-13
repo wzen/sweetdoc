@@ -127,3 +127,13 @@ class Navbar
     itemsSelectMenuEmt.removeClass('active')
     $('#menu-action-edit').parent('li').addClass('active')
 
+
+  # ヘッダーにタイトルを設定
+  @setTitle = (title_name) ->
+    if !window.isWorkTable
+      title_name += '(Preview)'
+    $("##{Navbar.NAVBAR_ROOT}").find('.nav_title').html(title_name)
+    if title_name? && title_name.length > 0
+      document.title = title_name
+    else
+      document.title = window.appName

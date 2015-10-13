@@ -139,6 +139,18 @@ Navbar = (function() {
     return $('#menu-action-edit').parent('li').addClass('active');
   };
 
+  Navbar.setTitle = function(title_name) {
+    if (!window.isWorkTable) {
+      title_name += '(Preview)';
+    }
+    $("#" + Navbar.NAVBAR_ROOT).find('.nav_title').html(title_name);
+    if ((title_name != null) && title_name.length > 0) {
+      return document.title = title_name;
+    } else {
+      return document.title = window.appName;
+    }
+  };
+
   return Navbar;
 
 })();

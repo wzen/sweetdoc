@@ -57,14 +57,14 @@ Common = (function() {
   };
 
   Common.applyEnvironmentFromPagevalue = function() {
-    RunCommon.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
+    Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();
     this.initScrollContentsPosition();
     return this.initZoom();
   };
 
   Common.resetEnvironment = function() {
-    RunCommon.setTitle('');
+    Navbar.setTitle('');
     return this.initScreenSize(true);
   };
 
