@@ -19,12 +19,12 @@ class EventAction
   # 開始イベント
   start: ->
     # ページ数設定
-    Navbar.setPageNum(@thisPageNum())
+    RunCommon.setPageNum(@thisPageNum())
     # CSS作成
     RunCommon.createCssElement(@thisPageNum())
     # フォークをMasterに設定
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum())
-    Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
+    RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
 
     @thisPage().willPage()
     @thisPage().start()
@@ -48,7 +48,7 @@ class EventAction
     else
       @pageIndex += 1
       # ページ番号更新
-      Navbar.setPageNum(@thisPageNum())
+      RunCommon.setPageNum(@thisPageNum())
       PageValue.setPageNum(@thisPageNum())
       @changePaging(beforePageIndex, @pageIndex, callback)
 
@@ -59,7 +59,7 @@ class EventAction
     if @pageIndex > 0
       # 動作させていない場合は前のページに戻す
       @pageIndex -= 1
-      Navbar.setPageNum(@thisPageNum())
+      RunCommon.setPageNum(@thisPageNum())
       PageValue.setPageNum(@thisPageNum())
       @changePaging(beforePageIndex, @pageIndex, callback)
     else
@@ -111,7 +111,7 @@ class EventAction
         else
           # フォークをMasterに設定
           RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum)
-          Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
+          RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
           # 後ページ移動 前処理
           @thisPage().willPage()
         @thisPage().start()
@@ -138,7 +138,7 @@ class EventAction
       page = @pageList[i]
       page.resetAllChapters()
     @pageIndex = 0
-    Navbar.setPageNum(@thisPageNum())
+    RunCommon.setPageNum(@thisPageNum())
     @finishedAllPages = false
     @start()
 

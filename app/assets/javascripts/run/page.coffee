@@ -107,7 +107,7 @@ class Page
     # ページングガイド作成
     @pagingGuide = new ArrowPagingGuide()
     # チャプター数設定
-    Navbar.setChapterNum(@thisChapterNum())
+    RunCommon.setChapterNum(@thisChapterNum())
     # チャプター前処理
     @floatPageScrollHandleCanvas()
     @thisChapter().willChapter()
@@ -140,7 +140,7 @@ class Page
     else
       @addChapterIndex(1)
       # チャプター数設定
-      Navbar.setChapterNum(@thisChapterNum())
+      RunCommon.setChapterNum(@thisChapterNum())
       # チャプター前処理
       @thisChapter().willChapter()
 
@@ -154,11 +154,11 @@ class Page
     if @thisChapter().changeForkNum?
       nfn = @thisChapter().changeForkNum
       if RunCommon.addForkNumToStack(nfn, @getChapterIndex(), window.eventAction.thisPageNum())
-        Navbar.setForkNum(nfn)
+        RunCommon.setForkNum(nfn)
     # チャプター数設定
-    Navbar.setChapterNum(@thisChapterNum())
+    RunCommon.setChapterNum(@thisChapterNum())
     # チャプター最大値設定
-    Navbar.setChapterMax(@getForkChapterList().length)
+    RunCommon.setChapterMax(@getForkChapterList().length)
     # チャプター前処理
     @thisChapter().willChapter()
 
@@ -172,7 +172,7 @@ class Page
       if @getChapterIndex() > 0
         @addChapterIndex(-1)
         @resetChapter(@getChapterIndex())
-        Navbar.setChapterNum(@thisChapterNum())
+        RunCommon.setChapterNum(@thisChapterNum())
       else
         oneBeforeForkObj = RunCommon.getOneBeforeObjestFromStack(window.eventAction.thisPageNum())
         lastForkObj = RunCommon.getLastObjestFromStack(window.eventAction.thisPageNum())
@@ -181,15 +181,15 @@ class Page
           RunCommon.popLastForkNumInStack(window.eventAction.thisPageNum())
           # フォーク番号変更
           nfn = oneBeforeForkObj.forkNum
-          Navbar.setForkNum(nfn)
+          RunCommon.setForkNum(nfn)
           # チャプター番号をフォーク以前に変更
           @setChapterIndex(lastForkObj.changedChapterIndex)
           # チャプターリセット
           @resetChapter(@getChapterIndex())
           # チャプター番号設定
-          Navbar.setChapterNum(@thisChapterNum())
+          RunCommon.setChapterNum(@thisChapterNum())
           # チャプター最大値設定
-          Navbar.setChapterMax(@getForkChapterList().length)
+          RunCommon.setChapterMax(@getForkChapterList().length)
         else
           # ページ戻し
           window.eventAction.rewindPage()
@@ -210,7 +210,7 @@ class Page
       chapter = @getForkChapterList()[i]
       chapter.resetAllEvents()
     @setChapterIndex(0)
-    Navbar.setChapterNum(@thisChapterNum())
+    RunCommon.setChapterNum(@thisChapterNum())
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
     @start()
@@ -249,7 +249,7 @@ class Page
     # リセット
     @resetAllChapters()
     # チャプター最大値設定
-    Navbar.setChapterMax(@getForkChapterList().length)
+    RunCommon.setChapterMax(@getForkChapterList().length)
     # キャッシュ保存
     LocalStorage.saveAllPageValues()
 
@@ -263,11 +263,11 @@ class Page
     @forwardProgressChapters()
     @getForkChapterList()[@getForkChapterList().length - 1].resetAllEvents()
     # チャプター最大値設定
-    Navbar.setChapterMax(@getForkChapterList().length)
+    RunCommon.setChapterMax(@getForkChapterList().length)
     # インデックスを最後のチャプターに
     @setChapterIndex(@getForkChapterList().length - 1)
     # フォーク番号設定
-    Navbar.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
+    RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
     # チャプター初期化
     @resetChapter()
     # キャッシュ保存

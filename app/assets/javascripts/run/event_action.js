@@ -17,10 +17,10 @@ EventAction = (function() {
   };
 
   EventAction.prototype.start = function() {
-    Navbar.setPageNum(this.thisPageNum());
+    RunCommon.setPageNum(this.thisPageNum());
     RunCommon.createCssElement(this.thisPageNum());
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum());
-    Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
+    RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
     this.thisPage().willPage();
     return this.thisPage().start();
   };
@@ -45,7 +45,7 @@ EventAction = (function() {
       return this.finishAllPages();
     } else {
       this.pageIndex += 1;
-      Navbar.setPageNum(this.thisPageNum());
+      RunCommon.setPageNum(this.thisPageNum());
       PageValue.setPageNum(this.thisPageNum());
       return this.changePaging(beforePageIndex, this.pageIndex, callback);
     }
@@ -59,7 +59,7 @@ EventAction = (function() {
     beforePageIndex = this.pageIndex;
     if (this.pageIndex > 0) {
       this.pageIndex -= 1;
-      Navbar.setPageNum(this.thisPageNum());
+      RunCommon.setPageNum(this.thisPageNum());
       PageValue.setPageNum(this.thisPageNum());
       return this.changePaging(beforePageIndex, this.pageIndex, callback);
     } else {
@@ -104,7 +104,7 @@ EventAction = (function() {
             _this.thisPage().willPageFromRewind();
           } else {
             RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum);
-            Navbar.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
+            RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
             _this.thisPage().willPage();
           }
           _this.thisPage().start();
@@ -131,7 +131,7 @@ EventAction = (function() {
       page.resetAllChapters();
     }
     this.pageIndex = 0;
-    Navbar.setPageNum(this.thisPageNum());
+    RunCommon.setPageNum(this.thisPageNum());
     this.finishedAllPages = false;
     return this.start();
   };

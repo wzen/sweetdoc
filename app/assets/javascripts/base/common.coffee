@@ -45,7 +45,7 @@ class Common
   # Pagevalueから環境を反映
   @applyEnvironmentFromPagevalue = ->
     # タイトル名設定
-    Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME))
+    RunCommon.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME))
     # 画面サイズ設定
     @initScreenSize()
     # スクロール位置設定
@@ -55,7 +55,7 @@ class Common
 
   # 環境の反映をリセット
   @resetEnvironment = ->
-    Navbar.setTitle('')
+    RunCommon.setTitle('')
     @initScreenSize(true)
 
   # プロジェクト表示サイズ設定

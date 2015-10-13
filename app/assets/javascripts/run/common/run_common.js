@@ -9,6 +9,30 @@ RunCommon = (function() {
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     RunCommon.RUN_CSS = constant.ElementAttribute.RUN_CSS;
+    RunCommon.AttributeName = (function() {
+      function AttributeName() {}
+
+      AttributeName.CONTENTS_CREATOR_CLASSNAME = constant.Run.AttributeName.CONTENTS_CREATOR_CLASSNAME;
+
+      AttributeName.CONTENTS_TITLE_CLASSNAME = constant.Run.AttributeName.CONTENTS_TITLE_CLASSNAME;
+
+      AttributeName.CONTENTS_CAPTION_CLASSNAME = constant.Run.AttributeName.CONTENTS_CAPTION_CLASSNAME;
+
+      AttributeName.CONTENTS_PAGE_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_NUM_CLASSNAME;
+
+      AttributeName.CONTENTS_PAGE_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_MAX_CLASSNAME;
+
+      AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME;
+
+      AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME;
+
+      AttributeName.CONTENTS_FORK_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_FORK_NUM_CLASSNAME;
+
+      AttributeName.CONTENTS_TAGS_CLASSNAME = constant.Run.AttributeName.CONTENTS_TAGS_CLASSNAME;
+
+      return AttributeName;
+
+    })();
   }
 
   RunCommon.initView = function() {
@@ -57,7 +81,7 @@ RunCommon = (function() {
       }
       pageList[i - 1] = page;
     }
-    Navbar.setPageMax(pageCount);
+    RunCommon.setPageMax(pageCount);
     window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1);
     return window.eventAction.start();
   };
@@ -292,6 +316,89 @@ RunCommon = (function() {
     Navbar.initRunNavbar();
     RunCommon.updateMainViewSize();
     return Common.applyEnvironmentFromPagevalue();
+  };
+
+  RunCommon.setCreator = function(value) {
+    var e;
+    e = $("." + this.AttributeName.CONTENTS_CREATOR_CLASSNAME);
+    if (e != null) {
+      return e.html(value);
+    } else {
+      return e.html('');
+    }
+  };
+
+  RunCommon.setTitle = function(title_name) {
+    var base, e;
+    base = title_name;
+    if (!window.isWorkTable) {
+      title_name += '(Preview)';
+    }
+    $("#" + Navbar.NAVBAR_ROOT).find('.nav_title').html(title_name);
+    e = $("." + this.AttributeName.CONTENTS_TITLE_CLASSNAME);
+    if ((title_name != null) && title_name.length > 0) {
+      document.title = title_name;
+    } else {
+      document.title = window.appName;
+    }
+    e = $("." + this.AttributeName.CONTENTS_TITLE_CLASSNAME);
+    if (e != null) {
+      return e.html(base);
+    } else {
+      return e.html('');
+    }
+  };
+
+  RunCommon.setPageNum = function(value) {
+    var e;
+    e = $("." + this.AttributeName.CONTENTS_PAGE_NUM_CLASSNAME);
+    if (e != null) {
+      return e.html(value);
+    } else {
+      return e.html('');
+    }
+  };
+
+  RunCommon.setChapterNum = function(value) {
+    var e;
+    e = $("." + this.AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME);
+    if (e != null) {
+      return e.html(value);
+    } else {
+      return e.html('');
+    }
+  };
+
+  RunCommon.setPageMax = function(page_max) {
+    var e;
+    e = $("." + this.AttributeName.CONTENTS_PAGE_MAX_CLASSNAME);
+    if (e != null) {
+      return e.html(page_max);
+    } else {
+      return e.html('');
+    }
+  };
+
+  RunCommon.setChapterMax = function(chapter_max) {
+    var e;
+    e = $("." + this.AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME);
+    if (e != null) {
+      return e.html(chapter_max);
+    } else {
+      return e.html('');
+    }
+  };
+
+  RunCommon.setForkNum = function(num) {
+    var e;
+    e = $("." + this.AttributeName.CONTENTS_FORK_NUM_CLASSNAME);
+    if (e != null) {
+      e.html(num);
+      return e.closest('li').css('display', num > 0 ? 'block' : 'none');
+    } else {
+      e.html('');
+      return e.closest('li').hide();
+    }
   };
 
   return RunCommon;

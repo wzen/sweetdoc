@@ -290,4 +290,18 @@ class Const
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
     OPTIONS = 'options'
   end
+
+  class Run
+    class AttributeName
+      CONTENTS_CREATOR_CLASSNAME = 'con_creator_cn'
+      CONTENTS_TITLE_CLASSNAME = 'con_title_cn'
+      CONTENTS_CAPTION_CLASSNAME = 'con_caption_cn'
+      CONTENTS_PAGE_NUM_CLASSNAME = 'con_page_num_cn'
+      CONTENTS_PAGE_MAX_CLASSNAME = 'con_page_max_cn'
+      CONTENTS_CHAPTER_NUM_CLASSNAME = 'con_chapter_num_cn'
+      CONTENTS_CHAPTER_MAX_CLASSNAME = 'con_chapter_max_cn'
+      CONTENTS_FORK_NUM_CLASSNAME = 'con_fork_num_cn'
+      CONTENTS_TAGS_CLASSNAME = 'con_tag_cn'
+    end
+  end
 end

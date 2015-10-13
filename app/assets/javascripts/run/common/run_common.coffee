@@ -5,6 +5,17 @@ class RunCommon
     # @property [String] RUN_CSS CSSスタイルRoot
     @RUN_CSS = constant.ElementAttribute.RUN_CSS
 
+    class @AttributeName
+      @CONTENTS_CREATOR_CLASSNAME = constant.Run.AttributeName.CONTENTS_CREATOR_CLASSNAME
+      @CONTENTS_TITLE_CLASSNAME = constant.Run.AttributeName.CONTENTS_TITLE_CLASSNAME
+      @CONTENTS_CAPTION_CLASSNAME = constant.Run.AttributeName.CONTENTS_CAPTION_CLASSNAME
+      @CONTENTS_PAGE_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_NUM_CLASSNAME
+      @CONTENTS_PAGE_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_MAX_CLASSNAME
+      @CONTENTS_CHAPTER_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME
+      @CONTENTS_CHAPTER_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME
+      @CONTENTS_FORK_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_FORK_NUM_CLASSNAME
+      @CONTENTS_TAGS_CLASSNAME = constant.Run.AttributeName.CONTENTS_TAGS_CLASSNAME
+
   # 画面初期化
   @initView = ->
     # Canvasサイズ設定
@@ -59,7 +70,7 @@ class RunCommon
       pageList[i - 1] = page
 
     # ナビバーのページ数 & チャプター数設定
-    Navbar.setPageMax(pageCount)
+    RunCommon.setPageMax(pageCount)
     # アクション作成
     window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1)
     window.eventAction.start()
@@ -278,3 +289,77 @@ class RunCommon
     Navbar.initRunNavbar()
     RunCommon.updateMainViewSize()
     Common.applyEnvironmentFromPagevalue()
+
+  # 作成者を設定
+  # @param [Integer] value 設定値
+  @setCreator = (value) ->
+    e = $(".#{@AttributeName.CONTENTS_CREATOR_CLASSNAME}")
+    if e?
+      e.html(value)
+    else
+      e.html('')
+
+  # タイトルを設定
+  @setTitle = (title_name) ->
+    base = title_name
+    if !window.isWorkTable
+      title_name += '(Preview)'
+    $("##{Navbar.NAVBAR_ROOT}").find('.nav_title').html(title_name)
+    e = $(".#{@AttributeName.CONTENTS_TITLE_CLASSNAME}")
+    if title_name? && title_name.length > 0
+      document.title = title_name
+    else
+      document.title = window.appName
+
+    e = $(".#{@AttributeName.CONTENTS_TITLE_CLASSNAME}")
+    if e?
+      e.html(base)
+    else
+      e.html('')
+
+  # ページ番号を設定
+  # @param [Integer] value 設定値
+  @setPageNum = (value) ->
+    e = $(".#{@AttributeName.CONTENTS_PAGE_NUM_CLASSNAME}")
+    if e?
+      e.html(value)
+    else
+      e.html('')
+
+  # チャプター番号を設定
+  # @param [Integer] value 設定値
+  @setChapterNum = (value) ->
+    e = $(".#{@AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME}")
+    if e?
+      e.html(value)
+    else
+      e.html('')
+
+  # ページ総数を設定
+  # @param [Integer] page_max 設定値
+  @setPageMax = (page_max) ->
+    e = $(".#{@AttributeName.CONTENTS_PAGE_MAX_CLASSNAME}")
+    if e?
+      e.html(page_max)
+    else
+      e.html('')
+
+  # チャプター総数を設定
+  # @param [Integer] chapter_max 設定値
+  @setChapterMax = (chapter_max) ->
+    e = $(".#{@AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME}")
+    if e?
+      e.html(chapter_max)
+    else
+      e.html('')
+
+  # フォーク番号を設定
+  # @param [Integer] num 設定値
+  @setForkNum = (num) ->
+    e = $(".#{@AttributeName.CONTENTS_FORK_NUM_CLASSNAME}")
+    if e?
+      e.html(num)
+      e.closest('li').css('display', if num > 0 then 'block' else 'none')
+    else
+      e.html('')
+      e.closest('li').hide()

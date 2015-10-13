@@ -91,7 +91,7 @@ class Project
         height: parseInt(height)
       })
       # タイトル設定
-      Navbar.setTitle(projectName)
+      RunCommon.setTitle(projectName)
 
       # 環境設定
       Common.applyEnvironmentFromPagevalue()
