@@ -200,7 +200,7 @@ $ ->
   if window.opener?
     setTimeout( ->
       # オーバーレイ前の画面をキャプチャ
-      body = $(window.opener.document.getElementById('pages'))
+      body = $(window.opener.document.getElementById('project_contents'))
       html2canvas(body, {
         onrendered: (canvas) ->
           Upload.makeCapture(canvas)

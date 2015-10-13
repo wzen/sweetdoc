@@ -25,6 +25,18 @@ a {
   bottom: 0;
   right: 0;
   margin: auto;
+  border: 5px solid #e6deca;
+
+  &.fullscreen {
+    border: 0 !important;
+  }
+}
+
+#project_contents {
+  box-sizing: content-box;
+  width: 100%;
+  height: 100%;
+  background-color: #FAFAFA;
 }
 
 #main_temp {

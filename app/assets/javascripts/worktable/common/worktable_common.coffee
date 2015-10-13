@@ -298,8 +298,8 @@ class WorktableCommon
     Handwrite.initHandwrite()
     # コンテキストメニュー
     @setMainContainerContext()
-    $('#project_wrapper').off("mousedown")
-    $('#project_wrapper').on("mousedown", =>
+    $('#project_contents').off("mousedown")
+    $('#project_contents').on("mousedown", =>
       @clearAllItemStyle()
     )
     # Mainビュー高さ設定

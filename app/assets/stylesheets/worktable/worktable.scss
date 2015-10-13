@@ -26,6 +26,8 @@ html, body {
 
 #timeline_container {
   position: relative;
+  background-color: #FAFAFA;
+  border: 5px solid #e6deca;
 }
 
 #contents {
@@ -81,11 +83,6 @@ div.scroll_inside {
   }
 }
 
-.stage_container {
-  background-color: #FAFAFA;
-  border: 5px solid #e6deca;
-}
-
 .scroll_x_content {
   overflow-x: scroll;
 }
@@ -95,6 +92,8 @@ div.scroll_inside {
 }
 
 #sidebar_container {
+  background-color: #FAFAFA;
+  border: 5px solid #e6deca;
   padding: 15px 5px 10px 5px;
   height: 100%;
   fieldset, img {

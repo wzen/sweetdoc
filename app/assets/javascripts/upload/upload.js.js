@@ -188,7 +188,7 @@ $(function() {
   if (window.opener != null) {
     return setTimeout(function() {
       var body;
-      body = $(window.opener.document.getElementById('pages'));
+      body = $(window.opener.document.getElementById('project_contents'));
       return html2canvas(body, {
         onrendered: function(canvas) {
           return Upload.makeCapture(canvas);

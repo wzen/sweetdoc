@@ -345,8 +345,8 @@ WorktableCommon = (function() {
     this.initKeyEvent();
     Handwrite.initHandwrite();
     this.setMainContainerContext();
-    $('#project_wrapper').off("mousedown");
-    $('#project_wrapper').on("mousedown", (function(_this) {
+    $('#project_contents').off("mousedown");
+    $('#project_contents').on("mousedown", (function(_this) {
       return function() {
         return _this.clearAllItemStyle();
       };
