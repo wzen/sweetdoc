@@ -33,7 +33,7 @@
 //= require base/indicator
 //= require base/project
 //= require base/float_view
-//= require base/motion_check
+//= require motion_check/motion_check_common
 // require_directory util
 //= require util/color/color_change
 //= require common_event/common_event

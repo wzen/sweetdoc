@@ -1,5 +1,8 @@
-<%= stylesheet_link_tag 'gallery', media: 'all', 'data-turbolinks-track' => true %>
-<%= javascript_include_tag 'gallery_with_run', 'data-turbolinks-track' => true %>
+<%= stylesheet_link_tag 'run_kit', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'run_kit', 'data-turbolinks-track' => true %>
+<%= stylesheet_link_tag 'gallery/gallery' %>
+<script src="<%= javascript_path 'gallery/gallery_common'%>" type="text/javascript" ></script>
+<script src="<%= javascript_path 'gallery/gallery_sidebar'%>" type="text/javascript" ></script>
 
 <div id="detail_wrapper">
     <div id="detail_header">

@@ -1,4 +1,5 @@
 <%= render 'base/run_contents_temp' %>
 
 <%= stylesheet_link_tag 'gallery', media: 'all', 'data-turbolinks-track' => true %>
-<%= javascript_include_tag 'gallery_with_run', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'gallery', 'data-turbolinks-track' => true %>
+<script src="<%= javascript_path 'gallery/gallery'%>" type="text/javascript" ></script>

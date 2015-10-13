@@ -42,6 +42,4 @@
 //= require run/guide/base
 //= require run/guide/scroll
 //= require run/guide/click
-//= require run/run
-//= require run/run_full_screen
 // require_tree .

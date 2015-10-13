@@ -14,8 +14,9 @@ Rails.application.routes.draw do
   post 'project/create'
   get 'project/list'
 
-  get 'run' => 'run#index'
-  post 'run' => 'run#index'
+  get 'motion_check' => 'motion_check#index'
+  post 'motion_check' => 'motion_check#index'
+
   get 'run/markitup_preview'
   get 'test_move/hello'
 

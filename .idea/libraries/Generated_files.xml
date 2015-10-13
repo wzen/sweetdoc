@@ -22,6 +22,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/paging_guide/arrow_paging_guide.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
@@ -56,7 +57,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_setting.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/motion_check.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
@@ -81,6 +82,9 @@
     <CLASSES>
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/run.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery_with_run.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/button.js" />
@@ -103,6 +107,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/paging_guide/arrow_paging_guide.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
@@ -139,7 +144,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/motion_check.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
