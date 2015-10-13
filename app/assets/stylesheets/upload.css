@@ -11,5 +11,10 @@
  * file per style scope.
  *
  *= require bootstrap.min
- *= require user/user
+ *= require markitup/skins/markitup/style
+ *= require markitup/sets/html/style
+ *= require common/common
+ *= require common/modal_view.css
+ *= require common/indicator
+ *= require upload/upload
  */

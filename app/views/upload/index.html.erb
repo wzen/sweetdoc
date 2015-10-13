@@ -1,11 +1,11 @@
 <%= form_tag('gallery/save_state', method: :post) do  %>
 <div id="upload_wrapper">
-    <div>
+    <div class="left">
         <div class="capture_wrapper">
             <img class="capture" src="" >
         </div>
     </div>
-    <div>
+    <div class="right">
         <div class="input_wrapper">
             <div class="title_wrapper">
                 <div>
@@ -55,14 +55,13 @@
                     </ul>
                 </div>
             </div>
-
-            <div class="button_wrapper">
-                <div>
-                    <button class="upload_button" value="Upload">Upload</button>
-                </div>
-            </div>
         </div>
     </div>
-    <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
 </div>
+<div class="button_wrapper">
+    <div>
+        <button class="upload_button" value="Upload">Upload</button>
+    </div>
+</div>
+<input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="<%= @project_id %>">
 <% end %>

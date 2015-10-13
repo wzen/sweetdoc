@@ -11,8 +11,6 @@
  * file per style scope.
  *
  *= require jquery-ui/jquery-ui.min
- *= require markitup/skins/markitup/style
- *= require markitup/sets/html/style
  *= require css/colorpicker
  *= require css/layout
  *= require bootstrap_custom

@@ -10,4 +10,5 @@
 //= require ../../../vendor/assets/html2canvas/html2canvas_custom.min
 //= require ../../../vendor/assets/markitup/markitup/jquery.markitup
 //= require ../../../vendor/assets/markitup/markitup/sets/html/set
+//= require base/constant
 //= require upload/upload.js

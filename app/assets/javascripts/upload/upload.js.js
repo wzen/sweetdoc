@@ -31,7 +31,7 @@ Upload = (function() {
     tags = $('.popular_tag a, .recommend_tag a', root);
     tags.off('click');
     tags.on('click', function() {
-      return RunCommon.addUploadGallerySelectTag(root, $(this).html());
+      return Upload.addUploadGallerySelectTag(root, $(this).html());
     });
     tags.off('mouseenter');
     tags.on('mouseenter', function(e) {
@@ -164,8 +164,8 @@ Upload = (function() {
     var height, root, width;
     root = $('#upload_wrapper');
     $(".capture", root).attr('src', canvas.toDataURL('image/png'));
-    width = $(canvas).width();
-    height = $(canvas).height();
+    width = parseInt($(canvas).attr('width'));
+    height = parseInt($(canvas).attr('height'));
     if (width > height) {
       return $(".capture", root).css({
         width: '100%',

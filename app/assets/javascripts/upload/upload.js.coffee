@@ -33,7 +33,7 @@ class Upload
     tags.off('click')
     tags.on('click', ->
       # 選択タグに追加
-      RunCommon.addUploadGallerySelectTag(root, $(@).html())
+      Upload.addUploadGallerySelectTag(root, $(@).html())
     )
 
     # マウスオーバーイベント
@@ -159,8 +159,8 @@ class Upload
   @makeCapture = (canvas) ->
     root = $('#upload_wrapper')
     $(".capture", root).attr('src', canvas.toDataURL('image/png'))
-    width = $(canvas).width()
-    height = $(canvas).height()
+    width = parseInt($(canvas).attr('width'))
+    height = parseInt($(canvas).attr('height'))
     if width > height
       $(".capture", root).css({width: '100%', height: 'auto'})
     else
