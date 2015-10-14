@@ -61,7 +61,6 @@ RunCommon = (function() {
       padding = 9;
     }
     updateMainHeight = $('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - infoHeight - padding;
-    $('#main').height(updateMainHeight);
     projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
     if (updateMainWidth < projectScreenSize.width + 30) {
@@ -77,9 +76,13 @@ RunCommon = (function() {
     } else {
       zoom = heightRate;
     }
+    if (zoom === 0.0) {
+      zoom = 0.01;
+    }
     updatedProjectScreenSize.width = projectScreenSize.width * zoom;
     updatedProjectScreenSize.height = projectScreenSize.height * zoom;
     updateMainWrapperPercent = 100 / zoom;
+    $('#main').height(updateMainHeight);
     $('#project_wrapper').css({
       width: updatedProjectScreenSize.width,
       height: updatedProjectScreenSize.height

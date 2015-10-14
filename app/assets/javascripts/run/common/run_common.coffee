@@ -40,6 +40,7 @@ class RunCommon
 
   # Mainビューのサイズ更新
   @updateMainViewSize = ->
+    # mainビュー高さ修正
     updateMainWidth = $('#contents').width()
     infoHeight = 0
     padding = 0
@@ -48,8 +49,8 @@ class RunCommon
       infoHeight = i.height()
       padding = 9
     updateMainHeight = $('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - infoHeight - padding
-    $('#main').height(updateMainHeight)
 
+    # スクリーンサイズ修正
     projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
     # Paddingを考慮して比較
@@ -60,16 +61,20 @@ class RunCommon
       # 縮小
       updatedProjectScreenSize.height = updateMainHeight - 10
 
-    # 変更率が大きい方でZoom
+    # Zoom 修正
     widthRate = updatedProjectScreenSize.width / projectScreenSize.width
     heightRate = updatedProjectScreenSize.height / projectScreenSize.height
     if widthRate < heightRate
       zoom = widthRate
     else
       zoom = heightRate
+    if zoom == 0.0
+      zoom = 0.01
     updatedProjectScreenSize.width = projectScreenSize.width * zoom
     updatedProjectScreenSize.height = projectScreenSize.height * zoom
     updateMainWrapperPercent = 100 / zoom
+
+    $('#main').height(updateMainHeight)
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
     window.mainWrapper.css({transform: "scale(#{zoom}, #{zoom})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 

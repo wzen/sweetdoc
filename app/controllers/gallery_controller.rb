@@ -39,13 +39,12 @@ class GalleryController < ApplicationController
     if project_id == nil || title == nil || title.length == 0
       # エラー
       @message = I18n.t('message.database.item_state.save.error')
-      render
+    else
+      project_id = project_id.to_i
+      caption = params[Const::Gallery::Key::CAPTION]
+      thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
+      @message = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img)
     end
-    project_id = project_id.to_i
-
-    caption = params[Const::Gallery::Key::CAPTION]
-    thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
-    @message = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img)
   end
 
   def update_last_state
