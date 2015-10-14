@@ -57,15 +57,22 @@ Common = (function() {
   };
 
   Common.applyEnvironmentFromPagevalue = function() {
-    Navbar.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
+    Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();
     this.initScrollContentsPosition();
     return this.initZoom();
   };
 
   Common.resetEnvironment = function() {
-    Navbar.setTitle('');
+    Common.setTitle('');
     return this.initScreenSize(true);
+  };
+
+  Common.setTitle = function(title_name) {
+    Navbar.setTitle(title_name);
+    if (!window.isWorkTable) {
+      return RunCommon.setTitle(title_name);
+    }
   };
 
   Common.initScreenSize = function(reset) {

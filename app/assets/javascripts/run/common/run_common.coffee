@@ -40,7 +40,8 @@ class RunCommon
 
   # Mainビューの高さ更新
   @updateMainViewSize = ->
-    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").outerHeight(true))
+    infoHeight = 50
+    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").outerHeight(true) - infoHeight)
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->

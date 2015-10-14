@@ -137,7 +137,7 @@ ServerStorage = (function() {
               v = ref1[k];
               PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
             }
-            Navbar.setTitle(data.project_pagevalue_data.title);
+            Common.setTitle(data.project_pagevalue_data.title);
           }
           if (data.instance_pagevalue_data != null) {
             d = {};

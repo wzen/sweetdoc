@@ -101,7 +101,7 @@ class ServerStorage
             if data.project_pagevalue_data?
               for k, v of data.project_pagevalue_data
                 PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
-              Navbar.setTitle(data.project_pagevalue_data.title)
+              Common.setTitle(data.project_pagevalue_data.title)
             if data.instance_pagevalue_data?
               d = {}
               for k, v of data.instance_pagevalue_data

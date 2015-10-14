@@ -3,7 +3,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #F9F6EA;
+  //background-color: #F9F6EA;
   //font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
   overflow: hidden;
@@ -17,6 +17,10 @@ html, body {
 div#main {
   padding: 5px 15px 5px 15px;
   height: 100%;
+
+  background-image: image_url('base/back2.jpg');
+  background-repeat: repeat;
+
   &.fullscreen {
     padding: 0;
 
@@ -27,6 +31,11 @@ div#main {
       z-index: 1999999998;
     }
   }
+}
+
+div.scroll_inside {
+  background-image: image_url('base/back4.jpg');
+  background-repeat: repeat;
 }
 
 div.main-wrapper {
@@ -414,22 +423,33 @@ div.creator_info_wrapper {
 }
 
 div.contents_info {
-  .title {
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  z-index:1999999999;
 
+  &.expand {
+    height: auto;
+  }
+
+  .title {
+    font-size: 18px;
   }
   .creator {
-
+    font-size: 16px;
   }
   .caption {
-
+    font-size: 14px;
   }
   .page {
-
+    font-size: 14px;
   }
   .fork {
     display: none;
+    color: darkorange;
+    font-size: 14px;
   }
   .chapter {
-
+    font-size: 14px;
   }
 }

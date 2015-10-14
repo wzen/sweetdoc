@@ -51,7 +51,9 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    return $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).outerHeight(true));
+    var infoHeight;
+    infoHeight = 50;
+    return $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).outerHeight(true) - infoHeight);
   };
 
   RunCommon.resizeMainContainerEvent = function() {
