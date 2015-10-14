@@ -108,7 +108,6 @@
     <orderEntry type="library" scope="PROVIDED" name="uber (v0.0.15, RVM: ruby-2.1.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="uglifier (v2.7.2, RVM: ruby-2.1.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="warden (v1.2.3, RVM: ruby-2.1.2) [gem]" level="application" />
-    <orderEntry type="library" name="Generated files" level="project" />
   </component>
   <component name="RModuleSettingsStorage">
     <LOAD_PATH number="0" />

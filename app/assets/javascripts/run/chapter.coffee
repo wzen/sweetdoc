@@ -52,22 +52,13 @@ class Chapter
         return false
     )
 
+    # TODO: center以外
+
     if item?
-        width = item.itemSize.w
-        height = item.itemSize.h
-        if item.scale?
-          width *= item.scale.w
-          height *= item.scale.h
-
-        left = null
-        top = null
-        if type == "center"
-          left = item.itemSize.x + width * 0.5 - (window.mainWrapper.width() * 0.5)
-          top = item.itemSize.y + height * 0.5 - (window.mainWrapper.height() * 0.5)
-
-        Common.updateScrollContentsPosition(top, left, isImmediate, ->
+      if type == 'center'
+        Common.focusToTarget(item.getJQueryElement(), ->
           window.disabledEventHandler = false
-        )
+        , isImmediate)
 
     else
       window.disabledEventHandler = false
