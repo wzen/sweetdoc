@@ -6,19 +6,27 @@
         <div class="info_contents">
             <%= render 'run/fullscreen/popup/creator_info' %>
             <div class="page">
-                <div class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>"></div>
-                <div class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"></div>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>">0</span>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"><%= @page_max %></span>
             </div>
             <div class="fork">
-                <div class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></div>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
             </div>
             <div class="chapter">
-                <div class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></div>
-                <div class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"></div>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>">0</span>
+                <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
             </div>
-            <div class="tags">
-                <div class="<%= Const::Run::AttributeName::CONTENTS_TAGS_CLASSNAME %>"></div>
-            </div>
+            <% if @tags.nil? == false && @tags.length > 0 %>
+                <div class="<%= Const::Run::AttributeName::CONTENTS_TAGS_CLASSNAME %>">
+                    <div class="tags tagcloud">
+                        <ul>
+                        <% @tags.each do |tag| %>
+                            <li><a href=""><%= tag %></a></li>
+                        <% end %>
+                        </ul>
+                    </div>
+                </div>
+            <% end %>
         </div>
     </div>
 </div>

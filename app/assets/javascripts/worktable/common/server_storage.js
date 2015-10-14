@@ -46,6 +46,7 @@ ServerStorage = (function() {
     if (callback == null) {
       callback = null;
     }
+    window.workingAutoSave = true;
     data = {};
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
     data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
@@ -89,8 +90,9 @@ ServerStorage = (function() {
             console.log(data.message);
           }
           if (callback != null) {
-            return callback();
+            callback();
           }
+          return window.workingAutoSave = false;
         },
         error: function(data) {
           if (window.debug) {
@@ -223,10 +225,7 @@ ServerStorage = (function() {
     if (WorktableSetting.IdleSaveTimer.isEnabled()) {
       time = parseFloat(WorktableSetting.IdleSaveTimer.idleTime()) * 1000;
       return window.saveIdleTimer = setTimeout(function() {
-        window.workingAutoSave = true;
-        return ServerStorage.save(function() {
-          return window.workingAutoSave = false;
-        });
+        return ServerStorage.save();
       }, time);
     }
   };

@@ -22,6 +22,8 @@ class ServerStorage
 
   # サーバにアイテムの情報を保存
   @save = (callback = null) ->
+    window.workingAutoSave = true
+
     data = {}
     data[@Key.PAGE_COUNT] = parseInt(PageValue.getPageCount())
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
@@ -64,6 +66,7 @@ class ServerStorage
               console.log(data.message)
             if callback?
               callback()
+            window.workingAutoSave = false
           error: (data) ->
             if window.debug
               console.log(data.message)
@@ -171,8 +174,5 @@ class ServerStorage
     if WorktableSetting.IdleSaveTimer.isEnabled()
       time = parseFloat(WorktableSetting.IdleSaveTimer.idleTime()) * 1000
       window.saveIdleTimer = setTimeout( ->
-        window.workingAutoSave = true
-        ServerStorage.save( ->
-          window.workingAutoSave = false
-        )
+        ServerStorage.save()
       , time)

@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(version: 20151006163105) do
     t.string   "encrypted_password",                     null: false
     t.boolean  "guest",                  default: false
     t.string   "provider"
+    t.binary   "thumbnail_img"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"

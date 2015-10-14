@@ -1,22 +1,35 @@
-<div class="info">
+<div class="contents_info">
     <div class="title">
-        <span class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"></span>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"><%= @title %></span>
     </div>
     <div class="creator">
-        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"></span>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"><%= @creator %></span>
     </div>
     <div class="page">
         <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>"></span>
-        <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"></span>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"><%= @page_max %></span>
     </div>
     <div class="fork">
         <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
     </div>
     <div class="chapter">
         <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
-        <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"></span>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
     </div>
-    <div class="tags">
-        <span class="<%= Const::Run::AttributeName::CONTENTS_TAGS_CLASSNAME %>"></span>
-    </div>
+    <% if @caption.nil? == false %>
+        <div class="caption">
+            <div class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %>"><%= @caption %></div>
+        </div>
+    <% end %>
+    <% if @tags.nil? == false && @tags.length > 0 %>
+        <div class="<%= Const::Run::AttributeName::CONTENTS_TAGS_CLASSNAME %>">
+            <div class="tags tagcloud">
+                <ul>
+                    <% @tags.each do |tag| %>
+                        <li><a href=""><%= tag %></a></li>
+                    <% end %>
+                </ul>
+            </div>
+        </div>
+    <% end %>
 </div>

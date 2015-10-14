@@ -1,11 +1,14 @@
 <div class="creator_info_wrapper">
     <div class="title">
-        <div class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"></div>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"><%= @title %></span>
     </div>
     <div class="creator">
-        <div class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"></div>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"><%= @creator.name %></span>
+        <span class="circle"><%= @creator.thumbnail_img %></span>
     </div>
-    <div class="caption">
-        <div class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %>"></div>
-    </div>
+    <% if @caption.nil? == false %>
+        <div class="caption">
+            <span class="<%= Const::Run::AttributeName::CONTENTS_CAPTION_CLASSNAME %>"><%= @caption %></span>
+        </div>
+    <% end %>
 </div>

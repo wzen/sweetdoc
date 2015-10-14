@@ -62,6 +62,8 @@ class MotionCheckController < ApplicationController
       @general_pagevalues = Run.make_pagevalue(general, Const::PageValueKey::G_PREFIX)
       @instance_pagevalues = Run.make_pagevalue_with_pagenum(instance, Const::PageValueKey::INSTANCE_PREFIX, page_num)
       @event_pagevalues = Run.make_pagevalue_with_pagenum(event, Const::PageValueKey::E_SUB_ROOT, page_num)
+
+      @creator = User.find(user_id)
     end
   end
 

@@ -5,7 +5,9 @@
 <script src="<%= javascript_path 'gallery/gallery_sidebar'%>" type="text/javascript" ></script>
 
 <div id="detail_wrapper">
-    <%= render 'run/defaultscreen/info' %>
     <%= render 'run/defaultscreen/main' %>
-    <%= render 'run/defaultscreen/footer' %>
+    <%= render 'run/defaultscreen/info' %>
+    <%= render 'run/defaultscreen/socialbutton' %>
+    <%= render 'base/csscode' %>
+    <%= render 'base/values', general_pagevalues: @general_pagevalues, instance_pagevalues: @instance_pagevalues, event_pagevalues: @event_pagevalues, is_runwindow_reload: @is_runwindow_reload %>
 </div>

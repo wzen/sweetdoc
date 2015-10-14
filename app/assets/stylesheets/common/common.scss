@@ -144,6 +144,17 @@ div.pop {
   }
 }
 
+.circle {
+  width: 50px;
+  height: 50px;
+  background: #FAFAFA;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -o-border-radius: 50px;
+  -ms-border-radius: 50px;
+  border-radius: 50px;
+}
+
 div.float_view_temp {
   display: none;
 }
