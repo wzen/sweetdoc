@@ -269,12 +269,12 @@ WorktableCommon = (function() {
     var borderWidth, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
-    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).outerHeight(true) - $('#timeline').height() - timelineTopPadding);
+    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
     window.scrollContentsSize = {
       width: window.scrollContents.width(),
       height: window.scrollContents.height()
     };
-    return $('#sidebar').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - borderWidth * 2);
+    return $('#sidebar').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - (borderWidth * 2));
   };
 
   WorktableCommon.resizeMainContainerEvent = function() {
@@ -350,8 +350,8 @@ WorktableCommon = (function() {
         return _this.clearAllItemStyle();
       };
     })(this));
-    this.updateMainViewSize();
     Common.applyEnvironmentFromPagevalue();
+    this.updateMainViewSize();
     return WorktableSetting.initConfig();
   };
 

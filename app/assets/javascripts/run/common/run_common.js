@@ -51,7 +51,8 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    var i, infoHeight, padding;
+    var heightRate, i, infoHeight, padding, projectScreenSize, updateMainHeight, updateMainWidth, updateMainWrapperPercent, updatedProjectScreenSize, widthRate, zoom;
+    updateMainWidth = $('#contents').width();
     infoHeight = 0;
     padding = 0;
     i = $('.contents_info:first');
@@ -59,7 +60,35 @@ RunCommon = (function() {
       infoHeight = i.height();
       padding = 9;
     }
-    return $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - infoHeight - padding);
+    updateMainHeight = $('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - infoHeight - padding;
+    $('#main').height(updateMainHeight);
+    projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+    updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
+    if (updateMainWidth < projectScreenSize.width + 30) {
+      updatedProjectScreenSize.width = updateMainWidth - 30;
+    }
+    if (updateMainHeight < projectScreenSize.height + 10) {
+      updatedProjectScreenSize.height = updateMainHeight - 10;
+    }
+    widthRate = updatedProjectScreenSize.width / projectScreenSize.width;
+    heightRate = updatedProjectScreenSize.height / projectScreenSize.height;
+    if (widthRate < heightRate) {
+      zoom = widthRate;
+    } else {
+      zoom = heightRate;
+    }
+    updatedProjectScreenSize.width = projectScreenSize.width * zoom;
+    updatedProjectScreenSize.height = projectScreenSize.height * zoom;
+    updateMainWrapperPercent = 100 / zoom;
+    $('#project_wrapper').css({
+      width: updatedProjectScreenSize.width,
+      height: updatedProjectScreenSize.height
+    });
+    return window.mainWrapper.css({
+      transform: "scale(" + zoom + ", " + zoom + ")",
+      width: updateMainWrapperPercent + "%",
+      height: updateMainWrapperPercent + "%"
+    });
   };
 
   RunCommon.resizeMainContainerEvent = function() {
@@ -322,8 +351,8 @@ RunCommon = (function() {
     Common.initResize(this.resizeEvent);
     this.setupScrollEvent();
     Navbar.initRunNavbar();
-    RunCommon.updateMainViewSize();
-    return Common.applyEnvironmentFromPagevalue();
+    Common.applyEnvironmentFromPagevalue();
+    return RunCommon.updateMainViewSize();
   };
 
   RunCommon.setCreator = function(value) {

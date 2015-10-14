@@ -38,15 +38,40 @@ class RunCommon
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
     scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
 
-  # Mainビューの高さ更新
+  # Mainビューのサイズ更新
   @updateMainViewSize = ->
+    updateMainWidth = $('#contents').width()
     infoHeight = 0
     padding = 0
     i = $('.contents_info:first')
     if i?
       infoHeight = i.height()
       padding = 9
-    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - infoHeight - padding)
+    updateMainHeight = $('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - infoHeight - padding
+    $('#main').height(updateMainHeight)
+
+    projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+    updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
+    # Paddingを考慮して比較
+    if updateMainWidth < projectScreenSize.width + 30
+      # 縮小
+      updatedProjectScreenSize.width = updateMainWidth - 30
+    if updateMainHeight < projectScreenSize.height + 10
+      # 縮小
+      updatedProjectScreenSize.height = updateMainHeight - 10
+
+    # 変更率が大きい方でZoom
+    widthRate = updatedProjectScreenSize.width / projectScreenSize.width
+    heightRate = updatedProjectScreenSize.height / projectScreenSize.height
+    if widthRate < heightRate
+      zoom = widthRate
+    else
+      zoom = heightRate
+    updatedProjectScreenSize.width = projectScreenSize.width * zoom
+    updatedProjectScreenSize.height = projectScreenSize.height * zoom
+    updateMainWrapperPercent = 100 / zoom
+    $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
+    window.mainWrapper.css({transform: "scale(#{zoom}, #{zoom})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->
@@ -293,8 +318,8 @@ class RunCommon
     Common.initResize(@resizeEvent)
     @setupScrollEvent()
     Navbar.initRunNavbar()
-    RunCommon.updateMainViewSize()
     Common.applyEnvironmentFromPagevalue()
+    RunCommon.updateMainViewSize()
 
   # 作成者を設定
   # @param [Integer] value 設定値

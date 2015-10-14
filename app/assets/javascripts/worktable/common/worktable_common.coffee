@@ -228,9 +228,9 @@ class WorktableCommon
   @updateMainViewSize = ->
     borderWidth = 5
     timelineTopPadding = 5
-    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").outerHeight(true) - $('#timeline').height() - timelineTopPadding)
+    $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2))
     window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
-    $('#sidebar').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - borderWidth * 2)
+    $('#sidebar').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - (borderWidth * 2))
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
@@ -301,10 +301,10 @@ class WorktableCommon
     $('#project_contents').on("mousedown", =>
       @clearAllItemStyle()
     )
-    # Mainビュー高さ設定
-    @updateMainViewSize()
     # 環境設定
     Common.applyEnvironmentFromPagevalue()
+    # Mainビュー高さ設定
+    @updateMainViewSize()
     # 共通設定
     WorktableSetting.initConfig()
 
