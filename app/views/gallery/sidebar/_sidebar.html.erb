@@ -3,10 +3,20 @@
         <!-- User -->
         <% if user_signed_in? %>
         <!-- ログイン済み -->
-            <div class="circle default_user <%= Const::Gallery::Sidebar::USER %>"></div>
+            <% if current_user.thumbnail_img.nil? %>
+                <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+                    <%= image_tag 'gallery/sidebar/default_user.png' ,size:'50x50' %>
+                </div>
+            <% else %>
+                <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+                    <img src="<%= current_user.thumbnail_img %>" width="50" height="50" />
+                </div>
+            <% end %>
         <% else %>
         <!-- 未ログイン-->
-            <div class="circle guest_user <%= Const::Gallery::Sidebar::USER %>"></div>
+            <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+                <%= image_tag 'gallery/sidebar/guest_user.png', size:'50x50' %>
+            </div>
         <% end %>
     </div>
     <div class="worktable_wrapper">
