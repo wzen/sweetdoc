@@ -12,7 +12,7 @@ class GalleryController < ApplicationController
     # Constantの設定
     init_const
 
-    @contents = nil
+    @pagevalues = nil
   end
 
   def detail
@@ -23,7 +23,7 @@ class GalleryController < ApplicationController
     # ViewCountをupdate
     Gallery.add_view_statistic_count(galiery_id, Date.today)
     # データを取得
-    @contents = Gallery.load_contents_detail(galiery_id)
+    @pagevalues = Gallery.load_contents_detail(galiery_id)
   end
 
   def run_window

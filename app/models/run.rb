@@ -17,8 +17,7 @@ class Run
         general_pagevalues: general_pagevalues,
         instance_pagevalues: instance_pagevalues,
         event_pagevalues: event_pagevalues,
-        creator: creator
-    }
+    }, creator
   end
 
   def self.make_pagevalue(root, pagevalue_root)
