@@ -206,6 +206,12 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         Key.RECOMMEND_SOURCE_WORD = constant.Gallery.Key.RECOMMEND_SOURCE_WORD;
 
+        Key.SHOW_GUIDE = constant.Gallery.Key.SHOW_GUIDE;
+
+        Key.SHOW_PAGE_NUM = constant.Gallery.Key.SHOW_PAGE_NUM;
+
+        Key.SHOW_CHAPTER_NUM = constant.Gallery.Key.SHOW_CHAPTER_NUM;
+
         return Key;
 
       })();

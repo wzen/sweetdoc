@@ -1,7 +1,12 @@
-<% general_pagevalues = nil if general_pagevalues.nil? %>
-<% instance_pagevalues = nil if instance_pagevalues.nil? %>
-<% event_pagevalues = nil if event_pagevalues.nil? %>
-<% is_runwindow_reload = false if is_runwindow_reload.nil? %>
+<%
+   is_runwindow_reload = false if is_runwindow_reload.nil?
+   if !contents.nil?
+     general_pagevalues = contents[:general_pagevalues]
+     instance_pagevalues = contents[:instance_pagevalues]
+     event_pagevalues = contents[:event_pagevalues]
+   end
+
+%>
 
 <%= form_tag("", method: "post", name: "run_form") do %>
     <div id="<%= Const::PageValueKey::G_ROOT %>">

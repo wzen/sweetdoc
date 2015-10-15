@@ -73,6 +73,9 @@ en:
     popular_tags: "Popular tags"
     recommend_tags: "Recommend tags"
     version: "Version"
+    show_guide: "Show Motion Guide"
+    show_page_num: "Show Page Number"
+    show_chapter_num: "Show Chapter Number"
   message:
     dialog:
       new_project: "All the contents making will delete."

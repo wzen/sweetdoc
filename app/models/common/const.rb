@@ -211,6 +211,9 @@ class Const
       BOOKMARK_COUNT = 'bookmark_count'
       RECOMMEND_SOURCE_WORD = 'recommend_source_word'
       NOTE = 'note'
+      SHOW_GUIDE = 'show_guide'
+      SHOW_PAGE_NUM = 'show_page_num'
+      SHOW_CHAPTER_NUM = 'show_chapter_num'
     end
 
     class SearchKey

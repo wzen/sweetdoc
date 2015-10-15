@@ -8,7 +8,7 @@ class MotionCheckController < ApplicationController
     # Constantの設定
     init_const
 
-    setup_data
+    setup_run_data
   end
 
   def paging
@@ -37,11 +37,11 @@ class MotionCheckController < ApplicationController
     # Constantの設定
     init_const
 
-    setup_data
+    setup_run_data
   end
 
   private
-  def setup_data
+  def setup_run_data
 
     @is_runwindow_reload = !request.post?
     unless @is_runwindow_reload
@@ -53,17 +53,7 @@ class MotionCheckController < ApplicationController
       general = params.require(Const::PageValueKey::G_PREFIX.to_sym)
       instance = params.require(Const::PageValueKey::INSTANCE_PREFIX.to_sym)
       event = params.require(Const::PageValueKey::E_SUB_ROOT.to_sym)
-      # cacheに保存
-      Rails.cache.write("user_id:#{user_id}-instance", instance, expires_in: 1.hour)
-      Rails.cache.write("user_id:#{user_id}-event", event, expires_in: 1.hour)
-
-      # TODO: DB保存処理
-
-      @general_pagevalues = Run.make_pagevalue(general, Const::PageValueKey::G_PREFIX)
-      @instance_pagevalues = Run.make_pagevalue_with_pagenum(instance, Const::PageValueKey::INSTANCE_PREFIX, page_num)
-      @event_pagevalues = Run.make_pagevalue_with_pagenum(event, Const::PageValueKey::E_SUB_ROOT, page_num)
-
-      @creator = User.find(user_id)
+      @contents = Run.setup_data(user_id, general, instance, event, page_num)
     end
   end
 

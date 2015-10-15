@@ -20,7 +20,17 @@ class Gallery < ActiveRecord::Base
   has_many :projects
   has_many :project_gallery_maps
 
-  def self.save_state(user_id, project_id, tags, title, caption, thumbnail_img)
+  def self.save_state(
+    user_id,
+    project_id,
+    tags,
+    title,
+    caption,
+    thumbnail_img,
+    show_guide,
+    show_page_num,
+    show_chapter_num
+  )
     begin
       ActiveRecord::Base.transaction do
         # Project取得
@@ -31,7 +41,10 @@ class Gallery < ActiveRecord::Base
                          caption: caption,
                          thumbnail_img: thumbnail_img,
                          screen_width: p.screen_width,
-                         screen_height: p.screen_height
+                         screen_height: p.screen_height,
+                         show_guide: show_guide,
+                         show_page_num: show_page_num,
+                         show_chapter_num: show_chapter_num
                      })
         g.save!
         gallery_id = g.id
@@ -88,10 +101,10 @@ class Gallery < ActiveRecord::Base
 
       end
 
-      return I18n.t('message.database.item_state.save.success')
+      return I18n.t('message.database.item_state.save.success'), gallery_id
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error')
+      return I18n.t('message.database.item_state.save.error'), nil
     end
   end
 

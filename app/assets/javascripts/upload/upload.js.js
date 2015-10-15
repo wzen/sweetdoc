@@ -99,7 +99,7 @@ Upload = (function() {
       return;
     }
     _saveGallery = function() {
-      var fd, tags, xhr;
+      var fd, tags;
       fd = new FormData(document.getElementById('upload_form'));
       tags = $('.select_tag a', root).html();
       if (tags != null) {
@@ -107,9 +107,19 @@ Upload = (function() {
       } else {
         fd.append(Constant.Gallery.Key.TAGS, null);
       }
-      xhr = new XMLHttpRequest();
-      xhr.open("POST", 'gallery/save_state');
-      return xhr.send(fd);
+      return $.ajax({
+        url: 'gallery/save_state',
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data) {
+          return window.location.href = "/gallery/detail?" + Constant.Gallery.Key.GALLERY_ID + "=" + data.gallery_id;
+        },
+        error: function(data) {
+          return alert(data.message);
+        }
+      });
     };
     if (window.confirm(I18n.t('message.dialog.update_gallery'))) {
       return _saveGallery.call(this);

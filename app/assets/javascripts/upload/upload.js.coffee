@@ -101,9 +101,20 @@ class Upload
         fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html())
       else
         fd.append(Constant.Gallery.Key.TAGS, null)
-      xhr = new XMLHttpRequest();
-      xhr.open("POST" , 'gallery/save_state');
-      xhr.send(fd);
+
+      $.ajax({
+        url: 'gallery/save_state'
+        data: fd
+        processData: false
+        contentType: false
+        type: 'POST'
+        success: (data) ->
+          # Gallery Detail
+          window.location.href = "/gallery/detail?#{Constant.Gallery.Key.GALLERY_ID}=#{data.gallery_id}"
+        error: (data) ->
+          # Error
+          alert(data.message)
+      })
 
     # 確認ダイアログ
     if window.confirm(I18n.t('message.dialog.update_gallery'))

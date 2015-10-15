@@ -52,6 +52,9 @@ ja:
     popular_tags: "人気のタグ"
     recommend_tags: "おすすめのタグ"
     version: "バージョン"
+    show_guide: "モーションガイドを表示"
+    show_page_num: "ページ番号を表示"
+    show_chapter_num: "チャプター番号を表示"
   message:
     dialog:
       new_project: "'作成中のコンテンツは全て削除されます。'"

@@ -2,6 +2,25 @@ require 'common/const'
 
 class Run
 
+  def self.setup_data(user_id, general, instance, event, page_num)
+    # cacheに保存
+    Rails.cache.write("user_id:#{user_id}-instance", instance, expires_in: 1.hour)
+    Rails.cache.write("user_id:#{user_id}-event", event, expires_in: 1.hour)
+
+    # TODO: DB保存処理
+
+    general_pagevalues = make_pagevalue(general, Const::PageValueKey::G_PREFIX)
+    instance_pagevalues = make_pagevalue_with_pagenum(instance, Const::PageValueKey::INSTANCE_PREFIX, page_num)
+    event_pagevalues = make_pagevalue_with_pagenum(event, Const::PageValueKey::E_SUB_ROOT, page_num)
+    creator = User.find(user_id)
+    return {
+        general_pagevalues: general_pagevalues,
+        instance_pagevalues: instance_pagevalues,
+        event_pagevalues: event_pagevalues,
+        creator: creator
+    }
+  end
+
   def self.make_pagevalue(root, pagevalue_root)
     html = ''
     root.each do |k, v|

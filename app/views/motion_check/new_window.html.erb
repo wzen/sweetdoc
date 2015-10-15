@@ -7,10 +7,7 @@
 <%= render 'motion_check/navbar/navber_window' %>
 
 <div id="contents">
-
     <%= render 'run/fullscreen/fullscreen' %>
-
     <%= render 'base/csscode' %>
-
-    <%= render 'base/values', general_pagevalues: @general_pagevalues, instance_pagevalues: @instance_pagevalues, event_pagevalues: @event_pagevalues, is_runwindow_reload: @is_runwindow_reload %>
+    <%= render 'base/values', contents: @contents, is_runwindow_reload: @is_runwindow_reload %>
 </div>
