@@ -22,9 +22,9 @@ class Upload
     )
 
     # Updateイベント
-    $('.upload_button', root).off('click')
-    $('.upload_button', root).on('click', ->
-      Upload.makeCapture(root)
+    $('.upload_button').off('click')
+    $('.upload_button').on('click', ->
+      Upload.uploadToGallery(root)
     )
 
   # タグクリックイベント
@@ -87,69 +87,23 @@ class Upload
       $('.select_tag_input', root).hide()
 
   # ギャラリーアップロード
-  @makeCapture = (root, callback = null) ->
+  @uploadToGallery = (root, callback = null) ->
     # 入力値バリデーションチェック
-    title = $('.title:first', root).val()
+    title = $("input[name='#{Constant.Gallery.Key.TITLE}']", root).val()
     if title.length == 0
       return
 
     # ギャラリー保存処理
     _saveGallery = ->
-
-      _toBlob = (canvas) ->
-        base64 = canvas.toDataURL('image/png')
-        # Base64からバイナリへ変換
-        bin = atob(base64.replace(/^.*,/, ''))
-        buffer = new Uint8Array(bin.length)
-        for i in [0..(bin.length - 1)]
-          buffer[i] = bin.charCodeAt(i)
-        # Blobを作成
-        blob = new Blob([buffer.buffer], {
-          type: 'text/plain'
-        })
-        return blob
-
-      _callback = (outputBlob = null) ->
-        fd = new FormData()
-        fd.append(Constant.Gallery.Key.PROJECT_ID, PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
-        fd.append(Constant.Gallery.Key.TITLE, title)
-        fd.append(Constant.Gallery.Key.CAPTION, $('.caption_markup:first', root).val())
-        fd.append(Constant.Gallery.Key.THUMBNAIL_IMG, outputBlob);
-        tags = $('.select_tag a', root).html()
-        if tags?
-          fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html())
-        else
-          fd.append(Constant.Gallery.Key.TAGS, null)
-        $.ajax(
-          {
-            url: "/gallery/save_state"
-            type: "POST"
-            data: fd
-            processData: false
-            contentType: false
-            success: (data)->
-              # 正常完了処理
-
-              # コールバック
-              if callback?
-                callback()
-
-                # 詳細画面に遷移
-
-            error: (data) ->
-          }
-        )
-
-      if window.captureCanvas?
-        # Blob作成
-        ua = window.navigator.userAgent.toLowerCase()
-        if ua.indexOf('firefox') >= 0
-          window.captureCanvas.toBlob(_callback)
-        else
-          blob = _toBlob(window.captureCanvas)
-          _callback.call(@, blob)
+      fd = new FormData(document.getElementById('upload_form'))
+      tags = $('.select_tag a', root).html()
+      if tags?
+        fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html())
       else
-        _callback.call(@)
+        fd.append(Constant.Gallery.Key.TAGS, null)
+      xhr = new XMLHttpRequest();
+      xhr.open("POST" , 'gallery/save_state');
+      xhr.send(fd);
 
     # 確認ダイアログ
     if window.confirm(I18n.t('message.dialog.update_gallery'))
@@ -158,41 +112,15 @@ class Upload
   # 前画面のキャプチャ作成
   @makeCapture = (canvas) ->
     root = $('#upload_wrapper')
-    $(".capture", root).attr('src', canvas.toDataURL('image/png'))
+    png = canvas.toDataURL('image/png')
+    $(".capture", root).attr('src', png)
+    $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png)
     width = parseInt($(canvas).attr('width'))
     height = parseInt($(canvas).attr('height'))
     if width > height
       $(".capture", root).css({width: '100%', height: 'auto'})
     else
       $(".capture", root).css({width: 'auto', height: '100%'})
-
-#    # blob作成
-#    _toBlob = (canvas) ->
-#      base64 = canvas.toDataURL('image/png')
-#      # Base64からバイナリへ変換
-#      bin = atob(base64.replace(/^.*,/, ''))
-#      buffer = new Uint8Array(bin.length)
-#      for i in [0..(bin.length - 1)]
-#        buffer[i] = bin.charCodeAt(i)
-#      # Blobを作成
-#      blob = new Blob([buffer.buffer], {
-#        type: 'text/plain'
-#      })
-#      return blob
-#
-#    _callback = (outputBlob = null) ->
-#      # Imgにセット
-#      root = $('#upload_wrapper')
-#      url = URL.createObjectURL(outputBlob)
-#      $(".capture", root).attr('src', url)
-#
-#    # Blob作成
-#    ua = window.navigator.userAgent.toLowerCase()
-#    if ua.indexOf('firefox') >= 0
-#      window.captureCanvas.toBlob(_callback)
-#    else
-#      blob = _toBlob(window.captureCanvas)
-#      _callback.call(@, blob)
 
 $ ->
   Upload.initEvent()

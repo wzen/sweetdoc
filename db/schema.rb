@@ -57,15 +57,15 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   end
 
   create_table "galleries", force: true do |t|
-    t.string   "title",                            null: false
+    t.string   "title",                                             null: false
     t.text     "caption"
-    t.binary   "thumbnail_img"
-    t.integer  "screen_width",                     null: false
-    t.integer  "screen_height",                    null: false
+    t.binary   "thumbnail_img",    limit: 16777215
+    t.integer  "screen_width",                                      null: false
+    t.integer  "screen_height",                                     null: false
     t.boolean  "show_guide"
     t.boolean  "show_page_num"
     t.boolean  "show_chapter_num"
-    t.boolean  "del_flg",          default: false
+    t.boolean  "del_flg",                           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -276,16 +276,16 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   create_table "users", force: true do |t|
     t.string   "name"
     t.string   "uid"
-    t.integer  "user_auth_id",           default: 3,     null: false
-    t.string   "email",                                  null: false
-    t.string   "encrypted_password",                     null: false
-    t.boolean  "guest",                  default: false
+    t.integer  "user_auth_id",                            default: 3,     null: false
+    t.string   "email",                                                   null: false
+    t.string   "encrypted_password",                                      null: false
+    t.boolean  "guest",                                   default: false
     t.string   "provider"
-    t.binary   "thumbnail_img"
+    t.binary   "thumbnail_img",          limit: 16777215
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,     null: false
+    t.integer  "sign_in_count",                           default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"

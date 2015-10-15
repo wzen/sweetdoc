@@ -309,7 +309,7 @@ class RunCommon
     target = '_uploadgallery'
     window.open("about:blank", target)
     root = $('#nav')
-    $(".#{Constant.Gallery.Key.PROJECT_ID}", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+    $("input[name='#{Constant.Gallery.Key.PROJECT_ID}']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
     document.upload_gallery_form.target = target
     setTimeout( ->
       document.upload_gallery_form.submit()

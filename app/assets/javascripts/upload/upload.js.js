@@ -20,9 +20,9 @@ Upload = (function() {
         return $(this).val('');
       }
     });
-    $('.upload_button', root).off('click');
-    return $('.upload_button', root).on('click', function() {
-      return Upload.makeCapture(root);
+    $('.upload_button').off('click');
+    return $('.upload_button').on('click', function() {
+      return Upload.uploadToGallery(root);
     });
   };
 
@@ -89,71 +89,27 @@ Upload = (function() {
     }
   };
 
-  Upload.makeCapture = function(root, callback) {
+  Upload.uploadToGallery = function(root, callback) {
     var _saveGallery, title;
     if (callback == null) {
       callback = null;
     }
-    title = $('.title:first', root).val();
+    title = $("input[name='" + Constant.Gallery.Key.TITLE + "']", root).val();
     if (title.length === 0) {
       return;
     }
     _saveGallery = function() {
-      var _callback, _toBlob, blob, ua;
-      _toBlob = function(canvas) {
-        var base64, bin, blob, buffer, i, j, ref;
-        base64 = canvas.toDataURL('image/png');
-        bin = atob(base64.replace(/^.*,/, ''));
-        buffer = new Uint8Array(bin.length);
-        for (i = j = 0, ref = bin.length - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
-          buffer[i] = bin.charCodeAt(i);
-        }
-        blob = new Blob([buffer.buffer], {
-          type: 'text/plain'
-        });
-        return blob;
-      };
-      _callback = function(outputBlob) {
-        var fd, tags;
-        if (outputBlob == null) {
-          outputBlob = null;
-        }
-        fd = new FormData();
-        fd.append(Constant.Gallery.Key.PROJECT_ID, PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-        fd.append(Constant.Gallery.Key.TITLE, title);
-        fd.append(Constant.Gallery.Key.CAPTION, $('.caption_markup:first', root).val());
-        fd.append(Constant.Gallery.Key.THUMBNAIL_IMG, outputBlob);
-        tags = $('.select_tag a', root).html();
-        if (tags != null) {
-          fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html());
-        } else {
-          fd.append(Constant.Gallery.Key.TAGS, null);
-        }
-        return $.ajax({
-          url: "/gallery/save_state",
-          type: "POST",
-          data: fd,
-          processData: false,
-          contentType: false,
-          success: function(data) {
-            if (callback != null) {
-              return callback();
-            }
-          },
-          error: function(data) {}
-        });
-      };
-      if (window.captureCanvas != null) {
-        ua = window.navigator.userAgent.toLowerCase();
-        if (ua.indexOf('firefox') >= 0) {
-          return window.captureCanvas.toBlob(_callback);
-        } else {
-          blob = _toBlob(window.captureCanvas);
-          return _callback.call(this, blob);
-        }
+      var fd, tags, xhr;
+      fd = new FormData(document.getElementById('upload_form'));
+      tags = $('.select_tag a', root).html();
+      if (tags != null) {
+        fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html());
       } else {
-        return _callback.call(this);
+        fd.append(Constant.Gallery.Key.TAGS, null);
       }
+      xhr = new XMLHttpRequest();
+      xhr.open("POST", 'gallery/save_state');
+      return xhr.send(fd);
     };
     if (window.confirm(I18n.t('message.dialog.update_gallery'))) {
       return _saveGallery.call(this);
@@ -161,9 +117,11 @@ Upload = (function() {
   };
 
   Upload.makeCapture = function(canvas) {
-    var height, root, width;
+    var height, png, root, width;
     root = $('#upload_wrapper');
-    $(".capture", root).attr('src', canvas.toDataURL('image/png'));
+    png = canvas.toDataURL('image/png');
+    $(".capture", root).attr('src', png);
+    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(png);
     width = parseInt($(canvas).attr('width'));
     height = parseInt($(canvas).attr('height'));
     if (width > height) {

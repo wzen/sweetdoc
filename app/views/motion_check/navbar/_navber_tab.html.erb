@@ -29,7 +29,7 @@
                     <a class="menu-upload-gallery" title="Upload Document"><%= image_tag("nav/upload.png", size:'24x24') %></a>
                     <div style="display: none">
                         <%= form_tag('/upload', method: :post, name: 'upload_gallery_form') do %>
-                            <input class="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="">
+                            <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="">
                         <% end %>
                     </div>
                 </li>

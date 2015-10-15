@@ -5,7 +5,7 @@ class UploadController < ApplicationController
 
     user_id = current_or_guest_user.id
     project_id = params[Const::Gallery::Key::PROJECT_ID]
-    if project_id == nil || title == nil || title.length == 0
+    if project_id == nil
       # エラー
       @message = I18n.t('message.database.item_state.save.error')
       render

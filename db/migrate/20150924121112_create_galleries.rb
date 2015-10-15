@@ -3,7 +3,7 @@ class CreateGalleries < ActiveRecord::Migration
     create_table :galleries do |t|
       t.string :title, null: false
       t.text :caption
-      t.binary :thumbnail_img
+      t.binary :thumbnail_img, limit: 10.megabyte
       t.integer :screen_width, null: false
       t.integer :screen_height, null: false
       t.boolean :show_guide
