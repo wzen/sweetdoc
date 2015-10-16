@@ -148,7 +148,6 @@ class PageValueState
               end
             end
           end
-
         end
       end
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
@@ -157,6 +156,8 @@ class PageValueState
   end
 
   def self.last_user_pagevalue_search_sql(user_id, project_id = nil)
+    # FIXME:
+
     project_filter = ''
     if project_id != nil && project_id != ''
       project_filter = "AND ump_sub.project_id = #{project_id}"
@@ -179,7 +180,6 @@ class PageValueState
         FROM user_pagevalues up_sub
         INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
         WHERE upm_sub.user_id = 2
-
         AND up_sub.del_flg = 0
         AND upm_sub.del_flg = 0
         GROUP BY upm_sub.project_id

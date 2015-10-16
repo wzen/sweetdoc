@@ -22,6 +22,7 @@ class PageValueStateController < ApplicationController
   end
 
   def user_pagevalue_list
+    # 現在未使用
     user_id = current_or_guest_user.id
     project_id = params[Const::ServerStorage::Key::PROJECT_ID].to_i
     @user_pagevalue_list = PageValueState.get_user_pagevalue_save_list(user_id, project_id)

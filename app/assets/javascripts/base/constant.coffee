@@ -107,6 +107,7 @@ if gon?
       class @Key
         @MESSAGE = constant.Gallery.Key.MESSAGE
         @GALLERY_ID = constant.Gallery.Key.GALLERY_ID
+        @GALLERY_ACCESS_TOKEN = constant.Gallery.Key.GALLERY_ACCESS_TOKEN
         @PROJECT_ID = constant.Gallery.Key.PROJECT_ID
         @TAGS = constant.Gallery.Key.TAGS
         @INSTANCE_PAGE_VALUE = constant.Gallery.Key.INSTANCE_PAGE_VALUE

@@ -19,11 +19,11 @@ class GalleryController < ApplicationController
     # Constantの設定
     init_const
 
-    galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
+    access_token = params[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]
     # ViewCountをupdate
-    Gallery.add_view_statistic_count(galiery_id, Date.today)
+    Gallery.add_view_statistic_count(access_token, Date.today)
     # データを取得
-    @pagevalues, @message, @title, @caption, @item_js_list, @gallery_view_count, @gallery_bookmark_count = Gallery.load_contents_detail(galiery_id)
+    @pagevalues, @message, @title, @caption, @item_js_list, @gallery_view_count, @gallery_bookmark_count = Gallery.firstload_contents(access_token)
   end
 
   def run_window
@@ -60,8 +60,9 @@ class GalleryController < ApplicationController
 
   def load_state
     user_id = current_or_guest_user.id
-    galiery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
-    @contents_detail = Gallery.load_state(galiery_id, user_id)
+    gallery_access_token = params[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]
+    page_num = params[Const::Gallery::Key::PAGE_NUM].to_i
+    @contents_detail = Gallery.load_page_contents(gallery_access_token, user_id, page_num)
   end
 
   def get_contents
@@ -87,9 +88,9 @@ class GalleryController < ApplicationController
 
   def add_bookmark
     user_id = current_or_guest_user.id
-    gallery_id = params[Const::Gallery::Key::GALLERY_ID].to_i
+    gallery_access_token = params[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]
     note = params[Const::Gallery::Key::NOTE]
-    Gallery.add_bookmark(user_id, gallery_id, note, Date.today)
+    Gallery.add_bookmark(user_id, gallery_access_token, note, Date.today)
   end
 
 end

@@ -37,6 +37,7 @@ class Gallery < ActiveRecord::Base
         p = Project.find(project_id)
         # Gallery レコード追加
         g = self.new({
+                         access_token: generate_access_token,
                          title: title,
                          caption: caption,
                          thumbnail_img: thumbnail_img,
@@ -99,37 +100,39 @@ class Gallery < ActiveRecord::Base
         # Tag レコード追加
         save_tag(tags, gallery_id)
 
+        return I18n.t('message.database.item_state.save.success'), g.access_token
       end
-
-      return I18n.t('message.database.item_state.save.success'), gallery_id
     rescue => e
       # 更新失敗
       return I18n.t('message.database.item_state.save.error'), nil
     end
   end
 
-  def self.add_view_statistic_count(gallery_id, date)
+  def self.add_view_statistic_count(access_token, date)
     begin
-        gvs = GalleryViewStatistic.where({gallery_id: gallery_id, view_day: date})
-        if gvs == nil
-          # 新規作成
-          gvs = GalleryViewStatistic.new({
-                                             gallery_id: gallery_id,
-                                             view_day: date
-                                         })
-        else
-          gvs.count += 1
-        end
-        gvs.save!
+      g = self.find_by({access_token: access_token, del_flg: false})
+      gvs = GalleryViewStatistic.where({gallery_id: g.id, view_day: date})
+      if gvs == nil
+        # 新規作成
+        gvs = GalleryViewStatistic.new({
+                                           gallery_id: g.id,
+                                           view_day: date
+                                       })
+      else
+        gvs.count += 1
+      end
+      gvs.save!
     rescue => e
       # 更新失敗
       return I18n.t('message.database.item_state.save.error')
     end
   end
 
-  def self.add_bookmark(user_id, gallery_id, note, date)
+  def self.add_bookmark(user_id, gallery_access_token, note, date)
     begin
       ActiveRecord::Base.transaction do
+        g = self.find_by({access_token: gallery_access_token, del_flg: false})
+        gallery_id = g.id
         gb = GalleryBookmark.where({gallery_id: gallery_id, user_id: user_id})
         # 既にブックマークが存在する場合は処理なし
         if gb == nil
@@ -324,59 +327,106 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.load_contents_detail(gallery_id)
-    gallery = self.where(id: gallery_id, del_flg: false)
-    if gallery == nil
+  def self.firstload_contents(access_token, page_num = 1)
+    sql = <<-"SQL"
+      SELECT g.* ,
+             u.name as username, u.thumbnail_img as user_thumbnail_img,
+             gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gbs.count as bookmark_count, gvs.count as view_count
+      FROM galleries g
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id
+      INNER JOIN users u ON upm.user_id = u.id
+      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = #{page_num} AND gipp.del_flg = 0
+      LEFT JOIN gallery_instance_pagevalues gip ON gipp.gallery_instance_pagevalue_id = gip.id AND gip.del_flg = 0
+      LEFT JOIN gallery_event_pagevalue_pagings gepp ON g.id = gepp.gallery_id AND gipp.page_num = gepp.page_num AND gepp.del_flg = 0
+      LEFT JOIN gallery_event_pagevalues gep ON gepp.gallery_event_pagevalue_id = gep.id AND gep.del_flg = 0
+      LEFT JOIN gallery_bookmark_statistics gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
+      LEFT JOIN gallery_view_statistics gvs ON g.id = gvs.gallery_id AND gvs.del_flg = 0
+      WHERE g.access_token = #{access_token}
+      AND g.del_flg = 0
+      AND pgm.del_flg = 0
+      AND upm.del_flg = 0
+      AND u.del_flg = 0
+      LIMIT 1
+    SQL
+    ret_sql = ActiveRecord::Base.connection.select_all(sql)
+    pagevalues = ret_sql.to_hash
+    if pagevalues.count == 0
       message = I18n.t('message.database.item_state.load.error')
       return nil
     else
-      message = I18n.t('message.database.item_state.load.success')
+      pagevalues = pagevalues.first
+      ipd = pagevalues['instance_pagevalue_data']
+      epd = pagevalues['event_pagevalue_data']
 
-      # PageValue
-      ipd = load_instance_pagevalue(gallery_id)
-      epd, item_js_list = load_event_pagevalue_and_jslist(gallery_id)
+      # 必要なItemIdを調査
+      itemids = []
+      JSON.parse(epd).each do |k, v|
+        if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
+          item_id = v[Const::EventPageValueKey::ITEM_ID]
+          if item_id != nil
+            itemids << item_id
+          end
+        end
+      end
+      item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
       # 閲覧数 & ブックマーク数を取得
-      gallery_view_count, gallery_bookmark_count  = load_viewcount_and_bookmarkcount(gallery_id)
+      gallery_view_count = pagevalues['bookmark_count']
+      gallery_bookmark_count = pagevalues['view_count']
 
-      contents_detail = {}
-      contents_detail[Const::Gallery::Key::MESSAGE] = message
-      contents_detail[Const::Gallery::Key::TITLE] = gallery.title
-      contents_detail[Const::Gallery::Key::CAPTION] = gallery.caption
-      contents_detail[Const::Gallery::Key::ITEM_JS_LIST] = item_js_list
-      contents_detail[Const::Gallery::Key::INSTANCE_PAGE_VALUE] = ipd
-      contents_detail[Const::Gallery::Key::EVENT_PAGE_VALUE] = epd
-      contents_detail[Const::Gallery::Key::VIEW_COUNT] = gallery_view_count
-      contents_detail[Const::Gallery::Key::BOOKMARK_COUNT] = gallery_bookmark_count
-      return contents_detail
+      message = I18n.t('message.database.item_state.load.success')
+
+      return {
+          #general_pagevalues: general_pagevalues,
+          instance_pagevalues: ipd,
+          event_pagevalues: epd,
+      }, message, pagevalues['title'], pagevalues['caption'], item_js_list, gallery_view_count, gallery_bookmark_count
     end
   end
 
-  def self.load_state(gallery_id, user_id)
-    gallery = self.where(id: gallery_id, del_flg: false)
-    if gallery == nil
+  def self.load_page_contents(access_token, page_num, loaded_itemids)
+    ret_sql = <<-"SQL"
+      SELECT gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data
+      FROM galleries g
+      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = #{page_num} AND gipp.del_flg = 0
+      LEFT JOIN gallery_instance_pagevalues gip ON gipp.gallery_instance_pagevalue_id = gip.id AND gip.del_flg = 0
+      LEFT JOIN gallery_event_pagevalue_pagings gepp ON g.id = gepp.gallery_id AND gipp.page_num = gepp.page_num AND gepp.del_flg = 0
+      LEFT JOIN gallery_event_pagevalues gep ON gepp.event_pagevalue_id = gep.id AND gep.del_flg = 0
+      WHERE g.access_token = #{access_token}
+      AND g.del_flg = 0
+      LIMIT 1
+    SQL
+    ret_sql = ActiveRecord::Base.connection.select_all(sql)
+    pagevalues = ret_sql.to_hash
+    if pagevalues.count == 0
       message = I18n.t('message.database.item_state.load.error')
       return nil
     else
-      # ユーザIDのチェック
-      if user_id != nil && gallery.user_id != user_id
-        message = I18n.t('message.database.item_state.load.error')
-        return nil
+      pagevalues = pagevalues.first
+      ipd = pagevalues['instance_pagevalue_data']
+      epd = pagevalues['event_pagevalue_data']
+
+      # 必要なItemIdを調査
+      itemids = []
+      JSON.parse(epd).each do |k, v|
+        if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
+          item_id = v[Const::EventPageValueKey::ITEM_ID]
+          unless loaded_itemids.include?(item_id)
+            if item_id != nil
+              itemids << item_id
+            end
+          end
+        end
       end
+      item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
       message = I18n.t('message.database.item_state.load.success')
 
-      # PageValue
-      ipd = load_instance_pagevalue(gallery_id)
-      epd, item_js_list = load_event_pagevalue_and_jslist(gallery_id)
-
-      contents_detail = {}
-      contents_detail[Const::Gallery::Key::MESSAGE] = message
-      contents_detail[Const::Gallery::Key::TITLE] = gallery.title
-      contents_detail[Const::Gallery::Key::ITEM_JS_LIST] = item_js_list
-      contents_detail[Const::Gallery::Key::INSTANCE_PAGE_VALUE] = ipd
-      contents_detail[Const::Gallery::Key::EVENT_PAGE_VALUE] = epd
-      return contents_detail
+      return {
+          instance_pagevalues: ipd,
+          event_pagevalues: epd,
+      }, message, item_js_list
     end
   end
 
@@ -503,5 +553,10 @@ class Gallery < ActiveRecord::Base
     return gallery_view_statistic_count, gallery_bookmark_statistic_count
   end
 
-  private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount
+  def self.generate_access_token
+    tmp_token = SecureRandom.urlsafe_base64(22)
+    self.find_by(access_token: tmp_token).blank? ? tmp_token : generate_access_token
+  end
+
+  private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount, :generate_access_token
 end

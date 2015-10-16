@@ -184,6 +184,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         Key.GALLERY_ID = constant.Gallery.Key.GALLERY_ID;
 
+        Key.GALLERY_ACCESS_TOKEN = constant.Gallery.Key.GALLERY_ACCESS_TOKEN;
+
         Key.PROJECT_ID = constant.Gallery.Key.PROJECT_ID;
 
         Key.TAGS = constant.Gallery.Key.TAGS;

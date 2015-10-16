@@ -110,7 +110,7 @@ class Upload
         type: 'POST'
         success: (data) ->
           # Gallery Detail
-          window.location.href = "/gallery/detail?#{Constant.Gallery.Key.GALLERY_ID}=#{data.gallery_id}"
+          window.location.href = "/gallery/detail?#{Constant.Gallery.Key.GALLERY_ACCESS_TOKEN}=#{data.access_token}"
         error: (data) ->
           # Error
           alert(data.message)

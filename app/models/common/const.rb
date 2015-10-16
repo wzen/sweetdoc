@@ -199,6 +199,7 @@ class Const
     class Key
       MESSAGE = 'message'
       GALLERY_ID = 'gid'
+      GALLERY_ACCESS_TOKEN = 'g_at'
       PROJECT_ID = 'pid'
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
@@ -214,6 +215,7 @@ class Const
       SHOW_GUIDE = 'show_guide'
       SHOW_PAGE_NUM = 'show_page_num'
       SHOW_CHAPTER_NUM = 'show_chapter_num'
+      PAGE_NUM = 'p_n'
     end
 
     class SearchKey
