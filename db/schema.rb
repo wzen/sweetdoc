@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   end
 
   create_table "galleries", force: true do |t|
+    t.string   "access_token",     limit: 30,                       null: false
     t.string   "title",                                             null: false
     t.text     "caption"
     t.binary   "thumbnail_img",    limit: 16777215
@@ -69,6 +70,8 @@ ActiveRecord::Schema.define(version: 20151006163105) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "galleries", ["access_token"], name: "index_galleries_on_access_token", unique: true, using: :btree
 
   create_table "gallery_bookmark_statistics", force: true do |t|
     t.integer  "gallery_id",             null: false
@@ -274,7 +277,8 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "name"
+    t.string   "access_token",           limit: 15,                       null: false
+    t.string   "name",                                                    null: false
     t.string   "uid"
     t.integer  "user_auth_id",                            default: 3,     null: false
     t.string   "email",                                                   null: false
@@ -298,6 +302,7 @@ ActiveRecord::Schema.define(version: 20151006163105) do
     t.datetime "updated_at"
   end
 
+  add_index "users", ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

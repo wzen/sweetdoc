@@ -1,2 +1,2 @@
 json.message @message
-json.gallery_id @gallery_id
+json.access_token @access_token

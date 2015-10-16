@@ -23,7 +23,7 @@ class GalleryController < ApplicationController
     # ViewCountをupdate
     Gallery.add_view_statistic_count(galiery_id, Date.today)
     # データを取得
-    @pagevalues = Gallery.load_contents_detail(galiery_id)
+    @pagevalues, @message, @title, @caption, @item_js_list, @gallery_view_count, @gallery_bookmark_count = Gallery.load_contents_detail(galiery_id)
   end
 
   def run_window
@@ -38,7 +38,7 @@ class GalleryController < ApplicationController
     project_id = params[Const::Gallery::Key::PROJECT_ID]
     if project_id == nil || title == nil || title.length == 0
       # エラー
-      @message, @gallery_id = I18n.t('message.database.item_state.save.error')
+      @message, @access_token = I18n.t('message.database.item_state.save.error')
     else
       project_id = project_id.to_i
       caption = params[Const::Gallery::Key::CAPTION]
@@ -46,7 +46,7 @@ class GalleryController < ApplicationController
       show_guide = params[Const::Gallery::Key::SHOW_GUIDE]
       show_page_num = params[Const::Gallery::Key::SHOW_PAGE_NUM]
       show_chapter_num = params[Const::Gallery::Key::SHOW_CHAPTER_NUM]
-      @message, @gallery_id = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img, show_guide, show_page_num, show_chapter_num)
+      @message, @access_token = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img, show_guide, show_page_num, show_chapter_num)
     end
   end
 

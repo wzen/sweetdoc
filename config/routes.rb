@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   get 'gallery/detail'
   post 'gallery/save_state'
   post 'gallery/update_last_state'
-  post 'gallery/load_state'
+  #post 'gallery/load_state'
   get 'gallery/get_contents'
   get 'gallery/get_popular_and_recommend_tags'
   post 'gallery/add_bookmark'

@@ -1,6 +1,7 @@
 class CreateGalleries < ActiveRecord::Migration
   def change
     create_table :galleries do |t|
+      t.string :access_token, null: false, limit: 30
       t.string :title, null: false
       t.text :caption
       t.binary :thumbnail_img, limit: 10.megabyte
@@ -13,5 +14,7 @@ class CreateGalleries < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :galleries, :access_token,         unique: true
   end
 end

@@ -42,7 +42,6 @@ class MotionCheckController < ApplicationController
 
   private
   def setup_run_data
-
     @is_runwindow_reload = !request.post?
     unless @is_runwindow_reload
       user_id = current_or_guest_user.id

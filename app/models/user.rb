@@ -18,11 +18,17 @@ class User < ActiveRecord::Base
       u.email    = "guest_#{Time.now.to_i}#{rand(100)}@example.com"
       u.encrypted_password = [*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
       u.guest    = true
+      u.access_token = generate_access_token
     end
   end
 
   def active_for_authentication?
     return true
+  end
+
+  def self.generate_access_token
+    tmp_token = SecureRandom.urlsafe_base64(10)
+    self.find_by(access_token: tmp_token).blank? ? tmp_token : generate_access_token
   end
 
 end

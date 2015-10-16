@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   # Locale
   before_filter :set_locale
 
+  before_filter :configure_permitted_parameters, if: :devise_controller?
+
   def init_const
     # Constantの設定
     gon.const  = const_values(Const, {})
@@ -81,6 +83,12 @@ class ApplicationController < ActionController::Base
   def set_locale
     # TODO: サブドメインから引っ張るように修正
     I18n.locale = params[:locale] || I18n.default_locale
+  end
+
+  protected
+  def configure_permitted_parameters
+    #strong parametersを設定し、nameを許可
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:name, :email, :password, :password_confirmation) }
   end
 
 end
