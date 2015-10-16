@@ -308,5 +308,10 @@ class Const
       CONTENTS_FORK_NUM_CLASSNAME = 'con_fork_num_cn'
       CONTENTS_TAGS_CLASSNAME = 'con_tag_cn'
     end
+
+    class Key
+      TARGET_PAGES = 'targetpages'
+      LOADED_ITEM_IDS = 'lii'
+    end
   end
 end

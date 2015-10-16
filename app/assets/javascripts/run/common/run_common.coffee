@@ -15,6 +15,9 @@ class RunCommon
       @CONTENTS_CHAPTER_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME
       @CONTENTS_FORK_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_FORK_NUM_CLASSNAME
       @CONTENTS_TAGS_CLASSNAME = constant.Run.AttributeName.CONTENTS_TAGS_CLASSNAME
+    class @Key
+      @TARGET_PAGES = constant.Run.Key.TARGET_PAGES
+      @LOADED_ITEM_IDS = constant.Run.Key.LOADED_ITEM_IDS
 
   # 画面初期化
   @initView = ->
@@ -193,21 +196,24 @@ class RunCommon
         callback()
       return
 
+    data = {}
+    data[RunCommon.Key.TARGET_PAGES] = targetPages
+    # FIXME:
+    data[RunCommon.Key.LOADED_ITEM_IDS] = null
     $.ajax(
       {
         url: "/run/paging"
         type: "POST"
         dataType: "json"
-        data: {
-          targetPages: targetPages
-        }
+        data: data
         success: (data)->
-          if data.instance_pagevalue_hash != null
-            for k, v of data.instance_pagevalue_hash
-              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
-          if data.event_pagevalue_hash != null
-            for k, v of data.event_pagevalue_hash
-              PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+          if data.pagevalues?
+            if data.pagevalues.instance_pagevalue?
+              for k, v of data.pagevalues.instance_pagevalue
+                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+            if data.pagevalues.event_pagevalue?
+              for k, v of data.pagevalues.event_pagevalue
+                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
           # コールバック
           if callback?

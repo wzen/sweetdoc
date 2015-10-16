@@ -114,7 +114,7 @@ Upload = (function() {
         contentType: false,
         type: 'POST',
         success: function(data) {
-          return window.location.href = "/gallery/detail?" + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN + "=" + data.access_token;
+          return window.location.href = "/gallery/detail/" + data.access_token;
         },
         error: function(data) {
           return alert(data.message);

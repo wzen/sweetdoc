@@ -8,6 +8,9 @@ require 'gallery/gallery_instance_pagevalue'
 require 'gallery/gallery_instance_pagevalue_paging'
 require 'gallery/gallery_event_pagevalue'
 require 'gallery/gallery_event_pagevalue_paging'
+require 'gallery/gallery_view_statistic'
+require 'gallery/gallery_bookmark'
+require 'gallery/gallery_bookmark_statistic'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
@@ -18,7 +21,7 @@ class Gallery < ActiveRecord::Base
   has_many :gallery_view_statistics
   has_many :gallery_bookmark_statistics
   has_many :projects
-  has_many :project_gallery_maps
+  has_many :project_gallery_mapsX
 
   def self.save_state(
     user_id,
@@ -111,7 +114,7 @@ class Gallery < ActiveRecord::Base
   def self.add_view_statistic_count(access_token, date)
     begin
       g = self.find_by({access_token: access_token, del_flg: false})
-      gvs = GalleryViewStatistic.where({gallery_id: g.id, view_day: date})
+      gvs = GalleryViewStatistic.where({gallery_id: g.id, view_day: date}).first
       if gvs == nil
         # 新規作成
         gvs = GalleryViewStatistic.new({
@@ -342,7 +345,7 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_event_pagevalues gep ON gepp.gallery_event_pagevalue_id = gep.id AND gep.del_flg = 0
       LEFT JOIN gallery_bookmark_statistics gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       LEFT JOIN gallery_view_statistics gvs ON g.id = gvs.gallery_id AND gvs.del_flg = 0
-      WHERE g.access_token = #{access_token}
+      WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
       AND pgm.del_flg = 0
       AND upm.del_flg = 0
@@ -385,48 +388,49 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.load_page_contents(access_token, page_num, loaded_itemids)
+  def self.load_page_contents(access_token, target_pages, loaded_itemids)
+    pages = "(#{target_pages.join(',')})"
     ret_sql = <<-"SQL"
-      SELECT gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data
+      SELECT gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num
       FROM galleries g
-      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = #{page_num} AND gipp.del_flg = 0
+      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num IN #{pages} AND gipp.del_flg = 0
       LEFT JOIN gallery_instance_pagevalues gip ON gipp.gallery_instance_pagevalue_id = gip.id AND gip.del_flg = 0
       LEFT JOIN gallery_event_pagevalue_pagings gepp ON g.id = gepp.gallery_id AND gipp.page_num = gepp.page_num AND gepp.del_flg = 0
       LEFT JOIN gallery_event_pagevalues gep ON gepp.event_pagevalue_id = gep.id AND gep.del_flg = 0
-      WHERE g.access_token = #{access_token}
+      WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
-      LIMIT 1
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     pagevalues = ret_sql.to_hash
     if pagevalues.count == 0
-      message = I18n.t('message.database.item_state.load.error')
       return nil
     else
-      pagevalues = pagevalues.first
-      ipd = pagevalues['instance_pagevalue_data']
-      epd = pagevalues['event_pagevalue_data']
-
-      # 必要なItemIdを調査
+      ins = {}
+      ent = {}
       itemids = []
-      JSON.parse(epd).each do |k, v|
-        if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-          item_id = v[Const::EventPageValueKey::ITEM_ID]
-          unless loaded_itemids.include?(item_id)
-            if item_id != nil
-              itemids << item_id
+      pagevalues.each do |pagevalue|
+        ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = pagevalue['instance_pagevalue_data']
+        epd = pagevalue['event_pagevalue_data']
+        ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = epd
+
+        # 必要なItemIdを調査
+        JSON.parse(epd).each do |k, v|
+          if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
+            item_id = v[Const::EventPageValueKey::ITEM_ID]
+            unless loaded_itemids.include?(item_id)
+              if item_id != nil
+                itemids << item_id
+              end
             end
           end
         end
       end
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
-      message = I18n.t('message.database.item_state.load.success')
-
       return {
-          instance_pagevalues: ipd,
-          event_pagevalues: epd,
-      }, message, item_js_list
+          instance_pagevalues: ins,
+          event_pagevalues: ent
+      }, item_js_list
     end
   end
 

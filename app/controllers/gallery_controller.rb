@@ -19,7 +19,7 @@ class GalleryController < ApplicationController
     # Constantの設定
     init_const
 
-    access_token = params[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]
+    access_token = params[:access_token]
     # ViewCountをupdate
     Gallery.add_view_statistic_count(access_token, Date.today)
     # データを取得

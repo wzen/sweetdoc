@@ -33,6 +33,16 @@ RunCommon = (function() {
       return AttributeName;
 
     })();
+    RunCommon.Key = (function() {
+      function Key() {}
+
+      Key.TARGET_PAGES = constant.Run.Key.TARGET_PAGES;
+
+      Key.LOADED_ITEM_IDS = constant.Run.Key.LOADED_ITEM_IDS;
+
+      return Key;
+
+    })();
   }
 
   RunCommon.initView = function() {
@@ -186,7 +196,7 @@ RunCommon = (function() {
   };
 
   RunCommon.loadPagingPageValue = function(loadPageNum, callback, forceUpdate) {
-    var className, i, l, lastPageNum, ref, ref1, section, targetPages;
+    var className, data, i, l, lastPageNum, ref, ref1, section, targetPages;
     if (callback == null) {
       callback = null;
     }
@@ -212,27 +222,30 @@ RunCommon = (function() {
       }
       return;
     }
+    data = {};
+    data[RunCommon.Key.TARGET_PAGES] = targetPages;
+    data[RunCommon.Key.LOADED_ITEM_IDS] = null;
     return $.ajax({
       url: "/run/paging",
       type: "POST",
       dataType: "json",
-      data: {
-        targetPages: targetPages
-      },
+      data: data,
       success: function(data) {
         var k, ref2, ref3, v;
-        if (data.instance_pagevalue_hash !== null) {
-          ref2 = data.instance_pagevalue_hash;
-          for (k in ref2) {
-            v = ref2[k];
-            PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+        if (data.pagevalues != null) {
+          if (data.pagevalues.instance_pagevalue != null) {
+            ref2 = data.pagevalues.instance_pagevalue;
+            for (k in ref2) {
+              v = ref2[k];
+              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+            }
           }
-        }
-        if (data.event_pagevalue_hash !== null) {
-          ref3 = data.event_pagevalue_hash;
-          for (k in ref3) {
-            v = ref3[k];
-            PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+          if (data.pagevalues.event_pagevalue != null) {
+            ref3 = data.pagevalues.event_pagevalue;
+            for (k in ref3) {
+              v = ref3[k];
+              PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+            }
           }
         }
         if (callback != null) {

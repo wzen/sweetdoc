@@ -74,17 +74,19 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   add_index "galleries", ["access_token"], name: "index_galleries_on_access_token", unique: true, using: :btree
 
   create_table "gallery_bookmark_statistics", force: true do |t|
-    t.integer  "gallery_id",             null: false
+    t.integer  "gallery_id",                 null: false
     t.integer  "count",      default: 0
     t.date     "view_day"
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "gallery_bookmarks", force: true do |t|
-    t.integer  "user_id",    null: false
-    t.integer  "gallery_id", null: false
+    t.integer  "user_id",                    null: false
+    t.integer  "gallery_id",                 null: false
     t.text     "note"
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -139,9 +141,10 @@ ActiveRecord::Schema.define(version: 20151006163105) do
   end
 
   create_table "gallery_view_statistics", force: true do |t|
-    t.integer  "gallery_id",             null: false
+    t.integer  "gallery_id",                 null: false
     t.integer  "count",      default: 0
     t.date     "view_day"
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -298,13 +301,13 @@ ActiveRecord::Schema.define(version: 20151006163105) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
+    t.boolean  "del_flg",                                 default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "users", ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

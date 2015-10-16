@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   get 'gallery/index'
   get 'gallery/grid'
   get 'gallery/detail'
+  match 'gallery/detail/:access_token' => 'gallery#detail', via: :get
   post 'gallery/save_state'
   post 'gallery/update_last_state'
   #post 'gallery/load_state'
