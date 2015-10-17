@@ -11,6 +11,7 @@ require 'gallery/gallery_event_pagevalue_paging'
 require 'gallery/gallery_view_statistic'
 require 'gallery/gallery_bookmark'
 require 'gallery/gallery_bookmark_statistic'
+require 'pagevalue/pagevalue_state'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
@@ -405,7 +406,7 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.load_page_contents(access_token, target_pages, loaded_itemids)
+  def self.paging(access_token, target_pages, loaded_itemids)
     pages = "(#{target_pages.join(',')})"
     ret_sql = <<-"SQL"
       SELECT ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num
@@ -429,22 +430,13 @@ class Gallery < ActiveRecord::Base
       ent = {}
       itemids = []
       pagevalues.each do |pagevalue|
-        gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = pagevalue['general_pagevalue_data']
-        ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = pagevalue['instance_pagevalue_data']
+        gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = pagevalue['general_pagevalue_data']
+        ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = pagevalue['instance_pagevalue_data']
         epd = pagevalue['event_pagevalue_data']
-        ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = epd
+        ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
-        # 必要なItemIdを調査
-        JSON.parse(epd).each do |k, v|
-          if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-            item_id = v[Const::EventPageValueKey::ITEM_ID]
-            unless loaded_itemids.include?(item_id)
-              if item_id != nil
-                itemids << item_id
-              end
-            end
-          end
-        end
+        need_load_itemids = PageValueState.extract_need_load_itemids(epd)
+        itemids = need_load_itemids - loaded_itemids
       end
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
@@ -541,11 +533,11 @@ class Gallery < ActiveRecord::Base
     return ipd
   end
 
-  def self.load_event_pagevalue_and_jslist(gallery_id)
+  def self.load_event_pagevalue_and_jslist(access_token, loaded_itemids = [])
     item_js_list = []
     epd = null
     # EventPageValue
-    gallery_event_pages = GalleryEventPagevaluePaging.joins(:gallery, :gallery_event_pagevalue).where(gallery: {id: gallery_id})
+    gallery_event_pages = GalleryEventPagevaluePaging.joins(:gallery, :gallery_event_pagevalue).where(gallery: {access_token: access_token})
                               .select('gallery_event_pagevalue_pagings.*, gallery_event_pagevalues.data as data')
     if gallery_event_pages.size > 0
       itemids = []
@@ -555,16 +547,8 @@ class Gallery < ActiveRecord::Base
         epd[key] = p.data
 
         # JSの読み込みが必要なItemIdを調査
-        JSON.parse(p.data).each do |k, v|
-          if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-            item_id = v[Const::EventPageValueKey::ITEM_ID]
-            if item_id != nil
-              unless itemids.include?(item_id)
-                itemids << item_id
-              end
-            end
-          end
-        end
+        itemids = PageValueState.extract_need_load_itemids(epd[key])
+        itemids -= loaded_itemids
       end
 
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))

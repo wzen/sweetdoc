@@ -23,7 +23,7 @@ class RunController < ApplicationController
       @pagevalues, @item_js_list = MotionCheck.paging(user_id, project_id, target_pages, loaded_itemids)
     else
       access_token = params[Const::Run::Key::ACCESS_TOKEN]
-      @pagevalues, @item_js_list = Gallery.load_page_contents(access_token, target_pages, loaded_itemids)
+      @pagevalues, @item_js_list = Gallery.paging(access_token, target_pages, loaded_itemids)
     end
   end
 

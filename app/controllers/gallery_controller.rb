@@ -58,13 +58,6 @@ class GalleryController < ApplicationController
     @message = Gallery.update_last_state(user_id, tags, i_page_values, e_page_values)
   end
 
-  def load_state
-    user_id = current_or_guest_user.id
-    gallery_access_token = params[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]
-    page_num = params[Const::Gallery::Key::PAGE_NUM].to_i
-    @contents_detail = Gallery.load_page_contents(gallery_access_token, user_id, page_num)
-  end
-
   def get_contents
     show_head = params[Const::Gallery::SearchKey::SHOW_HEAD].to_i
     show_limit = params[Const::Gallery::SearchKey::SHOW_LIMIT].to_i

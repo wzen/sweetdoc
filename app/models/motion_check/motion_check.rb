@@ -1,5 +1,6 @@
 require 'item/item'
 require 'item/item_js'
+require 'pagevalue/pagevalue_state'
 
 class MotionCheck
   def self.paging(user_id, project_id, target_pages, loaded_itemids = [])
@@ -51,20 +52,8 @@ class MotionCheck
           ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
           # 必要なItemIdを調査
-          JSON.parse(epd).each do |kk, vv|
-            if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
-              vv.each do |k, v|
-                if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-                  item_id = v[Const::EventPageValueKey::ITEM_ID]
-                  unless loaded_itemids.include?(item_id)
-                    if item_id != nil
-                      itemids << item_id
-                    end
-                  end
-                end
-              end
-            end
-          end
+          need_load_itemids = PageValueState.extract_need_load_itemids(epd)
+          itemids = need_load_itemids - loaded_itemids
         end
       end
 

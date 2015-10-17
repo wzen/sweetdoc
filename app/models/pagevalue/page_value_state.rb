@@ -138,16 +138,8 @@ class PageValueState
           epd[key] = pagevalue['event_pagevalue_data']
 
           # 必要なItemIdを調査
-          JSON.parse(epd[key]).each do |k, v|
-            if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-              item_id = v[Const::EventPageValueKey::ITEM_ID]
-              if item_id != nil
-                unless loaded_itemids.include?(item_id)
-                  itemids << item_id
-                end
-              end
-            end
-          end
+          itemids = PageValueState.extract_need_load_itemids(epd[key])
+          itemids -= loaded_itemids
         end
       end
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
@@ -334,6 +326,25 @@ class PageValueState
         end
       end
     end
+  end
+
+  def self.extract_need_load_itemids(event_page_value)
+    itemids = []
+    JSON.parse(event_page_value).each do |kk, vv|
+      if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
+        vv.each do |k, v|
+          if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
+            item_id = v[Const::EventPageValueKey::ITEM_ID]
+            if item_id != nil
+              unless itemids.include?(item_id)
+                itemids << item_id
+              end
+            end
+          end
+        end
+      end
+    end
+    return itemids
   end
 
   private_class_method :last_user_pagevalue_search_sql, :save_general_pagevalue, :save_setting_pagevalue, :save_instance_pagevalue, :save_event_pagevalue
