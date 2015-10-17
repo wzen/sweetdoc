@@ -401,9 +401,14 @@ class Gallery < ActiveRecord::Base
 
       pagevalues, creator = Run.setup_data(pagevalues['user_id'].to_i, gpd, ipd, epd, page_num)
 
+      show_options = {}
+      show_options[Const::Gallery::Key::SHOW_GUIDE] = pagevalues['show_guide']
+      show_options[Const::Gallery::Key::SHOW_PAGE_NUM] = pagevalues['show_page_num']
+      show_options[Const::Gallery::Key::SHOW_CHAPTER_NUM] = pagevalues['show_chapter_num']
+
       message = I18n.t('message.database.item_state.load.success')
 
-      return pagevalues, message, pagevalues['title'], pagevalues['caption'], pagevalues['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count
+      return pagevalues, message, pagevalues['title'], pagevalues['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options
     end
   end
 

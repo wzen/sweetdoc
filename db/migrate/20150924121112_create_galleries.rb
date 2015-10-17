@@ -8,9 +8,9 @@ class CreateGalleries < ActiveRecord::Migration
       t.integer :screen_width, null: false
       t.integer :screen_height, null: false
       t.integer :page_max, default: 1
-      t.boolean :show_guide
-      t.boolean :show_page_num
-      t.boolean :show_chapter_num
+      t.boolean :show_guide, default: true
+      t.boolean :show_page_num, default: false
+      t.boolean :show_chapter_num, default: false
       t.boolean :del_flg, :default => false
 
       t.timestamps

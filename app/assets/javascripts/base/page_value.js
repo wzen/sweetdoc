@@ -376,7 +376,11 @@ PageValue = (function() {
       if (val === null || val === "null") {
         return '';
       }
-      kyName += "[" + ky + "]";
+      if (kyName != null) {
+        kyName += "[" + ky + "]";
+      } else {
+        kyName = ky;
+      }
       if (jQuery.type(val) !== "object" && jQuery.type(val) !== "array") {
         val = Common.sanitaizeEncode(val);
         name = "";

@@ -280,7 +280,10 @@ class PageValue
       if val == null || val == "null"
         return ''
 
-      kyName += "[#{ky}]"
+      if kyName?
+        kyName += "[#{ky}]"
+      else
+        kyName = ky
       if jQuery.type(val) != "object" && jQuery.type(val) != "array"
         # サニタイズする
         val = Common.sanitaizeEncode(val)

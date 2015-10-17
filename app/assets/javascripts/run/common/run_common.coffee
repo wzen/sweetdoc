@@ -222,11 +222,10 @@ class RunCommon
               if data.pagevalues.event_pagevalue?
                 for k, v of data.pagevalues.event_pagevalue
                   PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+            # コールバック
+            if callback?
+              callback()
           )
-
-          # コールバック
-          if callback?
-            callback()
         error: (data) ->
       }
     )

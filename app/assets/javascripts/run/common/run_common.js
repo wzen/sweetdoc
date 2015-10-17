@@ -237,8 +237,8 @@ RunCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        Common.setupJsByList(data.itemJsList, function() {
-          var k, ref2, ref3, ref4, results, v;
+        return Common.setupJsByList(data.itemJsList, function() {
+          var k, ref2, ref3, ref4, v;
           if (data.pagevalues != null) {
             if (data.pagevalues.general_pagevalue != null) {
               ref2 = data.pagevalues.general_pagevalue;
@@ -256,18 +256,16 @@ RunCommon = (function() {
             }
             if (data.pagevalues.event_pagevalue != null) {
               ref4 = data.pagevalues.event_pagevalue;
-              results = [];
               for (k in ref4) {
                 v = ref4[k];
-                results.push(PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v)));
+                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
               }
-              return results;
             }
           }
+          if (callback != null) {
+            return callback();
+          }
         });
-        if (callback != null) {
-          return callback();
-        }
       },
       error: function(data) {}
     });

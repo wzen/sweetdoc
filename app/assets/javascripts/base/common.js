@@ -823,14 +823,26 @@ Common = (function() {
   };
 
   Common.setupJsByList = function(itemJsList, callback) {
-    var loadedCount;
+    var _callback, loadedCount;
     if (callback == null) {
       callback = null;
     }
-    if (itemJsList.length === 0) {
-      if (callback != null) {
-        callback();
+    _callback = function(item_id) {
+      if (item_id == null) {
+        item_id = null;
       }
+      if (item_id != null) {
+        PageValue.addItemInfo(item_id);
+        if (typeof EventConfig !== "undefined" && EventConfig !== null) {
+          EventConfig.addEventConfigContents(item_id);
+        }
+      }
+      if (callback != null) {
+        return callback();
+      }
+    };
+    if (itemJsList.length === 0) {
+      _callback.call(this);
       return;
     }
     loadedCount = 0;
@@ -841,9 +853,7 @@ Common = (function() {
         window.itemInitFuncList[itemId]();
         loadedCount += 1;
         if (loadedCount >= itemJsList.length) {
-          if (callback != null) {
-            callback();
-          }
+          _callback.call(this, d.item_id);
         }
         return;
       }
@@ -852,18 +862,12 @@ Common = (function() {
           css_temp: d.css_temp
         };
       }
-      Common.availJs(itemId, d.js_src, option, function() {
+      return Common.availJs(itemId, d.js_src, option, function() {
         loadedCount += 1;
         if (loadedCount >= itemJsList.length) {
-          if (callback != null) {
-            return callback();
-          }
+          return _callback.call(this, d.item_id);
         }
       });
-      PageValue.addItemInfo(d.item_id);
-      if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-        return EventConfig.addEventConfigContents(d.item_id);
-      }
     });
   };
 

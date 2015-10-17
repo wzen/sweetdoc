@@ -688,9 +688,17 @@ class Common
 
   # JSファイルを適用する
   @setupJsByList = (itemJsList, callback = null) ->
-    if itemJsList.length == 0
+
+    _callback = (item_id = null) ->
+      if item_id?
+        PageValue.addItemInfo(item_id)
+        if EventConfig?
+          EventConfig.addEventConfigContents(item_id)
       if callback?
         callback()
+
+    if itemJsList.length == 0
+      _callback.call(@)
       return
 
     loadedCount = 0
@@ -702,8 +710,7 @@ class Common
         loadedCount += 1
         if loadedCount >= itemJsList.length
           # 全て読み込んだ後
-          if callback?
-            callback()
+          _callback.call(@, d.item_id)
         return
 
       if d.css_temp?
@@ -713,12 +720,8 @@ class Common
         loadedCount += 1
         if loadedCount >= itemJsList.length
           # 全て読み込んだ後
-          if callback?
-            callback()
+          _callback.call(@, d.item_id)
       )
-      PageValue.addItemInfo(d.item_id)
-      if EventConfig?
-        EventConfig.addEventConfigContents(d.item_id)
     )
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等

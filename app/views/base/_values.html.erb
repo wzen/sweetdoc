@@ -1,5 +1,5 @@
 <%
-   is_runwindow_reload = false if defined?(is_runwindow_reload) != nil && is_runwindow_reload.nil?
+   is_runwindow_reload = false if defined?(is_runwindow_reload) == nil || is_runwindow_reload.nil?
    if defined?(pagevalues) != nil && !pagevalues.nil?
      general_pagevalues = pagevalues[:general_pagevalues]
      instance_pagevalues = pagevalues[:instance_pagevalues]
