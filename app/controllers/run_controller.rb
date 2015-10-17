@@ -14,6 +14,9 @@ class RunController < ApplicationController
 
     target_pages = params[Const::Run::Key::TARGET_PAGES]
     loaded_itemids = params[Const::Run::Key::LOADED_ITEM_IDS]
+    if loaded_itemids != nil
+      loaded_itemids = JSON.parse(loaded_itemids)
+    end
     if :motion_check_controller?
       user_id = current_or_guest_user.id
       project_id = params[Const::Run::Key::PROJECT_ID]

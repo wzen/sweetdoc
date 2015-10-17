@@ -244,14 +244,14 @@ RunCommon = (function() {
               ref2 = data.pagevalues.general_pagevalue;
               for (k in ref2) {
                 v = ref2[k];
-                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
               }
             }
             if (data.pagevalues.instance_pagevalue != null) {
               ref3 = data.pagevalues.instance_pagevalue;
               for (k in ref3) {
                 v = ref3[k];
-                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
               }
             }
             if (data.pagevalues.event_pagevalue != null) {
@@ -259,7 +259,7 @@ RunCommon = (function() {
               results = [];
               for (k in ref4) {
                 v = ref4[k];
-                results.push(PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+                results.push(PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v)));
               }
               return results;
             }

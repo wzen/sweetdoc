@@ -4,9 +4,9 @@ class Run
 
   def self.setup_data(user_id, general, instance, event, page_num)
     # cacheに保存
-    Rails.cache.write("user_id:#{user_id}-general", general, expires_in: 1.hour)
-    Rails.cache.write("user_id:#{user_id}-instance", instance, expires_in: 1.hour)
-    Rails.cache.write("user_id:#{user_id}-event", event, expires_in: 1.hour)
+    # Rails.cache.write("user_id:#{user_id}-general", general, expires_in: 1.hour)
+    # Rails.cache.write("user_id:#{user_id}-instance", instance, expires_in: 1.hour)
+    # Rails.cache.write("user_id:#{user_id}-event", event, expires_in: 1.hour)
 
     general_pagevalues = make_pagevalue(general, Const::PageValueKey::G_PREFIX)
     instance_pagevalues = make_pagevalue_with_pagenum(instance, Const::PageValueKey::INSTANCE_PREFIX, page_num)

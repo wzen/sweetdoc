@@ -215,13 +215,13 @@ class RunCommon
             if data.pagevalues?
               if data.pagevalues.general_pagevalue?
                 for k, v of data.pagevalues.general_pagevalue
-                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
               if data.pagevalues.instance_pagevalue?
                 for k, v of data.pagevalues.instance_pagevalue
-                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
               if data.pagevalues.event_pagevalue?
                 for k, v of data.pagevalues.event_pagevalue
-                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
           )
 
           # コールバック
