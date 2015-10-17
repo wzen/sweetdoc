@@ -11,7 +11,8 @@ require 'gallery/gallery_event_pagevalue_paging'
 require 'gallery/gallery_view_statistic'
 require 'gallery/gallery_bookmark'
 require 'gallery/gallery_bookmark_statistic'
-require 'pagevalue/pagevalue_state'
+require 'pagevalue/page_value_state'
+require 'base64'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
@@ -44,7 +45,7 @@ class Gallery < ActiveRecord::Base
                          access_token: generate_access_token,
                          title: title,
                          caption: caption,
-                         thumbnail_img: thumbnail_img,
+                         thumbnail_img: Base64.decode64(thumbnail_img),
                          screen_width: p.screen_width,
                          screen_height: p.screen_height,
                          show_guide: show_guide,
@@ -348,7 +349,7 @@ class Gallery < ActiveRecord::Base
   def self.firstload_contents(access_token, page_num = 1)
     sql = <<-"SQL"
       SELECT g.* ,
-             u.name as username, u.thumbnail_img as user_thumbnail_img,
+             u.id as user_id, u.name as username, u.thumbnail_img as user_thumbnail_img,
              ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gbs.count as bookmark_count, gvs.count as view_count
       FROM galleries g
       INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id
@@ -376,33 +377,30 @@ class Gallery < ActiveRecord::Base
       return nil
     else
       pagevalues = pagevalues.first
-      gpd = pagevalues['general_pagevalue_data']
-      ipd = pagevalues['instance_pagevalue_data']
-      epd = pagevalues['event_pagevalue_data']
+      gpd = {}
+      gpd[Const::Project::Key::SCREEN_SIZE] = {
+          width: pagevalues['screen_width'],
+          height: pagevalues['screen_height']
+      }
+      gpd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['general_pagevalue_data'])
+      ipd = {}
+      ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['instance_pagevalue_data'])
+      epd = {}
+      epd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['event_pagevalue_data'])
 
       # 必要なItemIdを調査
-      itemids = []
-      JSON.parse(epd).each do |k, v|
-        if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
-          item_id = v[Const::EventPageValueKey::ITEM_ID]
-          if item_id != nil
-            itemids << item_id
-          end
-        end
-      end
+      itemids = PageValueState.extract_need_load_itemids(pagevalues['event_pagevalue_data'])
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
       # 閲覧数 & ブックマーク数を取得
       gallery_view_count = pagevalues['bookmark_count']
       gallery_bookmark_count = pagevalues['view_count']
 
+      pagevalues, creator = Run.setup_data(pagevalues['user_id'].to_i, gpd, ipd, epd, page_num)
+
       message = I18n.t('message.database.item_state.load.success')
 
-      return {
-          general_pagevalues: gpd,
-          instance_pagevalues: ipd,
-          event_pagevalues: epd,
-      }, message, pagevalues['title'], pagevalues['caption'], item_js_list, gallery_view_count, gallery_bookmark_count
+      return pagevalues, message, pagevalues['title'], pagevalues['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count
     end
   end
 

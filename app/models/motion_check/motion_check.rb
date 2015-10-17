@@ -1,6 +1,6 @@
 require 'item/item'
 require 'item/item_js'
-require 'pagevalue/pagevalue_state'
+require 'pagevalue/page_value_state'
 
 class MotionCheck
   def self.paging(user_id, project_id, target_pages, loaded_itemids = [])

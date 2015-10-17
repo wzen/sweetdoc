@@ -330,7 +330,8 @@ class PageValueState
 
   def self.extract_need_load_itemids(event_page_value)
     itemids = []
-    JSON.parse(event_page_value).each do |kk, vv|
+    epv = event_page_value.kind_of?(String)? JSON.parse(event_page_value) : event_page_value
+    epv.each do |kk, vv|
       if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
         vv.each do |k, v|
           if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil

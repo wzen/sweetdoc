@@ -125,7 +125,7 @@ class Upload
     root = $('#upload_wrapper')
     png = canvas.toDataURL('image/png')
     $(".capture", root).attr('src', png)
-    $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png)
+    $("input[name='#{Constant.Gallery.Key.THUMBNAIL_IMG}']", root).val(png.replace(/^.*,/, ''))
     width = parseInt($(canvas).attr('width'))
     height = parseInt($(canvas).attr('height'))
     if width > height
