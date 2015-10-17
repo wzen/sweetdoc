@@ -822,6 +822,51 @@ Common = (function() {
     });
   };
 
+  Common.setupJsByList = function(itemJsList, callback) {
+    var loadedCount;
+    if (callback == null) {
+      callback = null;
+    }
+    if (itemJsList.length === 0) {
+      if (callback != null) {
+        callback();
+      }
+      return;
+    }
+    loadedCount = 0;
+    return itemJsList.forEach(function(d) {
+      var itemId, option;
+      itemId = d.item_id;
+      if (window.itemInitFuncList[itemId] != null) {
+        window.itemInitFuncList[itemId]();
+        loadedCount += 1;
+        if (loadedCount >= itemJsList.length) {
+          if (callback != null) {
+            callback();
+          }
+        }
+        return;
+      }
+      if (d.css_temp != null) {
+        option = {
+          css_temp: d.css_temp
+        };
+      }
+      Common.availJs(itemId, d.js_src, option, function() {
+        loadedCount += 1;
+        if (loadedCount >= itemJsList.length) {
+          if (callback != null) {
+            return callback();
+          }
+        }
+      });
+      PageValue.addItemInfo(d.item_id);
+      if (typeof EventConfig !== "undefined" && EventConfig !== null) {
+        return EventConfig.addEventConfigContents(d.item_id);
+      }
+    });
+  };
+
   return Common;
 
 })();

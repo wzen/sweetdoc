@@ -312,6 +312,8 @@ class Const
     class Key
       TARGET_PAGES = 'targetpages'
       LOADED_ITEM_IDS = 'lii'
+      PROJECT_ID = 'pid'
+      ACCESS_TOKEN = 'at'
     end
   end
 end

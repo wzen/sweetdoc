@@ -116,10 +116,7 @@ ServerStorage = (function() {
       },
       dataType: "json",
       success: function(data) {
-        var _callback, item_js_list, loadedCount, self;
-        self = this;
-        item_js_list = data.item_js_list;
-        _callback = function() {
+        return Common.setupJsByList(data.itemJsList, function() {
           var d, k, ref, ref1, ref2, ref3, v;
           WorktableCommon.removeAllItemOnWorkTable();
           if (data.general_pagevalue_data != null) {
@@ -174,36 +171,6 @@ ServerStorage = (function() {
               return callback();
             }
           });
-        };
-        if (item_js_list.length === 0) {
-          _callback.call(self);
-          return;
-        }
-        loadedCount = 0;
-        return item_js_list.forEach(function(d) {
-          var itemId, option;
-          itemId = d.item_id;
-          if (window.itemInitFuncList[itemId] != null) {
-            window.itemInitFuncList[itemId]();
-            loadedCount += 1;
-            if (loadedCount >= item_js_list.length) {
-              _callback.call(self);
-            }
-            return;
-          }
-          if (d.css_temp != null) {
-            option = {
-              css_temp: d.css_temp
-            };
-          }
-          Common.availJs(itemId, d.js_src, option, function() {
-            loadedCount += 1;
-            if (loadedCount >= item_js_list.length) {
-              return _callback.call(self);
-            }
-          });
-          PageValue.addItemInfo(d.item_id);
-          return EventConfig.addEventConfigContents(d.item_id);
         });
       },
       error: function(data) {

@@ -40,6 +40,10 @@ RunCommon = (function() {
 
       Key.LOADED_ITEM_IDS = constant.Run.Key.LOADED_ITEM_IDS;
 
+      Key.PROJECT_ID = constant.Run.Key.PROJECT_ID;
+
+      Key.ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN;
+
       return Key;
 
     })();
@@ -224,30 +228,43 @@ RunCommon = (function() {
     }
     data = {};
     data[RunCommon.Key.TARGET_PAGES] = targetPages;
-    data[RunCommon.Key.LOADED_ITEM_IDS] = null;
+    data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds());
+    data[RunCommon.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
+    data[RunCommon.Key.ACCESS_TOKEN] = window.location.search.substring(1).split('/')[0];
     return $.ajax({
       url: "/run/paging",
       type: "POST",
       dataType: "json",
       data: data,
       success: function(data) {
-        var k, ref2, ref3, v;
-        if (data.pagevalues != null) {
-          if (data.pagevalues.instance_pagevalue != null) {
-            ref2 = data.pagevalues.instance_pagevalue;
-            for (k in ref2) {
-              v = ref2[k];
-              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+        Common.setupJsByList(data.itemJsList, function() {
+          var k, ref2, ref3, ref4, results, v;
+          if (data.pagevalues != null) {
+            if (data.pagevalues.general_pagevalue != null) {
+              ref2 = data.pagevalues.general_pagevalue;
+              for (k in ref2) {
+                v = ref2[k];
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+              }
+            }
+            if (data.pagevalues.instance_pagevalue != null) {
+              ref3 = data.pagevalues.instance_pagevalue;
+              for (k in ref3) {
+                v = ref3[k];
+                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+              }
+            }
+            if (data.pagevalues.event_pagevalue != null) {
+              ref4 = data.pagevalues.event_pagevalue;
+              results = [];
+              for (k in ref4) {
+                v = ref4[k];
+                results.push(PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
+              }
+              return results;
             }
           }
-          if (data.pagevalues.event_pagevalue != null) {
-            ref3 = data.pagevalues.event_pagevalue;
-            for (k in ref3) {
-              v = ref3[k];
-              PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
-            }
-          }
-        }
+        });
         if (callback != null) {
           return callback();
         }

@@ -686,6 +686,40 @@ class Common
       buffer[i] = bin.charCodeAt(i)
     return new Blob([buffer.buffer], {type: type});
 
+  # JSファイルを適用する
+  @setupJsByList = (itemJsList, callback = null) ->
+    if itemJsList.length == 0
+      if callback?
+        callback()
+      return
+
+    loadedCount = 0
+    itemJsList.forEach((d) ->
+      itemId = d.item_id
+      if window.itemInitFuncList[itemId]?
+        # 既に読み込まれている場合はコールバックのみ実行
+        window.itemInitFuncList[itemId]()
+        loadedCount += 1
+        if loadedCount >= itemJsList.length
+          # 全て読み込んだ後
+          if callback?
+            callback()
+        return
+
+      if d.css_temp?
+        option = {css_temp: d.css_temp}
+
+      Common.availJs(itemId, d.js_src, option, ->
+        loadedCount += 1
+        if loadedCount >= itemJsList.length
+          # 全て読み込んだ後
+          if callback?
+            callback()
+      )
+      PageValue.addItemInfo(d.item_id)
+      if EventConfig?
+        EventConfig.addEventConfigContents(d.item_id)
+    )
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

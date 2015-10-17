@@ -86,10 +86,8 @@ class ServerStorage
         }
         dataType: "json"
         success: (data)->
-          self = @
-          item_js_list = data.item_js_list
-          # 全て読み込んだ後のコールバック
-          _callback = ->
+          # JSを適用
+          Common.setupJsByList(data.itemJsList, ->
             WorktableCommon.removeAllItemOnWorkTable()
 
             # Pagevalue設置
@@ -128,34 +126,6 @@ class ServerStorage
               if callback?
                 callback()
             )
-
-          if item_js_list.length == 0
-            _callback.call(self)
-            return
-
-          loadedCount = 0
-          item_js_list.forEach((d) ->
-            itemId = d.item_id
-            if window.itemInitFuncList[itemId]?
-              # 既に読み込まれている場合はコールバックのみ実行
-              window.itemInitFuncList[itemId]()
-              loadedCount += 1
-              if loadedCount >= item_js_list.length
-                # 全て読み込んだ後
-                _callback.call(self)
-              return
-
-            if d.css_temp?
-              option = {css_temp: d.css_temp}
-
-            Common.availJs(itemId, d.js_src, option, ->
-              loadedCount += 1
-              if loadedCount >= item_js_list.length
-                # 全て読み込んだ後
-                _callback.call(self)
-            )
-            PageValue.addItemInfo(d.item_id)
-            EventConfig.addEventConfigContents(d.item_id)
           )
 
         error: (data) ->

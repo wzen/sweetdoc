@@ -1,2 +1,6 @@
-json.instance_pagevalue_hash @instance_pagevalue_hash
-json.event_pagevalue_hash @event_pagevalue_hash
+json.pagevalues @pagevalues
+json.itemJsList @item_js_list do |itemJs|
+  itemJs.each do |k, v|
+    json.set!(k, v)
+  end
+end

@@ -61,9 +61,11 @@ class Gallery < ActiveRecord::Base
 
         # Pagevalueレコード取得
         sql = <<-"SQL"
-          SELECT ip.data as i_pagevalue_data, ep.data as e_pagevalue_data, ipp.page_num as page_num
+          SELECT gp.data as g_pagevalue_data, ip.data as i_pagevalue_data, ep.data as e_pagevalue_data, gpp.page_num as page_num
           FROM user_pagevalues up
-          LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
+          LEFT JOIN general_pagevalue_pagings gpp ON up.id = gpp.user_pagevalue_id AND gpp.del_flg = 0
+          LEFT JOIN general_pagevalues gp ON gpp.general_pagevalue_id = gp.id AND gp.del_flg = 0
+          LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.page_num = gpp.page_num AND ipp.del_flg = 0
           LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
           LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
           LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
@@ -75,6 +77,18 @@ class Gallery < ActiveRecord::Base
         ret = ActiveRecord::Base.connection.select_all(sql).to_hash
         ret.each do |record|
           page_num = record['page_num']
+          g_pagevalue_data = record['g_pagevalue_data']
+          if g_pagevalue_data != nil
+            gp = GalleryGeneralPagevalue.new({data: g_pagevalue_data})
+            gp.save!
+            gpp = GalleryGeneralPagevaluePaging.new({
+                                                         gallery_id: gallery_id,
+                                                         page_num: page_num,
+                                                         gallery_general_pagevalue_id: gp.id
+                                                     })
+            gpp.save!
+          end
+
           i_pagevalue_data = record['i_pagevalue_data']
           if i_pagevalue_data != nil
             ip = GalleryInstancePagevalue.new({data: i_pagevalue_data})
@@ -334,12 +348,14 @@ class Gallery < ActiveRecord::Base
     sql = <<-"SQL"
       SELECT g.* ,
              u.name as username, u.thumbnail_img as user_thumbnail_img,
-             gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gbs.count as bookmark_count, gvs.count as view_count
+             ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gbs.count as bookmark_count, gvs.count as view_count
       FROM galleries g
       INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id
       INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id
       INNER JOIN users u ON upm.user_id = u.id
-      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = #{page_num} AND gipp.del_flg = 0
+      LEFT JOIN gallery_general_pagevalue_pagings ggpp ON g.id = ggpp.gallery_id AND ggpp.page_num = #{page_num} AND ggpp.del_flg = 0
+      LEFT JOIN gallery_general_pagevalues ggp ON ggpp.gallery_general_pagevalue_id = ggp.id AND ggp.del_flg = 0
+      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = ggpp.page_num AND gipp.del_flg = 0
       LEFT JOIN gallery_instance_pagevalues gip ON gipp.gallery_instance_pagevalue_id = gip.id AND gip.del_flg = 0
       LEFT JOIN gallery_event_pagevalue_pagings gepp ON g.id = gepp.gallery_id AND gipp.page_num = gepp.page_num AND gepp.del_flg = 0
       LEFT JOIN gallery_event_pagevalues gep ON gepp.gallery_event_pagevalue_id = gep.id AND gep.del_flg = 0
@@ -359,6 +375,7 @@ class Gallery < ActiveRecord::Base
       return nil
     else
       pagevalues = pagevalues.first
+      gpd = pagevalues['general_pagevalue_data']
       ipd = pagevalues['instance_pagevalue_data']
       epd = pagevalues['event_pagevalue_data']
 
@@ -381,7 +398,7 @@ class Gallery < ActiveRecord::Base
       message = I18n.t('message.database.item_state.load.success')
 
       return {
-          #general_pagevalues: general_pagevalues,
+          general_pagevalues: gpd,
           instance_pagevalues: ipd,
           event_pagevalues: epd,
       }, message, pagevalues['title'], pagevalues['caption'], item_js_list, gallery_view_count, gallery_bookmark_count
@@ -391,9 +408,11 @@ class Gallery < ActiveRecord::Base
   def self.load_page_contents(access_token, target_pages, loaded_itemids)
     pages = "(#{target_pages.join(',')})"
     ret_sql = <<-"SQL"
-      SELECT gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num
+      SELECT ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num
       FROM galleries g
-      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num IN #{pages} AND gipp.del_flg = 0
+      LEFT JOIN gallery_general_pagevalue_pagings ggpp ON g.id = ggpp.gallery_id AND ggpp.page_num IN #{pages} AND ggpp.del_flg = 0
+      LEFT JOIN gallery_general_pagevalues ggp ON ggpp.gallery_general_pagevalue_id = ggp.id AND ggp.del_flg = 0
+      LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = ggpp.page_num AND gipp.del_flg = 0
       LEFT JOIN gallery_instance_pagevalues gip ON gipp.gallery_instance_pagevalue_id = gip.id AND gip.del_flg = 0
       LEFT JOIN gallery_event_pagevalue_pagings gepp ON g.id = gepp.gallery_id AND gipp.page_num = gepp.page_num AND gepp.del_flg = 0
       LEFT JOIN gallery_event_pagevalues gep ON gepp.event_pagevalue_id = gep.id AND gep.del_flg = 0
@@ -405,10 +424,12 @@ class Gallery < ActiveRecord::Base
     if pagevalues.count == 0
       return nil
     else
+      gen = {}
       ins = {}
       ent = {}
       itemids = []
       pagevalues.each do |pagevalue|
+        gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = pagevalue['general_pagevalue_data']
         ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = pagevalue['instance_pagevalue_data']
         epd = pagevalue['event_pagevalue_data']
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num']] = epd
@@ -428,6 +449,7 @@ class Gallery < ActiveRecord::Base
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
       return {
+          general_pagevalues: gen,
           instance_pagevalues: ins,
           event_pagevalues: ent
       }, item_js_list

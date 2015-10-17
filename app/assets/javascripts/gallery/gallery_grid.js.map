@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "gallery_grid.js",
+  "sourceRoot": "",
+  "sources": [
+    "gallery_grid.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,CAAA,CAAE,SAAA,GAAA;SAEA,aAAa,CAAC,QAAd,CAAA,EAFA;AAAA,CAAF,CAAA,CAAA"
+}

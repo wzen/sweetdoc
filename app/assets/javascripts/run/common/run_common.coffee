@@ -18,6 +18,8 @@ class RunCommon
     class @Key
       @TARGET_PAGES = constant.Run.Key.TARGET_PAGES
       @LOADED_ITEM_IDS = constant.Run.Key.LOADED_ITEM_IDS
+      @PROJECT_ID = constant.Run.Key.PROJECT_ID
+      @ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN
 
   # 画面初期化
   @initView = ->
@@ -198,8 +200,9 @@ class RunCommon
 
     data = {}
     data[RunCommon.Key.TARGET_PAGES] = targetPages
-    # FIXME:
-    data[RunCommon.Key.LOADED_ITEM_IDS] = null
+    data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds())
+    data[RunCommon.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
+    data[RunCommon.Key.ACCESS_TOKEN] = window.location.search.substring(1).split('/')[0]
     $.ajax(
       {
         url: "/run/paging"
@@ -207,13 +210,19 @@ class RunCommon
         dataType: "json"
         data: data
         success: (data)->
-          if data.pagevalues?
-            if data.pagevalues.instance_pagevalue?
-              for k, v of data.pagevalues.instance_pagevalue
-                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
-            if data.pagevalues.event_pagevalue?
-              for k, v of data.pagevalues.event_pagevalue
-                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+          # JSを適用
+          Common.setupJsByList(data.itemJsList, ->
+            if data.pagevalues?
+              if data.pagevalues.general_pagevalue?
+                for k, v of data.pagevalues.general_pagevalue
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+              if data.pagevalues.instance_pagevalue?
+                for k, v of data.pagevalues.instance_pagevalue
+                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+              if data.pagevalues.event_pagevalue?
+                for k, v of data.pagevalues.event_pagevalue
+                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+          )
 
           # コールバック
           if callback?
