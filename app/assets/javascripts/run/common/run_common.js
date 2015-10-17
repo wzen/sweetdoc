@@ -230,7 +230,7 @@ RunCommon = (function() {
     data[RunCommon.Key.TARGET_PAGES] = targetPages;
     data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds());
     data[RunCommon.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
-    data[RunCommon.Key.ACCESS_TOKEN] = window.location.search.substring(1).split('/')[0];
+    data[RunCommon.Key.ACCESS_TOKEN] = window.location.pathname.split('/')[3];
     return $.ajax({
       url: "/run/paging",
       type: "POST",
@@ -371,6 +371,7 @@ RunCommon = (function() {
     window.open("about:blank", target);
     root = $('#nav');
     $("input[name='" + Constant.Gallery.Key.PROJECT_ID + "']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+    $("input[name='" + Constant.Gallery.Key.PAGE_MAX + "']", root).val(PageValue.getPageCount());
     document.upload_gallery_form.target = target;
     return setTimeout(function() {
       return document.upload_gallery_form.submit();

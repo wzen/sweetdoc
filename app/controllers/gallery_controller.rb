@@ -43,10 +43,11 @@ class GalleryController < ApplicationController
       project_id = project_id.to_i
       caption = params[Const::Gallery::Key::CAPTION]
       thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
+      page_max = params[Const::Gallery::Key::PAGE_MAX]
       show_guide = params[Const::Gallery::Key::SHOW_GUIDE]
       show_page_num = params[Const::Gallery::Key::SHOW_PAGE_NUM]
       show_chapter_num = params[Const::Gallery::Key::SHOW_CHAPTER_NUM]
-      @message, @access_token = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img, show_guide, show_page_num, show_chapter_num)
+      @message, @access_token = Gallery.save_state(user_id, project_id, tags, title, caption, thumbnail_img, page_max, show_guide, show_page_num, show_chapter_num)
     end
   end
 

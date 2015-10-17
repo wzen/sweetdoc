@@ -7,6 +7,7 @@ class ServerStorage
     class @Key
       @PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID
       @PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT
+      @GENERAL_COMMON_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_COMMON_PAGE_VALUE
       @GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE
       @INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE
       @EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE
@@ -29,12 +30,9 @@ class ServerStorage
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
 
     generalPagevalues = {}
+    generalCommonPagevalues = {}
     general = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX)
-    for k, v of general
-      if k.indexOf(PageValue.Key.P_PREFIX) >= 0
-        pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''))
-        generalPagevalues[pageNum] = JSON.stringify(v)
-    data[@Key.GENERAL_PAGE_VALUE] = if Object.keys(generalPagevalues).length > 0 then generalPagevalues else null
+    data[@Key.GENERAL_PAGE_VALUE] = general
 
     instancePagevalues = {}
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
@@ -94,8 +92,10 @@ class ServerStorage
             if data.general_pagevalue_data?
               d = {}
               for k, v of data.general_pagevalue_data
-                d[k] = JSON.parse(v)
-              PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, d)
+                if k.indexOf(PageValue.Key.P_PREFIX) >= 0
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+                else
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
             if data.project_pagevalue_data?
               for k, v of data.project_pagevalue_data
                 PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)

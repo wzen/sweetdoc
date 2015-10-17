@@ -208,6 +208,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         Key.RECOMMEND_SOURCE_WORD = constant.Gallery.Key.RECOMMEND_SOURCE_WORD;
 
+        Key.PAGE_MAX = constant.Gallery.Key.PAGE_MAX;
+
         Key.SHOW_GUIDE = constant.Gallery.Key.SHOW_GUIDE;
 
         Key.SHOW_PAGE_NUM = constant.Gallery.Key.SHOW_PAGE_NUM;

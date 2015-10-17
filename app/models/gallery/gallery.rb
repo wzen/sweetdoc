@@ -32,6 +32,7 @@ class Gallery < ActiveRecord::Base
     title,
     caption,
     thumbnail_img,
+    page_max,
     show_guide,
     show_page_num,
     show_chapter_num
@@ -46,6 +47,7 @@ class Gallery < ActiveRecord::Base
                          title: title,
                          caption: caption,
                          thumbnail_img: Base64.decode64(thumbnail_img),
+                         page_max: page_max,
                          screen_width: p.screen_width,
                          screen_height: p.screen_height,
                          show_guide: show_guide,
@@ -382,6 +384,7 @@ class Gallery < ActiveRecord::Base
           width: pagevalues['screen_width'],
           height: pagevalues['screen_height']
       }
+      gpd[Const::PageValueKey::PAGE_COUNT] = pagevalues['page_max']
       gpd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['general_pagevalue_data'])
       ipd = {}
       ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['instance_pagevalue_data'])
@@ -400,13 +403,13 @@ class Gallery < ActiveRecord::Base
 
       message = I18n.t('message.database.item_state.load.success')
 
-      return pagevalues, message, pagevalues['title'], pagevalues['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count
+      return pagevalues, message, pagevalues['title'], pagevalues['caption'], pagevalues['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count
     end
   end
 
   def self.paging(access_token, target_pages, loaded_itemids)
     pages = "(#{target_pages.join(',')})"
-    ret_sql = <<-"SQL"
+    sql = <<-"SQL"
       SELECT ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num
       FROM galleries g
       LEFT JOIN gallery_general_pagevalue_pagings ggpp ON g.id = ggpp.gallery_id AND ggpp.page_num IN #{pages} AND ggpp.del_flg = 0
@@ -414,7 +417,7 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = ggpp.page_num AND gipp.del_flg = 0
       LEFT JOIN gallery_instance_pagevalues gip ON gipp.gallery_instance_pagevalue_id = gip.id AND gip.del_flg = 0
       LEFT JOIN gallery_event_pagevalue_pagings gepp ON g.id = gepp.gallery_id AND gipp.page_num = gepp.page_num AND gepp.del_flg = 0
-      LEFT JOIN gallery_event_pagevalues gep ON gepp.event_pagevalue_id = gep.id AND gep.del_flg = 0
+      LEFT JOIN gallery_event_pagevalues gep ON gepp.gallery_event_pagevalue_id = gep.id AND gep.del_flg = 0
       WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
     SQL
@@ -439,9 +442,9 @@ class Gallery < ActiveRecord::Base
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
       return {
-          general_pagevalues: gen,
-          instance_pagevalues: ins,
-          event_pagevalues: ent
+          general_pagevalue: gen,
+          instance_pagevalue: ins,
+          event_pagevalue: ent
       }, item_js_list
     end
   end

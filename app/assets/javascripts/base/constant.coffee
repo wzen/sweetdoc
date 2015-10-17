@@ -119,6 +119,7 @@ if gon?
         @VIEW_COUNT = constant.Gallery.Key.VIEW_COUNT
         @BOOKMARK_COUNT = constant.Gallery.Key.BOOKMARK_COUNT
         @RECOMMEND_SOURCE_WORD = constant.Gallery.Key.RECOMMEND_SOURCE_WORD
+        @PAGE_MAX = constant.Gallery.Key.PAGE_MAX
         @SHOW_GUIDE = constant.Gallery.Key.SHOW_GUIDE
         @SHOW_PAGE_NUM = constant.Gallery.Key.SHOW_PAGE_NUM
         @SHOW_CHAPTER_NUM = constant.Gallery.Key.SHOW_CHAPTER_NUM

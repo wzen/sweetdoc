@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151016231638) do
+ActiveRecord::Schema.define(version: 20151017090414) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20151016231638) do
     t.binary   "thumbnail_img",    limit: 16777215
     t.integer  "screen_width",                                      null: false
     t.integer  "screen_height",                                     null: false
+    t.integer  "page_max",                          default: 1
     t.boolean  "show_guide"
     t.boolean  "show_page_num"
     t.boolean  "show_chapter_num"
@@ -161,6 +162,14 @@ ActiveRecord::Schema.define(version: 20151016231638) do
     t.integer  "count",      default: 0
     t.date     "view_day"
     t.boolean  "del_flg",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "general_common_pagevalues", force: true do |t|
+    t.integer  "user_pagevalue_id",                 null: false
+    t.text     "data"
+    t.boolean  "del_flg",           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

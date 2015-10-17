@@ -11,5 +11,6 @@ class UploadController < ApplicationController
       render
     end
     @project_id = project_id.to_i
+    @page_max = params[Const::Gallery::Key::PAGE_MAX]
   end
 end

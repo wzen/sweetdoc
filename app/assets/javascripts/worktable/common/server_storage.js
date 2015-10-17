@@ -15,6 +15,8 @@ ServerStorage = (function() {
 
       Key.PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT;
 
+      Key.GENERAL_COMMON_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_COMMON_PAGE_VALUE;
+
       Key.GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE;
 
       Key.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
@@ -42,7 +44,7 @@ ServerStorage = (function() {
   }
 
   ServerStorage.save = function(callback) {
-    var data, event, eventPagevalues, general, generalPagevalues, instance, instancePagevalues, k, pageNum, v;
+    var data, event, eventPagevalues, general, generalCommonPagevalues, generalPagevalues, instance, instancePagevalues, k, pageNum, v;
     if (callback == null) {
       callback = null;
     }
@@ -51,15 +53,9 @@ ServerStorage = (function() {
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
     data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     generalPagevalues = {};
+    generalCommonPagevalues = {};
     general = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX);
-    for (k in general) {
-      v = general[k];
-      if (k.indexOf(PageValue.Key.P_PREFIX) >= 0) {
-        pageNum = parseInt(k.replace(PageValue.Key.P_PREFIX, ''));
-        generalPagevalues[pageNum] = JSON.stringify(v);
-      }
-    }
-    data[this.Key.GENERAL_PAGE_VALUE] = Object.keys(generalPagevalues).length > 0 ? generalPagevalues : null;
+    data[this.Key.GENERAL_PAGE_VALUE] = general;
     instancePagevalues = {};
     instance = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
     for (k in instance) {
@@ -124,9 +120,12 @@ ServerStorage = (function() {
             ref = data.general_pagevalue_data;
             for (k in ref) {
               v = ref[k];
-              d[k] = JSON.parse(v);
+              if (k.indexOf(PageValue.Key.P_PREFIX) >= 0) {
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
+              } else {
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+              }
             }
-            PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, d);
           }
           if (data.project_pagevalue_data != null) {
             ref1 = data.project_pagevalue_data;

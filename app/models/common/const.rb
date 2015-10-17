@@ -173,6 +173,7 @@ class Const
     class Key
       PROJECT_ID = 'project_id'
       PAGE_COUNT = 'page_count'
+      GENERAL_COMMON_PAGE_VALUE = 'cg'
       GENERAL_PAGE_VALUE = 'g'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
@@ -205,6 +206,7 @@ class Const
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       THUMBNAIL_IMG = 'tbimg'
+      PAGE_MAX = 'pagemax'
       TITLE = 'title'
       CAPTION = 'caption'
       ITEM_JS_LIST = 'item_js_list'
