@@ -22,9 +22,9 @@ class WorktableSetting
 
     class @PageValueKey
       # @property [String] GRID グリッド線表示
-      @GRID = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_enable"
+      @GRID = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{constant.Setting.Key.GRID_ENABLE}"
       # @property [String] GRID グリッド線間隔
-      @GRID_STEP = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}grid_step"
+      @GRID_STEP = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{constant.Setting.Key.GRID_STEP}"
 
     # グリッド初期化
     @initConfig: ->
@@ -150,9 +150,9 @@ class WorktableSetting
 
     class @PageValueKey
       # @property [String] AUTOSAVE AutoSave
-      @AUTOSAVE = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave"
+      @AUTOSAVE = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{constant.Setting.Key.AUTOSAVE}"
       # @property [String] AUTOSAVE_TIME AutoSave間隔
-      @AUTOSAVE_TIME = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}autosave_time"
+      @AUTOSAVE_TIME = "#{PageValue.Key.ST_PREFIX}#{PageValue.Key.PAGE_VALUES_SEPERATOR}#{constant.Setting.Key.AUTOSAVE_TIME}"
 
 
     @initConfig: ->

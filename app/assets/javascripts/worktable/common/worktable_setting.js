@@ -36,9 +36,9 @@ WorktableSetting = (function() {
     Grid.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.GRID = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_enable";
+      PageValueKey.GRID = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + constant.Setting.Key.GRID_ENABLE;
 
-      PageValueKey.GRID_STEP = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "grid_step";
+      PageValueKey.GRID_STEP = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + constant.Setting.Key.GRID_STEP;
 
       return PageValueKey;
 
@@ -180,9 +180,9 @@ WorktableSetting = (function() {
     IdleSaveTimer.PageValueKey = (function() {
       function PageValueKey() {}
 
-      PageValueKey.AUTOSAVE = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave";
+      PageValueKey.AUTOSAVE = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + constant.Setting.Key.AUTOSAVE;
 
-      PageValueKey.AUTOSAVE_TIME = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + "autosave_time";
+      PageValueKey.AUTOSAVE_TIME = "" + PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + constant.Setting.Key.AUTOSAVE_TIME;
 
       return PageValueKey;
 

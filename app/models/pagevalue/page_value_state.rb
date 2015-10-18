@@ -44,8 +44,11 @@ class PageValueState
             updated_user_pagevalue_id = up.id
           else
             # 共通設定更新
-            save_setting_pagevalue(s_page_values, saved_record['setting_pagevalue_id'])
+            sp_id = save_setting_pagevalue(s_page_values, saved_record['setting_pagevalue_id'])
             updated_user_pagevalue_id = saved_record['user_pagevalue_id']
+            up = UserPagevalue.find(updated_user_pagevalue_id)
+            up.setting_pagevalue_id = sp_id
+            up.save!
           end
 
           # PageValue保存
@@ -82,7 +85,11 @@ class PageValueState
   def self.load_state(user_id, user_pagevalue_id, loaded_itemids)
     sql = <<-"SQL"
       SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
-             ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, gcp.data as general_common_pagevalue_data, gp.data as general_pagevalue_data, sp.data as setting_pagevalue_data,
+             ip.data as instance_pagevalue_data,
+             ep.data as event_pagevalue_data,
+             gcp.data as general_common_pagevalue_data,
+             gp.data as general_pagevalue_data,
+             sp.autosave as setting_pagevalue_autosave, sp.autosave_time as setting_pagevalue_autosave_time, sp.grid_enable as setting_pagevalue_grid_enable, sp.grid_step as setting_pagevalue_grid_step,
              ipp.page_num as page_num
       FROM user_pagevalues up
       LEFT JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
@@ -121,7 +128,11 @@ class PageValueState
           width: pagevalues.first['project_screen_width'],
           height: pagevalues.first['project_screen_height']
       }
-      spd = pagevalues.first['setting_pagevalue_data']
+      spd = {}
+      spd[Const::Setting::Key::GRID_ENABLE] = pagevalues.first['setting_pagevalue_grid_enable'].to_i != 0
+      spd[Const::Setting::Key::GRID_STEP] = pagevalues.first['setting_pagevalue_grid_step']
+      spd[Const::Setting::Key::AUTOSAVE] = pagevalues.first['setting_pagevalue_autosave'].to_i != 0
+      spd[Const::Setting::Key::AUTOSAVE_TIME] = pagevalues.first['setting_pagevalue_autosave_time']
 
       gpd = {}
       ipd = {}
@@ -198,16 +209,46 @@ class PageValueState
 
     # 共通設定作成
     if save_value != 'null'
+
+      grid_enable = save_value[Const::Setting::Key::GRID_ENABLE]
+      if grid_enable
+        grid_enable = grid_enable == 'true'
+      else
+        grid_enable = false
+      end
+      grid_step = save_value[Const::Setting::Key::GRID_STEP]
+      unless grid_step
+        grid_step = grid_step.to_i
+      end
+      autosave = save_value[Const::Setting::Key::AUTOSAVE]
+      if autosave
+        autosave = autosave == 'true'
+      else
+        autosave = false
+      end
+      autosave_time = save_value[Const::Setting::Key::AUTOSAVE_TIME]
+      unless autosave_time
+        autosave_time = autosave_time.to_f
+      end
+
       if update_id == nil
         # Insert
-        sp = SettingPagevalue.new({data: save_value})
+        sp = SettingPagevalue.new({
+                                      autosave: autosave,
+                                      autosave_time: autosave_time,
+                                      grid_enable: grid_enable,
+                                      grid_step: grid_step
+                                  })
         sp.save!
         ret_id = sp.id
       else
         # Update
         sp = SettingPagevalue.find(update_id)
         if sp != nil
-          sp.data = save_value
+          sp.autosave = autosave
+          sp.autosave_time = autosave_time
+          sp.grid_enable = grid_enable
+          sp.grid_step = grid_step
           sp.save!
           ret_id = sp.id
         end

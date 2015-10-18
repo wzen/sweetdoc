@@ -1,3 +1,5 @@
+require 'project/project'
+
 class ProjectController < ApplicationController
   def create
     user_id = current_or_guest_user.id

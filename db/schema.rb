@@ -64,9 +64,9 @@ ActiveRecord::Schema.define(version: 20151017090414) do
     t.integer  "screen_width",                                      null: false
     t.integer  "screen_height",                                     null: false
     t.integer  "page_max",                          default: 1
-    t.boolean  "show_guide"
-    t.boolean  "show_page_num"
-    t.boolean  "show_chapter_num"
+    t.boolean  "show_guide",                        default: true
+    t.boolean  "show_page_num",                     default: false
+    t.boolean  "show_chapter_num",                  default: false
     t.boolean  "del_flg",                           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -275,8 +275,11 @@ ActiveRecord::Schema.define(version: 20151017090414) do
   end
 
   create_table "setting_pagevalues", force: true do |t|
-    t.text     "data"
-    t.boolean  "del_flg",    default: false
+    t.boolean  "autosave",                                 null: false
+    t.float    "autosave_time", limit: 24
+    t.boolean  "grid_enable",                              null: false
+    t.integer  "grid_step"
+    t.boolean  "del_flg",                  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
