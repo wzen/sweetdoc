@@ -176,6 +176,9 @@ class Const
   end
 
   class ServerStorage
+    # FIXME:
+    DIVIDE_INTERVAL_MINUTES = 15
+
     class Key
       PROJECT_ID = 'project_id'
       PAGE_COUNT = 'page_count'
@@ -184,6 +187,7 @@ class Const
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       SETTING_PAGE_VALUE = 's'
+      NEW_RECORD = 'nr'
     end
   end
 

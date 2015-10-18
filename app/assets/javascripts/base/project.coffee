@@ -34,14 +34,14 @@ class Project
 
     # 作成済みプロジェクト一覧取得
     Project.load_data((data) ->
-      user_pagevalue_list = data.list
+      user_pagevalue_list = data
       projectSelect = $('.project_select', modalEmt)
       if user_pagevalue_list.length > 0
         list = ''
         n = $.now()
         for p in user_pagevalue_list
-          d = new Date(p[Constant.Project.Key.USER_PAGEVALUE_UPDATED_AT])
-          e = "<option value='#{p[Constant.Project.Key.USER_PAGEVALUE_ID]}'>#{p[Constant.Project.Key.TITLE]} - #{Common.displayDiffAlmostTime(n, d.getTime())}</option>"
+          d = new Date(p['updated_at'])
+          e = "<option value='#{p['id']}'>#{p['project_title']} - #{Common.displayDiffAlmostTime(n, d.getTime())}</option>"
           list += e
         projectSelect.children().remove()
         $(list).appendTo(projectSelect)
@@ -127,7 +127,7 @@ class Project
   @load_data: (successCallback = null, errorCallback = null) ->
     $.ajax(
       {
-        url: "/project/list"
+        url: "/page_value_state/user_pagevalue_last_updated_list"
         type: "GET"
         dataType: "json"
         success: (data)->

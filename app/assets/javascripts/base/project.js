@@ -47,15 +47,15 @@ Project = (function() {
     $('.default_window_size', modalEmt).html((window.mainWrapper.width()) + " X " + (window.mainWrapper.height()));
     Project.load_data(function(data) {
       var d, e, i, len, list, n, p, projectSelect, size, user_pagevalue_list;
-      user_pagevalue_list = data.list;
+      user_pagevalue_list = data;
       projectSelect = $('.project_select', modalEmt);
       if (user_pagevalue_list.length > 0) {
         list = '';
         n = $.now();
         for (i = 0, len = user_pagevalue_list.length; i < len; i++) {
           p = user_pagevalue_list[i];
-          d = new Date(p[Constant.Project.Key.USER_PAGEVALUE_UPDATED_AT]);
-          e = "<option value='" + p[Constant.Project.Key.USER_PAGEVALUE_ID] + "'>" + p[Constant.Project.Key.TITLE] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
+          d = new Date(p['updated_at']);
+          e = "<option value='" + p['id'] + "'>" + p['project_title'] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
           list += e;
         }
         projectSelect.children().remove();
@@ -143,7 +143,7 @@ Project = (function() {
       errorCallback = null;
     }
     return $.ajax({
-      url: "/project/list",
+      url: "/page_value_state/user_pagevalue_last_updated_list",
       type: "GET",
       dataType: "json",
       success: function(data) {

@@ -12,7 +12,14 @@ require 'pagevalue/user_pagevalue'
 require 'project/user_project_map'
 
 class PageValueState
-  def self.save_state(user_id, project_id, page_count, g_page_values, i_page_values, e_page_values, s_page_values)
+  def self.save_state(user_id,
+      project_id,
+      page_count,
+      g_page_values,
+      i_page_values,
+      e_page_values,
+      s_page_values,
+      new_record)
     begin
       if g_page_values != 'null' ||
           i_page_values != 'null' ||
@@ -29,26 +36,43 @@ class PageValueState
             FROM user_pagevalues up
             INNER JOIN user_project_maps upm ON up.user_project_map_id = upm.id
             WHERE upm.user_id = #{user_id} AND upm.project_id = #{project_id}
+            ORDER BY up.updated_at DESC
+            LIMIT 1
           SQL
           ret = ActiveRecord::Base.connection.select_all(sql)
           saved_record = ret.to_hash.first
-          if saved_record == nil
-            # 共通設定作成
-            sp_id = save_setting_pagevalue(s_page_values)
+
+          # 共通設定作成
+          sp = save_setting_pagevalue(s_page_values, saved_record != nil ? saved_record['setting_pagevalue_id'] : nil)
+          if saved_record == nil || new_record
+            # レコード無し or 強制作成
             upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
             up = UserPagevalue.new({
                                        user_project_map_id: upm.id,
-                                       setting_pagevalue_id: sp_id
+                                       setting_pagevalue_id: sp.id
                                    })
             up.save!
             updated_user_pagevalue_id = up.id
+            last_save_time = up.updated_at
           else
-            # 共通設定更新
-            sp_id = save_setting_pagevalue(s_page_values, saved_record['setting_pagevalue_id'])
             updated_user_pagevalue_id = saved_record['user_pagevalue_id']
             up = UserPagevalue.find(updated_user_pagevalue_id)
-            up.setting_pagevalue_id = sp_id
-            up.save!
+            if Time.zone.now - up.created_at > Const::ServerStorage::DIVIDE_INTERVAL_MINUTES.minute
+              # 期間が過ぎている場合は新規作成
+              upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+              up = UserPagevalue.new({
+                                         user_project_map_id: upm.id,
+                                         setting_pagevalue_id: sp.id
+                                     })
+              up.save!
+              updated_user_pagevalue_id = up.id
+              last_save_time = up.updated_at
+            else
+              # 更新
+              up.setting_pagevalue_id = sp.id
+              up.save!
+              last_save_time = up.updated_at
+            end
           end
 
           # PageValue保存
@@ -56,13 +80,6 @@ class PageValueState
           save_instance_pagevalue(i_page_values, page_count, updated_user_pagevalue_id)
           save_event_pagevalue(e_page_values, page_count, updated_user_pagevalue_id)
 
-          # UserPageValueのupdate_at更新
-          up = UserPagevalue.find(updated_user_pagevalue_id)
-          if up != nil
-            up.touch
-            up.save!
-            last_save_time = up.updated_at
-          end
         end
       end
 
@@ -73,8 +90,25 @@ class PageValueState
     end
   end
 
-  def self.get_user_pagevalue_save_list(user_id, project_id)
-    sql = last_user_pagevalue_search_sql(user_id, project_id)
+  def self.user_pagevalue_last_updated_list(user_id)
+    sql = last_user_pagevalue_search_sql(user_id)
+    ret = ActiveRecord::Base.connection.select_all(sql).to_hash
+    return ret
+  end
+
+  def self.user_pagevalue_list_sorted_update(user_id, project_id)
+    sql =<<-"SQL"
+      SELECT
+      up.*
+      FROM
+      user_pagevalues up
+      INNER JOIN
+      user_project_maps upm ON up.user_project_map_id = upm.id
+      WHERE upm.user_id = #{user_id} AND upm.project_id = #{project_id}
+      AND up.del_flg = 0
+      AND upm.del_flg = 0
+      ORDER BY up.updated_at DESC
+    SQL
     ret = ActiveRecord::Base.connection.select_all(sql).to_hash
     return ret
   end
@@ -164,21 +198,14 @@ class PageValueState
     end
   end
 
-  def self.last_user_pagevalue_search_sql(user_id, project_id = nil)
-    # FIXME:
-
-    project_filter = ''
-    if project_id != nil && project_id != ''
-      project_filter = "AND ump_sub.project_id = #{project_id}"
-    end
-
+  def self.last_user_pagevalue_search_sql(user_id)
     return <<-"SQL"
       SELECT
-      up.*
+      up.*, p.title as project_title
       FROM
       user_pagevalues up
-      INNER JOIN
-      setting_pagevalues gp ON up.setting_pagevalue_id = gp.id
+      LEFT JOIN
+      setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
       INNER JOIN
       user_project_maps upm ON up.user_project_map_id = upm.id
       INNER JOIN
@@ -188,7 +215,7 @@ class PageValueState
         SELECT upm_sub.project_id as user_project_map_project_id, MAX(up_sub.updated_at) as user_pagevalue_updated_at_max
         FROM user_pagevalues up_sub
         INNER JOIN user_project_maps upm_sub ON up_sub.user_project_map_id = upm_sub.id
-        WHERE upm_sub.user_id = 2
+        WHERE upm_sub.user_id = #{user_id}
         AND up_sub.del_flg = 0
         AND upm_sub.del_flg = 0
         GROUP BY upm_sub.project_id
@@ -196,16 +223,15 @@ class PageValueState
       WHERE
       up.del_flg = 0
       AND
-      gp.del_flg = 0
-      AND
       upm.del_flg = 0
       AND
       p.del_flg = 0
+      ORDER BY up.updated_at DESC
     SQL
   end
 
   def self.save_setting_pagevalue(save_value, update_id = nil)
-    ret_id = nil
+    ret_sp = nil
 
     # 共通設定作成
     if save_value != 'null'
@@ -240,7 +266,7 @@ class PageValueState
                                       grid_step: grid_step
                                   })
         sp.save!
-        ret_id = sp.id
+        ret_sp = sp
       else
         # Update
         sp = SettingPagevalue.find(update_id)
@@ -250,12 +276,12 @@ class PageValueState
           sp.grid_enable = grid_enable
           sp.grid_step = grid_step
           sp.save!
-          ret_id = sp.id
+          ret_sp = sp
         end
       end
     end
 
-    return ret_id
+    return ret_sp
   end
 
   def self.save_general_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
