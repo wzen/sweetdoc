@@ -110,6 +110,9 @@ class Project
       ServerStorage.load(user_pagevalue_id, ->
         # 環境設定
         Common.applyEnvironmentFromPagevalue()
+        # Sectionを変更後のページに修正
+        sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+        $('#pages .section').attr('class', "#{sectionClass} section")
         # モーダルを削除
         Common.hideModalView()
       )

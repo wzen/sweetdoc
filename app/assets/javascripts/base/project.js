@@ -122,7 +122,10 @@ Project = (function() {
       var user_pagevalue_id;
       user_pagevalue_id = $('.project_select', modalEmt).val();
       return ServerStorage.load(user_pagevalue_id, function() {
+        var sectionClass;
         Common.applyEnvironmentFromPagevalue();
+        sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+        $('#pages .section').attr('class', sectionClass + " section");
         return Common.hideModalView();
       });
     });
