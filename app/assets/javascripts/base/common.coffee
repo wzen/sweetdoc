@@ -468,10 +468,10 @@ class Common
     diff = Common.calculateDiffTime($.now(), date)
     if diff.day > 0
       # 日で表示
-      return date.toLocaleDateString()
+      return @formatDate(date, 'YYYY/MM/DD')
     else
       # 時間で表示
-      return date.toLocaleTimeString()
+      return @formatDate(date, 'hh:mm:ss')
 
   # モーダルビュー表示
   # @param [Integer] type モーダルビュータイプ

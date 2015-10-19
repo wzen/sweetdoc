@@ -537,9 +537,9 @@ Common = (function() {
     date = new Date(update_at);
     diff = Common.calculateDiffTime($.now(), date);
     if (diff.day > 0) {
-      return date.toLocaleDateString();
+      return this.formatDate(date, 'YYYY/MM/DD');
     } else {
-      return date.toLocaleTimeString();
+      return this.formatDate(date, 'hh:mm:ss');
     }
   };
 
