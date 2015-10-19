@@ -115,6 +115,7 @@ Project = (function() {
       Common.applyEnvironmentFromPagevalue();
       return Project.create(projectName, width, height, function(data) {
         Navbar.setLastUpdateTime(data.updated_at);
+        window.initDone = true;
         return Common.hideModalView();
       });
     });
@@ -128,6 +129,7 @@ Project = (function() {
         Common.applyEnvironmentFromPagevalue();
         sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
         $('#pages .section').attr('class', sectionClass + " section");
+        window.initDone = true;
         return Common.hideModalView();
       });
     });

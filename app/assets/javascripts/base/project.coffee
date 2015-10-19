@@ -100,6 +100,8 @@ class Project
       Project.create(projectName, width, height, (data) ->
         # 更新日時設定
         Navbar.setLastUpdateTime(data.updated_at)
+        # 初期化終了
+        window.initDone = true
         # モーダルを削除
         Common.hideModalView()
       )
@@ -117,6 +119,8 @@ class Project
         # Sectionを変更後のページに修正
         sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
         $('#pages .section').attr('class', "#{sectionClass} section")
+        # 初期化終了
+        window.initDone = true
         # モーダルを削除
         Common.hideModalView()
       )

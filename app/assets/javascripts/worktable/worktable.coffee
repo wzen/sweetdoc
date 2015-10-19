@@ -32,13 +32,16 @@ $ ->
     PageValue.updateForkCount()
     # ページング
     Paging.initPaging()
-    # 初期化終了
-    window.initDone = true
+
 
   if existedCache
     # 描画
     PageValue.adjustInstanceAndEventOnPage()
-    WorktableCommon.drawAllItemFromInstancePageValue(_callback)
+    WorktableCommon.drawAllItemFromInstancePageValue( ->
+      _callback.call(@)
+      # 初期化終了
+      window.initDone = true
+    )
     # タイムライン更新
     Timeline.refreshAllTimeline()
   else
@@ -46,5 +49,5 @@ $ ->
     Timeline.refreshAllTimeline()
     _callback.call(@)
 
-    # 初期モーダル表示
+    # プロジェクトモーダル表示
     Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)

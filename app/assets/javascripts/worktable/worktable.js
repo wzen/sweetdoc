@@ -20,12 +20,14 @@ $(function() {
     OperationHistory.add(true);
     PageValue.updatePageCount();
     PageValue.updateForkCount();
-    Paging.initPaging();
-    return window.initDone = true;
+    return Paging.initPaging();
   };
   if (existedCache) {
     PageValue.adjustInstanceAndEventOnPage();
-    WorktableCommon.drawAllItemFromInstancePageValue(_callback);
+    WorktableCommon.drawAllItemFromInstancePageValue(function() {
+      _callback.call(this);
+      return window.initDone = true;
+    });
     return Timeline.refreshAllTimeline();
   } else {
     LocalStorage.clearWorktable();
