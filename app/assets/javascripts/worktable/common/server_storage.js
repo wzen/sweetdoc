@@ -180,6 +180,34 @@ ServerStorage = (function() {
     });
   };
 
+  ServerStorage.get_load_data = function(successCallback, errorCallback) {
+    var data;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    data = {};
+    data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
+    return $.ajax({
+      url: "/page_value_state/user_pagevalue_list_sorted_update",
+      type: "GET",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback();
+        }
+      }
+    });
+  };
+
   ServerStorage.startSaveIdleTimer = function() {
     var time;
     if (((window.workingAutoSave != null) && window.workingAutoSave) || !window.initDone) {

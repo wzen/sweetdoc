@@ -12,7 +12,6 @@ class PageValueStateController < ApplicationController
     s_page_values = params[Const::ServerStorage::Key::SETTING_PAGE_VALUE]
     new_record = params[Const::ServerStorage::Key::NEW_RECORD]
     @message, @last_save_time = PageValueState.save_state(user_id, project_id, page_count, g_page_values, i_page_values, e_page_values, s_page_values, new_record)
-    #@user_pagevalue_list = PageValueState.get_user_pagevalue_save_list(user_id, project_id)
   end
 
   def load_state

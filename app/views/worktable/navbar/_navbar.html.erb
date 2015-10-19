@@ -18,8 +18,12 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a class="menu-newcreate"><%= t('header_menu.file.newcreate') %></a></li>
-                        <li><a class="menu-open"><%= t('header_menu.file.open') %></a></li>
                         <li><a class="menu-save"><%= t('header_menu.file.save') %></a></li>
+                        <li class="dropdown-submenu">
+                            <a class="menu-load"><%= t('header_menu.file.load') %></a>
+                            <ul class="dropdown-menu <%= Const::ElementAttribute::FILE_LOAD_CLASS %>">
+                            </ul>
+                        </li>
                         <li class="divider"></li>
                         <li><a class="menu-setting"><%= t('header_menu.file.setting') %></a></li>
                     </ul>

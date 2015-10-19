@@ -90,6 +90,7 @@ class Const
     MAIN_TEMP_ID = 'main_temp'
     NAVBAR_ROOT = 'nav'
     RUN_CSS = 'run_css_@pagenum'
+    FILE_LOAD_CLASS = 'file_load'
   end
 
   class DesignConfig

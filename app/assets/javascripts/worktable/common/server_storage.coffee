@@ -135,6 +135,24 @@ class ServerStorage
       }
     )
 
+  @get_load_data: (successCallback = null, errorCallback = null) ->
+    data = {}
+    data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
+    $.ajax(
+      {
+        url: "/page_value_state/user_pagevalue_list_sorted_update"
+        type: "GET"
+        dataType: "json"
+        data: data
+        success: (data)->
+          if successCallback?
+            successCallback(data)
+        error: (data)->
+          if errorCallback?
+            errorCallback()
+      }
+    )
+
   @startSaveIdleTimer = ->
     if (window.workingAutoSave? && window.workingAutoSave) || !window.initDone
       # AutoSave実行中 or 画面初期化時は実行しない
