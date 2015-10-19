@@ -22,7 +22,8 @@ Upload = (function() {
     });
     $('.upload_button').off('click');
     return $('.upload_button').on('click', function() {
-      return Upload.uploadToGallery(root);
+      Upload.uploadToGallery(root);
+      return false;
     });
   };
 
@@ -101,9 +102,11 @@ Upload = (function() {
     _saveGallery = function() {
       var fd, tags;
       fd = new FormData(document.getElementById('upload_form'));
-      tags = $('.select_tag a', root).html();
+      tags = $.map($('.select_tag a', root), function(n) {
+        return $(n).html();
+      });
       if (tags != null) {
-        fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html());
+        fd.append(Constant.Gallery.Key.TAGS, tags);
       } else {
         fd.append(Constant.Gallery.Key.TAGS, null);
       }

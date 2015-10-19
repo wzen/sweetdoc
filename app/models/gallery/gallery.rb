@@ -4,6 +4,8 @@ require 'project/project_gallery_map'
 require 'project/user_project_map'
 require 'gallery/gallery_tag'
 require 'gallery/gallery_tag_map'
+require 'gallery/gallery_general_pagevalue'
+require 'gallery/gallery_general_pagevalue_paging'
 require 'gallery/gallery_instance_pagevalue'
 require 'gallery/gallery_instance_pagevalue_paging'
 require 'gallery/gallery_event_pagevalue'
@@ -310,25 +312,30 @@ class Gallery < ActiveRecord::Base
         # タグテーブル処理
         tag_ids = []
         tags.each do |tag|
-          tag = GalleryTag.find_by(name: tag)
-          if tag == nil
+          t = GalleryTag.find_by(name: tag)
+          if t == nil
             # タグを新規作成
-            tag = GalleryTag.new({
+            t = GalleryTag.new({
                                      name: tag
                                  })
-            tag.save!
-            tag_ids << tag.id
+            t.save!
+            tag_ids << t.id
 
           else
             # タグの重み付けを加算
-            tag.weight += 1
-            tag.save!
-            tag_ids << tag.id
+            if t.weight
+              t.weight += 1
+            else
+              t.weight = 1
+            end
+
+            t.save!
+            tag_ids << t.id
           end
         end
 
         # 存在しているデータが有る場合削除
-        GalleryTagMap.destroy(gallery_id: gallery_id)
+        GalleryTagMap.delete_all(gallery_id: gallery_id)
 
         # タグマップテーブル作成
         tag_ids.each do |tag_id|
@@ -337,6 +344,7 @@ class Gallery < ActiveRecord::Base
                                       gallery_id: gallery_id,
                                       gallery_tag_id: tag_id
                                   })
+          map.save!
         end
 
         # タグカテゴリ設定

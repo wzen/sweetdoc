@@ -33,7 +33,7 @@ class GalleryController < ApplicationController
 
   def save_state
     user_id = current_or_guest_user.id
-    tags = params[Const::Gallery::Key::TAGS]
+    tags = params[Const::Gallery::Key::TAGS].split(',')
     title = params[Const::Gallery::Key::TITLE]
     project_id = params[Const::Gallery::Key::PROJECT_ID]
     if project_id == nil || title == nil || title.length == 0

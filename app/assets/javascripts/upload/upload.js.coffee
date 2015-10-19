@@ -25,6 +25,7 @@ class Upload
     $('.upload_button').off('click')
     $('.upload_button').on('click', ->
       Upload.uploadToGallery(root)
+      return false
     )
 
   # タグクリックイベント
@@ -96,9 +97,9 @@ class Upload
     # ギャラリー保存処理
     _saveGallery = ->
       fd = new FormData(document.getElementById('upload_form'))
-      tags = $('.select_tag a', root).html()
+      tags = $.map($('.select_tag a', root), (n) -> $(n).html())
       if tags?
-        fd.append(Constant.Gallery.Key.TAGS, $('.select_tag a', root).html())
+        fd.append(Constant.Gallery.Key.TAGS, tags)
       else
         fd.append(Constant.Gallery.Key.TAGS, null)
 
