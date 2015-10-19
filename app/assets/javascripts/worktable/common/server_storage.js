@@ -37,6 +37,8 @@ ServerStorage = (function() {
 
       ElementAttribute.LOADED_LOCALTIME = 'loaded_localtime';
 
+      ElementAttribute.LOAD_LIST_INTERVAL_SECONDS = 60;
+
       return ElementAttribute;
 
     })();
@@ -80,7 +82,8 @@ ServerStorage = (function() {
         data: data,
         dataType: "json",
         success: function(data) {
-          $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS + " ." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+          $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+          Navbar.setLastUpdateTime(data.last_save_time);
           PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time);
           if (window.debug) {
             console.log(data.message);
@@ -167,7 +170,7 @@ ServerStorage = (function() {
             Common.applyEnvironmentFromPagevalue();
             WorktableSetting.initConfig();
             if (callback != null) {
-              return callback();
+              return callback(data);
             }
           });
         });

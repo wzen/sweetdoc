@@ -526,7 +526,21 @@ Common = (function() {
       span = year === 1 ? 'year' : 'years';
       ret = year + " " + span + " ago";
     }
+    if (ret == null) {
+      ret = '';
+    }
     return ret;
+  };
+
+  Common.displayLastUpdateTime = function(update_at) {
+    var date, diff;
+    date = new Date(update_at);
+    diff = Common.calculateDiffTime($.now(), date);
+    if (diff.day > 0) {
+      return date.toLocaleDateString();
+    } else {
+      return date.toLocaleTimeString();
+    }
   };
 
   Common.showModalView = function(type, prepareShowFunc, enableOverlayClose) {

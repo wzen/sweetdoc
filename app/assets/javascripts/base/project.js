@@ -113,7 +113,8 @@ Project = (function() {
       });
       Common.setTitle(projectName);
       Common.applyEnvironmentFromPagevalue();
-      return Project.create(projectName, width, height, function() {
+      return Project.create(projectName, width, height, function(data) {
+        Navbar.setLastUpdateTime(data.updated_at);
         return Common.hideModalView();
       });
     });
@@ -121,8 +122,9 @@ Project = (function() {
     $('.open_button', modalEmt).on('click', function() {
       var user_pagevalue_id;
       user_pagevalue_id = $('.project_select', modalEmt).val();
-      return ServerStorage.load(user_pagevalue_id, function() {
+      return ServerStorage.load(user_pagevalue_id, function(data) {
         var sectionClass;
+        Navbar.setLastUpdateTime(data.updated_at);
         Common.applyEnvironmentFromPagevalue();
         sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
         $('#pages .section').attr('class', sectionClass + " section");
@@ -178,7 +180,7 @@ Project = (function() {
       success: function(data) {
         PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id);
         if (callback != null) {
-          return callback();
+          return callback(data);
         }
       },
       error: function(data) {}

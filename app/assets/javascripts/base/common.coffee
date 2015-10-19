@@ -457,7 +457,21 @@ class Common
     if year > 0
       span = if year == 1 then 'year' else 'years'
       ret = "#{year} #{span} ago"
+    if !ret?
+      ret = ''
+
     return ret
+
+  # 最新更新日時
+  @displayLastUpdateTime = (update_at) ->
+    date = new Date(update_at)
+    diff = Common.calculateDiffTime($.now(), date)
+    if diff.day > 0
+      # 日で表示
+      return date.toLocaleDateString()
+    else
+      # 時間で表示
+      return date.toLocaleTimeString()
 
   # モーダルビュー表示
   # @param [Integer] type モーダルビュータイプ

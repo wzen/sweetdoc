@@ -21,12 +21,11 @@ class PageValueState
       s_page_values,
       new_record)
     begin
+      last_save_time = nil
       if g_page_values != 'null' ||
           i_page_values != 'null' ||
           e_page_values != 'null' ||
           s_page_values != 'null'
-
-        last_save_time = nil
 
         ActiveRecord::Base.transaction do
 
@@ -124,7 +123,8 @@ class PageValueState
              gcp.data as general_common_pagevalue_data,
              gp.data as general_pagevalue_data,
              sp.autosave as setting_pagevalue_autosave, sp.autosave_time as setting_pagevalue_autosave_time, sp.grid_enable as setting_pagevalue_grid_enable, sp.grid_step as setting_pagevalue_grid_step,
-             ipp.page_num as page_num
+             ipp.page_num as page_num,
+             up.updated_at as user_pagevalues_updated_at
       FROM user_pagevalues up
       LEFT JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
       INNER JOIN user_project_maps upm ON up.user_project_map_id = upm.id
@@ -194,7 +194,7 @@ class PageValueState
       end
 
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-      return item_js_list, ppd, gpd, ipd, epd, spd, message
+      return item_js_list, ppd, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
     end
   end
 

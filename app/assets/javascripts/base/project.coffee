@@ -97,7 +97,9 @@ class Project
       Common.applyEnvironmentFromPagevalue()
 
       # プロジェクト作成リクエスト
-      Project.create(projectName, width, height, ->
+      Project.create(projectName, width, height, (data) ->
+        # 更新日時設定
+        Navbar.setLastUpdateTime(data.updated_at)
         # モーダルを削除
         Common.hideModalView()
       )
@@ -107,7 +109,9 @@ class Project
     $('.open_button', modalEmt).on('click', ->
       # プロジェクト選択
       user_pagevalue_id = $('.project_select', modalEmt).val()
-      ServerStorage.load(user_pagevalue_id, ->
+      ServerStorage.load(user_pagevalue_id, (data) ->
+        # 最新更新日時設定
+        Navbar.setLastUpdateTime(data.updated_at)
         # 環境設定
         Common.applyEnvironmentFromPagevalue()
         # Sectionを変更後のページに修正
@@ -157,7 +161,7 @@ class Project
           # PageValue設定
           PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
           if callback?
-            callback()
+            callback(data)
         error: (data) ->
       }
     )

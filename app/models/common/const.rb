@@ -91,6 +91,7 @@ class Const
     NAVBAR_ROOT = 'nav'
     RUN_CSS = 'run_css_@pagenum'
     FILE_LOAD_CLASS = 'file_load'
+    LAST_UPDATE_TIME_CLASS = 'last_update_time'
   end
 
   class DesignConfig

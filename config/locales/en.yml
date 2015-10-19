@@ -47,6 +47,7 @@ en:
       introduction: "introduction"
       about: "About"
       back_to_mainpage: "Back to MainPage"
+      last_update_date: "Last update"
     setting:
       show_guide: "Toggle Guide"
   context_menu:

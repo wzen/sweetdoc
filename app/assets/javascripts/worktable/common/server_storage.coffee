@@ -17,6 +17,7 @@ class ServerStorage
       @FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS
       @LOAD_LIST_UPDATED_FLG = 'load_list_updated'
       @LOADED_LOCALTIME = 'loaded_localtime'
+      @LOAD_LIST_INTERVAL_SECONDS = 60
 
     # 60秒が過ぎたらLoadリスト一覧を取得可にする
     @LOAD_LIST_INTERVAL_SECONDS = 60
@@ -58,8 +59,9 @@ class ServerStorage
           dataType: "json"
           success: (data)->
             # 「Load」マウスオーバーで取得させるためupdateフラグを消去
-            $("##{Navbar.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.FILE_LOAD_CLASS} .#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
+            $("##{Navbar.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
             # 最終保存時刻更新
+            Navbar.setLastUpdateTime(data.last_save_time)
             PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time)
             if window.debug
               console.log(data.message)
@@ -125,7 +127,7 @@ class ServerStorage
               Common.applyEnvironmentFromPagevalue()
               WorktableSetting.initConfig()
               if callback?
-                callback()
+                callback(data)
             )
           )
 

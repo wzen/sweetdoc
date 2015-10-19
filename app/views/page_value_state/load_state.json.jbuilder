@@ -1,4 +1,5 @@
 json.message @message
+json.updated_at @updated_at
 json.project_pagevalue_data @project_pagevalue_data
 json.general_pagevalue_data @general_pagevalue_data
 json.instance_pagevalue_data @instance_pagevalue_data

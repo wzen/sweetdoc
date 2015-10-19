@@ -10,9 +10,7 @@ Navbar = (function() {
 
   Navbar.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
 
-  Navbar.LOAD_LIST_UPDATED_FLG = 'load_list_updated_flg';
-
-  Navbar.LOAD_LIST_INTERVAL_SECONDS = '60';
+  Navbar.LAST_UPDATE_TIME_CLASS = constant.ElementAttribute.LAST_UPDATE_TIME_CLASS;
 
   Navbar.initWorktableNavbar = function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt, menuSave;
@@ -163,17 +161,17 @@ Navbar = (function() {
 
   Navbar.get_load_list = function() {
     var diffTime, loadEmt, loadedLocalTime, s, updateFlg;
-    loadEmt = $("#" + Navbar.NAVBAR_ROOT).find("." + this.FILE_LOAD_CLASS);
-    updateFlg = loadEmt.find("." + this.LOAD_LIST_UPDATED_FLG).length > 0;
+    loadEmt = $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.FILE_LOAD_CLASS);
+    updateFlg = loadEmt.find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).length > 0;
     if (updateFlg) {
-      loadedLocalTime = loadEmt.find("." + this.LOADED_LOCALTIME);
+      loadedLocalTime = loadEmt.find("." + ServerStorage.ElementAttribute.LOADED_LOCALTIME);
       if (loadedLocalTime != null) {
         diffTime = Common.calculateDiffTime($.now(), parseInt(loadedLocalTime.val()));
         s = diffTime.seconds;
         if (window.debug) {
           console.log('loadedLocalTime diff ' + s);
         }
-        if (parseInt(s) <= this.LOAD_LIST_INTERVAL_SECONDS) {
+        if (parseInt(s) <= ServerStorage.ElementAttribute.LOAD_LIST_INTERVAL_SECONDS) {
           return;
         }
       }
@@ -199,10 +197,10 @@ Navbar = (function() {
           user_pagevalue_id = $(this).find('.user_pagevalue_id:first').val();
           return ServerStorage.load(user_pagevalue_id);
         });
-        loadEmt.find("." + ServerStorage.LOAD_LIST_UPDATED_FLG).remove();
-        loadEmt.find("." + ServerStorage.LOADED_LOCALTIME).remove();
-        $("<input type='hidden' class=" + ServerStorage.LOAD_LIST_UPDATED_FLG + " value='1'>").appendTo(loadEmt);
-        return $("<input type='hidden' class=" + ServerStorage.LOADED_LOCALTIME + " value=" + ($.now()) + ">").appendTo(loadEmt);
+        loadEmt.find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+        loadEmt.find("." + ServerStorage.ElementAttribute.LOADED_LOCALTIME).remove();
+        $("<input type='hidden' class=" + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG + " value='1'>").appendTo(loadEmt);
+        return $("<input type='hidden' class=" + ServerStorage.ElementAttribute.LOADED_LOCALTIME + " value=" + ($.now()) + ">").appendTo(loadEmt);
       } else {
         loadEmt.children().remove();
         return $("<li><a class='menu-item'>No Data</a></li>").appendTo(loadEmt);
@@ -214,6 +212,10 @@ Navbar = (function() {
       loadEmt.children().remove();
       return $("<li><a class='menu-item'>Server Access Error</a></li>").appendTo(loadEmt);
     });
+  };
+
+  Navbar.setLastUpdateTime = function(update_at) {
+    return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).html((I18n.t('header_menu.etc.last_update_date')) + " : " + (Common.displayLastUpdateTime(update_at)));
   };
 
   return Navbar;
