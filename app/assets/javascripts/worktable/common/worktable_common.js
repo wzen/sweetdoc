@@ -158,7 +158,10 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.changeMode = function(mode) {
-    if (mode === Constant.Mode.DRAW) {
+    if (mode === Constant.Mode.NOT_SELECT) {
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+      window.scrollInside.removeClass('edit_mode');
+    } else if (mode === Constant.Mode.DRAW) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInside.removeClass('edit_mode');
@@ -317,8 +320,7 @@ WorktableCommon = (function() {
 
   WorktableCommon.initMainContainer = function() {
     CommonVar.worktableCommonVar();
-    $(window.drawingCanvas).attr('width', window.mainWrapper.width());
-    $(window.drawingCanvas).attr('height', window.mainWrapper.height());
+    Common.updateCanvasSize();
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
     window.scrollInside.width(window.scrollViewSize);
     window.scrollInside.height(window.scrollViewSize);

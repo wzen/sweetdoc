@@ -129,7 +129,10 @@ class WorktableCommon
   # モードチェンジ
   # @param [Mode] mode 画面モード
   @changeMode = (mode) ->
-    if mode == Constant.Mode.DRAW
+    if mode == Constant.Mode.NOT_SELECT
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+      window.scrollInside.removeClass('edit_mode')
+    else if mode == Constant.Mode.DRAW
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInside.removeClass('edit_mode')
@@ -265,8 +268,7 @@ class WorktableCommon
   @initMainContainer = ->
     # 定数 & レイアウト & イベント系変数の初期化
     CommonVar.worktableCommonVar()
-    $(window.drawingCanvas).attr('width', window.mainWrapper.width())
-    $(window.drawingCanvas).attr('height', window.mainWrapper.height())
+    Common.updateCanvasSize()
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     # スクロールサイズ
     window.scrollInside.width(window.scrollViewSize)

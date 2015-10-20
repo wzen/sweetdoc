@@ -66,7 +66,10 @@ class Navbar
     )
 
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
-    $('.menu-item', itemsSelectMenuEmt).click( ->
+    $('.menu-item', itemsSelectMenuEmt).off('click')
+    $('.menu-item', itemsSelectMenuEmt).on('click', ->
+      selected = $(@).html()
+      $('#header_items_selected_menu_span').html(selected)
       # プレビューを停止して再描画
       WorktableCommon.reDrawAllInstanceItemIfChanging()
       # 選択枠削除
@@ -78,12 +81,8 @@ class Navbar
         WorktableCommon.changeMode(Constant.Mode.DRAW)
     )
 
-    $('#header_items_select_menu .menu-item').click( ->
-      selected = $(@).html()
-      $('#header_items_selected_menu_span').html(selected)
-    )
-
-    $('#menu-action-edit').click( ->
+    $('#menu-action-edit').off('click')
+    $('#menu-action-edit').on('click', ->
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
@@ -175,7 +174,8 @@ class Navbar
         loadEmt.children().remove()
         $(list).appendTo(loadEmt)
         # クリックイベント設定
-        loadEmt.find('li').click((e) ->
+        loadEmt.find('li').off('click')
+        loadEmt.find('li').on('click', (e) ->
           user_pagevalue_id = $(@).find('.user_pagevalue_id:first').val()
           ServerStorage.load(user_pagevalue_id)
         )

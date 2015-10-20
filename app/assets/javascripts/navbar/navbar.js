@@ -70,8 +70,11 @@ Navbar = (function() {
       return window.location.href = '/';
     });
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
-    $('.menu-item', itemsSelectMenuEmt).click(function() {
-      var emtId, itemId;
+    $('.menu-item', itemsSelectMenuEmt).off('click');
+    $('.menu-item', itemsSelectMenuEmt).on('click', function() {
+      var emtId, itemId, selected;
+      selected = $(this).html();
+      $('#header_items_selected_menu_span').html(selected);
       WorktableCommon.reDrawAllInstanceItemIfChanging();
       WorktableCommon.clearSelectedBorder();
       emtId = $(this).attr('id');
@@ -81,12 +84,8 @@ Navbar = (function() {
         return WorktableCommon.changeMode(Constant.Mode.DRAW);
       }
     });
-    $('#header_items_select_menu .menu-item').click(function() {
-      var selected;
-      selected = $(this).html();
-      return $('#header_items_selected_menu_span').html(selected);
-    });
-    $('#menu-action-edit').click(function() {
+    $('#menu-action-edit').off('click');
+    $('#menu-action-edit').on('click', function() {
       Navbar.setModeEdit();
       return WorktableCommon.changeMode(Constant.Mode.EDIT);
     });
@@ -189,7 +188,8 @@ Navbar = (function() {
         }
         loadEmt.children().remove();
         $(list).appendTo(loadEmt);
-        loadEmt.find('li').click(function(e) {
+        loadEmt.find('li').off('click');
+        loadEmt.find('li').on('click', function(e) {
           var user_pagevalue_id;
           user_pagevalue_id = $(this).find('.user_pagevalue_id:first').val();
           return ServerStorage.load(user_pagevalue_id);

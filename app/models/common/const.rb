@@ -2,6 +2,8 @@ class Const
 
   # 操作モード
   class Mode
+    # @property [Int] NOT_SELECT 未選択
+    NOT_SELECT = -1
     # @property [Int] DRAW 描画
     DRAW = 0
     # @property [Int] EDIT 画面編集

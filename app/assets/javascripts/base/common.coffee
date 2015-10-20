@@ -97,9 +97,9 @@ class Common
 
   # Canvasサイズ更新
   @updateCanvasSize = ->
-    if window.mainWrapper? && window.drawingCanvas?
-      $(window.drawingCanvas).attr('width', window.mainWrapper.width())
-      $(window.drawingCanvas).attr('height', window.mainWrapper.height())
+    if window.drawingCanvas?
+      $(window.drawingCanvas).attr('width', $('#pages').width())
+      $(window.drawingCanvas).attr('height', $('#pages').height())
 
   # リサイズイベント設定
   @initResize = (resizeEvent = null) ->

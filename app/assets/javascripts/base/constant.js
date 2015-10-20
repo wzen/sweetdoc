@@ -22,6 +22,8 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.Mode = (function() {
       function Mode() {}
 
+      Mode.NOT_SELECT = constant.Mode.NOT_SELECT;
+
       Mode.DRAW = constant.Mode.DRAW;
 
       Mode.EDIT = constant.Mode.EDIT;

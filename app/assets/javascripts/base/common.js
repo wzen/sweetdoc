@@ -118,9 +118,9 @@ Common = (function() {
   };
 
   Common.updateCanvasSize = function() {
-    if ((window.mainWrapper != null) && (window.drawingCanvas != null)) {
-      $(window.drawingCanvas).attr('width', window.mainWrapper.width());
-      return $(window.drawingCanvas).attr('height', window.mainWrapper.height());
+    if (window.drawingCanvas != null) {
+      $(window.drawingCanvas).attr('width', $('#pages').width());
+      return $(window.drawingCanvas).attr('height', $('#pages').height());
     }
   };
 
