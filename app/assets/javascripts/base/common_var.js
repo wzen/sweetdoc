@@ -54,7 +54,7 @@ CommonVar = (function() {
     this.initCommonVar();
     window.messageTimer = null;
     window.flushMessageTimer = null;
-    window.mode = Constant.Mode.DRAW;
+    window.mode = Constant.Mode.NOT_SELECT;
     window.selectedObjId = null;
     window.runningPreview = false;
     return this.updateWorktableBaseElement(PageValue.getPageNum());

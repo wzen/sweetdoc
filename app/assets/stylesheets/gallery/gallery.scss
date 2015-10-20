@@ -17,6 +17,10 @@ html, body {
   overflow: hidden;
 }
 
+div#contents {
+  margin-top: 0 !important;
+}
+
 div#main_gallery_wrapper {
   position: relative;
   width: 100%;

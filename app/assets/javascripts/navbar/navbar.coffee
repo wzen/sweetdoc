@@ -83,16 +83,21 @@ class Navbar
 
     $('#menu-action-edit').off('click')
     $('#menu-action-edit').on('click', ->
+      selected = $(@).html()
+      $('#header_items_selected_menu_span').html(selected)
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
 
     $('#menu_sidebar_toggle').off('click')
     $('#menu_sidebar_toggle').on('click', ->
-      Sidebar.switchSidebarConfig(Sidebar.Type.STATE)
-      StateConfig.initConfig()
-      WorktableSetting.initConfig()
-      Sidebar.openConfigSidebar()
+      if Sidebar.isOpenedConfigSidebar()
+        Sidebar.closeSidebar()
+      else
+        Sidebar.switchSidebarConfig(Sidebar.Type.STATE)
+        StateConfig.initConfig()
+        WorktableSetting.initConfig()
+        Sidebar.openConfigSidebar()
     )
 
   # Runナビバー初期化

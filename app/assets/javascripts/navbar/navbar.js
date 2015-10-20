@@ -86,15 +86,22 @@ Navbar = (function() {
     });
     $('#menu-action-edit').off('click');
     $('#menu-action-edit').on('click', function() {
+      var selected;
+      selected = $(this).html();
+      $('#header_items_selected_menu_span').html(selected);
       Navbar.setModeEdit();
       return WorktableCommon.changeMode(Constant.Mode.EDIT);
     });
     $('#menu_sidebar_toggle').off('click');
     return $('#menu_sidebar_toggle').on('click', function() {
-      Sidebar.switchSidebarConfig(Sidebar.Type.STATE);
-      StateConfig.initConfig();
-      WorktableSetting.initConfig();
-      return Sidebar.openConfigSidebar();
+      if (Sidebar.isOpenedConfigSidebar()) {
+        return Sidebar.closeSidebar();
+      } else {
+        Sidebar.switchSidebarConfig(Sidebar.Type.STATE);
+        StateConfig.initConfig();
+        WorktableSetting.initConfig();
+        return Sidebar.openConfigSidebar();
+      }
     });
   };
 
