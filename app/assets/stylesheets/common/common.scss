@@ -25,7 +25,6 @@ a {
   bottom: 0;
   right: 0;
   margin: auto;
-  border: 5px solid #e6deca;
 
   &.fullscreen {
     border: 0 !important;
@@ -60,6 +59,10 @@ div#pages {
     top: 0;
     left: 0;
   }
+}
+
+div.border {
+  border: 5px solid #e6deca;
 }
 
 div.tagcloud ul {

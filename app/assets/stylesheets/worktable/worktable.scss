@@ -27,7 +27,6 @@ html, body {
 #timeline_container {
   position: relative;
   background-color: #FAFAFA;
-  border: 5px solid #e6deca;
 }
 
 #contents {
@@ -92,9 +91,7 @@ div.scroll_inside {
 }
 
 #sidebar_container {
-  background-color: #FAFAFA;
-  border: 5px solid #e6deca;
-  padding: 15px 5px 10px 5px;
+  //padding: 0px 5px 0px 5px;
   height: 100%;
   fieldset, img {
     border: 0;
@@ -185,22 +182,7 @@ div.scroll_inside {
     border-top: solid 1px #dedede;
     border-bottom: solid 1px #dedede;
   }
-  //a {
-  //  color: #ffa800;
-  //  text-decoration: underline;
-  //  outline: 0;
-  //  &:hover {
-  //    color: #ffa800;
-  //  }
-  //}
-  //#sidebar-wrapper ul#nav li#homeBtn {
-  //  border-bottom: solid 5px #ffcc00;
-  //}
-  //body {
-  //  &#showcase ul#nav li#showcaseBtn, &.preset ul#nav li#presetBtn, &.random ul#nav li#randomBtn {
-  //    border-bottom: solid 5px #ffcc00;
-  //  }
-  //}
+
   #sidebar-wrapper {
     height: 100%;
   }
@@ -504,6 +486,10 @@ div.scroll_inside {
 
   div.design_temp {
     display: none;
+  }
+
+  .tab-content {
+    background-color: #FAFAFA;
   }
 }
 

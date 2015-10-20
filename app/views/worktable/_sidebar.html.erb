@@ -1,13 +1,32 @@
 <div id="sidebar" class="col-xs-3" style="display:none">
-    <div id="sidebar_container" class="stage_container">
+    <div id="sidebar_container">
+        <div id="sidebar-wrapper">
+            <div id="<%= Const::ElementAttribute::SIDEBAR_TAB_ROOT %>" class="sidebar-config" style="display: none">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab1" data-toggle="tab">State</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Setting</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="tab1" >
+                        <div class="scroll_y_content border">
+                            <p>
+                                <%= render 'worktable/sidebar_menu/state/state' %>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab2">
+                        <div class="scroll_y_content border">
+                            <p>
+                                <%= render 'worktable/sidebar_menu/setting/setting' %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div id="sidebar-wrapper" class="scroll_y_content">
-            <%= render 'worktable/sidebar_menu/state/state' %>
-            <%= render 'worktable/sidebar_menu/setting/setting' %>
             <%= render 'worktable/sidebar_menu/design/design' %>
             <%= render 'worktable/sidebar_menu/event/event' %>
         </div>
-
     </div>
 
 </div>

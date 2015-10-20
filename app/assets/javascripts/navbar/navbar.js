@@ -2,15 +2,17 @@
 var Navbar;
 
 Navbar = (function() {
+  var constant;
+
   function Navbar() {}
 
-  Navbar.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
-
-  Navbar.ITEM_MENU_PREFIX = 'menu-item-';
-
-  Navbar.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
-
-  Navbar.LAST_UPDATE_TIME_CLASS = constant.ElementAttribute.LAST_UPDATE_TIME_CLASS;
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    Navbar.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
+    Navbar.ITEM_MENU_PREFIX = 'menu-item-';
+    Navbar.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
+    Navbar.LAST_UPDATE_TIME_CLASS = constant.ElementAttribute.LAST_UPDATE_TIME_CLASS;
+  }
 
   Navbar.initWorktableNavbar = function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt, menuSave;
@@ -58,12 +60,6 @@ Navbar = (function() {
     $('.menu-load', fileMenuEmt).on('mouseenter', function() {
       return Navbar.get_load_list();
     });
-    $('.menu-setting', fileMenuEmt).off('click');
-    $('.menu-setting', fileMenuEmt).on('click', function() {
-      Sidebar.switchSidebarConfig(Sidebar.Type.SETTING);
-      WorktableSetting.initConfig();
-      return Sidebar.openConfigSidebar();
-    });
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li');
     $('.menu-about', etcMenuEmt).off('click');
     $('.menu-about', etcMenuEmt).on('click', function() {
@@ -98,6 +94,7 @@ Navbar = (function() {
     return $('#menu_sidebar_toggle').on('click', function() {
       Sidebar.switchSidebarConfig(Sidebar.Type.STATE);
       StateConfig.initConfig();
+      WorktableSetting.initConfig();
       return Sidebar.openConfigSidebar();
     });
   };

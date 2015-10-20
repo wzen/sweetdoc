@@ -89,6 +89,7 @@ class Const
   class ElementAttribute
     MAIN_TEMP_ID = 'main_temp'
     NAVBAR_ROOT = 'nav'
+    SIDEBAR_TAB_ROOT = 'tab-config'
     RUN_CSS = 'run_css_@pagenum'
     FILE_LOAD_CLASS = 'file_load'
     LAST_UPDATE_TIME_CLASS = 'last_update_time'

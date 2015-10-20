@@ -837,37 +837,42 @@ Common = (function() {
   };
 
   Common.setupJsByList = function(itemJsList, callback) {
-    var _callback, loadedCount;
+    var _addItem, _func, d, loadedIndex;
     if (callback == null) {
       callback = null;
     }
-    _callback = function(item_id) {
+    _addItem = function(item_id) {
       if (item_id == null) {
         item_id = null;
       }
       if (item_id != null) {
         PageValue.addItemInfo(item_id);
         if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-          EventConfig.addEventConfigContents(item_id);
+          return EventConfig.addEventConfigContents(item_id);
         }
-      }
-      if (callback != null) {
-        return callback();
       }
     };
     if (itemJsList.length === 0) {
-      _callback.call(this);
+      if (callback != null) {
+        callback();
+      }
       return;
     }
-    loadedCount = 0;
-    return itemJsList.forEach(function(d) {
+    loadedIndex = 0;
+    d = itemJsList[loadedIndex];
+    _func = function() {
       var itemId, option;
       itemId = d.item_id;
       if (window.itemInitFuncList[itemId] != null) {
         window.itemInitFuncList[itemId]();
-        loadedCount += 1;
-        if (loadedCount >= itemJsList.length) {
-          _callback.call(this, d.item_id);
+        loadedIndex += 1;
+        if (loadedIndex >= itemJsList.length) {
+          if (callback != null) {
+            callback();
+          }
+        } else {
+          d = itemJsList[loadedIndex];
+          _func.call();
         }
         return;
       }
@@ -877,12 +882,19 @@ Common = (function() {
         };
       }
       return Common.availJs(itemId, d.js_src, option, function() {
-        loadedCount += 1;
-        if (loadedCount >= itemJsList.length) {
-          return _callback.call(this, d.item_id);
+        _addItem.call(this, itemId);
+        loadedIndex += 1;
+        if (loadedIndex >= itemJsList.length) {
+          if (callback != null) {
+            return callback();
+          }
+        } else {
+          d = itemJsList[loadedIndex];
+          return _func.call();
         }
       });
-    });
+    };
+    return _func.call();
   };
 
   return Common;

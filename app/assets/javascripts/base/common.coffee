@@ -703,40 +703,51 @@ class Common
   # JSファイルを適用する
   @setupJsByList = (itemJsList, callback = null) ->
 
-    _callback = (item_id = null) ->
+    _addItem = (item_id = null) ->
       if item_id?
         PageValue.addItemInfo(item_id)
         if EventConfig?
           EventConfig.addEventConfigContents(item_id)
-      if callback?
-        callback()
+
 
     if itemJsList.length == 0
-      _callback.call(@)
+      if callback?
+        callback()
       return
 
-    loadedCount = 0
-    itemJsList.forEach((d) ->
+    loadedIndex = 0
+    d = itemJsList[loadedIndex]
+    _func = ->
       itemId = d.item_id
       if window.itemInitFuncList[itemId]?
-        # 既に読み込まれている場合はコールバックのみ実行
+          # 既に読み込まれている場合
         window.itemInitFuncList[itemId]()
-        loadedCount += 1
-        if loadedCount >= itemJsList.length
+        #_addItem.call(@, itemId)
+        loadedIndex += 1
+        if loadedIndex >= itemJsList.length
           # 全て読み込んだ後
-          _callback.call(@, d.item_id)
+          if callback?
+            callback()
+        else
+          d = itemJsList[loadedIndex]
+          _func.call()
         return
 
       if d.css_temp?
         option = {css_temp: d.css_temp}
 
       Common.availJs(itemId, d.js_src, option, ->
-        loadedCount += 1
-        if loadedCount >= itemJsList.length
+        _addItem.call(@, itemId)
+        loadedIndex += 1
+        if loadedIndex >= itemJsList.length
           # 全て読み込んだ後
-          _callback.call(@, d.item_id)
+          if callback?
+            callback()
+        else
+          d = itemJsList[loadedIndex]
+          _func.call()
       )
-    )
+    _func.call()
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

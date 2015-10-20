@@ -1,5 +1,11 @@
 class Sidebar
 
+
+  if gon?
+    # 定数
+    constant = gon.const
+    @SIDEBAR_TAB_ROOT = constant.ElementAttribute.SIDEBAR_TAB_ROOT
+
   class @Type
     @STATE = 'state'
     @CSS = 'css'
@@ -57,8 +63,8 @@ class Sidebar
     animation = @isOpenedConfigSidebar()
     $('.sidebar-config').hide()
 
-    if configType == @Type.STATE
-      sc = $("##{StateConfig.ROOT_ID_NAME}")
+    if configType == @Type.STATE || configType == @Type.SETTING
+      sc = $("##{@SIDEBAR_TAB_ROOT}")
       if animation
         sc.fadeIn('fast')
       else
@@ -78,12 +84,6 @@ class Sidebar
         $('#event-config').fadeIn('fast')
       else
         $('#event-config').show()
-    else if configType == @Type.SETTING
-      sc = $("##{WorktableSetting.ROOT_ID_NAME}")
-      if animation
-        sc.fadeIn('fast')
-      else
-        sc.show()
 
   # アイテム編集メニュー表示
   @openItemEditConfig = (target) ->

@@ -64,7 +64,9 @@ WorktableSetting = (function() {
           } else {
             gridStepDiv.hide();
           }
-          return _this.drawGrid(!gridValue);
+          _this.drawGrid(!gridValue);
+          gridValue = PageValue.getSettingPageValue(_this.PageValueKey.GRID);
+          return grid.prop("checked", gridValue === 'true');
         };
       })(this));
       if (gridValue) {

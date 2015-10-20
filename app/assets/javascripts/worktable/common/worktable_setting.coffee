@@ -49,6 +49,9 @@ class WorktableSetting
           gridStepDiv.hide()
 
         @drawGrid(!gridValue)
+
+        gridValue = PageValue.getSettingPageValue(@PageValueKey.GRID)
+        grid.prop("checked",gridValue == 'true')
       )
 
       # グリッド間隔の有効無効を切り替え

@@ -2,7 +2,14 @@
 var Sidebar, SidebarUI;
 
 Sidebar = (function() {
+  var constant;
+
   function Sidebar() {}
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    Sidebar.SIDEBAR_TAB_ROOT = constant.ElementAttribute.SIDEBAR_TAB_ROOT;
+  }
 
   Sidebar.Type = (function() {
     function Type() {}
@@ -80,8 +87,8 @@ Sidebar = (function() {
     }
     animation = this.isOpenedConfigSidebar();
     $('.sidebar-config').hide();
-    if (configType === this.Type.STATE) {
-      sc = $("#" + StateConfig.ROOT_ID_NAME);
+    if (configType === this.Type.STATE || configType === this.Type.SETTING) {
+      sc = $("#" + this.SIDEBAR_TAB_ROOT);
       if (animation) {
         return sc.fadeIn('fast');
       } else {
@@ -104,13 +111,6 @@ Sidebar = (function() {
         return $('#event-config').fadeIn('fast');
       } else {
         return $('#event-config').show();
-      }
-    } else if (configType === this.Type.SETTING) {
-      sc = $("#" + WorktableSetting.ROOT_ID_NAME);
-      if (animation) {
-        return sc.fadeIn('fast');
-      } else {
-        return sc.show();
       }
     }
   };

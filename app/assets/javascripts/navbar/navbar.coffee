@@ -1,12 +1,16 @@
 class Navbar
-  # @property [String] NAVBAR_ROOT ナビヘッダーRoot
-  @NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT
-  # @property [String] ITEM_MENU_PREFIX アイテムメニュープレフィックス
-  @ITEM_MENU_PREFIX = 'menu-item-'
-  # @property [String] FILE_LOAD_CLASS ファイル読み込み クラス名
-  @FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS
-  # @property [String] LAST_UPDATE_TIME_CLASS 最新更新日 クラス名
-  @LAST_UPDATE_TIME_CLASS = constant.ElementAttribute.LAST_UPDATE_TIME_CLASS
+
+  if gon?
+    # 定数
+    constant = gon.const
+    # @property [String] NAVBAR_ROOT ナビヘッダーRoot
+    @NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT
+    # @property [String] ITEM_MENU_PREFIX アイテムメニュープレフィックス
+    @ITEM_MENU_PREFIX = 'menu-item-'
+    # @property [String] FILE_LOAD_CLASS ファイル読み込み クラス名
+    @FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS
+    # @property [String] LAST_UPDATE_TIME_CLASS 最新更新日 クラス名
+    @LAST_UPDATE_TIME_CLASS = constant.ElementAttribute.LAST_UPDATE_TIME_CLASS
 
   # Worktableナビバー初期化
   @initWorktableNavbar = ->
@@ -51,13 +55,6 @@ class Navbar
       Navbar.get_load_list()
     )
 
-    $('.menu-setting', fileMenuEmt).off('click')
-    $('.menu-setting', fileMenuEmt).on('click', ->
-      Sidebar.switchSidebarConfig(Sidebar.Type.SETTING)
-      WorktableSetting.initConfig()
-      Sidebar.openConfigSidebar()
-    )
-
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li')
     $('.menu-about', etcMenuEmt).off('click')
     $('.menu-about', etcMenuEmt).on('click', ->
@@ -95,6 +92,7 @@ class Navbar
     $('#menu_sidebar_toggle').on('click', ->
       Sidebar.switchSidebarConfig(Sidebar.Type.STATE)
       StateConfig.initConfig()
+      WorktableSetting.initConfig()
       Sidebar.openConfigSidebar()
     )
 
