@@ -18,7 +18,11 @@ class GalleryCommon
   @initGridView: ->
     window.gridWrapper.masonry({
       itemSelector: '.grid_contents_wrapper'
-      columnWidth: 380
+      columnWidth: 180
+      isAnimated: true
+      animationOptions: {
+        duration: 400
+      }
       isFitWidth: true
     })
 

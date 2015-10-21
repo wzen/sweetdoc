@@ -144,6 +144,7 @@ div#gallery_contents_wrapper {
   width: 100%;
   height: 100%;
   padding-right: $sidebar_collapse_width;
+  overflow: scroll;
 
   .wrapper {
     position: relative;
@@ -235,8 +236,6 @@ div#detail_wrapper {
 
 div#grid_centering_wrapper {
   height: 100%;
-  margin-left: 0;
-  margin-right: $sidebar_collapse_width;
 }
 
 div#grid_wrapper {
@@ -246,17 +245,36 @@ div#grid_wrapper {
   margin-left: auto;
   margin-right: auto;
 
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
   .grid_contents_wrapper {
-    //box-sizing: border-box;
-    padding: 3px 3px 3px 3px;
-    width: 380px;
-    height: 250px;
+    box-sizing: border-box;
+    //padding: 3px 3px 3px 3px;
+    float: left;
+    width: 180px;
+    height: 180px;
+    padding: 3px;
+    //border: 3px solid hsla(0, 0%, 0%, 0.5);
+
+    &.grid-item-width2 {
+      width: 360px;
+    }
+    &.grid-item-height2 {
+      height: 360px;
+      .grid_img_wrapper {
+        height: 300px !important;
+      }
+    }
 
     .grid_img_wrapper {
       position: relative;
       width: 100%;
-      height: 200px;
-      background-color: blue;
+      height: 150px;
+      margin-bottom: 5px;
       border-radius: 20px;
 
       .loading_wrapper {
@@ -278,6 +296,14 @@ div#grid_wrapper {
           height: 16px;
         }
       }
+      .thumbnail_img_wrapper {
+        width: 100%;
+        height: 100%;
+        .thumbnail_img {
+          width: 100%;
+          height: 100%;
+        }
+      }
 
       .grid_img_contents {
         width: 100%;
@@ -286,7 +312,7 @@ div#grid_wrapper {
     }
     .info {
       width: 100%;
-      height: 50px;
+      height: 20px;
 
       background-color: yellow;
     }
@@ -302,6 +328,4 @@ div.overlay {
   z-index: 9999;
   margin-right: 70px;
 }
-
-
 

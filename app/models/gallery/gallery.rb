@@ -462,6 +462,17 @@ class Gallery < ActiveRecord::Base
     end
   end
 
+  def self.get_list_contents(search_type, show_head, show_limit, tag_id, date)
+    if search_type == Const::Gallery::SearchType::CREATED
+      return Gallery.grid_contents_sorted_by_createdate(show_head, show_limit, tag_id)
+    elsif search_type == Const::Gallery::SearchType::VIEW_COUNT
+      return Gallery.grid_contents_sorted_by_viewcount(show_head, show_limit, date, tag_id)
+    elsif search_type == Const::Gallery::SearchType::BOOKMARK_COUNT
+      return Gallery.grid_contents_sorted_by_bookmarkcount(show_head, show_limit, date, tag_id)
+    end
+    return nil
+  end
+
   def self.grid_contents_sorted_by_createdate(head, show_limit, tag_id)
     table = "(SELECT * FROM galleries ORDER BY created_at DESC LIMIT #{head}, #{show_limit})"
     if tag_id != nil
@@ -580,6 +591,19 @@ class Gallery < ActiveRecord::Base
   def self.generate_access_token
     tmp_token = SecureRandom.urlsafe_base64(22)
     self.find_by(access_token: tmp_token).blank? ? tmp_token : generate_access_token
+  end
+
+  def self.grid_size_classname
+    r = Random.new.rand(0..15).to_i
+    if r == 0
+      return "grid-item-width2 grid-item-height2"
+    elsif r == 1 || r == 2
+      return "grid-item-width2"
+    elsif r == 3 || r == 4
+      return "grid-item-height2"
+    else
+      return ''
+    end
   end
 
   private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount, :generate_access_token

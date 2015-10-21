@@ -1,28 +1,36 @@
-<% content = '' if content.nil? %>
+<%
+   if defined?(content) == nil || content.nil?
+     content = {}
+     content[Const::Gallery::Key::THUMBNAIL_IMG] = nil
+     content['title'] = ''
+     content['caption'] = ''
+     content['gallery_tags'] = []
+   end
+%>
 
-<div class="grid_contents_wrapper">
+<div class="grid_contents_wrapper <%= Gallery.grid_size_classname %>">
     <div class="grid_img_wrapper">
         <div class="loading_wrapper">
             <img class="loading" />
         </div>
-        <div style="display:none;">
-            <% if content.nil? %>
-                <img class="thumbnail_img" src="gallery/image_notfound.png" />
+        <div class="thumbnail_img_wrapper">
+            <% if content[Const::Gallery::Key::THUMBNAIL_IMG].nil? %>
+                <img class="thumbnail_img" src="<%= path_to_image 'gallery/image_notfound.png' %>" />
             <% else %>
                 <img class="thumbnail_img" src="<%= content[Const::Gallery::Key::THUMBNAIL_IMG] %>" />
             <% end %>
         </div>
     </div>
-    
+
     <div class="info">
         <div class="title_wrapper">
-            <%= content.title %>
+            <%= content['title'] %>
         </div>
         <div class="caption_wrapper">
-            <%= content.caption %>
+            <%= content['caption'] %>
         </div>
         <div class="tags_wrapper">
-            <% content.gallery_tags.each do |tag| %>
+            <% content['gallery_tags'].each do |tag| %>
                 <%= tag.name %>
             <% end %>
         </div>
