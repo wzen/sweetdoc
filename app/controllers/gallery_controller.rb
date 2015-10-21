@@ -14,10 +14,10 @@ class GalleryController < ApplicationController
 
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
 
-    show_head = params[Const::Gallery::SearchKey::SHOW_HEAD].to_i
-    show_limit = params[Const::Gallery::SearchKey::SHOW_LIMIT].to_i
-    tag_ids = params[Const::Gallery::SearchKey::TAG_ID].split(',')
-    date = params[Const::Gallery::SearchKey::DATE]
+    show_head = 0
+    show_limit = 50
+    tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
+    date = Date.today
     @contents = Gallery.grid_index(show_head, show_limit, date, tag_ids)
   end
 

@@ -475,17 +475,36 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_index(show_head, show_limit, date, tag_ids)
     sql =<<-"SQL"
-      (#{grid_contents_sorted_by_createdate_sql(show_head, show_limit, tag_ids)})
+      (#{grid_contents_sorted_by_createdate_sql(show_head, show_limit)})
       UNION ALL
-      (#{grid_contents_sorted_by_viewcount_sql(show_head, show_limit, date, tag_ids)})
+      (#{grid_contents_sorted_by_viewcount_sql(show_head, show_limit, date)})
       UNION ALL
       (#{grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)})
     SQL
     contents = ActiveRecord::Base.connection.select_all(sql)
-    if contents != nil
+    if contents != nil && contents.length > 0
       return contents.to_hash
     end
     return null
+  end
+
+  def self.get_bookmarked_tag(user_id)
+    if user_id
+      sql =<<-"SQL"
+      SELECT gt.category as category
+      FROM gallery_bookmarks gb
+      INNER JOIN galleries g ON g.id = gb.gallery_id AND g.del_flg = 0
+      INNER JOIN gallery_tag_maps gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
+      INNER JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
+      WHERE gb.user_id = #{user_id}
+      AND gb.del_flg = 0
+      SQL
+      contents = ActiveRecord::Base.connection.select_all(sql)
+      if contents != nil && contents.count > 0
+        return contents.to_hash.map{|c| c['category']}
+      end
+    end
+    return nil
   end
 
   def self.grid_contents_select(search_type)
@@ -500,13 +519,13 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_createdate(head, show_limit, tag_ids)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_sorted_by_createdate_sql(head, show_limit, tag_ids))
-    if contents != nil
+    if contents != nil && contents.count > 0
       return contents.to_hash
     end
     return null
   end
 
-  def self.grid_contents_sorted_by_createdate_sql(head, show_limit, tag_ids)
+  def self.grid_contents_sorted_by_createdate_sql(head, show_limit, tag_ids = nil)
     table = nil
     if tag_ids != nil && tag_ids.length > 0
       tags_in = "(#{tag_ids.join(',')})"
@@ -536,16 +555,16 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_viewcount(head, show_limit, date, tag_ids)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_sorted_by_viewcount_sql(head, show_limit, date, tag_ids))
-    if contents != nil
+    if contents != nil && contents.count > 0
       return contents.to_hash
     end
     return null
   end
 
-  def self.grid_contents_sorted_by_viewcount_sql(head, show_limit, date, tag_ids)
+  def self.grid_contents_sorted_by_viewcount_sql(head, show_limit, date, tag_ids = nil)
     where = 'WHERE g.del_flg = 0'
     if date != nil
-      where += " AND DATEDIFF(#{date}, gbs.view_day) == 0"
+      where += " AND DATEDIFF(#{date}, gbs.view_day) = 0"
     end
     if tag_ids != nil && tag_ids.length > 0
       tags_in = "(#{tag_ids.join(',')})"
@@ -565,16 +584,16 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_bookmarkcount(head, show_limit, date, tag_ids)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_sorted_by_bookmarkcount_sql(head, show_limit, date, tag_ids))
-    if contents != nil
+    if contents != nil && contents.count > 0
       return contents.to_hash
     end
     return null
   end
 
-  def self.grid_contents_sorted_by_bookmarkcount_sql(head, show_limit, date, tag_ids)
+  def self.grid_contents_sorted_by_bookmarkcount_sql(head, show_limit, date, tag_ids = nil)
     where = 'WHERE g.del_flg = 0'
     if date != nil
-      where += " AND DATEDIFF(#{date}, gbs.view_day) == 0"
+      where += " AND DATEDIFF(#{date}, gbs.view_day) = 0"
     end
     if tag_ids != nil && tag_ids.length > 0
       tags_in = "(#{tag_ids.join(',')})"
@@ -585,7 +604,7 @@ class Gallery < ActiveRecord::Base
       FROM galleries g
       INNER JOIN gallery_bookmark_statistics as gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
-      INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_fgl = 0
+      INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       #{where}
       ORDER BY gbs.count DESC LIMIT #{head}, #{show_limit}
     SQL
@@ -594,7 +613,7 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_user_bookmark(user_id, head, show_limit)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_user_bookmark_sql(user_id, head, show_limit))
-    if contents != nil
+    if contents != nil && contents.count > 0
       return contents.to_hash
     end
     return null
