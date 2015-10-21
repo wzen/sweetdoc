@@ -136,4 +136,5 @@ if gon?
       class @SearchType
         @VIEW_COUNT = constant.Gallery.SearchType.VIEW_COUNT
         @BOOKMARK_COUNT = constant.Gallery.SearchType.BOOKMARK_COUNT
+        @USER_BOOKMARK = constant.Gallery.SearchType.USER_BOOKMARK
         @CREATED = constant.Gallery.SearchType.CREATED

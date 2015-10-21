@@ -246,6 +246,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         SearchType.BOOKMARK_COUNT = constant.Gallery.SearchType.BOOKMARK_COUNT;
 
+        SearchType.USER_BOOKMARK = constant.Gallery.SearchType.USER_BOOKMARK;
+
         SearchType.CREATED = constant.Gallery.SearchType.CREATED;
 
         return SearchType;

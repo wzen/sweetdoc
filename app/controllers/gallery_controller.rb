@@ -16,10 +16,9 @@ class GalleryController < ApplicationController
 
     show_head = params[Const::Gallery::SearchKey::SHOW_HEAD].to_i
     show_limit = params[Const::Gallery::SearchKey::SHOW_LIMIT].to_i
-    search_type = params[Const::Gallery::SearchKey::SEARCH_TYPE]
-    tag_id = params[Const::Gallery::SearchKey::TAG_ID].to_i
+    tag_ids = params[Const::Gallery::SearchKey::TAG_ID].split(',')
     date = params[Const::Gallery::SearchKey::DATE]
-    @contents = Gallery.get_list_contents(search_type, show_head, show_limit, tag_id, date)
+    @contents = Gallery.grid_index(show_head, show_limit, date, tag_ids)
   end
 
   def detail

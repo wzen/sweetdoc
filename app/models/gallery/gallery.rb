@@ -473,24 +473,29 @@ class Gallery < ActiveRecord::Base
     return nil
   end
 
-  def self.grid_index(user_id, show_head, show_limit, tag_ids, date)
+  def self.grid_index(show_head, show_limit, date, tag_ids)
     sql =<<-"SQL"
-      SELECT *
-      FROM
-      (
-        #{grid_contents_sorted_by_createdate_sql(show_head, show_limit, tag_ids)}
-        UNION ALL
-        #{grid_contents_sorted_by_viewcount_sql(show_head, show_limit, date, tag_ids)}
-        UNION ALL
-        #{grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)}
-      ) x
-      LIMIT #{show_head}, #{show_limit}
+      (#{grid_contents_sorted_by_createdate_sql(show_head, show_limit, tag_ids)})
+      UNION ALL
+      (#{grid_contents_sorted_by_viewcount_sql(show_head, show_limit, date, tag_ids)})
+      UNION ALL
+      (#{grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)})
     SQL
     contents = ActiveRecord::Base.connection.select_all(sql)
     if contents != nil
       return contents.to_hash
     end
     return null
+  end
+
+  def self.grid_contents_select(search_type)
+    return <<-"VALUE"
+      g.access_token as gallery_access_token,
+      g.title as title,
+      g.caption as caption,
+      g.thumbnail_img as thumbnail_img,
+      '#{search_type}' as search_type
+    VALUE
   end
 
   def self.grid_contents_sorted_by_createdate(head, show_limit, tag_ids)
@@ -502,25 +507,30 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.grid_contents_sorted_by_createdate_sql(head, show_limit, tag_ids)
-    table = "(SELECT * FROM galleries ORDER BY created_at DESC LIMIT #{head}, #{show_limit})"
+    table = nil
     if tag_ids != nil && tag_ids.length > 0
       tags_in = "(#{tag_ids.join(',')})"
       table =<<-"TABLE"
-      (
-      SELECT g.*
-      FROM galleries g2
-      INNER JOIN gallery_tag_maps as gtm2 ON g2.id = gtm2.gallery_id AND gtm2.del_flg = 0
-      INNER JOIN gallery_tags as gt2 ON gtm2.gallery_tag_id = gt2.id AND gt2.del_flg = 0
-      WHERE gt.id IN #{tags_in}
-      AND g2.del_flg = 0
-      ORDER BY g.created_at DESC LIMIT #{head}, #{show_limit})"
-      )
+        (
+        SELECT g2.*
+        FROM galleries g2
+        INNER JOIN gallery_tag_maps as gtm2 ON g2.id = gtm2.gallery_id AND gtm2.del_flg = 0
+        INNER JOIN gallery_tags as gt2 ON gtm2.gallery_tag_id = gt2.id AND gt2.del_flg = 0
+        WHERE gt2.id IN #{tags_in}
+        AND g2.del_flg = 0
+        ORDER BY g.created_at DESC LIMIT #{head}, #{show_limit})"
+        )
       TABLE
     else
-      table = 'galleries'
+      table = "(SELECT * FROM galleries ORDER BY created_at DESC LIMIT #{head}, #{show_limit})"
     end
 
-    sql = "SELECT * FROM #{table} g INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id"
+    sql =<<-"SQL"
+     SELECT #{grid_contents_select(Const::Gallery::SearchType::CREATED)}
+     FROM #{table} g
+     INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
+     INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
+    SQL
     return sql
   end
 
@@ -542,7 +552,7 @@ class Gallery < ActiveRecord::Base
       where += " AND gt.id IN #{tags_in}"
     end
     sql =<<-"SQL"
-      SELECT g.*
+      SELECT #{grid_contents_select(Const::Gallery::SearchType::VIEW_COUNT)}
       FROM galleries g
       INNER JOIN gallery_view_statistics as gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
@@ -571,7 +581,7 @@ class Gallery < ActiveRecord::Base
       where += " AND gt.id IN #{tags_in}"
     end
     sql =<<-"SQL"
-      SELECT g.*
+      SELECT #{grid_contents_select(Const::Gallery::SearchType::BOOKMARK_COUNT)}
       FROM galleries g
       INNER JOIN gallery_bookmark_statistics as gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
@@ -592,10 +602,11 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_user_bookmark_sql(user_id, head, show_limit)
     sql =<<-"SQL"
-      SELECT g.*
+      SELECT #{grid_contents_select(Const::Gallery::SearchType::USER_BOOKMARK)}
       FROM galleries g
       INNER JOIN gallery_bookmarks as gb ON g.id = gb.gallery_id AND gb.user_id = #{user_id}
       WHERE g.del_flg = 0
+      ORDER BY g.updated_at
       LIMIT #{head}, #{show_limit}
     SQL
     return sql

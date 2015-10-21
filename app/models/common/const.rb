@@ -246,6 +246,7 @@ class Const
     class SearchType
       VIEW_COUNT = 'view_count'
       BOOKMARK_COUNT = 'bookmark_count'
+      USER_BOOKMARK = 'user_bookmark'
       CREATED = 'created'
     end
 
