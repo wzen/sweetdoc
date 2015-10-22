@@ -40,14 +40,14 @@ class GalleryController < ApplicationController
   def save_state
     user_id = current_or_guest_user.id
     tags = params[Const::Gallery::Key::TAGS].split(',')
-    title = params[Const::Gallery::Key::TITLE]
+    title = params[Const::Gallery::Key::TITLE].force_encoding('utf-8')
     project_id = params[Const::Gallery::Key::PROJECT_ID]
     if project_id == nil || title == nil || title.length == 0
       # エラー
       @message, @access_token = I18n.t('message.database.item_state.save.error')
     else
       project_id = project_id.to_i
-      caption = params[Const::Gallery::Key::CAPTION]
+      caption = params[Const::Gallery::Key::CAPTION].force_encoding('utf-8')
       thumbnail_img = params[Const::Gallery::Key::THUMBNAIL_IMG]
       page_max = params[Const::Gallery::Key::PAGE_MAX]
       show_guide = params[Const::Gallery::Key::SHOW_GUIDE]
@@ -85,6 +85,15 @@ class GalleryController < ApplicationController
     gallery_access_token = params[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]
     note = params[Const::Gallery::Key::NOTE]
     Gallery.add_bookmark(user_id, gallery_access_token, note, Date.today)
+  end
+
+  def thumbnail
+    g = Gallery.find_by(access_token: params[:access_token])
+    if g == nil || g.thumbnail_img == nil
+      ActionController::Base.helpers.asset_path('image_notfound.png')
+    else
+      send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)
+    end
   end
 
 end

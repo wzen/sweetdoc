@@ -14,7 +14,6 @@ require 'gallery/gallery_view_statistic'
 require 'gallery/gallery_bookmark'
 require 'gallery/gallery_bookmark_statistic'
 require 'pagevalue/page_value_state'
-require 'base64'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
@@ -49,6 +48,7 @@ class Gallery < ActiveRecord::Base
                          title: title,
                          caption: caption,
                          thumbnail_img: Base64.decode64(thumbnail_img),
+                         thumbnail_img_contents_type: thumbnail_img.content_type,
                          page_max: page_max,
                          screen_width: p.screen_width,
                          screen_height: p.screen_height,
@@ -482,7 +482,7 @@ class Gallery < ActiveRecord::Base
       (#{grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)})
     SQL
     contents = ActiveRecord::Base.connection.select_all(sql)
-    if contents != nil && contents.length > 0
+    if contents != nil && contents.count > 0
       return contents.to_hash
     end
     return null
@@ -509,11 +509,10 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_select(search_type)
     return <<-"VALUE"
-      g.access_token as gallery_access_token,
-      g.title as title,
-      g.caption as caption,
-      g.thumbnail_img as thumbnail_img,
-      '#{search_type}' as search_type
+      g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
+      g.title as #{Const::Gallery::Key::TITLE},
+      g.caption as #{Const::Gallery::Key::CAPTION},
+      '#{search_type}' as #{Const::Gallery::Key::SEARCH_TYPE}
     VALUE
   end
 

@@ -233,6 +233,7 @@ class Const
       SHOW_PAGE_NUM = 'show_page_num'
       SHOW_CHAPTER_NUM = 'show_chapter_num'
       PAGE_NUM = 'p_n'
+      SEARCH_TYPE = 'search_type'
     end
 
     class SearchKey

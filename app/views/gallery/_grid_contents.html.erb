@@ -1,10 +1,12 @@
+<%# coding: UTF-8 %>
+
 <%
    if defined?(content) == nil || content.nil?
      content = {}
      content[Const::Gallery::Key::THUMBNAIL_IMG] = nil
-     content['title'] = ''
-     content['caption'] = ''
-     content['gallery_tags'] = []
+     content[Const::Gallery::Key::TITLE] = ''
+     content[Const::Gallery::Key::CAPTION] = ''
+     content[Const::Gallery::Key::TAGS] = []
    end
 %>
 
@@ -14,25 +16,28 @@
             <img class="loading" />
         </div>
         <div class="thumbnail_img_wrapper">
-            <% if content[Const::Gallery::Key::THUMBNAIL_IMG].nil? %>
-                <img class="thumbnail_img" src="<%= path_to_image 'gallery/image_notfound.png' %>" />
-            <% else %>
-                <img class="thumbnail_img" src="<%= content[Const::Gallery::Key::THUMBNAIL_IMG] %>" />
-            <% end %>
+            <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img')%>
         </div>
     </div>
 
     <div class="info">
         <div class="title_wrapper">
-            <%= content['title'] %>
+            <% if !content[Const::Gallery::Key::TITLE].nil? %>
+                <%= content[Const::Gallery::Key::TITLE] %>
+            <% end %>
         </div>
         <div class="caption_wrapper">
-            <%= content['caption'] %>
+            <% if !content[Const::Gallery::Key::CAPTION].nil? %>
+                <%= content[Const::Gallery::Key::CAPTION] %>
+            <% end %>
         </div>
         <div class="tags_wrapper">
-            <% content['gallery_tags'].each do |tag| %>
-                <%= tag.name %>
+            <% if !content[Const::Gallery::Key::TAGS].nil? %>
+                <% content[Const::Gallery::Key::TAGS].each do |tag| %>
+                    <%= tag.name %>
+                <% end %>
             <% end %>
         </div>
     </div>
+    <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN] %>" />
 </div>

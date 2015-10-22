@@ -57,17 +57,18 @@ ActiveRecord::Schema.define(version: 20151017090414) do
   end
 
   create_table "galleries", force: true do |t|
-    t.string   "access_token",     limit: 30,                       null: false
-    t.string   "title",                                             null: false
+    t.string   "access_token",                limit: 30,                       null: false
+    t.string   "title",                                                        null: false
     t.text     "caption"
-    t.binary   "thumbnail_img",    limit: 16777215
-    t.integer  "screen_width",                                      null: false
-    t.integer  "screen_height",                                     null: false
-    t.integer  "page_max",                          default: 1
-    t.boolean  "show_guide",                        default: true
-    t.boolean  "show_page_num",                     default: false
-    t.boolean  "show_chapter_num",                  default: false
-    t.boolean  "del_flg",                           default: false
+    t.binary   "thumbnail_img",               limit: 16777215
+    t.string   "thumbnail_img_contents_type"
+    t.integer  "screen_width",                                                 null: false
+    t.integer  "screen_height",                                                null: false
+    t.integer  "page_max",                                     default: 1
+    t.boolean  "show_guide",                                   default: true
+    t.boolean  "show_page_num",                                default: false
+    t.boolean  "show_chapter_num",                             default: false
+    t.boolean  "del_flg",                                      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

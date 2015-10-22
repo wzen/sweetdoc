@@ -5,6 +5,7 @@ class CreateGalleries < ActiveRecord::Migration
       t.string :title, null: false
       t.text :caption
       t.binary :thumbnail_img, limit: 10.megabyte
+      t.string :thumbnail_img_contents_type
       t.integer :screen_width, null: false
       t.integer :screen_height, null: false
       t.integer :page_max, default: 1
