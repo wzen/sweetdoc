@@ -18,7 +18,8 @@ class GalleryController < ApplicationController
     show_limit = 50
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
     date = Date.today
-    @contents = Gallery.grid_index(show_head, show_limit, date, tag_ids)
+    contents = Gallery.grid_index(show_head, show_limit, date, tag_ids)
+    @contents = contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
   end
 
   def detail
@@ -83,7 +84,8 @@ class GalleryController < ApplicationController
     search_type = params[Const::Gallery::SearchKey::SEARCH_TYPE]
     tag_id = params[Const::Gallery::SearchKey::TAG_ID].to_i
     date = params[Const::Gallery::SearchKey::DATE]
-    @contents = Gallery.get_list_contents(search_type, show_head, show_limit, tag_id, date)
+    contents = Gallery.get_list_contents(search_type, show_head, show_limit, tag_id, date)
+    @contents = contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
   end
 
   def get_popular_and_recommend_tags

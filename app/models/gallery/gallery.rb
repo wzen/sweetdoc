@@ -14,7 +14,6 @@ require 'gallery/gallery_view_statistic'
 require 'gallery/gallery_bookmark'
 require 'gallery/gallery_bookmark_statistic'
 require 'pagevalue/page_value_state'
-require 'filemagic'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
