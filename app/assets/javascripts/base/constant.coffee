@@ -115,6 +115,7 @@ if gon?
         @INSTANCE_PAGE_VALUE = constant.Gallery.Key.INSTANCE_PAGE_VALUE
         @EVENT_PAGE_VALUE = constant.Gallery.Key.EVENT_PAGE_VALUE
         @THUMBNAIL_IMG = constant.Gallery.Key.THUMBNAIL_IMG
+        @THUMBNAIL_IMG_CONTENTSTYPE = constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE
         @TITLE = constant.Gallery.Key.TITLE
         @CAPTION = constant.Gallery.Key.CAPTION
         @ITEM_JS_LIST = constant.Gallery.Key.ITEM_JS_LIST

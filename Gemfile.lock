@@ -42,6 +42,14 @@ GEM
     arel (5.0.1.20140414130214)
     bcrypt (3.1.10)
     builder (3.2.2)
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
+    carrierwave-magic (0.0.4)
+      carrierwave
+      ruby-filemagic
     cells (3.11.2)
       actionpack (>= 3.0)
       railties (>= 3.0)
@@ -182,6 +190,7 @@ GEM
       rspec-mocks (~> 3.0.0)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.4)
+    ruby-filemagic (0.7.0)
     ruby-graphviz (1.0.9)
     sass (3.2.19)
     sass-rails (4.0.5)
@@ -230,6 +239,8 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
+  carrierwave
+  carrierwave-magic
   cells (= 3.11.2)
   coffee-rails (~> 4.0.0)
   dalli (= 2.7.4)
@@ -253,6 +264,7 @@ DEPENDENCIES
   rspec (= 3.0.0)
   rspec-cells (= 0.2.2)
   rspec-rails (= 3.0.0)
+  ruby-filemagic (= 0.7.0)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   spring

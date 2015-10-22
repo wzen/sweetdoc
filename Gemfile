@@ -79,6 +79,11 @@ gem 'omniauth-facebook', '2.0.1'
 gem 'omniauth-twitter', '1.2.1'
 gem 'omniauth-google-oauth2', '0.2.8'
 
+# 画像アップロード
+gem 'ruby-filemagic' , '0.7.0'
+gem 'carrierwave'
+gem 'carrierwave-magic'
+
 #gem 'rmagick', '2.15.4', require: 'RMagick'
 
 # Use HBase

@@ -14,6 +14,7 @@ require 'gallery/gallery_view_statistic'
 require 'gallery/gallery_bookmark'
 require 'gallery/gallery_bookmark_statistic'
 require 'pagevalue/page_value_state'
+require 'filemagic'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
@@ -33,6 +34,7 @@ class Gallery < ActiveRecord::Base
     title,
     caption,
     thumbnail_img,
+    thumbnail_img_contents_type,
     page_max,
     show_guide,
     show_page_num,
@@ -48,7 +50,7 @@ class Gallery < ActiveRecord::Base
                          title: title,
                          caption: caption,
                          thumbnail_img: Base64.decode64(thumbnail_img),
-                         thumbnail_img_contents_type: thumbnail_img.content_type,
+                         thumbnail_img_contents_type: thumbnail_img_contents_type,
                          page_max: page_max,
                          screen_width: p.screen_width,
                          screen_height: p.screen_height,

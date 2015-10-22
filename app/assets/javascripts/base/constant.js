@@ -198,6 +198,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         Key.THUMBNAIL_IMG = constant.Gallery.Key.THUMBNAIL_IMG;
 
+        Key.THUMBNAIL_IMG_CONTENTSTYPE = constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE;
+
         Key.TITLE = constant.Gallery.Key.TITLE;
 
         Key.CAPTION = constant.Gallery.Key.CAPTION;

@@ -221,6 +221,7 @@ class Const
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'
       THUMBNAIL_IMG = 'tbimg'
+      THUMBNAIL_IMG_CONTENTSTYPE = 'tbimgcnt'
       PAGE_MAX = 'pagemax'
       TITLE = 'title'
       CAPTION = 'caption'
