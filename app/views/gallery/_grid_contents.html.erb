@@ -1,22 +1,18 @@
 <%# coding: UTF-8 %>
 
 <%
-   if defined?(content) == nil || content.nil?
-     content = {}
-     content[Const::Gallery::Key::THUMBNAIL_IMG] = nil
-     content[Const::Gallery::Key::TITLE] = ''
-     content[Const::Gallery::Key::CAPTION] = ''
-     content[Const::Gallery::Key::TAGS] = []
-   end
+   t_width = content[Const::Gallery::Key::THUMBNAIL_IMG_WIDTH].to_i
+   t_height = content[Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT].to_i
+   grid_size_classname, thumbnail_style = Gallery.grid_contents_size_and_style(t_width, t_height)
 %>
 
-<div class="grid_contents_wrapper <%= Gallery.grid_size_classname %>">
+<div class="grid_contents_wrapper <%= grid_size_classname %>">
     <div class="grid_img_wrapper">
-        <div class="loading_wrapper">
+        <div class="loading_wrapper" style="display:none">
             <img class="loading" />
         </div>
         <div class="thumbnail_img_wrapper">
-            <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img')%>
+            <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: thumbnail_style)%>
         </div>
     </div>
 

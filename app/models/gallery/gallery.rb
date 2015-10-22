@@ -495,8 +495,8 @@ class Gallery < ActiveRecord::Base
       SELECT gt.category as category
       FROM gallery_bookmarks gb
       INNER JOIN galleries g ON g.id = gb.gallery_id AND g.del_flg = 0
-      INNER JOIN gallery_tag_maps gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
-      INNER JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
+      LEFT JOIN gallery_tag_maps gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
+      LEFT JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       WHERE gb.user_id = #{user_id}
       AND gb.del_flg = 0
       SQL
@@ -513,6 +513,8 @@ class Gallery < ActiveRecord::Base
       g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
       g.title as #{Const::Gallery::Key::TITLE},
       g.caption as #{Const::Gallery::Key::CAPTION},
+      g.thumbnail_img_width as #{Const::Gallery::Key::THUMBNAIL_IMG_WIDTH},
+      g.thumbnail_img_height as #{Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT},
       '#{search_type}' as #{Const::Gallery::Key::SEARCH_TYPE}
     VALUE
   end
@@ -533,8 +535,8 @@ class Gallery < ActiveRecord::Base
         (
         SELECT g2.*
         FROM galleries g2
-        INNER JOIN gallery_tag_maps as gtm2 ON g2.id = gtm2.gallery_id AND gtm2.del_flg = 0
-        INNER JOIN gallery_tags as gt2 ON gtm2.gallery_tag_id = gt2.id AND gt2.del_flg = 0
+        LEFT JOIN gallery_tag_maps as gtm2 ON g2.id = gtm2.gallery_id AND gtm2.del_flg = 0
+        LEFT JOIN gallery_tags as gt2 ON gtm2.gallery_tag_id = gt2.id AND gt2.del_flg = 0
         WHERE gt2.id IN #{tags_in}
         AND g2.del_flg = 0
         ORDER BY g.created_at DESC LIMIT #{head}, #{show_limit})"
@@ -547,8 +549,8 @@ class Gallery < ActiveRecord::Base
     sql =<<-"SQL"
      SELECT #{grid_contents_select(Const::Gallery::SearchType::CREATED)}
      FROM #{table} g
-     INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
-     INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
+     LEFT JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
+     LEFT JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
     SQL
     return sql
   end
@@ -574,8 +576,8 @@ class Gallery < ActiveRecord::Base
       SELECT #{grid_contents_select(Const::Gallery::SearchType::VIEW_COUNT)}
       FROM galleries g
       INNER JOIN gallery_view_statistics as gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
-      INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
-      INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
+      LEFT JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
+      LEFT JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       #{where}
       ORDER BY gbs.count DESC LIMIT #{head}, #{show_limit}
     SQL
@@ -603,8 +605,8 @@ class Gallery < ActiveRecord::Base
       SELECT #{grid_contents_select(Const::Gallery::SearchType::BOOKMARK_COUNT)}
       FROM galleries g
       INNER JOIN gallery_bookmark_statistics as gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
-      INNER JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
-      INNER JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
+      LEFT JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
+      LEFT JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       #{where}
       ORDER BY gbs.count DESC LIMIT #{head}, #{show_limit}
     SQL
@@ -686,17 +688,43 @@ class Gallery < ActiveRecord::Base
     self.find_by(access_token: tmp_token).blank? ? tmp_token : generate_access_token
   end
 
-  def self.grid_size_classname
+
+
+  def self.grid_contents_size_and_style(img_width, img_height)
     r = Random.new.rand(0..15).to_i
+    class_name = nil
+    style = nil
+    # img_wrapper サイズ
+    w = 180 - (3 * 2)
+    h = 180 - 20 - (3 * 2)
     if r == 0
-      return "grid-item-width2 grid-item-height2"
+      class_name = 'grid-item-width2 grid-item-height2'
+      w *= 2
+      h *= 2
     elsif r == 1 || r == 2
-      return "grid-item-width2"
+      class_name = 'grid-item-width2'
+      w *= 2
     elsif r == 3 || r == 4
-      return "grid-item-height2"
+      class_name = 'grid-item-height2'
+      h *= 2
     else
-      return ''
+      class_name = ''
     end
+
+    if img_height / img_width > h / w
+      style = 'width:100%;height:auto;'
+    else
+      style = 'width:auto;height:100%;'
+    end
+
+    if img_width / img_height > 1.5 && class_name = 'grid-item-height2'
+      class_name, style = grid_size_classname(img_width, img_height)
+    elsif img_height / img_width > 1.5 && class_name = 'grid-item-width2'
+      class_name, style = grid_size_classname(img_width, img_height)
+    end
+
+    return class_name, style
+
   end
 
   private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount, :generate_access_token
