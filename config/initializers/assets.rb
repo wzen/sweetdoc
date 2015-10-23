@@ -6,6 +6,14 @@ Rails.application.config.assets.version = '1.0'
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
-Rails.application.config.assets.precompile += ['pipeline/*']
+precompile_target = lambda do |filename, path|
+  puts filename
+  # Mapファイルは除外
+  path =~ /app\/assets/ && !%w(.map).include?(File.extname(filename))
+end
+Rails.application.config.assets.precompile = [
+    precompile_target,
+    /(?:\/|\\|\A)application\.(css|js)$/
+]
 
 #Rails.application.config.assets.prefix = '/assets'

@@ -20,6 +20,6 @@ module GetDesk
     config.i18n.default_locale = :en
     config.i18n.enforce_available_locales = true
 
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
   end
 end

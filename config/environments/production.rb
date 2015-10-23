@@ -91,22 +91,36 @@ Rails.application.configure do
   # FIXME:
   #config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
-  # passengerの場合
-  if defined?(PhusionPassenger)
-    PhusionPassenger.on_event(:starting_worker_process) do |forked|
-      Rails.cache.reset if forked
+  # # passengerの場合
+  # if defined?(PhusionPassenger)
+  #   PhusionPassenger.on_event(:starting_worker_process) do |forked|
+  #     Rails.cache.reset if forked
+  #
+  #     ObjectSpace.each_object(ActionDispatch::Session::DalliStore) { |obj| obj.reset }
+  #   end
+  # end
+  #
+  # # unicornの場合
+  # after_fork do |server, worker|
+  #   if defined?(ActiveSupport::Cache::DalliStore) && Rails.cache.is_a?(ActiveSupport::Cache::DalliStore)
+  #     Rails.cache.reset
+  #
+  #     ObjectSpace.each_object(ActionDispatch::Session::DalliStore) { |obj| obj.reset }
+  #   end
+  # end
 
-      ObjectSpace.each_object(ActionDispatch::Session::DalliStore) { |obj| obj.reset }
-    end
+  # Devise
+  config.to_prepare do
+    Devise::SessionsController.layout "user"
+    Devise::RegistrationsController.layout "user"
+    Devise::ConfirmationsController.layout "user"
+    Devise::UnlocksController.layout "user"
+    Devise::PasswordsController.layout "user"
   end
 
-  # unicornの場合
-  after_fork do |server, worker|
-    if defined?(ActiveSupport::Cache::DalliStore) && Rails.cache.is_a?(ActiveSupport::Cache::DalliStore)
-      Rails.cache.reset
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.raise_delivery_errors = false
 
-      ObjectSpace.each_object(ActionDispatch::Session::DalliStore) { |obj| obj.reset }
-    end
-  end
+  config.serve_static_assets = true
 
 end

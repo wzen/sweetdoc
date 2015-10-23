@@ -30,5 +30,5 @@ test:
 production:
   <<: *default
   database: revolver_production
-  username: wzen_production
+  username: root
   password: wzen1983
