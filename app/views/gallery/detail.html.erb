@@ -5,3 +5,6 @@
     <%= render 'base/csscode' %>
     <%= render 'base/values', pagevalues: @pagevalues %>
 </div>
+
+<%= stylesheet_link_tag 'pipeline/gallery', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'pipeline/gallery_with_run', 'data-turbolinks-track' => true %>

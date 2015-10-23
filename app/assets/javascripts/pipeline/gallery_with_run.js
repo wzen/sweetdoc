@@ -1,15 +1,14 @@
 /**
- * Created by susumuwatanabe on 11/19/14.
+ * Created by susumuwatanabe on 10/23/15.
  */
+
 //= require jquery-1.9.1.min
 //= require jquery_ujs
-//= require jquery-ui.min
-//= require jquery.transit.min
-//= require turbolinks
 //= require i18n
-//= require ../../../vendor/assets/bootstrap/bootstrap.min
-// IDE not aware under vendor/asset/
-//= require_directory ./i18n
+//= require ../../../../vendor/assets/bootstrap/bootstrap.min.js
+//= require ../../../../vendor/assets/masonry/masonry.pkgd.min.js
+//= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
+//= require_directory ./../i18n
 //= require base/constant
 //= require base/common
 //= require base/common_var
@@ -34,6 +33,7 @@
 //= require paging_animation/pageflip
 //= require run/common/run_setting
 //= require run/common/run_common
+//= require run/common/run_fullscreen
 //= require run/chapter
 //= require run/scroll_chapter
 //= require run/click_chapter
@@ -42,4 +42,6 @@
 //= require run/guide/base
 //= require run/guide/scroll
 //= require run/guide/click
-// require_tree .
+//= require gallery/gallery_common
+//= require gallery/gallery_sidebar
+//= require gallery/gallery

@@ -23,7 +23,3 @@ class RunFullScreen
       # イベント無効
       return
     )
-
-$ ->
-  # 作成者情報を表示
-  RunFullScreen.showCreatorInfo()

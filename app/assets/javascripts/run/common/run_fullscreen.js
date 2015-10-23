@@ -34,8 +34,4 @@ RunFullScreen = (function() {
 
 })();
 
-$(function() {
-  return RunFullScreen.showCreatorInfo();
-});
-
-//# sourceMappingURL=run_full_screen.js.map
+//# sourceMappingURL=run_fullscreen.js.map
