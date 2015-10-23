@@ -515,6 +515,8 @@ class Gallery < ActiveRecord::Base
       g.caption as #{Const::Gallery::Key::CAPTION},
       g.thumbnail_img_width as #{Const::Gallery::Key::THUMBNAIL_IMG_WIDTH},
       g.thumbnail_img_height as #{Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT},
+      g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
+      g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
       '#{search_type}' as #{Const::Gallery::Key::SEARCH_TYPE}
     VALUE
   end

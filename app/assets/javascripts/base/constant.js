@@ -190,6 +190,10 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         Key.PROJECT_ID = constant.Gallery.Key.PROJECT_ID;
 
+        Key.SCREEN_SIZE_WIDTH = constant.Gallery.Key.SCREEN_SIZE_WIDTH;
+
+        Key.SCREEN_SIZE_HEIGHT = constant.Gallery.Key.SCREEN_SIZE_HEIGHT;
+
         Key.TAGS = constant.Gallery.Key.TAGS;
 
         Key.INSTANCE_PAGE_VALUE = constant.Gallery.Key.INSTANCE_PAGE_VALUE;

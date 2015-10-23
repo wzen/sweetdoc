@@ -1,2 +1,10 @@
 <%= stylesheet_link_tag 'run_kit', media: 'all', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'run_kit', 'data-turbolinks-track' => true %>
+<script src="<%= javascript_path 'run/run_full_screen'%>" type="text/javascript" ></script>
+<script src="<%= javascript_path 'gallery/gallery_run_window'%>" type="text/javascript" ></script>
+
+<div id="contents">
+    <%= render 'run/fullscreen/fullscreen' %>
+    <%= render 'base/csscode' %>
+    <%= render 'base/values', pagevalues: @pagevalues, is_runwindow_reload: @is_runwindow_reload %>
+</div>

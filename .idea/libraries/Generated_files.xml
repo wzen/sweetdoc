@@ -61,6 +61,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/user.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_run_window.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/event_config.js" />
@@ -150,6 +151,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/user.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/click_chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_run_window.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/event_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_new_window.js.js" />

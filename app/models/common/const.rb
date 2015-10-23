@@ -217,6 +217,8 @@ class Const
       GALLERY_ID = 'gid'
       GALLERY_ACCESS_TOKEN = 'g_at'
       PROJECT_ID = 'pid'
+      SCREEN_SIZE_WIDTH = 'scrren_size_w'
+      SCREEN_SIZE_HEIGHT = 'scrren_size_h'
       TAGS = 'tags'
       INSTANCE_PAGE_VALUE = 'i'
       EVENT_PAGE_VALUE = 'e'

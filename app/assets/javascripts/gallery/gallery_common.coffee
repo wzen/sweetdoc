@@ -6,8 +6,6 @@ class GalleryCommon
     @initCommonVar()
     # リサイズ
     @initResize()
-    # グリッドビュー
-    @initGridView()
 
   @initCommonVar: ->
     window.mainGalleryWrapper = $('#main_gallery_wrapper')

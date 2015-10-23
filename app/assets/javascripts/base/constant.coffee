@@ -111,6 +111,8 @@ if gon?
         @GALLERY_ID = constant.Gallery.Key.GALLERY_ID
         @GALLERY_ACCESS_TOKEN = constant.Gallery.Key.GALLERY_ACCESS_TOKEN
         @PROJECT_ID = constant.Gallery.Key.PROJECT_ID
+        @SCREEN_SIZE_WIDTH = constant.Gallery.Key.SCREEN_SIZE_WIDTH
+        @SCREEN_SIZE_HEIGHT = constant.Gallery.Key.SCREEN_SIZE_HEIGHT
         @TAGS = constant.Gallery.Key.TAGS
         @INSTANCE_PAGE_VALUE = constant.Gallery.Key.INSTANCE_PAGE_VALUE
         @EVENT_PAGE_VALUE = constant.Gallery.Key.EVENT_PAGE_VALUE

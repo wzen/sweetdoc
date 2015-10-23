@@ -9,13 +9,28 @@ GalleryGrid = (function() {
   };
 
   GalleryGrid.initContentsHover = function() {
-    $('.grid_contents_wrapper').off('mouseenter');
-    $('.grid_contents_wrapper').on('mouseenter', function() {
-      return $(this).find('.hover_overlay').stop(true, true).fadeIn('100');
+    $('.grid_contents_link').off('click');
+    $('.grid_contents_link').on('click', function(e) {
+      e.preventDefault();
+      return window.location.href = '/gallery/' + $(this).find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
     });
-    $('.grid_contents_wrapper').off('mouseleave');
-    return $('.grid_contents_wrapper').on('mouseleave', function() {
-      return $(this).find('.hover_overlay').stop(true, true).fadeOut('300');
+    $('.new_window_link').off('click');
+    return $('.new_window_link').on('click', function(e) {
+      var left, size, target, top;
+      e.preventDefault();
+      size = {
+        width: $(this).find('.#{Const.Gallery.Key.SCREEN_SIZE_WIDTH}').val(),
+        height: $(this).find('.#{Const.Gallery.Key.SCREEN_SIZE_HEIGHT}').val()
+      };
+      left = Number((window.screen.width - size.width) / 2);
+      top = Number((window.screen.height - size.height) / 2);
+      target = "_runwindow";
+      window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + size.height + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
+      document.send_form.action = '/gallery/w/' + $(this).find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
+      document.send_form.target = target;
+      return setTimeout(function() {
+        return document.send_form.submit();
+      }, 200);
     });
   };
 
@@ -25,6 +40,7 @@ GalleryGrid = (function() {
 
 $(function() {
   GalleryCommon.initView();
+  GalleryCommon.initGridView();
   return GalleryGrid.initEvent();
 });
 

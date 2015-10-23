@@ -1,13 +1,15 @@
-<div id="grid_centering_wrapper">
-    <div id="grid_wrapper">
-        <% @contents.each do |content| %>
-            <%= render 'gallery/grid_contents', content: content %>
-        <% end %>
-
-    </div>
-</div>
-
 <%= stylesheet_link_tag 'gallery', media: 'all', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'gallery', 'data-turbolinks-track' => true %>
+<script src="<%= javascript_path 'gallery/gallery_common'%>" type="text/javascript" ></script>
 <script src="<%= javascript_path 'gallery/gallery_grid.js'%>" type="text/javascript" ></script>
+
+<form name="send_form">
+    <div id="grid_centering_wrapper">
+        <div id="grid_wrapper">
+            <% @contents.each do |content| %>
+                <%= render 'gallery/grid_contents', content: content %>
+            <% end %>
+        </div>
+    </div>
+</form>
 

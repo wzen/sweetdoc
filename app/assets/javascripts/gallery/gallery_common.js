@@ -6,8 +6,7 @@ GalleryCommon = (function() {
 
   GalleryCommon.initView = function() {
     this.initCommonVar();
-    this.initResize();
-    return this.initGridView();
+    return this.initResize();
   };
 
   GalleryCommon.initCommonVar = function() {
