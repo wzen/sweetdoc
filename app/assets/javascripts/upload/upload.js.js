@@ -136,10 +136,10 @@ Upload = (function() {
     $(".capture", root).attr('src', png);
     $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG + "']", root).val(png.replace(/^.*,/, ''));
     $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_CONTENTSTYPE + "']", root).val('image/png');
-    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val($(canvas).width());
-    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val($(canvas).height());
     width = parseInt($(canvas).attr('width'));
     height = parseInt($(canvas).attr('height'));
+    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_WIDTH + "']", root).val(width);
+    $("input[name='" + Constant.Gallery.Key.THUMBNAIL_IMG_HEIGHT + "']", root).val(height);
     if (width > height) {
       return $(".capture", root).css({
         width: '100%',

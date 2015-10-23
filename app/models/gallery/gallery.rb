@@ -688,8 +688,6 @@ class Gallery < ActiveRecord::Base
     self.find_by(access_token: tmp_token).blank? ? tmp_token : generate_access_token
   end
 
-
-
   def self.grid_contents_size_and_style(img_width, img_height)
     r = Random.new.rand(0..15).to_i
     class_name = nil

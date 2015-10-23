@@ -273,7 +273,7 @@ div#grid_wrapper {
     .grid_img_wrapper {
       position: relative;
       width: 100%;
-      height: 150px;
+      height: 100%;
       margin-bottom: 5px;
       border-radius: 20px;
 
@@ -286,6 +286,7 @@ div#grid_wrapper {
         margin: auto;
         width: 16px;
         height: 16px;
+        background-color: transparent;
 
         .loading {
           background-size: auto;
@@ -317,16 +318,32 @@ div#grid_wrapper {
         }
       }
 
-      .grid_img_contents {
-        width: 100%;
+      .hover_overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width : 100%;
         height: 100%;
-      }
-    }
-    .info {
-      width: 100%;
-      height: 20px;
+        background-color: transparent;
+        display: none;
+        .new_window {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 24px;
+          height: 24px;
+          background-image: image_url('gallery/open_new_window24.png');
+          background-size: 24px 24px;
+        }
+        .info {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 50px;
 
-      background-color: yellow;
+          background-color: yellow;
+        }
+      }
     }
   }
 }
