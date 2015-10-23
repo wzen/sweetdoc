@@ -252,14 +252,6 @@ ActiveRecord::Schema.define(version: 20151017090414) do
     t.datetime "updated_at"
   end
 
-  create_table "parts", force: true do |t|
-    t.integer  "type_cd",     null: false
-    t.integer  "sub_type_cd"
-    t.text     "contents"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "project_gallery_maps", force: true do |t|
     t.integer  "user_project_map_id",                 null: false
     t.integer  "gallery_id",                          null: false
