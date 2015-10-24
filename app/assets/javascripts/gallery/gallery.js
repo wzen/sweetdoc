@@ -19,11 +19,6 @@ GalleryGrid = (function() {
       e.preventDefault();
       return $(this).find('.hover_overlay').stop(true, true).fadeOut('300');
     });
-    $('.hover_overlay').off('click');
-    $('.hover_overlay').on('click', function(e) {
-      e.preventDefault();
-      return window.location.href = '/gallery/detail/' + $(this).closest('.grid_contents_wrapper').find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
-    });
     $('.new_window').off('click');
     return $('.new_window').on('click', function(e) {
       var left, root, size, target, top;

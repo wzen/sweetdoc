@@ -14,12 +14,6 @@ class GalleryGrid
       $(@).find('.hover_overlay').stop(true, true).fadeOut('300')
     )
 
-    $('.hover_overlay').off('click')
-    $('.hover_overlay').on('click', (e) ->
-      e.preventDefault()
-      window.location.href = '/gallery/detail/' + $(@).closest('.grid_contents_wrapper').find(".#{Constant.Gallery.Key.GALLERY_ACCESS_TOKEN}").val()
-    )
-
     $('.new_window').off('click')
     $('.new_window').on('click', (e) ->
       e.preventDefault()
