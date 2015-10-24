@@ -34,7 +34,6 @@
 //= require base/indicator
 //= require base/project
 //= require base/float_view
-//= require motion_check/motion_check_common
 // require_directory util
 //= require util/color/color_change
 //= require common_event/common_event
@@ -48,6 +47,8 @@
 //= require event_page_value/item/item.js
 //= require navbar/navbar.js
 //= require paging_animation/pageflip
+//= require motion_check/motion_check_common
+//= require coding/coding_common
 //= require worktable/common/worktable_common
 //= require worktable/common/message.js
 //= require worktable/common/history

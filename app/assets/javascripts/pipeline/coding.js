@@ -8,6 +8,7 @@
 //= require ../../../../vendor/assets/bootstrap/bootstrap.min.js
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require ../../../../vendor/assets/ace/ace
+//= require ../../../../vendor/assets/ace/ext-language_tools
 //= require_directory ./../i18n
 //= require base/constant
 //= require base/common
@@ -17,4 +18,5 @@
 //= require base/event_base
 //= require base/local_storage
 //= require base/float_view
+//= require coding/coding_common
 //= require coding/coding

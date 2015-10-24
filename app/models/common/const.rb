@@ -340,4 +340,11 @@ class Const
       ACCESS_TOKEN = 'at'
     end
   end
+
+  class Coding
+    class Lang
+      JAVASCRIPT = 'js'
+      COFFEESCRIPT = 'coffee'
+    end
+  end
 end

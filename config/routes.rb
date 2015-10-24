@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   post 'worktable' => 'worktable#index'
 
   get 'coding/item'
+  post 'coding/item'
+  match 'coding/item/:lang' => 'coding#item', via: :get
 
   post 'project/create'
   get 'project/list'
