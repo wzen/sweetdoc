@@ -16,7 +16,7 @@
                 <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: thumbnail_style)%>
             </div>
             <div class="hover_overlay">
-                <div class="new_window"><a class="new_window_link"></a></div>
+                <div class="new_window"></div>
                 <div class="info">
                     <div class="title_wrapper">
                         <% if !content[Const::Gallery::Key::TITLE].nil? %>

@@ -21,6 +21,7 @@
 //= require ../../../../vendor/assets/contextmenu/jquery.ui-contextmenu.js
 //= require_directory ../../../../vendor/assets/colorpicker/js
 //= require_directory ../../../../vendor/assets/deflate
+//= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
 //= require item/generator.jquery.color.js
 //= require base/constant

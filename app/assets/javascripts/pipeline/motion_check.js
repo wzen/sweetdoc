@@ -8,6 +8,7 @@
 //= require turbolinks
 //= require i18n
 //= require ../../../../vendor/assets/bootstrap/bootstrap.min
+//= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 // IDE not aware under vendor/asset/
 //= require_directory ./../i18n
 //= require base/constant

@@ -202,7 +202,8 @@ class RunCommon
     data[RunCommon.Key.TARGET_PAGES] = targetPages
     data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds())
     data[RunCommon.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
-    data[RunCommon.Key.ACCESS_TOKEN] = window.location.pathname.split('/')[3]
+    locationPaths = window.location.pathname.split('/')
+    data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
     $.ajax(
       {
         url: "/run/paging"

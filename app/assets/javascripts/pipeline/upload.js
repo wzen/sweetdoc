@@ -6,6 +6,7 @@
 //= require jquery_ujs
 //= require i18n
 //= require ../../../../vendor/assets/bootstrap/bootstrap.min
+//= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
 //= require ../../../../vendor/assets/html2canvas/html2canvas_custom.min
 //= require ../../../../vendor/assets/markitup/markitup/jquery.markitup

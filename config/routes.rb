@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   get 'gallery/detail'
   match 'gallery/detail/:access_token' => 'gallery#detail', via: :get
   get 'gallery/run_window'
-  match 'gallery/w/:access_token' => 'gallery#run_window', via: :get
+  match 'gallery/detail/w/:access_token' => 'gallery#run_window', via: :get
   post 'gallery/save_state'
   post 'gallery/update_last_state'
   get 'gallery/get_contents'

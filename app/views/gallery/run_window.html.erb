@@ -1,7 +1,14 @@
-<div id="contents">
-    <%= render 'run/fullscreen/fullscreen' %>
-    <%= render 'base/csscode' %>
-    <%= render 'base/values', pagevalues: @pagevalues, is_runwindow_reload: @is_runwindow_reload %>
+<div id="main_gallery_wrapper">
+    <div id="gallery_contents_wrapper">
+        <div class="wrapper">
+            <div id="contents">
+                <%= render 'run/fullscreen/fullscreen' %>
+                <%= render 'base/csscode' %>
+                <%= render 'base/values', pagevalues: @pagevalues, is_runwindow_reload: @is_runwindow_reload %>
+            </div>
+            <%= render 'gallery/sidebar/popup' %>
+        </div>
+    </div>
 </div>
 
 <%= stylesheet_link_tag 'pipeline/gallery', media: 'all', 'data-turbolinks-track' => true %>

@@ -24,19 +24,21 @@ GalleryGrid = (function() {
       e.preventDefault();
       return window.location.href = '/gallery/detail/' + $(this).closest('.grid_contents_wrapper').find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
     });
-    $('.new_window_link').off('click');
-    return $('.new_window_link').on('click', function(e) {
-      var left, size, target, top;
+    $('.new_window').off('click');
+    return $('.new_window').on('click', function(e) {
+      var left, root, size, target, top;
       e.preventDefault();
+      e.stopPropagation();
+      root = $(this).closest('.grid_contents_wrapper');
       size = {
-        width: $(this).find('.#{Const.Gallery.Key.SCREEN_SIZE_WIDTH}').val(),
-        height: $(this).find('.#{Const.Gallery.Key.SCREEN_SIZE_HEIGHT}').val()
+        width: root.find("." + Constant.Gallery.Key.SCREEN_SIZE_WIDTH).val(),
+        height: root.find("." + Constant.Gallery.Key.SCREEN_SIZE_HEIGHT).val()
       };
       left = Number((window.screen.width - size.width) / 2);
       top = Number((window.screen.height - size.height) / 2);
       target = "_runwindow";
       window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + size.height + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
-      document.send_form.action = '/gallery/w/' + $(this).find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
+      document.send_form.action = '/gallery/detail/w/' + root.find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
       document.send_form.target = target;
       return setTimeout(function() {
         return document.send_form.submit();
@@ -58,6 +60,7 @@ $(function() {
     return GalleryGrid.initEvent();
   });
   return $('.gallery.detail, .gallery.run_window').ready(function() {
+    RunFullScreen.showCreatorInfo();
     return RunCommon.start();
   });
 });

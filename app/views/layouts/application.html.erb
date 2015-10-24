@@ -4,10 +4,22 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>DDesk</title>
+    <%= favicon_link_tag '/assets/favicon.ico' %>
+    <%= include_gon %>
+    <%= csrf_meta_tag %>
+    <%= display_meta_tags({
+                                  title: "DDesk Gallery" ,
+                                  description: 'welcome revolver',
+                                  viewport: "width=device-width, initial-scale=1"
+                          })
+    %>
 </head>
-<body>
-
+<body class="<%= controller_name -%> <%= action_name -%>">
     <%= yield %>
-
+    <script type="text/javascript">
+        I18n.defaultLocale = "<%= I18n.default_locale %>";
+        I18n.locale = "<%= I18n.locale %>";
+        I18n.fallbacks = true;
+    </script>
 </body>
 </html>

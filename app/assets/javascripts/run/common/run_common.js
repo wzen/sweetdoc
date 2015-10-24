@@ -200,7 +200,7 @@ RunCommon = (function() {
   };
 
   RunCommon.loadPagingPageValue = function(loadPageNum, callback, forceUpdate) {
-    var className, data, i, l, lastPageNum, ref, ref1, section, targetPages;
+    var className, data, i, l, lastPageNum, locationPaths, ref, ref1, section, targetPages;
     if (callback == null) {
       callback = null;
     }
@@ -230,7 +230,8 @@ RunCommon = (function() {
     data[RunCommon.Key.TARGET_PAGES] = targetPages;
     data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds());
     data[RunCommon.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
-    data[RunCommon.Key.ACCESS_TOKEN] = window.location.pathname.split('/')[3];
+    locationPaths = window.location.pathname.split('/');
+    data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
     return $.ajax({
       url: "/run/paging",
       type: "POST",
