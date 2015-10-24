@@ -29,10 +29,6 @@ class Navbar
     )
 
     menuSave = $('.menu-save', fileMenuEmt)
-    menuSave.off('click')
-    menuSave.on('click', ->
-      ServerStorage.save()
-    )
     menuSave.off('mouseenter')
     menuSave.on('mouseenter', (e) ->
       lastSaveTime = PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME)
@@ -55,16 +51,6 @@ class Navbar
       Navbar.get_load_list()
     )
 
-    etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li')
-    $('.menu-about', etcMenuEmt).off('click')
-    $('.menu-about', etcMenuEmt).on('click', ->
-      Common.showModalView(Constant.ModalViewType.ABOUT)
-    )
-    $('.menu-backtomainpage', etcMenuEmt).off('click')
-    $('.menu-backtomainpage', etcMenuEmt).on('click', ->
-      window.location.href = '/'
-    )
-
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     $('.menu-item', itemsSelectMenuEmt).off('click')
     $('.menu-item', itemsSelectMenuEmt).on('click', ->
@@ -81,14 +67,6 @@ class Navbar
         WorktableCommon.changeMode(Constant.Mode.DRAW)
     )
 
-    $('#menu-action-edit').off('click')
-    $('#menu-action-edit').on('click', ->
-      selected = $(@).html()
-      $('#header_items_selected_menu_span').html(selected)
-      Navbar.setModeEdit()
-      WorktableCommon.changeMode(Constant.Mode.EDIT)
-    )
-
     $('#menu_sidebar_toggle').off('click')
     $('#menu_sidebar_toggle').on('click', ->
       if Sidebar.isOpenedConfigSidebar()
@@ -98,29 +76,6 @@ class Navbar
         StateConfig.initConfig()
         WorktableSetting.initConfig()
         Sidebar.openConfigSidebar()
-    )
-
-  # Runナビバー初期化
-  @initRunNavbar = ->
-    navEmt = $('#nav')
-
-    $('.menu-showguide', navEmt).off('click')
-    $('.menu-showguide', navEmt).on('click', ->
-      RunSetting.toggleShowGuide()
-    )
-    $('.menu-control-rewind-page', navEmt).off('click')
-    $('.menu-control-rewind-page', navEmt).on('click', ->
-      if window.eventAction?
-        window.eventAction.thisPage().rewindAllChapters()
-    )
-    $('.menu-control-rewind-chapter', navEmt).off('click')
-    $('.menu-control-rewind-chapter', navEmt).on('click', ->
-      if window.eventAction?
-        window.eventAction.thisPage().rewindChapter()
-    )
-    $('.menu-upload-gallery', navEmt).off('click')
-    $('.menu-upload-gallery', navEmt).on('click', ->
-      RunCommon.showUploadGalleryConfirm()
     )
 
   # Drawモードに設定
@@ -137,7 +92,6 @@ class Navbar
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     itemsSelectMenuEmt.removeClass('active')
     $('#menu-action-edit').parent('li').addClass('active')
-
 
   # ヘッダーにタイトルを設定
   @setTitle = (title_name) ->
@@ -205,4 +159,11 @@ class Navbar
   @setLastUpdateTime = (update_at) ->
     $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").html("#{I18n.t('header_menu.etc.last_update_date')} : #{Common.displayLastUpdateTime(update_at)}")
 
+  @selectEdit = ->
+    selected = $(@).html()
+    $('#header_items_selected_menu_span').html(selected)
+    Navbar.setModeEdit()
+    WorktableCommon.changeMode(Constant.Mode.EDIT)
 
+  @clickAbout = ->
+    Common.showModalView(Constant.ModalViewType.ABOUT)

@@ -11,30 +11,6 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li id="header_menu_setting">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_menu_setting">
-                        <%= t('header_menu.file.setting') %>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a class="menu-showguide"><%= t('header_menu.setting.show_guide') %></a></li>
-                    </ul>
-                </li>
-                <li><a onclick="MotionCheckCommon.run(true)"><%= t('header_menu.motion_check.newwindow') %></a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a class="menu-control-rewind-page" title="Rewind Page"><%= image_tag("nav/rewind_page.png", size:'20x20') %></a></li>
-                <li><a class="menu-control-rewind-chapter" title="Rewind Chapter"><%= image_tag("nav/rewind_chapter.png", size:'20x20') %></a></li>
-                <li>
-                    <a class="menu-upload-gallery" title="Upload Document"><%= image_tag("nav/upload.png", size:'24x24') %></a>
-                    <div style="display: none">
-                        <%= form_tag('/upload', method: :post, name: 'upload_gallery_form') do %>
-                            <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="">
-                            <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="">
-                        <% end %>
-                    </div>
-                </li>
-                </ul>
             </ul>
         </div>
     </div>

@@ -37,6 +37,7 @@ en:
         arrow: "Arrow"
         button: "Button"
       edit: "Edit"
+      item_coding: "Create Item"
     motion_check:
       title: "Motion Check"
       newtab: "New Tab"

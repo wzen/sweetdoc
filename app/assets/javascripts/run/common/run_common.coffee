@@ -338,7 +338,6 @@ class RunCommon
     @initHandleScrollPoint()
     Common.initResize(@resizeEvent)
     @setupScrollEvent()
-    Navbar.initRunNavbar()
     Common.applyEnvironmentFromPagevalue()
     RunCommon.updateMainViewSize()
 
