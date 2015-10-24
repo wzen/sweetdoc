@@ -228,6 +228,12 @@ div#gallery_contents_wrapper {
   }
 }
 
+body.run_window {
+  div#gallery_contents_wrapper {
+    padding-right: 0 !important;
+  }
+}
+
 div#detail_wrapper {
   position: relative;
   width: 100%;
