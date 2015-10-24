@@ -19,10 +19,10 @@ GalleryGrid = (function() {
       e.preventDefault();
       return $(this).find('.hover_overlay').stop(true, true).fadeOut('300');
     });
-    $('.grid_contents_link').off('click');
-    $('.grid_contents_link').on('click', function(e) {
+    $('.hover_overlay').off('click');
+    $('.hover_overlay').on('click', function(e) {
       e.preventDefault();
-      return window.location.href = '/gallery/' + $(this).find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
+      return window.location.href = '/gallery/detail/' + $(this).closest('.grid_contents_wrapper').find("." + Constant.Gallery.Key.GALLERY_ACCESS_TOKEN).val();
     });
     $('.new_window_link').off('click');
     return $('.new_window_link').on('click', function(e) {
@@ -58,19 +58,7 @@ $(function() {
     return GalleryGrid.initEvent();
   });
   return $('.gallery.detail, .gallery.run_window').ready(function() {
-    window.isWorkTable = false;
-    window.eventAction = null;
-    window.runPage = true;
-    window.initDone = false;
-    CommonVar.initVarWhenLoadedView();
-    CommonVar.initCommonVar();
-    PageValue.setPageNum(1);
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-    RunCommon.initMainContainer();
-    return Common.loadJsFromInstancePageValue(function() {
-      RunCommon.initEventAction();
-      return window.initDone = true;
-    });
+    return RunCommon.start();
   });
 });
 

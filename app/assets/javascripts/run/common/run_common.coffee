@@ -415,7 +415,7 @@ class RunCommon
       e.html('')
       e.closest('li').hide()
 
-  @start = ->
+  @start = (useLocalStorate = false) ->
     window.isWorkTable = false
     window.eventAction = null
     window.runPage = true
@@ -427,12 +427,13 @@ class RunCommon
     # デフォルト1ページ目から
     PageValue.setPageNum(1)
 
-    # キャッシュ読み込み
-    is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
-    if is_reload?
-      LocalStorage.loadAllPageValues()
-    else
-      LocalStorage.saveAllPageValues()
+    if useLocalStorate
+      # キャッシュ読み込み
+      is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
+      if is_reload?
+        LocalStorage.loadAllPageValues()
+      else
+        LocalStorage.saveAllPageValues()
 
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(PageValue.getPageNum())

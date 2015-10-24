@@ -470,8 +470,11 @@ RunCommon = (function() {
     }
   };
 
-  RunCommon.start = function() {
+  RunCommon.start = function(useLocalStorate) {
     var is_reload;
+    if (useLocalStorate == null) {
+      useLocalStorate = false;
+    }
     window.isWorkTable = false;
     window.eventAction = null;
     window.runPage = true;
@@ -479,11 +482,13 @@ RunCommon = (function() {
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
     PageValue.setPageNum(1);
-    is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
-    if (is_reload != null) {
-      LocalStorage.loadAllPageValues();
-    } else {
-      LocalStorage.saveAllPageValues();
+    if (useLocalStorate) {
+      is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
+      if (is_reload != null) {
+        LocalStorage.loadAllPageValues();
+      } else {
+        LocalStorage.saveAllPageValues();
+      }
     }
     Common.createdMainContainerIfNeeded(PageValue.getPageNum());
     RunCommon.initMainContainer();
