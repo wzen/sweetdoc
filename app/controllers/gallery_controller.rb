@@ -47,7 +47,7 @@ class GalleryController < ApplicationController
 
   def save_state
     user_id = current_or_guest_user.id
-    tags = params[Const::Gallery::Key::TAGS].split(',')
+    tags = params[Const::Gallery::Key::TAGS].split(',').map{|t| ApplicationController.helpers.sanitize(t)}
     title = params[Const::Gallery::Key::TITLE].force_encoding('utf-8')
     project_id = params[Const::Gallery::Key::PROJECT_ID]
     if project_id == nil || title == nil || title.length == 0
@@ -66,8 +66,8 @@ class GalleryController < ApplicationController
           user_id,
           project_id,
           tags,
-          title,
-          caption,
+          ApplicationController.helpers.sanitize(title),
+          ApplicationController.helpers.sanitize(caption),
           thumbnail_img,
           thumbnail_img_contents_type,
           page_max,
