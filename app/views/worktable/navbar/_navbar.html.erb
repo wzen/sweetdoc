@@ -18,7 +18,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a class="menu-newcreate"><%= t('header_menu.file.newcreate') %></a></li>
-                        <li><a class="menu-save" onclick="ServerStorage.save()"><%= t('header_menu.file.save') %></a></li>
+                        <li><a class="menu-save"><%= t('header_menu.file.save') %></a></li>
                         <li class="dropdown-submenu">
                             <a class="menu-load"><%= t('header_menu.file.load') %></a>
                             <ul class="dropdown-menu <%= Const::ElementAttribute::FILE_LOAD_CLASS %>">
@@ -36,9 +36,9 @@
                         <li><a id="menu-item-1" class="menu-item"><%= t('header_menu.action.draw.button') %></a></li>
                         <li><a id="menu-item-2" class="menu-item"><%= t('header_menu.action.draw.arrow') %></a></li>
                         <li class="divider"></li>
-                        <li><a id="menu-action-edit" class="menu-item" onclick="Navbar.selectEdit()"><%= t('header_menu.action.edit') %></a></li>
+                        <li><a id="menu-action-edit" class="menu-item"><%= t('header_menu.action.edit') %></a></li>
                         <li class="divider"></li>
-                        <li><a id="menu-item-coding" class="menu-item" onclick="CodingCommon.openItemCoding(this)"><%= t('header_menu.action.item_coding') %></a></li>
+                        <li><a id="menu-item-coding" class="menu-item"><%= t('header_menu.action.item_coding') %></a></li>
                     </ul>
                 </li>
                 <li><a onclick="MotionCheckCommon.run()"><%= t('header_menu.motion_check.title') %></a></li>
@@ -56,10 +56,10 @@
                         </li>
                         <li class="divider"></li>
                         <li><a class="menu-item"><%= t('header_menu.etc.introduction') %></a></li>
-                        <li><a class="menu-about" onclick="Navbar.clickAbout()"><%= t('header_menu.etc.about') %></a></li>
+                        <li><a class="menu-about"><%= t('header_menu.etc.about') %></a></li>
                         <li><a onclick="Worktable.runDebug()">Debug</a></li>
                         <li class="divider"></li>
-                        <li><a class="menu-backtomainpage" onclick="window.location.href = '/';"><%= t('header_menu.etc.back_to_mainpage') %></a></li>
+                        <li><a class="menu-backtomainpage"><%= t('header_menu.etc.back_to_mainpage') %></a></li>
                     </ul>
                 </li>
             </ul>
