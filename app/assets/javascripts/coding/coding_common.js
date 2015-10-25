@@ -2,46 +2,19 @@
 var CodingCommon;
 
 CodingCommon = (function() {
-  var constant;
-
   function CodingCommon() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    CodingCommon.Lang = (function() {
-      var COFFEESCRIPT, JAVASCRIPT;
-
-      function Lang() {}
-
-      JAVASCRIPT = constant.Coding.Lang.JAVASCRIPT;
-
-      COFFEESCRIPT = constant.Coding.Lang.COFFEESCRIPT;
-
-      return Lang;
-
-    })();
-  }
-
-  CodingCommon.openItemCodingJs = function() {
+  CodingCommon.openItemCoding = function(e) {
     var target;
+    e.stopPropagation();
     target = "_coding";
     window.open("about:blank", target);
-    document.run_form.action = '/coding/item/' + this.Lang.JAVASCRIPT;
+    document.run_form.action = '/coding/item';
     document.run_form.target = target;
-    return setTimeout(function() {
+    setTimeout(function() {
       return document.run_form.submit();
     }, 200);
-  };
-
-  CodingCommon.openItemCodingCoffee = function() {
-    var target;
-    target = "_coding";
-    window.open("about:blank", target);
-    document.run_form.action = '/coding/item/' + this.Lang.COFFEESCRIPT;
-    document.run_form.target = target;
-    return setTimeout(function() {
-      return document.run_form.submit();
-    }, 200);
+    return false;
   };
 
   return CodingCommon;

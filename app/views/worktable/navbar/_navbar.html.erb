@@ -38,13 +38,7 @@
                         <li class="divider"></li>
                         <li><a id="menu-action-edit" class="menu-item" onclick="Navbar.selectEdit()"><%= t('header_menu.action.edit') %></a></li>
                         <li class="divider"></li>
-                        <li class="dropdown-submenu">
-                            <a class="menu-item-coding"><%= t('header_menu.action.item_coding') %></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="menu-item" onclick="CodingCommon.openItemCodingJs()">Edit by JavaScript</a></li>
-                                <li><a class="menu-item" onclick="CodingCommon.openItemCodingCoffee()">Edit by CoffeeScript</a></li>
-                            </ul>
-                        </li>
+                        <li><a id="menu-item-coding" class="menu-item" onclick="CodingCommon.openItemCoding(this)"><%= t('header_menu.action.item_coding') %></a></li>
                     </ul>
                 </li>
                 <li><a onclick="MotionCheckCommon.run()"><%= t('header_menu.motion_check.title') %></a></li>
