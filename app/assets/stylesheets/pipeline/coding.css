@@ -11,5 +11,11 @@
  * file per style scope.
  *
  *= require bootstrap.min
+ *= require bootstrap_custom
+ *= require css/layout
+ *= require non-responsive
+ *= require common/common
+ *= require common/modal_view.css
+ *= require common/indicator
  *= require coding/coding
  */

@@ -89,6 +89,11 @@ class Navbar
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
 
+    $('#menu-action-coding').off('click')
+    $('#menu-action-coding').on('click', (e) ->
+      CodingCommon.openItemCoding(e)
+    )
+
     $('#menu_sidebar_toggle').off('click')
     $('#menu_sidebar_toggle').on('click', ->
       if Sidebar.isOpenedConfigSidebar()

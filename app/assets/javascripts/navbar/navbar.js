@@ -92,6 +92,10 @@ Navbar = (function() {
       Navbar.setModeEdit();
       return WorktableCommon.changeMode(Constant.Mode.EDIT);
     });
+    $('#menu-action-coding').off('click');
+    $('#menu-action-coding').on('click', function(e) {
+      return CodingCommon.openItemCoding(e);
+    });
     $('#menu_sidebar_toggle').off('click');
     return $('#menu_sidebar_toggle').on('click', function() {
       if (Sidebar.isOpenedConfigSidebar()) {
