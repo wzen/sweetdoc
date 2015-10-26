@@ -9,6 +9,7 @@
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require ../../../../vendor/assets/ace/ace
 //= require ../../../../vendor/assets/ace/ext-language_tools
+//= require ../../../../vendor/assets/jstree/jstree.min
 //= require_directory ./../i18n
 //= require base/constant
 //= require base/common

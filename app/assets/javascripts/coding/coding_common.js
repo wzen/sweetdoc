@@ -2,7 +2,19 @@
 var CodingCommon;
 
 CodingCommon = (function() {
+  var constant;
+
   function CodingCommon() {}
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    CodingCommon.Key = (function() {
+      function Key() {}
+
+      return Key;
+
+    })();
+  }
 
   CodingCommon.openItemCoding = function(e) {
     var target;
@@ -15,6 +27,23 @@ CodingCommon = (function() {
       return document.run_form.submit();
     }, 200);
     return false;
+  };
+
+  CodingCommon.initTreeView = function() {
+    return $('#tree').jstree({});
+  };
+
+  CodingCommon.initEditor = function() {
+    var editor;
+    ace.require("ace/ext/language_tools");
+    editor = ace.edit("editor");
+    editor.getSession().setMode("ace/mode/javascript");
+    editor.setTheme("ace/theme/tomorrow");
+    return editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: false
+    });
   };
 
   return CodingCommon;

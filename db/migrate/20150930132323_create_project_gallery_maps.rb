@@ -7,5 +7,6 @@ class CreateProjectGalleryMaps < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :project_gallery_maps, [:user_project_map_id, :gallery_id], unique: true
   end
 end

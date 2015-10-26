@@ -342,6 +342,14 @@ class Const
   end
 
   class Coding
+    class Key
+      NAME = 'name'
+      LANG = 'lang'
+      PUBLIC = 'public'
+      CODE = 'code'
+      USER_CODING_ID = 'user_coding_id'
+
+    end
     class Lang
       JAVASCRIPT = 'js'
       COFFEESCRIPT = 'coffee'

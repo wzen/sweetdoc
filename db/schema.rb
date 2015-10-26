@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151026025511) do
+ActiveRecord::Schema.define(version: 20151026070504) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20151026025511) do
     t.boolean  "show_guide",                                   default: true
     t.boolean  "show_page_num",                                default: false
     t.boolean  "show_chapter_num",                             default: false
+    t.integer  "version",                                      default: 1
     t.boolean  "del_flg",                                      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -96,10 +97,12 @@ ActiveRecord::Schema.define(version: 20151026025511) do
   end
 
   create_table "gallery_codings", force: true do |t|
-    t.string   "name",        null: false
-    t.integer  "public_type", null: false
-    t.integer  "lang_type",   null: false
-    t.text     "code",        null: false
+    t.string   "name",                        null: false
+    t.integer  "public_type",                 null: false
+    t.integer  "lang_type",                   null: false
+    t.text     "code",                        null: false
+    t.integer  "version",     default: 1
+    t.boolean  "del_flg",     default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -269,6 +272,8 @@ ActiveRecord::Schema.define(version: 20151026025511) do
     t.datetime "updated_at"
   end
 
+  add_index "project_gallery_maps", ["user_project_map_id", "gallery_id"], name: "index_project_gallery_maps_on_user_project_map_id_and_gallery_id", unique: true, using: :btree
+
   create_table "projects", force: true do |t|
     t.string   "title"
     t.integer  "screen_width",                  null: false
@@ -295,21 +300,37 @@ ActiveRecord::Schema.define(version: 20151026025511) do
     t.datetime "updated_at"
   end
 
+  create_table "user_coding_trees", force: true do |t|
+    t.integer  "user_id",                        null: false
+    t.string   "name",                           null: false
+    t.string   "node_path",                      null: false
+    t.string   "user_coding_id"
+    t.boolean  "del_flg",        default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_coding_trees", ["user_id"], name: "index_user_coding_trees_on_user_id", using: :btree
+
   create_table "user_codings", force: true do |t|
-    t.integer  "user_id",    null: false
-    t.string   "name",       null: false
-    t.integer  "lang_type",  null: false
-    t.text     "code",       null: false
+    t.integer  "user_id",                    null: false
+    t.string   "name",                       null: false
+    t.integer  "lang_type",                  null: false
+    t.text     "code",                       null: false
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "user_gallery_coding_maps", force: true do |t|
-    t.integer  "user_id",           null: false
-    t.integer  "gallery_coding_id", null: false
+    t.integer  "user_id",                           null: false
+    t.integer  "gallery_coding_id",                 null: false
+    t.boolean  "del_flg",           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "user_gallery_coding_maps", ["user_id", "gallery_coding_id"], name: "index_user_gallery_coding_maps_on_user_id_and_gallery_coding_id", unique: true, using: :btree
 
   create_table "user_pagevalues", force: true do |t|
     t.integer  "user_project_map_id",                  null: false
@@ -326,6 +347,8 @@ ActiveRecord::Schema.define(version: 20151026025511) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "user_project_maps", ["user_id", "project_id"], name: "index_user_project_maps_on_user_id_and_project_id", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "access_token",           limit: 15,                       null: false
