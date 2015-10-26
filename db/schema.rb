@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151017090414) do
+ActiveRecord::Schema.define(version: 20151026025511) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -91,6 +91,15 @@ ActiveRecord::Schema.define(version: 20151017090414) do
     t.integer  "gallery_id",                 null: false
     t.text     "note"
     t.boolean  "del_flg",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_codings", force: true do |t|
+    t.string   "name",        null: false
+    t.integer  "public_type", null: false
+    t.integer  "lang_type",   null: false
+    t.text     "code",        null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -282,6 +291,22 @@ ActiveRecord::Schema.define(version: 20151017090414) do
   create_table "user_auths", force: true do |t|
     t.string   "name",           null: false
     t.integer  "strength_order", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_codings", force: true do |t|
+    t.integer  "user_id",    null: false
+    t.string   "name",       null: false
+    t.integer  "lang_type",  null: false
+    t.text     "code",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_gallery_coding_maps", force: true do |t|
+    t.integer  "user_id",           null: false
+    t.integer  "gallery_coding_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

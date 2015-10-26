@@ -24,7 +24,7 @@ development:
 test:
   <<: *default
   database: revolver_test
-  username: wzen_test
+  username: root
   password: wzen1983
 
 production:
