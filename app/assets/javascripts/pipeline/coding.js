@@ -19,5 +19,6 @@
 //= require base/event_base
 //= require base/local_storage
 //= require base/float_view
+//= require navbar/navbar.js
 //= require coding/coding_common
 //= require coding/coding

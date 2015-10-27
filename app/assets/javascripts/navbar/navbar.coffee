@@ -128,6 +128,15 @@ class Navbar
       RunCommon.showUploadGalleryConfirm()
     )
 
+  # Codingナビバー初期化
+  @initCodingNavbar = ->
+    fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
+    menuSave = $('.menu-save', fileMenuEmt)
+    menuSave.off('click')
+    menuSave.on('click', ->
+      CodingCommon.saveData()
+    )
+
   # Drawモードに設定
   @setModeDraw = (itemId, callback = null) ->
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')

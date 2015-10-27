@@ -29,6 +29,7 @@ en:
       save: "Save"
       load: "Load"
       setting: "Setting"
+      new_file: "New File"
     action:
       action: "Action"
       select_action: "(Select Action)"

@@ -3,12 +3,26 @@
         <div id="tree_wrapper">
             <div id="tree">
                 <ul>
-                    <li>Root node 1</li>
+                    <li><%= @user.name %></li>
+                    <%== @load_tree_data %>
                 </ul>
             </div>
         </div>
         <div id="editor_wrapper">
-            <div id="editor"></div>
+            <% if @load_editor_data.length > 0 %>
+                <ul class="nav nav-tabs">
+                    <% @load_editor_data.each do |data| %>
+                        <li class="<%= data['is_front']? 'active' : '' %>"><a href="#<%= "uc_#{data['id'].to_s}_wrapper" %>" data-toggle="tab">State</a></li>
+                    <% end %>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <% @load_editor_data.each do |data| %>
+                        <div class="tab-pane fade in <%= data['is_front']? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
+                            <div id="<%= "uc_#{data.id.to_s}" %>" class="editor"></div>
+                        </div>
+                    <% end %>
+                </div>
+            <% end %>
         </div>
     </div>
 </div>

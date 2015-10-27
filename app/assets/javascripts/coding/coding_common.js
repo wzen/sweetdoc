@@ -9,7 +9,27 @@ CodingCommon = (function() {
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     CodingCommon.Key = (function() {
+      var CODE, IS_OPENED, LANG, NAME, NODE_PATH, PUBLIC, SUB_TREE, TREE_STATE, USER_CODING_ID;
+
       function Key() {}
+
+      NAME = constant.Coding.Key.NAME;
+
+      LANG = constant.Coding.Key.LANG;
+
+      PUBLIC = constant.Coding.Key.PUBLIC;
+
+      CODE = constant.Coding.Key.CODE;
+
+      USER_CODING_ID = constant.Coding.Key.USER_CODING_ID;
+
+      TREE_STATE = constant.Coding.Key.TREE_STATE;
+
+      SUB_TREE = constant.Coding.Key.SUB_TREE;
+
+      NODE_PATH = constant.Coding.Key.NODE_PATH;
+
+      IS_OPENED = constant.Coding.Key.IS_OPENED;
 
       return Key;
 
@@ -29,14 +49,23 @@ CodingCommon = (function() {
     return false;
   };
 
+  CodingCommon.init = function() {
+    this.initTreeView();
+    return this.initEditor();
+  };
+
   CodingCommon.initTreeView = function() {
-    return $('#tree').jstree({});
+    return $('#tree').jstree();
   };
 
   CodingCommon.initEditor = function() {
-    var editor;
+    var EditSession, css, editor, js;
     ace.require("ace/ext/language_tools");
     editor = ace.edit("editor");
+    EditSession = require("ace/edit_session").EditSession;
+    js = new EditSession("some js code");
+    css = new EditSession(["some", "css", "code here"]);
+    editor.setSession(js);
     editor.getSession().setMode("ace/mode/javascript");
     editor.setTheme("ace/theme/tomorrow");
     return editor.setOptions({
@@ -44,6 +73,89 @@ CodingCommon = (function() {
       enableSnippets: true,
       enableLiveAutocompletion: false
     });
+  };
+
+  CodingCommon.saveData = function(successCallback, errorCallback) {
+    var _treeState, data;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    _treeState = function() {};
+    data = {};
+    data[this.Key.TREE_STATE] = _treeState.call(this);
+    return $.ajax({
+      url: "/coding/save",
+      type: "GET",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
+  };
+
+  CodingCommon.loadCodeData = function(successCallback, errorCallback) {
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    return $.ajax({
+      url: "/coding/load_code",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
+  };
+
+  CodingCommon.loadTreeData = function(successCallback, errorCallback) {
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    return $.ajax({
+      url: "/coding/load_tree",
+      type: "GET",
+      dataType: "json",
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
+  };
+
+  CodingCommon.createTabEditor = function(editorData) {
+    var code, title;
+    code = editorData.code;
+    return title = editorData.title;
   };
 
   return CodingCommon;

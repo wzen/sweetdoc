@@ -5,6 +5,8 @@ class CreateUserCodings < ActiveRecord::Migration
       t.string :name, null: false
       t.integer :lang_type, null: false
       t.text :code, null: false
+      t.boolean :is_opened, null: false
+      t.boolean :is_front, null: false
       t.boolean :del_flg, default: false
       t.timestamps
     end

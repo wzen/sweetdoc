@@ -134,6 +134,16 @@ Navbar = (function() {
     });
   };
 
+  Navbar.initCodingNavbar = function() {
+    var fileMenuEmt, menuSave;
+    fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
+    menuSave = $('.menu-save', fileMenuEmt);
+    menuSave.off('click');
+    return menuSave.on('click', function() {
+      return CodingCommon.saveData();
+    });
+  };
+
   Navbar.setModeDraw = function(itemId, callback) {
     var emtId, itemsSelectMenuEmt;
     if (callback == null) {

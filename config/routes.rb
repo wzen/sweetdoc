@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
 
+  get 'coding/save'
+  get 'coding/load_code'
+  get 'coding/load_tree'
   get 'coding/item'
   post 'coding/item'
 

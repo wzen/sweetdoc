@@ -348,7 +348,10 @@ class Const
       PUBLIC = 'public'
       CODE = 'code'
       USER_CODING_ID = 'user_coding_id'
-
+      TREE_STATE = 'tree_state'
+      SUB_TREE = 'sub_tree'
+      NODE_PATH = 'node_path'
+      IS_OPENED = 'is_opened'
     end
     class Lang
       JAVASCRIPT = 'js'
