@@ -10,15 +10,15 @@
         </div>
         <div id="editor_wrapper">
             <% if @load_editor_data.length > 0 %>
-                <ul class="nav nav-tabs">
+                <ul id="my_tab" class="nav nav-tabs">
                     <% @load_editor_data.each do |data| %>
-                        <li class="<%= data['is_front']? 'active' : '' %>"><a href="#<%= "uc_#{data['id'].to_s}_wrapper" %>" data-toggle="tab">State</a></li>
+                        <li class="<%= data['is_front']? 'active' : '' %>"><a href="#<%= "uc_#{data['id'].to_s}_wrapper" %>" data-toggle="tab"><%= data['name'] %></a></li>
                     <% end %>
                 </ul>
-                <div id="myTabContent" class="tab-content">
+                <div id="my_tab_content" class="tab-content">
                     <% @load_editor_data.each do |data| %>
                         <div class="tab-pane fade in <%= data['is_front']? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
-                            <div id="<%= "uc_#{data.id.to_s}" %>" class="editor"></div>
+                            <div id="<%= "uc_#{data.id.to_s}" %>" class="editor <%= data['lang_type'] %>"></div>
                         </div>
                     <% end %>
                 </div>

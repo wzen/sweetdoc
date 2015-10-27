@@ -342,6 +342,7 @@ class Const
   end
 
   class Coding
+    DEFAULT_FILENAME = 'untitled'
     class Key
       NAME = 'name'
       LANG = 'lang'
@@ -353,7 +354,7 @@ class Const
       SUB_TREE = 'sub_tree'
       NODE_PATH = 'node_path'
       IS_OPENED = 'is_opened'
-      PARENT_NODE = 'parent_node'
+      PARENT_NODE_PATH = 'parent_node_path'
     end
     class Lang
       JAVASCRIPT = 'js'

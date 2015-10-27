@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   post 'coding/save_all'
   post 'coding/save_tree'
   post 'coding/save_code'
+  post 'coding/add_new_file'
+  post 'coding/add_new_folder'
   get 'coding/load_code'
   get 'coding/load_tree'
   get 'coding/item'

@@ -2,38 +2,49 @@
 var CodingCommon;
 
 CodingCommon = (function() {
-  var _codes, _treeState, constant;
+  var _codes, _parentNodePath, _treeState, constant;
 
   function CodingCommon() {}
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
+    CodingCommon.DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME;
     CodingCommon.Key = (function() {
-      var CODE, CODES, IS_OPENED, LANG, NAME, NODE_PATH, PUBLIC, SUB_TREE, TREE_STATE, USER_CODING_ID;
-
       function Key() {}
 
-      NAME = constant.Coding.Key.NAME;
+      Key.NAME = constant.Coding.Key.NAME;
 
-      LANG = constant.Coding.Key.LANG;
+      Key.LANG = constant.Coding.Key.LANG;
 
-      PUBLIC = constant.Coding.Key.PUBLIC;
+      Key.PUBLIC = constant.Coding.Key.PUBLIC;
 
-      CODE = constant.Coding.Key.CODE;
+      Key.CODE = constant.Coding.Key.CODE;
 
-      CODES = constant.Coding.Key.CODES;
+      Key.CODES = constant.Coding.Key.CODES;
 
-      USER_CODING_ID = constant.Coding.Key.USER_CODING_ID;
+      Key.USER_CODING_ID = constant.Coding.Key.USER_CODING_ID;
 
-      TREE_STATE = constant.Coding.Key.TREE_STATE;
+      Key.TREE_STATE = constant.Coding.Key.TREE_STATE;
 
-      SUB_TREE = constant.Coding.Key.SUB_TREE;
+      Key.SUB_TREE = constant.Coding.Key.SUB_TREE;
 
-      NODE_PATH = constant.Coding.Key.NODE_PATH;
+      Key.NODE_PATH = constant.Coding.Key.NODE_PATH;
 
-      IS_OPENED = constant.Coding.Key.IS_OPENED;
+      Key.IS_OPENED = constant.Coding.Key.IS_OPENED;
+
+      Key.PARENT_NODE_PATH = constant.Coding.Key.PARENT_NODE_PATH;
 
       return Key;
+
+    })();
+    CodingCommon.Lang = (function() {
+      function Lang() {}
+
+      Lang.JAVASCRIPT = constant.Coding.Lang.JAVASCRIPT;
+
+      Lang.COFFEESCRIPT = constant.Coding.Lang.COFFEESCRIPT;
+
+      return Lang;
 
     })();
   }
@@ -61,7 +72,38 @@ CodingCommon = (function() {
     return this.setupTreeEvent();
   };
 
-  CodingCommon.initEditor = function() {};
+  CodingCommon.initEditor = function() {
+    return $('.editor').each((function(_this) {
+      return function(e) {
+        var editorId, lang_type;
+        editorId = $(_this).attr('id');
+        lang_type = $(_this).attr('class').split(' ').filter(function(item, idx) {
+          return item !== 'editor';
+        });
+        if (lang_type.length > 0) {
+          return _this.setupEditor(editorId, lang_type[0]);
+        }
+      };
+    })(this));
+  };
+
+  CodingCommon.setupEditor = function(editorId, lang_type) {
+    var EditSession, editor;
+    ace.require("ace/ext/language_tools");
+    editor = ace.edit(editorId);
+    EditSession = require("ace/edit_session").EditSession;
+    if (lang_type === this.Lang.JAVASCRIPT) {
+      editor.getSession().setMode("ace/mode/javascript");
+    } else {
+      editor.getSession().setMode("ace/mode/coffeescript");
+    }
+    editor.setTheme("ace/theme/tomorrow");
+    return editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: false
+    });
+  };
 
   CodingCommon.setupTreeEvent = function() {
     var root;
@@ -83,13 +125,37 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.js'),
           cmd: "js",
           func: function(event, ui) {
-            return console.log('select JavaScript');
+            return CodingCommon.addNewFile(this.Lang.JAVASCRIPT, function(data) {
+              var ref, sel;
+              ref = $('#tree').jstree(true);
+              sel = ref.get_selected();
+              if (!sel.length) {
+                return false;
+              }
+              sel = sel[0];
+              return sel = ref.create_node(sel, {
+                "type": "file",
+                text: CodingCommon.DEFAULT_FILENAME + ".js"
+              }, 'last', function() {});
+            }, function(data) {});
           }
         }, {
           title: I18n.t('context_menu.coffee'),
           cmd: "coffee",
           func: function(event, ui) {
-            return console.log('select CoffeeScript');
+            return CodingCommon.addNewFile(this.Lang.COFFEESCRIPT, function(data) {
+              var ref, sel;
+              ref = $('#tree').jstree(true);
+              sel = ref.get_selected();
+              if (!sel.length) {
+                return false;
+              }
+              sel = sel[0];
+              return sel = ref.create_node(sel, {
+                "type": "file",
+                text: CodingCommon.DEFAULT_FILENAME + ".coffee"
+              }, 'last', function() {});
+            }, function(data) {});
           }
         }
       ]
@@ -98,7 +164,19 @@ CodingCommon = (function() {
       title: I18n.t('context_menu.new_folder'),
       cmd: "new_folder",
       func: function(event, ui) {
-        return console.log('select CoffeeScript');
+        return CodingCommon.addNewFolder(function(data) {
+          var ref, sel;
+          ref = $('#tree').jstree(true);
+          sel = ref.get_selected();
+          if (!sel.length) {
+            return false;
+          }
+          sel = sel[0];
+          return sel = ref.create_node(sel, {
+            type: "folder",
+            text: CodingCommon.DEFAULT_FILENAME + ".coffee"
+          });
+        }, function(data) {});
       }
     });
     return Common.setupContextMenu($('#tree .dir'), '#tree', {
@@ -261,11 +339,81 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.createTabEditor = function(editorData) {
-    var code, title;
-    code = editorData.code;
-    return title = editorData.title;
+  CodingCommon.addNewFile = function(lang_type, successCallback, errorCallback) {
+    var data;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    data = {};
+    data[this.Key.LANG] = lang_type;
+    data[this.Key.PARENT_NODE_PATH] = _parentNodePath();
+    return $.ajax({
+      url: "/coding/add_new_file",
+      type: "POST",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
   };
+
+  CodingCommon.addNewFolder = function(successCallback, errorCallback) {
+    var data;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    data = {};
+    data[this.Key.PARENT_NODE_PATH] = _parentNodePath();
+    return $.ajax({
+      url: "/coding/add_new_folder",
+      type: "POST",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
+  };
+
+  CodingCommon.createTabEditor = function(editorData) {
+    var code, lang_type, tab, tab_content, title, user_coding_id;
+    tab = $('#my_tab');
+    if (tab == null) {
+      $('#editor_wrapper').append('<ul id="my_tab" class="nav nav-tabs"></ul><div id="my_tab_content" class="tab-content"></div>');
+      tab = $('#my_tab');
+    }
+    tab_content = $('#my_tab_content');
+    user_coding_id = editorData.user_coding_id;
+    code = editorData.code;
+    title = editorData.title;
+    lang_type = editorData.lang_type;
+    tab.append("<li class='active'><a href='uc_" + user_coding_id + "_wrapper' data-toggle='tab'>" + title + "</a></li>");
+    tab_content.append("<div class='tab-pane fade in active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor " + lang_type + "'></div></div>");
+    return this.setupEditor("uc_" + user_coding_id, lang_type);
+  };
+
+  _parentNodePath = function() {};
 
   _treeState = function() {};
 

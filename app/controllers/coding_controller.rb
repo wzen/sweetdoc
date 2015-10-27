@@ -15,6 +15,19 @@ class CodingController < ApplicationController
     @message = Coding.save_code(user_id, codes)
   end
 
+  def add_new_file
+    user_id = current_or_guest_user.id
+    parent_node_path = params[Const::Coding::Key::PARENT_NODE_PATH]
+    lang = params[Const::Coding::Key::LANG]
+    @message, @add_user_coding_id, @code = Coding.add_new_file(user_id, parent_node_path, lang)
+  end
+
+  def add_new_folder
+    user_id = current_or_guest_user.id
+    parent_node_path = params[Const::Coding::Key::PARENT_NODE_PATH]
+    @message = Coding.add_new_folder(user_id, parent_node_path)
+  end
+
   def save_tree
     user_id = current_or_guest_user.id
     tree_state = params[Const::Coding::Key::TREE_STATE]
