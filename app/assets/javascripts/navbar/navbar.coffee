@@ -134,7 +134,7 @@ class Navbar
     menuSave = $('.menu-save', fileMenuEmt)
     menuSave.off('click')
     menuSave.on('click', ->
-      CodingCommon.saveData()
+      CodingCommon.saveAll()
     )
 
   # Drawモードに設定

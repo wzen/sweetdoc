@@ -2,14 +2,14 @@
 var CodingCommon;
 
 CodingCommon = (function() {
-  var constant;
+  var _codes, _treeState, constant;
 
   function CodingCommon() {}
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     CodingCommon.Key = (function() {
-      var CODE, IS_OPENED, LANG, NAME, NODE_PATH, PUBLIC, SUB_TREE, TREE_STATE, USER_CODING_ID;
+      var CODE, CODES, IS_OPENED, LANG, NAME, NODE_PATH, PUBLIC, SUB_TREE, TREE_STATE, USER_CODING_ID;
 
       function Key() {}
 
@@ -20,6 +20,8 @@ CodingCommon = (function() {
       PUBLIC = constant.Coding.Key.PUBLIC;
 
       CODE = constant.Coding.Key.CODE;
+
+      CODES = constant.Coding.Key.CODES;
 
       USER_CODING_ID = constant.Coding.Key.USER_CODING_ID;
 
@@ -55,40 +57,147 @@ CodingCommon = (function() {
   };
 
   CodingCommon.initTreeView = function() {
-    return $('#tree').jstree();
+    $('#tree').jstree();
+    return this.setupTreeEvent();
   };
 
-  CodingCommon.initEditor = function() {
-    var EditSession, css, editor, js;
-    ace.require("ace/ext/language_tools");
-    editor = ace.edit("editor");
-    EditSession = require("ace/edit_session").EditSession;
-    js = new EditSession("some js code");
-    css = new EditSession(["some", "css", "code here"]);
-    editor.setSession(js);
-    editor.getSession().setMode("ace/mode/javascript");
-    editor.setTheme("ace/theme/tomorrow");
-    return editor.setOptions({
-      enableBasicAutocompletion: true,
-      enableSnippets: true,
-      enableLiveAutocompletion: false
+  CodingCommon.initEditor = function() {};
+
+  CodingCommon.setupTreeEvent = function() {
+    var root;
+    root = $('#tree');
+    $('.dir, .tip', root).off('click');
+    $('.dir, .tip', root).on('click', function(e) {
+      return e.preventDefault();
+    });
+    return this.setupContextMenu();
+  };
+
+  CodingCommon.setupContextMenu = function() {
+    var menu;
+    menu = [];
+    menu.push({
+      title: I18n.t('context_menu.new_file'),
+      children: [
+        {
+          title: I18n.t('context_menu.js'),
+          cmd: "js",
+          func: function(event, ui) {
+            return console.log('select JavaScript');
+          }
+        }, {
+          title: I18n.t('context_menu.coffee'),
+          cmd: "coffee",
+          func: function(event, ui) {
+            return console.log('select CoffeeScript');
+          }
+        }
+      ]
+    });
+    menu.push({
+      title: I18n.t('context_menu.new_folder'),
+      cmd: "new_folder",
+      func: function(event, ui) {
+        return console.log('select CoffeeScript');
+      }
+    });
+    return Common.setupContextMenu($('#tree .dir'), '#tree', {
+      menu: menu,
+      select: function(event, ui) {
+        var i, len, results, value;
+        results = [];
+        for (i = 0, len = menu.length; i < len; i++) {
+          value = menu[i];
+          if (value.cmd === ui.cmd) {
+            if (value.func != null) {
+              results.push(value.func(event, ui));
+            } else {
+              results.push(void 0);
+            }
+          } else {
+            results.push(void 0);
+          }
+        }
+        return results;
+      },
+      beforeOpen: function(event, ui) {
+        var t;
+        t = $(event.target);
+        return ui.menu.zIndex($(event.target).zIndex() + 1);
+      }
     });
   };
 
-  CodingCommon.saveData = function(successCallback, errorCallback) {
-    var _treeState, data;
+  CodingCommon.saveAll = function(successCallback, errorCallback) {
+    var data;
     if (successCallback == null) {
       successCallback = null;
     }
     if (errorCallback == null) {
       errorCallback = null;
     }
-    _treeState = function() {};
     data = {};
-    data[this.Key.TREE_STATE] = _treeState.call(this);
+    data[this.Key.CODES] = _codes();
+    data[this.Key.TREE_STATE] = _treeState();
     return $.ajax({
-      url: "/coding/save",
-      type: "GET",
+      url: "/coding/save_all",
+      type: "POST",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
+  };
+
+  CodingCommon.saveTree = function(successCallback, errorCallback) {
+    var data;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    data = {};
+    data[this.Key.TREE_STATE] = _treeState();
+    return $.ajax({
+      url: "/coding/save_tree",
+      type: "POST",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
+  };
+
+  CodingCommon.saveCode = function(successCallback, errorCallback) {
+    var data;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    data = {};
+    data[this.Key.CODES] = _codes();
+    return $.ajax({
+      url: "/coding/save_code",
+      type: "POST",
       dataType: "json",
       data: data,
       success: function(data) {
@@ -157,6 +266,10 @@ CodingCommon = (function() {
     code = editorData.code;
     return title = editorData.title;
   };
+
+  _treeState = function() {};
+
+  _codes = function() {};
 
   return CodingCommon;
 

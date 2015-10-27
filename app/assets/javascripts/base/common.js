@@ -897,6 +897,16 @@ Common = (function() {
     return _func.call();
   };
 
+  Common.setupContextMenu = function(element, contextSelector, option) {
+    var data;
+    data = {
+      preventContextMenuForPopup: true,
+      preventSelect: true
+    };
+    $.extend(data, option);
+    return element.contextmenu(data);
+  };
+
   return Common;
 
 })();

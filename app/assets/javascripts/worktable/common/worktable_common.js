@@ -394,9 +394,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.setupContextMenu = function(element, contextSelector, menu) {
-    return element.contextmenu({
-      preventContextMenuForPopup: true,
-      preventSelect: true,
+    return Common.setupContextMenu(element, contextSelector, {
       menu: menu,
       select: function(event, ui) {
         var l, len, results, value;

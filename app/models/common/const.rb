@@ -347,11 +347,13 @@ class Const
       LANG = 'lang'
       PUBLIC = 'public'
       CODE = 'code'
+      CODES = 'codes'
       USER_CODING_ID = 'user_coding_id'
       TREE_STATE = 'tree_state'
       SUB_TREE = 'sub_tree'
       NODE_PATH = 'node_path'
       IS_OPENED = 'is_opened'
+      PARENT_NODE = 'parent_node'
     end
     class Lang
       JAVASCRIPT = 'js'

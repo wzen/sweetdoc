@@ -140,7 +140,7 @@ Navbar = (function() {
     menuSave = $('.menu-save', fileMenuEmt);
     menuSave.off('click');
     return menuSave.on('click', function() {
-      return CodingCommon.saveData();
+      return CodingCommon.saveAll();
     });
   };
 

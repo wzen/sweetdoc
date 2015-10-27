@@ -53,6 +53,10 @@ en:
     setting:
       show_guide: "Toggle Guide"
   context_menu:
+    new_file: "New File"
+    new_folder: "New Folder"
+    js: "JavaScript"
+    coffee: "CoffeeScript"
     copy: "Copy"
     cut: "Cut"
     paste: "Paste"

@@ -361,24 +361,20 @@ class WorktableCommon
   # @param [String] contextSelector
   # @param [Array] menu 表示メニュー
   @setupContextMenu = (element, contextSelector, menu) ->
-    element.contextmenu(
-      {
-        preventContextMenuForPopup: true
-        preventSelect: true
-        menu: menu
-        select: (event, ui) ->
-          for value in menu
-            if value.cmd == ui.cmd
-              value.func(event, ui)
-        beforeOpen: (event, ui) ->
-          t = $(event.target)
-          # 選択メニューを最前面に表示
-          ui.menu.zIndex( $(event.target).zIndex() + 1)
-          if window.mode == Constant.Mode.EDIT && $(t).hasClass('item')
-            # 選択状態にする
-            WorktableCommon.setSelectedBorder(t)
-      }
-    )
+    Common.setupContextMenu(element, contextSelector, {
+      menu: menu
+      select: (event, ui) ->
+        for value in menu
+          if value.cmd == ui.cmd
+            value.func(event, ui)
+      beforeOpen: (event, ui) ->
+        t = $(event.target)
+        # 選択メニューを最前面に表示
+        ui.menu.zIndex( $(event.target).zIndex() + 1)
+        if window.mode == Constant.Mode.EDIT && $(t).hasClass('item')
+        # 選択状態にする
+          WorktableCommon.setSelectedBorder(t)
+    })
 
   # 全てのアイテムとイベントを削除
   @removeAllItemAndEvent = ->

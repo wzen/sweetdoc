@@ -32,6 +32,8 @@ ja:
     setting:
       show_guide: "モーションガイド切り替え"
   context_menu:
+    new_file: "新規ファイル"
+    new_folder: "新規フォルダ"
     copy: "コピー"
     cut: "切り取り"
     paste: "貼り付け"

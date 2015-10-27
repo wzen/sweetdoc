@@ -749,6 +749,18 @@ class Common
       )
     _func.call()
 
+  # コンテキストメニュー初期化
+  # @param [String] elementID HTML要素ID
+  # @param [String] contextSelector
+  # @param [Object] option オプション
+  @setupContextMenu = (element, contextSelector, option) ->
+    data = {
+      preventContextMenuForPopup: true
+      preventSelect: true
+    }
+    $.extend(data, option)
+    element.contextmenu(data)
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.classMap = {}
