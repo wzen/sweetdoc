@@ -17,7 +17,6 @@ Rails.application.routes.draw do
   get 'coding/load_code'
   get 'coding/load_tree'
   get 'coding/item'
-  post 'coding/item'
 
   post 'project/create'
   get 'project/list'

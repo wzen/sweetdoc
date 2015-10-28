@@ -22,7 +22,7 @@
                     <% @load_editor_data.each do |data| %>
                         <div class="editor_wrapper">
                             <div class="tab-pane fade in <%= data['is_front']? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
-                                <div id="<%= "uc_#{data.id.to_s}" %>" class="editor <%= data['lang_type'] %>"></div>
+                                <div id="<%= "uc_#{data.id.to_s}" %>" class="editor <%= data['lang_type'] %>"><%= data['code'] %></div>
                             </div>
                         </div>
                     <% end %>

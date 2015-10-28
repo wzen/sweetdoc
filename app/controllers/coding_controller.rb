@@ -55,7 +55,8 @@ class CodingController < ApplicationController
 
     user_id = current_or_guest_user.id
     @load_editor_data = Coding.load_opened_code(user_id)
-    @load_tree_data = Coding.load_tree_html(user_id)
+    front_data = @load_editor_data.select{|l| l['is_front']}
+    @load_tree_data = Coding.load_tree_html(user_id, front_data.length > 0? front_data.first['id'] : nil)
     @user = current_or_guest_user
   end
 

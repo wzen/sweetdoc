@@ -131,9 +131,9 @@ class Coding
     end
   end
 
-  def self.load_tree_html(user_id)
+  def self.load_tree_html(user_id, opened_user_coding_id = nil)
     data = load_tree(user_id)
-    return _mk_tree_path_html(data)
+    return _mk_tree_path_html(data, opened_user_coding_id)
   end
 
   def self.upload(user_id, user_coding_id)
@@ -163,9 +163,9 @@ class Coding
           obj[n] = {}
         end
 
-        if idx == node_path.length - 1
-          obj[n] = user_coding_tree
-        else
+        obj['tree_value'] = user_coding_tree
+
+        if idx < node_path.length - 1
           obj = obj[n]
         end
       end
@@ -173,19 +173,32 @@ class Coding
     return ret
   end
 
-  def self._mk_tree_path_html(node)
+  def self._mk_tree_path_html(node, opened_user_coding_id = nil)
     ret = ''
     node.each do |k, v|
-      if v.is_a? Hash
-        child = _mk_tree_path_html(v)
-        ret += "<li class='dir'>#{k}<ul>#{child}</ul></li>"
+      if k == 'tree_value'
+        next
+      end
+
+      user_coding_tree = node['tree_value']
+      if v && !v.empty?
+        child = _mk_tree_path_html(v, opened_user_coding_id)
+        opened = ''
+        if user_coding_tree['is_opened']
+          opened = 'jstree-open'
+        end
+        ret += "<li class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
       else
         input = ''
-        user_coding_val = ['id', 'name', 'lang_type']
-        user_coding_val.each do |val|
-          input += "<input type='hidden' class='#{val}' value='#{v[val]}' />"
+        user_coding_tree_val = ['user_coding_id', 'is_opened']
+        user_coding_tree_val.each do |val|
+          input += "<input type='hidden' class='#{val}' value='#{user_coding_tree[val]}' />"
         end
-        ret += "<li class='tip' data-jstree='{\"icon\":\"jstree-file\"}'>#{k}#{input}</li>"
+        selected = ''
+        if opened_user_coding_id && opened_user_coding_id.to_i == user_coding_tree['user_coding_id'].to_i
+          selected = ',"selected":"true"'
+        end
+        ret += "<li class='tip' data-jstree='{\"icon\":\"jstree-file\"#{selected}}'>#{k}#{input}</li>"
       end
     end
     return ret

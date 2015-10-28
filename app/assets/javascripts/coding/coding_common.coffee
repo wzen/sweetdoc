@@ -279,12 +279,13 @@ class CodingCommon
   _treeState = ->
     ret = []
     root = $('#tree')
+    jt = root.jstree(true)
     $('.dir, .tip', root).each((i) ->
       node_path = _parentNodePath(@)
       user_coding_id = $(@).find('.id')
       if user_coding_id?
         user_coding_id = parseInt(user_coding_id)
-      is_opened = $(@).attr('aria-expanded') == 'true'
+      is_opened = jt.is_opened(@)
       ret.push({
         node_path: node_path
         user_coding_id: user_coding_id

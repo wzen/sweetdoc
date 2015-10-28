@@ -420,9 +420,10 @@ CodingCommon = (function() {
   };
 
   _treeState = function() {
-    var ret, root;
+    var jt, ret, root;
     ret = [];
     root = $('#tree');
+    jt = root.jstree(true);
     $('.dir, .tip', root).each(function(i) {
       var is_opened, node_path, user_coding_id;
       node_path = _parentNodePath(this);
@@ -430,7 +431,7 @@ CodingCommon = (function() {
       if (user_coding_id != null) {
         user_coding_id = parseInt(user_coding_id);
       }
-      is_opened = $(this).attr('aria-expanded') === 'true';
+      is_opened = jt.is_opened(this);
       return ret.push({
         node_path: node_path,
         user_coding_id: user_coding_id,
