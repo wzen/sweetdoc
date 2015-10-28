@@ -1,6 +1,7 @@
 require 'coding/gallery_coding'
 require 'coding/user_coding'
 require 'coding/user_gallery_coding_map'
+require 'coding/user_coding_tree'
 
 class Coding
   def self.save_all(user_id, codes, tree_states)
