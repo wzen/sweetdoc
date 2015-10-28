@@ -74,10 +74,9 @@ CodingCommon = (function() {
   };
 
   CodingCommon.setupEditor = function(editorId, lang_type) {
-    var EditSession, editor;
+    var editor;
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
-    EditSession = ace.require("ace/edit_session").EditSession;
     if (lang_type === this.Lang.JAVASCRIPT) {
       editor.getSession().setMode("ace/mode/javascript");
     } else {
