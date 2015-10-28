@@ -3,8 +3,11 @@
         <div id="tree_wrapper">
             <div id="tree">
                 <ul>
-                    <li class='dir'><%= @user.name %></li>
-                    <%== @load_tree_data %>
+                    <% if @load_tree_data.length > 0 %>
+                        <%== @load_tree_data %>
+                    <% else %>
+                        <li class='dir'><%= @user.name %></li>
+                    <% end %>
                 </ul>
             </div>
         </div>

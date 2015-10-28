@@ -99,7 +99,7 @@ class Coding
         else
           uc = UserCoding.where(user_id: user_id, del_flg: false)
         end
-        return uc.to_h
+        return uc
       end
     rescue => e
       # 失敗
@@ -110,8 +110,7 @@ class Coding
   def self.load_opened_code(user_id)
     begin
       ActiveRecord::Base.transaction do
-        uc = UserCoding.where(user_id: user_id, is_opened: true, del_flg: false)
-        return uc.to_h
+        return UserCoding.where(user_id: user_id, is_opened: true, del_flg: false)
       end
     rescue => e
       # 失敗
@@ -123,7 +122,7 @@ class Coding
     begin
       ActiveRecord::Base.transaction do
         uc = UserCodingTree.where(user_id: user_id, del_flg: false)
-        return _mk_path_treedata(uc.to_h)
+        return _mk_path_treedata(uc)
       end
     rescue => e
       # 失敗
@@ -132,7 +131,7 @@ class Coding
   end
 
   def self.load_tree_html(user_id)
-    data = load_code(user_id)
+    data = load_tree(user_id)
     return _mk_tree_path_html(data)
   end
 
@@ -158,13 +157,17 @@ class Coding
     user_coding_trees.each do |user_coding_tree|
       node_path = user_coding_tree['node_path'].split('/')
       obj = ret
-      node_path.each do |n|
-        unless defined? obj[n]
+      node_path.each_with_index do |n, idx|
+        unless obj[n]
           obj[n] = {}
         end
-        obj = obj[n]
+
+        if idx == node_path.length - 1
+          obj[n] = user_coding_tree
+        else
+          obj = obj[n]
+        end
       end
-      obj = user_coding_tree
     end
     return ret
   end
@@ -172,19 +175,17 @@ class Coding
   def self._mk_tree_path_html(node)
     ret = ''
     node.each do |k, v|
-      if v.is_a? Object
+      if v.is_a? Hash
         child = _mk_tree_path_html(v)
-        ret += "<li class='dir'>#{k}#{child}</li>"
+        ret += "<li class='dir'>#{k}<ul>#{child}</ul></li>"
       else
         input = ''
-        v.each do |kk, vv|
-          input += "<input type='hidden' class='#{kk}' value='#{vv}' />"
+        user_coding_val = ['id', 'name', 'lang_type']
+        user_coding_val.each do |val|
+          input += "<input type='hidden' class='#{val}' value='#{v[val]}' />"
         end
         ret += "<li class='tip'>#{k}#{input}</li>"
       end
-    end
-    if ret.length > 0
-      ret = "<ul>#{ret}</ul>"
     end
     return ret
   end
