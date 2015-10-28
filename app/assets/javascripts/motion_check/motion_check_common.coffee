@@ -29,16 +29,10 @@ class MotionCheckCommon
         if window.isWorkTable
           # データ保存
           ServerStorage.save( ->
-            # submit詰まり防止のため少し遅延させる
-            setTimeout( ->
-              document.run_form.submit()
-            , 200)
+            document.run_form.submit()
           )
         else
-          # submit詰まり防止のため少し遅延させる
-          setTimeout( ->
-            document.run_form.submit()
-          , 200)
+          document.run_form.submit()
 
       else
         # イベントが存在しない場合は表示しない

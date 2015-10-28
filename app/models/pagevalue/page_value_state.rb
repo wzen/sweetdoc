@@ -5,6 +5,7 @@ require 'pagevalue/event_pagevalue'
 require 'pagevalue/event_pagevalue_paging'
 require 'pagevalue/general_pagevalue'
 require 'pagevalue/general_pagevalue_paging'
+require 'pagevalue/general_common_pagevalue'
 require 'pagevalue/instance_pagevalue'
 require 'pagevalue/instance_pagevalue_paging'
 require 'pagevalue/setting_pagevalue'
@@ -189,8 +190,10 @@ class PageValueState
         end
       end
 
-      JSON.parse(pagevalues.first['general_common_pagevalue_data']).each do |k, v|
-        gpd[k] = v
+      if pagevalues.first['general_common_pagevalue_data']
+        JSON.parse(pagevalues.first['general_common_pagevalue_data']).each do |k, v|
+          gpd[k] = v
+        end
       end
 
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))

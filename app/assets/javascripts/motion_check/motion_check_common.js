@@ -31,14 +31,10 @@ MotionCheckCommon = (function() {
         document.run_form.target = target;
         if (window.isWorkTable) {
           return ServerStorage.save(function() {
-            return setTimeout(function() {
-              return document.run_form.submit();
-            }, 200);
+            return document.run_form.submit();
           });
         } else {
-          return setTimeout(function() {
-            return document.run_form.submit();
-          }, 200);
+          return document.run_form.submit();
         }
       } else {
         return Message.showWarn('No event');
