@@ -40,17 +40,17 @@ class CodingCommon
     @setupTreeEvent()
 
   @initEditor = ->
-    $('.editor').each( (e) =>
+    $('.editor').each( (e) ->
       editorId = $(@).attr('id')
       lang_type = $(@).attr('class').split(' ').filter((item, idx) -> item != 'editor')
       if lang_type.length > 0
-        @setupEditor(editorId, lang_type[0])
+        CodingCommon.setupEditor(editorId, lang_type[0])
     )
 
   @setupEditor = (editorId, lang_type) ->
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
-    EditSession = require("ace/edit_session").EditSession
+    EditSession = ace.require("ace/edit_session").EditSession
     if lang_type == @Lang.JAVASCRIPT
       editor.getSession().setMode("ace/mode/javascript")
     else

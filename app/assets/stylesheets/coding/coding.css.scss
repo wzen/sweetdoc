@@ -41,18 +41,42 @@ html, body {
   height: 100%;
 }
 
-#editor_wrapper {
+#editor_tab_wrapper {
   display: table-cell;
   width: auto;
   height: 100%;
-  padding-left: 200px;
   position: relative;
+}
 
-  .editor {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+#my_tab {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 42px;
+}
+
+#my_tab_content {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow:auto;
+
+  .editor_wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    .editor {
+      height: auto;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
 }
+

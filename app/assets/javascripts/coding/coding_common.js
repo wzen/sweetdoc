@@ -74,25 +74,23 @@ CodingCommon = (function() {
   };
 
   CodingCommon.initEditor = function() {
-    return $('.editor').each((function(_this) {
-      return function(e) {
-        var editorId, lang_type;
-        editorId = $(_this).attr('id');
-        lang_type = $(_this).attr('class').split(' ').filter(function(item, idx) {
-          return item !== 'editor';
-        });
-        if (lang_type.length > 0) {
-          return _this.setupEditor(editorId, lang_type[0]);
-        }
-      };
-    })(this));
+    return $('.editor').each(function(e) {
+      var editorId, lang_type;
+      editorId = $(this).attr('id');
+      lang_type = $(this).attr('class').split(' ').filter(function(item, idx) {
+        return item !== 'editor';
+      });
+      if (lang_type.length > 0) {
+        return CodingCommon.setupEditor(editorId, lang_type[0]);
+      }
+    });
   };
 
   CodingCommon.setupEditor = function(editorId, lang_type) {
     var EditSession, editor;
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
-    EditSession = require("ace/edit_session").EditSession;
+    EditSession = ace.require("ace/edit_session").EditSession;
     if (lang_type === this.Lang.JAVASCRIPT) {
       editor.getSession().setMode("ace/mode/javascript");
     } else {

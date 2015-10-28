@@ -315,7 +315,7 @@ ActiveRecord::Schema.define(version: 20151026070504) do
   create_table "user_codings", force: true do |t|
     t.integer  "user_id",                    null: false
     t.string   "name",                       null: false
-    t.integer  "lang_type",                  null: false
+    t.string   "lang_type",                  null: false
     t.text     "code",                       null: false
     t.boolean  "is_opened",  default: true
     t.boolean  "is_front",   default: true
