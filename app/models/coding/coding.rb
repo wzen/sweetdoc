@@ -184,7 +184,7 @@ class Coding
         user_coding_val.each do |val|
           input += "<input type='hidden' class='#{val}' value='#{v[val]}' />"
         end
-        ret += "<li class='tip'>#{k}#{input}</li>"
+        ret += "<li class='tip' data-jstree='{\"icon\":\"jstree-file\"}'>#{k}#{input}</li>"
       end
     end
     return ret
