@@ -2,13 +2,14 @@
 var CodingCommon;
 
 CodingCommon = (function() {
-  var _codes, _parentNodePath, _treeState, constant;
+  var _codes, _deactiveEditor, _parentNodePath, _treeState, constant;
 
   function CodingCommon() {}
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     CodingCommon.DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME;
+    CodingCommon.NOT_SAVED_PREFIX = '* ';
     CodingCommon.Key = (function() {
       function Key() {}
 
@@ -125,7 +126,7 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.js'),
           cmd: "js",
           func: function(event, ui) {
-            return CodingCommon.addNewFile(this.Lang.JAVASCRIPT, function(data) {
+            return CodingCommon.addNewFile(CodingCommon.Lang.JAVASCRIPT, function(data) {
               var ref, sel;
               ref = $('#tree').jstree(true);
               sel = ref.get_selected();
@@ -143,7 +144,7 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.coffee'),
           cmd: "coffee",
           func: function(event, ui) {
-            return CodingCommon.addNewFile(this.Lang.COFFEESCRIPT, function(data) {
+            return CodingCommon.addNewFile(CodingCommon.Lang.COFFEESCRIPT, function(data) {
               var ref, sel;
               ref = $('#tree').jstree(true);
               sel = ref.get_selected();
@@ -182,26 +183,35 @@ CodingCommon = (function() {
     return Common.setupContextMenu($('#tree .dir'), '#tree', {
       menu: menu,
       select: function(event, ui) {
-        var i, len, results, value;
-        results = [];
-        for (i = 0, len = menu.length; i < len; i++) {
-          value = menu[i];
-          if (value.cmd === ui.cmd) {
-            if (value.func != null) {
-              results.push(value.func(event, ui));
+        var _exec_func;
+        _exec_func = function(menuArray) {
+          var j, len, results, v;
+          results = [];
+          for (j = 0, len = menuArray.length; j < len; j++) {
+            v = menuArray[j];
+            if (v.children != null) {
+              _exec_func.call(this, v.children);
+            }
+            if (v.cmd === ui.cmd) {
+              if (v.func != null) {
+                results.push(v.func(event, ui));
+              } else {
+                results.push(void 0);
+              }
             } else {
               results.push(void 0);
             }
-          } else {
-            results.push(void 0);
           }
-        }
-        return results;
+          return results;
+        };
+        return _exec_func.call(this, menu);
       },
       beforeOpen: function(event, ui) {
-        var t;
+        var ref, t;
         t = $(event.target);
-        return ui.menu.zIndex($(event.target).zIndex() + 1);
+        ui.menu.zIndex($(event.target).zIndex() + 1);
+        ref = $('#tree').jstree(true);
+        return ref.select_node(t);
       }
     });
   };
@@ -404,6 +414,7 @@ CodingCommon = (function() {
       tab = $('#my_tab');
     }
     tab_content = $('#my_tab_content');
+    _deactiveEditor();
     user_coding_id = editorData.user_coding_id;
     code = editorData.code;
     title = editorData.title;
@@ -413,11 +424,62 @@ CodingCommon = (function() {
     return this.setupEditor("uc_" + user_coding_id, lang_type);
   };
 
-  _parentNodePath = function() {};
+  _parentNodePath = function(select_node) {
+    var path;
+    path = $(select_node).parents('li.dir').map(function(n) {
+      return $(this).text();
+    });
+    path.reverse().push(select_node.text());
+    return path;
+  };
 
-  _treeState = function() {};
+  _treeState = function() {
+    var ret, root;
+    ret = [];
+    root = $('#tree');
+    $('.dir, .tip', root).each(function(i) {
+      var is_opened, node_path, user_coding_id;
+      node_path = _parentNodePath(this);
+      user_coding_id = $(this).find('.id');
+      if (user_coding_id != null) {
+        user_coding_id = parseInt(user_coding_id);
+      }
+      is_opened = $(this).attr('aria-expanded') === 'true';
+      return ret.push({
+        node_path: node_path,
+        user_coding_id: user_coding_id,
+        is_opened: is_opened
+      });
+    });
+    return ret;
+  };
 
-  _codes = function() {};
+  _codes = function() {
+    var ret, tab;
+    ret = [];
+    tab = $('#my_tab');
+    tab.each(function(i) {
+      var code, lang_type, name, t, tabContentId;
+      t = $(this);
+      name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '');
+      tabContentId = t.find('a:first').attr('href').replace('#', '');
+      lang_type = $("" + tabContentId).find('.editor').attr('class').split(' ').filter(function(item, idx) {
+        return item !== 'editor';
+      });
+      code = $("" + tabContentId).find('.editor').text();
+      return ret.push({
+        name: name,
+        lang_type: lang_type,
+        code: code
+      });
+    });
+    return ret;
+  };
+
+  _deactiveEditor = function() {
+    $('#my_tab').children('li').removeClass('active');
+    return $('#my_tab_content').children('div').removeClass('active');
+  };
 
   return CodingCommon;
 

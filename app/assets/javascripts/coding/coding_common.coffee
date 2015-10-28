@@ -3,6 +3,7 @@ class CodingCommon
   if gon?
     constant = gon.const
     @DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME
+    @NOT_SAVED_PREFIX = '* '
     class @Key
       @NAME = constant.Coding.Key.NAME
       @LANG = constant.Coding.Key.LANG
@@ -75,7 +76,7 @@ class CodingCommon
     menu.push({title: I18n.t('context_menu.new_file'), children: [
       {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
         # JavaScriptファイル作成
-        CodingCommon.addNewFile(@Lang.JAVASCRIPT, (data) ->
+        CodingCommon.addNewFile(CodingCommon.Lang.JAVASCRIPT, (data) ->
 
           ref = $('#tree').jstree(true)
           sel = ref.get_selected()
@@ -91,7 +92,7 @@ class CodingCommon
       }
       {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
         # CoffeeScriptファイル作成
-        CodingCommon.addNewFile(@Lang.COFFEESCRIPT, (data) ->
+        CodingCommon.addNewFile(CodingCommon.Lang.COFFEESCRIPT, (data) ->
           ref = $('#tree').jstree(true)
           sel = ref.get_selected()
           if !sel.length
@@ -121,14 +122,21 @@ class CodingCommon
     Common.setupContextMenu($('#tree .dir'), '#tree', {
       menu: menu
       select: (event, ui) ->
-        for value in menu
-          if value.cmd == ui.cmd
-            if value.func?
-              value.func(event, ui)
+        _exec_func = (menuArray) ->
+          for v in menuArray
+            if v.children?
+              _exec_func.call(@, v.children)
+            if v.cmd == ui.cmd
+              if v.func?
+                v.func(event, ui)
+        _exec_func.call(@, menu)
+
       beforeOpen: (event, ui) ->
         t = $(event.target)
         # 選択メニューを最前面に表示
         ui.menu.zIndex( $(event.target).zIndex() + 1)
+        ref = $('#tree').jstree(true)
+        ref.select_node(t)
     })
 
 
@@ -263,6 +271,7 @@ class CodingCommon
       $('#editor_wrapper').append('<ul id="my_tab" class="nav nav-tabs"></ul><div id="my_tab_content" class="tab-content"></div>')
       tab = $('#my_tab')
     tab_content = $('#my_tab_content')
+    _deactiveEditor()
 
     user_coding_id = editorData.user_coding_id
     code = editorData.code
@@ -272,10 +281,45 @@ class CodingCommon
     tab_content.append("<div class='tab-pane fade in active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor #{lang_type}'></div></div>")
     @setupEditor("uc_#{user_coding_id}", lang_type)
 
-  _parentNodePath = ->
-
+  _parentNodePath = (select_node) ->
+    path = $(select_node).parents('li.dir').map((n) -> $(@).text())
+    path.reverse().push(select_node.text())
+    return path
 
   _treeState = ->
-
+    ret = []
+    root = $('#tree')
+    $('.dir, .tip', root).each((i) ->
+      node_path = _parentNodePath(@)
+      user_coding_id = $(@).find('.id')
+      if user_coding_id?
+        user_coding_id = parseInt(user_coding_id)
+      is_opened = $(@).attr('aria-expanded') == 'true'
+      ret.push({
+        node_path: node_path
+        user_coding_id: user_coding_id
+        is_opened: is_opened
+      })
+    )
+    return ret
 
   _codes = ->
+    ret = []
+    tab = $('#my_tab')
+    tab.each((i) ->
+      t = $(@)
+      name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '')
+      tabContentId = t.find('a:first').attr('href').replace('#', '')
+      lang_type = $("#{tabContentId}").find('.editor').attr('class').split(' ').filter((item, idx) -> item != 'editor')
+      code = $("#{tabContentId}").find('.editor').text()
+      ret.push({
+        name: name
+        lang_type: lang_type
+        code: code
+      })
+    )
+    return ret
+
+  _deactiveEditor = ->
+    $('#my_tab').children('li').removeClass('active')
+    $('#my_tab_content').children('div').removeClass('active')
