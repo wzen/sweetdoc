@@ -36,9 +36,9 @@ class Coding
         code[Const::Coding::Key::NAME] = 'untitled'
         code[Const::Coding::Key::LANG] = lang_type
         if lang_type == Const::Coding::Lang::JAVASCRIPT
-          file_path = '/code_template/item/javascript.js'
+          file_path = File.join(Rails.root, '/public/code_template/item/javascript.js')
         else
-          file_path = '/code_template/item/coffeescript.coffee'
+          file_path = File.join(Rails.root, '/public/code_template/item/coffeescript.coffee')
         end
         code[Const::Coding::Key::CODE] = ''
         File.open(file_path,'r') do |file|
@@ -46,6 +46,7 @@ class Coding
             code[Const::Coding::Key::CODE] += read_line
           end
         end
+        _back_all_codes(user_id)
         save_ids = _save_code(user_id, [code])
         user_coding_id = save_ids.first
 
@@ -210,6 +211,11 @@ class Coding
       ret << uc.id
     end
     return ret
+  end
+
+  def self._back_all_codes(user_id)
+    # 全てのコードを背面にする
+    UserCoding.where(user_id).update_all(is_front: false)
   end
 
   def self._replace_all_tree(user_id, tree_states)

@@ -126,7 +126,7 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.js'),
           cmd: "js",
           func: function(event, ui) {
-            return CodingCommon.addNewFile(CodingCommon.Lang.JAVASCRIPT, function(data) {
+            return CodingCommon.addNewFile(event.target, CodingCommon.Lang.JAVASCRIPT, function(data) {
               var ref, sel;
               ref = $('#tree').jstree(true);
               sel = ref.get_selected();
@@ -144,7 +144,7 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.coffee'),
           cmd: "coffee",
           func: function(event, ui) {
-            return CodingCommon.addNewFile(CodingCommon.Lang.COFFEESCRIPT, function(data) {
+            return CodingCommon.addNewFile(event.target, CodingCommon.Lang.COFFEESCRIPT, function(data) {
               var ref, sel;
               ref = $('#tree').jstree(true);
               sel = ref.get_selected();
@@ -165,7 +165,7 @@ CodingCommon = (function() {
       title: I18n.t('context_menu.new_folder'),
       cmd: "new_folder",
       func: function(event, ui) {
-        return CodingCommon.addNewFolder(function(data) {
+        return CodingCommon.addNewFolder(event.target, function(data) {
           var ref, sel;
           ref = $('#tree').jstree(true);
           sel = ref.get_selected();
@@ -349,7 +349,7 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.addNewFile = function(lang_type, successCallback, errorCallback) {
+  CodingCommon.addNewFile = function(parentNode, lang_type, successCallback, errorCallback) {
     var data;
     if (successCallback == null) {
       successCallback = null;
@@ -359,7 +359,7 @@ CodingCommon = (function() {
     }
     data = {};
     data[this.Key.LANG] = lang_type;
-    data[this.Key.PARENT_NODE_PATH] = _parentNodePath();
+    data[this.Key.PARENT_NODE_PATH] = _parentNodePath(parentNode);
     return $.ajax({
       url: "/coding/add_new_file",
       type: "POST",
@@ -378,7 +378,7 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.addNewFolder = function(successCallback, errorCallback) {
+  CodingCommon.addNewFolder = function(parentNode, successCallback, errorCallback) {
     var data;
     if (successCallback == null) {
       successCallback = null;
@@ -387,7 +387,7 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    data[this.Key.PARENT_NODE_PATH] = _parentNodePath();
+    data[this.Key.PARENT_NODE_PATH] = _parentNodePath(parentNode);
     return $.ajax({
       url: "/coding/add_new_folder",
       type: "POST",
@@ -425,12 +425,14 @@ CodingCommon = (function() {
   };
 
   _parentNodePath = function(select_node) {
-    var path;
+    var joinPath, path, reversePath;
     path = $(select_node).parents('li.dir').map(function(n) {
       return $(this).text();
-    });
-    path.reverse().push(select_node.text());
-    return path;
+    }).get();
+    path.unshift($(select_node).text());
+    reversePath = path.reverse();
+    joinPath = reversePath.join('/');
+    return joinPath;
   };
 
   _treeState = function() {

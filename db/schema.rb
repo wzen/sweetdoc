@@ -302,7 +302,6 @@ ActiveRecord::Schema.define(version: 20151026070504) do
 
   create_table "user_coding_trees", force: true do |t|
     t.integer  "user_id",                        null: false
-    t.string   "name",                           null: false
     t.string   "node_path",                      null: false
     t.string   "user_coding_id"
     t.boolean  "is_opened",      default: false
@@ -318,6 +317,8 @@ ActiveRecord::Schema.define(version: 20151026070504) do
     t.string   "name",                       null: false
     t.integer  "lang_type",                  null: false
     t.text     "code",                       null: false
+    t.boolean  "is_opened",  default: true
+    t.boolean  "is_front",   default: true
     t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"

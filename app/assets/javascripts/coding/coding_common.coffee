@@ -76,7 +76,7 @@ class CodingCommon
     menu.push({title: I18n.t('context_menu.new_file'), children: [
       {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
         # JavaScriptファイル作成
-        CodingCommon.addNewFile(CodingCommon.Lang.JAVASCRIPT, (data) ->
+        CodingCommon.addNewFile(event.target, CodingCommon.Lang.JAVASCRIPT, (data) ->
 
           ref = $('#tree').jstree(true)
           sel = ref.get_selected()
@@ -92,7 +92,7 @@ class CodingCommon
       }
       {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
         # CoffeeScriptファイル作成
-        CodingCommon.addNewFile(CodingCommon.Lang.COFFEESCRIPT, (data) ->
+        CodingCommon.addNewFile(event.target, CodingCommon.Lang.COFFEESCRIPT, (data) ->
           ref = $('#tree').jstree(true)
           sel = ref.get_selected()
           if !sel.length
@@ -108,7 +108,7 @@ class CodingCommon
       }
     ]})
     menu.push({title: I18n.t('context_menu.new_folder'), cmd: "new_folder", func: (event, ui) ->
-      CodingCommon.addNewFolder((data) ->
+      CodingCommon.addNewFolder(event.target, (data) ->
         # フォルダ作成
         ref = $('#tree').jstree(true)
         sel = ref.get_selected()
@@ -226,10 +226,10 @@ class CodingCommon
       }
     )
 
-  @addNewFile = (lang_type, successCallback = null, errorCallback = null) ->
+  @addNewFile = (parentNode, lang_type, successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.LANG] = lang_type
-    data[@Key.PARENT_NODE_PATH] = _parentNodePath()
+    data[@Key.PARENT_NODE_PATH] = _parentNodePath(parentNode)
     $.ajax(
       {
         url: "/coding/add_new_file"
@@ -246,9 +246,9 @@ class CodingCommon
     )
 
 
-  @addNewFolder =(successCallback = null, errorCallback = null) ->
+  @addNewFolder =(parentNode, successCallback = null, errorCallback = null) ->
     data = {}
-    data[@Key.PARENT_NODE_PATH] = _parentNodePath()
+    data[@Key.PARENT_NODE_PATH] = _parentNodePath(parentNode)
     $.ajax(
       {
         url: "/coding/add_new_folder"
@@ -282,9 +282,11 @@ class CodingCommon
     @setupEditor("uc_#{user_coding_id}", lang_type)
 
   _parentNodePath = (select_node) ->
-    path = $(select_node).parents('li.dir').map((n) -> $(@).text())
-    path.reverse().push(select_node.text())
-    return path
+    path = $(select_node).parents('li.dir').map((n) -> $(@).text()).get()
+    path.unshift($(select_node).text())
+    reversePath = path.reverse()
+    joinPath = reversePath.join('/')
+    return joinPath
 
   _treeState = ->
     ret = []
