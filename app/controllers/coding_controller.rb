@@ -43,7 +43,7 @@ class CodingController < ApplicationController
 
   def load_code
     user_id = current_or_guest_user.id
-    user_coding_id = params.require(Const::Coding::Key::USER_CODING_ID)
+    user_coding_id = params.fetch(Const::Coding::Key::USER_CODING_ID, nil)
     @load_data = Coding.load_code(user_id, user_coding_id)
   end
 

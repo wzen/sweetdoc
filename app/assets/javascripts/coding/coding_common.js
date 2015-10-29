@@ -99,6 +99,13 @@ CodingCommon = (function() {
     root.on('open_node.jstree close_node.jstree', function(node) {
       return CodingCommon.saveEditorState();
     });
+    root.on('dblclick.jstree', function(event) {
+      var node;
+      node = $(event.target).closest("li");
+      if (node.hasClass('tip')) {
+        return CodingCommon.activeTabEditor(parseInt(node.find('.user_coding_id:first').val()));
+      }
+    });
     return this.setupContextMenu();
   };
 
@@ -299,17 +306,21 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.loadCodeData = function(successCallback, errorCallback) {
+  CodingCommon.loadCodeData = function(userCodingId, successCallback, errorCallback) {
+    var data;
     if (successCallback == null) {
       successCallback = null;
     }
     if (errorCallback == null) {
       errorCallback = null;
     }
+    data = {};
+    data[CodingCommon.Key.USER_CODING_ID] = userCodingId;
     return $.ajax({
       url: "/coding/load_code",
       type: "GET",
       dataType: "json",
+      data: data,
       success: function(data) {
         if (successCallback != null) {
           return successCallback(data);
@@ -404,22 +415,32 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.createTabEditor = function(editorData) {
-    var code, lang_type, tab, tab_content, title, user_coding_id;
+  CodingCommon.activeTabEditor = function(user_coding_id) {
+    var editorWrapper, editorWrapperId, tab, tab_content;
     tab = $('#my_tab');
-    if (tab == null) {
-      $('#editor_wrapper').append('<ul id="my_tab" class="nav nav-tabs"></ul><div id="my_tab_content" class="tab-content"></div>');
+    if ((tab == null) || tab.length === 0) {
+      $('#editor_tab_wrapper').append('<ul id="my_tab" class="nav nav-tabs"></ul><div id="my_tab_content" class="tab-content"></div>');
       tab = $('#my_tab');
     }
     tab_content = $('#my_tab_content');
     _deactiveEditor();
-    user_coding_id = editorData.user_coding_id;
-    code = editorData.code;
-    title = editorData.title;
-    lang_type = editorData.lang_type;
-    tab.append("<li class='tab_li active'><a class='tab_button' href='uc_" + user_coding_id + "_wrapper' data-toggle='tab'>" + title + "</a><a class='close_tab_button'></a></li>");
-    tab_content.append("<div class='tab-pane fade in active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor " + lang_type + "'></div></div>");
-    this.setupEditor("uc_" + user_coding_id, lang_type);
+    editorWrapperId = "uc_" + user_coding_id + "_wrapper";
+    editorWrapper = $("#" + editorWrapperId);
+    if ((editorWrapper == null) || editorWrapper.length === 0) {
+      CodingCommon.loadCodeData(user_coding_id, function(data) {
+        var code, lang_type, loaded, title;
+        loaded = data.load_data[0];
+        code = loaded.code;
+        title = loaded.name;
+        lang_type = loaded.lang_type;
+        tab.append("<li class='tab_li active'><a class='tab_button' href='uc_" + user_coding_id + "_wrapper' data-toggle='tab'>" + title + "</a><a class='close_tab_button'></a></li>");
+        tab_content.append("<div class='editor_wrapper  " + lang_type + "'><div class='tab-pane fade in active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'></div></div></div>");
+        return CodingCommon.setupEditor("uc_" + user_coding_id, lang_type);
+      });
+    } else {
+      editorWrapper.addClass('active');
+      tab.find("a[href='#" + editorWrapperId + "']").closest('tab_li').addClass('active');
+    }
     return this.saveEditorState();
   };
 
@@ -491,14 +512,15 @@ CodingCommon = (function() {
     ret = [];
     tab = $('#my_tab');
     tab.each(function(i) {
-      var code, is_active, lang_type, name, t, tabContentId, user_coding_id;
+      var code, editor, is_active, lang_type, name, t, tabContentId, user_coding_id;
       t = $(this);
       name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '');
       tabContentId = t.find('a:first').attr('href').replace('#', '');
-      lang_type = $("" + tabContentId).find('.editor').attr('class').split(' ').filter(function(item, idx) {
-        return item !== 'editor';
+      lang_type = $("" + tabContentId).find('.editor_wrapper').attr('class').split(' ').filter(function(item, idx) {
+        return item !== 'editor_wrapper';
       });
-      code = $("" + tabContentId).find('.editor').text();
+      editor = ace.edit(t.find('.tab-pane:first').attr('id').replace('_wrapper', ''));
+      code = editor.getValue();
       is_active = $("" + tabContentId).find('.tab-pane:first').hasClass('active');
       user_coding_id = parseInt($("" + tabContentId).find('.editor').attr('id').replace('uc_', ''));
       return ret.push({

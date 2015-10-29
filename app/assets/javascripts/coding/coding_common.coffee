@@ -62,7 +62,12 @@ class CodingCommon
       # ツリー開閉
       CodingCommon.saveEditorState()
     )
-
+    root.on('dblclick.jstree', (event) ->
+      node = $(event.target).closest("li")
+      if node.hasClass('tip')
+        # エディタ表示
+        CodingCommon.activeTabEditor(parseInt(node.find('.user_coding_id:first').val()))
+    )
     @setupContextMenu()
 
   @setupContextMenu = ->
@@ -197,12 +202,15 @@ class CodingCommon
       }
     )
 
-  @loadCodeData = (successCallback = null, errorCallback = null) ->
+  @loadCodeData = (userCodingId, successCallback = null, errorCallback = null) ->
+    data = {}
+    data[CodingCommon.Key.USER_CODING_ID] = userCodingId
     $.ajax(
       {
         url: "/coding/load_code"
         type: "GET"
         dataType: "json"
+        data: data
         success: (data)->
           if successCallback?
             successCallback(data)
@@ -265,22 +273,36 @@ class CodingCommon
       }
     )
 
-  @createTabEditor = (editorData) ->
+  @activeTabEditor = (user_coding_id) ->
     tab = $('#my_tab')
-    if !tab?
+    if !tab? || tab.length == 0
       # タブビュー作成
-      $('#editor_wrapper').append('<ul id="my_tab" class="nav nav-tabs"></ul><div id="my_tab_content" class="tab-content"></div>')
+      $('#editor_tab_wrapper').append('<ul id="my_tab" class="nav nav-tabs"></ul><div id="my_tab_content" class="tab-content"></div>')
       tab = $('#my_tab')
     tab_content = $('#my_tab_content')
+    # 全てDeactive
     _deactiveEditor()
 
-    user_coding_id = editorData.user_coding_id
-    code = editorData.code
-    title = editorData.title
-    lang_type = editorData.lang_type
-    tab.append("<li class='tab_li active'><a class='tab_button' href='uc_#{user_coding_id}_wrapper' data-toggle='tab'>#{title}</a><a class='close_tab_button'></a></li>")
-    tab_content.append("<div class='tab-pane fade in active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor #{lang_type}'></div></div>")
-    @setupEditor("uc_#{user_coding_id}", lang_type)
+    editorWrapperId = "uc_#{user_coding_id}_wrapper"
+    editorWrapper = $("##{editorWrapperId}")
+    if !editorWrapper? || editorWrapper.length == 0
+      # エディタ作成
+      CodingCommon.loadCodeData(user_coding_id, (data) ->
+        loaded = data.load_data[0]
+        code = loaded.code
+        title = loaded.name
+        lang_type = loaded.lang_type
+
+        tab.append("<li class='tab_li active'><a class='tab_button' href='uc_#{user_coding_id}_wrapper' data-toggle='tab'>#{title}</a><a class='close_tab_button'></a></li>")
+        tab_content.append("<div class='editor_wrapper  #{lang_type}'><div class='tab-pane fade in active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor'></div></div></div>")
+        CodingCommon.setupEditor("uc_#{user_coding_id}", lang_type)
+      )
+
+    else
+      # 対象エディタをActiveに
+      editorWrapper.addClass('active')
+      tab.find("a[href='##{editorWrapperId}']").closest('tab_li').addClass('active')
+
     @saveEditorState()
 
   @saveEditorState = ->
@@ -341,8 +363,9 @@ class CodingCommon
       t = $(@)
       name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '')
       tabContentId = t.find('a:first').attr('href').replace('#', '')
-      lang_type = $("#{tabContentId}").find('.editor').attr('class').split(' ').filter((item, idx) -> item != 'editor')
-      code = $("#{tabContentId}").find('.editor').text()
+      lang_type = $("#{tabContentId}").find('.editor_wrapper').attr('class').split(' ').filter((item, idx) -> item != 'editor_wrapper')
+      editor = ace.edit(t.find('.tab-pane:first').attr('id').replace('_wrapper', ''))
+      code = editor.getValue()
       is_active = $("#{tabContentId}").find('.tab-pane:first').hasClass('active')
       user_coding_id = parseInt($("#{tabContentId}").find('.editor').attr('id').replace('uc_', ''))
       ret.push({
