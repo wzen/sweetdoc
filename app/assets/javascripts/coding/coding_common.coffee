@@ -311,7 +311,7 @@ class CodingCommon
 
   _parentNodePath = (select_node) ->
     path = $(select_node).parents('li.dir').map((n) -> $(@).text()).get()
-    path.unshift($(select_node).text())
+    path.unshift($('.jstree-anchor:first', select_node).text())
     reversePath = path.reverse()
     joinPath = reversePath.join('/')
     return joinPath

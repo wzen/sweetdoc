@@ -4,27 +4,27 @@ class CodingController < ApplicationController
 
   def save_all
     user_id = current_or_guest_user.id
-    codes = params.require(Const::Coding::Key::CODES).values
-    tree_data = params.require(Const::Coding::Key::TREE_DATA).values
+    codes = params.fetch(Const::Coding::Key::CODES, {}).values
+    tree_data = params.fetch(Const::Coding::Key::TREE_DATA, {}).values
     @message = Coding.save_all(user_id, codes, tree_data)
   end
 
   def save_code
     user_id = current_or_guest_user.id
-    codes = params.require(Const::Coding::Key::CODES).values
+    codes = params.fetch(Const::Coding::Key::CODES, {}).values
     @message = Coding.save_code(user_id, codes)
   end
 
   def save_tree
     user_id = current_or_guest_user.id
-    tree_data = params.require(Const::Coding::Key::TREE_DATA).values
+    tree_data = params.fetch(Const::Coding::Key::TREE_DATA, {}).values
     @message = Coding.save_tree(user_id, tree_data)
   end
 
   def save_state
     user_id = current_or_guest_user.id
-    tree_data = params.require(Const::Coding::Key::TREE_DATA).values
-    codes = params.require(Const::Coding::Key::CODES).values
+    tree_data = params.fetch(Const::Coding::Key::TREE_DATA, {}).values
+    codes = params.fetch(Const::Coding::Key::CODES, {}).values
     @message = Coding.save_state(user_id, tree_data, codes)
   end
 

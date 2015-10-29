@@ -458,7 +458,7 @@ CodingCommon = (function() {
     path = $(select_node).parents('li.dir').map(function(n) {
       return $(this).text();
     }).get();
-    path.unshift($(select_node).text());
+    path.unshift($('.jstree-anchor:first', select_node).text());
     reversePath = path.reverse();
     joinPath = reversePath.join('/');
     return joinPath;

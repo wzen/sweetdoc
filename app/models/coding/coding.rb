@@ -38,7 +38,7 @@ class Coding
       end
       tree_state[td[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] = td[Const::Coding::Key::IS_OPENED]
     end
-    Rails.cache.write(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id), tree_state, expires_in: 6.months)
+    Rails.cache.write(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id.to_s), tree_state, expires_in: 6.months)
 
     code_state = get_code_state(user_id)
     code_state.each do |k, v|
@@ -56,7 +56,7 @@ class Coding
       code_state[user_coding_id][Const::Coding::Key::IS_OPENED] = co[Const::Coding::Key::IS_OPENED]
       code_state[user_coding_id][Const::Coding::Key::IS_ACTIVE] = co[Const::Coding::Key::IS_ACTIVE]
     end
-    Rails.cache.write(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id), code_state, expires_in: 6.months)
+    Rails.cache.write(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id.to_s), code_state, expires_in: 6.months)
     return I18n.t('message.database.item_state.save.success')
   end
 
@@ -82,10 +82,15 @@ class Coding
         save_ids = _save_code(user_id, [code])
         user_coding_id = save_ids.first
 
-        tree_data = {}
-        tree_data[Const::Coding::Key::NODE_PATH] = parent_node_path + "/#{Const::Coding::DEFAULT_FILENAME}"
-        tree_data[Const::Coding::Key::USER_CODING_ID] = user_coding_id
-        _save_tree(user_id, tree_data)
+        path_array = parent_node_path.split('/') << Const::Coding::DEFAULT_FILENAME
+        node_path = []
+        path_array.each do |path|
+          tree_data = {}
+          node_path.push(path)
+          tree_data[Const::Coding::Key::NODE_PATH] = node_path.join('/')
+          tree_data[Const::Coding::Key::USER_CODING_ID] = user_coding_id
+          _save_tree(user_id, tree_data)
+        end
       end
       return I18n.t('message.database.item_state.save.success'), user_coding_id, code
     rescue => e
@@ -143,7 +148,7 @@ class Coding
         uc = UserCoding.where(user_id: user_id, del_flg: false)
         code_state = get_code_state(user_id)
         return uc.select do |s|
-          code_state[s['id']] && code_state[s['id']][Const::Gallery::Key::IS_OPENED]
+          code_state[s['id']] && code_state[s['id']][Const::Coding::Key::IS_OPENED]
         end
       end
     rescue => e
@@ -198,10 +203,10 @@ class Coding
           obj[n] = {}
         end
 
-        obj['tree_value'] = user_coding_tree
-
         if idx < node_path.length - 1
           obj = obj[n]
+        else
+          obj['tree_value'] = user_coding_tree
         end
       end
     end
@@ -220,8 +225,8 @@ class Coding
         child = _mk_tree_path_html(v, tree_state, code_state)
         opened = ''
         if tree_state &&
-            tree_state[user_coding_tree['id']] &&
-            tree_state[user_coding_tree['id']][Const::Gallery::Key::IS_OPENED]
+            tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]] &&
+            tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED]
           opened = 'jstree-open'
         end
         ret += "<li class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
