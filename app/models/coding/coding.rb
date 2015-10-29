@@ -33,17 +33,26 @@ class Coding
     # ツリー&エディタ状態をMemcachedに保存
     tree_state = get_tree_state(user_id)
     tree_data.each do |td|
+      if tree_state[td[Const::Coding::Key::NODE_PATH]].nil?
+        tree_state[td[Const::Coding::Key::NODE_PATH]] = {}
+      end
       tree_state[td[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] = td[Const::Coding::Key::IS_OPENED]
     end
     Rails.cache.write(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id), tree_state, expires_in: 6.months)
 
     code_state = get_code_state(user_id)
     code_state.each do |k, v|
+      if code_state[k].nil?
+        code_state[k] = {}
+      end
       code_state[k][Const::Coding::Key::IS_OPENED] = false
       code_state[k][Const::Coding::Key::IS_ACTIVE] = false
     end
     codes.each do |co|
       user_coding_id = co[Const::Coding::Key::USER_CODING_ID]
+      if code_state[user_coding_id].nil?
+        code_state[user_coding_id] = {}
+      end
       code_state[user_coding_id][Const::Coding::Key::IS_OPENED] = co[Const::Coding::Key::IS_OPENED]
       code_state[user_coding_id][Const::Coding::Key::IS_ACTIVE] = co[Const::Coding::Key::IS_ACTIVE]
     end
@@ -133,7 +142,9 @@ class Coding
       ActiveRecord::Base.transaction do
         uc = UserCoding.where(user_id: user_id, del_flg: false)
         code_state = get_code_state(user_id)
-        return uc.select{|s| code_state[s['id']][Const::Gallery::Key::IS_OPENED]}
+        return uc.select do |s|
+          code_state[s['id']] && code_state[s['id']][Const::Gallery::Key::IS_OPENED]
+        end
       end
     rescue => e
       # 失敗
@@ -221,7 +232,7 @@ class Coding
           input += "<input type='hidden' class='#{val}' value='#{user_coding_tree[val]}' />"
         end
         selected = ''
-        if code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE]
+        if code_state[user_coding_tree['user_coding_id']] && code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE]
           selected = ',"selected":"true"'
         end
         ret += "<li class='tip' data-jstree='{\"icon\":\"jstree-file\"#{selected}}'>#{k}#{input}</li>"
@@ -300,11 +311,11 @@ class Coding
   end
 
   def self.get_tree_state(user_id)
-    r = Rails.cache.read(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id))
+    r = Rails.cache.read(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id.to_s))
     return r ? r : {}
   end
   def self.get_code_state(user_id)
-    r = Rails.cache.read(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id))
+    r = Rails.cache.read(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id.to_s))
     return r ? r : {}
   end
 

@@ -436,8 +436,8 @@ CodingCommon = (function() {
       var data;
       window.saveEditorStateNowSaving = true;
       data = {};
-      data[this.Key.CODES] = _codes();
-      data[this.Key.TREE_DATA] = _treeState();
+      data[CodingCommon.Key.CODES] = _codes();
+      data[CodingCommon.Key.TREE_DATA] = _treeState();
       return $.ajax({
         url: "/coding/save_state",
         type: "POST",
@@ -476,7 +476,7 @@ CodingCommon = (function() {
       if (user_coding_id != null) {
         user_coding_id = parseInt(user_coding_id);
       }
-      is_opened = jt.is_opened(this);
+      is_opened = jt.is_open(this);
       return ret.push({
         node_path: node_path,
         user_coding_id: user_coding_id,

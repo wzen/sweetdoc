@@ -293,8 +293,8 @@ class CodingCommon
     saveEditorStateTimer = setTimeout( ->
       window.saveEditorStateNowSaving = true
       data = {}
-      data[@Key.CODES] = _codes()
-      data[@Key.TREE_DATA] = _treeState()
+      data[CodingCommon.Key.CODES] = _codes()
+      data[CodingCommon.Key.TREE_DATA] = _treeState()
       $.ajax(
         {
           url: "/coding/save_state"
@@ -325,7 +325,7 @@ class CodingCommon
       user_coding_id = $(@).find('.id')
       if user_coding_id?
         user_coding_id = parseInt(user_coding_id)
-      is_opened = jt.is_opened(@)
+      is_opened = jt.is_open(@)
       ret.push({
         node_path: node_path
         user_coding_id: user_coding_id
