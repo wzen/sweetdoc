@@ -350,15 +350,20 @@ class Const
       CODE = 'code'
       CODES = 'codes'
       USER_CODING_ID = 'user_coding_id'
-      TREE_STATE = 'tree_state'
+      TREE_DATA = 'tree_data'
       SUB_TREE = 'sub_tree'
       NODE_PATH = 'node_path'
       IS_OPENED = 'is_opened'
+      IS_ACTIVE = 'is_active'
       PARENT_NODE_PATH = 'parent_node_path'
     end
     class Lang
       JAVASCRIPT = 'js'
       COFFEESCRIPT = 'coffee'
+    end
+    class CacheKey
+      TREE_STATE_KEY = 'user_id:@user_id-treestatekey'
+      CODE_STATE_KEY = 'user_id:@user_id-codestatekey'
     end
   end
 end

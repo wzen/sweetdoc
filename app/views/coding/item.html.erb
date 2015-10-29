@@ -3,8 +3,8 @@
         <div id="tree_wrapper">
             <div id="tree">
                 <ul>
-                    <% if @load_tree_data.length > 0 %>
-                        <%== @load_tree_data %>
+                    <% if @load_tree_html.length > 0 %>
+                        <%== @load_tree_html %>
                     <% else %>
                         <li class='dir'><%= @user.name %></li>
                     <% end %>
@@ -12,16 +12,21 @@
             </div>
         </div>
         <div id="editor_tab_wrapper">
-            <% if @load_editor_data.length > 0 %>
+            <% if @load_user_coding.length > 0 %>
                 <ul id="my_tab" class="nav nav-tabs">
-                    <% @load_editor_data.each do |data| %>
-                        <li class="<%= data['is_front']? 'active' : '' %>"><a href="#<%= "uc_#{data['id'].to_s}_wrapper" %>" data-toggle="tab"><%= data['name'] %></a></li>
+                    <% @load_user_coding.each do |data| %>
+                        <li class="tab_li <%= @code_state[data['id']][Const::Coding::Key::IS_ACTIVE]? 'active' : '' %>">
+                            <a class="tab_button" href="#<%= "uc_#{data['id'].to_s}_wrapper" %>" data-toggle="tab">
+                                <%= data['name'] %>
+                            </a>
+                            <a class="close_tab_button"></a>
+                        </li>
                     <% end %>
                 </ul>
                 <div id="my_tab_content" class="tab-content">
-                    <% @load_editor_data.each do |data| %>
+                    <% @load_user_coding.each do |data| %>
                         <div class="editor_wrapper">
-                            <div class="tab-pane fade in <%= data['is_front']? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
+                            <div class="tab-pane fade in <%= @code_state[data['id']][Const::Coding::Key::IS_ACTIVE]? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
                                 <div id="<%= "uc_#{data.id.to_s}" %>" class="editor <%= data['lang_type'] %>"><%= data['code'] %></div>
                             </div>
                         </div>

@@ -25,7 +25,7 @@ CodingCommon = (function() {
 
       Key.USER_CODING_ID = constant.Coding.Key.USER_CODING_ID;
 
-      Key.TREE_STATE = constant.Coding.Key.TREE_STATE;
+      Key.TREE_DATA = constant.Coding.Key.TREE_DATA;
 
       Key.SUB_TREE = constant.Coding.Key.SUB_TREE;
 
@@ -61,7 +61,7 @@ CodingCommon = (function() {
   };
 
   CodingCommon.initEditor = function() {
-    return $('.editor').each(function(e) {
+    $('.editor').each(function(e) {
       var editorId, lang_type;
       editorId = $(this).attr('id');
       lang_type = $(this).attr('class').split(' ').filter(function(item, idx) {
@@ -70,6 +70,9 @@ CodingCommon = (function() {
       if (lang_type.length > 0) {
         return CodingCommon.setupEditor(editorId, lang_type[0]);
       }
+    });
+    return $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+      return CodingCommon.saveEditorState();
     });
   };
 
@@ -93,9 +96,8 @@ CodingCommon = (function() {
   CodingCommon.setupTreeEvent = function() {
     var root;
     root = $('#tree');
-    $('.dir, .tip', root).off('click');
-    $('.dir, .tip', root).on('click', function(e) {
-      return e.preventDefault();
+    root.on('open_node.jstree close_node.jstree', function(node) {
+      return CodingCommon.saveEditorState();
     });
     return this.setupContextMenu();
   };
@@ -200,6 +202,18 @@ CodingCommon = (function() {
     });
   };
 
+  CodingCommon.closeTabView = function(e) {
+    var contentsId, tab_li;
+    tab_li = $(e).closest('.tab_li');
+    contentsId = tab_li.find('.tab_button:first').attr('href').replace('#', '');
+    tab_li.remove();
+    $("" + contentsId).closest('.editor_wrapper').remove();
+    if ($('#my_tab').find('.tab_li.active').length === 0) {
+      $('#my_tab').find('.tab_li:first').addClass('active');
+    }
+    return this.saveEditorState();
+  };
+
   CodingCommon.saveAll = function(successCallback, errorCallback) {
     var data;
     if (successCallback == null) {
@@ -210,7 +224,7 @@ CodingCommon = (function() {
     }
     data = {};
     data[this.Key.CODES] = _codes();
-    data[this.Key.TREE_STATE] = _treeState();
+    data[this.Key.TREE_DATA] = _treeState();
     return $.ajax({
       url: "/coding/save_all",
       type: "POST",
@@ -238,7 +252,7 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    data[this.Key.TREE_STATE] = _treeState();
+    data[this.Key.TREE_DATA] = _treeState();
     return $.ajax({
       url: "/coding/save_tree",
       type: "POST",
@@ -403,9 +417,40 @@ CodingCommon = (function() {
     code = editorData.code;
     title = editorData.title;
     lang_type = editorData.lang_type;
-    tab.append("<li class='active'><a href='uc_" + user_coding_id + "_wrapper' data-toggle='tab'>" + title + "</a></li>");
+    tab.append("<li class='tab_li active'><a class='tab_button' href='uc_" + user_coding_id + "_wrapper' data-toggle='tab'>" + title + "</a><a class='close_tab_button'></a></li>");
     tab_content.append("<div class='tab-pane fade in active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor " + lang_type + "'></div></div>");
-    return this.setupEditor("uc_" + user_coding_id, lang_type);
+    this.setupEditor("uc_" + user_coding_id, lang_type);
+    return this.saveEditorState();
+  };
+
+  CodingCommon.saveEditorState = function() {
+    var idleSeconds, saveEditorStateTimer;
+    if ((window.saveEditorStateNowSaving != null) && window.saveEditorStateNowSaving) {
+      return;
+    }
+    idleSeconds = 5;
+    if (typeof saveEditorStateTimer !== "undefined" && saveEditorStateTimer !== null) {
+      clearTimeout(saveEditorStateTimer);
+    }
+    return saveEditorStateTimer = setTimeout(function() {
+      var data;
+      window.saveEditorStateNowSaving = true;
+      data = {};
+      data[this.Key.CODES] = _codes();
+      data[this.Key.TREE_DATA] = _treeState();
+      return $.ajax({
+        url: "/coding/save_state",
+        type: "POST",
+        dataType: "json",
+        data: data,
+        success: function(data) {
+          return window.saveEditorStateNowSaving = false;
+        },
+        error: function(data) {
+          return window.saveEditorStateNowSaving = false;
+        }
+      });
+    }, idleSeconds * 1000);
   };
 
   _parentNodePath = function(select_node) {
@@ -446,7 +491,7 @@ CodingCommon = (function() {
     ret = [];
     tab = $('#my_tab');
     tab.each(function(i) {
-      var code, lang_type, name, t, tabContentId;
+      var code, is_active, lang_type, name, t, tabContentId, user_coding_id;
       t = $(this);
       name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '');
       tabContentId = t.find('a:first').attr('href').replace('#', '');
@@ -454,10 +499,15 @@ CodingCommon = (function() {
         return item !== 'editor';
       });
       code = $("" + tabContentId).find('.editor').text();
+      is_active = $("" + tabContentId).find('.tab-pane:first').hasClass('active');
+      user_coding_id = parseInt($("" + tabContentId).find('.editor').attr('id').replace('uc_', ''));
       return ret.push({
+        user_coding_id: user_coding_id,
         name: name,
         lang_type: lang_type,
-        code: code
+        code: code,
+        is_opened: true,
+        is_active: is_active
       });
     });
     return ret;

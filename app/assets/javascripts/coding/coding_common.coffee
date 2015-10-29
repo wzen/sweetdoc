@@ -11,7 +11,7 @@ class CodingCommon
       @CODE = constant.Coding.Key.CODE
       @CODES = constant.Coding.Key.CODES
       @USER_CODING_ID = constant.Coding.Key.USER_CODING_ID
-      @TREE_STATE = constant.Coding.Key.TREE_STATE
+      @TREE_DATA = constant.Coding.Key.TREE_DATA
       @SUB_TREE = constant.Coding.Key.SUB_TREE
       @NODE_PATH = constant.Coding.Key.NODE_PATH
       @IS_OPENED = constant.Coding.Key.IS_OPENED
@@ -36,6 +36,11 @@ class CodingCommon
         CodingCommon.setupEditor(editorId, lang_type[0])
     )
 
+    $('a[data-toggle="tab"]').on('shown.bs.tab', (e) ->
+      # タブ切り替え
+      CodingCommon.saveEditorState()
+    )
+
   @setupEditor = (editorId, lang_type) ->
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
@@ -53,10 +58,11 @@ class CodingCommon
 
   @setupTreeEvent = ->
     root = $('#tree')
-    $('.dir, .tip', root).off('click')
-    $('.dir, .tip', root).on('click', (e) ->
-      e.preventDefault()
+    root.on('open_node.jstree close_node.jstree', (node) ->
+      # ツリー開閉
+      CodingCommon.saveEditorState()
     )
+
     @setupContextMenu()
 
   @setupContextMenu = ->
@@ -127,11 +133,19 @@ class CodingCommon
         ref.select_node(t)
     })
 
+  @closeTabView = (e) ->
+    tab_li = $(e).closest('.tab_li')
+    contentsId = tab_li.find('.tab_button:first').attr('href').replace('#', '')
+    tab_li.remove()
+    $("#{contentsId}").closest('.editor_wrapper').remove()
+    if $('#my_tab').find('.tab_li.active').length == 0
+      $('#my_tab').find('.tab_li:first').addClass('active')
+    @saveEditorState()
 
   @saveAll = (successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.CODES] = _codes()
-    data[@Key.TREE_STATE] = _treeState()
+    data[@Key.TREE_DATA] = _treeState()
     $.ajax(
       {
         url: "/coding/save_all"
@@ -149,7 +163,7 @@ class CodingCommon
 
   @saveTree = (successCallback = null, errorCallback = null) ->
     data = {}
-    data[@Key.TREE_STATE] = _treeState()
+    data[@Key.TREE_DATA] = _treeState()
     $.ajax(
       {
         url: "/coding/save_tree"
@@ -164,7 +178,6 @@ class CodingCommon
             errorCallback(data)
       }
     )
-
 
   @saveCode = (successCallback = null, errorCallback = null) ->
     data = {}
@@ -265,9 +278,36 @@ class CodingCommon
     code = editorData.code
     title = editorData.title
     lang_type = editorData.lang_type
-    tab.append("<li class='active'><a href='uc_#{user_coding_id}_wrapper' data-toggle='tab'>#{title}</a></li>")
+    tab.append("<li class='tab_li active'><a class='tab_button' href='uc_#{user_coding_id}_wrapper' data-toggle='tab'>#{title}</a><a class='close_tab_button'></a></li>")
     tab_content.append("<div class='tab-pane fade in active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor #{lang_type}'></div></div>")
     @setupEditor("uc_#{user_coding_id}", lang_type)
+    @saveEditorState()
+
+  @saveEditorState = ->
+    if window.saveEditorStateNowSaving? && window.saveEditorStateNowSaving
+      return
+
+    idleSeconds = 5
+    if saveEditorStateTimer?
+      clearTimeout(saveEditorStateTimer)
+    saveEditorStateTimer = setTimeout( ->
+      window.saveEditorStateNowSaving = true
+      data = {}
+      data[@Key.CODES] = _codes()
+      data[@Key.TREE_DATA] = _treeState()
+      $.ajax(
+        {
+          url: "/coding/save_state"
+          type: "POST"
+          dataType: "json"
+          data: data
+          success: (data)->
+            window.saveEditorStateNowSaving = false
+          error: (data) ->
+            window.saveEditorStateNowSaving = false
+        }
+      )
+    , idleSeconds * 1000)
 
   _parentNodePath = (select_node) ->
     path = $(select_node).parents('li.dir').map((n) -> $(@).text()).get()
@@ -303,10 +343,15 @@ class CodingCommon
       tabContentId = t.find('a:first').attr('href').replace('#', '')
       lang_type = $("#{tabContentId}").find('.editor').attr('class').split(' ').filter((item, idx) -> item != 'editor')
       code = $("#{tabContentId}").find('.editor').text()
+      is_active = $("#{tabContentId}").find('.tab-pane:first').hasClass('active')
+      user_coding_id = parseInt($("#{tabContentId}").find('.editor').attr('id').replace('uc_', ''))
       ret.push({
+        user_coding_id: user_coding_id
         name: name
         lang_type: lang_type
         code: code
+        is_opened: true
+        is_active: is_active
       })
     )
     return ret
@@ -314,3 +359,4 @@ class CodingCommon
   _deactiveEditor = ->
     $('#my_tab').children('li').removeClass('active')
     $('#my_tab_content').children('div').removeClass('active')
+

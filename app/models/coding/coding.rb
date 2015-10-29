@@ -4,11 +4,11 @@ require 'coding/user_gallery_coding_map'
 require 'coding/user_coding_tree'
 
 class Coding
-  def self.save_all(user_id, codes, tree_states)
+  def self.save_all(user_id, codes, tree_data)
     begin
       ActiveRecord::Base.transaction do
         _save_code(user_id, codes)
-        _replace_all_tree(user_id, tree_states)
+        _replace_all_tree(user_id, tree_data)
       end
       return I18n.t('message.database.item_state.save.success')
     rescue => e
@@ -27,6 +27,28 @@ class Coding
       # 失敗
       return I18n.t('message.database.item_state.save.error')
     end
+  end
+
+  def self.save_state(user_id, tree_data, codes)
+    # ツリー&エディタ状態をMemcachedに保存
+    tree_state = get_tree_state(user_id)
+    tree_data.each do |td|
+      tree_state[td[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] = td[Const::Coding::Key::IS_OPENED]
+    end
+    Rails.cache.write(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id), tree_state, expires_in: 6.months)
+
+    code_state = get_code_state(user_id)
+    code_state.each do |k, v|
+      code_state[k][Const::Coding::Key::IS_OPENED] = false
+      code_state[k][Const::Coding::Key::IS_ACTIVE] = false
+    end
+    codes.each do |co|
+      user_coding_id = co[Const::Coding::Key::USER_CODING_ID]
+      code_state[user_coding_id][Const::Coding::Key::IS_OPENED] = co[Const::Coding::Key::IS_OPENED]
+      code_state[user_coding_id][Const::Coding::Key::IS_ACTIVE] = co[Const::Coding::Key::IS_ACTIVE]
+    end
+    Rails.cache.write(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id), code_state, expires_in: 6.months)
+    return I18n.t('message.database.item_state.save.success')
   end
 
   def self.add_new_file(user_id, parent_node_path, lang_type)
@@ -51,11 +73,10 @@ class Coding
         save_ids = _save_code(user_id, [code])
         user_coding_id = save_ids.first
 
-        tree_state = {}
-        tree_state[Const::Coding::Key::NODE_PATH] = parent_node_path + "/#{Const::Coding::DEFAULT_FILENAME}"
-        tree_state[Const::Coding::Key::USER_CODING_ID] = user_coding_id
-        tree_state[Const::Coding::Key::IS_OPENED] = false
-        _save_tree(user_id, tree_state)
+        tree_data = {}
+        tree_data[Const::Coding::Key::NODE_PATH] = parent_node_path + "/#{Const::Coding::DEFAULT_FILENAME}"
+        tree_data[Const::Coding::Key::USER_CODING_ID] = user_coding_id
+        _save_tree(user_id, tree_data)
       end
       return I18n.t('message.database.item_state.save.success'), user_coding_id, code
     rescue => e
@@ -67,11 +88,10 @@ class Coding
   def self.add_new_folder(user_id, parent_node_path)
     begin
       ActiveRecord::Base.transaction do
-        tree_state = {}
-        tree_state[Const::Coding::Key::NODE_PATH] = parent_node_path + "/#{Const::Coding::DEFAULT_FILENAME}"
-        tree_state[Const::Coding::Key::USER_CODING_ID] = nil
-        tree_state[Const::Coding::Key::IS_OPENED] = false
-        _save_tree(user_id, tree_state)
+        tree_data = {}
+        tree_data[Const::Coding::Key::NODE_PATH] = parent_node_path + "/#{Const::Coding::DEFAULT_FILENAME}"
+        tree_data[Const::Coding::Key::USER_CODING_ID] = nil
+        _save_tree(user_id, tree_data)
       end
       return I18n.t('message.database.item_state.save.success')
     rescue => e
@@ -80,10 +100,10 @@ class Coding
     end
   end
 
-  def self.save_tree(user_id, tree_states)
+  def self.save_tree(user_id, tree_data)
     begin
       ActiveRecord::Base.transaction do
-        _replace_all_tree(user_id, tree_states)
+        _replace_all_tree(user_id, tree_data)
       end
       return I18n.t('message.database.item_state.save.success')
     rescue => e
@@ -111,7 +131,9 @@ class Coding
   def self.load_opened_code(user_id)
     begin
       ActiveRecord::Base.transaction do
-        return UserCoding.where(user_id: user_id, is_opened: true, del_flg: false)
+        uc = UserCoding.where(user_id: user_id, del_flg: false)
+        code_state = get_code_state(user_id)
+        return uc.select{|s| code_state[s['id']][Const::Gallery::Key::IS_OPENED]}
       end
     rescue => e
       # 失敗
@@ -131,9 +153,11 @@ class Coding
     end
   end
 
-  def self.load_tree_html(user_id, opened_user_coding_id = nil)
+  def self.load_coding_item_data(user_id)
     data = load_tree(user_id)
-    return _mk_tree_path_html(data, opened_user_coding_id)
+    tree_state = get_tree_state(user_id)
+    code_state = get_code_state(user_id)
+    return _mk_tree_path_html(data, tree_state, code_state), code_state
   end
 
   def self.upload(user_id, user_coding_id)
@@ -173,7 +197,7 @@ class Coding
     return ret
   end
 
-  def self._mk_tree_path_html(node, opened_user_coding_id = nil)
+  def self._mk_tree_path_html(node, tree_state, code_state)
     ret = ''
     node.each do |k, v|
       if k == 'tree_value'
@@ -182,20 +206,22 @@ class Coding
 
       user_coding_tree = node['tree_value']
       if v && !v.empty?
-        child = _mk_tree_path_html(v, opened_user_coding_id)
+        child = _mk_tree_path_html(v, tree_state, code_state)
         opened = ''
-        if user_coding_tree['is_opened']
+        if tree_state &&
+            tree_state[user_coding_tree['id']] &&
+            tree_state[user_coding_tree['id']][Const::Gallery::Key::IS_OPENED]
           opened = 'jstree-open'
         end
         ret += "<li class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
       else
         input = ''
-        user_coding_tree_val = ['user_coding_id', 'is_opened']
+        user_coding_tree_val = ['user_coding_id']
         user_coding_tree_val.each do |val|
           input += "<input type='hidden' class='#{val}' value='#{user_coding_tree[val]}' />"
         end
         selected = ''
-        if opened_user_coding_id && opened_user_coding_id.to_i == user_coding_tree['user_coding_id'].to_i
+        if code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE]
           selected = ',"selected":"true"'
         end
         ret += "<li class='tip' data-jstree='{\"icon\":\"jstree-file\"#{selected}}'>#{k}#{input}</li>"
@@ -230,23 +256,24 @@ class Coding
 
   def self._back_all_codes(user_id)
     # 全てのコードを背面にする
-    UserCoding.where(user_id).update_all(is_front: false)
+    # FIXME: memcachedにする
+    uc = UserCoding.where(user_id)
+    code_state = get_code_state(user_id)
+    uc.each{|u| }
   end
 
-  def self._replace_all_tree(user_id, tree_states)
+  def self._replace_all_tree(user_id, tree_data)
     ret = []
     # ツリーを論理削除
     UserCodingTree.where(user_id: user_id, del_flg: false).update_all(del_flg: true)
     # ツリー状態を保存
-    tree_states.each do |tree_state|
-      node_path = tree_state[Const::Coding::Key::NODE_PATH]
-      user_coding_id = tree_state[Const::Coding::Key::USER_CODING_ID]
-      is_opened =  tree_state[Const::Coding::Key::IS_OPENED]
+    tree_data.each do |td|
+      node_path = td[Const::Coding::Key::NODE_PATH]
+      user_coding_id = td[Const::Coding::Key::USER_CODING_ID]
       uct = UserCodingTree.new({
                                    user_id: user_id,
                                    node_path: node_path,
-                                   user_coding_id: user_coding_id,
-                                   is_opened: is_opened
+                                   user_coding_id: user_coding_id
                                })
       uct.save!
       ret << uct.id
@@ -254,25 +281,31 @@ class Coding
     return ret
   end
 
-  def self._save_tree(user_id, tree_state)
-    node_path = tree_state[Const::Coding::Key::NODE_PATH]
-    user_coding_id = tree_state[Const::Coding::Key::USER_CODING_ID]
-    is_opened =  tree_state[Const::Coding::Key::IS_OPENED]
+  def self._save_tree(user_id, tree_data)
+    node_path = tree_data[Const::Coding::Key::NODE_PATH]
+    user_coding_id = tree_data[Const::Coding::Key::USER_CODING_ID]
     uct = UserCodingTree.find_by(user_id: user_id, node_path: node_path, del_flg: false)
     if uct == nil
       uct = UserCodingTree.new({
                                    user_id: user_id,
                                    node_path: node_path,
-                                   user_coding_id: user_coding_id,
-                                   is_opened: is_opened
+                                   user_coding_id: user_coding_id
                                })
     else
       uct.user_coding_id = user_coding_id
-      uct.is_opened = is_opened
     end
     uct.save!
 
     return uct.id
+  end
+
+  def self.get_tree_state(user_id)
+    r = Rails.cache.read(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id))
+    return r ? r : {}
+  end
+  def self.get_code_state(user_id)
+    r = Rails.cache.read(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id))
+    return r ? r : {}
   end
 
   private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_save_code, :_replace_all_tree
