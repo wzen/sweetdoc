@@ -226,7 +226,8 @@ class Coding
         opened = ''
         if tree_state &&
             tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]] &&
-            tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED]
+            tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] &&
+            tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] == 'true'
           opened = 'jstree-open'
         end
         ret += "<li class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
