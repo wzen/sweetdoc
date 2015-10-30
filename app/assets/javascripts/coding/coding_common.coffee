@@ -134,6 +134,13 @@ class CodingCommon
 
   @getContextMenuArray = (type) ->
 
+    _countSameFilename = (node, targetName)->
+      childrenText = $(node).find('.jstree-node > jstree-anchor').text()
+      childrenText = $.grep(childrenText, (e) ->
+        e.indexOf(targetName) >= 0
+      )
+      return childrenText.length
+
     makeFile = {title: I18n.t('context_menu.new_file'), children: [
       {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
         # JavaScriptファイル作成
@@ -143,8 +150,13 @@ class CodingCommon
           if !sel.length
             return false
           sel = sel[0]
-          sel = ref.create_node(sel, {"type" : "js_file", text: "#{CodingCommon.DEFAULT_FILENAME}.js"}, 'last', ->
+          sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.js')
+          num = if sameNameCount == 0 then '' : sameNameCount + 1
+          sel = ref.create_node(sel, {"type" : "js_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.js"}, 'last', ->
+            # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
+            # フォルダオープン
+            ref.open_node(sel)
           )
         , (data)->
         )
@@ -157,8 +169,13 @@ class CodingCommon
           if !sel.length
             return false
           sel = sel[0]
-          sel = ref.create_node(sel, {"type":"coffee_file", text: "#{CodingCommon.DEFAULT_FILENAME}.coffee"}, 'last', ->
+          sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.coffee')
+          num = if sameNameCount == 0 then '' : sameNameCount + 1
+          sel = ref.create_node(sel, {"type":"coffee_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"}, 'last', ->
+            # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
+            # フォルダオープン
+            ref.open_node(sel)
           )
         , (data)->
         )
@@ -173,7 +190,14 @@ class CodingCommon
         if !sel.length
           return false
         sel = sel[0]
-        sel = ref.create_node(sel, {type:"folder", text: "#{CodingCommon.DEFAULT_FILENAME}.coffee"})
+        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
+        num = if sameNameCount == 0 then '' : sameNameCount + 1
+        sel = ref.create_node(sel, {type:"folder", text: "#{CodingCommon.DEFAULT_FILENAME + num}"}, 'last', ->
+          # コンテキストメニュー再設定
+          CodingCommon.setupContextMenu()
+          # フォルダオープン
+          ref.open_node(sel)
+        )
       , (data) ->
       )
     }

@@ -188,7 +188,15 @@ CodingCommon = (function() {
   };
 
   CodingCommon.getContextMenuArray = function(type) {
-    var deleteNode, makeFile, makeFolder, menu;
+    var _countSameFilename, deleteNode, makeFile, makeFolder, menu;
+    _countSameFilename = function(node, targetName) {
+      var childrenText;
+      childrenText = $(node).find('.jstree-node > jstree-anchor').text();
+      childrenText = $.grep(childrenText, function(e) {
+        return e.indexOf(targetName) >= 0;
+      });
+      return childrenText.length;
+    };
     makeFile = {
       title: I18n.t('context_menu.new_file'),
       children: [
@@ -197,18 +205,23 @@ CodingCommon = (function() {
           cmd: "js",
           func: function(event, ui) {
             return CodingCommon.addNewFile(event.target, CodingCommon.Lang.JAVASCRIPT, function(data) {
-              var ref, sel;
+              var num, ref, sameNameCount, sel;
               ref = $('#tree').jstree(true);
               sel = ref.get_selected();
               if (!sel.length) {
                 return false;
               }
               sel = sel[0];
+              sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.js');
+              num = sameNameCount === 0 ? {
+                '': sameNameCount + 1
+              } : void 0;
               return sel = ref.create_node(sel, {
                 "type": "js_file",
-                text: CodingCommon.DEFAULT_FILENAME + ".js"
+                text: (CodingCommon.DEFAULT_FILENAME + num) + ".js"
               }, 'last', function() {
-                return CodingCommon.setupContextMenu();
+                CodingCommon.setupContextMenu();
+                return ref.open_node(sel);
               });
             }, function(data) {});
           }
@@ -217,18 +230,23 @@ CodingCommon = (function() {
           cmd: "coffee",
           func: function(event, ui) {
             return CodingCommon.addNewFile(event.target, CodingCommon.Lang.COFFEESCRIPT, function(data) {
-              var ref, sel;
+              var num, ref, sameNameCount, sel;
               ref = $('#tree').jstree(true);
               sel = ref.get_selected();
               if (!sel.length) {
                 return false;
               }
               sel = sel[0];
+              sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.coffee');
+              num = sameNameCount === 0 ? {
+                '': sameNameCount + 1
+              } : void 0;
               return sel = ref.create_node(sel, {
                 "type": "coffee_file",
-                text: CodingCommon.DEFAULT_FILENAME + ".coffee"
+                text: (CodingCommon.DEFAULT_FILENAME + num) + ".coffee"
               }, 'last', function() {
-                return CodingCommon.setupContextMenu();
+                CodingCommon.setupContextMenu();
+                return ref.open_node(sel);
               });
             }, function(data) {});
           }
@@ -240,16 +258,23 @@ CodingCommon = (function() {
       cmd: "new_folder",
       func: function(event, ui) {
         return CodingCommon.addNewFolder(event.target, function(data) {
-          var ref, sel;
+          var num, ref, sameNameCount, sel;
           ref = $('#tree').jstree(true);
           sel = ref.get_selected();
           if (!sel.length) {
             return false;
           }
           sel = sel[0];
+          sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME);
+          num = sameNameCount === 0 ? {
+            '': sameNameCount + 1
+          } : void 0;
           return sel = ref.create_node(sel, {
             type: "folder",
-            text: CodingCommon.DEFAULT_FILENAME + ".coffee"
+            text: "" + (CodingCommon.DEFAULT_FILENAME + num)
+          }, 'last', function() {
+            CodingCommon.setupContextMenu();
+            return ref.open_node(sel);
           });
         }, function(data) {});
       }
