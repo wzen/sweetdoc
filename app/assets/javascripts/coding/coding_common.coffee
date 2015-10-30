@@ -361,7 +361,7 @@ class CodingCommon
 
   @deleteNode =(selectNode, successCallback = null, errorCallback = null) ->
     data = {}
-    data[@Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $('.jstree-anchor:first', selectNode).text()
+    data[@Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $(selectNode).text()
     $.ajax(
       {
         url: "/coding/delete_node"
@@ -436,8 +436,8 @@ class CodingCommon
     , idleSeconds * 1000)
 
   _parentNodePath = (select_node) ->
-    path = $(select_node).parents('li.dir').map((n) -> $(@).text()).get()
-    path.unshift($('.jstree-anchor:first', select_node).text())
+    path = $(select_node).parents('a.jstree-anchor').map((n) -> $(@).text()).get()
+    path.unshift($(select_node).text())
     reversePath = path.reverse()
     joinPath = reversePath.join('/')
     return joinPath

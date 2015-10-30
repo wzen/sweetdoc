@@ -519,7 +519,7 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    data[this.Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $('.jstree-anchor:first', selectNode).text();
+    data[this.Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $(selectNode).text();
     return $.ajax({
       url: "/coding/delete_node",
       type: "POST",
@@ -599,10 +599,10 @@ CodingCommon = (function() {
 
   _parentNodePath = function(select_node) {
     var joinPath, path, reversePath;
-    path = $(select_node).parents('li.dir').map(function(n) {
+    path = $(select_node).parents('a.jstree-anchor').map(function(n) {
       return $(this).text();
     }).get();
-    path.unshift($('.jstree-anchor:first', select_node).text());
+    path.unshift($(select_node).text());
     reversePath = path.reverse();
     joinPath = reversePath.join('/');
     return joinPath;

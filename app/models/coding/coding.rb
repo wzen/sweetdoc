@@ -84,11 +84,15 @@ class Coding
 
         path_array = parent_node_path.split('/') << Const::Coding::DEFAULT_FILENAME
         node_path = []
-        path_array.each do |path|
+        path_array.each_with_index do |path, idx|
           tree_data = {}
           node_path.push(path)
           tree_data[Const::Coding::Key::NODE_PATH] = node_path.join('/')
-          tree_data[Const::Coding::Key::USER_CODING_ID] = user_coding_id
+          if idx == path_array.length - 1
+            tree_data[Const::Coding::Key::USER_CODING_ID] = user_coding_id
+          else
+            tree_data[Const::Coding::Key::USER_CODING_ID] = nil
+          end
           _save_tree(user_id, tree_data)
         end
       end
@@ -191,7 +195,8 @@ class Coding
     data = load_tree(user_id)
     tree_state = get_tree_state(user_id)
     code_state = get_code_state(user_id)
-    return _mk_tree_path_html(data, tree_state, code_state), code_state
+    user_coding = UserCoding.where(user_id: user_id)
+    return _mk_tree_path_html(data, user_coding, tree_state, code_state), code_state
   end
 
   def self.upload(user_id, user_coding_id)
@@ -231,7 +236,7 @@ class Coding
     return ret
   end
 
-  def self._mk_tree_path_html(node, tree_state, code_state, depth = 1)
+  def self._mk_tree_path_html(node, user_coding, tree_state, code_state, depth = 1)
     ret = ''
     node.each do |k, v|
       if k == 'tree_value'
@@ -240,7 +245,7 @@ class Coding
 
       user_coding_tree = node['tree_value']
       if v && !v.empty?
-        child = _mk_tree_path_html(v, tree_state, code_state, depth + 1)
+        child = _mk_tree_path_html(v, user_coding, tree_state, code_state, depth + 1)
         # デフォルト開く状態
         opened = 'jstree-open'
         if tree_state &&
@@ -261,7 +266,19 @@ class Coding
         if code_state[user_coding_tree['user_coding_id']] && code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE]
           selected = ',"selected":"true"'
         end
-        ret += "<li class='tip' data-jstree='{\"icon\":\"jstree-file\"#{selected}}'>#{k}#{input}</li>"
+        type = 'folder'
+        ext = ''
+        if code_state[user_coding_tree['user_coding_id']]
+          lang_type = user_coding.select{|uc| uc['id'].to_i == user_coding_tree['user_coding_id'].to_i}.first['lang_type']
+          if lang_type == Const::Coding::Lang::JAVASCRIPT
+            type = 'js_file'
+            ext = '.js'
+          elsif lang_type == Const::Coding::Lang::COFFEESCRIPT
+            type = 'coffee_file'
+            ext = '.coffee'
+          end
+        end
+        ret += "<li class='tip' data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}#{ext}#{input}</li>"
       end
     end
     return ret
