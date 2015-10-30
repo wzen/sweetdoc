@@ -110,9 +110,59 @@ CodingCommon = (function() {
   };
 
   CodingCommon.setupContextMenu = function() {
-    var menu;
-    menu = [];
-    menu.push({
+    this.setupContextMenuByType('root');
+    this.setupContextMenuByType('dir');
+    return this.setupContextMenuByType('tip');
+  };
+
+  CodingCommon.setupContextMenuByType = function(type) {
+    var element;
+    if (type === 'root') {
+      element = $('#tree .jstree-anchor:first');
+    } else if (type === 'dir') {
+      element = $('#tree .jstree-anchor:not(:first) .jstree-icon:not(.jstree-file)').closest('.jstree-anchor');
+    } else if (type === 'tip') {
+      element = $('#tree .jstree-anchor .jstree-icon.jstree-file').closest('.jstree-anchor');
+    }
+    return Common.setupContextMenu(element, '#tree', {
+      menu: CodingCommon.getContextMenuArray(type),
+      select: function(event, ui) {
+        var _exec_func;
+        _exec_func = function(menuArray) {
+          var j, len, results, v;
+          results = [];
+          for (j = 0, len = menuArray.length; j < len; j++) {
+            v = menuArray[j];
+            if (v.children != null) {
+              _exec_func.call(this, v.children);
+            }
+            if (v.cmd === ui.cmd) {
+              if (v.func != null) {
+                results.push(v.func(event, ui));
+              } else {
+                results.push(void 0);
+              }
+            } else {
+              results.push(void 0);
+            }
+          }
+          return results;
+        };
+        return _exec_func.call(this, menu);
+      },
+      beforeOpen: function(event, ui) {
+        var ref, t;
+        t = $(event.target);
+        ref = $('#tree').jstree(true);
+        ref.deselect_all(true);
+        return ref.select_node(t);
+      }
+    });
+  };
+
+  CodingCommon.getContextMenuArray = function(type) {
+    var deleteNode, makeFile, makeFolder, menu;
+    makeFile = {
       title: I18n.t('context_menu.new_file'),
       children: [
         {
@@ -153,8 +203,8 @@ CodingCommon = (function() {
           }
         }
       ]
-    });
-    menu.push({
+    };
+    makeFolder = {
       title: I18n.t('context_menu.new_folder'),
       cmd: "new_folder",
       func: function(event, ui) {
@@ -172,41 +222,21 @@ CodingCommon = (function() {
           });
         }, function(data) {});
       }
-    });
-    return Common.setupContextMenu($('#tree .dir'), '#tree', {
-      menu: menu,
-      select: function(event, ui) {
-        var _exec_func;
-        _exec_func = function(menuArray) {
-          var j, len, results, v;
-          results = [];
-          for (j = 0, len = menuArray.length; j < len; j++) {
-            v = menuArray[j];
-            if (v.children != null) {
-              _exec_func.call(this, v.children);
-            }
-            if (v.cmd === ui.cmd) {
-              if (v.func != null) {
-                results.push(v.func(event, ui));
-              } else {
-                results.push(void 0);
-              }
-            } else {
-              results.push(void 0);
-            }
-          }
-          return results;
-        };
-        return _exec_func.call(this, menu);
-      },
-      beforeOpen: function(event, ui) {
-        var ref, t;
-        t = $(event.target);
-        ui.menu.zIndex($(event.target).zIndex() + 1);
-        ref = $('#tree').jstree(true);
-        return ref.select_node(t);
-      }
-    });
+    };
+    deleteNode = {
+      title: I18n.t('context_menu.delete'),
+      cmd: "delete",
+      func: function(event, ui) {}
+    };
+    menu = [];
+    if (type === 'root') {
+      menu = [makeFile, makeFolder];
+    } else if (type === 'dir') {
+      menu = [makeFile, makeFolder, deleteNode];
+    } else if (type === 'tip') {
+      menu = [deleteNode];
+    }
+    return menu;
   };
 
   CodingCommon.closeTabView = function(e) {

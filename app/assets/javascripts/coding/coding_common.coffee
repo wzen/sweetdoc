@@ -71,8 +71,41 @@ class CodingCommon
     @setupContextMenu()
 
   @setupContextMenu = ->
-    menu = []
-    menu.push({title: I18n.t('context_menu.new_file'), children: [
+    @setupContextMenuByType('root')
+    @setupContextMenuByType('dir')
+    @setupContextMenuByType('tip')
+
+  @setupContextMenuByType = (type) ->
+    if type == 'root'
+      element = $('#tree .jstree-anchor:first')
+    else if type == 'dir'
+      element = $('#tree .jstree-anchor:not(:first) .jstree-icon:not(.jstree-file)').closest('.jstree-anchor')
+    else if type == 'tip'
+      element = $('#tree .jstree-anchor .jstree-icon.jstree-file').closest('.jstree-anchor')
+
+    Common.setupContextMenu(element, '#tree', {
+      menu: CodingCommon.getContextMenuArray(type)
+      select: (event, ui) ->
+        _exec_func = (menuArray) ->
+          for v in menuArray
+            if v.children?
+              _exec_func.call(@, v.children)
+            if v.cmd == ui.cmd
+              if v.func?
+                v.func(event, ui)
+        _exec_func.call(@, menu)
+
+      beforeOpen: (event, ui) ->
+        t = $(event.target)
+        ref = $('#tree').jstree(true)
+        ref.deselect_all(true)
+        ref.select_node(t)
+    })
+
+
+  @getContextMenuArray = (type) ->
+
+    makeFile = {title: I18n.t('context_menu.new_file'), children: [
       {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
         # JavaScriptファイル作成
         CodingCommon.addNewFile(event.target, CodingCommon.Lang.JAVASCRIPT, (data) ->
@@ -84,7 +117,6 @@ class CodingCommon
           sel = sel[0]
           sel = ref.create_node(sel, {"type":"file", text: "#{CodingCommon.DEFAULT_FILENAME}.js"}, 'last', ->
             # エディタ作成
-
           )
         , (data)->
         )
@@ -99,14 +131,13 @@ class CodingCommon
           sel = sel[0]
           sel = ref.create_node(sel, {"type":"file", text: "#{CodingCommon.DEFAULT_FILENAME}.coffee"}, 'last', ->
             # エディタ作成
-
-
           )
         , (data)->
         )
       }
-    ]})
-    menu.push({title: I18n.t('context_menu.new_folder'), cmd: "new_folder", func: (event, ui) ->
+    ]}
+
+    makeFolder = {title: I18n.t('context_menu.new_folder'), cmd: "new_folder", func: (event, ui) ->
       CodingCommon.addNewFolder(event.target, (data) ->
         # フォルダ作成
         ref = $('#tree').jstree(true)
@@ -117,26 +148,20 @@ class CodingCommon
         sel = ref.create_node(sel, {type:"folder", text: "#{CodingCommon.DEFAULT_FILENAME}.coffee"})
       , (data) ->
       )
-    })
-    Common.setupContextMenu($('#tree .dir'), '#tree', {
-      menu: menu
-      select: (event, ui) ->
-        _exec_func = (menuArray) ->
-          for v in menuArray
-            if v.children?
-              _exec_func.call(@, v.children)
-            if v.cmd == ui.cmd
-              if v.func?
-                v.func(event, ui)
-        _exec_func.call(@, menu)
+    }
 
-      beforeOpen: (event, ui) ->
-        t = $(event.target)
-        # 選択メニューを最前面に表示
-        ui.menu.zIndex( $(event.target).zIndex() + 1)
-        ref = $('#tree').jstree(true)
-        ref.select_node(t)
-    })
+    deleteNode = {title: I18n.t('context_menu.delete'), cmd: "delete", func: (event, ui) ->
+      # 削除
+    }
+
+    menu = []
+    if type == 'root'
+      menu = [makeFile, makeFolder]
+    else if type == 'dir'
+      menu = [makeFile, makeFolder, deleteNode]
+    else if type == 'tip'
+      menu = [deleteNode]
+    return menu
 
   @closeTabView = (e) ->
     tab_li = $(e).closest('.tab_li')
