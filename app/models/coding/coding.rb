@@ -114,6 +114,24 @@ class Coding
     end
   end
 
+  def self.delete_node(user_id, node_path)
+    begin
+      ActiveRecord::Base.transaction do
+        uct = UserCodingTree.where('user_id = ? AND node_path LIKE ? AND del_flg = 0', user_id, "%#{escape_like(node_path)}%")
+        uct.each do |u|
+          if u['user_coding_id']
+            UserCoding.update_all({del_flg: true}, {id: u['user_coding_id']})
+          end
+        end
+        uct.update_all(del_flg: true)
+      end
+      return I18n.t('message.database.item_state.save.success')
+    rescue => e
+      # 失敗
+      return I18n.t('message.database.item_state.save.error')
+    end
+  end
+
   def self.save_tree(user_id, tree_data)
     begin
       ActiveRecord::Base.transaction do
@@ -282,17 +300,23 @@ class Coding
 
   def self._replace_all_tree(user_id, tree_data)
     ret = []
-    # ツリーを論理削除
+    # ツリーを一旦論理削除
     UserCodingTree.where(user_id: user_id, del_flg: false).update_all(del_flg: true)
     # ツリー状態を保存
     tree_data.each do |td|
       node_path = td[Const::Coding::Key::NODE_PATH]
       user_coding_id = td[Const::Coding::Key::USER_CODING_ID]
-      uct = UserCodingTree.new({
-                                   user_id: user_id,
-                                   node_path: node_path,
-                                   user_coding_id: user_coding_id
-                               })
+      uct = UserCodingTree.where(user_id: user_id, node_path: node_path)
+      if uct.count == 0
+        uct = UserCodingTree.new({
+                                     user_id: user_id,
+                                     node_path: node_path,
+                                     user_coding_id: user_coding_id
+                                 })
+      else
+        uct.user_coding_id = user_coding_id
+        uct.del_flg = false
+      end
       uct.save!
       ret << uct.id
     end

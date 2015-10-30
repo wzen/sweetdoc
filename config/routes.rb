@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   post 'coding/add_new_folder'
   get 'coding/load_code'
   get 'coding/load_tree'
+  post 'coding/delete_node'
   get 'coding/item'
 
   post 'project/create'

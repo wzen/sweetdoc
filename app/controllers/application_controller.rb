@@ -86,6 +86,11 @@ class ApplicationController < ActionController::Base
     I18n.locale = params[:locale] || I18n.default_locale
   end
 
+  # ActiveRecord Like エスケープ
+  def escape_like(string)
+    string.gsub(/[\\%_]/){|m| "\\#{m}"}
+  end
+
   protected
   def configure_permitted_parameters
     #strong parametersを設定し、nameを許可

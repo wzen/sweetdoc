@@ -226,7 +226,20 @@ CodingCommon = (function() {
     deleteNode = {
       title: I18n.t('context_menu.delete'),
       cmd: "delete",
-      func: function(event, ui) {}
+      func: function(event, ui) {
+        if (window.confirm(I18n.t('message.dialog.delete_node'))) {
+          return CodingCommon.deleteNode(event.target, function() {
+            var ref, sel;
+            ref = $('#tree').jstree(true);
+            sel = ref.get_selected();
+            if (!sel.length) {
+              return false;
+            }
+            sel = sel[0];
+            return ref.delete_node(sel);
+          });
+        }
+      }
     };
     menu = [];
     if (type === 'root') {
@@ -429,6 +442,34 @@ CodingCommon = (function() {
     data[this.Key.PARENT_NODE_PATH] = _parentNodePath(parentNode);
     return $.ajax({
       url: "/coding/add_new_folder",
+      type: "POST",
+      dataType: "json",
+      data: data,
+      success: function(data) {
+        if (successCallback != null) {
+          return successCallback(data);
+        }
+      },
+      error: function(data) {
+        if (errorCallback != null) {
+          return errorCallback(data);
+        }
+      }
+    });
+  };
+
+  CodingCommon.deleteNode = function(selectNode, successCallback, errorCallback) {
+    var data;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
+    }
+    data = {};
+    data[this.Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $('.jstree-anchor:first', selectNode).text();
+    return $.ajax({
+      url: "/coding/delete_node",
       type: "POST",
       dataType: "json",
       data: data,

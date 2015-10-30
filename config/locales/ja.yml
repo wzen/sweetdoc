@@ -65,6 +65,7 @@ ja:
       new_project: "'作成中のコンテンツは全て削除されます。'"
       delete_item: "アイテムが削除されます。"
       update_gallery: "アップロードします。"
+      delete_node: "削除してよろしいですか？ サブツリーが存在する場合、同時に削除されます。"
     database:
       item_state:
         save:

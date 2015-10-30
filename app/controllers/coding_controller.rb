@@ -41,6 +41,11 @@ class CodingController < ApplicationController
     @message = Coding.add_new_folder(user_id, parent_node_path)
   end
 
+  def delete_node
+    node_path = params.require(Const::Coding::Key::NODE_PATH)
+    @message = Coding.delete_node(user_id, node_path)
+  end
+
   def load_code
     user_id = current_or_guest_user.id
     user_coding_id = params.fetch(Const::Coding::Key::USER_CODING_ID, nil)

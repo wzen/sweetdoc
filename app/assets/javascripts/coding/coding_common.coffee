@@ -152,6 +152,16 @@ class CodingCommon
 
     deleteNode = {title: I18n.t('context_menu.delete'), cmd: "delete", func: (event, ui) ->
       # 削除
+      if window.confirm(I18n.t('message.dialog.delete_node'))
+        CodingCommon.deleteNode(event.target, ->
+          # 表示削除
+          ref = $('#tree').jstree(true)
+          sel = ref.get_selected()
+          if !sel.length
+            return false
+          sel = sel[0]
+          ref.delete_node(sel)
+        )
     }
 
     menu = []
@@ -279,13 +289,30 @@ class CodingCommon
       }
     )
 
-
   @addNewFolder =(parentNode, successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.PARENT_NODE_PATH] = _parentNodePath(parentNode)
     $.ajax(
       {
         url: "/coding/add_new_folder"
+        type: "POST"
+        dataType: "json"
+        data: data
+        success: (data)->
+          if successCallback?
+            successCallback(data)
+        error: (data) ->
+          if errorCallback?
+            errorCallback(data)
+      }
+    )
+
+  @deleteNode =(selectNode, successCallback = null, errorCallback = null) ->
+    data = {}
+    data[@Key.NODE_PATH] = _parentNodePath(selectNode) + '/' + $('.jstree-anchor:first', selectNode).text()
+    $.ajax(
+      {
+        url: "/coding/delete_node"
         type: "POST"
         dataType: "json"
         data: data
