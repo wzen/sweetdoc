@@ -434,7 +434,7 @@ CodingCommon = (function() {
         title = loaded.name;
         lang_type = loaded.lang_type;
         tab.append("<li class='tab_li active'><a class='tab_button' href='uc_" + user_coding_id + "_wrapper' data-toggle='tab'>" + title + "</a><a class='close_tab_button'></a></li>");
-        tab_content.append("<div class='editor_wrapper  " + lang_type + "'><div class='tab-pane fade in active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'></div></div></div>");
+        tab_content.append("<div class='editor_wrapper " + lang_type + "'><div class='tab-pane fade in active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'></div></div></div>");
         return CodingCommon.setupEditor("uc_" + user_coding_id, lang_type);
       });
     } else {
@@ -512,17 +512,18 @@ CodingCommon = (function() {
     ret = [];
     tab = $('#my_tab');
     tab.each(function(i) {
-      var code, editor, is_active, lang_type, name, t, tabContentId, user_coding_id;
+      var code, editor, editorWrapperId, is_active, lang_type, name, t, user_coding_id;
       t = $(this);
       name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '');
-      tabContentId = t.find('a:first').attr('href').replace('#', '');
-      lang_type = $("" + tabContentId).find('.editor_wrapper').attr('class').split(' ').filter(function(item, idx) {
+      editorWrapperId = t.find('a:first').attr('href').replace('#', '');
+      lang_type = $("#" + editorWrapperId).closest('.editor_wrapper').attr('class').split(' ').filter(function(item, idx) {
         return item !== 'editor_wrapper';
       });
-      editor = ace.edit(t.find('.tab-pane:first').attr('id').replace('_wrapper', ''));
+      lang_type = lang_type[0];
+      editor = ace.edit(editorWrapperId.replace('_wrapper', ''));
       code = editor.getValue();
-      is_active = $("" + tabContentId).find('.tab-pane:first').hasClass('active');
-      user_coding_id = parseInt($("" + tabContentId).find('.editor').attr('id').replace('uc_', ''));
+      is_active = $("#" + editorWrapperId).find('.tab-pane:first').hasClass('active');
+      user_coding_id = parseInt(editorWrapperId.replace('uc_', '').replace('_wrapper', ''));
       return ret.push({
         user_coding_id: user_coding_id,
         name: name,

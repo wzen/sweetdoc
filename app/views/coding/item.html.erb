@@ -25,9 +25,9 @@
                 </ul>
                 <div id="my_tab_content" class="tab-content">
                     <% @load_user_coding.each do |data| %>
-                        <div class="editor_wrapper">
+                        <div class="editor_wrapper <%= data['lang_type'] %>">
                             <div class="tab-pane fade in <%= @code_state[data['id']][Const::Coding::Key::IS_ACTIVE]? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
-                                <div id="<%= "uc_#{data.id.to_s}" %>" class="editor <%= data['lang_type'] %>"><%= data['code'] %></div>
+                                <div id="<%= "uc_#{data.id.to_s}" %>" class="editor"><%= data['code'] %></div>
                             </div>
                         </div>
                     <% end %>

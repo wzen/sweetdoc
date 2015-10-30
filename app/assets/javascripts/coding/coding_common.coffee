@@ -294,7 +294,7 @@ class CodingCommon
         lang_type = loaded.lang_type
 
         tab.append("<li class='tab_li active'><a class='tab_button' href='uc_#{user_coding_id}_wrapper' data-toggle='tab'>#{title}</a><a class='close_tab_button'></a></li>")
-        tab_content.append("<div class='editor_wrapper  #{lang_type}'><div class='tab-pane fade in active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor'></div></div></div>")
+        tab_content.append("<div class='editor_wrapper #{lang_type}'><div class='tab-pane fade in active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor'></div></div></div>")
         CodingCommon.setupEditor("uc_#{user_coding_id}", lang_type)
       )
 
@@ -362,12 +362,13 @@ class CodingCommon
     tab.each((i) ->
       t = $(@)
       name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '')
-      tabContentId = t.find('a:first').attr('href').replace('#', '')
-      lang_type = $("#{tabContentId}").find('.editor_wrapper').attr('class').split(' ').filter((item, idx) -> item != 'editor_wrapper')
-      editor = ace.edit(t.find('.tab-pane:first').attr('id').replace('_wrapper', ''))
+      editorWrapperId = t.find('a:first').attr('href').replace('#', '')
+      lang_type = $("##{editorWrapperId}").closest('.editor_wrapper').attr('class').split(' ').filter((item, idx) -> item != 'editor_wrapper')
+      lang_type = lang_type[0]
+      editor = ace.edit(editorWrapperId.replace('_wrapper', ''))
       code = editor.getValue()
-      is_active = $("#{tabContentId}").find('.tab-pane:first').hasClass('active')
-      user_coding_id = parseInt($("#{tabContentId}").find('.editor').attr('id').replace('uc_', ''))
+      is_active = $("##{editorWrapperId}").find('.tab-pane:first').hasClass('active')
+      user_coding_id = parseInt(editorWrapperId.replace('uc_', '').replace('_wrapper', ''))
       ret.push({
         user_coding_id: user_coding_id
         name: name

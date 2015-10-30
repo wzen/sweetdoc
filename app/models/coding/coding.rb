@@ -38,7 +38,7 @@ class Coding
       end
       tree_state[td[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] = td[Const::Coding::Key::IS_OPENED]
     end
-    Rails.cache.write(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id.to_s), tree_state, expires_in: 6.months)
+    Rails.cache.write(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id.to_s), tree_state, expires_in: 1.month)
 
     code_state = get_code_state(user_id)
     code_state.each do |k, v|
@@ -56,7 +56,7 @@ class Coding
       code_state[user_coding_id][Const::Coding::Key::IS_OPENED] = co[Const::Coding::Key::IS_OPENED]
       code_state[user_coding_id][Const::Coding::Key::IS_ACTIVE] = co[Const::Coding::Key::IS_ACTIVE]
     end
-    Rails.cache.write(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id.to_s), code_state, expires_in: 6.months)
+    Rails.cache.write(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id.to_s), code_state, expires_in: 1.month)
     return I18n.t('message.database.item_state.save.success')
   end
 
@@ -223,12 +223,13 @@ class Coding
       user_coding_tree = node['tree_value']
       if v && !v.empty?
         child = _mk_tree_path_html(v, tree_state, code_state)
-        opened = ''
+        # デフォルト開く状態
+        opened = 'jstree-open'
         if tree_state &&
             tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]] &&
             tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] &&
-            tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] == 'true'
-          opened = 'jstree-open'
+            tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] == 'false'
+          opened = ''
         end
         ret += "<li class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
       else
