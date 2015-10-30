@@ -56,7 +56,34 @@ CodingCommon = (function() {
   };
 
   CodingCommon.initTreeView = function() {
-    $('#tree').jstree();
+    $('#tree').jstree({
+      "core": {
+        "check_callback": true
+      },
+      "types": {
+        "#": {
+          "max_children": 1,
+          "valid_children": ["root"]
+        },
+        "default": {},
+        "root": {
+          "valid_children": ["folder", "js_file", "coffee_file"],
+          'icon': '/assets/coding/tree/node_icon_root.png'
+        },
+        "folder": {
+          "valid_children": ["folder", "js_file", "coffee_file"]
+        },
+        "js_file": {
+          'icon': '/assets/coding/tree/node_icon_js.png',
+          "valid_children": []
+        },
+        "coffee_file": {
+          'icon': '/assets/coding/tree/node_icon_coffee.png',
+          "valid_children": []
+        }
+      },
+      "plugins": ['types']
+    });
     return this.setupTreeEvent();
   };
 
@@ -148,7 +175,7 @@ CodingCommon = (function() {
           }
           return results;
         };
-        return _exec_func.call(this, menu);
+        return _exec_func.call(this, CodingCommon.getContextMenuArray(type));
       },
       beforeOpen: function(event, ui) {
         var ref, t;
@@ -178,9 +205,11 @@ CodingCommon = (function() {
               }
               sel = sel[0];
               return sel = ref.create_node(sel, {
-                "type": "file",
+                "type": "js_file",
                 text: CodingCommon.DEFAULT_FILENAME + ".js"
-              }, 'last', function() {});
+              }, 'last', function() {
+                return CodingCommon.setupContextMenu();
+              });
             }, function(data) {});
           }
         }, {
@@ -196,9 +225,11 @@ CodingCommon = (function() {
               }
               sel = sel[0];
               return sel = ref.create_node(sel, {
-                "type": "file",
+                "type": "coffee_file",
                 text: CodingCommon.DEFAULT_FILENAME + ".coffee"
-              }, 'last', function() {});
+              }, 'last', function() {
+                return CodingCommon.setupContextMenu();
+              });
             }, function(data) {});
           }
         }

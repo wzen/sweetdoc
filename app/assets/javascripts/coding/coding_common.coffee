@@ -25,7 +25,36 @@ class CodingCommon
     @initEditor()
 
   @initTreeView = ->
-    $('#tree').jstree()
+    $('#tree').jstree(
+      "core" : {
+        "check_callback": true
+      }
+      "types": {
+        "#" : {
+          "max_children" : 1,
+          "valid_children" : ["root"]
+        }
+        "default": {
+        }
+        "root": {
+          "valid_children": ["folder", "js_file", "coffee_file"],
+          'icon': '/assets/coding/tree/node_icon_root.png'
+        },
+        "folder": {
+          "valid_children": ["folder", "js_file", "coffee_file"],
+        }
+        "js_file" : {
+          'icon': '/assets/coding/tree/node_icon_js.png'
+          "valid_children" : []
+        }
+        "coffee_file" : {
+          'icon': '/assets/coding/tree/node_icon_coffee.png'
+          "valid_children" : []
+        }
+
+      }
+      "plugins": ['types']
+    )
     @setupTreeEvent()
 
   @initEditor = ->
@@ -93,7 +122,7 @@ class CodingCommon
             if v.cmd == ui.cmd
               if v.func?
                 v.func(event, ui)
-        _exec_func.call(@, menu)
+        _exec_func.call(@, CodingCommon.getContextMenuArray(type))
 
       beforeOpen: (event, ui) ->
         t = $(event.target)
@@ -109,14 +138,13 @@ class CodingCommon
       {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
         # JavaScriptファイル作成
         CodingCommon.addNewFile(event.target, CodingCommon.Lang.JAVASCRIPT, (data) ->
-
           ref = $('#tree').jstree(true)
           sel = ref.get_selected()
           if !sel.length
             return false
           sel = sel[0]
-          sel = ref.create_node(sel, {"type":"file", text: "#{CodingCommon.DEFAULT_FILENAME}.js"}, 'last', ->
-            # エディタ作成
+          sel = ref.create_node(sel, {"type" : "js_file", text: "#{CodingCommon.DEFAULT_FILENAME}.js"}, 'last', ->
+            CodingCommon.setupContextMenu()
           )
         , (data)->
         )
@@ -129,8 +157,8 @@ class CodingCommon
           if !sel.length
             return false
           sel = sel[0]
-          sel = ref.create_node(sel, {"type":"file", text: "#{CodingCommon.DEFAULT_FILENAME}.coffee"}, 'last', ->
-            # エディタ作成
+          sel = ref.create_node(sel, {"type":"coffee_file", text: "#{CodingCommon.DEFAULT_FILENAME}.coffee"}, 'last', ->
+            CodingCommon.setupContextMenu()
           )
         , (data)->
         )

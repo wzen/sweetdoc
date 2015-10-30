@@ -231,7 +231,7 @@ class Coding
     return ret
   end
 
-  def self._mk_tree_path_html(node, tree_state, code_state)
+  def self._mk_tree_path_html(node, tree_state, code_state, depth = 1)
     ret = ''
     node.each do |k, v|
       if k == 'tree_value'
@@ -240,7 +240,7 @@ class Coding
 
       user_coding_tree = node['tree_value']
       if v && !v.empty?
-        child = _mk_tree_path_html(v, tree_state, code_state)
+        child = _mk_tree_path_html(v, tree_state, code_state, depth + 1)
         # デフォルト開く状態
         opened = 'jstree-open'
         if tree_state &&
@@ -249,7 +249,8 @@ class Coding
             tree_state[user_coding_tree[Const::Coding::Key::NODE_PATH]][Const::Coding::Key::IS_OPENED] == 'false'
           opened = ''
         end
-        ret += "<li class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
+        type = depth == 1 ? 'root' : 'folder'
+        ret += "<li data-jstree='{\"type\": \"#{type}\"}' class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
       else
         input = ''
         user_coding_tree_val = ['user_coding_id']
