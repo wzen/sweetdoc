@@ -191,7 +191,9 @@ CodingCommon = (function() {
     var _countSameFilename, deleteNode, makeFile, makeFolder, menu;
     _countSameFilename = function(node, targetName) {
       var childrenText;
-      childrenText = $(node).find('.jstree-node > jstree-anchor').text();
+      childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(function() {
+        return $(this).text();
+      });
       childrenText = $.grep(childrenText, function(e) {
         return e.indexOf(targetName) >= 0;
       });
@@ -213,9 +215,7 @@ CodingCommon = (function() {
               }
               sel = sel[0];
               sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.js');
-              num = sameNameCount === 0 ? {
-                '': sameNameCount + 1
-              } : void 0;
+              num = sameNameCount === 0 ? '' : sameNameCount + 1;
               return sel = ref.create_node(sel, {
                 "type": "js_file",
                 text: (CodingCommon.DEFAULT_FILENAME + num) + ".js"
@@ -238,9 +238,7 @@ CodingCommon = (function() {
               }
               sel = sel[0];
               sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.coffee');
-              num = sameNameCount === 0 ? {
-                '': sameNameCount + 1
-              } : void 0;
+              num = sameNameCount === 0 ? '' : sameNameCount + 1;
               return sel = ref.create_node(sel, {
                 "type": "coffee_file",
                 text: (CodingCommon.DEFAULT_FILENAME + num) + ".coffee"
@@ -266,9 +264,7 @@ CodingCommon = (function() {
           }
           sel = sel[0];
           sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME);
-          num = sameNameCount === 0 ? {
-            '': sameNameCount + 1
-          } : void 0;
+          num = sameNameCount === 0 ? '' : sameNameCount + 1;
           return sel = ref.create_node(sel, {
             type: "folder",
             text: "" + (CodingCommon.DEFAULT_FILENAME + num)

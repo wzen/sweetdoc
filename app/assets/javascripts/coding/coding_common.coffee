@@ -135,7 +135,7 @@ class CodingCommon
   @getContextMenuArray = (type) ->
 
     _countSameFilename = (node, targetName)->
-      childrenText = $(node).find('.jstree-node > jstree-anchor').text()
+      childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(-> $(@).text())
       childrenText = $.grep(childrenText, (e) ->
         e.indexOf(targetName) >= 0
       )
@@ -151,7 +151,7 @@ class CodingCommon
             return false
           sel = sel[0]
           sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.js')
-          num = if sameNameCount == 0 then '' : sameNameCount + 1
+          num = if sameNameCount == 0 then '' else sameNameCount + 1
           sel = ref.create_node(sel, {"type" : "js_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.js"}, 'last', ->
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
@@ -170,7 +170,7 @@ class CodingCommon
             return false
           sel = sel[0]
           sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.coffee')
-          num = if sameNameCount == 0 then '' : sameNameCount + 1
+          num = if sameNameCount == 0 then '' else sameNameCount + 1
           sel = ref.create_node(sel, {"type":"coffee_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"}, 'last', ->
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
@@ -191,7 +191,7 @@ class CodingCommon
           return false
         sel = sel[0]
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
-        num = if sameNameCount == 0 then '' : sameNameCount + 1
+        num = if sameNameCount == 0 then '' else sameNameCount + 1
         sel = ref.create_node(sel, {type:"folder", text: "#{CodingCommon.DEFAULT_FILENAME + num}"}, 'last', ->
           # コンテキストメニュー再設定
           CodingCommon.setupContextMenu()
