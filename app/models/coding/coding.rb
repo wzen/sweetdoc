@@ -60,7 +60,7 @@ class Coding
     return I18n.t('message.database.item_state.save.success')
   end
 
-  def self.add_new_file(user_id, parent_node_path, lang_type)
+  def self.add_new_file(user_id, node_path, lang_type)
     begin
       user_coding_id = nil
       code = {}
@@ -82,12 +82,12 @@ class Coding
         save_ids = _save_code(user_id, [code])
         user_coding_id = save_ids.first
 
-        path_array = parent_node_path.split('/') << Const::Coding::DEFAULT_FILENAME
-        node_path = []
+        path_array = node_path.split('/')
+        np = []
         path_array.each_with_index do |path, idx|
           tree_data = {}
-          node_path.push(path)
-          tree_data[Const::Coding::Key::NODE_PATH] = node_path.join('/')
+          np.push(path)
+          tree_data[Const::Coding::Key::NODE_PATH] = np.join('/')
           if idx == path_array.length - 1
             tree_data[Const::Coding::Key::USER_CODING_ID] = user_coding_id
           else
@@ -229,7 +229,7 @@ class Coding
         if idx < node_path.length - 1
           obj = obj[n]
         else
-          obj['tree_value'] = user_coding_tree
+          obj[n]['tree_value'] = user_coding_tree
         end
       end
     end
@@ -243,8 +243,10 @@ class Coding
         next
       end
 
-      user_coding_tree = node['tree_value']
-      if v && !v.empty?
+      file_key = v.keys.select{|s| s != 'tree_value'}.first
+      value = v[file_key]
+      user_coding_tree = v['tree_value']
+      if value && !value.empty?
         child = _mk_tree_path_html(v, user_coding, tree_state, code_state, depth + 1)
         # デフォルト開く状態
         opened = 'jstree-open'
@@ -267,18 +269,15 @@ class Coding
           selected = ',"selected":"true"'
         end
         type = 'folder'
-        ext = ''
-        if code_state[user_coding_tree['user_coding_id']]
+        if user_coding_tree['user_coding_id']
           lang_type = user_coding.select{|uc| uc['id'].to_i == user_coding_tree['user_coding_id'].to_i}.first['lang_type']
           if lang_type == Const::Coding::Lang::JAVASCRIPT
             type = 'js_file'
-            ext = '.js'
           elsif lang_type == Const::Coding::Lang::COFFEESCRIPT
             type = 'coffee_file'
-            ext = '.coffee'
           end
         end
-        ret += "<li class='tip' data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}#{ext}#{input}</li>"
+        ret += "<li class='tip' data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}#{input}</li>"
       end
     end
     return ret

@@ -454,7 +454,7 @@ CodingCommon = (function() {
   };
 
   CodingCommon.addNewFile = function(parentNode, lang_type, successCallback, errorCallback) {
-    var data;
+    var data, ext;
     if (successCallback == null) {
       successCallback = null;
     }
@@ -463,7 +463,13 @@ CodingCommon = (function() {
     }
     data = {};
     data[this.Key.LANG] = lang_type;
-    data[this.Key.PARENT_NODE_PATH] = _parentNodePath(parentNode);
+    ext = '';
+    if (lang_type === this.Lang.JAVASCRIPT) {
+      ext = '.js';
+    } else if (lang_type === this.Lang.COFFEESCRIPT) {
+      ext = '.coffee';
+    }
+    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + this.DEFAULT_FILENAME + ext;
     return $.ajax({
       url: "/coding/add_new_file",
       type: "POST",
@@ -491,7 +497,7 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    data[this.Key.PARENT_NODE_PATH] = _parentNodePath(parentNode);
+    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + this.DEFAULT_FILENAME;
     return $.ajax({
       url: "/coding/add_new_folder",
       type: "POST",

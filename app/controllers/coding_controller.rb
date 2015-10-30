@@ -30,9 +30,9 @@ class CodingController < ApplicationController
 
   def add_new_file
     user_id = current_or_guest_user.id
-    parent_node_path = params.require(Const::Coding::Key::PARENT_NODE_PATH)
+    node_path = params.require(Const::Coding::Key::NODE_PATH)
     lang = params.require(Const::Coding::Key::LANG)
-    @message, @add_user_coding_id, @code = Coding.add_new_file(user_id, parent_node_path, lang)
+    @message, @add_user_coding_id, @code = Coding.add_new_file(user_id, node_path, lang)
   end
 
   def add_new_folder

@@ -325,7 +325,12 @@ class CodingCommon
   @addNewFile = (parentNode, lang_type, successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.LANG] = lang_type
-    data[@Key.PARENT_NODE_PATH] = _parentNodePath(parentNode)
+    ext = ''
+    if lang_type == @Lang.JAVASCRIPT
+      ext = '.js'
+    else if lang_type == @Lang.COFFEESCRIPT
+      ext = '.coffee'
+    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + @DEFAULT_FILENAME + ext
     $.ajax(
       {
         url: "/coding/add_new_file"
@@ -343,7 +348,7 @@ class CodingCommon
 
   @addNewFolder =(parentNode, successCallback = null, errorCallback = null) ->
     data = {}
-    data[@Key.PARENT_NODE_PATH] = _parentNodePath(parentNode)
+    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + @DEFAULT_FILENAME
     $.ajax(
       {
         url: "/coding/add_new_folder"
