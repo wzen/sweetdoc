@@ -117,7 +117,11 @@ Upload = (function() {
         contentType: false,
         type: 'POST',
         success: function(data) {
-          return window.location.href = "/gallery/detail/" + data.access_token;
+          if (data.resultSuccess) {
+            return window.location.href = "/gallery/detail/" + data.access_token;
+          } else {
+            return alert(data.message);
+          }
         },
         error: function(data) {
           return alert(data.message);

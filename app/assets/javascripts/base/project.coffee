@@ -142,8 +142,12 @@ class Project
         type: "GET"
         dataType: "json"
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback()
         error: (data)->
           if errorCallback?
             errorCallback()
@@ -165,10 +169,11 @@ class Project
         data: data
         dataType: "json"
         success: (data) ->
-          # PageValue設定
-          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
-          if callback?
-            callback(data)
+          if data.resultSuccess
+            # PageValue設定
+            PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
+            if callback?
+              callback(data)
         error: (data) ->
       }
     )

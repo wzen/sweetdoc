@@ -82,16 +82,22 @@ ServerStorage = (function() {
         data: data,
         dataType: "json",
         success: function(data) {
-          $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
-          Navbar.setLastUpdateTime(data.last_save_time);
-          PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time);
-          if (window.debug) {
-            console.log(data.message);
+          if (data.resultSuccess) {
+            $("#" + Navbar.NAVBAR_ROOT).find("." + ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG).remove();
+            Navbar.setLastUpdateTime(data.last_save_time);
+            PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time);
+            if (window.debug) {
+              console.log(data.message);
+            }
+            if (callback != null) {
+              callback();
+            }
+            return window.workingAutoSave = false;
+          } else {
+            if (window.debug) {
+              return console.log(data.message);
+            }
           }
-          if (callback != null) {
-            callback();
-          }
-          return window.workingAutoSave = false;
         },
         error: function(data) {
           if (window.debug) {
@@ -115,65 +121,71 @@ ServerStorage = (function() {
       },
       dataType: "json",
       success: function(data) {
-        return Common.setupJsByList(data.itemJsList, function() {
-          var d, k, ref, ref1, ref2, ref3, v;
-          WorktableCommon.removeAllItemOnWorkTable();
-          if (data.general_pagevalue_data != null) {
-            d = {};
-            ref = data.general_pagevalue_data;
-            for (k in ref) {
-              v = ref[k];
-              if (k.indexOf(PageValue.Key.P_PREFIX) >= 0) {
-                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
-              } else {
-                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+        if (data.resultSuccess) {
+          return Common.setupJsByList(data.itemJsList, function() {
+            var d, k, ref, ref1, ref2, ref3, v;
+            WorktableCommon.removeAllItemOnWorkTable();
+            if (data.general_pagevalue_data != null) {
+              d = {};
+              ref = data.general_pagevalue_data;
+              for (k in ref) {
+                v = ref[k];
+                if (k.indexOf(PageValue.Key.P_PREFIX) >= 0) {
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
+                } else {
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+                }
               }
             }
-          }
-          if (data.project_pagevalue_data != null) {
-            ref1 = data.project_pagevalue_data;
-            for (k in ref1) {
-              v = ref1[k];
-              PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+            if (data.project_pagevalue_data != null) {
+              ref1 = data.project_pagevalue_data;
+              for (k in ref1) {
+                v = ref1[k];
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
+              }
+              Common.setTitle(data.project_pagevalue_data.title);
             }
-            Common.setTitle(data.project_pagevalue_data.title);
-          }
-          if (data.instance_pagevalue_data != null) {
-            d = {};
-            ref2 = data.instance_pagevalue_data;
-            for (k in ref2) {
-              v = ref2[k];
-              d[k] = JSON.parse(v);
+            if (data.instance_pagevalue_data != null) {
+              d = {};
+              ref2 = data.instance_pagevalue_data;
+              for (k in ref2) {
+                v = ref2[k];
+                d[k] = JSON.parse(v);
+              }
+              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
             }
-            PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
-          }
-          if (data.event_pagevalue_data != null) {
-            d = {};
-            ref3 = data.event_pagevalue_data;
-            for (k in ref3) {
-              v = ref3[k];
-              d[k] = JSON.parse(v);
+            if (data.event_pagevalue_data != null) {
+              d = {};
+              ref3 = data.event_pagevalue_data;
+              for (k in ref3) {
+                v = ref3[k];
+                d[k] = JSON.parse(v);
+              }
+              PageValue.setEventPageValueByRootHash(d);
             }
-            PageValue.setEventPageValueByRootHash(d);
-          }
-          if (data.setting_pagevalue_data != null) {
-            d = data.setting_pagevalue_data;
-            PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d);
-          }
-          PageValue.adjustInstanceAndEventOnPage();
-          LocalStorage.saveAllPageValues();
-          return WorktableCommon.drawAllItemFromInstancePageValue(function() {
-            Timeline.refreshAllTimeline();
-            PageValue.updatePageCount();
-            PageValue.updateForkCount();
-            Paging.initPaging();
-            Common.applyEnvironmentFromPagevalue();
-            WorktableSetting.initConfig();
-            if (callback != null) {
-              return callback(data);
+            if (data.setting_pagevalue_data != null) {
+              d = data.setting_pagevalue_data;
+              PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d);
             }
+            PageValue.adjustInstanceAndEventOnPage();
+            LocalStorage.saveAllPageValues();
+            return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+              Timeline.refreshAllTimeline();
+              PageValue.updatePageCount();
+              PageValue.updateForkCount();
+              Paging.initPaging();
+              Common.applyEnvironmentFromPagevalue();
+              WorktableSetting.initConfig();
+              if (callback != null) {
+                return callback(data);
+              }
+            });
           });
-        });
+        } else {
+          if (window.debug) {
+            return console.log(data.message);
+          }
+        }
       },
       error: function(data) {
         if (window.debug) {
@@ -199,8 +211,14 @@ ServerStorage = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback();
+          }
         }
       },
       error: function(data) {

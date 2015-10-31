@@ -510,15 +510,16 @@ class Common
           }
           dataType: "json"
           success: (data)->
-            $('body').append(data.modalHtml)
-            emt = $('body').children(".modal-content.#{type}")
-            emt.hide()
-            if prepareShowFunc?
-              prepareShowFunc(emt, ->
+            if data.resultSuccess
+              $('body').append(data.modalHtml)
+              emt = $('body').children(".modal-content.#{type}")
+              emt.hide()
+              if prepareShowFunc?
+                prepareShowFunc(emt, ->
+                  _show.call(self)
+                )
+              else
                 _show.call(self)
-              )
-            else
-              _show.call(self)
           error: (data) ->
         }
       )
@@ -631,24 +632,25 @@ class Common
           itemIds: needReadItemIds
         }
         success: (data)->
-          callbackCount = 0
-          dataIdx = 0
+          if data.resultSuccess
+            callbackCount = 0
+            dataIdx = 0
 
-          _cb = (d) ->
-            if d.css_temp?
-              option = {css_temp: d.css_temp}
-            Common.availJs(d.item_id, d.js_src, option, =>
-              PageValue.addItemInfo(d.item_id)
-              if window.isWorkTable && EventConfig?
-                EventConfig.addEventConfigContents(d.item_id)
-              dataIdx += 1
-              if dataIdx >= data.length
-                if callback?
-                  callback()
-              else
-                _cb.call(@, data[dataIdx])
-            )
-          _cb.call(@, data[dataIdx])
+            _cb = (d) ->
+              if d.css_temp?
+                option = {css_temp: d.css_temp}
+              Common.availJs(d.item_id, d.js_src, option, =>
+                PageValue.addItemInfo(d.item_id)
+                if window.isWorkTable && EventConfig?
+                  EventConfig.addEventConfigContents(d.item_id)
+                dataIdx += 1
+                if dataIdx >= data.length
+                  if callback?
+                    callback()
+                else
+                  _cb.call(@, data[dataIdx])
+              )
+            _cb.call(@, data[dataIdx])
 
         error: (data) ->
       }

@@ -40,7 +40,7 @@ class MotionCheck
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     pagevalues = ret_sql.to_hash
     if pagevalues.count == 0
-      return nil
+      return true, nil
     else
       pagevalues.each do |pagevalue|
         gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = pagevalue['general_pagevalue_data']
@@ -55,7 +55,7 @@ class MotionCheck
     end
 
     item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-    return {
+    return true, {
         general_pagevalue: gen,
         instance_pagevalue: ins,
         event_pagevalue: ent

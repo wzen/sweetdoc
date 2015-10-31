@@ -124,11 +124,11 @@ class Gallery < ActiveRecord::Base
         # Tag レコード追加
         save_tag(tags, gallery_id)
 
-        return I18n.t('message.database.item_state.save.success'), g.access_token
+        return true, I18n.t('message.database.item_state.save.success'), g.access_token
       end
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error'), nil
+      return false, I18n.t('message.database.item_state.save.error'), nil
     end
   end
 
@@ -296,10 +296,10 @@ class Gallery < ActiveRecord::Base
         end
       end
 
-      return I18n.t('message.database.item_state.save.success')
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -438,7 +438,7 @@ class Gallery < ActiveRecord::Base
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     pagevalues = ret_sql.to_hash
     if pagevalues.count == 0
-      return nil
+      return true, nil
     else
       gen = {}
       ins = {}
@@ -455,7 +455,7 @@ class Gallery < ActiveRecord::Base
       end
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
 
-      return {
+      return true, {
           general_pagevalue: gen,
           instance_pagevalue: ins,
           event_pagevalue: ent

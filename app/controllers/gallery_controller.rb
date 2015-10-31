@@ -62,7 +62,7 @@ class GalleryController < ApplicationController
       show_guide = params[Const::Gallery::Key::SHOW_GUIDE]
       show_page_num = params[Const::Gallery::Key::SHOW_PAGE_NUM]
       show_chapter_num = params[Const::Gallery::Key::SHOW_CHAPTER_NUM]
-      @message, @access_token = Gallery.save_state(
+      @result_success, @message, @access_token = Gallery.save_state(
           user_id,
           project_id,
           tags,
@@ -82,7 +82,7 @@ class GalleryController < ApplicationController
     tags = params[Const::Gallery::Key::TAGS]
     i_page_values = params[Const::Gallery::Key::INSTANCE_PAGE_VALUE]
     e_page_values = params[Const::Gallery::Key::EVENT_PAGE_VALUE]
-    @message = Gallery.update_last_state(user_id, tags, i_page_values, e_page_values)
+    @result_success, @message = Gallery.update_last_state(user_id, tags, i_page_values, e_page_values)
   end
 
   def get_contents(show_head, show_limit, tag_id)
@@ -92,7 +92,7 @@ class GalleryController < ApplicationController
     tag_id = params[Const::Gallery::SearchKey::TAG_ID].to_i
     date = params[Const::Gallery::SearchKey::DATE]
     contents = Gallery.get_list_contents(search_type, show_head, show_limit, tag_id, date)
-    @contents = contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
+    @result_success, @contents = true, contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
   end
 
   def get_popular_and_recommend_tags

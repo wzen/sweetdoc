@@ -19,11 +19,11 @@ class RunController < ApplicationController
     end
     if Rails.application.routes.recognize_path(request.referer)[:controller] == "gallery"
       access_token = params[Const::Run::Key::ACCESS_TOKEN]
-      @pagevalues, @item_js_list = Gallery.paging(access_token, target_pages, loaded_itemids)
+      @result_success, @pagevalues, @item_js_list = Gallery.paging(access_token, target_pages, loaded_itemids)
     else
       user_id = current_or_guest_user.id
       project_id = params[Const::Run::Key::PROJECT_ID]
-      @pagevalues, @item_js_list = MotionCheck.paging(user_id, project_id, target_pages, loaded_itemids)
+      @result_success, @pagevalues, @item_js_list = MotionCheck.paging(user_id, project_id, target_pages, loaded_itemids)
     end
   end
 

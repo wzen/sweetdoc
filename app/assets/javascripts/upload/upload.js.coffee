@@ -110,8 +110,11 @@ class Upload
         contentType: false
         type: 'POST'
         success: (data) ->
-          # Gallery Detail
-          window.location.href = "/gallery/detail/#{data.access_token}"
+          if data.resultSuccess
+            # Gallery Detail
+            window.location.href = "/gallery/detail/#{data.access_token}"
+          else
+            alert(data.message)
         error: (data) ->
           # Error
           alert(data.message)

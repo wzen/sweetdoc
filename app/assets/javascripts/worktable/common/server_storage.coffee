@@ -58,16 +58,20 @@ class ServerStorage
           data: data
           dataType: "json"
           success: (data)->
-            # 「Load」マウスオーバーで取得させるためupdateフラグを消去
-            $("##{Navbar.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
-            # 最終保存時刻更新
-            Navbar.setLastUpdateTime(data.last_save_time)
-            PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time)
-            if window.debug
-              console.log(data.message)
-            if callback?
-              callback()
-            window.workingAutoSave = false
+            if data.resultSuccess
+              # 「Load」マウスオーバーで取得させるためupdateフラグを消去
+              $("##{Navbar.NAVBAR_ROOT}").find(".#{ServerStorage.ElementAttribute.LOAD_LIST_UPDATED_FLG}").remove()
+              # 最終保存時刻更新
+              Navbar.setLastUpdateTime(data.last_save_time)
+              PageValue.setGeneralPageValue(PageValue.Key.LAST_SAVE_TIME, data.last_save_time)
+              if window.debug
+                console.log(data.message)
+              if callback?
+                callback()
+              window.workingAutoSave = false
+            else
+              if window.debug
+                console.log(data.message)
           error: (data) ->
             if window.debug
               console.log(data.message)
@@ -87,49 +91,54 @@ class ServerStorage
         }
         dataType: "json"
         success: (data)->
-          # JSを適用
-          Common.setupJsByList(data.itemJsList, ->
-            WorktableCommon.removeAllItemOnWorkTable()
+          if data.resultSuccess
+            # JSを適用
+            Common.setupJsByList(data.itemJsList, ->
+              WorktableCommon.removeAllItemOnWorkTable()
 
-            # Pagevalue設置
-            if data.general_pagevalue_data?
-              d = {}
-              for k, v of data.general_pagevalue_data
-                if k.indexOf(PageValue.Key.P_PREFIX) >= 0
-                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
-                else
+              # Pagevalue設置
+              if data.general_pagevalue_data?
+                d = {}
+                for k, v of data.general_pagevalue_data
+                  if k.indexOf(PageValue.Key.P_PREFIX) >= 0
+                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+                  else
+                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+              if data.project_pagevalue_data?
+                for k, v of data.project_pagevalue_data
                   PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
-            if data.project_pagevalue_data?
-              for k, v of data.project_pagevalue_data
-                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
-              Common.setTitle(data.project_pagevalue_data.title)
-            if data.instance_pagevalue_data?
-              d = {}
-              for k, v of data.instance_pagevalue_data
-                d[k] = JSON.parse(v)
-              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
-            if data.event_pagevalue_data?
-              d = {}
-              for k, v of data.event_pagevalue_data
-                d[k] = JSON.parse(v)
-              PageValue.setEventPageValueByRootHash(d)
-            if data.setting_pagevalue_data?
-              d = data.setting_pagevalue_data
-              PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d)
+                Common.setTitle(data.project_pagevalue_data.title)
+              if data.instance_pagevalue_data?
+                d = {}
+                for k, v of data.instance_pagevalue_data
+                  d[k] = JSON.parse(v)
+                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
+              if data.event_pagevalue_data?
+                d = {}
+                for k, v of data.event_pagevalue_data
+                  d[k] = JSON.parse(v)
+                PageValue.setEventPageValueByRootHash(d)
+              if data.setting_pagevalue_data?
+                d = data.setting_pagevalue_data
+                PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d)
 
-            PageValue.adjustInstanceAndEventOnPage()
-            LocalStorage.saveAllPageValues()
-            WorktableCommon.drawAllItemFromInstancePageValue( ->
-              Timeline.refreshAllTimeline()
-              PageValue.updatePageCount()
-              PageValue.updateForkCount()
-              Paging.initPaging()
-              Common.applyEnvironmentFromPagevalue()
-              WorktableSetting.initConfig()
-              if callback?
-                callback(data)
+              PageValue.adjustInstanceAndEventOnPage()
+              LocalStorage.saveAllPageValues()
+              WorktableCommon.drawAllItemFromInstancePageValue( ->
+                Timeline.refreshAllTimeline()
+                PageValue.updatePageCount()
+                PageValue.updateForkCount()
+                Paging.initPaging()
+                Common.applyEnvironmentFromPagevalue()
+                WorktableSetting.initConfig()
+                if callback?
+                  callback(data)
+              )
             )
-          )
+
+          else
+            if window.debug
+              console.log(data.message)
 
         error: (data) ->
           if window.debug
@@ -147,8 +156,12 @@ class ServerStorage
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback()
         error: (data)->
           if errorCallback?
             errorCallback()

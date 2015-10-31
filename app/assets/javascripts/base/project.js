@@ -154,8 +154,14 @@ Project = (function() {
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback();
+          }
         }
       },
       error: function(data) {
@@ -183,9 +189,11 @@ Project = (function() {
       data: data,
       dataType: "json",
       success: function(data) {
-        PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id);
-        if (callback != null) {
-          return callback(data);
+        if (data.resultSuccess) {
+          PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id);
+          if (callback != null) {
+            return callback(data);
+          }
         }
       },
       error: function(data) {}
