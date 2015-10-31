@@ -158,8 +158,8 @@ class CodingCommon
           sel = ref.create_node(sel, {"type" : "js_file", text: filename}, 'last', ->
             # フォルダオープン
             ref.open_node(sel)
-            # コンテキストメニュー再設定
-            CodingCommon.setupContextMenu()
+            # イベント再設定
+            CodingCommon.setupTreeEvent()
             # 状態保存
             CodingCommon.saveEditorState(true)
           )
@@ -180,8 +180,8 @@ class CodingCommon
           sel = ref.create_node(sel, {"type":"coffee_file", text: filename}, 'last', ->
             # フォルダオープン
             ref.open_node(sel)
-            # コンテキストメニュー再設定
-            CodingCommon.setupContextMenu()
+            # イベント再設定
+            CodingCommon.setupTreeEvent()
             # 状態保存
             CodingCommon.saveEditorState(true)
           )
@@ -204,8 +204,8 @@ class CodingCommon
         sel = ref.create_node(sel, {type:"folder", text: folderName}, 'last', ->
           # フォルダオープン
           ref.open_node(sel)
-          # コンテキストメニュー再設定
-          CodingCommon.setupContextMenu()
+          # イベント再設定
+          CodingCommon.setupTreeEvent()
           # 状態保存
           CodingCommon.saveEditorState(true)
         )

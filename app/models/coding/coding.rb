@@ -78,8 +78,7 @@ class Coding
           end
         end
         _back_all_codes(user_id)
-        save_ids = _save_code(user_id, [code])
-        user_coding_id = save_ids.first
+        user_coding_id = _add_code(user_id, code)
 
         path_array = node_path.split('/')
         np = []
@@ -155,11 +154,11 @@ class Coding
         else
           uc = UserCoding.where(user_id: user_id, del_flg: false)
         end
-        return uc
+        return true, uc
       end
     rescue => e
       # 失敗
-      return []
+      return true, []
     end
   end
 
@@ -282,6 +281,18 @@ class Coding
     return ret
   end
 
+  def self._add_code(user_id, c)
+    lang_type = c[Const::Coding::Key::LANG]
+    code = c[Const::Coding::Key::CODE]
+    uc = UserCoding.new({
+                            user_id: user_id,
+                            lang_type: lang_type,
+                            code: code
+                        })
+    uc.save!
+    return uc.id
+  end
+
   def self._save_code(user_id, codes)
     ret = []
     codes.each do |c|
@@ -364,6 +375,6 @@ class Coding
     return r ? r : {}
   end
 
-  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_save_code, :_replace_all_tree
+  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_save_code, :_replace_all_tree
 
 end

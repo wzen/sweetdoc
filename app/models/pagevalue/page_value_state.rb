@@ -83,17 +83,17 @@ class PageValueState
         end
       end
 
-      return I18n.t('message.database.item_state.save.success'), last_save_time
+      return true, I18n.t('message.database.item_state.save.success'), last_save_time
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error'), nil
+      return false, I18n.t('message.database.item_state.save.error'), nil
     end
   end
 
   def self.user_pagevalue_last_updated_list(user_id)
     sql = last_user_pagevalue_search_sql(user_id)
     ret = ActiveRecord::Base.connection.select_all(sql).to_hash
-    return ret
+    return true, ret
   end
 
   def self.user_pagevalue_list_sorted_update(user_id, project_id)
@@ -110,7 +110,7 @@ class PageValueState
       ORDER BY up.updated_at DESC
     SQL
     ret = ActiveRecord::Base.connection.select_all(sql).to_hash
-    return ret
+    return true, ret
   end
 
   # ユーザの保存データを読み込む
@@ -197,7 +197,7 @@ class PageValueState
       end
 
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-      return item_js_list, ppd, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
+      return true, item_js_list, ppd, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
     end
   end
 

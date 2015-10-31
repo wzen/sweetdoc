@@ -20,12 +20,12 @@ class Project < ActiveRecord::Base
           upm.save!
           up = UserPagevalue.new({user_project_map_id: upm.id})
           up.save!
-          return I18n.t('message.database.item_state.save.success'), p.id, up.updated_at
+          return true, I18n.t('message.database.item_state.save.success'), p.id, up.updated_at
         end
       end
     rescue => e
       # 更新失敗
-      return I18n.t('message.database.item_state.save.error'), nil, nil
+      return false, I18n.t('message.database.item_state.save.error'), nil, nil
     end
   end
 

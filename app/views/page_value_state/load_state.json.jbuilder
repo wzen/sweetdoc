@@ -1,3 +1,4 @@
+json.resultSuccess @result_success
 json.message @message
 json.updated_at @updated_at
 json.project_pagevalue_data @project_pagevalue_data

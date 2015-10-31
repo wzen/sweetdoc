@@ -228,7 +228,7 @@ CodingCommon = (function() {
                 text: filename
               }, 'last', function() {
                 ref.open_node(sel);
-                CodingCommon.setupContextMenu();
+                CodingCommon.setupTreeEvent();
                 return CodingCommon.saveEditorState(true);
               });
             }, function(data) {});
@@ -253,7 +253,7 @@ CodingCommon = (function() {
                 text: filename
               }, 'last', function() {
                 ref.open_node(sel);
-                CodingCommon.setupContextMenu();
+                CodingCommon.setupTreeEvent();
                 return CodingCommon.saveEditorState(true);
               });
             }, function(data) {});
@@ -281,7 +281,7 @@ CodingCommon = (function() {
             text: folderName
           }, 'last', function() {
             ref.open_node(sel);
-            CodingCommon.setupContextMenu();
+            CodingCommon.setupTreeEvent();
             return CodingCommon.saveEditorState(true);
           });
         }, function(data) {});
