@@ -228,7 +228,8 @@ CodingCommon = (function() {
                 text: filename
               }, 'last', function() {
                 ref.open_node(sel);
-                return CodingCommon.setupContextMenu();
+                CodingCommon.setupContextMenu();
+                return CodingCommon.saveEditorState(true);
               });
             }, function(data) {});
           }
@@ -252,7 +253,8 @@ CodingCommon = (function() {
                 text: filename
               }, 'last', function() {
                 ref.open_node(sel);
-                return CodingCommon.setupContextMenu();
+                CodingCommon.setupContextMenu();
+                return CodingCommon.saveEditorState(true);
               });
             }, function(data) {});
           }
@@ -279,7 +281,8 @@ CodingCommon = (function() {
             text: folderName
           }, 'last', function() {
             ref.open_node(sel);
-            return CodingCommon.setupContextMenu();
+            CodingCommon.setupContextMenu();
+            return CodingCommon.saveEditorState(true);
           });
         }, function(data) {});
       }
@@ -297,7 +300,9 @@ CodingCommon = (function() {
               return false;
             }
             sel = sel[0];
-            return ref.delete_node(sel);
+            ref.delete_node(sel);
+            CodingCommon.setupContextMenu();
+            return CodingCommon.saveEditorState(true);
           });
         }
       }
@@ -624,12 +629,15 @@ CodingCommon = (function() {
     return this.saveEditorState();
   };
 
-  CodingCommon.saveEditorState = function() {
+  CodingCommon.saveEditorState = function(immediate) {
     var idleSeconds, saveEditorStateTimer;
+    if (immediate == null) {
+      immediate = false;
+    }
     if ((window.saveEditorStateNowSaving != null) && window.saveEditorStateNowSaving) {
       return;
     }
-    idleSeconds = 5;
+    idleSeconds = immediate ? 0 : 5;
     if (typeof saveEditorStateTimer !== "undefined" && saveEditorStateTimer !== null) {
       clearTimeout(saveEditorStateTimer);
     }

@@ -160,6 +160,8 @@ class CodingCommon
             ref.open_node(sel)
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
+            # 状態保存
+            CodingCommon.saveEditorState(true)
           )
         , (data)->
         )
@@ -180,6 +182,8 @@ class CodingCommon
             ref.open_node(sel)
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
+            # 状態保存
+            CodingCommon.saveEditorState(true)
           )
         , (data)->
         )
@@ -202,6 +206,8 @@ class CodingCommon
           ref.open_node(sel)
           # コンテキストメニュー再設定
           CodingCommon.setupContextMenu()
+          # 状態保存
+          CodingCommon.saveEditorState(true)
         )
       , (data) ->
       )
@@ -217,7 +223,12 @@ class CodingCommon
           if !sel.length
             return false
           sel = sel[0]
+          # ノード削除
           ref.delete_node(sel)
+          # コンテキストメニュー再設定
+          CodingCommon.setupContextMenu()
+          # 状態保存
+          CodingCommon.saveEditorState(true)
         )
     }
 
@@ -446,11 +457,11 @@ class CodingCommon
 
     @saveEditorState()
 
-  @saveEditorState = ->
+  @saveEditorState = (immediate = false) ->
     if window.saveEditorStateNowSaving? && window.saveEditorStateNowSaving
       return
 
-    idleSeconds = 5
+    idleSeconds = if immediate then 0 else 5
     if saveEditorStateTimer?
       clearTimeout(saveEditorStateTimer)
     saveEditorStateTimer = setTimeout( ->
