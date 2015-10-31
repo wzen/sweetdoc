@@ -12,6 +12,8 @@
 //= require ../../../../vendor/assets/contextmenu/jquery.ui-contextmenu.js
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require ../../../../vendor/assets/ace/ace
+//= require ../../../../vendor/assets/ace/mode-javascript
+//= require ../../../../vendor/assets/ace/mode-coffee
 //= require ../../../../vendor/assets/ace/ext-language_tools
 //= require ../../../../vendor/assets/jstree/jstree
 //= require_directory ./../i18n

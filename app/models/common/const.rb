@@ -344,7 +344,7 @@ class Const
   class Coding
     DEFAULT_FILENAME = 'untitled'
     class Key
-      LANG = 'lang'
+      LANG = 'lang_type'
       PUBLIC = 'public'
       CODE = 'code'
       CODES = 'codes'

@@ -89,12 +89,8 @@ CodingCommon = (function() {
     $('.editor').each(function(e) {
       var editorId, lang_type;
       editorId = $(this).attr('id');
-      lang_type = $(this).attr('class').split(' ').filter(function(item, idx) {
-        return item !== 'editor';
-      });
-      if (lang_type.length > 0) {
-        return CodingCommon.setupEditor(editorId, lang_type[0]);
-      }
+      lang_type = $(this).next("." + CodingCommon.Key.LANG).val();
+      return CodingCommon.setupEditor(editorId, lang_type);
     });
     return $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
       return CodingCommon.saveEditorState();
@@ -108,7 +104,7 @@ CodingCommon = (function() {
     if (lang_type === this.Lang.JAVASCRIPT) {
       editor.getSession().setMode("ace/mode/javascript");
     } else {
-      editor.getSession().setMode("ace/mode/coffeescript");
+      editor.getSession().setMode("ace/mode/coffee");
     }
     editor.setTheme("ace/theme/tomorrow");
     return editor.setOptions({

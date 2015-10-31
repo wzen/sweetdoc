@@ -59,9 +59,8 @@ class CodingCommon
   @initEditor = ->
     $('.editor').each( (e) ->
       editorId = $(@).attr('id')
-      lang_type = $(@).attr('class').split(' ').filter((item, idx) -> item != 'editor')
-      if lang_type.length > 0
-        CodingCommon.setupEditor(editorId, lang_type[0])
+      lang_type = $(@).next(".#{CodingCommon.Key.LANG}").val()
+      CodingCommon.setupEditor(editorId, lang_type)
     )
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', (e) ->
@@ -75,7 +74,7 @@ class CodingCommon
     if lang_type == @Lang.JAVASCRIPT
       editor.getSession().setMode("ace/mode/javascript")
     else
-      editor.getSession().setMode("ace/mode/coffeescript")
+      editor.getSession().setMode("ace/mode/coffee")
     editor.setTheme("ace/theme/tomorrow")
     # enable autocompletion and snippets
     editor.setOptions({

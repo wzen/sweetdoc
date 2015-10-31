@@ -175,11 +175,27 @@ class Coding
   def self.load_opened_code(user_id)
     begin
       ActiveRecord::Base.transaction do
-        uc = UserCoding.where(user_id: user_id, del_flg: false)
+        sql =<<-"SQL"
+          SELECT uc.code as code, uct.node_path as node_path, uc.lang_type as lang_type, uc.id as id
+          FROM user_codings uc
+          RIGHT JOIN user_coding_trees uct ON uc.user_id = uct.user_id
+          AND uc.id = uct.user_coding_id
+          AND uct.del_flg = 0
+          AND uc.del_flg = 0
+          WHERE uc.user_id = #{user_id}
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        uc = ret_sql.to_hash
         code_state = get_code_state(user_id)
-        return uc.select do |s|
-          code_state[s['id']] && code_state[s['id']][Const::Coding::Key::IS_OPENED]
+        uc = uc.select do |s|
+          code_state[s['id'].to_s] && code_state[s['id'].to_s][Const::Coding::Key::IS_OPENED]
         end
+        ret = uc.map do |m|
+          nodes = m['node_path'].split('/')
+          m['name'] = nodes[nodes.length - 1]
+          m
+        end
+        return ret
       end
     rescue => e
       # 失敗
@@ -322,10 +338,15 @@ class Coding
 
   def self._back_all_codes(user_id)
     # 全てのコードを背面にする
-    # FIXME: memcachedにする
-    uc = UserCoding.where(user_id)
     code_state = get_code_state(user_id)
-    uc.each{|u| }
+    code_state.each do |k, v|
+      if code_state[k].nil?
+        code_state[k] = {}
+      end
+      code_state[k][Const::Coding::Key::IS_OPENED] = false
+      code_state[k][Const::Coding::Key::IS_ACTIVE] = false
+    end
+    Rails.cache.write(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id.to_s), code_state, expires_in: 1.month)
   end
 
   def self._replace_all_tree(user_id, tree_data)
