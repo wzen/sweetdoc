@@ -231,7 +231,7 @@ CodingCommon = (function() {
                 CodingCommon.setupTreeEvent();
                 return CodingCommon.saveEditorState(true);
               });
-            }, function(data) {});
+            });
           }
         }, {
           title: I18n.t('context_menu.coffee'),
@@ -256,7 +256,7 @@ CodingCommon = (function() {
                 CodingCommon.setupTreeEvent();
                 return CodingCommon.saveEditorState(true);
               });
-            }, function(data) {});
+            });
           }
         }
       ]
@@ -284,7 +284,7 @@ CodingCommon = (function() {
             CodingCommon.setupTreeEvent();
             return CodingCommon.saveEditorState(true);
           });
-        }, function(data) {});
+        });
       }
     };
     deleteNode = {
@@ -629,10 +629,11 @@ CodingCommon = (function() {
     editorWrapper = $("#" + editorWrapperId);
     if ((editorWrapper == null) || editorWrapper.length === 0) {
       CodingCommon.loadCodeData(user_coding_id, function(data) {
-        var code, lang_type, loaded, title;
+        var code, lang_type, loaded, nodes, title;
         loaded = data.load_data[0];
         code = loaded.code;
-        title = loaded.name;
+        nodes = loaded.node_path.split('/');
+        title = nodes[nodes.length - 1];
         lang_type = loaded.lang_type;
         tab.append("<li class='tab_li active'><a class='tab_button' href='uc_" + user_coding_id + "_wrapper' data-toggle='tab'>" + title + "</a><a class='close_tab_button'></a></li>");
         tab_content.append("<div class='editor_wrapper " + lang_type + "'><div class='tab-pane fade in active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'></div></div></div>");

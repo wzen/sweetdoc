@@ -149,12 +149,22 @@ class Coding
   def self.load_code(user_id, user_coding_id = nil)
     begin
       ActiveRecord::Base.transaction do
+        u_sql = ''
         if user_coding_id
-          uc = UserCoding.where(id: user_coding_id, user_id: user_id, del_flg: false)
-        else
-          uc = UserCoding.where(user_id: user_id, del_flg: false)
+          u_sql = "AND uc.id = #{user_coding_id}"
         end
-        return true, uc
+        sql =<<-"SQL"
+          SELECT uc.code as code, uct.node_path as node_path, uc.lang_type as lang_type
+          FROM user_codings uc
+          RIGHT JOIN user_coding_trees uct ON uc.user_id = uct.user_id
+          AND uc.id = uct.user_coding_id
+          AND uct.del_flg = 0
+          AND uc.del_flg = 0
+          WHERE uc.user_id = #{user_id} #{u_sql}
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        ret = ret_sql.to_hash
+        return true, ret
       end
     rescue => e
       # 失敗

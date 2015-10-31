@@ -163,7 +163,6 @@ class CodingCommon
             # 状態保存
             CodingCommon.saveEditorState(true)
           )
-        , (data)->
         )
       }
       {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
@@ -185,7 +184,6 @@ class CodingCommon
             # 状態保存
             CodingCommon.saveEditorState(true)
           )
-        , (data)->
         )
       }
     ]}
@@ -209,7 +207,6 @@ class CodingCommon
           # 状態保存
           CodingCommon.saveEditorState(true)
         )
-      , (data) ->
       )
     }
 
@@ -458,7 +455,8 @@ class CodingCommon
       CodingCommon.loadCodeData(user_coding_id, (data) ->
         loaded = data.load_data[0]
         code = loaded.code
-        title = loaded.name
+        nodes = loaded.node_path.split('/')
+        title = nodes[nodes.length - 1]
         lang_type = loaded.lang_type
 
         tab.append("<li class='tab_li active'><a class='tab_button' href='uc_#{user_coding_id}_wrapper' data-toggle='tab'>#{title}</a><a class='close_tab_button'></a></li>")
