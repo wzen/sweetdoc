@@ -227,8 +227,8 @@ CodingCommon = (function() {
                 "type": "js_file",
                 text: filename
               }, 'last', function() {
-                CodingCommon.setupContextMenu();
-                return ref.open_node(sel);
+                ref.open_node(sel);
+                return CodingCommon.setupContextMenu();
               });
             }, function(data) {});
           }
@@ -251,8 +251,8 @@ CodingCommon = (function() {
                 "type": "coffee_file",
                 text: filename
               }, 'last', function() {
-                CodingCommon.setupContextMenu();
-                return ref.open_node(sel);
+                ref.open_node(sel);
+                return CodingCommon.setupContextMenu();
               });
             }, function(data) {});
           }
@@ -278,8 +278,8 @@ CodingCommon = (function() {
             type: "folder",
             text: folderName
           }, 'last', function() {
-            CodingCommon.setupContextMenu();
-            return ref.open_node(sel);
+            ref.open_node(sel);
+            return CodingCommon.setupContextMenu();
           });
         }, function(data) {});
       }

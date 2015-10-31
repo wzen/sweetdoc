@@ -156,10 +156,10 @@ class CodingCommon
         filename = "#{CodingCommon.DEFAULT_FILENAME + num}.js"
         CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT, (data) ->
           sel = ref.create_node(sel, {"type" : "js_file", text: filename}, 'last', ->
-            # コンテキストメニュー再設定
-            CodingCommon.setupContextMenu()
             # フォルダオープン
             ref.open_node(sel)
+            # コンテキストメニュー再設定
+            CodingCommon.setupContextMenu()
           )
         , (data)->
         )
@@ -176,10 +176,10 @@ class CodingCommon
         filename = "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"
         CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT, (data) ->
           sel = ref.create_node(sel, {"type":"coffee_file", text: filename}, 'last', ->
-            # コンテキストメニュー再設定
-            CodingCommon.setupContextMenu()
             # フォルダオープン
             ref.open_node(sel)
+            # コンテキストメニュー再設定
+            CodingCommon.setupContextMenu()
           )
         , (data)->
         )
@@ -198,10 +198,10 @@ class CodingCommon
       folderName = CodingCommon.DEFAULT_FILENAME + num
       CodingCommon.addNewFolder(event.target, folderName, (data) ->
         sel = ref.create_node(sel, {type:"folder", text: folderName}, 'last', ->
-          # コンテキストメニュー再設定
-          CodingCommon.setupContextMenu()
           # フォルダオープン
           ref.open_node(sel)
+          # コンテキストメニュー再設定
+          CodingCommon.setupContextMenu()
         )
       , (data) ->
       )
