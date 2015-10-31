@@ -37,8 +37,8 @@ class CodingController < ApplicationController
 
   def add_new_folder
     user_id = current_or_guest_user.id
-    parent_node_path = params.require(Const::Coding::Key::PARENT_NODE_PATH)
-    @message = Coding.add_new_folder(user_id, parent_node_path)
+    node_path = params.require(Const::Coding::Key::NODE_PATH)
+    @message = Coding.add_new_folder(user_id, node_path)
   end
 
   def delete_node

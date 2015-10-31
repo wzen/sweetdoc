@@ -134,24 +134,27 @@ class CodingCommon
 
   @getContextMenuArray = (type) ->
 
-    _countSameFilename = (node, targetName)->
+    _countSameFilename = (node, name, ext = '')->
       childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(-> $(@).text())
-      childrenText = $.grep(childrenText, (e) ->
-        e.indexOf(targetName) >= 0
-      )
-      return childrenText.length
+      count = 0
+      while count < 100
+        num = if count <= 1 then '' else count
+        if $.inArray("#{name}#{num}#{ext}", childrenText) == false
+          break
+        count += 1
+      return count
 
     makeFile = {title: I18n.t('context_menu.new_file'), children: [
       {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
+        ref = $('#tree').jstree(true)
+        sel = ref.get_selected()
+        if !sel.length
+          return false
+        sel = sel[0]
+        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js')
+        num = if sameNameCount == 0 then '' else sameNameCount + 1
         # JavaScriptファイル作成
-        CodingCommon.addNewFile(event.target, CodingCommon.Lang.JAVASCRIPT, (data) ->
-          ref = $('#tree').jstree(true)
-          sel = ref.get_selected()
-          if !sel.length
-            return false
-          sel = sel[0]
-          sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.js')
-          num = if sameNameCount == 0 then '' else sameNameCount + 1
+        CodingCommon.addNewFile(event.target, "#{CodingCommon.DEFAULT_FILENAME + num}.js", CodingCommon.Lang.JAVASCRIPT, (data) ->
           sel = ref.create_node(sel, {"type" : "js_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.js"}, 'last', ->
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
@@ -162,15 +165,15 @@ class CodingCommon
         )
       }
       {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
+        ref = $('#tree').jstree(true)
+        sel = ref.get_selected()
+        if !sel.length
+          return false
+        sel = sel[0]
+        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee')
+        num = if sameNameCount == 0 then '' else sameNameCount + 1
         # CoffeeScriptファイル作成
-        CodingCommon.addNewFile(event.target, CodingCommon.Lang.COFFEESCRIPT, (data) ->
-          ref = $('#tree').jstree(true)
-          sel = ref.get_selected()
-          if !sel.length
-            return false
-          sel = sel[0]
-          sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.coffee')
-          num = if sameNameCount == 0 then '' else sameNameCount + 1
+        CodingCommon.addNewFile(event.target, "#{CodingCommon.DEFAULT_FILENAME + num}.coffee", CodingCommon.Lang.COFFEESCRIPT, (data) ->
           sel = ref.create_node(sel, {"type":"coffee_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"}, 'last', ->
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
@@ -183,15 +186,15 @@ class CodingCommon
     ]}
 
     makeFolder = {title: I18n.t('context_menu.new_folder'), cmd: "new_folder", func: (event, ui) ->
-      CodingCommon.addNewFolder(event.target, (data) ->
-        # フォルダ作成
-        ref = $('#tree').jstree(true)
-        sel = ref.get_selected()
-        if !sel.length
-          return false
-        sel = sel[0]
-        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
-        num = if sameNameCount == 0 then '' else sameNameCount + 1
+      ref = $('#tree').jstree(true)
+      sel = ref.get_selected()
+      if !sel.length
+        return false
+      sel = sel[0]
+      sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
+      num = if sameNameCount == 0 then '' else sameNameCount + 1
+      # フォルダ作成
+      CodingCommon.addNewFolder(event.target, "#{CodingCommon.DEFAULT_FILENAME + num}", (data) ->
         sel = ref.create_node(sel, {type:"folder", text: "#{CodingCommon.DEFAULT_FILENAME + num}"}, 'last', ->
           # コンテキストメニュー再設定
           CodingCommon.setupContextMenu()
@@ -322,15 +325,10 @@ class CodingCommon
       }
     )
 
-  @addNewFile = (parentNode, lang_type, successCallback = null, errorCallback = null) ->
+  @addNewFile = (parentNode, name, lang_type, successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.LANG] = lang_type
-    ext = ''
-    if lang_type == @Lang.JAVASCRIPT
-      ext = '.js'
-    else if lang_type == @Lang.COFFEESCRIPT
-      ext = '.coffee'
-    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + @DEFAULT_FILENAME + ext
+    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name
     $.ajax(
       {
         url: "/coding/add_new_file"
@@ -346,9 +344,9 @@ class CodingCommon
       }
     )
 
-  @addNewFolder =(parentNode, successCallback = null, errorCallback = null) ->
+  @addNewFolder =(parentNode, name, successCallback = null, errorCallback = null) ->
     data = {}
-    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + @DEFAULT_FILENAME
+    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name
     $.ajax(
       {
         url: "/coding/add_new_folder"

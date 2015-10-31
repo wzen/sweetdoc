@@ -103,11 +103,11 @@ class Coding
     end
   end
 
-  def self.add_new_folder(user_id, parent_node_path)
+  def self.add_new_folder(user_id, node_path)
     begin
       ActiveRecord::Base.transaction do
         tree_data = {}
-        tree_data[Const::Coding::Key::NODE_PATH] = parent_node_path + "/#{Const::Coding::DEFAULT_FILENAME}"
+        tree_data[Const::Coding::Key::NODE_PATH] = node_path
         tree_data[Const::Coding::Key::USER_CODING_ID] = nil
         _save_tree(user_id, tree_data)
       end

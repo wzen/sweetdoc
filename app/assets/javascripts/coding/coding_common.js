@@ -189,15 +189,23 @@ CodingCommon = (function() {
 
   CodingCommon.getContextMenuArray = function(type) {
     var _countSameFilename, deleteNode, makeFile, makeFolder, menu;
-    _countSameFilename = function(node, targetName) {
-      var childrenText;
+    _countSameFilename = function(node, name, ext) {
+      var childrenText, count, num;
+      if (ext == null) {
+        ext = '';
+      }
       childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(function() {
         return $(this).text();
       });
-      childrenText = $.grep(childrenText, function(e) {
-        return e.indexOf(targetName) >= 0;
-      });
-      return childrenText.length;
+      count = 0;
+      while (count < 100) {
+        num = count <= 1 ? '' : count;
+        if ($.inArray("" + name + num + ext, childrenText) === false) {
+          break;
+        }
+        count += 1;
+      }
+      return count;
     };
     makeFile = {
       title: I18n.t('context_menu.new_file'),
@@ -206,16 +214,16 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.js'),
           cmd: "js",
           func: function(event, ui) {
-            return CodingCommon.addNewFile(event.target, CodingCommon.Lang.JAVASCRIPT, function(data) {
-              var num, ref, sameNameCount, sel;
-              ref = $('#tree').jstree(true);
-              sel = ref.get_selected();
-              if (!sel.length) {
-                return false;
-              }
-              sel = sel[0];
-              sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.js');
-              num = sameNameCount === 0 ? '' : sameNameCount + 1;
+            var num, ref, sameNameCount, sel;
+            ref = $('#tree').jstree(true);
+            sel = ref.get_selected();
+            if (!sel.length) {
+              return false;
+            }
+            sel = sel[0];
+            sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js');
+            num = sameNameCount === 0 ? '' : sameNameCount + 1;
+            return CodingCommon.addNewFile(event.target, (CodingCommon.DEFAULT_FILENAME + num) + ".js", CodingCommon.Lang.JAVASCRIPT, function(data) {
               return sel = ref.create_node(sel, {
                 "type": "js_file",
                 text: (CodingCommon.DEFAULT_FILENAME + num) + ".js"
@@ -229,16 +237,16 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.coffee'),
           cmd: "coffee",
           func: function(event, ui) {
-            return CodingCommon.addNewFile(event.target, CodingCommon.Lang.COFFEESCRIPT, function(data) {
-              var num, ref, sameNameCount, sel;
-              ref = $('#tree').jstree(true);
-              sel = ref.get_selected();
-              if (!sel.length) {
-                return false;
-              }
-              sel = sel[0];
-              sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME + '.coffee');
-              num = sameNameCount === 0 ? '' : sameNameCount + 1;
+            var num, ref, sameNameCount, sel;
+            ref = $('#tree').jstree(true);
+            sel = ref.get_selected();
+            if (!sel.length) {
+              return false;
+            }
+            sel = sel[0];
+            sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee');
+            num = sameNameCount === 0 ? '' : sameNameCount + 1;
+            return CodingCommon.addNewFile(event.target, (CodingCommon.DEFAULT_FILENAME + num) + ".coffee", CodingCommon.Lang.COFFEESCRIPT, function(data) {
               return sel = ref.create_node(sel, {
                 "type": "coffee_file",
                 text: (CodingCommon.DEFAULT_FILENAME + num) + ".coffee"
@@ -255,16 +263,16 @@ CodingCommon = (function() {
       title: I18n.t('context_menu.new_folder'),
       cmd: "new_folder",
       func: function(event, ui) {
-        return CodingCommon.addNewFolder(event.target, function(data) {
-          var num, ref, sameNameCount, sel;
-          ref = $('#tree').jstree(true);
-          sel = ref.get_selected();
-          if (!sel.length) {
-            return false;
-          }
-          sel = sel[0];
-          sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME);
-          num = sameNameCount === 0 ? '' : sameNameCount + 1;
+        var num, ref, sameNameCount, sel;
+        ref = $('#tree').jstree(true);
+        sel = ref.get_selected();
+        if (!sel.length) {
+          return false;
+        }
+        sel = sel[0];
+        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME);
+        num = sameNameCount === 0 ? '' : sameNameCount + 1;
+        return CodingCommon.addNewFolder(event.target, "" + (CodingCommon.DEFAULT_FILENAME + num), function(data) {
           return sel = ref.create_node(sel, {
             type: "folder",
             text: "" + (CodingCommon.DEFAULT_FILENAME + num)
@@ -453,8 +461,8 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.addNewFile = function(parentNode, lang_type, successCallback, errorCallback) {
-    var data, ext;
+  CodingCommon.addNewFile = function(parentNode, name, lang_type, successCallback, errorCallback) {
+    var data;
     if (successCallback == null) {
       successCallback = null;
     }
@@ -463,13 +471,7 @@ CodingCommon = (function() {
     }
     data = {};
     data[this.Key.LANG] = lang_type;
-    ext = '';
-    if (lang_type === this.Lang.JAVASCRIPT) {
-      ext = '.js';
-    } else if (lang_type === this.Lang.COFFEESCRIPT) {
-      ext = '.coffee';
-    }
-    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + this.DEFAULT_FILENAME + ext;
+    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name;
     return $.ajax({
       url: "/coding/add_new_file",
       type: "POST",
@@ -488,7 +490,7 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.addNewFolder = function(parentNode, successCallback, errorCallback) {
+  CodingCommon.addNewFolder = function(parentNode, name, successCallback, errorCallback) {
     var data;
     if (successCallback == null) {
       successCallback = null;
@@ -497,7 +499,7 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + this.DEFAULT_FILENAME;
+    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name;
     return $.ajax({
       url: "/coding/add_new_folder",
       type: "POST",
