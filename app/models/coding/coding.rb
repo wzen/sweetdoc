@@ -10,10 +10,10 @@ class Coding
         _save_code(user_id, codes)
         _replace_all_tree(user_id, tree_data)
       end
-      return I18n.t('message.database.item_state.save.success')
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -22,10 +22,10 @@ class Coding
       ActiveRecord::Base.transaction do
         _save_code(user_id, codes)
       end
-      return I18n.t('message.database.item_state.save.success')
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -57,7 +57,7 @@ class Coding
       code_state[user_coding_id][Const::Coding::Key::IS_ACTIVE] = co[Const::Coding::Key::IS_ACTIVE]
     end
     Rails.cache.write(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id.to_s), code_state, expires_in: 1.month)
-    return I18n.t('message.database.item_state.save.success')
+    return true, I18n.t('message.database.item_state.save.success')
   end
 
   def self.add_new_file(user_id, node_path, lang_type)
@@ -96,10 +96,10 @@ class Coding
           _save_tree(user_id, tree_data)
         end
       end
-      return I18n.t('message.database.item_state.save.success'), user_coding_id, code
+      return true, I18n.t('message.database.item_state.save.success'), user_coding_id, code
     rescue => e
       # 失敗
-      return I18n.t('message.database.item_state.save.error'), nil, nil
+      return false, I18n.t('message.database.item_state.save.error'), nil, nil
     end
   end
 
@@ -111,10 +111,10 @@ class Coding
         tree_data[Const::Coding::Key::USER_CODING_ID] = nil
         _save_tree(user_id, tree_data)
       end
-      return I18n.t('message.database.item_state.save.success')
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -129,10 +129,10 @@ class Coding
         end
         uct.update_all(del_flg: true)
       end
-      return I18n.t('message.database.item_state.save.success')
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -141,10 +141,10 @@ class Coding
       ActiveRecord::Base.transaction do
         _replace_all_tree(user_id, tree_data)
       end
-      return I18n.t('message.database.item_state.save.success')
+      return true, I18n.t('message.database.item_state.save.success')
     rescue => e
       # 失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -207,12 +207,12 @@ class Coding
           ugcm = UserGalleryCodingMap.find_by(user_id: user_id, del_flg: false)
         else
           # データ無し
-          return I18n.t('message.database.item_state.save.error')
+          return true, I18n.t('message.database.item_state.save.error')
         end
       end
     rescue => e
       # 失敗
-      return I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 

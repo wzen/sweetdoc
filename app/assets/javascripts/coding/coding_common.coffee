@@ -138,7 +138,7 @@ class CodingCommon
       count = 0
       while count < 100
         num = if count <= 1 then '' else count
-        if $.inArray("#{name}#{num}#{ext}", childrenText) == false
+        if $.inArray("#{name}#{num}#{ext}", childrenText) < 0
           break
         count += 1
       return count
@@ -250,8 +250,12 @@ class CodingCommon
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
@@ -268,8 +272,12 @@ class CodingCommon
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
@@ -286,8 +294,12 @@ class CodingCommon
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
@@ -304,8 +316,12 @@ class CodingCommon
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
@@ -319,8 +335,12 @@ class CodingCommon
         type: "GET"
         dataType: "json"
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
@@ -338,8 +358,12 @@ class CodingCommon
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
@@ -356,8 +380,12 @@ class CodingCommon
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
@@ -374,8 +402,12 @@ class CodingCommon
         dataType: "json"
         data: data
         success: (data)->
-          if successCallback?
-            successCallback(data)
+          if data.resultSuccess
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)

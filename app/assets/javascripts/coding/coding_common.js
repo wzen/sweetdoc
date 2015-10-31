@@ -198,7 +198,7 @@ CodingCommon = (function() {
       count = 0;
       while (count < 100) {
         num = count <= 1 ? '' : count;
-        if ($.inArray("" + name + num + ext, childrenText) === false) {
+        if ($.inArray("" + name + num + ext, childrenText) < 0) {
           break;
         }
         count += 1;
@@ -342,8 +342,14 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
@@ -370,8 +376,14 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
@@ -398,8 +410,14 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
@@ -426,8 +444,14 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
@@ -450,8 +474,14 @@ CodingCommon = (function() {
       type: "GET",
       dataType: "json",
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
@@ -479,8 +509,14 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
@@ -507,8 +543,14 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
@@ -535,8 +577,14 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
-        if (successCallback != null) {
-          return successCallback(data);
+        if (data.resultSuccess) {
+          if (successCallback != null) {
+            return successCallback(data);
+          }
+        } else {
+          if (errorCallback != null) {
+            return errorCallback(data);
+          }
         }
       },
       error: function(data) {
