@@ -113,7 +113,7 @@ CodingCommon = (function() {
       enableLiveAutocompletion: true
     });
     editor.getSession().on('change', function() {});
-    return editor.commands.addCommand({
+    editor.commands.addCommand({
       Name: "savefile",
       bindKey: {
         win: "Ctrl-S",
@@ -122,6 +122,10 @@ CodingCommon = (function() {
       exec: function(editor) {
         return CodingCommon.saveAll(function() {});
       }
+    });
+    $('.close_tab_button').off('click');
+    return $('.close_tab_button').on('click', function() {
+      return CodingCommon.closeTabView(this);
     });
   };
 
@@ -326,13 +330,15 @@ CodingCommon = (function() {
   };
 
   CodingCommon.closeTabView = function(e) {
-    var contentsId, tab_li;
+    var cid, contentsId, tab_li;
     tab_li = $(e).closest('.tab_li');
     contentsId = tab_li.find('.tab_button:first').attr('href').replace('#', '');
     tab_li.remove();
-    $("" + contentsId).closest('.tab-pane').remove();
+    $("#" + contentsId).closest('.tab-pane').remove();
     if ($('#my_tab').find('.tab_li.active').length === 0) {
       $('#my_tab').find('.tab_li:first').addClass('active');
+      cid = $('#my_tab').find('.tab_li:first .tab_button').attr('href').replace('#', '');
+      $("#" + cid).addClass('active');
     }
     return this.saveEditorState();
   };

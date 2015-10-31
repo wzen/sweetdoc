@@ -100,6 +100,11 @@ class CodingCommon
         )
     )
 
+    $('.close_tab_button').off('click')
+    $('.close_tab_button').on('click', ->
+      CodingCommon.closeTabView(@)
+    )
+
   @setupTreeEvent = ->
     root = $('#tree')
     root.on('open_node.jstree close_node.jstree', (node) ->
@@ -258,9 +263,12 @@ class CodingCommon
     tab_li = $(e).closest('.tab_li')
     contentsId = tab_li.find('.tab_button:first').attr('href').replace('#', '')
     tab_li.remove()
-    $("#{contentsId}").closest('.tab-pane').remove()
+    $("##{contentsId}").closest('.tab-pane').remove()
     if $('#my_tab').find('.tab_li.active').length == 0
       $('#my_tab').find('.tab_li:first').addClass('active')
+      cid = $('#my_tab').find('.tab_li:first .tab_button').attr('href').replace('#', '')
+      $("##{cid}").addClass('active')
+
     @saveEditorState()
 
   @saveAll = (successCallback = null, errorCallback = null) ->
