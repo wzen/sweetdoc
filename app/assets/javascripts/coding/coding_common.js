@@ -195,7 +195,7 @@ CodingCommon = (function() {
       childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(function() {
         return $(this).text();
       });
-      count = 0;
+      count = 1;
       while (count < 100) {
         num = count <= 1 ? '' : count;
         if ($.inArray("" + name + num + ext, childrenText) < 0) {
@@ -220,7 +220,7 @@ CodingCommon = (function() {
             }
             sel = sel[0];
             sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js');
-            num = sameNameCount === 0 ? '' : sameNameCount + 1;
+            num = sameNameCount <= 1 ? '' : sameNameCount;
             filename = (CodingCommon.DEFAULT_FILENAME + num) + ".js";
             return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT, function(data) {
               return sel = ref.create_node(sel, {
@@ -244,7 +244,7 @@ CodingCommon = (function() {
             }
             sel = sel[0];
             sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee');
-            num = sameNameCount === 0 ? '' : sameNameCount + 1;
+            num = sameNameCount <= 1 ? '' : sameNameCount;
             filename = (CodingCommon.DEFAULT_FILENAME + num) + ".coffee";
             return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT, function(data) {
               return sel = ref.create_node(sel, {
@@ -271,7 +271,7 @@ CodingCommon = (function() {
         }
         sel = sel[0];
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME);
-        num = sameNameCount === 0 ? '' : sameNameCount + 1;
+        num = sameNameCount <= 1 ? '' : sameNameCount;
         folderName = CodingCommon.DEFAULT_FILENAME + num;
         return CodingCommon.addNewFolder(event.target, folderName, function(data) {
           return sel = ref.create_node(sel, {
@@ -656,7 +656,7 @@ CodingCommon = (function() {
 
   _parentNodePath = function(select_node) {
     var joinPath, path, reversePath;
-    path = $(select_node).parents('a.jstree-anchor').map(function(n) {
+    path = $(select_node).parents('.jstree-children').prev('.jstree-anchor').map(function(n) {
       return $(this).text();
     }).get();
     path.unshift($(select_node).text());

@@ -302,7 +302,7 @@ ActiveRecord::Schema.define(version: 20151026070504) do
 
   create_table "user_coding_trees", force: true do |t|
     t.integer  "user_id",                        null: false
-    t.string   "node_path",                      null: false
+    t.text     "node_path",                      null: false
     t.string   "user_coding_id"
     t.boolean  "del_flg",        default: false
     t.datetime "created_at"

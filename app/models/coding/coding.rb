@@ -65,7 +65,6 @@ class Coding
       user_coding_id = nil
       code = {}
       ActiveRecord::Base.transaction do
-        code[Const::Coding::Key::NAME] = 'untitled'
         code[Const::Coding::Key::LANG] = lang_type
         if lang_type == Const::Coding::Lang::JAVASCRIPT
           file_path = File.join(Rails.root, '/public/code_template/item/javascript.js')

@@ -135,7 +135,7 @@ class CodingCommon
 
     _countSameFilename = (node, name, ext = '')->
       childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(-> $(@).text())
-      count = 0
+      count = 1
       while count < 100
         num = if count <= 1 then '' else count
         if $.inArray("#{name}#{num}#{ext}", childrenText) < 0
@@ -151,7 +151,7 @@ class CodingCommon
           return false
         sel = sel[0]
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js')
-        num = if sameNameCount == 0 then '' else sameNameCount + 1
+        num = if sameNameCount <= 1 then '' else sameNameCount
         # JavaScriptファイル作成
         filename = "#{CodingCommon.DEFAULT_FILENAME + num}.js"
         CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT, (data) ->
@@ -171,7 +171,7 @@ class CodingCommon
           return false
         sel = sel[0]
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee')
-        num = if sameNameCount == 0 then '' else sameNameCount + 1
+        num = if sameNameCount <= 1 then '' else sameNameCount
         # CoffeeScriptファイル作成
         filename = "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"
         CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT, (data) ->
@@ -193,7 +193,7 @@ class CodingCommon
         return false
       sel = sel[0]
       sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
-      num = if sameNameCount == 0 then '' else sameNameCount + 1
+      num = if sameNameCount <= 1 then '' else sameNameCount
       # フォルダ作成
       folderName = CodingCommon.DEFAULT_FILENAME + num
       CodingCommon.addNewFolder(event.target, folderName, (data) ->
@@ -473,7 +473,7 @@ class CodingCommon
     , idleSeconds * 1000)
 
   _parentNodePath = (select_node) ->
-    path = $(select_node).parents('a.jstree-anchor').map((n) -> $(@).text()).get()
+    path = $(select_node).parents('.jstree-children').prev('.jstree-anchor').map((n) -> $(@).text()).get()
     path.unshift($(select_node).text())
     reversePath = path.reverse()
     joinPath = reversePath.join('/')
