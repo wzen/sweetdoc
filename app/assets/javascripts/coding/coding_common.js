@@ -107,10 +107,21 @@ CodingCommon = (function() {
       editor.getSession().setMode("ace/mode/coffee");
     }
     editor.setTheme("ace/theme/tomorrow");
-    return editor.setOptions({
+    editor.setOptions({
       enableBasicAutocompletion: true,
       enableSnippets: true,
-      enableLiveAutocompletion: false
+      enableLiveAutocompletion: true
+    });
+    editor.getSession().on('change', function() {});
+    return editor.commands.addCommand({
+      Name: "savefile",
+      bindKey: {
+        win: "Ctrl-S",
+        mac: "Command-S"
+      },
+      exec: function(editor) {
+        return CodingCommon.saveAll(function() {});
+      }
     });
   };
 

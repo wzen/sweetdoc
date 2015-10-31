@@ -80,8 +80,25 @@ class CodingCommon
     editor.setOptions({
       enableBasicAutocompletion: true
       enableSnippets: true
-      enableLiveAutocompletion: false
+      enableLiveAutocompletion: true
     })
+
+    editor.getSession().on('change', ->
+      # 保存フラグ
+
+    )
+
+    editor.commands.addCommand(
+      Name : "savefile"
+      bindKey: {
+        win : "Ctrl-S",
+        mac : "Command-S"
+      }
+      exec: (editor) ->
+        CodingCommon.saveAll( ->
+          # 保存フラグ消去
+        )
+    )
 
   @setupTreeEvent = ->
     root = $('#tree')
