@@ -7,7 +7,7 @@ class Coding
   def self.save_all(user_id, codes, tree_data)
     begin
       ActiveRecord::Base.transaction do
-        _save_code(user_id, codes)
+        _update_code(user_id, codes)
         _replace_all_tree(user_id, tree_data)
       end
       return true, I18n.t('message.database.item_state.save.success')
@@ -17,10 +17,10 @@ class Coding
     end
   end
 
-  def self.save_code(user_id, codes)
+  def self.update_code(user_id, codes)
     begin
       ActiveRecord::Base.transaction do
-        _save_code(user_id, codes)
+        _update_code(user_id, codes)
       end
       return true, I18n.t('message.database.item_state.save.success')
     rescue => e
@@ -303,24 +303,19 @@ class Coding
     return uc.id
   end
 
-  def self._save_code(user_id, codes)
+  def self._update_code(user_id, codes)
     ret = []
     codes.each do |c|
-      lang_type = c[Const::Coding::Key::LANG]
+      user_coding_id = c[Const::Coding::Key::USER_CODING_ID]
       code = c[Const::Coding::Key::CODE]
-
-      uc = UserCoding.find_by(user_id: user_id, lang_type: lang_type, del_flg: false)
-      if uc == nil
-        uc = UserCoding.new({
-                                user_id: user_id,
-                                lang_type: lang_type,
-                                code: code
-                            })
-      else
+      uc = UserCoding.find(user_coding_id)
+      if uc != nil
         uc.code = code
+        uc.save!
+        ret << uc.id
+      else
+        ret << nil
       end
-      uc.save!
-      ret << uc.id
     end
     return ret
   end
@@ -385,6 +380,6 @@ class Coding
     return r ? r : {}
   end
 
-  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_save_code, :_replace_all_tree
+  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_update_code, :_replace_all_tree
 
 end

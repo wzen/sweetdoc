@@ -13,9 +13,9 @@
         </div>
         <div id="editor_tab_wrapper">
             <% if @load_user_coding.length > 0 %>
-                <ul id="my_tab" class="nav nav-tabs">
+                <ul id="my_tab" class="nav nav-tabs" role="tablist">
                     <% @load_user_coding.each do |data| %>
-                        <li class="tab_li <%= @code_state[data['id']][Const::Coding::Key::IS_ACTIVE]? 'active' : '' %>">
+                        <li role="presentation" class="tab_li <%= @code_state[data['id']][Const::Coding::Key::IS_ACTIVE]? 'active' : '' %>">
                             <a class="tab_button" href="#<%= "uc_#{data['id'].to_s}_wrapper" %>" data-toggle="tab">
                                 <%= data['name'] %>
                             </a>
@@ -26,7 +26,7 @@
                 <div id="my_tab_content" class="tab-content">
                     <% @load_user_coding.each do |data| %>
                         <div class="editor_wrapper <%= data['lang_type'] %>">
-                            <div class="tab-pane fade in <%= @code_state[data['id']][Const::Coding::Key::IS_ACTIVE]? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
+                            <div role="tabpanel" class="tab-pane <%= @code_state[data['id']][Const::Coding::Key::IS_ACTIVE]? 'active' : '' %>" id="<%= "uc_#{data['id'].to_s}_wrapper" %>" >
                                 <div id="<%= "uc_#{data.id.to_s}" %>" class="editor"><%= data['code'] %></div>
                             </div>
                         </div>

@@ -9,10 +9,10 @@ class CodingController < ApplicationController
     @result_success, @message = Coding.save_all(user_id, codes, tree_data)
   end
 
-  def save_code
+  def update_code
     user_id = current_or_guest_user.id
     codes = params.fetch(Const::Coding::Key::CODES, {}).values
-    @result_success, @message = Coding.save_code(user_id, codes)
+    @result_success, @message = Coding.update_code(user_id, codes)
   end
 
   def save_tree
