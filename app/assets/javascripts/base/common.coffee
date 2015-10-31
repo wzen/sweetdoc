@@ -520,7 +520,9 @@ class Common
                 )
               else
                 _show.call(self)
+                console.log('/modal_view/show server error')
           error: (data) ->
+            console.log('/modal_view/show ajax error')
         }
       )
     else
@@ -644,15 +646,18 @@ class Common
                 if window.isWorkTable && EventConfig?
                   EventConfig.addEventConfigContents(d.item_id)
                 dataIdx += 1
-                if dataIdx >= data.length
+                if dataIdx >= data.indexes.length
                   if callback?
                     callback()
                 else
-                  _cb.call(@, data[dataIdx])
+                  _cb.call(@, data.indexes[dataIdx])
               )
-            _cb.call(@, data[dataIdx])
+            _cb.call(@, data.indexes[dataIdx])
+          else
+            console.log('/item_js/index server error')
 
         error: (data) ->
+          console.log('/item_js/index ajax error')
       }
     )
 

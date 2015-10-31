@@ -587,11 +587,14 @@ Common = (function() {
                 return _show.call(self);
               });
             } else {
-              return _show.call(self);
+              _show.call(self);
+              return console.log('/modal_view/show server error');
             }
           }
         },
-        error: function(data) {}
+        error: function(data) {
+          return console.log('/modal_view/show ajax error');
+        }
       });
     } else {
       return _show.call(self);
@@ -758,20 +761,24 @@ Common = (function() {
                   EventConfig.addEventConfigContents(d.item_id);
                 }
                 dataIdx += 1;
-                if (dataIdx >= data.length) {
+                if (dataIdx >= data.indexes.length) {
                   if (callback != null) {
                     return callback();
                   }
                 } else {
-                  return _cb.call(_this, data[dataIdx]);
+                  return _cb.call(_this, data.indexes[dataIdx]);
                 }
               };
             })(this));
           };
-          return _cb.call(this, data[dataIdx]);
+          return _cb.call(this, data.indexes[dataIdx]);
+        } else {
+          return console.log('/item_js/index server error');
         }
       },
-      error: function(data) {}
+      error: function(data) {
+        return console.log('/item_js/index ajax error');
+      }
     });
   };
 

@@ -70,9 +70,11 @@ class ServerStorage
                 callback()
               window.workingAutoSave = false
             else
+              console.log('/page_value_state/save_state server error')
               if window.debug
                 console.log(data.message)
           error: (data) ->
+            console.log('/page_value_state/save_state ajax error')
             if window.debug
               console.log(data.message)
         }
@@ -137,10 +139,12 @@ class ServerStorage
             )
 
           else
+            console.log('/page_value_state/load_state server error')
             if window.debug
               console.log(data.message)
 
         error: (data) ->
+          console.log('/page_value_state/load_state ajax error')
           if window.debug
             console.log(data.message)
       }
@@ -160,9 +164,11 @@ class ServerStorage
             if successCallback?
               successCallback(data)
           else
+            console.log('/page_value_state/user_pagevalue_list_sorted_update server error')
             if errorCallback?
               errorCallback()
         error: (data)->
+          console.log('/page_value_state/user_pagevalue_list_sorted_update ajax error')
           if errorCallback?
             errorCallback()
       }

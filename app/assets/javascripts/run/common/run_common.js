@@ -268,9 +268,13 @@ RunCommon = (function() {
               return callback();
             }
           });
+        } else {
+          return console.log('/run/paging server error');
         }
       },
-      error: function(data) {}
+      error: function(data) {
+        return console.log('/run/paging ajax error');
+      }
     });
   };
 

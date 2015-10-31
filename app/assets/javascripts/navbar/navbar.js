@@ -193,7 +193,7 @@ Navbar = (function() {
     $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt);
     return ServerStorage.get_load_data(function(data) {
       var d, e, i, len, list, n, p, user_pagevalue_list;
-      user_pagevalue_list = data;
+      user_pagevalue_list = data.user_pagevalue_list;
       if (user_pagevalue_list.length > 0) {
         list = '';
         n = $.now();

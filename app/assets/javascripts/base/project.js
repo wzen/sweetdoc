@@ -47,7 +47,7 @@ Project = (function() {
     $('.default_window_size', modalEmt).html((window.mainWrapper.width()) + " X " + (window.mainWrapper.height()));
     Project.load_data(function(data) {
       var d, e, i, len, list, n, p, projectSelect, size, user_pagevalue_list;
-      user_pagevalue_list = data;
+      user_pagevalue_list = data.user_pagevalue_list;
       projectSelect = $('.project_select', modalEmt);
       if (user_pagevalue_list.length > 0) {
         list = '';
@@ -160,14 +160,16 @@ Project = (function() {
           }
         } else {
           if (errorCallback != null) {
-            return errorCallback();
+            errorCallback();
           }
+          return console.log('/page_value_state/user_pagevalue_last_updated_list server error');
         }
       },
       error: function(data) {
         if (errorCallback != null) {
-          return errorCallback();
+          errorCallback();
         }
+        return console.log('/page_value_state/user_pagevalue_last_updated_list ajax error');
       }
     });
   };
@@ -194,9 +196,13 @@ Project = (function() {
           if (callback != null) {
             return callback(data);
           }
+        } else {
+          return console.log('project/create server error');
         }
       },
-      error: function(data) {}
+      error: function(data) {
+        return console.log('project/create ajax error');
+      }
     });
   };
 

@@ -353,14 +353,16 @@ CodingCommon = (function() {
           }
         } else {
           if (errorCallback != null) {
-            return errorCallback(data);
+            errorCallback(data);
           }
+          return console.log('/coding/save_all server error');
         }
       },
       error: function(data) {
         if (errorCallback != null) {
-          return errorCallback(data);
+          errorCallback(data);
         }
+        return console.log('/coding/save_all ajax error');
       }
     });
   };
@@ -386,12 +388,14 @@ CodingCommon = (function() {
             return successCallback(data);
           }
         } else {
+          console.log('/coding/save_tree server error');
           if (errorCallback != null) {
             return errorCallback(data);
           }
         }
       },
       error: function(data) {
+        console.log('/coding/save_tree ajax error');
         if (errorCallback != null) {
           return errorCallback(data);
         }
@@ -420,12 +424,14 @@ CodingCommon = (function() {
             return successCallback(data);
           }
         } else {
+          console.log('/coding/save_code server error');
           if (errorCallback != null) {
             return errorCallback(data);
           }
         }
       },
       error: function(data) {
+        console.log('/coding/save_code ajax error');
         if (errorCallback != null) {
           return errorCallback(data);
         }
@@ -454,12 +460,14 @@ CodingCommon = (function() {
             return successCallback(data);
           }
         } else {
+          console.log('coding/load_code server error');
           if (errorCallback != null) {
             return errorCallback(data);
           }
         }
       },
       error: function(data) {
+        console.log('coding/load_code ajax error');
         if (errorCallback != null) {
           return errorCallback(data);
         }
@@ -484,12 +492,14 @@ CodingCommon = (function() {
             return successCallback(data);
           }
         } else {
+          console.log('/coding/load_tree server error');
           if (errorCallback != null) {
             return errorCallback(data);
           }
         }
       },
       error: function(data) {
+        console.log('/coding/load_tree ajax error');
         if (errorCallback != null) {
           return errorCallback(data);
         }
@@ -519,12 +529,14 @@ CodingCommon = (function() {
             return successCallback(data);
           }
         } else {
+          console.log('/coding/add_new_file server error');
           if (errorCallback != null) {
             return errorCallback(data);
           }
         }
       },
       error: function(data) {
+        console.log('/coding/add_new_file ajax error');
         if (errorCallback != null) {
           return errorCallback(data);
         }
@@ -553,12 +565,14 @@ CodingCommon = (function() {
             return successCallback(data);
           }
         } else {
+          console.log('/coding/add_new_folder server error');
           if (errorCallback != null) {
             return errorCallback(data);
           }
         }
       },
       error: function(data) {
+        console.log('/coding/add_new_folder ajax error');
         if (errorCallback != null) {
           return errorCallback(data);
         }
@@ -587,12 +601,14 @@ CodingCommon = (function() {
             return successCallback(data);
           }
         } else {
+          console.log('/coding/delete_node server error');
           if (errorCallback != null) {
             return errorCallback(data);
           }
         }
       },
       error: function(data) {
+        console.log('/coding/delete_node ajax error');
         if (errorCallback != null) {
           return errorCallback(data);
         }
@@ -653,9 +669,14 @@ CodingCommon = (function() {
         dataType: "json",
         data: data,
         success: function(data) {
-          return window.saveEditorStateNowSaving = false;
+          if (data.resultSuccess) {
+            return window.saveEditorStateNowSaving = false;
+          } else {
+            return console.log('/coding/save_state server error');
+          }
         },
         error: function(data) {
+          console.log('/coding/save_state ajax error');
           return window.saveEditorStateNowSaving = false;
         }
       });

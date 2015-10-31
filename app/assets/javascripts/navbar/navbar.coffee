@@ -177,7 +177,7 @@ class Navbar
     $("<li><a class='menu-item'>Loading...</a></li>").appendTo(loadEmt)
 
     ServerStorage.get_load_data((data) ->
-      user_pagevalue_list = data
+      user_pagevalue_list = data.user_pagevalue_list
       if user_pagevalue_list.length > 0
         list = ''
         n = $.now()

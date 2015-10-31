@@ -267,9 +267,11 @@ class CodingCommon
           else
             if errorCallback?
               errorCallback(data)
+            console.log('/coding/save_all server error')
         error: (data) ->
           if errorCallback?
             errorCallback(data)
+          console.log('/coding/save_all ajax error')
       }
     )
 
@@ -287,9 +289,11 @@ class CodingCommon
             if successCallback?
               successCallback(data)
           else
+            console.log('/coding/save_tree server error')
             if errorCallback?
               errorCallback(data)
         error: (data) ->
+          console.log('/coding/save_tree ajax error')
           if errorCallback?
             errorCallback(data)
       }
@@ -309,9 +313,11 @@ class CodingCommon
             if successCallback?
               successCallback(data)
           else
+            console.log('/coding/save_code server error')
             if errorCallback?
               errorCallback(data)
         error: (data) ->
+          console.log('/coding/save_code ajax error')
           if errorCallback?
             errorCallback(data)
       }
@@ -331,9 +337,11 @@ class CodingCommon
             if successCallback?
               successCallback(data)
           else
+            console.log('coding/load_code server error')
             if errorCallback?
               errorCallback(data)
         error: (data) ->
+          console.log('coding/load_code ajax error')
           if errorCallback?
             errorCallback(data)
       }
@@ -350,9 +358,11 @@ class CodingCommon
             if successCallback?
               successCallback(data)
           else
+            console.log('/coding/load_tree server error')
             if errorCallback?
               errorCallback(data)
         error: (data) ->
+          console.log('/coding/load_tree ajax error')
           if errorCallback?
             errorCallback(data)
       }
@@ -373,9 +383,11 @@ class CodingCommon
             if successCallback?
               successCallback(data)
           else
+            console.log('/coding/add_new_file server error')
             if errorCallback?
               errorCallback(data)
         error: (data) ->
+          console.log('/coding/add_new_file ajax error')
           if errorCallback?
             errorCallback(data)
       }
@@ -395,9 +407,11 @@ class CodingCommon
             if successCallback?
               successCallback(data)
           else
+            console.log('/coding/add_new_folder server error')
             if errorCallback?
               errorCallback(data)
         error: (data) ->
+          console.log('/coding/add_new_folder ajax error')
           if errorCallback?
             errorCallback(data)
       }
@@ -417,9 +431,11 @@ class CodingCommon
             if successCallback?
               successCallback(data)
           else
+            console.log('/coding/delete_node server error')
             if errorCallback?
               errorCallback(data)
         error: (data) ->
+          console.log('/coding/delete_node ajax error')
           if errorCallback?
             errorCallback(data)
       }
@@ -476,8 +492,12 @@ class CodingCommon
           dataType: "json"
           data: data
           success: (data)->
-            window.saveEditorStateNowSaving = false
+            if data.resultSuccess
+              window.saveEditorStateNowSaving = false
+            else
+              console.log('/coding/save_state server error')
           error: (data) ->
+            console.log('/coding/save_state ajax error')
             window.saveEditorStateNowSaving = false
         }
       )

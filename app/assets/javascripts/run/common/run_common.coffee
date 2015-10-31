@@ -227,8 +227,11 @@ class RunCommon
               # コールバック
               if callback?
                 callback()
-          )
+            )
+          else
+            console.log('/run/paging server error')
         error: (data) ->
+          console.log('/run/paging ajax error')
       }
     )
 

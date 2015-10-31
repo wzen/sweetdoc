@@ -34,7 +34,7 @@ class Project
 
     # 作成済みプロジェクト一覧取得
     Project.load_data((data) ->
-      user_pagevalue_list = data
+      user_pagevalue_list = data.user_pagevalue_list
       projectSelect = $('.project_select', modalEmt)
       if user_pagevalue_list.length > 0
         list = ''
@@ -148,9 +148,11 @@ class Project
           else
             if errorCallback?
               errorCallback()
+            console.log('/page_value_state/user_pagevalue_last_updated_list server error')
         error: (data)->
           if errorCallback?
             errorCallback()
+          console.log('/page_value_state/user_pagevalue_last_updated_list ajax error')
       }
     )
 
@@ -174,7 +176,10 @@ class Project
             PageValue.setGeneralPageValue(PageValue.Key.PROJECT_ID, data.project_id)
             if callback?
               callback(data)
+          else
+            console.log('project/create server error')
         error: (data) ->
+          console.log('project/create ajax error')
       }
     )
 
