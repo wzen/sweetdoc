@@ -289,7 +289,9 @@ class Coding
           input += "<input type='hidden' class='#{val}' value='#{user_coding_tree[val]}' />"
         end
         selected = ''
-        if code_state[user_coding_tree['user_coding_id']] && code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE]
+        if code_state[user_coding_tree['user_coding_id']] &&
+            code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE] &&
+            code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE] == 'true'
           selected = ',"selected":"true"'
         end
         type = 'folder'

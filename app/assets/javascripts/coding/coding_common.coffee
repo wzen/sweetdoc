@@ -476,16 +476,16 @@ class CodingCommon
         lang_type = loaded.lang_type
 
         tab.append("<li role='presentation' class='tab_li active'><a class='tab_button' aria-controls='uc_#{user_coding_id}_wrapper' href='#uc_#{user_coding_id}_wrapper' role='tab' data-toggle='tab'>#{title}</a><a class='close_tab_button'></a></li>")
-        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor'></div></div>")
+        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor'>#{code}</div></div>")
         CodingCommon.setupEditor("uc_#{user_coding_id}", lang_type)
+        CodingCommon.saveEditorState()
       )
 
     else
       # 対象エディタをActiveに
       editorWrapper.addClass('active')
       tab.find("a[href='##{editorWrapperId}']").closest('tab_li').addClass('active')
-
-    @saveEditorState()
+      CodingCommon.saveEditorState()
 
   @saveEditorState = (immediate = false) ->
     if window.saveEditorStateNowSaving? && window.saveEditorStateNowSaving
@@ -545,12 +545,12 @@ class CodingCommon
   _codes = ->
     ret = []
     tab = $('#my_tab')
-    tab.each((i) ->
+    tab.children('li').each((i) ->
       t = $(@)
       editorWrapperId = t.find('a:first').attr('href').replace('#', '')
       editor = ace.edit(editorWrapperId.replace('_wrapper', ''))
       code = editor.getValue()
-      is_active = $("##{editorWrapperId}").find('.tab-pane:first').hasClass('active')
+      is_active = $("##{editorWrapperId}").hasClass('active')
       user_coding_id = parseInt(editorWrapperId.replace('uc_', '').replace('_wrapper', ''))
       ret.push({
         user_coding_id: user_coding_id

@@ -635,7 +635,7 @@ CodingCommon = (function() {
     editorWrapperId = "uc_" + user_coding_id + "_wrapper";
     editorWrapper = $("#" + editorWrapperId);
     if ((editorWrapper == null) || editorWrapper.length === 0) {
-      CodingCommon.loadCodeData(user_coding_id, function(data) {
+      return CodingCommon.loadCodeData(user_coding_id, function(data) {
         var code, lang_type, loaded, nodes, title;
         loaded = data.load_data[0];
         code = loaded.code;
@@ -643,14 +643,15 @@ CodingCommon = (function() {
         title = nodes[nodes.length - 1];
         lang_type = loaded.lang_type;
         tab.append("<li role='presentation' class='tab_li active'><a class='tab_button' aria-controls='uc_" + user_coding_id + "_wrapper' href='#uc_" + user_coding_id + "_wrapper' role='tab' data-toggle='tab'>" + title + "</a><a class='close_tab_button'></a></li>");
-        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'></div></div>");
-        return CodingCommon.setupEditor("uc_" + user_coding_id, lang_type);
+        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'>" + code + "</div></div>");
+        CodingCommon.setupEditor("uc_" + user_coding_id, lang_type);
+        return CodingCommon.saveEditorState();
       });
     } else {
       editorWrapper.addClass('active');
       tab.find("a[href='#" + editorWrapperId + "']").closest('tab_li').addClass('active');
+      return CodingCommon.saveEditorState();
     }
-    return this.saveEditorState();
   };
 
   CodingCommon.saveEditorState = function(immediate) {
@@ -728,13 +729,13 @@ CodingCommon = (function() {
     var ret, tab;
     ret = [];
     tab = $('#my_tab');
-    tab.each(function(i) {
+    tab.children('li').each(function(i) {
       var code, editor, editorWrapperId, is_active, t, user_coding_id;
       t = $(this);
       editorWrapperId = t.find('a:first').attr('href').replace('#', '');
       editor = ace.edit(editorWrapperId.replace('_wrapper', ''));
       code = editor.getValue();
-      is_active = $("#" + editorWrapperId).find('.tab-pane:first').hasClass('active');
+      is_active = $("#" + editorWrapperId).hasClass('active');
       user_coding_id = parseInt(editorWrapperId.replace('uc_', '').replace('_wrapper', ''));
       return ret.push({
         user_coding_id: user_coding_id,
