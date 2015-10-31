@@ -286,15 +286,13 @@ class Coding
   def self._save_code(user_id, codes)
     ret = []
     codes.each do |c|
-      name = c[Const::Coding::Key::NAME]
       lang_type = c[Const::Coding::Key::LANG]
       code = c[Const::Coding::Key::CODE]
 
-      uc = UserCoding.find_by(user_id: user_id, name: name, lang_type: lang_type, del_flg: false)
+      uc = UserCoding.find_by(user_id: user_id, lang_type: lang_type, del_flg: false)
       if uc == nil
         uc = UserCoding.new({
                                 user_id: user_id,
-                                name: name,
                                 lang_type: lang_type,
                                 code: code
                             })

@@ -13,8 +13,6 @@ CodingCommon = (function() {
     CodingCommon.Key = (function() {
       function Key() {}
 
-      Key.NAME = constant.Coding.Key.NAME;
-
       Key.LANG = constant.Coding.Key.LANG;
 
       Key.PUBLIC = constant.Coding.Key.PUBLIC;
@@ -214,7 +212,7 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.js'),
           cmd: "js",
           func: function(event, ui) {
-            var num, ref, sameNameCount, sel;
+            var filename, num, ref, sameNameCount, sel;
             ref = $('#tree').jstree(true);
             sel = ref.get_selected();
             if (!sel.length) {
@@ -223,10 +221,11 @@ CodingCommon = (function() {
             sel = sel[0];
             sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js');
             num = sameNameCount === 0 ? '' : sameNameCount + 1;
-            return CodingCommon.addNewFile(event.target, (CodingCommon.DEFAULT_FILENAME + num) + ".js", CodingCommon.Lang.JAVASCRIPT, function(data) {
+            filename = (CodingCommon.DEFAULT_FILENAME + num) + ".js";
+            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT, function(data) {
               return sel = ref.create_node(sel, {
                 "type": "js_file",
-                text: (CodingCommon.DEFAULT_FILENAME + num) + ".js"
+                text: filename
               }, 'last', function() {
                 CodingCommon.setupContextMenu();
                 return ref.open_node(sel);
@@ -237,7 +236,7 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.coffee'),
           cmd: "coffee",
           func: function(event, ui) {
-            var num, ref, sameNameCount, sel;
+            var filename, num, ref, sameNameCount, sel;
             ref = $('#tree').jstree(true);
             sel = ref.get_selected();
             if (!sel.length) {
@@ -246,10 +245,11 @@ CodingCommon = (function() {
             sel = sel[0];
             sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee');
             num = sameNameCount === 0 ? '' : sameNameCount + 1;
-            return CodingCommon.addNewFile(event.target, (CodingCommon.DEFAULT_FILENAME + num) + ".coffee", CodingCommon.Lang.COFFEESCRIPT, function(data) {
+            filename = (CodingCommon.DEFAULT_FILENAME + num) + ".coffee";
+            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT, function(data) {
               return sel = ref.create_node(sel, {
                 "type": "coffee_file",
-                text: (CodingCommon.DEFAULT_FILENAME + num) + ".coffee"
+                text: filename
               }, 'last', function() {
                 CodingCommon.setupContextMenu();
                 return ref.open_node(sel);
@@ -263,7 +263,7 @@ CodingCommon = (function() {
       title: I18n.t('context_menu.new_folder'),
       cmd: "new_folder",
       func: function(event, ui) {
-        var num, ref, sameNameCount, sel;
+        var folderName, num, ref, sameNameCount, sel;
         ref = $('#tree').jstree(true);
         sel = ref.get_selected();
         if (!sel.length) {
@@ -272,10 +272,11 @@ CodingCommon = (function() {
         sel = sel[0];
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME);
         num = sameNameCount === 0 ? '' : sameNameCount + 1;
-        return CodingCommon.addNewFolder(event.target, "" + (CodingCommon.DEFAULT_FILENAME + num), function(data) {
+        folderName = CodingCommon.DEFAULT_FILENAME + num;
+        return CodingCommon.addNewFolder(event.target, folderName, function(data) {
           return sel = ref.create_node(sel, {
             type: "folder",
-            text: "" + (CodingCommon.DEFAULT_FILENAME + num)
+            text: folderName
           }, 'last', function() {
             CodingCommon.setupContextMenu();
             return ref.open_node(sel);
@@ -643,9 +644,8 @@ CodingCommon = (function() {
     ret = [];
     tab = $('#my_tab');
     tab.each(function(i) {
-      var code, editor, editorWrapperId, is_active, lang_type, name, t, user_coding_id;
+      var code, editor, editorWrapperId, is_active, lang_type, t, user_coding_id;
       t = $(this);
-      name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '');
       editorWrapperId = t.find('a:first').attr('href').replace('#', '');
       lang_type = $("#" + editorWrapperId).closest('.editor_wrapper').attr('class').split(' ').filter(function(item, idx) {
         return item !== 'editor_wrapper';
@@ -657,7 +657,6 @@ CodingCommon = (function() {
       user_coding_id = parseInt(editorWrapperId.replace('uc_', '').replace('_wrapper', ''));
       return ret.push({
         user_coding_id: user_coding_id,
-        name: name,
         lang_type: lang_type,
         code: code,
         is_opened: true,

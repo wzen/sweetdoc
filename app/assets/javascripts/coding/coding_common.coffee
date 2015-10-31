@@ -5,7 +5,6 @@ class CodingCommon
     @DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME
     @NOT_SAVED_PREFIX = '* '
     class @Key
-      @NAME = constant.Coding.Key.NAME
       @LANG = constant.Coding.Key.LANG
       @PUBLIC = constant.Coding.Key.PUBLIC
       @CODE = constant.Coding.Key.CODE
@@ -154,8 +153,9 @@ class CodingCommon
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js')
         num = if sameNameCount == 0 then '' else sameNameCount + 1
         # JavaScriptファイル作成
-        CodingCommon.addNewFile(event.target, "#{CodingCommon.DEFAULT_FILENAME + num}.js", CodingCommon.Lang.JAVASCRIPT, (data) ->
-          sel = ref.create_node(sel, {"type" : "js_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.js"}, 'last', ->
+        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.js"
+        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT, (data) ->
+          sel = ref.create_node(sel, {"type" : "js_file", text: filename}, 'last', ->
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
             # フォルダオープン
@@ -173,8 +173,9 @@ class CodingCommon
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee')
         num = if sameNameCount == 0 then '' else sameNameCount + 1
         # CoffeeScriptファイル作成
-        CodingCommon.addNewFile(event.target, "#{CodingCommon.DEFAULT_FILENAME + num}.coffee", CodingCommon.Lang.COFFEESCRIPT, (data) ->
-          sel = ref.create_node(sel, {"type":"coffee_file", text: "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"}, 'last', ->
+        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"
+        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT, (data) ->
+          sel = ref.create_node(sel, {"type":"coffee_file", text: filename}, 'last', ->
             # コンテキストメニュー再設定
             CodingCommon.setupContextMenu()
             # フォルダオープン
@@ -194,8 +195,9 @@ class CodingCommon
       sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
       num = if sameNameCount == 0 then '' else sameNameCount + 1
       # フォルダ作成
-      CodingCommon.addNewFolder(event.target, "#{CodingCommon.DEFAULT_FILENAME + num}", (data) ->
-        sel = ref.create_node(sel, {type:"folder", text: "#{CodingCommon.DEFAULT_FILENAME + num}"}, 'last', ->
+      folderName = CodingCommon.DEFAULT_FILENAME + num
+      CodingCommon.addNewFolder(event.target, folderName, (data) ->
+        sel = ref.create_node(sel, {type:"folder", text: folderName}, 'last', ->
           # コンテキストメニュー再設定
           CodingCommon.setupContextMenu()
           # フォルダオープン
@@ -468,7 +470,6 @@ class CodingCommon
     tab = $('#my_tab')
     tab.each((i) ->
       t = $(@)
-      name = t.find('a:first').text().replace(CodingCommon.NOT_SAVED_PREFIX, '')
       editorWrapperId = t.find('a:first').attr('href').replace('#', '')
       lang_type = $("##{editorWrapperId}").closest('.editor_wrapper').attr('class').split(' ').filter((item, idx) -> item != 'editor_wrapper')
       lang_type = lang_type[0]
@@ -478,7 +479,6 @@ class CodingCommon
       user_coding_id = parseInt(editorWrapperId.replace('uc_', '').replace('_wrapper', ''))
       ret.push({
         user_coding_id: user_coding_id
-        name: name
         lang_type: lang_type
         code: code
         is_opened: true
