@@ -155,7 +155,7 @@ CodingCommon = (function() {
     root.on('dblclick.jstree', function(event) {
       var node;
       node = $(event.target).closest("li");
-      if (node.hasClass('tip')) {
+      if (node.hasClass('jstree-leaf')) {
         return CodingCommon.activeTabEditor(parseInt(node.find('.user_coding_id:first').val()));
       }
     });
@@ -810,7 +810,7 @@ CodingCommon = (function() {
     ret = [];
     root = $('#tree');
     jt = root.jstree(true);
-    $('.dir, .tip', root).each(function(i) {
+    $('.jstree-node', root).each(function(i) {
       var is_opened, node_path, user_coding_id;
       node_path = _parentNodePath(this);
       user_coding_id = $(this).find('.id');

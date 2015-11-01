@@ -312,10 +312,10 @@ ActiveRecord::Schema.define(version: 20151026070504) do
   add_index "user_coding_trees", ["user_id"], name: "index_user_coding_trees_on_user_id", using: :btree
 
   create_table "user_codings", force: true do |t|
-    t.integer  "user_id",                    null: false
-    t.string   "lang_type",                  null: false
-    t.text     "code",                       null: false
-    t.boolean  "del_flg",    default: false
+    t.integer  "user_id",                                  null: false
+    t.string   "lang_type",                                null: false
+    t.string   "code_filename", limit: 15,                 null: false
+    t.boolean  "del_flg",                  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

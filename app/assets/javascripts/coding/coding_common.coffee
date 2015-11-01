@@ -124,7 +124,7 @@ class CodingCommon
     )
     root.on('dblclick.jstree', (event) ->
       node = $(event.target).closest("li")
-      if node.hasClass('tip')
+      if node.hasClass('jstree-leaf')
         # エディタ表示
         CodingCommon.activeTabEditor(parseInt(node.find('.user_coding_id:first').val()))
     )
@@ -595,7 +595,7 @@ class CodingCommon
     ret = []
     root = $('#tree')
     jt = root.jstree(true)
-    $('.dir, .tip', root).each((i) ->
+    $('.jstree-node', root).each((i) ->
       node_path = _parentNodePath(@)
       user_coding_id = $(@).find('.id')
       if user_coding_id?

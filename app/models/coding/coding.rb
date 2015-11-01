@@ -176,13 +176,13 @@ class Coding
     begin
       ActiveRecord::Base.transaction do
         sql =<<-"SQL"
-          SELECT uc.code as code, uct.node_path as node_path, uc.lang_type as lang_type, uc.id as id
+          SELECT uc.code_filename as code_filename, uct.node_path as node_path, uc.lang_type as lang_type, uc.id as id, u.access_token as user_access_token
           FROM user_codings uc
-          RIGHT JOIN user_coding_trees uct ON uc.user_id = uct.user_id
+          RIGHT JOIN user_coding_trees uct ON uc.user_id = uct.user_id AND uc.del_flg = 0 AND uct.del_flg = 0
+          INNER JOIN users u ON uc.user_id = u.id
           AND uc.id = uct.user_coding_id
-          AND uct.del_flg = 0
-          AND uc.del_flg = 0
-          WHERE uc.user_id = #{user_id}
+          AND u.del_flg = 0
+          WHERE u.id = #{user_id}
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         uc = ret_sql.to_hash
@@ -190,9 +190,18 @@ class Coding
         uc = uc.select do |s|
           code_state[s['id'].to_s] && code_state[s['id'].to_s][Const::Coding::Key::IS_OPENED]
         end
+        user_access_token = uc.first['user_access_token']
         ret = uc.map do |m|
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
+          filepath = _code_filepath(user_access_token, m['code_filename'])
+          code = ''
+          File.open(filepath, 'r') do |f|
+            file.each do |read_line|
+              code += read_line
+            end
+          end
+          m['code'] = code
           m
         end
         return ret
@@ -281,7 +290,7 @@ class Coding
           opened = ''
         end
         type = depth == 1 ? 'root' : 'folder'
-        ret += "<li data-jstree='{\"type\": \"#{type}\"}' class='dir #{opened}'>#{k}<ul>#{child}</ul></li>"
+        ret += "<li data-jstree='{\"type\": \"#{type}\"}' class='#{opened}'>#{k}<ul>#{child}</ul></li>"
       else
         input = ''
         user_coding_tree_val = ['user_coding_id']
@@ -303,7 +312,7 @@ class Coding
             type = 'coffee_file'
           end
         end
-        ret += "<li class='tip' data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}#{input}</li>"
+        ret += "<li data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}#{input}</li>"
       end
     end
     return ret
@@ -312,10 +321,17 @@ class Coding
   def self._add_code(user_id, c)
     lang_type = c[Const::Coding::Key::LANG]
     code = c[Const::Coding::Key::CODE]
+    code_filename = generate_filename(user_id)
+    user_access_token = User.find(user_id)['access_token']
+    FileUtils.mkdir_p(_code_parentdirpath(user_access_token)) unless File.directory?(_code_parentdirpath(user_access_token))
+    code_filepath = _code_filepath(user_access_token, code_filename)
+    File.open(code_filepath,'w') do |file|
+      file.write(code)
+    end
     uc = UserCoding.new({
                             user_id: user_id,
                             lang_type: lang_type,
-                            code: code
+                            code_filename: code_filename
                         })
     uc.save!
     return uc.id
@@ -323,13 +339,18 @@ class Coding
 
   def self._update_code(user_id, codes)
     ret = []
+    user_access_token = User.find(user_id)['access_token']
+    FileUtils.mkdir_p(_code_parentdirpath(user_access_token)) unless File.directory?(_code_parentdirpath(user_access_token))
     codes.each do |c|
       user_coding_id = c[Const::Coding::Key::USER_CODING_ID]
       code = c[Const::Coding::Key::CODE]
       uc = UserCoding.find(user_coding_id)
       if uc != nil
-        uc.code = code
-        uc.save!
+        code_filename = uc['code_filename']
+        code_filepath = _code_filepath(user_access_token, code_filename)
+        File.open(code_filepath, 'w') do |f|
+          f.write(code)
+        end
         ret << uc.id
       else
         ret << nil
@@ -398,11 +419,25 @@ class Coding
     r = Rails.cache.read(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id.to_s))
     return r ? r : {}
   end
+
   def self.get_code_state(user_id)
     r = Rails.cache.read(Const::Coding::CacheKey::CODE_STATE_KEY.gsub('@user_id', user_id.to_s))
     return r ? r : {}
   end
 
-  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_update_code, :_replace_all_tree
+  def self.generate_filename(user_id)
+    tmp_token = SecureRandom.urlsafe_base64(10)
+    UserCoding.find_by(user_id: user_id, code_filename: tmp_token).blank? ? tmp_token : generate_filename(user_id)
+  end
+
+  def self._code_parentdirpath(user_access_token)
+    path = File.join(Rails.root, "/user_code/#{user_access_token}")
+  end
+
+  def self._code_filepath(user_access_token, code_filename)
+    path = File.join(Rails.root, "/user_code/#{user_access_token}/#{code_filename}")
+  end
+
+  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_update_code, :_replace_all_tree, :_code_filepath
 
 end
