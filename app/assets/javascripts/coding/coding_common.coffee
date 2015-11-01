@@ -378,10 +378,10 @@ class CodingCommon
       )
 
   @saveActiveCode = (successCallback = null, errorCallback = null) ->
-    editorId = _activeEditorId
+    editorId = _activeEditorId()
     if window.editing[editorId]? && window.editing[editorId]
       data = {}
-      data[@Key.CODES] = _codes()
+      data[@Key.CODES] = _codes(editorId)
       $.ajax(
         {
           url: "/coding/update_code"
@@ -639,4 +639,4 @@ class CodingCommon
     $('#my_tab_content').children('div').removeClass('active')
 
   _activeEditorId = ->
-    $('#my_tab').children('.active:first').find('.tab_button:first').attr('href').replace('#', '')
+    $('#my_tab').children('.active:first').find('.tab_button:first').attr('href').replace('#', '').replace('_wrapper', '')

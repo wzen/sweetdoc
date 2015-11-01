@@ -517,10 +517,10 @@ CodingCommon = (function() {
     if (errorCallback == null) {
       errorCallback = null;
     }
-    editorId = _activeEditorId;
+    editorId = _activeEditorId();
     if ((window.editing[editorId] != null) && window.editing[editorId]) {
       data = {};
-      data[this.Key.CODES] = _codes();
+      data[this.Key.CODES] = _codes(editorId);
       return $.ajax({
         url: "/coding/update_code",
         type: "POST",
@@ -862,7 +862,7 @@ CodingCommon = (function() {
   };
 
   _activeEditorId = function() {
-    return $('#my_tab').children('.active:first').find('.tab_button:first').attr('href').replace('#', '');
+    return $('#my_tab').children('.active:first').find('.tab_button:first').attr('href').replace('#', '').replace('_wrapper', '');
   };
 
   return CodingCommon;
