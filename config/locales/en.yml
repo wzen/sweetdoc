@@ -30,6 +30,7 @@ en:
       load: "Load"
       setting: "Setting"
       new_file: "New File"
+      all_save: "Save all code"
     action:
       action: "Action"
       select_action: "(Select Action)"

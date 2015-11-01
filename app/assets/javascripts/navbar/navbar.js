@@ -135,8 +135,14 @@ Navbar = (function() {
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     menuSave = $('.menu-save', fileMenuEmt);
     menuSave.off('click');
+    menuSave.on('click', function() {
+      return CodingCommon.saveActiveCode();
+    });
+    fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
+    menuSave = $('.menu-all-save', fileMenuEmt);
+    menuSave.off('click');
     return menuSave.on('click', function() {
-      return CodingCommon.saveAll();
+      return CodingCommon.saveAllCode();
     });
   };
 

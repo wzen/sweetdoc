@@ -9,6 +9,7 @@ ja:
       load: "読み込み"
       setting: "設定"
       new_file: "新規ファイル"
+      all_save: "全保存"
     action:
       action: "アクション"
       select_action: "(アクションを選択してください)"

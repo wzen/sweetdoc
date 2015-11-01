@@ -129,7 +129,13 @@ class Navbar
     menuSave = $('.menu-save', fileMenuEmt)
     menuSave.off('click')
     menuSave.on('click', ->
-      CodingCommon.saveAll()
+      CodingCommon.saveActiveCode()
+    )
+    fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
+    menuSave = $('.menu-all-save', fileMenuEmt)
+    menuSave.off('click')
+    menuSave.on('click', ->
+      CodingCommon.saveAllCode()
     )
 
   # Drawモードに設定

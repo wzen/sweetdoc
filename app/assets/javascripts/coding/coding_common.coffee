@@ -22,6 +22,7 @@ class CodingCommon
   @init = ->
     @initTreeView()
     @initEditor()
+    window.editing = {}
 
   @initTreeView = ->
     $('#tree').jstree(
@@ -83,9 +84,14 @@ class CodingCommon
       enableLiveAutocompletion: true
     })
 
-    editor.getSession().on('change', ->
-      # 保存フラグ
-
+    editor.getSession().off('change')
+    editor.getSession().on('change', (e) ->
+      if !window.editing[editorId]? || !window.editing[editorId]
+        # 編集フラグ
+        window.editing[editorId] = true
+        tab = $('#my_tab').find("a[href=##{editorId}_wrapper]")
+        name = tab.text().replace(/\*/g, '')
+        tab.text("*#{name}")
     )
 
     editor.commands.addCommand(
@@ -95,8 +101,13 @@ class CodingCommon
         mac : "Command-S"
       }
       exec: (editor) ->
-        CodingCommon.saveAll( ->
-          # 保存フラグ消去
+        CodingCommon.saveActiveCode( ->
+          editorId = $(editor.container).attr('id')
+          # 編集フラグ消去
+          window.editing[editorId] = false
+          tab = $('#my_tab').find("a[href=##{editorId}_wrapper]")
+          name = tab.text()
+          tab.text(name.replace(/\*/g, ''))
         )
     )
 
@@ -272,29 +283,40 @@ class CodingCommon
     @saveEditorState()
 
   @saveAll = (successCallback = null, errorCallback = null) ->
-    data = {}
-    data[@Key.CODES] = _codes()
-    data[@Key.TREE_DATA] = _treeState()
-    $.ajax(
-      {
-        url: "/coding/save_all"
-        type: "POST"
-        dataType: "json"
-        data: data
-        success: (data)->
-          if data.resultSuccess
-            if successCallback?
-              successCallback(data)
-          else
+    if $.map(window.editing, (value) -> if value then '' else null ).length > 0
+
+      data = {}
+      data[@Key.CODES] = _codes()
+      data[@Key.TREE_DATA] = _treeState()
+      $.ajax(
+        {
+          url: "/coding/save_all"
+          type: "POST"
+          dataType: "json"
+          data: data
+          success: (data)->
+            # 編集フラグ消去
+            for k, v of window.editing
+              window.editing[k] = false
+            tabs = $('#my_tab').find(".tab_button")
+            tabs.each( ->
+              name = $(@).text()
+              $(@).text(name.replace(/\*/g, ''))
+            )
+
+            if data.resultSuccess
+              if successCallback?
+                successCallback(data)
+            else
+              if errorCallback?
+                errorCallback(data)
+              console.log('/coding/save_all server error')
+          error: (data) ->
             if errorCallback?
               errorCallback(data)
-            console.log('/coding/save_all server error')
-        error: (data) ->
-          if errorCallback?
-            errorCallback(data)
-          console.log('/coding/save_all ajax error')
-      }
-    )
+            console.log('/coding/save_all ajax error')
+        }
+      )
 
   @saveTree = (successCallback = null, errorCallback = null) ->
     data = {}
@@ -320,29 +342,66 @@ class CodingCommon
       }
     )
 
-  @updateCode = (successCallback = null, errorCallback = null) ->
-    data = {}
-    data[@Key.CODES] = _codes()
-    $.ajax(
-      {
-        url: "/coding/update_code"
-        type: "POST"
-        dataType: "json"
-        data: data
-        success: (data)->
-          if data.resultSuccess
-            if successCallback?
-              successCallback(data)
-          else
-            console.log('/coding/save_code server error')
+  @saveAllCode = (successCallback = null, errorCallback = null) ->
+    if $.map(window.editing, (value) -> if value then '' else null ).length > 0
+
+      data = {}
+      data[@Key.CODES] = _codes()
+      $.ajax(
+        {
+          url: "/coding/update_code"
+          type: "POST"
+          dataType: "json"
+          data: data
+          success: (data)->
+            # 編集フラグ消去
+            for k, v of window.editing
+              window.editing[k] = false
+            tabs = $('#my_tab').find(".tab_button")
+            tabs.each( ->
+              name = $(@).text()
+              $(@).text(name.replace(/\*/g, ''))
+            )
+
+            if data.resultSuccess
+              if successCallback?
+                successCallback(data)
+            else
+              console.log('/coding/save_code server error')
+              if errorCallback?
+                errorCallback(data)
+          error: (data) ->
+            console.log('/coding/save_code ajax error')
             if errorCallback?
               errorCallback(data)
-        error: (data) ->
-          console.log('/coding/save_code ajax error')
-          if errorCallback?
-            errorCallback(data)
-      }
-    )
+        }
+      )
+
+  @saveActiveCode = (successCallback = null, errorCallback = null) ->
+    editorId = _activeEditorId
+    if window.editing[editorId]? && window.editing[editorId]
+      data = {}
+      data[@Key.CODES] = _codes()
+      $.ajax(
+        {
+          url: "/coding/update_code"
+          type: "POST"
+          dataType: "json"
+          data: data
+          success: (data)->
+            if data.resultSuccess
+              if successCallback?
+                successCallback(data)
+            else
+              console.log('/coding/save_code server error')
+              if errorCallback?
+                errorCallback(data)
+          error: (data) ->
+            console.log('/coding/save_code ajax error')
+            if errorCallback?
+              errorCallback(data)
+        }
+      )
 
   @loadCodeData = (userCodingId, successCallback = null, errorCallback = null) ->
     data = {}
@@ -550,13 +609,19 @@ class CodingCommon
     )
     return ret
 
-  _codes = ->
+  _codes = (targetEditorId = null) ->
     ret = []
     tab = $('#my_tab')
     tab.children('li').each((i) ->
       t = $(@)
       editorWrapperId = t.find('a:first').attr('href').replace('#', '')
-      editor = ace.edit(editorWrapperId.replace('_wrapper', ''))
+      editorId = editorWrapperId.replace('_wrapper', '')
+
+      if targetEditorId? && editorId != targetEditorId
+        # 対象外のEditorはパス
+        return true
+
+      editor = ace.edit(editorId)
       code = editor.getValue()
       is_active = $("##{editorWrapperId}").hasClass('active')
       user_coding_id = parseInt(editorWrapperId.replace('uc_', '').replace('_wrapper', ''))
@@ -573,3 +638,5 @@ class CodingCommon
     $('#my_tab').children('li').removeClass('active')
     $('#my_tab_content').children('div').removeClass('active')
 
+  _activeEditorId = ->
+    $('#my_tab').children('.active:first').find('.tab_button:first').attr('href').replace('#', '')
