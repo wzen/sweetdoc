@@ -118,15 +118,20 @@ class CodingCommon
 
   @setupTreeEvent = ->
     root = $('#tree')
-    root.on('open_node.jstree close_node.jstree', (node) ->
+
+    root.off('open_node.jstree close_node.jstree.my')
+    root.on('open_node.jstree close_node.jstree.my', (node) ->
       # ツリー開閉
       CodingCommon.saveEditorState()
     )
-    root.on('dblclick.jstree', (event) ->
+
+    root.off('dblclick.jstree.my')
+    root.on('dblclick.jstree.my', (event) ->
       node = $(event.target).closest("li")
+      path = _parentNodePath(node).replace(/\//g, '_').replace('.', '_')
       if node.hasClass('jstree-leaf')
         # エディタ表示
-        CodingCommon.activeTabEditor(parseInt(node.find('.user_coding_id:first').val()))
+        CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id.#{path}").val()))
     )
     @setupContextMenu()
 
@@ -177,69 +182,27 @@ class CodingCommon
 
     makeFile = {title: I18n.t('context_menu.new_file'), children: [
       {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
-        ref = $('#tree').jstree(true)
-        sel = ref.get_selected()
-        if !sel.length
-          return false
-        sel = sel[0]
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js')
         num = if sameNameCount <= 1 then '' else sameNameCount
         # JavaScriptファイル作成
         filename = "#{CodingCommon.DEFAULT_FILENAME + num}.js"
-        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT, (data) ->
-          sel = ref.create_node(sel, {"type" : "js_file", text: filename}, 'last', ->
-            # フォルダオープン
-            ref.open_node(sel)
-            # イベント再設定
-            CodingCommon.setupTreeEvent()
-            # 状態保存
-            CodingCommon.saveEditorState(true)
-          )
-        )
+        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT)
       }
       {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
-        ref = $('#tree').jstree(true)
-        sel = ref.get_selected()
-        if !sel.length
-          return false
-        sel = sel[0]
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee')
         num = if sameNameCount <= 1 then '' else sameNameCount
         # CoffeeScriptファイル作成
         filename = "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"
-        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT, (data) ->
-          sel = ref.create_node(sel, {"type":"coffee_file", text: filename}, 'last', ->
-            # フォルダオープン
-            ref.open_node(sel)
-            # イベント再設定
-            CodingCommon.setupTreeEvent()
-            # 状態保存
-            CodingCommon.saveEditorState(true)
-          )
-        )
+        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT)
       }
     ]}
 
     makeFolder = {title: I18n.t('context_menu.new_folder'), cmd: "new_folder", func: (event, ui) ->
-      ref = $('#tree').jstree(true)
-      sel = ref.get_selected()
-      if !sel.length
-        return false
-      sel = sel[0]
       sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
       num = if sameNameCount <= 1 then '' else sameNameCount
       # フォルダ作成
       folderName = CodingCommon.DEFAULT_FILENAME + num
-      CodingCommon.addNewFolder(event.target, folderName, (data) ->
-        sel = ref.create_node(sel, {type:"folder", text: folderName}, 'last', ->
-          # フォルダオープン
-          ref.open_node(sel)
-          # イベント再設定
-          CodingCommon.setupTreeEvent()
-          # 状態保存
-          CodingCommon.saveEditorState(true)
-        )
-      )
+      CodingCommon.addNewFolder(event.target, folderName)
     }
 
     deleteNode = {title: I18n.t('context_menu.delete'), cmd: "delete", func: (event, ui) ->
@@ -451,7 +414,8 @@ class CodingCommon
   @addNewFile = (parentNode, name, lang_type, successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.LANG] = lang_type
-    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name
+    node_path = _parentNodePath(parentNode) + '/' + name
+    data[@Key.NODE_PATH] = node_path
     $.ajax(
       {
         url: "/coding/add_new_file"
@@ -460,6 +424,28 @@ class CodingCommon
         data: data
         success: (data)->
           if data.resultSuccess
+            type = ''
+            if lang_type == CodingCommon.Lang.JAVASCRIPT
+              type = 'js_file'
+            else if lang_type == CodingCommon.Lang.COFFEESCRIPT
+              type = 'coffee_file'
+            ref = $('#tree').jstree(true)
+            sel = ref.get_selected()
+            if !sel.length
+              return false
+            sel = sel[0]
+            sel = ref.create_node(sel, {"type" : type, text: name}, 'last', ->
+                # フォルダオープン
+              ref.open_node(sel, ->
+                # user_coding_id追加
+                path = node_path.replace(/\//g, '_').replace('.', '_')
+                $('#tree_wrapper').append("<input type='hidden' class='user_coding_id #{path}' value='#{data.add_user_coding_id}' />")
+                # イベント再設定
+                CodingCommon.setupTreeEvent()
+                # 状態保存
+                CodingCommon.saveEditorState(true)
+              )
+            )
             if successCallback?
               successCallback(data)
           else
@@ -484,6 +470,20 @@ class CodingCommon
         data: data
         success: (data)->
           if data.resultSuccess
+            ref = $('#tree').jstree(true)
+            sel = ref.get_selected()
+            if !sel.length
+              return false
+            sel = sel[0]
+            sel = ref.create_node(sel, {type:"folder", text: name}, 'last', ->
+              # フォルダオープン
+              ref.open_node(sel, ->
+                # イベント再設定
+                CodingCommon.setupTreeEvent()
+                # 状態保存
+                CodingCommon.saveEditorState(true)
+              )
+            )
             if successCallback?
               successCallback(data)
           else

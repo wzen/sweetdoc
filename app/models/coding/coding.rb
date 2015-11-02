@@ -165,8 +165,8 @@ class Coding
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         ret = ret_sql.to_hash
 
-        user_access_token = ret.first['user_access_token']
         ret = ret.map do |m|
+          user_access_token = m['user_access_token']
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
           filepath = _code_filepath(user_access_token, m['code_filename'])
@@ -206,8 +206,8 @@ class Coding
         uc = uc.select do |s|
           code_state[s['id'].to_s] && code_state[s['id'].to_s][Const::Coding::Key::IS_OPENED]
         end
-        user_access_token = uc.first['user_access_token']
         ret = uc.map do |m|
+          user_access_token = m['user_access_token']
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
           filepath = _code_filepath(user_access_token, m['code_filename'])
@@ -245,7 +245,8 @@ class Coding
     tree_state = get_tree_state(user_id)
     code_state = get_code_state(user_id)
     user_coding = UserCoding.where(user_id: user_id)
-    return _mk_tree_path_html(data, user_coding, tree_state, code_state), code_state
+    load_tree_html, load_user_codings = _mk_tree_path_html(data, user_coding, tree_state, code_state)
+    return load_tree_html, load_user_codings, code_state
   end
 
   def self.upload(user_id, user_coding_id)
@@ -286,7 +287,8 @@ class Coding
   end
 
   def self._mk_tree_path_html(node, user_coding, tree_state, code_state, depth = 1)
-    ret = ''
+    ret_html = ''
+    load_user_codings = {}
     node.each do |k, v|
       if k == 'tree_value'
         next
@@ -296,7 +298,8 @@ class Coding
       value = v[file_key]
       user_coding_tree = v['tree_value']
       if value && !value.empty?
-        child = _mk_tree_path_html(v, user_coding, tree_state, code_state, depth + 1)
+        child, child_load_user_codings = _mk_tree_path_html(v, user_coding, tree_state, code_state, depth + 1)
+        load_user_codings.merge!(child_load_user_codings)
         # デフォルト開く状態
         opened = 'jstree-open'
         if tree_state &&
@@ -306,13 +309,14 @@ class Coding
           opened = ''
         end
         type = depth == 1 ? 'root' : 'folder'
-        ret += "<li data-jstree='{\"type\": \"#{type}\"}' class='#{opened}'>#{k}<ul>#{child}</ul></li>"
+        ret_html += "<li data-jstree='{\"type\": \"#{type}\"}' class='#{opened}'>#{k}<ul>#{child}</ul></li>"
       else
-        input = ''
-        user_coding_tree_val = ['user_coding_id']
-        user_coding_tree_val.each do |val|
-          input += "<input type='hidden' class='#{val}' value='#{user_coding_tree[val]}' />"
-        end
+        load_user_codings[user_coding_tree['node_path']] = user_coding_tree['user_coding_id']
+
+        # user_coding_tree_val = ['user_coding_id']
+        # user_coding_tree_val.each do |val|
+        #   input += "<input type='hidden' class='#{val}' value='#{user_coding_tree[val]}' />"
+        # end
         selected = ''
         if code_state[user_coding_tree['user_coding_id']] &&
             code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE] &&
@@ -328,10 +332,10 @@ class Coding
             type = 'coffee_file'
           end
         end
-        ret += "<li data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}#{input}</li>"
+        ret_html += "<li data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}</li>"
       end
     end
-    return ret
+    return ret_html, load_user_codings
   end
 
   def self._add_code(user_id, c)

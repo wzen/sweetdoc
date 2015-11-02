@@ -149,14 +149,17 @@ CodingCommon = (function() {
   CodingCommon.setupTreeEvent = function() {
     var root;
     root = $('#tree');
-    root.on('open_node.jstree close_node.jstree', function(node) {
+    root.off('open_node.jstree close_node.jstree.my');
+    root.on('open_node.jstree close_node.jstree.my', function(node) {
       return CodingCommon.saveEditorState();
     });
-    root.on('dblclick.jstree', function(event) {
-      var node;
+    root.off('dblclick.jstree.my');
+    root.on('dblclick.jstree.my', function(event) {
+      var node, path;
       node = $(event.target).closest("li");
+      path = _parentNodePath(node).replace(/\//g, '_').replace('.', '_');
       if (node.hasClass('jstree-leaf')) {
-        return CodingCommon.activeTabEditor(parseInt(node.find('.user_coding_id:first').val()));
+        return CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id." + path).val()));
       }
     });
     return this.setupContextMenu();
@@ -240,51 +243,21 @@ CodingCommon = (function() {
           title: I18n.t('context_menu.js'),
           cmd: "js",
           func: function(event, ui) {
-            var filename, num, ref, sameNameCount, sel;
-            ref = $('#tree').jstree(true);
-            sel = ref.get_selected();
-            if (!sel.length) {
-              return false;
-            }
-            sel = sel[0];
+            var filename, num, sameNameCount;
             sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js');
             num = sameNameCount <= 1 ? '' : sameNameCount;
             filename = (CodingCommon.DEFAULT_FILENAME + num) + ".js";
-            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT, function(data) {
-              return sel = ref.create_node(sel, {
-                "type": "js_file",
-                text: filename
-              }, 'last', function() {
-                ref.open_node(sel);
-                CodingCommon.setupTreeEvent();
-                return CodingCommon.saveEditorState(true);
-              });
-            });
+            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT);
           }
         }, {
           title: I18n.t('context_menu.coffee'),
           cmd: "coffee",
           func: function(event, ui) {
-            var filename, num, ref, sameNameCount, sel;
-            ref = $('#tree').jstree(true);
-            sel = ref.get_selected();
-            if (!sel.length) {
-              return false;
-            }
-            sel = sel[0];
+            var filename, num, sameNameCount;
             sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee');
             num = sameNameCount <= 1 ? '' : sameNameCount;
             filename = (CodingCommon.DEFAULT_FILENAME + num) + ".coffee";
-            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT, function(data) {
-              return sel = ref.create_node(sel, {
-                "type": "coffee_file",
-                text: filename
-              }, 'last', function() {
-                ref.open_node(sel);
-                CodingCommon.setupTreeEvent();
-                return CodingCommon.saveEditorState(true);
-              });
-            });
+            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT);
           }
         }
       ]
@@ -293,26 +266,11 @@ CodingCommon = (function() {
       title: I18n.t('context_menu.new_folder'),
       cmd: "new_folder",
       func: function(event, ui) {
-        var folderName, num, ref, sameNameCount, sel;
-        ref = $('#tree').jstree(true);
-        sel = ref.get_selected();
-        if (!sel.length) {
-          return false;
-        }
-        sel = sel[0];
+        var folderName, num, sameNameCount;
         sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME);
         num = sameNameCount <= 1 ? '' : sameNameCount;
         folderName = CodingCommon.DEFAULT_FILENAME + num;
-        return CodingCommon.addNewFolder(event.target, folderName, function(data) {
-          return sel = ref.create_node(sel, {
-            type: "folder",
-            text: folderName
-          }, 'last', function() {
-            ref.open_node(sel);
-            CodingCommon.setupTreeEvent();
-            return CodingCommon.saveEditorState(true);
-          });
-        });
+        return CodingCommon.addNewFolder(event.target, folderName);
       }
     };
     deleteNode = {
@@ -617,7 +575,7 @@ CodingCommon = (function() {
   };
 
   CodingCommon.addNewFile = function(parentNode, name, lang_type, successCallback, errorCallback) {
-    var data;
+    var data, node_path;
     if (successCallback == null) {
       successCallback = null;
     }
@@ -626,14 +584,40 @@ CodingCommon = (function() {
     }
     data = {};
     data[this.Key.LANG] = lang_type;
-    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name;
+    node_path = _parentNodePath(parentNode) + '/' + name;
+    data[this.Key.NODE_PATH] = node_path;
     return $.ajax({
       url: "/coding/add_new_file",
       type: "POST",
       dataType: "json",
       data: data,
       success: function(data) {
+        var ref, sel, type;
         if (data.resultSuccess) {
+          type = '';
+          if (lang_type === CodingCommon.Lang.JAVASCRIPT) {
+            type = 'js_file';
+          } else if (lang_type === CodingCommon.Lang.COFFEESCRIPT) {
+            type = 'coffee_file';
+          }
+          ref = $('#tree').jstree(true);
+          sel = ref.get_selected();
+          if (!sel.length) {
+            return false;
+          }
+          sel = sel[0];
+          sel = ref.create_node(sel, {
+            "type": type,
+            text: name
+          }, 'last', function() {
+            return ref.open_node(sel, function() {
+              var path;
+              path = node_path.replace(/\//g, '_').replace('.', '_');
+              $('#tree_wrapper').append("<input type='hidden' class='user_coding_id " + path + "' value='" + data.add_user_coding_id + "' />");
+              CodingCommon.setupTreeEvent();
+              return CodingCommon.saveEditorState(true);
+            });
+          });
           if (successCallback != null) {
             return successCallback(data);
           }
@@ -669,7 +653,23 @@ CodingCommon = (function() {
       dataType: "json",
       data: data,
       success: function(data) {
+        var ref, sel;
         if (data.resultSuccess) {
+          ref = $('#tree').jstree(true);
+          sel = ref.get_selected();
+          if (!sel.length) {
+            return false;
+          }
+          sel = sel[0];
+          sel = ref.create_node(sel, {
+            type: "folder",
+            text: name
+          }, 'last', function() {
+            return ref.open_node(sel, function() {
+              CodingCommon.setupTreeEvent();
+              return CodingCommon.saveEditorState(true);
+            });
+          });
           if (successCallback != null) {
             return successCallback(data);
           }

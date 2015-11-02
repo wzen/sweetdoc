@@ -10,6 +10,12 @@
                     <% end %>
                 </ul>
             </div>
+            <% @load_user_codings.each do |k, v| %>
+                <%
+                   path = k.gsub('/', '_').gsub('.', '_')
+                %>
+                <input type="hidden" class="user_coding_id <%= path %>" value="<%= v %>" >
+            <% end %>
         </div>
         <div id="editor_tab_wrapper">
             <% if @load_user_coding.length > 0 %>
