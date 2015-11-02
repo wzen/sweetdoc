@@ -154,16 +154,32 @@ class Coding
           u_sql = "AND uc.id = #{user_coding_id}"
         end
         sql =<<-"SQL"
-          SELECT uc.code as code, uct.node_path as node_path, uc.lang_type as lang_type
+          SELECT uc.code_filename as code_filename, uct.node_path as node_path, uc.lang_type as lang_type, uc.id as id, u.access_token as user_access_token
           FROM user_codings uc
-          RIGHT JOIN user_coding_trees uct ON uc.user_id = uct.user_id
+          RIGHT JOIN user_coding_trees uct ON uc.user_id = uct.user_id AND uc.del_flg = 0 AND uct.del_flg = 0
+          INNER JOIN users u ON uc.user_id = u.id
           AND uc.id = uct.user_coding_id
-          AND uct.del_flg = 0
-          AND uc.del_flg = 0
-          WHERE uc.user_id = #{user_id} #{u_sql}
+          AND u.del_flg = 0
+          WHERE u.id = #{user_id} #{u_sql}
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         ret = ret_sql.to_hash
+
+        user_access_token = ret.first['user_access_token']
+        ret = ret.map do |m|
+          nodes = m['node_path'].split('/')
+          m['name'] = nodes[nodes.length - 1]
+          filepath = _code_filepath(user_access_token, m['code_filename'])
+          code = ''
+          File.open(filepath, 'r') do |f|
+            f.each do |read_line|
+              code += read_line
+            end
+          end
+          m['code'] = code
+          m
+        end
+
         return true, ret
       end
     rescue => e
@@ -197,7 +213,7 @@ class Coding
           filepath = _code_filepath(user_access_token, m['code_filename'])
           code = ''
           File.open(filepath, 'r') do |f|
-            file.each do |read_line|
+            f.each do |read_line|
               code += read_line
             end
           end
