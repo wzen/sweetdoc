@@ -586,7 +586,7 @@ class CodingCommon
 
   _parentNodePath = (select_node) ->
     path = $(select_node).parents('.jstree-children').prev('.jstree-anchor').map((n) -> $(@).text()).get()
-    path.unshift($(select_node).text())
+    path.unshift($(select_node).children('.jstree-anchor').text())
     reversePath = path.reverse()
     joinPath = reversePath.join('/')
     return joinPath
@@ -597,7 +597,8 @@ class CodingCommon
     jt = root.jstree(true)
     $('.jstree-node', root).each((i) ->
       node_path = _parentNodePath(@)
-      user_coding_id = $(@).find('.id')
+      np = node_path.replace(/\//g, '_').replace('.', '_')
+      user_coding_id = $('#tree_wrapper').find(".user_coding_id.#{np}").val()
       if user_coding_id?
         user_coding_id = parseInt(user_coding_id)
       is_opened = jt.is_open(@)

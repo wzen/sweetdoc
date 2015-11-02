@@ -799,7 +799,7 @@ CodingCommon = (function() {
     path = $(select_node).parents('.jstree-children').prev('.jstree-anchor').map(function(n) {
       return $(this).text();
     }).get();
-    path.unshift($(select_node).text());
+    path.unshift($(select_node).children('.jstree-anchor').text());
     reversePath = path.reverse();
     joinPath = reversePath.join('/');
     return joinPath;
@@ -811,9 +811,10 @@ CodingCommon = (function() {
     root = $('#tree');
     jt = root.jstree(true);
     $('.jstree-node', root).each(function(i) {
-      var is_opened, node_path, user_coding_id;
+      var is_opened, node_path, np, user_coding_id;
       node_path = _parentNodePath(this);
-      user_coding_id = $(this).find('.id');
+      np = node_path.replace(/\//g, '_').replace('.', '_');
+      user_coding_id = $('#tree_wrapper').find(".user_coding_id." + np).val();
       if (user_coding_id != null) {
         user_coding_id = parseInt(user_coding_id);
       }
