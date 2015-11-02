@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20151026070504) do
   end
 
   create_table "galleries", force: true do |t|
-    t.string   "access_token",                limit: 30,                       null: false
+    t.string   "access_token",                                                 null: false
     t.string   "title",                                                        null: false
     t.text     "caption"
     t.binary   "thumbnail_img",               limit: 16777215,                 null: false
@@ -312,10 +312,10 @@ ActiveRecord::Schema.define(version: 20151026070504) do
   add_index "user_coding_trees", ["user_id"], name: "index_user_coding_trees_on_user_id", using: :btree
 
   create_table "user_codings", force: true do |t|
-    t.integer  "user_id",                                  null: false
-    t.string   "lang_type",                                null: false
-    t.string   "code_filename", limit: 15,                 null: false
-    t.boolean  "del_flg",                  default: false
+    t.integer  "user_id",                       null: false
+    t.string   "lang_type",                     null: false
+    t.string   "code_filename",                 null: false
+    t.boolean  "del_flg",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -349,7 +349,7 @@ ActiveRecord::Schema.define(version: 20151026070504) do
   add_index "user_project_maps", ["user_id", "project_id"], name: "index_user_project_maps_on_user_id_and_project_id", unique: true, using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "access_token",           limit: 15,                       null: false
+    t.string   "access_token",                                            null: false
     t.string   "name",                                                    null: false
     t.string   "uid"
     t.integer  "user_auth_id",                            default: 3,     null: false

@@ -45,7 +45,7 @@ class Gallery < ActiveRecord::Base
         p = Project.find(project_id)
         # Gallery レコード追加
         g = self.new({
-                         access_token: generate_access_token,
+                         access_token: SecureRandom.uuid,
                          title: title,
                          caption: caption,
                          thumbnail_img: Base64.decode64(thumbnail_img),
@@ -685,11 +685,6 @@ class Gallery < ActiveRecord::Base
     return gallery_view_statistic_count, gallery_bookmark_statistic_count
   end
 
-  def self.generate_access_token
-    tmp_token = SecureRandom.urlsafe_base64(22)
-    self.find_by(access_token: tmp_token).blank? ? tmp_token : generate_access_token
-  end
-
   def self.grid_contents_size_and_style(img_width, img_height)
     r = Random.new.rand(0..15).to_i
     class_name = nil
@@ -727,5 +722,5 @@ class Gallery < ActiveRecord::Base
 
   end
 
-  private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount, :generate_access_token
+  private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount
 end

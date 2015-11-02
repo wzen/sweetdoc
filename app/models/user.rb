@@ -27,8 +27,7 @@ class User < ActiveRecord::Base
   end
 
   def self.generate_access_token
-    tmp_token = SecureRandom.urlsafe_base64(10)
-    self.find_by(access_token: tmp_token).blank? ? tmp_token : generate_access_token
+    return SecureRandom.urlsafe_base64(20)
   end
 
 end

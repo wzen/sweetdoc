@@ -14,6 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+/user_code
 .idea/dataSources.local.xml
 .idea/watcherTasks.xml
 .idea/workspace.xml
