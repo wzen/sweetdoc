@@ -2,7 +2,7 @@
 var CodingCommon;
 
 CodingCommon = (function() {
-  var _activeEditorId, _codes, _deactiveEditor, _parentNodePath, _treeState, constant;
+  var _activeEditorId, _codes, _deactiveEditor, _parentNodePath, _treeState, _userCodingClassNameByNodePath, constant;
 
   function CodingCommon() {}
 
@@ -157,7 +157,7 @@ CodingCommon = (function() {
     root.on('dblclick.jstree.my', function(event) {
       var node, path;
       node = $(event.target).closest("li");
-      path = _parentNodePath(node).replace(/\//g, '_').replace('.', '_');
+      path = _userCodingClassNameByNodePath(_parentNodePath(node));
       if (node.hasClass('jstree-leaf')) {
         return CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id." + path).val()));
       }
@@ -611,9 +611,7 @@ CodingCommon = (function() {
             text: name
           }, 'last', function() {
             return ref.open_node(sel, function() {
-              var path;
-              path = node_path.replace(/\//g, '_').replace('.', '_');
-              $('#tree_wrapper').append("<input type='hidden' class='user_coding_id " + path + "' value='" + data.add_user_coding_id + "' />");
+              $('#tree_wrapper').append("<input type='hidden' class='user_coding_id " + (_userCodingClassNameByNodePath(node_path)) + "' value='" + data.add_user_coding_id + "' />");
               CodingCommon.setupTreeEvent();
               return CodingCommon.saveEditorState(true);
             });
@@ -811,10 +809,9 @@ CodingCommon = (function() {
     root = $('#tree');
     jt = root.jstree(true);
     $('.jstree-node', root).each(function(i) {
-      var is_opened, node_path, np, user_coding_id;
+      var is_opened, node_path, user_coding_id;
       node_path = _parentNodePath(this);
-      np = node_path.replace(/\//g, '_').replace('.', '_');
-      user_coding_id = $('#tree_wrapper').find(".user_coding_id." + np).val();
+      user_coding_id = $('#tree_wrapper').find(".user_coding_id." + (_userCodingClassNameByNodePath(node_path))).val();
       if (user_coding_id != null) {
         user_coding_id = parseInt(user_coding_id);
       }
@@ -864,6 +861,10 @@ CodingCommon = (function() {
 
   _activeEditorId = function() {
     return $('#my_tab').children('.active:first').find('.tab_button:first').attr('href').replace('#', '').replace('_wrapper', '');
+  };
+
+  _userCodingClassNameByNodePath = function(nodePath) {
+    return nodePath.replace(/\//g, '_').replace('.', '_');
   };
 
   return CodingCommon;

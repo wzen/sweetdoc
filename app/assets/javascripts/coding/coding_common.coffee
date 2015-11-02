@@ -128,7 +128,7 @@ class CodingCommon
     root.off('dblclick.jstree.my')
     root.on('dblclick.jstree.my', (event) ->
       node = $(event.target).closest("li")
-      path = _parentNodePath(node).replace(/\//g, '_').replace('.', '_')
+      path = _userCodingClassNameByNodePath(_parentNodePath(node))
       if node.hasClass('jstree-leaf')
         # エディタ表示
         CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id.#{path}").val()))
@@ -438,8 +438,7 @@ class CodingCommon
                 # フォルダオープン
               ref.open_node(sel, ->
                 # user_coding_id追加
-                path = node_path.replace(/\//g, '_').replace('.', '_')
-                $('#tree_wrapper').append("<input type='hidden' class='user_coding_id #{path}' value='#{data.add_user_coding_id}' />")
+                $('#tree_wrapper').append("<input type='hidden' class='user_coding_id #{_userCodingClassNameByNodePath(node_path)}' value='#{data.add_user_coding_id}' />")
                 # イベント再設定
                 CodingCommon.setupTreeEvent()
                 # 状態保存
@@ -597,8 +596,7 @@ class CodingCommon
     jt = root.jstree(true)
     $('.jstree-node', root).each((i) ->
       node_path = _parentNodePath(@)
-      np = node_path.replace(/\//g, '_').replace('.', '_')
-      user_coding_id = $('#tree_wrapper').find(".user_coding_id.#{np}").val()
+      user_coding_id = $('#tree_wrapper').find(".user_coding_id.#{_userCodingClassNameByNodePath(node_path)}").val()
       if user_coding_id?
         user_coding_id = parseInt(user_coding_id)
       is_opened = jt.is_open(@)
@@ -641,3 +639,6 @@ class CodingCommon
 
   _activeEditorId = ->
     $('#my_tab').children('.active:first').find('.tab_button:first').attr('href').replace('#', '').replace('_wrapper', '')
+
+  _userCodingClassNameByNodePath = (nodePath) ->
+    return nodePath.replace(/\//g, '_').replace('.', '_')
