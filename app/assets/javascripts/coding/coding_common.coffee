@@ -585,7 +585,7 @@ class CodingCommon
 
   _parentNodePath = (select_node) ->
     path = $(select_node).parents('.jstree-children').prev('.jstree-anchor').map((n) -> $(@).text()).get()
-    path.unshift($(select_node).children('.jstree-anchor').text())
+    path.unshift($(select_node).text())
     reversePath = path.reverse()
     joinPath = reversePath.join('/')
     return joinPath
@@ -595,7 +595,7 @@ class CodingCommon
     root = $('#tree')
     jt = root.jstree(true)
     $('.jstree-node', root).each((i) ->
-      node_path = _parentNodePath(@)
+      node_path = _parentNodePath($(@).children('.jstree-anchor:first'))
       user_coding_id = $('#tree_wrapper').find(".user_coding_id.#{_userCodingClassNameByNodePath(node_path)}").val()
       if user_coding_id?
         user_coding_id = parseInt(user_coding_id)
