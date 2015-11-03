@@ -97,8 +97,20 @@ class Const
     LAST_UPDATE_TIME_CLASS = 'last_update_time'
   end
 
+  class ConfigType
+    DESIGN = 1
+    EVENT = 2
+  end
+
   class DesignConfig
     ROOT_CLASSNAME = 'dc'
+  end
+
+  class DesignConfigType
+    INPUT = 1
+    CHECKBOX = 2
+    SLIDER = 3
+
   end
 
   class EventConfig

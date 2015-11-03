@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151026070504) do
+ActiveRecord::Schema.define(version: 20151103013621) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -96,13 +96,31 @@ ActiveRecord::Schema.define(version: 20151026070504) do
     t.datetime "updated_at"
   end
 
+  create_table "gallery_coding_configs", force: true do |t|
+    t.integer  "gallery_coding_id",                 null: false
+    t.integer  "config_type",                       null: false
+    t.string   "header"
+    t.string   "label"
+    t.integer  "design_type"
+    t.integer  "event_type"
+    t.string   "vars"
+    t.string   "option"
+    t.integer  "order",                             null: false
+    t.boolean  "del_flg",           default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "gallery_coding_configs", ["gallery_coding_id"], name: "index_gallery_coding_configs_on_gallery_coding_id", using: :btree
+
   create_table "gallery_codings", force: true do |t|
-    t.string   "name",                        null: false
-    t.integer  "public_type",                 null: false
-    t.integer  "lang_type",                   null: false
-    t.text     "code",                        null: false
-    t.integer  "version",     default: 1
-    t.boolean  "del_flg",     default: false
+    t.integer  "created_user_id",                 null: false
+    t.string   "class_name",                      null: false
+    t.integer  "category"
+    t.integer  "public_type",                     null: false
+    t.string   "file_name",                       null: false
+    t.integer  "version",         default: 1
+    t.boolean  "del_flg",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
