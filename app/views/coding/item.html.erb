@@ -6,7 +6,7 @@
                     <% if @load_tree_html.length > 0 %>
                         <%== @load_tree_html %>
                     <% else %>
-                        <li data-jstree='{"type":"root"}' class='dir'><%= @user.name %></li>
+                        <li data-jstree='{"type":"root"}' class='root'><%= @user.name %></li>
                     <% end %>
                 </ul>
             </div>
