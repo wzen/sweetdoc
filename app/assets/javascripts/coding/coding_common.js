@@ -158,7 +158,7 @@ CodingCommon = (function() {
       var node, path;
       node = $(event.target).closest("li");
       path = _userCodingClassNameByNodePath(_parentNodePath(node));
-      if (node.hasClass('jstree-leaf')) {
+      if (node.hasClass('js') || node.hasClass('coffee')) {
         return CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id." + path).val()));
       }
     });
@@ -174,11 +174,11 @@ CodingCommon = (function() {
   CodingCommon.setupContextMenuByType = function(type) {
     var element;
     if (type === 'root') {
-      element = $('#tree .jstree-anchor:first');
+      element = $("#tree li.root").children('.jstree-anchor');
     } else if (type === 'dir') {
-      element = $('#tree .jstree-anchor:not(:first) .jstree-icon:not(.jstree-file)').closest('.jstree-anchor');
+      element = $("#tree li.folder").children('.jstree-anchor');
     } else if (type === 'tip') {
-      element = $('#tree .jstree-anchor .jstree-icon.jstree-file').closest('.jstree-anchor');
+      element = $("#tree li.js, #tree li.coffee").children('.jstree-anchor');
     }
     return Common.setupContextMenu(element, '#tree', {
       menu: CodingCommon.getContextMenuArray(type),
@@ -606,14 +606,22 @@ CodingCommon = (function() {
             return false;
           }
           sel = sel[0];
-          sel = ref.create_node(sel, {
+          ref.create_node(sel, {
             "type": type,
             text: name
-          }, 'last', function() {
+          }, 'last', function(e) {
+            var className;
+            if (lang_type === CodingCommon.Lang.JAVASCRIPT) {
+              className = 'js';
+            } else if (lang_type === CodingCommon.Lang.COFFEESCRIPT) {
+              className = 'coffee';
+            }
+            $("#" + e.id).addClass(className);
             return ref.open_node(sel, function() {
               $('#tree_wrapper').append("<input type='hidden' class='user_coding_id " + (_userCodingClassNameByNodePath(node_path)) + "' value='" + data.add_user_coding_id + "' />");
               CodingCommon.setupTreeEvent();
-              return CodingCommon.saveEditorState(true);
+              CodingCommon.saveEditorState(true);
+              return CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id." + (_userCodingClassNameByNodePath(node_path))).val()));
             });
           });
           if (successCallback != null) {
@@ -636,7 +644,7 @@ CodingCommon = (function() {
   };
 
   CodingCommon.addNewFolder = function(parentNode, name, successCallback, errorCallback) {
-    var data;
+    var data, nodePath;
     if (successCallback == null) {
       successCallback = null;
     }
@@ -644,7 +652,8 @@ CodingCommon = (function() {
       errorCallback = null;
     }
     data = {};
-    data[this.Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name;
+    nodePath = _parentNodePath(parentNode) + '/' + name;
+    data[this.Key.NODE_PATH] = nodePath;
     return $.ajax({
       url: "/coding/add_new_folder",
       type: "POST",
@@ -662,7 +671,8 @@ CodingCommon = (function() {
           sel = ref.create_node(sel, {
             type: "folder",
             text: name
-          }, 'last', function() {
+          }, 'last', function(e) {
+            $("#" + e.id).addClass('folder');
             return ref.open_node(sel, function() {
               CodingCommon.setupTreeEvent();
               return CodingCommon.saveEditorState(true);

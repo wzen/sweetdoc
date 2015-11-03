@@ -129,7 +129,7 @@ class CodingCommon
     root.on('dblclick.jstree.my', (event) ->
       node = $(event.target).closest("li")
       path = _userCodingClassNameByNodePath(_parentNodePath(node))
-      if node.hasClass('jstree-leaf')
+      if node.hasClass('js') || node.hasClass('coffee')
         # エディタ表示
         CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id.#{path}").val()))
     )
@@ -142,11 +142,11 @@ class CodingCommon
 
   @setupContextMenuByType = (type) ->
     if type == 'root'
-      element = $('#tree .jstree-anchor:first')
+      element = $("#tree li.root").children('.jstree-anchor')
     else if type == 'dir'
-      element = $('#tree .jstree-anchor:not(:first) .jstree-icon:not(.jstree-file)').closest('.jstree-anchor')
+      element = $("#tree li.folder").children('.jstree-anchor')
     else if type == 'tip'
-      element = $('#tree .jstree-anchor .jstree-icon.jstree-file').closest('.jstree-anchor')
+      element = $("#tree li.js, #tree li.coffee").children('.jstree-anchor')
 
     Common.setupContextMenu(element, '#tree', {
       menu: CodingCommon.getContextMenuArray(type)
@@ -434,8 +434,14 @@ class CodingCommon
             if !sel.length
               return false
             sel = sel[0]
-            sel = ref.create_node(sel, {"type" : type, text: name}, 'last', ->
-                # フォルダオープン
+            ref.create_node(sel, {"type" : type, text: name}, 'last', (e) ->
+              # クラス名設定
+              if lang_type == CodingCommon.Lang.JAVASCRIPT
+                className = 'js'
+              else if lang_type == CodingCommon.Lang.COFFEESCRIPT
+                className = 'coffee'
+              $("##{e.id}").addClass(className)
+              # フォルダオープン
               ref.open_node(sel, ->
                 # user_coding_id追加
                 $('#tree_wrapper').append("<input type='hidden' class='user_coding_id #{_userCodingClassNameByNodePath(node_path)}' value='#{data.add_user_coding_id}' />")
@@ -443,6 +449,8 @@ class CodingCommon
                 CodingCommon.setupTreeEvent()
                 # 状態保存
                 CodingCommon.saveEditorState(true)
+                # エディタ表示
+                CodingCommon.activeTabEditor(parseInt($('#tree_wrapper').find(".user_coding_id.#{_userCodingClassNameByNodePath(node_path)}").val()))
               )
             )
             if successCallback?
@@ -460,7 +468,8 @@ class CodingCommon
 
   @addNewFolder =(parentNode, name, successCallback = null, errorCallback = null) ->
     data = {}
-    data[@Key.NODE_PATH] = _parentNodePath(parentNode) + '/' + name
+    nodePath = _parentNodePath(parentNode) + '/' + name
+    data[@Key.NODE_PATH] = nodePath
     $.ajax(
       {
         url: "/coding/add_new_folder"
@@ -474,14 +483,16 @@ class CodingCommon
             if !sel.length
               return false
             sel = sel[0]
-            sel = ref.create_node(sel, {type:"folder", text: name}, 'last', ->
+            sel = ref.create_node(sel, {type:"folder", text: name}, 'last', (e) ->
+              # クラス名設定
+              $("##{e.id}").addClass('folder')
               # フォルダオープン
               ref.open_node(sel, ->
                 # イベント再設定
                 CodingCommon.setupTreeEvent()
                 # 状態保存
                 CodingCommon.saveEditorState(true)
-              )
+               )
             )
             if successCallback?
               successCallback(data)

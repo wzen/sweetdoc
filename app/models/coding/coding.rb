@@ -309,14 +309,10 @@ class Coding
           opened = ''
         end
         type = depth == 1 ? 'root' : 'folder'
-        ret_html += "<li data-jstree='{\"type\": \"#{type}\"}' class='#{opened}'>#{k}<ul>#{child}</ul></li>"
+        className = depth == 1 ? 'root' : 'folder'
+        ret_html += "<li data-jstree='{\"type\":\"#{type}\"}' class='#{opened} #{className}'>#{k}<ul>#{child}</ul></li>"
       else
         load_user_codings[user_coding_tree['node_path']] = user_coding_tree['user_coding_id']
-
-        # user_coding_tree_val = ['user_coding_id']
-        # user_coding_tree_val.each do |val|
-        #   input += "<input type='hidden' class='#{val}' value='#{user_coding_tree[val]}' />"
-        # end
         selected = ''
         if code_state[user_coding_tree['user_coding_id']] &&
             code_state[user_coding_tree['user_coding_id']][Const::Coding::Key::IS_ACTIVE] &&
@@ -324,15 +320,18 @@ class Coding
           selected = ',"selected":"true"'
         end
         type = 'folder'
+        className = 'folder'
         if user_coding_tree['user_coding_id']
           lang_type = user_coding.select{|uc| uc['id'].to_i == user_coding_tree['user_coding_id'].to_i}.first['lang_type']
           if lang_type == Const::Coding::Lang::JAVASCRIPT
             type = 'js_file'
+            className = 'js'
           elsif lang_type == Const::Coding::Lang::COFFEESCRIPT
             type = 'coffee_file'
+            className = 'coffee'
           end
         end
-        ret_html += "<li data-jstree='{\"type\":\"#{type}\"#{selected}}'>#{k}</li>"
+        ret_html += "<li data-jstree='{\"type\":\"#{type}\"#{selected}}' class='#{className}'>#{k}</li>"
       end
     end
     return ret_html, load_user_codings
