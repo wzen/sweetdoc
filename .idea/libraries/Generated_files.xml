@@ -76,26 +76,6 @@
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery_with_run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery_with_run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_grid.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_detail.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_run_window.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/run_full_screen.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_grid.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_detail.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/application.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/user.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_run_window.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_new_window.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/coding.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />

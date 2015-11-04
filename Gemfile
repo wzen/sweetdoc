@@ -84,6 +84,8 @@ gem 'ruby-filemagic' , '0.7.0'
 gem 'carrierwave'
 gem 'carrierwave-magic'
 
+gem "facets", require: false
+
 #gem 'fastimage'
 #gem 'rmagick', '2.15.4', require: 'RMagick'
 
