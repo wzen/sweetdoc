@@ -535,7 +535,7 @@ class CodingCommon
     tab = $('#my_tab')
     if !tab? || tab.length == 0
       # タブビュー作成
-      $('#editor_tab_wrapper').append('<div id="editor_header_menu"><div><div><a class="btn preview">Preview</a></div></div></div><div id="editor_contents_wrapper"><div><ul id="my_tab" class="nav nav-tabs" role="tablist"></ul><div id="my_tab_content" class="tab-content"></div></div></div>')
+      $('#editor_tab_wrapper').append('<div id="editor_header_menu"><div><div><a><div class="editor_btn preview">Preview</div></a></div></div></div><div id="editor_contents_wrapper"><div><ul id="my_tab" class="nav nav-tabs" role="tablist"></ul><div id="my_tab_content" class="tab-content"></div></div></div>')
       tab = $('#my_tab')
     tab_content = $('#my_tab_content')
     # 全てDeactive
