@@ -476,7 +476,7 @@ class Common
   # モーダルビュー表示
   # @param [Integer] type モーダルビュータイプ
   # @param [Function] prepareShowFunc 表示前処理
-  @showModalView = (type, prepareShowFunc = null, enableOverlayClose = true) ->
+  @showModalView = (type, enableOverlayClose = true, prepareShowFunc = null, prepareShowFuncParams = {}) ->
     self = @
     emt = $('body').children(".modal-content.#{type}")
 
@@ -515,7 +515,7 @@ class Common
               emt = $('body').children(".modal-content.#{type}")
               emt.hide()
               if prepareShowFunc?
-                prepareShowFunc(emt, ->
+                prepareShowFunc(emt, prepareShowFuncParams, ->
                   _show.call(self)
                 )
               else

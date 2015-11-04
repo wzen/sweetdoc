@@ -4,7 +4,7 @@ var Project;
 Project = (function() {
   function Project() {}
 
-  Project.initProjectModal = function(modalEmt, callback) {
+  Project.initProjectModal = function(modalEmt, params, callback) {
     var _modalSize;
     if (callback == null) {
       callback = null;

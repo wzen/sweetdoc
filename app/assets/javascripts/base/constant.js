@@ -34,6 +34,17 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ItemDrawType = (function() {
+      function ItemDrawType() {}
+
+      ItemDrawType.CANVAS = constant.Mode.CANVAS;
+
+      ItemDrawType.CSS = constant.Mode.CSS;
+
+      return ItemDrawType;
+
+    })();
+
     Constant.ActionType = (function() {
       function ActionType() {}
 
@@ -113,7 +124,9 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ModalViewType.ABOUT = constant.ModalViewType.ABOUT;
 
-      ModalViewType.UPLOAD_GALLERY_CONFIRM = constant.ModalViewType.UPLOAD_GALLERY_CONFIRM;
+      ModalViewType.ADMIN_PROJECTS = constant.ModalViewType.ADMIN_PROJECTS;
+
+      ModalViewType.CREATE_USER_CODE = constant.ModalViewType.CREATE_USER_CODE;
 
       return ModalViewType;
 

@@ -170,32 +170,26 @@ class CodingCommon
 
   @getContextMenuArray = (type) ->
 
-    _countSameFilename = (node, name, ext = '')->
-      childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(-> $(@).text())
-      count = 1
-      while count < 100
-        num = if count <= 1 then '' else count
-        if $.inArray("#{name}#{num}#{ext}", childrenText) < 0
-          break
-        count += 1
-      return count
+#    makeFile = {title: I18n.t('context_menu.new_file'), children: [
+#      {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
+#        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js')
+#        num = if sameNameCount <= 1 then '' else sameNameCount
+#        # JavaScriptファイル作成
+#        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.js"
+#        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT)
+#      }
+#      {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
+#        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee')
+#        num = if sameNameCount <= 1 then '' else sameNameCount
+#        # CoffeeScriptファイル作成
+#        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"
+#        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT)
+#      }
+#    ]}
 
-    makeFile = {title: I18n.t('context_menu.new_file'), children: [
-      {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
-        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js')
-        num = if sameNameCount <= 1 then '' else sameNameCount
-        # JavaScriptファイル作成
-        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.js"
-        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT)
-      }
-      {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
-        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee')
-        num = if sameNameCount <= 1 then '' else sameNameCount
-        # CoffeeScriptファイル作成
-        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"
-        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT)
-      }
-    ]}
+    makeFile = {title: I18n.t('context_menu.new_file'), cmd: "new_file", func: (event, ui) ->
+      Common.showModalView(Constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {target: event.target})
+    }
 
     makeFolder = {title: I18n.t('context_menu.new_folder'), cmd: "new_folder", func: (event, ui) ->
       sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME)
@@ -410,6 +404,53 @@ class CodingCommon
             errorCallback(data)
       }
     )
+
+  @initAddNewFileModal = (modalEmt, params, callback = null) ->
+    $('.node_path', modalEmt).html(_parentNodePath(params.target) + '/')
+    $('.file_name:first', modalEmt).val(CodingCommon.DEFAULT_FILENAME + '.js')
+    $('lang_select:first', modalEmt).val('js')
+    $('draw_select:first', modalEmt).val('canvas')
+
+    $('lang_select', modalEmt).off('change')
+    $('lang_select', modalEmt).on('change', (e) ->
+      # 拡張子設定
+      ext = ''
+      if $('.lang_select', modalEmt).val() == 'js'
+        ext = '.js'
+      else if $('.lang_select', modalEmt).val() == 'coffee'
+        ext = '.coffee'
+      fileName = $('.file_name:first', modalEmt).val()
+      fileName = fileName.replace(/\.*/, '') + ext
+      $('.file_name:first', modalEmt).val(fileName)
+    )
+
+    $('.create_button', modalEmt).off('click')
+    $('.create_button', modalEmt).on('click', (e) ->
+      e.preventDefault()
+      lang_type = ''
+      draw_type = ''
+      ext = ''
+      if $('.lang_select', modalEmt).val() == 'js'
+        lang_type = CodingCommon.Lang.JAVASCRIPT
+        ext = '.js'
+      else if $('.lang_select', modalEmt).val() == 'coffee'
+        lang_type = CodingCommon.Lang.COFFEESCRIPT
+        ext = '.coffee'
+      if $('.draw_select', modalEmt).val() == 'canvas'
+        draw_type = Constant.ItemDrawType.CANVAS
+      else if $('.draw_select', modalEmt).val() == 'css'
+        draw_type = Constant.ItemDrawType.CSS
+
+      if lang_type != '' && draw_type != ''
+        # 同名ファイルチェック
+        fileName = $('.file_name:first', modalEmt).val()
+        sameNameCount = _countSameFilename(params.target, fileName)
+        if sameNameCount <= 1
+          CodingCommon.addNewFile(params.target, fileName, lang_type)
+    )
+
+    if callback?
+      callback()
 
   @addNewFile = (parentNode, name, lang_type, successCallback = null, errorCallback = null) ->
     data = {}
@@ -653,3 +694,13 @@ class CodingCommon
 
   _userCodingClassNameByNodePath = (nodePath) ->
     return nodePath.replace(/\//g, '_').replace('.', '_')
+
+  _countSameFilename = (node, name, ext = '')->
+    childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(-> $(@).text())
+    count = 1
+    while count < 100
+      num = if count <= 1 then '' else count
+      if $.inArray("#{name}#{num}#{ext}", childrenText) < 0
+        break
+      count += 1
+    return count

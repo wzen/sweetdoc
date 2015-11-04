@@ -543,13 +543,16 @@ Common = (function() {
     }
   };
 
-  Common.showModalView = function(type, prepareShowFunc, enableOverlayClose) {
+  Common.showModalView = function(type, enableOverlayClose, prepareShowFunc, prepareShowFuncParams) {
     var _show, emt, self;
+    if (enableOverlayClose == null) {
+      enableOverlayClose = true;
+    }
     if (prepareShowFunc == null) {
       prepareShowFunc = null;
     }
-    if (enableOverlayClose == null) {
-      enableOverlayClose = true;
+    if (prepareShowFuncParams == null) {
+      prepareShowFuncParams = {};
     }
     self = this;
     emt = $('body').children(".modal-content." + type);
@@ -583,7 +586,7 @@ Common = (function() {
             emt = $('body').children(".modal-content." + type);
             emt.hide();
             if (prepareShowFunc != null) {
-              return prepareShowFunc(emt, function() {
+              return prepareShowFunc(emt, prepareShowFuncParams, function() {
                 return _show.call(self);
               });
             } else {

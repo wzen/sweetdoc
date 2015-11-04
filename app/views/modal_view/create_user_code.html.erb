@@ -1,0 +1,41 @@
+<div class="modal-content <%= Const::ModalViewType::CREATE_USER_CODE %>">
+  <div class="content">
+    <div>
+      <div class="cell_label">
+        <label>Path:</label>
+      </div>
+      <div>
+        <span class="node_path"></span>
+        <input class="file_name" type="number" value="" maxlength="4" style="max-width: 50px">
+      </div>
+    </div>
+    <div>
+      <div class="cell_label">
+        <label>Select Program Language:</label>
+      </div>
+      <div style="vertical-align: middle">
+        <select class="lang_select">
+          <option value="js">JavaScript</option>
+          <option value="coffee">CoffeeScript</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <div class="cell_label">
+        <label>Select Draw Type:</label>
+      </div>
+      <div style="vertical-align: middle">
+        <select class="draw_select">
+          <option value="canvas">HTML5 Canvas</option>
+          <option value="css">CSS</option>
+        </select>
+      </div>
+    </div>
+    <div class="button_wrapper">
+      <div>
+        <span class="new"><button class="create_button" value="Create">Create</button></span>
+        <button class="back_button" value="Back to MainPage">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,28 +1,28 @@
 # Coffee Temp
 
-@init = ->
+init = ->
 
-@actionProperties = {
-
-}
-
-@variables = {
+actionProperties = {
 
 }
 
-@updateEventBefore = ->
+variables = {
 
-@updateEventAfter = ->
+}
 
-@draw = ->
+updateEventBefore = ->
+
+updateEventAfter = ->
+
+draw = ->
 
 
-@scrollEvent = ->
+scrollEvent = ->
 
-@clickEvent = ->
+clickEvent = ->
 
-@cssAnimationElement = ->
+cssAnimationElement = ->
 
-@willChapter = ->
+willChapter = ->
 
-@didChapter = ->
+didChapter = ->

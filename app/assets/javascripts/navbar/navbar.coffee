@@ -21,11 +21,11 @@ class Navbar
         if window.confirm(I18n.t('message.dialog.new_project'))
           WorktableCommon.recreateMainContainer()
           # 初期モーダル表示
-          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)
+          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
       else
         WorktableCommon.recreateMainContainer()
         # 初期モーダル表示
-        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)
+        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
     )
 
     menuSave = $('.menu-save', fileMenuEmt)
@@ -152,7 +152,6 @@ class Navbar
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     itemsSelectMenuEmt.removeClass('active')
     $('#menu-action-edit').parent('li').addClass('active')
-
 
   # ヘッダーにタイトルを設定
   @setTitle = (title_name) ->

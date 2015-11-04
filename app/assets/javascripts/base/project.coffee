@@ -1,7 +1,7 @@
 class Project
 
   # プロジェクト作成時モーダルビュー初期化
-  @initProjectModal = (modalEmt, callback = null) ->
+  @initProjectModal = (modalEmt, params, callback = null) ->
 
     _modalSize = (type) ->
       if type == 'new'

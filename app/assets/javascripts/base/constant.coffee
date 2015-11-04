@@ -24,6 +24,13 @@ if gon?
       # @property [Int] OPTION アイテムオプション
       @OPTION = constant.Mode.OPTION
 
+    # アイテム種別
+    class @ItemDrawType
+      # @property [Int] CANVAS CANVAS
+      @CANVAS = constant.Mode.CANVAS
+      # @property [Int] CSS CSS
+      @CSS = constant.Mode.CSS
+
     # アクションイベント種別
     class @ActionType
       # @property [Int] SCROLL スクロール
@@ -77,8 +84,8 @@ if gon?
       @INIT_PROJECT = constant.ModalViewType.INIT_PROJECT
       # @property [Int] ABOUT 概要
       @ABOUT = constant.ModalViewType.ABOUT
-      # @property [Int] UPLOAD_GALLERY_CONFIRM ギャラリーアップロード
-      @UPLOAD_GALLERY_CONFIRM = constant.ModalViewType.UPLOAD_GALLERY_CONFIRM
+      @ADMIN_PROJECTS = constant.ModalViewType.ADMIN_PROJECTS
+      @CREATE_USER_CODE = constant.ModalViewType.CREATE_USER_CODE
 
     # ページング
     class @Paging

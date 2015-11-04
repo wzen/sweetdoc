@@ -51,4 +51,4 @@ $ ->
       _callback.call(@)
 
       # プロジェクトモーダル表示
-      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false)
+      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)

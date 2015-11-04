@@ -303,8 +303,8 @@ class Const
   class ModalViewType
     INIT_PROJECT = 'init_project'
     ADMIN_PROJECTS = 'admin_projects'
+    CREATE_USER_CODE = 'create_user_code'
     ABOUT = 'about'
-    UPLOAD_GALLERY_CONFIRM = 'upload_gallery_confirm'
   end
 
   class Paging

@@ -112,6 +112,82 @@
   }
 }
 
-.modal-content.upload_gallery_confirm {
 
+.modal-content.create_user_code {
+
+  .content {
+    > div {
+      display: table;
+      > div {
+        display: table-cell;
+        vertical-align: top;
+      }
+    }
+  }
+
+  label {
+    width:100%;
+    float:left;
+    font-size:12px;
+    line-height:24px;
+    font-weight:bold;
+
+  }
+
+  input {
+    line-height:18px;
+  }
+
+  input[type=text] {
+    width:300px;
+    margin-bottom:8px;
+    padding:2px 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid #CCC;
+  }
+
+  .button_wrapper {
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+
+    span {
+      display: none;
+    }
+
+    .create_button, .open_button {
+      background: #e62e4d;
+      background-image: -webkit-linear-gradient(top, #e62e4d, #c91414);
+      background-image: -moz-linear-gradient(top, #e62e4d, #c91414);
+      background-image: -ms-linear-gradient(top, #e62e4d, #c91414);
+      background-image: -o-linear-gradient(top, #e62e4d, #c91414);
+      background-image: linear-gradient(to bottom, #e62e4d, #c91414);
+      -webkit-border-radius: 8px;
+      -moz-border-radius: 8px;
+      border-radius: 8px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 13px;
+      padding: 5px 10px 5px 10px;
+      border: solid #e62e4d 1px;
+    }
+    .back_button {
+      background: #666061;
+      background-image: -webkit-linear-gradient(top, #666061, #7a7373);
+      background-image: -moz-linear-gradient(top, #666061, #7a7373);
+      background-image: -ms-linear-gradient(top, #666061, #7a7373);
+      background-image: -o-linear-gradient(top, #666061, #7a7373);
+      background-image: linear-gradient(to bottom, #666061, #7a7373);
+      -webkit-border-radius: 8px;
+      -moz-border-radius: 8px;
+      border-radius: 8px;
+      font-family: Arial;
+      color: #ffffff;
+      font-size: 13px;
+      padding: 5px 10px 5px 10px;
+      border: solid #666061 1px;
+    }
+  }
 }

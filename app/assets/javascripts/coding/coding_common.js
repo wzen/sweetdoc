@@ -2,7 +2,7 @@
 var CodingCommon;
 
 CodingCommon = (function() {
-  var _activeEditorId, _codes, _deactiveEditor, _parentNodePath, _treeState, _userCodingClassNameByNodePath, constant;
+  var _activeEditorId, _codes, _countSameFilename, _deactiveEditor, _parentNodePath, _treeState, _userCodingClassNameByNodePath, constant;
 
   function CodingCommon() {}
 
@@ -217,50 +217,15 @@ CodingCommon = (function() {
   };
 
   CodingCommon.getContextMenuArray = function(type) {
-    var _countSameFilename, deleteNode, makeFile, makeFolder, menu;
-    _countSameFilename = function(node, name, ext) {
-      var childrenText, count, num;
-      if (ext == null) {
-        ext = '';
-      }
-      childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(function() {
-        return $(this).text();
-      });
-      count = 1;
-      while (count < 100) {
-        num = count <= 1 ? '' : count;
-        if ($.inArray("" + name + num + ext, childrenText) < 0) {
-          break;
-        }
-        count += 1;
-      }
-      return count;
-    };
+    var deleteNode, makeFile, makeFolder, menu;
     makeFile = {
       title: I18n.t('context_menu.new_file'),
-      children: [
-        {
-          title: I18n.t('context_menu.js'),
-          cmd: "js",
-          func: function(event, ui) {
-            var filename, num, sameNameCount;
-            sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js');
-            num = sameNameCount <= 1 ? '' : sameNameCount;
-            filename = (CodingCommon.DEFAULT_FILENAME + num) + ".js";
-            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT);
-          }
-        }, {
-          title: I18n.t('context_menu.coffee'),
-          cmd: "coffee",
-          func: function(event, ui) {
-            var filename, num, sameNameCount;
-            sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee');
-            num = sameNameCount <= 1 ? '' : sameNameCount;
-            filename = (CodingCommon.DEFAULT_FILENAME + num) + ".coffee";
-            return CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT);
-          }
-        }
-      ]
+      cmd: "new_file",
+      func: function(event, ui) {
+        return Common.showModalView(Constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {
+          target: event.target
+        });
+      }
     };
     makeFolder = {
       title: I18n.t('context_menu.new_folder'),
@@ -574,6 +539,59 @@ CodingCommon = (function() {
     });
   };
 
+  CodingCommon.initAddNewFileModal = function(modalEmt, params, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    $('.node_path', modalEmt).html(_parentNodePath(params.target) + '/');
+    $('.file_name:first', modalEmt).val(CodingCommon.DEFAULT_FILENAME + '.js');
+    $('lang_select:first', modalEmt).val('js');
+    $('draw_select:first', modalEmt).val('canvas');
+    $('lang_select', modalEmt).off('change');
+    $('lang_select', modalEmt).on('change', function(e) {
+      var ext, fileName;
+      ext = '';
+      if ($('.lang_select', modalEmt).val() === 'js') {
+        ext = '.js';
+      } else if ($('.lang_select', modalEmt).val() === 'coffee') {
+        ext = '.coffee';
+      }
+      fileName = $('.file_name:first', modalEmt).val();
+      fileName = fileName.replace(/\.*/, '') + ext;
+      return $('.file_name:first', modalEmt).val(fileName);
+    });
+    $('.create_button', modalEmt).off('click');
+    $('.create_button', modalEmt).on('click', function(e) {
+      var draw_type, ext, fileName, lang_type, sameNameCount;
+      e.preventDefault();
+      lang_type = '';
+      draw_type = '';
+      ext = '';
+      if ($('.lang_select', modalEmt).val() === 'js') {
+        lang_type = CodingCommon.Lang.JAVASCRIPT;
+        ext = '.js';
+      } else if ($('.lang_select', modalEmt).val() === 'coffee') {
+        lang_type = CodingCommon.Lang.COFFEESCRIPT;
+        ext = '.coffee';
+      }
+      if ($('.draw_select', modalEmt).val() === 'canvas') {
+        draw_type = Constant.ItemDrawType.CANVAS;
+      } else if ($('.draw_select', modalEmt).val() === 'css') {
+        draw_type = Constant.ItemDrawType.CSS;
+      }
+      if (lang_type !== '' && draw_type !== '') {
+        fileName = $('.file_name:first', modalEmt).val();
+        sameNameCount = _countSameFilename(params.target, fileName);
+        if (sameNameCount <= 1) {
+          return CodingCommon.addNewFile(params.target, fileName, lang_type);
+        }
+      }
+    });
+    if (callback != null) {
+      return callback();
+    }
+  };
+
   CodingCommon.addNewFile = function(parentNode, name, lang_type, successCallback, errorCallback) {
     var data, node_path;
     if (successCallback == null) {
@@ -875,6 +893,25 @@ CodingCommon = (function() {
 
   _userCodingClassNameByNodePath = function(nodePath) {
     return nodePath.replace(/\//g, '_').replace('.', '_');
+  };
+
+  _countSameFilename = function(node, name, ext) {
+    var childrenText, count, num;
+    if (ext == null) {
+      ext = '';
+    }
+    childrenText = $(node).next('.jstree-children').find('.jstree-node > .jstree-anchor').map(function() {
+      return $(this).text();
+    });
+    count = 1;
+    while (count < 100) {
+      num = count <= 1 ? '' : count;
+      if ($.inArray("" + name + num + ext, childrenText) < 0) {
+        break;
+      }
+      count += 1;
+    }
+    return count;
   };
 
   return CodingCommon;

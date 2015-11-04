@@ -22,11 +22,11 @@ Navbar = (function() {
       if (Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2) {
         if (window.confirm(I18n.t('message.dialog.new_project'))) {
           WorktableCommon.recreateMainContainer();
-          return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false);
+          return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
         }
       } else {
         WorktableCommon.recreateMainContainer();
-        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, Project.initProjectModal, false);
+        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
       }
     });
     menuSave = $('.menu-save', fileMenuEmt);
