@@ -332,6 +332,7 @@ ActiveRecord::Schema.define(version: 20151103013621) do
   create_table "user_codings", force: true do |t|
     t.integer  "user_id",                       null: false
     t.string   "lang_type",                     null: false
+    t.integer  "draw_type",                     null: false
     t.string   "code_filename",                 null: false
     t.boolean  "del_flg",       default: false
     t.datetime "created_at"

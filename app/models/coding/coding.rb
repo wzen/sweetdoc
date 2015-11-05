@@ -66,6 +66,7 @@ class Coding
       code = {}
       ActiveRecord::Base.transaction do
         code[Const::Coding::Key::LANG] = lang_type
+        code[Const::Coding::Key::DRAW_TYPE] = draw_type
         draw_type_surfix = ''
         if draw_type == Const::ItemDrawType::CANVAS
           draw_type_surfix = 'canvas'
@@ -345,6 +346,7 @@ class Coding
 
   def self._add_code(user_id, c)
     lang_type = c[Const::Coding::Key::LANG]
+    draw_type = c[Const::Coding::Key::DRAW_TYPE]
     code = c[Const::Coding::Key::CODE]
     code_filename = generate_filename(user_id)
     user_access_token = User.find(user_id)['access_token']
@@ -356,6 +358,7 @@ class Coding
     uc = UserCoding.new({
                             user_id: user_id,
                             lang_type: lang_type,
+                            draw_type: draw_type,
                             code_filename: code_filename
                         })
     uc.save!
