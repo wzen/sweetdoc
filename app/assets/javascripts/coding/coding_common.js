@@ -545,10 +545,10 @@ CodingCommon = (function() {
     }
     $('.node_path', modalEmt).html(_parentNodePath(params.target) + '/');
     $('.file_name:first', modalEmt).val(CodingCommon.DEFAULT_FILENAME + '.js');
-    $('lang_select:first', modalEmt).val('js');
-    $('draw_select:first', modalEmt).val('canvas');
-    $('lang_select', modalEmt).off('change');
-    $('lang_select', modalEmt).on('change', function(e) {
+    $('.lang_select:first', modalEmt).val('js');
+    $('.draw_select:first', modalEmt).val('canvas');
+    $('.lang_select', modalEmt).off('change');
+    $('.lang_select', modalEmt).on('change', function(e) {
       var ext, fileName;
       ext = '';
       if ($('.lang_select', modalEmt).val() === 'js') {
@@ -557,7 +557,7 @@ CodingCommon = (function() {
         ext = '.coffee';
       }
       fileName = $('.file_name:first', modalEmt).val();
-      fileName = fileName.replace(/\.*/, '') + ext;
+      fileName = fileName.replace(/\..*/, '') + ext;
       return $('.file_name:first', modalEmt).val(fileName);
     });
     $('.create_button', modalEmt).off('click');
@@ -586,6 +586,11 @@ CodingCommon = (function() {
           return CodingCommon.addNewFile(params.target, fileName, lang_type);
         }
       }
+    });
+    $('.back_button', modalEmt).off('click');
+    $('.back_button', modalEmt).on('click', function(e) {
+      e.preventDefault();
+      return Common.hideModalView();
     });
     if (callback != null) {
       return callback();
