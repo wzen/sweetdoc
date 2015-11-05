@@ -425,17 +425,6 @@ class ArrowItem extends CanvasItemBase
     # 線の描画
     @drawLine()
 
-  # 描画終了時に呼ばれるメソッド
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
-    if !super(zindex)
-      return false
-    @drawAndMakeConfigsAndWritePageValue(show)
-    # Canvas状態を保存
-    @saveNewDrawedSurface()
-    return true
-
   # 矢印のサイズ更新
   # @private
   _updateArrowRect = (cood) ->

@@ -76,13 +76,6 @@ class ItemBase extends ItemEventBase
     padding = 5
     drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
-  # 描画終了時の処理
-  # @param [Int] zindex z-index
-  # @return [Boolean] 処理結果
-  endDraw: (zindex) ->
-    @zindex = zindex
-    return true
-
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
   # @abstract
@@ -280,18 +273,6 @@ class CssItemBase extends ItemBase
   # @abstract
   setupOptionMenu: ->
 
-  # 描画終了時に呼ばれるメソッド
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
-    if !super(zindex)
-      return false
-
-    # スクロールビュー分のxとyを追加
-    @itemSize.x += scrollContents.scrollLeft()
-    @itemSize.y += scrollContents.scrollTop()
-    return true
-
   #CSSを設定
   makeCss: (fromTemp = false) ->
     newEmt = null
@@ -370,38 +351,6 @@ class CanvasItemBase extends ItemBase
     @scale = {w:1.0, h:1.0}
     if window.isWorkTable
       @constructor.include WorkTableCanvasItemExtend
-
-  # 描画終了時に呼ばれるメソッド
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
-    if !super(zindex)
-      return false
-
-    # 座標を新規キャンパス用に修正
-    do =>
-      @coodRegist.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @coodLeftBodyPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @coodRightBodyPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @coodHeadPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-
-    # スクロールビュー分のxとyを追加
-    @itemSize.x += scrollContents.scrollLeft()
-    @itemSize.y += scrollContents.scrollTop()
-
-    return true
 
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID

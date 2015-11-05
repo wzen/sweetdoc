@@ -121,18 +121,6 @@ ButtonItem = (function(superClass) {
     }
   };
 
-  ButtonItem.prototype.endDraw = function(zindex, show) {
-    if (show == null) {
-      show = true;
-    }
-    if (!ButtonItem.__super__.endDraw.call(this, zindex)) {
-      return false;
-    }
-    this.makeCss(true);
-    this.drawAndMakeConfigsAndWritePageValue(show);
-    return true;
-  };
-
   ButtonItem.prototype.setupOptionMenu = function() {
     var btnBgColor, btnGradientStep, btnShadowColor, cssCache, cssCode, cssRoot, cssStyle, item, name;
     item = this;

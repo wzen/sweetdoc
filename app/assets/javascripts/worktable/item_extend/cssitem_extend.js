@@ -55,6 +55,17 @@ WorkTableCssItemExtend = {
       this.itemSize.y = cood.y;
     }
     return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
+  },
+  endDraw: function(zindex, show) {
+    if (show == null) {
+      show = true;
+    }
+    this.zindex = zindex;
+    this.itemSize.x += scrollContents.scrollLeft();
+    this.itemSize.y += scrollContents.scrollTop();
+    this.makeCss(true);
+    this.drawAndMakeConfigsAndWritePageValue(show);
+    return true;
   }
 };
 

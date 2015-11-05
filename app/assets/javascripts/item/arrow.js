@@ -420,18 +420,6 @@ ArrowItem = (function(superClass) {
     return this.drawLine();
   };
 
-  ArrowItem.prototype.endDraw = function(zindex, show) {
-    if (show == null) {
-      show = true;
-    }
-    if (!ArrowItem.__super__.endDraw.call(this, zindex)) {
-      return false;
-    }
-    this.drawAndMakeConfigsAndWritePageValue(show);
-    this.saveNewDrawedSurface();
-    return true;
-  };
-
   _updateArrowRect = function(cood) {
     var maxX, maxY, minX, minY;
     if (this.itemSize === null) {

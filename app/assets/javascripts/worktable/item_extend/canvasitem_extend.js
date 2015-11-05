@@ -42,6 +42,37 @@ WorkTableCanvasItemExtend = {
   },
   resizeComplete: function() {
     return this.saveObj();
+  },
+  endDraw: function(zindex, show) {
+    if (show == null) {
+      show = true;
+    }
+    this.zindex = zindex;
+    (function(_this) {
+      return (function() {
+        _this.coodRegist.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+        _this.coodLeftBodyPart.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+        _this.coodRightBodyPart.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+        return _this.coodHeadPart.forEach(function(e) {
+          e.x -= _this.itemSize.x;
+          return e.y -= _this.itemSize.y;
+        });
+      });
+    })(this)();
+    this.itemSize.x += scrollContents.scrollLeft();
+    this.itemSize.y += scrollContents.scrollTop();
+    this.drawAndMakeConfigsAndWritePageValue(show);
+    this.saveNewDrawedSurface();
+    return true;
   }
 };
 

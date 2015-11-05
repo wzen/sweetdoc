@@ -146,18 +146,6 @@ class ButtonItem extends CssItemBase
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 
-
-
-  # ドラッグ描画終了
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
-    if !super(zindex)
-      return false
-    @makeCss(true)
-    @drawAndMakeConfigsAndWritePageValue(show)
-    return true
-
   # CSSボタンコントロール初期化
   setupOptionMenu: ->
     item = @

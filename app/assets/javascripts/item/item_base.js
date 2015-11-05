@@ -85,11 +85,6 @@ ItemBase = (function(superClass) {
     return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
 
-  ItemBase.prototype.endDraw = function(zindex) {
-    this.zindex = zindex;
-    return true;
-  };
-
   ItemBase.prototype.reDraw = function(show) {
     if (show == null) {
       show = true;
@@ -294,18 +289,6 @@ CssItemBase = (function(superClass) {
 
   CssItemBase.prototype.setupOptionMenu = function() {};
 
-  CssItemBase.prototype.endDraw = function(zindex, show) {
-    if (show == null) {
-      show = true;
-    }
-    if (!CssItemBase.__super__.endDraw.call(this, zindex)) {
-      return false;
-    }
-    this.itemSize.x += scrollContents.scrollLeft();
-    this.itemSize.y += scrollContents.scrollTop();
-    return true;
-  };
-
   CssItemBase.prototype.makeCss = function(fromTemp) {
     var newEmt;
     if (fromTemp == null) {
@@ -391,38 +374,6 @@ CanvasItemBase = (function(superClass) {
       this.constructor.include(WorkTableCanvasItemExtend);
     }
   }
-
-  CanvasItemBase.prototype.endDraw = function(zindex, show) {
-    if (show == null) {
-      show = true;
-    }
-    if (!CanvasItemBase.__super__.endDraw.call(this, zindex)) {
-      return false;
-    }
-    (function(_this) {
-      return (function() {
-        _this.coodRegist.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-        _this.coodLeftBodyPart.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-        _this.coodRightBodyPart.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-        return _this.coodHeadPart.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-      });
-    })(this)();
-    this.itemSize.x += scrollContents.scrollLeft();
-    this.itemSize.y += scrollContents.scrollTop();
-    return true;
-  };
 
   CanvasItemBase.prototype.canvasElementId = function() {
     return this.id + '_canvas';
