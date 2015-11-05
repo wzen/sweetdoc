@@ -60,16 +60,22 @@ class Coding
     return true, I18n.t('message.database.item_state.save.success')
   end
 
-  def self.add_new_file(user_id, node_path, lang_type)
+  def self.add_new_file(user_id, node_path, lang_type, draw_type)
     begin
       user_coding_id = nil
       code = {}
       ActiveRecord::Base.transaction do
         code[Const::Coding::Key::LANG] = lang_type
+        draw_type_surfix = ''
+        if draw_type == Const::ItemDrawType::CANVAS
+          draw_type_surfix = 'canvas'
+        elsif draw_type == Const::ItemDrawType::CSS
+          draw_type_surfix = 'css'
+        end
         if lang_type == Const::Coding::Lang::JAVASCRIPT
-          file_path = File.join(Rails.root, '/public/code_template/item/javascript.js')
+          file_path = File.join(Rails.root, "/public/code_template/item/javascript_#{draw_type_surfix}.js")
         else
-          file_path = File.join(Rails.root, '/public/code_template/item/coffeescript.coffee')
+          file_path = File.join(Rails.root, "/public/code_template/item/coffeescript_#{draw_type_surfix}.coffee")
         end
         code[Const::Coding::Key::CODE] = ''
         File.open(file_path,'r') do |file|

@@ -526,7 +526,12 @@ class Common
         }
       )
     else
-      _show.call(self)
+      if prepareShowFunc?
+        prepareShowFunc(emt, prepareShowFuncParams, ->
+          _show.call(self)
+        )
+      else
+        _show.call(self)
 
   # 中央センタリング
   @modalCentering = (animation = false, b = null, c = null) ->

@@ -29,6 +29,8 @@ CodingCommon = (function() {
 
       Key.NODE_PATH = constant.Coding.Key.NODE_PATH;
 
+      Key.DRAW_TYPE = constant.Coding.Key.DRAW_TYPE;
+
       Key.IS_OPENED = constant.Coding.Key.IS_OPENED;
 
       Key.PARENT_NODE_PATH = constant.Coding.Key.PARENT_NODE_PATH;
@@ -545,8 +547,8 @@ CodingCommon = (function() {
     }
     $('.node_path', modalEmt).html(_parentNodePath(params.target) + '/');
     $('.file_name:first', modalEmt).val(CodingCommon.DEFAULT_FILENAME + '.js');
-    $('.lang_select:first', modalEmt).val('js');
-    $('.draw_select:first', modalEmt).val('canvas');
+    $('.lang_select:first', modalEmt).val('');
+    $('.draw_select:first', modalEmt).val('');
     $('.lang_select', modalEmt).off('change');
     $('.lang_select', modalEmt).on('change', function(e) {
       var ext, fileName;
@@ -583,7 +585,9 @@ CodingCommon = (function() {
         fileName = $('.file_name:first', modalEmt).val();
         sameNameCount = _countSameFilename(params.target, fileName);
         if (sameNameCount <= 1) {
-          return CodingCommon.addNewFile(params.target, fileName, lang_type);
+          return CodingCommon.addNewFile(params.target, fileName, lang_type, draw_type, function() {
+            return Common.hideModalView();
+          });
         }
       }
     });
@@ -597,7 +601,7 @@ CodingCommon = (function() {
     }
   };
 
-  CodingCommon.addNewFile = function(parentNode, name, lang_type, successCallback, errorCallback) {
+  CodingCommon.addNewFile = function(parentNode, name, lang_type, draw_type, successCallback, errorCallback) {
     var data, node_path;
     if (successCallback == null) {
       successCallback = null;
@@ -609,6 +613,7 @@ CodingCommon = (function() {
     data[this.Key.LANG] = lang_type;
     node_path = _parentNodePath(parentNode) + '/' + name;
     data[this.Key.NODE_PATH] = node_path;
+    data[this.Key.DRAW_TYPE] = draw_type;
     return $.ajax({
       url: "/coding/add_new_file",
       type: "POST",

@@ -13,6 +13,7 @@ class CodingCommon
       @TREE_DATA = constant.Coding.Key.TREE_DATA
       @SUB_TREE = constant.Coding.Key.SUB_TREE
       @NODE_PATH = constant.Coding.Key.NODE_PATH
+      @DRAW_TYPE = constant.Coding.Key.DRAW_TYPE
       @IS_OPENED = constant.Coding.Key.IS_OPENED
       @PARENT_NODE_PATH = constant.Coding.Key.PARENT_NODE_PATH
     class @Lang
@@ -169,24 +170,6 @@ class CodingCommon
 
 
   @getContextMenuArray = (type) ->
-
-#    makeFile = {title: I18n.t('context_menu.new_file'), children: [
-#      {title: I18n.t('context_menu.js'), cmd: "js", func: (event, ui) ->
-#        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.js')
-#        num = if sameNameCount <= 1 then '' else sameNameCount
-#        # JavaScriptファイル作成
-#        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.js"
-#        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.JAVASCRIPT)
-#      }
-#      {title: I18n.t('context_menu.coffee'), cmd: "coffee", func: (event, ui) ->
-#        sameNameCount = _countSameFilename(event.target, CodingCommon.DEFAULT_FILENAME, '.coffee')
-#        num = if sameNameCount <= 1 then '' else sameNameCount
-#        # CoffeeScriptファイル作成
-#        filename = "#{CodingCommon.DEFAULT_FILENAME + num}.coffee"
-#        CodingCommon.addNewFile(event.target, filename, CodingCommon.Lang.COFFEESCRIPT)
-#      }
-#    ]}
-
     makeFile = {title: I18n.t('context_menu.new_file'), cmd: "new_file", func: (event, ui) ->
       Common.showModalView(Constant.ModalViewType.CREATE_USER_CODE, false, CodingCommon.initAddNewFileModal, {target: event.target})
     }
@@ -408,8 +391,8 @@ class CodingCommon
   @initAddNewFileModal = (modalEmt, params, callback = null) ->
     $('.node_path', modalEmt).html(_parentNodePath(params.target) + '/')
     $('.file_name:first', modalEmt).val(CodingCommon.DEFAULT_FILENAME + '.js')
-    $('.lang_select:first', modalEmt).val('js')
-    $('.draw_select:first', modalEmt).val('canvas')
+    $('.lang_select:first', modalEmt).val('')
+    $('.draw_select:first', modalEmt).val('')
 
     $('.lang_select', modalEmt).off('change')
     $('.lang_select', modalEmt).on('change', (e) ->
@@ -446,7 +429,9 @@ class CodingCommon
         fileName = $('.file_name:first', modalEmt).val()
         sameNameCount = _countSameFilename(params.target, fileName)
         if sameNameCount <= 1
-          CodingCommon.addNewFile(params.target, fileName, lang_type)
+          CodingCommon.addNewFile(params.target, fileName, lang_type, draw_type, ->
+            Common.hideModalView()
+          )
     )
     $('.back_button', modalEmt).off('click')
     $('.back_button', modalEmt).on('click', (e) ->
@@ -457,11 +442,12 @@ class CodingCommon
     if callback?
       callback()
 
-  @addNewFile = (parentNode, name, lang_type, successCallback = null, errorCallback = null) ->
+  @addNewFile = (parentNode, name, lang_type, draw_type, successCallback = null, errorCallback = null) ->
     data = {}
     data[@Key.LANG] = lang_type
     node_path = _parentNodePath(parentNode) + '/' + name
     data[@Key.NODE_PATH] = node_path
+    data[@Key.DRAW_TYPE] = draw_type
     $.ajax(
       {
         url: "/coding/add_new_file"

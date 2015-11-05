@@ -37,9 +37,9 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ItemDrawType = (function() {
       function ItemDrawType() {}
 
-      ItemDrawType.CANVAS = constant.Mode.CANVAS;
+      ItemDrawType.CANVAS = constant.ItemDrawType.CANVAS;
 
-      ItemDrawType.CSS = constant.Mode.CSS;
+      ItemDrawType.CSS = constant.ItemDrawType.CSS;
 
       return ItemDrawType;
 

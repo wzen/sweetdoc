@@ -32,7 +32,8 @@ class CodingController < ApplicationController
     user_id = current_or_guest_user.id
     node_path = params.require(Const::Coding::Key::NODE_PATH)
     lang = params.require(Const::Coding::Key::LANG)
-    @result_success, @message, @add_user_coding_id, @code = Coding.add_new_file(user_id, node_path, lang)
+    draw_type = params.require(Const::Coding::Key::DRAW_TYPE).to_i
+    @result_success, @message, @add_user_coding_id, @code = Coding.add_new_file(user_id, node_path, lang, draw_type)
   end
 
   def add_new_folder

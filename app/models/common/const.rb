@@ -364,6 +364,7 @@ class Const
       TREE_DATA = 'tree_data'
       SUB_TREE = 'sub_tree'
       NODE_PATH = 'node_path'
+      DRAW_TYPE = 'draw_type'
       IS_OPENED = 'is_opened'
       IS_ACTIVE = 'is_active'
       PARENT_NODE_PATH = 'parent_node_path'

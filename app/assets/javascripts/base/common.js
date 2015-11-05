@@ -600,7 +600,13 @@ Common = (function() {
         }
       });
     } else {
-      return _show.call(self);
+      if (prepareShowFunc != null) {
+        return prepareShowFunc(emt, prepareShowFuncParams, function() {
+          return _show.call(self);
+        });
+      } else {
+        return _show.call(self);
+      }
     }
   };
 

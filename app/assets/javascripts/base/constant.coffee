@@ -27,9 +27,9 @@ if gon?
     # アイテム種別
     class @ItemDrawType
       # @property [Int] CANVAS CANVAS
-      @CANVAS = constant.Mode.CANVAS
+      @CANVAS = constant.ItemDrawType.CANVAS
       # @property [Int] CSS CSS
-      @CSS = constant.Mode.CSS
+      @CSS = constant.ItemDrawType.CSS
 
     # アクションイベント種別
     class @ActionType
