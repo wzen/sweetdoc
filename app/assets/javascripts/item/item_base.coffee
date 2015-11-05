@@ -48,6 +48,9 @@ class ItemBase extends ItemEventBase
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
 
+    if window.isWorkTable
+      @constructor.include WorkTableCommonExtend
+
   # コンフィグメニューの要素IDを取得
   # @return [String] HTML要素ID
   getDesignConfigId: ->
@@ -209,6 +212,9 @@ class CssItemBase extends ItemBase
       @moveLoc = {x:cood.x, y:cood.y}
     @css = null
     @cssStypeReflectTimer = null
+    if window.isWorkTable
+      @constructor.include WorkTableCssItemExtend
+
 
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
@@ -362,6 +368,8 @@ class CanvasItemBase extends ItemBase
     @newDrawedSurfaceImageData = null
     # @property [Array] scale 表示倍率
     @scale = {w:1.0, h:1.0}
+    if window.isWorkTable
+      @constructor.include WorkTableCanvasItemExtend
 
   # 描画終了時に呼ばれるメソッド
   # @param [Int] zindex z-index

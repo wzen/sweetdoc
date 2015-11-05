@@ -58,6 +58,9 @@ ItemBase = (function(superClass) {
     this.ohiRegistIndex = 0;
     this.jqueryElement = null;
     this.coodRegist = [];
+    if (window.isWorkTable) {
+      this.constructor.include(WorkTableCommonExtend);
+    }
   }
 
   ItemBase.prototype.getDesignConfigId = function() {
@@ -224,6 +227,9 @@ CssItemBase = (function(superClass) {
     }
     this.css = null;
     this.cssStypeReflectTimer = null;
+    if (window.isWorkTable) {
+      this.constructor.include(WorkTableCssItemExtend);
+    }
   }
 
   CssItemBase.jsLoaded = function(option) {
@@ -381,6 +387,9 @@ CanvasItemBase = (function(superClass) {
       w: 1.0,
       h: 1.0
     };
+    if (window.isWorkTable) {
+      this.constructor.include(WorkTableCanvasItemExtend);
+    }
   }
 
   CanvasItemBase.prototype.endDraw = function(zindex, show) {

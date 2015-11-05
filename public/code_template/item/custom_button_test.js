@@ -97,4 +97,18 @@ ItemXxx = (function(superClass) {
 
 })(CssItemBase);
 
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemXxx.ITEM_ID] == null)) {
+  window.itemInitFuncList[ItemXxx.ITEM_ID] = function(option) {
+    if (option == null) {
+      option = {};
+    }
+    if (window.isWorkTable && (ItemXxx.jsLoaded != null)) {
+      ItemXxx.jsLoaded(option);
+    }
+    if (window.debug) {
+      return console.log('button loaded');
+    }
+  };
+}
+
 //# sourceMappingURL=custom_button_test.js.map

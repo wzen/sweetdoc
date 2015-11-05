@@ -5,10 +5,6 @@ WorkTableCommonExtend =
   startDraw: ->
     return
 
-  # ドラッグ描画
-  # @param [Array] cood 座標
-  draw: (cood) ->
-
   # 描画&コンフィグ作成
   # @param [Boolean] show 要素作成後に描画を表示するか
   drawAndMakeConfigsAndWritePageValue: (show = true) ->

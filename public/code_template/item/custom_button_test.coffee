@@ -87,3 +87,13 @@ class ItemXxx extends CssItemBase
   didChapter = ->
 
 # Coffee Temp ---End---
+
+# 初期化
+if window.itemInitFuncList? && !window.itemInitFuncList[ItemXxx.ITEM_ID]?
+  window.itemInitFuncList[ItemXxx.ITEM_ID] = (option = {}) ->
+    if window.isWorkTable && ItemXxx.jsLoaded?
+      ItemXxx.jsLoaded(option)
+    #JS読み込み完了
+    if window.debug
+      console.log('button loaded')
+

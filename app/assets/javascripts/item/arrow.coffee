@@ -412,68 +412,62 @@ class ArrowItem extends CanvasItemBase
     if window.debug
       console.log(name + 'X:' + cood.x + ' ' + name + 'Y:' + cood.y)
 
+  # 描画(パス+線)
+  # @param [Array] moveCood 画面ドラッグ座標
+  draw: (moveCood) ->
+    @coodRegist.push(moveCood)
+    # 描画範囲の更新
+    _updateArrowRect.call(@, moveCood)
+    # パスの描画
+    @drawPath(moveCood)
+    # 描画した矢印をクリア
+    @restoreDrawingSurface(@itemSize)
+    # 線の描画
+    @drawLine()
+
+  # 描画終了時に呼ばれるメソッド
+  # @param [Int] zindex z-index
+  # @param [boolean] show 要素作成後に描画を表示するか
+  endDraw: (zindex, show = true) ->
+    if !super(zindex)
+      return false
+    @drawAndMakeConfigsAndWritePageValue(show)
+    # Canvas状態を保存
+    @saveNewDrawedSurface()
+    return true
+
+  # 矢印のサイズ更新
+  # @private
+  _updateArrowRect = (cood) ->
+    if @itemSize == null
+      @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
+    else
+      minX = cood.x - @padding_size
+      minX = if minX < 0 then 0 else minX
+      minY = cood.y - @padding_size
+      minY = if minY < 0 then 0 else minY
+      maxX = cood.x + @padding_size
+      maxX = if maxX > drawingCanvas.width then drawingCanvas.width else maxX
+      maxY = cood.y + @padding_size
+      maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
+
+      if @itemSize.x > minX
+        @itemSize.w += @itemSize.x - minX
+        @itemSize.x = minX
+      if @itemSize.x + @itemSize.w < maxX
+        @itemSize.w += maxX - (@itemSize.x + @itemSize.w)
+      if @itemSize.y > minY
+        @itemSize.h += @itemSize.y - minY
+        @itemSize.y = minY
+      if @itemSize.y + @itemSize.h < maxY
+        @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
+
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
-
-if window.isWorkTable
-  # ワークテーブル用矢印クラス
-  class WorkTableArrowItem extends ArrowItem
-    @include WorkTableCommonExtend
-    @include WorkTableCanvasItemExtend
-
-    # 描画(パス+線)
-    # @param [Array] moveCood 画面ドラッグ座標
-    draw : (moveCood) ->
-      @coodRegist.push(moveCood)
-      # 描画範囲の更新
-      _updateArrowRect.call(@, moveCood)
-      # パスの描画
-      @drawPath(moveCood)
-      # 描画した矢印をクリア
-      @restoreDrawingSurface(@itemSize)
-      # 線の描画
-      @drawLine()
-
-    # 描画終了時に呼ばれるメソッド
-    # @param [Int] zindex z-index
-    # @param [boolean] show 要素作成後に描画を表示するか
-    endDraw: (zindex, show = true) ->
-      if !super(zindex)
-        return false
-      @drawAndMakeConfigsAndWritePageValue(show)
-      # Canvas状態を保存
-      @saveNewDrawedSurface()
-      return true
-
-    # 矢印のサイズ更新
-    # @private
-    _updateArrowRect = (cood) ->
-      if @itemSize == null
-        @itemSize = {x: cood.x, y: cood.y, w: 0, h: 0}
-      else
-        minX = cood.x - @padding_size
-        minX = if minX < 0 then 0 else minX
-        minY = cood.y - @padding_size
-        minY = if minY < 0 then 0 else minY
-        maxX = cood.x + @padding_size
-        maxX = if maxX > drawingCanvas.width then drawingCanvas.width else maxX
-        maxY = cood.y + @padding_size
-        maxY = if maxY > drawingCanvas.height then drawingCanvas.height else maxY
-
-        if @itemSize.x > minX
-          @itemSize.w += @itemSize.x - minX
-          @itemSize.x = minX
-        if @itemSize.x + @itemSize.w < maxX
-          @itemSize.w += maxX - (@itemSize.x + @itemSize.w)
-        if @itemSize.y > minY
-          @itemSize.h += @itemSize.y - minY
-          @itemSize.y = minY
-        if @itemSize.y + @itemSize.h < maxY
-          @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
-
-  Common.setClassToMap(false, WorkTableArrowItem.ITEM_ID, WorkTableArrowItem)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ID]?
   window.itemInitFuncList[ArrowItem.ITEM_ID] = (option = {}) ->
+    if window.isWorkTable && ArrowItem.jsLoaded?
+      ArrowItem.jsLoaded(option)
     #JS読み込み完了後の処理
     if window.debug
       console.log('arrow loaded')

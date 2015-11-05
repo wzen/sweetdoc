@@ -3,7 +3,6 @@ var WorkTableCommonExtend;
 
 WorkTableCommonExtend = {
   startDraw: function() {},
-  draw: function(cood) {},
   drawAndMakeConfigsAndWritePageValue: function(show) {
     if (show == null) {
       show = true;
