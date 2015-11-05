@@ -50,9 +50,12 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
+        <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_canvas.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/checkbox.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
+        <item url="file://$PROJECT_DIR$/public/code_template/item/en/custom_button_test.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/textbox.js" />
+        <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
@@ -61,8 +64,11 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/design.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
+        <item url="file://$PROJECT_DIR$/public/code_template/item/ja/coffeescript_canvas.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/color.js" />
+        <item url="file://$PROJECT_DIR$/public/code_template/item/ja/custom_button_test.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
+        <item url="file://$PROJECT_DIR$/public/code_template/item/ja/coffeescript_css.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />
@@ -79,6 +85,10 @@
       </sourceFilesUrls>
     </properties>
     <CLASSES>
+      <root url="file://$PROJECT_DIR$/public/code_template/item/custom_button_test.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/coffeescript_css.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/coffeescript_canvas.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/coffeescript.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/generator.jquery.color.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
@@ -128,9 +138,12 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_canvas.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/checkbox.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/en/custom_button_test.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/textbox.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
@@ -139,8 +152,11 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/design.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/ja/coffeescript_canvas.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/value_parts/color.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/ja/custom_button_test.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
+      <root url="file://$PROJECT_DIR$/public/code_template/item/ja/coffeescript_css.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />

@@ -74,9 +74,9 @@ class Coding
           draw_type_surfix = 'css'
         end
         if lang_type == Const::Coding::Lang::JAVASCRIPT
-          file_path = File.join(Rails.root, "/public/code_template/item/javascript_#{draw_type_surfix}.js")
+          file_path = File.join(Rails.root, "/public/code_template/item/#{I18n.locale}/javascript_#{draw_type_surfix}.js")
         else
-          file_path = File.join(Rails.root, "/public/code_template/item/coffeescript_#{draw_type_surfix}.coffee")
+          file_path = File.join(Rails.root, "/public/code_template/item/#{I18n.locale}/coffeescript_#{draw_type_surfix}.coffee")
         end
         code[Const::Coding::Key::CODE] = ''
         File.open(file_path,'r') do |file|
