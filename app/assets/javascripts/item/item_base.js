@@ -166,7 +166,7 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.defaultActionType = function() {
-    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ACTION_TYPE];
+    return Common.getActionTypeByCodingActionType(this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ACTION_TYPE]);
   };
 
   ItemBase.defaultAnimationType = function() {

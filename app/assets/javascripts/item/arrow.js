@@ -26,8 +26,7 @@ ArrowItem = (function(superClass) {
       defaultMethod: 'scrollDraw',
       methods: {
         scrollDraw: {
-          actionType: Constant.ActionType.SCROLL,
-          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION,
+          actionType: 'scroll',
           scrollEnabledDirection: {
             top: true,
             bottom: true,
@@ -51,8 +50,7 @@ ArrowItem = (function(superClass) {
           }
         },
         changeColorClick: {
-          actionType: Constant.ActionType.CLICK,
-          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION,
+          actionType: 'click',
           options: {
             id: 'changeColorClick_Design',
             name: 'Changing color by click'

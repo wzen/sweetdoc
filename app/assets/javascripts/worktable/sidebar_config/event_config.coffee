@@ -380,14 +380,15 @@ class EventConfig
           return
         for methodName, prop of methods
           # アクションメソッドConfig追加
-          actionType = Common.getActionTypeClassNameByActionType(prop.actionType)
+          actionType = Common.getActionTypeByCodingActionType(prop.actionType)
+          actionTypeClassName = Common.getActionTypeClassNameByActionType(actionType)
           methodClone = $('#event-config .method_temp').children(':first').clone(true)
           span = methodClone.find('label:first').children('span:first')
-          span.attr('class', actionType)
+          span.attr('class', actionTypeClassName)
           span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
-          methodClone.find('input.action_type:first').val(prop.actionType)
+          methodClone.find('input.action_type:first').val(actionType)
           methodClone.find('input.method_name:first').val(methodName)
-          methodClone.find('input.animation_type:first').val(prop.actionAnimationType)
+          #methodClone.find('input.animation_type:first').val(prop.actionAnimationType)
           valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', methodName)
           methodClone.find('input:radio').attr('name', className)
           methodClone.find('input.value_class_name:first').val(valueClassName)
@@ -395,9 +396,9 @@ class EventConfig
 
           # イベントタイプConfig追加
           handlerClone = null
-          if prop.actionType == Constant.ActionType.SCROLL
+          if actionType == Constant.ActionType.SCROLL
             handlerClone = $('#event-config .handler_scroll_temp').children().clone(true)
-          else if prop.actionType == Constant.ActionType.CLICK
+          else if actionType == Constant.ActionType.CLICK
             handlerClone = $('#event-config .handler_click_temp').children().clone(true)
           handlerParent = $("<div class='#{valueClassName}' style='display:none'></div>")
           handlerParent.append(handlerClone)

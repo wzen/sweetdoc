@@ -357,7 +357,7 @@ EventConfig = (function() {
   };
 
   EventConfig.addEventConfigContents = function(item_id) {
-    var actionParent, actionType, action_forms, className, handlerClone, handlerParent, handler_forms, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
+    var actionParent, actionType, actionTypeClassName, action_forms, className, handlerClone, handlerParent, handler_forms, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
     itemClass = Common.getClassFromMap(false, item_id);
     if ((itemClass != null) && (itemClass.actionProperties != null)) {
       className = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id);
@@ -377,22 +377,22 @@ EventConfig = (function() {
         }
         for (methodName in methods) {
           prop = methods[methodName];
-          actionType = Common.getActionTypeClassNameByActionType(prop.actionType);
+          actionType = Common.getActionTypeByCodingActionType(prop.actionType);
+          actionTypeClassName = Common.getActionTypeClassNameByActionType(actionType);
           methodClone = $('#event-config .method_temp').children(':first').clone(true);
           span = methodClone.find('label:first').children('span:first');
-          span.attr('class', actionType);
+          span.attr('class', actionTypeClassName);
           span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name']);
-          methodClone.find('input.action_type:first').val(prop.actionType);
+          methodClone.find('input.action_type:first').val(actionType);
           methodClone.find('input.method_name:first').val(methodName);
-          methodClone.find('input.animation_type:first').val(prop.actionAnimationType);
           valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', methodName);
           methodClone.find('input:radio').attr('name', className);
           methodClone.find('input.value_class_name:first').val(valueClassName);
           actionParent.append(methodClone);
           handlerClone = null;
-          if (prop.actionType === Constant.ActionType.SCROLL) {
+          if (actionType === Constant.ActionType.SCROLL) {
             handlerClone = $('#event-config .handler_scroll_temp').children().clone(true);
-          } else if (prop.actionType === Constant.ActionType.CLICK) {
+          } else if (actionType === Constant.ActionType.CLICK) {
             handlerClone = $('#event-config .handler_click_temp').children().clone(true);
           }
           handlerParent = $("<div class='" + valueClassName + "' style='display:none'></div>");

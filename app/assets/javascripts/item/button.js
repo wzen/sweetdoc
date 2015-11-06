@@ -25,8 +25,7 @@ ButtonItem = (function(superClass) {
       defaultMethod: 'defaultClick',
       methods: {
         defaultClick: {
-          actionType: Constant.ActionType.CLICK,
-          actionAnimationType: Constant.ActionAnimationType.CSS3_ANIMATION,
+          actionType: 'click',
           options: {
             id: 'defaultClick',
             name: 'Default click action',
@@ -38,8 +37,7 @@ ButtonItem = (function(superClass) {
           }
         },
         changeColorScroll: {
-          actionType: Constant.ActionType.SCROLL,
-          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION,
+          actionType: 'scroll',
           scrollEnabledDirection: {
             top: true,
             bottom: true,

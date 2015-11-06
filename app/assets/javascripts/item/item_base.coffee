@@ -159,7 +159,7 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
-    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ACTION_TYPE]
+    return Common.getActionTypeByCodingActionType(@actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ACTION_TYPE])
 
   # アイテム作成時に設定されるデフォルトアニメーションタイプ
   @defaultAnimationType = ->

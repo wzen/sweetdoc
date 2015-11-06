@@ -23,8 +23,8 @@ class ItemXxx extends CssItemBase
       defaultMethod: 'defaultClick'
       methods: {
         defaultClick: {
-          actionType: Constant.ActionType.CLICK
-          actionAnimationType: Constant.ActionAnimationType.CSS3_ANIMATION
+          actionType: 'click'
+          #actionAnimationType: Constant.ActionAnimationType.CSS3_ANIMATION
           options: {
             id: 'defaultClick'
             name: 'Default click action'
@@ -37,8 +37,8 @@ class ItemXxx extends CssItemBase
         }
 
         changeColorScroll: {
-          actionType: Constant.ActionType.SCROLL
-          actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION
+          actionType: 'scroll'
+          #actionAnimationType: Constant.ActionAnimationType.JQUERY_ANIMATION
           scrollEnabledDirection: {
             top: true
             bottom: true

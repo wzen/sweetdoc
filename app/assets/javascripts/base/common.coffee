@@ -387,6 +387,16 @@ class Common
       return Constant.TimelineActionTypeClassName.SCROLL
     return null
 
+  # コードのアクションタイプからアクションタイプを取得
+  # @param [Integer] actionType アクションタイプID
+  # @return [String] アクションタイプクラス名
+  @getActionTypeByCodingActionType = (actionType) ->
+    if actionType == 'click'
+      return Constant.ActionType.CLICK
+    else if actionType == 'scroll'
+      return Constant.ActionType.SCROLL
+    return null
+
   # 日付をフォーマットで変換
   # @param [Date] date 対象日付
   # @param [String] format 変換フォーマット

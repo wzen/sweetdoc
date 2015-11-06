@@ -451,6 +451,15 @@ Common = (function() {
     return null;
   };
 
+  Common.getActionTypeByCodingActionType = function(actionType) {
+    if (actionType === 'click') {
+      return Constant.ActionType.CLICK;
+    } else if (actionType === 'scroll') {
+      return Constant.ActionType.SCROLL;
+    }
+    return null;
+  };
+
   Common.formatDate = function(date, format) {
     var i, j, length, milliSeconds, ref;
     if (format == null) {
