@@ -31,13 +31,13 @@ class Const
   # アイテムアクションの引数
   class ItemActionOptionType
     # @property [Int] INTEGER 数値
-    INTEGER = 0
+    NUMBER = 'number'
     # @property [Int] STRING 文字列
-    STRING = 1
+    STRING = 'string'
     # @property [Int] COLOR 色
-    COLOR = 2
-    # @property [Int] DESIGN デザイン
-    DESIGN = 3
+    COLOR = 'color'
+    # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
+    DESIGN_TOOL = 'design_tool'
   end
 
   # アクションイベント種別
