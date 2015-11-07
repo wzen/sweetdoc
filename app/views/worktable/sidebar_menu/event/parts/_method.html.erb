@@ -1,12 +1,12 @@
 <% action_type = '' if action_type.nil? %>
 <% method_name = '' if method_name.nil? %>
-<% action_event_type_id = '' if action_event_type_id.nil? %>
+<% action_type_id = '' if action_type_id.nil? %>
 <% value_class_name = '' if value_class_name.nil? %>
 <% radio_name = '' if radio_name.nil? %>
 
 <div class='radio'>
     <label><input type='radio' name='<%= radio_name %>'><span class='<%= action_type %>'><%= method_name %></span></label>
-    <input class='action_type' type='hidden' value='<%= action_event_type_id %>'>
+    <input class='action_type' type='hidden' value='<%= action_type_id %>'>
     <input class='method_name' type='hidden' value='<%= method_name %>'>
     <input class='value_class_name' type='hidden' value='<%= value_class_name %>'>
 </div>

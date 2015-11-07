@@ -24,8 +24,7 @@ ActiveRecord::Schema.define(version: 20151103013621) do
     t.integer  "common_action_id",                   null: false
     t.integer  "user_auth_strength_min",             null: false
     t.integer  "common_action_event_target_type_id", null: false
-    t.integer  "action_event_type_id",               null: false
-    t.integer  "action_animation_type_id",           null: false
+    t.integer  "action_type_id",                     null: false
     t.text     "method_name",                        null: false
     t.text     "scroll_enabled_direction"
     t.text     "scroll_forward_direction"

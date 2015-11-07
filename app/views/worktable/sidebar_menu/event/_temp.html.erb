@@ -26,8 +26,8 @@
                         <% c.common_action_events.each do |a| %>
                             <%=
                                 render 'worktable/sidebar_menu/event/parts/method',
-                                       action_type: EventHelper.actionTypeClassNameByActionType(a.action_event_type_id),
-                                       action_event_type_id: a.action_event_type_id,
+                                       action_type: EventHelper.actionTypeClassNameByActionType(a.action_type_id),
+                                       action_type_id: a.action_type_id,
                                        method_name: a.method_name,
                                        radio_name: Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
                                        value_class_name: Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
@@ -54,9 +54,9 @@
             <% @common_actions.each do |c| %>
                 <% c.common_action_events.each do |a| %>
                     <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
-                        <% if a.action_event_type_id == Const::ActionType::SCROLL  %>
+                        <% if a.action_type_id == Const::ActionType::SCROLL  %>
                             <%= render 'worktable/sidebar_menu/event/parts/handler_scroll' %>
-                        <% elsif a.action_event_type_id == Const::ActionType::CLICK %>
+                        <% elsif a.action_type_id == Const::ActionType::CLICK %>
                             <%= render 'worktable/sidebar_menu/event/parts/handler_click' %>
                         <% end %>
                     </div>
