@@ -13,11 +13,6 @@ class Worktable
     # optionsをJsonString→HashArrayに変更
     common_actions.each do |c|
       c.common_action_events.each do |a|
-        # if c.options
-        #   c.options = JSON.parse(c.options)
-        # else
-        #   c.options = {}
-        # end
         if a.localize_common_action_events.first.options
           # optionsのローカライズをマージ
           a.options = JSON.parse(a.localize_common_action_events.first.options)

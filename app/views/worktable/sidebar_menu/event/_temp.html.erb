@@ -26,7 +26,6 @@
                         <% c.common_action_events.each do |a| %>
                             <%=
                                 render 'worktable/sidebar_menu/event/parts/method',
-                                       action_type: EventHelper.actionTypeClassNameByActionType(a.action_type_id),
                                        action_type_id: a.action_type_id,
                                        method_name: a.method_name,
                                        radio_name: Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
