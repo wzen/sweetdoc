@@ -21,43 +21,41 @@ ArrowItem = (function(superClass) {
 
   HEADER_HEIGHT = 50;
 
-  ArrowItem.actionProperties = function() {
-    return {
-      defaultMethod: 'scrollDraw',
-      methods: {
-        scrollDraw: {
-          actionType: 'scroll',
-          scrollEnabledDirection: {
-            top: true,
-            bottom: true,
-            left: false,
-            right: false
-          },
-          scrollForwardDirection: {
-            top: false,
-            bottom: true,
-            left: false,
-            right: false
-          },
-          options: {
-            id: 'drawScroll',
-            name: 'Drawing by scroll',
-            desc: "Draw by scroll action",
-            ja: {
-              name: 'スクロールで描画',
-              desc: 'スクロールで矢印を描画'
-            }
-          }
+  ArrowItem.actionProperties = {
+    defaultMethod: 'scrollDraw',
+    methods: {
+      scrollDraw: {
+        actionType: 'scroll',
+        scrollEnabledDirection: {
+          top: true,
+          bottom: true,
+          left: false,
+          right: false
         },
-        changeColorClick: {
-          actionType: 'click',
-          options: {
-            id: 'changeColorClick_Design',
-            name: 'Changing color by click'
+        scrollForwardDirection: {
+          top: false,
+          bottom: true,
+          left: false,
+          right: false
+        },
+        options: {
+          id: 'drawScroll',
+          name: 'Drawing by scroll',
+          desc: "Draw by scroll action",
+          ja: {
+            name: 'スクロールで描画',
+            desc: 'スクロールで矢印を描画'
           }
         }
+      },
+      changeColorClick: {
+        actionType: 'click',
+        options: {
+          id: 'changeColorClick_Design',
+          name: 'Changing color by click'
+        }
       }
-    };
+    }
   };
 
   function ArrowItem(cood) {

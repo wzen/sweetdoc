@@ -18,7 +18,7 @@ class ItemXxx extends CssItemBase
 # Coffee Temp ---Start---
   init = ->
 
-  @actionProperties: ->
+  @actionProperties =
     {
       defaultMethod: 'defaultClick'
       methods: {

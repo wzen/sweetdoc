@@ -20,43 +20,42 @@ ButtonItem = (function(superClass) {
     ButtonItem.ITEM_ID = window.loadedItemId;
   }
 
-  ButtonItem.actionProperties = function() {
-    return {
-      defaultMethod: 'defaultClick',
-      methods: {
-        defaultClick: {
-          actionType: 'click',
-          options: {
-            id: 'defaultClick',
-            name: 'Default click action',
-            desc: "Click push action",
-            ja: {
-              name: '通常クリック',
-              desc: 'デフォルトのボタンクリック'
-            }
-          }
-        },
-        changeColorScroll: {
-          actionType: 'scroll',
-          scrollEnabledDirection: {
-            top: true,
-            bottom: true,
-            left: false,
-            right: false
-          },
-          scrollForwardDirection: {
-            top: false,
-            bottom: true,
-            left: false,
-            right: false
-          },
-          options: {
-            id: 'changeColorScroll_Design',
-            name: 'Changing color by click'
+  ButtonItem.actionProperties = {
+    defaultMethod: 'defaultClick',
+    designConfig: 'design_tool',
+    methods: {
+      defaultClick: {
+        actionType: 'click',
+        options: {
+          id: 'defaultClick',
+          name: 'Default click action',
+          desc: "Click push action",
+          ja: {
+            name: '通常クリック',
+            desc: 'デフォルトのボタンクリック'
           }
         }
+      },
+      changeColorScroll: {
+        actionType: 'scroll',
+        scrollEnabledDirection: {
+          top: true,
+          bottom: true,
+          left: false,
+          right: false
+        },
+        scrollForwardDirection: {
+          top: false,
+          bottom: true,
+          left: false,
+          right: false
+        },
+        options: {
+          id: 'changeColorScroll_Design',
+          name: 'Changing color by click'
+        }
       }
-    };
+    }
   };
 
   ButtonItem.prototype.updateEventBefore = function() {
@@ -127,14 +126,13 @@ ButtonItem = (function(superClass) {
     cssCode = this.cssCode;
     cssStyle = this.cssStyle;
     this.designConfigRoot = $('#' + this.getDesignConfigId());
-    if (this.designConfigRoot == null) {
+    if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
       this.makeDesignConfig();
+      this.designConfigRoot = $('#' + this.getDesignConfigId());
     }
-    this.cssConfig = $(".css-config", this.designConfigRoot);
-    this.canvasConfig = $(".canvas-config", this.designConfigRoot);
-    btnGradientStep = $(".design-gradient-step", this.cssConfig);
-    btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", this.cssConfig);
-    btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", this.cssConfig);
+    btnGradientStep = $(".design-gradient-step", this.designConfigRoot);
+    btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", this.designConfigRoot);
+    btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", this.designConfigRoot);
     name = $('.item-name', this.designConfigRoot);
     name.val(this.name);
     name.off('change').on('change', (function(_this) {
@@ -191,7 +189,7 @@ ButtonItem = (function(superClass) {
     btnGradientStep.off('keyup mouseup');
     return btnGradientStep.on('keyup mouseup', function(e) {
       var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
-      SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, this.cssConfig);
+      SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, this.designConfigRoot);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = j = 2; j <= 4; i = ++j) {
         className = 'design-bg-color' + i;
@@ -218,7 +216,7 @@ ButtonItem = (function(superClass) {
       return item.reflectCssStyle();
     }).each(function() {
       var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
-      SidebarUI.changeGradientShow(this, cssCode, cssStyle, this.cssConfig);
+      SidebarUI.changeGradientShow(this, cssCode, cssStyle, this.designConfigRoot);
       stepValue = parseInt($(this).val());
       for (i = j = 2; j <= 4; i = ++j) {
         className = 'design-bg-color' + i;

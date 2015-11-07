@@ -1,6 +1,5 @@
 class Sidebar
 
-
   if gon?
     # 定数
     constant = gon.const

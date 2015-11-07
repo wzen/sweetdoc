@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
+  post 'worktable/design_config'
 
   post 'coding/save_all'
   post 'coding/save_tree'

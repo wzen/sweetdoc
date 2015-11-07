@@ -140,6 +140,33 @@ WorkTableCommonExtend = {
         }
       });
     })();
+  },
+  makeDesignConfig: function() {
+    var self;
+    self = this;
+    this.designConfigRoot = $('#' + this.getDesignConfigId());
+    if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
+      return DesignConfig.addConfigIfNeed(this, function(data) {
+        var html;
+        html = $(data.html).attr('id', self.getDesignConfigId());
+        return $('#design-config').append(html);
+      });
+    }
+  },
+  drag: function() {
+    var element;
+    element = $('#' + this.id);
+    this.itemSize.x = element.position().left;
+    this.itemSize.y = element.position().top;
+    if (window.debug) {
+      return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
+    }
+  },
+  dragComplete: function() {
+    return this.saveObj();
+  },
+  resizeComplete: function() {
+    return this.saveObj();
   }
 };
 

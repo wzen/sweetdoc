@@ -9,4 +9,13 @@ class WorktableController < ApplicationController
     @common_actions = Worktable.init_common_events
   end
 
+  def design_config
+    design_config = params.fetch('designConfig', nil)
+    @result_success = true
+    @html = ''
+    if design_config
+      @html = Worktable.get_design_config(design_config)
+    end
+  end
+
 end

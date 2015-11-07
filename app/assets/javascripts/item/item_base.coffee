@@ -154,22 +154,22 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->
-    return @actionProperties()[@ActionPropertiesKey.DEFAULT_METHOD]
+    return @actionProperties[@ActionPropertiesKey.DEFAULT_METHOD]
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
-    return Common.getActionTypeByCodingActionType(@actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ACTION_TYPE])
+    return Common.getActionTypeByCodingActionType(@actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ACTION_TYPE])
 
   @defaultEventConfigValue = ->
     return null
 
   # スクロールのデフォルト有効方向
   @defaultScrollEnabledDirection = ->
-    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_ENABLED_DIRECTION]
+    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_ENABLED_DIRECTION]
 
   # スクロールのデフォルト進行方向
   @defaultScrollForwardDirection = ->
-    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
+    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
 
   # イベントに書き込む情報
   eventConfigValue: ->

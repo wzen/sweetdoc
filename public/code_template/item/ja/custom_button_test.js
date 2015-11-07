@@ -26,43 +26,41 @@ ItemXxx = (function(superClass) {
 
   init = function() {};
 
-  ItemXxx.actionProperties = function() {
-    return {
-      defaultMethod: 'defaultClick',
-      methods: {
-        defaultClick: {
-          actionType: 'click',
-          options: {
-            id: 'defaultClick',
-            name: 'Default click action',
-            desc: "Click push action",
-            ja: {
-              name: '通常クリック',
-              desc: 'デフォルトのボタンクリック'
-            }
-          }
-        },
-        changeColorScroll: {
-          actionType: 'scroll',
-          scrollEnabledDirection: {
-            top: true,
-            bottom: true,
-            left: false,
-            right: false
-          },
-          scrollForwardDirection: {
-            top: false,
-            bottom: true,
-            left: false,
-            right: false
-          },
-          options: {
-            id: 'changeColorScroll_Design',
-            name: 'Changing color by click'
+  ItemXxx.actionProperties = {
+    defaultMethod: 'defaultClick',
+    methods: {
+      defaultClick: {
+        actionType: 'click',
+        options: {
+          id: 'defaultClick',
+          name: 'Default click action',
+          desc: "Click push action",
+          ja: {
+            name: '通常クリック',
+            desc: 'デフォルトのボタンクリック'
           }
         }
+      },
+      changeColorScroll: {
+        actionType: 'scroll',
+        scrollEnabledDirection: {
+          top: true,
+          bottom: true,
+          left: false,
+          right: false
+        },
+        scrollForwardDirection: {
+          top: false,
+          bottom: true,
+          left: false,
+          right: false
+        },
+        options: {
+          id: 'changeColorScroll_Design',
+          name: 'Changing color by click'
+        }
       }
-    };
+    }
   };
 
   variables = {};

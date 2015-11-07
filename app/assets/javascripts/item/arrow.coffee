@@ -15,7 +15,7 @@ class ArrowItem extends CanvasItemBase
   # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
   HEADER_HEIGHT = 50
 
-  @actionProperties: ->
+  @actionProperties =
     {
       defaultMethod: 'scrollDraw'
       methods : {

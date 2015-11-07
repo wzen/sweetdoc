@@ -11,9 +11,10 @@ class ButtonItem extends CssItemBase
     # @property [String] ITEM_ID アイテム種別
     @ITEM_ID = window.loadedItemId
 
-  @actionProperties: ->
+  @actionProperties =
     {
       defaultMethod: 'defaultClick'
+      designConfig: 'design_tool'
       methods: {
         defaultClick: {
           actionType: 'click'
@@ -154,13 +155,12 @@ class ButtonItem extends CssItemBase
     cssStyle = @cssStyle
 
     @designConfigRoot = $('#' + @getDesignConfigId())
-    if !@designConfigRoot?
+    if !@designConfigRoot? || @designConfigRoot.length == 0
       @makeDesignConfig()
-    @cssConfig = $(".css-config", @designConfigRoot)
-    @canvasConfig = $(".canvas-config", @designConfigRoot)
-    btnGradientStep = $(".design-gradient-step", @cssConfig)
-    btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", @cssConfig)
-    btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", @cssConfig);
+      @designConfigRoot = $('#' + @getDesignConfigId())
+    btnGradientStep = $(".design-gradient-step", @designConfigRoot)
+    btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", @designConfigRoot)
+    btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", @designConfigRoot);
 
     # アイテム名の変更
     name = $('.item-name', @designConfigRoot)
@@ -227,7 +227,7 @@ class ButtonItem extends CssItemBase
     # グラデーションStepイベント
     btnGradientStep.off('keyup mouseup')
     btnGradientStep.on('keyup mouseup', (e) ->
-      SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
+      SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, @designConfigRoot)
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
         className = 'design-bg-color' + i
@@ -249,7 +249,7 @@ class ButtonItem extends CssItemBase
           webkitFlag.html(webkitCache.html())
       item.reflectCssStyle()
     ).each( ->
-      SidebarUI.changeGradientShow(@, cssCode, cssStyle, @cssConfig)
+      SidebarUI.changeGradientShow(@, cssCode, cssStyle, @designConfigRoot)
       stepValue = parseInt($(@).val())
       for i in [2 .. 4]
         className = 'design-bg-color' + i

@@ -29,7 +29,7 @@ class Const
   end
 
   # アイテムアクションの引数
-  class ItemActionOptionType
+  class ItemDesignOptionType
     # @property [Int] INTEGER 数値
     NUMBER = 'number'
     # @property [Int] STRING 文字列

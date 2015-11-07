@@ -160,11 +160,11 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
-    return this.actionProperties()[this.ActionPropertiesKey.DEFAULT_METHOD];
+    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_METHOD];
   };
 
   ItemBase.defaultActionType = function() {
-    return Common.getActionTypeByCodingActionType(this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ACTION_TYPE]);
+    return Common.getActionTypeByCodingActionType(this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ACTION_TYPE]);
   };
 
   ItemBase.defaultEventConfigValue = function() {
@@ -172,11 +172,11 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.defaultScrollEnabledDirection = function() {
-    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
+    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
   };
 
   ItemBase.defaultScrollForwardDirection = function() {
-    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
+    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
   };
 
   ItemBase.prototype.eventConfigValue = function() {

@@ -116,3 +116,29 @@ WorkTableCommonExtend =
           if self.resizeComplete?
             self.resizeComplete()
       })
+
+  # デザイン変更コンフィグを作成
+  makeDesignConfig: ->
+    self = @
+    @designConfigRoot = $('#' + @getDesignConfigId())
+    if !@designConfigRoot? || @designConfigRoot.length == 0
+      DesignConfig.addConfigIfNeed(@, (data) ->
+        html = $(data.html).attr('id', self.getDesignConfigId())
+        $('#design-config').append(html)
+      )
+
+  # ドラッグ中イベント
+  drag: ->
+    element = $('#' + @id)
+    @itemSize.x = element.position().left
+    @itemSize.y = element.position().top
+    if window.debug
+      console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
+
+  # ドラッグ完了時イベント
+  dragComplete: ->
+    @saveObj()
+
+  # リサイズ完了時イベント
+  resizeComplete: ->
+    @saveObj()

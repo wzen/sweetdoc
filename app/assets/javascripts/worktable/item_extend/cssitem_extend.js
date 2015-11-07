@@ -2,35 +2,11 @@
 var WorkTableCssItemExtend;
 
 WorkTableCssItemExtend = {
-  makeDesignConfig: function() {
-    var cssConfig;
-    this.designConfigRoot = $('#' + this.getDesignConfigId());
-    if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
-      this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
-      this.designConfigRoot.removeClass('design_temp');
-      cssConfig = this.designConfigRoot.find('.css-config');
-      this.designConfigRoot.find('.css-config').show();
-      this.designConfigRoot.find('.canvas-config').remove();
-      return $('#design-config').append(this.designConfigRoot);
-    }
-  },
-  drag: function() {
-    var element;
-    element = $('#' + this.id);
-    this.itemSize.x = element.position().left;
-    return this.itemSize.y = element.position().top;
-  },
-  dragComplete: function() {
-    return this.saveObj();
-  },
   resize: function() {
     var element;
     element = $('#' + this.id);
     this.itemSize.w = element.width();
     return this.itemSize.h = element.height();
-  },
-  resizeComplete: function() {
-    return this.saveObj();
   },
   draw: function(cood) {
     if (this.itemSize !== null) {

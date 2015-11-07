@@ -2,28 +2,6 @@
 var WorkTableCanvasItemExtend;
 
 WorkTableCanvasItemExtend = {
-  makeDesignConfig: function() {
-    this.designConfigRoot = $('#' + this.getDesignConfigId());
-    if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
-      this.designConfigRoot = $('#design-config .design_temp').clone(true).attr('id', this.getDesignConfigId());
-      this.designConfigRoot.removeClass('design_temp');
-      this.designConfigRoot.find('.canvas-config').show();
-      this.designConfigRoot.find('.css-config').remove();
-      return $('#design-config').append(this.designConfigRoot);
-    }
-  },
-  drag: function() {
-    var element;
-    element = $('#' + this.id);
-    this.itemSize.x = element.position().left;
-    this.itemSize.y = element.position().top;
-    if (window.debug) {
-      return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
-    }
-  },
-  dragComplete: function() {
-    return this.saveObj();
-  },
   resize: function() {
     var canvas, drawingCanvas, drawingContext, element;
     canvas = $('#' + this.canvasElementId());
@@ -39,9 +17,6 @@ WorkTableCanvasItemExtend = {
     if (window.debug) {
       return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
     }
-  },
-  resizeComplete: function() {
-    return this.saveObj();
   },
   endDraw: function(zindex, show) {
     if (show == null) {

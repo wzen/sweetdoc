@@ -364,7 +364,7 @@ EventConfig = (function() {
       action_forms = $('#event-config .action_forms');
       if (action_forms.find("." + className).length === 0) {
         actionParent = $("<div class='" + className + "' style='display:none'></div>");
-        props = itemClass.actionProperties();
+        props = itemClass.actionProperties;
         if (props == null) {
           console.log('Not declaration actionProperties');
           return;
