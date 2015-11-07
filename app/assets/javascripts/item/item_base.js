@@ -300,7 +300,7 @@ CssItemBase = (function(superClass) {
       newEmt = $(this.css);
     } else {
       newEmt = $('#' + this.constructor.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
-      newEmt.find('.btn-item-id').html(this.id);
+      newEmt.find('.design-item-id').html(this.id);
     }
     window.cssCodeInfo.append(newEmt);
     this.cssRoot = $('#' + this.getCssRootElementId());

@@ -158,9 +158,9 @@ class ButtonItem extends CssItemBase
       @makeDesignConfig()
     @cssConfig = $(".css-config", @designConfigRoot)
     @canvasConfig = $(".canvas-config", @designConfigRoot)
-    btnGradientStep = $(".btn-gradient-step", @cssConfig)
-    btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", @cssConfig)
-    btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", @cssConfig);
+    btnGradientStep = $(".design-gradient-step", @cssConfig)
+    btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", @cssConfig)
+    btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", @cssConfig);
 
     # アイテム名の変更
     name = $('.item-name', @designConfigRoot)
@@ -171,27 +171,27 @@ class ButtonItem extends CssItemBase
     )
 
     # スライダー初期化
-    SidebarUI.settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    SidebarUI.settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    SidebarUI.settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    SidebarUI.settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-    SidebarUI.settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-    SidebarUI.settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    SidebarUI.settingSlider('design-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    SidebarUI.settingSlider('design-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    SidebarUI.settingSlider('design-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
+    SidebarUI.settingSlider('design-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
+    SidebarUI.settingSlider('design-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
 
     # オプションメニューを作成
     # カラーピッカーイベント
@@ -230,7 +230,7 @@ class ButtonItem extends CssItemBase
       SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, @cssConfig)
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
-        className = 'btn-bg-color' + i
+        className = 'design-bg-color' + i
         mozFlag = $("." + className + "-moz-flag", cssRoot)
         mozCache = $("." + className + "-moz-cache", cssRoot)
         webkitFlag = $("." + className + "-webkit-flag", cssRoot)
@@ -252,7 +252,7 @@ class ButtonItem extends CssItemBase
       SidebarUI.changeGradientShow(@, cssCode, cssStyle, @cssConfig)
       stepValue = parseInt($(@).val())
       for i in [2 .. 4]
-        className = 'btn-bg-color' + i
+        className = 'design-bg-color' + i
         mozFlag = $("." + className + "-moz-flag", cssRoot)
         mozCache = $("." + className + "-moz-cache", cssRoot)
         webkitFlag = $("." + className + "-webkit-flag", cssRoot)

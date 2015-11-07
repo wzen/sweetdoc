@@ -286,7 +286,7 @@ class CssItemBase extends ItemBase
     else
       # CSSテンプレートから作成
       newEmt = $('#' + @constructor.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
-      newEmt.find('.btn-item-id').html(@id)
+      newEmt.find('.design-item-id').html(@id)
     window.cssCodeInfo.append(newEmt)
     @cssRoot = $('#' + @getCssRootElementId())
     @cssCache = $(".css-cache", @cssRoot)

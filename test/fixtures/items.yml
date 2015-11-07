@@ -9,57 +9,57 @@ one:
     <style type="text/css" class="css-style"></style>
     <style type="text/css" class="css-anim-style"></style>
     <pre class="css-code">
-    div#<span class="btn-item-id"></span> .css3button {
+    div#<span class="design-item-id"></span> .css3button {
         <span class="property">font-family</span>: Arial, Helvetica, sans-serif;
-        <span class="property">font-size</span>: <span class="btn-slider-font-size-value">14</span>px;
-        <span class="property">color</span>: #<span class="btn-font-color">ffffff</span>;
-        <span class="property">padding</span>: <span class="btn-slider-padding-top-value">10</span>px <span class="btn-slider-padding-left-value">20</span>px;
+        <span class="property">font-size</span>: <span class="design-slider-font-size-value">14</span>px;
+        <span class="property">color</span>: #<span class="design-font-color">ffffff</span>;
+        <span class="property">padding</span>: <span class="design-slider-padding-top-value">10</span>px <span class="design-slider-padding-left-value">20</span>px;
         <span class="property">background</span>: <span class="property">-moz-linear-gradient</span>(
-        <span class="btn-slider-gradient-deg-value">0</span>deg,
-        #<span class="btn-bg-color1">ffbdf5</span> 0%,
-        <span class="btn-bg-color2-moz-flag">
-        #<span class="btn-bg-color2">ff82ec</span> <span class="btn-bg-color2-position">25</span>%,</span>
-        <span class="btn-bg-color3-moz-flag">#<span class="btn-bg-color3">fc46e1</span> <span class="btn-bg-color3-position">50</span>%,</span>
-        <span class="btn-bg-color4-moz-flag">#<span class="btn-bg-color4">fc46e1</span> <span class="btn-bg-color4-position">75</span>%,</span>
-        #<span class="btn-bg-color5">fc46e1</span> 100%);
+        <span class="design-slider-gradient-deg-value">0</span>deg,
+        #<span class="design-bg-color1">ffbdf5</span> 0%,
+        <span class="design-bg-color2-moz-flag">
+        #<span class="design-bg-color2">ff82ec</span> <span class="design-bg-color2-position">25</span>%,</span>
+        <span class="design-bg-color3-moz-flag">#<span class="design-bg-color3">fc46e1</span> <span class="design-bg-color3-position">50</span>%,</span>
+        <span class="design-bg-color4-moz-flag">#<span class="design-bg-color4">fc46e1</span> <span class="design-bg-color4-position">75</span>%,</span>
+        #<span class="design-bg-color5">fc46e1</span> 100%);
         <span class="property">background</span>: <span class="property">-webkit-gradient</span>(
-        linear, <span class="btn-slider-gradient-deg-value-webkit">left top, left bottom</span>,
-        from(#<span class="btn-bg-color1">ffbdf5</span>),
-        <span class="btn-bg-color2-webkit-flag">
+        linear, <span class="design-slider-gradient-deg-value-webkit">left top, left bottom</span>,
+        from(#<span class="design-bg-color1">ffbdf5</span>),
+        <span class="design-bg-color2-webkit-flag">
         <span>
-        color-stop(<span class="p">0.<span class="btn-bg-color2-position">25</span></span>,
-        #<span class="btn-bg-color2">ff82ec</span>),
+        color-stop(<span class="p">0.<span class="design-bg-color2-position">25</span></span>,
+        #<span class="design-bg-color2">ff82ec</span>),
         </span>
         </span>
-        <span class="btn-bg-color3-webkit-flag">
+        <span class="design-bg-color3-webkit-flag">
         <span>
-        color-stop(<span class="p">0.<span class="btn-bg-color3-position">50</span></span>,
-        #<span class="btn-bg-color3">ff82ec</span>),
+        color-stop(<span class="p">0.<span class="design-bg-color3-position">50</span></span>,
+        #<span class="design-bg-color3">ff82ec</span>),
         </span>
         </span>
-        <span class="btn-bg-color4-webkit-flag">
+        <span class="design-bg-color4-webkit-flag">
         <span>
-        color-stop(<span class="p">0.<span class="btn-bg-color4-position">75</span></span>,
-        #<span class="btn-bg-color4">ff82ec</span>),
+        color-stop(<span class="p">0.<span class="design-bg-color4-position">75</span></span>,
+        #<span class="design-bg-color4">ff82ec</span>),
         </span>
         </span>
-        to(#<span class="btn-bg-color5">fc46e1</span>));
-        <span class="property">-moz-border-radius</span>: <span class="btn-slider-border-radius-value">30</span>px;
-        <span class="property">-webkit-border-radius</span>: <span class="btn-slider-border-radius-value">30</span>px;
-        <span class="property">border-radius</span>: <span class="btn-slider-border-radius-value">30</span>px;
-        <span class="property">border</span>: <span class="btn-slider-border-width-value">3</span>px solid #<span class="btn-border-color">ffffff</span>;
+        to(#<span class="design-bg-color5">fc46e1</span>));
+        <span class="property">-moz-border-radius</span>: <span class="design-slider-border-radius-value">30</span>px;
+        <span class="property">-webkit-border-radius</span>: <span class="design-slider-border-radius-value">30</span>px;
+        <span class="property">border-radius</span>: <span class="design-slider-border-radius-value">30</span>px;
+        <span class="property">border</span>: <span class="design-slider-border-width-value">3</span>px solid #<span class="design-border-color">ffffff</span>;
         <span class="property">-moz-box-shadow</span>:
-        <span class="btn-slider-shadow-left-value">0</span>px <span class="btn-slider-shadow-top-value">3</span>px <span class="btn-slider-shadow-size-value">11</span>px rgba(<span class="btn-shadow-color">000,000,000</span>,<span class="btn-slider-shadow-opacity-value">0.5</span>),
-        inset <span class="btn-slider-shadowinset-left-value">0</span>px <span class="btn-slider-shadowinset-top-value">0</span>px <span class="btn-slider-shadowinset-size-value">1</span>px rgba(<span class="btn-shadowinset-color">255,000,217</span>,<span class="btn-slider-shadowinset-opacity-value">1</span>);
+        <span class="design-slider-shadow-left-value">0</span>px <span class="design-slider-shadow-top-value">3</span>px <span class="design-slider-shadow-size-value">11</span>px rgba(<span class="design-shadow-color">000,000,000</span>,<span class="design-slider-shadow-opacity-value">0.5</span>),
+        inset <span class="design-slider-shadowinset-left-value">0</span>px <span class="design-slider-shadowinset-top-value">0</span>px <span class="design-slider-shadowinset-size-value">1</span>px rgba(<span class="design-shadowinset-color">255,000,217</span>,<span class="design-slider-shadowinset-opacity-value">1</span>);
         <span class="property">-webkit-box-shadow</span>:
-        <span class="btn-slider-shadow-left-value">0</span>px <span class="btn-slider-shadow-top-value">3</span>px <span class="btn-slider-shadow-size-value">11</span>px rgba(<span class="btn-shadow-color">000,000,000</span>,<span class="btn-slider-shadow-opacity-value">0.5</span>),
-        inset <span class="btn-slider-shadowinset-left-value">0</span>px <span class="btn-slider-shadowinset-top-value">0</span>px <span class="btn-slider-shadowinset-size-value">1</span>px rgba(<span class="btn-shadowinset-color">255,000,217</span>,<span class="btn-slider-shadowinset-opacity-value">1</span>);
+        <span class="design-slider-shadow-left-value">0</span>px <span class="design-slider-shadow-top-value">3</span>px <span class="design-slider-shadow-size-value">11</span>px rgba(<span class="design-shadow-color">000,000,000</span>,<span class="design-slider-shadow-opacity-value">0.5</span>),
+        inset <span class="design-slider-shadowinset-left-value">0</span>px <span class="design-slider-shadowinset-top-value">0</span>px <span class="design-slider-shadowinset-size-value">1</span>px rgba(<span class="design-shadowinset-color">255,000,217</span>,<span class="design-slider-shadowinset-opacity-value">1</span>);
         <span class="property">box-shadow</span>:
-        <span class="btn-slider-shadow-left-value">0</span>px <span class="btn-slider-shadow-top-value">3</span>px <span class="btn-slider-shadow-size-value">11</span>px rgba(<span class="btn-shadow-color">000,000,000</span>,<span class="btn-slider-shadow-opacity-value">0.5</span>),
-        inset <span class="btn-slider-shadowinset-left-value">0</span>px <span class="btn-slider-shadowinset-top-value">0</span>px <span class="btn-slider-shadowinset-size-value">1</span>px rgba(<span class="btn-shadowinset-color">255,000,217</span>,<span class="btn-slider-shadowinset-opacity-value">1</span>);
+        <span class="design-slider-shadow-left-value">0</span>px <span class="design-slider-shadow-top-value">3</span>px <span class="design-slider-shadow-size-value">11</span>px rgba(<span class="design-shadow-color">000,000,000</span>,<span class="design-slider-shadow-opacity-value">0.5</span>),
+        inset <span class="design-slider-shadowinset-left-value">0</span>px <span class="design-slider-shadowinset-top-value">0</span>px <span class="design-slider-shadowinset-size-value">1</span>px rgba(<span class="design-shadowinset-color">255,000,217</span>,<span class="design-slider-shadowinset-opacity-value">1</span>);
         <span class="property">text-shadow</span>:
-        <span class="btn-slider-text-shadow1-left-value">0</span>px <span class="btn-slider-text-shadow1-top-value">-1</span>px <span class="btn-slider-text-shadow1-size-value">0</span>px rgba(<span class="btn-text-shadow1-color">000,000,000</span>,<span class="btn-slider-text-shadow1-opacity-value">0.2</span>),
-        <span class="btn-slider-text-shadow2-left-value">0</span>px <span class="btn-slider-text-shadow2-top-value">1</span>px <span class="btn-slider-text-shadow2-size-value">0</span>px rgba(<span class="btn-text-shadow2-color">255,255,255</span>,<span class="btn-slider-text-shadow2-opacity-value">0.3</span>);
+        <span class="design-slider-text-shadow1-left-value">0</span>px <span class="design-slider-text-shadow1-top-value">-1</span>px <span class="design-slider-text-shadow1-size-value">0</span>px rgba(<span class="design-text-shadow1-color">000,000,000</span>,<span class="design-slider-text-shadow1-opacity-value">0.2</span>),
+        <span class="design-slider-text-shadow2-left-value">0</span>px <span class="design-slider-text-shadow2-top-value">1</span>px <span class="design-slider-text-shadow2-size-value">0</span>px rgba(<span class="design-text-shadow2-color">255,255,255</span>,<span class="design-slider-text-shadow2-opacity-value">0.3</span>);
         display: table;
         z-index:100;
         width: 100%;
@@ -67,12 +67,12 @@ one:
         }
     </pre>
     <div class="css-cache">
-        <div class="btn-bg-color2-moz-cache"></div>
-        <div class="btn-bg-color3-moz-cache"></div>
-        <div class="btn-bg-color4-moz-cache"></div>
-        <div class="btn-bg-color2-webkit-cache"></div>
-        <div class="btn-bg-color3-webkit-cache"></div>
-        <div class="btn-bg-color4-webkit-cache"></div>
+        <div class="design-bg-color2-moz-cache"></div>
+        <div class="design-bg-color3-moz-cache"></div>
+        <div class="design-bg-color4-moz-cache"></div>
+        <div class="design-bg-color2-webkit-cache"></div>
+        <div class="design-bg-color3-webkit-cache"></div>
+        <div class="design-bg-color4-webkit-cache"></div>
     </div>
 
 

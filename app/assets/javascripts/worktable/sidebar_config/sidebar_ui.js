@@ -197,7 +197,7 @@ SidebarUI = (function() {
       slide: function(event, ui) {
         var index, position;
         index = $(ui.handle).index();
-        position = $('.btn-bg-color' + (index + 2) + '-position', cssCode);
+        position = $('.design-bg-color' + (index + 2) + '-position', cssCode);
         position.html(("0" + ui.value).slice(-2));
         return _reflectStyle.call(self, event.target);
       }
@@ -278,7 +278,7 @@ SidebarUI = (function() {
     var element, i, j, results;
     results = [];
     for (i = j = 2; j <= 4; i = ++j) {
-      element = $('.btn-bg-color' + i, cssConfig);
+      element = $('.design-bg-color' + i, cssConfig);
       if (i > gradientStepValue - 1) {
         results.push(element.hide());
       } else {

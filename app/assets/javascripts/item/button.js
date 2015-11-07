@@ -132,9 +132,9 @@ ButtonItem = (function(superClass) {
     }
     this.cssConfig = $(".css-config", this.designConfigRoot);
     this.canvasConfig = $(".canvas-config", this.designConfigRoot);
-    btnGradientStep = $(".btn-gradient-step", this.cssConfig);
-    btnBgColor = $(".btn-bg-color1,.btn-bg-color2,.btn-bg-color3,.btn-bg-color4,.btn-bg-color5,.btn-border-color,.btn-font-color", this.cssConfig);
-    btnShadowColor = $(".btn-shadow-color,.btn-shadowinset-color,.btn-text-shadow1-color,.btn-text-shadow2-color", this.cssConfig);
+    btnGradientStep = $(".design-gradient-step", this.cssConfig);
+    btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", this.cssConfig);
+    btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", this.cssConfig);
     name = $('.item-name', this.designConfigRoot);
     name.val(this.name);
     name.off('change').on('change', (function(_this) {
@@ -143,27 +143,27 @@ ButtonItem = (function(superClass) {
         return _this.setItemPropToPageValue('name', _this.name);
       };
     })(this));
-    SidebarUI.settingGradientSlider('btn-slider-gradient', null, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingGradientDegSlider('btn-slider-gradient-deg', 0, 315, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-border-radius', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-border-width', 0, 10, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-font-size', 0, 30, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-shadow-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    SidebarUI.settingSlider('btn-slider-shadow-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-shadow-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-shadowinset-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    SidebarUI.settingSlider('btn-slider-shadowinset-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-shadowinset-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    SidebarUI.settingSlider('btn-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
-    SidebarUI.settingSlider('btn-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
-    SidebarUI.settingSlider('btn-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-border-radius', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-border-width', 0, 10, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-font-size', 0, 30, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-shadow-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    SidebarUI.settingSlider('design-slider-shadow-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-shadow-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-shadowinset-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    SidebarUI.settingSlider('design-slider-shadowinset-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-shadowinset-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    SidebarUI.settingSlider('design-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, this.designConfigRoot, 0.1);
+    SidebarUI.settingSlider('design-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, this.designConfigRoot);
+    SidebarUI.settingSlider('design-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, this.designConfigRoot);
     btnBgColor.each(function() {
       var btnCodeEmt, className, colorValue, self;
       self = $(this);
@@ -194,7 +194,7 @@ ButtonItem = (function(superClass) {
       SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, this.cssConfig);
       stepValue = parseInt($(e.currentTarget).val());
       for (i = j = 2; j <= 4; i = ++j) {
-        className = 'btn-bg-color' + i;
+        className = 'design-bg-color' + i;
         mozFlag = $("." + className + "-moz-flag", cssRoot);
         mozCache = $("." + className + "-moz-cache", cssRoot);
         webkitFlag = $("." + className + "-webkit-flag", cssRoot);
@@ -221,7 +221,7 @@ ButtonItem = (function(superClass) {
       SidebarUI.changeGradientShow(this, cssCode, cssStyle, this.cssConfig);
       stepValue = parseInt($(this).val());
       for (i = j = 2; j <= 4; i = ++j) {
-        className = 'btn-bg-color' + i;
+        className = 'design-bg-color' + i;
         mozFlag = $("." + className + "-moz-flag", cssRoot);
         mozCache = $("." + className + "-moz-cache", cssRoot);
         webkitFlag = $("." + className + "-webkit-flag", cssRoot);
