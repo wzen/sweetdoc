@@ -66,14 +66,6 @@ class Const
     SCREEN = 2
   end
 
-  # アクション変更種別
-  class ActionAnimationType
-    # @property [Int] JQUERY_ANIMATION JQeury描画
-    JQUERY_ANIMATION = 0
-    # @property [Int] CSS3_ANIMATION CSS3アニメーション
-    CSS3_ANIMATION = 1
-  end
-
   # キーコード
   class KeyboardKeyCode
     # @property [Int] ENTER エンターキー
@@ -286,7 +278,6 @@ class Const
     ORDER = 'order'
     METHODNAME = 'methodname'
     ACTIONTYPE = 'actiontype'
-    ANIAMTIONTYPE = 'animationtype'
     IS_SYNC = 'is_sync'
     SCROLL_POINT_START = 'scroll_point_start'
     SCROLL_POINT_END = 'scroll_point_end'
@@ -326,7 +317,6 @@ class Const
     METHODS = 'methods'
     DEFAULT_METHOD = 'defaultMethod'
     ACTION_TYPE = 'actionType'
-    ANIMATION_TYPE = 'actionAnimationType'
     SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
     OPTIONS = 'options'

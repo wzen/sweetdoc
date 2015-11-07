@@ -4,7 +4,6 @@ one:
   user_auth_strength_min: 1
   common_action_event_target_type_id: 0
   action_event_type_id: 0
-  action_animation_type_id: 0
   method_name: changeBackgroundColor
   scroll_enabled_direction: |
             {
@@ -28,6 +27,5 @@ two:
   user_auth_strength_min: 1
   common_action_event_target_type_id: 1
   action_event_type_id: 1
-  action_animation_type_id: 0
   method_name: changeScreenPosition
   options: {}

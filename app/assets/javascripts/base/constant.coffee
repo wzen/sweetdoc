@@ -47,13 +47,6 @@ if gon?
       # @property [Int] CLICK クリック
       @CLICK = constant.TimelineActionTypeClassName.CLICK
 
-    # イベントアクション種類
-    class @ActionAnimationType
-      # @property [Int] JQUERY_ANIMATION JQeury描画
-      @JQUERY_ANIMATION = constant.ActionAnimationType.JQUERY_ANIMATION
-      # @property [Int] CSS3_ANIMATION CSS3アニメーション
-      @CSS3_ANIMATION = constant.ActionAnimationType.CSS3_ANIMATION
-
     # キーコード
     class @KeyboardKeyCode
       # @property [Int] ENTER エンターキー

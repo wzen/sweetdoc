@@ -102,7 +102,6 @@ EventConfig = (function() {
       parent = $(e).closest('.radio');
       this.actionType = parseInt(parent.find('input.action_type:first').val());
       this.methodName = parent.find('input.method_name:first').val();
-      this.animationType = parent.find('input.animation_type:first').val();
     }
     handlerClassName = this.methodClassName();
     valueClassName = this.methodClassName();

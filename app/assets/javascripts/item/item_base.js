@@ -25,8 +25,6 @@ ItemBase = (function(superClass) {
 
       ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
 
-      ActionPropertiesKey.ANIMATION_TYPE = constant.ItemActionPropertiesKey.ANIMATION_TYPE;
-
       ActionPropertiesKey.SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION;
 
       ActionPropertiesKey.SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION;
@@ -167,10 +165,6 @@ ItemBase = (function(superClass) {
 
   ItemBase.defaultActionType = function() {
     return Common.getActionTypeByCodingActionType(this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ACTION_TYPE]);
-  };
-
-  ItemBase.defaultAnimationType = function() {
-    return this.actionProperties()[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ANIMATION_TYPE];
   };
 
   ItemBase.defaultEventConfigValue = function() {

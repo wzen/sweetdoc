@@ -69,17 +69,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
-    Constant.ActionAnimationType = (function() {
-      function ActionAnimationType() {}
-
-      ActionAnimationType.JQUERY_ANIMATION = constant.ActionAnimationType.JQUERY_ANIMATION;
-
-      ActionAnimationType.CSS3_ANIMATION = constant.ActionAnimationType.CSS3_ANIMATION;
-
-      return ActionAnimationType;
-
-    })();
-
     Constant.KeyboardKeyCode = (function() {
       function KeyboardKeyCode() {}
 

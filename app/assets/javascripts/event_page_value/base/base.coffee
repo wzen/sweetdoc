@@ -77,7 +77,6 @@ class EventPageValueBase
     writeValue[@PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent
     writeValue[@PageValueKey.METHODNAME] = eventConfig.methodName
     writeValue[@PageValueKey.ACTIONTYPE] = eventConfig.actionType
-    writeValue[@PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType
     writeValue[@PageValueKey.IS_SYNC] = eventConfig.isParallel
 
     if eventConfig.actionType == Constant.ActionType.SCROLL
@@ -102,7 +101,6 @@ class EventPageValueBase
       eventConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
       eventConfig.methodName = writeValue[@PageValueKey.METHODNAME]
       eventConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
-      eventConfig.animationType = writeValue[@PageValueKey.ANIAMTIONTYPE]
 
       parallel = $(".parallel_div .parallel", eventConfig.emt)
       isParallel = writeValue[@PageValueKey.IS_SYNC]

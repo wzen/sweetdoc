@@ -108,7 +108,6 @@ class EventConfig
       parent = $(e).closest('.radio')
       @actionType = parseInt(parent.find('input.action_type:first').val())
       @methodName = parent.find('input.method_name:first').val()
-      @animationType = parent.find('input.animation_type:first').val()
 
     handlerClassName = @methodClassName()
     valueClassName = @methodClassName()
@@ -388,7 +387,6 @@ class EventConfig
           span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
           methodClone.find('input.action_type:first').val(actionType)
           methodClone.find('input.method_name:first').val(methodName)
-          #methodClone.find('input.animation_type:first').val(prop.actionAnimationType)
           valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', methodName)
           methodClone.find('input:radio').attr('name', className)
           methodClone.find('input.value_class_name:first').val(valueClassName)

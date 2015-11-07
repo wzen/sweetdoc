@@ -21,7 +21,6 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.METHODNAME] = item.constructor.defaultMethodName()
     actionType = item.constructor.defaultActionType()
     writeValue[@PageValueKey.ACTIONTYPE] = actionType
-    writeValue[@PageValueKey.ANIAMTIONTYPE] = item.constructor.defaultAnimationType()
     start = @getAllScrollLength()
     end = start + item.coodRegist.length
     if start > end

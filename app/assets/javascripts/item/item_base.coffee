@@ -17,7 +17,6 @@ class ItemBase extends ItemEventBase
       @METHODS = constant.ItemActionPropertiesKey.METHODS
       @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
       @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
-      @ANIMATION_TYPE = constant.ItemActionPropertiesKey.ANIMATION_TYPE
       @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
       @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
       @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
@@ -160,10 +159,6 @@ class ItemBase extends ItemEventBase
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
     return Common.getActionTypeByCodingActionType(@actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ACTION_TYPE])
-
-  # アイテム作成時に設定されるデフォルトアニメーションタイプ
-  @defaultAnimationType = ->
-    return @actionProperties()[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ANIMATION_TYPE]
 
   @defaultEventConfigValue = ->
     return null

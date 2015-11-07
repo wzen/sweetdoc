@@ -91,7 +91,6 @@ EventPageValueBase = (function() {
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent;
     writeValue[this.PageValueKey.METHODNAME] = eventConfig.methodName;
     writeValue[this.PageValueKey.ACTIONTYPE] = eventConfig.actionType;
-    writeValue[this.PageValueKey.ANIAMTIONTYPE] = eventConfig.animationType;
     writeValue[this.PageValueKey.IS_SYNC] = eventConfig.isParallel;
     if (eventConfig.actionType === Constant.ActionType.SCROLL) {
       writeValue[this.PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart;
@@ -114,7 +113,6 @@ EventPageValueBase = (function() {
       eventConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
       eventConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
       eventConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
-      eventConfig.animationType = writeValue[this.PageValueKey.ANIAMTIONTYPE];
       parallel = $(".parallel_div .parallel", eventConfig.emt);
       isParallel = writeValue[this.PageValueKey.IS_SYNC];
       if ((parallel != null) && isParallel) {
