@@ -12,10 +12,11 @@ class WorktableController < ApplicationController
   def design_config
     design_config = params.fetch('designConfig', nil)
     @result_success = true
-    @html = ''
+    html = ''
     if design_config
-      @html = Worktable.get_design_config(design_config)
+      html = Worktable.get_design_config(design_config)
     end
+    @html = "<div class='#{Const::DesignConfig::ROOT_CLASSNAME}'>#{html}</div>"
   end
 
 end

@@ -24,7 +24,9 @@ class Worktable
   end
 
   def self.get_design_config(design_config)
-    ret = ''
+    ret = ApplicationController.new.render_to_string(
+        partial: 'worktable/sidebar_menu/design/parts/common'
+    )
     if design_config.is_a?(String)
       if design_config == Const::ItemDesignOptionType::DESIGN_TOOL
         ret += ApplicationController.new.render_to_string(
