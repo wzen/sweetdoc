@@ -183,6 +183,20 @@ ItemBase = (function(superClass) {
     return null;
   };
 
+  ItemBase.prototype.updateItemSize = function(x, y, w, h) {
+    this.getJQueryElement().css({
+      top: y,
+      left: x,
+      width: w,
+      height: h
+    });
+    this.itemSize.x = parseInt(x);
+    this.itemSize.y = parseInt(y);
+    this.itemSize.w = parseInt(w);
+    this.itemSize.h = parseInt(h);
+    return this.saveObj();
+  };
+
   return ItemBase;
 
 })(ItemEventBase);

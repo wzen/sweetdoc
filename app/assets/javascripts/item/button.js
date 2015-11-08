@@ -141,6 +141,20 @@ ButtonItem = (function(superClass) {
         return _this.setItemPropToPageValue('name', _this.name);
       };
     })(this));
+    $('.item_position_x:first', this.designConfigRoot).val(this.itemSize.x);
+    $('.item_position_y:first', this.designConfigRoot).val(this.itemSize.y);
+    $('.item_width:first', this.designConfigRoot).val(this.itemSize.w);
+    $('.item_height:first', this.designConfigRoot).val(this.itemSize.h);
+    $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', this.designConfigRoot).off('change').on('change', (function(_this) {
+      return function() {
+        var h, w, x, y;
+        x = parseInt($('.item_position_x:first', _this.designConfigRoot).val());
+        y = parseInt($('.item_position_y:first', _this.designConfigRoot).val());
+        w = parseInt($('.item_width:first', _this.designConfigRoot).val());
+        h = parseInt($('.item_height:first', _this.designConfigRoot).val());
+        return _this.updateItemSize(x, y, w, h);
+      };
+    })(this));
     SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, cssStyle, this.designConfigRoot);
     SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, cssStyle, this.designConfigRoot);
     SidebarUI.settingSlider('design-slider-border-radius', 0, 100, cssCode, cssStyle, this.designConfigRoot);

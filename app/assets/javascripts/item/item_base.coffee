@@ -175,6 +175,15 @@ class ItemBase extends ItemEventBase
   eventConfigValue: ->
     return null
 
+  # アイテム位置&サイズを更新
+  updateItemSize: (x, y, w, h) ->
+    @getJQueryElement().css({top: y, left: x, width: w, height: h})
+    @itemSize.x = parseInt(x)
+    @itemSize.y = parseInt(y)
+    @itemSize.w = parseInt(w)
+    @itemSize.h = parseInt(h)
+    @saveObj()
+
 # CSSアイテム
 # @abstract
 # @extend ItemBase

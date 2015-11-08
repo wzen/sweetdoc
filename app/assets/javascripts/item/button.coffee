@@ -170,6 +170,19 @@ class ButtonItem extends CssItemBase
       @setItemPropToPageValue('name', @name)
     )
 
+    # アイテム位置の変更
+    $('.item_position_x:first', @designConfigRoot).val(@itemSize.x)
+    $('.item_position_y:first', @designConfigRoot).val(@itemSize.y)
+    $('.item_width:first', @designConfigRoot).val(@itemSize.w)
+    $('.item_height:first', @designConfigRoot).val(@itemSize.h)
+    $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', @designConfigRoot).off('change').on('change', =>
+      x = parseInt($('.item_position_x:first', @designConfigRoot).val())
+      y = parseInt($('.item_position_y:first', @designConfigRoot).val())
+      w = parseInt($('.item_width:first', @designConfigRoot).val())
+      h = parseInt($('.item_height:first', @designConfigRoot).val())
+      @updateItemSize(x, y, w, h)
+    )
+
     # スライダー初期化
     SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
     SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
