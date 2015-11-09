@@ -156,11 +156,15 @@ WorkTableCommonExtend = {
   drag: function() {
     var element;
     element = $('#' + this.id);
-    this.itemSize.x = element.position().left;
-    this.itemSize.y = element.position().top;
+    this.updateItemPosition(element.position().left, element.position().top);
     if (window.debug) {
       return console.log("drag: itemSize: " + (JSON.stringify(this.itemSize)));
     }
+  },
+  resize: function() {
+    var element;
+    element = $('#' + this.id);
+    return this.updateItemSize(element.width(), element.height());
   },
   dragComplete: function() {
     return this.saveObj();

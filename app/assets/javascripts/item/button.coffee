@@ -183,7 +183,7 @@ class ButtonItem extends CssItemBase
       y = parseInt($('.item_position_y:first', @designConfigRoot).val())
       w = parseInt($('.item_width:first', @designConfigRoot).val())
       h = parseInt($('.item_height:first', @designConfigRoot).val())
-      @updateItemSize(x, y, w, h)
+      @updatePositionAndItemSize(x, y, w, h)
     )
 
     # スライダー初期化

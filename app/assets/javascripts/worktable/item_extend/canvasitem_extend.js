@@ -2,22 +2,6 @@
 var WorkTableCanvasItemExtend;
 
 WorkTableCanvasItemExtend = {
-  resize: function() {
-    var canvas, drawingCanvas, drawingContext, element;
-    canvas = $('#' + this.canvasElementId());
-    element = $('#' + this.id);
-    this.scale.w = element.width() / this.itemSize.w;
-    this.scale.h = element.height() / this.itemSize.h;
-    canvas.attr('width', element.width());
-    canvas.attr('height', element.height());
-    drawingCanvas = document.getElementById(this.canvasElementId());
-    drawingContext = drawingCanvas.getContext('2d');
-    drawingContext.scale(this.scale.w, this.scale.h);
-    this.drawNewCanvas();
-    if (window.debug) {
-      return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
-    }
-  },
   endDraw: function(zindex, show) {
     if (show == null) {
       show = true;

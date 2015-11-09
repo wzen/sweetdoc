@@ -130,10 +130,14 @@ WorkTableCommonExtend =
   # ドラッグ中イベント
   drag: ->
     element = $('#' + @id)
-    @itemSize.x = element.position().left
-    @itemSize.y = element.position().top
+    @updateItemPosition(element.position().left, element.position().top)
     if window.debug
       console.log("drag: itemSize: #{JSON.stringify(@itemSize)}")
+
+  # リサイズ時のイベント
+  resize: ->
+    element = $('#' + @id)
+    @updateItemSize(element.width(), element.height())
 
   # ドラッグ完了時イベント
   dragComplete: ->

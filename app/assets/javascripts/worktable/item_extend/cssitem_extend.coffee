@@ -1,10 +1,5 @@
 # CSS
 WorkTableCssItemExtend =
-  # リサイズ時のイベント
-  resize: ->
-    element = $('#' + @id)
-    @itemSize.w = element.width()
-    @itemSize.h = element.height()
 
   # ドラッグ描画
   # @param [Array] cood 座標

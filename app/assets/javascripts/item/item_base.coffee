@@ -189,14 +189,17 @@ class ItemBase extends ItemEventBase
     @getJQueryElement().css({top: @itemSize.y, left: @itemSize.x, width: @itemSize.w, height: @itemSize.h})
 
   # アイテム位置&サイズを更新
-  updateItemSize: (x, y, w, h, withSave = true) ->
-    @getJQueryElement().css({top: y, left: x, width: w, height: h})
-    @itemSize.x = parseInt(x)
-    @itemSize.y = parseInt(y)
-    @itemSize.w = parseInt(w)
-    @itemSize.h = parseInt(h)
-    if withSave
+  updatePositionAndItemSize: (x, y, w, h, withSaveObj = true, updateInstanceInfo = true) ->
+    @updateItemPosition(x, y, updateInstanceInfo)
+    @updateItemSize(w, h, updateInstanceInfo)
+    if withSaveObj
       @saveObj()
+
+  updateItemPosition: (x, y, updateInstanceInfo = true) ->
+    @getJQueryElement().css({top: y, left: x})
+    if updateInstanceInfo
+      @itemSize.x = parseInt(x)
+      @itemSize.y = parseInt(y)
 
   # スクロールによるアイテム状態更新
   updateItemCommonByScroll: (scrollValue)->
@@ -340,6 +343,13 @@ class CssItemBase extends ItemBase
     super(obj)
     @mousedownCood = Common.makeClone(obj.mousedownCood)
     @css = Common.makeClone(obj.css)
+
+  # アイテムサイズ更新
+  updateItemSize: (w, h, updateInstanceInfo = true) ->
+    @getJQueryElement().css({width: w, height: h})
+    if updateInstanceInfo
+      @itemSize.w = parseInt(w)
+      @itemSize.h = parseInt(h)
 
   # CSS内のオブジェクトIDを自身のものに変更
   changeCssId: (oldObjId) ->
@@ -510,3 +520,24 @@ class CanvasItemBase extends ItemBase
       context.clearRect(0, 0, canvas.width, canvas.height)
       # キャンパスに対する初期化
       @initCanvas()
+
+  # アイテムサイズ更新
+  updateItemSize: (w, h, updateInstanceInfo = true) ->
+    element = $('#' + @id)
+    element.css({width: w, height: h})
+    canvas = $('#' + @canvasElementId())
+    scaleW = element.width() / @itemSize.w
+    scaleH = element.height() / @itemSize.h
+    canvas.attr('width',  element.width())
+    canvas.attr('height', element.height())
+    drawingCanvas = document.getElementById(@canvasElementId())
+    drawingContext = drawingCanvas.getContext('2d')
+    drawingContext.scale(scaleW, scaleH)
+    @drawNewCanvas()
+    if updateInstanceInfo
+      @scale.w = scaleW
+      @scale.h = scaleH
+#      @itemSize.w = element.width()
+#      @itemSize.h = element.height()
+    if window.debug
+      console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")

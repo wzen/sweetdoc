@@ -1,20 +1,5 @@
 # Canvas
 WorkTableCanvasItemExtend =
-  # リサイズ中イベント
-  resize: ->
-    canvas = $('#' + @canvasElementId())
-    element = $('#' + @id)
-    @scale.w = element.width() / @itemSize.w
-    @scale.h = element.height() / @itemSize.h
-    canvas.attr('width',  element.width())
-    canvas.attr('height', element.height())
-    drawingCanvas = document.getElementById(@canvasElementId())
-    drawingContext = drawingCanvas.getContext('2d')
-    drawingContext.scale(@scale.w, @scale.h)
-    @drawNewCanvas()
-    if window.debug
-      console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
-
   # 描画終了
   # @param [Int] zindex z-index
   # @param [boolean] show 要素作成後に描画を表示するか

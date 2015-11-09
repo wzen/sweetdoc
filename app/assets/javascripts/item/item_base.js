@@ -207,22 +207,31 @@ ItemBase = (function(superClass) {
     });
   };
 
-  ItemBase.prototype.updateItemSize = function(x, y, w, h, withSave) {
-    if (withSave == null) {
-      withSave = true;
+  ItemBase.prototype.updatePositionAndItemSize = function(x, y, w, h, withSaveObj, updateInstanceInfo) {
+    if (withSaveObj == null) {
+      withSaveObj = true;
+    }
+    if (updateInstanceInfo == null) {
+      updateInstanceInfo = true;
+    }
+    this.updateItemPosition(x, y, updateInstanceInfo);
+    this.updateItemSize(w, h, updateInstanceInfo);
+    if (withSaveObj) {
+      return this.saveObj();
+    }
+  };
+
+  ItemBase.prototype.updateItemPosition = function(x, y, updateInstanceInfo) {
+    if (updateInstanceInfo == null) {
+      updateInstanceInfo = true;
     }
     this.getJQueryElement().css({
       top: y,
-      left: x,
-      width: w,
-      height: h
+      left: x
     });
-    this.itemSize.x = parseInt(x);
-    this.itemSize.y = parseInt(y);
-    this.itemSize.w = parseInt(w);
-    this.itemSize.h = parseInt(h);
-    if (withSave) {
-      return this.saveObj();
+    if (updateInstanceInfo) {
+      this.itemSize.x = parseInt(x);
+      return this.itemSize.y = parseInt(y);
     }
   };
 
@@ -398,6 +407,20 @@ CssItemBase = (function(superClass) {
     CssItemBase.__super__.setMiniumObject.call(this, obj);
     this.mousedownCood = Common.makeClone(obj.mousedownCood);
     return this.css = Common.makeClone(obj.css);
+  };
+
+  CssItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
+    if (updateInstanceInfo == null) {
+      updateInstanceInfo = true;
+    }
+    this.getJQueryElement().css({
+      width: w,
+      height: h
+    });
+    if (updateInstanceInfo) {
+      this.itemSize.w = parseInt(w);
+      return this.itemSize.h = parseInt(h);
+    }
   };
 
   CssItemBase.prototype.changeCssId = function(oldObjId) {
@@ -578,6 +601,34 @@ CanvasItemBase = (function(superClass) {
       context = canvas.getContext('2d');
       context.clearRect(0, 0, canvas.width, canvas.height);
       return this.initCanvas();
+    }
+  };
+
+  CanvasItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
+    var canvas, drawingCanvas, drawingContext, element, scaleH, scaleW;
+    if (updateInstanceInfo == null) {
+      updateInstanceInfo = true;
+    }
+    element = $('#' + this.id);
+    element.css({
+      width: w,
+      height: h
+    });
+    canvas = $('#' + this.canvasElementId());
+    scaleW = element.width() / this.itemSize.w;
+    scaleH = element.height() / this.itemSize.h;
+    canvas.attr('width', element.width());
+    canvas.attr('height', element.height());
+    drawingCanvas = document.getElementById(this.canvasElementId());
+    drawingContext = drawingCanvas.getContext('2d');
+    drawingContext.scale(scaleW, scaleH);
+    this.drawNewCanvas();
+    if (updateInstanceInfo) {
+      this.scale.w = scaleW;
+      this.scale.h = scaleH;
+    }
+    if (window.debug) {
+      return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
     }
   };
 

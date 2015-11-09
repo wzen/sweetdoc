@@ -2,12 +2,6 @@
 var WorkTableCssItemExtend;
 
 WorkTableCssItemExtend = {
-  resize: function() {
-    var element;
-    element = $('#' + this.id);
-    this.itemSize.w = element.width();
-    return this.itemSize.h = element.height();
-  },
   draw: function(cood) {
     if (this.itemSize !== null) {
       this.restoreDrawingSurface(this.itemSize);

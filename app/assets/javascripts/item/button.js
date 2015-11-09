@@ -155,7 +155,7 @@ ButtonItem = (function(superClass) {
         y = parseInt($('.item_position_y:first', _this.designConfigRoot).val());
         w = parseInt($('.item_width:first', _this.designConfigRoot).val());
         h = parseInt($('.item_height:first', _this.designConfigRoot).val());
-        return _this.updateItemSize(x, y, w, h);
+        return _this.updatePositionAndItemSize(x, y, w, h);
       };
     })(this));
     SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, cssStyle, this.designConfigRoot);
