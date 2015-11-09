@@ -250,6 +250,9 @@ EventBase = (function(superClass) {
     this.scrollValue += plusX + plusY;
     sPoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
+    if (this instanceof ItemBase) {
+      this.updateItemCommonByScroll(this.scrollValue);
+    }
     if (this.scrollValue < sPoint) {
       this.scrollValue = sPoint;
       return;
@@ -280,6 +283,13 @@ EventBase = (function(superClass) {
     e.preventDefault();
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
+    }
+    if (this instanceof ItemBase) {
+      setTimeout((function(_this) {
+        return function() {
+          return _this.updateItemCommonByClick();
+        };
+      })(this), 0);
     }
     return this.constructor.prototype[this.getEventMethodName()].call(this, e, complete);
   };

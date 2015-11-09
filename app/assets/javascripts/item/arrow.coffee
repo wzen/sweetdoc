@@ -161,12 +161,14 @@ class ArrowItem extends CanvasItemBase
 
   # イベント前の表示状態にする
   updateEventBefore: ->
+    super()
     methodName = @getEventMethodName()
     if methodName == 'scrollDraw'
       @reDraw(false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
+    super()
     methodName = @getEventMethodName()
     if methodName == 'scrollDraw'
       @reDraw(false)

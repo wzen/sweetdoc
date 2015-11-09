@@ -90,6 +90,8 @@ class EventConfig
       displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @commonEventId)
     else
       displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
+      # アイテム共通情報表示
+      $('.item_common_div', @emt).show()
     $(".#{displayClassName}", @emt).show()
     $(".action_div", @emt).show()
 
@@ -145,6 +147,13 @@ class EventConfig
   # 入力値を適用する
   applyAction: ->
     # 入力値を保存
+
+    @itemSizeDiff = {
+      x: parseInt($('.item_position_diff_x:first', @emt).val())
+      y: parseInt($('.item_position_diff_y:first', @emt).val())
+      w: parseInt($('.item_diff_width:first', @emt).val())
+      h: parseInt($('.item_diff_height:first', @emt).val())
+    }
 
     @isParallel = false
     parallel = $(".parallel_div .parallel", @emt)

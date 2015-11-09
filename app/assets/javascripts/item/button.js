@@ -26,6 +26,7 @@ ButtonItem = (function(superClass) {
     methods: {
       defaultClick: {
         actionType: 'click',
+        clickAnimationDuration: 0.5,
         options: {
           id: 'defaultClick',
           name: 'Default click action',
@@ -60,6 +61,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.updateEventBefore = function() {
     var methodName;
+    ButtonItem.__super__.updateEventBefore.call(this);
     this.getJQueryElement().css('opacity', 0);
     methodName = this.getEventMethodName();
     if (methodName === 'defaultClick') {
@@ -69,6 +71,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.prototype.updateEventAfter = function() {
     var methodName;
+    ButtonItem.__super__.updateEventAfter.call(this);
     this.getJQueryElement().css('opacity', 1);
     methodName = this.getEventMethodName();
     if (methodName === 'defaultClick') {
@@ -107,7 +110,7 @@ ButtonItem = (function(superClass) {
     keyframe = keyFrameName + " {\n  0% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  40% {\n    top: " + (parseInt(top) + 10) + "px;\n    left: " + (parseInt(left) + 10) + "px;\n    width: " + (parseInt(width) - 20) + "px;\n    height: " + (parseInt(height) - 20) + "px;\n  }\n  80% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  90% {\n    top: " + (parseInt(top) + 5) + "px;\n    left: " + (parseInt(left) + 5) + "px;\n    width: " + (parseInt(width) - 10) + "px;\n    height: " + (parseInt(height) - 10) + "px;\n  }\n  100% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n}";
     webkitKeyframe = "@-webkit-keyframes " + keyframe;
     mozKeyframe = "@-moz-keyframes " + keyframe;
-    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: 0.5s;\n-moz-animation-duration: 0.5s;\n}";
+    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration + "s;\n-moz-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration + "s;\n}";
     return webkitKeyframe + " " + mozKeyframe + " " + css;
   };
 

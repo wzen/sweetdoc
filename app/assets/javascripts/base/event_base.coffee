@@ -229,6 +229,10 @@ class EventBase extends Extend
     sPoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
 
+    if @ instanceof ItemBase
+      # アイテム位置&サイズ更新
+      @updateItemCommonByScroll(@scrollValue)
+
     # スクロール指定範囲外なら反応させない
     if @scrollValue < sPoint
       @scrollValue = sPoint
@@ -261,6 +265,11 @@ class EventBase extends Extend
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
+
+    if @ instanceof ItemBase
+      setTimeout( =>
+        @updateItemCommonByClick()
+      , 0)
     (@constructor.prototype[@getEventMethodName()]).call(@, e, complete)
 
   # イベント後の表示状態にする

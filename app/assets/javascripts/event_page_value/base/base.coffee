@@ -10,6 +10,8 @@ class EventPageValueBase
       @ID = constant.EventPageValueKey.ID
       # @property [String] ITEM_ID アイテムタイプID
       @ITEM_ID = constant.EventPageValueKey.ITEM_ID
+      # @property [String] ITEM_SIZE_DIFF アイテムサイズ
+      @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
       # @property [String] COMMON_EVENT_ID 共通イベントID
       @COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID
       # @property [String] VALUE イベント値
@@ -73,6 +75,7 @@ class EventPageValueBase
     writeValue = {}
     writeValue[@PageValueKey.ID] = eventConfig.id
     writeValue[@PageValueKey.ITEM_ID] = eventConfig.itemId
+    writeValue[@PageValueKey.ITEM_SIZE_DIFF] = eventConfig.itemSizeDiff
     writeValue[@PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId
     writeValue[@PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent
     writeValue[@PageValueKey.METHODNAME] = eventConfig.methodName
@@ -97,10 +100,21 @@ class EventPageValueBase
     if writeValue?
       eventConfig.id = writeValue[@PageValueKey.ID]
       eventConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
+      eventConfig.itemSizeDiff = writeValue[@PageValueKey.ITEM_SIZE_DIFF]
       eventConfig.commonEventId = writeValue[@PageValueKey.COMMON_EVENT_ID]
       eventConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
       eventConfig.methodName = writeValue[@PageValueKey.METHODNAME]
       eventConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
+
+      if !eventConfig.isCommonEvent
+        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.x
+          $('.item_position_diff_x', eventConfig.emt).val(eventConfig.itemSizeDiff.x)
+        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.y
+          $('.item_position_diff_y', eventConfig.emt).val(eventConfig.itemSizeDiff.y)
+        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.w
+          $('.item_diff_width', eventConfig.emt).val(eventConfig.itemSizeDiff.w)
+        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h
+          $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h)
 
       parallel = $(".parallel_div .parallel", eventConfig.emt)
       isParallel = writeValue[@PageValueKey.IS_SYNC]

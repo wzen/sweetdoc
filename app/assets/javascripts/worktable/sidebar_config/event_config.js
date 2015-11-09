@@ -81,6 +81,7 @@ EventConfig = (function() {
       displayClassName = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this.commonEventId);
     } else {
       displayClassName = this.constructor.ITEM_ACTION_CLASS.replace('@itemid', this.itemId);
+      $('.item_common_div', this.emt).show();
     }
     $("." + displayClassName, this.emt).show();
     $(".action_div", this.emt).show();
@@ -137,6 +138,12 @@ EventConfig = (function() {
 
   EventConfig.prototype.applyAction = function() {
     var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, topEmt;
+    this.itemSizeDiff = {
+      x: parseInt($('.item_position_diff_x:first', this.emt).val()),
+      y: parseInt($('.item_position_diff_y:first', this.emt).val()),
+      w: parseInt($('.item_diff_width:first', this.emt).val()),
+      h: parseInt($('.item_diff_height:first', this.emt).val())
+    };
     this.isParallel = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {

@@ -22,6 +22,7 @@ EPVItem = (function(superClass) {
     writeValue = {};
     writeValue[this.PageValueKey.ID] = item.id;
     writeValue[this.PageValueKey.ITEM_ID] = item.constructor.ITEM_ID;
+    writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = item.itemSizeDiff;
     writeValue[this.PageValueKey.COMMON_EVENT_ID] = null;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = false;
     writeValue[this.PageValueKey.METHODNAME] = item.constructor.defaultMethodName();

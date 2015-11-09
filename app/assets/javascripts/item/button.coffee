@@ -18,6 +18,7 @@ class ButtonItem extends CssItemBase
       methods: {
         defaultClick: {
           actionType: 'click'
+          clickAnimationDuration: 0.5
           options: {
             id: 'defaultClick'
             name: 'Default click action'
@@ -53,6 +54,7 @@ class ButtonItem extends CssItemBase
 
   # イベント前の表示状態にする
   updateEventBefore: ->
+    super()
     @getJQueryElement().css('opacity', 0)
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
@@ -60,6 +62,7 @@ class ButtonItem extends CssItemBase
 
   # イベント後の表示状態にする
   updateEventAfter: ->
+    super()
     @getJQueryElement().css('opacity', 1)
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
@@ -133,8 +136,8 @@ class ButtonItem extends CssItemBase
     {
     -webkit-animation-name: #{keyFrameName};
     -moz-animation-name: #{keyFrameName};
-    -webkit-animation-duration: 0.5s;
-    -moz-animation-duration: 0.5s;
+    -webkit-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration}s;
+    -moz-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration}s;
     }
     """
     return "#{webkitKeyframe} #{mozKeyframe} #{css}"

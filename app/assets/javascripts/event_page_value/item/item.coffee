@@ -16,6 +16,7 @@ class EPVItem extends EventPageValueBase
     writeValue = {}
     writeValue[@PageValueKey.ID] = item.id
     writeValue[@PageValueKey.ITEM_ID] = item.constructor.ITEM_ID
+    writeValue[@PageValueKey.ITEM_SIZE_DIFF] = item.itemSizeDiff
     writeValue[@PageValueKey.COMMON_EVENT_ID] = null
     writeValue[@PageValueKey.IS_COMMON_EVENT] = false
     writeValue[@PageValueKey.METHODNAME] = item.constructor.defaultMethodName()

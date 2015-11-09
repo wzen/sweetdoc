@@ -153,6 +153,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventBefore = function() {
     var methodName;
+    ArrowItem.__super__.updateEventBefore.call(this);
     methodName = this.getEventMethodName();
     if (methodName === 'scrollDraw') {
       return this.reDraw(false);
@@ -161,6 +162,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.prototype.updateEventAfter = function() {
     var methodName;
+    ArrowItem.__super__.updateEventAfter.call(this);
     methodName = this.getEventMethodName();
     if (methodName === 'scrollDraw') {
       this.reDraw(false);

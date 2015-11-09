@@ -183,7 +183,34 @@ ItemBase = (function(superClass) {
     return null;
   };
 
-  ItemBase.prototype.updateItemSize = function(x, y, w, h) {
+  ItemBase.prototype.updateEventAfter = function() {
+    var h, itemDiff, w, x, y;
+    itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    x = this.itemSize.x + itemDiff.x;
+    y = this.itemSize.y + itemDiff.y;
+    w = this.itemSize.w + itemDiff.w;
+    h = this.itemSize.h + itemDiff.h;
+    return this.getJQueryElement().css({
+      top: y,
+      left: x,
+      width: w,
+      height: h
+    });
+  };
+
+  ItemBase.prototype.updateEventBefore = function() {
+    return this.getJQueryElement().css({
+      top: this.itemSize.y,
+      left: this.itemSize.x,
+      width: this.itemSize.w,
+      height: this.itemSize.h
+    });
+  };
+
+  ItemBase.prototype.updateItemSize = function(x, y, w, h, withSave) {
+    if (withSave == null) {
+      withSave = true;
+    }
     this.getJQueryElement().css({
       top: y,
       left: x,
@@ -194,7 +221,80 @@ ItemBase = (function(superClass) {
     this.itemSize.y = parseInt(y);
     this.itemSize.w = parseInt(w);
     this.itemSize.h = parseInt(h);
-    return this.saveObj();
+    if (withSave) {
+      return this.saveObj();
+    }
+  };
+
+  ItemBase.prototype.updateItemCommonByScroll = function(scrollValue) {
+    return this.updateItemSizeByScroll(scrollValue);
+  };
+
+  ItemBase.prototype.updateItemCommonByClick = function() {
+    var clickAnimationDuration;
+    clickAnimationDuration = this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration;
+    return this.updateItemSizeByClick(clickAnimationDuration);
+  };
+
+  ItemBase.prototype.updateItemSizeByScroll = function(scrollValue) {
+    var beforeItemSize, h, itemDiff, progressPercentage, scrollEnd, scrollStart, w, x, y;
+    scrollEnd = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
+    scrollStart = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    progressPercentage = (scrollValue - scrollStart) / (scrollEnd - scrollStart);
+    beforeItemSize = {
+      x: this.getJQueryElement().position().left,
+      y: this.getJQueryElement().position().top,
+      w: this.getJQueryElement().width(),
+      h: this.getJQueryElement().height()
+    };
+    itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    x = beforeItemSize.x + (itemDiff.x * progressPercentage);
+    y = beforeItemSize.y + (itemDiff.y * progressPercentage);
+    w = beforeItemSize.w + (itemDiff.w * progressPercentage);
+    h = beforeItemSize.h + (itemDiff.h * progressPercentage);
+    return this.getJQueryElement().css({
+      top: y,
+      left: x,
+      width: w,
+      height: h
+    });
+  };
+
+  ItemBase.prototype.updateItemSizeByClick = function(clickAnimationDuration) {
+    var beforeItemSize, count, duration, itemDiff, loopMax, perH, perW, perX, perY, timer;
+    duration = 0.1;
+    beforeItemSize = {
+      x: this.getJQueryElement().position().left,
+      y: this.getJQueryElement().position().top,
+      w: this.getJQueryElement().width(),
+      h: this.getJQueryElement().height()
+    };
+    itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    perX = itemDiff.x * (duration / clickAnimationDuration);
+    perY = itemDiff.y * (duration / clickAnimationDuration);
+    perW = itemDiff.w * (duration / clickAnimationDuration);
+    perH = itemDiff.h * (duration / clickAnimationDuration);
+    loopMax = Math.ceil(duration / clickAnimationDuration);
+    count = 1;
+    return timer = setInterval((function(_this) {
+      return function() {
+        var h, w, x, y;
+        x = beforeItemSize.x + perX;
+        y = beforeItemSize.y + perY;
+        w = beforeItemSize.w + perW;
+        h = beforeItemSize.h + perH;
+        _this.getJQueryElement().css({
+          top: y,
+          left: x,
+          width: w,
+          height: h
+        });
+        if (count >= loopMax) {
+          clearInterval(timer);
+        }
+        return count += 1;
+      };
+    })(this), duration);
   };
 
   return ItemBase;

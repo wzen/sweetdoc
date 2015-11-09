@@ -175,14 +175,83 @@ class ItemBase extends ItemEventBase
   eventConfigValue: ->
     return null
 
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    x = @itemSize.x + itemDiff.x
+    y = @itemSize.y + itemDiff.y
+    w = @itemSize.w + itemDiff.w
+    h = @itemSize.h + itemDiff.h
+    @getJQueryElement().css({top: y, left: x, width: w, height: h})
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    @getJQueryElement().css({top: @itemSize.y, left: @itemSize.x, width: @itemSize.w, height: @itemSize.h})
+
   # アイテム位置&サイズを更新
-  updateItemSize: (x, y, w, h) ->
+  updateItemSize: (x, y, w, h, withSave = true) ->
     @getJQueryElement().css({top: y, left: x, width: w, height: h})
     @itemSize.x = parseInt(x)
     @itemSize.y = parseInt(y)
     @itemSize.w = parseInt(w)
     @itemSize.h = parseInt(h)
-    @saveObj()
+    if withSave
+      @saveObj()
+
+  # スクロールによるアイテム状態更新
+  updateItemCommonByScroll: (scrollValue)->
+    @updateItemSizeByScroll(scrollValue)
+
+  # クリックによるアイテム状態更新
+  updateItemCommonByClick: ->
+    clickAnimationDuration = @constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration
+    @updateItemSizeByClick(clickAnimationDuration)
+
+  # スクロールイベントでアイテム位置&サイズ更新
+  updateItemSizeByScroll: (scrollValue) ->
+    scrollEnd = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+    scrollStart = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    progressPercentage = (scrollValue - scrollStart) / (scrollEnd - scrollStart)
+    beforeItemSize = {
+      x: @getJQueryElement().position().left
+      y: @getJQueryElement().position().top
+      w: @getJQueryElement().width()
+      h: @getJQueryElement().height()
+    }
+    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    x = beforeItemSize.x + (itemDiff.x * progressPercentage)
+    y = beforeItemSize.y + (itemDiff.y * progressPercentage)
+    w = beforeItemSize.w + (itemDiff.w * progressPercentage)
+    h = beforeItemSize.h + (itemDiff.h * progressPercentage)
+    @getJQueryElement().css({top: y, left: x, width: w, height: h})
+
+  # クリックイベントでアイテム位置&サイズ更新
+  updateItemSizeByClick: (clickAnimationDuration) ->
+    duration = 0.1
+    # クリックアニメーションと同時に実行させること
+    beforeItemSize = {
+      x: @getJQueryElement().position().left
+      y: @getJQueryElement().position().top
+      w: @getJQueryElement().width()
+      h: @getJQueryElement().height()
+    }
+    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    perX = itemDiff.x * (duration / clickAnimationDuration)
+    perY = itemDiff.y * (duration / clickAnimationDuration)
+    perW = itemDiff.w * (duration / clickAnimationDuration)
+    perH = itemDiff.h * (duration / clickAnimationDuration)
+    loopMax = Math.ceil(duration / clickAnimationDuration)
+    count = 1
+    timer = setInterval( =>
+      x = beforeItemSize.x + perX
+      y = beforeItemSize.y + perY
+      w = beforeItemSize.w + perW
+      h = beforeItemSize.h + perH
+      @getJQueryElement().css({top: y, left: x, width: w, height: h})
+      if count >= loopMax
+        clearInterval(timer)
+      count += 1
+    , duration)
 
 # CSSアイテム
 # @abstract

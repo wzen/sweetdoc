@@ -272,6 +272,7 @@ class Const
   class EventPageValueKey
     ID = 'id'
     ITEM_ID = 'item_id'
+    ITEM_SIZE_DIFF = 'item_size_diff'
     COMMON_EVENT_ID = 'common_event_id'
     VALUE = 'value'
     IS_COMMON_EVENT = 'is_common_event'

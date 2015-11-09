@@ -15,6 +15,8 @@ EventPageValueBase = (function() {
 
       PageValueKey.ITEM_ID = constant.EventPageValueKey.ITEM_ID;
 
+      PageValueKey.ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF;
+
       PageValueKey.COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID;
 
       PageValueKey.VALUE = constant.EventPageValueKey.VALUE;
@@ -87,6 +89,7 @@ EventPageValueBase = (function() {
     writeValue = {};
     writeValue[this.PageValueKey.ID] = eventConfig.id;
     writeValue[this.PageValueKey.ITEM_ID] = eventConfig.itemId;
+    writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = eventConfig.itemSizeDiff;
     writeValue[this.PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent;
     writeValue[this.PageValueKey.METHODNAME] = eventConfig.methodName;
@@ -109,10 +112,25 @@ EventPageValueBase = (function() {
     if (writeValue != null) {
       eventConfig.id = writeValue[this.PageValueKey.ID];
       eventConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
+      eventConfig.itemSizeDiff = writeValue[this.PageValueKey.ITEM_SIZE_DIFF];
       eventConfig.commonEventId = writeValue[this.PageValueKey.COMMON_EVENT_ID];
       eventConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
       eventConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
       eventConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
+      if (!eventConfig.isCommonEvent) {
+        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.x) {
+          $('.item_position_diff_x', eventConfig.emt).val(eventConfig.itemSizeDiff.x);
+        }
+        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.y) {
+          $('.item_position_diff_y', eventConfig.emt).val(eventConfig.itemSizeDiff.y);
+        }
+        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.w) {
+          $('.item_diff_width', eventConfig.emt).val(eventConfig.itemSizeDiff.w);
+        }
+        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h) {
+          $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h);
+        }
+      }
       parallel = $(".parallel_div .parallel", eventConfig.emt);
       isParallel = writeValue[this.PageValueKey.IS_SYNC];
       if ((parallel != null) && isParallel) {
