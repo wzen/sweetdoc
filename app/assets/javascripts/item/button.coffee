@@ -71,11 +71,11 @@ class ButtonItem extends CssItemBase
   # 共通クリックイベント ※アクションイベント
   defaultClick : (e, complete) =>
     # ボタン凹むアクション
-    @getJQueryElement().addClass('defaultClick_' + @id)
+    @getJQueryElement().find('.css_item:first').addClass('defaultClick_' + @id)
     @getJQueryElement().off('webkitAnimationEnd animationend')
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
-      @getJQueryElement().removeClass('defaultClick_' + @id)
+      @getJQueryElement().find('.css_item:first').removeClass('defaultClick_' + @id)
       @isFinishedEvent = true
       if complete?
         complete()
@@ -86,7 +86,7 @@ class ButtonItem extends CssItemBase
     methodName = @getEventMethodName()
     funcName = "#{methodName}_#{@id}"
     keyFrameName = "#{@id}_frame"
-    emt = @getJQueryElement()
+    emt = @getJQueryElement().find('.css_item:first')
     top = emt.css('top')
     left = emt.css('left')
     width = emt.css('width')

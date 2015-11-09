@@ -20,9 +20,9 @@ EventBase = (function(superClass) {
       return;
     }
     if (this.getEventActionType() === Constant.ActionType.SCROLL) {
-      return this.scrollEvent = this.scrollRootFunc;
+      return this.scrollEvent = this.scrollHandlerFunc;
     } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
-      return this.clickEvent = this.clickRootFunc;
+      return this.clickEvent = this.clickHandlerFunc;
     }
   };
 
@@ -64,7 +64,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.preview = function(event) {
     var _preview;
     _preview = function(event) {
-      var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, method, p;
+      var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, p;
       drawDelay = 30;
       loopDelay = 1000;
       loopMaxCount = 5;
@@ -73,7 +73,6 @@ EventBase = (function(superClass) {
       if (this instanceof CssItemBase) {
         this.appendAnimationCssIfNeeded();
       }
-      method = this.constructor.prototype[this.getEventMethodName()];
       actionType = this.getEventActionType();
       this.doPreviewLoop = true;
       loopCount = 0;
@@ -89,7 +88,7 @@ EventBase = (function(superClass) {
                 _this.previewTimer = null;
               }
               return _this.previewTimer = setTimeout(function() {
-                method.call(_this, p);
+                _this.execMethod(p);
                 p += 1;
                 if (p >= _this.scrollLength()) {
                   p = 0;
@@ -145,7 +144,7 @@ EventBase = (function(superClass) {
                 _this.previewTimer = null;
               }
               return _this.previewTimer = setTimeout(function() {
-                return method.call(_this, null, _loop);
+                return _this.execMethod(null, _loop);
               }, loopDelay);
             } else {
               if (_this.previewFinished != null) {
@@ -155,7 +154,7 @@ EventBase = (function(superClass) {
             }
           };
         })(this);
-        return method.call(this, null, _loop);
+        return this.execMethod(null, _loop);
       }
     };
     return this.stopPreview((function(_this) {
@@ -214,7 +213,31 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.didChapter = function() {};
 
-  EventBase.prototype.scrollRootFunc = function(x, y, complete) {
+  EventBase.prototype.execMethod = function(params, complete) {
+    var actionType, methodName;
+    if (complete == null) {
+      complete = null;
+    }
+    methodName = this.getEventMethodName();
+    if (methodName == null) {
+      return;
+    }
+    if (this instanceof ItemBase) {
+      actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[methodName].actionType);
+      if (actionType === Constant.ActionType.SCROLL) {
+        this.updateItemCommonByScroll(params);
+      } else if (actionType === Constant.ActionType.CLICK) {
+        setTimeout((function(_this) {
+          return function() {
+            return _this.updateItemCommonByClick();
+          };
+        })(this), 0);
+      }
+    }
+    return this.constructor.prototype[methodName].call(this, params, complete);
+  };
+
+  EventBase.prototype.scrollHandlerFunc = function(x, y, complete) {
     var ePoint, methodName, plusX, plusY, sPoint;
     if (complete == null) {
       complete = null;
@@ -250,9 +273,6 @@ EventBase = (function(superClass) {
     this.scrollValue += plusX + plusY;
     sPoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
-    if (this instanceof ItemBase) {
-      this.updateItemCommonByScroll(this.scrollValue);
-    }
     if (this.scrollValue < sPoint) {
       this.scrollValue = sPoint;
       return;
@@ -269,14 +289,14 @@ EventBase = (function(superClass) {
     }
     this.canForward = this.scrollValue < ePoint;
     this.canReverse = this.scrollValue > sPoint;
-    return this.constructor.prototype[methodName].call(this, this.scrollValue - sPoint);
+    return this.execMethod(this.scrollValue - sPoint);
   };
 
   EventBase.prototype.scrollLength = function() {
     return parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
   };
 
-  EventBase.prototype.clickRootFunc = function(e, complete) {
+  EventBase.prototype.clickHandlerFunc = function(e, complete) {
     if (complete == null) {
       complete = null;
     }
@@ -284,14 +304,7 @@ EventBase = (function(superClass) {
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    if (this instanceof ItemBase) {
-      setTimeout((function(_this) {
-        return function() {
-          return _this.updateItemCommonByClick();
-        };
-      })(this), 0);
-    }
-    return this.constructor.prototype[this.getEventMethodName()].call(this, e, complete);
+    return this.execMethod(e, complete);
   };
 
   EventBase.prototype.updateEventAfter = function() {};

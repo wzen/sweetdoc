@@ -84,11 +84,11 @@ ButtonItem = (function(superClass) {
   };
 
   ButtonItem.prototype.defaultClick = function(e, complete) {
-    this.getJQueryElement().addClass('defaultClick_' + this.id);
+    this.getJQueryElement().find('.css_item:first').addClass('defaultClick_' + this.id);
     this.getJQueryElement().off('webkitAnimationEnd animationend');
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
-        _this.getJQueryElement().removeClass('defaultClick_' + _this.id);
+        _this.getJQueryElement().find('.css_item:first').removeClass('defaultClick_' + _this.id);
         _this.isFinishedEvent = true;
         if (complete != null) {
           return complete();
@@ -102,7 +102,7 @@ ButtonItem = (function(superClass) {
     methodName = this.getEventMethodName();
     funcName = methodName + "_" + this.id;
     keyFrameName = this.id + "_frame";
-    emt = this.getJQueryElement();
+    emt = this.getJQueryElement().find('.css_item:first');
     top = emt.css('top');
     left = emt.css('left');
     width = emt.css('width');

@@ -240,7 +240,7 @@ ItemBase = (function(superClass) {
     var beforeItemSize, h, itemDiff, progressPercentage, scrollEnd, scrollStart, w, x, y;
     scrollEnd = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     scrollStart = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
-    progressPercentage = (scrollValue - scrollStart) / (scrollEnd - scrollStart);
+    progressPercentage = scrollValue / (scrollEnd - scrollStart);
     beforeItemSize = {
       x: this.getJQueryElement().position().left,
       y: this.getJQueryElement().position().top,
@@ -261,8 +261,14 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.updateItemSizeByClick = function(clickAnimationDuration) {
-    var beforeItemSize, count, duration, itemDiff, loopMax, perH, perW, perX, perY, timer;
-    duration = 0.1;
+    var beforeItemSize, count, duration, h, itemDiff, loopMax, perH, perW, perX, perY, timer, w, x, y;
+    this.getJQueryElement().css({
+      top: this.itemSize.y,
+      left: this.itemSize.x,
+      width: this.itemSize.w,
+      height: this.itemSize.h
+    });
+    duration = 0.01;
     beforeItemSize = {
       x: this.getJQueryElement().position().left,
       y: this.getJQueryElement().position().top,
@@ -270,19 +276,22 @@ ItemBase = (function(superClass) {
       h: this.getJQueryElement().height()
     };
     itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    if ((itemDiff == null) || (itemDiff.x === 0 && itemDiff.y === 0 && itemDiff.w === 0 && itemDiff.h === 0)) {
+      return;
+    }
     perX = itemDiff.x * (duration / clickAnimationDuration);
     perY = itemDiff.y * (duration / clickAnimationDuration);
     perW = itemDiff.w * (duration / clickAnimationDuration);
     perH = itemDiff.h * (duration / clickAnimationDuration);
-    loopMax = Math.ceil(duration / clickAnimationDuration);
+    loopMax = Math.ceil(clickAnimationDuration / duration);
     count = 1;
-    return timer = setInterval((function(_this) {
+    timer = setInterval((function(_this) {
       return function() {
         var h, w, x, y;
-        x = beforeItemSize.x + perX;
-        y = beforeItemSize.y + perY;
-        w = beforeItemSize.w + perW;
-        h = beforeItemSize.h + perH;
+        x = beforeItemSize.x + (perX * count);
+        y = beforeItemSize.y + (perY * count);
+        w = beforeItemSize.w + (perW * count);
+        h = beforeItemSize.h + (perH * count);
         _this.getJQueryElement().css({
           top: y,
           left: x,
@@ -294,7 +303,17 @@ ItemBase = (function(superClass) {
         }
         return count += 1;
       };
-    })(this), duration);
+    })(this), duration * 1000);
+    x = this.itemSize.x + itemDiff.x;
+    y = this.itemSize.y + itemDiff.y;
+    w = this.itemSize.w + itemDiff.w;
+    h = this.itemSize.h + itemDiff.h;
+    return this.getJQueryElement().css({
+      top: y,
+      left: x,
+      width: w,
+      height: h
+    });
   };
 
   return ItemBase;

@@ -211,7 +211,7 @@ class ItemBase extends ItemEventBase
   updateItemSizeByScroll: (scrollValue) ->
     scrollEnd = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
     scrollStart = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
-    progressPercentage = (scrollValue - scrollStart) / (scrollEnd - scrollStart)
+    progressPercentage = scrollValue / (scrollEnd - scrollStart)
     beforeItemSize = {
       x: @getJQueryElement().position().left
       y: @getJQueryElement().position().top
@@ -227,7 +227,9 @@ class ItemBase extends ItemEventBase
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByClick: (clickAnimationDuration) ->
-    duration = 0.1
+    @getJQueryElement().css({top: @itemSize.y, left: @itemSize.x, width: @itemSize.w, height: @itemSize.h})
+
+    duration = 0.01
     # クリックアニメーションと同時に実行させること
     beforeItemSize = {
       x: @getJQueryElement().position().left
@@ -236,22 +238,34 @@ class ItemBase extends ItemEventBase
       h: @getJQueryElement().height()
     }
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    if !itemDiff? || (itemDiff.x == 0 && itemDiff.y == 0 && itemDiff.w == 0 && itemDiff.h == 0)
+      # 変更なしの場合は処理なし
+      return
+
     perX = itemDiff.x * (duration / clickAnimationDuration)
     perY = itemDiff.y * (duration / clickAnimationDuration)
     perW = itemDiff.w * (duration / clickAnimationDuration)
     perH = itemDiff.h * (duration / clickAnimationDuration)
-    loopMax = Math.ceil(duration / clickAnimationDuration)
+    #console.log("perX: #{perX}, perY: #{perY}, perW: #{perW}, perH: #{perH}")
+    loopMax = Math.ceil(clickAnimationDuration/ duration)
     count = 1
     timer = setInterval( =>
-      x = beforeItemSize.x + perX
-      y = beforeItemSize.y + perY
-      w = beforeItemSize.w + perW
-      h = beforeItemSize.h + perH
+      x = beforeItemSize.x + (perX * count)
+      y = beforeItemSize.y + (perY * count)
+      w = beforeItemSize.w + (perW * count)
+      h = beforeItemSize.h + (perH * count)
+      #console.log("x: #{x}, y: #{y}, w: #{w}, h: #{h}")
       @getJQueryElement().css({top: y, left: x, width: w, height: h})
       if count >= loopMax
         clearInterval(timer)
       count += 1
-    , duration)
+    , duration * 1000)
+
+    x = @itemSize.x + itemDiff.x
+    y = @itemSize.y + itemDiff.y
+    w = @itemSize.w + itemDiff.w
+    h = @itemSize.h + itemDiff.h
+    @getJQueryElement().css({top: y, left: x, width: w, height: h})
 
 # CSSアイテム
 # @abstract

@@ -16,10 +16,10 @@ class EventBase extends Extend
       return
     # スクロールイベント
     if @getEventActionType() == Constant.ActionType.SCROLL
-      @scrollEvent = @scrollRootFunc
+      @scrollEvent = @scrollHandlerFunc
     # クリックイベント
     else if @getEventActionType() == Constant.ActionType.CLICK
-      @clickEvent = @clickRootFunc
+      @clickEvent = @clickHandlerFunc
 
   # 設定されているイベントメソッド名を取得
   # @return [String] メソッド名
@@ -69,7 +69,7 @@ class EventBase extends Extend
       if @ instanceof CssItemBase
         @appendAnimationCssIfNeeded()
 
-      method = @constructor.prototype[@getEventMethodName()]
+      #method = @constructor.prototype[@getEventMethodName()]
       actionType = @getEventActionType()
       # イベントループ
       @doPreviewLoop = true
@@ -85,7 +85,8 @@ class EventBase extends Extend
               clearTimeout(@previewTimer)
               @previewTimer = null
             @previewTimer = setTimeout( =>
-              method.call(@, p)
+              @execMethod(p)
+              #method.call(@, p)
               p += 1
               if p >= @scrollLength()
                 p = 0
@@ -130,14 +131,16 @@ class EventBase extends Extend
               clearTimeout(@previewTimer)
               @previewTimer = null
             @previewTimer = setTimeout( =>
-              method.call(@, null, _loop)
+              @execMethod(null, _loop)
+              #method.call(@, null, _loop)
             , loopDelay)
           else
             if @previewFinished?
               @previewFinished()
               @previewFinished = null
 
-        method.call(@, null, _loop)
+        @execMethod(null, _loop)
+        #method.call(@, null, _loop)
 
     @stopPreview( =>
       window.runningPreview = true
@@ -186,11 +189,30 @@ class EventBase extends Extend
   # @abstract
   didChapter: ->
 
+  execMethod: (params, complete = null) ->
+    methodName = @getEventMethodName()
+    if !methodName?
+      # メソッドが無い場合
+      return
+
+    # メソッド共通処理
+    if @ instanceof ItemBase
+      actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[methodName].actionType)
+      if actionType == Constant.ActionType.SCROLL
+        # アイテム位置&サイズ更新
+        @updateItemCommonByScroll(params)
+      else if actionType == Constant.ActionType.CLICK
+        setTimeout( =>
+          @updateItemCommonByClick()
+        , 0)
+
+    (@constructor.prototype[methodName]).call(@, params, complete)
+
   # スクロール基底メソッド
   # @param [Integer] x スクロール横座標
   # @param [Integer] y スクロール縦座標
   # @param [Function] complete イベント終了後コールバック
-  scrollRootFunc: (x, y, complete = null) ->
+  scrollHandlerFunc: (x, y, complete = null) ->
     methodName = @getEventMethodName()
     if !methodName?
       # メソッドが無い場合
@@ -229,10 +251,6 @@ class EventBase extends Extend
     sPoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
 
-    if @ instanceof ItemBase
-      # アイテム位置&サイズ更新
-      @updateItemCommonByScroll(@scrollValue)
-
     # スクロール指定範囲外なら反応させない
     if @scrollValue < sPoint
       @scrollValue = sPoint
@@ -250,7 +268,7 @@ class EventBase extends Extend
     @canForward = @scrollValue < ePoint
     @canReverse = @scrollValue > sPoint
 
-    (@constructor.prototype[methodName]).call(@, @scrollValue - sPoint)
+    @execMethod(@scrollValue - sPoint)
 
   # スクロールの長さを取得
   # @return [Integer] スクロール長さ
@@ -260,17 +278,13 @@ class EventBase extends Extend
   # スクロール基底メソッド
   # @param [Object] e クリックオブジェクト
   # @param [Function] complete イベント終了後コールバック
-  clickRootFunc: (e, complete = null) ->
+  clickHandlerFunc: (e, complete = null) ->
     e.preventDefault()
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
-    if @ instanceof ItemBase
-      setTimeout( =>
-        @updateItemCommonByClick()
-      , 0)
-    (@constructor.prototype[@getEventMethodName()]).call(@, e, complete)
+    @execMethod(e, complete)
 
   # イベント後の表示状態にする
   # @abstract
