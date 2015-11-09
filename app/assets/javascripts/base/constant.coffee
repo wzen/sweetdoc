@@ -38,6 +38,16 @@ if gon?
       # @property [Int] CLICK クリック
       @CLICK = constant.ActionType.CLICK
 
+    class @ItemDesignOptionType
+      # @property [Int] INTEGER 数値
+      @NUMBER = constant.ItemDesignOptionType.NUMBER
+      # @property [Int] STRING 文字列
+      @STRING = constant.ItemDesignOptionType.STRING
+      # @property [Int] COLOR 色
+      @COLOR = constant.ItemDesignOptionType.COLOR
+      # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
+      @DESIGN_TOOL = constant.ItemDesignOptionType.DESIGN_TOOL
+
     # アクションイベントクラス名
     class @TimelineActionTypeClassName
       # @property [Int] BLANK ブランク

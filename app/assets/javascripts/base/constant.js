@@ -56,6 +56,21 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ItemDesignOptionType = (function() {
+      function ItemDesignOptionType() {}
+
+      ItemDesignOptionType.NUMBER = constant.ItemDesignOptionType.NUMBER;
+
+      ItemDesignOptionType.STRING = constant.ItemDesignOptionType.STRING;
+
+      ItemDesignOptionType.COLOR = constant.ItemDesignOptionType.COLOR;
+
+      ItemDesignOptionType.DESIGN_TOOL = constant.ItemDesignOptionType.DESIGN_TOOL;
+
+      return ItemDesignOptionType;
+
+    })();
+
     Constant.TimelineActionTypeClassName = (function() {
       function TimelineActionTypeClassName() {}
 

@@ -18,6 +18,7 @@ class ArrowItem extends CanvasItemBase
   @actionProperties =
     {
       defaultMethod: 'scrollDraw'
+      designConfig: 'design_tool'
       methods : {
         scrollDraw: {
           actionType: 'scroll'

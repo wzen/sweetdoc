@@ -23,6 +23,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.actionProperties = {
     defaultMethod: 'scrollDraw',
+    designConfig: 'design_tool',
     methods: {
       scrollDraw: {
         actionType: 'scroll',

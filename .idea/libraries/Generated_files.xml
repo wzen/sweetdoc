@@ -33,7 +33,6 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/DesignConfig.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
@@ -68,6 +67,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
         <item url="file://$PROJECT_DIR$/public/code_template/item/ja/coffeescript_css.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas_item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
@@ -75,6 +75,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />
@@ -157,6 +158,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
       <root url="file://$PROJECT_DIR$/public/code_template/item/ja/coffeescript_css.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas_item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/item/item.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
@@ -164,6 +166,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/backgroundcolor.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/indicator.js" />

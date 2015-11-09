@@ -178,15 +178,11 @@ class ItemBase extends ItemEventBase
   # イベント後の表示状態にする
   updateEventAfter: ->
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-    x = @itemSize.x + itemDiff.x
-    y = @itemSize.y + itemDiff.y
-    w = @itemSize.w + itemDiff.w
-    h = @itemSize.h + itemDiff.h
-    @getJQueryElement().css({top: y, left: x, width: w, height: h})
+    @updatePositionAndItemSize(@itemSize.x + itemDiff.x, @itemSize.y + itemDiff.y, @itemSize.w + itemDiff.w, @itemSize.h + itemDiff.h, false, false)
 
   # イベント前の表示状態にする
   updateEventBefore: ->
-    @getJQueryElement().css({top: @itemSize.y, left: @itemSize.x, width: @itemSize.w, height: @itemSize.h})
+    @updatePositionAndItemSize(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h, false, false)
 
   # アイテム位置&サイズを更新
   updatePositionAndItemSize: (x, y, w, h, withSaveObj = true, updateInstanceInfo = true) ->
@@ -230,7 +226,7 @@ class ItemBase extends ItemEventBase
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByClick: (clickAnimationDuration) ->
-    @getJQueryElement().css({top: @itemSize.y, left: @itemSize.x, width: @itemSize.w, height: @itemSize.h})
+    @updatePositionAndItemSize(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h, false, false)
 
     duration = 0.01
     # クリックアニメーションと同時に実行させること
@@ -264,280 +260,37 @@ class ItemBase extends ItemEventBase
       count += 1
     , duration * 1000)
 
-    x = @itemSize.x + itemDiff.x
-    y = @itemSize.y + itemDiff.y
-    w = @itemSize.w + itemDiff.w
-    h = @itemSize.h + itemDiff.h
-    @getJQueryElement().css({top: y, left: x, width: w, height: h})
-
-# CSSアイテム
-# @abstract
-# @extend ItemBase
-class CssItemBase extends ItemBase
-
-  # @property [String] CSSTEMPID CSSテンプレートID
-  @CSSTEMPID = ''
-
-  if gon?
-    constant = gon.const
-
-    @DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME
-
-  # コンストラクタ
-  # @param [Array] cood 座標
-  constructor: (cood = null) ->
-    super(cood)
-    @cssRoot = null
-    @cssCache = null
-    @cssCode = null
-    @cssStyle = null
-    if cood != null
-      @moveLoc = {x:cood.x, y:cood.y}
-    @css = null
-    @cssStypeReflectTimer = null
-    if window.isWorkTable
-      @constructor.include WorkTableCssItemExtend
+    @updatePositionAndItemSize(@itemSize.x + itemDiff.x, @itemSize.y + itemDiff.y, @itemSize.w + itemDiff.w, @itemSize.h + itemDiff.h, false, false)
 
 
-  # JSファイル読み込み時処理
-  @jsLoaded: (option) ->
-    # ワークテーブルの初期化処理
-    css_temp = option.css_temp
-    if css_temp?
-      # CSSテンプレートを設置
-      tempEmt = "<div id='#{@CSSTEMPID}'>#{css_temp}</div>"
-      window.cssCodeInfoTemp.append(tempEmt)
-
-  # 再描画処理
-  # @param [boolean] show 要素作成後に描画を表示するか
-  reDraw: (show = true)->
-    super(show)
-    @clearDraw()
-    $(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
-    if !show
-      @getJQueryElement().css('opacity', 0)
-
-    if @setupDragAndResizeEvents?
-      # ドラッグ & リサイズイベント設定
-      @setupDragAndResizeEvents()
-
-  # 描画削除
-  clearDraw: ->
-    @getJQueryElement().remove()
-
-  # ストレージとDB保存用の最小限のデータを取得
-  # @return [Array] アイテムオブジェクトの最小限データ
-  getMinimumObject: ->
-    obj = super()
-    newobj = {
-      itemId: @constructor.ITEM_ID
-      mousedownCood: Common.makeClone(@mousedownCood)
-      css: @cssRoot[0].outerHTML
-    }
-    $.extend(obj, newobj)
-    return obj
-
-  # 最小限のデータを設定
-  # @param [Array] obj アイテムオブジェクトの最小限データ
-  setMiniumObject: (obj) ->
-    super(obj)
-    @mousedownCood = Common.makeClone(obj.mousedownCood)
-    @css = Common.makeClone(obj.css)
-
-  # アイテムサイズ更新
-  updateItemSize: (w, h, updateInstanceInfo = true) ->
-    @getJQueryElement().css({width: w, height: h})
-    if updateInstanceInfo
-      @itemSize.w = parseInt(w)
-      @itemSize.h = parseInt(h)
-
-  # CSS内のオブジェクトIDを自身のものに変更
-  changeCssId: (oldObjId) ->
-    reg = new RegExp(oldObjId, 'g')
-    @css = @css.replace(reg, @id)
-
-  # CSSのルートのIDを取得
-  # @return [String] CSSルートID
-  getCssRootElementId: ->
-    return "css-" + @id
-
-  # CSSアニメーションルートID取得
-  # @return [String] CSSアニメーションID
-  getCssAnimElementId: ->
-    return "css-anim-style"
-
-  # オプションメニューを作成
-  # @abstract
+  # CSSボタンコントロール初期化
   setupOptionMenu: ->
+    @designConfigRoot = $('#' + @getDesignConfigId())
+    if !@designConfigRoot? || @designConfigRoot.length == 0
+      @makeDesignConfig()
+      @designConfigRoot = $('#' + @getDesignConfigId())
 
-  #CSSを設定
-  makeCss: (fromTemp = false) ->
-    newEmt = null
+    # アイテム名の変更
+    name = $('.item-name', @designConfigRoot)
+    name.val(@name)
+    name.off('change').on('change', =>
+      @name = name.val()
+      @setItemPropToPageValue('name', @name)
+    )
 
-    # 存在する場合消去して上書き
-    $("#{@getCssRootElementId()}").remove()
-
-    if !fromTemp && @css?
-      # 設定済みのCSSプロパティから作成
-      newEmt = $(@css)
-    else
-      # CSSテンプレートから作成
-      newEmt = $('#' + @constructor.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
-      newEmt.find('.design-item-id').html(@id)
-    window.cssCodeInfo.append(newEmt)
-    @cssRoot = $('#' + @getCssRootElementId())
-    @cssCache = $(".css-cache", @cssRoot)
-    @cssCode = $(".css-code", @cssRoot)
-    @cssStyle = $(".css-style", @cssRoot)
-
-    @reflectCssStyle(false)
-
-  # CSS内容
-  # @abstract
-  cssAnimationElement: ->
-    return null
-
-  # アニメーションCSS追加処理
-  appendAnimationCssIfNeeded : ->
-    ce = @cssAnimationElement()
-    if ce?
-      methodName = @getEventMethodName()
-      # CSSが存在する場合は削除して入れ替え
-      @removeCss()
-      funcName = "#{methodName}_#{@id}"
-      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
-
-  # CSSのスタイルを反映
-  reflectCssStyle: (doStyleSave = true) ->
-    @cssStyle.text(@cssCode.text())
-    @css = @cssRoot[0].outerHTML
-
-    if doStyleSave
-      # 頻繁に呼ばれるためタイマーでPageValueに書き込む
-      if @cssStypeReflectTimer?
-        clearTimeout(@cssStypeReflectTimer)
-        @cssStypeReflectTimer = null
-      @cssStypeReflectTimer = setTimeout( =>
-        # 0.5秒後に反映
-        # ページに状態を保存
-        @setItemAllPropToPageValue()
-        # キャッシュに保存
-        LocalStorage.saveAllPageValues()
-        @cssStypeReflectTimer = setTimeout( ->
-          # 1秒後に操作履歴に保存
-          OperationHistory.add()
-        , 1000)
-      , 500)
-
-  # CSS削除処理
-  removeCss: ->
-    methodName = @getEventMethodName()
-    funcName = "#{methodName}_#{@id}"
-    window.cssCode.find(".#{funcName}").remove()
-
-# Canvasアイテム
-# @abstract
-# @extend ItemBase
-class CanvasItemBase extends ItemBase
-  # コンストラクタ
-  constructor: ->
-    super()
-    @newDrawingSurfaceImageData = null
-    @newDrawedSurfaceImageData = null
-    # @property [Array] scale 表示倍率
-    @scale = {w:1.0, h:1.0}
-    if window.isWorkTable
-      @constructor.include WorkTableCanvasItemExtend
-
-  # CanvasのHTML要素IDを取得
-  # @return [Int] Canvas要素ID
-  canvasElementId: ->
-    return @id + '_canvas'
-
-  # 伸縮率を設定
-  setScale: ->
-    # 要素の伸縮
-    element = $("##{@id}")
-    canvas = $("##{@canvasElementId()}")
-    element.width(@itemSize.w * @scale.w)
-    element.height(@itemSize.h * @scale.h)
-    canvas.attr('width',  element.width())
-    canvas.attr('height', element.height())
-    # キャンパスの伸縮
-    context = canvas[0].getContext('2d');
-    context.scale(@scale.w, @scale.h)
-    if window.debug
-      console.log("setScale: itemSize: #{JSON.stringify(@itemSize)}")
-
-  # キャンパス初期化処理
-  initCanvas: ->
-    # 伸縮率を設定
-    @setScale()
-
-  # 新規キャンパスを作成
-  makeNewCanvas: ->
-    $(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
-    # キャンパスに対する初期化
-    @initCanvas()
-    # 画面を保存
-    @saveNewDrawingSurface()
-
-  # 新規キャンパスの画面を保存
-  saveNewDrawingSurface : ->
-    canvas = document.getElementById(@canvasElementId());
-    if canvas?
-      context = canvas.getContext('2d');
-      @newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
-
-  # 描画済みの新規キャンパスの画面を保存
-  saveNewDrawedSurface : ->
-    canvas = document.getElementById(@canvasElementId());
-    if canvas?
-      context = canvas.getContext('2d');
-      @newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
-
-  # 保存した画面を新規キャンパスの全画面に再設定
-  restoreAllNewDrawingSurface : ->
-    if @newDrawingSurfaceImageData?
-      canvas = document.getElementById(@canvasElementId());
-      if canvas?
-        context = canvas.getContext('2d');
-        context.putImageData(@newDrawingSurfaceImageData, 0, 0)
-
-  # 保存した画面を新規キャンパスの全画面に再設定
-  restoreAllNewDrawedSurface : ->
-    if @newDrawedSurfaceImageData
-      canvas = document.getElementById(@canvasElementId());
-      if canvas?
-        context = canvas.getContext('2d');
-        context.putImageData(@newDrawedSurfaceImageData, 0, 0)
-
-  # 描画を削除
-  clearDraw: ->
-    canvas = document.getElementById(@canvasElementId());
-    if canvas?
-      context = canvas.getContext('2d');
-      context.clearRect(0, 0, canvas.width, canvas.height)
-      # キャンパスに対する初期化
-      @initCanvas()
-
-  # アイテムサイズ更新
-  updateItemSize: (w, h, updateInstanceInfo = true) ->
-    element = $('#' + @id)
-    element.css({width: w, height: h})
-    canvas = $('#' + @canvasElementId())
-    scaleW = element.width() / @itemSize.w
-    scaleH = element.height() / @itemSize.h
-    canvas.attr('width',  element.width())
-    canvas.attr('height', element.height())
-    drawingCanvas = document.getElementById(@canvasElementId())
-    drawingContext = drawingCanvas.getContext('2d')
-    drawingContext.scale(scaleW, scaleH)
-    @drawNewCanvas()
-    if updateInstanceInfo
-      @scale.w = scaleW
-      @scale.h = scaleH
-#      @itemSize.w = element.width()
-#      @itemSize.h = element.height()
-    if window.debug
-      console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
+    # アイテム位置の変更
+    x = @getJQueryElement().position().left
+    y = @getJQueryElement().position().top
+    w = @getJQueryElement().width()
+    h = @getJQueryElement().height()
+    $('.item_position_x:first', @designConfigRoot).val(x)
+    $('.item_position_y:first', @designConfigRoot).val(y)
+    $('.item_width:first', @designConfigRoot).val(w)
+    $('.item_height:first', @designConfigRoot).val(h)
+    $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', @designConfigRoot).off('change').on('change', =>
+      x = parseInt($('.item_position_x:first', @designConfigRoot).val())
+      y = parseInt($('.item_position_y:first', @designConfigRoot).val())
+      w = parseInt($('.item_width:first', @designConfigRoot).val())
+      h = parseInt($('.item_height:first', @designConfigRoot).val())
+      @updatePositionAndItemSize(x, y, w, h)
+    )
