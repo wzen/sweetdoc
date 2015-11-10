@@ -83,13 +83,59 @@ CssItemBase = (function(superClass) {
     return this.css = Common.makeClone(obj.css);
   };
 
-  CssItemBase.prototype.originalItemElementSize = function() {
-    return {
-      x: this.itemSize.x,
-      y: this.itemSize.y,
-      w: this.itemSize.w,
-      h: this.itemSize.h
-    };
+  CssItemBase.prototype.stateEventBefore = function(isForward) {
+    var itemDiff, itemSize, obj;
+    obj = this.getMinimumObject();
+    if (!isForward) {
+      itemSize = obj.itemSize;
+      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+      obj.itemSize = {
+        x: itemSize.x - itemDiff.x,
+        y: itemSize.y - itemDiff.y,
+        w: itemSize.w - itemDiff.w,
+        h: itemSize.h - itemDiff.h
+      };
+    }
+    console.log("stateEventBefore");
+    console.log(obj);
+    return obj;
+  };
+
+  CssItemBase.prototype.stateEventAfter = function(isForward) {
+    var itemDiff, itemSize, obj;
+    obj = this.getMinimumObject();
+    if (isForward) {
+      obj = this.getMinimumObject();
+      itemSize = obj.itemSize;
+      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+      obj.itemSize = {
+        x: itemSize.x + itemDiff.x,
+        y: itemSize.y + itemDiff.y,
+        w: itemSize.w + itemDiff.w,
+        h: itemSize.h + itemDiff.h
+      };
+    }
+    console.log("stateEventAfter");
+    console.log(obj);
+    return obj;
+  };
+
+  CssItemBase.prototype.updateEventBefore = function() {
+    var capturedEventBeforeObject;
+    CssItemBase.__super__.updateEventBefore.call(this);
+    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
+    if (capturedEventBeforeObject) {
+      return this.updatePositionAndItemSize(capturedEventBeforeObject.itemSize, false, true);
+    }
+  };
+
+  CssItemBase.prototype.updateEventAfter = function() {
+    var capturedEventAfterObject;
+    CssItemBase.__super__.updateEventAfter.call(this);
+    capturedEventAfterObject = this.getCapturedEventAfterObject();
+    if (capturedEventAfterObject) {
+      return this.updatePositionAndItemSize(capturedEventAfterObject.itemSize, false, true);
+    }
   };
 
   CssItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
@@ -104,6 +150,18 @@ CssItemBase = (function(superClass) {
       this.itemSize.w = parseInt(w);
       return this.itemSize.h = parseInt(h);
     }
+  };
+
+  CssItemBase.prototype.originalItemElementSize = function() {
+    var capturedEventBeforeObject, itemSize;
+    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
+    itemSize = capturedEventBeforeObject.itemSize;
+    return {
+      x: itemSize.x,
+      y: itemSize.y,
+      w: itemSize.w,
+      h: itemSize.h
+    };
   };
 
   CssItemBase.prototype.changeCssId = function(oldObjId) {

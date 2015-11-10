@@ -171,7 +171,8 @@ class WorktableCommon
           if obj.value.itemId?
             item = Common.getInstanceFromMap(false, id, obj.value.itemId)
             if item? && item instanceof ItemBase
-              item.reDraw()
+              # イベント適用前の状態で描画
+              item.reDrawWithEventBefore()
       )
 
   # 非表示をクリア

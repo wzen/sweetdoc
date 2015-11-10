@@ -185,7 +185,7 @@ class Page
           # チャプター番号をフォーク以前に変更
           @setChapterIndex(lastForkObj.changedChapterIndex)
           # チャプターリセット
-          @resetChapter(@getChapterIndex())
+          @resetChapter(@getChapterIndex(), true)
           # チャプター番号設定
           RunCommon.setChapterNum(@thisChapterNum())
           # チャプター最大値設定
@@ -199,10 +199,10 @@ class Page
     @thisChapter().willChapter()
 
   # チャプターの内容をリセット
-  resetChapter: (chapterIndex = @getChapterIndex()) ->
+  resetChapter: (chapterIndex = @getChapterIndex(), takeStateCapture = false) ->
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
-    @getForkChapterList()[chapterIndex].resetAllEvents()
+    @getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture)
 
   # 全てのチャプターを戻す
   rewindAllChapters: ->

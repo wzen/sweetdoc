@@ -91,9 +91,15 @@ Chapter = (function() {
     })(this));
   };
 
-  Chapter.prototype.resetAllEvents = function() {
+  Chapter.prototype.resetAllEvents = function(takeStateCapture) {
+    if (takeStateCapture == null) {
+      takeStateCapture = false;
+    }
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
+        if (takeStateCapture && e instanceof ItemBase) {
+          e.takeCaptureInstanceState(false);
+        }
         return e.resetEvent();
       };
     })(this));

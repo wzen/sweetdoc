@@ -322,6 +322,10 @@ class Common
       # インスタンスを保存する
       instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
       instance.id = id
+      # インスタンス値が存在する場合、初期化
+      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
+      if obj
+        instance.setMiniumObject(obj)
       window.instanceMap[id] = instance
 
   # 生成したインスタンスの中からアイテムのみ取得

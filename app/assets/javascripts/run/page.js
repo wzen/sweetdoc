@@ -194,7 +194,7 @@ Page = (function() {
           nfn = oneBeforeForkObj.forkNum;
           RunCommon.setForkNum(nfn);
           this.setChapterIndex(lastForkObj.changedChapterIndex);
-          this.resetChapter(this.getChapterIndex());
+          this.resetChapter(this.getChapterIndex(), true);
           RunCommon.setChapterNum(this.thisChapterNum());
           RunCommon.setChapterMax(this.getForkChapterList().length);
         } else {
@@ -206,13 +206,16 @@ Page = (function() {
     return this.thisChapter().willChapter();
   };
 
-  Page.prototype.resetChapter = function(chapterIndex) {
+  Page.prototype.resetChapter = function(chapterIndex, takeStateCapture) {
     if (chapterIndex == null) {
       chapterIndex = this.getChapterIndex();
     }
+    if (takeStateCapture == null) {
+      takeStateCapture = false;
+    }
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
-    return this.getForkChapterList()[chapterIndex].resetAllEvents();
+    return this.getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture);
   };
 
   Page.prototype.rewindAllChapters = function() {

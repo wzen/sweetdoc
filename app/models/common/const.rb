@@ -270,6 +270,7 @@ class Const
   end
 
   class EventPageValueKey
+    DIST_ID = 'dist_id'
     ID = 'id'
     ITEM_ID = 'item_id'
     ITEM_SIZE_DIFF = 'item_size_diff'

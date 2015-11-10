@@ -14,6 +14,7 @@ class EPVItem extends EventPageValueBase
   @writeDefaultToPageValue = (item) ->
     errorMes = ""
     writeValue = {}
+    writeValue[@PageValueKey.DIST_ID] = Common.generateId()
     writeValue[@PageValueKey.ID] = item.id
     writeValue[@PageValueKey.ITEM_ID] = item.constructor.ITEM_ID
     writeValue[@PageValueKey.ITEM_SIZE_DIFF] = item.itemSizeDiff

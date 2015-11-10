@@ -182,6 +182,9 @@ class EventBase extends Extend
     if actionType == Constant.ActionType.SCROLL
       @scrollValue = 0
 
+    # アイテムの変更前変更後の状態をキャプチャ
+    @takeCaptureInstanceState(true)
+
     # 状態をイベント前に戻す
     @updateEventBefore()
 
@@ -312,10 +315,15 @@ class ItemEventBase extends EventBase
   # @param [Object] event 設定イベント
   initEvent: (event) ->
     super(event)
-    # インスタンス値設定
-    objId = event[EventPageValueBase.PageValueKey.ID]
-    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
-    @setMiniumObject(instance)
+
+
+#    # インスタンス値設定
+#    objId = event[EventPageValueBase.PageValueKey.ID]
+#    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
+#    @setMiniumObject(instance)
+
+    # 状態保存
+    @takeCaptureInstanceState(true)
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     @reDraw(false)

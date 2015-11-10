@@ -6,9 +6,11 @@ class EventPageValueBase
     constant = gon.const
 
     class @PageValueKey
-      # @property [String] ID アイテムID
+      # @property [String] DIST_ID 一意のイベント識別ID
+      @DIST_ID = constant.EventPageValueKey.DIST_ID
+      # @property [String] ID オブジェクトID
       @ID = constant.EventPageValueKey.ID
-      # @property [String] ITEM_ID アイテムタイプID
+      # @property [String] ITEM_ID アイテムID
       @ITEM_ID = constant.EventPageValueKey.ITEM_ID
       # @property [String] ITEM_SIZE_DIFF アイテムサイズ
       @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
@@ -73,6 +75,7 @@ class EventPageValueBase
   # @return [Object] 書き込むデータ
   @writeToPageValue = (eventConfig) ->
     writeValue = {}
+    writeValue[@PageValueKey.DIST_ID] = eventConfig.distId
     writeValue[@PageValueKey.ID] = eventConfig.id
     writeValue[@PageValueKey.ITEM_ID] = eventConfig.itemId
     writeValue[@PageValueKey.ITEM_SIZE_DIFF] = eventConfig.itemSizeDiff
@@ -98,6 +101,7 @@ class EventPageValueBase
   @readFromPageValue = (eventConfig) ->
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum))
     if writeValue?
+      eventConfig.distId = writeValue[@PageValueKey.DIST_ID]
       eventConfig.id = writeValue[@PageValueKey.ID]
       eventConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
       eventConfig.itemSizeDiff = writeValue[@PageValueKey.ITEM_SIZE_DIFF]

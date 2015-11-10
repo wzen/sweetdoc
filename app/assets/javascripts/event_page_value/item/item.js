@@ -20,6 +20,7 @@ EPVItem = (function(superClass) {
     var actionType, end, errorMes, start, teNum, writeValue;
     errorMes = "";
     writeValue = {};
+    writeValue[this.PageValueKey.DIST_ID] = Common.generateId();
     writeValue[this.PageValueKey.ID] = item.id;
     writeValue[this.PageValueKey.ITEM_ID] = item.constructor.ITEM_ID;
     writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = item.itemSizeDiff;

@@ -20,7 +20,6 @@ class Chapter
 
   # チャプター実行前処理
   willChapter: ->
-
     # イベントのwillChapter呼び出し & CSS追加
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
@@ -82,8 +81,12 @@ class Chapter
     )
 
   # チャプターのイベントをリセットする
-  resetAllEvents: ->
+  resetAllEvents: (takeStateCapture = false) ->
     @eventObjList.forEach((e) =>
+      if takeStateCapture && e instanceof ItemBase
+        # 変更前、変更後の状態キャプチャを取る
+        e.takeCaptureInstanceState(false)
+
       e.resetEvent()
     )
 

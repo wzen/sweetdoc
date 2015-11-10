@@ -348,7 +348,7 @@ Common = (function() {
   };
 
   Common.setInstanceFromMap = function(isCommonEvent, id, classMapId) {
-    var instance;
+    var instance, obj;
     if (typeof isCommonEvent === "boolean") {
       if (isCommonEvent) {
         isCommonEvent = "1";
@@ -365,6 +365,10 @@ Common = (function() {
     if (window.instanceMap[id] == null) {
       instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
       instance.id = id;
+      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id));
+      if (obj) {
+        instance.setMiniumObject(obj);
+      }
       return window.instanceMap[id] = instance;
     }
   };

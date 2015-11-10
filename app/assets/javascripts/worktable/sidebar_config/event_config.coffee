@@ -148,6 +148,9 @@ class EventConfig
   applyAction: ->
     # 入力値を保存
 
+    if !@distId?
+      @distId = Common.generateId()
+
     @itemSizeDiff = {
       x: parseInt($('.item_position_diff_x:first', @emt).val())
       y: parseInt($('.item_position_diff_y:first', @emt).val())

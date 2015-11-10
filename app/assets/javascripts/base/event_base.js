@@ -208,6 +208,7 @@ EventBase = (function(superClass) {
     if (actionType === Constant.ActionType.SCROLL) {
       this.scrollValue = 0;
     }
+    this.takeCaptureInstanceState(true);
     return this.updateEventBefore();
   };
 
@@ -348,11 +349,8 @@ ItemEventBase = (function(superClass) {
   }
 
   ItemEventBase.prototype.initEvent = function(event) {
-    var instance, objId;
     ItemEventBase.__super__.initEvent.call(this, event);
-    objId = event[EventPageValueBase.PageValueKey.ID];
-    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId));
-    this.setMiniumObject(instance);
+    this.takeCaptureInstanceState(true);
     return this.reDraw(false);
   };
 

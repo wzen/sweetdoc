@@ -84,18 +84,71 @@ class CanvasItemBase extends ItemBase
       # キャンパスに対する初期化
       @initCanvas()
 
-  # アニメーション変更前のアイテムサイズ
-  originalItemElementSize: ->
-    originalScale = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id)).scale
-    return {
-      x: @itemSize.x
-      y: @itemSize.y
-      w: @itemSize.w * originalScale.w
-      h: @itemSize.h * originalScale.h
-    }
+  # イベント適用前のオブジェクト状態を取得
+  stateEventBefore: (isForward) ->
+    obj = @getMinimumObject()
+    if !isForward
+      # サイズ変更後のScaleを計算
+      scale = obj.scale
+      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+      obj.itemSize.x -= itemDiff.x
+      obj.itemSize.y -= itemDiff.y
+      w = scale.w * obj.itemSize.w
+      h = scale.h * obj.itemSize.h
+      sw = (w - itemDiff.w) / obj.itemSize.w
+      sh = (h - itemDiff.h) / obj.itemSize.h
+      obj.scale.w = sw
+      obj.scale.h = sh
+
+    console.log("stateEventBefore")
+    console.log(obj)
+    return obj
+
+  # イベント適用後のオブジェクト状態を取得
+  stateEventAfter: (isForward) ->
+    obj = @getMinimumObject()
+    if isForward
+      scale = obj.scale
+      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+      obj.itemSize.x += itemDiff.x
+      obj.itemSize.y += itemDiff.y
+      w = scale.w * obj.itemSize.w
+      h = scale.h * obj.itemSize.h
+      sw = (w + itemDiff.w) / obj.itemSize.w
+      sh = (h + itemDiff.h) / obj.itemSize.h
+      obj.scale.w = sw
+      obj.scale.h = sh
+
+    console.log("stateEventAfter")
+    console.log(obj)
+    return obj
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    super()
+    capturedEventBeforeObject = @getCapturedEventBeforeObject()
+    if capturedEventBeforeObject
+      # アイテムサイズ更新
+      itemSize = capturedEventBeforeObject.itemSize
+      itemSize.w *= capturedEventBeforeObject.scale.w
+      itemSize.h *= capturedEventBeforeObject.scale.h
+      @updatePositionAndItemSize(itemSize, false, true)
+
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    super()
+    capturedEventAfterObject = @getCapturedEventAfterObject()
+    if capturedEventAfterObject
+      # アイテムサイズ更新
+      itemSize = capturedEventAfterObject.itemSize
+      itemSize.w *= capturedEventAfterObject.scale.w
+      itemSize.h *= capturedEventAfterObject.scale.h
+      @updatePositionAndItemSize(itemSize, false, true)
 
   # アイテムサイズ更新
   updateItemSize: (w, h, updateInstanceInfo = true) ->
+    if window.debug
+      console.log("resize: w: #{w}  h: #{h}")
     element = $('#' + @id)
     element.css({width: w, height: h})
     canvas = $('#' + @canvasElementId())
@@ -106,12 +159,24 @@ class CanvasItemBase extends ItemBase
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.scale(scaleW, scaleH)
-    console.log("scaleW: #{scaleW}, scaleH: #{scaleH}")
+    #console.log("scaleW: #{scaleW}, scaleH: #{scaleH}")
     @scale.w = scaleW
     @scale.h = scaleH
     @drawNewCanvas()
     if window.debug
       console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
+
+  # アニメーション変更前のアイテムサイズ
+  originalItemElementSize: ->
+    capturedEventBeforeObject = @getCapturedEventBeforeObject()
+    itemSize = capturedEventBeforeObject.itemSize
+    originalScale = capturedEventBeforeObject.scale
+    return {
+      x: itemSize.x
+      y: itemSize.y
+      w: itemSize.w * originalScale.w
+      h: itemSize.h * originalScale.h
+    }
 
   # CSSボタンコントロール初期化
   setupOptionMenu: ->

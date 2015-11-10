@@ -72,14 +72,58 @@ class CssItemBase extends ItemBase
     @mousedownCood = Common.makeClone(obj.mousedownCood)
     @css = Common.makeClone(obj.css)
 
-  # アニメーション変更前のアイテムサイズ
-  originalItemElementSize: ->
-    return {
-      x: @itemSize.x
-      y: @itemSize.y
-      w: @itemSize.w
-      h: @itemSize.h
-    }
+  # イベント適用前のオブジェクト状態を取得
+  stateEventBefore: (isForward) ->
+    obj = @getMinimumObject()
+    if !isForward
+      # サイズ変更後
+      itemSize = obj.itemSize
+      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+      obj.itemSize = {
+        x: itemSize.x - itemDiff.x
+        y: itemSize.y - itemDiff.y
+        w: itemSize.w - itemDiff.w
+        h: itemSize.h - itemDiff.h
+      }
+
+    console.log("stateEventBefore")
+    console.log(obj)
+    return obj
+
+  # イベント適用後のオブジェクト状態を取得
+  stateEventAfter: (isForward) ->
+    obj = @getMinimumObject()
+    if isForward
+      # サイズ変更後
+      obj = @getMinimumObject()
+      itemSize = obj.itemSize
+      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+      obj.itemSize = {
+        x: itemSize.x + itemDiff.x
+        y: itemSize.y + itemDiff.y
+        w: itemSize.w + itemDiff.w
+        h: itemSize.h + itemDiff.h
+      }
+
+    console.log("stateEventAfter")
+    console.log(obj)
+    return obj
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    super()
+    capturedEventBeforeObject = @getCapturedEventBeforeObject()
+    if capturedEventBeforeObject
+      # アイテムサイズ更新
+      @updatePositionAndItemSize(capturedEventBeforeObject.itemSize, false, true)
+
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    super()
+    capturedEventAfterObject = @getCapturedEventAfterObject()
+    if capturedEventAfterObject
+      # アイテムサイズ更新
+      @updatePositionAndItemSize(capturedEventAfterObject.itemSize, false, true)
 
   # アイテムサイズ更新
   updateItemSize: (w, h, updateInstanceInfo = true) ->
@@ -87,6 +131,17 @@ class CssItemBase extends ItemBase
     if updateInstanceInfo
       @itemSize.w = parseInt(w)
       @itemSize.h = parseInt(h)
+
+  # アニメーション変更前のアイテムサイズ
+  originalItemElementSize: ->
+    capturedEventBeforeObject = @getCapturedEventBeforeObject()
+    itemSize = capturedEventBeforeObject.itemSize
+    return {
+      x: itemSize.x
+      y: itemSize.y
+      w: itemSize.w
+      h: itemSize.h
+    }
 
   # CSS内のオブジェクトIDを自身のものに変更
   changeCssId: (oldObjId) ->

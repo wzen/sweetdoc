@@ -138,6 +138,9 @@ EventConfig = (function() {
 
   EventConfig.prototype.applyAction = function() {
     var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, topEmt;
+    if (this.distId == null) {
+      this.distId = Common.generateId();
+    }
     this.itemSizeDiff = {
       x: parseInt($('.item_position_diff_x:first', this.emt).val()),
       y: parseInt($('.item_position_diff_y:first', this.emt).val()),

@@ -203,7 +203,7 @@ WorktableCommon = (function() {
           if (obj.value.itemId != null) {
             item = Common.getInstanceFromMap(false, id, obj.value.itemId);
             if ((item != null) && item instanceof ItemBase) {
-              results.push(item.reDraw());
+              results.push(item.reDrawWithEventBefore());
             } else {
               results.push(void 0);
             }

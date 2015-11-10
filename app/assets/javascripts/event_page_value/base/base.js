@@ -11,6 +11,8 @@ EventPageValueBase = (function() {
     EventPageValueBase.PageValueKey = (function() {
       function PageValueKey() {}
 
+      PageValueKey.DIST_ID = constant.EventPageValueKey.DIST_ID;
+
       PageValueKey.ID = constant.EventPageValueKey.ID;
 
       PageValueKey.ITEM_ID = constant.EventPageValueKey.ITEM_ID;
@@ -87,6 +89,7 @@ EventPageValueBase = (function() {
   EventPageValueBase.writeToPageValue = function(eventConfig) {
     var writeValue;
     writeValue = {};
+    writeValue[this.PageValueKey.DIST_ID] = eventConfig.distId;
     writeValue[this.PageValueKey.ID] = eventConfig.id;
     writeValue[this.PageValueKey.ITEM_ID] = eventConfig.itemId;
     writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = eventConfig.itemSizeDiff;
@@ -110,6 +113,7 @@ EventPageValueBase = (function() {
     var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, rightEmt, start, topEmt, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
+      eventConfig.distId = writeValue[this.PageValueKey.DIST_ID];
       eventConfig.id = writeValue[this.PageValueKey.ID];
       eventConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
       eventConfig.itemSizeDiff = writeValue[this.PageValueKey.ITEM_SIZE_DIFF];

@@ -98,21 +98,77 @@ CanvasItemBase = (function(superClass) {
     }
   };
 
-  CanvasItemBase.prototype.originalItemElementSize = function() {
-    var originalScale;
-    originalScale = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id)).scale;
-    return {
-      x: this.itemSize.x,
-      y: this.itemSize.y,
-      w: this.itemSize.w * originalScale.w,
-      h: this.itemSize.h * originalScale.h
-    };
+  CanvasItemBase.prototype.stateEventBefore = function(isForward) {
+    var h, itemDiff, obj, scale, sh, sw, w;
+    obj = this.getMinimumObject();
+    if (!isForward) {
+      scale = obj.scale;
+      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+      obj.itemSize.x -= itemDiff.x;
+      obj.itemSize.y -= itemDiff.y;
+      w = scale.w * obj.itemSize.w;
+      h = scale.h * obj.itemSize.h;
+      sw = (w - itemDiff.w) / obj.itemSize.w;
+      sh = (h - itemDiff.h) / obj.itemSize.h;
+      obj.scale.w = sw;
+      obj.scale.h = sh;
+    }
+    console.log("stateEventBefore");
+    console.log(obj);
+    return obj;
+  };
+
+  CanvasItemBase.prototype.stateEventAfter = function(isForward) {
+    var h, itemDiff, obj, scale, sh, sw, w;
+    obj = this.getMinimumObject();
+    if (isForward) {
+      scale = obj.scale;
+      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+      obj.itemSize.x += itemDiff.x;
+      obj.itemSize.y += itemDiff.y;
+      w = scale.w * obj.itemSize.w;
+      h = scale.h * obj.itemSize.h;
+      sw = (w + itemDiff.w) / obj.itemSize.w;
+      sh = (h + itemDiff.h) / obj.itemSize.h;
+      obj.scale.w = sw;
+      obj.scale.h = sh;
+    }
+    console.log("stateEventAfter");
+    console.log(obj);
+    return obj;
+  };
+
+  CanvasItemBase.prototype.updateEventBefore = function() {
+    var capturedEventBeforeObject, itemSize;
+    CanvasItemBase.__super__.updateEventBefore.call(this);
+    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
+    if (capturedEventBeforeObject) {
+      itemSize = capturedEventBeforeObject.itemSize;
+      itemSize.w *= capturedEventBeforeObject.scale.w;
+      itemSize.h *= capturedEventBeforeObject.scale.h;
+      return this.updatePositionAndItemSize(itemSize, false, true);
+    }
+  };
+
+  CanvasItemBase.prototype.updateEventAfter = function() {
+    var capturedEventAfterObject, itemSize;
+    CanvasItemBase.__super__.updateEventAfter.call(this);
+    capturedEventAfterObject = this.getCapturedEventAfterObject();
+    if (capturedEventAfterObject) {
+      itemSize = capturedEventAfterObject.itemSize;
+      itemSize.w *= capturedEventAfterObject.scale.w;
+      itemSize.h *= capturedEventAfterObject.scale.h;
+      return this.updatePositionAndItemSize(itemSize, false, true);
+    }
   };
 
   CanvasItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
     var canvas, drawingCanvas, drawingContext, element, scaleH, scaleW;
     if (updateInstanceInfo == null) {
       updateInstanceInfo = true;
+    }
+    if (window.debug) {
+      console.log("resize: w: " + w + "  h: " + h);
     }
     element = $('#' + this.id);
     element.css({
@@ -127,13 +183,25 @@ CanvasItemBase = (function(superClass) {
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.scale(scaleW, scaleH);
-    console.log("scaleW: " + scaleW + ", scaleH: " + scaleH);
     this.scale.w = scaleW;
     this.scale.h = scaleH;
     this.drawNewCanvas();
     if (window.debug) {
       return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
     }
+  };
+
+  CanvasItemBase.prototype.originalItemElementSize = function() {
+    var capturedEventBeforeObject, itemSize, originalScale;
+    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
+    itemSize = capturedEventBeforeObject.itemSize;
+    originalScale = capturedEventBeforeObject.scale;
+    return {
+      x: itemSize.x,
+      y: itemSize.y,
+      w: itemSize.w * originalScale.w,
+      h: itemSize.h * originalScale.h
+    };
   };
 
   CanvasItemBase.prototype.setupOptionMenu = function() {

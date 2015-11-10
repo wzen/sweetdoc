@@ -89,6 +89,18 @@ ItemBase = (function(superClass) {
     }
   };
 
+  ItemBase.prototype.reDrawWithEventBefore = function(show) {
+    var obj;
+    if (show == null) {
+      show = true;
+    }
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
+    if (obj) {
+      this.setMiniumObject(obj);
+    }
+    return this.reDraw(show);
+  };
+
   ItemBase.prototype.saveObj = function(newCreated) {
     var k, num, ref, self, v;
     if (newCreated == null) {
@@ -183,25 +195,15 @@ ItemBase = (function(superClass) {
     return null;
   };
 
-  ItemBase.prototype.updateEventAfter = function() {
-    var itemDiff;
-    itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-    return this.updatePositionAndItemSize(this.itemSize.x + itemDiff.x, this.itemSize.y + itemDiff.y, this.itemSize.w + itemDiff.w, this.itemSize.h + itemDiff.h, false, false);
-  };
-
-  ItemBase.prototype.updateEventBefore = function() {
-    return this.updatePositionAndItemSize(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h, false, false);
-  };
-
-  ItemBase.prototype.updatePositionAndItemSize = function(x, y, w, h, withSaveObj, updateInstanceInfo) {
+  ItemBase.prototype.updatePositionAndItemSize = function(itemSize, withSaveObj, updateInstanceInfo) {
     if (withSaveObj == null) {
       withSaveObj = true;
     }
     if (updateInstanceInfo == null) {
       updateInstanceInfo = true;
     }
-    this.updateItemPosition(x, y, updateInstanceInfo);
-    this.updateItemSize(w, h, updateInstanceInfo);
+    this.updateItemPosition(itemSize.x, itemSize.y, updateInstanceInfo);
+    this.updateItemSize(itemSize.w, itemSize.h, updateInstanceInfo);
     if (withSaveObj) {
       return this.saveObj();
     }
@@ -221,6 +223,51 @@ ItemBase = (function(superClass) {
     }
   };
 
+  ItemBase.prototype.getCapturedEventBeforeObject = function() {
+    if (this.capturedEventBeforeObject == null) {
+      this.capturedEventBeforeObject = {};
+    }
+    return this.capturedEventBeforeObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]];
+  };
+
+  ItemBase.prototype.getCapturedEventAfterObject = function() {
+    if (this.capturedEventAfterObject == null) {
+      this.capturedEventAfterObject = {};
+    }
+    return this.capturedEventAfterObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]];
+  };
+
+  ItemBase.prototype.takeCaptureInstanceState = function(isForward) {
+    if (this.capturedEventBeforeObject == null) {
+      this.capturedEventBeforeObject = {};
+    }
+    if (this.capturedEventBeforeObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] == null) {
+      this.capturedEventBeforeObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] = this.stateEventBefore(isForward);
+    }
+    if (this.capturedEventAfterObject == null) {
+      this.capturedEventAfterObject = {};
+    }
+    if (this.capturedEventAfterObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] == null) {
+      return this.capturedEventAfterObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] = this.stateEventAfter(isForward);
+    }
+  };
+
+  ItemBase.prototype.updateEventBefore = function() {
+    var capturedEventBeforeObject;
+    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
+    if (capturedEventBeforeObject) {
+      return this.setMiniumObject(capturedEventBeforeObject);
+    }
+  };
+
+  ItemBase.prototype.updateEventAfter = function() {
+    var capturedEventAfterObject;
+    capturedEventAfterObject = this.getCapturedEventAfterObject();
+    if (capturedEventAfterObject) {
+      return this.setMiniumObject(capturedEventAfterObject);
+    }
+  };
+
   ItemBase.prototype.updateItemCommonByScroll = function(scrollValue) {
     return this.updateItemSizeByScroll(scrollValue);
   };
@@ -232,24 +279,28 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.updateItemSizeByScroll = function(scrollValue) {
-    var beforeItemSize, h, itemDiff, progressPercentage, scrollEnd, scrollStart, w, x, y;
+    var h, itemDiff, itemSize, originalItemElementSize, progressPercentage, scrollEnd, scrollStart, w, x, y;
     scrollEnd = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     scrollStart = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     progressPercentage = scrollValue / (scrollEnd - scrollStart);
     itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-    beforeItemSize = this.originalItemElementSize();
-    x = beforeItemSize.x + (itemDiff.x * progressPercentage);
-    y = beforeItemSize.y + (itemDiff.y * progressPercentage);
-    w = beforeItemSize.w + (itemDiff.w * progressPercentage);
-    h = beforeItemSize.h + (itemDiff.h * progressPercentage);
-    return this.updatePositionAndItemSize(x, y, w, h, false, false);
+    originalItemElementSize = this.originalItemElementSize();
+    x = originalItemElementSize.x + (itemDiff.x * progressPercentage);
+    y = originalItemElementSize.y + (itemDiff.y * progressPercentage);
+    w = originalItemElementSize.w + (itemDiff.w * progressPercentage);
+    h = originalItemElementSize.h + (itemDiff.h * progressPercentage);
+    itemSize = {
+      x: x,
+      y: y,
+      w: w,
+      h: h
+    };
+    return this.updatePositionAndItemSize(itemSize, false, false);
   };
 
   ItemBase.prototype.updateItemSizeByClick = function(clickAnimationDuration) {
-    var beforeItemSize, count, duration, itemDiff, loopMax, perH, perW, perX, perY, timer;
-    this.updatePositionAndItemSize(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h, false, false);
+    var count, duration, itemDiff, loopMax, originalItemElementSize, perH, perW, perX, perY, timer;
     duration = 0.01;
-    beforeItemSize = this.originalItemElementSize();
     itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
     if ((itemDiff == null) || (itemDiff.x === 0 && itemDiff.y === 0 && itemDiff.w === 0 && itemDiff.h === 0)) {
       return;
@@ -260,21 +311,23 @@ ItemBase = (function(superClass) {
     perH = itemDiff.h * (duration / clickAnimationDuration);
     loopMax = Math.ceil(clickAnimationDuration / duration);
     count = 1;
-    timer = setInterval((function(_this) {
+    originalItemElementSize = this.originalItemElementSize();
+    return timer = setInterval((function(_this) {
       return function() {
-        var h, w, x, y;
-        x = beforeItemSize.x + (perX * count);
-        y = beforeItemSize.y + (perY * count);
-        w = beforeItemSize.w + (perW * count);
-        h = beforeItemSize.h + (perH * count);
-        _this.updatePositionAndItemSize(x, y, w, h, false, false);
+        var itemSize;
+        itemSize = {
+          x: originalItemElementSize.x + (perX * count),
+          y: originalItemElementSize.y + (perY * count),
+          w: originalItemElementSize.w + (perW * count),
+          h: originalItemElementSize.h + (perH * count)
+        };
+        _this.updatePositionAndItemSize(itemSize, false, false);
         if (count >= loopMax) {
           clearInterval(timer);
         }
         return count += 1;
       };
     })(this), duration * 1000);
-    return this.updatePositionAndItemSize(this.itemSize.x + itemDiff.x, this.itemSize.y + itemDiff.y, this.itemSize.w + itemDiff.w, this.itemSize.h + itemDiff.h, false, false);
   };
 
   ItemBase.prototype.setupOptionMenu = function() {
@@ -302,11 +355,14 @@ ItemBase = (function(superClass) {
     $('.item_height:first', this.designConfigRoot).val(h);
     return $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', this.designConfigRoot).off('change').on('change', (function(_this) {
       return function() {
-        x = parseInt($('.item_position_x:first', _this.designConfigRoot).val());
-        y = parseInt($('.item_position_y:first', _this.designConfigRoot).val());
-        w = parseInt($('.item_width:first', _this.designConfigRoot).val());
-        h = parseInt($('.item_height:first', _this.designConfigRoot).val());
-        return _this.updatePositionAndItemSize(x, y, w, h);
+        var itemSize;
+        itemSize = {
+          x: parseInt($('.item_position_x:first', _this.designConfigRoot).val()),
+          y: parseInt($('.item_position_y:first', _this.designConfigRoot).val()),
+          w: parseInt($('.item_width:first', _this.designConfigRoot).val()),
+          h: parseInt($('.item_height:first', _this.designConfigRoot).val())
+        };
+        return _this.updatePositionAndItemSize(itemSize);
       };
     })(this));
   };

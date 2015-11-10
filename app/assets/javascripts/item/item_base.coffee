@@ -81,6 +81,16 @@ class ItemBase extends ItemEventBase
   # @param [Boolean] show 要素作成後に表示するか
   reDraw: (show = true) ->
 
+  # インスタンス変数で描画
+  # データから読み込んで描画する処理に使用
+  # @param [Boolean] show 要素作成後に表示するか
+  reDrawWithEventBefore: (show = true) ->
+    # インスタンス値初期化
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
+    if obj
+      @setMiniumObject(obj)
+    @reDraw(show)
+
   # アイテムの情報をアイテムリストと操作履歴に保存
   # @param [Boolean] newCreated 新規作成か
   saveObj: (newCreated = false) ->
@@ -175,19 +185,10 @@ class ItemBase extends ItemEventBase
   eventConfigValue: ->
     return null
 
-  # イベント後の表示状態にする
-  updateEventAfter: ->
-    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-    @updatePositionAndItemSize(@itemSize.x + itemDiff.x, @itemSize.y + itemDiff.y, @itemSize.w + itemDiff.w, @itemSize.h + itemDiff.h, false, false)
-
-  # イベント前の表示状態にする
-  updateEventBefore: ->
-    @updatePositionAndItemSize(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h, false, false)
-
   # アイテム位置&サイズを更新
-  updatePositionAndItemSize: (x, y, w, h, withSaveObj = true, updateInstanceInfo = true) ->
-    @updateItemPosition(x, y, updateInstanceInfo)
-    @updateItemSize(w, h, updateInstanceInfo)
+  updatePositionAndItemSize: (itemSize, withSaveObj = true, updateInstanceInfo = true) ->
+    @updateItemPosition(itemSize.x, itemSize.y, updateInstanceInfo)
+    @updateItemSize(itemSize.w, itemSize.h, updateInstanceInfo)
     if withSaveObj
       @saveObj()
 
@@ -196,6 +197,40 @@ class ItemBase extends ItemEventBase
     if updateInstanceInfo
       @itemSize.x = parseInt(x)
       @itemSize.y = parseInt(y)
+
+  getCapturedEventBeforeObject: ->
+    if !@capturedEventBeforeObject?
+      @capturedEventBeforeObject = {}
+    return @capturedEventBeforeObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]
+
+  getCapturedEventAfterObject: ->
+    if !@capturedEventAfterObject?
+      @capturedEventAfterObject = {}
+    return @capturedEventAfterObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]
+
+  # イベント適用前、適用後の状態を保存する
+  takeCaptureInstanceState: (isForward) ->
+    if !@capturedEventBeforeObject?
+      @capturedEventBeforeObject = {}
+    if !@capturedEventBeforeObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]?
+      @capturedEventBeforeObject[@event[EventPageValueBase.PageValueKey.DIST_ID]] = @stateEventBefore(isForward)
+
+    if !@capturedEventAfterObject?
+      @capturedEventAfterObject = {}
+    if !@capturedEventAfterObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]?
+      @capturedEventAfterObject[@event[EventPageValueBase.PageValueKey.DIST_ID]] = @stateEventAfter(isForward)
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    capturedEventBeforeObject = @getCapturedEventBeforeObject()
+    if capturedEventBeforeObject
+      @setMiniumObject(capturedEventBeforeObject)
+
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    capturedEventAfterObject = @getCapturedEventAfterObject()
+    if capturedEventAfterObject
+      @setMiniumObject(capturedEventAfterObject)
 
   # スクロールによるアイテム状態更新
   updateItemCommonByScroll: (scrollValue)->
@@ -213,21 +248,27 @@ class ItemBase extends ItemEventBase
     progressPercentage = scrollValue / (scrollEnd - scrollStart)
     #console.log("progressPercentage: #{progressPercentage}")
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-    beforeItemSize = @originalItemElementSize()
-    x = beforeItemSize.x + (itemDiff.x * progressPercentage)
-    y = beforeItemSize.y + (itemDiff.y * progressPercentage)
-    w = beforeItemSize.w + (itemDiff.w * progressPercentage)
-    h = beforeItemSize.h + (itemDiff.h * progressPercentage)
+    originalItemElementSize = @originalItemElementSize()
+    x = originalItemElementSize.x + (itemDiff.x * progressPercentage)
+    y = originalItemElementSize.y + (itemDiff.y * progressPercentage)
+    w = originalItemElementSize.w + (itemDiff.w * progressPercentage)
+    h = originalItemElementSize.h + (itemDiff.h * progressPercentage)
     #console.log("x: #{x}, y: #{y}, w: #{w}, h: #{h}")
-    @updatePositionAndItemSize(x, y, w, h, false, false)
+    itemSize = {
+      x: x
+      y: y
+      w: w
+      h: h
+    }
+    @updatePositionAndItemSize(itemSize, false, false)
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByClick: (clickAnimationDuration) ->
-    @updatePositionAndItemSize(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h, false, false)
+#    capturedEventBeforeObject = @getCapturedEventBeforeObject()
+#    @updatePositionAndItemSize(capturedEventBeforeObject.itemSize, false, false)
 
     duration = 0.01
     # クリックアニメーションと同時に実行させること
-    beforeItemSize = @originalItemElementSize()
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
     if !itemDiff? || (itemDiff.x == 0 && itemDiff.y == 0 && itemDiff.w == 0 && itemDiff.h == 0)
       # 変更なしの場合は処理なし
@@ -240,20 +281,23 @@ class ItemBase extends ItemEventBase
     #console.log("perX: #{perX}, perY: #{perY}, perW: #{perW}, perH: #{perH}")
     loopMax = Math.ceil(clickAnimationDuration/ duration)
     count = 1
+    originalItemElementSize = @originalItemElementSize()
     timer = setInterval( =>
-      x = beforeItemSize.x + (perX * count)
-      y = beforeItemSize.y + (perY * count)
-      w = beforeItemSize.w + (perW * count)
-      h = beforeItemSize.h + (perH * count)
+      itemSize = {
+        x: originalItemElementSize.x + (perX * count)
+        y: originalItemElementSize.y + (perY * count)
+        w: originalItemElementSize.w + (perW * count)
+        h: originalItemElementSize.h + (perH * count)
+      }
       #console.log("x: #{x}, y: #{y}, w: #{w}, h: #{h}")
-      @updatePositionAndItemSize(x, y, w, h, false, false)
+      @updatePositionAndItemSize(itemSize, false, false)
       if count >= loopMax
         clearInterval(timer)
       count += 1
     , duration * 1000)
 
-    @updatePositionAndItemSize(@itemSize.x + itemDiff.x, @itemSize.y + itemDiff.y, @itemSize.w + itemDiff.w, @itemSize.h + itemDiff.h, false, false)
-
+#    capturedEventAfterObject = @getCapturedEventAfterObject()
+#    @updatePositionAndItemSize(capturedEventAfterObject.itemSize, false, false)
 
   # CSSボタンコントロール初期化
   setupOptionMenu: ->
@@ -280,9 +324,11 @@ class ItemBase extends ItemEventBase
     $('.item_width:first', @designConfigRoot).val(w)
     $('.item_height:first', @designConfigRoot).val(h)
     $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', @designConfigRoot).off('change').on('change', =>
-      x = parseInt($('.item_position_x:first', @designConfigRoot).val())
-      y = parseInt($('.item_position_y:first', @designConfigRoot).val())
-      w = parseInt($('.item_width:first', @designConfigRoot).val())
-      h = parseInt($('.item_height:first', @designConfigRoot).val())
-      @updatePositionAndItemSize(x, y, w, h)
+      itemSize = {
+        x: parseInt($('.item_position_x:first', @designConfigRoot).val())
+        y: parseInt($('.item_position_y:first', @designConfigRoot).val())
+        w: parseInt($('.item_width:first', @designConfigRoot).val())
+        h: parseInt($('.item_height:first', @designConfigRoot).val())
+      }
+      @updatePositionAndItemSize(itemSize)
     )
