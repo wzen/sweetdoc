@@ -115,7 +115,7 @@ class CssItemBase extends ItemBase
     capturedEventBeforeObject = @getCapturedEventBeforeObject()
     if capturedEventBeforeObject
       # アイテムサイズ更新
-      @updatePositionAndItemSize(capturedEventBeforeObject.itemSize, false, true)
+      @updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false, true)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
@@ -123,7 +123,7 @@ class CssItemBase extends ItemBase
     capturedEventAfterObject = @getCapturedEventAfterObject()
     if capturedEventAfterObject
       # アイテムサイズ更新
-      @updatePositionAndItemSize(capturedEventAfterObject.itemSize, false, true)
+      @updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false, true)
 
   # アイテムサイズ更新
   updateItemSize: (w, h, updateInstanceInfo = true) ->
@@ -135,13 +135,7 @@ class CssItemBase extends ItemBase
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
     capturedEventBeforeObject = @getCapturedEventBeforeObject()
-    itemSize = capturedEventBeforeObject.itemSize
-    return {
-      x: itemSize.x
-      y: itemSize.y
-      w: itemSize.w
-      h: itemSize.h
-    }
+    return capturedEventBeforeObject.itemSize
 
   # CSS内のオブジェクトIDを自身のものに変更
   changeCssId: (oldObjId) ->

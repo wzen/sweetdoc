@@ -125,7 +125,7 @@ CssItemBase = (function(superClass) {
     CssItemBase.__super__.updateEventBefore.call(this);
     capturedEventBeforeObject = this.getCapturedEventBeforeObject();
     if (capturedEventBeforeObject) {
-      return this.updatePositionAndItemSize(capturedEventBeforeObject.itemSize, false, true);
+      return this.updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false, true);
     }
   };
 
@@ -134,7 +134,7 @@ CssItemBase = (function(superClass) {
     CssItemBase.__super__.updateEventAfter.call(this);
     capturedEventAfterObject = this.getCapturedEventAfterObject();
     if (capturedEventAfterObject) {
-      return this.updatePositionAndItemSize(capturedEventAfterObject.itemSize, false, true);
+      return this.updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false, true);
     }
   };
 
@@ -153,15 +153,9 @@ CssItemBase = (function(superClass) {
   };
 
   CssItemBase.prototype.originalItemElementSize = function() {
-    var capturedEventBeforeObject, itemSize;
+    var capturedEventBeforeObject;
     capturedEventBeforeObject = this.getCapturedEventBeforeObject();
-    itemSize = capturedEventBeforeObject.itemSize;
-    return {
-      x: itemSize.x,
-      y: itemSize.y,
-      w: itemSize.w,
-      h: itemSize.h
-    };
+    return capturedEventBeforeObject.itemSize;
   };
 
   CssItemBase.prototype.changeCssId = function(oldObjId) {
