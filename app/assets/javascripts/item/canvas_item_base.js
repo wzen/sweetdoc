@@ -139,7 +139,7 @@ CanvasItemBase = (function(superClass) {
       itemSize = Common.makeClone(capturedEventBeforeObject.itemSize);
       itemSize.w *= capturedEventBeforeObject.scale.w;
       itemSize.h *= capturedEventBeforeObject.scale.h;
-      return this.updatePositionAndItemSize(itemSize, false, true);
+      return this.updatePositionAndItemSize(itemSize, false);
     }
   };
 
@@ -151,15 +151,12 @@ CanvasItemBase = (function(superClass) {
       itemSize = Common.makeClone(capturedEventAfterObject.itemSize);
       itemSize.w *= capturedEventAfterObject.scale.w;
       itemSize.h *= capturedEventAfterObject.scale.h;
-      return this.updatePositionAndItemSize(itemSize, false, true);
+      return this.updatePositionAndItemSize(itemSize, false);
     }
   };
 
-  CanvasItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
+  CanvasItemBase.prototype.updateItemSize = function(w, h) {
     var canvas, drawingCanvas, drawingContext, element, scaleH, scaleW;
-    if (updateInstanceInfo == null) {
-      updateInstanceInfo = true;
-    }
     element = $('#' + this.id);
     element.css({
       width: w,

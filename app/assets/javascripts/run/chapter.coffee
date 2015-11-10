@@ -24,8 +24,6 @@ class Chapter
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
       event.willChapter()
-      if event instanceof CssItemBase
-        event.appendAnimationCssIfNeeded()
       @doMoveChapter = false
 
     # Canvasを前面に表示

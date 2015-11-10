@@ -70,9 +70,14 @@ CssItemBase = (function(superClass) {
     obj = CssItemBase.__super__.getMinimumObject.call(this);
     newobj = {
       itemId: this.constructor.ITEM_ID,
-      mousedownCood: Common.makeClone(this.mousedownCood),
-      css: this.cssRoot[0].outerHTML
+      mousedownCood: Common.makeClone(this.mousedownCood)
     };
+    if (this.cssRoot == null) {
+      this.cssRoot = $('#' + this.getCssRootElementId());
+    }
+    if ((this.cssRoot != null) && this.cssRoot.length > 0) {
+      newobj['css'] = this.cssRoot[0].outerHTML;
+    }
     $.extend(obj, newobj);
     return obj;
   };
@@ -125,7 +130,7 @@ CssItemBase = (function(superClass) {
     CssItemBase.__super__.updateEventBefore.call(this);
     capturedEventBeforeObject = this.getCapturedEventBeforeObject();
     if (capturedEventBeforeObject) {
-      return this.updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false, true);
+      return this.updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false);
     }
   };
 
@@ -134,22 +139,17 @@ CssItemBase = (function(superClass) {
     CssItemBase.__super__.updateEventAfter.call(this);
     capturedEventAfterObject = this.getCapturedEventAfterObject();
     if (capturedEventAfterObject) {
-      return this.updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false, true);
+      return this.updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false);
     }
   };
 
-  CssItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
-    if (updateInstanceInfo == null) {
-      updateInstanceInfo = true;
-    }
+  CssItemBase.prototype.updateItemSize = function(w, h) {
     this.getJQueryElement().css({
       width: w,
       height: h
     });
-    if (updateInstanceInfo) {
-      this.itemSize.w = parseInt(w);
-      return this.itemSize.h = parseInt(h);
-    }
+    this.itemSize.w = parseInt(w);
+    return this.itemSize.h = parseInt(h);
   };
 
   CssItemBase.prototype.originalItemElementSize = function() {
@@ -213,7 +213,9 @@ CssItemBase = (function(superClass) {
       doStyleSave = true;
     }
     this.cssStyle.text(this.cssCode.text());
-    this.css = this.cssRoot[0].outerHTML;
+    if (this.cssRoot != null) {
+      this.css = this.cssRoot[0].outerHTML;
+    }
     if (doStyleSave) {
       if (this.cssStypeReflectTimer != null) {
         clearTimeout(this.cssStypeReflectTimer);

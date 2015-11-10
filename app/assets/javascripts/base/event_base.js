@@ -350,6 +350,9 @@ ItemEventBase = (function(superClass) {
 
   ItemEventBase.prototype.initEvent = function(event) {
     ItemEventBase.__super__.initEvent.call(this, event);
+    if (this instanceof CssItemBase) {
+      this.appendAnimationCssIfNeeded();
+    }
     return this.reDraw(false);
   };
 

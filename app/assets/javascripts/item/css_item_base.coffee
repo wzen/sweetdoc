@@ -60,8 +60,11 @@ class CssItemBase extends ItemBase
     newobj = {
       itemId: @constructor.ITEM_ID
       mousedownCood: Common.makeClone(@mousedownCood)
-      css: @cssRoot[0].outerHTML
     }
+    if !@cssRoot?
+      @cssRoot = $('#' + @getCssRootElementId())
+    if @cssRoot? && @cssRoot.length > 0
+      newobj['css'] = @cssRoot[0].outerHTML
     $.extend(obj, newobj)
     return obj
 
@@ -115,7 +118,7 @@ class CssItemBase extends ItemBase
     capturedEventBeforeObject = @getCapturedEventBeforeObject()
     if capturedEventBeforeObject
       # アイテムサイズ更新
-      @updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false, true)
+      @updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
@@ -123,14 +126,13 @@ class CssItemBase extends ItemBase
     capturedEventAfterObject = @getCapturedEventAfterObject()
     if capturedEventAfterObject
       # アイテムサイズ更新
-      @updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false, true)
+      @updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false)
 
   # アイテムサイズ更新
-  updateItemSize: (w, h, updateInstanceInfo = true) ->
+  updateItemSize: (w, h) ->
     @getJQueryElement().css({width: w, height: h})
-    if updateInstanceInfo
-      @itemSize.w = parseInt(w)
-      @itemSize.h = parseInt(h)
+    @itemSize.w = parseInt(w)
+    @itemSize.h = parseInt(h)
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
@@ -192,7 +194,8 @@ class CssItemBase extends ItemBase
   # CSSのスタイルを反映
   reflectCssStyle: (doStyleSave = true) ->
     @cssStyle.text(@cssCode.text())
-    @css = @cssRoot[0].outerHTML
+    if @cssRoot?
+      @css = @cssRoot[0].outerHTML
 
     if doStyleSave
       # 頻繁に呼ばれるためタイマーでPageValueに書き込む

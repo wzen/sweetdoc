@@ -195,32 +195,24 @@ ItemBase = (function(superClass) {
     return null;
   };
 
-  ItemBase.prototype.updatePositionAndItemSize = function(itemSize, withSaveObj, updateInstanceInfo) {
+  ItemBase.prototype.updatePositionAndItemSize = function(itemSize, withSaveObj) {
     if (withSaveObj == null) {
       withSaveObj = true;
     }
-    if (updateInstanceInfo == null) {
-      updateInstanceInfo = true;
-    }
-    this.updateItemPosition(itemSize.x, itemSize.y, updateInstanceInfo);
-    this.updateItemSize(itemSize.w, itemSize.h, updateInstanceInfo);
+    this.updateItemPosition(itemSize.x, itemSize.y);
+    this.updateItemSize(itemSize.w, itemSize.h);
     if (withSaveObj) {
       return this.saveObj();
     }
   };
 
-  ItemBase.prototype.updateItemPosition = function(x, y, updateInstanceInfo) {
-    if (updateInstanceInfo == null) {
-      updateInstanceInfo = true;
-    }
+  ItemBase.prototype.updateItemPosition = function(x, y) {
     this.getJQueryElement().css({
       top: y,
       left: x
     });
-    if (updateInstanceInfo) {
-      this.itemSize.x = parseInt(x);
-      return this.itemSize.y = parseInt(y);
-    }
+    this.itemSize.x = parseInt(x);
+    return this.itemSize.y = parseInt(y);
   };
 
   ItemBase.prototype.getCapturedEventBeforeObject = function() {
@@ -296,7 +288,7 @@ ItemBase = (function(superClass) {
       w: w,
       h: h
     };
-    return this.updatePositionAndItemSize(itemSize, false, false);
+    return this.updatePositionAndItemSize(itemSize, false);
   };
 
   ItemBase.prototype.updateItemSizeByClick = function(clickAnimationDuration) {
@@ -322,7 +314,7 @@ ItemBase = (function(superClass) {
           w: originalItemElementSize.w + (perW * count),
           h: originalItemElementSize.h + (perH * count)
         };
-        _this.updatePositionAndItemSize(itemSize, false, false);
+        _this.updatePositionAndItemSize(itemSize, false);
         if (count >= loopMax) {
           clearInterval(timer);
         }

@@ -316,6 +316,9 @@ class ItemEventBase extends EventBase
   initEvent: (event) ->
     super(event)
 
+    if @ instanceof CssItemBase
+      @appendAnimationCssIfNeeded()
+
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     @reDraw(false)

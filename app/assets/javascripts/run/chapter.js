@@ -28,9 +28,6 @@ Chapter = (function() {
       event = ref[idx];
       event.initEvent(this.eventList[idx]);
       event.willChapter();
-      if (event instanceof CssItemBase) {
-        event.appendAnimationCssIfNeeded();
-      }
       this.doMoveChapter = false;
     }
     this.floatScrollHandleCanvas();

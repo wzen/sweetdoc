@@ -186,17 +186,16 @@ class ItemBase extends ItemEventBase
     return null
 
   # アイテム位置&サイズを更新
-  updatePositionAndItemSize: (itemSize, withSaveObj = true, updateInstanceInfo = true) ->
-    @updateItemPosition(itemSize.x, itemSize.y, updateInstanceInfo)
-    @updateItemSize(itemSize.w, itemSize.h, updateInstanceInfo)
+  updatePositionAndItemSize: (itemSize, withSaveObj = true) ->
+    @updateItemPosition(itemSize.x, itemSize.y)
+    @updateItemSize(itemSize.w, itemSize.h)
     if withSaveObj
       @saveObj()
 
-  updateItemPosition: (x, y, updateInstanceInfo = true) ->
+  updateItemPosition: (x, y) ->
     @getJQueryElement().css({top: y, left: x})
-    if updateInstanceInfo
-      @itemSize.x = parseInt(x)
-      @itemSize.y = parseInt(y)
+    @itemSize.x = parseInt(x)
+    @itemSize.y = parseInt(y)
 
   getCapturedEventBeforeObject: ->
     if !@capturedEventBeforeObject?
@@ -259,7 +258,7 @@ class ItemBase extends ItemEventBase
       w: w
       h: h
     }
-    @updatePositionAndItemSize(itemSize, false, false)
+    @updatePositionAndItemSize(itemSize, false)
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByClick: (clickAnimationDuration) ->
@@ -287,7 +286,7 @@ class ItemBase extends ItemEventBase
         w: originalItemElementSize.w + (perW * count)
         h: originalItemElementSize.h + (perH * count)
       }
-      @updatePositionAndItemSize(itemSize, false, false)
+      @updatePositionAndItemSize(itemSize, false)
       if count >= loopMax
         clearInterval(timer)
       count += 1

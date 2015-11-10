@@ -126,7 +126,7 @@ class CanvasItemBase extends ItemBase
       itemSize = Common.makeClone(capturedEventBeforeObject.itemSize)
       itemSize.w *= capturedEventBeforeObject.scale.w
       itemSize.h *= capturedEventBeforeObject.scale.h
-      @updatePositionAndItemSize(itemSize, false, true)
+      @updatePositionAndItemSize(itemSize, false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
@@ -137,10 +137,10 @@ class CanvasItemBase extends ItemBase
       itemSize = Common.makeClone(capturedEventAfterObject.itemSize)
       itemSize.w *= capturedEventAfterObject.scale.w
       itemSize.h *= capturedEventAfterObject.scale.h
-      @updatePositionAndItemSize(itemSize, false, true)
+      @updatePositionAndItemSize(itemSize, false)
 
   # アイテムサイズ更新
-  updateItemSize: (w, h, updateInstanceInfo = true) ->
+  updateItemSize: (w, h) ->
     element = $('#' + @id)
     element.css({width: w, height: h})
     canvas = $('#' + @canvasElementId())
