@@ -236,35 +236,20 @@ ItemBase = (function(superClass) {
     scrollEnd = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     scrollStart = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     progressPercentage = scrollValue / (scrollEnd - scrollStart);
-    beforeItemSize = {
-      x: this.getJQueryElement().position().left,
-      y: this.getJQueryElement().position().top,
-      w: this.getJQueryElement().width(),
-      h: this.getJQueryElement().height()
-    };
     itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    beforeItemSize = this.originalItemElementSize();
     x = beforeItemSize.x + (itemDiff.x * progressPercentage);
     y = beforeItemSize.y + (itemDiff.y * progressPercentage);
     w = beforeItemSize.w + (itemDiff.w * progressPercentage);
     h = beforeItemSize.h + (itemDiff.h * progressPercentage);
-    return this.getJQueryElement().css({
-      top: y,
-      left: x,
-      width: w,
-      height: h
-    });
+    return this.updatePositionAndItemSize(x, y, w, h, false, false);
   };
 
   ItemBase.prototype.updateItemSizeByClick = function(clickAnimationDuration) {
     var beforeItemSize, count, duration, itemDiff, loopMax, perH, perW, perX, perY, timer;
     this.updatePositionAndItemSize(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h, false, false);
     duration = 0.01;
-    beforeItemSize = {
-      x: this.getJQueryElement().position().left,
-      y: this.getJQueryElement().position().top,
-      w: this.getJQueryElement().width(),
-      h: this.getJQueryElement().height()
-    };
+    beforeItemSize = this.originalItemElementSize();
     itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
     if ((itemDiff == null) || (itemDiff.x === 0 && itemDiff.y === 0 && itemDiff.w === 0 && itemDiff.h === 0)) {
       return;
@@ -282,12 +267,7 @@ ItemBase = (function(superClass) {
         y = beforeItemSize.y + (perY * count);
         w = beforeItemSize.w + (perW * count);
         h = beforeItemSize.h + (perH * count);
-        _this.getJQueryElement().css({
-          top: y,
-          left: x,
-          width: w,
-          height: h
-        });
+        _this.updatePositionAndItemSize(x, y, w, h, false, false);
         if (count >= loopMax) {
           clearInterval(timer);
         }

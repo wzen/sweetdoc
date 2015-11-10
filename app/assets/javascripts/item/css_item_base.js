@@ -83,6 +83,15 @@ CssItemBase = (function(superClass) {
     return this.css = Common.makeClone(obj.css);
   };
 
+  CssItemBase.prototype.originalItemElementSize = function() {
+    return {
+      x: this.itemSize.x,
+      y: this.itemSize.y,
+      w: this.itemSize.w,
+      h: this.itemSize.h
+    };
+  };
+
   CssItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
     if (updateInstanceInfo == null) {
       updateInstanceInfo = true;

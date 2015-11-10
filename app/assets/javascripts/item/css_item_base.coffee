@@ -72,6 +72,15 @@ class CssItemBase extends ItemBase
     @mousedownCood = Common.makeClone(obj.mousedownCood)
     @css = Common.makeClone(obj.css)
 
+  # アニメーション変更前のアイテムサイズ
+  originalItemElementSize: ->
+    return {
+      x: @itemSize.x
+      y: @itemSize.y
+      w: @itemSize.w
+      h: @itemSize.h
+    }
+
   # アイテムサイズ更新
   updateItemSize: (w, h, updateInstanceInfo = true) ->
     @getJQueryElement().css({width: w, height: h})

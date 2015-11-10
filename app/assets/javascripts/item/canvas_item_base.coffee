@@ -84,6 +84,16 @@ class CanvasItemBase extends ItemBase
       # キャンパスに対する初期化
       @initCanvas()
 
+  # アニメーション変更前のアイテムサイズ
+  originalItemElementSize: ->
+    originalScale = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id)).scale
+    return {
+      x: @itemSize.x
+      y: @itemSize.y
+      w: @itemSize.w * originalScale.w
+      h: @itemSize.h * originalScale.h
+    }
+
   # アイテムサイズ更新
   updateItemSize: (w, h, updateInstanceInfo = true) ->
     element = $('#' + @id)
@@ -96,12 +106,10 @@ class CanvasItemBase extends ItemBase
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.scale(scaleW, scaleH)
+    console.log("scaleW: #{scaleW}, scaleH: #{scaleH}")
+    @scale.w = scaleW
+    @scale.h = scaleH
     @drawNewCanvas()
-    if updateInstanceInfo
-      @scale.w = scaleW
-      @scale.h = scaleH
-    #      @itemSize.w = element.width()
-    #      @itemSize.h = element.height()
     if window.debug
       console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
 

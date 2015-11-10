@@ -98,6 +98,17 @@ CanvasItemBase = (function(superClass) {
     }
   };
 
+  CanvasItemBase.prototype.originalItemElementSize = function() {
+    var originalScale;
+    originalScale = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id)).scale;
+    return {
+      x: this.itemSize.x,
+      y: this.itemSize.y,
+      w: this.itemSize.w * originalScale.w,
+      h: this.itemSize.h * originalScale.h
+    };
+  };
+
   CanvasItemBase.prototype.updateItemSize = function(w, h, updateInstanceInfo) {
     var canvas, drawingCanvas, drawingContext, element, scaleH, scaleW;
     if (updateInstanceInfo == null) {
@@ -116,11 +127,10 @@ CanvasItemBase = (function(superClass) {
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.scale(scaleW, scaleH);
+    console.log("scaleW: " + scaleW + ", scaleH: " + scaleH);
+    this.scale.w = scaleW;
+    this.scale.h = scaleH;
     this.drawNewCanvas();
-    if (updateInstanceInfo) {
-      this.scale.w = scaleW;
-      this.scale.h = scaleH;
-    }
     if (window.debug) {
       return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
     }

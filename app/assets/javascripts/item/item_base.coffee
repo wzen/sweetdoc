@@ -211,18 +211,15 @@ class ItemBase extends ItemEventBase
     scrollEnd = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
     scrollStart = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     progressPercentage = scrollValue / (scrollEnd - scrollStart)
-    beforeItemSize = {
-      x: @getJQueryElement().position().left
-      y: @getJQueryElement().position().top
-      w: @getJQueryElement().width()
-      h: @getJQueryElement().height()
-    }
+    #console.log("progressPercentage: #{progressPercentage}")
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    beforeItemSize = @originalItemElementSize()
     x = beforeItemSize.x + (itemDiff.x * progressPercentage)
     y = beforeItemSize.y + (itemDiff.y * progressPercentage)
     w = beforeItemSize.w + (itemDiff.w * progressPercentage)
     h = beforeItemSize.h + (itemDiff.h * progressPercentage)
-    @getJQueryElement().css({top: y, left: x, width: w, height: h})
+    #console.log("x: #{x}, y: #{y}, w: #{w}, h: #{h}")
+    @updatePositionAndItemSize(x, y, w, h, false, false)
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByClick: (clickAnimationDuration) ->
@@ -230,12 +227,7 @@ class ItemBase extends ItemEventBase
 
     duration = 0.01
     # クリックアニメーションと同時に実行させること
-    beforeItemSize = {
-      x: @getJQueryElement().position().left
-      y: @getJQueryElement().position().top
-      w: @getJQueryElement().width()
-      h: @getJQueryElement().height()
-    }
+    beforeItemSize = @originalItemElementSize()
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
     if !itemDiff? || (itemDiff.x == 0 && itemDiff.y == 0 && itemDiff.w == 0 && itemDiff.h == 0)
       # 変更なしの場合は処理なし
@@ -254,7 +246,7 @@ class ItemBase extends ItemEventBase
       w = beforeItemSize.w + (perW * count)
       h = beforeItemSize.h + (perH * count)
       #console.log("x: #{x}, y: #{y}, w: #{w}, h: #{h}")
-      @getJQueryElement().css({top: y, left: x, width: w, height: h})
+      @updatePositionAndItemSize(x, y, w, h, false, false)
       if count >= loopMax
         clearInterval(timer)
       count += 1
