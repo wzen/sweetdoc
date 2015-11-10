@@ -350,7 +350,6 @@ ItemEventBase = (function(superClass) {
 
   ItemEventBase.prototype.initEvent = function(event) {
     ItemEventBase.__super__.initEvent.call(this, event);
-    this.takeCaptureInstanceState(true);
     return this.reDraw(false);
   };
 

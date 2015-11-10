@@ -29,8 +29,6 @@ class CanvasItemBase extends ItemBase
     # キャンパスの伸縮
     context = canvas[0].getContext('2d');
     context.scale(@scale.w, @scale.h)
-    if window.debug
-      console.log("setScale: itemSize: #{JSON.stringify(@itemSize)}")
 
   # キャンパス初期化処理
   initCanvas: ->
@@ -100,8 +98,6 @@ class CanvasItemBase extends ItemBase
       obj.scale.w = sw
       obj.scale.h = sh
 
-    console.log("stateEventBefore")
-    console.log(obj)
     return obj
 
   # イベント適用後のオブジェクト状態を取得
@@ -119,8 +115,6 @@ class CanvasItemBase extends ItemBase
       obj.scale.w = sw
       obj.scale.h = sh
 
-    console.log("stateEventAfter")
-    console.log(obj)
     return obj
 
   # イベント前の表示状態にする
@@ -129,7 +123,7 @@ class CanvasItemBase extends ItemBase
     capturedEventBeforeObject = @getCapturedEventBeforeObject()
     if capturedEventBeforeObject
       # アイテムサイズ更新
-      itemSize = capturedEventBeforeObject.itemSize
+      itemSize = Common.makeClone(capturedEventBeforeObject.itemSize)
       itemSize.w *= capturedEventBeforeObject.scale.w
       itemSize.h *= capturedEventBeforeObject.scale.h
       @updatePositionAndItemSize(itemSize, false, true)
@@ -140,15 +134,13 @@ class CanvasItemBase extends ItemBase
     capturedEventAfterObject = @getCapturedEventAfterObject()
     if capturedEventAfterObject
       # アイテムサイズ更新
-      itemSize = capturedEventAfterObject.itemSize
+      itemSize = Common.makeClone(capturedEventAfterObject.itemSize)
       itemSize.w *= capturedEventAfterObject.scale.w
       itemSize.h *= capturedEventAfterObject.scale.h
       @updatePositionAndItemSize(itemSize, false, true)
 
   # アイテムサイズ更新
   updateItemSize: (w, h, updateInstanceInfo = true) ->
-    if window.debug
-      console.log("resize: w: #{w}  h: #{h}")
     element = $('#' + @id)
     element.css({width: w, height: h})
     canvas = $('#' + @canvasElementId())
@@ -159,12 +151,9 @@ class CanvasItemBase extends ItemBase
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.scale(scaleW, scaleH)
-    #console.log("scaleW: #{scaleW}, scaleH: #{scaleH}")
     @scale.w = scaleW
     @scale.h = scaleH
     @drawNewCanvas()
-    if window.debug
-      console.log("resize: itemSize: #{JSON.stringify(@itemSize)}")
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->

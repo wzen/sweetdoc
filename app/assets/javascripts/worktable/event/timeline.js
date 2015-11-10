@@ -143,9 +143,15 @@ Timeline = (function() {
           if (item != null) {
             if (idx < te_num - 1) {
               item.initEvent(te);
+              if (item instanceof ItemBase) {
+                item.takeCaptureInstanceState(true);
+              }
               results.push(item.updateEventAfter());
             } else if (idx === te_num - 1) {
               item.initEvent(te);
+              if (item instanceof ItemBase) {
+                item.takeCaptureInstanceState(true);
+              }
               item.preview(te);
               break;
             } else {

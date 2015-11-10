@@ -316,14 +316,6 @@ class ItemEventBase extends EventBase
   initEvent: (event) ->
     super(event)
 
-
-#    # インスタンス値設定
-#    objId = event[EventPageValueBase.PageValueKey.ID]
-#    instance = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
-#    @setMiniumObject(instance)
-
-    # 状態保存
-    @takeCaptureInstanceState(true)
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     @reDraw(false)

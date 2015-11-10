@@ -32,10 +32,7 @@ CanvasItemBase = (function(superClass) {
     canvas.attr('width', element.width());
     canvas.attr('height', element.height());
     context = canvas[0].getContext('2d');
-    context.scale(this.scale.w, this.scale.h);
-    if (window.debug) {
-      return console.log("setScale: itemSize: " + (JSON.stringify(this.itemSize)));
-    }
+    return context.scale(this.scale.w, this.scale.h);
   };
 
   CanvasItemBase.prototype.initCanvas = function() {
@@ -113,8 +110,6 @@ CanvasItemBase = (function(superClass) {
       obj.scale.w = sw;
       obj.scale.h = sh;
     }
-    console.log("stateEventBefore");
-    console.log(obj);
     return obj;
   };
 
@@ -133,8 +128,6 @@ CanvasItemBase = (function(superClass) {
       obj.scale.w = sw;
       obj.scale.h = sh;
     }
-    console.log("stateEventAfter");
-    console.log(obj);
     return obj;
   };
 
@@ -143,7 +136,7 @@ CanvasItemBase = (function(superClass) {
     CanvasItemBase.__super__.updateEventBefore.call(this);
     capturedEventBeforeObject = this.getCapturedEventBeforeObject();
     if (capturedEventBeforeObject) {
-      itemSize = capturedEventBeforeObject.itemSize;
+      itemSize = Common.makeClone(capturedEventBeforeObject.itemSize);
       itemSize.w *= capturedEventBeforeObject.scale.w;
       itemSize.h *= capturedEventBeforeObject.scale.h;
       return this.updatePositionAndItemSize(itemSize, false, true);
@@ -155,7 +148,7 @@ CanvasItemBase = (function(superClass) {
     CanvasItemBase.__super__.updateEventAfter.call(this);
     capturedEventAfterObject = this.getCapturedEventAfterObject();
     if (capturedEventAfterObject) {
-      itemSize = capturedEventAfterObject.itemSize;
+      itemSize = Common.makeClone(capturedEventAfterObject.itemSize);
       itemSize.w *= capturedEventAfterObject.scale.w;
       itemSize.h *= capturedEventAfterObject.scale.h;
       return this.updatePositionAndItemSize(itemSize, false, true);
@@ -166,9 +159,6 @@ CanvasItemBase = (function(superClass) {
     var canvas, drawingCanvas, drawingContext, element, scaleH, scaleW;
     if (updateInstanceInfo == null) {
       updateInstanceInfo = true;
-    }
-    if (window.debug) {
-      console.log("resize: w: " + w + "  h: " + h);
     }
     element = $('#' + this.id);
     element.css({
@@ -185,10 +175,7 @@ CanvasItemBase = (function(superClass) {
     drawingContext.scale(scaleW, scaleH);
     this.scale.w = scaleW;
     this.scale.h = scaleH;
-    this.drawNewCanvas();
-    if (window.debug) {
-      return console.log("resize: itemSize: " + (JSON.stringify(this.itemSize)));
-    }
+    return this.drawNewCanvas();
   };
 
   CanvasItemBase.prototype.originalItemElementSize = function() {

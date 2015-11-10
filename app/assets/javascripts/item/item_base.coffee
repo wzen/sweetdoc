@@ -210,6 +210,7 @@ class ItemBase extends ItemEventBase
 
   # イベント適用前、適用後の状態を保存する
   takeCaptureInstanceState: (isForward) ->
+    console.log("takeCaptureInstanceState")
     if !@capturedEventBeforeObject?
       @capturedEventBeforeObject = {}
     if !@capturedEventBeforeObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]?
@@ -246,14 +247,12 @@ class ItemBase extends ItemEventBase
     scrollEnd = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
     scrollStart = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     progressPercentage = scrollValue / (scrollEnd - scrollStart)
-    #console.log("progressPercentage: #{progressPercentage}")
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
     originalItemElementSize = @originalItemElementSize()
     x = originalItemElementSize.x + (itemDiff.x * progressPercentage)
     y = originalItemElementSize.y + (itemDiff.y * progressPercentage)
     w = originalItemElementSize.w + (itemDiff.w * progressPercentage)
     h = originalItemElementSize.h + (itemDiff.h * progressPercentage)
-    #console.log("x: #{x}, y: #{y}, w: #{w}, h: #{h}")
     itemSize = {
       x: x
       y: y
@@ -278,7 +277,6 @@ class ItemBase extends ItemEventBase
     perY = itemDiff.y * (duration / clickAnimationDuration)
     perW = itemDiff.w * (duration / clickAnimationDuration)
     perH = itemDiff.h * (duration / clickAnimationDuration)
-    #console.log("perX: #{perX}, perY: #{perY}, perW: #{perW}, perH: #{perH}")
     loopMax = Math.ceil(clickAnimationDuration/ duration)
     count = 1
     originalItemElementSize = @originalItemElementSize()
@@ -289,7 +287,6 @@ class ItemBase extends ItemEventBase
         w: originalItemElementSize.w + (perW * count)
         h: originalItemElementSize.h + (perH * count)
       }
-      #console.log("x: #{x}, y: #{y}, w: #{w}, h: #{h}")
       @updatePositionAndItemSize(itemSize, false, false)
       if count >= loopMax
         clearInterval(timer)

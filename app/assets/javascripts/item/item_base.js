@@ -238,6 +238,7 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.takeCaptureInstanceState = function(isForward) {
+    console.log("takeCaptureInstanceState");
     if (this.capturedEventBeforeObject == null) {
       this.capturedEventBeforeObject = {};
     }
