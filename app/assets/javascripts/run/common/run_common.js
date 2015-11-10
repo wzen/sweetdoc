@@ -389,6 +389,7 @@ RunCommon = (function() {
     this.initHandleScrollPoint();
     Common.initResize(this.resizeEvent);
     this.setupScrollEvent();
+    Navbar.initRunNavbar();
     Common.applyEnvironmentFromPagevalue();
     return RunCommon.updateMainViewSize();
   };
