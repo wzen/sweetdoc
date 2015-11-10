@@ -262,9 +262,6 @@ class ItemBase extends ItemEventBase
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByClick: (clickAnimationDuration) ->
-#    capturedEventBeforeObject = @getCapturedEventBeforeObject()
-#    @updatePositionAndItemSize(capturedEventBeforeObject.itemSize, false, false)
-
     duration = 0.01
     # クリックアニメーションと同時に実行させること
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
@@ -292,8 +289,13 @@ class ItemBase extends ItemEventBase
       count += 1
     , duration * 1000)
 
-#    capturedEventAfterObject = @getCapturedEventAfterObject()
-#    @updatePositionAndItemSize(capturedEventAfterObject.itemSize, false, false)
+    itemSize = {
+      x: originalItemElementSize.x + itemDiff.x
+      y: originalItemElementSize.y + itemDiff.y
+      w: originalItemElementSize.w + itemDiff.w
+      h: originalItemElementSize.h + itemDiff.h
+    }
+    @updatePositionAndItemSize(itemSize, false)
 
   # CSSボタンコントロール初期化
   setupOptionMenu: ->

@@ -292,7 +292,7 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.updateItemSizeByClick = function(clickAnimationDuration) {
-    var count, duration, itemDiff, loopMax, originalItemElementSize, perH, perW, perX, perY, timer;
+    var count, duration, itemDiff, itemSize, loopMax, originalItemElementSize, perH, perW, perX, perY, timer;
     duration = 0.01;
     itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
     if ((itemDiff == null) || (itemDiff.x === 0 && itemDiff.y === 0 && itemDiff.w === 0 && itemDiff.h === 0)) {
@@ -305,7 +305,7 @@ ItemBase = (function(superClass) {
     loopMax = Math.ceil(clickAnimationDuration / duration);
     count = 1;
     originalItemElementSize = this.originalItemElementSize();
-    return timer = setInterval((function(_this) {
+    timer = setInterval((function(_this) {
       return function() {
         var itemSize;
         itemSize = {
@@ -321,6 +321,13 @@ ItemBase = (function(superClass) {
         return count += 1;
       };
     })(this), duration * 1000);
+    itemSize = {
+      x: originalItemElementSize.x + itemDiff.x,
+      y: originalItemElementSize.y + itemDiff.y,
+      w: originalItemElementSize.w + itemDiff.w,
+      h: originalItemElementSize.h + itemDiff.h
+    };
+    return this.updatePositionAndItemSize(itemSize, false);
   };
 
   ItemBase.prototype.setupOptionMenu = function() {
