@@ -20,6 +20,7 @@ class RunCommon
       @LOADED_ITEM_IDS = constant.Run.Key.LOADED_ITEM_IDS
       @PROJECT_ID = constant.Run.Key.PROJECT_ID
       @ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN
+      @RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID
 
   # 画面初期化
   @initView = ->
@@ -201,9 +202,9 @@ class RunCommon
     data = {}
     data[RunCommon.Key.TARGET_PAGES] = targetPages
     data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds())
-    data[RunCommon.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
     locationPaths = window.location.pathname.split('/')
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
+    data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID)
     $.ajax(
       {
         url: "/run/paging"

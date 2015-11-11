@@ -28,8 +28,12 @@ class MotionCheckCommon
 
         if window.isWorkTable
           # データ保存
-          ServerStorage.save( ->
-            document.run_form.submit()
+          ServerStorage.save( (data) ->
+            if data.resultSuccess
+              PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id)
+              document.run_form.submit()
+            else
+              console.log('ServerStorage save error')
           )
         else
           document.run_form.submit()

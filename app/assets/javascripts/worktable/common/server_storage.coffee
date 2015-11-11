@@ -67,7 +67,7 @@ class ServerStorage
               if window.debug
                 console.log(data.message)
               if callback?
-                callback()
+                callback(data)
               window.workingAutoSave = false
             else
               console.log('/page_value_state/save_state server error')

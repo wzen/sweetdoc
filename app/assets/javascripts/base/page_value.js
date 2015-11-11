@@ -50,6 +50,8 @@ PageValue = (function() {
 
       Key.LAST_SAVE_TIME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "last_save_time";
 
+      Key.RUNNING_USER_PAGEVALUE_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.USER_PAGEVALUE_ID;
+
       Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
       Key.instancePagePrefix = function(pn) {

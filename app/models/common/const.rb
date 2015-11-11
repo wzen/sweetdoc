@@ -342,6 +342,7 @@ class Const
       LOADED_ITEM_IDS = 'lii'
       PROJECT_ID = 'pid'
       ACCESS_TOKEN = 'at'
+      RUNNING_USER_PAGEVALUE_ID = 'urpi'
     end
   end
 

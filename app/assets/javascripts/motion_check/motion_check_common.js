@@ -30,8 +30,13 @@ MotionCheckCommon = (function() {
         }
         document.run_form.target = target;
         if (window.isWorkTable) {
-          return ServerStorage.save(function() {
-            return document.run_form.submit();
+          return ServerStorage.save(function(data) {
+            if (data.resultSuccess) {
+              PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id);
+              return document.run_form.submit();
+            } else {
+              return console.log('ServerStorage save error');
+            }
           });
         } else {
           return document.run_form.submit();

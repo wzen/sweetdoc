@@ -3,7 +3,7 @@ require 'item/item_js'
 require 'pagevalue/page_value_state'
 
 class MotionCheck
-  def self.paging(user_id, project_id, target_pages, loaded_itemids = [])
+  def self.paging(user_id, user_pagevalue_id, target_pages, loaded_itemids = [])
     gen = {}
     ins = {}
     ent = {}
@@ -15,7 +15,6 @@ class MotionCheck
     SELECT gp.data as general_pagevalue_data, ip.data as instance_pagevalue_data, ep.data as event_pagevalue_data, ipp.page_num as page_num
     FROM users u
     INNER JOIN user_project_maps upm ON u.id = upm.user_id
-    INNER JOIN projects p ON upm.project_id = p.id
     INNER JOIN user_pagevalues up ON upm.id = up.user_project_map_id
     LEFT JOIN general_pagevalue_pagings gpp ON up.id = gpp.user_pagevalue_id AND gpp.page_num IN #{pages} AND gpp.del_flg = 0
     LEFT JOIN general_pagevalues gp ON gpp.general_pagevalue_id = gp.id AND gp.del_flg = 0
@@ -26,13 +25,11 @@ class MotionCheck
     WHERE
       u.id = #{user_id}
     AND
-      p.id = #{project_id}
+      up.id = #{user_pagevalue_id}
     AND
       u.del_flg = 0
     AND
       upm.del_flg = 0
-    AND
-      p.del_flg = 0
     AND
       up.del_flg = 0
     SQL

@@ -90,7 +90,7 @@ ServerStorage = (function() {
               console.log(data.message);
             }
             if (callback != null) {
-              callback();
+              callback(data);
             }
             return window.workingAutoSave = false;
           } else {

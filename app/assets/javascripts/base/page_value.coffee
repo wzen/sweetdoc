@@ -40,6 +40,8 @@ class PageValue
       @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
       # @property [String] LAST_SAVE_TIME 最終保存時刻
       @LAST_SAVE_TIME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}last_save_time"
+      # @property [String] LAST_SAVE_TIME 最終保存時刻
+      @RUNNING_USER_PAGEVALUE_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.USER_PAGEVALUE_ID}"
       # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
       @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
       # @property [return] インスタンスページプレフィックスを取得

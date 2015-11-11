@@ -44,6 +44,8 @@ RunCommon = (function() {
 
       Key.ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN;
 
+      Key.RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID;
+
       return Key;
 
     })();
@@ -229,9 +231,9 @@ RunCommon = (function() {
     data = {};
     data[RunCommon.Key.TARGET_PAGES] = targetPages;
     data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds());
-    data[RunCommon.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     locationPaths = window.location.pathname.split('/');
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
+    data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID);
     return $.ajax({
       url: "/run/paging",
       type: "POST",

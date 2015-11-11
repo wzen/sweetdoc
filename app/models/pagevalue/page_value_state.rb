@@ -23,6 +23,7 @@ class PageValueState
       new_record)
     begin
       last_save_time = nil
+      updated_user_pagevalue_id = nil
       if g_page_values != 'null' ||
           i_page_values != 'null' ||
           e_page_values != 'null' ||
@@ -83,10 +84,10 @@ class PageValueState
         end
       end
 
-      return true, I18n.t('message.database.item_state.save.success'), last_save_time
+      return true, I18n.t('message.database.item_state.save.success'), last_save_time, updated_user_pagevalue_id
     rescue => e
       # 更新失敗
-      return false, I18n.t('message.database.item_state.save.error'), nil
+      return false, I18n.t('message.database.item_state.save.error'), nil, nil
     end
   end
 
