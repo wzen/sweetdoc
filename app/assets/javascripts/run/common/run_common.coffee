@@ -98,18 +98,23 @@ class RunCommon
   @initEventAction = ->
     # アクションのイベントを取得
     pageCount = PageValue.getPageCount()
+    pageNum = PageValue.getPageNum()
     pageList = new Array(pageCount)
     for i in [1..pageCount]
-      forkEventPageValueList = {}
-      for j in [0..PageValue.getForkCount()]
-        forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i)
-      page = null
-      if forkEventPageValueList[PageValue.Key.EF_MASTER_FORKNUM].length > 0
-        # Masterデータが存在する場合ページを作成
-        page = new Page({
-          forks: forkEventPageValueList
-        })
-      pageList[i - 1] = page
+      if i == parseInt(pageNum)
+        # 初期表示ページのみ作成。ページング時に追加作成する。
+        forkEventPageValueList = {}
+        for j in [0..PageValue.getForkCount()]
+          forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i)
+        page = null
+        if forkEventPageValueList[PageValue.Key.EF_MASTER_FORKNUM].length > 0
+          # Masterデータが存在する場合ページを作成
+          page = new Page({
+            forks: forkEventPageValueList
+          })
+        pageList[i - 1] = page
+      else
+        pageList[i - 1] = null
 
     # ナビバーのページ数 & チャプター数設定
     RunCommon.setPageMax(pageCount)
@@ -438,6 +443,8 @@ class RunCommon
       is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
       if is_reload?
         LocalStorage.loadAllPageValues()
+        # TODO: ページ1から開始(操作履歴保存処理を入れるまで)
+        PageValue.setPageNum(1)
       else
         LocalStorage.saveAllPageValues()
 

@@ -121,21 +121,26 @@ RunCommon = (function() {
   };
 
   RunCommon.initEventAction = function() {
-    var forkEventPageValueList, i, j, l, m, page, pageCount, pageList, ref, ref1;
+    var forkEventPageValueList, i, j, l, m, page, pageCount, pageList, pageNum, ref, ref1;
     pageCount = PageValue.getPageCount();
+    pageNum = PageValue.getPageNum();
     pageList = new Array(pageCount);
     for (i = l = 1, ref = pageCount; 1 <= ref ? l <= ref : l >= ref; i = 1 <= ref ? ++l : --l) {
-      forkEventPageValueList = {};
-      for (j = m = 0, ref1 = PageValue.getForkCount(); 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
-        forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i);
+      if (i === parseInt(pageNum)) {
+        forkEventPageValueList = {};
+        for (j = m = 0, ref1 = PageValue.getForkCount(); 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
+          forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i);
+        }
+        page = null;
+        if (forkEventPageValueList[PageValue.Key.EF_MASTER_FORKNUM].length > 0) {
+          page = new Page({
+            forks: forkEventPageValueList
+          });
+        }
+        pageList[i - 1] = page;
+      } else {
+        pageList[i - 1] = null;
       }
-      page = null;
-      if (forkEventPageValueList[PageValue.Key.EF_MASTER_FORKNUM].length > 0) {
-        page = new Page({
-          forks: forkEventPageValueList
-        });
-      }
-      pageList[i - 1] = page;
     }
     RunCommon.setPageMax(pageCount);
     window.eventAction = new EventAction(pageList, PageValue.getPageNum() - 1);
@@ -495,6 +500,7 @@ RunCommon = (function() {
       is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
       if (is_reload != null) {
         LocalStorage.loadAllPageValues();
+        PageValue.setPageNum(1);
       } else {
         LocalStorage.saveAllPageValues();
       }
