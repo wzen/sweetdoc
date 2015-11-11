@@ -170,3 +170,116 @@ class CanvasItemBase extends ItemBase
   # CSSボタンコントロール初期化
   setupOptionMenu: ->
     super()
+    item = @
+    cssRoot = @cssRoot
+    cssCode = @cssCode
+
+    if @constructor.actionProperties.designConfig == Constant.ItemDesignOptionType.DESIGN_TOOL
+
+      btnGradientStep = $(".design-gradient-step", @designConfigRoot)
+      btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", @designConfigRoot)
+      btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", @designConfigRoot);
+
+      # スライダー初期化
+      SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, @designConfigRoot)
+      SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-border-radius', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-border-width', 0, 10, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-font-size', 0, 30, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadow-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadow-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-shadow-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadow-top', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadowinset-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadowinset-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-shadowinset-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadowinset-top', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow1-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-text-shadow1-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow1-top', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow2-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-text-shadow2-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow2-top', -100, 100, cssCode, @designConfigRoot)
+
+      # オプションメニューを作成
+      # カラーピッカーイベント
+      btnBgColor.each( ->
+        self = $(@)
+        className = self[0].classList[0]
+        btnCodeEmt = cssCode.find("." + className).first()
+        colorValue = btnCodeEmt.text()
+        ColorPickerUtil.initColorPicker(
+          self,
+          colorValue,
+          (a, b, d) ->
+            btnCodeEmt = cssCode.find("." + className)
+            btnCodeEmt.text(b)
+            item.applyCssStyle()
+        )
+      )
+      btnShadowColor.each( ->
+        self = $(@)
+        className = self[0].classList[0]
+        btnCodeEmt = cssCode.find("." + className).first()
+        colorValue = btnCodeEmt.text()
+        ColorPickerUtil.initColorPicker(
+          self,
+          colorValue,
+          (a, b, d) ->
+            btnCodeEmt = cssCode.find("." + className)
+            btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
+            item.applyCssStyle()
+        )
+      )
+
+      # グラデーションStepイベント
+      btnGradientStep.off('keyup mouseup')
+      btnGradientStep.on('keyup mouseup', (e) ->
+        SidebarUI.changeGradientShow(e.currentTarget, cssCode, @designConfigRoot)
+        stepValue = parseInt($(e.currentTarget).val())
+        for i in [2 .. 4]
+          className = 'design-bg-color' + i
+          mozFlag = $("." + className + "-moz-flag", cssRoot)
+          mozCache = $("." + className + "-moz-cache", cssRoot)
+          webkitFlag = $("." + className + "-webkit-flag", cssRoot)
+          webkitCache = $("." + className + "-webkit-cache", cssRoot)
+          if i > stepValue - 1
+            mh = mozFlag.html()
+            if mh.length > 0
+              mozCache.html(mh)
+            wh = webkitFlag.html()
+            if wh.length > 0
+              webkitCache.html(wh)
+            $(mozFlag).empty()
+            $(webkitFlag).empty()
+          else
+            mozFlag.html(mozCache.html());
+            webkitFlag.html(webkitCache.html())
+        item.applyCssStyle()
+      ).each( ->
+        SidebarUI.changeGradientShow(@, cssCode, @designConfigRoot)
+        stepValue = parseInt($(@).val())
+        for i in [2 .. 4]
+          className = 'design-bg-color' + i
+          mozFlag = $("." + className + "-moz-flag", cssRoot)
+          mozCache = $("." + className + "-moz-cache", cssRoot)
+          webkitFlag = $("." + className + "-webkit-flag", cssRoot)
+          webkitCache = $("." + className + "-webkit-cache", cssRoot)
+          if i > stepValue - 1
+            mh = mozFlag.html()
+            if mh.length > 0
+              mozCache.html(mh)
+            wh = webkitFlag.html()
+            if wh.length > 0
+              webkitCache.html(wh)
+            $(mozFlag).empty()
+            $(webkitFlag).empty()
+        item.applyCssStyle()
+      )
+
+
+  applyDesignTool: (drawingContext) ->
+
+

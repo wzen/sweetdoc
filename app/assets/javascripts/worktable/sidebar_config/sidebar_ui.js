@@ -142,7 +142,7 @@ Sidebar = (function() {
 })();
 
 SidebarUI = (function() {
-  var _reflectStyle, constant;
+  var _applyStyle, constant;
 
   function SidebarUI() {}
 
@@ -151,7 +151,7 @@ SidebarUI = (function() {
     SidebarUI.DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME;
   }
 
-  SidebarUI.settingSlider = function(className, min, max, cssCode, cssStyle, designConfigRoot, stepValue) {
+  SidebarUI.settingSlider = function(className, min, max, cssCode, designConfigRoot, stepValue) {
     var d, defaultValue, meterElement, self, valueElement;
     if (stepValue == null) {
       stepValue = 0;
@@ -176,12 +176,12 @@ SidebarUI = (function() {
       slide: function(event, ui) {
         valueElement.val(ui.value);
         valueElement.html(ui.value);
-        return _reflectStyle.call(self, event.target);
+        return _applyStyle.call(self, event.target);
       }
     });
   };
 
-  SidebarUI.settingGradientSliderByElement = function(element, values, cssCode, cssStyle) {
+  SidebarUI.settingGradientSliderByElement = function(element, values, cssCode) {
     var handleElement, id, self;
     self = this;
     id = element.attr("id");
@@ -199,7 +199,7 @@ SidebarUI = (function() {
         index = $(ui.handle).index();
         position = $('.design-bg-color' + (index + 2) + '-position', cssCode);
         position.html(("0" + ui.value).slice(-2));
-        return _reflectStyle.call(self, event.target);
+        return _applyStyle.call(self, event.target);
       }
     });
     handleElement = element.children('.ui-slider-handle');
@@ -210,13 +210,13 @@ SidebarUI = (function() {
     }
   };
 
-  SidebarUI.settingGradientSlider = function(className, values, cssCode, cssStyle, designConfigRoot) {
+  SidebarUI.settingGradientSlider = function(className, values, cssCode, designConfigRoot) {
     var meterElement;
     meterElement = $('.' + className, designConfigRoot);
-    return this.settingGradientSliderByElement(meterElement, values, cssCode, cssStyle);
+    return this.settingGradientSliderByElement(meterElement, values, cssCode);
   };
 
-  SidebarUI.settingGradientDegSlider = function(className, min, max, cssCode, cssStyle, designConfigRoot) {
+  SidebarUI.settingGradientDegSlider = function(className, min, max, cssCode, designConfigRoot) {
     var d, defaultValue, meterElement, self, valueElement, webkitDeg, webkitValueElement;
     self = this;
     meterElement = $('.' + className, designConfigRoot);
@@ -251,12 +251,12 @@ SidebarUI = (function() {
         valueElement.val(ui.value);
         valueElement.html(ui.value);
         webkitValueElement.html(webkitDeg[ui.value]);
-        return _reflectStyle.call(self, event.target);
+        return _applyStyle.call(self, event.target);
       }
     });
   };
 
-  SidebarUI.changeGradientShow = function(targetElement, cssCode, cssStyle, cssConfig) {
+  SidebarUI.changeGradientShow = function(targetElement, cssCode, cssConfig) {
     var meterElement, value, values;
     value = parseInt(targetElement.value);
     if (value >= 2 && value <= 5) {
@@ -269,7 +269,7 @@ SidebarUI = (function() {
       } else if (value === 5) {
         values = [25, 50, 75];
       }
-      SidebarUI.settingGradientSliderByElement(meterElement, values, cssCode, cssStyle);
+      SidebarUI.settingGradientSliderByElement(meterElement, values, cssCode);
       return this.switchGradientColorSelectorVisible(value, cssConfig);
     }
   };
@@ -288,13 +288,13 @@ SidebarUI = (function() {
     return results;
   };
 
-  _reflectStyle = function(eventTarget) {
+  _applyStyle = function(eventTarget) {
     var item, objId, prefix;
     prefix = ItemBase.DESIGN_CONFIG_ROOT_ID.replace('@id', '');
     objId = $(eventTarget).closest("." + CssItemBase.DESIGN_ROOT_CLASSNAME).attr('id').replace(prefix, '');
     item = window.instanceMap[objId];
     if ((item != null) && item instanceof CssItemBase) {
-      return item.reflectCssStyle();
+      return item.applyCssStyle();
     }
   };
 

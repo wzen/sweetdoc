@@ -123,10 +123,9 @@ class SidebarUI
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Object] cssCode コードエレメント
-  # @param [Object] cssStyle CSSプレビューのエレメント
   # @param [Object] designConfigRoot デザインコンフィグRoot
   # @param [Int] stepValue 進捗数
-  @settingSlider = (className, min, max, cssCode, cssStyle, designConfigRoot, stepValue = 0) ->
+  @settingSlider = (className, min, max, cssCode, designConfigRoot, stepValue = 0) ->
     self = @
 
     meterElement = $('.' + className, designConfigRoot)
@@ -146,15 +145,14 @@ class SidebarUI
       slide: (event, ui)->
         valueElement.val(ui.value)
         valueElement.html(ui.value)
-        _reflectStyle.call(self, event.target)
+        _applyStyle.call(self, event.target)
     })
 
   # HTML要素からグラデーションスライダーの作成
   # @param [Object] element HTML要素
   # @param [Array] values 値の配列
   # @param [Object] cssCode コードエレメント
-  # @param [Object] cssStyle CSSプレビューのエレメント
-  @settingGradientSliderByElement = (element, values, cssCode, cssStyle) ->
+  @settingGradientSliderByElement = (element, values, cssCode) ->
     self = @
 
     id = element.attr("id")
@@ -170,7 +168,7 @@ class SidebarUI
         index = $(ui.handle).index()
         position = $('.design-bg-color' + (index + 2) + '-position', cssCode)
         position.html(("0" + ui.value).slice(-2))
-        _reflectStyle.call(self, event.target)
+        _applyStyle.call(self, event.target)
     })
 
     handleElement = element.children('.ui-slider-handle')
@@ -183,11 +181,10 @@ class SidebarUI
   # @param [Int] id HTML要素のID
   # @param [Array] values 値の配列
   # @param [Object] cssCode コードエレメント
-  # @param [Object] cssStyle CSSプレビューのエレメント
   # @param [Object] designConfigRoot デザインコンフィグRoot
-  @settingGradientSlider = (className, values, cssCode, cssStyle, designConfigRoot) ->
+  @settingGradientSlider = (className, values, cssCode, designConfigRoot) ->
     meterElement = $('.' + className, designConfigRoot)
-    @settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
+    @settingGradientSliderByElement(meterElement, values, cssCode)
 
 
   # グラデーション方向スライダーの作成
@@ -195,9 +192,8 @@ class SidebarUI
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Object] cssCode コードエレメント
-  # @param [Object] cssStyle CSSプレビューのエレメント
   # @param [Object] designConfigRoot デザインコンフィグRoot
-  @settingGradientDegSlider = (className, min, max, cssCode, cssStyle, designConfigRoot) ->
+  @settingGradientDegSlider = (className, min, max, cssCode, designConfigRoot) ->
     self = @
 
     meterElement = $('.' + className, designConfigRoot)
@@ -223,15 +219,14 @@ class SidebarUI
         valueElement.val(ui.value)
         valueElement.html(ui.value)
         webkitValueElement.html(webkitDeg[ui.value])
-        _reflectStyle.call(self, event.target)
+        _applyStyle.call(self, event.target)
     })
 
   # グラデーションの表示変更(スライダーのハンドル&カラーピッカー)
   # @param [Object] element HTML要素
   # @param [Object] cssCode コードエレメント
-  # @param [Object] cssStyle CSSプレビューのエレメント
   # @param [Object] cssConfig CSSコンフィグRoot
-  @changeGradientShow = (targetElement, cssCode, cssStyle, cssConfig) ->
+  @changeGradientShow = (targetElement, cssCode, cssConfig) ->
     value = parseInt(targetElement.value)
     if value >= 2 && value <= 5
       meterElement = $(targetElement).siblings('.ui-slider:first')
@@ -243,7 +238,7 @@ class SidebarUI
       else if value == 5
         values = [25, 50, 75]
 
-      SidebarUI.settingGradientSliderByElement(meterElement, values, cssCode, cssStyle)
+      SidebarUI.settingGradientSliderByElement(meterElement, values, cssCode)
       @switchGradientColorSelectorVisible(value, cssConfig)
 
   # グラデーションのカラーピッカー表示切り替え
@@ -257,9 +252,9 @@ class SidebarUI
       else
         element.show()
 
-  _reflectStyle = (eventTarget) ->
+  _applyStyle = (eventTarget) ->
     prefix = ItemBase.DESIGN_CONFIG_ROOT_ID.replace('@id', '')
     objId = $(eventTarget).closest(".#{CssItemBase.DESIGN_ROOT_CLASSNAME}").attr('id').replace(prefix, '')
     item = window.instanceMap[objId]
     if item? && item instanceof CssItemBase
-      item.reflectCssStyle()
+      item.applyCssStyle()

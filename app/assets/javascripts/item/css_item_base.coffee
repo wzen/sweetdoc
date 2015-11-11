@@ -174,7 +174,7 @@ class CssItemBase extends ItemBase
     @cssCode = $(".css-code", @cssRoot)
     @cssStyle = $(".css-style", @cssRoot)
 
-    @reflectCssStyle(false)
+    @applyCssStyle(false)
 
   # CSS内容
   # @abstract
@@ -192,7 +192,7 @@ class CssItemBase extends ItemBase
       window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
 
   # CSSのスタイルを反映
-  reflectCssStyle: (doStyleSave = true) ->
+  applyCssStyle: (doStyleSave = true) ->
     @cssStyle.text(@cssCode.text())
     if @cssRoot?
       @css = @cssRoot[0].outerHTML
@@ -224,11 +224,8 @@ class CssItemBase extends ItemBase
   setupOptionMenu: ->
     super()
     item = @
-
     cssRoot = @cssRoot
-    cssCache = @cssCache
     cssCode = @cssCode
-    cssStyle = @cssStyle
 
     if @constructor.actionProperties.designConfig == Constant.ItemDesignOptionType.DESIGN_TOOL
 
@@ -237,27 +234,27 @@ class CssItemBase extends ItemBase
       btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", @designConfigRoot);
 
       # スライダー初期化
-      SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-border-radius', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-border-width', 0, 10, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-font-size', 0, 30, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-shadow-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-shadow-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design-slider-shadow-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-shadow-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-shadowinset-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-shadowinset-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design-slider-shadowinset-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-shadowinset-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-text-shadow1-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design-slider-text-shadow1-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-text-shadow1-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-text-shadow2-left', -100, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, cssStyle, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design-slider-text-shadow2-size', 0, 100, cssCode, cssStyle, @designConfigRoot)
-      SidebarUI.settingSlider('design-slider-text-shadow2-top', -100, 100, cssCode, cssStyle, @designConfigRoot)
+      SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, @designConfigRoot)
+      SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-border-radius', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-border-width', 0, 10, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-font-size', 0, 30, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadow-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadow-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-shadow-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadow-top', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadowinset-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadowinset-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-shadowinset-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-shadowinset-top', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow1-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-text-shadow1-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow1-top', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow2-left', -100, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
+      SidebarUI.settingSlider('design-slider-text-shadow2-size', 0, 100, cssCode, @designConfigRoot)
+      SidebarUI.settingSlider('design-slider-text-shadow2-top', -100, 100, cssCode, @designConfigRoot)
 
       # オプションメニューを作成
       # カラーピッカーイベント
@@ -272,7 +269,7 @@ class CssItemBase extends ItemBase
           (a, b, d) ->
             btnCodeEmt = cssCode.find("." + className)
             btnCodeEmt.text(b)
-            item.reflectCssStyle()
+            item.applyCssStyle()
         )
       )
       btnShadowColor.each( ->
@@ -286,14 +283,14 @@ class CssItemBase extends ItemBase
           (a, b, d) ->
             btnCodeEmt = cssCode.find("." + className)
             btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
-            item.reflectCssStyle()
+            item.applyCssStyle()
         )
       )
 
       # グラデーションStepイベント
       btnGradientStep.off('keyup mouseup')
       btnGradientStep.on('keyup mouseup', (e) ->
-        SidebarUI.changeGradientShow(e.currentTarget, cssCode, cssStyle, @designConfigRoot)
+        SidebarUI.changeGradientShow(e.currentTarget, cssCode, @designConfigRoot)
         stepValue = parseInt($(e.currentTarget).val())
         for i in [2 .. 4]
           className = 'design-bg-color' + i
@@ -313,9 +310,9 @@ class CssItemBase extends ItemBase
           else
             mozFlag.html(mozCache.html());
             webkitFlag.html(webkitCache.html())
-        item.reflectCssStyle()
+        item.applyCssStyle()
       ).each( ->
-        SidebarUI.changeGradientShow(@, cssCode, cssStyle, @designConfigRoot)
+        SidebarUI.changeGradientShow(@, cssCode, @designConfigRoot)
         stepValue = parseInt($(@).val())
         for i in [2 .. 4]
           className = 'design-bg-color' + i
@@ -332,6 +329,6 @@ class CssItemBase extends ItemBase
               webkitCache.html(wh)
             $(mozFlag).empty()
             $(webkitFlag).empty()
-        item.reflectCssStyle()
+        item.applyCssStyle()
       )
 
