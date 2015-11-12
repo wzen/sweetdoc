@@ -195,30 +195,30 @@ CanvasItemBase = (function(superClass) {
     cssRoot = this.cssRoot;
     cssCode = this.cssCode;
     if (this.constructor.actionProperties.designConfig === Constant.ItemDesignOptionType.DESIGN_TOOL) {
-      btnGradientStep = $(".design-gradient-step", this.designConfigRoot);
-      btnBgColor = $(".design-bg-color1,.design-bg-color2,.design-bg-color3,.design-bg-color4,.design-bg-color5,.design-border-color,.design-font-color", this.designConfigRoot);
-      btnShadowColor = $(".design-shadow-color,.design-shadowinset-color,.design-text-shadow1-color,.design-text-shadow2-color", this.designConfigRoot);
-      SidebarUI.settingGradientSlider('design-slider-gradient', null, cssCode, this.designConfigRoot);
-      SidebarUI.settingGradientDegSlider('design-slider-gradient-deg', 0, 315, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-border-radius', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-border-width', 0, 10, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-font-size', 0, 30, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-shadow-left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-shadow-opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design-slider-shadow-size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-shadow-top', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-shadowinset-left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-shadowinset-opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design-slider-shadowinset-size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-shadowinset-top', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-text-shadow1-left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-text-shadow1-opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design-slider-text-shadow1-size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-text-shadow1-top', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-text-shadow2-left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-text-shadow2-opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design-slider-text-shadow2-size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design-slider-text-shadow2-top', -100, 100, cssCode, this.designConfigRoot);
+      btnGradientStep = $(".design_gradient_step", this.designConfigRoot);
+      btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", this.designConfigRoot);
+      btnShadowColor = $(".design_shadow_color,.design_shadowinset_color,.design_text_shadow1_color,.design_text_shadow2_color", this.designConfigRoot);
+      SidebarUI.settingGradientSlider('design_slider_gradient', null, cssCode, this.designConfigRoot);
+      SidebarUI.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_border_radius', 0, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_border_width', 0, 10, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_font_size', 0, 30, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_shadow_left', -100, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_shadow_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
+      SidebarUI.settingSlider('design_slider_shadow_size', 0, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_shadow_top', -100, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_shadowinset_left', -100, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_shadowinset_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
+      SidebarUI.settingSlider('design_slider_shadowinset_size', 0, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_shadowinset_top', -100, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_text_shadow1_left', -100, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
+      SidebarUI.settingSlider('design_slider_text_shadow1_size', 0, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_text_shadow1_top', -100, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_text_shadow2_left', -100, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
+      SidebarUI.settingSlider('design_slider_text_shadow2_size', 0, 100, cssCode, this.designConfigRoot);
+      SidebarUI.settingSlider('design_slider_text_shadow2_top', -100, 100, cssCode, this.designConfigRoot);
       btnBgColor.each(function() {
         var btnCodeEmt, className, colorValue, self;
         self = $(this);
@@ -249,11 +249,11 @@ CanvasItemBase = (function(superClass) {
         SidebarUI.changeGradientShow(e.currentTarget, cssCode, this.designConfigRoot);
         stepValue = parseInt($(e.currentTarget).val());
         for (i = j = 2; j <= 4; i = ++j) {
-          className = 'design-bg-color' + i;
-          mozFlag = $("." + className + "-moz-flag", cssRoot);
-          mozCache = $("." + className + "-moz-cache", cssRoot);
-          webkitFlag = $("." + className + "-webkit-flag", cssRoot);
-          webkitCache = $("." + className + "-webkit-cache", cssRoot);
+          className = 'design_bg_color' + i;
+          mozFlag = $("." + className + "_moz_flag", cssRoot);
+          mozCache = $("." + className + "_moz_cache", cssRoot);
+          webkitFlag = $("." + className + "_webkit_flag", cssRoot);
+          webkitCache = $("." + className + "_webkit_cache", cssRoot);
           if (i > stepValue - 1) {
             mh = mozFlag.html();
             if (mh.length > 0) {
@@ -276,11 +276,11 @@ CanvasItemBase = (function(superClass) {
         SidebarUI.changeGradientShow(this, cssCode, this.designConfigRoot);
         stepValue = parseInt($(this).val());
         for (i = j = 2; j <= 4; i = ++j) {
-          className = 'design-bg-color' + i;
-          mozFlag = $("." + className + "-moz-flag", cssRoot);
-          mozCache = $("." + className + "-moz-cache", cssRoot);
-          webkitFlag = $("." + className + "-webkit-flag", cssRoot);
-          webkitCache = $("." + className + "-webkit-cache", cssRoot);
+          className = 'design_bg_color' + i;
+          mozFlag = $("." + className + "_moz_flag", cssRoot);
+          mozCache = $("." + className + "_moz_cache", cssRoot);
+          webkitFlag = $("." + className + "_webkit_flag", cssRoot);
+          webkitCache = $("." + className + "_webkit_cache", cssRoot);
           if (i > stepValue - 1) {
             mh = mozFlag.html();
             if (mh.length > 0) {

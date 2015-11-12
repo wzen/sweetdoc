@@ -152,15 +152,15 @@ SidebarUI = (function() {
   }
 
   SidebarUI.settingSlider = function(className, min, max, cssCode, designConfigRoot, stepValue) {
-    var d, defaultValue, meterElement, self, valueElement;
+    var cssCodeElement, defaultValue, meterElement, self, valueElement;
     if (stepValue == null) {
       stepValue = 0;
     }
     self = this;
     meterElement = $('.' + className, designConfigRoot);
-    valueElement = $('.' + className + '-value', designConfigRoot);
-    d = $('.' + className + '-value', cssCode)[0];
-    defaultValue = $(d).html();
+    valueElement = $('.' + className + '_value', designConfigRoot);
+    cssCodeElement = $('.' + className + '_value', cssCode);
+    defaultValue = cssCodeElement.html();
     valueElement.val(defaultValue);
     valueElement.html(defaultValue);
     try {
@@ -174,8 +174,11 @@ SidebarUI = (function() {
       step: stepValue,
       value: defaultValue,
       slide: function(event, ui) {
-        valueElement.val(ui.value);
-        valueElement.html(ui.value);
+        var value;
+        value = ui.value;
+        valueElement.val(value);
+        valueElement.html(value);
+        cssCodeElement.html(value);
         return _applyStyle.call(self, event.target);
       }
     });
@@ -197,7 +200,7 @@ SidebarUI = (function() {
       slide: function(event, ui) {
         var index, position;
         index = $(ui.handle).index();
-        position = $('.design-bg-color' + (index + 2) + '-position', cssCode);
+        position = $('.design_bg_color' + (index + 2) + '_position', cssCode);
         position.html(("0" + ui.value).slice(-2));
         return _applyStyle.call(self, event.target);
       }
@@ -220,9 +223,9 @@ SidebarUI = (function() {
     var d, defaultValue, meterElement, self, valueElement, webkitDeg, webkitValueElement;
     self = this;
     meterElement = $('.' + className, designConfigRoot);
-    valueElement = $('.' + className + '-value', cssCode);
-    webkitValueElement = $('.' + className + '-value-webkit', cssCode);
-    d = $('.' + className + '-value', cssCode)[0];
+    valueElement = $('.' + className + '_value', cssCode);
+    webkitValueElement = $('.' + className + '_value_webkit', cssCode);
+    d = $('.' + className + '_value', cssCode)[0];
     defaultValue = $(d).html();
     webkitDeg = {
       0: 'left top, left bottom',
@@ -278,7 +281,7 @@ SidebarUI = (function() {
     var element, i, j, results;
     results = [];
     for (i = j = 2; j <= 4; i = ++j) {
-      element = $('.design-bg-color' + i, cssConfig);
+      element = $('.design_bg_color' + i, cssConfig);
       if (i > gradientStepValue - 1) {
         results.push(element.hide());
       } else {

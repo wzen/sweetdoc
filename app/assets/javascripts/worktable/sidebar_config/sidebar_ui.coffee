@@ -129,9 +129,9 @@ class SidebarUI
     self = @
 
     meterElement = $('.' + className, designConfigRoot)
-    valueElement = $('.' + className + '-value', designConfigRoot)
-    d = $('.' + className + '-value', cssCode)[0]
-    defaultValue = $(d).html()
+    valueElement = $('.' + className + '_value', designConfigRoot)
+    cssCodeElement = $('.' + className + '_value', cssCode)
+    defaultValue = cssCodeElement.html()
     valueElement.val(defaultValue)
     valueElement.html(defaultValue)
     try
@@ -143,8 +143,10 @@ class SidebarUI
       step: stepValue,
       value: defaultValue
       slide: (event, ui)->
-        valueElement.val(ui.value)
-        valueElement.html(ui.value)
+        value = ui.value
+        valueElement.val(value)
+        valueElement.html(value)
+        cssCodeElement.html(value)
         _applyStyle.call(self, event.target)
     })
 
@@ -166,7 +168,7 @@ class SidebarUI
       values: values
       slide: (event, ui) ->
         index = $(ui.handle).index()
-        position = $('.design-bg-color' + (index + 2) + '-position', cssCode)
+        position = $('.design_bg_color' + (index + 2) + '_position', cssCode)
         position.html(("0" + ui.value).slice(-2))
         _applyStyle.call(self, event.target)
     })
@@ -197,9 +199,9 @@ class SidebarUI
     self = @
 
     meterElement = $('.' + className, designConfigRoot)
-    valueElement = $('.' + className + '-value', cssCode)
-    webkitValueElement = $('.' + className + '-value-webkit', cssCode)
-    d = $('.' + className + '-value', cssCode)[0]
+    valueElement = $('.' + className + '_value', cssCode)
+    webkitValueElement = $('.' + className + '_value_webkit', cssCode)
+    d = $('.' + className + '_value', cssCode)[0]
     defaultValue = $(d).html()
     webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
 
@@ -246,7 +248,7 @@ class SidebarUI
   # @param [Object] cssConfig CSSコンフィグRoot
   @switchGradientColorSelectorVisible = (gradientStepValue, cssConfig) ->
     for i in [2 .. 4]
-      element = $('.design-bg-color' + i, cssConfig)
+      element = $('.design_bg_color' + i, cssConfig)
       if i > gradientStepValue - 1
         element.hide()
       else
