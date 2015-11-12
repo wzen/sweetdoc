@@ -8,7 +8,9 @@ CssItemBase = (function(superClass) {
 
   extend(CssItemBase, superClass);
 
-  CssItemBase.CSSTEMPID = '';
+  if (window.loadedItemId != null) {
+    CssItemBase.ITEM_ID = window.loadedItemId;
+  }
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
@@ -37,14 +39,7 @@ CssItemBase = (function(superClass) {
     }
   }
 
-  CssItemBase.jsLoaded = function(option) {
-    var css_temp, tempEmt;
-    css_temp = option.css_temp;
-    if (css_temp != null) {
-      tempEmt = "<div id='" + this.CSSTEMPID + "'>" + css_temp + "</div>";
-      return window.cssCodeInfoTemp.append(tempEmt);
-    }
-  };
+  CssItemBase.jsLoaded = function(option) {};
 
   CssItemBase.prototype.reDraw = function(show) {
     if (show == null) {
@@ -173,19 +168,28 @@ CssItemBase = (function(superClass) {
   };
 
   CssItemBase.prototype.makeCss = function(fromTemp) {
-    var newEmt;
+    var k, ref, temp, v;
     if (fromTemp == null) {
       fromTemp = false;
     }
-    newEmt = null;
     $("" + (this.getCssRootElementId())).remove();
     if (!fromTemp && (this.css != null)) {
-      newEmt = $(this.css);
+      temp = $(this.css);
+      temp.appendTo(window.cssCodeInfoTemp);
     } else {
-      newEmt = $('#' + this.constructor.CSSTEMPID).clone(true).attr('id', this.getCssRootElementId());
-      newEmt.find('.design_item_id').html(this.id);
+      temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
+      temp.attr('id', this.getCssRootElementId());
+      if (this.constructor.actionProperties.designConfigDefaultValues != null) {
+        ref = this.constructor.actionProperties.designConfigDefaultValues;
+        for (k in ref) {
+          v = ref[k];
+          console.log("k: " + k + "  v: " + v);
+          temp.find("." + k).html("" + v);
+        }
+      }
+      temp.find('.design_item_id').html(this.id);
+      temp.appendTo(window.cssCodeInfoTemp);
     }
-    window.cssCodeInfo.append(newEmt);
     this.cssRoot = $('#' + this.getCssRootElementId());
     this.cssCache = $(".css_cache", this.cssRoot);
     this.cssCode = $(".css_code", this.cssRoot);

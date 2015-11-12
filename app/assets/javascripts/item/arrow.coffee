@@ -4,6 +4,7 @@ class ArrowItem extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Arrow"
 
+  # ↓必須
   if window.loadedItemId?
     # @property [String] ITEM_ID アイテム種別
     @ITEM_ID = window.loadedItemId
@@ -404,7 +405,8 @@ class ArrowItem extends CanvasItemBase
     drawingContext.beginPath();
     # 尾と体の座標をCanvasに描画
     _drawCoodToNewCanvas.call(@)
-    drawingContext.fillStyle = "#00008B"
+    #drawingContext.fillStyle = "#00008B"
+    @applyDesignTool(drawingContext)
     drawingContext.fill()
 
   # 座標のログを表示
@@ -455,9 +457,10 @@ class ArrowItem extends CanvasItemBase
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ID]?
+  console.log('arrow loaded')
   window.itemInitFuncList[ArrowItem.ITEM_ID] = (option = {}) ->
     if window.isWorkTable && ArrowItem.jsLoaded?
       ArrowItem.jsLoaded(option)
     #JS読み込み完了後の処理
     if window.debug
-      console.log('arrow loaded')
+      console.log('arrow init Finish')

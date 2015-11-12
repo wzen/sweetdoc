@@ -3,8 +3,9 @@
 # @extend ItemBase
 class CssItemBase extends ItemBase
 
-  # @property [String] CSSTEMPID CSSテンプレートID
-  @CSSTEMPID = ''
+  if window.loadedItemId?
+    # @property [String] ITEM_ID アイテム種別
+    @ITEM_ID = window.loadedItemId
 
   if gon?
     constant = gon.const
@@ -30,11 +31,6 @@ class CssItemBase extends ItemBase
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
     # ワークテーブルの初期化処理
-    css_temp = option.css_temp
-    if css_temp?
-      # CSSテンプレートを設置
-      tempEmt = "<div id='#{@CSSTEMPID}'>#{css_temp}</div>"
-      window.cssCodeInfoTemp.append(tempEmt)
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -156,19 +152,25 @@ class CssItemBase extends ItemBase
 
   #CSSを設定
   makeCss: (fromTemp = false) ->
-    newEmt = null
 
     # 存在する場合消去して上書き
     $("#{@getCssRootElementId()}").remove()
 
     if !fromTemp && @css?
-      # 設定済みのCSSプロパティから作成
-      newEmt = $(@css)
+      temp = $(@css)
+      temp.appendTo(window.cssCodeInfoTemp)
     else
-      # CSSテンプレートから作成
-      newEmt = $('#' + @constructor.CSSTEMPID).clone(true).attr('id', @getCssRootElementId())
-      newEmt.find('.design_item_id').html(@id)
-    window.cssCodeInfo.append(newEmt)
+      # CSSを作成
+      temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
+      temp.attr('id', @getCssRootElementId())
+      if @constructor.actionProperties.designConfigDefaultValues?
+        # 初期化
+        for k,v of @constructor.actionProperties.designConfigDefaultValues
+          console.log("k: #{k}  v: #{v}")
+          temp.find(".#{k}").html("#{v}")
+      temp.find('.design_item_id').html(@id)
+      temp.appendTo(window.cssCodeInfoTemp)
+
     @cssRoot = $('#' + @getCssRootElementId())
     @cssCache = $(".css_cache", @cssRoot)
     @cssCode = $(".css_code", @cssRoot)

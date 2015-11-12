@@ -401,7 +401,7 @@ ArrowItem = (function(superClass) {
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.beginPath();
     _drawCoodToNewCanvas.call(this);
-    drawingContext.fillStyle = "#00008B";
+    this.applyDesignTool(drawingContext);
     return drawingContext.fill();
   };
 
@@ -461,6 +461,7 @@ ArrowItem = (function(superClass) {
 Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ArrowItem.ITEM_ID] == null)) {
+  console.log('arrow loaded');
   window.itemInitFuncList[ArrowItem.ITEM_ID] = function(option) {
     if (option == null) {
       option = {};
@@ -469,7 +470,7 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ArrowItem.ITEM
       ArrowItem.jsLoaded(option);
     }
     if (window.debug) {
-      return console.log('arrow loaded');
+      return console.log('arrow init Finish');
     }
   };
 }

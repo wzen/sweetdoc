@@ -656,10 +656,8 @@ class Common
           if data.resultSuccess
             callbackCount = 0
             dataIdx = 0
-
             _cb = (d) ->
-              if d.css_temp?
-                option = {css_temp: d.css_temp}
+              option = {}
               Common.availJs(d.item_id, d.js_src, option, =>
                 PageValue.addItemInfo(d.item_id)
                 if window.isWorkTable && EventConfig?
@@ -714,7 +712,7 @@ class Common
         window.loadedItemId = null
         if callback?
           callback()
-    , '500')
+    , 500)
 
   # CanvasをBlobに変換
   @canvasToBlob = (canvas) ->
@@ -759,9 +757,7 @@ class Common
           _func.call()
         return
 
-      if d.css_temp?
-        option = {css_temp: d.css_temp}
-
+      option = {}
       Common.availJs(itemId, d.js_src, option, ->
         _addItem.call(@, itemId)
         loadedIndex += 1

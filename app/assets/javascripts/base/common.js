@@ -771,11 +771,7 @@ Common = (function() {
           dataIdx = 0;
           _cb = function(d) {
             var option;
-            if (d.css_temp != null) {
-              option = {
-                css_temp: d.css_temp
-              };
-            }
+            option = {};
             return Common.availJs(d.item_id, d.js_src, option, (function(_this) {
               return function() {
                 PageValue.addItemInfo(d.item_id);
@@ -852,7 +848,7 @@ Common = (function() {
           return callback();
         }
       }
-    }, '500');
+    }, 500);
   };
 
   Common.canvasToBlob = function(canvas) {
@@ -909,11 +905,7 @@ Common = (function() {
         }
         return;
       }
-      if (d.css_temp != null) {
-        option = {
-          css_temp: d.css_temp
-        };
-      }
+      option = {};
       return Common.availJs(itemId, d.js_src, option, function() {
         _addItem.call(this, itemId);
         loadedIndex += 1;

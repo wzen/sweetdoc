@@ -14,8 +14,7 @@ class ItemJs
       ret <<
           {
               item_id: item.id,
-              js_src: self.js_path(item.src_name),
-              css_temp: item.css_temp,
+              js_src: self.js_path(item.src_name)
           }
     end
 
