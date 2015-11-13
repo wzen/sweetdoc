@@ -27,13 +27,16 @@ class ButtonItem extends CssItemBase
         design_bg_color4: 'fc46e1'
         design_bg_color4_position: 75
         design_bg_color5: 'fc46e1'
+        design_border_color: 'ffffff'
         design_slider_gradient_deg_value_webkit: 'left top, left bottom'
         design_slider_border_radius_value: 30
         design_slider_border_width_value: 3
+        design_slider_shadow_left_value: 0
         design_slider_shadow_top_value: 3
         design_slider_shadow_size_value: 11
         design_shadow_color: '000,000,000'
         design_slider_shadow_opacity_value: 0.5
+        design_slider_shadowinset_left_value: 0
         design_slider_shadowinset_top_value: 0
         design_slider_shadowinset_size_value: 1
         design_shadowinset_color: '255,000,217'

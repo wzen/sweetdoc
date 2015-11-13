@@ -8,10 +8,10 @@ class ColorPickerUtil
     element.css("backgroundColor", "#" + colorValue)
     element.ColorPicker({})
     element.ColorPickerSetColor(colorValue)
-    element.ColorPickerResetOnChange( (a, b, d) ->
+    element.ColorPickerResetOnChange( (a, b, d, e) ->
       element.css("backgroundColor", "#" + b)
       if onChange?
-        onChange(a, b, d)
+        onChange(a, b, d, e)
     )
     element.unbind()
     element.mousedown( (e) ->

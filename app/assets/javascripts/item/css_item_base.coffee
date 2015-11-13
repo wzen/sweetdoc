@@ -22,7 +22,6 @@ class CssItemBase extends ItemBase
     @cssStyle = null
     if cood != null
       @moveLoc = {x:cood.x, y:cood.y}
-    @css = null
     @cssStypeReflectTimer = null
     if window.isWorkTable
       @constructor.include WorkTableCssItemExtend
@@ -57,10 +56,6 @@ class CssItemBase extends ItemBase
       itemId: @constructor.ITEM_ID
       mousedownCood: Common.makeClone(@mousedownCood)
     }
-    if !@cssRoot?
-      @cssRoot = $('#' + @getCssRootElementId())
-    if @cssRoot? && @cssRoot.length > 0
-      newobj['css'] = @cssRoot[0].outerHTML
     $.extend(obj, newobj)
     return obj
 
@@ -69,7 +64,6 @@ class CssItemBase extends ItemBase
   setMiniumObject: (obj) ->
     super(obj)
     @mousedownCood = Common.makeClone(obj.mousedownCood)
-    @css = Common.makeClone(obj.css)
 
   # イベント適用前のオブジェクト状態を取得
   stateEventBefore: (isForward) ->
@@ -135,11 +129,6 @@ class CssItemBase extends ItemBase
     capturedEventBeforeObject = @getCapturedEventBeforeObject()
     return capturedEventBeforeObject.itemSize
 
-  # CSS内のオブジェクトIDを自身のものに変更
-  changeCssId: (oldObjId) ->
-    reg = new RegExp(oldObjId, 'g')
-    @css = @css.replace(reg, @id)
-
   # CSSのルートのIDを取得
   # @return [String] CSSルートID
   getCssRootElementId: ->
@@ -152,53 +141,36 @@ class CssItemBase extends ItemBase
 
   #CSSを設定
   makeCss: (fromTemp = false) ->
-
-    # 存在する場合消去して上書き
+    # 上書きするため一旦削除
     $("#{@getCssRootElementId()}").remove()
 
-    if !fromTemp && @css?
-      temp = $(@css)
-      temp.appendTo(window.cssCodeInfoTemp)
+    temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
+    temp.attr('id', @getCssRootElementId())
+
+    if !fromTemp && @design?
+      # 保存しているデザインで初期化
+      for k,v of @design
+        #console.log("k: #{k}  v: #{v}")
+        temp.find(".#{k}").html("#{v}")
     else
-      # CSSを作成
-      temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
-      temp.attr('id', @getCssRootElementId())
       if @constructor.actionProperties.designConfigDefaultValues?
-        # 初期化
+        # デフォルトのデザインで初期化
         for k,v of @constructor.actionProperties.designConfigDefaultValues
-          console.log("k: #{k}  v: #{v}")
+          #console.log("k: #{k}  v: #{v}")
           temp.find(".#{k}").html("#{v}")
-      temp.find('.design_item_id').html(@id)
-      temp.appendTo(window.cssCodeInfoTemp)
+    temp.find('.design_item_id').html(@id)
+    temp.appendTo(window.cssCode)
 
     @cssRoot = $('#' + @getCssRootElementId())
     @cssCache = $(".css_cache", @cssRoot)
     @cssCode = $(".css_code", @cssRoot)
     @cssStyle = $(".css_style", @cssRoot)
 
-    @applyCssStyle(false)
+    @applyDesignChange(false)
 
-  # CSS内容
-  # @abstract
-  cssAnimationElement: ->
-    return null
-
-  # アニメーションCSS追加処理
-  appendAnimationCssIfNeeded : ->
-    ce = @cssAnimationElement()
-    if ce?
-      methodName = @getEventMethodName()
-      # CSSが存在する場合は削除して入れ替え
-      @removeCss()
-      funcName = "#{methodName}_#{@id}"
-      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
-
-  # CSSのスタイルを反映
-  applyCssStyle: (doStyleSave = true) ->
+  # CSSに反映
+  applyDesignChange: (doStyleSave) ->
     @cssStyle.text(@cssCode.text())
-    if @cssRoot?
-      @css = @cssRoot[0].outerHTML
-
     if doStyleSave
       # 頻繁に呼ばれるためタイマーでPageValueに書き込む
       if @cssStypeReflectTimer?
@@ -216,121 +188,23 @@ class CssItemBase extends ItemBase
         , 1000)
       , 500)
 
-  # CSS削除処理
-  removeCss: ->
+  # CSS内容
+  # @abstract
+  cssAnimationElement: ->
+    return null
+
+  # アニメーションCSS追加処理
+  appendAnimationCssIfNeeded : ->
+    ce = @cssAnimationElement()
+    if ce?
+      methodName = @getEventMethodName()
+      # CSSが存在する場合は削除して入れ替え
+      @removeAnimationCss()
+      funcName = "#{methodName}_#{@id}"
+      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
+
+  # アニメーションCSS削除処理
+  removeAnimationCss: ->
     methodName = @getEventMethodName()
     funcName = "#{methodName}_#{@id}"
     window.cssCode.find(".#{funcName}").remove()
-
-  # CSSボタンコントロール初期化
-  setupOptionMenu: ->
-    super()
-    item = @
-    cssRoot = @cssRoot
-    cssCode = @cssCode
-
-    if @constructor.actionProperties.designConfig == Constant.ItemDesignOptionType.DESIGN_TOOL
-
-      btnGradientStep = $(".design_gradient_step", @designConfigRoot)
-      btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", @designConfigRoot)
-      btnShadowColor = $(".design_shadow_color,.design_shadowinset_color,.design_text_shadow1_color,.design_text_shadow2_color", @designConfigRoot);
-
-      # スライダー初期化
-      SidebarUI.settingGradientSlider('design_slider_gradient', null, cssCode, @designConfigRoot)
-      SidebarUI.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_border_radius', 0, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_border_width', 0, 10, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_font_size', 0, 30, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_shadow_left', -100, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_shadow_opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design_slider_shadow_size', 0, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_shadow_top', -100, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_shadowinset_left', -100, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_shadowinset_opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design_slider_shadowinset_size', 0, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_shadowinset_top', -100, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_text_shadow1_left', -100, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design_slider_text_shadow1_size', 0, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_text_shadow1_top', -100, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_text_shadow2_left', -100, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, cssCode, @designConfigRoot, 0.1)
-      SidebarUI.settingSlider('design_slider_text_shadow2_size', 0, 100, cssCode, @designConfigRoot)
-      SidebarUI.settingSlider('design_slider_text_shadow2_top', -100, 100, cssCode, @designConfigRoot)
-
-      # オプションメニューを作成
-      # カラーピッカーイベント
-      btnBgColor.each( ->
-        self = $(@)
-        className = self[0].classList[0]
-        btnCodeEmt = cssCode.find("." + className).first()
-        colorValue = btnCodeEmt.text()
-        ColorPickerUtil.initColorPicker(
-          self,
-          colorValue,
-          (a, b, d) ->
-            btnCodeEmt = cssCode.find("." + className)
-            btnCodeEmt.text(b)
-            item.applyCssStyle()
-        )
-      )
-      btnShadowColor.each( ->
-        self = $(@)
-        className = self[0].classList[0]
-        btnCodeEmt = cssCode.find("." + className).first()
-        colorValue = btnCodeEmt.text()
-        ColorPickerUtil.initColorPicker(
-          self,
-          colorValue,
-          (a, b, d) ->
-            btnCodeEmt = cssCode.find("." + className)
-            btnCodeEmt.text(d.r + "," + d.g + "," + d.b)
-            item.applyCssStyle()
-        )
-      )
-
-      # グラデーションStepイベント
-      btnGradientStep.off('keyup mouseup')
-      btnGradientStep.on('keyup mouseup', (e) ->
-        SidebarUI.changeGradientShow(e.currentTarget, cssCode, @designConfigRoot)
-        stepValue = parseInt($(e.currentTarget).val())
-        for i in [2 .. 4]
-          className = 'design_bg_color' + i
-          mozFlag = $("." + className + "_moz_flag", cssRoot)
-          mozCache = $("." + className + "_moz_cache", cssRoot)
-          webkitFlag = $("." + className + "_webkit_flag", cssRoot)
-          webkitCache = $("." + className + "_webkit_cache", cssRoot)
-          if i > stepValue - 1
-            mh = mozFlag.html()
-            if mh.length > 0
-              mozCache.html(mh)
-            wh = webkitFlag.html()
-            if wh.length > 0
-              webkitCache.html(wh)
-            $(mozFlag).empty()
-            $(webkitFlag).empty()
-          else
-            mozFlag.html(mozCache.html());
-            webkitFlag.html(webkitCache.html())
-        item.applyCssStyle()
-      ).each( ->
-        SidebarUI.changeGradientShow(@, cssCode, @designConfigRoot)
-        stepValue = parseInt($(@).val())
-        for i in [2 .. 4]
-          className = 'design_bg_color' + i
-          mozFlag = $("." + className + "_moz_flag", cssRoot)
-          mozCache = $("." + className + "_moz_cache", cssRoot)
-          webkitFlag = $("." + className + "_webkit_flag", cssRoot)
-          webkitCache = $("." + className + "_webkit_cache", cssRoot)
-          if i > stepValue - 1
-            mh = mozFlag.html()
-            if mh.length > 0
-              mozCache.html(mh)
-            wh = webkitFlag.html()
-            if wh.length > 0
-              webkitCache.html(wh)
-            $(mozFlag).empty()
-            $(webkitFlag).empty()
-        item.applyCssStyle()
-      )
-

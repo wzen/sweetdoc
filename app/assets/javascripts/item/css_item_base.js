@@ -32,7 +32,6 @@ CssItemBase = (function(superClass) {
         y: cood.y
       };
     }
-    this.css = null;
     this.cssStypeReflectTimer = null;
     if (window.isWorkTable) {
       this.constructor.include(WorkTableCssItemExtend);
@@ -67,20 +66,13 @@ CssItemBase = (function(superClass) {
       itemId: this.constructor.ITEM_ID,
       mousedownCood: Common.makeClone(this.mousedownCood)
     };
-    if (this.cssRoot == null) {
-      this.cssRoot = $('#' + this.getCssRootElementId());
-    }
-    if ((this.cssRoot != null) && this.cssRoot.length > 0) {
-      newobj['css'] = this.cssRoot[0].outerHTML;
-    }
     $.extend(obj, newobj);
     return obj;
   };
 
   CssItemBase.prototype.setMiniumObject = function(obj) {
     CssItemBase.__super__.setMiniumObject.call(this, obj);
-    this.mousedownCood = Common.makeClone(obj.mousedownCood);
-    return this.css = Common.makeClone(obj.css);
+    return this.mousedownCood = Common.makeClone(obj.mousedownCood);
   };
 
   CssItemBase.prototype.stateEventBefore = function(isForward) {
@@ -153,12 +145,6 @@ CssItemBase = (function(superClass) {
     return capturedEventBeforeObject.itemSize;
   };
 
-  CssItemBase.prototype.changeCssId = function(oldObjId) {
-    var reg;
-    reg = new RegExp(oldObjId, 'g');
-    return this.css = this.css.replace(reg, this.id);
-  };
-
   CssItemBase.prototype.getCssRootElementId = function() {
     return "css_" + this.id;
   };
@@ -168,58 +154,39 @@ CssItemBase = (function(superClass) {
   };
 
   CssItemBase.prototype.makeCss = function(fromTemp) {
-    var k, ref, temp, v;
+    var k, ref, ref1, temp, v;
     if (fromTemp == null) {
       fromTemp = false;
     }
     $("" + (this.getCssRootElementId())).remove();
-    if (!fromTemp && (this.css != null)) {
-      temp = $(this.css);
-      temp.appendTo(window.cssCodeInfoTemp);
+    temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
+    temp.attr('id', this.getCssRootElementId());
+    if (!fromTemp && (this.design != null)) {
+      ref = this.design;
+      for (k in ref) {
+        v = ref[k];
+        temp.find("." + k).html("" + v);
+      }
     } else {
-      temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
-      temp.attr('id', this.getCssRootElementId());
       if (this.constructor.actionProperties.designConfigDefaultValues != null) {
-        ref = this.constructor.actionProperties.designConfigDefaultValues;
-        for (k in ref) {
-          v = ref[k];
-          console.log("k: " + k + "  v: " + v);
+        ref1 = this.constructor.actionProperties.designConfigDefaultValues;
+        for (k in ref1) {
+          v = ref1[k];
           temp.find("." + k).html("" + v);
         }
       }
-      temp.find('.design_item_id').html(this.id);
-      temp.appendTo(window.cssCodeInfoTemp);
     }
+    temp.find('.design_item_id').html(this.id);
+    temp.appendTo(window.cssCode);
     this.cssRoot = $('#' + this.getCssRootElementId());
     this.cssCache = $(".css_cache", this.cssRoot);
     this.cssCode = $(".css_code", this.cssRoot);
     this.cssStyle = $(".css_style", this.cssRoot);
-    return this.applyCssStyle(false);
+    return this.applyDesignChange(false);
   };
 
-  CssItemBase.prototype.cssAnimationElement = function() {
-    return null;
-  };
-
-  CssItemBase.prototype.appendAnimationCssIfNeeded = function() {
-    var ce, funcName, methodName;
-    ce = this.cssAnimationElement();
-    if (ce != null) {
-      methodName = this.getEventMethodName();
-      this.removeCss();
-      funcName = methodName + "_" + this.id;
-      return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
-    }
-  };
-
-  CssItemBase.prototype.applyCssStyle = function(doStyleSave) {
-    if (doStyleSave == null) {
-      doStyleSave = true;
-    }
+  CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
     this.cssStyle.text(this.cssCode.text());
-    if (this.cssRoot != null) {
-      this.css = this.cssRoot[0].outerHTML;
-    }
     if (doStyleSave) {
       if (this.cssStypeReflectTimer != null) {
         clearTimeout(this.cssStypeReflectTimer);
@@ -237,122 +204,26 @@ CssItemBase = (function(superClass) {
     }
   };
 
-  CssItemBase.prototype.removeCss = function() {
+  CssItemBase.prototype.cssAnimationElement = function() {
+    return null;
+  };
+
+  CssItemBase.prototype.appendAnimationCssIfNeeded = function() {
+    var ce, funcName, methodName;
+    ce = this.cssAnimationElement();
+    if (ce != null) {
+      methodName = this.getEventMethodName();
+      this.removeAnimationCss();
+      funcName = methodName + "_" + this.id;
+      return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
+    }
+  };
+
+  CssItemBase.prototype.removeAnimationCss = function() {
     var funcName, methodName;
     methodName = this.getEventMethodName();
     funcName = methodName + "_" + this.id;
     return window.cssCode.find("." + funcName).remove();
-  };
-
-  CssItemBase.prototype.setupOptionMenu = function() {
-    var btnBgColor, btnGradientStep, btnShadowColor, cssCode, cssRoot, item;
-    CssItemBase.__super__.setupOptionMenu.call(this);
-    item = this;
-    cssRoot = this.cssRoot;
-    cssCode = this.cssCode;
-    if (this.constructor.actionProperties.designConfig === Constant.ItemDesignOptionType.DESIGN_TOOL) {
-      btnGradientStep = $(".design_gradient_step", this.designConfigRoot);
-      btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", this.designConfigRoot);
-      btnShadowColor = $(".design_shadow_color,.design_shadowinset_color,.design_text_shadow1_color,.design_text_shadow2_color", this.designConfigRoot);
-      SidebarUI.settingGradientSlider('design_slider_gradient', null, cssCode, this.designConfigRoot);
-      SidebarUI.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_border_radius', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_border_width', 0, 10, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_font_size', 0, 30, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_shadow_left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_shadow_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design_slider_shadow_size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_shadow_top', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_shadowinset_left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_shadowinset_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design_slider_shadowinset_size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_shadowinset_top', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_text_shadow1_left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design_slider_text_shadow1_size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_text_shadow1_top', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_text_shadow2_left', -100, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, cssCode, this.designConfigRoot, 0.1);
-      SidebarUI.settingSlider('design_slider_text_shadow2_size', 0, 100, cssCode, this.designConfigRoot);
-      SidebarUI.settingSlider('design_slider_text_shadow2_top', -100, 100, cssCode, this.designConfigRoot);
-      btnBgColor.each(function() {
-        var btnCodeEmt, className, colorValue, self;
-        self = $(this);
-        className = self[0].classList[0];
-        btnCodeEmt = cssCode.find("." + className).first();
-        colorValue = btnCodeEmt.text();
-        return ColorPickerUtil.initColorPicker(self, colorValue, function(a, b, d) {
-          btnCodeEmt = cssCode.find("." + className);
-          btnCodeEmt.text(b);
-          return item.applyCssStyle();
-        });
-      });
-      btnShadowColor.each(function() {
-        var btnCodeEmt, className, colorValue, self;
-        self = $(this);
-        className = self[0].classList[0];
-        btnCodeEmt = cssCode.find("." + className).first();
-        colorValue = btnCodeEmt.text();
-        return ColorPickerUtil.initColorPicker(self, colorValue, function(a, b, d) {
-          btnCodeEmt = cssCode.find("." + className);
-          btnCodeEmt.text(d.r + "," + d.g + "," + d.b);
-          return item.applyCssStyle();
-        });
-      });
-      btnGradientStep.off('keyup mouseup');
-      return btnGradientStep.on('keyup mouseup', function(e) {
-        var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
-        SidebarUI.changeGradientShow(e.currentTarget, cssCode, this.designConfigRoot);
-        stepValue = parseInt($(e.currentTarget).val());
-        for (i = j = 2; j <= 4; i = ++j) {
-          className = 'design_bg_color' + i;
-          mozFlag = $("." + className + "_moz_flag", cssRoot);
-          mozCache = $("." + className + "_moz_cache", cssRoot);
-          webkitFlag = $("." + className + "_webkit_flag", cssRoot);
-          webkitCache = $("." + className + "_webkit_cache", cssRoot);
-          if (i > stepValue - 1) {
-            mh = mozFlag.html();
-            if (mh.length > 0) {
-              mozCache.html(mh);
-            }
-            wh = webkitFlag.html();
-            if (wh.length > 0) {
-              webkitCache.html(wh);
-            }
-            $(mozFlag).empty();
-            $(webkitFlag).empty();
-          } else {
-            mozFlag.html(mozCache.html());
-            webkitFlag.html(webkitCache.html());
-          }
-        }
-        return item.applyCssStyle();
-      }).each(function() {
-        var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
-        SidebarUI.changeGradientShow(this, cssCode, this.designConfigRoot);
-        stepValue = parseInt($(this).val());
-        for (i = j = 2; j <= 4; i = ++j) {
-          className = 'design_bg_color' + i;
-          mozFlag = $("." + className + "_moz_flag", cssRoot);
-          mozCache = $("." + className + "_moz_cache", cssRoot);
-          webkitFlag = $("." + className + "_webkit_flag", cssRoot);
-          webkitCache = $("." + className + "_webkit_cache", cssRoot);
-          if (i > stepValue - 1) {
-            mh = mozFlag.html();
-            if (mh.length > 0) {
-              mozCache.html(mh);
-            }
-            wh = webkitFlag.html();
-            if (wh.length > 0) {
-              webkitCache.html(wh);
-            }
-            $(mozFlag).empty();
-            $(webkitFlag).empty();
-          }
-        }
-        return item.applyCssStyle();
-      });
-    }
   };
 
   return CssItemBase;

@@ -20,6 +20,43 @@ class ArrowItem extends CanvasItemBase
     {
       defaultMethod: 'scrollDraw'
       designConfig: 'design_tool'
+      designConfigDefaultValues: {
+        design_slider_font_size_value: 14
+        design_font_color: 'ffffff'
+        design_slider_padding_top_value: 10
+        design_slider_padding_left_value: 20
+        design_slider_gradient_deg_value: 0
+        design_bg_color1: 'ffbdf5'
+        design_bg_color2: 'ff82ec'
+        design_bg_color2_position: 25
+        design_bg_color3: 'fc46e1'
+        design_bg_color3_position: 50
+        design_bg_color4: 'fc46e1'
+        design_bg_color4_position: 75
+        design_bg_color5: 'fc46e1'
+        design_border_color: 'ffffff'
+        design_slider_gradient_deg_value_webkit: 'left top, left bottom'
+        design_slider_border_radius_value: 30
+        design_slider_border_width_value: 3
+        design_slider_shadow_top_value: 3
+        design_slider_shadow_size_value: 11
+        design_shadow_color: '000,000,000'
+        design_slider_shadow_opacity_value: 0.5
+        design_slider_shadowinset_top_value: 0
+        design_slider_shadowinset_size_value: 1
+        design_shadowinset_color: '255,000,217'
+        design_slider_shadowinset_opacity_value: 1
+        design_slider_text_shadow1_left_value: 0
+        design_slider_text_shadow1_top_value: -1
+        design_slider_text_shadow1_size_value: 0
+        design_text_shadow1_color: '000,000,000'
+        design_slider_text_shadow1_opacity_value: 0.2
+        design_slider_text_shadow2_left_value: 0
+        design_slider_text_shadow2_top_value: 1
+        design_slider_text_shadow2_size_value: 0
+        design_text_shadow2_color: '255,255,255'
+        design_slider_text_shadow2_opacity_value: 0.3
+      }
       methods : {
         scrollDraw: {
           actionType: 'scroll'

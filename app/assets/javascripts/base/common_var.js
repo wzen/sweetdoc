@@ -24,8 +24,6 @@ CommonVar = (function() {
     var page;
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
     window.sidebarWrapper = $("#sidebar-wrapper");
-    window.cssCodeInfo = $('#css_code_info');
-    window.cssCodeInfoTemp = $('#css_code_info_temp');
     window.scrollContents = $("#pages ." + page + " .scroll_contents:first");
     window.scrollInside = $("#pages ." + page + " .scroll_inside:first");
     window.mainWrapper = $("#pages ." + page + " .main-wrapper:first");

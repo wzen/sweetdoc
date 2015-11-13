@@ -172,17 +172,6 @@ class RunCommon
         ret = true
     return ret
 
-  # CSS要素作成
-  # @param [Integer] pageNum ページ番号
-  @createCssElement = (pageNum) ->
-    # CSS作成
-    cssId = @RUN_CSS.replace('@pagenum', pageNum)
-    cssEmt = $("##{cssId}")
-    if !cssEmt? || cssEmt.length == 0
-      $("<div id='#{cssId}'></div>").appendTo(window.cssCode)
-      cssEmt = $("##{cssId}")
-    cssEmt.html(PageValue.itemCssOnPage(pageNum))
-
   # 対象ページのPageValueデータを読み込み
   # @param [Integer] loadPageNum 読み込むページ番号
   # @param [Function] callback コールバック

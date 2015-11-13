@@ -303,27 +303,3 @@ class EventBase extends Extend
     prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     obj = @getMinimumObject()
     PageValue.setInstancePageValue(prefix_key, obj)
-
-class CommonEventBase extends EventBase
-  # イベントの初期化
-  # @param [Object] event 設定イベント
-  initEvent: (event) ->
-    super(event)
-
-class ItemEventBase extends EventBase
-  # イベントの初期化
-  # @param [Object] event 設定イベント
-  initEvent: (event) ->
-    super(event)
-
-    if @ instanceof CssItemBase
-      @appendAnimationCssIfNeeded()
-
-    # 描画してアイテムを作成
-    # 表示非表示はwillChapterで切り替え
-    @reDraw(false)
-
-  # 最小限のデータを設定
-  # @abstract
-  setMiniumObject: (obj) ->
-

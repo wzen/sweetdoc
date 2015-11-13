@@ -29,10 +29,49 @@ WorkTableCanvasItemExtend = {
     })(this)();
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
+    this.applyDefaultDesign();
     this.drawAndMakeConfigsAndWritePageValue(show);
     this.saveNewDrawedSurface();
     return true;
-  }
+  },
+  applyDesignStyleChange: function(doStyleSave) {
+    if (doStyleSave == null) {
+      doStyleSave = true;
+    }
+    this.cssStyle.text(this.cssCode.text());
+    if (doStyleSave) {
+      if (this.cssStypeReflectTimer != null) {
+        clearTimeout(this.cssStypeReflectTimer);
+        this.cssStypeReflectTimer = null;
+      }
+      return this.cssStypeReflectTimer = setTimeout((function(_this) {
+        return function() {
+          _this.setItemAllPropToPageValue();
+          LocalStorage.saveAllPageValues();
+          return _this.cssStypeReflectTimer = setTimeout(function() {
+            return OperationHistory.add();
+          }, 1000);
+        };
+      })(this), 500);
+    }
+  },
+  applyGradientStyleChange: function(index, designKeyName, value, doStyleSave) {
+    if (doStyleSave == null) {
+      doStyleSave = true;
+    }
+  },
+  applyGradientDegChange: function(designKeyName, value, doStyleSave) {
+    if (doStyleSave == null) {
+      doStyleSave = true;
+    }
+  },
+  applyGradientStepChange: function(target) {},
+  applyColorChangeByPicker: function(designKeyName, value, doStyleSave) {
+    if (doStyleSave == null) {
+      doStyleSave = true;
+    }
+  },
+  applyDesignTool: function(drawingContext) {}
 };
 
 //# sourceMappingURL=canvasitem_extend.js.map

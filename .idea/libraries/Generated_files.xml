@@ -4,8 +4,10 @@
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/generator.jquery.color.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/common_event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
@@ -23,7 +25,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding.js.js" />
@@ -93,8 +95,10 @@
       <root url="file://$PROJECT_DIR$/public/code_template/item/coffeescript.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/generator.jquery.color.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/common_event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/util/color/color_change.js" />
@@ -112,7 +116,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/code_template.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding.js.js" />

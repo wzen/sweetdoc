@@ -195,17 +195,6 @@ RunCommon = (function() {
     return ret;
   };
 
-  RunCommon.createCssElement = function(pageNum) {
-    var cssEmt, cssId;
-    cssId = this.RUN_CSS.replace('@pagenum', pageNum);
-    cssEmt = $("#" + cssId);
-    if ((cssEmt == null) || cssEmt.length === 0) {
-      $("<div id='" + cssId + "'></div>").appendTo(window.cssCode);
-      cssEmt = $("#" + cssId);
-    }
-    return cssEmt.html(PageValue.itemCssOnPage(pageNum));
-  };
-
   RunCommon.loadPagingPageValue = function(loadPageNum, callback, forceUpdate) {
     var className, data, i, l, lastPageNum, locationPaths, ref, ref1, section, targetPages;
     if (callback == null) {

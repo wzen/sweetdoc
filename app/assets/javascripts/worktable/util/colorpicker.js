@@ -8,10 +8,10 @@ ColorPickerUtil = (function() {
     element.css("backgroundColor", "#" + colorValue);
     element.ColorPicker({});
     element.ColorPickerSetColor(colorValue);
-    element.ColorPickerResetOnChange(function(a, b, d) {
+    element.ColorPickerResetOnChange(function(a, b, d, e) {
       element.css("backgroundColor", "#" + b);
       if (onChange != null) {
-        return onChange(a, b, d);
+        return onChange(a, b, d, e);
       }
     });
     element.unbind();

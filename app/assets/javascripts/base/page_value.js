@@ -71,6 +71,14 @@ PageValue = (function() {
         return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + 'cache' + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
       };
 
+      Key.instanceDesignRoot = function(objId) {
+        return this.instanceValue(objId) + this.PAGE_VALUES_SEPERATOR + 'designs';
+      };
+
+      Key.instanceDesign = function(objId, designKey) {
+        return this.instanceDesignRoot(objId) + this.PAGE_VALUES_SEPERATOR + designKey;
+      };
+
       Key.ITEM_LOADED_PREFIX = 'itemloaded';
 
       Key.itemLoaded = function(itemId) {
@@ -653,29 +661,6 @@ PageValue = (function() {
       return parseInt(key.replace(this.Key.EF_PREFIX, ''));
     }
     return null;
-  };
-
-  PageValue.itemCssOnPage = function(pageNum) {
-    var css, eventPageValueRoot, eventPageValues, index, instance, k, kk, objId, v;
-    css = '';
-    eventPageValueRoot = PageValue.getEventPageValue(this.Key.eventPageRoot(pageNum));
-    for (kk in eventPageValueRoot) {
-      eventPageValues = eventPageValueRoot[kk];
-      if (this.isContentsRoot(kk)) {
-        for (k in eventPageValues) {
-          v = eventPageValues[k];
-          if (k.indexOf(this.Key.E_NUM_PREFIX) === 0) {
-            index = parseInt(k.substring(this.Key.E_NUM_PREFIX.length)) - 1;
-            objId = v.id;
-            instance = PageValue.getInstancePageValue(this.Key.instanceValue(objId));
-            if (instance.css != null) {
-              css += instance.css;
-            }
-          }
-        }
-      }
-    }
-    return css;
   };
 
   PageValue.sortEventPageValue = function(beforeNum, afterNum) {

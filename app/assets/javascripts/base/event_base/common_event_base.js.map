@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "common_event_base.js",
+  "sourceRoot": "",
+  "sources": [
+    "common_event_base.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,eAAA;EAAA;6BAAA;;AAAA;AAIE,qCAAA,CAAA;;;;GAAA;;AAAA,4BAAA,SAAA,GAAW,SAAC,KAAD,GAAA;WACT,+CAAM,KAAN,EADS;EAAA,CAAX,CAAA;;yBAAA;;GAJ4B,UAA9B,CAAA"
+}

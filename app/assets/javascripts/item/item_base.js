@@ -14,6 +14,8 @@ ItemBase = (function(superClass) {
 
   ItemBase.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
 
+  ItemBase.DESIGN_PAGEVALUE_ROOT = 'designs';
+
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     ItemBase.ActionPropertiesKey = (function() {
@@ -57,13 +59,9 @@ ItemBase = (function(superClass) {
     this.jqueryElement = null;
     this.coodRegist = [];
     if (window.isWorkTable) {
-      this.constructor.include(WorkTableCommonExtend);
+      this.constructor.include(WorkTableCommonInclude);
     }
   }
-
-  ItemBase.prototype.getDesignConfigId = function() {
-    return this.constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
-  };
 
   ItemBase.prototype.getJQueryElement = function() {
     return $('#' + this.id);
@@ -154,7 +152,8 @@ ItemBase = (function(superClass) {
       name: Common.makeClone(this.name),
       itemSize: Common.makeClone(this.itemSize),
       zindex: Common.makeClone(this.zindex),
-      coodRegist: JSON.stringify(Common.makeClone(this.coodRegist))
+      coodRegist: JSON.stringify(Common.makeClone(this.coodRegist)),
+      designs: Common.makeClone(this.designs)
     };
     return obj;
   };
@@ -166,6 +165,7 @@ ItemBase = (function(superClass) {
     this.itemSize = Common.makeClone(obj.itemSize);
     this.zindex = Common.makeClone(obj.zindex);
     this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
+    this.designs = Common.makeClone(obj.designs);
     return window.instanceMap[this.id] = this;
   };
 
@@ -189,6 +189,18 @@ ItemBase = (function(superClass) {
 
   ItemBase.defaultScrollForwardDirection = function() {
     return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
+  };
+
+  ItemBase.prototype.applyDefaultDesign = function() {
+    var k, ref, v;
+    if (this.constructor.actionProperties.designConfigDefaultValues) {
+      ref = this.constructor.actionProperties.designConfigDefaultValues;
+      for (k in ref) {
+        v = ref[k];
+        PageValue.setInstancePageValue(PageValue.Key.instanceDesign(this.id, k), v);
+      }
+    }
+    return this.designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(this.id));
   };
 
   ItemBase.prototype.eventConfigValue = function() {
@@ -328,43 +340,6 @@ ItemBase = (function(superClass) {
       h: originalItemElementSize.h + itemDiff.h
     };
     return this.updatePositionAndItemSize(itemSize, false);
-  };
-
-  ItemBase.prototype.setupOptionMenu = function() {
-    var h, name, w, x, y;
-    this.designConfigRoot = $('#' + this.getDesignConfigId());
-    if ((this.designConfigRoot == null) || this.designConfigRoot.length === 0) {
-      this.makeDesignConfig();
-      this.designConfigRoot = $('#' + this.getDesignConfigId());
-    }
-    name = $('.item-name', this.designConfigRoot);
-    name.val(this.name);
-    name.off('change').on('change', (function(_this) {
-      return function() {
-        _this.name = name.val();
-        return _this.setItemPropToPageValue('name', _this.name);
-      };
-    })(this));
-    x = this.getJQueryElement().position().left;
-    y = this.getJQueryElement().position().top;
-    w = this.getJQueryElement().width();
-    h = this.getJQueryElement().height();
-    $('.item_position_x:first', this.designConfigRoot).val(x);
-    $('.item_position_y:first', this.designConfigRoot).val(y);
-    $('.item_width:first', this.designConfigRoot).val(w);
-    $('.item_height:first', this.designConfigRoot).val(h);
-    return $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', this.designConfigRoot).off('change').on('change', (function(_this) {
-      return function() {
-        var itemSize;
-        itemSize = {
-          x: parseInt($('.item_position_x:first', _this.designConfigRoot).val()),
-          y: parseInt($('.item_position_y:first', _this.designConfigRoot).val()),
-          w: parseInt($('.item_width:first', _this.designConfigRoot).val()),
-          h: parseInt($('.item_height:first', _this.designConfigRoot).val())
-        };
-        return _this.updatePositionAndItemSize(itemSize);
-      };
-    })(this));
   };
 
   return ItemBase;

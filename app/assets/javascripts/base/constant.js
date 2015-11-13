@@ -56,6 +56,15 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.DesignConfig = (function() {
+      function DesignConfig() {}
+
+      DesignConfig.DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME;
+
+      return DesignConfig;
+
+    })();
+
     Constant.ItemDesignOptionType = (function() {
       function ItemDesignOptionType() {}
 

@@ -29,7 +29,49 @@ WorkTableCanvasItemExtend =
     # スクロールビュー分のxとyを追加
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
+    @applyDefaultDesign()
     @drawAndMakeConfigsAndWritePageValue(show)
     # Canvas状態を保存
     @saveNewDrawedSurface()
     return true
+
+  # デザイン変更を反映
+  applyDesignStyleChange: (doStyleSave = true) ->
+
+    # TODO: 修正
+
+    @cssStyle.text(@cssCode.text())
+    if doStyleSave
+      # 頻繁に呼ばれるためタイマーでPageValueに書き込む
+      if @cssStypeReflectTimer?
+        clearTimeout(@cssStypeReflectTimer)
+        @cssStypeReflectTimer = null
+      @cssStypeReflectTimer = setTimeout( =>
+        # 0.5秒後に反映
+        # ページに状態を保存
+        @setItemAllPropToPageValue()
+        # キャッシュに保存
+        LocalStorage.saveAllPageValues()
+        @cssStypeReflectTimer = setTimeout( ->
+          # 1秒後に操作履歴に保存
+          OperationHistory.add()
+        , 1000)
+      , 500)
+
+  # グラデーションデザイン変更を反映
+  applyGradientStyleChange: (index, designKeyName, value, doStyleSave = true) ->
+
+
+  # グラデーション方向変更を反映
+  applyGradientDegChange: (designKeyName, value, doStyleSave = true) ->
+
+
+  applyGradientStepChange: (target) ->
+    # TODO: 修正
+
+
+  applyColorChangeByPicker: (designKeyName, value, doStyleSave = true) ->
+    # TODO: 修正
+
+
+  applyDesignTool: (drawingContext) ->

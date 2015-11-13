@@ -20,8 +20,6 @@ class EventAction
   start: ->
     # ページ数設定
     RunCommon.setPageNum(@thisPageNum())
-    # CSS作成
-    RunCommon.createCssElement(@thisPageNum())
     # フォークをMasterに設定
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum())
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
@@ -101,8 +99,6 @@ class EventAction
         # 新規コンテナ初期化
         RunCommon.initMainContainer()
         PageValue.adjustInstanceAndEventOnPage()
-        # CSS作成
-        RunCommon.createCssElement(afterPageNum)
 
         # ページ前処理
         if beforePageNum > afterPageNum

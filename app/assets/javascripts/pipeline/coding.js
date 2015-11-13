@@ -25,7 +25,9 @@
 //= require base/common_var
 //= require base/page_value
 //= require base/extend
-//= require base/event_base
+//= require base/event_base/event_base
+//= require base/event_base/common_event_base
+//= require base/event_base/item_event_base
 //= require base/local_storage
 //= require base/float_view
 //= require navbar/navbar.js

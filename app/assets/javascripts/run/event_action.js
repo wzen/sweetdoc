@@ -18,7 +18,6 @@ EventAction = (function() {
 
   EventAction.prototype.start = function() {
     RunCommon.setPageNum(this.thisPageNum());
-    RunCommon.createCssElement(this.thisPageNum());
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum());
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
     this.thisPage().willPage();
@@ -99,7 +98,6 @@ EventAction = (function() {
           pageFlip = new PageFlip(beforePageNum, afterPageNum);
           RunCommon.initMainContainer();
           PageValue.adjustInstanceAndEventOnPage();
-          RunCommon.createCssElement(afterPageNum);
           if (beforePageNum > afterPageNum) {
             _this.thisPage().willPageFromRewind();
           } else {

@@ -38,6 +38,9 @@ if gon?
       # @property [Int] CLICK クリック
       @CLICK = constant.ActionType.CLICK
 
+    class @DesignConfig
+      @DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME
+
     class @ItemDesignOptionType
       # @property [Int] INTEGER 数値
       @NUMBER = constant.ItemDesignOptionType.NUMBER

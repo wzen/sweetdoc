@@ -9,6 +9,8 @@ class ItemBase extends ItemEventBase
   @ITEM_ID = ""
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
   @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
+  # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
+  @DESIGN_PAGEVALUE_ROOT = 'designs'
 
   if gon?
     constant = gon.const
@@ -48,12 +50,7 @@ class ItemBase extends ItemEventBase
     @coodRegist = []
 
     if window.isWorkTable
-      @constructor.include WorkTableCommonExtend
-
-  # コンフィグメニューの要素IDを取得
-  # @return [String] HTML要素ID
-  getDesignConfigId: ->
-    return @constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)
+      @constructor.include WorkTableCommonInclude
 
   # アイテムのJQuery要素を取得
   # @return [Object] JQuery要素
@@ -142,6 +139,7 @@ class ItemBase extends ItemEventBase
       itemSize: Common.makeClone(@itemSize)
       zindex: Common.makeClone(@zindex)
       coodRegist: JSON.stringify(Common.makeClone(@coodRegist))
+      designs: Common.makeClone(@designs)
     }
     return obj
 
@@ -156,6 +154,7 @@ class ItemBase extends ItemEventBase
     @itemSize = Common.makeClone(obj.itemSize)
     @zindex = Common.makeClone(obj.zindex)
     @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
+    @designs = Common.makeClone(obj.designs)
     window.instanceMap[@id] = @
 
   # イベントによって設定したスタイルをクリアする
@@ -180,6 +179,14 @@ class ItemBase extends ItemEventBase
   # スクロールのデフォルト進行方向
   @defaultScrollForwardDirection = ->
     return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
+
+  # デフォルトデザイン適用
+  applyDefaultDesign: ->
+    # デザイン用のPageValue作成
+    if @constructor.actionProperties.designConfigDefaultValues
+      for k, v of @constructor.actionProperties.designConfigDefaultValues
+        PageValue.setInstancePageValue(PageValue.Key.instanceDesign(@id, k), v)
+    @designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(@id))
 
   # イベントに書き込む情報
   eventConfigValue: ->
@@ -296,37 +303,3 @@ class ItemBase extends ItemEventBase
       h: originalItemElementSize.h + itemDiff.h
     }
     @updatePositionAndItemSize(itemSize, false)
-
-  # CSSボタンコントロール初期化
-  setupOptionMenu: ->
-    @designConfigRoot = $('#' + @getDesignConfigId())
-    if !@designConfigRoot? || @designConfigRoot.length == 0
-      @makeDesignConfig()
-      @designConfigRoot = $('#' + @getDesignConfigId())
-
-    # アイテム名の変更
-    name = $('.item-name', @designConfigRoot)
-    name.val(@name)
-    name.off('change').on('change', =>
-      @name = name.val()
-      @setItemPropToPageValue('name', @name)
-    )
-
-    # アイテム位置の変更
-    x = @getJQueryElement().position().left
-    y = @getJQueryElement().position().top
-    w = @getJQueryElement().width()
-    h = @getJQueryElement().height()
-    $('.item_position_x:first', @designConfigRoot).val(x)
-    $('.item_position_y:first', @designConfigRoot).val(y)
-    $('.item_width:first', @designConfigRoot).val(w)
-    $('.item_height:first', @designConfigRoot).val(h)
-    $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', @designConfigRoot).off('change').on('change', =>
-      itemSize = {
-        x: parseInt($('.item_position_x:first', @designConfigRoot).val())
-        y: parseInt($('.item_position_y:first', @designConfigRoot).val())
-        w: parseInt($('.item_width:first', @designConfigRoot).val())
-        h: parseInt($('.item_height:first', @designConfigRoot).val())
-      }
-      @updatePositionAndItemSize(itemSize)
-    )

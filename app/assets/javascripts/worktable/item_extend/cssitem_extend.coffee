@@ -28,6 +28,55 @@ WorkTableCssItemExtend =
     # スクロールビュー分のxとyを追加
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
+    @applyDefaultDesign()
     @makeCss(true)
     @drawAndMakeConfigsAndWritePageValue(show)
     return true
+
+  # デザイン変更を反映
+  applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->
+    cssCodeElement = $('.' + designKeyName + '_value', @cssCode)
+    cssCodeElement.html(value)
+    @applyDesignChange(doStyleSave)
+
+  # グラデーションデザイン変更を反映
+  applyGradientStyleChange: (index, designKeyName, value, doStyleSave = true) ->
+    position = $('.design_bg_color' + (index + 2) + '_position', @cssCode)
+    position.html(("0" + value).slice(-2))
+    @applyDesignStyleChange(designKeyName, value, doStyleSave)
+
+  # グラデーション方向変更を反映
+  applyGradientDegChange: (designKeyName, value, doStyleSave = true) ->
+    webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
+    webkitValueElement = $('.' + className + '_value_webkit', @cssCode)
+    webkitValueElement.html(webkitDeg[ui.value])
+    @applyDesignStyleChange(designKeyName, value, doStyleSave)
+
+  applyGradientStepChange: (target, doStyleSave = true) ->
+    @changeGradientShow(target)
+    stepValue = parseInt($(target).val())
+    for i in [2 .. 4]
+      className = 'design_bg_color' + i
+      mozFlag = $("." + className + "_moz_flag", @cssRoot)
+      mozCache = $("." + className + "_moz_cache", @cssRoot)
+      webkitFlag = $("." + className + "_webkit_flag", @cssRoot)
+      webkitCache = $("." + className + "_webkit_cache", @cssRoot)
+      if i > stepValue - 1
+        mh = mozFlag.html()
+        if mh.length > 0
+          mozCache.html(mh)
+        wh = webkitFlag.html()
+        if wh.length > 0
+          webkitCache.html(wh)
+        $(mozFlag).empty()
+        $(webkitFlag).empty()
+      else
+        mozFlag.html(mozCache.html());
+        webkitFlag.html(webkitCache.html())
+    @applyDesignChange(doStyleSave)
+
+  applyColorChangeByPicker: (designKeyName, value, doStyleSave = true) ->
+    codeEmt = $(".#{designKeyName}", @cssCode)
+    codeEmt.text(value)
+    @applyDesignChange(doStyleSave)
+

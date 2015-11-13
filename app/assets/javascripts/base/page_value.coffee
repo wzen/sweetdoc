@@ -52,6 +52,10 @@ class PageValue
       @instanceValue = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
       # @property [return] インスタンスキャッシュ値
       @instanceValueCache = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + 'cache' + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
+      # @property [return] インスタンスデザインRoot
+      @instanceDesignRoot = (objId) -> @instanceValue(objId) + @PAGE_VALUES_SEPERATOR + 'designs'
+      # @property [return] インスタンスデザイン
+      @instanceDesign = (objId, designKey) -> @instanceDesignRoot(objId) + @PAGE_VALUES_SEPERATOR + designKey
       # @property [String] ITEM_LOADED_PREFIX アイテム読み込み済みプレフィックス
       @ITEM_LOADED_PREFIX = 'itemloaded'
       @itemLoaded = (itemId) -> "#{@ITEM_LOADED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{itemId}"
@@ -526,24 +530,6 @@ class PageValue
     if key.indexOf(@Key.EF_PREFIX) >= 0
       return parseInt(key.replace(@Key.EF_PREFIX, ''))
     return null
-
-  # アイテムのCSSを取得
-  # @param [Integer] pageNum ページ番号
-  # @return [String] CSS
-  @itemCssOnPage = (pageNum) ->
-    # EventPageValueのcssを一つの文字列にまとめる
-    css = ''
-    eventPageValueRoot = PageValue.getEventPageValue(@Key.eventPageRoot(pageNum))
-    for kk, eventPageValues of eventPageValueRoot
-      if @isContentsRoot(kk)
-        for k, v of eventPageValues
-          if k.indexOf(@Key.E_NUM_PREFIX) == 0
-            index = parseInt(k.substring(@Key.E_NUM_PREFIX.length)) - 1
-            objId = v.id
-            instance = PageValue.getInstancePageValue(@Key.instanceValue(objId))
-            if instance.css?
-              css += instance.css
-    return css
 
   # EventPageValueをソート
   # @param [Integer] beforeNum 移動前イベント番号
