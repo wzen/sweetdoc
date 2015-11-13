@@ -238,9 +238,9 @@ WorkTableCommonInclude = {
         return function(idx, e) {
           var className, colorValue;
           className = e.classList[0];
-          colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className));
+          colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className + "_value"));
           return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d, e) {
-            _this.designs[className] = b;
+            _this.designs.values[className + "_value"] = b;
             return self.applyColorChangeByPicker(className, b);
           });
         };
@@ -250,11 +250,11 @@ WorkTableCommonInclude = {
         return function(idx, e) {
           var className, colorValue;
           className = e.classList[0];
-          colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className));
+          colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className + "_value"));
           return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d) {
             var value;
             value = d.r + "," + d.g + "," + d.b;
-            this.designs[className] = value;
+            this.designs.values[className + "_value"] = value;
             return self.applyColorChangeByPicker(className, value);
           });
         };
@@ -298,7 +298,7 @@ WorkTableCommonInclude = {
           n = $.grep(classNames, function(s) {
             return s.indexOf('design_') >= 0;
           })[0];
-          _this.designs[n + "_value"] = ui.value;
+          _this.designs.values[n + "_value"] = ui.value;
           return _this.applyDesignStyleChange(n, ui.value);
         };
       })(this)
@@ -323,7 +323,7 @@ WorkTableCommonInclude = {
           n = $.grep(classNames, function(s) {
             return s.indexOf('design_') >= 0;
           })[0];
-          _this.designs[n + "_value"] = ui.value;
+          _this.designs.values[n + "_value"] = ui.value;
           return _this.applyGradientStyleChange(index, n, ui.value);
         };
       })(this)
@@ -338,7 +338,7 @@ WorkTableCommonInclude = {
   settingGradientSlider: function(className, values) {
     var designConfigRoot, meterElement;
     designConfigRoot = $('#' + this.getDesignConfigId());
-    meterElement = $('.' + className, designConfigRoot);
+    meterElement = $("." + className, designConfigRoot);
     return this.settingGradientSliderByElement(meterElement, values);
   },
   settingGradientDegSlider: function(className, min, max) {
@@ -368,7 +368,7 @@ WorkTableCommonInclude = {
           n = $.grep(classNames, function(s) {
             return s.indexOf('design_') >= 0;
           })[0];
-          _this.designs[n + "_value"] = ui.value;
+          _this.designs.values[n + "_value"] = ui.value;
           return _this.applyGradientDegChange(n, ui.value);
         };
       })(this)

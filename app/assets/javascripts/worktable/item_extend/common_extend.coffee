@@ -219,12 +219,12 @@ WorkTableCommonInclude =
       btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot)
       btnBgColor.each((idx, e) =>
         className = e.classList[0]
-        colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(@id, className))
+        colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(@id, "#{className}_value"))
         ColorPickerUtil.initColorPicker(
           $(e),
           colorValue,
           (a, b, d, e) =>
-            @designs[className] = b
+            @designs.values["#{className}_value"] = b
             self.applyColorChangeByPicker(className, b)
         )
       )
@@ -233,13 +233,13 @@ WorkTableCommonInclude =
       btnShadowColor = $(".design_shadow_color,.design_shadowinset_color,.design_text_shadow1_color,.design_text_shadow2_color", designConfigRoot);
       btnShadowColor.each( (idx, e) =>
         className = e.classList[0]
-        colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(@id, className))
+        colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(@id, "#{className}_value"))
         ColorPickerUtil.initColorPicker(
           $(e),
           colorValue,
           (a, b, d) ->
             value = "#{d.r},#{d.g},#{d.b}"
-            @designs[className] = value
+            @designs.values["#{className}_value"] = value
             self.applyColorChangeByPicker(className, value)
         )
       )
@@ -278,7 +278,7 @@ WorkTableCommonInclude =
         valueElement.html(ui.value)
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
-        @designs["#{n}_value"] = ui.value
+        @designs.values["#{n}_value"] = ui.value
         @applyDesignStyleChange(n, ui.value)
     })
 
@@ -298,7 +298,7 @@ WorkTableCommonInclude =
         index = $(ui.handle).index()
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
-        @designs["#{n}_value"] = ui.value
+        @designs.values["#{n}_value"] = ui.value
         @applyGradientStyleChange(index, n, ui.value)
     })
 
@@ -313,7 +313,7 @@ WorkTableCommonInclude =
   # @param [Array] values 値の配列
   settingGradientSlider: (className, values) ->
     designConfigRoot = $('#' + @getDesignConfigId())
-    meterElement = $('.' + className, designConfigRoot)
+    meterElement = $(".#{className}", designConfigRoot)
     @settingGradientSliderByElement(meterElement, values)
 
   # グラデーション方向スライダーの作成
@@ -341,7 +341,7 @@ WorkTableCommonInclude =
         valueElement.html(ui.value)
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
-        @designs["#{n}_value"] = ui.value
+        @designs.values["#{n}_value"] = ui.value
         @applyGradientDegChange(n, ui.value)
     })
 

@@ -192,13 +192,8 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.applyDefaultDesign = function() {
-    var k, ref, v;
-    if (this.constructor.actionProperties.designConfigDefaultValues) {
-      ref = this.constructor.actionProperties.designConfigDefaultValues;
-      for (k in ref) {
-        v = ref[k];
-        PageValue.setInstancePageValue(PageValue.Key.instanceDesign(this.id, k), v);
-      }
+    if (this.constructor.actionProperties.designConfigDefaultValues != null) {
+      PageValue.setInstancePageValue(PageValue.Key.instanceDesignRoot(this.id), this.constructor.actionProperties.designConfigDefaultValues);
     }
     return this.designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(this.id));
   };

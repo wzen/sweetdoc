@@ -141,31 +141,35 @@ class CssItemBase extends ItemBase
 
   #CSSを設定
   makeCss: (fromTemp = false) ->
-    # 上書きするため一旦削除
-    $("#{@getCssRootElementId()}").remove()
-
-    temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
-    temp.attr('id', @getCssRootElementId())
-
-    if !fromTemp && @designs?
-      # 保存しているデザインで初期化
-      for k,v of @designs
-        #console.log("k: #{k}  v: #{v}")
-        temp.find(".#{k}").html("#{v}")
-    else
-      if @constructor.actionProperties.designConfigDefaultValues?
-        # デフォルトのデザインで初期化
-        for k,v of @constructor.actionProperties.designConfigDefaultValues
+    _applyCss = (designs) ->
+      if !designs?
+        return
+      temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
+      temp.attr('id', @getCssRootElementId())
+      if designs.values?
+        for k,v of designs.values
           #console.log("k: #{k}  v: #{v}")
           temp.find(".#{k}").html("#{v}")
-    temp.find('.design_item_id').html(@id)
-    temp.appendTo(window.cssCode)
+      if designs.flags?
+        for k,v of designs.flags
+          if !v
+            temp.find(".#{k}").empty()
+      temp.find('.design_item_id').html(@id)
+      temp.appendTo(window.cssCode)
+
+    # 上書きするため一旦削除
+    $("#{@getCssRootElementId()}").remove()
+    if !fromTemp && @designs?
+      # 保存しているデザインで初期化
+      _applyCss.call(@, @designs)
+    else
+      # デフォルトのデザインで初期化
+      _applyCss.call(@, @constructor.actionProperties.designConfigDefaultValues)
 
     @cssRoot = $('#' + @getCssRootElementId())
     @cssCache = $(".css_cache", @cssRoot)
     @cssCode = $(".css_code", @cssRoot)
     @cssStyle = $(".css_style", @cssRoot)
-
     @applyDesignChange(false)
 
   # CSSに反映

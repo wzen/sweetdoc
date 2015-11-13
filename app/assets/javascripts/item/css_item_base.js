@@ -154,30 +154,42 @@ CssItemBase = (function(superClass) {
   };
 
   CssItemBase.prototype.makeCss = function(fromTemp) {
-    var k, ref, ref1, temp, v;
+    var _applyCss;
     if (fromTemp == null) {
       fromTemp = false;
     }
-    $("" + (this.getCssRootElementId())).remove();
-    temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
-    temp.attr('id', this.getCssRootElementId());
-    if (!fromTemp && (this.designs != null)) {
-      ref = this.designs;
-      for (k in ref) {
-        v = ref[k];
-        temp.find("." + k).html("" + v);
+    _applyCss = function(designs) {
+      var k, ref, ref1, temp, v;
+      if (designs == null) {
+        return;
       }
-    } else {
-      if (this.constructor.actionProperties.designConfigDefaultValues != null) {
-        ref1 = this.constructor.actionProperties.designConfigDefaultValues;
-        for (k in ref1) {
-          v = ref1[k];
+      temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
+      temp.attr('id', this.getCssRootElementId());
+      if (designs.values != null) {
+        ref = designs.values;
+        for (k in ref) {
+          v = ref[k];
           temp.find("." + k).html("" + v);
         }
       }
+      if (designs.flags != null) {
+        ref1 = designs.flags;
+        for (k in ref1) {
+          v = ref1[k];
+          if (!v) {
+            temp.find("." + k).empty();
+          }
+        }
+      }
+      temp.find('.design_item_id').html(this.id);
+      return temp.appendTo(window.cssCode);
+    };
+    $("" + (this.getCssRootElementId())).remove();
+    if (!fromTemp && (this.designs != null)) {
+      _applyCss.call(this, this.designs);
+    } else {
+      _applyCss.call(this, this.constructor.actionProperties.designConfigDefaultValues);
     }
-    temp.find('.design_item_id').html(this.id);
-    temp.appendTo(window.cssCode);
     this.cssRoot = $('#' + this.getCssRootElementId());
     this.cssCache = $(".css_cache", this.cssRoot);
     this.cssCode = $(".css_code", this.cssRoot);

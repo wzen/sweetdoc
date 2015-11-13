@@ -180,12 +180,11 @@ class ItemBase extends ItemEventBase
   @defaultScrollForwardDirection = ->
     return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
 
-  # デフォルトデザイン適用
+  # デフォルトデザインをPageValue & 変数に適用
   applyDefaultDesign: ->
     # デザイン用のPageValue作成
-    if @constructor.actionProperties.designConfigDefaultValues
-      for k, v of @constructor.actionProperties.designConfigDefaultValues
-        PageValue.setInstancePageValue(PageValue.Key.instanceDesign(@id, k), v)
+    if @constructor.actionProperties.designConfigDefaultValues?
+      PageValue.setInstancePageValue(PageValue.Key.instanceDesignRoot(@id), @constructor.actionProperties.designConfigDefaultValues)
     @designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(@id))
 
   # イベントに書き込む情報
