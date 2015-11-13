@@ -224,7 +224,7 @@ WorkTableCommonInclude =
           $(e),
           colorValue,
           (a, b, d, e) =>
-            PageValue.setInstancePageValue(PageValue.Key.instanceDesign(@id, className), b)
+            @designs[className] = b
             self.applyColorChangeByPicker(className, b)
         )
       )
@@ -239,7 +239,7 @@ WorkTableCommonInclude =
           colorValue,
           (a, b, d) ->
             value = "#{d.r},#{d.g},#{d.b}"
-            PageValue.setInstancePageValue(PageValue.Key.instanceDesign(@id, className), value)
+            @designs[className] = value
             self.applyColorChangeByPicker(className, value)
         )
       )
@@ -278,7 +278,7 @@ WorkTableCommonInclude =
         valueElement.html(ui.value)
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
-        PageValue.setInstancePageValue(PageValue.Key.instanceDesign(@id, "#{n}_value"), ui.value)
+        @designs["#{n}_value"] = ui.value
         @applyDesignStyleChange(n, ui.value)
     })
 
@@ -298,7 +298,7 @@ WorkTableCommonInclude =
         index = $(ui.handle).index()
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
-        PageValue.setInstancePageValue(PageValue.Key.instanceDesign(@id, "#{n}_value"), ui.value)
+        @designs["#{n}_value"] = ui.value
         @applyGradientStyleChange(index, n, ui.value)
     })
 
@@ -341,7 +341,7 @@ WorkTableCommonInclude =
         valueElement.html(ui.value)
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
-        PageValue.setInstancePageValue(PageValue.Key.instanceDesign(@id, "#{n}_value"), ui.value)
+        @designs["#{n}_value"] = ui.value
         @applyGradientDegChange(n, ui.value)
     })
 

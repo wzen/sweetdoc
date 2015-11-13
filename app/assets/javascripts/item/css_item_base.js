@@ -161,8 +161,8 @@ CssItemBase = (function(superClass) {
     $("" + (this.getCssRootElementId())).remove();
     temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
     temp.attr('id', this.getCssRootElementId());
-    if (!fromTemp && (this.design != null)) {
-      ref = this.design;
+    if (!fromTemp && (this.designs != null)) {
+      ref = this.designs;
       for (k in ref) {
         v = ref[k];
         temp.find("." + k).html("" + v);

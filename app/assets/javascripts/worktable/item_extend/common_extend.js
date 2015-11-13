@@ -240,7 +240,7 @@ WorkTableCommonInclude = {
           className = e.classList[0];
           colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className));
           return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d, e) {
-            PageValue.setInstancePageValue(PageValue.Key.instanceDesign(_this.id, className), b);
+            _this.designs[className] = b;
             return self.applyColorChangeByPicker(className, b);
           });
         };
@@ -254,7 +254,7 @@ WorkTableCommonInclude = {
           return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d) {
             var value;
             value = d.r + "," + d.g + "," + d.b;
-            PageValue.setInstancePageValue(PageValue.Key.instanceDesign(this.id, className), value);
+            this.designs[className] = value;
             return self.applyColorChangeByPicker(className, value);
           });
         };
@@ -298,7 +298,7 @@ WorkTableCommonInclude = {
           n = $.grep(classNames, function(s) {
             return s.indexOf('design_') >= 0;
           })[0];
-          PageValue.setInstancePageValue(PageValue.Key.instanceDesign(_this.id, n + "_value"), ui.value);
+          _this.designs[n + "_value"] = ui.value;
           return _this.applyDesignStyleChange(n, ui.value);
         };
       })(this)
@@ -323,7 +323,7 @@ WorkTableCommonInclude = {
           n = $.grep(classNames, function(s) {
             return s.indexOf('design_') >= 0;
           })[0];
-          PageValue.setInstancePageValue(PageValue.Key.instanceDesign(_this.id, n + "_value"), ui.value);
+          _this.designs[n + "_value"] = ui.value;
           return _this.applyGradientStyleChange(index, n, ui.value);
         };
       })(this)
@@ -368,7 +368,7 @@ WorkTableCommonInclude = {
           n = $.grep(classNames, function(s) {
             return s.indexOf('design_') >= 0;
           })[0];
-          PageValue.setInstancePageValue(PageValue.Key.instanceDesign(_this.id, n + "_value"), ui.value);
+          _this.designs[n + "_value"] = ui.value;
           return _this.applyGradientDegChange(n, ui.value);
         };
       })(this)

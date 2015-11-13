@@ -147,9 +147,9 @@ class CssItemBase extends ItemBase
     temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
     temp.attr('id', @getCssRootElementId())
 
-    if !fromTemp && @design?
+    if !fromTemp && @designs?
       # 保存しているデザインで初期化
-      for k,v of @design
+      for k,v of @designs
         #console.log("k: #{k}  v: #{v}")
         temp.find(".#{k}").html("#{v}")
     else
