@@ -52,7 +52,7 @@ WorkTableCssItemExtend = {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    position = $('.design_bg_color' + (index + 2) + '_position', this.cssCode);
+    position = $('.design_bg_color' + (index + 2) + '_position_value', this.cssCode);
     position.html(("0" + value).slice(-2));
     return this.applyDesignStyleChange(designKeyName, value, doStyleSave);
   },
@@ -71,8 +71,8 @@ WorkTableCssItemExtend = {
       270: 'left top, right top',
       315: 'left top, right bottom'
     };
-    webkitValueElement = $('.' + className + '_value_webkit', this.cssCode);
-    webkitValueElement.html(webkitDeg[ui.value]);
+    webkitValueElement = $('.' + designKeyName + '_value_webkit_value', this.cssCode);
+    webkitValueElement.html(webkitDeg[value]);
     return this.applyDesignStyleChange(designKeyName, value, doStyleSave);
   },
   applyGradientStepChange: function(target, doStyleSave) {

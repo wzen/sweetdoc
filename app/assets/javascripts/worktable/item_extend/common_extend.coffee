@@ -311,7 +311,7 @@ WorkTableCommonInclude =
         index = $(ui.handle).index()
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
-        @designs.values["#{n}_value"] = ui.value
+        @designs.values["design_bg_color#{index + 2}_position_value"] = ("0" + ui.value).slice(-2)
         @applyGradientStyleChange(index, n, ui.value)
     })
 
@@ -355,6 +355,8 @@ WorkTableCommonInclude =
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
         @designs.values["#{n}_value"] = ui.value
+        webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
+        @designs.values["#{n}_value_webkit_value"] = webkitDeg[ui.value]
         @applyGradientDegChange(n, ui.value)
     })
 
