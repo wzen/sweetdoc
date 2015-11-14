@@ -27,6 +27,7 @@ class ArrowItem extends CanvasItemBase
           design_slider_padding_top_value: 10
           design_slider_padding_left_value: 20
           design_slider_gradient_deg_value: 0
+          design_slider_gradient_deg_value_webkit_value: 'left top, left bottom'
           design_bg_color1_value: 'ffbdf5'
           design_bg_color2_value: 'ff82ec'
           design_bg_color2_position_value: 25
@@ -60,9 +61,12 @@ class ArrowItem extends CanvasItemBase
           design_slider_text_shadow2_opacity_value: 0.3
         }
         flags: {
-          design_bg_color2_flag: false
-          design_bg_color3_flag: false
-          design_bg_color4_flag: false
+          design_bg_color2_moz_flag: false
+          design_bg_color2_webkit_flag: false
+          design_bg_color3_moz_flag: false
+          design_bg_color3_webkit_flag: false
+          design_bg_color4_moz_flag: false
+          design_bg_color4_webkit_flag: false
         }
       }
       methods : {

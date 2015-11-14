@@ -57,15 +57,22 @@ WorkTableCssItemExtend =
     stepValue = parseInt($(target).val())
     for i in [2 .. 4]
       className = 'design_bg_color' + i
-      flag = $("." + className + "_flag", @cssRoot)
-      cache = $("." + className + "_cache", @cssRoot)
+      mozFlag = $("." + className + "_moz_flag", @cssRoot)
+      mozCache = $("." + className + "_moz_cache", @cssRoot)
+      webkitFlag = $("." + className + "_webkit_flag", @cssRoot)
+      webkitCache = $("." + className + "_webkit_cache", @cssRoot)
       if i > stepValue - 1
-        mh = flag.html()
+        mh = mozFlag.html()
         if mh.length > 0
-          cache.html(mh)
-        $(flag).empty()
+          mozCache.html(mh)
+        wh = webkitFlag.html()
+        if wh.length > 0
+          webkitCache.html(wh)
+        $(mozFlag).empty()
+        $(webkitFlag).empty()
       else
-        flag.html(cache.html())
+        mozFlag.html(mozCache.html());
+        webkitFlag.html(webkitCache.html())
     @applyDesignChange(doStyleSave)
 
   applyColorChangeByPicker: (designKeyName, value, doStyleSave = true) ->

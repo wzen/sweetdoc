@@ -247,10 +247,18 @@ WorkTableCommonInclude =
       # グラデーションStep
       btnGradientStep = $(".design_gradient_step", designConfigRoot)
       btnGradientStep.off('keyup mouseup')
-      btnGradientStep.on('keyup mouseup', (e) ->
+      btnGradientStep.on('keyup mouseup', (e) =>
+        stepValue = parseInt($(e.currentTarget).val())
+        for i in [2 .. 4]
+          @designs.flags["design_bg_color#{i}_moz_flag"] = i <= stepValue - 1
+          @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
         self.applyGradientStepChange(e.currentTarget)
-      ).each( ->
-        self.applyGradientStepChange(@)
+      ).each( (idx, e) =>
+        stepValue = parseInt($(e).val())
+        for i in [2 .. 4]
+          @designs.flags["design_bg_color#{i}_moz_flag"] = i <= stepValue - 1
+          @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
+        self.applyGradientStepChange(e)
       )
 
   # 通常スライダーの作成

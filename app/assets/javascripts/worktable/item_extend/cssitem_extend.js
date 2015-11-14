@@ -76,7 +76,7 @@ WorkTableCssItemExtend = {
     return this.applyDesignStyleChange(designKeyName, value, doStyleSave);
   },
   applyGradientStepChange: function(target, doStyleSave) {
-    var cache, className, flag, i, j, mh, stepValue;
+    var className, i, j, mh, mozCache, mozFlag, stepValue, webkitCache, webkitFlag, wh;
     if (doStyleSave == null) {
       doStyleSave = true;
     }
@@ -84,16 +84,24 @@ WorkTableCssItemExtend = {
     stepValue = parseInt($(target).val());
     for (i = j = 2; j <= 4; i = ++j) {
       className = 'design_bg_color' + i;
-      flag = $("." + className + "_flag", this.cssRoot);
-      cache = $("." + className + "_cache", this.cssRoot);
+      mozFlag = $("." + className + "_moz_flag", this.cssRoot);
+      mozCache = $("." + className + "_moz_cache", this.cssRoot);
+      webkitFlag = $("." + className + "_webkit_flag", this.cssRoot);
+      webkitCache = $("." + className + "_webkit_cache", this.cssRoot);
       if (i > stepValue - 1) {
-        mh = flag.html();
+        mh = mozFlag.html();
         if (mh.length > 0) {
-          cache.html(mh);
+          mozCache.html(mh);
         }
-        $(flag).empty();
+        wh = webkitFlag.html();
+        if (wh.length > 0) {
+          webkitCache.html(wh);
+        }
+        $(mozFlag).empty();
+        $(webkitFlag).empty();
       } else {
-        flag.html(cache.html());
+        mozFlag.html(mozCache.html());
+        webkitFlag.html(webkitCache.html());
       }
     }
     return this.applyDesignChange(doStyleSave);

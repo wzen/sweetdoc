@@ -261,11 +261,27 @@ WorkTableCommonInclude = {
       })(this));
       btnGradientStep = $(".design_gradient_step", designConfigRoot);
       btnGradientStep.off('keyup mouseup');
-      return btnGradientStep.on('keyup mouseup', function(e) {
-        return self.applyGradientStepChange(e.currentTarget);
-      }).each(function() {
-        return self.applyGradientStepChange(this);
-      });
+      return btnGradientStep.on('keyup mouseup', (function(_this) {
+        return function(e) {
+          var i, j, stepValue;
+          stepValue = parseInt($(e.currentTarget).val());
+          for (i = j = 2; j <= 4; i = ++j) {
+            _this.designs.flags["design_bg_color" + i + "_moz_flag"] = i <= stepValue - 1;
+            _this.designs.flags["design_bg_color" + i + "_webkit_flag"] = i <= stepValue - 1;
+          }
+          return self.applyGradientStepChange(e.currentTarget);
+        };
+      })(this)).each((function(_this) {
+        return function(idx, e) {
+          var i, j, stepValue;
+          stepValue = parseInt($(e).val());
+          for (i = j = 2; j <= 4; i = ++j) {
+            _this.designs.flags["design_bg_color" + i + "_moz_flag"] = i <= stepValue - 1;
+            _this.designs.flags["design_bg_color" + i + "_webkit_flag"] = i <= stepValue - 1;
+          }
+          return self.applyGradientStepChange(e);
+        };
+      })(this));
     }
   },
   settingSlider: function(className, min, max, stepValue) {
