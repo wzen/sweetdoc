@@ -273,9 +273,16 @@ WorkTableCommonInclude = {
         };
       })(this)).each((function(_this) {
         return function(idx, e) {
-          var i, j, stepValue;
-          stepValue = parseInt($(e).val());
+          var i, j, k, stepValue;
+          stepValue = 2;
           for (i = j = 2; j <= 4; i = ++j) {
+            if (!_this.designs.flags["design_bg_color" + i + "_moz_flag"]) {
+              stepValue = i;
+              break;
+            }
+          }
+          $(e).val(stepValue);
+          for (i = k = 2; k <= 4; i = ++k) {
             _this.designs.flags["design_bg_color" + i + "_moz_flag"] = i <= stepValue - 1;
             _this.designs.flags["design_bg_color" + i + "_webkit_flag"] = i <= stepValue - 1;
           }

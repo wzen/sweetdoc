@@ -254,7 +254,12 @@ WorkTableCommonInclude =
           @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
         self.applyGradientStepChange(e.currentTarget)
       ).each( (idx, e) =>
-        stepValue = parseInt($(e).val())
+        stepValue = 2
+        for i in [2 .. 4]
+          if !@designs.flags["design_bg_color#{i}_moz_flag"]
+            stepValue = i
+            break
+        $(e).val(stepValue)
         for i in [2 .. 4]
           @designs.flags["design_bg_color#{i}_moz_flag"] = i <= stepValue - 1
           @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
