@@ -171,11 +171,19 @@ class CanvasItemBase extends ItemBase
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
 
-    do ->
+    do =>
       # 背景色グラデーション
-
-      width = 0
-      height = 0
-
-      gradient = drawingContext.createLinearGradient(0, 0, width, height)
+      halfSlopLength = Math.sqrt(Math.pow(drawingCanvas.width, 2) + Math.pow(drawingCanvas.height, 2)) / 2.0
+      deg = @designs.values.design_slider_gradient_deg_value
+      console.log("deg: #{deg}")
+      pi = deg / 180.0 * Math.PI
+      l1 = halfSlopLength * Math.cos((deg % 45) / 180.0 * Math.PI)
+      console.log("l1: #{l1}")
+      centorCood = {x: drawingCanvas.width / 2, h : drawingCanvas.height / 2}
+      startX = l1 * Math.sin(pi) + centorCood.x
+      startY = l1 * Math.cos(pi) - centorCood.y
+      endX = l1 * Math.sin(pi) - centorCood.x
+      endY = l1 * Math.cos(pi) + centorCood.y
+      console.log("startX: #{startX}, startY: #{startY}, endX: #{endX}, endY: #{endY}")
+      gradient = drawingContext.createLinearGradient(startX, startY, endX, endY)
       drawingContext.fillStyle = "##{@designs.values.design_bg_color1_value}"
