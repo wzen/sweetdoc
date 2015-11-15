@@ -113,7 +113,7 @@ WorkTableCanvasItemExtend =
     )
 
   # デザイン変更を反映
-  applyDesignStyleChange: (doStyleSave = true) ->
+  applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)
     @reDraw()
 

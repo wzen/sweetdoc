@@ -198,17 +198,15 @@ CanvasItemBase = (function(superClass) {
     var drawingCanvas, drawingContext;
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');
-    return (function(_this) {
-      return function() {
+    (function(_this) {
+      return (function() {
         var centorCood, deg, endX, endY, gradient, halfSlopLength, l1, pi, startX, startY, tanX, tanY;
         halfSlopLength = Math.sqrt(Math.pow(drawingCanvas.width / 2.0, 2) + Math.pow(drawingCanvas.height / 2.0, 2));
         deg = _this.designs.values.design_slider_gradient_deg_value;
-        console.log("deg: " + deg);
         pi = deg / 180.0 * Math.PI;
         tanX = drawingCanvas.width * (Math.sin(pi) >= 0 ? Math.ceil(Math.sin(pi)) : Math.floor(Math.sin(pi)));
         tanY = drawingCanvas.height * (Math.cos(pi) >= 0 ? Math.ceil(Math.cos(pi)) : Math.floor(Math.cos(pi)));
         l1 = halfSlopLength * Math.cos(Math.abs((Math.atan2(tanX, tanY) * 180.0 / Math.PI) - deg) / 180.0 * Math.PI);
-        console.log("l1: " + l1);
         centorCood = {
           x: drawingCanvas.width / 2.0,
           y: drawingCanvas.height / 2.0
@@ -217,7 +215,6 @@ CanvasItemBase = (function(superClass) {
         startY = centorCood.y - parseInt(l1 * Math.cos(pi));
         endX = centorCood.x + parseInt(l1 * Math.sin(pi + Math.PI));
         endY = centorCood.y - parseInt(l1 * Math.cos(pi + Math.PI));
-        console.log("startX: " + startX + ", startY: " + startY + ", endX: " + endX + ", endY: " + endY);
         gradient = drawingContext.createLinearGradient(startX, startY, endX, endY);
         gradient.addColorStop(0, "#" + _this.designs.values.design_bg_color1_value);
         if (_this.designs.flags.design_bg_color2_flag) {
@@ -230,10 +227,18 @@ CanvasItemBase = (function(superClass) {
           gradient.addColorStop(_this.designs.values.design_bg_color4_position_value / 100, "#" + _this.designs.values.design_bg_color4_value);
         }
         gradient.addColorStop(1, "#" + _this.designs.values.design_bg_color5_value);
-        drawingContext.fillStyle = gradient;
-        return drawingContext.fill();
-      };
+        return drawingContext.fillStyle = gradient;
+      });
     })(this)();
+    (function(_this) {
+      return (function() {
+        drawingContext.shadowColor = "rgba(" + _this.designs.values.design_shadow_color_value + "," + _this.designs.values.design_slider_shadow_opacity_value + ")";
+        drawingContext.shadowOffsetX = _this.designs.values.design_slider_shadow_left_value;
+        drawingContext.shadowOffsetY = _this.designs.values.design_slider_shadow_top_value;
+        return drawingContext.shadowBlur = _this.designs.values.design_slider_shadow_size_value;
+      });
+    })(this)();
+    return drawingContext.fill();
   };
 
   return CanvasItemBase;

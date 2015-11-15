@@ -38,7 +38,7 @@ class ArrowItem extends CanvasItemBase
           design_border_color_value: 'ffffff'
           design_slider_border_radius_value: 30
           design_slider_border_width_value: 3
-          design_slider_shadow_left_value: 0
+          design_slider_shadow_left_value: 3
           design_slider_shadow_top_value: 3
           design_slider_shadow_size_value: 11
           design_shadow_color_value: '000,000,000'

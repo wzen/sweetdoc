@@ -180,18 +180,18 @@ class CanvasItemBase extends ItemBase
       # 背景色グラデーション
       halfSlopLength = Math.sqrt(Math.pow(drawingCanvas.width / 2.0, 2) + Math.pow(drawingCanvas.height / 2.0, 2))
       deg = @designs.values.design_slider_gradient_deg_value
-      console.log("deg: #{deg}")
+      #console.log("deg: #{deg}")
       pi = deg / 180.0 * Math.PI
       tanX = drawingCanvas.width * (if Math.sin(pi) >= 0 then Math.ceil(Math.sin(pi)) else Math.floor(Math.sin(pi)))
       tanY = drawingCanvas.height * (if Math.cos(pi) >= 0 then Math.ceil(Math.cos(pi)) else Math.floor(Math.cos(pi)))
       l1 = halfSlopLength * Math.cos(Math.abs((Math.atan2(tanX, tanY) * 180.0 / Math.PI) - deg) / 180.0 * Math.PI)
-      console.log("l1: #{l1}")
+      #console.log("l1: #{l1}")
       centorCood = {x: drawingCanvas.width / 2.0, y : drawingCanvas.height / 2.0}
       startX = centorCood.x + parseInt((l1 * Math.sin(pi)))
       startY = centorCood.y - parseInt((l1 * Math.cos(pi)))
       endX = centorCood.x + parseInt((l1 * Math.sin(pi + Math.PI)))
       endY = centorCood.y - parseInt((l1 * Math.cos(pi + Math.PI)))
-      console.log("startX: #{startX}, startY: #{startY}, endX: #{endX}, endY: #{endY}")
+      #console.log("startX: #{startX}, startY: #{startY}, endX: #{endX}, endY: #{endY}")
       gradient = drawingContext.createLinearGradient(startX, startY, endX, endY)
       gradient.addColorStop(0,"##{@designs.values.design_bg_color1_value}")
       if @designs.flags.design_bg_color2_flag
@@ -202,4 +202,12 @@ class CanvasItemBase extends ItemBase
         gradient.addColorStop(@designs.values.design_bg_color4_position_value / 100,"##{@designs.values.design_bg_color4_value}")
       gradient.addColorStop(1,"##{@designs.values.design_bg_color5_value}")
       drawingContext.fillStyle = gradient
-      drawingContext.fill()
+
+    do =>
+      # 影
+      drawingContext.shadowColor = "rgba(#{@designs.values.design_shadow_color_value},#{@designs.values.design_slider_shadow_opacity_value})"
+      drawingContext.shadowOffsetX = @designs.values.design_slider_shadow_left_value
+      drawingContext.shadowOffsetY = @designs.values.design_slider_shadow_top_value
+      drawingContext.shadowBlur = @designs.values.design_slider_shadow_size_value
+
+    drawingContext.fill()

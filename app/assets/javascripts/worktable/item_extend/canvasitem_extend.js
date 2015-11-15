@@ -114,7 +114,7 @@ WorkTableCanvasItemExtend = {
       };
     })(this));
   },
-  applyDesignStyleChange: function(doStyleSave) {
+  applyDesignStyleChange: function(designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
