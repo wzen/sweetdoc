@@ -182,12 +182,14 @@ class CanvasItemBase extends ItemBase
       deg = @designs.values.design_slider_gradient_deg_value
       console.log("deg: #{deg}")
       pi = deg / 180.0 * Math.PI
-      l1 = halfSlopLength * Math.cos(Math.abs((Math.atan2(drawingCanvas.width, drawingCanvas.height) * 180.0 / Math.PI) - (deg % 90)) / 180.0 * Math.PI)
+      tanX = drawingCanvas.width * (if Math.sin(pi) >= 0 then Math.ceil(Math.sin(pi)) else Math.floor(Math.sin(pi)))
+      tanY = drawingCanvas.height * (if Math.cos(pi) >= 0 then Math.ceil(Math.cos(pi)) else Math.floor(Math.cos(pi)))
+      l1 = halfSlopLength * Math.cos(Math.abs((Math.atan2(tanX, tanY) * 180.0 / Math.PI) - deg) / 180.0 * Math.PI)
       console.log("l1: #{l1}")
       centorCood = {x: drawingCanvas.width / 2.0, y : drawingCanvas.height / 2.0}
-      startX = centorCood.x - parseInt((l1 * Math.sin(pi)))
+      startX = centorCood.x + parseInt((l1 * Math.sin(pi)))
       startY = centorCood.y - parseInt((l1 * Math.cos(pi)))
-      endX = centorCood.x - parseInt((l1 * Math.sin(pi + Math.PI)))
+      endX = centorCood.x + parseInt((l1 * Math.sin(pi + Math.PI)))
       endY = centorCood.y - parseInt((l1 * Math.cos(pi + Math.PI)))
       console.log("startX: #{startX}, startY: #{startY}, endX: #{endX}, endY: #{endY}")
       gradient = drawingContext.createLinearGradient(startX, startY, endX, endY)
