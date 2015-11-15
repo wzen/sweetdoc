@@ -200,19 +200,7 @@ CssItemBase = (function(superClass) {
   CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
     this.cssStyle.text(this.cssCode.text());
     if (doStyleSave) {
-      if (this.cssStypeReflectTimer != null) {
-        clearTimeout(this.cssStypeReflectTimer);
-        this.cssStypeReflectTimer = null;
-      }
-      return this.cssStypeReflectTimer = setTimeout((function(_this) {
-        return function() {
-          _this.setItemAllPropToPageValue();
-          LocalStorage.saveAllPageValues();
-          return _this.cssStypeReflectTimer = setTimeout(function() {
-            return OperationHistory.add();
-          }, 1000);
-        };
-      })(this), 500);
+      return this.saveDesign();
     }
   };
 

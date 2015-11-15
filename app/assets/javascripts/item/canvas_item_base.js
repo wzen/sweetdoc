@@ -188,6 +188,12 @@ CanvasItemBase = (function(superClass) {
     };
   };
 
+  CanvasItemBase.prototype.applyDesignChange = function(doStyleSave) {
+    if (doStyleSave) {
+      return this.saveDesign();
+    }
+  };
+
   CanvasItemBase.prototype.applyDesignTool = function() {
     var drawingCanvas, drawingContext;
     drawingCanvas = document.getElementById(this.canvasElementId());

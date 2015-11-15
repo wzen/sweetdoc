@@ -176,21 +176,7 @@ class CssItemBase extends ItemBase
   applyDesignChange: (doStyleSave) ->
     @cssStyle.text(@cssCode.text())
     if doStyleSave
-      # 頻繁に呼ばれるためタイマーでPageValueに書き込む
-      if @cssStypeReflectTimer?
-        clearTimeout(@cssStypeReflectTimer)
-        @cssStypeReflectTimer = null
-      @cssStypeReflectTimer = setTimeout( =>
-        # 0.5秒後に反映
-        # ページに状態を保存
-        @setItemAllPropToPageValue()
-        # キャッシュに保存
-        LocalStorage.saveAllPageValues()
-        @cssStypeReflectTimer = setTimeout( ->
-          # 1秒後に操作履歴に保存
-          OperationHistory.add()
-        , 1000)
-      , 500)
+      @saveDesign()
 
   # CSS内容
   # @abstract

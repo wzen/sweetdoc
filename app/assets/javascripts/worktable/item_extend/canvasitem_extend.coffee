@@ -114,20 +114,25 @@ WorkTableCanvasItemExtend =
 
   # デザイン変更を反映
   applyDesignStyleChange: (doStyleSave = true) ->
+    @applyDesignChange(doStyleSave)
     @reDraw()
 
   # グラデーションデザイン変更を反映
   applyGradientStyleChange: (index, designKeyName, value, doStyleSave = true) ->
+    @applyDesignChange(doStyleSave)
     @reDraw()
 
   # グラデーション方向変更を反映
   applyGradientDegChange: (designKeyName, value, doStyleSave = true) ->
+    @applyDesignChange(doStyleSave)
     @reDraw()
 
   # グラデーションステップ数変更を反映
-  applyGradientStepChange: (target) ->
+  applyGradientStepChange: (target, doStyleSave = true) ->
+    @applyDesignChange(doStyleSave)
     @reDraw()
 
   # カラーピッカー変更を反映
   applyColorChangeByPicker: (designKeyName, value, doStyleSave = true) ->
+    @applyDesignChange(doStyleSave)
     @reDraw()

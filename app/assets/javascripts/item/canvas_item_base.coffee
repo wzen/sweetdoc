@@ -167,6 +167,11 @@ class CanvasItemBase extends ItemBase
       h: itemSize.h * originalScale.h
     }
 
+  # CSSに反映
+  applyDesignChange: (doStyleSave) ->
+    if doStyleSave
+      @saveDesign()
+
   applyDesignTool: ->
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')

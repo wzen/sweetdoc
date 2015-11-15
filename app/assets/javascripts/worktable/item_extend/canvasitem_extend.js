@@ -118,27 +118,35 @@ WorkTableCanvasItemExtend = {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
+    this.applyDesignChange(doStyleSave);
     return this.reDraw();
   },
   applyGradientStyleChange: function(index, designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
+    this.applyDesignChange(doStyleSave);
     return this.reDraw();
   },
   applyGradientDegChange: function(designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
+    this.applyDesignChange(doStyleSave);
     return this.reDraw();
   },
-  applyGradientStepChange: function(target) {
+  applyGradientStepChange: function(target, doStyleSave) {
+    if (doStyleSave == null) {
+      doStyleSave = true;
+    }
+    this.applyDesignChange(doStyleSave);
     return this.reDraw();
   },
   applyColorChangeByPicker: function(designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
+    this.applyDesignChange(doStyleSave);
     return this.reDraw();
   }
 };

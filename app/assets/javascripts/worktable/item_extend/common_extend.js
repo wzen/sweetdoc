@@ -358,6 +358,21 @@ WorkTableCommonInclude = {
       }
     }
     return results;
+  },
+  saveDesign: function() {
+    if (this.saveDesignReflectTimer != null) {
+      clearTimeout(this.saveDesignReflectTimer);
+      this.saveDesignReflectTimer = null;
+    }
+    return this.saveDesignReflectTimer = setTimeout((function(_this) {
+      return function() {
+        _this.setItemAllPropToPageValue();
+        LocalStorage.saveAllPageValues();
+        return _this.saveDesignReflectTimer = setTimeout(function() {
+          return OperationHistory.add();
+        }, 1000);
+      };
+    })(this), 500);
   }
 };
 

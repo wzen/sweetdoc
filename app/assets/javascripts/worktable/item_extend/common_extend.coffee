@@ -314,3 +314,20 @@ WorkTableCommonInclude =
         element.hide()
       else
         element.show()
+
+  saveDesign: ->
+    if @saveDesignReflectTimer?
+      clearTimeout(@saveDesignReflectTimer)
+      @saveDesignReflectTimer = null
+    @saveDesignReflectTimer = setTimeout( =>
+      # 0.5秒後に反映
+      # ページに状態を保存
+      @setItemAllPropToPageValue()
+      # キャッシュに保存
+      LocalStorage.saveAllPageValues()
+      @saveDesignReflectTimer = setTimeout( ->
+        # 1秒後に操作履歴に保存
+        OperationHistory.add()
+      , 1000)
+    , 500)
+
