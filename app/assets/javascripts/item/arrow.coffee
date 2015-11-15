@@ -454,7 +454,6 @@ class ArrowItem extends CanvasItemBase
     drawingContext.beginPath();
     # 尾と体の座標をCanvasに描画
     _drawCoodToNewCanvas.call(@)
-    #drawingContext.fillStyle = "#00008B"
     @applyDesignTool(drawingContext)
     drawingContext.fill()
 

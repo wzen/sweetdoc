@@ -35,6 +35,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/design_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />

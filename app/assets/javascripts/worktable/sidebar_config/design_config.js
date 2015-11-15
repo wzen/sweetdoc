@@ -15,7 +15,8 @@ DesignConfig = (function() {
       url: "/worktable/design_config",
       type: "POST",
       data: {
-        designConfig: obj.constructor.actionProperties.designConfig
+        designConfig: obj.constructor.actionProperties.designConfig,
+        isCanvas: obj instanceof CanvasItemBase
       },
       dataType: "json",
       success: function(data) {

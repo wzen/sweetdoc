@@ -6,6 +6,7 @@ class DesignConfig
         type: "POST"
         data: {
           designConfig: obj.constructor.actionProperties.designConfig
+          isCanvas: obj instanceof CanvasItemBase
         }
         dataType: "json"
         success: (data)->

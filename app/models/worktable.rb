@@ -23,14 +23,15 @@ class Worktable
     return common_actions
   end
 
-  def self.get_design_config(design_config)
+  def self.get_design_config(design_config, is_canvas)
     ret = ApplicationController.new.render_to_string(
         partial: 'worktable/sidebar_menu/design/parts/common'
     )
     if design_config.is_a?(String)
       if design_config == Const::ItemDesignOptionType::DESIGN_TOOL
+        name = is_canvas ? 'canvas_design_tool' : 'css_design_tool'
         ret += ApplicationController.new.render_to_string(
-            partial: 'worktable/sidebar_menu/design/parts/design_tool'
+            partial: "worktable/sidebar_menu/design/parts/#{name}"
         )
       end
     elsif design_config.is_a?(Object)
