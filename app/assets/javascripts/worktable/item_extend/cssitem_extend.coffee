@@ -83,7 +83,7 @@ WorkTableCssItemExtend =
       ColorPickerUtil.initColorPicker(
         $(e),
         colorValue,
-        (a, b, d) ->
+        (a, b, d) =>
           value = "#{d.r},#{d.g},#{d.b}"
           @designs.values["#{className}_value"] = value
           self.applyColorChangeByPicker(className, value)

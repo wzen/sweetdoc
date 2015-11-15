@@ -84,7 +84,7 @@ WorkTableCssItemExtend = {
         return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d) {
           var value;
           value = d.r + "," + d.g + "," + d.b;
-          this.designs.values[className + "_value"] = value;
+          _this.designs.values[className + "_value"] = value;
           return self.applyColorChangeByPicker(className, value);
         });
       };
