@@ -47,18 +47,6 @@ WorkTableCanvasItemExtend = {
     self.settingSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
     self.settingSlider('design_slider_shadow_size', 0, 100);
     self.settingSlider('design_slider_shadow_top', -100, 100);
-    self.settingSlider('design_slider_shadowinset_left', -100, 100);
-    self.settingSlider('design_slider_shadowinset_opacity', 0.0, 1.0, 0.1);
-    self.settingSlider('design_slider_shadowinset_size', 0, 100);
-    self.settingSlider('design_slider_shadowinset_top', -100, 100);
-    self.settingSlider('design_slider_text_shadow1_left', -100, 100);
-    self.settingSlider('design_slider_text_shadow1_opacity', 0.0, 1.0, 0.1);
-    self.settingSlider('design_slider_text_shadow1_size', 0, 100);
-    self.settingSlider('design_slider_text_shadow1_top', -100, 100);
-    self.settingSlider('design_slider_text_shadow2_left', -100, 100);
-    self.settingSlider('design_slider_text_shadow2_opacity', 0.0, 1.0, 0.1);
-    self.settingSlider('design_slider_text_shadow2_size', 0, 100);
-    self.settingSlider('design_slider_text_shadow2_top', -100, 100);
     btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot);
     btnBgColor.each((function(_this) {
       return function(idx, e) {

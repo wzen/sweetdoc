@@ -46,22 +46,7 @@ ArrowItem = (function(superClass) {
         design_slider_shadow_top_value: 3,
         design_slider_shadow_size_value: 11,
         design_shadow_color_value: '000,000,000',
-        design_slider_shadow_opacity_value: 0.5,
-        design_slider_shadowinset_left_value: 0,
-        design_slider_shadowinset_top_value: 0,
-        design_slider_shadowinset_size_value: 1,
-        design_shadowinset_color_value: '255,000,217',
-        design_slider_shadowinset_opacity_value: 1,
-        design_slider_text_shadow1_left_value: 0,
-        design_slider_text_shadow1_top_value: -1,
-        design_slider_text_shadow1_size_value: 0,
-        design_text_shadow1_color_value: '000,000,000',
-        design_slider_text_shadow1_opacity_value: 0.2,
-        design_slider_text_shadow2_left_value: 0,
-        design_slider_text_shadow2_top_value: 1,
-        design_slider_text_shadow2_size_value: 0,
-        design_text_shadow2_color_value: '255,255,255',
-        design_slider_text_shadow2_opacity_value: 0.3
+        design_slider_shadow_opacity_value: 0.5
       },
       flags: {
         design_bg_color2_flag: false,
