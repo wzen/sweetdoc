@@ -188,6 +188,19 @@ CanvasItemBase = (function(superClass) {
     };
   };
 
+  CanvasItemBase.prototype.applyDesignTool = function() {
+    var drawingCanvas, drawingContext;
+    drawingCanvas = document.getElementById(this.canvasElementId());
+    drawingContext = drawingCanvas.getContext('2d');
+    return (function() {
+      var gradient, height, width;
+      width = 0;
+      height = 0;
+      gradient = drawingContext.createLinearGradient(0, 0, width, height);
+      return drawingContext.fillStyle = "#" + this.designs.values.design_bg_color1_value;
+    })();
+  };
+
   return CanvasItemBase;
 
 })(ItemBase);

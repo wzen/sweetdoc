@@ -153,6 +153,7 @@ WorkTableCssItemExtend = {
       270: 'left top, right top',
       315: 'left top, right bottom'
     };
+    this.designs.values[designKeyName + "_value_webkit_value"] = webkitDeg[value];
     webkitValueElement = $('.' + designKeyName + '_value_webkit_value', this.cssCode);
     webkitValueElement.html(webkitDeg[value]);
     return this.applyDesignStyleChange(designKeyName, value, doStyleSave);

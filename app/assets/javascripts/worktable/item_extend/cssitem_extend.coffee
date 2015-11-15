@@ -128,6 +128,7 @@ WorkTableCssItemExtend =
   # グラデーション方向変更を反映
   applyGradientDegChange: (designKeyName, value, doStyleSave = true) ->
     webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
+    @designs.values["#{designKeyName}_value_webkit_value"] = webkitDeg[value]
     webkitValueElement = $('.' + designKeyName + '_value_webkit_value', @cssCode)
     webkitValueElement.html(webkitDeg[value])
     @applyDesignStyleChange(designKeyName, value, doStyleSave)

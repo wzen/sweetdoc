@@ -14,7 +14,7 @@ WorkTableCommonInclude =
   # 描画&コンフィグ作成
   # @param [Boolean] show 要素作成後に描画を表示するか
   drawAndMakeConfigsAndWritePageValue: (show = true) ->
-    # ボタン設置
+    # 描画
     @reDraw(show)
     # コンフィグ作成
     @makeDesignConfig()
@@ -258,13 +258,16 @@ WorkTableCommonInclude =
   # @param [Int] id メーターのElementID
   # @param [Int] min 最小値
   # @param [Int] max 最大値
-  settingGradientDegSlider: (className, min, max) ->
+  settingGradientDegSlider: (className, min, max, each45Degrees = true) ->
     designConfigRoot = $('#' + @getDesignConfigId())
     meterElement = $('.' + className, designConfigRoot)
     valueElement = $('.' + className + '_value', designConfigRoot)
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(@id, "#{className}_value"))
     valueElement.val(defaultValue)
     valueElement.html(defaultValue)
+    step = 1
+    if each45Degrees
+      step = 45
 
     try
       meterElement.slider('destroy')
@@ -272,7 +275,7 @@ WorkTableCommonInclude =
     meterElement.slider({
       min: min,
       max: max,
-      step: 45,
+      step: step,
       value: defaultValue
       slide: (event, ui) =>
         valueElement.val(ui.value)
@@ -280,8 +283,6 @@ WorkTableCommonInclude =
         classNames = $(event.target).attr('class').split(' ')
         n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
         @designs.values["#{n}_value"] = ui.value
-        webkitDeg = {0 : 'left top, left bottom', 45 : 'right top, left bottom', 90 : 'right top, left top', 135 : 'right bottom, left top', 180 : 'left bottom, left top', 225 : 'left bottom, right top', 270 : 'left top, right top', 315: 'left top, right bottom'}
-        @designs.values["#{n}_value_webkit_value"] = webkitDeg[ui.value]
         @applyGradientDegChange(n, ui.value)
     })
 

@@ -39,7 +39,7 @@ WorkTableCanvasItemExtend = {
     self = this;
     designConfigRoot = $('#' + this.getDesignConfigId());
     self.settingGradientSlider('design_slider_gradient', null);
-    self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315);
+    self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false);
     self.settingSlider('design_slider_border_radius', 0, 100);
     self.settingSlider('design_slider_border_width', 0, 10);
     self.settingSlider('design_slider_font_size', 0, 30);
@@ -92,8 +92,7 @@ WorkTableCanvasItemExtend = {
         var i, j, stepValue;
         stepValue = parseInt($(e.currentTarget).val());
         for (i = j = 2; j <= 4; i = ++j) {
-          _this.designs.flags["design_bg_color" + i + "_moz_flag"] = i <= stepValue - 1;
-          _this.designs.flags["design_bg_color" + i + "_webkit_flag"] = i <= stepValue - 1;
+          _this.designs.flags["design_bg_color" + i + "_flag"] = i <= stepValue - 1;
         }
         return self.applyGradientStepChange(e.currentTarget);
       };
@@ -102,15 +101,14 @@ WorkTableCanvasItemExtend = {
         var i, j, k, stepValue;
         stepValue = 2;
         for (i = j = 2; j <= 4; i = ++j) {
-          if (!_this.designs.flags["design_bg_color" + i + "_moz_flag"]) {
+          if (!_this.designs.flags["design_bg_color" + i + "_flag"]) {
             stepValue = i;
             break;
           }
         }
         $(e).val(stepValue);
         for (i = k = 2; k <= 4; i = ++k) {
-          _this.designs.flags["design_bg_color" + i + "_moz_flag"] = i <= stepValue - 1;
-          _this.designs.flags["design_bg_color" + i + "_webkit_flag"] = i <= stepValue - 1;
+          _this.designs.flags["design_bg_color" + i + "_flag"] = i <= stepValue - 1;
         }
         return self.applyGradientStepChange(e);
       };
@@ -120,22 +118,7 @@ WorkTableCanvasItemExtend = {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    this.cssStyle.text(this.cssCode.text());
-    if (doStyleSave) {
-      if (this.cssStypeReflectTimer != null) {
-        clearTimeout(this.cssStypeReflectTimer);
-        this.cssStypeReflectTimer = null;
-      }
-      return this.cssStypeReflectTimer = setTimeout((function(_this) {
-        return function() {
-          _this.setItemAllPropToPageValue();
-          LocalStorage.saveAllPageValues();
-          return _this.cssStypeReflectTimer = setTimeout(function() {
-            return OperationHistory.add();
-          }, 1000);
-        };
-      })(this), 500);
-    }
+    return this.reDraw();
   },
   applyGradientStyleChange: function(index, designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
@@ -157,9 +140,6 @@ WorkTableCanvasItemExtend = {
       doStyleSave = true;
     }
     return this.reDraw();
-  },
-  applyDesignTool: function(drawingContext) {
-    return drawingContext.fillStyle = "#00008B";
   }
 };
 

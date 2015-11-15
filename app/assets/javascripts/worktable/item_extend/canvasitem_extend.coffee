@@ -39,10 +39,10 @@ WorkTableCanvasItemExtend =
   setupDesignToolOptionMenu: ->
     self = @
     designConfigRoot = $('#' + @getDesignConfigId())
-    
+
     # スライダー
     self.settingGradientSlider('design_slider_gradient', null)
-    self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315)
+    self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false)
     self.settingSlider('design_slider_border_radius', 0, 100)
     self.settingSlider('design_slider_border_width', 0, 10)
     self.settingSlider('design_slider_font_size', 0, 30)
@@ -98,44 +98,23 @@ WorkTableCanvasItemExtend =
     btnGradientStep.on('keyup mouseup', (e) =>
       stepValue = parseInt($(e.currentTarget).val())
       for i in [2 .. 4]
-        @designs.flags["design_bg_color#{i}_moz_flag"] = i <= stepValue - 1
-        @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
+        @designs.flags["design_bg_color#{i}_flag"] = i <= stepValue - 1
       self.applyGradientStepChange(e.currentTarget)
     ).each( (idx, e) =>
       stepValue = 2
       for i in [2 .. 4]
-        if !@designs.flags["design_bg_color#{i}_moz_flag"]
+        if !@designs.flags["design_bg_color#{i}_flag"]
           stepValue = i
           break
       $(e).val(stepValue)
       for i in [2 .. 4]
-        @designs.flags["design_bg_color#{i}_moz_flag"] = i <= stepValue - 1
-        @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
+        @designs.flags["design_bg_color#{i}_flag"] = i <= stepValue - 1
       self.applyGradientStepChange(e)
     )
 
   # デザイン変更を反映
   applyDesignStyleChange: (doStyleSave = true) ->
-
-    # TODO: 修正
-
-    @cssStyle.text(@cssCode.text())
-    if doStyleSave
-      # 頻繁に呼ばれるためタイマーでPageValueに書き込む
-      if @cssStypeReflectTimer?
-        clearTimeout(@cssStypeReflectTimer)
-        @cssStypeReflectTimer = null
-      @cssStypeReflectTimer = setTimeout( =>
-        # 0.5秒後に反映
-        # ページに状態を保存
-        @setItemAllPropToPageValue()
-        # キャッシュに保存
-        LocalStorage.saveAllPageValues()
-        @cssStypeReflectTimer = setTimeout( ->
-          # 1秒後に操作履歴に保存
-          OperationHistory.add()
-        , 1000)
-      , 500)
+    @reDraw()
 
   # グラデーションデザイン変更を反映
   applyGradientStyleChange: (index, designKeyName, value, doStyleSave = true) ->
@@ -152,7 +131,3 @@ WorkTableCanvasItemExtend =
   # カラーピッカー変更を反映
   applyColorChangeByPicker: (designKeyName, value, doStyleSave = true) ->
     @reDraw()
-
-  applyDesignTool: (drawingContext) ->
-    # 背景色
-    drawingContext.fillStyle = "#00008B"

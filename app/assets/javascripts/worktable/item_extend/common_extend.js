@@ -287,14 +287,21 @@ WorkTableCommonInclude = {
     meterElement = $("." + className, designConfigRoot);
     return this.settingGradientSliderByElement(meterElement, values);
   },
-  settingGradientDegSlider: function(className, min, max) {
-    var defaultValue, designConfigRoot, meterElement, valueElement;
+  settingGradientDegSlider: function(className, min, max, each45Degrees) {
+    var defaultValue, designConfigRoot, meterElement, step, valueElement;
+    if (each45Degrees == null) {
+      each45Degrees = true;
+    }
     designConfigRoot = $('#' + this.getDesignConfigId());
     meterElement = $('.' + className, designConfigRoot);
     valueElement = $('.' + className + '_value', designConfigRoot);
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(this.id, className + "_value"));
     valueElement.val(defaultValue);
     valueElement.html(defaultValue);
+    step = 1;
+    if (each45Degrees) {
+      step = 45;
+    }
     try {
       meterElement.slider('destroy');
     } catch (_error) {
@@ -303,11 +310,11 @@ WorkTableCommonInclude = {
     return meterElement.slider({
       min: min,
       max: max,
-      step: 45,
+      step: step,
       value: defaultValue,
       slide: (function(_this) {
         return function(event, ui) {
-          var classNames, n, webkitDeg;
+          var classNames, n;
           valueElement.val(ui.value);
           valueElement.html(ui.value);
           classNames = $(event.target).attr('class').split(' ');
@@ -315,17 +322,6 @@ WorkTableCommonInclude = {
             return s.indexOf('design_') >= 0;
           })[0];
           _this.designs.values[n + "_value"] = ui.value;
-          webkitDeg = {
-            0: 'left top, left bottom',
-            45: 'right top, left bottom',
-            90: 'right top, left top',
-            135: 'right bottom, left top',
-            180: 'left bottom, left top',
-            225: 'left bottom, right top',
-            270: 'left top, right top',
-            315: 'left top, right bottom'
-          };
-          _this.designs.values[n + "_value_webkit_value"] = webkitDeg[ui.value];
           return _this.applyGradientDegChange(n, ui.value);
         };
       })(this)

@@ -166,3 +166,16 @@ class CanvasItemBase extends ItemBase
       w: itemSize.w * originalScale.w
       h: itemSize.h * originalScale.h
     }
+
+  applyDesignTool: ->
+    drawingCanvas = document.getElementById(@canvasElementId())
+    drawingContext = drawingCanvas.getContext('2d')
+
+    do ->
+      # 背景色グラデーション
+
+      width = 0
+      height = 0
+
+      gradient = drawingContext.createLinearGradient(0, 0, width, height)
+      drawingContext.fillStyle = "##{@designs.values.design_bg_color1_value}"
