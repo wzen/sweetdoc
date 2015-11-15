@@ -446,8 +446,7 @@ ArrowItem = (function(superClass) {
     drawingContext = drawingCanvas.getContext('2d');
     drawingContext.beginPath();
     _drawCoodToNewCanvas.call(this);
-    this.applyDesignTool();
-    return drawingContext.fill();
+    return this.applyDesignTool();
   };
 
   _coodLog = function(cood, name) {

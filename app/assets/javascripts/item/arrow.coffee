@@ -451,7 +451,6 @@ class ArrowItem extends CanvasItemBase
     # 尾と体の座標をCanvasに描画
     _drawCoodToNewCanvas.call(@)
     @applyDesignTool()
-    drawingContext.fill()
 
   # 座標のログを表示
   # @private

@@ -195,23 +195,35 @@ CanvasItemBase = (function(superClass) {
     return (function(_this) {
       return function() {
         var centorCood, deg, endX, endY, gradient, halfSlopLength, l1, pi, startX, startY;
-        halfSlopLength = Math.sqrt(Math.pow(drawingCanvas.width, 2) + Math.pow(drawingCanvas.height, 2)) / 2.0;
+        halfSlopLength = Math.sqrt(Math.pow(drawingCanvas.width / 2.0, 2) + Math.pow(drawingCanvas.height / 2.0, 2));
         deg = _this.designs.values.design_slider_gradient_deg_value;
         console.log("deg: " + deg);
         pi = deg / 180.0 * Math.PI;
-        l1 = halfSlopLength * Math.cos((deg % 45) / 180.0 * Math.PI);
+        l1 = halfSlopLength * Math.cos(Math.abs((Math.atan2(drawingCanvas.width, drawingCanvas.height) * 180.0 / Math.PI) - (deg % 90)) / 180.0 * Math.PI);
         console.log("l1: " + l1);
         centorCood = {
-          x: drawingCanvas.width / 2,
-          h: drawingCanvas.height / 2
+          x: drawingCanvas.width / 2.0,
+          y: drawingCanvas.height / 2.0
         };
-        startX = l1 * Math.sin(pi) + centorCood.x;
-        startY = l1 * Math.cos(pi) - centorCood.y;
-        endX = l1 * Math.sin(pi) - centorCood.x;
-        endY = l1 * Math.cos(pi) + centorCood.y;
+        startX = centorCood.x - parseInt(l1 * Math.sin(pi));
+        startY = centorCood.y - parseInt(l1 * Math.cos(pi));
+        endX = centorCood.x - parseInt(l1 * Math.sin(pi + Math.PI));
+        endY = centorCood.y - parseInt(l1 * Math.cos(pi + Math.PI));
         console.log("startX: " + startX + ", startY: " + startY + ", endX: " + endX + ", endY: " + endY);
         gradient = drawingContext.createLinearGradient(startX, startY, endX, endY);
-        return drawingContext.fillStyle = "#" + _this.designs.values.design_bg_color1_value;
+        gradient.addColorStop(0, "#" + _this.designs.values.design_bg_color1_value);
+        if (_this.designs.flags.design_bg_color2_flag) {
+          gradient.addColorStop(_this.designs.values.design_bg_color2_position_value / 100, "#" + _this.designs.values.design_bg_color2_value);
+        }
+        if (_this.designs.flags.design_bg_color3_flag) {
+          gradient.addColorStop(_this.designs.values.design_bg_color3_position_value / 100, "#" + _this.designs.values.design_bg_color3_value);
+        }
+        if (_this.designs.flags.design_bg_color4_flag) {
+          gradient.addColorStop(_this.designs.values.design_bg_color4_position_value / 100, "#" + _this.designs.values.design_bg_color4_value);
+        }
+        gradient.addColorStop(1, "#" + _this.designs.values.design_bg_color5_value);
+        drawingContext.fillStyle = gradient;
+        return drawingContext.fill();
       };
     })(this)();
   };
