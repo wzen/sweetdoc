@@ -198,6 +198,7 @@ CssItemBase = (function(superClass) {
   };
 
   CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
+    this.reDraw();
     this.cssStyle.text(this.cssCode.text());
     if (doStyleSave) {
       return this.saveDesign();

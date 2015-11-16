@@ -169,6 +169,7 @@ class CanvasItemBase extends ItemBase
 
   # CSSに反映
   applyDesignChange: (doStyleSave) ->
+    @reDraw()
     if doStyleSave
       @saveDesign()
 

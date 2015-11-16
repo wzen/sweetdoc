@@ -10,13 +10,11 @@ class WorktableController < ApplicationController
   end
 
   def design_config
-    design_config = params.fetch('designConfig', nil)
-    is_canvas = params.require('isCanvas')
+    design_config = params.fetch('designConfig', false)
+    modifiables = params.fetch('modifiables', {})
+    is_canvas = params.require('isCanvas') == 'true'
     @result_success = true
-    html = ''
-    if design_config
-      html = Worktable.get_design_config(design_config, is_canvas)
-    end
+    html = Worktable.get_design_config(design_config, is_canvas, modifiables)
     @html = "<div class='#{Const::DesignConfig::ROOT_CLASSNAME}'>#{html}</div>"
   end
 

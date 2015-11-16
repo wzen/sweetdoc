@@ -4,7 +4,7 @@ var DesignConfig;
 DesignConfig = (function() {
   function DesignConfig() {}
 
-  DesignConfig.addConfigIfNeed = function(obj, successCallback, errorCallback) {
+  DesignConfig.getDesignConfig = function(obj, successCallback, errorCallback) {
     if (successCallback == null) {
       successCallback = null;
     }
@@ -16,7 +16,8 @@ DesignConfig = (function() {
       type: "POST",
       data: {
         designConfig: obj.constructor.actionProperties.designConfig,
-        isCanvas: obj instanceof CanvasItemBase
+        isCanvas: obj instanceof CanvasItemBase,
+        modifiables: obj.constructor.actionProperties.modifiables
       },
       dataType: "json",
       success: function(data) {

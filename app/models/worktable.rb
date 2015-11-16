@@ -23,35 +23,37 @@ class Worktable
     return common_actions
   end
 
-  def self.get_design_config(design_config, is_canvas)
+  def self.get_design_config(design_config, is_canvas, modifiables)
     ret = ApplicationController.new.render_to_string(
         partial: 'worktable/sidebar_menu/design/parts/common'
     )
-    if design_config.is_a?(String)
-      if design_config == Const::ItemDesignOptionType::DESIGN_TOOL
-        name = is_canvas ? 'canvas_design_tool' : 'css_design_tool'
-        ret += ApplicationController.new.render_to_string(
-            partial: "worktable/sidebar_menu/design/parts/#{name}"
-        )
+    if design_config
+      name = is_canvas ? 'canvas_design_tool' : 'css_design_tool'
+      ret += ApplicationController.new.render_to_string(
+          partial: "worktable/sidebar_menu/design/parts/#{name}"
+      )
+    end
+    modifiables.each do |var, v|
+      temp = ''
+      if v['type'] == Const::ItemDesignOptionType::NUMBER
+        temp = 'worktable/sidebar_menu/design/parts/slider'
+      elsif v['type'] == Const::ItemDesignOptionType::STRING
+        temp = 'worktable/sidebar_menu/design/parts/textbox'
+      elsif v['type'] == Const::ItemDesignOptionType::COLOR
+        temp = 'worktable/sidebar_menu/design/parts/color'
       end
-    elsif design_config.is_a?(Object)
-      design_config.each do |var, v|
-        temp = ''
-        if v['type'] == Const::ItemDesignOptionType::NUMBER
-          temp = 'worktable/sidebar_menu/design/parts/slider'
-        elsif v['type'] == Const::ItemDesignOptionType::STRING
-          temp = 'worktable/sidebar_menu/design/parts/textbox'
-        elsif v['type'] == Const::ItemDesignOptionType::COLOR
-          temp = 'worktable/sidebar_menu/design/parts/color'
-        end
-        ret += ApplicationController.new.render_to_string(
-            partial: temp,
-            locals: {
-                var_name: var,
-                options: v['options']
-            }
-        )
+      value = v
+      l_value = v[I18n.locale]
+      if l_value
+        value.update!(l_value)
       end
+      ret += ApplicationController.new.render_to_string(
+          partial: temp,
+          locals: {
+              var_name: var,
+              value: value
+          }
+      )
     end
     return ret
   end

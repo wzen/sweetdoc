@@ -5,7 +5,7 @@ var ArrowItem,
   hasProp = {}.hasOwnProperty;
 
 ArrowItem = (function(superClass) {
-  var ARROW_WIDTH, HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _updateArrowRect;
+  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _updateArrowRect;
 
   extend(ArrowItem, superClass);
 
@@ -15,15 +15,13 @@ ArrowItem = (function(superClass) {
     ArrowItem.ITEM_ID = window.loadedItemId;
   }
 
-  ARROW_WIDTH = 37;
-
   HEADER_WIDTH = 100;
 
   HEADER_HEIGHT = 50;
 
   ArrowItem.actionProperties = {
     defaultMethod: 'scrollDraw',
-    designConfig: 'design_tool',
+    designConfig: true,
     designConfigDefaultValues: {
       values: {
         design_slider_font_size_value: 14,
@@ -54,6 +52,18 @@ ArrowItem = (function(superClass) {
         design_bg_color4_flag: false
       }
     },
+    modifiables: {
+      arrowWidth: {
+        name: "Arrow's width",
+        "default": 37,
+        type: 'number',
+        min: 1,
+        max: 99,
+        ja: {
+          name: "矢印の幅"
+        }
+      }
+    },
     methods: {
       scrollDraw: {
         actionType: 'scroll',
@@ -68,6 +78,17 @@ ArrowItem = (function(superClass) {
           bottom: true,
           left: false,
           right: false
+        },
+        modifiables: {
+          arrowWidth: {
+            name: "Arrow's width",
+            type: 'number',
+            min: 1,
+            max: 99,
+            ja: {
+              name: "矢印の幅"
+            }
+          }
         },
         options: {
           id: 'drawScroll',
@@ -102,8 +123,6 @@ ArrowItem = (function(superClass) {
     this.coodHeadPart = [];
     this.coodLeftBodyPart = [];
     this.coodRightBodyPart = [];
-    this.arrow_width = ARROW_WIDTH;
-    this.arrow_half_width = this.arrow_width / 2.0;
     this.header_width = HEADER_WIDTH;
     this.header_height = HEADER_HEIGHT;
     this.padding_size = this.header_width;
@@ -159,23 +178,20 @@ ArrowItem = (function(superClass) {
   };
 
   ArrowItem.prototype.getMinimumObject = function() {
-    var newobj, obj;
+    var addObj, obj;
     obj = ArrowItem.__super__.getMinimumObject.call(this);
-    newobj = {
+    addObj = {
       itemId: this.constructor.ITEM_ID,
-      arrow_width: Common.makeClone(this.arrow_width),
       header_width: Common.makeClone(this.header_width),
       header_height: Common.makeClone(this.header_height),
       scale: Common.makeClone(this.scale)
     };
-    $.extend(obj, newobj);
+    $.extend(obj, addObj);
     return obj;
   };
 
   ArrowItem.prototype.setMiniumObject = function(obj) {
     ArrowItem.__super__.setMiniumObject.call(this, obj);
-    this.arrow_width = Common.makeClone(obj.arrow_width);
-    this.arrow_half_width = Common.makeClone(this.arrow_width / 2.0);
     this.header_width = Common.makeClone(obj.header_width);
     this.header_height = Common.makeClone(obj.header_height);
     this.padding_size = Common.makeClone(this.header_width);
@@ -258,13 +274,13 @@ ArrowItem = (function(superClass) {
     };
     sita = Math.atan2(r.y, r.x);
     leftTop = {
-      x: Math.cos(sita) * (this.header_width + this.arrow_width) / 2.0 + rightCood.x,
-      y: Math.sin(sita) * (this.header_width + this.arrow_width) / 2.0 + rightCood.y
+      x: Math.cos(sita) * (this.header_width + this.arrowWidth) / 2.0 + rightCood.x,
+      y: Math.sin(sita) * (this.header_width + this.arrowWidth) / 2.0 + rightCood.y
     };
     sitaRight = sita + Math.PI;
     rightTop = {
-      x: Math.cos(sitaRight) * (this.header_width - this.arrow_width) / 2.0 + rightCood.x,
-      y: Math.sin(sitaRight) * (this.header_width - this.arrow_width) / 2.0 + rightCood.y
+      x: Math.cos(sitaRight) * (this.header_width - this.arrowWidth) / 2.0 + rightCood.x,
+      y: Math.sin(sitaRight) * (this.header_width - this.arrowWidth) / 2.0 + rightCood.y
     };
     sitaTop = sita + Math.PI / 2.0;
     mid = {
@@ -281,7 +297,7 @@ ArrowItem = (function(superClass) {
   _calTailDrawPath = function() {
 
     /* 検証 */
-    var _validate, locSub, locTail, rad;
+    var _validate, arrowHalfWidth, locSub, locTail, rad;
     _validate = function() {
       return this.drawCoodRegist.length === 2;
     };
@@ -291,13 +307,14 @@ ArrowItem = (function(superClass) {
     locTail = this.drawCoodRegist[0];
     locSub = this.drawCoodRegist[1];
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x);
+    arrowHalfWidth = this.arrowWidth / 2.0;
     this.coodRightBodyPart.push({
-      x: -(Math.sin(rad) * this.arrow_half_width) + locTail.x,
-      y: Math.cos(rad) * this.arrow_half_width + locTail.y
+      x: -(Math.sin(rad) * arrowHalfWidth) + locTail.x,
+      y: Math.cos(rad) * arrowHalfWidth + locTail.y
     });
     return this.coodLeftBodyPart.push({
-      x: Math.sin(rad) * this.arrow_half_width + locTail.x,
-      y: -(Math.cos(rad) * this.arrow_half_width) + locTail.y
+      x: Math.sin(rad) * arrowHalfWidth + locTail.x,
+      y: -(Math.cos(rad) * arrowHalfWidth) + locTail.y
     });
   };
 
@@ -311,7 +328,7 @@ ArrowItem = (function(superClass) {
 
     /* 3点から引く座標を求める */
     _calCenterBodyCood = function(left, center, right) {
-      var cos, l, leftLength, leftX, leftY, r, rad, ret, rightLength, rightX, rightY, vectorRad;
+      var arrowHalfWidth, cos, l, leftLength, leftX, leftY, r, rad, ret, rightLength, rightX, rightY, vectorRad;
       leftLength = _coodLength.call(this, left, center);
       rightLength = _coodLength.call(this, right, center);
       l = {
@@ -331,10 +348,11 @@ ArrowItem = (function(superClass) {
       }
       vectorRad = Math.acos(cos);
       rad = Math.atan2(r.y, r.x) + (vectorRad / 2.0);
-      leftX = parseInt(Math.cos(rad + Math.PI) * this.arrow_half_width + center.x);
-      leftY = parseInt(Math.sin(rad + Math.PI) * this.arrow_half_width + center.y);
-      rightX = parseInt(Math.cos(rad) * this.arrow_half_width + center.x);
-      rightY = parseInt(Math.sin(rad) * this.arrow_half_width + center.y);
+      arrowHalfWidth = this.arrowWidth / 2.0;
+      leftX = parseInt(Math.cos(rad + Math.PI) * arrowHalfWidth + center.x);
+      leftY = parseInt(Math.sin(rad + Math.PI) * arrowHalfWidth + center.y);
+      rightX = parseInt(Math.cos(rad) * arrowHalfWidth + center.x);
+      rightY = parseInt(Math.sin(rad) * arrowHalfWidth + center.y);
       ret = {
         coodLeftPart: {
           x: leftX,

@@ -1,5 +1,5 @@
 class DesignConfig
-  @addConfigIfNeed = (obj, successCallback = null, errorCallback = null)->
+  @getDesignConfig = (obj, successCallback = null, errorCallback = null)->
     $.ajax(
       {
         url: "/worktable/design_config"
@@ -7,6 +7,7 @@ class DesignConfig
         data: {
           designConfig: obj.constructor.actionProperties.designConfig
           isCanvas: obj instanceof CanvasItemBase
+          modifiables: obj.constructor.actionProperties.modifiables
         }
         dataType: "json"
         success: (data)->

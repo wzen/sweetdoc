@@ -49,6 +49,11 @@ class ItemBase extends ItemEventBase
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
 
+    # modifiables変数の初期化
+    if @constructor.actionProperties.modifiables?
+      for varName, value of @constructor.actionProperties.modifiables
+        this[varName] = value.default
+
     if window.isWorkTable
       @constructor.include WorkTableCommonInclude
 
@@ -141,6 +146,13 @@ class ItemBase extends ItemEventBase
       coodRegist: JSON.stringify(Common.makeClone(@coodRegist))
       designs: Common.makeClone(@designs)
     }
+    mod = {}
+    # modifiables変数の追加
+    if @constructor.actionProperties.modifiables?
+      for varName, value of @constructor.actionProperties.modifiables
+        mod[varName] = Common.makeClone(this[varName])
+    $.extend(obj, mod)
+
     return obj
 
   # 最小限のデータを設定
@@ -155,6 +167,12 @@ class ItemBase extends ItemEventBase
     @zindex = Common.makeClone(obj.zindex)
     @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
     @designs = Common.makeClone(obj.designs)
+
+    # modifiables変数の追加
+    if @constructor.actionProperties.modifiables?
+      for varName, value of @constructor.actionProperties.modifiables
+        this[varName] = Common.makeClone(obj[varName])
+
     window.instanceMap[@id] = @
 
   # イベントによって設定したスタイルをクリアする

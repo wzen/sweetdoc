@@ -149,7 +149,7 @@ WorkTableCommonInclude = {
     self = this;
     designConfigRoot = $('#' + this.getDesignConfigId());
     if ((designConfigRoot == null) || designConfigRoot.length === 0) {
-      return DesignConfig.addConfigIfNeed(this, function(data) {
+      return DesignConfig.getDesignConfig(this, function(data) {
         var html;
         html = $(data.html).attr('id', self.getDesignConfigId());
         return $('#design-config').append(html);
@@ -210,18 +210,18 @@ WorkTableCommonInclude = {
         return _this.updatePositionAndItemSize(itemSize);
       };
     })(this));
-    if (this.constructor.actionProperties.designConfig === Constant.ItemDesignOptionType.DESIGN_TOOL) {
+    if ((this.constructor.actionProperties.designConfig != null) && this.constructor.actionProperties.designConfig) {
       return this.setupDesignToolOptionMenu();
     }
   },
-  settingSlider: function(className, min, max, stepValue) {
+  settingDesignSlider: function(className, min, max, stepValue) {
     var defaultValue, designConfigRoot, meterElement, valueElement;
     if (stepValue == null) {
       stepValue = 0;
     }
     designConfigRoot = $('#' + this.getDesignConfigId());
     meterElement = $("." + className, designConfigRoot);
-    valueElement = $("." + className + "_value", designConfigRoot);
+    valueElement = meterElement.prev('input:first');
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(this.id, className + "_value"));
     valueElement.val(defaultValue);
     valueElement.html(defaultValue);
@@ -373,6 +373,41 @@ WorkTableCommonInclude = {
         }, 1000);
       };
     })(this), 500);
+  },
+  settingModifiableVarSlider: function(configRoot, meterClassName, varName, min, max, stepValue) {
+    var defaultValue, meterElement, valueElement;
+    if (stepValue == null) {
+      stepValue = 0;
+    }
+    meterElement = $("." + meterClassName, configRoot);
+    valueElement = meterElement.prev('input:first');
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+    valueElement.val(defaultValue);
+    valueElement.html(defaultValue);
+    try {
+      meterElement.slider('destroy');
+    } catch (_error) {
+
+    }
+    return meterElement.slider({
+      min: min,
+      max: max,
+      step: stepValue,
+      value: defaultValue,
+      slide: (function(_this) {
+        return function(event, ui) {
+          var classNames, n;
+          valueElement.val(ui.value);
+          valueElement.html(ui.value);
+          classNames = $(event.target).attr('class').split(' ');
+          n = $.grep(classNames, function(s) {
+            return s.indexOf('design_') >= 0;
+          })[0];
+          _this[varName] = ui.value;
+          return _this.applyDesignStyleChange(n, ui.value);
+        };
+      })(this)
+    });
   }
 };
 

@@ -172,8 +172,9 @@ class CssItemBase extends ItemBase
     @cssStyle = $(".css_style", @cssRoot)
     @applyDesignChange(false)
 
-  # CSSに反映
+  # デザイン反映
   applyDesignChange: (doStyleSave) ->
+    @reDraw()
     @cssStyle.text(@cssCode.text())
     if doStyleSave
       @saveDesign()

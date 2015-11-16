@@ -9,8 +9,6 @@ class ArrowItem extends CanvasItemBase
     # @property [String] ITEM_ID アイテム種別
     @ITEM_ID = window.loadedItemId
 
-  # @property [Int] ARROW_WIDTH 矢印幅
-  ARROW_WIDTH = 37
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100
   # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
@@ -19,7 +17,7 @@ class ArrowItem extends CanvasItemBase
   @actionProperties =
     {
       defaultMethod: 'scrollDraw'
-      designConfig: 'design_tool'
+      designConfig: true
       designConfigDefaultValues: {
         values: {
           design_slider_font_size_value: 14
@@ -50,6 +48,18 @@ class ArrowItem extends CanvasItemBase
           design_bg_color4_flag: false
         }
       }
+      modifiables: {
+        arrowWidth: {
+          name: "Arrow's width"
+          default: 37
+          type: 'number'
+          min: 1
+          max: 99
+          ja: {
+            name: "矢印の幅"
+          }
+        }
+      }
       methods : {
         scrollDraw: {
           actionType: 'scroll'
@@ -64,6 +74,17 @@ class ArrowItem extends CanvasItemBase
             bottom: true
             left: false
             right: false
+          }
+          modifiables: {
+            arrowWidth: {
+              name: "Arrow's width"
+              type: 'number'
+              min: 1
+              max: 99
+              ja :{
+                name: "矢印の幅"
+              }
+            }
           }
           options: {
             id: 'drawScroll'
@@ -97,10 +118,6 @@ class ArrowItem extends CanvasItemBase
     @coodLeftBodyPart = []
     # @property [Array] coodRightBodyPart 矢印の体右部分の座標
     @coodRightBodyPart = []
-    # @property [Int] arrow_width 矢印幅
-    @arrow_width = ARROW_WIDTH
-    # @property [Int] arrow_half_width 矢印の半分幅
-    @arrow_half_width = @arrow_width / 2.0
     # @property [Int] header_width 矢印の頭の幅
     @header_width = HEADER_WIDTH
     # @property [Int] header_height 矢印の頭の長さ
@@ -170,22 +187,19 @@ class ArrowItem extends CanvasItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   getMinimumObject: ->
     obj = super()
-    newobj = {
+    addObj = {
       itemId: @constructor.ITEM_ID
-      arrow_width: Common.makeClone(@arrow_width)
       header_width: Common.makeClone(@header_width)
       header_height: Common.makeClone(@header_height)
       scale: Common.makeClone(@scale)
     }
-    $.extend(obj, newobj)
+    $.extend(obj, addObj)
     return obj
 
   # 最小限のデータを設定
   # @param [Array] obj アイテムオブジェクトの最小限データ
   setMiniumObject: (obj) ->
     super(obj)
-    @arrow_width = Common.makeClone(obj.arrow_width)
-    @arrow_half_width = Common.makeClone(@arrow_width / 2.0)
     @header_width = Common.makeClone(obj.header_width)
     @header_height = Common.makeClone(obj.header_height)
     @padding_size = Common.makeClone(@header_width)
@@ -264,14 +278,14 @@ class ArrowItem extends CanvasItemBase
       y: leftCood.y - rightCood.y
     sita = Math.atan2(r.y, r.x)
     leftTop =
-      x: Math.cos(sita) * (@header_width + @arrow_width) / 2.0 + rightCood.x
-      y: Math.sin(sita) * (@header_width + @arrow_width) / 2.0 + rightCood.y
+      x: Math.cos(sita) * (@header_width + @arrowWidth) / 2.0 + rightCood.x
+      y: Math.sin(sita) * (@header_width + @arrowWidth) / 2.0 + rightCood.y
 
     sitaRight = sita + Math.PI
 
     rightTop =
-      x: Math.cos(sitaRight) * (@header_width - @arrow_width) / 2.0 + rightCood.x
-      y: Math.sin(sitaRight) * (@header_width - @arrow_width) / 2.0 + rightCood.y
+      x: Math.cos(sitaRight) * (@header_width - @arrowWidth) / 2.0 + rightCood.x
+      y: Math.sin(sitaRight) * (@header_width - @arrowWidth) / 2.0 + rightCood.y
 
     sitaTop = sita + Math.PI / 2.0
 
@@ -299,8 +313,9 @@ class ArrowItem extends CanvasItemBase
 
     # 座標を保存
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x)
-    @coodRightBodyPart.push({x: -(Math.sin(rad) * @arrow_half_width) + locTail.x, y: Math.cos(rad) * @arrow_half_width + locTail.y})
-    @coodLeftBodyPart.push({x: Math.sin(rad) * @arrow_half_width + locTail.x, y: -(Math.cos(rad) * @arrow_half_width) + locTail.y})
+    arrowHalfWidth = @arrowWidth / 2.0
+    @coodRightBodyPart.push({x: -(Math.sin(rad) * arrowHalfWidth) + locTail.x, y: Math.cos(rad) * arrowHalfWidth + locTail.y})
+    @coodLeftBodyPart.push({x: Math.sin(rad) * arrowHalfWidth + locTail.x, y: -(Math.cos(rad) * arrowHalfWidth) + locTail.y})
 
   # 矢印の本体を作成
   # @private
@@ -336,10 +351,11 @@ class ArrowItem extends CanvasItemBase
       #      console.log('locRight:x ' + Math.cos(rad))
       #      console.log('locRight:x ' + Math.sin(rad))
 
-      leftX = parseInt(Math.cos(rad + Math.PI) * @arrow_half_width + center.x)
-      leftY = parseInt(Math.sin(rad + Math.PI) * @arrow_half_width + center.y)
-      rightX = parseInt(Math.cos(rad) * @arrow_half_width + center.x)
-      rightY = parseInt(Math.sin(rad) * @arrow_half_width + center.y)
+      arrowHalfWidth = @arrowWidth / 2.0
+      leftX = parseInt(Math.cos(rad + Math.PI) * arrowHalfWidth + center.x)
+      leftY = parseInt(Math.sin(rad + Math.PI) * arrowHalfWidth + center.y)
+      rightX = parseInt(Math.cos(rad) * arrowHalfWidth + center.x)
+      rightY = parseInt(Math.sin(rad) * arrowHalfWidth + center.y)
 
       ret =
         coodLeftPart:

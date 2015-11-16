@@ -128,7 +128,7 @@ WorkTableCommonInclude =
     self = @
     designConfigRoot = $('#' + @getDesignConfigId())
     if !designConfigRoot? || designConfigRoot.length == 0
-      DesignConfig.addConfigIfNeed(@, (data) ->
+      DesignConfig.getDesignConfig(@, (data) ->
         html = $(data.html).attr('id', self.getDesignConfigId())
         $('#design-config').append(html)
       )
@@ -188,18 +188,18 @@ WorkTableCommonInclude =
       @updatePositionAndItemSize(itemSize)
     )
 
-    if @constructor.actionProperties.designConfig == Constant.ItemDesignOptionType.DESIGN_TOOL
+    if @constructor.actionProperties.designConfig? && @constructor.actionProperties.designConfig
       @setupDesignToolOptionMenu()
 
-  # 通常スライダーの作成
+  # デザインスライダーの作成
   # @param [Int] id メーターのElementID
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingSlider: (className, min, max, stepValue = 0) ->
+  settingDesignSlider: (className, min, max, stepValue = 0) ->
     designConfigRoot = $('#' + @getDesignConfigId())
     meterElement = $(".#{className}", designConfigRoot)
-    valueElement = $(".#{className}_value", designConfigRoot)
+    valueElement = meterElement.prev('input:first')
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(@id, "#{className}_value"))
     valueElement.val(defaultValue)
     valueElement.html(defaultValue)
@@ -315,6 +315,7 @@ WorkTableCommonInclude =
       else
         element.show()
 
+  # デザイン更新処理
   saveDesign: ->
     if @saveDesignReflectTimer?
       clearTimeout(@saveDesignReflectTimer)
@@ -330,4 +331,32 @@ WorkTableCommonInclude =
         OperationHistory.add()
       , 1000)
     , 500)
+
+  # 変数編集スライダーの作成
+  # @param [Int] id メーターのElementID
+  # @param [Int] min 最小値
+  # @param [Int] max 最大値
+  # @param [Int] stepValue 進捗数
+  settingModifiableVarSlider: (configRoot, meterClassName, varName, min, max, stepValue = 0) ->
+    meterElement = $(".#{meterClassName}", configRoot)
+    valueElement = meterElement.prev('input:first')
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+    valueElement.val(defaultValue)
+    valueElement.html(defaultValue)
+    try
+      meterElement.slider('destroy')
+    catch #例外は握りつぶす
+    meterElement.slider({
+      min: min,
+      max: max,
+      step: stepValue,
+      value: defaultValue
+      slide: (event, ui) =>
+        valueElement.val(ui.value)
+        valueElement.html(ui.value)
+        classNames = $(event.target).attr('class').split(' ')
+        n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
+        this[varName] = ui.value
+        @applyDesignStyleChange(n, ui.value)
+    })
 

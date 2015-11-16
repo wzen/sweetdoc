@@ -40,13 +40,13 @@ WorkTableCanvasItemExtend = {
     designConfigRoot = $('#' + this.getDesignConfigId());
     self.settingGradientSlider('design_slider_gradient', null);
     self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false);
-    self.settingSlider('design_slider_border_radius', 0, 100);
-    self.settingSlider('design_slider_border_width', 0, 10);
-    self.settingSlider('design_slider_font_size', 0, 30);
-    self.settingSlider('design_slider_shadow_left', -100, 100);
-    self.settingSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
-    self.settingSlider('design_slider_shadow_size', 0, 100);
-    self.settingSlider('design_slider_shadow_top', -100, 100);
+    self.settingDesignSlider('design_slider_border_radius', 0, 100);
+    self.settingDesignSlider('design_slider_border_width', 0, 10);
+    self.settingDesignSlider('design_slider_font_size', 0, 30);
+    self.settingDesignSlider('design_slider_shadow_left', -100, 100);
+    self.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
+    self.settingDesignSlider('design_slider_shadow_size', 0, 100);
+    self.settingDesignSlider('design_slider_shadow_top', -100, 100);
     btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot);
     btnBgColor.each((function(_this) {
       return function(idx, e) {
@@ -106,36 +106,31 @@ WorkTableCanvasItemExtend = {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    this.applyDesignChange(doStyleSave);
-    return this.reDraw();
+    return this.applyDesignChange(doStyleSave);
   },
   applyGradientStyleChange: function(index, designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    this.applyDesignChange(doStyleSave);
-    return this.reDraw();
+    return this.applyDesignChange(doStyleSave);
   },
   applyGradientDegChange: function(designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    this.applyDesignChange(doStyleSave);
-    return this.reDraw();
+    return this.applyDesignChange(doStyleSave);
   },
   applyGradientStepChange: function(target, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    this.applyDesignChange(doStyleSave);
-    return this.reDraw();
+    return this.applyDesignChange(doStyleSave);
   },
   applyColorChangeByPicker: function(designKeyName, value, doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    this.applyDesignChange(doStyleSave);
-    return this.reDraw();
+    return this.applyDesignChange(doStyleSave);
   }
 };
 

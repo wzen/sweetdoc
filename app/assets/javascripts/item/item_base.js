@@ -39,6 +39,7 @@ ItemBase = (function(superClass) {
   }
 
   function ItemBase(cood) {
+    var ref, value, varName;
     if (cood == null) {
       cood = null;
     }
@@ -58,6 +59,13 @@ ItemBase = (function(superClass) {
     this.ohiRegistIndex = 0;
     this.jqueryElement = null;
     this.coodRegist = [];
+    if (this.constructor.actionProperties.modifiables != null) {
+      ref = this.constructor.actionProperties.modifiables;
+      for (varName in ref) {
+        value = ref[varName];
+        this[varName] = value["default"];
+      }
+    }
     if (window.isWorkTable) {
       this.constructor.include(WorkTableCommonInclude);
     }
@@ -145,7 +153,7 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.getMinimumObject = function() {
-    var obj;
+    var mod, obj, ref, value, varName;
     obj = {
       id: Common.makeClone(this.id),
       itemId: Common.makeClone(this.constructor.ITEM_ID),
@@ -155,10 +163,20 @@ ItemBase = (function(superClass) {
       coodRegist: JSON.stringify(Common.makeClone(this.coodRegist)),
       designs: Common.makeClone(this.designs)
     };
+    mod = {};
+    if (this.constructor.actionProperties.modifiables != null) {
+      ref = this.constructor.actionProperties.modifiables;
+      for (varName in ref) {
+        value = ref[varName];
+        mod[varName] = Common.makeClone(this[varName]);
+      }
+    }
+    $.extend(obj, mod);
     return obj;
   };
 
   ItemBase.prototype.setMiniumObject = function(obj) {
+    var ref, value, varName;
     delete window.instanceMap[this.id];
     this.id = Common.makeClone(obj.id);
     this.name = Common.makeClone(obj.name);
@@ -166,6 +184,13 @@ ItemBase = (function(superClass) {
     this.zindex = Common.makeClone(obj.zindex);
     this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
     this.designs = Common.makeClone(obj.designs);
+    if (this.constructor.actionProperties.modifiables != null) {
+      ref = this.constructor.actionProperties.modifiables;
+      for (varName in ref) {
+        value = ref[varName];
+        this[varName] = Common.makeClone(obj[varName]);
+      }
+    }
     return window.instanceMap[this.id] = this;
   };
 

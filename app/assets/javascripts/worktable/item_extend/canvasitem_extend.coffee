@@ -43,13 +43,13 @@ WorkTableCanvasItemExtend =
     # スライダー
     self.settingGradientSlider('design_slider_gradient', null)
     self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false)
-    self.settingSlider('design_slider_border_radius', 0, 100)
-    self.settingSlider('design_slider_border_width', 0, 10)
-    self.settingSlider('design_slider_font_size', 0, 30)
-    self.settingSlider('design_slider_shadow_left', -100, 100)
-    self.settingSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1)
-    self.settingSlider('design_slider_shadow_size', 0, 100)
-    self.settingSlider('design_slider_shadow_top', -100, 100)
+    self.settingDesignSlider('design_slider_border_radius', 0, 100)
+    self.settingDesignSlider('design_slider_border_width', 0, 10)
+    self.settingDesignSlider('design_slider_font_size', 0, 30)
+    self.settingDesignSlider('design_slider_shadow_left', -100, 100)
+    self.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1)
+    self.settingDesignSlider('design_slider_shadow_size', 0, 100)
+    self.settingDesignSlider('design_slider_shadow_top', -100, 100)
 
     # 背景色
     btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot)
@@ -103,24 +103,19 @@ WorkTableCanvasItemExtend =
   # デザイン変更を反映
   applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)
-    @reDraw()
 
   # グラデーションデザイン変更を反映
   applyGradientStyleChange: (index, designKeyName, value, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)
-    @reDraw()
 
   # グラデーション方向変更を反映
   applyGradientDegChange: (designKeyName, value, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)
-    @reDraw()
 
   # グラデーションステップ数変更を反映
   applyGradientStepChange: (target, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)
-    @reDraw()
 
   # カラーピッカー変更を反映
   applyColorChangeByPicker: (designKeyName, value, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)
-    @reDraw()

@@ -12,7 +12,7 @@ class ButtonItem extends CssItemBase
   @actionProperties =
     {
       defaultMethod: 'defaultClick'
-      designConfig: 'design_tool'
+      designConfig: true
       designConfigDefaultValues: {
         values: {
           design_slider_font_size_value: 14
@@ -98,6 +98,12 @@ class ButtonItem extends CssItemBase
         }
       }
     }
+
+  # 再描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
+  reDraw: (show = true)->
+    super(show)
+
 
   # イベント前の表示状態にする
   updateEventBefore: ->

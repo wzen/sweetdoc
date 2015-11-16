@@ -20,7 +20,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.actionProperties = {
     defaultMethod: 'defaultClick',
-    designConfig: 'design_tool',
+    designConfig: true,
     designConfigDefaultValues: {
       values: {
         design_slider_font_size_value: 14,
@@ -104,6 +104,13 @@ ButtonItem = (function(superClass) {
         }
       }
     }
+  };
+
+  ButtonItem.prototype.reDraw = function(show) {
+    if (show == null) {
+      show = true;
+    }
+    return ButtonItem.__super__.reDraw.call(this, show);
   };
 
   ButtonItem.prototype.updateEventBefore = function() {
