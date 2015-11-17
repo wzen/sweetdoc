@@ -92,6 +92,7 @@ class EventConfig
       displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
       # アイテム共通情報表示
       $('.item_common_div', @emt).show()
+
     $(".#{displayClassName}", @emt).show()
     $(".action_div", @emt).show()
 
@@ -111,34 +112,46 @@ class EventConfig
       @actionType = parseInt(parent.find('input.action_type:first').val())
       @methodName = parent.find('input.method_name:first').val()
 
-    handlerClassName = @methodClassName()
-    valueClassName = @methodClassName()
+    _callback = ->
+      handlerClassName = @methodClassName()
+      valueClassName = @methodClassName()
 
-    if @teNum > 1
-      beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
-      if @actionType == beforeActionType
-        # 前のイベントと同じアクションタイプの場合は同時実行を表示
-        $(".config.parallel_div", @emt).show()
+      if @teNum > 1
+        beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
+        if @actionType == beforeActionType
+          # 前のイベントと同じアクションタイプの場合は同時実行を表示
+          $(".config.parallel_div", @emt).show()
 
-    $(".handler_div .configBox", @emt).children("div").hide()
-    $(".handler_div .#{handlerClassName}", @emt).show()
-    $(".config.handler_div", @emt).show()
+      # Handler表示
+      $(".handler_div .configBox", @emt).children("div").hide()
+      $(".handler_div .#{handlerClassName}", @emt).show()
+      $(".config.handler_div", @emt).show()
 
-    $(".value_forms", @emt).children("div").hide()
-    $(".value_forms .#{valueClassName}", @emt).show()
-    $(".config.values_div", @emt).show()
+      # 変更値表示
+      $(".value_forms", @emt).children("div").hide()
+      $(".value_forms .#{valueClassName}", @emt).show()
+      $(".config.values_div", @emt).show()
 
-    if e?
-      # 初期化
-      tle = _getEventPageValueClass.call(@)
-      if tle? && tle.initConfigValue?
-        tle.initConfigValue(@)
+      if e?
+        # 初期化
+        tle = _getEventPageValueClass.call(@)
+        if tle? && tle.initConfigValue?
+          tle.initConfigValue(@)
 
-    if @actionType == Constant.ActionType.SCROLL
-      _setScrollDirectionEvent.call(@)
-    else if @actionType == Constant.ActionType.CLICK
-      _setForkSelect.call(@)
-    _setApplyClickEvent.call(@)
+      if @actionType == Constant.ActionType.SCROLL
+        _setScrollDirectionEvent.call(@)
+      else if @actionType == Constant.ActionType.CLICK
+        _setForkSelect.call(@)
+      _setApplyClickEvent.call(@)
+
+    item = window.instanceMap[@id]
+    if item? && item instanceof ItemBase
+      # Itemの変数変更コンフィグ読み込み
+      @addEventVarModifyConfig(item, =>
+        _callback.call(@)
+      )
+    else
+      _callback.call(@)
 
   # イベントの入力値を初期化する
   resetAction: ->
@@ -345,7 +358,6 @@ class EventConfig
       self.applyAction()
       # イベントを更新
       Timeline.refreshAllTimeline()
-      # 次のイベントConfigを表示
     )
     em = $('.push.button.cancel', @emt)
     em.off('click')
@@ -415,3 +427,36 @@ class EventConfig
           handlerParent.appendTo(handler_forms)
 
         actionParent.appendTo(action_forms)
+
+  addEventVarModifyConfig: (obj, callback = null) ->
+    # HTML存在チェック
+    valueClassName = @methodClassName()
+    emt = $(".value_forms .#{valueClassName}", @emt)
+    if emt.length > 0
+      if callback?
+        callback()
+
+    $.ajax(
+      {
+        url: "/worktable/event_var_modify_config"
+        type: "POST"
+        data: {
+          modifiables: obj.constructor.actionProperties.methods[@methodName].modifiables
+        }
+        dataType: "json"
+        success: (data)->
+          if data.resultSuccess
+            # HTML追加
+            $(".value_forms", @emt).append(data.html.wrap("<div class='#{valueClassName}'></div>"))
+            if successCallback?
+              successCallback(data)
+          else
+            if errorCallback?
+              errorCallback(data)
+            console.log('/worktable/event_var_modify_config server error')
+        error: (data) ->
+          if errorCallback?
+            errorCallback(data)
+          console.log('/worktable/event_var_modify_config ajax error')
+      }
+    )

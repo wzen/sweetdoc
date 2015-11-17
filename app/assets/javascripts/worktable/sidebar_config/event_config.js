@@ -95,7 +95,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.clickMethod = function(e) {
-    var beforeActionType, handlerClassName, parent, tle, valueClassName;
+    var _callback, item, parent;
     if (e == null) {
       e = null;
     }
@@ -104,32 +104,45 @@ EventConfig = (function() {
       this.actionType = parseInt(parent.find('input.action_type:first').val());
       this.methodName = parent.find('input.method_name:first').val();
     }
-    handlerClassName = this.methodClassName();
-    valueClassName = this.methodClassName();
-    if (this.teNum > 1) {
-      beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
-      if (this.actionType === beforeActionType) {
-        $(".config.parallel_div", this.emt).show();
+    _callback = function() {
+      var beforeActionType, handlerClassName, tle, valueClassName;
+      handlerClassName = this.methodClassName();
+      valueClassName = this.methodClassName();
+      if (this.teNum > 1) {
+        beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
+        if (this.actionType === beforeActionType) {
+          $(".config.parallel_div", this.emt).show();
+        }
       }
-    }
-    $(".handler_div .configBox", this.emt).children("div").hide();
-    $(".handler_div ." + handlerClassName, this.emt).show();
-    $(".config.handler_div", this.emt).show();
-    $(".value_forms", this.emt).children("div").hide();
-    $(".value_forms ." + valueClassName, this.emt).show();
-    $(".config.values_div", this.emt).show();
-    if (e != null) {
-      tle = _getEventPageValueClass.call(this);
-      if ((tle != null) && (tle.initConfigValue != null)) {
-        tle.initConfigValue(this);
+      $(".handler_div .configBox", this.emt).children("div").hide();
+      $(".handler_div ." + handlerClassName, this.emt).show();
+      $(".config.handler_div", this.emt).show();
+      $(".value_forms", this.emt).children("div").hide();
+      $(".value_forms ." + valueClassName, this.emt).show();
+      $(".config.values_div", this.emt).show();
+      if (e != null) {
+        tle = _getEventPageValueClass.call(this);
+        if ((tle != null) && (tle.initConfigValue != null)) {
+          tle.initConfigValue(this);
+        }
       }
+      if (this.actionType === Constant.ActionType.SCROLL) {
+        _setScrollDirectionEvent.call(this);
+      } else if (this.actionType === Constant.ActionType.CLICK) {
+        _setForkSelect.call(this);
+      }
+      return _setApplyClickEvent.call(this);
+    };
+    item = window.instanceMap[this.id];
+    if ((item != null) && item instanceof ItemBase) {
+      return this.addEventVarModifyConfig(item, (function(_this) {
+        return function() {
+          return _callback.call(_this);
+        };
+      })(this));
+    } else {
+      return _callback.call(this);
     }
-    if (this.actionType === Constant.ActionType.SCROLL) {
-      _setScrollDirectionEvent.call(this);
-    } else if (this.actionType === Constant.ActionType.CLICK) {
-      _setForkSelect.call(this);
-    }
-    return _setApplyClickEvent.call(this);
   };
 
   EventConfig.prototype.resetAction = function() {
@@ -411,6 +424,47 @@ EventConfig = (function() {
         return actionParent.appendTo(action_forms);
       }
     }
+  };
+
+  EventConfig.prototype.addEventVarModifyConfig = function(obj, callback) {
+    var emt, valueClassName;
+    if (callback == null) {
+      callback = null;
+    }
+    valueClassName = this.methodClassName();
+    emt = $(".value_forms ." + valueClassName, this.emt);
+    if (emt.length > 0) {
+      if (callback != null) {
+        callback();
+      }
+    }
+    return $.ajax({
+      url: "/worktable/event_var_modify_config",
+      type: "POST",
+      data: {
+        modifiables: obj.constructor.actionProperties.methods[this.methodName].modifiables
+      },
+      dataType: "json",
+      success: function(data) {
+        if (data.resultSuccess) {
+          $(".value_forms", this.emt).append(data.html.wrap("<div class='" + valueClassName + "'></div>"));
+          if (typeof successCallback !== "undefined" && successCallback !== null) {
+            return successCallback(data);
+          }
+        } else {
+          if (typeof errorCallback !== "undefined" && errorCallback !== null) {
+            errorCallback(data);
+          }
+          return console.log('/worktable/event_var_modify_config server error');
+        }
+      },
+      error: function(data) {
+        if (typeof errorCallback !== "undefined" && errorCallback !== null) {
+          errorCallback(data);
+        }
+        return console.log('/worktable/event_var_modify_config ajax error');
+      }
+    });
   };
 
   return EventConfig;

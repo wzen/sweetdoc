@@ -14,8 +14,13 @@ class WorktableController < ApplicationController
     modifiables = params.fetch('modifiables', {})
     is_canvas = params.require('isCanvas') == 'true'
     @result_success = true
-    html = Worktable.get_design_config(design_config, is_canvas, modifiables)
-    @html = "<div class='#{Const::DesignConfig::ROOT_CLASSNAME}'>#{html}</div>"
+    @html = Worktable.design_config(design_config, is_canvas, modifiables)
+  end
+
+  def event_var_modify_config
+    modifiables = params.fetch('modifiables', {})
+    @result_success = true
+    @html = Worktable.event_var_modify_config(modifiables)
   end
 
 end

@@ -23,7 +23,7 @@ class Worktable
     return common_actions
   end
 
-  def self.get_design_config(design_config, is_canvas, modifiables)
+  def self.design_config(design_config, is_canvas, modifiables)
     ret = ApplicationController.new.render_to_string(
         partial: 'worktable/sidebar_menu/design/parts/common'
     )
@@ -41,6 +41,33 @@ class Worktable
         temp = 'worktable/sidebar_menu/design/parts/textbox'
       elsif v['type'] == Const::ItemDesignOptionType::COLOR
         temp = 'worktable/sidebar_menu/design/parts/color'
+      end
+      value = v
+      l_value = v[I18n.locale]
+      if l_value
+        value.update!(l_value)
+      end
+      ret += ApplicationController.new.render_to_string(
+          partial: temp,
+          locals: {
+              var_name: var,
+              value: value
+          }
+      )
+    end
+    return "<div class='#{Const::DesignConfig::ROOT_CLASSNAME}'>#{ret}</div>"
+  end
+
+  def self.event_var_modify_config(modifiables)
+    ret = ''
+    modifiables.each do |var, v|
+      temp = ''
+      if v['type'] == Const::ItemDesignOptionType::NUMBER
+        temp = 'worktable/sidebar_menu/event/parts/slider'
+      elsif v['type'] == Const::ItemDesignOptionType::STRING
+        temp = 'worktable/sidebar_menu/event/parts/textbox'
+      elsif v['type'] == Const::ItemDesignOptionType::COLOR
+        temp = 'worktable/sidebar_menu/event/parts/color'
       end
       value = v
       l_value = v[I18n.locale]

@@ -98,13 +98,6 @@ class Const
     ROOT_CLASSNAME = 'dc'
   end
 
-  class DesignConfigType
-    INPUT = 1
-    CHECKBOX = 2
-    SLIDER = 3
-
-  end
-
   class EventConfig
     # @property EVENT_COMMON_PREFIX 共通イベント クラス名プレフィックス
     EVENT_COMMON_PREFIX = 'c_'

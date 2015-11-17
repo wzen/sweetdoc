@@ -2,7 +2,7 @@
 # 共通
 WorkTableCommonInclude =
 
-  # コンフィグメニューの要素IDを取得
+  # デザインコンフィグメニューの要素IDを取得
   # @return [String] HTML要素ID
   getDesignConfigId: ->
     return @constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)

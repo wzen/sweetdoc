@@ -4,17 +4,10 @@ var CssItemBase,
   hasProp = {}.hasOwnProperty;
 
 CssItemBase = (function(superClass) {
-  var constant;
-
   extend(CssItemBase, superClass);
 
   if (window.loadedItemId != null) {
     CssItemBase.ITEM_ID = window.loadedItemId;
-  }
-
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    CssItemBase.DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME;
   }
 
   function CssItemBase(cood) {

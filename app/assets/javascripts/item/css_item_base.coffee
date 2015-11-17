@@ -7,11 +7,6 @@ class CssItemBase extends ItemBase
     # @property [String] ITEM_ID アイテム種別
     @ITEM_ID = window.loadedItemId
 
-  if gon?
-    constant = gon.const
-
-    @DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME
-
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null) ->

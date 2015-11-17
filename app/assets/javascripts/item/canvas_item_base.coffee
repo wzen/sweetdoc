@@ -173,12 +173,13 @@ class CanvasItemBase extends ItemBase
     if doStyleSave
       @saveDesign()
 
+  # CanvasにDesignToolの内容を反映
   applyDesignTool: ->
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
 
     do =>
-      # 背景色グラデーション
+      # 背景色
       halfSlopLength = Math.sqrt(Math.pow(drawingCanvas.width / 2.0, 2) + Math.pow(drawingCanvas.height / 2.0, 2))
       deg = @designs.values.design_slider_gradient_deg_value
       #console.log("deg: #{deg}")
