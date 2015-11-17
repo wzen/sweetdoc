@@ -382,7 +382,7 @@ class EventConfig
   @removeAllConfig: ->
     $('#event-config').children('.event').remove()
 
-  # アクションイベント情報をコンフィグ内に追加
+  # アクションイベント情報をコンフィグに追加
   # @param [Integer] item_id アイテムID
   @addEventConfigContents = (item_id) ->
     itemClass = Common.getClassFromMap(false, item_id)
@@ -460,3 +460,29 @@ class EventConfig
           console.log('/worktable/event_var_modify_config ajax error')
       }
     )
+
+  # 変数編集スライダーの作成
+  # @param [Int] id メーターのElementID
+  # @param [Int] min 最小値
+  # @param [Int] max 最大値
+  # @param [Int] stepValue 進捗数
+  settingModifiableVarSlider: (meterClassName, varName, min = 0, max = 100, stepValue = 0) ->
+    meterElement = $(".#{meterClassName}", @emt)
+    valueElement = meterElement.prev('input:first')
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+    valueElement.val(defaultValue)
+    valueElement.html(defaultValue)
+    try
+      meterElement.slider('destroy')
+    catch #例外は握りつぶす
+    meterElement.slider({
+      min: min,
+      max: max,
+      step: stepValue,
+      value: defaultValue
+      slide: (event, ui) =>
+        valueElement.val(ui.value)
+        valueElement.html(ui.value)
+        this[varName] = ui.value
+        @applyDesignChange()
+    })

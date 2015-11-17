@@ -40,6 +40,8 @@ class EventPageValueBase
       @SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS
       # @property [String] CHANGE_FORKNUM フォーク番号
       @CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM
+      # @property [String] MODIFIABLE_VARS 変更するインスタンス変数
+      @MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS
 
   # コンフィグ初期設定
   # @param [Object] eventConfig イベントコンフィグオブジェクト
@@ -84,6 +86,7 @@ class EventPageValueBase
     writeValue[@PageValueKey.METHODNAME] = eventConfig.methodName
     writeValue[@PageValueKey.ACTIONTYPE] = eventConfig.actionType
     writeValue[@PageValueKey.IS_SYNC] = eventConfig.isParallel
+    writeValue[@PageValueKey.MODIFIABLE_VARS] = eventConfig.modifiableVars
 
     if eventConfig.actionType == Constant.ActionType.SCROLL
       writeValue[@PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart
@@ -109,6 +112,7 @@ class EventPageValueBase
       eventConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
       eventConfig.methodName = writeValue[@PageValueKey.METHODNAME]
       eventConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
+      eventConfig.modifiableVars = writeValue[@PageValueKey.MODIFIABLE_VARS]
 
       if !eventConfig.isCommonEvent
         if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.x
@@ -119,6 +123,15 @@ class EventPageValueBase
           $('.item_diff_width', eventConfig.emt).val(eventConfig.itemSizeDiff.w)
         if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h
           $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h)
+
+        if eventConfig.modifiableVars?
+          for varName, value of eventConfig.modifiableVars
+            if value.type == Constant.ItemDesignOptionType.NUMBER
+              $('', eventConfig.emt)
+            else if value.type == Constant.ItemDesignOptionType.STRING
+              $('', eventConfig.emt)
+            else if value.type == Constant.ItemDesignOptionType.COLOR
+              $('', eventConfig.emt)
 
       parallel = $(".parallel_div .parallel", eventConfig.emt)
       isParallel = writeValue[@PageValueKey.IS_SYNC]

@@ -467,6 +467,43 @@ EventConfig = (function() {
     });
   };
 
+  EventConfig.prototype.settingModifiableVarSlider = function(meterClassName, varName, min, max, stepValue) {
+    var defaultValue, meterElement, valueElement;
+    if (min == null) {
+      min = 0;
+    }
+    if (max == null) {
+      max = 100;
+    }
+    if (stepValue == null) {
+      stepValue = 0;
+    }
+    meterElement = $("." + meterClassName, this.emt);
+    valueElement = meterElement.prev('input:first');
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+    valueElement.val(defaultValue);
+    valueElement.html(defaultValue);
+    try {
+      meterElement.slider('destroy');
+    } catch (_error) {
+
+    }
+    return meterElement.slider({
+      min: min,
+      max: max,
+      step: stepValue,
+      value: defaultValue,
+      slide: (function(_this) {
+        return function(event, ui) {
+          valueElement.val(ui.value);
+          valueElement.html(ui.value);
+          _this[varName] = ui.value;
+          return _this.applyDesignChange();
+        };
+      })(this)
+    });
+  };
+
   return EventConfig;
 
 })();

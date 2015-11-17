@@ -17,7 +17,7 @@ EPVItem = (function(superClass) {
   };
 
   EPVItem.writeDefaultToPageValue = function(item) {
-    var actionType, end, errorMes, start, teNum, writeValue;
+    var actionType, end, errorMes, methodName, mod, ref, start, teNum, v, value, varName, writeValue;
     errorMes = "";
     writeValue = {};
     writeValue[this.PageValueKey.DIST_ID] = Common.generateId();
@@ -41,6 +41,19 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection();
     writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
     writeValue[this.PageValueKey.VALUE] = item.constructor.defaultEventConfigValue();
+    ref = item.constructor.actionProperties.methods;
+    for (methodName in ref) {
+      value = ref[methodName];
+      mod = value.modifiables;
+      for (varName in mod) {
+        v = mod[varName];
+        mod.value = item[varName];
+      }
+      writeValue[this.PageValueKey.MODIFIABLE_VARS] = {
+        methodName: methodName,
+        vars: mod
+      };
+    }
     if (errorMes.length === 0) {
       teNum = PageValue.getEventPageValue(PageValue.Key.eventCount());
       if (teNum != null) {

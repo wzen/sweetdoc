@@ -45,6 +45,8 @@ EventPageValueBase = (function() {
 
       PageValueKey.CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM;
 
+      PageValueKey.MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS;
+
       return PageValueKey;
 
     })();
@@ -98,6 +100,7 @@ EventPageValueBase = (function() {
     writeValue[this.PageValueKey.METHODNAME] = eventConfig.methodName;
     writeValue[this.PageValueKey.ACTIONTYPE] = eventConfig.actionType;
     writeValue[this.PageValueKey.IS_SYNC] = eventConfig.isParallel;
+    writeValue[this.PageValueKey.MODIFIABLE_VARS] = eventConfig.modifiableVars;
     if (eventConfig.actionType === Constant.ActionType.SCROLL) {
       writeValue[this.PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart;
       writeValue[this.PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd;
@@ -110,7 +113,7 @@ EventPageValueBase = (function() {
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, rightEmt, start, topEmt, writeValue;
+    var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, ref, rightEmt, start, topEmt, value, varName, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       eventConfig.distId = writeValue[this.PageValueKey.DIST_ID];
@@ -121,6 +124,7 @@ EventPageValueBase = (function() {
       eventConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
       eventConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
       eventConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
+      eventConfig.modifiableVars = writeValue[this.PageValueKey.MODIFIABLE_VARS];
       if (!eventConfig.isCommonEvent) {
         if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.x) {
           $('.item_position_diff_x', eventConfig.emt).val(eventConfig.itemSizeDiff.x);
@@ -133,6 +137,19 @@ EventPageValueBase = (function() {
         }
         if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h) {
           $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h);
+        }
+        if (eventConfig.modifiableVars != null) {
+          ref = eventConfig.modifiableVars;
+          for (varName in ref) {
+            value = ref[varName];
+            if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+              $('', eventConfig.emt);
+            } else if (value.type === Constant.ItemDesignOptionType.STRING) {
+              $('', eventConfig.emt);
+            } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+              $('', eventConfig.emt);
+            }
+          }
         }
       }
       parallel = $(".parallel_div .parallel", eventConfig.emt);
