@@ -99,6 +99,10 @@ class PageValue
       @zoom = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}zoom"
       # @property [return] アイテム表示状態
       @itemVisible = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}item_visible"
+      # @property [String] F_ROOT 履歴情報ルート
+      @F_ROOT = constant.PageValueKey.F_ROOT
+      # @property [String] F_PREFIX 履歴情報プレフィックス
+      @F_PREFIX = constant.PageValueKey.F_PREFIX
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID
@@ -128,6 +132,12 @@ class PageValue
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   @getSettingPageValue = (key, updateOnly = false) ->
     _getPageValue.call(@, key, @Key.ST_ROOT, updateOnly)
+
+  # 操作履歴値を取得
+  # @param [String] key キー値
+  # @param [Boolean] updateOnly updateクラス付与のみ取得するか
+  @getFootprintPageValue = (key, updateOnly = false) ->
+    _getPageValue.call(@, key, @Key.F_ROOT, updateOnly)
 
   # ページが持つ値を取得
   # @param [String] key キー値
@@ -271,6 +281,14 @@ class PageValue
   # @param [Boolean] giveUpdate update属性を付与するか
   @setSettingPageValue = (key, value, giveUpdate = false) ->
     _setPageValue.call(@, key, value, false, @Key.ST_ROOT, true, giveUpdate)
+
+  # 操作履歴を設定
+  # @param [String] key キー値
+  # @param [Object] value 設定値(ハッシュ配列または値)
+  # @param [Boolean] giveName name属性を付与するか
+  # @param [Boolean] giveUpdate update属性を付与するか
+  @setFootprintPageValue = (key, value, giveUpdate = false) ->
+    _setPageValue.call(@, key, value, false, @Key.F_ROOT, true, giveUpdate)
 
   # ページが持つ値を設定
   # @param [String] key キー値

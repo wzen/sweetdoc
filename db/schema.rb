@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151103013621) do
+ActiveRecord::Schema.define(version: 20151117130615) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -346,6 +346,17 @@ ActiveRecord::Schema.define(version: 20151103013621) do
   end
 
   add_index "user_gallery_coding_maps", ["user_id", "gallery_coding_id"], name: "index_user_gallery_coding_maps_on_user_id_and_gallery_coding_id", unique: true, using: :btree
+
+  create_table "user_gallery_footprints", force: true do |t|
+    t.integer  "user_id",                    null: false
+    t.integer  "gallery_id",                 null: false
+    t.text     "data"
+    t.boolean  "del_flg",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_gallery_footprints", ["user_id", "gallery_id"], name: "index_user_gallery_footprints_on_user_id_and_gallery_id", unique: true, using: :btree
 
   create_table "user_pagevalues", force: true do |t|
     t.integer  "user_project_map_id",                  null: false

@@ -154,6 +154,10 @@ class Const
     FORK_NUM = 'fork_num'
     # @property [String] EF_MASTER_FORKNUM Masterのフォーク番号
     EF_MASTER_FORKNUM = 0
+    # @property [String] H_ROOT 履歴情報ルート
+    F_ROOT = 'footprint_page_values'
+    # @property [String] H_ROOT 履歴情報ルート
+    F_PREFIX = 'footprints'
   end
 
   class StateConfig
@@ -279,6 +283,7 @@ class Const
     SCROLL_ENABLED_DIRECTIONS = 'scroll_enabled_directions'
     SCROLL_FORWARD_DIRECTIONS = 'scroll_forward_directions'
     CHANGE_FORKNUM = 'change_forknum'
+    MODIFIABLE_VARS = 'modifiable_vars'
   end
 
   class UserPageValue
@@ -336,6 +341,7 @@ class Const
       PROJECT_ID = 'pid'
       ACCESS_TOKEN = 'at'
       RUNNING_USER_PAGEVALUE_ID = 'urpi'
+      FOOTPRINT_PAGE_VALUE = 'f'
     end
   end
 

@@ -23,6 +23,8 @@ LocalStorage = (function() {
 
     Key.RUN_SETTING_PAGEVALUES = 'run_setting_pagevalues';
 
+    Key.RUN_FOOTPRINT_PAGE_VALUES = 'run_footprint_pagevalues';
+
     Key.WORKTABLE_SAVETIME = 'worktable_time';
 
     Key.RUN_SAVETIME = 'run_time';
@@ -112,17 +114,12 @@ LocalStorage = (function() {
   };
 
   LocalStorage.loadGeneralPageValue = function() {
-    var h, isRun, k, key, lstorage, results, v;
+    var h, isRun, key, lstorage;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_GENERAL_PAGEVALUES : this.Key.WORKTABLE_GENERAL_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
-    results = [];
-    for (k in h) {
-      v = h[k];
-      results.push(PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
-    }
-    return results;
+    return PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, h);
   };
 
   LocalStorage.saveInstancePageValue = function() {
@@ -137,17 +134,12 @@ LocalStorage = (function() {
   };
 
   LocalStorage.loadInstancePageValue = function() {
-    var h, isRun, k, key, lstorage, results, v;
+    var h, isRun, key, lstorage;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_INSTANCE_PAGEVALUES : this.Key.WORKTABLE_INSTANCE_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
-    results = [];
-    for (k in h) {
-      v = h[k];
-      results.push(PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
-    }
-    return results;
+    return PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, h);
   };
 
   LocalStorage.saveEventPageValue = function() {
@@ -180,17 +172,26 @@ LocalStorage = (function() {
   };
 
   LocalStorage.loadSettingPageValue = function() {
-    var h, isRun, k, key, lstorage, results, v;
+    var h, isRun, key, lstorage;
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
-    results = [];
-    for (k in h) {
-      v = h[k];
-      results.push(PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v));
-    }
-    return results;
+    return PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, h);
+  };
+
+  LocalStorage.saveFootprintPageValue = function() {
+    var h, lstorage;
+    lstorage = localStorage;
+    h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX);
+    return lstorage.setItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES, JSON.stringify(h));
+  };
+
+  LocalStorage.loadFootprintPageValue = function() {
+    var h, lstorage;
+    lstorage = localStorage;
+    h = JSON.parse(lstorage.getItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES));
+    return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, h);
   };
 
   return LocalStorage;

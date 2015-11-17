@@ -1,4 +1,6 @@
 $ ->
+  window.isMotionCheck = true
+
   $('.motion_check.index').ready ->
     RunCommon.start(true)
 

@@ -37,6 +37,8 @@ Rails.application.routes.draw do
   #ajax
   post 'page_value_state/save_state'
   post 'page_value_state/load_state'
+  post 'page_value_state/save_gallery_footprint'
+  post 'page_value_state/load_gallery_footprint'
   get 'page_value_state/user_pagevalue_last_updated_list'
   get 'page_value_state/user_pagevalue_list_sorted_update'
   get 'item_js/index'

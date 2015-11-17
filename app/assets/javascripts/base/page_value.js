@@ -175,6 +175,10 @@ PageValue = (function() {
         return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "item_visible";
       };
 
+      Key.F_ROOT = constant.PageValueKey.F_ROOT;
+
+      Key.F_PREFIX = constant.PageValueKey.F_PREFIX;
+
       return Key;
 
     })();
@@ -210,6 +214,13 @@ PageValue = (function() {
       updateOnly = false;
     }
     return _getPageValue.call(this, key, this.Key.ST_ROOT, updateOnly);
+  };
+
+  PageValue.getFootprintPageValue = function(key, updateOnly) {
+    if (updateOnly == null) {
+      updateOnly = false;
+    }
+    return _getPageValue.call(this, key, this.Key.F_ROOT, updateOnly);
   };
 
   _getPageValue = function(key, rootId, updateOnly) {
@@ -376,6 +387,13 @@ PageValue = (function() {
       giveUpdate = false;
     }
     return _setPageValue.call(this, key, value, false, this.Key.ST_ROOT, true, giveUpdate);
+  };
+
+  PageValue.setFootprintPageValue = function(key, value, giveUpdate) {
+    if (giveUpdate == null) {
+      giveUpdate = false;
+    }
+    return _setPageValue.call(this, key, value, false, this.Key.F_ROOT, true, giveUpdate);
   };
 
   _setPageValue = function(key, value, isCache, rootId, giveName, giveUpdate) {

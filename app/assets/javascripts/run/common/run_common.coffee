@@ -21,6 +21,7 @@ class RunCommon
       @PROJECT_ID = constant.Run.Key.PROJECT_ID
       @ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN
       @RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID
+      FOOTPRINT_PAGE_VALUE = constant.Run.Key.FOOTPRINT_PAGE_VALUE
 
   # 画面初期化
   @initView = ->
@@ -414,6 +415,60 @@ class RunCommon
     else
       e.html('')
       e.closest('li').hide()
+
+  @saveFootprint = (callback = null) ->
+    if window.isMotionCheck? && window.isMotionCheck
+      # LocalStorageに保存
+      LocalStorage.saveFootprintPageValue()
+    else
+      # Serverに保存
+      data = {}
+      locationPaths = window.location.pathname.split('/')
+      data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
+      data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX)
+      $.ajax(
+        {
+          url: "/page_value_state/save_gallery_footprint"
+          type: "POST"
+          data: data
+          dataType: "json"
+          success: (data)->
+            if data.resultSuccess
+              if callback?
+                callback()
+            else
+              console.log('/page_value_state/save_gallery_footprint server error')
+          error: (data) ->
+            console.log('/page_value_state/save_gallery_footprint ajax error')
+        }
+      )
+
+  @loadFootprint = (callback = null) ->
+    if window.isMotionCheck? && window.isMotionCheck
+      # LocalStorageから読み込み
+      LocalStorage.loadFootprintPageValue()
+    else
+      # Serverから読み込み
+      data = {}
+      locationPaths = window.location.pathname.split('/')
+      data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
+      $.ajax(
+        {
+          url: "/page_value_state/load_gallery_footprint"
+          type: "POST"
+          data: data
+          dataType: "json"
+          success: (data)->
+            if data.resultSuccess
+              PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalue_data)
+              if callback?
+                callback()
+            else
+              console.log('/page_value_state/load_gallery_footprint server error')
+          error: (data) ->
+            console.log('/page_value_state/load_gallery_footprint ajax error')
+        }
+      )
 
   @start = (useLocalStorate = false) ->
     window.isWorkTable = false

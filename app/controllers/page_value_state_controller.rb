@@ -32,4 +32,17 @@ class PageValueStateController < ApplicationController
     @result_success, @user_pagevalue_list = PageValueState.user_pagevalue_list_sorted_update(user_id, project_id)
   end
 
+  def save_gallery_footprint
+    user_id = current_or_guest_user.id
+    gallery_access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
+    footprint_page_values = params.fetch(Const::Run::Key::FOOTPRINT_PAGE_VALUE, nil)
+    @result_success, @message = PageValueState.save_gallery_footprint(user_id, gallery_access_token, footprint_page_values)
+  end
+
+  def load_gallery_footprint
+    user_id = current_or_guest_user.id
+    gallery_access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
+    @result_success, @message, @pagevalue_data = PageValueState.load_gallery_footprint(user_id, gallery_access_token)
+  end
+
 end

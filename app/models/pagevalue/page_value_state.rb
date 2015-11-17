@@ -11,6 +11,7 @@ require 'pagevalue/instance_pagevalue_paging'
 require 'pagevalue/setting_pagevalue'
 require 'pagevalue/user_pagevalue'
 require 'project/user_project_map'
+require 'pagevalue/user_gallery_footprint'
 
 class PageValueState
   def self.save_state(user_id,
@@ -453,6 +454,64 @@ class PageValueState
       end
     end
     return itemids
+  end
+
+  def self.save_gallery_footprint(user_id, gallery_access_token, page_value)
+    begin
+      if page_value != nil && page_value != 'null'
+        ActiveRecord::Base.transaction do
+
+          g = Gallery.find_by(access_token: gallery_access_token)
+          gallery_id = g.id
+
+          # 履歴保存
+          fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
+          if fp
+            # Update
+            fp.data = page_value
+          else
+            # Create
+            fp = UserGalleryFootprint.new({
+                user_id: user_id,
+                gallery_id: gallery_id,
+                data: page_value
+                                          })
+          end
+          fp.save!
+        end
+      else
+        # Delete
+        fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
+        if fp
+          fp.destory
+        end
+      end
+
+      return true, I18n.t('message.database.item_state.save.success')
+    rescue => e
+      # 更新失敗
+      return false, I18n.t('message.database.item_state.save.error')
+    end
+  end
+
+  def self.load_gallery_footprint(user_id, gallery_access_token)
+    begin
+      data = nil
+      ActiveRecord::Base.transaction do
+
+        g = Gallery.find_by(access_token: gallery_access_token)
+        gallery_id = g.id
+
+        fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
+        if fp
+          data = fp.data
+        end
+      end
+      return true, I18n.t('message.database.item_state.save.success'), data
+    rescue => e
+      # 失敗
+      return false, I18n.t('message.database.item_state.save.error'), nil
+    end
   end
 
   private_class_method :last_user_pagevalue_search_sql, :save_general_pagevalue, :save_setting_pagevalue, :save_instance_pagevalue, :save_event_pagevalue

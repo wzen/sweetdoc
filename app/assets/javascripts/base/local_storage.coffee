@@ -18,6 +18,8 @@ class LocalStorage
     @RUN_EVENT_PAGEVALUES = 'run_event_pagevalues'
     # @property [Int] WORKTABLE_SETTING_PAGEVALUES 共通設定
     @RUN_SETTING_PAGEVALUES = 'run_setting_pagevalues'
+    # @property [Int] RUN_FOOTPRINT_PAGE_VALUES 操作履歴
+    @RUN_FOOTPRINT_PAGE_VALUES = 'run_footprint_pagevalues'
     # @property [Int] WORKTABLE_SAVETIME 保存時間
     @WORKTABLE_SAVETIME = 'worktable_time'
     # @property [Int] WORKTABLE_SAVETIME 保存時間
@@ -26,14 +28,14 @@ class LocalStorage
   @WORKTABLE_SAVETIME = 5
   @RUN_SAVETIME = 9999
 
-  # 全てのPageValueを保存
+  # PageValueを保存
   @saveAllPageValues: ->
     @saveGeneralPageValue()
     @saveInstancePageValue()
     @saveEventPageValue()
     @saveSettingPageValue()
 
-  # 全てのPageValueを読み込み
+  # PageValueを読み込み
   @loadAllPageValues: ->
     @loadGeneralPageValue()
     @loadInstancePageValue()
@@ -102,8 +104,9 @@ class LocalStorage
     lstorage = localStorage
     key = if isRun then @Key.RUN_GENERAL_PAGEVALUES else @Key.WORKTABLE_GENERAL_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
-    for k, v of h
-      PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, h)
+#    for k, v of h
+#      PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # キャッシュにインスタンス値を保存
   @saveInstancePageValue: ->
@@ -122,8 +125,9 @@ class LocalStorage
     lstorage = localStorage
     key = if isRun then @Key.RUN_INSTANCE_PAGEVALUES else @Key.WORKTABLE_INSTANCE_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
-    for k, v of h
-      PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+    PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, h)
+#    for k, v of h
+#      PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # キャッシュにイベント値を保存
   @saveEventPageValue: ->
@@ -158,5 +162,18 @@ class LocalStorage
     lstorage = localStorage
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
-    for k, v of h
-      PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+    PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, h)
+#    for k, v of h
+#      PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+
+  # キャッシュに操作履歴値を保存
+  @saveFootprintPageValue: ->
+    lstorage = localStorage
+    h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX)
+    lstorage.setItem(@Key.RUN_FOOTPRINT_PAGE_VALUES, JSON.stringify(h))
+
+  # キャッシュから操作履歴値を読み込み
+  @loadFootprintPageValue: ->
+    lstorage = localStorage
+    h = JSON.parse(lstorage.getItem(@Key.RUN_FOOTPRINT_PAGE_VALUES))
+    PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, h)
