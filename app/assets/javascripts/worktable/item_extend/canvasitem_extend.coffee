@@ -100,6 +100,12 @@ WorkTableCanvasItemExtend =
       self.applyGradientStepChange(e)
     )
 
+    # 変数編集
+    if @constructor.actionProperties.modifiables?
+      for varName, value of @constructor.actionProperties.modifiables
+        if value.type == Constant.ItemDesignOptionType.NUMBER
+          self.settingModifiableVarSlider(designConfigRoot, "#{varName}_meter", varName, value.min, value.max)
+
   # デザイン変更を反映
   applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)

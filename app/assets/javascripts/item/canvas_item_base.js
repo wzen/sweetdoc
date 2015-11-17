@@ -189,6 +189,9 @@ CanvasItemBase = (function(superClass) {
   };
 
   CanvasItemBase.prototype.applyDesignChange = function(doStyleSave) {
+    if (doStyleSave == null) {
+      doStyleSave = true;
+    }
     this.reDraw();
     if (doStyleSave) {
       return this.saveDesign();

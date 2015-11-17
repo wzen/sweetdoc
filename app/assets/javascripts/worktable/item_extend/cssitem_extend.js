@@ -39,7 +39,7 @@ WorkTableCssItemExtend = {
     return true;
   },
   setupDesignToolOptionMenu: function() {
-    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, self;
+    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, ref, results, self, value, varName;
     self = this;
     designConfigRoot = $('#' + this.getDesignConfigId());
     self.settingGradientSlider('design_slider_gradient', null);
@@ -91,7 +91,7 @@ WorkTableCssItemExtend = {
     })(this));
     btnGradientStep = $(".design_gradient_step", designConfigRoot);
     btnGradientStep.off('keyup mouseup');
-    return btnGradientStep.on('keyup mouseup', (function(_this) {
+    btnGradientStep.on('keyup mouseup', (function(_this) {
       return function(e) {
         var i, j, stepValue;
         stepValue = parseInt($(e.currentTarget).val());
@@ -120,6 +120,19 @@ WorkTableCssItemExtend = {
         return _this.saveDesign();
       };
     })(this));
+    if (this.constructor.actionProperties.modifiables != null) {
+      ref = this.constructor.actionProperties.modifiables;
+      results = [];
+      for (varName in ref) {
+        value = ref[varName];
+        if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+          results.push(self.settingModifiableVarSlider(designConfigRoot, varName + "_meter", varName, value.min, value.max));
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    }
   },
   applyDesignStyleChange: function(designKeyName, value, doStyleSave) {
     var cssCodeElement;

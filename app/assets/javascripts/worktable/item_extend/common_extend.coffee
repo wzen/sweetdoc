@@ -337,7 +337,7 @@ WorkTableCommonInclude =
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingModifiableVarSlider: (configRoot, meterClassName, varName, min, max, stepValue = 0) ->
+  settingModifiableVarSlider: (configRoot, meterClassName, varName, min = 0, max = 100, stepValue = 0) ->
     meterElement = $(".#{meterClassName}", configRoot)
     valueElement = meterElement.prev('input:first')
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
@@ -354,9 +354,7 @@ WorkTableCommonInclude =
       slide: (event, ui) =>
         valueElement.val(ui.value)
         valueElement.html(ui.value)
-        classNames = $(event.target).attr('class').split(' ')
-        n = $.grep(classNames, (s) -> s.indexOf('design_') >= 0)[0]
         this[varName] = ui.value
-        @applyDesignStyleChange(n, ui.value)
+        @applyDesignChange()
     })
 

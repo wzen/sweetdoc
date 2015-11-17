@@ -376,6 +376,12 @@ WorkTableCommonInclude = {
   },
   settingModifiableVarSlider: function(configRoot, meterClassName, varName, min, max, stepValue) {
     var defaultValue, meterElement, valueElement;
+    if (min == null) {
+      min = 0;
+    }
+    if (max == null) {
+      max = 100;
+    }
     if (stepValue == null) {
       stepValue = 0;
     }
@@ -396,15 +402,10 @@ WorkTableCommonInclude = {
       value: defaultValue,
       slide: (function(_this) {
         return function(event, ui) {
-          var classNames, n;
           valueElement.val(ui.value);
           valueElement.html(ui.value);
-          classNames = $(event.target).attr('class').split(' ');
-          n = $.grep(classNames, function(s) {
-            return s.indexOf('design_') >= 0;
-          })[0];
           _this[varName] = ui.value;
-          return _this.applyDesignStyleChange(n, ui.value);
+          return _this.applyDesignChange();
         };
       })(this)
     });
