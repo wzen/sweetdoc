@@ -40,8 +40,8 @@ WorkTableCanvasItemExtend = {
     designConfigRoot = $('#' + this.getDesignConfigId());
     self.settingGradientSlider('design_slider_gradient', null);
     self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false);
-    self.settingDesignSlider('design_slider_border_radius', 0, 100);
-    self.settingDesignSlider('design_slider_border_width', 0, 10);
+    self.settingDesignSlider('design_slider_border_radius', 1, 100);
+    self.settingDesignSlider('design_slider_border_width', 0, 30);
     self.settingDesignSlider('design_slider_font_size', 0, 30);
     self.settingDesignSlider('design_slider_shadow_left', -100, 100);
     self.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);

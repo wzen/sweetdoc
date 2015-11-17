@@ -239,6 +239,14 @@ CanvasItemBase = (function(superClass) {
         return drawingContext.shadowBlur = _this.designs.values.design_slider_shadow_size_value;
       });
     })(this)();
+    (function(_this) {
+      return (function() {
+        drawingContext.strokeStyle = "#" + _this.designs.values.design_border_color_value;
+        drawingContext.lineWidth = _this.designs.values.design_slider_border_width_value;
+        return drawingContext.miterLimit = _this.designs.values.design_slider_border_radius_value;
+      });
+    })(this)();
+    drawingContext.stroke();
     return drawingContext.fill();
   };
 

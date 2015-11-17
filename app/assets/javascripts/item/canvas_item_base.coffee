@@ -211,4 +211,11 @@ class CanvasItemBase extends ItemBase
       drawingContext.shadowOffsetY = @designs.values.design_slider_shadow_top_value
       drawingContext.shadowBlur = @designs.values.design_slider_shadow_size_value
 
+    do =>
+      # 線
+      drawingContext.strokeStyle = "##{@designs.values.design_border_color_value}"
+      drawingContext.lineWidth = @designs.values.design_slider_border_width_value
+      drawingContext.miterLimit = @designs.values.design_slider_border_radius_value
+
+    drawingContext.stroke()
     drawingContext.fill()
