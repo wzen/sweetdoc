@@ -194,7 +194,7 @@ class PageValueState
 
       if pagevalues.first['general_common_pagevalue_data']
         JSON.parse(pagevalues.first['general_common_pagevalue_data']).each do |k, v|
-          gpd[k] = JSON.parse(v)
+          gpd[k] = v
         end
       end
 
