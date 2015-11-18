@@ -60,43 +60,6 @@ class CssItemBase extends ItemBase
     super(obj)
     @mousedownCood = Common.makeClone(obj.mousedownCood)
 
-  # イベント適用前のオブジェクト状態を取得
-  stateEventBefore: (isForward) ->
-    obj = @getMinimumObject()
-    if !isForward
-      # サイズ変更後
-      itemSize = obj.itemSize
-      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-      obj.itemSize = {
-        x: itemSize.x - itemDiff.x
-        y: itemSize.y - itemDiff.y
-        w: itemSize.w - itemDiff.w
-        h: itemSize.h - itemDiff.h
-      }
-
-    console.log("stateEventBefore")
-    console.log(obj)
-    return obj
-
-  # イベント適用後のオブジェクト状態を取得
-  stateEventAfter: (isForward) ->
-    obj = @getMinimumObject()
-    if isForward
-      # サイズ変更後
-      obj = @getMinimumObject()
-      itemSize = obj.itemSize
-      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-      obj.itemSize = {
-        x: itemSize.x + itemDiff.x
-        y: itemSize.y + itemDiff.y
-        w: itemSize.w + itemDiff.w
-        h: itemSize.h + itemDiff.h
-      }
-
-    console.log("stateEventAfter")
-    console.log(obj)
-    return obj
-
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     @getJQueryElement().css({width: w, height: h})

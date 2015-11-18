@@ -68,43 +68,6 @@ CssItemBase = (function(superClass) {
     return this.mousedownCood = Common.makeClone(obj.mousedownCood);
   };
 
-  CssItemBase.prototype.stateEventBefore = function(isForward) {
-    var itemDiff, itemSize, obj;
-    obj = this.getMinimumObject();
-    if (!isForward) {
-      itemSize = obj.itemSize;
-      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-      obj.itemSize = {
-        x: itemSize.x - itemDiff.x,
-        y: itemSize.y - itemDiff.y,
-        w: itemSize.w - itemDiff.w,
-        h: itemSize.h - itemDiff.h
-      };
-    }
-    console.log("stateEventBefore");
-    console.log(obj);
-    return obj;
-  };
-
-  CssItemBase.prototype.stateEventAfter = function(isForward) {
-    var itemDiff, itemSize, obj;
-    obj = this.getMinimumObject();
-    if (isForward) {
-      obj = this.getMinimumObject();
-      itemSize = obj.itemSize;
-      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-      obj.itemSize = {
-        x: itemSize.x + itemDiff.x,
-        y: itemSize.y + itemDiff.y,
-        w: itemSize.w + itemDiff.w,
-        h: itemSize.h + itemDiff.h
-      };
-    }
-    console.log("stateEventAfter");
-    console.log(obj);
-    return obj;
-  };
-
   CssItemBase.prototype.updateItemSize = function(w, h) {
     this.getJQueryElement().css({
       width: w,

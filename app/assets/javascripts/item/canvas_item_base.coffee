@@ -82,41 +82,6 @@ class CanvasItemBase extends ItemBase
       # キャンパスに対する初期化
       @initCanvas()
 
-  # イベント適用前のオブジェクト状態を取得
-  stateEventBefore: (isForward) ->
-    obj = @getMinimumObject()
-    if !isForward
-      # サイズ変更後のScaleを計算
-      scale = obj.scale
-      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-      obj.itemSize.x -= itemDiff.x
-      obj.itemSize.y -= itemDiff.y
-      w = scale.w * obj.itemSize.w
-      h = scale.h * obj.itemSize.h
-      sw = (w - itemDiff.w) / obj.itemSize.w
-      sh = (h - itemDiff.h) / obj.itemSize.h
-      obj.scale.w = sw
-      obj.scale.h = sh
-
-    return obj
-
-  # イベント適用後のオブジェクト状態を取得
-  stateEventAfter: (isForward) ->
-    obj = @getMinimumObject()
-    if isForward
-      scale = obj.scale
-      itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-      obj.itemSize.x += itemDiff.x
-      obj.itemSize.y += itemDiff.y
-      w = scale.w * obj.itemSize.w
-      h = scale.h * obj.itemSize.h
-      sw = (w + itemDiff.w) / obj.itemSize.w
-      sh = (h + itemDiff.h) / obj.itemSize.h
-      obj.scale.w = sw
-      obj.scale.h = sh
-
-    return obj
-
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     element = $('#' + @id)

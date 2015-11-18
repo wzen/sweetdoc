@@ -95,42 +95,6 @@ CanvasItemBase = (function(superClass) {
     }
   };
 
-  CanvasItemBase.prototype.stateEventBefore = function(isForward) {
-    var h, itemDiff, obj, scale, sh, sw, w;
-    obj = this.getMinimumObject();
-    if (!isForward) {
-      scale = obj.scale;
-      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-      obj.itemSize.x -= itemDiff.x;
-      obj.itemSize.y -= itemDiff.y;
-      w = scale.w * obj.itemSize.w;
-      h = scale.h * obj.itemSize.h;
-      sw = (w - itemDiff.w) / obj.itemSize.w;
-      sh = (h - itemDiff.h) / obj.itemSize.h;
-      obj.scale.w = sw;
-      obj.scale.h = sh;
-    }
-    return obj;
-  };
-
-  CanvasItemBase.prototype.stateEventAfter = function(isForward) {
-    var h, itemDiff, obj, scale, sh, sw, w;
-    obj = this.getMinimumObject();
-    if (isForward) {
-      scale = obj.scale;
-      itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
-      obj.itemSize.x += itemDiff.x;
-      obj.itemSize.y += itemDiff.y;
-      w = scale.w * obj.itemSize.w;
-      h = scale.h * obj.itemSize.h;
-      sw = (w + itemDiff.w) / obj.itemSize.w;
-      sh = (h + itemDiff.h) / obj.itemSize.h;
-      obj.scale.w = sw;
-      obj.scale.h = sh;
-    }
-    return obj;
-  };
-
   CanvasItemBase.prototype.updateItemSize = function(w, h) {
     var canvas, drawingCanvas, drawingContext, element, scaleH, scaleW;
     element = $('#' + this.id);
