@@ -106,7 +106,8 @@ class CssItemBase extends ItemBase
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
-    obj = @getMinimumObject()
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
+    $.extend(true, obj, diff)
     return obj.itemSize
 
   # CSSのルートのIDを取得

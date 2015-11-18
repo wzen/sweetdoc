@@ -117,7 +117,8 @@ CssItemBase = (function(superClass) {
   CssItemBase.prototype.originalItemElementSize = function() {
     var diff, obj;
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    obj = this.getMinimumObject();
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
+    $.extend(true, obj, diff);
     return obj.itemSize;
   };
 
