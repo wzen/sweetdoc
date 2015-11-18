@@ -426,15 +426,18 @@ EventConfig = (function() {
     }
   };
 
-  EventConfig.prototype.addEventVarModifyConfig = function(obj, callback) {
+  EventConfig.prototype.addEventVarModifyConfig = function(obj, successCallback, errorCallback) {
     var emt, valueClassName;
-    if (callback == null) {
-      callback = null;
+    if (successCallback == null) {
+      successCallback = null;
+    }
+    if (errorCallback == null) {
+      errorCallback = null;
     }
     valueClassName = this.methodClassName();
     emt = $(".value_forms ." + valueClassName, this.emt);
     if (emt.length > 0) {
-      if (callback != null) {
+      if (typeof callback !== "undefined" && callback !== null) {
         callback();
       }
     }
@@ -447,19 +450,19 @@ EventConfig = (function() {
       dataType: "json",
       success: function(data) {
         if (data.resultSuccess) {
-          $(".value_forms", this.emt).append(data.html.wrap("<div class='" + valueClassName + "'></div>"));
-          if (typeof successCallback !== "undefined" && successCallback !== null) {
+          $(".value_forms", this.emt).append($("<div class='" + valueClassName + "'>" + data.html + "</div>"));
+          if (successCallback != null) {
             return successCallback(data);
           }
         } else {
-          if (typeof errorCallback !== "undefined" && errorCallback !== null) {
+          if (errorCallback != null) {
             errorCallback(data);
           }
           return console.log('/worktable/event_var_modify_config server error');
         }
       },
       error: function(data) {
-        if (typeof errorCallback !== "undefined" && errorCallback !== null) {
+        if (errorCallback != null) {
           errorCallback(data);
         }
         return console.log('/worktable/event_var_modify_config ajax error');

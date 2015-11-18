@@ -489,14 +489,6 @@ class RunCommon
         }
       )
 
-  # インスタンスの変数値を保存
-  @saveInstanceObjectToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
-    baseObj = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(targetObjId)).value
-    obj = window.instanceMap[targetObjId]
-    diff = Common.diffEventObject(baseObj, obj.getMinimumObject())
-    key = if isChangeBefore then PageValue.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) else PageValue.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum)
-    PageValue.setFootprintPageValue(key, diff)
-
   @start = (useLocalStorate = false) ->
     window.isWorkTable = false
     window.eventAction = null

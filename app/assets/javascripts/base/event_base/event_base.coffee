@@ -69,7 +69,6 @@ class EventBase extends Extend
       if @ instanceof CssItemBase
         @appendAnimationCssIfNeeded()
 
-      #method = @constructor.prototype[@getEventMethodName()]
       actionType = @getEventActionType()
       # イベントループ
       @doPreviewLoop = true
@@ -179,14 +178,14 @@ class EventBase extends Extend
     if actionType == Constant.ActionType.SCROLL
       @scrollValue = 0
     # インスタンスの状態を保存
-    RunCommon.saveInstanceObjectToFootprint(@id, true, @event[EventPageValueBase.PageValueKey.DIST_ID])
+    PageValue.saveInstanceObjectToFootprint(@id, true, @event[EventPageValueBase.PageValueKey.DIST_ID])
     # 状態をイベント前に戻す
     @updateEventBefore()
 
   # チャプター終了時イベント
   didChapter: ->
     # インスタンスの状態を保存
-    RunCommon.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
+    PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
 
   execMethod: (params, complete = null) ->
     methodName = @getEventMethodName()
@@ -288,13 +287,13 @@ class EventBase extends Extend
   # イベント後の表示状態にする
   updateEventAfter: ->
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
-    obj = @getMinimumObject()
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
     @setMiniumObject($.extend(true, obj, diff))
 
   # イベント前の表示状態にする
   updateEventBefore: ->
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
-    obj = @getMinimumObject()
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
     @setMiniumObject($.extend(true, obj, diff))
 
   # アイテムの情報をページ値に保存

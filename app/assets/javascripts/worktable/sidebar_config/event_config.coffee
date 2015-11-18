@@ -428,7 +428,8 @@ class EventConfig
 
         actionParent.appendTo(action_forms)
 
-  addEventVarModifyConfig: (obj, callback = null) ->
+  # 変数編集の入力フォームを追加
+  addEventVarModifyConfig: (obj, successCallback = null, errorCallback = null) ->
     # HTML存在チェック
     valueClassName = @methodClassName()
     emt = $(".value_forms .#{valueClassName}", @emt)
@@ -447,7 +448,7 @@ class EventConfig
         success: (data)->
           if data.resultSuccess
             # HTML追加
-            $(".value_forms", @emt).append(data.html.wrap("<div class='#{valueClassName}'></div>"))
+            $(".value_forms", @emt).append($("<div class='#{valueClassName}'>#{data.html}</div>"))
             if successCallback?
               successCallback(data)
           else

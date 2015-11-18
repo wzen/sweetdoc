@@ -834,6 +834,18 @@ PageValue = (function() {
     return results;
   };
 
+  PageValue.saveInstanceObjectToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
+    var baseObj, diff, key, obj;
+    if (pageNum == null) {
+      pageNum = PageValue.getPageNum();
+    }
+    baseObj = this.getInstancePageValue(PageValue.Key.instanceValue(targetObjId));
+    obj = window.instanceMap[targetObjId];
+    diff = Common.diffEventObject(baseObj, obj.getMinimumObject());
+    key = isChangeBefore ? this.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
+    return this.setFootprintPageValue(key, diff);
+  };
+
   return PageValue;
 
 })();

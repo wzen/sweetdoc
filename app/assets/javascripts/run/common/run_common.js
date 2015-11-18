@@ -548,18 +548,6 @@ RunCommon = (function() {
     }
   };
 
-  RunCommon.saveInstanceObjectToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
-    var baseObj, diff, key, obj;
-    if (pageNum == null) {
-      pageNum = PageValue.getPageNum();
-    }
-    baseObj = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(targetObjId)).value;
-    obj = window.instanceMap[targetObjId];
-    diff = Common.diffEventObject(baseObj, obj.getMinimumObject());
-    key = isChangeBefore ? PageValue.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : PageValue.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
-    return PageValue.setFootprintPageValue(key, diff);
-  };
-
   RunCommon.start = function(useLocalStorate) {
     if (useLocalStorate == null) {
       useLocalStorate = false;

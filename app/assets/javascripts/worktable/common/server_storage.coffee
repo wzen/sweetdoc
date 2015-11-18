@@ -100,12 +100,6 @@ class ServerStorage
 
               # Pagevalue設置
               if data.general_pagevalue_data?
-#                d = {}
-#                for k, v of data.general_pagevalue_data
-#                  if k.indexOf(PageValue.Key.P_PREFIX) >= 0
-#                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
-#                  else
-#                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
                 PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data)
                 Common.setTitle(data.general_pagevalue_data.title)
               if data.instance_pagevalue_data?

@@ -88,8 +88,12 @@ Common = (function() {
       var f, k, ret, v;
       if (typeof o1 !== typeof o2) {
         return o2;
-      } else if (typeof o1 !== 'object' && o1 !== o2) {
-        return o2;
+      } else if (typeof o1 !== 'object') {
+        if (o1 !== o2) {
+          return o2;
+        } else {
+          return null;
+        }
       } else {
         ret = {};
         for (k in o1) {

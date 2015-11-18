@@ -208,12 +208,12 @@ EventBase = (function(superClass) {
     if (actionType === Constant.ActionType.SCROLL) {
       this.scrollValue = 0;
     }
-    RunCommon.saveInstanceObjectToFootprint(this.id, true, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
+    PageValue.saveInstanceObjectToFootprint(this.id, true, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
     return this.updateEventBefore();
   };
 
   EventBase.prototype.didChapter = function() {
-    return RunCommon.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.execMethod = function(params, complete) {
@@ -313,14 +313,14 @@ EventBase = (function(superClass) {
   EventBase.prototype.updateEventAfter = function() {
     var diff, obj;
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    obj = this.getMinimumObject();
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
     return this.setMiniumObject($.extend(true, obj, diff));
   };
 
   EventBase.prototype.updateEventBefore = function() {
     var diff, obj;
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    obj = this.getMinimumObject();
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
     return this.setMiniumObject($.extend(true, obj, diff));
   };
 
