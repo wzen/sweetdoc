@@ -113,7 +113,7 @@ EventPageValueBase = (function() {
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, ref, rightEmt, start, topEmt, value, varName, writeValue;
+    var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, rightEmt, start, topEmt, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       eventConfig.distId = writeValue[this.PageValueKey.DIST_ID];
@@ -137,19 +137,6 @@ EventPageValueBase = (function() {
         }
         if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h) {
           $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h);
-        }
-        if (eventConfig.modifiableVars != null) {
-          ref = eventConfig.modifiableVars;
-          for (varName in ref) {
-            value = ref[varName];
-            if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-              $('', eventConfig.emt);
-            } else if (value.type === Constant.ItemDesignOptionType.STRING) {
-              $('', eventConfig.emt);
-            } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-              $('', eventConfig.emt);
-            }
-          }
         }
       }
       parallel = $(".parallel_div .parallel", eventConfig.emt);

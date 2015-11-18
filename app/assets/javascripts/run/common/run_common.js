@@ -34,8 +34,6 @@ RunCommon = (function() {
 
     })();
     RunCommon.Key = (function() {
-      var FOOTPRINT_PAGE_VALUE;
-
       function Key() {}
 
       Key.TARGET_PAGES = constant.Run.Key.TARGET_PAGES;
@@ -48,7 +46,9 @@ RunCommon = (function() {
 
       Key.RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID;
 
-      FOOTPRINT_PAGE_VALUE = constant.Run.Key.FOOTPRINT_PAGE_VALUE;
+      Key.FOOTPRINT_PAGE_VALUE = constant.Run.Key.FOOTPRINT_PAGE_VALUE;
+
+      Key.LOAD_FOOTPRINT = constant.Run.Key.LOAD_FOOTPRINT;
 
       return Key;
 
@@ -125,14 +125,14 @@ RunCommon = (function() {
   };
 
   RunCommon.initEventAction = function() {
-    var forkEventPageValueList, i, j, l, m, page, pageCount, pageList, pageNum, ref, ref1;
+    var forkEventPageValueList, i, j, k, l, page, pageCount, pageList, pageNum, ref, ref1;
     pageCount = PageValue.getPageCount();
     pageNum = PageValue.getPageNum();
     pageList = new Array(pageCount);
-    for (i = l = 1, ref = pageCount; 1 <= ref ? l <= ref : l >= ref; i = 1 <= ref ? ++l : --l) {
+    for (i = k = 1, ref = pageCount; 1 <= ref ? k <= ref : k >= ref; i = 1 <= ref ? ++k : --k) {
       if (i === parseInt(pageNum)) {
         forkEventPageValueList = {};
-        for (j = m = 0, ref1 = PageValue.getForkCount(); 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
+        for (j = l = 0, ref1 = PageValue.getForkCount(); 0 <= ref1 ? l <= ref1 : l >= ref1; j = 0 <= ref1 ? ++l : --l) {
           forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i);
         }
         page = null;
@@ -199,8 +199,11 @@ RunCommon = (function() {
     return ret;
   };
 
-  RunCommon.loadPagingPageValue = function(loadPageNum, callback, forceUpdate) {
-    var className, data, i, l, lastPageNum, locationPaths, ref, ref1, section, targetPages;
+  RunCommon.loadPagingPageValue = function(loadPageNum, doLoadFootprint, callback, forceUpdate) {
+    var className, data, i, k, lastPageNum, locationPaths, ref, ref1, section, targetPages;
+    if (doLoadFootprint == null) {
+      doLoadFootprint = false;
+    }
     if (callback == null) {
       callback = null;
     }
@@ -209,7 +212,7 @@ RunCommon = (function() {
     }
     lastPageNum = loadPageNum + Constant.Paging.PRELOAD_PAGEVALUE_NUM;
     targetPages = [];
-    for (i = l = ref = loadPageNum, ref1 = lastPageNum; ref <= ref1 ? l <= ref1 : l >= ref1; i = ref <= ref1 ? ++l : --l) {
+    for (i = k = ref = loadPageNum, ref1 = lastPageNum; ref <= ref1 ? k <= ref1 : k >= ref1; i = ref <= ref1 ? ++k : --k) {
       if (forceUpdate) {
         targetPages.push(i);
       } else {
@@ -232,6 +235,7 @@ RunCommon = (function() {
     locationPaths = window.location.pathname.split('/');
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID);
+    data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint;
     return $.ajax({
       url: "/run/paging",
       type: "POST",
@@ -240,28 +244,18 @@ RunCommon = (function() {
       success: function(data) {
         if (data.resultSuccess) {
           return Common.setupJsByList(data.itemJsList, function() {
-            var k, ref2, ref3, ref4, v;
             if (data.pagevalues != null) {
               if (data.pagevalues.general_pagevalue != null) {
-                ref2 = data.pagevalues.general_pagevalue;
-                for (k in ref2) {
-                  v = ref2[k];
-                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
-                }
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.pagevalues.general_pagevalue);
               }
               if (data.pagevalues.instance_pagevalue != null) {
-                ref3 = data.pagevalues.instance_pagevalue;
-                for (k in ref3) {
-                  v = ref3[k];
-                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
-                }
+                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.pagevalues.instance_pagevalue);
               }
               if (data.pagevalues.event_pagevalue != null) {
-                ref4 = data.pagevalues.event_pagevalue;
-                for (k in ref4) {
-                  v = ref4[k];
-                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
-                }
+                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.pagevalues.event_pagevalue);
+              }
+              if (data.pagevalues.footprint != null) {
+                PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalues.footprint);
               }
             }
             if (callback != null) {
@@ -490,7 +484,7 @@ RunCommon = (function() {
       data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
       data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX);
       return $.ajax({
-        url: "/page_value_state/save_gallery_footprint",
+        url: "/run/save_gallery_footprint",
         type: "POST",
         data: data,
         dataType: "json",
@@ -500,11 +494,11 @@ RunCommon = (function() {
               return callback();
             }
           } else {
-            return console.log('/page_value_state/save_gallery_footprint server error');
+            return console.log('/run/save_gallery_footprint server error');
           }
         },
         error: function(data) {
-          return console.log('/page_value_state/save_gallery_footprint ajax error');
+          return console.log('/run/save_gallery_footprint ajax error');
         }
       });
     }
@@ -522,7 +516,7 @@ RunCommon = (function() {
       locationPaths = window.location.pathname.split('/');
       data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
       return $.ajax({
-        url: "/page_value_state/load_gallery_footprint",
+        url: "/run/load_gallery_footprint",
         type: "POST",
         data: data,
         dataType: "json",
@@ -533,11 +527,11 @@ RunCommon = (function() {
               return callback();
             }
           } else {
-            return console.log('/page_value_state/load_gallery_footprint server error');
+            return console.log('/run/load_gallery_footprint server error');
           }
         },
         error: function(data) {
-          return console.log('/page_value_state/load_gallery_footprint ajax error');
+          return console.log('/run/load_gallery_footprint ajax error');
         }
       });
     }

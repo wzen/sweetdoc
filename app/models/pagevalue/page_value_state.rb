@@ -12,6 +12,8 @@ require 'pagevalue/setting_pagevalue'
 require 'pagevalue/user_pagevalue'
 require 'project/user_project_map'
 require 'pagevalue/user_gallery_footprint'
+require 'pagevalue/user_gallery_footprint_pagevalue'
+require 'pagevalue/user_gallery_footprint_paging'
 
 class PageValueState
   def self.save_state(user_id,
@@ -157,14 +159,6 @@ class PageValueState
       return nil
     else
       message = I18n.t('message.database.item_state.load.success')
-
-      ppd = {}
-      ppd[Const::Project::Key::PROJECT_ID] = pagevalues.first['project_id']
-      ppd[Const::Project::Key::TITLE] = pagevalues.first['project_title']
-      ppd[Const::Project::Key::SCREEN_SIZE] = {
-          width: pagevalues.first['project_screen_width'],
-          height: pagevalues.first['project_screen_height']
-      }
       spd = {}
       spd[Const::Setting::Key::GRID_ENABLE] = pagevalues.first['setting_pagevalue_grid_enable'].to_i != 0
       spd[Const::Setting::Key::GRID_STEP] = pagevalues.first['setting_pagevalue_grid_step']
@@ -172,19 +166,25 @@ class PageValueState
       spd[Const::Setting::Key::AUTOSAVE_TIME] = pagevalues.first['setting_pagevalue_autosave_time']
 
       gpd = {}
+      gpd[Const::Project::Key::PROJECT_ID] = pagevalues.first['project_id']
+      gpd[Const::Project::Key::TITLE] = pagevalues.first['project_title']
+      gpd[Const::Project::Key::SCREEN_SIZE] = {
+          width: pagevalues.first['project_screen_width'],
+          height: pagevalues.first['project_screen_height']
+      }
       ipd = {}
       epd = {}
       itemids = []
       pagevalues.each do |pagevalue|
         key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
         if pagevalue['general_pagevalue_data'] != nil
-          gpd[key] = pagevalue['general_pagevalue_data']
+          gpd[key] = JSON.parse(pagevalue['general_pagevalue_data'])
         end
         if pagevalue['instance_pagevalue_data'] != nil
-          ipd[key] = pagevalue['instance_pagevalue_data']
+          ipd[key] = JSON.parse(pagevalue['instance_pagevalue_data'])
         end
         if pagevalue['event_pagevalue_data'] != nil
-          epd[key] = pagevalue['event_pagevalue_data']
+          epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
 
           # 必要なItemIdを調査
           itemids = PageValueState.extract_need_load_itemids(epd[key])
@@ -194,12 +194,12 @@ class PageValueState
 
       if pagevalues.first['general_common_pagevalue_data']
         JSON.parse(pagevalues.first['general_common_pagevalue_data']).each do |k, v|
-          gpd[k] = v
+          gpd[k] = JSON.parse(v)
         end
       end
 
       item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
-      return true, item_js_list, ppd, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
+      return true, item_js_list, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
     end
   end
 
@@ -465,25 +465,65 @@ class PageValueState
           gallery_id = g.id
 
           # 履歴保存
+          page_value.each do |k, v|
+            if k.index(Const::PageValueKey::P_PREFIX) >= 0
+              # ページ保存
+              page_num = k.gsub(Const::PageValueKey::P_PREFIX, '').to_i
+              p = UserGalleryFootprintPaging.find_by(user_id: user_id, gallery_id: gallery_id, page_num: page_num)
+              if p
+                u = UserGalleryFootprintPagevalue.find(p.user_gallery_footprint_pagevalue_id)
+                if u
+                  u.data = v.to_json
+                  u.save!
+                else
+                  u = UserGalleryFootprintPagevalue.new({data: v.to_json})
+                  u_id = u.save!
+                  p.user_gallery_footprint_pagevalue_id = u_id
+                  p.save!
+                end
+              else
+                u = UserGalleryFootprintPagevalue.new({data: v.to_json})
+                u_id = u.save!
+                p = UserGalleryFootprintPaging.new({user_id: user_id,
+                                                    gallery_id: gallery_id,
+                                                    page_num: page_num,
+                                                    user_gallery_footprint_pagevalue_id: u_id
+                                                   })
+                p.save!
+              end
+            end
+          end
+
+          page_num = nil
+          page_value.each do |k, v|
+            if k.index(Const::PageValueKey::P_PREFIX) < 0
+              if k == Const::PageValueKey::PAGE_NUM
+                page_num = v
+              end
+            end
+          end
+
           fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
           if fp
             # Update
-            fp.data = page_value
+            fp.page_num = page_num
           else
             # Create
             fp = UserGalleryFootprint.new({
                 user_id: user_id,
                 gallery_id: gallery_id,
-                data: page_value
+                page_num: page_num
                                           })
           end
           fp.save!
         end
       else
         # Delete
+        # FIXME:
         fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
         if fp
-          fp.destory
+          fp.del_flg = true
+          fp.save!
         end
       end
 
@@ -494,7 +534,8 @@ class PageValueState
     end
   end
 
-  def self.load_gallery_footprint(user_id, gallery_access_token)
+  def self.load_gallery_footprint(user_id, target_pages, gallery_access_token)
+    # 現在未使用
     begin
       data = nil
       ActiveRecord::Base.transaction do

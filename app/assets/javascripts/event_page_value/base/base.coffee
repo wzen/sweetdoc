@@ -124,14 +124,14 @@ class EventPageValueBase
         if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h
           $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h)
 
-        if eventConfig.modifiableVars?
-          for varName, value of eventConfig.modifiableVars
-            if value.type == Constant.ItemDesignOptionType.NUMBER
-              $('', eventConfig.emt)
-            else if value.type == Constant.ItemDesignOptionType.STRING
-              $('', eventConfig.emt)
-            else if value.type == Constant.ItemDesignOptionType.COLOR
-              $('', eventConfig.emt)
+#        if eventConfig.modifiableVars?
+#          for varName, value of eventConfig.modifiableVars
+#            if value.type == Constant.ItemDesignOptionType.NUMBER
+#              $('', eventConfig.emt)
+#            else if value.type == Constant.ItemDesignOptionType.STRING
+#              $('', eventConfig.emt)
+#            else if value.type == Constant.ItemDesignOptionType.COLOR
+#              $('', eventConfig.emt)
 
       parallel = $(".parallel_div .parallel", eventConfig.emt)
       isParallel = writeValue[@PageValueKey.IS_SYNC]

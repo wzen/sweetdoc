@@ -179,6 +179,13 @@ PageValue = (function() {
 
       Key.F_PREFIX = constant.PageValueKey.F_PREFIX;
 
+      Key.footprintPageRoot = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + this.F_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
+      };
+
       return Key;
 
     })();
@@ -622,7 +629,7 @@ PageValue = (function() {
 
   PageValue.getPageNum = function() {
     var ret;
-    ret = PageValue.getGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM);
+    ret = PageValue.getFootprintPageValue("" + this.Key.F_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM);
     if (ret != null) {
       ret = parseInt(ret);
     } else {
@@ -633,7 +640,7 @@ PageValue = (function() {
   };
 
   PageValue.setPageNum = function(num) {
-    return PageValue.setGeneralPageValue("" + this.Key.G_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM, parseInt(num));
+    return PageValue.setFootprintPageValue("" + this.Key.F_PREFIX + this.Key.PAGE_VALUES_SEPERATOR + this.Key.PAGE_NUM, parseInt(num));
   };
 
   PageValue.addPagenum = function(addNum) {

@@ -26,7 +26,7 @@ class PageValue
       @PAGE_NUM = constant.PageValueKey.PAGE_NUM
       # @property [String] FORK_NUM フォーク総数
       @FORK_COUNT = constant.PageValueKey.FORK_COUNT
-      # @property [String] FORK_NUM 現在のページ番号
+      # @property [String] FORK_NUM 現在のフォーク番号
       @FORK_NUM = constant.PageValueKey.FORK_NUM
       # @property [String] IS_ROOT ページ値ルート
       @IS_ROOT = constant.PageValueKey.IS_ROOT
@@ -103,6 +103,8 @@ class PageValue
       @F_ROOT = constant.PageValueKey.F_ROOT
       # @property [String] F_PREFIX 履歴情報プレフィックス
       @F_PREFIX = constant.PageValueKey.F_PREFIX
+      # @property [return] 履歴ページルート
+      @footprintPageRoot = (pn = PageValue.getPageNum()) -> "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID
@@ -494,7 +496,8 @@ class PageValue
   # 現在のページ番号を取得
   # @return [Integer] ページ番号
   @getPageNum = ->
-    ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
+    ret = PageValue.getFootprintPageValue("#{@Key.F_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
+    #ret = PageValue.getGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}")
     if ret?
       ret = parseInt(ret)
     else
@@ -505,8 +508,8 @@ class PageValue
   # 現在のページ番号を設定
   # @param [Integer] num 設定値
   @setPageNum = (num) ->
-    #window.pn = null
-    PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
+    PageValue.setFootprintPageValue("#{@Key.F_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
+    #PageValue.setGeneralPageValue("#{@Key.G_PREFIX}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.PAGE_NUM}", parseInt(num))
 
   # 現在のページ番号を追加
   # @param [Integer] addNum 追加値
@@ -527,7 +530,7 @@ class PageValue
     PageValue.setEventPageValue("#{@Key.eventPageRoot()}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_NUM}", parseInt(num))
 
   # フォーク総数を取得
-  # @return [Integer] ページ総数
+  # @return [Integer] フォーク総数
   @getForkCount = (pn = @getPageNum()) ->
     ret = PageValue.getEventPageValue("#{@Key.eventPageRoot(pn)}#{@Key.PAGE_VALUES_SEPERATOR}#{@Key.FORK_COUNT}")
     if ret?

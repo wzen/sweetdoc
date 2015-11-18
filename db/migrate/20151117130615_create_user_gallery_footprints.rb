@@ -1,13 +1,15 @@
 class CreateUserGalleryFootprints < ActiveRecord::Migration
   def change
     create_table :user_gallery_footprints do |t|
-      t.integer :user_id, null: false
-      t.integer :gallery_id, null:false
-      t.text :data
+      t.integer :user_id
+      t.integer :gallery_id
+      t.integer :page_num
+      # カラム随時追加
+
       t.boolean :del_flg, default: false
       t.timestamps
     end
 
-    add_index :user_gallery_footprints, [:user_id, :gallery_id], unique: true
+    add_index :user_gallery_footprint_pagings, [:user_id, :gallery_id], unique: true
   end
 end

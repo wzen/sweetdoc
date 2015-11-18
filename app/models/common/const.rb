@@ -342,6 +342,7 @@ class Const
       ACCESS_TOKEN = 'at'
       RUNNING_USER_PAGEVALUE_ID = 'urpi'
       FOOTPRINT_PAGE_VALUE = 'f'
+      LOAD_FOOTPRINT = 'l_f'
     end
   end
 

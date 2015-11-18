@@ -421,10 +421,21 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.paging(access_token, target_pages, loaded_itemids)
+  def self.paging(user_id, access_token, target_pages, loaded_itemids, load_footprint)
+    # TODO: 操作履歴は後でMemcachedに変更予定
+
+    footprint_sql_select = ''
+    footprint_sql_from = ''
+    if load_footprint
+      footprint_sql_select = ', ugfpv.data as user_gallery_footprint_data'
+      footprint_sql_from = <<-"FSQL"
+      LEFT JOIN user_gallery_footprint_pagings ugfp ON ugfp.user_id = #{user_id} AND g.id = ugfp.gallery_id AND ugfp.page_num = gepp.page_num AND ugfp.del_flg = 0
+      LEFT JOIN user_gallery_footprint_pagevalues ugfpv ON ugfp.user_gallery_footprint_pagevalue_id = ugfpv.id AND ugfpv.del_flg = 0
+      FSQL
+    end
     pages = "(#{target_pages.join(',')})"
     sql = <<-"SQL"
-      SELECT ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num
+      SELECT ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num #{footprint_sql_select}
       FROM galleries g
       LEFT JOIN gallery_general_pagevalue_pagings ggpp ON g.id = ggpp.gallery_id AND ggpp.page_num IN #{pages} AND ggpp.del_flg = 0
       LEFT JOIN gallery_general_pagevalues ggp ON ggpp.gallery_general_pagevalue_id = ggp.id AND ggp.del_flg = 0
@@ -432,6 +443,7 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_instance_pagevalues gip ON gipp.gallery_instance_pagevalue_id = gip.id AND gip.del_flg = 0
       LEFT JOIN gallery_event_pagevalue_pagings gepp ON g.id = gepp.gallery_id AND gipp.page_num = gepp.page_num AND gepp.del_flg = 0
       LEFT JOIN gallery_event_pagevalues gep ON gepp.gallery_event_pagevalue_id = gep.id AND gep.del_flg = 0
+      #{footprint_sql_from}
       WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
     SQL
@@ -443,11 +455,15 @@ class Gallery < ActiveRecord::Base
       gen = {}
       ins = {}
       ent = {}
+      fot = {}
       itemids = []
       pagevalues.each do |pagevalue|
-        gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = pagevalue['general_pagevalue_data']
-        ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = pagevalue['instance_pagevalue_data']
-        epd = pagevalue['event_pagevalue_data']
+        gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['general_pagevalue_data'])
+        ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['instance_pagevalue_data'])
+        if load_footprint
+          fot[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['user_gallery_footprint_data'])
+        end
+        epd = JSON.parse(pagevalue['event_pagevalue_data'])
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
         need_load_itemids = PageValueState.extract_need_load_itemids(epd)
@@ -458,7 +474,8 @@ class Gallery < ActiveRecord::Base
       return true, {
           general_pagevalue: gen,
           instance_pagevalue: ins,
-          event_pagevalue: ent
+          event_pagevalue: ent,
+          footprint: fot
       }, item_js_list
     end
   end

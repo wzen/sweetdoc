@@ -21,7 +21,8 @@ class RunCommon
       @PROJECT_ID = constant.Run.Key.PROJECT_ID
       @ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN
       @RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID
-      FOOTPRINT_PAGE_VALUE = constant.Run.Key.FOOTPRINT_PAGE_VALUE
+      @FOOTPRINT_PAGE_VALUE = constant.Run.Key.FOOTPRINT_PAGE_VALUE
+      @LOAD_FOOTPRINT = constant.Run.Key.LOAD_FOOTPRINT
 
   # 画面初期化
   @initView = ->
@@ -177,7 +178,7 @@ class RunCommon
   # @param [Integer] loadPageNum 読み込むページ番号
   # @param [Function] callback コールバック
   # @param [Boolean] forceUpdate 既存データを上書きするか
-  @loadPagingPageValue = (loadPageNum, callback = null, forceUpdate = false) ->
+  @loadPagingPageValue = (loadPageNum, doLoadFootprint = false, callback = null, forceUpdate = false) ->
     lastPageNum = loadPageNum + Constant.Paging.PRELOAD_PAGEVALUE_NUM
     targetPages = []
     for i in [loadPageNum..lastPageNum]
@@ -200,6 +201,7 @@ class RunCommon
     locationPaths = window.location.pathname.split('/')
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID)
+    data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint
     $.ajax(
       {
         url: "/run/paging"
@@ -212,14 +214,20 @@ class RunCommon
             Common.setupJsByList(data.itemJsList, ->
               if data.pagevalues?
                 if data.pagevalues.general_pagevalue?
-                  for k, v of data.pagevalues.general_pagevalue
-                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.pagevalues.general_pagevalue)
+#                  for k, v of data.pagevalues.general_pagevalue
+#                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
                 if data.pagevalues.instance_pagevalue?
-                  for k, v of data.pagevalues.instance_pagevalue
-                    PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.pagevalues.instance_pagevalue)
+#                  for k, v of data.pagevalues.instance_pagevalue
+#                    PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
                 if data.pagevalues.event_pagevalue?
-                  for k, v of data.pagevalues.event_pagevalue
-                    PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.pagevalues.event_pagevalue)
+#                  for k, v of data.pagevalues.event_pagevalue
+#                    PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+                if data.pagevalues.footprint?
+                  PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalues.footprint)
+
               # コールバック
               if callback?
                 callback()
@@ -416,6 +424,7 @@ class RunCommon
       e.html('')
       e.closest('li').hide()
 
+  # 操作履歴を保存
   @saveFootprint = (callback = null) ->
     if window.isMotionCheck? && window.isMotionCheck
       # LocalStorageに保存
@@ -428,7 +437,7 @@ class RunCommon
       data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX)
       $.ajax(
         {
-          url: "/page_value_state/save_gallery_footprint"
+          url: "/run/save_gallery_footprint"
           type: "POST"
           data: data
           dataType: "json"
@@ -437,13 +446,15 @@ class RunCommon
               if callback?
                 callback()
             else
-              console.log('/page_value_state/save_gallery_footprint server error')
+              console.log('/run/save_gallery_footprint server error')
           error: (data) ->
-            console.log('/page_value_state/save_gallery_footprint ajax error')
+            console.log('/run/save_gallery_footprint ajax error')
         }
       )
 
+  # 操作履歴を読み込み
   @loadFootprint = (callback = null) ->
+    # 現在未使用
     if window.isMotionCheck? && window.isMotionCheck
       # LocalStorageから読み込み
       LocalStorage.loadFootprintPageValue()
@@ -454,7 +465,7 @@ class RunCommon
       data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
       $.ajax(
         {
-          url: "/page_value_state/load_gallery_footprint"
+          url: "/run/load_gallery_footprint"
           type: "POST"
           data: data
           dataType: "json"
@@ -464,9 +475,9 @@ class RunCommon
               if callback?
                 callback()
             else
-              console.log('/page_value_state/load_gallery_footprint server error')
+              console.log('/run/load_gallery_footprint server error')
           error: (data) ->
-            console.log('/page_value_state/load_gallery_footprint ajax error')
+            console.log('/run/load_gallery_footprint ajax error')
         }
       )
 

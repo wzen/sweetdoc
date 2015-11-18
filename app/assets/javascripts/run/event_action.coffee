@@ -78,7 +78,9 @@ class EventAction
       console.log('[changePaging] afterPageNum:' + afterPageNum)
 
     # 次ページのPageValue読み込み
-    RunCommon.loadPagingPageValue(afterPageNum, =>
+    # 前ページに戻る場合は操作履歴も取得する
+    doLoadFootprint = beforePageNum > afterPageNum
+    RunCommon.loadPagingPageValue(afterPageNum, doLoadFootprint, =>
       # 必要JSファイル読み込み
       Common.loadJsFromInstancePageValue( =>
         if @thisPage() == null

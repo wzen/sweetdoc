@@ -125,49 +125,19 @@ ServerStorage = (function() {
       success: function(data) {
         if (data.resultSuccess) {
           return Common.setupJsByList(data.itemJsList, function() {
-            var d, k, ref, ref1, ref2, ref3, v;
             WorktableCommon.removeAllItemOnWorkTable();
             if (data.general_pagevalue_data != null) {
-              d = {};
-              ref = data.general_pagevalue_data;
-              for (k in ref) {
-                v = ref[k];
-                if (k.indexOf(PageValue.Key.P_PREFIX) >= 0) {
-                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v));
-                } else {
-                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
-                }
-              }
-            }
-            if (data.project_pagevalue_data != null) {
-              ref1 = data.project_pagevalue_data;
-              for (k in ref1) {
-                v = ref1[k];
-                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v);
-              }
-              Common.setTitle(data.project_pagevalue_data.title);
+              PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data);
+              Common.setTitle(data.general_pagevalue_data.title);
             }
             if (data.instance_pagevalue_data != null) {
-              d = {};
-              ref2 = data.instance_pagevalue_data;
-              for (k in ref2) {
-                v = ref2[k];
-                d[k] = JSON.parse(v);
-              }
-              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d);
+              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data);
             }
             if (data.event_pagevalue_data != null) {
-              d = {};
-              ref3 = data.event_pagevalue_data;
-              for (k in ref3) {
-                v = ref3[k];
-                d[k] = JSON.parse(v);
-              }
-              PageValue.setEventPageValueByRootHash(d);
+              PageValue.setEventPageValueByRootHash(data.event_pagevalue_data);
             }
             if (data.setting_pagevalue_data != null) {
-              d = data.setting_pagevalue_data;
-              PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d);
+              PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data);
             }
             PageValue.adjustInstanceAndEventOnPage();
             LocalStorage.saveAllPageValues();

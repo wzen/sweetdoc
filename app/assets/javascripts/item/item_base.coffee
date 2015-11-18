@@ -175,6 +175,11 @@ class ItemBase extends ItemEventBase
 
     window.instanceMap[@id] = @
 
+  patchDiffObject: (diff) ->
+    obj = @getMinimumObject()
+    $.extend(true, obj, diff)
+    @setMiniumObject(obj)
+
   # イベントによって設定したスタイルをクリアする
   clearAllEventStyle: ->
     return
@@ -255,6 +260,9 @@ class ItemBase extends ItemEventBase
     capturedEventAfterObject = @getCapturedEventAfterObject()
     if capturedEventAfterObject
       @setMiniumObject(capturedEventAfterObject)
+
+
+
 
   # スクロールによるアイテム状態更新
   updateItemCommonByScroll: (scrollValue)->

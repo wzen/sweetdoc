@@ -68,7 +68,7 @@ EventAction = (function() {
   };
 
   EventAction.prototype.changePaging = function(beforePageIndex, afterPageIndex, callback) {
-    var afterPageNum, beforePageNum;
+    var afterPageNum, beforePageNum, doLoadFootprint;
     if (callback == null) {
       callback = null;
     }
@@ -78,7 +78,8 @@ EventAction = (function() {
       console.log('[changePaging] beforePageNum:' + beforePageNum);
       console.log('[changePaging] afterPageNum:' + afterPageNum);
     }
-    return RunCommon.loadPagingPageValue(afterPageNum, (function(_this) {
+    doLoadFootprint = beforePageNum > afterPageNum;
+    return RunCommon.loadPagingPageValue(afterPageNum, doLoadFootprint, (function(_this) {
       return function() {
         return Common.loadJsFromInstancePageValue(function() {
           var forkEventPageValueList, i, j, pageFlip, ref;

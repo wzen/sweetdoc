@@ -56,6 +56,62 @@ Common = (function() {
     return RandomString;
   };
 
+  Common.isEqualObject = function(obj1, obj2) {
+    var _func;
+    _func = function(o1, o2) {
+      var k, ret, v;
+      if (typeof o1 !== typeof o2) {
+        return false;
+      } else if (typeof o1 !== 'object') {
+        return o1 === o2;
+      } else {
+        if (Object.keys(o1).length !== Object.keys(o2).length) {
+          return false;
+        }
+        ret = true;
+        for (k in o1) {
+          v = o1[k];
+          if (_func(v, o2[k]) === false) {
+            ret = false;
+            break;
+          }
+        }
+        return ret;
+      }
+    };
+    return _func(obj1, obj2);
+  };
+
+  Common.diffEventObject = function(obj1, obj2) {
+    var _func, obj;
+    _func = function(o1, o2) {
+      var f, k, ret, v;
+      if (typeof o1 !== typeof o2) {
+        return o2;
+      } else if (typeof o1 !== 'object' && o1 !== o2) {
+        return o2;
+      } else {
+        ret = {};
+        for (k in o1) {
+          v = o1[k];
+          f = _func(v, o2[k]);
+          if (f != null) {
+            ret[k] = f;
+          }
+        }
+        if (Object.keys(ret).length > 0) {
+          return ret;
+        } else {
+          return null;
+        }
+      }
+    };
+    obj = _func(obj1, obj2);
+    console.log('diffEventObject');
+    console.log(obj);
+    return obj;
+  };
+
   Common.applyEnvironmentFromPagevalue = function() {
     Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();

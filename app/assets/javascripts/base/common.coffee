@@ -42,6 +42,42 @@ class Common
       RandomString += BaseString.charAt( Math.floor( Math.random() * n))
     return RandomString
 
+  # オブジェクトの比較
+  @isEqualObject: (obj1, obj2) ->
+    _func = (o1, o2) ->
+      if typeof o1 != typeof o2
+        return false
+      else if typeof o1 != 'object'
+        return o1 == o2
+      else
+        if Object.keys(o1).length != Object.keys(o2).length
+          return false
+        ret = true
+        for k, v of o1
+          if _func(v, o2[k]) == false
+            ret = false
+            break
+        return ret
+    return _func(obj1, obj2)
+
+  @diffEventObject: (obj1, obj2) ->
+    _func = (o1, o2) ->
+      if typeof o1 != typeof o2
+        return o2
+      else if typeof o1 != 'object' && o1 != o2
+        return o2
+      else
+        ret = {}
+        for k, v of o1
+          f = _func(v, o2[k])
+          if f?
+            ret[k] = f
+        return if Object.keys(ret).length > 0 then ret else null
+    obj = _func(obj1, obj2)
+    console.log('diffEventObject')
+    console.log(obj)
+    return obj
+
   # Pagevalueから環境を反映
   @applyEnvironmentFromPagevalue = ->
     # タイトル名設定

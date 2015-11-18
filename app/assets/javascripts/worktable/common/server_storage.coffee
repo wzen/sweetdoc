@@ -100,29 +100,20 @@ class ServerStorage
 
               # Pagevalue設置
               if data.general_pagevalue_data?
-                d = {}
-                for k, v of data.general_pagevalue_data
-                  if k.indexOf(PageValue.Key.P_PREFIX) >= 0
-                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
-                  else
-                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
-              if data.project_pagevalue_data?
-                for k, v of data.project_pagevalue_data
-                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
-                Common.setTitle(data.project_pagevalue_data.title)
+#                d = {}
+#                for k, v of data.general_pagevalue_data
+#                  if k.indexOf(PageValue.Key.P_PREFIX) >= 0
+#                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, JSON.parse(v))
+#                  else
+#                    PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data)
+                Common.setTitle(data.general_pagevalue_data.title)
               if data.instance_pagevalue_data?
-                d = {}
-                for k, v of data.instance_pagevalue_data
-                  d[k] = JSON.parse(v)
-                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, d)
+                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data)
               if data.event_pagevalue_data?
-                d = {}
-                for k, v of data.event_pagevalue_data
-                  d[k] = JSON.parse(v)
-                PageValue.setEventPageValueByRootHash(d)
+                PageValue.setEventPageValueByRootHash(data.event_pagevalue_data)
               if data.setting_pagevalue_data?
-                d = data.setting_pagevalue_data
-                PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, d)
+                PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data)
 
               PageValue.adjustInstanceAndEventOnPage()
               LocalStorage.saveAllPageValues()

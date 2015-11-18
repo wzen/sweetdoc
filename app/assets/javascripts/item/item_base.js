@@ -194,6 +194,13 @@ ItemBase = (function(superClass) {
     return window.instanceMap[this.id] = this;
   };
 
+  ItemBase.prototype.patchDiffObject = function(diff) {
+    var obj;
+    obj = this.getMinimumObject();
+    $.extend(true, obj, diff);
+    return this.setMiniumObject(obj);
+  };
+
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {

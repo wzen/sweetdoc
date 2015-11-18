@@ -37,8 +37,6 @@ Rails.application.routes.draw do
   #ajax
   post 'page_value_state/save_state'
   post 'page_value_state/load_state'
-  post 'page_value_state/save_gallery_footprint'
-  post 'page_value_state/load_gallery_footprint'
   get 'page_value_state/user_pagevalue_last_updated_list'
   get 'page_value_state/user_pagevalue_list_sorted_update'
   get 'item_js/index'
@@ -47,6 +45,8 @@ Rails.application.routes.draw do
   get 'modal_view/show'
   post 'test_move/hello'
   post 'run/paging'
+  post 'run/save_gallery_footprint'
+  post 'run/load_gallery_footprint'
 
   # Gallery
   get 'gallery/index'

@@ -18,7 +18,7 @@ class PageValueStateController < ApplicationController
     user_id = current_or_guest_user.id
     user_pagevalue_id = params['user_pagevalue_id'].to_i
     loaded_itemids = JSON.parse(params['loaded_itemids'])
-    @result_success, @item_js_list, @project_pagevalue_data, @general_pagevalue_data, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message, @updated_at = PageValueState.load_state(user_id, user_pagevalue_id, loaded_itemids)
+    @result_success, @item_js_list, @general_pagevalue_data, @instance_pagevalue_data, @event_pagevalue_data, @setting_pagevalue_data, @message, @updated_at = PageValueState.load_state(user_id, user_pagevalue_id, loaded_itemids)
   end
 
   def user_pagevalue_last_updated_list
@@ -30,19 +30,6 @@ class PageValueStateController < ApplicationController
     user_id = current_or_guest_user.id
     project_id = params.require(Const::ServerStorage::Key::PROJECT_ID).to_i
     @result_success, @user_pagevalue_list = PageValueState.user_pagevalue_list_sorted_update(user_id, project_id)
-  end
-
-  def save_gallery_footprint
-    user_id = current_or_guest_user.id
-    gallery_access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
-    footprint_page_values = params.fetch(Const::Run::Key::FOOTPRINT_PAGE_VALUE, nil)
-    @result_success, @message = PageValueState.save_gallery_footprint(user_id, gallery_access_token, footprint_page_values)
-  end
-
-  def load_gallery_footprint
-    user_id = current_or_guest_user.id
-    gallery_access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
-    @result_success, @message, @pagevalue_data = PageValueState.load_gallery_footprint(user_id, gallery_access_token)
   end
 
 end
