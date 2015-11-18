@@ -235,7 +235,12 @@ RunCommon = (function() {
     locationPaths = window.location.pathname.split('/');
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID);
-    data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint;
+    if (window.isMotionCheck && doLoadFootprint) {
+      data[RunCommon.Key.LOAD_FOOTPRINT] = false;
+      LocalStorage.loadPagingFootprintPageValue(loadPageNum);
+    } else {
+      data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint;
+    }
     return $.ajax({
       url: "/run/paging",
       type: "POST",
@@ -477,7 +482,10 @@ RunCommon = (function() {
       callback = null;
     }
     if ((window.isMotionCheck != null) && window.isMotionCheck) {
-      return LocalStorage.saveFootprintPageValue();
+      LocalStorage.saveFootprintPageValue();
+      if (callback != null) {
+        return callback();
+      }
     } else {
       data = {};
       locationPaths = window.location.pathname.split('/');
@@ -510,7 +518,10 @@ RunCommon = (function() {
       callback = null;
     }
     if ((window.isMotionCheck != null) && window.isMotionCheck) {
-      return LocalStorage.loadFootprintPageValue();
+      LocalStorage.loadCommonFootprintPageValue();
+      if (callback != null) {
+        return callback();
+      }
     } else {
       data = {};
       locationPaths = window.location.pathname.split('/');

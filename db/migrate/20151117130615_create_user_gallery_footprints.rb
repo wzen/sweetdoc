@@ -10,6 +10,6 @@ class CreateUserGalleryFootprints < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :user_gallery_footprint_pagings, [:user_id, :gallery_id], unique: true
+    add_index :user_gallery_footprints, [:user_id, :gallery_id], unique: true, name: 'user_gallery_footprints_index'
   end
 end

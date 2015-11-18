@@ -173,7 +173,20 @@ class LocalStorage
     lstorage.setItem(@Key.RUN_FOOTPRINT_PAGE_VALUES, JSON.stringify(h))
 
   # キャッシュから操作履歴値を読み込み
-  @loadFootprintPageValue: ->
+  @loadCommonFootprintPageValue: ->
     lstorage = localStorage
     h = JSON.parse(lstorage.getItem(@Key.RUN_FOOTPRINT_PAGE_VALUES))
-    PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, h)
+    ret = {}
+    for k, v of h
+      if k.indexOf(PageValue.Key.P_PREFIX) < 0
+        ret[k] = v
+    PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret)
+
+  @loadPagingFootprintPageValue: (pageNum) ->
+    lstorage = localStorage
+    h = JSON.parse(lstorage.getItem(@Key.RUN_FOOTPRINT_PAGE_VALUES))
+    ret = {}
+    for k, v of h
+      if k.indexOf(PageValue.Key.P_PREFIX) >= 0 && parseInt(k.replace(PageValue.Key.P_PREFIX, '')) == pageNum
+        ret[k] = v
+    PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret)

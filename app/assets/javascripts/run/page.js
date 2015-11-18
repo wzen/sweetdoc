@@ -277,7 +277,9 @@ Page = (function() {
     return LocalStorage.saveAllPageValues();
   };
 
-  Page.prototype.didPage = function() {};
+  Page.prototype.didPage = function() {
+    return RunCommon.saveFootprint();
+  };
 
   Page.prototype.initChapterEvent = function() {
     var chapter, event, i, j, len, ref, results;

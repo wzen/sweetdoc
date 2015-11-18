@@ -187,11 +187,32 @@ LocalStorage = (function() {
     return lstorage.setItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES, JSON.stringify(h));
   };
 
-  LocalStorage.loadFootprintPageValue = function() {
-    var h, lstorage;
+  LocalStorage.loadCommonFootprintPageValue = function() {
+    var h, k, lstorage, ret, v;
     lstorage = localStorage;
     h = JSON.parse(lstorage.getItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES));
-    return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, h);
+    ret = {};
+    for (k in h) {
+      v = h[k];
+      if (k.indexOf(PageValue.Key.P_PREFIX) < 0) {
+        ret[k] = v;
+      }
+    }
+    return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret);
+  };
+
+  LocalStorage.loadPagingFootprintPageValue = function(pageNum) {
+    var h, k, lstorage, ret, v;
+    lstorage = localStorage;
+    h = JSON.parse(lstorage.getItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES));
+    ret = {};
+    for (k in h) {
+      v = h[k];
+      if (k.indexOf(PageValue.Key.P_PREFIX) >= 0 && parseInt(k.replace(PageValue.Key.P_PREFIX, '')) === pageNum) {
+        ret[k] = v;
+      }
+    }
+    return PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret);
   };
 
   return LocalStorage;

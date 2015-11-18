@@ -201,7 +201,12 @@ class RunCommon
     locationPaths = window.location.pathname.split('/')
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID)
-    data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint
+    if window.isMotionCheck && doLoadFootprint
+      # 動作確認の場合はLocalStorageから操作履歴を取得
+      data[RunCommon.Key.LOAD_FOOTPRINT] = false
+      LocalStorage.loadPagingFootprintPageValue(loadPageNum)
+    else
+      data[RunCommon.Key.LOAD_FOOTPRINT] = doLoadFootprint
     $.ajax(
       {
         url: "/run/paging"
@@ -429,6 +434,8 @@ class RunCommon
     if window.isMotionCheck? && window.isMotionCheck
       # LocalStorageに保存
       LocalStorage.saveFootprintPageValue()
+      if callback?
+        callback()
     else
       # Serverに保存
       data = {}
@@ -456,7 +463,9 @@ class RunCommon
   @loadCommonFootprint = (callback = null) ->
     if window.isMotionCheck? && window.isMotionCheck
       # LocalStorageから読み込み
-      LocalStorage.loadFootprintPageValue()
+      LocalStorage.loadCommonFootprintPageValue()
+      if callback?
+        callback()
     else
       # Serverから読み込み
       data = {}

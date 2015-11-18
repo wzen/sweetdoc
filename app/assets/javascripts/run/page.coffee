@@ -275,6 +275,8 @@ class Page
 
   # ページ後処理
   didPage: ->
+    # 操作履歴を保存
+    RunCommon.saveFootprint()
 
   # チャプターのイベントを初期化
   initChapterEvent: ->
@@ -331,7 +333,6 @@ class Page
     @finishedAllChapters = true
     if window.debug
       console.log('Finish All Chapters!')
-
     if window.eventAction.hasNextPage()
       # ページ移動のためのスクロールイベントを取るようにする
       @floatPageScrollHandleCanvas()
