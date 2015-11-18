@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   post 'test_move/hello'
   post 'run/paging'
   post 'run/save_gallery_footprint'
-  post 'run/load_gallery_footprint'
+  post 'run/load_common_gallery_footprint'
 
   # Gallery
   get 'gallery/index'

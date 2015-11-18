@@ -81,10 +81,6 @@ class Chapter
   # チャプターのイベントをリセットする
   resetAllEvents: (takeStateCapture = false) ->
     @eventObjList.forEach((e) =>
-      if takeStateCapture && e instanceof ItemBase
-        # 変更前、変更後の状態キャプチャを取る
-        e.takeCaptureInstanceState(false)
-
       e.resetEvent()
     )
 

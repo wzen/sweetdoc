@@ -37,12 +37,10 @@ class RunController < ApplicationController
     @result_success, @message = PageValueState.save_gallery_footprint(user_id, gallery_access_token, footprint_page_values)
   end
 
-  def load_gallery_footprint
-    # 現在未使用
+  def load_common_gallery_footprint
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
-    target_pages = params.require(Const::Run::Key::TARGET_PAGES)
-    @result_success, @message, @pagevalue_data = PageValueState.load_gallery_footprint(user_id, target_pages, gallery_access_token)
+    @result_success, @message, @pagevalue_data = PageValueState.load_common_gallery_footprint(user_id, gallery_access_token)
   end
 
 end

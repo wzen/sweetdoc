@@ -97,22 +97,6 @@ class CssItemBase extends ItemBase
     console.log(obj)
     return obj
 
-  # イベント前の表示状態にする
-  updateEventBefore: ->
-    super()
-    capturedEventBeforeObject = @getCapturedEventBeforeObject()
-    if capturedEventBeforeObject
-      # アイテムサイズ更新
-      @updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false)
-
-  # イベント後の表示状態にする
-  updateEventAfter: ->
-    super()
-    capturedEventAfterObject = @getCapturedEventAfterObject()
-    if capturedEventAfterObject
-      # アイテムサイズ更新
-      @updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false)
-
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     @getJQueryElement().css({width: w, height: h})
@@ -121,8 +105,9 @@ class CssItemBase extends ItemBase
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
-    capturedEventBeforeObject = @getCapturedEventBeforeObject()
-    return capturedEventBeforeObject.itemSize
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    obj = @getMinimumObject()
+    return obj.itemSize
 
   # CSSのルートのIDを取得
   # @return [String] CSSルートID

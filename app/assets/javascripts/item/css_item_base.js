@@ -105,24 +105,6 @@ CssItemBase = (function(superClass) {
     return obj;
   };
 
-  CssItemBase.prototype.updateEventBefore = function() {
-    var capturedEventBeforeObject;
-    CssItemBase.__super__.updateEventBefore.call(this);
-    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
-    if (capturedEventBeforeObject) {
-      return this.updatePositionAndItemSize(Common.makeClone(capturedEventBeforeObject.itemSize), false);
-    }
-  };
-
-  CssItemBase.prototype.updateEventAfter = function() {
-    var capturedEventAfterObject;
-    CssItemBase.__super__.updateEventAfter.call(this);
-    capturedEventAfterObject = this.getCapturedEventAfterObject();
-    if (capturedEventAfterObject) {
-      return this.updatePositionAndItemSize(Common.makeClone(capturedEventAfterObject.itemSize), false);
-    }
-  };
-
   CssItemBase.prototype.updateItemSize = function(w, h) {
     this.getJQueryElement().css({
       width: w,
@@ -133,9 +115,10 @@ CssItemBase = (function(superClass) {
   };
 
   CssItemBase.prototype.originalItemElementSize = function() {
-    var capturedEventBeforeObject;
-    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
-    return capturedEventBeforeObject.itemSize;
+    var diff, obj;
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    obj = this.getMinimumObject();
+    return obj.itemSize;
   };
 
   CssItemBase.prototype.getCssRootElementId = function() {

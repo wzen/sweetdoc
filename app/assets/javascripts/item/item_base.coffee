@@ -159,7 +159,6 @@ class ItemBase extends ItemEventBase
   # @param [Object] obj 設定データ
   setMiniumObject: (obj) ->
     # ID変更のため一度instanceMapから削除
-
     delete window.instanceMap[@id]
     @id = Common.makeClone(obj.id)
     @name = Common.makeClone(obj.name)
@@ -172,13 +171,7 @@ class ItemBase extends ItemEventBase
     if @constructor.actionProperties.modifiables?
       for varName, value of @constructor.actionProperties.modifiables
         this[varName] = Common.makeClone(obj[varName])
-
     window.instanceMap[@id] = @
-
-  patchDiffObject: (diff) ->
-    obj = @getMinimumObject()
-    $.extend(true, obj, diff)
-    @setMiniumObject(obj)
 
   # イベントによって設定したスタイルをクリアする
   clearAllEventStyle: ->
@@ -225,44 +218,6 @@ class ItemBase extends ItemEventBase
     @getJQueryElement().css({top: y, left: x})
     @itemSize.x = parseInt(x)
     @itemSize.y = parseInt(y)
-
-  getCapturedEventBeforeObject: ->
-    if !@capturedEventBeforeObject?
-      @capturedEventBeforeObject = {}
-    return @capturedEventBeforeObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]
-
-  getCapturedEventAfterObject: ->
-    if !@capturedEventAfterObject?
-      @capturedEventAfterObject = {}
-    return @capturedEventAfterObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]
-
-  # イベント適用前、適用後の状態を保存する
-  takeCaptureInstanceState: (isForward) ->
-    console.log("takeCaptureInstanceState")
-    if !@capturedEventBeforeObject?
-      @capturedEventBeforeObject = {}
-    if !@capturedEventBeforeObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]?
-      @capturedEventBeforeObject[@event[EventPageValueBase.PageValueKey.DIST_ID]] = @stateEventBefore(isForward)
-
-    if !@capturedEventAfterObject?
-      @capturedEventAfterObject = {}
-    if !@capturedEventAfterObject[@event[EventPageValueBase.PageValueKey.DIST_ID]]?
-      @capturedEventAfterObject[@event[EventPageValueBase.PageValueKey.DIST_ID]] = @stateEventAfter(isForward)
-
-  # イベント前の表示状態にする
-  updateEventBefore: ->
-    capturedEventBeforeObject = @getCapturedEventBeforeObject()
-    if capturedEventBeforeObject
-      @setMiniumObject(capturedEventBeforeObject)
-
-  # イベント後の表示状態にする
-  updateEventAfter: ->
-    capturedEventAfterObject = @getCapturedEventAfterObject()
-    if capturedEventAfterObject
-      @setMiniumObject(capturedEventAfterObject)
-
-
-
 
   # スクロールによるアイテム状態更新
   updateItemCommonByScroll: (scrollValue)->

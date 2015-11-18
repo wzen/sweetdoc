@@ -194,13 +194,6 @@ ItemBase = (function(superClass) {
     return window.instanceMap[this.id] = this;
   };
 
-  ItemBase.prototype.patchDiffObject = function(diff) {
-    var obj;
-    obj = this.getMinimumObject();
-    $.extend(true, obj, diff);
-    return this.setMiniumObject(obj);
-  };
-
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
@@ -252,52 +245,6 @@ ItemBase = (function(superClass) {
     });
     this.itemSize.x = parseInt(x);
     return this.itemSize.y = parseInt(y);
-  };
-
-  ItemBase.prototype.getCapturedEventBeforeObject = function() {
-    if (this.capturedEventBeforeObject == null) {
-      this.capturedEventBeforeObject = {};
-    }
-    return this.capturedEventBeforeObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]];
-  };
-
-  ItemBase.prototype.getCapturedEventAfterObject = function() {
-    if (this.capturedEventAfterObject == null) {
-      this.capturedEventAfterObject = {};
-    }
-    return this.capturedEventAfterObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]];
-  };
-
-  ItemBase.prototype.takeCaptureInstanceState = function(isForward) {
-    console.log("takeCaptureInstanceState");
-    if (this.capturedEventBeforeObject == null) {
-      this.capturedEventBeforeObject = {};
-    }
-    if (this.capturedEventBeforeObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] == null) {
-      this.capturedEventBeforeObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] = this.stateEventBefore(isForward);
-    }
-    if (this.capturedEventAfterObject == null) {
-      this.capturedEventAfterObject = {};
-    }
-    if (this.capturedEventAfterObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] == null) {
-      return this.capturedEventAfterObject[this.event[EventPageValueBase.PageValueKey.DIST_ID]] = this.stateEventAfter(isForward);
-    }
-  };
-
-  ItemBase.prototype.updateEventBefore = function() {
-    var capturedEventBeforeObject;
-    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
-    if (capturedEventBeforeObject) {
-      return this.setMiniumObject(capturedEventBeforeObject);
-    }
-  };
-
-  ItemBase.prototype.updateEventAfter = function() {
-    var capturedEventAfterObject;
-    capturedEventAfterObject = this.getCapturedEventAfterObject();
-    if (capturedEventAfterObject) {
-      return this.setMiniumObject(capturedEventAfterObject);
-    }
   };
 
   ItemBase.prototype.updateItemCommonByScroll = function(scrollValue) {

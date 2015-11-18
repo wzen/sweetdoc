@@ -30,8 +30,6 @@ class PageValue
       @FORK_NUM = constant.PageValueKey.FORK_NUM
       # @property [String] IS_ROOT ページ値ルート
       @IS_ROOT = constant.PageValueKey.IS_ROOT
-      # @property [String] FORK_STACK フォーク番号スタック
-      @FORK_STACK = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
       # @property [String] PROJECT_NAME プロジェクトID
       @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.PROJECT_ID}"
       # @property [String] PROJECT_NAME プロジェクト名
@@ -103,8 +101,16 @@ class PageValue
       @F_ROOT = constant.PageValueKey.F_ROOT
       # @property [String] F_PREFIX 履歴情報プレフィックス
       @F_PREFIX = constant.PageValueKey.F_PREFIX
+      # @property [String] F_PREFIX 履歴情報イベント一意IDプレフィックス
+      @FED_PREFIX = constant.PageValueKey.FED_PREFIX
       # @property [return] 履歴ページルート
       @footprintPageRoot = (pn = PageValue.getPageNum()) -> "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
+      # @property [return] インスタンスDiff履歴(変更前)
+      @footprintInstanceDiffBefore = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceDiffBefore"
+      # @property [return] インスタンスDiff履歴(変更後)
+      @footprintInstanceDiffAfter = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceDiffAfter"
+      # @property [String] FORK_STACK フォーク番号スタック
+      @FORK_STACK = "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] itemId アイテムID

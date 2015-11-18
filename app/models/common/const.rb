@@ -158,6 +158,8 @@ class Const
     F_ROOT = 'footprint_page_values'
     # @property [String] H_ROOT 履歴情報ルート
     F_PREFIX = 'footprints'
+    # @property [String] F_PREFIX 履歴情報イベント一意IDプレフィックス
+    FED_PREFIX = 'event_dists'
   end
 
   class StateConfig

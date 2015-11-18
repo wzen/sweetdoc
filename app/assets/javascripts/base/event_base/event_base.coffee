@@ -86,7 +86,6 @@ class EventBase extends Extend
               @previewTimer = null
             @previewTimer = setTimeout( =>
               @execMethod(p)
-              #method.call(@, p)
               p += 1
               if p >= @scrollLength()
                 p = 0
@@ -132,7 +131,6 @@ class EventBase extends Extend
               @previewTimer = null
             @previewTimer = setTimeout( =>
               @execMethod(null, _loop)
-              #method.call(@, null, _loop)
             , loopDelay)
           else
             if @previewFinished?
@@ -140,7 +138,6 @@ class EventBase extends Extend
               @previewFinished = null
 
         @execMethod(null, _loop)
-        #method.call(@, null, _loop)
 
     @stopPreview( =>
       window.runningPreview = true
@@ -181,16 +178,15 @@ class EventBase extends Extend
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.SCROLL
       @scrollValue = 0
-
-    # アイテムの変更前変更後の状態をキャプチャ
-    @takeCaptureInstanceState(true)
-
+    # インスタンスの状態を保存
+    RunCommon.saveInstanceObjectToFootprint(@id, true, @event[EventPageValueBase.PageValueKey.DIST_ID])
     # 状態をイベント前に戻す
     @updateEventBefore()
 
   # チャプター終了時イベント
-  # @abstract
   didChapter: ->
+    # インスタンスの状態を保存
+    RunCommon.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
 
   execMethod: (params, complete = null) ->
     methodName = @getEventMethodName()
@@ -290,12 +286,16 @@ class EventBase extends Extend
     @execMethod(e, complete)
 
   # イベント後の表示状態にする
-  # @abstract
   updateEventAfter: ->
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    obj = @getMinimumObject()
+    @setMiniumObject($.extend(true, obj, diff))
 
   # イベント前の表示状態にする
-  # @abstract
   updateEventBefore: ->
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    obj = @getMinimumObject()
+    @setMiniumObject($.extend(true, obj, diff))
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか

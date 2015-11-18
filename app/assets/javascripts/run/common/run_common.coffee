@@ -257,7 +257,7 @@ class RunCommon
       forkNum: forkNum
     }, pn)
     # PageValueに書き込み
-    PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
+    PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
     return true
 
   # フォーク番号をスタックに追加
@@ -274,7 +274,7 @@ class RunCommon
         }
       )
       # PageValueに書き込み
-      PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
+      PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
       return true
     else
       return false
@@ -284,7 +284,7 @@ class RunCommon
   @getLastObjestFromStack = (pn) ->
     if !window.forkNumStacks?
       # PageValueから読み込み
-      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK)
+      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK)
       if !window.forkNumStacks?
         return null
     stack = window.forkNumStacks[pn]
@@ -307,7 +307,7 @@ class RunCommon
   @getOneBeforeObjestFromStack = (pn) ->
     if !window.forkNumStacks?
       # PageValueから読み込み
-      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK)
+      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK)
       if !window.forkNumStacks?
         return null
     stack = window.forkNumStacks[pn]
@@ -321,7 +321,7 @@ class RunCommon
   @popLastForkNumInStack = (pn) ->
     if !window.forkNumStacks?
       # PageValueから読み込み
-      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK)
+      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK)
       if !window.forkNumStacks?
         return false
     window.forkNumStacks[pn].pop()
@@ -453,8 +453,7 @@ class RunCommon
       )
 
   # 操作履歴を読み込み
-  @loadFootprint = (callback = null) ->
-    # 現在未使用
+  @loadCommonFootprint = (callback = null) ->
     if window.isMotionCheck? && window.isMotionCheck
       # LocalStorageから読み込み
       LocalStorage.loadFootprintPageValue()
@@ -465,7 +464,7 @@ class RunCommon
       data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
       $.ajax(
         {
-          url: "/run/load_gallery_footprint"
+          url: "/run/load_common_gallery_footprint"
           type: "POST"
           data: data
           dataType: "json"
@@ -475,11 +474,19 @@ class RunCommon
               if callback?
                 callback()
             else
-              console.log('/run/load_gallery_footprint server error')
+              console.log('/run/load_common_gallery_footprint server error')
           error: (data) ->
-            console.log('/run/load_gallery_footprint ajax error')
+            console.log('/run/load_common_gallery_footprint ajax error')
         }
       )
+
+  # インスタンスの変数値を保存
+  @saveInstanceObjectToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
+    baseObj = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(targetObjId)).value
+    obj = window.instanceMap[targetObjId]
+    diff = Common.diffEventObject(baseObj, obj.getMinimumObject())
+    key = if isChangeBefore then PageValue.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) else PageValue.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum)
+    PageValue.setFootprintPageValue(key, diff)
 
   @start = (useLocalStorate = false) ->
     window.isWorkTable = false
@@ -490,28 +497,28 @@ class RunCommon
     # 変数初期化
     CommonVar.initVarWhenLoadedView()
     CommonVar.initCommonVar()
-    # デフォルト1ページ目から
-    PageValue.setPageNum(1)
 
-    if useLocalStorate
-      # キャッシュ読み込み
-      is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
-      if is_reload?
-        LocalStorage.loadAllPageValues()
-        # TODO: ページ1から開始(操作履歴保存処理を入れるまで)
-        PageValue.setPageNum(1)
-      else
-        LocalStorage.saveAllPageValues()
+    # 操作履歴読み込み
+    @loadCommonFootprint( =>
+      if useLocalStorate
+        # キャッシュ読み込み
+        is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD)
+        if is_reload?
+          LocalStorage.loadAllPageValues()
+        else
+          LocalStorage.saveAllPageValues()
 
-    # Mainコンテナ作成
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum())
-    # コンテナ初期化
-    RunCommon.initMainContainer()
+      # Mainコンテナ作成
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+      # コンテナ初期化
+      RunCommon.initMainContainer()
 
-    # 必要JS読み込み
-    Common.loadJsFromInstancePageValue(->
-      # イベント初期化
-      RunCommon.initEventAction()
-      # 初期化終了
-      window.initDone = true
+      # 必要JS読み込み
+      Common.loadJsFromInstancePageValue(->
+        # イベント初期化
+        RunCommon.initEventAction()
+        # 初期化終了
+        window.initDone = true
+      )
     )
+

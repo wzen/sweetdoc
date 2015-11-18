@@ -131,30 +131,6 @@ CanvasItemBase = (function(superClass) {
     return obj;
   };
 
-  CanvasItemBase.prototype.updateEventBefore = function() {
-    var capturedEventBeforeObject, itemSize;
-    CanvasItemBase.__super__.updateEventBefore.call(this);
-    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
-    if (capturedEventBeforeObject) {
-      itemSize = Common.makeClone(capturedEventBeforeObject.itemSize);
-      itemSize.w *= capturedEventBeforeObject.scale.w;
-      itemSize.h *= capturedEventBeforeObject.scale.h;
-      return this.updatePositionAndItemSize(itemSize, false);
-    }
-  };
-
-  CanvasItemBase.prototype.updateEventAfter = function() {
-    var capturedEventAfterObject, itemSize;
-    CanvasItemBase.__super__.updateEventAfter.call(this);
-    capturedEventAfterObject = this.getCapturedEventAfterObject();
-    if (capturedEventAfterObject) {
-      itemSize = Common.makeClone(capturedEventAfterObject.itemSize);
-      itemSize.w *= capturedEventAfterObject.scale.w;
-      itemSize.h *= capturedEventAfterObject.scale.h;
-      return this.updatePositionAndItemSize(itemSize, false);
-    }
-  };
-
   CanvasItemBase.prototype.updateItemSize = function(w, h) {
     var canvas, drawingCanvas, drawingContext, element, scaleH, scaleW;
     element = $('#' + this.id);
@@ -176,10 +152,11 @@ CanvasItemBase = (function(superClass) {
   };
 
   CanvasItemBase.prototype.originalItemElementSize = function() {
-    var capturedEventBeforeObject, itemSize, originalScale;
-    capturedEventBeforeObject = this.getCapturedEventBeforeObject();
-    itemSize = capturedEventBeforeObject.itemSize;
-    originalScale = capturedEventBeforeObject.scale;
+    var diff, itemSize, obj, originalScale;
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    obj = this.getMinimumObject();
+    itemSize = obj.itemSize;
+    originalScale = obj.scale;
     return {
       x: itemSize.x,
       y: itemSize.y,

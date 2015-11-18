@@ -40,8 +40,6 @@ PageValue = (function() {
 
       Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
-      Key.FORK_STACK = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "fork_stack";
-
       Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.PROJECT_ID;
 
       Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.TITLE;
@@ -179,12 +177,30 @@ PageValue = (function() {
 
       Key.F_PREFIX = constant.PageValueKey.F_PREFIX;
 
+      Key.FED_PREFIX = constant.PageValueKey.FED_PREFIX;
+
       Key.footprintPageRoot = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
         return "" + this.F_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
       };
+
+      Key.footprintInstanceDiffBefore = function(eventDistNum, objId, pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceDiffBefore";
+      };
+
+      Key.footprintInstanceDiffAfter = function(eventDistNum, objId, pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceDiffAfter";
+      };
+
+      Key.FORK_STACK = "" + Key.F_PREFIX + Key.PAGE_VALUES_SEPERATOR + "fork_stack";
 
       return Key;
 

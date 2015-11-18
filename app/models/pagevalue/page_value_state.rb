@@ -534,10 +534,10 @@ class PageValueState
     end
   end
 
-  def self.load_gallery_footprint(user_id, target_pages, gallery_access_token)
-    # 現在未使用
+  def self.load_common_gallery_footprint(user_id, gallery_access_token)
+    # 履歴情報取得
     begin
-      data = nil
+      data = {}
       ActiveRecord::Base.transaction do
 
         g = Gallery.find_by(access_token: gallery_access_token)
@@ -545,7 +545,7 @@ class PageValueState
 
         fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
         if fp
-          data = fp.data
+          data[Const::PageValueKey::PAGE_NUM] = fp.page_num
         end
       end
       return true, I18n.t('message.database.item_state.save.success'), data

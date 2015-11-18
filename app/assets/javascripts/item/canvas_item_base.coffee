@@ -117,28 +117,6 @@ class CanvasItemBase extends ItemBase
 
     return obj
 
-  # イベント前の表示状態にする
-  updateEventBefore: ->
-    super()
-    capturedEventBeforeObject = @getCapturedEventBeforeObject()
-    if capturedEventBeforeObject
-      # アイテムサイズ更新
-      itemSize = Common.makeClone(capturedEventBeforeObject.itemSize)
-      itemSize.w *= capturedEventBeforeObject.scale.w
-      itemSize.h *= capturedEventBeforeObject.scale.h
-      @updatePositionAndItemSize(itemSize, false)
-
-  # イベント後の表示状態にする
-  updateEventAfter: ->
-    super()
-    capturedEventAfterObject = @getCapturedEventAfterObject()
-    if capturedEventAfterObject
-      # アイテムサイズ更新
-      itemSize = Common.makeClone(capturedEventAfterObject.itemSize)
-      itemSize.w *= capturedEventAfterObject.scale.w
-      itemSize.h *= capturedEventAfterObject.scale.h
-      @updatePositionAndItemSize(itemSize, false)
-
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     element = $('#' + @id)
@@ -157,9 +135,10 @@ class CanvasItemBase extends ItemBase
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
-    capturedEventBeforeObject = @getCapturedEventBeforeObject()
-    itemSize = capturedEventBeforeObject.itemSize
-    originalScale = capturedEventBeforeObject.scale
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    obj = @getMinimumObject()
+    itemSize = obj.itemSize
+    originalScale = obj.scale
     return {
       x: itemSize.x
       y: itemSize.y

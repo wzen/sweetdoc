@@ -291,7 +291,7 @@ RunCommon = (function() {
       changedChapterIndex: 0,
       forkNum: forkNum
     }, pn);
-    PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
+    PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
     return true;
   };
 
@@ -304,7 +304,7 @@ RunCommon = (function() {
         changedChapterIndex: cIndex,
         forkNum: forkNum
       });
-      PageValue.setGeneralPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
+      PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
       return true;
     } else {
       return false;
@@ -314,7 +314,7 @@ RunCommon = (function() {
   RunCommon.getLastObjestFromStack = function(pn) {
     var stack;
     if (window.forkNumStacks == null) {
-      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK);
+      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK);
       if (window.forkNumStacks == null) {
         return null;
       }
@@ -340,7 +340,7 @@ RunCommon = (function() {
   RunCommon.getOneBeforeObjestFromStack = function(pn) {
     var stack;
     if (window.forkNumStacks == null) {
-      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK);
+      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK);
       if (window.forkNumStacks == null) {
         return null;
       }
@@ -355,7 +355,7 @@ RunCommon = (function() {
 
   RunCommon.popLastForkNumInStack = function(pn) {
     if (window.forkNumStacks == null) {
-      window.forkNumStacks = PageValue.getGeneralPageValue(PageValue.Key.FORK_STACK);
+      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK);
       if (window.forkNumStacks == null) {
         return false;
       }
@@ -504,7 +504,7 @@ RunCommon = (function() {
     }
   };
 
-  RunCommon.loadFootprint = function(callback) {
+  RunCommon.loadCommonFootprint = function(callback) {
     var data, locationPaths;
     if (callback == null) {
       callback = null;
@@ -516,7 +516,7 @@ RunCommon = (function() {
       locationPaths = window.location.pathname.split('/');
       data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
       return $.ajax({
-        url: "/run/load_gallery_footprint",
+        url: "/run/load_common_gallery_footprint",
         type: "POST",
         data: data,
         dataType: "json",
@@ -527,18 +527,29 @@ RunCommon = (function() {
               return callback();
             }
           } else {
-            return console.log('/run/load_gallery_footprint server error');
+            return console.log('/run/load_common_gallery_footprint server error');
           }
         },
         error: function(data) {
-          return console.log('/run/load_gallery_footprint ajax error');
+          return console.log('/run/load_common_gallery_footprint ajax error');
         }
       });
     }
   };
 
+  RunCommon.saveInstanceObjectToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
+    var baseObj, diff, key, obj;
+    if (pageNum == null) {
+      pageNum = PageValue.getPageNum();
+    }
+    baseObj = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(targetObjId)).value;
+    obj = window.instanceMap[targetObjId];
+    diff = Common.diffEventObject(baseObj, obj.getMinimumObject());
+    key = isChangeBefore ? PageValue.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : PageValue.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
+    return PageValue.setFootprintPageValue(key, diff);
+  };
+
   RunCommon.start = function(useLocalStorate) {
-    var is_reload;
     if (useLocalStorate == null) {
       useLocalStorate = false;
     }
@@ -548,22 +559,25 @@ RunCommon = (function() {
     window.initDone = false;
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
-    PageValue.setPageNum(1);
-    if (useLocalStorate) {
-      is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
-      if (is_reload != null) {
-        LocalStorage.loadAllPageValues();
-        PageValue.setPageNum(1);
-      } else {
-        LocalStorage.saveAllPageValues();
-      }
-    }
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-    RunCommon.initMainContainer();
-    return Common.loadJsFromInstancePageValue(function() {
-      RunCommon.initEventAction();
-      return window.initDone = true;
-    });
+    return this.loadCommonFootprint((function(_this) {
+      return function() {
+        var is_reload;
+        if (useLocalStorate) {
+          is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
+          if (is_reload != null) {
+            LocalStorage.loadAllPageValues();
+          } else {
+            LocalStorage.saveAllPageValues();
+          }
+        }
+        Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+        RunCommon.initMainContainer();
+        return Common.loadJsFromInstancePageValue(function() {
+          RunCommon.initEventAction();
+          return window.initDone = true;
+        });
+      };
+    })(this));
   };
 
   return RunCommon;

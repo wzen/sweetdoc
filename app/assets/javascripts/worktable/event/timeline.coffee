@@ -148,13 +148,9 @@ class Timeline
           if item?
             if idx < te_num - 1
               item.initEvent(te)
-              if item instanceof ItemBase
-                item.takeCaptureInstanceState(true)
               item.updateEventAfter()
             else if idx == te_num - 1
               item.initEvent(te)
-              if item instanceof ItemBase
-                item.takeCaptureInstanceState(true)
               # プレビュー実行
               item.preview(te)
               break

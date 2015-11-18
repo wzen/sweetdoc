@@ -94,9 +94,6 @@ Chapter = (function() {
     }
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        if (takeStateCapture && e instanceof ItemBase) {
-          e.takeCaptureInstanceState(false);
-        }
         return e.resetEvent();
       };
     })(this));
