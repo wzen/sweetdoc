@@ -143,6 +143,7 @@ Timeline = (function() {
           if (item != null) {
             if (idx < te_num - 1) {
               item.initEvent(te);
+              PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
               results.push(item.updateEventAfter());
             } else if (idx === te_num - 1) {
               item.initEvent(te);

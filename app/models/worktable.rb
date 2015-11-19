@@ -70,7 +70,7 @@ class Worktable
         temp = 'worktable/sidebar_menu/event/parts/color'
       end
       value = v
-      l_value = v[I18n.locale]
+      l_value = v[I18n.locale.to_s]
       if l_value
         value.update!(l_value)
       end

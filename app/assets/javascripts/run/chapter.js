@@ -102,7 +102,7 @@ Chapter = (function() {
   Chapter.prototype.forwardAllEvents = function() {
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        return e.forwardEvent();
+        return e.updateEventAfter();
       };
     })(this));
   };

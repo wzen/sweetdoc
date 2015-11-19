@@ -220,62 +220,27 @@ class ItemBase extends ItemEventBase
     @itemSize.y = parseInt(y)
 
   # スクロールによるアイテム状態更新
-  updateItemCommonByScroll: (scrollValue)->
-    @updateItemSizeByScroll(scrollValue)
+  updateInstanceParamByScroll: (scrollValue, immediate = false)->
+    super()
+    @updateItemSizeByScroll(scrollValue, immediate)
 
   # クリックによるアイテム状態更新
-  updateItemCommonByClick: ->
-    clickAnimationDuration = @constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration
-    @updateItemSizeByClick(clickAnimationDuration)
+  updateInstanceParamByClick: (immediate = false) ->
+    super()
+    @updateItemSizeByClick()
 
   # スクロールイベントでアイテム位置&サイズ更新
-  updateItemSizeByScroll: (scrollValue) ->
-    scrollEnd = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
-    scrollStart = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
-    progressPercentage = scrollValue / (scrollEnd - scrollStart)
+  updateItemSizeByScroll: (scrollValue, immediate = false) ->
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-    if itemDiff? && itemDiff != 'undefined'
-      originalItemElementSize = @originalItemElementSize()
-      x = originalItemElementSize.x + (itemDiff.x * progressPercentage)
-      y = originalItemElementSize.y + (itemDiff.y * progressPercentage)
-      w = originalItemElementSize.w + (itemDiff.w * progressPercentage)
-      h = originalItemElementSize.h + (itemDiff.h * progressPercentage)
-      itemSize = {
-        x: x
-        y: y
-        w: w
-        h: h
-      }
-      @updatePositionAndItemSize(itemSize, false)
+    if !itemDiff? || itemDiff == 'undefined'
+      # 変更なしの場合
+      return
+    if itemDiff.x == 0 && itemDiff.y == 0 && itemDiff.w == 0 && itemDiff.h == 0
+      # 変更なしの場合
+      return
 
-  # クリックイベントでアイテム位置&サイズ更新
-  updateItemSizeByClick: (clickAnimationDuration) ->
-    duration = 0.01
-    # クリックアニメーションと同時に実行させること
-    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
-    if itemDiff? && itemDiff != 'undefined'
-      if itemDiff.x == 0 && itemDiff.y == 0 && itemDiff.w == 0 && itemDiff.h == 0
-        return
-      perX = itemDiff.x * (duration / clickAnimationDuration)
-      perY = itemDiff.y * (duration / clickAnimationDuration)
-      perW = itemDiff.w * (duration / clickAnimationDuration)
-      perH = itemDiff.h * (duration / clickAnimationDuration)
-      loopMax = Math.ceil(clickAnimationDuration/ duration)
-      count = 1
-      originalItemElementSize = @originalItemElementSize()
-      timer = setInterval( =>
-        itemSize = {
-          x: originalItemElementSize.x + (perX * count)
-          y: originalItemElementSize.y + (perY * count)
-          w: originalItemElementSize.w + (perW * count)
-          h: originalItemElementSize.h + (perH * count)
-        }
-        @updatePositionAndItemSize(itemSize, false)
-        if count >= loopMax
-          clearInterval(timer)
-        count += 1
-      , duration * 1000)
-
+    originalItemElementSize = @originalItemElementSize()
+    if immediate
       itemSize = {
         x: originalItemElementSize.x + itemDiff.x
         y: originalItemElementSize.y + itemDiff.y
@@ -283,3 +248,64 @@ class ItemBase extends ItemEventBase
         h: originalItemElementSize.h + itemDiff.h
       }
       @updatePositionAndItemSize(itemSize, false)
+      return
+
+    scrollEnd = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+    scrollStart = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    progressPercentage = scrollValue / (scrollEnd - scrollStart)
+    itemSize = {
+      x: originalItemElementSize.x + (itemDiff.x * progressPercentage)
+      y: originalItemElementSize.y + (itemDiff.y * progressPercentage)
+      w: originalItemElementSize.w + (itemDiff.w * progressPercentage)
+      h: originalItemElementSize.h + (itemDiff.h * progressPercentage)
+    }
+    @updatePositionAndItemSize(itemSize, false)
+
+  # クリックイベントでアイテム位置&サイズ更新
+  updateItemSizeByClick: (immediate = false) ->
+    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    if !itemDiff? || itemDiff == 'undefined'
+      # 変更なしの場合
+      return
+    if itemDiff.x == 0 && itemDiff.y == 0 && itemDiff.w == 0 && itemDiff.h == 0
+      # 変更なしの場合
+      return
+
+    originalItemElementSize = @originalItemElementSize()
+    if immediate
+      itemSize = {
+        x: originalItemElementSize.x + itemDiff.x
+        y: originalItemElementSize.y + itemDiff.y
+        w: originalItemElementSize.w + itemDiff.w
+        h: originalItemElementSize.h + itemDiff.h
+      }
+      @updatePositionAndItemSize(itemSize, false)
+      return
+
+    clickAnimationDuration = @constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration
+    duration = 0.01
+    perX = itemDiff.x * (duration / clickAnimationDuration)
+    perY = itemDiff.y * (duration / clickAnimationDuration)
+    perW = itemDiff.w * (duration / clickAnimationDuration)
+    perH = itemDiff.h * (duration / clickAnimationDuration)
+    loopMax = Math.ceil(clickAnimationDuration/ duration)
+    count = 1
+    timer = setInterval( =>
+      itemSize = {
+        x: originalItemElementSize.x + (perX * count)
+        y: originalItemElementSize.y + (perY * count)
+        w: originalItemElementSize.w + (perW * count)
+        h: originalItemElementSize.h + (perH * count)
+      }
+      @updatePositionAndItemSize(itemSize, false)
+      if count >= loopMax
+        clearInterval(timer)
+        itemSize = {
+          x: originalItemElementSize.x + itemDiff.x
+          y: originalItemElementSize.y + itemDiff.y
+          w: originalItemElementSize.w + itemDiff.w
+          h: originalItemElementSize.h + itemDiff.h
+        }
+        @updatePositionAndItemSize(itemSize, false)
+      count += 1
+    , duration * 1000)

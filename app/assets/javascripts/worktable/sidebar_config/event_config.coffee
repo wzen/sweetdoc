@@ -434,8 +434,9 @@ class EventConfig
     valueClassName = @methodClassName()
     emt = $(".value_forms .#{valueClassName}", @emt)
     if emt.length > 0
-      if callback?
-        callback()
+      if successCallback?
+        successCallback()
+      return
 
     $.ajax(
       {

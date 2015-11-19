@@ -57,10 +57,6 @@ EventBase = (function(superClass) {
     return this.isFinishedEvent = false;
   };
 
-  EventBase.prototype.forwardEvent = function() {
-    return this.updateEventAfter();
-  };
-
   EventBase.prototype.preview = function(event) {
     var _preview;
     _preview = function(event) {
@@ -225,17 +221,15 @@ EventBase = (function(superClass) {
     if (methodName == null) {
       return;
     }
-    if (this instanceof ItemBase) {
-      actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[methodName].actionType);
-      if (actionType === Constant.ActionType.SCROLL) {
-        this.updateItemCommonByScroll(params);
-      } else if (actionType === Constant.ActionType.CLICK) {
-        setTimeout((function(_this) {
-          return function() {
-            return _this.updateItemCommonByClick();
-          };
-        })(this), 0);
-      }
+    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[methodName].actionType);
+    if (actionType === Constant.ActionType.SCROLL) {
+      this.updateInstanceParamByScroll(params);
+    } else if (actionType === Constant.ActionType.CLICK) {
+      setTimeout((function(_this) {
+        return function() {
+          return _this.updateInstanceParamByClick();
+        };
+      })(this), 0);
     }
     return this.constructor.prototype[methodName].call(this, params, complete);
   };
@@ -310,18 +304,40 @@ EventBase = (function(superClass) {
     return this.execMethod(e, complete);
   };
 
-  EventBase.prototype.updateEventAfter = function() {
-    var diff, obj;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-    return this.setMiniumObject($.extend(true, obj, diff));
-  };
-
   EventBase.prototype.updateEventBefore = function() {
     var diff, obj;
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
     return this.setMiniumObject($.extend(true, obj, diff));
+  };
+
+  EventBase.prototype.updateEventAfter = function() {
+    var actionType, diff, obj;
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    if (diff != null) {
+      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
+      return this.setMiniumObject($.extend(true, obj, diff));
+    } else {
+      actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
+      if (actionType === Constant.ActionType.SCROLL) {
+        this.updateInstanceParamByScroll(null, true);
+      } else if (actionType === Constant.ActionType.CLICK) {
+        this.updateInstanceParamByClick(true);
+      }
+      return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
+    }
+  };
+
+  EventBase.prototype.updateInstanceParamByScroll = function(scrollValue, immediate) {
+    if (immediate == null) {
+      immediate = false;
+    }
+  };
+
+  EventBase.prototype.updateInstanceParamByClick = function(immediate) {
+    if (immediate == null) {
+      immediate = false;
+    }
   };
 
   EventBase.prototype.setItemAllPropToPageValue = function(isCache) {

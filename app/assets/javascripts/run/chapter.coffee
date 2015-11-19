@@ -87,7 +87,7 @@ class Chapter
   # チャプターのイベントを実行後にする
   forwardAllEvents: ->
     @eventObjList.forEach((e) =>
-      e.forwardEvent()
+      e.updateEventAfter()
     )
 
   # ガイド表示

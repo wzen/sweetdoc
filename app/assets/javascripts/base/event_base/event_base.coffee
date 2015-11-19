@@ -51,10 +51,6 @@ class EventBase extends Extend
     @updateEventBefore()
     @isFinishedEvent = false
 
-  # アクション実行後にする
-  forwardEvent: ->
-    @updateEventAfter()
-
   # プレビュー開始
   # @param [Object] event 設定イベント
   preview: (event) ->
@@ -194,15 +190,14 @@ class EventBase extends Extend
       return
 
     # メソッド共通処理
-    if @ instanceof ItemBase
-      actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[methodName].actionType)
-      if actionType == Constant.ActionType.SCROLL
-        # アイテム位置&サイズ更新
-        @updateItemCommonByScroll(params)
-      else if actionType == Constant.ActionType.CLICK
-        setTimeout( =>
-          @updateItemCommonByClick()
-        , 0)
+    actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[methodName].actionType)
+    if actionType == Constant.ActionType.SCROLL
+      # アイテム位置&サイズ更新
+      @updateInstanceParamByScroll(params)
+    else if actionType == Constant.ActionType.CLICK
+      setTimeout( =>
+        @updateInstanceParamByClick()
+      , 0)
 
     (@constructor.prototype[methodName]).call(@, params, complete)
 
@@ -281,20 +276,37 @@ class EventBase extends Extend
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
-
     @execMethod(e, complete)
-
-  # イベント後の表示状態にする
-  updateEventAfter: ->
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
-    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
-    @setMiniumObject($.extend(true, obj, diff))
 
   # イベント前の表示状態にする
   updateEventBefore: ->
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
     @setMiniumObject($.extend(true, obj, diff))
+
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    if diff?
+      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
+      @setMiniumObject($.extend(true, obj, diff))
+    else
+      actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[@getEventMethodName()].actionType)
+      if actionType == Constant.ActionType.SCROLL
+        @updateInstanceParamByScroll(null, true)
+      else if actionType == Constant.ActionType.CLICK
+        @updateInstanceParamByClick(true)
+      # インスタンスの状態を保存
+      PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
+
+  # スクロールによるアイテム状態更新
+  # @abstract
+  updateInstanceParamByScroll: (scrollValue, immediate = false)->
+
+  # クリックによるアイテム状態更新
+  # @abstract
+  updateInstanceParamByClick: (immediate = false) ->
+
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか

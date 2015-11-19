@@ -437,9 +437,10 @@ EventConfig = (function() {
     valueClassName = this.methodClassName();
     emt = $(".value_forms ." + valueClassName, this.emt);
     if (emt.length > 0) {
-      if (typeof callback !== "undefined" && callback !== null) {
-        callback();
+      if (successCallback != null) {
+        successCallback();
       }
+      return;
     }
     return $.ajax({
       url: "/worktable/event_var_modify_config",
