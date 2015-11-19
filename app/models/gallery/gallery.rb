@@ -361,7 +361,7 @@ class Gallery < ActiveRecord::Base
     sql = <<-"SQL"
       SELECT g.* ,
              u.id as user_id, u.name as username, u.thumbnail_img as user_thumbnail_img,
-             ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gbs.count as bookmark_count, gvs.count as view_count
+             ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gbs.count as bookmark_count, gvs.count as view_count, ugf.* as footprint_data
       FROM galleries g
       INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id
       INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id
@@ -374,6 +374,7 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN gallery_event_pagevalues gep ON gepp.gallery_event_pagevalue_id = gep.id AND gep.del_flg = 0
       LEFT JOIN gallery_bookmark_statistics gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       LEFT JOIN gallery_view_statistics gvs ON g.id = gvs.gallery_id AND gvs.del_flg = 0
+      LEFT JOIN user_gallery_footprints ugf ON ugf.user_id = u.id AND ugf.gallery_id = g.id AND ugf.del_flg = 0
       WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
       AND pgm.del_flg = 0
@@ -399,6 +400,7 @@ class Gallery < ActiveRecord::Base
       ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['instance_pagevalue_data'])
       epd = {}
       epd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['event_pagevalue_data'])
+      fpd = pagevalues['footprint_data'].select{|k, v| k != 'user_id' && k != 'gallery_id' && k != 'del_flg' }
 
       # 必要なItemIdを調査
       itemids = PageValueState.extract_need_load_itemids(pagevalues['event_pagevalue_data'])
@@ -408,7 +410,7 @@ class Gallery < ActiveRecord::Base
       gallery_view_count = pagevalues['bookmark_count']
       gallery_bookmark_count = pagevalues['view_count']
 
-      pagevalues, creator = Run.setup_data(pagevalues['user_id'].to_i, gpd, ipd, epd, page_num)
+      pagevalues, creator = Run.setup_data(pagevalues['user_id'].to_i, gpd, ipd, epd, fpd, page_num)
 
       show_options = {}
       show_options[Const::Gallery::Key::SHOW_GUIDE] = pagevalues['show_guide']

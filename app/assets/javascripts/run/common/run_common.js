@@ -549,6 +549,7 @@ RunCommon = (function() {
   };
 
   RunCommon.start = function(useLocalStorate) {
+    var is_reload;
     if (useLocalStorate == null) {
       useLocalStorate = false;
     }
@@ -558,25 +559,20 @@ RunCommon = (function() {
     window.initDone = false;
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
-    return this.loadCommonFootprint((function(_this) {
-      return function() {
-        var is_reload;
-        if (useLocalStorate) {
-          is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
-          if (is_reload != null) {
-            LocalStorage.loadAllPageValues();
-          } else {
-            LocalStorage.saveAllPageValues();
-          }
-        }
-        Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-        RunCommon.initMainContainer();
-        return Common.loadJsFromInstancePageValue(function() {
-          RunCommon.initEventAction();
-          return window.initDone = true;
-        });
-      };
-    })(this));
+    if (useLocalStorate) {
+      is_reload = PageValue.getInstancePageValue(PageValue.Key.IS_RUNWINDOW_RELOAD);
+      if (is_reload != null) {
+        LocalStorage.loadAllPageValues();
+      } else {
+        LocalStorage.saveAllPageValues();
+      }
+    }
+    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+    RunCommon.initMainContainer();
+    return Common.loadJsFromInstancePageValue(function() {
+      RunCommon.initEventAction();
+      return window.initDone = true;
+    });
   };
 
   return RunCommon;

@@ -2,7 +2,7 @@ require 'common/const'
 
 class Run
 
-  def self.setup_data(user_id, general, instance, event, page_num)
+  def self.setup_data(user_id, general, instance, event, footprint, page_num)
     # cacheに保存
     # Rails.cache.write("user_id:#{user_id}-general", general, expires_in: 1.hour)
     # Rails.cache.write("user_id:#{user_id}-instance", instance, expires_in: 1.hour)
@@ -11,11 +11,13 @@ class Run
     general_pagevalues = make_pagevalue(general, Const::PageValueKey::G_PREFIX)
     instance_pagevalues = make_pagevalue_with_pagenum(instance, Const::PageValueKey::INSTANCE_PREFIX, page_num)
     event_pagevalues = make_pagevalue_with_pagenum(event, Const::PageValueKey::E_SUB_ROOT, page_num)
+    footprint_pagevalues = make_pagevalue(footprint, Const::PageValueKey::F_PREFIX)
     creator = User.find(user_id)
     return {
         general_pagevalues: general_pagevalues,
         instance_pagevalues: instance_pagevalues,
         event_pagevalues: event_pagevalues,
+        footprint_pagevalues: footprint_pagevalues
     }, creator
   end
 

@@ -4,6 +4,7 @@
      general_pagevalues = pagevalues[:general_pagevalues]
      instance_pagevalues = pagevalues[:instance_pagevalues]
      event_pagevalues = pagevalues[:event_pagevalues]
+     footprint_pagevalues = pagevalues[:footprint_pagevalues]
    end
 
 %>
@@ -34,5 +35,8 @@
     </div>
 
     <div id="<%= Const::PageValueKey::F_ROOT %>">
+      <% if footprint_pagevalues != nil %>
+          <%= footprint_pagevalues.html_safe %>
+      <% end %>
     </div>
 <% end %>

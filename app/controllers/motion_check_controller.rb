@@ -30,7 +30,8 @@ class MotionCheckController < ApplicationController
       general = params.require(Const::PageValueKey::G_PREFIX.to_sym)
       instance = params.require(Const::PageValueKey::INSTANCE_PREFIX.to_sym)
       event = params.require(Const::PageValueKey::E_SUB_ROOT.to_sym)
-      @pagevalues, @creator = Run.setup_data(user_id, general, instance, event, page_num)
+      footprint = params.require(Const::PageValueKey::F_PREFIX.to_sym)
+      @pagevalues, @creator = Run.setup_data(user_id, general, instance, event, footprint, page_num)
     end
   end
 
