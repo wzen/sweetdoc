@@ -524,21 +524,38 @@ EventConfig = (function() {
       slide: (function(_this) {
         return function(event, ui) {
           valueElement.val(ui.value);
-          return valueElement.html(ui.value);
+          valueElement.html(ui.value);
+          if (_this.modifiableVars == null) {
+            _this.modifiableVars = {};
+          }
+          return _this.modifiableVars[varName] = ui.value;
         };
       })(this)
     });
   };
 
   EventConfig.prototype.settingModifiableString = function(varName, defaultValue) {
-    return $("." + varName + "_text", this.emt).val(defaultValue);
+    $("." + varName + "_text", this.emt).val(defaultValue);
+    return $("." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
+      return function() {
+        if (_this.modifiableVars == null) {
+          _this.modifiableVars = {};
+        }
+        return _this.modifiableVars[varName] = $(_this).val();
+      };
+    })(this));
   };
 
   EventConfig.prototype.settingModifiableColor = function(varName, defaultValue) {
     var emt;
     emt = $("." + varName + "_color", this.emt);
     return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
-      return function(a, b, d, e) {};
+      return function(a, b, d, e) {
+        if (_this.modifiableVars == null) {
+          _this.modifiableVars = {};
+        }
+        return _this.modifiableVars[varName] = b;
+      };
     })(this));
   };
 

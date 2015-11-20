@@ -134,7 +134,7 @@ class ButtonItem extends CssItemBase
         complete()
     )
 
-  # CSS
+  # CSSアニメーションの定義(必要な場合)
   cssAnimationElement : ->
     methodName = @getEventMethodName()
     funcName = "#{methodName}_#{@id}"

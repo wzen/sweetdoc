@@ -34,14 +34,7 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection()
     writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection()
     writeValue[@PageValueKey.VALUE] = item.constructor.defaultEventConfigValue()
-    for methodName, value of item.constructor.actionProperties.methods
-      mod = value.modifiables
-      for varName, v of mod
-        mod.value = item[varName]
-      writeValue[@PageValueKey.MODIFIABLE_VARS] =  {
-        methodName: methodName
-        vars: mod
-      }
+    writeValue[@PageValueKey.MODIFIABLE_VARS] = null
 
     if errorMes.length == 0
       teNum = PageValue.getEventPageValue(PageValue.Key.eventCount())

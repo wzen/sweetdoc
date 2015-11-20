@@ -251,7 +251,7 @@ ItemBase = (function(superClass) {
     if (immediate == null) {
       immediate = false;
     }
-    ItemBase.__super__.updateInstanceParamByScroll.call(this);
+    ItemBase.__super__.updateInstanceParamByScroll.call(this, scrollValue, immediate);
     return this.updateItemSizeByScroll(scrollValue, immediate);
   };
 
@@ -259,7 +259,7 @@ ItemBase = (function(superClass) {
     if (immediate == null) {
       immediate = false;
     }
-    ItemBase.__super__.updateInstanceParamByClick.call(this);
+    ItemBase.__super__.updateInstanceParamByClick.call(this, immediate);
     return this.updateItemSizeByClick();
   };
 

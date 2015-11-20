@@ -221,12 +221,12 @@ class ItemBase extends ItemEventBase
 
   # スクロールによるアイテム状態更新
   updateInstanceParamByScroll: (scrollValue, immediate = false)->
-    super()
+    super(scrollValue, immediate)
     @updateItemSizeByScroll(scrollValue, immediate)
 
   # クリックによるアイテム状態更新
   updateInstanceParamByClick: (immediate = false) ->
-    super()
+    super(immediate)
     @updateItemSizeByClick()
 
   # スクロールイベントでアイテム位置&サイズ更新

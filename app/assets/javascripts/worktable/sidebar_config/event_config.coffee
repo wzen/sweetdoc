@@ -501,12 +501,20 @@ class EventConfig
       slide: (event, ui) =>
         valueElement.val(ui.value)
         valueElement.html(ui.value)
+        if !@modifiableVars?
+          @modifiableVars = {}
+        @modifiableVars[varName] = ui.value
     })
 
   # 変数編集テキストボックスの作成
   # @param [String] varName 変数名
   settingModifiableString: (varName, defaultValue) ->
     $(".#{varName}_text", @emt).val(defaultValue)
+    $(".#{varName}_text", @emt).off('change').on('change', =>
+      if !@modifiableVars?
+        @modifiableVars = {}
+      @modifiableVars[varName] = $(@).val()
+    )
 
   # 変数編集カラーピッカーの作成
   # @param [Object] configRoot コンフィグルート
@@ -517,6 +525,9 @@ class EventConfig
       $(emt),
       defaultValue,
       (a, b, d, e) =>
+        if !@modifiableVars?
+          @modifiableVars = {}
+        @modifiableVars[varName] = b
     )
 
 

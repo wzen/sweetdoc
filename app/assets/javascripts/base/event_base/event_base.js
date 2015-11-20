@@ -345,7 +345,7 @@ EventBase = (function(superClass) {
         } else {
           if (value.varAutoChange) {
             if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-              results.push(this[varName] = this[varName] + (after - before) * progressPercentage);
+              results.push(this[varName] = before + (after - before) * progressPercentage);
             } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
               colorCacheVarName = varName + "ColorChangeCache";
               if (this[colorCacheVarName] == null) {
@@ -398,7 +398,7 @@ EventBase = (function(superClass) {
           if ((before != null) && (after != null)) {
             if (value.varAutoChange) {
               if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-                _this[varName] = _this[varName] + (after - before) * progressPercentage;
+                _this[varName] = before + (after - before) * progressPercentage;
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChangeCache";
                 if (_this[colorCacheVarName] == null) {

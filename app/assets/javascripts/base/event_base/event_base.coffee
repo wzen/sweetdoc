@@ -314,7 +314,7 @@ class EventBase extends Extend
         else
           if value.varAutoChange
             if value.type == Constant.ItemDesignOptionType.NUMBER
-              this[varName] = this[varName] + (after - before) * progressPercentage
+              this[varName] = before + (after - before) * progressPercentage
             else if value.type == Constant.ItemDesignOptionType.COLOR
               colorCacheVarName = "#{varName}ColorChangeCache"
               if !this[colorCacheVarName]?
@@ -346,7 +346,7 @@ class EventBase extends Extend
         if before? && after?
           if value.varAutoChange
             if value.type == Constant.ItemDesignOptionType.NUMBER
-              this[varName] = this[varName] + (after - before) * progressPercentage
+              this[varName] = before + (after - before) * progressPercentage
             else if value.type == Constant.ItemDesignOptionType.COLOR
               colorCacheVarName = "#{varName}ColorChangeCache"
               if !this[colorCacheVarName]?
