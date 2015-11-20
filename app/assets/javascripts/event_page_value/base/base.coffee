@@ -183,18 +183,6 @@ class EventPageValueBase
           $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn))
           $('.fork_select:first', handlerDiv).parent('div').css('display', if enabled then 'block' else 'none')
 
-      if eventConfig.modifiableVars?
-        item = window.instanceMap[eventConfig.id]
-        propMod = item.constructor.actionProperties.methods[eventConfig.methodName].modifiables
-        for varName, value of eventConfig.modifiableVars
-          p = propMod[varName]
-          if p.type == Constant.ItemDesignOptionType.NUMBER
-            eventConfig.settingModifiableVarSlider(varName, value, p.min, p.max, p.stepValue)
-          else if p.type == Constant.ItemDesignOptionType.STRING
-            eventConfig.settingModifiableString(varName, value)
-          else if p.type == Constant.ItemDesignOptionType.COLOR
-            eventConfig.settingModifiableColor(varName, value)
-
       return true
     else
       return false

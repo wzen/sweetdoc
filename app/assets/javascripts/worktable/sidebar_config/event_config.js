@@ -481,7 +481,11 @@ EventConfig = (function() {
     results = [];
     for (varName in mod) {
       v = mod[varName];
-      defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+      if ((this.modifiableVars != null) && (this.modifiableVars[varName] != null)) {
+        defaultValue = this.modifiableVars[varName];
+      } else {
+        defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+      }
       if (v.type === Constant.ItemDesignOptionType.NUMBER) {
         results.push(this.settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue));
       } else if (v.type === Constant.ItemDesignOptionType.STRING) {

@@ -471,7 +471,10 @@ class EventConfig
   initEventVarModifyConfig: (obj) ->
     mod = obj.constructor.actionProperties.methods[@methodName].modifiables
     for varName, v of mod
-      defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+      if @modifiableVars? && @modifiableVars[varName]?
+        defaultValue = @modifiableVars[varName]
+      else
+        defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
       if v.type == Constant.ItemDesignOptionType.NUMBER
         @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
       else if v.type == Constant.ItemDesignOptionType.STRING
