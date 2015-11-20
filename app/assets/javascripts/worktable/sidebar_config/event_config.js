@@ -437,6 +437,7 @@ EventConfig = (function() {
     valueClassName = this.methodClassName();
     emt = $(".value_forms ." + valueClassName, this.emt);
     if (emt.length > 0) {
+      this.initEventVarModifyConfig(obj);
       if (successCallback != null) {
         successCallback();
       }
@@ -449,19 +450,22 @@ EventConfig = (function() {
         modifiables: obj.constructor.actionProperties.methods[this.methodName].modifiables
       },
       dataType: "json",
-      success: function(data) {
-        if (data.resultSuccess) {
-          $(".value_forms", this.emt).append($("<div class='" + valueClassName + "'>" + data.html + "</div>"));
-          if (successCallback != null) {
-            return successCallback(data);
+      success: (function(_this) {
+        return function(data) {
+          if (data.resultSuccess) {
+            $(".value_forms", _this.emt).append($("<div class='" + valueClassName + "'>" + data.html + "</div>"));
+            _this.initEventVarModifyConfig(obj);
+            if (successCallback != null) {
+              return successCallback(data);
+            }
+          } else {
+            if (errorCallback != null) {
+              errorCallback(data);
+            }
+            return console.log('/worktable/event_var_modify_config server error');
           }
-        } else {
-          if (errorCallback != null) {
-            errorCallback(data);
-          }
-          return console.log('/worktable/event_var_modify_config server error');
-        }
-      },
+        };
+      })(this),
       error: function(data) {
         if (errorCallback != null) {
           errorCallback(data);
@@ -471,8 +475,28 @@ EventConfig = (function() {
     });
   };
 
-  EventConfig.prototype.settingModifiableVarSlider = function(meterClassName, varName, min, max, stepValue) {
-    var defaultValue, meterElement, valueElement;
+  EventConfig.prototype.initEventVarModifyConfig = function(obj) {
+    var defaultValue, mod, results, v, varName;
+    mod = obj.constructor.actionProperties.methods[this.methodName].modifiables;
+    results = [];
+    for (varName in mod) {
+      v = mod[varName];
+      defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+      if (v.type === Constant.ItemDesignOptionType.NUMBER) {
+        results.push(this.settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue));
+      } else if (v.type === Constant.ItemDesignOptionType.STRING) {
+        results.push(this.settingModifiableString(varName, defaultValue));
+      } else if (v.type === Constant.ItemDesignOptionType.COLOR) {
+        results.push(this.settingModifiableColor(varName, defaultValue));
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
+
+  EventConfig.prototype.settingModifiableVarSlider = function(varName, defaultValue, min, max, stepValue) {
+    var meterClassName, meterElement, valueElement;
     if (min == null) {
       min = 0;
     }
@@ -482,9 +506,9 @@ EventConfig = (function() {
     if (stepValue == null) {
       stepValue = 0;
     }
+    meterClassName = varName + "_meter";
     meterElement = $("." + meterClassName, this.emt);
     valueElement = meterElement.prev('input:first');
-    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
     valueElement.val(defaultValue);
     valueElement.html(defaultValue);
     try {
@@ -500,12 +524,22 @@ EventConfig = (function() {
       slide: (function(_this) {
         return function(event, ui) {
           valueElement.val(ui.value);
-          valueElement.html(ui.value);
-          _this[varName] = ui.value;
-          return _this.applyDesignChange();
+          return valueElement.html(ui.value);
         };
       })(this)
     });
+  };
+
+  EventConfig.prototype.settingModifiableString = function(varName, defaultValue) {
+    return $("." + varName + "_text", this.emt).val(defaultValue);
+  };
+
+  EventConfig.prototype.settingModifiableColor = function(varName, defaultValue) {
+    var emt;
+    emt = $("." + varName + "_color", this.emt);
+    return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
+      return function(a, b, d, e) {};
+    })(this));
   };
 
   return EventConfig;

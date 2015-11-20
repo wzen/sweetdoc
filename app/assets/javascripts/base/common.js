@@ -992,6 +992,38 @@ Common = (function() {
     return element.contextmenu(data);
   };
 
+  Common.colorChangeCacheData = function(beforeColor, afterColor, length) {
+    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, m, r, rPer, ref, ret, rgb, rp, val;
+    ret = [];
+    bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+    for (index = j = 0, len = bColors.length; j < len; index = ++j) {
+      val = bColors[index];
+      bColors[index] = parseInt(val);
+    }
+    cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+    for (index = l = 0, len1 = cColors.length; l < len1; index = ++l) {
+      val = cColors[index];
+      cColors[index] = parseInt(val);
+    }
+    rPer = (cColors[0] - bColors[0]) / length;
+    gPer = (cColors[1] - bColors[1]) / length;
+    bPer = (cColors[2] - bColors[2]) / length;
+    rp = rPer;
+    gp = gPer;
+    bp = bPer;
+    for (i = m = 0, ref = length; 0 <= ref ? m <= ref : m >= ref; i = 0 <= ref ? ++m : --m) {
+      r = parseInt(bColors[0] + rp);
+      g = parseInt(bColors[1] + gp);
+      b = parseInt(bColors[2] + bp);
+      rgb = "rgb(" + r + "," + g + "," + b + ")";
+      ret[i] = rgb;
+      rp += rPer;
+      gp += gPer;
+      bp += bPer;
+    }
+    return ret;
+  };
+
   return Common;
 
 })();

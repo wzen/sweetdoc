@@ -113,7 +113,7 @@ EventPageValueBase = (function() {
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, rightEmt, start, topEmt, writeValue;
+    var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, item, leftEmt, p, parallel, propMod, ref, rightEmt, start, topEmt, value, varName, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       eventConfig.distId = writeValue[this.PageValueKey.DIST_ID];
@@ -205,6 +205,22 @@ EventPageValueBase = (function() {
           fn = enabled ? forkNum : 1;
           $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
           $('.fork_select:first', handlerDiv).parent('div').css('display', enabled ? 'block' : 'none');
+        }
+      }
+      if (eventConfig.modifiableVars != null) {
+        item = window.instanceMap[eventConfig.id];
+        propMod = item.constructor.actionProperties.methods[eventConfig.methodName].modifiables;
+        ref = eventConfig.modifiableVars;
+        for (varName in ref) {
+          value = ref[varName];
+          p = propMod[varName];
+          if (p.type === Constant.ItemDesignOptionType.NUMBER) {
+            eventConfig.settingModifiableVarSlider(varName, value, p.min, p.max, p.stepValue);
+          } else if (p.type === Constant.ItemDesignOptionType.STRING) {
+            eventConfig.settingModifiableString(varName, value);
+          } else if (p.type === Constant.ItemDesignOptionType.COLOR) {
+            eventConfig.settingModifiableColor(varName, value);
+          }
         }
       }
       return true;

@@ -304,40 +304,124 @@ EventBase = (function(superClass) {
     return this.execMethod(e, complete);
   };
 
-  EventBase.prototype.updateEventBefore = function() {
+  EventBase.prototype.getMinimumObjectEventBefore = function() {
     var diff, obj;
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-    return this.setMiniumObject($.extend(true, obj, diff));
+    return $.extend(true, obj, diff);
+  };
+
+  EventBase.prototype.updateEventBefore = function() {
+    return this.setMiniumObject(this.getMinimumObjectEventBefore());
   };
 
   EventBase.prototype.updateEventAfter = function() {
-    var actionType, diff, obj;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    if (diff != null) {
-      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-      return this.setMiniumObject($.extend(true, obj, diff));
-    } else {
-      actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
-      if (actionType === Constant.ActionType.SCROLL) {
-        this.updateInstanceParamByScroll(null, true);
-      } else if (actionType === Constant.ActionType.CLICK) {
-        this.updateInstanceParamByClick(true);
-      }
-      return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
+    var actionType;
+    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
+    if (actionType === Constant.ActionType.SCROLL) {
+      this.updateInstanceParamByScroll(null, true);
+    } else if (actionType === Constant.ActionType.CLICK) {
+      this.updateInstanceParamByClick(true);
     }
+    return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.updateInstanceParamByScroll = function(scrollValue, immediate) {
+    var after, before, colorCacheVarName, eventBeforeObj, mod, progressPercentage, results, value, varName;
     if (immediate == null) {
       immediate = false;
     }
+    progressPercentage = scrollValue / this.scrollLength();
+    eventBeforeObj = this.getMinimumObjectEventBefore();
+    mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
+    results = [];
+    for (varName in mod) {
+      value = mod[varName];
+      before = eventBeforeObj[varName];
+      after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+      if ((before != null) && (after != null)) {
+        if (immediate) {
+          results.push(this[varName] = after);
+        } else {
+          if (value.varAutoChange) {
+            if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+              results.push(this[varName] = this[varName] + (after - before) * progressPercentage);
+            } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+              colorCacheVarName = varName + "ColorChangeCache";
+              if (this[colorCacheVarName] == null) {
+                this[colorCacheVarName] = Common.colorChangeCacheData(before, after, this.scrollLength());
+              }
+              results.push(this[varName] = this[colorCacheVarName][scrollValue]);
+            } else {
+              results.push(void 0);
+            }
+          } else {
+            results.push(void 0);
+          }
+        }
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
   };
 
   EventBase.prototype.updateInstanceParamByClick = function(immediate) {
+    var after, clickAnimationDuration, count, duration, eventBeforeObj, loopMax, mod, timer, value, varName;
     if (immediate == null) {
       immediate = false;
     }
+    clickAnimationDuration = this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration;
+    duration = 0.01;
+    loopMax = Math.ceil(clickAnimationDuration / duration);
+    eventBeforeObj = this.getMinimumObjectEventBefore();
+    mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
+    if (immediate) {
+      for (varName in mod) {
+        value = mod[varName];
+        after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+        if (after != null) {
+          this[varName] = after;
+        }
+      }
+      return;
+    }
+    count = 1;
+    return timer = setInterval((function(_this) {
+      return function() {
+        var before, colorCacheVarName, progressPercentage;
+        progressPercentage = duration * count / clickAnimationDuration;
+        for (varName in mod) {
+          value = mod[varName];
+          before = eventBeforeObj[varName];
+          after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+          if ((before != null) && (after != null)) {
+            if (value.varAutoChange) {
+              if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+                _this[varName] = _this[varName] + (after - before) * progressPercentage;
+              } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+                colorCacheVarName = varName + "ColorChangeCache";
+                if (_this[colorCacheVarName] == null) {
+                  _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, loopMax);
+                }
+                _this[varName] = _this[colorCacheVarName][count];
+              }
+            }
+          }
+        }
+        if (count >= loopMax) {
+          clearInterval(timer);
+          for (varName in mod) {
+            value = mod[varName];
+            after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+            if (after != null) {
+              _this[varName] = after;
+            }
+          }
+        }
+        return count += 1;
+      };
+    })(this), duration * 1000);
   };
 
   EventBase.prototype.setItemAllPropToPageValue = function(isCache) {

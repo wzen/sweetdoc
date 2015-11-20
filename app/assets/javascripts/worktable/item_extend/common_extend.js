@@ -186,7 +186,7 @@ WorkTableCommonInclude = {
     name.val(this.name);
     name.off('change').on('change', (function(_this) {
       return function() {
-        _this.name = name.val();
+        _this.name = $(_this).val();
         return _this.setItemPropToPageValue('name', _this.name);
       };
     })(this));
@@ -374,7 +374,7 @@ WorkTableCommonInclude = {
       };
     })(this), 500);
   },
-  settingModifiableVarSlider: function(configRoot, meterClassName, varName, min, max, stepValue) {
+  settingModifiableVarSlider: function(configRoot, varName, min, max, stepValue) {
     var defaultValue, meterElement, valueElement;
     if (min == null) {
       min = 0;
@@ -385,7 +385,7 @@ WorkTableCommonInclude = {
     if (stepValue == null) {
       stepValue = 0;
     }
-    meterElement = $("." + meterClassName, configRoot);
+    meterElement = $("." + varName + "_meter", configRoot);
     valueElement = meterElement.prev('input:first');
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
     valueElement.val(defaultValue);
@@ -409,6 +409,28 @@ WorkTableCommonInclude = {
         };
       })(this)
     });
+  },
+  settingModifiableString: function(configRoot, varName) {
+    var defaultValue;
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+    $("." + varName + "_text", configRoot).val(defaultValue);
+    return $("." + varName + "_text", configRoot).off('change').on('change', (function(_this) {
+      return function() {
+        _this[varName] = $(_this).val();
+        return _this.applyDesignChange();
+      };
+    })(this));
+  },
+  settingModifiableColor: function(configRoot, varName) {
+    var defaultValue, emt;
+    emt = $("." + varName + "_color", configRoot);
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+    return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
+      return function(a, b, d, e) {
+        _this[varName] = b;
+        return _this.applyDesignChange();
+      };
+    })(this));
   }
 };
 

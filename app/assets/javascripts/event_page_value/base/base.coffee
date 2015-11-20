@@ -124,15 +124,6 @@ class EventPageValueBase
         if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h
           $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h)
 
-#        if eventConfig.modifiableVars?
-#          for varName, value of eventConfig.modifiableVars
-#            if value.type == Constant.ItemDesignOptionType.NUMBER
-#              $('', eventConfig.emt)
-#            else if value.type == Constant.ItemDesignOptionType.STRING
-#              $('', eventConfig.emt)
-#            else if value.type == Constant.ItemDesignOptionType.COLOR
-#              $('', eventConfig.emt)
-
       parallel = $(".parallel_div .parallel", eventConfig.emt)
       isParallel = writeValue[@PageValueKey.IS_SYNC]
       if parallel? && isParallel
@@ -191,6 +182,18 @@ class EventPageValueBase
           fn = if enabled then forkNum else 1
           $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn))
           $('.fork_select:first', handlerDiv).parent('div').css('display', if enabled then 'block' else 'none')
+
+      if eventConfig.modifiableVars?
+        item = window.instanceMap[eventConfig.id]
+        propMod = item.constructor.actionProperties.methods[eventConfig.methodName].modifiables
+        for varName, value of eventConfig.modifiableVars
+          p = propMod[varName]
+          if p.type == Constant.ItemDesignOptionType.NUMBER
+            eventConfig.settingModifiableVarSlider(varName, value, p.min, p.max, p.stepValue)
+          else if p.type == Constant.ItemDesignOptionType.STRING
+            eventConfig.settingModifiableString(varName, value)
+          else if p.type == Constant.ItemDesignOptionType.COLOR
+            eventConfig.settingModifiableColor(varName, value)
 
       return true
     else

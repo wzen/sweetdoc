@@ -823,6 +823,34 @@ class Common
     $.extend(data, option)
     element.contextmenu(data)
 
+  # 色変更差分のキャッシュを取得
+  @colorChangeCacheData = (beforeColor, afterColor, length) ->
+    ret = []
+    # 'rgb(r, g, b)'のフォーマットを分解
+    bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+    for val, index in bColors
+      bColors[index] = parseInt(val)
+    cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+    for val, index in cColors
+      cColors[index] = parseInt(val)
+    rPer = (cColors[0] - bColors[0]) / length
+    gPer = (cColors[1] - bColors[1]) / length
+    bPer = (cColors[2] - bColors[2]) / length
+    rp = rPer
+    gp = gPer
+    bp = bPer
+    for i in [0..length]
+      r = parseInt(bColors[0] + rp)
+      g = parseInt(bColors[1] + gp)
+      b = parseInt(bColors[2] + bp)
+      rgb = "rgb(#{r},#{g},#{b})"
+      ret[i] = rgb
+      rp += rPer
+      gp += gPer
+      bp += bPer
+
+    return ret
+
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.classMap = {}

@@ -434,6 +434,8 @@ class EventConfig
     valueClassName = @methodClassName()
     emt = $(".value_forms .#{valueClassName}", @emt)
     if emt.length > 0
+      # コンフィグの初期化
+      @initEventVarModifyConfig(obj)
       if successCallback?
         successCallback()
       return
@@ -446,10 +448,12 @@ class EventConfig
           modifiables: obj.constructor.actionProperties.methods[@methodName].modifiables
         }
         dataType: "json"
-        success: (data)->
+        success: (data) =>
           if data.resultSuccess
-            # HTML追加
+            # コンフィグ追加
             $(".value_forms", @emt).append($("<div class='#{valueClassName}'>#{data.html}</div>"))
+            # コンフィグの初期化
+            @initEventVarModifyConfig(obj)
             if successCallback?
               successCallback(data)
           else
@@ -463,15 +467,27 @@ class EventConfig
       }
     )
 
+  # 変数編集コンフィグの初期化
+  initEventVarModifyConfig: (obj) ->
+    mod = obj.constructor.actionProperties.methods[@methodName].modifiables
+    for varName, v of mod
+      defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+      if v.type == Constant.ItemDesignOptionType.NUMBER
+        @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
+      else if v.type == Constant.ItemDesignOptionType.STRING
+        @settingModifiableString(varName, defaultValue)
+      else if v.type == Constant.ItemDesignOptionType.COLOR
+        @settingModifiableColor(varName, defaultValue)
+
   # 変数編集スライダーの作成
-  # @param [Int] id メーターのElementID
+  # @param [Int] varName 変数名
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingModifiableVarSlider: (meterClassName, varName, min = 0, max = 100, stepValue = 0) ->
+  settingModifiableVarSlider: (varName, defaultValue, min = 0, max = 100, stepValue = 0) ->
+    meterClassName = "#{varName}_meter"
     meterElement = $(".#{meterClassName}", @emt)
     valueElement = meterElement.prev('input:first')
-    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     valueElement.val(defaultValue)
     valueElement.html(defaultValue)
     try
@@ -485,6 +501,23 @@ class EventConfig
       slide: (event, ui) =>
         valueElement.val(ui.value)
         valueElement.html(ui.value)
-        this[varName] = ui.value
-        @applyDesignChange()
     })
+
+  # 変数編集テキストボックスの作成
+  # @param [String] varName 変数名
+  settingModifiableString: (varName, defaultValue) ->
+    $(".#{varName}_text", @emt).val(defaultValue)
+
+  # 変数編集カラーピッカーの作成
+  # @param [Object] configRoot コンフィグルート
+  # @param [String] varName 変数名
+  settingModifiableColor: (varName, defaultValue) ->
+    emt = $(".#{varName}_color", @emt)
+    ColorPickerUtil.initColorPicker(
+      $(emt),
+      defaultValue,
+      (a, b, d, e) =>
+    )
+
+
+

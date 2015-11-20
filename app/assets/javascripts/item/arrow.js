@@ -85,6 +85,7 @@ ArrowItem = (function(superClass) {
             type: 'number',
             min: 1,
             max: 99,
+            varAutoChange: true,
             ja: {
               name: "矢印の幅"
             }

@@ -183,6 +183,7 @@ class EventBase extends Extend
     # インスタンスの状態を保存
     PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
 
+  # メソッド実行
   execMethod: (params, complete = null) ->
     methodName = @getEventMethodName()
     if !methodName?
@@ -278,35 +279,87 @@ class EventBase extends Extend
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
     @execMethod(e, complete)
 
-  # イベント前の表示状態にする
-  updateEventBefore: ->
+  # イベント前のインスタンスオブジェクトを取得
+  getMinimumObjectEventBefore: ->
     diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
-    @setMiniumObject($.extend(true, obj, diff))
+    return $.extend(true, obj, diff)
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    @setMiniumObject(@getMinimumObjectEventBefore())
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffAfter(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
-    if diff?
-      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
-      @setMiniumObject($.extend(true, obj, diff))
-    else
-      actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[@getEventMethodName()].actionType)
-      if actionType == Constant.ActionType.SCROLL
-        @updateInstanceParamByScroll(null, true)
-      else if actionType == Constant.ActionType.CLICK
-        @updateInstanceParamByClick(true)
-      # インスタンスの状態を保存
-      PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
+    actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[@getEventMethodName()].actionType)
+    if actionType == Constant.ActionType.SCROLL
+      @updateInstanceParamByScroll(null, true)
+    else if actionType == Constant.ActionType.CLICK
+      @updateInstanceParamByClick(true)
+    # インスタンスの状態を保存
+    PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # スクロールによるアイテム状態更新
-  # @abstract
   updateInstanceParamByScroll: (scrollValue, immediate = false)->
+    # TODO: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
+    progressPercentage = scrollValue / @scrollLength()
+    eventBeforeObj = @getMinimumObjectEventBefore()
+    mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
+    for varName, value of mod
+      before = eventBeforeObj[varName]
+      after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+      if before? && after?
+        if immediate
+          this[varName] = after
+        else
+          if value.varAutoChange
+            if value.type == Constant.ItemDesignOptionType.NUMBER
+              this[varName] = this[varName] + (after - before) * progressPercentage
+            else if value.type == Constant.ItemDesignOptionType.COLOR
+              colorCacheVarName = "#{varName}ColorChangeCache"
+              if !this[colorCacheVarName]?
+                this[colorCacheVarName] = Common.colorChangeCacheData(before, after, @scrollLength())
+              this[varName] = this[colorCacheVarName][scrollValue]
 
   # クリックによるアイテム状態更新
-  # @abstract
   updateInstanceParamByClick: (immediate = false) ->
+    # TODO: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
+    clickAnimationDuration = @constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration
+    duration = 0.01
+    loopMax = Math.ceil(clickAnimationDuration/ duration)
+    eventBeforeObj = @getMinimumObjectEventBefore()
+    mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
 
+    if immediate
+      for varName, value of mod
+        after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+        if after?
+          this[varName] = after
+      return
+
+    count = 1
+    timer = setInterval( =>
+      progressPercentage = duration * count / clickAnimationDuration
+      for varName, value of mod
+        before = eventBeforeObj[varName]
+        after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+        if before? && after?
+          if value.varAutoChange
+            if value.type == Constant.ItemDesignOptionType.NUMBER
+              this[varName] = this[varName] + (after - before) * progressPercentage
+            else if value.type == Constant.ItemDesignOptionType.COLOR
+              colorCacheVarName = "#{varName}ColorChangeCache"
+              if !this[colorCacheVarName]?
+                this[colorCacheVarName] = Common.colorChangeCacheData(before, after, loopMax)
+              this[varName] = this[colorCacheVarName][count]
+      if count >= loopMax
+        clearInterval(timer)
+        for varName, value of mod
+          after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+          if after?
+            this[varName] = after
+      count += 1
+    , duration * 1000)
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか

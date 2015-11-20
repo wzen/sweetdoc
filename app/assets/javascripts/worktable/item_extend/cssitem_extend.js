@@ -126,7 +126,11 @@ WorkTableCssItemExtend = {
       for (varName in ref) {
         value = ref[varName];
         if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-          results.push(self.settingModifiableVarSlider(designConfigRoot, varName + "_meter", varName, value.min, value.max));
+          results.push(self.settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max));
+        } else if (value.type === Constant.ItemDesignOptionType.STRING) {
+          results.push(self.settingModifiableString(designConfigRoot, varName));
+        } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+          results.push(self.settingModifiableColor(designConfigRoot, varName));
         } else {
           results.push(void 0);
         }

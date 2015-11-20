@@ -165,7 +165,7 @@ WorkTableCommonInclude =
     name = $('.item-name', designConfigRoot)
     name.val(@name)
     name.off('change').on('change', =>
-      @name = name.val()
+      @name = $(@).val()
       @setItemPropToPageValue('name', @name)
     )
 
@@ -333,12 +333,13 @@ WorkTableCommonInclude =
     , 500)
 
   # 変数編集スライダーの作成
-  # @param [Int] id メーターのElementID
+  # @param [Object] configRoot コンフィグルート
+  # @param [String] varName 変数名
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingModifiableVarSlider: (configRoot, meterClassName, varName, min = 0, max = 100, stepValue = 0) ->
-    meterElement = $(".#{meterClassName}", configRoot)
+  settingModifiableVarSlider: (configRoot, varName, min = 0, max = 100, stepValue = 0) ->
+    meterElement = $(".#{varName}_meter", configRoot)
     valueElement = meterElement.prev('input:first')
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     valueElement.val(defaultValue)
@@ -357,4 +358,29 @@ WorkTableCommonInclude =
         this[varName] = ui.value
         @applyDesignChange()
     })
+
+  # 変数編集テキストボックスの作成
+  # @param [Object] configRoot コンフィグルート
+  # @param [String] varName 変数名
+  settingModifiableString: (configRoot, varName) ->
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+    $(".#{varName}_text", configRoot).val(defaultValue)
+    $(".#{varName}_text", configRoot).off('change').on('change', =>
+      this[varName] = $(@).val()
+      @applyDesignChange()
+    )
+
+  # 変数編集カラーピッカーの作成
+  # @param [Object] configRoot コンフィグルート
+  # @param [String] varName 変数名
+  settingModifiableColor: (configRoot, varName) ->
+    emt = $(".#{varName}_color", configRoot)
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+    ColorPickerUtil.initColorPicker(
+      $(emt),
+      defaultValue,
+      (a, b, d, e) =>
+        this[varName] = b
+        @applyDesignChange()
+    )
 

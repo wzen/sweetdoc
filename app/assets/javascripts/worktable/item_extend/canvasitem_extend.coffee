@@ -104,7 +104,11 @@ WorkTableCanvasItemExtend =
     if @constructor.actionProperties.modifiables?
       for varName, value of @constructor.actionProperties.modifiables
         if value.type == Constant.ItemDesignOptionType.NUMBER
-          self.settingModifiableVarSlider(designConfigRoot, "#{varName}_meter", varName, value.min, value.max)
+          self.settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max)
+        else if value.type == Constant.ItemDesignOptionType.STRING
+          self.settingModifiableString(designConfigRoot, varName)
+        else if value.type == Constant.ItemDesignOptionType.COLOR
+          self.settingModifiableColor(designConfigRoot, varName)
 
   # デザイン変更を反映
   applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->
