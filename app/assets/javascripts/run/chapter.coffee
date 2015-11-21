@@ -24,7 +24,7 @@ class Chapter
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
       # インスタンスの状態を保存
-      PageValue.saveInstanceObjectToFootprint(@id, true, @event[EventPageValueBase.PageValueKey.DIST_ID])
+      PageValue.saveInstanceObjectToFootprint(event.id, true, event.event[EventPageValueBase.PageValueKey.DIST_ID])
       event.willChapter()
       @doMoveChapter = false
 

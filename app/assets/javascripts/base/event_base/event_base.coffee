@@ -48,7 +48,7 @@ class EventBase extends Extend
 
   # リセット(アクション前に戻す)
   resetEvent: ->
-    @willChapter()
+    @updateEventBefore()
     @isFinishedEvent = false
 
   # プレビュー開始
@@ -105,6 +105,7 @@ class EventBase extends Extend
             @previewTimer = setTimeout( =>
               # 状態を変更前に戻す
               @resetEvent()
+              @willChapter()
               _draw.call(@)
             , loopDelay)
             if !@doPreviewLoop
@@ -129,6 +130,7 @@ class EventBase extends Extend
             @previewTimer = setTimeout( =>
               # 状態を変更前に戻す
               @resetEvent()
+              @willChapter()
               @execMethod(null, _loop)
             , loopDelay)
           else

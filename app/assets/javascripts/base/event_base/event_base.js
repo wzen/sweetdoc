@@ -53,7 +53,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.resetEvent = function() {
-    this.willChapter();
+    this.updateEventBefore();
     return this.isFinishedEvent = false;
   };
 
@@ -114,6 +114,7 @@ EventBase = (function(superClass) {
               }
               _this.previewTimer = setTimeout(function() {
                 _this.resetEvent();
+                _this.willChapter();
                 return _draw.call(_this);
               }, loopDelay);
               if (!_this.doPreviewLoop) {
@@ -142,6 +143,7 @@ EventBase = (function(superClass) {
               }
               return _this.previewTimer = setTimeout(function() {
                 _this.resetEvent();
+                _this.willChapter();
                 return _this.execMethod(null, _loop);
               }, loopDelay);
             } else {
