@@ -993,17 +993,43 @@ Common = (function() {
   };
 
   Common.colorChangeCacheData = function(beforeColor, afterColor, length) {
-    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, m, r, rPer, ref, ret, rgb, rp, val;
+    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, p, r, rPer, ref, ret, rgb, rp, val;
     ret = [];
-    bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
-    for (index = j = 0, len = bColors.length; j < len; index = ++j) {
-      val = bColors[index];
-      bColors[index] = parseInt(val);
+    bColors = new Array(3);
+    if (beforeColor.indexOf('rgb') >= 0) {
+      bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+      for (index = j = 0, len = bColors.length; j < len; index = ++j) {
+        val = bColors[index];
+        bColors[index] = parseInt(val);
+      }
     }
-    cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
-    for (index = l = 0, len1 = cColors.length; l < len1; index = ++l) {
-      val = cColors[index];
-      cColors[index] = parseInt(val);
+    if (beforeColor.length === 6 || (beforeColor.length === 7 && beforeColor.indexOf('#') === 0)) {
+      beforeColor = beforeColor.replace('#', '');
+      bColors[0] = beforeColor.substring(0, 2);
+      bColors[1] = beforeColor.substring(2, 4);
+      bColors[2] = beforeColor.substring(4, 6);
+      for (index = l = 0, len1 = bColors.length; l < len1; index = ++l) {
+        val = bColors[index];
+        bColors[index] = parseInt(val, 16);
+      }
+    }
+    cColors = new Array(3);
+    if (afterColor.indexOf('rgb') >= 0) {
+      cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+      for (index = m = 0, len2 = cColors.length; m < len2; index = ++m) {
+        val = cColors[index];
+        cColors[index] = parseInt(val);
+      }
+    }
+    if (afterColor.length === 6 || (afterColor.length === 7 && afterColor.indexOf('#') === 0)) {
+      afterColor = afterColor.replace('#', '');
+      cColors[0] = afterColor.substring(0, 2);
+      cColors[1] = afterColor.substring(2, 4);
+      cColors[2] = afterColor.substring(4, 6);
+      for (index = o = 0, len3 = cColors.length; o < len3; index = ++o) {
+        val = cColors[index];
+        cColors[index] = parseInt(val, 16);
+      }
     }
     rPer = (cColors[0] - bColors[0]) / length;
     gPer = (cColors[1] - bColors[1]) / length;
@@ -1011,7 +1037,7 @@ Common = (function() {
     rp = rPer;
     gp = gPer;
     bp = bPer;
-    for (i = m = 0, ref = length; 0 <= ref ? m <= ref : m >= ref; i = 0 <= ref ? ++m : --m) {
+    for (i = p = 0, ref = length; 0 <= ref ? p <= ref : p >= ref; i = 0 <= ref ? ++p : --p) {
       r = parseInt(bColors[0] + rp);
       g = parseInt(bColors[1] + gp);
       b = parseInt(bColors[2] + bp);

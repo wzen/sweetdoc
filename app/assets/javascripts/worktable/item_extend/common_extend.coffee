@@ -355,7 +355,7 @@ WorkTableCommonInclude =
       slide: (event, ui) =>
         valueElement.val(ui.value)
         valueElement.html(ui.value)
-        this[varName] = ui.value
+        @[varName] = ui.value
         @applyDesignChange()
     })
 
@@ -366,7 +366,7 @@ WorkTableCommonInclude =
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     $(".#{varName}_text", configRoot).val(defaultValue)
     $(".#{varName}_text", configRoot).off('change').on('change', =>
-      this[varName] = $(@).val()
+      @[varName] = $(@).val()
       @applyDesignChange()
     )
 
@@ -380,7 +380,7 @@ WorkTableCommonInclude =
       $(emt),
       defaultValue,
       (a, b, d, e) =>
-        this[varName] = b
+        @[varName] = b
         @applyDesignChange()
     )
 

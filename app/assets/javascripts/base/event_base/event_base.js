@@ -65,7 +65,7 @@ EventBase = (function(superClass) {
       loopDelay = 1000;
       loopMaxCount = 5;
       this.initEvent(event);
-      this.willChapter();
+      this.updateEventBefore();
       if (this instanceof CssItemBase) {
         this.appendAnimationCssIfNeeded();
       }
@@ -113,6 +113,7 @@ EventBase = (function(superClass) {
                 _this.previewTimer = null;
               }
               _this.previewTimer = setTimeout(function() {
+                _this.resetEvent();
                 return _draw.call(_this);
               }, loopDelay);
               if (!_this.doPreviewLoop) {
@@ -140,6 +141,7 @@ EventBase = (function(superClass) {
                 _this.previewTimer = null;
               }
               return _this.previewTimer = setTimeout(function() {
+                _this.resetEvent();
                 return _this.execMethod(null, _loop);
               }, loopDelay);
             } else {
@@ -162,29 +164,17 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.stopPreview = function(callback) {
-    var _stop;
     if (callback == null) {
       callback = null;
     }
-    _stop = function() {
-      if (this.previewTimer != null) {
-        clearTimeout(this.previewTimer);
-        FloatView.hide();
-        this.previewTimer = null;
-      }
-      if (callback != null) {
-        return callback();
-      }
-    };
-    if (this.doPreviewLoop) {
+    if (this.previewTimer != null) {
+      clearTimeout(this.previewTimer);
+      FloatView.hide();
+      this.previewTimer = null;
       this.doPreviewLoop = false;
-      return this.previewFinished = (function(_this) {
-        return function() {
-          return _stop.call(_this);
-        };
-      })(this);
-    } else {
-      return _stop.call(this);
+    }
+    if (callback != null) {
+      return callback();
     }
   };
 
@@ -199,11 +189,6 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.willChapter = function() {
-    var actionType;
-    actionType = this.getEventActionType();
-    if (actionType === Constant.ActionType.SCROLL) {
-      this.scrollValue = 0;
-    }
     PageValue.saveInstanceObjectToFootprint(this.id, true, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
     return this.updateEventBefore();
   };
@@ -312,7 +297,12 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventBefore = function() {
-    return this.setMiniumObject(this.getMinimumObjectEventBefore());
+    var actionType;
+    this.setMiniumObject(this.getMinimumObjectEventBefore());
+    actionType = this.getEventActionType();
+    if (actionType === Constant.ActionType.SCROLL) {
+      return this.scrollValue = 0;
+    }
   };
 
   EventBase.prototype.updateEventAfter = function() {

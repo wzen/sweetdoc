@@ -45,8 +45,11 @@ class Project
           list += e
         projectSelect.children().remove()
         $(list).appendTo(projectSelect)
+        $('.project_create_wrapper input[type=radio][value=select]', modalEmt).prop('checked', true)
         $('.display_project_new_wrapper', modalEmt).hide()
         $('.display_project_select_wrapper', modalEmt).show()
+        $(".button_wrapper .select", modalEmt).show()
+        $('.button_wrapper span', modalEmt).hide()
         $(".button_wrapper .select", modalEmt).show()
         size = _modalSize('select')
         modalEmt.css({width: size.width, height: size.height})
@@ -56,8 +59,11 @@ class Project
           callback()
       else
         projectSelect.children().remove()
+        $('.project_create_wrapper input[type=radio][value=new]', modalEmt).prop('checked', true)
         $('.display_project_new_wrapper', modalEmt).show()
         $('.display_project_select_wrapper', modalEmt).hide()
+        $(".button_wrapper .new", modalEmt).show()
+        $('.button_wrapper span', modalEmt).hide()
         $(".button_wrapper .new", modalEmt).show()
         size = _modalSize('new')
         modalEmt.css({width: size.width, height: size.height})

@@ -8,6 +8,7 @@ ButtonItem = (function(superClass) {
   extend(ButtonItem, superClass);
 
   function ButtonItem() {
+    this.changeColorClick = bind(this.changeColorClick, this);
     this.defaultClick = bind(this.defaultClick, this);
     return ButtonItem.__super__.constructor.apply(this, arguments);
   }
@@ -70,9 +71,20 @@ ButtonItem = (function(superClass) {
         design_bg_color4_webkit_flag: false
       }
     },
+    modifiables: {
+      backgroundColor: {
+        name: "Background Color",
+        "default": 'ffffff',
+        type: 'color',
+        ja: {
+          name: "背景色"
+        }
+      }
+    },
     methods: {
       defaultClick: {
         actionType: 'click',
+        isCssAnimation: true,
         clickAnimationDuration: 0.5,
         options: {
           id: 'defaultClick',
@@ -100,7 +112,28 @@ ButtonItem = (function(superClass) {
         },
         options: {
           id: 'changeColorScroll_Design',
-          name: 'Changing color by click'
+          name: 'Changing color by scroll'
+        }
+      },
+      changeColorClick: {
+        actionType: 'click',
+        clickAnimationDuration: 0.5,
+        options: {
+          id: 'changeColorClick_Design',
+          name: 'Changing color by click',
+          ja: {
+            name: 'クリックで色変更'
+          }
+        },
+        modifiables: {
+          backgroundColor: {
+            name: "Background Color",
+            type: 'color',
+            varAutoChange: true,
+            ja: {
+              name: "背景色"
+            }
+          }
         }
       }
     }
@@ -120,6 +153,8 @@ ButtonItem = (function(superClass) {
     methodName = this.getEventMethodName();
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
+    } else if (methodName === 'changeColorClick') {
+      return this.backgroundColor = 'ffffff';
     }
   };
 
@@ -151,6 +186,14 @@ ButtonItem = (function(superClass) {
     })(this));
   };
 
+  ButtonItem.prototype.changeColorClick = function(e, complete) {
+    this.getJQueryElement().find('.css3button').css('background', "#" + this.backgroundColor);
+    this.isFinishedEvent = true;
+    if (complete != null) {
+      return complete();
+    }
+  };
+
   ButtonItem.prototype.cssAnimationElement = function() {
     var css, emt, funcName, height, keyFrameName, keyframe, left, methodName, mozKeyframe, top, webkitKeyframe, width;
     methodName = this.getEventMethodName();
@@ -171,6 +214,8 @@ ButtonItem = (function(superClass) {
   ButtonItem.prototype.willChapter = function() {
     ButtonItem.__super__.willChapter.call(this);
     if (this.getEventMethodName() === 'defaultClick') {
+      return this.getJQueryElement().css('opacity', 1);
+    } else if (this.getEventMethodName() === 'changeColorClick') {
       return this.getJQueryElement().css('opacity', 1);
     }
   };

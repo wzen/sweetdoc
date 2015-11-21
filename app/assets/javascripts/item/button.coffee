@@ -62,9 +62,20 @@ class ButtonItem extends CssItemBase
           design_bg_color4_webkit_flag: false
         }
       }
+      modifiables: {
+        backgroundColor: {
+          name: "Background Color"
+          default: 'ffffff'
+          type: 'color'
+          ja :{
+            name: "背景色"
+          }
+        }
+      }
       methods: {
         defaultClick: {
           actionType: 'click'
+          isCssAnimation: true
           clickAnimationDuration: 0.5
           options: {
             id: 'defaultClick'
@@ -93,7 +104,29 @@ class ButtonItem extends CssItemBase
           }
           options: {
             id: 'changeColorScroll_Design'
+            name: 'Changing color by scroll'
+          }
+        }
+
+        changeColorClick: {
+          actionType: 'click'
+          clickAnimationDuration: 0.5
+          options: {
+            id: 'changeColorClick_Design'
             name: 'Changing color by click'
+            ja: {
+              name: 'クリックで色変更'
+            }
+          }
+          modifiables: {
+            backgroundColor: {
+              name: "Background Color"
+              type: 'color'
+              varAutoChange: true
+              ja :{
+                name: "背景色"
+              }
+            }
           }
         }
       }
@@ -112,6 +145,8 @@ class ButtonItem extends CssItemBase
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
+    else if methodName == 'changeColorClick'
+      @backgroundColor = 'ffffff'
 
   # イベント後の表示状態にする
   updateEventAfter: ->
@@ -133,6 +168,13 @@ class ButtonItem extends CssItemBase
       if complete?
         complete()
     )
+
+  # *アクションイベント
+  changeColorClick: (e, complete) =>
+    @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
+    @isFinishedEvent = true
+    if complete?
+      complete()
 
   # CSSアニメーションの定義(必要な場合)
   cssAnimationElement : ->
@@ -200,8 +242,9 @@ class ButtonItem extends CssItemBase
     if @getEventMethodName() == 'defaultClick'
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
-
-
+    else if @getEventMethodName() == 'changeColorClick'
+      # ボタンを表示
+      @getJQueryElement().css('opacity', 1)
 
 Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)
 

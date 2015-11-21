@@ -470,17 +470,18 @@ class EventConfig
   # 変数編集コンフィグの初期化
   initEventVarModifyConfig: (obj) ->
     mod = obj.constructor.actionProperties.methods[@methodName].modifiables
-    for varName, v of mod
-      if @modifiableVars? && @modifiableVars[varName]?
-        defaultValue = @modifiableVars[varName]
-      else
-        defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
-      if v.type == Constant.ItemDesignOptionType.NUMBER
-        @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
-      else if v.type == Constant.ItemDesignOptionType.STRING
-        @settingModifiableString(varName, defaultValue)
-      else if v.type == Constant.ItemDesignOptionType.COLOR
-        @settingModifiableColor(varName, defaultValue)
+    if mod?
+      for varName, v of mod
+        if @modifiableVars? && @modifiableVars[varName]?
+          defaultValue = @modifiableVars[varName]
+        else
+          defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+        if v.type == Constant.ItemDesignOptionType.NUMBER
+          @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
+        else if v.type == Constant.ItemDesignOptionType.STRING
+          @settingModifiableString(varName, defaultValue)
+        else if v.type == Constant.ItemDesignOptionType.COLOR
+          @settingModifiableColor(varName, defaultValue)
 
   # 変数編集スライダーの作成
   # @param [Int] varName 変数名
@@ -532,6 +533,3 @@ class EventConfig
           @modifiableVars = {}
         @modifiableVars[varName] = b
     )
-
-
-

@@ -61,7 +61,7 @@ class EventBase extends Extend
 
       # イベント初期化
       @initEvent(event)
-      @willChapter()
+      @updateEventBefore()
       if @ instanceof CssItemBase
         @appendAnimationCssIfNeeded()
 
@@ -103,6 +103,8 @@ class EventBase extends Extend
               clearTimeout(@previewTimer)
               @previewTimer = null
             @previewTimer = setTimeout( =>
+              # 状態を変更前に戻す
+              @resetEvent()
               _draw.call(@)
             , loopDelay)
             if !@doPreviewLoop
@@ -125,6 +127,8 @@ class EventBase extends Extend
               clearTimeout(@previewTimer)
               @previewTimer = null
             @previewTimer = setTimeout( =>
+              # 状態を変更前に戻す
+              @resetEvent()
               @execMethod(null, _loop)
             , loopDelay)
           else
@@ -142,21 +146,28 @@ class EventBase extends Extend
   # プレビューを停止
   # @param [Function] callback コールバック
   stopPreview: (callback = null) ->
-    _stop = ->
-      if @previewTimer?
-        clearTimeout(@previewTimer)
-        FloatView.hide()
-        @previewTimer = null
-      if callback?
-        callback()
-
-    if @doPreviewLoop
+    if @previewTimer?
+      clearTimeout(@previewTimer)
+      FloatView.hide()
+      @previewTimer = null
       @doPreviewLoop = false
-      @previewFinished = =>
-        _stop.call(@)
-
-    else
-      _stop.call(@)
+    if callback?
+      callback()
+#    _stop = ->
+#      if @previewTimer?
+#        clearTimeout(@previewTimer)
+#        FloatView.hide()
+#        @previewTimer = null
+#      if callback?
+#        callback()
+#
+#    if @doPreviewLoop
+#      @doPreviewLoop = false
+#      @previewFinished = =>
+#        _stop.call(@)
+#
+#    else
+#      _stop.call(@)
 
   # JQueryエレメントを取得
   # @abstract
@@ -170,9 +181,6 @@ class EventBase extends Extend
 
   # チャプター開始前イベント
   willChapter: ->
-    actionType = @getEventActionType()
-    if actionType == Constant.ActionType.SCROLL
-      @scrollValue = 0
     # インスタンスの状態を保存
     PageValue.saveInstanceObjectToFootprint(@id, true, @event[EventPageValueBase.PageValueKey.DIST_ID])
     # 状態をイベント前に戻す
@@ -288,6 +296,9 @@ class EventBase extends Extend
   # イベント前の表示状態にする
   updateEventBefore: ->
     @setMiniumObject(@getMinimumObjectEventBefore())
+    actionType = @getEventActionType()
+    if actionType == Constant.ActionType.SCROLL
+      @scrollValue = 0
 
   # イベント後の表示状態にする
   updateEventAfter: ->
@@ -310,16 +321,16 @@ class EventBase extends Extend
       after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
       if before? && after?
         if immediate
-          this[varName] = after
+          @[varName] = after
         else
           if value.varAutoChange
             if value.type == Constant.ItemDesignOptionType.NUMBER
-              this[varName] = before + (after - before) * progressPercentage
+              @[varName] = before + (after - before) * progressPercentage
             else if value.type == Constant.ItemDesignOptionType.COLOR
               colorCacheVarName = "#{varName}ColorChangeCache"
-              if !this[colorCacheVarName]?
-                this[colorCacheVarName] = Common.colorChangeCacheData(before, after, @scrollLength())
-              this[varName] = this[colorCacheVarName][scrollValue]
+              if !@[colorCacheVarName]?
+                @[colorCacheVarName] = Common.colorChangeCacheData(before, after, @scrollLength())
+              @[varName] = @[colorCacheVarName][scrollValue]
 
   # クリックによるアイテム状態更新
   updateInstanceParamByClick: (immediate = false) ->
@@ -334,7 +345,7 @@ class EventBase extends Extend
       for varName, value of mod
         after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         if after?
-          this[varName] = after
+          @[varName] = after
       return
 
     count = 1
@@ -346,18 +357,18 @@ class EventBase extends Extend
         if before? && after?
           if value.varAutoChange
             if value.type == Constant.ItemDesignOptionType.NUMBER
-              this[varName] = before + (after - before) * progressPercentage
+              @[varName] = before + (after - before) * progressPercentage
             else if value.type == Constant.ItemDesignOptionType.COLOR
               colorCacheVarName = "#{varName}ColorChangeCache"
-              if !this[colorCacheVarName]?
-                this[colorCacheVarName] = Common.colorChangeCacheData(before, after, loopMax)
-              this[varName] = this[colorCacheVarName][count]
+              if !@[colorCacheVarName]?
+                @[colorCacheVarName] = Common.colorChangeCacheData(before, after, loopMax)
+              @[varName] = @[colorCacheVarName][count]
       if count >= loopMax
         clearInterval(timer)
         for varName, value of mod
           after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
           if after?
-            this[varName] = after
+            @[varName] = after
       count += 1
     , duration * 1000)
 

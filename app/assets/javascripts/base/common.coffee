@@ -826,13 +826,37 @@ class Common
   # 色変更差分のキャッシュを取得
   @colorChangeCacheData = (beforeColor, afterColor, length) ->
     ret = []
-    # 'rgb(r, g, b)'のフォーマットを分解
-    bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
-    for val, index in bColors
-      bColors[index] = parseInt(val)
-    cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
-    for val, index in cColors
-      cColors[index] = parseInt(val)
+
+    bColors = new Array(3)
+    if beforeColor.indexOf('rgb') >= 0
+      # 'rgb(r, g, b)'のフォーマットを分解
+      bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+      for val, index in bColors
+        bColors[index] = parseInt(val)
+    if beforeColor.length == 6 || (beforeColor.length == 7 && beforeColor.indexOf('#') == 0)
+      # 'xxxxxxのフォーマットを分解'
+      beforeColor = beforeColor.replace('#', '')
+      bColors[0] = beforeColor.substring(0, 2)
+      bColors[1] = beforeColor.substring(2, 4)
+      bColors[2] = beforeColor.substring(4, 6)
+      for val, index in bColors
+        bColors[index] = parseInt(val, 16)
+
+    cColors = new Array(3)
+    if afterColor.indexOf('rgb') >= 0
+      # 'rgb(r, g, b)'のフォーマットを分解
+      cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+      for val, index in cColors
+        cColors[index] = parseInt(val)
+    if afterColor.length == 6 || (afterColor.length == 7 && afterColor.indexOf('#') == 0)
+      # 'xxxxxxのフォーマットを分解'
+      afterColor = afterColor.replace('#', '')
+      cColors[0] = afterColor.substring(0, 2)
+      cColors[1] = afterColor.substring(2, 4)
+      cColors[2] = afterColor.substring(4, 6)
+      for val, index in cColors
+        cColors[index] = parseInt(val, 16)
+
     rPer = (cColors[0] - bColors[0]) / length
     gPer = (cColors[1] - bColors[1]) / length
     bPer = (cColors[2] - bColors[2]) / length
