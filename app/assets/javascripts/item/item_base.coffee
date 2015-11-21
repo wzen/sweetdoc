@@ -220,17 +220,17 @@ class ItemBase extends ItemEventBase
     @itemSize.y = parseInt(y)
 
   # スクロールによるアイテム状態更新
-  updateInstanceParamByScroll: (scrollValue, immediate = false)->
-    super(scrollValue, immediate)
-    @updateItemSizeByScroll(scrollValue, immediate)
+  updateInstanceParamByStep: (stepValue, immediate = false)->
+    super(stepValue, immediate)
+    @updateItemSizeByStep(stepValue, immediate)
 
   # クリックによるアイテム状態更新
-  updateInstanceParamByClick: (immediate = false) ->
+  updateInstanceParamByAnimation: (immediate = false) ->
     super(immediate)
-    @updateItemSizeByClick()
+    @updateItemSizeByAnimation()
 
   # スクロールイベントでアイテム位置&サイズ更新
-  updateItemSizeByScroll: (scrollValue, immediate = false) ->
+  updateItemSizeByStep: (scrollValue, immediate = false) ->
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
     if !itemDiff? || itemDiff == 'undefined'
       # 変更なしの場合
@@ -262,7 +262,7 @@ class ItemBase extends ItemEventBase
     @updatePositionAndItemSize(itemSize, false)
 
   # クリックイベントでアイテム位置&サイズ更新
-  updateItemSizeByClick: (immediate = false) ->
+  updateItemSizeByAnimation: (immediate = false) ->
     itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
     if !itemDiff? || itemDiff == 'undefined'
       # 変更なしの場合
@@ -282,13 +282,13 @@ class ItemBase extends ItemEventBase
       @updatePositionAndItemSize(itemSize, false)
       return
 
-    clickAnimationDuration = @constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration
+    clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
     duration = 0.01
-    perX = itemDiff.x * (duration / clickAnimationDuration)
-    perY = itemDiff.y * (duration / clickAnimationDuration)
-    perW = itemDiff.w * (duration / clickAnimationDuration)
-    perH = itemDiff.h * (duration / clickAnimationDuration)
-    loopMax = Math.ceil(clickAnimationDuration/ duration)
+    perX = itemDiff.x * (duration / clickDuration)
+    perY = itemDiff.y * (duration / clickDuration)
+    perW = itemDiff.w * (duration / clickDuration)
+    perH = itemDiff.h * (duration / clickDuration)
+    loopMax = Math.ceil(clickDuration/ duration)
     count = 1
     timer = setInterval( =>
       itemSize = {

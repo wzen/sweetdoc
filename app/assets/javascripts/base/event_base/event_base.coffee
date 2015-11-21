@@ -1,11 +1,14 @@
 # イベントリスナー Extend
 class EventBase extends Extend
 
+  @CLICK_INTERVAL_DURATION = 0.01
+
   # イベントの初期化
   # @param [Object] event 設定イベント
   initEvent: (event) ->
     @event = event
     @isFinishedEvent = false
+    @skipEvent = false
     @doPreviewLoop = false
     @enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
@@ -14,6 +17,7 @@ class EventBase extends Extend
     if !@constructor.prototype[@getEventMethodName()]?
       # メソッドが見つからない場合は終了
       return
+
     # スクロールイベント
     if @getEventActionType() == Constant.ActionType.SCROLL
       @scrollEvent = @scrollHandlerFunc
@@ -50,6 +54,7 @@ class EventBase extends Extend
   resetEvent: ->
     @updateEventBefore()
     @isFinishedEvent = false
+    @skipEvent = false
 
   # プレビュー開始
   # @param [Object] event 設定イベント
@@ -148,28 +153,21 @@ class EventBase extends Extend
   # プレビューを停止
   # @param [Function] callback コールバック
   stopPreview: (callback = null) ->
-    if @previewTimer?
-      clearTimeout(@previewTimer)
-      FloatView.hide()
-      @previewTimer = null
+    _stop = ->
+      if @previewTimer?
+        clearTimeout(@previewTimer)
+        FloatView.hide()
+        @previewTimer = null
+      if callback?
+        callback()
+
+    if @doPreviewLoop
       @doPreviewLoop = false
-    if callback?
-      callback()
-#    _stop = ->
-#      if @previewTimer?
-#        clearTimeout(@previewTimer)
-#        FloatView.hide()
-#        @previewTimer = null
-#      if callback?
-#        callback()
-#
-#    if @doPreviewLoop
-#      @doPreviewLoop = false
-#      @previewFinished = =>
-#        _stop.call(@)
-#
-#    else
-#      _stop.call(@)
+      @previewFinished = =>
+        _stop.call(@)
+
+    else
+      _stop.call(@)
 
   # JQueryエレメントを取得
   # @abstract
@@ -199,13 +197,12 @@ class EventBase extends Extend
       return
 
     # メソッド共通処理
-    actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[methodName].actionType)
-    if actionType == Constant.ActionType.SCROLL
+    if !@isDrawByAnimationMethod()
       # アイテム位置&サイズ更新
-      @updateInstanceParamByScroll(params)
-    else if actionType == Constant.ActionType.CLICK
+      @updateInstanceParamByStep(params)
+    else
       setTimeout( =>
-        @updateInstanceParamByClick()
+        @updateInstanceParamByAnimation()
       , 0)
 
     (@constructor.prototype[methodName]).call(@, params, complete)
@@ -220,8 +217,8 @@ class EventBase extends Extend
       # メソッドが無い場合
       return
 
-    if @isFinishedEvent
-      # 終了済みの場合
+    if @isFinishedEvent || @skipEvent
+      # 終了済みorイベントを反応させない場合
       return
 
     # 動作済みフラグON
@@ -259,7 +256,7 @@ class EventBase extends Extend
       return
     else if @scrollValue >= ePoint
       @scrollValue = ePoint
-      if !@isFinishedEvent
+      if !@isDrawByAnimationMethod() && !@isFinishedEvent
         # 終了イベント
         @isFinishedEvent = true
         ScrollGuide.hideGuide()
@@ -270,7 +267,18 @@ class EventBase extends Extend
     @canForward = @scrollValue < ePoint
     @canReverse = @scrollValue > sPoint
 
-    @execMethod(@scrollValue - sPoint)
+    if !@isDrawByAnimationMethod()
+      # ステップ実行
+      @execMethod(@scrollValue - sPoint)
+    else
+      # アニメーション実行は1回のみ
+      @skipEvent = true
+      @execMethod( =>
+        @isFinishedEvent = true
+        ScrollGuide.hideGuide()
+        if complete?
+          complete()
+      )
 
   # スクロールの長さを取得
   # @return [Integer] スクロール長さ
@@ -282,10 +290,32 @@ class EventBase extends Extend
   # @param [Function] complete イベント終了後コールバック
   clickHandlerFunc: (e, complete = null) ->
     e.preventDefault()
+
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
-    @execMethod(e, complete)
+
+    if !@isDrawByAnimationMethod()
+      # ステップ実行
+      clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
+      stepMax = @clickDurationStepMax()
+      count = 1
+      timer = setInterval( =>
+        @execMethod(e, count)
+        count += 1
+        if stepMax > count
+          clearInterval(timer)
+          # 終了イベント
+          @isFinishedEvent = true
+          if complete?
+            complete()
+      , @constructor.CLICK_INTERVAL_DURATION)
+    else
+      # アニメーション実行
+      @execMethod(e, ->
+        if complete?
+          complete()
+      )
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->
@@ -302,18 +332,21 @@ class EventBase extends Extend
 
   # イベント後の表示状態にする
   updateEventAfter: ->
-    actionType =  Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[@getEventMethodName()].actionType)
-    if actionType == Constant.ActionType.SCROLL
-      @updateInstanceParamByScroll(null, true)
-    else if actionType == Constant.ActionType.CLICK
-      @updateInstanceParamByClick(true)
+    if !@isDrawByAnimationMethod()
+      @updateInstanceParamByStep(null, true)
+    else
+      @updateInstanceParamByAnimation(true)
     # インスタンスの状態を保存
     PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
 
-  # スクロールによるアイテム状態更新
-  updateInstanceParamByScroll: (scrollValue, immediate = false)->
+  # ステップ実行によるアイテム状態更新
+  updateInstanceParamByStep: (stepValue, immediate = false)->
+    actionType = Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[@getEventMethodName()].actionType)
+    stepMax = if actionType == Constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
+    if !stepMax?
+      stepMax = 1
     # TODO: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
-    progressPercentage = scrollValue / @scrollLength()
+    progressPercentage = stepValue / stepMax
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
     for varName, value of mod
@@ -330,15 +363,14 @@ class EventBase extends Extend
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChangeCache"
                 if !@[colorCacheVarName]?
-                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, @scrollLength())
-                @[varName] = @[colorCacheVarName][scrollValue]
+                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax)
+                @[varName] = @[colorCacheVarName][stepValue]
 
-  # クリックによるアイテム状態更新
-  updateInstanceParamByClick: (immediate = false) ->
+  # アニメーションによるアイテム状態更新
+  updateInstanceParamByAnimation: (immediate = false) ->
     # TODO: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
-    clickAnimationDuration = @constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration
-    duration = 0.01
-    loopMax = Math.ceil(clickAnimationDuration/ duration)
+    clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
+    loopMax = @clickDurationStepMax()
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
 
@@ -352,7 +384,7 @@ class EventBase extends Extend
 
     count = 1
     timer = setInterval( =>
-      progressPercentage = duration * count / clickAnimationDuration
+      progressPercentage = @constructor.CLICK_INTERVAL_DURATION * count / clickDuration
       for varName, value of mod
         if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
           before = eventBeforeObj[varName]
@@ -374,7 +406,7 @@ class EventBase extends Extend
             if after?
               @[varName] = after
       count += 1
-    , duration * 1000)
+    , @constructor.CLICK_INTERVAL_DURATION * 1000)
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか
@@ -382,3 +414,11 @@ class EventBase extends Extend
     prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     obj = @getMinimumObject()
     PageValue.setInstancePageValue(prefix_key, obj)
+
+  # メソッドがアニメーションとして実行するか
+  isDrawByAnimationMethod: ->
+    return @event[EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]? && @event[EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]
+
+  clickDurationStepMax: ->
+    clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
+    return Math.ceil(clickDuration / @constructor.CLICK_INTERVAL_DURATION)

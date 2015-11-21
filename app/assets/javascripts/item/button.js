@@ -84,8 +84,8 @@ ButtonItem = (function(superClass) {
     methods: {
       defaultClick: {
         actionType: 'click',
-        isCssAnimation: true,
-        clickAnimationDuration: 0.5,
+        isDrawByAnimation: true,
+        clickDuration: 0.5,
         options: {
           id: 'defaultClick',
           name: 'Default click action',
@@ -117,7 +117,7 @@ ButtonItem = (function(superClass) {
       },
       changeColorClick: {
         actionType: 'click',
-        clickAnimationDuration: 0.5,
+        clickDuration: 0.5,
         options: {
           id: 'changeColorClick_Design',
           name: 'Changing color by click',
@@ -207,7 +207,7 @@ ButtonItem = (function(superClass) {
     keyframe = keyFrameName + " {\n  0% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  40% {\n    top: " + (parseInt(top) + 10) + "px;\n    left: " + (parseInt(left) + 10) + "px;\n    width: " + (parseInt(width) - 20) + "px;\n    height: " + (parseInt(height) - 20) + "px;\n  }\n  80% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  90% {\n    top: " + (parseInt(top) + 5) + "px;\n    left: " + (parseInt(left) + 5) + "px;\n    width: " + (parseInt(width) - 10) + "px;\n    height: " + (parseInt(height) - 10) + "px;\n  }\n  100% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n}";
     webkitKeyframe = "@-webkit-keyframes " + keyframe;
     mozKeyframe = "@-moz-keyframes " + keyframe;
-    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration + "s;\n-moz-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration + "s;\n}";
+    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION] + "s;\n-moz-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION] + "s;\n}";
     return webkitKeyframe + " " + mozKeyframe + " " + css;
   };
 

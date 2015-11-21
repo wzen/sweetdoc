@@ -75,8 +75,8 @@ class ButtonItem extends CssItemBase
       methods: {
         defaultClick: {
           actionType: 'click'
-          isCssAnimation: true
-          clickAnimationDuration: 0.5
+          isDrawByAnimation: true
+          clickDuration: 0.5
           options: {
             id: 'defaultClick'
             name: 'Default click action'
@@ -110,7 +110,7 @@ class ButtonItem extends CssItemBase
 
         changeColorClick: {
           actionType: 'click'
-          clickAnimationDuration: 0.5
+          clickDuration: 0.5
           options: {
             id: 'changeColorClick_Design'
             name: 'Changing color by click'
@@ -231,8 +231,8 @@ class ButtonItem extends CssItemBase
     {
     -webkit-animation-name: #{keyFrameName};
     -moz-animation-name: #{keyFrameName};
-    -webkit-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration}s;
-    -moz-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()].clickAnimationDuration}s;
+    -webkit-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]}s;
+    -moz-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]}s;
     }
     """
     return "#{webkitKeyframe} #{mozKeyframe} #{css}"

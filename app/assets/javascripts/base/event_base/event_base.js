@@ -10,9 +10,12 @@ EventBase = (function(superClass) {
     return EventBase.__super__.constructor.apply(this, arguments);
   }
 
+  EventBase.CLICK_INTERVAL_DURATION = 0.01;
+
   EventBase.prototype.initEvent = function(event) {
     this.event = event;
     this.isFinishedEvent = false;
+    this.skipEvent = false;
     this.doPreviewLoop = false;
     this.enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this.forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
@@ -54,7 +57,8 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.resetEvent = function() {
     this.updateEventBefore();
-    return this.isFinishedEvent = false;
+    this.isFinishedEvent = false;
+    return this.skipEvent = false;
   };
 
   EventBase.prototype.preview = function(event) {
@@ -166,17 +170,29 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.stopPreview = function(callback) {
+    var _stop;
     if (callback == null) {
       callback = null;
     }
-    if (this.previewTimer != null) {
-      clearTimeout(this.previewTimer);
-      FloatView.hide();
-      this.previewTimer = null;
+    _stop = function() {
+      if (this.previewTimer != null) {
+        clearTimeout(this.previewTimer);
+        FloatView.hide();
+        this.previewTimer = null;
+      }
+      if (callback != null) {
+        return callback();
+      }
+    };
+    if (this.doPreviewLoop) {
       this.doPreviewLoop = false;
-    }
-    if (callback != null) {
-      return callback();
+      return this.previewFinished = (function(_this) {
+        return function() {
+          return _stop.call(_this);
+        };
+      })(this);
+    } else {
+      return _stop.call(this);
     }
   };
 
@@ -199,7 +215,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.execMethod = function(params, complete) {
-    var actionType, methodName;
+    var methodName;
     if (complete == null) {
       complete = null;
     }
@@ -207,13 +223,12 @@ EventBase = (function(superClass) {
     if (methodName == null) {
       return;
     }
-    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[methodName].actionType);
-    if (actionType === Constant.ActionType.SCROLL) {
-      this.updateInstanceParamByScroll(params);
-    } else if (actionType === Constant.ActionType.CLICK) {
+    if (!this.isDrawByAnimationMethod()) {
+      this.updateInstanceParamByStep(params);
+    } else {
       setTimeout((function(_this) {
         return function() {
-          return _this.updateInstanceParamByClick();
+          return _this.updateInstanceParamByAnimation();
         };
       })(this), 0);
     }
@@ -229,7 +244,7 @@ EventBase = (function(superClass) {
     if (methodName == null) {
       return;
     }
-    if (this.isFinishedEvent) {
+    if (this.isFinishedEvent || this.skipEvent) {
       return;
     }
     if (window.eventAction != null) {
@@ -261,7 +276,7 @@ EventBase = (function(superClass) {
       return;
     } else if (this.scrollValue >= ePoint) {
       this.scrollValue = ePoint;
-      if (!this.isFinishedEvent) {
+      if (!this.isDrawByAnimationMethod() && !this.isFinishedEvent) {
         this.isFinishedEvent = true;
         ScrollGuide.hideGuide();
         if (complete != null) {
@@ -272,7 +287,20 @@ EventBase = (function(superClass) {
     }
     this.canForward = this.scrollValue < ePoint;
     this.canReverse = this.scrollValue > sPoint;
-    return this.execMethod(this.scrollValue - sPoint);
+    if (!this.isDrawByAnimationMethod()) {
+      return this.execMethod(this.scrollValue - sPoint);
+    } else {
+      this.skipEvent = true;
+      return this.execMethod((function(_this) {
+        return function() {
+          _this.isFinishedEvent = true;
+          ScrollGuide.hideGuide();
+          if (complete != null) {
+            return complete();
+          }
+        };
+      })(this));
+    }
   };
 
   EventBase.prototype.scrollLength = function() {
@@ -280,6 +308,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.clickHandlerFunc = function(e, complete) {
+    var clickDuration, count, stepMax, timer;
     if (complete == null) {
       complete = null;
     }
@@ -287,7 +316,30 @@ EventBase = (function(superClass) {
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    return this.execMethod(e, complete);
+    if (!this.isDrawByAnimationMethod()) {
+      clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
+      stepMax = this.clickDurationStepMax();
+      count = 1;
+      return timer = setInterval((function(_this) {
+        return function() {
+          _this.execMethod(e, count);
+          count += 1;
+          if (stepMax > count) {
+            clearInterval(timer);
+            _this.isFinishedEvent = true;
+            if (complete != null) {
+              return complete();
+            }
+          }
+        };
+      })(this), this.constructor.CLICK_INTERVAL_DURATION);
+    } else {
+      return this.execMethod(e, function() {
+        if (complete != null) {
+          return complete();
+        }
+      });
+    }
   };
 
   EventBase.prototype.getMinimumObjectEventBefore = function() {
@@ -307,22 +359,25 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventAfter = function() {
-    var actionType;
-    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
-    if (actionType === Constant.ActionType.SCROLL) {
-      this.updateInstanceParamByScroll(null, true);
-    } else if (actionType === Constant.ActionType.CLICK) {
-      this.updateInstanceParamByClick(true);
+    if (!this.isDrawByAnimationMethod()) {
+      this.updateInstanceParamByStep(null, true);
+    } else {
+      this.updateInstanceParamByAnimation(true);
     }
     return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
-  EventBase.prototype.updateInstanceParamByScroll = function(scrollValue, immediate) {
-    var after, before, colorCacheVarName, eventBeforeObj, mod, progressPercentage, results, value, varName;
+  EventBase.prototype.updateInstanceParamByStep = function(stepValue, immediate) {
+    var actionType, after, before, colorCacheVarName, eventBeforeObj, mod, progressPercentage, results, stepMax, value, varName;
     if (immediate == null) {
       immediate = false;
     }
-    progressPercentage = scrollValue / this.scrollLength();
+    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
+    stepMax = actionType === Constant.ActionType.SCROLL ? this.scrollLength() : this.clickDurationStepMax();
+    if (stepMax == null) {
+      stepMax = 1;
+    }
+    progressPercentage = stepValue / stepMax;
     eventBeforeObj = this.getMinimumObjectEventBefore();
     mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
     results = [];
@@ -341,9 +396,9 @@ EventBase = (function(superClass) {
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChangeCache";
                 if (this[colorCacheVarName] == null) {
-                  this[colorCacheVarName] = Common.colorChangeCacheData(before, after, this.scrollLength());
+                  this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax);
                 }
-                results.push(this[varName] = this[colorCacheVarName][scrollValue]);
+                results.push(this[varName] = this[colorCacheVarName][stepValue]);
               } else {
                 results.push(void 0);
               }
@@ -361,14 +416,13 @@ EventBase = (function(superClass) {
     return results;
   };
 
-  EventBase.prototype.updateInstanceParamByClick = function(immediate) {
-    var after, clickAnimationDuration, count, duration, eventBeforeObj, loopMax, mod, timer, value, varName;
+  EventBase.prototype.updateInstanceParamByAnimation = function(immediate) {
+    var after, clickDuration, count, eventBeforeObj, loopMax, mod, timer, value, varName;
     if (immediate == null) {
       immediate = false;
     }
-    clickAnimationDuration = this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration;
-    duration = 0.01;
-    loopMax = Math.ceil(clickAnimationDuration / duration);
+    clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
+    loopMax = this.clickDurationStepMax();
     eventBeforeObj = this.getMinimumObjectEventBefore();
     mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
     if (immediate) {
@@ -387,7 +441,7 @@ EventBase = (function(superClass) {
     return timer = setInterval((function(_this) {
       return function() {
         var before, colorCacheVarName, progressPercentage;
-        progressPercentage = duration * count / clickAnimationDuration;
+        progressPercentage = _this.constructor.CLICK_INTERVAL_DURATION * count / clickDuration;
         for (varName in mod) {
           value = mod[varName];
           if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
@@ -422,7 +476,7 @@ EventBase = (function(superClass) {
         }
         return count += 1;
       };
-    })(this), duration * 1000);
+    })(this), this.constructor.CLICK_INTERVAL_DURATION * 1000);
   };
 
   EventBase.prototype.setItemAllPropToPageValue = function(isCache) {
@@ -433,6 +487,16 @@ EventBase = (function(superClass) {
     prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
     obj = this.getMinimumObject();
     return PageValue.setInstancePageValue(prefix_key, obj);
+  };
+
+  EventBase.prototype.isDrawByAnimationMethod = function() {
+    return (this.event[EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION] != null) && this.event[EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION];
+  };
+
+  EventBase.prototype.clickDurationStepMax = function() {
+    var clickDuration;
+    clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
+    return Math.ceil(clickDuration / this.constructor.CLICK_INTERVAL_DURATION);
   };
 
   return EventBase;

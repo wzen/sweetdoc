@@ -286,6 +286,8 @@ class Const
     SCROLL_FORWARD_DIRECTIONS = 'scroll_forward_directions'
     CHANGE_FORKNUM = 'change_forknum'
     MODIFIABLE_VARS = 'modifiable_vars'
+    IS_DRAW_BY_ANIMATION = 'isDrawByAnimation'
+    CLICK_DURATION = 'clickDuration'
   end
 
   class UserPageValue

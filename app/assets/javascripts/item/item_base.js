@@ -247,23 +247,23 @@ ItemBase = (function(superClass) {
     return this.itemSize.y = parseInt(y);
   };
 
-  ItemBase.prototype.updateInstanceParamByScroll = function(scrollValue, immediate) {
+  ItemBase.prototype.updateInstanceParamByStep = function(stepValue, immediate) {
     if (immediate == null) {
       immediate = false;
     }
-    ItemBase.__super__.updateInstanceParamByScroll.call(this, scrollValue, immediate);
-    return this.updateItemSizeByScroll(scrollValue, immediate);
+    ItemBase.__super__.updateInstanceParamByStep.call(this, stepValue, immediate);
+    return this.updateItemSizeByStep(stepValue, immediate);
   };
 
-  ItemBase.prototype.updateInstanceParamByClick = function(immediate) {
+  ItemBase.prototype.updateInstanceParamByAnimation = function(immediate) {
     if (immediate == null) {
       immediate = false;
     }
-    ItemBase.__super__.updateInstanceParamByClick.call(this, immediate);
-    return this.updateItemSizeByClick();
+    ItemBase.__super__.updateInstanceParamByAnimation.call(this, immediate);
+    return this.updateItemSizeByAnimation();
   };
 
-  ItemBase.prototype.updateItemSizeByScroll = function(scrollValue, immediate) {
+  ItemBase.prototype.updateItemSizeByStep = function(scrollValue, immediate) {
     var itemDiff, itemSize, originalItemElementSize, progressPercentage, scrollEnd, scrollStart;
     if (immediate == null) {
       immediate = false;
@@ -298,8 +298,8 @@ ItemBase = (function(superClass) {
     return this.updatePositionAndItemSize(itemSize, false);
   };
 
-  ItemBase.prototype.updateItemSizeByClick = function(immediate) {
-    var clickAnimationDuration, count, duration, itemDiff, itemSize, loopMax, originalItemElementSize, perH, perW, perX, perY, timer;
+  ItemBase.prototype.updateItemSizeByAnimation = function(immediate) {
+    var clickDuration, count, duration, itemDiff, itemSize, loopMax, originalItemElementSize, perH, perW, perX, perY, timer;
     if (immediate == null) {
       immediate = false;
     }
@@ -321,13 +321,13 @@ ItemBase = (function(superClass) {
       this.updatePositionAndItemSize(itemSize, false);
       return;
     }
-    clickAnimationDuration = this.constructor.actionProperties.methods[this.getEventMethodName()].clickAnimationDuration;
+    clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
     duration = 0.01;
-    perX = itemDiff.x * (duration / clickAnimationDuration);
-    perY = itemDiff.y * (duration / clickAnimationDuration);
-    perW = itemDiff.w * (duration / clickAnimationDuration);
-    perH = itemDiff.h * (duration / clickAnimationDuration);
-    loopMax = Math.ceil(clickAnimationDuration / duration);
+    perX = itemDiff.x * (duration / clickDuration);
+    perY = itemDiff.y * (duration / clickDuration);
+    perW = itemDiff.w * (duration / clickDuration);
+    perH = itemDiff.h * (duration / clickDuration);
+    loopMax = Math.ceil(clickDuration / duration);
     count = 1;
     return timer = setInterval((function(_this) {
       return function() {

@@ -47,6 +47,10 @@ EventPageValueBase = (function() {
 
       PageValueKey.MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS;
 
+      PageValueKey.IS_DRAW_BY_ANIMATION = constant.EventPageValueKey.IS_DRAW_BY_ANIMATION;
+
+      PageValueKey.CLICK_DURATION = constant.EventPageValueKey.CLICK_DURATION;
+
       return PageValueKey;
 
     })();
