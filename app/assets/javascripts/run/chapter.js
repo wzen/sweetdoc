@@ -27,6 +27,7 @@ Chapter = (function() {
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
       event.initEvent(this.eventList[idx]);
+      PageValue.saveInstanceObjectToFootprint(this.id, true, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
       event.willChapter();
       this.doMoveChapter = false;
     }

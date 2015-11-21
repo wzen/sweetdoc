@@ -53,7 +53,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.resetEvent = function() {
-    this.updateEventBefore();
+    this.willChapter();
     return this.isFinishedEvent = false;
   };
 
@@ -65,7 +65,7 @@ EventBase = (function(superClass) {
       loopDelay = 1000;
       loopMaxCount = 5;
       this.initEvent(event);
-      this.updateEventBefore();
+      this.willChapter();
       if (this instanceof CssItemBase) {
         this.appendAnimationCssIfNeeded();
       }
@@ -189,7 +189,6 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.willChapter = function() {
-    PageValue.saveInstanceObjectToFootprint(this.id, true, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
     return this.updateEventBefore();
   };
 
@@ -327,27 +326,31 @@ EventBase = (function(superClass) {
     results = [];
     for (varName in mod) {
       value = mod[varName];
-      before = eventBeforeObj[varName];
-      after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-      if ((before != null) && (after != null)) {
-        if (immediate) {
-          results.push(this[varName] = after);
-        } else {
-          if (value.varAutoChange) {
-            if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-              results.push(this[varName] = before + (after - before) * progressPercentage);
-            } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-              colorCacheVarName = varName + "ColorChangeCache";
-              if (this[colorCacheVarName] == null) {
-                this[colorCacheVarName] = Common.colorChangeCacheData(before, after, this.scrollLength());
+      if ((this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+        before = eventBeforeObj[varName];
+        after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+        if ((before != null) && (after != null)) {
+          if (immediate) {
+            results.push(this[varName] = after);
+          } else {
+            if (value.varAutoChange) {
+              if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+                results.push(this[varName] = before + (after - before) * progressPercentage);
+              } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+                colorCacheVarName = varName + "ColorChangeCache";
+                if (this[colorCacheVarName] == null) {
+                  this[colorCacheVarName] = Common.colorChangeCacheData(before, after, this.scrollLength());
+                }
+                results.push(this[varName] = this[colorCacheVarName][scrollValue]);
+              } else {
+                results.push(void 0);
               }
-              results.push(this[varName] = this[colorCacheVarName][scrollValue]);
             } else {
               results.push(void 0);
             }
-          } else {
-            results.push(void 0);
           }
+        } else {
+          results.push(void 0);
         }
       } else {
         results.push(void 0);
@@ -369,9 +372,11 @@ EventBase = (function(superClass) {
     if (immediate) {
       for (varName in mod) {
         value = mod[varName];
-        after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-        if (after != null) {
-          this[varName] = after;
+        if ((this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+          after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+          if (after != null) {
+            this[varName] = after;
+          }
         }
       }
       return;
@@ -383,18 +388,20 @@ EventBase = (function(superClass) {
         progressPercentage = duration * count / clickAnimationDuration;
         for (varName in mod) {
           value = mod[varName];
-          before = eventBeforeObj[varName];
-          after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-          if ((before != null) && (after != null)) {
-            if (value.varAutoChange) {
-              if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-                _this[varName] = before + (after - before) * progressPercentage;
-              } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-                colorCacheVarName = varName + "ColorChangeCache";
-                if (_this[colorCacheVarName] == null) {
-                  _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, loopMax);
+          if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+            before = eventBeforeObj[varName];
+            after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+            if ((before != null) && (after != null)) {
+              if (value.varAutoChange) {
+                if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+                  _this[varName] = before + (after - before) * progressPercentage;
+                } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+                  colorCacheVarName = varName + "ColorChangeCache";
+                  if (_this[colorCacheVarName] == null) {
+                    _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, loopMax);
+                  }
+                  _this[varName] = _this[colorCacheVarName][count];
                 }
-                _this[varName] = _this[colorCacheVarName][count];
               }
             }
           }
@@ -403,9 +410,11 @@ EventBase = (function(superClass) {
           clearInterval(timer);
           for (varName in mod) {
             value = mod[varName];
-            after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
-            if (after != null) {
-              _this[varName] = after;
+            if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+              after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+              if (after != null) {
+                _this[varName] = after;
+              }
             }
           }
         }

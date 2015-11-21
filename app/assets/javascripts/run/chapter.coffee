@@ -23,6 +23,8 @@ class Chapter
     # イベントのwillChapter呼び出し & CSS追加
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
+      # インスタンスの状態を保存
+      PageValue.saveInstanceObjectToFootprint(@id, true, @event[EventPageValueBase.PageValueKey.DIST_ID])
       event.willChapter()
       @doMoveChapter = false
 
