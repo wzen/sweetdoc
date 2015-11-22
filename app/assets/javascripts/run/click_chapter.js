@@ -12,15 +12,15 @@ ClickChapter = (function(superClass) {
   }
 
   ClickChapter.prototype.willChapter = function() {
-    var self;
     ClickChapter.__super__.willChapter.call(this);
-    self = this;
-    this.eventObjList.forEach(function(event) {
-      event.getJQueryElement().off('click');
-      return event.getJQueryElement().on('click', function(e) {
-        return self.clickEvent(e);
-      });
-    });
+    this.eventObjList.forEach((function(_this) {
+      return function(event) {
+        event.getJQueryElement().off('click');
+        return event.getJQueryElement().on('click', function(e) {
+          return _this.clickEvent(e);
+        });
+      };
+    })(this));
     this.floatAllChapterEvents();
     return this.showGuide();
   };

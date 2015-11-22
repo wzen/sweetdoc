@@ -78,7 +78,7 @@ EventBase = (function(superClass) {
       loopCount = 0;
       this.previewTimer = null;
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW);
-      if (actionType === Constant.ActionType.SCROLL) {
+      if (!this.isDrawByAnimationMethod()) {
         p = 0;
         _draw = (function(_this) {
           return function() {
@@ -88,7 +88,9 @@ EventBase = (function(superClass) {
                 _this.previewTimer = null;
               }
               return _this.previewTimer = setTimeout(function() {
-                _this.execMethod(p);
+                _this.execMethod({
+                  step: p
+                });
                 p += 1;
                 if (p >= _this.scrollLength()) {
                   p = 0;
@@ -133,7 +135,7 @@ EventBase = (function(superClass) {
           };
         })(this);
         return _draw.call(this);
-      } else if (actionType === Constant.ActionType.CLICK) {
+      } else {
         _loop = (function(_this) {
           return function() {
             if (_this.doPreviewLoop) {
@@ -148,7 +150,9 @@ EventBase = (function(superClass) {
               return _this.previewTimer = setTimeout(function() {
                 _this.resetEvent();
                 _this.willChapter();
-                return _this.execMethod(null, _loop);
+                return _this.execMethod({
+                  complete: _loop
+                });
               }, loopDelay);
             } else {
               if (_this.previewFinished != null) {
@@ -158,7 +162,9 @@ EventBase = (function(superClass) {
             }
           };
         })(this);
-        return this.execMethod(null, _loop);
+        return this.execMethod({
+          complete: _loop
+        });
       }
     };
     return this.stopPreview((function(_this) {
@@ -288,18 +294,20 @@ EventBase = (function(superClass) {
     this.canForward = this.scrollValue < ePoint;
     this.canReverse = this.scrollValue > sPoint;
     if (!this.isDrawByAnimationMethod()) {
-      return this.execMethod(this.scrollValue - sPoint);
+      return this.execMethod({
+        step: this.scrollValue - sPoint
+      });
     } else {
       this.skipEvent = true;
-      return this.execMethod((function(_this) {
-        return function() {
-          _this.isFinishedEvent = true;
+      return this.execMethod({
+        complete: function() {
+          this.isFinishedEvent = true;
           ScrollGuide.hideGuide();
           if (complete != null) {
             return complete();
           }
-        };
-      })(this));
+        }
+      });
     }
   };
 
@@ -322,7 +330,9 @@ EventBase = (function(superClass) {
       count = 1;
       return timer = setInterval((function(_this) {
         return function() {
-          _this.execMethod(e, count);
+          _this.execMethod({
+            step: count
+          });
           count += 1;
           if (stepMax > count) {
             clearInterval(timer);
@@ -334,10 +344,8 @@ EventBase = (function(superClass) {
         };
       })(this), this.constructor.CLICK_INTERVAL_DURATION);
     } else {
-      return this.execMethod(e, function() {
-        if (complete != null) {
-          return complete();
-        }
+      return this.execMethod({
+        complete: complete
       });
     }
   };

@@ -12,11 +12,10 @@ class ClickChapter extends Chapter
     super()
 
     # イベント設定
-    self = @
-    @eventObjList.forEach((event) ->
+    @eventObjList.forEach((event) =>
       event.getJQueryElement().off('click')
-      event.getJQueryElement().on('click', (e) ->
-        self.clickEvent(e)
+      event.getJQueryElement().on('click', (e) =>
+        @clickEvent(e)
       )
     )
     @floatAllChapterEvents()

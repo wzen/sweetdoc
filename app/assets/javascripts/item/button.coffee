@@ -157,7 +157,7 @@ class ButtonItem extends CssItemBase
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
 
   # 共通クリックイベント ※アクションイベント
-  defaultClick : (e, complete) =>
+  defaultClick : (opt) ->
     # ボタン凹むアクション
     @getJQueryElement().find('.css_item:first').addClass('defaultClick_' + @id)
     @getJQueryElement().off('webkitAnimationEnd animationend')
@@ -165,16 +165,16 @@ class ButtonItem extends CssItemBase
       #console.log('css-anim end')
       @getJQueryElement().find('.css_item:first').removeClass('defaultClick_' + @id)
       @isFinishedEvent = true
-      if complete?
-        complete()
+      if opt.complete?
+        opt.complete()
     )
 
   # *アクションイベント
-  changeColorClick: (e, complete) =>
+  changeColorClick: (opt) ->
     @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
     @isFinishedEvent = true
-    if complete?
-      complete()
+    if opt.complete?
+      opt.complete()
 
   # CSSアニメーションの定義(必要な場合)
   cssAnimationElement : ->

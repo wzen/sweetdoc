@@ -218,9 +218,9 @@ ArrowItem = (function(superClass) {
     }
   };
 
-  ArrowItem.prototype.scrollDraw = function(scrollValue) {
+  ArrowItem.prototype.scrollDraw = function(opt) {
     var j, len, r, ref;
-    r = scrollValue / this.scrollLength();
+    r = opt.step / this.scrollLength();
     this.resetDrawPath();
     this.restoreAllNewDrawingSurface();
     ref = this.coodRegist.slice(0, parseInt((this.coodRegist.length - 1) * r));

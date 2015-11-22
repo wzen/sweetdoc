@@ -77,7 +77,7 @@ class EventBase extends Extend
       @previewTimer = null
       # FloatView表示
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW)
-      if actionType == Constant.ActionType.SCROLL
+      if !@isDrawByAnimationMethod()
         p = 0
         _draw = =>
           if @doPreviewLoop
@@ -85,7 +85,7 @@ class EventBase extends Extend
               clearTimeout(@previewTimer)
               @previewTimer = null
             @previewTimer = setTimeout( =>
-              @execMethod(p)
+              @execMethod({step: p})
               p += 1
               if p >= @scrollLength()
                 p = 0
@@ -122,7 +122,7 @@ class EventBase extends Extend
 
         _draw.call(@)
 
-      else if actionType == Constant.ActionType.CLICK
+      else
         _loop = =>
           if @doPreviewLoop
             loopCount += 1
@@ -136,14 +136,14 @@ class EventBase extends Extend
               # 状態を変更前に戻す
               @resetEvent()
               @willChapter()
-              @execMethod(null, _loop)
+              @execMethod({complete: _loop})
             , loopDelay)
           else
             if @previewFinished?
               @previewFinished()
               @previewFinished = null
 
-        @execMethod(null, _loop)
+        @execMethod({complete: _loop})
 
     @stopPreview( =>
       window.runningPreview = true
@@ -269,16 +269,17 @@ class EventBase extends Extend
 
     if !@isDrawByAnimationMethod()
       # ステップ実行
-      @execMethod(@scrollValue - sPoint)
+      @execMethod({step: @scrollValue - sPoint})
     else
       # アニメーション実行は1回のみ
       @skipEvent = true
-      @execMethod( =>
-        @isFinishedEvent = true
-        ScrollGuide.hideGuide()
-        if complete?
-          complete()
-      )
+      @execMethod({
+        complete: ->
+          @isFinishedEvent = true
+          ScrollGuide.hideGuide()
+          if complete?
+            complete()
+      })
 
   # スクロールの長さを取得
   # @return [Integer] スクロール長さ
@@ -301,7 +302,7 @@ class EventBase extends Extend
       stepMax = @clickDurationStepMax()
       count = 1
       timer = setInterval( =>
-        @execMethod(e, count)
+        @execMethod({step: count})
         count += 1
         if stepMax > count
           clearInterval(timer)
@@ -312,10 +313,7 @@ class EventBase extends Extend
       , @constructor.CLICK_INTERVAL_DURATION)
     else
       # アニメーション実行
-      @execMethod(e, ->
-        if complete?
-          complete()
-      )
+      @execMethod({complete: complete})
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->

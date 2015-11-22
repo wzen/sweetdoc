@@ -223,9 +223,9 @@ class ArrowItem extends CanvasItemBase
 
   # スクロールイベント ※アクションイベント
   # @param [Integer] scrollValue スクロール値
-  scrollDraw : (scrollValue) ->
+  scrollDraw : (opt) ->
     #console.log("scrollY: #{@scrollValue}")
-    r = scrollValue / @scrollLength()
+    r = opt.step / @scrollLength()
 
     @resetDrawPath()
     @restoreAllNewDrawingSurface()
