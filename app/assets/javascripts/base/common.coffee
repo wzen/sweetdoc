@@ -824,7 +824,7 @@ class Common
     element.contextmenu(data)
 
   # 色変更差分のキャッシュを取得
-  @colorChangeCacheData = (beforeColor, afterColor, length) ->
+  @colorChangeCacheData = (beforeColor, afterColor, length, isOutputHex = true) ->
     ret = []
 
     bColors = new Array(3)
@@ -867,8 +867,11 @@ class Common
       r = parseInt(bColors[0] + rp)
       g = parseInt(bColors[1] + gp)
       b = parseInt(bColors[2] + bp)
-      rgb = "rgb(#{r},#{g},#{b})"
-      ret[i] = rgb
+      if isOutputHex
+        o = "#{r.toString(16)}#{g.toString(16)}#{b.toString(16)}"
+      else
+        o = "rgb(#{r},#{g},#{b})"
+      ret[i] = o
       rp += rPer
       gp += gPer
       bp += bPer

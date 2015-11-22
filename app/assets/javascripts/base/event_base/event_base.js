@@ -10,7 +10,7 @@ EventBase = (function(superClass) {
     return EventBase.__super__.constructor.apply(this, arguments);
   }
 
-  EventBase.CLICK_INTERVAL_DURATION = 0.01;
+  EventBase.STEP_INTERVAL_DURATION = 0.01;
 
   EventBase.prototype.initEvent = function(event) {
     this.event = event;
@@ -64,16 +64,16 @@ EventBase = (function(superClass) {
   EventBase.prototype.preview = function(event) {
     var _preview;
     _preview = function(event) {
-      var _draw, _loop, actionType, drawDelay, loopCount, loopDelay, loopMaxCount, p;
-      drawDelay = 30;
+      var _draw, _loop, drawDelay, loopCount, loopDelay, loopMaxCount, p, stepMax;
+      drawDelay = this.constructor.STEP_INTERVAL_DURATION * 1000;
       loopDelay = 1000;
       loopMaxCount = 5;
       this.initEvent(event);
+      stepMax = this.stepMax();
       this.willChapter();
       if (this instanceof CssItemBase) {
         this.appendAnimationCssIfNeeded();
       }
-      actionType = this.getEventActionType();
       this.doPreviewLoop = true;
       loopCount = 0;
       this.previewTimer = null;
@@ -92,7 +92,7 @@ EventBase = (function(superClass) {
                   step: p
                 });
                 p += 1;
-                if (p >= _this.scrollLength()) {
+                if (p >= stepMax) {
                   p = 0;
                   return _loop.call(_this);
                 } else {
@@ -220,17 +220,14 @@ EventBase = (function(superClass) {
     return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
-  EventBase.prototype.execMethod = function(params, complete) {
+  EventBase.prototype.execMethod = function(opt) {
     var methodName;
-    if (complete == null) {
-      complete = null;
-    }
     methodName = this.getEventMethodName();
     if (methodName == null) {
       return;
     }
     if (!this.isDrawByAnimationMethod()) {
-      this.updateInstanceParamByStep(params);
+      this.updateInstanceParamByStep(opt.step);
     } else {
       setTimeout((function(_this) {
         return function() {
@@ -238,7 +235,7 @@ EventBase = (function(superClass) {
         };
       })(this), 0);
     }
-    return this.constructor.prototype[methodName].call(this, params, complete);
+    return this.constructor.prototype[methodName].call(this, opt);
   };
 
   EventBase.prototype.scrollHandlerFunc = function(x, y, complete) {
@@ -321,12 +318,16 @@ EventBase = (function(superClass) {
       complete = null;
     }
     e.preventDefault();
+    if (this.isFinishedEvent || this.skipEvent) {
+      return;
+    }
+    this.skipEvent = true;
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
     if (!this.isDrawByAnimationMethod()) {
       clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
-      stepMax = this.clickDurationStepMax();
+      stepMax = this.stepMax();
       count = 1;
       return timer = setInterval((function(_this) {
         return function() {
@@ -342,7 +343,7 @@ EventBase = (function(superClass) {
             }
           }
         };
-      })(this), this.constructor.CLICK_INTERVAL_DURATION);
+      })(this), this.constructor.STEP_INTERVAL_DURATION);
     } else {
       return this.execMethod({
         complete: complete
@@ -376,12 +377,11 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateInstanceParamByStep = function(stepValue, immediate) {
-    var actionType, after, before, colorCacheVarName, eventBeforeObj, mod, progressPercentage, results, stepMax, value, varName;
+    var after, before, colorCacheVarName, eventBeforeObj, mod, progressPercentage, results, stepMax, value, varName;
     if (immediate == null) {
       immediate = false;
     }
-    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
-    stepMax = actionType === Constant.ActionType.SCROLL ? this.scrollLength() : this.clickDurationStepMax();
+    stepMax = this.stepMax();
     if (stepMax == null) {
       stepMax = 1;
     }
@@ -425,12 +425,12 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateInstanceParamByAnimation = function(immediate) {
-    var after, clickDuration, count, eventBeforeObj, loopMax, mod, timer, value, varName;
+    var after, clickDuration, count, eventBeforeObj, mod, stepMax, timer, value, varName;
     if (immediate == null) {
       immediate = false;
     }
     clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
-    loopMax = this.clickDurationStepMax();
+    stepMax = this.stepMax();
     eventBeforeObj = this.getMinimumObjectEventBefore();
     mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
     if (immediate) {
@@ -449,7 +449,7 @@ EventBase = (function(superClass) {
     return timer = setInterval((function(_this) {
       return function() {
         var before, colorCacheVarName, progressPercentage;
-        progressPercentage = _this.constructor.CLICK_INTERVAL_DURATION * count / clickDuration;
+        progressPercentage = _this.constructor.STEP_INTERVAL_DURATION * count / clickDuration;
         for (varName in mod) {
           value = mod[varName];
           if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
@@ -462,7 +462,7 @@ EventBase = (function(superClass) {
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChangeCache";
                   if (_this[colorCacheVarName] == null) {
-                    _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, loopMax);
+                    _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax);
                   }
                   _this[varName] = _this[colorCacheVarName][count];
                 }
@@ -470,7 +470,7 @@ EventBase = (function(superClass) {
             }
           }
         }
-        if (count >= loopMax) {
+        if (count >= stepMax) {
           clearInterval(timer);
           for (varName in mod) {
             value = mod[varName];
@@ -484,7 +484,7 @@ EventBase = (function(superClass) {
         }
         return count += 1;
       };
-    })(this), this.constructor.CLICK_INTERVAL_DURATION * 1000);
+    })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
   };
 
   EventBase.prototype.setItemAllPropToPageValue = function(isCache) {
@@ -498,13 +498,23 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.isDrawByAnimationMethod = function() {
-    return (this.event[EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION] != null) && this.event[EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION];
+    return (this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION] != null) && this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION];
+  };
+
+  EventBase.prototype.stepMax = function() {
+    var actionType;
+    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
+    if (actionType === Constant.ActionType.SCROLL) {
+      return this.scrollLength();
+    } else {
+      return this.clickDurationStepMax();
+    }
   };
 
   EventBase.prototype.clickDurationStepMax = function() {
     var clickDuration;
     clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
-    return Math.ceil(clickDuration / this.constructor.CLICK_INTERVAL_DURATION);
+    return Math.ceil(clickDuration / this.constructor.STEP_INTERVAL_DURATION);
   };
 
   return EventBase;

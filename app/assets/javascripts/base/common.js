@@ -992,8 +992,11 @@ Common = (function() {
     return element.contextmenu(data);
   };
 
-  Common.colorChangeCacheData = function(beforeColor, afterColor, length) {
-    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, p, r, rPer, ref, ret, rgb, rp, val;
+  Common.colorChangeCacheData = function(beforeColor, afterColor, length, isOutputHex) {
+    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, p, q, r, rPer, ref, ret, rp, val;
+    if (isOutputHex == null) {
+      isOutputHex = true;
+    }
     ret = [];
     bColors = new Array(3);
     if (beforeColor.indexOf('rgb') >= 0) {
@@ -1026,7 +1029,7 @@ Common = (function() {
       cColors[0] = afterColor.substring(0, 2);
       cColors[1] = afterColor.substring(2, 4);
       cColors[2] = afterColor.substring(4, 6);
-      for (index = o = 0, len3 = cColors.length; o < len3; index = ++o) {
+      for (index = p = 0, len3 = cColors.length; p < len3; index = ++p) {
         val = cColors[index];
         cColors[index] = parseInt(val, 16);
       }
@@ -1037,12 +1040,16 @@ Common = (function() {
     rp = rPer;
     gp = gPer;
     bp = bPer;
-    for (i = p = 0, ref = length; 0 <= ref ? p <= ref : p >= ref; i = 0 <= ref ? ++p : --p) {
+    for (i = q = 0, ref = length; 0 <= ref ? q <= ref : q >= ref; i = 0 <= ref ? ++q : --q) {
       r = parseInt(bColors[0] + rp);
       g = parseInt(bColors[1] + gp);
       b = parseInt(bColors[2] + bp);
-      rgb = "rgb(" + r + "," + g + "," + b + ")";
-      ret[i] = rgb;
+      if (isOutputHex) {
+        o = "" + (r.toString(16)) + (g.toString(16)) + (b.toString(16));
+      } else {
+        o = "rgb(" + r + "," + g + "," + b + ")";
+      }
+      ret[i] = o;
       rp += rPer;
       gp += gPer;
       bp += bPer;

@@ -560,7 +560,7 @@ EventConfig = (function() {
         if (_this.modifiableVars == null) {
           _this.modifiableVars = {};
         }
-        return _this.modifiableVars[varName] = b;
+        return _this.modifiableVars[varName] = "" + b;
       };
     })(this));
   };

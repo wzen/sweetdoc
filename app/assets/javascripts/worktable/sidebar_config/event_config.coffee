@@ -531,5 +531,5 @@ class EventConfig
       (a, b, d, e) =>
         if !@modifiableVars?
           @modifiableVars = {}
-        @modifiableVars[varName] = b
+        @modifiableVars[varName] = "#{b}"
     )
