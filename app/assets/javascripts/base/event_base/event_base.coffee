@@ -310,7 +310,7 @@ class EventBase extends Extend
       timer = setInterval( =>
         @execMethod({step: count})
         count += 1
-        if stepMax > count
+        if stepMax < count
           clearInterval(timer)
           # 終了イベント
           @isFinishedEvent = true
@@ -401,14 +401,14 @@ class EventBase extends Extend
                 if !@[colorCacheVarName]?
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax)
                 @[varName] = @[colorCacheVarName][count]
-      if count >= stepMax
+      count += 1
+      if count > stepMax
         clearInterval(timer)
         for varName, value of mod
           if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
             after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
             if after?
               @[varName] = after
-      count += 1
     , @constructor.STEP_INTERVAL_DURATION * 1000)
 
   # アイテムの情報をページ値に保存

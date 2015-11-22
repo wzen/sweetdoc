@@ -335,7 +335,7 @@ EventBase = (function(superClass) {
             step: count
           });
           count += 1;
-          if (stepMax > count) {
+          if (stepMax < count) {
             clearInterval(timer);
             _this.isFinishedEvent = true;
             if (complete != null) {
@@ -448,7 +448,7 @@ EventBase = (function(superClass) {
     count = 1;
     return timer = setInterval((function(_this) {
       return function() {
-        var before, colorCacheVarName, progressPercentage;
+        var before, colorCacheVarName, progressPercentage, results;
         progressPercentage = _this.constructor.STEP_INTERVAL_DURATION * count / clickDuration;
         for (varName in mod) {
           value = mod[varName];
@@ -470,19 +470,25 @@ EventBase = (function(superClass) {
             }
           }
         }
-        if (count >= stepMax) {
+        count += 1;
+        if (count > stepMax) {
           clearInterval(timer);
+          results = [];
           for (varName in mod) {
             value = mod[varName];
             if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
               after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
               if (after != null) {
-                _this[varName] = after;
+                results.push(_this[varName] = after);
+              } else {
+                results.push(void 0);
               }
+            } else {
+              results.push(void 0);
             }
           }
+          return results;
         }
-        return count += 1;
       };
     })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
   };
