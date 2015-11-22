@@ -106,6 +106,16 @@ class ButtonItem extends CssItemBase
             id: 'changeColorScroll_Design'
             name: 'Changing color by scroll'
           }
+          modifiables: {
+            backgroundColor: {
+              name: "Background Color"
+              type: 'color'
+              varAutoChange: true
+              ja :{
+                name: "背景色"
+              }
+            }
+          }
         }
 
         changeColorClick: {
@@ -145,7 +155,7 @@ class ButtonItem extends CssItemBase
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
-    else if methodName == 'changeColorClick'
+    else if methodName == 'changeColorClick' || methodName == 'changeColorScroll'
       @backgroundColor = 'ffffff'
 
   # イベント後の表示状態にする
@@ -164,15 +174,18 @@ class ButtonItem extends CssItemBase
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
       @getJQueryElement().find('.css_item:first').removeClass('defaultClick_' + @id)
-      @isFinishedEvent = true
       if opt.complete?
         opt.complete()
     )
 
   # *アクションイベント
+  changeColorScroll: (opt) ->
+    @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
+    if opt.complete?
+      opt.complete()
+
   changeColorClick: (opt) ->
     @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
-    @isFinishedEvent = true
     if opt.complete?
       opt.complete()
 
@@ -242,7 +255,7 @@ class ButtonItem extends CssItemBase
     if @getEventMethodName() == 'defaultClick'
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
-    else if @getEventMethodName() == 'changeColorClick'
+    else if @getEventMethodName() == 'changeColorClick' || @getEventMethodName() == 'changeColorScroll'
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 

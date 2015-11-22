@@ -319,7 +319,12 @@ class EventBase extends Extend
       , @constructor.STEP_INTERVAL_DURATION)
     else
       # アニメーション実行
-      @execMethod({complete: complete})
+      @execMethod({
+        complete: ->
+          @isFinishedEvent = true
+          if complete?
+            complete()
+      })
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->

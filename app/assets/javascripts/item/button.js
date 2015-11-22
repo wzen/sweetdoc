@@ -110,6 +110,16 @@ ButtonItem = (function(superClass) {
         options: {
           id: 'changeColorScroll_Design',
           name: 'Changing color by scroll'
+        },
+        modifiables: {
+          backgroundColor: {
+            name: "Background Color",
+            type: 'color',
+            varAutoChange: true,
+            ja: {
+              name: "背景色"
+            }
+          }
         }
       },
       changeColorClick: {
@@ -150,7 +160,7 @@ ButtonItem = (function(superClass) {
     methodName = this.getEventMethodName();
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
-    } else if (methodName === 'changeColorClick') {
+    } else if (methodName === 'changeColorClick' || methodName === 'changeColorScroll') {
       return this.backgroundColor = 'ffffff';
     }
   };
@@ -175,7 +185,6 @@ ButtonItem = (function(superClass) {
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().find('.css_item:first').removeClass('defaultClick_' + _this.id);
-        _this.isFinishedEvent = true;
         if (opt.complete != null) {
           return opt.complete();
         }
@@ -183,9 +192,15 @@ ButtonItem = (function(superClass) {
     })(this));
   };
 
+  ButtonItem.prototype.changeColorScroll = function(opt) {
+    this.getJQueryElement().find('.css3button').css('background', "#" + this.backgroundColor);
+    if (opt.complete != null) {
+      return opt.complete();
+    }
+  };
+
   ButtonItem.prototype.changeColorClick = function(opt) {
     this.getJQueryElement().find('.css3button').css('background', "#" + this.backgroundColor);
-    this.isFinishedEvent = true;
     if (opt.complete != null) {
       return opt.complete();
     }
@@ -212,7 +227,7 @@ ButtonItem = (function(superClass) {
     ButtonItem.__super__.willChapter.call(this);
     if (this.getEventMethodName() === 'defaultClick') {
       return this.getJQueryElement().css('opacity', 1);
-    } else if (this.getEventMethodName() === 'changeColorClick') {
+    } else if (this.getEventMethodName() === 'changeColorClick' || this.getEventMethodName() === 'changeColorScroll') {
       return this.getJQueryElement().css('opacity', 1);
     }
   };

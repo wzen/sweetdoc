@@ -346,7 +346,12 @@ EventBase = (function(superClass) {
       })(this), this.constructor.STEP_INTERVAL_DURATION);
     } else {
       return this.execMethod({
-        complete: complete
+        complete: function() {
+          this.isFinishedEvent = true;
+          if (complete != null) {
+            return complete();
+          }
+        }
       });
     }
   };
