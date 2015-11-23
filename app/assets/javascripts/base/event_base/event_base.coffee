@@ -1,7 +1,7 @@
 # イベントリスナー Extend
 class EventBase extends Extend
 
-  @STEP_INTERVAL_DURATION = 0.01
+  @STEP_INTERVAL_DURATION = 0.03
 
   # イベントの初期化
   # @param [Object] event 設定イベント
@@ -67,8 +67,6 @@ class EventBase extends Extend
       @initEvent(event)
       stepMax = @stepMax()
       @willChapter()
-      if @ instanceof CssItemBase
-        @appendAnimationCssIfNeeded()
 
       # イベントループ
       @doPreviewLoop = true

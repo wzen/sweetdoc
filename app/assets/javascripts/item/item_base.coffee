@@ -22,6 +22,7 @@ class ItemBase extends ItemEventBase
       @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
       @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
       @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
+      @CLICK_DURATION = constant.ItemActionPropertiesKey.CLICK_DURATION
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -195,6 +196,10 @@ class ItemBase extends ItemEventBase
   # スクロールのデフォルト進行方向
   @defaultScrollForwardDirection = ->
     return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
+
+  # クリックのデフォルト時間
+  @defaultClickDuration = ->
+    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.CLICK_DURATION]
 
   # デフォルトデザインをPageValue & 変数に適用
   applyDefaultDesign: ->

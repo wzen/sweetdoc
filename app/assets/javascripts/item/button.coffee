@@ -190,7 +190,7 @@ class ButtonItem extends CssItemBase
       opt.complete()
 
   # CSSアニメーションの定義(必要な場合)
-  cssAnimationElement : ->
+  cssAnimationKeyframe : ->
     methodName = @getEventMethodName()
     funcName = "#{methodName}_#{@id}"
     keyFrameName = "#{@id}_frame"
@@ -235,20 +235,8 @@ class ButtonItem extends CssItemBase
       }
     }
     """
-    webkitKeyframe = "@-webkit-keyframes #{keyframe}"
-    mozKeyframe = "@-moz-keyframes #{keyframe}"
 
-    # CSSに設定
-    css = """
-    .#{funcName}
-    {
-    -webkit-animation-name: #{keyFrameName};
-    -moz-animation-name: #{keyFrameName};
-    -webkit-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]}s;
-    -moz-animation-duration: #{@constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]}s;
-    }
-    """
-    return "#{webkitKeyframe} #{mozKeyframe} #{css}"
+    return keyframe
 
   willChapter: ->
     super()

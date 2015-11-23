@@ -206,8 +206,8 @@ ButtonItem = (function(superClass) {
     }
   };
 
-  ButtonItem.prototype.cssAnimationElement = function() {
-    var css, emt, funcName, height, keyFrameName, keyframe, left, methodName, mozKeyframe, top, webkitKeyframe, width;
+  ButtonItem.prototype.cssAnimationKeyframe = function() {
+    var emt, funcName, height, keyFrameName, keyframe, left, methodName, top, width;
     methodName = this.getEventMethodName();
     funcName = methodName + "_" + this.id;
     keyFrameName = this.id + "_frame";
@@ -217,10 +217,7 @@ ButtonItem = (function(superClass) {
     width = emt.css('width');
     height = emt.css('height');
     keyframe = keyFrameName + " {\n  0% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  40% {\n    top: " + (parseInt(top) + 10) + "px;\n    left: " + (parseInt(left) + 10) + "px;\n    width: " + (parseInt(width) - 20) + "px;\n    height: " + (parseInt(height) - 20) + "px;\n  }\n  80% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n  90% {\n    top: " + (parseInt(top) + 5) + "px;\n    left: " + (parseInt(left) + 5) + "px;\n    width: " + (parseInt(width) - 10) + "px;\n    height: " + (parseInt(height) - 10) + "px;\n  }\n  100% {\n    top: " + (parseInt(top)) + "px;\n    left: " + (parseInt(left)) + "px;\n    width: " + (parseInt(width)) + "px;\n    height: " + (parseInt(height)) + "px;\n  }\n}";
-    webkitKeyframe = "@-webkit-keyframes " + keyframe;
-    mozKeyframe = "@-moz-keyframes " + keyframe;
-    css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION] + "s;\n-moz-animation-duration: " + this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION] + "s;\n}";
-    return webkitKeyframe + " " + mozKeyframe + " " + css;
+    return keyframe;
   };
 
   ButtonItem.prototype.willChapter = function() {

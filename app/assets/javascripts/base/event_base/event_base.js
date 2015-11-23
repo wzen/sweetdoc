@@ -10,7 +10,7 @@ EventBase = (function(superClass) {
     return EventBase.__super__.constructor.apply(this, arguments);
   }
 
-  EventBase.STEP_INTERVAL_DURATION = 0.01;
+  EventBase.STEP_INTERVAL_DURATION = 0.03;
 
   EventBase.prototype.initEvent = function(event) {
     this.event = event;
@@ -71,9 +71,6 @@ EventBase = (function(superClass) {
       this.initEvent(event);
       stepMax = this.stepMax();
       this.willChapter();
-      if (this instanceof CssItemBase) {
-        this.appendAnimationCssIfNeeded();
-      }
       this.doPreviewLoop = true;
       loopCount = 0;
       this.previewTimer = null;

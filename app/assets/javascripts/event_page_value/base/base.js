@@ -57,7 +57,7 @@ EventPageValueBase = (function() {
   }
 
   EventPageValueBase.initConfigValue = function(eventConfig) {
-    var _scrollLength, end, endDiv, handlerDiv, s, start, startDiv;
+    var _scrollLength, clickDuration, end, endDiv, handlerDiv, item, s, start, startDiv;
     _scrollLength = function(eventConfig) {
       var end, start, writeValue;
       writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
@@ -89,6 +89,15 @@ EventPageValueBase = (function() {
           return endDiv.val(parseInt(s) + _scrollLength.call(this, eventConfig));
         }
       }
+    } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
+      handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
+      if (handlerDiv != null) {
+        clickDuration = handlerDiv.find('.click_duration:first');
+        item = window.instanceMap[eventConfig.id];
+        if (item != null) {
+          return clickDuration.val(item.constructor.methods[eventConfig.methodClassName()][item.constructor.ActionPropertiesKey.CLICK_DURATION]);
+        }
+      }
     }
   };
 
@@ -111,13 +120,14 @@ EventPageValueBase = (function() {
       writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection;
       writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection;
     } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
+      writeValue[this.PageValueKey.CLICK_DURATION] = eventConfig.clickDuration;
       writeValue[this.PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum;
     }
     return writeValue;
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var bottomEmt, enabled, enabledDirection, end, fn, forkNum, forwardDirection, handlerDiv, isParallel, leftEmt, parallel, rightEmt, start, topEmt, writeValue;
+    var bottomEmt, clickDuration, enabled, fn, handlerDiv, isParallel, item, leftEmt, parallel, rightEmt, topEmt, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       eventConfig.distId = writeValue[this.PageValueKey.DIST_ID];
@@ -151,19 +161,19 @@ EventPageValueBase = (function() {
       if (eventConfig.actionType === Constant.ActionType.SCROLL) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
-          start = writeValue[this.PageValueKey.SCROLL_POINT_START];
-          end = writeValue[this.PageValueKey.SCROLL_POINT_END];
-          if ((start != null) && (end != null)) {
-            handlerDiv.find('.scroll_point_start:first').val(start);
-            handlerDiv.find('.scroll_point_end:first').val(end);
+          eventConfig.scrollPointStart = writeValue[this.PageValueKey.SCROLL_POINT_START];
+          eventConfig.scrollPointEnd = writeValue[this.PageValueKey.SCROLL_POINT_END];
+          if ((eventConfig.scrollPointStart != null) && (eventConfig.scrollPointEnd != null)) {
+            handlerDiv.find('.scroll_point_start:first').val(eventConfig.scrollPointStart);
+            handlerDiv.find('.scroll_point_end:first').val(eventConfig.scrollPointEnd);
           }
-          enabledDirection = writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
-          forwardDirection = writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
+          eventConfig.scrollEnabledDirection = writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
+          eventConfig.scrollForwardDirection = writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
           topEmt = handlerDiv.find('.scroll_enabled_top:first');
           if (topEmt != null) {
-            topEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.top);
-            if (enabledDirection.top) {
-              topEmt.children('.scroll_forward:first').prop("checked", forwardDirection.top);
+            topEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.top);
+            if (eventConfig.scrollEnabledDirection.top) {
+              topEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.top);
             } else {
               topEmt.children('.scroll_forward:first').prop("checked", false);
               topEmt.children('.scroll_forward:first').parent('label').hide();
@@ -171,9 +181,9 @@ EventPageValueBase = (function() {
           }
           bottomEmt = handlerDiv.find('scroll_enabled_bottom:first');
           if (bottomEmt != null) {
-            bottomEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.bottom);
-            if (enabledDirection.bottom) {
-              bottomEmt.children('.scroll_forward:first').prop("checked", forwardDirection.bottom);
+            bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.bottom);
+            if (eventConfig.scrollEnabledDirection.bottom) {
+              bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.bottom);
             } else {
               bottomEmt.children('.scroll_forward:first').prop("checked", false);
               bottomEmt.children('.scroll_forward:first').parent('label').hide();
@@ -181,9 +191,9 @@ EventPageValueBase = (function() {
           }
           leftEmt = handlerDiv.find('scroll_enabled_left:first');
           if (leftEmt != null) {
-            leftEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.left);
-            if (enabledDirection.left) {
-              leftEmt.children('.scroll_forward:first').prop("checked", forwardDirection.left);
+            leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.left);
+            if (eventConfig.scrollEnabledDirection.left) {
+              leftEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.left);
             } else {
               leftEmt.children('.scroll_forward:first').prop("checked", false);
               leftEmt.children('.scroll_forward:first').parent('label').hide();
@@ -191,9 +201,9 @@ EventPageValueBase = (function() {
           }
           rightEmt = handlerDiv.find('scroll_enabled_right:first');
           if (rightEmt != null) {
-            rightEmt.children('.scroll_enabled:first').prop("checked", enabledDirection.right);
-            if (enabledDirection.right) {
-              rightEmt.children('.scroll_forward:first').prop("checked", forwardDirection.right);
+            rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.right);
+            if (eventConfig.scrollEnabledDirection.right) {
+              rightEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.right);
             } else {
               rightEmt.children('.scroll_forward:first').prop("checked", false);
               rightEmt.children('.scroll_forward:first').parent('label').hide();
@@ -203,10 +213,20 @@ EventPageValueBase = (function() {
       } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
-          forkNum = writeValue[this.PageValueKey.CHANGE_FORKNUM];
-          enabled = (forkNum != null) && forkNum > 0;
+          clickDuration = handlerDiv.find('.click_duration:first');
+          eventConfig.clickDuration = writeValue[this.PageValueKey.CLICK_DURATION];
+          if (eventConfig.clickDuration != null) {
+            clickDuration.val(eventConfig.clickDuration);
+          } else {
+            item = window.instanceMap[eventConfig.id];
+            if (item != null) {
+              clickDuration.val(item.constructor.methods[eventConfig.methodClassName()][item.constructor.ActionPropertiesKey.CLICK_DURATION]);
+            }
+          }
+          eventConfig.forkNum = writeValue[this.PageValueKey.CHANGE_FORKNUM];
+          enabled = (eventConfig.forkNum != null) && eventConfig.forkNum > 0;
           $('.enable_fork:first', handlerDiv).prop('checked', enabled);
-          fn = enabled ? forkNum : 1;
+          fn = enabled ? eventConfig.forkNum : 1;
           $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
           $('.fork_select:first', handlerDiv).parent('div').css('display', enabled ? 'block' : 'none');
         }

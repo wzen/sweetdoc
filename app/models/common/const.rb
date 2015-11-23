@@ -324,6 +324,7 @@ class Const
     SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
     OPTIONS = 'options'
+    CLICK_DURATION = 'clickDuration'
   end
 
   class Run

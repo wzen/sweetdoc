@@ -21,6 +21,12 @@ class CssItemBase extends ItemBase
     if window.isWorkTable
       @constructor.include WorkTableCssItemExtend
 
+  # クリック実行時間
+  clickDuration: ->
+    d = @event[EventPageValueBase.PageValueKey.CLICK_DURATION]
+    if !d?
+      d = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
+    return d
 
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
@@ -123,20 +129,36 @@ class CssItemBase extends ItemBase
     if doStyleSave
       @saveDesign()
 
-  # CSS内容
+  # アニメーションKeyframe
   # @abstract
-  cssAnimationElement: ->
+  cssAnimationKeyframe: ->
     return null
 
   # アニメーションCSS追加処理
   appendAnimationCssIfNeeded : ->
-    ce = @cssAnimationElement()
-    if ce?
+    keyframe = @cssAnimationKeyframe()
+    if keyframe?
       methodName = @getEventMethodName()
       # CSSが存在する場合は削除して入れ替え
       @removeAnimationCss()
       funcName = "#{methodName}_#{@id}"
-      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{ce} </style></div>")
+      keyFrameName = "#{@id}_frame"
+      webkitKeyframe = "@-webkit-keyframes #{keyframe}"
+      mozKeyframe = "@-moz-keyframes #{keyframe}"
+      duration = @clickDuration()
+
+      # CSSに設定
+      css = """
+      .#{funcName}
+      {
+      -webkit-animation-name: #{keyFrameName};
+      -moz-animation-name: #{keyFrameName};
+      -webkit-animation-duration: #{duration}s;
+      -moz-animation-duration: #{duration}s;
+      }
+      """
+
+      window.cssCode.append("<div class='#{funcName}'><style type='text/css'> #{webkitKeyframe} #{mozKeyframe} #{css} </style></div>")
 
   # アニメーションCSS削除処理
   removeAnimationCss: ->

@@ -204,6 +204,8 @@ class EventConfig
     else if @actionType == Constant.ActionType.CLICK
       handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
       if handlerDiv?
+        @clickDuration = handlerDiv.find('.click_duration:first').val()
+
         @forkNum = 0
         checked = handlerDiv.find('.enable_fork:first').is(':checked')
         if checked? && checked

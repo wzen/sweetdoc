@@ -31,6 +31,15 @@ CssItemBase = (function(superClass) {
     }
   }
 
+  CssItemBase.prototype.clickDuration = function() {
+    var d;
+    d = this.event[EventPageValueBase.PageValueKey.CLICK_DURATION];
+    if (d == null) {
+      d = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
+    }
+    return d;
+  };
+
   CssItemBase.jsLoaded = function(option) {};
 
   CssItemBase.prototype.reDraw = function(show) {
@@ -145,18 +154,23 @@ CssItemBase = (function(superClass) {
     }
   };
 
-  CssItemBase.prototype.cssAnimationElement = function() {
+  CssItemBase.prototype.cssAnimationKeyframe = function() {
     return null;
   };
 
   CssItemBase.prototype.appendAnimationCssIfNeeded = function() {
-    var ce, funcName, methodName;
-    ce = this.cssAnimationElement();
-    if (ce != null) {
+    var css, duration, funcName, keyFrameName, keyframe, methodName, mozKeyframe, webkitKeyframe;
+    keyframe = this.cssAnimationKeyframe();
+    if (keyframe != null) {
       methodName = this.getEventMethodName();
       this.removeAnimationCss();
       funcName = methodName + "_" + this.id;
-      return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + ce + " </style></div>");
+      keyFrameName = this.id + "_frame";
+      webkitKeyframe = "@-webkit-keyframes " + keyframe;
+      mozKeyframe = "@-moz-keyframes " + keyframe;
+      duration = this.clickDuration();
+      css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: " + duration + "s;\n-moz-animation-duration: " + duration + "s;\n}";
+      return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + webkitKeyframe + " " + mozKeyframe + " " + css + " </style></div>");
     }
   };
 

@@ -33,6 +33,8 @@ ItemBase = (function(superClass) {
 
       ActionPropertiesKey.OPTIONS = constant.ItemActionPropertiesKey.OPTIONS;
 
+      ActionPropertiesKey.CLICK_DURATION = constant.ItemActionPropertiesKey.CLICK_DURATION;
+
       return ActionPropertiesKey;
 
     })();
@@ -214,6 +216,10 @@ ItemBase = (function(superClass) {
 
   ItemBase.defaultScrollForwardDirection = function() {
     return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
+  };
+
+  ItemBase.defaultClickDuration = function() {
+    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.CLICK_DURATION];
   };
 
   ItemBase.prototype.applyDefaultDesign = function() {

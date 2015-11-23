@@ -192,6 +192,7 @@ EventConfig = (function() {
     } else if (this.actionType === Constant.ActionType.CLICK) {
       handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
       if (handlerDiv != null) {
+        this.clickDuration = handlerDiv.find('.click_duration:first').val();
         this.forkNum = 0;
         checked = handlerDiv.find('.enable_fork:first').is(':checked');
         if ((checked != null) && checked) {

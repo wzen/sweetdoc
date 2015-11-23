@@ -40,6 +40,7 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.IS_SYNC] = false;
     writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection();
     writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
+    writeValue[this.PageValueKey.CLICK_DURATION] = item.constructor.defaultClickDuration();
     writeValue[this.PageValueKey.VALUE] = item.constructor.defaultEventConfigValue();
     writeValue[this.PageValueKey.MODIFIABLE_VARS] = {};
     if (errorMes.length === 0) {
