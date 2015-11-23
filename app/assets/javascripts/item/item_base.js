@@ -33,7 +33,7 @@ ItemBase = (function(superClass) {
 
       ActionPropertiesKey.OPTIONS = constant.ItemActionPropertiesKey.OPTIONS;
 
-      ActionPropertiesKey.CLICK_DURATION = constant.ItemActionPropertiesKey.CLICK_DURATION;
+      ActionPropertiesKey.EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION;
 
       return ActionPropertiesKey;
 
@@ -219,7 +219,7 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.defaultClickDuration = function() {
-    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.CLICK_DURATION];
+    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.EVENT_DURATION];
   };
 
   ItemBase.prototype.applyDefaultDesign = function() {
@@ -305,7 +305,7 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.updateItemSizeByAnimation = function(immediate) {
-    var clickDuration, count, duration, itemDiff, itemSize, loopMax, originalItemElementSize, perH, perW, perX, perY, timer;
+    var count, duration, eventDuration, itemDiff, itemSize, loopMax, originalItemElementSize, perH, perW, perX, perY, timer;
     if (immediate == null) {
       immediate = false;
     }
@@ -327,13 +327,13 @@ ItemBase = (function(superClass) {
       this.updatePositionAndItemSize(itemSize, false);
       return;
     }
-    clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
+    eventDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION];
     duration = 0.01;
-    perX = itemDiff.x * (duration / clickDuration);
-    perY = itemDiff.y * (duration / clickDuration);
-    perW = itemDiff.w * (duration / clickDuration);
-    perH = itemDiff.h * (duration / clickDuration);
-    loopMax = Math.ceil(clickDuration / duration);
+    perX = itemDiff.x * (duration / eventDuration);
+    perY = itemDiff.y * (duration / eventDuration);
+    perW = itemDiff.w * (duration / eventDuration);
+    perH = itemDiff.h * (duration / eventDuration);
+    loopMax = Math.ceil(eventDuration / duration);
     count = 1;
     return timer = setInterval((function(_this) {
       return function() {

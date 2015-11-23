@@ -141,6 +141,7 @@ class EventConfig
       if @actionType == Constant.ActionType.SCROLL
         _setScrollDirectionEvent.call(@)
       else if @actionType == Constant.ActionType.CLICK
+        _setEventDuration.call(@)
         _setForkSelect.call(@)
       _setApplyClickEvent.call(@)
 
@@ -204,7 +205,7 @@ class EventConfig
     else if @actionType == Constant.ActionType.CLICK
       handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
       if handlerDiv?
-        @clickDuration = handlerDiv.find('.click_duration:first').val()
+        @eventDuration = handlerDiv.find('.click_duration:first').val()
 
         @forkNum = 0
         checked = handlerDiv.find('.enable_fork:first').is(':checked')
@@ -228,10 +229,8 @@ class EventConfig
 
     # イベントの色を変更
     Timeline.changeTimelineColor(@teNum, @actionType)
-
     # キャッシュに保存
     LocalStorage.saveAllPageValues()
-
     # プレビュー開始
     item = instanceMap[@id]
     if item? && item.preview?
@@ -309,6 +308,17 @@ class EventConfig
         emt.parent('label').hide()
         emt.prop('checked', false)
     )
+
+  _setEventDuration = ->
+    self = 0
+    handler = $('.handler_div', @emt)
+    eventDuration = handler.find('.click_duration:first')
+    if @eventDuration?
+      eventDuration.val(@eventDuration)
+    else
+      item = window.instanceMap[@id]
+      if item?
+        eventDuration.val(item.constructor.actionProperties.methods[@methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION])
 
   _setForkSelect = ->
     self = 0
@@ -474,7 +484,7 @@ class EventConfig
     mod = obj.constructor.actionProperties.methods[@methodName].modifiables
     if mod?
       for varName, v of mod
-        if @modifiableVars? && @modifiableVars[varName]?
+        if @hasModifiableVar(varName)
           defaultValue = @modifiableVars[varName]
         else
           defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
@@ -484,6 +494,14 @@ class EventConfig
           @settingModifiableString(varName, defaultValue)
         else if v.type == Constant.ItemDesignOptionType.COLOR
           @settingModifiableColor(varName, defaultValue)
+
+  # 変数変更値が存在するか
+  hasModifiableVar: (varName = null) ->
+    ret = @modifiableVars? && @modifiableVars? != 'undefined'
+    if varName?
+      return ret && @modifiableVars[varName]?
+    else
+      return ret
 
   # 変数編集スライダーの作成
   # @param [Int] varName 変数名
@@ -507,7 +525,7 @@ class EventConfig
       slide: (event, ui) =>
         valueElement.val(ui.value)
         valueElement.html(ui.value)
-        if !@modifiableVars?
+        if !@hasModifiableVar(varName)
           @modifiableVars = {}
         @modifiableVars[varName] = ui.value
     })
@@ -517,7 +535,7 @@ class EventConfig
   settingModifiableString: (varName, defaultValue) ->
     $(".#{varName}_text", @emt).val(defaultValue)
     $(".#{varName}_text", @emt).off('change').on('change', =>
-      if !@modifiableVars?
+      if !@hasModifiableVar(varName)
         @modifiableVars = {}
       @modifiableVars[varName] = $(@).val()
     )
@@ -531,7 +549,7 @@ class EventConfig
       $(emt),
       defaultValue,
       (a, b, d, e) =>
-        if !@modifiableVars?
+        if !@hasModifiableVar(varName)
           @modifiableVars = {}
         @modifiableVars[varName] = "#{b}"
     )

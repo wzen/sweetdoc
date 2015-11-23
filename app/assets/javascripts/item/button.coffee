@@ -76,7 +76,7 @@ class ButtonItem extends CssItemBase
         defaultClick: {
           actionType: 'click'
           isDrawByAnimation: true
-          clickDuration: 0.5
+          eventDuration: 0.5
           options: {
             id: 'defaultClick'
             name: 'Default click action'
@@ -120,7 +120,7 @@ class ButtonItem extends CssItemBase
 
         changeColorClick: {
           actionType: 'click'
-          clickDuration: 0.5
+          eventDuration: 0.5
           options: {
             id: 'changeColorClick_Design'
             name: 'Changing color by click'

@@ -33,7 +33,7 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.IS_SYNC] = false
     writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection()
     writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection()
-    writeValue[@PageValueKey.CLICK_DURATION] = item.constructor.defaultClickDuration()
+    writeValue[@PageValueKey.EVENT_DURATION] = item.constructor.defaultClickDuration()
     writeValue[@PageValueKey.VALUE] = item.constructor.defaultEventConfigValue()
     writeValue[@PageValueKey.MODIFIABLE_VARS] = {}
 

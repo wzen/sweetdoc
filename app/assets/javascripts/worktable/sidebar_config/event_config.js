@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _getEventPageValueClass, _setApplyClickEvent, _setForkSelect, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
+  var _getEventPageValueClass, _setApplyClickEvent, _setEventDuration, _setForkSelect, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
@@ -129,6 +129,7 @@ EventConfig = (function() {
       if (this.actionType === Constant.ActionType.SCROLL) {
         _setScrollDirectionEvent.call(this);
       } else if (this.actionType === Constant.ActionType.CLICK) {
+        _setEventDuration.call(this);
         _setForkSelect.call(this);
       }
       return _setApplyClickEvent.call(this);
@@ -192,7 +193,7 @@ EventConfig = (function() {
     } else if (this.actionType === Constant.ActionType.CLICK) {
       handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
       if (handlerDiv != null) {
-        this.clickDuration = handlerDiv.find('.click_duration:first').val();
+        this.eventDuration = handlerDiv.find('.click_duration:first').val();
         this.forkNum = 0;
         checked = handlerDiv.find('.enable_fork:first').is(':checked');
         if ((checked != null) && checked) {
@@ -306,6 +307,21 @@ EventConfig = (function() {
         return emt.prop('checked', false);
       }
     });
+  };
+
+  _setEventDuration = function() {
+    var eventDuration, handler, item, self;
+    self = 0;
+    handler = $('.handler_div', this.emt);
+    eventDuration = handler.find('.click_duration:first');
+    if (this.eventDuration != null) {
+      return eventDuration.val(this.eventDuration);
+    } else {
+      item = window.instanceMap[this.id];
+      if (item != null) {
+        return eventDuration.val(item.constructor.actionProperties.methods[this.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
+      }
+    }
   };
 
   _setForkSelect = function() {
@@ -483,7 +499,7 @@ EventConfig = (function() {
       results = [];
       for (varName in mod) {
         v = mod[varName];
-        if ((this.modifiableVars != null) && (this.modifiableVars[varName] != null)) {
+        if (this.hasModifiableVar(varName)) {
           defaultValue = this.modifiableVars[varName];
         } else {
           defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
@@ -499,6 +515,19 @@ EventConfig = (function() {
         }
       }
       return results;
+    }
+  };
+
+  EventConfig.prototype.hasModifiableVar = function(varName) {
+    var ret;
+    if (varName == null) {
+      varName = null;
+    }
+    ret = (this.modifiableVars != null) && (this.modifiableVars != null) !== 'undefined';
+    if (varName != null) {
+      return ret && (this.modifiableVars[varName] != null);
+    } else {
+      return ret;
     }
   };
 
@@ -532,7 +561,7 @@ EventConfig = (function() {
         return function(event, ui) {
           valueElement.val(ui.value);
           valueElement.html(ui.value);
-          if (_this.modifiableVars == null) {
+          if (!_this.hasModifiableVar(varName)) {
             _this.modifiableVars = {};
           }
           return _this.modifiableVars[varName] = ui.value;
@@ -545,7 +574,7 @@ EventConfig = (function() {
     $("." + varName + "_text", this.emt).val(defaultValue);
     return $("." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
       return function() {
-        if (_this.modifiableVars == null) {
+        if (!_this.hasModifiableVar(varName)) {
           _this.modifiableVars = {};
         }
         return _this.modifiableVars[varName] = $(_this).val();
@@ -558,7 +587,7 @@ EventConfig = (function() {
     emt = $("." + varName + "_color", this.emt);
     return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
       return function(a, b, d, e) {
-        if (_this.modifiableVars == null) {
+        if (!_this.hasModifiableVar(varName)) {
           _this.modifiableVars = {};
         }
         return _this.modifiableVars[varName] = "" + b;

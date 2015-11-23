@@ -31,15 +31,6 @@ CssItemBase = (function(superClass) {
     }
   }
 
-  CssItemBase.prototype.clickDuration = function() {
-    var d;
-    d = this.event[EventPageValueBase.PageValueKey.CLICK_DURATION];
-    if (d == null) {
-      d = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
-    }
-    return d;
-  };
-
   CssItemBase.jsLoaded = function(option) {};
 
   CssItemBase.prototype.reDraw = function(show) {
@@ -168,7 +159,7 @@ CssItemBase = (function(superClass) {
       keyFrameName = this.id + "_frame";
       webkitKeyframe = "@-webkit-keyframes " + keyframe;
       mozKeyframe = "@-moz-keyframes " + keyframe;
-      duration = this.clickDuration();
+      duration = this.eventDuration();
       css = "." + funcName + "\n{\n-webkit-animation-name: " + keyFrameName + ";\n-moz-animation-name: " + keyFrameName + ";\n-webkit-animation-duration: " + duration + "s;\n-moz-animation-duration: " + duration + "s;\n}";
       return window.cssCode.append("<div class='" + funcName + "'><style type='text/css'> " + webkitKeyframe + " " + mozKeyframe + " " + css + " </style></div>");
     }

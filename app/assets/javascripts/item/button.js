@@ -82,7 +82,7 @@ ButtonItem = (function(superClass) {
       defaultClick: {
         actionType: 'click',
         isDrawByAnimation: true,
-        clickDuration: 0.5,
+        eventDuration: 0.5,
         options: {
           id: 'defaultClick',
           name: 'Default click action',
@@ -124,7 +124,7 @@ ButtonItem = (function(superClass) {
       },
       changeColorClick: {
         actionType: 'click',
-        clickDuration: 0.5,
+        eventDuration: 0.5,
         options: {
           id: 'changeColorClick_Design',
           name: 'Changing color by click',

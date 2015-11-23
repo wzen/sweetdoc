@@ -21,13 +21,6 @@ class CssItemBase extends ItemBase
     if window.isWorkTable
       @constructor.include WorkTableCssItemExtend
 
-  # クリック実行時間
-  clickDuration: ->
-    d = @event[EventPageValueBase.PageValueKey.CLICK_DURATION]
-    if !d?
-      d = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
-    return d
-
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
     # ワークテーブルの初期化処理
@@ -145,7 +138,7 @@ class CssItemBase extends ItemBase
       keyFrameName = "#{@id}_frame"
       webkitKeyframe = "@-webkit-keyframes #{keyframe}"
       mozKeyframe = "@-moz-keyframes #{keyframe}"
-      duration = @clickDuration()
+      duration = @eventDuration()
 
       # CSSに設定
       css = """

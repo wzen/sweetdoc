@@ -302,7 +302,6 @@ class EventBase extends Extend
 
     if !@isDrawByAnimationMethod()
       # ステップ実行
-      clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
       stepMax = @stepMax()
       count = 1
       timer = setInterval( =>
@@ -314,7 +313,7 @@ class EventBase extends Extend
           @isFinishedEvent = true
           if complete?
             complete()
-      , @constructor.STEP_INTERVAL_DURATION)
+      , @constructor.STEP_INTERVAL_DURATION * 1000)
     else
       # アニメーション実行
       @execMethod({
@@ -368,14 +367,14 @@ class EventBase extends Extend
                 @[varName] = before + (after - before) * progressPercentage
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChangeCache"
-                if !@[colorCacheVarName]?
+                if stepValue == 0 || !@[colorCacheVarName]?
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax)
                 @[varName] = @[colorCacheVarName][stepValue]
 
   # アニメーションによるアイテム状態更新
   updateInstanceParamByAnimation: (immediate = false) ->
     # TODO: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
-    clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
+    ed = @eventDuration()
     stepMax = @stepMax()
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
@@ -390,7 +389,7 @@ class EventBase extends Extend
 
     count = 1
     timer = setInterval( =>
-      progressPercentage = @constructor.STEP_INTERVAL_DURATION * count / clickDuration
+      progressPercentage = @constructor.STEP_INTERVAL_DURATION * count / ed
       for varName, value of mod
         if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
           before = eventBeforeObj[varName]
@@ -401,7 +400,7 @@ class EventBase extends Extend
                 @[varName] = before + (after - before) * progressPercentage
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChangeCache"
-                if !@[colorCacheVarName]?
+                if count == 1 || !@[colorCacheVarName]?
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax)
                 @[varName] = @[colorCacheVarName][count]
       count += 1
@@ -432,5 +431,12 @@ class EventBase extends Extend
 
   # クリック時間ステップ数最大値
   clickDurationStepMax: ->
-    clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
-    return Math.ceil(clickDuration / @constructor.STEP_INTERVAL_DURATION)
+    ed = @eventDuration()
+    return Math.ceil(ed / @constructor.STEP_INTERVAL_DURATION)
+
+  # クリック実行時間
+  eventDuration: ->
+    d = @event[EventPageValueBase.PageValueKey.EVENT_DURATION]
+    if !d?
+      d = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION]
+    return d

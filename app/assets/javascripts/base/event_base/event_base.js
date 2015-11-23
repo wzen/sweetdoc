@@ -310,7 +310,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.clickHandlerFunc = function(e, complete) {
-    var clickDuration, count, stepMax, timer;
+    var count, stepMax, timer;
     if (complete == null) {
       complete = null;
     }
@@ -323,7 +323,6 @@ EventBase = (function(superClass) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
     if (!this.isDrawByAnimationMethod()) {
-      clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
       stepMax = this.stepMax();
       count = 1;
       return timer = setInterval((function(_this) {
@@ -340,7 +339,7 @@ EventBase = (function(superClass) {
             }
           }
         };
-      })(this), this.constructor.STEP_INTERVAL_DURATION);
+      })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
     } else {
       return this.execMethod({
         complete: function() {
@@ -405,7 +404,7 @@ EventBase = (function(superClass) {
                 results.push(this[varName] = before + (after - before) * progressPercentage);
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChangeCache";
-                if (this[colorCacheVarName] == null) {
+                if (stepValue === 0 || (this[colorCacheVarName] == null)) {
                   this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax);
                 }
                 results.push(this[varName] = this[colorCacheVarName][stepValue]);
@@ -427,11 +426,11 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateInstanceParamByAnimation = function(immediate) {
-    var after, clickDuration, count, eventBeforeObj, mod, stepMax, timer, value, varName;
+    var after, count, ed, eventBeforeObj, mod, stepMax, timer, value, varName;
     if (immediate == null) {
       immediate = false;
     }
-    clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
+    ed = this.eventDuration();
     stepMax = this.stepMax();
     eventBeforeObj = this.getMinimumObjectEventBefore();
     mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
@@ -451,7 +450,7 @@ EventBase = (function(superClass) {
     return timer = setInterval((function(_this) {
       return function() {
         var before, colorCacheVarName, progressPercentage, results;
-        progressPercentage = _this.constructor.STEP_INTERVAL_DURATION * count / clickDuration;
+        progressPercentage = _this.constructor.STEP_INTERVAL_DURATION * count / ed;
         for (varName in mod) {
           value = mod[varName];
           if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
@@ -463,7 +462,7 @@ EventBase = (function(superClass) {
                   _this[varName] = before + (after - before) * progressPercentage;
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChangeCache";
-                  if (_this[colorCacheVarName] == null) {
+                  if (count === 1 || (_this[colorCacheVarName] == null)) {
                     _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax);
                   }
                   _this[varName] = _this[colorCacheVarName][count];
@@ -520,9 +519,18 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.clickDurationStepMax = function() {
-    var clickDuration;
-    clickDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION];
-    return Math.ceil(clickDuration / this.constructor.STEP_INTERVAL_DURATION);
+    var ed;
+    ed = this.eventDuration();
+    return Math.ceil(ed / this.constructor.STEP_INTERVAL_DURATION);
+  };
+
+  EventBase.prototype.eventDuration = function() {
+    var d;
+    d = this.event[EventPageValueBase.PageValueKey.EVENT_DURATION];
+    if (d == null) {
+      d = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION];
+    }
+    return d;
   };
 
   return EventBase;

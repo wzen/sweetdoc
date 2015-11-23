@@ -44,8 +44,8 @@ class EventPageValueBase
       @MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS
       # @property [String] IS_DRAW_BY_ANIMATION アニメーションとしてメソッドを実行するか
       @IS_DRAW_BY_ANIMATION = constant.EventPageValueKey.IS_DRAW_BY_ANIMATION
-      # @property [String] CLICK_DURATION クリック実行時間
-      @CLICK_DURATION = constant.EventPageValueKey.CLICK_DURATION
+      # @property [String] EVENT_DURATION クリック実行時間
+      @EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION
 
   # コンフィグ初期設定
   # @param [Object] eventConfig イベントコンフィグオブジェクト
@@ -78,10 +78,10 @@ class EventPageValueBase
     else if eventConfig.actionType == Constant.ActionType.CLICK
       handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
       if handlerDiv?
-        clickDuration = handlerDiv.find('.click_duration:first')
+        eventDuration = handlerDiv.find('.click_duration:first')
         item = window.instanceMap[eventConfig.id]
         if item?
-          clickDuration.val(item.constructor.methods[eventConfig.methodClassName()][item.constructor.ActionPropertiesKey.CLICK_DURATION])
+          eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION])
 
   # PageValueに書き込みデータを取得
   # @param [Object] eventConfig イベントコンフィグオブジェクト
@@ -105,7 +105,7 @@ class EventPageValueBase
       writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection
       writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection
     else if eventConfig.actionType == Constant.ActionType.CLICK
-      writeValue[@PageValueKey.CLICK_DURATION] = eventConfig.clickDuration
+      writeValue[@PageValueKey.EVENT_DURATION] = eventConfig.eventDuration
       writeValue[@PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum
 
     return writeValue
@@ -188,14 +188,14 @@ class EventPageValueBase
       else if eventConfig.actionType == Constant.ActionType.CLICK
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
         if handlerDiv?
-          clickDuration = handlerDiv.find('.click_duration:first')
-          eventConfig.clickDuration = writeValue[@PageValueKey.CLICK_DURATION]
-          if eventConfig.clickDuration?
-            clickDuration.val(eventConfig.clickDuration)
+          eventDuration = handlerDiv.find('.click_duration:first')
+          eventConfig.eventDuration = writeValue[@PageValueKey.EVENT_DURATION]
+          if eventConfig.eventDuration?
+            eventDuration.val(eventConfig.eventDuration)
           else
             item = window.instanceMap[eventConfig.id]
             if item?
-              clickDuration.val(item.constructor.methods[eventConfig.methodClassName()][item.constructor.ActionPropertiesKey.CLICK_DURATION])
+              eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION])
 
           eventConfig.forkNum = writeValue[@PageValueKey.CHANGE_FORKNUM]
           enabled = eventConfig.forkNum? && eventConfig.forkNum > 0

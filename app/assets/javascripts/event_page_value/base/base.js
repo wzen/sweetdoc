@@ -49,7 +49,7 @@ EventPageValueBase = (function() {
 
       PageValueKey.IS_DRAW_BY_ANIMATION = constant.EventPageValueKey.IS_DRAW_BY_ANIMATION;
 
-      PageValueKey.CLICK_DURATION = constant.EventPageValueKey.CLICK_DURATION;
+      PageValueKey.EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION;
 
       return PageValueKey;
 
@@ -57,7 +57,7 @@ EventPageValueBase = (function() {
   }
 
   EventPageValueBase.initConfigValue = function(eventConfig) {
-    var _scrollLength, clickDuration, end, endDiv, handlerDiv, item, s, start, startDiv;
+    var _scrollLength, end, endDiv, eventDuration, handlerDiv, item, s, start, startDiv;
     _scrollLength = function(eventConfig) {
       var end, start, writeValue;
       writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
@@ -92,10 +92,10 @@ EventPageValueBase = (function() {
     } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
       handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
       if (handlerDiv != null) {
-        clickDuration = handlerDiv.find('.click_duration:first');
+        eventDuration = handlerDiv.find('.click_duration:first');
         item = window.instanceMap[eventConfig.id];
         if (item != null) {
-          return clickDuration.val(item.constructor.methods[eventConfig.methodClassName()][item.constructor.ActionPropertiesKey.CLICK_DURATION]);
+          return eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
         }
       }
     }
@@ -120,14 +120,14 @@ EventPageValueBase = (function() {
       writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection;
       writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection;
     } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
-      writeValue[this.PageValueKey.CLICK_DURATION] = eventConfig.clickDuration;
+      writeValue[this.PageValueKey.EVENT_DURATION] = eventConfig.eventDuration;
       writeValue[this.PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum;
     }
     return writeValue;
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var bottomEmt, clickDuration, enabled, fn, handlerDiv, isParallel, item, leftEmt, parallel, rightEmt, topEmt, writeValue;
+    var bottomEmt, enabled, eventDuration, fn, handlerDiv, isParallel, item, leftEmt, parallel, rightEmt, topEmt, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       eventConfig.distId = writeValue[this.PageValueKey.DIST_ID];
@@ -213,14 +213,14 @@ EventPageValueBase = (function() {
       } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
-          clickDuration = handlerDiv.find('.click_duration:first');
-          eventConfig.clickDuration = writeValue[this.PageValueKey.CLICK_DURATION];
-          if (eventConfig.clickDuration != null) {
-            clickDuration.val(eventConfig.clickDuration);
+          eventDuration = handlerDiv.find('.click_duration:first');
+          eventConfig.eventDuration = writeValue[this.PageValueKey.EVENT_DURATION];
+          if (eventConfig.eventDuration != null) {
+            eventDuration.val(eventConfig.eventDuration);
           } else {
             item = window.instanceMap[eventConfig.id];
             if (item != null) {
-              clickDuration.val(item.constructor.methods[eventConfig.methodClassName()][item.constructor.ActionPropertiesKey.CLICK_DURATION]);
+              eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
             }
           }
           eventConfig.forkNum = writeValue[this.PageValueKey.CHANGE_FORKNUM];

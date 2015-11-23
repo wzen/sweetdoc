@@ -22,7 +22,7 @@ class ItemBase extends ItemEventBase
       @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
       @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
       @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
-      @CLICK_DURATION = constant.ItemActionPropertiesKey.CLICK_DURATION
+      @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -199,7 +199,7 @@ class ItemBase extends ItemEventBase
 
   # クリックのデフォルト時間
   @defaultClickDuration = ->
-    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.CLICK_DURATION]
+    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.EVENT_DURATION]
 
   # デフォルトデザインをPageValue & 変数に適用
   applyDefaultDesign: ->
@@ -287,13 +287,13 @@ class ItemBase extends ItemEventBase
       @updatePositionAndItemSize(itemSize, false)
       return
 
-    clickDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.CLICK_DURATION]
+    eventDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION]
     duration = 0.01
-    perX = itemDiff.x * (duration / clickDuration)
-    perY = itemDiff.y * (duration / clickDuration)
-    perW = itemDiff.w * (duration / clickDuration)
-    perH = itemDiff.h * (duration / clickDuration)
-    loopMax = Math.ceil(clickDuration/ duration)
+    perX = itemDiff.x * (duration / eventDuration)
+    perY = itemDiff.y * (duration / eventDuration)
+    perW = itemDiff.w * (duration / eventDuration)
+    perH = itemDiff.h * (duration / eventDuration)
+    loopMax = Math.ceil(eventDuration/ duration)
     count = 1
     timer = setInterval( =>
       itemSize = {

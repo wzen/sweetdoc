@@ -287,7 +287,7 @@ class Const
     CHANGE_FORKNUM = 'change_forknum'
     MODIFIABLE_VARS = 'modifiable_vars'
     IS_DRAW_BY_ANIMATION = 'isDrawByAnimation'
-    CLICK_DURATION = 'clickDuration'
+    EVENT_DURATION = 'eventDuration'
   end
 
   class UserPageValue
@@ -324,7 +324,7 @@ class Const
     SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
     OPTIONS = 'options'
-    CLICK_DURATION = 'clickDuration'
+    EVENT_DURATION = 'eventDuration'
   end
 
   class Run
