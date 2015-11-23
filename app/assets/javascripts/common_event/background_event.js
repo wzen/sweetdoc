@@ -12,42 +12,42 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.EVENT_ID = '1';
 
+  BackgroundEvent.actionProperties = {
+    defaultMethod: 'changeBackgroundColor',
+    methods: {
+      changeColorClick: {
+        actionType: 'scroll',
+        options: {
+          id: 'changeColorClick_Design',
+          name: 'Changing color by click',
+          ja: {
+            name: 'クリックで色変更'
+          }
+        },
+        modifiables: {
+          backgroundColor: {
+            name: "Background Color",
+            type: 'color',
+            varAutoChange: true,
+            ja: {
+              name: "背景色"
+            }
+          }
+        }
+      }
+    }
+  };
+
   BackgroundEvent.prototype.initEvent = function(event) {
-    var afterColor, beforeColor, className, methodName, scrollEnd, scrollStart, section;
+    var className, section;
     BackgroundEvent.__super__.initEvent.call(this, event);
-    methodName = this.getEventMethodName();
-    if (methodName === 'changeBackgroundColor') {
-      beforeColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
-      afterColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR];
-      scrollStart = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
-      scrollEnd = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
-      this.scrollEvents = Common.colorChangeCacheData(beforeColor, afterColor, scrollEnd - scrollStart);
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-      section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-      return this.targetBackground = section;
-    }
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    return this.targetBackground = section;
   };
 
-  BackgroundEvent.prototype.updateEventBefore = function() {
-    var bColor, methodName;
-    methodName = this.getEventMethodName();
-    if (methodName === 'changeBackgroundColor') {
-      bColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR];
-      return this.targetBackground.css('backgroundColor', bColor);
-    }
-  };
-
-  BackgroundEvent.prototype.updateEventAfter = function() {
-    var cColor, methodName;
-    methodName = this.getEventMethodName();
-    if (methodName === 'changeBackgroundColor') {
-      cColor = this.event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR];
-      return this.targetBackground.css('backgroundColor', cColor);
-    }
-  };
-
-  BackgroundEvent.prototype.changeBackgroundColor = function(scrollValue) {
-    return this.targetBackground.css('backgroundColor', this.scrollEvents[scrollValue]);
+  BackgroundEvent.prototype.changeBackgroundColor = function(opt) {
+    return this.targetBackground.css('backgroundColor', "#" + backgroundColor);
   };
 
   return BackgroundEvent;
