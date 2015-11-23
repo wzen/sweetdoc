@@ -34,11 +34,10 @@ $ ->
       # ページング
       Paging.initPaging()
 
-
     if existedCache
       # 描画
       PageValue.adjustInstanceAndEventOnPage()
-      WorktableCommon.drawAllItemFromInstancePageValue( ->
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         _callback.call(@)
         # 初期化終了
         window.initDone = true

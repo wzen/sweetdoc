@@ -15,7 +15,7 @@ BackgroundEvent = (function(superClass) {
   BackgroundEvent.actionProperties = {
     defaultMethod: 'changeBackgroundColor',
     methods: {
-      changeColorClick: {
+      changeBackgroundColor: {
         actionType: 'scroll',
         options: {
           id: 'changeColorClick_Design',

@@ -99,7 +99,7 @@ Paging = (function() {
       PageValue.setPageNum(PageValue.getPageCount() + 1);
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();
-      return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+      return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         Timeline.refreshAllTimeline();
         return pageFlip.startRender(function() {
           var className, section;
@@ -162,7 +162,7 @@ Paging = (function() {
       PageValue.setPageNum(selectedPageNum);
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();
-      return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+      return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         return Paging.selectFork(selectedForkNum, function() {
           Timeline.refreshAllTimeline();
           return pageFlip.startRender(function() {
@@ -215,7 +215,7 @@ Paging = (function() {
           return callback();
         }
       } else {
-        return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+        return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
           if (callback != null) {
             return callback();
           }

@@ -114,7 +114,7 @@ class Paging
       # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
-      WorktableCommon.drawAllItemFromInstancePageValue( ->
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # タイムライン更新
         Timeline.refreshAllTimeline()
 
@@ -185,7 +185,7 @@ class Paging
       # 新規コンテナ初期化
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
-      WorktableCommon.drawAllItemFromInstancePageValue( ->
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # フォーク内容反映
         Paging.selectFork(selectedForkNum, ->
           # タイムライン更新
@@ -257,7 +257,7 @@ class Paging
         # Forkに変更
 
         # フォークのアイテムを描画
-        WorktableCommon.drawAllItemFromInstancePageValue( ->
+        WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
           if callback?
             callback()
         )

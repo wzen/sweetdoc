@@ -55,7 +55,7 @@ class OperationHistory
       # キャッシュ保存 & 描画 & タイムライン更新
       PageValue.adjustInstanceAndEventOnPage()
       LocalStorage.saveAllPageValues()
-      WorktableCommon.drawAllItemFromInstancePageValue()
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
       Timeline.refreshAllTimeline()
       return true
     else
@@ -84,7 +84,7 @@ class OperationHistory
       # キャッシュ保存 & 描画 & タイムライン更新
       PageValue.adjustInstanceAndEventOnPage()
       LocalStorage.saveAllPageValues()
-      WorktableCommon.drawAllItemFromInstancePageValue()
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
       Timeline.refreshAllTimeline()
       return true
     else

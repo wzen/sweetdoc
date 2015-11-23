@@ -71,7 +71,7 @@ OperationHistory = (function() {
       window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;
       PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
-      WorktableCommon.drawAllItemFromInstancePageValue();
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue();
       Timeline.refreshAllTimeline();
       return true;
     } else {
@@ -99,7 +99,7 @@ OperationHistory = (function() {
       window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;
       PageValue.adjustInstanceAndEventOnPage();
       LocalStorage.saveAllPageValues();
-      WorktableCommon.drawAllItemFromInstancePageValue();
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue();
       Timeline.refreshAllTimeline();
       return true;
     } else {

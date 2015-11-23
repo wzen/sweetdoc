@@ -72,25 +72,12 @@
             <div class="event-config-headliner">Value</div>
             <div class="forms value_forms">
                 <!-- イベント毎の設定値 -->
-                <% @common_actions.each do |c| %>
-                    <% c.common_action_events.each do |a| %>
-                        <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
-                          <% if a.id == Const::CommonActionEventChangeType::BACKGROUND  %>
-                            <%= render 'worktable/sidebar_menu/event/parts/backgroundcolor_change' %>
-                          <% elsif a.id == Const::CommonActionEventChangeType::SCREEN %>
-                            <%= render 'worktable/sidebar_menu/event/parts/screenposition_change' %>
-                          <% end %>
-                        </div>
-                    <% end %>
-                <% end %>
             </div>
             <div class="forms">
-
                 <button class="push button reset" style="margin-top: 10px">reset change</button><br/>
                 <button class="push button apply" style="margin-top: 10px">Apply</button><br/>
                 <button class="push button cancel" style="margin-top: 10px">Close(Not apply)</button>
                 <input class="confirm" type="hidden" value="OK?(Confirm)">
-
                 <!-- エラー (暫定でこの位置) -->
                 <div class="event_config_error error-message">
                     <div><p></p></div>

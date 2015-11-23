@@ -6,7 +6,7 @@ class BackgroundEvent extends CommonEvent
     {
       defaultMethod: 'changeBackgroundColor'
       methods: {
-        changeColorClick: {
+        changeBackgroundColor: {
           actionType: 'scroll'
           options: {
             id: 'changeColorClick_Design'

@@ -145,14 +145,25 @@ class EventConfig
         _setForkSelect.call(@)
       _setApplyClickEvent.call(@)
 
-    item = window.instanceMap[@id]
-    if item? && item instanceof ItemBase
-      # Itemの変数変更コンフィグ読み込み
-      @addEventVarModifyConfig(item, =>
+    if @id?
+      # アイテム選択時
+      item = window.instanceMap[@id]
+      if item?
+        # 変数変更コンフィグ読み込み
+        @addEventVarModifyConfig(item.constructor, =>
+          _callback.call(@)
+        )
+      else
         _callback.call(@)
-      )
-    else
-      _callback.call(@)
+    else if @commonEventId
+      # 共通イベント選択時
+      objClass = Common.getClassFromMap(true, @commonEventId)
+      if objClass
+        @addEventVarModifyConfig(objClass, =>
+          _callback.call(@)
+        )
+      else
+        _callback.call(@)
 
   # イベントの入力値を初期化する
   resetAction: ->
@@ -441,13 +452,13 @@ class EventConfig
         actionParent.appendTo(action_forms)
 
   # 変数編集の入力フォームを追加
-  addEventVarModifyConfig: (obj, successCallback = null, errorCallback = null) ->
+  addEventVarModifyConfig: (objClass, successCallback = null, errorCallback = null) ->
     # HTML存在チェック
     valueClassName = @methodClassName()
     emt = $(".value_forms .#{valueClassName}", @emt)
     if emt.length > 0
       # コンフィグの初期化
-      @initEventVarModifyConfig(obj)
+      @initEventVarModifyConfig(objClass)
       if successCallback?
         successCallback()
       return
@@ -457,7 +468,7 @@ class EventConfig
         url: "/worktable/event_var_modify_config"
         type: "POST"
         data: {
-          modifiables: obj.constructor.actionProperties.methods[@methodName].modifiables
+          modifiables: objClass.actionProperties.methods[@methodName].modifiables
         }
         dataType: "json"
         success: (data) =>
@@ -465,7 +476,7 @@ class EventConfig
             # コンフィグ追加
             $(".value_forms", @emt).append($("<div class='#{valueClassName}'>#{data.html}</div>"))
             # コンフィグの初期化
-            @initEventVarModifyConfig(obj)
+            @initEventVarModifyConfig(objClass)
             if successCallback?
               successCallback(data)
           else
@@ -480,8 +491,8 @@ class EventConfig
     )
 
   # 変数編集コンフィグの初期化
-  initEventVarModifyConfig: (obj) ->
-    mod = obj.constructor.actionProperties.methods[@methodName].modifiables
+  initEventVarModifyConfig: (objClass) ->
+    mod = objClass.actionProperties.methods[@methodName].modifiables
     if mod?
       for varName, v of mod
         if @hasModifiableVar(varName)

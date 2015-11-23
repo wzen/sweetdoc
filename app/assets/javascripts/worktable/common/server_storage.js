@@ -141,7 +141,7 @@ ServerStorage = (function() {
             }
             PageValue.adjustInstanceAndEventOnPage();
             LocalStorage.saveAllPageValues();
-            return WorktableCommon.drawAllItemFromInstancePageValue(function() {
+            return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
               Timeline.refreshAllTimeline();
               PageValue.updatePageCount();
               PageValue.updateForkCount();

@@ -25,7 +25,7 @@ $(function() {
     };
     if (existedCache) {
       PageValue.adjustInstanceAndEventOnPage();
-      WorktableCommon.drawAllItemFromInstancePageValue(function() {
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         _callback.call(this);
         return window.initDone = true;
       });

@@ -403,7 +403,7 @@ class WorktableCommon
   # イベントPageValueから全てのアイテムを描画
   # @param [Function] callback コールバック
   # @param [Integer] pageNum 描画するPageValueのページ番号
-  @drawAllItemFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
+  @createAllInstanceAndDrawFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     Common.loadJsFromInstancePageValue( ->
       pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
       for k, obj of pageValues

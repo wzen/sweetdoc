@@ -445,7 +445,7 @@ WorktableCommon = (function() {
     })(this));
   };
 
-  WorktableCommon.drawAllItemFromInstancePageValue = function(callback, pageNum) {
+  WorktableCommon.createAllInstanceAndDrawFromInstancePageValue = function(callback, pageNum) {
     if (callback == null) {
       callback = null;
     }

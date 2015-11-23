@@ -95,7 +95,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.clickMethod = function(e) {
-    var _callback, item, parent;
+    var _callback, item, objClass, parent;
     if (e == null) {
       e = null;
     }
@@ -134,15 +134,28 @@ EventConfig = (function() {
       }
       return _setApplyClickEvent.call(this);
     };
-    item = window.instanceMap[this.id];
-    if ((item != null) && item instanceof ItemBase) {
-      return this.addEventVarModifyConfig(item, (function(_this) {
-        return function() {
-          return _callback.call(_this);
-        };
-      })(this));
-    } else {
-      return _callback.call(this);
+    if (this.id != null) {
+      item = window.instanceMap[this.id];
+      if (item != null) {
+        return this.addEventVarModifyConfig(item.constructor, (function(_this) {
+          return function() {
+            return _callback.call(_this);
+          };
+        })(this));
+      } else {
+        return _callback.call(this);
+      }
+    } else if (this.commonEventId) {
+      objClass = Common.getClassFromMap(true, this.commonEventId);
+      if (objClass) {
+        return this.addEventVarModifyConfig(objClass, (function(_this) {
+          return function() {
+            return _callback.call(_this);
+          };
+        })(this));
+      } else {
+        return _callback.call(this);
+      }
     }
   };
 
@@ -443,7 +456,7 @@ EventConfig = (function() {
     }
   };
 
-  EventConfig.prototype.addEventVarModifyConfig = function(obj, successCallback, errorCallback) {
+  EventConfig.prototype.addEventVarModifyConfig = function(objClass, successCallback, errorCallback) {
     var emt, valueClassName;
     if (successCallback == null) {
       successCallback = null;
@@ -454,7 +467,7 @@ EventConfig = (function() {
     valueClassName = this.methodClassName();
     emt = $(".value_forms ." + valueClassName, this.emt);
     if (emt.length > 0) {
-      this.initEventVarModifyConfig(obj);
+      this.initEventVarModifyConfig(objClass);
       if (successCallback != null) {
         successCallback();
       }
@@ -464,14 +477,14 @@ EventConfig = (function() {
       url: "/worktable/event_var_modify_config",
       type: "POST",
       data: {
-        modifiables: obj.constructor.actionProperties.methods[this.methodName].modifiables
+        modifiables: objClass.actionProperties.methods[this.methodName].modifiables
       },
       dataType: "json",
       success: (function(_this) {
         return function(data) {
           if (data.resultSuccess) {
             $(".value_forms", _this.emt).append($("<div class='" + valueClassName + "'>" + data.html + "</div>"));
-            _this.initEventVarModifyConfig(obj);
+            _this.initEventVarModifyConfig(objClass);
             if (successCallback != null) {
               return successCallback(data);
             }
@@ -492,9 +505,9 @@ EventConfig = (function() {
     });
   };
 
-  EventConfig.prototype.initEventVarModifyConfig = function(obj) {
+  EventConfig.prototype.initEventVarModifyConfig = function(objClass) {
     var defaultValue, mod, results, v, varName;
-    mod = obj.constructor.actionProperties.methods[this.methodName].modifiables;
+    mod = objClass.actionProperties.methods[this.methodName].modifiables;
     if (mod != null) {
       results = [];
       for (varName in mod) {
