@@ -10,60 +10,6 @@ EPVBackgroundColor = (function(superClass) {
     return EPVBackgroundColor.__super__.constructor.apply(this, arguments);
   }
 
-  EPVBackgroundColor.BASE_COLOR = 'b_color';
-
-  EPVBackgroundColor.CHANGE_COLOR = 'c_color';
-
-  EPVBackgroundColor.initConfigValue = function(eventConfig) {
-    var bgColor, className, section;
-    EPVBackgroundColor.__super__.constructor.initConfigValue.call(this, eventConfig);
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-    bgColor = section.css('backgroundColor');
-    $(".baseColor", $("values_div", eventConfig.emt)).css('backgroundColor', bgColor);
-    return $(".colorPicker", eventConfig.emt).each(function() {
-      var self;
-      self = $(this);
-      if (!self.hasClass('temp') && !self.hasClass('baseColor')) {
-        return ColorPickerUtil.initColorPicker(self, bgColor, null);
-      }
-    });
-  };
-
-  EPVBackgroundColor.writeToPageValue = function(eventConfig) {
-    var emt, errorMes, value, writeValue;
-    errorMes = "";
-    writeValue = EPVBackgroundColor.__super__.constructor.writeToPageValue.call(this, eventConfig);
-    emt = eventConfig.emt;
-    value = {};
-    value[this.BASE_COLOR] = $('.base_color:first', emt).css('backgroundColor');
-    value[this.CHANGE_COLOR] = $('.change_color:first', emt).css('backgroundColor');
-    if (value[this.BASE_COLOR] === value[this.CHANGE_COLOR]) {
-      errorMes = "同じ色は選択できません";
-    }
-    if (errorMes.length === 0) {
-      writeValue[this.PageValueKey.VALUE] = value;
-      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue);
-      PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
-      LocalStorage.saveAllPageValues();
-    }
-    return errorMes;
-  };
-
-  EPVBackgroundColor.readFromPageValue = function(eventConfig) {
-    var emt, ret, value, writeValue;
-    ret = EPVBackgroundColor.__super__.constructor.readFromPageValue.call(this, eventConfig);
-    if (!ret) {
-      return false;
-    }
-    emt = eventConfig.emt;
-    writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
-    value = writeValue[this.PageValueKey.VALUE];
-    ColorPickerUtil.initColorPicker($(".colorPicker.base_color", emt), value[this.BASE_COLOR], null);
-    ColorPickerUtil.initColorPicker($(".colorPicker.change_color", emt), value[this.CHANGE_COLOR], null);
-    return true;
-  };
-
   return EPVBackgroundColor;
 
 })(EventPageValueBase);

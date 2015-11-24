@@ -378,7 +378,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateInstanceParamByStep = function(stepValue, immediate) {
-    var after, before, colorCacheVarName, eventBeforeObj, mod, progressPercentage, results, stepMax, value, varName;
+    var after, before, colorCacheVarName, colorType, eventBeforeObj, mod, progressPercentage, results, stepMax, value, varName;
     if (immediate == null) {
       immediate = false;
     }
@@ -405,7 +405,8 @@ EventBase = (function(superClass) {
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChangeCache";
                 if (stepValue === 0 || (this[colorCacheVarName] == null)) {
-                  this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax);
+                  colorType = this.constructor.actionProperties.modifiables[varName].colorType;
+                  this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType);
                 }
                 results.push(this[varName] = this[colorCacheVarName][stepValue]);
               } else {

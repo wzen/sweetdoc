@@ -60,7 +60,7 @@ class EventPageValueBase
 
       return 0
 
-    if eventConfig.actionType == Constant.ActionType.SCROLL
+    if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
       handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
       if handlerDiv?
         startDiv = handlerDiv.find('.scroll_point_start:first')
@@ -75,40 +75,33 @@ class EventPageValueBase
         end = endDiv.val()
         if end.length == 0
           endDiv.val(parseInt(s) + _scrollLength.call(@, eventConfig))
-    else if eventConfig.actionType == Constant.ActionType.CLICK
+    else if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
       handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
       if handlerDiv?
         eventDuration = handlerDiv.find('.click_duration:first')
-        item = window.instanceMap[eventConfig.id]
+        item = window.instanceMap[eventConfig[@PageValueKey.ID]]
         if item?
-          eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION])
+          eventDuration.val(item.constructor.actionProperties.methods[eventConfig[@PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION])
 
   # PageValueに書き込みデータを取得
   # @param [Object] eventConfig イベントコンフィグオブジェクト
   # @return [Object] 書き込むデータ
   @writeToPageValue = (eventConfig) ->
+    errorMes = ''
     writeValue = {}
-    writeValue[@PageValueKey.DIST_ID] = eventConfig.distId
-    writeValue[@PageValueKey.ID] = eventConfig.id
-    writeValue[@PageValueKey.ITEM_ID] = eventConfig.itemId
-    writeValue[@PageValueKey.ITEM_SIZE_DIFF] = eventConfig.itemSizeDiff
-    writeValue[@PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId
-    writeValue[@PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent
-    writeValue[@PageValueKey.METHODNAME] = eventConfig.methodName
-    writeValue[@PageValueKey.ACTIONTYPE] = eventConfig.actionType
-    writeValue[@PageValueKey.IS_SYNC] = eventConfig.isParallel
-    writeValue[@PageValueKey.MODIFIABLE_VARS] = eventConfig.modifiableVars
+    for k, v of @PageValueKey
+      if eventConfig[v]?
+        writeValue[v] = eventConfig[v]
 
-    if eventConfig.actionType == Constant.ActionType.SCROLL
-      writeValue[@PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart
-      writeValue[@PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd
-      writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection
-      writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection
-    else if eventConfig.actionType == Constant.ActionType.CLICK
-      writeValue[@PageValueKey.EVENT_DURATION] = eventConfig.eventDuration
-      writeValue[@PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum
+    if errorMes.length == 0
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue)
+      if parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
-    return writeValue
+      # Storageに保存
+      LocalStorage.saveAllPageValues()
+
+    return errorMes
 
   # PageValueからConfigにデータを読み込み
   # @param [Object] eventConfig イベントコンフィグオブジェクト
@@ -116,91 +109,78 @@ class EventPageValueBase
   @readFromPageValue = (eventConfig) ->
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum))
     if writeValue?
-      eventConfig.distId = writeValue[@PageValueKey.DIST_ID]
-      eventConfig.id = writeValue[@PageValueKey.ID]
-      eventConfig.itemId = writeValue[@PageValueKey.ITEM_ID]
-      eventConfig.itemSizeDiff = writeValue[@PageValueKey.ITEM_SIZE_DIFF]
-      eventConfig.commonEventId = writeValue[@PageValueKey.COMMON_EVENT_ID]
-      eventConfig.isCommonEvent = writeValue[@PageValueKey.IS_COMMON_EVENT]
-      eventConfig.methodName = writeValue[@PageValueKey.METHODNAME]
-      eventConfig.actionType = writeValue[@PageValueKey.ACTIONTYPE]
-      eventConfig.modifiableVars = writeValue[@PageValueKey.MODIFIABLE_VARS]
+      for k, v of @PageValueKey
+        if writeValue[v]?
+          eventConfig[v] = writeValue[v]
 
-      if !eventConfig.isCommonEvent
-        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.x
-          $('.item_position_diff_x', eventConfig.emt).val(eventConfig.itemSizeDiff.x)
-        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.y
-          $('.item_position_diff_y', eventConfig.emt).val(eventConfig.itemSizeDiff.y)
-        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.w
-          $('.item_diff_width', eventConfig.emt).val(eventConfig.itemSizeDiff.w)
-        if eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h
-          $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h)
+      if !eventConfig[@PageValueKey.IS_COMMON_EVENT]
+        if eventConfig[@PageValueKey.ITEM_SIZE_DIFF] && eventConfig[@PageValueKey.ITEM_SIZE_DIFF].x
+          $('.item_position_diff_x', eventConfig.emt).val(eventConfig[@PageValueKey.ITEM_SIZE_DIFF].x)
+        if eventConfig[@PageValueKey.ITEM_SIZE_DIFF] && eventConfig[@PageValueKey.ITEM_SIZE_DIFF].y
+          $('.item_position_diff_y', eventConfig.emt).val(eventConfig[@PageValueKey.ITEM_SIZE_DIFF].y)
+        if eventConfig[@PageValueKey.ITEM_SIZE_DIFF] && eventConfig[@PageValueKey.ITEM_SIZE_DIFF].w
+          $('.item_diff_width', eventConfig.emt).val(eventConfig[@PageValueKey.ITEM_SIZE_DIFF].w)
+        if eventConfig[@PageValueKey.ITEM_SIZE_DIFF] && eventConfig[@PageValueKey.ITEM_SIZE_DIFF].h
+          $('.item_diff_height', eventConfig.emt).val(eventConfig[@PageValueKey.ITEM_SIZE_DIFF].h)
 
       parallel = $(".parallel_div .parallel", eventConfig.emt)
-      isParallel = writeValue[@PageValueKey.IS_SYNC]
-      if parallel? && isParallel
+      if parallel? && eventConfig[@PageValueKey.IS_SYNC]
         parallel.prop("checked", true)
 
-      if eventConfig.actionType == Constant.ActionType.SCROLL
+      if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
         if handlerDiv?
-          eventConfig.scrollPointStart = writeValue[@PageValueKey.SCROLL_POINT_START]
-          eventConfig.scrollPointEnd = writeValue[@PageValueKey.SCROLL_POINT_END]
-          if eventConfig.scrollPointStart? && eventConfig.scrollPointEnd?
-            handlerDiv.find('.scroll_point_start:first').val(eventConfig.scrollPointStart)
-            handlerDiv.find('.scroll_point_end:first').val(eventConfig.scrollPointEnd)
+          if eventConfig[@PageValueKey.SCROLL_POINT_START]? && eventConfig[@PageValueKey.SCROLL_POINT_END]?
+            handlerDiv.find('.scroll_point_start:first').val(eventConfig[@PageValueKey.SCROLL_POINT_START])
+            handlerDiv.find('.scroll_point_end:first').val(eventConfig[@PageValueKey.SCROLL_POINT_END])
 
-          eventConfig.scrollEnabledDirection = writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS]
-          eventConfig.scrollForwardDirection = writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS]
           topEmt = handlerDiv.find('.scroll_enabled_top:first')
           if topEmt?
-            topEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.top)
-            if eventConfig.scrollEnabledDirection.top
-              topEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.top)
+            topEmt.children('.scroll_enabled:first').prop("checked", eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].top)
+            if eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].top
+              topEmt.children('.scroll_forward:first').prop("checked", eventConfig[@PageValueKey.SCROLL_FORWARD_DIRECTIONS].top)
             else
               topEmt.children('.scroll_forward:first').prop("checked", false)
               topEmt.children('.scroll_forward:first').parent('label').hide()
           bottomEmt = handlerDiv.find('scroll_enabled_bottom:first')
           if bottomEmt?
-            bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.bottom)
-            if eventConfig.scrollEnabledDirection.bottom
-              bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.bottom)
+            bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom)
+            if eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom
+              bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig[@PageValueKey.SCROLL_FORWARD_DIRECTIONS].bottom)
             else
               bottomEmt.children('.scroll_forward:first').prop("checked", false)
               bottomEmt.children('.scroll_forward:first').parent('label').hide()
           leftEmt = handlerDiv.find('scroll_enabled_left:first')
           if leftEmt?
-            leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.left)
-            if eventConfig.scrollEnabledDirection.left
-              leftEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.left)
+            leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].left)
+            if eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].left
+              leftEmt.children('.scroll_forward:first').prop("checked", eventConfig[@PageValueKey.SCROLL_FORWARD_DIRECTIONS].left)
             else
               leftEmt.children('.scroll_forward:first').prop("checked", false)
               leftEmt.children('.scroll_forward:first').parent('label').hide()
           rightEmt = handlerDiv.find('scroll_enabled_right:first')
           if rightEmt?
-            rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.right)
-            if eventConfig.scrollEnabledDirection.right
-              rightEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.right)
+            rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].right)
+            if eventConfig[@PageValueKey.SCROLL_ENABLED_DIRECTIONS].right
+              rightEmt.children('.scroll_forward:first').prop("checked", eventConfig[@PageValueKey.SCROLL_FORWARD_DIRECTIONS].right)
             else
               rightEmt.children('.scroll_forward:first').prop("checked", false)
               rightEmt.children('.scroll_forward:first').parent('label').hide()
 
-      else if eventConfig.actionType == Constant.ActionType.CLICK
+      else if eventConfig[@PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
         handlerDiv = $(".handler_div .#{eventConfig.methodClassName()}", eventConfig.emt)
         if handlerDiv?
           eventDuration = handlerDiv.find('.click_duration:first')
-          eventConfig.eventDuration = writeValue[@PageValueKey.EVENT_DURATION]
-          if eventConfig.eventDuration?
-            eventDuration.val(eventConfig.eventDuration)
+          if eventConfig[@PageValueKey.EVENT_DURATION]?
+            eventDuration.val(eventConfig[@PageValueKey.EVENT_DURATION])
           else
-            item = window.instanceMap[eventConfig.id]
+            item = window.instanceMap[eventConfig[@PageValueKey.ID]]
             if item?
-              eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION])
+              eventDuration.val(item.constructor.actionProperties.methods[eventConfig[@PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION])
 
-          eventConfig.forkNum = writeValue[@PageValueKey.CHANGE_FORKNUM]
-          enabled = eventConfig.forkNum? && eventConfig.forkNum > 0
+          enabled = eventConfig[@PageValueKey.CHANGE_FORKNUM]? && eventConfig[@PageValueKey.CHANGE_FORKNUM] > 0
           $('.enable_fork:first', handlerDiv).prop('checked', enabled)
-          fn = if enabled then eventConfig.forkNum else 1
+          fn = if enabled then eventConfig[@PageValueKey.CHANGE_FORKNUM] else 1
           $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn))
           $('.fork_select:first', handlerDiv).parent('div').css('display', if enabled then 'block' else 'none')
 

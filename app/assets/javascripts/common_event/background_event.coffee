@@ -5,6 +5,17 @@ class BackgroundEvent extends CommonEvent
   @actionProperties =
     {
       defaultMethod: 'changeBackgroundColor'
+      modifiables: {
+        backgroundColor: {
+          name: "Background Color"
+          default: 'transparent'
+          type: 'color'
+          colorType: 'rgb'
+          ja :{
+            name: "背景色"
+          }
+        }
+      }
       methods: {
         changeBackgroundColor: {
           actionType: 'scroll'
@@ -34,27 +45,25 @@ class BackgroundEvent extends CommonEvent
   initEvent: (event) ->
     super(event)
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
-    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+    section = $("##{Constant.Paging.ROOT_ID}").find(".scroll_inside:first")
     @targetBackground = section
+
+  # イベント前の表示状態にする
+  updateEventBefore: ->
+    super()
+    methodName = @getEventMethodName()
+    if methodName == 'changeBackgroundColor'
+      @targetBackground.css('backgroundColor', "#{@backgroundColor}")
 #
-#  # イベント前の表示状態にする
-#  updateEventBefore: ->
-#    super()
-#    methodName = @getEventMethodName()
-#    if methodName == 'changeBackgroundColor'
-#      bColor = @event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.BASE_COLOR]
-#      @targetBackground.css('backgroundColor', bColor)
-#
-#  # イベント後の表示状態にする
-#  updateEventAfter: ->
-#    super()
-#    methodName = @getEventMethodName()
-#    if methodName == 'changeBackgroundColor'
-#      cColor = @event[EventPageValueBase.PageValueKey.VALUE][EPVBackgroundColor.CHANGE_COLOR]
-#      @targetBackground.css('backgroundColor', cColor)
+  # イベント後の表示状態にする
+  updateEventAfter: ->
+    super()
+    methodName = @getEventMethodName()
+    if methodName == 'changeBackgroundColor'
+      @targetBackground.css('backgroundColor', "#{@backgroundColor}")
 
   # スクロールイベント
   changeBackgroundColor: (opt) ->
-    @targetBackground.css('backgroundColor', "##{backgroundColor}")
+    @targetBackground.css('backgroundColor', "#{@backgroundColor}")
 
 Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)

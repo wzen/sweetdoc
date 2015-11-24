@@ -229,10 +229,6 @@ ItemBase = (function(superClass) {
     return this.designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(this.id));
   };
 
-  ItemBase.prototype.eventConfigValue = function() {
-    return null;
-  };
-
   ItemBase.prototype.updatePositionAndItemSize = function(itemSize, withSaveObj) {
     if (withSaveObj == null) {
       withSaveObj = true;

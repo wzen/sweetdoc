@@ -70,7 +70,7 @@ EventPageValueBase = (function() {
       }
       return 0;
     };
-    if (eventConfig.actionType === Constant.ActionType.SCROLL) {
+    if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
       handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
       if (handlerDiv != null) {
         startDiv = handlerDiv.find('.scroll_point_start:first');
@@ -89,91 +89,80 @@ EventPageValueBase = (function() {
           return endDiv.val(parseInt(s) + _scrollLength.call(this, eventConfig));
         }
       }
-    } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
+    } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
       handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
       if (handlerDiv != null) {
         eventDuration = handlerDiv.find('.click_duration:first');
-        item = window.instanceMap[eventConfig.id];
+        item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
         if (item != null) {
-          return eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
+          return eventDuration.val(item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
         }
       }
     }
   };
 
   EventPageValueBase.writeToPageValue = function(eventConfig) {
-    var writeValue;
+    var errorMes, k, ref, v, writeValue;
+    errorMes = '';
     writeValue = {};
-    writeValue[this.PageValueKey.DIST_ID] = eventConfig.distId;
-    writeValue[this.PageValueKey.ID] = eventConfig.id;
-    writeValue[this.PageValueKey.ITEM_ID] = eventConfig.itemId;
-    writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = eventConfig.itemSizeDiff;
-    writeValue[this.PageValueKey.COMMON_EVENT_ID] = eventConfig.commonEventId;
-    writeValue[this.PageValueKey.IS_COMMON_EVENT] = eventConfig.isCommonEvent;
-    writeValue[this.PageValueKey.METHODNAME] = eventConfig.methodName;
-    writeValue[this.PageValueKey.ACTIONTYPE] = eventConfig.actionType;
-    writeValue[this.PageValueKey.IS_SYNC] = eventConfig.isParallel;
-    writeValue[this.PageValueKey.MODIFIABLE_VARS] = eventConfig.modifiableVars;
-    if (eventConfig.actionType === Constant.ActionType.SCROLL) {
-      writeValue[this.PageValueKey.SCROLL_POINT_START] = eventConfig.scrollPointStart;
-      writeValue[this.PageValueKey.SCROLL_POINT_END] = eventConfig.scrollPointEnd;
-      writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = eventConfig.scrollEnabledDirection;
-      writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = eventConfig.scrollForwardDirection;
-    } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
-      writeValue[this.PageValueKey.EVENT_DURATION] = eventConfig.eventDuration;
-      writeValue[this.PageValueKey.CHANGE_FORKNUM] = eventConfig.forkNum;
+    ref = this.PageValueKey;
+    for (k in ref) {
+      v = ref[k];
+      if (eventConfig[v] != null) {
+        writeValue[v] = eventConfig[v];
+      }
     }
-    return writeValue;
+    if (errorMes.length === 0) {
+      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue);
+      if (parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum) {
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
+      }
+      LocalStorage.saveAllPageValues();
+    }
+    return errorMes;
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var bottomEmt, enabled, eventDuration, fn, handlerDiv, isParallel, item, leftEmt, parallel, rightEmt, topEmt, writeValue;
+    var bottomEmt, enabled, eventDuration, fn, handlerDiv, item, k, leftEmt, parallel, ref, rightEmt, topEmt, v, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
-      eventConfig.distId = writeValue[this.PageValueKey.DIST_ID];
-      eventConfig.id = writeValue[this.PageValueKey.ID];
-      eventConfig.itemId = writeValue[this.PageValueKey.ITEM_ID];
-      eventConfig.itemSizeDiff = writeValue[this.PageValueKey.ITEM_SIZE_DIFF];
-      eventConfig.commonEventId = writeValue[this.PageValueKey.COMMON_EVENT_ID];
-      eventConfig.isCommonEvent = writeValue[this.PageValueKey.IS_COMMON_EVENT];
-      eventConfig.methodName = writeValue[this.PageValueKey.METHODNAME];
-      eventConfig.actionType = writeValue[this.PageValueKey.ACTIONTYPE];
-      eventConfig.modifiableVars = writeValue[this.PageValueKey.MODIFIABLE_VARS];
-      if (!eventConfig.isCommonEvent) {
-        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.x) {
-          $('.item_position_diff_x', eventConfig.emt).val(eventConfig.itemSizeDiff.x);
+      ref = this.PageValueKey;
+      for (k in ref) {
+        v = ref[k];
+        if (writeValue[v] != null) {
+          eventConfig[v] = writeValue[v];
         }
-        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.y) {
-          $('.item_position_diff_y', eventConfig.emt).val(eventConfig.itemSizeDiff.y);
+      }
+      if (!eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
+        if (eventConfig[this.PageValueKey.ITEM_SIZE_DIFF] && eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].x) {
+          $('.item_position_diff_x', eventConfig.emt).val(eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].x);
         }
-        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.w) {
-          $('.item_diff_width', eventConfig.emt).val(eventConfig.itemSizeDiff.w);
+        if (eventConfig[this.PageValueKey.ITEM_SIZE_DIFF] && eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].y) {
+          $('.item_position_diff_y', eventConfig.emt).val(eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].y);
         }
-        if (eventConfig.itemSizeDiff && eventConfig.itemSizeDiff.h) {
-          $('.item_diff_height', eventConfig.emt).val(eventConfig.itemSizeDiff.h);
+        if (eventConfig[this.PageValueKey.ITEM_SIZE_DIFF] && eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].w) {
+          $('.item_diff_width', eventConfig.emt).val(eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].w);
+        }
+        if (eventConfig[this.PageValueKey.ITEM_SIZE_DIFF] && eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].h) {
+          $('.item_diff_height', eventConfig.emt).val(eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].h);
         }
       }
       parallel = $(".parallel_div .parallel", eventConfig.emt);
-      isParallel = writeValue[this.PageValueKey.IS_SYNC];
-      if ((parallel != null) && isParallel) {
+      if ((parallel != null) && eventConfig[this.PageValueKey.IS_SYNC]) {
         parallel.prop("checked", true);
       }
-      if (eventConfig.actionType === Constant.ActionType.SCROLL) {
+      if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
-          eventConfig.scrollPointStart = writeValue[this.PageValueKey.SCROLL_POINT_START];
-          eventConfig.scrollPointEnd = writeValue[this.PageValueKey.SCROLL_POINT_END];
-          if ((eventConfig.scrollPointStart != null) && (eventConfig.scrollPointEnd != null)) {
-            handlerDiv.find('.scroll_point_start:first').val(eventConfig.scrollPointStart);
-            handlerDiv.find('.scroll_point_end:first').val(eventConfig.scrollPointEnd);
+          if ((eventConfig[this.PageValueKey.SCROLL_POINT_START] != null) && (eventConfig[this.PageValueKey.SCROLL_POINT_END] != null)) {
+            handlerDiv.find('.scroll_point_start:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_START]);
+            handlerDiv.find('.scroll_point_end:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_END]);
           }
-          eventConfig.scrollEnabledDirection = writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
-          eventConfig.scrollForwardDirection = writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
           topEmt = handlerDiv.find('.scroll_enabled_top:first');
           if (topEmt != null) {
-            topEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.top);
-            if (eventConfig.scrollEnabledDirection.top) {
-              topEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.top);
+            topEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top);
+            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top) {
+              topEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].top);
             } else {
               topEmt.children('.scroll_forward:first').prop("checked", false);
               topEmt.children('.scroll_forward:first').parent('label').hide();
@@ -181,9 +170,9 @@ EventPageValueBase = (function() {
           }
           bottomEmt = handlerDiv.find('scroll_enabled_bottom:first');
           if (bottomEmt != null) {
-            bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.bottom);
-            if (eventConfig.scrollEnabledDirection.bottom) {
-              bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.bottom);
+            bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom);
+            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom) {
+              bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].bottom);
             } else {
               bottomEmt.children('.scroll_forward:first').prop("checked", false);
               bottomEmt.children('.scroll_forward:first').parent('label').hide();
@@ -191,9 +180,9 @@ EventPageValueBase = (function() {
           }
           leftEmt = handlerDiv.find('scroll_enabled_left:first');
           if (leftEmt != null) {
-            leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.left);
-            if (eventConfig.scrollEnabledDirection.left) {
-              leftEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.left);
+            leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left);
+            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left) {
+              leftEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].left);
             } else {
               leftEmt.children('.scroll_forward:first').prop("checked", false);
               leftEmt.children('.scroll_forward:first').parent('label').hide();
@@ -201,32 +190,30 @@ EventPageValueBase = (function() {
           }
           rightEmt = handlerDiv.find('scroll_enabled_right:first');
           if (rightEmt != null) {
-            rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig.scrollEnabledDirection.right);
-            if (eventConfig.scrollEnabledDirection.right) {
-              rightEmt.children('.scroll_forward:first').prop("checked", eventConfig.scrollForwardDirection.right);
+            rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right);
+            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right) {
+              rightEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].right);
             } else {
               rightEmt.children('.scroll_forward:first').prop("checked", false);
               rightEmt.children('.scroll_forward:first').parent('label').hide();
             }
           }
         }
-      } else if (eventConfig.actionType === Constant.ActionType.CLICK) {
+      } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
         handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
         if (handlerDiv != null) {
           eventDuration = handlerDiv.find('.click_duration:first');
-          eventConfig.eventDuration = writeValue[this.PageValueKey.EVENT_DURATION];
-          if (eventConfig.eventDuration != null) {
-            eventDuration.val(eventConfig.eventDuration);
+          if (eventConfig[this.PageValueKey.EVENT_DURATION] != null) {
+            eventDuration.val(eventConfig[this.PageValueKey.EVENT_DURATION]);
           } else {
-            item = window.instanceMap[eventConfig.id];
+            item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
             if (item != null) {
-              eventDuration.val(item.constructor.actionProperties.methods[eventConfig.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
+              eventDuration.val(item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
             }
           }
-          eventConfig.forkNum = writeValue[this.PageValueKey.CHANGE_FORKNUM];
-          enabled = (eventConfig.forkNum != null) && eventConfig.forkNum > 0;
+          enabled = (eventConfig[this.PageValueKey.CHANGE_FORKNUM] != null) && eventConfig[this.PageValueKey.CHANGE_FORKNUM] > 0;
           $('.enable_fork:first', handlerDiv).prop('checked', enabled);
-          fn = enabled ? eventConfig.forkNum : 1;
+          fn = enabled ? eventConfig[this.PageValueKey.CHANGE_FORKNUM] : 1;
           $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
           $('.fork_select:first', handlerDiv).parent('div').css('display', enabled ? 'block' : 'none');
         }

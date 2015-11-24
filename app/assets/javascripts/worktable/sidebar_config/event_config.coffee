@@ -30,22 +30,22 @@ class EventConfig
 
     # 選択イベントタイプ
     selectItemValue = ''
-    if @isCommonEvent
-      selectItemValue = "#{EventConfig.EVENT_COMMON_PREFIX}#{@commonEventId}"
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      selectItemValue = "#{EventConfig.EVENT_COMMON_PREFIX}#{@[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]}"
     else
-      selectItemValue = "#{@id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{@itemId}"
+      selectItemValue = "#{@[EventPageValueBase.PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{@[EventPageValueBase.PageValueKey.ITEM_ID]}"
     $('.te_item_select', @emt).val(selectItemValue)
 
     actionFormName = ''
-    if @isCommonEvent
-      actionFormName = EventConfig.EVENT_COMMON_PREFIX + @commonEventId
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      actionFormName = EventConfig.EVENT_COMMON_PREFIX + @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
     else
-      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
+      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', @[EventPageValueBase.PageValueKey.ITEM_ID])
 
     $(".#{actionFormName} .radio", @emt).each((e) ->
       actionType = $(@).find('input.action_type').val()
       methodName = $(@).find('input.method_name').val()
-      if parseInt(actionType) == self.actionType && methodName == self.methodName
+      if parseInt(actionType) == self[EventPageValueBase.PageValueKey.ACTIONTYPE] && methodName == self[EventPageValueBase.PageValueKey.METHODNAME]
         $(@).find('input:radio').prop('checked', true)
         return false
     )
@@ -62,19 +62,19 @@ class EventConfig
         $(".config.te_div", @emt).hide()
         return
 
-      @isCommonEvent = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) == 0
-      if @isCommonEvent
-        @commonEventId = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length))
+      @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) == 0
+      if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+        @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length))
       else
         splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
-        @id = splitValues[0]
-        @itemId = splitValues[1]
+        @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
+        @[EventPageValueBase.PageValueKey.ITEM_ID] = splitValues[1]
 
     # 選択枠消去
     WorktableCommon.clearSelectedBorder()
 
-    if !@isCommonEvent
-      vEmt = $('#' + @id)
+    if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      vEmt = $('#' + @[EventPageValueBase.PageValueKey.ID])
       # 選択枠設定
       WorktableCommon.setSelectedBorder(vEmt, 'timeline')
       # フォーカス
@@ -86,10 +86,10 @@ class EventConfig
 
     # 表示
     displayClassName = ''
-    if @isCommonEvent
-      displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @commonEventId)
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
     else
-      displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemid', @itemId)
+      displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemid', @[EventPageValueBase.PageValueKey.ITEM_ID])
       # アイテム共通情報表示
       $('.item_common_div', @emt).show()
 
@@ -109,8 +109,8 @@ class EventConfig
   clickMethod: (e = null) ->
     if e?
       parent = $(e).closest('.radio')
-      @actionType = parseInt(parent.find('input.action_type:first').val())
-      @methodName = parent.find('input.method_name:first').val()
+      @[EventPageValueBase.PageValueKey.ACTIONTYPE] = parseInt(parent.find('input.action_type:first').val())
+      @[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val()
 
     _callback = ->
       handlerClassName = @methodClassName()
@@ -118,7 +118,7 @@ class EventConfig
 
       if @teNum > 1
         beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
-        if @actionType == beforeActionType
+        if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == beforeActionType
           # 前のイベントと同じアクションタイプの場合は同時実行を表示
           $(".config.parallel_div", @emt).show()
 
@@ -138,16 +138,16 @@ class EventConfig
         if tle? && tle.initConfigValue?
           tle.initConfigValue(@)
 
-      if @actionType == Constant.ActionType.SCROLL
+      if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
         _setScrollDirectionEvent.call(@)
-      else if @actionType == Constant.ActionType.CLICK
+      else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
         _setEventDuration.call(@)
         _setForkSelect.call(@)
       _setApplyClickEvent.call(@)
 
-    if @id?
+    if @[EventPageValueBase.PageValueKey.ID]?
       # アイテム選択時
-      item = window.instanceMap[@id]
+      item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
       if item?
         # 変数変更コンフィグ読み込み
         @addEventVarModifyConfig(item.constructor, =>
@@ -155,9 +155,9 @@ class EventConfig
         )
       else
         _callback.call(@)
-    else if @commonEventId
+    else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
       # 共通イベント選択時
-      objClass = Common.getClassFromMap(true, @commonEventId)
+      objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
       if objClass
         @addEventVarModifyConfig(objClass, =>
           _callback.call(@)
@@ -173,64 +173,64 @@ class EventConfig
   applyAction: ->
     # 入力値を保存
 
-    if !@distId?
-      @distId = Common.generateId()
+    if !@[EventPageValueBase.PageValueKey.DIST_ID]?
+      @[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId()
 
-    @itemSizeDiff = {
+    @[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF] = {
       x: parseInt($('.item_position_diff_x:first', @emt).val())
       y: parseInt($('.item_position_diff_y:first', @emt).val())
       w: parseInt($('.item_diff_width:first', @emt).val())
       h: parseInt($('.item_diff_height:first', @emt).val())
     }
 
-    @isParallel = false
+    @[EventPageValueBase.PageValueKey.IS_SYNC] = false
     parallel = $(".parallel_div .parallel", @emt)
     if parallel?
-      @isParallel = parallel.is(":checked")
+      @[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked")
 
-    if @actionType == Constant.ActionType.SCROLL
-      @scrollPointStart = ''
-      @scrollPointEnd = ""
+    if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
+      @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = ''
+      @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = ""
       handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
       if handlerDiv?
-        @scrollPointStart = handlerDiv.find('.scroll_point_start:first').val()
-        @scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val()
+        @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
+        @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val()
 
         topEmt = handlerDiv.find('.scroll_enabled_top:first')
         bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first')
         leftEmt = handlerDiv.find('.scroll_enabled_left:first')
         rightEmt = handlerDiv.find('.scroll_enabled_right:first')
-        @scrollEnabledDirection = {
+        @[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
           top: topEmt.find('.scroll_enabled:first').is(":checked")
           bottom: bottomEmt.find('.scroll_enabled:first').is(":checked")
           left: leftEmt.find('.scroll_enabled:first').is(":checked")
           right: rightEmt.find('.scroll_enabled:first').is(":checked")
         }
-        @scrollForwardDirection = {
+        @[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
           top: topEmt.find('.scroll_forward:first').is(":checked")
           bottom: bottomEmt.find('.scroll_forward:first').is(":checked")
           left: leftEmt.find('.scroll_forward:first').is(":checked")
           right: rightEmt.find('.scroll_forward:first').is(":checked")
         }
 
-    else if @actionType == Constant.ActionType.CLICK
+    else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
       handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
       if handlerDiv?
-        @eventDuration = handlerDiv.find('.click_duration:first').val()
+        @[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val()
 
-        @forkNum = 0
+        @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0
         checked = handlerDiv.find('.enable_fork:first').is(':checked')
         if checked? && checked
           prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
-          @forkNum = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
+          @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
 
-    if @isCommonEvent
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # 共通イベントはここでインスタンス生成
-      commonEventClass = Common.getClassFromMap(true, @commonEventId)
+      commonEventClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
       commonEvent = new commonEventClass()
       instanceMap[commonEvent.id] = commonEvent
       commonEvent.setItemAllPropToPageValue()
-      @id = commonEvent.id
+      @[EventPageValueBase.PageValueKey.ID] = commonEvent.id
 
     errorMes = @writeToPageValue()
     if errorMes? && errorMes.length > 0
@@ -239,11 +239,11 @@ class EventConfig
       return
 
     # イベントの色を変更
-    Timeline.changeTimelineColor(@teNum, @actionType)
+    Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
     # キャッシュに保存
     LocalStorage.saveAllPageValues()
     # プレビュー開始
-    item = instanceMap[@id]
+    item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
     if item? && item.preview?
       item.preview(PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum)))
 
@@ -266,10 +266,10 @@ class EventConfig
 
   # アクションメソッド & メソッド毎の値のクラス名を取得
   methodClassName: ->
-    if @isCommonEvent
-      return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @commonEventId).replace('@methodname', @methodName)
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
     else
-      return @constructor.ITEM_VALUES_CLASS.replace('@itemid', @itemId).replace('@methodname', @methodName)
+      return @constructor.ITEM_VALUES_CLASS.replace('@itemid', @[EventPageValueBase.PageValueKey.ITEM_ID]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
 
   # エラー表示
   # @param [String] message メッセージ内容
@@ -287,13 +287,13 @@ class EventConfig
   # 対応するEventPageValueクラスを取得
   # @return [Class] EventPageValueクラス
   _getEventPageValueClass = ->
-    if @isCommonEvent == null
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == null
       return null
 
-    if @isCommonEvent
-      if @commonEventId == Constant.CommonActionEventChangeType.BACKGROUND
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] == Constant.CommonActionEventChangeType.BACKGROUND
         return EPVBackgroundColor
-      else if @commonEventId == Constant.CommonActionEventChangeType.SCREEN
+      else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] == Constant.CommonActionEventChangeType.SCREEN
         return EPVScreenPosition
     else
       return EPVItem
@@ -324,12 +324,12 @@ class EventConfig
     self = 0
     handler = $('.handler_div', @emt)
     eventDuration = handler.find('.click_duration:first')
-    if @eventDuration?
-      eventDuration.val(@eventDuration)
+    if @[EventPageValueBase.PageValueKey.EVENT_DURATION]?
+      eventDuration.val(@[EventPageValueBase.PageValueKey.EVENT_DURATION])
     else
-      item = window.instanceMap[@id]
+      item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
       if item?
-        eventDuration.val(item.constructor.actionProperties.methods[@methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION])
+        eventDuration.val(item.constructor.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION])
 
   _setForkSelect = ->
     self = 0
@@ -468,7 +468,7 @@ class EventConfig
         url: "/worktable/event_var_modify_config"
         type: "POST"
         data: {
-          modifiables: objClass.actionProperties.methods[@methodName].modifiables
+          modifiables: objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
         }
         dataType: "json"
         success: (data) =>
@@ -492,13 +492,19 @@ class EventConfig
 
   # 変数編集コンフィグの初期化
   initEventVarModifyConfig: (objClass) ->
-    mod = objClass.actionProperties.methods[@methodName].modifiables
+    mod = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
     if mod?
       for varName, v of mod
+        defaultValue = null
         if @hasModifiableVar(varName)
-          defaultValue = @modifiableVars[varName]
+          defaultValue = @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         else
-          defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+          objClass = null
+          if @[EventPageValueBase.PageValueKey.ITEM_ID]?
+            objClass = Common.getClassFromMap(false, @[EventPageValueBase.PageValueKey.ITEM_ID])
+          else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]?
+            objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
+          defaultValue = objClass.actionProperties.modifiables[varName].default
         if v.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
         else if v.type == Constant.ItemDesignOptionType.STRING
@@ -508,9 +514,9 @@ class EventConfig
 
   # 変数変更値が存在するか
   hasModifiableVar: (varName = null) ->
-    ret = @modifiableVars? && @modifiableVars? != 'undefined'
+    ret = @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? != 'undefined'
     if varName?
-      return ret && @modifiableVars[varName]?
+      return ret && @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
     else
       return ret
 
@@ -537,8 +543,8 @@ class EventConfig
         valueElement.val(ui.value)
         valueElement.html(ui.value)
         if !@hasModifiableVar(varName)
-          @modifiableVars = {}
-        @modifiableVars[varName] = ui.value
+          @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = ui.value
     })
 
   # 変数編集テキストボックスの作成
@@ -547,8 +553,8 @@ class EventConfig
     $(".#{varName}_text", @emt).val(defaultValue)
     $(".#{varName}_text", @emt).off('change').on('change', =>
       if !@hasModifiableVar(varName)
-        @modifiableVars = {}
-      @modifiableVars[varName] = $(@).val()
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
+      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(@).val()
     )
 
   # 変数編集カラーピッカーの作成
@@ -561,6 +567,6 @@ class EventConfig
       defaultValue,
       (a, b, d, e) =>
         if !@hasModifiableVar(varName)
-          @modifiableVars = {}
-        @modifiableVars[varName] = "#{b}"
+          @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "#{b}"
     )

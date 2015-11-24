@@ -12,10 +12,6 @@ EPVItem = (function(superClass) {
 
   EPVItem.itemSize = 'item_size';
 
-  EPVItem.initConfigValue = function(eventConfig, item) {
-    return EPVItem.__super__.constructor.initConfigValue.call(this, eventConfig);
-  };
-
   EPVItem.writeDefaultToPageValue = function(item) {
     var actionType, end, errorMes, start, teNum, writeValue;
     errorMes = "";
@@ -55,29 +51,6 @@ EPVItem = (function(superClass) {
       LocalStorage.saveAllPageValues();
     }
     return errorMes;
-  };
-
-  EPVItem.writeToPageValue = function(eventConfig) {
-    var errorMes, item, value, writeValue;
-    errorMes = "";
-    writeValue = EPVItem.__super__.constructor.writeToPageValue.call(this, eventConfig);
-    if (errorMes.length === 0) {
-      item = instanceMap[eventConfig.id];
-      value = item.eventConfigValue();
-      writeValue[this.PageValueKey.VALUE] = value;
-      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue);
-      if (parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum) {
-        PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
-      }
-      LocalStorage.saveAllPageValues();
-    }
-    return errorMes;
-  };
-
-  EPVItem.readFromPageValue = function(eventConfig, item) {
-    var ret;
-    ret = EPVItem.__super__.constructor.readFromPageValue.call(this, eventConfig);
-    return ret;
   };
 
   return EPVItem;

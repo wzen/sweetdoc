@@ -25,23 +25,23 @@ EventConfig = (function() {
     var actionFormName, selectItemValue, self;
     self = this;
     selectItemValue = '';
-    if (this.isCommonEvent) {
-      selectItemValue = "" + EventConfig.EVENT_COMMON_PREFIX + this.commonEventId;
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      selectItemValue = "" + EventConfig.EVENT_COMMON_PREFIX + this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID];
     } else {
-      selectItemValue = "" + this.id + EventConfig.EVENT_ITEM_SEPERATOR + this.itemId;
+      selectItemValue = "" + this[EventPageValueBase.PageValueKey.ID] + EventConfig.EVENT_ITEM_SEPERATOR + this[EventPageValueBase.PageValueKey.ITEM_ID];
     }
     $('.te_item_select', this.emt).val(selectItemValue);
     actionFormName = '';
-    if (this.isCommonEvent) {
-      actionFormName = EventConfig.EVENT_COMMON_PREFIX + this.commonEventId;
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      actionFormName = EventConfig.EVENT_COMMON_PREFIX + this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID];
     } else {
-      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', this.itemId);
+      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', this[EventPageValueBase.PageValueKey.ITEM_ID]);
     }
     return $("." + actionFormName + " .radio", this.emt).each(function(e) {
       var actionType, methodName;
       actionType = $(this).find('input.action_type').val();
       methodName = $(this).find('input.method_name').val();
-      if (parseInt(actionType) === self.actionType && methodName === self.methodName) {
+      if (parseInt(actionType) === self[EventPageValueBase.PageValueKey.ACTIONTYPE] && methodName === self[EventPageValueBase.PageValueKey.METHODNAME]) {
         $(this).find('input:radio').prop('checked', true);
         return false;
       }
@@ -59,28 +59,28 @@ EventConfig = (function() {
         $(".config.te_div", this.emt).hide();
         return;
       }
-      this.isCommonEvent = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) === 0;
-      if (this.isCommonEvent) {
-        this.commonEventId = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length));
+      this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) === 0;
+      if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+        this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length));
       } else {
         splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
-        this.id = splitValues[0];
-        this.itemId = splitValues[1];
+        this[EventPageValueBase.PageValueKey.ID] = splitValues[0];
+        this[EventPageValueBase.PageValueKey.ITEM_ID] = splitValues[1];
       }
     }
     WorktableCommon.clearSelectedBorder();
-    if (!this.isCommonEvent) {
-      vEmt = $('#' + this.id);
+    if (!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      vEmt = $('#' + this[EventPageValueBase.PageValueKey.ID]);
       WorktableCommon.setSelectedBorder(vEmt, 'timeline');
       Common.focusToTarget(vEmt);
     }
     $(".config.te_div", this.emt).hide();
     $(".action_div .forms", this.emt).children("div").hide();
     displayClassName = '';
-    if (this.isCommonEvent) {
-      displayClassName = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this.commonEventId);
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      displayClassName = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
     } else {
-      displayClassName = this.constructor.ITEM_ACTION_CLASS.replace('@itemid', this.itemId);
+      displayClassName = this.constructor.ITEM_ACTION_CLASS.replace('@itemid', this[EventPageValueBase.PageValueKey.ITEM_ID]);
       $('.item_common_div', this.emt).show();
     }
     $("." + displayClassName, this.emt).show();
@@ -101,8 +101,8 @@ EventConfig = (function() {
     }
     if (e != null) {
       parent = $(e).closest('.radio');
-      this.actionType = parseInt(parent.find('input.action_type:first').val());
-      this.methodName = parent.find('input.method_name:first').val();
+      this[EventPageValueBase.PageValueKey.ACTIONTYPE] = parseInt(parent.find('input.action_type:first').val());
+      this[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val();
     }
     _callback = function() {
       var beforeActionType, handlerClassName, tle, valueClassName;
@@ -110,7 +110,7 @@ EventConfig = (function() {
       valueClassName = this.methodClassName();
       if (this.teNum > 1) {
         beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
-        if (this.actionType === beforeActionType) {
+        if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === beforeActionType) {
           $(".config.parallel_div", this.emt).show();
         }
       }
@@ -126,16 +126,16 @@ EventConfig = (function() {
           tle.initConfigValue(this);
         }
       }
-      if (this.actionType === Constant.ActionType.SCROLL) {
+      if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
         _setScrollDirectionEvent.call(this);
-      } else if (this.actionType === Constant.ActionType.CLICK) {
+      } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
         _setEventDuration.call(this);
         _setForkSelect.call(this);
       }
       return _setApplyClickEvent.call(this);
     };
-    if (this.id != null) {
-      item = window.instanceMap[this.id];
+    if (this[EventPageValueBase.PageValueKey.ID] != null) {
+      item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
       if (item != null) {
         return this.addEventVarModifyConfig(item.constructor, (function(_this) {
           return function() {
@@ -145,8 +145,8 @@ EventConfig = (function() {
       } else {
         return _callback.call(this);
       }
-    } else if (this.commonEventId) {
-      objClass = Common.getClassFromMap(true, this.commonEventId);
+    } else if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]) {
+      objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
       if (objClass) {
         return this.addEventVarModifyConfig(objClass, (function(_this) {
           return function() {
@@ -165,71 +165,71 @@ EventConfig = (function() {
 
   EventConfig.prototype.applyAction = function() {
     var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, topEmt;
-    if (this.distId == null) {
-      this.distId = Common.generateId();
+    if (this[EventPageValueBase.PageValueKey.DIST_ID] == null) {
+      this[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId();
     }
-    this.itemSizeDiff = {
+    this[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF] = {
       x: parseInt($('.item_position_diff_x:first', this.emt).val()),
       y: parseInt($('.item_position_diff_y:first', this.emt).val()),
       w: parseInt($('.item_diff_width:first', this.emt).val()),
       h: parseInt($('.item_diff_height:first', this.emt).val())
     };
-    this.isParallel = false;
+    this[EventPageValueBase.PageValueKey.IS_SYNC] = false;
     parallel = $(".parallel_div .parallel", this.emt);
     if (parallel != null) {
-      this.isParallel = parallel.is(":checked");
+      this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
     }
-    if (this.actionType === Constant.ActionType.SCROLL) {
-      this.scrollPointStart = '';
-      this.scrollPointEnd = "";
+    if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
+      this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = '';
+      this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = "";
       handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
       if (handlerDiv != null) {
-        this.scrollPointStart = handlerDiv.find('.scroll_point_start:first').val();
-        this.scrollPointEnd = handlerDiv.find('.scroll_point_end:first').val();
+        this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
+        this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
         topEmt = handlerDiv.find('.scroll_enabled_top:first');
         bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first');
         leftEmt = handlerDiv.find('.scroll_enabled_left:first');
         rightEmt = handlerDiv.find('.scroll_enabled_right:first');
-        this.scrollEnabledDirection = {
+        this[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
           top: topEmt.find('.scroll_enabled:first').is(":checked"),
           bottom: bottomEmt.find('.scroll_enabled:first').is(":checked"),
           left: leftEmt.find('.scroll_enabled:first').is(":checked"),
           right: rightEmt.find('.scroll_enabled:first').is(":checked")
         };
-        this.scrollForwardDirection = {
+        this[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
           top: topEmt.find('.scroll_forward:first').is(":checked"),
           bottom: bottomEmt.find('.scroll_forward:first').is(":checked"),
           left: leftEmt.find('.scroll_forward:first').is(":checked"),
           right: rightEmt.find('.scroll_forward:first').is(":checked")
         };
       }
-    } else if (this.actionType === Constant.ActionType.CLICK) {
+    } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
       handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
       if (handlerDiv != null) {
-        this.eventDuration = handlerDiv.find('.click_duration:first').val();
-        this.forkNum = 0;
+        this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
+        this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
         checked = handlerDiv.find('.enable_fork:first').is(':checked');
         if ((checked != null) && checked) {
           prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
-          this.forkNum = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
+          this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
         }
       }
     }
-    if (this.isCommonEvent) {
-      commonEventClass = Common.getClassFromMap(true, this.commonEventId);
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      commonEventClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
       commonEvent = new commonEventClass();
       instanceMap[commonEvent.id] = commonEvent;
       commonEvent.setItemAllPropToPageValue();
-      this.id = commonEvent.id;
+      this[EventPageValueBase.PageValueKey.ID] = commonEvent.id;
     }
     errorMes = this.writeToPageValue();
     if ((errorMes != null) && errorMes.length > 0) {
       this.showError(errorMes);
       return;
     }
-    Timeline.changeTimelineColor(this.teNum, this.actionType);
+    Timeline.changeTimelineColor(this.teNum, this[EventPageValueBase.PageValueKey.ACTIONTYPE]);
     LocalStorage.saveAllPageValues();
-    item = instanceMap[this.id];
+    item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
     if ((item != null) && (item.preview != null)) {
       return item.preview(PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum)));
     }
@@ -258,10 +258,10 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.methodClassName = function() {
-    if (this.isCommonEvent) {
-      return this.constructor.COMMON_VALUES_CLASS.replace('@commoneventid', this.commonEventId).replace('@methodname', this.methodName);
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      return this.constructor.COMMON_VALUES_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
     } else {
-      return this.constructor.ITEM_VALUES_CLASS.replace('@itemid', this.itemId).replace('@methodname', this.methodName);
+      return this.constructor.ITEM_VALUES_CLASS.replace('@itemid', this[EventPageValueBase.PageValueKey.ITEM_ID]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
     }
   };
 
@@ -280,13 +280,13 @@ EventConfig = (function() {
   };
 
   _getEventPageValueClass = function() {
-    if (this.isCommonEvent === null) {
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === null) {
       return null;
     }
-    if (this.isCommonEvent) {
-      if (this.commonEventId === Constant.CommonActionEventChangeType.BACKGROUND) {
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] === Constant.CommonActionEventChangeType.BACKGROUND) {
         return EPVBackgroundColor;
-      } else if (this.commonEventId === Constant.CommonActionEventChangeType.SCREEN) {
+      } else if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] === Constant.CommonActionEventChangeType.SCREEN) {
         return EPVScreenPosition;
       }
     } else {
@@ -327,12 +327,12 @@ EventConfig = (function() {
     self = 0;
     handler = $('.handler_div', this.emt);
     eventDuration = handler.find('.click_duration:first');
-    if (this.eventDuration != null) {
-      return eventDuration.val(this.eventDuration);
+    if (this[EventPageValueBase.PageValueKey.EVENT_DURATION] != null) {
+      return eventDuration.val(this[EventPageValueBase.PageValueKey.EVENT_DURATION]);
     } else {
-      item = window.instanceMap[this.id];
+      item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
       if (item != null) {
-        return eventDuration.val(item.constructor.actionProperties.methods[this.methodName][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
+        return eventDuration.val(item.constructor.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
       }
     }
   };
@@ -477,7 +477,7 @@ EventConfig = (function() {
       url: "/worktable/event_var_modify_config",
       type: "POST",
       data: {
-        modifiables: objClass.actionProperties.methods[this.methodName].modifiables
+        modifiables: objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
       },
       dataType: "json",
       success: (function(_this) {
@@ -507,15 +507,22 @@ EventConfig = (function() {
 
   EventConfig.prototype.initEventVarModifyConfig = function(objClass) {
     var defaultValue, mod, results, v, varName;
-    mod = objClass.actionProperties.methods[this.methodName].modifiables;
+    mod = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables;
     if (mod != null) {
       results = [];
       for (varName in mod) {
         v = mod[varName];
+        defaultValue = null;
         if (this.hasModifiableVar(varName)) {
-          defaultValue = this.modifiableVars[varName];
+          defaultValue = this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
         } else {
-          defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+          objClass = null;
+          if (this[EventPageValueBase.PageValueKey.ITEM_ID] != null) {
+            objClass = Common.getClassFromMap(false, this[EventPageValueBase.PageValueKey.ITEM_ID]);
+          } else if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] != null) {
+            objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
+          }
+          defaultValue = objClass.actionProperties.modifiables[varName]["default"];
         }
         if (v.type === Constant.ItemDesignOptionType.NUMBER) {
           results.push(this.settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue));
@@ -536,9 +543,9 @@ EventConfig = (function() {
     if (varName == null) {
       varName = null;
     }
-    ret = (this.modifiableVars != null) && (this.modifiableVars != null) !== 'undefined';
+    ret = (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) !== 'undefined';
     if (varName != null) {
-      return ret && (this.modifiableVars[varName] != null);
+      return ret && (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null);
     } else {
       return ret;
     }
@@ -575,9 +582,9 @@ EventConfig = (function() {
           valueElement.val(ui.value);
           valueElement.html(ui.value);
           if (!_this.hasModifiableVar(varName)) {
-            _this.modifiableVars = {};
+            _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
           }
-          return _this.modifiableVars[varName] = ui.value;
+          return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = ui.value;
         };
       })(this)
     });
@@ -588,9 +595,9 @@ EventConfig = (function() {
     return $("." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
       return function() {
         if (!_this.hasModifiableVar(varName)) {
-          _this.modifiableVars = {};
+          _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this.modifiableVars[varName] = $(_this).val();
+        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(_this).val();
       };
     })(this));
   };
@@ -601,9 +608,9 @@ EventConfig = (function() {
     return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
       return function(a, b, d, e) {
         if (!_this.hasModifiableVar(varName)) {
-          _this.modifiableVars = {};
+          _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this.modifiableVars[varName] = "" + b;
+        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "" + b;
       };
     })(this));
   };

@@ -1,5 +1,7 @@
 class Const
 
+  DEFAULT_BACKGROUNDCOLOR = '#FAFAFA'
+
   # 操作モード
   class Mode
     # @property [Int] NOT_SELECT 未選択

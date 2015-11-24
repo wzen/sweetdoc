@@ -368,7 +368,8 @@ class EventBase extends Extend
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChangeCache"
                 if stepValue == 0 || !@[colorCacheVarName]?
-                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax)
+                  colorType = @constructor.actionProperties.modifiables[varName].colorType
+                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType)
                 @[varName] = @[colorCacheVarName][stepValue]
 
   # アニメーションによるアイテム状態更新

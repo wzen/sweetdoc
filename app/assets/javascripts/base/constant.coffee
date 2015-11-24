@@ -4,6 +4,9 @@ if gon?
 
   # アプリ共通定数
   class Constant
+
+    @DEFAULT_BACKGROUNDCOLOR = constant.DEFAULT_BACKGROUNDCOLOR
+
     # ZIndex
     class @Zindex
       # @property GRID グリッド線

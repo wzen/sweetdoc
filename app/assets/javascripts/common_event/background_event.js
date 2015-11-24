@@ -14,6 +14,17 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.actionProperties = {
     defaultMethod: 'changeBackgroundColor',
+    modifiables: {
+      backgroundColor: {
+        name: "Background Color",
+        "default": 'transparent',
+        type: 'color',
+        colorType: 'rgb',
+        ja: {
+          name: "背景色"
+        }
+      }
+    },
     methods: {
       changeBackgroundColor: {
         actionType: 'scroll',
@@ -42,12 +53,30 @@ BackgroundEvent = (function(superClass) {
     var className, section;
     BackgroundEvent.__super__.initEvent.call(this, event);
     className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    section = $("#" + Constant.Paging.ROOT_ID).find(".scroll_inside:first");
     return this.targetBackground = section;
   };
 
+  BackgroundEvent.prototype.updateEventBefore = function() {
+    var methodName;
+    BackgroundEvent.__super__.updateEventBefore.call(this);
+    methodName = this.getEventMethodName();
+    if (methodName === 'changeBackgroundColor') {
+      return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
+    }
+  };
+
+  BackgroundEvent.prototype.updateEventAfter = function() {
+    var methodName;
+    BackgroundEvent.__super__.updateEventAfter.call(this);
+    methodName = this.getEventMethodName();
+    if (methodName === 'changeBackgroundColor') {
+      return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
+    }
+  };
+
   BackgroundEvent.prototype.changeBackgroundColor = function(opt) {
-    return this.targetBackground.css('backgroundColor', "#" + backgroundColor);
+    return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
   };
 
   return BackgroundEvent;

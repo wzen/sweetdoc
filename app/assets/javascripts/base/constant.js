@@ -6,6 +6,8 @@ if (typeof gon !== "undefined" && gon !== null) {
   Constant = (function() {
     function Constant() {}
 
+    Constant.DEFAULT_BACKGROUNDCOLOR = constant.DEFAULT_BACKGROUNDCOLOR;
+
     Constant.Zindex = (function() {
       function Zindex() {}
 

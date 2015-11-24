@@ -824,23 +824,8 @@ class Common
     element.contextmenu(data)
 
   # 色変更差分のキャッシュを取得
-  @colorChangeCacheData = (beforeColor, afterColor, length, isOutputHex = true) ->
+  @colorChangeCacheData = (beforeColor, afterColor, length, colorType = 'hex') ->
     ret = []
-
-    bColors = new Array(3)
-    if beforeColor.indexOf('rgb') >= 0
-      # 'rgb(r, g, b)'のフォーマットを分解
-      bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
-      for val, index in bColors
-        bColors[index] = parseInt(val)
-    if beforeColor.length == 6 || (beforeColor.length == 7 && beforeColor.indexOf('#') == 0)
-      # 'xxxxxxのフォーマットを分解'
-      beforeColor = beforeColor.replace('#', '')
-      bColors[0] = beforeColor.substring(0, 2)
-      bColors[1] = beforeColor.substring(2, 4)
-      bColors[2] = beforeColor.substring(4, 6)
-      for val, index in bColors
-        bColors[index] = parseInt(val, 16)
 
     cColors = new Array(3)
     if afterColor.indexOf('rgb') >= 0
@@ -857,24 +842,44 @@ class Common
       for val, index in cColors
         cColors[index] = parseInt(val, 16)
 
-    rPer = (cColors[0] - bColors[0]) / length
-    gPer = (cColors[1] - bColors[1]) / length
-    bPer = (cColors[2] - bColors[2]) / length
-    rp = rPer
-    gp = gPer
-    bp = bPer
-    for i in [0..length]
-      r = parseInt(bColors[0] + rp)
-      g = parseInt(bColors[1] + gp)
-      b = parseInt(bColors[2] + bp)
-      if isOutputHex
-        o = "#{r.toString(16)}#{g.toString(16)}#{b.toString(16)}"
-      else
-        o = "rgb(#{r},#{g},#{b})"
-      ret[i] = o
-      rp += rPer
-      gp += gPer
-      bp += bPer
+    if beforeColor == 'transparent'
+      # 透明から変更する場合は rgbaで出力
+      for i in [0..length]
+        ret[i] = "rgba(#{cColors[0]},#{cColors[1]},#{cColors[2]}, #{i / length})"
+    else
+      bColors = new Array(3)
+      if beforeColor.indexOf('rgb') >= 0
+        # 'rgb(r, g, b)'のフォーマットを分解
+        bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+        for val, index in bColors
+          bColors[index] = parseInt(val)
+      if beforeColor.length == 6 || (beforeColor.length == 7 && beforeColor.indexOf('#') == 0)
+        # 'xxxxxxのフォーマットを分解'
+        beforeColor = beforeColor.replace('#', '')
+        bColors[0] = beforeColor.substring(0, 2)
+        bColors[1] = beforeColor.substring(2, 4)
+        bColors[2] = beforeColor.substring(4, 6)
+        for val, index in bColors
+          bColors[index] = parseInt(val, 16)
+
+      rPer = (cColors[0] - bColors[0]) / length
+      gPer = (cColors[1] - bColors[1]) / length
+      bPer = (cColors[2] - bColors[2]) / length
+      rp = rPer
+      gp = gPer
+      bp = bPer
+      for i in [0..length]
+        r = parseInt(bColors[0] + rp)
+        g = parseInt(bColors[1] + gp)
+        b = parseInt(bColors[2] + bp)
+        if colorType == 'hex'
+          o = "#{r.toString(16)}#{g.toString(16)}#{b.toString(16)}"
+        else if colorType == 'rgb'
+          o = "rgb(#{r},#{g},#{b})"
+        ret[i] = o
+        rp += rPer
+        gp += gPer
+        bp += bPer
 
     return ret
 

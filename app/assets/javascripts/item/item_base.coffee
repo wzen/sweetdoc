@@ -153,7 +153,6 @@ class ItemBase extends ItemEventBase
       for varName, value of @constructor.actionProperties.modifiables
         mod[varName] = Common.makeClone(@[varName])
     $.extend(obj, mod)
-
     return obj
 
   # 最小限のデータを設定
@@ -207,10 +206,6 @@ class ItemBase extends ItemEventBase
     if @constructor.actionProperties.designConfigDefaultValues?
       PageValue.setInstancePageValue(PageValue.Key.instanceDesignRoot(@id), @constructor.actionProperties.designConfigDefaultValues)
     @designs = PageValue.getInstancePageValue(PageValue.Key.instanceDesignRoot(@id))
-
-  # イベントに書き込む情報
-  eventConfigValue: ->
-    return null
 
   # アイテム位置&サイズを更新
   updatePositionAndItemSize: (itemSize, withSaveObj = true) ->

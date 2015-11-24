@@ -135,7 +135,10 @@ Project = (function() {
         Common.applyEnvironmentFromPagevalue();
         sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
         $('#pages .section:first').attr('class', sectionClass + " section");
-        $('#pages .section:first').css('z-index', Common.plusPagingZindex(0, PageValue.getPageNum()));
+        $('#pages .section:first').css({
+          'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR,
+          'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())
+        });
         $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
         window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
         window.initDone = true;

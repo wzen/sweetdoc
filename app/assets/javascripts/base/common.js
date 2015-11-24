@@ -992,34 +992,16 @@ Common = (function() {
     return element.contextmenu(data);
   };
 
-  Common.colorChangeCacheData = function(beforeColor, afterColor, length, isOutputHex) {
-    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, p, q, r, rPer, ref, ret, rp, val;
-    if (isOutputHex == null) {
-      isOutputHex = true;
+  Common.colorChangeCacheData = function(beforeColor, afterColor, length, colorType) {
+    var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, p, q, r, rPer, ref, ref1, ret, rp, u, val;
+    if (colorType == null) {
+      colorType = 'hex';
     }
     ret = [];
-    bColors = new Array(3);
-    if (beforeColor.indexOf('rgb') >= 0) {
-      bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
-      for (index = j = 0, len = bColors.length; j < len; index = ++j) {
-        val = bColors[index];
-        bColors[index] = parseInt(val);
-      }
-    }
-    if (beforeColor.length === 6 || (beforeColor.length === 7 && beforeColor.indexOf('#') === 0)) {
-      beforeColor = beforeColor.replace('#', '');
-      bColors[0] = beforeColor.substring(0, 2);
-      bColors[1] = beforeColor.substring(2, 4);
-      bColors[2] = beforeColor.substring(4, 6);
-      for (index = l = 0, len1 = bColors.length; l < len1; index = ++l) {
-        val = bColors[index];
-        bColors[index] = parseInt(val, 16);
-      }
-    }
     cColors = new Array(3);
     if (afterColor.indexOf('rgb') >= 0) {
       cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
-      for (index = m = 0, len2 = cColors.length; m < len2; index = ++m) {
+      for (index = j = 0, len = cColors.length; j < len; index = ++j) {
         val = cColors[index];
         cColors[index] = parseInt(val);
       }
@@ -1029,30 +1011,54 @@ Common = (function() {
       cColors[0] = afterColor.substring(0, 2);
       cColors[1] = afterColor.substring(2, 4);
       cColors[2] = afterColor.substring(4, 6);
-      for (index = p = 0, len3 = cColors.length; p < len3; index = ++p) {
+      for (index = l = 0, len1 = cColors.length; l < len1; index = ++l) {
         val = cColors[index];
         cColors[index] = parseInt(val, 16);
       }
     }
-    rPer = (cColors[0] - bColors[0]) / length;
-    gPer = (cColors[1] - bColors[1]) / length;
-    bPer = (cColors[2] - bColors[2]) / length;
-    rp = rPer;
-    gp = gPer;
-    bp = bPer;
-    for (i = q = 0, ref = length; 0 <= ref ? q <= ref : q >= ref; i = 0 <= ref ? ++q : --q) {
-      r = parseInt(bColors[0] + rp);
-      g = parseInt(bColors[1] + gp);
-      b = parseInt(bColors[2] + bp);
-      if (isOutputHex) {
-        o = "" + (r.toString(16)) + (g.toString(16)) + (b.toString(16));
-      } else {
-        o = "rgb(" + r + "," + g + "," + b + ")";
+    if (beforeColor === 'transparent') {
+      for (i = m = 0, ref = length; 0 <= ref ? m <= ref : m >= ref; i = 0 <= ref ? ++m : --m) {
+        ret[i] = "rgba(" + cColors[0] + "," + cColors[1] + "," + cColors[2] + ", " + (i / length) + ")";
       }
-      ret[i] = o;
-      rp += rPer;
-      gp += gPer;
-      bp += bPer;
+    } else {
+      bColors = new Array(3);
+      if (beforeColor.indexOf('rgb') >= 0) {
+        bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+        for (index = p = 0, len2 = bColors.length; p < len2; index = ++p) {
+          val = bColors[index];
+          bColors[index] = parseInt(val);
+        }
+      }
+      if (beforeColor.length === 6 || (beforeColor.length === 7 && beforeColor.indexOf('#') === 0)) {
+        beforeColor = beforeColor.replace('#', '');
+        bColors[0] = beforeColor.substring(0, 2);
+        bColors[1] = beforeColor.substring(2, 4);
+        bColors[2] = beforeColor.substring(4, 6);
+        for (index = q = 0, len3 = bColors.length; q < len3; index = ++q) {
+          val = bColors[index];
+          bColors[index] = parseInt(val, 16);
+        }
+      }
+      rPer = (cColors[0] - bColors[0]) / length;
+      gPer = (cColors[1] - bColors[1]) / length;
+      bPer = (cColors[2] - bColors[2]) / length;
+      rp = rPer;
+      gp = gPer;
+      bp = bPer;
+      for (i = u = 0, ref1 = length; 0 <= ref1 ? u <= ref1 : u >= ref1; i = 0 <= ref1 ? ++u : --u) {
+        r = parseInt(bColors[0] + rp);
+        g = parseInt(bColors[1] + gp);
+        b = parseInt(bColors[2] + bp);
+        if (colorType === 'hex') {
+          o = "" + (r.toString(16)) + (g.toString(16)) + (b.toString(16));
+        } else if (colorType === 'rgb') {
+          o = "rgb(" + r + "," + g + "," + b + ")";
+        }
+        ret[i] = o;
+        rp += rPer;
+        gp += gPer;
+        bp += bPer;
+      }
     }
     return ret;
   };
