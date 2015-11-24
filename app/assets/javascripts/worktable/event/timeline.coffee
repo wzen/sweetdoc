@@ -146,13 +146,12 @@ class Timeline
         for te, idx in tes
           item = window.instanceMap[te.id]
           if item?
+            item.initEvent(te)
+            # インスタンスの状態を保存
+            PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
             if idx < te_num - 1
-              item.initEvent(te)
-              # インスタンスの状態を保存
-              PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
-              item.updateEventAfter()
+               item.updateEventAfter()
             else if idx == te_num - 1
-              item.initEvent(te)
               # プレビュー実行
               item.preview(te)
               break

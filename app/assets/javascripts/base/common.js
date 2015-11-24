@@ -1050,7 +1050,7 @@ Common = (function() {
         g = parseInt(bColors[1] + gp);
         b = parseInt(bColors[2] + bp);
         if (colorType === 'hex') {
-          o = "" + (r.toString(16)) + (g.toString(16)) + (b.toString(16));
+          o = "#" + (r.toString(16)) + (g.toString(16)) + (b.toString(16));
         } else if (colorType === 'rgb') {
           o = "rgb(" + r + "," + g + "," + b + ")";
         }

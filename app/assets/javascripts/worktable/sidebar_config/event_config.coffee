@@ -568,5 +568,5 @@ class EventConfig
       (a, b, d, e) =>
         if !@hasModifiableVar(varName)
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
-        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "#{b}"
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "##{b}"
     )

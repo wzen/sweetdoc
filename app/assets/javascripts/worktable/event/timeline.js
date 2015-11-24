@@ -141,12 +141,11 @@ Timeline = (function() {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {
+            item.initEvent(te);
+            PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
             if (idx < te_num - 1) {
-              item.initEvent(te);
-              PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
               results.push(item.updateEventAfter());
             } else if (idx === te_num - 1) {
-              item.initEvent(te);
               item.preview(te);
               break;
             } else {

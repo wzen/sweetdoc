@@ -427,7 +427,7 @@ WorkTableCommonInclude = {
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
     return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
       return function(a, b, d, e) {
-        _this[varName] = b;
+        _this[varName] = "#" + b;
         return _this.applyDesignChange();
       };
     })(this));

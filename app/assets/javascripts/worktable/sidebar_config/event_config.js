@@ -610,7 +610,7 @@ EventConfig = (function() {
         if (!_this.hasModifiableVar(varName)) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "" + b;
+        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "#" + b;
       };
     })(this));
   };

@@ -380,7 +380,7 @@ WorkTableCommonInclude =
       $(emt),
       defaultValue,
       (a, b, d, e) =>
-        @[varName] = b
+        @[varName] = "##{b}"
         @applyDesignChange()
     )
 
