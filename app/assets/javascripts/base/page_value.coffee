@@ -224,23 +224,23 @@ class PageValue
   # 汎用値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] deepCopy ディープコピー
-  @setGeneralPageValue = (key, value, deepCopy = false) ->
-    _setPageValue.call(@, key, value, false, @Key.G_ROOT, true, deepCopy)
+  # @param [Boolean] doAdded 上書きでなく追加する
+  @setGeneralPageValue = (key, value, doAdd = false) ->
+    _setPageValue.call(@, key, value, false, @Key.G_ROOT, true, doAdd)
 
   # インスタンス値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] deepCopy ディープコピー
-  @setInstancePageValue = (key, value, deepCopy = false) ->
-    _setPageValue.call(@, key, value, false, @Key.IS_ROOT, true, deepCopy)
+  # @param [Boolean] doAdded 上書きでなく追加する
+  @setInstancePageValue = (key, value, doAdd = false) ->
+    _setPageValue.call(@, key, value, false, @Key.IS_ROOT, true, doAdd)
 
   # イベントの値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] deepCopy ディープコピー
-  @setEventPageValue = (key, value, deepCopy = false) ->
-    _setPageValue.call(@, key, value, false, @Key.E_ROOT, true, deepCopy)
+  # @param [Boolean] doAdded 上書きでなく追加する
+  @setEventPageValue = (key, value, doAdd = false) ->
+    _setPageValue.call(@, key, value, false, @Key.E_ROOT, true, doAdd)
 
   # イベントの値をページルート値から設定
   # @param [Object] value 設定値(E_PREFIXで取得したハッシュ配列または値)
@@ -255,16 +255,16 @@ class PageValue
   # 共通設定値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] deepCopy ディープコピー
-  @setSettingPageValue = (key, value, deepCopy = false) ->
-    _setPageValue.call(@, key, value, false, @Key.ST_ROOT, true, deepCopy)
+  # @param [Boolean] doAdded 上書きでなく追加する
+  @setSettingPageValue = (key, value, doAdd = false) ->
+    _setPageValue.call(@, key, value, false, @Key.ST_ROOT, true, doAdd)
 
   # 操作履歴を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] deepCopy ディープコピー
-  @setFootprintPageValue = (key, value, deepCopy = false) ->
-    _setPageValue.call(@, key, value, false, @Key.F_ROOT, true, deepCopy)
+  # @param [Boolean] doAdded 上書きでなく追加する
+  @setFootprintPageValue = (key, value, doAdd = false) ->
+    _setPageValue.call(@, key, value, false, @Key.F_ROOT, true, doAdd)
 
   # ページが持つ値を設定
   # @param [String] key キー値
@@ -272,13 +272,13 @@ class PageValue
   # @param [Boolean] isCache このページでのみ保持させるか
   # @param [String] rootId Root要素ID
   # @param [Boolean] giveName name属性を付与するか
-  # @param [Boolean] deepCopy ディープコピー
-  _setPageValue = (key, value, isCache, rootId, giveName, deepCopy) ->
+  # @param [Boolean] doAdded 上書きでなく追加する
+  _setPageValue = (key, value, isCache, rootId, giveName, doAdded) ->
     f = @
 
-    if deepCopy
-      n = _getPageValue(key, rootId)
-      $.extend(true, value, n)
+    if doAdded
+      n = _getPageValue.call(@, key, rootId)
+      $.extend(value, n)
 
     # ハッシュを要素の文字列に変換
     makeElementStr = (ky, val, kyName) ->

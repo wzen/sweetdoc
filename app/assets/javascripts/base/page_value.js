@@ -309,25 +309,25 @@ PageValue = (function() {
     return value;
   };
 
-  PageValue.setGeneralPageValue = function(key, value, deepCopy) {
-    if (deepCopy == null) {
-      deepCopy = false;
+  PageValue.setGeneralPageValue = function(key, value, doAdd) {
+    if (doAdd == null) {
+      doAdd = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.G_ROOT, true, deepCopy);
+    return _setPageValue.call(this, key, value, false, this.Key.G_ROOT, true, doAdd);
   };
 
-  PageValue.setInstancePageValue = function(key, value, deepCopy) {
-    if (deepCopy == null) {
-      deepCopy = false;
+  PageValue.setInstancePageValue = function(key, value, doAdd) {
+    if (doAdd == null) {
+      doAdd = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.IS_ROOT, true, deepCopy);
+    return _setPageValue.call(this, key, value, false, this.Key.IS_ROOT, true, doAdd);
   };
 
-  PageValue.setEventPageValue = function(key, value, deepCopy) {
-    if (deepCopy == null) {
-      deepCopy = false;
+  PageValue.setEventPageValue = function(key, value, doAdd) {
+    if (doAdd == null) {
+      doAdd = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true, deepCopy);
+    return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true, doAdd);
   };
 
   PageValue.setEventPageValueByPageRootHash = function(value, fn, pn) {
@@ -343,26 +343,26 @@ PageValue = (function() {
     return this.setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn), value);
   };
 
-  PageValue.setSettingPageValue = function(key, value, deepCopy) {
-    if (deepCopy == null) {
-      deepCopy = false;
+  PageValue.setSettingPageValue = function(key, value, doAdd) {
+    if (doAdd == null) {
+      doAdd = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.ST_ROOT, true, deepCopy);
+    return _setPageValue.call(this, key, value, false, this.Key.ST_ROOT, true, doAdd);
   };
 
-  PageValue.setFootprintPageValue = function(key, value, deepCopy) {
-    if (deepCopy == null) {
-      deepCopy = false;
+  PageValue.setFootprintPageValue = function(key, value, doAdd) {
+    if (doAdd == null) {
+      doAdd = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.F_ROOT, true, deepCopy);
+    return _setPageValue.call(this, key, value, false, this.Key.F_ROOT, true, doAdd);
   };
 
-  _setPageValue = function(key, value, isCache, rootId, giveName, deepCopy) {
+  _setPageValue = function(key, value, isCache, rootId, giveName, doAdded) {
     var cacheClassName, f, keys, makeElementStr, n, parentClassName, root;
     f = this;
-    if (deepCopy) {
-      n = _getPageValue(key, rootId);
-      $.extend(true, value, n);
+    if (doAdded) {
+      n = _getPageValue.call(this, key, rootId);
+      $.extend(value, n);
     }
     makeElementStr = function(ky, val, kyName) {
       var k, name, ret, v;
