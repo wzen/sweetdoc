@@ -33,15 +33,15 @@ class RunCommon
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
 
     # スクロールビューの大きさ
-    scrollInside.width(window.scrollViewSize)
-    scrollInside.height(window.scrollViewSize)
+    scrollInsideWrapper.width(window.scrollViewSize)
+    scrollInsideWrapper.height(window.scrollViewSize)
     scrollInsideCover.width(window.scrollViewSize)
     scrollInsideCover.height(window.scrollViewSize)
     scrollHandle.width(window.scrollViewSize)
     scrollHandle.height(window.scrollViewSize)
 
     # スクロール位置初期化
-    Common.updateScrollContentsPosition(scrollInside.width() * 0.5, scrollInside.height() * 0.5)
+    Common.updateScrollContentsPosition(scrollInsideWrapper.width() * 0.5, scrollInsideWrapper.height() * 0.5)
 
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
     scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
@@ -219,13 +219,13 @@ class RunCommon
             Common.setupJsByList(data.itemJsList, ->
               if data.pagevalues?
                 if data.pagevalues.general_pagevalue?
-                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.pagevalues.general_pagevalue)
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.pagevalues.general_pagevalue, true)
                 if data.pagevalues.instance_pagevalue?
-                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.pagevalues.instance_pagevalue)
+                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.pagevalues.instance_pagevalue, true)
                 if data.pagevalues.event_pagevalue?
-                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.pagevalues.event_pagevalue)
+                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.pagevalues.event_pagevalue, true)
                 if data.pagevalues.footprint?
-                  PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalues.footprint)
+                  PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalues.footprint, true)
 
               # コールバック
               if callback?
@@ -500,6 +500,8 @@ class RunCommon
         LocalStorage.loadAllPageValues()
       else
         LocalStorage.saveAllPageValues()
+        # 1ページから開始
+        PageValue.setPageNum(1)
 
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(PageValue.getPageNum())

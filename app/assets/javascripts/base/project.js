@@ -140,7 +140,7 @@ Project = (function() {
           'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())
         });
         $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-        window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+        window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
         window.initDone = true;
         return Common.hideModalView();
       });

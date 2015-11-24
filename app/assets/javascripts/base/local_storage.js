@@ -159,7 +159,7 @@ LocalStorage = (function() {
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_EVENT_PAGEVALUES : this.Key.WORKTABLE_EVENT_PAGEVALUES;
     h = JSON.parse(lstorage.getItem(key));
-    return PageValue.setEventPageValueByRootHash(h);
+    return PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, h);
   };
 
   LocalStorage.saveSettingPageValue = function() {

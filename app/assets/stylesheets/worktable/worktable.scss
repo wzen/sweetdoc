@@ -72,7 +72,8 @@ div.scroll_contents {
   box-sizing: content-box;
 }
 
-div.scroll_inside {
+
+div.scroll_inside_wrapper {
   position: relative;
   width: 100%;
   height: 100%;
@@ -80,6 +81,11 @@ div.scroll_inside {
   &.edit_mode {
     cursor: move !important;
   }
+}
+
+div.scroll_background, div.scroll_inside {
+  width: 100%;
+  height: 100%;
 }
 
 .scroll_x_content {

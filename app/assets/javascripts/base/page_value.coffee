@@ -120,54 +120,50 @@ class PageValue
   # 汎用値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
-  @getGeneralPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, @Key.G_ROOT, updateOnly)
+  @getGeneralPageValue = (key) ->
+    _getPageValue.call(@, key, @Key.G_ROOT)
 
   # インスタンス値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
-  @getInstancePageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, @Key.IS_ROOT, updateOnly)
+  @getInstancePageValue = (key) ->
+    _getPageValue.call(@, key, @Key.IS_ROOT)
 
   # イベントの値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
-  @getEventPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, @Key.E_ROOT, updateOnly)
+  @getEventPageValue = (key) ->
+    _getPageValue.call(@, key, @Key.E_ROOT)
 
   # 共通設定値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
-  @getSettingPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, @Key.ST_ROOT, updateOnly)
+  @getSettingPageValue = (key) ->
+    _getPageValue.call(@, key, @Key.ST_ROOT)
 
   # 操作履歴値を取得
   # @param [String] key キー値
   # @param [Boolean] updateOnly updateクラス付与のみ取得するか
-  @getFootprintPageValue = (key, updateOnly = false) ->
-    _getPageValue.call(@, key, @Key.F_ROOT, updateOnly)
+  @getFootprintPageValue = (key) ->
+    _getPageValue.call(@, key, @Key.F_ROOT)
 
   # ページが持つ値を取得
   # @param [String] key キー値
   # @param [String] rootId Root要素ID
-  # @param [Boolean] updateOnly updateクラス付与のみ取得するか
   # @return [Object] ハッシュ配列または値で返す
-  _getPageValue = (key, rootId, updateOnly) ->
+  _getPageValue = (key, rootId) ->
     if !key?
       console.log('')
 
     f = @
     # div以下の値をハッシュとしてまとめる
-    takeValue = (element, hasUpdate) ->
+    takeValue = (element) ->
       ret = null
       c = $(element).children()
       if c? && c.length > 0
         $(c).each((e) ->
           cList = @.classList
-          hu = hasUpdate
           if $(@).hasClass(PageValue.Key.UPDATED)
-            # updateフラグを持っている場合はフラグON & クラス一覧から除外
-            hu = true
             cList = cList.filter((f) ->
               return f != PageValue.Key.UPDATED
             )
@@ -181,16 +177,14 @@ class PageValue
 
           v = null
           if @.tagName == "INPUT"
-            # updateのみ取得 & updateフラグが無い場合はデータ取らない
-            if (updateOnly && !hasUpdate) == false
-              # サニタイズをデコード
-              v = Common.sanitaizeDecode($(@).val())
-              if jQuery.isNumeric(v)
-                v = Number(v)
-              else if v == "true" || v == "false"
-                v = if v == "true" then true else false
+            # サニタイズをデコード
+            v = Common.sanitaizeDecode($(@).val())
+            if jQuery.isNumeric(v)
+              v = Number(v)
+            else if v == "true" || v == "false"
+              v = if v == "true" then true else false
           else
-            v = takeValue.call(f, @, hu)
+            v = takeValue.call(f, @)
 
           # nullの場合は返却データに含めない
           if v != null
@@ -210,93 +204,67 @@ class PageValue
         return null
 
     value = null
-    hasUpdate = false
     root = $("##{rootId}")
     keys = key.split(@Key.PAGE_VALUES_SEPERATOR)
     keys.forEach((k, index) ->
       root = $(".#{k}", root)
-      if $(root).hasClass(PageValue.Key.UPDATED)
-        hasUpdate = true
       if !root? || root.length == 0
         value = null
         return
       if keys.length - 1 == index
         if root[0].tagName == "INPUT"
-          # updateのみ取得 & updateフラグが無い場合はデータ取らない
-          if (updateOnly && !hasUpdate) == false
-            value = Common.sanitaizeDecode(root.val())
-            if jQuery.isNumeric(value)
-              value = Number(value)
-          else
-            return null
+          value = Common.sanitaizeDecode(root.val())
+          if jQuery.isNumeric(value)
+            value = Number(value)
         else
-          value = takeValue.call(f, root, hasUpdate)
+          value = takeValue.call(f, root)
     )
     return value
 
   # 汎用値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] giveUpdate update属性を付与するか
-  @setGeneralPageValue = (key, value, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, false, @Key.G_ROOT, true, giveUpdate)
+  # @param [Boolean] deepCopy ディープコピー
+  @setGeneralPageValue = (key, value, deepCopy = false) ->
+    _setPageValue.call(@, key, value, false, @Key.G_ROOT, true, deepCopy)
 
   # インスタンス値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] isCache このページでのみ保持させるか
-  # @param [Boolean] giveUpdate update属性を付与するか
-  @setInstancePageValue = (key, value, isCache = false, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, isCache, @Key.IS_ROOT, true, giveUpdate)
+  # @param [Boolean] deepCopy ディープコピー
+  @setInstancePageValue = (key, value, deepCopy = false) ->
+    _setPageValue.call(@, key, value, false, @Key.IS_ROOT, true, deepCopy)
 
   # イベントの値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] giveUpdate update属性を付与するか
-  @setEventPageValue = (key, value, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, false, @Key.E_ROOT, true, giveUpdate)
-
-  # イベントの値をルート値から設定
-  # @param [Object] value 設定値(E_PREFIXで取得したハッシュ配列または値)
-  # @param [Boolean] refresh イベント要素を全て入れ替える
-  # @param [Boolean] giveUpdate update属性を付与するか
-  @setEventPageValueByRootHash = (value, refresh = true, giveUpdate = false) ->
-    if refresh
-      # 内容を一旦消去
-      $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").remove()
-    for k, v of value
-      @setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
-
+  # @param [Boolean] deepCopy ディープコピー
+  @setEventPageValue = (key, value, deepCopy = false) ->
+    _setPageValue.call(@, key, value, false, @Key.E_ROOT, true, deepCopy)
 
   # イベントの値をページルート値から設定
   # @param [Object] value 設定値(E_PREFIXで取得したハッシュ配列または値)
   # @param [Integer] fn フォーク番号
   # @param [Integer] pn ページ番号
-  # @param [Boolean] refresh イベント要素を全て入れ替える
-  # @param [Boolean] giveUpdate update属性を付与するか
-  @setEventPageValueByPageRootHash = (value, fn = @getForkNum(), pn = @getPageNum(), refresh = true, giveUpdate = false) ->
-    if refresh
-      # 内容を一旦消去
-      contensRoot = if fn > 0 then @Key.EF_PREFIX + fn else @Key.E_MASTER_ROOT
-      $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").children(".#{contensRoot}").remove()
-    for k, v of value
-      @setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn) + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate)
+  @setEventPageValueByPageRootHash = (value, fn = @getForkNum(), pn = @getPageNum()) ->
+    # 内容を一旦消去
+    contensRoot = if fn > 0 then @Key.EF_PREFIX + fn else @Key.E_MASTER_ROOT
+    $("##{@Key.E_ROOT}").children(".#{@Key.E_SUB_ROOT}").children(".#{@Key.pageRoot()}").children(".#{contensRoot}").remove()
+    @setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn), value)
 
   # 共通設定値を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] giveName name属性を付与するか
-  # @param [Boolean] giveUpdate update属性を付与するか
-  @setSettingPageValue = (key, value, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, false, @Key.ST_ROOT, true, giveUpdate)
+  # @param [Boolean] deepCopy ディープコピー
+  @setSettingPageValue = (key, value, deepCopy = false) ->
+    _setPageValue.call(@, key, value, false, @Key.ST_ROOT, true, deepCopy)
 
   # 操作履歴を設定
   # @param [String] key キー値
   # @param [Object] value 設定値(ハッシュ配列または値)
-  # @param [Boolean] giveName name属性を付与するか
-  # @param [Boolean] giveUpdate update属性を付与するか
-  @setFootprintPageValue = (key, value, giveUpdate = false) ->
-    _setPageValue.call(@, key, value, false, @Key.F_ROOT, true, giveUpdate)
+  # @param [Boolean] deepCopy ディープコピー
+  @setFootprintPageValue = (key, value, deepCopy = false) ->
+    _setPageValue.call(@, key, value, false, @Key.F_ROOT, true, deepCopy)
 
   # ページが持つ値を設定
   # @param [String] key キー値
@@ -304,9 +272,14 @@ class PageValue
   # @param [Boolean] isCache このページでのみ保持させるか
   # @param [String] rootId Root要素ID
   # @param [Boolean] giveName name属性を付与するか
-  # @param [Boolean] giveUpdate update属性を付与するか
-  _setPageValue = (key, value, isCache, rootId, giveName, giveUpdate) ->
+  # @param [Boolean] deepCopy ディープコピー
+  _setPageValue = (key, value, isCache, rootId, giveName, deepCopy) ->
     f = @
+
+    if deepCopy
+      n = _getPageValue(key, rootId)
+      $.extend(true, value, n)
+
     # ハッシュを要素の文字列に変換
     makeElementStr = (ky, val, kyName) ->
       if val == null || val == "null"
@@ -359,9 +332,6 @@ class PageValue
           # 要素が存在する場合は消去して上書き
           root.remove()
         # 要素作成
-        if giveUpdate
-          # 親要素にupdateクラスを付与
-          parent.addClass(PageValue.Key.UPDATED)
         root = jQuery(makeElementStr.call(f, k, value, parentClassName)).appendTo(parent)
         if isCache
           root.addClass(cacheClassName)
@@ -598,8 +568,8 @@ class PageValue
       screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
       if !screenSize?
         screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
-      t = (window.scrollInside.height() + screenSize.height) * 0.5 - position.top
-      l = (window.scrollInside.width() + screenSize.width) * 0.5 - position.left
+      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top
+      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left
       return {top: t, left: l}
     else
       return null
@@ -611,8 +581,8 @@ class PageValue
     screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
     if !screenSize?
       screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
-    t = (window.scrollInside.height() + screenSize.height) * 0.5 - top
-    l = (window.scrollInside.width() + screenSize.width) * 0.5 - left
+    t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top
+    l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left
     # 中央位置からの差を設定
     @setGeneralPageValue(@Key.displayPosition(), {top: t, left: l})
 

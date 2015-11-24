@@ -105,7 +105,7 @@ class ServerStorage
               if data.instance_pagevalue_data?
                 PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data)
               if data.event_pagevalue_data?
-                PageValue.setEventPageValueByRootHash(data.event_pagevalue_data)
+                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.event_pagevalue_data)
               if data.setting_pagevalue_data?
                 PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data)
 

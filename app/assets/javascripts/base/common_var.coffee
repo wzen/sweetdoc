@@ -23,6 +23,7 @@ class CommonVar
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     window.sidebarWrapper = $("#sidebar-wrapper")
     window.scrollContents = $("#pages .#{page} .scroll_contents:first")
+    window.scrollInsideWrapper = $("#pages .#{page} .scroll_inside_wrapper:first")
     window.scrollInside = $("#pages .#{page} .scroll_inside:first")
     window.mainWrapper = $("#pages .#{page} .main-wrapper:first")
     window.drawingCanvas = $("#pages .#{page} .canvas_container:first")[0]
@@ -39,6 +40,7 @@ class CommonVar
     window.scrollHandleWrapper = $("#pages .#{page} .scroll_handle_wrapper:first")
     window.scrollHandle = $("#pages .#{page} .scroll_handle:first")
     window.scrollInsideCover = $("#pages .#{page} .scroll_inside_cover:first")
+    window.scrollInsideWrapper = $("#pages .#{page} .scroll_inside_wrapper:first")
     window.scrollInside = $("#pages .#{page} .scroll_inside:first")
     window.canvasWrapper = $("#pages .#{page} .canvas_wrapper:first")
     window.drawingCanvas = $("#pages .#{page} .canvas_container:first")[0]

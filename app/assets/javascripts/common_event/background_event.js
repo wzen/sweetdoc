@@ -10,14 +10,14 @@ BackgroundEvent = (function(superClass) {
     return BackgroundEvent.__super__.constructor.apply(this, arguments);
   }
 
-  BackgroundEvent.EVENT_ID = '1';
-
   BackgroundEvent.PrivateClass = (function(superClass1) {
     extend(PrivateClass, superClass1);
 
     function PrivateClass() {
       return PrivateClass.__super__.constructor.apply(this, arguments);
     }
+
+    PrivateClass.EVENT_ID = '1';
 
     PrivateClass.actionProperties = {
       defaultMethod: 'changeBackgroundColor',
@@ -89,6 +89,8 @@ BackgroundEvent = (function(superClass) {
     return PrivateClass;
 
   })(CommonEvent.PrivateClass);
+
+  BackgroundEvent.EVENT_ID = BackgroundEvent.PrivateClass.EVENT_ID;
 
   BackgroundEvent.actionProperties = BackgroundEvent.PrivateClass.actionProperties;
 

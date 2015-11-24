@@ -234,7 +234,7 @@ class Common
   @updateScrollContentsFromPagevalue: ->
     position = PageValue.getScrollContentsPosition()
     if !position?
-      position = {top: window.scrollInside.height() * 0.5, left: window.scrollInside.width() * 0.5}
+      position = {top: window.scrollInsideWrapper.height() * 0.5, left: window.scrollInsideWrapper.width() * 0.5}
       PageValue.setDisplayPosition(position.top, position.left)
     @updateScrollContentsPosition(position.top, position.left)
 
@@ -829,8 +829,8 @@ class Common
 
     cColors = new Array(3)
     if afterColor.indexOf('rgb') >= 0
-      # 'rgb(r, g, b)'のフォーマットを分解
-      cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+      # 'rgb(r, g, b)'または'rgba(r, g, b, a)'のフォーマットを分解
+      cColors = afterColor.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',')
       for val, index in cColors
         cColors[index] = parseInt(val)
     if afterColor.length == 6 || (afterColor.length == 7 && afterColor.indexOf('#') == 0)
@@ -849,8 +849,8 @@ class Common
     else
       bColors = new Array(3)
       if beforeColor.indexOf('rgb') >= 0
-        # 'rgb(r, g, b)'のフォーマットを分解
-        bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',')
+        # 'rgb(r, g, b)'または'rgba(r, g, b, a)'のフォーマットを分解
+        bColors = beforeColor.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',')
         for val, index in bColors
           bColors[index] = parseInt(val)
       if beforeColor.length == 6 || (beforeColor.length == 7 && beforeColor.indexOf('#') == 0)

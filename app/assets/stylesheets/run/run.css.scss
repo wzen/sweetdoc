@@ -33,9 +33,16 @@ div#main {
   }
 }
 
-div.scroll_inside {
+div.scroll_background {
+  width: 100%;
+  height: 100%;
   background-image: image_url('base/back4.jpg');
   background-repeat: repeat;
+}
+
+div.scroll_inside {
+  width: 100%;
+  height: 100%;
 }
 
 div.main-wrapper {
@@ -91,10 +98,15 @@ div.scroll_contents {
   box-sizing: content-box;
 }
 
-div.scroll_inside, div.scroll_inside_cover {
+div.scroll_inside_wrapper, div.scroll_inside_cover {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+div.scroll_background, div.scroll_inside {
+  width: 100%;
+  height: 100%;
 }
 
 div.scroll_inside_cover {

@@ -146,7 +146,7 @@ class LocalStorage
     lstorage = localStorage
     key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
-    PageValue.setEventPageValueByRootHash(h)
+    PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, h)
 
   # キャッシュに共通設定値を保存
   @saveSettingPageValue: ->

@@ -211,58 +211,41 @@ PageValue = (function() {
     return this.setInstancePageValue(this.Key.itemLoaded(itemId), true);
   };
 
-  PageValue.getGeneralPageValue = function(key, updateOnly) {
-    if (updateOnly == null) {
-      updateOnly = false;
-    }
-    return _getPageValue.call(this, key, this.Key.G_ROOT, updateOnly);
+  PageValue.getGeneralPageValue = function(key) {
+    return _getPageValue.call(this, key, this.Key.G_ROOT);
   };
 
-  PageValue.getInstancePageValue = function(key, updateOnly) {
-    if (updateOnly == null) {
-      updateOnly = false;
-    }
-    return _getPageValue.call(this, key, this.Key.IS_ROOT, updateOnly);
+  PageValue.getInstancePageValue = function(key) {
+    return _getPageValue.call(this, key, this.Key.IS_ROOT);
   };
 
-  PageValue.getEventPageValue = function(key, updateOnly) {
-    if (updateOnly == null) {
-      updateOnly = false;
-    }
-    return _getPageValue.call(this, key, this.Key.E_ROOT, updateOnly);
+  PageValue.getEventPageValue = function(key) {
+    return _getPageValue.call(this, key, this.Key.E_ROOT);
   };
 
-  PageValue.getSettingPageValue = function(key, updateOnly) {
-    if (updateOnly == null) {
-      updateOnly = false;
-    }
-    return _getPageValue.call(this, key, this.Key.ST_ROOT, updateOnly);
+  PageValue.getSettingPageValue = function(key) {
+    return _getPageValue.call(this, key, this.Key.ST_ROOT);
   };
 
-  PageValue.getFootprintPageValue = function(key, updateOnly) {
-    if (updateOnly == null) {
-      updateOnly = false;
-    }
-    return _getPageValue.call(this, key, this.Key.F_ROOT, updateOnly);
+  PageValue.getFootprintPageValue = function(key) {
+    return _getPageValue.call(this, key, this.Key.F_ROOT);
   };
 
-  _getPageValue = function(key, rootId, updateOnly) {
-    var f, hasUpdate, keys, root, takeValue, value;
+  _getPageValue = function(key, rootId) {
+    var f, keys, root, takeValue, value;
     if (key == null) {
       console.log('');
     }
     f = this;
-    takeValue = function(element, hasUpdate) {
+    takeValue = function(element) {
       var c, ret;
       ret = null;
       c = $(element).children();
       if ((c != null) && c.length > 0) {
         $(c).each(function(e) {
-          var cList, hu, k, v;
+          var cList, k, v;
           cList = this.classList;
-          hu = hasUpdate;
           if ($(this).hasClass(PageValue.Key.UPDATED)) {
-            hu = true;
             cList = cList.filter(function(f) {
               return f !== PageValue.Key.UPDATED;
             });
@@ -277,16 +260,14 @@ PageValue = (function() {
           }
           v = null;
           if (this.tagName === "INPUT") {
-            if ((updateOnly && !hasUpdate) === false) {
-              v = Common.sanitaizeDecode($(this).val());
-              if (jQuery.isNumeric(v)) {
-                v = Number(v);
-              } else if (v === "true" || v === "false") {
-                v = v === "true" ? true : false;
-              }
+            v = Common.sanitaizeDecode($(this).val());
+            if (jQuery.isNumeric(v)) {
+              v = Number(v);
+            } else if (v === "true" || v === "false") {
+              v = v === "true" ? true : false;
             }
           } else {
-            v = takeValue.call(f, this, hu);
+            v = takeValue.call(f, this);
           }
           if (v !== null) {
             if (jQuery.type(ret) === "array" && jQuery.isNumeric(k)) {
@@ -306,122 +287,83 @@ PageValue = (function() {
       }
     };
     value = null;
-    hasUpdate = false;
     root = $("#" + rootId);
     keys = key.split(this.Key.PAGE_VALUES_SEPERATOR);
     keys.forEach(function(k, index) {
       root = $("." + k, root);
-      if ($(root).hasClass(PageValue.Key.UPDATED)) {
-        hasUpdate = true;
-      }
       if ((root == null) || root.length === 0) {
         value = null;
         return;
       }
       if (keys.length - 1 === index) {
         if (root[0].tagName === "INPUT") {
-          if ((updateOnly && !hasUpdate) === false) {
-            value = Common.sanitaizeDecode(root.val());
-            if (jQuery.isNumeric(value)) {
-              return value = Number(value);
-            }
-          } else {
-            return null;
+          value = Common.sanitaizeDecode(root.val());
+          if (jQuery.isNumeric(value)) {
+            return value = Number(value);
           }
         } else {
-          return value = takeValue.call(f, root, hasUpdate);
+          return value = takeValue.call(f, root);
         }
       }
     });
     return value;
   };
 
-  PageValue.setGeneralPageValue = function(key, value, giveUpdate) {
-    if (giveUpdate == null) {
-      giveUpdate = false;
+  PageValue.setGeneralPageValue = function(key, value, deepCopy) {
+    if (deepCopy == null) {
+      deepCopy = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.G_ROOT, true, giveUpdate);
+    return _setPageValue.call(this, key, value, false, this.Key.G_ROOT, true, deepCopy);
   };
 
-  PageValue.setInstancePageValue = function(key, value, isCache, giveUpdate) {
-    if (isCache == null) {
-      isCache = false;
+  PageValue.setInstancePageValue = function(key, value, deepCopy) {
+    if (deepCopy == null) {
+      deepCopy = false;
     }
-    if (giveUpdate == null) {
-      giveUpdate = false;
-    }
-    return _setPageValue.call(this, key, value, isCache, this.Key.IS_ROOT, true, giveUpdate);
+    return _setPageValue.call(this, key, value, false, this.Key.IS_ROOT, true, deepCopy);
   };
 
-  PageValue.setEventPageValue = function(key, value, giveUpdate) {
-    if (giveUpdate == null) {
-      giveUpdate = false;
+  PageValue.setEventPageValue = function(key, value, deepCopy) {
+    if (deepCopy == null) {
+      deepCopy = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true, giveUpdate);
+    return _setPageValue.call(this, key, value, false, this.Key.E_ROOT, true, deepCopy);
   };
 
-  PageValue.setEventPageValueByRootHash = function(value, refresh, giveUpdate) {
-    var k, results, v;
-    if (refresh == null) {
-      refresh = true;
-    }
-    if (giveUpdate == null) {
-      giveUpdate = false;
-    }
-    if (refresh) {
-      $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).remove();
-    }
-    results = [];
-    for (k in value) {
-      v = value[k];
-      results.push(this.setEventPageValue(PageValue.Key.E_SUB_ROOT + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
-    }
-    return results;
-  };
-
-  PageValue.setEventPageValueByPageRootHash = function(value, fn, pn, refresh, giveUpdate) {
-    var contensRoot, k, results, v;
+  PageValue.setEventPageValueByPageRootHash = function(value, fn, pn) {
+    var contensRoot;
     if (fn == null) {
       fn = this.getForkNum();
     }
     if (pn == null) {
       pn = this.getPageNum();
     }
-    if (refresh == null) {
-      refresh = true;
-    }
-    if (giveUpdate == null) {
-      giveUpdate = false;
-    }
-    if (refresh) {
-      contensRoot = fn > 0 ? this.Key.EF_PREFIX + fn : this.Key.E_MASTER_ROOT;
-      $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).children("." + contensRoot).remove();
-    }
-    results = [];
-    for (k in value) {
-      v = value[k];
-      results.push(this.setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn) + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v, giveUpdate));
-    }
-    return results;
+    contensRoot = fn > 0 ? this.Key.EF_PREFIX + fn : this.Key.E_MASTER_ROOT;
+    $("#" + this.Key.E_ROOT).children("." + this.Key.E_SUB_ROOT).children("." + (this.Key.pageRoot())).children("." + contensRoot).remove();
+    return this.setEventPageValue(PageValue.Key.eventPageMainRoot(fn, pn), value);
   };
 
-  PageValue.setSettingPageValue = function(key, value, giveUpdate) {
-    if (giveUpdate == null) {
-      giveUpdate = false;
+  PageValue.setSettingPageValue = function(key, value, deepCopy) {
+    if (deepCopy == null) {
+      deepCopy = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.ST_ROOT, true, giveUpdate);
+    return _setPageValue.call(this, key, value, false, this.Key.ST_ROOT, true, deepCopy);
   };
 
-  PageValue.setFootprintPageValue = function(key, value, giveUpdate) {
-    if (giveUpdate == null) {
-      giveUpdate = false;
+  PageValue.setFootprintPageValue = function(key, value, deepCopy) {
+    if (deepCopy == null) {
+      deepCopy = false;
     }
-    return _setPageValue.call(this, key, value, false, this.Key.F_ROOT, true, giveUpdate);
+    return _setPageValue.call(this, key, value, false, this.Key.F_ROOT, true, deepCopy);
   };
 
-  _setPageValue = function(key, value, isCache, rootId, giveName, giveUpdate) {
-    var cacheClassName, f, keys, makeElementStr, parentClassName, root;
+  _setPageValue = function(key, value, isCache, rootId, giveName, deepCopy) {
+    var cacheClassName, f, keys, makeElementStr, n, parentClassName, root;
     f = this;
+    if (deepCopy) {
+      n = _getPageValue(key, rootId);
+      $.extend(true, value, n);
+    }
     makeElementStr = function(ky, val, kyName) {
       var k, name, ret, v;
       if (val === null || val === "null") {
@@ -477,9 +419,6 @@ PageValue = (function() {
       } else {
         if ((root != null) && root.length > 0) {
           root.remove();
-        }
-        if (giveUpdate) {
-          parent.addClass(PageValue.Key.UPDATED);
         }
         root = jQuery(makeElementStr.call(f, k, value, parentClassName)).appendTo(parent);
         if (isCache) {
@@ -705,7 +644,7 @@ PageValue = (function() {
   };
 
   PageValue.sortEventPageValue = function(beforeNum, afterNum) {
-    var e, eventPageValues, i, idx, j, len, m, n, num, ref, ref1, ref2, ref3, results, w;
+    var e, eventPageValues, i, idx, j, len, m, num, o, ref, ref1, ref2, ref3, results, w;
     eventPageValues = PageValue.getEventPageValueSortedListByNum();
     w = eventPageValues[beforeNum - 1];
     w[EventPageValueBase.PageValueKey.IS_SYNC] = false;
@@ -722,7 +661,7 @@ PageValue = (function() {
     }
     eventPageValues[afterNum - 1] = w;
     results = [];
-    for (idx = n = 0, len = eventPageValues.length; n < len; idx = ++n) {
+    for (idx = o = 0, len = eventPageValues.length; o < len; idx = ++o) {
       e = eventPageValues[idx];
       results.push(this.setEventPageValue(this.Key.eventNumber(idx + 1), e));
     }
@@ -762,8 +701,8 @@ PageValue = (function() {
           height: window.mainWrapper.height()
         };
       }
-      t = (window.scrollInside.height() + screenSize.height) * 0.5 - position.top;
-      l = (window.scrollInside.width() + screenSize.width) * 0.5 - position.left;
+      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - position.top;
+      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - position.left;
       return {
         top: t,
         left: l
@@ -782,8 +721,8 @@ PageValue = (function() {
         height: window.mainWrapper.height()
       };
     }
-    t = (window.scrollInside.height() + screenSize.height) * 0.5 - top;
-    l = (window.scrollInside.width() + screenSize.width) * 0.5 - left;
+    t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top;
+    l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left;
     return this.setGeneralPageValue(this.Key.displayPosition(), {
       top: t,
       left: l

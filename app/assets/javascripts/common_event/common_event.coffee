@@ -1,6 +1,6 @@
 # 共通イベント基底クラス
 class CommonEvent extends CommonEventBase
-  @EVENT_ID = ''
+
   instance = null
 
   constructor: ->
@@ -49,4 +49,5 @@ class CommonEvent extends CommonEventBase
       instance = new @PrivateClass()
     return instance
 
+  @EVENT_ID = @PrivateClass.EVENT_ID
   @actionProperties = @PrivateClass.actionProperties

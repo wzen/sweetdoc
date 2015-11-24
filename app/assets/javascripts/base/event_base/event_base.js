@@ -406,6 +406,9 @@ EventBase = (function(superClass) {
                 colorCacheVarName = varName + "ColorChangeCache";
                 if (stepValue === 0 || (this[colorCacheVarName] == null)) {
                   colorType = this.constructor.actionProperties.modifiables[varName].colorType;
+                  if (colorType == null) {
+                    colorType = 'hex';
+                  }
                   this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType);
                 }
                 results.push(this[varName] = this[colorCacheVarName][stepValue]);
@@ -450,7 +453,7 @@ EventBase = (function(superClass) {
     count = 1;
     return timer = setInterval((function(_this) {
       return function() {
-        var before, colorCacheVarName, progressPercentage, results;
+        var before, colorCacheVarName, colorType, progressPercentage, results;
         progressPercentage = _this.constructor.STEP_INTERVAL_DURATION * count / ed;
         for (varName in mod) {
           value = mod[varName];
@@ -464,7 +467,11 @@ EventBase = (function(superClass) {
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChangeCache";
                   if (count === 1 || (_this[colorCacheVarName] == null)) {
-                    _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax);
+                    colorType = _this.constructor.actionProperties.modifiables[varName].colorType;
+                    if (colorType == null) {
+                      colorType = 'hex';
+                    }
+                    _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType);
                   }
                   _this[varName] = _this[colorCacheVarName][count];
                 }

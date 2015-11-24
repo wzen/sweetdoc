@@ -59,13 +59,13 @@ RunCommon = (function() {
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height());
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
-    scrollInside.width(window.scrollViewSize);
-    scrollInside.height(window.scrollViewSize);
+    scrollInsideWrapper.width(window.scrollViewSize);
+    scrollInsideWrapper.height(window.scrollViewSize);
     scrollInsideCover.width(window.scrollViewSize);
     scrollInsideCover.height(window.scrollViewSize);
     scrollHandle.width(window.scrollViewSize);
     scrollHandle.height(window.scrollViewSize);
-    Common.updateScrollContentsPosition(scrollInside.width() * 0.5, scrollInside.height() * 0.5);
+    Common.updateScrollContentsPosition(scrollInsideWrapper.width() * 0.5, scrollInsideWrapper.height() * 0.5);
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5);
     return scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5);
   };
@@ -251,16 +251,16 @@ RunCommon = (function() {
           return Common.setupJsByList(data.itemJsList, function() {
             if (data.pagevalues != null) {
               if (data.pagevalues.general_pagevalue != null) {
-                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.pagevalues.general_pagevalue);
+                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.pagevalues.general_pagevalue, true);
               }
               if (data.pagevalues.instance_pagevalue != null) {
-                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.pagevalues.instance_pagevalue);
+                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.pagevalues.instance_pagevalue, true);
               }
               if (data.pagevalues.event_pagevalue != null) {
-                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.pagevalues.event_pagevalue);
+                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.pagevalues.event_pagevalue, true);
               }
               if (data.pagevalues.footprint != null) {
-                PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalues.footprint);
+                PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, data.pagevalues.footprint, true);
               }
             }
             if (callback != null) {
@@ -565,6 +565,7 @@ RunCommon = (function() {
         LocalStorage.loadAllPageValues();
       } else {
         LocalStorage.saveAllPageValues();
+        PageValue.setPageNum(1);
       }
     }
     Common.createdMainContainerIfNeeded(PageValue.getPageNum());

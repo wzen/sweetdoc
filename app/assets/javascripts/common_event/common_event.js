@@ -8,8 +8,6 @@ CommonEvent = (function(superClass) {
 
   extend(CommonEvent, superClass);
 
-  CommonEvent.EVENT_ID = '';
-
   instance = null;
 
   function CommonEvent() {
@@ -77,6 +75,8 @@ CommonEvent = (function(superClass) {
     }
     return instance;
   };
+
+  CommonEvent.EVENT_ID = CommonEvent.PrivateClass.EVENT_ID;
 
   CommonEvent.actionProperties = CommonEvent.PrivateClass.actionProperties;
 

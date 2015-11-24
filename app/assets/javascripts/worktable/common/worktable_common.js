@@ -103,7 +103,7 @@ WorktableCommon = (function() {
       i += 1;
     }
     targetZIndex = parseInt($("#" + objId).css('z-index'));
-    i = parseInt(window.scrollInside.css('z-index'));
+    i = parseInt(window.scrollInsideWrapper.css('z-index'));
     for (l = 0, len = sorted.length; l < len; l++) {
       item = sorted[l];
       itemId = $(item).attr('id');
@@ -141,7 +141,7 @@ WorktableCommon = (function() {
       i += 1;
     }
     targetZIndex = parseInt($("#" + objId).css('z-index'));
-    i = parseInt(window.scrollInside.css('z-index')) + 1;
+    i = parseInt(window.scrollInsideWrapper.css('z-index')) + 1;
     for (l = 0, len = sorted.length; l < len; l++) {
       item = sorted[l];
       itemId = $(item).attr('id');
@@ -151,7 +151,7 @@ WorktableCommon = (function() {
         i += 1;
       }
     }
-    minZIndex = parseInt(window.scrollInside.css('z-index'));
+    minZIndex = parseInt(window.scrollInsideWrapper.css('z-index'));
     $("#" + objId).css('z-index', minZIndex);
     return PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex));
   };
@@ -159,20 +159,20 @@ WorktableCommon = (function() {
   WorktableCommon.changeMode = function(mode) {
     if (mode === Constant.Mode.NOT_SELECT) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-      window.scrollInside.removeClass('edit_mode');
+      window.scrollInsideWrapper.removeClass('edit_mode');
     } else if (mode === Constant.Mode.DRAW) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
-      window.scrollInside.removeClass('edit_mode');
+      window.scrollInsideWrapper.removeClass('edit_mode');
     } else if (mode === Constant.Mode.EDIT) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
       window.scrollContents.find('.item.draggable').addClass('edit_mode');
-      window.scrollInside.addClass('edit_mode');
+      window.scrollInsideWrapper.addClass('edit_mode');
       Navbar.setModeEdit();
     } else if (mode === Constant.Mode.OPTION) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
-      window.scrollInside.removeClass('edit_mode');
+      window.scrollInsideWrapper.removeClass('edit_mode');
     }
     window.beforeMode = window.mode;
     return window.mode = mode;
@@ -321,9 +321,9 @@ WorktableCommon = (function() {
     CommonVar.worktableCommonVar();
     Common.updateCanvasSize();
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-    window.scrollInside.width(window.scrollViewSize);
-    window.scrollInside.height(window.scrollViewSize);
-    window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+    window.scrollInsideWrapper.width(window.scrollViewSize);
+    window.scrollInsideWrapper.height(window.scrollViewSize);
+    window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll');
     window.scrollContents.on('scroll', function(e) {
       var left, top;

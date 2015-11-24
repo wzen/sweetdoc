@@ -302,8 +302,8 @@ Common = (function() {
     position = PageValue.getScrollContentsPosition();
     if (position == null) {
       position = {
-        top: window.scrollInside.height() * 0.5,
-        left: window.scrollInside.width() * 0.5
+        top: window.scrollInsideWrapper.height() * 0.5,
+        left: window.scrollInsideWrapper.width() * 0.5
       };
       PageValue.setDisplayPosition(position.top, position.left);
     }
@@ -1000,7 +1000,7 @@ Common = (function() {
     ret = [];
     cColors = new Array(3);
     if (afterColor.indexOf('rgb') >= 0) {
-      cColors = afterColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+      cColors = afterColor.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',');
       for (index = j = 0, len = cColors.length; j < len; index = ++j) {
         val = cColors[index];
         cColors[index] = parseInt(val);
@@ -1023,7 +1023,7 @@ Common = (function() {
     } else {
       bColors = new Array(3);
       if (beforeColor.indexOf('rgb') >= 0) {
-        bColors = beforeColor.replace('rgb', '').replace('(', '').replace(')', '').split(',');
+        bColors = beforeColor.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',');
         for (index = p = 0, len2 = bColors.length; p < len2; index = ++p) {
           val = bColors[index];
           bColors[index] = parseInt(val);

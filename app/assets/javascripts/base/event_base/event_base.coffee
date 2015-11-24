@@ -350,7 +350,7 @@ class EventBase extends Extend
     stepMax = @stepMax()
     if !stepMax?
       stepMax = 1
-    # TODO: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
+    # NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
     progressPercentage = stepValue / stepMax
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
@@ -369,12 +369,14 @@ class EventBase extends Extend
                 colorCacheVarName = "#{varName}ColorChangeCache"
                 if stepValue == 0 || !@[colorCacheVarName]?
                   colorType = @constructor.actionProperties.modifiables[varName].colorType
+                  if !colorType?
+                    colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType)
                 @[varName] = @[colorCacheVarName][stepValue]
 
   # アニメーションによるアイテム状態更新
   updateInstanceParamByAnimation: (immediate = false) ->
-    # TODO: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
+    # NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
     ed = @eventDuration()
     stepMax = @stepMax()
     eventBeforeObj = @getMinimumObjectEventBefore()
@@ -402,7 +404,10 @@ class EventBase extends Extend
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChangeCache"
                 if count == 1 || !@[colorCacheVarName]?
-                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax)
+                  colorType = @constructor.actionProperties.modifiables[varName].colorType
+                  if !colorType?
+                    colorType = 'hex'
+                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType)
                 @[varName] = @[colorCacheVarName][count]
       count += 1
       if count > stepMax

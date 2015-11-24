@@ -40,9 +40,9 @@ class MotionCheck
       return true, nil
     else
       pagevalues.each do |pagevalue|
-        gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = pagevalue['general_pagevalue_data']
-        ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = pagevalue['instance_pagevalue_data']
-        epd = pagevalue['event_pagevalue_data']
+        gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['general_pagevalue_data'])
+        ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['instance_pagevalue_data'])
+        epd = JSON.parse(pagevalue['event_pagevalue_data'])
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
         # 必要なItemIdを調査

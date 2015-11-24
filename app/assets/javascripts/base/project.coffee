@@ -127,7 +127,7 @@ class Project
         $('#pages .section:first').attr('class', "#{sectionClass} section")
         $('#pages .section:first').css({'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR, 'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())})
         $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
-        window.scrollInside.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
+        window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
         # 初期化終了
         window.initDone = true
         # モーダルを削除

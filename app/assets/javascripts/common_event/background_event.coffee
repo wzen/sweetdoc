@@ -1,8 +1,7 @@
 # 背景イベント
 class BackgroundEvent extends CommonEvent
-  @EVENT_ID = '1'
-
   class @PrivateClass extends CommonEvent.PrivateClass
+    @EVENT_ID = '1'
 
     @actionProperties =
     {
@@ -68,6 +67,7 @@ class BackgroundEvent extends CommonEvent
     changeBackgroundColor: (opt) ->
       @targetBackground.css('backgroundColor', "#{@backgroundColor}")
 
+  @EVENT_ID = @PrivateClass.EVENT_ID
   @actionProperties = @PrivateClass.actionProperties
 
 Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)

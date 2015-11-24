@@ -13,10 +13,10 @@ class StateConfig
     position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
     $('.display_position_x', rootEmt).val(parseInt(position.left))
     $('.display_position_y', rootEmt).val(parseInt(position.top))
-    leftMin = -window.scrollInside.width() * 0.5
-    leftMax = window.scrollInside.width() * 0.5
-    topMin = -window.scrollInside.height() * 0.5
-    topMax = window.scrollInside.height() * 0.5
+    leftMin = -window.scrollInsideWrapper.width() * 0.5
+    leftMax = window.scrollInsideWrapper.width() * 0.5
+    topMin = -window.scrollInsideWrapper.height() * 0.5
+    topMax = window.scrollInsideWrapper.height() * 0.5
     # Inputイベント
     $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout')
     $('.display_position_x, .display_position_y', rootEmt).on('keypress focusout', (e) ->

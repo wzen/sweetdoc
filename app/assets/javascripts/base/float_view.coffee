@@ -49,8 +49,8 @@ class FloatView
       return ''
     screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     if screenSize?
-      t = (window.scrollInside.height() + screenSize.height) * 0.5 - top
-      l = (window.scrollInside.width() + screenSize.width) * 0.5 - left
+      t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top
+      l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left
       return "X: #{l}  Y:#{t}"
     return ''
 
