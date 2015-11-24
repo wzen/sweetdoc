@@ -8,7 +8,7 @@ class EventBase extends Extend
   initEvent: (event) ->
     @event = event
     @isFinishedEvent = false
-    @skipEvent = false
+    @skipEvent = true
     @doPreviewLoop = false
     @enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
@@ -338,6 +338,9 @@ class EventBase extends Extend
 
   # イベント後の表示状態にする
   updateEventAfter: ->
+    actionType = @getEventActionType()
+    if actionType == Constant.ActionType.SCROLL
+      @scrollValue = @scrollLength()
     if !@isDrawByAnimationMethod()
       @updateInstanceParamByStep(null, true)
     else

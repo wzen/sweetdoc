@@ -9,6 +9,8 @@ class MotionCheckCommon
       if h? && Object.keys(h).length > 0
         # Runのキャッシュを削除
         LocalStorage.clearRun()
+        # Worktableの操作履歴を全削除
+        PageValue.removeAllFootprint()
         target = ''
         if newWindow
           # 実行確認ページを新規ウィンドウで表示

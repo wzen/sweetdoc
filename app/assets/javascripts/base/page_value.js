@@ -785,6 +785,10 @@ PageValue = (function() {
     return this.setFootprintPageValue(key, diff);
   };
 
+  PageValue.removeAllFootprint = function() {
+    return this.setFootprintPageValue(this.Key.F_PREFIX, {});
+  };
+
   return PageValue;
 
 })();

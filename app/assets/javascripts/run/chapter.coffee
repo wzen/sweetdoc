@@ -32,6 +32,8 @@ class Chapter
     @floatScrollHandleCanvas()
     # 対象アイテムにフォーカス
     @focusToActorIfNeed(false)
+    # イベント反応有効
+    @enableEventHandle()
 
   # チャプター共通の後処理
   didChapter: ->
@@ -96,3 +98,15 @@ class Chapter
   # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
   showGuide: (calledByWillChapter = false) ->
     return RunSetting.isShowGuide()
+
+  # イベント反応を有効にする
+  enableEventHandle: ->
+    @eventObjList.forEach((e) =>
+      e.skipEvent = false
+    )
+
+  # イベント反応を無効にする
+  disableEventHandle: ->
+    @eventObjList.forEach((e) =>
+      e.skipEvent = true
+    )

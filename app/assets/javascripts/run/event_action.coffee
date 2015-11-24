@@ -23,7 +23,6 @@ class EventAction
     # フォークをMasterに設定
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum())
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
-
     @thisPage().willPage()
     @thisPage().start()
 
@@ -93,7 +92,6 @@ class EventAction
           })
           if window.debug
             console.log('[nextPage] created page instance')
-
         # Mainコンテナ作成
         Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
         # ページングアニメーションクラス作成
@@ -112,9 +110,11 @@ class EventAction
           RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
           # 後ページ移動 前処理
           @thisPage().willPage()
+        # イベント反応無効
+        @thisPage().thisChapter().disableEventHandle()
         @thisPage().start()
         # ページングアニメーション
-        pageFlip.startRender( ->
+        pageFlip.startRender( =>
           # 隠したビューを非表示にする
           className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
           section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
@@ -123,6 +123,8 @@ class EventAction
           Common.removeAllItem(beforePageNum)
           # CSS削除
           $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
+          # イベント反応有効
+          @thisPage().thisChapter().enableEventHandle()
           # コールバック
           if callback?
             callback()

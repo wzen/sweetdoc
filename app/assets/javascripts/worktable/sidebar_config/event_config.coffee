@@ -228,8 +228,10 @@ class EventConfig
       # 共通イベントはここでインスタンス生成
       commonEventClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
       commonEvent = new commonEventClass()
-      instanceMap[commonEvent.id] = commonEvent
-      commonEvent.setItemAllPropToPageValue()
+      if !instanceMap[commonEvent.id]?
+        # ※インスタンスが存在しない場合のみsetInstanceする
+        instanceMap[commonEvent.id] = commonEvent
+        commonEvent.setItemAllPropToPageValue()
       @[EventPageValueBase.PageValueKey.ID] = commonEvent.id
 
     errorMes = @writeToPageValue()

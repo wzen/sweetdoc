@@ -15,7 +15,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.initEvent = function(event) {
     this.event = event;
     this.isFinishedEvent = false;
-    this.skipEvent = false;
+    this.skipEvent = true;
     this.doPreviewLoop = false;
     this.enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this.forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
@@ -369,6 +369,11 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventAfter = function() {
+    var actionType;
+    actionType = this.getEventActionType();
+    if (actionType === Constant.ActionType.SCROLL) {
+      this.scrollValue = this.scrollLength();
+    }
     if (!this.isDrawByAnimationMethod()) {
       this.updateInstanceParamByStep(null, true);
     } else {

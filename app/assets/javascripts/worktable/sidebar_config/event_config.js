@@ -218,8 +218,10 @@ EventConfig = (function() {
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       commonEventClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
       commonEvent = new commonEventClass();
-      instanceMap[commonEvent.id] = commonEvent;
-      commonEvent.setItemAllPropToPageValue();
+      if (instanceMap[commonEvent.id] == null) {
+        instanceMap[commonEvent.id] = commonEvent;
+        commonEvent.setItemAllPropToPageValue();
+      }
       this[EventPageValueBase.PageValueKey.ID] = commonEvent.id;
     }
     errorMes = this.writeToPageValue();

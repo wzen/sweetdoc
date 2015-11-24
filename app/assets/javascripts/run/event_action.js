@@ -106,6 +106,7 @@ EventAction = (function() {
             RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
             _this.thisPage().willPage();
           }
+          _this.thisPage().thisChapter().disableEventHandle();
           _this.thisPage().start();
           return pageFlip.startRender(function() {
             var className, section;
@@ -114,6 +115,7 @@ EventAction = (function() {
             section.hide();
             Common.removeAllItem(beforePageNum);
             $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
+            _this.thisPage().thisChapter().enableEventHandle();
             if (callback != null) {
               return callback();
             }

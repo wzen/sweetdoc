@@ -218,8 +218,7 @@ class ArrowItem extends CanvasItemBase
     super()
     methodName = @getEventMethodName()
     if methodName == 'scrollDraw'
-      @reDraw(false)
-      (@constructor.prototype[methodName]).call(@, @event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+      @reDraw()
 
   # スクロールイベント ※アクションイベント
   # @param [Integer] scrollValue スクロール値

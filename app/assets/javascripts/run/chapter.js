@@ -32,7 +32,8 @@ Chapter = (function() {
       this.doMoveChapter = false;
     }
     this.floatScrollHandleCanvas();
-    return this.focusToActorIfNeed(false);
+    this.focusToActorIfNeed(false);
+    return this.enableEventHandle();
   };
 
   Chapter.prototype.didChapter = function() {
@@ -113,6 +114,22 @@ Chapter = (function() {
       calledByWillChapter = false;
     }
     return RunSetting.isShowGuide();
+  };
+
+  Chapter.prototype.enableEventHandle = function() {
+    return this.eventObjList.forEach((function(_this) {
+      return function(e) {
+        return e.skipEvent = false;
+      };
+    })(this));
+  };
+
+  Chapter.prototype.disableEventHandle = function() {
+    return this.eventObjList.forEach((function(_this) {
+      return function(e) {
+        return e.skipEvent = true;
+      };
+    })(this));
   };
 
   return Chapter;
