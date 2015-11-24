@@ -375,7 +375,7 @@ WorktableCommon = (function() {
     return WorktableCommon.setupContextMenu($("#pages ." + page + " .scroll_inside:first"), "#pages ." + page + " .main-wrapper:first", menu);
   };
 
-  WorktableCommon.recreateMainContainer = function() {
+  WorktableCommon.resetWorktable = function() {
     this.removeAllItemAndEvent();
     $('#pages .section').remove();
     Common.resetEnvironment();
@@ -477,7 +477,6 @@ WorktableCommon = (function() {
             event.drawAndMakeConfigs();
           }
         }
-        event.setItemAllPropToPageValue();
       }
       if (callback != null) {
         return callback();

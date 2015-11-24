@@ -1,7 +1,9 @@
 # 共通イベント基底クラス
 class CommonEvent extends CommonEventBase
 
-  instance = null
+  # インスタンスはページ毎持つ
+  # 必要に応じてサブクラスで変更
+  instance = {}
 
   constructor: ->
     super()
@@ -45,9 +47,17 @@ class CommonEvent extends CommonEventBase
       window.instanceMap[@id] = @
 
   @getInstance: ->
-    if !instance?
-      instance = new @PrivateClass()
-    return instance
+    if !instance[PageValue.getPageNum()]?
+      instance[PageValue.getPageNum()] = new @PrivateClass()
+    return instance[PageValue.getPageNum()]
+
+  @deleteInstance: (objId) ->
+    for k, v of instance
+      if v.id == objId
+        delete instance[k]
+  @deleteAllInstance: ->
+    for k, v of instance
+      delete instance[k]
 
   @EVENT_ID = @PrivateClass.EVENT_ID
   @actionProperties = @PrivateClass.actionProperties

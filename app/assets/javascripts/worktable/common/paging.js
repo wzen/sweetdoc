@@ -94,8 +94,8 @@ Paging = (function() {
       Sidebar.closeSidebar();
       LocalStorage.clearWorktableWithoutSetting();
       EventConfig.removeAllConfig();
-      created = Common.createdMainContainerIfNeeded(beforePageNum + 1);
-      pageFlip = new PageFlip(beforePageNum, beforePageNum + 1);
+      created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1);
+      pageFlip = new PageFlip(beforePageNum, PageValue.getPageCount() + 1);
       PageValue.setPageNum(PageValue.getPageCount() + 1);
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();

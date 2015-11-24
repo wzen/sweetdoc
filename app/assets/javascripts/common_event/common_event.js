@@ -8,7 +8,7 @@ CommonEvent = (function(superClass) {
 
   extend(CommonEvent, superClass);
 
-  instance = null;
+  instance = {};
 
   function CommonEvent() {
     CommonEvent.__super__.constructor.call(this);
@@ -70,10 +70,34 @@ CommonEvent = (function(superClass) {
   })(CommonEventBase);
 
   CommonEvent.getInstance = function() {
-    if (instance == null) {
-      instance = new this.PrivateClass();
+    if (instance[PageValue.getPageNum()] == null) {
+      instance[PageValue.getPageNum()] = new this.PrivateClass();
     }
-    return instance;
+    return instance[PageValue.getPageNum()];
+  };
+
+  CommonEvent.deleteInstance = function(objId) {
+    var k, results, v;
+    results = [];
+    for (k in instance) {
+      v = instance[k];
+      if (v.id === objId) {
+        results.push(delete instance[k]);
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
+
+  CommonEvent.deleteAllInstance = function() {
+    var k, results, v;
+    results = [];
+    for (k in instance) {
+      v = instance[k];
+      results.push(delete instance[k]);
+    }
+    return results;
   };
 
   CommonEvent.EVENT_ID = CommonEvent.PrivateClass.EVENT_ID;

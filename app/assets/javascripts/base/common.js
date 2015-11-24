@@ -764,6 +764,9 @@ Common = (function() {
         itemId = obj.value.itemId;
         if (objId != null) {
           $("#" + objId).remove();
+          if (window.instanceMap[objId] instanceof CommonEvent) {
+            CommonEvent.deleteInstance(objId);
+          }
           results.push(delete window.instanceMap[objId]);
         } else {
           results.push(void 0);
@@ -778,7 +781,8 @@ Common = (function() {
           v.getJQueryElement().remove();
         }
       }
-      return window.instanceMap = {};
+      window.instanceMap = {};
+      return CommonEvent.deleteAllInstance();
     }
   };
 

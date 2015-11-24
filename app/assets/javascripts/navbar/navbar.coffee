@@ -19,11 +19,11 @@ class Navbar
     $('.menu-newcreate', fileMenuEmt).on('click', ->
       if Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2
         if window.confirm(I18n.t('message.dialog.new_project'))
-          WorktableCommon.recreateMainContainer()
+          WorktableCommon.resetWorktable()
           # 初期モーダル表示
           Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
       else
-        WorktableCommon.recreateMainContainer()
+        WorktableCommon.resetWorktable()
         # 初期モーダル表示
         Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
     )

@@ -45,27 +45,24 @@ class BackgroundEvent extends CommonEvent
     # @param [Object] event 設定イベント
     initEvent: (event) ->
       super(event)
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
-      section = $("##{Constant.Paging.ROOT_ID}").find(".scroll_inside:first")
-      @targetBackground = section
 
     # イベント前の表示状態にする
     updateEventBefore: ->
       super()
       methodName = @getEventMethodName()
       if methodName == 'changeBackgroundColor'
-        @targetBackground.css('backgroundColor', "#{@backgroundColor}")
+        window.scrollInside.css('backgroundColor', @backgroundColor)
   #
     # イベント後の表示状態にする
     updateEventAfter: ->
       super()
       methodName = @getEventMethodName()
       if methodName == 'changeBackgroundColor'
-        @targetBackground.css('backgroundColor', "#{@backgroundColor}")
+        window.scrollInside.css('backgroundColor', @backgroundColor)
 
     # スクロールイベント
     changeBackgroundColor: (opt) ->
-      @targetBackground.css('backgroundColor', "#{@backgroundColor}")
+      window.scrollInside.css('backgroundColor', @backgroundColor)
 
   @EVENT_ID = @PrivateClass.EVENT_ID
   @actionProperties = @PrivateClass.actionProperties

@@ -105,8 +105,6 @@ class LocalStorage
     key = if isRun then @Key.RUN_GENERAL_PAGEVALUES else @Key.WORKTABLE_GENERAL_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
     PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, h)
-#    for k, v of h
-#      PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # キャッシュにインスタンス値を保存
   @saveInstancePageValue: ->
@@ -126,8 +124,6 @@ class LocalStorage
     key = if isRun then @Key.RUN_INSTANCE_PAGEVALUES else @Key.WORKTABLE_INSTANCE_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
     PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, h)
-#    for k, v of h
-#      PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # キャッシュにイベント値を保存
   @saveEventPageValue: ->
@@ -163,8 +159,6 @@ class LocalStorage
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
     h = JSON.parse(lstorage.getItem(key))
     PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, h)
-#    for k, v of h
-#      PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + k, v)
 
   # キャッシュに操作履歴値を保存
   @saveFootprintPageValue: ->

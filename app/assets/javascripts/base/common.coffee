@@ -644,12 +644,17 @@ class Common
         itemId = obj.value.itemId
         if objId?
           $("##{objId}").remove()
+          if window.instanceMap[objId] instanceof CommonEvent
+            # Singletonのキャッシュを削除
+            CommonEvent.deleteInstance(objId)
           delete window.instanceMap[objId]
     else
       for k, v of Common.getCreatedItemInstances()
         if v.getJQueryElement?
           v.getJQueryElement().remove()
       window.instanceMap = {}
+      # Singletonのキャッシュを削除
+      CommonEvent.deleteAllInstance()
 
   # JSファイルをサーバから読み込む
   # @param [Int] itemId アイテム種別

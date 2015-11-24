@@ -21,11 +21,11 @@ Navbar = (function() {
     $('.menu-newcreate', fileMenuEmt).on('click', function() {
       if (Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2) {
         if (window.confirm(I18n.t('message.dialog.new_project'))) {
-          WorktableCommon.recreateMainContainer();
+          WorktableCommon.resetWorktable();
           return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
         }
       } else {
-        WorktableCommon.recreateMainContainer();
+        WorktableCommon.resetWorktable();
         return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
       }
     });

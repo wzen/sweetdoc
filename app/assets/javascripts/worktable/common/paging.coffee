@@ -106,9 +106,9 @@ class Paging
       EventConfig.removeAllConfig()
 
       # Mainコンテナ作成
-      created = Common.createdMainContainerIfNeeded(beforePageNum + 1)
+      created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1)
       # ページングクラス作成
-      pageFlip = new PageFlip(beforePageNum, beforePageNum + 1)
+      pageFlip = new PageFlip(beforePageNum, PageValue.getPageCount() + 1)
       # ページ番号更新
       PageValue.setPageNum(PageValue.getPageCount() + 1)
       # 新規コンテナ初期化

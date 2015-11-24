@@ -326,8 +326,8 @@ class WorktableCommon
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
     WorktableCommon.setupContextMenu($("#pages .#{page} .scroll_inside:first"), "#pages .#{page} .main-wrapper:first", menu)
 
-  # Mainコンテナ再作成
-  @recreateMainContainer: ->
+  # ワークテーブル初期化
+  @resetWorktable: ->
     # アイテムを全消去
     @removeAllItemAndEvent()
     # ページを全消去
@@ -423,7 +423,7 @@ class WorktableCommon
             event.makeCss()
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
-        event.setItemAllPropToPageValue()
+        #event.setItemAllPropToPageValue()
 
       # コールバック
       if callback?

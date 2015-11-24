@@ -57,11 +57,7 @@ BackgroundEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.initEvent = function(event) {
-      var className, section;
-      PrivateClass.__super__.initEvent.call(this, event);
-      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-      section = $("#" + Constant.Paging.ROOT_ID).find(".scroll_inside:first");
-      return this.targetBackground = section;
+      return PrivateClass.__super__.initEvent.call(this, event);
     };
 
     PrivateClass.prototype.updateEventBefore = function() {
@@ -69,7 +65,7 @@ BackgroundEvent = (function(superClass) {
       PrivateClass.__super__.updateEventBefore.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeBackgroundColor') {
-        return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
+        return window.scrollInside.css('backgroundColor', this.backgroundColor);
       }
     };
 
@@ -78,12 +74,12 @@ BackgroundEvent = (function(superClass) {
       PrivateClass.__super__.updateEventAfter.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeBackgroundColor') {
-        return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
+        return window.scrollInside.css('backgroundColor', this.backgroundColor);
       }
     };
 
     PrivateClass.prototype.changeBackgroundColor = function(opt) {
-      return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
+      return window.scrollInside.css('backgroundColor', this.backgroundColor);
     };
 
     return PrivateClass;
