@@ -12,72 +12,85 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.EVENT_ID = '1';
 
-  BackgroundEvent.actionProperties = {
-    defaultMethod: 'changeBackgroundColor',
-    modifiables: {
-      backgroundColor: {
-        name: "Background Color",
-        "default": 'transparent',
-        type: 'color',
-        colorType: 'rgb',
-        ja: {
-          name: "背景色"
-        }
-      }
-    },
-    methods: {
-      changeBackgroundColor: {
-        actionType: 'scroll',
-        options: {
-          id: 'changeColorClick_Design',
-          name: 'Changing color by click',
+  BackgroundEvent.PrivateClass = (function(superClass1) {
+    extend(PrivateClass, superClass1);
+
+    function PrivateClass() {
+      return PrivateClass.__super__.constructor.apply(this, arguments);
+    }
+
+    PrivateClass.actionProperties = {
+      defaultMethod: 'changeBackgroundColor',
+      modifiables: {
+        backgroundColor: {
+          name: "Background Color",
+          "default": 'transparent',
+          type: 'color',
+          colorType: 'rgb',
           ja: {
-            name: 'クリックで色変更'
+            name: "背景色"
           }
-        },
-        modifiables: {
-          backgroundColor: {
-            name: "Background Color",
-            type: 'color',
-            varAutoChange: true,
+        }
+      },
+      methods: {
+        changeBackgroundColor: {
+          actionType: 'scroll',
+          options: {
+            id: 'changeColorClick_Design',
+            name: 'Changing color by click',
             ja: {
-              name: "背景色"
+              name: 'クリックで色変更'
+            }
+          },
+          modifiables: {
+            backgroundColor: {
+              name: "Background Color",
+              type: 'color',
+              varAutoChange: true,
+              ja: {
+                name: "背景色"
+              }
             }
           }
         }
       }
-    }
-  };
+    };
 
-  BackgroundEvent.prototype.initEvent = function(event) {
-    var className, section;
-    BackgroundEvent.__super__.initEvent.call(this, event);
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
-    section = $("#" + Constant.Paging.ROOT_ID).find(".scroll_inside:first");
-    return this.targetBackground = section;
-  };
+    PrivateClass.prototype.initEvent = function(event) {
+      var className, section;
+      PrivateClass.__super__.initEvent.call(this, event);
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+      section = $("#" + Constant.Paging.ROOT_ID).find(".scroll_inside:first");
+      return this.targetBackground = section;
+    };
 
-  BackgroundEvent.prototype.updateEventBefore = function() {
-    var methodName;
-    BackgroundEvent.__super__.updateEventBefore.call(this);
-    methodName = this.getEventMethodName();
-    if (methodName === 'changeBackgroundColor') {
+    PrivateClass.prototype.updateEventBefore = function() {
+      var methodName;
+      PrivateClass.__super__.updateEventBefore.call(this);
+      methodName = this.getEventMethodName();
+      if (methodName === 'changeBackgroundColor') {
+        return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
+      }
+    };
+
+    PrivateClass.prototype.updateEventAfter = function() {
+      var methodName;
+      PrivateClass.__super__.updateEventAfter.call(this);
+      methodName = this.getEventMethodName();
+      if (methodName === 'changeBackgroundColor') {
+        return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
+      }
+    };
+
+    PrivateClass.prototype.changeBackgroundColor = function(opt) {
       return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
-    }
-  };
+    };
 
-  BackgroundEvent.prototype.updateEventAfter = function() {
-    var methodName;
-    BackgroundEvent.__super__.updateEventAfter.call(this);
-    methodName = this.getEventMethodName();
-    if (methodName === 'changeBackgroundColor') {
-      return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
-    }
-  };
+    return PrivateClass;
 
-  BackgroundEvent.prototype.changeBackgroundColor = function(opt) {
-    return this.targetBackground.css('backgroundColor', "" + this.backgroundColor);
-  };
+  })(CommonEvent.PrivateClass);
+
+  BackgroundEvent.actionProperties = BackgroundEvent.PrivateClass.actionProperties;
 
   return BackgroundEvent;
 

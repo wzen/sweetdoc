@@ -2,7 +2,9 @@
 class BackgroundEvent extends CommonEvent
   @EVENT_ID = '1'
 
-  @actionProperties =
+  class @PrivateClass extends CommonEvent.PrivateClass
+
+    @actionProperties =
     {
       defaultMethod: 'changeBackgroundColor'
       modifiables: {
@@ -40,30 +42,33 @@ class BackgroundEvent extends CommonEvent
       }
     }
 
-  # イベントの初期化
-  # @param [Object] event 設定イベント
-  initEvent: (event) ->
-    super(event)
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
-    section = $("##{Constant.Paging.ROOT_ID}").find(".scroll_inside:first")
-    @targetBackground = section
+    # イベントの初期化
+    # @param [Object] event 設定イベント
+    initEvent: (event) ->
+      super(event)
+      className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+      section = $("##{Constant.Paging.ROOT_ID}").find(".scroll_inside:first")
+      @targetBackground = section
 
-  # イベント前の表示状態にする
-  updateEventBefore: ->
-    super()
-    methodName = @getEventMethodName()
-    if methodName == 'changeBackgroundColor'
-      @targetBackground.css('backgroundColor', "#{@backgroundColor}")
-#
-  # イベント後の表示状態にする
-  updateEventAfter: ->
-    super()
-    methodName = @getEventMethodName()
-    if methodName == 'changeBackgroundColor'
+    # イベント前の表示状態にする
+    updateEventBefore: ->
+      super()
+      methodName = @getEventMethodName()
+      if methodName == 'changeBackgroundColor'
+        @targetBackground.css('backgroundColor', "#{@backgroundColor}")
+  #
+    # イベント後の表示状態にする
+    updateEventAfter: ->
+      super()
+      methodName = @getEventMethodName()
+      if methodName == 'changeBackgroundColor'
+        @targetBackground.css('backgroundColor', "#{@backgroundColor}")
+
+    # スクロールイベント
+    changeBackgroundColor: (opt) ->
       @targetBackground.css('backgroundColor', "#{@backgroundColor}")
 
-  # スクロールイベント
-  changeBackgroundColor: (opt) ->
-    @targetBackground.css('backgroundColor', "#{@backgroundColor}")
+  @actionProperties = @PrivateClass.actionProperties
 
 Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)
+

@@ -4,54 +4,81 @@ var CommonEvent,
   hasProp = {}.hasOwnProperty;
 
 CommonEvent = (function(superClass) {
+  var instance;
+
   extend(CommonEvent, superClass);
 
   CommonEvent.EVENT_ID = '';
 
+  instance = null;
+
   function CommonEvent() {
-    var ref, value, varName;
     CommonEvent.__super__.constructor.call(this);
-    this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
-      for (varName in ref) {
-        value = ref[varName];
-        this[varName] = value["default"];
-      }
-    }
+    return this.constructor.getInstance();
   }
 
-  CommonEvent.prototype.getMinimumObject = function() {
-    var mod, obj, ref, value, varName;
-    obj = {
-      id: Common.makeClone(this.id),
-      eventId: Common.makeClone(this.constructor.EVENT_ID)
-    };
-    mod = {};
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
-      for (varName in ref) {
-        value = ref[varName];
-        mod[varName] = Common.makeClone(this[varName]);
+  CommonEvent.PrivateClass = (function(superClass1) {
+    extend(PrivateClass, superClass1);
+
+    PrivateClass.actionProperties = null;
+
+    function PrivateClass() {
+      var ref, value, varName;
+      PrivateClass.__super__.constructor.call(this);
+      this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
+      if (this.constructor.actionProperties.modifiables != null) {
+        ref = this.constructor.actionProperties.modifiables;
+        for (varName in ref) {
+          value = ref[varName];
+          this[varName] = value["default"];
+        }
       }
     }
-    $.extend(obj, mod);
-    return obj;
+
+    PrivateClass.prototype.getMinimumObject = function() {
+      var mod, obj, ref, value, varName;
+      obj = {
+        id: Common.makeClone(this.id),
+        eventId: Common.makeClone(this.constructor.EVENT_ID)
+      };
+      mod = {};
+      if (this.constructor.actionProperties.modifiables != null) {
+        ref = this.constructor.actionProperties.modifiables;
+        for (varName in ref) {
+          value = ref[varName];
+          mod[varName] = Common.makeClone(this[varName]);
+        }
+      }
+      $.extend(obj, mod);
+      return obj;
+    };
+
+    PrivateClass.prototype.setMiniumObject = function(obj) {
+      var ref, value, varName;
+      delete window.instanceMap[this.id];
+      this.id = Common.makeClone(obj.id);
+      if (this.constructor.actionProperties.modifiables != null) {
+        ref = this.constructor.actionProperties.modifiables;
+        for (varName in ref) {
+          value = ref[varName];
+          this[varName] = Common.makeClone(obj[varName]);
+        }
+      }
+      return window.instanceMap[this.id] = this;
+    };
+
+    return PrivateClass;
+
+  })(CommonEventBase);
+
+  CommonEvent.getInstance = function() {
+    if (instance == null) {
+      instance = new this.PrivateClass();
+    }
+    return instance;
   };
 
-  CommonEvent.prototype.setMiniumObject = function(obj) {
-    var ref, value, varName;
-    delete window.instanceMap[this.id];
-    this.id = Common.makeClone(obj.id);
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
-      for (varName in ref) {
-        value = ref[varName];
-        this[varName] = Common.makeClone(obj[varName]);
-      }
-    }
-    return window.instanceMap[this.id] = this;
-  };
+  CommonEvent.actionProperties = CommonEvent.PrivateClass.actionProperties;
 
   return CommonEvent;
 
