@@ -116,6 +116,10 @@ Common = (function() {
     return obj;
   };
 
+  Common.isElement = function(obj) {
+    return (typeof obj === "object") && (obj.length === 1) && (obj.get(0).nodeType === 1) && (typeof obj.get(0).style === "object") && (typeof obj.get(0).ownerDocument === "object");
+  };
+
   Common.applyEnvironmentFromPagevalue = function() {
     Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();

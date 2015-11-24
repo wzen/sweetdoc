@@ -34,7 +34,7 @@ SimpleArrowItem = (function(superClass) {
       y: 0
     };
     this.coodRegist = [];
-    this.coodHeadPart = [];
+    this._coodHeadPart = [];
   }
 
   SimpleArrowItem.prototype.canvasElementId = function() {
@@ -73,7 +73,7 @@ SimpleArrowItem = (function(superClass) {
       l.x -= this.itemSize.x;
       l.y -= this.itemSize.y;
     }
-    ref1 = this.coodHeadPart;
+    ref1 = this._coodHeadPart;
     for (k = 0, len1 = ref1.length; k < len1; k++) {
       l = ref1[k];
       l.x -= this.itemSize.x;
@@ -113,7 +113,7 @@ SimpleArrowItem = (function(superClass) {
       a: this.itemSize,
       b: this.zindex,
       c: this.coodRegist,
-      d: this.coodHeadPart
+      d: this._coodHeadPart
     };
     return obj;
   };
@@ -173,7 +173,7 @@ SimpleArrowItem = (function(superClass) {
       x: Math.cos(sitaMid) * HEADER_HEIGHT + lastBodyCood.x,
       y: Math.sin(sitaMid) * HEADER_HEIGHT + lastBodyCood.y
     };
-    return this.coodHeadPart = [rightTop, top, leftTop];
+    return this._coodHeadPart = [rightTop, top, leftTop];
   };
 
   drawCoodToCanvas = function(drawingContext) {
@@ -191,15 +191,15 @@ SimpleArrowItem = (function(superClass) {
       drawingContext.lineTo(this.coodRegist[i].x, this.coodRegist[i].y);
     }
     drawingContext.stroke();
-    if (this.coodHeadPart.length < 2) {
+    if (this._coodHeadPart.length < 2) {
       return;
     }
     drawingContext.beginPath();
     drawingContext.fillStyle = 'red';
     drawingContext.lineWidth = 1.0;
-    drawingContext.moveTo(this.coodHeadPart[0].x, this.coodHeadPart[0].y);
-    for (i = k = 1, ref1 = this.coodHeadPart.length - 1; 1 <= ref1 ? k <= ref1 : k >= ref1; i = 1 <= ref1 ? ++k : --k) {
-      drawingContext.lineTo(this.coodHeadPart[i].x, this.coodHeadPart[i].y);
+    drawingContext.moveTo(this._coodHeadPart[0].x, this._coodHeadPart[0].y);
+    for (i = k = 1, ref1 = this._coodHeadPart.length - 1; 1 <= ref1 ? k <= ref1 : k >= ref1; i = 1 <= ref1 ? ++k : --k) {
+      drawingContext.lineTo(this._coodHeadPart[i].x, this._coodHeadPart[i].y);
     }
     drawingContext.closePath();
     drawingContext.fill();

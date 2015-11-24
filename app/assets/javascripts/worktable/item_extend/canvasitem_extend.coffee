@@ -13,15 +13,15 @@ WorkTableCanvasItemExtend =
         e.x -= @itemSize.x
         e.y -= @itemSize.y
       )
-      @coodLeftBodyPart.forEach((e) =>
+      @_coodLeftBodyPart.forEach((e) =>
         e.x -= @itemSize.x
         e.y -= @itemSize.y
       )
-      @coodRightBodyPart.forEach((e) =>
+      @_coodRightBodyPart.forEach((e) =>
         e.x -= @itemSize.x
         e.y -= @itemSize.y
       )
-      @coodHeadPart.forEach((e) =>
+      @_coodHeadPart.forEach((e) =>
         e.x -= @itemSize.x
         e.y -= @itemSize.y
       )

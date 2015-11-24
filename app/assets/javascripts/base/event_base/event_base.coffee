@@ -453,3 +453,30 @@ class EventBase extends Extend
     if !d?
       d = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION]
     return d
+
+  # 保存用の最小限のデータを取得
+  # @return [Object] 取得データ
+  getMinimumObject: ->
+    obj = {}
+    for k, v of @
+      if v?
+        if k.indexOf('_') != 0 &&
+          (v instanceof ImageData) == false &&
+          !Common.isElement(v) &&
+          typeof v != 'function'
+            obj[k] = Common.makeClone(v)
+    return obj
+
+  # 最小限のデータを設定
+  # @param [Object] obj 設定データ
+  setMiniumObject: (obj) ->
+    # ID変更のため一度instanceMapから削除
+    delete window.instanceMap[@id]
+    for k, v of obj
+      if v?
+        if k.indexOf('_') != 0 &&
+          (v instanceof ImageData) == false &&
+          !Common.isElement(v) &&
+          typeof v != 'function'
+            @[k] = Common.makeClone(v)
+    window.instanceMap[@id] = @

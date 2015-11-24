@@ -12,8 +12,3 @@ class ItemEventBase extends EventBase
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     @reDraw(false)
-
-  # 最小限のデータを設定
-  # @abstract
-  setMiniumObject: (obj) ->
-

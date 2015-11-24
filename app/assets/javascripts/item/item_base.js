@@ -47,6 +47,7 @@ ItemBase = (function(superClass) {
     }
     ItemBase.__super__.constructor.call(this);
     this.id = "i" + this.constructor.IDENTITY + Common.generateId();
+    this.itemId = this.constructor.ITEM_ID;
     this.name = null;
     this.drawingSurfaceImageData = null;
     if (cood !== null) {
@@ -152,48 +153,6 @@ ItemBase = (function(superClass) {
     prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
     PageValue.setInstancePageValue(prefix_key + (":" + prop), value);
     return LocalStorage.saveInstancePageValue();
-  };
-
-  ItemBase.prototype.getMinimumObject = function() {
-    var mod, obj, ref, value, varName;
-    obj = {
-      id: Common.makeClone(this.id),
-      itemId: Common.makeClone(this.constructor.ITEM_ID),
-      name: Common.makeClone(this.name),
-      itemSize: Common.makeClone(this.itemSize),
-      zindex: Common.makeClone(this.zindex),
-      coodRegist: JSON.stringify(Common.makeClone(this.coodRegist)),
-      designs: Common.makeClone(this.designs)
-    };
-    mod = {};
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
-      for (varName in ref) {
-        value = ref[varName];
-        mod[varName] = Common.makeClone(this[varName]);
-      }
-    }
-    $.extend(obj, mod);
-    return obj;
-  };
-
-  ItemBase.prototype.setMiniumObject = function(obj) {
-    var ref, value, varName;
-    delete window.instanceMap[this.id];
-    this.id = Common.makeClone(obj.id);
-    this.name = Common.makeClone(obj.name);
-    this.itemSize = Common.makeClone(obj.itemSize);
-    this.zindex = Common.makeClone(obj.zindex);
-    this.coodRegist = Common.makeClone(JSON.parse(obj.coodRegist));
-    this.designs = Common.makeClone(obj.designs);
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
-      for (varName in ref) {
-        value = ref[varName];
-        this[varName] = Common.makeClone(obj[varName]);
-      }
-    }
-    return window.instanceMap[this.id] = this;
   };
 
   ItemBase.prototype.clearAllEventStyle = function() {};

@@ -30,6 +30,8 @@ class ItemBase extends ItemEventBase
     super()
     # @property [Int] id ID
     @id = "i" + @constructor.IDENTITY + Common.generateId()
+    # @property [ItemType] ITEM_ID アイテム種別
+    @itemId = @constructor.ITEM_ID
     # @property [String] name 名前
     @name = null
     # @property [Object] drawingSurfaceImageData 画面を保存する変数
@@ -134,44 +136,6 @@ class ItemBase extends ItemEventBase
     prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     PageValue.setInstancePageValue(prefix_key + ":#{prop}", value)
     LocalStorage.saveInstancePageValue()
-
-  # 保存用の最小限のデータを取得
-  # @return [Object] 取得データ
-  getMinimumObject: ->
-    obj = {
-      id: Common.makeClone(@id)
-      itemId: Common.makeClone(@constructor.ITEM_ID)
-      name: Common.makeClone(@name)
-      itemSize: Common.makeClone(@itemSize)
-      zindex: Common.makeClone(@zindex)
-      coodRegist: JSON.stringify(Common.makeClone(@coodRegist))
-      designs: Common.makeClone(@designs)
-    }
-    mod = {}
-    # modifiables変数の追加
-    if @constructor.actionProperties.modifiables?
-      for varName, value of @constructor.actionProperties.modifiables
-        mod[varName] = Common.makeClone(@[varName])
-    $.extend(obj, mod)
-    return obj
-
-  # 最小限のデータを設定
-  # @param [Object] obj 設定データ
-  setMiniumObject: (obj) ->
-    # ID変更のため一度instanceMapから削除
-    delete window.instanceMap[@id]
-    @id = Common.makeClone(obj.id)
-    @name = Common.makeClone(obj.name)
-    @itemSize = Common.makeClone(obj.itemSize)
-    @zindex = Common.makeClone(obj.zindex)
-    @coodRegist = Common.makeClone(JSON.parse(obj.coodRegist))
-    @designs = Common.makeClone(obj.designs)
-
-    # modifiables変数の追加
-    if @constructor.actionProperties.modifiables?
-      for varName, value of @constructor.actionProperties.modifiables
-        @[varName] = Common.makeClone(obj[varName])
-    window.instanceMap[@id] = @
 
   # イベントによって設定したスタイルをクリアする
   clearAllEventStyle: ->

@@ -52,22 +52,6 @@ CssItemBase = (function(superClass) {
     return this.getJQueryElement().remove();
   };
 
-  CssItemBase.prototype.getMinimumObject = function() {
-    var newobj, obj;
-    obj = CssItemBase.__super__.getMinimumObject.call(this);
-    newobj = {
-      itemId: this.constructor.ITEM_ID,
-      mousedownCood: Common.makeClone(this.mousedownCood)
-    };
-    $.extend(obj, newobj);
-    return obj;
-  };
-
-  CssItemBase.prototype.setMiniumObject = function(obj) {
-    CssItemBase.__super__.setMiniumObject.call(this, obj);
-    return this.mousedownCood = Common.makeClone(obj.mousedownCood);
-  };
-
   CssItemBase.prototype.updateItemSize = function(w, h) {
     this.getJQueryElement().css({
       width: w,

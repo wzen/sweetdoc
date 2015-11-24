@@ -19,8 +19,6 @@ ItemEventBase = (function(superClass) {
     return this.reDraw(false);
   };
 
-  ItemEventBase.prototype.setMiniumObject = function(obj) {};
-
   return ItemEventBase;
 
 })(EventBase);

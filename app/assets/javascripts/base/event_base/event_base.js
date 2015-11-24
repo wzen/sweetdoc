@@ -553,6 +553,34 @@ EventBase = (function(superClass) {
     return d;
   };
 
+  EventBase.prototype.getMinimumObject = function() {
+    var k, obj, v;
+    obj = {};
+    for (k in this) {
+      v = this[k];
+      if (v != null) {
+        if (k.indexOf('_') !== 0 && (v instanceof ImageData) === false && !Common.isElement(v) && typeof v !== 'function') {
+          obj[k] = Common.makeClone(v);
+        }
+      }
+    }
+    return obj;
+  };
+
+  EventBase.prototype.setMiniumObject = function(obj) {
+    var k, v;
+    delete window.instanceMap[this.id];
+    for (k in obj) {
+      v = obj[k];
+      if (v != null) {
+        if (k.indexOf('_') !== 0 && (v instanceof ImageData) === false && !Common.isElement(v) && typeof v !== 'function') {
+          this[k] = Common.makeClone(v);
+        }
+      }
+    }
+    return window.instanceMap[this.id] = this;
+  };
+
   return EventBase;
 
 })(Extend);

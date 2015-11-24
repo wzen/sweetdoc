@@ -28,8 +28,8 @@ class SimpleArrowItem extends ItemBase
     @direction = {x: 0, y: 0}
     # @property [Array] coodRegist ドラッグした座標
     @coodRegist = []
-    # @property [Array] coodHeadPart 矢印の頭部の座標
-    @coodHeadPart = []
+    # @property [Array] _coodHeadPart 矢印の頭部の座標
+    @_coodHeadPart = []
 
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID
@@ -74,7 +74,7 @@ class SimpleArrowItem extends ItemBase
     for l in @coodRegist
       l.x -= @itemSize.x
       l.y -= @itemSize.y
-    for l in @coodHeadPart
+    for l in @_coodHeadPart
       l.x -= @itemSize.x
       l.y -= @itemSize.y
 
@@ -112,7 +112,7 @@ class SimpleArrowItem extends ItemBase
       a: @itemSize
       b: @zindex
       c: @coodRegist
-      d : @coodHeadPart
+      d : @_coodHeadPart
     }
     return obj
 
@@ -171,7 +171,7 @@ class SimpleArrowItem extends ItemBase
       x: Math.cos(sitaMid) * HEADER_HEIGHT + lastBodyCood.x
       y: Math.sin(sitaMid) * HEADER_HEIGHT + lastBodyCood.y
 
-    @coodHeadPart = [rightTop, top, leftTop]
+    @_coodHeadPart = [rightTop, top, leftTop]
 
   # 座標をCanvasに描画
   # @private
@@ -189,14 +189,14 @@ class SimpleArrowItem extends ItemBase
       drawingContext.lineTo(@coodRegist[i].x, @coodRegist[i].y)
     drawingContext.stroke()
 
-    if @coodHeadPart.length < 2
+    if @_coodHeadPart.length < 2
       return
     drawingContext.beginPath()
     drawingContext.fillStyle = 'red'
     drawingContext.lineWidth = 1.0
-    drawingContext.moveTo(@coodHeadPart[0].x, @coodHeadPart[0].y)
-    for i in [1 .. @coodHeadPart.length - 1]
-      drawingContext.lineTo(@coodHeadPart[i].x, @coodHeadPart[i].y)
+    drawingContext.moveTo(@_coodHeadPart[0].x, @_coodHeadPart[0].y)
+    for i in [1 .. @_coodHeadPart.length - 1]
+      drawingContext.lineTo(@_coodHeadPart[i].x, @_coodHeadPart[i].y)
     drawingContext.closePath()
     drawingContext.fill()
     drawingContext.stroke()

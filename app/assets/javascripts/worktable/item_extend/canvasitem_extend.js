@@ -13,15 +13,15 @@ WorkTableCanvasItemExtend = {
           e.x -= _this.itemSize.x;
           return e.y -= _this.itemSize.y;
         });
-        _this.coodLeftBodyPart.forEach(function(e) {
+        _this._coodLeftBodyPart.forEach(function(e) {
           e.x -= _this.itemSize.x;
           return e.y -= _this.itemSize.y;
         });
-        _this.coodRightBodyPart.forEach(function(e) {
+        _this._coodRightBodyPart.forEach(function(e) {
           e.x -= _this.itemSize.x;
           return e.y -= _this.itemSize.y;
         });
-        return _this.coodHeadPart.forEach(function(e) {
+        return _this._coodHeadPart.forEach(function(e) {
           e.x -= _this.itemSize.x;
           return e.y -= _this.itemSize.y;
         });

@@ -24,6 +24,7 @@ CommonEvent = (function(superClass) {
       var ref, value, varName;
       PrivateClass.__super__.constructor.call(this);
       this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
+      this.eventId = this.constructor.EVENT_ID;
       if (this.constructor.actionProperties.modifiables != null) {
         ref = this.constructor.actionProperties.modifiables;
         for (varName in ref) {
@@ -32,38 +33,6 @@ CommonEvent = (function(superClass) {
         }
       }
     }
-
-    PrivateClass.prototype.getMinimumObject = function() {
-      var mod, obj, ref, value, varName;
-      obj = {
-        id: Common.makeClone(this.id),
-        eventId: Common.makeClone(this.constructor.EVENT_ID)
-      };
-      mod = {};
-      if (this.constructor.actionProperties.modifiables != null) {
-        ref = this.constructor.actionProperties.modifiables;
-        for (varName in ref) {
-          value = ref[varName];
-          mod[varName] = Common.makeClone(this[varName]);
-        }
-      }
-      $.extend(obj, mod);
-      return obj;
-    };
-
-    PrivateClass.prototype.setMiniumObject = function(obj) {
-      var ref, value, varName;
-      delete window.instanceMap[this.id];
-      this.id = Common.makeClone(obj.id);
-      if (this.constructor.actionProperties.modifiables != null) {
-        ref = this.constructor.actionProperties.modifiables;
-        for (varName in ref) {
-          value = ref[varName];
-          this[varName] = Common.makeClone(obj[varName]);
-        }
-      }
-      return window.instanceMap[this.id] = this;
-    };
 
     return PrivateClass;
 

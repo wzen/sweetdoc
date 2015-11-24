@@ -82,6 +82,10 @@ class Common
     console.log(obj)
     return obj
 
+  # オブジェクトがHTML要素か判定
+  @isElement: (obj) ->
+    return (typeof obj == "object") && (obj.length == 1) && (obj.get(0).nodeType ==1) && (typeof obj.get(0).style == "object") && (typeof obj.get(0).ownerDocument == "object")
+
   # Pagevalueから環境を反映
   @applyEnvironmentFromPagevalue = ->
     # タイトル名設定

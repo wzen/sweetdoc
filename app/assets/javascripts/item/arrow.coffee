@@ -112,13 +112,13 @@ class ArrowItem extends CanvasItemBase
   constructor : (cood = null)->
     super(cood)
     # @property [Array] direction 矢印の進行方向
-    @direction = {x: 0, y: 0}
-    # @property [Array] coodHeadPart 矢印の頭部の座標
-    @coodHeadPart = []
-    # @property [Array] coodLeftBodyPart 矢印の体左部分の座標
-    @coodLeftBodyPart = []
-    # @property [Array] coodRightBodyPart 矢印の体右部分の座標
-    @coodRightBodyPart = []
+    @_direction = {x: 0, y: 0}
+    # @property [Array] _coodHeadPart 矢印の頭部の座標
+    @_coodHeadPart = []
+    # @property [Array] _coodLeftBodyPart 矢印の体左部分の座標
+    @_coodLeftBodyPart = []
+    # @property [Array] _coodRightBodyPart 矢印の体右部分の座標
+    @_coodRightBodyPart = []
     # @property [Int] header_width 矢印の頭の幅
     @header_width = HEADER_WIDTH
     # @property [Int] header_height 矢印の頭の長さ
@@ -127,20 +127,20 @@ class ArrowItem extends CanvasItemBase
     @padding_size = @header_width
     # @property [Array] drawCoodRegist 矢印のドラッグ座標(描画時のみ使用)
     # @private
-    @drawCoodRegist = []
+    @_drawCoodRegist = []
 
   # パスの描画
   # @param [Array] moveCood 画面ドラッグ座標
   drawPath : (moveCood) ->
-    _calDrection.call(@, @drawCoodRegist[@drawCoodRegist.length - 1], moveCood)
-    @drawCoodRegist.push(moveCood)
+    _calDrection.call(@, @_drawCoodRegist[@_drawCoodRegist.length - 1], moveCood)
+    @_drawCoodRegist.push(moveCood)
 
     # 尾の部分の座標を計算
     _calTailDrawPath.call(@)
     # 体の部分の座標を計算
     _calBodyPath.call(@, moveCood)
     # 頭の部分の座標を計算
-    _calTrianglePath.call(@, @coodLeftBodyPart[@coodLeftBodyPart.length - 1], @coodRightBodyPart[@coodRightBodyPart.length - 1])
+    _calTrianglePath.call(@, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1], @_coodRightBodyPart[@_coodRightBodyPart.length - 1])
     #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
 
   # 線の描画
@@ -179,32 +179,10 @@ class ArrowItem extends CanvasItemBase
 
   # パスの情報をリセット
   resetDrawPath: ->
-    @coodHeadPart = []
-    @coodLeftBodyPart = []
-    @coodRightBodyPart = []
-    @drawCoodRegist = []
-
-  # アイテムの最小限のデータを取得
-  # @return [Array] アイテムオブジェクトの最小限データ
-  getMinimumObject: ->
-    obj = super()
-    addObj = {
-      itemId: @constructor.ITEM_ID
-      header_width: Common.makeClone(@header_width)
-      header_height: Common.makeClone(@header_height)
-      scale: Common.makeClone(@scale)
-    }
-    $.extend(obj, addObj)
-    return obj
-
-  # 最小限のデータを設定
-  # @param [Array] obj アイテムオブジェクトの最小限データ
-  setMiniumObject: (obj) ->
-    super(obj)
-    @header_width = Common.makeClone(obj.header_width)
-    @header_height = Common.makeClone(obj.header_height)
-    @padding_size = Common.makeClone(@header_width)
-    @scale = Common.makeClone(obj.scale)
+    @_coodHeadPart = []
+    @_coodLeftBodyPart = []
+    @_coodRightBodyPart = []
+    @_drawCoodRegist = []
 
   # イベント前の表示状態にする
   updateEventBefore: ->
@@ -265,7 +243,7 @@ class ArrowItem extends CanvasItemBase
       y = -1
 
     #console.log('direction x:' + x + ' y:' + y)
-    @direction = {x: x, y: y}
+    @_direction = {x: x, y: y}
 
   # 矢印の頭を作成
   # @private
@@ -296,33 +274,33 @@ class ArrowItem extends CanvasItemBase
       x: Math.cos(sitaTop) * @header_height + mid.x
       y: Math.sin(sitaTop) * @header_height + mid.y
 
-    @coodHeadPart = [rightTop, top, leftTop]
+    @_coodHeadPart = [rightTop, top, leftTop]
 
   # 矢印の尾を作成
   # @private
   _calTailDrawPath = ->
     ### 検証 ###
     _validate = ->
-      return @drawCoodRegist.length == 2
+      return @_drawCoodRegist.length == 2
 
     if !_validate.call(@)
       return
 
-    locTail = @drawCoodRegist[0]
-    locSub = @drawCoodRegist[1]
+    locTail = @_drawCoodRegist[0]
+    locSub = @_drawCoodRegist[1]
 
     # 座標を保存
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x)
     arrowHalfWidth = @arrowWidth / 2.0
-    @coodRightBodyPart.push({x: -(Math.sin(rad) * arrowHalfWidth) + locTail.x, y: Math.cos(rad) * arrowHalfWidth + locTail.y})
-    @coodLeftBodyPart.push({x: Math.sin(rad) * arrowHalfWidth + locTail.x, y: -(Math.cos(rad) * arrowHalfWidth) + locTail.y})
+    @_coodRightBodyPart.push({x: -(Math.sin(rad) * arrowHalfWidth) + locTail.x, y: Math.cos(rad) * arrowHalfWidth + locTail.y})
+    @_coodLeftBodyPart.push({x: Math.sin(rad) * arrowHalfWidth + locTail.x, y: -(Math.cos(rad) * arrowHalfWidth) + locTail.y})
 
   # 矢印の本体を作成
   # @private
   _calBodyPath = ->
     ### 検証 ###
     _validate = ->
-      return @drawCoodRegist.length >= 3
+      return @_drawCoodRegist.length >= 3
 
     ### 3点から引く座標を求める ###
     _calCenterBodyCood = (left, center, right) ->
@@ -370,22 +348,22 @@ class ArrowItem extends CanvasItemBase
     _suitCoodBasedDirection = (cood)->
 
       _suitCood = (cood, beforeCood) ->
-        if @direction.x < 0 &&
+        if @_direction.x < 0 &&
           beforeCood.x < cood.x
             cood.x = beforeCood.x
-        else if @direction.x > 0 &&
+        else if @_direction.x > 0 &&
           beforeCood.x > cood.x
             cood.x = beforeCood.x
-        if @direction.y < 0 &&
+        if @_direction.y < 0 &&
           beforeCood.y < cood.y
             cood.y = beforeCood.y
-        else if @direction.y > 0 &&
+        else if @_direction.y > 0 &&
           beforeCood.y > cood.y
             cood.y = beforeCood.y
         return cood
 
-      beforeLeftCood = @coodLeftBodyPart[@coodLeftBodyPart.length - 1]
-      beforeRightCood = @coodRightBodyPart[@coodRightBodyPart.length - 1]
+      beforeLeftCood = @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1]
+      beforeRightCood = @_coodRightBodyPart[@_coodRightBodyPart.length - 1]
       leftCood = _suitCood.call(@, cood.coodLeftPart, beforeLeftCood)
       rightCood = _suitCood.call(@, cood.coodRightPart, beforeRightCood)
 
@@ -397,9 +375,9 @@ class ArrowItem extends CanvasItemBase
     if !_validate.call(@)
       return
 
-    locLeftBody = @coodLeftBodyPart[@coodLeftBodyPart.length - 1]
-    locRightBody = @coodRightBodyPart[@coodRightBodyPart.length - 1]
-    centerBodyCood = _calCenterBodyCood.call(@, @drawCoodRegist[@drawCoodRegist.length - 3], @drawCoodRegist[@drawCoodRegist.length - 2], @drawCoodRegist[@drawCoodRegist.length - 1])
+    locLeftBody = @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1]
+    locRightBody = @_coodRightBodyPart[@_coodRightBodyPart.length - 1]
+    centerBodyCood = _calCenterBodyCood.call(@, @_drawCoodRegist[@_drawCoodRegist.length - 3], @_drawCoodRegist[@_drawCoodRegist.length - 2], @_drawCoodRegist[@_drawCoodRegist.length - 1])
     centerBodyCood = _suitCoodBasedDirection.call(@, centerBodyCood)
     #    console.log('Left')
     #    _coodLog.call(@, locLeftBody, 'moveTo')
@@ -408,8 +386,8 @@ class ArrowItem extends CanvasItemBase
     #    _coodLog.call(@, locRightBody, 'moveTo')
     #    _coodLog.call(@, centerBodyCood.coodRightPart, 'lineTo')
 
-    @coodLeftBodyPart.push(centerBodyCood.coodLeftPart)
-    @coodRightBodyPart.push(centerBodyCood.coodRightPart)
+    @_coodLeftBodyPart.push(centerBodyCood.coodLeftPart)
+    @_coodRightBodyPart.push(centerBodyCood.coodRightPart)
 
   # 座標をCanvasに描画
   # @private
@@ -420,18 +398,18 @@ class ArrowItem extends CanvasItemBase
       drawingContext = dc
     else
       drawingContext = window.drawingContext
-    if @coodLeftBodyPart.length <= 0 || @coodRightBodyPart.length <= 0
+    if @_coodLeftBodyPart.length <= 0 || @_coodRightBodyPart.length <= 0
       # 尾が描かれてない場合
       return
 
-    drawingContext.moveTo(@coodLeftBodyPart[@coodLeftBodyPart.length - 1].x, @coodLeftBodyPart[@coodLeftBodyPart.length - 1].y)
-    if @coodLeftBodyPart.length >= 2
-      for i in [@coodLeftBodyPart.length - 2 .. 0]
-        drawingContext.lineTo(@coodLeftBodyPart[i].x, @coodLeftBodyPart[i].y)
-    for i in [0 .. @coodRightBodyPart.length - 1]
-      drawingContext.lineTo(@coodRightBodyPart[i].x, @coodRightBodyPart[i].y)
-    for i in [0 .. @coodHeadPart.length - 1]
-      drawingContext.lineTo(@coodHeadPart[i].x, @coodHeadPart[i].y)
+    drawingContext.moveTo(@_coodLeftBodyPart[@_coodLeftBodyPart.length - 1].x, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1].y)
+    if @_coodLeftBodyPart.length >= 2
+      for i in [@_coodLeftBodyPart.length - 2 .. 0]
+        drawingContext.lineTo(@_coodLeftBodyPart[i].x, @_coodLeftBodyPart[i].y)
+    for i in [0 .. @_coodRightBodyPart.length - 1]
+      drawingContext.lineTo(@_coodRightBodyPart[i].x, @_coodRightBodyPart[i].y)
+    for i in [0 .. @_coodHeadPart.length - 1]
+      drawingContext.lineTo(@_coodHeadPart[i].x, @_coodHeadPart[i].y)
     drawingContext.closePath()
 
   # 座標を基底Canvasに描画

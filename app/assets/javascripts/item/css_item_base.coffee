@@ -42,23 +42,6 @@ class CssItemBase extends ItemBase
   clearDraw: ->
     @getJQueryElement().remove()
 
-  # ストレージとDB保存用の最小限のデータを取得
-  # @return [Array] アイテムオブジェクトの最小限データ
-  getMinimumObject: ->
-    obj = super()
-    newobj = {
-      itemId: @constructor.ITEM_ID
-      mousedownCood: Common.makeClone(@mousedownCood)
-    }
-    $.extend(obj, newobj)
-    return obj
-
-  # 最小限のデータを設定
-  # @param [Array] obj アイテムオブジェクトの最小限データ
-  setMiniumObject: (obj) ->
-    super(obj)
-    @mousedownCood = Common.makeClone(obj.mousedownCood)
-
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     @getJQueryElement().css({width: w, height: h})
