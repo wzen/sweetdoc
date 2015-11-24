@@ -106,8 +106,8 @@ EventAction = (function() {
             RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
             _this.thisPage().willPage();
           }
-          _this.thisPage().thisChapter().disableEventHandle();
           _this.thisPage().start();
+          _this.thisPage().thisChapter().disableEventHandle();
           return pageFlip.startRender(function() {
             var className, section;
             className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);

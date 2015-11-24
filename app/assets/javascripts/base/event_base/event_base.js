@@ -214,6 +214,13 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.didChapter = function() {
+    var k, v;
+    for (k in this) {
+      v = this[k];
+      if (k.lastIndexOf('__Cache') >= 0) {
+        delete this[k];
+      }
+    }
     return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
@@ -408,8 +415,8 @@ EventBase = (function(superClass) {
               if (value.type === Constant.ItemDesignOptionType.NUMBER) {
                 results.push(this[varName] = before + (after - before) * progressPercentage);
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-                colorCacheVarName = varName + "ColorChangeCache";
-                if (stepValue === 0 || (this[colorCacheVarName] == null)) {
+                colorCacheVarName = varName + "ColorChange__Cache";
+                if (this[colorCacheVarName] == null) {
                   colorType = this.constructor.actionProperties.modifiables[varName].colorType;
                   if (colorType == null) {
                     colorType = 'hex';
@@ -470,8 +477,8 @@ EventBase = (function(superClass) {
                 if (value.type === Constant.ItemDesignOptionType.NUMBER) {
                   _this[varName] = before + (after - before) * progressPercentage;
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-                  colorCacheVarName = varName + "ColorChangeCache";
-                  if (count === 1 || (_this[colorCacheVarName] == null)) {
+                  colorCacheVarName = varName + "ColorChange__Cache";
+                  if (_this[colorCacheVarName] == null) {
                     colorType = _this.constructor.actionProperties.modifiables[varName].colorType;
                     if (colorType == null) {
                       colorType = 'hex';

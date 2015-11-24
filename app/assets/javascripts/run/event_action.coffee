@@ -110,9 +110,9 @@ class EventAction
           RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
           # 後ページ移動 前処理
           @thisPage().willPage()
+        @thisPage().start()
         # イベント反応無効
         @thisPage().thisChapter().disableEventHandle()
-        @thisPage().start()
         # ページングアニメーション
         pageFlip.startRender( =>
           # 隠したビューを非表示にする

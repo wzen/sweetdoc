@@ -183,6 +183,10 @@ class EventBase extends Extend
 
   # チャプター終了時イベント
   didChapter: ->
+    # キャッシュ用の「__Cache」と付くインスタンス変数を削除
+    for k, v of @
+      if k.lastIndexOf('__Cache') >= 0
+        delete @[k]
     # インスタンスの状態を保存
     PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
 
@@ -369,8 +373,8 @@ class EventBase extends Extend
               if value.type == Constant.ItemDesignOptionType.NUMBER
                 @[varName] = before + (after - before) * progressPercentage
               else if value.type == Constant.ItemDesignOptionType.COLOR
-                colorCacheVarName = "#{varName}ColorChangeCache"
-                if stepValue == 0 || !@[colorCacheVarName]?
+                colorCacheVarName = "#{varName}ColorChange__Cache"
+                if !@[colorCacheVarName]?
                   colorType = @constructor.actionProperties.modifiables[varName].colorType
                   if !colorType?
                     colorType = 'hex'
@@ -405,8 +409,8 @@ class EventBase extends Extend
               if value.type == Constant.ItemDesignOptionType.NUMBER
                 @[varName] = before + (after - before) * progressPercentage
               else if value.type == Constant.ItemDesignOptionType.COLOR
-                colorCacheVarName = "#{varName}ColorChangeCache"
-                if count == 1 || !@[colorCacheVarName]?
+                colorCacheVarName = "#{varName}ColorChange__Cache"
+                if !@[colorCacheVarName]?
                   colorType = @constructor.actionProperties.modifiables[varName].colorType
                   if !colorType?
                     colorType = 'hex'
