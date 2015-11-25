@@ -12,8 +12,8 @@ Rails.application.routes.draw do
 
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
-  post 'worktable/design_config'
-  post 'worktable/event_var_modify_config'
+  post 'config_menu/design_config'
+  post 'config_menu/event_var_modify_config'
 
   post 'coding/save_all'
   post 'coding/save_tree'

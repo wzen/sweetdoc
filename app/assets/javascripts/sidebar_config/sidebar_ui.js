@@ -36,17 +36,19 @@ Sidebar = (function() {
     if (selectedBorderType == null) {
       selectedBorderType = "edit";
     }
-    if (!Sidebar.isOpenedConfigSidebar()) {
-      WorktableCommon.changeMode(Constant.Mode.OPTION);
-      main = $('#main');
+    if (window.isWorkTable) {
       if (!Sidebar.isOpenedConfigSidebar()) {
-        main.removeClass('col-xs-12');
-        main.addClass('col-xs-9');
-        $('#sidebar').fadeIn('500', function() {
-          return WorktableCommon.resizeMainContainerEvent();
-        });
-        if (target !== null) {
-          return WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
+        WorktableCommon.changeMode(Constant.Mode.OPTION);
+        main = $('#main');
+        if (!Sidebar.isOpenedConfigSidebar()) {
+          main.removeClass('col-xs-12');
+          main.addClass('col-xs-9');
+          $('#sidebar').fadeIn('500', function() {
+            return WorktableCommon.resizeMainContainerEvent();
+          });
+          if (target !== null) {
+            return WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
+          }
         }
       }
     }
@@ -57,18 +59,20 @@ Sidebar = (function() {
     if (callback == null) {
       callback = null;
     }
-    WorktableCommon.clearSelectedBorder();
-    if (!Sidebar.isClosedConfigSidebar()) {
-      main = $('#main');
-      return $('#sidebar').fadeOut('500', function() {
-        main.removeClass('col-xs-9');
-        main.addClass('col-xs-12');
-        WorktableCommon.resizeMainContainerEvent();
-        if (callback != null) {
-          callback();
-        }
-        return $('.sidebar-config').hide();
-      });
+    if (window.isWorkTable) {
+      WorktableCommon.clearSelectedBorder();
+      if (!Sidebar.isClosedConfigSidebar()) {
+        main = $('#main');
+        return $('#sidebar').fadeOut('500', function() {
+          main.removeClass('col-xs-9');
+          main.addClass('col-xs-12');
+          WorktableCommon.resizeMainContainerEvent();
+          if (callback != null) {
+            callback();
+          }
+          return $('.sidebar-config').hide();
+        });
+      }
     }
   };
 

@@ -1,0 +1,2 @@
+module ConfigMenuHelper
+end

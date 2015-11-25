@@ -17,7 +17,7 @@
         </div>
     </div>
   <div class="config te_div item_common_div" style="display: none">
-    <%= render 'worktable/sidebar_menu/event/parts/item_common' %>
+    <%= render 'sidebar_menu/event/parts/item_common' %>
   </div>
     <div class="config te_div action_div" style="display: none">
         <div class="configBox">
@@ -28,7 +28,7 @@
                     <div class="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>" style="display: none">
                         <% c.common_action_events.each do |a| %>
                             <%=
-                                render 'worktable/sidebar_menu/event/parts/method',
+                                render 'sidebar_menu/event/parts/method',
                                        action_type_id: a.action_type_id,
                                        method_name: a.method_name,
                                        radio_name: Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
@@ -57,9 +57,9 @@
                 <% c.common_action_events.each do |a| %>
                     <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
                         <% if a.action_type_id == Const::ActionType::SCROLL  %>
-                            <%= render 'worktable/sidebar_menu/event/parts/handler_scroll' %>
+                            <%= render 'sidebar_menu/event/parts/handler_scroll' %>
                         <% elsif a.action_type_id == Const::ActionType::CLICK %>
-                            <%= render 'worktable/sidebar_menu/event/parts/handler_click' %>
+                            <%= render 'sidebar_menu/event/parts/handler_click' %>
                         <% end %>
                     </div>
                 <% end %>
@@ -90,12 +90,12 @@
 </div>
 
 <div class="method_temp">
-    <%= render 'worktable/sidebar_menu/event/parts/method' %>
+    <%= render 'sidebar_menu/event/parts/method' %>
 </div>
 
 <div class="handler_scroll_temp">
-    <%= render 'worktable/sidebar_menu/event/parts/handler_scroll' %>
+    <%= render 'sidebar_menu/event/parts/handler_scroll' %>
 </div>
 <div class="handler_click_temp">
-    <%= render 'worktable/sidebar_menu/event/parts/handler_click' %>
+    <%= render 'sidebar_menu/event/parts/handler_click' %>
 </div>

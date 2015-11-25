@@ -53,6 +53,10 @@
 //= require paging_animation/pageflip
 //= require motion_check/motion_check_common
 //= require coding/coding_common
+//= require sidebar_config/design_config.js
+//= require sidebar_config/event_config.js
+//= require sidebar_config/sidebar_ui.js
+//= require sidebar_config/state_config.js
 //= require worktable/common/worktable_common
 //= require worktable/common/message.js
 //= require worktable/common/history
@@ -63,10 +67,6 @@
 //= require worktable/item_extend/common_extend
 //= require worktable/item_extend/canvasitem_extend
 //= require worktable/item_extend/cssitem_extend
-//= require worktable/sidebar_config/design_config.js
-//= require worktable/sidebar_config/event_config.js
-//= require worktable/sidebar_config/sidebar_ui.js
-//= require worktable/sidebar_config/state_config.js
 //= require worktable/event/timeline
 //= require worktable/handwrite
 //= require worktable/worktable

@@ -16,34 +16,36 @@ class Sidebar
   # @param [Array] target フォーカス対象オブジェクト
   # @param [String] selectedBorderType 選択枠タイプ
   @openConfigSidebar = (target = null, selectedBorderType = "edit") ->
-    if !Sidebar.isOpenedConfigSidebar()
-      # モードを変更
-      WorktableCommon.changeMode(Constant.Mode.OPTION)
-      main = $('#main')
+    if window.isWorkTable
       if !Sidebar.isOpenedConfigSidebar()
-        main.removeClass('col-xs-12')
-        main.addClass('col-xs-9')
-        $('#sidebar').fadeIn('500', ->
-          WorktableCommon.resizeMainContainerEvent()
-        )
-        if target != null
-          WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType)
+        # モードを変更
+        WorktableCommon.changeMode(Constant.Mode.OPTION)
+        main = $('#main')
+        if !Sidebar.isOpenedConfigSidebar()
+          main.removeClass('col-xs-12')
+          main.addClass('col-xs-9')
+          $('#sidebar').fadeIn('500', ->
+            WorktableCommon.resizeMainContainerEvent()
+          )
+          if target != null
+            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
   # サイドバーをクローズ
   # @param [Function] callback コールバック
   @closeSidebar = (callback = null) ->
-    # 選択枠を削除
-    WorktableCommon.clearSelectedBorder()
-    if !Sidebar.isClosedConfigSidebar()
-      main = $('#main')
-      $('#sidebar').fadeOut('500', ->
-        main.removeClass('col-xs-9')
-        main.addClass('col-xs-12')
-        WorktableCommon.resizeMainContainerEvent()
-        if callback?
-          callback()
-        $('.sidebar-config').hide()
-      )
+    if window.isWorkTable
+      # 選択枠を削除
+      WorktableCommon.clearSelectedBorder()
+      if !Sidebar.isClosedConfigSidebar()
+        main = $('#main')
+        $('#sidebar').fadeOut('500', ->
+          main.removeClass('col-xs-9')
+          main.addClass('col-xs-12')
+          WorktableCommon.resizeMainContainerEvent()
+          if callback?
+            callback()
+          $('.sidebar-config').hide()
+        )
 
   # サイドバーがオープンしているか
   # @return [Boolean] 判定結果

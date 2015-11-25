@@ -70,15 +70,17 @@ class EventConfig
         @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
         @[EventPageValueBase.PageValueKey.ITEM_ID] = splitValues[1]
 
-    # 選択枠消去
-    WorktableCommon.clearSelectedBorder()
+    if window.isWorkTable
+      # 選択枠消去
+      WorktableCommon.clearSelectedBorder()
 
     if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       vEmt = $('#' + @[EventPageValueBase.PageValueKey.ID])
-      # 選択枠設定
-      WorktableCommon.setSelectedBorder(vEmt, 'timeline')
-      # フォーカス
-      Common.focusToTarget(vEmt)
+      if window.isWorkTable
+        # 選択枠設定
+        WorktableCommon.setSelectedBorder(vEmt, 'timeline')
+        # フォーカス
+        Common.focusToTarget(vEmt)
 
     # 一度全て非表示にする
     $(".config.te_div", @emt).hide()
@@ -471,7 +473,7 @@ class EventConfig
 
     $.ajax(
       {
-        url: "/worktable/event_var_modify_config"
+        url: "/config_menu/event_var_modify_config"
         type: "POST"
         data: {
           modifiables: objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
@@ -488,11 +490,11 @@ class EventConfig
           else
             if errorCallback?
               errorCallback(data)
-            console.log('/worktable/event_var_modify_config server error')
+            console.log('/config_menu/event_var_modify_config server error')
         error: (data) ->
           if errorCallback?
             errorCallback(data)
-          console.log('/worktable/event_var_modify_config ajax error')
+          console.log('/config_menu/event_var_modify_config ajax error')
       }
     )
 

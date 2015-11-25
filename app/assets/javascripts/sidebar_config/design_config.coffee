@@ -2,7 +2,7 @@ class DesignConfig
   @getDesignConfig = (obj, successCallback = null, errorCallback = null)->
     $.ajax(
       {
-        url: "/worktable/design_config"
+        url: "/config_menu/design_config"
         type: "POST"
         data: {
           designConfig: obj.constructor.actionProperties.designConfig
@@ -17,10 +17,10 @@ class DesignConfig
           else
             if errorCallback?
               errorCallback(data)
-            console.log('/worktable/design_config server error')
+            console.log('/config_menu/design_config server error')
         error: (data) ->
           if errorCallback?
             errorCallback(data)
-          console.log('/worktable/design_config ajax error')
+          console.log('/config_menu/design_config ajax error')
       }
     )

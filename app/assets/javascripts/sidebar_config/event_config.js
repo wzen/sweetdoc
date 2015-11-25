@@ -68,11 +68,15 @@ EventConfig = (function() {
         this[EventPageValueBase.PageValueKey.ITEM_ID] = splitValues[1];
       }
     }
-    WorktableCommon.clearSelectedBorder();
+    if (window.isWorkTable) {
+      WorktableCommon.clearSelectedBorder();
+    }
     if (!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       vEmt = $('#' + this[EventPageValueBase.PageValueKey.ID]);
-      WorktableCommon.setSelectedBorder(vEmt, 'timeline');
-      Common.focusToTarget(vEmt);
+      if (window.isWorkTable) {
+        WorktableCommon.setSelectedBorder(vEmt, 'timeline');
+        Common.focusToTarget(vEmt);
+      }
     }
     $(".config.te_div", this.emt).hide();
     $(".action_div .forms", this.emt).children("div").hide();
@@ -479,7 +483,7 @@ EventConfig = (function() {
       return;
     }
     return $.ajax({
-      url: "/worktable/event_var_modify_config",
+      url: "/config_menu/event_var_modify_config",
       type: "POST",
       data: {
         modifiables: objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
@@ -497,7 +501,7 @@ EventConfig = (function() {
             if (errorCallback != null) {
               errorCallback(data);
             }
-            return console.log('/worktable/event_var_modify_config server error');
+            return console.log('/config_menu/event_var_modify_config server error');
           }
         };
       })(this),
@@ -505,7 +509,7 @@ EventConfig = (function() {
         if (errorCallback != null) {
           errorCallback(data);
         }
-        return console.log('/worktable/event_var_modify_config ajax error');
+        return console.log('/config_menu/event_var_modify_config ajax error');
       }
     });
   };

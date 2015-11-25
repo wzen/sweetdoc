@@ -12,7 +12,7 @@ DesignConfig = (function() {
       errorCallback = null;
     }
     return $.ajax({
-      url: "/worktable/design_config",
+      url: "/config_menu/design_config",
       type: "POST",
       data: {
         designConfig: obj.constructor.actionProperties.designConfig,
@@ -29,14 +29,14 @@ DesignConfig = (function() {
           if (errorCallback != null) {
             errorCallback(data);
           }
-          return console.log('/worktable/design_config server error');
+          return console.log('/config_menu/design_config server error');
         }
       },
       error: function(data) {
         if (errorCallback != null) {
           errorCallback(data);
         }
-        return console.log('/worktable/design_config ajax error');
+        return console.log('/config_menu/design_config ajax error');
       }
     });
   };
