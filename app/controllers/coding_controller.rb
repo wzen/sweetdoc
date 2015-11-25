@@ -72,4 +72,8 @@ class CodingController < ApplicationController
     @user = current_or_guest_user
   end
 
+  def item_preview
+
+  end
+
 end

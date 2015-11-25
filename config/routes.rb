@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   root to: 'gallery#index'
 
+  get 'item_gallery/index'
+  get 'item_gallery/preview'
+  get 'item_gallery/add'
+
   devise_for :user, controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations'
