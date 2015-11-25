@@ -8,8 +8,8 @@ CanvasItemBase = (function(superClass) {
 
   function CanvasItemBase() {
     CanvasItemBase.__super__.constructor.call(this);
-    this.newDrawingSurfaceImageData = null;
-    this.newDrawedSurfaceImageData = null;
+    this._newDrawingSurfaceImageData = null;
+    this._newDrawedSurfaceImageData = null;
     this.scale = {
       w: 1.0,
       h: 1.0
@@ -50,7 +50,7 @@ CanvasItemBase = (function(superClass) {
     canvas = document.getElementById(this.canvasElementId());
     if (canvas != null) {
       context = canvas.getContext('2d');
-      return this.newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      return this._newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
     }
   };
 
@@ -59,28 +59,28 @@ CanvasItemBase = (function(superClass) {
     canvas = document.getElementById(this.canvasElementId());
     if (canvas != null) {
       context = canvas.getContext('2d');
-      return this.newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+      return this._newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
     }
   };
 
   CanvasItemBase.prototype.restoreAllNewDrawingSurface = function() {
     var canvas, context;
-    if (this.newDrawingSurfaceImageData != null) {
+    if (this._newDrawingSurfaceImageData != null) {
       canvas = document.getElementById(this.canvasElementId());
       if (canvas != null) {
         context = canvas.getContext('2d');
-        return context.putImageData(this.newDrawingSurfaceImageData, 0, 0);
+        return context.putImageData(this._newDrawingSurfaceImageData, 0, 0);
       }
     }
   };
 
   CanvasItemBase.prototype.restoreAllNewDrawedSurface = function() {
     var canvas, context;
-    if (this.newDrawedSurfaceImageData) {
+    if (this._newDrawedSurfaceImageData) {
       canvas = document.getElementById(this.canvasElementId());
       if (canvas != null) {
         context = canvas.getContext('2d');
-        return context.putImageData(this.newDrawedSurfaceImageData, 0, 0);
+        return context.putImageData(this._newDrawedSurfaceImageData, 0, 0);
       }
     }
   };

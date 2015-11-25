@@ -11,13 +11,13 @@ class CssItemBase extends ItemBase
   # @param [Array] cood 座標
   constructor: (cood = null) ->
     super(cood)
-    @cssRoot = null
-    @cssCache = null
-    @cssCode = null
-    @cssStyle = null
+    @_cssRoot = null
+    @_cssCache = null
+    @_cssCode = null
+    @_cssStyle = null
     if cood != null
-      @moveLoc = {x:cood.x, y:cood.y}
-    @cssStypeReflectTimer = null
+      @_moveLoc = {x:cood.x, y:cood.y}
+    @_cssStypeReflectTimer = null
     if window.isWorkTable
       @constructor.include WorkTableCssItemExtend
 
@@ -92,16 +92,16 @@ class CssItemBase extends ItemBase
       # デフォルトのデザインで初期化
       _applyCss.call(@, @constructor.actionProperties.designConfigDefaultValues)
 
-    @cssRoot = $('#' + @getCssRootElementId())
-    @cssCache = $(".css_cache", @cssRoot)
-    @cssCode = $(".css_code", @cssRoot)
-    @cssStyle = $(".css_style", @cssRoot)
+    @_cssRoot = $('#' + @getCssRootElementId())
+    @_cssCache = $(".css_cache", @_cssRoot)
+    @_cssCode = $(".css_code", @_cssRoot)
+    @_cssStyle = $(".css_style", @_cssRoot)
     @applyDesignChange(false)
 
   # デザイン反映
   applyDesignChange: (doStyleSave) ->
     @reDraw()
-    @cssStyle.text(@cssCode.text())
+    @_cssStyle.text(@_cssCode.text())
     if doStyleSave
       @saveDesign()
 

@@ -49,18 +49,17 @@ ItemBase = (function(superClass) {
     this.id = "i" + this.constructor.IDENTITY + Common.generateId();
     this.itemId = this.constructor.ITEM_ID;
     this.name = null;
-    this.drawingSurfaceImageData = null;
+    this._drawingSurfaceImageData = null;
     if (cood !== null) {
-      this.mousedownCood = {
+      this._mousedownCood = {
         x: cood.x,
         y: cood.y
       };
     }
     this.itemSize = null;
     this.zindex = Constant.Zindex.EVENTBOTTOM + 1;
-    this.ohiRegist = [];
-    this.ohiRegistIndex = 0;
-    this.jqueryElement = null;
+    this._ohiRegist = [];
+    this._ohiRegistIndex = 0;
     this.coodRegist = [];
     if (this.constructor.actionProperties.modifiables != null) {
       ref = this.constructor.actionProperties.modifiables;
@@ -79,17 +78,17 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.saveDrawingSurface = function() {
-    return this.drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height);
+    return this._drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height);
   };
 
   ItemBase.prototype.restoreAllDrawingSurface = function() {
-    return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0);
+    return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0);
   };
 
   ItemBase.prototype.restoreDrawingSurface = function(size) {
     var padding;
     padding = 5;
-    return drawingContext.putImageData(this.drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
+    return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
 
   ItemBase.prototype.reDraw = function(show) {

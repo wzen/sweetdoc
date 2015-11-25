@@ -16,6 +16,7 @@ class CommonEvent extends CommonEventBase
       super()
       # @property [Int] id ID
       @id = "c" + @constructor.EVENT_ID + Common.generateId()
+      # @property [Int] eventId 共通イベントID
       @eventId =  @constructor.EVENT_ID
       # modifiables変数の初期化
       if @constructor.actionProperties.modifiables?

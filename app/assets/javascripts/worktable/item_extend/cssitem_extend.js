@@ -12,15 +12,15 @@ WorkTableCssItemExtend = {
       w: null,
       h: null
     };
-    this.itemSize.w = Math.abs(cood.x - this.moveLoc.x);
-    this.itemSize.h = Math.abs(cood.y - this.moveLoc.y);
-    if (cood.x > this.moveLoc.x) {
-      this.itemSize.x = this.moveLoc.x;
+    this.itemSize.w = Math.abs(cood.x - this._moveLoc.x);
+    this.itemSize.h = Math.abs(cood.y - this._moveLoc.y);
+    if (cood.x > this._moveLoc.x) {
+      this.itemSize.x = this._moveLoc.x;
     } else {
       this.itemSize.x = cood.x;
     }
-    if (cood.y > this.moveLoc.y) {
-      this.itemSize.y = this.moveLoc.y;
+    if (cood.y > this._moveLoc.y) {
+      this.itemSize.y = this._moveLoc.y;
     } else {
       this.itemSize.y = cood.y;
     }
@@ -116,7 +116,7 @@ WorkTableCssItemExtend = {
           _this.designs.flags["design_bg_color" + i + "_moz_flag"] = i <= stepValue - 1;
           _this.designs.flags["design_bg_color" + i + "_webkit_flag"] = i <= stepValue - 1;
         }
-        _this.cssStyle.text(_this.cssCode.text());
+        _this._cssStyle.text(_this._cssCode.text());
         return _this.saveDesign();
       };
     })(this));
@@ -143,7 +143,7 @@ WorkTableCssItemExtend = {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    cssCodeElement = $('.' + designKeyName + '_value', this.cssCode);
+    cssCodeElement = $('.' + designKeyName + '_value', this._cssCode);
     cssCodeElement.html(value);
     return this.applyDesignChange(doStyleSave);
   },
@@ -152,7 +152,7 @@ WorkTableCssItemExtend = {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    position = $('.design_bg_color' + (index + 2) + '_position_value', this.cssCode);
+    position = $('.design_bg_color' + (index + 2) + '_position_value', this._cssCode);
     position.html(("0" + value).slice(-2));
     return this.applyDesignStyleChange(designKeyName, value, doStyleSave);
   },
@@ -172,7 +172,7 @@ WorkTableCssItemExtend = {
       315: 'left top, right bottom'
     };
     this.designs.values[designKeyName + "_value_webkit_value"] = webkitDeg[value];
-    webkitValueElement = $('.' + designKeyName + '_value_webkit_value', this.cssCode);
+    webkitValueElement = $('.' + designKeyName + '_value_webkit_value', this._cssCode);
     webkitValueElement.html(webkitDeg[value]);
     return this.applyDesignStyleChange(designKeyName, value, doStyleSave);
   },
@@ -185,10 +185,10 @@ WorkTableCssItemExtend = {
     stepValue = parseInt($(target).val());
     for (i = j = 2; j <= 4; i = ++j) {
       className = 'design_bg_color' + i;
-      mozFlag = $("." + className + "_moz_flag", this.cssRoot);
-      mozCache = $("." + className + "_moz_cache", this.cssRoot);
-      webkitFlag = $("." + className + "_webkit_flag", this.cssRoot);
-      webkitCache = $("." + className + "_webkit_cache", this.cssRoot);
+      mozFlag = $("." + className + "_moz_flag", this._cssRoot);
+      mozCache = $("." + className + "_moz_cache", this._cssRoot);
+      webkitFlag = $("." + className + "_webkit_flag", this._cssRoot);
+      webkitCache = $("." + className + "_webkit_cache", this._cssRoot);
       if (i > stepValue - 1) {
         mh = mozFlag.html();
         if (mh.length > 0) {
@@ -212,7 +212,7 @@ WorkTableCssItemExtend = {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    codeEmt = $("." + designKeyName + "_value", this.cssCode);
+    codeEmt = $("." + designKeyName + "_value", this._cssCode);
     codeEmt.text(value);
     return this.applyDesignChange(doStyleSave);
   }

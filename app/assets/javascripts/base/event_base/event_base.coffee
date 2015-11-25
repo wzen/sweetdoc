@@ -454,7 +454,7 @@ class EventBase extends Extend
       d = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION]
     return d
 
-  # 保存用の最小限のデータを取得
+  # 保存用の最小限のデータを取得 保存不要なタイプの判定は適宜追加
   # @return [Object] 取得データ
   getMinimumObject: ->
     obj = {}
@@ -467,7 +467,7 @@ class EventBase extends Extend
             obj[k] = Common.makeClone(v)
     return obj
 
-  # 最小限のデータを設定
+  # 最小限のデータを設定 保存不要なタイプの判定は適宜追加
   # @param [Object] obj 設定データ
   setMiniumObject: (obj) ->
     # ID変更のため一度instanceMapから削除

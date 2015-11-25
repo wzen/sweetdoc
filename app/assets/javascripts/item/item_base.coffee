@@ -34,24 +34,21 @@ class ItemBase extends ItemEventBase
     @itemId = @constructor.ITEM_ID
     # @property [String] name 名前
     @name = null
-    # @property [Object] drawingSurfaceImageData 画面を保存する変数
-    @drawingSurfaceImageData = null
+    # @property [Object] _drawingSurfaceImageData 画面を保存する変数
+    @_drawingSurfaceImageData = null
     if cood != null
-      # @property [Array] mousedownCood 初期座標
-      @mousedownCood = {x:cood.x, y:cood.y}
+      # @property [Array] _mousedownCood 初期座標
+      @_mousedownCood = {x:cood.x, y:cood.y}
     # @property [Array] itemSize サイズ
     @itemSize = null
     # @property [Int] zIndex z-index
     @zindex = Constant.Zindex.EVENTBOTTOM + 1
-    # @property [Array] ohiRegist 操作履歴Index保存配列
-    @ohiRegist = []
-    # @property [Int] ohiRegistIndex 操作履歴Index保存配列のインデックス
-    @ohiRegistIndex = 0
-    # @property [Object] jqueryElement アイテムのjQueryオブジェクト
-    @jqueryElement = null
+    # @property [Array] _ohiRegist 操作履歴Index保存配列
+    @_ohiRegist = []
+    # @property [Int] _ohiRegistIndex 操作履歴Index保存配列のインデックス
+    @_ohiRegistIndex = 0
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
-
     # modifiables変数の初期化
     if @constructor.actionProperties.modifiables?
       for varName, value of @constructor.actionProperties.modifiables
@@ -67,18 +64,18 @@ class ItemBase extends ItemEventBase
 
   # 画面を保存(全画面)
   saveDrawingSurface : ->
-    @drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
+    @_drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)
 
   # 保存した画面を全画面に再設定
   restoreAllDrawingSurface : ->
-    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0)
+    window.drawingContext.putImageData(@_drawingSurfaceImageData, 0, 0)
 
   # 保存した画面を指定したサイズで再設定
   # @param [Array] size サイズ
   restoreDrawingSurface : (size) ->
     # ボタンのLadderBand用にpaddingを付ける
     padding = 5
-    drawingContext.putImageData(@drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
+    window.drawingContext.putImageData(@_drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用

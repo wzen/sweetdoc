@@ -15,17 +15,17 @@ CssItemBase = (function(superClass) {
       cood = null;
     }
     CssItemBase.__super__.constructor.call(this, cood);
-    this.cssRoot = null;
-    this.cssCache = null;
-    this.cssCode = null;
-    this.cssStyle = null;
+    this._cssRoot = null;
+    this._cssCache = null;
+    this._cssCode = null;
+    this._cssStyle = null;
     if (cood !== null) {
-      this.moveLoc = {
+      this._moveLoc = {
         x: cood.x,
         y: cood.y
       };
     }
-    this.cssStypeReflectTimer = null;
+    this._cssStypeReflectTimer = null;
     if (window.isWorkTable) {
       this.constructor.include(WorkTableCssItemExtend);
     }
@@ -114,16 +114,16 @@ CssItemBase = (function(superClass) {
     } else {
       _applyCss.call(this, this.constructor.actionProperties.designConfigDefaultValues);
     }
-    this.cssRoot = $('#' + this.getCssRootElementId());
-    this.cssCache = $(".css_cache", this.cssRoot);
-    this.cssCode = $(".css_code", this.cssRoot);
-    this.cssStyle = $(".css_style", this.cssRoot);
+    this._cssRoot = $('#' + this.getCssRootElementId());
+    this._cssCache = $(".css_cache", this._cssRoot);
+    this._cssCode = $(".css_code", this._cssRoot);
+    this._cssStyle = $(".css_style", this._cssRoot);
     return this.applyDesignChange(false);
   };
 
   CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
     this.reDraw();
-    this.cssStyle.text(this.cssCode.text());
+    this._cssStyle.text(this._cssCode.text());
     if (doStyleSave) {
       return this.saveDesign();
     }

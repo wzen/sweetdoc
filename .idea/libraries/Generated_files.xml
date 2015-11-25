@@ -38,6 +38,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/design_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
+        <item url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
@@ -130,6 +131,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/design_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
+      <root url="file://$PROJECT_DIR$/lib/assets/javascripts/stylesheet_handle.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/sidebar_config/sidebar_ui.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/i18n/translations.js" />

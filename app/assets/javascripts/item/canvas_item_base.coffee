@@ -5,8 +5,8 @@ class CanvasItemBase extends ItemBase
   # コンストラクタ
   constructor: ->
     super()
-    @newDrawingSurfaceImageData = null
-    @newDrawedSurfaceImageData = null
+    @_newDrawingSurfaceImageData = null
+    @_newDrawedSurfaceImageData = null
     # @property [Array] scale 表示倍率
     @scale = {w:1.0, h:1.0}
     if window.isWorkTable
@@ -48,30 +48,30 @@ class CanvasItemBase extends ItemBase
     canvas = document.getElementById(@canvasElementId());
     if canvas?
       context = canvas.getContext('2d');
-      @newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
+      @_newDrawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
   # 描画済みの新規キャンパスの画面を保存
   saveNewDrawedSurface : ->
     canvas = document.getElementById(@canvasElementId());
     if canvas?
       context = canvas.getContext('2d');
-      @newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
+      @_newDrawedSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
   # 保存した画面を新規キャンパスの全画面に再設定
   restoreAllNewDrawingSurface : ->
-    if @newDrawingSurfaceImageData?
+    if @_newDrawingSurfaceImageData?
       canvas = document.getElementById(@canvasElementId());
       if canvas?
         context = canvas.getContext('2d');
-        context.putImageData(@newDrawingSurfaceImageData, 0, 0)
+        context.putImageData(@_newDrawingSurfaceImageData, 0, 0)
 
   # 保存した画面を新規キャンパスの全画面に再設定
   restoreAllNewDrawedSurface : ->
-    if @newDrawedSurfaceImageData
+    if @_newDrawedSurfaceImageData
       canvas = document.getElementById(@canvasElementId());
       if canvas?
         context = canvas.getContext('2d');
-        context.putImageData(@newDrawedSurfaceImageData, 0, 0)
+        context.putImageData(@_newDrawedSurfaceImageData, 0, 0)
 
   # 描画を削除
   clearDraw: ->
