@@ -49,11 +49,6 @@ class ItemBase extends ItemEventBase
     @_ohiRegistIndex = 0
     # @property [Array] coodRegist ドラッグ座標
     @coodRegist = []
-    # modifiables変数の初期化
-    if @constructor.actionProperties.modifiables?
-      for varName, value of @constructor.actionProperties.modifiables
-        @[varName] = value.default
-
     if window.isWorkTable
       @constructor.include WorkTableCommonInclude
 

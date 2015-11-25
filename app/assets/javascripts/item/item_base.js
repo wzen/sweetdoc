@@ -41,7 +41,6 @@ ItemBase = (function(superClass) {
   }
 
   function ItemBase(cood) {
-    var ref, value, varName;
     if (cood == null) {
       cood = null;
     }
@@ -61,13 +60,6 @@ ItemBase = (function(superClass) {
     this._ohiRegist = [];
     this._ohiRegistIndex = 0;
     this.coodRegist = [];
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
-      for (varName in ref) {
-        value = ref[varName];
-        this[varName] = value["default"];
-      }
-    }
     if (window.isWorkTable) {
       this.constructor.include(WorkTableCommonInclude);
     }

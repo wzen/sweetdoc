@@ -6,11 +6,18 @@ var EventBase,
 EventBase = (function(superClass) {
   extend(EventBase, superClass);
 
-  function EventBase() {
-    return EventBase.__super__.constructor.apply(this, arguments);
-  }
-
   EventBase.STEP_INTERVAL_DURATION = 0.03;
+
+  function EventBase() {
+    var ref, value, varName;
+    if (this.constructor.actionProperties.modifiables != null) {
+      ref = this.constructor.actionProperties.modifiables;
+      for (varName in ref) {
+        value = ref[varName];
+        this[varName] = value["default"];
+      }
+    }
+  }
 
   EventBase.prototype.initEvent = function(event) {
     this.event = event;

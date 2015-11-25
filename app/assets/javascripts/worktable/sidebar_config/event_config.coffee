@@ -247,7 +247,11 @@ class EventConfig
     # プレビュー開始
     item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
     if item? && item.preview?
-      item.preview(PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum)))
+      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
+      # インスタンスの状態を保存
+      item.initEvent(te)
+      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
+      item.preview(te)
 
   # 画面値に書き込み
   writeToPageValue: ->

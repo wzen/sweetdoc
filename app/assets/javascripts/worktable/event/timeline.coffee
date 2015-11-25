@@ -141,6 +141,8 @@ class Timeline
     # @param [Integer] te_num 実行するイベント番号
     _doPreview = (te_num) ->
       Common.clearAllEventAction( ->
+        # 操作履歴削除
+        PageValue.removeAllFootprint()
         tes = PageValue.getEventPageValueSortedListByNum()
         te_num = parseInt(te_num)
         for te, idx in tes

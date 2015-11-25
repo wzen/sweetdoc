@@ -164,7 +164,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.applyAction = function() {
-    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, topEmt;
+    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, te, topEmt;
     if (this[EventPageValueBase.PageValueKey.DIST_ID] == null) {
       this[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId();
     }
@@ -233,7 +233,10 @@ EventConfig = (function() {
     LocalStorage.saveAllPageValues();
     item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
     if ((item != null) && (item.preview != null)) {
-      return item.preview(PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum)));
+      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
+      item.initEvent(te);
+      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
+      return item.preview(te);
     }
   };
 

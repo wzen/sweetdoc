@@ -134,6 +134,7 @@ Timeline = (function() {
     _doPreview = function(te_num) {
       return Common.clearAllEventAction(function() {
         var idx, item, j, len, results, tes;
+        PageValue.removeAllFootprint();
         tes = PageValue.getEventPageValueSortedListByNum();
         te_num = parseInt(te_num);
         results = [];

@@ -3,6 +3,12 @@ class EventBase extends Extend
 
   @STEP_INTERVAL_DURATION = 0.03
 
+  constructor: ->
+    # modifiables変数の初期化
+    if @constructor.actionProperties.modifiables?
+      for varName, value of @constructor.actionProperties.modifiables
+        @[varName] = value.default
+
   # イベントの初期化
   # @param [Object] event 設定イベント
   initEvent: (event) ->

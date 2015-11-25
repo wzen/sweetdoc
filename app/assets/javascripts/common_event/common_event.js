@@ -3,35 +3,24 @@ var CommonEvent,
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
 
-CommonEvent = (function(superClass) {
+CommonEvent = (function() {
   var instance;
-
-  extend(CommonEvent, superClass);
 
   instance = {};
 
   function CommonEvent() {
-    CommonEvent.__super__.constructor.call(this);
     return this.constructor.getInstance();
   }
 
-  CommonEvent.PrivateClass = (function(superClass1) {
-    extend(PrivateClass, superClass1);
+  CommonEvent.PrivateClass = (function(superClass) {
+    extend(PrivateClass, superClass);
 
     PrivateClass.actionProperties = null;
 
     function PrivateClass() {
-      var ref, value, varName;
       PrivateClass.__super__.constructor.call(this);
       this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
       this.eventId = this.constructor.EVENT_ID;
-      if (this.constructor.actionProperties.modifiables != null) {
-        ref = this.constructor.actionProperties.modifiables;
-        for (varName in ref) {
-          value = ref[varName];
-          this[varName] = value["default"];
-        }
-      }
     }
 
     return PrivateClass;
@@ -75,6 +64,6 @@ CommonEvent = (function(superClass) {
 
   return CommonEvent;
 
-})(CommonEventBase);
+})();
 
 //# sourceMappingURL=common_event.js.map
