@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "item_preview.js",
+  "sourceRoot": "",
+  "sources": [
+    "item_preview.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,CAAA,CAAE,SAAA,GAAA;AACA,EAAA,CAAA,CAAE,sBAAF,CAAyB,CAAC,KAA1B,CAAgC,SAAA,GAAA,CAAhC,CAAA,CAAA;SAIA,CAAA,CAAE,uBAAF,CAA0B,CAAC,KAA3B,CAAiC,SAAA,GAAA,CAAjC,EALA;AAAA,CAAF,CAAA,CAAA"
+}

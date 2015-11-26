@@ -1,3 +1,6 @@
+<%= stylesheet_link_tag 'pipeline/coding', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'pipeline/coding', 'data-turbolinks-track' => true %>
+
 <div id="contents">
     <div id="wrapper">
         <div id="tree_wrapper">
@@ -56,3 +59,6 @@
         </div>
     </div>
 </div>
+
+<input id="<%= Const::Coding::Key::CODE %>" type="hidden" name="<%= Const::Coding::Key::CODE %>" value="">
+<input id="<%= Const::Coding::Key::LANG %>" type="hidden" name="<%= Const::Coding::Key::LANG %>" value="">

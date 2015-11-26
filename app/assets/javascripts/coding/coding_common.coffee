@@ -111,6 +111,7 @@ class CodingCommon
           tab.text(name.replace(/\*/g, ''))
         )
     )
+    editor.setKeyboardHandler('ace/keyboard/emacs')
 
     $('.close_tab_button').off('click')
     $('.close_tab_button').on('click', ->
@@ -330,6 +331,15 @@ class CodingCommon
           data: data
           success: (data)->
             if data.resultSuccess
+              # 編集フラグ消去
+              window.editing[editorId] = false
+              tabs = $('#my_tab').find(".tab_button")
+              tabs.each( ->
+                if $(@).parent('.active')
+                  name = $(@).text()
+                  $(@).text(name.replace(/\*/g, ''))
+              )
+
               if successCallback?
                 successCallback(data)
             else
@@ -569,6 +579,11 @@ class CodingCommon
       # タブビュー作成
       $('#editor_tab_wrapper').append('<div id="editor_header_menu"><div><div><a><div class="editor_btn preview">Preview</div></a></div></div></div><div id="editor_contents_wrapper"><div><ul id="my_tab" class="nav nav-tabs" role="tablist"></ul><div id="my_tab_content" class="tab-content"></div></div></div>')
       tab = $('#my_tab')
+      # イベント設定
+      $('#editor_tab_wrapper preview').off('click').on('click', (e) =>
+        e.preventDefault()
+        @runPreview()
+      )
     tab_content = $('#my_tab_content')
     # 全てDeactive
     _deactiveEditor()
@@ -595,6 +610,23 @@ class CodingCommon
       editorWrapper.addClass('active')
       tab.find("a[href='##{editorWrapperId}']").closest('tab_li').addClass('active')
       CodingCommon.saveEditorState()
+
+  # プレビュー実行
+  @runPreview = ->
+    # アクティブコード取得
+    editorId = $('#my_tab .active a').attr('href').replace('_wrapper', '')
+    editor = ace.edit(editorId)
+
+    $("##{@Key.CODE}").val(editor.getValue())
+    mode = editor.getSession().getMode().$id
+    console.log(mode)
+    $("##{@Key.LANG}").val(mode)
+
+    target = "_coding_item_preview_tab"
+    window.open("about:blank", target)
+    document.coding_form.action = '/coding/item_preview'
+    document.coding_form.target = target
+    document.coding_form.submit()
 
   @saveEditorState = (immediate = false) ->
     if window.saveEditorStateNowSaving? && window.saveEditorStateNowSaving

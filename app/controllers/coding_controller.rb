@@ -73,7 +73,9 @@ class CodingController < ApplicationController
   end
 
   def item_preview
-
+    user_id = current_or_guest_user.id
+    @code = params.require(Const::Coding::Key::CODE)
+    @lang_type = params.require(Const::Coding::Key::LANG)
   end
 
 end

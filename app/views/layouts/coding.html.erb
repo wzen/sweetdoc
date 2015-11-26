@@ -15,16 +15,16 @@
     %>
 </head>
 <body class="<%= controller_name -%> <%= action_name -%>">
-    <%= render 'coding/navbar/navber' %>
+  <%= form_tag("", method: "post", name: "coding_form") do %>
+      <%= render 'coding/navbar/navber' %>
 
-    <%= yield %>
+      <%= yield %>
 
-    <%= stylesheet_link_tag 'pipeline/coding', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'pipeline/coding', 'data-turbolinks-track' => true %>
-    <script type="text/javascript">
-        I18n.defaultLocale = "<%= I18n.default_locale %>";
-        I18n.locale = "<%= I18n.locale %>";
-        I18n.fallbacks = true;
-    </script>
+      <script type="text/javascript">
+          I18n.defaultLocale = "<%= I18n.default_locale %>";
+          I18n.locale = "<%= I18n.locale %>";
+          I18n.fallbacks = true;
+      </script>
+  <% end %>
 </body>
 </html>

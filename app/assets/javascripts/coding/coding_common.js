@@ -142,6 +142,7 @@ CodingCommon = (function() {
         });
       }
     });
+    editor.setKeyboardHandler('ace/keyboard/emacs');
     $('.close_tab_button').off('click');
     return $('.close_tab_button').on('click', function() {
       return CodingCommon.closeTabView(this);
@@ -452,7 +453,17 @@ CodingCommon = (function() {
         dataType: "json",
         data: data,
         success: function(data) {
+          var tabs;
           if (data.resultSuccess) {
+            window.editing[editorId] = false;
+            tabs = $('#my_tab').find(".tab_button");
+            tabs.each(function() {
+              var name;
+              if ($(this).parent('.active')) {
+                name = $(this).text();
+                return $(this).text(name.replace(/\*/g, ''));
+              }
+            });
             if (successCallback != null) {
               return successCallback(data);
             }
@@ -767,6 +778,12 @@ CodingCommon = (function() {
     if ((tab == null) || tab.length === 0) {
       $('#editor_tab_wrapper').append('<div id="editor_header_menu"><div><div><a><div class="editor_btn preview">Preview</div></a></div></div></div><div id="editor_contents_wrapper"><div><ul id="my_tab" class="nav nav-tabs" role="tablist"></ul><div id="my_tab_content" class="tab-content"></div></div></div>');
       tab = $('#my_tab');
+      $('#editor_tab_wrapper preview').off('click').on('click', (function(_this) {
+        return function(e) {
+          e.preventDefault();
+          return _this.runPreview();
+        };
+      })(this));
     }
     tab_content = $('#my_tab_content');
     _deactiveEditor();
@@ -790,6 +807,21 @@ CodingCommon = (function() {
       tab.find("a[href='#" + editorWrapperId + "']").closest('tab_li').addClass('active');
       return CodingCommon.saveEditorState();
     }
+  };
+
+  CodingCommon.runPreview = function() {
+    var editor, editorId, mode, target;
+    editorId = $('#my_tab .active a').attr('href').replace('_wrapper', '');
+    editor = ace.edit(editorId);
+    $("#" + this.Key.CODE).val(editor.getValue());
+    mode = editor.getSession().getMode().$id;
+    console.log(mode);
+    $("#" + this.Key.LANG).val(mode);
+    target = "_coding_item_preview_tab";
+    window.open("about:blank", target);
+    document.coding_form.action = '/coding/item_preview';
+    document.coding_form.target = target;
+    return document.coding_form.submit();
   };
 
   CodingCommon.saveEditorState = function(immediate) {

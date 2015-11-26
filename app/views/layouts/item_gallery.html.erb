@@ -20,12 +20,10 @@
     %>
 
 
-    <%= render 'item_gallery/navbar/navber' %>
+    <%= render 'item_gallery/navbar/navbar' %>
 
     <%= yield %>
 
-    <%= stylesheet_link_tag 'pipeline/item_gallery', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'pipeline/item_gallery', 'data-turbolinks-track' => true %>
     <script type="text/javascript">
         I18n.defaultLocale = "<%= I18n.default_locale %>";
         I18n.locale = "<%= I18n.locale %>";

@@ -1,0 +1,18 @@
+<%
+   l = ''
+   if @lang_type == Const::Coding::Lang::JAVASCRIPT
+     l = 'javascript'
+   elsif @lang_type == Const::Coding::Lang::COFFEESCRIPT
+     l = 'coffeescript'
+   end
+%>
+<div id="contents">
+  <%= render 'coding/preview_main' %>
+  <%= render 'base/sidebar', open_sidebar: true %>
+  <%= render 'base/csscode' %>
+  <%= render 'base/values' %>
+</div>
+
+<script type="<%= 'text/' + l %>">
+  <%= @code %>
+</script>
