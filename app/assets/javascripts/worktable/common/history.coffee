@@ -15,6 +15,10 @@ class OperationHistory
   # 操作履歴を追加
   # @param [Boolean] isInit 初期化処理か
   @add = (isInit = false) ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     if window.operationHistoryIndexes[@operationHistoryIndex()]? && !isInit
       window.operationHistoryIndexes[@operationHistoryIndex()] = (window.operationHistoryIndexes[@operationHistoryIndex()] + 1) % @OPERATION_STORE_MAX
     else
@@ -92,12 +96,20 @@ class OperationHistory
 
   # undo処理
   @undo = ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     nextTailIndex = (window.operationHistoryTailIndexes[@operationHistoryIndex()] + 1) % @OPERATION_STORE_MAX
     if !window.operationHistoryIndexes[@operationHistoryIndex()]? || nextTailIndex == window.operationHistoryIndexes[@operationHistoryIndex()] || !_pop.call(@)
       Message.flushWarn("Can't Undo")
 
   # redo処理
   @redo = ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     if !window.operationHistoryIndexes[@operationHistoryIndex()]? || window.operationHistoryTailIndexes[@operationHistoryIndex()] == window.operationHistoryIndexes[@operationHistoryIndex()] || !_popRedo.call(@)
       Message.flushWarn("Can't Redo")
 

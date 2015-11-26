@@ -89,6 +89,10 @@ class LocalStorage
 
   # キャッシュに共通値を保存
   @saveGeneralPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX)
@@ -100,6 +104,10 @@ class LocalStorage
 
   # キャッシュから共通値を読み込み
   @loadGeneralPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_GENERAL_PAGEVALUES else @Key.WORKTABLE_GENERAL_PAGEVALUES
@@ -108,6 +116,10 @@ class LocalStorage
 
   # キャッシュにインスタンス値を保存
   @saveInstancePageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX)
@@ -119,6 +131,10 @@ class LocalStorage
 
   # キャッシュからインスタンス値を読み込み
   @loadInstancePageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_INSTANCE_PAGEVALUES else @Key.WORKTABLE_INSTANCE_PAGEVALUES
@@ -127,6 +143,10 @@ class LocalStorage
 
   # キャッシュにイベント値を保存
   @saveEventPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
@@ -138,6 +158,10 @@ class LocalStorage
 
   # キャッシュからイベント値を読み込み
   @loadEventPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_EVENT_PAGEVALUES else @Key.WORKTABLE_EVENT_PAGEVALUES
@@ -146,6 +170,10 @@ class LocalStorage
 
   # キャッシュに共通設定値を保存
   @saveSettingPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     h = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX)
@@ -154,6 +182,10 @@ class LocalStorage
 
   # キャッシュから共通設定値を読み込み
   @loadSettingPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     isRun = !window.isWorkTable
     lstorage = localStorage
     key = if isRun then @Key.RUN_SETTING_PAGEVALUES else @Key.WORKTABLE_SETTING_PAGEVALUES
@@ -162,12 +194,20 @@ class LocalStorage
 
   # キャッシュに操作履歴値を保存
   @saveFootprintPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     lstorage = localStorage
     h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX)
     lstorage.setItem(@Key.RUN_FOOTPRINT_PAGE_VALUES, JSON.stringify(h))
 
   # キャッシュから操作履歴値を読み込み
   @loadCommonFootprintPageValue: ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     lstorage = localStorage
     h = JSON.parse(lstorage.getItem(@Key.RUN_FOOTPRINT_PAGE_VALUES))
     ret = {}
@@ -177,6 +217,10 @@ class LocalStorage
     PageValue.setFootprintPageValue(PageValue.Key.F_PREFIX, ret)
 
   @loadPagingFootprintPageValue: (pageNum) ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     lstorage = localStorage
     h = JSON.parse(lstorage.getItem(@Key.RUN_FOOTPRINT_PAGE_VALUES))
     ret = {}

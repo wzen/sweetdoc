@@ -1,4 +1,5 @@
 $ ->
+  window.isItemPreview = true
   # 初期タイプはWS
   window.isWorkTable = true
   window.isMotionCheck = false

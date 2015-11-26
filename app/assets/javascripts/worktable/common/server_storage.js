@@ -50,6 +50,9 @@ ServerStorage = (function() {
     if (callback == null) {
       callback = null;
     }
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     window.workingAutoSave = true;
     data = {};
     data[this.Key.PAGE_COUNT] = parseInt(PageValue.getPageCount());
@@ -114,6 +117,9 @@ ServerStorage = (function() {
     if (callback == null) {
       callback = null;
     }
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     return $.ajax({
       url: "/page_value_state/load_state",
       type: "POST",
@@ -177,6 +183,9 @@ ServerStorage = (function() {
     if (errorCallback == null) {
       errorCallback = null;
     }
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     data = {};
     data[this.Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
     return $.ajax({
@@ -207,6 +216,9 @@ ServerStorage = (function() {
 
   ServerStorage.startSaveIdleTimer = function() {
     var time;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     if (((window.workingAutoSave != null) && window.workingAutoSave) || !window.initDone) {
       return;
     }

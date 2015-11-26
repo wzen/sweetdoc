@@ -31,6 +31,9 @@ OperationHistory = (function() {
     if (isInit == null) {
       isInit = false;
     }
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     if ((window.operationHistoryIndexes[this.operationHistoryIndex()] != null) && !isInit) {
       window.operationHistoryIndexes[this.operationHistoryIndex()] = (window.operationHistoryIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
     } else {
@@ -109,6 +112,9 @@ OperationHistory = (function() {
 
   OperationHistory.undo = function() {
     var nextTailIndex;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     nextTailIndex = (window.operationHistoryTailIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
     if ((window.operationHistoryIndexes[this.operationHistoryIndex()] == null) || nextTailIndex === window.operationHistoryIndexes[this.operationHistoryIndex()] || !_pop.call(this)) {
       return Message.flushWarn("Can't Undo");
@@ -116,6 +122,9 @@ OperationHistory = (function() {
   };
 
   OperationHistory.redo = function() {
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     if ((window.operationHistoryIndexes[this.operationHistoryIndex()] == null) || window.operationHistoryTailIndexes[this.operationHistoryIndex()] === window.operationHistoryIndexes[this.operationHistoryIndex()] || !_popRedo.call(this)) {
       return Message.flushWarn("Can't Redo");
     }

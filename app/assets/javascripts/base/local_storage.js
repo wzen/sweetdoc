@@ -104,6 +104,9 @@ LocalStorage = (function() {
 
   LocalStorage.saveGeneralPageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     h = PageValue.getGeneralPageValue(PageValue.Key.G_PREFIX);
@@ -115,6 +118,9 @@ LocalStorage = (function() {
 
   LocalStorage.loadGeneralPageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_GENERAL_PAGEVALUES : this.Key.WORKTABLE_GENERAL_PAGEVALUES;
@@ -124,6 +130,9 @@ LocalStorage = (function() {
 
   LocalStorage.saveInstancePageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     h = PageValue.getInstancePageValue(PageValue.Key.INSTANCE_PREFIX);
@@ -135,6 +144,9 @@ LocalStorage = (function() {
 
   LocalStorage.loadInstancePageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_INSTANCE_PAGEVALUES : this.Key.WORKTABLE_INSTANCE_PAGEVALUES;
@@ -144,6 +156,9 @@ LocalStorage = (function() {
 
   LocalStorage.saveEventPageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
@@ -155,6 +170,9 @@ LocalStorage = (function() {
 
   LocalStorage.loadEventPageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_EVENT_PAGEVALUES : this.Key.WORKTABLE_EVENT_PAGEVALUES;
@@ -164,6 +182,9 @@ LocalStorage = (function() {
 
   LocalStorage.saveSettingPageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     h = PageValue.getSettingPageValue(PageValue.Key.ST_PREFIX);
@@ -173,6 +194,9 @@ LocalStorage = (function() {
 
   LocalStorage.loadSettingPageValue = function() {
     var h, isRun, key, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     isRun = !window.isWorkTable;
     lstorage = localStorage;
     key = isRun ? this.Key.RUN_SETTING_PAGEVALUES : this.Key.WORKTABLE_SETTING_PAGEVALUES;
@@ -182,6 +206,9 @@ LocalStorage = (function() {
 
   LocalStorage.saveFootprintPageValue = function() {
     var h, lstorage;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     lstorage = localStorage;
     h = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX);
     return lstorage.setItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES, JSON.stringify(h));
@@ -189,6 +216,9 @@ LocalStorage = (function() {
 
   LocalStorage.loadCommonFootprintPageValue = function() {
     var h, k, lstorage, ret, v;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     lstorage = localStorage;
     h = JSON.parse(lstorage.getItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES));
     ret = {};
@@ -203,6 +233,9 @@ LocalStorage = (function() {
 
   LocalStorage.loadPagingFootprintPageValue = function(pageNum) {
     var h, k, lstorage, ret, v;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      return;
+    }
     lstorage = localStorage;
     h = JSON.parse(lstorage.getItem(this.Key.RUN_FOOTPRINT_PAGE_VALUES));
     ret = {};

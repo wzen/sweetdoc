@@ -24,6 +24,10 @@ class ServerStorage
 
   # サーバにアイテムの情報を保存
   @save = (callback = null) ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     window.workingAutoSave = true
 
     data = {}
@@ -83,6 +87,10 @@ class ServerStorage
   # サーバからアイテムの情報を取得して描画
   # @param [Integer] user_pagevalue_id 取得するUserPageValueのID
   @load = (user_pagevalue_id, callback = null) ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     $.ajax(
       {
         url: "/page_value_state/load_state"
@@ -136,6 +144,10 @@ class ServerStorage
     )
 
   @get_load_data: (successCallback = null, errorCallback = null) ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     data = {}
     data[@Key.PROJECT_ID] = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
     $.ajax(
@@ -160,6 +172,10 @@ class ServerStorage
     )
 
   @startSaveIdleTimer = ->
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は処理しない
+      return
+
     if (window.workingAutoSave? && window.workingAutoSave) || !window.initDone
       # AutoSave実行中 or 画面初期化時は実行しない
       return
