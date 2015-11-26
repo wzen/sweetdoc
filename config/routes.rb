@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get 'coding/load_tree'
   post 'coding/delete_node'
   get 'coding/item'
+  post 'coding/item_preview'
 
   post 'project/create'
   get 'project/list'

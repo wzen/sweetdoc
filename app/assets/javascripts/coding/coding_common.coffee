@@ -70,6 +70,12 @@ class CodingCommon
       CodingCommon.saveEditorState()
     )
 
+    $('#editor_tab_wrapper .preview').off('click').on('click', (e) =>
+      # ボタンイベント設定
+      e.preventDefault()
+      @runPreview()
+    )
+
   @setupEditor = (editorId, lang_type, defaultValue = null) ->
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
@@ -582,7 +588,7 @@ class CodingCommon
       $('#editor_tab_wrapper').append('<div id="editor_header_menu"><div><div><a><div class="editor_btn preview">Preview</div></a></div></div></div><div id="editor_contents_wrapper"><div><ul id="my_tab" class="nav nav-tabs" role="tablist"></ul><div id="my_tab_content" class="tab-content"></div></div></div>')
       tab = $('#my_tab')
       # イベント設定
-      $('#editor_tab_wrapper preview').off('click').on('click', (e) =>
+      $('#editor_tab_wrapper .preview').off('click').on('click', (e) =>
         e.preventDefault()
         @runPreview()
       )
@@ -616,7 +622,7 @@ class CodingCommon
   # プレビュー実行
   @runPreview = ->
     # アクティブコード取得
-    user_coding_id = $('#my_tab .active a').attr('href').replace('uc_', '').replace('_wrapper', '')
+    user_coding_id = $('#my_tab .active a').attr('href').replace('#uc_', '').replace('_wrapper', '')
     $("##{@Key.USER_CODING_ID}").val(user_coding_id)
     target = "_coding_item_preview_tab"
     window.open("about:blank", target)

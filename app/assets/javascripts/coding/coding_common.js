@@ -95,9 +95,15 @@ CodingCommon = (function() {
       lang_type = $(this).next("." + CodingCommon.Key.LANG).val();
       return CodingCommon.setupEditor(editorId, lang_type);
     });
-    return $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
       return CodingCommon.saveEditorState();
     });
+    return $('#editor_tab_wrapper .preview').off('click').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        return _this.runPreview();
+      };
+    })(this));
   };
 
   CodingCommon.setupEditor = function(editorId, lang_type, defaultValue) {
@@ -784,7 +790,7 @@ CodingCommon = (function() {
     if ((tab == null) || tab.length === 0) {
       $('#editor_tab_wrapper').append('<div id="editor_header_menu"><div><div><a><div class="editor_btn preview">Preview</div></a></div></div></div><div id="editor_contents_wrapper"><div><ul id="my_tab" class="nav nav-tabs" role="tablist"></ul><div id="my_tab_content" class="tab-content"></div></div></div>');
       tab = $('#my_tab');
-      $('#editor_tab_wrapper preview').off('click').on('click', (function(_this) {
+      $('#editor_tab_wrapper .preview').off('click').on('click', (function(_this) {
         return function(e) {
           e.preventDefault();
           return _this.runPreview();
@@ -817,7 +823,7 @@ CodingCommon = (function() {
 
   CodingCommon.runPreview = function() {
     var target, user_coding_id;
-    user_coding_id = $('#my_tab .active a').attr('href').replace('uc_', '').replace('_wrapper', '');
+    user_coding_id = $('#my_tab .active a').attr('href').replace('#uc_', '').replace('_wrapper', '');
     $("#" + this.Key.USER_CODING_ID).val(user_coding_id);
     target = "_coding_item_preview_tab";
     window.open("about:blank", target);

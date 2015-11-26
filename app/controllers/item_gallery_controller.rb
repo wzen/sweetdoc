@@ -3,6 +3,8 @@ class ItemGalleryController < ApplicationController
   end
 
   def preview
+    # Constantの設定
+    init_const
   end
 
   def add

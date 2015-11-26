@@ -5,7 +5,7 @@ ItemPreviewCommon = (function() {
   function ItemPreviewCommon() {}
 
   ItemPreviewCommon.initMainContainerAsWorktable = function() {
-    CommonVar.worktableCommonVar();
+    CommonVar.itemPreviewVar();
     Common.updateCanvasSize();
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
     window.scrollInsideWrapper.width(window.scrollViewSize);

@@ -50,6 +50,21 @@ CommonVar = (function() {
     return window.cssCode = $("#cssCode");
   };
 
+  CommonVar.updateItemPreviewBaseElement = function() {
+    window.scrollWrapper = $("#sidebar-wrapper");
+    window.mainWrapper = $("#main .main-wrapper:first");
+    window.scrollContents = $("#main .scroll_contents:first");
+    window.scrollHandleWrapper = $("#main .scroll_handle_wrapper:first");
+    window.scrollHandle = $("#main .scroll_handle:first");
+    window.scrollInsideCover = $("#main .scroll_inside_cover:first");
+    window.scrollInsideWrapper = $("#main .scroll_inside_wrapper:first");
+    window.scrollInside = $("#main .scroll_inside:first");
+    window.canvasWrapper = $("#main .canvas_wrapper:first");
+    window.drawingCanvas = $("#main .canvas_container:first")[0];
+    window.drawingContext = drawingCanvas.getContext('2d');
+    return window.cssCode = $("#cssCode");
+  };
+
   CommonVar.worktableCommonVar = function() {
     this.initCommonVar();
     window.messageTimer = null;
@@ -72,6 +87,28 @@ CommonVar = (function() {
     window.disabledEventHandler = false;
     window.firstItemFocused = false;
     return this.updateRunBaseElement(PageValue.getPageNum());
+  };
+
+  CommonVar.itemPreviewVar = function() {
+    this.initCommonVar();
+    if (window.isWorkTable) {
+      window.messageTimer = null;
+      window.flushMessageTimer = null;
+      window.mode = Constant.Mode.NOT_SELECT;
+      window.selectedObjId = null;
+      window.runningPreview = false;
+    } else {
+      window.distX = 0;
+      window.distY = 0;
+      window.resizeTimer = false;
+      window.scrollViewSwitchZindex = {
+        'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT),
+        'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)
+      };
+      window.disabledEventHandler = false;
+      window.firstItemFocused = false;
+    }
+    return this.updateItemPreviewBaseElement();
   };
 
   return CommonVar;

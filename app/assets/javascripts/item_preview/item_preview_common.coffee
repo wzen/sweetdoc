@@ -3,7 +3,7 @@ class ItemPreviewCommon
   # Mainコンテナ初期化
   @initMainContainerAsWorktable = ->
     # 定数 & レイアウト & イベント系変数の初期化
-    CommonVar.worktableCommonVar()
+    CommonVar.itemPreviewVar()
     Common.updateCanvasSize()
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     # スクロールサイズ
