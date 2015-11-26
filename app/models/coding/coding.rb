@@ -235,6 +235,32 @@ class Coding
     end
   end
 
+  def self.code_filepath(user_id, user_coding_id)
+    begin
+      ActiveRecord::Base.transaction do
+        sql =<<-"SQL"
+          SELECT uc.code_filename as code_filename, uc.lang_type as lang_type, u.access_token as user_access_token
+          FROM user_codings uc
+          INNER JOIN users u ON uc.user_id = u.id
+          AND uc.id = uct.user_coding_id
+          AND u.del_flg = 0
+          WHERE u.id = #{user_id}
+          AND uc.id = #{user_coding_id}
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        r = ret_sql.to_hash
+        if r.count > 0
+          return _code_filepath(r.first['user_access_token'], r.first['code_filename']), r.first['lang_type']
+        else
+          return nil, nil
+        end
+      end
+    rescue => e
+      # 失敗
+      return nil , nil
+    end
+  end
+
   def self.load_tree(user_id)
     begin
       ActiveRecord::Base.transaction do

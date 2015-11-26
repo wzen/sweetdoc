@@ -74,8 +74,8 @@ class CodingController < ApplicationController
 
   def item_preview
     user_id = current_or_guest_user.id
-    @code = params.require(Const::Coding::Key::CODE)
-    @lang_type = params.require(Const::Coding::Key::LANG)
+    user_coding_id = params.require(Const::Coding::Key::USER_CODING_ID)
+    @item_source_path, @lang_type = Coding.code_filepath(user_id, user_coding_id)
   end
 
 end

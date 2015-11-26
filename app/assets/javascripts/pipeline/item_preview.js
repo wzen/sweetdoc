@@ -22,6 +22,7 @@
 //= require_directory ../../../../vendor/assets/colorpicker/js
 //= require_directory ../../../../vendor/assets/deflate
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
+//= require ../../../../vendor/assets/coffeescript_serverwork/coffeescript_serverwork
 //= require_directory ./../i18n
 //= require item/generator.jquery.color.js
 //= require base/constant
@@ -80,5 +81,6 @@
 //= require worktable/item_extend/cssitem_extend
 //= require worktable/event/timeline
 //= require worktable/handwrite
-//= require coding/item_preview
+//= require item_preview/item_preview_common
+//= require item_preview/item_preview
 

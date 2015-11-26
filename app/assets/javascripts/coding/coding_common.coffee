@@ -70,7 +70,7 @@ class CodingCommon
       CodingCommon.saveEditorState()
     )
 
-  @setupEditor = (editorId, lang_type, defaultValue = '') ->
+  @setupEditor = (editorId, lang_type, defaultValue = null) ->
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
     if lang_type == @Lang.JAVASCRIPT
@@ -112,7 +112,8 @@ class CodingCommon
         )
     )
     editor.setKeyboardHandler('ace/keyboard/emacs')
-    editor.setValue(defaultValue)
+    if defaultValue?
+      editor.setValue(defaultValue)
 
     $('.close_tab_button').off('click')
     $('.close_tab_button').on('click', ->
@@ -615,14 +616,8 @@ class CodingCommon
   # プレビュー実行
   @runPreview = ->
     # アクティブコード取得
-    editorId = $('#my_tab .active a').attr('href').replace('_wrapper', '')
-    editor = ace.edit(editorId)
-
-    $("##{@Key.CODE}").val(editor.getValue())
-    mode = editor.getSession().getMode().$id
-    console.log(mode)
-    $("##{@Key.LANG}").val(mode)
-
+    user_coding_id = $('#my_tab .active a').attr('href').replace('uc_', '').replace('_wrapper', '')
+    $("##{@Key.USER_CODING_ID}").val(user_coding_id)
     target = "_coding_item_preview_tab"
     window.open("about:blank", target)
     document.coding_form.action = '/coding/item_preview'

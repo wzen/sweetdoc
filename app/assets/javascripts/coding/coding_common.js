@@ -103,7 +103,7 @@ CodingCommon = (function() {
   CodingCommon.setupEditor = function(editorId, lang_type, defaultValue) {
     var editor;
     if (defaultValue == null) {
-      defaultValue = '';
+      defaultValue = null;
     }
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
@@ -146,7 +146,9 @@ CodingCommon = (function() {
       }
     });
     editor.setKeyboardHandler('ace/keyboard/emacs');
-    editor.setValue(defaultValue);
+    if (defaultValue != null) {
+      editor.setValue(defaultValue);
+    }
     $('.close_tab_button').off('click');
     return $('.close_tab_button').on('click', function() {
       return CodingCommon.closeTabView(this);
@@ -814,13 +816,9 @@ CodingCommon = (function() {
   };
 
   CodingCommon.runPreview = function() {
-    var editor, editorId, mode, target;
-    editorId = $('#my_tab .active a').attr('href').replace('_wrapper', '');
-    editor = ace.edit(editorId);
-    $("#" + this.Key.CODE).val(editor.getValue());
-    mode = editor.getSession().getMode().$id;
-    console.log(mode);
-    $("#" + this.Key.LANG).val(mode);
+    var target, user_coding_id;
+    user_coding_id = $('#my_tab .active a').attr('href').replace('uc_', '').replace('_wrapper', '');
+    $("#" + this.Key.USER_CODING_ID).val(user_coding_id);
     target = "_coding_item_preview_tab";
     window.open("about:blank", target);
     document.coding_form.action = '/coding/item_preview';
