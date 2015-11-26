@@ -1,7 +1,7 @@
 class ItemPreviewCommon
 
   # Mainコンテナ初期化
-  @initMainContainer = ->
+  @initMainContainerAsWorktable = ->
     # 定数 & レイアウト & イベント系変数の初期化
     CommonVar.worktableCommonVar()
     Common.updateCanvasSize()
@@ -25,23 +25,9 @@ class ItemPreviewCommon
         window.scrollContentsScrollTimer = null
       , 500)
     )
-    # ドロップダウン
-    $('.dropdown-toggle').dropdown()
     # ナビバー
-    Navbar.initWorktableNavbar()
-    # キーイベント
-    @initKeyEvent()
+    #Navbar.initWorktableNavbar()
     # ドラッグ描画イベント
     Handwrite.initHandwrite()
-    # コンテキストメニュー
-    @setMainContainerContext()
-    $('#project_contents').off("mousedown")
-    $('#project_contents').on("mousedown", =>
-      @clearAllItemStyle()
-    )
-    # 環境設定
-    Common.applyEnvironmentFromPagevalue()
     # Mainビュー高さ設定
-    @updateMainViewSize()
-    # 共通設定
-    WorktableSetting.initConfig()
+    WorktableCommon.updateMainViewSize()

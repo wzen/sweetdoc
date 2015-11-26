@@ -1,3 +1,8 @@
-<div id="design-config" class="sidebar-config border" style="display: none">
+<%
+   show_sidebar = false if show_sidebar.nil?
+   show_display = show_sidebar ? 'block' : 'none'
+%>
+
+<div id="design-config" class="sidebar-config border" style="display: <%= show_display %>">
     <!-- アイテム作成毎にテンプレートからDivを作成しここに追加 -->
 </div>

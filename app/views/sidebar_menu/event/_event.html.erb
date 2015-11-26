@@ -1,4 +1,9 @@
-<div id="event-config" class="sidebar-config border" style="display: none">
+<%
+   show_sidebar = false if show_sidebar.nil?
+   show_display = show_sidebar ? 'block' : 'none'
+%>
+
+<div id="event-config" class="sidebar-config border" style="display: <%= show_display %>">
 
     <!-- イベント作成毎にテンプレートからDivを作成しここに追加 -->
 

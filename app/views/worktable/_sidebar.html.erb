@@ -1,9 +1,4 @@
-<%
-   open_sidebar = false if open_sidebar.nil?
-   sidebar_display = open_sidebar ? 'block' : 'none'
-%>
-
-<div id="sidebar" class="col-xs-3" style="display:<%= sidebar_display %>">
+<div id="sidebar" class="col-xs-3" style="display:none">
     <div id="sidebar_container">
         <div id="sidebar-wrapper" style="overflow: auto">
             <div id="<%= Const::ElementAttribute::SIDEBAR_TAB_ROOT %>" class="sidebar-config" style="display: none">

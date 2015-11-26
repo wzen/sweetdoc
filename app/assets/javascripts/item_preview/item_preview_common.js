@@ -4,7 +4,7 @@ var ItemPreviewCommon;
 ItemPreviewCommon = (function() {
   function ItemPreviewCommon() {}
 
-  ItemPreviewCommon.initMainContainer = function() {
+  ItemPreviewCommon.initMainContainerAsWorktable = function() {
     CommonVar.worktableCommonVar();
     Common.updateCanvasSize();
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
@@ -27,20 +27,8 @@ ItemPreviewCommon = (function() {
         return window.scrollContentsScrollTimer = null;
       }, 500);
     });
-    $('.dropdown-toggle').dropdown();
-    Navbar.initWorktableNavbar();
-    this.initKeyEvent();
     Handwrite.initHandwrite();
-    this.setMainContainerContext();
-    $('#project_contents').off("mousedown");
-    $('#project_contents').on("mousedown", (function(_this) {
-      return function() {
-        return _this.clearAllItemStyle();
-      };
-    })(this));
-    Common.applyEnvironmentFromPagevalue();
-    this.updateMainViewSize();
-    return WorktableSetting.initConfig();
+    return WorktableCommon.updateMainViewSize();
   };
 
   return ItemPreviewCommon;

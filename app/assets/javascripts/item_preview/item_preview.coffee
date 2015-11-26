@@ -1,5 +1,6 @@
 $ ->
-  window.isWorkTable = false
+  # 初期タイプはWS
+  window.isWorkTable = true
   window.isMotionCheck = false
   #window.initDone = false
   # ブラウザ対応チェック
@@ -10,6 +11,8 @@ $ ->
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
+
+  ItemPreviewCommon.initMainContainerAsWorktable()
 
   $('.coding.item_preview').ready ->
     # コーディングデバッグ
