@@ -21,9 +21,9 @@ class CodingCommon
       @COFFEESCRIPT = constant.Coding.Lang.COFFEESCRIPT
 
   @init = ->
+    window.editing = {}
     @initTreeView()
     @initEditor()
-    window.editing = {}
 
   @initTreeView = ->
     $('#tree').jstree(
@@ -70,7 +70,7 @@ class CodingCommon
       CodingCommon.saveEditorState()
     )
 
-  @setupEditor = (editorId, lang_type) ->
+  @setupEditor = (editorId, lang_type, defaultValue = '') ->
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
     if lang_type == @Lang.JAVASCRIPT
@@ -112,6 +112,7 @@ class CodingCommon
         )
     )
     editor.setKeyboardHandler('ace/keyboard/emacs')
+    editor.setValue(defaultValue)
 
     $('.close_tab_button').off('click')
     $('.close_tab_button').on('click', ->
@@ -600,8 +601,8 @@ class CodingCommon
         lang_type = loaded.lang_type
 
         tab.append("<li role='presentation' class='tab_li active'><a class='tab_button' aria-controls='uc_#{user_coding_id}_wrapper' href='#uc_#{user_coding_id}_wrapper' role='tab' data-toggle='tab'>#{title}</a><a class='close_tab_button'></a></li>")
-        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor'>#{code}</div></div>")
-        CodingCommon.setupEditor("uc_#{user_coding_id}", lang_type)
+        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_#{user_coding_id}_wrapper'><div id='uc_#{user_coding_id}' class='editor'></div></div>")
+        CodingCommon.setupEditor("uc_#{user_coding_id}", lang_type, code)
         CodingCommon.saveEditorState()
       )
 

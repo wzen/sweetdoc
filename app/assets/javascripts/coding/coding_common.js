@@ -51,9 +51,9 @@ CodingCommon = (function() {
   }
 
   CodingCommon.init = function() {
+    window.editing = {};
     this.initTreeView();
-    this.initEditor();
-    return window.editing = {};
+    return this.initEditor();
   };
 
   CodingCommon.initTreeView = function() {
@@ -100,8 +100,11 @@ CodingCommon = (function() {
     });
   };
 
-  CodingCommon.setupEditor = function(editorId, lang_type) {
+  CodingCommon.setupEditor = function(editorId, lang_type, defaultValue) {
     var editor;
+    if (defaultValue == null) {
+      defaultValue = '';
+    }
     ace.require("ace/ext/language_tools");
     editor = ace.edit(editorId);
     if (lang_type === this.Lang.JAVASCRIPT) {
@@ -143,6 +146,7 @@ CodingCommon = (function() {
       }
     });
     editor.setKeyboardHandler('ace/keyboard/emacs');
+    editor.setValue(defaultValue);
     $('.close_tab_button').off('click');
     return $('.close_tab_button').on('click', function() {
       return CodingCommon.closeTabView(this);
@@ -798,8 +802,8 @@ CodingCommon = (function() {
         title = nodes[nodes.length - 1];
         lang_type = loaded.lang_type;
         tab.append("<li role='presentation' class='tab_li active'><a class='tab_button' aria-controls='uc_" + user_coding_id + "_wrapper' href='#uc_" + user_coding_id + "_wrapper' role='tab' data-toggle='tab'>" + title + "</a><a class='close_tab_button'></a></li>");
-        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'>" + code + "</div></div>");
-        CodingCommon.setupEditor("uc_" + user_coding_id, lang_type);
+        tab_content.append("<div role='tabpanel' class='tab-pane active' id='uc_" + user_coding_id + "_wrapper'><div id='uc_" + user_coding_id + "' class='editor'></div></div>");
+        CodingCommon.setupEditor("uc_" + user_coding_id, lang_type, code);
         return CodingCommon.saveEditorState();
       });
     } else {

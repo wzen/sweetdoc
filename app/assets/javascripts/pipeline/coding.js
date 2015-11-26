@@ -18,6 +18,7 @@
 //= require ../../../../vendor/assets/ace/worker-coffee
 //= require ../../../../vendor/assets/ace/ext-language_tools
 //= require ../../../../vendor/assets/ace/keybinding-emacs
+//= require ../../../../vendor/assets/ace/keybinding-vim
 //= require ../../../../vendor/assets/jstree/jstree
 //= require_directory ./../i18n
 //= require base/constant
