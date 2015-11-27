@@ -5,7 +5,7 @@ require 'coding/user_coding_tree'
 
 class Coding
 
-  USER_CODE_PATH = '/public/user_code/'
+  USER_CODE_PATH = '/user_code/'
 
   def self.save_all(user_id, codes, tree_data)
     begin
@@ -488,7 +488,7 @@ class Coding
   end
 
   def self._code_parentdirpath(user_access_token)
-    File.join(Rails.root, "#{USER_CODE_PATH}#{user_access_token}")
+    File.join(Rails.root, "/public#{USER_CODE_PATH}#{user_access_token}")
   end
 
   def self._code_filepath(user_access_token, code_filename)

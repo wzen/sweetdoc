@@ -24,16 +24,13 @@
             <% if @load_user_coding.length > 0 %>
                 <div id="editor_header_menu">
                     <div>
-                      <%= form_tag("", method: "post", name: "coding_form") do %>
                         <div>
                             <a>
                                 <div class="editor_btn preview">
                                     Preview
                                 </div>
                             </a>
-                          <input id="<%= Const::Coding::Key::USER_CODING_ID %>" type="hidden" name="<%= Const::Coding::Key::USER_CODING_ID %>" value="">
                         </div>
-                      <% end %>
                     </div>
                 </div>
                 <div id="editor_contents_wrapper">
@@ -63,3 +60,6 @@
     </div>
 </div>
 
+<%= form_tag("", method: "post", name: "coding_form") do %>
+    <input id="<%= Const::Coding::Key::USER_CODING_ID %>" type="hidden" name="<%= Const::Coding::Key::USER_CODING_ID %>" value="">
+<% end %>

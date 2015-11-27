@@ -1,10 +1,12 @@
 # Test
-class ArrowItem extends CanvasItemBase
-  @IDENTITY = "Temp"
+class window.ItemPreviewTemp extends CanvasItemBase
+  @IDENTITY = "ItemPreviewTemp"
 
   # ↓Don't Delete
   if window.loadedItemId?
     @ITEM_ID = window.loadedItemId
+  if window.isItemPreview? && window.isItemPreview
+    @ITEM_ID = Number.MAX_VALUE
 
   HEADER_WIDTH = 100
   HEADER_HEIGHT = 50
@@ -471,13 +473,13 @@ class ArrowItem extends CanvasItemBase
       if @itemSize.y + @itemSize.h < maxY
         @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
-Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
+Common.setClassToMap(false, ItemPreviewTemp.ITEM_ID, ItemPreviewTemp)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ID]?
-  console.log('arrow loaded')
-  window.itemInitFuncList[ArrowItem.ITEM_ID] = (option = {}) ->
-    if window.isWorkTable && ArrowItem.jsLoaded?
-      ArrowItem.jsLoaded(option)
+if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.ITEM_ID]?
+  console.log('ItemPreviewTemp loaded')
+  window.itemInitFuncList[ItemPreviewTemp.ITEM_ID] = (option = {}) ->
+    if window.isWorkTable && ItemPreviewTemp.jsLoaded?
+      ItemPreviewTemp.jsLoaded(option)
     #JS読み込み完了後の処理
     if window.debug
-      console.log('arrow init Finish')
+      console.log('ItemPreviewTemp init Finish')

@@ -11,7 +11,22 @@ $(function() {
   CommonVar.initCommonVar();
   ItemPreviewCommon.initMainContainerAsWorktable();
   $('.coding.item_preview').ready(function() {
-    return window.initDone = true;
+    var count, timer;
+    window.initDone = true;
+    count = 0;
+    return timer = setInterval((function(_this) {
+      return function() {
+        if (typeof ItemPreviewTemp !== "undefined" && ItemPreviewTemp !== null) {
+          window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
+          WorktableCommon.changeMode(Constant.Mode.DRAW);
+          clearInterval(timer);
+        }
+        count += 1;
+        if (count >= 100) {
+          return clearInterval(timer);
+        }
+      };
+    })(this), 50);
   });
   return $('.item_gallery.preview').ready(function() {
     return window.initDone = true;

@@ -1,10 +1,12 @@
 # Test
-class Temp extends CssItemBase
-  @IDENTITY = "Temp"
+class window.ItemPreviewTemp extends CssItemBase
+  @IDENTITY = "ItemPreviewTemp"
 
   # ↓ Don't Delete
   if window.loadedItemId?
     @ITEM_ID = window.loadedItemId
+  if window.isItemPreview? && window.isItemPreview
+    @ITEM_ID = Number.MAX_VALUE
 
   @actionProperties =
   {
@@ -245,14 +247,14 @@ class Temp extends CssItemBase
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 
-Common.setClassToMap(false, Temp.ITEM_ID, Temp)
+Common.setClassToMap(false, ItemPreviewTemp.ITEM_ID, ItemPreviewTemp)
 
 # Don't Delete
-if window.itemInitFuncList? && !window.itemInitFuncList[Temp.ITEM_ID]?
-  console.log('temp loaded')
-  window.itemInitFuncList[Temp.ITEM_ID] = (option = {}) ->
-    if window.isWorkTable && Temp.jsLoaded?
-      Temp.jsLoaded(option)
+if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.ITEM_ID]?
+  console.log('ItemPreviewTemp loaded')
+  window.itemInitFuncList[ItemPreviewTemp.ITEM_ID] = (option = {}) ->
+    if window.isWorkTable && ItemPreviewTemp.jsLoaded?
+      ItemPreviewTemp.jsLoaded(option)
     if window.debug
-      console.log('temp init finished')
+      console.log('ItemPreviewTemp init finished')
 

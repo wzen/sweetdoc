@@ -20,6 +20,16 @@ $ ->
     # 初期化終了
     window.initDone = true
 
+    count = 0
+    timer = setInterval( =>
+      if ItemPreviewTemp?
+        window.selectItemMenu = ItemPreviewTemp.ITEM_ID
+        WorktableCommon.changeMode(Constant.Mode.DRAW)
+        clearInterval(timer)
+      count += 1
+      if count >= 100
+        clearInterval(timer)
+    , 50)
 
   $('.item_gallery.preview').ready ->
     # アイテムギャラリー動作確認
