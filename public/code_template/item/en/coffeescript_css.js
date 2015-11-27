@@ -16,7 +16,7 @@ window.ItemPreviewTemp = (function(superClass) {
   }
 
   if ((window.isItemPreview != null) && window.isItemPreview) {
-    ItemPreviewTemp.ITEM_ID = Number.MAX_VALUE;
+    ItemPreviewTemp.ITEM_ID = 999;
   }
 
   ItemPreviewTemp.actionProperties = {

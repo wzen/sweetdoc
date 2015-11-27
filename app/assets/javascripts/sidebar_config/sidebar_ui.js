@@ -145,7 +145,7 @@ Sidebar = (function() {
   Sidebar.initEventConfig = function(te_num) {
     var eId, emt;
     if (te_num == null) {
-      te_num = 0;
+      te_num = 1;
     }
     eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
     emt = $("#" + eId);

@@ -6,7 +6,7 @@ class window.ItemPreviewTemp extends CanvasItemBase
   if window.loadedItemId?
     @ITEM_ID = window.loadedItemId
   if window.isItemPreview? && window.isItemPreview
-    @ITEM_ID = Number.MAX_VALUE
+    @ITEM_ID = 999
 
   HEADER_WIDTH = 100
   HEADER_HEIGHT = 50

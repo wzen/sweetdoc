@@ -112,7 +112,7 @@ class Sidebar
       # 初期化関数を呼び出す
       obj.setupOptionMenu()
 
-  @initEventConfig = (te_num = 0)->
+  @initEventConfig = (te_num = 1)->
     eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
     emt = $("##{eId}")
     if emt.length == 0

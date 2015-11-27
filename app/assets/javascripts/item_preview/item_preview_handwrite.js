@@ -16,10 +16,11 @@ ItemPreviewHandwrite = (function(superClass) {
       return this.item.endDraw(this.zindex, true, (function(_this) {
         return function() {
           _this.item.setupDragAndResizeEvents();
-          WorktableCommon.changeMode(Constant.Mode.DRAW);
+          WorktableCommon.changeMode(Constant.Mode.EDIT);
           _this.item.saveObj(true);
           _this.zindex += 1;
           Sidebar.initItemEditConfig(_this.item);
+          EventConfig.addEventConfigContents(_this.item.itemId);
           return Sidebar.initEventConfig();
         };
       })(this));
