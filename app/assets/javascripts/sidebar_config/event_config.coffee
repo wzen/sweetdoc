@@ -147,7 +147,7 @@ class EventConfig
         _setForkSelect.call(@)
       _setApplyClickEvent.call(@)
 
-    if @[EventPageValueBase.PageValueKey.ID]?
+    if !@[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
       # アイテム選択時
       item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
       if item?
@@ -157,7 +157,7 @@ class EventConfig
         )
       else
         _callback.call(@)
-    else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
+    else
       # 共通イベント選択時
       objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
       if objClass
@@ -578,3 +578,44 @@ class EventConfig
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "##{b}"
     )
+
+  # アイテム選択メニューを更新
+  @updateSelectItemMenu = ->
+    # 作成されたアイテムの一覧を取得
+    teItemSelects = $('#event-config .te_item_select')
+    teItemSelect = teItemSelects[0]
+    selectOptions = ''
+    items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pageRoot()}")
+    items.children().each( ->
+      id = $(@).find('input.id').val()
+      name = $(@).find('input.name').val()
+      itemId = $(@).find('input.itemId').val()
+      if itemId?
+        selectOptions += """
+            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{itemId}'>
+              #{name}
+            </option>
+          """
+    )
+    itemOptgroupClassName = 'item_optgroup_class_name'
+    selectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + selectOptions + '</optgroup>'
+    # メニューを入れ替え
+    teItemSelects.each( ->
+      $(@).find(".#{itemOptgroupClassName}").remove()
+      $(@).append($(selectOptions))
+    )
+
+  # イベントハンドラー設定
+  # @param [Integer] te_num イベント番号
+  @setupTimelineEventHandler = (te_num) ->
+    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+    emt = $('#' + eId)
+    # Configクラス作成 & イベントハンドラの設定
+    te = new EventConfig(emt, te_num)
+    do =>
+      em = $('.te_item_select', emt)
+      em.off('change')
+      em.on('change', (e) ->
+        te.clearError()
+        te.selectItem(@)
+      )

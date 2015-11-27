@@ -124,7 +124,7 @@ ItemBase = (function(superClass) {
     if (window.debug) {
       console.log('save obj');
     }
-    return Timeline.updateSelectItemMenu();
+    return EventConfig.updateSelectItemMenu();
   };
 
   ItemBase.prototype.getItemPropFromPageValue = function(prop, isCache) {

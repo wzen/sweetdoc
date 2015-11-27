@@ -19,7 +19,8 @@ ItemPreviewHandwrite = (function(superClass) {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
           _this.item.saveObj(true);
           _this.zindex += 1;
-          return Sidebar.initItemEditConfig(_this.item);
+          Sidebar.initItemEditConfig(_this.item);
+          return Sidebar.initEventConfig();
         };
       })(this));
     }

@@ -138,7 +138,7 @@ EventConfig = (function() {
       }
       return _setApplyClickEvent.call(this);
     };
-    if (this[EventPageValueBase.PageValueKey.ID] != null) {
+    if (!this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]) {
       item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
       if (item != null) {
         return this.addEventVarModifyConfig(item.constructor, (function(_this) {
@@ -149,7 +149,7 @@ EventConfig = (function() {
       } else {
         return _callback.call(this);
       }
-    } else if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]) {
+    } else {
       objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
       if (objClass) {
         return this.addEventVarModifyConfig(objClass, (function(_this) {
@@ -622,6 +622,47 @@ EventConfig = (function() {
         return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "#" + b;
       };
     })(this));
+  };
+
+  EventConfig.updateSelectItemMenu = function() {
+    var itemOptgroupClassName, items, selectOptions, teItemSelect, teItemSelects;
+    teItemSelects = $('#event-config .te_item_select');
+    teItemSelect = teItemSelects[0];
+    selectOptions = '';
+    items = $("#" + PageValue.Key.IS_ROOT + " ." + PageValue.Key.INSTANCE_PREFIX + " ." + (PageValue.Key.pageRoot()));
+    items.children().each(function() {
+      var id, itemId, name;
+      id = $(this).find('input.id').val();
+      name = $(this).find('input.name').val();
+      itemId = $(this).find('input.itemId').val();
+      if (itemId != null) {
+        return selectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + itemId + "'>\n  " + name + "\n</option>";
+      }
+    });
+    itemOptgroupClassName = 'item_optgroup_class_name';
+    selectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + selectOptions + '</optgroup>';
+    return teItemSelects.each(function() {
+      $(this).find("." + itemOptgroupClassName).remove();
+      return $(this).append($(selectOptions));
+    });
+  };
+
+  EventConfig.setupTimelineEventHandler = function(te_num) {
+    var eId, emt, te;
+    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
+    emt = $('#' + eId);
+    te = new EventConfig(emt, te_num);
+    return (function(_this) {
+      return function() {
+        var em;
+        em = $('.te_item_select', emt);
+        em.off('change');
+        return em.on('change', function(e) {
+          te.clearError();
+          return te.selectItem(this);
+        });
+      };
+    })(this)();
   };
 
   return EventConfig;

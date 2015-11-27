@@ -111,3 +111,16 @@ class Sidebar
     if obj? && obj.setupOptionMenu?
       # 初期化関数を呼び出す
       obj.setupOptionMenu()
+
+  @initEventConfig = (te_num = 0)->
+    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+    emt = $("##{eId}")
+    if emt.length == 0
+      # イベントメニューの作成
+      emt = $('#event-config .event_temp .event').clone(true).attr('id', eId)
+      $('#event-config').append(emt)
+    # アイテム選択メニュー更新
+    EventConfig.updateSelectItemMenu()
+    # イベントハンドラの設定
+    EventConfig.setupTimelineEventHandler(te_num)
+

@@ -111,7 +111,7 @@ class ItemBase extends ItemEventBase
 
     # イベントの選択項目更新
     # fixme: 実行場所について再考
-    Timeline.updateSelectItemMenu()
+    EventConfig.updateSelectItemMenu()
 
   # アイテムの情報をページ値から取得
   # @property [String] prop 変数名

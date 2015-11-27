@@ -172,70 +172,16 @@ class Timeline
     _initEventConfig = (e) ->
       # サイドメニューをタイムラインに切り替え
       Sidebar.switchSidebarConfig(Sidebar.Type.TIMELINE)
-
       te_num = $(e).find('input.te_num').val()
-      eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
-      emt = $('#' + eId)
-      if emt.length == 0
-        # イベントメニューの作成
-        emt = $('#event-config .event_temp .event').clone(true).attr('id', eId)
-        $('#event-config').append(emt)
-
-      # アイテム選択メニュー更新
-      self.updateSelectItemMenu()
-
-      # イベントハンドラの設定
-      self.setupTimelineEventHandler(te_num)
-
+      Sidebar.initEventConfig(te_num)
       # イベントメニューの表示
       $('#event-config .event').hide()
-      emt.show()
-
+      eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+      $("##{eId}").show()
       # サイドバー表示
       Sidebar.openConfigSidebar()
 
     _setupTimelineEvent.call(self)
-
-  # アイテム選択メニューを更新
-  @updateSelectItemMenu = ->
-    # 作成されたアイテムの一覧を取得
-    teItemSelects = $('#event-config .te_item_select')
-    teItemSelect = teItemSelects[0]
-    selectOptions = ''
-    items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pageRoot()}")
-    items.children().each( ->
-      id = $(@).find('input.id').val()
-      name = $(@).find('input.name').val()
-      itemId = $(@).find('input.itemId').val()
-      if itemId?
-        selectOptions += """
-            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{itemId}'>
-              #{name}
-            </option>
-          """
-    )
-    itemOptgroupClassName = 'item_optgroup_class_name'
-    selectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + selectOptions + '</optgroup>'
-    # メニューを入れ替え
-    teItemSelects.each( ->
-      $(@).find(".#{itemOptgroupClassName}").remove()
-      $(@).append($(selectOptions))
-    )
-
-  # イベントハンドラー設定
-  # @param [Integer] te_num イベント番号
-  @setupTimelineEventHandler = (te_num) ->
-    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
-    emt = $('#' + eId)
-    # Configクラス作成 & イベントハンドラの設定
-    te = new EventConfig(emt, te_num)
-    do =>
-      em = $('.te_item_select', emt)
-      em.off('change')
-      em.on('change', (e) ->
-        te.clearError()
-        te.selectItem(@)
-      )
 
   # タイムラインイベントの色を変更
   # @param [Integer] teNum イベント番号

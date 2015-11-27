@@ -142,6 +142,21 @@ Sidebar = (function() {
     }
   };
 
+  Sidebar.initEventConfig = function(te_num) {
+    var eId, emt;
+    if (te_num == null) {
+      te_num = 0;
+    }
+    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
+    emt = $("#" + eId);
+    if (emt.length === 0) {
+      emt = $('#event-config .event_temp .event').clone(true).attr('id', eId);
+      $('#event-config').append(emt);
+    }
+    EventConfig.updateSelectItemMenu();
+    return EventConfig.setupTimelineEventHandler(te_num);
+  };
+
   return Sidebar;
 
 })();

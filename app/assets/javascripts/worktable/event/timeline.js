@@ -166,63 +166,16 @@ Timeline = (function() {
       return Timeline.refreshAllTimeline();
     };
     _initEventConfig = function(e) {
-      var eId, emt, te_num;
+      var eId, te_num;
       Sidebar.switchSidebarConfig(Sidebar.Type.TIMELINE);
       te_num = $(e).find('input.te_num').val();
-      eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
-      emt = $('#' + eId);
-      if (emt.length === 0) {
-        emt = $('#event-config .event_temp .event').clone(true).attr('id', eId);
-        $('#event-config').append(emt);
-      }
-      self.updateSelectItemMenu();
-      self.setupTimelineEventHandler(te_num);
+      Sidebar.initEventConfig(te_num);
       $('#event-config .event').hide();
-      emt.show();
+      eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
+      $("#" + eId).show();
       return Sidebar.openConfigSidebar();
     };
     return _setupTimelineEvent.call(self);
-  };
-
-  Timeline.updateSelectItemMenu = function() {
-    var itemOptgroupClassName, items, selectOptions, teItemSelect, teItemSelects;
-    teItemSelects = $('#event-config .te_item_select');
-    teItemSelect = teItemSelects[0];
-    selectOptions = '';
-    items = $("#" + PageValue.Key.IS_ROOT + " ." + PageValue.Key.INSTANCE_PREFIX + " ." + (PageValue.Key.pageRoot()));
-    items.children().each(function() {
-      var id, itemId, name;
-      id = $(this).find('input.id').val();
-      name = $(this).find('input.name').val();
-      itemId = $(this).find('input.itemId').val();
-      if (itemId != null) {
-        return selectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + itemId + "'>\n  " + name + "\n</option>";
-      }
-    });
-    itemOptgroupClassName = 'item_optgroup_class_name';
-    selectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + selectOptions + '</optgroup>';
-    return teItemSelects.each(function() {
-      $(this).find("." + itemOptgroupClassName).remove();
-      return $(this).append($(selectOptions));
-    });
-  };
-
-  Timeline.setupTimelineEventHandler = function(te_num) {
-    var eId, emt, te;
-    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
-    emt = $('#' + eId);
-    te = new EventConfig(emt, te_num);
-    return (function(_this) {
-      return function() {
-        var em;
-        em = $('.te_item_select', emt);
-        em.off('change');
-        return em.on('change', function(e) {
-          te.clearError();
-          return te.selectItem(this);
-        });
-      };
-    })(this)();
   };
 
   Timeline.changeTimelineColor = function(teNum, actionType) {
