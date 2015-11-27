@@ -34,7 +34,6 @@ class CommonVar
   # @param [Integer] pageNum ページ番号
   @updateRunBaseElement = (pageNum) ->
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
-    window.scrollWrapper = $("#sidebar-wrapper")
     window.mainWrapper = $("#pages .#{page} .main-wrapper:first")
     window.scrollContents = $("#pages .#{page} .scroll_contents:first")
     window.scrollHandleWrapper = $("#pages .#{page} .scroll_handle_wrapper:first")
@@ -49,7 +48,7 @@ class CommonVar
 
   # アイテムプレビューのJQueryオブジェクト保存
   @updateItemPreviewBaseElement = ->
-    window.scrollWrapper = $("#sidebar-wrapper")
+    window.sidebarWrapper = $("#sidebar-wrapper")
     window.mainWrapper = $("#main .main-wrapper:first")
     window.scrollContents = $("#main .scroll_contents:first")
     window.scrollHandleWrapper = $("#main .scroll_handle_wrapper:first")

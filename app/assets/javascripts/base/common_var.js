@@ -36,7 +36,6 @@ CommonVar = (function() {
   CommonVar.updateRunBaseElement = function(pageNum) {
     var page;
     page = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum);
-    window.scrollWrapper = $("#sidebar-wrapper");
     window.mainWrapper = $("#pages ." + page + " .main-wrapper:first");
     window.scrollContents = $("#pages ." + page + " .scroll_contents:first");
     window.scrollHandleWrapper = $("#pages ." + page + " .scroll_handle_wrapper:first");
@@ -51,7 +50,7 @@ CommonVar = (function() {
   };
 
   CommonVar.updateItemPreviewBaseElement = function() {
-    window.scrollWrapper = $("#sidebar-wrapper");
+    window.sidebarWrapper = $("#sidebar-wrapper");
     window.mainWrapper = $("#main .main-wrapper:first");
     window.scrollContents = $("#main .scroll_contents:first");
     window.scrollHandleWrapper = $("#main .scroll_handle_wrapper:first");

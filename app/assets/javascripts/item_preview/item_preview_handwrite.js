@@ -11,12 +11,14 @@ ItemPreviewHandwrite = (function(superClass) {
   }
 
   ItemPreviewHandwrite.mouseUpDrawing = function() {
-    if (typeof item !== "undefined" && item !== null) {
-      item.restoreAllDrawingSurface();
-      item.endDraw(zindex);
-      item.setupDragAndResizeEvents();
+    if (this.item != null) {
+      this.item.restoreAllDrawingSurface();
+      this.item.endDraw(this.zindex);
+      this.item.setupDragAndResizeEvents();
       WorktableCommon.changeMode(Constant.Mode.DRAW);
-      return zindex += 1;
+      this.item.saveObj(true);
+      this.zindex += 1;
+      return Sidebar.initItemEditConfig(this.item);
     }
   };
 

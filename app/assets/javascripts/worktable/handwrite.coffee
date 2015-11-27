@@ -1,15 +1,21 @@
 class Handwrite
 
+  @item = null
+  @drag = false
+  @click = false
+  @enableMoveEvent = true
+  @queueLoc = null
+  @zindex = null
+
   # 手書きイベント初期化
   @initHandwrite = ->
-    self = @
-    drag = false
-    click = false
+    @drag = false
+    @click = false
+    @item = null
     lastX = null; lastY = null
-    item = null
-    enableMoveEvent = true
-    queueLoc = null
-    zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
+    @enableMoveEvent = true
+    @queueLoc = null
+    @zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
     MOVE_FREQUENCY = 7
     @zoom = 1
 
@@ -27,7 +33,7 @@ class Handwrite
       # 画面のウィンドウ座標からCanvas座標に変換
       # @param [Array] e ウィンドウ座標
       # @return [Array] Canvas座標
-      _calcCanvasLoc = (e) ->
+      _calcCanvasLoc = (e) =>
         x = (e.x || e.clientX) / @zoom
         y = (e.y || e.clientY) / @zoom
         return _windowToCanvas(drawingCanvas, x, y)
@@ -40,15 +46,15 @@ class Handwrite
 
       # マウスダウンイベント
       # @param [Array] e ウィンドウ座標
-      drawingCanvas.onmousedown = (e) ->
+      drawingCanvas.onmousedown = (e) =>
         if e.which == 1 #左クリック
           @zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
           loc = _calcCanvasLoc.call(@, e)
           _saveLastLoc(loc)
-          click = true
+          @click = true
           if mode == Constant.Mode.DRAW
             e.preventDefault()
-            self.mouseDownDrawing(loc)
+            @mouseDownDrawing(loc)
           else if mode == Constant.Mode.OPTION
             # サイドバーを閉じる
             Sidebar.closeSidebar()
@@ -57,25 +63,25 @@ class Handwrite
 
       # マウスドラッグイベント
       # @param [Array] e ウィンドウ座標
-      drawingCanvas.onmousemove = (e) ->
+      drawingCanvas.onmousemove = (e) =>
         if e.which == 1 #左クリック
           loc = _calcCanvasLoc.call(@, e)
-          if click &&
+          if @click &&
               Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
             if mode == Constant.Mode.DRAW
               e.preventDefault()
-              self.mouseMoveDrawing(loc)
+              @mouseMoveDrawing(loc)
             _saveLastLoc(loc)
 
       # マウスアップイベント
       # @param [Array] e ウィンドウ座標
-      drawingCanvas.onmouseup = (e) ->
+      drawingCanvas.onmouseup = (e) =>
         if e.which == 1 #左クリック
-          if drag && mode == Constant.Mode.DRAW
+          if @drag && mode == Constant.Mode.DRAW
             e.preventDefault()
-            self.mouseUpDrawing()
-        drag = false
-        click = false
+            @mouseUpDrawing()
+        @drag = false
+        @click = false
 
 
   # マウスダウン時の描画イベント
@@ -84,39 +90,39 @@ class Handwrite
     # プレビューを停止して再描画
     WorktableCommon.reDrawAllInstanceItemIfChanging()
     if selectItemMenu?
-      item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
-      window.instanceMap[item.id] = item
-      item.saveDrawingSurface()
+      @item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
+      window.instanceMap[@item.id] = @item
+      @item.saveDrawingSurface()
       WorktableCommon.changeMode(Constant.Mode.DRAW)
-      item.startDraw()
+      @item.startDraw()
 
   # マウスドラッグ時の描画イベント
   # @param [Array] loc Canvas座標
   @mouseMoveDrawing = (loc) ->
-    if item?
-      if enableMoveEvent
-        enableMoveEvent = false
-        drag = true
-        item.draw(loc)
+    if @item?
+      if @enableMoveEvent
+        @enableMoveEvent = false
+        @drag = true
+        @item.draw(loc)
 
         # 待ちキューがある場合はもう一度実行
-        if queueLoc != null
-          q = queueLoc
-          queueLoc = null
-          item.draw(q)
+        if @queueLoc != null
+          q = @queueLoc
+          @queueLoc = null
+          @item.draw(q)
 
-        enableMoveEvent = true
+        @enableMoveEvent = true
       else
         # 待ちキューに保存
-        queueLoc = loc
+        @queueLoc = loc
 
   # マウスアップ時の描画イベント
   @mouseUpDrawing = ->
-    if item?
-      item.restoreAllDrawingSurface()
-      item.endDraw(zindex)
-      item.setupDragAndResizeEvents()
+    if @item?
+      @item.restoreAllDrawingSurface()
+      @item.endDraw(@zindex)
+      @item.setupDragAndResizeEvents()
       WorktableCommon.changeMode(Constant.Mode.DRAW)
-      item.saveObj(true)
-      zindex += 1
+      @item.saveObj(true)
+      @zindex += 1
 

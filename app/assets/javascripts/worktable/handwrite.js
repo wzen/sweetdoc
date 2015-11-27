@@ -4,17 +4,28 @@ var Handwrite;
 Handwrite = (function() {
   function Handwrite() {}
 
+  Handwrite.item = null;
+
+  Handwrite.drag = false;
+
+  Handwrite.click = false;
+
+  Handwrite.enableMoveEvent = true;
+
+  Handwrite.queueLoc = null;
+
+  Handwrite.zindex = null;
+
   Handwrite.initHandwrite = function() {
-    var MOVE_FREQUENCY, _windowToCanvas, click, drag, enableMoveEvent, item, lastX, lastY, queueLoc, self, zindex;
-    self = this;
-    drag = false;
-    click = false;
+    var MOVE_FREQUENCY, _windowToCanvas, lastX, lastY;
+    this.drag = false;
+    this.click = false;
+    this.item = null;
     lastX = null;
     lastY = null;
-    item = null;
-    enableMoveEvent = true;
-    queueLoc = null;
-    zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
+    this.enableMoveEvent = true;
+    this.queueLoc = null;
+    this.zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
     MOVE_FREQUENCY = 7;
     this.zoom = 1;
     _windowToCanvas = function(canvas, x, y) {
@@ -30,8 +41,8 @@ Handwrite = (function() {
         var _calcCanvasLoc, _saveLastLoc;
         _calcCanvasLoc = function(e) {
           var x, y;
-          x = (e.x || e.clientX) / this.zoom;
-          y = (e.y || e.clientY) / this.zoom;
+          x = (e.x || e.clientX) / _this.zoom;
+          y = (e.y || e.clientY) / _this.zoom;
           return _windowToCanvas(drawingCanvas, x, y);
         };
         _saveLastLoc = function(loc) {
@@ -41,13 +52,13 @@ Handwrite = (function() {
         drawingCanvas.onmousedown = function(e) {
           var loc;
           if (e.which === 1) {
-            this.zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
-            loc = _calcCanvasLoc.call(this, e);
+            _this.zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
+            loc = _calcCanvasLoc.call(_this, e);
             _saveLastLoc(loc);
-            click = true;
+            _this.click = true;
             if (mode === Constant.Mode.DRAW) {
               e.preventDefault();
-              return self.mouseDownDrawing(loc);
+              return _this.mouseDownDrawing(loc);
             } else if (mode === Constant.Mode.OPTION) {
               Sidebar.closeSidebar();
               return WorktableCommon.putbackMode();
@@ -57,11 +68,11 @@ Handwrite = (function() {
         drawingCanvas.onmousemove = function(e) {
           var loc;
           if (e.which === 1) {
-            loc = _calcCanvasLoc.call(this, e);
-            if (click && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY) {
+            loc = _calcCanvasLoc.call(_this, e);
+            if (_this.click && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY) {
               if (mode === Constant.Mode.DRAW) {
                 e.preventDefault();
-                self.mouseMoveDrawing(loc);
+                _this.mouseMoveDrawing(loc);
               }
               return _saveLastLoc(loc);
             }
@@ -69,57 +80,56 @@ Handwrite = (function() {
         };
         return drawingCanvas.onmouseup = function(e) {
           if (e.which === 1) {
-            if (drag && mode === Constant.Mode.DRAW) {
+            if (_this.drag && mode === Constant.Mode.DRAW) {
               e.preventDefault();
-              self.mouseUpDrawing();
+              _this.mouseUpDrawing();
             }
           }
-          drag = false;
-          return click = false;
+          _this.drag = false;
+          return _this.click = false;
         };
       };
     })(this)();
   };
 
   Handwrite.mouseDownDrawing = function(loc) {
-    var item;
     WorktableCommon.reDrawAllInstanceItemIfChanging();
     if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
-      item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
-      window.instanceMap[item.id] = item;
-      item.saveDrawingSurface();
+      this.item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
+      window.instanceMap[this.item.id] = this.item;
+      this.item.saveDrawingSurface();
       WorktableCommon.changeMode(Constant.Mode.DRAW);
-      return item.startDraw();
+      return this.item.startDraw();
     }
   };
 
   Handwrite.mouseMoveDrawing = function(loc) {
-    var drag, enableMoveEvent, q, queueLoc;
-    if (typeof item !== "undefined" && item !== null) {
-      if (enableMoveEvent) {
-        enableMoveEvent = false;
-        drag = true;
-        item.draw(loc);
-        if (queueLoc !== null) {
-          q = queueLoc;
-          queueLoc = null;
-          item.draw(q);
+    var q;
+    if (this.item != null) {
+      if (this.enableMoveEvent) {
+        this.enableMoveEvent = false;
+        this.drag = true;
+        this.item.draw(loc);
+        if (this.queueLoc !== null) {
+          q = this.queueLoc;
+          this.queueLoc = null;
+          this.item.draw(q);
         }
-        return enableMoveEvent = true;
+        return this.enableMoveEvent = true;
       } else {
-        return queueLoc = loc;
+        return this.queueLoc = loc;
       }
     }
   };
 
   Handwrite.mouseUpDrawing = function() {
-    if (typeof item !== "undefined" && item !== null) {
-      item.restoreAllDrawingSurface();
-      item.endDraw(zindex);
-      item.setupDragAndResizeEvents();
+    if (this.item != null) {
+      this.item.restoreAllDrawingSurface();
+      this.item.endDraw(this.zindex);
+      this.item.setupDragAndResizeEvents();
       WorktableCommon.changeMode(Constant.Mode.DRAW);
-      item.saveObj(true);
-      return zindex += 1;
+      this.item.saveObj(true);
+      return this.zindex += 1;
     }
   };
 

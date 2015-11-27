@@ -120,9 +120,20 @@ Sidebar = (function() {
   };
 
   Sidebar.openItemEditConfig = function(target) {
-    var _initOptionMenu, emt, obj;
+    var emt, obj;
     emt = $(target);
     obj = instanceMap[emt.attr('id')];
+    this.initItemEditConfig(obj);
+    if (obj instanceof CssItemBase) {
+      this.switchSidebarConfig(this.Type.CSS);
+    } else if (obj instanceof CanvasItemBase) {
+      this.switchSidebarConfig(this.Type.CANVAS);
+    }
+    return this.openConfigSidebar(target);
+  };
+
+  Sidebar.initItemEditConfig = function(obj) {
+    var _initOptionMenu;
     _initOptionMenu = function() {
       if ((obj != null) && (obj.setupOptionMenu != null)) {
         obj.setupOptionMenu();
@@ -131,14 +142,8 @@ Sidebar = (function() {
         return obj.showOptionMenu();
       }
     };
-    if (obj instanceof CssItemBase) {
-      this.switchSidebarConfig(this.Type.CSS);
-    } else if (obj instanceof CanvasItemBase) {
-      this.switchSidebarConfig(this.Type.CANVAS);
-    }
     ColorPickerUtil.initColorPickerValue();
-    _initOptionMenu();
-    return this.openConfigSidebar(target);
+    return _initOptionMenu();
   };
 
   return Sidebar;
