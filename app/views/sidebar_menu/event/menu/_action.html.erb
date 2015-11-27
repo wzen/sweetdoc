@@ -1,0 +1,21 @@
+<div class="config te_div action_div" style="display: none">
+  <div class="configBox">
+    <div class="event-config-headliner">Action</div>
+    <div class="forms action_forms">
+      <% common_actions.each do |c| %>
+          <!-- アクション名一覧 -->
+          <div class="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>" style="display: none">
+            <% c.common_action_events.each do |a| %>
+                <%=
+                    render 'sidebar_menu/event/parts/method',
+                           action_type_id: a.action_type_id,
+                           method_name: a.method_name,
+                           radio_name: Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
+                           value_class_name: Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
+                %>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>

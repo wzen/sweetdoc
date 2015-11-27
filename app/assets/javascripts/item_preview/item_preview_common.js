@@ -27,9 +27,14 @@ ItemPreviewCommon = (function() {
         return window.scrollContentsScrollTimer = null;
       }, 500);
     });
-    Handwrite.initHandwrite();
+    ItemPreviewHandwrite.initHandwrite();
     Common.applyEnvironmentFromPagevalue();
     return WorktableCommon.updateMainViewSize();
+  };
+
+  ItemPreviewCommon.initAfterLoadItem = function() {
+    window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
+    return WorktableCommon.changeMode(Constant.Mode.DRAW);
   };
 
   return ItemPreviewCommon;

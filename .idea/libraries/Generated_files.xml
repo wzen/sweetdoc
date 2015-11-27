@@ -17,6 +17,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/scroll.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/user/user.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_handwrite.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_setting.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
@@ -118,6 +119,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/scroll.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/user/user.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_setting.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />

@@ -82,5 +82,6 @@
 //= require worktable/event/timeline
 //= require worktable/handwrite
 //= require item_preview/item_preview_common
+//= require item_preview/item_preview_handwrite
 //= require item_preview/item_preview
 

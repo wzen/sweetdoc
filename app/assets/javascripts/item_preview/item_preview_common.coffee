@@ -28,9 +28,16 @@ class ItemPreviewCommon
     # ナビバー
     #Navbar.initWorktableNavbar()
     # ドラッグ描画イベント
-    Handwrite.initHandwrite()
+    ItemPreviewHandwrite.initHandwrite()
     # 環境設定
     Common.applyEnvironmentFromPagevalue()
     # Mainビュー高さ設定
     WorktableCommon.updateMainViewSize()
+
+  # 初期化
+  @initAfterLoadItem = ->
+    # 描画モード
+    window.selectItemMenu = ItemPreviewTemp.ITEM_ID
+    WorktableCommon.changeMode(Constant.Mode.DRAW)
+
 

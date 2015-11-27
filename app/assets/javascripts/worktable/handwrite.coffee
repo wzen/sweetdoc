@@ -2,6 +2,7 @@ class Handwrite
 
   # 手書きイベント初期化
   @initHandwrite = ->
+    self = @
     drag = false
     click = false
     lastX = null; lastY = null
@@ -19,48 +20,6 @@ class Handwrite
     _windowToCanvas = (canvas, x, y) ->
       bbox = canvas.getBoundingClientRect()
       return {x: x - bbox.left * (canvas.width  / bbox.width), y: y - bbox.top  * (canvas.height / bbox.height)}
-
-    # マウスダウン時の描画イベント
-    # @param [Array] loc Canvas座標
-    _mouseDownDrawing = (loc) ->
-      # プレビューを停止して再描画
-      WorktableCommon.reDrawAllInstanceItemIfChanging()
-      if selectItemMenu?
-        item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
-        window.instanceMap[item.id] = item
-        item.saveDrawingSurface()
-        WorktableCommon.changeMode(Constant.Mode.DRAW)
-        item.startDraw()
-
-    # マウスドラッグ時の描画イベント
-    # @param [Array] loc Canvas座標
-    _mouseMoveDrawing = (loc) ->
-      if item?
-        if enableMoveEvent
-          enableMoveEvent = false
-          drag = true
-          item.draw(loc)
-
-          # 待ちキューがある場合はもう一度実行
-          if queueLoc != null
-            q = queueLoc
-            queueLoc = null
-            item.draw(q)
-
-          enableMoveEvent = true
-        else
-          # 待ちキューに保存
-          queueLoc = loc
-
-    # マウスアップ時の描画イベント
-    _mouseUpDrawing = ->
-      if item?
-        item.restoreAllDrawingSurface()
-        item.endDraw(zindex)
-        item.setupDragAndResizeEvents()
-        WorktableCommon.changeMode(Constant.Mode.DRAW)
-        item.saveObj(true)
-        zindex += 1
 
     # 手書きイベントを設定
     do =>
@@ -89,7 +48,7 @@ class Handwrite
           click = true
           if mode == Constant.Mode.DRAW
             e.preventDefault()
-            _mouseDownDrawing(loc)
+            self.mouseDownDrawing(loc)
           else if mode == Constant.Mode.OPTION
             # サイドバーを閉じる
             Sidebar.closeSidebar()
@@ -105,7 +64,7 @@ class Handwrite
               Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
             if mode == Constant.Mode.DRAW
               e.preventDefault()
-              _mouseMoveDrawing(loc)
+              self.mouseMoveDrawing(loc)
             _saveLastLoc(loc)
 
       # マウスアップイベント
@@ -114,6 +73,50 @@ class Handwrite
         if e.which == 1 #左クリック
           if drag && mode == Constant.Mode.DRAW
             e.preventDefault()
-            _mouseUpDrawing()
+            self.mouseUpDrawing()
         drag = false
         click = false
+
+
+  # マウスダウン時の描画イベント
+  # @param [Array] loc Canvas座標
+  @mouseDownDrawing = (loc) ->
+    # プレビューを停止して再描画
+    WorktableCommon.reDrawAllInstanceItemIfChanging()
+    if selectItemMenu?
+      item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
+      window.instanceMap[item.id] = item
+      item.saveDrawingSurface()
+      WorktableCommon.changeMode(Constant.Mode.DRAW)
+      item.startDraw()
+
+  # マウスドラッグ時の描画イベント
+  # @param [Array] loc Canvas座標
+  @mouseMoveDrawing = (loc) ->
+    if item?
+      if enableMoveEvent
+        enableMoveEvent = false
+        drag = true
+        item.draw(loc)
+
+        # 待ちキューがある場合はもう一度実行
+        if queueLoc != null
+          q = queueLoc
+          queueLoc = null
+          item.draw(q)
+
+        enableMoveEvent = true
+      else
+        # 待ちキューに保存
+        queueLoc = loc
+
+  # マウスアップ時の描画イベント
+  @mouseUpDrawing = ->
+    if item?
+      item.restoreAllDrawingSurface()
+      item.endDraw(zindex)
+      item.setupDragAndResizeEvents()
+      WorktableCommon.changeMode(Constant.Mode.DRAW)
+      item.saveObj(true)
+      zindex += 1
+

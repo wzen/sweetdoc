@@ -17,9 +17,8 @@ $(function() {
     return timer = setInterval((function(_this) {
       return function() {
         if (typeof ItemPreviewTemp !== "undefined" && ItemPreviewTemp !== null) {
-          window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
-          WorktableCommon.changeMode(Constant.Mode.DRAW);
           clearInterval(timer);
+          ItemPreviewCommon.initAfterLoadItem();
         }
         count += 1;
         if (count >= 100) {

@@ -1,103 +1,19 @@
 <%
-   # TODO: 修正予定
-
-   common_actions = @common_actions
-   common_actions = [] if common_actions.nil?
    is_item_preview = @is_item_preview
    is_item_preview = false if is_item_preview.nil?
 %>
 
 <div class="event">
   <% unless is_item_preview %>
-    <div class="config">
-        <div class="configBox">
-            <div class="event-config-headliner">Target</div>
-            <div class="forms">
-                <!-- イベント対象一覧 -->
-                <!-- ワークスペース読み込み時に設定 -->
-                <select class="form-control te_item_select" name="te_item_select">
-                    <option value="">(Select)</option>
-                    <optgroup label="<%= I18n.t('config.select_opt_group.common') %>">
-                    <% common_actions.each do |c| %>
-                      <option value="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>"><%= t(c.name) %></option>
-                    <% end %>
-                    </optgroup>
-                </select>
-            </div>
-        </div>
-    </div>
+      <%= render 'sidebar_menu/event/menu/target_select' %>
   <% end %>
-  <div class="config te_div item_common_div" style="display: none">
-    <%= render 'sidebar_menu/event/parts/item_common' %>
-  </div>
-    <div class="config te_div action_div" style="display: none">
-        <div class="configBox">
-            <div class="event-config-headliner">Action</div>
-            <div class="forms action_forms">
-                <% common_actions.each do |c| %>
-                    <!-- アクション名一覧 -->
-                    <div class="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>" style="display: none">
-                        <% c.common_action_events.each do |a| %>
-                            <%=
-                                render 'sidebar_menu/event/parts/method',
-                                       action_type_id: a.action_type_id,
-                                       method_name: a.method_name,
-                                       radio_name: Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s),
-                                       value_class_name: Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name)
-                            %>
-                        <% end %>
-                    </div>
-                <% end %>
-            </div>
-        </div>
-    </div>
-
-    <div class="config te_div parallel_div" style="display: none">
-        <div class="configBox">
-            <div class="event-config-headliner">Sync</div>
-            <div class="forms">
-                <!-- 同時実行 -->
-                <label><input class="parallel" name="parallel" type="checkbox">Sync with previous event</label>
-            </div>
-        </div>
-    </div>
-
-    <div class="config te_div handler_div" style="display: none">
-        <div class="configBox">
-            <% common_actions.each do |c| %>
-                <% c.common_action_events.each do |a| %>
-                    <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
-                        <% if a.action_type_id == Const::ActionType::SCROLL  %>
-                            <%= render 'sidebar_menu/event/parts/handler_scroll' %>
-                        <% elsif a.action_type_id == Const::ActionType::CLICK %>
-                            <%= render 'sidebar_menu/event/parts/handler_click' %>
-                        <% end %>
-                    </div>
-                <% end %>
-            <% end %>
-         </div>
-    </div>
-
-    <div class="config te_div values_div" style="display: none">
-        <div class="configBox">
-            <div class="event-config-headliner">Value</div>
-            <div class="forms value_forms">
-                <!-- イベント毎の設定値 -->
-            </div>
-            <div class="forms">
-                <button class="push button reset" style="margin-top: 10px">reset change</button><br/>
-                <button class="push button apply" style="margin-top: 10px">Apply</button><br/>
-                <button class="push button cancel" style="margin-top: 10px">Close(Not apply)</button>
-                <input class="confirm" type="hidden" value="OK?(Confirm)">
-                <!-- エラー (暫定でこの位置) -->
-                <div class="event_config_error error-message">
-                    <div><p></p></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="values"></div>
+  <%= render 'sidebar_menu/event/menu/item_common' %>
+  <%= render 'sidebar_menu/event/menu/action' %>
+  <%= render 'sidebar_menu/event/menu/sync' %>
+  <%= render 'sidebar_menu/event/menu/handler' %>
+  <%= render 'sidebar_menu/event/menu/value' %>
+  <%= render 'sidebar_menu/event/menu/buttons' %>
+  <div class="values"></div>
 </div>
 
 <div class="method_temp">
