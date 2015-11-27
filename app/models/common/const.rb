@@ -84,6 +84,8 @@ class Const
 
   class ElementAttribute
     MAIN_TEMP_ID = 'main_temp'
+    MAIN_TEMP_WORKTABLE_CLASS = 'main_temp_ws'
+    MAIN_TEMP_RUN_CLASS = 'main_temp_run'
     NAVBAR_ROOT = 'nav'
     SIDEBAR_TAB_ROOT = 'tab-config'
     RUN_CSS = 'run_css_@pagenum'

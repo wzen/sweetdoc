@@ -651,7 +651,7 @@ EventConfig = (function() {
     var eId, emt, te;
     eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
     emt = $('#' + eId);
-    te = new EventConfig(emt, te_num);
+    te = new this(emt, te_num);
     return (function(_this) {
       return function() {
         var em;

@@ -2,25 +2,17 @@
   <div id="screen_wrapper">
     <div id="project_wrapper" class="border">
       <div id="project_contents">
-        <div id="<%= Const::Paging::ROOT_ID %>">
-          <div class="section">
-            <div class="main-wrapper">
-              <div class="scroll_wrapper">
-                <div class="scroll_contents">
-                  <div class="scroll_inside_wrapper">
-                    <div class="scroll_background">
-                      <div class="scroll_inside"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <canvas class="canvas_container canvas" style="z-index: <%= Const::Zindex::EVENTBOTTOM %>"></canvas>
-            </div>
-          </div>
-        </div>
+        <div id="<%= Const::Paging::ROOT_ID %>"></div>
       </div>
     </div>
   </div>
+</div>
+
+<div class="<%= Const::ElementAttribute::MAIN_TEMP_WORKTABLE_CLASS %>">
+  <%= render 'worktable/worktable_contents_temp' %>
+</div>
+<div class="<%= Const::ElementAttribute::MAIN_TEMP_RUN_CLASS %>">
+  <%= render 'run/run_contents_temp' %>
 </div>
 
 <%= render 'base/indicator' %>

@@ -2,7 +2,40 @@
 var ItemPreviewCommon;
 
 ItemPreviewCommon = (function() {
+  var constant;
+
   function ItemPreviewCommon() {}
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    ItemPreviewCommon.MAIN_TEMP_WORKTABLE_CLASS = constant.ElementAttribute.MAIN_TEMP_WORKTABLE_CLASS;
+    ItemPreviewCommon.MAIN_TEMP_RUN_CLASS = constant.ElementAttribute.MAIN_TEMP_RUN_CLASS;
+  }
+
+  ItemPreviewCommon.createdMainContainerIfNeeded = function() {
+    var container, markClass, root, temp;
+    root = $("#" + Constant.Paging.ROOT_ID);
+    markClass = '';
+    if (isWorkTable) {
+      markClass = 'ws';
+    } else {
+      markClass = 'run';
+    }
+    container = $("." + markClass, root);
+    if ((container == null) || container.length === 0) {
+      root.empty();
+      if (isWorkTable) {
+        temp = $("." + ItemPreviewCommon.MAIN_TEMP_WORKTABLE_CLASS + ":first").children(':first').clone(true);
+      } else {
+        temp = $("." + ItemPreviewCommon.MAIN_TEMP_RUN_CLASS + ":first").children(':first').clone(true);
+      }
+      temp = $(temp).wrap("<div class='" + markClass + " section'></div>").parent();
+      root.append(temp);
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   ItemPreviewCommon.initMainContainerAsWorktable = function() {
     CommonVar.itemPreviewVar();
@@ -32,9 +65,50 @@ ItemPreviewCommon = (function() {
     return WorktableCommon.updateMainViewSize();
   };
 
+  ItemPreviewCommon.initMainContainerAsRun = function() {};
+
   ItemPreviewCommon.initAfterLoadItem = function() {
     window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
     return WorktableCommon.changeMode(Constant.Mode.DRAW);
+  };
+
+  ItemPreviewCommon.initEvent = function() {
+    $('#run_btn_wrapper .run_btn').off('click').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        if (window.isWorkTable) {
+          window.isWorkTable = false;
+          return _this.switchRun(function() {
+            $('#run_btn_wrapper').hide();
+            return $('#stop_btn_wrapper').show();
+          });
+        }
+      };
+    })(this));
+    return $('#stop_btn_wrapper .stop_btn').off('click').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        if (!window.isWorkTable) {
+          window.isWorkTable = true;
+          return _this.switchWorktable(function() {
+            $('#run_btn_wrapper').show();
+            return $('#stop_btn_wrapper').hide();
+          });
+        }
+      };
+    })(this));
+  };
+
+  ItemPreviewCommon.switchWorktable = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+  };
+
+  ItemPreviewCommon.switchRun = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
   };
 
   return ItemPreviewCommon;

@@ -1,4 +1,6 @@
-<%= render 'run/run_contents_temp' %>
+<div id="<%= Const::ElementAttribute::MAIN_TEMP_ID %>">
+  <%= render 'run/run_contents_temp' %>
+</div>
 
 <%= stylesheet_link_tag 'pipeline/gallery', media: 'all', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'pipeline/gallery_with_run', 'data-turbolinks-track' => true %>

@@ -2,9 +2,14 @@
 var Common;
 
 Common = (function() {
+  var constant;
+
   function Common() {}
 
-  Common.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    Common.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
+  }
 
   Common.checkBlowserEnvironment = function() {
     var c, e;

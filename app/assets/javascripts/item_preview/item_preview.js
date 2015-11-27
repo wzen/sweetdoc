@@ -9,6 +9,7 @@ $(function() {
   }
   CommonVar.initVarWhenLoadedView();
   CommonVar.initCommonVar();
+  ItemPreviewCommon.createdMainContainerIfNeeded();
   ItemPreviewCommon.initMainContainerAsWorktable();
   $('.coding.item_preview').ready(function() {
     var count, timer;
