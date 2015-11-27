@@ -91,6 +91,10 @@ class CodingCommon
       enableLiveAutocompletion: true
     })
 
+    editor.setKeyboardHandler('ace/keyboard/emacs')
+    if defaultValue?
+      editor.setValue(defaultValue)
+
     editor.getSession().off('change')
     editor.getSession().on('change', (e) ->
       if !window.editing[editorId]? || !window.editing[editorId]
@@ -117,9 +121,6 @@ class CodingCommon
           tab.text(name.replace(/\*/g, ''))
         )
     )
-    editor.setKeyboardHandler('ace/keyboard/emacs')
-    if defaultValue?
-      editor.setValue(defaultValue)
 
     $('.close_tab_button').off('click')
     $('.close_tab_button').on('click', ->
@@ -224,7 +225,7 @@ class CodingCommon
     contentsId = tab_li.find('.tab_button:first').attr('href').replace('#', '')
     tab_li.remove()
     $("##{contentsId}").closest('.tab-pane').remove()
-    if $('#my_tab').find('.tab_li.active').length == 0
+    if $('#my_tab').find('.tab_li').length > 0 && $('#my_tab').find('.tab_li.active').length == 0
       $('#my_tab').find('.tab_li:first').addClass('active')
       cid = $('#my_tab').find('.tab_li:first .tab_button').attr('href').replace('#', '')
       $("##{cid}").addClass('active')

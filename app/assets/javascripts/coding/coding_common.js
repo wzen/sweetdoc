@@ -124,6 +124,10 @@ CodingCommon = (function() {
       enableSnippets: true,
       enableLiveAutocompletion: true
     });
+    editor.setKeyboardHandler('ace/keyboard/emacs');
+    if (defaultValue != null) {
+      editor.setValue(defaultValue);
+    }
     editor.getSession().off('change');
     editor.getSession().on('change', function(e) {
       var name, tab;
@@ -151,10 +155,6 @@ CodingCommon = (function() {
         });
       }
     });
-    editor.setKeyboardHandler('ace/keyboard/emacs');
-    if (defaultValue != null) {
-      editor.setValue(defaultValue);
-    }
     $('.close_tab_button').off('click');
     return $('.close_tab_button').on('click', function() {
       return CodingCommon.closeTabView(this);
@@ -290,7 +290,7 @@ CodingCommon = (function() {
     contentsId = tab_li.find('.tab_button:first').attr('href').replace('#', '');
     tab_li.remove();
     $("#" + contentsId).closest('.tab-pane').remove();
-    if ($('#my_tab').find('.tab_li.active').length === 0) {
+    if ($('#my_tab').find('.tab_li').length > 0 && $('#my_tab').find('.tab_li.active').length === 0) {
       $('#my_tab').find('.tab_li:first').addClass('active');
       cid = $('#my_tab').find('.tab_li:first .tab_button').attr('href').replace('#', '');
       $("#" + cid).addClass('active');
