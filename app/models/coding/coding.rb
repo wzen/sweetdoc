@@ -4,6 +4,9 @@ require 'coding/user_gallery_coding_map'
 require 'coding/user_coding_tree'
 
 class Coding
+
+  USER_CODE_PATH = '/public/user_code/'
+
   def self.save_all(user_id, codes, tree_data)
     begin
       ActiveRecord::Base.transaction do
@@ -242,15 +245,15 @@ class Coding
           SELECT uc.code_filename as code_filename, uc.lang_type as lang_type, u.access_token as user_access_token
           FROM user_codings uc
           INNER JOIN users u ON uc.user_id = u.id
-          AND uc.id = uct.user_coding_id
-          AND u.del_flg = 0
           WHERE u.id = #{user_id}
+          AND u.del_flg = 0
           AND uc.id = #{user_coding_id}
+          AND uc.del_flg = 0
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         r = ret_sql.to_hash
         if r.count > 0
-          return _code_filepath(r.first['user_access_token'], r.first['code_filename']), r.first['lang_type']
+          return _code_urlpath(r.first['user_access_token'], r.first['code_filename']), r.first['lang_type']
         else
           return nil, nil
         end
@@ -485,11 +488,15 @@ class Coding
   end
 
   def self._code_parentdirpath(user_access_token)
-    path = File.join(Rails.root, "/user_code/#{user_access_token}")
+    File.join(Rails.root, "#{USER_CODE_PATH}#{user_access_token}")
   end
 
   def self._code_filepath(user_access_token, code_filename)
-    path = File.join(Rails.root, "/user_code/#{user_access_token}/#{code_filename}")
+    _code_parentdirpath(user_access_token) + "/#{code_filename}"
+  end
+
+  def self._code_urlpath(user_access_token, code_filename)
+    "#{USER_CODE_PATH}#{user_access_token}/#{code_filename}"
   end
 
   private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_update_code, :_replace_all_tree, :_code_filepath
