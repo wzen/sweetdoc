@@ -23,15 +23,14 @@ WorkTableCssItemExtend =
   # 描画終了
   # @param [Int] zindex z-index
   # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
+  endDraw: (zindex, show = true, callback = null) ->
     @zindex = zindex
     # スクロールビュー分のxとyを追加
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
     @applyDefaultDesign()
     @makeCss(true)
-    @drawAndMakeConfigsAndWritePageValue(show)
-    return true
+    @drawAndMakeConfigsAndWritePageValue(show, callback)
 
   # デザインツールメニュー設定
   setupDesignToolOptionMenu: ->

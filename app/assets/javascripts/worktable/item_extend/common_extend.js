@@ -6,16 +6,25 @@ WorkTableCommonInclude = {
     return this.constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
   },
   startDraw: function() {},
-  drawAndMakeConfigsAndWritePageValue: function(show) {
+  drawAndMakeConfigsAndWritePageValue: function(show, callback) {
     if (show == null) {
       show = true;
     }
-    this.reDraw(show);
-    this.makeDesignConfig();
-    if (this.constructor.defaultMethodName() != null) {
-      EPVItem.writeDefaultToPageValue(this);
-      return Timeline.refreshAllTimeline();
+    if (callback == null) {
+      callback = null;
     }
+    this.reDraw(show);
+    return this.makeDesignConfig((function(_this) {
+      return function() {
+        if (_this.constructor.defaultMethodName() != null) {
+          EPVItem.writeDefaultToPageValue(_this);
+          Timeline.refreshAllTimeline();
+        }
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   },
   drawAndMakeConfigs: function(show) {
     if (show == null) {
@@ -144,15 +153,24 @@ WorkTableCommonInclude = {
       });
     })();
   },
-  makeDesignConfig: function() {
+  makeDesignConfig: function(callback) {
     var designConfigRoot, self;
+    if (callback == null) {
+      callback = null;
+    }
     self = this;
     designConfigRoot = $('#' + this.getDesignConfigId());
     if ((designConfigRoot == null) || designConfigRoot.length === 0) {
       return DesignConfig.getDesignConfig(this, function(data) {
         var html;
-        html = $(data.html).attr('id', self.getDesignConfigId());
-        return $('#design-config').append(html);
+        designConfigRoot = $('#' + self.getDesignConfigId());
+        if ((designConfigRoot == null) || designConfigRoot.length === 0) {
+          html = $(data.html).attr('id', self.getDesignConfigId());
+          $('#design-config').append(html);
+        }
+        if (callback != null) {
+          return callback();
+        }
       });
     }
   },

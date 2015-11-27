@@ -59,10 +59,13 @@ SimpleArrowItem = (function(superClass) {
     return drawCoodToCanvas.call(this, window.drawingContext);
   };
 
-  SimpleArrowItem.prototype.endDraw = function(zindex, show) {
+  SimpleArrowItem.prototype.endDraw = function(zindex, show, callback) {
     var j, k, l, len, len1, ref, ref1;
     if (show == null) {
       show = true;
+    }
+    if (callback == null) {
+      callback = null;
     }
     if (!SimpleArrowItem.__super__.endDraw.call(this, zindex)) {
       return false;

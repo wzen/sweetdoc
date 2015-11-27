@@ -66,7 +66,7 @@ class SimpleArrowItem extends ItemBase
   # @param [Array] cood 座標
   # @param [Int] zindex z-index
   # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
+  endDraw: (zindex, show = true, callback = null) ->
     if !super(zindex)
       return false
 

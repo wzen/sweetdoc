@@ -123,27 +123,23 @@ Sidebar = (function() {
     var emt, obj;
     emt = $(target);
     obj = instanceMap[emt.attr('id')];
-    this.initItemEditConfig(obj);
     if (obj instanceof CssItemBase) {
       this.switchSidebarConfig(this.Type.CSS);
     } else if (obj instanceof CanvasItemBase) {
       this.switchSidebarConfig(this.Type.CANVAS);
     }
+    this.initItemEditConfig(obj);
+    if ((obj != null) && (obj.showOptionMenu != null)) {
+      obj.showOptionMenu();
+    }
     return this.openConfigSidebar(target);
   };
 
   Sidebar.initItemEditConfig = function(obj) {
-    var _initOptionMenu;
-    _initOptionMenu = function() {
-      if ((obj != null) && (obj.setupOptionMenu != null)) {
-        obj.setupOptionMenu();
-      }
-      if ((obj != null) && (obj.showOptionMenu != null)) {
-        return obj.showOptionMenu();
-      }
-    };
     ColorPickerUtil.initColorPickerValue();
-    return _initOptionMenu();
+    if ((obj != null) && (obj.setupOptionMenu != null)) {
+      return obj.setupOptionMenu();
+    }
   };
 
   return Sidebar;

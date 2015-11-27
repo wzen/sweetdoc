@@ -13,12 +13,15 @@ ItemPreviewHandwrite = (function(superClass) {
   ItemPreviewHandwrite.mouseUpDrawing = function() {
     if (this.item != null) {
       this.item.restoreAllDrawingSurface();
-      this.item.endDraw(this.zindex);
-      this.item.setupDragAndResizeEvents();
-      WorktableCommon.changeMode(Constant.Mode.DRAW);
-      this.item.saveObj(true);
-      this.zindex += 1;
-      return Sidebar.initItemEditConfig(this.item);
+      return this.item.endDraw(this.zindex, true, (function(_this) {
+        return function() {
+          _this.item.setupDragAndResizeEvents();
+          WorktableCommon.changeMode(Constant.Mode.DRAW);
+          _this.item.saveObj(true);
+          _this.zindex += 1;
+          return Sidebar.initItemEditConfig(_this.item);
+        };
+      })(this));
     }
   };
 

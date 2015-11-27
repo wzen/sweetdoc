@@ -26,17 +26,19 @@ WorkTableCssItemExtend = {
     }
     return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
   },
-  endDraw: function(zindex, show) {
+  endDraw: function(zindex, show, callback) {
     if (show == null) {
       show = true;
+    }
+    if (callback == null) {
+      callback = null;
     }
     this.zindex = zindex;
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
     this.applyDefaultDesign();
     this.makeCss(true);
-    this.drawAndMakeConfigsAndWritePageValue(show);
-    return true;
+    return this.drawAndMakeConfigsAndWritePageValue(show, callback);
   },
   setupDesignToolOptionMenu: function() {
     var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, ref, results, self, value, varName;

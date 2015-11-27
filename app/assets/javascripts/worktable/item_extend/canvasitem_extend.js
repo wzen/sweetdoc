@@ -2,9 +2,12 @@
 var WorkTableCanvasItemExtend;
 
 WorkTableCanvasItemExtend = {
-  endDraw: function(zindex, show) {
+  endDraw: function(zindex, show, callback) {
     if (show == null) {
       show = true;
+    }
+    if (callback == null) {
+      callback = null;
     }
     this.zindex = zindex;
     (function(_this) {
@@ -30,9 +33,14 @@ WorkTableCanvasItemExtend = {
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
     this.applyDefaultDesign();
-    this.drawAndMakeConfigsAndWritePageValue(show);
-    this.saveNewDrawedSurface();
-    return true;
+    return this.drawAndMakeConfigsAndWritePageValue(show, (function(_this) {
+      return function() {
+        _this.saveNewDrawedSurface();
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   },
   setupDesignToolOptionMenu: function() {
     var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, ref, results, self, value, varName;

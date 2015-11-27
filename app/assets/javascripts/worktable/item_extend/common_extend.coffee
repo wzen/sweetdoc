@@ -13,17 +13,19 @@ WorkTableCommonInclude =
 
   # 描画&コンフィグ作成
   # @param [Boolean] show 要素作成後に描画を表示するか
-  drawAndMakeConfigsAndWritePageValue: (show = true) ->
+  drawAndMakeConfigsAndWritePageValue: (show = true, callback = null) ->
     # 描画
     @reDraw(show)
     # コンフィグ作成
-    @makeDesignConfig()
-
-    if @constructor.defaultMethodName()?
-      # デフォルトイベントがある場合はイベント作成
-      EPVItem.writeDefaultToPageValue(@)
-      # タイムライン更新
-      Timeline.refreshAllTimeline()
+    @makeDesignConfig(=>
+      if @constructor.defaultMethodName()?
+        # デフォルトイベントがある場合はイベント作成
+        EPVItem.writeDefaultToPageValue(@)
+        # タイムライン更新
+        Timeline.refreshAllTimeline()
+      if callback?
+        callback()
+    )
 
   # 描画&コンフィグ作成
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -124,13 +126,17 @@ WorkTableCommonInclude =
       })
 
   # デザイン変更コンフィグを作成
-  makeDesignConfig: ->
+  makeDesignConfig: (callback = null) ->
     self = @
     designConfigRoot = $('#' + @getDesignConfigId())
     if !designConfigRoot? || designConfigRoot.length == 0
       DesignConfig.getDesignConfig(@, (data) ->
-        html = $(data.html).attr('id', self.getDesignConfigId())
-        $('#design-config').append(html)
+        designConfigRoot = $('#' + self.getDesignConfigId())
+        if !designConfigRoot? || designConfigRoot.length == 0
+          html = $(data.html).attr('id', self.getDesignConfigId())
+          $('#design-config').append(html)
+        if callback?
+          callback()
       )
 
   # ドラッグ中イベント

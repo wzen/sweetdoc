@@ -3,7 +3,7 @@ WorkTableCanvasItemExtend =
   # 描画終了
   # @param [Int] zindex z-index
   # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true) ->
+  endDraw: (zindex, show = true, callback = null) ->
     @zindex = zindex
 
     # TODO: 汎用的に修正
@@ -30,10 +30,12 @@ WorkTableCanvasItemExtend =
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
     @applyDefaultDesign()
-    @drawAndMakeConfigsAndWritePageValue(show)
-    # Canvas状態を保存
-    @saveNewDrawedSurface()
-    return true
+    @drawAndMakeConfigsAndWritePageValue(show, =>
+      # Canvas状態を保存
+      @saveNewDrawedSurface()
+      if callback?
+        callback()
+    )
 
   # デザインツールメニュー設定
   setupDesignToolOptionMenu: ->

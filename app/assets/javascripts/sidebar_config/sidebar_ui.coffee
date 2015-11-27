@@ -90,28 +90,24 @@ class Sidebar
   @openItemEditConfig = (target) ->
     emt = $(target)
     obj = instanceMap[emt.attr('id')]
-    # アイテム編集メニュー初期化
-    @initItemEditConfig(obj)
     # コンフィグ表示切り替え
     if obj instanceof CssItemBase
       @switchSidebarConfig(@Type.CSS)
     else if obj instanceof CanvasItemBase
       @switchSidebarConfig(@Type.CANVAS)
+    # アイテム編集メニュー初期化
+    @initItemEditConfig(obj)
+    if obj? && obj.showOptionMenu?
+      # オプションメニュー表示処理
+      obj.showOptionMenu()
     # オプションメニューを表示
     @openConfigSidebar(target)
 
   # アイテム編集メニュー初期化
   @initItemEditConfig = (obj) ->
-    # オプションメニューを初期化
-    _initOptionMenu = ->
-      if obj? && obj.setupOptionMenu?
-        # 初期化関数を呼び出す
-        obj.setupOptionMenu()
-      if obj? && obj.showOptionMenu?
-        # オプションメニュー表示処理
-        obj.showOptionMenu()
-
     # カラーピッカー値を初期化
     ColorPickerUtil.initColorPickerValue()
     # オプションメニューの値を初期化
-    _initOptionMenu()
+    if obj? && obj.setupOptionMenu?
+      # 初期化関数を呼び出す
+      obj.setupOptionMenu()

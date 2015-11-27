@@ -3,10 +3,11 @@ class ItemPreviewHandwrite extends Handwrite
   @mouseUpDrawing = ->
     if @item?
       @item.restoreAllDrawingSurface()
-      @item.endDraw(@zindex)
-      @item.setupDragAndResizeEvents()
-      WorktableCommon.changeMode(Constant.Mode.DRAW)
-      @item.saveObj(true)
-      @zindex += 1
-      # デザインコンフィグを初期化
-      Sidebar.initItemEditConfig(@item)
+      @item.endDraw(@zindex, true, =>
+        @item.setupDragAndResizeEvents()
+        WorktableCommon.changeMode(Constant.Mode.DRAW)
+        @item.saveObj(true)
+        @zindex += 1
+        # デザインコンフィグを初期化
+        Sidebar.initItemEditConfig(@item)
+      )
