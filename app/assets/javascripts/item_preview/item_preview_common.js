@@ -28,6 +28,7 @@ ItemPreviewCommon = (function() {
       }, 500);
     });
     Handwrite.initHandwrite();
+    Common.applyEnvironmentFromPagevalue();
     return WorktableCommon.updateMainViewSize();
   };
 

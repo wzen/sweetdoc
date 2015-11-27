@@ -12,7 +12,6 @@ $ ->
   # 変数初期化
   CommonVar.initVarWhenLoadedView()
   CommonVar.initCommonVar()
-
   ItemPreviewCommon.initMainContainerAsWorktable()
 
   $('.coding.item_preview').ready ->

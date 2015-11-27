@@ -29,5 +29,8 @@ class ItemPreviewCommon
     #Navbar.initWorktableNavbar()
     # ドラッグ描画イベント
     Handwrite.initHandwrite()
+    # 環境設定
+    Common.applyEnvironmentFromPagevalue()
     # Mainビュー高さ設定
     WorktableCommon.updateMainViewSize()
+
