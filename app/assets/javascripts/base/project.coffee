@@ -90,15 +90,8 @@ class Project
           # エラー
           return
 
-      # PageValue設定
-      PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName)
-      PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
-        width: parseInt(width)
-        height: parseInt(height)
-      })
-      # タイトル設定
-      Common.setTitle(projectName)
-
+      # プロジェクト情報初期化
+      Project.initProjectValue(projectName, width, height)
       # 環境設定
       Common.applyEnvironmentFromPagevalue()
 
@@ -189,3 +182,12 @@ class Project
       }
     )
 
+  @initProjectValue = (name, width, height) ->
+    # PageValue設定
+    PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, name)
+    PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
+      width: parseInt(width)
+      height: parseInt(height)
+    })
+    # タイトル設定
+    Common.setTitle(name)

@@ -13,7 +13,7 @@ ItemPreviewCommon = (function() {
   }
 
   ItemPreviewCommon.createdMainContainerIfNeeded = function() {
-    var container, markClass, root, temp;
+    var container, markClass, pageSection, root, sectionClass, temp;
     root = $("#" + Constant.Paging.ROOT_ID);
     markClass = '';
     if (isWorkTable) {
@@ -22,6 +22,8 @@ ItemPreviewCommon = (function() {
       markClass = 'run';
     }
     container = $("." + markClass, root);
+    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', 1);
+    pageSection = $("." + sectionClass, root);
     if ((container == null) || container.length === 0) {
       root.empty();
       if (isWorkTable) {
@@ -29,7 +31,7 @@ ItemPreviewCommon = (function() {
       } else {
         temp = $("." + ItemPreviewCommon.MAIN_TEMP_RUN_CLASS + ":first").children(':first').clone(true);
       }
-      temp = $(temp).wrap("<div class='" + markClass + " section'></div>").parent();
+      temp = $(temp).wrap("<div class='" + sectionClass + " " + markClass + " section'></div>").parent();
       root.append(temp);
       return true;
     } else {
@@ -41,7 +43,7 @@ ItemPreviewCommon = (function() {
     if (callback == null) {
       callback = null;
     }
-    CommonVar.itemPreviewVar();
+    CommonVar.worktableCommonVar();
     Common.updateCanvasSize();
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
     window.scrollInsideWrapper.width(window.scrollViewSize);
@@ -89,7 +91,8 @@ ItemPreviewCommon = (function() {
 
   ItemPreviewCommon.initAfterLoadItem = function() {
     window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
-    return WorktableCommon.changeMode(Constant.Mode.DRAW);
+    WorktableCommon.changeMode(Constant.Mode.DRAW);
+    return this.initEvent();
   };
 
   ItemPreviewCommon.initEvent = function() {
@@ -123,20 +126,35 @@ ItemPreviewCommon = (function() {
     if (callback == null) {
       callback = null;
     }
+    window.initDone = false;
     this.createdMainContainerIfNeeded();
     return this.initMainContainerAsWorktable(function() {
-      if (callback != null) {
-        return callback();
-      }
+      return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+        window.initDone = true;
+        if (callback != null) {
+          return callback();
+        }
+      });
     });
   };
 
   ItemPreviewCommon.switchRun = function(callback) {
+    var height, width;
     if (callback == null) {
       callback = null;
     }
+    window.initDone = false;
+    width = $('#screen_wrapper').width();
+    height = $('#screen_wrapper').height();
+    Project.initProjectValue('ItemPreviewRun', width, height);
     this.createdMainContainerIfNeeded();
     return this.initMainContainerAsRun(function() {
+      window.eventAction = null;
+      window.runPage = true;
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+      RunCommon.initMainContainer();
+      RunCommon.initEventAction();
+      window.initDone = true;
       if (callback != null) {
         return callback();
       }

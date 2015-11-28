@@ -1,11 +1,3 @@
-<%
-   l = ''
-   if @lang_type == Const::Coding::Lang::JAVASCRIPT
-     l = 'javascript'
-   elsif @lang_type == Const::Coding::Lang::COFFEESCRIPT
-     l = 'coffeescript'
-   end
-%>
 <div id="contents">
   <%= render 'item_preview/preview_main' %>
   <%= render 'item_preview/sidebar' %>
@@ -13,5 +5,5 @@
   <%= render 'base/values' %>
 </div>
 
-<script type="<%= 'text/' + l %>" src="<%= @item_source_path %>"></script>
+<script type="text/javascript" charset="UTF-8" src="<%= @item_source_path %>?ver=<%= SecureRandom.hex(8) %>"></script>
 

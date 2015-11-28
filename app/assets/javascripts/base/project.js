@@ -112,12 +112,7 @@ Project = (function() {
           return;
         }
       }
-      PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, projectName);
-      PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
-        width: parseInt(width),
-        height: parseInt(height)
-      });
-      Common.setTitle(projectName);
+      Project.initProjectValue(projectName, width, height);
       Common.applyEnvironmentFromPagevalue();
       return Project.create(projectName, width, height, function(data) {
         Navbar.setLastUpdateTime(data.updated_at);
@@ -213,6 +208,15 @@ Project = (function() {
         return console.log('project/create ajax error');
       }
     });
+  };
+
+  Project.initProjectValue = function(name, width, height) {
+    PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, name);
+    PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
+      width: parseInt(width),
+      height: parseInt(height)
+    });
+    return Common.setTitle(name);
   };
 
   return Project;

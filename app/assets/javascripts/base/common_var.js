@@ -88,28 +88,6 @@ CommonVar = (function() {
     return this.updateRunBaseElement(PageValue.getPageNum());
   };
 
-  CommonVar.itemPreviewVar = function() {
-    this.initCommonVar();
-    if (window.isWorkTable) {
-      window.messageTimer = null;
-      window.flushMessageTimer = null;
-      window.mode = Constant.Mode.NOT_SELECT;
-      window.selectedObjId = null;
-      window.runningPreview = false;
-    } else {
-      window.distX = 0;
-      window.distY = 0;
-      window.resizeTimer = false;
-      window.scrollViewSwitchZindex = {
-        'on': Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT),
-        'off': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)
-      };
-      window.disabledEventHandler = false;
-      window.firstItemFocused = false;
-    }
-    return this.updateItemPreviewBaseElement();
-  };
-
   return CommonVar;
 
 })();

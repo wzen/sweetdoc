@@ -14,6 +14,8 @@ class ItemPreviewCommon
     else
       markClass = 'run'
     container = $(".#{markClass}", root)
+    sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', 1)
+    pageSection = $(".#{sectionClass}", root)
     if !container? || container.length == 0
       # 現在のContainerを削除
       root.empty()
@@ -22,7 +24,7 @@ class ItemPreviewCommon
         temp = $(".#{ItemPreviewCommon.MAIN_TEMP_WORKTABLE_CLASS}:first").children(':first').clone(true)
       else
         temp = $(".#{ItemPreviewCommon.MAIN_TEMP_RUN_CLASS}:first").children(':first').clone(true)
-      temp = $(temp).wrap("<div class='#{markClass} section'></div>").parent()
+      temp = $(temp).wrap("<div class='#{sectionClass} #{markClass} section'></div>").parent()
       root.append(temp)
       return true
     else
@@ -31,7 +33,7 @@ class ItemPreviewCommon
   # Mainコンテナ初期化
   @initMainContainerAsWorktable = (callback = null) ->
     # 定数 & レイアウト & イベント系変数の初期化
-    CommonVar.itemPreviewVar()
+    CommonVar.worktableCommonVar()
     Common.updateCanvasSize()
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     # スクロールサイズ
@@ -79,6 +81,7 @@ class ItemPreviewCommon
     # 描画モード
     window.selectItemMenu = ItemPreviewTemp.ITEM_ID
     WorktableCommon.changeMode(Constant.Mode.DRAW)
+    @initEvent()
 
   # イベント設定
   @initEvent = ->
@@ -102,16 +105,35 @@ class ItemPreviewCommon
     )
   # WS状態に変更
   @switchWorktable = (callback = null) ->
+    window.initDone = false
     @createdMainContainerIfNeeded()
-    @initMainContainerAsWorktable(->
-      if callback?
-        callback()
+    @initMainContainerAsWorktable( ->
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+        window.initDone = true
+        if callback?
+          callback()
+      )
     )
 
   # Run状態に変更
   @switchRun = (callback = null) ->
+    window.initDone = false
+    # プロジェクトサイズ設定
+    width = $('#screen_wrapper').width()
+    height = $('#screen_wrapper').height()
+    Project.initProjectValue('ItemPreviewRun', width, height)
     @createdMainContainerIfNeeded()
-    @initMainContainerAsRun(->
+    @initMainContainerAsRun( ->
+      window.eventAction = null
+      window.runPage = true
+      # Mainコンテナ作成
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+      # コンテナ初期化
+      RunCommon.initMainContainer()
+      # イベント初期化
+      RunCommon.initEventAction()
+      # 初期化終了
+      window.initDone = true
       if callback?
         callback()
     )

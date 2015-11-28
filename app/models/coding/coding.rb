@@ -6,6 +6,7 @@ require 'coding/user_coding_tree'
 class Coding
 
   USER_CODE_PATH = '/user_code/'
+  COFFEESCRIPT_SUFFIX = '_cobase'
 
   def self.save_all(user_id, codes, tree_data)
     begin
@@ -180,6 +181,9 @@ class Coding
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
           filepath = _code_filepath(user_access_token, m['code_filename'])
+          if m['lang_type'] == Const::Coding::Lang::COFFEESCRIPT
+            filepath += COFFEESCRIPT_SUFFIX
+          end
           code = ''
           File.open(filepath, 'r') do |f|
             f.each do |read_line|
@@ -221,6 +225,9 @@ class Coding
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
           filepath = _code_filepath(user_access_token, m['code_filename'])
+          if m['lang_type'] == Const::Coding::Lang::COFFEESCRIPT
+            filepath += COFFEESCRIPT_SUFFIX
+          end
           code = ''
           File.open(filepath, 'r') do |f|
             f.each do |read_line|
@@ -253,14 +260,14 @@ class Coding
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         r = ret_sql.to_hash
         if r.count > 0
-          return _code_urlpath(r.first['user_access_token'], r.first['code_filename']), r.first['lang_type']
+          return _code_urlpath(r.first['user_access_token'], r.first['code_filename'])
         else
-          return nil, nil
+          return nil
         end
       end
     rescue => e
       # 失敗
-      return nil , nil
+      return nil
     end
   end
 
@@ -380,10 +387,7 @@ class Coding
     code_filename = generate_filename(user_id)
     user_access_token = User.find(user_id)['access_token']
     FileUtils.mkdir_p(_code_parentdirpath(user_access_token)) unless File.directory?(_code_parentdirpath(user_access_token))
-    code_filepath = _code_filepath(user_access_token, code_filename)
-    File.open(code_filepath,'w') do |file|
-      file.write(code)
-    end
+    _save_code(user_access_token, code_filename, lang_type, code)
     uc = UserCoding.new({
                             user_id: user_id,
                             lang_type: lang_type,
@@ -404,10 +408,7 @@ class Coding
       uc = UserCoding.find(user_coding_id)
       if uc != nil
         code_filename = uc['code_filename']
-        code_filepath = _code_filepath(user_access_token, code_filename)
-        File.open(code_filepath, 'w') do |f|
-          f.write(code)
-        end
+        _save_code(user_access_token, code_filename, uc['lang_type'], code)
         ret << uc.id
       else
         ret << nil
@@ -497,6 +498,24 @@ class Coding
 
   def self._code_urlpath(user_access_token, code_filename)
     "#{USER_CODE_PATH}#{user_access_token}/#{code_filename}"
+  end
+
+  def self._save_code(user_access_token, code_filename, lang_type, code)
+    code_filepath = _code_filepath(user_access_token, code_filename)
+    if lang_type == Const::Coding::Lang::COFFEESCRIPT
+      coffee_filepath = code_filepath + COFFEESCRIPT_SUFFIX
+      File.open(coffee_filepath,'w+') do |f|
+        f.write(code)
+      end
+      # JSコンパイル
+      File.open(code_filepath,'w') do |f|
+        f.write(CoffeeScript.compile(File.read(coffee_filepath), bare: true))
+      end
+    else
+      File.open(code_filepath,'w') do |file|
+        file.write(code)
+      end
+    end
   end
 
   private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_update_code, :_replace_all_tree, :_code_filepath
