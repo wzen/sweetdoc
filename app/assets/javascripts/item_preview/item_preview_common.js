@@ -37,7 +37,10 @@ ItemPreviewCommon = (function() {
     }
   };
 
-  ItemPreviewCommon.initMainContainerAsWorktable = function() {
+  ItemPreviewCommon.initMainContainerAsWorktable = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     CommonVar.itemPreviewVar();
     Common.updateCanvasSize();
     $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
@@ -62,10 +65,27 @@ ItemPreviewCommon = (function() {
     });
     ItemPreviewHandwrite.initHandwrite();
     Common.applyEnvironmentFromPagevalue();
-    return WorktableCommon.updateMainViewSize();
+    WorktableCommon.updateMainViewSize();
+    if (callback != null) {
+      return callback();
+    }
   };
 
-  ItemPreviewCommon.initMainContainerAsRun = function() {};
+  ItemPreviewCommon.initMainContainerAsRun = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    CommonVar.runCommonVar();
+    RunCommon.initView();
+    RunCommon.initHandleScrollPoint();
+    Common.initResize(this.resizeEvent);
+    RunCommon.setupScrollEvent();
+    Common.applyEnvironmentFromPagevalue();
+    RunCommon.updateMainViewSize();
+    if (callback != null) {
+      return callback();
+    }
+  };
 
   ItemPreviewCommon.initAfterLoadItem = function() {
     window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
@@ -103,12 +123,24 @@ ItemPreviewCommon = (function() {
     if (callback == null) {
       callback = null;
     }
+    this.createdMainContainerIfNeeded();
+    return this.initMainContainerAsWorktable(function() {
+      if (callback != null) {
+        return callback();
+      }
+    });
   };
 
   ItemPreviewCommon.switchRun = function(callback) {
     if (callback == null) {
       callback = null;
     }
+    this.createdMainContainerIfNeeded();
+    return this.initMainContainerAsRun(function() {
+      if (callback != null) {
+        return callback();
+      }
+    });
   };
 
   return ItemPreviewCommon;

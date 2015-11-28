@@ -46,6 +46,8 @@ GalleryGrid = (function() {
 })();
 
 $(function() {
+  window.isMotionCheck = false;
+  window.isItemPreview = false;
   GalleryCommon.initView();
   $('.gallery.index').ready(function() {
     return console.log('home#index');

@@ -3,6 +3,7 @@ $(function() {
   return $('.worktable.index').ready(function() {
     var _callback, existedCache;
     window.isWorkTable = true;
+    window.isItemPreview = false;
     window.initDone = false;
     if (!Common.checkBlowserEnvironment()) {
       alert('ブラウザ非対応です。');

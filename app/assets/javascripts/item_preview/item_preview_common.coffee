@@ -29,7 +29,7 @@ class ItemPreviewCommon
       return false
 
   # Mainコンテナ初期化
-  @initMainContainerAsWorktable = ->
+  @initMainContainerAsWorktable = (callback = null) ->
     # 定数 & レイアウト & イベント系変数の初期化
     CommonVar.itemPreviewVar()
     Common.updateCanvasSize()
@@ -53,8 +53,6 @@ class ItemPreviewCommon
         window.scrollContentsScrollTimer = null
       , 500)
     )
-    # ナビバー
-    #Navbar.initWorktableNavbar()
     # ドラッグ描画イベント
     ItemPreviewHandwrite.initHandwrite()
     # 環境設定
@@ -62,8 +60,19 @@ class ItemPreviewCommon
     # Mainビュー高さ設定
     WorktableCommon.updateMainViewSize()
 
-  @initMainContainerAsRun = ->
+    if callback?
+      callback()
 
+  @initMainContainerAsRun = (callback = null) ->
+    CommonVar.runCommonVar()
+    RunCommon.initView()
+    RunCommon.initHandleScrollPoint()
+    Common.initResize(@resizeEvent)
+    RunCommon.setupScrollEvent()
+    Common.applyEnvironmentFromPagevalue()
+    RunCommon.updateMainViewSize()
+    if callback?
+      callback()
 
   # 初期化
   @initAfterLoadItem = ->
@@ -93,11 +102,19 @@ class ItemPreviewCommon
     )
   # WS状態に変更
   @switchWorktable = (callback = null) ->
-
+    @createdMainContainerIfNeeded()
+    @initMainContainerAsWorktable(->
+      if callback?
+        callback()
+    )
 
   # Run状態に変更
   @switchRun = (callback = null) ->
-
+    @createdMainContainerIfNeeded()
+    @initMainContainerAsRun(->
+      if callback?
+        callback()
+    )
 
 
 

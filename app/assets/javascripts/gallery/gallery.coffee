@@ -36,6 +36,9 @@ class GalleryGrid
     )
 
 $ ->
+  window.isMotionCheck = false
+  window.isItemPreview = false
+
   # ビュー初期化
   GalleryCommon.initView()
 
