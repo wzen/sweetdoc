@@ -12,19 +12,21 @@ ItemPreviewHandwrite = (function(superClass) {
 
   ItemPreviewHandwrite.mouseUpDrawing = function() {
     if (this.item != null) {
-      this.item.restoreAllDrawingSurface();
-      return this.item.endDraw(this.zindex, true, (function(_this) {
-        return function() {
-          _this.item.setupDragAndResizeEvents();
-          WorktableCommon.changeMode(Constant.Mode.EDIT);
-          _this.item.saveObj(true);
-          _this.zindex += 1;
-          Sidebar.initItemEditConfig(_this.item);
-          EventConfig.addEventConfigContents(_this.item.itemId);
-          return Sidebar.initEventConfig();
-        };
-      })(this));
+      if (window.scrollInside.find('.item').length === 0) {
+        this.item.restoreAllDrawingSurface();
+        this.item.endDraw(this.zindex, true, (function(_this) {
+          return function() {
+            _this.item.setupDragAndResizeEvents();
+            _this.item.saveObj(true);
+            _this.zindex += 1;
+            Sidebar.initItemEditConfig(_this.item);
+            EventConfig.addEventConfigContents(_this.item.itemId);
+            return Sidebar.initEventConfig();
+          };
+        })(this));
+      }
     }
+    return WorktableCommon.changeMode(Constant.Mode.EDIT);
   };
 
   return ItemPreviewHandwrite;
