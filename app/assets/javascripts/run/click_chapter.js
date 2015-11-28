@@ -51,10 +51,15 @@ ClickChapter = (function(superClass) {
   };
 
   ClickChapter.prototype.showGuide = function() {
+    var idleTime;
     if (!ClickChapter.__super__.showGuide.call(this)) {
       return false;
     }
     this.hideGuide();
+    idleTime = ClickGuide.IDLE_TIMER;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      idleTime = 0;
+    }
     return this.constructor.guideTimer = setTimeout((function(_this) {
       return function() {
         var items;
@@ -66,7 +71,7 @@ ClickChapter = (function(superClass) {
         });
         return ClickGuide.showGuide(items);
       };
-    })(this), ClickGuide.IDLE_TIMER);
+    })(this), idleTime);
   };
 
   ClickChapter.prototype.hideGuide = function() {

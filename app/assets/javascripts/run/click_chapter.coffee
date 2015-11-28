@@ -52,6 +52,12 @@ class ClickChapter extends Chapter
     if !super()
       return false
     @hideGuide()
+
+    idleTime = ClickGuide.IDLE_TIMER
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は即表示
+      idleTime = 0
+
     @constructor.guideTimer = setTimeout( =>
       # ガイド表示
       items = []
@@ -60,7 +66,7 @@ class ClickChapter extends Chapter
           items.push(event)
       )
       ClickGuide.showGuide(items)
-    , ClickGuide.IDLE_TIMER)
+    , idleTime)
 
   # ガイド非表示
   hideGuide: ->

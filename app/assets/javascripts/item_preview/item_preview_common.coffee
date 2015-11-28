@@ -88,55 +88,62 @@ class ItemPreviewCommon
     # ボタン
     $('#run_btn_wrapper .run_btn').off('click').on('click', (e) =>
       e.preventDefault()
-      if window.isWorkTable
-        window.isWorkTable = false
-        @switchRun( ->
-          $('#run_btn_wrapper').hide()
-          $('#stop_btn_wrapper').show()
-        )
+      @switchRun()
     )
     $('#stop_btn_wrapper .stop_btn').off('click').on('click', (e) =>
       e.preventDefault()
-      if !window.isWorkTable
-        window.isWorkTable = true
-        @switchWorktable( ->
-          $('#run_btn_wrapper').show()
-          $('#stop_btn_wrapper').hide()
-        )
+      @switchWorktable()
     )
 
   # WS状態に変更
   @switchWorktable = (callback = null) ->
-    window.initDone = false
-    GuideBase.hideGuide()
-    @createdMainContainerIfNeeded()
-    @initMainContainerAsWorktable( =>
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( =>
-        window.initDone = true
-        WorktableCommon.changeMode(Constant.Mode.EDIT)
-        if callback?
-          callback()
+    if !window.isWorkTable
+      window.isWorkTable = true
+      window.initDone = false
+      GuideBase.hideGuide()
+      @createdMainContainerIfNeeded()
+      @initMainContainerAsWorktable( =>
+        WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( =>
+          window.initDone = true
+          # コンフィグのイベントを全て有効化
+          $('#sidebar').find('.config_overlay').remove()
+          WorktableCommon.changeMode(Constant.Mode.EDIT)
+          $('#run_btn_wrapper').show()
+          $('#stop_btn_wrapper').hide()
+          if callback?
+            callback()
+        )
       )
-    )
 
   # Run状態に変更
   @switchRun = (callback = null) ->
-    window.initDone = false
-    # プロジェクトサイズ設定
-    width = $('#screen_wrapper').width()
-    height = $('#screen_wrapper').height()
-    Project.initProjectValue('ItemPreviewRun', width, height)
-    @createdMainContainerIfNeeded()
-    @initMainContainerAsRun( ->
-      window.eventAction = null
-      window.runPage = true
-      # イベント初期化
-      RunCommon.initEventAction()
-      # 初期化終了
-      window.initDone = true
-      if callback?
-        callback()
+    if window.isWorkTable
+      window.isWorkTable = false
+      window.initDone = false
+      # プロジェクトサイズ設定
+      width = $('#screen_wrapper').width()
+      height = $('#screen_wrapper').height()
+      Project.initProjectValue('ItemPreviewRun', width, height)
+      @createdMainContainerIfNeeded()
+      @initMainContainerAsRun( =>
+        window.eventAction = null
+        window.runPage = true
+        # コンフィグのイベントを全て無効化
+        @coverOverlayOnConfig()
+        # イベント初期化
+        RunCommon.initEventAction()
+        # 初期化終了
+        window.initDone = true
+        $('#run_btn_wrapper').hide()
+        $('#stop_btn_wrapper').show()
+        if callback?
+          callback()
+      )
+
+  @coverOverlayOnConfig = ->
+    style = "top:#{$('#myTabContent').position().top}px;left:#{$('#myTabContent').position().left}px;width:#{$('#myTabContent').width()}px;height:#{$('#myTabContent').height()}px;"
+    $('#sidebar').append("<div class='config_overlay' style='#{style}'></div>")
+    $('.config_overlay').off('click').on('click', (e) ->
+      e.preventDefault()
+      return
     )
-
-
-

@@ -43,6 +43,7 @@ ScrollChapter = (function(superClass) {
   };
 
   ScrollChapter.prototype.showGuide = function(calledByWillChapter) {
+    var idleTime;
     if (calledByWillChapter == null) {
       calledByWillChapter = false;
     }
@@ -50,12 +51,16 @@ ScrollChapter = (function(superClass) {
       return false;
     }
     this.hideGuide();
+    idleTime = ScrollGuide.IDLE_TIMER;
+    if ((window.isItemPreview != null) && window.isItemPreview) {
+      idleTime = 0;
+    }
     return this.constructor.guideTimer = setTimeout((function(_this) {
       return function() {
         _this.adjustGuideParams(calledByWillChapter);
         return ScrollGuide.showGuide(_this.enabledDirections, _this.forwardDirections, _this.canForward, _this.canReverse);
       };
-    })(this), ScrollGuide.IDLE_TIMER);
+    })(this), idleTime);
   };
 
   ScrollChapter.prototype.hideGuide = function() {

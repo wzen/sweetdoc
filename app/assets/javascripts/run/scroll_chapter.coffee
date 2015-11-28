@@ -37,11 +37,16 @@ class ScrollChapter extends Chapter
     if !super(calledByWillChapter)
       return false
     @hideGuide()
+    idleTime = ScrollGuide.IDLE_TIMER
+    if window.isItemPreview? && window.isItemPreview
+      # アイテムプレビュー時は即表示
+      idleTime = 0
+
     @constructor.guideTimer = setTimeout( =>
       # ガイド表示
       @adjustGuideParams(calledByWillChapter)
       ScrollGuide.showGuide(@enabledDirections, @forwardDirections, @canForward, @canReverse)
-    , ScrollGuide.IDLE_TIMER)
+    , idleTime)
 
   # ガイド非表示
   hideGuide: ->

@@ -12,7 +12,7 @@ class ItemPreviewHandwrite extends Handwrite
           # デザインコンフィグを初期化
           Sidebar.initItemEditConfig(@item)
           # イベントコンフィグを初期化
-          EventConfig.addEventConfigContents(@item.itemId)
+          ItemPreviewEventConfig.addEventConfigContents(@item.itemId)
           Sidebar.initEventConfig()
         )
 

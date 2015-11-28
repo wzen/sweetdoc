@@ -98,25 +98,13 @@ ItemPreviewCommon = (function() {
     $('#run_btn_wrapper .run_btn').off('click').on('click', (function(_this) {
       return function(e) {
         e.preventDefault();
-        if (window.isWorkTable) {
-          window.isWorkTable = false;
-          return _this.switchRun(function() {
-            $('#run_btn_wrapper').hide();
-            return $('#stop_btn_wrapper').show();
-          });
-        }
+        return _this.switchRun();
       };
     })(this));
     return $('#stop_btn_wrapper .stop_btn').off('click').on('click', (function(_this) {
       return function(e) {
         e.preventDefault();
-        if (!window.isWorkTable) {
-          window.isWorkTable = true;
-          return _this.switchWorktable(function() {
-            $('#run_btn_wrapper').show();
-            return $('#stop_btn_wrapper').hide();
-          });
-        }
+        return _this.switchWorktable();
       };
     })(this));
   };
@@ -125,20 +113,26 @@ ItemPreviewCommon = (function() {
     if (callback == null) {
       callback = null;
     }
-    window.initDone = false;
-    GuideBase.hideGuide();
-    this.createdMainContainerIfNeeded();
-    return this.initMainContainerAsWorktable((function(_this) {
-      return function() {
-        return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-          window.initDone = true;
-          WorktableCommon.changeMode(Constant.Mode.EDIT);
-          if (callback != null) {
-            return callback();
-          }
-        });
-      };
-    })(this));
+    if (!window.isWorkTable) {
+      window.isWorkTable = true;
+      window.initDone = false;
+      GuideBase.hideGuide();
+      this.createdMainContainerIfNeeded();
+      return this.initMainContainerAsWorktable((function(_this) {
+        return function() {
+          return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+            window.initDone = true;
+            $('#sidebar').find('.config_overlay').remove();
+            WorktableCommon.changeMode(Constant.Mode.EDIT);
+            $('#run_btn_wrapper').show();
+            $('#stop_btn_wrapper').hide();
+            if (callback != null) {
+              return callback();
+            }
+          });
+        };
+      })(this));
+    }
   };
 
   ItemPreviewCommon.switchRun = function(callback) {
@@ -146,19 +140,36 @@ ItemPreviewCommon = (function() {
     if (callback == null) {
       callback = null;
     }
-    window.initDone = false;
-    width = $('#screen_wrapper').width();
-    height = $('#screen_wrapper').height();
-    Project.initProjectValue('ItemPreviewRun', width, height);
-    this.createdMainContainerIfNeeded();
-    return this.initMainContainerAsRun(function() {
-      window.eventAction = null;
-      window.runPage = true;
-      RunCommon.initEventAction();
-      window.initDone = true;
-      if (callback != null) {
-        return callback();
-      }
+    if (window.isWorkTable) {
+      window.isWorkTable = false;
+      window.initDone = false;
+      width = $('#screen_wrapper').width();
+      height = $('#screen_wrapper').height();
+      Project.initProjectValue('ItemPreviewRun', width, height);
+      this.createdMainContainerIfNeeded();
+      return this.initMainContainerAsRun((function(_this) {
+        return function() {
+          window.eventAction = null;
+          window.runPage = true;
+          _this.coverOverlayOnConfig();
+          RunCommon.initEventAction();
+          window.initDone = true;
+          $('#run_btn_wrapper').hide();
+          $('#stop_btn_wrapper').show();
+          if (callback != null) {
+            return callback();
+          }
+        };
+      })(this));
+    }
+  };
+
+  ItemPreviewCommon.coverOverlayOnConfig = function() {
+    var style;
+    style = "top:" + ($('#myTabContent').position().top) + "px;left:" + ($('#myTabContent').position().left) + "px;width:" + ($('#myTabContent').width()) + "px;height:" + ($('#myTabContent').height()) + "px;";
+    $('#sidebar').append("<div class='config_overlay' style='" + style + "'></div>");
+    return $('.config_overlay').off('click').on('click', function(e) {
+      e.preventDefault();
     });
   };
 
