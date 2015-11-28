@@ -25,7 +25,7 @@ ItemPreviewCommon = (function() {
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', 1);
     pageSection = $("." + sectionClass, root);
     if ((container == null) || container.length === 0) {
-      root.empty();
+      root.children('.section').remove();
       if (isWorkTable) {
         temp = $("." + ItemPreviewCommon.MAIN_TEMP_WORKTABLE_CLASS + ":first").children(':first').clone(true);
       } else {

@@ -18,7 +18,7 @@ class ItemPreviewCommon
     pageSection = $(".#{sectionClass}", root)
     if !container? || container.length == 0
       # 現在のContainerを削除
-      root.empty()
+      root.children('.section').remove()
       # Tempからコピー
       if isWorkTable
         temp = $(".#{ItemPreviewCommon.MAIN_TEMP_WORKTABLE_CLASS}:first").children(':first').clone(true)

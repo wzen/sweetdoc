@@ -10,12 +10,10 @@ window.ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.IDENTITY = "ItemPreviewTemp";
 
+  ItemPreviewTemp.ITEM_ID = -1;
+
   if (window.loadedItemId != null) {
     ItemPreviewTemp.ITEM_ID = window.loadedItemId;
-  }
-
-  if ((window.isItemPreview != null) && window.isItemPreview) {
-    ItemPreviewTemp.ITEM_ID = 999;
   }
 
   HEADER_WIDTH = 100;

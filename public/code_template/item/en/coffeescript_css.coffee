@@ -3,10 +3,9 @@ class window.ItemPreviewTemp extends CssItemBase
   @IDENTITY = "ItemPreviewTemp"
 
   # ↓ Don't Delete
+  @ITEM_ID = -1
   if window.loadedItemId?
     @ITEM_ID = window.loadedItemId
-  if window.isItemPreview? && window.isItemPreview
-    @ITEM_ID = 999
 
   @actionProperties =
   {
