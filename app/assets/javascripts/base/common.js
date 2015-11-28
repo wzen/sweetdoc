@@ -803,6 +803,9 @@ Common = (function() {
     if (jQuery.type(itemIds) !== "array") {
       itemIds = [itemIds];
     }
+    itemIds = $.grep(itemIds, function(n) {
+      return n >= 0;
+    });
     if (itemIds.length === 0) {
       if (callback != null) {
         callback();

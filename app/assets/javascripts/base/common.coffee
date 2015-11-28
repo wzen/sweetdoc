@@ -669,6 +669,9 @@ class Common
     if jQuery.type(itemIds) != "array"
       itemIds = [itemIds]
 
+    itemIds = $.grep(itemIds, (n) ->
+      return n >= 0
+    )
     # 読み込むIDがない場合はコールバック実行して終了
     if itemIds.length == 0
       if callback?

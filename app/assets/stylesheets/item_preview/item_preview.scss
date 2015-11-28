@@ -45,11 +45,9 @@ div.stop_btn {
 }
 
 .editSelected {
-  //padding: 1px !important;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
+  border: none !important;
+}
+
+.timelineSelected {
+  border: none !important;
 }

@@ -108,10 +108,12 @@ class ItemPreviewCommon
   # WS状態に変更
   @switchWorktable = (callback = null) ->
     window.initDone = false
+    GuideBase.hideGuide()
     @createdMainContainerIfNeeded()
-    @initMainContainerAsWorktable( ->
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+    @initMainContainerAsWorktable( =>
+      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( =>
         window.initDone = true
+        WorktableCommon.changeMode(Constant.Mode.EDIT)
         if callback?
           callback()
       )

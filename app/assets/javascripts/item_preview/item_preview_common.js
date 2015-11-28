@@ -126,15 +126,19 @@ ItemPreviewCommon = (function() {
       callback = null;
     }
     window.initDone = false;
+    GuideBase.hideGuide();
     this.createdMainContainerIfNeeded();
-    return this.initMainContainerAsWorktable(function() {
-      return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-        window.initDone = true;
-        if (callback != null) {
-          return callback();
-        }
-      });
-    });
+    return this.initMainContainerAsWorktable((function(_this) {
+      return function() {
+        return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+          window.initDone = true;
+          WorktableCommon.changeMode(Constant.Mode.EDIT);
+          if (callback != null) {
+            return callback();
+          }
+        });
+      };
+    })(this));
   };
 
   ItemPreviewCommon.switchRun = function(callback) {
