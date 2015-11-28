@@ -113,6 +113,7 @@ Project = (function() {
         }
       }
       Project.initProjectValue(projectName, width, height);
+      Common.setTitle(projectName);
       Common.applyEnvironmentFromPagevalue();
       return Project.create(projectName, width, height, function(data) {
         Navbar.setLastUpdateTime(data.updated_at);
@@ -212,11 +213,10 @@ Project = (function() {
 
   Project.initProjectValue = function(name, width, height) {
     PageValue.setGeneralPageValue(PageValue.Key.PROJECT_NAME, name);
-    PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
+    return PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
       width: parseInt(width),
       height: parseInt(height)
     });
-    return Common.setTitle(name);
   };
 
   return Project;

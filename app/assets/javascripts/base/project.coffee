@@ -92,6 +92,8 @@ class Project
 
       # プロジェクト情報初期化
       Project.initProjectValue(projectName, width, height)
+      # プロジェクト名設定
+      Common.setTitle(projectName)
       # 環境設定
       Common.applyEnvironmentFromPagevalue()
 
@@ -189,5 +191,3 @@ class Project
       width: parseInt(width)
       height: parseInt(height)
     })
-    # タイトル設定
-    Common.setTitle(name)

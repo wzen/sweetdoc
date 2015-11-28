@@ -334,9 +334,7 @@ class RunCommon
     $("input[name='#{Constant.Gallery.Key.PROJECT_ID}']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
     $("input[name='#{Constant.Gallery.Key.PAGE_MAX}']", root).val(PageValue.getPageCount())
     document.upload_gallery_form.target = target
-    setTimeout( ->
-      document.upload_gallery_form.submit()
-    , 200)
+    document.upload_gallery_form.submit()
 
   # Mainコンテナ初期化
   @initMainContainer = ->
@@ -360,21 +358,22 @@ class RunCommon
 
   # タイトルを設定
   @setTitle = (title_name) ->
-    base = title_name
-    if !window.isWorkTable
-      title_name += '(Preview)'
-    $("##{Navbar.NAVBAR_ROOT}").find('.nav_title').html(title_name)
-    e = $(".#{@AttributeName.CONTENTS_TITLE_CLASSNAME}")
-    if title_name? && title_name.length > 0
-      document.title = title_name
-    else
-      document.title = window.appName
+    if title_name?
+      base = title_name
+      if !window.isWorkTable
+        title_name += '(Preview)'
+      $("##{Navbar.NAVBAR_ROOT}").find('.nav_title').html(title_name)
+      e = $(".#{@AttributeName.CONTENTS_TITLE_CLASSNAME}")
+      if title_name? && title_name.length > 0
+        document.title = title_name
+      else
+        document.title = window.appName
 
-    e = $(".#{@AttributeName.CONTENTS_TITLE_CLASSNAME}")
-    if e?
-      e.html(base)
-    else
-      e.html('')
+      e = $(".#{@AttributeName.CONTENTS_TITLE_CLASSNAME}")
+      if e?
+        e.html(base)
+      else
+        e.html('')
 
   # ページ番号を設定
   # @param [Integer] value 設定値

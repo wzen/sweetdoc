@@ -138,9 +138,11 @@ Common = (function() {
   };
 
   Common.setTitle = function(title_name) {
-    Navbar.setTitle(title_name);
-    if (!window.isWorkTable) {
-      return RunCommon.setTitle(title_name);
+    if (title_name != null) {
+      Navbar.setTitle(title_name);
+      if (!window.isWorkTable) {
+        return RunCommon.setTitle(title_name);
+      }
     }
   };
 

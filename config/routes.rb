@@ -73,6 +73,7 @@ Rails.application.routes.draw do
 
   # Upload
   post 'upload' => 'upload#index'
+  post 'upload/item'
 
   # Document
   get 'document/terms'

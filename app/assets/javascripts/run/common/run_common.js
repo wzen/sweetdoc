@@ -377,9 +377,7 @@ RunCommon = (function() {
     $("input[name='" + Constant.Gallery.Key.PROJECT_ID + "']", root).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
     $("input[name='" + Constant.Gallery.Key.PAGE_MAX + "']", root).val(PageValue.getPageCount());
     document.upload_gallery_form.target = target;
-    return setTimeout(function() {
-      return document.upload_gallery_form.submit();
-    }, 200);
+    return document.upload_gallery_form.submit();
   };
 
   RunCommon.initMainContainer = function() {
@@ -405,22 +403,24 @@ RunCommon = (function() {
 
   RunCommon.setTitle = function(title_name) {
     var base, e;
-    base = title_name;
-    if (!window.isWorkTable) {
-      title_name += '(Preview)';
-    }
-    $("#" + Navbar.NAVBAR_ROOT).find('.nav_title').html(title_name);
-    e = $("." + this.AttributeName.CONTENTS_TITLE_CLASSNAME);
-    if ((title_name != null) && title_name.length > 0) {
-      document.title = title_name;
-    } else {
-      document.title = window.appName;
-    }
-    e = $("." + this.AttributeName.CONTENTS_TITLE_CLASSNAME);
-    if (e != null) {
-      return e.html(base);
-    } else {
-      return e.html('');
+    if (title_name != null) {
+      base = title_name;
+      if (!window.isWorkTable) {
+        title_name += '(Preview)';
+      }
+      $("#" + Navbar.NAVBAR_ROOT).find('.nav_title').html(title_name);
+      e = $("." + this.AttributeName.CONTENTS_TITLE_CLASSNAME);
+      if ((title_name != null) && title_name.length > 0) {
+        document.title = title_name;
+      } else {
+        document.title = window.appName;
+      }
+      e = $("." + this.AttributeName.CONTENTS_TITLE_CLASSNAME);
+      if (e != null) {
+        return e.html(base);
+      } else {
+        return e.html('');
+      }
     }
   };
 

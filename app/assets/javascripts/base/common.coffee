@@ -106,9 +106,10 @@ class Common
 
   # タイトルを設定
   @setTitle = (title_name) ->
-    Navbar.setTitle(title_name)
-    if !window.isWorkTable
-      RunCommon.setTitle(title_name)
+    if title_name?
+      Navbar.setTitle(title_name)
+      if !window.isWorkTable
+        RunCommon.setTitle(title_name)
 
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->

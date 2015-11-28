@@ -246,6 +246,7 @@ class Const
       SHOW_CHAPTER_NUM = 'show_chapter_num'
       PAGE_NUM = 'p_n'
       SEARCH_TYPE = 'search_type'
+      USER_CODING_ID = 'user_coding_id'
     end
 
     class SearchKey
