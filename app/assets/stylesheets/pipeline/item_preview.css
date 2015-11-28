@@ -11,6 +11,8 @@
  * file per style scope.
  *
  *= require css/colorpicker
+ *= require worktable/worktable
+ *= require run/run
  *= require item_preview/item_preview
  * require_tree .
  * require_self

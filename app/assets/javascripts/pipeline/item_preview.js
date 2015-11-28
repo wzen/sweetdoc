@@ -22,7 +22,6 @@
 //= require_directory ../../../../vendor/assets/colorpicker/js
 //= require_directory ../../../../vendor/assets/deflate
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
-//= require ../../../../vendor/assets/coffeescript_serverwork/coffeescript_serverwork
 //= require_directory ./../i18n
 //= require item/generator.jquery.color.js
 //= require base/constant

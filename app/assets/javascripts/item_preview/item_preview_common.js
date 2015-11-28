@@ -80,10 +80,9 @@ ItemPreviewCommon = (function() {
     CommonVar.runCommonVar();
     RunCommon.initView();
     RunCommon.initHandleScrollPoint();
-    Common.initResize(this.resizeEvent);
     RunCommon.setupScrollEvent();
     Common.applyEnvironmentFromPagevalue();
-    RunCommon.updateMainViewSize();
+    $('#project_wrapper').removeAttr('style');
     if (callback != null) {
       return callback();
     }
@@ -151,8 +150,6 @@ ItemPreviewCommon = (function() {
     return this.initMainContainerAsRun(function() {
       window.eventAction = null;
       window.runPage = true;
-      Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-      RunCommon.initMainContainer();
       RunCommon.initEventAction();
       window.initDone = true;
       if (callback != null) {

@@ -69,10 +69,10 @@ class ItemPreviewCommon
     CommonVar.runCommonVar()
     RunCommon.initView()
     RunCommon.initHandleScrollPoint()
-    Common.initResize(@resizeEvent)
     RunCommon.setupScrollEvent()
     Common.applyEnvironmentFromPagevalue()
-    RunCommon.updateMainViewSize()
+    # ProjectWrapperの幅、高さは親に合わせる
+    $('#project_wrapper').removeAttr('style')
     if callback?
       callback()
 
@@ -85,6 +85,7 @@ class ItemPreviewCommon
 
   # イベント設定
   @initEvent = ->
+    # ボタン
     $('#run_btn_wrapper .run_btn').off('click').on('click', (e) =>
       e.preventDefault()
       if window.isWorkTable
@@ -103,6 +104,7 @@ class ItemPreviewCommon
           $('#stop_btn_wrapper').hide()
         )
     )
+
   # WS状態に変更
   @switchWorktable = (callback = null) ->
     window.initDone = false
@@ -126,10 +128,6 @@ class ItemPreviewCommon
     @initMainContainerAsRun( ->
       window.eventAction = null
       window.runPage = true
-      # Mainコンテナ作成
-      Common.createdMainContainerIfNeeded(PageValue.getPageNum())
-      # コンテナ初期化
-      RunCommon.initMainContainer()
       # イベント初期化
       RunCommon.initEventAction()
       # 初期化終了

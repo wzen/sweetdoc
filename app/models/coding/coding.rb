@@ -6,7 +6,7 @@ require 'coding/user_coding_tree'
 class Coding
 
   USER_CODE_PATH = '/user_code/'
-  COFFEESCRIPT_SUFFIX = '_cobase'
+  COFFEESCRIPT_SUFFIX = '__cbase'
 
   def self.save_all(user_id, codes, tree_data)
     begin
