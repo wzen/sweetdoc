@@ -2,12 +2,10 @@ require 'coding/user_coding'
 require 'coding/user_coding_tree'
 
 class Coding
-  COFFEESCRIPT_SUFFIX = '__cbase'
-
   def self.save_all(user_id, codes, tree_data)
     begin
       ActiveRecord::Base.transaction do
-        CodingHelper.update_code(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_id, codes)
+        UserCodeUtil.update_code(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_id, codes)
         _replace_all_tree(user_id, tree_data)
       end
       return true, I18n.t('message.database.item_state.save.success')
@@ -20,7 +18,7 @@ class Coding
   def self.update_code(user_id, codes)
     begin
       ActiveRecord::Base.transaction do
-        CodingHelper.update_code(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_id, codes)
+        UserCodeUtil.update_code(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_id, codes)
       end
       return true, I18n.t('message.database.item_state.save.success')
     rescue => e
@@ -85,7 +83,7 @@ class Coding
           end
         end
         _back_all_codes(user_id)
-        user_coding_id = CodingHelper.add_code(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_id, code)
+        user_coding_id = UserCodeUtil.add_code(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_id, code)
 
         path_array = node_path.split('/')
         np = []
@@ -176,9 +174,9 @@ class Coding
           user_access_token = m['user_access_token']
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
-          filepath = CodingHelper.code_filepath(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_access_token, m['code_filename'])
+          filepath = UserCodeUtil.code_filepath(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_access_token, m['code_filename'])
           if m['lang_type'] == Const::Coding::Lang::COFFEESCRIPT
-            filepath += COFFEESCRIPT_SUFFIX
+            filepath += UserCodeUtil::COFFEESCRIPT_SUFFIX
           end
           code = ''
           File.open(filepath, 'r') do |f|
@@ -220,9 +218,9 @@ class Coding
           user_access_token = m['user_access_token']
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
-          filepath = CodingHelper.code_filepath(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_access_token, m['code_filename'])
+          filepath = UserCodeUtil.code_filepath(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_access_token, m['code_filename'])
           if m['lang_type'] == Const::Coding::Lang::COFFEESCRIPT
-            filepath += COFFEESCRIPT_SUFFIX
+            filepath += UserCodeUtil::COFFEESCRIPT_SUFFIX
           end
           code = ''
           File.open(filepath, 'r') do |f|
@@ -256,7 +254,7 @@ class Coding
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         r = ret_sql.to_hash
         if r.count > 0
-          return CodingHelper.code_urlpath(CodingHelper::CODE_TYPE::ITEM_PREVIEW, r.first['user_access_token'], r.first['code_filename'])
+          return UserCodeUtil.code_urlpath(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, r.first['user_access_token'], r.first['code_filename'])
         else
           return nil
         end
