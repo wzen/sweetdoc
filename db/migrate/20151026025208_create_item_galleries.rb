@@ -1,6 +1,6 @@
-class CreateGalleryItems < ActiveRecord::Migration
+class CreateItemGalleries < ActiveRecord::Migration
   def change
-    create_table :gallery_items do |t|
+    create_table :item_galleries do |t|
       t.integer :created_user_id, null: false
       t.string :class_name, null: false
       t.integer :public_type, null: false

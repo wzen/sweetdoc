@@ -143,7 +143,7 @@ ActiveRecord::Schema.define(version: 20151118051402) do
     t.datetime "updated_at"
   end
 
-  create_table "gallery_items", force: true do |t|
+  create_table "item_galleries", force: true do |t|
     t.integer  "created_user_id",                 null: false
     t.string   "class_name",                      null: false
     t.integer  "category"
@@ -350,15 +350,15 @@ ActiveRecord::Schema.define(version: 20151118051402) do
 
   add_index "user_gallery_footprints", ["user_id", "gallery_id"], name: "user_gallery_footprints_index", unique: true, using: :btree
 
-  create_table "user_gallery_item_maps", force: true do |t|
+  create_table "user_item_gallery_maps", force: true do |t|
     t.integer  "user_id",                         null: false
-    t.integer  "gallery_item_id",                 null: false
+    t.integer  "item_gallery_id",                 null: false
     t.boolean  "del_flg",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "user_gallery_item_maps", ["user_id", "gallery_item_id"], name: "index_user_gallery_item_maps_on_user_id_and_gallery_item_id", unique: true, using: :btree
+  add_index "user_item_gallery_maps", ["user_id", "item_gallery_id"], name: "index_user_item_gallery_maps_on_user_id_and_item_gallery_id", unique: true, using: :btree
 
   create_table "user_pagevalues", force: true do |t|
     t.integer  "user_project_map_id",                  null: false

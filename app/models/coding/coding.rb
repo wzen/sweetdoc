@@ -1,6 +1,6 @@
-require 'coding/gallery_item'
+require 'coding/item_gallery'
 require 'coding/user_coding'
-require 'coding/user_gallery_item_map'
+require 'coding/user_item_gallery_map'
 require 'coding/user_coding_tree'
 
 class Coding
@@ -297,7 +297,7 @@ class Coding
       ActiveRecord::Base.transaction do
         uc = UserCoding.find_by(id: user_coding_id, user_id: user_id, del_flg: false)
         if uc != nil
-          ugcm = UserGalleryItemMap.find_by(user_id: user_id, del_flg: false)
+          ugcm = UserItemGalleryMap.find_by(user_id: user_id, del_flg: false)
         else
           # データ無し
           return true, I18n.t('message.database.item_state.save.error')
