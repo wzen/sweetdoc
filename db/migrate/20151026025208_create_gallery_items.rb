@@ -1,6 +1,6 @@
-class CreateGalleryCodings < ActiveRecord::Migration
+class CreateGalleryItems < ActiveRecord::Migration
   def change
-    create_table :gallery_codings do |t|
+    create_table :gallery_items do |t|
       t.integer :created_user_id, null: false
       t.string :class_name, null: false
       t.integer :category

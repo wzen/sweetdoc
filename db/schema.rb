@@ -95,35 +95,6 @@ ActiveRecord::Schema.define(version: 20151118051402) do
     t.datetime "updated_at"
   end
 
-  create_table "gallery_coding_configs", force: true do |t|
-    t.integer  "gallery_coding_id",                 null: false
-    t.integer  "config_type",                       null: false
-    t.string   "header"
-    t.string   "label"
-    t.integer  "design_type"
-    t.integer  "event_type"
-    t.string   "vars"
-    t.string   "option"
-    t.integer  "order",                             null: false
-    t.boolean  "del_flg",           default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "gallery_coding_configs", ["gallery_coding_id"], name: "index_gallery_coding_configs_on_gallery_coding_id", using: :btree
-
-  create_table "gallery_codings", force: true do |t|
-    t.integer  "created_user_id",                 null: false
-    t.string   "class_name",                      null: false
-    t.integer  "category"
-    t.integer  "public_type",                     null: false
-    t.string   "file_name",                       null: false
-    t.integer  "version",         default: 1
-    t.boolean  "del_flg",         default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "gallery_event_pagevalue_pagings", force: true do |t|
     t.integer  "gallery_id",                                 null: false
     t.integer  "page_num",                                   null: false
@@ -168,6 +139,18 @@ ActiveRecord::Schema.define(version: 20151118051402) do
   create_table "gallery_instance_pagevalues", force: true do |t|
     t.text     "data"
     t.boolean  "del_flg",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gallery_items", force: true do |t|
+    t.integer  "created_user_id",                 null: false
+    t.string   "class_name",                      null: false
+    t.integer  "category"
+    t.integer  "public_type",                     null: false
+    t.string   "file_name",                       null: false
+    t.integer  "version",         default: 1
+    t.boolean  "del_flg",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -337,16 +320,6 @@ ActiveRecord::Schema.define(version: 20151118051402) do
     t.datetime "updated_at"
   end
 
-  create_table "user_gallery_coding_maps", force: true do |t|
-    t.integer  "user_id",                           null: false
-    t.integer  "gallery_coding_id",                 null: false
-    t.boolean  "del_flg",           default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_gallery_coding_maps", ["user_id", "gallery_coding_id"], name: "index_user_gallery_coding_maps_on_user_id_and_gallery_coding_id", unique: true, using: :btree
-
   create_table "user_gallery_footprint_pagevalues", force: true do |t|
     t.text     "data"
     t.boolean  "del_flg",    default: false
@@ -376,6 +349,16 @@ ActiveRecord::Schema.define(version: 20151118051402) do
   end
 
   add_index "user_gallery_footprints", ["user_id", "gallery_id"], name: "user_gallery_footprints_index", unique: true, using: :btree
+
+  create_table "user_gallery_item_maps", force: true do |t|
+    t.integer  "user_id",                         null: false
+    t.integer  "gallery_item_id",                 null: false
+    t.boolean  "del_flg",         default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_gallery_item_maps", ["user_id", "gallery_item_id"], name: "index_user_gallery_item_maps_on_user_id_and_gallery_item_id", unique: true, using: :btree
 
   create_table "user_pagevalues", force: true do |t|
     t.integer  "user_project_map_id",                  null: false
