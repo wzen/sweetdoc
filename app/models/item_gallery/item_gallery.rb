@@ -1,7 +1,13 @@
-require 'item_gallery/user_item_gallery_map'
 require 'coding/user_coding'
+require 'item_gallery/user_item_gallery_map'
+require 'item_gallery/item_gallery_tag'
+require 'item_gallery/item_gallery_tag_map'
 
 class ItemGallery < ActiveRecord::Base
+  def self.index
+
+  end
+
   def self.save_state(
     user_id,
     user_coding_id,
@@ -40,7 +46,7 @@ class ItemGallery < ActiveRecord::Base
           if update_item_gallery_id && (ugcm = UserItemGalleryMap.find_by(user_id: user_id, item_gallery_id: update_item_gallery_id, del_flg: false))
             # 既存コードのUpdate
             # update
-            ig = ItemGallery.find(ugcm.item_gallery_id)
+            ig = ItemGallery.find(update_item_gallery_id)
             save_filename = ig.file_name
             user_code_path = "#{UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, user_access_token)}/#{save_filename}"
             File.open(user_code_path, 'w') do |file|
@@ -56,6 +62,8 @@ class ItemGallery < ActiveRecord::Base
             # Insert
             ig = ItemGallery.new({
                                      created_user_id: user_id,
+                                     title: title,
+                                     caption: caption,
                                      class_name: class_name,
                                      public_type: Const::ItemGallery::PublicType::PUBLIC,
                                      file_name: save_filename
@@ -74,6 +82,60 @@ class ItemGallery < ActiveRecord::Base
         end
       end
     rescue => e
+    end
+  end
+
+  # タグ名のレコードを新規作成
+  def self.save_tag(tags, item_gallery_id)
+    begin
+      if tags != 'null' && tags.length > 0
+        # タグ数がMAX以上のものは削除
+        tags = tags.take(Const::ItemGallery::TAG_MAX)
+
+        # タグテーブル処理
+        tag_ids = []
+        tags.each do |tag|
+          t = ItemGalleryTag.find_by(name: tag)
+          if t == nil
+            # タグを新規作成
+            t = ItemGalleryTag.new({
+                                   name: tag
+                               })
+            t.save!
+            tag_ids << t.id
+
+          else
+            # タグの重み付けを加算
+            if t.weight
+              t.weight += 1
+            else
+              t.weight = 1
+            end
+
+            t.save!
+            tag_ids << t.id
+          end
+        end
+
+        # 存在しているデータが有る場合削除
+        ItemGalleryTagMap.delete_all(item_gallery_id: item_gallery_id)
+
+        # タグマップテーブル作成
+        tag_ids.each do |tag_id|
+          # Insert
+          map = ItemGalleryTagMap.new({
+                                      item_gallery_id: item_gallery_id,
+                                      item_gallery_tag_id: tag_id
+                                  })
+          map.save!
+        end
+
+        # タグカテゴリ設定
+        ItemGalleryTag.save_tag_category(tags)
+      end
+
+    rescue => e
+      raise e
     end
   end
 end

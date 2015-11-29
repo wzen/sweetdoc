@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151118051402) do
+ActiveRecord::Schema.define(version: 20151129170857) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(version: 20151118051402) do
 
   create_table "gallery_tags", force: true do |t|
     t.string   "name",                       null: false
-    t.integer  "weight"
+    t.integer  "weight",     default: 0
     t.string   "category"
     t.boolean  "del_flg",    default: false
     t.datetime "created_at"
@@ -218,11 +218,30 @@ ActiveRecord::Schema.define(version: 20151118051402) do
 
   create_table "item_galleries", force: true do |t|
     t.integer  "created_user_id",                 null: false
+    t.string   "title",                           null: false
+    t.text     "caption"
     t.string   "class_name",                      null: false
     t.integer  "public_type",                     null: false
     t.string   "file_name",                       null: false
     t.integer  "version",         default: 1
     t.boolean  "del_flg",         default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_gallery_tag_maps", force: true do |t|
+    t.integer  "item_gallery_id",                     null: false
+    t.integer  "item_gallery_tag_id",                 null: false
+    t.boolean  "del_flg",             default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_gallery_tags", force: true do |t|
+    t.string   "name",                       null: false
+    t.integer  "weight",     default: 0
+    t.string   "category"
+    t.boolean  "del_flg",    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

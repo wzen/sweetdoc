@@ -1,6 +1,6 @@
-class CreateGalleryTags < ActiveRecord::Migration
+class CreateItemGalleryTags < ActiveRecord::Migration
   def change
-    create_table :gallery_tags do |t|
+    create_table :item_gallery_tags do |t|
       t.string :name, null: false
       t.integer :weight, default: 0
       t.string :category

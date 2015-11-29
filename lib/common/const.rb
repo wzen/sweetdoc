@@ -384,6 +384,7 @@ class Const
   end
 
   class ItemGallery
+    TAG_MAX = 3
     class PublicType
       PUBLIC = 1
       PRIVATE = 2

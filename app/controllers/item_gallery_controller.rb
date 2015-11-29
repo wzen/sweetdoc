@@ -2,6 +2,9 @@ require 'item_gallery/item_gallery'
 
 class ItemGalleryController < ApplicationController
   def index
+    # Constantの設定
+    init_const
+
   end
 
   def preview
