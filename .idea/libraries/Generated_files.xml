@@ -39,6 +39,10 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/design_config.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_gallery.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_event_config.js" />
@@ -142,6 +146,10 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/util/colorpicker.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/design_config.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_contents.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_event_config.js" />

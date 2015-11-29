@@ -256,6 +256,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
         Key.SHOW_CHAPTER_NUM = constant.Gallery.Key.SHOW_CHAPTER_NUM;
 
+        Key.USER_CODING_ID = constant.Gallery.Key.USER_CODING_ID;
+
         return Key;
 
       })();

@@ -138,6 +138,18 @@ class Navbar
       CodingCommon.saveAllCode()
     )
 
+  # アイテムプレビューナビバー初期化
+  @initItemPreviewNavbar = ->
+    navEmt = $('#nav')
+    $('.menu-upload-item', navEmt).off('click')
+    $('.menu-upload-item', navEmt).on('click', ->
+      ItemPreviewCommon.showUploadItemConfirm()
+    )
+    $('.menu-add-item', navEmt).off('click')
+    $('.menu-add-item', navEmt).on('click', ->
+      ItemPreviewCommon.showAddItemConfirm()
+    )
+
   # Drawモードに設定
   @setModeDraw = (itemId, callback = null) ->
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')

@@ -12,4 +12,8 @@
 //= require ../../../../vendor/assets/markitup/markitup/jquery.markitup
 //= require ../../../../vendor/assets/markitup/markitup/sets/html/set
 //= require base/constant
+//= require upload/upload_base
+//= require upload/upload_contents
+//= require upload/upload_item
+//= require upload/upload_common
 //= require upload/upload.js

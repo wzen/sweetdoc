@@ -82,6 +82,7 @@ class ItemPreviewCommon
     window.selectItemMenu = ItemPreviewTemp.ITEM_ID
     WorktableCommon.changeMode(Constant.Mode.DRAW)
     @initEvent()
+    Navbar.initItemPreviewNavbar()
 
   # イベント設定
   @initEvent = ->
@@ -147,3 +148,11 @@ class ItemPreviewCommon
       e.preventDefault()
       return
     )
+
+  @showUploadItemConfirm = ->
+    target = '_uploaditem'
+    window.open("about:blank", target)
+    document.upload_item_form.target = target
+    document.upload_item_form.submit()
+
+  @showAddItemConfirm = ->

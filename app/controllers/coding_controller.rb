@@ -76,7 +76,7 @@ class CodingController < ApplicationController
     # Constantの設定
     init_const
     user_id = current_or_guest_user.id
-    user_coding_id = params.require(Const::Coding::Key::USER_CODING_ID)
+    @user_coding_id = params.require(Const::Coding::Key::USER_CODING_ID)
     @item_source_path = Coding.code_filepath(user_id, user_coding_id)
   end
 

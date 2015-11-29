@@ -146,6 +146,19 @@ Navbar = (function() {
     });
   };
 
+  Navbar.initItemPreviewNavbar = function() {
+    var navEmt;
+    navEmt = $('#nav');
+    $('.menu-upload-item', navEmt).off('click');
+    $('.menu-upload-item', navEmt).on('click', function() {
+      return ItemPreviewCommon.showUploadItemConfirm();
+    });
+    $('.menu-add-item', navEmt).off('click');
+    return $('.menu-add-item', navEmt).on('click', function() {
+      return ItemPreviewCommon.showAddItemConfirm();
+    });
+  };
+
   Navbar.setModeDraw = function(itemId, callback) {
     var emtId, itemsSelectMenuEmt;
     if (callback == null) {

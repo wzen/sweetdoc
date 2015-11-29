@@ -146,6 +146,7 @@ if gon?
         @SHOW_GUIDE = constant.Gallery.Key.SHOW_GUIDE
         @SHOW_PAGE_NUM = constant.Gallery.Key.SHOW_PAGE_NUM
         @SHOW_CHAPTER_NUM = constant.Gallery.Key.SHOW_CHAPTER_NUM
+        @USER_CODING_ID = constant.Gallery.Key.USER_CODING_ID
 
       class @SearchKey
         @SHOW_HEAD = constant.Gallery.SearchKey.SHOW_HEAD

@@ -91,7 +91,8 @@ ItemPreviewCommon = (function() {
   ItemPreviewCommon.initAfterLoadItem = function() {
     window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
     WorktableCommon.changeMode(Constant.Mode.DRAW);
-    return this.initEvent();
+    this.initEvent();
+    return Navbar.initItemPreviewNavbar();
   };
 
   ItemPreviewCommon.initEvent = function() {
@@ -172,6 +173,16 @@ ItemPreviewCommon = (function() {
       e.preventDefault();
     });
   };
+
+  ItemPreviewCommon.showUploadItemConfirm = function() {
+    var target;
+    target = '_uploaditem';
+    window.open("about:blank", target);
+    document.upload_item_form.target = target;
+    return document.upload_item_form.submit();
+  };
+
+  ItemPreviewCommon.showAddItemConfirm = function() {};
 
   return ItemPreviewCommon;
 
