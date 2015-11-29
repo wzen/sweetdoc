@@ -20,6 +20,10 @@ module GetDesk
     config.i18n.default_locale = :en
     config.i18n.enforce_available_locales = true
 
+    # Encoding
     config.encoding = 'utf-8'
+
+    # lib以下のコードをロード
+    config.autoload_paths += %W(#{config.root}/lib/common)
   end
 end

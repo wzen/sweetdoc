@@ -1,5 +1,3 @@
-require 'common/const'
-
 class MotionCheckController < ApplicationController
   def index
     # リクエストサイズ表示

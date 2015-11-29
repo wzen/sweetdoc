@@ -1,4 +1,3 @@
-require 'common/const'
 require 'project/project'
 
 class WorktableController < ApplicationController

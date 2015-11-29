@@ -2,14 +2,12 @@ require 'coding/user_coding'
 require 'coding/user_coding_tree'
 
 class Coding
-
-  USER_CODE_PATH = '/user_code/'
   COFFEESCRIPT_SUFFIX = '__cbase'
 
   def self.save_all(user_id, codes, tree_data)
     begin
       ActiveRecord::Base.transaction do
-        _update_code(user_id, codes)
+        CodingHelper.update_code(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_id, codes)
         _replace_all_tree(user_id, tree_data)
       end
       return true, I18n.t('message.database.item_state.save.success')
@@ -22,7 +20,7 @@ class Coding
   def self.update_code(user_id, codes)
     begin
       ActiveRecord::Base.transaction do
-        _update_code(user_id, codes)
+        CodingHelper.update_code(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_id, codes)
       end
       return true, I18n.t('message.database.item_state.save.success')
     rescue => e
@@ -87,7 +85,7 @@ class Coding
           end
         end
         _back_all_codes(user_id)
-        user_coding_id = _add_code(user_id, code)
+        user_coding_id = CodingHelper.add_code(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_id, code)
 
         path_array = node_path.split('/')
         np = []
@@ -178,7 +176,7 @@ class Coding
           user_access_token = m['user_access_token']
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
-          filepath = _code_filepath(user_access_token, m['code_filename'])
+          filepath = CodingHelper.code_filepath(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_access_token, m['code_filename'])
           if m['lang_type'] == Const::Coding::Lang::COFFEESCRIPT
             filepath += COFFEESCRIPT_SUFFIX
           end
@@ -222,7 +220,7 @@ class Coding
           user_access_token = m['user_access_token']
           nodes = m['node_path'].split('/')
           m['name'] = nodes[nodes.length - 1]
-          filepath = _code_filepath(user_access_token, m['code_filename'])
+          filepath = CodingHelper.code_filepath(CodingHelper::CODE_TYPE::ITEM_PREVIEW, user_access_token, m['code_filename'])
           if m['lang_type'] == Const::Coding::Lang::COFFEESCRIPT
             filepath += COFFEESCRIPT_SUFFIX
           end
@@ -258,7 +256,7 @@ class Coding
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         r = ret_sql.to_hash
         if r.count > 0
-          return _code_urlpath(r.first['user_access_token'], r.first['code_filename'])
+          return CodingHelper.code_urlpath(CodingHelper::CODE_TYPE::ITEM_PREVIEW, r.first['user_access_token'], r.first['code_filename'])
         else
           return nil
         end
@@ -361,43 +359,6 @@ class Coding
     return ret_html, load_user_codings
   end
 
-  def self._add_code(user_id, c)
-    lang_type = c[Const::Coding::Key::LANG]
-    draw_type = c[Const::Coding::Key::DRAW_TYPE]
-    code = c[Const::Coding::Key::CODE]
-    code_filename = generate_filename(user_id)
-    user_access_token = User.find(user_id)['access_token']
-    FileUtils.mkdir_p(_code_parentdirpath(user_access_token)) unless File.directory?(_code_parentdirpath(user_access_token))
-    _save_code(user_access_token, code_filename, lang_type, code)
-    uc = UserCoding.new({
-                            user_id: user_id,
-                            lang_type: lang_type,
-                            draw_type: draw_type,
-                            code_filename: code_filename
-                        })
-    uc.save!
-    return uc.id
-  end
-
-  def self._update_code(user_id, codes)
-    ret = []
-    user_access_token = User.find(user_id)['access_token']
-    FileUtils.mkdir_p(_code_parentdirpath(user_access_token)) unless File.directory?(_code_parentdirpath(user_access_token))
-    codes.each do |c|
-      user_coding_id = c[Const::Coding::Key::USER_CODING_ID]
-      code = c[Const::Coding::Key::CODE]
-      uc = UserCoding.find(user_coding_id)
-      if uc != nil
-        code_filename = uc['code_filename']
-        _save_code(user_access_token, code_filename, uc['lang_type'], code)
-        ret << uc.id
-      else
-        ret << nil
-      end
-    end
-    return ret
-  end
-
   def self._back_all_codes(user_id)
     # 全てのコードを背面にする
     code_state = get_code_state(user_id)
@@ -469,36 +430,6 @@ class Coding
     UserCoding.find_by(user_id: user_id, code_filename: tmp_token).blank? ? tmp_token : generate_filename(user_id)
   end
 
-  def self._code_parentdirpath(user_access_token)
-    File.join(Rails.root, "/public#{USER_CODE_PATH}#{user_access_token}")
-  end
-
-  def self._code_filepath(user_access_token, code_filename)
-    _code_parentdirpath(user_access_token) + "/#{code_filename}"
-  end
-
-  def self._code_urlpath(user_access_token, code_filename)
-    "#{USER_CODE_PATH}#{user_access_token}/#{code_filename}"
-  end
-
-  def self._save_code(user_access_token, code_filename, lang_type, code)
-    code_filepath = _code_filepath(user_access_token, code_filename)
-    if lang_type == Const::Coding::Lang::COFFEESCRIPT
-      coffee_filepath = code_filepath + COFFEESCRIPT_SUFFIX
-      File.open(coffee_filepath,'w+') do |f|
-        f.write(code)
-      end
-      # JSコンパイル
-      File.open(code_filepath,'w') do |f|
-        f.write(CoffeeScript.compile(File.read(coffee_filepath), bare: true))
-      end
-    else
-      File.open(code_filepath,'w') do |file|
-        file.write(code)
-      end
-    end
-  end
-
-  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_add_code, :_update_code, :_replace_all_tree, :_code_filepath
+  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_replace_all_tree
 
 end

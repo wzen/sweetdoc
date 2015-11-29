@@ -1,4 +1,3 @@
-require 'common/const'
 require 'motion_check/motion_check'
 require 'gallery/gallery'
 require 'pagevalue/page_value_state'

@@ -1,5 +1,3 @@
-require 'common/const'
-
 class Run
 
   def self.setup_data(user_id, general, instance, event, footprint, page_num)

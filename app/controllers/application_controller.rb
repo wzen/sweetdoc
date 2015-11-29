@@ -1,4 +1,3 @@
-require 'common/const'
 require 'base64'
 
 class ApplicationController < ActionController::Base

@@ -1,4 +1,3 @@
-require 'common/const'
 require 'item/item'
 require 'item/item_js'
 require 'pagevalue/event_pagevalue'

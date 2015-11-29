@@ -1,6 +1,3 @@
-require 'common/const'
-require 'common/config_menu'
-
 class ConfigMenuController < ApplicationController
   def design_config
     design_config = params.fetch('designConfig', false)
