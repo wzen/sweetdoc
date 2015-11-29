@@ -30,24 +30,6 @@ class UserCodeUtil
     nil
   end
 
-  def self.add_code(type, user_id, c)
-    lang_type = c[Const::Coding::Key::LANG]
-    draw_type = c[Const::Coding::Key::DRAW_TYPE]
-    code = c[Const::Coding::Key::CODE]
-    code_filename = generate_filename(user_id)
-    user_access_token = User.find(user_id)['access_token']
-    FileUtils.mkdir_p(code_parentdirpath(type, user_access_token)) unless File.directory?(code_parentdirpath(type, user_access_token))
-    save_code(type, user_access_token, code_filename, lang_type, code)
-    uc = UserCoding.new({
-                            user_id: user_id,
-                            lang_type: lang_type,
-                            draw_type: draw_type,
-                            code_filename: code_filename
-                        })
-    uc.save!
-    return uc.id
-  end
-
   def self.update_code(type, user_id, codes)
     ret = []
     user_access_token = User.find(user_id)['access_token']

@@ -83,7 +83,7 @@ class Coding
           end
         end
         _back_all_codes(user_id)
-        user_coding_id = UserCodeUtil.add_code(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_id, code)
+        user_coding_id = _add_code(user_id, code)
 
         path_array = node_path.split('/')
         np = []
@@ -413,6 +413,24 @@ class Coding
     return uct.id
   end
 
+  def self._add_code(user_id, c)
+    lang_type = c[Const::Coding::Key::LANG]
+    draw_type = c[Const::Coding::Key::DRAW_TYPE]
+    code = c[Const::Coding::Key::CODE]
+    code_filename = generate_filename(user_id)
+    user_access_token = User.find(user_id)['access_token']
+    FileUtils.mkdir_p(UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_access_token)) unless File.directory?(UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_access_token))
+    UserCodeUtil.save_code(UserCodeUtil::CODE_TYPE::ITEM_PREVIEW, user_access_token, code_filename, lang_type, code)
+    uc = UserCoding.new({
+                            user_id: user_id,
+                            lang_type: lang_type,
+                            draw_type: draw_type,
+                            code_filename: code_filename
+                        })
+    uc.save!
+    return uc.id
+  end
+
   def self.get_tree_state(user_id)
     r = Rails.cache.read(Const::Coding::CacheKey::TREE_STATE_KEY.gsub('@user_id', user_id.to_s))
     return r ? r : {}
@@ -428,6 +446,6 @@ class Coding
     UserCoding.find_by(user_id: user_id, code_filename: tmp_token).blank? ? tmp_token : generate_filename(user_id)
   end
 
-  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_replace_all_tree
+  private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_replace_all_tree, :_add_code
 
 end

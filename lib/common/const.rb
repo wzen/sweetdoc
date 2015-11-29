@@ -382,4 +382,11 @@ class Const
       CODE_STATE_KEY = 'user_id:@user_id-codestatekey'
     end
   end
+
+  class ItemGallery
+    class PublicType
+      PUBLIC = 1
+      PRIVATE = 2
+    end
+  end
 end
