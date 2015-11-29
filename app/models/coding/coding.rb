@@ -1,6 +1,4 @@
-require 'coding/item_gallery'
 require 'coding/user_coding'
-require 'coding/user_item_gallery_map'
 require 'coding/user_coding_tree'
 
 class Coding
@@ -290,23 +288,6 @@ class Coding
     user_coding = UserCoding.where(user_id: user_id)
     load_tree_html, load_user_codings = _mk_tree_path_html(data, user_coding, tree_state, code_state)
     return load_tree_html, load_user_codings, code_state
-  end
-
-  def self.upload(user_id, user_coding_id)
-    begin
-      ActiveRecord::Base.transaction do
-        uc = UserCoding.find_by(id: user_coding_id, user_id: user_id, del_flg: false)
-        if uc != nil
-          ugcm = UserItemGalleryMap.find_by(user_id: user_id, del_flg: false)
-        else
-          # データ無し
-          return true, I18n.t('message.database.item_state.save.error')
-        end
-      end
-    rescue => e
-      # 失敗
-      return false, I18n.t('message.database.item_state.save.error')
-    end
   end
 
   def self._mk_path_treedata(user_coding_trees)
