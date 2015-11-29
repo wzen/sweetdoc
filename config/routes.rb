@@ -1,10 +1,5 @@
 Rails.application.routes.draw do
   root to: 'gallery#index'
-
-  get 'item_gallery/index'
-  get 'item_gallery/preview'
-  get 'item_gallery/add'
-
   devise_for :user, controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations'
@@ -14,7 +9,6 @@ Rails.application.routes.draw do
   post 'worktable' => 'worktable#index'
   post 'config_menu/design_config'
   post 'config_menu/event_var_modify_config'
-
   post 'coding/save_all'
   post 'coding/save_tree'
   post 'coding/update_code'
@@ -26,20 +20,14 @@ Rails.application.routes.draw do
   post 'coding/delete_node'
   get 'coding/item'
   post 'coding/item_preview'
-
   post 'project/create'
   get 'project/list'
-
   get 'motion_check' => 'motion_check#index'
   post 'motion_check' => 'motion_check#index'
   post 'motion_check/new_window'
-
   get 'run/markitup_preview'
   get 'test_move/hello'
-
   get 'parts/button_css_default'
-
-  #ajax
   post 'page_value_state/save_state'
   post 'page_value_state/load_state'
   get 'page_value_state/user_pagevalue_last_updated_list'
@@ -70,6 +58,12 @@ Rails.application.routes.draw do
       get 'thumbnail'
     end
   end
+
+  # ItemGallery
+  get 'item_gallery/index'
+  get 'item_gallery/preview'
+  post 'item_gallery/upload_user_used'
+  post 'item_gallery/save_state'
 
   # Upload
   post 'upload' => 'upload#index'
