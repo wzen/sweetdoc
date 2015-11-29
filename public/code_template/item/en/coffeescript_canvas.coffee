@@ -1,5 +1,5 @@
 # Test
-class window.ItemPreviewTemp extends CanvasItemBase
+class ItemPreviewTemp extends CanvasItemBase
   @IDENTITY = "ItemPreviewTemp"
 
   # ↓Don't Delete

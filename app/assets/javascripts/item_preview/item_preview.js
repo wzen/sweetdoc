@@ -17,7 +17,7 @@ $(function() {
     count = 0;
     return timer = setInterval((function(_this) {
       return function() {
-        if (typeof ItemPreviewTemp !== "undefined" && ItemPreviewTemp !== null) {
+        if (window[Constant.ITEM_CODING_TEMP_CLASS_NAME] != null) {
           clearInterval(timer);
           ItemPreviewCommon.initAfterLoadItem();
         }

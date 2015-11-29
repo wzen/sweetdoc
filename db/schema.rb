@@ -143,18 +143,6 @@ ActiveRecord::Schema.define(version: 20151118051402) do
     t.datetime "updated_at"
   end
 
-  create_table "item_galleries", force: true do |t|
-    t.integer  "created_user_id",                 null: false
-    t.string   "class_name",                      null: false
-    t.integer  "category"
-    t.integer  "public_type",                     null: false
-    t.string   "file_name",                       null: false
-    t.integer  "version",         default: 1
-    t.boolean  "del_flg",         default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "gallery_tag_maps", force: true do |t|
     t.integer  "gallery_id",                     null: false
     t.integer  "gallery_tag_id",                 null: false
@@ -224,6 +212,17 @@ ActiveRecord::Schema.define(version: 20151118051402) do
   create_table "item_categories", force: true do |t|
     t.integer  "item_id",     null: false
     t.integer  "category_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_galleries", force: true do |t|
+    t.integer  "created_user_id",                 null: false
+    t.string   "class_name",                      null: false
+    t.integer  "public_type",                     null: false
+    t.string   "file_name",                       null: false
+    t.integer  "version",         default: 1
+    t.boolean  "del_flg",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

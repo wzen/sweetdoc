@@ -1,5 +1,5 @@
 # Test
-class window.ItemPreviewTemp extends CssItemBase
+class ItemPreviewTemp extends CssItemBase
   @IDENTITY = "ItemPreviewTemp"
 
   # ↓ Don't Delete

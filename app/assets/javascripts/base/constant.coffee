@@ -6,6 +6,7 @@ if gon?
   class Constant
 
     @DEFAULT_BACKGROUNDCOLOR = constant.DEFAULT_BACKGROUNDCOLOR
+    @ITEM_CODING_TEMP_CLASS_NAME = constant.ITEM_CODING_TEMP_CLASS_NAME
 
     # ZIndex
     class @Zindex

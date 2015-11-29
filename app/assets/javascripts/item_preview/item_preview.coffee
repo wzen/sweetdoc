@@ -22,7 +22,7 @@ $ ->
 
     count = 0
     timer = setInterval( =>
-      if ItemPreviewTemp?
+      if window[Constant.ITEM_CODING_TEMP_CLASS_NAME]?
         clearInterval(timer)
         ItemPreviewCommon.initAfterLoadItem()
       count += 1

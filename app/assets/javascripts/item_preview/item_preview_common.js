@@ -89,7 +89,7 @@ ItemPreviewCommon = (function() {
   };
 
   ItemPreviewCommon.initAfterLoadItem = function() {
-    window.selectItemMenu = ItemPreviewTemp.ITEM_ID;
+    window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ID;
     WorktableCommon.changeMode(Constant.Mode.DRAW);
     this.initEvent();
     return Navbar.initItemPreviewNavbar();

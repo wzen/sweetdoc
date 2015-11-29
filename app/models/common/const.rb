@@ -1,6 +1,7 @@
 class Const
 
   DEFAULT_BACKGROUNDCOLOR = '#FAFAFA'
+  ITEM_CODING_TEMP_CLASS_NAME = 'ItemPreviewTemp'
 
   # 操作モード
   class Mode

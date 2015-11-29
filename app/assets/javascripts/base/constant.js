@@ -8,6 +8,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.DEFAULT_BACKGROUNDCOLOR = constant.DEFAULT_BACKGROUNDCOLOR;
 
+    Constant.ITEM_CODING_TEMP_CLASS_NAME = constant.ITEM_CODING_TEMP_CLASS_NAME;
+
     Constant.Zindex = (function() {
       function Zindex() {}
 
