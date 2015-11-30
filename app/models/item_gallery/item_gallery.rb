@@ -58,9 +58,10 @@ class ItemGallery < ActiveRecord::Base
             File.open(user_code_path, 'w') do |file|
               file.write(code)
             end
-
+            access_token = SecureRandom.urlsafe_base64
             # Insert
             ig = ItemGallery.new({
+                                     access_token: access_token,
                                      created_user_id: user_id,
                                      title: title,
                                      caption: caption,
@@ -77,11 +78,13 @@ class ItemGallery < ActiveRecord::Base
           # 成功
           return true, I18n.t('message.database.item_state.save.success')
         else
-          # データ無し
+          # 失敗
           return false, I18n.t('message.database.item_state.save.error')
         end
       end
     rescue => e
+      # 失敗
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 
@@ -136,6 +139,53 @@ class ItemGallery < ActiveRecord::Base
 
     rescue => e
       raise e
+    end
+  end
+
+  def self.code_filepath(item_gallery_access_token)
+    begin
+      ActiveRecord::Base.transaction do
+        sql =<<-"SQL"
+          SELECT u.access_token as created_user_access_token, ig.file_name as code_filename
+          FROM user u INNER JOIN item_galleries ig
+          WHERE u.id = ig.created_user_id
+          AND ig.access_token = #{item_gallery_access_token}
+          AND u.del_flg = 0
+          AND ig.del_flg = 0
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        r = ret_sql.to_hash
+        if r.count > 0
+          return UserCodeUtil.code_urlpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, r.first['created_user_access_token'], r.first['code_filename'])
+        else
+          return nil
+        end
+      end
+    rescue => e
+      # 失敗
+      return nil
+    end
+  end
+
+  def self.upload_user_used(user_id, item_gallery_access_token)
+    begin
+      # TODO:
+      ActiveRecord::Base.transaction do
+        sql =<<-"SQL"
+          SELECT u.access_token as user_access_token, ig.file_name as code_filename
+          FROM user u INNER JOIN item_galleries ig
+          WHERE u.id = #{user_id}
+          AND ig.access_token = #{item_gallery_access_token}
+          AND u.del_flg = 0
+          AND ig.del_flg = 0
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        # 成功
+        return true, I18n.t('message.database.item_state.save.success')
+      end
+    rescue => e
+      # 失敗
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 end

@@ -7,7 +7,7 @@
                         <label><%= I18n.t('upload_confirm.title') %></label>
                     </div>
                     <div>
-                        <input name="<%= Const::Gallery::Key::TITLE %>" required>
+                        <input name="<%= Const::ItemGallery::Key::TITLE %>" required>
                     </div>
                 </div>
 
@@ -16,7 +16,7 @@
                         <label><%= I18n.t('upload_confirm.caption') %></label>
                     </div>
                     <div>
-                        <textarea class="caption_markup" name="<%= Const::Gallery::Key::CAPTION %>"></textarea>
+                        <textarea class="caption_markup" name="<%= Const::ItemGallery::Key::CAPTION %>"></textarea>
                     </div>
                 </div>
                 <div class="select_tag_wrapper">
@@ -27,7 +27,7 @@
                             </ul>
                         </div>
                         <div class="select_tag_input_wrapper">
-                            <input class="select_tag_input" name="<%= Const::Gallery::Key::TAGS %>" value="" >
+                            <input class="select_tag_input" name="<%= Const::ItemGallery::Key::TAGS %>" value="" >
                         </div>
                     </div>
                 </div>
@@ -40,27 +40,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="option_wrapper">
-                    <div class="form-item">
-                        <%= check_box_tag Const::Gallery::Key::SHOW_GUIDE, true, true %>
-                        <%= label_tag I18n.t('upload_confirm.show_guide') %>
-                    </div>
-                    <div class="form-item">
-                        <%= check_box_tag Const::Gallery::Key::SHOW_PAGE_NUM %>
-                        <%= label_tag I18n.t('upload_confirm.show_page_num') %>
-                    </div>
-                    <div class="form-item">
-                        <%= check_box_tag Const::Gallery::Key::SHOW_CHAPTER_NUM %>
-                        <%= label_tag I18n.t('upload_confirm.show_chapter_num') %>
-                    </div>
-                </div>
             </div>
         </div>
-        <input name="<%= Const::Gallery::Key::USER_CODING_ID %>" type="hidden" value="<%= @user_coding_id %>">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG %>" type="hidden" value="">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE %>" type="hidden" value="">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_WIDTH %>" type="hidden" value="">
-        <input name="<%= Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT %>" type="hidden" value="">
+        <input name="<%= Const::ItemGallery::Key::USER_CODING_ID %>" type="hidden" value="<%= @user_coding_id %>">
     </div>
     <div class="button_wrapper">
         <div>

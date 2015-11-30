@@ -161,3 +161,15 @@ if gon?
         @BOOKMARK_COUNT = constant.Gallery.SearchType.BOOKMARK_COUNT
         @USER_BOOKMARK = constant.Gallery.SearchType.USER_BOOKMARK
         @CREATED = constant.Gallery.SearchType.CREATED
+
+    class @ItemGallery
+      @TAG_MAX = constant.ItemGallery.TAG_MAX
+
+      class @Key
+        @ITEM_GALLERY_ID = constant.ItemGallery.Key.GALLERY_ID
+        @ITEM_GALLERY_ACCESS_TOKEN = constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN
+        @TAGS = constant.ItemGallery.Key.TAGS
+        @TITLE = constant.ItemGallery.Key.TITLE
+        @CAPTION = constant.ItemGallery.Key.CAPTION
+        @SEARCH_TYPE = constant.ItemGallery.Key.SEARCH_TYPE
+        @USER_CODING_ID = constant.ItemGallery.Key.USER_CODING_ID

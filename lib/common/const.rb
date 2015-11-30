@@ -274,6 +274,27 @@ class Const
     end
   end
 
+
+  class ItemGallery
+    TAG_MAX = 3
+
+    class Key
+      MESSAGE = 'message'
+      ITEM_GALLERY_ID = 'igid'
+      ITEM_GALLERY_ACCESS_TOKEN = 'ig_at'
+      TAGS = 'tags'
+      TITLE = 'title'
+      CAPTION = 'caption'
+      SEARCH_TYPE = 'search_type'
+      USER_CODING_ID = 'user_coding_id'
+    end
+
+    class PublicType
+      PUBLIC = 1
+      PRIVATE = 2
+    end
+  end
+
   class EventPageValueKey
     DIST_ID = 'dist_id'
     ID = 'id'
@@ -383,11 +404,4 @@ class Const
     end
   end
 
-  class ItemGallery
-    TAG_MAX = 3
-    class PublicType
-      PUBLIC = 1
-      PRIVATE = 2
-    end
-  end
 end

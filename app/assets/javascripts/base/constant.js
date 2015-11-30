@@ -300,6 +300,36 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.ItemGallery = (function() {
+      function ItemGallery() {}
+
+      ItemGallery.TAG_MAX = constant.ItemGallery.TAG_MAX;
+
+      ItemGallery.Key = (function() {
+        function Key() {}
+
+        Key.ITEM_GALLERY_ID = constant.ItemGallery.Key.GALLERY_ID;
+
+        Key.ITEM_GALLERY_ACCESS_TOKEN = constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN;
+
+        Key.TAGS = constant.ItemGallery.Key.TAGS;
+
+        Key.TITLE = constant.ItemGallery.Key.TITLE;
+
+        Key.CAPTION = constant.ItemGallery.Key.CAPTION;
+
+        Key.SEARCH_TYPE = constant.ItemGallery.Key.SEARCH_TYPE;
+
+        Key.USER_CODING_ID = constant.ItemGallery.Key.USER_CODING_ID;
+
+        return Key;
+
+      })();
+
+      return ItemGallery;
+
+    })();
+
     return Constant;
 
   })();

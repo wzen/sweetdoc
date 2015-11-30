@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

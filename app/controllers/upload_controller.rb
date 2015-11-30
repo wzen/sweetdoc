@@ -16,6 +16,6 @@ class UploadController < ApplicationController
 
     # FIXME: ユーザ判定
     user_id = current_or_guest_user.id
-    @user_coding_id = params.require(Const::Gallery::Key::USER_CODING_ID)
+    @user_coding_id = params.require(Const::ItemGallery::Key::USER_CODING_ID)
   end
 end

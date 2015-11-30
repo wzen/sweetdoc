@@ -15,7 +15,7 @@ UploadItem = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
-    title = $("input[name='" + Constant.Gallery.Key.TITLE + "']", root).val();
+    title = $("input[name='" + Constant.ItemGallery.Key.TITLE + "']", root).val();
     if (title.length === 0) {
       return;
     }
@@ -26,9 +26,9 @@ UploadItem = (function(superClass) {
         return $(n).html();
       });
       if (tags != null) {
-        fd.append(Constant.Gallery.Key.TAGS, tags);
+        fd.append(Constant.ItemGallery.Key.TAGS, tags);
       } else {
-        fd.append(Constant.Gallery.Key.TAGS, null);
+        fd.append(Constant.ItemGallery.Key.TAGS, null);
       }
       return $.ajax({
         url: 'item_gallery/save_state',
