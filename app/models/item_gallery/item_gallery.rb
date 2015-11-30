@@ -43,10 +43,9 @@ class ItemGallery < ActiveRecord::Base
           end
           FileUtils.mkdir_p(UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, user_access_token)) unless File.directory?(UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, user_access_token))
 
-          if update_item_gallery_id && (ugcm = UserItemGalleryMap.find_by(user_id: user_id, item_gallery_id: update_item_gallery_id, del_flg: false))
+          if update_item_gallery_id && (ig = ItemGallery.find_by(created_user_id: user_id, item_gallery_id: update_item_gallery_id, del_flg: false))
             # 既存コードのUpdate
             # update
-            ig = ItemGallery.find(update_item_gallery_id)
             save_filename = ig.file_name
             user_code_path = "#{UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, user_access_token)}/#{save_filename}"
             File.open(user_code_path, 'w') do |file|
@@ -69,11 +68,7 @@ class ItemGallery < ActiveRecord::Base
                                      public_type: Const::ItemGallery::PublicType::PUBLIC,
                                      file_name: save_filename
                                  })
-            ig_id = ig.save!
-            ugcm = UserItemGalleryMap.new({user_id: user_id,
-                                           item_gallery_id: ig_id
-                                          })
-            ugcm.save!
+            ig.save!
           end
           # 成功
           return true, I18n.t('message.database.item_state.save.success')
