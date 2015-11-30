@@ -2,8 +2,13 @@ require 'item_gallery/item_gallery'
 
 class ItemGalleryController < ApplicationController
   def index
+    user_id = current_or_guest_user.id
+
     # Constantの設定
     init_const
+
+    # ItemGallery & UserItemGallery
+
 
   end
 
