@@ -1,0 +1,17 @@
+one:
+  id: 1
+  create_user_id: 1
+  modify_user_id: 1
+  title: "Button"
+  caption: ''
+  class_name: 'ButtonItem'
+  file_name: "button.js"
+
+two:
+  id: 2
+  create_user_id: 1
+  modify_user_id: 1
+  title: "Arrow"
+  caption: ''
+  class_name: 'ArrowItem'
+  file_name: "arrow.js"

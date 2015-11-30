@@ -14,6 +14,7 @@ require 'gallery/gallery_view_statistic'
 require 'gallery/gallery_bookmark'
 require 'gallery/gallery_bookmark_statistic'
 require 'pagevalue/page_value_state'
+require 'item/preload_item'
 
 class Gallery < ActiveRecord::Base
   belongs_to :user_project_map
@@ -404,7 +405,7 @@ class Gallery < ActiveRecord::Base
 
       # 必要なItemIdを調査
       itemids = PageValueState.extract_need_load_itemids(pagevalues['event_pagevalue_data'])
-      item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
+      item_js_list = ItemJs.extract_iteminfo(PreloadItem.find(itemids))
 
       # 閲覧数 & ブックマーク数を取得
       gallery_view_count = pagevalues['bookmark_count']
@@ -471,7 +472,7 @@ class Gallery < ActiveRecord::Base
         need_load_itemids = PageValueState.extract_need_load_itemids(epd)
         itemids = need_load_itemids - loaded_itemids
       end
-      item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
+      item_js_list = ItemJs.extract_iteminfo(PreloadItem.find(itemids))
 
       return true, {
           general_pagevalue: gen,
@@ -692,7 +693,7 @@ class Gallery < ActiveRecord::Base
         itemids -= loaded_itemids
       end
 
-      item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
+      item_js_list = ItemJs.extract_iteminfo(PreloadItem.find(itemids))
     end
 
     return epd, item_js_list

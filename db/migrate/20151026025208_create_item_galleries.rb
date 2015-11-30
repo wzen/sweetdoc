@@ -1,6 +1,7 @@
 class CreateItemGalleries < ActiveRecord::Migration
   def change
     create_table :item_galleries do |t|
+      t.string :access_token, null: false
       t.integer :created_user_id, null: false
       t.string :title, null: false
       t.text :caption

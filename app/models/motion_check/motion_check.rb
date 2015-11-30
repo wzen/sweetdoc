@@ -1,4 +1,4 @@
-require 'item/item'
+require 'item/preload_item'
 require 'item/item_js'
 require 'pagevalue/page_value_state'
 
@@ -51,7 +51,7 @@ class MotionCheck
       end
     end
 
-    item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
+    item_js_list = ItemJs.extract_iteminfo(PreloadItem.find(itemids))
     return true, {
         general_pagevalue: gen,
         instance_pagevalue: ins,

@@ -1,9 +1,9 @@
 class ItemJs
 
   # アイテムjsファイルのパスを取得
-  # @param [String] src_name ソースファイル名
-  def self.js_path(src_name)
-    return "#{Rails.application.config.assets.prefix}/item/#{src_name}"
+  # @param [String] file_name ソースファイル名
+  def self.js_path(file_name)
+    return "#{Rails.application.config.assets.prefix}/item/#{file_name}"
   end
 
   # itemレコードから情報を抽出する
@@ -14,7 +14,7 @@ class ItemJs
       ret <<
           {
               item_id: item.id,
-              js_src: self.js_path(item.src_name)
+              js_src: self.js_path(item.file_name)
           }
     end
 

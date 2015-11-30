@@ -1,4 +1,4 @@
-require 'item/item'
+require 'item/preload_item'
 require 'item/item_js'
 require 'pagevalue/event_pagevalue'
 require 'pagevalue/event_pagevalue_paging'
@@ -197,7 +197,7 @@ class PageValueState
         end
       end
 
-      item_js_list = ItemJs.extract_iteminfo(Item.find(itemids))
+      item_js_list = ItemJs.extract_iteminfo(PreloadItem.find(itemids))
       return true, item_js_list, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
     end
   end

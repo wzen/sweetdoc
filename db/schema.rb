@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151129170857) do
+ActiveRecord::Schema.define(version: 20151130105556) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -217,6 +217,7 @@ ActiveRecord::Schema.define(version: 20151129170857) do
   end
 
   create_table "item_galleries", force: true do |t|
+    t.string   "access_token",                    null: false
     t.integer  "created_user_id",                 null: false
     t.string   "title",                           null: false
     t.text     "caption"
@@ -246,16 +247,6 @@ ActiveRecord::Schema.define(version: 20151129170857) do
     t.datetime "updated_at"
   end
 
-  create_table "items", force: true do |t|
-    t.integer  "draw_type",      null: false
-    t.string   "name",           null: false
-    t.string   "src_name",       null: false
-    t.integer  "create_user_id", null: false
-    t.integer  "modify_user_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "locales", force: true do |t|
     t.string   "i18n_locale", null: false
     t.string   "locale_name", null: false
@@ -277,6 +268,17 @@ ActiveRecord::Schema.define(version: 20151129170857) do
     t.integer  "item_id",    null: false
     t.integer  "locale_id",  null: false
     t.string   "item_name",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "preload_items", force: true do |t|
+    t.string   "title",          null: false
+    t.text     "caption"
+    t.string   "class_name",     null: false
+    t.string   "file_name",      null: false
+    t.integer  "create_user_id", null: false
+    t.integer  "modify_user_id", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
