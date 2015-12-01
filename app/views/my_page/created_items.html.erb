@@ -2,13 +2,13 @@
     <div class="row">
         <div class="top">
             <div class="left">
-            <div class="top">
+                <div class="top">
                     <div class="left">
                         <div class="title">
-                            <%= content[Const::ItemGallery::Key::TITLE] %>
+                            <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
                         </div>
                         <div class="user">
-                            <%= content[Const::User::Key::NAME] %>
+                            <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
                         </div>
                     </div>
                 </div>

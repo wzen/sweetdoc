@@ -51,9 +51,9 @@ Rails.application.routes.draw do
   get 'gallery/index'
   get 'gallery/grid'
   get 'gallery/detail'
-  match 'gallery/detail/:access_token' => 'gallery#detail', via: :get
+  match 'gallery/detail/:g_at' => 'gallery#detail', via: :get
   get 'gallery/run_window'
-  match 'gallery/detail/w/:access_token' => 'gallery#run_window', via: :get
+  match 'gallery/detail/w/:g_at' => 'gallery#run_window', via: :get
   post 'gallery/save_state'
   post 'gallery/update_last_state'
   get 'gallery/get_contents'
@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   # ItemGallery
   get 'item_gallery/index'
   get 'item_gallery/preview'
+  match 'item_gallery/preview/:ig_at' => 'item_gallery#preview', via: :get
   post 'item_gallery/upload_user_used'
   post 'item_gallery/save_state'
 

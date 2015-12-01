@@ -13,6 +13,7 @@ class MyPage
         g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
         g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
         u.name as #{Const::User::Key::NAME},
+        u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
         group_concat(gt.name separator ',') as #{Const::Gallery::Key::TAGS}
       FROM user_project_maps upm
       INNER JOIN users u ON upm.user_id = u.id
@@ -39,6 +40,7 @@ class MyPage
         t.#{Const::ItemGallery::Key::TITLE} as #{Const::ItemGallery::Key::TITLE},
         t.#{Const::ItemGallery::Key::CAPTION} as #{Const::ItemGallery::Key::CAPTION},
         t.#{Const::User::Key::NAME} as #{Const::User::Key::NAME},
+        t.#{Const::User::Key::USER_ACCESS_TOKEN} as #{Const::User::Key::USER_ACCESS_TOKEN},
         t.#{Const::ItemGallery::Key::TAGS} as #{Const::ItemGallery::Key::TAGS},
         count(*) as #{Const::User::Key::USER_COUNT}
 　　　 FROM (
@@ -48,6 +50,7 @@ class MyPage
           ig.title as #{Const::ItemGallery::Key::TITLE},
           ig.caption as #{Const::ItemGallery::Key::CAPTION},
           u.name as #{Const::User::Key::NAME},
+          u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
           group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
         FROM item_galleries ig
         INNER JOIN users u ON ig.created_user_id = u.id
@@ -78,6 +81,7 @@ class MyPage
         g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
         g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
         u.name as #{Const::User::Key::NAME},
+        u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
         group_concat(gt.name separator ',') as #{Const::Gallery::Key::TAGS}
       FROM gallery_bookmarks gb
       INNER JOIN users u ON gb.user_id = u.id
@@ -100,6 +104,7 @@ class MyPage
         ig.title as #{Const::ItemGallery::Key::TITLE},
         ig.caption as #{Const::ItemGallery::Key::CAPTION},
         u.name as #{Const::User::Key::NAME},
+        u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
         group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
       FROM item_galleries ig
       INNER JOIN user_item_gallery_maps uigm ON ig.id = uigm.item_gallery_id
