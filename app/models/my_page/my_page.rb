@@ -2,7 +2,7 @@ require 'gallery/gallery'
 require 'item_gallery/item_gallery'
 
 class MyPage
-  def self.created_contents(user_id)
+  def self.created_contents(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT
         g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
@@ -25,12 +25,13 @@ class MyPage
       AND gtm.del_flg = 0 AND gt.del_flg = 0
       GROUP BY g.id
       ORDER BY g.updated_at DESC
+      LIMIT #{head}, #{limit}
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     return ret_sql.to_hash
   end
 
-  def self.created_items(user_id)
+  def self.created_items(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT
         t.#{Const::ItemGallery::Key::ITEM_GALLERY_ID} as #{Const::ItemGallery::Key::ITEM_GALLERY_ID},
@@ -57,6 +58,7 @@ class MyPage
         AND ig.del_flg = 0 AND igt.del_flg = 0
         GROUP BY ig.id
         ORDER BY ig.updated_at DESC
+        LIMIT #{head}, #{limit}
       ) t
       LEFT JOIN user_item_gallery_maps uigm ON t.#{Const::ItemGallery::Key::ITEM_GALLERY_ID} = uigm.item_gallery_id AND uigm.del_flg = 0
       GROUP BY t.#{Const::ItemGallery::Key::ITEM_GALLERY_ID}
@@ -65,7 +67,7 @@ class MyPage
     return ret_sql.to_hash
   end
 
-  def self.bookmarks(user_id)
+  def self.bookmarks(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT
         g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
@@ -85,12 +87,13 @@ class MyPage
       AND gtm.del_flg = 0 AND gt.del_flg = 0
       GROUP BY g.id
       ORDER BY gb.updated_at DESC
+      LIMIT #{head}, #{limit}
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     return ret_sql.to_hash
   end
 
-  def self.using_items(user_id)
+  def self.using_items(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT
         ig.access_token as #{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN},
@@ -108,6 +111,7 @@ class MyPage
       AND ig.del_flg = 0 AND igt.del_flg = 0
       GROUP BY ig.id
       ORDER BY uigm.updated_at DESC
+      LIMIT #{head}, #{limit}
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
     return ret_sql.to_hash

@@ -412,4 +412,11 @@ class Const
     end
   end
 
+  class MyPage
+    class Key
+      HEAD = 'h'
+      LIMIT = 'l'
+    end
+  end
+
 end

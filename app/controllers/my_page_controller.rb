@@ -4,9 +4,11 @@ class MyPageController < ApplicationController
 
   def created_contents
     user_id = _get_user_id
+    head = params.fetch(Const::MyPage::Key::HEAD, 0)
+    limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.created_contents(user_id)
+      @contents = MyPage.created_contents(user_id, head, limit)
     else
       # エラー
     end
@@ -14,9 +16,11 @@ class MyPageController < ApplicationController
 
   def created_items
     user_id = _get_user_id
+    head = params.fetch(Const::MyPage::Key::HEAD, 0)
+    limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.created_items(user_id)
+      @contents = MyPage.created_items(user_id, head, limit)
     else
       # エラー
     end
@@ -24,9 +28,11 @@ class MyPageController < ApplicationController
 
   def bookmarks
     user_id = _get_user_id
+    head = params.fetch(Const::MyPage::Key::HEAD, 0)
+    limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.bookmarks(user_id)
+      @contents = MyPage.bookmarks(user_id, head, limit)
     else
       # エラー
     end
@@ -34,9 +40,11 @@ class MyPageController < ApplicationController
 
   def using_items
     user_id = _get_user_id
+    head = params.fetch(Const::MyPage::Key::HEAD, 0)
+    limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.using_items(user_id)
+      @contents = MyPage.using_items(user_id, head, limit)
     else
       # エラー
     end
