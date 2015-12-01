@@ -142,7 +142,7 @@ class ItemGallery < ActiveRecord::Base
       ActiveRecord::Base.transaction do
         sql =<<-"SQL"
           SELECT u.access_token as created_user_access_token, ig.file_name as code_filename
-          FROM user u INNER JOIN item_galleries ig ON u.id = ig.created_user_id
+          FROM users u INNER JOIN item_galleries ig ON u.id = ig.created_user_id
           WHERE ig.access_token = #{item_gallery_access_token}
           AND u.del_flg = 0
           AND ig.del_flg = 0

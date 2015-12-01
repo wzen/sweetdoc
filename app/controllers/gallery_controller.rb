@@ -13,7 +13,6 @@ class GalleryController < ApplicationController
     init_const
 
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
-
     show_head = 0
     show_limit = 50
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
@@ -47,34 +46,28 @@ class GalleryController < ApplicationController
 
   def save_state
     user_id = current_or_guest_user.id
-    tags = params.require(Const::Gallery::Key::TAGS).split(',').map{|t| ApplicationController.helpers.sanitize(t)}
+    tags = params.fetch(Const::Gallery::Key::TAGS, '').split(',').map{|t| ApplicationController.helpers.sanitize(t)}
     title = params.require(Const::Gallery::Key::TITLE).force_encoding('utf-8')
-    project_id = params.require(Const::Gallery::Key::PROJECT_ID)
-    if project_id == nil || title == nil || title.length == 0
-      # エラー
-      @message, @access_token = I18n.t('message.database.item_state.save.error')
-    else
-      project_id = project_id.to_i
-      caption = params.fetch(Const::Gallery::Key::CAPTION, {}).force_encoding('utf-8')
-      thumbnail_img = params.require(Const::Gallery::Key::THUMBNAIL_IMG)
-      thumbnail_img_contents_type = params.require(Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE)
-      page_max = params.require(Const::Gallery::Key::PAGE_MAX)
-      show_guide = params.fetch(Const::Gallery::Key::SHOW_GUIDE, false)
-      show_page_num = params.fetch(Const::Gallery::Key::SHOW_PAGE_NUM, false)
-      show_chapter_num = params.fetch(Const::Gallery::Key::SHOW_CHAPTER_NUM, false)
-      @result_success, @message, @access_token = Gallery.save_state(
-          user_id,
-          project_id,
-          tags,
-          ApplicationController.helpers.sanitize(title),
-          ApplicationController.helpers.sanitize(caption),
-          thumbnail_img,
-          thumbnail_img_contents_type,
-          page_max,
-          show_guide,
-          show_page_num,
-          show_chapter_num)
-    end
+    project_id = params.require(Const::Gallery::Key::PROJECT_ID).to_i
+    caption = params.fetch(Const::Gallery::Key::CAPTION, '').force_encoding('utf-8')
+    thumbnail_img = params.require(Const::Gallery::Key::THUMBNAIL_IMG)
+    thumbnail_img_contents_type = params.require(Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE)
+    page_max = params.require(Const::Gallery::Key::PAGE_MAX)
+    show_guide = params.fetch(Const::Gallery::Key::SHOW_GUIDE, false)
+    show_page_num = params.fetch(Const::Gallery::Key::SHOW_PAGE_NUM, false)
+    show_chapter_num = params.fetch(Const::Gallery::Key::SHOW_CHAPTER_NUM, false)
+    @result_success, @message, @access_token = Gallery.save_state(
+        user_id,
+        project_id,
+        tags,
+        ApplicationController.helpers.sanitize(title),
+        ApplicationController.helpers.sanitize(caption),
+        thumbnail_img,
+        thumbnail_img_contents_type,
+        page_max,
+        show_guide,
+        show_page_num,
+        show_chapter_num)
   end
 
   def update_last_state

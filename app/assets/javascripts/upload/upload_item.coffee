@@ -23,8 +23,8 @@ class UploadItem extends UploadBase
         type: 'POST'
         success: (data) ->
           if data.resultSuccess
-            # Gallery Detail
-            window.location.href = "/gallery/detail/#{data.access_token}"
+            # マイページ遷移
+            window.location.href = "/my_page/created_item"
           else
             console.log('gallery/save_state server error')
             alert(data.message)

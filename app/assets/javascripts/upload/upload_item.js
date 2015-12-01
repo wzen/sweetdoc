@@ -38,7 +38,7 @@ UploadItem = (function(superClass) {
         type: 'POST',
         success: function(data) {
           if (data.resultSuccess) {
-            return window.location.href = "/gallery/detail/" + data.access_token;
+            return window.location.href = "/my_page/created_item";
           } else {
             console.log('gallery/save_state server error');
             return alert(data.message);

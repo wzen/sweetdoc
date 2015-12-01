@@ -7,9 +7,9 @@ Rails.application.routes.draw do
 
   get 'my_page' => 'my_page#bookmark'
   get 'my_page/created_contents'
-  get 'my_page/created_item'
-  get 'my_page/bookmark'
-  get 'my_page/using_item'
+  get 'my_page/created_items'
+  get 'my_page/bookmarks'
+  get 'my_page/using_items'
 
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'

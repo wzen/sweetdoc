@@ -404,4 +404,10 @@ class Const
     end
   end
 
+  class MyPage
+    class Key
+      USER_ACCESS_TOKEN = 'u'
+    end
+  end
+
 end
