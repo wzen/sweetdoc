@@ -1,2 +1,35 @@
-<h1>MyPage#created_item</h1>
-<p>Find me in app/views/my_page/created_item.html.erb</p>
+<% @contents.each do |content| %>
+    <div class="row">
+        <div class="top">
+            <div class="left">
+            <div class="top">
+                    <div class="left">
+                        <div class="title">
+                            <%= content[Const::ItemGallery::Key::TITLE] %>
+                        </div>
+                        <div class="user">
+                            <%= content[Const::User::Key::NAME] %>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="tags">
+                        <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
+                            <div class="tag_name"><%= t %></div>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+            <div class="right">
+                <div class="using_user">
+                    <%= content[Const::User::Key::USER_COUNT] %>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="caption">
+                <%= content[Const::ItemGallery::Key::CAPTION] %>
+            </div>
+        </div>
+    </div>
+<% end %>

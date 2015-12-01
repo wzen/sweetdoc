@@ -44,7 +44,7 @@ class MyPageController < ApplicationController
 
   private
   def _get_user_id
-    user_access_token = params.fetch(Const::MyPage::Key::USER_ACCESS_TOKEN, nil)
+    user_access_token = params.fetch(Const::User::Key::USER_ACCESS_TOKEN, nil)
     if user_access_token
       user = User.find_by(access_token: user_access_token)
       if user
