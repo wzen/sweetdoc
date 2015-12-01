@@ -142,9 +142,8 @@ class ItemGallery < ActiveRecord::Base
       ActiveRecord::Base.transaction do
         sql =<<-"SQL"
           SELECT u.access_token as created_user_access_token, ig.file_name as code_filename
-          FROM user u INNER JOIN item_galleries ig
-          WHERE u.id = ig.created_user_id
-          AND ig.access_token = #{item_gallery_access_token}
+          FROM user u INNER JOIN item_galleries ig ON u.id = ig.created_user_id
+          WHERE ig.access_token = #{item_gallery_access_token}
           AND u.del_flg = 0
           AND ig.del_flg = 0
         SQL
@@ -162,22 +161,40 @@ class ItemGallery < ActiveRecord::Base
     end
   end
 
-  def self.upload_user_used(user_id, item_gallery_access_token)
+  def self.upload_user_used(user_id, item_gallery_access_token, is_add)
     begin
       # TODO:
       ActiveRecord::Base.transaction do
         sql =<<-"SQL"
-          SELECT u.access_token as user_access_token, ig.file_name as code_filename
-          FROM user u INNER JOIN item_galleries ig
-          WHERE u.id = #{user_id}
+          SELECT ig.id as item_gallery_id, uigm.id as user_item_gallery_id
+          FROM user_item_gallery_maps uigm
+          INNER JOIN item_galleres ig ON uigm.item_gallery_id = ig.id
+          WHERE uigm.user_id = #{user_id}
           AND ig.access_token = #{item_gallery_access_token}
-          AND u.del_flg = 0
+          AND uigm.del_flg = 0
           AND ig.del_flg = 0
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
-        # 成功
-        return true, I18n.t('message.database.item_state.save.success')
-      end
+        ret = ret_sql.to_hash
+        if ret.count == 0 && is_add
+          # 追加処理
+          uigm = UserItemGalleryMap.new({
+                                            user_id: user_id,
+                                            item_gallery_id: ret.first['item_gallery_id']
+                                        })
+          uigm.save!
+          # 成功
+          return true, I18n.t('message.database.item_state.save.success')
+        elsif ret.count > 0 && !is_add
+          # 削除処理
+          uigm = UserItemGalleryMap.find(ret.first['user_item_gallery_id'])
+          uigm.destroy!
+          # 成功
+          return true, I18n.t('message.database.item_state.save.success')
+        else
+          # 処理なし
+        end
+       end
     rescue => e
       # 失敗
       return false, I18n.t('message.database.item_state.save.error')

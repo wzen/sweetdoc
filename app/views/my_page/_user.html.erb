@@ -1,8 +1,12 @@
 <div>
     <div class="user_icon">
-
+        <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+            <%= image_tag 'gallery/sidebar/default_user.png' ,size:'100x100' %>
+        </div>
     </div>
     <% if @is_access_me %>
         <div class="edit"></div>
     <% end %>
+
+    <!-- ソーシャルボタン等追加予定 -->
 </div>

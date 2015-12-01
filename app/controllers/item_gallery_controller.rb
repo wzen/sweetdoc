@@ -19,9 +19,21 @@ class ItemGalleryController < ApplicationController
     @item_source_path = ItemGallery.code_filepath(@item_gallery_access_token)
   end
 
-  def upload_user_used
+  def add_user_used
+    user_id = current_or_guest_user.id
+    item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
+    result_success, message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, true)
+  end
 
-    # ItemGallery IndexにRedirect
+  def add_user_used_ajax
+    user_id = current_or_guest_user.id
+    item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
+    @result_success, @message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, true)
+  end
+  def remove_user_used_ajax
+    user_id = current_or_guest_user.id
+    item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
+    @result_success, @message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, false)
   end
 
   def save_state
