@@ -5,6 +5,12 @@ Rails.application.routes.draw do
       registrations: 'users/registrations'
   }
 
+  get 'my_page' => 'my_page#bookmark'
+  get 'my_page/created_contents'
+  get 'my_page/created_item'
+  get 'my_page/bookmark'
+  get 'my_page/using_item'
+
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
   post 'config_menu/design_config'

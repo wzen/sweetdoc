@@ -3,11 +3,13 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/my_page.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
     </CLASSES>
     <JAVADOC />
