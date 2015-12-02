@@ -37,7 +37,7 @@ GallerySidebar = (function() {
     $('.wrapper .circle', root).hover(function(e) {
       var type;
       type = _type.call(this);
-      if (!$("#gallery_contents_wrapper .sidebar_popup" + type).is(':visible')) {
+      if (!$("#sidebar_wrapper .sidebar_popup" + type).is(':visible')) {
         return $(this).stop().animate({
           opacity: 0.7
         }, 200, 'linear');
@@ -45,7 +45,7 @@ GallerySidebar = (function() {
     }, function(e) {
       var type;
       type = _type.call(this);
-      if (!$("#gallery_contents_wrapper .sidebar_popup" + type).is(':visible')) {
+      if (!$("#sidebar_wrapper .sidebar_popup" + type).is(':visible')) {
         return $(this).stop().animate({
           opacity: 0.3
         }, 100, 'linear');
@@ -57,7 +57,7 @@ GallerySidebar = (function() {
         return window.location.href = '/worktable';
       } else {
         type = _type.call(this);
-        popup = $("#gallery_contents_wrapper .sidebar_popup" + type);
+        popup = $("#sidebar_wrapper .sidebar_popup" + type);
         if (popup.is(':visible')) {
           type = _type.call(this);
           popup.stop(true, true).fadeOut(100, 'linear');
@@ -66,7 +66,7 @@ GallerySidebar = (function() {
           }, 100, 'linear');
           return $('.overlay').remove();
         } else {
-          $("#gallery_contents_wrapper .sidebar_popup").hide();
+          $("#sidebar_wrapper .sidebar_popup").hide();
           self = $(this);
           $('.wrapper .circle', root).filter(function(s) {
             return $(this).attr('class') !== self.attr('class');
@@ -75,10 +75,10 @@ GallerySidebar = (function() {
           $(this).stop().animate({
             opacity: 1
           }, 200, 'linear');
-          $('#gallery_contents_wrapper').append('<div class="overlay"></div>');
+          $('.sidebar_overlay_parent').append('<div class="overlay"></div>');
           return $('.overlay').click(function() {
             $('.wrapper .circle', root).css('opacity', 0.3);
-            $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100);
+            $("#sidebar_wrapper .sidebar_popup").fadeOut(100);
             return $('.overlay').remove();
           });
         }

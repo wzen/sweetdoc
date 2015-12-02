@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   # Locale
   before_filter :set_locale
-
+  before_filter :init_const
   before_filter :configure_permitted_parameters, if: :devise_controller?
 
   def init_const

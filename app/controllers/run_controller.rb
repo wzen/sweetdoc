@@ -9,9 +9,6 @@ class RunController < ApplicationController
   end
 
   def paging
-    # Constantの設定
-    init_const
-
     user_id = current_or_guest_user.id
     target_pages = params.require(Const::Run::Key::TARGET_PAGES)
     loaded_itemids = params.require(Const::Run::Key::LOADED_ITEM_IDS)

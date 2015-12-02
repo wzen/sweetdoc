@@ -4,14 +4,9 @@ class GalleryController < ApplicationController
   #before_filter :authenticate_user!
 
   def index
-    # Constantの設定
-    init_const
   end
 
   def grid
-    # Constantの設定
-    init_const
-
     # ブックマークしたコンテンツ & タグからの関連コンテンツ & 今日のアクセスTopコンテンツ
     show_head = 0
     show_limit = 50
@@ -22,9 +17,6 @@ class GalleryController < ApplicationController
   end
 
   def detail
-    # Constantの設定
-    init_const
-
     access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     # ViewCountをupdate
     Gallery.add_view_statistic_count(access_token, Date.today)
@@ -33,9 +25,6 @@ class GalleryController < ApplicationController
   end
 
   def run_window
-    # Constantの設定
-    init_const
-
     access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     # ViewCountをupdate
     Gallery.add_view_statistic_count(access_token, Date.today)

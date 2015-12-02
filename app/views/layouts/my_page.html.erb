@@ -15,14 +15,13 @@
     %>
 </head>
 <body class="<%= controller_name -%> <%= action_name -%>">
-*** Temporary ***
     <div id="main_wrapper">
         <div id="user_wrapper">
             <%= render 'my_page/user' %>
         </div>
-        <div id="contents_wrapper">
+        <div id="contents_wrapper" class="sidebar_overlay_parent">
             <div class="wrapper">
-                <div id="<%= Const::ElementAttribute::SIDEBAR_TAB_ROOT %>" class="sidebar-config" style="display: none">
+                <div class="tabview_wrapper">
                     <ul class="nav nav-tabs">
                         <li class="<%= action_name == 'bookmarks'? 'active': '' %>"><%= link_to 'Bookmark', 'my_page/bookmarks', disabled: action_name == 'bookmarks' %></li>
                         <li class="<%= action_name == 'created_contents'? 'active': '' %>"><%= link_to 'CreatedContents', 'my_page/created_contents', disabled: action_name == 'created_contents' %></li>
@@ -41,12 +40,11 @@
                         </div>
                     </div>
                 </div>
-
-                <%= render 'gallery/sidebar/popup' %>
             </div>
         </div>
         <div id="sidebar_wrapper" class="collapse">
             <%= render 'gallery/sidebar/sidebar' %>
+            <%= render 'gallery/sidebar/popup' %>
         </div>
     </div>
 

@@ -2,16 +2,12 @@ require 'item_gallery/item_gallery'
 
 class ItemGalleryController < ApplicationController
   def index
-    # Constantの設定
-    init_const
     @contents = ItemGallery.index_page_data
     user_id = current_or_guest_user.id
     @using_items = ItemGallery.using_items(user_id)
   end
 
   def preview
-    # Constantの設定
-    init_const
     @item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
     @item_source_path = ItemGallery.code_filepath(@item_gallery_access_token)
   end

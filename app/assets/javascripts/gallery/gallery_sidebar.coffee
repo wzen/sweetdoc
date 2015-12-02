@@ -27,11 +27,11 @@ class GallerySidebar
 
     $('.wrapper .circle', root).hover((e) ->
       type = _type.call(@)
-      if !$("#gallery_contents_wrapper .sidebar_popup#{type}").is(':visible')
+      if !$("#sidebar_wrapper .sidebar_popup#{type}").is(':visible')
         $(@).stop().animate({opacity: 0.7}, 200, 'linear')
     , (e) ->
       type = _type.call(@)
-      if !$("#gallery_contents_wrapper .sidebar_popup#{type}").is(':visible')
+      if !$("#sidebar_wrapper .sidebar_popup#{type}").is(':visible')
         $(@).stop().animate({opacity: 0.3}, 100, 'linear')
     )
 
@@ -41,22 +41,22 @@ class GallerySidebar
         window.location.href = '/worktable';
       else
         type = _type.call(@)
-        popup = $("#gallery_contents_wrapper .sidebar_popup#{type}")
+        popup = $("#sidebar_wrapper .sidebar_popup#{type}")
         if popup.is(':visible')
           type = _type.call(@)
           popup.stop(true, true).fadeOut(100, 'linear')
           $(@).stop().animate({opacity: 0.7}, 100, 'linear')
           $('.overlay').remove()
         else
-          $("#gallery_contents_wrapper .sidebar_popup").hide()
+          $("#sidebar_wrapper .sidebar_popup").hide()
           self = $(@)
           $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.3)
           popup.stop(true, true).fadeIn(200, 'linear')
           $(@).stop().animate({opacity: 1}, 200, 'linear')
-          $('#gallery_contents_wrapper').append('<div class="overlay"></div>')
+          $('.sidebar_overlay_parent').append('<div class="overlay"></div>')
           $('.overlay').click( ->
             $('.wrapper .circle', root).css('opacity', 0.3)
-            $("#gallery_contents_wrapper .sidebar_popup").fadeOut(100)
+            $("#sidebar_wrapper .sidebar_popup").fadeOut(100)
             $('.overlay').remove()
           )
     )

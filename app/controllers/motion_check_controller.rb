@@ -2,17 +2,10 @@ class MotionCheckController < ApplicationController
   def index
     # リクエストサイズ表示
     p "content_length: #{request.content_length}"
-
-    # Constantの設定
-    init_const
-
     setup_run_data
   end
 
   def new_window
-    # Constantの設定
-    init_const
-
     setup_run_data
   end
 

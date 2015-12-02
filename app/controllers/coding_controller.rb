@@ -63,9 +63,6 @@ class CodingController < ApplicationController
   end
 
   def item
-    # Constantの設定
-    init_const
-
     user_id = current_or_guest_user.id
     @load_user_coding = Coding.load_opened_code(user_id)
     @load_tree_html, @load_user_codings, @code_state = Coding.load_coding_item_data(user_id)
@@ -73,8 +70,6 @@ class CodingController < ApplicationController
   end
 
   def item_preview
-    # Constantの設定
-    init_const
     user_id = current_or_guest_user.id
     @user_coding_id = params.require(Const::Coding::Key::USER_CODING_ID)
     @item_source_path = Coding.code_filepath(user_id, @user_coding_id)
