@@ -3,31 +3,49 @@ body.bookmarks {
     div.row {
       width: 100%;
       > div.top {
+        width: 100%;
         height: 100px;
         > div.left {
+          float: left;
           div.thumbnail {
-
+            width: 100px;
+            height: 100px;
           }
         }
         > div.right {
+          float: right;
           > div.top {
+            width: 100%;
+            height: 70px;
             div.title {
-
+              width: 70%;
+              height: 100%;
             }
             div.user {
-
+              width: 30%;
+              height: 100%;
             }
           }
           > div.bottom {
+            width: 100%;
+            height: 30px;
             div.tags {
+              width: 100%;
               div.tag_name {
 
               }
             }
           }
         }
+        &:after {
+          display: table;
+          content: '';
+          clear: both;
+          line-height: 0;
+        }
       }
       > div.bottom {
+        width: 100%;
         div.caption {
 
         }
@@ -62,6 +80,12 @@ body.created_contents {
             }
           }
         }
+        &:after {
+          display: table;
+          content: '';
+          clear: both;
+          line-height: 0;
+        }
       }
       > div.bottom {
         div.caption {
@@ -87,6 +111,12 @@ body.created_items {
 
               }
             }
+            &:after {
+              display: table;
+              content: '';
+              clear: both;
+              line-height: 0;
+            }
           }
           > div.bottom {
             > div.tags {
@@ -100,6 +130,12 @@ body.created_items {
           div.using_user {
 
           }
+        }
+        &:after {
+          display: table;
+          content: '';
+          clear: both;
+          line-height: 0;
         }
       }
       > div.bottom {
@@ -125,6 +161,12 @@ body.using_items {
 
               }
             }
+            &:after {
+              display: table;
+              content: '';
+              clear: both;
+              line-height: 0;
+            }
           }
           > div.bottom {
             > div.tags {
@@ -138,6 +180,12 @@ body.using_items {
           div.remove_button {
 
           }
+        }
+        &:after {
+          display: table;
+          content: '';
+          clear: both;
+          line-height: 0;
         }
       }
       > div.bottom {

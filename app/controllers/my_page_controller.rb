@@ -1,4 +1,5 @@
-require 'mypage/mypage'
+require 'gallery/gallery'
+require 'item_gallery/item_gallery'
 
 class MyPageController < ApplicationController
 
@@ -8,7 +9,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.created_contents(user_id, head, limit)
+      @contents = Gallery.created_contents(user_id, head, limit)
     else
       # エラー
     end
@@ -20,7 +21,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.created_items(user_id, head, limit)
+      @contents = ItemGallery.created_items(user_id, head, limit)
     else
       # エラー
     end
@@ -32,7 +33,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.bookmarks(user_id, head, limit)
+      @contents = Gallery.bookmarks(user_id, head, limit)
     else
       # エラー
     end
@@ -44,7 +45,7 @@ class MyPageController < ApplicationController
     limit = params.fetch(Const::MyPage::Key::LIMIT, 30)
     if user_id
       @user = User.find(user_id)
-      @contents = MyPage.using_items(user_id, head, limit)
+      @contents = ItemGallery.using_items(user_id, head, limit)
     else
       # エラー
     end

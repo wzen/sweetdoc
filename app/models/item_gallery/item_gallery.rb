@@ -2,10 +2,102 @@ require 'coding/user_coding'
 require 'item_gallery/user_item_gallery_map'
 require 'item_gallery/item_gallery_tag'
 require 'item_gallery/item_gallery_tag_map'
+require 'item_gallery/item_gallery_using_statistics'
 
 class ItemGallery < ActiveRecord::Base
-  def self.index
+  def self.index_page_data(head = 0, limit = 30)
+    begin
+      # TODO: 取り方見直し 暫定で人気順
+      ActiveRecord::Base.transaction do
+        sql =<<-"SQL"
+            SELECT
+              ig.id as #{Const::ItemGallery::Key::ITEM_GALLERY_ID},
+              ig.access_token as #{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN},
+              ig.title as #{Const::ItemGallery::Key::TITLE},
+              ig.caption as #{Const::ItemGallery::Key::CAPTION},
+              u.name as #{Const::User::Key::NAME},
+              u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
+              group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
+            FROM item_galleries ig
+            INNER JOIN users u ON ig.created_user_id = u.id
+            INNER JOIN item_gallery_tag_maps igtm ON igtm.gallery_id = ig.id
+            INNER JOIN item_gallery_tags igt ON igtm.gallery_tag_id = igt.id
+            LEFT JOIN item_gallery_using_statistics igus ON ig.id = igus.item_gallery_id
+            WHERE u.del_flg = 0 AND ig.del_flg = 0 AND igus.del_flg = 0 AND igt.del_flg = 0 AND igtm.del_flg = 0
+            GROUP BY ig.id
+            ORDER BY igus.count DESC
+            LIMIT #{head}, #{limit}
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        return ret_sql.to_hash.first
+      end
+    rescue => e
+      # 失敗
+      return false, I18n.t('message.database.item_state.save.error')
+    end
+  end
 
+  def self.using_items(user_id, head = 0, limit = 30)
+    sql =<<-"SQL"
+      SELECT
+        ig.access_token as #{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN},
+        ig.title as #{Const::ItemGallery::Key::TITLE},
+        ig.caption as #{Const::ItemGallery::Key::CAPTION},
+        u.name as #{Const::User::Key::NAME},
+        u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
+        group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
+      FROM item_galleries ig
+      INNER JOIN user_item_gallery_maps uigm ON ig.id = uigm.item_gallery_id
+      INNER JOIN users u ON uigm.user_id = u.id
+      INNER JOIN item_gallery_tag_maps igtm ON igtm.gallery_id = ig.id
+      INNER JOIN item_gallery_tags igt ON igtm.gallery_tag_id = igt.id
+      WHERE u.id = #{user_id}
+      AND u.del_flg = 0 AND ig.del_flg = 0 AND uigm.del_flg = 0
+      AND ig.del_flg = 0 AND igt.del_flg = 0
+      GROUP BY ig.id
+      ORDER BY uigm.updated_at DESC
+      LIMIT #{head}, #{limit}
+    SQL
+    ret_sql = ActiveRecord::Base.connection.select_all(sql)
+    return ret_sql.to_hash
+  end
+
+  def self.created_items(user_id, head = 0, limit = 30)
+    sql =<<-"SQL"
+      SELECT
+        t.#{Const::ItemGallery::Key::ITEM_GALLERY_ID} as #{Const::ItemGallery::Key::ITEM_GALLERY_ID},
+        t.#{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN} as #{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN},
+        t.#{Const::ItemGallery::Key::TITLE} as #{Const::ItemGallery::Key::TITLE},
+        t.#{Const::ItemGallery::Key::CAPTION} as #{Const::ItemGallery::Key::CAPTION},
+        t.#{Const::User::Key::NAME} as #{Const::User::Key::NAME},
+        t.#{Const::User::Key::USER_ACCESS_TOKEN} as #{Const::User::Key::USER_ACCESS_TOKEN},
+        t.#{Const::ItemGallery::Key::TAGS} as #{Const::ItemGallery::Key::TAGS},
+        count(*) as #{Const::User::Key::USER_COUNT}
+　　　 FROM (
+        SELECT
+          ig.id as #{Const::ItemGallery::Key::ITEM_GALLERY_ID},
+          ig.access_token as #{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN},
+          ig.title as #{Const::ItemGallery::Key::TITLE},
+          ig.caption as #{Const::ItemGallery::Key::CAPTION},
+          u.name as #{Const::User::Key::NAME},
+          u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
+          group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
+        FROM item_galleries ig
+        INNER JOIN users u ON ig.created_user_id = u.id
+        INNER JOIN item_gallery_tag_maps igtm ON igtm.gallery_id = ig.id
+        INNER JOIN item_gallery_tags igt ON igtm.gallery_tag_id = igt.id
+        WHERE u.id = #{user_id}
+        AND u.del_flg = 0 AND ig.del_flg = 0
+        AND ig.del_flg = 0 AND igt.del_flg = 0 AND igtm.del_flg = 0
+        GROUP BY ig.id
+        ORDER BY ig.updated_at DESC
+        LIMIT #{head}, #{limit}
+      ) t
+      LEFT JOIN user_item_gallery_maps uigm ON t.#{Const::ItemGallery::Key::ITEM_GALLERY_ID} = uigm.item_gallery_id AND uigm.del_flg = 0
+      GROUP BY t.#{Const::ItemGallery::Key::ITEM_GALLERY_ID}
+    SQL
+    ret_sql = ActiveRecord::Base.connection.select_all(sql)
+    return ret_sql.to_hash
   end
 
   def self.save_state(
@@ -22,8 +114,6 @@ class ItemGallery < ActiveRecord::Base
           SELECT uc.code_filename as code_filename, uc.lang_type as lang_type, uc.id as id, u.access_token as user_access_token
           FROM user_codings uc
           INNER JOIN users u ON uc.user_id = u.id
-          AND uc.id = uct.user_coding_id
-          AND u.del_flg = 0
           WHERE u.id = #{user_id}
           AND uc.del_flg = 0
           AND uc.id = #{user_coding_id}
@@ -51,6 +141,8 @@ class ItemGallery < ActiveRecord::Base
             File.open(user_code_path, 'w') do |file|
               file.write(code)
             end
+
+            save_tag(tags, ig.id)
           else
             save_filename = SecureRandom.urlsafe_base64
             user_code_path = "#{UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, user_access_token)}/#{save_filename}"
@@ -69,6 +161,8 @@ class ItemGallery < ActiveRecord::Base
                                      file_name: save_filename
                                  })
             ig.save!
+
+            save_tag(tags, ig.id)
           end
           # 成功
           return true, I18n.t('message.database.item_state.save.success')
@@ -178,17 +272,22 @@ class ItemGallery < ActiveRecord::Base
         ret = ret_sql.to_hash
         if ret.count == 0 && is_add
           # 追加処理
+          item_gallery_id = ItemGallery.find_by(access_token: item_gallery_access_token).id
           uigm = UserItemGalleryMap.new({
                                             user_id: user_id,
-                                            item_gallery_id: ret.first['item_gallery_id']
+                                            item_gallery_id: item_gallery_id
                                         })
           uigm.save!
+          # 使用数更新
+          _update_using_count(item_gallery_id)
           # 成功
           return true, I18n.t('message.database.item_state.save.success')
         elsif ret.count > 0 && !is_add
           # 削除処理
           uigm = UserItemGalleryMap.find(ret.first['user_item_gallery_id'])
           uigm.destroy!
+          # 使用数更新
+          _update_using_count(ret.first['item_gallery_id'])
           # 成功
           return true, I18n.t('message.database.item_state.save.success')
         else
@@ -200,4 +299,23 @@ class ItemGallery < ActiveRecord::Base
       return false, I18n.t('message.database.item_state.save.error')
     end
   end
+
+  def self._update_using_count(item_gallery_id)
+    count = UserItemGalleryMap.where(item_gallery_id: item_gallery_id).count
+    # 使用数更新
+    igus = ItemGalleryUsingStatistics.find(item_gallery_id: item_gallery_id)
+    if igus
+      # Update
+      igus.count = count
+    else
+      # Insert
+      igus = ItemGalleryUsingStatistics.new({
+                                         item_gallery_id: item_gallery_id,
+                                         count: count
+                                      })
+    end
+    igus.save!
+  end
+
+  private_class_method :_update_using_count
 end

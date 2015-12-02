@@ -2,14 +2,11 @@ require 'item_gallery/item_gallery'
 
 class ItemGalleryController < ApplicationController
   def index
-    user_id = current_or_guest_user.id
-
     # Constantの設定
     init_const
-
-    # ItemGallery & UserItemGallery
-
-
+    @contents = ItemGallery.index_page_data
+    user_id = current_or_guest_user.id
+    @using_items = ItemGallery.using_items(user_id)
   end
 
   def preview

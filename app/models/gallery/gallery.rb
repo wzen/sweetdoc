@@ -742,5 +742,62 @@ class Gallery < ActiveRecord::Base
 
   end
 
+  def self.created_contents(user_id, head = 0, limit = 30)
+    sql =<<-"SQL"
+      SELECT
+        g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
+        g.title as #{Const::Gallery::Key::TITLE},
+        g.caption as #{Const::Gallery::Key::CAPTION},
+        g.thumbnail_img_width as #{Const::Gallery::Key::THUMBNAIL_IMG_WIDTH},
+        g.thumbnail_img_height as #{Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT},
+        g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
+        g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
+        u.name as #{Const::User::Key::NAME},
+        u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
+        group_concat(gt.name separator ',') as #{Const::Gallery::Key::TAGS}
+      FROM user_project_maps upm
+      INNER JOIN users u ON upm.user_id = u.id
+      INNER JOIN project_gallery_maps pgm ON pgm.user_project_map_id = pgm.id
+      INNER JOIN galleries g ON g.id = pgm.gallery_id
+      INNER JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id
+      INNER JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id
+      WHERE u.id = #{user_id}
+      AND u.del_flg = 0 AND pgm.del_flg = 0 AND upm.del_flg = 0 AND g.del_flg = 0
+      AND gtm.del_flg = 0 AND gt.del_flg = 0
+      GROUP BY g.id
+      ORDER BY g.updated_at DESC
+      LIMIT #{head}, #{limit}
+    SQL
+    ret_sql = ActiveRecord::Base.connection.select_all(sql)
+    return ret_sql.to_hash
+  end
+
+  def self.bookmarks(user_id, head = 0, limit = 30)
+    sql =<<-"SQL"
+      SELECT
+        g.access_token as #{Const::Gallery::Key::GALLERY_ACCESS_TOKEN},
+        g.title as #{Const::Gallery::Key::TITLE},
+        g.caption as #{Const::Gallery::Key::CAPTION},
+        g.thumbnail_img_width as #{Const::Gallery::Key::THUMBNAIL_IMG_WIDTH},
+        g.thumbnail_img_height as #{Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT},
+        g.screen_width as #{Const::Gallery::Key::SCREEN_SIZE_WIDTH},
+        g.screen_height as #{Const::Gallery::Key::SCREEN_SIZE_HEIGHT},
+        u.name as #{Const::User::Key::NAME},
+        u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
+        group_concat(gt.name separator ',') as #{Const::Gallery::Key::TAGS}
+      FROM gallery_bookmarks gb
+      INNER JOIN users u ON gb.user_id = u.id
+      INNER JOIN galleries g ON g.id = gb.gallery_id
+      WHERE u.id = #{user_id}
+      AND u.del_flg = 0 AND gb.del_flg = 0 AND g.del_flg = 0
+      AND gtm.del_flg = 0 AND gt.del_flg = 0
+      GROUP BY g.id
+      ORDER BY gb.updated_at DESC
+      LIMIT #{head}, #{limit}
+    SQL
+    ret_sql = ActiveRecord::Base.connection.select_all(sql)
+    return ret_sql.to_hash
+  end
+
   private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount
 end
