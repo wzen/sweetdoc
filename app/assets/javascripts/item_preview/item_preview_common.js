@@ -117,7 +117,7 @@ ItemPreviewCommon = (function() {
     if (!window.isWorkTable) {
       window.isWorkTable = true;
       window.initDone = false;
-      GuideBase.hideGuide();
+      RunCommon.shutdown();
       this.createdMainContainerIfNeeded();
       return this.initMainContainerAsWorktable((function(_this) {
         return function() {

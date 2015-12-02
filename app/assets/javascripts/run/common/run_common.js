@@ -576,6 +576,12 @@ RunCommon = (function() {
     });
   };
 
+  RunCommon.shutdown = function() {
+    if (window.eventAction != null) {
+      return window.eventAction.shutdown();
+    }
+  };
+
   return RunCommon;
 
 })();

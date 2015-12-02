@@ -101,7 +101,7 @@ class ItemPreviewCommon
     if !window.isWorkTable
       window.isWorkTable = true
       window.initDone = false
-      GuideBase.hideGuide()
+      RunCommon.shutdown()
       @createdMainContainerIfNeeded()
       @initMainContainerAsWorktable( =>
         WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( =>

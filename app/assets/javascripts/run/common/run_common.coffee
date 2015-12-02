@@ -515,3 +515,9 @@ class RunCommon
       window.initDone = true
     )
 
+  @shutdown = ->
+    if window.eventAction?
+      window.eventAction.shutdown()
+
+
+

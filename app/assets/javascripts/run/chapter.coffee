@@ -99,6 +99,10 @@ class Chapter
   showGuide: (calledByWillChapter = false) ->
     return RunSetting.isShowGuide()
 
+  # ガイド非表示
+  # @abstract
+  hideGuide: ->
+
   # イベント反応を有効にする
   enableEventHandle: ->
     @eventObjList.forEach((e) =>

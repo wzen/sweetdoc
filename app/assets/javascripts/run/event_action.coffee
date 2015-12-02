@@ -26,6 +26,11 @@ class EventAction
     @thisPage().willPage()
     @thisPage().start()
 
+  # 中断
+  shutdown: ->
+    if @thisPage()?
+      @thisPage().shutdown()
+
   # 全てのチャプターが終了している場合、ページを進める
   # @param [Function] callback コールバック
   nextPageIfFinishedAllChapter: (callback = null) ->

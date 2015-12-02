@@ -339,3 +339,7 @@ class Page
     else
       # 全ページ終了の場合
       window.eventAction.finishAllPages()
+
+  # 中断
+  shutdown: ->
+    @hideAllGuide()

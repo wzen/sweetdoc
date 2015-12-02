@@ -376,6 +376,10 @@ Page = (function() {
     }
   };
 
+  Page.prototype.shutdown = function() {
+    return this.hideAllGuide();
+  };
+
   return Page;
 
 })();

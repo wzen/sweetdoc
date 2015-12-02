@@ -116,6 +116,8 @@ Chapter = (function() {
     return RunSetting.isShowGuide();
   };
 
+  Chapter.prototype.hideGuide = function() {};
+
   Chapter.prototype.enableEventHandle = function() {
     return this.eventObjList.forEach((function(_this) {
       return function(e) {

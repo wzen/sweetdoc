@@ -24,6 +24,12 @@ EventAction = (function() {
     return this.thisPage().start();
   };
 
+  EventAction.prototype.shutdown = function() {
+    if (this.thisPage() != null) {
+      return this.thisPage().shutdown();
+    }
+  };
+
   EventAction.prototype.nextPageIfFinishedAllChapter = function(callback) {
     if (callback == null) {
       callback = null;

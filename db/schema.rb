@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130105556) do
+ActiveRecord::Schema.define(version: 20151202022806) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -243,6 +243,14 @@ ActiveRecord::Schema.define(version: 20151130105556) do
     t.integer  "weight",     default: 0
     t.string   "category"
     t.boolean  "del_flg",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_gallery_using_statistics", force: true do |t|
+    t.integer  "item_gallery_id",                 null: false
+    t.integer  "count",           default: 0
+    t.boolean  "del_flg",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
