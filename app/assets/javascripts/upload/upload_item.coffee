@@ -16,7 +16,7 @@ class UploadItem extends UploadBase
         fd.append(Constant.ItemGallery.Key.TAGS, null)
 
       $.ajax({
-        url: 'item_gallery/save_state'
+        url: '/item_gallery/save_state'
         data: fd
         processData: false
         contentType: false
@@ -24,7 +24,7 @@ class UploadItem extends UploadBase
         success: (data) ->
           if data.resultSuccess
             # マイページ遷移
-            window.location.href = "/my_page/created_item"
+            window.location.href = "/my_page/created_items"
           else
             console.log('gallery/save_state server error')
             alert(data.message)

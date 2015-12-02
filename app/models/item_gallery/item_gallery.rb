@@ -20,8 +20,8 @@ class ItemGallery < ActiveRecord::Base
               group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
             FROM item_galleries ig
             INNER JOIN users u ON ig.created_user_id = u.id
-            INNER JOIN item_gallery_tag_maps igtm ON igtm.gallery_id = ig.id
-            INNER JOIN item_gallery_tags igt ON igtm.gallery_tag_id = igt.id
+            INNER JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id
+            INNER JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id
             LEFT JOIN item_gallery_using_statistics igus ON ig.id = igus.item_gallery_id
             WHERE u.del_flg = 0 AND ig.del_flg = 0 AND igus.del_flg = 0 AND igt.del_flg = 0 AND igtm.del_flg = 0
             GROUP BY ig.id
@@ -49,8 +49,8 @@ class ItemGallery < ActiveRecord::Base
       FROM item_galleries ig
       INNER JOIN user_item_gallery_maps uigm ON ig.id = uigm.item_gallery_id
       INNER JOIN users u ON uigm.user_id = u.id
-      INNER JOIN item_gallery_tag_maps igtm ON igtm.gallery_id = ig.id
-      INNER JOIN item_gallery_tags igt ON igtm.gallery_tag_id = igt.id
+      INNER JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id
+      INNER JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id
       WHERE u.id = #{user_id}
       AND u.del_flg = 0 AND ig.del_flg = 0 AND uigm.del_flg = 0
       AND ig.del_flg = 0 AND igt.del_flg = 0
@@ -73,7 +73,7 @@ class ItemGallery < ActiveRecord::Base
         t.#{Const::User::Key::USER_ACCESS_TOKEN} as #{Const::User::Key::USER_ACCESS_TOKEN},
         t.#{Const::ItemGallery::Key::TAGS} as #{Const::ItemGallery::Key::TAGS},
         count(*) as #{Const::User::Key::USER_COUNT}
-　　　 FROM (
+        FROM (
         SELECT
           ig.id as #{Const::ItemGallery::Key::ITEM_GALLERY_ID},
           ig.access_token as #{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN},
@@ -84,8 +84,8 @@ class ItemGallery < ActiveRecord::Base
           group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
         FROM item_galleries ig
         INNER JOIN users u ON ig.created_user_id = u.id
-        INNER JOIN item_gallery_tag_maps igtm ON igtm.gallery_id = ig.id
-        INNER JOIN item_gallery_tags igt ON igtm.gallery_tag_id = igt.id
+        INNER JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id
+        INNER JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id
         WHERE u.id = #{user_id}
         AND u.del_flg = 0 AND ig.del_flg = 0
         AND ig.del_flg = 0 AND igt.del_flg = 0 AND igtm.del_flg = 0

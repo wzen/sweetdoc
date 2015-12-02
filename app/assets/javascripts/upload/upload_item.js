@@ -31,14 +31,14 @@ UploadItem = (function(superClass) {
         fd.append(Constant.ItemGallery.Key.TAGS, null);
       }
       return $.ajax({
-        url: 'item_gallery/save_state',
+        url: '/item_gallery/save_state',
         data: fd,
         processData: false,
         contentType: false,
         type: 'POST',
         success: function(data) {
           if (data.resultSuccess) {
-            return window.location.href = "/my_page/created_item";
+            return window.location.href = "/my_page/created_items";
           } else {
             console.log('gallery/save_state server error');
             return alert(data.message);

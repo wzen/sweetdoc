@@ -15,6 +15,7 @@
 /log/*.log
 /tmp
 /public/user_code
+/public/item_gallery
 .idea/dataSources.local.xml
 .idea/watcherTasks.xml
 .idea/workspace.xml
