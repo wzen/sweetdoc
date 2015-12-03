@@ -173,9 +173,9 @@ body.created_items {
     div.contents_row {
       padding: 10px;
       > div.contents_top {
-        height: 90px;
+        height: 70px;
         > div.contents_left {
-          height: 50px;
+          height: 40px;
           width: 100%;
           > div {
             height: 100%;
@@ -186,7 +186,7 @@ body.created_items {
                 > div.contents_left {
                   > div.title {
                     > a {
-                      font-size: 35px;
+                      font-size: 25px;
                       font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
                       font-weight: 900;
                     }
@@ -219,8 +219,8 @@ body.created_items {
             }
             > div.contents_bottom {
               div.tag_label {
-                width: 70px;
-                font-size: 20px;
+                width: 40px;
+                font-size: 14px;
               }
             }
           }
@@ -258,9 +258,9 @@ body.using_items {
     div.contents_row {
       padding: 10px;
       > div.contents_top {
-        height: 90px;
+        height: 70px;
         > div.contents_left {
-          height: 50px;
+          height: 40px;
           width: 100%;
           > div {
             height: 100%;
@@ -272,7 +272,7 @@ body.using_items {
                 > div.contents_left {
                   > div.title {
                     > a {
-                      font-size: 35px;
+                      font-size: 25px;
                       font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
                       font-weight: 900;
                     }
@@ -295,8 +295,8 @@ body.using_items {
             }
             > div.contents_bottom {
               div.tag_label {
-                width: 70px;
-                font-size: 20px;
+                width: 40px;
+                font-size: 14px;
               }
             }
           }

@@ -134,6 +134,75 @@ div.tagcloud ul {
   }
 }
 
+div.tagcloud.mini ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-block;
+    margin: .1em 0 0 1em;
+    padding: 0;
+
+    a {
+      position: relative;
+      display: inline-block;
+      height: 20px;
+      line-height: 20px;
+      padding: 0 1em;
+      background-color: #3498db;
+      border-radius: 0 3px 3px 0;
+      color: #fff;
+      font-size: 11px;
+      text-decoration: none;
+      -webkit-transition: .2s;
+      transition: .2s;
+    }
+
+    a::before {
+      position: absolute;
+      top: 0;
+      left: -10px;
+      content: '';
+      width: 0;
+      height: 0;
+      border-color: transparent #3498db transparent transparent;
+      border-style: solid;
+      border-width: 10px 10px 10px 0;
+      -webkit-transition: .2s;
+      transition: .2s;
+    }
+    a::after {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      z-index: 2;
+      display: block;
+      content: '';
+      width: 6px;
+      height: 6px;
+      margin-top: -3px;
+      background-color: #fff;
+      border-radius: 100%;
+    }
+
+    span {
+      display: block;
+      max-width: 100px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    a:hover {
+      background-color: #555;
+      color: #fff;
+    }
+    a:hover::before {
+      border-right-color: #555;
+    }
+  }
+}
+
 div.pop {
   position: absolute;
   text-align: center;
