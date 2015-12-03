@@ -1,9 +1,9 @@
 <% @contents.each do |content| %>
-    <div class="row">
-        <div class="top">
-            <div class="left">
-                <div class="top">
-                    <div class="left">
+    <div class="contents_row">
+        <div class="contents_top">
+            <div class="contents_left">
+                <div class="contents_top">
+                    <div class="contents_left">
                         <div class="title">
                             <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
                         </div>
@@ -12,7 +12,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bottom">
+                <div class="contents_bottom">
                     <div class="tags">
                         <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
                             <div class="tag_name"><%= t %></div>
@@ -20,13 +20,13 @@
                     </div>
                 </div>
             </div>
-            <div class="right">
+            <div class="contents_right">
                 <div class="using_user">
                     <%= content[Const::User::Key::USER_COUNT] %>
                 </div>
             </div>
         </div>
-        <div class="bottom">
+        <div class="contents_bottom">
             <div class="caption">
                 <%= content[Const::ItemGallery::Key::CAPTION] %>
             </div>

@@ -13,18 +13,21 @@ div#user_wrapper {
   width: 150px;
   height: 100%;
   float: left;
-  //margin-top: 41px;
+  margin-top: 51px;
   background-color: #aa3f39;
 
   .user_icon {
     margin-top: 15px;
-  }
 
-  .circle {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto;
-    background-color: white;
+    > div {
+      background-color: white;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      -webkit-border-radius: 15px;
+      -moz-border-radius: 15px;
+      border-radius: 15px;;
+    }
   }
 }
 
@@ -55,32 +58,35 @@ div#contents_wrapper {
 
 div#myTabContent {
   height: 100%;
-  margin-top: -7px;
+  // レイアウトが崩れるためコメントアウト
+  //margin-top: -7px;
 }
 div.tab-pane {
+  width: 100%;
   height: 100%;
   > div {
+    width: 100%;
     height: 100%;
   }
 }
 
 body.bookmarks {
   #myTabContent {
-    div.row {
+    div.contents_row {
       width: 100%;
-      > div.top {
+      > div.contents_top {
         width: 100%;
         height: 100px;
-        > div.left {
+        > div.contents_left {
           float: left;
           div.thumbnail {
             width: 100px;
             height: 100px;
           }
         }
-        > div.right {
+        > div.contents_right {
           float: right;
-          > div.top {
+          > div.contents_top {
             width: 100%;
             height: 70px;
             div.title {
@@ -92,7 +98,7 @@ body.bookmarks {
               height: 100%;
             }
           }
-          > div.bottom {
+          > div.contents_bottom {
             width: 100%;
             height: 30px;
             div.tags {
@@ -110,7 +116,7 @@ body.bookmarks {
           line-height: 0;
         }
       }
-      > div.bottom {
+      > div.contents_bottom {
         width: 100%;
         div.caption {
 
@@ -122,15 +128,15 @@ body.bookmarks {
 
 body.created_contents {
   #myTabContent {
-    div.row {
-      > div.top {
-        > div.left {
+    div.contents_row {
+      > div.contents_top {
+        > div.contents_left {
           div.thumbnail {
 
           }
         }
-        > div.right {
-          > div.top {
+        > div.contents_right {
+          > div.contents_top {
             div.title {
 
             }
@@ -138,7 +144,7 @@ body.created_contents {
 
             }
           }
-          > div.bottom {
+          > div.contents_bottom {
             div.tags {
               div.tag_name {
 
@@ -153,7 +159,7 @@ body.created_contents {
           line-height: 0;
         }
       }
-      > div.bottom {
+      > div.contents_bottom {
         div.caption {
 
         }
@@ -162,15 +168,15 @@ body.created_contents {
   }
 }
 
-
 body.created_items {
   #myTabContent {
-    div.row {
-      > div.top {
-        > div.left {
-
-          > div.top {
-            > div.left {
+    div.contents_row {
+      > div.contents_top {
+        > div.contents_left {
+          float: left;
+          > div.contents_top {
+            > div.contents_left {
+              float: left;
               > div.title {
 
               }
@@ -185,7 +191,7 @@ body.created_items {
               line-height: 0;
             }
           }
-          > div.bottom {
+          > div.contents_bottom {
             > div.tags {
               div.tag_name {
 
@@ -193,19 +199,20 @@ body.created_items {
             }
           }
         }
-        > div.right {
+        > div.contents_right {
+          float: right;
           div.using_user {
 
           }
         }
         &:after {
           display: table;
-          content: '';
+          content: ' ';
           clear: both;
           line-height: 0;
         }
       }
-      > div.bottom {
+      > div.contents_bottom {
         div.caption {
 
         }
@@ -216,11 +223,13 @@ body.created_items {
 
 body.using_items {
   #myTabContent {
-    div.row {
-      > div.top {
-        > div.left {
-          > div.top {
-            > div.left {
+    div.contents_row {
+      > div.contents_top {
+        > div.contents_left {
+          float: left;
+          > div.contents_top {
+            > div.contents_left {
+              float: left;
               > div.title {
 
               }
@@ -235,7 +244,7 @@ body.using_items {
               line-height: 0;
             }
           }
-          > div.bottom {
+          > div.contents_top {
             > div.tags {
               div.tag_name {
 
@@ -243,7 +252,7 @@ body.using_items {
             }
           }
         }
-        > div.right {
+        > div.contents_right {
           div.remove_button {
 
           }
@@ -255,7 +264,7 @@ body.using_items {
           line-height: 0;
         }
       }
-      > div.bottom {
+      > div.contents_bottom {
         div.caption {
 
         }

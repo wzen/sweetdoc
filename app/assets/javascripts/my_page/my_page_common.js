@@ -5,7 +5,10 @@ MyPageCommon = (function() {
   function MyPageCommon() {}
 
   MyPageCommon.adjustContentsSize = function() {
-    return $('#myTabContent').height($('.tabview_wrapper:first').height() - $('.nav-tabs:first').height());
+    var height;
+    height = $('.tabview_wrapper:first').height() - $('.nav-tabs:first').height();
+    $('#myTabContent').height(height);
+    return $('#user_wrapper').height(height - 2);
   };
 
   MyPageCommon.initResize = function() {
