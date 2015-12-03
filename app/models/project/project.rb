@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
     begin
       ActiveRecord::Base.transaction do
         user_project = UserProjectMap.where(user_id: user_id)
-        if user_project != nil && user_project.count >= Const::Project::USER_CREATE_MAX
+        if user_project.present? && user_project.count >= Const::Project::USER_CREATE_MAX
           # 作成上限
           return I18n.t('message.database.item_state.save.error'), null
         else
@@ -44,7 +44,7 @@ class Project < ActiveRecord::Base
       ORDER BY up.updated_at DESC
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
-    if ret_sql != nil
+    if ret_sql.present?
       return ret_sql.to_hash
     end
 

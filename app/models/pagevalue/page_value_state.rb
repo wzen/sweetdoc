@@ -46,8 +46,8 @@ class PageValueState
           saved_record = ret.to_hash.first
 
           # 共通設定作成
-          sp = save_setting_pagevalue(s_page_values, saved_record != nil ? saved_record['setting_pagevalue_id'] : nil)
-          if saved_record == nil || new_record
+          sp = save_setting_pagevalue(s_page_values, saved_record.present? ? saved_record['setting_pagevalue_id'] : nil)
+          if saved_record.blank? || new_record
             # レコード無し or 強制作成
             upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
             up = UserPagevalue.new({
@@ -176,13 +176,13 @@ class PageValueState
       itemids = []
       pagevalues.each do |pagevalue|
         key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
-        if pagevalue['general_pagevalue_data'] != nil
+        if pagevalue['general_pagevalue_data'].present?
           gpd[key] = JSON.parse(pagevalue['general_pagevalue_data'])
         end
-        if pagevalue['instance_pagevalue_data'] != nil
+        if pagevalue['instance_pagevalue_data'].present?
           ipd[key] = JSON.parse(pagevalue['instance_pagevalue_data'])
         end
-        if pagevalue['event_pagevalue_data'] != nil
+        if pagevalue['event_pagevalue_data'].present?
           epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
 
           # 必要なItemIdを調査
@@ -261,7 +261,7 @@ class PageValueState
         autosave_time = autosave_time.to_f
       end
 
-      if update_id == nil
+      if update_id.blank?
         # Insert
         sp = SettingPagevalue.new({
                                       autosave: autosave,
@@ -274,7 +274,7 @@ class PageValueState
       else
         # Update
         sp = SettingPagevalue.find(update_id)
-        if sp != nil
+        if sp.present?
           sp.autosave = autosave
           sp.autosave_time = autosave_time
           sp.grid_enable = grid_enable
@@ -304,7 +304,7 @@ class PageValueState
 
       # 保存済みデータ取得
       updated = false
-      if update_user_pagevalue_id != nil
+      if update_user_pagevalue_id.present?
         gc = GeneralCommonPagevalue.find_by(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
         if gc
           gc.data = common.to_json
@@ -321,7 +321,7 @@ class PageValueState
       end
 
       # 保存済みデータ取得
-      if update_user_pagevalue_id == nil
+      if update_user_pagevalue_id.blank?
         saved_record = []
       else
         saved_record = GeneralPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
@@ -332,7 +332,7 @@ class PageValueState
         pagevalue = page[page_num.to_s]
         select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
 
-        if select_saved_record == nil
+        if select_saved_record.blank?
           # 新規作成
           ip = GeneralPagevalue.new({data: pagevalue.to_json})
           ip.save!
@@ -345,7 +345,7 @@ class PageValueState
 
         else
           # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
-          if pagevalue != nil
+          if pagevalue.present?
             # 更新
             general_pagevalue_id = select_saved_record['general_pagevalue_id']
             ip = GeneralPagevalue.find(general_pagevalue_id)
@@ -360,7 +360,7 @@ class PageValueState
   def self.save_instance_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
     if save_value != 'null'
       # 保存済みデータ取得
-      if update_user_pagevalue_id == nil
+      if update_user_pagevalue_id.blank?
         saved_record = []
       else
         saved_record = InstancePagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
@@ -371,7 +371,7 @@ class PageValueState
         pagevalue = save_value[page_num.to_s]
         select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
 
-        if select_saved_record == nil
+        if select_saved_record.blank?
           # 新規作成
           ip = InstancePagevalue.new({data: pagevalue})
           ip.save!
@@ -384,7 +384,7 @@ class PageValueState
 
         else
           # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
-          if pagevalue != nil
+          if pagevalue.present?
             # 更新
             instance_pagevalue_id = select_saved_record['instance_pagevalue_id']
             ip = InstancePagevalue.find(instance_pagevalue_id)
@@ -399,7 +399,7 @@ class PageValueState
   def self.save_event_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
     if save_value != 'null'
       # 保存済みデータ取得
-      if update_user_pagevalue_id == nil
+      if update_user_pagevalue_id.blank?
         saved_record = []
       else
         saved_record = EventPagevaluePaging.where(user_pagevalue_id: update_user_pagevalue_id, del_flg: false)
@@ -410,7 +410,7 @@ class PageValueState
         pagevalue = save_value[page_num.to_s]
         select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
 
-        if select_saved_record == nil
+        if select_saved_record.blank?
           # 新規作成
           ep = EventPagevalue.new({data: pagevalue})
           ep.save!
@@ -423,7 +423,7 @@ class PageValueState
 
         else
           # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
-          if pagevalue != nil
+          if pagevalue.present?
             # 更新
             event_pagevalue_id = select_saved_record['event_pagevalue_id']
             ep = EventPagevalue.find(event_pagevalue_id)
@@ -441,9 +441,9 @@ class PageValueState
     epv.each do |kk, vv|
       if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
         vv.each do |k, v|
-          if k.index(Const::PageValueKey::E_NUM_PREFIX) != nil
+          if k.index(Const::PageValueKey::E_NUM_PREFIX).present?
             item_id = v[Const::EventPageValueKey::ITEM_ID]
-            if item_id != nil
+            if item_id.present?
               unless itemids.include?(item_id)
                 itemids << item_id
               end
@@ -457,7 +457,7 @@ class PageValueState
 
   def self.save_gallery_footprint(user_id, gallery_access_token, page_value)
     begin
-      if page_value != nil && page_value != 'null'
+      if page_value.present? && page_value != 'null'
         ActiveRecord::Base.transaction do
 
           g = Gallery.find_by(access_token: gallery_access_token)
@@ -503,7 +503,7 @@ class PageValueState
           end
 
           fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
-          if fp
+          if fp.present?
             # Update
             fp.page_num = page_num
           else

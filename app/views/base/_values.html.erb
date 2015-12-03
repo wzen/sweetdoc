@@ -10,33 +10,35 @@
 %>
 
 <%= form_tag("", method: "post", name: "run_form") do %>
-    <div id="<%= Const::PageValueKey::G_ROOT %>">
-        <% if general_pagevalues != nil %>
-            <%= general_pagevalues.html_safe %>
-        <% end %>
-    </div>
+    <div style="display: none">
+        <div id="<%= Const::PageValueKey::G_ROOT %>">
+            <% if general_pagevalues != nil %>
+                <%= general_pagevalues.html_safe %>
+            <% end %>
+        </div>
 
-    <div id="<%= Const::PageValueKey::IS_ROOT %>">
-        <% if is_runwindow_reload %>
-            <input type="hidden" class="<%= Const::PageValueKey::IS_RUNWINDOW_RELOAD %>" value="true" >
-        <% end %>
-        <% if instance_pagevalues != nil %>
-            <%= instance_pagevalues.html_safe %>
-        <% end %>
-    </div>
+        <div id="<%= Const::PageValueKey::IS_ROOT %>">
+            <% if is_runwindow_reload %>
+                <input type="hidden" class="<%= Const::PageValueKey::IS_RUNWINDOW_RELOAD %>" value="true" >
+            <% end %>
+            <% if instance_pagevalues != nil %>
+                <%= instance_pagevalues.html_safe %>
+            <% end %>
+        </div>
 
-    <div id="<%= Const::PageValueKey::ST_ROOT %>">
-    </div>
+        <div id="<%= Const::PageValueKey::ST_ROOT %>">
+        </div>
 
-    <div id="<%= Const::PageValueKey::E_ROOT %>">
-        <% if event_pagevalues != nil %>
-            <%= event_pagevalues.html_safe %>
-        <% end %>
-    </div>
+        <div id="<%= Const::PageValueKey::E_ROOT %>">
+            <% if event_pagevalues != nil %>
+                <%= event_pagevalues.html_safe %>
+            <% end %>
+        </div>
 
-    <div id="<%= Const::PageValueKey::F_ROOT %>">
-      <% if footprint_pagevalues != nil %>
-          <%= footprint_pagevalues.html_safe %>
-      <% end %>
+        <div id="<%= Const::PageValueKey::F_ROOT %>">
+          <% if footprint_pagevalues != nil %>
+              <%= footprint_pagevalues.html_safe %>
+          <% end %>
+        </div>
     </div>
 <% end %>

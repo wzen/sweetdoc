@@ -35,6 +35,8 @@ class Gallery < ActiveRecord::Base
     caption,
     thumbnail_img,
     thumbnail_img_contents_type,
+    thumbnail_width,
+    thumbnail_height,
     page_max,
     show_guide,
     show_page_num,
@@ -51,6 +53,8 @@ class Gallery < ActiveRecord::Base
                          caption: caption,
                          thumbnail_img: Base64.decode64(thumbnail_img),
                          thumbnail_img_contents_type: thumbnail_img_contents_type,
+                         thumbnail_img_width: thumbnail_width,
+                         thumbnail_img_height: thumbnail_height,
                          page_max: page_max,
                          screen_width: p.screen_width,
                          screen_height: p.screen_height,
@@ -66,6 +70,7 @@ class Gallery < ActiveRecord::Base
         # ProjectGalelryMap追加
         pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
         pgm.save!
+
 
         # Pagevalueレコード取得
         sql = <<-"SQL"
@@ -86,7 +91,7 @@ class Gallery < ActiveRecord::Base
         ret.each do |record|
           page_num = record['page_num']
           g_pagevalue_data = record['g_pagevalue_data']
-          if g_pagevalue_data != nil
+          if g_pagevalue_data.present?
             gp = GalleryGeneralPagevalue.new({data: g_pagevalue_data})
             gp.save!
             gpp = GalleryGeneralPagevaluePaging.new({
@@ -98,7 +103,7 @@ class Gallery < ActiveRecord::Base
           end
 
           i_pagevalue_data = record['i_pagevalue_data']
-          if i_pagevalue_data != nil
+          if i_pagevalue_data.present?
             ip = GalleryInstancePagevalue.new({data: i_pagevalue_data})
             ip.save!
             ipp = GalleryInstancePagevaluePaging.new({
@@ -110,7 +115,7 @@ class Gallery < ActiveRecord::Base
           end
 
           e_pagevalue_data = record['e_pagevalue_data']
-          if e_pagevalue_data != nil
+          if e_pagevalue_data.present?
             ep = GalleryEventPagevalue.new({data: e_pagevalue_data})
             ep.save!
             epp = GalleryEventPagevaluePaging.new({
@@ -137,7 +142,7 @@ class Gallery < ActiveRecord::Base
     begin
       g = self.find_by({access_token: access_token, del_flg: false})
       gvs = GalleryViewStatistic.where({gallery_id: g.id, view_day: date}).first
-      if gvs == nil
+      if gvs.blank?
         # 新規作成
         gvs = GalleryViewStatistic.new({
                                            gallery_id: g.id,
@@ -160,7 +165,7 @@ class Gallery < ActiveRecord::Base
         gallery_id = g.id
         gb = GalleryBookmark.where({gallery_id: gallery_id, user_id: user_id})
         # 既にブックマークが存在する場合は処理なし
-        if gb == nil
+        if gb.blank?
           gb = GalleryBookmark.new({
                                        gallery_id: gallery_id,
                                        user_id: user_id,
@@ -169,7 +174,7 @@ class Gallery < ActiveRecord::Base
           gb.save!
 
           gbs = GalleryBookmarkStatistic.where({gallery_id: gallery_id, view_day: date})
-          if gbs == nil
+          if gbs.blank?
             # 新規作成
             gbs = GalleryBookmarkStatistic.new({
                                                    gallery_id: gallery_id,
@@ -202,7 +207,7 @@ class Gallery < ActiveRecord::Base
             pagevalue = v['pagevalue']
 
             p = last_i_page_values.map{|m| m.page_num.to_i == page_num}.first
-            if p == nil
+            if p.blank?
               # Insert
               ip = GalleryInstancePagevalue.new({data: pagevalue})
               ip.save!
@@ -216,7 +221,7 @@ class Gallery < ActiveRecord::Base
             else
               # Update
               ip = GalleryInstancePagevalue.find(p.gallery_instance_pagevalue_id.to_i)
-              if ip != nil
+              if ip.present?
                 ip.data = pagevalue
               end
               ip.save!
@@ -228,7 +233,7 @@ class Gallery < ActiveRecord::Base
           extras = last_i_page_values.map{|m| m.page_num.to_i > i_page_values.length}
           extras.each do |extra|
             ip = GalleryInstancePagevalue.find(extra.gallery_instance_pagevalue_id.to_i)
-            if ip != nil
+            if ip.present?
               if ip.retain <= 1
                 ip.del_flg = true
               end
@@ -236,7 +241,7 @@ class Gallery < ActiveRecord::Base
               ip.save!
             end
             ipp = GalleryInstancePagevaluePaging.find(extra.id.to_i)
-            if ipp != nil
+            if ipp.present?
               ipp.del_flg = true
               ipp.save!
             end
@@ -251,7 +256,7 @@ class Gallery < ActiveRecord::Base
             pagevalue = v['pagevalue']
 
             p = last_e_page_values.map{|m| m.page_num.to_i == page_num}.first
-            if p == nil
+            if p.blank?
               # Insert
               ep = GalleryEventPagevalue.new({data: pagevalue})
               ep.save!
@@ -265,7 +270,7 @@ class Gallery < ActiveRecord::Base
             else
               # Update
               ep = GalleryInstancePagevalue.find(p.gallery_event_pagevalue_id.to_i)
-              if ep != nil
+              if ep.present?
                 ep.data = pagevalue
               end
               ep.save!
@@ -277,7 +282,7 @@ class Gallery < ActiveRecord::Base
           extras = last_e_page_values.map{|m| m.page_num.to_i > e_page_values.length}
           extras.each do |extra|
             ep = GalleryEventPagevalue.find(extra.gallery_event_pagevalue_id.to_i)
-            if ep != nil
+            if ep.present?
               if ep.retain <= 1
                 ep.del_flg = true
               end
@@ -285,7 +290,7 @@ class Gallery < ActiveRecord::Base
               ep.save!
             end
             epp = GalleryEventPagevaluePaging.find(extra.id.to_i)
-            if epp != nil
+            if epp.present?
               epp.del_flg = true
               epp.save!
             end
@@ -315,7 +320,7 @@ class Gallery < ActiveRecord::Base
         tag_ids = []
         tags.each do |tag|
           t = GalleryTag.find_by(name: tag)
-          if t == nil
+          if t.blank?
             # タグを新規作成
             t = GalleryTag.new({
                                      name: tag
@@ -359,10 +364,25 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.firstload_contents(access_token, page_num = 1)
-    sql = <<-"SQL"
-      SELECT g.* ,
-             u.id as user_id, u.name as username, u.thumbnail_img as user_thumbnail_img,
-             ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gbs.count as bookmark_count, gvs.count as view_count, ugf.* as footprint_data
+    sql = <<-"SQL".strip_heredoc
+      SELECT
+        g.title as title,
+        g.caption as caption,
+        g.screen_width as screen_width,
+        g.screen_height as screen_height,
+        g.page_max as page_max,
+        g.show_guide as show_guide,
+        g.show_page_num as show_page_num,
+        g.show_chapter_num as show_chapter_num,
+        u.id as user_id,
+        u.name as username,
+        u.thumbnail_img as user_thumbnail_img,
+        ggp.data as general_pagevalue_data,
+        gip.data as instance_pagevalue_data,
+        gep.data as event_pagevalue_data,
+        gbs.count as bookmark_count,
+        gvs.count as view_count,
+        ugf.page_num as footprint_page_num
       FROM galleries g
       INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id
       INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id
@@ -401,7 +421,12 @@ class Gallery < ActiveRecord::Base
       ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['instance_pagevalue_data'])
       epd = {}
       epd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['event_pagevalue_data'])
-      fpd = pagevalues['footprint_data'].select{|k, v| k != 'user_id' && k != 'gallery_id' && k != 'del_flg' }
+      fpd = {}
+      if pagevalues['footprint_page_num'].present?
+        fpd[Const::PageValueKey::PAGE_NUM] = pagevalues['footprint_page_num']
+      else
+        fpd[Const::PageValueKey::PAGE_NUM] = 1
+      end
 
       # 必要なItemIdを調査
       itemids = PageValueState.extract_need_load_itemids(pagevalues['event_pagevalue_data'])
@@ -503,7 +528,7 @@ class Gallery < ActiveRecord::Base
       (#{grid_contents_sorted_by_bookmarkcount_sql(show_head, show_limit, date, tag_ids)})
     SQL
     contents = ActiveRecord::Base.connection.select_all(sql)
-    if contents != nil && contents.count > 0
+    if contents.present? && contents.count > 0
       return contents.to_hash
     end
     return null
@@ -521,7 +546,7 @@ class Gallery < ActiveRecord::Base
       AND gb.del_flg = 0
       SQL
       contents = ActiveRecord::Base.connection.select_all(sql)
-      if contents != nil && contents.count > 0
+      if contents.present? && contents.count > 0
         return contents.to_hash.map{|c| c['category']}
       end
     end
@@ -543,7 +568,7 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_createdate(head, show_limit, tag_ids)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_sorted_by_createdate_sql(head, show_limit, tag_ids))
-    if contents != nil && contents.count > 0
+    if contents.present? && contents.count > 0
       return contents.to_hash
     end
     return null
@@ -551,7 +576,7 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_createdate_sql(head, show_limit, tag_ids = nil)
     table = nil
-    if tag_ids != nil && tag_ids.length > 0
+    if tag_ids.present? && tag_ids.length > 0
       tags_in = "(#{tag_ids.join(',')})"
       table =<<-"TABLE"
         (
@@ -579,7 +604,7 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_viewcount(head, show_limit, date, tag_ids)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_sorted_by_viewcount_sql(head, show_limit, date, tag_ids))
-    if contents != nil && contents.count > 0
+    if contents.present? && contents.count > 0
       return contents.to_hash
     end
     return null
@@ -587,10 +612,10 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_viewcount_sql(head, show_limit, date, tag_ids = nil)
     where = 'WHERE g.del_flg = 0'
-    if date != nil
+    if date.present?
       where += " AND DATEDIFF(#{date}, gbs.view_day) = 0"
     end
-    if tag_ids != nil && tag_ids.length > 0
+    if tag_ids.present? && tag_ids.length > 0
       tags_in = "(#{tag_ids.join(',')})"
       where += " AND gt.id IN #{tags_in}"
     end
@@ -608,7 +633,7 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_bookmarkcount(head, show_limit, date, tag_ids)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_sorted_by_bookmarkcount_sql(head, show_limit, date, tag_ids))
-    if contents != nil && contents.count > 0
+    if contents.present? && contents.count > 0
       return contents.to_hash
     end
     return null
@@ -616,10 +641,10 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_sorted_by_bookmarkcount_sql(head, show_limit, date, tag_ids = nil)
     where = 'WHERE g.del_flg = 0'
-    if date != nil
+    if date.present?
       where += " AND DATEDIFF(#{date}, gbs.view_day) = 0"
     end
-    if tag_ids != nil && tag_ids.length > 0
+    if tag_ids.present? && tag_ids.length > 0
       tags_in = "(#{tag_ids.join(',')})"
       where += " AND gt.id IN #{tags_in}"
     end
@@ -637,7 +662,7 @@ class Gallery < ActiveRecord::Base
 
   def self.grid_contents_user_bookmark(user_id, head, show_limit)
     contents = ActiveRecord::Base.connection.select_all(grid_contents_user_bookmark_sql(user_id, head, show_limit))
-    if contents != nil && contents.count > 0
+    if contents.present? && contents.count > 0
       return contents.to_hash
     end
     return null

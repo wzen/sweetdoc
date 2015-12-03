@@ -21,7 +21,7 @@ class ItemGalleryTag < ActiveRecord::Base
 
           loop_count = 0
           gallery_tag = self.find(tag.id)
-          while gallery_tag == nil && loop_count <= loop_max
+          while gallery_tag.blank? && loop_count <= loop_max
             sleep 0.1
             loop_count += 1
             gallery_tag = self.find(tag.id)

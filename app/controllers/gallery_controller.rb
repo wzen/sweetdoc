@@ -41,6 +41,8 @@ class GalleryController < ApplicationController
     caption = params.fetch(Const::Gallery::Key::CAPTION, '').force_encoding('utf-8')
     thumbnail_img = params.require(Const::Gallery::Key::THUMBNAIL_IMG)
     thumbnail_img_contents_type = params.require(Const::Gallery::Key::THUMBNAIL_IMG_CONTENTSTYPE)
+    thumbnail_img_width = params.require(Const::Gallery::Key::THUMBNAIL_IMG_WIDTH)
+    thumbnail_img_height = params.require(Const::Gallery::Key::THUMBNAIL_IMG_HEIGHT)
     page_max = params.require(Const::Gallery::Key::PAGE_MAX)
     show_guide = params.fetch(Const::Gallery::Key::SHOW_GUIDE, false)
     show_page_num = params.fetch(Const::Gallery::Key::SHOW_PAGE_NUM, false)
@@ -53,6 +55,8 @@ class GalleryController < ApplicationController
         ApplicationController.helpers.sanitize(caption),
         thumbnail_img,
         thumbnail_img_contents_type,
+        thumbnail_img_width,
+        thumbnail_img_height,
         page_max,
         show_guide,
         show_page_num,
@@ -92,7 +96,7 @@ class GalleryController < ApplicationController
 
   def thumbnail
     g = Gallery.find_by(access_token: params[:access_token])
-    if g == nil || g.thumbnail_img == nil
+    if g.blank? || g.thumbnail_img.blank?
       ActionController::Base.helpers.asset_path('image_notfound.png')
     else
       send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)

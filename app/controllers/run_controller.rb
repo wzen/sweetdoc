@@ -12,7 +12,7 @@ class RunController < ApplicationController
     user_id = current_or_guest_user.id
     target_pages = params.require(Const::Run::Key::TARGET_PAGES)
     loaded_itemids = params.require(Const::Run::Key::LOADED_ITEM_IDS)
-    if loaded_itemids != nil
+    if loaded_itemids.present?
       loaded_itemids = JSON.parse(loaded_itemids)
     end
     if Rails.application.routes.recognize_path(request.referer)[:controller] == "gallery"

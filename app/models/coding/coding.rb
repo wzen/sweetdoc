@@ -399,7 +399,7 @@ class Coding
     node_path = tree_data[Const::Coding::Key::NODE_PATH]
     user_coding_id = tree_data[Const::Coding::Key::USER_CODING_ID]
     uct = UserCodingTree.find_by(user_id: user_id, node_path: node_path, del_flg: false)
-    if uct == nil
+    if uct.blank?
       uct = UserCodingTree.new({
                                    user_id: user_id,
                                    node_path: node_path,

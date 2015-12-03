@@ -25,7 +25,7 @@ class GalleryTag < ActiveRecord::Base
   end
 
   def self.get_recommend_tags(got_popular_tags, recommend_source_word)
-    if recommend_source_word == nil || recommend_source_word.length == 0
+    if recommend_source_word.blank? || recommend_source_word.length == 0
       return []
     end
 
@@ -37,7 +37,7 @@ class GalleryTag < ActiveRecord::Base
                                                     score: 10
                                                 })
     category = result['wordlist'].first['cname']
-    if category != nil
+    if category.present?
       limit = 30
       take_num = 3
 
@@ -86,7 +86,7 @@ class GalleryTag < ActiveRecord::Base
 
           loop_count = 0
           gallery_tag = self.find(tag.id)
-          while gallery_tag == nil && loop_count <= loop_max
+          while gallery_tag.blank? && loop_count <= loop_max
             sleep 0.1
             loop_count += 1
             gallery_tag = self.find(tag.id)

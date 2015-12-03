@@ -38,7 +38,7 @@ class UserCodeUtil
       user_coding_id = c[Const::Coding::Key::USER_CODING_ID]
       code = c[Const::Coding::Key::CODE]
       uc = UserCoding.find(user_coding_id)
-      if uc != nil
+      if uc.present?
         code_filename = uc['code_filename']
         save_code(type, user_access_token, code_filename, uc['lang_type'], code)
         ret << uc.id

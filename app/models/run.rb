@@ -53,8 +53,14 @@ class Run
     end
 
     ret = ''
-    value.each do |k, v|
-      ret += make_element_str(k, v, key_name)
+    if value.class == Array
+      value.each_with_index do |v, idx|
+        ret += make_element_str(idx, v, key_name)
+      end
+    else
+      value.each do |k, v|
+        ret += make_element_str(k, v, key_name)
+      end
     end
 
     return "<div class=#{key}>#{ret}</div>"

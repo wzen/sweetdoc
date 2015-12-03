@@ -15,7 +15,7 @@ class MotionCheckController < ApplicationController
     unless @is_runwindow_reload
       user_id = current_or_guest_user.id
       page_num = params['page_num']
-      if page_num == nil
+      if page_num.blank?
         page_num = 1
       end
       general = params.require(Const::PageValueKey::G_PREFIX.to_sym)

@@ -120,7 +120,7 @@ class ItemGallery < ActiveRecord::Base
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         ret = ret_sql.to_hash.first
-        if ret != nil
+        if ret.present?
           # ユーザコード読み込み & 変換
           user_access_token = ret['user_access_token']
           class_name = "C#{SecureRandom.hex(8)}"
@@ -133,7 +133,7 @@ class ItemGallery < ActiveRecord::Base
           end
           FileUtils.mkdir_p(UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, user_access_token)) unless File.directory?(UserCodeUtil.code_parentdirpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, user_access_token))
 
-          if update_item_gallery_id && (ig = ItemGallery.find_by(created_user_id: user_id, item_gallery_id: update_item_gallery_id, del_flg: false))
+          if update_item_gallery_id && (ig = ItemGallery.find_by(created_user_id: user_id, item_gallery_id: update_item_gallery_id, del_flg: false)).present?
             # 既存コードのUpdate
             # update
             save_filename = ig.file_name
@@ -188,7 +188,7 @@ class ItemGallery < ActiveRecord::Base
         tag_ids = []
         tags.each do |tag|
           t = ItemGalleryTag.find_by(name: tag)
-          if t == nil
+          if t.blank?
             # タグを新規作成
             t = ItemGalleryTag.new({
                                    name: tag
@@ -198,7 +198,7 @@ class ItemGallery < ActiveRecord::Base
 
           else
             # タグの重み付けを加算
-            if t.weight
+            if t.weight.present?
               t.weight += 1
             else
               t.weight = 1
@@ -304,7 +304,7 @@ class ItemGallery < ActiveRecord::Base
     count = UserItemGalleryMap.where(item_gallery_id: item_gallery_id).count
     # 使用数更新
     igus = ItemGalleryUsingStatistics.find(item_gallery_id: item_gallery_id)
-    if igus
+    if igus.present?
       # Update
       igus.count = count
     else
