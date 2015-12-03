@@ -177,56 +177,70 @@ body.created_items {
         > div.contents_left {
           height: 50px;
           width: 100%;
-          > div.float_container {
+          > div {
             height: 100%;
             margin-right: 100px;
-            > div.contents_top {
-              > div.contents_left {
-                > div.title {
-                  > a {
-                    font-size: 35px;
-                    font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                    font-weight: 900;
+            > div.float_container {
+              height: 100%;
+              > div.contents_top {
+                > div.contents_left {
+                  > div.title {
+                    > a {
+                      font-size: 35px;
+                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                      font-weight: 900;
+                    }
                   }
                 }
-              }
-              > div.contents_right {
-                padding: 5px;
-                > div.contents_top {
-                  height: 50%;
-                  > div.user {
-                    vertical-align: middle;
-                    > a {
+                > div.contents_right {
+                  padding: 5px;
+                  > div.contents_top {
+                    height: 50%;
+                    > div.user {
+                      vertical-align: middle;
+                      > a {
+                        font-size: 15px;
+                        font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                        font-weight: 900;
+                      }
+                    }
+                  }
+                  > div.contents_bottom {
+                    height: 50%;
+                    > div.using_user {
+                      vertical-align: middle;
                       font-size: 15px;
                       font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
                       font-weight: 900;
                     }
                   }
                 }
-                > div.contents_bottom {
-                  height: 50%;
-                  > div.using_user {
-                    vertical-align: middle;
-                    font-size: 15px;
-                    font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                    font-weight: 900;
-                  }
-                }
               }
             }
-          }
-          > div.contents_bottom {
-            div.tag_label {
-              width: 70px;
-              font-size: 20px;
+            > div.contents_bottom {
+              div.tag_label {
+                width: 70px;
+                font-size: 20px;
+              }
             }
           }
         }
         > div.contents_right {
           width: 100px;
-          div.delete_button {
-            width: 100px;
-            height: 100%;
+          margin-left: -100px;
+          div.contents_top {
+            height: 50%;
+            div.edit_button {
+              width: 100px;
+              height: 100%;
+            }
+          }
+          div.contents_bottom {
+            height: 50%;
+            div.delete_button {
+              width: 100px;
+              height: 100%;
+            }
           }
         }
       }
@@ -242,29 +256,58 @@ body.created_items {
 body.using_items {
   #myTabContent {
     div.contents_row {
+      padding: 10px;
       > div.contents_top {
+        height: 90px;
         > div.contents_left {
-          > div.contents_top {
-            > div.contents_left {
-              > div.title {
-
-              }
-              > div.user {
-
+          height: 50px;
+          width: 100%;
+          > div {
+            height: 100%;
+            margin-right: 100px;
+            > div.float_container {
+              height: 100%;
+              > div.contents_top {
+                height: 100%;
+                > div.contents_left {
+                  > div.title {
+                    > a {
+                      font-size: 35px;
+                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                      font-weight: 900;
+                    }
+                  }
+                }
+                > div.contents_right {
+                  padding: 5px;
+                  height: 100%;
+                  > div.user {
+                    vertical-align: middle;
+                    height: 100%;
+                    > a {
+                      font-size: 15px;
+                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                      font-weight: 900;
+                    }
+                  }
+                }
               }
             }
-          }
-          > div.contents_top {
-            > div.tags {
-              div.tag_name {
-
+            > div.contents_bottom {
+              div.tag_label {
+                width: 70px;
+                font-size: 20px;
               }
             }
           }
         }
         > div.contents_right {
+          width: 100px;
+          margin-left: -100px;
+          height: 100%;
           div.remove_button {
-
+            width: 100px;
+            height: 100%;
           }
         }
       }
@@ -276,6 +319,7 @@ body.using_items {
     }
   }
 }
+
 
 div.contents_left, div.contents_right {
   height: 100%;
@@ -303,4 +347,63 @@ div.tagcloud {
   a {
     pointer-events: none;
   }
+}
+
+div.contents_row {
+  margin-top: 10px;
+}
+
+.drop-shadow {
+  position:relative;
+  padding:1em;
+  margin:2em 10px 4em;
+  background:#fff;
+  -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+.drop-shadow:before,
+.drop-shadow:after {
+  content:"";
+  position:absolute;
+  z-index:-2;
+}
+
+.drop-shadow p {
+  font-size:16px;
+  font-weight:bold;
+}
+
+.lifted {
+  -moz-border-radius:4px;
+  border-radius:4px;
+}
+
+.lifted:before,
+.lifted:after {
+  bottom:15px;
+  left:10px;
+  width:50%;
+  height:20%;
+  max-width:300px;
+  max-height:100px;
+  -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+  box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+  -webkit-transform:rotate(-3deg);
+  -moz-transform:rotate(-3deg);
+  -ms-transform:rotate(-3deg);
+  -o-transform:rotate(-3deg);
+  transform:rotate(-3deg);
+}
+
+.lifted:after {
+  right:10px;
+  left:auto;
+  -webkit-transform:rotate(3deg);
+  -moz-transform:rotate(3deg);
+  -ms-transform:rotate(3deg);
+  -o-transform:rotate(3deg);
+  transform:rotate(3deg);
 }
