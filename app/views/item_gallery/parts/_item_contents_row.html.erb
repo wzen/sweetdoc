@@ -1,0 +1,132 @@
+<%
+   content = {} if content.nil?
+   editable = false if editable.nil?
+%>
+
+<% if editable %>
+
+    <div class="contents_row drop-shadow lifted">
+        <div class="contents_top">
+            <div class="contents_left">
+                <div>
+                    <div class="float_container">
+                        <div class="contents_top">
+                            <div class="contents_left">
+                                <div class="title">
+                                    <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
+                                </div>
+                            </div>
+                            <div class="contents_right">
+                                <div class="contents_top">
+                                    <div class="user">
+                                        <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
+                                    </div>
+                                </div>
+                                <div class="contents_bottom">
+                                    <div class="using_user">
+                                        <%= content[Const::User::Key::USER_COUNT] %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contents_bottom">
+                        <div class="contents_left">
+                            <div class="tag_label">
+                                Tags:
+                            </div>
+                        </div>
+                        <div class="contents_left">
+                            <div class="tags tagcloud">
+                                <ul>
+                                    <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
+                                        <li class="tag_name"><a><%= t %></a></li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contents_right">
+                <div class="contents_top">
+                    <div class="edit_button">
+                    </div>
+                </div>
+                <div class="contents_bottom">
+                    <div class="delete_button">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="contents_bottom">
+            <div class="caption">
+                <%= content[Const::ItemGallery::Key::CAPTION] %>
+            </div>
+        </div>
+    </div>
+
+<% else %>
+
+    <div class="contents_row drop-shadow lifted">
+        <div class="contents_top">
+            <div class="contents_left">
+                <div>
+                    <div class="float_container">
+                        <div class="contents_top">
+                            <div class="contents_left">
+                                <div class="title">
+                                    <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
+                                </div>
+                            </div>
+                            <div class="contents_right">
+                                <div class="contents_top">
+                                    <div class="user">
+                                        <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
+                                    </div>
+                                </div>
+                                <div class="contents_bottom">
+                                    <div class="using_user">
+                                        <%= content[Const::User::Key::USER_COUNT] %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contents_bottom">
+                        <div class="contents_left">
+                            <div class="tag_label">
+                                Tags:
+                            </div>
+                        </div>
+                        <div class="contents_left">
+                            <div class="tags tagcloud">
+                                <ul>
+                                    <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
+                                        <li class="tag_name"><a><%= t %></a></li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contents_right">
+                <div class="contents_top">
+                    <div class="edit_button">
+                    </div>
+                </div>
+                <div class="contents_bottom">
+                    <div class="delete_button">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="contents_bottom">
+            <div class="caption">
+                <%= content[Const::ItemGallery::Key::CAPTION] %>
+            </div>
+        </div>
+    </div>
+
+<% end %>

@@ -5,71 +5,12 @@
 
 <div id="item_gallery_wrapper" class="col-xs-9">
     <% @contents.each do |content| %>
-        <div class="contents_row">
-            <div class="contents_top">
-                <div class="contents_left">
-                    <div class="contents_top">
-                        <div class="contents_left">
-                            <div class="title">
-                                <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
-                            </div>
-                            <div class="user">
-                                <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="contents_bottom">
-                        <div class="tags">
-                            <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
-                                <div class="tag_name"><%= t %></div>
-                            <% end %>
-                        </div>
-                    </div>
-                </div>
-                <div class="contents_right">
-                    <div class="using_user">
-                        <%= content[Const::User::Key::USER_COUNT] %>
-                    </div>
-                </div>
-            </div>
-            <div class="contents_bottom">
-                <div class="caption">
-                    <%= content[Const::ItemGallery::Key::CAPTION] %>
-                </div>
-            </div>
-        </div>
+        <%= render 'item_gallery/parts/item_contents_row', content: content, editable: false %>
     <% end %>
 </div>
 
 <div id="using_item_wrapper" class="col-xs-3">
     <% @using_items.each do |content| %>
-        <div class="row">
-            <div class="contents_top">
-                <div class="contents_left">
-                    <div class="contents_top">
-                        <div class="contents_left">
-                            <div class="title">
-                                <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
-                            </div>
-                            <div class="user">
-                                <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="contents_bottom">
-                        <div class="tags">
-                            <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
-                                <div class="tag_name"><%= t %></div>
-                            <% end %>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="contents_bottom">
-                <div class="caption">
-                    <%= content[Const::ItemGallery::Key::CAPTION] %>
-                </div>
-            </div>
-        </div>
+      <%= render 'item_gallery/parts/user_using_contents_row', content: content, editable: false %>
     <% end %>
 </div>
