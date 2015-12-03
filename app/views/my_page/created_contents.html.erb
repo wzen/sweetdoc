@@ -1,25 +1,54 @@
 <% @contents.each do |content| %>
-    <div class="contents_row">
+    <div class="contents_row  drop-shadow lifted">
         <div class="contents_top">
             <div class="contents_left">
-                <div class="thumbnail">
-                    <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: 'width:100px;height:100px;')%>
+                <div>
+                    <div class="float_container">
+                        <div class="contents_top">
+                            <div class="contents_left">
+                                <div class="contents_thumbnail">
+                                    <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: 'width:60px;height:60px;')%>
+                                </div>
+                            </div>
+                            <div class="contents_right">
+                                <div class="contents_top">
+                                    <div class="title">
+                                        <%= link_to content[Const::Gallery::Key::TITLE], "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>
+                                    </div>
+                                </div>
+                                <div class="contents_bottom">
+                                    <div class="user">
+                                        <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contents_bottom">
+                        <div class="contents_left">
+                            <div class="tag_label">
+                                Tags:
+                            </div>
+                        </div>
+                        <div class="contents_left">
+                            <div class="tags tagcloud mini">
+                                <ul>
+                                    <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
+                                        <li class="tag_name"><a><%= t %></a></li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="contents_right">
                 <div class="contents_top">
-                    <div class="title">
-                        <%= link_to content[Const::Gallery::Key::TITLE], "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>
-                    </div>
-                    <div class="user">
-                        <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
+                    <div class="edit_button">
                     </div>
                 </div>
                 <div class="contents_bottom">
-                    <div class="tags">
-                        <% content[Const::Gallery::Key::TAGS].split(',').each do |t| %>
-                            <div class="tag_name"><%= t %></div>
-                        <% end %>
+                    <div class="delete_button">
                     </div>
                 </div>
             </div>

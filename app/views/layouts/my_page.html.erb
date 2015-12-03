@@ -23,11 +23,11 @@
             <div class="wrapper">
                 <div class="tabview_wrapper">
                     <ul class="nav nav-tabs">
-                        <li class="<%= action_name == 'bookmarks'? 'active': '' %>"><%= link_to 'Bookmark', 'my_page/bookmarks', disabled: action_name == 'bookmarks' %></li>
-                        <li class="<%= action_name == 'created_contents'? 'active': '' %>"><%= link_to 'CreatedContents', 'my_page/created_contents', disabled: action_name == 'created_contents' %></li>
-                        <li class="<%= action_name == 'created_items'? 'active': '' %>"><%= link_to 'CreatedItem', 'my_page/created_items', disabled: action_name == 'created_items' %></li>
-                        <% if @is_access_me %>
-                            <li class="<%= action_name == 'using_items'? 'active': '' %>"><%= link_to 'UsingItem', 'my_page/using_items', disabled: action_name == 'using_items' %></li>
+                        <li class="<%= action_name == 'bookmarks'? 'active': '' %>"><%= link_to 'Bookmark', 'bookmarks', disabled: action_name == 'bookmarks' %></li>
+                        <li class="<%= action_name == 'created_contents'? 'active': '' %>"><%= link_to 'CreatedContents', 'created_contents', disabled: action_name == 'created_contents' %></li>
+                        <li class="<%= action_name == 'created_items'? 'active': '' %>"><%= link_to 'CreatedItem', 'created_items', disabled: action_name == 'created_items' %></li>
+                        <% if @is_access_user_page %>
+                            <li class="<%= action_name == 'using_items'? 'active': '' %>"><%= link_to 'UsingItem', 'using_items', disabled: action_name == 'using_items' %></li>
                         <% end %>
                     </ul>
                     <div id="myTabContent" class="tab-content">

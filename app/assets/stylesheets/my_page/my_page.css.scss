@@ -129,34 +129,74 @@ body.bookmarks {
 body.created_contents {
   #myTabContent {
     div.contents_row {
+      padding: 10px;
       > div.contents_top {
+        height: 100px;
         > div.contents_left {
-          div.thumbnail {
-
-          }
-        }
-        > div.contents_right {
-          > div.contents_top {
-            div.title {
-
+          height: 66px;
+          width: 100%;
+          > div {
+            height: 100%;
+            margin-right: 100px;
+            > div.float_container {
+              height: 100%;
+              > div.contents_top {
+                > div.contents_left {
+                  > div.contents_thumbnail {
+                  }
+                }
+                > div.contents_right {
+                  float: left;
+                  margin-left: 30px;
+                  padding: 5px;
+                  > div.contents_top {
+                    height: 50%;
+                    > div.title {
+                      vertical-align: middle;
+                      > a {
+                        font-size: 25px;
+                        font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                        font-weight: 900;
+                      }
+                    }
+                  }
+                  > div.contents_bottom {
+                    height: 50%;
+                    > div.user {
+                      vertical-align: middle;
+                      font-size: 15px;
+                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                      font-weight: 900;
+                    }
+                  }
+                }
+              }
             }
-            div.user {
-
-            }
-          }
-          > div.contents_bottom {
-            div.tags {
-              div.tag_name {
-
+            > div.contents_bottom {
+              div.tag_label {
+                width: 40px;
+                font-size: 14px;
               }
             }
           }
         }
-        &:after {
-          display: table;
-          content: '';
-          clear: both;
-          line-height: 0;
+        > div.contents_right {
+          width: 100px;
+          margin-left: -100px;
+          div.contents_top {
+            height: 50%;
+            div.edit_button {
+              width: 100px;
+              height: 100%;
+            }
+          }
+          div.contents_bottom {
+            height: 50%;
+            div.delete_button {
+              width: 100px;
+              height: 100%;
+            }
+          }
         }
       }
       > div.contents_bottom {
@@ -356,7 +396,7 @@ div.contents_row {
 .drop-shadow {
   position:relative;
   padding:1em;
-  margin:2em 10px 4em;
+  margin:2em 10px 1em;
   background:#fff;
   -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
   -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;

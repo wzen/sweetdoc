@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'gallery#index'
+  root to: 'gallery#grid'
   devise_for :user, controllers: {
       sessions: 'users/sessions',
       registrations: 'users/registrations'

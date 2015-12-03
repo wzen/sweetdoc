@@ -757,10 +757,10 @@ class Gallery < ActiveRecord::Base
       style = 'width:auto;height:100%;'
     end
 
-    if img_width / img_height > 1.5 && class_name = 'grid-item-height2'
-      class_name, style = grid_size_classname(img_width, img_height)
-    elsif img_height / img_width > 1.5 && class_name = 'grid-item-width2'
-      class_name, style = grid_size_classname(img_width, img_height)
+    if img_width / img_height > 1.5 && class_name == 'grid-item-height2'
+      class_name, style = grid_contents_size_and_style(img_width, img_height)
+    elsif img_height / img_width > 1.5 && class_name == 'grid-item-width2'
+      class_name, style = grid_contents_size_and_style(img_width, img_height)
     end
 
     return class_name, style
@@ -782,7 +782,7 @@ class Gallery < ActiveRecord::Base
         group_concat(gt.name separator ',') as #{Const::Gallery::Key::TAGS}
       FROM user_project_maps upm
       INNER JOIN users u ON upm.user_id = u.id
-      INNER JOIN project_gallery_maps pgm ON pgm.user_project_map_id = pgm.id
+      INNER JOIN project_gallery_maps pgm ON pgm.user_project_map_id = upm.id
       INNER JOIN galleries g ON g.id = pgm.gallery_id
       INNER JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id
       INNER JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id
