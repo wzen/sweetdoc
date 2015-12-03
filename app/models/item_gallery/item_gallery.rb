@@ -72,7 +72,7 @@ class ItemGallery < ActiveRecord::Base
         t.#{Const::User::Key::NAME} as #{Const::User::Key::NAME},
         t.#{Const::User::Key::USER_ACCESS_TOKEN} as #{Const::User::Key::USER_ACCESS_TOKEN},
         t.#{Const::ItemGallery::Key::TAGS} as #{Const::ItemGallery::Key::TAGS},
-        count(*) as #{Const::User::Key::USER_COUNT}
+        count(uigm.id) as #{Const::User::Key::USER_COUNT}
         FROM (
         SELECT
           ig.id as #{Const::ItemGallery::Key::ITEM_GALLERY_ID},
