@@ -6,12 +6,13 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page_common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -19,12 +20,13 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page_common.js" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -813,6 +813,8 @@ class Gallery < ActiveRecord::Base
       FROM gallery_bookmarks gb
       INNER JOIN users u ON gb.user_id = u.id
       INNER JOIN galleries g ON g.id = gb.gallery_id
+      INNER JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id
+      INNER JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id
       WHERE u.id = #{user_id}
       AND u.del_flg = 0 AND gb.del_flg = 0 AND g.del_flg = 0
       AND gtm.del_flg = 0 AND gt.del_flg = 0

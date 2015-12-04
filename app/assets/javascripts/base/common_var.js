@@ -15,7 +15,7 @@ CommonVar = (function() {
   };
 
   CommonVar.initCommonVar = function() {
-    window.appName = 'DDesk';
+    window.appName = 'SugerDoc';
     window.scrollViewSize = 30000;
     return window.pageNumMax = 10000;
   };
