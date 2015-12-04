@@ -64,6 +64,7 @@
                 <%= content[Const::Gallery::Key::CAPTION] %>
             </div>
         </div>
+        <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN] %>">
     </div>
 
 <% else %>
@@ -113,6 +114,7 @@
                 <%= content[Const::Gallery::Key::CAPTION] %>
             </div>
         </div>
+        <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN] %>">
     </div>
 
 <% end %>

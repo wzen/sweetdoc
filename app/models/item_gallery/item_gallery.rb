@@ -37,6 +37,37 @@ class ItemGallery < ActiveRecord::Base
     end
   end
 
+  def self.popular_tags(limit)
+    begin
+      # TODO: 不可対策のため統計テーブル等作る
+      ActiveRecord::Base.transaction do
+        sql =<<-"SQL"
+            SELECT
+              t.#{Const::ItemGallery::Key::TAG_ID} as #{Const::ItemGallery::Key::TAG_ID},
+              t.#{Const::ItemGallery::Key::TAG_NAME} as #{Const::ItemGallery::Key::TAG_NAME},
+              t.#{Const::ItemGallery::Key::ITEM_GALLERY_COUNT} as #{Const::ItemGallery::Key::ITEM_GALLERY_COUNT}
+            FROM (
+              SELECT
+                igt.id as #{Const::ItemGallery::Key::TAG_ID},
+                igt.name as #{Const::ItemGallery::Key::TAG_NAME},
+                count(igtm.item_gallery_id) as #{Const::ItemGallery::Key::ITEM_GALLERY_COUNT}
+              FROM item_gallery_tag_maps igtm
+              INNER JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id
+              WHERE igt.del_flg = 0 AND igtm.del_flg = 0
+              GROUP BY igtm.item_gallery_tag_id
+              LIMIT 0, #{limit} ) t
+            ORDER BY t.#{Const::ItemGallery::Key::ITEM_GALLERY_COUNT} DESC
+
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        return ret_sql.to_hash.first
+      end
+    rescue => e
+      # 失敗
+      return false, I18n.t('message.database.item_state.save.error')
+    end
+  end
+
   def self.using_items(user_id, head = 0, limit = 30)
     sql =<<-"SQL"
       SELECT

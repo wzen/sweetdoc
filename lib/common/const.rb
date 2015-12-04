@@ -248,6 +248,8 @@ class Const
       PAGE_NUM = 'p_n'
       SEARCH_TYPE = 'search_type'
       USER_CODING_ID = 'user_coding_id'
+      TAG_ID = 'tag_id'
+      TAG_NAME = 'tag_name'
     end
 
     class SearchKey
@@ -277,6 +279,7 @@ class Const
 
   class ItemGallery
     TAG_MAX = 3
+    POPULAR_TAG_MENU_SHOW_MAX = 15
 
     class Key
       MESSAGE = 'message'
@@ -287,6 +290,9 @@ class Const
       CAPTION = 'caption'
       SEARCH_TYPE = 'search_type'
       USER_CODING_ID = 'user_coding_id'
+      TAG_ID = 'tag_id'
+      TAG_NAME = 'tag_name'
+      ITEM_GALLERY_COUNT = 'item_gallery_count'
     end
 
     class PublicType

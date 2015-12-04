@@ -2,6 +2,7 @@ require 'item_gallery/item_gallery'
 
 class ItemGalleryController < ApplicationController
   def index
+    @popular_tags = ItemGallery.popular_tags(Const::ItemGallery::POPULAR_TAG_MENU_SHOW_MAX)
     @contents = ItemGallery.index_page_data
     user_id = current_or_guest_user.id
     @using_items = ItemGallery.using_items(user_id)

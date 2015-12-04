@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SugerDoc Editor</title>
+    <title>SugerDoc ItemGallery</title>
     <%= favicon_link_tag '/assets/favicon.ico' %>
     <%= include_gon %>
     <%= csrf_meta_tag %>
@@ -18,7 +18,10 @@
     <%
        set_meta_tags viewport: ''
     %>
-    <%= yield %>
+    <%= render 'item_gallery/navbar/navbar' %>
+    <div id="contents">
+        <%= yield %>
+    </div>
     <script type="text/javascript">
         I18n.defaultLocale = "<%= I18n.default_locale %>";
         I18n.locale = "<%= I18n.locale %>";

@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   end
 
   # ItemGallery
+  get 'item_gallery' => 'item_gallery#index'
   get 'item_gallery/index'
   get 'item_gallery/preview'
   match 'item_gallery/preview/:ig_at' => 'item_gallery#preview', via: :get
