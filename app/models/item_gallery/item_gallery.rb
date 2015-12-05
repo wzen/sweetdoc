@@ -335,6 +335,14 @@ class ItemGallery < ActiveRecord::Base
     end
   end
 
+  def self.delete_item(user_id, item_gallery_access_token)
+    ig = self.find_by(created_user_id: user_id, access_token: item_gallery_access_token)
+    if ig.present?
+      ig.del_flg = 1
+      ig.save!
+    end
+  end
+
   def self._update_using_count(item_gallery_id)
     count = UserItemGalleryMap.where(item_gallery_id: item_gallery_id).count
     # 使用数更新

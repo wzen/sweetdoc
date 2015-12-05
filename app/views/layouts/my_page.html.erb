@@ -16,7 +16,7 @@
 </head>
 <body class="<%= controller_name -%> <%= action_name -%>">
     <div id="main_wrapper">
-        <div id="user_wrapper">
+        <div id="user_wrapper" class="<%= @is_accessed_myself_page ? 'my' : 'order' %>">
             <%= render 'my_page/user' %>
         </div>
         <div id="contents_wrapper" class="sidebar_overlay_parent">
@@ -26,7 +26,7 @@
                         <li class="<%= action_name == 'bookmarks'? 'active': '' %>"><%= link_to 'Bookmark', 'bookmarks', disabled: action_name == 'bookmarks' %></li>
                         <li class="<%= action_name == 'created_contents'? 'active': '' %>"><%= link_to 'CreatedContents', 'created_contents', disabled: action_name == 'created_contents' %></li>
                         <li class="<%= action_name == 'created_items'? 'active': '' %>"><%= link_to 'CreatedItem', 'created_items', disabled: action_name == 'created_items' %></li>
-                        <% if @is_access_user_page %>
+                        <% if @is_accessed_myself_page %>
                             <li class="<%= action_name == 'using_items'? 'active': '' %>"><%= link_to 'UsingItem', 'using_items', disabled: action_name == 'using_items' %></li>
                         <% end %>
                     </ul>

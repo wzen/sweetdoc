@@ -58,12 +58,12 @@ class MyPageController < ApplicationController
       user = User.find_by(access_token: user_access_token)
       if user
         # 指定ユーザのページ表示
-        @is_access_user_page = false
+        @is_accessed_myself_page = false
         return user.user_id
       end
     end
     # 自分のページを表示
-    @is_access_user_page = true
+    @is_accessed_myself_page = true
     current_or_guest_user.id
   end
 end

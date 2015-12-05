@@ -1,1 +1,9 @@
-<button class="delete_button image_button" style="margin-top: 5px;margin-bottom: 5px"><%= image_tag 'etc/delete.png', size: '24x24' %></button><br/>
+<%
+   link_url = '' if link_url.nil?
+%>
+<%= form_tag(link_url, method: 'get') do  %>
+    <%= button_tag(data: { disable_with: "Please wait..." }, class:'delete_button image_button', style: 'margin-top: 5px;margin-bottom: 5px') do %>
+        <%= image_tag 'etc/delete.png', size: '24x24' %>
+    <% end %>
+<% end %>
+

@@ -3,8 +3,8 @@ require 'item_gallery/item_gallery'
 class ItemGalleryController < ApplicationController
   def index
     @popular_tags = ItemGallery.popular_tags(Const::ItemGallery::POPULAR_TAG_MENU_SHOW_MAX)
-    @contents = ItemGallery.index_page_data
     user_id = current_or_guest_user.id
+    @contents = ItemGallery.index_page_data(user_id)
     @using_items = ItemGallery.using_items(user_id)
   end
 
@@ -17,17 +17,38 @@ class ItemGalleryController < ApplicationController
     user_id = current_or_guest_user.id
     item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
     result_success, message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, true)
+    # TODO: メッセージ
+    # マイページ:UsingItemsを表示
+    redirect_to '/my_page/using_items'
   end
 
   def add_user_used_ajax
+    # FIXME: 現在未使用
     user_id = current_or_guest_user.id
     item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
     @result_success, @message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, true)
   end
-  def remove_user_used_ajax
+
+  def remove_user_used
     user_id = current_or_guest_user.id
     item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
-    @result_success, @message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, false)
+    result_success, message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, false)
+    # TODO: メッセージ
+    # マイページ:UsingItemsを表示
+    redirect_to '/my_page/using_items'
+  end
+
+  def edit
+    # TODO:
+  end
+
+  def delete
+    user_id = current_or_guest_user.id
+    item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
+    result_success, message = ItemGallery.delete_item(user_id, item_gallery_access_token)
+    # TODO: メッセージ
+    # マイページ:CreatedItemsを表示
+    redirect_to '/my_page/created_items'
   end
 
   def save_state

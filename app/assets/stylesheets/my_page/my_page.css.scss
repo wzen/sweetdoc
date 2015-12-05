@@ -14,7 +14,13 @@ div#user_wrapper {
   height: 100%;
   float: left;
   margin-top: 51px;
-  background-color: #aa3f39;
+
+  &.my {
+    background-color: #aa3f39;
+  }
+  &.order {
+    background-color: #08088A;
+  }
 
   .user_icon {
     margin-top: 15px;

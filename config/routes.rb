@@ -72,6 +72,10 @@ Rails.application.routes.draw do
   match 'item_gallery/preview/:ig_at' => 'item_gallery#preview', via: :get
   post 'item_gallery/upload_user_used'
   post 'item_gallery/save_state'
+  get 'item_gallery/add_user_used'
+  get 'item_gallery/remove_user_used'
+  get 'item_gallery/edit'
+  get 'item_gallery/delete'
 
   # Upload
   post 'upload' => 'upload#index'
