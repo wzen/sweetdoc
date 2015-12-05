@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       registrations: 'users/registrations'
   }
 
-  get 'my_page' => 'my_page#bookmark'
+  get 'my_page' => 'my_page#bookmarks'
   get 'my_page/created_contents'
   get 'my_page/created_items'
   get 'my_page/bookmarks'

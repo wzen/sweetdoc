@@ -10,28 +10,26 @@
         <div class="contents_top">
             <div class="contents_left">
                 <div>
-                    <div class="float_container">
-                        <div class="contents_top">
-                            <div class="contents_left">
-                                <div class="title">
-                                    <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
-                                </div>
-                            </div>
-                            <div class="contents_right">
-                                <div class="contents_top">
-                                    <div class="user">
-                                        <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
-                                    </div>
-                                </div>
-                                <div class="contents_bottom">
-                                    <div class="using_user">
-                                        <%= content[Const::User::Key::USER_COUNT] %>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="title">
+                        <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
+                    </div>
+                </div>
+            </div>
+            <div class="contents_right">
+                <div class="contents_top">
+                    <div class="contents_left">
+                        <div class="user">
+                            <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
                         </div>
                     </div>
-                    <div class="contents_bottom">
+                    <div class="contents_left">
+                        <div class="using_user">
+                            <%= content[Const::User::Key::USER_COUNT] %>
+                        </div>
+                    </div>
+                </div>
+                <div class="contents_bottom">
+                    <% if content[Const::ItemGallery::Key::TAGS].present? %>
                         <div class="contents_left">
                             <div class="tag_label">
                                 Tags:
@@ -46,35 +44,38 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="contents_right">
-                <div class="preview_button">
-                    <%= render 'base/button/preview' %>
-                </div>
-                <div class="add_or_remove_button">
-                    <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
-                        <%= render 'base/button/add' %>
-                    <% else %>
-                        <%= render 'base/button/remove' %>
                     <% end %>
-                </div>
-                <div class="edit_button">
-                    <%= render 'base/button/edit' %>
-                </div>
-                <div class="delete_button">
-                    <%= render 'base/button/delete' %>
                 </div>
             </div>
         </div>
-        <% if show_caption %>
-            <div class="contents_bottom">
+        <div class="contents_bottom">
+            <% if show_caption && content[Const::ItemGallery::Key::CAPTION].present? %>
                 <div class="caption">
                     <%= content[Const::ItemGallery::Key::CAPTION] %>
                 </div>
+            <% end %>
+            <div class="buttons">
+                <div class="contents_right">
+                    <div class="preview_button">
+                        <%= render 'base/button/preview' %>
+                    </div>
+                    <div class="add_or_remove_button">
+                        <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
+                            <%= render 'base/button/add' %>
+                        <% else %>
+                            <%= render 'base/button/remove' %>
+                        <% end %>
+                    </div>
+                    <div class="edit_button">
+                        <%= render 'base/button/edit' %>
+                    </div>
+                    <div class="delete_button">
+                        <%= render 'base/button/delete' %>
+                    </div>
+                </div>
             </div>
-        <% end %>
+        </div>
+
         <input type="hidden" class="<%= Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN] %>">
     </div>
 
@@ -84,28 +85,26 @@
         <div class="contents_top">
             <div class="contents_left">
                 <div>
-                    <div class="float_container">
-                        <div class="contents_top">
-                            <div class="contents_left">
-                                <div class="title">
-                                    <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
-                                </div>
-                            </div>
-                            <div class="contents_right">
-                                <div class="contents_top">
-                                    <div class="user">
-                                        <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
-                                    </div>
-                                </div>
-                                <div class="contents_bottom">
-                                    <div class="using_user">
-                                        <%= content[Const::User::Key::USER_COUNT] %>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="title">
+                        <%= link_to content[Const::ItemGallery::Key::TITLE], "/item_gallery/preview/#{content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}" %>
+                    </div>
+                </div>
+            </div>
+            <div class="contents_right">
+                <div class="contents_top">
+                    <div class="contents_left">
+                        <div class="user">
+                            <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
                         </div>
                     </div>
-                    <div class="contents_bottom">
+                    <div class="contents_left">
+                        <div class="using_user">
+                            <%= content[Const::User::Key::USER_COUNT] %>
+                        </div>
+                    </div>
+                </div>
+                <div class="contents_bottom">
+                    <% if content[Const::ItemGallery::Key::TAGS].present? %>
                         <div class="contents_left">
                             <div class="tag_label">
                                 Tags:
@@ -120,29 +119,32 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="contents_right">
-                <div class="preview_button">
-                    <%= render 'base/button/preview' %>
-                </div>
-                <div class="add_or_remove_button">
-                    <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
-                        <%= render 'base/button/add' %>
-                    <% else %>
-                        <%= render 'base/button/remove' %>
                     <% end %>
                 </div>
             </div>
         </div>
-        <% if show_caption %>
-            <div class="contents_bottom">
+        <div class="contents_bottom">
+            <% if show_caption && content[Const::ItemGallery::Key::CAPTION].present? %>
                 <div class="caption">
                     <%= content[Const::ItemGallery::Key::CAPTION] %>
                 </div>
+            <% end %>
+            <div class="buttons">
+                <div class="contents_right">
+                    <div class="preview_button">
+                        <%= render 'base/button/preview' %>
+                    </div>
+                    <div class="add_or_remove_button">
+                        <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
+                            <%= render 'base/button/add' %>
+                        <% else %>
+                            <%= render 'base/button/remove' %>
+                        <% end %>
+                    </div>
+                </div>
             </div>
-        <% end %>
+        </div>
+
         <input type="hidden" class="<%= Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN] %>">
     </div>
 

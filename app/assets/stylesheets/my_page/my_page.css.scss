@@ -131,70 +131,49 @@ body.created_contents {
     div.contents_row {
       padding: 10px;
       > div.contents_top {
-        height: 100px;
+        height: 80px;
         > div.contents_left {
-          height: 66px;
+          height: 100%;
+          width: 80px;
+          margin-right: -80px;
+          > div.contents_thumbnail {
+          }
+        }
+        > div.contents_right {
+          float: left;
+          padding: 5px;
           width: 100%;
           > div {
-            height: 100%;
-            margin-right: 100px;
-            > div.float_container {
-              height: 100%;
-              > div.contents_top {
-                > div.contents_left {
-                  > div.contents_thumbnail {
-                  }
-                }
-                > div.contents_right {
-                  float: left;
-                  margin-left: 30px;
-                  padding: 5px;
-                  > div.contents_top {
-                    height: 50%;
-                    > div.title {
-                      vertical-align: middle;
-                      > a {
-                        font-size: 25px;
-                        font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                        font-weight: 900;
-                      }
-                    }
-                  }
-                  > div.contents_bottom {
-                    height: 50%;
-                    > div.user {
-                      vertical-align: middle;
-                      font-size: 15px;
-                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                      font-weight: 900;
-                    }
-                  }
+            margin-left: 80px;
+            > div.contents_top {
+              height: 50%;
+              > div.title {
+                vertical-align: middle;
+                > a {
+                  font-size: 25px;
+                  font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                  font-weight: 900;
                 }
               }
             }
             > div.contents_bottom {
-              div.tag_label {
-                width: 40px;
-                font-size: 14px;
+              height: 50%;
+              > div.contents_left {
+                width: 50%;
+                > div.user {
+                  vertical-align: middle;
+                  font-size: 15px;
+                  font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                  font-weight: 900;
+                }
               }
-            }
-          }
-        }
-        > div.contents_right {
-          width: 100px;
-          margin-left: -100px;
-          div.contents_top {
-            height: 50%;
-            div.edit_button {
-              width: 100px;
-              height: 100%;
-            }
-          }
-          div.contents_bottom {
-            height: 50%;
-            div.delete_button {
-              width: 100px;
-              height: 100%;
+              > div.contents_right {
+                width: 50%;
+                div.tag_label {
+                  width: 40px;
+                  font-size: 14px;
+                }
+              }
             }
           }
         }
@@ -202,6 +181,15 @@ body.created_contents {
       > div.contents_bottom {
         div.caption {
 
+        }
+        div.buttons {
+          > div.contents_right {
+            > div {
+              float: left;
+              margin-left: 10px;
+              margin-right: 10px;
+            }
+          }
         }
       }
     }
@@ -213,80 +201,68 @@ body.created_items {
     div.contents_row {
       padding: 10px;
       > div.contents_top {
-        height: 70px;
+        height: 50px;
         > div.contents_left {
           height: 40px;
           width: 100%;
           > div {
             height: 100%;
-            margin-right: 100px;
-            > div.float_container {
-              height: 100%;
-              > div.contents_top {
-                > div.contents_left {
-                  > div.title {
-                    > a {
-                      font-size: 25px;
-                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                      font-weight: 900;
-                    }
-                  }
-                }
-                > div.contents_right {
-                  padding: 5px;
-                  > div.contents_top {
-                    height: 50%;
-                    > div.user {
-                      vertical-align: middle;
-                      > a {
-                        font-size: 15px;
-                        font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                        font-weight: 900;
-                      }
-                    }
-                  }
-                  > div.contents_bottom {
-                    height: 50%;
-                    > div.using_user {
-                      vertical-align: middle;
-                      font-size: 15px;
-                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                      font-weight: 900;
-                    }
-                  }
-                }
-              }
-            }
-            > div.contents_bottom {
-              div.tag_label {
-                width: 40px;
-                font-size: 14px;
+            margin-right: 400px;
+            > div.title {
+              > a {
+                font-size: 25px;
+                font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                font-weight: 900;
               }
             }
           }
         }
         > div.contents_right {
-          width: 100px;
-          margin-left: -100px;
-          div.contents_top {
-            height: 50%;
-            div.edit_button {
-              width: 100px;
-              height: 100%;
+          padding: 5px;
+          width: 400px;
+          margin-left: -400px;
+          > div.contents_top {
+            > div.contents_left {
+              width: 50%;
+              > div.user {
+                vertical-align: middle;
+                > a {
+                  font-size: 15px;
+                  font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                  font-weight: 900;
+                }
+              }
+            }
+            > div.contents_left {
+              width: 50%;
+              > div.using_user {
+                vertical-align: middle;
+                font-size: 15px;
+                font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                font-weight: 900;
+              }
             }
           }
-          div.contents_bottom {
-            height: 50%;
-            div.delete_button {
-              width: 100px;
-              height: 100%;
+          > div.contents_bottom {
+            div.tag_label {
+              width: 40px;
+              font-size: 14px;
             }
           }
         }
       }
       > div.contents_bottom {
         div.caption {
-
+          color: blue;
+        }
+        div.buttons {
+          > div.contents_right {
+            > div {
+              float: left;
+              margin-left: 10px;
+              margin-right: 10px;
+            }
+          }
         }
       }
     }

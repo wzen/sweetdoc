@@ -30,13 +30,15 @@
                             </div>
                         </div>
                         <div class="contents_left">
-                            <div class="tags tagcloud mini event_disabled">
-                                <ul>
-                                    <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
-                                        <li class="tag_name"><a><%= t %></a></li>
-                                    <% end %>
-                                </ul>
-                            </div>
+                            <% if content[Const::ItemGallery::Key::TAGS].present? %>
+                                <div class="tags tagcloud mini event_disabled">
+                                    <ul>
+                                        <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
+                                            <li class="tag_name"><a><%= t %></a></li>
+                                        <% end %>
+                                    </ul>
+                                </div>
+                            <% end %>
                         </div>
                     </div>
                 </div>
@@ -85,13 +87,15 @@
                             </div>
                         </div>
                         <div class="contents_left">
-                            <div class="tags tagcloud mini event_disabled">
-                                <ul>
-                                    <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
-                                        <li class="tag_name"><a><%= t %></a></li>
-                                    <% end %>
-                                </ul>
-                            </div>
+                            <% if content[Const::ItemGallery::Key::TAGS].present? %>
+                                <div class="tags tagcloud mini event_disabled">
+                                    <ul>
+                                        <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
+                                            <li class="tag_name"><a><%= t %></a></li>
+                                        <% end %>
+                                    </ul>
+                                </div>
+                            <% end %>
                         </div>
                     </div>
                 </div>

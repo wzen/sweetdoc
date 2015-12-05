@@ -343,10 +343,7 @@ button.preview_button {
   box-sizing: border-box;
   cursor: pointer;
 
-  width: 100%;
-  &.contents_row {
-    width: 80px;
-  }
+  width: 80px;
 
   background: #0000bb;
   -webkit-border-radius: 4px;
@@ -378,10 +375,7 @@ button.add_button, .remove_button {
   box-sizing: border-box;
   cursor: pointer;
 
-  width: 100%;
-  &.contents_row {
-    width: 80px;
-  }
+  width: 80px;
 
   background: #bb0000;
   -webkit-border-radius: 4px;
@@ -389,7 +383,6 @@ button.add_button, .remove_button {
   color: #fff;
   padding: 6px 10px;
   text-align: center;
-
 
   &:hover {
     background: #870000;
@@ -413,11 +406,7 @@ button.edit_button {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   cursor: pointer;
-
-  width: 100%;
-  &.contents_row {
-    width: 80px;
-  }
+  width: 80px;
 
   background: #088A08;
   -webkit-border-radius: 4px;
@@ -450,10 +439,7 @@ button.delete_button {
   box-sizing: border-box;
   cursor: pointer;
 
-  width: 100%;
-  &.contents_row {
-    width: 80px;
-  }
+  width: 80px;
 
   background: #A4A4A4;
   -webkit-border-radius: 4px;
