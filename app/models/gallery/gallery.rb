@@ -784,11 +784,10 @@ class Gallery < ActiveRecord::Base
       INNER JOIN users u ON upm.user_id = u.id
       INNER JOIN project_gallery_maps pgm ON pgm.user_project_map_id = upm.id
       INNER JOIN galleries g ON g.id = pgm.gallery_id
-      INNER JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id
-      INNER JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id
+      LEFT JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id AND gtm.del_flg = 0
+      LEFT JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       WHERE u.id = #{user_id}
       AND u.del_flg = 0 AND pgm.del_flg = 0 AND upm.del_flg = 0 AND g.del_flg = 0
-      AND gtm.del_flg = 0 AND gt.del_flg = 0
       GROUP BY g.id
       ORDER BY g.updated_at DESC
       LIMIT #{head}, #{limit}
@@ -813,11 +812,10 @@ class Gallery < ActiveRecord::Base
       FROM gallery_bookmarks gb
       INNER JOIN users u ON gb.user_id = u.id
       INNER JOIN galleries g ON g.id = gb.gallery_id
-      INNER JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id
-      INNER JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id
+      LEFT JOIN gallery_tag_maps gtm ON gtm.gallery_id = g.id AND gtm.del_flg = 0
+      LEFT JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       WHERE u.id = #{user_id}
       AND u.del_flg = 0 AND gb.del_flg = 0 AND g.del_flg = 0
-      AND gtm.del_flg = 0 AND gt.del_flg = 0
       GROUP BY g.id
       ORDER BY gb.updated_at DESC
       LIMIT #{head}, #{limit}

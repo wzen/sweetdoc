@@ -8,7 +8,7 @@
                 <% @popular_tags.each do |t| %>
                     <li class="tag_name">
                         <a>
-                            <%= t[Const::ItemGallery::Key::TAG_NAME] + "(#{t[Const::ItemGallery::Key::ITEM_GALLERY_COUNT]})" %>
+                            <%= t[Const::ItemGallery::Key::TAG_NAME] + "(#{t[Const::ItemGallery::Key::ITEM_GALLERY_COUNT.to_s]})" %>
                         </a>
                         <input type="hidden" class="<%= Const::ItemGallery::Key::TAG_ID %>" value="<%= t[Const::ItemGallery::Key::TAG_ID] %>">
                     </li>
