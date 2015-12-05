@@ -55,19 +55,6 @@
             <% end %>
             <div class="buttons">
                 <div class="contents_right">
-                    <div class="preview_button">
-                        <%= render 'base/button/preview' %>
-                    </div>
-                    <div class="add_or_remove_button">
-                        <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
-                            <%= render 'base/button/add' %>
-                        <% else %>
-                            <%= render 'base/button/remove' %>
-                        <% end %>
-                    </div>
-                    <div class="edit_button">
-                        <%= render 'base/button/edit' %>
-                    </div>
                     <div class="delete_button">
                         <%= render 'base/button/delete' %>
                     </div>
@@ -127,20 +114,6 @@
                     <%= content[Const::Gallery::Key::CAPTION] %>
                 </div>
             <% end %>
-            <div class="buttons">
-                <div class="contents_right">
-                    <div class="preview_button">
-                        <%= render 'base/button/preview' %>
-                    </div>
-                    <div class="add_or_remove_button">
-                        <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
-                            <%= render 'base/button/add' %>
-                        <% else %>
-                            <%= render 'base/button/remove' %>
-                        <% end %>
-                    </div>
-                </div>
-            </div>
         </div>
         <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN] %>">
     </div>

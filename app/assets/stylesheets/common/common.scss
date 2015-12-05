@@ -333,7 +333,15 @@ div.css_item_wrapper {
   transform:rotate(3deg);
 }
 
-button.preview_button {
+.image_button {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+/*
+
+button.preview_button, button.remove_button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -365,7 +373,7 @@ button.preview_button {
   }
 }
 
-button.add_button, .remove_button {
+button.add_button {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -461,3 +469,4 @@ button.delete_button {
     filter: alpha(opacity=80);
   }
 }
+*/
