@@ -203,6 +203,12 @@ div.tagcloud.mini ul {
   }
 }
 
+div.tagcloud.event_disabled {
+  a {
+    pointer-events: none;
+  }
+}
+
 div.pop {
   position: absolute;
   text-align: center;
@@ -270,4 +276,202 @@ div.css_item_wrapper {
 
 .scroll_y_content {
   overflow-y: scroll;
+}
+
+.drop-shadow {
+  position:relative;
+  padding:1em;
+  margin:2em 10px 1em;
+  background:#fff;
+  -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+  box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+}
+
+.drop-shadow:before,
+.drop-shadow:after {
+  content:"";
+  position:absolute;
+  z-index:-2;
+}
+
+.drop-shadow p {
+  font-size:16px;
+  font-weight:bold;
+}
+
+.lifted {
+  -moz-border-radius:4px;
+  border-radius:4px;
+}
+
+.lifted:before,
+.lifted:after {
+  bottom:15px;
+  left:10px;
+  width:50%;
+  height:20%;
+  max-width:300px;
+  max-height:100px;
+  -webkit-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+  box-shadow:0 15px 10px rgba(0, 0, 0, 0.7);
+  -webkit-transform:rotate(-3deg);
+  -moz-transform:rotate(-3deg);
+  -ms-transform:rotate(-3deg);
+  -o-transform:rotate(-3deg);
+  transform:rotate(-3deg);
+}
+
+.lifted:after {
+  right:10px;
+  left:auto;
+  -webkit-transform:rotate(3deg);
+  -moz-transform:rotate(3deg);
+  -ms-transform:rotate(3deg);
+  -o-transform:rotate(3deg);
+  transform:rotate(3deg);
+}
+
+button.preview_button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  width: 100%;
+  &.contents_row {
+    width: 80px;
+  }
+
+  background: #0000bb;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #fff;
+  padding: 6px 10px;
+  text-align: center;
+
+  &:hover {
+    background: #000087;
+  }
+  &[disabled],
+  &[disabled]:hover {
+    background: #0000bb;
+    color: #fff;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+  }
+}
+
+button.add_button, .remove_button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  width: 100%;
+  &.contents_row {
+    width: 80px;
+  }
+
+  background: #bb0000;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #fff;
+  padding: 6px 10px;
+  text-align: center;
+
+
+  &:hover {
+    background: #870000;
+  }
+  &[disabled],
+  &[disabled]:hover {
+    background: #bb0000;
+    color: #aaa;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+  }
+}
+
+button.edit_button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  width: 100%;
+  &.contents_row {
+    width: 80px;
+  }
+
+  background: #088A08;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #fff;
+  padding: 6px 10px;
+  text-align: center;
+
+
+  &:hover {
+    background: #21610B;
+  }
+  &[disabled],
+  &[disabled]:hover {
+    background: #088A08;
+    color: #aaa;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+  }
+}
+
+button.delete_button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  width: 100%;
+  &.contents_row {
+    width: 80px;
+  }
+
+  background: #A4A4A4;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  color: #fff;
+  padding: 6px 10px;
+  text-align: center;
+
+
+  &:hover {
+    background: #585858;
+  }
+  &[disabled],
+  &[disabled]:hover {
+    background: #A4A4A4;
+    color: #aaa;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+  }
 }

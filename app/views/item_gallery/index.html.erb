@@ -8,7 +8,7 @@
                 <% @popular_tags.each do |t| %>
                     <li class="tag_name">
                         <a>
-                            <%= t[Const::ItemGallery::Key::TAG_NAME] + "(#{t[Const::ItemGallery::Key::ITEM_GALLERY_COUNT.to_s]})" %>
+                            <%= t[Const::ItemGallery::Key::TAG_NAME] + "(#{t[Const::ItemGallery::Key::ITEM_GALLERY_COUNT]})" %>
                         </a>
                         <input type="hidden" class="<%= Const::ItemGallery::Key::TAG_ID %>" value="<%= t[Const::ItemGallery::Key::TAG_ID] %>">
                     </li>
@@ -21,7 +21,7 @@
 <div id="item_gallery_wrapper" class="col-xs-6">
     <% if @contents.present? %>
         <% @contents.each do |content| %>
-            <%= render 'item_gallery/parts/item_contents_row', content: content, editable: false %>
+            <%= render 'item_gallery/parts/item_contents_row', content: content, editable: false, show_caption: false %>
         <% end %>
     <% end %>
 </div>

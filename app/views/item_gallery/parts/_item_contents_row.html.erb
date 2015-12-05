@@ -1,6 +1,7 @@
 <%
    content = {} if content.nil?
    editable = false if editable.nil?
+   show_caption = true if show_caption.nil?
 %>
 
 <% if editable %>
@@ -37,7 +38,7 @@
                             </div>
                         </div>
                         <div class="contents_left">
-                            <div class="tags tagcloud mini">
+                            <div class="tags tagcloud mini event_disabled">
                                 <ul>
                                     <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
                                         <li class="tag_name"><a><%= t %></a></li>
@@ -50,18 +51,30 @@
             </div>
             <div class="contents_right">
                 <div class="preview_button">
+                    <%= render 'base/button/preview' %>
+                </div>
+                <div class="add_or_remove_button">
+                    <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
+                        <%= render 'base/button/add' %>
+                    <% else %>
+                        <%= render 'base/button/remove' %>
+                    <% end %>
                 </div>
                 <div class="edit_button">
+                    <%= render 'base/button/edit' %>
                 </div>
                 <div class="delete_button">
+                    <%= render 'base/button/delete' %>
                 </div>
             </div>
         </div>
-        <div class="contents_bottom">
-            <div class="caption">
-                <%= content[Const::ItemGallery::Key::CAPTION] %>
+        <% if show_caption %>
+            <div class="contents_bottom">
+                <div class="caption">
+                    <%= content[Const::ItemGallery::Key::CAPTION] %>
+                </div>
             </div>
-        </div>
+        <% end %>
         <input type="hidden" class="<%= Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN] %>">
     </div>
 
@@ -99,7 +112,7 @@
                             </div>
                         </div>
                         <div class="contents_left">
-                            <div class="tags tagcloud">
+                            <div class="tags tagcloud mini event_disabled">
                                 <ul>
                                     <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
                                         <li class="tag_name"><a><%= t %></a></li>
@@ -112,14 +125,24 @@
             </div>
             <div class="contents_right">
                 <div class="preview_button">
+                    <%= render 'base/button/preview' %>
+                </div>
+                <div class="add_or_remove_button">
+                    <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
+                        <%= render 'base/button/add' %>
+                    <% else %>
+                        <%= render 'base/button/remove' %>
+                    <% end %>
                 </div>
             </div>
         </div>
-        <div class="contents_bottom">
-            <div class="caption">
-                <%= content[Const::ItemGallery::Key::CAPTION] %>
+        <% if show_caption %>
+            <div class="contents_bottom">
+                <div class="caption">
+                    <%= content[Const::ItemGallery::Key::CAPTION] %>
+                </div>
             </div>
-        </div>
+        <% end %>
         <input type="hidden" class="<%= Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN] %>">
     </div>
 

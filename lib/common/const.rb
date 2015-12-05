@@ -293,6 +293,7 @@ class Const
       TAG_ID = 'tag_id'
       TAG_NAME = 'tag_name'
       ITEM_GALLERY_COUNT = 'item_gallery_count'
+      USER_ITEM_GALLERY_ID = 'user_item_gallery_id'
     end
 
     class PublicType

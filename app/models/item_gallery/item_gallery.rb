@@ -5,7 +5,7 @@ require 'item_gallery/item_gallery_tag_map'
 require 'item_gallery/item_gallery_using_statistics'
 
 class ItemGallery < ActiveRecord::Base
-  def self.index_page_data(head = 0, limit = 30)
+  def self.index_page_data(user_id, head = 0, limit = 30)
     begin
       # TODO: 取り方見直し 暫定で人気順
       ActiveRecord::Base.transaction do
@@ -17,12 +17,14 @@ class ItemGallery < ActiveRecord::Base
               ig.caption as #{Const::ItemGallery::Key::CAPTION},
               u.name as #{Const::User::Key::NAME},
               u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
+              uigm.id as #{Const::ItemGallery::Key::USER_ITEM_GALLERY_ID},
               group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
             FROM item_galleries ig
             INNER JOIN users u ON ig.created_user_id = u.id
             LEFT JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id AND igtm.del_flg = 0
             LEFT JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id AND igt.del_flg = 0
             LEFT JOIN item_gallery_using_statistics igus ON ig.id = igus.item_gallery_id AND igus.del_flg = 0
+            LEFT JOIN user_item_gallery_maps uigm ON uigm.item_gallery_id = ig.id AND uigm.user_id = #{user_id}
             WHERE u.del_flg = 0 AND ig.del_flg = 0
             GROUP BY ig.id
             ORDER BY igus.count DESC
@@ -102,6 +104,7 @@ class ItemGallery < ActiveRecord::Base
         t.#{Const::User::Key::NAME} as #{Const::User::Key::NAME},
         t.#{Const::User::Key::USER_ACCESS_TOKEN} as #{Const::User::Key::USER_ACCESS_TOKEN},
         t.#{Const::ItemGallery::Key::TAGS} as #{Const::ItemGallery::Key::TAGS},
+        t.#{Const::ItemGallery::Key::USER_ITEM_GALLERY_ID} as #{Const::ItemGallery::Key::USER_ITEM_GALLERY_ID},
         count(uigm.id) as #{Const::User::Key::USER_COUNT}
         FROM (
         SELECT
@@ -111,11 +114,13 @@ class ItemGallery < ActiveRecord::Base
           ig.caption as #{Const::ItemGallery::Key::CAPTION},
           u.name as #{Const::User::Key::NAME},
           u.access_token as #{Const::User::Key::USER_ACCESS_TOKEN},
+          uigm.id as #{Const::ItemGallery::Key::USER_ITEM_GALLERY_ID},
           group_concat(igt.name separator ',') as #{Const::ItemGallery::Key::TAGS}
         FROM item_galleries ig
         INNER JOIN users u ON ig.created_user_id = u.id
         LEFT JOIN item_gallery_tag_maps igtm ON igtm.item_gallery_id = ig.id AND igtm.del_flg = 0
         LEFT JOIN item_gallery_tags igt ON igtm.item_gallery_tag_id = igt.id AND igt.del_flg = 0
+        LEFT JOIN user_item_gallery_maps uigm ON uigm.item_gallery_id = ig.id AND uigm.user_id = #{user_id}
         WHERE u.id = #{user_id}
         AND u.del_flg = 0 AND ig.del_flg = 0
         AND ig.del_flg = 0
