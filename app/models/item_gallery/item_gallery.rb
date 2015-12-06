@@ -272,7 +272,7 @@ class ItemGallery < ActiveRecord::Base
         sql =<<-"SQL"
           SELECT u.access_token as created_user_access_token, ig.file_name as code_filename
           FROM users u INNER JOIN item_galleries ig ON u.id = ig.created_user_id
-          WHERE ig.access_token = #{item_gallery_access_token}
+          WHERE ig.access_token = '#{item_gallery_access_token}'
           AND u.del_flg = 0
           AND ig.del_flg = 0
         SQL
@@ -292,14 +292,13 @@ class ItemGallery < ActiveRecord::Base
 
   def self.upload_user_used(user_id, item_gallery_access_token, is_add)
     begin
-      # TODO:
       ActiveRecord::Base.transaction do
         sql =<<-"SQL"
           SELECT ig.id as item_gallery_id, uigm.id as user_item_gallery_id
           FROM user_item_gallery_maps uigm
-          INNER JOIN item_galleres ig ON uigm.item_gallery_id = ig.id
+          INNER JOIN item_galleries ig ON uigm.item_gallery_id = ig.id
           WHERE uigm.user_id = #{user_id}
-          AND ig.access_token = #{item_gallery_access_token}
+          AND ig.access_token = '#{item_gallery_access_token}'
           AND uigm.del_flg = 0
           AND ig.del_flg = 0
         SQL
@@ -346,7 +345,7 @@ class ItemGallery < ActiveRecord::Base
   def self._update_using_count(item_gallery_id)
     count = UserItemGalleryMap.where(item_gallery_id: item_gallery_id).count
     # 使用数更新
-    igus = ItemGalleryUsingStatistics.find(item_gallery_id: item_gallery_id)
+    igus = ItemGalleryUsingStatistics.find_by(item_gallery_id: item_gallery_id)
     if igus.present?
       # Update
       igus.count = count

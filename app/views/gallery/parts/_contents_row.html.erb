@@ -9,17 +9,17 @@
         <div class="contents_top">
             <div class="contents_left">
                 <div class="contents_thumbnail">
-                    <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: 'width:80px;height:80px;')%>
+                    <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: 'width:100px;height:100px;')%>
                 </div>
             </div>
             <div class="contents_right">
                 <div>
-                    <div class="contents_top">
+                    <div class="row1">
                         <div class="title">
                             <%= link_to content[Const::Gallery::Key::TITLE], "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>
                         </div>
                     </div>
-                    <div class="contents_bottom">
+                    <div class="row2">
                         <div class="contents_left">
                             <div class="user">
                                 <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
@@ -44,19 +44,23 @@
                             <% end %>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="contents_bottom">
-            <% if content[Const::ItemGallery::Key::CAPTION].present? %>
-                <div class="caption">
-                    <%= content[Const::Gallery::Key::CAPTION] %>
-                </div>
-            <% end %>
-            <div class="buttons">
-                <div class="contents_right">
-                    <div class="delete_button">
-                        <%= render 'base/button/delete' %>
+                    <% if content[Const::ItemGallery::Key::CAPTION].present? %>
+                        <div class="row3">
+                            <div class="caption">
+                                <%= content[Const::Gallery::Key::CAPTION] %>
+                            </div>
+                        </div>
+                    <% end %>
+                    <div class="row4">
+                        <div class="buttons">
+                            <div>
+                                <div class="contents_right">
+                                    <div class="delete_button">
+                                        <%= render 'base/button/delete' %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,17 +74,17 @@
         <div class="contents_top">
             <div class="contents_left">
                 <div class="contents_thumbnail">
-                    <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: 'width:80px;height:80px;')%>
+                    <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: 'width:100px;height:100px;')%>
                 </div>
             </div>
             <div class="contents_right">
                 <div>
-                    <div class="contents_top">
+                    <div class="row1">
                         <div class="title">
                             <%= link_to content[Const::Gallery::Key::TITLE], "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>
                         </div>
                     </div>
-                    <div class="contents_bottom">
+                    <div class="row2">
                         <div class="contents_left">
                             <div class="user">
                                 <%= link_to content[Const::User::Key::NAME], "/my_page/u=#{content[Const::User::Key::USER_ACCESS_TOKEN]}" %>
@@ -105,15 +109,15 @@
                             <% end %>
                         </div>
                     </div>
+                    <% if content[Const::ItemGallery::Key::CAPTION].present? %>
+                        <div class="row3">
+                            <div class="caption">
+                                <%= content[Const::Gallery::Key::CAPTION] %>
+                            </div>
+                        </div>
+                    <% end %>
                 </div>
             </div>
-        </div>
-        <div class="contents_bottom">
-            <% if content[Const::ItemGallery::Key::CAPTION].present? %>
-                <div class="caption">
-                    <%= content[Const::Gallery::Key::CAPTION] %>
-                </div>
-            <% end %>
         </div>
         <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN] %>">
     </div>

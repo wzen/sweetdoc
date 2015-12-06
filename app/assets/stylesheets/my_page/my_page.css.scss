@@ -137,11 +137,10 @@ body.created_contents {
     div.contents_row {
       padding: 10px;
       > div.contents_top {
-        height: 80px;
         > div.contents_left {
           height: 100%;
-          width: 80px;
-          margin-right: -80px;
+          width: 100px;
+          margin-right: -100px;
           > div.contents_thumbnail {
           }
         }
@@ -150,8 +149,8 @@ body.created_contents {
           padding: 5px;
           width: 100%;
           > div {
-            margin-left: 80px;
-            > div.contents_top {
+            margin-left: 100px;
+            > div.row1 {
               height: 50%;
               > div.title {
                 vertical-align: middle;
@@ -162,7 +161,7 @@ body.created_contents {
                 }
               }
             }
-            > div.contents_bottom {
+            > div.row2 {
               height: 50%;
               > div.contents_left {
                 width: 50%;
@@ -180,20 +179,44 @@ body.created_contents {
                   font-size: 14px;
                 }
               }
+              &:after {
+                display: table;
+                content: '';
+                clear: both;
+                line-height: 0;
+              }
             }
-          }
-        }
-      }
-      > div.contents_bottom {
-        div.caption {
+            > div.row3 {
+              div.caption {
 
-        }
-        div.buttons {
-          > div.contents_right {
-            > div {
-              float: left;
-              margin-left: 10px;
-              margin-right: 10px;
+              }
+            }
+            > div.row4 {
+              div.buttons {
+                > div {
+                  overflow: hidden;
+                  width: 100%;
+                  > div.contents_right {
+                    > div {
+                      float: left;
+                      margin-left: 10px;
+                      margin-right: 10px;
+                    }
+                    &:after {
+                      display: table;
+                      content: '';
+                      clear: both;
+                      line-height: 0;
+                    }
+                  }
+                  &:after {
+                    display: table;
+                    content: '';
+                    clear: both;
+                    line-height: 0;
+                  }
+                }
+              }
             }
           }
         }
@@ -209,7 +232,7 @@ body.created_items {
       > div.contents_top {
         height: 50px;
         > div.contents_left {
-          height: 40px;
+          height: 50px;
           width: 100%;
           > div {
             height: 100%;
@@ -296,62 +319,75 @@ body.using_items {
     div.contents_row {
       padding: 10px;
       > div.contents_top {
-        height: 70px;
+        height: 50px;
         > div.contents_left {
-          height: 40px;
+          height: 50px;
           width: 100%;
           > div {
             height: 100%;
-            margin-right: 100px;
-            > div.float_container {
-              height: 100%;
-              > div.contents_top {
-                height: 100%;
-                > div.contents_left {
-                  > div.title {
-                    > a {
-                      font-size: 25px;
-                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                      font-weight: 900;
-                    }
-                  }
-                }
-                > div.contents_right {
-                  padding: 5px;
-                  height: 100%;
-                  > div.user {
-                    vertical-align: middle;
-                    height: 100%;
-                    > a {
-                      font-size: 15px;
-                      font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
-                      font-weight: 900;
-                    }
-                  }
-                }
-              }
-            }
-            > div.contents_bottom {
-              div.tag_label {
-                width: 40px;
-                font-size: 14px;
+            margin-right: 400px;
+            > div.title {
+              > a {
+                font-size: 25px;
+                font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                font-weight: 900;
               }
             }
           }
         }
         > div.contents_right {
-          width: 100px;
-          margin-left: -100px;
-          height: 100%;
-          div.remove_button {
-            width: 100px;
-            height: 100%;
+          padding: 5px;
+          width: 400px;
+          margin-left: -400px;
+          > div.contents_top {
+            > div.contents_left {
+              width: 50%;
+              > div.user {
+                vertical-align: middle;
+                > a {
+                  font-size: 15px;
+                  font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                  font-weight: 900;
+                }
+              }
+            }
+          }
+          > div.contents_bottom {
+            div.tag_label {
+              width: 40px;
+              font-size: 14px;
+            }
           }
         }
       }
-      > div.contents_bottom {
+      > div {
         div.caption {
-
+          color: blue;
+        }
+        div.buttons {
+          > div {
+            overflow: hidden;
+            width: 100%;
+            > div.contents_right {
+              > div {
+                float: left;
+                margin-left: 10px;
+                margin-right: 10px;
+              }
+              &:after {
+                display: table;
+                content: '';
+                clear: both;
+                line-height: 0;
+              }
+            }
+            &:after {
+              display: table;
+              content: '';
+              clear: both;
+              line-height: 0;
+            }
+          }
         }
       }
     }

@@ -18,8 +18,9 @@ class ItemGalleryController < ApplicationController
     item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
     result_success, message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, true)
     # TODO: メッセージ
-    # マイページ:UsingItemsを表示
-    redirect_to '/my_page/using_items'
+    # 呼び出し元と同じ画面を表示
+    p = Rails.application.routes.recognize_path(request.referrer)
+    redirect_to controller: p[:controller], action: p[:action]
   end
 
   def add_user_used_ajax
@@ -34,8 +35,9 @@ class ItemGalleryController < ApplicationController
     item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
     result_success, message = ItemGallery.upload_user_used(user_id, item_gallery_access_token, false)
     # TODO: メッセージ
-    # マイページ:UsingItemsを表示
-    redirect_to '/my_page/using_items'
+    # 呼び出し元と同じ画面を表示
+    p = Rails.application.routes.recognize_path(request.referrer)
+    redirect_to controller: p[:controller], action: p[:action]
   end
 
   def edit

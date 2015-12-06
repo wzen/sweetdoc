@@ -4,9 +4,9 @@
 %>
 <%= form_tag link_url do  %>
     <% params.each do |k, v| %>
-        <input type="hidden" class="<%= k %>" value="<%= v %>">
+        <input type="hidden" name="<%= k %>" value="<%= v %>">
     <% end %>
-    <%= button_tag(data: { disable_with: "Please wait..." }, class:'delete_button image_button', style: 'margin-top: 5px;margin-bottom: 5px') do %>
+    <%= button_tag(class:'delete_button image_button', style: 'margin-top: 5px;margin-bottom: 5px') do %>
         <%= image_tag 'etc/delete.png', size: '24x24' %>
     <% end %>
 <% end %>
