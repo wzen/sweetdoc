@@ -3,7 +3,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  //background-color: #F9F6EA;
+  background-color: #F9F6EA;
   //font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
   overflow: hidden;
@@ -38,13 +38,100 @@ div.tagcloud {
   }
 }
 
+div#tag_select_wrapper, div#using_item_wrapper {
+  > div {
+    width: 100%;
+    margin-top: 5px;
+    background-color: white;
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+div#using_item_wrapper {
+  div.contents_row {
+    padding: 10px;
+    > div.contents_top {
+      height: 30px;
+      > div.contents_left {
+        height: 30px;
+        width: 100%;
+        > div {
+          height: 100%;
+          margin-right: 120px;
+          > div.title {
+            > a {
+              font-size: 15px;
+              font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+              font-weight: 900;
+            }
+          }
+        }
+      }
+      > div.contents_right {
+        padding: 5px;
+        width: 120px;
+        margin-left: -120px;
+        > div.contents_top {
+          > div.contents_left {
+            width: 50%;
+            > div.user {
+              vertical-align: middle;
+              > a {
+                font-size: 10px;
+                font-family: Quicksand, 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;;
+                font-weight: 900;
+              }
+            }
+          }
+        }
+      }
+    }
+    > div {
+      div.buttons {
+        > div {
+          overflow: hidden;
+          width: 100%;
+          > div.contents_right {
+            > div {
+              float: left;
+              margin-left: 10px;
+              margin-right: 10px;
+            }
+            &:after {
+              display: table;
+              content: '';
+              clear: both;
+              line-height: 0;
+            }
+          }
+          &:after {
+            display: table;
+            content: '';
+            clear: both;
+            line-height: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 div#item_gallery_wrapper {
+  height: 100%;
+  > div {
+    width: 100%;
+    height: 100%;
+    border-top: none;
+    border-bottom: none;
+    background-color: white;
+  }
   div.contents_row {
     padding: 10px;
     > div.contents_top {
       height: 50px;
       > div.contents_left {
-        height: 40px;
+        height: 50px;
         width: 100%;
         > div {
           height: 100%;
@@ -152,4 +239,21 @@ div.contents_row {
   margin-top: 10px;
 }
 
+div.popular_menu {
+  li {
+    display: block !important;
+  }
+}
 
+div.headliner {
+  background-image: image-url("sidebar/css_option_headline.jpg");
+  background-repeat: no-repeat;
+  -moz-background-size: 100% 100%;
+  background-size: 100% 100%;
+  margin-bottom: 10px;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}

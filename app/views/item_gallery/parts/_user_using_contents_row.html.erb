@@ -1,6 +1,6 @@
 <%
    content = {} if content.nil?
-   without_button = false if without_button.nil?
+   mini = false if mini.nil?
 %>
 
 <div class="contents_row drop-shadow lifted">
@@ -20,43 +20,43 @@
                     </div>
                 </div>
             </div>
-            <div class="contents_bottom">
-                <% if content[Const::ItemGallery::Key::TAGS].present? %>
-                    <div class="contents_left">
-                        <div class="tag_label">
-                            Tags:
+            <% unless mini %>
+                <div class="contents_bottom">
+                    <% if content[Const::ItemGallery::Key::TAGS].present? %>
+                        <div class="contents_left">
+                            <div class="tag_label">
+                                Tags:
+                            </div>
                         </div>
-                    </div>
-                    <div class="contents_left">
-                        <div class="tags tagcloud mini event_disabled">
-                            <ul>
-                                <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
-                                    <li class="tag_name"><a><%= t %></a></li>
-                                <% end %>
-                            </ul>
+                        <div class="contents_left">
+                            <div class="tags tagcloud mini event_disabled">
+                                <ul>
+                                    <% content[Const::ItemGallery::Key::TAGS].split(',').each do |t| %>
+                                        <li class="tag_name"><a><%= t %></a></li>
+                                    <% end %>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                <% end %>
-            </div>
+                    <% end %>
+                </div>
+            <% end %>
         </div>
     </div>
     <div>
-        <% if content[Const::ItemGallery::Key::CAPTION].present? %>
+        <% if !mini && content[Const::ItemGallery::Key::CAPTION].present? %>
             <div class="caption">
                 <%= content[Const::ItemGallery::Key::CAPTION] %>
             </div>
         <% end %>
-        <% unless without_button %>
-            <div class="buttons">
-                <div>
-                    <div class="contents_right">
-                        <div class="add_or_remove_button">
-                            <%= render 'base/button/remove', link_url: "/item_gallery/remove_user_used", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}  %>
-                        </div>
+        <div class="buttons">
+            <div>
+                <div class="contents_right">
+                    <div class="add_or_remove_button">
+                        <%= render 'base/button/remove', link_url: "/item_gallery/remove_user_used", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}, mini: mini  %>
                     </div>
                 </div>
             </div>
-        <% end %>
+        </div>
     </div>
 
     <input type="hidden" class="<%= Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN] %>">

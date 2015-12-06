@@ -80,6 +80,7 @@
 
 <% else %>
 
+
     <div class="contents_row drop-shadow lifted">
         <div class="contents_top">
             <div class="contents_left">
@@ -122,20 +123,22 @@
                 </div>
             </div>
         </div>
-        <div class="contents_bottom">
+        <div>
             <% if show_caption && content[Const::ItemGallery::Key::CAPTION].present? %>
                 <div class="caption">
                     <%= content[Const::ItemGallery::Key::CAPTION] %>
                 </div>
             <% end %>
             <div class="buttons">
-                <div class="contents_right">
-                    <div class="add_or_remove_button">
-                        <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
-                            <%= render 'base/button/add', link_url: "/item_gallery/add_user_used", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}  %>
-                        <% else %>
-                            <%= render 'base/button/remove', link_url: "/item_gallery/remove_user_used", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}  %>
-                        <% end %>
+                <div>
+                    <div class="contents_right">
+                        <div class="add_or_remove_button">
+                            <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
+                                <%= render 'base/button/add', link_url: "/item_gallery/add_user_used", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}  %>
+                            <% else %>
+                                <%= render 'base/button/remove', link_url: "/item_gallery/remove_user_used", params:{Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN.to_sym => content[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN]}  %>
+                            <% end %>
+                        </div>
                     </div>
                 </div>
             </div>
