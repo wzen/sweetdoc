@@ -10,7 +10,7 @@ class ItemGalleryController < ApplicationController
 
   def preview
     @item_gallery_access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
-    @item_source_path = ItemGallery.code_filepath(@item_gallery_access_token)
+    @item_source_path, @item_class_name = ItemGallery.code_filepath(@item_gallery_access_token)
   end
 
   def add_user_used

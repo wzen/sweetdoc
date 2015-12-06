@@ -10,6 +10,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.ITEM_CODING_TEMP_CLASS_NAME = constant.ITEM_CODING_TEMP_CLASS_NAME;
 
+    Constant.ITEM_GALLERY_ITEM_CLASSNAME = constant.ITEM_GALLERY_ITEM_CLASSNAME;
+
     Constant.Zindex = (function() {
       function Zindex() {}
 

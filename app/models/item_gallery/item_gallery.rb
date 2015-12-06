@@ -270,7 +270,7 @@ class ItemGallery < ActiveRecord::Base
     begin
       ActiveRecord::Base.transaction do
         sql =<<-"SQL"
-          SELECT u.access_token as created_user_access_token, ig.file_name as code_filename
+          SELECT u.access_token as created_user_access_token, ig.file_name as code_filename, ig.class_name as item_class_name
           FROM users u INNER JOIN item_galleries ig ON u.id = ig.created_user_id
           WHERE ig.access_token = '#{item_gallery_access_token}'
           AND u.del_flg = 0
@@ -279,14 +279,14 @@ class ItemGallery < ActiveRecord::Base
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
         r = ret_sql.to_hash
         if r.count > 0
-          return UserCodeUtil.code_urlpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, r.first['created_user_access_token'], r.first['code_filename'])
+          return UserCodeUtil.code_urlpath(UserCodeUtil::CODE_TYPE::ITEM_GALLERY, r.first['created_user_access_token'], r.first['code_filename']), r.first['item_class_name']
         else
-          return nil
+          return nil, nil
         end
       end
     rescue => e
       # 失敗
-      return nil
+      return nil, nil
     end
   end
 

@@ -2,6 +2,7 @@ class Const
 
   DEFAULT_BACKGROUNDCOLOR = '#FAFAFA'
   ITEM_CODING_TEMP_CLASS_NAME = 'ItemPreviewTemp'
+  ITEM_GALLERY_ITEM_CLASSNAME = 'igtc'
 
   # 操作モード
   class Mode

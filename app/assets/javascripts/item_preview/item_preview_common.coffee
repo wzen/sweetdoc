@@ -79,7 +79,11 @@ class ItemPreviewCommon
   # 初期化
   @initAfterLoadItem = ->
     # 描画モード
-    window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ID
+    if window.isCodingDebug
+      window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ID
+    else
+      itemClassName = $(".#{Constant.ITEM_GALLERY_ITEM_CLASSNAME}:first").val()
+      window.selectItemMenu = window[itemClassName].ITEM_ID
     WorktableCommon.changeMode(Constant.Mode.DRAW)
     @initEvent()
     Navbar.initItemPreviewNavbar()

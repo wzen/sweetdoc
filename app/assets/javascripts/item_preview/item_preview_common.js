@@ -89,7 +89,13 @@ ItemPreviewCommon = (function() {
   };
 
   ItemPreviewCommon.initAfterLoadItem = function() {
-    window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ID;
+    var itemClassName;
+    if (window.isCodingDebug) {
+      window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ID;
+    } else {
+      itemClassName = $("." + Constant.ITEM_GALLERY_ITEM_CLASSNAME + ":first").val();
+      window.selectItemMenu = window[itemClassName].ITEM_ID;
+    }
     WorktableCommon.changeMode(Constant.Mode.DRAW);
     this.initEvent();
     return Navbar.initItemPreviewNavbar();

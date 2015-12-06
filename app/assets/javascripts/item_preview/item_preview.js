@@ -13,6 +13,7 @@ $(function() {
   ItemPreviewCommon.initMainContainerAsWorktable();
   $('.coding.item_preview').ready(function() {
     var count, timer;
+    window.isCodingDebug = true;
     window.initDone = true;
     count = 0;
     return timer = setInterval((function(_this) {
@@ -29,7 +30,23 @@ $(function() {
     })(this), 50);
   });
   return $('.item_gallery.preview').ready(function() {
-    return window.initDone = true;
+    var count, itemClassName, timer;
+    window.isCodingDebug = false;
+    window.initDone = true;
+    itemClassName = $("." + Constant.ITEM_GALLERY_ITEM_CLASSNAME + ":first").val();
+    count = 0;
+    return timer = setInterval((function(_this) {
+      return function() {
+        if (window[itemClassName] != null) {
+          clearInterval(timer);
+          ItemPreviewCommon.initAfterLoadItem();
+        }
+        count += 1;
+        if (count >= 100) {
+          return clearInterval(timer);
+        }
+      };
+    })(this), 50);
   });
 });
 
