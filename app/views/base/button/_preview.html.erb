@@ -1,7 +1,11 @@
 <%
    link_url = '' if link_url.nil?
+   params = {} if params.nil?
 %>
-<%= form_tag(link_url, method: 'get') do  %>
+<%= form_tag link_url do  %>
+    <% params.each do |k, v| %>
+        <input type="hidden" class="<%= k %>" value="<%= v %>">
+    <% end %>
     <%= button_tag(data: { disable_with: "Please wait..." }, class:'preview_button image_button', style: 'margin-top: 5px;margin-bottom: 5px') do %>
         <%= image_tag 'etc/preview.png', size: '24x24' %>
     <% end %>

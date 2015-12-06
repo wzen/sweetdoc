@@ -288,7 +288,6 @@ div.css_item_wrapper {
   box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
 }
 
-.drop-shadow:before,
 .drop-shadow:after {
   content:"";
   position:absolute;
@@ -305,7 +304,6 @@ div.css_item_wrapper {
   border-radius:4px;
 }
 
-.lifted:before,
 .lifted:after {
   bottom:15px;
   left:10px;

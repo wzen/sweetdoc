@@ -261,12 +261,14 @@ body.created_items {
         div.caption {
           color: blue;
         }
-        div.buttons {
-          > div.contents_right {
-            > div {
-              float: left;
-              margin-left: 10px;
-              margin-right: 10px;
+        > div.contents_top {
+          div.buttons {
+            > div.contents_right {
+              > div {
+                float: left;
+                margin-left: 10px;
+                margin-right: 10px;
+              }
             }
           }
         }
