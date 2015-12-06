@@ -257,18 +257,32 @@ body.created_items {
           }
         }
       }
-      > div.contents_bottom {
+      > div {
         div.caption {
           color: blue;
         }
-        > div.contents_top {
-          div.buttons {
+        div.buttons {
+          > div {
+            overflow: hidden;
+            width: 100%;
             > div.contents_right {
               > div {
                 float: left;
                 margin-left: 10px;
                 margin-right: 10px;
               }
+              &:after {
+                display: table;
+                content: '';
+                clear: both;
+                line-height: 0;
+              }
+            }
+            &:after {
+              display: table;
+              content: '';
+              clear: both;
+              line-height: 0;
             }
           }
         }

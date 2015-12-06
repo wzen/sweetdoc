@@ -48,14 +48,14 @@
                 </div>
             </div>
         </div>
-        <div class="contents_bottom">
+        <div>
             <% if show_caption && content[Const::ItemGallery::Key::CAPTION].present? %>
                 <div class="caption">
                     <%= content[Const::ItemGallery::Key::CAPTION] %>
                 </div>
             <% end %>
-            <div class="contents_top">
-                <div class="buttons">
+            <div class="buttons">
+                <div>
                     <div class="contents_right">
                         <div class="add_or_remove_button">
                             <% if content[Const::ItemGallery::Key::USER_ITEM_GALLERY_ID].blank? %>
