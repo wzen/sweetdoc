@@ -3,11 +3,7 @@
 class ArrowItem extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Arrow"
-
-  # ↓必須
-  if window.loadedItemToken?
-    # @property [String] ITEM_ACCESS_TOKEN アイテム種別
-    @ITEM_ACCESS_TOKEN = window.loadedItemToken
+  @ITEM_ACCESS_TOKEN = 'ArrowItem'
 
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100

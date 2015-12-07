@@ -86,7 +86,9 @@ Rails.application.configure do
   config.assets.compile = true
 
   # Memcached
-  config.cache_store = :dalli_store
+  #config.cache_store = :dalli_store
+  # Redis
+  config.cache_store = :redis_store
 
   # FIXME:
   #config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }

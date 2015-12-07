@@ -11,9 +11,7 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.IDENTITY = "Arrow";
 
-  if (window.loadedItemToken != null) {
-    ArrowItem.ITEM_ACCESS_TOKEN = window.loadedItemToken;
-  }
+  ArrowItem.ITEM_ACCESS_TOKEN = 'ArrowItem';
 
   HEADER_WIDTH = 100;
 

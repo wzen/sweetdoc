@@ -3,11 +3,7 @@
 class ButtonItem extends CssItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Button"
-
-  # ↓必須
-  if window.loadedItemToken?
-    # @property [String] ITEM_ACCESS_TOKEN アイテム種別
-    @ITEM_ACCESS_TOKEN = window.loadedItemToken
+  @ITEM_ACCESS_TOKEN = 'ButtonItem'
 
   @actionProperties =
     {

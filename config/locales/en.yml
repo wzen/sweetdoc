@@ -38,6 +38,8 @@ en:
         draw: "Draw"
         arrow: "Arrow"
         button: "Button"
+      preload_item: "Default items"
+      added_item: "Added items"
       edit: "Edit"
       item_coding: "Create Item"
     motion_check:

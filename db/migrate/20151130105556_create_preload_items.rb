@@ -3,6 +3,7 @@ class CreatePreloadItems < ActiveRecord::Migration
     create_table :preload_items do |t|
       t.string :title, null: false
       t.text :caption
+      t.string :access_token, null: false
       t.string :class_name, null: false
       t.string :file_name, null: false
       t.integer :create_user_id, :null => false

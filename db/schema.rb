@@ -283,6 +283,7 @@ ActiveRecord::Schema.define(version: 20151202022806) do
   create_table "preload_items", force: true do |t|
     t.string   "title",          null: false
     t.text     "caption"
+    t.string   "access_token",   null: false
     t.string   "class_name",     null: false
     t.string   "file_name",      null: false
     t.integer  "create_user_id", null: false

@@ -4,6 +4,7 @@ one:
   modify_user_id: 1
   title: "Button"
   caption: ''
+  access_token: 'ButtonItem'
   class_name: 'ButtonItem'
   file_name: "button.js"
 
@@ -13,5 +14,6 @@ two:
   modify_user_id: 1
   title: "Arrow"
   caption: ''
+  access_token: 'ArrowItem'
   class_name: 'ArrowItem'
   file_name: "arrow.js"

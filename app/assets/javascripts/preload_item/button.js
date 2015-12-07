@@ -12,9 +12,7 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.IDENTITY = "Button";
 
-  if (window.loadedItemToken != null) {
-    ButtonItem.ITEM_ACCESS_TOKEN = window.loadedItemToken;
-  }
+  ButtonItem.ITEM_ACCESS_TOKEN = 'ButtonItem';
 
   ButtonItem.actionProperties = {
     defaultMethod: 'defaultClick',

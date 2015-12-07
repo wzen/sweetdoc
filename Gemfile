@@ -65,7 +65,11 @@ group :development, :test do
 end
 
 # memcacheクライアント
-gem 'dalli', '2.7.4'
+#gem 'dalli', '2.7.4'
+# Redisクライアント
+gem 'redis', '3.2.2'
+gem 'redis-rails', '4.0.0'
+
 # Metaタグ
 gem 'meta-tags', '2.0.0'
 # マルチスレッド

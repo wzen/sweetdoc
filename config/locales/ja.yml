@@ -17,6 +17,8 @@ ja:
         draw: "描画"
         arrow: "矢印"
         button: "ボタン"
+      preload_item: "標準アイテム"
+      added_item: "追加アイテム"
       edit: "編集"
       item_coding: "アイテム作成"
     motion_check:
