@@ -10,8 +10,8 @@ SimpleArrowItem = (function(superClass) {
 
   SimpleArrowItem.IDENTITY = "simplearrow";
 
-  if (window.loadedItemId != null) {
-    SimpleArrowItem.ITEM_ID = window.loadedItemId;
+  if (window.loadedItemToken != null) {
+    SimpleArrowItem.ITEM_ACCESS_TOKEN = window.loadedItemToken;
   }
 
   ARROW_WIDTH = 30;
@@ -112,7 +112,7 @@ SimpleArrowItem = (function(superClass) {
   SimpleArrowItem.prototype.getMinimumObject = function() {
     var obj;
     obj = {
-      itemId: this.constructor.ITEM_ID,
+      itemToken: this.constructor.ITEM_ACCESS_TOKEN,
       a: this.itemSize,
       b: this.zindex,
       c: this.coodRegist,

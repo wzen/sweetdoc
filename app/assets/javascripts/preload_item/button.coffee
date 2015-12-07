@@ -5,9 +5,9 @@ class ButtonItem extends CssItemBase
   @IDENTITY = "Button"
 
   # ↓必須
-  if window.loadedItemId?
-    # @property [String] ITEM_ID アイテム種別
-    @ITEM_ID = window.loadedItemId
+  if window.loadedItemToken?
+    # @property [String] ITEM_ACCESS_TOKEN アイテム種別
+    @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
   @actionProperties =
     {
@@ -247,12 +247,12 @@ class ButtonItem extends CssItemBase
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 
-Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem)
+Common.setClassToMap(false, ButtonItem.ITEM_ACCESS_TOKEN, ButtonItem)
 
 # 初期化
-if window.itemInitFuncList? && !window.itemInitFuncList[ButtonItem.ITEM_ID]?
+if window.itemInitFuncList? && !window.itemInitFuncList[ButtonItem.ITEM_ACCESS_TOKEN]?
   console.log('button loaded')
-  window.itemInitFuncList[ButtonItem.ITEM_ID] = (option = {}) ->
+  window.itemInitFuncList[ButtonItem.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && ButtonItem.jsLoaded?
       ButtonItem.jsLoaded(option)
     #JS読み込み完了

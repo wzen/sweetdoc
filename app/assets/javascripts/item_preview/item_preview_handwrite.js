@@ -20,7 +20,7 @@ ItemPreviewHandwrite = (function(superClass) {
             _this.item.saveObj(true);
             _this.zindex += 1;
             Sidebar.initItemEditConfig(_this.item);
-            ItemPreviewEventConfig.addEventConfigContents(_this.item.itemId);
+            ItemPreviewEventConfig.addEventConfigContents(_this.item.itemToken);
             return Sidebar.initEventConfig(Common.generateId());
           };
         })(this));

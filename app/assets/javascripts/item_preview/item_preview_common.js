@@ -91,10 +91,10 @@ ItemPreviewCommon = (function() {
   ItemPreviewCommon.initAfterLoadItem = function() {
     var itemClassName;
     if (window.isCodingDebug) {
-      window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ID;
+      window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ACCESS_TOKEN;
     } else {
       itemClassName = $("." + Constant.ITEM_GALLERY_ITEM_CLASSNAME + ":first").val();
-      window.selectItemMenu = window[itemClassName].ITEM_ID;
+      window.selectItemMenu = window[itemClassName].ITEM_ACCESS_TOKEN;
     }
     WorktableCommon.changeMode(Constant.Mode.DRAW);
     this.initEvent();

@@ -265,14 +265,14 @@ class Common
 
   # クラスハッシュ配列からクラスを取り出し
   # @param [Boolean] isCommon 共通イベントか
-  # @param [Integer] id EventIdまたはItemId
+  # @param [Integer] dist EventIdまたはItemToken
   # @return [Object] 対象クラス
-  @getClassFromMap = (isCommon, id) ->
+  @getClassFromMap = (isCommon, dist) ->
     if !window.classMap?
       window.classMap = {}
 
     c = isCommon
-    i = id
+    i = dist
     if typeof c == "boolean"
       if c
         c = "1"
@@ -280,7 +280,7 @@ class Common
         c = "0"
 
     if typeof i != "string"
-      i = String(id)
+      i = String(dist)
 
     if !window.classMap[c]? || !window.classMap[c][i]?
       return null
@@ -289,11 +289,11 @@ class Common
 
   # クラスをハッシュ配列に保存
   # @param [Boolean] isCommon 共通イベントか
-  # @param [Integer] id EventIdまたはItemId
+  # @param [Integer] id EventIdまたはItemToken
   # @param [Class] value クラス
-  @setClassToMap = (isCommon, id, value) ->
+  @setClassToMap = (isCommon, dist, value) ->
     c = isCommon
-    i = id
+    i = dist
     if typeof c == "boolean"
       if c
         c = "1"
@@ -301,7 +301,7 @@ class Common
         c = "0"
 
     if typeof i != "string"
-      i = String(id)
+      i = String(dist)
 
     if !window.classMap?
       window.classMap = {}
@@ -310,70 +310,49 @@ class Common
 
     window.classMap[c][i] = value
 
-  # インスタンス作成
-  # @param [Boolean] isCommonEvent 共通イベントか
-  # @param [Integer] classMapId EventIdまたはItemId
-  # @return [Object] インスタンス
-  @newInstance = (isCommonEvent, classMapId) ->
-    if typeof isCommonEvent == "boolean"
-      if isCommonEvent
-        isCommonEvent = "1"
-      else
-        isCommonEvent = "0"
-
-    if typeof id != "string"
-      id = String(id)
-
-    if !window.instanceMap?
-      window.instanceMap = {}
-    # インスタンスを保存する
-    instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
-    window.instanceMap[instance.id] = instance
-    return instance
-
   # インスタンス取得
   # @param [Boolean] isCommonEvent 共通イベントか
   # @param [Integer] id イベントID
-  # @param [Integer] classMapId EventIdまたはItemId
+  # @param [Integer] classMapId EventIdまたはItemToken
   # @return [Object] インスタンス
-  @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
-    if typeof isCommonEvent == "boolean"
-      if isCommonEvent
-        isCommonEvent = "1"
-      else
-        isCommonEvent = "0"
-
-    if typeof id != "string"
-      id = String(id)
-
-    Common.setInstanceFromMap(isCommonEvent, id, classMapId)
-    return window.instanceMap[id]
+#  @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
+#    if typeof isCommonEvent == "boolean"
+#      if isCommonEvent
+#        isCommonEvent = "1"
+#      else
+#        isCommonEvent = "0"
+#
+#    if typeof id != "string"
+#      id = String(id)
+#
+#    Common.setInstanceFromMap(isCommonEvent, id, classMapId)
+#    return window.instanceMap[id]
 
   # インスタンス設定(上書きはしない)
   # @param [Boolean] isCommonEvent 共通イベントか
   # @param [Integer] id イベントID
-  # @param [Integer] classMapId EventIdまたはItemId
-  @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
-    if typeof isCommonEvent == "boolean"
-      if isCommonEvent
-        isCommonEvent = "1"
-      else
-        isCommonEvent = "0"
-
-    if typeof id != "string"
-      id = String(id)
-
-    if !window.instanceMap?
-      window.instanceMap = {}
-    if !window.instanceMap[id]?
-      # インスタンスを保存する
-      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
-      instance.id = id
-      # インスタンス値が存在する場合、初期化
-      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
-      if obj
-        instance.setMiniumObject(obj)
-      window.instanceMap[id] = instance
+  # @param [Integer] classMapId EventIdまたはItemToken
+#  @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
+#    if typeof isCommonEvent == "boolean"
+#      if isCommonEvent
+#        isCommonEvent = "1"
+#      else
+#        isCommonEvent = "0"
+#
+#    if typeof id != "string"
+#      id = String(id)
+#
+#    if !window.instanceMap?
+#      window.instanceMap = {}
+#    if !window.instanceMap[id]?
+#      # インスタンスを保存する
+#      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
+#      instance.id = id
+#      # インスタンス値が存在する場合、初期化
+#      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
+#      if obj
+#        instance.setMiniumObject(obj)
+#      window.instanceMap[id] = instance
 
   # 生成したインスタンスの中からアイテムのみ取得
   # @return [Array] アイテムインスタンス配列
@@ -648,7 +627,7 @@ class Common
       pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
       for k, obj of pageValues
         objId = obj.value.id
-        itemId = obj.value.itemId
+        itemToken = obj.value.itemToken
         if objId?
           $("##{objId}").remove()
           if window.instanceMap[objId] instanceof CommonEvent
@@ -664,59 +643,59 @@ class Common
       CommonEvent.deleteAllInstance()
 
   # JSファイルをサーバから読み込む
-  # @param [Int] itemId アイテム種別
+  # @param [Int] itemToken アイテム種別
   # @param [Function] callback コールバック関数
-  @loadItemJs = (itemIds, callback = null) ->
-    if jQuery.type(itemIds) != "array"
-      itemIds = [itemIds]
+  @loadItemJs = (itemTokens, callback = null) ->
+    if jQuery.type(itemTokens) != "array"
+      itemTokens = [itemTokens]
 
-    itemIds = $.grep(itemIds, (n) ->
+    itemTokens = $.grep(itemTokens, (n) ->
       return n >= 0
     )
     # 読み込むIDがない場合はコールバック実行して終了
-    if itemIds.length == 0
+    if itemTokens.length == 0
       if callback?
         callback()
       return
 
     callbackCount = 0
-    needReadItemIds = []
-    for itemId in itemIds
-      if itemId?
-        if window.itemInitFuncList[itemId]?
+    needReaditemTokens = []
+    for itemToken in itemTokens
+      if itemToken?
+        if window.itemInitFuncList[itemToken]?
           # 読み込み済みなアイテムIDの場合
-          window.itemInitFuncList[itemId]()
+          window.itemInitFuncList[itemToken]()
           callbackCount += 1
-          if callbackCount >= itemIds.length
+          if callbackCount >= itemTokens.length
             if callback?
               # 既に全て読み込まれている場合はコールバック実行して終了
               callback()
             return
         else
           # Ajaxでjs読み込みが必要なアイテムID
-          needReadItemIds.push(itemId)
+          needReaditemTokens.push(itemToken)
       else
         callbackCount += 1
 
     # js読み込み
+    data = {}
+    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReaditemTokens
     $.ajax(
       {
         url: "/item_js/index"
         type: "POST"
         dataType: "json"
-        data: {
-          itemIds: needReadItemIds
-        }
+        data: data
         success: (data)->
           if data.resultSuccess
             callbackCount = 0
             dataIdx = 0
             _cb = (d) ->
               option = {}
-              Common.availJs(d.item_id, d.js_src, option, =>
-                PageValue.addItemInfo(d.item_id)
+              Common.availJs(d.item_access_token, d.js_src, option, =>
+                PageValue.addItemInfo(d.item_access_token)
                 if window.isWorkTable && EventConfig?
-                  EventConfig.addEventConfigContents(d.item_id)
+                  EventConfig.addEventConfigContents(d.item_access_token)
                 dataIdx += 1
                 if dataIdx >= data.indexes.length
                   if callback?
@@ -736,24 +715,24 @@ class Common
   # イベントPageValueから全てのJSを取得
   @loadJsFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
-    needItemIds = []
+    needitemTokens = []
     for k, obj of pageValues
-      if obj.value.itemId?
-        if $.inArray(obj.value.itemId, needItemIds) < 0
-          needItemIds.push(obj.value.itemId)
+      if obj.value.itemToken?
+        if $.inArray(obj.value.itemToken, needitemTokens) < 0
+          needitemTokens.push(obj.value.itemToken)
 
-    @loadItemJs(needItemIds, ->
+    @loadItemJs(needitemTokens, ->
       # コールバック
       if callback?
         callback()
     )
 
   # JSファイルを設定
-  # @param [String] itemId アイテムID
+  # @param [String] itemToken アイテムID
   # @param [String] jsSrc jsファイル名
   # @param [Function] callback 設定後のコールバック
-  @availJs = (itemId, jsSrc, option = {}, callback = null) ->
-    window.loadedItemId = itemId
+  @availJs = (itemToken, jsSrc, option = {}, callback = null) ->
+    window.loadedItemToken = itemToken
     s = document.createElement('script');
     s.type = 'text/javascript';
     # TODO: 認証コードの比較
@@ -761,10 +740,10 @@ class Common
     firstScript = document.getElementsByTagName('script')[0];
     firstScript.parentNode.insertBefore(s, firstScript);
     t = setInterval( ->
-      if window.itemInitFuncList[itemId]?
+      if window.itemInitFuncList[itemToken]?
         clearInterval(t)
-        window.itemInitFuncList[itemId](option)
-        window.loadedItemId = null
+        window.itemInitFuncList[itemToken](option)
+        window.loadedItemToken = null
         if callback?
           callback()
     , 500)
@@ -782,11 +761,11 @@ class Common
   # JSファイルを適用する
   @setupJsByList = (itemJsList, callback = null) ->
 
-    _addItem = (item_id = null) ->
-      if item_id?
-        PageValue.addItemInfo(item_id)
+    _addItem = (item_access_token = null) ->
+      if item_access_token?
+        PageValue.addItemInfo(item_access_token)
         if EventConfig?
-          EventConfig.addEventConfigContents(item_id)
+          EventConfig.addEventConfigContents(item_access_token)
 
 
     if itemJsList.length == 0
@@ -797,11 +776,11 @@ class Common
     loadedIndex = 0
     d = itemJsList[loadedIndex]
     _func = ->
-      itemId = d.item_id
-      if window.itemInitFuncList[itemId]?
+      itemToken = d.item_access_token
+      if window.itemInitFuncList[itemToken]?
           # 既に読み込まれている場合
-        window.itemInitFuncList[itemId]()
-        #_addItem.call(@, itemId)
+        window.itemInitFuncList[itemToken]()
+        #_addItem.call(@, itemToken)
         loadedIndex += 1
         if loadedIndex >= itemJsList.length
           # 全て読み込んだ後
@@ -813,8 +792,8 @@ class Common
         return
 
       option = {}
-      Common.availJs(itemId, d.js_src, option, ->
-        _addItem.call(@, itemId)
+      Common.availJs(itemToken, d.js_src, option, ->
+        _addItem.call(@, itemToken)
         loadedIndex += 1
         if loadedIndex >= itemJsList.length
           # 全て読み込んだ後

@@ -337,13 +337,13 @@ Common = (function() {
     }
   };
 
-  Common.getClassFromMap = function(isCommon, id) {
+  Common.getClassFromMap = function(isCommon, dist) {
     var c, i;
     if (window.classMap == null) {
       window.classMap = {};
     }
     c = isCommon;
-    i = id;
+    i = dist;
     if (typeof c === "boolean") {
       if (c) {
         c = "1";
@@ -352,7 +352,7 @@ Common = (function() {
       }
     }
     if (typeof i !== "string") {
-      i = String(id);
+      i = String(dist);
     }
     if ((window.classMap[c] == null) || (window.classMap[c][i] == null)) {
       return null;
@@ -360,10 +360,10 @@ Common = (function() {
     return window.classMap[c][i];
   };
 
-  Common.setClassToMap = function(isCommon, id, value) {
+  Common.setClassToMap = function(isCommon, dist, value) {
     var c, i;
     c = isCommon;
-    i = id;
+    i = dist;
     if (typeof c === "boolean") {
       if (c) {
         c = "1";
@@ -372,7 +372,7 @@ Common = (function() {
       }
     }
     if (typeof i !== "string") {
-      i = String(id);
+      i = String(dist);
     }
     if (window.classMap == null) {
       window.classMap = {};
@@ -381,67 +381,6 @@ Common = (function() {
       window.classMap[c] = {};
     }
     return window.classMap[c][i] = value;
-  };
-
-  Common.newInstance = function(isCommonEvent, classMapId) {
-    var id, instance;
-    if (typeof isCommonEvent === "boolean") {
-      if (isCommonEvent) {
-        isCommonEvent = "1";
-      } else {
-        isCommonEvent = "0";
-      }
-    }
-    if (typeof id !== "string") {
-      id = String(id);
-    }
-    if (window.instanceMap == null) {
-      window.instanceMap = {};
-    }
-    instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
-    window.instanceMap[instance.id] = instance;
-    return instance;
-  };
-
-  Common.getInstanceFromMap = function(isCommonEvent, id, classMapId) {
-    if (typeof isCommonEvent === "boolean") {
-      if (isCommonEvent) {
-        isCommonEvent = "1";
-      } else {
-        isCommonEvent = "0";
-      }
-    }
-    if (typeof id !== "string") {
-      id = String(id);
-    }
-    Common.setInstanceFromMap(isCommonEvent, id, classMapId);
-    return window.instanceMap[id];
-  };
-
-  Common.setInstanceFromMap = function(isCommonEvent, id, classMapId) {
-    var instance, obj;
-    if (typeof isCommonEvent === "boolean") {
-      if (isCommonEvent) {
-        isCommonEvent = "1";
-      } else {
-        isCommonEvent = "0";
-      }
-    }
-    if (typeof id !== "string") {
-      id = String(id);
-    }
-    if (window.instanceMap == null) {
-      window.instanceMap = {};
-    }
-    if (window.instanceMap[id] == null) {
-      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
-      instance.id = id;
-      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id));
-      if (obj) {
-        instance.setMiniumObject(obj);
-      }
-      return window.instanceMap[id] = instance;
-    }
   };
 
   Common.getCreatedItemInstances = function() {
@@ -762,7 +701,7 @@ Common = (function() {
   };
 
   Common.removeAllItem = function(pageNum) {
-    var itemId, k, obj, objId, pageValues, ref, results, v;
+    var itemToken, k, obj, objId, pageValues, ref, results, v;
     if (pageNum == null) {
       pageNum = null;
     }
@@ -772,7 +711,7 @@ Common = (function() {
       for (k in pageValues) {
         obj = pageValues[k];
         objId = obj.value.id;
-        itemId = obj.value.itemId;
+        itemToken = obj.value.itemToken;
         if (objId != null) {
           $("#" + objId).remove();
           if (window.instanceMap[objId] instanceof CommonEvent) {
@@ -797,51 +736,51 @@ Common = (function() {
     }
   };
 
-  Common.loadItemJs = function(itemIds, callback) {
-    var callbackCount, itemId, j, len, needReadItemIds;
+  Common.loadItemJs = function(itemTokens, callback) {
+    var callbackCount, data, itemToken, j, len, needReaditemTokens;
     if (callback == null) {
       callback = null;
     }
-    if (jQuery.type(itemIds) !== "array") {
-      itemIds = [itemIds];
+    if (jQuery.type(itemTokens) !== "array") {
+      itemTokens = [itemTokens];
     }
-    itemIds = $.grep(itemIds, function(n) {
+    itemTokens = $.grep(itemTokens, function(n) {
       return n >= 0;
     });
-    if (itemIds.length === 0) {
+    if (itemTokens.length === 0) {
       if (callback != null) {
         callback();
       }
       return;
     }
     callbackCount = 0;
-    needReadItemIds = [];
-    for (j = 0, len = itemIds.length; j < len; j++) {
-      itemId = itemIds[j];
-      if (itemId != null) {
-        if (window.itemInitFuncList[itemId] != null) {
-          window.itemInitFuncList[itemId]();
+    needReaditemTokens = [];
+    for (j = 0, len = itemTokens.length; j < len; j++) {
+      itemToken = itemTokens[j];
+      if (itemToken != null) {
+        if (window.itemInitFuncList[itemToken] != null) {
+          window.itemInitFuncList[itemToken]();
           callbackCount += 1;
-          if (callbackCount >= itemIds.length) {
+          if (callbackCount >= itemTokens.length) {
             if (callback != null) {
               callback();
             }
             return;
           }
         } else {
-          needReadItemIds.push(itemId);
+          needReaditemTokens.push(itemToken);
         }
       } else {
         callbackCount += 1;
       }
     }
+    data = {};
+    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReaditemTokens;
     return $.ajax({
       url: "/item_js/index",
       type: "POST",
       dataType: "json",
-      data: {
-        itemIds: needReadItemIds
-      },
+      data: data,
       success: function(data) {
         var _cb, dataIdx;
         if (data.resultSuccess) {
@@ -850,11 +789,11 @@ Common = (function() {
           _cb = function(d) {
             var option;
             option = {};
-            return Common.availJs(d.item_id, d.js_src, option, (function(_this) {
+            return Common.availJs(d.item_access_token, d.js_src, option, (function(_this) {
               return function() {
-                PageValue.addItemInfo(d.item_id);
+                PageValue.addItemInfo(d.item_access_token);
                 if (window.isWorkTable && (typeof EventConfig !== "undefined" && EventConfig !== null)) {
-                  EventConfig.addEventConfigContents(d.item_id);
+                  EventConfig.addEventConfigContents(d.item_access_token);
                 }
                 dataIdx += 1;
                 if (dataIdx >= data.indexes.length) {
@@ -879,7 +818,7 @@ Common = (function() {
   };
 
   Common.loadJsFromInstancePageValue = function(callback, pageNum) {
-    var k, needItemIds, obj, pageValues;
+    var k, needitemTokens, obj, pageValues;
     if (callback == null) {
       callback = null;
     }
@@ -887,23 +826,23 @@ Common = (function() {
       pageNum = PageValue.getPageNum();
     }
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
-    needItemIds = [];
+    needitemTokens = [];
     for (k in pageValues) {
       obj = pageValues[k];
-      if (obj.value.itemId != null) {
-        if ($.inArray(obj.value.itemId, needItemIds) < 0) {
-          needItemIds.push(obj.value.itemId);
+      if (obj.value.itemToken != null) {
+        if ($.inArray(obj.value.itemToken, needitemTokens) < 0) {
+          needitemTokens.push(obj.value.itemToken);
         }
       }
     }
-    return this.loadItemJs(needItemIds, function() {
+    return this.loadItemJs(needitemTokens, function() {
       if (callback != null) {
         return callback();
       }
     });
   };
 
-  Common.availJs = function(itemId, jsSrc, option, callback) {
+  Common.availJs = function(itemToken, jsSrc, option, callback) {
     var firstScript, s, t;
     if (option == null) {
       option = {};
@@ -911,17 +850,17 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    window.loadedItemId = itemId;
+    window.loadedItemToken = itemToken;
     s = document.createElement('script');
     s.type = 'text/javascript';
     s.src = jsSrc;
     firstScript = document.getElementsByTagName('script')[0];
     firstScript.parentNode.insertBefore(s, firstScript);
     return t = setInterval(function() {
-      if (window.itemInitFuncList[itemId] != null) {
+      if (window.itemInitFuncList[itemToken] != null) {
         clearInterval(t);
-        window.itemInitFuncList[itemId](option);
-        window.loadedItemId = null;
+        window.itemInitFuncList[itemToken](option);
+        window.loadedItemToken = null;
         if (callback != null) {
           return callback();
         }
@@ -948,14 +887,14 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    _addItem = function(item_id) {
-      if (item_id == null) {
-        item_id = null;
+    _addItem = function(item_access_token) {
+      if (item_access_token == null) {
+        item_access_token = null;
       }
-      if (item_id != null) {
-        PageValue.addItemInfo(item_id);
+      if (item_access_token != null) {
+        PageValue.addItemInfo(item_access_token);
         if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-          return EventConfig.addEventConfigContents(item_id);
+          return EventConfig.addEventConfigContents(item_access_token);
         }
       }
     };
@@ -968,10 +907,10 @@ Common = (function() {
     loadedIndex = 0;
     d = itemJsList[loadedIndex];
     _func = function() {
-      var itemId, option;
-      itemId = d.item_id;
-      if (window.itemInitFuncList[itemId] != null) {
-        window.itemInitFuncList[itemId]();
+      var itemToken, option;
+      itemToken = d.item_access_token;
+      if (window.itemInitFuncList[itemToken] != null) {
+        window.itemInitFuncList[itemToken]();
         loadedIndex += 1;
         if (loadedIndex >= itemJsList.length) {
           if (callback != null) {
@@ -984,8 +923,8 @@ Common = (function() {
         return;
       }
       option = {};
-      return Common.availJs(itemId, d.js_src, option, function() {
-        _addItem.call(this, itemId);
+      return Common.availJs(itemToken, d.js_src, option, function() {
+        _addItem.call(this, itemToken);
         loadedIndex += 1;
         if (loadedIndex >= itemJsList.length) {
           if (callback != null) {

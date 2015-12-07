@@ -5,8 +5,8 @@ class ItemBase extends ItemEventBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = ""
   # @abstract
-  # @property [ItemType] ITEM_ID アイテム種別
-  @ITEM_ID = ""
+  # @property [ItemType] ITEM_ACCESS_TOKEN アイテム種別
+  @ITEM_ACCESS_TOKEN = ""
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
   @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
@@ -30,8 +30,8 @@ class ItemBase extends ItemEventBase
     super()
     # @property [Int] id ID
     @id = "i" + @constructor.IDENTITY + Common.generateId()
-    # @property [ItemType] ITEM_ID アイテム種別
-    @itemId = @constructor.ITEM_ID
+    # @property [ItemType] ITEM_ACCESS_TOKEN アイテム種別
+    @itemToken = @constructor.ITEM_ACCESS_TOKEN
     # @property [String] name 名前
     @name = null
     # @property [Object] _drawingSurfaceImageData 画面を保存する変数

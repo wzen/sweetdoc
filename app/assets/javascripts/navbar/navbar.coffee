@@ -76,8 +76,8 @@ class Navbar
       WorktableCommon.clearSelectedBorder()
       emtId = $(this).attr('id')
       if emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0
-        itemId = parseInt(emtId.replace(Navbar.ITEM_MENU_PREFIX, ''))
-        Navbar.setModeDraw(itemId)
+        itemToken = parseInt(emtId.replace(Navbar.ITEM_MENU_PREFIX, ''))
+        Navbar.setModeDraw(itemToken)
         WorktableCommon.changeMode(Constant.Mode.DRAW)
     )
 
@@ -151,13 +151,13 @@ class Navbar
     )
 
   # Drawモードに設定
-  @setModeDraw = (itemId, callback = null) ->
+  @setModeDraw = (itemToken, callback = null) ->
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     itemsSelectMenuEmt.removeClass('active')
-    emtId = "menu-item-" + itemId
+    emtId = "menu-item-" + itemToken
     $("##{emtId}").parent('li').addClass('active')
-    window.selectItemMenu = itemId
-    Common.loadItemJs(itemId, callback)
+    window.selectItemMenu = itemToken
+    Common.loadItemJs(itemToken, callback)
 
   # Editモードに設定
   @setModeEdit = ->

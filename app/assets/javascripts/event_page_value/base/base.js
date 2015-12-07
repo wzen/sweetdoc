@@ -15,7 +15,7 @@ EventPageValueBase = (function() {
 
       PageValueKey.ID = constant.EventPageValueKey.ID;
 
-      PageValueKey.ITEM_ID = constant.EventPageValueKey.ITEM_ID;
+      PageValueKey.ITEM_ACCESS_TOKEN = constant.EventPageValueKey.ITEM_ACCESS_TOKEN;
 
       PageValueKey.ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF;
 

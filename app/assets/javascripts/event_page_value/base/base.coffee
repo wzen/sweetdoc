@@ -10,8 +10,8 @@ class EventPageValueBase
       @DIST_ID = constant.EventPageValueKey.DIST_ID
       # @property [String] ID オブジェクトID
       @ID = constant.EventPageValueKey.ID
-      # @property [String] ITEM_ID アイテムID
-      @ITEM_ID = constant.EventPageValueKey.ITEM_ID
+      # @property [String] ITEM_ACCESS_TOKEN アイテムID
+      @ITEM_ACCESS_TOKEN = constant.EventPageValueKey.ITEM_ACCESS_TOKEN
       # @property [String] ITEM_SIZE_DIFF アイテムサイズ
       @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
       # @property [String] COMMON_EVENT_ID 共通イベントID

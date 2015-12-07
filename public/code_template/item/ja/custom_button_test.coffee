@@ -8,8 +8,8 @@ class ItemXxx extends CssItemBase
   # クラス名と同じ
   @IDENTITY = "ItemXxx"
 
-  if window.loadedItemId?
-    @ITEM_ID = window.loadedItemId
+  if window.loadedItemToken?
+    @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
   # アイテム作成時に設定される
   @elementId = ''
@@ -87,8 +87,8 @@ class ItemXxx extends CssItemBase
 # Coffee Temp ---End---
 
 # 初期化
-if window.itemInitFuncList? && !window.itemInitFuncList[ItemXxx.ITEM_ID]?
-  window.itemInitFuncList[ItemXxx.ITEM_ID] = (option = {}) ->
+if window.itemInitFuncList? && !window.itemInitFuncList[ItemXxx.ITEM_ACCESS_TOKEN]?
+  window.itemInitFuncList[ItemXxx.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && ItemXxx.jsLoaded?
       ItemXxx.jsLoaded(option)
     #JS読み込み完了

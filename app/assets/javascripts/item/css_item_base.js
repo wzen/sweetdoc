@@ -6,8 +6,8 @@ var CssItemBase,
 CssItemBase = (function(superClass) {
   extend(CssItemBase, superClass);
 
-  if (window.loadedItemId != null) {
-    CssItemBase.ITEM_ID = window.loadedItemId;
+  if (window.loadedItemToken != null) {
+    CssItemBase.ITEM_ACCESS_TOKEN = window.loadedItemToken;
   }
 
   function CssItemBase(cood) {
@@ -105,7 +105,7 @@ CssItemBase = (function(superClass) {
           }
         }
       }
-      temp.find('.design_item_id').html(this.id);
+      temp.find('.design_item_obj_id').html(this.id);
       return temp.appendTo(window.cssCode);
     };
     $("" + (this.getCssRootElementId())).remove();

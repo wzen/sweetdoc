@@ -31,7 +31,8 @@ class WorktableCommon
     if objId?
       pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
       if pageValue?
-        instance = Common.getInstanceFromMap(false, objId, pageValue.itemId)
+        instance = window.instanceMap[objId]
+        #instance = Common.getInstanceFromMap(false, objId, pageValue.itemToken)
         if instance instanceof ItemBase
           window.copiedInstance = Common.makeClone(instance.getMinimumObject())
           if isCopyOperation
@@ -46,7 +47,8 @@ class WorktableCommon
   # アイテムの貼り付け (Ctrl + v)
   @pasteItem = ->
     if window.copiedInstance?
-      instance = Common.newInstance(false, window.copiedInstance.itemId)
+      instance = new (Common.getClassFromMap(false, window.copiedInstance.itemToken))()
+      window.instanceMap[instance.id] = instance
       obj = Common.makeClone(window.copiedInstance)
       obj.id = instance.id
       instance.setMiniumObject(obj)
@@ -85,10 +87,10 @@ class WorktableCommon
     targetZIndex = parseInt($("##{objId}").css('z-index'))
     i = parseInt(window.scrollInsideWrapper.css('z-index'))
     for item in sorted
-      itemId = $(item).attr('id')
-      if objId != itemId
+      itemObjId = $(item).attr('id')
+      if objId != itemObjId
         item.css('z-index', i)
-        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i))
+        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemObjId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i))
         i += 1
     maxZIndex = i
     $("##{objId}").css('z-index', maxZIndex)
@@ -116,10 +118,10 @@ class WorktableCommon
     targetZIndex = parseInt($("##{objId}").css('z-index'))
     i = parseInt(window.scrollInsideWrapper.css('z-index')) + 1
     for item in sorted
-      itemId = $(item).attr('id')
-      if objId != itemId
+      itemObjId = $(item).attr('id')
+      if objId != itemObjId
         item.css('z-index', i)
-        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i))
+        PageValue.setInstancePageValue(PageValue.Key.instanceValue(itemObjId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(i))
         i += 1
     minZIndex = parseInt(window.scrollInsideWrapper.css('z-index'))
     $("##{objId}").css('z-index', minZIndex)
@@ -164,11 +166,12 @@ class WorktableCommon
       @stopAllEventPreview( ->
         instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn))
         for k, obj of instances
-          isCommon = null
+          #isCommon = null
           id = obj.value.id
-          classMapId = null
-          if obj.value.itemId?
-            item = Common.getInstanceFromMap(false, id, obj.value.itemId)
+          #classMapId = null
+          if obj.value.itemToken?
+            item = window.instanceMap[id]
+            #item = Common.getInstanceFromMap(false, id, obj.value.itemToken)
             if item? && item instanceof ItemBase
               # イベント適用前の状態で描画
               item.reDrawWithEventBefore()
@@ -407,23 +410,23 @@ class WorktableCommon
     Common.loadJsFromInstancePageValue( ->
       pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
       for k, obj of pageValues
-        isCommon = null
+#        isCommon = null
         id = obj.value.id
-        classMapId = null
-        if obj.value.itemId?
-          isCommon = false
-          classMapId = obj.value.itemId
-        else
-          isCommon = true
-          classMapId = obj.value.eventId
-        event = Common.getInstanceFromMap(isCommon, id, classMapId)
+#        classMapId = null
+#        if obj.value.itemToken?
+#          isCommon = false
+#          classMapId = obj.value.itemToken
+#        else
+#          isCommon = true
+#          classMapId = obj.value.eventId
+        event = window.instanceMap[id]
+        #event = Common.getInstanceFromMap(isCommon, id, classMapId)
         if event instanceof ItemBase
           event.setMiniumObject(obj.value)
           if event instanceof CssItemBase
             event.makeCss()
           if event.drawAndMakeConfigs?
             event.drawAndMakeConfigs()
-        #event.setItemAllPropToPageValue()
 
       # コールバック
       if callback?

@@ -118,8 +118,8 @@ class PageValueState
 
   # ユーザの保存データを読み込む
   # @param [String] user_id ユーザID
-  # @param [Array] loaded_itemids 読み込み済みのアイテムID一覧
-  def self.load_state(user_id, user_pagevalue_id, loaded_itemids)
+  # @param [Array] loaded_item_access_tokens 読み込み済みのアイテムID一覧
+  def self.load_state(user_id, user_pagevalue_id, loaded_item_access_tokens)
     sql = <<-"SQL"
       SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
              ip.data as instance_pagevalue_data,
@@ -173,7 +173,7 @@ class PageValueState
       }
       ipd = {}
       epd = {}
-      itemids = []
+      item_access_tokens = []
       pagevalues.each do |pagevalue|
         key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
         if pagevalue['general_pagevalue_data'].present?
@@ -185,9 +185,9 @@ class PageValueState
         if pagevalue['event_pagevalue_data'].present?
           epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
 
-          # 必要なItemIdを調査
-          itemids = PageValueState.extract_need_load_itemids(epd[key])
-          itemids -= loaded_itemids
+          # 必要なItemTokenを調査
+          item_access_tokens = PageValueState.extract_need_load_itemaccesstokens(epd[key])
+          item_access_tokens -= loaded_item_access_tokens
         end
       end
 
@@ -197,7 +197,7 @@ class PageValueState
         end
       end
 
-      item_js_list = ItemJs.extract_iteminfo(PreloadItem.find(itemids))
+      item_js_list = ItemJs.get_item_gallery(item_access_tokens)
       return true, item_js_list, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
     end
   end
@@ -435,24 +435,24 @@ class PageValueState
     end
   end
 
-  def self.extract_need_load_itemids(event_page_value)
-    itemids = []
+  def self.extract_need_load_itemaccesstokens(event_page_value)
+    access_tokens = []
     epv = event_page_value.kind_of?(String)? JSON.parse(event_page_value) : event_page_value
     epv.each do |kk, vv|
       if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
         vv.each do |k, v|
           if k.index(Const::PageValueKey::E_NUM_PREFIX).present?
-            item_id = v[Const::EventPageValueKey::ITEM_ID]
-            if item_id.present?
-              unless itemids.include?(item_id)
-                itemids << item_id
+            token = v[Const::EventPageValueKey::ITEM_ACCESS_TOKEN]
+            if token.present?
+              unless access_tokens.include?(token)
+                access_tokens << token
               end
             end
           end
         end
       end
     end
-    return itemids
+    return access_tokens
   end
 
   def self.save_gallery_footprint(user_id, gallery_access_token, page_value)

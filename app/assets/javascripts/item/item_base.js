@@ -10,7 +10,7 @@ ItemBase = (function(superClass) {
 
   ItemBase.IDENTITY = "";
 
-  ItemBase.ITEM_ID = "";
+  ItemBase.ITEM_ACCESS_TOKEN = "";
 
   ItemBase.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
 
@@ -46,7 +46,7 @@ ItemBase = (function(superClass) {
     }
     ItemBase.__super__.constructor.call(this);
     this.id = "i" + this.constructor.IDENTITY + Common.generateId();
-    this.itemId = this.constructor.ITEM_ID;
+    this.itemToken = this.constructor.ITEM_ACCESS_TOKEN;
     this.name = null;
     this._drawingSurfaceImageData = null;
     if (cood !== null) {

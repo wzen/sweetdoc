@@ -11,8 +11,8 @@ ArrowItem = (function(superClass) {
 
   ArrowItem.IDENTITY = "Arrow";
 
-  if (window.loadedItemId != null) {
-    ArrowItem.ITEM_ID = window.loadedItemId;
+  if (window.loadedItemToken != null) {
+    ArrowItem.ITEM_ACCESS_TOKEN = window.loadedItemToken;
   }
 
   HEADER_WIDTH = 100;
@@ -484,11 +484,11 @@ ArrowItem = (function(superClass) {
 
 })(CanvasItemBase);
 
-Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem);
+Common.setClassToMap(false, ArrowItem.ITEM_ACCESS_TOKEN, ArrowItem);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ArrowItem.ITEM_ID] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ArrowItem.ITEM_ACCESS_TOKEN] == null)) {
   console.log('arrow loaded');
-  window.itemInitFuncList[ArrowItem.ITEM_ID] = function(option) {
+  window.itemInitFuncList[ArrowItem.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

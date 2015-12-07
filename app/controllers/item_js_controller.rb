@@ -4,9 +4,9 @@ require 'item/item_js'
 class ItemJsController < ApplicationController
 
   def index
-    item_ids = params['itemIds']
+    access_token = params.require(Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN)
     @result_success = true
-    @indexes = ItemJs.extract_iteminfo(PreloadItem.find(item_ids))
+    @indexes = ItemJs.get_item_gallery(access_token)
   end
 
 end

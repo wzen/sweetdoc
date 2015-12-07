@@ -3,9 +3,9 @@ class ItemPreviewTemp extends CanvasItemBase
   @IDENTITY = "ItemPreviewTemp"
 
   # ↓Don't Delete
-  @ITEM_ID = -1
-  if window.loadedItemId?
-    @ITEM_ID = window.loadedItemId
+  @ITEM_ACCESS_TOKEN = 'default'
+  if window.loadedItemToken?
+    @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
   HEADER_WIDTH = 100
   HEADER_HEIGHT = 50
@@ -472,11 +472,11 @@ class ItemPreviewTemp extends CanvasItemBase
       if @itemSize.y + @itemSize.h < maxY
         @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
-Common.setClassToMap(false, ItemPreviewTemp.ITEM_ID, ItemPreviewTemp)
+Common.setClassToMap(false, ItemPreviewTemp.ITEM_ACCESS_TOKEN, ItemPreviewTemp)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.ITEM_ID]?
+if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN]?
   console.log('ItemPreviewTemp loaded')
-  window.itemInitFuncList[ItemPreviewTemp.ITEM_ID] = (option = {}) ->
+  window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && ItemPreviewTemp.jsLoaded?
       ItemPreviewTemp.jsLoaded(option)
     #JS読み込み完了後の処理

@@ -18,8 +18,8 @@ ItemXxx = (function(superClass) {
 
   ItemXxx.IDENTITY = "ItemXxx";
 
-  if (window.loadedItemId != null) {
-    ItemXxx.ITEM_ID = window.loadedItemId;
+  if (window.loadedItemToken != null) {
+    ItemXxx.ITEM_ACCESS_TOKEN = window.loadedItemToken;
   }
 
   ItemXxx.elementId = '';
@@ -93,8 +93,8 @@ ItemXxx = (function(superClass) {
 
 })(CssItemBase);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemXxx.ITEM_ID] == null)) {
-  window.itemInitFuncList[ItemXxx.ITEM_ID] = function(option) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemXxx.ITEM_ACCESS_TOKEN] == null)) {
+  window.itemInitFuncList[ItemXxx.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

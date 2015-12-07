@@ -12,8 +12,8 @@ ButtonItem = (function(superClass) {
 
   ButtonItem.IDENTITY = "Button";
 
-  if (window.loadedItemId != null) {
-    ButtonItem.ITEM_ID = window.loadedItemId;
+  if (window.loadedItemToken != null) {
+    ButtonItem.ITEM_ACCESS_TOKEN = window.loadedItemToken;
   }
 
   ButtonItem.actionProperties = {
@@ -233,11 +233,11 @@ ButtonItem = (function(superClass) {
 
 })(CssItemBase);
 
-Common.setClassToMap(false, ButtonItem.ITEM_ID, ButtonItem);
+Common.setClassToMap(false, ButtonItem.ITEM_ACCESS_TOKEN, ButtonItem);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ButtonItem.ITEM_ID] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ButtonItem.ITEM_ACCESS_TOKEN] == null)) {
   console.log('button loaded');
-  window.itemInitFuncList[ButtonItem.ITEM_ID] = function(option) {
+  window.itemInitFuncList[ButtonItem.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

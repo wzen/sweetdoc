@@ -12,10 +12,10 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.IDENTITY = "ItemPreviewTemp";
 
-  ItemPreviewTemp.ITEM_ID = -1;
+  ItemPreviewTemp.ITEM_ACCESS_TOKEN = 'default';
 
-  if (window.loadedItemId != null) {
-    ItemPreviewTemp.ITEM_ID = window.loadedItemId;
+  if (window.loadedItemToken != null) {
+    ItemPreviewTemp.ITEM_ACCESS_TOKEN = window.loadedItemToken;
   }
 
   ItemPreviewTemp.actionProperties = {
@@ -235,11 +235,11 @@ ItemPreviewTemp = (function(superClass) {
 
 })(CssItemBase);
 
-Common.setClassToMap(false, ItemPreviewTemp.ITEM_ID, ItemPreviewTemp);
+Common.setClassToMap(false, ItemPreviewTemp.ITEM_ACCESS_TOKEN, ItemPreviewTemp);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.ITEM_ID] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN] == null)) {
   console.log('ItemPreviewTemp loaded');
-  window.itemInitFuncList[ItemPreviewTemp.ITEM_ID] = function(option) {
+  window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

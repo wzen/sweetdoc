@@ -5,9 +5,9 @@ class ArrowItem extends CanvasItemBase
   @IDENTITY = "Arrow"
 
   # ↓必須
-  if window.loadedItemId?
-    # @property [String] ITEM_ID アイテム種別
-    @ITEM_ID = window.loadedItemId
+  if window.loadedItemToken?
+    # @property [String] ITEM_ACCESS_TOKEN アイテム種別
+    @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100
@@ -476,11 +476,11 @@ class ArrowItem extends CanvasItemBase
       if @itemSize.y + @itemSize.h < maxY
         @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
-Common.setClassToMap(false, ArrowItem.ITEM_ID, ArrowItem)
+Common.setClassToMap(false, ArrowItem.ITEM_ACCESS_TOKEN, ArrowItem)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ID]?
+if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ACCESS_TOKEN]?
   console.log('arrow loaded')
-  window.itemInitFuncList[ArrowItem.ITEM_ID] = (option = {}) ->
+  window.itemInitFuncList[ArrowItem.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && ArrowItem.jsLoaded?
       ArrowItem.jsLoaded(option)
     #JS読み込み完了後の処理

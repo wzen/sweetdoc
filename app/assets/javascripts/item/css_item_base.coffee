@@ -3,9 +3,9 @@
 # @extend ItemBase
 class CssItemBase extends ItemBase
 
-  if window.loadedItemId?
-    # @property [String] ITEM_ID アイテム種別
-    @ITEM_ID = window.loadedItemId
+  if window.loadedItemToken?
+    # @property [String] ITEM_ACCESS_TOKEN アイテム種別
+    @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
   # コンストラクタ
   # @param [Array] cood 座標
@@ -80,7 +80,7 @@ class CssItemBase extends ItemBase
         for k,v of designs.flags
           if !v
             temp.find(".#{k}").empty()
-      temp.find('.design_item_id').html(@id)
+      temp.find('.design_item_obj_id').html(@id)
       temp.appendTo(window.cssCode)
 
     # 上書きするため一旦削除

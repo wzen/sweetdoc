@@ -33,14 +33,14 @@ class EventConfig
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       selectItemValue = "#{EventConfig.EVENT_COMMON_PREFIX}#{@[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]}"
     else
-      selectItemValue = "#{@[EventPageValueBase.PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{@[EventPageValueBase.PageValueKey.ITEM_ID]}"
+      selectItemValue = "#{@[EventPageValueBase.PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{@[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]}"
     $('.te_item_select', @emt).val(selectItemValue)
 
     actionFormName = ''
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       actionFormName = EventConfig.EVENT_COMMON_PREFIX + @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
     else
-      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', @[EventPageValueBase.PageValueKey.ITEM_ID])
+      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
 
     $(".#{actionFormName} .radio", @emt).each((e) ->
       actionType = $(@).find('input.action_type').val()
@@ -68,7 +68,7 @@ class EventConfig
       else
         splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
         @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
-        @[EventPageValueBase.PageValueKey.ITEM_ID] = splitValues[1]
+        @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN] = splitValues[1]
 
     if window.isWorkTable
       # 選択枠消去
@@ -91,7 +91,7 @@ class EventConfig
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
     else
-      displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemid', @[EventPageValueBase.PageValueKey.ITEM_ID])
+      displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
       # アイテム共通情報表示
       $('.item_common_div', @emt).show()
 
@@ -277,7 +277,7 @@ class EventConfig
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
     else
-      return @constructor.ITEM_VALUES_CLASS.replace('@itemid', @[EventPageValueBase.PageValueKey.ITEM_ID]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
+      return @constructor.ITEM_VALUES_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
 
   # エラー表示
   # @param [String] message メッセージ内容
@@ -414,12 +414,12 @@ class EventConfig
     $('#event-config').children('.event').remove()
 
   # アクションイベント情報をコンフィグに追加
-  # @param [Integer] item_id アイテムID
-  @addEventConfigContents = (item_id) ->
-    itemClass = Common.getClassFromMap(false, item_id)
+  # @param [Integer] item_access_token アイテムID
+  @addEventConfigContents = (item_access_token) ->
+    itemClass = Common.getClassFromMap(false, item_access_token)
 
     if itemClass? && itemClass.actionProperties?
-      className = EventConfig.ITEM_ACTION_CLASS.replace('@itemid', item_id)
+      className = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', item_access_token)
       handler_forms = $('#event-config .handler_div .configBox')
       action_forms = $('#event-config .action_forms')
       if action_forms.find(".#{className}").length == 0
@@ -442,7 +442,7 @@ class EventConfig
           span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
           methodClone.find('input.action_type:first').val(actionType)
           methodClone.find('input.method_name:first').val(methodName)
-          valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemid', item_id).replace('@methodname', methodName)
+          valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName)
           methodClone.find('input:radio').attr('name', className)
           methodClone.find('input.value_class_name:first').val(valueClassName)
           actionParent.append(methodClone)
@@ -508,8 +508,8 @@ class EventConfig
           defaultValue = @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         else
           objClass = null
-          if @[EventPageValueBase.PageValueKey.ITEM_ID]?
-            objClass = Common.getClassFromMap(false, @[EventPageValueBase.PageValueKey.ITEM_ID])
+          if @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]?
+            objClass = Common.getClassFromMap(false, @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
           else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]?
             objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
           defaultValue = objClass.actionProperties.modifiables[varName].default
@@ -589,10 +589,10 @@ class EventConfig
     items.children().each( ->
       id = $(@).find('input.id').val()
       name = $(@).find('input.name').val()
-      itemId = $(@).find('input.itemId').val()
-      if itemId?
+      itemToken = $(@).find('input.itemToken').val()
+      if itemToken?
         selectOptions += """
-            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{itemId}'>
+            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{itemToken}'>
               #{name}
             </option>
           """

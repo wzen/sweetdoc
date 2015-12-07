@@ -38,7 +38,7 @@ RunCommon = (function() {
 
       Key.TARGET_PAGES = constant.Run.Key.TARGET_PAGES;
 
-      Key.LOADED_ITEM_IDS = constant.Run.Key.LOADED_ITEM_IDS;
+      Key.LOADED_ITEM_ACCESS_TOKENS = constant.Run.Key.LOADED_ITEM_ACCESS_TOKENS;
 
       Key.PROJECT_ID = constant.Run.Key.PROJECT_ID;
 
@@ -231,7 +231,7 @@ RunCommon = (function() {
     }
     data = {};
     data[RunCommon.Key.TARGET_PAGES] = targetPages;
-    data[RunCommon.Key.LOADED_ITEM_IDS] = JSON.stringify(PageValue.getLoadedItemIds());
+    data[RunCommon.Key.LOADED_ITEM_ACCESS_TOKENS] = JSON.stringify(PageValue.getLoadeditemTokens());
     locationPaths = window.location.pathname.split('/');
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID);

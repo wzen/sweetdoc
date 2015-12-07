@@ -4,9 +4,9 @@ class SimpleArrowItem extends ItemBase
 
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "simplearrow"
-  # @property [String] ITEM_ID アイテム種別
-  if window.loadedItemId?
-    @ITEM_ID = window.loadedItemId
+  # @property [String] ITEM_ACCESS_TOKEN アイテム種別
+  if window.loadedItemToken?
+    @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 30
@@ -108,7 +108,7 @@ class SimpleArrowItem extends ItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   getMinimumObject: ->
     obj = {
-      itemId: @constructor.ITEM_ID
+      itemToken: @constructor.ITEM_ACCESS_TOKEN
       a: @itemSize
       b: @zindex
       c: @coodRegist
