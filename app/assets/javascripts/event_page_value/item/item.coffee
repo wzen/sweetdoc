@@ -46,28 +46,3 @@ class EPVItem extends EventPageValueBase
       LocalStorage.saveAllPageValues()
 
     return errorMes
-
-  # PageValueに書き込み
-  # @param [Object] eventConfig イベントコンフィグオブジェクト
-  # @return [String] エラーメッセージ
-#  @writeToPageValue = (eventConfig) ->
-#    errorMes = ""
-#    writeValue = super(eventConfig)
-#
-#    if errorMes.length == 0
-#      PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue)
-#      if parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum
-#        PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
-#
-#      # Storageに保存
-#      LocalStorage.saveAllPageValues()
-#
-#    return errorMes
-
-  # PageValueからConfigにデータを読み込み
-  # @param [Object] eventConfig イベントコンフィグオブジェクト
-  # @param [Object] item アイテムオブジェクト
-  # @return [Boolean] 読み込み成功したか
-#  @readFromPageValue = (eventConfig, item) ->
-#    ret = super(eventConfig)
-#    return ret

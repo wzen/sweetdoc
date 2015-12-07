@@ -299,10 +299,10 @@ class EventConfig
       return null
 
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] == Constant.CommonActionEventChangeType.BACKGROUND
-        return EPVBackgroundColor
-      else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] == Constant.CommonActionEventChangeType.SCREEN
+      if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] == Constant.CommonActionEventChangeType.SCREEN
         return EPVScreenPosition
+      else
+        return EventPageValueBase
     else
       return EPVItem
 
