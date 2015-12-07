@@ -16,7 +16,9 @@ class Timeline
     # tempをクローンしてtimeline_eventsに追加
     pEmt = $('#timeline_events')
     newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true)
-    $("<input class='te_num' type='hidden' value='#{teNum}' >").appendTo(newEmt)
+    newEmt.find('.te_num').val(teNum)
+    newEmt.find('.dist_id').val(Common.generateId())
+    #$("<input class='te_num' type='hidden' value='#{teNum}' >").appendTo(newEmt)
     pEmt.append(newEmt)
 
   # タイムラインのイベント設定
@@ -35,10 +37,11 @@ class Timeline
           teNum = idx + 1
           emt = timelineEvents.eq(idx)
           if emt.length == 0
-            # 新規作成
+            # 無い場合は新規作成
             self.createTimelineEvent(teNum)
             timelineEvents = $('#timeline_events').children('.timeline_event')
           $('.te_num', emt).val(teNum)
+          $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID])
           actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
           Timeline.changeTimelineColor(teNum, actionType)
 
@@ -172,11 +175,12 @@ class Timeline
     _initEventConfig = (e) ->
       # サイドメニューをタイムラインに切り替え
       Sidebar.switchSidebarConfig(Sidebar.Type.TIMELINE)
-      te_num = $(e).find('input.te_num').val()
-      Sidebar.initEventConfig(te_num)
+      teNum = $(e).find('input.te_num').val()
+      distId = $(e).find('input.dist_id').val()
+      Sidebar.initEventConfig(distId, teNum)
       # イベントメニューの表示
       $('#event-config .event').hide()
-      eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+      eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId)
       $("##{eId}").show()
       # サイドバー表示
       Sidebar.openConfigSidebar()
@@ -221,7 +225,9 @@ class Timeline
   # タイムラインソートイベント
   @changeSortTimeline: (beforeNum, afterNum) ->
     if beforeNum != afterNum
+      # PageValueのタイムライン番号を入れ替え
       PageValue.sortEventPageValue(beforeNum, afterNum)
+    # タイムライン再作成
     @refreshAllTimeline()
 
 

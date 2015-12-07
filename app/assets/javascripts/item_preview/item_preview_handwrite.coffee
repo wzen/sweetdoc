@@ -13,7 +13,8 @@ class ItemPreviewHandwrite extends Handwrite
           Sidebar.initItemEditConfig(@item)
           # イベントコンフィグを初期化
           ItemPreviewEventConfig.addEventConfigContents(@item.itemId)
-          Sidebar.initEventConfig()
+          # EventConfigのDistIdは適当
+          Sidebar.initEventConfig(Common.generateId())
         )
 
     WorktableCommon.changeMode(Constant.Mode.EDIT)

@@ -4,7 +4,7 @@ class EventConfig
     # 定数
     constant = gon.const
     # @property [String] TE_ITEM_ROOT_ID イベントRoot
-    @ITEM_ROOT_ID = 'event_@te_num'
+    @ITEM_ROOT_ID = 'event_@distId'
     # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
     @EVENT_ITEM_SEPERATOR = "&"
     # @property [String] COMMON_ACTION_CLASS イベント共通アクションクラス名
@@ -21,7 +21,7 @@ class EventConfig
   # コンストラクタ
   # @param [Object] @emt コンフィグRoot
   # @param [Integer] @teNum イベント番号
-  constructor: (@emt, @teNum) ->
+  constructor: (@emt, @teNum, @distId) ->
     _setupFromPageValues.call(@)
 
   # インスタンス値から画面の状態を設定
@@ -606,12 +606,12 @@ class EventConfig
     )
 
   # イベントハンドラー設定
-  # @param [Integer] te_num イベント番号
-  @setupTimelineEventHandler = (te_num) ->
-    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num)
+  # @param [Integer] distId イベント番号
+  @setupTimelineEventHandler = (distId, teNum) ->
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId)
     emt = $('#' + eId)
     # Configクラス作成 & イベントハンドラの設定
-    te = new @(emt, te_num)
+    te = new @(emt, teNum, distId)
     do =>
       em = $('.te_item_select', emt)
       em.off('change')

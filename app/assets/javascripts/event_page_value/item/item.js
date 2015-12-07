@@ -12,11 +12,11 @@ EPVItem = (function(superClass) {
 
   EPVItem.itemSize = 'item_size';
 
-  EPVItem.writeDefaultToPageValue = function(item) {
-    var actionType, end, errorMes, start, teNum, writeValue;
+  EPVItem.writeDefaultToPageValue = function(item, teNum, distId) {
+    var actionType, end, errorMes, start, writeValue;
     errorMes = "";
     writeValue = {};
-    writeValue[this.PageValueKey.DIST_ID] = Common.generateId();
+    writeValue[this.PageValueKey.DIST_ID] = distId;
     writeValue[this.PageValueKey.ID] = item.id;
     writeValue[this.PageValueKey.ITEM_ID] = item.constructor.ITEM_ID;
     writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = item.itemSizeDiff;
@@ -40,12 +40,6 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.VALUE] = item.constructor.defaultEventConfigValue();
     writeValue[this.PageValueKey.MODIFIABLE_VARS] = {};
     if (errorMes.length === 0) {
-      teNum = PageValue.getEventPageValue(PageValue.Key.eventCount());
-      if (teNum != null) {
-        teNum = parseInt(teNum) + 1;
-      } else {
-        teNum = 1;
-      }
       PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum);
       LocalStorage.saveAllPageValues();

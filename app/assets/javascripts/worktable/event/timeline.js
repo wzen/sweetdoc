@@ -18,7 +18,8 @@ Timeline = (function() {
     }
     pEmt = $('#timeline_events');
     newEmt = $('.timeline_event_temp', pEmt).children(':first').clone(true);
-    $("<input class='te_num' type='hidden' value='" + teNum + "' >").appendTo(newEmt);
+    newEmt.find('.te_num').val(teNum);
+    newEmt.find('.dist_id').val(Common.generateId());
     return pEmt.append(newEmt);
   };
 
@@ -41,6 +42,7 @@ Timeline = (function() {
             timelineEvents = $('#timeline_events').children('.timeline_event');
           }
           $('.te_num', emt).val(teNum);
+          $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID]);
           actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE];
           Timeline.changeTimelineColor(teNum, actionType);
           if (pageValue[EventPageValueBase.PageValueKey.IS_SYNC]) {
@@ -166,12 +168,13 @@ Timeline = (function() {
       return Timeline.refreshAllTimeline();
     };
     _initEventConfig = function(e) {
-      var eId, te_num;
+      var distId, eId, teNum;
       Sidebar.switchSidebarConfig(Sidebar.Type.TIMELINE);
-      te_num = $(e).find('input.te_num').val();
-      Sidebar.initEventConfig(te_num);
+      teNum = $(e).find('input.te_num').val();
+      distId = $(e).find('input.dist_id').val();
+      Sidebar.initEventConfig(distId, teNum);
       $('#event-config .event').hide();
-      eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
+      eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId);
       $("#" + eId).show();
       return Sidebar.openConfigSidebar();
     };

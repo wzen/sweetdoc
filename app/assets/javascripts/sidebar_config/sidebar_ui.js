@@ -142,19 +142,19 @@ Sidebar = (function() {
     }
   };
 
-  Sidebar.initEventConfig = function(te_num) {
+  Sidebar.initEventConfig = function(distId, teNum) {
     var eId, emt;
-    if (te_num == null) {
-      te_num = 1;
+    if (teNum == null) {
+      teNum = 1;
     }
-    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId);
     emt = $("#" + eId);
     if (emt.length === 0) {
       emt = $('#event-config .event_temp .event').clone(true).attr('id', eId);
       $('#event-config').append(emt);
     }
     EventConfig.updateSelectItemMenu();
-    return EventConfig.setupTimelineEventHandler(te_num);
+    return EventConfig.setupTimelineEventHandler(distId, teNum);
   };
 
   return Sidebar;

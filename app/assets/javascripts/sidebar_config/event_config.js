@@ -6,7 +6,7 @@ EventConfig = (function() {
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
-    EventConfig.ITEM_ROOT_ID = 'event_@te_num';
+    EventConfig.ITEM_ROOT_ID = 'event_@distId';
     EventConfig.EVENT_ITEM_SEPERATOR = "&";
     EventConfig.COMMON_ACTION_CLASS = constant.EventConfig.COMMON_ACTION_CLASS;
     EventConfig.ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS;
@@ -15,9 +15,10 @@ EventConfig = (function() {
     EventConfig.EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX;
   }
 
-  function EventConfig(emt1, teNum) {
+  function EventConfig(emt1, teNum1, distId1) {
     this.emt = emt1;
-    this.teNum = teNum;
+    this.teNum = teNum1;
+    this.distId = distId1;
     _setupFromPageValues.call(this);
   }
 
@@ -293,10 +294,10 @@ EventConfig = (function() {
       return null;
     }
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] === Constant.CommonActionEventChangeType.BACKGROUND) {
-        return EPVBackgroundColor;
-      } else if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] === Constant.CommonActionEventChangeType.SCREEN) {
+      if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] === Constant.CommonActionEventChangeType.SCREEN) {
         return EPVScreenPosition;
+      } else {
+        return EventPageValueBase;
       }
     } else {
       return EPVItem;
@@ -647,11 +648,11 @@ EventConfig = (function() {
     });
   };
 
-  EventConfig.setupTimelineEventHandler = function(te_num) {
+  EventConfig.setupTimelineEventHandler = function(distId, teNum) {
     var eId, emt, te;
-    eId = EventConfig.ITEM_ROOT_ID.replace('@te_num', te_num);
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId);
     emt = $('#' + eId);
-    te = new this(emt, te_num);
+    te = new this(emt, teNum, distId);
     return (function(_this) {
       return function() {
         var em;

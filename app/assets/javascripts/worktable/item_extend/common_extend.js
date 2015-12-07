@@ -16,8 +16,12 @@ WorkTableCommonInclude = {
     this.reDraw(show);
     return this.makeDesignConfig((function(_this) {
       return function() {
+        var blank, distId, teNum;
         if (_this.constructor.defaultMethodName() != null) {
-          EPVItem.writeDefaultToPageValue(_this);
+          blank = $('#timeline_events .blank:first');
+          teNum = blank.find('.te_num').val();
+          distId = blank.find('.dist_id').val();
+          EPVItem.writeDefaultToPageValue(_this, teNum, distId);
           Timeline.refreshAllTimeline();
         }
         if (callback != null) {

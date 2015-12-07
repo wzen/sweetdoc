@@ -5,10 +5,10 @@ class EPVItem extends EventPageValueBase
   # アイテムのデフォルトイベントをPageValueに書き込み
   # @param [Object] item アイテムオブジェクト
   # @return [String] エラーメッセージ
-  @writeDefaultToPageValue = (item) ->
+  @writeDefaultToPageValue = (item, teNum, distId) ->
     errorMes = ""
     writeValue = {}
-    writeValue[@PageValueKey.DIST_ID] = Common.generateId()
+    writeValue[@PageValueKey.DIST_ID] = distId
     writeValue[@PageValueKey.ID] = item.id
     writeValue[@PageValueKey.ITEM_ID] = item.constructor.ITEM_ID
     writeValue[@PageValueKey.ITEM_SIZE_DIFF] = item.itemSizeDiff
@@ -32,12 +32,6 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.MODIFIABLE_VARS] = {}
 
     if errorMes.length == 0
-      teNum = PageValue.getEventPageValue(PageValue.Key.eventCount())
-      if teNum?
-        teNum = parseInt(teNum) + 1
-      else
-        teNum = 1
-
       # イベントとイベント数をPageValueに書き込み
       PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum), writeValue)
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum)

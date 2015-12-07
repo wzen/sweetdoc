@@ -21,7 +21,7 @@ ItemPreviewHandwrite = (function(superClass) {
             _this.zindex += 1;
             Sidebar.initItemEditConfig(_this.item);
             ItemPreviewEventConfig.addEventConfigContents(_this.item.itemId);
-            return Sidebar.initEventConfig();
+            return Sidebar.initEventConfig(Common.generateId());
           };
         })(this));
       }

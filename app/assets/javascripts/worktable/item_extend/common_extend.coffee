@@ -20,7 +20,11 @@ WorkTableCommonInclude =
     @makeDesignConfig(=>
       if @constructor.defaultMethodName()?
         # デフォルトイベントがある場合はイベント作成
-        EPVItem.writeDefaultToPageValue(@)
+        # Blankのタイムラインを取得
+        blank = $('#timeline_events .blank:first')
+        teNum = blank.find('.te_num').val()
+        distId = blank.find('.dist_id').val()
+        EPVItem.writeDefaultToPageValue(@, teNum, distId)
         # タイムライン更新
         Timeline.refreshAllTimeline()
       if callback?
