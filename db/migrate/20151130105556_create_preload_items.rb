@@ -4,8 +4,6 @@ class CreatePreloadItems < ActiveRecord::Migration
       t.string :title, null: false
       t.text :caption
       t.string :access_token, null: false
-      t.string :class_name, null: false
-      t.string :file_name, null: false
       t.integer :create_user_id, :null => false
       t.integer :modify_user_id, :null => false
 

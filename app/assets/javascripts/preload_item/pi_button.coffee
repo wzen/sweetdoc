@@ -4,7 +4,6 @@ class PreloadItemButton extends CssItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Button"
   @ITEM_ACCESS_TOKEN = 'PreloadItemButton'
-  window.itemTokenClassMap[@ITEM_ACCESS_TOKEN] = @name
 
   @actionProperties =
     {

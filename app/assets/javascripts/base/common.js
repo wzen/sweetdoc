@@ -786,7 +786,7 @@ Common = (function() {
       itemTokens = [itemTokens];
     }
     itemTokens = $.grep(itemTokens, function(n) {
-      return n >= 0;
+      return window.itemInitFuncList[n] == null;
     });
     if (itemTokens.length === 0) {
       if (callback != null) {

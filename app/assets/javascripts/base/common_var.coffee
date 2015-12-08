@@ -83,4 +83,3 @@ class CommonVar
 
 do ->
   window.itemInitFuncList = {}
-  window.itemTokenClassMap = {}

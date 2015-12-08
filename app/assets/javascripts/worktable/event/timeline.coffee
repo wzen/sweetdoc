@@ -180,7 +180,7 @@ class Timeline
       Sidebar.initEventConfig(distId, teNum)
       # イベントメニューの表示
       $('#event-config .event').hide()
-      eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId)
+      eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
       $("##{eId}").show()
       # サイドバー表示
       Sidebar.openConfigSidebar()

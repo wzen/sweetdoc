@@ -12,6 +12,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.ITEM_GALLERY_ITEM_CLASSNAME = constant.ITEM_GALLERY_ITEM_CLASSNAME;
 
+    Constant.ITEM_PREVIEW_ITEM_ACCESS_TOKEN = 'dummy';
+
     Constant.Zindex = (function() {
       function Zindex() {}
 

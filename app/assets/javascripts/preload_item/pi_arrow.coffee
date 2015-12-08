@@ -4,7 +4,6 @@ class PreloadItemArrow extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Arrow"
   @ITEM_ACCESS_TOKEN = 'PreloadItemArrow'
-  window.itemTokenClassMap[@ITEM_ACCESS_TOKEN] = @name
 
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100

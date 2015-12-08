@@ -3,10 +3,8 @@ class ItemPreviewTemp extends CanvasItemBase
   @IDENTITY = "ItemPreviewTemp"
 
   # ↓Don't Delete
-  @ITEM_ACCESS_TOKEN = 'default'
   if window.loadedItemToken?
     @ITEM_ACCESS_TOKEN = window.loadedItemToken
-    window.itemTokenClassMap[@ITEM_ACCESS_TOKEN] = @name
 
   HEADER_WIDTH = 100
   HEADER_HEIGHT = 50

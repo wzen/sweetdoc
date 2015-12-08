@@ -650,7 +650,8 @@ class Common
       itemTokens = [itemTokens]
 
     itemTokens = $.grep(itemTokens, (n) ->
-      return n >= 0
+      # 読み込み済みのものは除外
+      return !window.itemInitFuncList[n]?
     )
     # 読み込むIDがない場合はコールバック実行して終了
     if itemTokens.length == 0

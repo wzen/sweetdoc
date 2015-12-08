@@ -113,7 +113,7 @@ class Sidebar
       obj.setupOptionMenu()
 
   @initEventConfig = (distId, teNum = 1)->
-    eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId)
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
     emt = $("##{eId}")
     if emt.length == 0
       # イベントメニューの作成

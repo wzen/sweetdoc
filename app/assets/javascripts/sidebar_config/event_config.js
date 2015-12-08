@@ -650,7 +650,7 @@ EventConfig = (function() {
 
   EventConfig.setupTimelineEventHandler = function(distId, teNum) {
     var eId, emt, te;
-    eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId);
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
     emt = $('#' + eId);
     te = new this(emt, teNum, distId);
     return (function(_this) {

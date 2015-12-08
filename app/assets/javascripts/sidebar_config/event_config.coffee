@@ -608,7 +608,7 @@ class EventConfig
   # イベントハンドラー設定
   # @param [Integer] distId イベント番号
   @setupTimelineEventHandler = (distId, teNum) ->
-    eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId)
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
     emt = $('#' + eId)
     # Configクラス作成 & イベントハンドラの設定
     te = new @(emt, teNum, distId)

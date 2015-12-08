@@ -14,6 +14,10 @@ EPVItem = (function(superClass) {
 
   EPVItem.writeDefaultToPageValue = function(item, teNum, distId) {
     var actionType, end, errorMes, start, writeValue;
+    if (window.isItemPreview) {
+      teNum = 1;
+      distId = Common.generateId();
+    }
     errorMes = "";
     writeValue = {};
     writeValue[this.PageValueKey.DIST_ID] = distId;

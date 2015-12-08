@@ -12,11 +12,8 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.IDENTITY = "ItemPreviewTemp";
 
-  ItemPreviewTemp.ITEM_ACCESS_TOKEN = 'default';
-
   if (window.loadedItemToken != null) {
     ItemPreviewTemp.ITEM_ACCESS_TOKEN = window.loadedItemToken;
-    window.itemTokenClassMap[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = ItemPreviewTemp.name;
   }
 
   ItemPreviewTemp.actionProperties = {

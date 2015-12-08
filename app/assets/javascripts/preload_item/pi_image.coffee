@@ -1,2 +1,2 @@
-class PreloadItemImage
-  
+class PreloadItemImage extends ItemBase
+

@@ -174,7 +174,7 @@ Timeline = (function() {
       distId = $(e).find('input.dist_id').val();
       Sidebar.initEventConfig(distId, teNum);
       $('#event-config .event').hide();
-      eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId);
+      eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
       $("#" + eId).show();
       return Sidebar.openConfigSidebar();
     };

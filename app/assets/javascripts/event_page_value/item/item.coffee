@@ -6,6 +6,11 @@ class EPVItem extends EventPageValueBase
   # @param [Object] item アイテムオブジェクト
   # @return [String] エラーメッセージ
   @writeDefaultToPageValue = (item, teNum, distId) ->
+    if window.isItemPreview
+      # アイテムプレビュー時は暫定の値を入れる
+      teNum = 1
+      distId = Common.generateId()
+
     errorMes = ""
     writeValue = {}
     writeValue[@PageValueKey.DIST_ID] = distId

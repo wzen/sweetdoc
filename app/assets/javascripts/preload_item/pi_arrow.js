@@ -13,8 +13,6 @@ PreloadItemArrow = (function(superClass) {
 
   PreloadItemArrow.ITEM_ACCESS_TOKEN = 'PreloadItemArrow';
 
-  window.itemTokenClassMap[PreloadItemArrow.ITEM_ACCESS_TOKEN] = PreloadItemArrow.name;
-
   HEADER_WIDTH = 100;
 
   HEADER_HEIGHT = 50;

@@ -3,7 +3,7 @@ class ItemJs
   # アイテムjsファイルのパスを取得
   # @param [String] file_name ソースファイル名
   def self._js_path(user_access_token, file_name)
-    return File.join(Rails.root, "/public/item_gallery/#{user_access_token}/#{file_name}")
+    return "/item_gallery/#{user_access_token}/#{file_name}"
     #return "#{Rails.application.config.assets.prefix}/item/#{file_name}"
   end
 
@@ -15,7 +15,7 @@ class ItemJs
       ret <<
           {
               item_access_token: item_gallery['item_gallery_access_token'],
-              js_src: self._js_path(item_gallery['created_user_access_token'], item_gallery['file_name']),
+              js_src: _js_path(item_gallery['created_user_access_token'], item_gallery['file_name']),
               class_name: item_gallery['class_name']
           }
     end

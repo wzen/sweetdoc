@@ -284,8 +284,6 @@ ActiveRecord::Schema.define(version: 20151202022806) do
     t.string   "title",          null: false
     t.text     "caption"
     t.string   "access_token",   null: false
-    t.string   "class_name",     null: false
-    t.string   "file_name",      null: false
     t.integer  "create_user_id", null: false
     t.integer  "modify_user_id", null: false
     t.datetime "created_at"

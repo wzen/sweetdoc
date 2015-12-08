@@ -147,7 +147,7 @@ Sidebar = (function() {
     if (teNum == null) {
       teNum = 1;
     }
-    eId = EventConfig.ITEM_ROOT_ID.replace('@distid', distId);
+    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
     emt = $("#" + eId);
     if (emt.length === 0) {
       emt = $('#event-config .event_temp .event').clone(true).attr('id', eId);

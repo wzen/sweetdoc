@@ -14,8 +14,6 @@ PreloadItemButton = (function(superClass) {
 
   PreloadItemButton.ITEM_ACCESS_TOKEN = 'PreloadItemButton';
 
-  window.itemTokenClassMap[PreloadItemButton.ITEM_ACCESS_TOKEN] = PreloadItemButton.name;
-
   PreloadItemButton.actionProperties = {
     defaultMethod: 'defaultClick',
     designConfig: true,
