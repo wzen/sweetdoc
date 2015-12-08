@@ -475,6 +475,7 @@ class PreloadItemArrow extends CanvasItemBase
 Common.setClassToMap(false, PreloadItemArrow.ITEM_ACCESS_TOKEN, PreloadItemArrow)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN]?
+  EventConfig.addEventConfigContents(PreloadItemArrow.ITEM_ACCESS_TOKEN)
   console.log('arrow loaded')
   window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemArrow.jsLoaded?

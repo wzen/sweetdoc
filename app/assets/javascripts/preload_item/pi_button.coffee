@@ -247,6 +247,7 @@ Common.setClassToMap(false, PreloadItemButton.ITEM_ACCESS_TOKEN, PreloadItemButt
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN]?
+  EventConfig.addEventConfigContents(PreloadItemButton.ITEM_ACCESS_TOKEN)
   console.log('button loaded')
   window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemButton.jsLoaded?

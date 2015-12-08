@@ -485,6 +485,7 @@ PreloadItemArrow = (function(superClass) {
 Common.setClassToMap(false, PreloadItemArrow.ITEM_ACCESS_TOKEN, PreloadItemArrow);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] == null)) {
+  EventConfig.addEventConfigContents(PreloadItemArrow.ITEM_ACCESS_TOKEN);
   console.log('arrow loaded');
   window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
