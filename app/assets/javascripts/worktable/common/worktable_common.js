@@ -199,8 +199,8 @@ WorktableCommon = (function() {
           obj = instances[k];
           id = obj.value.id;
           if (obj.value.itemToken != null) {
-            item = window.instanceMap[id];
-            if ((item != null) && item instanceof ItemBase) {
+            item = Common.getInstanceFromMap(false, id, obj.value.itemToken);
+            if (item instanceof ItemBase) {
               results.push(item.reDrawWithEventBefore());
             } else {
               results.push(void 0);
@@ -452,12 +452,20 @@ WorktableCommon = (function() {
       pageNum = PageValue.getPageNum();
     }
     return Common.loadJsFromInstancePageValue(function() {
-      var event, id, k, obj, pageValues;
+      var classMapId, event, id, isCommon, k, obj, pageValues;
       pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
       for (k in pageValues) {
         obj = pageValues[k];
         id = obj.value.id;
-        event = window.instanceMap[id];
+        classMapId = null;
+        if (obj.value.itemToken != null) {
+          isCommon = false;
+          classMapId = obj.value.itemToken;
+        } else {
+          isCommon = true;
+          classMapId = obj.value.eventId;
+        }
+        event = Common.getInstanceFromMap(isCommon, id, classMapId);
         if (event instanceof ItemBase) {
           event.setMiniumObject(obj.value);
           if (event instanceof CssItemBase) {

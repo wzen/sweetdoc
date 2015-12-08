@@ -315,44 +315,44 @@ class Common
   # @param [Integer] id イベントID
   # @param [Integer] classMapId EventIdまたはItemToken
   # @return [Object] インスタンス
-#  @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
-#    if typeof isCommonEvent == "boolean"
-#      if isCommonEvent
-#        isCommonEvent = "1"
-#      else
-#        isCommonEvent = "0"
-#
-#    if typeof id != "string"
-#      id = String(id)
-#
-#    Common.setInstanceFromMap(isCommonEvent, id, classMapId)
-#    return window.instanceMap[id]
+  @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
+    if typeof isCommonEvent == "boolean"
+      if isCommonEvent
+        isCommonEvent = "1"
+      else
+        isCommonEvent = "0"
+
+    if typeof id != "string"
+      id = String(id)
+
+    Common.setInstanceFromMap(isCommonEvent, id, classMapId)
+    return window.instanceMap[id]
 
   # インスタンス設定(上書きはしない)
   # @param [Boolean] isCommonEvent 共通イベントか
   # @param [Integer] id イベントID
   # @param [Integer] classMapId EventIdまたはItemToken
-#  @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
-#    if typeof isCommonEvent == "boolean"
-#      if isCommonEvent
-#        isCommonEvent = "1"
-#      else
-#        isCommonEvent = "0"
-#
-#    if typeof id != "string"
-#      id = String(id)
-#
-#    if !window.instanceMap?
-#      window.instanceMap = {}
-#    if !window.instanceMap[id]?
-#      # インスタンスを保存する
-#      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
-#      instance.id = id
-#      # インスタンス値が存在する場合、初期化
-#      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
-#      if obj
-#        instance.setMiniumObject(obj)
-#      window.instanceMap[id] = instance
+  @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
+    if typeof isCommonEvent == "boolean"
+      if isCommonEvent
+        isCommonEvent = "1"
+      else
+        isCommonEvent = "0"
+
+    if typeof id != "string"
+      id = String(id)
+
+    if !window.instanceMap?
+      window.instanceMap = {}
+    if !window.instanceMap[id]?
+      # インスタンスを保存する
+      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
+      instance.id = id
+      # インスタンス値が存在する場合、初期化
+      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
+      if obj
+        instance.setMiniumObject(obj)
+      window.instanceMap[id] = instance
 
   # 生成したインスタンスの中からアイテムのみ取得
   # @return [Array] アイテムインスタンス配列
@@ -880,5 +880,3 @@ class Common
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->
   window.classMap = {}
-
-

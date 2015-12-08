@@ -383,6 +383,47 @@ Common = (function() {
     return window.classMap[c][i] = value;
   };
 
+  Common.getInstanceFromMap = function(isCommonEvent, id, classMapId) {
+    if (typeof isCommonEvent === "boolean") {
+      if (isCommonEvent) {
+        isCommonEvent = "1";
+      } else {
+        isCommonEvent = "0";
+      }
+    }
+    if (typeof id !== "string") {
+      id = String(id);
+    }
+    Common.setInstanceFromMap(isCommonEvent, id, classMapId);
+    return window.instanceMap[id];
+  };
+
+  Common.setInstanceFromMap = function(isCommonEvent, id, classMapId) {
+    var instance, obj;
+    if (typeof isCommonEvent === "boolean") {
+      if (isCommonEvent) {
+        isCommonEvent = "1";
+      } else {
+        isCommonEvent = "0";
+      }
+    }
+    if (typeof id !== "string") {
+      id = String(id);
+    }
+    if (window.instanceMap == null) {
+      window.instanceMap = {};
+    }
+    if (window.instanceMap[id] == null) {
+      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
+      instance.id = id;
+      obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id));
+      if (obj) {
+        instance.setMiniumObject(obj);
+      }
+      return window.instanceMap[id] = instance;
+    }
+  };
+
   Common.getCreatedItemInstances = function() {
     var k, ret, v;
     ret = {};

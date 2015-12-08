@@ -166,13 +166,10 @@ class WorktableCommon
       @stopAllEventPreview( ->
         instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn))
         for k, obj of instances
-          #isCommon = null
           id = obj.value.id
-          #classMapId = null
           if obj.value.itemToken?
-            item = window.instanceMap[id]
-            #item = Common.getInstanceFromMap(false, id, obj.value.itemToken)
-            if item? && item instanceof ItemBase
+            item = Common.getInstanceFromMap(false, id, obj.value.itemToken)
+            if item instanceof ItemBase
               # イベント適用前の状態で描画
               item.reDrawWithEventBefore()
       )
@@ -410,17 +407,15 @@ class WorktableCommon
     Common.loadJsFromInstancePageValue( ->
       pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
       for k, obj of pageValues
-#        isCommon = null
         id = obj.value.id
-#        classMapId = null
-#        if obj.value.itemToken?
-#          isCommon = false
-#          classMapId = obj.value.itemToken
-#        else
-#          isCommon = true
-#          classMapId = obj.value.eventId
-        event = window.instanceMap[id]
-        #event = Common.getInstanceFromMap(isCommon, id, classMapId)
+        classMapId = null
+        if obj.value.itemToken?
+          isCommon = false
+          classMapId = obj.value.itemToken
+        else
+          isCommon = true
+          classMapId = obj.value.eventId
+        event = Common.getInstanceFromMap(isCommon, id, classMapId)
         if event instanceof ItemBase
           event.setMiniumObject(obj.value)
           if event instanceof CssItemBase
