@@ -6,7 +6,6 @@ CommonVar = (function() {
 
   CommonVar.initVarWhenLoadedView = function() {
     window.instanceMap = {};
-    window.itemInitFuncList = [];
     window.debug = true;
     window.copiedInstance = null;
     window.operationHistories = {};
@@ -91,5 +90,7 @@ CommonVar = (function() {
   return CommonVar;
 
 })();
+
+window.itemInitFuncList = {};
 
 //# sourceMappingURL=common_var.js.map

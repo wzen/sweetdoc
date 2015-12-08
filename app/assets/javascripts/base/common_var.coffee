@@ -4,7 +4,7 @@ class CommonVar
   # 変数初期化(トップ画面読み込み時に一度だけ実行)
   @initVarWhenLoadedView = ->
     window.instanceMap = {}
-    window.itemInitFuncList = []
+    #window.itemInitFuncList = []
     window.debug = true
     window.copiedInstance = null
     window.operationHistories = {}
@@ -81,3 +81,5 @@ class CommonVar
     window.disabledEventHandler = false
     window.firstItemFocused = false
     @updateRunBaseElement(PageValue.getPageNum())
+
+window.itemInitFuncList = {}

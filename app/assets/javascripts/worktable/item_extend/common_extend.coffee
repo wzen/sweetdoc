@@ -21,7 +21,7 @@ WorkTableCommonInclude =
       if @constructor.defaultMethodName()?
         # デフォルトイベントがある場合はイベント作成
         # Blankのタイムラインを取得
-        blank = $('#timeline_events .blank:first')
+        blank = $('#timeline_events > .timeline_event.blank:first')
         teNum = blank.find('.te_num').val()
         distId = blank.find('.dist_id').val()
         EPVItem.writeDefaultToPageValue(@, teNum, distId)

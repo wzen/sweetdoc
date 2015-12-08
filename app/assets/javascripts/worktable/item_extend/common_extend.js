@@ -18,7 +18,7 @@ WorkTableCommonInclude = {
       return function() {
         var blank, distId, teNum;
         if (_this.constructor.defaultMethodName() != null) {
-          blank = $('#timeline_events .blank:first');
+          blank = $('#timeline_events > .timeline_event.blank:first');
           teNum = blank.find('.te_num').val();
           distId = blank.find('.dist_id').val();
           EPVItem.writeDefaultToPageValue(_this, teNum, distId);

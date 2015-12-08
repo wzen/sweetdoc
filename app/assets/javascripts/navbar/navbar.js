@@ -79,7 +79,7 @@ Navbar = (function() {
       WorktableCommon.clearSelectedBorder();
       emtId = $(this).attr('id');
       if (emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0) {
-        itemToken = parseInt(emtId.replace(Navbar.ITEM_MENU_PREFIX, ''));
+        itemToken = emtId.replace(Navbar.ITEM_MENU_PREFIX, '');
         Navbar.setModeDraw(itemToken);
         return WorktableCommon.changeMode(Constant.Mode.DRAW);
       }

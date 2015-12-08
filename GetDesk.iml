@@ -85,6 +85,12 @@
     <orderEntry type="library" scope="PROVIDED" name="railties (v4.1.6, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v10.4.2, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rdoc (v4.2.0, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="redis (v3.2.2, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="redis-actionpack (v4.0.1, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="redis-activesupport (v4.1.5, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="redis-rack (v1.5.0, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="redis-rails (v4.0.0, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="redis-store (v1.1.7, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ref (v2.0.0, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="request_store (v1.2.0, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="responders (v1.1.2, RVM: ruby-2.1.2 [global]) [gem]" level="application" />

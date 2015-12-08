@@ -1,0 +1,5 @@
+<script type="text/javascript">
+    <% @preload_items.each do |p| %>
+      window.loadedItemToken[p.access_token] = true
+    <% end %>
+</script>

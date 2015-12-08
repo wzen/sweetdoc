@@ -24,6 +24,10 @@ class ItemJs
   end
 
   def self.get_item_gallery(access_tokens)
+    if access_tokens.blank?
+      return []
+    end
+
     begin
       ActiveRecord::Base.transaction do
         at = access_tokens

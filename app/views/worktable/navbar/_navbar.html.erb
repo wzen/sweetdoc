@@ -36,19 +36,25 @@
                         <li class="dropdown-submenu">
                             <a class="menu-load"><%= t('header_menu.action.preload_item') %></a>
                             <ul class="dropdown-menu">
-
-                                <li><a id="menu-item-1" class="menu-item"><%= t('header_menu.action.draw.button') %></a></li>
-                                <li><a id="menu-item-2" class="menu-item"><%= t('header_menu.action.draw.arrow') %></a></li>
-
+                                <% if @preload_items.present? %>
+                                    <% @preload_items.each do |p| %>
+                                        <li><a id="menu-item-<%= p.access_token %>" class="menu-item"><%= p.title %></a></li>
+                                    <% end %>
+                                <% else %>
+                                    <li><a class="menu-item">No item</a></li>
+                                <% end %>
                             </ul>
                         </li>
                         <li class="dropdown-submenu">
                             <a class="menu-load"><%= t('header_menu.action.added_item') %></a>
                             <ul class="dropdown-menu">
-
-                                <li><a id="menu-item-1" class="menu-item"><%= t('header_menu.action.draw.button') %></a></li>
-                                <li><a id="menu-item-2" class="menu-item"><%= t('header_menu.action.draw.arrow') %></a></li>
-
+                                <% if @using_items.present? %>
+                                    <% @using_items.each do |p| %>
+                                        <li><a id="menu-item-<%= p[Const::ItemGallery::Key::ITEM_GALLERY_ACCESS_TOKEN] %>" class="menu-item"><%= p[Const::ItemGallery::Key::TITLE] %></a></li>
+                                    <% end %>
+                                <% else %>
+                                    <li><a class="menu-item">No item</a></li>
+                                <% end %>
                             </ul>
                         </li>
                          <li class="divider"></li>

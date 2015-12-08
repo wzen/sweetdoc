@@ -25,5 +25,9 @@ module GetDesk
 
     # lib以下のコードをロード
     config.autoload_paths += %W(#{config.root}/lib/common)
+
+    # params.requireエラーで例外を発生させる
+    config.action_controller.action_on_unpermitted_parameters = :raise
+
   end
 end
