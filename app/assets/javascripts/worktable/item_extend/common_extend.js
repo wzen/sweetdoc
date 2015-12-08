@@ -51,12 +51,7 @@ WorkTableCommonInclude = {
     (function() {
       var contextSelector, menu;
       menu = [];
-      contextSelector = null;
-      if (self instanceof CanvasItemBase) {
-        contextSelector = ".canvas_item";
-      } else if (self instanceof CssItemBase) {
-        contextSelector = ".css_item_base";
-      }
+      contextSelector = ".context_base";
       menu.push({
         title: "Edit",
         cmd: "edit",

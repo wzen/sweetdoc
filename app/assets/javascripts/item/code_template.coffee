@@ -22,11 +22,15 @@ class ElementCode
     createItemElement: (item) ->
       if item instanceof CanvasItemBase
         return """
-          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="canvas_item_wrapper"><div class='canvas_item'><canvas id="#{item.canvasElementId()}" class="canvas_item canvas" ></canvas></div></div></div>
+          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'><canvas id="#{item.canvasElementId()}" class="canvas context_base" ></canvas></div></div></div>
         """
       else if item instanceof CssItemBase
         return """
-          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="css_item_wrapper"><div class='css_item'><div type="button" class="css_item_base"><div></div></div></div></div></div>
+          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'><div type="button" class="css_item_base context_base"><div></div></div></div></div></div>
+        """
+      else if item instanceof PreloadItemImage
+        return """
+          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'><img  /></div></div></div></div></div>
         """
 
     # グリッド線のテンプレートHTMLを読み込み

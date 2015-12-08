@@ -178,11 +178,11 @@ PreloadItemButton = (function(superClass) {
   };
 
   PreloadItemButton.prototype.defaultClick = function(opt) {
-    this.getJQueryElement().find('.css_item:first').addClass('defaultClick_' + this.id);
+    this.getJQueryElement().find('.item_contents:first').addClass('defaultClick_' + this.id);
     this.getJQueryElement().off('webkitAnimationEnd animationend');
     return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
-        _this.getJQueryElement().find('.css_item:first').removeClass('defaultClick_' + _this.id);
+        _this.getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + _this.id);
         if (opt.complete != null) {
           return opt.complete();
         }
@@ -209,7 +209,7 @@ PreloadItemButton = (function(superClass) {
     methodName = this.getEventMethodName();
     funcName = methodName + "_" + this.id;
     keyFrameName = this.id + "_frame";
-    emt = this.getJQueryElement().find('.css_item:first');
+    emt = this.getJQueryElement().find('.item_contents:first');
     top = emt.css('top');
     left = emt.css('left');
     width = emt.css('width');

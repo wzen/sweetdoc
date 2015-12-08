@@ -165,11 +165,11 @@ class PreloadItemButton extends CssItemBase
   # 共通クリックイベント ※アクションイベント
   defaultClick : (opt) ->
     # ボタン凹むアクション
-    @getJQueryElement().find('.css_item:first').addClass('defaultClick_' + @id)
+    @getJQueryElement().find('.item_contents:first').addClass('defaultClick_' + @id)
     @getJQueryElement().off('webkitAnimationEnd animationend')
     @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
       #console.log('css-anim end')
-      @getJQueryElement().find('.css_item:first').removeClass('defaultClick_' + @id)
+      @getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + @id)
       if opt.complete?
         opt.complete()
     )
@@ -190,7 +190,7 @@ class PreloadItemButton extends CssItemBase
     methodName = @getEventMethodName()
     funcName = "#{methodName}_#{@id}"
     keyFrameName = "#{@id}_frame"
-    emt = @getJQueryElement().find('.css_item:first')
+    emt = @getJQueryElement().find('.item_contents:first')
     top = emt.css('top')
     left = emt.css('left')
     width = emt.css('width')
