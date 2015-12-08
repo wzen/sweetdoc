@@ -95,7 +95,7 @@ Handwrite = (function() {
   Handwrite.mouseDownDrawing = function(loc) {
     WorktableCommon.reDrawAllInstanceItemIfChanging();
     if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
-      this.item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
+      this.item = new (Common.getClassFromMap(false, window.itemTokenClassMap[selectItemMenu]))(loc);
       window.instanceMap[this.item.id] = this.item;
       this.item.saveDrawingSurface();
       WorktableCommon.changeMode(Constant.Mode.DRAW);

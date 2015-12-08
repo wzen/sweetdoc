@@ -63,6 +63,7 @@
     <orderEntry type="library" scope="PROVIDED" name="mail (v2.6.3, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="meta-tags (v2.0.0, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mime-types (v2.6.2, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="mini_magick (v4.3.6, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="minitest (v5.8.1, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.11.2, RVM: ruby-2.1.2 [global]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="multi_xml (v0.5.5, RVM: ruby-2.1.2 [global]) [gem]" level="application" />

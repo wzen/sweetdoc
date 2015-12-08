@@ -90,7 +90,7 @@ class Handwrite
     # プレビューを停止して再描画
     WorktableCommon.reDrawAllInstanceItemIfChanging()
     if selectItemMenu?
-      @item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
+      @item = new (Common.getClassFromMap(false, window.itemTokenClassMap[selectItemMenu]))(loc)
       window.instanceMap[@item.id] = @item
       @item.saveDrawingSurface()
       WorktableCommon.changeMode(Constant.Mode.DRAW)

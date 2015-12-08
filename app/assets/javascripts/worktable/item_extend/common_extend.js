@@ -52,10 +52,10 @@ WorkTableCommonInclude = {
       var contextSelector, menu;
       menu = [];
       contextSelector = null;
-      if ((typeof ArrowItem !== "undefined" && ArrowItem !== null) && self instanceof ArrowItem) {
-        contextSelector = ".arrow";
-      } else if ((typeof ButtonItem !== "undefined" && ButtonItem !== null) && self instanceof ButtonItem) {
-        contextSelector = ".css3button";
+      if (self instanceof CanvasItemBase) {
+        contextSelector = ".canvas_item";
+      } else if (self instanceof CssItemBase) {
+        contextSelector = ".css_item_base";
       }
       menu.push({
         title: "Edit",

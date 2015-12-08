@@ -87,6 +87,7 @@ gem 'omniauth-google-oauth2', '0.2.8'
 gem 'ruby-filemagic' , '0.7.0'
 gem 'carrierwave'
 gem 'carrierwave-magic'
+gem 'mini_magick'
 
 gem "facets", require: false
 

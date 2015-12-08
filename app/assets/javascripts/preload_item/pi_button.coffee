@@ -1,9 +1,10 @@
 # ボタンアイテム
 # @extend CssItemBase
-class ButtonItem extends CssItemBase
+class PreloadItemButton extends CssItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Button"
-  @ITEM_ACCESS_TOKEN = 'ButtonItem'
+  @ITEM_ACCESS_TOKEN = 'PreloadItemButton'
+  window.itemTokenClassMap[@ITEM_ACCESS_TOKEN] = @name
 
   @actionProperties =
     {
@@ -176,12 +177,12 @@ class ButtonItem extends CssItemBase
 
   # *アクションイベント
   changeColorScroll: (opt) ->
-    @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
+    @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
     if opt.complete?
       opt.complete()
 
   changeColorClick: (opt) ->
-    @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
+    @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
     if opt.complete?
       opt.complete()
 
@@ -243,14 +244,14 @@ class ButtonItem extends CssItemBase
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 
-Common.setClassToMap(false, ButtonItem.ITEM_ACCESS_TOKEN, ButtonItem)
+Common.setClassToMap(false, PreloadItemButton.ITEM_ACCESS_TOKEN, PreloadItemButton)
 
 # 初期化
-if window.itemInitFuncList? && !window.itemInitFuncList[ButtonItem.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN]?
   console.log('button loaded')
-  window.itemInitFuncList[ButtonItem.ITEM_ACCESS_TOKEN] = (option = {}) ->
-    if window.isWorkTable && ButtonItem.jsLoaded?
-      ButtonItem.jsLoaded(option)
+  window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN] = (option = {}) ->
+    if window.isWorkTable && PreloadItemButton.jsLoaded?
+      PreloadItemButton.jsLoaded(option)
     #JS読み込み完了
     if window.debug
       console.log('button init finished')

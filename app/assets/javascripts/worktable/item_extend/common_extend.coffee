@@ -56,10 +56,10 @@ WorkTableCommonInclude =
     do ->
       menu = []
       contextSelector = null
-      if ArrowItem? && self instanceof ArrowItem
-        contextSelector = ".arrow"
-      else if ButtonItem? && self instanceof ButtonItem
-        contextSelector = ".css3button"
+      if self instanceof CanvasItemBase
+        contextSelector = ".canvas_item"
+      else if self instanceof CssItemBase
+        contextSelector = ".css_item_base"
       menu.push({title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # アイテム編集
         Sidebar.openItemEditConfig(event.target)

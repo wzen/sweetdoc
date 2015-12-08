@@ -16,6 +16,7 @@ ItemPreviewTemp = (function(superClass) {
 
   if (window.loadedItemToken != null) {
     ItemPreviewTemp.ITEM_ACCESS_TOKEN = window.loadedItemToken;
+    window.itemTokenClassMap[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = ItemPreviewTemp.name;
   }
 
   ItemPreviewTemp.actionProperties = {
@@ -195,14 +196,14 @@ ItemPreviewTemp = (function(superClass) {
   };
 
   ItemPreviewTemp.prototype.changeColorScroll = function(opt) {
-    this.getJQueryElement().find('.css3button').css('background', "#" + this.backgroundColor);
+    this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
     if (opt.complete != null) {
       return opt.complete();
     }
   };
 
   ItemPreviewTemp.prototype.changeColorClick = function(opt) {
-    this.getJQueryElement().find('.css3button').css('background', "#" + this.backgroundColor);
+    this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
     if (opt.complete != null) {
       return opt.complete();
     }

@@ -107,6 +107,7 @@ GEM
     meta-tags (2.0.0)
       actionpack (>= 3.0.0)
     mime-types (2.6.2)
+    mini_magick (4.3.6)
     minitest (5.8.1)
     multi_json (1.11.2)
     multi_xml (0.5.5)
@@ -270,6 +271,7 @@ DEPENDENCIES
   less-rails
   libv8 (= 3.16.14.3)
   meta-tags (= 2.0.0)
+  mini_magick
   mysql2 (~> 0.3.20)
   omniauth (= 1.2.2)
   omniauth-facebook (= 2.0.1)

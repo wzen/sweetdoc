@@ -91,6 +91,9 @@ CommonVar = (function() {
 
 })();
 
-window.itemInitFuncList = {};
+(function() {
+  window.itemInitFuncList = {};
+  return window.itemTokenClassMap = {};
+})();
 
 //# sourceMappingURL=common_var.js.map

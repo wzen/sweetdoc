@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "pi_image.js",
+  "sourceRoot": "",
+  "sources": [
+    "pi_image.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA,IAAA,gBAAA;;AAAA;gCAAA;;0BAAA;;IAAA,CAAA"
+}

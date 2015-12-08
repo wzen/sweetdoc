@@ -15,6 +15,7 @@ ItemPreviewTemp = (function(superClass) {
 
   if (window.loadedItemToken != null) {
     ItemPreviewTemp.ITEM_ACCESS_TOKEN = window.loadedItemToken;
+    window.itemTokenClassMap[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = ItemPreviewTemp.name;
   }
 
   HEADER_WIDTH = 100;

@@ -6,6 +6,7 @@ class ItemPreviewTemp extends CssItemBase
   @ITEM_ACCESS_TOKEN = 'default'
   if window.loadedItemToken?
     @ITEM_ACCESS_TOKEN = window.loadedItemToken
+    window.itemTokenClassMap[@ITEM_ACCESS_TOKEN] = @name
 
   @actionProperties =
   {
@@ -178,13 +179,13 @@ class ItemPreviewTemp extends CssItemBase
 
   # *アクションイベント
   changeColorScroll: (opt) ->
-    @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
+    @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
     if opt.complete?
       opt.complete()
 
   # *アクションイベント
   changeColorClick: (opt) ->
-    @getJQueryElement().find('.css3button').css('background', "##{@backgroundColor}")
+    @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
     if opt.complete?
       opt.complete()
 

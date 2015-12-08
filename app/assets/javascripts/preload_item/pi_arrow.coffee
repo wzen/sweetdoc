@@ -1,9 +1,10 @@
 # 矢印アイテム
 # @extend CanvasItemBase
-class ArrowItem extends CanvasItemBase
+class PreloadItemArrow extends CanvasItemBase
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "Arrow"
-  @ITEM_ACCESS_TOKEN = 'ArrowItem'
+  @ITEM_ACCESS_TOKEN = 'PreloadItemArrow'
+  window.itemTokenClassMap[@ITEM_ACCESS_TOKEN] = @name
 
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100
@@ -472,13 +473,13 @@ class ArrowItem extends CanvasItemBase
       if @itemSize.y + @itemSize.h < maxY
         @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
 
-Common.setClassToMap(false, ArrowItem.ITEM_ACCESS_TOKEN, ArrowItem)
+Common.setClassToMap(false, PreloadItemArrow.ITEM_ACCESS_TOKEN, PreloadItemArrow)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[ArrowItem.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN]?
   console.log('arrow loaded')
-  window.itemInitFuncList[ArrowItem.ITEM_ACCESS_TOKEN] = (option = {}) ->
-    if window.isWorkTable && ArrowItem.jsLoaded?
-      ArrowItem.jsLoaded(option)
+  window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] = (option = {}) ->
+    if window.isWorkTable && PreloadItemArrow.jsLoaded?
+      PreloadItemArrow.jsLoaded(option)
     #JS読み込み完了後の処理
     if window.debug
       console.log('arrow init Finish')

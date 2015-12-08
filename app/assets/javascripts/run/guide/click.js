@@ -52,7 +52,7 @@ ClickGuide = (function(superClass) {
 
   ClickGuide.focusColor = function(item) {
     var arr, averageColors, background, baseColors, c, colors, count, diffs, endIndex, i, j, k, l, len, maxDiff, re, ref, ref1, startIndex, targetKey, v;
-    background = item.getJQueryElement().find('.css3button:first').css('background');
+    background = item.getJQueryElement().find('.css_item_base:first').css('background');
     startIndex = background.indexOf('gradient(') + 'gradient('.length;
     endIndex = background.length - 1;
     count = 1;
