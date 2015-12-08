@@ -6,9 +6,42 @@ var PreloadItemImage,
 PreloadItemImage = (function(superClass) {
   extend(PreloadItemImage, superClass);
 
-  function PreloadItemImage() {
-    return PreloadItemImage.__super__.constructor.apply(this, arguments);
+  PreloadItemImage.actionProperties = {
+    modifiables: {
+      imagePath: {
+        name: "Select image",
+        type: 'select_file',
+        ja: {
+          name: "画像を選択"
+        }
+      }
+    }
+  };
+
+  function PreloadItemImage(cood) {
+    if (cood == null) {
+      cood = null;
+    }
+    PreloadItemImage.__super__.constructor.call(this);
+    this.imagePath = null;
+    this.isKeepAspect = false;
+    this.scale = {
+      w: 1.0,
+      h: 1.0
+    };
   }
+
+  PreloadItemImage.prototype.reDraw = function(show) {
+    if (show == null) {
+      show = true;
+    }
+    PreloadItemImage.__super__.reDraw.call(this, show);
+    if (this.imagePath != null) {
+
+    } else {
+
+    }
+  };
 
   return PreloadItemImage;
 

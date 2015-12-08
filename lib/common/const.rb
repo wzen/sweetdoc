@@ -40,6 +40,8 @@ class Const
     STRING = 'string'
     # @property [Int] COLOR 色
     COLOR = 'color'
+    # @property [Int] SELECT_FILE ファイル選択
+    SELECT_FILE = 'select_file'
     # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
     DESIGN_TOOL = 'design_tool'
   end

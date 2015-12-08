@@ -20,18 +20,23 @@ class ElementCode
     # @param [Object] item アイテムオブジェクト
     # @return [String] HTML
     createItemElement: (item) ->
+      contents = ''
       if item instanceof CanvasItemBase
-        return """
-          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'><canvas id="#{item.canvasElementId()}" class="canvas context_base" ></canvas></div></div></div>
+        contents = """
+          <canvas id="#{item.canvasElementId()}" class="canvas context_base" ></canvas>
         """
       else if item instanceof CssItemBase
-        return """
-          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'><div type="button" class="css_item_base context_base"><div></div></div></div></div></div>
+        contents = """
+          <div type="button" class="css_item_base context_base"><div></div></div>
         """
       else if item instanceof PreloadItemImage
-        return """
-          <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'><img  /></div></div></div></div></div>
+        contents = """
+          <img  />
         """
+
+      return """
+        <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'>#{contents}</div></div></div>
+      """
 
     # グリッド線のテンプレートHTMLを読み込み
     # @param [Integer] top HTMLを設置するY位置
