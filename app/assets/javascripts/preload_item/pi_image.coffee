@@ -21,6 +21,14 @@ class PreloadItemImage extends ItemBase
     @isKeepAspect = false
     @scale = {w:1.0, h:1.0}
 
+  # アイテム用のテンプレートHTMLを読み込み
+  # @return [String] HTML
+  createItemElement: ->
+    contents = """
+
+        """
+    return Common.wrapCreateItemElement(@, contents)
+
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true)->

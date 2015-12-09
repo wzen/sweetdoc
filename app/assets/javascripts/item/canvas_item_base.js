@@ -23,6 +23,12 @@ CanvasItemBase = (function(superClass) {
     return this.id + '_canvas';
   };
 
+  CanvasItemBase.prototype.createItemElement = function() {
+    var contents;
+    contents = "<canvas id=\"" + (this.canvasElementId()) + "\" class=\"canvas context_base\" ></canvas>";
+    return Common.wrapCreateItemElement(this, contents);
+  };
+
   CanvasItemBase.prototype.setScale = function() {
     var canvas, context, element;
     element = $("#" + this.id);
@@ -40,7 +46,7 @@ CanvasItemBase = (function(superClass) {
   };
 
   CanvasItemBase.prototype.makeNewCanvas = function() {
-    $(ElementCode.get().createItemElement(this)).appendTo(window.scrollInside);
+    $(this.createItemElement()).appendTo(window.scrollInside);
     this.initCanvas();
     return this.saveNewDrawingSurface();
   };

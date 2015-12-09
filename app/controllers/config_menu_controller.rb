@@ -5,9 +5,9 @@ class ConfigMenuController < ApplicationController
   def design_config
     design_config = params.fetch('designConfig', false)
     modifiables = params.fetch('modifiables', {})
-    is_canvas = params.require('isCanvas') == 'true'
+    item_type = params.fetch('itemType', 'other')
     @result_success = true
-    @html = ConfigMenu.design_config(design_config, is_canvas, modifiables)
+    @html = ConfigMenu.design_config(design_config, item_type, modifiables)
     render 'ret'
   end
 

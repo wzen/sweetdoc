@@ -5,18 +5,27 @@ DesignConfig = (function() {
   function DesignConfig() {}
 
   DesignConfig.getDesignConfig = function(obj, successCallback, errorCallback) {
+    var itemType;
     if (successCallback == null) {
       successCallback = null;
     }
     if (errorCallback == null) {
       errorCallback = null;
     }
+    itemType = null;
+    if (obj instanceof CanvasItemBase) {
+      itemType = 'canvas';
+    } else if (obj instanceof CssItemBase) {
+      itemType = 'css';
+    } else {
+      itemType = 'other';
+    }
     return $.ajax({
       url: "/config_menu/design_config",
       type: "POST",
       data: {
         designConfig: obj.constructor.actionProperties.designConfig,
-        isCanvas: obj instanceof CanvasItemBase,
+        itemType: itemType,
         modifiables: obj.constructor.actionProperties.modifiables
       },
       dataType: "json",

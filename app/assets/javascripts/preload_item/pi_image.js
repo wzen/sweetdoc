@@ -31,6 +31,12 @@ PreloadItemImage = (function(superClass) {
     };
   }
 
+  PreloadItemImage.prototype.createItemElement = function() {
+    var contents;
+    contents = "";
+    return Common.wrapCreateItemElement(this, contents);
+  };
+
   PreloadItemImage.prototype.reDraw = function(show) {
     if (show == null) {
       show = true;

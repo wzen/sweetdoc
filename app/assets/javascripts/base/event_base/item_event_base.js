@@ -12,12 +12,11 @@ ItemEventBase = (function(superClass) {
 
   ItemEventBase.prototype.initEvent = function(event) {
     ItemEventBase.__super__.initEvent.call(this, event);
-    if (this instanceof CssItemBase) {
-      this.makeCss();
-      this.appendAnimationCssIfNeeded();
-    }
+    this.initEventPrepare();
     return this.reDraw(false);
   };
+
+  ItemEventBase.prototype.initEventPrepare = function() {};
 
   return ItemEventBase;
 

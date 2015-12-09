@@ -169,7 +169,7 @@ Timeline = (function() {
     };
     _initEventConfig = function(e) {
       var distId, eId, teNum;
-      Sidebar.switchSidebarConfig(Sidebar.Type.TIMELINE);
+      Sidebar.switchSidebarConfig(Sidebar.Type.EVENT);
       teNum = $(e).find('input.te_num').val();
       distId = $(e).find('input.dist_id').val();
       Sidebar.initEventConfig(distId, teNum);

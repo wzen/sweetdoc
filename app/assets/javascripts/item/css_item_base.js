@@ -31,6 +31,17 @@ CssItemBase = (function(superClass) {
     }
   }
 
+  CssItemBase.prototype.initEventPrepare = function() {
+    this.makeCss();
+    return this.appendAnimationCssIfNeeded();
+  };
+
+  CssItemBase.prototype.createItemElement = function() {
+    var contents;
+    contents = "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
+    return Common.wrapCreateItemElement(this, contents);
+  };
+
   CssItemBase.jsLoaded = function(option) {};
 
   CssItemBase.prototype.reDraw = function(show) {
@@ -39,7 +50,7 @@ CssItemBase = (function(superClass) {
     }
     CssItemBase.__super__.reDraw.call(this, show);
     this.clearDraw();
-    $(ElementCode.get().createItemElement(this)).appendTo(window.scrollInside);
+    $(this.createItemElement()).appendTo(window.scrollInside);
     if (!show) {
       this.getJQueryElement().css('opacity', 0);
     }

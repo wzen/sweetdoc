@@ -69,6 +69,8 @@ ItemBase = (function(superClass) {
     return $('#' + this.id);
   };
 
+  ItemBase.prototype.createItemElement = function() {};
+
   ItemBase.prototype.saveDrawingSurface = function() {
     return this._drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height);
   };

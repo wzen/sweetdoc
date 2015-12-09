@@ -21,6 +21,20 @@ class CssItemBase extends ItemBase
     if window.isWorkTable
       @constructor.include WorkTableCssItemExtend
 
+  # initEvent前の処理
+  initEventPrepare: ->
+    # デザインCSS & アニメーションCSS作成
+    @makeCss()
+    @appendAnimationCssIfNeeded()
+
+ # アイテム用のテンプレートHTMLを読み込み
+  # @return [String] HTML
+  createItemElement: ->
+    contents = """
+          <div type="button" class="css_item_base context_base"><div></div></div>
+        """
+    return Common.wrapCreateItemElement(@, contents)
+
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
     # ワークテーブルの初期化処理
@@ -30,7 +44,7 @@ class CssItemBase extends ItemBase
   reDraw: (show = true)->
     super(show)
     @clearDraw()
-    $(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
+    $(@createItemElement()).appendTo(window.scrollInside)
     if !show
       @getJQueryElement().css('opacity', 0)
 

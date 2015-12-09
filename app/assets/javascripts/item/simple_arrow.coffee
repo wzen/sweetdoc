@@ -93,7 +93,7 @@ class SimpleArrowItem extends ItemBase
   drawAndMakeConfigs: (show = true) ->
 
     # Canvasを作成
-    $(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
+    #$(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
     $('#' + @canvasElementId()).attr('width', $('#' + @id).width())
     $('#' + @canvasElementId()).attr('height', $('#' + @id).height())
     @setupDragAndResizeEvents()

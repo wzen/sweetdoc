@@ -57,6 +57,11 @@ class ItemBase extends ItemEventBase
   getJQueryElement: ->
     return $('#' + @id)
 
+  # アイテム用のテンプレートHTMLを読み込み
+  # @abstract
+  # @return [String] HTML
+  createItemElement: ->
+
   # 画面を保存(全画面)
   saveDrawingSurface : ->
     @_drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height)

@@ -16,11 +16,7 @@ Sidebar = (function() {
 
     Type.STATE = 'state';
 
-    Type.CSS = 'css';
-
-    Type.CANVAS = 'canvas';
-
-    Type.TIMELINE = 'timeline';
+    Type.EVENT = 'event';
 
     Type.SETTING = 'setting';
 
@@ -98,19 +94,7 @@ Sidebar = (function() {
       } else {
         return sc.show();
       }
-    } else if (configType === this.Type.CSS && (item != null) && (item.cssConfig != null)) {
-      if (animation) {
-        return item.cssConfig.fadeIn('fast');
-      } else {
-        return item.cssConfig.show();
-      }
-    } else if (configType === this.Type.CANVAS && (item != null) && (item.canvasConfig != null)) {
-      if (animation) {
-        return item.canvasConfig.fadeIn('fast');
-      } else {
-        return item.canvasConfig.show();
-      }
-    } else if (configType === this.Type.TIMELINE) {
+    } else if (configType === this.Type.EVENT) {
       if (animation) {
         return $('#event-config').fadeIn('fast');
       } else {
@@ -123,11 +107,6 @@ Sidebar = (function() {
     var emt, obj;
     emt = $(target);
     obj = instanceMap[emt.attr('id')];
-    if (obj instanceof CssItemBase) {
-      this.switchSidebarConfig(this.Type.CSS);
-    } else if (obj instanceof CanvasItemBase) {
-      this.switchSidebarConfig(this.Type.CANVAS);
-    }
     this.initItemEditConfig(obj);
     if ((obj != null) && (obj.showOptionMenu != null)) {
       obj.showOptionMenu();

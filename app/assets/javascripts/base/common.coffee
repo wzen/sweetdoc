@@ -207,6 +207,12 @@ class Common
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     $(".#{sectionClass}", root).remove()
 
+  # アイテム用のテンプレートHTMLをwrap
+  @wrapCreateItemElement = (item, contents) ->
+    return """
+      <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'>#{contents}</div></div></div>
+    """
+
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
   # @param [Fucntion] callback コールバック

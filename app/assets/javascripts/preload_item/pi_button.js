@@ -234,7 +234,9 @@ PreloadItemButton = (function(superClass) {
 Common.setClassToMap(false, PreloadItemButton.ITEM_ACCESS_TOKEN, PreloadItemButton);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN] == null)) {
-  EventConfig.addEventConfigContents(PreloadItemButton.ITEM_ACCESS_TOKEN);
+  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
+    EventConfig.addEventConfigContents(PreloadItemButton.ITEM_ACCESS_TOKEN);
+  }
   console.log('button loaded');
   window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {

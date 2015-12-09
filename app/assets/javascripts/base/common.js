@@ -267,6 +267,10 @@ Common = (function() {
     return $("." + sectionClass, root).remove();
   };
 
+  Common.wrapCreateItemElement = function(item, contents) {
+    return "<div id=\"" + item.id + "\" class=\"item draggable resizable\" style=\"position: absolute;top:" + item.itemSize.y + "px;left:" + item.itemSize.x + "px;width:" + item.itemSize.w + "px;height:" + item.itemSize.h + "px;z-index:" + (Common.plusPagingZindex(item.zindex)) + "\"><div class=\"item_wrapper\"><div class='item_contents'>" + contents + "</div></div></div>";
+  };
+
   Common.focusToTarget = function(target, callback, immediate) {
     var diff;
     if (callback == null) {

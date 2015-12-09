@@ -7,9 +7,7 @@ class Sidebar
 
   class @Type
     @STATE = 'state'
-    @CSS = 'css'
-    @CANVAS = 'canvas'
-    @TIMELINE = 'timeline'
+    @EVENT = 'event'
     @SETTING = 'setting'
 
   # サイドバーをオープン
@@ -70,17 +68,7 @@ class Sidebar
         sc.fadeIn('fast')
       else
         sc.show()
-    else if configType == @Type.CSS && item? && item.cssConfig?
-      if animation
-        item.cssConfig.fadeIn('fast')
-      else
-        item.cssConfig.show()
-    else if configType == @Type.CANVAS && item? && item.canvasConfig?
-      if animation
-        item.canvasConfig.fadeIn('fast')
-      else
-        item.canvasConfig.show()
-    else if configType == @Type.TIMELINE
+    else if configType == @Type.EVENT
       if animation
         $('#event-config').fadeIn('fast')
       else
@@ -90,11 +78,6 @@ class Sidebar
   @openItemEditConfig = (target) ->
     emt = $(target)
     obj = instanceMap[emt.attr('id')]
-    # コンフィグ表示切り替え
-    if obj instanceof CssItemBase
-      @switchSidebarConfig(@Type.CSS)
-    else if obj instanceof CanvasItemBase
-      @switchSidebarConfig(@Type.CANVAS)
     # アイテム編集メニュー初期化
     @initItemEditConfig(obj)
     if obj? && obj.showOptionMenu?

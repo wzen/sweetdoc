@@ -98,7 +98,6 @@ SimpleArrowItem = (function(superClass) {
     if (show == null) {
       show = true;
     }
-    $(ElementCode.get().createItemElement(this)).appendTo(window.scrollInside);
     $('#' + this.canvasElementId()).attr('width', $('#' + this.id).width());
     $('#' + this.canvasElementId()).attr('height', $('#' + this.id).height());
     this.setupDragAndResizeEvents();

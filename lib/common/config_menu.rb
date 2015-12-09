@@ -1,14 +1,21 @@
 class ConfigMenu
 
-  def self.design_config(design_config, is_canvas, modifiables)
+  def self.design_config(design_config, item_type, modifiables)
     ret = ApplicationController.new.render_to_string(
         partial: 'sidebar_menu/design/parts/common'
     )
     if design_config
-      name = is_canvas ? 'canvas_design_tool' : 'css_design_tool'
-      ret += ApplicationController.new.render_to_string(
-          partial: "sidebar_menu/design/parts/#{name}"
-      )
+      name = nil
+      if item_type == 'canvas'
+        name = 'canvas_design_tool'
+      elsif item_type == 'css'
+        name = 'css_design_tool'
+      end
+      if name.present?
+        ret += ApplicationController.new.render_to_string(
+            partial: "sidebar_menu/design/parts/#{name}"
+        )
+      end
     end
     ret += _modifiables_vars_config(modifiables)
     return "<div class='#{Const::DesignConfig::ROOT_CLASSNAME}'>#{ret}</div>"
