@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202022806) do
+ActiveRecord::Schema.define(version: 20151209141157) do
 
   create_table "categories", force: true do |t|
     t.string   "category_name", null: false
@@ -254,6 +254,20 @@ ActiveRecord::Schema.define(version: 20151202022806) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "item_images", force: true do |t|
+    t.integer  "user_project_map_id", null: false
+    t.integer  "gallery_id"
+    t.string   "item_obj_id",         null: false
+    t.string   "event_dist_id"
+    t.text     "file_path",           null: false
+    t.boolean  "is_upload_localfile", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "item_images", ["gallery_id", "item_obj_id"], name: "item_images_index2", using: :btree
+  add_index "item_images", ["user_project_map_id"], name: "item_images_index1", using: :btree
 
   create_table "locales", force: true do |t|
     t.string   "i18n_locale", null: false

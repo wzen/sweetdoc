@@ -71,7 +71,6 @@ class Gallery < ActiveRecord::Base
         pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
         pgm.save!
 
-
         # Pagevalueレコード取得
         sql = <<-"SQL"
           SELECT gp.data as g_pagevalue_data, ip.data as i_pagevalue_data, ep.data as e_pagevalue_data, gpp.page_num as page_num
@@ -128,7 +127,9 @@ class Gallery < ActiveRecord::Base
         end
 
         # Tag レコード追加
-        save_tag(tags, gallery_id)
+        _save_tag(tags, gallery_id)
+        # Image GalleryIdカラムにID追加
+        _update_item_images_column(upm.id, gallery_id)
 
         return true, I18n.t('message.database.item_state.save.success'), g.access_token
       end
@@ -297,7 +298,7 @@ class Gallery < ActiveRecord::Base
           end
 
           # Tag レコード追加
-          save_tag(tags, gallery_id)
+          _save_tag(tags, gallery_id)
 
         end
       end
@@ -310,7 +311,7 @@ class Gallery < ActiveRecord::Base
   end
 
   # タグ名のレコードを新規作成
-  def self.save_tag(tags, gallery_id)
+  def self._save_tag(tags, gallery_id)
     begin
       if tags != 'null' && tags.length > 0
         # タグ数がMAX以上のものは削除
@@ -680,51 +681,7 @@ class Gallery < ActiveRecord::Base
     return sql
   end
 
-  def self.send_imagedata(contents)
-    contents.each do |content|
-      send_data contents[Const::Gallery::Key::THUMBNAIL_IMG], :type => 'image/jpeg', :disposition => 'inline'
-    end
-  end
-
-  def self.load_instance_pagevalue(gallery_id)
-    ipd = null
-    gallery_instance_pages = GalleryInstancePagevaluePaging.joins(:gallery, :gallery_instance_pagevalue).where(gallery: {id: gallery_id})
-                                 .select('gallery_instance_pagevalue_pagings.*, gallery_instance_pagevalues.data as data')
-    if gallery_instance_pages.size > 0
-      ipd = {}
-      gallery_instance_pages.each do |p|
-        key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
-        ipd[key] = p.data
-      end
-    end
-    return ipd
-  end
-
-  def self.load_event_pagevalue_and_jslist(access_token, loaded_item_access_tokens = [])
-    item_js_list = []
-    epd = null
-    # EventPageValue
-    gallery_event_pages = GalleryEventPagevaluePaging.joins(:gallery, :gallery_event_pagevalue).where(gallery: {access_token: access_token})
-                              .select('gallery_event_pagevalue_pagings.*, gallery_event_pagevalues.data as data')
-    if gallery_event_pages.size > 0
-      item_access_tokens = []
-      epd = {}
-      gallery_event_pages.each do |p|
-        key = Const::PageValueKey::P_PREFIX + p.page_num.to_s
-        epd[key] = p.data
-
-        # JSの読み込みが必要なItemTokenを調査
-        item_access_tokens = PageValueState.extract_need_load_itemaccesstokens(epd[key])
-        item_access_tokens -= loaded_item_access_tokens
-      end
-
-      item_js_list = ItemJs.get_item_gallery(item_access_tokens)
-    end
-
-    return epd, item_js_list
-  end
-
-  def self.load_viewcount_and_bookmarkcount(gallery_id)
+  def self._load_viewcount_and_bookmarkcount(gallery_id)
     gallery_view_statistic_count = GalleryViewStatistic.where({gallery_id: gallery_id}).group(:gallery_id).sum(:count)
     gallery_bookmark_statistic_count = GalleryBookmarkStatistic.where({gallery_id: gallery_id}).group(:gallery_id).sum(:count)
     return gallery_view_statistic_count, gallery_bookmark_statistic_count
@@ -824,5 +781,9 @@ class Gallery < ActiveRecord::Base
     return ret_sql.to_hash
   end
 
-  private_class_method :save_tag, :send_imagedata, :load_instance_pagevalue, :load_event_pagevalue_and_jslist, :load_viewcount_and_bookmarkcount
+  def self._update_item_images_column(user_project_map_id, gallery_id)
+    ItemImage.where(user_project_map_id: user_project_map_id).update_all(gallery_id: gallery_id)
+  end
+
+  private_class_method :_save_tag, :_load_viewcount_and_bookmarkcount, :_update_item_images_column
 end

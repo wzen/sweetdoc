@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery-ui.min
 //= require jquery.transit.min
+//= require jquery.remotipart
 //= require turbolinks
 //= require i18n
 // IDE not aware under vendor/asset/

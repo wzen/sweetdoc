@@ -6,7 +6,7 @@ gem 'rails', '4.1.6'
 gem 'i18n', '0.6.11'
 gem "i18n-js", '2.1.2'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+#gem 'sqlite3'
 # Mysql
 gem 'mysql2', '~> 0.3.20'
 # Use SCSS for stylesheets
@@ -88,8 +88,9 @@ gem 'ruby-filemagic' , '0.7.0'
 gem 'carrierwave'
 gem 'carrierwave-magic'
 gem 'mini_magick'
+gem 'remotipart', '1.2.1'
 
-gem "facets", require: false
+#gem "facets", require: false
 
 #gem 'fastimage'
 #gem 'rmagick', '2.15.4', require: 'RMagick'
