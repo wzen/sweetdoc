@@ -31,6 +31,7 @@
 //= require base/event_base/item_event_base
 //= require base/local_storage
 //= require base/float_view
+//= require base/config_menu
 //= require navbar/navbar.js
 //= require coding/coding_common
 //= require coding/coding

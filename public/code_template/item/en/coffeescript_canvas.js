@@ -146,28 +146,36 @@ ItemPreviewTemp = (function(superClass) {
   };
 
   ItemPreviewTemp.prototype.reDraw = function(show) {
-    var canvas, j, len, r, ref;
+    var _after, canvas;
     if (show == null) {
       show = true;
     }
     ItemPreviewTemp.__super__.reDraw.call(this, show);
+    _after = function() {
+      var j, len, r, ref;
+      this.resetDrawPath();
+      if (show) {
+        ref = this.coodRegist;
+        for (j = 0, len = ref.length; j < len; j++) {
+          r = ref[j];
+          this.drawPath(r);
+        }
+        this.drawNewCanvas();
+      }
+      if (this.setupDragAndResizeEvents != null) {
+        return this.setupDragAndResizeEvents();
+      }
+    };
     canvas = document.getElementById(this.canvasElementId());
     if (canvas == null) {
-      this.makeNewCanvas();
+      return this.makeNewCanvas((function(_this) {
+        return function() {
+          return _after.call(_this);
+        };
+      })(this));
     } else {
       this.clearDraw();
-    }
-    this.resetDrawPath();
-    if (show) {
-      ref = this.coodRegist;
-      for (j = 0, len = ref.length; j < len; j++) {
-        r = ref[j];
-        this.drawPath(r);
-      }
-      this.drawNewCanvas();
-    }
-    if (this.setupDragAndResizeEvents != null) {
-      return this.setupDragAndResizeEvents();
+      return _after.call(this);
     }
   };
 

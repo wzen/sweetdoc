@@ -151,27 +151,33 @@ class PreloadItemArrow extends CanvasItemBase
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true) ->
     super(show)
+
+    _after = ->
+      # 座標をクリア
+      @resetDrawPath()
+
+      if show
+        # 座標を再計算
+        for r in @coodRegist
+          @drawPath(r)
+        # 描画
+        @drawNewCanvas()
+
+      if @setupDragAndResizeEvents?
+        # ドラッグ & リサイズイベント設定
+        @setupDragAndResizeEvents()
+
     # 新規キャンパス存在チェック
     canvas = document.getElementById(@canvasElementId())
     if !canvas?
       # 新規Canvasを作成
-      @makeNewCanvas()
+      @makeNewCanvas( =>
+        _after.call(@)
+      )
     else
       # 描画をクリア
       @clearDraw()
-    # 座標をクリア
-    @resetDrawPath()
-
-    if show
-      # 座標を再計算
-      for r in @coodRegist
-        @drawPath(r)
-      # 描画
-      @drawNewCanvas()
-
-    if @setupDragAndResizeEvents?
-      # ドラッグ & リサイズイベント設定
-      @setupDragAndResizeEvents()
+      _after.call(@)
 
   # パスの情報をリセット
   resetDrawPath: ->

@@ -35,21 +35,39 @@ PreloadItemImage = (function(superClass) {
     };
   }
 
-  PreloadItemImage.prototype.createItemElement = function() {
-    var contents;
-    contents = "";
-    return Common.wrapCreateItemElement(this, contents);
-  };
-
   PreloadItemImage.prototype.reDraw = function(show) {
     if (show == null) {
       show = true;
     }
     PreloadItemImage.__super__.reDraw.call(this, show);
+    this.clearDraw();
+    return this.createItemElement((function(_this) {
+      return function(createdElement) {
+        $(createdElement).appendTo(window.scrollInside);
+        if (!show) {
+          _this.getJQueryElement().css('opacity', 0);
+        }
+        if (_this.setupDragAndResizeEvents != null) {
+          return _this.setupDragAndResizeEvents();
+        }
+      };
+    })(this));
+  };
+
+  PreloadItemImage.prototype.createItemElement = function(callback) {
+    var contents;
     if (this.imagePath != null) {
-
+      contents = "<img src='" + this.imagePath + "' />";
+      return callback(Common.wrapCreateItemElement(this, contents));
     } else {
-
+      return ConfigMenu.loadConfig(ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT, function(config) {
+        var left, style, top;
+        style = '';
+        top = this.itemSize.h - $(config).height() / 2.0;
+        left = this.itemSize.w - $(config).width() / 2.0;
+        contents = "<div style='position:absolute;top:" + top + "px;left:" + left + "px;'>" + config + "</div>";
+        return callback(Common.wrapCreateItemElement(this, contents));
+      });
     }
   };
 

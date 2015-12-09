@@ -35,7 +35,10 @@ WorkTableCommonInclude =
     # ボタン設置
     @reDraw(show)
     # コンフィグ作成
-    @makeDesignConfig(callback)
+    ConfigMenu.getDesignConfig(@, ->
+      if callback?
+        callback()
+    )
 
   # オプションメニューを開く
   showOptionMenu: ->
@@ -122,20 +125,6 @@ WorkTableCommonInclude =
             self.resizeComplete()
       })
 
-  # デザイン変更コンフィグを作成
-  makeDesignConfig: (callback = null) ->
-    self = @
-    designConfigRoot = $('#' + @getDesignConfigId())
-    if !designConfigRoot? || designConfigRoot.length == 0
-      DesignConfig.getDesignConfig(@, (data) ->
-        designConfigRoot = $('#' + self.getDesignConfigId())
-        if !designConfigRoot? || designConfigRoot.length == 0
-          html = $(data.html).attr('id', self.getDesignConfigId())
-          $('#design-config').append(html)
-        if callback?
-          callback()
-      )
-
   # ドラッグ中イベント
   drag: ->
     element = $('#' + @id)
@@ -159,40 +148,37 @@ WorkTableCommonInclude =
 
   # CSSボタンコントロール初期化
   setupOptionMenu: ->
-    designConfigRoot = $('#' + @getDesignConfigId())
-    if !designConfigRoot? || designConfigRoot.length == 0
-      @makeDesignConfig()
-      designConfigRoot = $('#' + @getDesignConfigId())
+    ConfigMenu.getDesignConfig(@, (designConfigRoot) =>
+      # アイテム名の変更
+      name = $('.item-name', designConfigRoot)
+      name.val(@name)
+      name.off('change').on('change', =>
+        @name = $(@).val()
+        @setItemPropToPageValue('name', @name)
+      )
 
-    # アイテム名の変更
-    name = $('.item-name', designConfigRoot)
-    name.val(@name)
-    name.off('change').on('change', =>
-      @name = $(@).val()
-      @setItemPropToPageValue('name', @name)
+      # アイテム位置の変更
+      x = @getJQueryElement().position().left
+      y = @getJQueryElement().position().top
+      w = @getJQueryElement().width()
+      h = @getJQueryElement().height()
+      $('.item_position_x:first', designConfigRoot).val(x)
+      $('.item_position_y:first', designConfigRoot).val(y)
+      $('.item_width:first', designConfigRoot).val(w)
+      $('.item_height:first', designConfigRoot).val(h)
+      $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', designConfigRoot).off('change').on('change', =>
+        itemSize = {
+          x: parseInt($('.item_position_x:first', designConfigRoot).val())
+          y: parseInt($('.item_position_y:first', designConfigRoot).val())
+          w: parseInt($('.item_width:first', designConfigRoot).val())
+          h: parseInt($('.item_height:first', designConfigRoot).val())
+        }
+        @updatePositionAndItemSize(itemSize)
+      )
+
+      if @constructor.actionProperties.designConfig? && @constructor.actionProperties.designConfig
+        @setupDesignToolOptionMenu()
     )
-
-    # アイテム位置の変更
-    x = @getJQueryElement().position().left
-    y = @getJQueryElement().position().top
-    w = @getJQueryElement().width()
-    h = @getJQueryElement().height()
-    $('.item_position_x:first', designConfigRoot).val(x)
-    $('.item_position_y:first', designConfigRoot).val(y)
-    $('.item_width:first', designConfigRoot).val(w)
-    $('.item_height:first', designConfigRoot).val(h)
-    $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', designConfigRoot).off('change').on('change', =>
-      itemSize = {
-        x: parseInt($('.item_position_x:first', designConfigRoot).val())
-        y: parseInt($('.item_position_y:first', designConfigRoot).val())
-        w: parseInt($('.item_width:first', designConfigRoot).val())
-        h: parseInt($('.item_height:first', designConfigRoot).val())
-      }
-      @updatePositionAndItemSize(itemSize)
-    )
-
-    if @constructor.actionProperties.designConfig? && @constructor.actionProperties.designConfig
-      @setupDesignToolOptionMenu()
 
   # デザインスライダーの作成
   # @param [Int] id メーターのElementID

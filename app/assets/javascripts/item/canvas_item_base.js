@@ -23,10 +23,10 @@ CanvasItemBase = (function(superClass) {
     return this.id + '_canvas';
   };
 
-  CanvasItemBase.prototype.createItemElement = function() {
+  CanvasItemBase.prototype.createItemElement = function(callback) {
     var contents;
     contents = "<canvas id=\"" + (this.canvasElementId()) + "\" class=\"canvas context_base\" ></canvas>";
-    return Common.wrapCreateItemElement(this, contents);
+    return callback(Common.wrapCreateItemElement(this, contents));
   };
 
   CanvasItemBase.prototype.setScale = function() {
@@ -45,10 +45,20 @@ CanvasItemBase = (function(superClass) {
     return this.setScale();
   };
 
-  CanvasItemBase.prototype.makeNewCanvas = function() {
-    $(this.createItemElement()).appendTo(window.scrollInside);
-    this.initCanvas();
-    return this.saveNewDrawingSurface();
+  CanvasItemBase.prototype.makeNewCanvas = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return this.createItemElement((function(_this) {
+      return function(createdElement) {
+        $(createdElement).appendTo(window.scrollInside);
+        _this.initCanvas();
+        _this.saveNewDrawingSurface();
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   CanvasItemBase.prototype.saveNewDrawingSurface = function() {

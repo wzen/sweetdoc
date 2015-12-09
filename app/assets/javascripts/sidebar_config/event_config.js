@@ -142,7 +142,7 @@ EventConfig = (function() {
     if (!this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]) {
       item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
       if (item != null) {
-        return this.addEventVarModifyConfig(item.constructor, (function(_this) {
+        return ConfigMenu.eventVarModifyConfig(this, item.constructor, (function(_this) {
           return function() {
             return _callback.call(_this);
           };
@@ -153,7 +153,7 @@ EventConfig = (function() {
     } else {
       objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
       if (objClass) {
-        return this.addEventVarModifyConfig(objClass, (function(_this) {
+        return ConfigMenu.eventVarModifyConfig(this, objClass, (function(_this) {
           return function() {
             return _callback.call(_this);
           };
@@ -464,55 +464,6 @@ EventConfig = (function() {
         return actionParent.appendTo(action_forms);
       }
     }
-  };
-
-  EventConfig.prototype.addEventVarModifyConfig = function(objClass, successCallback, errorCallback) {
-    var emt, valueClassName;
-    if (successCallback == null) {
-      successCallback = null;
-    }
-    if (errorCallback == null) {
-      errorCallback = null;
-    }
-    valueClassName = this.methodClassName();
-    emt = $(".value_forms ." + valueClassName, this.emt);
-    if (emt.length > 0) {
-      this.initEventVarModifyConfig(objClass);
-      if (successCallback != null) {
-        successCallback();
-      }
-      return;
-    }
-    return $.ajax({
-      url: "/config_menu/event_var_modify_config",
-      type: "POST",
-      data: {
-        modifiables: objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
-      },
-      dataType: "json",
-      success: (function(_this) {
-        return function(data) {
-          if (data.resultSuccess) {
-            $(".value_forms", _this.emt).append($("<div class='" + valueClassName + "'>" + data.html + "</div>"));
-            _this.initEventVarModifyConfig(objClass);
-            if (successCallback != null) {
-              return successCallback(data);
-            }
-          } else {
-            if (errorCallback != null) {
-              errorCallback(data);
-            }
-            return console.log('/config_menu/event_var_modify_config server error');
-          }
-        };
-      })(this),
-      error: function(data) {
-        if (errorCallback != null) {
-          errorCallback(data);
-        }
-        return console.log('/config_menu/event_var_modify_config ajax error');
-      }
-    });
   };
 
   EventConfig.prototype.initEventVarModifyConfig = function(objClass) {

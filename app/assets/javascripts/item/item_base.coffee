@@ -60,7 +60,7 @@ class ItemBase extends ItemEventBase
   # アイテム用のテンプレートHTMLを読み込み
   # @abstract
   # @return [String] HTML
-  createItemElement: ->
+  createItemElement: (callback) ->
 
   # 画面を保存(全画面)
   saveDrawingSurface : ->

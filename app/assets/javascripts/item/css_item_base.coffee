@@ -29,11 +29,11 @@ class CssItemBase extends ItemBase
 
  # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
-  createItemElement: ->
+  createItemElement: (callback) ->
     contents = """
           <div type="button" class="css_item_base context_base"><div></div></div>
         """
-    return Common.wrapCreateItemElement(@, contents)
+    callback(Common.wrapCreateItemElement(@, contents))
 
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
@@ -44,13 +44,15 @@ class CssItemBase extends ItemBase
   reDraw: (show = true)->
     super(show)
     @clearDraw()
-    $(@createItemElement()).appendTo(window.scrollInside)
-    if !show
-      @getJQueryElement().css('opacity', 0)
+    @createItemElement((createdElement) =>
+      $(createdElement).appendTo(window.scrollInside)
+      if !show
+        @getJQueryElement().css('opacity', 0)
 
-    if @setupDragAndResizeEvents?
-      # ドラッグ & リサイズイベント設定
-      @setupDragAndResizeEvents()
+      if @setupDragAndResizeEvents?
+        # ドラッグ & リサイズイベント設定
+        @setupDragAndResizeEvents()
+    )
 
   # 描画削除
   clearDraw: ->

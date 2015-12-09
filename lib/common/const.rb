@@ -429,4 +429,11 @@ class Const
     end
   end
 
+  class ConfigMenu
+    ROOT_ID = 'config_menu_temps'
+    class Action
+      PRELOAD_IMAGE_PATH_SELECT = 'preload_image_path_select_config'
+    end
+  end
+
 end

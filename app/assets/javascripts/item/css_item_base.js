@@ -36,10 +36,10 @@ CssItemBase = (function(superClass) {
     return this.appendAnimationCssIfNeeded();
   };
 
-  CssItemBase.prototype.createItemElement = function() {
+  CssItemBase.prototype.createItemElement = function(callback) {
     var contents;
     contents = "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
-    return Common.wrapCreateItemElement(this, contents);
+    return callback(Common.wrapCreateItemElement(this, contents));
   };
 
   CssItemBase.jsLoaded = function(option) {};
@@ -50,13 +50,17 @@ CssItemBase = (function(superClass) {
     }
     CssItemBase.__super__.reDraw.call(this, show);
     this.clearDraw();
-    $(this.createItemElement()).appendTo(window.scrollInside);
-    if (!show) {
-      this.getJQueryElement().css('opacity', 0);
-    }
-    if (this.setupDragAndResizeEvents != null) {
-      return this.setupDragAndResizeEvents();
-    }
+    return this.createItemElement((function(_this) {
+      return function(createdElement) {
+        $(createdElement).appendTo(window.scrollInside);
+        if (!show) {
+          _this.getJQueryElement().css('opacity', 0);
+        }
+        if (_this.setupDragAndResizeEvents != null) {
+          return _this.setupDragAndResizeEvents();
+        }
+      };
+    })(this));
   };
 
   CssItemBase.prototype.clearDraw = function() {

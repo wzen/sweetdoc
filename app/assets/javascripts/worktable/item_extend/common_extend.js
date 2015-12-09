@@ -37,7 +37,11 @@ WorkTableCommonInclude = {
       callback = null;
     }
     this.reDraw(show);
-    return this.makeDesignConfig(callback);
+    return ConfigMenu.getDesignConfig(this, function() {
+      if (callback != null) {
+        return callback();
+      }
+    });
   },
   showOptionMenu: function() {
     var sc;
@@ -154,27 +158,6 @@ WorkTableCommonInclude = {
       });
     })();
   },
-  makeDesignConfig: function(callback) {
-    var designConfigRoot, self;
-    if (callback == null) {
-      callback = null;
-    }
-    self = this;
-    designConfigRoot = $('#' + this.getDesignConfigId());
-    if ((designConfigRoot == null) || designConfigRoot.length === 0) {
-      return DesignConfig.getDesignConfig(this, function(data) {
-        var html;
-        designConfigRoot = $('#' + self.getDesignConfigId());
-        if ((designConfigRoot == null) || designConfigRoot.length === 0) {
-          html = $(data.html).attr('id', self.getDesignConfigId());
-          $('#design-config').append(html);
-        }
-        if (callback != null) {
-          return callback();
-        }
-      });
-    }
-  },
   drag: function() {
     var element;
     element = $('#' + this.id);
@@ -195,43 +178,38 @@ WorkTableCommonInclude = {
     return this.saveObj();
   },
   setupOptionMenu: function() {
-    var designConfigRoot, h, name, w, x, y;
-    designConfigRoot = $('#' + this.getDesignConfigId());
-    if ((designConfigRoot == null) || designConfigRoot.length === 0) {
-      this.makeDesignConfig();
-      designConfigRoot = $('#' + this.getDesignConfigId());
-    }
-    name = $('.item-name', designConfigRoot);
-    name.val(this.name);
-    name.off('change').on('change', (function(_this) {
-      return function() {
-        _this.name = $(_this).val();
-        return _this.setItemPropToPageValue('name', _this.name);
+    return ConfigMenu.getDesignConfig(this, (function(_this) {
+      return function(designConfigRoot) {
+        var h, name, w, x, y;
+        name = $('.item-name', designConfigRoot);
+        name.val(_this.name);
+        name.off('change').on('change', function() {
+          _this.name = $(_this).val();
+          return _this.setItemPropToPageValue('name', _this.name);
+        });
+        x = _this.getJQueryElement().position().left;
+        y = _this.getJQueryElement().position().top;
+        w = _this.getJQueryElement().width();
+        h = _this.getJQueryElement().height();
+        $('.item_position_x:first', designConfigRoot).val(x);
+        $('.item_position_y:first', designConfigRoot).val(y);
+        $('.item_width:first', designConfigRoot).val(w);
+        $('.item_height:first', designConfigRoot).val(h);
+        $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', designConfigRoot).off('change').on('change', function() {
+          var itemSize;
+          itemSize = {
+            x: parseInt($('.item_position_x:first', designConfigRoot).val()),
+            y: parseInt($('.item_position_y:first', designConfigRoot).val()),
+            w: parseInt($('.item_width:first', designConfigRoot).val()),
+            h: parseInt($('.item_height:first', designConfigRoot).val())
+          };
+          return _this.updatePositionAndItemSize(itemSize);
+        });
+        if ((_this.constructor.actionProperties.designConfig != null) && _this.constructor.actionProperties.designConfig) {
+          return _this.setupDesignToolOptionMenu();
+        }
       };
     })(this));
-    x = this.getJQueryElement().position().left;
-    y = this.getJQueryElement().position().top;
-    w = this.getJQueryElement().width();
-    h = this.getJQueryElement().height();
-    $('.item_position_x:first', designConfigRoot).val(x);
-    $('.item_position_y:first', designConfigRoot).val(y);
-    $('.item_width:first', designConfigRoot).val(w);
-    $('.item_height:first', designConfigRoot).val(h);
-    $('.item_position_x:first, .item_position_y:first, .item_width:first, .item_height:first', designConfigRoot).off('change').on('change', (function(_this) {
-      return function() {
-        var itemSize;
-        itemSize = {
-          x: parseInt($('.item_position_x:first', designConfigRoot).val()),
-          y: parseInt($('.item_position_y:first', designConfigRoot).val()),
-          w: parseInt($('.item_width:first', designConfigRoot).val()),
-          h: parseInt($('.item_height:first', designConfigRoot).val())
-        };
-        return _this.updatePositionAndItemSize(itemSize);
-      };
-    })(this));
-    if ((this.constructor.actionProperties.designConfig != null) && this.constructor.actionProperties.designConfig) {
-      return this.setupDesignToolOptionMenu();
-    }
   },
   settingDesignSlider: function(className, min, max, stepValue) {
     var defaultValue, designConfigRoot, meterElement, valueElement;

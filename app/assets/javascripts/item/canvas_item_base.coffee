@@ -19,11 +19,11 @@ class CanvasItemBase extends ItemBase
 
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
-  createItemElement: ->
+  createItemElement: (callback) ->
     contents = """
       <canvas id="#{@canvasElementId()}" class="canvas context_base" ></canvas>
     """
-    return Common.wrapCreateItemElement(@, contents)
+    callback(Common.wrapCreateItemElement(@, contents))
 
   # 伸縮率を設定
   setScale: ->
@@ -44,12 +44,16 @@ class CanvasItemBase extends ItemBase
     @setScale()
 
   # 新規キャンパスを作成
-  makeNewCanvas: ->
-    $(@createItemElement()).appendTo(window.scrollInside)
-    # キャンパスに対する初期化
-    @initCanvas()
-    # 画面を保存
-    @saveNewDrawingSurface()
+  makeNewCanvas: (callback = null) ->
+    @createItemElement( (createdElement) =>
+      $(createdElement).appendTo(window.scrollInside)
+      # キャンパスに対する初期化
+      @initCanvas()
+      # 画面を保存
+      @saveNewDrawingSurface()
+      if callback?
+        callback()
+    )
 
   # 新規キャンパスの画面を保存
   saveNewDrawingSurface : ->

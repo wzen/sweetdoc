@@ -152,7 +152,7 @@ class EventConfig
       item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
       if item?
         # 変数変更コンフィグ読み込み
-        @addEventVarModifyConfig(item.constructor, =>
+        ConfigMenu.eventVarModifyConfig(@, item.constructor, =>
           _callback.call(@)
         )
       else
@@ -161,7 +161,7 @@ class EventConfig
       # 共通イベント選択時
       objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
       if objClass
-        @addEventVarModifyConfig(objClass, =>
+        ConfigMenu.eventVarModifyConfig(@, objClass, =>
           _callback.call(@)
         )
       else
@@ -458,45 +458,6 @@ class EventConfig
           handlerParent.appendTo(handler_forms)
 
         actionParent.appendTo(action_forms)
-
-  # 変数編集の入力フォームを追加
-  addEventVarModifyConfig: (objClass, successCallback = null, errorCallback = null) ->
-    # HTML存在チェック
-    valueClassName = @methodClassName()
-    emt = $(".value_forms .#{valueClassName}", @emt)
-    if emt.length > 0
-      # コンフィグの初期化
-      @initEventVarModifyConfig(objClass)
-      if successCallback?
-        successCallback()
-      return
-
-    $.ajax(
-      {
-        url: "/config_menu/event_var_modify_config"
-        type: "POST"
-        data: {
-          modifiables: objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
-        }
-        dataType: "json"
-        success: (data) =>
-          if data.resultSuccess
-            # コンフィグ追加
-            $(".value_forms", @emt).append($("<div class='#{valueClassName}'>#{data.html}</div>"))
-            # コンフィグの初期化
-            @initEventVarModifyConfig(objClass)
-            if successCallback?
-              successCallback(data)
-          else
-            if errorCallback?
-              errorCallback(data)
-            console.log('/config_menu/event_var_modify_config server error')
-        error: (data) ->
-          if errorCallback?
-            errorCallback(data)
-          console.log('/config_menu/event_var_modify_config ajax error')
-      }
-    )
 
   # 変数編集コンフィグの初期化
   initEventVarModifyConfig: (objClass) ->
