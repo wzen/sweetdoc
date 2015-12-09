@@ -13,8 +13,7 @@ WorkTableCommonInclude = {
     if (callback == null) {
       callback = null;
     }
-    this.reDraw(show);
-    return this.makeDesignConfig((function(_this) {
+    return this.drawAndMakeConfigs(show, (function(_this) {
       return function() {
         var blank, distId, teNum;
         if (_this.constructor.defaultMethodName() != null) {
@@ -30,12 +29,15 @@ WorkTableCommonInclude = {
       };
     })(this));
   },
-  drawAndMakeConfigs: function(show) {
+  drawAndMakeConfigs: function(show, callback) {
     if (show == null) {
       show = true;
     }
+    if (callback == null) {
+      callback = null;
+    }
     this.reDraw(show);
-    return this.makeDesignConfig();
+    return this.makeDesignConfig(callback);
   },
   showOptionMenu: function() {
     var sc;

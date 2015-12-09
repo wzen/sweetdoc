@@ -41,6 +41,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
@@ -90,6 +91,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
     </CLASSES>
     <JAVADOC />

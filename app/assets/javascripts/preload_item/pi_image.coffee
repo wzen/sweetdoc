@@ -1,4 +1,7 @@
 class PreloadItemImage extends ItemBase
+  # @property [String] IDENTITY アイテム識別名
+  @IDENTITY = "image"
+  @ITEM_ACCESS_TOKEN = 'PreloadItemImage'
 
   @actionProperties =
   {
@@ -38,3 +41,10 @@ class PreloadItemImage extends ItemBase
       # imgタグを作成or更新
     else
       # imgパス選択フィールド表示
+
+
+# 初期化
+if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN]?
+  if EventConfig?
+    EventConfig.addEventConfigContents(PreloadItemImage.ITEM_ACCESS_TOKEN)
+  console.log('button loaded')

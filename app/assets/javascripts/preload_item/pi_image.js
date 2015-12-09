@@ -6,6 +6,10 @@ var PreloadItemImage,
 PreloadItemImage = (function(superClass) {
   extend(PreloadItemImage, superClass);
 
+  PreloadItemImage.IDENTITY = "image";
+
+  PreloadItemImage.ITEM_ACCESS_TOKEN = 'PreloadItemImage';
+
   PreloadItemImage.actionProperties = {
     modifiables: {
       imagePath: {
@@ -52,5 +56,12 @@ PreloadItemImage = (function(superClass) {
   return PreloadItemImage;
 
 })(ItemBase);
+
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN] == null)) {
+  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
+    EventConfig.addEventConfigContents(PreloadItemImage.ITEM_ACCESS_TOKEN);
+  }
+  console.log('button loaded');
+}
 
 //# sourceMappingURL=pi_image.js.map

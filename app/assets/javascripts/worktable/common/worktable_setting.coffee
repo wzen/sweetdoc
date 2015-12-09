@@ -118,7 +118,7 @@ class WorktableSetting
           left = 0
         if !context?
           # キャンパスを作成
-          $(ElementCode.get().createGridElement(top, left)).appendTo(window.scrollInside)
+          $(@createGridElement(top, left)).appendTo(window.scrollInside)
           canvas = $("#pages .#{page} .#{@SETTING_GRID_CANVAS_CLASS}:first")[0]
           context = canvas.getContext('2d');
         else
@@ -143,6 +143,15 @@ class WorktableSetting
 
         PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, true)
         LocalStorage.saveSettingPageValue()
+
+    # グリッド線のテンプレートHTMLを読み込み
+    # @param [Integer] top HTMLを設置するY位置
+    # @param [Integer] left HTMLを設置するX位置
+    # @return [String] HTML
+    @createGridElement: (top, left) ->
+      return """
+          <div class="#{@SETTING_GRID_ELEMENT_CLASS}" style="position: absolute;top:#{top}px;left:#{left}px;width:#{@GRIDVIEW_SIZE}px;height:#{@GRIDVIEW_SIZE}px;z-index:#{Common.plusPagingZindex(Constant.Zindex.GRID)}"><canvas class="#{@SETTING_GRID_CANVAS_CLASS}" class="canvas" width="#{@GRIDVIEW_SIZE}" height="#{@GRIDVIEW_SIZE}"></canvas></div>
+        """
 
   # 自動保存
   class @IdleSaveTimer

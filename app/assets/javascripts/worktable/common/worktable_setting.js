@@ -134,7 +134,7 @@ WorktableSetting = (function() {
           left = 0;
         }
         if (context == null) {
-          $(ElementCode.get().createGridElement(top, left)).appendTo(window.scrollInside);
+          $(this.createGridElement(top, left)).appendTo(window.scrollInside);
           canvas = $("#pages ." + page + " ." + this.SETTING_GRID_CANVAS_CLASS + ":first")[0];
           context = canvas.getContext('2d');
         } else {
@@ -162,6 +162,10 @@ WorktableSetting = (function() {
         PageValue.setSettingPageValue(WorktableSetting.Grid.PageValueKey.GRID, true);
         return LocalStorage.saveSettingPageValue();
       }
+    };
+
+    Grid.createGridElement = function(top, left) {
+      return "<div class=\"" + this.SETTING_GRID_ELEMENT_CLASS + "\" style=\"position: absolute;top:" + top + "px;left:" + left + "px;width:" + this.GRIDVIEW_SIZE + "px;height:" + this.GRIDVIEW_SIZE + "px;z-index:" + (Common.plusPagingZindex(Constant.Zindex.GRID)) + "\"><canvas class=\"" + this.SETTING_GRID_CANVAS_CLASS + "\" class=\"canvas\" width=\"" + this.GRIDVIEW_SIZE + "\" height=\"" + this.GRIDVIEW_SIZE + "\"></canvas></div>";
     };
 
     return Grid;

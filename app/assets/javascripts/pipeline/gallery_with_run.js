@@ -27,7 +27,6 @@
 //= require common_event/background_event
 //= require common_event/screen_event
 //= require common_event/paging_guide/arrow_paging_guide
-//= require item/code_template
 //= require item/item_base
 //= require item/css_item_base
 //= require item/canvas_item_base
