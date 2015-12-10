@@ -8,6 +8,7 @@ class PreloadItemImage extends ItemBase
 
   @actionProperties =
   {
+    isFixed: true
     modifiables: {
       imagePath: {
         name: "Select image"

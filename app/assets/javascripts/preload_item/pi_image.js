@@ -17,6 +17,7 @@ PreloadItemImage = (function(superClass) {
   PreloadItemImage.ITEM_ACCESS_TOKEN = 'PreloadItemImage';
 
   PreloadItemImage.actionProperties = {
+    isFixed: true,
     modifiables: {
       imagePath: {
         name: "Select image",

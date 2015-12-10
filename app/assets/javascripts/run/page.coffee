@@ -248,6 +248,8 @@ class Page
     @initFocus()
     # リセット
     @resetAllChapters()
+    # 固定アイテム描画
+    @drawFixedItem()
     # チャプター最大値設定
     RunCommon.setChapterMax(@getForkChapterList().length)
     # キャッシュ保存
@@ -270,6 +272,8 @@ class Page
     RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()))
     # チャプター初期化
     @resetChapter()
+    # 固定アイテム描画
+    @drawFixedItem()
     # キャッシュ保存
     LocalStorage.saveAllPageValues()
 
@@ -309,6 +313,16 @@ class Page
           if !event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
             chapter.focusToActorIfNeed(true)
             flg = true
+
+  # 固定アイテムの描画
+  drawFixedItem: ->
+    instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
+    for key, instance of instances
+      value = instance.value
+      ins = Common.getInstanceFromMap(false, value.id, value.itemToken)
+      ap = ins.constructor.actionProperties
+      if ap.isFixed? && ap.isFixed
+        ins.reDraw()
 
   # 全てのチャプターをリセット
   resetAllChapters: ->
