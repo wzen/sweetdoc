@@ -26,7 +26,7 @@ CanvasItemBase = (function(superClass) {
   CanvasItemBase.prototype.createItemElement = function(callback) {
     var contents;
     contents = "<canvas id=\"" + (this.canvasElementId()) + "\" class=\"canvas context_base\" ></canvas>";
-    return callback(Common.wrapCreateItemElement(this, contents));
+    return callback(Common.wrapCreateItemElement(this, $(contents)));
   };
 
   CanvasItemBase.prototype.setScale = function() {

@@ -23,7 +23,7 @@ class CanvasItemBase extends ItemBase
     contents = """
       <canvas id="#{@canvasElementId()}" class="canvas context_base" ></canvas>
     """
-    callback(Common.wrapCreateItemElement(@, contents))
+    callback(Common.wrapCreateItemElement(@, $(contents)))
 
   # 伸縮率を設定
   setScale: ->

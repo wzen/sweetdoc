@@ -33,7 +33,7 @@ class CssItemBase extends ItemBase
     contents = """
           <div type="button" class="css_item_base context_base"><div></div></div>
         """
-    callback(Common.wrapCreateItemElement(@, contents))
+    callback(Common.wrapCreateItemElement(@, $(contents)))
 
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->

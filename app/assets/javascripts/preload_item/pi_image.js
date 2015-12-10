@@ -4,7 +4,7 @@ var PreloadItemImage,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemImage = (function(superClass) {
-  var _loadImageUploadConfig, _sizeOfKeepAspect, constant;
+  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _loadImageUploadConfig, _sizeOfKeepAspect, constant;
 
   extend(PreloadItemImage, superClass);
 
@@ -25,6 +25,10 @@ PreloadItemImage = (function(superClass) {
 
     })();
   }
+
+  UPLOAD_FORM_WIDTH = 350;
+
+  UPLOAD_FORM_HEIGHT = 200;
 
   PreloadItemImage.IDENTITY = "image";
 
@@ -152,31 +156,36 @@ PreloadItemImage = (function(superClass) {
         height = this.itemSize.h;
       }
       contents = "<img src='" + this.imagePath + "' width='" + width + "' height='" + height + "' />";
-      return callback(Common.wrapCreateItemElement(this, contents));
+      return callback(Common.wrapCreateItemElement(this, $(contents)));
     } else {
       return _loadImageUploadConfig.call(this, (function(_this) {
         return function(config) {
-          var left, style, top;
+          var left, style, top, w;
           style = '';
           top = _this.itemSize.h - $(config).height() / 2.0;
           left = _this.itemSize.w - $(config).width() / 2.0;
-          contents = "<div style='position:absolute;top:" + top + "px;left:" + left + "px;'>" + config + "</div>";
-          return callback(Common.wrapCreateItemElement(_this, contents));
+          w = "<div style='position:absolute;top:" + top + "px;left:" + left + "px;'></div>";
+          contents = $(config).wrap(w);
+          return callback(Common.wrapCreateItemElement(_this, $(contents)));
         };
       })(this));
     }
   };
 
   _loadImageUploadConfig = function(callback) {
-    return ConfigMenu.loadConfig(ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT, function(config) {
-      $(config).find("." + this.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-      $(config).find("." + this.Key.ITEM_OBJ_ID).val(this.id);
-      $(config).off().on('ajax:complete', function(e, data, status, error) {
-        console.log(data);
-        return console.log(data.responseText);
-      });
-      return callback(config);
-    });
+    return ConfigMenu.loadConfig(ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT, null, (function(_this) {
+      return function(config) {
+        $(config).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+        $(config).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
+        $(config).css('width', UPLOAD_FORM_WIDTH + 'px');
+        $(config).css('height', UPLOAD_FORM_HEIGHT + 'px');
+        $(config).off().on('ajax:complete', function(e, data, status, error) {
+          console.log(data);
+          return console.log(data.responseText);
+        });
+        return callback(config);
+      };
+    })(this));
   };
 
   _sizeOfKeepAspect = function() {

@@ -39,7 +39,7 @@ CssItemBase = (function(superClass) {
   CssItemBase.prototype.createItemElement = function(callback) {
     var contents;
     contents = "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
-    return callback(Common.wrapCreateItemElement(this, contents));
+    return callback(Common.wrapCreateItemElement(this, $(contents)));
   };
 
   CssItemBase.jsLoaded = function(option) {};

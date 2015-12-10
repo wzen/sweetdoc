@@ -209,9 +209,10 @@ class Common
 
   # アイテム用のテンプレートHTMLをwrap
   @wrapCreateItemElement = (item, contents) ->
-    return """
-      <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'>#{contents}</div></div></div>
+    w = """
+      <div id="#{item.id}" class="item draggable resizable" style="position: absolute;top:#{item.itemSize.y}px;left:#{item.itemSize.x}px;width:#{item.itemSize.w }px;height:#{item.itemSize.h}px;z-index:#{Common.plusPagingZindex(item.zindex)}"><div class="item_wrapper"><div class='item_contents'></div></div></div>
     """
+    return $(contents).wrap(w).closest('.item')
 
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム

@@ -7,6 +7,9 @@ class PreloadItemImage extends ItemBase
       @EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID
       @URL = constant.PreloadItemImage.Key.URL
 
+  UPLOAD_FORM_WIDTH = 350
+  UPLOAD_FORM_HEIGHT = 200
+
   # @property [String] IDENTITY アイテム識別名
   @IDENTITY = "image"
   @ITEM_ACCESS_TOKEN = 'PreloadItemImage'
@@ -111,23 +114,26 @@ class PreloadItemImage extends ItemBase
       contents = """
         <img src='#{@imagePath}' width='#{width}' height='#{height}' />
       """
-      callback(Common.wrapCreateItemElement(@, contents))
+      callback(Common.wrapCreateItemElement(@, $(contents)))
     else
       _loadImageUploadConfig.call(@, (config) =>
         # 画像選択フォームを中央に表示
         style = ''
         top = @itemSize.h - $(config).height() / 2.0
         left = @itemSize.w - $(config).width() / 2.0
-        contents = """
-          <div style='position:absolute;top:#{top}px;left:#{left}px;'>#{config}</div>
+        w = """
+          <div style='position:absolute;top:#{top}px;left:#{left}px;'></div>
         """
-        callback(Common.wrapCreateItemElement(@, contents))
+        contents = $(config).wrap(w)
+        callback(Common.wrapCreateItemElement(@, $(contents)))
       )
 
   _loadImageUploadConfig = (callback) ->
-    ConfigMenu.loadConfig(ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT, (config) ->
-      $(config).find(".#{@Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
-      $(config).find(".#{@Key.ITEM_OBJ_ID}").val(@id)
+    ConfigMenu.loadConfig(ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT, null, (config) =>
+      $(config).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+      $(config).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
+      $(config).css('width', UPLOAD_FORM_WIDTH + 'px')
+      $(config).css('height', UPLOAD_FORM_HEIGHT + 'px')
       $(config).off().on('ajax:complete', (e, data, status, error) ->
         console.log data
         console.log data.responseText
