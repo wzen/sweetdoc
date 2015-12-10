@@ -56,6 +56,8 @@ if gon?
       @COLOR = constant.ItemDesignOptionType.COLOR
       # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
       @DESIGN_TOOL = constant.ItemDesignOptionType.DESIGN_TOOL
+      # @property [Int] SELECT_FILE ファイル選択
+      @SELECT_FILE = constant.ItemDesignOptionType.SELECT_FILE
 
     # アクションイベントクラス名
     class @TimelineActionTypeClassName

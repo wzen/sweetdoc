@@ -84,6 +84,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ItemDesignOptionType.DESIGN_TOOL = constant.ItemDesignOptionType.DESIGN_TOOL;
 
+      ItemDesignOptionType.SELECT_FILE = constant.ItemDesignOptionType.SELECT_FILE;
+
       return ItemDesignOptionType;
 
     })();

@@ -18,12 +18,22 @@ class ItemImage < ActiveRecord::Base
         if upm.blank?
           return false, I18n.t('message.database.item_state.save.error'), nil
         end
-        image = self.new
-        image.user_project_map_id = upm.id
-        image.item_obj_id = item_obj_id
-        image.event_dist_id = event_dist_id
-        image.file_path = file_path
-        image.link_url = url
+
+        # 存在チェック
+        image = self.find_by(user_project_map_id: upm.id, item_obj_id: item_obj_id, event_dist_id: event_dist_id)
+        if image.present?
+          # 更新
+          image.file_path = file_path
+          image.link_url = url
+        else
+          # 作成
+          image = self.new
+          image.user_project_map_id = upm.id
+          image.item_obj_id = item_obj_id
+          image.event_dist_id = event_dist_id
+          image.file_path = file_path
+          image.link_url = url
+        end
         image.save!
 
         ret_url = nil

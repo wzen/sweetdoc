@@ -112,15 +112,8 @@ WorkTableCssItemExtend =
       @saveDesign()
     )
 
-    # 変数編集
-    if @constructor.actionProperties.modifiables?
-      for varName, value of @constructor.actionProperties.modifiables
-        if value.type == Constant.ItemDesignOptionType.NUMBER
-          self.settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max)
-        else if value.type == Constant.ItemDesignOptionType.STRING
-          self.settingModifiableString(designConfigRoot, varName)
-        else if value.type == Constant.ItemDesignOptionType.COLOR
-          self.settingModifiableColor(designConfigRoot, varName)
+    # 変数編集イベント設定
+    @settingModifiableChangeEvent(designConfigRoot)
 
   # デザイン変更を反映
   applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->

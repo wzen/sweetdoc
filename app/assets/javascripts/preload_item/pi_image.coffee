@@ -35,10 +35,12 @@ class PreloadItemImage extends ItemBase
     super(cood)
     @imagePath = null
     @_image = null
-    @isKeepAspect = false
+    @isKeepAspect = true
     @scale = {w:1.0, h:1.0}
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
+    if window.isWorkTable
+      @constructor.include WorkTableCommonInclude
 
   # ドラッグ描画
   # @param [Array] cood 座標
@@ -90,6 +92,17 @@ class PreloadItemImage extends ItemBase
         @setupDragAndResizeEvents()
     )
 
+  # デザインツールメニュー設定
+  setupDesignToolOptionMenu: ->
+    self = @
+    designConfigRoot = $('#' + @getDesignConfigId())
+    # 変数編集イベント設定
+    @settingModifiableChangeEvent(designConfigRoot)
+
+  # デザイン反映
+  applyDesignChange: (doStyleSave) ->
+    @reDraw()
+
   # 描画削除
   clearDraw: ->
     @getJQueryElement().remove()
@@ -110,45 +123,66 @@ class PreloadItemImage extends ItemBase
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
   createItemElement: (showModal, callback) ->
-    if @_image?
-      if @isKeepAspect
-        size = _sizeOfKeepAspect.call(@)
-        width = size.width
-        height = size.height
+    _makeImageObjectIfNeed.call(@, =>
+      if @_image?
+        if @isKeepAspect
+          size = _sizeOfKeepAspect.call(@)
+          width = size.width
+          height = size.height
+        else
+          width = @itemSize.w
+          height = @itemSize.h
+        contents = """
+          <img src='#{@imagePath}' width='#{width}' height='#{height}' />
+        """
+        callback(Common.wrapCreateItemElement(@, $(contents)))
       else
-        width = @itemSize.w
-        height = @itemSize.h
-      contents = """
-        <img src='#{@imagePath}' width='#{width}' height='#{height}' />
-      """
-      callback(Common.wrapCreateItemElement(@, $(contents)))
-    else
-      # 画像未設定時表示
-      contents = """
-        <div class='no_image'><div class='center_image'></div></div>
-      """
-      if showModal
-        # 画像アップロードモーダル表示
-        Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
-          $(modalEmt).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
-          $(modalEmt).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
-          $(modalEmt).find('form').off().on('ajax:complete', (e, data, status, error) =>
-            # モーダル非表示
-            Common.hideModalView()
-            d = JSON.parse(data.responseText)
-            @imagePath = d.image_url
-            # Aspect比はデフォルトtrue
-            @isKeepAspect = true
-            @_image = new Image()
-            @_image.src = @imagePath
-            @_image.onload = =>
-              @reDraw()
+        # 画像未設定時表示
+        contents = """
+          <div class='no_image'><div class='center_image'></div></div>
+        """
+        if showModal
+          # 画像アップロードモーダル表示
+          Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
+            $(modalEmt).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+            $(modalEmt).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
+            $(modalEmt).find('form').off().on('ajax:complete', (e, data, status, error) =>
+              # モーダル非表示
+              Common.hideModalView()
+              d = JSON.parse(data.responseText)
+              @imagePath = d.image_url
+              @saveObj()
+              _makeImageObjectIfNeed.call(@, =>
+                @reDraw()
+              )
+            )
+            _initModalEvent.call(@, modalEmt)
+            if callback?
+              callback()
           )
-          _initModalEvent.call(@, modalEmt)
-          if callback?
-            callback()
-        )
-      callback(Common.wrapCreateItemElement(@, $(contents)))
+        callback(Common.wrapCreateItemElement(@, $(contents)))
+    )
+
+  _makeImageObjectIfNeed = (callback) ->
+    if @_image?
+      # 作成済み
+      callback()
+      return
+
+    if !@imagePath?
+      # 作成不可
+      callback()
+      return
+
+    @_image = new Image()
+    @_image.src = @imagePath
+    @_image.onload = ->
+      callback()
+    @_image.onerror = =>
+      # 読み込み失敗 -> NoImageに変更
+      @imagePath = null
+      @_image = null
+      @reDraw()
 
   _sizeOfKeepAspect = ->
     if @itemSize.w / @itemSize.h > @_image.naturalWidth / @_image.naturalHeight

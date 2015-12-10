@@ -371,6 +371,28 @@ WorkTableCommonInclude = {
       };
     })(this), 500);
   },
+  settingModifiableChangeEvent: function(designConfigRoot) {
+    var ref, results, value, varName;
+    if (this.constructor.actionProperties.modifiables != null) {
+      ref = this.constructor.actionProperties.modifiables;
+      results = [];
+      for (varName in ref) {
+        value = ref[varName];
+        if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+          results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max));
+        } else if (value.type === Constant.ItemDesignOptionType.STRING) {
+          results.push(this.settingModifiableString(designConfigRoot, varName));
+        } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
+          results.push(this.settingModifiableColor(designConfigRoot, varName));
+        } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
+          results.push(this.settingModifiableSelectFile(designConfigRoot, varName));
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    }
+  },
   settingModifiableVarSlider: function(configRoot, varName, min, max, stepValue) {
     var defaultValue, meterElement, valueElement;
     if (min == null) {
@@ -426,6 +448,17 @@ WorkTableCommonInclude = {
       return function(a, b, d, e) {
         _this[varName] = "#" + b;
         return _this.applyDesignChange();
+      };
+    })(this));
+  },
+  settingModifiableSelectFile: function(configRoot, varName) {
+    var form;
+    form = $("form.item_image_form_" + varName, configRoot);
+    return form.off().on('ajax:complete', (function(_this) {
+      return function(e, data, status, error) {
+        var d;
+        d = JSON.parse(data.responseText);
+        return _this[varName] = d.image_url;
       };
     })(this));
   }

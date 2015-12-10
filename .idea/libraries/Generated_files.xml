@@ -30,8 +30,10 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/config_menu.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/event_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/common_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
@@ -90,7 +92,9 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/canvasitem_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/cssitem_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/item_extend/common_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/event_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />

@@ -41,7 +41,7 @@ WorkTableCssItemExtend = {
     return this.drawAndMakeConfigsAndWritePageValue(show, callback);
   },
   setupDesignToolOptionMenu: function() {
-    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, ref, results, self, value, varName;
+    var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, self;
     self = this;
     designConfigRoot = $('#' + this.getDesignConfigId());
     self.settingGradientSlider('design_slider_gradient', null);
@@ -122,23 +122,7 @@ WorkTableCssItemExtend = {
         return _this.saveDesign();
       };
     })(this));
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
-      results = [];
-      for (varName in ref) {
-        value = ref[varName];
-        if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-          results.push(self.settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max));
-        } else if (value.type === Constant.ItemDesignOptionType.STRING) {
-          results.push(self.settingModifiableString(designConfigRoot, varName));
-        } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-          results.push(self.settingModifiableColor(designConfigRoot, varName));
-        } else {
-          results.push(void 0);
-        }
-      }
-      return results;
-    }
+    return this.settingModifiableChangeEvent(designConfigRoot);
   },
   applyDesignStyleChange: function(designKeyName, value, doStyleSave) {
     var cssCodeElement;

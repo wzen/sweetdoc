@@ -4,7 +4,7 @@ var PreloadItemImage,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemImage = (function(superClass) {
-  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _initModalEvent, _sizeOfKeepAspect, constant;
+  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _initModalEvent, _makeImageObjectIfNeed, _sizeOfKeepAspect, constant;
 
   extend(PreloadItemImage, superClass);
 
@@ -57,7 +57,7 @@ PreloadItemImage = (function(superClass) {
     PreloadItemImage.__super__.constructor.call(this, cood);
     this.imagePath = null;
     this._image = null;
-    this.isKeepAspect = false;
+    this.isKeepAspect = true;
     this.scale = {
       w: 1.0,
       h: 1.0
@@ -67,6 +67,9 @@ PreloadItemImage = (function(superClass) {
         x: cood.x,
         y: cood.y
       };
+    }
+    if (window.isWorkTable) {
+      this.constructor.include(WorkTableCommonInclude);
     }
   }
 
@@ -137,6 +140,17 @@ PreloadItemImage = (function(superClass) {
     })(this));
   };
 
+  PreloadItemImage.prototype.setupDesignToolOptionMenu = function() {
+    var designConfigRoot, self;
+    self = this;
+    designConfigRoot = $('#' + this.getDesignConfigId());
+    return this.settingModifiableChangeEvent(designConfigRoot);
+  };
+
+  PreloadItemImage.prototype.applyDesignChange = function(doStyleSave) {
+    return this.reDraw();
+  };
+
   PreloadItemImage.prototype.clearDraw = function() {
     return this.getJQueryElement().remove();
   };
@@ -159,49 +173,72 @@ PreloadItemImage = (function(superClass) {
   };
 
   PreloadItemImage.prototype.createItemElement = function(showModal, callback) {
-    var contents, height, size, width;
-    if (this._image != null) {
-      if (this.isKeepAspect) {
-        size = _sizeOfKeepAspect.call(this);
-        width = size.width;
-        height = size.height;
-      } else {
-        width = this.itemSize.w;
-        height = this.itemSize.h;
-      }
-      contents = "<img src='" + this.imagePath + "' width='" + width + "' height='" + height + "' />";
-      return callback(Common.wrapCreateItemElement(this, $(contents)));
-    } else {
-      contents = "<div class='no_image'><div class='center_image'></div></div>";
-      if (showModal) {
-        Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (function(_this) {
-          return function(modalEmt, params, callback) {
-            if (callback == null) {
-              callback = null;
-            }
-            $(modalEmt).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-            $(modalEmt).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
-            $(modalEmt).find('form').off().on('ajax:complete', function(e, data, status, error) {
-              var d;
-              Common.hideModalView();
-              d = JSON.parse(data.responseText);
-              _this.imagePath = d.image_url;
-              _this.isKeepAspect = true;
-              _this._image = new Image();
-              _this._image.src = _this.imagePath;
-              return _this._image.onload = function() {
-                return _this.reDraw();
-              };
+    return _makeImageObjectIfNeed.call(this, (function(_this) {
+      return function() {
+        var contents, height, size, width;
+        if (_this._image != null) {
+          if (_this.isKeepAspect) {
+            size = _sizeOfKeepAspect.call(_this);
+            width = size.width;
+            height = size.height;
+          } else {
+            width = _this.itemSize.w;
+            height = _this.itemSize.h;
+          }
+          contents = "<img src='" + _this.imagePath + "' width='" + width + "' height='" + height + "' />";
+          return callback(Common.wrapCreateItemElement(_this, $(contents)));
+        } else {
+          contents = "<div class='no_image'><div class='center_image'></div></div>";
+          if (showModal) {
+            Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, function(modalEmt, params, callback) {
+              if (callback == null) {
+                callback = null;
+              }
+              $(modalEmt).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+              $(modalEmt).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
+              $(modalEmt).find('form').off().on('ajax:complete', function(e, data, status, error) {
+                var d;
+                Common.hideModalView();
+                d = JSON.parse(data.responseText);
+                _this.imagePath = d.image_url;
+                _this.saveObj();
+                return _makeImageObjectIfNeed.call(_this, function() {
+                  return _this.reDraw();
+                });
+              });
+              _initModalEvent.call(_this, modalEmt);
+              if (callback != null) {
+                return callback();
+              }
             });
-            _initModalEvent.call(_this, modalEmt);
-            if (callback != null) {
-              return callback();
-            }
-          };
-        })(this));
-      }
-      return callback(Common.wrapCreateItemElement(this, $(contents)));
+          }
+          return callback(Common.wrapCreateItemElement(_this, $(contents)));
+        }
+      };
+    })(this));
+  };
+
+  _makeImageObjectIfNeed = function(callback) {
+    if (this._image != null) {
+      callback();
+      return;
     }
+    if (this.imagePath == null) {
+      callback();
+      return;
+    }
+    this._image = new Image();
+    this._image.src = this.imagePath;
+    this._image.onload = function() {
+      return callback();
+    };
+    return this._image.onerror = (function(_this) {
+      return function() {
+        _this.imagePath = null;
+        _this._image = null;
+        return _this.reDraw();
+      };
+    })(this);
   };
 
   _sizeOfKeepAspect = function() {

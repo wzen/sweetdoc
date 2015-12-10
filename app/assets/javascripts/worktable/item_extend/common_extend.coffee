@@ -321,6 +321,19 @@ WorkTableCommonInclude =
       , 1000)
     , 500)
 
+  # 変数編集イベント設定
+  settingModifiableChangeEvent: (designConfigRoot) ->
+    if @constructor.actionProperties.modifiables?
+      for varName, value of @constructor.actionProperties.modifiables
+        if value.type == Constant.ItemDesignOptionType.NUMBER
+          @settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max)
+        else if value.type == Constant.ItemDesignOptionType.STRING
+          @settingModifiableString(designConfigRoot, varName)
+        else if value.type == Constant.ItemDesignOptionType.COLOR
+          @settingModifiableColor(designConfigRoot, varName)
+        else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
+          @settingModifiableSelectFile(designConfigRoot, varName)
+
   # 変数編集スライダーの作成
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
@@ -371,5 +384,15 @@ WorkTableCommonInclude =
       (a, b, d, e) =>
         @[varName] = "##{b}"
         @applyDesignChange()
+    )
+
+  # 変数編集ファイルアップロードの作成
+  # @param [Object] configRoot コンフィグルート
+  # @param [String] varName 変数名
+  settingModifiableSelectFile: (configRoot, varName) ->
+    form = $("form.item_image_form_#{varName}", configRoot)
+    form.off().on('ajax:complete', (e, data, status, error) =>
+      d = JSON.parse(data.responseText)
+      @[varName] = d.image_url
     )
 
