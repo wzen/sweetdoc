@@ -9,6 +9,11 @@ $(function() {
       alert('ブラウザ非対応です。');
       return;
     }
+    $.ajaxSetup({
+      beforeSend: function(xhr) {
+        return xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+      }
+    });
     existedCache = !LocalStorage.isOverWorktableSaveTimeLimit();
     if (existedCache) {
       LocalStorage.loadAllPageValues();

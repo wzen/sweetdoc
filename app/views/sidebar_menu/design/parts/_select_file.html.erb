@@ -1,0 +1,11 @@
+<%
+   var_name = '' if var_name.nil?
+%>
+<%= form_tag 'item_image/create', :html => { :class => "form-horizontal item_image_form_#{var_name}", :multipart => true , :remote => true },:format => :json,:authenticity_token => true  do |f| %>
+    <input type="hidden" name="<%= Const::PreloadItemImage::Key::PROJECT_ID %>" class="<%= Const::PreloadItemImage::Key::PROJECT_ID %>">
+    <input type="hidden" name="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>" class="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>">
+    <input type="hidden" name="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>" class="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>">
+    <%= file_field_tag :file_path %>
+    <input type="text" name="<%= Const::PreloadItemImage::Key::URL %>" class="<%= Const::PreloadItemImage::Key::URL %>">
+    <%= submit_tag 'Upload', class: 'btn btn-default', data: { disable_with: 'uploading…' } %>
+<% end %>

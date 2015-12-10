@@ -436,4 +436,13 @@ class Const
     end
   end
 
+  class PreloadItemImage
+    class Key
+      PROJECT_ID = 'pid'
+      ITEM_OBJ_ID = 'iobjid'
+      EVENT_DIST_ID = 'edistid'
+      URL = 'url'
+    end
+  end
+
 end

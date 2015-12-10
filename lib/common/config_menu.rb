@@ -1,7 +1,7 @@
 class ConfigMenu
 
-  def self.design_config(design_config, item_type, modifiables)
-    ret = ApplicationController.new.render_to_string(
+  def self.design_config(controller, design_config, item_type, modifiables)
+    ret = controller.render_to_string(
         partial: 'sidebar_menu/design/parts/common'
     )
     if design_config
@@ -12,20 +12,20 @@ class ConfigMenu
         name = 'css_design_tool'
       end
       if name.present?
-        ret += ApplicationController.new.render_to_string(
+        ret += controller.render_to_string(
             partial: "sidebar_menu/design/parts/#{name}"
         )
       end
     end
-    ret += _modifiables_vars_config(modifiables)
+    ret += _modifiables_vars_config(controller, modifiables)
     return "<div class='#{Const::DesignConfig::ROOT_CLASSNAME}'>#{ret}</div>"
   end
 
-  def self.event_var_modify_config(modifiables)
-    return _modifiables_vars_config(modifiables)
+  def self.event_var_modify_config(controller, modifiables)
+    return _modifiables_vars_config(controller, modifiables)
   end
 
-  def self._modifiables_vars_config(modifiables)
+  def self._modifiables_vars_config(controller, modifiables)
     ret = nil
     modifiables.each do |var, v|
       temp = ''
@@ -44,7 +44,7 @@ class ConfigMenu
         value.update!(l_value)
       end
       if ret.blank?
-        ret = ApplicationController.new.render_to_string(
+        ret = controller.render_to_string(
             partial: temp,
             locals: {
                 var_name: var,
@@ -52,7 +52,7 @@ class ConfigMenu
             }
         )
       else
-        ret += ApplicationController.new.render_to_string(
+        ret += controller.render_to_string(
             partial: temp,
             locals: {
                 var_name: var,

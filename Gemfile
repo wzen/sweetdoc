@@ -87,13 +87,12 @@ gem 'omniauth-google-oauth2', '0.2.8'
 gem 'ruby-filemagic' , '0.7.0'
 gem 'carrierwave'
 gem 'carrierwave-magic'
+gem 'rmagick', '2.15.4', require: 'RMagick'
 gem 'mini_magick'
 gem 'remotipart', '1.2.1'
 
 #gem "facets", require: false
-
 #gem 'fastimage'
-#gem 'rmagick', '2.15.4', require: 'RMagick'
 
 # Use HBase
 #normalgem 'massive_record'

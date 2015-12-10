@@ -13,8 +13,6 @@ Rails.application.routes.draw do
 
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
-  post 'config_menu/design_config'
-  post 'config_menu/event_var_modify_config'
   post 'coding/save_all'
   post 'coding/save_tree'
   post 'coding/update_code'
@@ -80,6 +78,14 @@ Rails.application.routes.draw do
   # Upload
   post 'upload' => 'upload#index'
   post 'upload/item'
+
+  # ConfigMenu
+  post 'config_menu/design_config'
+  post 'config_menu/event_var_modify_config'
+  post 'config_menu/preload_image_path_select_config'
+
+  # ItemImage
+  post 'item_image/create'
 
   # Document
   get 'document/terms'
