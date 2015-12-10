@@ -4,7 +4,7 @@ var PreloadItemImage,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemImage = (function(superClass) {
-  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _loadImageUploadConfig, _sizeOfKeepAspect, constant;
+  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _sizeOfKeepAspect, constant;
 
   extend(PreloadItemImage, superClass);
 
@@ -158,34 +158,22 @@ PreloadItemImage = (function(superClass) {
       contents = "<img src='" + this.imagePath + "' width='" + width + "' height='" + height + "' />";
       return callback(Common.wrapCreateItemElement(this, $(contents)));
     } else {
-      return _loadImageUploadConfig.call(this, (function(_this) {
-        return function(config) {
-          var left, style, top, w;
-          style = '';
-          top = _this.itemSize.h - $(config).height() / 2.0;
-          left = _this.itemSize.w - $(config).width() / 2.0;
-          w = "<div style='position:absolute;top:" + top + "px;left:" + left + "px;'></div>";
-          contents = $(config).wrap(w);
-          return callback(Common.wrapCreateItemElement(_this, $(contents)));
+      contents = "<div class='no_image'><div class='center_image'></div></div>";
+      callback(Common.wrapCreateItemElement(this, $(contents)));
+      return Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (function(_this) {
+        return function(modalEmt, params, callback) {
+          if (callback == null) {
+            callback = null;
+          }
+          $(modalEmt).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+          $(modalEmt).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
+          return $(modalEmt).find('form').off().on('ajax:complete', function(e, data, status, error) {
+            console.log(data);
+            return console.log(data.responseText);
+          });
         };
       })(this));
     }
-  };
-
-  _loadImageUploadConfig = function(callback) {
-    return ConfigMenu.loadConfig(ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT, null, (function(_this) {
-      return function(config) {
-        $(config).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-        $(config).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
-        $(config).css('width', UPLOAD_FORM_WIDTH + 'px');
-        $(config).css('height', UPLOAD_FORM_HEIGHT + 'px');
-        $(config).off().on('ajax:complete', function(e, data, status, error) {
-          console.log(data);
-          return console.log(data.responseText);
-        });
-        return callback(config);
-      };
-    })(this));
   };
 
   _sizeOfKeepAspect = function() {

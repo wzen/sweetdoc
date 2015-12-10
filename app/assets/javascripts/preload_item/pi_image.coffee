@@ -116,30 +116,20 @@ class PreloadItemImage extends ItemBase
       """
       callback(Common.wrapCreateItemElement(@, $(contents)))
     else
-      _loadImageUploadConfig.call(@, (config) =>
-        # 画像選択フォームを中央に表示
-        style = ''
-        top = @itemSize.h - $(config).height() / 2.0
-        left = @itemSize.w - $(config).width() / 2.0
-        w = """
-          <div style='position:absolute;top:#{top}px;left:#{left}px;'></div>
-        """
-        contents = $(config).wrap(w)
-        callback(Common.wrapCreateItemElement(@, $(contents)))
+      # 画像未設定時表示
+      contents = """
+        <div class='no_image'><div class='center_image'></div></div>
+      """
+      callback(Common.wrapCreateItemElement(@, $(contents)))
+      # 画像アップロードモーダル表示
+      Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
+        $(modalEmt).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+        $(modalEmt).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
+        $(modalEmt).find('form').off().on('ajax:complete', (e, data, status, error) ->
+          console.log data
+          console.log data.responseText
+        )
       )
-
-  _loadImageUploadConfig = (callback) ->
-    ConfigMenu.loadConfig(ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT, null, (config) =>
-      $(config).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
-      $(config).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
-      $(config).css('width', UPLOAD_FORM_WIDTH + 'px')
-      $(config).css('height', UPLOAD_FORM_HEIGHT + 'px')
-      $(config).off().on('ajax:complete', (e, data, status, error) ->
-        console.log data
-        console.log data.responseText
-      )
-      callback(config)
-    )
 
   _sizeOfKeepAspect = ->
     if @itemSize.w / @itemSize.h > @_image.naturalWidth / @_image.naturalHeight

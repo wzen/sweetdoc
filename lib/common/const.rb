@@ -336,6 +336,7 @@ class Const
     INIT_PROJECT = 'init_project'
     ADMIN_PROJECTS = 'admin_projects'
     CREATE_USER_CODE = 'create_user_code'
+    ITEM_IMAGE_UPLOAD = 'item_image_upload'
     ABOUT = 'about'
   end
 

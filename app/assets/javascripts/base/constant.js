@@ -149,6 +149,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ModalViewType.CREATE_USER_CODE = constant.ModalViewType.CREATE_USER_CODE;
 
+      ModalViewType.ITEM_IMAGE_UPLOAD = constant.ModalViewType.ITEM_IMAGE_UPLOAD;
+
       return ModalViewType;
 
     })();
