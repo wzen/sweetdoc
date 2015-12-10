@@ -4,31 +4,9 @@ var PreloadItemImage,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemImage = (function(superClass) {
-  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _initModalEvent, _makeImageObjectIfNeed, _sizeOfKeepAspect, constant;
+  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _initModalEvent, _makeImageObjectIfNeed, _sizeOfKeepAspect;
 
   extend(PreloadItemImage, superClass);
-
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    PreloadItemImage.Key = (function() {
-      function Key() {}
-
-      Key.PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID;
-
-      Key.ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID;
-
-      Key.EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID;
-
-      Key.SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE;
-
-      Key.URL = constant.PreloadItemImage.Key.URL;
-
-      Key.SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE;
-
-      return Key;
-
-    })();
-  }
 
   UPLOAD_FORM_WIDTH = 350;
 
@@ -140,13 +118,6 @@ PreloadItemImage = (function(superClass) {
     })(this));
   };
 
-  PreloadItemImage.prototype.setupDesignToolOptionMenu = function() {
-    var designConfigRoot, self;
-    self = this;
-    designConfigRoot = $('#' + this.getDesignConfigId());
-    return this.settingModifiableChangeEvent(designConfigRoot);
-  };
-
   PreloadItemImage.prototype.applyDesignChange = function(doStyleSave) {
     return this.reDraw();
   };
@@ -194,17 +165,13 @@ PreloadItemImage = (function(superClass) {
               if (callback == null) {
                 callback = null;
               }
-              $(modalEmt).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-              $(modalEmt).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
               $(modalEmt).find('form').off().on('ajax:complete', function(e, data, status, error) {
                 var d;
                 Common.hideModalView();
                 d = JSON.parse(data.responseText);
                 _this.imagePath = d.image_url;
                 _this.saveObj();
-                return _makeImageObjectIfNeed.call(_this, function() {
-                  return _this.reDraw();
-                });
+                return _this.reDraw();
               });
               _initModalEvent.call(_this, modalEmt);
               if (callback != null) {
@@ -256,39 +223,7 @@ PreloadItemImage = (function(superClass) {
   };
 
   _initModalEvent = function(emt) {
-    $(emt).find("." + this.constructor.Key.SELECT_FILE + ":first").off().on('change', (function(_this) {
-      return function(e) {
-        var del, el, target;
-        target = e.target;
-        if (target.value && target.value.length > 0) {
-          el = $(emt).find("." + _this.constructor.Key.URL + ":first");
-          el.attr('disabled', true);
-          el.css('backgroundColor', 'gray');
-          del = $(emt).find("." + _this.constructor.Key.SELECT_FILE_DELETE + ":first");
-          del.off('click').on('click', function() {
-            $(target).val('');
-            return $(target).trigger('change');
-          });
-          return del.show();
-        } else {
-          el = $(emt).find("." + _this.constructor.Key.URL + ":first");
-          el.removeAttr('disabled');
-          el.css('backgroundColor', 'white');
-          return $(emt).find("." + _this.constructor.Key.SELECT_FILE_DELETE + ":first").hide();
-        }
-      };
-    })(this));
-    return $(emt).find("." + this.constructor.Key.URL + ":first").off().on('change', (function(_this) {
-      return function(e) {
-        var target;
-        target = e.target;
-        if ($(target).val().length > 0) {
-          return $(emt).find("." + _this.constructor.Key.SELECT_FILE + ":first").attr('disabled', true);
-        } else {
-          return $(emt).find("." + _this.constructor.Key.SELECT_FILE + ":first").removeAttr('disabled');
-        }
-      };
-    })(this));
+    return this.initModifiableSelectFile(emt);
   };
 
   return PreloadItemImage;

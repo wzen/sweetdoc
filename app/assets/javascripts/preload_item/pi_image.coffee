@@ -1,14 +1,4 @@
 class PreloadItemImage extends ItemBase
-  if gon?
-    constant = gon.const
-    class @Key
-      @PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID
-      @ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID
-      @EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID
-      @SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE
-      @URL = constant.PreloadItemImage.Key.URL
-      @SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE
-
   UPLOAD_FORM_WIDTH = 350
   UPLOAD_FORM_HEIGHT = 200
 
@@ -92,13 +82,6 @@ class PreloadItemImage extends ItemBase
         @setupDragAndResizeEvents()
     )
 
-  # デザインツールメニュー設定
-  setupDesignToolOptionMenu: ->
-    self = @
-    designConfigRoot = $('#' + @getDesignConfigId())
-    # 変数編集イベント設定
-    @settingModifiableChangeEvent(designConfigRoot)
-
   # デザイン反映
   applyDesignChange: (doStyleSave) ->
     @reDraw()
@@ -144,17 +127,13 @@ class PreloadItemImage extends ItemBase
         if showModal
           # 画像アップロードモーダル表示
           Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
-            $(modalEmt).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
-            $(modalEmt).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
             $(modalEmt).find('form').off().on('ajax:complete', (e, data, status, error) =>
               # モーダル非表示
               Common.hideModalView()
               d = JSON.parse(data.responseText)
               @imagePath = d.image_url
               @saveObj()
-              _makeImageObjectIfNeed.call(@, =>
-                @reDraw()
-              )
+              @reDraw()
             )
             _initModalEvent.call(@, modalEmt)
             if callback?
@@ -193,39 +172,7 @@ class PreloadItemImage extends ItemBase
       return {width: @itemSize.w, height: @_image.naturalHeight * @itemSize.w / @_image.naturalWidth}
 
   _initModalEvent = (emt) ->
-    $(emt).find(".#{@constructor.Key.SELECT_FILE}:first").off().on('change', (e) =>
-      target = e.target
-      if target.value && target.value.length > 0
-        # 選択時
-        # URL入力を無効
-        el = $(emt).find(".#{@constructor.Key.URL}:first")
-        el.attr('disabled', true)
-        el.css('backgroundColor', 'gray')
-        del = $(emt).find(".#{@constructor.Key.SELECT_FILE_DELETE}:first")
-        del.off('click').on('click', ->
-          $(target).val('')
-          $(target).trigger('change')
-        )
-        del.show()
-      else
-        # 未選択
-        # URL入力を有効
-        el = $(emt).find(".#{@constructor.Key.URL}:first")
-        el.removeAttr('disabled')
-        el.css('backgroundColor', 'white')
-        $(emt).find(".#{@constructor.Key.SELECT_FILE_DELETE}:first").hide()
-    )
-    $(emt).find(".#{@constructor.Key.URL}:first").off().on('change', (e) =>
-      target = e.target
-      if $(target).val().length > 0
-        # 入力時
-        # ファイル選択を無効
-        $(emt).find(".#{@constructor.Key.SELECT_FILE}:first").attr('disabled', true)
-      else
-        # 未入力時
-        # ファイル選択を有効
-        $(emt).find(".#{@constructor.Key.SELECT_FILE}:first").removeAttr('disabled')
-    )
+    @initModifiableSelectFile(emt)
 
 Common.setClassToMap(false, PreloadItemImage.ITEM_ACCESS_TOKEN, PreloadItemImage)
 

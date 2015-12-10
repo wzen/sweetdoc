@@ -176,8 +176,12 @@ WorkTableCommonInclude =
         @updatePositionAndItemSize(itemSize)
       )
 
+      # デザインコンフィグ
       if @constructor.actionProperties.designConfig? && @constructor.actionProperties.designConfig
         @setupDesignToolOptionMenu()
+
+      # 変数編集コンフィグ
+      @settingModifiableChangeEvent()
     )
 
   # デザインスライダーの作成
@@ -322,7 +326,8 @@ WorkTableCommonInclude =
     , 500)
 
   # 変数編集イベント設定
-  settingModifiableChangeEvent: (designConfigRoot) ->
+  settingModifiableChangeEvent: ->
+    designConfigRoot = $('#' + @getDesignConfigId())
     if @constructor.actionProperties.modifiables?
       for varName, value of @constructor.actionProperties.modifiables
         if value.type == Constant.ItemDesignOptionType.NUMBER
@@ -391,8 +396,50 @@ WorkTableCommonInclude =
   # @param [String] varName 変数名
   settingModifiableSelectFile: (configRoot, varName) ->
     form = $("form.item_image_form_#{varName}", configRoot)
+    @initModifiableSelectFile(form)
     form.off().on('ajax:complete', (e, data, status, error) =>
       d = JSON.parse(data.responseText)
       @[varName] = d.image_url
+      @saveObj()
+      @applyDesignChange()
     )
+
+  # 変数編集ファイルアップロードのイベント初期化
+  initModifiableSelectFile: (emt) ->
+    $(emt).find(".#{@constructor.ImageKey.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+    $(emt).find(".#{@constructor.ImageKey.ITEM_OBJ_ID}").val(@id)
+    $(emt).find(".#{@constructor.ImageKey.SELECT_FILE}:first").off().on('change', (e) =>
+      target = e.target
+      if target.value && target.value.length > 0
+        # 選択時
+        # URL入力を無効
+        el = $(emt).find(".#{@constructor.ImageKey.URL}:first")
+        el.attr('disabled', true)
+        el.css('backgroundColor', 'gray')
+        del = $(emt).find(".#{@constructor.ImageKey.SELECT_FILE_DELETE}:first")
+        del.off('click').on('click', ->
+          $(target).val('')
+          $(target).trigger('change')
+        )
+        del.show()
+      else
+        # 未選択
+        # URL入力を有効
+        el = $(emt).find(".#{@constructor.ImageKey.URL}:first")
+        el.removeAttr('disabled')
+        el.css('backgroundColor', 'white')
+        $(emt).find(".#{@constructor.ImageKey.SELECT_FILE_DELETE}:first").hide()
+    )
+    $(emt).find(".#{@constructor.ImageKey.URL}:first").off().on('change', (e) =>
+      target = e.target
+      if $(target).val().length > 0
+        # 入力時
+        # ファイル選択を無効
+        $(emt).find(".#{@constructor.ImageKey.SELECT_FILE}:first").attr('disabled', true)
+      else
+        # 未入力時
+        # ファイル選択を有効
+        $(emt).find(".#{@constructor.ImageKey.SELECT_FILE}:first").removeAttr('disabled')
+    )
+
 

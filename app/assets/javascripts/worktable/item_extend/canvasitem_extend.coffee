@@ -102,9 +102,6 @@ WorkTableCanvasItemExtend =
       self.applyGradientStepChange(e)
     )
 
-    # 変数編集イベント設定
-    @settingModifiableChangeEvent(designConfigRoot)
-
   # デザイン変更を反映
   applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->
     @applyDesignChange(doStyleSave)

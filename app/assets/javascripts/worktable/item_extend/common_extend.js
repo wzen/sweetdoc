@@ -206,8 +206,9 @@ WorkTableCommonInclude = {
           return _this.updatePositionAndItemSize(itemSize);
         });
         if ((_this.constructor.actionProperties.designConfig != null) && _this.constructor.actionProperties.designConfig) {
-          return _this.setupDesignToolOptionMenu();
+          _this.setupDesignToolOptionMenu();
         }
+        return _this.settingModifiableChangeEvent();
       };
     })(this));
   },
@@ -371,8 +372,9 @@ WorkTableCommonInclude = {
       };
     })(this), 500);
   },
-  settingModifiableChangeEvent: function(designConfigRoot) {
-    var ref, results, value, varName;
+  settingModifiableChangeEvent: function() {
+    var designConfigRoot, ref, results, value, varName;
+    designConfigRoot = $('#' + this.getDesignConfigId());
     if (this.constructor.actionProperties.modifiables != null) {
       ref = this.constructor.actionProperties.modifiables;
       results = [];
@@ -454,11 +456,51 @@ WorkTableCommonInclude = {
   settingModifiableSelectFile: function(configRoot, varName) {
     var form;
     form = $("form.item_image_form_" + varName, configRoot);
+    this.initModifiableSelectFile(form);
     return form.off().on('ajax:complete', (function(_this) {
       return function(e, data, status, error) {
         var d;
         d = JSON.parse(data.responseText);
-        return _this[varName] = d.image_url;
+        _this[varName] = d.image_url;
+        _this.saveObj();
+        return _this.applyDesignChange();
+      };
+    })(this));
+  },
+  initModifiableSelectFile: function(emt) {
+    $(emt).find("." + this.constructor.ImageKey.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+    $(emt).find("." + this.constructor.ImageKey.ITEM_OBJ_ID).val(this.id);
+    $(emt).find("." + this.constructor.ImageKey.SELECT_FILE + ":first").off().on('change', (function(_this) {
+      return function(e) {
+        var del, el, target;
+        target = e.target;
+        if (target.value && target.value.length > 0) {
+          el = $(emt).find("." + _this.constructor.ImageKey.URL + ":first");
+          el.attr('disabled', true);
+          el.css('backgroundColor', 'gray');
+          del = $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE_DELETE + ":first");
+          del.off('click').on('click', function() {
+            $(target).val('');
+            return $(target).trigger('change');
+          });
+          return del.show();
+        } else {
+          el = $(emt).find("." + _this.constructor.ImageKey.URL + ":first");
+          el.removeAttr('disabled');
+          el.css('backgroundColor', 'white');
+          return $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE_DELETE + ":first").hide();
+        }
+      };
+    })(this));
+    return $(emt).find("." + this.constructor.ImageKey.URL + ":first").off().on('change', (function(_this) {
+      return function(e) {
+        var target;
+        target = e.target;
+        if ($(target).val().length > 0) {
+          return $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE + ":first").attr('disabled', true);
+        } else {
+          return $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE + ":first").removeAttr('disabled');
+        }
       };
     })(this));
   }

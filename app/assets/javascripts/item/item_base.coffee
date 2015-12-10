@@ -24,6 +24,15 @@ class ItemBase extends ItemEventBase
       @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
       @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
 
+    class @ImageKey
+      @PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID
+      @ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID
+      @EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID
+      @SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE
+      @URL = constant.PreloadItemImage.Key.URL
+      @SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE
+
+
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->

@@ -93,7 +93,7 @@ WorkTableCssItemExtend = {
     })(this));
     btnGradientStep = $(".design_gradient_step", designConfigRoot);
     btnGradientStep.off('keyup mouseup');
-    btnGradientStep.on('keyup mouseup', (function(_this) {
+    return btnGradientStep.on('keyup mouseup', (function(_this) {
       return function(e) {
         var i, j, stepValue;
         stepValue = parseInt($(e.currentTarget).val());
@@ -122,7 +122,6 @@ WorkTableCssItemExtend = {
         return _this.saveDesign();
       };
     })(this));
-    return this.settingModifiableChangeEvent(designConfigRoot);
   },
   applyDesignStyleChange: function(designKeyName, value, doStyleSave) {
     var cssCodeElement;

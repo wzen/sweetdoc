@@ -38,6 +38,24 @@ ItemBase = (function(superClass) {
       return ActionPropertiesKey;
 
     })();
+    ItemBase.ImageKey = (function() {
+      function ImageKey() {}
+
+      ImageKey.PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID;
+
+      ImageKey.ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID;
+
+      ImageKey.EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID;
+
+      ImageKey.SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE;
+
+      ImageKey.URL = constant.PreloadItemImage.Key.URL;
+
+      ImageKey.SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE;
+
+      return ImageKey;
+
+    })();
   }
 
   function ItemBase(cood) {

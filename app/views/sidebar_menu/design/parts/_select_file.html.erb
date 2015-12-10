@@ -1,7 +1,7 @@
 <%
    var_name = '' if var_name.nil?
 %>
-<%= form_tag 'item_image/create_img.json', :remote => true, :html => { :class => "form-horizontal item_image_form_#{var_name} item_image_form", :multipart => true},:format => :json,:authenticity_token => true  do |f| %>
+<%= form_tag 'item_image/create_img.json', remote: true, class: "form-horizontal item_image_form_#{var_name} item_image_form", multipart: true, format: :json, authenticity_token: true  do |f| %>
     <input type="hidden" name="<%= Const::PreloadItemImage::Key::PROJECT_ID %>" class="<%= Const::PreloadItemImage::Key::PROJECT_ID %>">
     <input type="hidden" name="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>" class="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>">
     <input type="hidden" name="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>" class="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>">
