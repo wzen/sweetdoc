@@ -577,20 +577,29 @@ EventConfig = (function() {
   };
 
   EventConfig.updateSelectItemMenu = function() {
-    var itemOptgroupClassName, items, selectOptions, teItemSelect, teItemSelects;
+    var ap, filteredItems, id, item, itemOptgroupClassName, itemToken, items, k, name, obj, selectOptions, teItemSelect, teItemSelects, v;
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
     selectOptions = '';
-    items = $("#" + PageValue.Key.IS_ROOT + " ." + PageValue.Key.INSTANCE_PREFIX + " ." + (PageValue.Key.pageRoot()));
-    items.children().each(function() {
-      var id, itemToken, name;
-      id = $(this).find('input.id').val();
-      name = $(this).find('input.name').val();
-      itemToken = $(this).find('input.itemToken').val();
-      if (itemToken != null) {
-        return selectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + itemToken + "'>\n  " + name + "\n</option>";
+    items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
+    filteredItems = {};
+    for (k in items) {
+      v = items[k];
+      obj = window.instanceMap[v.value.id];
+      ap = obj.constructor.actionProperties;
+      if ((ap.isFixed == null) || !ap.isFixed) {
+        filteredItems[k] = v;
       }
-    });
+    }
+    for (k in filteredItems) {
+      item = filteredItems[k];
+      id = item.value.id;
+      name = item.value.name;
+      itemToken = item.value.itemToken;
+      if (itemToken != null) {
+        selectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + itemToken + "'>\n  " + name + "\n</option>";
+      }
+    }
     itemOptgroupClassName = 'item_optgroup_class_name';
     selectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + selectOptions + '</optgroup>';
     return teItemSelects.each(function() {

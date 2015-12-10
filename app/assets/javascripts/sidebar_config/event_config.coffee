@@ -546,18 +546,26 @@ class EventConfig
     teItemSelects = $('#event-config .te_item_select')
     teItemSelect = teItemSelects[0]
     selectOptions = ''
-    items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pageRoot()}")
-    items.children().each( ->
-      id = $(@).find('input.id').val()
-      name = $(@).find('input.name').val()
-      itemToken = $(@).find('input.itemToken').val()
+    #items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pageRoot()}")
+    items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
+    filteredItems = {}
+    for k, v of items
+      # 選択項目から除外する条件
+      obj = window.instanceMap[v.value.id]
+      ap = obj.constructor.actionProperties
+      if !ap.isFixed? || !ap.isFixed
+        filteredItems[k] = v
+    for k, item of filteredItems
+      id = item.value.id
+      name = item.value.name
+      itemToken = item.value.itemToken
       if itemToken?
         selectOptions += """
             <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{itemToken}'>
               #{name}
             </option>
           """
-    )
+
     itemOptgroupClassName = 'item_optgroup_class_name'
     selectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + selectOptions + '</optgroup>'
     # メニューを入れ替え
