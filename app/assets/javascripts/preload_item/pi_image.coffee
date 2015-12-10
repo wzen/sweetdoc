@@ -95,6 +95,10 @@ class PreloadItemImage extends ItemBase
     @getJQueryElement().css({width: w, height: h})
     @itemSize.w = parseInt(w)
     @itemSize.h = parseInt(h)
+    size = _sizeOfKeepAspect.call(@)
+    img = @getJQueryElement().find('img')
+    img.width(size.width)
+    img.height(size.height)
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
@@ -116,13 +120,13 @@ class PreloadItemImage extends ItemBase
           width = @itemSize.w
           height = @itemSize.h
         contents = """
-          <img src='#{@imagePath}' width='#{width}' height='#{height}' />
+          <img class='put_center' src='#{@imagePath}' width='#{width}' height='#{height}' />
         """
         callback(Common.wrapCreateItemElement(@, $(contents)))
       else
         # 画像未設定時表示
         contents = """
-          <div class='no_image'><div class='center_image'></div></div>
+          <div class='no_image'><div class='center_image put_center'></div></div>
         """
         if showModal
           # 画像アップロードモーダル表示

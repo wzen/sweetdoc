@@ -127,12 +127,17 @@ PreloadItemImage = (function(superClass) {
   };
 
   PreloadItemImage.prototype.updateItemSize = function(w, h) {
+    var img, size;
     this.getJQueryElement().css({
       width: w,
       height: h
     });
     this.itemSize.w = parseInt(w);
-    return this.itemSize.h = parseInt(h);
+    this.itemSize.h = parseInt(h);
+    size = _sizeOfKeepAspect.call(this);
+    img = this.getJQueryElement().find('img');
+    img.width(size.width);
+    return img.height(size.height);
   };
 
   PreloadItemImage.prototype.originalItemElementSize = function() {
@@ -156,10 +161,10 @@ PreloadItemImage = (function(superClass) {
             width = _this.itemSize.w;
             height = _this.itemSize.h;
           }
-          contents = "<img src='" + _this.imagePath + "' width='" + width + "' height='" + height + "' />";
+          contents = "<img class='put_center' src='" + _this.imagePath + "' width='" + width + "' height='" + height + "' />";
           return callback(Common.wrapCreateItemElement(_this, $(contents)));
         } else {
-          contents = "<div class='no_image'><div class='center_image'></div></div>";
+          contents = "<div class='no_image'><div class='center_image put_center'></div></div>";
           if (showModal) {
             Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, function(modalEmt, params, callback) {
               if (callback == null) {
