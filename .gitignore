@@ -16,6 +16,7 @@
 /tmp
 /public/user_code
 /public/item_gallery
+/public/uploads
 .idea/dataSources.local.xml
 .idea/watcherTasks.xml
 .idea/workspace.xml

@@ -4,7 +4,7 @@ var PreloadItemImage,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemImage = (function(superClass) {
-  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _sizeOfKeepAspect, constant;
+  var UPLOAD_FORM_HEIGHT, UPLOAD_FORM_WIDTH, _initModalEvent, _sizeOfKeepAspect, constant;
 
   extend(PreloadItemImage, superClass);
 
@@ -19,7 +19,11 @@ PreloadItemImage = (function(superClass) {
 
       Key.EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID;
 
+      Key.SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE;
+
       Key.URL = constant.PreloadItemImage.Key.URL;
+
+      Key.SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE;
 
       return Key;
 
@@ -101,7 +105,17 @@ PreloadItemImage = (function(superClass) {
     this.zindex = zindex;
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
-    return this.reDraw();
+    return this.createItemElement(true, (function(_this) {
+      return function(createdElement) {
+        $(createdElement).appendTo(window.scrollInside);
+        if (!show) {
+          _this.getJQueryElement().css('opacity', 0);
+        }
+        if (_this.setupDragAndResizeEvents != null) {
+          return _this.setupDragAndResizeEvents();
+        }
+      };
+    })(this));
   };
 
   PreloadItemImage.prototype.reDraw = function(show) {
@@ -110,7 +124,7 @@ PreloadItemImage = (function(superClass) {
     }
     PreloadItemImage.__super__.reDraw.call(this, show);
     this.clearDraw();
-    return this.createItemElement((function(_this) {
+    return this.createItemElement(false, (function(_this) {
       return function(createdElement) {
         $(createdElement).appendTo(window.scrollInside);
         if (!show) {
@@ -144,7 +158,7 @@ PreloadItemImage = (function(superClass) {
     return obj.itemSize;
   };
 
-  PreloadItemImage.prototype.createItemElement = function(callback) {
+  PreloadItemImage.prototype.createItemElement = function(showModal, callback) {
     var contents, height, size, width;
     if (this._image != null) {
       if (this.isKeepAspect) {
@@ -159,20 +173,34 @@ PreloadItemImage = (function(superClass) {
       return callback(Common.wrapCreateItemElement(this, $(contents)));
     } else {
       contents = "<div class='no_image'><div class='center_image'></div></div>";
-      callback(Common.wrapCreateItemElement(this, $(contents)));
-      return Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (function(_this) {
-        return function(modalEmt, params, callback) {
-          if (callback == null) {
-            callback = null;
-          }
-          $(modalEmt).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
-          $(modalEmt).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
-          return $(modalEmt).find('form').off().on('ajax:complete', function(e, data, status, error) {
-            console.log(data);
-            return console.log(data.responseText);
-          });
-        };
-      })(this));
+      if (showModal) {
+        Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (function(_this) {
+          return function(modalEmt, params, callback) {
+            if (callback == null) {
+              callback = null;
+            }
+            $(modalEmt).find("." + _this.constructor.Key.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+            $(modalEmt).find("." + _this.constructor.Key.ITEM_OBJ_ID).val(_this.id);
+            $(modalEmt).find('form').off().on('ajax:complete', function(e, data, status, error) {
+              var d;
+              Common.hideModalView();
+              d = JSON.parse(data.responseText);
+              _this.imagePath = d.image_url;
+              _this.isKeepAspect = true;
+              _this._image = new Image();
+              _this._image.src = _this.imagePath;
+              return _this._image.onload = function() {
+                return _this.reDraw();
+              };
+            });
+            _initModalEvent.call(_this, modalEmt);
+            if (callback != null) {
+              return callback();
+            }
+          };
+        })(this));
+      }
+      return callback(Common.wrapCreateItemElement(this, $(contents)));
     }
   };
 
@@ -188,6 +216,42 @@ PreloadItemImage = (function(superClass) {
         height: this._image.naturalHeight * this.itemSize.w / this._image.naturalWidth
       };
     }
+  };
+
+  _initModalEvent = function(emt) {
+    $(emt).find("." + this.constructor.Key.SELECT_FILE + ":first").off().on('change', (function(_this) {
+      return function(e) {
+        var del, el, target;
+        target = e.target;
+        if (target.value && target.value.length > 0) {
+          el = $(emt).find("." + _this.constructor.Key.URL + ":first");
+          el.attr('disabled', true);
+          el.css('backgroundColor', 'gray');
+          del = $(emt).find("." + _this.constructor.Key.SELECT_FILE_DELETE + ":first");
+          del.off('click').on('click', function() {
+            $(target).val('');
+            return $(target).trigger('change');
+          });
+          return del.show();
+        } else {
+          el = $(emt).find("." + _this.constructor.Key.URL + ":first");
+          el.removeAttr('disabled');
+          el.css('backgroundColor', 'white');
+          return $(emt).find("." + _this.constructor.Key.SELECT_FILE_DELETE + ":first").hide();
+        }
+      };
+    })(this));
+    return $(emt).find("." + this.constructor.Key.URL + ":first").off().on('change', (function(_this) {
+      return function(e) {
+        var target;
+        target = e.target;
+        if ($(target).val().length > 0) {
+          return $(emt).find("." + _this.constructor.Key.SELECT_FILE + ":first").attr('disabled', true);
+        } else {
+          return $(emt).find("." + _this.constructor.Key.SELECT_FILE + ":first").removeAttr('disabled');
+        }
+      };
+    })(this));
   };
 
   return PreloadItemImage;

@@ -85,7 +85,7 @@ Rails.application.routes.draw do
   post 'config_menu/preload_image_path_select_config'
 
   # ItemImage
-  post 'item_image/create'
+  post 'item_image/create_img'
 
   # Document
   get 'document/terms'

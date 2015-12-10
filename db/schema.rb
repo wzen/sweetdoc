@@ -260,8 +260,8 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.integer  "gallery_id"
     t.string   "item_obj_id",         null: false
     t.string   "event_dist_id"
-    t.text     "file_path",           null: false
-    t.boolean  "is_upload_localfile", null: false
+    t.string   "file_path"
+    t.text     "link_url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

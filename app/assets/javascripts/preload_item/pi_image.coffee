@@ -5,7 +5,9 @@ class PreloadItemImage extends ItemBase
       @PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID
       @ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID
       @EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID
+      @SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE
       @URL = constant.PreloadItemImage.Key.URL
+      @SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE
 
   UPLOAD_FORM_WIDTH = 350
   UPLOAD_FORM_HEIGHT = 200
@@ -65,18 +67,24 @@ class PreloadItemImage extends ItemBase
     # スクロールビュー分のxとyを追加
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
-    @reDraw()
+    @createItemElement(true, (createdElement) =>
+      $(createdElement).appendTo(window.scrollInside)
+      if !show
+        @getJQueryElement().css('opacity', 0)
+      if @setupDragAndResizeEvents?
+        # ドラッグ & リサイズイベント設定
+        @setupDragAndResizeEvents()
+    )
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   reDraw: (show = true)->
     super(show)
     @clearDraw()
-    @createItemElement((createdElement) =>
+    @createItemElement(false, (createdElement) =>
       $(createdElement).appendTo(window.scrollInside)
       if !show
         @getJQueryElement().css('opacity', 0)
-
       if @setupDragAndResizeEvents?
         # ドラッグ & リサイズイベント設定
         @setupDragAndResizeEvents()
@@ -99,10 +107,9 @@ class PreloadItemImage extends ItemBase
     $.extend(true, obj, diff)
     return obj.itemSize
 
-
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
-  createItemElement: (callback) ->
+  createItemElement: (showModal, callback) ->
     if @_image?
       if @isKeepAspect
         size = _sizeOfKeepAspect.call(@)
@@ -120,16 +127,28 @@ class PreloadItemImage extends ItemBase
       contents = """
         <div class='no_image'><div class='center_image'></div></div>
       """
-      callback(Common.wrapCreateItemElement(@, $(contents)))
-      # 画像アップロードモーダル表示
-      Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
-        $(modalEmt).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
-        $(modalEmt).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
-        $(modalEmt).find('form').off().on('ajax:complete', (e, data, status, error) ->
-          console.log data
-          console.log data.responseText
+      if showModal
+        # 画像アップロードモーダル表示
+        Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
+          $(modalEmt).find(".#{@constructor.Key.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+          $(modalEmt).find(".#{@constructor.Key.ITEM_OBJ_ID}").val(@id)
+          $(modalEmt).find('form').off().on('ajax:complete', (e, data, status, error) =>
+            # モーダル非表示
+            Common.hideModalView()
+            d = JSON.parse(data.responseText)
+            @imagePath = d.image_url
+            # Aspect比はデフォルトtrue
+            @isKeepAspect = true
+            @_image = new Image()
+            @_image.src = @imagePath
+            @_image.onload = =>
+              @reDraw()
+          )
+          _initModalEvent.call(@, modalEmt)
+          if callback?
+            callback()
         )
-      )
+      callback(Common.wrapCreateItemElement(@, $(contents)))
 
   _sizeOfKeepAspect = ->
     if @itemSize.w / @itemSize.h > @_image.naturalWidth / @_image.naturalHeight
@@ -138,6 +157,41 @@ class PreloadItemImage extends ItemBase
     else
       # 幅に合わせる
       return {width: @itemSize.w, height: @_image.naturalHeight * @itemSize.w / @_image.naturalWidth}
+
+  _initModalEvent = (emt) ->
+    $(emt).find(".#{@constructor.Key.SELECT_FILE}:first").off().on('change', (e) =>
+      target = e.target
+      if target.value && target.value.length > 0
+        # 選択時
+        # URL入力を無効
+        el = $(emt).find(".#{@constructor.Key.URL}:first")
+        el.attr('disabled', true)
+        el.css('backgroundColor', 'gray')
+        del = $(emt).find(".#{@constructor.Key.SELECT_FILE_DELETE}:first")
+        del.off('click').on('click', ->
+          $(target).val('')
+          $(target).trigger('change')
+        )
+        del.show()
+      else
+        # 未選択
+        # URL入力を有効
+        el = $(emt).find(".#{@constructor.Key.URL}:first")
+        el.removeAttr('disabled')
+        el.css('backgroundColor', 'white')
+        $(emt).find(".#{@constructor.Key.SELECT_FILE_DELETE}:first").hide()
+    )
+    $(emt).find(".#{@constructor.Key.URL}:first").off().on('change', (e) =>
+      target = e.target
+      if $(target).val().length > 0
+        # 入力時
+        # ファイル選択を無効
+        $(emt).find(".#{@constructor.Key.SELECT_FILE}:first").attr('disabled', true)
+      else
+        # 未入力時
+        # ファイル選択を有効
+        $(emt).find(".#{@constructor.Key.SELECT_FILE}:first").removeAttr('disabled')
+    )
 
 Common.setClassToMap(false, PreloadItemImage.ITEM_ACCESS_TOKEN, PreloadItemImage)
 

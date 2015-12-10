@@ -442,6 +442,8 @@ class Const
       PROJECT_ID = 'pid'
       ITEM_OBJ_ID = 'iobjid'
       EVENT_DIST_ID = 'edistid'
+      SELECT_FILE = 'sef'
+      SELECT_FILE_DELETE = 'sef_del'
       URL = 'url'
     end
   end

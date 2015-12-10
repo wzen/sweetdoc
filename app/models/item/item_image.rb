@@ -7,7 +7,7 @@ class ItemImage < ActiveRecord::Base
     begin
       ActiveRecord::Base.transaction do
         if file_path.blank? && url.blank?
-          return nil
+          return false, I18n.t('message.database.item_state.save.error'), nil
         end
         if file_path.present?
           # ローカルファイルパスを優先して登録
@@ -16,16 +16,23 @@ class ItemImage < ActiveRecord::Base
 
         upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
         if upm.blank?
-          return nil
+          return false, I18n.t('message.database.item_state.save.error'), nil
         end
         image = self.new
         image.user_project_map_id = upm.id
         image.item_obj_id = item_obj_id
         image.event_dist_id = event_dist_id
         image.file_path = file_path
-        image.url = url
+        image.link_url = url
         image.save!
-        return true, I18n.t('message.database.item_state.save.success'), image.url
+
+        ret_url = nil
+        if file_path.present?
+          ret_url = image.file_path.url
+        else
+          ret_url = url
+        end
+        return true, I18n.t('message.database.item_state.save.success'), ret_url
       end
     rescue => e
       # 更新失敗

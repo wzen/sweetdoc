@@ -6,7 +6,7 @@ class CreateItemImages < ActiveRecord::Migration
       t.string :item_obj_id, null: false
       t.string :event_dist_id
       t.string :file_path
-      t.text :url
+      t.text :link_url
 
       t.timestamps
     end
