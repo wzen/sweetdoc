@@ -23,8 +23,9 @@ class EventAction
     # フォークをMasterに設定
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum())
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
-    @thisPage().willPage()
-    @thisPage().start()
+    @thisPage().willPage( =>
+      @thisPage().start()
+    )
 
   # 中断
   shutdown: ->
@@ -67,8 +68,9 @@ class EventAction
     else
       # 動作させている場合はページのアクションを元に戻す
       # ページ前処理
-      @thisPage().willPage()
-      @thisPage().start()
+      @thisPage().willPage( =>
+        @thisPage().start()
+      )
 
   # ページ変更処理
   # @param [Integer] beforePageIndex 変更前ページIndex
@@ -105,35 +107,40 @@ class EventAction
         RunCommon.initMainContainer()
         PageValue.adjustInstanceAndEventOnPage()
 
+        _after = ->
+          @thisPage().start()
+          # イベント反応無効
+          @thisPage().thisChapter().disableEventHandle()
+          # ページングアニメーション
+          pageFlip.startRender( =>
+            # 隠したビューを非表示にする
+            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+            section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+            section.hide()
+            # 隠したビューのアイテムを削除
+            Common.removeAllItem(beforePageNum)
+            # CSS削除
+            $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
+            # イベント反応有効
+            @thisPage().thisChapter().enableEventHandle()
+            # コールバック
+            if callback?
+              callback()
+          )
+
         # ページ前処理
         if beforePageNum > afterPageNum
           # 前ページ移動 前処理
           @thisPage().willPageFromRewind()
+          _after.call(@)
         else
           # フォークをMasterに設定
           RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum)
           RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM)
           # 後ページ移動 前処理
-          @thisPage().willPage()
-        @thisPage().start()
-        # イベント反応無効
-        @thisPage().thisChapter().disableEventHandle()
-        # ページングアニメーション
-        pageFlip.startRender( =>
-          # 隠したビューを非表示にする
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-          section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-          section.hide()
-          # 隠したビューのアイテムを削除
-          Common.removeAllItem(beforePageNum)
-          # CSS削除
-          $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
-          # イベント反応有効
-          @thisPage().thisChapter().enableEventHandle()
-          # コールバック
-          if callback?
-            callback()
-        )
+          @thisPage().willPage( =>
+            _after.call(@)
+          )
       )
     )
 

@@ -41,17 +41,22 @@ class CssItemBase extends ItemBase
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
-  reDraw: (show = true)->
-    super(show)
-    @clearDraw()
-    @createItemElement((createdElement) =>
-      $(createdElement).appendTo(window.scrollInside)
-      if !show
-        @getJQueryElement().css('opacity', 0)
+  # @param [Function] callback コールバック
+  reDraw: (show = true, callback = null) ->
+    super(show, =>
+      @clearDraw()
+      @createItemElement((createdElement) =>
+        $(createdElement).appendTo(window.scrollInside)
+        if !show
+          @getJQueryElement().css('opacity', 0)
 
-      if @setupDragAndResizeEvents?
-        # ドラッグ & リサイズイベント設定
-        @setupDragAndResizeEvents()
+        if @setupDragAndResizeEvents?
+          # ドラッグ & リサイズイベント設定
+          @setupDragAndResizeEvents()
+
+        if callback?
+          callback()
+      )
     )
 
   # 描画削除

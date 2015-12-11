@@ -100,21 +100,28 @@ PreloadItemImage = (function(superClass) {
     })(this));
   };
 
-  PreloadItemImage.prototype.reDraw = function(show) {
+  PreloadItemImage.prototype.reDraw = function(show, callback) {
     if (show == null) {
       show = true;
     }
-    PreloadItemImage.__super__.reDraw.call(this, show);
-    this.clearDraw();
-    return this.createItemElement(false, (function(_this) {
-      return function(createdElement) {
-        $(createdElement).appendTo(window.scrollInside);
-        if (!show) {
-          _this.getJQueryElement().css('opacity', 0);
-        }
-        if (_this.setupDragAndResizeEvents != null) {
-          return _this.setupDragAndResizeEvents();
-        }
+    if (callback == null) {
+      callback = null;
+    }
+    return PreloadItemImage.__super__.reDraw.call(this, show, (function(_this) {
+      return function() {
+        _this.clearDraw();
+        return _this.createItemElement(false, function(createdElement) {
+          $(createdElement).appendTo(window.scrollInside);
+          if (!show) {
+            _this.getJQueryElement().css('opacity', 0);
+          }
+          if (_this.setupDragAndResizeEvents != null) {
+            _this.setupDragAndResizeEvents();
+          }
+          if (callback != null) {
+            return callback();
+          }
+        });
       };
     })(this));
   };

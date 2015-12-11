@@ -261,13 +261,22 @@ Page = (function() {
     });
   };
 
-  Page.prototype.willPage = function() {
+  Page.prototype.willPage = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     this.initChapterEvent();
-    this.initFocus();
     this.resetAllChapters();
-    this.initItemState();
-    RunCommon.setChapterMax(this.getForkChapterList().length);
-    return LocalStorage.saveAllPageValues();
+    return this.initItemState((function(_this) {
+      return function() {
+        _this.initFocus(true);
+        RunCommon.setChapterMax(_this.getForkChapterList().length);
+        LocalStorage.saveAllPageValues();
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   Page.prototype.willPageFromRewind = function(beforeScrollWindowSize) {
@@ -351,8 +360,11 @@ Page = (function() {
     }
   };
 
-  Page.prototype.initItemState = function() {
+  Page.prototype.initItemState = function(callback) {
     var instance, instances, key, obj, results, value;
+    if (callback == null) {
+      callback = null;
+    }
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     results = [];
     for (key in instances) {
@@ -360,7 +372,19 @@ Page = (function() {
       value = instance.value;
       obj = Common.getInstanceFromMap(false, value.id, value.itemToken);
       if (obj.visible) {
-        results.push(obj.reDraw());
+        results.push(obj.reDraw(true, (function(_this) {
+          return function() {
+            if (obj.firstFocus) {
+              window.disabledEventHandler = true;
+              Common.focusToTarget(obj.getJQueryElement(), function() {
+                return window.disabledEventHandler = false;
+              }, true);
+            }
+            if (callback != null) {
+              return callback();
+            }
+          };
+        })(this)));
       } else {
         results.push(void 0);
       }

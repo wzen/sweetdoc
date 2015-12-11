@@ -67,6 +67,7 @@ ItemBase = (function(superClass) {
     this.itemToken = this.constructor.ITEM_ACCESS_TOKEN;
     this.name = null;
     this.visible = false;
+    this.firstFocus = false;
     this._drawingSurfaceImageData = null;
     if (cood !== null) {
       this._mousedownCood = {
@@ -104,9 +105,15 @@ ItemBase = (function(superClass) {
     return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
 
-  ItemBase.prototype.reDraw = function(show) {
+  ItemBase.prototype.reDraw = function(show, callback) {
     if (show == null) {
       show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    if (callback != null) {
+      return callback();
     }
   };
 

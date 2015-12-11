@@ -20,8 +20,11 @@ EventAction = (function() {
     RunCommon.setPageNum(this.thisPageNum());
     RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, window.eventAction.thisPageNum());
     RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
-    this.thisPage().willPage();
-    return this.thisPage().start();
+    return this.thisPage().willPage((function(_this) {
+      return function() {
+        return _this.thisPage().start();
+      };
+    })(this));
   };
 
   EventAction.prototype.shutdown = function() {
@@ -68,8 +71,11 @@ EventAction = (function() {
       PageValue.setPageNum(this.thisPageNum());
       return this.changePaging(beforePageIndex, this.pageIndex, callback);
     } else {
-      this.thisPage().willPage();
-      return this.thisPage().start();
+      return this.thisPage().willPage((function(_this) {
+        return function() {
+          return _this.thisPage().start();
+        };
+      })(this));
     }
   };
 
@@ -88,7 +94,7 @@ EventAction = (function() {
     return RunCommon.loadPagingPageValue(afterPageNum, doLoadFootprint, (function(_this) {
       return function() {
         return Common.loadJsFromInstancePageValue(function() {
-          var forkEventPageValueList, i, j, pageFlip, ref;
+          var _after, forkEventPageValueList, i, j, pageFlip, ref;
           if (_this.thisPage() === null) {
             forkEventPageValueList = {};
             for (i = j = 0, ref = PageValue.getForkCount(); 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
@@ -105,27 +111,34 @@ EventAction = (function() {
           pageFlip = new PageFlip(beforePageNum, afterPageNum);
           RunCommon.initMainContainer();
           PageValue.adjustInstanceAndEventOnPage();
+          _after = function() {
+            this.thisPage().start();
+            this.thisPage().thisChapter().disableEventHandle();
+            return pageFlip.startRender((function(_this) {
+              return function() {
+                var className, section;
+                className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+                section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+                section.hide();
+                Common.removeAllItem(beforePageNum);
+                $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
+                _this.thisPage().thisChapter().enableEventHandle();
+                if (callback != null) {
+                  return callback();
+                }
+              };
+            })(this));
+          };
           if (beforePageNum > afterPageNum) {
             _this.thisPage().willPageFromRewind();
+            return _after.call(_this);
           } else {
             RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum);
             RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);
-            _this.thisPage().willPage();
+            return _this.thisPage().willPage(function() {
+              return _after.call(_this);
+            });
           }
-          _this.thisPage().start();
-          _this.thisPage().thisChapter().disableEventHandle();
-          return pageFlip.startRender(function() {
-            var className, section;
-            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-            section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-            section.hide();
-            Common.removeAllItem(beforePageNum);
-            $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
-            _this.thisPage().thisChapter().enableEventHandle();
-            if (callback != null) {
-              return callback();
-            }
-          });
         });
       };
     })(this));

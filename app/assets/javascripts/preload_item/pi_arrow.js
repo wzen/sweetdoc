@@ -143,38 +143,45 @@ PreloadItemArrow = (function(superClass) {
     return drawingContext.stroke();
   };
 
-  PreloadItemArrow.prototype.reDraw = function(show) {
-    var _after, canvas;
+  PreloadItemArrow.prototype.reDraw = function(show, callback) {
     if (show == null) {
       show = true;
     }
-    PreloadItemArrow.__super__.reDraw.call(this, show);
-    _after = function() {
-      var j, len, r, ref;
-      this.resetDrawPath();
-      if (show) {
-        ref = this.coodRegist;
-        for (j = 0, len = ref.length; j < len; j++) {
-          r = ref[j];
-          this.drawPath(r);
-        }
-        this.drawNewCanvas();
-      }
-      if (this.setupDragAndResizeEvents != null) {
-        return this.setupDragAndResizeEvents();
-      }
-    };
-    canvas = document.getElementById(this.canvasElementId());
-    if (canvas == null) {
-      return this.makeNewCanvas((function(_this) {
-        return function() {
-          return _after.call(_this);
-        };
-      })(this));
-    } else {
-      this.clearDraw();
-      return _after.call(this);
+    if (callback == null) {
+      callback = null;
     }
+    return PreloadItemArrow.__super__.reDraw.call(this, show, (function(_this) {
+      return function() {
+        var _after, canvas;
+        _after = function() {
+          var j, len, r, ref;
+          this.resetDrawPath();
+          if (show) {
+            ref = this.coodRegist;
+            for (j = 0, len = ref.length; j < len; j++) {
+              r = ref[j];
+              this.drawPath(r);
+            }
+            this.drawNewCanvas();
+          }
+          if (this.setupDragAndResizeEvents != null) {
+            this.setupDragAndResizeEvents();
+          }
+          if (callback != null) {
+            return callback();
+          }
+        };
+        canvas = document.getElementById(_this.canvasElementId());
+        if (canvas == null) {
+          return _this.makeNewCanvas(function() {
+            return _after.call(_this);
+          });
+        } else {
+          _this.clearDraw();
+          return _after.call(_this);
+        }
+      };
+    })(this));
   };
 
   PreloadItemArrow.prototype.resetDrawPath = function() {

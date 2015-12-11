@@ -245,19 +245,22 @@ class Page
     )
 
   # ページ前処理
-  willPage: ->
+  willPage: (callback = null)->
     # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
-    # フォーカス
-    @initFocus()
     # リセット
     @resetAllChapters()
     # アイテム状態初期化
-    @initItemState()
-    # チャプター最大値設定
-    RunCommon.setChapterMax(@getForkChapterList().length)
-    # キャッシュ保存
-    LocalStorage.saveAllPageValues()
+    @initItemState( =>
+      # フォーカス
+      @initFocus(true)
+      # チャプター最大値設定
+      RunCommon.setChapterMax(@getForkChapterList().length)
+      # キャッシュ保存
+      LocalStorage.saveAllPageValues()
+      if callback?
+        callback()
+    )
 
   # ページ戻し前処理
   willPageFromRewind: (beforeScrollWindowSize) ->
@@ -317,14 +320,23 @@ class Page
             flg = true
 
   # アイテム状態の初期化
-  initItemState: ->
+  initItemState: (callback = null) ->
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
     for key, instance of instances
       value = instance.value
       obj = Common.getInstanceFromMap(false, value.id, value.itemToken)
-      # 初期表示
       if obj.visible
-        obj.reDraw()
+        # 初期表示
+        obj.reDraw(true, =>
+          if obj.firstFocus
+            # 初期フォーカス
+            window.disabledEventHandler = true
+            Common.focusToTarget(obj.getJQueryElement(), ->
+              window.disabledEventHandler = false
+            , true)
+          if callback?
+            callback()
+        )
 
   # 全てのチャプターをリセット
   resetAllChapters: ->

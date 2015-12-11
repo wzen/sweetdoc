@@ -45,6 +45,8 @@ class ItemBase extends ItemEventBase
     @name = null
     # @property [String] visible 表示状態
     @visible = false
+    # @property [String] firstFocus 初期フォーカス
+    @firstFocus = false
     # @property [Object] _drawingSurfaceImageData 画面を保存する変数
     @_drawingSurfaceImageData = null
     if cood != null
@@ -90,9 +92,11 @@ class ItemBase extends ItemEventBase
 
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
-  # @abstract
   # @param [Boolean] show 要素作成後に表示するか
-  reDraw: (show = true) ->
+  # @param [Function] callback コールバック
+  reDraw: (show = true, callback = null) ->
+    if callback?
+      callback()
 
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用

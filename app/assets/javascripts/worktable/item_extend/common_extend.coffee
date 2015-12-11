@@ -157,13 +157,30 @@ WorkTableCommonInclude =
         @setItemPropToPageValue('name', @name)
       )
 
+      # アイテム初期フォーカス
+      if @firstFocus
+        $('.focus_at_launch', designConfigRoot).prop('checked', true)
+      else
+        $('.focus_at_launch', designConfigRoot).removeAttr('checked')
+      $('.focus_at_launch', designConfigRoot).off('change').on('change', (e) =>
+        @firstFocus = $(e.target).prop('checked')
+        @saveObj()
+      )
+
       # アイテム初期表示
       if @visible
         $('.visible_at_launch', designConfigRoot).prop('checked', true)
       else
         $('.visible_at_launch', designConfigRoot).removeAttr('checked')
+        $('.focus_at_launch', designConfigRoot).removeAttr('disabled')
       $('.visible_at_launch', designConfigRoot).off('change').on('change', (e) =>
         @visible = $(e.target).prop('checked')
+        if @visible
+          $('.focus_at_launch', designConfigRoot).removeAttr('disabled')
+        else
+          $('.focus_at_launch', designConfigRoot).removeAttr('checked')
+          $('.focus_at_launch', designConfigRoot).attr('disabled', true)
+        $('.focus_at_launch', designConfigRoot).trigger('change')
         @saveObj()
       )
 

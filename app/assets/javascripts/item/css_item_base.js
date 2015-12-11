@@ -44,21 +44,28 @@ CssItemBase = (function(superClass) {
 
   CssItemBase.jsLoaded = function(option) {};
 
-  CssItemBase.prototype.reDraw = function(show) {
+  CssItemBase.prototype.reDraw = function(show, callback) {
     if (show == null) {
       show = true;
     }
-    CssItemBase.__super__.reDraw.call(this, show);
-    this.clearDraw();
-    return this.createItemElement((function(_this) {
-      return function(createdElement) {
-        $(createdElement).appendTo(window.scrollInside);
-        if (!show) {
-          _this.getJQueryElement().css('opacity', 0);
-        }
-        if (_this.setupDragAndResizeEvents != null) {
-          return _this.setupDragAndResizeEvents();
-        }
+    if (callback == null) {
+      callback = null;
+    }
+    return CssItemBase.__super__.reDraw.call(this, show, (function(_this) {
+      return function() {
+        _this.clearDraw();
+        return _this.createItemElement(function(createdElement) {
+          $(createdElement).appendTo(window.scrollInside);
+          if (!show) {
+            _this.getJQueryElement().css('opacity', 0);
+          }
+          if (_this.setupDragAndResizeEvents != null) {
+            _this.setupDragAndResizeEvents();
+          }
+          if (callback != null) {
+            return callback();
+          }
+        });
       };
     })(this));
   };

@@ -144,11 +144,14 @@ PreloadItemButton = (function(superClass) {
     }
   };
 
-  PreloadItemButton.prototype.reDraw = function(show) {
+  PreloadItemButton.prototype.reDraw = function(show, callback) {
     if (show == null) {
       show = true;
     }
-    return PreloadItemButton.__super__.reDraw.call(this, show);
+    if (callback == null) {
+      callback = null;
+    }
+    return PreloadItemButton.__super__.reDraw.call(this, show, callback);
   };
 
   PreloadItemButton.prototype.updateEventBefore = function() {

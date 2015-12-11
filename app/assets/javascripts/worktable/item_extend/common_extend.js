@@ -187,13 +187,30 @@ WorkTableCommonInclude = {
           _this.name = $(_this).val();
           return _this.setItemPropToPageValue('name', _this.name);
         });
+        if (_this.firstFocus) {
+          $('.focus_at_launch', designConfigRoot).prop('checked', true);
+        } else {
+          $('.focus_at_launch', designConfigRoot).removeAttr('checked');
+        }
+        $('.focus_at_launch', designConfigRoot).off('change').on('change', function(e) {
+          _this.firstFocus = $(e.target).prop('checked');
+          return _this.saveObj();
+        });
         if (_this.visible) {
           $('.visible_at_launch', designConfigRoot).prop('checked', true);
         } else {
           $('.visible_at_launch', designConfigRoot).removeAttr('checked');
+          $('.focus_at_launch', designConfigRoot).removeAttr('disabled');
         }
         $('.visible_at_launch', designConfigRoot).off('change').on('change', function(e) {
           _this.visible = $(e.target).prop('checked');
+          if (_this.visible) {
+            $('.focus_at_launch', designConfigRoot).removeAttr('disabled');
+          } else {
+            $('.focus_at_launch', designConfigRoot).removeAttr('checked');
+            $('.focus_at_launch', designConfigRoot).attr('disabled', true);
+          }
+          $('.focus_at_launch', designConfigRoot).trigger('change');
           return _this.saveObj();
         });
         x = _this.getJQueryElement().position().left;
