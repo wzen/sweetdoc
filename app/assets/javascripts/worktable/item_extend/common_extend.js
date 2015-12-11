@@ -187,6 +187,15 @@ WorkTableCommonInclude = {
           _this.name = $(_this).val();
           return _this.setItemPropToPageValue('name', _this.name);
         });
+        if (_this.visible) {
+          $('.visible_at_launch', designConfigRoot).prop('checked', true);
+        } else {
+          $('.visible_at_launch', designConfigRoot).removeAttr('checked');
+        }
+        $('.visible_at_launch', designConfigRoot).off('change').on('change', function(e) {
+          _this.visible = $(e.target).prop('checked');
+          return _this.saveObj();
+        });
         x = _this.getJQueryElement().position().left;
         y = _this.getJQueryElement().position().top;
         w = _this.getJQueryElement().width();

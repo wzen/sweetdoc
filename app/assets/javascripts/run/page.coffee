@@ -110,7 +110,11 @@ class Page
     RunCommon.setChapterNum(@thisChapterNum())
     # チャプター前処理
     @floatPageScrollHandleCanvas()
-    @thisChapter().willChapter()
+    if @thisChapter()?
+      @thisChapter().willChapter()
+    else
+      # チャプター無し -> 終了
+      @finishAllChapters()
 
   # 全てのイベントが終了している場合、チャプターを進める
   nextChapterIfFinishedAllEvent: ->

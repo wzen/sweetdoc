@@ -1,24 +1,37 @@
 <%
    var_name = '' if var_name.nil?
+   value = {} if value.nil?
 %>
-<%= form_tag 'item_image/create_img.json', remote: true, class: "form-horizontal item_image_form_#{var_name} item_image_form", multipart: true, format: :json, authenticity_token: true  do |f| %>
-    <input type="hidden" name="<%= Const::PreloadItemImage::Key::PROJECT_ID %>" class="<%= Const::PreloadItemImage::Key::PROJECT_ID %>">
-    <input type="hidden" name="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>" class="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>">
-    <input type="hidden" name="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>" class="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>">
-    <div>
-        <div style="float: left">
-            <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
-        </div>
-        <div style="float:left;">
-            <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete" style="display: none;">
-        </div>
-        <br style="clear: both" />
+
+<div class="config">
+  <div class="configBox">
+    <% if value['name'].present? %>
+        <div class="cssedit-headliner"><%= value['name'] %></div>
+    <% end %>
+    <div class="forms">
+      <div>
+        <%= form_tag 'item_image/create_img.json', remote: true, class: "form-horizontal item_image_form_#{var_name} item_image_form", multipart: true, format: :json, authenticity_token: true  do |f| %>
+            <input type="hidden" name="<%= Const::PreloadItemImage::Key::PROJECT_ID %>" class="<%= Const::PreloadItemImage::Key::PROJECT_ID %>">
+            <input type="hidden" name="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>" class="<%= Const::PreloadItemImage::Key::ITEM_OBJ_ID %>">
+            <input type="hidden" name="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>" class="<%= Const::PreloadItemImage::Key::EVENT_DIST_ID %>">
+            <div>
+                <div style="float: left">
+                    <%= file_field_tag :file_path, class: Const::PreloadItemImage::Key::SELECT_FILE %>
+                </div>
+                <div style="float:left;">
+                    <input type="button" class="<%= Const::PreloadItemImage::Key::SELECT_FILE_DELETE %>" value="Delete" style="display: none;">
+                </div>
+                <br style="clear: both" />
+            </div>
+            <div style="text-align: center;width:100%;height:100%;margin-top: 5px;margin-bottom: 5px;"> OR </div>
+            <div>
+                <input type="text" name="<%= Const::PreloadItemImage::Key::URL %>" class="<%= Const::PreloadItemImage::Key::URL %>">
+            </div>
+            <div style="text-align: center;margin-top: 5px;margin-bottom: 5px;">
+                <%= submit_tag 'Upload', class: 'btn btn-default', data: { disable_with: 'uploading…' } %>
+            </div>
+        <% end %>
+      </div>
     </div>
-    <div style="text-align: center;width:100%;height:100%;margin-top: 5px;margin-bottom: 5px;"> OR </div>
-    <div>
-        <input type="text" name="<%= Const::PreloadItemImage::Key::URL %>" class="<%= Const::PreloadItemImage::Key::URL %>">
-    </div>
-    <div style="text-align: center;margin-top: 5px;margin-bottom: 5px;">
-        <%= submit_tag 'Upload', class: 'btn btn-default', data: { disable_with: 'uploading…' } %>
-    </div>
-<% end %>
+  </div>
+</div>

@@ -157,6 +157,16 @@ WorkTableCommonInclude =
         @setItemPropToPageValue('name', @name)
       )
 
+      # アイテム初期表示
+      if @visible
+        $('.visible_at_launch', designConfigRoot).prop('checked', true)
+      else
+        $('.visible_at_launch', designConfigRoot).removeAttr('checked')
+      $('.visible_at_launch', designConfigRoot).off('change').on('change', (e) =>
+        @visible = $(e.target).prop('checked')
+        @saveObj()
+      )
+
       # アイテム位置の変更
       x = @getJQueryElement().position().left
       y = @getJQueryElement().position().top

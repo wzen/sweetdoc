@@ -133,7 +133,11 @@ Page = (function() {
     this.pagingGuide = new ArrowPagingGuide();
     RunCommon.setChapterNum(this.thisChapterNum());
     this.floatPageScrollHandleCanvas();
-    return this.thisChapter().willChapter();
+    if (this.thisChapter() != null) {
+      return this.thisChapter().willChapter();
+    } else {
+      return this.finishAllChapters();
+    }
   };
 
   Page.prototype.nextChapterIfFinishedAllEvent = function() {

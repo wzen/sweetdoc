@@ -135,12 +135,9 @@ RunCommon = (function() {
         for (j = l = 0, ref1 = PageValue.getForkCount(); 0 <= ref1 ? l <= ref1 : l >= ref1; j = 0 <= ref1 ? ++l : --l) {
           forkEventPageValueList[j] = PageValue.getEventPageValueSortedListByNum(j, i);
         }
-        page = null;
-        if (forkEventPageValueList[PageValue.Key.EF_MASTER_FORKNUM].length > 0) {
-          page = new Page({
-            forks: forkEventPageValueList
-          });
-        }
+        page = new Page({
+          forks: forkEventPageValueList
+        });
         pageList[i - 1] = page;
       } else {
         pageList[i - 1] = null;
