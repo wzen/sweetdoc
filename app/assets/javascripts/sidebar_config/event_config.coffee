@@ -24,32 +24,6 @@ class EventConfig
   constructor: (@emt, @teNum, @distId) ->
     _setupFromPageValues.call(@)
 
-  # インスタンス値から画面の状態を設定
-  setupConfigValues: ->
-    self = @
-
-    # 選択イベントタイプ
-    selectItemValue = ''
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      selectItemValue = "#{EventConfig.EVENT_COMMON_PREFIX}#{@[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]}"
-    else
-      selectItemValue = "#{@[EventPageValueBase.PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{@[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]}"
-    $('.te_item_select', @emt).val(selectItemValue)
-
-    actionFormName = ''
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      actionFormName = EventConfig.EVENT_COMMON_PREFIX + @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
-    else
-      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
-
-    $(".#{actionFormName} .radio", @emt).each((e) ->
-      actionType = $(@).find('input.action_type').val()
-      methodName = $(@).find('input.method_name').val()
-      if parseInt(actionType) == self[EventPageValueBase.PageValueKey.ACTIONTYPE] && methodName == self[EventPageValueBase.PageValueKey.METHODNAME]
-        $(@).find('input:radio').prop('checked', true)
-        return false
-    )
-
   # イベントタイプ選択
   # @param [Object] e 選択オブジェクト
   selectItem: (e = null) ->
@@ -84,20 +58,27 @@ class EventConfig
 
     # 一度全て非表示にする
     $(".config.te_div", @emt).hide()
-    $(".action_div .forms", @emt).children("div").hide()
+    #$(".action_div .forms", @emt).children("div").hide()
 
-    # 表示
+    if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      # アイテム共通情報表示
+      $('.item_common_div', @emt).show()
+
+    # Handler表示
+    $(".config.handler_div", @emt).show()
+    # Action表示
+    $(".action_div", @emt).show()
     displayClassName = ''
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
     else
       displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
-      # アイテム共通情報表示
-      $('.item_common_div', @emt).show()
+    $(".action_div .#{displayClassName}", @emt).show()
 
-    $(".#{displayClassName}", @emt).show()
-    $(".action_div", @emt).show()
-
+    # イベント設定
+    _setHandlerRadioEvent.call(@)
+    _setScrollDirectionEvent.call(@)
+    _setForkSelect.call(@)
     _setMethodActionEvent.call(@)
 
     if e?
@@ -111,12 +92,9 @@ class EventConfig
   clickMethod: (e = null) ->
     if e?
       parent = $(e).closest('.radio')
-      @[EventPageValueBase.PageValueKey.ACTIONTYPE] = parseInt(parent.find('input.action_type:first').val())
       @[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val()
 
     _callback = ->
-      handlerClassName = @methodClassName()
-      valueClassName = @methodClassName()
 
       if @teNum > 1
         beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
@@ -124,15 +102,12 @@ class EventConfig
           # 前のイベントと同じアクションタイプの場合は同時実行を表示
           $(".config.parallel_div", @emt).show()
 
-      # Handler表示
-      $(".handler_div .configBox", @emt).children("div").hide()
-      $(".handler_div .#{handlerClassName}", @emt).show()
-      $(".config.handler_div", @emt).show()
-
-      # 変更値表示
-      $(".value_forms", @emt).children("div").hide()
-      $(".value_forms .#{valueClassName}", @emt).show()
-      $(".config.values_div", @emt).show()
+      if @[EventPageValueBase.PageValueKey.METHODNAME]?
+        # 変更値表示
+        valueClassName = @methodClassName()
+        $(".value_forms", @emt).children("div").hide()
+        $(".value_forms .#{valueClassName}", @emt).show()
+        $(".config.values_div", @emt).show()
 
       if e?
         # 初期化
@@ -140,17 +115,12 @@ class EventConfig
         if tle? && tle.initConfigValue?
           tle.initConfigValue(@)
 
-      if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
-        _setScrollDirectionEvent.call(@)
-      else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
-        _setEventDuration.call(@)
-        _setForkSelect.call(@)
       _setApplyClickEvent.call(@)
 
     if !@[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
       # アイテム選択時
       item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
-      if item?
+      if item? && @[EventPageValueBase.PageValueKey.METHODNAME]?
         # 変数変更コンフィグ読み込み
         ConfigMenu.eventVarModifyConfig(@, item.constructor, =>
           _callback.call(@)
@@ -173,8 +143,11 @@ class EventConfig
 
   # 入力値を適用する
   applyAction: ->
-    # 入力値を保存
+    if !@[EventPageValueBase.PageValueKey.ACTIONTYPE]?
+      console.log('validation error')
+      return false
 
+    # 入力値を保存
     if !@[EventPageValueBase.PageValueKey.DIST_ID]?
       @[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId()
 
@@ -186,47 +159,42 @@ class EventConfig
     }
 
     @[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', @emt).prop('checked')
-
     @[EventPageValueBase.PageValueKey.IS_SYNC] = false
     parallel = $(".parallel_div .parallel", @emt)
     if parallel?
       @[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked")
 
+    handlerDiv = $(".handler_div", @emt)
     if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = ''
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = ""
-      handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
-      if handlerDiv?
-        @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
-        @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val()
+      @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
+      @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val()
 
-        topEmt = handlerDiv.find('.scroll_enabled_top:first')
-        bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first')
-        leftEmt = handlerDiv.find('.scroll_enabled_left:first')
-        rightEmt = handlerDiv.find('.scroll_enabled_right:first')
-        @[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
-          top: topEmt.find('.scroll_enabled:first').is(":checked")
-          bottom: bottomEmt.find('.scroll_enabled:first').is(":checked")
-          left: leftEmt.find('.scroll_enabled:first').is(":checked")
-          right: rightEmt.find('.scroll_enabled:first').is(":checked")
-        }
-        @[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
-          top: topEmt.find('.scroll_forward:first').is(":checked")
-          bottom: bottomEmt.find('.scroll_forward:first').is(":checked")
-          left: leftEmt.find('.scroll_forward:first').is(":checked")
-          right: rightEmt.find('.scroll_forward:first').is(":checked")
-        }
+      topEmt = handlerDiv.find('.scroll_enabled_top:first')
+      bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first')
+      leftEmt = handlerDiv.find('.scroll_enabled_left:first')
+      rightEmt = handlerDiv.find('.scroll_enabled_right:first')
+      @[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
+        top: topEmt.find('.scroll_enabled:first').is(":checked")
+        bottom: bottomEmt.find('.scroll_enabled:first').is(":checked")
+        left: leftEmt.find('.scroll_enabled:first').is(":checked")
+        right: rightEmt.find('.scroll_enabled:first').is(":checked")
+      }
+      @[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
+        top: topEmt.find('.scroll_forward:first').is(":checked")
+        bottom: bottomEmt.find('.scroll_forward:first').is(":checked")
+        left: leftEmt.find('.scroll_forward:first').is(":checked")
+        right: rightEmt.find('.scroll_forward:first').is(":checked")
+      }
 
     else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
-      handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
-      if handlerDiv?
-        @[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val()
-
-        @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0
-        checked = handlerDiv.find('.enable_fork:first').is(':checked')
-        if checked? && checked
-          prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
-          @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
+      @[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val()
+      @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0
+      checked = handlerDiv.find('.enable_fork:first').is(':checked')
+      if checked? && checked
+        prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
+        @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
 
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # 共通イベントはここでインスタンス生成
@@ -242,7 +210,7 @@ class EventConfig
     if errorMes? && errorMes.length > 0
       # エラー発生時
       @showError(errorMes)
-      return
+      return false
 
     # イベントの色を変更
     Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
@@ -257,6 +225,8 @@ class EventConfig
       PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
       item.preview(te)
 
+    return true
+
   # 画面値に書き込み
   writeToPageValue: ->
     errorMes = "Not implemented"
@@ -268,11 +238,11 @@ class EventConfig
 
   # 画面値から読み込み
   readFromPageValue: ->
-    if EventPageValueBase.readFromPageValue(@)
-      tle = _getEventPageValueClass.call(@)
-      if tle?
-        return tle.readFromPageValue(@)
-    return false
+    tle = _getEventPageValueClass.call(@)
+    if tle?
+      return tle.readFromPageValue(@)
+    else
+      return false
 
   # アクションメソッド & メソッド毎の値のクラス名を取得
   methodClassName: ->
@@ -309,13 +279,28 @@ class EventConfig
       return EPVItem
 
   _setMethodActionEvent = ->
-    self = @
     em = $('.action_forms input:radio', @emt)
-    em.off('change')
-    em.on('change', (e) ->
-      self.clearError()
-      self.clickMethod(@)
+    em.off('change').on('change', (e) =>
+      @clearError()
+      @clickMethod(e.target)
     )
+    #methodClassName = @methodClassName()
+    #$('.action_forms input:radio:checked', @emt).trigger('change')
+
+  _setHandlerRadioEvent = ->
+    $('.handler_div input[type=radio]', @emt).off('click').on('click', (e) =>
+      # RadioクリックイベントでButtonフォーム表示
+      $('.button_div', @emt).show()
+
+      $('.handler_form', @emt).hide()
+      if $(e.target).val() == 'scroll'
+        @[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.SCROLL
+        $('.scroll_form', @emt).show()
+      else if $(e.target).val() == 'click'
+        @[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.CLICK
+        $('.click_form', @emt).show()
+    )
+    $('.handler_div input[type=radio]:checked', @emt).trigger('click')
 
   _setScrollDirectionEvent = ->
     self = 0
@@ -329,17 +314,6 @@ class EventConfig
         emt.parent('label').hide()
         emt.prop('checked', false)
     )
-
-  _setEventDuration = ->
-    self = 0
-    handler = $('.handler_div', @emt)
-    eventDuration = handler.find('.click_duration:first')
-    if @[EventPageValueBase.PageValueKey.EVENT_DURATION]?
-      eventDuration.val(@[EventPageValueBase.PageValueKey.EVENT_DURATION])
-    else
-      item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
-      if item?
-        eventDuration.val(item.constructor.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION])
 
   _setForkSelect = ->
     self = 0
@@ -388,9 +362,9 @@ class EventConfig
       self.clearError()
 
       # 入力値を適用する
-      self.applyAction()
-      # イベントを更新
-      Timeline.refreshAllTimeline()
+      if self.applyAction()
+        # イベントを更新
+        Timeline.refreshAllTimeline()
     )
     em = $('.push.button.cancel', @emt)
     em.off('click')
@@ -407,7 +381,6 @@ class EventConfig
 
   _setupFromPageValues = ->
     if @readFromPageValue()
-      @setupConfigValues()
       @selectItem()
       @clickMethod()
 
@@ -422,7 +395,7 @@ class EventConfig
 
     if itemClass? && itemClass.actionProperties?
       className = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', item_access_token)
-      handler_forms = $('#event-config .handler_div .configBox')
+      #handler_forms = $('#event-config .handler_div .configBox')
       action_forms = $('#event-config .action_forms')
       if action_forms.find(".#{className}").length == 0
         actionParent = $("<div class='#{className}' style='display:none'></div>")
@@ -448,16 +421,6 @@ class EventConfig
           methodClone.find('input:radio').attr('name', className)
           methodClone.find('input.value_class_name:first').val(valueClassName)
           actionParent.append(methodClone)
-
-          # イベントタイプConfig追加
-          handlerClone = null
-          if actionType == Constant.ActionType.SCROLL
-            handlerClone = $('#event-config .handler_scroll_temp').children().clone(true)
-          else if actionType == Constant.ActionType.CLICK
-            handlerClone = $('#event-config .handler_click_temp').children().clone(true)
-          handlerParent = $("<div class='#{valueClassName}' style='display:none'></div>")
-          handlerParent.append(handlerClone)
-          handlerParent.appendTo(handler_forms)
 
         actionParent.appendTo(action_forms)
 

@@ -1,19 +1,21 @@
-<%
-   common_actions = @common_actions
-   common_actions = [] if common_actions.nil?
-%>
 <div class="config te_div handler_div" style="display: none">
   <div class="configBox">
-    <% common_actions.each do |c| %>
-        <% c.common_action_events.each do |a| %>
-            <div class="<%= Const::EventConfig::COMMON_VALUES_CLASS.sub('@commoneventid', c.id.to_s).sub('@methodname', a.method_name) %>" style="display: none">
-              <% if a.action_type_id == Const::ActionType::SCROLL  %>
-                  <%= render 'sidebar_menu/event/parts/handler_scroll' %>
-              <% elsif a.action_type_id == Const::ActionType::CLICK %>
-                  <%= render 'sidebar_menu/event/parts/handler_click' %>
-              <% end %>
-            </div>
-        <% end %>
-    <% end %>
+    <div class="forms">
+      <div>
+        <div style="display: inline-block">
+          <input type="radio" name="handler_select" value="scroll">Scroll
+        </div>
+        <div style="display: inline-block">
+          <input type="radio" name="handler_select" value="click">Click
+        </div>
+      </div>
+      <div class="handler_form scroll_form" style="display: none">
+        <%= render 'sidebar_menu/event/parts/handler_scroll' %>
+      </div>
+      <div class="handler_form click_form" style="display: none">
+        <%= render 'sidebar_menu/event/parts/handler_click' %>
+      </div>
+    </div>
+
   </div>
 </div>

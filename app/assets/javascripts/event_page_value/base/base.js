@@ -59,7 +59,7 @@ EventPageValueBase = (function() {
   }
 
   EventPageValueBase.initConfigValue = function(eventConfig) {
-    var _scrollLength, end, endDiv, eventDuration, handlerDiv, item, s, start, startDiv;
+    var _scrollLength, duration, end, endDiv, eventDuration, handlerDiv, item, s, start, startDiv;
     _scrollLength = function(eventConfig) {
       var end, start, writeValue;
       writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
@@ -72,33 +72,32 @@ EventPageValueBase = (function() {
       }
       return 0;
     };
+    handlerDiv = $(".handler_div", eventConfig.emt);
     if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
-      handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
-      if (handlerDiv != null) {
-        startDiv = handlerDiv.find('.scroll_point_start:first');
-        start = startDiv.val();
-        s = null;
-        if (start.length === 0) {
-          s = EventPageValueBase.getAllScrollLength();
-          startDiv.val(s);
-          if (s === 0) {
-            startDiv.prop("disabled", true);
-          }
-        }
-        endDiv = handlerDiv.find('.scroll_point_end:first');
-        end = endDiv.val();
-        if (end.length === 0) {
-          return endDiv.val(parseInt(s) + _scrollLength.call(this, eventConfig));
+      startDiv = handlerDiv.find('.scroll_point_start:first');
+      start = startDiv.val();
+      s = null;
+      if (start.length === 0) {
+        s = EventPageValueBase.getAllScrollLength();
+        startDiv.val(s);
+        if (s === 0) {
+          startDiv.prop("disabled", true);
         }
       }
+      endDiv = handlerDiv.find('.scroll_point_end:first');
+      end = endDiv.val();
+      if (end.length === 0) {
+        return endDiv.val(parseInt(s) + _scrollLength.call(this, eventConfig));
+      }
     } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
-      handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
-      if (handlerDiv != null) {
-        eventDuration = handlerDiv.find('.click_duration:first');
-        item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
-        if (item != null) {
-          return eventDuration.val(item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
+      eventDuration = handlerDiv.find('.click_duration:first');
+      item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
+      if (item != null) {
+        duration = item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION];
+        if (duration == null) {
+          duration = 0;
         }
+        return eventDuration.val(duration);
       }
     }
   };
@@ -125,7 +124,7 @@ EventPageValueBase = (function() {
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var bottomEmt, enabled, eventDuration, fn, handlerDiv, item, k, leftEmt, parallel, ref, rightEmt, topEmt, v, writeValue;
+    var actionFormName, bottomEmt, duration, enabled, eventDuration, fn, handlerDiv, item, k, leftEmt, parallel, ref, rightEmt, selectItemValue, topEmt, v, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       ref = this.PageValueKey;
@@ -135,6 +134,27 @@ EventPageValueBase = (function() {
           eventConfig[v] = writeValue[v];
         }
       }
+      selectItemValue = '';
+      if (eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
+        selectItemValue = "" + EventConfig.EVENT_COMMON_PREFIX + eventConfig[this.PageValueKey.COMMON_EVENT_ID];
+      } else {
+        selectItemValue = "" + eventConfig[this.PageValueKey.ID] + EventConfig.EVENT_ITEM_SEPERATOR + eventConfig[this.PageValueKey.ITEM_ACCESS_TOKEN];
+      }
+      $('.te_item_select', eventConfig.emt).val(selectItemValue);
+      actionFormName = '';
+      if (eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
+        actionFormName = EventConfig.EVENT_COMMON_PREFIX + eventConfig[this.PageValueKey.COMMON_EVENT_ID];
+      } else {
+        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', eventConfig[this.PageValueKey.ITEM_ACCESS_TOKEN]);
+      }
+      $("." + actionFormName + " .radio", eventConfig.emt).each(function(e) {
+        var actionType, methodName;
+        actionType = $(this).find('input.action_type').val();
+        methodName = $(this).find('input.method_name').val();
+        if (parseInt(actionType) === eventConfig[EventPageValueBase.PageValueKey.ACTIONTYPE] && methodName === eventConfig[EventPageValueBase.PageValueKey.METHODNAME]) {
+          return $(this).find('input:radio').prop('checked', true);
+        }
+      });
       if (!eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
         if (eventConfig[this.PageValueKey.ITEM_SIZE_DIFF] && eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].x) {
           $('.item_position_diff_x', eventConfig.emt).val(eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].x);
@@ -158,72 +178,73 @@ EventPageValueBase = (function() {
       if ((parallel != null) && eventConfig[this.PageValueKey.IS_SYNC]) {
         parallel.prop("checked", true);
       }
+      handlerDiv = $(".handler_div", eventConfig.emt);
       if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
-        handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
-        if (handlerDiv != null) {
-          if ((eventConfig[this.PageValueKey.SCROLL_POINT_START] != null) && (eventConfig[this.PageValueKey.SCROLL_POINT_END] != null)) {
-            handlerDiv.find('.scroll_point_start:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_START]);
-            handlerDiv.find('.scroll_point_end:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_END]);
+        handlerDiv.find('input[type=radio][value=scroll]').prop('checked', true);
+        if ((eventConfig[this.PageValueKey.SCROLL_POINT_START] != null) && (eventConfig[this.PageValueKey.SCROLL_POINT_END] != null)) {
+          handlerDiv.find('.scroll_point_start:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_START]);
+          handlerDiv.find('.scroll_point_end:first').val(eventConfig[this.PageValueKey.SCROLL_POINT_END]);
+        }
+        topEmt = handlerDiv.find('.scroll_enabled_top:first');
+        if (topEmt != null) {
+          topEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top);
+          if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top) {
+            topEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].top);
+          } else {
+            topEmt.children('.scroll_forward:first').prop("checked", false);
+            topEmt.children('.scroll_forward:first').parent('label').hide();
           }
-          topEmt = handlerDiv.find('.scroll_enabled_top:first');
-          if (topEmt != null) {
-            topEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top);
-            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].top) {
-              topEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].top);
-            } else {
-              topEmt.children('.scroll_forward:first').prop("checked", false);
-              topEmt.children('.scroll_forward:first').parent('label').hide();
-            }
+        }
+        bottomEmt = handlerDiv.find('scroll_enabled_bottom:first');
+        if (bottomEmt != null) {
+          bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom);
+          if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom) {
+            bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].bottom);
+          } else {
+            bottomEmt.children('.scroll_forward:first').prop("checked", false);
+            bottomEmt.children('.scroll_forward:first').parent('label').hide();
           }
-          bottomEmt = handlerDiv.find('scroll_enabled_bottom:first');
-          if (bottomEmt != null) {
-            bottomEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom);
-            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].bottom) {
-              bottomEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].bottom);
-            } else {
-              bottomEmt.children('.scroll_forward:first').prop("checked", false);
-              bottomEmt.children('.scroll_forward:first').parent('label').hide();
-            }
+        }
+        leftEmt = handlerDiv.find('scroll_enabled_left:first');
+        if (leftEmt != null) {
+          leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left);
+          if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left) {
+            leftEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].left);
+          } else {
+            leftEmt.children('.scroll_forward:first').prop("checked", false);
+            leftEmt.children('.scroll_forward:first').parent('label').hide();
           }
-          leftEmt = handlerDiv.find('scroll_enabled_left:first');
-          if (leftEmt != null) {
-            leftEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left);
-            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].left) {
-              leftEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].left);
-            } else {
-              leftEmt.children('.scroll_forward:first').prop("checked", false);
-              leftEmt.children('.scroll_forward:first').parent('label').hide();
-            }
-          }
-          rightEmt = handlerDiv.find('scroll_enabled_right:first');
-          if (rightEmt != null) {
-            rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right);
-            if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right) {
-              rightEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].right);
-            } else {
-              rightEmt.children('.scroll_forward:first').prop("checked", false);
-              rightEmt.children('.scroll_forward:first').parent('label').hide();
-            }
+        }
+        rightEmt = handlerDiv.find('scroll_enabled_right:first');
+        if (rightEmt != null) {
+          rightEmt.children('.scroll_enabled:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right);
+          if (eventConfig[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS].right) {
+            rightEmt.children('.scroll_forward:first').prop("checked", eventConfig[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS].right);
+          } else {
+            rightEmt.children('.scroll_forward:first').prop("checked", false);
+            rightEmt.children('.scroll_forward:first').parent('label').hide();
           }
         }
       } else if (eventConfig[this.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
-        handlerDiv = $(".handler_div ." + (eventConfig.methodClassName()), eventConfig.emt);
-        if (handlerDiv != null) {
-          eventDuration = handlerDiv.find('.click_duration:first');
-          if (eventConfig[this.PageValueKey.EVENT_DURATION] != null) {
-            eventDuration.val(eventConfig[this.PageValueKey.EVENT_DURATION]);
-          } else {
-            item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
-            if (item != null) {
-              eventDuration.val(item.constructor.actionProperties.methods[eventConfig[this.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
+        handlerDiv.find('input[type=radio][value=click]').prop('checked', true);
+        eventDuration = handlerDiv.find('.click_duration:first');
+        if (eventConfig[this.PageValueKey.EVENT_DURATION] != null) {
+          eventDuration.val(eventConfig[this.PageValueKey.EVENT_DURATION]);
+        } else {
+          item = window.instanceMap[eventConfig[this.PageValueKey.ID]];
+          if (item != null) {
+            duration = eventConfig[this.PageValueKey.EVENT_DURATION];
+            if (duration == null) {
+              duration = 0;
             }
+            eventDuration.val(duration);
           }
-          enabled = (eventConfig[this.PageValueKey.CHANGE_FORKNUM] != null) && eventConfig[this.PageValueKey.CHANGE_FORKNUM] > 0;
-          $('.enable_fork:first', handlerDiv).prop('checked', enabled);
-          fn = enabled ? eventConfig[this.PageValueKey.CHANGE_FORKNUM] : 1;
-          $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
-          $('.fork_select:first', handlerDiv).parent('div').css('display', enabled ? 'block' : 'none');
         }
+        enabled = (eventConfig[this.PageValueKey.CHANGE_FORKNUM] != null) && eventConfig[this.PageValueKey.CHANGE_FORKNUM] > 0;
+        $('.enable_fork:first', handlerDiv).prop('checked', enabled);
+        fn = enabled ? eventConfig[this.PageValueKey.CHANGE_FORKNUM] : 1;
+        $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
+        $('.fork_select:first', handlerDiv).parent('div').css('display', enabled ? 'block' : 'none');
       }
       return true;
     } else {

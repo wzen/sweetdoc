@@ -6,6 +6,9 @@
   <div class="configBox">
     <div class="event-config-headliner">Action</div>
     <div class="forms action_forms">
+      <div>
+        <%= render 'sidebar_menu/event/parts/method' %>
+      </div>
       <% common_actions.each do |c| %>
           <!-- アクション名一覧 -->
           <div class="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>" style="display: none">

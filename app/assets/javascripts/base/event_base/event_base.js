@@ -539,9 +539,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.progressMax = function() {
-    var actionType;
-    actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
-    if (actionType === Constant.ActionType.SCROLL) {
+    if (this.event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
       return this.scrollLength();
     } else {
       return this.clickDurationStepMax();
@@ -557,8 +555,8 @@ EventBase = (function(superClass) {
   EventBase.prototype.eventDuration = function() {
     var d;
     d = this.event[EventPageValueBase.PageValueKey.EVENT_DURATION];
-    if (d == null) {
-      d = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION];
+    if (d === 'undefined') {
+      d = null;
     }
     return d;
   };

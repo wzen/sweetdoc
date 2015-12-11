@@ -305,7 +305,7 @@ ItemBase = (function(superClass) {
       this.updatePositionAndItemSize(itemSize, false);
       return;
     }
-    eventDuration = this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION];
+    eventDuration = this.event[EventPageValueBase.PageValueKey.EVENT_DURATION];
     duration = 0.01;
     perX = itemDiff.x * (duration / eventDuration);
     perY = itemDiff.y * (duration / eventDuration);

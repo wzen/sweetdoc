@@ -12,6 +12,10 @@ ItemPreviewEventConfig = (function(superClass) {
 
   ItemPreviewEventConfig.prototype.applyAction = function() {
     var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, topEmt;
+    if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
+      console.log('validation error');
+      return false;
+    }
     if (this[EventPageValueBase.PageValueKey.DIST_ID] == null) {
       this[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId();
     }
@@ -27,40 +31,35 @@ ItemPreviewEventConfig = (function(superClass) {
     if (parallel != null) {
       this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
     }
+    handlerDiv = $(".handler_div", this.emt);
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = '';
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = "";
-      handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
-      if (handlerDiv != null) {
-        this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
-        this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
-        topEmt = handlerDiv.find('.scroll_enabled_top:first');
-        bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first');
-        leftEmt = handlerDiv.find('.scroll_enabled_left:first');
-        rightEmt = handlerDiv.find('.scroll_enabled_right:first');
-        this[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
-          top: topEmt.find('.scroll_enabled:first').is(":checked"),
-          bottom: bottomEmt.find('.scroll_enabled:first').is(":checked"),
-          left: leftEmt.find('.scroll_enabled:first').is(":checked"),
-          right: rightEmt.find('.scroll_enabled:first').is(":checked")
-        };
-        this[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
-          top: topEmt.find('.scroll_forward:first').is(":checked"),
-          bottom: bottomEmt.find('.scroll_forward:first').is(":checked"),
-          left: leftEmt.find('.scroll_forward:first').is(":checked"),
-          right: rightEmt.find('.scroll_forward:first').is(":checked")
-        };
-      }
+      this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
+      this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
+      topEmt = handlerDiv.find('.scroll_enabled_top:first');
+      bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first');
+      leftEmt = handlerDiv.find('.scroll_enabled_left:first');
+      rightEmt = handlerDiv.find('.scroll_enabled_right:first');
+      this[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
+        top: topEmt.find('.scroll_enabled:first').is(":checked"),
+        bottom: bottomEmt.find('.scroll_enabled:first').is(":checked"),
+        left: leftEmt.find('.scroll_enabled:first').is(":checked"),
+        right: rightEmt.find('.scroll_enabled:first').is(":checked")
+      };
+      this[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
+        top: topEmt.find('.scroll_forward:first').is(":checked"),
+        bottom: bottomEmt.find('.scroll_forward:first').is(":checked"),
+        left: leftEmt.find('.scroll_forward:first').is(":checked"),
+        right: rightEmt.find('.scroll_forward:first').is(":checked")
+      };
     } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
-      handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
-      if (handlerDiv != null) {
-        this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
-        this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
-        checked = handlerDiv.find('.enable_fork:first').is(':checked');
-        if ((checked != null) && checked) {
-          prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
-          this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
-        }
+      this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
+      this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
+      checked = handlerDiv.find('.enable_fork:first').is(':checked');
+      if ((checked != null) && checked) {
+        prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
+        this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
       }
     }
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {

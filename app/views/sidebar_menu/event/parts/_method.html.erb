@@ -4,8 +4,12 @@
 <% radio_name = '' if radio_name.nil? %>
 
 <div class='radio'>
+  <% if method_name.length > 0 %>
     <label><input type='radio' name='<%= radio_name %>'><span class='<%= EventHelper.actionTypeClassNameByActionType(action_type_id) %>'><%= method_name %></span></label>
     <input class='action_type' type='hidden' value='<%= action_type_id %>'>
     <input class='method_name' type='hidden' value='<%= method_name %>'>
     <input class='value_class_name' type='hidden' value='<%= value_class_name %>'>
+  <% else %>
+      <label><input type='radio' name='none' checked><span class='none'>none</span></label>
+  <% end %>
 </div>

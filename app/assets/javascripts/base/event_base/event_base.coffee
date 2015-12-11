@@ -445,8 +445,7 @@ class EventBase extends Extend
 
   # ステップ数最大値
   progressMax: ->
-    actionType = Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[@getEventMethodName()].actionType)
-    return if actionType == Constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
+    return if @event[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
 
   # クリック時間ステップ数最大値
   clickDurationStepMax: ->
@@ -456,8 +455,8 @@ class EventBase extends Extend
   # クリック実行時間
   eventDuration: ->
     d = @event[EventPageValueBase.PageValueKey.EVENT_DURATION]
-    if !d?
-      d = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION]
+    if d == 'undefined'
+      d = null
     return d
 
   # 保存用の最小限のデータを取得 保存不要なタイプの判定は適宜追加

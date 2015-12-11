@@ -260,7 +260,7 @@ class ItemBase extends ItemEventBase
       @updatePositionAndItemSize(itemSize, false)
       return
 
-    eventDuration = @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.EVENT_DURATION]
+    eventDuration = @event[EventPageValueBase.PageValueKey.EVENT_DURATION]
     duration = 0.01
     perX = itemDiff.x * (duration / eventDuration)
     perY = itemDiff.y * (duration / eventDuration)

@@ -1,6 +1,10 @@
 class ItemPreviewEventConfig extends EventConfig
   # 入力値を適用する
   applyAction: ->
+    if !@[EventPageValueBase.PageValueKey.ACTIONTYPE]?
+      console.log('validation error')
+      return false
+
     # 入力値を保存
     if !@[EventPageValueBase.PageValueKey.DIST_ID]?
       @[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId()
@@ -19,41 +23,38 @@ class ItemPreviewEventConfig extends EventConfig
     if parallel?
       @[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked")
 
+    handlerDiv = $(".handler_div", @emt)
     if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = ''
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = ""
-      handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
-      if handlerDiv?
-        @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
-        @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val()
+      @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
+      @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val()
 
-        topEmt = handlerDiv.find('.scroll_enabled_top:first')
-        bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first')
-        leftEmt = handlerDiv.find('.scroll_enabled_left:first')
-        rightEmt = handlerDiv.find('.scroll_enabled_right:first')
-        @[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
-          top: topEmt.find('.scroll_enabled:first').is(":checked")
-          bottom: bottomEmt.find('.scroll_enabled:first').is(":checked")
-          left: leftEmt.find('.scroll_enabled:first').is(":checked")
-          right: rightEmt.find('.scroll_enabled:first').is(":checked")
-        }
-        @[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
-          top: topEmt.find('.scroll_forward:first').is(":checked")
-          bottom: bottomEmt.find('.scroll_forward:first').is(":checked")
-          left: leftEmt.find('.scroll_forward:first').is(":checked")
-          right: rightEmt.find('.scroll_forward:first').is(":checked")
-        }
+      topEmt = handlerDiv.find('.scroll_enabled_top:first')
+      bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first')
+      leftEmt = handlerDiv.find('.scroll_enabled_left:first')
+      rightEmt = handlerDiv.find('.scroll_enabled_right:first')
+      @[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
+        top: topEmt.find('.scroll_enabled:first').is(":checked")
+        bottom: bottomEmt.find('.scroll_enabled:first').is(":checked")
+        left: leftEmt.find('.scroll_enabled:first').is(":checked")
+        right: rightEmt.find('.scroll_enabled:first').is(":checked")
+      }
+      @[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
+        top: topEmt.find('.scroll_forward:first').is(":checked")
+        bottom: bottomEmt.find('.scroll_forward:first').is(":checked")
+        left: leftEmt.find('.scroll_forward:first').is(":checked")
+        right: rightEmt.find('.scroll_forward:first').is(":checked")
+      }
 
     else if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
-      handlerDiv = $(".handler_div .#{@methodClassName()}", @emt)
-      if handlerDiv?
-        @[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val()
+      @[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val()
 
-        @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0
-        checked = handlerDiv.find('.enable_fork:first').is(':checked')
-        if checked? && checked
-          prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
-          @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
+      @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0
+      checked = handlerDiv.find('.enable_fork:first').is(':checked')
+      if checked? && checked
+        prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
+        @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
 
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # 共通イベントはここでインスタンス生成

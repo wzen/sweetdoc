@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _getEventPageValueClass, _setApplyClickEvent, _setEventDuration, _setForkSelect, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
+  var _getEventPageValueClass, _setApplyClickEvent, _setForkSelect, _setHandlerRadioEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
@@ -21,33 +21,6 @@ EventConfig = (function() {
     this.distId = distId1;
     _setupFromPageValues.call(this);
   }
-
-  EventConfig.prototype.setupConfigValues = function() {
-    var actionFormName, selectItemValue, self;
-    self = this;
-    selectItemValue = '';
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      selectItemValue = "" + EventConfig.EVENT_COMMON_PREFIX + this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID];
-    } else {
-      selectItemValue = "" + this[EventPageValueBase.PageValueKey.ID] + EventConfig.EVENT_ITEM_SEPERATOR + this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN];
-    }
-    $('.te_item_select', this.emt).val(selectItemValue);
-    actionFormName = '';
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      actionFormName = EventConfig.EVENT_COMMON_PREFIX + this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID];
-    } else {
-      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]);
-    }
-    return $("." + actionFormName + " .radio", this.emt).each(function(e) {
-      var actionType, methodName;
-      actionType = $(this).find('input.action_type').val();
-      methodName = $(this).find('input.method_name').val();
-      if (parseInt(actionType) === self[EventPageValueBase.PageValueKey.ACTIONTYPE] && methodName === self[EventPageValueBase.PageValueKey.METHODNAME]) {
-        $(this).find('input:radio').prop('checked', true);
-        return false;
-      }
-    });
-  };
 
   EventConfig.prototype.selectItem = function(e) {
     var checkedRadioButton, displayClassName, splitValues, vEmt, value;
@@ -80,16 +53,21 @@ EventConfig = (function() {
       }
     }
     $(".config.te_div", this.emt).hide();
-    $(".action_div .forms", this.emt).children("div").hide();
+    if (!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      $('.item_common_div', this.emt).show();
+    }
+    $(".config.handler_div", this.emt).show();
+    $(".action_div", this.emt).show();
     displayClassName = '';
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       displayClassName = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
     } else {
       displayClassName = this.constructor.ITEM_ACTION_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]);
-      $('.item_common_div', this.emt).show();
     }
-    $("." + displayClassName, this.emt).show();
-    $(".action_div", this.emt).show();
+    $(".action_div ." + displayClassName, this.emt).show();
+    _setHandlerRadioEvent.call(this);
+    _setScrollDirectionEvent.call(this);
+    _setForkSelect.call(this);
     _setMethodActionEvent.call(this);
     if (e != null) {
       checkedRadioButton = $(".action_forms input:radio[name='" + displayClassName + "']:checked", this.emt);
@@ -106,42 +84,33 @@ EventConfig = (function() {
     }
     if (e != null) {
       parent = $(e).closest('.radio');
-      this[EventPageValueBase.PageValueKey.ACTIONTYPE] = parseInt(parent.find('input.action_type:first').val());
       this[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val();
     }
     _callback = function() {
-      var beforeActionType, handlerClassName, tle, valueClassName;
-      handlerClassName = this.methodClassName();
-      valueClassName = this.methodClassName();
+      var beforeActionType, tle, valueClassName;
       if (this.teNum > 1) {
         beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
         if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === beforeActionType) {
           $(".config.parallel_div", this.emt).show();
         }
       }
-      $(".handler_div .configBox", this.emt).children("div").hide();
-      $(".handler_div ." + handlerClassName, this.emt).show();
-      $(".config.handler_div", this.emt).show();
-      $(".value_forms", this.emt).children("div").hide();
-      $(".value_forms ." + valueClassName, this.emt).show();
-      $(".config.values_div", this.emt).show();
+      if (this[EventPageValueBase.PageValueKey.METHODNAME] != null) {
+        valueClassName = this.methodClassName();
+        $(".value_forms", this.emt).children("div").hide();
+        $(".value_forms ." + valueClassName, this.emt).show();
+        $(".config.values_div", this.emt).show();
+      }
       if (e != null) {
         tle = _getEventPageValueClass.call(this);
         if ((tle != null) && (tle.initConfigValue != null)) {
           tle.initConfigValue(this);
         }
       }
-      if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
-        _setScrollDirectionEvent.call(this);
-      } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
-        _setEventDuration.call(this);
-        _setForkSelect.call(this);
-      }
       return _setApplyClickEvent.call(this);
     };
     if (!this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]) {
       item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-      if (item != null) {
+      if ((item != null) && (this[EventPageValueBase.PageValueKey.METHODNAME] != null)) {
         return ConfigMenu.eventVarModifyConfig(this, item.constructor, (function(_this) {
           return function() {
             return _callback.call(_this);
@@ -170,6 +139,10 @@ EventConfig = (function() {
 
   EventConfig.prototype.applyAction = function() {
     var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, te, topEmt;
+    if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
+      console.log('validation error');
+      return false;
+    }
     if (this[EventPageValueBase.PageValueKey.DIST_ID] == null) {
       this[EventPageValueBase.PageValueKey.DIST_ID] = Common.generateId();
     }
@@ -185,40 +158,35 @@ EventConfig = (function() {
     if (parallel != null) {
       this[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked");
     }
+    handlerDiv = $(".handler_div", this.emt);
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = '';
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = "";
-      handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
-      if (handlerDiv != null) {
-        this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
-        this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
-        topEmt = handlerDiv.find('.scroll_enabled_top:first');
-        bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first');
-        leftEmt = handlerDiv.find('.scroll_enabled_left:first');
-        rightEmt = handlerDiv.find('.scroll_enabled_right:first');
-        this[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
-          top: topEmt.find('.scroll_enabled:first').is(":checked"),
-          bottom: bottomEmt.find('.scroll_enabled:first').is(":checked"),
-          left: leftEmt.find('.scroll_enabled:first').is(":checked"),
-          right: rightEmt.find('.scroll_enabled:first').is(":checked")
-        };
-        this[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
-          top: topEmt.find('.scroll_forward:first').is(":checked"),
-          bottom: bottomEmt.find('.scroll_forward:first').is(":checked"),
-          left: leftEmt.find('.scroll_forward:first').is(":checked"),
-          right: rightEmt.find('.scroll_forward:first').is(":checked")
-        };
-      }
+      this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
+      this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
+      topEmt = handlerDiv.find('.scroll_enabled_top:first');
+      bottomEmt = handlerDiv.find('.scroll_enabled_bottom:first');
+      leftEmt = handlerDiv.find('.scroll_enabled_left:first');
+      rightEmt = handlerDiv.find('.scroll_enabled_right:first');
+      this[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = {
+        top: topEmt.find('.scroll_enabled:first').is(":checked"),
+        bottom: bottomEmt.find('.scroll_enabled:first').is(":checked"),
+        left: leftEmt.find('.scroll_enabled:first').is(":checked"),
+        right: rightEmt.find('.scroll_enabled:first').is(":checked")
+      };
+      this[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = {
+        top: topEmt.find('.scroll_forward:first').is(":checked"),
+        bottom: bottomEmt.find('.scroll_forward:first').is(":checked"),
+        left: leftEmt.find('.scroll_forward:first').is(":checked"),
+        right: rightEmt.find('.scroll_forward:first').is(":checked")
+      };
     } else if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
-      handlerDiv = $(".handler_div ." + (this.methodClassName()), this.emt);
-      if (handlerDiv != null) {
-        this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
-        this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
-        checked = handlerDiv.find('.enable_fork:first').is(':checked');
-        if ((checked != null) && checked) {
-          prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
-          this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
-        }
+      this[EventPageValueBase.PageValueKey.EVENT_DURATION] = handlerDiv.find('.click_duration:first').val();
+      this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = 0;
+      checked = handlerDiv.find('.enable_fork:first').is(':checked');
+      if ((checked != null) && checked) {
+        prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
+        this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
       }
     }
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
@@ -233,7 +201,7 @@ EventConfig = (function() {
     errorMes = this.writeToPageValue();
     if ((errorMes != null) && errorMes.length > 0) {
       this.showError(errorMes);
-      return;
+      return false;
     }
     Timeline.changeTimelineColor(this.teNum, this[EventPageValueBase.PageValueKey.ACTIONTYPE]);
     LocalStorage.saveAllPageValues();
@@ -242,8 +210,9 @@ EventConfig = (function() {
       te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
       item.initEvent(te);
       PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
-      return item.preview(te);
+      item.preview(te);
     }
+    return true;
   };
 
   EventConfig.prototype.writeToPageValue = function() {
@@ -259,13 +228,12 @@ EventConfig = (function() {
 
   EventConfig.prototype.readFromPageValue = function() {
     var tle;
-    if (EventPageValueBase.readFromPageValue(this)) {
-      tle = _getEventPageValueClass.call(this);
-      if (tle != null) {
-        return tle.readFromPageValue(this);
-      }
+    tle = _getEventPageValueClass.call(this);
+    if (tle != null) {
+      return tle.readFromPageValue(this);
+    } else {
+      return false;
     }
-    return false;
   };
 
   EventConfig.prototype.methodClassName = function() {
@@ -306,14 +274,31 @@ EventConfig = (function() {
   };
 
   _setMethodActionEvent = function() {
-    var em, self;
-    self = this;
+    var em;
     em = $('.action_forms input:radio', this.emt);
-    em.off('change');
-    return em.on('change', function(e) {
-      self.clearError();
-      return self.clickMethod(this);
-    });
+    return em.off('change').on('change', (function(_this) {
+      return function(e) {
+        _this.clearError();
+        return _this.clickMethod(e.target);
+      };
+    })(this));
+  };
+
+  _setHandlerRadioEvent = function() {
+    $('.handler_div input[type=radio]', this.emt).off('click').on('click', (function(_this) {
+      return function(e) {
+        $('.button_div', _this.emt).show();
+        $('.handler_form', _this.emt).hide();
+        if ($(e.target).val() === 'scroll') {
+          _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.SCROLL;
+          return $('.scroll_form', _this.emt).show();
+        } else if ($(e.target).val() === 'click') {
+          _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.CLICK;
+          return $('.click_form', _this.emt).show();
+        }
+      };
+    })(this));
+    return $('.handler_div input[type=radio]:checked', this.emt).trigger('click');
   };
 
   _setScrollDirectionEvent = function() {
@@ -331,21 +316,6 @@ EventConfig = (function() {
         return emt.prop('checked', false);
       }
     });
-  };
-
-  _setEventDuration = function() {
-    var eventDuration, handler, item, self;
-    self = 0;
-    handler = $('.handler_div', this.emt);
-    eventDuration = handler.find('.click_duration:first');
-    if (this[EventPageValueBase.PageValueKey.EVENT_DURATION] != null) {
-      return eventDuration.val(this[EventPageValueBase.PageValueKey.EVENT_DURATION]);
-    } else {
-      item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-      if (item != null) {
-        return eventDuration.val(item.constructor.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][item.constructor.ActionPropertiesKey.EVENT_DURATION]);
-      }
-    }
   };
 
   _setForkSelect = function() {
@@ -392,8 +362,9 @@ EventConfig = (function() {
     em.off('click');
     em.on('click', function(e) {
       self.clearError();
-      self.applyAction();
-      return Timeline.refreshAllTimeline();
+      if (self.applyAction()) {
+        return Timeline.refreshAllTimeline();
+      }
     });
     em = $('.push.button.cancel', this.emt);
     em.off('click');
@@ -409,7 +380,6 @@ EventConfig = (function() {
 
   _setupFromPageValues = function() {
     if (this.readFromPageValue()) {
-      this.setupConfigValues();
       this.selectItem();
       return this.clickMethod();
     }
@@ -420,11 +390,10 @@ EventConfig = (function() {
   };
 
   EventConfig.addEventConfigContents = function(item_access_token) {
-    var actionParent, actionType, actionTypeClassName, action_forms, className, handlerClone, handlerParent, handler_forms, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
+    var actionParent, actionType, actionTypeClassName, action_forms, className, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
     itemClass = Common.getClassFromMap(false, item_access_token);
     if ((itemClass != null) && (itemClass.actionProperties != null)) {
       className = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', item_access_token);
-      handler_forms = $('#event-config .handler_div .configBox');
       action_forms = $('#event-config .action_forms');
       if (action_forms.find("." + className).length === 0) {
         actionParent = $("<div class='" + className + "' style='display:none'></div>");
@@ -452,15 +421,6 @@ EventConfig = (function() {
           methodClone.find('input:radio').attr('name', className);
           methodClone.find('input.value_class_name:first').val(valueClassName);
           actionParent.append(methodClone);
-          handlerClone = null;
-          if (actionType === Constant.ActionType.SCROLL) {
-            handlerClone = $('#event-config .handler_scroll_temp').children().clone(true);
-          } else if (actionType === Constant.ActionType.CLICK) {
-            handlerClone = $('#event-config .handler_click_temp').children().clone(true);
-          }
-          handlerParent = $("<div class='" + valueClassName + "' style='display:none'></div>");
-          handlerParent.append(handlerClone);
-          handlerParent.appendTo(handler_forms);
         }
         return actionParent.appendTo(action_forms);
       }
