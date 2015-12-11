@@ -71,12 +71,12 @@ EventBase = (function(superClass) {
   EventBase.prototype.preview = function(event) {
     var _preview;
     _preview = function(event) {
-      var _draw, _loop, drawDelay, loopCount, loopDelay, loopMaxCount, p, stepMax;
+      var _draw, _loop, drawDelay, loopCount, loopDelay, loopMaxCount, p, progressMax;
       drawDelay = this.constructor.STEP_INTERVAL_DURATION * 1000;
       loopDelay = 1000;
       loopMaxCount = 5;
       this.initEvent(event);
-      stepMax = this.stepMax();
+      progressMax = this.progressMax();
       this.willChapter();
       this.doPreviewLoop = true;
       loopCount = 0;
@@ -93,10 +93,11 @@ EventBase = (function(superClass) {
               }
               return _this.previewTimer = setTimeout(function() {
                 _this.execMethod({
-                  step: p
+                  progress: p,
+                  progressMax: progressMax
                 });
                 p += 1;
-                if (p >= stepMax) {
+                if (p >= progressMax) {
                   p = 0;
                   return _loop.call(_this);
                 } else {
@@ -238,7 +239,7 @@ EventBase = (function(superClass) {
       return;
     }
     if (!this.isDrawByAnimationMethod()) {
-      this.updateInstanceParamByStep(opt.step);
+      this.updateInstanceParamByStep(opt.progress);
     } else {
       setTimeout((function(_this) {
         return function() {
@@ -303,7 +304,8 @@ EventBase = (function(superClass) {
     this.canReverse = this.scrollValue > sPoint;
     if (!this.isDrawByAnimationMethod()) {
       return this.execMethod({
-        step: this.scrollValue - sPoint
+        progress: this.scrollValue - sPoint,
+        progressMax: this.progressMax()
       });
     } else {
       this.skipEvent = true;
@@ -324,7 +326,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.clickHandlerFunc = function(e, complete) {
-    var count, stepMax, timer;
+    var count, progressMax, timer;
     if (complete == null) {
       complete = null;
     }
@@ -337,15 +339,16 @@ EventBase = (function(superClass) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
     if (!this.isDrawByAnimationMethod()) {
-      stepMax = this.stepMax();
+      progressMax = this.progressMax();
       count = 1;
       return timer = setInterval((function(_this) {
         return function() {
           _this.execMethod({
-            step: count
+            progress: count,
+            progressMax: progressMax
           });
           count += 1;
-          if (stepMax < count) {
+          if (progressMax < count) {
             clearInterval(timer);
             _this.isFinishedEvent = true;
             if (complete != null) {
@@ -396,16 +399,16 @@ EventBase = (function(superClass) {
     return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
-  EventBase.prototype.updateInstanceParamByStep = function(stepValue, immediate) {
-    var after, before, colorCacheVarName, colorType, eventBeforeObj, mod, progressPercentage, results, stepMax, value, varName;
+  EventBase.prototype.updateInstanceParamByStep = function(progressValue, immediate) {
+    var after, before, colorCacheVarName, colorType, eventBeforeObj, mod, progressMax, progressPercentage, results, value, varName;
     if (immediate == null) {
       immediate = false;
     }
-    stepMax = this.stepMax();
-    if (stepMax == null) {
-      stepMax = 1;
+    progressMax = this.progressMax();
+    if (progressMax == null) {
+      progressMax = 1;
     }
-    progressPercentage = stepValue / stepMax;
+    progressPercentage = progressValue / progressMax;
     eventBeforeObj = this.getMinimumObjectEventBefore();
     mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
     results = [];
@@ -428,9 +431,9 @@ EventBase = (function(superClass) {
                   if (colorType == null) {
                     colorType = 'hex';
                   }
-                  this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType);
+                  this[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType);
                 }
-                results.push(this[varName] = this[colorCacheVarName][stepValue]);
+                results.push(this[varName] = this[colorCacheVarName][progressValue]);
               } else {
                 results.push(void 0);
               }
@@ -449,12 +452,12 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateInstanceParamByAnimation = function(immediate) {
-    var after, count, ed, eventBeforeObj, mod, stepMax, timer, value, varName;
+    var after, count, ed, eventBeforeObj, mod, progressMax, timer, value, varName;
     if (immediate == null) {
       immediate = false;
     }
     ed = this.eventDuration();
-    stepMax = this.stepMax();
+    progressMax = this.progressMax();
     eventBeforeObj = this.getMinimumObjectEventBefore();
     mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
     if (immediate) {
@@ -490,7 +493,7 @@ EventBase = (function(superClass) {
                     if (colorType == null) {
                       colorType = 'hex';
                     }
-                    _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType);
+                    _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType);
                   }
                   _this[varName] = _this[colorCacheVarName][count];
                 }
@@ -499,7 +502,7 @@ EventBase = (function(superClass) {
           }
         }
         count += 1;
-        if (count > stepMax) {
+        if (count > progressMax) {
           clearInterval(timer);
           results = [];
           for (varName in mod) {
@@ -535,7 +538,7 @@ EventBase = (function(superClass) {
     return (this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION] != null) && this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION];
   };
 
-  EventBase.prototype.stepMax = function() {
+  EventBase.prototype.progressMax = function() {
     var actionType;
     actionType = Common.getActionTypeByCodingActionType(this.constructor.actionProperties.methods[this.getEventMethodName()].actionType);
     if (actionType === Constant.ActionType.SCROLL) {

@@ -71,7 +71,7 @@ class EventBase extends Extend
       loopMaxCount = 5 # ループ5回
       # イベント初期化
       @initEvent(event)
-      stepMax = @stepMax()
+      progressMax = @progressMax()
       @willChapter()
 
       # イベントループ
@@ -88,9 +88,9 @@ class EventBase extends Extend
               clearTimeout(@previewTimer)
               @previewTimer = null
             @previewTimer = setTimeout( =>
-              @execMethod({step: p})
+              @execMethod({progress: p, progressMax: progressMax})
               p += 1
-              if p >= stepMax
+              if p >= progressMax
                 p = 0
                 _loop.call(@)
               else
@@ -206,7 +206,7 @@ class EventBase extends Extend
     # メソッド共通処理
     if !@isDrawByAnimationMethod()
       # アイテム位置&サイズ更新
-      @updateInstanceParamByStep(opt.step)
+      @updateInstanceParamByStep(opt.progress)
     else
       setTimeout( =>
         @updateInstanceParamByAnimation()
@@ -276,7 +276,7 @@ class EventBase extends Extend
 
     if !@isDrawByAnimationMethod()
       # ステップ実行
-      @execMethod({step: @scrollValue - sPoint})
+      @execMethod({progress: @scrollValue - sPoint, progressMax: @progressMax()})
     else
       # アニメーション実行は1回のみ
       @skipEvent = true
@@ -312,12 +312,12 @@ class EventBase extends Extend
 
     if !@isDrawByAnimationMethod()
       # ステップ実行
-      stepMax = @stepMax()
+      progressMax = @progressMax()
       count = 1
       timer = setInterval( =>
-        @execMethod({step: count})
+        @execMethod({progress: count, progressMax: progressMax})
         count += 1
-        if stepMax < count
+        if progressMax < count
           clearInterval(timer)
           # 終了イベント
           @isFinishedEvent = true
@@ -359,12 +359,12 @@ class EventBase extends Extend
     PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # ステップ実行によるアイテム状態更新
-  updateInstanceParamByStep: (stepValue, immediate = false)->
-    stepMax = @stepMax()
-    if !stepMax?
-      stepMax = 1
+  updateInstanceParamByStep: (progressValue, immediate = false)->
+    progressMax = @progressMax()
+    if !progressMax?
+      progressMax = 1
     # NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
-    progressPercentage = stepValue / stepMax
+    progressPercentage = progressValue / progressMax
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
     for varName, value of mod
@@ -384,14 +384,14 @@ class EventBase extends Extend
                   colorType = @constructor.actionProperties.modifiables[varName].colorType
                   if !colorType?
                     colorType = 'hex'
-                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType)
-                @[varName] = @[colorCacheVarName][stepValue]
+                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
+                @[varName] = @[colorCacheVarName][progressValue]
 
   # アニメーションによるアイテム状態更新
   updateInstanceParamByAnimation: (immediate = false) ->
     # NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
     ed = @eventDuration()
-    stepMax = @stepMax()
+    progressMax = @progressMax()
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
 
@@ -420,10 +420,10 @@ class EventBase extends Extend
                   colorType = @constructor.actionProperties.modifiables[varName].colorType
                   if !colorType?
                     colorType = 'hex'
-                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, stepMax, colorType)
+                  @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
                 @[varName] = @[colorCacheVarName][count]
       count += 1
-      if count > stepMax
+      if count > progressMax
         clearInterval(timer)
         for varName, value of mod
           if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
@@ -444,7 +444,7 @@ class EventBase extends Extend
     return @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]? && @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]
 
   # ステップ数最大値
-  stepMax: ->
+  progressMax: ->
     actionType = Common.getActionTypeByCodingActionType(@constructor.actionProperties.methods[@getEventMethodName()].actionType)
     return if actionType == Constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
 

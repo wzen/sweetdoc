@@ -206,7 +206,7 @@ class ItemPreviewTemp extends CanvasItemBase
   # @param [Integer] scrollValue スクロール値
   scrollDraw : (opt) ->
     #console.log("scrollY: #{@scrollValue}")
-    r = opt.step / @stepMax()
+    r = opt.progress / opt.progressMax
 
     @resetDrawPath()
     @restoreAllNewDrawingSurface()

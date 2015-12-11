@@ -213,7 +213,7 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.prototype.scrollDraw = function(opt) {
     var j, len, r, ref;
-    r = opt.step / this.stepMax();
+    r = opt.progress / opt.progressMax;
     this.resetDrawPath();
     this.restoreAllNewDrawingSurface();
     ref = this.coodRegist.slice(0, parseInt((this.coodRegist.length - 1) * r));
