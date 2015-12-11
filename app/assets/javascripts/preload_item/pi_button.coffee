@@ -7,7 +7,11 @@ class PreloadItemButton extends CssItemBase
 
   @actionProperties =
     {
-      defaultMethod: 'defaultClick'
+      defaultEvent: {
+        method: 'defaultClick'
+        actionType: 'click'
+        eventDuration: 0.5
+      }
       designConfig: true
       designConfigDefaultValues: {
         values: {
@@ -70,9 +74,7 @@ class PreloadItemButton extends CssItemBase
       }
       methods: {
         defaultClick: {
-          actionType: 'click'
           isDrawByAnimation: true
-          eventDuration: 0.5
           options: {
             id: 'defaultClick'
             name: 'Default click action'
@@ -85,19 +87,6 @@ class PreloadItemButton extends CssItemBase
         }
 
         changeColorScroll: {
-          actionType: 'scroll'
-          scrollEnabledDirection: {
-            top: true
-            bottom: true
-            left: false
-            right: false
-          }
-          scrollForwardDirection: {
-            top: false
-            bottom: true
-            left: false
-            right: false
-          }
           options: {
             id: 'changeColorScroll_Design'
             name: 'Changing color by scroll'
@@ -115,8 +104,6 @@ class PreloadItemButton extends CssItemBase
         }
 
         changeColorClick: {
-          actionType: 'click'
-          eventDuration: 0.5
           options: {
             id: 'changeColorClick_Design'
             name: 'Changing color by click'

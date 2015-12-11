@@ -15,7 +15,11 @@ PreloadItemButton = (function(superClass) {
   PreloadItemButton.ITEM_ACCESS_TOKEN = 'PreloadItemButton';
 
   PreloadItemButton.actionProperties = {
-    defaultMethod: 'defaultClick',
+    defaultEvent: {
+      method: 'defaultClick',
+      actionType: 'click',
+      eventDuration: 0.5
+    },
     designConfig: true,
     designConfigDefaultValues: {
       values: {
@@ -78,9 +82,7 @@ PreloadItemButton = (function(superClass) {
     },
     methods: {
       defaultClick: {
-        actionType: 'click',
         isDrawByAnimation: true,
-        eventDuration: 0.5,
         options: {
           id: 'defaultClick',
           name: 'Default click action',
@@ -92,19 +94,6 @@ PreloadItemButton = (function(superClass) {
         }
       },
       changeColorScroll: {
-        actionType: 'scroll',
-        scrollEnabledDirection: {
-          top: true,
-          bottom: true,
-          left: false,
-          right: false
-        },
-        scrollForwardDirection: {
-          top: false,
-          bottom: true,
-          left: false,
-          right: false
-        },
         options: {
           id: 'changeColorScroll_Design',
           name: 'Changing color by scroll'
@@ -121,8 +110,6 @@ PreloadItemButton = (function(superClass) {
         }
       },
       changeColorClick: {
-        actionType: 'click',
-        eventDuration: 0.5,
         options: {
           id: 'changeColorClick_Design',
           name: 'Changing color by click',

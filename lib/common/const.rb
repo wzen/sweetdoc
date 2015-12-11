@@ -358,6 +358,8 @@ class Const
 
   class ItemActionPropertiesKey
     METHODS = 'methods'
+    DEFAULT_EVENT = 'defaultEvent'
+    METHOD = 'method'
     DEFAULT_METHOD = 'defaultMethod'
     ACTION_TYPE = 'actionType'
     SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'

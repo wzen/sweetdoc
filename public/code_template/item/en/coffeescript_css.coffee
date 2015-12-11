@@ -6,9 +6,14 @@ class ItemPreviewTemp extends CssItemBase
   if window.loadedItemToken?
     @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
+
   @actionProperties =
   {
-    defaultMethod: 'defaultClick'
+    defaultEvent: {
+      method: 'defaultClick'
+      actionType: 'click'
+      eventDuration: 0.5
+    }
     designConfig: true
     designConfigDefaultValues: {
       values: {
@@ -71,9 +76,7 @@ class ItemPreviewTemp extends CssItemBase
     }
     methods: {
       defaultClick: {
-        actionType: 'click'
         isDrawByAnimation: true
-        eventDuration: 0.5
         options: {
           id: 'defaultClick'
           name: 'Default click action'
@@ -86,19 +89,6 @@ class ItemPreviewTemp extends CssItemBase
       }
 
       changeColorScroll: {
-        actionType: 'scroll'
-        scrollEnabledDirection: {
-          top: true
-          bottom: true
-          left: false
-          right: false
-        }
-        scrollForwardDirection: {
-          top: false
-          bottom: true
-          left: false
-          right: false
-        }
         options: {
           id: 'changeColorScroll_Design'
           name: 'Changing color by scroll'
@@ -116,8 +106,6 @@ class ItemPreviewTemp extends CssItemBase
       }
 
       changeColorClick: {
-        actionType: 'click'
-        eventDuration: 0.5
         options: {
           id: 'changeColorClick_Design'
           name: 'Changing color by click'

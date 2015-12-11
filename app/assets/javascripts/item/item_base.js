@@ -23,6 +23,10 @@ ItemBase = (function(superClass) {
 
       ActionPropertiesKey.METHODS = constant.ItemActionPropertiesKey.METHODS;
 
+      ActionPropertiesKey.DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT;
+
+      ActionPropertiesKey.METHOD = constant.ItemActionPropertiesKey.METHOD;
+
       ActionPropertiesKey.DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD;
 
       ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
@@ -177,11 +181,11 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
-    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_METHOD];
+    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.METHOD];
   };
 
   ItemBase.defaultActionType = function() {
-    return Common.getActionTypeByCodingActionType(this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.ACTION_TYPE]);
+    return Common.getActionTypeByCodingActionType(this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.ACTION_TYPE]);
   };
 
   ItemBase.defaultEventConfigValue = function() {
@@ -189,15 +193,15 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.defaultScrollEnabledDirection = function() {
-    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
+    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
   };
 
   ItemBase.defaultScrollForwardDirection = function() {
-    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
+    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
   };
 
   ItemBase.defaultClickDuration = function() {
-    return this.actionProperties[this.ActionPropertiesKey.METHODS][this.defaultMethodName()][this.ActionPropertiesKey.EVENT_DURATION];
+    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.EVENT_DURATION];
   };
 
   ItemBase.prototype.applyDefaultDesign = function() {

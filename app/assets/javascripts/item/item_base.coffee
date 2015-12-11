@@ -17,6 +17,8 @@ class ItemBase extends ItemEventBase
 
     class @ActionPropertiesKey
       @METHODS = constant.ItemActionPropertiesKey.METHODS
+      @DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT
+      @METHOD = constant.ItemActionPropertiesKey.METHOD
       @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
       @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
       @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
@@ -155,26 +157,26 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->
-    return @actionProperties[@ActionPropertiesKey.DEFAULT_METHOD]
+    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.METHOD]
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
-    return Common.getActionTypeByCodingActionType(@actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.ACTION_TYPE])
+    return Common.getActionTypeByCodingActionType(@actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.ACTION_TYPE])
 
   @defaultEventConfigValue = ->
     return null
 
   # スクロールのデフォルト有効方向
   @defaultScrollEnabledDirection = ->
-    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_ENABLED_DIRECTION]
+    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SCROLL_ENABLED_DIRECTION]
 
   # スクロールのデフォルト進行方向
   @defaultScrollForwardDirection = ->
-    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
+    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
 
   # クリックのデフォルト時間
   @defaultClickDuration = ->
-    return @actionProperties[@ActionPropertiesKey.METHODS][@defaultMethodName()][@ActionPropertiesKey.EVENT_DURATION]
+    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.EVENT_DURATION]
 
   # デフォルトデザインをPageValue & 変数に適用
   applyDefaultDesign: ->

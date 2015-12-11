@@ -12,7 +12,22 @@ class PreloadItemArrow extends CanvasItemBase
 
   @actionProperties =
     {
-      defaultMethod: 'scrollDraw'
+      defaultEvent: {
+        method: 'scrollDraw'
+        actionType: 'scroll'
+        scrollEnabledDirection: {
+          top: true
+          bottom: true
+          left: false
+          right: false
+        }
+        scrollForwardDirection: {
+          top: false
+          bottom: true
+          left: false
+          right: false
+        }
+      }
       designConfig: true
       designConfigDefaultValues: {
         values: {
@@ -58,19 +73,6 @@ class PreloadItemArrow extends CanvasItemBase
       }
       methods : {
         scrollDraw: {
-          actionType: 'scroll'
-          scrollEnabledDirection: {
-            top: true
-            bottom: true
-            left: false
-            right: false
-          }
-          scrollForwardDirection: {
-            top: false
-            bottom: true
-            left: false
-            right: false
-          }
           modifiables: {
             arrowWidth: {
               name: "Arrow's width"
