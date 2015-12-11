@@ -263,12 +263,23 @@ class EventBase extends Extend
       return
     else if @scrollValue >= ePoint
       @scrollValue = ePoint
-      if !@isDrawByAnimationMethod() && !@isFinishedEvent
-        # 終了イベント
-        @isFinishedEvent = true
-        ScrollGuide.hideGuide()
-        if complete?
-          complete()
+      if !@isFinishedEvent
+        if !@isDrawByAnimationMethod()
+          # 終了イベント
+          @isFinishedEvent = true
+          ScrollGuide.hideGuide()
+          if complete?
+            complete()
+        else
+          # アニメーション実行は1回のみ
+          @skipEvent = true
+          @execMethod({
+            complete: ->
+              @isFinishedEvent = true
+              ScrollGuide.hideGuide()
+              if complete?
+                complete()
+          })
       return
 
     @canForward = @scrollValue < ePoint
@@ -277,23 +288,13 @@ class EventBase extends Extend
     if !@isDrawByAnimationMethod()
       # ステップ実行
       @execMethod({progress: @scrollValue - sPoint, progressMax: @progressMax()})
-    else
-      # アニメーション実行は1回のみ
-      @skipEvent = true
-      @execMethod({
-        complete: ->
-          @isFinishedEvent = true
-          ScrollGuide.hideGuide()
-          if complete?
-            complete()
-      })
 
   # スクロールの長さを取得
   # @return [Integer] スクロール長さ
   scrollLength: ->
     return parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
 
-  # スクロール基底メソッド
+  # クリック基底メソッド
   # @param [Object] e クリックオブジェクト
   # @param [Function] complete イベント終了後コールバック
   clickHandlerFunc: (e, complete = null) ->

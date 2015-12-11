@@ -291,11 +291,24 @@ EventBase = (function(superClass) {
       return;
     } else if (this.scrollValue >= ePoint) {
       this.scrollValue = ePoint;
-      if (!this.isDrawByAnimationMethod() && !this.isFinishedEvent) {
-        this.isFinishedEvent = true;
-        ScrollGuide.hideGuide();
-        if (complete != null) {
-          complete();
+      if (!this.isFinishedEvent) {
+        if (!this.isDrawByAnimationMethod()) {
+          this.isFinishedEvent = true;
+          ScrollGuide.hideGuide();
+          if (complete != null) {
+            complete();
+          }
+        } else {
+          this.skipEvent = true;
+          this.execMethod({
+            complete: function() {
+              this.isFinishedEvent = true;
+              ScrollGuide.hideGuide();
+              if (complete != null) {
+                return complete();
+              }
+            }
+          });
         }
       }
       return;
@@ -306,17 +319,6 @@ EventBase = (function(superClass) {
       return this.execMethod({
         progress: this.scrollValue - sPoint,
         progressMax: this.progressMax()
-      });
-    } else {
-      this.skipEvent = true;
-      return this.execMethod({
-        complete: function() {
-          this.isFinishedEvent = true;
-          ScrollGuide.hideGuide();
-          if (complete != null) {
-            return complete();
-          }
-        }
       });
     }
   };
