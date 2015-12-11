@@ -64,7 +64,7 @@ class ClickGuide extends GuideBase
   # フォーカス時の色を判定
   # @param [Object] item アイテムオブジェクト
   @focusColor: (item) ->
-    background = item.getJQueryElement().find('.css_item_base:first').css('background')
+    background = item.getJQueryElement().find('.context_base:first').css('background')
 
     # gradient抜き出し
     startIndex = background.indexOf('gradient(') + 'gradient('.length

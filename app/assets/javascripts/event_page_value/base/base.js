@@ -148,10 +148,9 @@ EventPageValueBase = (function() {
         actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', eventConfig[this.PageValueKey.ITEM_ACCESS_TOKEN]);
       }
       $("." + actionFormName + " .radio", eventConfig.emt).each(function(e) {
-        var actionType, methodName;
-        actionType = $(this).find('input.action_type').val();
+        var methodName;
         methodName = $(this).find('input.method_name').val();
-        if (parseInt(actionType) === eventConfig[EventPageValueBase.PageValueKey.ACTIONTYPE] && methodName === eventConfig[EventPageValueBase.PageValueKey.METHODNAME]) {
+        if (methodName === eventConfig[EventPageValueBase.PageValueKey.METHODNAME]) {
           return $(this).find('input:radio').prop('checked', true);
         }
       });

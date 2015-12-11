@@ -367,18 +367,19 @@ Page = (function() {
   };
 
   Page.prototype.initItemState = function(callback) {
-    var instance, instances, key, obj, results, value;
+    var instance, instances, key, obj, value, waitDraw;
     if (callback == null) {
       callback = null;
     }
+    waitDraw = false;
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
-    results = [];
     for (key in instances) {
       instance = instances[key];
       value = instance.value;
       obj = Common.getInstanceFromMap(false, value.id, value.itemToken);
       if (obj.visible) {
-        results.push(obj.reDraw(true, (function(_this) {
+        waitDraw = true;
+        obj.reDraw(true, (function(_this) {
           return function() {
             if (obj.firstFocus) {
               window.disabledEventHandler = true;
@@ -390,12 +391,14 @@ Page = (function() {
               return callback();
             }
           };
-        })(this)));
-      } else {
-        results.push(void 0);
+        })(this));
       }
     }
-    return results;
+    if (!waitDraw) {
+      if (callback != null) {
+        return callback();
+      }
+    }
   };
 
   Page.prototype.resetAllChapters = function() {

@@ -216,14 +216,16 @@ class EventConfig
     Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
     # キャッシュに保存
     LocalStorage.saveAllPageValues()
-    # プレビュー開始
-    item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
-    if item? && item.preview?
-      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
-      # インスタンスの状態を保存
-      item.initEvent(te)
-      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
-      item.preview(te)
+
+    if @[EventPageValueBase.PageValueKey.METHODNAME]?
+      # プレビュー開始
+      item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
+      if item? && item.preview?
+        te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
+        # インスタンスの状態を保存
+        item.initEvent(te)
+        PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
+        item.preview(te)
 
     return true
 
@@ -407,15 +409,15 @@ class EventConfig
         if !methods?
           console.log("Not Found #{ItemBase.ActionPropertiesKey.METHODS} key in actionProperties")
           return
+
+        # アクションメソッドConfig追加
+        methodClone = $('#event-config .method_none_temp').children(':first').clone(true)
+        methodClone.find('input:radio').attr('name', className)
+        actionParent.append(methodClone)
         for methodName, prop of methods
-          # アクションメソッドConfig追加
-          actionType = Common.getActionTypeByCodingActionType(prop.actionType)
-          actionTypeClassName = Common.getActionTypeClassNameByActionType(actionType)
           methodClone = $('#event-config .method_temp').children(':first').clone(true)
           span = methodClone.find('label:first').children('span:first')
-          span.attr('class', actionTypeClassName)
           span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
-          methodClone.find('input.action_type:first').val(actionType)
           methodClone.find('input.method_name:first').val(methodName)
           valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName)
           methodClone.find('input:radio').attr('name', className)

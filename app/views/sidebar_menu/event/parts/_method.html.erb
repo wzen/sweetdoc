@@ -1,15 +1,14 @@
 <% method_name = '' if method_name.nil? %>
-<% action_type_id = '' if action_type_id.nil? %>
 <% value_class_name = '' if value_class_name.nil? %>
 <% radio_name = '' if radio_name.nil? %>
+<% type = 'normal' if type.nil? %>
 
 <div class='radio'>
-  <% if method_name.length > 0 %>
-    <label><input type='radio' name='<%= radio_name %>'><span class='<%= EventHelper.actionTypeClassNameByActionType(action_type_id) %>'><%= method_name %></span></label>
-    <input class='action_type' type='hidden' value='<%= action_type_id %>'>
+  <% if type != 'none' %>
+    <label><input type='radio' name='<%= radio_name %>'><span><%= method_name %></span></label>
     <input class='method_name' type='hidden' value='<%= method_name %>'>
     <input class='value_class_name' type='hidden' value='<%= value_class_name %>'>
   <% else %>
-      <label><input type='radio' name='none' checked><span class='none'>none</span></label>
+      <label><input type='radio' name='<%= radio_name %>' checked><span class='none'>none</span></label>
   <% end %>
 </div>

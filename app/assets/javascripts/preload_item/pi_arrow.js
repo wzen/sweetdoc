@@ -19,7 +19,7 @@ PreloadItemArrow = (function(superClass) {
 
   PreloadItemArrow.actionProperties = {
     defaultEvent: {
-      method: 'scrollDraw',
+      method: 'changeDraw',
       actionType: 'scroll',
       scrollEnabledDirection: {
         top: true,
@@ -78,7 +78,7 @@ PreloadItemArrow = (function(superClass) {
       }
     },
     methods: {
-      scrollDraw: {
+      changeDraw: {
         modifiables: {
           arrowWidth: {
             name: "Arrow's width",
@@ -93,19 +93,19 @@ PreloadItemArrow = (function(superClass) {
         },
         options: {
           id: 'drawScroll',
-          name: 'Drawing by scroll',
-          desc: "Draw by scroll action",
+          name: 'Draw',
+          desc: "Draw",
           ja: {
-            name: 'スクロールで描画',
-            desc: 'スクロールで矢印を描画'
+            name: '描画',
+            desc: '矢印を描画'
           }
         }
       },
-      changeColorClick: {
+      changeColor: {
         actionType: 'click',
         options: {
-          id: 'changeColorClick_Design',
-          name: 'Changing color by click'
+          id: 'changeColor_Design',
+          name: 'Change color'
         }
       }
     }
@@ -115,7 +115,7 @@ PreloadItemArrow = (function(superClass) {
     if (cood == null) {
       cood = null;
     }
-    this.changeColorClick = bind(this.changeColorClick, this);
+    this.changeColor = bind(this.changeColor, this);
     PreloadItemArrow.__super__.constructor.call(this, cood);
     this._direction = {
       x: 0,
@@ -197,7 +197,7 @@ PreloadItemArrow = (function(superClass) {
     var methodName;
     PreloadItemArrow.__super__.updateEventBefore.call(this);
     methodName = this.getEventMethodName();
-    if (methodName === 'scrollDraw') {
+    if (methodName === 'changeDraw') {
       return this.reDraw(false);
     }
   };
@@ -206,12 +206,12 @@ PreloadItemArrow = (function(superClass) {
     var methodName;
     PreloadItemArrow.__super__.updateEventAfter.call(this);
     methodName = this.getEventMethodName();
-    if (methodName === 'scrollDraw') {
+    if (methodName === 'changeDraw') {
       return this.reDraw();
     }
   };
 
-  PreloadItemArrow.prototype.scrollDraw = function(opt) {
+  PreloadItemArrow.prototype.changeDraw = function(opt) {
     var j, len, r, ref;
     r = opt.progress / opt.progressMax;
     this.resetDrawPath();
@@ -224,7 +224,7 @@ PreloadItemArrow = (function(superClass) {
     return this.drawNewCanvas();
   };
 
-  PreloadItemArrow.prototype.changeColorClick = function(e) {};
+  PreloadItemArrow.prototype.changeColor = function(opt) {};
 
   _coodLength = function(locA, locB) {
     return parseInt(Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2)));

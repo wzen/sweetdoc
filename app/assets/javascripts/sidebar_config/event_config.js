@@ -205,12 +205,14 @@ EventConfig = (function() {
     }
     Timeline.changeTimelineColor(this.teNum, this[EventPageValueBase.PageValueKey.ACTIONTYPE]);
     LocalStorage.saveAllPageValues();
-    item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-    if ((item != null) && (item.preview != null)) {
-      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
-      item.initEvent(te);
-      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
-      item.preview(te);
+    if (this[EventPageValueBase.PageValueKey.METHODNAME] != null) {
+      item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
+      if ((item != null) && (item.preview != null)) {
+        te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
+        item.initEvent(te);
+        PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
+        item.preview(te);
+      }
     }
     return true;
   };
@@ -390,7 +392,7 @@ EventConfig = (function() {
   };
 
   EventConfig.addEventConfigContents = function(item_access_token) {
-    var actionParent, actionType, actionTypeClassName, action_forms, className, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
+    var actionParent, action_forms, className, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
     itemClass = Common.getClassFromMap(false, item_access_token);
     if ((itemClass != null) && (itemClass.actionProperties != null)) {
       className = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', item_access_token);
@@ -407,15 +409,14 @@ EventConfig = (function() {
           console.log("Not Found " + ItemBase.ActionPropertiesKey.METHODS + " key in actionProperties");
           return;
         }
+        methodClone = $('#event-config .method_none_temp').children(':first').clone(true);
+        methodClone.find('input:radio').attr('name', className);
+        actionParent.append(methodClone);
         for (methodName in methods) {
           prop = methods[methodName];
-          actionType = Common.getActionTypeByCodingActionType(prop.actionType);
-          actionTypeClassName = Common.getActionTypeClassNameByActionType(actionType);
           methodClone = $('#event-config .method_temp').children(':first').clone(true);
           span = methodClone.find('label:first').children('span:first');
-          span.attr('class', actionTypeClassName);
           span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name']);
-          methodClone.find('input.action_type:first').val(actionType);
           methodClone.find('input.method_name:first').val(methodName);
           valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName);
           methodClone.find('input:radio').attr('name', className);

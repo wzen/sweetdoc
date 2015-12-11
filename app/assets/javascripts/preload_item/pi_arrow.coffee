@@ -13,7 +13,7 @@ class PreloadItemArrow extends CanvasItemBase
   @actionProperties =
     {
       defaultEvent: {
-        method: 'scrollDraw'
+        method: 'changeDraw'
         actionType: 'scroll'
         scrollEnabledDirection: {
           top: true
@@ -72,7 +72,7 @@ class PreloadItemArrow extends CanvasItemBase
         }
       }
       methods : {
-        scrollDraw: {
+        changeDraw: {
           modifiables: {
             arrowWidth: {
               name: "Arrow's width"
@@ -87,19 +87,19 @@ class PreloadItemArrow extends CanvasItemBase
           }
           options: {
             id: 'drawScroll'
-            name: 'Drawing by scroll'
-            desc: "Draw by scroll action"
+            name: 'Draw'
+            desc: "Draw"
             ja: {
-              name: 'スクロールで描画'
-              desc: 'スクロールで矢印を描画'
+              name: '描画'
+              desc: '矢印を描画'
             }
           }
         }
-        changeColorClick: {
+        changeColor: {
           actionType: 'click'
           options: {
-            id: 'changeColorClick_Design'
-            name: 'Changing color by click'
+            id: 'changeColor_Design'
+            name: 'Change color'
           }
         }
       }
@@ -195,19 +195,18 @@ class PreloadItemArrow extends CanvasItemBase
   updateEventBefore: ->
     super()
     methodName = @getEventMethodName()
-    if methodName == 'scrollDraw'
+    if methodName == 'changeDraw'
       @reDraw(false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
     super()
     methodName = @getEventMethodName()
-    if methodName == 'scrollDraw'
+    if methodName == 'changeDraw'
       @reDraw()
 
-  # スクロールイベント ※アクションイベント
-  # @param [Integer] scrollValue スクロール値
-  scrollDraw : (opt) ->
+  # 描画イベント ※アクションイベント
+  changeDraw : (opt) ->
     r = opt.progress / opt.progressMax
 
     @resetDrawPath()
@@ -217,8 +216,8 @@ class PreloadItemArrow extends CanvasItemBase
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()
 
-  # クリックイベント ※アクションイベント
-  changeColorClick : (e) =>
+  # 色変更イベント ※アクションイベント
+  changeColor : (opt) =>
 
   # 座標間の距離を計算する
   # @private

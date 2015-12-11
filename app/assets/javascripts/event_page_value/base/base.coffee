@@ -130,9 +130,8 @@ class EventPageValueBase
       else
         actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', eventConfig[@PageValueKey.ITEM_ACCESS_TOKEN])
       $(".#{actionFormName} .radio", eventConfig.emt).each((e) ->
-        actionType = $(@).find('input.action_type').val()
         methodName = $(@).find('input.method_name').val()
-        if parseInt(actionType) == eventConfig[EventPageValueBase.PageValueKey.ACTIONTYPE] && methodName == eventConfig[EventPageValueBase.PageValueKey.METHODNAME]
+        if methodName == eventConfig[EventPageValueBase.PageValueKey.METHODNAME]
           $(@).find('input:radio').prop('checked', true)
       )
 
