@@ -49,20 +49,20 @@ class Chapter
     window.disabledEventHandler = true
     item = null
     @eventObjList.forEach((e, idx) =>
-      if @eventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-        item = e
-        return false
+      if @eventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false &&
+        @eventList[idx][EventPageValueBase.PageValueKey.DO_FOCUS]
+          item = e
+          return false
     )
 
-    # TODO: center以外
-
     if item?
+      # TODO: center以外も?
       if type == 'center'
         Common.focusToTarget(item.getJQueryElement(), ->
           window.disabledEventHandler = false
         , isImmediate)
-
     else
+      # フォーカスなし
       window.disabledEventHandler = false
 
   # イベントアイテムを前面に表示

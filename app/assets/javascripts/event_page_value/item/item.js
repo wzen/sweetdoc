@@ -23,7 +23,13 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.DIST_ID] = distId;
     writeValue[this.PageValueKey.ID] = item.id;
     writeValue[this.PageValueKey.ITEM_ACCESS_TOKEN] = item.constructor.ITEM_ACCESS_TOKEN;
-    writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = item.itemSizeDiff;
+    writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = {
+      x: 0,
+      y: 0,
+      w: 0,
+      h: 0
+    };
+    writeValue[this.PageValueKey.DO_FOCUS] = true;
     writeValue[this.PageValueKey.COMMON_EVENT_ID] = null;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = false;
     writeValue[this.PageValueKey.METHODNAME] = item.constructor.defaultMethodName();

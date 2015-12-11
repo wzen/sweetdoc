@@ -14,6 +14,8 @@ class EventPageValueBase
       @ITEM_ACCESS_TOKEN = constant.EventPageValueKey.ITEM_ACCESS_TOKEN
       # @property [String] ITEM_SIZE_DIFF アイテムサイズ
       @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
+      # @property [String] DO_FOCUS フォーカス
+      @DO_FOCUS = constant.EventPageValueKey.DO_FOCUS
       # @property [String] COMMON_EVENT_ID 共通イベントID
       @COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID
       # @property [String] VALUE イベント値
@@ -122,6 +124,10 @@ class EventPageValueBase
           $('.item_diff_width', eventConfig.emt).val(eventConfig[@PageValueKey.ITEM_SIZE_DIFF].w)
         if eventConfig[@PageValueKey.ITEM_SIZE_DIFF] && eventConfig[@PageValueKey.ITEM_SIZE_DIFF].h
           $('.item_diff_height', eventConfig.emt).val(eventConfig[@PageValueKey.ITEM_SIZE_DIFF].h)
+        if eventConfig[@PageValueKey.DO_FOCUS]
+          $('.do_focus', eventConfig.emt).prop('checked', true)
+        else
+          $('.do_focus', eventConfig.emt).removeAttr('checked')
 
       parallel = $(".parallel_div .parallel", eventConfig.emt)
       if parallel? && eventConfig[@PageValueKey.IS_SYNC]

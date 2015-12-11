@@ -51,7 +51,7 @@ Chapter = (function() {
     item = null;
     this.eventObjList.forEach((function(_this) {
       return function(e, idx) {
-        if (_this.eventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+        if (_this.eventList[idx][EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false && _this.eventList[idx][EventPageValueBase.PageValueKey.DO_FOCUS]) {
           item = e;
           return false;
         }

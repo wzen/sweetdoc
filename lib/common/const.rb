@@ -310,6 +310,7 @@ class Const
     ID = 'id'
     ITEM_ACCESS_TOKEN = 'item_access_token'
     ITEM_SIZE_DIFF = 'item_size_diff'
+    DO_FOCUS = 'do_focus'
     COMMON_EVENT_ID = 'common_event_id'
     VALUE = 'value'
     IS_COMMON_EVENT = 'is_common_event'

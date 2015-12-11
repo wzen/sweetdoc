@@ -19,6 +19,8 @@ EventPageValueBase = (function() {
 
       PageValueKey.ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF;
 
+      PageValueKey.DO_FOCUS = constant.EventPageValueKey.DO_FOCUS;
+
       PageValueKey.COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID;
 
       PageValueKey.VALUE = constant.EventPageValueKey.VALUE;
@@ -145,6 +147,11 @@ EventPageValueBase = (function() {
         }
         if (eventConfig[this.PageValueKey.ITEM_SIZE_DIFF] && eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].h) {
           $('.item_diff_height', eventConfig.emt).val(eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].h);
+        }
+        if (eventConfig[this.PageValueKey.DO_FOCUS]) {
+          $('.do_focus', eventConfig.emt).prop('checked', true);
+        } else {
+          $('.do_focus', eventConfig.emt).removeAttr('checked');
         }
       }
       parallel = $(".parallel_div .parallel", eventConfig.emt);

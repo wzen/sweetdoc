@@ -185,6 +185,8 @@ class EventConfig
       h: parseInt($('.item_diff_height:first', @emt).val())
     }
 
+    @[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', @emt).prop('checked')
+
     @[EventPageValueBase.PageValueKey.IS_SYNC] = false
     parallel = $(".parallel_div .parallel", @emt)
     if parallel?
