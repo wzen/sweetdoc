@@ -180,37 +180,59 @@ WorkTableCommonInclude = {
   setupOptionMenu: function() {
     return ConfigMenu.getDesignConfig(this, (function(_this) {
       return function(designConfigRoot) {
-        var h, name, w, x, y;
+        var _existFocusSetItem, focusEmt, h, name, visibleEmt, w, x, y;
         name = $('.item-name', designConfigRoot);
         name.val(_this.name);
         name.off('change').on('change', function() {
           _this.name = $(_this).val();
           return _this.setItemPropToPageValue('name', _this.name);
         });
+        _existFocusSetItem = function() {
+          var focusExist, instance, instances, k, obj;
+          focusExist = false;
+          instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
+          for (k in instances) {
+            instance = instances[k];
+            obj = window.instanceMap[instance.value.id];
+            if ((obj != null) && (obj.firstFocus != null) && obj.firstFocus) {
+              focusExist = true;
+            }
+          }
+          return focusExist;
+        };
+        focusEmt = $('.focus_at_launch', designConfigRoot);
         if (_this.firstFocus) {
-          $('.focus_at_launch', designConfigRoot).prop('checked', true);
+          focusEmt.prop('checked', true);
         } else {
-          $('.focus_at_launch', designConfigRoot).removeAttr('checked');
+          focusEmt.removeAttr('checked');
         }
-        $('.focus_at_launch', designConfigRoot).off('change').on('change', function(e) {
+        if (!_this.firstFocus && _existFocusSetItem.call(_this)) {
+          focusEmt.removeAttr('checked');
+          focusEmt.attr('disabled', true);
+        } else {
+          focusEmt.removeAttr('disabled');
+        }
+        focusEmt.off('change').on('change', function(e) {
           _this.firstFocus = $(e.target).prop('checked');
           return _this.saveObj();
         });
+        visibleEmt = $('.visible_at_launch', designConfigRoot);
         if (_this.visible) {
-          $('.visible_at_launch', designConfigRoot).prop('checked', true);
+          visibleEmt.prop('checked', true);
         } else {
-          $('.visible_at_launch', designConfigRoot).removeAttr('checked');
-          $('.focus_at_launch', designConfigRoot).removeAttr('disabled');
+          visibleEmt.removeAttr('checked');
+          focusEmt.removeAttr('checked');
+          focusEmt.attr('disabled', true);
         }
-        $('.visible_at_launch', designConfigRoot).off('change').on('change', function(e) {
+        visibleEmt.off('change').on('change', function(e) {
           _this.visible = $(e.target).prop('checked');
-          if (_this.visible) {
-            $('.focus_at_launch', designConfigRoot).removeAttr('disabled');
+          if (_this.visible && !_existFocusSetItem.call(_this)) {
+            focusEmt.removeAttr('disabled');
           } else {
-            $('.focus_at_launch', designConfigRoot).removeAttr('checked');
-            $('.focus_at_launch', designConfigRoot).attr('disabled', true);
+            focusEmt.removeAttr('checked');
+            focusEmt.attr('disabled', true);
           }
-          $('.focus_at_launch', designConfigRoot).trigger('change');
+          focusEmt.trigger('change');
           return _this.saveObj();
         });
         x = _this.getJQueryElement().position().left;

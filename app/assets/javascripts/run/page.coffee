@@ -263,7 +263,7 @@ class Page
     )
 
   # ページ戻し前処理
-  willPageFromRewind: (beforeScrollWindowSize) ->
+  willPageFromRewind: (callback = null) ->
     # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
     # フォーカス
@@ -281,6 +281,8 @@ class Page
     @resetChapter()
     # キャッシュ保存
     LocalStorage.saveAllPageValues()
+    if callback?
+      callback()
 
   # ページ後処理
   didPage: ->

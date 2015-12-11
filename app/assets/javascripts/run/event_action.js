@@ -130,8 +130,9 @@ EventAction = (function() {
             })(this));
           };
           if (beforePageNum > afterPageNum) {
-            _this.thisPage().willPageFromRewind();
-            return _after.call(_this);
+            return _this.thisPage().willPageFromRewind(function() {
+              return _after.call(_this);
+            });
           } else {
             RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum);
             RunCommon.setForkNum(PageValue.Key.EF_MASTER_FORKNUM);

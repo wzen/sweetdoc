@@ -157,30 +157,48 @@ WorkTableCommonInclude =
         @setItemPropToPageValue('name', @name)
       )
 
+      _existFocusSetItem = ->
+        focusExist = false
+        instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
+        for k, instance of instances
+          obj = window.instanceMap[instance.value.id]
+          if obj? && obj.firstFocus? && obj.firstFocus
+            focusExist = true
+        return focusExist
+
+      focusEmt = $('.focus_at_launch', designConfigRoot)
       # アイテム初期フォーカス
       if @firstFocus
-        $('.focus_at_launch', designConfigRoot).prop('checked', true)
+        focusEmt.prop('checked', true)
       else
-        $('.focus_at_launch', designConfigRoot).removeAttr('checked')
-      $('.focus_at_launch', designConfigRoot).off('change').on('change', (e) =>
+        focusEmt.removeAttr('checked')
+      # ページ内に初期フォーカス設定されているアイテムが存在する場合はdisabled
+      if !@firstFocus && _existFocusSetItem.call(@)
+        focusEmt.removeAttr('checked')
+        focusEmt.attr('disabled', true)
+      else
+        focusEmt.removeAttr('disabled')
+      focusEmt.off('change').on('change', (e) =>
         @firstFocus = $(e.target).prop('checked')
         @saveObj()
       )
 
+      visibleEmt = $('.visible_at_launch', designConfigRoot)
       # アイテム初期表示
       if @visible
-        $('.visible_at_launch', designConfigRoot).prop('checked', true)
+        visibleEmt.prop('checked', true)
       else
-        $('.visible_at_launch', designConfigRoot).removeAttr('checked')
-        $('.focus_at_launch', designConfigRoot).removeAttr('disabled')
-      $('.visible_at_launch', designConfigRoot).off('change').on('change', (e) =>
+        visibleEmt.removeAttr('checked')
+        focusEmt.removeAttr('checked')
+        focusEmt.attr('disabled', true)
+      visibleEmt.off('change').on('change', (e) =>
         @visible = $(e.target).prop('checked')
-        if @visible
-          $('.focus_at_launch', designConfigRoot).removeAttr('disabled')
+        if @visible && !_existFocusSetItem.call(@)
+          focusEmt.removeAttr('disabled')
         else
-          $('.focus_at_launch', designConfigRoot).removeAttr('checked')
-          $('.focus_at_launch', designConfigRoot).attr('disabled', true)
-        $('.focus_at_launch', designConfigRoot).trigger('change')
+          focusEmt.removeAttr('checked')
+          focusEmt.attr('disabled', true)
+        focusEmt.trigger('change')
         @saveObj()
       )
 

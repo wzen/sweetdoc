@@ -131,8 +131,9 @@ class EventAction
         # ページ前処理
         if beforePageNum > afterPageNum
           # 前ページ移動 前処理
-          @thisPage().willPageFromRewind()
-          _after.call(@)
+          @thisPage().willPageFromRewind( =>
+            _after.call(@)
+          )
         else
           # フォークをMasterに設定
           RunCommon.initForkStack(PageValue.Key.EF_MASTER_FORKNUM, afterPageNum)

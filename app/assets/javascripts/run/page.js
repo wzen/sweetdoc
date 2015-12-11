@@ -279,7 +279,10 @@ Page = (function() {
     })(this));
   };
 
-  Page.prototype.willPageFromRewind = function(beforeScrollWindowSize) {
+  Page.prototype.willPageFromRewind = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     this.initChapterEvent();
     this.initFocus(false);
     this.forwardProgressChapters();
@@ -288,7 +291,10 @@ Page = (function() {
     this.setChapterIndex(this.getForkChapterList().length - 1);
     RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
     this.resetChapter();
-    return LocalStorage.saveAllPageValues();
+    LocalStorage.saveAllPageValues();
+    if (callback != null) {
+      return callback();
+    }
   };
 
   Page.prototype.didPage = function() {
