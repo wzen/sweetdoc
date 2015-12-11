@@ -66,6 +66,7 @@ ItemBase = (function(superClass) {
     this.id = "i" + this.constructor.IDENTITY + Common.generateId();
     this.itemToken = this.constructor.ITEM_ACCESS_TOKEN;
     this.name = null;
+    this.visible = false;
     this._drawingSurfaceImageData = null;
     if (cood !== null) {
       this._mousedownCood = {

@@ -17,7 +17,6 @@ PreloadItemImage = (function(superClass) {
   PreloadItemImage.ITEM_ACCESS_TOKEN = 'PreloadItemImage';
 
   PreloadItemImage.actionProperties = {
-    isFixed: true,
     modifiables: {
       imagePath: {
         name: "Select image",
@@ -47,6 +46,7 @@ PreloadItemImage = (function(superClass) {
         y: cood.y
       };
     }
+    this.visible = true;
     if (window.isWorkTable) {
       this.constructor.include(WorkTableCommonInclude);
     }

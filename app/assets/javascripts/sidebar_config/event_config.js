@@ -577,22 +577,13 @@ EventConfig = (function() {
   };
 
   EventConfig.updateSelectItemMenu = function() {
-    var ap, filteredItems, id, item, itemOptgroupClassName, itemToken, items, k, name, obj, selectOptions, teItemSelect, teItemSelects, v;
+    var id, item, itemOptgroupClassName, itemToken, items, k, name, selectOptions, teItemSelect, teItemSelects;
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
     selectOptions = '';
     items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
-    filteredItems = {};
     for (k in items) {
-      v = items[k];
-      obj = window.instanceMap[v.value.id];
-      ap = obj.constructor.actionProperties;
-      if ((ap.isFixed == null) || !ap.isFixed) {
-        filteredItems[k] = v;
-      }
-    }
-    for (k in filteredItems) {
-      item = filteredItems[k];
+      item = items[k];
       id = item.value.id;
       name = item.value.name;
       itemToken = item.value.itemToken;

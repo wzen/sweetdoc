@@ -261,7 +261,7 @@ Page = (function() {
     this.initChapterEvent();
     this.initFocus();
     this.resetAllChapters();
-    this.drawFixedItem();
+    this.initItemState();
     RunCommon.setChapterMax(this.getForkChapterList().length);
     return LocalStorage.saveAllPageValues();
   };
@@ -275,7 +275,6 @@ Page = (function() {
     this.setChapterIndex(this.getForkChapterList().length - 1);
     RunCommon.setForkNum(RunCommon.getLastForkNumFromStack(window.eventAction.thisPageNum()));
     this.resetChapter();
-    this.drawFixedItem();
     return LocalStorage.saveAllPageValues();
   };
 
@@ -348,17 +347,16 @@ Page = (function() {
     }
   };
 
-  Page.prototype.drawFixedItem = function() {
-    var ap, ins, instance, instances, key, results, value;
+  Page.prototype.initItemState = function() {
+    var instance, instances, key, obj, results, value;
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     results = [];
     for (key in instances) {
       instance = instances[key];
       value = instance.value;
-      ins = Common.getInstanceFromMap(false, value.id, value.itemToken);
-      ap = ins.constructor.actionProperties;
-      if ((ap.isFixed != null) && ap.isFixed) {
-        results.push(ins.reDraw());
+      obj = Common.getInstanceFromMap(false, value.id, value.itemToken);
+      if (obj.visible) {
+        results.push(obj.reDraw());
       } else {
         results.push(void 0);
       }

@@ -548,14 +548,7 @@ class EventConfig
     selectOptions = ''
     #items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pageRoot()}")
     items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
-    filteredItems = {}
-    for k, v of items
-      # 選択項目から除外する条件
-      obj = window.instanceMap[v.value.id]
-      ap = obj.constructor.actionProperties
-      if !ap.isFixed? || !ap.isFixed
-        filteredItems[k] = v
-    for k, item of filteredItems
+    for k, item of items
       id = item.value.id
       name = item.value.name
       itemToken = item.value.itemToken

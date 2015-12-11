@@ -43,6 +43,8 @@ class ItemBase extends ItemEventBase
     @itemToken = @constructor.ITEM_ACCESS_TOKEN
     # @property [String] name 名前
     @name = null
+    # @property [String] visible 表示状態
+    @visible = false
     # @property [Object] _drawingSurfaceImageData 画面を保存する変数
     @_drawingSurfaceImageData = null
     if cood != null

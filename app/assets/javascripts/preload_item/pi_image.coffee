@@ -8,7 +8,6 @@ class PreloadItemImage extends ItemBase
 
   @actionProperties =
   {
-    isFixed: true
     modifiables: {
       imagePath: {
         name: "Select image"
@@ -30,6 +29,7 @@ class PreloadItemImage extends ItemBase
     @scale = {w:1.0, h:1.0}
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
+    @visible = true
     if window.isWorkTable
       @constructor.include WorkTableCommonInclude
 
