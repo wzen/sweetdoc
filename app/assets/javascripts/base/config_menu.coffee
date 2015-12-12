@@ -56,6 +56,13 @@ class ConfigMenu
 
   # 変数編集コンフィグ
   @eventVarModifyConfig = (eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) ->
+    if !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]]? ||
+      !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables?
+        # メソッド or 変数編集無し
+        if successCallback?
+          successCallback()
+        return
+
     # HTML存在チェック
     valueClassName = eventConfigObj.methodClassName()
     emt = $(".value_forms .#{valueClassName}", eventConfigObj.emt)

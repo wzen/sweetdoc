@@ -19,7 +19,18 @@ class CommonEvent
       @eventId =  @constructor.EVENT_ID
 
     getJQueryElement: ->
-      return window.scrollInsideCover
+      return $('#common_event_click_overlay')
+
+    willChapter: ->
+      if @event[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
+        # クリック用オーバーレイを追加
+        z_index = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT)
+        $('body').append("<div id='common_event_click_overlay' style='z-index:#{z_index}'></div>")
+
+    didChapter: ->
+      if @event[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
+        # クリック用オーバーレイを削除
+        $('#common_event_click_overlay').remove()
 
   @getInstance: ->
     if !instance[PageValue.getPageNum()]?

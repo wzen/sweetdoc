@@ -8,5 +8,5 @@ class CommonEventBase extends EventBase
   # メソッド実行
   execMethod: (opt) ->
     super(opt)
-    (@constructor.prototype[methodName]).call(@, opt)
+    (@constructor.prototype[@getEventMethodName()]).call(@, opt)
 

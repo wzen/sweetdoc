@@ -24,7 +24,21 @@ CommonEvent = (function() {
     }
 
     PrivateClass.prototype.getJQueryElement = function() {
-      return window.scrollInsideCover;
+      return $('#common_event_click_overlay');
+    };
+
+    PrivateClass.prototype.willChapter = function() {
+      var z_index;
+      if (this.event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
+        z_index = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT);
+        return $('body').append("<div id='common_event_click_overlay' style='z-index:" + z_index + "'></div>");
+      }
+    };
+
+    PrivateClass.prototype.didChapter = function() {
+      if (this.event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
+        return $('#common_event_click_overlay').remove();
+      }
     };
 
     return PrivateClass;

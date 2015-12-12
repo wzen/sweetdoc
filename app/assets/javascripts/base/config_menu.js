@@ -87,6 +87,12 @@ ConfigMenu = (function() {
     if (errorCallback == null) {
       errorCallback = null;
     }
+    if ((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables == null)) {
+      if (successCallback != null) {
+        successCallback();
+      }
+      return;
+    }
     valueClassName = eventConfigObj.methodClassName();
     emt = $(".value_forms ." + valueClassName, eventConfigObj.emt);
     if (emt.length > 0) {
