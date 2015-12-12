@@ -9,7 +9,7 @@ Rails.application.config.assets.version = '1.0'
 precompile_target = lambda do |filename, path|
   puts filename
   # Mapファイルは除外
-  path =~ /app\/assets/ && !%w(.map).include?(File.extname(filename))
+  path =~ /app\/assets/ && !%w(.map .map.js).include?(File.extname(filename))
 end
 Rails.application.config.assets.precompile = [
     precompile_target,
