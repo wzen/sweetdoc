@@ -263,7 +263,7 @@ class EventConfig
 
   _setMethodActionEvent = ->
     actionClassName = @actionClassName()
-    em = $(".action_forms .#{actionClassName} input:radio", @emt)
+    em = $(".action_forms .#{actionClassName} input[type=radio]", @emt)
     em.off('click').on('click', (e) =>
       @clearError()
       parent = $(e.target).closest('.radio')
@@ -277,7 +277,7 @@ class EventConfig
 
   _setHandlerRadioEvent = ->
     $('.handler_div input[type=radio]', @emt).off('click').on('click', (e) =>
-      if $(".action_forms .#{@actionClassName()} input:radio:checked", @emt).length > 0
+      if $(".action_forms .#{@actionClassName()} input[type=radio]:checked", @emt).length > 0
         # Buttonフォーム表示
         $('.button_div', @emt).show()
 
@@ -403,7 +403,7 @@ class EventConfig
 
         # アクションメソッドConfig追加
         methodClone = $('#event-config .method_none_temp').children(':first').clone(true)
-        methodClone.find('input:radio').attr('name', className)
+        methodClone.find('input[type=radio]').attr('name', className)
         actionParent.append(methodClone)
         methods = props[ItemBase.ActionPropertiesKey.METHODS]
         if methods?
@@ -413,7 +413,7 @@ class EventConfig
             span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
             methodClone.find('input.method_name:first').val(methodName)
             valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName)
-            methodClone.find('input:radio').attr('name', className)
+            methodClone.find('input[type=radio]').attr('name', className)
             methodClone.find('input.value_class_name:first').val(valueClassName)
             actionParent.append(methodClone)
 

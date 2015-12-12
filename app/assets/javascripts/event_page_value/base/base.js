@@ -152,7 +152,7 @@ EventPageValueBase = (function() {
         var methodName;
         methodName = $(this).find('input.method_name').val();
         if (methodName === eventConfig[EventPageValueBase.PageValueKey.METHODNAME]) {
-          return $(this).find('input:radio').prop('checked', true);
+          return $(this).find('input[type=radio]').prop('checked', true);
         }
       });
       if (!eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {

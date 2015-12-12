@@ -260,7 +260,7 @@ EventConfig = (function() {
   _setMethodActionEvent = function() {
     var actionClassName, em;
     actionClassName = this.actionClassName();
-    em = $(".action_forms ." + actionClassName + " input:radio", this.emt);
+    em = $(".action_forms ." + actionClassName + " input[type=radio]", this.emt);
     em.off('click').on('click', (function(_this) {
       return function(e) {
         var parent;
@@ -280,7 +280,7 @@ EventConfig = (function() {
     $('.handler_div input[type=radio]', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         var beforeActionType;
-        if ($(".action_forms ." + (_this.actionClassName()) + " input:radio:checked", _this.emt).length > 0) {
+        if ($(".action_forms ." + (_this.actionClassName()) + " input[type=radio]:checked", _this.emt).length > 0) {
           $('.button_div', _this.emt).show();
         }
         $('.handler_form', _this.emt).hide();
@@ -405,7 +405,7 @@ EventConfig = (function() {
           return;
         }
         methodClone = $('#event-config .method_none_temp').children(':first').clone(true);
-        methodClone.find('input:radio').attr('name', className);
+        methodClone.find('input[type=radio]').attr('name', className);
         actionParent.append(methodClone);
         methods = props[ItemBase.ActionPropertiesKey.METHODS];
         if (methods != null) {
@@ -416,7 +416,7 @@ EventConfig = (function() {
             span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name']);
             methodClone.find('input.method_name:first').val(methodName);
             valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName);
-            methodClone.find('input:radio').attr('name', className);
+            methodClone.find('input[type=radio]').attr('name', className);
             methodClone.find('input.value_class_name:first').val(valueClassName);
             actionParent.append(methodClone);
           }

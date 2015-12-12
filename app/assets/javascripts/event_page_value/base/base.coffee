@@ -134,7 +134,7 @@ class EventPageValueBase
       $(".#{actionFormName} .radio", eventConfig.emt).each((e) ->
         methodName = $(@).find('input.method_name').val()
         if methodName == eventConfig[EventPageValueBase.PageValueKey.METHODNAME]
-          $(@).find('input:radio').prop('checked', true)
+          $(@).find('input[type=radio]').prop('checked', true)
       )
 
       # 画面位置&サイズ
