@@ -23,7 +23,7 @@ EventConfig = (function() {
   }
 
   EventConfig.prototype.selectItem = function(e) {
-    var checkedRadioButton, displayClassName, splitValues, vEmt, value;
+    var displayClassName, splitValues, vEmt, value;
     if (e == null) {
       e = null;
     }
@@ -68,43 +68,21 @@ EventConfig = (function() {
     _setHandlerRadioEvent.call(this);
     _setScrollDirectionEvent.call(this);
     _setForkSelect.call(this);
-    _setMethodActionEvent.call(this);
-    if (e != null) {
-      checkedRadioButton = $(".action_forms input:radio[name='" + displayClassName + "']:checked", this.emt);
-      if (checkedRadioButton.val()) {
-        return this.clickMethod(checkedRadioButton);
-      }
-    }
+    return _setMethodActionEvent.call(this);
   };
 
   EventConfig.prototype.clickMethod = function(e) {
-    var _callback, item, objClass, parent;
+    var _callback, item, objClass;
     if (e == null) {
       e = null;
     }
-    if (e != null) {
-      parent = $(e).closest('.radio');
-      this[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val();
-    }
     _callback = function() {
-      var beforeActionType, tle, valueClassName;
-      if (this.teNum > 1) {
-        beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
-        if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === beforeActionType) {
-          $(".config.parallel_div", this.emt).show();
-        }
-      }
+      var valueClassName;
       if (this[EventPageValueBase.PageValueKey.METHODNAME] != null) {
         valueClassName = this.methodClassName();
         $(".value_forms", this.emt).children("div").hide();
         $(".value_forms ." + valueClassName, this.emt).show();
         $(".config.values_div", this.emt).show();
-      }
-      if (e != null) {
-        tle = _getEventPageValueClass.call(this);
-        if ((tle != null) && (tle.initConfigValue != null)) {
-          tle.initConfigValue(this);
-        }
       }
       return _setApplyClickEvent.call(this);
     };
@@ -205,14 +183,12 @@ EventConfig = (function() {
     }
     Timeline.changeTimelineColor(this.teNum, this[EventPageValueBase.PageValueKey.ACTIONTYPE]);
     LocalStorage.saveAllPageValues();
-    if (this[EventPageValueBase.PageValueKey.METHODNAME] != null) {
-      item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-      if ((item != null) && (item.preview != null)) {
-        te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
-        item.initEvent(te);
-        PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
-        item.preview(te);
-      }
+    item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
+    if ((item != null) && (item.preview != null)) {
+      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
+      item.initEvent(te);
+      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
+      item.preview(te);
     }
     return true;
   };
@@ -278,25 +254,43 @@ EventConfig = (function() {
   _setMethodActionEvent = function() {
     var em;
     em = $('.action_forms input:radio', this.emt);
-    return em.off('change').on('change', (function(_this) {
+    em.off('change').on('change', (function(_this) {
       return function(e) {
+        var parent;
         _this.clearError();
-        return _this.clickMethod(e.target);
+        parent = $(e.target).closest('.radio');
+        _this[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val();
+        _this.clickMethod(e.target);
+        if (_this[EventPageValueBase.PageValueKey.ACTIONTYPE] != null) {
+          return $('.button_div', _this.emt).show();
+        }
       };
     })(this));
+    return $('.action_forms input:radio:checked', this.emt).trigger('change');
   };
 
   _setHandlerRadioEvent = function() {
     $('.handler_div input[type=radio]', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
-        $('.button_div', _this.emt).show();
+        var beforeActionType;
+        if ($('.action_forms input:radio:checked', _this.emt).length > 0) {
+          $('.button_div', _this.emt).show();
+        }
         $('.handler_form', _this.emt).hide();
         if ($(e.target).val() === 'scroll') {
           _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.SCROLL;
-          return $('.scroll_form', _this.emt).show();
+          $('.scroll_form', _this.emt).show();
         } else if ($(e.target).val() === 'click') {
           _this[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.CLICK;
-          return $('.click_form', _this.emt).show();
+          $('.click_form', _this.emt).show();
+        }
+        if (_this.teNum > 1) {
+          beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(_this.teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE];
+          if (_this[EventPageValueBase.PageValueKey.ACTIONTYPE] === beforeActionType) {
+            return $(".config.parallel_div", _this.emt).show();
+          } else {
+            return $(".config.parallel_div", _this.emt).hide();
+          }
         }
       };
     })(this));
@@ -382,8 +376,7 @@ EventConfig = (function() {
 
   _setupFromPageValues = function() {
     if (this.readFromPageValue()) {
-      this.selectItem();
-      return this.clickMethod();
+      return this.selectItem();
     }
   };
 
@@ -404,24 +397,22 @@ EventConfig = (function() {
           console.log('Not declaration actionProperties');
           return;
         }
-        methods = props[ItemBase.ActionPropertiesKey.METHODS];
-        if (methods == null) {
-          console.log("Not Found " + ItemBase.ActionPropertiesKey.METHODS + " key in actionProperties");
-          return;
-        }
         methodClone = $('#event-config .method_none_temp').children(':first').clone(true);
         methodClone.find('input:radio').attr('name', className);
         actionParent.append(methodClone);
-        for (methodName in methods) {
-          prop = methods[methodName];
-          methodClone = $('#event-config .method_temp').children(':first').clone(true);
-          span = methodClone.find('label:first').children('span:first');
-          span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name']);
-          methodClone.find('input.method_name:first').val(methodName);
-          valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName);
-          methodClone.find('input:radio').attr('name', className);
-          methodClone.find('input.value_class_name:first').val(valueClassName);
-          actionParent.append(methodClone);
+        methods = props[ItemBase.ActionPropertiesKey.METHODS];
+        if (methods != null) {
+          for (methodName in methods) {
+            prop = methods[methodName];
+            methodClone = $('#event-config .method_temp').children(':first').clone(true);
+            span = methodClone.find('label:first').children('span:first');
+            span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name']);
+            methodClone.find('input.method_name:first').val(methodName);
+            valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName);
+            methodClone.find('input:radio').attr('name', className);
+            methodClone.find('input.value_class_name:first').val(valueClassName);
+            actionParent.append(methodClone);
+          }
         }
         return actionParent.appendTo(action_forms);
       }

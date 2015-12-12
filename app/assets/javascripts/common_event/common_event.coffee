@@ -18,6 +18,9 @@ class CommonEvent
       # @property [Int] eventId 共通イベントID
       @eventId =  @constructor.EVENT_ID
 
+    getJQueryElement: ->
+      return window.scrollInsideCover
+
   @getInstance: ->
     if !instance[PageValue.getPageNum()]?
       instance[PageValue.getPageNum()] = new @PrivateClass()

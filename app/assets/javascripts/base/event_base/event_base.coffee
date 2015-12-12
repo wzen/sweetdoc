@@ -19,11 +19,6 @@ class EventBase extends Extend
     @enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
 
-    # アクションメソッドの設定
-    if !@constructor.prototype[@getEventMethodName()]?
-      # メソッドが見つからない場合は終了
-      return
-
     # スクロールイベント
     if @getEventActionType() == Constant.ActionType.SCROLL
       @scrollEvent = @scrollHandlerFunc
@@ -35,7 +30,13 @@ class EventBase extends Extend
   # @return [String] メソッド名
   getEventMethodName: ->
     if @event?
-      return @event[EventPageValueBase.PageValueKey.METHODNAME]
+      methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+      if methodName?
+        return methodName
+      else
+        EventPageValueBase.NO_METHOD
+    else
+      return EventPageValueBase.NO_METHOD
 
   # 設定されているイベントアクションタイプを取得
   # @return [Integer] アクションタイプ
@@ -198,11 +199,6 @@ class EventBase extends Extend
 
   # メソッド実行
   execMethod: (opt) ->
-    methodName = @getEventMethodName()
-    if !methodName?
-      # メソッドが無い場合
-      return
-
     # メソッド共通処理
     if !@isDrawByAnimationMethod()
       # アイテム位置&サイズ更新
@@ -212,18 +208,11 @@ class EventBase extends Extend
         @updateInstanceParamByAnimation()
       , 0)
 
-    (@constructor.prototype[methodName]).call(@, opt)
-
   # スクロール基底メソッド
   # @param [Integer] x スクロール横座標
   # @param [Integer] y スクロール縦座標
   # @param [Function] complete イベント終了後コールバック
   scrollHandlerFunc: (x, y, complete = null) ->
-    methodName = @getEventMethodName()
-    if !methodName?
-      # メソッドが無い場合
-      return
-
     if @isFinishedEvent || @skipEvent
       # 終了済みorイベントを反応させない場合
       return
@@ -361,6 +350,9 @@ class EventBase extends Extend
 
   # ステップ実行によるアイテム状態更新
   updateInstanceParamByStep: (progressValue, immediate = false)->
+    if @getEventMethodName() == EventPageValueBase.NO_METHOD
+      return
+
     progressMax = @progressMax()
     if !progressMax?
       progressMax = 1
@@ -390,12 +382,14 @@ class EventBase extends Extend
 
   # アニメーションによるアイテム状態更新
   updateInstanceParamByAnimation: (immediate = false) ->
+    if @getEventMethodName() == EventPageValueBase.NO_METHOD
+      return
+
     # NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
     ed = @eventDuration()
     progressMax = @progressMax()
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
-
     if immediate
       for varName, value of mod
         if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
@@ -442,7 +436,10 @@ class EventBase extends Extend
 
   # メソッドがアニメーションとして実行するか
   isDrawByAnimationMethod: ->
-    return @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]? && @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]
+    if @getEventMethodName() != EventPageValueBase.NO_METHOD
+      return @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]? && @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]
+    else
+      return false
 
   # ステップ数最大値
   progressMax: ->

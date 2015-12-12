@@ -7,9 +7,6 @@ class ScreenEvent extends CommonEvent
     @beforeScrollTop = scrollContents.scrollTop()
     @beforeScrollLeft = scrollContents.scrollLeft()
 
-  getJQueryElement: ->
-    return window.mainWrapper
-
   # イベント前の表示状態にする
   updateEventBefore: ->
     methodName = @getEventMethodName()

@@ -5,6 +5,8 @@ class EventPageValueBase
   # 定数
     constant = gon.const
 
+    @NO_METHOD = constant.EventPageValue.NO_METHOD
+
     class @PageValueKey
       # @property [String] DIST_ID 一意のイベント識別ID
       @DIST_ID = constant.EventPageValueKey.DIST_ID

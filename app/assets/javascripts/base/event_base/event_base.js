@@ -26,9 +26,6 @@ EventBase = (function(superClass) {
     this.doPreviewLoop = false;
     this.enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this.forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
-    if (this.constructor.prototype[this.getEventMethodName()] == null) {
-      return;
-    }
     if (this.getEventActionType() === Constant.ActionType.SCROLL) {
       return this.scrollEvent = this.scrollHandlerFunc;
     } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
@@ -37,8 +34,16 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.getEventMethodName = function() {
+    var methodName;
     if (this.event != null) {
-      return this.event[EventPageValueBase.PageValueKey.METHODNAME];
+      methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+      if (methodName != null) {
+        return methodName;
+      } else {
+        return EventPageValueBase.NO_METHOD;
+      }
+    } else {
+      return EventPageValueBase.NO_METHOD;
     }
   };
 
@@ -233,31 +238,21 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.execMethod = function(opt) {
-    var methodName;
-    methodName = this.getEventMethodName();
-    if (methodName == null) {
-      return;
-    }
     if (!this.isDrawByAnimationMethod()) {
-      this.updateInstanceParamByStep(opt.progress);
+      return this.updateInstanceParamByStep(opt.progress);
     } else {
-      setTimeout((function(_this) {
+      return setTimeout((function(_this) {
         return function() {
           return _this.updateInstanceParamByAnimation();
         };
       })(this), 0);
     }
-    return this.constructor.prototype[methodName].call(this, opt);
   };
 
   EventBase.prototype.scrollHandlerFunc = function(x, y, complete) {
-    var ePoint, methodName, plusX, plusY, sPoint;
+    var ePoint, plusX, plusY, sPoint;
     if (complete == null) {
       complete = null;
-    }
-    methodName = this.getEventMethodName();
-    if (methodName == null) {
-      return;
     }
     if (this.isFinishedEvent || this.skipEvent) {
       return;
@@ -406,6 +401,9 @@ EventBase = (function(superClass) {
     if (immediate == null) {
       immediate = false;
     }
+    if (this.getEventMethodName() === EventPageValueBase.NO_METHOD) {
+      return;
+    }
     progressMax = this.progressMax();
     if (progressMax == null) {
       progressMax = 1;
@@ -457,6 +455,9 @@ EventBase = (function(superClass) {
     var after, count, ed, eventBeforeObj, mod, progressMax, timer, value, varName;
     if (immediate == null) {
       immediate = false;
+    }
+    if (this.getEventMethodName() === EventPageValueBase.NO_METHOD) {
+      return;
     }
     ed = this.eventDuration();
     progressMax = this.progressMax();
@@ -537,7 +538,11 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.isDrawByAnimationMethod = function() {
-    return (this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION] != null) && this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION];
+    if (this.getEventMethodName() !== EventPageValueBase.NO_METHOD) {
+      return (this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION] != null) && this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION];
+    } else {
+      return false;
+    }
   };
 
   EventBase.prototype.progressMax = function() {

@@ -16,10 +16,6 @@ ScreenEvent = (function(superClass) {
     this.beforeScrollLeft = scrollContents.scrollLeft();
   }
 
-  ScreenEvent.prototype.getJQueryElement = function() {
-    return window.mainWrapper;
-  };
-
   ScreenEvent.prototype.updateEventBefore = function() {
     var methodName;
     methodName = this.getEventMethodName();

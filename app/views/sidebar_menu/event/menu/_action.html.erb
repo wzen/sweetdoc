@@ -9,13 +9,6 @@
       <% common_actions.each do |c| %>
           <!-- アクション名一覧 -->
           <div class="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>" style="display: none">
-            <div>
-              <%=
-                  render 'sidebar_menu/event/parts/method',
-                         type: 'none',
-                         radio_name: Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s)
-              %>
-            </div>
             <% c.common_action_events.each do |a| %>
                 <%=
                     render 'sidebar_menu/event/parts/method',

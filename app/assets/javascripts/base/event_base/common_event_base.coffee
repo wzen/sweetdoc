@@ -4,3 +4,9 @@ class CommonEventBase extends EventBase
   # @param [Object] event 設定イベント
   initEvent: (event) ->
     super(event)
+
+  # メソッド実行
+  execMethod: (opt) ->
+    super(opt)
+    (@constructor.prototype[methodName]).call(@, opt)
+

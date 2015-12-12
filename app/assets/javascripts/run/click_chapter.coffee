@@ -37,7 +37,7 @@ class ClickChapter extends Chapter
       return
 
     @eventObjList.forEach((event) ->
-      if event.id == $(e.currentTarget).attr('id')
+      if event.getJQueryElement().get(0) == $(e.currentTarget).get(0)
         event.clickEvent(e, ->
           # クリックしたイベントのフォーク番号を保存
           self.changeForkNum = event.getChangeForkNum()

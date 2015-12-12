@@ -8,6 +8,7 @@ EventPageValueBase = (function() {
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
+    EventPageValueBase.NO_METHOD = constant.EventPageValue.NO_METHOD;
     EventPageValueBase.PageValueKey = (function() {
       function PageValueKey() {}
 

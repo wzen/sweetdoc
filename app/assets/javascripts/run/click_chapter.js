@@ -39,7 +39,7 @@ ClickChapter = (function(superClass) {
       return;
     }
     return this.eventObjList.forEach(function(event) {
-      if (event.id === $(e.currentTarget).attr('id')) {
+      if (event.getJQueryElement().get(0) === $(e.currentTarget).get(0)) {
         return event.clickEvent(e, function() {
           self.changeForkNum = event.getChangeForkNum();
           if (window.eventAction != null) {

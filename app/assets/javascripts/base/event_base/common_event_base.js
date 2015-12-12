@@ -14,6 +14,11 @@ CommonEventBase = (function(superClass) {
     return CommonEventBase.__super__.initEvent.call(this, event);
   };
 
+  CommonEventBase.prototype.execMethod = function(opt) {
+    CommonEventBase.__super__.execMethod.call(this, opt);
+    return this.constructor.prototype[methodName].call(this, opt);
+  };
+
   return CommonEventBase;
 
 })(EventBase);

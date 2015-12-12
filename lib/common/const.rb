@@ -305,6 +305,11 @@ class Const
     end
   end
 
+  class EventPageValue
+    # @property [String] NO_METHOD メソッド無し名
+    NO_METHOD = '__no_method'
+  end
+
   class EventPageValueKey
     DIST_ID = 'dist_id'
     ID = 'id'

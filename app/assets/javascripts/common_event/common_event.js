@@ -23,6 +23,10 @@ CommonEvent = (function() {
       this.eventId = this.constructor.EVENT_ID;
     }
 
+    PrivateClass.prototype.getJQueryElement = function() {
+      return window.scrollInsideCover;
+    };
+
     return PrivateClass;
 
   })(CommonEventBase);

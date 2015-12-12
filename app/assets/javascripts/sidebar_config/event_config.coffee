@@ -58,7 +58,6 @@ class EventConfig
 
     # 一度全て非表示にする
     $(".config.te_div", @emt).hide()
-    #$(".action_div .forms", @emt).children("div").hide()
 
     if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # アイテム共通情報表示
@@ -81,39 +80,16 @@ class EventConfig
     _setForkSelect.call(@)
     _setMethodActionEvent.call(@)
 
-    if e?
-      # ラジオボタンをクリックした場合
-      checkedRadioButton = $(".action_forms input:radio[name='#{displayClassName}']:checked", @emt)
-      if checkedRadioButton.val()
-        @clickMethod(checkedRadioButton)
-
   # メソッド選択
   # @param [Object] e 選択オブジェクト
   clickMethod: (e = null) ->
-    if e?
-      parent = $(e).closest('.radio')
-      @[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val()
-
     _callback = ->
-
-      if @teNum > 1
-        beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
-        if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == beforeActionType
-          # 前のイベントと同じアクションタイプの場合は同時実行を表示
-          $(".config.parallel_div", @emt).show()
-
       if @[EventPageValueBase.PageValueKey.METHODNAME]?
         # 変更値表示
         valueClassName = @methodClassName()
         $(".value_forms", @emt).children("div").hide()
         $(".value_forms .#{valueClassName}", @emt).show()
         $(".config.values_div", @emt).show()
-
-      if e?
-        # 初期化
-        tle = _getEventPageValueClass.call(@)
-        if tle? && tle.initConfigValue?
-          tle.initConfigValue(@)
 
       _setApplyClickEvent.call(@)
 
@@ -217,15 +193,15 @@ class EventConfig
     # キャッシュに保存
     LocalStorage.saveAllPageValues()
 
-    if @[EventPageValueBase.PageValueKey.METHODNAME]?
-      # プレビュー開始
-      item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
-      if item? && item.preview?
-        te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
-        # インスタンスの状態を保存
-        item.initEvent(te)
-        PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
-        item.preview(te)
+    #if @[EventPageValueBase.PageValueKey.METHODNAME]?
+    # プレビュー開始
+    item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
+    if item? && item.preview?
+      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
+      # インスタンスの状態を保存
+      item.initEvent(te)
+      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
+      item.preview(te)
 
     return true
 
@@ -284,15 +260,20 @@ class EventConfig
     em = $('.action_forms input:radio', @emt)
     em.off('change').on('change', (e) =>
       @clearError()
+      parent = $(e.target).closest('.radio')
+      @[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val()
       @clickMethod(e.target)
+      if @[EventPageValueBase.PageValueKey.ACTIONTYPE]?
+        # Buttonフォーム表示
+        $('.button_div', @emt).show()
     )
-    #methodClassName = @methodClassName()
-    #$('.action_forms input:radio:checked', @emt).trigger('change')
+    $('.action_forms input:radio:checked', @emt).trigger('change')
 
   _setHandlerRadioEvent = ->
     $('.handler_div input[type=radio]', @emt).off('click').on('click', (e) =>
-      # RadioクリックイベントでButtonフォーム表示
-      $('.button_div', @emt).show()
+      if $('.action_forms input:radio:checked', @emt).length > 0
+        # Buttonフォーム表示
+        $('.button_div', @emt).show()
 
       $('.handler_form', @emt).hide()
       if $(e.target).val() == 'scroll'
@@ -301,6 +282,14 @@ class EventConfig
       else if $(e.target).val() == 'click'
         @[EventPageValueBase.PageValueKey.ACTIONTYPE] = Constant.ActionType.CLICK
         $('.click_form', @emt).show()
+
+      if @teNum > 1
+        beforeActionType = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum - 1))[EventPageValueBase.PageValueKey.ACTIONTYPE]
+        if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == beforeActionType
+          # 前のイベントと同じアクションタイプの場合は同時実行を表示
+          $(".config.parallel_div", @emt).show()
+        else
+          $(".config.parallel_div", @emt).hide()
     )
     $('.handler_div input[type=radio]:checked', @emt).trigger('click')
 
@@ -384,7 +373,7 @@ class EventConfig
   _setupFromPageValues = ->
     if @readFromPageValue()
       @selectItem()
-      @clickMethod()
+      #@clickMethod()
 
   # 追加されたコンフィグを全て消去
   @removeAllConfig: ->
@@ -405,24 +394,22 @@ class EventConfig
         if !props?
           console.log('Not declaration actionProperties')
           return
-        methods = props[ItemBase.ActionPropertiesKey.METHODS]
-        if !methods?
-          console.log("Not Found #{ItemBase.ActionPropertiesKey.METHODS} key in actionProperties")
-          return
 
         # アクションメソッドConfig追加
         methodClone = $('#event-config .method_none_temp').children(':first').clone(true)
         methodClone.find('input:radio').attr('name', className)
         actionParent.append(methodClone)
-        for methodName, prop of methods
-          methodClone = $('#event-config .method_temp').children(':first').clone(true)
-          span = methodClone.find('label:first').children('span:first')
-          span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
-          methodClone.find('input.method_name:first').val(methodName)
-          valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName)
-          methodClone.find('input:radio').attr('name', className)
-          methodClone.find('input.value_class_name:first').val(valueClassName)
-          actionParent.append(methodClone)
+        methods = props[ItemBase.ActionPropertiesKey.METHODS]
+        if methods?
+          for methodName, prop of methods
+            methodClone = $('#event-config .method_temp').children(':first').clone(true)
+            span = methodClone.find('label:first').children('span:first')
+            span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
+            methodClone.find('input.method_name:first').val(methodName)
+            valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName)
+            methodClone.find('input:radio').attr('name', className)
+            methodClone.find('input.value_class_name:first').val(valueClassName)
+            actionParent.append(methodClone)
 
         actionParent.appendTo(action_forms)
 
