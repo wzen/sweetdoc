@@ -207,6 +207,18 @@ class Common
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     $(".#{sectionClass}", root).remove()
 
+  # 最初にフォーカスするアイテムオブジェクトを取得
+  @firstFocusItemObj = (pn = PageValue.getPageNum()) ->
+    obj = null
+    instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn))
+    for key, instance of instances
+      value = instance.value
+      o = window.instanceMap[value.id]
+      if o instanceof ItemBase && o.visible && o.firstFocus
+        obj = o
+        return obj
+    return obj
+
   # アイテム用のテンプレートHTMLをwrap
   @wrapCreateItemElement = (item, contents) ->
     w = """

@@ -71,7 +71,7 @@ ItemBase = (function(superClass) {
     this.itemToken = this.constructor.ITEM_ACCESS_TOKEN;
     this.name = null;
     this.visible = false;
-    this.firstFocus = false;
+    this.firstFocus = Common.firstFocusItemObj() === null;
     this._drawingSurfaceImageData = null;
     if (cood !== null) {
       this._mousedownCood = {

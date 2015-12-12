@@ -415,6 +415,11 @@ class EventConfig
 
   # 変数編集コンフィグの初期化
   initEventVarModifyConfig: (objClass) ->
+    if !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]]? ||
+      !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables?
+      # メソッド or 変数編集無し
+      return
+
     mod = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
     if mod?
       for varName, v of mod

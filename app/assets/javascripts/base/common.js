@@ -267,6 +267,25 @@ Common = (function() {
     return $("." + sectionClass, root).remove();
   };
 
+  Common.firstFocusItemObj = function(pn) {
+    var instance, instances, key, o, obj, value;
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    obj = null;
+    instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn));
+    for (key in instances) {
+      instance = instances[key];
+      value = instance.value;
+      o = window.instanceMap[value.id];
+      if (o instanceof ItemBase && o.visible && o.firstFocus) {
+        obj = o;
+        return obj;
+      }
+    }
+    return obj;
+  };
+
   Common.wrapCreateItemElement = function(item, contents) {
     var w;
     w = "<div id=\"" + item.id + "\" class=\"item draggable resizable\" style=\"position: absolute;top:" + item.itemSize.y + "px;left:" + item.itemSize.x + "px;width:" + item.itemSize.w + "px;height:" + item.itemSize.h + "px;z-index:" + (Common.plusPagingZindex(item.zindex)) + "\"><div class=\"item_wrapper\"><div class='item_contents'></div></div></div>";

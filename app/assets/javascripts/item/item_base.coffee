@@ -48,7 +48,7 @@ class ItemBase extends ItemEventBase
     # @property [String] visible 表示状態
     @visible = false
     # @property [String] firstFocus 初期フォーカス
-    @firstFocus = false
+    @firstFocus = Common.firstFocusItemObj() == null
     # @property [Object] _drawingSurfaceImageData 画面を保存する変数
     @_drawingSurfaceImageData = null
     if cood != null
