@@ -15,6 +15,9 @@
     %>
 </head>
 <body class="<%= controller_name -%> <%= action_name -%>">
+    <script type="text/javascript">
+      window.isWorkTable = false
+    </script>
     <%= yield %>
     <script type="text/javascript">
         I18n.defaultLocale = "<%= I18n.default_locale %>";

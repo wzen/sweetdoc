@@ -1,6 +1,5 @@
 $ ->
   $('.worktable.index').ready ->
-    window.isWorkTable = true
     window.isItemPreview = false
     window.initDone = false
 

@@ -14,9 +14,6 @@ CanvasItemBase = (function(superClass) {
       w: 1.0,
       h: 1.0
     };
-    if (window.isWorkTable) {
-      this.constructor.include(WorkTableCanvasItemExtend);
-    }
   }
 
   CanvasItemBase.prototype.canvasElementId = function() {
@@ -146,16 +143,6 @@ CanvasItemBase = (function(superClass) {
     };
   };
 
-  CanvasItemBase.prototype.applyDesignChange = function(doStyleSave) {
-    if (doStyleSave == null) {
-      doStyleSave = true;
-    }
-    this.reDraw();
-    if (doStyleSave) {
-      return this.saveDesign();
-    }
-  };
-
   CanvasItemBase.prototype.applyDesignTool = function() {
     var drawingCanvas, drawingContext;
     drawingCanvas = document.getElementById(this.canvasElementId());
@@ -210,6 +197,149 @@ CanvasItemBase = (function(superClass) {
     drawingContext.stroke();
     return drawingContext.fill();
   };
+
+  if (window.isWorkTable) {
+    CanvasItemBase.include({
+      endDraw: function(zindex, show, callback) {
+        if (show == null) {
+          show = true;
+        }
+        if (callback == null) {
+          callback = null;
+        }
+        this.zindex = zindex;
+        (function(_this) {
+          return (function() {
+            _this.coodRegist.forEach(function(e) {
+              e.x -= _this.itemSize.x;
+              return e.y -= _this.itemSize.y;
+            });
+            _this._coodLeftBodyPart.forEach(function(e) {
+              e.x -= _this.itemSize.x;
+              return e.y -= _this.itemSize.y;
+            });
+            _this._coodRightBodyPart.forEach(function(e) {
+              e.x -= _this.itemSize.x;
+              return e.y -= _this.itemSize.y;
+            });
+            return _this._coodHeadPart.forEach(function(e) {
+              e.x -= _this.itemSize.x;
+              return e.y -= _this.itemSize.y;
+            });
+          });
+        })(this)();
+        this.itemSize.x += scrollContents.scrollLeft();
+        this.itemSize.y += scrollContents.scrollTop();
+        this.applyDefaultDesign();
+        return this.drawAndMakeConfigsAndWritePageValue(show, (function(_this) {
+          return function() {
+            _this.saveNewDrawedSurface();
+            if (callback != null) {
+              return callback();
+            }
+          };
+        })(this));
+      },
+      setupDesignToolOptionMenu: function() {
+        var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, self;
+        self = this;
+        designConfigRoot = $('#' + this.getDesignConfigId());
+        self.settingGradientSlider('design_slider_gradient', null);
+        self.settingGradientDegSlider('design_slider_gradient_deg', 0, 315, false);
+        self.settingDesignSlider('design_slider_border_radius', 1, 100);
+        self.settingDesignSlider('design_slider_border_width', 0, 30);
+        self.settingDesignSlider('design_slider_font_size', 0, 30);
+        self.settingDesignSlider('design_slider_shadow_left', -100, 100);
+        self.settingDesignSlider('design_slider_shadow_opacity', 0.0, 1.0, 0.1);
+        self.settingDesignSlider('design_slider_shadow_size', 0, 100);
+        self.settingDesignSlider('design_slider_shadow_top', -100, 100);
+        btnBgColor = $(".design_bg_color1,.design_bg_color2,.design_bg_color3,.design_bg_color4,.design_bg_color5,.design_border_color,.design_font_color", designConfigRoot);
+        btnBgColor.each((function(_this) {
+          return function(idx, e) {
+            var className, colorValue;
+            className = e.classList[0];
+            colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className + "_value"));
+            return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d, e) {
+              _this.designs.values[className + "_value"] = b;
+              return self.applyColorChangeByPicker(className, b);
+            });
+          };
+        })(this));
+        btnShadowColor = $(".design_shadow_color,.design_shadowinset_color,.design_text_shadow1_color,.design_text_shadow2_color", designConfigRoot);
+        btnShadowColor.each((function(_this) {
+          return function(idx, e) {
+            var className, colorValue;
+            className = e.classList[0];
+            colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className + "_value"));
+            return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d) {
+              var value;
+              value = d.r + "," + d.g + "," + d.b;
+              _this.designs.values[className + "_value"] = value;
+              return self.applyColorChangeByPicker(className, value);
+            });
+          };
+        })(this));
+        btnGradientStep = $(".design_gradient_step", designConfigRoot);
+        btnGradientStep.off('keyup mouseup');
+        return btnGradientStep.on('keyup mouseup', (function(_this) {
+          return function(e) {
+            var i, j, stepValue;
+            stepValue = parseInt($(e.currentTarget).val());
+            for (i = j = 2; j <= 4; i = ++j) {
+              _this.designs.flags["design_bg_color" + i + "_flag"] = i <= stepValue - 1;
+            }
+            return self.applyGradientStepChange(e.currentTarget);
+          };
+        })(this)).each((function(_this) {
+          return function(idx, e) {
+            var i, j, k, stepValue;
+            stepValue = 2;
+            for (i = j = 2; j <= 4; i = ++j) {
+              if (!_this.designs.flags["design_bg_color" + i + "_flag"]) {
+                stepValue = i;
+                break;
+              }
+            }
+            $(e).val(stepValue);
+            for (i = k = 2; k <= 4; i = ++k) {
+              _this.designs.flags["design_bg_color" + i + "_flag"] = i <= stepValue - 1;
+            }
+            return self.applyGradientStepChange(e);
+          };
+        })(this));
+      },
+      applyDesignStyleChange: function(designKeyName, value, doStyleSave) {
+        if (doStyleSave == null) {
+          doStyleSave = true;
+        }
+        return this.applyDesignChange(doStyleSave);
+      },
+      applyGradientStyleChange: function(index, designKeyName, value, doStyleSave) {
+        if (doStyleSave == null) {
+          doStyleSave = true;
+        }
+        return this.applyDesignChange(doStyleSave);
+      },
+      applyGradientDegChange: function(designKeyName, value, doStyleSave) {
+        if (doStyleSave == null) {
+          doStyleSave = true;
+        }
+        return this.applyDesignChange(doStyleSave);
+      },
+      applyGradientStepChange: function(target, doStyleSave) {
+        if (doStyleSave == null) {
+          doStyleSave = true;
+        }
+        return this.applyDesignChange(doStyleSave);
+      },
+      applyColorChangeByPicker: function(designKeyName, value, doStyleSave) {
+        if (doStyleSave == null) {
+          doStyleSave = true;
+        }
+        return this.applyDesignChange(doStyleSave);
+      }
+    });
+  }
 
   return CanvasItemBase;
 

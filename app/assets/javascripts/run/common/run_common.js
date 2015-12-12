@@ -550,7 +550,6 @@ RunCommon = (function() {
     if (useLocalStorate == null) {
       useLocalStorate = false;
     }
-    window.isWorkTable = false;
     window.eventAction = null;
     window.runPage = true;
     window.initDone = false;

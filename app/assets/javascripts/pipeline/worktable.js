@@ -63,9 +63,6 @@
 //= require worktable/common/paging
 //= require worktable/common/worktable_setting
 //= require worktable/util/colorpicker
-//= require worktable/item_extend/common_extend
-//= require worktable/item_extend/canvasitem_extend
-//= require worktable/item_extend/cssitem_extend
 //= require worktable/event/timeline
 //= require worktable/handwrite
 //= require worktable/worktable

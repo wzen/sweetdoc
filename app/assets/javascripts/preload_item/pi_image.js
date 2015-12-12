@@ -36,10 +36,6 @@ PreloadItemImage = (function(superClass) {
     this.imagePath = null;
     this._image = null;
     this.isKeepAspect = true;
-    this.scale = {
-      w: 1.0,
-      h: 1.0
-    };
     if (cood !== null) {
       this._moveLoc = {
         x: cood.x,
@@ -47,58 +43,7 @@ PreloadItemImage = (function(superClass) {
       };
     }
     this.visible = true;
-    if (window.isWorkTable) {
-      this.constructor.include(WorkTableCommonInclude);
-    }
   }
-
-  PreloadItemImage.prototype.draw = function(cood) {
-    if (this.itemSize !== null) {
-      this.restoreDrawingSurface(this.itemSize);
-    }
-    this.itemSize = {
-      x: null,
-      y: null,
-      w: null,
-      h: null
-    };
-    this.itemSize.w = Math.abs(cood.x - this._moveLoc.x);
-    this.itemSize.h = Math.abs(cood.y - this._moveLoc.y);
-    if (cood.x > this._moveLoc.x) {
-      this.itemSize.x = this._moveLoc.x;
-    } else {
-      this.itemSize.x = cood.x;
-    }
-    if (cood.y > this._moveLoc.y) {
-      this.itemSize.y = this._moveLoc.y;
-    } else {
-      this.itemSize.y = cood.y;
-    }
-    return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
-  };
-
-  PreloadItemImage.prototype.endDraw = function(zindex, show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    this.zindex = zindex;
-    this.itemSize.x += scrollContents.scrollLeft();
-    this.itemSize.y += scrollContents.scrollTop();
-    return this.createItemElement(true, (function(_this) {
-      return function(createdElement) {
-        $(createdElement).appendTo(window.scrollInside);
-        if (!show) {
-          _this.getJQueryElement().css('opacity', 0);
-        }
-        if (_this.setupDragAndResizeEvents != null) {
-          return _this.setupDragAndResizeEvents();
-        }
-      };
-    })(this));
-  };
 
   PreloadItemImage.prototype.reDraw = function(show, callback) {
     if (show == null) {
@@ -126,34 +71,13 @@ PreloadItemImage = (function(superClass) {
     })(this));
   };
 
-  PreloadItemImage.prototype.applyDesignChange = function(doStyleSave) {
-    return this.reDraw();
-  };
-
-  PreloadItemImage.prototype.clearDraw = function() {
-    return this.getJQueryElement().remove();
-  };
-
   PreloadItemImage.prototype.updateItemSize = function(w, h) {
     var img, size;
-    this.getJQueryElement().css({
-      width: w,
-      height: h
-    });
-    this.itemSize.w = parseInt(w);
-    this.itemSize.h = parseInt(h);
+    PreloadItemImage.__super__.updateItemSize.call(this, w, h);
     size = _sizeOfKeepAspect.call(this);
     img = this.getJQueryElement().find('img');
     img.width(size.width);
     return img.height(size.height);
-  };
-
-  PreloadItemImage.prototype.originalItemElementSize = function() {
-    var diff, obj;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-    $.extend(true, obj, diff);
-    return obj.itemSize;
   };
 
   PreloadItemImage.prototype.createItemElement = function(showModal, callback) {
