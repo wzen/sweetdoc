@@ -67,12 +67,8 @@ class EventConfig
     $(".config.handler_div", @emt).show()
     # Action表示
     $(".action_div", @emt).show()
-    displayClassName = ''
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      displayClassName = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
-    else
-      displayClassName = @constructor.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
-    $(".action_div .#{displayClassName}", @emt).show()
+    actionClassName = @actionClassName()
+    $(".action_div .#{actionClassName}", @emt).show()
 
     # イベント設定
     _setHandlerRadioEvent.call(@)
@@ -222,6 +218,15 @@ class EventConfig
     else
       return false
 
+  # アクションメソッドクラス名を取得
+  actionClassName: ->
+    name = ''
+    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
+      name = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
+    else
+      name = @constructor.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
+    return name
+
   # アクションメソッド & メソッド毎の値のクラス名を取得
   methodClassName: ->
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
@@ -258,7 +263,7 @@ class EventConfig
 
   _setMethodActionEvent = ->
     em = $('.action_forms input:radio', @emt)
-    em.off('change').on('change', (e) =>
+    em.off('click').on('click', (e) =>
       @clearError()
       parent = $(e.target).closest('.radio')
       @[EventPageValueBase.PageValueKey.METHODNAME] = parent.find('input.method_name:first').val()
@@ -267,7 +272,8 @@ class EventConfig
         # Buttonフォーム表示
         $('.button_div', @emt).show()
     )
-    $('.action_forms input:radio:checked', @emt).trigger('change')
+    actionClassName = @actionClassName()
+    $(".action_forms .#{actionClassName} input[type=radio]:checked", @emt).trigger('click')
 
   _setHandlerRadioEvent = ->
     $('.handler_div input[type=radio]', @emt).off('click').on('click', (e) =>
@@ -417,8 +423,8 @@ class EventConfig
   initEventVarModifyConfig: (objClass) ->
     if !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]]? ||
       !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables?
-      # メソッド or 変数編集無し
-      return
+        # メソッド or 変数編集無し
+        return
 
     mod = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
     if mod?

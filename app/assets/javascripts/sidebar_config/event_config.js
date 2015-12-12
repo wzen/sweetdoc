@@ -23,7 +23,7 @@ EventConfig = (function() {
   }
 
   EventConfig.prototype.selectItem = function(e) {
-    var displayClassName, splitValues, vEmt, value;
+    var actionClassName, splitValues, vEmt, value;
     if (e == null) {
       e = null;
     }
@@ -58,13 +58,8 @@ EventConfig = (function() {
     }
     $(".config.handler_div", this.emt).show();
     $(".action_div", this.emt).show();
-    displayClassName = '';
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      displayClassName = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
-    } else {
-      displayClassName = this.constructor.ITEM_ACTION_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]);
-    }
-    $(".action_div ." + displayClassName, this.emt).show();
+    actionClassName = this.actionClassName();
+    $(".action_div ." + actionClassName, this.emt).show();
     _setHandlerRadioEvent.call(this);
     _setScrollDirectionEvent.call(this);
     _setForkSelect.call(this);
@@ -214,6 +209,17 @@ EventConfig = (function() {
     }
   };
 
+  EventConfig.prototype.actionClassName = function() {
+    var name;
+    name = '';
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
+      name = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
+    } else {
+      name = this.constructor.ITEM_ACTION_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]);
+    }
+    return name;
+  };
+
   EventConfig.prototype.methodClassName = function() {
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       return this.constructor.COMMON_VALUES_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
@@ -252,9 +258,9 @@ EventConfig = (function() {
   };
 
   _setMethodActionEvent = function() {
-    var em;
+    var actionClassName, em;
     em = $('.action_forms input:radio', this.emt);
-    em.off('change').on('change', (function(_this) {
+    em.off('click').on('click', (function(_this) {
       return function(e) {
         var parent;
         _this.clearError();
@@ -266,7 +272,8 @@ EventConfig = (function() {
         }
       };
     })(this));
-    return $('.action_forms input:radio:checked', this.emt).trigger('change');
+    actionClassName = this.actionClassName();
+    return $(".action_forms ." + actionClassName + " input[type=radio]:checked", this.emt).trigger('click');
   };
 
   _setHandlerRadioEvent = function() {
@@ -421,6 +428,9 @@ EventConfig = (function() {
 
   EventConfig.prototype.initEventVarModifyConfig = function(objClass) {
     var defaultValue, mod, results, v, varName;
+    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables == null)) {
+      return;
+    }
     mod = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables;
     if (mod != null) {
       results = [];
