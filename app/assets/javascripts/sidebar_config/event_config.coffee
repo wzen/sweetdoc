@@ -445,6 +445,8 @@ class EventConfig
           @settingModifiableString(varName, defaultValue)
         else if v.type == Constant.ItemDesignOptionType.COLOR
           @settingModifiableColor(varName, defaultValue)
+        else if v.type == Constant.ItemDesignOptionType.SELECT
+          @settingModifiableSelect(varName, defaultValue, v.options)
 
   # 変数変更値が存在するか
   hasModifiableVar: (varName = null) ->
@@ -503,6 +505,35 @@ class EventConfig
         if !@hasModifiableVar(varName)
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "##{b}"
+    )
+
+  # 変数編集選択メニューの作成
+  settingModifiableSelect: (varName, defaultValue, selectOptions) ->
+
+    _joinArray = (value) ->
+      if $.isArray(value)
+        return value.join(',')
+      else
+        return value
+
+    _splitArray = (value) ->
+      if $.isArray(value)
+        return value.split(',')
+      else
+        return value
+
+    selectEmt = $(".#{varName}_select", @emt)
+    if selectEmt.children('option').length == 0
+      # 選択項目の作成
+      for option in selectOptions
+        v = _joinArray.call(@, option)
+        selectEmt.append("<option value='#{v}'>#{v}</option>")
+
+    selectEmt.val(_joinArray.call(@, defaultValue))
+    selectEmt.off('change').on('change', =>
+      if !@hasModifiableVar(varName)
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
+      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(@, $(@).val())
     )
 
   # アイテム選択メニューを更新

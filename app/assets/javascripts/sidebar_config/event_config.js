@@ -454,6 +454,8 @@ EventConfig = (function() {
           results.push(this.settingModifiableString(varName, defaultValue));
         } else if (v.type === Constant.ItemDesignOptionType.COLOR) {
           results.push(this.settingModifiableColor(varName, defaultValue));
+        } else if (v.type === Constant.ItemDesignOptionType.SELECT) {
+          results.push(this.settingModifiableSelect(varName, defaultValue, v.options));
         } else {
           results.push(void 0);
         }
@@ -535,6 +537,41 @@ EventConfig = (function() {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "#" + b;
+      };
+    })(this));
+  };
+
+  EventConfig.prototype.settingModifiableSelect = function(varName, defaultValue, selectOptions) {
+    var _joinArray, _splitArray, j, len, option, selectEmt, v;
+    _joinArray = function(value) {
+      if ($.isArray(value)) {
+        return value.join(',');
+      } else {
+        return value;
+      }
+    };
+    _splitArray = function(value) {
+      if ($.isArray(value)) {
+        return value.split(',');
+      } else {
+        return value;
+      }
+    };
+    selectEmt = $("." + varName + "_select", this.emt);
+    if (selectEmt.children('option').length === 0) {
+      for (j = 0, len = selectOptions.length; j < len; j++) {
+        option = selectOptions[j];
+        v = _joinArray.call(this, option);
+        selectEmt.append("<option value='" + v + "'>" + v + "</option>");
+      }
+    }
+    selectEmt.val(_joinArray.call(this, defaultValue));
+    return selectEmt.off('change').on('change', (function(_this) {
+      return function() {
+        if (!_this.hasModifiableVar(varName)) {
+          _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
+        }
+        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(_this, $(_this).val());
       };
     })(this));
   };

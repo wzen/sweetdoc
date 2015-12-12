@@ -82,6 +82,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ItemDesignOptionType.COLOR = constant.ItemDesignOptionType.COLOR;
 
+      ItemDesignOptionType.SELECT = constant.ItemDesignOptionType.SELECT;
+
       ItemDesignOptionType.DESIGN_TOOL = constant.ItemDesignOptionType.DESIGN_TOOL;
 
       ItemDesignOptionType.SELECT_FILE = constant.ItemDesignOptionType.SELECT_FILE;

@@ -436,6 +436,8 @@ WorkTableCommonInclude = {
           results.push(this.settingModifiableColor(designConfigRoot, varName));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
           results.push(this.settingModifiableSelectFile(designConfigRoot, varName));
+        } else if (v.type === Constant.ItemDesignOptionType.SELECT) {
+          results.push(this.settingModifiableSelect(designConfigRoot, varName, value.options));
         } else {
           results.push(void 0);
         }
@@ -511,6 +513,41 @@ WorkTableCommonInclude = {
         d = JSON.parse(data.responseText);
         _this[varName] = d.image_url;
         _this.saveObj();
+        return _this.applyDesignChange();
+      };
+    })(this));
+  },
+  settingModifiableSelect: function(configRoot, varName, selectOptions) {
+    var _joinArray, _splitArray, defaultValue, j, len, option, selectEmt, v;
+    _joinArray = function(value) {
+      if ($.isArray(value)) {
+        return value.join(',');
+      } else {
+        return value;
+      }
+    };
+    _splitArray = function(value) {
+      if ($.isArray(value)) {
+        return value.split(',');
+      } else {
+        return value;
+      }
+    };
+    selectEmt = $("." + varName + "_select", configRoot);
+    if (selectEmt.children('option').length === 0) {
+      for (j = 0, len = selectOptions.length; j < len; j++) {
+        option = selectOptions[j];
+        v = _joinArray.call(this, option);
+        selectEmt.append("<option value='" + v + "'>" + v + "</option>");
+      }
+    }
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+    if (defaultValue != null) {
+      selectEmt.val(_joinArray.call(this, defaultValue));
+    }
+    return selectEmt.off('change').on('change', (function(_this) {
+      return function() {
+        _this[varName] = _splitArray.call(_this, $(_this).val());
         return _this.applyDesignChange();
       };
     })(this));

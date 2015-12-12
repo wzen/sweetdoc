@@ -54,6 +54,8 @@ if gon?
       @STRING = constant.ItemDesignOptionType.STRING
       # @property [Int] COLOR 色
       @COLOR = constant.ItemDesignOptionType.COLOR
+      # @property [Int] SELECT 選択
+      @SELECT = constant.ItemDesignOptionType.SELECT
       # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
       @DESIGN_TOOL = constant.ItemDesignOptionType.DESIGN_TOOL
       # @property [Int] SELECT_FILE ファイル選択

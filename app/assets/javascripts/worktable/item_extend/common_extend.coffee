@@ -383,6 +383,8 @@ WorkTableCommonInclude =
           @settingModifiableColor(designConfigRoot, varName)
         else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
           @settingModifiableSelectFile(designConfigRoot, varName)
+        else if v.type == Constant.ItemDesignOptionType.SELECT
+          @settingModifiableSelect(designConfigRoot, varName, value.options)
 
   # 変数編集スライダーの作成
   # @param [Object] configRoot コンフィグルート
@@ -446,6 +448,36 @@ WorkTableCommonInclude =
       d = JSON.parse(data.responseText)
       @[varName] = d.image_url
       @saveObj()
+      @applyDesignChange()
+    )
+
+  # 変数編集選択メニューの作成
+  settingModifiableSelect: (configRoot, varName, selectOptions) ->
+
+    _joinArray = (value) ->
+      if $.isArray(value)
+        return value.join(',')
+      else
+        return value
+
+    _splitArray = (value) ->
+      if $.isArray(value)
+        return value.split(',')
+      else
+        return value
+
+    selectEmt = $(".#{varName}_select", configRoot)
+    if selectEmt.children('option').length == 0
+      # 選択項目の作成
+      for option in selectOptions
+        v = _joinArray.call(@, option)
+        selectEmt.append("<option value='#{v}'>#{v}</option>")
+
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+    if defaultValue?
+      selectEmt.val(_joinArray.call(@, defaultValue))
+    selectEmt.off('change').on('change', =>
+      @[varName] = _splitArray.call(@, $(@).val())
       @applyDesignChange()
     )
 
