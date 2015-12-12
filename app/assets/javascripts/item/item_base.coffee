@@ -2,8 +2,8 @@
 # @abstract
 class ItemBase extends ItemEventBase
   # @abstract
-  # @property [String] IDENTITY アイテム識別名
-  @IDENTITY = ""
+  # @property [String] NAME_PREFIX 名前プレフィックス
+  @NAME_PREFIX = ""
   # @abstract
   # @property [ItemType] ITEM_ACCESS_TOKEN アイテム種別
   @ITEM_ACCESS_TOKEN = ""
@@ -40,7 +40,7 @@ class ItemBase extends ItemEventBase
   constructor: (cood = null)->
     super()
     # @property [Int] id ID
-    @id = "i" + @constructor.IDENTITY + Common.generateId()
+    @id = "i" + @constructor.NAME_PREFIX + Common.generateId()
     # @property [ItemType] ITEM_ACCESS_TOKEN アイテム種別
     @itemToken = @constructor.ITEM_ACCESS_TOKEN
     # @property [String] name 名前
@@ -118,9 +118,9 @@ class ItemBase extends ItemEventBase
       num = 0
       self = @
       for k, v of Common.getCreatedItemInstances()
-        if self.constructor.IDENTITY == v.constructor.IDENTITY
+        if self.constructor.NAME_PREFIX == v.constructor.NAME_PREFIX
           num += 1
-      @name = @constructor.IDENTITY + " #{num}"
+      @name = @constructor.NAME_PREFIX + " #{num}"
 
     # ページに状態を保存
     @setItemAllPropToPageValue()

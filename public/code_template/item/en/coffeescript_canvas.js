@@ -9,7 +9,7 @@ ItemPreviewTemp = (function(superClass) {
 
   extend(ItemPreviewTemp, superClass);
 
-  ItemPreviewTemp.IDENTITY = "ItemPreviewTemp";
+  ItemPreviewTemp.NAME_PREFIX = "ItemPreviewTemp";
 
   if (window.loadedItemToken != null) {
     ItemPreviewTemp.ITEM_ACCESS_TOKEN = window.loadedItemToken;

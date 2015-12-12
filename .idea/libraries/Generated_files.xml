@@ -19,13 +19,13 @@
         <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_arrow.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_image.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page_common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page.js.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/config_menu.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas_item_base.js" />
@@ -49,6 +49,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/event_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_text.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
       </sourceFilesUrls>
@@ -87,13 +88,13 @@
       <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_arrow.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_image.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page_common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page.js.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/config_menu.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas_item_base.js" />
@@ -117,6 +118,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/event_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_text.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
     </CLASSES>

@@ -1,6 +1,6 @@
 # Test
 class ItemPreviewTemp extends CanvasItemBase
-  @IDENTITY = "ItemPreviewTemp"
+  @NAME_PREFIX = "ItemPreviewTemp"
 
   # ↓Don't Delete
   if window.loadedItemToken?

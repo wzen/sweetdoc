@@ -8,7 +8,7 @@ SimpleArrowItem = (function(superClass) {
 
   extend(SimpleArrowItem, superClass);
 
-  SimpleArrowItem.IDENTITY = "simplearrow";
+  SimpleArrowItem.NAME_PREFIX = "simplearrow";
 
   if (window.loadedItemToken != null) {
     SimpleArrowItem.ITEM_ACCESS_TOKEN = window.loadedItemToken;

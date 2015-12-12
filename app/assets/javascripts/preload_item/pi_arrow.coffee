@@ -1,8 +1,7 @@
 # 矢印アイテム
 # @extend CanvasItemBase
 class PreloadItemArrow extends CanvasItemBase
-  # @property [String] IDENTITY アイテム識別名
-  @IDENTITY = "Arrow"
+  @NAME_PREFIX = "Arrow"
   @ITEM_ACCESS_TOKEN = 'PreloadItemArrow'
 
   # @property [Int] HEADER_WIDTH 矢印の頭の幅

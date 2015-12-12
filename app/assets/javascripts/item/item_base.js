@@ -8,7 +8,7 @@ ItemBase = (function(superClass) {
 
   extend(ItemBase, superClass);
 
-  ItemBase.IDENTITY = "";
+  ItemBase.NAME_PREFIX = "";
 
   ItemBase.ITEM_ACCESS_TOKEN = "";
 
@@ -67,7 +67,7 @@ ItemBase = (function(superClass) {
       cood = null;
     }
     ItemBase.__super__.constructor.call(this);
-    this.id = "i" + this.constructor.IDENTITY + Common.generateId();
+    this.id = "i" + this.constructor.NAME_PREFIX + Common.generateId();
     this.itemToken = this.constructor.ITEM_ACCESS_TOKEN;
     this.name = null;
     this.visible = false;
@@ -144,11 +144,11 @@ ItemBase = (function(superClass) {
       ref = Common.getCreatedItemInstances();
       for (k in ref) {
         v = ref[k];
-        if (self.constructor.IDENTITY === v.constructor.IDENTITY) {
+        if (self.constructor.NAME_PREFIX === v.constructor.NAME_PREFIX) {
           num += 1;
         }
       }
-      this.name = this.constructor.IDENTITY + (" " + num);
+      this.name = this.constructor.NAME_PREFIX + (" " + num);
     }
     this.setItemAllPropToPageValue();
     LocalStorage.saveAllPageValues();

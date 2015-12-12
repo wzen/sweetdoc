@@ -1,8 +1,5 @@
-class PreloadItemImage extends ItemBase
-  UPLOAD_FORM_WIDTH = 350
-  UPLOAD_FORM_HEIGHT = 200
-
-  @NAME_PREFIX = "image"
+class PreloadItemText extends ItemBase
+  @NAME_PREFIX = "text"
   @ITEM_ACCESS_TOKEN = 'PreloadItemImage'
 
   @actionProperties =

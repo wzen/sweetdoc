@@ -10,7 +10,7 @@ ItemPreviewTemp = (function(superClass) {
     return ItemPreviewTemp.__super__.constructor.apply(this, arguments);
   }
 
-  ItemPreviewTemp.IDENTITY = "ItemPreviewTemp";
+  ItemPreviewTemp.NAME_PREFIX = "ItemPreviewTemp";
 
   if (window.loadedItemToken != null) {
     ItemPreviewTemp.ITEM_ACCESS_TOKEN = window.loadedItemToken;

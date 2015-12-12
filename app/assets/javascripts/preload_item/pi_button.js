@@ -10,7 +10,7 @@ PreloadItemButton = (function(superClass) {
     return PreloadItemButton.__super__.constructor.apply(this, arguments);
   }
 
-  PreloadItemButton.IDENTITY = "Button";
+  PreloadItemButton.NAME_PREFIX = "Button";
 
   PreloadItemButton.ITEM_ACCESS_TOKEN = 'PreloadItemButton';
 

@@ -9,7 +9,7 @@ PreloadItemArrow = (function(superClass) {
 
   extend(PreloadItemArrow, superClass);
 
-  PreloadItemArrow.IDENTITY = "Arrow";
+  PreloadItemArrow.NAME_PREFIX = "Arrow";
 
   PreloadItemArrow.ITEM_ACCESS_TOKEN = 'PreloadItemArrow';
 

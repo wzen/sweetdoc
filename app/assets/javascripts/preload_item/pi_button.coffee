@@ -1,8 +1,8 @@
 # ボタンアイテム
 # @extend CssItemBase
 class PreloadItemButton extends CssItemBase
-  # @property [String] IDENTITY アイテム識別名
-  @IDENTITY = "Button"
+  # @property [String] NAME_PREFIX アイテム識別名
+  @NAME_PREFIX = "Button"
   @ITEM_ACCESS_TOKEN = 'PreloadItemButton'
 
   @actionProperties =

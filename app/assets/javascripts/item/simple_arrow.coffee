@@ -1,10 +1,7 @@
 # 矢印アイテム
 # @extend ItemBase
 class SimpleArrowItem extends ItemBase
-
-  # @property [String] IDENTITY アイテム識別名
-  @IDENTITY = "simplearrow"
-  # @property [String] ITEM_ACCESS_TOKEN アイテム種別
+  @NAME_PREFIX = "simplearrow"
   if window.loadedItemToken?
     @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
