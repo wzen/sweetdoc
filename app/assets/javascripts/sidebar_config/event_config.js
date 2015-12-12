@@ -259,7 +259,8 @@ EventConfig = (function() {
 
   _setMethodActionEvent = function() {
     var actionClassName, em;
-    em = $('.action_forms input:radio', this.emt);
+    actionClassName = this.actionClassName();
+    em = $(".action_forms ." + actionClassName + " input:radio", this.emt);
     em.off('click').on('click', (function(_this) {
       return function(e) {
         var parent;
@@ -272,7 +273,6 @@ EventConfig = (function() {
         }
       };
     })(this));
-    actionClassName = this.actionClassName();
     return $(".action_forms ." + actionClassName + " input[type=radio]:checked", this.emt).trigger('click');
   };
 
@@ -280,7 +280,7 @@ EventConfig = (function() {
     $('.handler_div input[type=radio]', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         var beforeActionType;
-        if ($('.action_forms input:radio:checked', _this.emt).length > 0) {
+        if ($(".action_forms ." + (_this.actionClassName()) + " input:radio:checked", _this.emt).length > 0) {
           $('.button_div', _this.emt).show();
         }
         $('.handler_form', _this.emt).hide();

@@ -262,7 +262,8 @@ class EventConfig
       return EPVItem
 
   _setMethodActionEvent = ->
-    em = $('.action_forms input:radio', @emt)
+    actionClassName = @actionClassName()
+    em = $(".action_forms .#{actionClassName} input:radio", @emt)
     em.off('click').on('click', (e) =>
       @clearError()
       parent = $(e.target).closest('.radio')
@@ -272,12 +273,11 @@ class EventConfig
         # Buttonフォーム表示
         $('.button_div', @emt).show()
     )
-    actionClassName = @actionClassName()
     $(".action_forms .#{actionClassName} input[type=radio]:checked", @emt).trigger('click')
 
   _setHandlerRadioEvent = ->
     $('.handler_div input[type=radio]', @emt).off('click').on('click', (e) =>
-      if $('.action_forms input:radio:checked', @emt).length > 0
+      if $(".action_forms .#{@actionClassName()} input:radio:checked", @emt).length > 0
         # Buttonフォーム表示
         $('.button_div', @emt).show()
 
