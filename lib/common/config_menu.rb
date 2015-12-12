@@ -17,27 +17,29 @@ class ConfigMenu
         )
       end
     end
-    ret += _modifiables_vars_config(controller, modifiables)
+    ret += _modifiables_vars_config(controller, modifiables, true)
     return "<div class='#{Const::DesignConfig::ROOT_CLASSNAME}'>#{ret}</div>"
   end
 
   def self.event_var_modify_config(controller, modifiables)
-    return _modifiables_vars_config(controller, modifiables)
+    return _modifiables_vars_config(controller, modifiables, false)
   end
 
-  def self._modifiables_vars_config(controller, modifiables)
+  def self._modifiables_vars_config(controller, modifiables, isDesign)
     ret = nil
+    dir = isDesign ? 'design' : 'event'
     modifiables.each do |var, v|
-      temp = ''
+      temp_name = ''
       if v['type'] == Const::ItemDesignOptionType::NUMBER
-        temp = 'sidebar_menu/event/parts/slider'
+        temp_name = 'slider'
       elsif v['type'] == Const::ItemDesignOptionType::STRING
-        temp = 'sidebar_menu/event/parts/textbox'
+        temp_name = 'textbox'
       elsif v['type'] == Const::ItemDesignOptionType::COLOR
-        temp = 'sidebar_menu/event/parts/color'
+        temp_name = 'color'
       elsif v['type'] == Const::ItemDesignOptionType::SELECT_FILE
-        temp = 'sidebar_menu/design/parts/select_file'
+        temp_name = 'select_file'
       end
+      temp = "sidebar_menu/#{dir}/parts/#{temp_name}"
       value = v
       l_value = v[I18n.locale.to_s]
       if l_value
