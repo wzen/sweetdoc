@@ -1,7 +1,7 @@
 # イベントリスナー Extend
 class EventBase extends Extend
 
-  @STEP_INTERVAL_DURATION = 0.03
+  @STEP_INTERVAL_DURATION = 0.01
 
   constructor: ->
     # modifiables変数の初期化

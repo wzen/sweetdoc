@@ -6,7 +6,7 @@ var EventBase,
 EventBase = (function(superClass) {
   extend(EventBase, superClass);
 
-  EventBase.STEP_INTERVAL_DURATION = 0.03;
+  EventBase.STEP_INTERVAL_DURATION = 0.01;
 
   function EventBase() {
     var ref, value, varName;
