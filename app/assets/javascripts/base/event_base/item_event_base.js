@@ -12,8 +12,7 @@ ItemEventBase = (function(superClass) {
 
   ItemEventBase.prototype.initEvent = function(event) {
     ItemEventBase.__super__.initEvent.call(this, event);
-    this.initEventPrepare();
-    return this.reDraw(false);
+    return this.initEventPrepare();
   };
 
   ItemEventBase.prototype.initEventPrepare = function() {};

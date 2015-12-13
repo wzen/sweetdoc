@@ -7,7 +7,8 @@ class ItemEventBase extends EventBase
     @initEventPrepare()
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
-    @reDraw(false)
+    # 何故必要か調査中
+    #@reDraw(false)
 
   # initEvent前の処理
   # @abstract

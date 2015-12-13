@@ -25,13 +25,14 @@ class CssItemBase extends ItemBase
     @makeCss()
     @appendAnimationCssIfNeeded()
 
- # アイテム用のテンプレートHTMLを読み込み
+  # HTML要素
+  # @abstract
+  cssItemHtml: ->
+
+  # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
   createItemElement: (callback) ->
-    contents = """
-          <div type="button" class="css_item_base context_base"><div></div></div>
-        """
-    @addContentsToScrollInside(contents, callback)
+    @addContentsToScrollInside(@cssItemHtml(), callback)
 
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->

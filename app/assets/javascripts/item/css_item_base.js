@@ -33,10 +33,10 @@ CssItemBase = (function(superClass) {
     return this.appendAnimationCssIfNeeded();
   };
 
+  CssItemBase.prototype.cssItemHtml = function() {};
+
   CssItemBase.prototype.createItemElement = function(callback) {
-    var contents;
-    contents = "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
-    return this.addContentsToScrollInside(contents, callback);
+    return this.addContentsToScrollInside(this.cssItemHtml(), callback);
   };
 
   CssItemBase.jsLoaded = function(option) {};

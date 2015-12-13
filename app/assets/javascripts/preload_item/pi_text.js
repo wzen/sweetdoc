@@ -45,13 +45,17 @@ PreloadItemText = (function(superClass) {
     return PreloadItemText.__super__.updateItemSize.call(this, w, h);
   };
 
+  PreloadItemText.prototype.cssItemHtml = function() {
+    return "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
+  };
+
   PreloadItemText.prototype.itemDraw = function(show) {
     return PreloadItemText.__super__.itemDraw.call(this, show);
   };
 
   return PreloadItemText;
 
-})(CanvasItemBase);
+})(CssItemBase);
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText);
 

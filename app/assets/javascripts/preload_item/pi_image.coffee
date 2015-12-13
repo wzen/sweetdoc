@@ -41,14 +41,29 @@ class PreloadItemImage extends ItemBase
   # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
   reDraw: (show = true, callback = null) ->
+    if @reDrawing? && @reDrawing
+      # createItemElementが重い時のため
+      # 描画中はスタックに登録
+      @reDrawStack = true
+      console.log('add stack')
+      return
+
+    @reDrawing = true
     @clearDraw()
     @createItemElement( =>
       @itemDraw(show)
       if @setupDragAndResizeEvents?
         # ドラッグ & リサイズイベント設定
         @setupDragAndResizeEvents()
-      if callback?
-        callback()
+      @reDrawing = false
+      if @reDrawStack? && @reDrawStack
+        # スタックが存在する場合再度描画
+        @reDrawStack = false
+        console.log('stack redraw')
+        @reDraw(show, callback)
+      else
+        if callback?
+          callback()
     , false)
 
   # アイテム用のテンプレートHTMLを読み込み

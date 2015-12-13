@@ -1,4 +1,4 @@
-class PreloadItemText extends CanvasItemBase
+class PreloadItemText extends CssItemBase
   @NAME_PREFIX = "text"
   @ITEM_ACCESS_TOKEN = 'PreloadItemText'
 
@@ -133,6 +133,12 @@ class PreloadItemText extends CanvasItemBase
   updateItemSize: (w, h) ->
     super(w, h)
     # フォントサイズ変更
+
+  # HTML要素
+  cssItemHtml: ->
+    return """
+      <div type="button" class="css_item_base context_base"><div></div></div>
+    """
 
   itemDraw: (show) ->
     super(show)
