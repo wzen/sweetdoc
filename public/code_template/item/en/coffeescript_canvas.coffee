@@ -6,13 +6,15 @@ class ItemPreviewTemp extends CanvasItemBase
   if window.loadedItemToken?
     @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
+  # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100
+  # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
   HEADER_HEIGHT = 50
 
   @actionProperties =
   {
     defaultEvent: {
-      method: 'scrollDraw'
+      method: 'changeDraw'
       actionType: 'scroll'
       scrollEnabledDirection: {
         top: true
@@ -71,7 +73,7 @@ class ItemPreviewTemp extends CanvasItemBase
       }
     }
     methods : {
-      scrollDraw: {
+      changeDraw: {
         modifiables: {
           arrowWidth: {
             name: "Arrow's width"
@@ -86,19 +88,19 @@ class ItemPreviewTemp extends CanvasItemBase
         }
         options: {
           id: 'drawScroll'
-          name: 'Drawing by scroll'
-          desc: "Draw by scroll action"
+          name: 'Draw'
+          desc: "Draw"
           ja: {
-            name: 'スクロールで描画'
-            desc: 'スクロールで矢印を描画'
+            name: '描画'
+            desc: '矢印を描画'
           }
         }
       }
-      changeColorClick: {
+      changeColor: {
         actionType: 'click'
         options: {
-          id: 'changeColorClick_Design'
-          name: 'Changing color by click'
+          id: 'changeColor_Design'
+          name: 'Change color'
         }
       }
     }
@@ -106,7 +108,7 @@ class ItemPreviewTemp extends CanvasItemBase
 
   # コンストラクタ
   # @param [Array] cood 座標
-  constructor : (cood = null) ->
+  constructor : (cood = null)->
     super(cood)
     # @property [Array] direction 矢印の進行方向
     @_direction = {x: 0, y: 0}
@@ -126,99 +128,46 @@ class ItemPreviewTemp extends CanvasItemBase
     # @private
     @_drawCoodRegist = []
 
-  # パスの描画
-  # @param [Array] moveCood 画面ドラッグ座標
-  drawPath : (moveCood) ->
-    _calDrection.call(@, @_drawCoodRegist[@_drawCoodRegist.length - 1], moveCood)
-    @_drawCoodRegist.push(moveCood)
-
-    # 尾の部分の座標を計算
-    _calTailDrawPath.call(@)
-    # 体の部分の座標を計算
-    _calBodyPath.call(@, moveCood)
-    # 頭の部分の座標を計算
-    _calTrianglePath.call(@, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1], @_coodRightBodyPart[@_coodRightBodyPart.length - 1])
-    #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
-
-  # 線の描画
-  drawLine : ->
-    drawingContext.beginPath();
-    # 尾と体の座標をCanvasに描画
-    _drawCoodToBaseCanvas.call(@)
-    drawingContext.globalAlpha = 0.3
-    drawingContext.stroke()
-
-  # 再描画処理(新規キャンパスに描画)
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null) ->
-    super(show, =>
-      _after = ->
-        # 座標をクリア
-        @resetDrawPath()
-
-        if show
-          # 座標を再計算
-          for r in @coodRegist
-            @drawPath(r)
-          # 描画
-          @drawNewCanvas()
-
-        if @setupDragAndResizeEvents?
-          # ドラッグ & リサイズイベント設定
-          @setupDragAndResizeEvents()
-        if callback?
-          callback()
-
-      # 新規キャンパス存在チェック
-      canvas = document.getElementById(@canvasElementId())
-      if !canvas?
-        # 新規Canvasを作成
-        @makeNewCanvas( =>
-          _after.call(@)
-        )
-      else
-        # 描画をクリア
-        @clearDraw()
-        _after.call(@)
-    )
-
-  # パスの情報をリセット
-  resetDrawPath: ->
-    @_coodHeadPart = []
-    @_coodLeftBodyPart = []
-    @_coodRightBodyPart = []
-    @_drawCoodRegist = []
+  # アイテム描画
+  # @param [Boolean] show 要素作成後に表示するか
+  itemDraw: (show = true) ->
+    super(show)
+    # 座標をクリア
+    _resetDrawPath.call(@)
+    if show
+      # 座標を再計算
+      for r in @coodRegist
+        _drawPath.call(@, r)
+      # 描画
+      @drawNewCanvas()
 
   # イベント前の表示状態にする
   updateEventBefore: ->
     super()
     methodName = @getEventMethodName()
-    if methodName == 'scrollDraw'
+    if methodName == 'changeDraw'
       @reDraw(false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
     super()
     methodName = @getEventMethodName()
-    if methodName == 'scrollDraw'
+    if methodName == 'changeDraw'
       @reDraw()
 
-  # スクロールイベント ※アクションイベント
-  # @param [Integer] scrollValue スクロール値
-  scrollDraw : (opt) ->
-    #console.log("scrollY: #{@scrollValue}")
+  # 描画イベント ※アクションイベント
+  changeDraw : (opt) ->
     r = opt.progress / opt.progressMax
 
-    @resetDrawPath()
+    _resetDrawPath.call(@)
     @restoreAllNewDrawingSurface()
     for r in @coodRegist.slice(0, parseInt((@coodRegist.length - 1) * r))
-      @drawPath(r)
+      _drawPath.call(@, r)
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()
 
-  # クリックイベント ※アクションイベント
-  changeColorClick : (e) =>
+  # 色変更イベント ※アクションイベント
+  changeColor : (opt) =>
 
   # 座標間の距離を計算する
   # @private
@@ -405,7 +354,7 @@ class ItemPreviewTemp extends CanvasItemBase
     else
       drawingContext = window.drawingContext
     if @_coodLeftBodyPart.length <= 0 || @_coodRightBodyPart.length <= 0
-      # 尾が描かれてない場合
+# 尾が描かれてない場合
       return
 
     drawingContext.moveTo(@_coodLeftBodyPart[@_coodLeftBodyPart.length - 1].x, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1].y)
@@ -450,11 +399,11 @@ class ItemPreviewTemp extends CanvasItemBase
     # 描画範囲の更新
     _updateArrowRect.call(@, moveCood)
     # パスの描画
-    @drawPath(moveCood)
+    _drawPath.call(@, moveCood)
     # 描画した矢印をクリア
     @restoreDrawingSurface(@itemSize)
     # 線の描画
-    @drawLine()
+    _drawLine.call(@)
 
   # 矢印のサイズ更新
   # @private
@@ -481,6 +430,35 @@ class ItemPreviewTemp extends CanvasItemBase
         @itemSize.y = minY
       if @itemSize.y + @itemSize.h < maxY
         @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
+
+  # パスの描画
+  # @param [Array] moveCood 画面ドラッグ座標
+  _drawPath = (moveCood) ->
+    _calDrection.call(@, @_drawCoodRegist[@_drawCoodRegist.length - 1], moveCood)
+    @_drawCoodRegist.push(moveCood)
+
+    # 尾の部分の座標を計算
+    _calTailDrawPath.call(@)
+    # 体の部分の座標を計算
+    _calBodyPath.call(@, moveCood)
+    # 頭の部分の座標を計算
+    _calTrianglePath.call(@, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1], @_coodRightBodyPart[@_coodRightBodyPart.length - 1])
+  #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
+
+  # 線の描画
+  _drawLine = ->
+    drawingContext.beginPath();
+    # 尾と体の座標をCanvasに描画
+    _drawCoodToBaseCanvas.call(@)
+    drawingContext.globalAlpha = 0.3
+    drawingContext.stroke()
+
+  # パスの情報をリセット
+  _resetDrawPath = ->
+    @_coodHeadPart = []
+    @_coodLeftBodyPart = []
+    @_coodRightBodyPart = []
+    @_drawCoodRegist = []
 
 Common.setClassToMap(false, ItemPreviewTemp.ITEM_ACCESS_TOKEN, ItemPreviewTemp)
 

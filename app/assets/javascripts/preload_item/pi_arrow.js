@@ -5,7 +5,7 @@ var PreloadItemArrow,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemArrow = (function(superClass) {
-  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _updateArrowRect;
+  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _drawLine, _drawPath, _resetDrawPath, _updateArrowRect;
 
   extend(PreloadItemArrow, superClass);
 
@@ -130,43 +130,21 @@ PreloadItemArrow = (function(superClass) {
     this._drawCoodRegist = [];
   }
 
-  PreloadItemArrow.prototype.drawPath = function(moveCood) {
-    _calDrection.call(this, this._drawCoodRegist[this._drawCoodRegist.length - 1], moveCood);
-    this._drawCoodRegist.push(moveCood);
-    _calTailDrawPath.call(this);
-    _calBodyPath.call(this, moveCood);
-    return _calTrianglePath.call(this, this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1], this._coodRightBodyPart[this._coodRightBodyPart.length - 1]);
-  };
-
-  PreloadItemArrow.prototype.drawLine = function() {
-    drawingContext.beginPath();
-    _drawCoodToBaseCanvas.call(this);
-    drawingContext.globalAlpha = 0.3;
-    return drawingContext.stroke();
-  };
-
   PreloadItemArrow.prototype.itemDraw = function(show) {
     var j, len, r, ref;
     if (show == null) {
       show = true;
     }
     PreloadItemArrow.__super__.itemDraw.call(this, show);
-    this.resetDrawPath();
+    _resetDrawPath.call(this);
     if (show) {
       ref = this.coodRegist;
       for (j = 0, len = ref.length; j < len; j++) {
         r = ref[j];
-        this.drawPath(r);
+        _drawPath.call(this, r);
       }
       return this.drawNewCanvas();
     }
-  };
-
-  PreloadItemArrow.prototype.resetDrawPath = function() {
-    this._coodHeadPart = [];
-    this._coodLeftBodyPart = [];
-    this._coodRightBodyPart = [];
-    return this._drawCoodRegist = [];
   };
 
   PreloadItemArrow.prototype.updateEventBefore = function() {
@@ -190,12 +168,12 @@ PreloadItemArrow = (function(superClass) {
   PreloadItemArrow.prototype.changeDraw = function(opt) {
     var j, len, r, ref;
     r = opt.progress / opt.progressMax;
-    this.resetDrawPath();
+    _resetDrawPath.call(this);
     this.restoreAllNewDrawingSurface();
     ref = this.coodRegist.slice(0, parseInt((this.coodRegist.length - 1) * r));
     for (j = 0, len = ref.length; j < len; j++) {
       r = ref[j];
-      this.drawPath(r);
+      _drawPath.call(this, r);
     }
     return this.drawNewCanvas();
   };
@@ -431,9 +409,9 @@ PreloadItemArrow = (function(superClass) {
   PreloadItemArrow.prototype.draw = function(moveCood) {
     this.coodRegist.push(moveCood);
     _updateArrowRect.call(this, moveCood);
-    this.drawPath(moveCood);
+    _drawPath.call(this, moveCood);
     this.restoreDrawingSurface(this.itemSize);
-    return this.drawLine();
+    return _drawLine.call(this);
   };
 
   _updateArrowRect = function(cood) {
@@ -469,6 +447,28 @@ PreloadItemArrow = (function(superClass) {
         return this.itemSize.h += maxY - (this.itemSize.y + this.itemSize.h);
       }
     }
+  };
+
+  _drawPath = function(moveCood) {
+    _calDrection.call(this, this._drawCoodRegist[this._drawCoodRegist.length - 1], moveCood);
+    this._drawCoodRegist.push(moveCood);
+    _calTailDrawPath.call(this);
+    _calBodyPath.call(this, moveCood);
+    return _calTrianglePath.call(this, this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1], this._coodRightBodyPart[this._coodRightBodyPart.length - 1]);
+  };
+
+  _drawLine = function() {
+    drawingContext.beginPath();
+    _drawCoodToBaseCanvas.call(this);
+    drawingContext.globalAlpha = 0.3;
+    return drawingContext.stroke();
+  };
+
+  _resetDrawPath = function() {
+    this._coodHeadPart = [];
+    this._coodLeftBodyPart = [];
+    this._coodRightBodyPart = [];
+    return this._drawCoodRegist = [];
   };
 
   return PreloadItemArrow;

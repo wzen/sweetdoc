@@ -1,4 +1,4 @@
-class PreloadItemText extends ItemBase
+class PreloadItemText extends CanvasItemBase
   @NAME_PREFIX = "text"
   @ITEM_ACCESS_TOKEN = 'PreloadItemText'
 

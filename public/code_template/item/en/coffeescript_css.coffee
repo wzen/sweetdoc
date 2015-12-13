@@ -6,7 +6,6 @@ class ItemPreviewTemp extends CssItemBase
   if window.loadedItemToken?
     @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
-
   @actionProperties =
   {
     defaultEvent: {
@@ -127,12 +126,6 @@ class ItemPreviewTemp extends CssItemBase
     }
   }
 
-  # 再描画処理
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null)->
-    super(show, callback)
-
   # イベント前の表示状態にする
   updateEventBefore: ->
     super()
@@ -169,7 +162,6 @@ class ItemPreviewTemp extends CssItemBase
     if opt.complete?
       opt.complete()
 
-  # *アクションイベント
   changeColorClick: (opt) ->
     @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
     if opt.complete?
@@ -232,6 +224,7 @@ class ItemPreviewTemp extends CssItemBase
     else if @getEventMethodName() == 'changeColorClick' || @getEventMethodName() == 'changeColorScroll'
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
+
 
 Common.setClassToMap(false, ItemPreviewTemp.ITEM_ACCESS_TOKEN, ItemPreviewTemp)
 

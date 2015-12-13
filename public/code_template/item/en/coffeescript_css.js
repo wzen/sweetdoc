@@ -133,16 +133,6 @@ ItemPreviewTemp = (function(superClass) {
     }
   };
 
-  ItemPreviewTemp.prototype.reDraw = function(show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    return ItemPreviewTemp.__super__.reDraw.call(this, show, callback);
-  };
-
   ItemPreviewTemp.prototype.updateEventBefore = function() {
     var methodName;
     ItemPreviewTemp.__super__.updateEventBefore.call(this);

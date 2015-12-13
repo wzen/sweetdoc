@@ -51,9 +51,7 @@ CanvasItemBase = (function(superClass) {
     if (show == null) {
       show = true;
     }
-    this.initCanvas();
-    this.saveNewDrawingSurface();
-    return this.clearDraw();
+    return this.initCanvas();
   };
 
   CanvasItemBase.prototype.saveNewDrawingSurface = function() {
@@ -98,6 +96,7 @@ CanvasItemBase = (function(superClass) {
 
   CanvasItemBase.prototype.clearDraw = function() {
     var canvas, context;
+    this.saveNewDrawingSurface();
     canvas = document.getElementById(this.canvasElementId());
     if (canvas != null) {
       context = canvas.getContext('2d');

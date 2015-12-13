@@ -126,47 +126,18 @@ class PreloadItemArrow extends CanvasItemBase
     # @private
     @_drawCoodRegist = []
 
-  # パスの描画
-  # @param [Array] moveCood 画面ドラッグ座標
-  drawPath : (moveCood) ->
-    _calDrection.call(@, @_drawCoodRegist[@_drawCoodRegist.length - 1], moveCood)
-    @_drawCoodRegist.push(moveCood)
-
-    # 尾の部分の座標を計算
-    _calTailDrawPath.call(@)
-    # 体の部分の座標を計算
-    _calBodyPath.call(@, moveCood)
-    # 頭の部分の座標を計算
-    _calTrianglePath.call(@, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1], @_coodRightBodyPart[@_coodRightBodyPart.length - 1])
-    #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
-
-  # 線の描画
-  drawLine : ->
-    drawingContext.beginPath();
-    # 尾と体の座標をCanvasに描画
-    _drawCoodToBaseCanvas.call(@)
-    drawingContext.globalAlpha = 0.3
-    drawingContext.stroke()
-
   # アイテム描画
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
     super(show)
     # 座標をクリア
-    @resetDrawPath()
+    _resetDrawPath.call(@)
     if show
       # 座標を再計算
       for r in @coodRegist
-        @drawPath(r)
+        _drawPath.call(@, r)
       # 描画
       @drawNewCanvas()
-
-  # パスの情報をリセット
-  resetDrawPath: ->
-    @_coodHeadPart = []
-    @_coodLeftBodyPart = []
-    @_coodRightBodyPart = []
-    @_drawCoodRegist = []
 
   # イベント前の表示状態にする
   updateEventBefore: ->
@@ -186,10 +157,10 @@ class PreloadItemArrow extends CanvasItemBase
   changeDraw : (opt) ->
     r = opt.progress / opt.progressMax
 
-    @resetDrawPath()
+    _resetDrawPath.call(@)
     @restoreAllNewDrawingSurface()
     for r in @coodRegist.slice(0, parseInt((@coodRegist.length - 1) * r))
-      @drawPath(r)
+      _drawPath.call(@, r)
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()
 
@@ -426,11 +397,11 @@ class PreloadItemArrow extends CanvasItemBase
     # 描画範囲の更新
     _updateArrowRect.call(@, moveCood)
     # パスの描画
-    @drawPath(moveCood)
+    _drawPath.call(@, moveCood)
     # 描画した矢印をクリア
     @restoreDrawingSurface(@itemSize)
     # 線の描画
-    @drawLine()
+    _drawLine.call(@)
 
   # 矢印のサイズ更新
   # @private
@@ -457,6 +428,35 @@ class PreloadItemArrow extends CanvasItemBase
         @itemSize.y = minY
       if @itemSize.y + @itemSize.h < maxY
         @itemSize.h += maxY - (@itemSize.y + @itemSize.h)
+
+  # パスの描画
+  # @param [Array] moveCood 画面ドラッグ座標
+  _drawPath = (moveCood) ->
+    _calDrection.call(@, @_drawCoodRegist[@_drawCoodRegist.length - 1], moveCood)
+    @_drawCoodRegist.push(moveCood)
+
+    # 尾の部分の座標を計算
+    _calTailDrawPath.call(@)
+    # 体の部分の座標を計算
+    _calBodyPath.call(@, moveCood)
+    # 頭の部分の座標を計算
+    _calTrianglePath.call(@, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1], @_coodRightBodyPart[@_coodRightBodyPart.length - 1])
+    #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
+
+  # 線の描画
+  _drawLine = ->
+    drawingContext.beginPath();
+    # 尾と体の座標をCanvasに描画
+    _drawCoodToBaseCanvas.call(@)
+    drawingContext.globalAlpha = 0.3
+    drawingContext.stroke()
+
+  # パスの情報をリセット
+  _resetDrawPath = ->
+    @_coodHeadPart = []
+    @_coodLeftBodyPart = []
+    @_coodRightBodyPart = []
+    @_drawCoodRegist = []
 
 Common.setClassToMap(false, PreloadItemArrow.ITEM_ACCESS_TOKEN, PreloadItemArrow)
 

@@ -98,7 +98,7 @@ PreloadItemText = (function(superClass) {
 
   return PreloadItemText;
 
-})(ItemBase);
+})(CanvasItemBase);
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText);
 

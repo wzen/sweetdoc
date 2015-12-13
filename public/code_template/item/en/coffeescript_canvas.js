@@ -5,7 +5,7 @@ var ItemPreviewTemp,
   hasProp = {}.hasOwnProperty;
 
 ItemPreviewTemp = (function(superClass) {
-  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _updateArrowRect;
+  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _drawLine, _drawPath, _resetDrawPath, _updateArrowRect;
 
   extend(ItemPreviewTemp, superClass);
 
@@ -21,7 +21,7 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.actionProperties = {
     defaultEvent: {
-      method: 'scrollDraw',
+      method: 'changeDraw',
       actionType: 'scroll',
       scrollEnabledDirection: {
         top: true,
@@ -80,7 +80,7 @@ ItemPreviewTemp = (function(superClass) {
       }
     },
     methods: {
-      scrollDraw: {
+      changeDraw: {
         modifiables: {
           arrowWidth: {
             name: "Arrow's width",
@@ -95,19 +95,19 @@ ItemPreviewTemp = (function(superClass) {
         },
         options: {
           id: 'drawScroll',
-          name: 'Drawing by scroll',
-          desc: "Draw by scroll action",
+          name: 'Draw',
+          desc: "Draw",
           ja: {
-            name: 'スクロールで描画',
-            desc: 'スクロールで矢印を描画'
+            name: '描画',
+            desc: '矢印を描画'
           }
         }
       },
-      changeColorClick: {
+      changeColor: {
         actionType: 'click',
         options: {
-          id: 'changeColorClick_Design',
-          name: 'Changing color by click'
+          id: 'changeColor_Design',
+          name: 'Change color'
         }
       }
     }
@@ -117,7 +117,7 @@ ItemPreviewTemp = (function(superClass) {
     if (cood == null) {
       cood = null;
     }
-    this.changeColorClick = bind(this.changeColorClick, this);
+    this.changeColor = bind(this.changeColor, this);
     ItemPreviewTemp.__super__.constructor.call(this, cood);
     this._direction = {
       x: 0,
@@ -132,74 +132,28 @@ ItemPreviewTemp = (function(superClass) {
     this._drawCoodRegist = [];
   }
 
-  ItemPreviewTemp.prototype.drawPath = function(moveCood) {
-    _calDrection.call(this, this._drawCoodRegist[this._drawCoodRegist.length - 1], moveCood);
-    this._drawCoodRegist.push(moveCood);
-    _calTailDrawPath.call(this);
-    _calBodyPath.call(this, moveCood);
-    return _calTrianglePath.call(this, this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1], this._coodRightBodyPart[this._coodRightBodyPart.length - 1]);
-  };
-
-  ItemPreviewTemp.prototype.drawLine = function() {
-    drawingContext.beginPath();
-    _drawCoodToBaseCanvas.call(this);
-    drawingContext.globalAlpha = 0.3;
-    return drawingContext.stroke();
-  };
-
-  ItemPreviewTemp.prototype.reDraw = function(show, callback) {
+  ItemPreviewTemp.prototype.itemDraw = function(show) {
+    var j, len, r, ref;
     if (show == null) {
       show = true;
     }
-    if (callback == null) {
-      callback = null;
+    ItemPreviewTemp.__super__.itemDraw.call(this, show);
+    _resetDrawPath.call(this);
+    if (show) {
+      ref = this.coodRegist;
+      for (j = 0, len = ref.length; j < len; j++) {
+        r = ref[j];
+        _drawPath.call(this, r);
+      }
+      return this.drawNewCanvas();
     }
-    return ItemPreviewTemp.__super__.reDraw.call(this, show, (function(_this) {
-      return function() {
-        var _after, canvas;
-        _after = function() {
-          var j, len, r, ref;
-          this.resetDrawPath();
-          if (show) {
-            ref = this.coodRegist;
-            for (j = 0, len = ref.length; j < len; j++) {
-              r = ref[j];
-              this.drawPath(r);
-            }
-            this.drawNewCanvas();
-          }
-          if (this.setupDragAndResizeEvents != null) {
-            this.setupDragAndResizeEvents();
-          }
-          if (callback != null) {
-            return callback();
-          }
-        };
-        canvas = document.getElementById(_this.canvasElementId());
-        if (canvas == null) {
-          return _this.makeNewCanvas(function() {
-            return _after.call(_this);
-          });
-        } else {
-          _this.clearDraw();
-          return _after.call(_this);
-        }
-      };
-    })(this));
-  };
-
-  ItemPreviewTemp.prototype.resetDrawPath = function() {
-    this._coodHeadPart = [];
-    this._coodLeftBodyPart = [];
-    this._coodRightBodyPart = [];
-    return this._drawCoodRegist = [];
   };
 
   ItemPreviewTemp.prototype.updateEventBefore = function() {
     var methodName;
     ItemPreviewTemp.__super__.updateEventBefore.call(this);
     methodName = this.getEventMethodName();
-    if (methodName === 'scrollDraw') {
+    if (methodName === 'changeDraw') {
       return this.reDraw(false);
     }
   };
@@ -208,25 +162,25 @@ ItemPreviewTemp = (function(superClass) {
     var methodName;
     ItemPreviewTemp.__super__.updateEventAfter.call(this);
     methodName = this.getEventMethodName();
-    if (methodName === 'scrollDraw') {
+    if (methodName === 'changeDraw') {
       return this.reDraw();
     }
   };
 
-  ItemPreviewTemp.prototype.scrollDraw = function(opt) {
+  ItemPreviewTemp.prototype.changeDraw = function(opt) {
     var j, len, r, ref;
     r = opt.progress / opt.progressMax;
-    this.resetDrawPath();
+    _resetDrawPath.call(this);
     this.restoreAllNewDrawingSurface();
     ref = this.coodRegist.slice(0, parseInt((this.coodRegist.length - 1) * r));
     for (j = 0, len = ref.length; j < len; j++) {
       r = ref[j];
-      this.drawPath(r);
+      _drawPath.call(this, r);
     }
     return this.drawNewCanvas();
   };
 
-  ItemPreviewTemp.prototype.changeColorClick = function(e) {};
+  ItemPreviewTemp.prototype.changeColor = function(opt) {};
 
   _coodLength = function(locA, locB) {
     return parseInt(Math.sqrt(Math.pow(locA.x - locB.x, 2) + Math.pow(locA.y - locB.y, 2)));
@@ -457,9 +411,9 @@ ItemPreviewTemp = (function(superClass) {
   ItemPreviewTemp.prototype.draw = function(moveCood) {
     this.coodRegist.push(moveCood);
     _updateArrowRect.call(this, moveCood);
-    this.drawPath(moveCood);
+    _drawPath.call(this, moveCood);
     this.restoreDrawingSurface(this.itemSize);
-    return this.drawLine();
+    return _drawLine.call(this);
   };
 
   _updateArrowRect = function(cood) {
@@ -495,6 +449,28 @@ ItemPreviewTemp = (function(superClass) {
         return this.itemSize.h += maxY - (this.itemSize.y + this.itemSize.h);
       }
     }
+  };
+
+  _drawPath = function(moveCood) {
+    _calDrection.call(this, this._drawCoodRegist[this._drawCoodRegist.length - 1], moveCood);
+    this._drawCoodRegist.push(moveCood);
+    _calTailDrawPath.call(this);
+    _calBodyPath.call(this, moveCood);
+    return _calTrianglePath.call(this, this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1], this._coodRightBodyPart[this._coodRightBodyPart.length - 1]);
+  };
+
+  _drawLine = function() {
+    drawingContext.beginPath();
+    _drawCoodToBaseCanvas.call(this);
+    drawingContext.globalAlpha = 0.3;
+    return drawingContext.stroke();
+  };
+
+  _resetDrawPath = function() {
+    this._coodHeadPart = [];
+    this._coodLeftBodyPart = [];
+    this._coodRightBodyPart = [];
+    return this._drawCoodRegist = [];
   };
 
   return ItemPreviewTemp;
