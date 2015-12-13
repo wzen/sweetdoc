@@ -14,6 +14,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.ITEM_PREVIEW_ITEM_ACCESS_TOKEN = 'dummy';
 
+    Constant.CANVAS_ITEM_COORDINATE_VAR_SURFIX = 'Coord';
+
     Constant.Zindex = (function() {
       function Zindex() {}
 

@@ -123,9 +123,9 @@ ItemPreviewTemp = (function(superClass) {
       x: 0,
       y: 0
     };
-    this._coodHeadPart = [];
-    this._coodLeftBodyPart = [];
-    this._coodRightBodyPart = [];
+    this._headPartCoord = [];
+    this._leftBodyPartCoord = [];
+    this._rightBodyPartCoord = [];
     this.header_width = HEADER_WIDTH;
     this.header_height = HEADER_HEIGHT;
     this.padding_size = this.header_width;
@@ -140,7 +140,7 @@ ItemPreviewTemp = (function(superClass) {
     ItemPreviewTemp.__super__.itemDraw.call(this, show);
     _resetDrawPath.call(this);
     if (show) {
-      ref = this.coodRegist;
+      ref = this.registCoord;
       for (j = 0, len = ref.length; j < len; j++) {
         r = ref[j];
         _drawPath.call(this, r);
@@ -172,7 +172,7 @@ ItemPreviewTemp = (function(superClass) {
     r = opt.progress / opt.progressMax;
     _resetDrawPath.call(this);
     this.restoreAllNewDrawingSurface();
-    ref = this.coodRegist.slice(0, parseInt((this.coodRegist.length - 1) * r));
+    ref = this.registCoord.slice(0, parseInt((this.registCoord.length - 1) * r));
     for (j = 0, len = ref.length; j < len; j++) {
       r = ref[j];
       _drawPath.call(this, r);
@@ -241,7 +241,7 @@ ItemPreviewTemp = (function(superClass) {
       x: Math.cos(sitaTop) * this.header_height + mid.x,
       y: Math.sin(sitaTop) * this.header_height + mid.y
     };
-    return this._coodHeadPart = [rightTop, top, leftTop];
+    return this._headPartCoord = [rightTop, top, leftTop];
   };
 
   _calTailDrawPath = function() {
@@ -258,11 +258,11 @@ ItemPreviewTemp = (function(superClass) {
     locSub = this._drawCoodRegist[1];
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x);
     arrowHalfWidth = this.arrowWidth / 2.0;
-    this._coodRightBodyPart.push({
+    this._rightBodyPartCoord.push({
       x: -(Math.sin(rad) * arrowHalfWidth) + locTail.x,
       y: Math.cos(rad) * arrowHalfWidth + locTail.y
     });
-    return this._coodLeftBodyPart.push({
+    return this._leftBodyPartCoord.push({
       x: Math.sin(rad) * arrowHalfWidth + locTail.x,
       y: -(Math.cos(rad) * arrowHalfWidth) + locTail.y
     });
@@ -332,8 +332,8 @@ ItemPreviewTemp = (function(superClass) {
         }
         return cood;
       };
-      beforeLeftCood = this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1];
-      beforeRightCood = this._coodRightBodyPart[this._coodRightBodyPart.length - 1];
+      beforeLeftCood = this._leftBodyPartCoord[this._leftBodyPartCoord.length - 1];
+      beforeRightCood = this._rightBodyPartCoord[this._rightBodyPartCoord.length - 1];
       leftCood = _suitCood.call(this, cood.coodLeftPart, beforeLeftCood);
       rightCood = _suitCood.call(this, cood.coodRightPart, beforeRightCood);
       ret = {
@@ -345,12 +345,12 @@ ItemPreviewTemp = (function(superClass) {
     if (!_validate.call(this)) {
       return;
     }
-    locLeftBody = this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1];
-    locRightBody = this._coodRightBodyPart[this._coodRightBodyPart.length - 1];
+    locLeftBody = this._leftBodyPartCoord[this._leftBodyPartCoord.length - 1];
+    locRightBody = this._rightBodyPartCoord[this._rightBodyPartCoord.length - 1];
     centerBodyCood = _calCenterBodyCood.call(this, this._drawCoodRegist[this._drawCoodRegist.length - 3], this._drawCoodRegist[this._drawCoodRegist.length - 2], this._drawCoodRegist[this._drawCoodRegist.length - 1]);
     centerBodyCood = _suitCoodBasedDirection.call(this, centerBodyCood);
-    this._coodLeftBodyPart.push(centerBodyCood.coodLeftPart);
-    return this._coodRightBodyPart.push(centerBodyCood.coodRightPart);
+    this._leftBodyPartCoord.push(centerBodyCood.coodLeftPart);
+    return this._rightBodyPartCoord.push(centerBodyCood.coodRightPart);
   };
 
   _drawCoodToCanvas = function(dc) {
@@ -364,20 +364,20 @@ ItemPreviewTemp = (function(superClass) {
     } else {
       drawingContext = window.drawingContext;
     }
-    if (this._coodLeftBodyPart.length <= 0 || this._coodRightBodyPart.length <= 0) {
+    if (this._leftBodyPartCoord.length <= 0 || this._rightBodyPartCoord.length <= 0) {
       return;
     }
-    drawingContext.moveTo(this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1].x, this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1].y);
-    if (this._coodLeftBodyPart.length >= 2) {
-      for (i = j = ref = this._coodLeftBodyPart.length - 2; ref <= 0 ? j <= 0 : j >= 0; i = ref <= 0 ? ++j : --j) {
-        drawingContext.lineTo(this._coodLeftBodyPart[i].x, this._coodLeftBodyPart[i].y);
+    drawingContext.moveTo(this._leftBodyPartCoord[this._leftBodyPartCoord.length - 1].x, this._leftBodyPartCoord[this._leftBodyPartCoord.length - 1].y);
+    if (this._leftBodyPartCoord.length >= 2) {
+      for (i = j = ref = this._leftBodyPartCoord.length - 2; ref <= 0 ? j <= 0 : j >= 0; i = ref <= 0 ? ++j : --j) {
+        drawingContext.lineTo(this._leftBodyPartCoord[i].x, this._leftBodyPartCoord[i].y);
       }
     }
-    for (i = k = 0, ref1 = this._coodRightBodyPart.length - 1; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
-      drawingContext.lineTo(this._coodRightBodyPart[i].x, this._coodRightBodyPart[i].y);
+    for (i = k = 0, ref1 = this._rightBodyPartCoord.length - 1; 0 <= ref1 ? k <= ref1 : k >= ref1; i = 0 <= ref1 ? ++k : --k) {
+      drawingContext.lineTo(this._rightBodyPartCoord[i].x, this._rightBodyPartCoord[i].y);
     }
-    for (i = m = 0, ref2 = this._coodHeadPart.length - 1; 0 <= ref2 ? m <= ref2 : m >= ref2; i = 0 <= ref2 ? ++m : --m) {
-      drawingContext.lineTo(this._coodHeadPart[i].x, this._coodHeadPart[i].y);
+    for (i = m = 0, ref2 = this._headPartCoord.length - 1; 0 <= ref2 ? m <= ref2 : m >= ref2; i = 0 <= ref2 ? ++m : --m) {
+      drawingContext.lineTo(this._headPartCoord[i].x, this._headPartCoord[i].y);
     }
     return drawingContext.closePath();
   };
@@ -409,7 +409,7 @@ ItemPreviewTemp = (function(superClass) {
   };
 
   ItemPreviewTemp.prototype.draw = function(moveCood) {
-    this.coodRegist.push(moveCood);
+    this.registCoord.push(moveCood);
     _updateArrowRect.call(this, moveCood);
     _drawPath.call(this, moveCood);
     this.restoreDrawingSurface(this.itemSize);
@@ -456,7 +456,7 @@ ItemPreviewTemp = (function(superClass) {
     this._drawCoodRegist.push(moveCood);
     _calTailDrawPath.call(this);
     _calBodyPath.call(this, moveCood);
-    return _calTrianglePath.call(this, this._coodLeftBodyPart[this._coodLeftBodyPart.length - 1], this._coodRightBodyPart[this._coodRightBodyPart.length - 1]);
+    return _calTrianglePath.call(this, this._leftBodyPartCoord[this._leftBodyPartCoord.length - 1], this._rightBodyPartCoord[this._rightBodyPartCoord.length - 1]);
   };
 
   _drawLine = function() {
@@ -467,9 +467,9 @@ ItemPreviewTemp = (function(superClass) {
   };
 
   _resetDrawPath = function() {
-    this._coodHeadPart = [];
-    this._coodLeftBodyPart = [];
-    this._coodRightBodyPart = [];
+    this._headPartCoord = [];
+    this._leftBodyPartCoord = [];
+    this._rightBodyPartCoord = [];
     return this._drawCoodRegist = [];
   };
 

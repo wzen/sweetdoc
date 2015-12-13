@@ -62,8 +62,8 @@ class ItemBase extends ItemEventBase
     @_ohiRegist = []
     # @property [Int] _ohiRegistIndex 操作履歴Index保存配列のインデックス
     @_ohiRegistIndex = 0
-    # @property [Array] coodRegist ドラッグ座標
-    @coodRegist = []
+    # @property [Array] registCoord ドラッグ座標
+    @registCoord = []
 
   # アイテムのJQuery要素を取得
   # @return [Object] JQuery要素

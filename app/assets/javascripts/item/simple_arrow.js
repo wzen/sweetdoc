@@ -33,8 +33,8 @@ SimpleArrowItem = (function(superClass) {
       x: 0,
       y: 0
     };
-    this.coodRegist = [];
-    this._coodHeadPart = [];
+    this.registCoord = [];
+    this._headPartCoord = [];
   }
 
   SimpleArrowItem.prototype.canvasElementId = function() {
@@ -43,16 +43,16 @@ SimpleArrowItem = (function(superClass) {
 
   SimpleArrowItem.prototype.draw = function(moveCood) {
     var b, mid;
-    calDrection.call(this, this.coodRegist[this.coodRegist.length - 1], moveCood);
-    if (this.coodRegist.length >= 2) {
-      b = this.coodRegist[this.coodRegist.length - 2];
+    calDrection.call(this, this.registCoord[this.registCoord.length - 1], moveCood);
+    if (this.registCoord.length >= 2) {
+      b = this.registCoord[this.registCoord.length - 2];
       mid = {
         x: (b.x + moveCood.x) / 2.0,
         y: (b.y + moveCood.y) / 2.0
       };
-      this.coodRegist[this.coodRegist - 1] = mid;
+      this.registCoord[this.registCoord - 1] = mid;
     }
-    this.coodRegist.push(moveCood);
+    this.registCoord.push(moveCood);
     updateArrowRect.call(this, moveCood);
     clearArrow.call(this);
     calTrianglePath.call(this);
@@ -70,13 +70,13 @@ SimpleArrowItem = (function(superClass) {
     if (!SimpleArrowItem.__super__.endDraw.call(this, zindex)) {
       return false;
     }
-    ref = this.coodRegist;
+    ref = this.registCoord;
     for (j = 0, len = ref.length; j < len; j++) {
       l = ref[j];
       l.x -= this.itemSize.x;
       l.y -= this.itemSize.y;
     }
-    ref1 = this._coodHeadPart;
+    ref1 = this._headPartCoord;
     for (k = 0, len1 = ref1.length; k < len1; k++) {
       l = ref1[k];
       l.x -= this.itemSize.x;
@@ -114,8 +114,8 @@ SimpleArrowItem = (function(superClass) {
       itemToken: this.constructor.ITEM_ACCESS_TOKEN,
       a: this.itemSize,
       b: this.zindex,
-      c: this.coodRegist,
-      d: this._coodHeadPart
+      c: this.registCoord,
+      d: this._headPartCoord
     };
     return obj;
   };
@@ -151,13 +151,13 @@ SimpleArrowItem = (function(superClass) {
 
   calTrianglePath = function() {
     var lastBodyCood, leftTop, r, rightTop, sita, sitaLeft, sitaMid, sitaRight, top;
-    if (this.coodRegist.length < 4) {
+    if (this.registCoord.length < 4) {
       return null;
     }
-    lastBodyCood = this.coodRegist[this.coodRegist.length - 1];
+    lastBodyCood = this.registCoord[this.registCoord.length - 1];
     r = {
-      x: this.coodRegist[this.coodRegist.length - 4].x - lastBodyCood.x,
-      y: this.coodRegist[this.coodRegist.length - 4].y - lastBodyCood.y
+      x: this.registCoord[this.registCoord.length - 4].x - lastBodyCood.x,
+      y: this.registCoord[this.registCoord.length - 4].y - lastBodyCood.y
     };
     sita = Math.atan2(r.y, r.x);
     sitaLeft = sita - Math.PI / 2.0;
@@ -175,12 +175,12 @@ SimpleArrowItem = (function(superClass) {
       x: Math.cos(sitaMid) * HEADER_HEIGHT + lastBodyCood.x,
       y: Math.sin(sitaMid) * HEADER_HEIGHT + lastBodyCood.y
     };
-    return this._coodHeadPart = [rightTop, top, leftTop];
+    return this._headPartCoord = [rightTop, top, leftTop];
   };
 
   drawCoodToCanvas = function(drawingContext) {
     var i, j, k, ref, ref1;
-    if (this.coodRegist.length < 2) {
+    if (this.registCoord.length < 2) {
       return;
     }
     drawingContext.beginPath();
@@ -188,20 +188,20 @@ SimpleArrowItem = (function(superClass) {
     drawingContext.strokeStyle = 'red';
     drawingContext.lineCap = 'round';
     drawingContext.lineJoin = 'round';
-    drawingContext.moveTo(this.coodRegist[0].x, this.coodRegist[0].y);
-    for (i = j = 1, ref = this.coodRegist.length - 1; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-      drawingContext.lineTo(this.coodRegist[i].x, this.coodRegist[i].y);
+    drawingContext.moveTo(this.registCoord[0].x, this.registCoord[0].y);
+    for (i = j = 1, ref = this.registCoord.length - 1; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
+      drawingContext.lineTo(this.registCoord[i].x, this.registCoord[i].y);
     }
     drawingContext.stroke();
-    if (this._coodHeadPart.length < 2) {
+    if (this._headPartCoord.length < 2) {
       return;
     }
     drawingContext.beginPath();
     drawingContext.fillStyle = 'red';
     drawingContext.lineWidth = 1.0;
-    drawingContext.moveTo(this._coodHeadPart[0].x, this._coodHeadPart[0].y);
-    for (i = k = 1, ref1 = this._coodHeadPart.length - 1; 1 <= ref1 ? k <= ref1 : k >= ref1; i = 1 <= ref1 ? ++k : --k) {
-      drawingContext.lineTo(this._coodHeadPart[i].x, this._coodHeadPart[i].y);
+    drawingContext.moveTo(this._headPartCoord[0].x, this._headPartCoord[0].y);
+    for (i = k = 1, ref1 = this._headPartCoord.length - 1; 1 <= ref1 ? k <= ref1 : k >= ref1; i = 1 <= ref1 ? ++k : --k) {
+      drawingContext.lineTo(this._headPartCoord[i].x, this._headPartCoord[i].y);
     }
     drawingContext.closePath();
     drawingContext.fill();

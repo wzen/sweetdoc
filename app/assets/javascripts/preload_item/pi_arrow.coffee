@@ -110,12 +110,12 @@ class PreloadItemArrow extends CanvasItemBase
     super(cood)
     # @property [Array] direction 矢印の進行方向
     @_direction = {x: 0, y: 0}
-    # @property [Array] _coodHeadPart 矢印の頭部の座標
-    @_coodHeadPart = []
-    # @property [Array] _coodLeftBodyPart 矢印の体左部分の座標
-    @_coodLeftBodyPart = []
-    # @property [Array] _coodRightBodyPart 矢印の体右部分の座標
-    @_coodRightBodyPart = []
+    # @property [Array] _headPartCoord 矢印の頭部の座標
+    @_headPartCoord = []
+    # @property [Array] _leftBodyPartCoord 矢印の体左部分の座標
+    @_leftBodyPartCoord = []
+    # @property [Array] _rightBodyPartCoord 矢印の体右部分の座標
+    @_rightBodyPartCoord = []
     # @property [Int] header_width 矢印の頭の幅
     @header_width = HEADER_WIDTH
     # @property [Int] header_height 矢印の頭の長さ
@@ -134,7 +134,7 @@ class PreloadItemArrow extends CanvasItemBase
     _resetDrawPath.call(@)
     if show
       # 座標を再計算
-      for r in @coodRegist
+      for r in @registCoord
         _drawPath.call(@, r)
       # 描画
       @drawNewCanvas()
@@ -159,7 +159,7 @@ class PreloadItemArrow extends CanvasItemBase
 
     _resetDrawPath.call(@)
     @restoreAllNewDrawingSurface()
-    for r in @coodRegist.slice(0, parseInt((@coodRegist.length - 1) * r))
+    for r in @registCoord.slice(0, parseInt((@registCoord.length - 1) * r))
       _drawPath.call(@, r)
     # 尾と体の座標をCanvasに描画
     @drawNewCanvas()
@@ -227,7 +227,7 @@ class PreloadItemArrow extends CanvasItemBase
       x: Math.cos(sitaTop) * @header_height + mid.x
       y: Math.sin(sitaTop) * @header_height + mid.y
 
-    @_coodHeadPart = [rightTop, top, leftTop]
+    @_headPartCoord = [rightTop, top, leftTop]
 
   # 矢印の尾を作成
   # @private
@@ -245,8 +245,8 @@ class PreloadItemArrow extends CanvasItemBase
     # 座標を保存
     rad = Math.atan2(locSub.y - locTail.y, locSub.x - locTail.x)
     arrowHalfWidth = @arrowWidth / 2.0
-    @_coodRightBodyPart.push({x: -(Math.sin(rad) * arrowHalfWidth) + locTail.x, y: Math.cos(rad) * arrowHalfWidth + locTail.y})
-    @_coodLeftBodyPart.push({x: Math.sin(rad) * arrowHalfWidth + locTail.x, y: -(Math.cos(rad) * arrowHalfWidth) + locTail.y})
+    @_rightBodyPartCoord.push({x: -(Math.sin(rad) * arrowHalfWidth) + locTail.x, y: Math.cos(rad) * arrowHalfWidth + locTail.y})
+    @_leftBodyPartCoord.push({x: Math.sin(rad) * arrowHalfWidth + locTail.x, y: -(Math.cos(rad) * arrowHalfWidth) + locTail.y})
 
   # 矢印の本体を作成
   # @private
@@ -315,8 +315,8 @@ class PreloadItemArrow extends CanvasItemBase
             cood.y = beforeCood.y
         return cood
 
-      beforeLeftCood = @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1]
-      beforeRightCood = @_coodRightBodyPart[@_coodRightBodyPart.length - 1]
+      beforeLeftCood = @_leftBodyPartCoord[@_leftBodyPartCoord.length - 1]
+      beforeRightCood = @_rightBodyPartCoord[@_rightBodyPartCoord.length - 1]
       leftCood = _suitCood.call(@, cood.coodLeftPart, beforeLeftCood)
       rightCood = _suitCood.call(@, cood.coodRightPart, beforeRightCood)
 
@@ -328,8 +328,8 @@ class PreloadItemArrow extends CanvasItemBase
     if !_validate.call(@)
       return
 
-    locLeftBody = @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1]
-    locRightBody = @_coodRightBodyPart[@_coodRightBodyPart.length - 1]
+    locLeftBody = @_leftBodyPartCoord[@_leftBodyPartCoord.length - 1]
+    locRightBody = @_rightBodyPartCoord[@_rightBodyPartCoord.length - 1]
     centerBodyCood = _calCenterBodyCood.call(@, @_drawCoodRegist[@_drawCoodRegist.length - 3], @_drawCoodRegist[@_drawCoodRegist.length - 2], @_drawCoodRegist[@_drawCoodRegist.length - 1])
     centerBodyCood = _suitCoodBasedDirection.call(@, centerBodyCood)
     #    console.log('Left')
@@ -339,8 +339,8 @@ class PreloadItemArrow extends CanvasItemBase
     #    _coodLog.call(@, locRightBody, 'moveTo')
     #    _coodLog.call(@, centerBodyCood.coodRightPart, 'lineTo')
 
-    @_coodLeftBodyPart.push(centerBodyCood.coodLeftPart)
-    @_coodRightBodyPart.push(centerBodyCood.coodRightPart)
+    @_leftBodyPartCoord.push(centerBodyCood.coodLeftPart)
+    @_rightBodyPartCoord.push(centerBodyCood.coodRightPart)
 
   # 座標をCanvasに描画
   # @private
@@ -351,18 +351,18 @@ class PreloadItemArrow extends CanvasItemBase
       drawingContext = dc
     else
       drawingContext = window.drawingContext
-    if @_coodLeftBodyPart.length <= 0 || @_coodRightBodyPart.length <= 0
+    if @_leftBodyPartCoord.length <= 0 || @_rightBodyPartCoord.length <= 0
       # 尾が描かれてない場合
       return
 
-    drawingContext.moveTo(@_coodLeftBodyPart[@_coodLeftBodyPart.length - 1].x, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1].y)
-    if @_coodLeftBodyPart.length >= 2
-      for i in [@_coodLeftBodyPart.length - 2 .. 0]
-        drawingContext.lineTo(@_coodLeftBodyPart[i].x, @_coodLeftBodyPart[i].y)
-    for i in [0 .. @_coodRightBodyPart.length - 1]
-      drawingContext.lineTo(@_coodRightBodyPart[i].x, @_coodRightBodyPart[i].y)
-    for i in [0 .. @_coodHeadPart.length - 1]
-      drawingContext.lineTo(@_coodHeadPart[i].x, @_coodHeadPart[i].y)
+    drawingContext.moveTo(@_leftBodyPartCoord[@_leftBodyPartCoord.length - 1].x, @_leftBodyPartCoord[@_leftBodyPartCoord.length - 1].y)
+    if @_leftBodyPartCoord.length >= 2
+      for i in [@_leftBodyPartCoord.length - 2 .. 0]
+        drawingContext.lineTo(@_leftBodyPartCoord[i].x, @_leftBodyPartCoord[i].y)
+    for i in [0 .. @_rightBodyPartCoord.length - 1]
+      drawingContext.lineTo(@_rightBodyPartCoord[i].x, @_rightBodyPartCoord[i].y)
+    for i in [0 .. @_headPartCoord.length - 1]
+      drawingContext.lineTo(@_headPartCoord[i].x, @_headPartCoord[i].y)
     drawingContext.closePath()
 
   # 座標を基底Canvasに描画
@@ -393,7 +393,7 @@ class PreloadItemArrow extends CanvasItemBase
   # 描画(パス+線)
   # @param [Array] moveCood 画面ドラッグ座標
   draw: (moveCood) ->
-    @coodRegist.push(moveCood)
+    @registCoord.push(moveCood)
     # 描画範囲の更新
     _updateArrowRect.call(@, moveCood)
     # パスの描画
@@ -440,7 +440,7 @@ class PreloadItemArrow extends CanvasItemBase
     # 体の部分の座標を計算
     _calBodyPath.call(@, moveCood)
     # 頭の部分の座標を計算
-    _calTrianglePath.call(@, @_coodLeftBodyPart[@_coodLeftBodyPart.length - 1], @_coodRightBodyPart[@_coodRightBodyPart.length - 1])
+    _calTrianglePath.call(@, @_leftBodyPartCoord[@_leftBodyPartCoord.length - 1], @_rightBodyPartCoord[@_rightBodyPartCoord.length - 1])
     #console.log("@traceTriangelHeadIndex:" + @traceTriangelHeadIndex)
 
   # 線の描画
@@ -453,9 +453,9 @@ class PreloadItemArrow extends CanvasItemBase
 
   # パスの情報をリセット
   _resetDrawPath = ->
-    @_coodHeadPart = []
-    @_coodLeftBodyPart = []
-    @_coodRightBodyPart = []
+    @_headPartCoord = []
+    @_leftBodyPartCoord = []
+    @_rightBodyPartCoord = []
     @_drawCoodRegist = []
 
 Common.setClassToMap(false, PreloadItemArrow.ITEM_ACCESS_TOKEN, PreloadItemArrow)

@@ -5,25 +5,14 @@ canvasItemBaseWorktableExtend =
   endDraw: (zindex, show = true, callback = null) ->
     @zindex = zindex
 
-    # TODO: 汎用的に修正
     # 座標を新規キャンパス用に修正
-    do =>
-      @coodRegist.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @_coodLeftBodyPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @_coodRightBodyPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
-      @_coodHeadPart.forEach((e) =>
-        e.x -= @itemSize.x
-        e.y -= @itemSize.y
-      )
+    rex = new RegExp("#{Constant.CANVAS_ITEM_COORDINATE_VAR_SURFIX}$")
+    for k, v of @
+      if k.match(rex)
+        v.forEach((e) =>
+          e.x -= @itemSize.x
+          e.y -= @itemSize.y
+        )
 
     # スクロールビュー分のxとyを追加
     @itemSize.x += scrollContents.scrollLeft()

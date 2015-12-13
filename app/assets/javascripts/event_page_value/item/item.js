@@ -36,7 +36,7 @@ EPVItem = (function(superClass) {
     actionType = item.constructor.defaultActionType();
     writeValue[this.PageValueKey.ACTIONTYPE] = actionType;
     start = this.getAllScrollLength();
-    end = start + item.coodRegist.length;
+    end = start + item.registCoord.length;
     if (start > end) {
       start = null;
       end = null;

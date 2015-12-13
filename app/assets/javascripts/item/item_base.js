@@ -83,7 +83,7 @@ ItemBase = (function(superClass) {
     this.zindex = Constant.Zindex.EVENTBOTTOM + 1;
     this._ohiRegist = [];
     this._ohiRegistIndex = 0;
-    this.coodRegist = [];
+    this.registCoord = [];
   }
 
   ItemBase.prototype.getJQueryElement = function() {

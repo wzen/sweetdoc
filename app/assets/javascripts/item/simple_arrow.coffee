@@ -23,10 +23,10 @@ class SimpleArrowItem extends ItemBase
     super(cood)
     # @property [Array] direction 矢印の進行方向
     @direction = {x: 0, y: 0}
-    # @property [Array] coodRegist ドラッグした座標
-    @coodRegist = []
-    # @property [Array] _coodHeadPart 矢印の頭部の座標
-    @_coodHeadPart = []
+    # @property [Array] registCoord ドラッグした座標
+    @registCoord = []
+    # @property [Array] _headPartCoord 矢印の頭部の座標
+    @_headPartCoord = []
 
   # CanvasのHTML要素IDを取得
   # @return [Int] Canvas要素ID
@@ -36,16 +36,16 @@ class SimpleArrowItem extends ItemBase
   # 描画
   # @param [Array] moveCood 画面ドラッグ座標
   draw : (moveCood) ->
-    calDrection.call(@, @coodRegist[@coodRegist.length - 1], moveCood)
+    calDrection.call(@, @registCoord[@registCoord.length - 1], moveCood)
 
-    if @coodRegist.length >= 2
-      b = @coodRegist[@coodRegist.length - 2]
+    if @registCoord.length >= 2
+      b = @registCoord[@registCoord.length - 2]
       mid =
         x: (b.x + moveCood.x) / 2.0
         y: (b.y + moveCood.y) / 2.0
-      @coodRegist[@coodRegist - 1] = mid
+      @registCoord[@registCoord - 1] = mid
 
-    @coodRegist.push(moveCood)
+    @registCoord.push(moveCood)
 
     updateArrowRect.call(@, moveCood)
 
@@ -68,10 +68,10 @@ class SimpleArrowItem extends ItemBase
       return false
 
     # 新しいCanvasに合わせるためにrect分座標を引く
-    for l in @coodRegist
+    for l in @registCoord
       l.x -= @itemSize.x
       l.y -= @itemSize.y
-    for l in @_coodHeadPart
+    for l in @_headPartCoord
       l.x -= @itemSize.x
       l.y -= @itemSize.y
 
@@ -108,8 +108,8 @@ class SimpleArrowItem extends ItemBase
       itemToken: @constructor.ITEM_ACCESS_TOKEN
       a: @itemSize
       b: @zindex
-      c: @coodRegist
-      d : @_coodHeadPart
+      c: @registCoord
+      d : @_headPartCoord
     }
     return obj
 
@@ -146,13 +146,13 @@ class SimpleArrowItem extends ItemBase
   # 矢印の頭を作成
   # @private
   calTrianglePath = ->
-    if @coodRegist.length < 4
+    if @registCoord.length < 4
       return null
 
-    lastBodyCood = @coodRegist[@coodRegist.length - 1]
+    lastBodyCood = @registCoord[@registCoord.length - 1]
     r =
-      x: @coodRegist[@coodRegist.length - 4].x - lastBodyCood.x
-      y: @coodRegist[@coodRegist.length - 4].y - lastBodyCood.y
+      x: @registCoord[@registCoord.length - 4].x - lastBodyCood.x
+      y: @registCoord[@registCoord.length - 4].y - lastBodyCood.y
     sita = Math.atan2(r.y, r.x)
     sitaLeft = sita - Math.PI / 2.0
     leftTop =
@@ -168,12 +168,12 @@ class SimpleArrowItem extends ItemBase
       x: Math.cos(sitaMid) * HEADER_HEIGHT + lastBodyCood.x
       y: Math.sin(sitaMid) * HEADER_HEIGHT + lastBodyCood.y
 
-    @_coodHeadPart = [rightTop, top, leftTop]
+    @_headPartCoord = [rightTop, top, leftTop]
 
   # 座標をCanvasに描画
   # @private
   drawCoodToCanvas = (drawingContext) ->
-    if @coodRegist.length < 2
+    if @registCoord.length < 2
       # 描かれてない場合
       return
     drawingContext.beginPath()
@@ -181,19 +181,19 @@ class SimpleArrowItem extends ItemBase
     drawingContext.strokeStyle = 'red'
     drawingContext.lineCap = 'round'
     drawingContext.lineJoin = 'round'
-    drawingContext.moveTo(@coodRegist[0].x, @coodRegist[0].y)
-    for i in [1 .. @coodRegist.length - 1]
-      drawingContext.lineTo(@coodRegist[i].x, @coodRegist[i].y)
+    drawingContext.moveTo(@registCoord[0].x, @registCoord[0].y)
+    for i in [1 .. @registCoord.length - 1]
+      drawingContext.lineTo(@registCoord[i].x, @registCoord[i].y)
     drawingContext.stroke()
 
-    if @_coodHeadPart.length < 2
+    if @_headPartCoord.length < 2
       return
     drawingContext.beginPath()
     drawingContext.fillStyle = 'red'
     drawingContext.lineWidth = 1.0
-    drawingContext.moveTo(@_coodHeadPart[0].x, @_coodHeadPart[0].y)
-    for i in [1 .. @_coodHeadPart.length - 1]
-      drawingContext.lineTo(@_coodHeadPart[i].x, @_coodHeadPart[i].y)
+    drawingContext.moveTo(@_headPartCoord[0].x, @_headPartCoord[0].y)
+    for i in [1 .. @_headPartCoord.length - 1]
+      drawingContext.lineTo(@_headPartCoord[i].x, @_headPartCoord[i].y)
     drawingContext.closePath()
     drawingContext.fill()
     drawingContext.stroke()

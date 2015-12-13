@@ -3,6 +3,7 @@ var canvasItemBaseWorktableExtend;
 
 canvasItemBaseWorktableExtend = {
   endDraw: function(zindex, show, callback) {
+    var k, rex, v;
     if (show == null) {
       show = true;
     }
@@ -10,26 +11,18 @@ canvasItemBaseWorktableExtend = {
       callback = null;
     }
     this.zindex = zindex;
-    (function(_this) {
-      return (function() {
-        _this.coodRegist.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-        _this._coodLeftBodyPart.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-        _this._coodRightBodyPart.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-        return _this._coodHeadPart.forEach(function(e) {
-          e.x -= _this.itemSize.x;
-          return e.y -= _this.itemSize.y;
-        });
-      });
-    })(this)();
+    rex = new RegExp(Constant.CANVAS_ITEM_COORDINATE_VAR_SURFIX + "$");
+    for (k in this) {
+      v = this[k];
+      if (k.match(rex)) {
+        v.forEach((function(_this) {
+          return function(e) {
+            e.x -= _this.itemSize.x;
+            return e.y -= _this.itemSize.y;
+          };
+        })(this));
+      }
+    }
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
     this.applyDefaultDesign();
@@ -94,7 +87,7 @@ canvasItemBaseWorktableExtend = {
       };
     })(this)).each((function(_this) {
       return function(idx, e) {
-        var i, j, k, stepValue;
+        var i, j, l, stepValue;
         stepValue = 2;
         for (i = j = 2; j <= 4; i = ++j) {
           if (!_this.designs.flags["design_bg_color" + i + "_flag"]) {
@@ -103,7 +96,7 @@ canvasItemBaseWorktableExtend = {
           }
         }
         $(e).val(stepValue);
-        for (i = k = 2; k <= 4; i = ++k) {
+        for (i = l = 2; l <= 4; i = ++l) {
           _this.designs.flags["design_bg_color" + i + "_flag"] = i <= stepValue - 1;
         }
         return self.applyGradientStepChange(e);
