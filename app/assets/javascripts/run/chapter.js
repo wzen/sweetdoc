@@ -27,7 +27,7 @@ Chapter = (function() {
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
       event.initEvent(this.eventList[idx]);
-      PageValue.saveInstanceObjectToFootprint(event.id, true, event.event[EventPageValueBase.PageValueKey.DIST_ID]);
+      PageValue.saveInstanceObjectToFootprint(event.id, true, event._event[EventPageValueBase.PageValueKey.DIST_ID]);
       event.willChapter();
       this.doMoveChapter = false;
     }
@@ -72,7 +72,7 @@ Chapter = (function() {
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     window.scrollContents.css('z-index', scrollViewSwitchZindex.on);
     return this.eventObjList.forEach(function(e) {
-      if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+      if (e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
         return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       }
     });
@@ -83,7 +83,7 @@ Chapter = (function() {
     window.scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        if (e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
+        if (e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
           return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + _this.num));
         }
       };
@@ -121,7 +121,7 @@ Chapter = (function() {
   Chapter.prototype.enableEventHandle = function() {
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        return e.skipEvent = false;
+        return e._skipEvent = false;
       };
     })(this));
   };
@@ -129,7 +129,7 @@ Chapter = (function() {
   Chapter.prototype.disableEventHandle = function() {
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        return e.skipEvent = true;
+        return e._skipEvent = true;
       };
     })(this));
   };

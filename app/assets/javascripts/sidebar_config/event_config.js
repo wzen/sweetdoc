@@ -182,7 +182,7 @@ EventConfig = (function() {
     if ((item != null) && (item.preview != null)) {
       te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
       item.initEvent(te);
-      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
+      PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
       item.preview(te);
     }
     return true;

@@ -196,7 +196,7 @@ class EventConfig
       te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
       # インスタンスの状態を保存
       item.initEvent(te)
-      PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
+      PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
       item.preview(te)
 
     return true

@@ -25,7 +25,7 @@ class Chapter
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
       # インスタンスの状態を保存
-      PageValue.saveInstanceObjectToFootprint(event.id, true, event.event[EventPageValueBase.PageValueKey.DIST_ID])
+      PageValue.saveInstanceObjectToFootprint(event.id, true, event._event[EventPageValueBase.PageValueKey.DIST_ID])
       event.willChapter()
       @doMoveChapter = false
 
@@ -70,7 +70,7 @@ class Chapter
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
     window.scrollContents.css('z-index', scrollViewSwitchZindex.on)
     @eventObjList.forEach((e) ->
-      if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+      if e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
     )
 
@@ -79,7 +79,7 @@ class Chapter
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     window.scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @eventObjList.forEach((e) =>
-      if e.event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
+      if e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
         e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + @num))
     )
 
@@ -107,11 +107,11 @@ class Chapter
   # イベント反応を有効にする
   enableEventHandle: ->
     @eventObjList.forEach((e) =>
-      e.skipEvent = false
+      e._skipEvent = false
     )
 
   # イベント反応を無効にする
   disableEventHandle: ->
     @eventObjList.forEach((e) =>
-      e.skipEvent = true
+      e._skipEvent = true
     )

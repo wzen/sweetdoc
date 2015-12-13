@@ -127,7 +127,7 @@ CanvasItemBase = (function(superClass) {
 
   CanvasItemBase.prototype.originalItemElementSize = function() {
     var diff, itemSize, obj, originalScale;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
     $.extend(true, obj, diff);
     itemSize = obj.itemSize;

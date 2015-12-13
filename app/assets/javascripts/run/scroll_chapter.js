@@ -58,7 +58,7 @@ ScrollChapter = (function(superClass) {
     return this.constructor.guideTimer = setTimeout((function(_this) {
       return function() {
         _this.adjustGuideParams(calledByWillChapter);
-        return ScrollGuide.showGuide(_this.enabledDirections, _this.forwardDirections, _this.canForward, _this.canReverse);
+        return ScrollGuide.showGuide(_this._enabledDirections, _this._forwardDirections, _this.canForward, _this.canReverse);
       };
     })(this), idleTime);
   };
@@ -72,13 +72,13 @@ ScrollChapter = (function(superClass) {
   };
 
   ScrollChapter.prototype.adjustGuideParams = function(calledByWillChapter) {
-    this.enabledDirections = {
+    this._enabledDirections = {
       top: false,
       bottom: false,
       left: false,
       right: false
     };
-    this.forwardDirections = {
+    this._forwardDirections = {
       top: false,
       bottom: false,
       left: false,
@@ -89,19 +89,19 @@ ScrollChapter = (function(superClass) {
     this.eventObjList.forEach((function(_this) {
       return function(event) {
         var k, ref, ref1, v;
-        if (!event.isFinishedEvent) {
-          ref = event.enabledDirections;
+        if (!event._isFinishedEvent) {
+          ref = event._enabledDirections;
           for (k in ref) {
             v = ref[k];
-            if (!_this.enabledDirections[k]) {
-              _this.enabledDirections[k] = v;
+            if (!_this._enabledDirections[k]) {
+              _this._enabledDirections[k] = v;
             }
           }
-          ref1 = event.forwardDirections;
+          ref1 = event._forwardDirections;
           for (k in ref1) {
             v = ref1[k];
-            if (!_this.forwardDirections[k]) {
-              _this.forwardDirections[k] = v;
+            if (!_this._forwardDirections[k]) {
+              _this._forwardDirections[k] = v;
             }
           }
           if (!calledByWillChapter) {
@@ -126,8 +126,8 @@ ScrollChapter = (function(superClass) {
     ret = true;
     this.eventObjList.forEach(function(event) {
       var methodName;
-      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME];
-      if (!event.isFinishedEvent) {
+      methodName = event._event[EventPageValueBase.PageValueKey.METHODNAME];
+      if (!event._isFinishedEvent) {
         ret = false;
         return false;
       }

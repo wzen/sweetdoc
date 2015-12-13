@@ -12,12 +12,12 @@ class EventBase extends Extend
   # イベントの初期化
   # @param [Object] event 設定イベント
   initEvent: (event) ->
-    @event = event
-    @isFinishedEvent = false
-    @skipEvent = true
-    @doPreviewLoop = false
-    @enabledDirections = @event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
-    @forwardDirections = @event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
+    @_event = event
+    @_isFinishedEvent = false
+    @_skipEvent = true
+    @_doPreviewLoop = false
+    @_enabledDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
+    @_forwardDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
 
     # スクロールイベント
     if @getEventActionType() == Constant.ActionType.SCROLL
@@ -29,8 +29,8 @@ class EventBase extends Extend
   # 設定されているイベントメソッド名を取得
   # @return [String] メソッド名
   getEventMethodName: ->
-    if @event?
-      methodName = @event[EventPageValueBase.PageValueKey.METHODNAME]
+    if @_event?
+      methodName = @_event[EventPageValueBase.PageValueKey.METHODNAME]
       if methodName?
         return methodName
       else
@@ -41,14 +41,14 @@ class EventBase extends Extend
   # 設定されているイベントアクションタイプを取得
   # @return [Integer] アクションタイプ
   getEventActionType: ->
-    if @event?
-      return @event[EventPageValueBase.PageValueKey.ACTIONTYPE]
+    if @_event?
+      return @_event[EventPageValueBase.PageValueKey.ACTIONTYPE]
 
   # 変更設定されているフォーク番号を取得
   # @return [Integer] フォーク番号
   getChangeForkNum: ->
-    if @event?
-      num = @event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
+    if @_event?
+      num = @_event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
       if num?
         return parseInt(num)
       else
@@ -60,8 +60,8 @@ class EventBase extends Extend
   # リセット(アクション前に戻す)
   resetEvent: ->
     @updateEventBefore()
-    @isFinishedEvent = false
-    @skipEvent = false
+    @_isFinishedEvent = false
+    @_skipEvent = false
 
   # プレビュー開始
   # @param [Object] event 設定イベント
@@ -76,7 +76,7 @@ class EventBase extends Extend
       @willChapter()
 
       # イベントループ
-      @doPreviewLoop = true
+      @_doPreviewLoop = true
       loopCount = 0
       @previewTimer = null
       # FloatView表示
@@ -84,7 +84,7 @@ class EventBase extends Extend
       if !@isDrawByAnimationMethod()
         p = 0
         _draw = =>
-          if @doPreviewLoop
+          if @_doPreviewLoop
             if @previewTimer?
               clearTimeout(@previewTimer)
               @previewTimer = null
@@ -103,7 +103,7 @@ class EventBase extends Extend
               @previewFinished = null
 
         _loop = =>
-          if @doPreviewLoop
+          if @_doPreviewLoop
             loopCount += 1
             if loopCount >= loopMaxCount
               @stopPreview()
@@ -117,7 +117,7 @@ class EventBase extends Extend
               @willChapter()
               _draw.call(@)
             , loopDelay)
-            if !@doPreviewLoop
+            if !@_doPreviewLoop
               @stopPreview()
           else
             if @previewFinished?
@@ -128,7 +128,7 @@ class EventBase extends Extend
 
       else
         _loop = =>
-          if @doPreviewLoop
+          if @_doPreviewLoop
             loopCount += 1
             if loopCount >= loopMaxCount
               @stopPreview()
@@ -165,8 +165,8 @@ class EventBase extends Extend
       if callback?
         callback()
 
-    if @doPreviewLoop
-      @doPreviewLoop = false
+    if @_doPreviewLoop
+      @_doPreviewLoop = false
       @previewFinished = =>
         _stop.call(@)
 
@@ -195,7 +195,7 @@ class EventBase extends Extend
       if k.lastIndexOf('__Cache') >= 0
         delete @[k]
     # インスタンスの状態を保存
-    PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
+    PageValue.saveInstanceObjectToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # メソッド実行
   execMethod: (opt) ->
@@ -213,7 +213,7 @@ class EventBase extends Extend
   # @param [Integer] y スクロール縦座標
   # @param [Function] complete イベント終了後コールバック
   scrollHandlerFunc: (x, y, complete = null) ->
-    if @isFinishedEvent || @skipEvent
+    if @_isFinishedEvent || @_skipEvent
       # 終了済みorイベントを反応させない場合
       return
 
@@ -225,26 +225,26 @@ class EventBase extends Extend
     #console.log("y:#{y}")
     plusX = 0
     plusY = 0
-    if x > 0 && @enabledDirections.right
+    if x > 0 && @_enabledDirections.right
       plusX = parseInt((x + 9) / 10)
-    else if x < 0 && @enabledDirections.left
+    else if x < 0 && @_enabledDirections.left
       plusX = parseInt((x - 9) / 10)
-    if y > 0 && @enabledDirections.bottom
+    if y > 0 && @_enabledDirections.bottom
       plusY = parseInt((y + 9) / 10)
-    else if y < 0 && @enabledDirections.top
+    else if y < 0 && @_enabledDirections.top
       plusY = parseInt((y - 9) / 10)
 
-    if (plusX > 0 && !@forwardDirections.right) ||
-      (plusX < 0 && @forwardDirections.left)
+    if (plusX > 0 && !@_forwardDirections.right) ||
+      (plusX < 0 && @_forwardDirections.left)
         plusX = -plusX
-    if (plusY > 0 && !@forwardDirections.bottom) ||
-      (plusY < 0 && @forwardDirections.top)
+    if (plusY > 0 && !@_forwardDirections.bottom) ||
+      (plusY < 0 && @_forwardDirections.top)
         plusY = -plusY
 
     @scrollValue += plusX + plusY
 
-    sPoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
-    ePoint = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+    sPoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
 
     # スクロール指定範囲外なら反応させない
     if @scrollValue < sPoint
@@ -252,19 +252,19 @@ class EventBase extends Extend
       return
     else if @scrollValue >= ePoint
       @scrollValue = ePoint
-      if !@isFinishedEvent
+      if !@_isFinishedEvent
         if !@isDrawByAnimationMethod()
           # 終了イベント
-          @isFinishedEvent = true
+          @_isFinishedEvent = true
           ScrollGuide.hideGuide()
           if complete?
             complete()
         else
           # アニメーション実行は1回のみ
-          @skipEvent = true
+          @_skipEvent = true
           @execMethod({
             complete: ->
-              @isFinishedEvent = true
+              @_isFinishedEvent = true
               ScrollGuide.hideGuide()
               if complete?
                 complete()
@@ -281,7 +281,7 @@ class EventBase extends Extend
   # スクロールの長さを取得
   # @return [Integer] スクロール長さ
   scrollLength: ->
-    return parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    return parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
 
   # クリック基底メソッド
   # @param [Object] e クリックオブジェクト
@@ -289,12 +289,12 @@ class EventBase extends Extend
   clickHandlerFunc: (e, complete = null) ->
     e.preventDefault()
 
-    if @isFinishedEvent || @skipEvent
+    if @_isFinishedEvent || @_skipEvent
       # 終了済みorイベントを反応させない場合
       return
 
     # イベントは一回のみ実行
-    @skipEvent = true
+    @_skipEvent = true
 
     # 動作済みフラグON
     if window.eventAction?
@@ -310,7 +310,7 @@ class EventBase extends Extend
         if progressMax < count
           clearInterval(timer)
           # 終了イベント
-          @isFinishedEvent = true
+          @_isFinishedEvent = true
           if complete?
             complete()
       , @constructor.STEP_INTERVAL_DURATION * 1000)
@@ -318,14 +318,14 @@ class EventBase extends Extend
       # アニメーション実行
       @execMethod({
         complete: ->
-          @isFinishedEvent = true
+          @_isFinishedEvent = true
           if complete?
             complete()
       })
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
     return $.extend(true, obj, diff)
 
@@ -346,7 +346,7 @@ class EventBase extends Extend
     else
       @updateInstanceParamByAnimation(true)
     # インスタンスの状態を保存
-    PageValue.saveInstanceObjectToFootprint(@id, false, @event[EventPageValueBase.PageValueKey.DIST_ID])
+    PageValue.saveInstanceObjectToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # ステップ実行によるアイテム状態更新
   updateInstanceParamByStep: (progressValue, immediate = false)->
@@ -361,9 +361,9 @@ class EventBase extends Extend
     eventBeforeObj = @getMinimumObjectEventBefore()
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
     for varName, value of mod
-      if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
+      if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
         before = eventBeforeObj[varName]
-        after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+        after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         if before? && after?
           if immediate
             @[varName] = after
@@ -392,8 +392,8 @@ class EventBase extends Extend
     mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
     if immediate
       for varName, value of mod
-        if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
-          after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+        if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
+          after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
           if after?
             @[varName] = after
       return
@@ -402,9 +402,9 @@ class EventBase extends Extend
     timer = setInterval( =>
       progressPercentage = @constructor.STEP_INTERVAL_DURATION * count / ed
       for varName, value of mod
-        if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
+        if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
           before = eventBeforeObj[varName]
-          after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+          after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
           if before? && after?
             if value.varAutoChange
               if value.type == Constant.ItemDesignOptionType.NUMBER
@@ -421,8 +421,8 @@ class EventBase extends Extend
       if count > progressMax
         clearInterval(timer)
         for varName, value of mod
-          if @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
-            after = @event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+          if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
+            after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
             if after?
               @[varName] = after
     , @constructor.STEP_INTERVAL_DURATION * 1000)
@@ -443,7 +443,7 @@ class EventBase extends Extend
 
   # ステップ数最大値
   progressMax: ->
-    return if @event[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
+    return if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL then @scrollLength() else @clickDurationStepMax()
 
   # クリック時間ステップ数最大値
   clickDurationStepMax: ->
@@ -452,7 +452,7 @@ class EventBase extends Extend
 
   # クリック実行時間
   eventDuration: ->
-    d = @event[EventPageValueBase.PageValueKey.EVENT_DURATION]
+    d = @_event[EventPageValueBase.PageValueKey.EVENT_DURATION]
     if d == 'undefined'
       d = null
     return d

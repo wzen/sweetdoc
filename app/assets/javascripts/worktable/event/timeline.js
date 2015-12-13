@@ -145,7 +145,7 @@ Timeline = (function() {
           item = window.instanceMap[te.id];
           if (item != null) {
             item.initEvent(te);
-            PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID]);
+            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
             if (idx < te_num - 1) {
               results.push(item.updateEventAfter());
             } else if (idx === te_num - 1) {

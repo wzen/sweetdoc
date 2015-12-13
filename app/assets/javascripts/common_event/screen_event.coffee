@@ -17,8 +17,8 @@ class ScreenEvent extends CommonEvent
   updateEventAfter: ->
     methodName = @getEventMethodName()
     if methodName == 'changeScreenPosition'
-      scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
-      scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
+      scrollTop = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
+      scrollLeft = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
       Common.updateScrollContentsPosition(@beforeScrollTop + scrollTop, @beforeScrollLeft + scrollLeft)
 
   # 画面移動イベント
@@ -30,29 +30,29 @@ class ScreenEvent extends CommonEvent
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.CLICK
       finished_count = 0
-      scrollLeft = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
-      scrollTop = parseInt(@event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
+      scrollLeft = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
+      scrollTop = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
       Common.updateScrollContentsPosition(scrollContents.scrollTop() + scrollTop, scrollContents.scrollLeft() + scrollLeft, false, ->
         finished_count += 1
         if finished_count >= 2
-          @isFinishedEvent = true
+          @_isFinishedEvent = true
           if complete?
             complete()
       )
 
-      scale = @event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z]
+      scale = @_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z]
       if scale != 0
         @getJQueryElement().transition({scale: "+=#{scale}"}, 'normal', 'linear', ->
           finished_count += 1
           if finished_count >= 2
-            @isFinishedEvent = true
+            @_isFinishedEvent = true
             if complete?
               complete()
         )
       else
         finished_count += 1
         if finished_count >= 2
-          @isFinishedEvent = true
+          @_isFinishedEvent = true
           if complete?
             complete()
 

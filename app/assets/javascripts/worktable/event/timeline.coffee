@@ -153,7 +153,7 @@ class Timeline
           if item?
             item.initEvent(te)
             # インスタンスの状態を保存
-            PageValue.saveInstanceObjectToFootprint(item.id, true, item.event[EventPageValueBase.PageValueKey.DIST_ID])
+            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
             if idx < te_num - 1
                item.updateEventAfter()
             else if idx == te_num - 1

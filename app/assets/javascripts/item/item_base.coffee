@@ -195,7 +195,7 @@ class ItemBase extends ItemEventBase
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
     $.extend(true, obj, diff)
     return obj.itemSize
@@ -264,7 +264,7 @@ class ItemBase extends ItemEventBase
 
   # スクロールイベントでアイテム位置&サイズ更新
   updateItemSizeByStep: (scrollValue, immediate = false) ->
-    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    itemDiff = @_event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
     if !itemDiff? || itemDiff == 'undefined'
       # 変更なしの場合
       return
@@ -283,8 +283,8 @@ class ItemBase extends ItemEventBase
       @updatePositionAndItemSize(itemSize, false)
       return
 
-    scrollEnd = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
-    scrollStart = parseInt(@event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
+    scrollEnd = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+    scrollStart = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     progressPercentage = scrollValue / (scrollEnd - scrollStart)
     itemSize = {
       x: originalItemElementSize.x + (itemDiff.x * progressPercentage)
@@ -296,7 +296,7 @@ class ItemBase extends ItemEventBase
 
   # クリックイベントでアイテム位置&サイズ更新
   updateItemSizeByAnimation: (immediate = false) ->
-    itemDiff = @event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
+    itemDiff = @_event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF]
     if !itemDiff? || itemDiff == 'undefined'
       # 変更なしの場合
       return
@@ -315,7 +315,7 @@ class ItemBase extends ItemEventBase
       @updatePositionAndItemSize(itemSize, false)
       return
 
-    eventDuration = @event[EventPageValueBase.PageValueKey.EVENT_DURATION]
+    eventDuration = @_event[EventPageValueBase.PageValueKey.EVENT_DURATION]
     duration = 0.01
     perX = itemDiff.x * (duration / eventDuration)
     perY = itemDiff.y * (duration / eventDuration)

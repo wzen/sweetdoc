@@ -20,12 +20,12 @@ EventBase = (function(superClass) {
   }
 
   EventBase.prototype.initEvent = function(event) {
-    this.event = event;
-    this.isFinishedEvent = false;
-    this.skipEvent = true;
-    this.doPreviewLoop = false;
-    this.enabledDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
-    this.forwardDirections = this.event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
+    this._event = event;
+    this._isFinishedEvent = false;
+    this._skipEvent = true;
+    this._doPreviewLoop = false;
+    this._enabledDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
+    this._forwardDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
     if (this.getEventActionType() === Constant.ActionType.SCROLL) {
       return this.scrollEvent = this.scrollHandlerFunc;
     } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
@@ -35,8 +35,8 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.getEventMethodName = function() {
     var methodName;
-    if (this.event != null) {
-      methodName = this.event[EventPageValueBase.PageValueKey.METHODNAME];
+    if (this._event != null) {
+      methodName = this._event[EventPageValueBase.PageValueKey.METHODNAME];
       if (methodName != null) {
         return methodName;
       } else {
@@ -48,15 +48,15 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.getEventActionType = function() {
-    if (this.event != null) {
-      return this.event[EventPageValueBase.PageValueKey.ACTIONTYPE];
+    if (this._event != null) {
+      return this._event[EventPageValueBase.PageValueKey.ACTIONTYPE];
     }
   };
 
   EventBase.prototype.getChangeForkNum = function() {
     var num;
-    if (this.event != null) {
-      num = this.event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
+    if (this._event != null) {
+      num = this._event[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
       if (num != null) {
         return parseInt(num);
       } else {
@@ -69,8 +69,8 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.resetEvent = function() {
     this.updateEventBefore();
-    this.isFinishedEvent = false;
-    return this.skipEvent = false;
+    this._isFinishedEvent = false;
+    return this._skipEvent = false;
   };
 
   EventBase.prototype.preview = function(event) {
@@ -83,7 +83,7 @@ EventBase = (function(superClass) {
       this.initEvent(event);
       progressMax = this.progressMax();
       this.willChapter();
-      this.doPreviewLoop = true;
+      this._doPreviewLoop = true;
       loopCount = 0;
       this.previewTimer = null;
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW);
@@ -91,7 +91,7 @@ EventBase = (function(superClass) {
         p = 0;
         _draw = (function(_this) {
           return function() {
-            if (_this.doPreviewLoop) {
+            if (_this._doPreviewLoop) {
               if (_this.previewTimer != null) {
                 clearTimeout(_this.previewTimer);
                 _this.previewTimer = null;
@@ -119,7 +119,7 @@ EventBase = (function(superClass) {
         })(this);
         _loop = (function(_this) {
           return function() {
-            if (_this.doPreviewLoop) {
+            if (_this._doPreviewLoop) {
               loopCount += 1;
               if (loopCount >= loopMaxCount) {
                 _this.stopPreview();
@@ -133,7 +133,7 @@ EventBase = (function(superClass) {
                 _this.willChapter();
                 return _draw.call(_this);
               }, loopDelay);
-              if (!_this.doPreviewLoop) {
+              if (!_this._doPreviewLoop) {
                 return _this.stopPreview();
               }
             } else {
@@ -148,7 +148,7 @@ EventBase = (function(superClass) {
       } else {
         _loop = (function(_this) {
           return function() {
-            if (_this.doPreviewLoop) {
+            if (_this._doPreviewLoop) {
               loopCount += 1;
               if (loopCount >= loopMaxCount) {
                 _this.stopPreview();
@@ -200,8 +200,8 @@ EventBase = (function(superClass) {
         return callback();
       }
     };
-    if (this.doPreviewLoop) {
-      this.doPreviewLoop = false;
+    if (this._doPreviewLoop) {
+      this._doPreviewLoop = false;
       return this.previewFinished = (function(_this) {
         return function() {
           return _stop.call(_this);
@@ -234,7 +234,7 @@ EventBase = (function(superClass) {
         delete this[k];
       }
     }
-    return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return PageValue.saveInstanceObjectToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.execMethod = function(opt) {
@@ -254,7 +254,7 @@ EventBase = (function(superClass) {
     if (complete == null) {
       complete = null;
     }
-    if (this.isFinishedEvent || this.skipEvent) {
+    if (this._isFinishedEvent || this._skipEvent) {
       return;
     }
     if (window.eventAction != null) {
@@ -262,42 +262,42 @@ EventBase = (function(superClass) {
     }
     plusX = 0;
     plusY = 0;
-    if (x > 0 && this.enabledDirections.right) {
+    if (x > 0 && this._enabledDirections.right) {
       plusX = parseInt((x + 9) / 10);
-    } else if (x < 0 && this.enabledDirections.left) {
+    } else if (x < 0 && this._enabledDirections.left) {
       plusX = parseInt((x - 9) / 10);
     }
-    if (y > 0 && this.enabledDirections.bottom) {
+    if (y > 0 && this._enabledDirections.bottom) {
       plusY = parseInt((y + 9) / 10);
-    } else if (y < 0 && this.enabledDirections.top) {
+    } else if (y < 0 && this._enabledDirections.top) {
       plusY = parseInt((y - 9) / 10);
     }
-    if ((plusX > 0 && !this.forwardDirections.right) || (plusX < 0 && this.forwardDirections.left)) {
+    if ((plusX > 0 && !this._forwardDirections.right) || (plusX < 0 && this._forwardDirections.left)) {
       plusX = -plusX;
     }
-    if ((plusY > 0 && !this.forwardDirections.bottom) || (plusY < 0 && this.forwardDirections.top)) {
+    if ((plusY > 0 && !this._forwardDirections.bottom) || (plusY < 0 && this._forwardDirections.top)) {
       plusY = -plusY;
     }
     this.scrollValue += plusX + plusY;
-    sPoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
-    ePoint = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
+    sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     if (this.scrollValue < sPoint) {
       this.scrollValue = sPoint;
       return;
     } else if (this.scrollValue >= ePoint) {
       this.scrollValue = ePoint;
-      if (!this.isFinishedEvent) {
+      if (!this._isFinishedEvent) {
         if (!this.isDrawByAnimationMethod()) {
-          this.isFinishedEvent = true;
+          this._isFinishedEvent = true;
           ScrollGuide.hideGuide();
           if (complete != null) {
             complete();
           }
         } else {
-          this.skipEvent = true;
+          this._skipEvent = true;
           this.execMethod({
             complete: function() {
-              this.isFinishedEvent = true;
+              this._isFinishedEvent = true;
               ScrollGuide.hideGuide();
               if (complete != null) {
                 return complete();
@@ -319,7 +319,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.scrollLength = function() {
-    return parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    return parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
   };
 
   EventBase.prototype.clickHandlerFunc = function(e, complete) {
@@ -328,10 +328,10 @@ EventBase = (function(superClass) {
       complete = null;
     }
     e.preventDefault();
-    if (this.isFinishedEvent || this.skipEvent) {
+    if (this._isFinishedEvent || this._skipEvent) {
       return;
     }
-    this.skipEvent = true;
+    this._skipEvent = true;
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
@@ -347,7 +347,7 @@ EventBase = (function(superClass) {
           count += 1;
           if (progressMax < count) {
             clearInterval(timer);
-            _this.isFinishedEvent = true;
+            _this._isFinishedEvent = true;
             if (complete != null) {
               return complete();
             }
@@ -357,7 +357,7 @@ EventBase = (function(superClass) {
     } else {
       return this.execMethod({
         complete: function() {
-          this.isFinishedEvent = true;
+          this._isFinishedEvent = true;
           if (complete != null) {
             return complete();
           }
@@ -368,7 +368,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.getMinimumObjectEventBefore = function() {
     var diff, obj;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
     return $.extend(true, obj, diff);
   };
@@ -393,7 +393,7 @@ EventBase = (function(superClass) {
     } else {
       this.updateInstanceParamByAnimation(true);
     }
-    return PageValue.saveInstanceObjectToFootprint(this.id, false, this.event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return PageValue.saveInstanceObjectToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.updateInstanceParamByStep = function(progressValue, immediate) {
@@ -414,9 +414,9 @@ EventBase = (function(superClass) {
     results = [];
     for (varName in mod) {
       value = mod[varName];
-      if ((this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+      if ((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
         before = eventBeforeObj[varName];
-        after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+        after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
         if ((before != null) && (after != null)) {
           if (immediate) {
             results.push(this[varName] = after);
@@ -466,8 +466,8 @@ EventBase = (function(superClass) {
     if (immediate) {
       for (varName in mod) {
         value = mod[varName];
-        if ((this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
-          after = this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+        if ((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+          after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
           if (after != null) {
             this[varName] = after;
           }
@@ -482,9 +482,9 @@ EventBase = (function(superClass) {
         progressPercentage = _this.constructor.STEP_INTERVAL_DURATION * count / ed;
         for (varName in mod) {
           value = mod[varName];
-          if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+          if ((_this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
             before = eventBeforeObj[varName];
-            after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+            after = _this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
             if ((before != null) && (after != null)) {
               if (value.varAutoChange) {
                 if (value.type === Constant.ItemDesignOptionType.NUMBER) {
@@ -510,8 +510,8 @@ EventBase = (function(superClass) {
           results = [];
           for (varName in mod) {
             value = mod[varName];
-            if ((_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
-              after = _this.event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+            if ((_this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
+              after = _this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
               if (after != null) {
                 results.push(_this[varName] = after);
               } else {
@@ -546,7 +546,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.progressMax = function() {
-    if (this.event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
+    if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
       return this.scrollLength();
     } else {
       return this.clickDurationStepMax();
@@ -561,7 +561,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.eventDuration = function() {
     var d;
-    d = this.event[EventPageValueBase.PageValueKey.EVENT_DURATION];
+    d = this._event[EventPageValueBase.PageValueKey.EVENT_DURATION];
     if (d === 'undefined') {
       d = null;
     }

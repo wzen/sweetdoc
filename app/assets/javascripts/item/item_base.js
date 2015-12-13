@@ -233,7 +233,7 @@ ItemBase = (function(superClass) {
 
   ItemBase.prototype.originalItemElementSize = function() {
     var diff, obj;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this.event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
     $.extend(true, obj, diff);
     return obj.itemSize;
@@ -322,7 +322,7 @@ ItemBase = (function(superClass) {
     if (immediate == null) {
       immediate = false;
     }
-    itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
     if ((itemDiff == null) || itemDiff === 'undefined') {
       return;
     }
@@ -340,8 +340,8 @@ ItemBase = (function(superClass) {
       this.updatePositionAndItemSize(itemSize, false);
       return;
     }
-    scrollEnd = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
-    scrollStart = parseInt(this.event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
+    scrollEnd = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
+    scrollStart = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     progressPercentage = scrollValue / (scrollEnd - scrollStart);
     itemSize = {
       x: originalItemElementSize.x + (itemDiff.x * progressPercentage),
@@ -357,7 +357,7 @@ ItemBase = (function(superClass) {
     if (immediate == null) {
       immediate = false;
     }
-    itemDiff = this.event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
+    itemDiff = this._event[EventPageValueBase.PageValueKey.ITEM_SIZE_DIFF];
     if ((itemDiff == null) || itemDiff === 'undefined') {
       return;
     }
@@ -375,7 +375,7 @@ ItemBase = (function(superClass) {
       this.updatePositionAndItemSize(itemSize, false);
       return;
     }
-    eventDuration = this.event[EventPageValueBase.PageValueKey.EVENT_DURATION];
+    eventDuration = this._event[EventPageValueBase.PageValueKey.EVENT_DURATION];
     duration = 0.01;
     perX = itemDiff.x * (duration / eventDuration);
     perY = itemDiff.y * (duration / eventDuration);

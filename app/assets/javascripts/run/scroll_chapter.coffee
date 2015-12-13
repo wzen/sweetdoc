@@ -45,7 +45,7 @@ class ScrollChapter extends Chapter
     @constructor.guideTimer = setTimeout( =>
       # ガイド表示
       @adjustGuideParams(calledByWillChapter)
-      ScrollGuide.showGuide(@enabledDirections, @forwardDirections, @canForward, @canReverse)
+      ScrollGuide.showGuide(@_enabledDirections, @_forwardDirections, @canForward, @canReverse)
     , idleTime)
 
   # ガイド非表示
@@ -58,13 +58,13 @@ class ScrollChapter extends Chapter
   # ガイドフラグ調整
   # @param [Boolean] calledByWillChapter チャプター開始時に呼ばれたか
   adjustGuideParams: (calledByWillChapter) ->
-    @enabledDirections = {
+    @_enabledDirections = {
       top: false
       bottom: false
       left: false
       right: false
     }
-    @forwardDirections = {
+    @_forwardDirections = {
       top: false
       bottom: false
       left: false
@@ -73,14 +73,14 @@ class ScrollChapter extends Chapter
     @canForward = false
     @canReverse = false
     @eventObjList.forEach((event) =>
-      if !event.isFinishedEvent
+      if !event._isFinishedEvent
         # trueフラグ優先にまとめる
-        for k, v of event.enabledDirections
-          if !@enabledDirections[k]
-            @enabledDirections[k] = v
-        for k, v of event.forwardDirections
-          if !@forwardDirections[k]
-            @forwardDirections[k] = v
+        for k, v of event._enabledDirections
+          if !@_enabledDirections[k]
+            @_enabledDirections[k] = v
+        for k, v of event._forwardDirections
+          if !@_forwardDirections[k]
+            @_forwardDirections[k] = v
 
         if !calledByWillChapter
           if event.canForward? && event.canForward
@@ -99,8 +99,8 @@ class ScrollChapter extends Chapter
   finishedAllEvent: ->
     ret = true
     @eventObjList.forEach((event) ->
-      methodName = event.event[EventPageValueBase.PageValueKey.METHODNAME]
-      if !event.isFinishedEvent
+      methodName = event._event[EventPageValueBase.PageValueKey.METHODNAME]
+      if !event._isFinishedEvent
         ret = false
         return false
     )
