@@ -134,6 +134,10 @@ class PreloadItemText extends CanvasItemBase
     super(w, h)
     # フォントサイズ変更
 
+  itemDraw: (show) ->
+    super(show)
+
+
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN]?

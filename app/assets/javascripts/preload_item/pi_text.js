@@ -45,6 +45,10 @@ PreloadItemText = (function(superClass) {
     return PreloadItemText.__super__.updateItemSize.call(this, w, h);
   };
 
+  PreloadItemText.prototype.itemDraw = function(show) {
+    return PreloadItemText.__super__.itemDraw.call(this, show);
+  };
+
   return PreloadItemText;
 
 })(CanvasItemBase);

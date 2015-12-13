@@ -139,7 +139,7 @@ class ItemPreviewTemp extends CanvasItemBase
       for r in @registCoord
         _drawPath.call(@, r)
       # 描画
-      @drawNewCanvas()
+      _drawNewCanvas.call(@)
 
   # イベント前の表示状態にする
   updateEventBefore: ->
@@ -164,7 +164,7 @@ class ItemPreviewTemp extends CanvasItemBase
     for r in @registCoord.slice(0, parseInt((@registCoord.length - 1) * r))
       _drawPath.call(@, r)
     # 尾と体の座標をCanvasに描画
-    @drawNewCanvas()
+    _drawNewCanvas.call(@)
 
   # 色変更イベント ※アクションイベント
   changeColor : (opt) =>
@@ -354,7 +354,7 @@ class ItemPreviewTemp extends CanvasItemBase
     else
       drawingContext = window.drawingContext
     if @_leftBodyPartCoord.length <= 0 || @_rightBodyPartCoord.length <= 0
-# 尾が描かれてない場合
+      # 尾が描かれてない場合
       return
 
     drawingContext.moveTo(@_leftBodyPartCoord[@_leftBodyPartCoord.length - 1].x, @_leftBodyPartCoord[@_leftBodyPartCoord.length - 1].y)
@@ -378,7 +378,7 @@ class ItemPreviewTemp extends CanvasItemBase
     _drawCoodToCanvas.call(@, drawingContext)
 
   # 新しいCanvasに矢印を描画
-  drawNewCanvas : ->
+  _drawNewCanvas = ->
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.beginPath();

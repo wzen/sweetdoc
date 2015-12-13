@@ -5,7 +5,7 @@ var PreloadItemArrow,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemArrow = (function(superClass) {
-  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _drawLine, _drawPath, _resetDrawPath, _updateArrowRect;
+  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _drawLine, _drawNewCanvas, _drawPath, _resetDrawPath, _updateArrowRect;
 
   extend(PreloadItemArrow, superClass);
 
@@ -143,7 +143,7 @@ PreloadItemArrow = (function(superClass) {
         r = ref[j];
         _drawPath.call(this, r);
       }
-      return this.drawNewCanvas();
+      return _drawNewCanvas.call(this);
     }
   };
 
@@ -175,7 +175,7 @@ PreloadItemArrow = (function(superClass) {
       r = ref[j];
       _drawPath.call(this, r);
     }
-    return this.drawNewCanvas();
+    return _drawNewCanvas.call(this);
   };
 
   PreloadItemArrow.prototype.changeColor = function(opt) {};
@@ -391,7 +391,7 @@ PreloadItemArrow = (function(superClass) {
     return _drawCoodToCanvas.call(this, drawingContext);
   };
 
-  PreloadItemArrow.prototype.drawNewCanvas = function() {
+  _drawNewCanvas = function() {
     var drawingCanvas, drawingContext;
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');

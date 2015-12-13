@@ -133,6 +133,12 @@ ItemBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
+    if ((this.reDrawing != null) && this.reDrawing) {
+      this.reDrawStack = true;
+      console.log('add stack');
+      return;
+    }
+    this.reDrawing = true;
     this.clearDraw();
     return this.createItemElement((function(_this) {
       return function() {
@@ -140,8 +146,15 @@ ItemBase = (function(superClass) {
         if (_this.setupDragAndResizeEvents != null) {
           _this.setupDragAndResizeEvents();
         }
-        if (callback != null) {
-          return callback();
+        _this.reDrawing = false;
+        if ((_this.reDrawStack != null) && _this.reDrawStack) {
+          _this.reDrawStack = false;
+          console.log('stack redraw');
+          return _this.reDraw(show, callback);
+        } else {
+          if (callback != null) {
+            return callback();
+          }
         }
       };
     })(this));

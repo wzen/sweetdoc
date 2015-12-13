@@ -5,7 +5,7 @@ var ItemPreviewTemp,
   hasProp = {}.hasOwnProperty;
 
 ItemPreviewTemp = (function(superClass) {
-  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _drawLine, _drawPath, _resetDrawPath, _updateArrowRect;
+  var HEADER_HEIGHT, HEADER_WIDTH, _calBodyPath, _calDrection, _calTailDrawPath, _calTrianglePath, _coodLength, _coodLog, _drawCoodToBaseCanvas, _drawCoodToCanvas, _drawCoodToNewCanvas, _drawLine, _drawNewCanvas, _drawPath, _resetDrawPath, _updateArrowRect;
 
   extend(ItemPreviewTemp, superClass);
 
@@ -145,7 +145,7 @@ ItemPreviewTemp = (function(superClass) {
         r = ref[j];
         _drawPath.call(this, r);
       }
-      return this.drawNewCanvas();
+      return _drawNewCanvas.call(this);
     }
   };
 
@@ -177,7 +177,7 @@ ItemPreviewTemp = (function(superClass) {
       r = ref[j];
       _drawPath.call(this, r);
     }
-    return this.drawNewCanvas();
+    return _drawNewCanvas.call(this);
   };
 
   ItemPreviewTemp.prototype.changeColor = function(opt) {};
@@ -393,7 +393,7 @@ ItemPreviewTemp = (function(superClass) {
     return _drawCoodToCanvas.call(this, drawingContext);
   };
 
-  ItemPreviewTemp.prototype.drawNewCanvas = function() {
+  _drawNewCanvas = function() {
     var drawingCanvas, drawingContext;
     drawingCanvas = document.getElementById(this.canvasElementId());
     drawingContext = drawingCanvas.getContext('2d');

@@ -781,8 +781,10 @@ PageValue = (function() {
     baseObj = this.getInstancePageValue(PageValue.Key.instanceValue(targetObjId));
     obj = window.instanceMap[targetObjId];
     diff = Common.diffEventObject(baseObj, obj.getMinimumObject());
-    key = isChangeBefore ? this.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
-    return this.setFootprintPageValue(key, diff);
+    if (diff != null) {
+      key = isChangeBefore ? this.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
+      return this.setFootprintPageValue(key, diff);
+    }
   };
 
   PageValue.removeAllFootprint = function() {

@@ -137,7 +137,7 @@ class PreloadItemArrow extends CanvasItemBase
       for r in @registCoord
         _drawPath.call(@, r)
       # 描画
-      @drawNewCanvas()
+      _drawNewCanvas.call(@)
 
   # イベント前の表示状態にする
   updateEventBefore: ->
@@ -162,7 +162,7 @@ class PreloadItemArrow extends CanvasItemBase
     for r in @registCoord.slice(0, parseInt((@registCoord.length - 1) * r))
       _drawPath.call(@, r)
     # 尾と体の座標をCanvasに描画
-    @drawNewCanvas()
+    _drawNewCanvas.call(@)
 
   # 色変更イベント ※アクションイベント
   changeColor : (opt) =>
@@ -376,7 +376,7 @@ class PreloadItemArrow extends CanvasItemBase
     _drawCoodToCanvas.call(@, drawingContext)
 
   # 新しいCanvasに矢印を描画
-  drawNewCanvas : ->
+  _drawNewCanvas = ->
     drawingCanvas = document.getElementById(@canvasElementId())
     drawingContext = drawingCanvas.getContext('2d')
     drawingContext.beginPath();

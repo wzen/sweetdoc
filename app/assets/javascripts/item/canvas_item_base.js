@@ -122,7 +122,7 @@ CanvasItemBase = (function(superClass) {
     drawingContext.scale(scaleW, scaleH);
     this.scale.w = scaleW;
     this.scale.h = scaleH;
-    return this.drawNewCanvas();
+    return this.reDraw();
   };
 
   CanvasItemBase.prototype.originalItemElementSize = function() {
