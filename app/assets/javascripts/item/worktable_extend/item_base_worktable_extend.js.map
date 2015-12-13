@@ -1,9 +1,9 @@
 {
   "version": 3,
-  "file": "scroll_paging_guide.js",
+  "file": "item_base_worktable_extend.js",
   "sourceRoot": "",
   "sources": [
-    "scroll_paging_guide.coffee"
+    "item_base_worktable_extend.coffee"
   ],
   "names": [],
   "mappings": ";AAAA"
