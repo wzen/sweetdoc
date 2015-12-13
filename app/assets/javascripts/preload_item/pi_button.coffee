@@ -125,12 +125,6 @@ class PreloadItemButton extends CssItemBase
       }
     }
 
-  # 再描画処理
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null)->
-    super(show, callback)
-
   # イベント前の表示状態にする
   updateEventBefore: ->
     super()

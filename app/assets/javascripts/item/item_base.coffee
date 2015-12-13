@@ -74,6 +74,14 @@ class ItemBase extends ItemEventBase
   # @abstract
   # @return [String] HTML
   createItemElement: (callback) ->
+    callback()
+
+  # ScrollInsideに要素追加
+  addContentsToScrollInside: (contents, callback = null) ->
+    createdElement = Common.wrapCreateItemElement(@, $(contents))
+    $(createdElement).appendTo(window.scrollInside)
+    if callback?
+      callback()
 
   # 画面を保存(全画面)
   saveDrawingSurface : ->
@@ -90,13 +98,24 @@ class ItemBase extends ItemEventBase
     padding = 5
     window.drawingContext.putImageData(@_drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
-  # インスタンス変数で描画
-  # データから読み込んで描画する処理に使用
+  # アイテム描画
+  # @abstract
   # @param [Boolean] show 要素作成後に表示するか
+  itemDraw: (show = true) ->
+
+  # 再描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
   reDraw: (show = true, callback = null) ->
-    if callback?
-      callback()
+    @clearDraw()
+    @createItemElement( =>
+      @itemDraw(show)
+      if @setupDragAndResizeEvents?
+        # ドラッグ & リサイズイベント設定
+        @setupDragAndResizeEvents()
+      if callback?
+        callback()
+    )
 
   # 描画削除
   clearDraw: ->

@@ -90,7 +90,21 @@ ItemBase = (function(superClass) {
     return $('#' + this.id);
   };
 
-  ItemBase.prototype.createItemElement = function(callback) {};
+  ItemBase.prototype.createItemElement = function(callback) {
+    return callback();
+  };
+
+  ItemBase.prototype.addContentsToScrollInside = function(contents, callback) {
+    var createdElement;
+    if (callback == null) {
+      callback = null;
+    }
+    createdElement = Common.wrapCreateItemElement(this, $(contents));
+    $(createdElement).appendTo(window.scrollInside);
+    if (callback != null) {
+      return callback();
+    }
+  };
 
   ItemBase.prototype.saveDrawingSurface = function() {
     return this._drawingSurfaceImageData = drawingContext.getImageData(0, 0, drawingCanvas.width, drawingCanvas.height);
@@ -106,6 +120,12 @@ ItemBase = (function(superClass) {
     return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
 
+  ItemBase.prototype.itemDraw = function(show) {
+    if (show == null) {
+      show = true;
+    }
+  };
+
   ItemBase.prototype.reDraw = function(show, callback) {
     if (show == null) {
       show = true;
@@ -113,9 +133,18 @@ ItemBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
-    if (callback != null) {
-      return callback();
-    }
+    this.clearDraw();
+    return this.createItemElement((function(_this) {
+      return function() {
+        _this.itemDraw(show);
+        if (_this.setupDragAndResizeEvents != null) {
+          _this.setupDragAndResizeEvents();
+        }
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   ItemBase.prototype.clearDraw = function() {

@@ -145,45 +145,21 @@ PreloadItemArrow = (function(superClass) {
     return drawingContext.stroke();
   };
 
-  PreloadItemArrow.prototype.reDraw = function(show, callback) {
+  PreloadItemArrow.prototype.itemDraw = function(show) {
+    var j, len, r, ref;
     if (show == null) {
       show = true;
     }
-    if (callback == null) {
-      callback = null;
+    PreloadItemArrow.__super__.itemDraw.call(this, show);
+    this.resetDrawPath();
+    if (show) {
+      ref = this.coodRegist;
+      for (j = 0, len = ref.length; j < len; j++) {
+        r = ref[j];
+        this.drawPath(r);
+      }
+      return this.drawNewCanvas();
     }
-    return PreloadItemArrow.__super__.reDraw.call(this, show, (function(_this) {
-      return function() {
-        var _after, canvas;
-        _after = function() {
-          var j, len, r, ref;
-          this.resetDrawPath();
-          if (show) {
-            ref = this.coodRegist;
-            for (j = 0, len = ref.length; j < len; j++) {
-              r = ref[j];
-              this.drawPath(r);
-            }
-            this.drawNewCanvas();
-          }
-          if (this.setupDragAndResizeEvents != null) {
-            this.setupDragAndResizeEvents();
-          }
-          if (callback != null) {
-            return callback();
-          }
-        };
-        canvas = document.getElementById(_this.canvasElementId());
-        if (canvas == null) {
-          return _this.makeNewCanvas(function() {
-            return _after.call(_this);
-          });
-        } else {
-          _this.clearDraw();
-          return _after.call(_this);
-        }
-      };
-    })(this));
   };
 
   PreloadItemArrow.prototype.resetDrawPath = function() {

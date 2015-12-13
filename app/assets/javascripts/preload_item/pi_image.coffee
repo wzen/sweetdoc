@@ -29,24 +29,6 @@ class PreloadItemImage extends ItemBase
       @_moveLoc = {x:cood.x, y:cood.y}
     @visible = true
 
-  # 再描画処理
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null)->
-    super(show, =>
-      @clearDraw()
-      @createItemElement(false, (createdElement) =>
-        $(createdElement).appendTo(window.scrollInside)
-        if !show
-          @getJQueryElement().css('opacity', 0)
-        if @setupDragAndResizeEvents?
-          # ドラッグ & リサイズイベント設定
-          @setupDragAndResizeEvents()
-        if callback?
-          callback()
-      )
-    )
-
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     super(w, h)
@@ -55,9 +37,23 @@ class PreloadItemImage extends ItemBase
     img.width(size.width)
     img.height(size.height)
 
+  # 再描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
+  # @param [Function] callback コールバック
+  reDraw: (show = true, callback = null) ->
+    @clearDraw()
+    @createItemElement( =>
+      @itemDraw(show)
+      if @setupDragAndResizeEvents?
+        # ドラッグ & リサイズイベント設定
+        @setupDragAndResizeEvents()
+      if callback?
+        callback()
+    , false)
+
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
-  createItemElement: (showModal, callback) ->
+  createItemElement: (callback, showModal = true) ->
     _makeImageObjectIfNeed.call(@, =>
       if @_image?
         if @isKeepAspect
@@ -70,7 +66,7 @@ class PreloadItemImage extends ItemBase
         contents = """
           <img class='put_center' src='#{@imagePath}' width='#{width}' height='#{height}' />
         """
-        callback(Common.wrapCreateItemElement(@, $(contents)))
+        @addContentsToScrollInside(contents, callback)
       else
         # 画像未設定時表示
         contents = """
@@ -91,7 +87,7 @@ class PreloadItemImage extends ItemBase
             if callback?
               callback()
           )
-        callback(Common.wrapCreateItemElement(@, $(contents)))
+        @addContentsToScrollInside(contents, callback)
     )
 
   _makeImageObjectIfNeed = (callback) ->

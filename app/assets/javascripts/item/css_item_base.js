@@ -36,35 +36,20 @@ CssItemBase = (function(superClass) {
   CssItemBase.prototype.createItemElement = function(callback) {
     var contents;
     contents = "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
-    return callback(Common.wrapCreateItemElement(this, $(contents)));
+    return this.addContentsToScrollInside(contents, callback);
   };
 
   CssItemBase.jsLoaded = function(option) {};
 
-  CssItemBase.prototype.reDraw = function(show, callback) {
+  CssItemBase.prototype.itemDraw = function(show) {
     if (show == null) {
       show = true;
     }
-    if (callback == null) {
-      callback = null;
+    if (!show) {
+      return this.getJQueryElement().css('opacity', 0);
+    } else {
+      return this.getJQueryElement().css('opacity', 1);
     }
-    return CssItemBase.__super__.reDraw.call(this, show, (function(_this) {
-      return function() {
-        _this.clearDraw();
-        return _this.createItemElement(function(createdElement) {
-          $(createdElement).appendTo(window.scrollInside);
-          if (!show) {
-            _this.getJQueryElement().css('opacity', 0);
-          }
-          if (_this.setupDragAndResizeEvents != null) {
-            _this.setupDragAndResizeEvents();
-          }
-          if (callback != null) {
-            return callback();
-          }
-        });
-      };
-    })(this));
   };
 
   CssItemBase.prototype.getCssRootElementId = function() {

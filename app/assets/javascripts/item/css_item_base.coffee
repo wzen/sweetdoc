@@ -31,31 +31,19 @@ class CssItemBase extends ItemBase
     contents = """
           <div type="button" class="css_item_base context_base"><div></div></div>
         """
-    callback(Common.wrapCreateItemElement(@, $(contents)))
+    @addContentsToScrollInside(contents, callback)
 
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
     # ワークテーブルの初期化処理
 
-  # 再描画処理
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null) ->
-    super(show, =>
-      @clearDraw()
-      @createItemElement((createdElement) =>
-        $(createdElement).appendTo(window.scrollInside)
-        if !show
-          @getJQueryElement().css('opacity', 0)
-
-        if @setupDragAndResizeEvents?
-          # ドラッグ & リサイズイベント設定
-          @setupDragAndResizeEvents()
-
-        if callback?
-          callback()
-      )
-    )
+  # アイテム描画
+  # @param [Boolean] show 要素作成後に表示するか
+  itemDraw: (show = true) ->
+    if !show
+      @getJQueryElement().css('opacity', 0)
+    else
+      @getJQueryElement().css('opacity', 1)
 
   # CSSのルートのIDを取得
   # @return [String] CSSルートID

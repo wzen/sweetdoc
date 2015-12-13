@@ -45,32 +45,6 @@ PreloadItemImage = (function(superClass) {
     this.visible = true;
   }
 
-  PreloadItemImage.prototype.reDraw = function(show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    return PreloadItemImage.__super__.reDraw.call(this, show, (function(_this) {
-      return function() {
-        _this.clearDraw();
-        return _this.createItemElement(false, function(createdElement) {
-          $(createdElement).appendTo(window.scrollInside);
-          if (!show) {
-            _this.getJQueryElement().css('opacity', 0);
-          }
-          if (_this.setupDragAndResizeEvents != null) {
-            _this.setupDragAndResizeEvents();
-          }
-          if (callback != null) {
-            return callback();
-          }
-        });
-      };
-    })(this));
-  };
-
   PreloadItemImage.prototype.updateItemSize = function(w, h) {
     var img, size;
     PreloadItemImage.__super__.updateItemSize.call(this, w, h);
@@ -80,7 +54,31 @@ PreloadItemImage = (function(superClass) {
     return img.height(size.height);
   };
 
-  PreloadItemImage.prototype.createItemElement = function(showModal, callback) {
+  PreloadItemImage.prototype.reDraw = function(show, callback) {
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    this.clearDraw();
+    return this.createItemElement((function(_this) {
+      return function() {
+        _this.itemDraw(show);
+        if (_this.setupDragAndResizeEvents != null) {
+          _this.setupDragAndResizeEvents();
+        }
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this), false);
+  };
+
+  PreloadItemImage.prototype.createItemElement = function(callback, showModal) {
+    if (showModal == null) {
+      showModal = true;
+    }
     return _makeImageObjectIfNeed.call(this, (function(_this) {
       return function() {
         var contents, height, size, width;
@@ -94,7 +92,7 @@ PreloadItemImage = (function(superClass) {
             height = _this.itemSize.h;
           }
           contents = "<img class='put_center' src='" + _this.imagePath + "' width='" + width + "' height='" + height + "' />";
-          return callback(Common.wrapCreateItemElement(_this, $(contents)));
+          return _this.addContentsToScrollInside(contents, callback);
         } else {
           contents = "<div class='no_image'><div class='center_image put_center'></div></div>";
           if (showModal) {
@@ -116,7 +114,7 @@ PreloadItemImage = (function(superClass) {
               }
             });
           }
-          return callback(Common.wrapCreateItemElement(_this, $(contents)));
+          return _this.addContentsToScrollInside(contents, callback);
         }
       };
     })(this));
