@@ -268,7 +268,7 @@ class Page
     @initChapterEvent()
     # フォーカス
     @initFocus(false)
-    # 最後のイベント以外リセット
+    # 最後のイベントのみリセット
     @forwardProgressChapters()
     @getForkChapterList()[@getForkChapterList().length - 1].resetAllEvents()
     # チャプター最大値設定
