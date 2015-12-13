@@ -18,10 +18,7 @@ itemBaseWorktableExtend = {
     this.itemSize.y += scrollContents.scrollTop();
     return this.createItemElement(true, (function(_this) {
       return function(createdElement) {
-        $(createdElement).appendTo(window.scrollInside);
-        if (!show) {
-          _this.getJQueryElement().css('opacity', 0);
-        }
+        _this.itemDraw(show);
         if (_this.setupDragAndResizeEvents != null) {
           _this.setupDragAndResizeEvents();
         }

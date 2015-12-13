@@ -17,9 +17,7 @@ itemBaseWorktableExtend =
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
     @createItemElement(true, (createdElement) =>
-      $(createdElement).appendTo(window.scrollInside)
-      if !show
-        @getJQueryElement().css('opacity', 0)
+      @itemDraw(show)
       if @setupDragAndResizeEvents?
         # ドラッグ & リサイズイベント設定
         @setupDragAndResizeEvents()
