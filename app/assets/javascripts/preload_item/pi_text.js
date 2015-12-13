@@ -41,60 +41,9 @@ PreloadItemText = (function(superClass) {
     }
   }
 
-  PreloadItemText.prototype.endDraw = function(zindex, show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    this.zindex = zindex;
-    this.itemSize.x += scrollContents.scrollLeft();
-    this.itemSize.y += scrollContents.scrollTop();
-    return this.createItemElement(true, (function(_this) {
-      return function(createdElement) {
-        $(createdElement).appendTo(window.scrollInside);
-        if (!show) {
-          _this.getJQueryElement().css('opacity', 0);
-        }
-        if (_this.setupDragAndResizeEvents != null) {
-          return _this.setupDragAndResizeEvents();
-        }
-      };
-    })(this));
-  };
-
-  PreloadItemText.prototype.reDraw = function(show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    return PreloadItemText.__super__.reDraw.call(this, show, (function(_this) {
-      return function() {
-        _this.clearDraw();
-        return _this.createItemElement(false, function(createdElement) {
-          $(createdElement).appendTo(window.scrollInside);
-          if (!show) {
-            _this.getJQueryElement().css('opacity', 0);
-          }
-          if (_this.setupDragAndResizeEvents != null) {
-            _this.setupDragAndResizeEvents();
-          }
-          if (callback != null) {
-            return callback();
-          }
-        });
-      };
-    })(this));
-  };
-
   PreloadItemText.prototype.updateItemSize = function(w, h) {
     return PreloadItemText.__super__.updateItemSize.call(this, w, h);
   };
-
-  PreloadItemText.prototype.createItemElement = function(showModal, callback) {};
 
   return PreloadItemText;
 

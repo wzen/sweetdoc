@@ -16,7 +16,7 @@ itemBaseWorktableExtend = {
     this.zindex = zindex;
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
-    return this.createItemElement(true, (function(_this) {
+    return this.createItemElement((function(_this) {
       return function(createdElement) {
         _this.itemDraw(show);
         if (_this.setupDragAndResizeEvents != null) {

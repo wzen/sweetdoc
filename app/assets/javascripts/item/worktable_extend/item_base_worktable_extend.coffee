@@ -16,7 +16,7 @@ itemBaseWorktableExtend =
     # スクロールビュー分のxとyを追加
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
-    @createItemElement(true, (createdElement) =>
+    @createItemElement((createdElement) =>
       @itemDraw(show)
       if @setupDragAndResizeEvents?
         # ドラッグ & リサイズイベント設定

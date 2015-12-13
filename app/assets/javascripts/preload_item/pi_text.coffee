@@ -129,50 +129,10 @@ class PreloadItemText extends CanvasItemBase
     if window.isWorkTable
       @constructor.include WorkTableCommonInclude
 
-  # 描画終了
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true, callback = null) ->
-    @zindex = zindex
-    # スクロールビュー分のxとyを追加
-    @itemSize.x += scrollContents.scrollLeft()
-    @itemSize.y += scrollContents.scrollTop()
-    @createItemElement(true, (createdElement) =>
-      $(createdElement).appendTo(window.scrollInside)
-      if !show
-        @getJQueryElement().css('opacity', 0)
-      if @setupDragAndResizeEvents?
-        # ドラッグ & リサイズイベント設定
-        @setupDragAndResizeEvents()
-    )
-
-  # 再描画処理
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null)->
-    super(show, =>
-      @clearDraw()
-      @createItemElement(false, (createdElement) =>
-        $(createdElement).appendTo(window.scrollInside)
-        if !show
-          @getJQueryElement().css('opacity', 0)
-        if @setupDragAndResizeEvents?
-          # ドラッグ & リサイズイベント設定
-          @setupDragAndResizeEvents()
-        if callback?
-          callback()
-      )
-    )
-
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     super(w, h)
     # フォントサイズ変更
-
-  # アイテム用のテンプレートHTMLを読み込み
-  # @return [String] HTML
-  createItemElement: (showModal, callback) ->
-
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
 
