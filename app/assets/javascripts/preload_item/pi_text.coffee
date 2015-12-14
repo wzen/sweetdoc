@@ -128,7 +128,7 @@ class PreloadItemText extends CssItemBase
     @fontSize = null
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
-    @editing = true
+    @_editing = false
     @inputText = 'Input text'
 
   # アイテムサイズ更新
@@ -138,19 +138,21 @@ class PreloadItemText extends CssItemBase
 
   # HTML要素
   cssItemHtml: ->
-    if @editing
+    if @_editing
       return """
-        <div class="css_item_base context_base put_center" style="width:50%;"><input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;"></div>
+        <input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;">
       """
     else
       return """
-        <div class="css_item_base context_base"><div class='#{@constructor.CONTENTS_CLASSNAME}'>#{@inputText}</div></div>
+        <div class='#{@constructor.CONTENTS_CLASSNAME}'>#{@inputText}</div>
       """
 
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->
     @restoreAllDrawingSurface()
     @fontSize = _fontSize.call(@)
+    # 編集状態で描画
+    @_editing = true
     @endDraw(zindex, true, =>
       @setupDragAndResizeEvents()
       @saveObj(true)
@@ -169,28 +171,35 @@ class PreloadItemText extends CssItemBase
     )
 
   # CSSスタイル
-  # @abstract
+  # TODO: CSSファイルで管理できるように修正
   cssStyle: ->
     return """
       ##{@id} .#{@constructor.INPUT_CLASSNAME}, ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
         font-family: '#{@fontFamily}';
-        font-size: '#{@fontSize}px';
+        font-size: #{@fontSize}px;
+        display: table-cell;
+        vertical-align: middle;
+      }
+      ##{@id} .css_item_base {
+        display: table;
+        width: 100%;
+        height: 100%;
       }
     """
 
   _fontSize = ->
     if @itemSize.w > @itemSize.h
       # 高さに合わせる
-      return parseInt(@itemSize.h / 10)
+      return parseInt(@itemSize.h / 3)
     else
       # 幅に合わせる
-      return parseInt(@itemSize.w / 10)
+      return parseInt(@itemSize.w / 3)
 
   _settingTextDbclickEvent = ->
     # ダブルクリックでEditに変更
     emt = @getJQueryElement().find(".#{@constructor.CONTENTS_CLASSNAME}:first")
     emt.off('dblclick').on('dblclick', (e) =>
-      @editing = true
+      @_editing = true
       @reDraw(true, =>
         # テキストイベント設定
         _settingInputEvent.call(@)
@@ -203,7 +212,7 @@ class PreloadItemText extends CssItemBase
     input.off('change').on('change', (e) =>
       @inputText = $(e.target).val()
       # 編集終了
-      @editing = false
+      @_editing = false
       @saveObj()
       # モードを描画モードに
       Navbar.setModeDraw(@itemToken, =>

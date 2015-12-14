@@ -32,7 +32,8 @@ class CssItemBase extends ItemBase
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML
   createItemElement: (callback) ->
-    @addContentsToScrollInside(@cssItemHtml(), callback)
+    element = "<div class='css_item_base context_base put_center'>#{@cssItemHtml()}</div>"
+    @addContentsToScrollInside(element, callback)
 
   # JSファイル読み込み時処理
   @jsLoaded: (option) ->
@@ -59,18 +60,22 @@ class CssItemBase extends ItemBase
   #CSSを設定
   makeCss: (fromTemp = false) ->
     _applyCss = (designs) ->
-      if !designs?
-        return
-      temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
-      temp.attr('id', @getCssRootElementId())
-      if designs.values?
-        for k,v of designs.values
-          #console.log("k: #{k}  v: #{v}")
-          temp.find(".#{k}").html("#{v}")
-      if designs.flags?
-        for k,v of designs.flags
-          if !v
-            temp.find(".#{k}").empty()
+      # CSS用のDiv作成
+      if designs?
+        temp = $('.cssdesign_tool_temp:first').clone(true).attr('class', '')
+        temp.attr('id', @getCssRootElementId())
+        if designs.values?
+          for k,v of designs.values
+            #console.log("k: #{k}  v: #{v}")
+            temp.find(".#{k}").html("#{v}")
+        if designs.flags?
+          for k,v of designs.flags
+            if !v
+              temp.find(".#{k}").empty()
+      else
+        temp = $('.cssdesign_temp:first').clone(true).attr('class', '')
+        temp.attr('id', @getCssRootElementId())
+
       temp.find('.design_item_obj_id').html(@id)
       temp.appendTo(window.cssCode)
 

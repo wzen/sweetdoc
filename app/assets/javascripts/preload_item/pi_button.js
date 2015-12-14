@@ -132,7 +132,7 @@ PreloadItemButton = (function(superClass) {
   };
 
   PreloadItemButton.prototype.cssItemHtml = function() {
-    return "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
+    return "<div></div>";
   };
 
   PreloadItemButton.prototype.updateEventBefore = function() {

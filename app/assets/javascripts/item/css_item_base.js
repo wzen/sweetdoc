@@ -36,7 +36,9 @@ CssItemBase = (function(superClass) {
   CssItemBase.prototype.cssItemHtml = function() {};
 
   CssItemBase.prototype.createItemElement = function(callback) {
-    return this.addContentsToScrollInside(this.cssItemHtml(), callback);
+    var element;
+    element = "<div class='css_item_base context_base put_center'>" + (this.cssItemHtml()) + "</div>";
+    return this.addContentsToScrollInside(element, callback);
   };
 
   CssItemBase.jsLoaded = function(option) {};
@@ -67,26 +69,28 @@ CssItemBase = (function(superClass) {
     }
     _applyCss = function(designs) {
       var k, ref, ref1, temp, v;
-      if (designs == null) {
-        return;
-      }
-      temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
-      temp.attr('id', this.getCssRootElementId());
-      if (designs.values != null) {
-        ref = designs.values;
-        for (k in ref) {
-          v = ref[k];
-          temp.find("." + k).html("" + v);
-        }
-      }
-      if (designs.flags != null) {
-        ref1 = designs.flags;
-        for (k in ref1) {
-          v = ref1[k];
-          if (!v) {
-            temp.find("." + k).empty();
+      if (designs != null) {
+        temp = $('.cssdesign_tool_temp:first').clone(true).attr('class', '');
+        temp.attr('id', this.getCssRootElementId());
+        if (designs.values != null) {
+          ref = designs.values;
+          for (k in ref) {
+            v = ref[k];
+            temp.find("." + k).html("" + v);
           }
         }
+        if (designs.flags != null) {
+          ref1 = designs.flags;
+          for (k in ref1) {
+            v = ref1[k];
+            if (!v) {
+              temp.find("." + k).empty();
+            }
+          }
+        }
+      } else {
+        temp = $('.cssdesign_temp:first').clone(true).attr('class', '');
+        temp.attr('id', this.getCssRootElementId());
       }
       temp.find('.design_item_obj_id').html(this.id);
       return temp.appendTo(window.cssCode);

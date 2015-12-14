@@ -128,7 +128,7 @@ class PreloadItemButton extends CssItemBase
   # HTML要素
   cssItemHtml: ->
     return """
-      <div type="button" class="css_item_base context_base"><div></div></div>
+      <div></div>
     """
 
   # イベント前の表示状態にする

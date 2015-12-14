@@ -42,7 +42,7 @@ PreloadItemText = (function(superClass) {
         y: cood.y
       };
     }
-    this.editing = true;
+    this._editing = false;
     this.inputText = 'Input text';
   }
 
@@ -51,10 +51,10 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.cssItemHtml = function() {
-    if (this.editing) {
-      return "<div class=\"css_item_base context_base put_center\" style=\"width:50%;\"><input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;\"></div>";
+    if (this._editing) {
+      return "<input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;\">";
     } else {
-      return "<div class=\"css_item_base context_base\"><div class='" + this.constructor.CONTENTS_CLASSNAME + "'>" + this.inputText + "</div></div>";
+      return "<div class='" + this.constructor.CONTENTS_CLASSNAME + "'>" + this.inputText + "</div>";
     }
   };
 
@@ -64,6 +64,7 @@ PreloadItemText = (function(superClass) {
     }
     this.restoreAllDrawingSurface();
     this.fontSize = _fontSize.call(this);
+    this._editing = true;
     return this.endDraw(zindex, true, (function(_this) {
       return function() {
         _this.setupDragAndResizeEvents();
@@ -81,14 +82,14 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.cssStyle = function() {
-    return "#" + this.id + " ." + this.constructor.INPUT_CLASSNAME + ", #" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  font-family: '" + this.fontFamily + "';\n  font-size: '" + this.fontSize + "px';\n}";
+    return "#" + this.id + " ." + this.constructor.INPUT_CLASSNAME + ", #" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  font-family: '" + this.fontFamily + "';\n  font-size: " + this.fontSize + "px;\n  display: table-cell;\n  vertical-align: middle;\n}\n#" + this.id + " .css_item_base {\n  display: table;\n  width: 100%;\n  height: 100%;\n}";
   };
 
   _fontSize = function() {
     if (this.itemSize.w > this.itemSize.h) {
-      return parseInt(this.itemSize.h / 10);
+      return parseInt(this.itemSize.h / 3);
     } else {
-      return parseInt(this.itemSize.w / 10);
+      return parseInt(this.itemSize.w / 3);
     }
   };
 
@@ -97,7 +98,7 @@ PreloadItemText = (function(superClass) {
     emt = this.getJQueryElement().find("." + this.constructor.CONTENTS_CLASSNAME + ":first");
     return emt.off('dblclick').on('dblclick', (function(_this) {
       return function(e) {
-        _this.editing = true;
+        _this._editing = true;
         return _this.reDraw(true, function() {
           return _settingInputEvent.call(_this);
         });
@@ -111,7 +112,7 @@ PreloadItemText = (function(superClass) {
     return input.off('change').on('change', (function(_this) {
       return function(e) {
         _this.inputText = $(e.target).val();
-        _this.editing = false;
+        _this._editing = false;
         _this.saveObj();
         return Navbar.setModeDraw(_this.itemToken, function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
