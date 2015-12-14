@@ -52,7 +52,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.cssItemHtml = function() {
     if (this._editing) {
-      return "<input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;\">";
+      return "<input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;height:100%;\">";
     } else {
       return "<div class='" + this.constructor.CONTENTS_CLASSNAME + "'>" + this.inputText + "</div>";
     }

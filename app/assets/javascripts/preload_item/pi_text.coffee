@@ -140,7 +140,7 @@ class PreloadItemText extends CssItemBase
   cssItemHtml: ->
     if @_editing
       return """
-        <input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;">
+        <input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;height:100%;">
       """
     else
       return """

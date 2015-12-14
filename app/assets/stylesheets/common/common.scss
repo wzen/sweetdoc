@@ -334,3 +334,10 @@ div.item_wrapper {
   margin: auto;
 }
 
+// リサイズのHandlerをもっと前面にする
+.ui-resizable-handle {
+  position: absolute;
+  font-size: 0.1px;
+  z-index: 99999 !important;
+  display: block;
+}
