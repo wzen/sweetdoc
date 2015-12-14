@@ -74,6 +74,7 @@ PreloadItemText = (function(superClass) {
         WorktableCommon.changeMode(Constant.Mode.EDIT);
         _settingInputEvent.call(_this);
         _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").focus();
+        _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").select();
         if (callback != null) {
           return callback();
         }
@@ -100,26 +101,40 @@ PreloadItemText = (function(superClass) {
       return function(e) {
         _this._editing = true;
         return _this.reDraw(true, function() {
-          return _settingInputEvent.call(_this);
+          _settingInputEvent.call(_this);
+          _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").focus();
+          return _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").select();
         });
       };
     })(this));
   };
 
   _settingInputEvent = function() {
-    var input;
-    input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
-    return input.off('change').on('change', (function(_this) {
-      return function(e) {
-        _this.inputText = $(e.target).val();
-        _this._editing = false;
-        _this.saveObj();
-        return Navbar.setModeDraw(_this.itemToken, function() {
+    var _event, input;
+    _event = function(target) {
+      this.inputText = $(target).val();
+      this._editing = false;
+      this.saveObj();
+      return Navbar.setModeDraw(this.itemToken, (function(_this) {
+        return function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
           return _this.reDraw(true, function() {
             return _settingTextDbclickEvent.call(_this);
           });
-        });
+        };
+      })(this));
+    };
+    input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
+    input.off('focusout').on('focusout', (function(_this) {
+      return function(e) {
+        return _event.call(_this, e.target);
+      };
+    })(this));
+    return input.off('keypress').on('keypress', (function(_this) {
+      return function(e) {
+        if (e.keyCode === 13) {
+          return _event.call(_this, e.target);
+        }
       };
     })(this));
   };

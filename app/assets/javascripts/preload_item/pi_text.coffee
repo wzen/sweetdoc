@@ -165,6 +165,7 @@ class PreloadItemText extends CssItemBase
       _settingInputEvent.call(@)
       # テキストを選択状態に
       @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").focus()
+      @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").select()
 
       if callback?
         callback()
@@ -203,14 +204,17 @@ class PreloadItemText extends CssItemBase
       @reDraw(true, =>
         # テキストイベント設定
         _settingInputEvent.call(@)
+        # テキストを選択状態に
+        @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").focus()
+        @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").select()
+
       )
     )
 
   _settingInputEvent = ->
     # テキストイベント設定
-    input = @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first")
-    input.off('change').on('change', (e) =>
-      @inputText = $(e.target).val()
+    _event = (target) ->
+      @inputText = $(target).val()
       # 編集終了
       @_editing = false
       @saveObj()
@@ -222,6 +226,14 @@ class PreloadItemText extends CssItemBase
           _settingTextDbclickEvent.call(@)
         )
       )
+
+    input = @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first")
+    input.off('focusout').on('focusout', (e) =>
+      _event.call(@, e.target)
+    )
+    input.off('keypress').on('keypress', (e) =>
+      if e.keyCode == 13
+        _event.call(@, e.target)
     )
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
