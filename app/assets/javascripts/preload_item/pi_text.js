@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _fontSize;
+  var _fontSize, _settingInputEvent, _settingTextDbclickEvent;
 
   extend(PreloadItemText, superClass);
 
@@ -42,7 +42,7 @@ PreloadItemText = (function(superClass) {
         y: cood.y
       };
     }
-    this._editing = true;
+    this.editing = true;
     this.inputText = 'Input text';
   }
 
@@ -52,39 +52,32 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.cssItemHtml = function() {
     if (this.editing) {
-      return "<div class=\"css_item_base context_base\"><input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "'></div>";
+      return "<div class=\"css_item_base context_base put_center\" style=\"width:50%;\"><input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;\"></div>";
     } else {
       return "<div class=\"css_item_base context_base\"><div class='" + this.constructor.CONTENTS_CLASSNAME + "'>" + this.inputText + "</div></div>";
     }
   };
 
-  PreloadItemText.prototype.itemDraw = function(show) {
-    return PreloadItemText.__super__.itemDraw.call(this, show);
-  };
-
-  PreloadItemText.prototype.changeMode = function(mode) {
-    this.editing = true;
-    return this.reDraw();
-  };
-
-  PreloadItemText.prototype.willHandWriteMouseUp = function() {
-    PreloadItemText.__super__.willHandWriteMouseUp.call(this);
-    return this.fontSize = _fontSize.call(this);
-  };
-
-  PreloadItemText.prototype.didHandWriteMouseUp = function() {
-    var input;
-    PreloadItemText.__super__.didHandWriteMouseUp.call(this);
-    Navbar.setModeEdit();
-    WorktableCommon.changeMode(Constant.Mode.EDIT);
-    input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
-    input.off('change').on('change', (function(_this) {
-      return function(e) {
-        _this.editing = true;
-        return _this.reDraw();
+  PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    this.restoreAllDrawingSurface();
+    this.fontSize = _fontSize.call(this);
+    return this.endDraw(zindex, true, (function(_this) {
+      return function() {
+        _this.setupDragAndResizeEvents();
+        _this.saveObj(true);
+        _this.firstFocus = Common.firstFocusItemObj() === null;
+        Navbar.setModeEdit();
+        WorktableCommon.changeMode(Constant.Mode.EDIT);
+        _settingInputEvent.call(_this);
+        _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").focus();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
-    return input.focus();
   };
 
   PreloadItemText.prototype.cssStyle = function() {
@@ -97,6 +90,37 @@ PreloadItemText = (function(superClass) {
     } else {
       return parseInt(this.itemSize.w / 10);
     }
+  };
+
+  _settingTextDbclickEvent = function() {
+    var emt;
+    emt = this.getJQueryElement().find("." + this.constructor.CONTENTS_CLASSNAME + ":first");
+    return emt.off('dblclick').on('dblclick', (function(_this) {
+      return function(e) {
+        _this.editing = true;
+        return _this.reDraw(true, function() {
+          return _settingInputEvent.call(_this);
+        });
+      };
+    })(this));
+  };
+
+  _settingInputEvent = function() {
+    var input;
+    input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
+    return input.off('change').on('change', (function(_this) {
+      return function(e) {
+        _this.inputText = $(e.target).val();
+        _this.editing = false;
+        _this.saveObj();
+        return Navbar.setModeDraw(_this.itemToken, function() {
+          WorktableCommon.changeMode(Constant.Mode.DRAW);
+          return _this.reDraw(true, function() {
+            return _settingTextDbclickEvent.call(_this);
+          });
+        });
+      };
+    })(this));
   };
 
   return PreloadItemText;

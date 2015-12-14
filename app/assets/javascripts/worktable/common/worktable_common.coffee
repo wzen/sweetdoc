@@ -127,6 +127,10 @@ class WorktableCommon
   # モードチェンジ
   # @param [Mode] afterMode 変更後画面モード
   @changeMode = (afterMode) ->
+    if window.mode == afterMode
+      # 変更なし
+      return
+
     if afterMode == Constant.Mode.NOT_SELECT
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
       window.scrollInsideWrapper.removeClass('edit_mode')

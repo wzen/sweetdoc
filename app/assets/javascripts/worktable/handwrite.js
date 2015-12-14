@@ -97,9 +97,7 @@ Handwrite = (function() {
     if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
       this.item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
       window.instanceMap[this.item.id] = this.item;
-      this.item.saveDrawingSurface();
-      WorktableCommon.changeMode(Constant.Mode.DRAW);
-      return this.item.startDraw();
+      return this.item.mouseDownDrawing();
     }
   };
 
@@ -124,15 +122,9 @@ Handwrite = (function() {
 
   Handwrite.mouseUpDrawing = function() {
     if (this.item != null) {
-      this.item.willHandWriteMouseUp();
-      this.item.restoreAllDrawingSurface();
-      return this.item.endDraw(this.zindex, true, (function(_this) {
+      return this.item.mouseUpDrawing(this.zindex, (function(_this) {
         return function() {
-          _this.item.setupDragAndResizeEvents();
-          WorktableCommon.changeMode(Constant.Mode.DRAW);
-          _this.item.saveObj(true);
-          _this.zindex += 1;
-          return _this.item.didHandWriteMouseUp();
+          return _this.zindex += 1;
         };
       })(this));
     }

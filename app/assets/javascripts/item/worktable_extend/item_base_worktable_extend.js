@@ -5,6 +5,34 @@ itemBaseWorktableExtend = {
   getDesignConfigId: function() {
     return this.constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
   },
+  mouseDownDrawing: function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    this.saveDrawingSurface();
+    WorktableCommon.changeMode(Constant.Mode.DRAW);
+    this.startDraw();
+    if (callback != null) {
+      return callback();
+    }
+  },
+  mouseUpDrawing: function(zindex, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    this.restoreAllDrawingSurface();
+    return this.endDraw(zindex, true, (function(_this) {
+      return function() {
+        _this.setupDragAndResizeEvents();
+        WorktableCommon.changeMode(Constant.Mode.DRAW);
+        _this.saveObj(true);
+        _this.firstFocus = Common.firstFocusItemObj() === null;
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
+  },
   startDraw: function() {},
   draw: function(cood) {
     if (this.itemSize !== null) {
@@ -51,10 +79,6 @@ itemBaseWorktableExtend = {
         }
       };
     })(this));
-  },
-  willHandWriteMouseUp: function() {},
-  didHandWriteMouseUp: function() {
-    return this.firstFocus = Common.firstFocusItemObj() === null;
   },
   changeMode: function(changeMode) {},
   drawAndMakeConfigsAndWritePageValue: function(show, callback) {

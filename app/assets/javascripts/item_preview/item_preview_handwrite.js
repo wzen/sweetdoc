@@ -13,7 +13,6 @@ ItemPreviewHandwrite = (function(superClass) {
   ItemPreviewHandwrite.mouseUpDrawing = function() {
     if (this.item != null) {
       if (window.scrollInside.find('.item').length === 0) {
-        this.item.willHandWriteMouseUp();
         this.item.restoreAllDrawingSurface();
         this.item.endDraw(this.zindex, true, (function(_this) {
           return function() {
@@ -22,8 +21,7 @@ ItemPreviewHandwrite = (function(superClass) {
             _this.zindex += 1;
             Sidebar.initItemEditConfig(_this.item);
             ItemPreviewEventConfig.addEventConfigContents(_this.item.itemToken);
-            Sidebar.initEventConfig(Common.generateId());
-            return _this.item.didHandWriteMouseUp();
+            return Sidebar.initEventConfig(Common.generateId());
           };
         })(this));
       }

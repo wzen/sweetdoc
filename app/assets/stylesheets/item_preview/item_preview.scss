@@ -46,6 +46,7 @@ div.stop_btn {
 
 .editSelected {
   border: none !important;
+  pointer-events: none;
 }
 
 .timelineSelected {

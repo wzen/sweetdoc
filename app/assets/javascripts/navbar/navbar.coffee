@@ -77,8 +77,9 @@ class Navbar
       emtId = $(this).attr('id')
       if emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0
         itemToken = emtId.replace(Navbar.ITEM_MENU_PREFIX, '')
-        Navbar.setModeDraw(itemToken)
-        WorktableCommon.changeMode(Constant.Mode.DRAW)
+        Navbar.setModeDraw(itemToken, =>
+          WorktableCommon.changeMode(Constant.Mode.DRAW)
+        )
     )
 
     $('#menu-action-edit').off('click')
@@ -153,7 +154,9 @@ class Navbar
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     itemsSelectMenuEmt.removeClass('active')
     emtId = "menu-item-" + itemToken
-    $("##{emtId}").parent('li').addClass('active')
+    menuItem = $("##{emtId}")
+    menuItem.parent('li').addClass('active')
+    $('#header_items_selected_menu_span').html(menuItem.html())
     window.selectItemMenu = itemToken
     Common.loadItemJs(itemToken, callback)
 

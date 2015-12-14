@@ -4,6 +4,28 @@ itemBaseWorktableExtend =
   getDesignConfigId: ->
     return @constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', @id)
 
+  # マウスダウン時の描画イベント
+  # @param [Array] loc Canvas座標
+  mouseDownDrawing: (callback = null) ->
+    @saveDrawingSurface()
+    WorktableCommon.changeMode(Constant.Mode.DRAW)
+    @startDraw()
+    if callback?
+      callback()
+
+  # マウスアップ時の描画イベント
+  mouseUpDrawing: (zindex, callback = null) ->
+    @restoreAllDrawingSurface()
+    @endDraw(zindex, true, =>
+      @setupDragAndResizeEvents()
+      WorktableCommon.changeMode(Constant.Mode.DRAW)
+      @saveObj(true)
+      # フォーカス設定
+      @firstFocus = Common.firstFocusItemObj() == null
+      if callback?
+        callback()
+    )
+
   # ドラッグ描画開始
   startDraw: ->
     return
@@ -43,13 +65,6 @@ itemBaseWorktableExtend =
       if callback?
         callback()
     )
-
-  # ドラッグ描画終了前処理
-  willHandWriteMouseUp: ->
-  # ドラッグ描画終了後処理
-  didHandWriteMouseUp: ->
-    # フォーカス設定
-    @firstFocus = Common.firstFocusItemObj() == null
 
   # モード変更時処理
   # @abstract

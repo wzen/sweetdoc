@@ -156,6 +156,9 @@ WorktableCommon = (function() {
 
   WorktableCommon.changeMode = function(afterMode) {
     var item, items, l, len, results;
+    if (window.mode === afterMode) {
+      return;
+    }
     if (afterMode === Constant.Mode.NOT_SELECT) {
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
       window.scrollInsideWrapper.removeClass('edit_mode');

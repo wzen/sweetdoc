@@ -128,7 +128,7 @@ class PreloadItemText extends CssItemBase
     @fontSize = null
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
-    @_editing = true
+    @editing = true
     @inputText = 'Input text'
 
   # アイテムサイズ更新
@@ -140,38 +140,33 @@ class PreloadItemText extends CssItemBase
   cssItemHtml: ->
     if @editing
       return """
-        <div class="css_item_base context_base"><input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}'></div>
+        <div class="css_item_base context_base put_center" style="width:50%;"><input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;"></div>
       """
     else
       return """
         <div class="css_item_base context_base"><div class='#{@constructor.CONTENTS_CLASSNAME}'>#{@inputText}</div></div>
       """
 
-  itemDraw: (show) ->
-    super(show)
-
-  changeMode: (mode) ->
-    # 表示をinputに
-    @editing = true
-    @reDraw()
-
-  willHandWriteMouseUp: ->
-    super()
+  # マウスアップ時の描画イベント
+  mouseUpDrawing: (zindex, callback = null) ->
+    @restoreAllDrawingSurface()
     @fontSize = _fontSize.call(@)
+    @endDraw(zindex, true, =>
+      @setupDragAndResizeEvents()
+      @saveObj(true)
+      # フォーカス設定
+      @firstFocus = Common.firstFocusItemObj() == null
+      # 編集モード
+      Navbar.setModeEdit()
+      WorktableCommon.changeMode(Constant.Mode.EDIT)
+      # テキストイベント設定
+      _settingInputEvent.call(@)
+      # テキストを選択状態に
+      @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").focus()
 
-  didHandWriteMouseUp: ->
-    super()
-    # 編集モード
-    Navbar.setModeEdit()
-    WorktableCommon.changeMode(Constant.Mode.EDIT)
-    # テキストイベント設定
-    input = @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first")
-    input.off('change').on('change', (e) =>
-      @editing = true
-      @reDraw()
+      if callback?
+        callback()
     )
-    # テキストを選択状態に
-    input.focus()
 
   # CSSスタイル
   # @abstract
@@ -190,6 +185,35 @@ class PreloadItemText extends CssItemBase
     else
       # 幅に合わせる
       return parseInt(@itemSize.w / 10)
+
+  _settingTextDbclickEvent = ->
+    # ダブルクリックでEditに変更
+    emt = @getJQueryElement().find(".#{@constructor.CONTENTS_CLASSNAME}:first")
+    emt.off('dblclick').on('dblclick', (e) =>
+      @editing = true
+      @reDraw(true, =>
+        # テキストイベント設定
+        _settingInputEvent.call(@)
+      )
+    )
+
+  _settingInputEvent = ->
+    # テキストイベント設定
+    input = @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first")
+    input.off('change').on('change', (e) =>
+      @inputText = $(e.target).val()
+      # 編集終了
+      @editing = false
+      @saveObj()
+      # モードを描画モードに
+      Navbar.setModeDraw(@itemToken, =>
+        WorktableCommon.changeMode(Constant.Mode.DRAW)
+        @reDraw(true, =>
+          # イベント設定
+          _settingTextDbclickEvent.call(@)
+        )
+      )
+    )
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
 

@@ -90,11 +90,10 @@ class Handwrite
     # プレビューを停止して再描画
     WorktableCommon.reDrawAllInstanceItemIfChanging()
     if selectItemMenu?
+      # インスタンス作成
       @item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
       window.instanceMap[@item.id] = @item
-      @item.saveDrawingSurface()
-      WorktableCommon.changeMode(Constant.Mode.DRAW)
-      @item.startDraw()
+      @item.mouseDownDrawing()
 
   # マウスドラッグ時の描画イベント
   # @param [Array] loc Canvas座標
@@ -119,12 +118,6 @@ class Handwrite
   # マウスアップ時の描画イベント
   @mouseUpDrawing = ->
     if @item?
-      @item.willHandWriteMouseUp()
-      @item.restoreAllDrawingSurface()
-      @item.endDraw(@zindex, true, =>
-        @item.setupDragAndResizeEvents()
-        WorktableCommon.changeMode(Constant.Mode.DRAW)
-        @item.saveObj(true)
+      @item.mouseUpDrawing(@zindex, =>
         @zindex += 1
-        @item.didHandWriteMouseUp()
       )
