@@ -125,11 +125,16 @@ Handwrite = (function() {
   Handwrite.mouseUpDrawing = function() {
     if (this.item != null) {
       this.item.restoreAllDrawingSurface();
-      this.item.endDraw(this.zindex);
-      this.item.setupDragAndResizeEvents();
-      WorktableCommon.changeMode(Constant.Mode.DRAW);
-      this.item.saveObj(true);
-      return this.zindex += 1;
+      this.item.willCallEndDraw();
+      return this.item.endDraw(this.zindex, true, (function(_this) {
+        return function() {
+          _this.item.didCallEndDraw();
+          _this.item.setupDragAndResizeEvents();
+          WorktableCommon.changeMode(Constant.Mode.DRAW);
+          _this.item.saveObj(true);
+          return _this.zindex += 1;
+        };
+      })(this));
     }
   };
 

@@ -5,7 +5,9 @@ class ItemPreviewHandwrite extends Handwrite
       # 表示アイテムは一つのみ
       if window.scrollInside.find('.item').length == 0
         @item.restoreAllDrawingSurface()
+        @item.willCallEndDraw()
         @item.endDraw(@zindex, true, =>
+          @item.didCallEndDraw()
           @item.setupDragAndResizeEvents()
           @item.saveObj(true)
           @zindex += 1

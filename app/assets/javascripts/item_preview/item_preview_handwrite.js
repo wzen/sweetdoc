@@ -14,8 +14,10 @@ ItemPreviewHandwrite = (function(superClass) {
     if (this.item != null) {
       if (window.scrollInside.find('.item').length === 0) {
         this.item.restoreAllDrawingSurface();
+        this.item.willCallEndDraw();
         this.item.endDraw(this.zindex, true, (function(_this) {
           return function() {
+            _this.item.didCallEndDraw();
             _this.item.setupDragAndResizeEvents();
             _this.item.saveObj(true);
             _this.zindex += 1;

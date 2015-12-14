@@ -44,9 +44,6 @@ PreloadItemText = (function(superClass) {
     }
     this._editing = true;
     this.inputText = 'Input text';
-    if (window.isWorkTable) {
-      this.constructor.include(WorkTableCommonInclude);
-    }
   }
 
   PreloadItemText.prototype.updateItemSize = function(w, h) {
@@ -70,10 +67,14 @@ PreloadItemText = (function(superClass) {
     return this.reDraw();
   };
 
+  PreloadItemText.prototype.willCallEndDraw = function() {
+    PreloadItemText.__super__.willCallEndDraw.call(this);
+    return this.fontSize = _fontSize.call(this);
+  };
+
   PreloadItemText.prototype.didCallEndDraw = function() {
     var input;
     PreloadItemText.__super__.didCallEndDraw.call(this);
-    this.fontSize = _fontSize.call(this);
     WorktableCommon.changeMode(Constant.Mode.EDIT);
     input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
     input.off('change').on('change', (function(_this) {
@@ -86,14 +87,14 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.cssStyle = function() {
-    return "#" + this.id + " ." + this.constructor.INPUT_CLASSNAME + ", #" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  font-family: " + this.fontFamily + ";\n  font-size: " + this.fontSize + "px;\n}";
+    return "#" + this.id + " ." + this.constructor.INPUT_CLASSNAME + ", #" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  font-family: '" + this.fontFamily + "';\n  font-size: '" + this.fontSize + "px';\n}";
   };
 
   _fontSize = function() {
     if (this.itemSize.w > this.itemSize.h) {
-      return this.itemSize.h;
+      return parseInt(this.itemSize.h / 10);
     } else {
-      return this.itemSize.w;
+      return parseInt(this.itemSize.w / 10);
     }
   };
 

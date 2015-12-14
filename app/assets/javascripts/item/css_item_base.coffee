@@ -94,7 +94,7 @@ class CssItemBase extends ItemBase
     @reDraw()
     @_cssDesignToolStyle.text(@_cssDesignToolCode.text())
     if (addStyle = @cssStyle())?
-      @_cssRoot.append(addStyle.wrap("<style type='text/css'></style>"))
+      @_cssRoot.append($("<style type='text/css'>#{addStyle}</style>"))
 
     if doStyleSave
       @saveDesign()

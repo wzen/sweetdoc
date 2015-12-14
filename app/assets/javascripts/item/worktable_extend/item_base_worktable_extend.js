@@ -6,33 +6,6 @@ itemBaseWorktableExtend = {
     return this.constructor.DESIGN_CONFIG_ROOT_ID.replace('@id', this.id);
   },
   startDraw: function() {},
-  endDraw: function(zindex, show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    this.zindex = zindex;
-    this.itemSize.x += scrollContents.scrollLeft();
-    this.itemSize.y += scrollContents.scrollTop();
-    return this.createItemElement((function(_this) {
-      return function(createdElement) {
-        _this.itemDraw(show);
-        if (_this.setupDragAndResizeEvents != null) {
-          _this.setupDragAndResizeEvents();
-        }
-        _this.didCallEndDraw();
-        if (callback != null) {
-          return callback();
-        }
-      };
-    })(this));
-  },
-  changeMode: function(changeMode) {},
-  didCallEndDraw: function() {
-    return this.firstFocus = Common.firstFocusItemObj() === null;
-  },
   draw: function(cood) {
     if (this.itemSize !== null) {
       this.restoreDrawingSurface(this.itemSize);
@@ -57,6 +30,33 @@ itemBaseWorktableExtend = {
     }
     return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
   },
+  endDraw: function(zindex, show, callback) {
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    this.zindex = zindex;
+    this.itemSize.x += scrollContents.scrollLeft();
+    this.itemSize.y += scrollContents.scrollTop();
+    return this.createItemElement((function(_this) {
+      return function(createdElement) {
+        _this.itemDraw(show);
+        if (_this.setupDragAndResizeEvents != null) {
+          _this.setupDragAndResizeEvents();
+        }
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
+  },
+  willCallEndDraw: function() {},
+  didCallEndDraw: function() {
+    return this.firstFocus = Common.firstFocusItemObj() === null;
+  },
+  changeMode: function(changeMode) {},
   drawAndMakeConfigsAndWritePageValue: function(show, callback) {
     if (show == null) {
       show = true;

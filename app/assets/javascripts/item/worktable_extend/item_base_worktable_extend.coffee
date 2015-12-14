@@ -8,33 +8,6 @@ itemBaseWorktableExtend =
   startDraw: ->
     return
 
-  # 描画終了
-  # @param [Int] zindex z-index
-  # @param [boolean] show 要素作成後に描画を表示するか
-  endDraw: (zindex, show = true, callback = null) ->
-    @zindex = zindex
-    # スクロールビュー分のxとyを追加
-    @itemSize.x += scrollContents.scrollLeft()
-    @itemSize.y += scrollContents.scrollTop()
-    @createItemElement((createdElement) =>
-      @itemDraw(show)
-      if @setupDragAndResizeEvents?
-        # ドラッグ & リサイズイベント設定
-        @setupDragAndResizeEvents()
-      @didCallEndDraw()
-      if callback?
-        callback()
-    )
-
-  # モード変更時処理
-  # @abstract
-  changeMode: (changeMode) ->
-
-  # ドラッグ描画終了時処理
-  didCallEndDraw: ->
-    # フォーカス設定
-    @firstFocus = Common.firstFocusItemObj() == null
-
   # ドラッグ描画(枠)
   # @param [Array] cood 座標
   draw: (cood) ->
@@ -53,6 +26,34 @@ itemBaseWorktableExtend =
     else
       @itemSize.y = cood.y
     drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
+
+  # 描画終了
+  # @param [Int] zindex z-index
+  # @param [boolean] show 要素作成後に描画を表示するか
+  endDraw: (zindex, show = true, callback = null) ->
+    @zindex = zindex
+    # スクロールビュー分のxとyを追加
+    @itemSize.x += scrollContents.scrollLeft()
+    @itemSize.y += scrollContents.scrollTop()
+    @createItemElement((createdElement) =>
+      @itemDraw(show)
+      if @setupDragAndResizeEvents?
+        # ドラッグ & リサイズイベント設定
+        @setupDragAndResizeEvents()
+      if callback?
+        callback()
+    )
+
+  # ドラッグ描画終了前処理
+  willCallEndDraw: ->
+  # ドラッグ描画終了後処理
+  didCallEndDraw: ->
+    # フォーカス設定
+    @firstFocus = Common.firstFocusItemObj() == null
+
+  # モード変更時処理
+  # @abstract
+  changeMode: (changeMode) ->
 
   # 描画&コンフィグ作成
   # @param [Boolean] show 要素作成後に描画を表示するか

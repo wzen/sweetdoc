@@ -130,8 +130,6 @@ class PreloadItemText extends CssItemBase
       @_moveLoc = {x:cood.x, y:cood.y}
     @_editing = true
     @inputText = 'Input text'
-    if window.isWorkTable
-      @constructor.include WorkTableCommonInclude
 
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
@@ -157,9 +155,12 @@ class PreloadItemText extends CssItemBase
     @editing = true
     @reDraw()
 
-  didCallEndDraw: ->
+  willCallEndDraw: ->
     super()
     @fontSize = _fontSize.call(@)
+
+  didCallEndDraw: ->
+    super()
     # 編集モード
     WorktableCommon.changeMode(Constant.Mode.EDIT)
     # テキストイベント設定
@@ -176,18 +177,18 @@ class PreloadItemText extends CssItemBase
   cssStyle: ->
     return """
       ##{@id} .#{@constructor.INPUT_CLASSNAME}, ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
-        font-family: #{@fontFamily};
-        font-size: #{@fontSize}px;
+        font-family: '#{@fontFamily}';
+        font-size: '#{@fontSize}px';
       }
     """
 
   _fontSize = ->
     if @itemSize.w > @itemSize.h
       # 高さに合わせる
-      return @itemSize.h
+      return parseInt(@itemSize.h / 10)
     else
       # 幅に合わせる
-      return @itemSize.w
+      return parseInt(@itemSize.w / 10)
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
 

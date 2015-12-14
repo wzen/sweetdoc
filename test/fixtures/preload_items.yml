@@ -21,3 +21,11 @@ three:
   title: "Image"
   caption: ''
   access_token: 'PreloadItemImage'
+
+four:
+  id: 4
+  create_user_id: 1
+  modify_user_id: 1
+  title: "Text"
+  caption: ''
+  access_token: 'PreloadItemText'

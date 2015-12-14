@@ -109,7 +109,7 @@ CssItemBase = (function(superClass) {
     this.reDraw();
     this._cssDesignToolStyle.text(this._cssDesignToolCode.text());
     if ((addStyle = this.cssStyle()) != null) {
-      this._cssRoot.append(addStyle.wrap("<style type='text/css'></style>"));
+      this._cssRoot.append($("<style type='text/css'>" + addStyle + "</style>"));
     }
     if (doStyleSave) {
       return this.saveDesign();
