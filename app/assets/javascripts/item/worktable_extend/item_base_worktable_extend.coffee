@@ -45,9 +45,9 @@ itemBaseWorktableExtend =
     )
 
   # ドラッグ描画終了前処理
-  willCallEndDraw: ->
+  willHandWriteMouseUp: ->
   # ドラッグ描画終了後処理
-  didCallEndDraw: ->
+  didHandWriteMouseUp: ->
     # フォーカス設定
     @firstFocus = Common.firstFocusItemObj() == null
 

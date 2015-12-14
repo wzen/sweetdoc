@@ -52,8 +52,8 @@ itemBaseWorktableExtend = {
       };
     })(this));
   },
-  willCallEndDraw: function() {},
-  didCallEndDraw: function() {
+  willHandWriteMouseUp: function() {},
+  didHandWriteMouseUp: function() {
     return this.firstFocus = Common.firstFocusItemObj() === null;
   },
   changeMode: function(changeMode) {},

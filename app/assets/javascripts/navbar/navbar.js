@@ -86,9 +86,6 @@ Navbar = (function() {
     });
     $('#menu-action-edit').off('click');
     $('#menu-action-edit').on('click', function() {
-      var selected;
-      selected = $(this).html();
-      $('#header_items_selected_menu_span').html(selected);
       Navbar.setModeEdit();
       return WorktableCommon.changeMode(Constant.Mode.EDIT);
     });
@@ -173,7 +170,9 @@ Navbar = (function() {
   };
 
   Navbar.setModeEdit = function() {
-    var itemsSelectMenuEmt;
+    var itemsSelectMenuEmt, selected;
+    selected = $('#menu-action-edit').html();
+    $('#header_items_selected_menu_span').html(selected);
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
     itemsSelectMenuEmt.removeClass('active');
     return $('#menu-action-edit').parent('li').addClass('active');

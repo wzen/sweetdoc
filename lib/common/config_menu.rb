@@ -38,6 +38,8 @@ class ConfigMenu
         temp_name = 'color'
       elsif v['type'] == Const::ItemDesignOptionType::SELECT_FILE
         temp_name = 'select_file'
+      elsif v['type'] == Const::ItemDesignOptionType::SELECT
+        temp_name = 'select'
       end
       temp = "sidebar_menu/#{dir}/parts/#{temp_name}"
       value = v

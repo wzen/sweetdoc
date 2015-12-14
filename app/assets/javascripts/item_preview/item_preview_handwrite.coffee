@@ -4,10 +4,9 @@ class ItemPreviewHandwrite extends Handwrite
     if @item?
       # 表示アイテムは一つのみ
       if window.scrollInside.find('.item').length == 0
+        @item.willHandWriteMouseUp()
         @item.restoreAllDrawingSurface()
-        @item.willCallEndDraw()
         @item.endDraw(@zindex, true, =>
-          @item.didCallEndDraw()
           @item.setupDragAndResizeEvents()
           @item.saveObj(true)
           @zindex += 1
@@ -17,6 +16,7 @@ class ItemPreviewHandwrite extends Handwrite
           ItemPreviewEventConfig.addEventConfigContents(@item.itemToken)
           # EventConfigのDistIdは適当
           Sidebar.initEventConfig(Common.generateId())
+          @item.didHandWriteMouseUp()
         )
 
     WorktableCommon.changeMode(Constant.Mode.EDIT)

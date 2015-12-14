@@ -124,15 +124,15 @@ Handwrite = (function() {
 
   Handwrite.mouseUpDrawing = function() {
     if (this.item != null) {
+      this.item.willHandWriteMouseUp();
       this.item.restoreAllDrawingSurface();
-      this.item.willCallEndDraw();
       return this.item.endDraw(this.zindex, true, (function(_this) {
         return function() {
-          _this.item.didCallEndDraw();
           _this.item.setupDragAndResizeEvents();
           WorktableCommon.changeMode(Constant.Mode.DRAW);
           _this.item.saveObj(true);
-          return _this.zindex += 1;
+          _this.zindex += 1;
+          return _this.item.didHandWriteMouseUp();
         };
       })(this));
     }

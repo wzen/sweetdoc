@@ -13,7 +13,7 @@ class PreloadItemText extends CssItemBase
         ja: {
           name: 'フォント選択'
         }
-        options: [
+        'options[]': [
           'sans-serif'
           'arial'
           'arial black'
@@ -155,13 +155,14 @@ class PreloadItemText extends CssItemBase
     @editing = true
     @reDraw()
 
-  willCallEndDraw: ->
+  willHandWriteMouseUp: ->
     super()
     @fontSize = _fontSize.call(@)
 
-  didCallEndDraw: ->
+  didHandWriteMouseUp: ->
     super()
     # 編集モード
+    Navbar.setModeEdit()
     WorktableCommon.changeMode(Constant.Mode.EDIT)
     # テキストイベント設定
     input = @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first")

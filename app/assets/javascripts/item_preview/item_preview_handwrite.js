@@ -13,17 +13,17 @@ ItemPreviewHandwrite = (function(superClass) {
   ItemPreviewHandwrite.mouseUpDrawing = function() {
     if (this.item != null) {
       if (window.scrollInside.find('.item').length === 0) {
+        this.item.willHandWriteMouseUp();
         this.item.restoreAllDrawingSurface();
-        this.item.willCallEndDraw();
         this.item.endDraw(this.zindex, true, (function(_this) {
           return function() {
-            _this.item.didCallEndDraw();
             _this.item.setupDragAndResizeEvents();
             _this.item.saveObj(true);
             _this.zindex += 1;
             Sidebar.initItemEditConfig(_this.item);
             ItemPreviewEventConfig.addEventConfigContents(_this.item.itemToken);
-            return Sidebar.initEventConfig(Common.generateId());
+            Sidebar.initEventConfig(Common.generateId());
+            return _this.item.didHandWriteMouseUp();
           };
         })(this));
       }

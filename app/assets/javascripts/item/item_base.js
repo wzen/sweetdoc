@@ -251,7 +251,11 @@ ItemBase = (function(superClass) {
   ItemBase.prototype.clearAllEventStyle = function() {};
 
   ItemBase.defaultMethodName = function() {
-    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.METHOD];
+    if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.METHOD];
+    } else {
+      return null;
+    }
   };
 
   ItemBase.defaultActionType = function() {
@@ -263,15 +267,27 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.defaultScrollEnabledDirection = function() {
-    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
+    if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_ENABLED_DIRECTION];
+    } else {
+      return null;
+    }
   };
 
   ItemBase.defaultScrollForwardDirection = function() {
-    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
+    if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SCROLL_FORWARD_DIRECTION];
+    } else {
+      return null;
+    }
   };
 
   ItemBase.defaultClickDuration = function() {
-    return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.EVENT_DURATION];
+    if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.EVENT_DURATION];
+    } else {
+      return null;
+    }
   };
 
   ItemBase.prototype.applyDefaultDesign = function() {

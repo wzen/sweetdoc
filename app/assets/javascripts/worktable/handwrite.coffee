@@ -119,12 +119,12 @@ class Handwrite
   # マウスアップ時の描画イベント
   @mouseUpDrawing = ->
     if @item?
+      @item.willHandWriteMouseUp()
       @item.restoreAllDrawingSurface()
-      @item.willCallEndDraw()
       @item.endDraw(@zindex, true, =>
-        @item.didCallEndDraw()
         @item.setupDragAndResizeEvents()
         WorktableCommon.changeMode(Constant.Mode.DRAW)
         @item.saveObj(true)
         @zindex += 1
+        @item.didHandWriteMouseUp()
       )

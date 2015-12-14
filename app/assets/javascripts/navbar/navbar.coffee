@@ -83,8 +83,6 @@ class Navbar
 
     $('#menu-action-edit').off('click')
     $('#menu-action-edit').on('click', ->
-      selected = $(@).html()
-      $('#header_items_selected_menu_span').html(selected)
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
@@ -161,6 +159,8 @@ class Navbar
 
   # Editモードに設定
   @setModeEdit = ->
+    selected = $('#menu-action-edit').html()
+    $('#header_items_selected_menu_span').html(selected)
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     itemsSelectMenuEmt.removeClass('active')
     $('#menu-action-edit').parent('li').addClass('active')

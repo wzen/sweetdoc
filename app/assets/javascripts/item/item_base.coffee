@@ -212,7 +212,11 @@ class ItemBase extends ItemEventBase
 
   # アイテム作成時に設定されるデフォルトメソッド名
   @defaultMethodName = ->
-    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.METHOD]
+    if @actionProperties? &&
+      @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
+        return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.METHOD]
+    else
+      return null
 
   # アイテム作成時に設定されるデフォルトアクションタイプ
   @defaultActionType = ->
@@ -223,15 +227,27 @@ class ItemBase extends ItemEventBase
 
   # スクロールのデフォルト有効方向
   @defaultScrollEnabledDirection = ->
-    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SCROLL_ENABLED_DIRECTION]
+    if @actionProperties? &&
+      @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
+        return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SCROLL_ENABLED_DIRECTION]
+    else
+      return null
 
   # スクロールのデフォルト進行方向
   @defaultScrollForwardDirection = ->
-    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
+    if @actionProperties? &&
+      @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
+        return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SCROLL_FORWARD_DIRECTION]
+    else
+      return null
 
   # クリックのデフォルト時間
   @defaultClickDuration = ->
-    return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.EVENT_DURATION]
+    if @actionProperties? &&
+      @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
+        return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.EVENT_DURATION]
+    else
+      return null
 
   # デフォルトデザインをPageValue & 変数に適用
   applyDefaultDesign: ->
