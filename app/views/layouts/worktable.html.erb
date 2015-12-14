@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SugerDoc WorkTable</title>
-    <%= favicon_link_tag '/assets/favicon.ico' %>
-    <%= include_gon %>
-    <%= csrf_meta_tag %>
-    <%= display_meta_tags({
-                                  title: "SugerDoc WorkTable" ,
-                                  description: 'Welcome SugerDoc',
-                                  viewport: "width=device-width, initial-scale=1"
-                          })
-    %>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>SugerDoc WorkTable</title>
+  <%= favicon_link_tag '/assets/favicon.ico' %>
+  <%= include_gon %>
+  <%= csrf_meta_tag %>
+  <%= display_meta_tags({
+                                title: "SugerDoc WorkTable" ,
+                                description: 'Welcome SugerDoc',
+                                viewport: "width=device-width, initial-scale=1"
+                        })
+  %>
+  <%= stylesheet_link_tag 'pipeline/worktable', media: 'all', 'data-turbolinks-track' => true %>
 </head>
 
 <body class="<%= controller_name -%> <%= action_name -%>">
@@ -21,8 +22,6 @@
     </script>
 
     <%= yield %>
-
-    <%= stylesheet_link_tag 'pipeline/worktable', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'pipeline/worktable', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'pipeline/preload_item', 'data-turbolinks-track' => true %>
     <script type="text/javascript">

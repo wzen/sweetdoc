@@ -208,7 +208,7 @@ class Common
     $(".#{sectionClass}", root).remove()
 
   # ページ内のインスタンスを取得
-  @instancesInPage = (pn = PageValue.getPageNum()) ->
+  @instancesInPage = (pn = PageValue.getPageNum(), withInitFromPageValue = false) ->
     ret = []
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn))
     for key, instance of instances
@@ -217,12 +217,14 @@ class Common
       if !classMapId?
         classMapId = value.eventId
       obj = Common.getInstanceFromMap(value.eventId?, value.id, classMapId)
+      if withInitFromPageValue
+        obj.setMiniumObject(value)
       ret.push(obj)
     return ret
 
   # ページ内のアイテムインスタンスを取得
-  @itemInstancesInPage = (pn = PageValue.getPageNum()) ->
-    return $.grep(@instancesInPage(pn), (n) ->
+  @itemInstancesInPage = (pn = PageValue.getPageNum(), withInitFromPageValue = false) ->
+    return $.grep(@instancesInPage(pn, withInitFromPageValue), (n) ->
       n instanceof ItemBase
     )
 

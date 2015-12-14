@@ -13,6 +13,7 @@
                                   viewport: "width=device-width, initial-scale=1"
                           })
     %>
+  <%= stylesheet_link_tag 'pipeline/run', media: 'all', 'data-turbolinks-track' => true %>
 </head>
 <body class="<%= controller_name -%> <%= action_name -%>">
     <script type="text/javascript">
@@ -21,7 +22,6 @@
 
     <%= yield %>
 
-    <%= stylesheet_link_tag 'pipeline/run', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'pipeline/motion_check', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'pipeline/preload_item', 'data-turbolinks-track' => true %>
     <script type="text/javascript">

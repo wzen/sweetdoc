@@ -401,9 +401,9 @@ class WorktableCommon
   # @param [Integer] pageNum 描画するPageValueのページ番号
   @createAllInstanceAndDrawFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     Common.loadJsFromInstancePageValue( ->
-      items = Common.itemInstancesInPage(pageNum)
+      # インスタンス取得 & PageValueの値で初期化
+      items = Common.itemInstancesInPage(pageNum, true)
       for item in items
-        item.setMiniumObject(obj.value)
         if item.drawAndMakeConfigs?
           item.drawAndMakeConfigs()
 

@@ -440,10 +440,9 @@ WorktableCommon = (function() {
     }
     return Common.loadJsFromInstancePageValue(function() {
       var item, items, l, len;
-      items = Common.itemInstancesInPage(pageNum);
+      items = Common.itemInstancesInPage(pageNum, true);
       for (l = 0, len = items.length; l < len; l++) {
         item = items[l];
-        item.setMiniumObject(obj.value);
         if (item.drawAndMakeConfigs != null) {
           item.drawAndMakeConfigs();
         }

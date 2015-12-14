@@ -267,10 +267,13 @@ Common = (function() {
     return $("." + sectionClass, root).remove();
   };
 
-  Common.instancesInPage = function(pn) {
+  Common.instancesInPage = function(pn, withInitFromPageValue) {
     var classMapId, instance, instances, key, obj, ret, value;
     if (pn == null) {
       pn = PageValue.getPageNum();
+    }
+    if (withInitFromPageValue == null) {
+      withInitFromPageValue = false;
     }
     ret = [];
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn));
@@ -282,16 +285,22 @@ Common = (function() {
         classMapId = value.eventId;
       }
       obj = Common.getInstanceFromMap(value.eventId != null, value.id, classMapId);
+      if (withInitFromPageValue) {
+        obj.setMiniumObject(value);
+      }
       ret.push(obj);
     }
     return ret;
   };
 
-  Common.itemInstancesInPage = function(pn) {
+  Common.itemInstancesInPage = function(pn, withInitFromPageValue) {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    return $.grep(this.instancesInPage(pn), function(n) {
+    if (withInitFromPageValue == null) {
+      withInitFromPageValue = false;
+    }
+    return $.grep(this.instancesInPage(pn, withInitFromPageValue), function(n) {
       return n instanceof ItemBase;
     });
   };
