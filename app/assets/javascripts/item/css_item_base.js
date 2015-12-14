@@ -16,9 +16,9 @@ CssItemBase = (function(superClass) {
     }
     CssItemBase.__super__.constructor.call(this, cood);
     this._cssRoot = null;
-    this._cssCache = null;
-    this._cssCode = null;
-    this._cssStyle = null;
+    this._cssDesignToolCache = null;
+    this._cssDesignToolCode = null;
+    this._cssDesignToolStyle = null;
     if (cood !== null) {
       this._moveLoc = {
         x: cood.x,
@@ -98,16 +98,16 @@ CssItemBase = (function(superClass) {
       _applyCss.call(this, this.constructor.actionProperties.designConfigDefaultValues);
     }
     this._cssRoot = $('#' + this.getCssRootElementId());
-    this._cssCache = $(".css_cache", this._cssRoot);
-    this._cssCode = $(".css_code", this._cssRoot);
-    this._cssStyle = $(".css_style", this._cssRoot);
+    this._cssDesignToolCache = $(".css_design_tool_cache", this._cssRoot);
+    this._cssDesignToolCode = $(".css_design_tool_code", this._cssRoot);
+    this._cssDesignToolStyle = $(".css_design_tool_style", this._cssRoot);
     return this.applyDesignChange(false);
   };
 
   CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
     var addStyle;
     this.reDraw();
-    this._cssStyle.text(this._cssCode.text());
+    this._cssDesignToolStyle.text(this._cssDesignToolCode.text());
     if ((addStyle = this.cssStyle()) != null) {
       this._cssRoot.append(addStyle.wrap("<style type='text/css'></style>"));
     }

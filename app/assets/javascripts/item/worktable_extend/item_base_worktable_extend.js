@@ -240,7 +240,7 @@ itemBaseWorktableExtend = {
         });
         _existFocusSetItem = function() {
           var focusExist, j, len, obj, objs;
-          objs = Common.itemInstancesInPage(pn);
+          objs = Common.itemInstancesInPage();
           focusExist = false;
           for (j = 0, len = objs.length; j < len; j++) {
             obj = objs[j];

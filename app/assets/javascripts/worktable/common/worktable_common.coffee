@@ -405,7 +405,7 @@ class WorktableCommon
   @createAllInstanceAndDrawFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     Common.loadJsFromInstancePageValue( ->
       # インスタンス取得 & PageValueの値で初期化
-      items = Common.itemInstancesInPage(pageNum, true)
+      items = Common.itemInstancesInPage(pageNum, true, true)
       for item in items
         if item.drawAndMakeConfigs?
           item.drawAndMakeConfigs()

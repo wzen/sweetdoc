@@ -267,10 +267,13 @@ Common = (function() {
     return $("." + sectionClass, root).remove();
   };
 
-  Common.instancesInPage = function(pn, withInitFromPageValue) {
+  Common.instancesInPage = function(pn, withCreateInstance, withInitFromPageValue) {
     var classMapId, instance, instances, key, obj, ret, value;
     if (pn == null) {
       pn = PageValue.getPageNum();
+    }
+    if (withCreateInstance == null) {
+      withCreateInstance = false;
     }
     if (withInitFromPageValue == null) {
       withInitFromPageValue = false;
@@ -280,27 +283,34 @@ Common = (function() {
     for (key in instances) {
       instance = instances[key];
       value = instance.value;
-      classMapId = value.itemToken;
-      if (classMapId == null) {
-        classMapId = value.eventId;
-      }
-      obj = Common.getInstanceFromMap(value.eventId != null, value.id, classMapId);
-      if (withInitFromPageValue) {
-        obj.setMiniumObject(value);
+      if (withCreateInstance) {
+        classMapId = value.itemToken;
+        if (classMapId == null) {
+          classMapId = value.eventId;
+        }
+        obj = Common.getInstanceFromMap(value.eventId != null, value.id, classMapId);
+        if (withInitFromPageValue) {
+          obj.setMiniumObject(value);
+        }
+      } else {
+        obj = window.instanceMap[value.id];
       }
       ret.push(obj);
     }
     return ret;
   };
 
-  Common.itemInstancesInPage = function(pn, withInitFromPageValue) {
+  Common.itemInstancesInPage = function(pn, withCreateInstance, withInitFromPageValue) {
     if (pn == null) {
       pn = PageValue.getPageNum();
+    }
+    if (withCreateInstance == null) {
+      withCreateInstance = false;
     }
     if (withInitFromPageValue == null) {
       withInitFromPageValue = false;
     }
-    return $.grep(this.instancesInPage(pn, withInitFromPageValue), function(n) {
+    return $.grep(this.instancesInPage(pn, withCreateInstance, withInitFromPageValue), function(n) {
       return n instanceof ItemBase;
     });
   };

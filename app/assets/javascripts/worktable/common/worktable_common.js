@@ -452,7 +452,7 @@ WorktableCommon = (function() {
     }
     return Common.loadJsFromInstancePageValue(function() {
       var item, items, l, len;
-      items = Common.itemInstancesInPage(pageNum, true);
+      items = Common.itemInstancesInPage(pageNum, true, true);
       for (l = 0, len = items.length; l < len; l++) {
         item = items[l];
         if (item.drawAndMakeConfigs != null) {

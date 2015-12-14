@@ -12,9 +12,9 @@ class CssItemBase extends ItemBase
   constructor: (cood = null) ->
     super(cood)
     @_cssRoot = null
-    @_cssCache = null
-    @_cssCode = null
-    @_cssStyle = null
+    @_cssDesignToolCache = null
+    @_cssDesignToolCode = null
+    @_cssDesignToolStyle = null
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
     @_cssStypeReflectTimer = null
@@ -84,15 +84,15 @@ class CssItemBase extends ItemBase
       _applyCss.call(@, @constructor.actionProperties.designConfigDefaultValues)
 
     @_cssRoot = $('#' + @getCssRootElementId())
-    @_cssCache = $(".css_cache", @_cssRoot)
-    @_cssCode = $(".css_code", @_cssRoot)
-    @_cssStyle = $(".css_style", @_cssRoot)
+    @_cssDesignToolCache = $(".css_design_tool_cache", @_cssRoot)
+    @_cssDesignToolCode = $(".css_design_tool_code", @_cssRoot)
+    @_cssDesignToolStyle = $(".css_design_tool_style", @_cssRoot)
     @applyDesignChange(false)
 
   # デザイン反映
   applyDesignChange: (doStyleSave) ->
     @reDraw()
-    @_cssStyle.text(@_cssCode.text())
+    @_cssDesignToolStyle.text(@_cssDesignToolCode.text())
     if (addStyle = @cssStyle())?
       @_cssRoot.append(addStyle.wrap("<style type='text/css'></style>"))
 

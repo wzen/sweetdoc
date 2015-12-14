@@ -102,19 +102,19 @@ cssItemBaseWorktableExtend =
       for i in [2 .. 4]
         @designs.flags["design_bg_color#{i}_moz_flag"] = i <= stepValue - 1
         @designs.flags["design_bg_color#{i}_webkit_flag"] = i <= stepValue - 1
-      @_cssStyle.text(@_cssCode.text())
+      @_cssDesignToolStyle.text(@_cssDesignToolCode.text())
       @saveDesign()
     )
 
   # デザイン変更を反映
   applyDesignStyleChange: (designKeyName, value, doStyleSave = true) ->
-    cssCodeElement = $('.' + designKeyName + '_value', @_cssCode)
+    cssCodeElement = $('.' + designKeyName + '_value', @_cssDesignToolCode)
     cssCodeElement.html(value)
     @applyDesignChange(doStyleSave)
 
   # グラデーションデザイン変更を反映
   applyGradientStyleChange: (index, designKeyName, value, doStyleSave = true) ->
-    position = $('.design_bg_color' + (index + 2) + '_position_value', @_cssCode)
+    position = $('.design_bg_color' + (index + 2) + '_position_value', @_cssDesignToolCode)
     position.html(("0" + value).slice(-2))
     @applyDesignStyleChange(designKeyName, value, doStyleSave)
 
@@ -131,7 +131,7 @@ cssItemBaseWorktableExtend =
       315: 'left top, right bottom'
     }
     @designs.values["#{designKeyName}_value_webkit_value"] = webkitDeg[value]
-    webkitValueElement = $('.' + designKeyName + '_value_webkit_value', @_cssCode)
+    webkitValueElement = $('.' + designKeyName + '_value_webkit_value', @_cssDesignToolCode)
     webkitValueElement.html(webkitDeg[value])
     @applyDesignStyleChange(designKeyName, value, doStyleSave)
 
@@ -141,9 +141,9 @@ cssItemBaseWorktableExtend =
     for i in [2 .. 4]
       className = 'design_bg_color' + i
       mozFlag = $("." + className + "_moz_flag", @_cssRoot)
-      mozCache = $("." + className + "_moz_cache", @_cssRoot)
+      mozCache = $("." + className + "_moz_cache", @_cssDesignToolCache)
       webkitFlag = $("." + className + "_webkit_flag", @_cssRoot)
-      webkitCache = $("." + className + "_webkit_cache", @_cssRoot)
+      webkitCache = $("." + className + "_webkit_cache", @_cssDesignToolCache)
       if i > stepValue - 1
         mh = mozFlag.html()
         if mh.length > 0
@@ -159,6 +159,6 @@ cssItemBaseWorktableExtend =
     @applyDesignChange(doStyleSave)
 
   applyColorChangeByPicker: (designKeyName, value, doStyleSave = true) ->
-    codeEmt = $(".#{designKeyName}_value", @_cssCode)
+    codeEmt = $(".#{designKeyName}_value", @_cssDesignToolCode)
     codeEmt.text(value)
     @applyDesignChange(doStyleSave)

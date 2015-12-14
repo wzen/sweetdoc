@@ -207,7 +207,7 @@ itemBaseWorktableExtend =
       )
 
       _existFocusSetItem = ->
-        objs = Common.itemInstancesInPage(pn)
+        objs = Common.itemInstancesInPage()
         focusExist = false
         for obj in objs
           if obj.firstFocus? && obj.firstFocus
