@@ -125,32 +125,35 @@ class WorktableCommon
     PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex))
 
   # モードチェンジ
-  # @param [Mode] mode 画面モード
-  @changeMode = (mode) ->
-    if mode == Constant.Mode.NOT_SELECT
+  # @param [Mode] afterMode 変更後画面モード
+  @changeMode = (afterMode) ->
+    if afterMode == Constant.Mode.NOT_SELECT
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
       window.scrollInsideWrapper.removeClass('edit_mode')
-    else if mode == Constant.Mode.DRAW
+    else if afterMode == Constant.Mode.DRAW
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInsideWrapper.removeClass('edit_mode')
-    else if mode == Constant.Mode.EDIT
+    else if afterMode == Constant.Mode.EDIT
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
       window.scrollContents.find('.item.draggable').addClass('edit_mode')
       window.scrollInsideWrapper.addClass('edit_mode')
       # ヘッダーをEditに
       Navbar.setModeEdit()
-    else if mode == Constant.Mode.OPTION
+    else if afterMode == Constant.Mode.OPTION
       $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInsideWrapper.removeClass('edit_mode')
 
     # 変更前のモードを保存
     window.beforeMode = window.mode
-    window.mode = mode
+    window.mode = afterMode
 
     # アイテムのイベント呼び出し
-
+    items = Common.itemInstancesInPage()
+    for item in items
+      if item.changeMode?
+        item.changeMode(afterMode)
 
   # モードを一つ前に戻す
   @putbackMode = ->

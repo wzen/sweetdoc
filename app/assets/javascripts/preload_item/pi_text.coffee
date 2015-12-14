@@ -1,11 +1,13 @@
 class PreloadItemText extends CssItemBase
   @NAME_PREFIX = "text"
   @ITEM_ACCESS_TOKEN = 'PreloadItemText'
+  @INPUT_CLASSNAME = 'pi_input_text'
+  @CONTENTS_CLASSNAME = 'pi_contents_text'
 
   @actionProperties =
   {
     modifiables: {
-      fontType: {
+      fontFamily: {
         name: "Select Font"
         type: 'select'
         ja: {
@@ -118,13 +120,12 @@ class PreloadItemText extends CssItemBase
     }
   }
 
-  @INPUT_CLASSNAME = 'pi_input_text'
-
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
     super(cood)
-    @fontType = 'Times New Roman'
+    @fontFamily = 'Times New Roman'
+    @fontSize = null
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
     @_editing = true
@@ -145,14 +146,20 @@ class PreloadItemText extends CssItemBase
       """
     else
       return """
-        <div class="css_item_base context_base">#{@inputText}</div>
+        <div class="css_item_base context_base"><div class='#{@constructor.CONTENTS_CLASSNAME}'>#{@inputText}</div></div>
       """
 
   itemDraw: (show) ->
     super(show)
 
+  changeMode: (mode) ->
+    # 表示をinputに
+    @editing = true
+    @reDraw()
+
   didCallEndDraw: ->
     super()
+    @fontSize = _fontSize.call(@)
     # 編集モード
     WorktableCommon.changeMode(Constant.Mode.EDIT)
     # テキストイベント設定
@@ -163,6 +170,24 @@ class PreloadItemText extends CssItemBase
     )
     # テキストを選択状態に
     input.focus()
+
+  # CSSスタイル
+  # @abstract
+  cssStyle: ->
+    return """
+      ##{@id} .#{@constructor.INPUT_CLASSNAME}, ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
+        font-family: #{@fontFamily};
+        font-size: #{@fontSize}px;
+      }
+    """
+
+  _fontSize = ->
+    if @itemSize.w > @itemSize.h
+      # 高さに合わせる
+      return @itemSize.h
+    else
+      # 幅に合わせる
+      return @itemSize.w
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
 

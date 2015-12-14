@@ -105,12 +105,18 @@ CssItemBase = (function(superClass) {
   };
 
   CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
+    var addStyle;
     this.reDraw();
     this._cssStyle.text(this._cssCode.text());
+    if ((addStyle = this.cssStyle()) != null) {
+      this._cssRoot.append(addStyle.wrap("<style type='text/css'></style>"));
+    }
     if (doStyleSave) {
       return this.saveDesign();
     }
   };
+
+  CssItemBase.prototype.cssStyle = function() {};
 
   CssItemBase.prototype.cssAnimationKeyframe = function() {
     return null;

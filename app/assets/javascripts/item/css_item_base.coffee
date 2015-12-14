@@ -93,8 +93,15 @@ class CssItemBase extends ItemBase
   applyDesignChange: (doStyleSave) ->
     @reDraw()
     @_cssStyle.text(@_cssCode.text())
+    if (addStyle = @cssStyle())?
+      @_cssRoot.append(addStyle.wrap("<style type='text/css'></style>"))
+
     if doStyleSave
       @saveDesign()
+
+  # CSSスタイル
+  # @abstract
+  cssStyle: ->
 
   # アニメーションKeyframe
   # @abstract

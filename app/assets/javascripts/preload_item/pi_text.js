@@ -4,15 +4,21 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
+  var _fontSize;
+
   extend(PreloadItemText, superClass);
 
   PreloadItemText.NAME_PREFIX = "text";
 
   PreloadItemText.ITEM_ACCESS_TOKEN = 'PreloadItemText';
 
+  PreloadItemText.INPUT_CLASSNAME = 'pi_input_text';
+
+  PreloadItemText.CONTENTS_CLASSNAME = 'pi_contents_text';
+
   PreloadItemText.actionProperties = {
     modifiables: {
-      fontType: {
+      fontFamily: {
         name: "Select Font",
         type: 'select',
         ja: {
@@ -23,14 +29,13 @@ PreloadItemText = (function(superClass) {
     }
   };
 
-  PreloadItemText.INPUT_CLASSNAME = 'pi_input_text';
-
   function PreloadItemText(cood) {
     if (cood == null) {
       cood = null;
     }
     PreloadItemText.__super__.constructor.call(this, cood);
-    this.fontType = 'Times New Roman';
+    this.fontFamily = 'Times New Roman';
+    this.fontSize = null;
     if (cood !== null) {
       this._moveLoc = {
         x: cood.x,
@@ -52,7 +57,7 @@ PreloadItemText = (function(superClass) {
     if (this.editing) {
       return "<div class=\"css_item_base context_base\"><input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "'></div>";
     } else {
-      return "<div class=\"css_item_base context_base\">" + this.inputText + "</div>";
+      return "<div class=\"css_item_base context_base\"><div class='" + this.constructor.CONTENTS_CLASSNAME + "'>" + this.inputText + "</div></div>";
     }
   };
 
@@ -60,9 +65,15 @@ PreloadItemText = (function(superClass) {
     return PreloadItemText.__super__.itemDraw.call(this, show);
   };
 
+  PreloadItemText.prototype.changeMode = function(mode) {
+    this.editing = true;
+    return this.reDraw();
+  };
+
   PreloadItemText.prototype.didCallEndDraw = function() {
     var input;
     PreloadItemText.__super__.didCallEndDraw.call(this);
+    this.fontSize = _fontSize.call(this);
     WorktableCommon.changeMode(Constant.Mode.EDIT);
     input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
     input.off('change').on('change', (function(_this) {
@@ -72,6 +83,18 @@ PreloadItemText = (function(superClass) {
       };
     })(this));
     return input.focus();
+  };
+
+  PreloadItemText.prototype.cssStyle = function() {
+    return "#" + this.id + " ." + this.constructor.INPUT_CLASSNAME + ", #" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  font-family: " + this.fontFamily + ";\n  font-size: " + this.fontSize + "px;\n}";
+  };
+
+  _fontSize = function() {
+    if (this.itemSize.w > this.itemSize.h) {
+      return this.itemSize.h;
+    } else {
+      return this.itemSize.w;
+    }
   };
 
   return PreloadItemText;
