@@ -23,6 +23,8 @@ PreloadItemText = (function(superClass) {
     }
   };
 
+  PreloadItemText.INPUT_CLASSNAME = 'pi_input_text';
+
   function PreloadItemText(cood) {
     if (cood == null) {
       cood = null;
@@ -35,7 +37,8 @@ PreloadItemText = (function(superClass) {
         y: cood.y
       };
     }
-    this.visible = true;
+    this._editing = true;
+    this.inputText = 'Input text';
     if (window.isWorkTable) {
       this.constructor.include(WorkTableCommonInclude);
     }
@@ -46,11 +49,29 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.cssItemHtml = function() {
-    return "<div type=\"button\" class=\"css_item_base context_base\"><div></div></div>";
+    if (this.editing) {
+      return "<div class=\"css_item_base context_base\"><input type='text' class='" + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "'></div>";
+    } else {
+      return "<div class=\"css_item_base context_base\">" + this.inputText + "</div>";
+    }
   };
 
   PreloadItemText.prototype.itemDraw = function(show) {
     return PreloadItemText.__super__.itemDraw.call(this, show);
+  };
+
+  PreloadItemText.prototype.didCallEndDraw = function() {
+    var input;
+    PreloadItemText.__super__.didCallEndDraw.call(this);
+    WorktableCommon.changeMode(Constant.Mode.EDIT);
+    input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
+    input.off('change').on('change', (function(_this) {
+      return function(e) {
+        _this.editing = true;
+        return _this.reDraw();
+      };
+    })(this));
+    return input.focus();
   };
 
   return PreloadItemText;

@@ -21,9 +21,19 @@ itemBaseWorktableExtend =
       if @setupDragAndResizeEvents?
         # ドラッグ & リサイズイベント設定
         @setupDragAndResizeEvents()
+      @didCallEndDraw()
       if callback?
         callback()
     )
+
+  # モード変更時処理
+  # @abstract
+  changeMode: (changeMode) ->
+
+  # ドラッグ描画終了時処理
+  didCallEndDraw: ->
+    # フォーカス設定
+    @firstFocus = Common.firstFocusItemObj() == null
 
   # ドラッグ描画(枠)
   # @param [Array] cood 座標
@@ -197,11 +207,10 @@ itemBaseWorktableExtend =
       )
 
       _existFocusSetItem = ->
+        objs = Common.itemInstancesInPage(pn)
         focusExist = false
-        instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
-        for k, instance of instances
-          obj = window.instanceMap[instance.value.id]
-          if obj? && obj.firstFocus? && obj.firstFocus
+        for obj in objs
+          if obj.firstFocus? && obj.firstFocus
             focusExist = true
         return focusExist
 

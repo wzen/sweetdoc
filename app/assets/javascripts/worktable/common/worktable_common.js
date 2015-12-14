@@ -70,9 +70,6 @@ WorktableCommon = (function() {
       }
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0);
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0);
-      if (instance instanceof CssItemBase) {
-        instance.makeCss();
-      }
       if (instance.drawAndMakeConfigs != null) {
         instance.drawAndMakeConfigs();
       }
@@ -192,22 +189,12 @@ WorktableCommon = (function() {
     }
     if (window.runningPreview) {
       return this.stopAllEventPreview(function() {
-        var id, instances, item, k, obj, results;
-        instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn));
+        var item, items, l, len, results;
+        items = Common.itemInstancesInPage(pn);
         results = [];
-        for (k in instances) {
-          obj = instances[k];
-          id = obj.value.id;
-          if (obj.value.itemToken != null) {
-            item = Common.getInstanceFromMap(false, id, obj.value.itemToken);
-            if (item instanceof ItemBase) {
-              results.push(item.reDrawWithEventBefore());
-            } else {
-              results.push(void 0);
-            }
-          } else {
-            results.push(void 0);
-          }
+        for (l = 0, len = items.length; l < len; l++) {
+          item = items[l];
+          results.push(item.reDrawWithEventBefore());
         }
         return results;
       });
@@ -452,28 +439,13 @@ WorktableCommon = (function() {
       pageNum = PageValue.getPageNum();
     }
     return Common.loadJsFromInstancePageValue(function() {
-      var classMapId, event, id, isCommon, k, obj, pageValues;
-      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
-      for (k in pageValues) {
-        obj = pageValues[k];
-        id = obj.value.id;
-        classMapId = null;
-        if (obj.value.itemToken != null) {
-          isCommon = false;
-          classMapId = obj.value.itemToken;
-        } else {
-          isCommon = true;
-          classMapId = obj.value.eventId;
-        }
-        event = Common.getInstanceFromMap(isCommon, id, classMapId);
-        if (event instanceof ItemBase) {
-          event.setMiniumObject(obj.value);
-          if (event instanceof CssItemBase) {
-            event.makeCss();
-          }
-          if (event.drawAndMakeConfigs != null) {
-            event.drawAndMakeConfigs();
-          }
+      var item, items, l, len;
+      items = Common.itemInstancesInPage(pageNum);
+      for (l = 0, len = items.length; l < len; l++) {
+        item = items[l];
+        item.setMiniumObject(obj.value);
+        if (item.drawAndMakeConfigs != null) {
+          item.drawAndMakeConfigs();
         }
       }
       if (callback != null) {

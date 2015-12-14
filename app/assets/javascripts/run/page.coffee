@@ -324,10 +324,8 @@ class Page
   # アイテム状態の初期化
   initItemState: (callback = null) ->
     waitDraw = false
-    instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
-    for key, instance of instances
-      value = instance.value
-      obj = Common.getInstanceFromMap(false, value.id, value.itemToken)
+    objs = Common.itemInstancesInPage()
+    for obj in objs
       if obj.visible
         waitDraw = true
         # 初期表示

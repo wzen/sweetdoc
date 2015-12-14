@@ -267,18 +267,45 @@ Common = (function() {
     return $("." + sectionClass, root).remove();
   };
 
-  Common.firstFocusItemObj = function(pn) {
-    var instance, instances, key, o, obj, value;
+  Common.instancesInPage = function(pn) {
+    var classMapId, instance, instances, key, obj, ret, value;
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    obj = null;
+    ret = [];
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn));
     for (key in instances) {
       instance = instances[key];
       value = instance.value;
-      o = window.instanceMap[value.id];
-      if (o instanceof ItemBase && o.visible && o.firstFocus) {
+      classMapId = value.itemToken;
+      if (classMapId == null) {
+        classMapId = value.eventId;
+      }
+      obj = Common.getInstanceFromMap(value.eventId != null, value.id, classMapId);
+      ret.push(obj);
+    }
+    return ret;
+  };
+
+  Common.itemInstancesInPage = function(pn) {
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    return $.grep(this.instancesInPage(pn), function(n) {
+      return n instanceof ItemBase;
+    });
+  };
+
+  Common.firstFocusItemObj = function(pn) {
+    var j, len, o, obj, objs;
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    objs = this.itemInstancesInPage(pn);
+    obj = null;
+    for (j = 0, len = objs.length; j < len; j++) {
+      o = objs[j];
+      if (o.visible && o.firstFocus) {
         obj = o;
         return obj;
       }

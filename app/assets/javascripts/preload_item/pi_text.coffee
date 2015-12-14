@@ -118,6 +118,8 @@ class PreloadItemText extends CssItemBase
     }
   }
 
+  @INPUT_CLASSNAME = 'pi_input_text'
+
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
@@ -125,7 +127,8 @@ class PreloadItemText extends CssItemBase
     @fontType = 'Times New Roman'
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
-    @visible = true
+    @_editing = true
+    @inputText = 'Input text'
     if window.isWorkTable
       @constructor.include WorkTableCommonInclude
 
@@ -136,13 +139,30 @@ class PreloadItemText extends CssItemBase
 
   # HTML要素
   cssItemHtml: ->
-    return """
-      <div type="button" class="css_item_base context_base"><div></div></div>
-    """
+    if @editing
+      return """
+        <div class="css_item_base context_base"><input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}'></div>
+      """
+    else
+      return """
+        <div class="css_item_base context_base">#{@inputText}</div>
+      """
 
   itemDraw: (show) ->
     super(show)
 
+  didCallEndDraw: ->
+    super()
+    # 編集モード
+    WorktableCommon.changeMode(Constant.Mode.EDIT)
+    # テキストイベント設定
+    input = @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first")
+    input.off('change').on('change', (e) =>
+      @editing = true
+      @reDraw()
+    )
+    # テキストを選択状態に
+    input.focus()
 
 Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
 

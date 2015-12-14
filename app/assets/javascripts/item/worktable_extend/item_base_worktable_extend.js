@@ -22,11 +22,16 @@ itemBaseWorktableExtend = {
         if (_this.setupDragAndResizeEvents != null) {
           _this.setupDragAndResizeEvents();
         }
+        _this.didCallEndDraw();
         if (callback != null) {
           return callback();
         }
       };
     })(this));
+  },
+  changeMode: function(changeMode) {},
+  didCallEndDraw: function() {
+    return this.firstFocus = Common.firstFocusItemObj() === null;
   },
   draw: function(cood) {
     if (this.itemSize !== null) {
@@ -234,13 +239,12 @@ itemBaseWorktableExtend = {
           return _this.setItemPropToPageValue('name', _this.name);
         });
         _existFocusSetItem = function() {
-          var focusExist, instance, instances, k, obj;
+          var focusExist, j, len, obj, objs;
+          objs = Common.itemInstancesInPage(pn);
           focusExist = false;
-          instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
-          for (k in instances) {
-            instance = instances[k];
-            obj = window.instanceMap[instance.value.id];
-            if ((obj != null) && (obj.firstFocus != null) && obj.firstFocus) {
+          for (j = 0, len = objs.length; j < len; j++) {
+            obj = objs[j];
+            if ((obj.firstFocus != null) && obj.firstFocus) {
               focusExist = true;
             }
           }

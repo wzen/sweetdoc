@@ -542,7 +542,6 @@ class EventConfig
     teItemSelects = $('#event-config .te_item_select')
     teItemSelect = teItemSelects[0]
     selectOptions = ''
-    #items = $("##{PageValue.Key.IS_ROOT} .#{PageValue.Key.INSTANCE_PREFIX} .#{PageValue.Key.pageRoot()}")
     items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
     for k, item of items
       id = item.value.id

@@ -367,16 +367,14 @@ Page = (function() {
   };
 
   Page.prototype.initItemState = function(callback) {
-    var instance, instances, key, obj, value, waitDraw;
+    var j, len, obj, objs, waitDraw;
     if (callback == null) {
       callback = null;
     }
     waitDraw = false;
-    instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
-    for (key in instances) {
-      instance = instances[key];
-      value = instance.value;
-      obj = Common.getInstanceFromMap(false, value.id, value.itemToken);
+    objs = Common.itemInstancesInPage();
+    for (j = 0, len = objs.length; j < len; j++) {
+      obj = objs[j];
       if (obj.visible) {
         waitDraw = true;
         obj.reDraw(true, (function(_this) {

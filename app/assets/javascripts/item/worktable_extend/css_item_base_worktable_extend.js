@@ -16,6 +16,21 @@ cssItemBaseWorktableExtend = {
     this.makeCss(true);
     return this.drawAndMakeConfigsAndWritePageValue(show, callback);
   },
+  drawAndMakeConfigs: function(show, callback) {
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    this.makeCss();
+    this.reDraw(show);
+    return ConfigMenu.getDesignConfig(this, function() {
+      if (callback != null) {
+        return callback();
+      }
+    });
+  },
   setupDesignToolOptionMenu: function() {
     var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, self;
     self = this;

@@ -207,14 +207,31 @@ class Common
     sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', pageNum)
     $(".#{sectionClass}", root).remove()
 
-  # 最初にフォーカスするアイテムオブジェクトを取得
-  @firstFocusItemObj = (pn = PageValue.getPageNum()) ->
-    obj = null
+  # ページ内のインスタンスを取得
+  @instancesInPage = (pn = PageValue.getPageNum()) ->
+    ret = []
     instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn))
     for key, instance of instances
       value = instance.value
-      o = window.instanceMap[value.id]
-      if o instanceof ItemBase && o.visible && o.firstFocus
+      classMapId = value.itemToken
+      if !classMapId?
+        classMapId = value.eventId
+      obj = Common.getInstanceFromMap(value.eventId?, value.id, classMapId)
+      ret.push(obj)
+    return ret
+
+  # ページ内のアイテムインスタンスを取得
+  @itemInstancesInPage = (pn = PageValue.getPageNum()) ->
+    return $.grep(@instancesInPage(pn), (n) ->
+      n instanceof ItemBase
+    )
+
+  # 最初にフォーカスするアイテムオブジェクトを取得
+  @firstFocusItemObj = (pn = PageValue.getPageNum()) ->
+    objs = @itemInstancesInPage(pn)
+    obj = null
+    for o in objs
+      if o.visible && o.firstFocus
         obj = o
         return obj
     return obj

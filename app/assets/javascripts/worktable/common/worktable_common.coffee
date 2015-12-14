@@ -57,9 +57,6 @@ class WorktableCommon
       # 画面中央に貼り付け
       instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0)
       instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0)
-      if instance instanceof CssItemBase
-        # CSSを作成する
-        instance.makeCss()
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
       instance.setItemAllPropToPageValue()
@@ -152,6 +149,9 @@ class WorktableCommon
     window.beforeMode = window.mode
     window.mode = mode
 
+    # アイテムのイベント呼び出し
+
+
   # モードを一つ前に戻す
   @putbackMode = ->
     if window.beforeMode?
@@ -164,14 +164,10 @@ class WorktableCommon
     if window.runningPreview
       # イベント停止
       @stopAllEventPreview( ->
-        instances = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pn))
-        for k, obj of instances
-          id = obj.value.id
-          if obj.value.itemToken?
-            item = Common.getInstanceFromMap(false, id, obj.value.itemToken)
-            if item instanceof ItemBase
-              # イベント適用前の状態で描画
-              item.reDrawWithEventBefore()
+        items = Common.itemInstancesInPage(pn)
+        for item in items
+          # イベント適用前の状態で描画
+          item.reDrawWithEventBefore()
       )
 
   # 非表示をクリア
@@ -400,28 +396,16 @@ class WorktableCommon
       Timeline.refreshAllTimeline()
     )
 
-  # イベントPageValueから全てのアイテムを描画
+  # PageValueから全てのインスタンスを作成
   # @param [Function] callback コールバック
   # @param [Integer] pageNum 描画するPageValueのページ番号
   @createAllInstanceAndDrawFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     Common.loadJsFromInstancePageValue( ->
-      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
-      for k, obj of pageValues
-        id = obj.value.id
-        classMapId = null
-        if obj.value.itemToken?
-          isCommon = false
-          classMapId = obj.value.itemToken
-        else
-          isCommon = true
-          classMapId = obj.value.eventId
-        event = Common.getInstanceFromMap(isCommon, id, classMapId)
-        if event instanceof ItemBase
-          event.setMiniumObject(obj.value)
-          if event instanceof CssItemBase
-            event.makeCss()
-          if event.drawAndMakeConfigs?
-            event.drawAndMakeConfigs()
+      items = Common.itemInstancesInPage(pageNum)
+      for item in items
+        item.setMiniumObject(obj.value)
+        if item.drawAndMakeConfigs?
+          item.drawAndMakeConfigs()
 
       # コールバック
       if callback?

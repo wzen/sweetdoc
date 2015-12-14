@@ -108,8 +108,9 @@ PreloadItemImage = (function(superClass) {
           return _this.addContentsToScrollInside(contents, callback);
         } else {
           contents = "<div class='no_image'><div class='center_image put_center'></div></div>";
+          _this.addContentsToScrollInside(contents, callback);
           if (showModal) {
-            Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, function(modalEmt, params, callback) {
+            return Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, function(modalEmt, params, callback) {
               if (callback == null) {
                 callback = null;
               }
@@ -127,7 +128,6 @@ PreloadItemImage = (function(superClass) {
               }
             });
           }
-          return _this.addContentsToScrollInside(contents, callback);
         }
       };
     })(this));

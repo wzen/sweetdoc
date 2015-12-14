@@ -87,6 +87,7 @@ class PreloadItemImage extends ItemBase
         contents = """
           <div class='no_image'><div class='center_image put_center'></div></div>
         """
+        @addContentsToScrollInside(contents, callback)
         if showModal
           # 画像アップロードモーダル表示
           Common.showModalView(Constant.ModalViewType.ITEM_IMAGE_UPLOAD, true, (modalEmt, params, callback = null) =>
@@ -102,7 +103,6 @@ class PreloadItemImage extends ItemBase
             if callback?
               callback()
           )
-        @addContentsToScrollInside(contents, callback)
     )
 
   _makeImageObjectIfNeed = (callback) ->
