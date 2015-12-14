@@ -267,7 +267,7 @@ Page = (function() {
     }
     this.initChapterEvent();
     this.resetAllChapters();
-    return this.initItemState((function(_this) {
+    return this.initItemDrawingInPage((function(_this) {
       return function() {
         _this.initFocus(true);
         RunCommon.setChapterMax(_this.getForkChapterList().length);
@@ -366,31 +366,29 @@ Page = (function() {
     }
   };
 
-  Page.prototype.initItemState = function(callback) {
+  Page.prototype.initItemDrawingInPage = function(callback) {
     var j, len, obj, objs, waitDraw;
     if (callback == null) {
       callback = null;
     }
     waitDraw = false;
-    objs = Common.itemInstancesInPage();
+    objs = Common.itemInstancesInPage(PageValue.getPageNum(), true, true);
     for (j = 0, len = objs.length; j < len; j++) {
       obj = objs[j];
-      if (obj.visible) {
-        waitDraw = true;
-        obj.reDraw(true, (function(_this) {
-          return function() {
-            if (obj.firstFocus) {
-              window.disabledEventHandler = true;
-              Common.focusToTarget(obj.getJQueryElement(), function() {
-                return window.disabledEventHandler = false;
-              }, true);
-            }
-            if (callback != null) {
-              return callback();
-            }
-          };
-        })(this));
-      }
+      waitDraw = true;
+      obj.reDrawIfItemNotExist(obj.visible, (function(_this) {
+        return function() {
+          if (obj.firstFocus) {
+            window.disabledEventHandler = true;
+            Common.focusToTarget(obj.getJQueryElement(), function() {
+              return window.disabledEventHandler = false;
+            }, true);
+          }
+          if (callback != null) {
+            return callback();
+          }
+        };
+      })(this));
     }
     if (!waitDraw) {
       if (callback != null) {

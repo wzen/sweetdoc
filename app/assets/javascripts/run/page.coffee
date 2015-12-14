@@ -251,7 +251,7 @@ class Page
     # リセット
     @resetAllChapters()
     # アイテム状態初期化
-    @initItemState( =>
+    @initItemDrawingInPage( =>
       # フォーカス
       @initFocus(true)
       # チャプター最大値設定
@@ -321,24 +321,25 @@ class Page
             chapter.focusToActorIfNeed(true)
             flg = true
 
-  # アイテム状態の初期化
-  initItemState: (callback = null) ->
+  # アイテム表示の初期化
+  initItemDrawingInPage: (callback = null) ->
     waitDraw = false
-    objs = Common.itemInstancesInPage()
+    # アイテムインスタンス取得(無い場合は作成 & 初期化もする)
+    objs = Common.itemInstancesInPage(PageValue.getPageNum(), true, true)
     for obj in objs
-      if obj.visible
-        waitDraw = true
-        # 初期表示
-        obj.reDraw(true, =>
-          if obj.firstFocus
-            # 初期フォーカス
-            window.disabledEventHandler = true
-            Common.focusToTarget(obj.getJQueryElement(), ->
-              window.disabledEventHandler = false
-            , true)
-          if callback?
-            callback()
-        )
+      #if obj.visible
+      waitDraw = true
+      # 初期表示
+      obj.reDrawIfItemNotExist(obj.visible, =>
+        if obj.firstFocus
+          # 初期フォーカス
+          window.disabledEventHandler = true
+          Common.focusToTarget(obj.getJQueryElement(), ->
+            window.disabledEventHandler = false
+          , true)
+        if callback?
+          callback()
+      )
     if !waitDraw
       if callback?
         callback()

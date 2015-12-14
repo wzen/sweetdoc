@@ -160,6 +160,18 @@ ItemBase = (function(superClass) {
     })(this));
   };
 
+  ItemBase.prototype.reDrawIfItemNotExist = function(show, callback) {
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    if (this.getJQueryElement().length === 0) {
+      return this.reDraw(show, callback);
+    }
+  };
+
   ItemBase.prototype.clearDraw = function() {
     return this.getJQueryElement().remove();
   };

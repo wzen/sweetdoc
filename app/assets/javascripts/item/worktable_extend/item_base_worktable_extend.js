@@ -510,8 +510,8 @@ itemBaseWorktableExtend = {
           results.push(this.settingModifiableColor(designConfigRoot, varName));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
           results.push(this.settingModifiableSelectFile(designConfigRoot, varName));
-        } else if (v.type === Constant.ItemDesignOptionType.SELECT) {
-          results.push(this.settingModifiableSelect(designConfigRoot, varName, value.options));
+        } else if (value.type === Constant.ItemDesignOptionType.SELECT) {
+          results.push(this.settingModifiableSelect(designConfigRoot, varName, value['options[]']));
         } else {
           results.push(void 0);
         }
@@ -620,8 +620,8 @@ itemBaseWorktableExtend = {
       selectEmt.val(_joinArray.call(this, defaultValue));
     }
     return selectEmt.off('change').on('change', (function(_this) {
-      return function() {
-        _this[varName] = _splitArray.call(_this, $(_this).val());
+      return function(e) {
+        _this[varName] = _splitArray.call(_this, $(e.target).val());
         return _this.applyDesignChange();
       };
     })(this));

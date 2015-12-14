@@ -184,6 +184,9 @@ div.scroll_background, div.scroll_inside {
   #sidebar-wrapper {
     height: 100%;
   }
+  .sidebar-config {
+    overflow: hidden;
+  }
   .config {
     margin: 0 0 30px 0;
     width: 100%;

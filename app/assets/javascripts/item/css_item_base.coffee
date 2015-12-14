@@ -22,7 +22,7 @@ class CssItemBase extends ItemBase
   # initEvent前の処理
   initEventPrepare: ->
     # デザインCSS & アニメーションCSS作成
-    @makeCss()
+    #@makeCss()
     @appendAnimationCssIfNeeded()
 
   # HTML要素
@@ -58,7 +58,7 @@ class CssItemBase extends ItemBase
     return "css_anim_style"
 
   #CSSを設定
-  makeCss: (fromTemp = false) ->
+  makeCss: (forceUpdate = false) ->
     _applyCss = (designs) ->
       # CSS用のDiv作成
       if designs?
@@ -79,9 +79,15 @@ class CssItemBase extends ItemBase
       temp.find('.design_item_obj_id').html(@id)
       temp.appendTo(window.cssCode)
 
-    # 上書きするため一旦削除
-    $("#{@getCssRootElementId()}").remove()
-    if !fromTemp && @designs?
+    rootEmt = $("#{@getCssRootElementId()}")
+    if rootEmt? && rootEmt.length > 0
+      if forceUpdate
+        # 上書きするため一旦削除
+        $("#{@getCssRootElementId()}").remove()
+      else
+        return
+
+    if @designs?
       # 保存しているデザインで初期化
       _applyCss.call(@, @designs)
     else
@@ -94,9 +100,20 @@ class CssItemBase extends ItemBase
     @_cssDesignToolStyle = $(".css_design_tool_style", @_cssRoot)
     @applyDesignChange(false)
 
+  # 再描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
+  # @param [Function] callback コールバック
+  reDraw: (show = true, callback = null) ->
+    super(show, =>
+      # CSS作成
+      @makeCss()
+      if callback?
+        callback()
+    )
+
   # デザイン反映
   applyDesignChange: (doStyleSave) ->
-    @reDraw()
+    #@reDraw()
     @_cssDesignToolStyle.text(@_cssDesignToolCode.text())
     if (addStyle = @cssStyle())?
       @_cssRoot.append($("<style type='text/css'>#{addStyle}</style>"))

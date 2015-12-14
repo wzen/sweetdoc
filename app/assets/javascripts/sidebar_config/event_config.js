@@ -455,7 +455,7 @@ EventConfig = (function() {
         } else if (v.type === Constant.ItemDesignOptionType.COLOR) {
           results.push(this.settingModifiableColor(varName, defaultValue));
         } else if (v.type === Constant.ItemDesignOptionType.SELECT) {
-          results.push(this.settingModifiableSelect(varName, defaultValue, v.options));
+          results.push(this.settingModifiableSelect(varName, defaultValue, v['options[]']));
         } else {
           results.push(void 0);
         }
@@ -567,11 +567,11 @@ EventConfig = (function() {
     }
     selectEmt.val(_joinArray.call(this, defaultValue));
     return selectEmt.off('change').on('change', (function(_this) {
-      return function() {
+      return function(e) {
         if (!_this.hasModifiableVar(varName)) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(_this, $(_this).val());
+        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(_this, $(e.target).val());
       };
     })(this));
   };

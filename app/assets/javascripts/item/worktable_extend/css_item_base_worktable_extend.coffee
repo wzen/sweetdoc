@@ -9,7 +9,7 @@ cssItemBaseWorktableExtend =
     @itemSize.x += scrollContents.scrollLeft()
     @itemSize.y += scrollContents.scrollTop()
     @applyDefaultDesign()
-    @makeCss(true)
+    #@makeCss()
     @drawAndMakeConfigsAndWritePageValue(show, callback)
 
   # 描画&コンフィグ作成
@@ -17,7 +17,7 @@ cssItemBaseWorktableExtend =
   # @return [Boolean] 処理結果
   drawAndMakeConfigs: (show = true, callback = null) ->
     # CSS作成
-    @makeCss()
+    #@makeCss()
     # ボタン設置
     @reDraw(show)
     # コンフィグ作成

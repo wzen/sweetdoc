@@ -132,6 +132,13 @@ class ItemBase extends ItemEventBase
           callback()
     )
 
+  # 画面表示がない場合描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
+  # @param [Function] callback コールバック
+  reDrawIfItemNotExist: (show = true, callback = null) ->
+    if @getJQueryElement().length == 0
+      @reDraw(show, callback)
+
   # 描画削除
   clearDraw: ->
     @getJQueryElement().remove()

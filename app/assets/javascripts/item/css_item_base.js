@@ -29,7 +29,6 @@ CssItemBase = (function(superClass) {
   }
 
   CssItemBase.prototype.initEventPrepare = function() {
-    this.makeCss();
     return this.appendAnimationCssIfNeeded();
   };
 
@@ -62,10 +61,10 @@ CssItemBase = (function(superClass) {
     return "css_anim_style";
   };
 
-  CssItemBase.prototype.makeCss = function(fromTemp) {
-    var _applyCss;
-    if (fromTemp == null) {
-      fromTemp = false;
+  CssItemBase.prototype.makeCss = function(forceUpdate) {
+    var _applyCss, rootEmt;
+    if (forceUpdate == null) {
+      forceUpdate = false;
     }
     _applyCss = function(designs) {
       var k, ref, ref1, temp, v;
@@ -95,8 +94,15 @@ CssItemBase = (function(superClass) {
       temp.find('.design_item_obj_id').html(this.id);
       return temp.appendTo(window.cssCode);
     };
-    $("" + (this.getCssRootElementId())).remove();
-    if (!fromTemp && (this.designs != null)) {
+    rootEmt = $("" + (this.getCssRootElementId()));
+    if ((rootEmt != null) && rootEmt.length > 0) {
+      if (forceUpdate) {
+        $("" + (this.getCssRootElementId())).remove();
+      } else {
+        return;
+      }
+    }
+    if (this.designs != null) {
       _applyCss.call(this, this.designs);
     } else {
       _applyCss.call(this, this.constructor.actionProperties.designConfigDefaultValues);
@@ -108,9 +114,25 @@ CssItemBase = (function(superClass) {
     return this.applyDesignChange(false);
   };
 
+  CssItemBase.prototype.reDraw = function(show, callback) {
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    return CssItemBase.__super__.reDraw.call(this, show, (function(_this) {
+      return function() {
+        _this.makeCss();
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
+  };
+
   CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
     var addStyle;
-    this.reDraw();
     this._cssDesignToolStyle.text(this._cssDesignToolCode.text());
     if ((addStyle = this.cssStyle()) != null) {
       this._cssRoot.append($("<style type='text/css'>" + addStyle + "</style>"));

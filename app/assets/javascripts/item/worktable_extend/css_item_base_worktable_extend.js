@@ -13,7 +13,6 @@ cssItemBaseWorktableExtend = {
     this.itemSize.x += scrollContents.scrollLeft();
     this.itemSize.y += scrollContents.scrollTop();
     this.applyDefaultDesign();
-    this.makeCss(true);
     return this.drawAndMakeConfigsAndWritePageValue(show, callback);
   },
   drawAndMakeConfigs: function(show, callback) {
@@ -23,7 +22,6 @@ cssItemBaseWorktableExtend = {
     if (callback == null) {
       callback = null;
     }
-    this.makeCss();
     this.reDraw(show);
     return ConfigMenu.getDesignConfig(this, function() {
       if (callback != null) {

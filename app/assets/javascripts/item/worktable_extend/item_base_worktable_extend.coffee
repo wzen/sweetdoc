@@ -447,8 +447,8 @@ itemBaseWorktableExtend =
           @settingModifiableColor(designConfigRoot, varName)
         else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
           @settingModifiableSelectFile(designConfigRoot, varName)
-        else if v.type == Constant.ItemDesignOptionType.SELECT
-          @settingModifiableSelect(designConfigRoot, varName, value.options)
+        else if value.type == Constant.ItemDesignOptionType.SELECT
+          @settingModifiableSelect(designConfigRoot, varName, value['options[]'])
 
   # 変数編集スライダーの作成
   # @param [Object] configRoot コンフィグルート
@@ -539,8 +539,8 @@ itemBaseWorktableExtend =
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     if defaultValue?
       selectEmt.val(_joinArray.call(@, defaultValue))
-    selectEmt.off('change').on('change', =>
-      @[varName] = _splitArray.call(@, $(@).val())
+    selectEmt.off('change').on('change', (e) =>
+      @[varName] = _splitArray.call(@, $(e.target).val())
       @applyDesignChange()
     )
 

@@ -446,7 +446,7 @@ class EventConfig
         else if v.type == Constant.ItemDesignOptionType.COLOR
           @settingModifiableColor(varName, defaultValue)
         else if v.type == Constant.ItemDesignOptionType.SELECT
-          @settingModifiableSelect(varName, defaultValue, v.options)
+          @settingModifiableSelect(varName, defaultValue, v['options[]'])
 
   # 変数変更値が存在するか
   hasModifiableVar: (varName = null) ->
@@ -530,10 +530,10 @@ class EventConfig
         selectEmt.append("<option value='#{v}'>#{v}</option>")
 
     selectEmt.val(_joinArray.call(@, defaultValue))
-    selectEmt.off('change').on('change', =>
+    selectEmt.off('change').on('change', (e) =>
       if !@hasModifiableVar(varName)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
-      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(@, $(@).val())
+      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(@, $(e.target).val())
     )
 
   # アイテム選択メニューを更新
