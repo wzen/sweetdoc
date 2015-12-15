@@ -89,10 +89,12 @@ en:
     show_chapter_num: "Show Chapter Number"
   message:
     dialog:
-      new_project: "All the contents making will delete."
-      delete_item: "The item will delete."
+      change_project: "Your making contents will delete."
+      last_savetime: "Last saved time:"
+      delete_item: "This item will delete."
       update_gallery: "Upload"
-      delete_node: "The contents (and subtree) will delete."
+      delete_node: "This contents (w/subtree) will delete."
+      delete_project: "This project will delete."
     database:
       item_state:
         save:

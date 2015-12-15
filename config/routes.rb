@@ -5,14 +5,18 @@ Rails.application.routes.draw do
       registrations: 'users/registrations'
   }
 
+  # MyPage
   get 'my_page' => 'my_page#bookmarks'
   get 'my_page/created_contents'
   get 'my_page/created_items'
   get 'my_page/bookmarks'
   get 'my_page/using_items'
 
+  # Worktable
   get 'worktable' => 'worktable#index'
   post 'worktable' => 'worktable#index'
+
+  # Coding
   post 'coding/save_all'
   post 'coding/save_tree'
   post 'coding/update_code'
@@ -24,23 +28,36 @@ Rails.application.routes.draw do
   post 'coding/delete_node'
   get 'coding/item'
   post 'coding/item_preview'
+
+  # Project
   post 'project/create'
+  post 'project/get_project_by_user_pagevalue_id'
   get 'project/list'
+  get 'project/admin_menu'
+  post 'project/reset'
+  post 'project/remove'
+
+  # MotionCheck
   get 'motion_check' => 'motion_check#index'
   post 'motion_check' => 'motion_check#index'
   post 'motion_check/new_window'
-  get 'run/markitup_preview'
-  get 'test_move/hello'
-  get 'parts/button_css_default'
+
+  # PageValueState
   post 'page_value_state/save_state'
   post 'page_value_state/load_state'
   get 'page_value_state/user_pagevalue_last_updated_list'
   get 'page_value_state/user_pagevalue_list_sorted_update'
+
+  # ItemJs
   get 'item_js/index'
   post 'item_js/index'
   get 'item_js_code/hello'
+
+  # Modal
   get 'modal_view/show'
-  post 'test_move/hello'
+
+  # Run
+  get 'run/markitup_preview'
   post 'run/paging'
   post 'run/save_gallery_footprint'
   post 'run/load_common_gallery_footprint'

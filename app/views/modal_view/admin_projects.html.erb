@@ -1,4 +1,36 @@
 <div class="modal-content <%= Const::ModalViewType::ADMIN_PROJECTS %>">
-    <div class="content">
+  <div class="am_scroll_wrapper scroll_x_content">
+    <div class="am_wrapper">
+      <div class="am_list_wrapper">
+        <div class="am_list">
+        </div>
+      </div>
+      <div class="am_input_wrapper">
+        <div class="am_input">
+          <div class="display_project_new_wrapper">
+            <div class="cell_label">
+              <label>Project name:</label>
+            </div>
+            <div>
+              <input name="project_name" class="project_name" type="text" required="required"><br />
+            </div>
+          </div>
+          <div class="display_size_input_wrapper" style="display: none">
+            <div style="display: inline-block">
+              Width:<input class="display_size_input_width" type="number" value="" maxlength="4" style="max-width: 50px">
+            </div>
+            <div style="display: inline-block">
+              Height:<input class="display_size_input_height" type="number" value="" maxlength="4" style="max-width: 50px">
+            </div>
+          </div>
+        </div>
+        <div class="button_wrapper">
+          <div>
+            <span class="update"><button class="update_button" value="Update">Update</button></span>
+            <button class="cancel_button" value="Cancel">Cancel</button>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

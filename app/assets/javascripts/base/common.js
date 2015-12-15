@@ -667,6 +667,21 @@ Common = (function() {
     return ret;
   };
 
+  Common.displayLastUpdateDiffAlmostTime = function(update_at) {
+    var d, lastSaveTime, n;
+    if (update_at == null) {
+      update_at = null;
+    }
+    lastSaveTime = update_at != null ? update_at : PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME);
+    if (lastSaveTime != null) {
+      n = $.now();
+      d = new Date(lastSaveTime);
+      return Common.displayDiffAlmostTime(n, d.getTime());
+    } else {
+      return null;
+    }
+  };
+
   Common.displayLastUpdateTime = function(update_at) {
     var date, diff;
     date = new Date(update_at);

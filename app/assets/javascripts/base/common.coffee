@@ -540,8 +540,17 @@ class Common
       ret = "#{year} #{span} ago"
     if !ret?
       ret = ''
-
     return ret
+
+  # 最終更新日時の時間差を取得
+  @displayLastUpdateDiffAlmostTime = (update_at = null) ->
+    lastSaveTime = if update_at? then update_at else PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME)
+    if lastSaveTime?
+      n = $.now()
+      d = new Date(lastSaveTime)
+      return Common.displayDiffAlmostTime(n, d.getTime())
+    else
+      return null
 
   # 最新更新日時
   @displayLastUpdateTime = (update_at) ->

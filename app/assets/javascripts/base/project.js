@@ -56,7 +56,7 @@ Project = (function() {
       });
     });
     $('.default_window_size', modalEmt).html((window.mainWrapper.width()) + " X " + (window.mainWrapper.height()));
-    Project.load_data(function(data) {
+    Project.load_data_order_last_updated(function(data) {
       var d, e, i, len, list, n, p, projectSelect, size, user_pagevalue_list;
       user_pagevalue_list = data.user_pagevalue_list;
       projectSelect = $('.project_select', modalEmt);
@@ -158,7 +158,7 @@ Project = (function() {
     });
   };
 
-  Project.load_data = function(successCallback, errorCallback) {
+  Project.load_data_order_last_updated = function(successCallback, errorCallback) {
     if (successCallback == null) {
       successCallback = null;
     }
@@ -231,12 +231,77 @@ Project = (function() {
   };
 
   Project.initAdminProjectModal = function(modalEmt, params, callback) {
+    var _deleteEvent, _editEvent, _loadAdminMenu;
     if (callback == null) {
       callback = null;
     }
-    return Project.load_data(function(data) {
-      var user_pagevalue_list;
-      return user_pagevalue_list = data.user_pagevalue_list;
+    _loadAdminMenu = function(callback) {
+      return $.ajax({
+        url: "/project/admin_menu",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+          if (data.resultSuccess) {
+            return callback(data.admin_html);
+          } else {
+            return console.log('/project/admin_menu server error');
+          }
+        },
+        error: function(data) {
+          return console.log('/project/admin_menu ajax error');
+        }
+      });
+    };
+    _editEvent = function(callback) {
+      return $.ajax({
+        url: "/project/get_project_by_user_pagevalue_id",
+        type: "POST",
+        dataType: "json",
+        success: function(data) {
+          if (data.resultSuccess) {
+            return callback(data.project);
+          } else {
+            return console.log('/project/get_project_by_user_pagevalue_id server error');
+          }
+        },
+        error: function(data) {
+          return console.log('/project/get_project_by_user_pagevalue_id ajax error');
+        }
+      });
+    };
+    _deleteEvent = function(callback) {
+      return $.ajax({
+        url: "/project/remove",
+        type: "POST",
+        dataType: "json",
+        success: function(data) {
+          if (data.resultSuccess) {
+            return callback(data.admin_html);
+          } else {
+            return console.log('/project/remove server error');
+          }
+        },
+        error: function(data) {
+          return console.log('/project/remove ajax error');
+        }
+      });
+    };
+    return _loadAdminMenu.call(this, function(admin_html) {
+      modalEmt.find('.am_list:first').html(admin_html);
+      modalEmt.find('.am_row .edit_button').off('click').on('click', (function(_this) {
+        return function(e) {
+          return _editEvent(function(project) {});
+        };
+      })(this));
+      return modalEmt.find('.am_row .remove_button').off('click').on('click', (function(_this) {
+        return function(e) {
+          if (window.confirm(I18n.t('message.dialog.delete_project'))) {
+            return _deleteEvent(function(admin_html) {
+              return modalEmt.find('.am_list:first').empty().html(admin_html);
+            });
+          }
+        };
+      })(this));
     });
   };
 

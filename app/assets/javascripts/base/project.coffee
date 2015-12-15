@@ -38,7 +38,7 @@ class Project
     $('.default_window_size', modalEmt).html("#{window.mainWrapper.width()} X #{window.mainWrapper.height()}")
 
     # 作成済みプロジェクト一覧取得
-    Project.load_data((data) ->
+    Project.load_data_order_last_updated((data) ->
       user_pagevalue_list = data.user_pagevalue_list
       projectSelect = $('.project_select', modalEmt)
       if user_pagevalue_list.length > 0
@@ -142,7 +142,7 @@ class Project
     )
 
   # プロジェクト一覧を更新順に取得
-  @load_data: (successCallback = null, errorCallback = null) ->
+  @load_data_order_last_updated: (successCallback = null, errorCallback = null) ->
     $.ajax(
       {
         url: "/page_value_state/user_pagevalue_last_updated_list"
@@ -200,9 +200,73 @@ class Project
 
   # プロジェクト管理モーダルビュー初期化
   @initAdminProjectModal = (modalEmt, params, callback = null) ->
-    # 作成済みプロジェクト一覧取得
-    Project.load_data((data) ->
-      user_pagevalue_list = data.user_pagevalue_list
+    _loadAdminMenu = (callback) ->
+      $.ajax(
+        {
+          url: "/project/admin_menu"
+          type: "GET"
+          dataType: "json"
+          success: (data)->
+            if data.resultSuccess
+              callback(data.admin_html)
+            else
+              console.log('/project/admin_menu server error')
+          error: (data)->
+            console.log('/project/admin_menu ajax error')
+        }
+      )
 
+    _editEvent = (callback) ->
+      $.ajax(
+        {
+          url: "/project/get_project_by_user_pagevalue_id"
+          type: "POST"
+          dataType: "json"
+          success: (data)->
+            if data.resultSuccess
+              callback(data.project)
+            else
+              console.log('/project/get_project_by_user_pagevalue_id server error')
+          error: (data)->
+            console.log('/project/get_project_by_user_pagevalue_id ajax error')
+        }
+      )
+
+    _deleteEvent = (callback) ->
+      $.ajax(
+        {
+          url: "/project/remove"
+          type: "POST"
+          dataType: "json"
+          success: (data)->
+            if data.resultSuccess
+              callback(data.admin_html)
+            else
+              console.log('/project/remove server error')
+          error: (data)->
+            console.log('/project/remove ajax error')
+        }
+      )
+
+    # 作成済みプロジェクト一覧取得
+    _loadAdminMenu.call(@, (admin_html) ->
+      modalEmt.find('.am_list:first').html(admin_html)
+      # イベント設定
+      modalEmt.find('.am_row .edit_button').off('click').on('click', (e) =>
+        # 編集
+        _editEvent((project) =>
+          # 入力値初期化
+          # 右にスライド
+        )
+      )
+      modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
+        # 削除確認
+        if window.confirm(I18n.t('message.dialog.delete_project'))
+          # 削除
+          _deleteEvent( (admin_html) =>
+            # 削除完了 -> リスト再表示
+            modalEmt.find('.am_list:first').empty().html(admin_html)
+          )
+      )
     )
 

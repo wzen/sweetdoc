@@ -18,8 +18,14 @@ Navbar = (function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt, menuSave;
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     $('.menu-changeproject', fileMenuEmt).off('click').on('click', function() {
+      var lastSaveTime, lastSaveTimeStr;
       if (Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2) {
-        if (window.confirm(I18n.t('message.dialog.new_project'))) {
+        lastSaveTimeStr = '';
+        lastSaveTime = Common.displayLastUpdateDiffAlmostTime();
+        if (lastSaveTime != null) {
+          lastSaveTimeStr = '\n' + I18n.t('message.dialog.last_savetime') + lastSaveTime;
+        }
+        if (window.confirm(I18n.t('message.dialog.change_project') + lastSaveTimeStr)) {
           WorktableCommon.resetWorktable();
           return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
         }
@@ -36,13 +42,11 @@ Navbar = (function() {
       return ServerStorage.save();
     });
     menuSave.off('mouseenter').on('mouseenter', function(e) {
-      var d, lastSaveTime, li, n;
-      lastSaveTime = PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME);
+      var lastSaveTime, li;
+      lastSaveTime = Common.displayLastUpdateDiffAlmostTime();
       if (lastSaveTime != null) {
-        n = $.now();
-        d = new Date(lastSaveTime);
         li = this.closest('li');
-        $(li).append($("<div class='pop' style='display:none'><p>Last Save " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</p></div>"));
+        $(li).append($("<div class='pop' style='display:none'><p>Last Save " + lastSaveTime + "</p></div>"));
         $('.pop', li).css({
           top: $(li).height() + 30,
           left: $(li).width()

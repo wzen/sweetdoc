@@ -30,6 +30,35 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def self.get_project_by_user_pagevalue_id(user_id, user_pagevalue_id)
+    begin
+      ActiveRecord::Base.transaction do
+        sql = <<-"SQL"
+          SELECT p.*
+          FROM user_project_maps upm
+          INNER JOIN user_pagevalues up ON upm.id = up.user_project_map_id
+          INNER JOIN projects p ON p.id = upm.project_id
+          WHERE
+            upm.user_id = #{user_id}
+          AND
+            up.id = #{user_pagevalue_id}
+          AND
+            upm.del_flg = 0
+          AND
+            up.del_flg = 0
+        SQL
+        ret_sql = ActiveRecord::Base.connection.select_all(sql)
+        if ret_sql.present?
+          return true, I18n.t('message.database.item_state.save.success'), ret_sql.to_hash
+        end
+        return true, I18n.t('message.database.item_state.save.success'), nil
+      end
+    rescue => e
+      # 更新失敗
+      return false, I18n.t('message.database.item_state.save.error'), nil
+    end
+  end
+
   def self.list(user_id)
     sql = <<-"SQL"
       SELECT p.title as #{Const::Project::Key::TITLE}, up.id as #{Const::Project::Key::USER_PAGEVALUE_ID}, up.updated_at as #{Const::Project::Key::USER_PAGEVALUE_UPDATED_AT}
@@ -52,14 +81,22 @@ class Project < ActiveRecord::Base
     return null
   end
 
-  def self.admin_menu(user_id)
-
-  end
-
   def self.reset(user_id, project_id)
-    # アイテム画像の削除
-    ret, message = ItemImage.remove_worktable_img(user_id, project_id)
-    return
+    begin
+      ActiveRecord::Base.transaction do
+        # アイテム画像の削除
+        ret, mes = ItemImage.remove_worktable_img(user_id, project_id)
+        unless ret
+          # 更新失敗
+          return false, I18n.t('message.database.item_state.save.error')
+        end
+        return true, I18n.t('message.database.item_state.save.success')
+      end
+    rescue => e
+      # 更新失敗
+      return false, I18n.t('message.database.item_state.save.error')
+    end
+
   end
 
   def self.remove(user_id, project_id)
@@ -70,11 +107,14 @@ class Project < ActiveRecord::Base
           upm.del_flg = true
           upm.save!
         end
-        return true, I18n.t('message.database.item_state.save.success')
+
+        # 削除完了 -> リストを再取得
+        reload_list = list(user_id)
+        return true, I18n.t('message.database.item_state.save.success'), reload_list
       end
     rescue => e
       # 更新失敗
-      return false, I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error'), nil
     end
   end
 
