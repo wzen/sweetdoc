@@ -53,8 +53,10 @@ class CanvasItemBase extends ItemBase
   itemDraw: (show = true) ->
     # キャンパスに対する初期化
     @initCanvas()
+    # 画面を保存
+    @saveNewDrawingSurface()
 
-  # 新規キャンパスの画面を保存
+  # 描画時のキャンパスの画面を保存
   saveNewDrawingSurface : ->
     canvas = document.getElementById(@canvasElementId());
     if canvas?
@@ -86,8 +88,6 @@ class CanvasItemBase extends ItemBase
 
   # 描画を削除
   removeItemElement: ->
-    # 画面を保存
-    @saveNewDrawingSurface()
     canvas = document.getElementById(@canvasElementId());
     if canvas?
       context = canvas.getContext('2d');

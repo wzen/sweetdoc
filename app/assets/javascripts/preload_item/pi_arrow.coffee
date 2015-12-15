@@ -156,7 +156,6 @@ class PreloadItemArrow extends CanvasItemBase
   # 描画イベント ※アクションイベント
   changeDraw : (opt) ->
     r = opt.progress / opt.progressMax
-
     _resetDrawPath.call(@)
     @restoreAllNewDrawingSurface()
     for r in @registCoord.slice(0, parseInt((@registCoord.length - 1) * r))

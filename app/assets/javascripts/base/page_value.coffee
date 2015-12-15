@@ -599,7 +599,7 @@ class PageValue
     if eventPageValues.length >= 2
       for idx in [0..(eventPageValues.length - 2)]
         @setEventPageValue(@Key.eventNumber(idx + 1), eventPageValues[idx])
-    PageValue.setEventPageValue(@Key.eventCount(), eventPageValues.length - 1)
+    @setEventPageValue(@Key.eventCount(), eventPageValues.length - 1)
 
   # 対象イベントのSyncを解除する
   # @param [Integer] objId オブジェクトID

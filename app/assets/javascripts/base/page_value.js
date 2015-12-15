@@ -745,7 +745,7 @@ PageValue = (function() {
         this.setEventPageValue(this.Key.eventNumber(idx + 1), eventPageValues[idx]);
       }
     }
-    return PageValue.setEventPageValue(this.Key.eventCount(), eventPageValues.length - 1);
+    return this.setEventPageValue(this.Key.eventCount(), eventPageValues.length - 1);
   };
 
   PageValue.removeEventPageValueSync = function(objId) {
