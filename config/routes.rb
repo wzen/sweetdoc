@@ -86,6 +86,9 @@ Rails.application.routes.draw do
 
   # ItemImage
   post 'item_image/create_img'
+  post 'item_image/remove_worktable_project_img'
+  post 'item_image/remove_worktable_item_img'
+  post 'item_image/remove_gallery_img'
 
   # Document
   get 'document/terms'
