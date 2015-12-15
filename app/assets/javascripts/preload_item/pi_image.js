@@ -67,7 +67,7 @@ PreloadItemImage = (function(superClass) {
       return;
     }
     this.reDrawing = true;
-    this.clearDraw();
+    this.removeItemElement();
     return this.createItemElement((function(_this) {
       return function() {
         _this.itemDraw(show);
@@ -86,6 +86,10 @@ PreloadItemImage = (function(superClass) {
         }
       };
     })(this), false);
+  };
+
+  PreloadItemImage.prototype.removeItemElement = function() {
+    return PreloadItemImage.__super__.removeItemElement.call(this);
   };
 
   PreloadItemImage.prototype.createItemElement = function(callback, showModal) {

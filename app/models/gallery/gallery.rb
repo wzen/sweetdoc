@@ -66,7 +66,7 @@ class Gallery < ActiveRecord::Base
         gallery_id = g.id
 
         # UserProjectMap取得
-        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
         # ProjectGalelryMap追加
         pgm = ProjectGalleryMap.new({user_project_map_id: upm.id, gallery_id: g.id})
         pgm.save!
@@ -142,7 +142,7 @@ class Gallery < ActiveRecord::Base
   def self.add_view_statistic_count(access_token, date)
     begin
       g = self.find_by({access_token: access_token, del_flg: false})
-      gvs = GalleryViewStatistic.where({gallery_id: g.id, view_day: date}).first
+      gvs = GalleryViewStatistic.where(gallery_id: g.id, view_day: date, del_flg: false).first
       if gvs.blank?
         # 新規作成
         gvs = GalleryViewStatistic.new({
@@ -164,7 +164,7 @@ class Gallery < ActiveRecord::Base
       ActiveRecord::Base.transaction do
         g = self.find_by({access_token: gallery_access_token, del_flg: false})
         gallery_id = g.id
-        gb = GalleryBookmark.where({gallery_id: gallery_id, user_id: user_id})
+        gb = GalleryBookmark.where(gallery_id: gallery_id, user_id: user_id, del_flg: false)
         # 既にブックマークが存在する場合は処理なし
         if gb.blank?
           gb = GalleryBookmark.new({
@@ -174,7 +174,7 @@ class Gallery < ActiveRecord::Base
                                    })
           gb.save!
 
-          gbs = GalleryBookmarkStatistic.where({gallery_id: gallery_id, view_day: date})
+          gbs = GalleryBookmarkStatistic.where(gallery_id: gallery_id, view_day: date, del_flg: false)
           if gbs.blank?
             # 新規作成
             gbs = GalleryBookmarkStatistic.new({
@@ -200,7 +200,7 @@ class Gallery < ActiveRecord::Base
 
         ActiveRecord::Base.transaction do
           # Instance 最新データ取得
-          last_i_page_values = GalleryInstancePagevaluePaging.joins(:gallery).where(gallery: {user_id: user_id})
+          last_i_page_values = GalleryInstancePagevaluePaging.joins(:gallery).where(gallery: {user_id: user_id, del_flg: false})
 
           # Instance 追加 or 更新
           i_page_values.each do |k, v|
@@ -249,7 +249,7 @@ class Gallery < ActiveRecord::Base
           end
 
           # Event 最新データ取得
-          last_e_page_values = GalleryEventPagevaluePaging.joins(:gallery).where(gallery: {user_id: user_id})
+          last_e_page_values = GalleryEventPagevaluePaging.joins(:gallery).where(gallery: {user_id: user_id, del_flg: false})
 
           # Event 追加 or 更新
           e_page_values.each do |k, v|
@@ -320,7 +320,7 @@ class Gallery < ActiveRecord::Base
         # タグテーブル処理
         tag_ids = []
         tags.each do |tag|
-          t = GalleryTag.find_by(name: tag)
+          t = GalleryTag.find_by(name: tag, del_flg: false)
           if t.blank?
             # タグを新規作成
             t = GalleryTag.new({
@@ -682,8 +682,8 @@ class Gallery < ActiveRecord::Base
   end
 
   def self._load_viewcount_and_bookmarkcount(gallery_id)
-    gallery_view_statistic_count = GalleryViewStatistic.where({gallery_id: gallery_id}).group(:gallery_id).sum(:count)
-    gallery_bookmark_statistic_count = GalleryBookmarkStatistic.where({gallery_id: gallery_id}).group(:gallery_id).sum(:count)
+    gallery_view_statistic_count = GalleryViewStatistic.where(gallery_id: gallery_id, del_flg: false).group(:gallery_id).sum(:count)
+    gallery_bookmark_statistic_count = GalleryBookmarkStatistic.where(gallery_id: gallery_id, del_flg: false).group(:gallery_id).sum(:count)
     return gallery_view_statistic_count, gallery_bookmark_statistic_count
   end
 
@@ -782,7 +782,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def self._update_item_images_column(user_project_map_id, gallery_id)
-    ItemImage.where(user_project_map_id: user_project_map_id).update_all(gallery_id: gallery_id)
+    ItemImage.where(user_project_map_id: user_project_map_id, del_flg: false).update_all(gallery_id: gallery_id)
   end
 
   private_class_method :_save_tag, :_load_viewcount_and_bookmarkcount, :_update_item_images_column

@@ -131,33 +131,36 @@ ServerStorage = (function() {
       success: function(data) {
         if (data.resultSuccess) {
           return Common.setupJsByList(data.itemJsList, function() {
-            WorktableCommon.removeAllItemOnWorkTable();
-            if (data.general_pagevalue_data != null) {
-              PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data);
-              Common.setTitle(data.general_pagevalue_data.title);
-            }
-            if (data.instance_pagevalue_data != null) {
-              PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data);
-            }
-            if (data.event_pagevalue_data != null) {
-              PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.event_pagevalue_data);
-            }
-            if (data.setting_pagevalue_data != null) {
-              PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data);
-            }
-            PageValue.adjustInstanceAndEventOnPage();
-            LocalStorage.saveAllPageValues();
-            return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
-              Timeline.refreshAllTimeline();
-              PageValue.updatePageCount();
-              PageValue.updateForkCount();
-              Paging.initPaging();
-              Common.applyEnvironmentFromPagevalue();
-              WorktableSetting.initConfig();
-              if (callback != null) {
-                return callback(data);
-              }
-            });
+            return WorktableCommon.removeAllItemAndEvent((function(_this) {
+              return function() {
+                if (data.general_pagevalue_data != null) {
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data);
+                  Common.setTitle(data.general_pagevalue_data.title);
+                }
+                if (data.instance_pagevalue_data != null) {
+                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data);
+                }
+                if (data.event_pagevalue_data != null) {
+                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.event_pagevalue_data);
+                }
+                if (data.setting_pagevalue_data != null) {
+                  PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data);
+                }
+                PageValue.adjustInstanceAndEventOnPage();
+                LocalStorage.saveAllPageValues();
+                return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+                  Timeline.refreshAllTimeline();
+                  PageValue.updatePageCount();
+                  PageValue.updateForkCount();
+                  Paging.initPaging();
+                  Common.applyEnvironmentFromPagevalue();
+                  WorktableSetting.initConfig();
+                  if (callback != null) {
+                    return callback(data);
+                  }
+                });
+              };
+            })(this));
           });
         } else {
           console.log('/page_value_state/load_state server error');

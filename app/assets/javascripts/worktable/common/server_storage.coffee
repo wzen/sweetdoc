@@ -104,30 +104,30 @@ class ServerStorage
           if data.resultSuccess
             # JSを適用
             Common.setupJsByList(data.itemJsList, ->
-              WorktableCommon.removeAllItemOnWorkTable()
+              WorktableCommon.removeAllItemAndEvent( =>
+                # Pagevalue設置
+                if data.general_pagevalue_data?
+                  PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data)
+                  Common.setTitle(data.general_pagevalue_data.title)
+                if data.instance_pagevalue_data?
+                  PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data)
+                if data.event_pagevalue_data?
+                  PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.event_pagevalue_data)
+                if data.setting_pagevalue_data?
+                  PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data)
 
-              # Pagevalue設置
-              if data.general_pagevalue_data?
-                PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, data.general_pagevalue_data)
-                Common.setTitle(data.general_pagevalue_data.title)
-              if data.instance_pagevalue_data?
-                PageValue.setInstancePageValue(PageValue.Key.INSTANCE_PREFIX, data.instance_pagevalue_data)
-              if data.event_pagevalue_data?
-                PageValue.setEventPageValue(PageValue.Key.E_SUB_ROOT, data.event_pagevalue_data)
-              if data.setting_pagevalue_data?
-                PageValue.setSettingPageValue(PageValue.Key.ST_PREFIX, data.setting_pagevalue_data)
-
-              PageValue.adjustInstanceAndEventOnPage()
-              LocalStorage.saveAllPageValues()
-              WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
-                Timeline.refreshAllTimeline()
-                PageValue.updatePageCount()
-                PageValue.updateForkCount()
-                Paging.initPaging()
-                Common.applyEnvironmentFromPagevalue()
-                WorktableSetting.initConfig()
-                if callback?
-                  callback(data)
+                PageValue.adjustInstanceAndEventOnPage()
+                LocalStorage.saveAllPageValues()
+                WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+                  Timeline.refreshAllTimeline()
+                  PageValue.updatePageCount()
+                  PageValue.updateForkCount()
+                  Paging.initPaging()
+                  Common.applyEnvironmentFromPagevalue()
+                  WorktableSetting.initConfig()
+                  if callback?
+                    callback(data)
+                )
               )
             )
 

@@ -189,7 +189,7 @@ itemBaseWorktableExtend = {
         uiIcon: "ui-icon-scissors",
         func: function(event, ui) {
           if (window.confirm(I18n.t('message.dialog.delete_item'))) {
-            return WorktableCommon.removeItem(event.target);
+            return WorktableCommon.removeSingleItem(event.target);
           }
         }
       });

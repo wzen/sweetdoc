@@ -1,5 +1,6 @@
 require 'pagevalue/user_pagevalue'
 require 'project/user_project_map'
+require 'item/item_image'
 
 class Project < ActiveRecord::Base
   has_many :project_gallery_maps
@@ -8,7 +9,7 @@ class Project < ActiveRecord::Base
   def self.create(user_id, title, screen_width, screen_height)
     begin
       ActiveRecord::Base.transaction do
-        user_project = UserProjectMap.where(user_id: user_id)
+        user_project = UserProjectMap.where(user_id: user_id, del_flg: false)
         if user_project.present? && user_project.count >= Const::Project::USER_CREATE_MAX
           # 作成上限
           return I18n.t('message.database.item_state.save.error'), null
@@ -49,6 +50,28 @@ class Project < ActiveRecord::Base
     end
 
     return null
+  end
+
+  def self.reset(user_id, project_id)
+    # アイテム画像の削除
+    ret, message = ItemImage.remove_worktable_img(user_id, project_id)
+    return
+  end
+
+  def self.remove(user_id, project_id)
+    begin
+      ActiveRecord::Base.transaction do
+        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
+        if upm.present?
+          upm.del_flg = true
+          upm.save!
+        end
+        return true, I18n.t('message.database.item_state.save.success')
+      end
+    rescue => e
+      # 更新失敗
+      return false, I18n.t('message.database.item_state.save.error')
+    end
   end
 
 end

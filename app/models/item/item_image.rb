@@ -14,13 +14,13 @@ class ItemImage < ActiveRecord::Base
           url = nil
         end
 
-        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
         if upm.blank?
           return false, I18n.t('message.database.item_state.save.error'), nil
         end
 
         # 存在チェック
-        image = self.find_by(user_project_map_id: upm.id, item_obj_id: item_obj_id, event_dist_id: event_dist_id)
+        image = self.find_by(user_project_map_id: upm.id, item_obj_id: item_obj_id, event_dist_id: event_dist_id, del_flg: false)
         if image.present?
           # 更新
           image.file_path = file_path
@@ -53,7 +53,7 @@ class ItemImage < ActiveRecord::Base
   def self.remove_worktable_img(user_id, project_id, item_obj_id = nil)
     begin
       ActiveRecord::Base.transaction do
-        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
         if upm.blank?
           return false, I18n.t('message.database.item_state.save.error')
         end

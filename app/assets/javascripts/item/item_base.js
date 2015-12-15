@@ -94,6 +94,10 @@ ItemBase = (function(superClass) {
     return callback();
   };
 
+  ItemBase.prototype.removeItemElement = function() {
+    return this.getJQueryElement().remove();
+  };
+
   ItemBase.prototype.addContentsToScrollInside = function(contents, callback) {
     var createdElement;
     if (callback == null) {
@@ -139,7 +143,7 @@ ItemBase = (function(superClass) {
       return;
     }
     this.reDrawing = true;
-    this.clearDraw();
+    this.removeItemElement();
     return this.createItemElement((function(_this) {
       return function() {
         _this.itemDraw(show);
@@ -172,10 +176,6 @@ ItemBase = (function(superClass) {
     }
   };
 
-  ItemBase.prototype.clearDraw = function() {
-    return this.getJQueryElement().remove();
-  };
-
   ItemBase.prototype.applyDesignChange = function(doStyleSave) {
     if (doStyleSave == null) {
       doStyleSave = true;
@@ -206,7 +206,7 @@ ItemBase = (function(superClass) {
     if (newCreated) {
       num = 0;
       self = this;
-      ref = Common.getCreatedItemInstances();
+      ref = Common.allItemInstances();
       for (k in ref) {
         v = ref[k];
         if (self.constructor.NAME_PREFIX === v.constructor.NAME_PREFIX) {

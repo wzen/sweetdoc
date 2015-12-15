@@ -41,7 +41,7 @@ class GalleryTag < ActiveRecord::Base
       limit = 30
       take_num = 3
 
-      ordered = self.find_by_category(category).order('weight DESC').limit(limit)
+      ordered = self.find_by(category: category, del_flg: false).order('weight DESC').limit(limit)
       get_row = []
       # ランダムに取得
       while get_row.length <= take_num

@@ -49,7 +49,7 @@ class PageValueState
           sp = save_setting_pagevalue(s_page_values, saved_record.present? ? saved_record['setting_pagevalue_id'] : nil)
           if saved_record.blank? || new_record
             # レコード無し or 強制作成
-            upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+            upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
             up = UserPagevalue.new({
                                        user_project_map_id: upm.id,
                                        setting_pagevalue_id: sp.id
@@ -62,7 +62,7 @@ class PageValueState
             up = UserPagevalue.find(updated_user_pagevalue_id)
             if Time.zone.now - up.created_at > Const::ServerStorage::DIVIDE_INTERVAL_MINUTES.minute
               # 期間が過ぎている場合は新規作成
-              upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id)
+              upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
               up = UserPagevalue.new({
                                          user_project_map_id: upm.id,
                                          setting_pagevalue_id: sp.id
@@ -460,7 +460,7 @@ class PageValueState
       if page_value.present? && page_value != 'null'
         ActiveRecord::Base.transaction do
 
-          g = Gallery.find_by(access_token: gallery_access_token)
+          g = Gallery.find_by(access_token: gallery_access_token, del_flg: false)
           gallery_id = g.id
 
           # 履歴保存
@@ -468,7 +468,7 @@ class PageValueState
             if k.index(Const::PageValueKey::P_PREFIX) >= 0
               # ページ保存
               page_num = k.gsub(Const::PageValueKey::P_PREFIX, '').to_i
-              p = UserGalleryFootprintPaging.find_by(user_id: user_id, gallery_id: gallery_id, page_num: page_num)
+              p = UserGalleryFootprintPaging.find_by(user_id: user_id, gallery_id: gallery_id, page_num: page_num, del_flg: false)
               if p
                 u = UserGalleryFootprintPagevalue.find(p.user_gallery_footprint_pagevalue_id)
                 if u
@@ -502,7 +502,7 @@ class PageValueState
             end
           end
 
-          fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
+          fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id, del_flg: false)
           if fp.present?
             # Update
             fp.page_num = page_num
@@ -519,7 +519,7 @@ class PageValueState
       else
         # Delete
         # FIXME:
-        fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
+        fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id, del_flg: false)
         if fp
           fp.del_flg = true
           fp.save!
@@ -539,10 +539,10 @@ class PageValueState
       data = {}
       ActiveRecord::Base.transaction do
 
-        g = Gallery.find_by(access_token: gallery_access_token)
+        g = Gallery.find_by(access_token: gallery_access_token, del_flg: false)
         gallery_id = g.id
 
-        fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id)
+        fp = UserGalleryFootprint.find_by(user_id: user_id, gallery_id: gallery_id, del_flg: false)
         if fp
           data[Const::PageValueKey::PAGE_NUM] = fp.page_num
         end

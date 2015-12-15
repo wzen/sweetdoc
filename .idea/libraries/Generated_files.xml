@@ -17,8 +17,10 @@
         <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_canvas.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
         <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_arrow.js" />
@@ -71,8 +73,10 @@
       <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_canvas.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
       <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_arrow.js" />

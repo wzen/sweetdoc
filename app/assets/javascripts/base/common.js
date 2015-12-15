@@ -495,7 +495,7 @@ Common = (function() {
     }
   };
 
-  Common.getCreatedItemInstances = function() {
+  Common.allItemInstances = function() {
     var k, ret, v;
     ret = {};
     for (k in instanceMap) {
@@ -813,35 +813,28 @@ Common = (function() {
   };
 
   Common.removeAllItem = function(pageNum) {
-    var itemToken, k, obj, objId, pageValues, ref, results, v;
+    var item, items, j, k, len, ref, results, v;
     if (pageNum == null) {
       pageNum = null;
     }
     if (pageNum != null) {
-      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
+      items = this.instancesInPage(pageNum);
       results = [];
-      for (k in pageValues) {
-        obj = pageValues[k];
-        objId = obj.value.id;
-        itemToken = obj.value.itemToken;
-        if (objId != null) {
-          $("#" + objId).remove();
-          if (window.instanceMap[objId] instanceof CommonEvent) {
-            CommonEvent.deleteInstance(objId);
-          }
-          results.push(delete window.instanceMap[objId]);
+      for (j = 0, len = items.length; j < len; j++) {
+        item = items[j];
+        if (item instanceof CommonEvent) {
+          CommonEvent.deleteInstance(item.id);
         } else {
-          results.push(void 0);
+          item.removeItemElement();
         }
+        results.push(delete window.instanceMap[item.id]);
       }
       return results;
     } else {
-      ref = Common.getCreatedItemInstances();
+      ref = Common.allItemInstances();
       for (k in ref) {
         v = ref[k];
-        if (v.getJQueryElement != null) {
-          v.getJQueryElement().remove();
-        }
+        v.removeItemElement();
       }
       window.instanceMap = {};
       return CommonEvent.deleteAllInstance();

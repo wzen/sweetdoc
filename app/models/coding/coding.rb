@@ -281,7 +281,7 @@ class Coding
     data = load_tree(user_id)
     tree_state = get_tree_state(user_id)
     code_state = get_code_state(user_id)
-    user_coding = UserCoding.where(user_id: user_id)
+    user_coding = UserCoding.where(user_id: user_id, del_flg: false)
     load_tree_html, load_user_codings = _mk_tree_path_html(data, user_coding, tree_state, code_state)
     return load_tree_html, load_user_codings, code_state
   end
@@ -443,7 +443,7 @@ class Coding
 
   def self.generate_filename(user_id)
     tmp_token = SecureRandom.urlsafe_base64(10)
-    UserCoding.find_by(user_id: user_id, code_filename: tmp_token).blank? ? tmp_token : generate_filename(user_id)
+    UserCoding.find_by(user_id: user_id, code_filename: tmp_token, del_flg: false).blank? ? tmp_token : generate_filename(user_id)
   end
 
   private_class_method :_mk_path_treedata, :_mk_tree_path_html, :_replace_all_tree, :_add_code

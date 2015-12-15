@@ -156,7 +156,7 @@ itemBaseWorktableExtend =
         title: I18n.t('context_menu.delete'), cmd: "delete", uiIcon: "ui-icon-scissors", func: (event, ui) ->
           # アイテム削除
           if window.confirm(I18n.t('message.dialog.delete_item'))
-            WorktableCommon.removeItem(event.target)
+            WorktableCommon.removeSingleItem(event.target)
       })
       WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu)
 

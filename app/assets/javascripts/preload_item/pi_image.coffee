@@ -49,7 +49,7 @@ class PreloadItemImage extends ItemBase
       return
 
     @reDrawing = true
-    @clearDraw()
+    @removeItemElement()
     @createItemElement( =>
       @itemDraw(show)
       if @setupDragAndResizeEvents?
@@ -65,6 +65,12 @@ class PreloadItemImage extends ItemBase
         if callback?
           callback()
     , false)
+
+  # アイテム削除 ※コールバックは無くていい
+  removeItemElement: ->
+    super()
+    # レコード削除
+
 
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML

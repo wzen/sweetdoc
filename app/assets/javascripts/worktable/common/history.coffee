@@ -46,21 +46,20 @@ class OperationHistory
     if window.operationHistories[@operationHistoryIndex()]? && window.operationHistories[@operationHistoryIndex()][hIndex]?
       obj = window.operationHistories[@operationHistoryIndex()][hIndex]
       # 全描画を消去
-      WorktableCommon.removeAllItemAndEventOnThisPage()
-
-      instancePageValue = obj[@Key.INSTANCE]
-      eventPageValue = obj[@Key.EVENT]
-      if instancePageValue?
-        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
-      if eventPageValue?
-        PageValue.setEventPageValueByPageRootHash(eventPageValue)
-      window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
-
-      # キャッシュ保存 & 描画 & タイムライン更新
-      PageValue.adjustInstanceAndEventOnPage()
-      LocalStorage.saveAllPageValues()
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
-      Timeline.refreshAllTimeline()
+      WorktableCommon.removeAllItemAndEventOnThisPage( =>
+        instancePageValue = obj[@Key.INSTANCE]
+        eventPageValue = obj[@Key.EVENT]
+        if instancePageValue?
+          PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
+        if eventPageValue?
+          PageValue.setEventPageValueByPageRootHash(eventPageValue)
+        window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
+          # キャッシュ保存 & 描画 & タイムライン更新
+        PageValue.adjustInstanceAndEventOnPage()
+        LocalStorage.saveAllPageValues()
+        WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
+        Timeline.refreshAllTimeline()
+      )
       return true
     else
       return false
@@ -75,21 +74,21 @@ class OperationHistory
     if window.operationHistories[@operationHistoryIndex()]? && window.operationHistories[@operationHistoryIndex()][hIndex]?
       obj = window.operationHistories[@operationHistoryIndex()][hIndex]
       # 全描画を消去
-      WorktableCommon.removeAllItemAndEventOnThisPage()
+      WorktableCommon.removeAllItemAndEventOnThisPage( =>
+        instancePageValue = obj[@Key.INSTANCE]
+        eventPageValue = obj[@Key.EVENT]
+        if instancePageValue?
+          PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
+        if eventPageValue?
+          PageValue.setEventPageValueByPageRootHash(eventPageValue)
+        window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
 
-      instancePageValue = obj[@Key.INSTANCE]
-      eventPageValue = obj[@Key.EVENT]
-      if instancePageValue?
-        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue)
-      if eventPageValue?
-        PageValue.setEventPageValueByPageRootHash(eventPageValue)
-      window.operationHistoryIndexes[@operationHistoryIndex()] = hIndex
-
-      # キャッシュ保存 & 描画 & タイムライン更新
-      PageValue.adjustInstanceAndEventOnPage()
-      LocalStorage.saveAllPageValues()
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
-      Timeline.refreshAllTimeline()
+        # キャッシュ保存 & 描画 & タイムライン更新
+        PageValue.adjustInstanceAndEventOnPage()
+        LocalStorage.saveAllPageValues()
+        WorktableCommon.createAllInstanceAndDrawFromInstancePageValue()
+        Timeline.refreshAllTimeline()
+      )
       return true
     else
       return false

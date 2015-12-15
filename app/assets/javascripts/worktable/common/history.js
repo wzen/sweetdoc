@@ -50,7 +50,7 @@ OperationHistory = (function() {
   };
 
   _pop = function() {
-    var eventPageValue, hIndex, instancePageValue, obj;
+    var hIndex, obj;
     if (window.operationHistoryIndexes[this.operationHistoryIndex()] == null) {
       return false;
     }
@@ -62,20 +62,24 @@ OperationHistory = (function() {
     }
     if ((window.operationHistories[this.operationHistoryIndex()] != null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] != null)) {
       obj = window.operationHistories[this.operationHistoryIndex()][hIndex];
-      WorktableCommon.removeAllItemAndEventOnThisPage();
-      instancePageValue = obj[this.Key.INSTANCE];
-      eventPageValue = obj[this.Key.EVENT];
-      if (instancePageValue != null) {
-        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
-      }
-      if (eventPageValue != null) {
-        PageValue.setEventPageValueByPageRootHash(eventPageValue);
-      }
-      window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;
-      PageValue.adjustInstanceAndEventOnPage();
-      LocalStorage.saveAllPageValues();
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue();
-      Timeline.refreshAllTimeline();
+      WorktableCommon.removeAllItemAndEventOnThisPage((function(_this) {
+        return function() {
+          var eventPageValue, instancePageValue;
+          instancePageValue = obj[_this.Key.INSTANCE];
+          eventPageValue = obj[_this.Key.EVENT];
+          if (instancePageValue != null) {
+            PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
+          }
+          if (eventPageValue != null) {
+            PageValue.setEventPageValueByPageRootHash(eventPageValue);
+          }
+          window.operationHistoryIndexes[_this.operationHistoryIndex()] = hIndex;
+          PageValue.adjustInstanceAndEventOnPage();
+          LocalStorage.saveAllPageValues();
+          WorktableCommon.createAllInstanceAndDrawFromInstancePageValue();
+          return Timeline.refreshAllTimeline();
+        };
+      })(this));
       return true;
     } else {
       return false;
@@ -83,27 +87,31 @@ OperationHistory = (function() {
   };
 
   _popRedo = function() {
-    var eventPageValue, hIndex, instancePageValue, obj;
+    var hIndex, obj;
     if (window.operationHistoryIndexes[this.operationHistoryIndex()] == null) {
       return false;
     }
     hIndex = (window.operationHistoryIndexes[this.operationHistoryIndex()] + 1) % this.OPERATION_STORE_MAX;
     if ((window.operationHistories[this.operationHistoryIndex()] != null) && (window.operationHistories[this.operationHistoryIndex()][hIndex] != null)) {
       obj = window.operationHistories[this.operationHistoryIndex()][hIndex];
-      WorktableCommon.removeAllItemAndEventOnThisPage();
-      instancePageValue = obj[this.Key.INSTANCE];
-      eventPageValue = obj[this.Key.EVENT];
-      if (instancePageValue != null) {
-        PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
-      }
-      if (eventPageValue != null) {
-        PageValue.setEventPageValueByPageRootHash(eventPageValue);
-      }
-      window.operationHistoryIndexes[this.operationHistoryIndex()] = hIndex;
-      PageValue.adjustInstanceAndEventOnPage();
-      LocalStorage.saveAllPageValues();
-      WorktableCommon.createAllInstanceAndDrawFromInstancePageValue();
-      Timeline.refreshAllTimeline();
+      WorktableCommon.removeAllItemAndEventOnThisPage((function(_this) {
+        return function() {
+          var eventPageValue, instancePageValue;
+          instancePageValue = obj[_this.Key.INSTANCE];
+          eventPageValue = obj[_this.Key.EVENT];
+          if (instancePageValue != null) {
+            PageValue.setInstancePageValue(PageValue.Key.instancePagePrefix(), instancePageValue);
+          }
+          if (eventPageValue != null) {
+            PageValue.setEventPageValueByPageRootHash(eventPageValue);
+          }
+          window.operationHistoryIndexes[_this.operationHistoryIndex()] = hIndex;
+          PageValue.adjustInstanceAndEventOnPage();
+          LocalStorage.saveAllPageValues();
+          WorktableCommon.createAllInstanceAndDrawFromInstancePageValue();
+          return Timeline.refreshAllTimeline();
+        };
+      })(this));
       return true;
     } else {
       return false;

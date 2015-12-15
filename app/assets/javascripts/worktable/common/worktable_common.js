@@ -54,7 +54,7 @@ WorktableCommon = (function() {
       objId = window.selectedObjId;
     }
     this.copyItem(objId, false);
-    return this.removeItem($("#" + objId));
+    return this.removeSingleItem($("#" + objId));
   };
 
   WorktableCommon.pasteItem = function() {
@@ -218,12 +218,10 @@ WorktableCommon = (function() {
 
   WorktableCommon.clearAllItemStyle = function() {
     var k, ref, v;
-    ref = Common.getCreatedItemInstances();
+    ref = Common.allItemInstances();
     for (k in ref) {
       v = ref[k];
-      if (v instanceof ItemBase) {
-        v.clearAllEventStyle();
-      }
+      v.clearAllEventStyle();
     }
     this.clearSelectedBorder();
     return $('.colorPicker').ColorPickerHide();
@@ -290,27 +288,18 @@ WorktableCommon = (function() {
     return WorktableCommon.resizeMainContainerEvent();
   };
 
-  WorktableCommon.removeItem = function(itemElement) {
+  WorktableCommon.removeSingleItem = function(itemElement) {
     var targetId;
     targetId = $(itemElement).attr('id');
     PageValue.removeInstancePageValue(targetId);
     PageValue.removeEventPageValueSync(targetId);
-    itemElement.remove();
+    if (window.instanceMap[targetId] != null) {
+      window.instanceMap[targetId].removeItemElement();
+    }
     PageValue.adjustInstanceAndEventOnPage();
     Timeline.refreshAllTimeline();
     LocalStorage.saveAllPageValues();
     return OperationHistory.add();
-  };
-
-  WorktableCommon.removeAllItemOnWorkTable = function() {
-    var k, ref, results, v;
-    ref = Common.getCreatedItemInstances();
-    results = [];
-    for (k in ref) {
-      v = ref[k];
-      results.push(v.getJQueryElement().remove());
-    }
-    return results;
   };
 
 
@@ -377,20 +366,23 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.resetWorktable = function() {
-    this.removeAllItemAndEvent();
-    $('#pages .section').remove();
-    Common.resetEnvironment();
-    CommonVar.initVarWhenLoadedView();
-    CommonVar.initCommonVar();
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-    WorktableCommon.initMainContainer();
-    LocalStorage.clearWorktableWithoutSetting();
-    Timeline.refreshAllTimeline();
-    PageValue.setPageNum(1);
-    OperationHistory.add(true);
-    PageValue.updatePageCount();
-    PageValue.updateForkCount();
-    return Paging.initPaging();
+    return this.removeAllItemAndEvent((function(_this) {
+      return function() {
+        $('#pages .section').remove();
+        Common.resetEnvironment();
+        CommonVar.initVarWhenLoadedView();
+        CommonVar.initCommonVar();
+        Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+        WorktableCommon.initMainContainer();
+        LocalStorage.clearWorktableWithoutSetting();
+        Timeline.refreshAllTimeline();
+        PageValue.setPageNum(1);
+        OperationHistory.add(true);
+        PageValue.updatePageCount();
+        PageValue.updateForkCount();
+        return Paging.initPaging();
+      };
+    })(this));
   };
 
   WorktableCommon.setupContextMenu = function(element, contextSelector, menu) {
@@ -420,7 +412,10 @@ WorktableCommon = (function() {
     });
   };
 
-  WorktableCommon.removeAllItemAndEvent = function() {
+  WorktableCommon.removeAllItemAndEvent = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
     return Common.clearAllEventAction((function(_this) {
@@ -428,20 +423,29 @@ WorktableCommon = (function() {
         Common.removeAllItem();
         EventConfig.removeAllConfig();
         PageValue.removeAllGeneralAndInstanceAndEventPageValue();
-        return Timeline.refreshAllTimeline();
+        Timeline.refreshAllTimeline();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
   };
 
-  WorktableCommon.removeAllItemAndEventOnThisPage = function() {
+  WorktableCommon.removeAllItemAndEventOnThisPage = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutGeneralAndSetting();
     return Common.clearAllEventAction((function(_this) {
       return function() {
-        Common.removeAllItem();
+        Common.removeAllItem(PageValue.getPageNum());
         EventConfig.removeAllConfig();
         PageValue.removeAllInstanceAndEventPageValueOnPage();
-        return Timeline.refreshAllTimeline();
+        Timeline.refreshAllTimeline();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
   };

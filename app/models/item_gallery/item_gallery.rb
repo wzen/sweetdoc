@@ -222,7 +222,7 @@ class ItemGallery < ActiveRecord::Base
         # タグテーブル処理
         tag_ids = []
         tags.each do |tag|
-          t = ItemGalleryTag.find_by(name: tag)
+          t = ItemGalleryTag.find_by(name: tag, del_flg: false)
           if t.blank?
             # タグを新規作成
             t = ItemGalleryTag.new({
@@ -306,7 +306,7 @@ class ItemGallery < ActiveRecord::Base
         ret = ret_sql.to_hash
         if ret.count == 0 && is_add
           # 追加処理
-          item_gallery_id = ItemGallery.find_by(access_token: item_gallery_access_token).id
+          item_gallery_id = ItemGallery.find_by(access_token: item_gallery_access_token, del_flg: false).id
           uigm = UserItemGalleryMap.new({
                                             user_id: user_id,
                                             item_gallery_id: item_gallery_id
@@ -335,7 +335,7 @@ class ItemGallery < ActiveRecord::Base
   end
 
   def self.delete_item(user_id, item_gallery_access_token)
-    ig = self.find_by(created_user_id: user_id, access_token: item_gallery_access_token)
+    ig = self.find_by(created_user_id: user_id, access_token: item_gallery_access_token, del_flg: false)
     if ig.present?
       ig.del_flg = 1
       ig.save!
@@ -343,9 +343,9 @@ class ItemGallery < ActiveRecord::Base
   end
 
   def self._update_using_count(item_gallery_id)
-    count = UserItemGalleryMap.where(item_gallery_id: item_gallery_id).count
+    count = UserItemGalleryMap.where(item_gallery_id: item_gallery_id, del_flg: false).count
     # 使用数更新
-    igus = ItemGalleryUsingStatistics.find_by(item_gallery_id: item_gallery_id)
+    igus = ItemGalleryUsingStatistics.find_by(item_gallery_id: item_gallery_id, del_flg: false)
     if igus.present?
       # Update
       igus.count = count

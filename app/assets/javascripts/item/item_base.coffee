@@ -76,6 +76,10 @@ class ItemBase extends ItemEventBase
   createItemElement: (callback) ->
     callback()
 
+  # アイテム削除
+  removeItemElement: ->
+    @getJQueryElement().remove()
+
   # ScrollInsideに要素追加
   addContentsToScrollInside: (contents, callback = null) ->
     createdElement = Common.wrapCreateItemElement(@, $(contents))
@@ -115,7 +119,7 @@ class ItemBase extends ItemEventBase
       return
 
     @reDrawing = true
-    @clearDraw()
+    @removeItemElement()
     @createItemElement( =>
       @itemDraw(show)
       if @setupDragAndResizeEvents?
@@ -138,10 +142,6 @@ class ItemBase extends ItemEventBase
   reDrawIfItemNotExist: (show = true, callback = null) ->
     if @getJQueryElement().length == 0
       @reDraw(show, callback)
-
-  # 描画削除
-  clearDraw: ->
-    @getJQueryElement().remove()
 
   # CSSに反映
   applyDesignChange: (doStyleSave = true) ->
@@ -166,7 +166,7 @@ class ItemBase extends ItemEventBase
       # 名前を付与
       num = 0
       self = @
-      for k, v of Common.getCreatedItemInstances()
+      for k, v of Common.allItemInstances()
         if self.constructor.NAME_PREFIX == v.constructor.NAME_PREFIX
           num += 1
       @name = @constructor.NAME_PREFIX + " #{num}"

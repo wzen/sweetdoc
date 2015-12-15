@@ -10,4 +10,7 @@ class WorktableController < ApplicationController
     @using_items = ItemGallery.using_items(user_id)
   end
 
+  def reset_project
+
+  end
 end

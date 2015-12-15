@@ -95,7 +95,7 @@ class GalleryController < ApplicationController
   end
 
   def thumbnail
-    g = Gallery.find_by(access_token: params[:access_token])
+    g = Gallery.find_by(access_token: params[:access_token], del_flg: false)
     if g.blank? || g.thumbnail_img.blank?
       ActionController::Base.helpers.asset_path('image_notfound.png')
     else

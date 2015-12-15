@@ -55,7 +55,7 @@ class MyPageController < ApplicationController
   def _get_user_id
     user_access_token = params.fetch(Const::User::Key::USER_ACCESS_TOKEN, nil)
     if user_access_token
-      user = User.find_by(access_token: user_access_token)
+      user = User.find_by(access_token: user_access_token, del_flg: false)
       if user
         # 指定ユーザのページ表示
         @is_accessed_myself_page = false

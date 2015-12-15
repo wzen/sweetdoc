@@ -42,7 +42,7 @@ class WorktableCommon
   # @param [Integer] objId コピーするアイテムのオブジェクトID
   @cutItem = (objId = window.selectedObjId) ->
     @copyItem(objId, false)
-    @removeItem($("##{objId}"))
+    @removeSingleItem($("##{objId}"))
 
   # アイテムの貼り付け (Ctrl + v)
   @pasteItem = ->
@@ -179,9 +179,8 @@ class WorktableCommon
 
   # 非表示をクリア
   @clearAllItemStyle = ->
-    for k, v of Common.getCreatedItemInstances()
-      if v instanceof ItemBase
-        v.clearAllEventStyle()
+    for k, v of Common.allItemInstances()
+      v.clearAllEventStyle()
 
     # 選択枠を取る
     @clearSelectedBorder()
@@ -249,20 +248,16 @@ class WorktableCommon
     WorktableCommon.resizeMainContainerEvent()
 
   # アイテムを削除
-  @removeItem = (itemElement) ->
+  @removeSingleItem = (itemElement) ->
     targetId = $(itemElement).attr('id')
     PageValue.removeInstancePageValue(targetId)
     PageValue.removeEventPageValueSync(targetId)
-    itemElement.remove()
+    if window.instanceMap[targetId]?
+      window.instanceMap[targetId].removeItemElement()
     PageValue.adjustInstanceAndEventOnPage()
     Timeline.refreshAllTimeline()
     LocalStorage.saveAllPageValues()
     OperationHistory.add()
-
-  # 画面の全アイテムを削除
-  @removeAllItemOnWorkTable = ->
-    for k, v of Common.getCreatedItemInstances()
-      v.getJQueryElement().remove()
 
   ### デバッグ ###
   @runDebug = ->
@@ -332,32 +327,33 @@ class WorktableCommon
   # ワークテーブル初期化
   @resetWorktable: ->
     # アイテムを全消去
-    @removeAllItemAndEvent()
-    # ページを全消去
-    $('#pages .section').remove()
-    # 環境をリセット
-    Common.resetEnvironment()
-    # 変数初期化
-    CommonVar.initVarWhenLoadedView()
-    CommonVar.initCommonVar()
-    # Mainコンテナ作成
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum())
-    # コンテナ初期化
-    WorktableCommon.initMainContainer()
-    # キャッシュ削除
-    LocalStorage.clearWorktableWithoutSetting()
-    # タイムライン更新
-    Timeline.refreshAllTimeline()
-    # ページ数初期化
-    PageValue.setPageNum(1)
-    # 履歴に画面初期時を状態を保存
-    OperationHistory.add(true)
-    # ページ総数更新
-    PageValue.updatePageCount()
-    # フォーク総数更新
-    PageValue.updateForkCount()
-    # ページング
-    Paging.initPaging()
+    @removeAllItemAndEvent( =>
+      # ページを全消去
+      $('#pages .section').remove()
+      # 環境をリセット
+      Common.resetEnvironment()
+      # 変数初期化
+      CommonVar.initVarWhenLoadedView()
+      CommonVar.initCommonVar()
+      # Mainコンテナ作成
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+      # コンテナ初期化
+      WorktableCommon.initMainContainer()
+      # キャッシュ削除
+      LocalStorage.clearWorktableWithoutSetting()
+      # タイムライン更新
+      Timeline.refreshAllTimeline()
+      # ページ数初期化
+      PageValue.setPageNum(1)
+      # 履歴に画面初期時を状態を保存
+      OperationHistory.add(true)
+      # ページ総数更新
+      PageValue.updatePageCount()
+      # フォーク総数更新
+      PageValue.updateForkCount()
+      # ページング
+      Paging.initPaging()
+    )
 
   # コンテキストメニュー初期化
   # @param [String] elementID HTML要素ID
@@ -380,7 +376,7 @@ class WorktableCommon
     })
 
   # 全てのアイテムとイベントを削除
-  @removeAllItemAndEvent = ->
+  @removeAllItemAndEvent = (callback = null) ->
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutSetting()
@@ -389,18 +385,22 @@ class WorktableCommon
       EventConfig.removeAllConfig()
       PageValue.removeAllGeneralAndInstanceAndEventPageValue()
       Timeline.refreshAllTimeline()
+      if callback?
+        callback()
     )
 
   # ページ内の全てのアイテムとイベントを削除
-  @removeAllItemAndEventOnThisPage = ->
+  @removeAllItemAndEventOnThisPage = (callback = null) ->
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutGeneralAndSetting()
     Common.clearAllEventAction( =>
-      Common.removeAllItem()
+      Common.removeAllItem(PageValue.getPageNum())
       EventConfig.removeAllConfig()
       PageValue.removeAllInstanceAndEventPageValueOnPage()
       Timeline.refreshAllTimeline()
+      if callback?
+        callback()
     )
 
   # PageValueから全てのインスタンスを作成

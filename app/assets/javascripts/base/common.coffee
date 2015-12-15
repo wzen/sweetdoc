@@ -397,7 +397,7 @@ class Common
 
   # 生成したインスタンスの中からアイテムのみ取得
   # @return [Array] アイテムインスタンス配列
-  @getCreatedItemInstances = ->
+  @allItemInstances = ->
     ret = {}
     for k, v of instanceMap
       if v instanceof CommonEventBase == false
@@ -665,20 +665,18 @@ class Common
   # @param [Integer] pageNum ページ番号
   @removeAllItem = (pageNum = null) ->
     if pageNum?
-      pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
-      for k, obj of pageValues
-        objId = obj.value.id
-        itemToken = obj.value.itemToken
-        if objId?
-          $("##{objId}").remove()
-          if window.instanceMap[objId] instanceof CommonEvent
-            # Singletonのキャッシュを削除
-            CommonEvent.deleteInstance(objId)
-          delete window.instanceMap[objId]
+      items = @instancesInPage(pageNum)
+      for item in items
+        if item instanceof CommonEvent
+          # Singletonのキャッシュを削除
+          CommonEvent.deleteInstance(item.id)
+        else
+          # アイテム削除
+          item.removeItemElement()
+        delete window.instanceMap[item.id]
     else
-      for k, v of Common.getCreatedItemInstances()
-        if v.getJQueryElement?
-          v.getJQueryElement().remove()
+      for k, v of Common.allItemInstances()
+        v.removeItemElement()
       window.instanceMap = {}
       # Singletonのキャッシュを削除
       CommonEvent.deleteAllInstance()
