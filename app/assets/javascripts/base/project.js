@@ -42,7 +42,18 @@ Project = (function() {
     });
     $('.display_size_wrapper input[type=radio]', modalEmt).off('click');
     $('.display_size_wrapper input[type=radio]', modalEmt).on('click', function() {
-      return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
+      var height;
+      $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
+      if ($(this).val() === 'input') {
+        height = 199;
+      } else {
+        height = 179;
+      }
+      return modalEmt.animate({
+        height: size.height + "px"
+      }, {
+        duration: 300
+      });
     });
     $('.default_window_size', modalEmt).html((window.mainWrapper.width()) + " X " + (window.mainWrapper.height()));
     Project.load_data(function(data) {
@@ -216,6 +227,16 @@ Project = (function() {
     return PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {
       width: parseInt(width),
       height: parseInt(height)
+    });
+  };
+
+  Project.initAdminProjectModal = function(modalEmt, params, callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    return Project.load_data(function(data) {
+      var user_pagevalue_list;
+      return user_pagevalue_list = data.user_pagevalue_list;
     });
   };
 

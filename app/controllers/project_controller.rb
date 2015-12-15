@@ -13,4 +13,9 @@ class ProjectController < ApplicationController
     @result_success = true
     @list = Project.list(user_id)
   end
+
+  def admin_menu
+    user_id = current_or_guest_user.id
+    @result_success, @html = Project.admin_menu(user_id)
+  end
 end

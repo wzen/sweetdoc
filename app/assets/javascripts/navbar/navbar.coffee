@@ -15,8 +15,7 @@ class Navbar
   # Worktableナビバー初期化
   @initWorktableNavbar = ->
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
-    $('.menu-newcreate', fileMenuEmt).off('click')
-    $('.menu-newcreate', fileMenuEmt).on('click', ->
+    $('.menu-changeproject', fileMenuEmt).off('click').on('click', ->
       if Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2
         if window.confirm(I18n.t('message.dialog.new_project'))
           WorktableCommon.resetWorktable()
@@ -28,13 +27,16 @@ class Navbar
         Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
     )
 
+    $('.menu-adminproject', fileMenuEmt).off('click').on('click', ->
+      # モーダル表示
+      Common.showModalView(Constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal)
+    )
+
     menuSave = $('.menu-save', fileMenuEmt)
-    menuSave.off('click')
-    menuSave.on('click', ->
+    menuSave.off('click').on('click', ->
       ServerStorage.save()
     )
-    menuSave.off('mouseenter')
-    menuSave.on('mouseenter', (e) ->
+    menuSave.off('mouseenter').on('mouseenter', (e) ->
       lastSaveTime = PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME)
       if lastSaveTime?
         n = $.now()
@@ -44,30 +46,25 @@ class Navbar
         $('.pop', li).css({top: $(li).height() + 30, left: $(li).width()})
         $('.pop', li).show()
     )
-    menuSave.off('mouseleave')
-    menuSave.on('mouseleave', (e) ->
+    menuSave.off('mouseleave').on('mouseleave', (e) ->
       ul = @closest('ul')
       $('.pop', ul).remove()
     )
 
-    $('.menu-load', fileMenuEmt).off('mouseenter')
-    $('.menu-load', fileMenuEmt).on('mouseenter', ->
+    $('.menu-load', fileMenuEmt).off('mouseenter').on('mouseenter', ->
       Navbar.get_load_list()
     )
 
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li')
-    $('.menu-about', etcMenuEmt).off('click')
-    $('.menu-about', etcMenuEmt).on('click', ->
+    $('.menu-about', etcMenuEmt).off('click').on('click', ->
       Common.showModalView(Constant.ModalViewType.ABOUT)
     )
-    $('.menu-backtomainpage', etcMenuEmt).off('click')
-    $('.menu-backtomainpage', etcMenuEmt).on('click', ->
+    $('.menu-backtomainpage', etcMenuEmt).off('click').on('click', ->
       window.location.href = '/'
     )
 
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
-    $('.menu-item', itemsSelectMenuEmt).off('click')
-    $('.menu-item', itemsSelectMenuEmt).on('click', ->
+    $('.menu-item', itemsSelectMenuEmt).off('click').on('click', ->
       selected = $(@).html()
       $('#header_items_selected_menu_span').html(selected)
       # プレビューを停止して再描画
@@ -82,14 +79,12 @@ class Navbar
         )
     )
 
-    $('#menu-action-edit').off('click')
-    $('#menu-action-edit').on('click', ->
+    $('#menu-action-edit').off('click').on('click', ->
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
 
-    $('#menu_sidebar_toggle').off('click')
-    $('#menu_sidebar_toggle').on('click', ->
+    $('#menu_sidebar_toggle').off('click').on('click', ->
       if Sidebar.isOpenedConfigSidebar()
         Sidebar.closeSidebar()
       else
@@ -103,22 +98,18 @@ class Navbar
   @initRunNavbar = ->
     navEmt = $('#nav')
 
-    $('.menu-showguide', navEmt).off('click')
-    $('.menu-showguide', navEmt).on('click', ->
+    $('.menu-showguide', navEmt).off('click').on('click', ->
       RunSetting.toggleShowGuide()
     )
-    $('.menu-control-rewind-page', navEmt).off('click')
-    $('.menu-control-rewind-page', navEmt).on('click', ->
+    $('.menu-control-rewind-page', navEmt).off('click').on('click', ->
       if window.eventAction?
         window.eventAction.thisPage().rewindAllChapters()
     )
-    $('.menu-control-rewind-chapter', navEmt).off('click')
-    $('.menu-control-rewind-chapter', navEmt).on('click', ->
+    $('.menu-control-rewind-chapter', navEmt).off('click').on('click', ->
       if window.eventAction?
         window.eventAction.thisPage().rewindChapter()
     )
-    $('.menu-upload-gallery', navEmt).off('click')
-    $('.menu-upload-gallery', navEmt).on('click', ->
+    $('.menu-upload-gallery', navEmt).off('click').on('click', ->
       RunCommon.showUploadGalleryConfirm()
     )
 
@@ -126,26 +117,22 @@ class Navbar
   @initCodingNavbar = ->
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
     menuSave = $('.menu-save', fileMenuEmt)
-    menuSave.off('click')
-    menuSave.on('click', ->
+    menuSave.off('click').on('click', ->
       CodingCommon.saveActiveCode()
     )
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
     menuSave = $('.menu-all-save', fileMenuEmt)
-    menuSave.off('click')
-    menuSave.on('click', ->
+    menuSave.off('click').on('click', ->
       CodingCommon.saveAllCode()
     )
 
   # アイテムプレビューナビバー初期化
   @initItemPreviewNavbar = ->
     navEmt = $('#nav')
-    $('.menu-upload-item', navEmt).off('click')
-    $('.menu-upload-item', navEmt).on('click', ->
+    $('.menu-upload-item', navEmt).off('click').on('click', ->
       ItemPreviewCommon.showUploadItemConfirm()
     )
-    $('.menu-add-item', navEmt).off('click')
-    $('.menu-add-item', navEmt).on('click', ->
+    $('.menu-add-item', navEmt).off('click').on('click', ->
       ItemPreviewCommon.showAddItemConfirm()
     )
 

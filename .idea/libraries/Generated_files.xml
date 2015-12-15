@@ -37,6 +37,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/common_event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/css_item_base_worktable_extend.js" />
@@ -93,6 +94,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/common_event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_sidebar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/css_item_base_worktable_extend.js" />

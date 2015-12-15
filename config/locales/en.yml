@@ -23,7 +23,8 @@ en:
   hello: "Hello world"
   header_menu:
     file:
-      newcreate: "Create NewProject"
+      changeproject: "Change Project"
+      adminproject: "Project Manager"
       file: "File"
       open: "Open"
       save: "Save"

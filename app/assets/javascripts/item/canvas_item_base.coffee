@@ -53,7 +53,7 @@ class CanvasItemBase extends ItemBase
   itemDraw: (show = true) ->
     # キャンパスに対する初期化
     @initCanvas()
-    # 画面を保存
+    # 空の画面状態を保存
     @saveNewDrawingSurface()
 
   # 描画時のキャンパスの画面を保存

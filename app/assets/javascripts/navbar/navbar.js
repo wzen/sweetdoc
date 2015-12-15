@@ -17,8 +17,7 @@ Navbar = (function() {
   Navbar.initWorktableNavbar = function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt, menuSave;
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
-    $('.menu-newcreate', fileMenuEmt).off('click');
-    $('.menu-newcreate', fileMenuEmt).on('click', function() {
+    $('.menu-changeproject', fileMenuEmt).off('click').on('click', function() {
       if (Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2) {
         if (window.confirm(I18n.t('message.dialog.new_project'))) {
           WorktableCommon.resetWorktable();
@@ -29,13 +28,14 @@ Navbar = (function() {
         return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
       }
     });
+    $('.menu-adminproject', fileMenuEmt).off('click').on('click', function() {
+      return Common.showModalView(Constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal);
+    });
     menuSave = $('.menu-save', fileMenuEmt);
-    menuSave.off('click');
-    menuSave.on('click', function() {
+    menuSave.off('click').on('click', function() {
       return ServerStorage.save();
     });
-    menuSave.off('mouseenter');
-    menuSave.on('mouseenter', function(e) {
+    menuSave.off('mouseenter').on('mouseenter', function(e) {
       var d, lastSaveTime, li, n;
       lastSaveTime = PageValue.getGeneralPageValue(PageValue.Key.LAST_SAVE_TIME);
       if (lastSaveTime != null) {
@@ -50,28 +50,23 @@ Navbar = (function() {
         return $('.pop', li).show();
       }
     });
-    menuSave.off('mouseleave');
-    menuSave.on('mouseleave', function(e) {
+    menuSave.off('mouseleave').on('mouseleave', function(e) {
       var ul;
       ul = this.closest('ul');
       return $('.pop', ul).remove();
     });
-    $('.menu-load', fileMenuEmt).off('mouseenter');
-    $('.menu-load', fileMenuEmt).on('mouseenter', function() {
+    $('.menu-load', fileMenuEmt).off('mouseenter').on('mouseenter', function() {
       return Navbar.get_load_list();
     });
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li');
-    $('.menu-about', etcMenuEmt).off('click');
-    $('.menu-about', etcMenuEmt).on('click', function() {
+    $('.menu-about', etcMenuEmt).off('click').on('click', function() {
       return Common.showModalView(Constant.ModalViewType.ABOUT);
     });
-    $('.menu-backtomainpage', etcMenuEmt).off('click');
-    $('.menu-backtomainpage', etcMenuEmt).on('click', function() {
+    $('.menu-backtomainpage', etcMenuEmt).off('click').on('click', function() {
       return window.location.href = '/';
     });
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
-    $('.menu-item', itemsSelectMenuEmt).off('click');
-    $('.menu-item', itemsSelectMenuEmt).on('click', function() {
+    $('.menu-item', itemsSelectMenuEmt).off('click').on('click', function() {
       var emtId, itemToken, selected;
       selected = $(this).html();
       $('#header_items_selected_menu_span').html(selected);
@@ -87,13 +82,11 @@ Navbar = (function() {
         })(this));
       }
     });
-    $('#menu-action-edit').off('click');
-    $('#menu-action-edit').on('click', function() {
+    $('#menu-action-edit').off('click').on('click', function() {
       Navbar.setModeEdit();
       return WorktableCommon.changeMode(Constant.Mode.EDIT);
     });
-    $('#menu_sidebar_toggle').off('click');
-    return $('#menu_sidebar_toggle').on('click', function() {
+    return $('#menu_sidebar_toggle').off('click').on('click', function() {
       if (Sidebar.isOpenedConfigSidebar()) {
         return Sidebar.closeSidebar();
       } else {
@@ -108,24 +101,20 @@ Navbar = (function() {
   Navbar.initRunNavbar = function() {
     var navEmt;
     navEmt = $('#nav');
-    $('.menu-showguide', navEmt).off('click');
-    $('.menu-showguide', navEmt).on('click', function() {
+    $('.menu-showguide', navEmt).off('click').on('click', function() {
       return RunSetting.toggleShowGuide();
     });
-    $('.menu-control-rewind-page', navEmt).off('click');
-    $('.menu-control-rewind-page', navEmt).on('click', function() {
+    $('.menu-control-rewind-page', navEmt).off('click').on('click', function() {
       if (window.eventAction != null) {
         return window.eventAction.thisPage().rewindAllChapters();
       }
     });
-    $('.menu-control-rewind-chapter', navEmt).off('click');
-    $('.menu-control-rewind-chapter', navEmt).on('click', function() {
+    $('.menu-control-rewind-chapter', navEmt).off('click').on('click', function() {
       if (window.eventAction != null) {
         return window.eventAction.thisPage().rewindChapter();
       }
     });
-    $('.menu-upload-gallery', navEmt).off('click');
-    return $('.menu-upload-gallery', navEmt).on('click', function() {
+    return $('.menu-upload-gallery', navEmt).off('click').on('click', function() {
       return RunCommon.showUploadGalleryConfirm();
     });
   };
@@ -134,14 +123,12 @@ Navbar = (function() {
     var fileMenuEmt, menuSave;
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     menuSave = $('.menu-save', fileMenuEmt);
-    menuSave.off('click');
-    menuSave.on('click', function() {
+    menuSave.off('click').on('click', function() {
       return CodingCommon.saveActiveCode();
     });
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     menuSave = $('.menu-all-save', fileMenuEmt);
-    menuSave.off('click');
-    return menuSave.on('click', function() {
+    return menuSave.off('click').on('click', function() {
       return CodingCommon.saveAllCode();
     });
   };
@@ -149,12 +136,10 @@ Navbar = (function() {
   Navbar.initItemPreviewNavbar = function() {
     var navEmt;
     navEmt = $('#nav');
-    $('.menu-upload-item', navEmt).off('click');
-    $('.menu-upload-item', navEmt).on('click', function() {
+    $('.menu-upload-item', navEmt).off('click').on('click', function() {
       return ItemPreviewCommon.showUploadItemConfirm();
     });
-    $('.menu-add-item', navEmt).off('click');
-    return $('.menu-add-item', navEmt).on('click', function() {
+    return $('.menu-add-item', navEmt).off('click').on('click', function() {
       return ItemPreviewCommon.showAddItemConfirm();
     });
   };

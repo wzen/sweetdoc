@@ -27,6 +27,11 @@ class Project
     $('.display_size_wrapper input[type=radio]', modalEmt).off('click')
     $('.display_size_wrapper input[type=radio]', modalEmt).on('click', ->
       $('.display_size_input_wrapper', modalEmt).css('display', if $(@).val() == 'input' then 'block' else 'none')
+      if $(@).val() == 'input'
+        height = 199
+      else
+        height = 179
+      modalEmt.animate({height: "#{size.height}px"}, {duration: 300})
     )
 
     # ウィンドウサイズ
@@ -136,6 +141,7 @@ class Project
       window.location.href = '/'
     )
 
+  # プロジェクト一覧を更新順に取得
   @load_data: (successCallback = null, errorCallback = null) ->
     $.ajax(
       {
@@ -191,3 +197,12 @@ class Project
       width: parseInt(width)
       height: parseInt(height)
     })
+
+  # プロジェクト管理モーダルビュー初期化
+  @initAdminProjectModal = (modalEmt, params, callback = null) ->
+    # 作成済みプロジェクト一覧取得
+    Project.load_data((data) ->
+      user_pagevalue_list = data.user_pagevalue_list
+
+    )
+

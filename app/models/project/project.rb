@@ -52,6 +52,10 @@ class Project < ActiveRecord::Base
     return null
   end
 
+  def self.admin_menu(user_id)
+
+  end
+
   def self.reset(user_id, project_id)
     # アイテム画像の削除
     ret, message = ItemImage.remove_worktable_img(user_id, project_id)
