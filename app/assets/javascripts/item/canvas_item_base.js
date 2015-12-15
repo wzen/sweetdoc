@@ -94,7 +94,7 @@ CanvasItemBase = (function(superClass) {
     }
   };
 
-  CanvasItemBase.prototype.clearDraw = function() {
+  CanvasItemBase.prototype.removeItemElement = function() {
     var canvas, context;
     this.saveNewDrawingSurface();
     canvas = document.getElementById(this.canvasElementId());

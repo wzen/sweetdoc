@@ -85,7 +85,7 @@ class CanvasItemBase extends ItemBase
         context.putImageData(@_newDrawedSurfaceImageData, 0, 0)
 
   # 描画を削除
-  clearDraw: ->
+  removeItemElement: ->
     # 画面を保存
     @saveNewDrawingSurface()
     canvas = document.getElementById(@canvasElementId());
