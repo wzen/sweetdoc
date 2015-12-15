@@ -13,7 +13,11 @@ class GalleryController < ApplicationController
     tag_ids = Gallery.get_bookmarked_tag(current_or_guest_user.id)
     date = Date.today
     contents = Gallery.grid_index(show_head, show_limit, date, tag_ids)
-    @contents = contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
+    if contents.present?
+      @contents = contents.uniq{|u| u[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}
+    else
+      @contents = {}
+    end
   end
 
   def detail

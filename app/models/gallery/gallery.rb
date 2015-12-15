@@ -532,7 +532,7 @@ class Gallery < ActiveRecord::Base
     if contents.present? && contents.count > 0
       return contents.to_hash
     end
-    return null
+    return nil
   end
 
   def self.get_bookmarked_tag(user_id)
