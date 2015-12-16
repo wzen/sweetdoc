@@ -3,7 +3,7 @@
  */
 //= require jquery-1.9.1.min
 //= require jquery_ujs
-//= require jquery-ui.min
+//= require jquery-ui
 //= require jquery.transit.min
 //= require turbolinks
 //= require i18n

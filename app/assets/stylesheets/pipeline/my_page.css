@@ -13,7 +13,7 @@
  *= require bootstrap.min
  *= require common/common
  *= require common/modal_view.css
- *= require jquery-ui/jquery-ui.min
+ *= require jquery-ui
  *= require css/layout
  *= require gallery/gallery
  *= require my_page/my_page

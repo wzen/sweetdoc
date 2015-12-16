@@ -16,4 +16,6 @@ Rails.application.config.assets.precompile = [
     /(?:\/|\\|\A)application\.(css|js)$/
 ]
 
+Rails.application.config.assets.precompile += %w(markitup/skins/markitup/*.png markitup/sets/html/*.png)
+
 #Rails.application.config.assets.prefix = '/assets'

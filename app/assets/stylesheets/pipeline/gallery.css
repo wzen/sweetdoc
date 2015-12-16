@@ -14,7 +14,7 @@
  *= require common/common
  *= require common/modal_view.css
  *= require paging_animation/pageflip
- *= require jquery-ui/jquery-ui.min
+ *= require jquery-ui
  *= require css/colorpicker
  *= require css/layout
  *= require run/run
