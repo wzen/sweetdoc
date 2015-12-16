@@ -256,12 +256,13 @@ ActiveRecord::Schema.define(version: 20151209141157) do
   end
 
   create_table "item_images", force: true do |t|
-    t.integer  "user_project_map_id", null: false
+    t.integer  "user_project_map_id",                 null: false
     t.integer  "gallery_id"
-    t.string   "item_obj_id",         null: false
+    t.string   "item_obj_id",                         null: false
     t.string   "event_dist_id"
     t.string   "file_path"
     t.text     "link_url"
+    t.boolean  "del_flg",             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

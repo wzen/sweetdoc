@@ -277,10 +277,10 @@ DEPENDENCIES
   i18n-js (= 2.1.2)
   jbuilder (= 2.3.2)
   jquery-rails (= 3.1.4)
-  jquery-ui-rails
+  jquery-ui-rails (= 5.0.5)
   less-rails (= 2.7.0)
   libv8 (= 3.16.14.7)
-  markitup-rails
+  markitup-rails (= 1.1.3)
   meta-tags (= 2.1.0)
   mini_magick (= 4.3.6)
   mysql2 (~> 0.3.20)
