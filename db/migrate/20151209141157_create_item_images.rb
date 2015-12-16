@@ -7,6 +7,7 @@ class CreateItemImages < ActiveRecord::Migration
       t.string :event_dist_id
       t.string :file_path
       t.text :link_url
+      t.boolean :del_flg, default: false
 
       t.timestamps
     end
