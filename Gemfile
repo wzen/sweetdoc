@@ -43,7 +43,7 @@ gem 'sprockets-rails', '2.3.3'
 gem 'bcrypt', '3.1.10'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+gem 'unicorn'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
