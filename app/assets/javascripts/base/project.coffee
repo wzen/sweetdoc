@@ -216,7 +216,7 @@ class Project
         }
       )
 
-    _editEvent = (callback) ->
+    _loadEditInput = (callback) ->
       $.ajax(
         {
           url: "/project/get_project_by_user_pagevalue_id"
@@ -232,7 +232,7 @@ class Project
         }
       )
 
-    _deleteEvent = (callback) ->
+    _delete = (callback) ->
       $.ajax(
         {
           url: "/project/remove"
@@ -248,22 +248,43 @@ class Project
         }
       )
 
+    _initEditInput = ->
+      inputWrapper = modalEmt.find('.am_input_wrapper:first')
+      inputWrapper.find('input[type=text]').val('')
+      inputWrapper.find('input[type=number]').val('')
+
+    _settingEditInputEvent = ->
+      modalEmt.find('.button_wrapper update_button').off('click').on('click', (e) =>
+      )
+      modalEmt.find('.button_wrapper cancel_button').off('click').on('click', (e) =>
+        # 左にスライド
+        modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
+      )
+
     # 作成済みプロジェクト一覧取得
     _loadAdminMenu.call(@, (admin_html) ->
       modalEmt.find('.am_list:first').html(admin_html)
       # イベント設定
       modalEmt.find('.am_row .edit_button').off('click').on('click', (e) =>
-        # 編集
-        _editEvent((project) =>
-          # 入力値初期化
-          # 右にスライド
+        # 右にスライド
+        scrollWrapper = modalEmt.find('.am_scroll_wrapper:first')
+        scrollContents = scrollWrapper.children('div:first')
+        scrollWrapper.animate({scrollLeft: scrollContents.width()}, 200)
+        # プロジェクト情報初期化
+        _initEditInput.call(@)
+        # プロジェクト情報読み込み
+        _loadEditInput((project) =>
+          inputWrapper = modalEmt.find('.am_input_wrapper:first')
+          inputWrapper.find('.project_name:first').val(project.title)
+          inputWrapper.find('.display_size_input_width:first').val(project.screen_width)
+          inputWrapper.find('.display_size_input_height:first').val(project.screen_height)
         )
       )
       modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
         # 削除確認
         if window.confirm(I18n.t('message.dialog.delete_project'))
           # 削除
-          _deleteEvent( (admin_html) =>
+          _delete( (admin_html) =>
             # 削除完了 -> リスト再表示
             modalEmt.find('.am_list:first').empty().html(admin_html)
           )

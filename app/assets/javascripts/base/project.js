@@ -231,7 +231,7 @@ Project = (function() {
   };
 
   Project.initAdminProjectModal = function(modalEmt, params, callback) {
-    var _deleteEvent, _editEvent, _loadAdminMenu;
+    var _delete, _initEditInput, _loadAdminMenu, _loadEditInput, _settingEditInputEvent;
     if (callback == null) {
       callback = null;
     }
@@ -252,7 +252,7 @@ Project = (function() {
         }
       });
     };
-    _editEvent = function(callback) {
+    _loadEditInput = function(callback) {
       return $.ajax({
         url: "/project/get_project_by_user_pagevalue_id",
         type: "POST",
@@ -269,7 +269,7 @@ Project = (function() {
         }
       });
     };
-    _deleteEvent = function(callback) {
+    _delete = function(callback) {
       return $.ajax({
         url: "/project/remove",
         type: "POST",
@@ -286,17 +286,48 @@ Project = (function() {
         }
       });
     };
+    _initEditInput = function() {
+      var inputWrapper;
+      inputWrapper = modalEmt.find('.am_input_wrapper:first');
+      inputWrapper.find('input[type=text]').val('');
+      return inputWrapper.find('input[type=number]').val('');
+    };
+    _settingEditInputEvent = function() {
+      modalEmt.find('.button_wrapper update_button').off('click').on('click', (function(_this) {
+        return function(e) {};
+      })(this));
+      return modalEmt.find('.button_wrapper cancel_button').off('click').on('click', (function(_this) {
+        return function(e) {
+          return modalEmt.find('.am_scroll_wrapper:first').animate({
+            scrollLeft: 0
+          }, 200);
+        };
+      })(this));
+    };
     return _loadAdminMenu.call(this, function(admin_html) {
       modalEmt.find('.am_list:first').html(admin_html);
       modalEmt.find('.am_row .edit_button').off('click').on('click', (function(_this) {
         return function(e) {
-          return _editEvent(function(project) {});
+          var scrollContents, scrollWrapper;
+          scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
+          scrollContents = scrollWrapper.children('div:first');
+          scrollWrapper.animate({
+            scrollLeft: scrollContents.width()
+          }, 200);
+          _initEditInput.call(_this);
+          return _loadEditInput(function(project) {
+            var inputWrapper;
+            inputWrapper = modalEmt.find('.am_input_wrapper:first');
+            inputWrapper.find('.project_name:first').val(project.title);
+            inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
+            return inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
+          });
         };
       })(this));
       return modalEmt.find('.am_row .remove_button').off('click').on('click', (function(_this) {
         return function(e) {
           if (window.confirm(I18n.t('message.dialog.delete_project'))) {
-            return _deleteEvent(function(admin_html) {
+            return _delete(function(admin_html) {
               return modalEmt.find('.am_list:first').empty().html(admin_html);
             });
           }
