@@ -21,13 +21,13 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_arrow.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_image.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page_common.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page.js.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/config_menu.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas_item_base.js" />
@@ -35,6 +35,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
@@ -78,13 +79,13 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_arrow.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_image.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page_common.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/my_page/my_page.js.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/screen_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/config_menu.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/base/base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/canvas_item_base.js" />
@@ -92,6 +93,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />

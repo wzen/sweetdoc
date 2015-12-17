@@ -9,6 +9,7 @@ class CommonVar
     window.operationHistories = {}
     window.operationHistoryTailIndexes = {}
     window.operationHistoryIndexes = {}
+    window.mode = Constant.Mode.NOT_SELECT
 
   # 変数初期化(全メニュー共通)
   @initCommonVar = ->
@@ -65,7 +66,6 @@ class CommonVar
     @initCommonVar()
     window.messageTimer = null
     window.flushMessageTimer = null
-    window.mode = Constant.Mode.NOT_SELECT
     window.selectedObjId = null
     window.runningPreview = false
     @updateWorktableBaseElement(PageValue.getPageNum())

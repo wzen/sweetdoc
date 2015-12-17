@@ -55,6 +55,8 @@ GallerySidebar = (function() {
       var popup, self, type;
       if ($(this).hasClass(GallerySidebar.WORKTABLE)) {
         return window.location.href = '/worktable';
+      } else if ($(this).hasClass(GallerySidebar.LOGO)) {
+        return Common.showModalView(Constant.ModalViewType.ABOUT);
       } else {
         type = _type.call(this);
         popup = $("#sidebar_wrapper .sidebar_popup" + type);

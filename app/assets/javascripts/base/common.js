@@ -837,19 +837,25 @@ Common = (function() {
       results = [];
       for (j = 0, len = items.length; j < len; j++) {
         item = items[j];
-        if (item instanceof CommonEvent) {
-          CommonEvent.deleteInstance(item.id);
+        if (item != null) {
+          if (item instanceof CommonEvent) {
+            CommonEvent.deleteInstance(item.id);
+          } else {
+            item.removeItemElement();
+          }
+          results.push(delete window.instanceMap[item.id]);
         } else {
-          item.removeItemElement();
+          results.push(void 0);
         }
-        results.push(delete window.instanceMap[item.id]);
       }
       return results;
     } else {
       ref = Common.allItemInstances();
       for (k in ref) {
         v = ref[k];
-        v.removeItemElement();
+        if (v != null) {
+          v.removeItemElement();
+        }
       }
       window.instanceMap = {};
       return CommonEvent.deleteAllInstance();

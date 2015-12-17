@@ -676,16 +676,18 @@ class Common
     if pageNum?
       items = @instancesInPage(pageNum)
       for item in items
-        if item instanceof CommonEvent
-          # Singletonのキャッシュを削除
-          CommonEvent.deleteInstance(item.id)
-        else
-          # アイテム削除
-          item.removeItemElement()
-        delete window.instanceMap[item.id]
+        if item?
+          if item instanceof CommonEvent
+            # Singletonのキャッシュを削除
+            CommonEvent.deleteInstance(item.id)
+          else
+            # アイテム削除
+            item.removeItemElement()
+          delete window.instanceMap[item.id]
     else
       for k, v of Common.allItemInstances()
-        v.removeItemElement()
+        if v?
+          v.removeItemElement()
       window.instanceMap = {}
       # Singletonのキャッシュを削除
       CommonEvent.deleteAllInstance()

@@ -154,41 +154,43 @@ WorktableCommon = (function() {
     return PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex));
   };
 
-  WorktableCommon.changeMode = function(afterMode) {
+  WorktableCommon.changeMode = function(afterMode, pn) {
     var item, items, l, len, results;
-    if (window.mode === afterMode) {
-      return;
+    if (pn == null) {
+      pn = PageValue.getPageNum();
     }
     if (afterMode === Constant.Mode.NOT_SELECT) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn));
       window.scrollInsideWrapper.removeClass('edit_mode');
     } else if (afterMode === Constant.Mode.DRAW) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn));
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInsideWrapper.removeClass('edit_mode');
     } else if (afterMode === Constant.Mode.EDIT) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM));
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM, pn));
       window.scrollContents.find('.item.draggable').addClass('edit_mode');
       window.scrollInsideWrapper.addClass('edit_mode');
       Navbar.setModeEdit();
     } else if (afterMode === Constant.Mode.OPTION) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn));
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInsideWrapper.removeClass('edit_mode');
     }
-    window.beforeMode = window.mode;
-    window.mode = afterMode;
-    items = Common.itemInstancesInPage();
-    results = [];
-    for (l = 0, len = items.length; l < len; l++) {
-      item = items[l];
-      if (item.changeMode != null) {
-        results.push(item.changeMode(afterMode));
-      } else {
-        results.push(void 0);
+    if (window.mode !== afterMode) {
+      window.beforeMode = window.mode;
+      window.mode = afterMode;
+      items = Common.itemInstancesInPage();
+      results = [];
+      for (l = 0, len = items.length; l < len; l++) {
+        item = items[l];
+        if (item.changeMode != null) {
+          results.push(item.changeMode(afterMode));
+        } else {
+          results.push(void 0);
+        }
       }
+      return results;
     }
-    return results;
   };
 
   WorktableCommon.putbackMode = function() {

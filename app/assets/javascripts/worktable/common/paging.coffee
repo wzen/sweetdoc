@@ -115,6 +115,8 @@ class Paging
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+        # 作成ページのモード設定
+        WorktableCommon.changeMode(window.mode)
         # タイムライン更新
         Timeline.refreshAllTimeline()
 
@@ -188,6 +190,8 @@ class Paging
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # フォーク内容反映
         Paging.selectFork(selectedForkNum, ->
+          # ページ変更後のモード設定
+          WorktableCommon.changeMode(window.mode, selectedPageNum)
           # タイムライン更新
           Timeline.refreshAllTimeline()
 

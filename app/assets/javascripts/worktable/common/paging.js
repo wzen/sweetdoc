@@ -100,6 +100,7 @@ Paging = (function() {
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();
       return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+        WorktableCommon.changeMode(window.mode);
         Timeline.refreshAllTimeline();
         return pageFlip.startRender(function() {
           var className, section;
@@ -164,6 +165,7 @@ Paging = (function() {
       PageValue.adjustInstanceAndEventOnPage();
       return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         return Paging.selectFork(selectedForkNum, function() {
+          WorktableCommon.changeMode(window.mode, selectedPageNum);
           Timeline.refreshAllTimeline();
           return pageFlip.startRender(function() {
             var className, section;

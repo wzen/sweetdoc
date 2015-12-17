@@ -126,38 +126,37 @@ class WorktableCommon
 
   # モードチェンジ
   # @param [Mode] afterMode 変更後画面モード
-  @changeMode = (afterMode) ->
-    if window.mode == afterMode
-      # 変更なし
-      return
+  @changeMode = (afterMode, pn = PageValue.getPageNum()) ->
 
+    # 画面Zindex変更
     if afterMode == Constant.Mode.NOT_SELECT
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn))
       window.scrollInsideWrapper.removeClass('edit_mode')
     else if afterMode == Constant.Mode.DRAW
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn))
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInsideWrapper.removeClass('edit_mode')
     else if afterMode == Constant.Mode.EDIT
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM))
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM, pn))
       window.scrollContents.find('.item.draggable').addClass('edit_mode')
       window.scrollInsideWrapper.addClass('edit_mode')
       # ヘッダーをEditに
       Navbar.setModeEdit()
     else if afterMode == Constant.Mode.OPTION
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
+      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn))
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInsideWrapper.removeClass('edit_mode')
 
-    # 変更前のモードを保存
-    window.beforeMode = window.mode
-    window.mode = afterMode
+    if window.mode != afterMode
+      # 変更前のモードを保存
+      window.beforeMode = window.mode
+      window.mode = afterMode
 
-    # アイテムのイベント呼び出し
-    items = Common.itemInstancesInPage()
-    for item in items
-      if item.changeMode?
-        item.changeMode(afterMode)
+      # アイテムのイベント呼び出し
+      items = Common.itemInstancesInPage()
+      for item in items
+        if item.changeMode?
+          item.changeMode(afterMode)
 
   # モードを一つ前に戻す
   @putbackMode = ->

@@ -10,7 +10,8 @@ CommonVar = (function() {
     window.copiedInstance = null;
     window.operationHistories = {};
     window.operationHistoryTailIndexes = {};
-    return window.operationHistoryIndexes = {};
+    window.operationHistoryIndexes = {};
+    return window.mode = Constant.Mode.NOT_SELECT;
   };
 
   CommonVar.initCommonVar = function() {
@@ -67,7 +68,6 @@ CommonVar = (function() {
     this.initCommonVar();
     window.messageTimer = null;
     window.flushMessageTimer = null;
-    window.mode = Constant.Mode.NOT_SELECT;
     window.selectedObjId = null;
     window.runningPreview = false;
     return this.updateWorktableBaseElement(PageValue.getPageNum());
