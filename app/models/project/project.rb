@@ -107,14 +107,12 @@ class Project < ActiveRecord::Base
           upm.del_flg = true
           upm.save!
         end
-
-        # 削除完了 -> リストを再取得
-        reload_list = list(user_id)
-        return true, I18n.t('message.database.item_state.save.success'), reload_list
+        # 削除完了
+        return true, I18n.t('message.database.item_state.save.success')
       end
     rescue => e
       # 更新失敗
-      return false, I18n.t('message.database.item_state.save.error'), nil
+      return false, I18n.t('message.database.item_state.save.error')
     end
   end
 

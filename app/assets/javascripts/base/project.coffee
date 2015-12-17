@@ -45,8 +45,8 @@ class Project
         list = ''
         n = $.now()
         for p in user_pagevalue_list
-          d = new Date(p['updated_at'])
-          e = "<option value='#{p['id']}'>#{p['project_title']} - #{Common.displayDiffAlmostTime(n, d.getTime())}</option>"
+          d = new Date(p['up_updated_at'])
+          e = "<option value='#{p['up_id']}'>#{p['p_title']} - #{Common.displayDiffAlmostTime(n, d.getTime())}</option>"
           list += e
         projectSelect.children().remove()
         $(list).appendTo(projectSelect)
@@ -145,7 +145,7 @@ class Project
   @load_data_order_last_updated: (successCallback = null, errorCallback = null) ->
     $.ajax(
       {
-        url: "/page_value_state/user_pagevalue_last_updated_list"
+        url: "/page_value_state/user_pagevalues_and_projects_sorted_updated"
         type: "GET"
         dataType: "json"
         success: (data)->
@@ -155,11 +155,11 @@ class Project
           else
             if errorCallback?
               errorCallback()
-            console.log('/page_value_state/user_pagevalue_last_updated_list server error')
+            console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated server error')
         error: (data)->
           if errorCallback?
             errorCallback()
-          console.log('/page_value_state/user_pagevalue_last_updated_list ajax error')
+          console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated ajax error')
       }
     )
 
@@ -222,7 +222,7 @@ class Project
           url: "/project/get_project_by_user_pagevalue_id"
           type: "POST"
           dataType: "json"
-          success: (data)->
+          success: (data) ->
             if data.resultSuccess
               callback(data.project)
             else
@@ -262,7 +262,7 @@ class Project
       )
 
     # 作成済みプロジェクト一覧取得
-    _loadAdminMenu.call(@, (admin_html) ->
+    _loadAdminMenu.call(@, (admin_html) =>
       modalEmt.find('.am_list:first').html(admin_html)
       # イベント設定
       modalEmt.find('.am_row .edit_button').off('click').on('click', (e) =>
@@ -289,5 +289,8 @@ class Project
             modalEmt.find('.am_list:first').empty().html(admin_html)
           )
       )
+      Common.modalCentering()
+      if callback?
+        callback()
     )
 

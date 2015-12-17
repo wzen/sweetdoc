@@ -1,0 +1,2 @@
+json.resultSuccess @result_success
+json.user_pagevalue_list @user_pagevalue_list

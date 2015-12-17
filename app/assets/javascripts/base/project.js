@@ -65,8 +65,8 @@ Project = (function() {
         n = $.now();
         for (i = 0, len = user_pagevalue_list.length; i < len; i++) {
           p = user_pagevalue_list[i];
-          d = new Date(p['updated_at']);
-          e = "<option value='" + p['id'] + "'>" + p['project_title'] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
+          d = new Date(p['up_updated_at']);
+          e = "<option value='" + p['up_id'] + "'>" + p['p_title'] + " - " + (Common.displayDiffAlmostTime(n, d.getTime())) + "</option>";
           list += e;
         }
         projectSelect.children().remove();
@@ -166,7 +166,7 @@ Project = (function() {
       errorCallback = null;
     }
     return $.ajax({
-      url: "/page_value_state/user_pagevalue_last_updated_list",
+      url: "/page_value_state/user_pagevalues_and_projects_sorted_updated",
       type: "GET",
       dataType: "json",
       success: function(data) {
@@ -178,14 +178,14 @@ Project = (function() {
           if (errorCallback != null) {
             errorCallback();
           }
-          return console.log('/page_value_state/user_pagevalue_last_updated_list server error');
+          return console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated server error');
         }
       },
       error: function(data) {
         if (errorCallback != null) {
           errorCallback();
         }
-        return console.log('/page_value_state/user_pagevalue_last_updated_list ajax error');
+        return console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated ajax error');
       }
     });
   };
@@ -304,10 +304,10 @@ Project = (function() {
         };
       })(this));
     };
-    return _loadAdminMenu.call(this, function(admin_html) {
-      modalEmt.find('.am_list:first').html(admin_html);
-      modalEmt.find('.am_row .edit_button').off('click').on('click', (function(_this) {
-        return function(e) {
+    return _loadAdminMenu.call(this, (function(_this) {
+      return function(admin_html) {
+        modalEmt.find('.am_list:first').html(admin_html);
+        modalEmt.find('.am_row .edit_button').off('click').on('click', function(e) {
           var scrollContents, scrollWrapper;
           scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
           scrollContents = scrollWrapper.children('div:first');
@@ -322,18 +322,20 @@ Project = (function() {
             inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
             return inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
           });
-        };
-      })(this));
-      return modalEmt.find('.am_row .remove_button').off('click').on('click', (function(_this) {
-        return function(e) {
+        });
+        modalEmt.find('.am_row .remove_button').off('click').on('click', function(e) {
           if (window.confirm(I18n.t('message.dialog.delete_project'))) {
             return _delete(function(admin_html) {
               return modalEmt.find('.am_list:first').empty().html(admin_html);
             });
           }
-        };
-      })(this));
-    });
+        });
+        Common.modalCentering();
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   return Project;

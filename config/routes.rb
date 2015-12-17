@@ -32,7 +32,6 @@ Rails.application.routes.draw do
   # Project
   post 'project/create'
   post 'project/get_project_by_user_pagevalue_id'
-  get 'project/list'
   get 'project/admin_menu'
   post 'project/reset'
   post 'project/remove'
@@ -45,7 +44,7 @@ Rails.application.routes.draw do
   # PageValueState
   post 'page_value_state/save_state'
   post 'page_value_state/load_state'
-  get 'page_value_state/user_pagevalue_last_updated_list'
+  get 'page_value_state/user_pagevalues_and_projects_sorted_updated'
   get 'page_value_state/user_pagevalue_list_sorted_update'
 
   # ItemJs

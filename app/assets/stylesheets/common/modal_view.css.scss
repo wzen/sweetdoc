@@ -33,7 +33,7 @@
   opacity: 0.3;
 }
 
-.modal-content.init_project, .modal-content.admin_project {
+.modal-content.init_project, .modal-content.admin_projects {
 
   .content {
     > div {
@@ -68,27 +68,6 @@
     border:1px solid #CCC;
   }
 
-  .am_scroll_wrapper {
-    overflow: hidden;
-    .am_list_wrapper {
-      .am_list {
-        .am_row {
-          .am_title_wrapper {
-            .am_title {
-
-            }
-          }
-          .am_edit_wrapper {
-
-          }
-          .am_remove_wrapper {
-
-          }
-        }
-      }
-    }
-  }
-
   .button_wrapper {
     width: 100%;
     text-align: center;
@@ -97,56 +76,97 @@
     span {
       display: none;
     }
+  }
 
-    .create_button, .open_button, .update_button {
-      background: #e62e4d;
-      background-image: -webkit-linear-gradient(top, #e62e4d, #c91414);
-      background-image: -moz-linear-gradient(top, #e62e4d, #c91414);
-      background-image: -ms-linear-gradient(top, #e62e4d, #c91414);
-      background-image: -o-linear-gradient(top, #e62e4d, #c91414);
-      background-image: linear-gradient(to bottom, #e62e4d, #c91414);
-      -webkit-border-radius: 8px;
-      -moz-border-radius: 8px;
-      border-radius: 8px;
-      font-family: Arial;
-      color: #ffffff;
-      font-size: 13px;
-      padding: 5px 10px 5px 10px;
-      border: solid #e62e4d 1px;
-    }
+  .create_button, .open_button, .update_button {
+    background: #e62e4d;
+    background-image: -webkit-linear-gradient(top, #e62e4d, #c91414);
+    background-image: -moz-linear-gradient(top, #e62e4d, #c91414);
+    background-image: -ms-linear-gradient(top, #e62e4d, #c91414);
+    background-image: -o-linear-gradient(top, #e62e4d, #c91414);
+    background-image: linear-gradient(to bottom, #e62e4d, #c91414);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 5px 10px 5px 10px;
+    border: solid #e62e4d 1px;
+  }
 
-    .edit_button {
-      background: #088A08;
-      background-image: -webkit-linear-gradient(top, #088A08, #0B610B);
-      background-image: -moz-linear-gradient(top, #088A08, #0B610B);
-      background-image: -ms-linear-gradient(top, #088A08, #0B610B);
-      background-image: -o-linear-gradient(top, #088A08, #0B610B);
-      background-image: linear-gradient(to bottom, #088A08, #0B610B);
-      -webkit-border-radius: 8px;
-      -moz-border-radius: 8px;
-      border-radius: 8px;
-      font-family: Arial;
-      color: #ffffff;
-      font-size: 13px;
-      padding: 5px 10px 5px 10px;
-      border: solid #088A08 1px;
-    }
+  .edit_button {
+    background: #088A08;
+    background-image: -webkit-linear-gradient(top, #088A08, #0B610B);
+    background-image: -moz-linear-gradient(top, #088A08, #0B610B);
+    background-image: -ms-linear-gradient(top, #088A08, #0B610B);
+    background-image: -o-linear-gradient(top, #088A08, #0B610B);
+    background-image: linear-gradient(to bottom, #088A08, #0B610B);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 5px 10px 5px 10px;
+    border: solid #088A08 1px;
+  }
 
-    .back_button, .cancel_button, .remove_button {
-      background: #666061;
-      background-image: -webkit-linear-gradient(top, #666061, #7a7373);
-      background-image: -moz-linear-gradient(top, #666061, #7a7373);
-      background-image: -ms-linear-gradient(top, #666061, #7a7373);
-      background-image: -o-linear-gradient(top, #666061, #7a7373);
-      background-image: linear-gradient(to bottom, #666061, #7a7373);
-      -webkit-border-radius: 8px;
-      -moz-border-radius: 8px;
-      border-radius: 8px;
-      font-family: Arial;
-      color: #ffffff;
-      font-size: 13px;
-      padding: 5px 10px 5px 10px;
-      border: solid #666061 1px;
+  .back_button, .cancel_button, .remove_button {
+    background: #666061;
+    background-image: -webkit-linear-gradient(top, #666061, #7a7373);
+    background-image: -moz-linear-gradient(top, #666061, #7a7373);
+    background-image: -ms-linear-gradient(top, #666061, #7a7373);
+    background-image: -o-linear-gradient(top, #666061, #7a7373);
+    background-image: linear-gradient(to bottom, #666061, #7a7373);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 5px 10px 5px 10px;
+    border: solid #666061 1px;
+  }
+}
+
+.modal-content.admin_projects {
+  width: 50% !important;
+  .am_scroll_wrapper {
+    overflow: hidden;
+    .am_wrapper {
+      width: 200%;
+      float: left;
+      .am_list_wrapper {
+        width: 50%;
+        .am_list {
+          width: 100%;
+          .am_row {
+            width: 100%;
+            padding: 5px;
+            .am_title_wrapper {
+              float: left;
+              width: 60%;
+              .am_title {
+
+              }
+            }
+            .am_edit_wrapper {
+              float: left;
+              width: 20%;
+            }
+            .am_remove_wrapper {
+              float: left;
+              width: 20%;
+            }
+          }
+        }
+      }
+      .am_input_wrapper {
+        width: 50%;
+        display: none;
+        float: left;
+      }
     }
   }
 }

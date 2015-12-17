@@ -46,7 +46,7 @@ class PageValueState
           saved_record = ret.to_hash.first
 
           # 共通設定作成
-          sp = save_setting_pagevalue(s_page_values, saved_record.present? ? saved_record['setting_pagevalue_id'] : nil)
+          sp = _save_setting_pagevalue(s_page_values, saved_record.present? ? saved_record['setting_pagevalue_id'] : nil)
           if saved_record.blank? || new_record
             # レコード無し or 強制作成
             upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
@@ -79,9 +79,9 @@ class PageValueState
           end
 
           # PageValue保存
-          save_general_pagevalue(g_page_values, page_count, updated_user_pagevalue_id)
-          save_instance_pagevalue(i_page_values, page_count, updated_user_pagevalue_id)
-          save_event_pagevalue(e_page_values, page_count, updated_user_pagevalue_id)
+          _save_general_pagevalue(g_page_values, page_count, updated_user_pagevalue_id)
+          _save_instance_pagevalue(i_page_values, page_count, updated_user_pagevalue_id)
+          _save_event_pagevalue(e_page_values, page_count, updated_user_pagevalue_id)
 
         end
       end
@@ -93,8 +93,15 @@ class PageValueState
     end
   end
 
-  def self.user_pagevalue_last_updated_list(user_id)
-    sql = last_user_pagevalue_search_sql(user_id)
+  def self.user_pagevalues_and_projects_sorted_updated(user_id)
+    select =<<-"SELECT"
+      up.id as up_id,
+      up.updated_at as up_updated_at,
+      p.title as p_title,
+      p.screen_width as p_screen_width,
+      p.screen_height as p_screen_height
+    SELECT
+    sql = _user_pagevalue_sql_order_updated_desc(select, user_id)
     ret = ActiveRecord::Base.connection.select_all(sql).to_hash
     return true, ret
   end
@@ -202,10 +209,10 @@ class PageValueState
     end
   end
 
-  def self.last_user_pagevalue_search_sql(user_id)
+  def self._user_pagevalue_sql_order_updated_desc(select_str, user_id)
     return <<-"SQL"
       SELECT
-      up.*, p.title as project_title
+      #{select_str}
       FROM
       user_pagevalues up
       LEFT JOIN
@@ -234,7 +241,7 @@ class PageValueState
     SQL
   end
 
-  def self.save_setting_pagevalue(save_value, update_id = nil)
+  def self._save_setting_pagevalue(save_value, update_id = nil)
     ret_sp = nil
 
     # 共通設定作成
@@ -288,7 +295,7 @@ class PageValueState
     return ret_sp
   end
 
-  def self.save_general_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
+  def self._save_general_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
     if save_value != 'null'
 
       common = {}
@@ -357,7 +364,7 @@ class PageValueState
     end
   end
 
-  def self.save_instance_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
+  def self._save_instance_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
     if save_value != 'null'
       # 保存済みデータ取得
       if update_user_pagevalue_id.blank?
@@ -396,7 +403,7 @@ class PageValueState
     end
   end
 
-  def self.save_event_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
+  def self._save_event_pagevalue(save_value, page_count, update_user_pagevalue_id = nil)
     if save_value != 'null'
       # 保存済みデータ取得
       if update_user_pagevalue_id.blank?
@@ -554,5 +561,5 @@ class PageValueState
     end
   end
 
-  private_class_method :last_user_pagevalue_search_sql, :save_general_pagevalue, :save_setting_pagevalue, :save_instance_pagevalue, :save_event_pagevalue
+  private_class_method :_user_pagevalue_sql_order_updated_desc, :_save_general_pagevalue, :_save_setting_pagevalue, :_save_instance_pagevalue, :_save_event_pagevalue
 end

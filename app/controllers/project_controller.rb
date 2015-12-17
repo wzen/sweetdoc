@@ -1,4 +1,5 @@
 require 'project/project'
+require 'pagevalue/page_value_state'
 
 class ProjectController < ApplicationController
   def create
@@ -6,12 +7,6 @@ class ProjectController < ApplicationController
     title = params.require(Const::Project::Key::TITLE)
     screen_size = params.require(Const::Project::Key::SCREEN_SIZE)
     @result_success, @message, @project_id, @updated_at = Project.create(user_id, title, screen_size['width'].to_i, screen_size['height'].to_i)
-  end
-
-  def list
-    user_id = current_or_guest_user.id
-    @result_success = true
-    @list = Project.list(user_id)
   end
 
   def get_project_by_user_pagevalue_id
@@ -22,7 +17,7 @@ class ProjectController < ApplicationController
 
   def admin_menu
     user_id = current_or_guest_user.id
-    list = Project.list(user_id)
+    list = PageValueState.user_pagevalues_and_projects_sorted_updated(user_id)
     @admin_html = render_to_string(
         partial: 'project/admin_menu',
         locals: {
@@ -41,14 +36,17 @@ class ProjectController < ApplicationController
   def remove
     user_id = current_or_guest_user.id
     project_id = params.require(Const::Project::Key::PROJECT_ID)
-    @result_success, @message, reload_list = Project.remove(user_id, project_id)
-    if reload_list.present?
-      @admin_html = render_to_string(
-          partial: 'project/admin_menu',
-          locals: {
-              list: list
-          }
-      )
+    @result_success, @message = Project.remove(user_id, project_id)
+    if @result_success
+      reload_list = PageValueState.user_pagevalues_and_projects_sorted_updated(user_id)
+      if reload_list.present?
+        @admin_html = render_to_string(
+            partial: 'project/admin_menu',
+            locals: {
+                list: list
+            }
+        )
+      end
     end
   end
 end
