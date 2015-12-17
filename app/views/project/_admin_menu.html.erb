@@ -9,16 +9,19 @@
         <%= content['p_title'] %>
       </div>
     </div>
-    <div class="am_edit_wrapper">
-      <div class="am_edit_button_wrapper">
-        <span class="edit"><button class="edit_button" value="Edit">Edit</button></span>
+    <div class="am_button_wrapper clearfix">
+      <div class="am_edit_wrapper">
+        <div class="am_edit_button_wrapper">
+          <span class="edit"><button class="edit_button" value="Edit">Edit</button></span>
+        </div>
+      </div>
+      <div class="am_remove_wrapper">
+        <div class="am_remove_button_wrapper">
+          <span class="remove"><button class="remove_button" value="Delete">Delete</button></span>
+        </div>
       </div>
     </div>
-    <div class="am_remove_wrapper">
-      <div class="am_remove_button_wrapper">
-        <span class="remove"><button class="remove_button" value="Delete">Delete</button></span>
-      </div>
-    </div>
+    <input class="<%= Const::Project::Key::PROJECT_ID %>" type="hidden" value="<%= content['p_id'] %>">
     <input class="<%= Const::Project::Key::USER_PAGEVALUE_ID %>" type="hidden" value="<%= content['up_id'] %>">
   </div>
 <% end %>

@@ -216,12 +216,15 @@ class Project
         }
       )
 
-    _loadEditInput = (callback) ->
+    _loadEditInput = (target, callback) ->
+      data = {}
+      data[Constant.Project.Key.USER_PAGEVALUE_ID] = $(target).closest('.am_row').find(".#{Constant.Project.Key.USER_PAGEVALUE_ID}:first").val()
       $.ajax(
         {
           url: "/project/get_project_by_user_pagevalue_id"
           type: "POST"
           dataType: "json"
+          data: data
           success: (data) ->
             if data.resultSuccess
               callback(data.project)
@@ -232,12 +235,40 @@ class Project
         }
       )
 
-    _delete = (callback) ->
+    _update = (target, callback) ->
+      data = {}
+      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
+      inputWrapper = modalEmt.find('.am_input_wrapper:first')
+      data.value = {
+        p_title: inputWrapper.find('.project_name:first').val()
+        p_screen_width: inputWrapper.find('.display_size_input_width:first').val()
+        p_screen_height: inputWrapper.find('.display_size_input_height:first').val()
+      }
+      $.ajax(
+        {
+          url: "/project/update"
+          type: "POST"
+          dataType: "json"
+          data: data
+          success: (data)->
+            if data.resultSuccess
+              callback(data.admin_html)
+            else
+              console.log('/project/remove server error')
+          error: (data)->
+            console.log('/project/remove ajax error')
+        }
+      )
+
+    _delete = (target, callback) ->
+      data = {}
+      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
       $.ajax(
         {
           url: "/project/remove"
           type: "POST"
           dataType: "json"
+          data: data
           success: (data)->
             if data.resultSuccess
               callback(data.admin_html)
@@ -250,11 +281,18 @@ class Project
 
     _initEditInput = ->
       inputWrapper = modalEmt.find('.am_input_wrapper:first')
+      inputWrapper.hide()
       inputWrapper.find('input[type=text]').val('')
       inputWrapper.find('input[type=number]').val('')
 
     _settingEditInputEvent = ->
       modalEmt.find('.button_wrapper update_button').off('click').on('click', (e) =>
+        _update(@, $(e.target), (admin_html) =>
+          # 更新完了 -> リスト再表示
+          modalEmt.find('.am_list:first').empty().html(admin_html)
+          # 左にスライド
+          modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
+        )
       )
       modalEmt.find('.button_wrapper cancel_button').off('click').on('click', (e) =>
         # 左にスライド
@@ -273,18 +311,19 @@ class Project
         # プロジェクト情報初期化
         _initEditInput.call(@)
         # プロジェクト情報読み込み
-        _loadEditInput((project) =>
+        _loadEditInput($(e.target), (project) =>
           inputWrapper = modalEmt.find('.am_input_wrapper:first')
           inputWrapper.find('.project_name:first').val(project.title)
           inputWrapper.find('.display_size_input_width:first').val(project.screen_width)
           inputWrapper.find('.display_size_input_height:first').val(project.screen_height)
+          inputWrapper.show()
         )
       )
       modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
         # 削除確認
         if window.confirm(I18n.t('message.dialog.delete_project'))
           # 削除
-          _delete( (admin_html) =>
+          _delete(@, $(e.target), (admin_html) =>
             # 削除完了 -> リスト再表示
             modalEmt.find('.am_list:first').empty().html(admin_html)
           )

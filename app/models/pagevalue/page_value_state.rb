@@ -97,6 +97,7 @@ class PageValueState
     select =<<-"SELECT"
       up.id as up_id,
       up.updated_at as up_updated_at,
+      p.id as p_id,
       p.title as p_title,
       p.screen_width as p_screen_width,
       p.screen_height as p_screen_height

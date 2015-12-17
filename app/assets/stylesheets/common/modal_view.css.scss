@@ -76,6 +76,13 @@
     span {
       display: none;
     }
+    .create_button, .open_button, .update_button {
+      width: 25%;
+    }
+    .back_button, .cancel_button {
+      width: 40%;
+      margin-left: 10px;
+    }
   }
 
   .create_button, .open_button, .update_button {
@@ -93,6 +100,7 @@
     font-size: 13px;
     padding: 5px 10px 5px 10px;
     border: solid #e62e4d 1px;
+    width: 90%;
   }
 
   .edit_button {
@@ -110,6 +118,7 @@
     font-size: 13px;
     padding: 5px 10px 5px 10px;
     border: solid #088A08 1px;
+    width: 90%;
   }
 
   .back_button, .cancel_button, .remove_button {
@@ -127,17 +136,18 @@
     font-size: 13px;
     padding: 5px 10px 5px 10px;
     border: solid #666061 1px;
+    width: 90%;
   }
 }
 
 .modal-content.admin_projects {
-  width: 50% !important;
+  width: 40% !important;
   .am_scroll_wrapper {
     overflow: hidden;
     .am_wrapper {
       width: 200%;
-      float: left;
       .am_list_wrapper {
+        float: left;
         width: 50%;
         .am_list {
           width: 100%;
@@ -146,18 +156,29 @@
             padding: 5px;
             .am_title_wrapper {
               float: left;
-              width: 60%;
+              width: 100%;
+              height: 30px;
               .am_title {
-
+                font-size: 16px;
+                line-height: 30px;
+                vertical-align: middle;
+                margin-right: 150px;
               }
             }
-            .am_edit_wrapper {
-              float: left;
-              width: 20%;
-            }
-            .am_remove_wrapper {
-              float: left;
-              width: 20%;
+            .am_button_wrapper {
+              float: right;
+              width: 150px;
+              margin-left: -150px;
+              .am_edit_wrapper {
+                float: left;
+                width: 50%;
+                text-align: center;
+              }
+              .am_remove_wrapper {
+                float: left;
+                width: 50%;
+                text-align: center;
+              }
             }
           }
         }

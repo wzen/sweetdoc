@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   post 'project/create'
   post 'project/get_project_by_user_pagevalue_id'
   get 'project/admin_menu'
+  post 'project/update'
   post 'project/reset'
   post 'project/remove'
 

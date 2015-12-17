@@ -1,6 +1,7 @@
 require 'pagevalue/user_pagevalue'
 require 'project/user_project_map'
 require 'item/item_image'
+require 'pagevalue/page_value_state'
 
 class Project < ActiveRecord::Base
   has_many :project_gallery_maps
@@ -48,8 +49,8 @@ class Project < ActiveRecord::Base
             up.del_flg = 0
         SQL
         ret_sql = ActiveRecord::Base.connection.select_all(sql)
-        if ret_sql.present?
-          return true, I18n.t('message.database.item_state.save.success'), ret_sql.to_hash
+        if ret_sql.present? && ret_sql.count > 0
+          return true, I18n.t('message.database.item_state.save.success'), ret_sql.to_hash.first
         end
         return true, I18n.t('message.database.item_state.save.success'), nil
       end
@@ -81,6 +82,49 @@ class Project < ActiveRecord::Base
     return null
   end
 
+  def self.admin_project_list(controller, user_id)
+    result_success, list = PageValueState.user_pagevalues_and_projects_sorted_updated(user_id)
+    admin_html = []
+    if result_success
+      if list.present?
+        admin_html = controller.render_to_string(
+            partial: 'project/admin_menu',
+            locals: {
+                list: list
+            }
+        )
+      end
+    end
+    return result_success, admin_html
+  end
+
+  def self.update(user_id, project_id, value)
+    begin
+      ActiveRecord::Base.transaction do
+        upm = UserProjectMap.find_by(user_id: user_id, project_id: project_id, del_flg: false)
+        if upm.present?
+          p = self.find(project_id)
+          if p.present?
+            if value['p_title'].present?
+              p.title = value['p_title']
+            end
+            if value['p_screen_width'].present?
+              p.screen_width = value['p_screen_width']
+            end
+            if value['p_screen_height'].present?
+              p.screen_height = value['p_screen_height']
+            end
+            p.save!
+          end
+        end
+        return true, I18n.t('message.database.item_state.save.success')
+      end
+    rescue => e
+      # 更新失敗
+      return false, I18n.t('message.database.item_state.save.error')
+    end
+  end
+
   def self.reset(user_id, project_id)
     begin
       ActiveRecord::Base.transaction do
@@ -106,6 +150,11 @@ class Project < ActiveRecord::Base
         if upm.present?
           upm.del_flg = true
           upm.save!
+          p = self.find(project_id)
+          if p.present?
+            p.del_flg = true
+            p.save!
+          end
         end
         # 削除完了
         return true, I18n.t('message.database.item_state.save.success')

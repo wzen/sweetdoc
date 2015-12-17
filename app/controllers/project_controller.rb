@@ -1,5 +1,4 @@
 require 'project/project'
-require 'pagevalue/page_value_state'
 
 class ProjectController < ApplicationController
   def create
@@ -17,14 +16,17 @@ class ProjectController < ApplicationController
 
   def admin_menu
     user_id = current_or_guest_user.id
-    list = PageValueState.user_pagevalues_and_projects_sorted_updated(user_id)
-    @admin_html = render_to_string(
-        partial: 'project/admin_menu',
-        locals: {
-            list: list
-        }
-    )
-    @result_success = true
+    @result_success, @admin_html = Project.admin_project_list(self, user_id)
+  end
+
+  def update
+    user_id = current_or_guest_user.id
+    project_id = params.require(Const::Project::Key::PROJECT_ID)
+    value = params.fetch('value', {})
+    @result_success, @message = Project.update(user_id, project_id, value)
+    if @result_success
+      @result_success, @admin_html = Project.admin_project_list(self, user_id)
+    end
   end
 
   def reset
@@ -38,15 +40,7 @@ class ProjectController < ApplicationController
     project_id = params.require(Const::Project::Key::PROJECT_ID)
     @result_success, @message = Project.remove(user_id, project_id)
     if @result_success
-      reload_list = PageValueState.user_pagevalues_and_projects_sorted_updated(user_id)
-      if reload_list.present?
-        @admin_html = render_to_string(
-            partial: 'project/admin_menu',
-            locals: {
-                list: list
-            }
-        )
-      end
+      @result_success, @admin_html = Project.admin_project_list(self, user_id)
     end
   end
 end

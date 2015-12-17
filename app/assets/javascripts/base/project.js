@@ -231,7 +231,7 @@ Project = (function() {
   };
 
   Project.initAdminProjectModal = function(modalEmt, params, callback) {
-    var _delete, _initEditInput, _loadAdminMenu, _loadEditInput, _settingEditInputEvent;
+    var _delete, _initEditInput, _loadAdminMenu, _loadEditInput, _settingEditInputEvent, _update;
     if (callback == null) {
       callback = null;
     }
@@ -252,11 +252,15 @@ Project = (function() {
         }
       });
     };
-    _loadEditInput = function(callback) {
+    _loadEditInput = function(target, callback) {
+      var data;
+      data = {};
+      data[Constant.Project.Key.USER_PAGEVALUE_ID] = $(target).closest('.am_row').find("." + Constant.Project.Key.USER_PAGEVALUE_ID + ":first").val();
       return $.ajax({
         url: "/project/get_project_by_user_pagevalue_id",
         type: "POST",
         dataType: "json",
+        data: data,
         success: function(data) {
           if (data.resultSuccess) {
             return callback(data.project);
@@ -269,11 +273,42 @@ Project = (function() {
         }
       });
     };
-    _delete = function(callback) {
+    _update = function(target, callback) {
+      var data, inputWrapper;
+      data = {};
+      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
+      inputWrapper = modalEmt.find('.am_input_wrapper:first');
+      data.value = {
+        p_title: inputWrapper.find('.project_name:first').val(),
+        p_screen_width: inputWrapper.find('.display_size_input_width:first').val(),
+        p_screen_height: inputWrapper.find('.display_size_input_height:first').val()
+      };
+      return $.ajax({
+        url: "/project/update",
+        type: "POST",
+        dataType: "json",
+        data: data,
+        success: function(data) {
+          if (data.resultSuccess) {
+            return callback(data.admin_html);
+          } else {
+            return console.log('/project/remove server error');
+          }
+        },
+        error: function(data) {
+          return console.log('/project/remove ajax error');
+        }
+      });
+    };
+    _delete = function(target, callback) {
+      var data;
+      data = {};
+      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
       return $.ajax({
         url: "/project/remove",
         type: "POST",
         dataType: "json",
+        data: data,
         success: function(data) {
           if (data.resultSuccess) {
             return callback(data.admin_html);
@@ -289,12 +324,20 @@ Project = (function() {
     _initEditInput = function() {
       var inputWrapper;
       inputWrapper = modalEmt.find('.am_input_wrapper:first');
+      inputWrapper.hide();
       inputWrapper.find('input[type=text]').val('');
       return inputWrapper.find('input[type=number]').val('');
     };
     _settingEditInputEvent = function() {
       modalEmt.find('.button_wrapper update_button').off('click').on('click', (function(_this) {
-        return function(e) {};
+        return function(e) {
+          return _update(_this, $(e.target), function(admin_html) {
+            modalEmt.find('.am_list:first').empty().html(admin_html);
+            return modalEmt.find('.am_scroll_wrapper:first').animate({
+              scrollLeft: 0
+            }, 200);
+          });
+        };
       })(this));
       return modalEmt.find('.button_wrapper cancel_button').off('click').on('click', (function(_this) {
         return function(e) {
@@ -315,17 +358,18 @@ Project = (function() {
             scrollLeft: scrollContents.width()
           }, 200);
           _initEditInput.call(_this);
-          return _loadEditInput(function(project) {
+          return _loadEditInput($(e.target), function(project) {
             var inputWrapper;
             inputWrapper = modalEmt.find('.am_input_wrapper:first');
             inputWrapper.find('.project_name:first').val(project.title);
             inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
-            return inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
+            inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
+            return inputWrapper.show();
           });
         });
         modalEmt.find('.am_row .remove_button').off('click').on('click', function(e) {
           if (window.confirm(I18n.t('message.dialog.delete_project'))) {
-            return _delete(function(admin_html) {
+            return _delete(_this, $(e.target), function(admin_html) {
               return modalEmt.find('.am_list:first').empty().html(admin_html);
             });
           }
