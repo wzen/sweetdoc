@@ -350,9 +350,7 @@ Project = (function() {
               screenWidth: updated_project_info.screen_width,
               screenHeight: updated_project_info.screen_height
             });
-            return modalEmt.find('.am_scroll_wrapper:first').animate({
-              scrollLeft: 0
-            }, 200);
+            return Common.hideModalView();
           });
         };
       })(this));
@@ -365,21 +363,20 @@ Project = (function() {
       })(this));
     };
     _updateActive = function() {
-      return modalEmt.find('.am_row').each((function(_this) {
-        return function() {
-          var openedProjectId;
-          openedProjectId = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
-          if ($(_this).find("." + Constant.Project.Key.PROJECT_ID + ":first").val() === openedProjectId) {
-            return $(_this).find(".am_title:frist").addClass('opened');
-          } else {
-            return $(_this).find(".am_title:frist").removeClass('opened');
-          }
-        };
-      })(this));
+      return modalEmt.find('.am_row').each(function() {
+        var openedProjectId;
+        openedProjectId = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
+        if (parseInt($(this).find("." + Constant.Project.Key.PROJECT_ID + ":first").val()) === parseInt(openedProjectId)) {
+          return $(this).find(".am_title:first").addClass('opened');
+        } else {
+          return $(this).find(".am_title:first").removeClass('opened');
+        }
+      });
     };
     return _loadAdminMenu.call(this, (function(_this) {
       return function(admin_html) {
         modalEmt.find('.am_list:first').html(admin_html);
+        _updateActive.call(_this);
         modalEmt.find('.am_row .edit_button').off('click').on('click', function(e) {
           var scrollContents, scrollWrapper;
           scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
@@ -400,9 +397,18 @@ Project = (function() {
           });
         });
         modalEmt.find('.am_row .remove_button').off('click').on('click', function(e) {
+          var deletedProjectId;
           if (window.confirm(I18n.t('message.dialog.delete_project'))) {
+            deletedProjectId = $(e.target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
             return _delete.call(_this, $(e.target), function(admin_html) {
-              return modalEmt.find('.am_list:first').empty().html(admin_html);
+              _updateActive.call(_this);
+              if (parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) === parseInt(deletedProjectId)) {
+                Common.hideModalView();
+                WorktableCommon.resetWorktable();
+                return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
+              } else {
+                return modalEmt.find('.am_list:first').empty().html(admin_html);
+              }
             });
           }
         });

@@ -307,8 +307,8 @@ class Project
             screenWidth: updated_project_info.screen_width
             screenHeight: updated_project_info.screen_height
           })
-          # 左にスライド
-          modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
+          # 非表示
+          Common.hideModalView()
         )
       )
       modalEmt.find('.button_wrapper .cancel_button').off('click').on('click', (e) =>
@@ -317,17 +317,19 @@ class Project
       )
 
     _updateActive = ->
-      modalEmt.find('.am_row').each( =>
+      modalEmt.find('.am_row').each( ->
         openedProjectId = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
-        if $(@).find(".#{Constant.Project.Key.PROJECT_ID}:first").val() == openedProjectId
-          $(@).find(".am_title:frist").addClass('opened')
+        if parseInt($(@).find(".#{Constant.Project.Key.PROJECT_ID}:first").val()) == parseInt(openedProjectId)
+          $(@).find(".am_title:first").addClass('opened')
         else
-          $(@).find(".am_title:frist").removeClass('opened')
+          $(@).find(".am_title:first").removeClass('opened')
       )
 
     # 作成済みプロジェクト一覧取得
     _loadAdminMenu.call(@, (admin_html) =>
       modalEmt.find('.am_list:first').html(admin_html)
+      # アクティブ設定
+      _updateActive.call(@)
       # イベント設定
       modalEmt.find('.am_row .edit_button').off('click').on('click', (e) =>
         # 右にスライド
@@ -350,10 +352,20 @@ class Project
       modalEmt.find('.am_row .remove_button').off('click').on('click', (e) =>
         # 削除確認
         if window.confirm(I18n.t('message.dialog.delete_project'))
+          deletedProjectId = $(e.target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
           # 削除
           _delete.call(@, $(e.target), (admin_html) =>
-            # 削除完了 -> リスト再表示
-            modalEmt.find('.am_list:first').empty().html(admin_html)
+            # アクティブ設定
+            _updateActive.call(@)
+            if parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) == parseInt(deletedProjectId)
+              # 自身のプロジェクトを削除 -> プロジェクト選択
+              Common.hideModalView()
+              WorktableCommon.resetWorktable()
+              # 初期モーダル表示
+              Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
+            else
+              # 削除完了 -> リスト再表示
+              modalEmt.find('.am_list:first').empty().html(admin_html)
           )
       )
       Common.modalCentering()
