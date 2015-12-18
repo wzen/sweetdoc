@@ -95,3 +95,9 @@ ja:
         password: 'パスワード'
         password_confirmation: 'パスワード確認'
         email: 'メールアドレス'
+
+  account:
+    in_use_as_guest: 'ゲストとして使用中'
+    login_or_create_account: 'ログインまたは新規作成'
+    edit: 'アカウント編集'
+    logout: 'ログアウト'

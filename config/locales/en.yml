@@ -112,3 +112,8 @@ en:
     screen: "Screen"
   test: "testok"
 
+  account:
+    in_use_as_guest: 'In use as guest'
+    login_or_create_account: 'Login or Create account'
+    edit: 'Edit account'
+    logout: 'Logout'

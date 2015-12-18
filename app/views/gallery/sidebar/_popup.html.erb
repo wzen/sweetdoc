@@ -1,21 +1,22 @@
 <div class="sidebar_popup user">
     <div class="wrapper arrow_top">
         <% if user_signed_in? %>
-            <%= link_to 'Edit Account', edit_user_registration_path %>
-            <%= link_to 'Log Out',  destroy_user_session_path, method: :delete, data: {confirm: 'Are you sure?'} %>
+            <%= link_to I18n.t('account.edit'), edit_user_registration_path %>
+            <%= link_to I18n.t('account.logout'),  destroy_user_session_path, method: :delete, data: {confirm: 'Are you sure?'} %>
         <% else %>
-            <%= link_to 'Log In',  new_user_session_path %>
+          <%= I18n.t('account.in_use_as_guest') %>
+          <%= link_to I18n.t('account.login_or_create_account'),  new_user_session_path %>
         <% end %>
     </div>
 </div>
 <div class="sidebar_popup view">
     <div class="wrapper arrow_middle">
-        ok
+      under construction
     </div>
 </div>
 <div class="sidebar_popup search">
     <div class="wrapper arrow_middle">
-        ok
+      under construction
     </div>
 </div>
 <div class="sidebar_popup logo">
