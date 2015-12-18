@@ -15,8 +15,12 @@ GalleryCommon = (function() {
     return window.gridWrapper = $('#grid_wrapper');
   };
 
-  GalleryCommon.initGridView = function() {
-    return window.gridWrapper.masonry({
+  GalleryCommon.initGridView = function(callback) {
+    var grid;
+    if (callback == null) {
+      callback = null;
+    }
+    grid = new Masonry('#grid_wrapper', {
       itemSelector: '.grid_contents_wrapper',
       columnWidth: 180,
       isAnimated: true,
@@ -25,6 +29,12 @@ GalleryCommon = (function() {
       },
       isFitWidth: true
     });
+    grid.on('layoutComplete', function() {
+      if (callback != null) {
+        return callback();
+      }
+    });
+    return grid.layout();
   };
 
   GalleryCommon.initResize = function() {

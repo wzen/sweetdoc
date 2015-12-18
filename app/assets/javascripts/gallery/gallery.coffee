@@ -1,4 +1,8 @@
 class GalleryGrid
+
+  @showAllGrid = ->
+    $('#grid_wrapper').find('.grid_contents_wrapper:hidden').show()
+
   @initEvent = ->
     @initContentsHover()
 
@@ -48,9 +52,12 @@ $ ->
 
   $('.gallery.grid').ready ->
     # グリッドビュー初期化
-    GalleryCommon.initGridView()
-    # イベント設定
-    GalleryGrid.initEvent()
+    GalleryCommon.initGridView( =>
+      # イベント設定
+      GalleryGrid.initEvent()
+      # グリッド表示
+      GalleryGrid.showAllGrid()
+    )
 
   $('.gallery.detail, .gallery.run_window').ready ->
     # 作成者情報を表示

@@ -13,8 +13,9 @@ class GalleryCommon
     window.gridWrapper = $('#grid_wrapper')
 
   # グリッド初期化
-  @initGridView: ->
-    window.gridWrapper.masonry({
+  @initGridView: (callback = null) ->
+    # Masonry初期化
+    grid = new Masonry('#grid_wrapper', {
       itemSelector: '.grid_contents_wrapper'
       columnWidth: 180
       isAnimated: true
@@ -23,6 +24,13 @@ class GalleryCommon
       }
       isFitWidth: true
     })
+    # 描画後イベント
+    grid.on('layoutComplete', ->
+      if callback?
+        callback()
+    )
+    # 描画実行
+    grid.layout()
 
   # リサイズ初期化
   @initResize: ->
