@@ -25,9 +25,8 @@ class GalleryCommon
       isFitWidth: true
     })
     # 描画後イベント
-    grid.on('layoutComplete', ->
-      if callback?
-        callback()
+    grid.on('layoutComplete', =>
+      @showAllGrid()
     )
     # 描画実行
     grid.layout()
@@ -40,4 +39,9 @@ class GalleryCommon
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
+
+  # グリッド表示
+  @showAllGrid = ->
+    $('#grid_wrapper').find('.grid_contents_wrapper:hidden').show()
+
 

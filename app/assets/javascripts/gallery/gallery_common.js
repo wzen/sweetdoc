@@ -29,11 +29,11 @@ GalleryCommon = (function() {
       },
       isFitWidth: true
     });
-    grid.on('layoutComplete', function() {
-      if (callback != null) {
-        return callback();
-      }
-    });
+    grid.on('layoutComplete', (function(_this) {
+      return function() {
+        return _this.showAllGrid();
+      };
+    })(this));
     return grid.layout();
   };
 
@@ -44,6 +44,10 @@ GalleryCommon = (function() {
   };
 
   GalleryCommon.resizeMainContainerEvent = function() {};
+
+  GalleryCommon.showAllGrid = function() {
+    return $('#grid_wrapper').find('.grid_contents_wrapper:hidden').show();
+  };
 
   return GalleryCommon;
 

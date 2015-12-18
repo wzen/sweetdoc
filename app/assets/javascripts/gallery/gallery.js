@@ -4,10 +4,6 @@ var GalleryGrid;
 GalleryGrid = (function() {
   function GalleryGrid() {}
 
-  GalleryGrid.showAllGrid = function() {
-    return $('#grid_wrapper').find('.grid_contents_wrapper:hidden').show();
-  };
-
   GalleryGrid.initEvent = function() {
     return this.initContentsHover();
   };
@@ -57,12 +53,8 @@ $(function() {
     return console.log('home#index');
   });
   $('.gallery.grid').ready(function() {
-    return GalleryCommon.initGridView((function(_this) {
-      return function() {
-        GalleryGrid.initEvent();
-        return GalleryGrid.showAllGrid();
-      };
-    })(this));
+    GalleryCommon.initGridView();
+    return GalleryGrid.initEvent();
   });
   return $('.gallery.detail, .gallery.run_window').ready(function() {
     RunFullScreen.showCreatorInfo();
