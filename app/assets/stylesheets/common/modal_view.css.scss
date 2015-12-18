@@ -163,6 +163,9 @@
                 line-height: 30px;
                 vertical-align: middle;
                 margin-right: 150px;
+                &.opened {
+                  color: blue;
+                }
               }
             }
             .am_button_wrapper {

@@ -117,11 +117,11 @@ class Project < ActiveRecord::Base
             p.save!
           end
         end
-        return true, I18n.t('message.database.item_state.save.success')
+        return true, I18n.t('message.database.item_state.save.success'), p.attributes
       end
     rescue => e
       # 更新失敗
-      return false, I18n.t('message.database.item_state.save.error')
+      return false, I18n.t('message.database.item_state.save.error'), nil
     end
   end
 

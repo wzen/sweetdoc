@@ -1,5 +1,15 @@
 class Project
 
+  # プロジェクト更新
+  @updateProjectInfo = (info) ->
+    projectName = info.projectName
+    width = info.screenWidth
+    height = info.screenHeight
+    # プロジェクト情報初期化
+    Project.initProjectValue(projectName, width, height)
+    # プロジェクト名設定
+    Common.setTitle(projectName)
+
   # プロジェクト作成時モーダルビュー初期化
   @initProjectModal = (modalEmt, params, callback = null) ->
 
@@ -95,10 +105,12 @@ class Project
           # エラー
           return
 
-      # プロジェクト情報初期化
-      Project.initProjectValue(projectName, width, height)
-      # プロジェクト名設定
-      Common.setTitle(projectName)
+      # プロジェクト更新
+      Project.updateProjectInfo({
+        projectName: projectName
+        screenWidth: width
+        screenHeight: height
+      })
       # 環境設定
       Common.applyEnvironmentFromPagevalue()
 
@@ -252,7 +264,7 @@ class Project
           data: data
           success: (data)->
             if data.resultSuccess
-              callback(data.admin_html)
+              callback(data.updated_project_info, data.admin_html)
             else
               console.log('/project/remove server error')
           error: (data)->
@@ -287,9 +299,16 @@ class Project
 
     _settingEditInputEvent = ->
       modalEmt.find('.button_wrapper update_button').off('click').on('click', (e) =>
-        _update(@, $(e.target), (admin_html) =>
+        _update(@, $(e.target), (updated_project_info, admin_html) =>
           # 更新完了 -> リスト再表示
           modalEmt.find('.am_list:first').empty().html(admin_html)
+           # アクティブ & プロジェクト状態更新
+          _updateActive.call(@)
+          @updateProjectInfo({
+            projectName: updated_project_info.title
+            screenWidth: updated_project_info.screen_width
+            screenHeight: updated_project_info.screen_height
+          })
           # 左にスライド
           modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
         )
@@ -297,6 +316,15 @@ class Project
       modalEmt.find('.button_wrapper cancel_button').off('click').on('click', (e) =>
         # 左にスライド
         modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
+      )
+
+    _updateActive = ->
+      modalEmt.find('.am_row').each( =>
+        openedProjectId = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)
+        if $(@).find(".#{Constant.Project.Key.PROJECT_ID}:first").val() == openedProjectId
+          $(@).find(".am_title:frist").addClass('opened')
+        else
+          $(@).find(".am_title:frist").removeClass('opened')
       )
 
     # 作成済みプロジェクト一覧取得

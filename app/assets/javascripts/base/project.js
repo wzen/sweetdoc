@@ -4,6 +4,15 @@ var Project;
 Project = (function() {
   function Project() {}
 
+  Project.updateProjectInfo = function(info) {
+    var height, projectName, width;
+    projectName = info.projectName;
+    width = info.screenWidth;
+    height = info.screenHeight;
+    Project.initProjectValue(projectName, width, height);
+    return Common.setTitle(projectName);
+  };
+
   Project.initProjectModal = function(modalEmt, params, callback) {
     var _modalSize;
     if (callback == null) {
@@ -123,8 +132,11 @@ Project = (function() {
           return;
         }
       }
-      Project.initProjectValue(projectName, width, height);
-      Common.setTitle(projectName);
+      Project.updateProjectInfo({
+        projectName: projectName,
+        screenWidth: width,
+        screenHeight: height
+      });
       Common.applyEnvironmentFromPagevalue();
       return Project.create(projectName, width, height, function(data) {
         Navbar.setLastUpdateTime(data.updated_at);
@@ -231,7 +243,7 @@ Project = (function() {
   };
 
   Project.initAdminProjectModal = function(modalEmt, params, callback) {
-    var _delete, _initEditInput, _loadAdminMenu, _loadEditInput, _settingEditInputEvent, _update;
+    var _delete, _initEditInput, _loadAdminMenu, _loadEditInput, _settingEditInputEvent, _update, _updateActive;
     if (callback == null) {
       callback = null;
     }
@@ -290,7 +302,7 @@ Project = (function() {
         data: data,
         success: function(data) {
           if (data.resultSuccess) {
-            return callback(data.admin_html);
+            return callback(data.updated_project_info, data.admin_html);
           } else {
             return console.log('/project/remove server error');
           }
@@ -331,8 +343,14 @@ Project = (function() {
     _settingEditInputEvent = function() {
       modalEmt.find('.button_wrapper update_button').off('click').on('click', (function(_this) {
         return function(e) {
-          return _update(_this, $(e.target), function(admin_html) {
+          return _update(_this, $(e.target), function(updated_project_info, admin_html) {
             modalEmt.find('.am_list:first').empty().html(admin_html);
+            _updateActive.call(_this);
+            _this.updateProjectInfo({
+              projectName: updated_project_info.title,
+              screenWidth: updated_project_info.screen_width,
+              screenHeight: updated_project_info.screen_height
+            });
             return modalEmt.find('.am_scroll_wrapper:first').animate({
               scrollLeft: 0
             }, 200);
@@ -344,6 +362,19 @@ Project = (function() {
           return modalEmt.find('.am_scroll_wrapper:first').animate({
             scrollLeft: 0
           }, 200);
+        };
+      })(this));
+    };
+    _updateActive = function() {
+      return modalEmt.find('.am_row').each((function(_this) {
+        return function() {
+          var openedProjectId;
+          openedProjectId = PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID);
+          if ($(_this).find("." + Constant.Project.Key.PROJECT_ID + ":first").val() === openedProjectId) {
+            return $(_this).find(".am_title:frist").addClass('opened');
+          } else {
+            return $(_this).find(".am_title:frist").removeClass('opened');
+          }
         };
       })(this));
     };

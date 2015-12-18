@@ -23,7 +23,7 @@ class ProjectController < ApplicationController
     user_id = current_or_guest_user.id
     project_id = params.require(Const::Project::Key::PROJECT_ID)
     value = params.fetch('value', {})
-    @result_success, @message = Project.update(user_id, project_id, value)
+    @result_success, @message, @updated_project_info = Project.update(user_id, project_id, value)
     if @result_success
       @result_success, @admin_html = Project.admin_project_list(self, user_id)
     end
