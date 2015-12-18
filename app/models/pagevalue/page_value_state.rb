@@ -179,6 +179,11 @@ class PageValueState
           width: pagevalues.first['project_screen_width'],
           height: pagevalues.first['project_screen_height']
       }
+      if pagevalues.first['general_common_pagevalue_data']
+        # プロジェクト要素以外のGeneralを設定
+        gpd.reverse_merge!(JSON.parse(pagevalues.first['general_common_pagevalue_data']))
+      end
+
       ipd = {}
       epd = {}
       item_access_tokens = []
@@ -196,12 +201,6 @@ class PageValueState
           # 必要なItemTokenを調査
           item_access_tokens = PageValueState.extract_need_load_itemaccesstokens(epd[key])
           item_access_tokens -= loaded_item_access_tokens
-        end
-      end
-
-      if pagevalues.first['general_common_pagevalue_data']
-        JSON.parse(pagevalues.first['general_common_pagevalue_data']).each do |k, v|
-          gpd[k] = v
         end
       end
 

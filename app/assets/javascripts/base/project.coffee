@@ -9,6 +9,8 @@ class Project
     Project.initProjectValue(projectName, width, height)
     # プロジェクト名設定
     Common.setTitle(projectName)
+    # 環境更新
+    Common.applyEnvironmentFromPagevalue()
 
   # プロジェクト作成時モーダルビュー初期化
   @initProjectModal = (modalEmt, params, callback = null) ->
@@ -111,8 +113,6 @@ class Project
         screenWidth: width
         screenHeight: height
       })
-      # 環境設定
-      Common.applyEnvironmentFromPagevalue()
 
       # プロジェクト作成リクエスト
       Project.create(projectName, width, height, (data) ->
@@ -132,8 +132,6 @@ class Project
       ServerStorage.load(user_pagevalue_id, (data) ->
         # 最新更新日時設定
         Navbar.setLastUpdateTime(data.updated_at)
-        # 環境設定
-        Common.applyEnvironmentFromPagevalue()
         # ページ変更処理
         sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
         $('#pages .section:first').attr('class', "#{sectionClass} section")
@@ -249,7 +247,7 @@ class Project
 
     _update = (target, callback) ->
       data = {}
-      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
+      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_input_wrapper').find(".#{Constant.Project.Key.PROJECT_ID}:first").val()
       inputWrapper = modalEmt.find('.am_input_wrapper:first')
       data.value = {
         p_title: inputWrapper.find('.project_name:first').val()
@@ -298,13 +296,13 @@ class Project
       inputWrapper.find('input[type=number]').val('')
 
     _settingEditInputEvent = ->
-      modalEmt.find('.button_wrapper update_button').off('click').on('click', (e) =>
-        _update(@, $(e.target), (updated_project_info, admin_html) =>
+      modalEmt.find('.button_wrapper .update_button').off('click').on('click', (e) =>
+        _update.call(@, $(e.target), (updated_project_info, admin_html) =>
           # 更新完了 -> リスト再表示
           modalEmt.find('.am_list:first').empty().html(admin_html)
            # アクティブ & プロジェクト状態更新
           _updateActive.call(@)
-          @updateProjectInfo({
+          Project.updateProjectInfo({
             projectName: updated_project_info.title
             screenWidth: updated_project_info.screen_width
             screenHeight: updated_project_info.screen_height
@@ -313,7 +311,7 @@ class Project
           modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
         )
       )
-      modalEmt.find('.button_wrapper cancel_button').off('click').on('click', (e) =>
+      modalEmt.find('.button_wrapper .cancel_button').off('click').on('click', (e) =>
         # 左にスライド
         modalEmt.find('.am_scroll_wrapper:first').animate({scrollLeft: 0}, 200)
       )
@@ -344,6 +342,8 @@ class Project
           inputWrapper.find('.project_name:first').val(project.title)
           inputWrapper.find('.display_size_input_width:first').val(project.screen_width)
           inputWrapper.find('.display_size_input_height:first').val(project.screen_height)
+          inputWrapper.find(".#{Constant.Project.Key.PROJECT_ID}:first").val(project.id)
+          _settingEditInputEvent.call(@)
           inputWrapper.show()
         )
       )
@@ -351,7 +351,7 @@ class Project
         # 削除確認
         if window.confirm(I18n.t('message.dialog.delete_project'))
           # 削除
-          _delete(@, $(e.target), (admin_html) =>
+          _delete.call(@, $(e.target), (admin_html) =>
             # 削除完了 -> リスト再表示
             modalEmt.find('.am_list:first').empty().html(admin_html)
           )

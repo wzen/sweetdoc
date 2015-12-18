@@ -10,7 +10,8 @@ Project = (function() {
     width = info.screenWidth;
     height = info.screenHeight;
     Project.initProjectValue(projectName, width, height);
-    return Common.setTitle(projectName);
+    Common.setTitle(projectName);
+    return Common.applyEnvironmentFromPagevalue();
   };
 
   Project.initProjectModal = function(modalEmt, params, callback) {
@@ -137,7 +138,6 @@ Project = (function() {
         screenWidth: width,
         screenHeight: height
       });
-      Common.applyEnvironmentFromPagevalue();
       return Project.create(projectName, width, height, function(data) {
         Navbar.setLastUpdateTime(data.updated_at);
         window.initDone = true;
@@ -151,7 +151,6 @@ Project = (function() {
       return ServerStorage.load(user_pagevalue_id, function(data) {
         var sectionClass;
         Navbar.setLastUpdateTime(data.updated_at);
-        Common.applyEnvironmentFromPagevalue();
         sectionClass = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
         $('#pages .section:first').attr('class', sectionClass + " section");
         $('#pages .section:first').css({
@@ -288,7 +287,7 @@ Project = (function() {
     _update = function(target, callback) {
       var data, inputWrapper;
       data = {};
-      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_row').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
+      data[Constant.Project.Key.PROJECT_ID] = $(target).closest('.am_input_wrapper').find("." + Constant.Project.Key.PROJECT_ID + ":first").val();
       inputWrapper = modalEmt.find('.am_input_wrapper:first');
       data.value = {
         p_title: inputWrapper.find('.project_name:first').val(),
@@ -341,12 +340,12 @@ Project = (function() {
       return inputWrapper.find('input[type=number]').val('');
     };
     _settingEditInputEvent = function() {
-      modalEmt.find('.button_wrapper update_button').off('click').on('click', (function(_this) {
+      modalEmt.find('.button_wrapper .update_button').off('click').on('click', (function(_this) {
         return function(e) {
-          return _update(_this, $(e.target), function(updated_project_info, admin_html) {
+          return _update.call(_this, $(e.target), function(updated_project_info, admin_html) {
             modalEmt.find('.am_list:first').empty().html(admin_html);
             _updateActive.call(_this);
-            _this.updateProjectInfo({
+            Project.updateProjectInfo({
               projectName: updated_project_info.title,
               screenWidth: updated_project_info.screen_width,
               screenHeight: updated_project_info.screen_height
@@ -357,7 +356,7 @@ Project = (function() {
           });
         };
       })(this));
-      return modalEmt.find('.button_wrapper cancel_button').off('click').on('click', (function(_this) {
+      return modalEmt.find('.button_wrapper .cancel_button').off('click').on('click', (function(_this) {
         return function(e) {
           return modalEmt.find('.am_scroll_wrapper:first').animate({
             scrollLeft: 0
@@ -395,12 +394,14 @@ Project = (function() {
             inputWrapper.find('.project_name:first').val(project.title);
             inputWrapper.find('.display_size_input_width:first').val(project.screen_width);
             inputWrapper.find('.display_size_input_height:first').val(project.screen_height);
+            inputWrapper.find("." + Constant.Project.Key.PROJECT_ID + ":first").val(project.id);
+            _settingEditInputEvent.call(_this);
             return inputWrapper.show();
           });
         });
         modalEmt.find('.am_row .remove_button').off('click').on('click', function(e) {
           if (window.confirm(I18n.t('message.dialog.delete_project'))) {
-            return _delete(_this, $(e.target), function(admin_html) {
+            return _delete.call(_this, $(e.target), function(admin_html) {
               return modalEmt.find('.am_list:first').empty().html(admin_html);
             });
           }
