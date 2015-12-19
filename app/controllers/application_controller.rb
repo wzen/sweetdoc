@@ -81,8 +81,9 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    # TODO: サブドメインから引っ張るように修正
-    I18n.locale = params[:locale] || I18n.default_locale
+    #I18n.locale = params[:locale] || I18n.default_locale
+    locale = params[:locale] || locale_from_accept_language || locale_from_ip
+    I18n.locale = (I18n::available_locales.include? locale.to_sym) ? locale.to_sym : I18n.default_locale
   end
 
   # ActiveRecord Like エスケープ
@@ -94,6 +95,26 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     #strong parametersを設定し、nameを許可
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:name, :email, :password, :password_confirmation) }
+  end
+
+  def locale_from_accept_language
+    request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+  end
+
+  def locale_from_ip
+    locale_from_ip = nil
+
+    geoip ||= GeoIP.new(Rails.root.join( "db/GeoIP.dat" ))
+    country = geoip.country(request.remote_ip)
+    code = country.country_code2.downcase
+
+    if code == "jp"
+      locale_from_ip = "ja"
+    elsif code.present? && code != "--"
+      locale_from_ip = "en"
+    end
+
+    locale_from_ip
   end
 
 end

@@ -13,7 +13,7 @@ ja:
       all_save: "全保存"
     action:
       action: "アクション"
-      select_action: "(アクションを選択してください)"
+      select_action: "(アクションを選択)"
       draw:
         draw: "描画"
         arrow: "矢印"
