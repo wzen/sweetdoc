@@ -45,7 +45,7 @@ class ConfigMenu
       value = v
       l_value = v[I18n.locale.to_s]
       if l_value
-        value.update!(l_value)
+        value.merge!(l_value)
       end
       if ret.blank?
         ret = controller.render_to_string(
