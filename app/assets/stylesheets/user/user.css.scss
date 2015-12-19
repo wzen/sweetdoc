@@ -430,7 +430,7 @@ input:-webkit-autofill {
   width: 100%;
 }
 
-.button-panel .button {
+.button-panel.submit .button {
   background: #f16272;
   border: none;
   color: #fff;
@@ -443,6 +443,22 @@ input:-webkit-autofill {
   text-transform: uppercase;
   transition: background 0.3s ease-in-out;
   width: 100%;
+}
+
+.button-panel.other .button {
+  background: #3937e1;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  height: 50px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2em;
+  letter-spacing: 0.05em;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background 0.3s ease-in-out;
+  width: 258px;
+  margin: auto;
 }
 
 .button:hover {
