@@ -1,0 +1,15 @@
+<div class="modal-content <%= Const::ModalViewType::NOTICE_LOGIN %>">
+  <div class="content">
+    <form action="/user/sign_in" method="get">
+      <div>
+        <%= render "base/mention/#{I18n.locale}/notice_login" %>
+      </div>
+      <div class="button_wrapper clearfix">
+        <div>
+          <button class="create_button" value="Create"><%= I18n.t('account.login_or_create_account') %></button>
+          <button class="back_button" value="continue_as_guest" onclick="Common.hideModalView(); return false;"><%= I18n.t('account.continue_as_guest') %></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -101,3 +101,4 @@ ja:
     login_or_create_account: 'ログインまたは新規作成'
     edit: 'アカウント編集'
     logout: 'ログアウト'
+    continue_as_guest: 'ゲストのまま継続'

@@ -117,3 +117,4 @@ en:
     login_or_create_account: 'Login or Create account'
     edit: 'Edit account'
     logout: 'Logout'
+    continue_as_guest: 'Continue as guest'

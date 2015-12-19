@@ -157,6 +157,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ModalViewType.ITEM_IMAGE_UPLOAD = constant.ModalViewType.ITEM_IMAGE_UPLOAD;
 
+      ModalViewType.NOTICE_LOGIN = constant.ModalViewType.NOTICE_LOGIN;
+
       return ModalViewType;
 
     })();
