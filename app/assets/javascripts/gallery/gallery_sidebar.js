@@ -39,7 +39,7 @@ GallerySidebar = (function() {
       type = _type.call(this);
       if (!$("#sidebar_wrapper .sidebar_popup" + type).is(':visible')) {
         return $(this).stop().animate({
-          opacity: 0.7
+          opacity: 1
         }, 200, 'linear');
       }
     }, function(e) {
@@ -47,7 +47,7 @@ GallerySidebar = (function() {
       type = _type.call(this);
       if (!$("#sidebar_wrapper .sidebar_popup" + type).is(':visible')) {
         return $(this).stop().animate({
-          opacity: 0.3
+          opacity: 0.7
         }, 100, 'linear');
       }
     });
@@ -64,7 +64,7 @@ GallerySidebar = (function() {
           type = _type.call(this);
           popup.stop(true, true).fadeOut(100, 'linear');
           $(this).stop().animate({
-            opacity: 0.7
+            opacity: 1
           }, 100, 'linear');
           return $('.overlay').remove();
         } else {
@@ -72,14 +72,14 @@ GallerySidebar = (function() {
           self = $(this);
           $('.wrapper .circle', root).filter(function(s) {
             return $(this).attr('class') !== self.attr('class');
-          }).css('opacity', 0.3);
+          }).css('opacity', 0.7);
           popup.stop(true, true).fadeIn(200, 'linear');
           $(this).stop().animate({
             opacity: 1
           }, 200, 'linear');
           $('.sidebar_overlay_parent').append('<div class="overlay"></div>');
           return $('.overlay').click(function() {
-            $('.wrapper .circle', root).css('opacity', 0.3);
+            $('.wrapper .circle', root).css('opacity', 0.7);
             $("#sidebar_wrapper .sidebar_popup").fadeOut(100);
             return $('.overlay').remove();
           });

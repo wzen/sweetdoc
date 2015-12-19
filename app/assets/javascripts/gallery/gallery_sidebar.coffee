@@ -28,11 +28,11 @@ class GallerySidebar
     $('.wrapper .circle', root).hover((e) ->
       type = _type.call(@)
       if !$("#sidebar_wrapper .sidebar_popup#{type}").is(':visible')
-        $(@).stop().animate({opacity: 0.7}, 200, 'linear')
+        $(@).stop().animate({opacity: 1}, 200, 'linear')
     , (e) ->
       type = _type.call(@)
       if !$("#sidebar_wrapper .sidebar_popup#{type}").is(':visible')
-        $(@).stop().animate({opacity: 0.3}, 100, 'linear')
+        $(@).stop().animate({opacity: 0.7}, 100, 'linear')
     )
 
     $('.wrapper .circle', root).click((e) ->
@@ -48,17 +48,17 @@ class GallerySidebar
         if popup.is(':visible')
           type = _type.call(@)
           popup.stop(true, true).fadeOut(100, 'linear')
-          $(@).stop().animate({opacity: 0.7}, 100, 'linear')
+          $(@).stop().animate({opacity: 1}, 100, 'linear')
           $('.overlay').remove()
         else
           $("#sidebar_wrapper .sidebar_popup").hide()
           self = $(@)
-          $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.3)
+          $('.wrapper .circle', root).filter((s) -> $(@).attr('class') != self.attr('class')).css('opacity', 0.7)
           popup.stop(true, true).fadeIn(200, 'linear')
           $(@).stop().animate({opacity: 1}, 200, 'linear')
           $('.sidebar_overlay_parent').append('<div class="overlay"></div>')
           $('.overlay').click( ->
-            $('.wrapper .circle', root).css('opacity', 0.3)
+            $('.wrapper .circle', root).css('opacity', 0.7)
             $("#sidebar_wrapper .sidebar_popup").fadeOut(100)
             $('.overlay').remove()
           )

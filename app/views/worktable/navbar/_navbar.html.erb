@@ -87,16 +87,19 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href=""><span class="<%= Const::ElementAttribute::LAST_UPDATE_TIME_CLASS %>"></span></a></li>
-                <li id="<%= Const::Paging::NAV_ROOT_ID %>">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header-pageing">
-                        <span class="<%= Const::Paging::NAV_SELECTED_CLASS %>"></span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu <%= Const::Paging::NAV_SELECT_ROOT_CLASS %>" role="menu">
-                    </ul>
-                </li>
-                <li><a id="menu_sidebar_toggle"><%= image_tag("nav/sidebar.png", size:'20x20') %></a></li>
+              <li><a href=""><span class="<%= Const::ElementAttribute::LAST_UPDATE_TIME_CLASS %>"></span></a></li>
+              <li id="<%= Const::Paging::NAV_ROOT_ID %>">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#header-pageing">
+                      <span class="<%= Const::Paging::NAV_SELECTED_CLASS %>"></span>
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu <%= Const::Paging::NAV_SELECT_ROOT_CLASS %>" role="menu">
+                  </ul>
+              </li>
+              <li><a id="menu_sidebar_toggle"><%= image_tag("nav/sidebar.png", size:'20x20') %></a></li>
+              <li>
+                <%= render 'base/login_user' %>
+              </li>
             </ul>
         </div>
     </div>
