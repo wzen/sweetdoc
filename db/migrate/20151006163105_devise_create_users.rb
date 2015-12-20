@@ -14,6 +14,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.boolean :guest, default: false
       t.string :provider
       t.binary :thumbnail_img, limit: 10.megabyte
+      #t.string :service_token
 
       ## Recoverable
       t.string   :reset_password_token

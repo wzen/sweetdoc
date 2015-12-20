@@ -12,6 +12,14 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, omniauth_providers: [:twitter, :facebook, :google]
 
+  def self.generate_access_token
+    return SecureRandom.urlsafe_base64(20)
+  end
+
+  def active_for_authentication?
+    return true
+  end
+
   def self.new_guest
     new do |u|
       u.name = "Guest"
@@ -22,12 +30,34 @@ class User < ActiveRecord::Base
     end
   end
 
-  def active_for_authentication?
-    return true
+  def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
+    user = User.where(:provider => auth.provider, :uid => auth.uid).first
+    unless user
+      user = User.create(
+          access_token: generate_access_token,
+          name:     auth.extra.raw_info.name,
+          provider: auth.provider,
+          uid:      auth.uid,
+          email:    auth.info.email,
+          password: Devise.friendly_token[0,20]
+      )
+    end
+    user
   end
 
-  def self.generate_access_token
-    return SecureRandom.urlsafe_base64(20)
+  def self.find_for_twitter_oauth(auth, signed_in_resource=nil)
+    user = User.where(:provider => auth.provider, :uid => auth.uid).first
+    unless user
+      user = User.create(
+          access_token: generate_access_token,
+          name:     auth.info.nickname,
+          provider: auth.provider,
+          uid:      auth.uid,
+          email:    auth.info.email,
+          #service_token:    auth.credentials.token,
+          password: Devise.friendly_token[0,20] )
+    end
+    return user
   end
 
 end
