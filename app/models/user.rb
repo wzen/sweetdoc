@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
           name:     auth.extra.raw_info.name,
           provider: auth.provider,
           uid:      auth.uid,
-          email:    dummy_email_if_needed(auth),
+          email:    dummy_email(auth),
           provider_token:    auth.credentials.token,
           password: Devise.friendly_token[0,20],
           encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
           name:     auth.info.nickname,
           provider: auth.provider,
           uid:      auth.uid,
-          email:    dummy_email_if_needed(auth),
+          email:    dummy_email(auth),
           provider_token:    auth.credentials.token,
           password: Devise.friendly_token[0,20],
           encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
@@ -65,31 +65,26 @@ class User < ActiveRecord::Base
   end
 
   def self.find_for_google_oauth2(auth)
-    begin
-      user = User.where(:provider => auth.provider, :uid => auth.uid).first
-      unless user
-        user = User.new(
-            access_token: generate_access_token,
-            name:     auth.info.name,
-            provider: auth.provider,
-            uid:      auth.uid,
-            email:    dummy_email_if_needed(auth),
-            provider_token:    auth.credentials.token,
-            password: Devise.friendly_token[0, 20],
-            encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
-        )
-        user.save!
-      end
-      user
-    rescue => e
-      logger.info(e)
+    user = User.where(:provider => auth.provider, :uid => auth.uid).first
+    unless user
+      user = User.create(
+          access_token: generate_access_token,
+          name:     auth.info.name,
+          provider: auth.provider,
+          uid:      auth.uid,
+          email:    dummy_email(auth),
+          provider_token:    auth.credentials.token,
+          password: Devise.friendly_token[0, 20],
+          encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
+      )
     end
+    return user
   end
 
-  def self.dummy_email_if_needed(auth)
-    email = auth.info.email
-    email = "#{auth.provider}-#{auth.uid}@example.com" if email.blank?
-    email
+  def self.dummy_email(auth)
+    #email = auth.info.email
+    email = "#{auth.provider}-#{auth.uid}@example.com"
+    return email
   end
 
 end
