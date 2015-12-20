@@ -39,17 +39,17 @@ class CodingCommon
         }
         "root": {
           "valid_children": ["folder", "js_file", "coffee_file"],
-          'icon': '/assets/coding/tree/node_icon_root.png'
+          'icon': '/images/coding/tree/node_icon_root.png'
         },
         "folder": {
           "valid_children": ["folder", "js_file", "coffee_file"],
         }
         "js_file" : {
-          'icon': '/assets/coding/tree/node_icon_js.png'
+          'icon': '/images/coding/tree/node_icon_js.png'
           "valid_children" : []
         }
         "coffee_file" : {
-          'icon': '/assets/coding/tree/node_icon_coffee.png'
+          'icon': '/images/coding/tree/node_icon_coffee.png'
           "valid_children" : []
         }
 
