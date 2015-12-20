@@ -51,35 +51,33 @@ GallerySidebar = (function() {
         }, 100, 'linear');
       }
     });
-    return $('.wrapper .circle', root).click(function(e) {
+    return $(".wrapper .circle." + GallerySidebar.SEARCH + ", .wrapper .circle." + GallerySidebar.VIEW, root).click(function(e) {
       var popup, self, type;
-      if ($(this).hasClass(GallerySidebar.SEARCH) || $(this).hasClass(GallerySidebar.VIEW)) {
+      type = _type.call(this);
+      popup = $("#sidebar_wrapper .sidebar_popup" + type);
+      if (popup.is(':visible')) {
         type = _type.call(this);
-        popup = $("#sidebar_wrapper .sidebar_popup" + type);
-        if (popup.is(':visible')) {
-          type = _type.call(this);
-          popup.stop(true, true).fadeOut(100, 'linear');
-          $(this).stop().animate({
-            opacity: 1
-          }, 100, 'linear');
+        popup.stop(true, true).fadeOut(100, 'linear');
+        $(this).stop().animate({
+          opacity: 1
+        }, 100, 'linear');
+        return $('.overlay').remove();
+      } else {
+        $("#sidebar_wrapper .sidebar_popup").hide();
+        self = $(this);
+        $('.wrapper .circle', root).filter(function(s) {
+          return $(this).attr('class') !== self.attr('class');
+        }).css('opacity', 0.7);
+        popup.stop(true, true).fadeIn(200, 'linear');
+        $(this).stop().animate({
+          opacity: 1
+        }, 200, 'linear');
+        $('.sidebar_overlay_parent').append('<div class="overlay"></div>');
+        return $('.overlay').click(function() {
+          $('.wrapper .circle', root).css('opacity', 0.7);
+          $("#sidebar_wrapper .sidebar_popup").fadeOut(100);
           return $('.overlay').remove();
-        } else {
-          $("#sidebar_wrapper .sidebar_popup").hide();
-          self = $(this);
-          $('.wrapper .circle', root).filter(function(s) {
-            return $(this).attr('class') !== self.attr('class');
-          }).css('opacity', 0.7);
-          popup.stop(true, true).fadeIn(200, 'linear');
-          $(this).stop().animate({
-            opacity: 1
-          }, 200, 'linear');
-          $('.sidebar_overlay_parent').append('<div class="overlay"></div>');
-          return $('.overlay').click(function() {
-            $('.wrapper .circle', root).css('opacity', 0.7);
-            $("#sidebar_wrapper .sidebar_popup").fadeOut(100);
-            return $('.overlay').remove();
-          });
-        }
+        });
       }
     });
   };
