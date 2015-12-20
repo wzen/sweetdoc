@@ -36,13 +36,7 @@ class GallerySidebar
     )
 
     $('.wrapper .circle', root).click((e) ->
-      if $(@).hasClass(GallerySidebar.WORKTABLE)
-        # Worktableに遷移
-        window.location.href = '/worktable';
-      else if $(@).hasClass(GallerySidebar.LOGO)
-        # Aboutモーダル表示
-        Common.showModalView(Constant.ModalViewType.ABOUT)
-      else
+      if $(@).hasClass(GallerySidebar.SEARCH) || $(@).hasClass(GallerySidebar.VIEW)
         type = _type.call(@)
         popup = $("#sidebar_wrapper .sidebar_popup#{type}")
         if popup.is(':visible')

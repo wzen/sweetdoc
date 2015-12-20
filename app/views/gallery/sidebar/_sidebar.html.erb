@@ -5,7 +5,9 @@
     </div>
     <div class="worktable_wrapper">
         <!-- worktable -->
+      <%= link_to '/worktable' do %>
         <div class="circle grid <%= Const::Gallery::Sidebar::WORKTABLE %>"></div>
+      <% end %>
     </div>
     <div class="view_wrapper">
         <!-- view -->
@@ -18,7 +20,7 @@
 
     <div class="logo_wrapper">
         <!-- logo -->
-        <div class="circle <%= Const::Gallery::Sidebar::LOGO %>"></div>
+        <div class="circle <%= Const::Gallery::Sidebar::LOGO %>" onclick="Common.showModalView(Constant.ModalViewType.ABOUT); return false;"></div>
     </div>
     <div class="doc"></div>
 </div>

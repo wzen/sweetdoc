@@ -76,7 +76,7 @@ div#sidebar_wrapper {
       margin-top: 10px;
       text-align: center;
 
-      > div {
+      .circle {
         background-repeat: no-repeat;
         -moz-background-size: 50px 50px;
         background-size: 50px 50px;
@@ -107,7 +107,7 @@ div#sidebar_wrapper {
       margin-top: 10px;
       text-align: center;
 
-      > div {
+      .circle {
         background-repeat: no-repeat;
         -moz-background-size: 50px 50px;
         background-size: 50px 50px;
@@ -129,7 +129,7 @@ div#sidebar_wrapper {
       right: 0;
       text-align: center;
 
-      > div {
+      .circle {
         background-image: image-url("gallery/sidebar/logo.png");
         background-repeat: no-repeat;
         -moz-background-size: 50px 50px;

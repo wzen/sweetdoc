@@ -53,11 +53,7 @@ GallerySidebar = (function() {
     });
     return $('.wrapper .circle', root).click(function(e) {
       var popup, self, type;
-      if ($(this).hasClass(GallerySidebar.WORKTABLE)) {
-        return window.location.href = '/worktable';
-      } else if ($(this).hasClass(GallerySidebar.LOGO)) {
-        return Common.showModalView(Constant.ModalViewType.ABOUT);
-      } else {
+      if ($(this).hasClass(GallerySidebar.SEARCH) || $(this).hasClass(GallerySidebar.VIEW)) {
         type = _type.call(this);
         popup = $("#sidebar_wrapper .sidebar_popup" + type);
         if (popup.is(':visible')) {
