@@ -65,23 +65,25 @@ class User < ActiveRecord::Base
   end
 
   def self.find_for_google_oauth2(auth)
-    logger.debug('find_for_google_oauth2')
-    logger.debug(auth)
-    
-    user = User.where(:provider => auth.provider, :uid => auth.uid).first
-    unless user
-      user = User.create(
-          access_token: generate_access_token,
-          name:     auth.info.name,
-          provider: auth.provider,
-          uid:      auth.uid,
-          email:    dummy_email_if_needed(auth),
-          provider_token:    auth.credentials.token,
-          password: Devise.friendly_token[0, 20],
-          encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
-      )
+    begin
+      user = User.where(:provider => auth.provider, :uid => auth.uid).first
+      unless user
+        user = User.new(
+            access_token: generate_access_token,
+            name:     auth.info.name,
+            provider: auth.provider,
+            uid:      auth.uid,
+            email:    dummy_email_if_needed(auth),
+            provider_token:    auth.credentials.token,
+            password: Devise.friendly_token[0, 20],
+            encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
+        )
+        user.save!
+      end
+      user
+    rescue => e
+      logger.info(e)
     end
-    user
   end
 
   def self.dummy_email_if_needed(auth)
