@@ -38,26 +38,26 @@
             </div>
 
             <div class="social_wrapper">
-                <%= form_tag(user_omniauth_authorize_path(:facebook)) do %>
-                    <%= button_tag id: 'fblogin', type: 'submit' do %>
-                        f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
-                        <span id="fbtext">Sign In with Facebook</span>
-                    <% end %>
-                <% end %>
+              <%= form_tag(user_omniauth_authorize_path(:facebook)) do %>
+                  <%= button_tag id: 'fblogin', type: 'submit' do %>
+                      f&nbsp;&nbsp;&nbsp;<em id="fbname"></em>
+                      <span id="fbtext">Sign In with Facebook</span>
+                  <% end %>
+              <% end %>
 
-                <%= form_tag(user_omniauth_authorize_path(:google_oauth2)) do %>
-                    <%= button_tag id: 'gpluslogin', type: 'submit' do %>
-                        g+<em id="gpname"></em>
-                        <span id="gptext">Sign In with Google</span>
-                    <% end %>
-                <% end %>
+              <%= form_tag(user_omniauth_authorize_path(:twitter)) do %>
+                  <%= button_tag id: 'twtrlogin', type: 'submit' do %>
+                      t&nbsp;&nbsp;&nbsp;<em id="twtrname"></em>
+                      <span id="twtrtext">Sign In with Twitter</span>
+                  <% end %>
+              <% end %>
 
-                <%= form_tag(user_omniauth_authorize_path(:twitter)) do %>
-                    <%= button_tag id: 'twtrlogin', type: 'submit' do %>
-                        t&nbsp;&nbsp;&nbsp;<em id="twtrname"></em>
-                        <span id="twtrtext">Sign In with Twitter</span>
-                    <% end %>
-                <% end %>
+              <%= form_tag(user_omniauth_authorize_path(:google_oauth2)) do %>
+                  <%= button_tag id: 'gpluslogin', type: 'submit' do %>
+                      g+<em id="gpname"></em>
+                      <span id="gptext">Sign In with Google</span>
+                  <% end %>
+              <% end %>
             </div>
         </div>
         <div class="sign_up_footer">

@@ -65,8 +65,10 @@ class User < ActiveRecord::Base
   end
 
   def self.find_for_google_oauth2(auth)
+    logger.debug('find_for_google_oauth2')
+    logger.debug(auth)
+    
     user = User.where(:provider => auth.provider, :uid => auth.uid).first
-
     unless user
       user = User.create(
           access_token: generate_access_token,
