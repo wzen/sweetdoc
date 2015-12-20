@@ -38,11 +38,12 @@ class User < ActiveRecord::Base
           name:     auth.extra.raw_info.name,
           provider: auth.provider,
           uid:      auth.uid,
-          email:    auth.info.email,
-          password: Devise.friendly_token[0,20]
+          email:    dummy_email_if_needed(auth),
+          password: Devise.friendly_token[0,20],
+          encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
       )
     end
-    user
+    return user
   end
 
   def self.find_for_twitter_oauth(auth, signed_in_resource=nil)
@@ -53,11 +54,18 @@ class User < ActiveRecord::Base
           name:     auth.info.nickname,
           provider: auth.provider,
           uid:      auth.uid,
-          email:    auth.info.email,
-          #service_token:    auth.credentials.token,
-          password: Devise.friendly_token[0,20] )
+          email:    dummy_email_if_needed(auth),
+          password: Devise.friendly_token[0,20],
+          encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
+      )
     end
     return user
+  end
+
+  def self.dummy_email_if_needed(auth)
+    email = auth.info.email
+    email = "#{auth.provider}-#{auth.uid}@example.com" if email.blank?
+    email
   end
 
 end

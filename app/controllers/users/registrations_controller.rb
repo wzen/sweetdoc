@@ -8,8 +8,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def build_resource(hash = nil)
-    # アクセストークン作成
-    hash[:access_token] = User.generate_access_token
+    if hash.present? && hash[:access_token].blank?
+      # アクセストークン作成
+      hash[:access_token] = User.generate_access_token
+    end
     super
   end
 end
