@@ -45,7 +45,7 @@
                     <% end %>
                 <% end %>
 
-                <%= form_tag(user_omniauth_authorize_path(:google)) do %>
+                <%= form_tag(user_omniauth_authorize_path(:google_oauth2)) do %>
                     <%= button_tag id: 'gpluslogin', type: 'submit' do %>
                         g+<em id="gpname"></em>
                         <span id="gptext">Sign In with Google</span>

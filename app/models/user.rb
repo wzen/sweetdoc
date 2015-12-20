@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, omniauth_providers: [:twitter, :facebook, :google]
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, omniauth_providers: [:twitter, :facebook, :google_oauth2]
 
   def self.generate_access_token
     return SecureRandom.urlsafe_base64(20)
@@ -39,6 +39,7 @@ class User < ActiveRecord::Base
           provider: auth.provider,
           uid:      auth.uid,
           email:    dummy_email_if_needed(auth),
+          provider_token:    auth.credentials.token,
           password: Devise.friendly_token[0,20],
           encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
       )
@@ -55,11 +56,29 @@ class User < ActiveRecord::Base
           provider: auth.provider,
           uid:      auth.uid,
           email:    dummy_email_if_needed(auth),
+          provider_token:    auth.credentials.token,
           password: Devise.friendly_token[0,20],
           encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
       )
     end
     return user
+  end
+
+  def self.find_for_google_oauth2(auth)
+    user = User.where(email: auth.info.email).first
+
+    unless user
+      user = User.create(
+          name:     auth.info.name,
+          provider: auth.provider,
+          uid:      auth.uid,
+          email:    dummy_email_if_needed(auth),
+          provider_token:    auth.credentials.token,
+          password: Devise.friendly_token[0, 20],
+          encrypted_password:[*1..9, *'A'..'Z', *'a'..'z'].sample(10).join
+      )
+    end
+    user
   end
 
   def self.dummy_email_if_needed(auth)
