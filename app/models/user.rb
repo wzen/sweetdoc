@@ -69,6 +69,7 @@ class User < ActiveRecord::Base
 
     unless user
       user = User.create(
+          access_token: generate_access_token,
           name:     auth.info.name,
           provider: auth.provider,
           uid:      auth.uid,
