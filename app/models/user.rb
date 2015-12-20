@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_for_google_oauth2(auth)
-    user = User.where(email: auth.info.email).first
+    user = User.where(:provider => auth.provider, :uid => auth.uid).first
 
     unless user
       user = User.create(
