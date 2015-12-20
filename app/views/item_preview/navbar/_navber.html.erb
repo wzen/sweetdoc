@@ -11,17 +11,20 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="menu-control-rewind-page" title="Rewind Page"><%= image_tag("nav/rewind_page.png", size:'20x20') %></a></li>
-                <li><a class="menu-control-rewind-chapter" title="Rewind Chapter"><%= image_tag("nav/rewind_chapter.png", size:'20x20') %></a></li>
-                <li>
-                    <a class="menu-upload-gallery" title="Upload Document"><%= image_tag("nav/upload.png", size:'24x24') %></a>
-                    <div style="display: none">
-                        <%= form_tag('/upload/item', method: :post, name: 'upload_gallery_form') do %>
-                            <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="">
-                            <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="">
-                        <% end %>
-                    </div>
-                </li>
+              <li><a class="menu-control-rewind-page" title="Rewind Page"><%= image_tag("nav/rewind_page.png", size:'20x20') %></a></li>
+              <li><a class="menu-control-rewind-chapter" title="Rewind Chapter"><%= image_tag("nav/rewind_chapter.png", size:'20x20') %></a></li>
+              <li>
+                  <a class="menu-upload-gallery" title="Upload Document"><%= image_tag("nav/upload.png", size:'24x24') %></a>
+                  <div style="display: none">
+                      <%= form_tag('/upload/item', method: :post, name: 'upload_gallery_form') do %>
+                          <input name="<%= Const::Gallery::Key::PROJECT_ID %>" type="hidden" value="">
+                          <input name="<%= Const::Gallery::Key::PAGE_MAX %>" type="hidden" value="">
+                      <% end %>
+                  </div>
+              </li>
+              <li>
+                <%= render 'base/user/login_user' %>
+              </li>
             </ul>
         </div>
     </div>

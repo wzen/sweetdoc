@@ -6,9 +6,9 @@ class ItemPreviewTemp extends CanvasItemBase
   if window.loadedItemToken?
     @ITEM_ACCESS_TOKEN = window.loadedItemToken
 
-  # @property [Int] HEADER_WIDTH 矢印の頭の幅
+  # @property [Int] HEADER_WIDTH
   HEADER_WIDTH = 100
-  # @property [Int] HEADER_HEIGHT 矢印の頭の長さ
+  # @property [Int] HEADER_HEIGHT
   HEADER_HEIGHT = 50
 
   @actionProperties =
@@ -67,9 +67,6 @@ class ItemPreviewTemp extends CanvasItemBase
         type: 'number'
         min: 1
         max: 99
-        ja: {
-          name: "矢印の幅"
-        }
       }
     }
     methods : {
@@ -81,19 +78,12 @@ class ItemPreviewTemp extends CanvasItemBase
             min: 1
             max: 99
             varAutoChange: true
-            ja :{
-              name: "矢印の幅"
-            }
           }
         }
         options: {
           id: 'drawScroll'
           name: 'Draw'
           desc: "Draw"
-          ja: {
-            name: '描画'
-            desc: '矢印を描画'
-          }
         }
       }
       changeColor: {
@@ -106,8 +96,7 @@ class ItemPreviewTemp extends CanvasItemBase
     }
   }
 
-  # コンストラクタ
-  # @param [Array] cood 座標
+  # @param [Array] cood
   constructor : (cood = null)->
     super(cood)
     # @property [Array] direction 矢印の進行方向
@@ -128,8 +117,7 @@ class ItemPreviewTemp extends CanvasItemBase
     # @private
     @_drawCoodRegist = []
 
-  # アイテム描画
-  # @param [Boolean] show 要素作成後に表示するか
+  # @param [Boolean] show
   itemDraw: (show = true) ->
     super(show)
     # 座標をクリア

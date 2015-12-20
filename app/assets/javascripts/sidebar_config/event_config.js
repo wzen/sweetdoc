@@ -486,7 +486,7 @@ EventConfig = (function() {
       max = 100;
     }
     if (stepValue == null) {
-      stepValue = 0;
+      stepValue = 1;
     }
     meterClassName = varName + "_meter";
     meterElement = $("." + meterClassName, this.emt);

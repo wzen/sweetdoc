@@ -73,10 +73,7 @@ ItemPreviewTemp = (function(superClass) {
         "default": 37,
         type: 'number',
         min: 1,
-        max: 99,
-        ja: {
-          name: "矢印の幅"
-        }
+        max: 99
       }
     },
     methods: {
@@ -87,20 +84,13 @@ ItemPreviewTemp = (function(superClass) {
             type: 'number',
             min: 1,
             max: 99,
-            varAutoChange: true,
-            ja: {
-              name: "矢印の幅"
-            }
+            varAutoChange: true
           }
         },
         options: {
           id: 'drawScroll',
           name: 'Draw',
-          desc: "Draw",
-          ja: {
-            name: '描画',
-            desc: '矢印を描画'
-          }
+          desc: "Draw"
         }
       },
       changeColor: {

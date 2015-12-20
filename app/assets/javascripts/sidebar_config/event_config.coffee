@@ -461,7 +461,7 @@ class EventConfig
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingModifiableVarSlider: (varName, defaultValue, min = 0, max = 100, stepValue = 0) ->
+  settingModifiableVarSlider: (varName, defaultValue, min = 0, max = 100, stepValue = 1) ->
     meterClassName = "#{varName}_meter"
     meterElement = $(".#{meterClassName}", @emt)
     valueElement = meterElement.prev('input:first')

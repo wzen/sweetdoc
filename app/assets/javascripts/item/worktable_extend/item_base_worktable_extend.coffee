@@ -298,7 +298,7 @@ itemBaseWorktableExtend =
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingDesignSlider: (className, min, max, stepValue = 0) ->
+  settingDesignSlider: (className, min, max, stepValue = 1) ->
     designConfigRoot = $('#' + @getDesignConfigId())
     meterElement = $(".#{className}", designConfigRoot)
     valueElement = meterElement.prev('input:first')
@@ -456,7 +456,7 @@ itemBaseWorktableExtend =
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingModifiableVarSlider: (configRoot, varName, min = 0, max = 100, stepValue = 0) ->
+  settingModifiableVarSlider: (configRoot, varName, min = 0, max = 100, stepValue = 1) ->
     meterElement = $(".#{varName}_meter", configRoot)
     valueElement = meterElement.prev('input:first')
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]

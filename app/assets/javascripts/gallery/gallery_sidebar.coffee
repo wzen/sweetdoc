@@ -36,14 +36,7 @@ class GallerySidebar
     )
 
     $('.wrapper .circle', root).click((e) ->
-      if $(@).hasClass(GallerySidebar.USER)
-        if $(@).hasClass('guest')
-          # モーダル表示
-          Common.showModalView(Constant.ModalViewType.NOTICE_LOGIN)
-        else
-          # マイページ表示
-          window.location.href = '/my_page'
-      else if $(@).hasClass(GallerySidebar.WORKTABLE)
+      if $(@).hasClass(GallerySidebar.WORKTABLE)
         # Worktableに遷移
         window.location.href = '/worktable';
       else if $(@).hasClass(GallerySidebar.LOGO)

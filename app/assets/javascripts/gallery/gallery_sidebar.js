@@ -53,13 +53,7 @@ GallerySidebar = (function() {
     });
     return $('.wrapper .circle', root).click(function(e) {
       var popup, self, type;
-      if ($(this).hasClass(GallerySidebar.USER)) {
-        if ($(this).hasClass('guest')) {
-          return Common.showModalView(Constant.ModalViewType.NOTICE_LOGIN);
-        } else {
-          return window.location.href = '/my_page';
-        }
-      } else if ($(this).hasClass(GallerySidebar.WORKTABLE)) {
+      if ($(this).hasClass(GallerySidebar.WORKTABLE)) {
         return window.location.href = '/worktable';
       } else if ($(this).hasClass(GallerySidebar.LOGO)) {
         return Common.showModalView(Constant.ModalViewType.ABOUT);

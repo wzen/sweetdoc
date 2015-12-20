@@ -5,19 +5,21 @@
 
 <div style="<%= !is_gallery ? 'padding: 5px' : '' %>">
   <% if user_signed_in? %>
-      <!-- ログイン済み -->
-      <% if current_user.thumbnail_img.nil? %>
-          <div class="circle <%= Const::Gallery::Sidebar::USER %>">
-            <%= image_tag 'gallery/sidebar/default_user.png' ,size:"#{size}x#{size}" %>
-          </div>
-      <% else %>
-          <div class="circle <%= Const::Gallery::Sidebar::USER %>">
-            <img src="<%= current_user.thumbnail_img %>" width="<%= size %>" height="<%= size %>" />
-          </div>
+      <%= link_to '/my_page' do %>
+        <!-- ログイン済み -->
+        <% if current_user.thumbnail_img.nil? %>
+            <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+              <%= image_tag 'gallery/sidebar/default_user.png' ,size:"#{size}x#{size}" %>
+            </div>
+        <% else %>
+            <div class="circle <%= Const::Gallery::Sidebar::USER %>">
+              <img src="<%= current_user.thumbnail_img %>" width="<%= size %>" height="<%= size %>" />
+            </div>
+        <% end %>
       <% end %>
   <% else %>
       <!-- 未ログイン-->
-      <div class="circle <%= Const::Gallery::Sidebar::USER %> guest">
+      <div class="circle <%= Const::Gallery::Sidebar::USER %> guest" onclick="Common.showModalView(Constant.ModalViewType.NOTICE_LOGIN)">
         <%= image_tag 'gallery/sidebar/guest_user.png', size:"#{size}x#{size}" %>
       </div>
   <% end %>

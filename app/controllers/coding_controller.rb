@@ -43,6 +43,7 @@ class CodingController < ApplicationController
   end
 
   def delete_node
+    user_id = current_or_guest_user.id
     node_path = params.require(Const::Coding::Key::NODE_PATH)
     @result_success, @message = Coding.delete_node(user_id, node_path)
   end

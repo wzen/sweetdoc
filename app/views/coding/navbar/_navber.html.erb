@@ -11,24 +11,29 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li id="header_items_file_menu">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_file_menu">
-                        <%= t('header_menu.file.file') %>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li class="dropdown-submenu">
-                            <a class="menu-file"><%= t('header_menu.file.file') %></a>
-                            <ul class="dropdown-menu <%= Const::ElementAttribute::FILE_LOAD_CLASS %>">
-                                <li><a class="menu-file-js">JavaScript</a></li>
-                                <li><a class="menu-file-coffee">CoffeeScript</a></li>
-                            </ul>
-                        </li>
-                        <li><a class="menu-save"><%= t('header_menu.file.save') %></a></li>
-                        <li><a class="menu-all-save"><%= t('header_menu.file.all_save') %></a></li>
-                    </ul>
-                </li>
+              <li id="header_items_file_menu">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#header_items_file_menu">
+                      <%= t('header_menu.file.file') %>
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu" role="menu">
+                      <li class="dropdown-submenu">
+                          <a class="menu-file"><%= t('header_menu.file.file') %></a>
+                          <ul class="dropdown-menu <%= Const::ElementAttribute::FILE_LOAD_CLASS %>">
+                              <li><a class="menu-file-js">JavaScript</a></li>
+                              <li><a class="menu-file-coffee">CoffeeScript</a></li>
+                          </ul>
+                      </li>
+                      <li><a class="menu-save"><%= t('header_menu.file.save') %></a></li>
+                      <li><a class="menu-all-save"><%= t('header_menu.file.all_save') %></a></li>
+                  </ul>
+              </li>
             </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <%= render 'base/user/login_user' %>
+            </li>
+          </ul>
         </div>
     </div>
 </div>

@@ -449,7 +449,5 @@ ActiveRecord::Schema.define(version: 20151209141157) do
   end
 
   add_index "users", ["access_token"], name: "index_users_on_access_token", unique: true, using: :btree
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

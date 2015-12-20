@@ -337,7 +337,7 @@ itemBaseWorktableExtend = {
   settingDesignSlider: function(className, min, max, stepValue) {
     var defaultValue, designConfigRoot, meterElement, valueElement;
     if (stepValue == null) {
-      stepValue = 0;
+      stepValue = 1;
     }
     designConfigRoot = $('#' + this.getDesignConfigId());
     meterElement = $("." + className, designConfigRoot);
@@ -528,7 +528,7 @@ itemBaseWorktableExtend = {
       max = 100;
     }
     if (stepValue == null) {
-      stepValue = 0;
+      stepValue = 1;
     }
     meterElement = $("." + varName + "_meter", configRoot);
     valueElement = meterElement.prev('input:first');
