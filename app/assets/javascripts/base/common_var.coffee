@@ -82,5 +82,10 @@ class CommonVar
 
 do ->
   window.itemInitFuncList = {}
-  window.debug = true
+
+  window.debug = false
+  if gon?
+    constant = gon.const
+    window.debug = constant.DEBUG_JS
+
   window.runDebug = false

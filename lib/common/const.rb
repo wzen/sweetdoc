@@ -3,6 +3,7 @@ class Const
   DEFAULT_BACKGROUNDCOLOR = '#FAFAFA'
   ITEM_CODING_TEMP_CLASS_NAME = 'ItemPreviewTemp'
   ITEM_GALLERY_ITEM_CLASSNAME = 'igtc'
+  DEBUG_JS = ENV['RAILS_SERVE_DEBUG_JS'].present?
 
   # 操作モード
   class Mode

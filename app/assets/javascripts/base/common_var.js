@@ -91,8 +91,13 @@ CommonVar = (function() {
 })();
 
 (function() {
+  var constant;
   window.itemInitFuncList = {};
-  window.debug = true;
+  window.debug = false;
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    window.debug = constant.DEBUG_JS;
+  }
   return window.runDebug = false;
 })();
 
