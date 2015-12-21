@@ -94,6 +94,9 @@ gem 'rmagick', '2.15.4', require: 'RMagick'
 gem 'mini_magick', '4.3.6'
 gem 'remotipart', '1.2.1'
 
+# メンテナンス画面の表示
+gem 'turnout'
+
 #gem "facets", require: false
 #gem 'fastimage'
 
