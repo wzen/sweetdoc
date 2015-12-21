@@ -41,8 +41,7 @@ class ItemPreviewCommon
     window.scrollInsideWrapper.height(window.scrollViewSize)
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
     # スクロールイベント設定
-    window.scrollContents.off('scroll')
-    window.scrollContents.on('scroll', (e) ->
+    window.scrollContents.off('scroll').on('scroll', (e) ->
       e.preventDefault()
       top = window.scrollContents.scrollTop()
       left = window.scrollContents.scrollLeft()

@@ -59,9 +59,6 @@ Handwrite = (function() {
             if (mode === Constant.Mode.DRAW) {
               e.preventDefault();
               return _this.mouseDownDrawing(loc);
-            } else if (mode === Constant.Mode.OPTION) {
-              Sidebar.closeSidebar();
-              return WorktableCommon.putbackMode();
             }
           }
         };

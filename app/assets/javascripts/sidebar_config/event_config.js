@@ -106,12 +106,8 @@ EventConfig = (function() {
     }
   };
 
-  EventConfig.prototype.resetAction = function() {
-    return _setupFromPageValues.call(this);
-  };
-
   EventConfig.prototype.applyAction = function() {
-    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, te, topEmt;
+    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, topEmt;
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
       if (window.debug) {
         console.log('validation error');
@@ -180,14 +176,29 @@ EventConfig = (function() {
     }
     Timeline.changeTimelineColor(this.teNum, this[EventPageValueBase.PageValueKey.ACTIONTYPE]);
     LocalStorage.saveAllPageValues();
+    return true;
+  };
+
+  EventConfig.prototype.preview = function() {
+    var item, te;
     item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
     if ((item != null) && (item.preview != null)) {
       te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
       item.initEvent(te);
       PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
-      item.preview(te);
+      return item.preview(te);
     }
-    return true;
+  };
+
+  EventConfig.prototype.stopPreview = function(callback) {
+    var item;
+    if (callback == null) {
+      callback = null;
+    }
+    item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
+    if ((item != null) && (item.stopPreview != null)) {
+      return item.stopPreview(callback);
+    }
   };
 
   EventConfig.prototype.writeToPageValue = function() {
@@ -310,8 +321,7 @@ EventConfig = (function() {
     var handler, self;
     self = 0;
     handler = $('.handler_div', this.emt);
-    $('.scroll_enabled', handler).off('click');
-    return $('.scroll_enabled', handler).on('click', function(e) {
+    return $('.scroll_enabled', handler).off('click').on('click', function(e) {
       var emt;
       if ($(this).is(':checked')) {
         return $(this).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').show();
@@ -327,8 +337,7 @@ EventConfig = (function() {
     var forkCount, forkNum, handler, i, j, name, ref, selectOptions, self, value;
     self = 0;
     handler = $('.handler_div', this.emt);
-    $('.enable_fork', handler).off('click');
-    $('.enable_fork', handler).on('click', function(e) {
+    $('.enable_fork', handler).off('click').on('click', function(e) {
       return $('.fork_select', handler).parent('div').css('display', $(this).is(':checked') ? 'block' : 'none');
     });
     forkCount = PageValue.getForkCount();
@@ -355,32 +364,31 @@ EventConfig = (function() {
   };
 
   _setApplyClickEvent = function() {
-    var em, self;
-    self = this;
-    em = $('.push.button.reset', this.emt);
-    em.off('click');
-    em.on('click', function(e) {
-      self.clearError();
-      return self.resetAction();
-    });
-    em = $('.push.button.apply', this.emt);
-    em.off('click');
-    em.on('click', function(e) {
-      self.clearError();
-      if (self.applyAction()) {
-        return Timeline.refreshAllTimeline();
-      }
-    });
-    em = $('.push.button.cancel', this.emt);
-    em.off('click');
-    return em.on('click', function(e) {
-      self.clearError();
-      e = $(this).closest('.event');
-      $('.values', e).html('');
-      return Sidebar.closeSidebar(function() {
-        return $(".config.te_div", e).hide();
-      });
-    });
+    $('.push.button.preview', this.emt).off('click').on('click', (function(_this) {
+      return function(e) {
+        _this.clearError();
+        _this.preview();
+        $(e.target).hide();
+        return $(e.target).next('.stop_preview').show();
+      };
+    })(this));
+    $('.push.button.apply', this.emt).off('click').on('click', (function(_this) {
+      return function(e) {
+        _this.clearError();
+        if (_this.applyAction()) {
+          return Timeline.refreshAllTimeline();
+        }
+      };
+    })(this));
+    return $('.push.button.stop_preview', this.emt).off('click').on('click', (function(_this) {
+      return function(e) {
+        _this.clearError();
+        return _this.stopPreview(function() {
+          $(e.target).hide();
+          return $(e.target).prev('.preview').show();
+        });
+      };
+    })(this));
   };
 
   _setupFromPageValues = function() {
@@ -612,8 +620,7 @@ EventConfig = (function() {
       return function() {
         var em;
         em = $('.te_item_select', emt);
-        em.off('change');
-        return em.on('change', function(e) {
+        return em.off('change').on('change', function(e) {
           te.clearError();
           return te.selectItem(this);
         });

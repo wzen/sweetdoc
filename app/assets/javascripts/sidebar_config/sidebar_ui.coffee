@@ -28,6 +28,13 @@ class Sidebar
           if target != null
             WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
+        # 閉じるイベント設定
+        $(window.drawingCanvas).one('click.sidebar_close', (e) =>
+          Sidebar.closeSidebar()
+          # モードを変更以前に戻す
+          WorktableCommon.putbackMode()
+        )
+
   # サイドバーをクローズ
   # @param [Function] callback コールバック
   @closeSidebar = (callback = null) ->

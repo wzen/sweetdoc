@@ -1,10 +1,16 @@
 <div class="config te_div button_div" style="display: none">
   <div class="configBox">
     <div class="forms">
-      <button class="push button reset" style="margin-top: 10px">reset change</button><br/>
-      <button class="push button apply" style="margin-top: 10px">Apply</button><br/>
-      <button class="push button cancel" style="margin-top: 10px">Close(Not apply)</button>
-      <input class="confirm" type="hidden" value="OK?(Confirm)">
+      <div style="margin:5px;">
+        <button class="push button preview">Preview</button>
+        <button class="push button preview_stop">Stop</button>
+        <div>
+          <label><input class="keep_disp_mag" name="keep_disp_mag" type="checkbox">Keep display magnification</label>
+        </div>
+      </div>
+      <div style="margin:5px;">
+        <button class="push button apply" >Apply</button><br/>
+      </div>
       <!-- エラー (暫定でこの位置) -->
       <div class="event_config_error error-message">
         <div><p></p></div>

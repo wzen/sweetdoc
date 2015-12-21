@@ -43,9 +43,15 @@ Sidebar = (function() {
             return WorktableCommon.resizeMainContainerEvent();
           });
           if (target !== null) {
-            return WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
+            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
           }
         }
+        return $(window.drawingCanvas).one('click.sidebar_close', (function(_this) {
+          return function(e) {
+            Sidebar.closeSidebar();
+            return WorktableCommon.putbackMode();
+          };
+        })(this));
       }
     }
   };

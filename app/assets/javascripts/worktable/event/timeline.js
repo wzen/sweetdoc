@@ -62,8 +62,7 @@ Timeline = (function() {
       }
       self.createTimelineEvent(ePageValues.length + 1);
       timelineEvents = $('#timeline_events').children('.timeline_event');
-      timelineEvents.off('click');
-      timelineEvents.on('click', function(e) {
+      timelineEvents.off('click').on('click', function(e) {
         return _clickTimelineEvent.call(self, this);
       });
       $('#timeline_events').sortable({

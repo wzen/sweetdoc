@@ -55,11 +55,6 @@ class Handwrite
           if mode == Constant.Mode.DRAW
             e.preventDefault()
             @mouseDownDrawing(loc)
-          else if mode == Constant.Mode.OPTION
-            # サイドバーを閉じる
-            Sidebar.closeSidebar()
-            # モードを変更以前に戻す
-            WorktableCommon.putbackMode()
 
       # マウスドラッグイベント
       # @param [Array] e ウィンドウ座標

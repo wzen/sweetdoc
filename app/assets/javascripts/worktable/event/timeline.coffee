@@ -68,8 +68,7 @@ class Timeline
       timelineEvents = $('#timeline_events').children('.timeline_event')
 
       # イベントのクリック
-      timelineEvents.off('click')
-      timelineEvents.on('click', (e) ->
+      timelineEvents.off('click').on('click', (e) ->
         _clickTimelineEvent.call(self, @)
       )
       # イベントのD&D

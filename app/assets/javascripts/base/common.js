@@ -1148,6 +1148,10 @@ Common = (function() {
     return ret;
   };
 
+  Common.showNotification = function(message, type) {};
+
+  Common.hideNotification = function() {};
+
   return Common;
 
 })();

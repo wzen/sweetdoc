@@ -109,10 +109,6 @@ class EventConfig
       else
         _callback.call(@)
 
-  # イベントの入力値を初期化する
-  resetAction: ->
-    _setupFromPageValues.call(@)
-
   # 入力値を適用する
   applyAction: ->
     if !@[EventPageValueBase.PageValueKey.ACTIONTYPE]?
@@ -190,8 +186,10 @@ class EventConfig
     # キャッシュに保存
     LocalStorage.saveAllPageValues()
 
-    #if @[EventPageValueBase.PageValueKey.METHODNAME]?
-    # プレビュー開始
+    return true
+
+  # プレビュー開始
+  preview: ->
     item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
     if item? && item.preview?
       te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
@@ -200,7 +198,11 @@ class EventConfig
       PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
       item.preview(te)
 
-    return true
+  # プレビュー停止
+  stopPreview: (callback = null) ->
+    item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
+    if item? && item.stopPreview?
+      item.stopPreview(callback)
 
   # 画面値に書き込み
   writeToPageValue: ->
@@ -303,8 +305,7 @@ class EventConfig
   _setScrollDirectionEvent = ->
     self = 0
     handler = $('.handler_div', @emt)
-    $('.scroll_enabled', handler).off('click')
-    $('.scroll_enabled', handler).on('click', (e) ->
+    $('.scroll_enabled', handler).off('click').on('click', (e) ->
       if $(@).is(':checked')
         $(@).closest('.scroll_enabled_wrapper').find('.scroll_forward:first').parent('label').show()
       else
@@ -316,8 +317,7 @@ class EventConfig
   _setForkSelect = ->
     self = 0
     handler = $('.handler_div', @emt)
-    $('.enable_fork', handler).off('click')
-    $('.enable_fork', handler).on('click', (e) ->
+    $('.enable_fork', handler).off('click').on('click', (e) ->
       $('.fork_select', handler).parent('div').css('display', if $(@).is(':checked') then 'block' else 'none')
      )
 
@@ -346,41 +346,31 @@ class EventConfig
       $('.fork_handler_wrapper', handler).hide()
 
   _setApplyClickEvent = ->
-    self = @
-    em = $('.push.button.reset', @emt)
-    em.off('click')
-    em.on('click', (e) ->
-      self.clearError()
+    $('.push.button.preview', @emt).off('click').on('click', (e) =>
+      @clearError()
       # UIの入力値を初期化
-      self.resetAction()
+      @preview()
+      $(e.target).hide()
+      $(e.target).next('.stop_preview').show()
     )
-    em = $('.push.button.apply', @emt)
-    em.off('click')
-    em.on('click', (e) ->
-      self.clearError()
-
+    $('.push.button.apply', @emt).off('click').on('click', (e) =>
+      @clearError()
       # 入力値を適用する
-      if self.applyAction()
+      if @applyAction()
         # イベントを更新
         Timeline.refreshAllTimeline()
     )
-    em = $('.push.button.cancel', @emt)
-    em.off('click')
-    em.on('click', (e) ->
-      self.clearError()
-
-      # 入力を全てクリアしてサイドバーを閉じる
-      e = $(@).closest('.event')
-      $('.values', e).html('')
-      Sidebar.closeSidebar( ->
-        $(".config.te_div", e).hide()
+    $('.push.button.stop_preview', @emt).off('click').on('click', (e) =>
+      @clearError()
+      @stopPreview( =>
+        $(e.target).hide()
+        $(e.target).prev('.preview').show()
       )
     )
 
   _setupFromPageValues = ->
     if @readFromPageValue()
       @selectItem()
-      #@clickMethod()
 
   # 追加されたコンフィグを全て消去
   @removeAllConfig: ->
@@ -573,8 +563,7 @@ class EventConfig
     te = new @(emt, teNum, distId)
     do =>
       em = $('.te_item_select', emt)
-      em.off('change')
-      em.on('change', (e) ->
+      em.off('change').on('change', (e) ->
         te.clearError()
         te.selectItem(@)
       )
