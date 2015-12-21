@@ -43,7 +43,7 @@ class Project
         height = 199
       else
         height = 179
-      modalEmt.animate({height: "#{size.height}px"}, {duration: 300})
+      modalEmt.animate({height: "#{height}px"}, {duration: 300})
     )
 
     # ウィンドウサイズ

@@ -24,7 +24,7 @@ class Chapter
     if window.runDebug
       console.log('Chapter willChapter')
 
-    # イベントのwillChapter呼び出し & CSS追加
+    # 個々イベントのwillChapter呼び出し & CSS追加
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
       # インスタンスの状態を保存
@@ -32,8 +32,6 @@ class Chapter
       event.willChapter()
       @doMoveChapter = false
 
-    # Canvasを前面に表示
-    @floatScrollHandleCanvas()
     # 対象アイテムにフォーカス
     @focusToActorIfNeed(false)
     # イベント反応有効

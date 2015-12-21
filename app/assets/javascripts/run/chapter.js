@@ -34,7 +34,6 @@ Chapter = (function() {
       event.willChapter();
       this.doMoveChapter = false;
     }
-    this.floatScrollHandleCanvas();
     this.focusToActorIfNeed(false);
     return this.enableEventHandle();
   };

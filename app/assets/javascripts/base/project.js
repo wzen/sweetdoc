@@ -60,7 +60,7 @@ Project = (function() {
         height = 179;
       }
       return modalEmt.animate({
-        height: size.height + "px"
+        height: height + "px"
       }, {
         duration: 300
       });

@@ -147,6 +147,9 @@ class ItemBase extends ItemEventBase
       console.log('ItemBase reDrawIfItemNotExist id:' + @id)
     if @getJQueryElement().length == 0
       @reDraw(show, callback)
+    else
+      if callback?
+        callback()
 
   # CSSに反映
   applyDesignChange: (doStyleSave = true) ->

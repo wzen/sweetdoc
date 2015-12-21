@@ -179,6 +179,10 @@ ItemBase = (function(superClass) {
     }
     if (this.getJQueryElement().length === 0) {
       return this.reDraw(show, callback);
+    } else {
+      if (callback != null) {
+        return callback();
+      }
     }
   };
 
