@@ -66,6 +66,9 @@ class EventBase extends Extend
   # プレビュー開始
   # @param [Object] event 設定イベント
   preview: (event) ->
+    if window.runDebug
+      console.log('EventBase preview id:' + @id)
+
     _preview = (event) ->
       drawDelay = @constructor.STEP_INTERVAL_DURATION * 1000
       loopDelay = 1000 # 1秒毎イベント実行
@@ -157,6 +160,9 @@ class EventBase extends Extend
   # プレビューを停止
   # @param [Function] callback コールバック
   stopPreview: (callback = null) ->
+    if window.runDebug
+      console.log('EventBase stopPreview id:' + @id)
+
     _stop = ->
       if @previewTimer?
         clearTimeout(@previewTimer)
@@ -331,6 +337,9 @@ class EventBase extends Extend
 
   # イベント前の表示状態にする
   updateEventBefore: ->
+    if window.runDebug
+      console.log('EventBase updateEventBefore id:' + @id)
+
     @setMiniumObject(@getMinimumObjectEventBefore())
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.SCROLL
@@ -338,6 +347,9 @@ class EventBase extends Extend
 
   # イベント後の表示状態にする
   updateEventAfter: ->
+    if window.runDebug
+      console.log('EventBase updateEventAfter id:' + @id)
+
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.SCROLL
       @scrollValue = @scrollLength()

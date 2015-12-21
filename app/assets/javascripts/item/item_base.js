@@ -137,6 +137,9 @@ ItemBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
+    if (window.runDebug) {
+      console.log('ItemBase reDraw id:' + this.id);
+    }
     if ((this.reDrawing != null) && this.reDrawing) {
       this.reDrawStack = true;
       console.log('add stack');
@@ -171,6 +174,9 @@ ItemBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
+    if (window.runDebug) {
+      console.log('ItemBase reDrawIfItemNotExist id:' + this.id);
+    }
     if (this.getJQueryElement().length === 0) {
       return this.reDraw(show, callback);
     }
@@ -190,6 +196,9 @@ ItemBase = (function(superClass) {
     var obj;
     if (show == null) {
       show = true;
+    }
+    if (window.runDebug) {
+      console.log('ItemBase reDrawWithEventBefore id:' + this.id);
     }
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
     if (obj) {

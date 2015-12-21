@@ -104,6 +104,9 @@ class Page
 
   # 開始イベント
   start: ->
+    if window.runDebug
+      console.log('Page Start')
+
     # ページングガイド作成
     @pagingGuide = new ArrowPagingGuide()
     # チャプター数設定
@@ -168,6 +171,9 @@ class Page
 
   # チャプターを戻す
   rewindChapter: ->
+    if window.runDebug
+      console.log('Page rewindChapter')
+
     # 全ガイド非表示
     @hideAllGuide()
 
@@ -204,12 +210,17 @@ class Page
 
   # チャプターの内容をリセット
   resetChapter: (chapterIndex = @getChapterIndex(), takeStateCapture = false) ->
+    if window.runDebug
+      console.log('Page resetChapter')
     @finishedAllChapters = false
     @finishedScrollDistSum = 0
     @getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture)
 
   # 全てのチャプターを戻す
   rewindAllChapters: ->
+    if window.runDebug
+      console.log('Page rewindAllChapters')
+
     for i in [(@getForkChapterList().length - 1)..0] by -1
       chapter = @getForkChapterList()[i]
       chapter.resetAllEvents()
@@ -238,6 +249,9 @@ class Page
 
   # 全てのイベントアイテムをFrontから落とす
   floatPageScrollHandleCanvas: ->
+    if window.runDebug
+      console.log('Page floatPageScrollHandleCanvas')
+
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @getForkChapterList().forEach((chapter) ->
@@ -246,6 +260,9 @@ class Page
 
   # ページ前処理
   willPage: (callback = null)->
+    if window.runDebug
+      console.log('Page willPage')
+
     # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
     # リセット
@@ -264,6 +281,9 @@ class Page
 
   # ページ戻し前処理
   willPageFromRewind: (callback = null) ->
+    if window.runDebug
+      console.log('Page willPageFromRewind')
+
     # ページ状態初期化のため、ここで全チャプターのイベントを初期化
     @initChapterEvent()
     # フォーカス
@@ -286,6 +306,9 @@ class Page
 
   # ページ後処理
   didPage: ->
+    if window.runDebug
+      console.log('Page didPage')
+
     # 操作履歴を保存
     RunCommon.saveFootprint()
 
@@ -323,6 +346,9 @@ class Page
 
   # アイテム表示の初期化
   initItemDrawingInPage: (callback = null) ->
+    if window.runDebug
+      console.log('Page initItemDrawingInPage')
+
     waitDraw = false
     # アイテムインスタンス取得(無い場合は作成 & 初期化もする)
     objs = Common.itemInstancesInPage(PageValue.getPageNum(), true, true)
@@ -346,6 +372,8 @@ class Page
 
   # 全てのチャプターをリセット
   resetAllChapters: ->
+    if window.runDebug
+      console.log('Page resetAllChapters')
     @getAllChapterList().forEach((chapter) ->
       chapter.resetAllEvents()
     )
@@ -364,9 +392,10 @@ class Page
 
   # イベント終了イベント
   finishAllChapters: ->
+    if window.runDebug
+      console.log('Page finishAllChapters')
+
     @finishedAllChapters = true
-    if window.debug
-      console.log('Finish All Chapters!')
     if window.eventAction.hasNextPage()
       # ページ移動のためのスクロールイベントを取るようにする
       @floatPageScrollHandleCanvas()

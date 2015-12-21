@@ -21,6 +21,9 @@ class Chapter
 
   # チャプター実行前処理
   willChapter: ->
+    if window.runDebug
+      console.log('Chapter willChapter')
+
     # イベントのwillChapter呼び出し & CSS追加
     for event, idx in @eventObjList
       event.initEvent(@eventList[idx])
@@ -38,6 +41,9 @@ class Chapter
 
   # チャプター共通の後処理
   didChapter: ->
+    if window.runDebug
+      console.log('Chapter didChapter')
+
     @eventObjList.forEach((event) ->
       event.didChapter()
     )
@@ -67,6 +73,9 @@ class Chapter
 
   # イベントアイテムを前面に表示
   floatAllChapterEvents: ->
+    if window.runDebug
+      console.log('Chapter floatAllChapterEvents')
+
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
     window.scrollContents.css('z-index', scrollViewSwitchZindex.on)
     @eventObjList.forEach((e) ->
@@ -76,6 +85,9 @@ class Chapter
 
   # スクロールイベント用のCanvasを前面に表示
   floatScrollHandleCanvas: ->
+    if window.runDebug
+      console.log('Chapter floatScrollHandleCanvas')
+
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
     window.scrollContents.css('z-index', scrollViewSwitchZindex.off)
     @eventObjList.forEach((e) =>
@@ -85,12 +97,18 @@ class Chapter
 
   # チャプターのイベントをリセットする
   resetAllEvents: (takeStateCapture = false) ->
+    if window.runDebug
+      console.log('Chapter resetAllEvents')
+
     @eventObjList.forEach((e) =>
       e.resetEvent()
     )
 
   # チャプターのイベントを実行後にする
   forwardAllEvents: ->
+    if window.runDebug
+      console.log('Chapter forwardAllEvents')
+
     @eventObjList.forEach((e) =>
       e.updateEventAfter()
     )

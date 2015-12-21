@@ -1,6 +1,7 @@
 $ ->
   window.isMotionCheck = true
   window.isItemPreview = false
+  window.runDebug = true
 
   $('.motion_check.index').ready ->
     RunCommon.start(true)

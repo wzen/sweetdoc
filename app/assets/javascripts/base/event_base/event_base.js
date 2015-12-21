@@ -75,6 +75,9 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.preview = function(event) {
     var _preview;
+    if (window.runDebug) {
+      console.log('EventBase preview id:' + this.id);
+    }
     _preview = function(event) {
       var _draw, _loop, drawDelay, loopCount, loopDelay, loopMaxCount, p, progressMax;
       drawDelay = this.constructor.STEP_INTERVAL_DURATION * 1000;
@@ -189,6 +192,9 @@ EventBase = (function(superClass) {
     var _stop;
     if (callback == null) {
       callback = null;
+    }
+    if (window.runDebug) {
+      console.log('EventBase stopPreview id:' + this.id);
     }
     _stop = function() {
       if (this.previewTimer != null) {
@@ -375,6 +381,9 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.updateEventBefore = function() {
     var actionType;
+    if (window.runDebug) {
+      console.log('EventBase updateEventBefore id:' + this.id);
+    }
     this.setMiniumObject(this.getMinimumObjectEventBefore());
     actionType = this.getEventActionType();
     if (actionType === Constant.ActionType.SCROLL) {
@@ -384,6 +393,9 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.updateEventAfter = function() {
     var actionType;
+    if (window.runDebug) {
+      console.log('EventBase updateEventAfter id:' + this.id);
+    }
     actionType = this.getEventActionType();
     if (actionType === Constant.ActionType.SCROLL) {
       this.scrollValue = this.scrollLength();

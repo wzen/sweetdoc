@@ -23,6 +23,9 @@ Chapter = (function() {
 
   Chapter.prototype.willChapter = function() {
     var event, i, idx, len, ref;
+    if (window.runDebug) {
+      console.log('Chapter willChapter');
+    }
     ref = this.eventObjList;
     for (idx = i = 0, len = ref.length; i < len; idx = ++i) {
       event = ref[idx];
@@ -37,6 +40,9 @@ Chapter = (function() {
   };
 
   Chapter.prototype.didChapter = function() {
+    if (window.runDebug) {
+      console.log('Chapter didChapter');
+    }
     return this.eventObjList.forEach(function(event) {
       return event.didChapter();
     });
@@ -69,6 +75,9 @@ Chapter = (function() {
   };
 
   Chapter.prototype.floatAllChapterEvents = function() {
+    if (window.runDebug) {
+      console.log('Chapter floatAllChapterEvents');
+    }
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
     window.scrollContents.css('z-index', scrollViewSwitchZindex.on);
     return this.eventObjList.forEach(function(e) {
@@ -79,6 +88,9 @@ Chapter = (function() {
   };
 
   Chapter.prototype.floatScrollHandleCanvas = function() {
+    if (window.runDebug) {
+      console.log('Chapter floatScrollHandleCanvas');
+    }
     window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     window.scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.eventObjList.forEach((function(_this) {
@@ -94,6 +106,9 @@ Chapter = (function() {
     if (takeStateCapture == null) {
       takeStateCapture = false;
     }
+    if (window.runDebug) {
+      console.log('Chapter resetAllEvents');
+    }
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
         return e.resetEvent();
@@ -102,6 +117,9 @@ Chapter = (function() {
   };
 
   Chapter.prototype.forwardAllEvents = function() {
+    if (window.runDebug) {
+      console.log('Chapter forwardAllEvents');
+    }
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
         return e.updateEventAfter();

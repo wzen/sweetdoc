@@ -130,6 +130,9 @@ Page = (function() {
   };
 
   Page.prototype.start = function() {
+    if (window.runDebug) {
+      console.log('Page Start');
+    }
     this.pagingGuide = new ArrowPagingGuide();
     RunCommon.setChapterNum(this.thisChapterNum());
     this.floatPageScrollHandleCanvas();
@@ -183,6 +186,9 @@ Page = (function() {
 
   Page.prototype.rewindChapter = function() {
     var lastForkObj, nfn, oneBeforeForkObj;
+    if (window.runDebug) {
+      console.log('Page rewindChapter');
+    }
     this.hideAllGuide();
     this.resetChapter(this.getChapterIndex());
     if (!this.thisChapter().doMoveChapter) {
@@ -217,6 +223,9 @@ Page = (function() {
     if (takeStateCapture == null) {
       takeStateCapture = false;
     }
+    if (window.runDebug) {
+      console.log('Page resetChapter');
+    }
     this.finishedAllChapters = false;
     this.finishedScrollDistSum = 0;
     return this.getForkChapterList()[chapterIndex].resetAllEvents(takeStateCapture);
@@ -224,6 +233,9 @@ Page = (function() {
 
   Page.prototype.rewindAllChapters = function() {
     var chapter, i, j, ref;
+    if (window.runDebug) {
+      console.log('Page rewindAllChapters');
+    }
     for (i = j = ref = this.getForkChapterList().length - 1; j >= 0; i = j += -1) {
       chapter = this.getForkChapterList()[i];
       chapter.resetAllEvents();
@@ -254,6 +266,9 @@ Page = (function() {
   };
 
   Page.prototype.floatPageScrollHandleCanvas = function() {
+    if (window.runDebug) {
+      console.log('Page floatPageScrollHandleCanvas');
+    }
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.getForkChapterList().forEach(function(chapter) {
@@ -264,6 +279,9 @@ Page = (function() {
   Page.prototype.willPage = function(callback) {
     if (callback == null) {
       callback = null;
+    }
+    if (window.runDebug) {
+      console.log('Page willPage');
     }
     this.initChapterEvent();
     this.resetAllChapters();
@@ -283,6 +301,9 @@ Page = (function() {
     if (callback == null) {
       callback = null;
     }
+    if (window.runDebug) {
+      console.log('Page willPageFromRewind');
+    }
     this.initChapterEvent();
     this.initFocus(false);
     this.forwardProgressChapters();
@@ -298,6 +319,9 @@ Page = (function() {
   };
 
   Page.prototype.didPage = function() {
+    if (window.runDebug) {
+      console.log('Page didPage');
+    }
     return RunCommon.saveFootprint();
   };
 
@@ -371,6 +395,9 @@ Page = (function() {
     if (callback == null) {
       callback = null;
     }
+    if (window.runDebug) {
+      console.log('Page initItemDrawingInPage');
+    }
     waitDraw = false;
     objs = Common.itemInstancesInPage(PageValue.getPageNum(), true, true);
     for (j = 0, len = objs.length; j < len; j++) {
@@ -398,6 +425,9 @@ Page = (function() {
   };
 
   Page.prototype.resetAllChapters = function() {
+    if (window.runDebug) {
+      console.log('Page resetAllChapters');
+    }
     return this.getAllChapterList().forEach(function(chapter) {
       return chapter.resetAllEvents();
     });
@@ -416,10 +446,10 @@ Page = (function() {
   };
 
   Page.prototype.finishAllChapters = function() {
-    this.finishedAllChapters = true;
-    if (window.debug) {
-      console.log('Finish All Chapters!');
+    if (window.runDebug) {
+      console.log('Page finishAllChapters');
     }
+    this.finishedAllChapters = true;
     if (window.eventAction.hasNextPage()) {
       return this.floatPageScrollHandleCanvas();
     } else {

@@ -111,6 +111,9 @@ class ItemBase extends ItemEventBase
   # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
   reDraw: (show = true, callback = null) ->
+    if window.runDebug
+      console.log('ItemBase reDraw id:' + @id)
+
     if @reDrawing? && @reDrawing
       # createItemElementが重い時のため
       # 描画中はスタックに登録
@@ -140,6 +143,8 @@ class ItemBase extends ItemEventBase
   # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
   reDrawIfItemNotExist: (show = true, callback = null) ->
+    if window.runDebug
+      console.log('ItemBase reDrawIfItemNotExist id:' + @id)
     if @getJQueryElement().length == 0
       @reDraw(show, callback)
 
@@ -153,6 +158,9 @@ class ItemBase extends ItemEventBase
   # データから読み込んで描画する処理に使用
   # @param [Boolean] show 要素作成後に表示するか
   reDrawWithEventBefore: (show = true) ->
+    if window.runDebug
+      console.log('ItemBase reDrawWithEventBefore id:' + @id)
+
     # インスタンス値初期化
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
     if obj

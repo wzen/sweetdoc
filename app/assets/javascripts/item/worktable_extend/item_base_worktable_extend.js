@@ -88,6 +88,9 @@ itemBaseWorktableExtend = {
     if (callback == null) {
       callback = null;
     }
+    if (window.runDebug) {
+      console.log('ItemBase drawAndMakeConfigsAndWritePageValue');
+    }
     return this.drawAndMakeConfigs(show, (function(_this) {
       return function() {
         var blank, distId, teNum;
@@ -110,6 +113,9 @@ itemBaseWorktableExtend = {
     }
     if (callback == null) {
       callback = null;
+    }
+    if (window.runDebug) {
+      console.log('ItemBase drawAndMakeConfigs');
     }
     this.reDraw(show);
     return ConfigMenu.getDesignConfig(this, function() {

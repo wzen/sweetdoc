@@ -73,6 +73,9 @@ itemBaseWorktableExtend =
   # 描画&コンフィグ作成
   # @param [Boolean] show 要素作成後に描画を表示するか
   drawAndMakeConfigsAndWritePageValue: (show = true, callback = null) ->
+    if window.runDebug
+      console.log('ItemBase drawAndMakeConfigsAndWritePageValue')
+
     @drawAndMakeConfigs(show, =>
       if @constructor.defaultMethodName()?
         # デフォルトイベントがある場合はイベント作成
@@ -91,6 +94,9 @@ itemBaseWorktableExtend =
   # @param [boolean] show 要素作成後に描画を表示するか
   # @return [Boolean] 処理結果
   drawAndMakeConfigs: (show = true, callback = null) ->
+    if window.runDebug
+      console.log('ItemBase drawAndMakeConfigs')
+
     # ボタン設置
     @reDraw(show)
     # コンフィグ作成
