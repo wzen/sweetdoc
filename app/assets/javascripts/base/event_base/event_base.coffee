@@ -228,7 +228,8 @@ class EventBase extends Extend
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
     # スクロール値更新
-    #console.log("y:#{y}")
+    #if window.debug
+      #console.log("y:#{y}")
     plusX = 0
     plusY = 0
     if x > 0 && @_enabledDirections.right

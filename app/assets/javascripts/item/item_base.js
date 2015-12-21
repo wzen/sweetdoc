@@ -142,7 +142,9 @@ ItemBase = (function(superClass) {
     }
     if ((this.reDrawing != null) && this.reDrawing) {
       this.reDrawStack = true;
-      console.log('add stack');
+      if (window.debug) {
+        console.log('add stack');
+      }
       return;
     }
     this.reDrawing = true;
@@ -156,7 +158,9 @@ ItemBase = (function(superClass) {
         _this.reDrawing = false;
         if ((_this.reDrawStack != null) && _this.reDrawStack) {
           _this.reDrawStack = false;
-          console.log('stack redraw');
+          if (window.debug) {
+            console.log('stack redraw');
+          }
           return _this.reDraw(show, callback);
         } else {
           if (callback != null) {

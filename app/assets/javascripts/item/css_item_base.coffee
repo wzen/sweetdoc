@@ -66,7 +66,8 @@ class CssItemBase extends ItemBase
         temp.attr('id', @getCssRootElementId())
         if designs.values?
           for k,v of designs.values
-            #console.log("k: #{k}  v: #{v}")
+            #if window.debug
+              #console.log("k: #{k}  v: #{v}")
             temp.find(".#{k}").html("#{v}")
         if designs.flags?
           for k,v of designs.flags

@@ -45,7 +45,8 @@ class PreloadItemImage extends ItemBase
       # createItemElementが重い時のため
       # 描画中はスタックに登録
       @reDrawStack = true
-      console.log('add stack')
+      if window.debug
+        console.log('add stack')
       return
 
     @reDrawing = true
@@ -59,7 +60,8 @@ class PreloadItemImage extends ItemBase
       if @reDrawStack? && @reDrawStack
         # スタックが存在する場合再度描画
         @reDrawStack = false
-        console.log('stack redraw')
+        if window.debug
+          console.log('stack redraw')
         @reDraw(show, callback)
       else
         if callback?
@@ -148,7 +150,8 @@ Common.setClassToMap(false, PreloadItemImage.ITEM_ACCESS_TOKEN, PreloadItemImage
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN]?
   if EventConfig?
     EventConfig.addEventConfigContents(PreloadItemImage.ITEM_ACCESS_TOKEN)
-  console.log('PreloadImage loaded')
+  if window.debug
+    console.log('PreloadImage loaded')
   window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemImage.jsLoaded?
       PreloadItemArrow.jsLoaded(option)

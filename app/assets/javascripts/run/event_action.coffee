@@ -162,4 +162,5 @@ class EventAction
   # 全ページ終了イベント
   finishAllPages: ->
     @finishedAllPages = true
-    console.log('Finish All Pages!!!')
+    if window.debug
+      console.log('Finish All Pages!!!')

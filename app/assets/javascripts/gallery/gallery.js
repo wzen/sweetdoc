@@ -49,9 +49,7 @@ $(function() {
   window.isMotionCheck = false;
   window.isItemPreview = false;
   GalleryCommon.initView();
-  $('.gallery.index').ready(function() {
-    return console.log('home#index');
-  });
+  $('.gallery.index').ready(function() {});
   $('.gallery.grid').ready(function() {
     GalleryCommon.initGridView();
     return GalleryGrid.initEvent();

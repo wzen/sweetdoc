@@ -118,7 +118,8 @@ class ItemBase extends ItemEventBase
       # createItemElementが重い時のため
       # 描画中はスタックに登録
       @reDrawStack = true
-      console.log('add stack')
+      if window.debug
+        console.log('add stack')
       return
 
     @reDrawing = true
@@ -132,7 +133,8 @@ class ItemBase extends ItemEventBase
       if @reDrawStack? && @reDrawStack
         # スタックが存在する場合再度描画
         @reDrawStack = false
-        console.log('stack redraw')
+        if window.debug
+          console.log('stack redraw')
         @reDraw(show, callback)
       else
         if callback?

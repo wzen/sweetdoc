@@ -79,7 +79,8 @@ class ArrowPagingGuide
     , 200)
     @finishedScrollDistSum += x + y
     _moveBackground.call(@)
-    #console.log('finishedScrollDistSum:' + @finishedScrollDistSum)
+    #if window.debug
+      #console.log('finishedScrollDistSum:' + @finishedScrollDistSum)
     if @finishedScrollDistSum > @constructor.PAGE_CHANGE_SCROLL_DIST
       if @intervalTimer != null
         clearInterval(@intervalTimer)

@@ -116,7 +116,8 @@ class EventConfig
   # 入力値を適用する
   applyAction: ->
     if !@[EventPageValueBase.PageValueKey.ACTIONTYPE]?
-      console.log('validation error')
+      if window.debug
+        console.log('validation error')
       return false
 
     # 入力値を保存
@@ -398,7 +399,8 @@ class EventConfig
         actionParent = $("<div class='#{className}' style='display:none'></div>")
         props = itemClass.actionProperties
         if !props?
-          console.log('Not declaration actionProperties')
+          if window.debug
+            console.log('Not declaration actionProperties')
           return
 
         # アクションメソッドConfig追加

@@ -163,7 +163,9 @@ EventAction = (function() {
 
   EventAction.prototype.finishAllPages = function() {
     this.finishedAllPages = true;
-    return console.log('Finish All Pages!!!');
+    if (window.debug) {
+      return console.log('Finish All Pages!!!');
+    }
   };
 
   return EventAction;

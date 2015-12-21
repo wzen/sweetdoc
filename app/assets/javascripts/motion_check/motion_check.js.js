@@ -2,7 +2,7 @@
 $(function() {
   window.isMotionCheck = true;
   window.isItemPreview = false;
-  window.runDebug = true;
+  window.runDebug = window.debug;
   $('.motion_check.index').ready(function() {
     return RunCommon.start(true);
   });

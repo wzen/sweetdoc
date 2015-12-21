@@ -13,7 +13,9 @@ ItemPreviewEventConfig = (function(superClass) {
   ItemPreviewEventConfig.prototype.applyAction = function() {
     var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, topEmt;
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
-      console.log('validation error');
+      if (window.debug) {
+        console.log('ItemPreviewEventConfig validation error');
+      }
       return false;
     }
     if (this[EventPageValueBase.PageValueKey.DIST_ID] == null) {

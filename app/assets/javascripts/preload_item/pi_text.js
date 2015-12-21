@@ -149,7 +149,9 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemTex
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
     EventConfig.addEventConfigContents(PreloadItemText.ITEM_ACCESS_TOKEN);
   }
-  console.log('PreloadItemText loaded');
+  if (window.debug) {
+    console.log('PreloadItemText loaded');
+  }
   window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
       option = {};

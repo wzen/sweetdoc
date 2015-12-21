@@ -481,7 +481,9 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArr
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
     EventConfig.addEventConfigContents(PreloadItemArrow.ITEM_ACCESS_TOKEN);
   }
-  console.log('arrow loaded');
+  if (window.debug) {
+    console.log('arrow loaded');
+  }
   window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
       option = {};

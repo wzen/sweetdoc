@@ -44,8 +44,6 @@ $ ->
   GalleryCommon.initView()
 
   $('.gallery.index').ready ->
-    console.log 'home#index'
-
 
   $('.gallery.grid').ready ->
     # グリッドビュー初期化

@@ -63,7 +63,9 @@ PreloadItemImage = (function(superClass) {
     }
     if ((this.reDrawing != null) && this.reDrawing) {
       this.reDrawStack = true;
-      console.log('add stack');
+      if (window.debug) {
+        console.log('add stack');
+      }
       return;
     }
     this.reDrawing = true;
@@ -77,7 +79,9 @@ PreloadItemImage = (function(superClass) {
         _this.reDrawing = false;
         if ((_this.reDrawStack != null) && _this.reDrawStack) {
           _this.reDrawStack = false;
-          console.log('stack redraw');
+          if (window.debug) {
+            console.log('stack redraw');
+          }
           return _this.reDraw(show, callback);
         } else {
           if (callback != null) {
@@ -188,7 +192,9 @@ if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemIma
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
     EventConfig.addEventConfigContents(PreloadItemImage.ITEM_ACCESS_TOKEN);
   }
-  console.log('PreloadImage loaded');
+  if (window.debug) {
+    console.log('PreloadImage loaded');
+  }
   window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN] = function(option) {
     if (option == null) {
       option = {};

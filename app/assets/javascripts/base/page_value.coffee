@@ -152,9 +152,6 @@ class PageValue
   # @param [String] rootId Root要素ID
   # @return [Object] ハッシュ配列または値で返す
   _getPageValue = (key, rootId) ->
-    if !key?
-      console.log('')
-
     f = @
     # div以下の値をハッシュとしてまとめる
     takeValue = (element) ->

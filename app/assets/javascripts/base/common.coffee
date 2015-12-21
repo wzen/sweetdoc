@@ -80,8 +80,9 @@ class Common
             ret[k] = f
         return if Object.keys(ret).length > 0 then ret else null
     obj = _func(obj1, obj2)
-    console.log('diffEventObject')
-    console.log(obj)
+    if window.debug
+      console.log('diffEventObject')
+      console.log(obj)
     return obj
 
   # オブジェクトがHTML要素か判定

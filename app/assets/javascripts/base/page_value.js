@@ -233,9 +233,6 @@ PageValue = (function() {
 
   _getPageValue = function(key, rootId) {
     var f, keys, root, takeValue, value;
-    if (key == null) {
-      console.log('');
-    }
     f = this;
     takeValue = function(element) {
       var c, ret;

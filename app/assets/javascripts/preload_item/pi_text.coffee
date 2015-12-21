@@ -241,7 +241,8 @@ Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN]?
   if EventConfig?
     EventConfig.addEventConfigContents(PreloadItemText.ITEM_ACCESS_TOKEN)
-  console.log('PreloadItemText loaded')
+  if window.debug
+    console.log('PreloadItemText loaded')
   window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemText.jsLoaded?
       PreloadItemArrow.jsLoaded(option)

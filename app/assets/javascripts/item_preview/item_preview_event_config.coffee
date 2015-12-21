@@ -2,7 +2,8 @@ class ItemPreviewEventConfig extends EventConfig
   # 入力値を適用する
   applyAction: ->
     if !@[EventPageValueBase.PageValueKey.ACTIONTYPE]?
-      console.log('validation error')
+      if window.debug
+        console.log('ItemPreviewEventConfig validation error')
       return false
 
     # 入力値を保存

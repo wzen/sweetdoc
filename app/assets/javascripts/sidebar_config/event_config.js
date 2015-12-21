@@ -113,7 +113,9 @@ EventConfig = (function() {
   EventConfig.prototype.applyAction = function() {
     var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, item, leftEmt, parallel, prefix, rightEmt, te, topEmt;
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
-      console.log('validation error');
+      if (window.debug) {
+        console.log('validation error');
+      }
       return false;
     }
     if (this[EventPageValueBase.PageValueKey.DIST_ID] == null) {
@@ -401,7 +403,9 @@ EventConfig = (function() {
         actionParent = $("<div class='" + className + "' style='display:none'></div>");
         props = itemClass.actionProperties;
         if (props == null) {
-          console.log('Not declaration actionProperties');
+          if (window.debug) {
+            console.log('Not declaration actionProperties');
+          }
           return;
         }
         methodClone = $('#event-config .method_none_temp').children(':first').clone(true);

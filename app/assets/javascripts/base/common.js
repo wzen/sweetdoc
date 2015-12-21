@@ -116,8 +116,10 @@ Common = (function() {
       }
     };
     obj = _func(obj1, obj2);
-    console.log('diffEventObject');
-    console.log(obj);
+    if (window.debug) {
+      console.log('diffEventObject');
+      console.log(obj);
+    }
     return obj;
   };
 
