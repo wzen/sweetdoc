@@ -488,7 +488,24 @@ EventConfig = (function() {
     }
   };
 
-  EventConfig.prototype.initEventSpecificConfig = function() {};
+  EventConfig.prototype.initEventSpecificConfig = function(objClass) {
+    var e, results, sp, v, varName;
+    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].specific == null)) {
+      return;
+    }
+    sp = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].specific;
+    results = [];
+    for (varName in sp) {
+      v = sp[varName];
+      e = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT + " ." + varName);
+      if (e.length > 0) {
+        results.push(e.val(v));
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
 
   EventConfig.prototype.hasModifiableVar = function(varName) {
     var ret;

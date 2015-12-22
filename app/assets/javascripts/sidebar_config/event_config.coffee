@@ -453,9 +453,21 @@ class EventConfig
         else if v.type == Constant.ItemDesignOptionType.SELECT
           @settingModifiableSelect(varName, defaultValue, v['options[]'])
 
-  initEventSpecificConfig: ->
-    # FIXME: 必要であれば実装
-    # またはinitEventVarModifyConfigのイベントを再利用
+  # 独自変数コンフィグの初期化
+  initEventSpecificConfig: (objClass) ->
+    if !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]]? ||
+      !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].specific?
+        # メソッド or 変数編集無し
+        return
+
+    sp = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].specific
+    # 変数と同じクラス名のInputに設定(現状textのみ)
+    for varName, v of sp
+      e = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT} .#{varName}")
+      if e.length > 0
+        e.val(v)
+
+    # FIXME: イベント必要であれば実装
 
   # 変数変更値が存在するか
   hasModifiableVar: (varName = null) ->

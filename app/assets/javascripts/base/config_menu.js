@@ -114,7 +114,7 @@ ConfigMenu = (function() {
         if (data.resultSuccess) {
           $(".value_forms", eventConfigObj.emt).append($("<div class='" + valueClassName + "'><div class='" + eventConfigObj.constructor.METHOD_VALUE_MODIFY_ROOT + "'>" + data.modify_html + "</div><div class='" + eventConfigObj.constructor.METHOD_VALUE_SPECIFIC_ROOT + "'>" + data.specific_html + "</div></div>"));
           eventConfigObj.initEventVarModifyConfig(itemObjClass);
-          eventConfigObj.initEventSpecificConfig();
+          eventConfigObj.initEventSpecificConfig(itemObjClass);
           if (successCallback != null) {
             return successCallback(data);
           }

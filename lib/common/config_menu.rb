@@ -29,7 +29,6 @@ class ConfigMenu
     dir = 'sidebar_menu/event/specific_values'
     temp_name = class_dist_token.to_s.downcase
     # テンプレート存在チェック
-    # TODO: 初期値を設定できるようにする
     if lookup_context.exists?(temp_name, dir, true)
       temp = "#{dir}/#{temp_name}"
       ret = controller.render_to_string(
