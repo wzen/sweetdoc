@@ -456,11 +456,11 @@ class EventConfig
   # 独自変数コンフィグの初期化
   initEventSpecificConfig: (objClass) ->
     if !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]]? ||
-      !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].specific?
+      !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES]?
         # メソッド or 変数編集無し
         return
 
-    sp = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].specific
+    sp = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES]
     # 変数と同じクラス名のInputに設定(現状textのみ)
     for varName, v of sp
       e = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT} .#{varName}")

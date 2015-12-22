@@ -16,32 +16,6 @@ ItemBase = (function(superClass) {
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
-    ItemBase.ActionPropertiesKey = (function() {
-      function ActionPropertiesKey() {}
-
-      ActionPropertiesKey.METHODS = constant.ItemActionPropertiesKey.METHODS;
-
-      ActionPropertiesKey.DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT;
-
-      ActionPropertiesKey.METHOD = constant.ItemActionPropertiesKey.METHOD;
-
-      ActionPropertiesKey.DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD;
-
-      ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
-
-      ActionPropertiesKey.SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES;
-
-      ActionPropertiesKey.SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION;
-
-      ActionPropertiesKey.SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION;
-
-      ActionPropertiesKey.OPTIONS = constant.ItemActionPropertiesKey.OPTIONS;
-
-      ActionPropertiesKey.EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION;
-
-      return ActionPropertiesKey;
-
-    })();
     ItemBase.ImageKey = (function() {
       function ImageKey() {}
 

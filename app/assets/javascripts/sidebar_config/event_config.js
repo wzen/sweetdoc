@@ -490,10 +490,10 @@ EventConfig = (function() {
 
   EventConfig.prototype.initEventSpecificConfig = function(objClass) {
     var e, results, sp, v, varName;
-    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].specific == null)) {
+    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES] == null)) {
       return;
     }
-    sp = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].specific;
+    sp = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
     results = [];
     for (varName in sp) {
       v = sp[varName];

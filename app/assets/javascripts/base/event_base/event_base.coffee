@@ -6,6 +6,20 @@ class EventBase extends Extend
 
   @STEP_INTERVAL_DURATION = 0.01
 
+  if gon?
+    constant = gon.const
+    class @ActionPropertiesKey
+      @METHODS = constant.ItemActionPropertiesKey.METHODS
+      @DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT
+      @METHOD = constant.ItemActionPropertiesKey.METHOD
+      @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
+      @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
+      @SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES
+      @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
+      @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
+      @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
+      @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
+
   constructor: ->
     # modifiables変数の初期化
     if @constructor.actionProperties.modifiables?

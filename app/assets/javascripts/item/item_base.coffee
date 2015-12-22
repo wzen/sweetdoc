@@ -12,18 +12,6 @@ class ItemBase extends ItemEventBase
   if gon?
     constant = gon.const
 
-    class @ActionPropertiesKey
-      @METHODS = constant.ItemActionPropertiesKey.METHODS
-      @DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT
-      @METHOD = constant.ItemActionPropertiesKey.METHOD
-      @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
-      @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
-      @SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES
-      @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
-      @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
-      @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
-      @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
-
     class @ImageKey
       @PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID
       @ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID
@@ -31,7 +19,6 @@ class ItemBase extends ItemEventBase
       @SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE
       @URL = constant.PreloadItemImage.Key.URL
       @SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE
-
 
   # コンストラクタ
   # @param [Array] cood 座標

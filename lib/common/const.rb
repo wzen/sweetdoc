@@ -371,7 +371,7 @@ class Const
     DEFAULT_EVENT = 'defaultEvent'
     METHOD = 'method'
     DEFAULT_METHOD = 'defaultMethod'
-    SPECIFIC_METHOD_VALUES = 'specificMethodValues'
+    SPECIFIC_METHOD_VALUES = 'specificValues'
     ACTION_TYPE = 'actionType'
     SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
