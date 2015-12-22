@@ -204,18 +204,16 @@ WorktableCommon = (function() {
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    if (window.runningPreview) {
-      return this.stopAllEventPreview(function() {
-        var item, items, l, len, results;
-        items = Common.itemInstancesInPage(pn);
-        results = [];
-        for (l = 0, len = items.length; l < len; l++) {
-          item = items[l];
-          results.push(item.reDrawWithEventBefore());
-        }
-        return results;
-      });
-    }
+    return this.stopAllEventPreview(function() {
+      var item, items, l, len, results;
+      items = Common.itemInstancesInPage(pn);
+      results = [];
+      for (l = 0, len = items.length; l < len; l++) {
+        item = items[l];
+        results.push(item.reDrawWithEventBefore());
+      }
+      return results;
+    });
   };
 
   WorktableCommon.clearAllItemStyle = function() {
@@ -474,16 +472,42 @@ WorktableCommon = (function() {
     }, pageNum);
   };
 
+  WorktableCommon.runPreview = function(te_num, keepDispMag) {
+    if (keepDispMag == null) {
+      keepDispMag = false;
+    }
+    return Common.clearAllEventAction(function() {
+      var idx, item, l, len, results, te, tes;
+      PageValue.removeAllFootprint();
+      tes = PageValue.getEventPageValueSortedListByNum();
+      te_num = parseInt(te_num);
+      results = [];
+      for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
+        te = tes[idx];
+        item = window.instanceMap[te.id];
+        if ((item != null) && (item.preview != null)) {
+          item.initEvent(te);
+          PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
+          if (idx < te_num - 1) {
+            results.push(item.updateEventAfter());
+          } else if (idx === te_num - 1) {
+            item.preview(te, keepDispMag);
+            break;
+          } else {
+            results.push(void 0);
+          }
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    });
+  };
+
   WorktableCommon.stopAllEventPreview = function(callback) {
     var count, k, length, ref, v;
     if (callback == null) {
       callback = null;
-    }
-    if (!window.runningPreview) {
-      if (callback != null) {
-        callback();
-        return;
-      }
     }
     count = 0;
     length = Object.keys(window.instanceMap).length;
@@ -494,14 +518,12 @@ WorktableCommon = (function() {
         v.stopPreview(function() {
           count += 1;
           if (length <= count && (callback != null)) {
-            window.runningPreview = false;
             callback();
           }
         });
       } else {
         count += 1;
         if (length <= count && (callback != null)) {
-          window.runningPreview = false;
           callback();
           return;
         }

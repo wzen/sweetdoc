@@ -22,6 +22,23 @@ EventConfig = (function() {
     _setupFromPageValues.call(this);
   }
 
+  EventConfig.initEventConfig = function(distId, teNum) {
+    if (teNum == null) {
+      teNum = 1;
+    }
+    this.updateSelectItemMenu();
+    return this.setupTimelineEventHandler(distId, teNum);
+  };
+
+  EventConfig.prototype.clearAllChange = function() {
+    return Common.clearAllEventAction((function(_this) {
+      return function() {
+        _this.emt.find('.button_preview_wrapper').show();
+        return _this.emt.find('.button_stop_preview_wrapper').hide();
+      };
+    })(this));
+  };
+
   EventConfig.prototype.selectItem = function(e) {
     var actionClassName, splitValues, vEmt, value;
     if (e == null) {
@@ -179,26 +196,15 @@ EventConfig = (function() {
     return true;
   };
 
-  EventConfig.prototype.preview = function() {
-    var item, te;
-    item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-    if ((item != null) && (item.preview != null)) {
-      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(this.teNum));
-      item.initEvent(te);
-      PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
-      return item.preview(te);
-    }
+  EventConfig.prototype.preview = function(keepDispMag) {
+    return WorktableCommon.runPreview(this.teNum, keepDispMag);
   };
 
   EventConfig.prototype.stopPreview = function(callback) {
-    var item;
     if (callback == null) {
       callback = null;
     }
-    item = instanceMap[this[EventPageValueBase.PageValueKey.ID]];
-    if ((item != null) && (item.stopPreview != null)) {
-      return item.stopPreview(callback);
-    }
+    return WorktableCommon.stopAllEventPreview(callback);
   };
 
   EventConfig.prototype.writeToPageValue = function() {
@@ -366,16 +372,19 @@ EventConfig = (function() {
   _setApplyClickEvent = function() {
     $('.push.button.preview', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
+        var keepDispMag;
         _this.clearError();
-        _this.preview();
-        $(e.target).hide();
-        return $(e.target).next('.stop_preview').show();
+        keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
+        _this.preview(keepDispMag);
+        $(e.target).closest('.button_div').find('.button_preview_wrapper').hide();
+        return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show();
       };
     })(this));
     $('.push.button.apply', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
         if (_this.applyAction()) {
+          FloatView.show('Applied', FloatView.Type.INFO);
           return Timeline.refreshAllTimeline();
         }
       };
@@ -383,9 +392,9 @@ EventConfig = (function() {
     return $('.push.button.stop_preview', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
-        return _this.stopPreview(function() {
-          $(e.target).hide();
-          return $(e.target).prev('.preview').show();
+        return Common.clearAllEventAction(function() {
+          $(e.target).closest('.button_div').find('.button_preview_wrapper').show();
+          return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide();
         });
       };
     })(this));
@@ -612,17 +621,16 @@ EventConfig = (function() {
   };
 
   EventConfig.setupTimelineEventHandler = function(distId, teNum) {
-    var eId, emt, te;
+    var config, eId, emt;
     eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
     emt = $('#' + eId);
-    te = new this(emt, teNum, distId);
+    config = new this(emt, teNum, distId);
     return (function(_this) {
       return function() {
-        var em;
-        em = $('.te_item_select', emt);
-        return em.off('change').on('change', function(e) {
-          te.clearError();
-          return te.selectItem(this);
+        config.clearAllChange();
+        return $('.te_item_select', emt).off('change').on('change', function(e) {
+          config.clearError();
+          return config.selectItem(this);
         });
       };
     })(this)();

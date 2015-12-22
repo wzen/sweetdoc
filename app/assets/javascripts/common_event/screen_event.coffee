@@ -22,10 +22,8 @@ class ScreenEvent extends CommonEvent
       Common.updateScrollContentsPosition(@beforeScrollTop + scrollTop, @beforeScrollLeft + scrollLeft)
 
   # 画面移動イベント
-  # @param [Object] e クリックオブジェクト
-  # @param [Function] complete 終了コールバック
-  changeScreenPosition: (e, complete) =>
-    @updateEventBefore()
+  changeScreenPosition: (opt) =>
+    # TODO: オーバーレイを表示
 
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.CLICK
@@ -36,8 +34,8 @@ class ScreenEvent extends CommonEvent
         finished_count += 1
         if finished_count >= 2
           @_isFinishedEvent = true
-          if complete?
-            complete()
+          if opt.complete?
+            opt.complete()
       )
 
       scale = @_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z]
@@ -46,14 +44,14 @@ class ScreenEvent extends CommonEvent
           finished_count += 1
           if finished_count >= 2
             @_isFinishedEvent = true
-            if complete?
-              complete()
+            if opt.complete?
+              opt.complete()
         )
       else
         finished_count += 1
         if finished_count >= 2
           @_isFinishedEvent = true
-          if complete?
-            complete()
+          if opt.complete?
+            opt.complete()
 
 Common.setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent)

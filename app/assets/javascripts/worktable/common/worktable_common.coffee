@@ -167,14 +167,13 @@ class WorktableCommon
   # アイテム描画が変更されている場合にインスタンス全アイテム再描画
   # @param [Integer] pn ページ番号
   @reDrawAllInstanceItemIfChanging = (pn = PageValue.getPageNum()) ->
-    if window.runningPreview
-      # イベント停止
-      @stopAllEventPreview( ->
-        items = Common.itemInstancesInPage(pn)
-        for item in items
-          # イベント適用前の状態で描画
-          item.reDrawWithEventBefore()
-      )
+    # イベント停止
+    @stopAllEventPreview( ->
+      items = Common.itemInstancesInPage(pn)
+      for item in items
+        # イベント適用前の状態で描画
+        item.reDrawWithEventBefore()
+    )
 
   # 非表示をクリア
   @clearAllItemStyle = ->
@@ -418,14 +417,31 @@ class WorktableCommon
         callback()
     , pageNum)
 
+  # プレビュー実行
+  # @param [Integer] te_num 実行するイベント番号
+  @runPreview = (te_num, keepDispMag = false) ->
+    Common.clearAllEventAction( ->
+      # 操作履歴削除
+      PageValue.removeAllFootprint()
+      tes = PageValue.getEventPageValueSortedListByNum()
+      te_num = parseInt(te_num)
+      for te, idx in tes
+        item = window.instanceMap[te.id]
+        if item? && item.preview?
+          item.initEvent(te)
+          # インスタンスの状態を保存
+          PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
+          if idx < te_num - 1
+            item.updateEventAfter()
+          else if idx == te_num - 1
+            # プレビュー実行
+            item.preview(te, keepDispMag)
+            break
+    )
+
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック
   @stopAllEventPreview: (callback = null) ->
-    if !window.runningPreview
-      if callback?
-        callback()
-        return
-
     count = 0
     length = Object.keys(window.instanceMap).length
     for k, v of window.instanceMap
@@ -433,13 +449,11 @@ class WorktableCommon
         v.stopPreview( ->
           count += 1
           if length <= count && callback?
-            window.runningPreview = false
             callback()
             return
         )
       else
         count += 1
         if length <= count && callback?
-          window.runningPreview = false
           callback()
           return

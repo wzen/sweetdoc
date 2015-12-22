@@ -24,6 +24,21 @@ class EventConfig
   constructor: (@emt, @teNum, @distId) ->
     _setupFromPageValues.call(@)
 
+  # イベントコンフィグ表示前初期化
+  @initEventConfig: (distId, teNum = 1) ->
+    # アイテム選択メニュー更新
+    @updateSelectItemMenu()
+    # イベントハンドラの設定
+    @setupTimelineEventHandler(distId, teNum)
+
+  clearAllChange: ->
+    # 表示を元に戻す
+    Common.clearAllEventAction( =>
+      # プレビューボタンに切り替え
+      @emt.find('.button_preview_wrapper').show()
+      @emt.find('.button_stop_preview_wrapper').hide()
+    )
+
   # イベントタイプ選択
   # @param [Object] e 選択オブジェクト
   selectItem: (e = null) ->
@@ -185,24 +200,15 @@ class EventConfig
     Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
     # キャッシュに保存
     LocalStorage.saveAllPageValues()
-
     return true
 
   # プレビュー開始
-  preview: ->
-    item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
-    if item? && item.preview?
-      te = PageValue.getEventPageValue(PageValue.Key.eventNumber(@teNum))
-      # インスタンスの状態を保存
-      item.initEvent(te)
-      PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
-      item.preview(te)
+  preview: (keepDispMag) ->
+    WorktableCommon.runPreview(@teNum, keepDispMag)
 
   # プレビュー停止
   stopPreview: (callback = null) ->
-    item = instanceMap[@[EventPageValueBase.PageValueKey.ID]]
-    if item? && item.stopPreview?
-      item.stopPreview(callback)
+    WorktableCommon.stopAllEventPreview(callback)
 
   # 画面値に書き込み
   writeToPageValue: ->
@@ -349,22 +355,25 @@ class EventConfig
     $('.push.button.preview', @emt).off('click').on('click', (e) =>
       @clearError()
       # UIの入力値を初期化
-      @preview()
-      $(e.target).hide()
-      $(e.target).next('.stop_preview').show()
+      keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked')
+      @preview(keepDispMag)
+      $(e.target).closest('.button_div').find('.button_preview_wrapper').hide()
+      $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show()
     )
     $('.push.button.apply', @emt).off('click').on('click', (e) =>
       @clearError()
       # 入力値を適用する
       if @applyAction()
+        # 通知
+        FloatView.show('Applied', FloatView.Type.INFO)
         # イベントを更新
         Timeline.refreshAllTimeline()
     )
     $('.push.button.stop_preview', @emt).off('click').on('click', (e) =>
       @clearError()
-      @stopPreview( =>
-        $(e.target).hide()
-        $(e.target).prev('.preview').show()
+      Common.clearAllEventAction( =>
+        $(e.target).closest('.button_div').find('.button_preview_wrapper').show()
+        $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide()
       )
     )
 
@@ -560,10 +569,12 @@ class EventConfig
     eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
     emt = $('#' + eId)
     # Configクラス作成 & イベントハンドラの設定
-    te = new @(emt, teNum, distId)
+    config = new @(emt, teNum, distId)
     do =>
-      em = $('.te_item_select', emt)
-      em.off('change').on('change', (e) ->
-        te.clearError()
-        te.selectItem(@)
+      # 変更を元に戻す
+      config.clearAllChange()
+      # 選択メニューイベント
+      $('.te_item_select', emt).off('change').on('change', (e) ->
+        config.clearError()
+        config.selectItem(@)
       )

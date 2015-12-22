@@ -24,7 +24,7 @@ Timeline = (function() {
   };
 
   Timeline.setupTimelineEventConfig = function() {
-    var _clickTimelineEvent, _deleteTimeline, _doPreview, _initEventConfig, _setupTimelineEvent, self, te;
+    var _clickTimelineEvent, _deleteTimeline, _initEventConfig, _setupTimelineEvent, self, te;
     self = this;
     te = null;
     _setupTimelineEvent = function() {
@@ -130,35 +130,7 @@ Timeline = (function() {
         _initEventConfig.call(this, e);
       }
       te_num = $(e).find('input.te_num').val();
-      return _doPreview.call(this, te_num);
-    };
-    _doPreview = function(te_num) {
-      return Common.clearAllEventAction(function() {
-        var idx, item, j, len, results, tes;
-        PageValue.removeAllFootprint();
-        tes = PageValue.getEventPageValueSortedListByNum();
-        te_num = parseInt(te_num);
-        results = [];
-        for (idx = j = 0, len = tes.length; j < len; idx = ++j) {
-          te = tes[idx];
-          item = window.instanceMap[te.id];
-          if (item != null) {
-            item.initEvent(te);
-            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
-            if (idx < te_num - 1) {
-              results.push(item.updateEventAfter());
-            } else if (idx === te_num - 1) {
-              item.preview(te);
-              break;
-            } else {
-              results.push(void 0);
-            }
-          } else {
-            results.push(void 0);
-          }
-        }
-        return results;
-      });
+      return WorktableCommon.runPreview(te_num);
     };
     _deleteTimeline = function(target) {
       var eNum;

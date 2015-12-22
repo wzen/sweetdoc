@@ -18,8 +18,7 @@ class StateConfig
     topMin = -window.scrollInsideWrapper.height() * 0.5
     topMax = window.scrollInsideWrapper.height() * 0.5
     # Inputイベント
-    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout')
-    $('.display_position_x, .display_position_y', rootEmt).on('keypress focusout', (e) ->
+    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
       if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
         # スクロール位置変更
         left = $('.display_position_x', rootEmt).val()
@@ -42,8 +41,7 @@ class StateConfig
     # Zoom (1〜5)
     zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
     $('.zoom', rootEmt).val(zoom)
-    $('.zoom', rootEmt).off('keypress focusout')
-    $('.zoom', rootEmt).on('keypress focusout', (e) ->
+    $('.zoom', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
       if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
         # Zoom実行
         zoom = $('.zoom', rootEmt).val()
@@ -77,8 +75,7 @@ class StateConfig
           temp.find('.item_invisible').show()
         createdItemList.append(temp)
 
-      $('.focus_enabled > a').off('click')
-      $('.focus_enabled > a').on('click', (e) ->
+      $('.focus_enabled > a').off('click').on('click', (e) ->
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         # アイテムにフォーカス
         Common.focusToTarget($("##{objId}"), ->
@@ -89,15 +86,13 @@ class StateConfig
         )
       )
 
-      $('a.item_edit', rootEmt).off('click')
-      $('a.item_edit', rootEmt).on('click', (e) ->
+      $('a.item_edit', rootEmt).off('click').on('click', (e) ->
         e.preventDefault()
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         Sidebar.openItemEditConfig($("##{objId}"))
       )
 
-      $('.item_visible > a, .item_invisible > a', rootEmt).off('click')
-      $('.item_visible > a, .item_invisible > a', rootEmt).on('click', (e) ->
+      $('.item_visible > a, .item_invisible > a', rootEmt).off('click').on('click', (e) ->
         e.preventDefault()
         StateConfig.clickToggleVisible(@)
       )

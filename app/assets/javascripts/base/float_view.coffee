@@ -2,42 +2,27 @@ class FloatView
   class @Type
     @PREVIEW = 'preview'
     @DISPLAY_POSITION = 'display_position'
+    @INFO = 'info'
+    @WARN = 'warn'
+    @ERROR = 'error'
 
   @show = (message, type) ->
     if !window.initDone
       return
 
     screenWrapper = $('#screen_wrapper')
-    root = $('.float_view:first', screenWrapper)
+    root = $(".float_view.#{type}:first", screenWrapper)
     if root.length == 0
+      $(".float_view", screenWrapper).remove()
       $('.float_view_temp', screenWrapper).clone(true).attr('class', 'float_view').appendTo(screenWrapper)
       root = $('.float_view:first', screenWrapper)
-
-      if type == @Type.PREVIEW
-        rootCss = {
-          'background-color': 'black'
-          opacity: '0.3'
-          'z-index': '1999999999'
-        }
-        messageCss = {
-          color: 'white'
-          'font-size': '24px'
-        }
-      else if type == @Type.DISPLAY_POSITION
-        rootCss = {
-          'background-color': 'black'
-          opacity: '0.3'
-          'z-index': '1999999999'
-        }
-        messageCss = {
-          color: 'white'
-          'font-size': '24px'
-        }
-
-      root.css(rootCss)
-      $('.message', root).css(messageCss)
-    else
-      root.show()
+      root.removeClass((index, className) ->
+        return className != 'float_view'
+      ).addClass(type)
+      $('.message', root).removeClass((index, className) ->
+        return className != 'message'
+      ).addClass(type)
+    root.show()
 
     $('.message', root).html(message)
 
@@ -55,4 +40,4 @@ class FloatView
     return ''
 
   @displayPositionMessage = ->
-    return 'Motion Preview'
+    return 'Running Preview'

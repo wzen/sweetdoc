@@ -22,8 +22,7 @@ StateConfig = (function() {
     leftMax = window.scrollInsideWrapper.width() * 0.5;
     topMin = -window.scrollInsideWrapper.height() * 0.5;
     topMax = window.scrollInsideWrapper.height() * 0.5;
-    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout');
-    $('.display_position_x, .display_position_y', rootEmt).on('keypress focusout', function(e) {
+    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
       var left, top;
       if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
         left = $('.display_position_x', rootEmt).val();
@@ -50,8 +49,7 @@ StateConfig = (function() {
     });
     zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
     $('.zoom', rootEmt).val(zoom);
-    $('.zoom', rootEmt).off('keypress focusout');
-    $('.zoom', rootEmt).on('keypress focusout', function(e) {
+    $('.zoom', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
       if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
         zoom = $('.zoom', rootEmt).val();
         if (zoom < 1) {
@@ -84,8 +82,7 @@ StateConfig = (function() {
         }
         createdItemList.append(temp);
       }
-      $('.focus_enabled > a').off('click');
-      $('.focus_enabled > a').on('click', function(e) {
+      $('.focus_enabled > a').off('click').on('click', function(e) {
         var objId;
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
         return Common.focusToTarget($("#" + objId), function() {
@@ -95,15 +92,13 @@ StateConfig = (function() {
           return $('.display_position_y', rootEmt).val(parseInt(position.top));
         });
       });
-      $('a.item_edit', rootEmt).off('click');
-      $('a.item_edit', rootEmt).on('click', function(e) {
+      $('a.item_edit', rootEmt).off('click').on('click', function(e) {
         var objId;
         e.preventDefault();
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
         return Sidebar.openItemEditConfig($("#" + objId));
       });
-      $('.item_visible > a, .item_invisible > a', rootEmt).off('click');
-      return $('.item_visible > a, .item_invisible > a', rootEmt).on('click', function(e) {
+      return $('.item_visible > a, .item_invisible > a', rootEmt).off('click').on('click', function(e) {
         e.preventDefault();
         return StateConfig.clickToggleVisible(this);
       });

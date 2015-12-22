@@ -137,29 +137,7 @@ class Timeline
 
       # プレビュー
       te_num = $(e).find('input.te_num').val()
-      _doPreview.call(@, te_num)
-
-    # プレビュー実行
-    # @param [Integer] te_num 実行するイベント番号
-    _doPreview = (te_num) ->
-      Common.clearAllEventAction( ->
-        # 操作履歴削除
-        PageValue.removeAllFootprint()
-        tes = PageValue.getEventPageValueSortedListByNum()
-        te_num = parseInt(te_num)
-        for te, idx in tes
-          item = window.instanceMap[te.id]
-          if item?
-            item.initEvent(te)
-            # インスタンスの状態を保存
-            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
-            if idx < te_num - 1
-               item.updateEventAfter()
-            else if idx == te_num - 1
-              # プレビュー実行
-              item.preview(te)
-              break
-      )
+      WorktableCommon.runPreview(te_num)
 
     # タイムライン削除
     _deleteTimeline = (target) ->

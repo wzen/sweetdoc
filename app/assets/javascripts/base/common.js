@@ -510,7 +510,7 @@ Common = (function() {
   };
 
   Common.clearAllEventAction = function(callback) {
-    var _callback, callbackCount, forkNum, i, idx, item, j, l, len, previewinitCount, ref, results, self, te, tes, tesArray;
+    var _updateEventBefore, callbackCount, forkNum, i, j, ref, self, tesArray;
     if (callback == null) {
       callback = null;
     }
@@ -524,50 +524,36 @@ Common = (function() {
       }
     }
     callbackCount = 0;
-    _callback = function() {
-      callbackCount += 1;
-      if (callbackCount >= tesArray.length) {
-        if (callback != null) {
-          return callback();
-        }
-      }
-    };
-    results = [];
-    for (l = 0, len = tesArray.length; l < len; l++) {
-      tes = tesArray[l];
-      previewinitCount = 0;
-      if (tes.length <= 0) {
-        _callback.call(self);
-        break;
-      }
-      results.push((function() {
-        var m, ref1, results1;
-        results1 = [];
+    _updateEventBefore = function() {
+      var idx, item, l, len, m, ref1, results, te, tes;
+      results = [];
+      for (l = 0, len = tesArray.length; l < len; l++) {
+        tes = tesArray[l];
         for (idx = m = ref1 = tes.length - 1; m >= 0; idx = m += -1) {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {
             item.initEvent(te);
-            results1.push(item.stopPreview(function() {
-              item.updateEventBefore();
-              previewinitCount += 1;
-              if (previewinitCount >= tes.length) {
-                return _callback.call(self);
-              }
-            }));
-          } else {
-            previewinitCount += 1;
-            if (previewinitCount >= tes.length) {
-              results1.push(_callback.call(self));
-            } else {
-              results1.push(void 0);
-            }
+            item.updateEventBefore();
           }
         }
-        return results1;
-      })());
+        if (callback != null) {
+          results.push(callback());
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    };
+    if (window.isWorkTable) {
+      return WorktableCommon.stopAllEventPreview((function(_this) {
+        return function() {
+          return _updateEventBefore.call(_this);
+        };
+      })(this));
+    } else {
+      return _updateEventBefore.call(this);
     }
-    return results;
   };
 
   Common.getActionTypeClassNameByActionType = function(actionType) {
@@ -1147,10 +1133,6 @@ Common = (function() {
     }
     return ret;
   };
-
-  Common.showNotification = function(message, type) {};
-
-  Common.hideNotification = function() {};
 
   return Common;
 

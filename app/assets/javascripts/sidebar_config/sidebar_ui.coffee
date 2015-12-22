@@ -102,6 +102,7 @@ class Sidebar
       # 初期化関数を呼び出す
       obj.setupOptionMenu()
 
+  # イベントコンフィグ初期化
   @initEventConfig = (distId, teNum = 1)->
     eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
     emt = $("##{eId}")
@@ -109,8 +110,7 @@ class Sidebar
       # イベントメニューの作成
       emt = $('#event-config .event_temp .event').clone(true).attr('id', eId)
       $('#event-config').append(emt)
-    # アイテム選択メニュー更新
-    EventConfig.updateSelectItemMenu()
-    # イベントハンドラの設定
-    EventConfig.setupTimelineEventHandler(distId, teNum)
+    # イベントコンフィグメニュー初期化
+    EventConfig.initEventConfig(distId, teNum)
+
 

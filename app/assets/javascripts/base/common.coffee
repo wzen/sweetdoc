@@ -409,7 +409,6 @@ class Common
   # @param [Function] callback コールバック
   @clearAllEventAction: (callback = null) ->
     # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
-
     self = @
     tesArray = []
     tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM))
@@ -418,36 +417,26 @@ class Common
       for i in [1..forkNum]
         # フォークデータを含める
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i))
-
     callbackCount = 0
 
-    _callback = ->
-      callbackCount += 1
-      if callbackCount >= tesArray.length
+    _updateEventBefore = ->
+      for tes in tesArray
+        for idx in [tes.length - 1 .. 0] by -1
+          te = tes[idx]
+          item = window.instanceMap[te.id]
+          if item?
+            item.initEvent(te)
+            item.updateEventBefore()
         if callback?
           callback()
 
-    for tes in tesArray
-      previewinitCount = 0
-      if tes.length <= 0
-        _callback.call(self)
-        break
-
-      for idx in [tes.length - 1 .. 0] by -1
-        te = tes[idx]
-        item = window.instanceMap[te.id]
-        if item?
-          item.initEvent(te)
-          item.stopPreview( ->
-            item.updateEventBefore()
-            previewinitCount += 1
-            if previewinitCount >= tes.length
-              _callback.call(self)
-          )
-        else
-          previewinitCount += 1
-          if previewinitCount >= tes.length
-            _callback.call(self)
+    if window.isWorkTable
+      # 全プレビュー停止
+      WorktableCommon.stopAllEventPreview( =>
+        _updateEventBefore.call(@)
+      )
+    else
+      _updateEventBefore.call(@)
 
   # アクションタイプからアクションタイプクラス名を取得
   # @param [Integer] actionType アクションタイプID
@@ -928,11 +917,6 @@ class Common
         bp += bPer
 
     return ret
-
-  @showNotification = (message, type) ->
-
-  @hideNotification = ->
-
 
 # 画面共通の初期化処理 ajaxでサーバから読み込む等
 do ->

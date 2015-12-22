@@ -9,6 +9,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_event_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/sidebar_ui.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/state_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
@@ -19,6 +20,7 @@
         <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
@@ -73,6 +75,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_event_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/common_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/sidebar_ui.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/state_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
@@ -83,6 +86,7 @@
       <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />

@@ -73,13 +73,17 @@ EventBase = (function(superClass) {
     return this._skipEvent = false;
   };
 
-  EventBase.prototype.preview = function(event) {
+  EventBase.prototype.preview = function(event, keepDispMag) {
     var _preview;
+    if (keepDispMag == null) {
+      keepDispMag = false;
+    }
     if (window.runDebug) {
       console.log('EventBase preview id:' + this.id);
     }
     _preview = function(event) {
       var _draw, _loop, drawDelay, loopCount, loopDelay, loopMaxCount, p, progressMax;
+      this._runningPreview = true;
       drawDelay = this.constructor.STEP_INTERVAL_DURATION * 1000;
       loopDelay = 1000;
       loopMaxCount = 5;
@@ -88,21 +92,23 @@ EventBase = (function(superClass) {
       this.willChapter();
       this._doPreviewLoop = true;
       loopCount = 0;
-      this.previewTimer = null;
+      this._previewTimer = null;
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW);
       if (!this.isDrawByAnimationMethod()) {
         p = 0;
         _draw = (function(_this) {
           return function() {
             if (_this._doPreviewLoop) {
-              if (_this.previewTimer != null) {
-                clearTimeout(_this.previewTimer);
-                _this.previewTimer = null;
+              if (_this._previewTimer != null) {
+                clearTimeout(_this._previewTimer);
+                _this._previewTimer = null;
               }
-              return _this.previewTimer = setTimeout(function() {
+              return _this._previewTimer = setTimeout(function() {
                 _this.execMethod({
+                  isPreview: true,
                   progress: p,
-                  progressMax: progressMax
+                  progressMax: progressMax,
+                  keepDispMag: keepDispMag
                 });
                 p += 1;
                 if (p >= progressMax) {
@@ -127,11 +133,11 @@ EventBase = (function(superClass) {
               if (loopCount >= loopMaxCount) {
                 _this.stopPreview();
               }
-              if (_this.previewTimer != null) {
-                clearTimeout(_this.previewTimer);
-                _this.previewTimer = null;
+              if (_this._previewTimer != null) {
+                clearTimeout(_this._previewTimer);
+                _this._previewTimer = null;
               }
-              _this.previewTimer = setTimeout(function() {
+              _this._previewTimer = setTimeout(function() {
                 _this.resetEvent();
                 _this.willChapter();
                 return _draw.call(_this);
@@ -156,15 +162,17 @@ EventBase = (function(superClass) {
               if (loopCount >= loopMaxCount) {
                 _this.stopPreview();
               }
-              if (_this.previewTimer != null) {
-                clearTimeout(_this.previewTimer);
-                _this.previewTimer = null;
+              if (_this._previewTimer != null) {
+                clearTimeout(_this._previewTimer);
+                _this._previewTimer = null;
               }
-              return _this.previewTimer = setTimeout(function() {
+              return _this._previewTimer = setTimeout(function() {
                 _this.resetEvent();
                 _this.willChapter();
                 return _this.execMethod({
-                  complete: _loop
+                  isPreview: true,
+                  complete: _loop,
+                  keepDispMag: keepDispMag
                 });
               }, loopDelay);
             } else {
@@ -176,13 +184,14 @@ EventBase = (function(superClass) {
           };
         })(this);
         return this.execMethod({
-          complete: _loop
+          isPreview: true,
+          complete: _loop,
+          keepDispMag: keepDispMag
         });
       }
     };
     return this.stopPreview((function(_this) {
       return function() {
-        window.runningPreview = true;
         return _preview.call(_this, event);
       };
     })(this));
@@ -196,11 +205,19 @@ EventBase = (function(superClass) {
     if (window.runDebug) {
       console.log('EventBase stopPreview id:' + this.id);
     }
+    if ((this._runningPreview == null) || !this._runningPreview) {
+      this._runningPreview = false;
+      if (callback != null) {
+        callback();
+      }
+      return;
+    }
     _stop = function() {
-      if (this.previewTimer != null) {
-        clearTimeout(this.previewTimer);
+      if (this._previewTimer != null) {
+        clearTimeout(this._previewTimer);
         FloatView.hide();
-        this.previewTimer = null;
+        this._previewTimer = null;
+        this._runningPreview = false;
       }
       if (callback != null) {
         return callback();
@@ -302,6 +319,7 @@ EventBase = (function(superClass) {
         } else {
           this._skipEvent = true;
           this.execMethod({
+            isPreview: false,
             complete: function() {
               this._isFinishedEvent = true;
               ScrollGuide.hideGuide();
@@ -318,6 +336,7 @@ EventBase = (function(superClass) {
     this.canReverse = this.scrollValue > sPoint;
     if (!this.isDrawByAnimationMethod()) {
       return this.execMethod({
+        isPreview: false,
         progress: this.scrollValue - sPoint,
         progressMax: this.progressMax()
       });
@@ -347,6 +366,7 @@ EventBase = (function(superClass) {
       return timer = setInterval((function(_this) {
         return function() {
           _this.execMethod({
+            isPreview: false,
             progress: count,
             progressMax: progressMax
           });
@@ -362,6 +382,7 @@ EventBase = (function(superClass) {
       })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
     } else {
       return this.execMethod({
+        isPreview: false,
         complete: function() {
           this._isFinishedEvent = true;
           if (complete != null) {

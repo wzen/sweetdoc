@@ -65,11 +65,12 @@ class EventBase extends Extend
 
   # プレビュー開始
   # @param [Object] event 設定イベント
-  preview: (event) ->
+  preview: (event, keepDispMag = false) ->
     if window.runDebug
       console.log('EventBase preview id:' + @id)
 
     _preview = (event) ->
+      @_runningPreview = true
       drawDelay = @constructor.STEP_INTERVAL_DURATION * 1000
       loopDelay = 1000 # 1秒毎イベント実行
       loopMaxCount = 5 # ループ5回
@@ -77,22 +78,26 @@ class EventBase extends Extend
       @initEvent(event)
       progressMax = @progressMax()
       @willChapter()
-
       # イベントループ
       @_doPreviewLoop = true
       loopCount = 0
-      @previewTimer = null
+      @_previewTimer = null
       # FloatView表示
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW)
       if !@isDrawByAnimationMethod()
         p = 0
         _draw = =>
           if @_doPreviewLoop
-            if @previewTimer?
-              clearTimeout(@previewTimer)
-              @previewTimer = null
-            @previewTimer = setTimeout( =>
-              @execMethod({progress: p, progressMax: progressMax})
+            if @_previewTimer?
+              clearTimeout(@_previewTimer)
+              @_previewTimer = null
+            @_previewTimer = setTimeout( =>
+              @execMethod({
+                isPreview: true
+                progress: p
+                progressMax: progressMax
+                keepDispMag: keepDispMag
+              })
               p += 1
               if p >= progressMax
                 p = 0
@@ -111,10 +116,10 @@ class EventBase extends Extend
             if loopCount >= loopMaxCount
               @stopPreview()
 
-            if @previewTimer?
-              clearTimeout(@previewTimer)
-              @previewTimer = null
-            @previewTimer = setTimeout( =>
+            if @_previewTimer?
+              clearTimeout(@_previewTimer)
+              @_previewTimer = null
+            @_previewTimer = setTimeout( =>
               # 状態を変更前に戻す
               @resetEvent()
               @willChapter()
@@ -136,24 +141,31 @@ class EventBase extends Extend
             if loopCount >= loopMaxCount
               @stopPreview()
 
-            if @previewTimer?
-              clearTimeout(@previewTimer)
-              @previewTimer = null
-            @previewTimer = setTimeout( =>
+            if @_previewTimer?
+              clearTimeout(@_previewTimer)
+              @_previewTimer = null
+            @_previewTimer = setTimeout( =>
               # 状態を変更前に戻す
               @resetEvent()
               @willChapter()
-              @execMethod({complete: _loop})
+              @execMethod({
+                isPreview: true
+                complete: _loop
+                keepDispMag: keepDispMag
+              })
             , loopDelay)
           else
             if @previewFinished?
               @previewFinished()
               @previewFinished = null
 
-        @execMethod({complete: _loop})
+        @execMethod({
+          isPreview: true
+          complete: _loop
+          keepDispMag: keepDispMag
+        })
 
     @stopPreview( =>
-      window.runningPreview = true
       _preview.call(@, event)
     )
 
@@ -163,11 +175,18 @@ class EventBase extends Extend
     if window.runDebug
       console.log('EventBase stopPreview id:' + @id)
 
+    if !@_runningPreview? || !@_runningPreview
+      @_runningPreview = false
+      if callback?
+        callback()
+      return
+
     _stop = ->
-      if @previewTimer?
-        clearTimeout(@previewTimer)
+      if @_previewTimer?
+        clearTimeout(@_previewTimer)
         FloatView.hide()
-        @previewTimer = null
+        @_previewTimer = null
+        @_runningPreview = false
       if callback?
         callback()
 
@@ -270,6 +289,7 @@ class EventBase extends Extend
           # アニメーション実行は1回のみ
           @_skipEvent = true
           @execMethod({
+            isPreview: false
             complete: ->
               @_isFinishedEvent = true
               ScrollGuide.hideGuide()
@@ -283,7 +303,11 @@ class EventBase extends Extend
 
     if !@isDrawByAnimationMethod()
       # ステップ実行
-      @execMethod({progress: @scrollValue - sPoint, progressMax: @progressMax()})
+      @execMethod({
+        isPreview: false
+        progress: @scrollValue - sPoint
+        progressMax: @progressMax()
+      })
 
   # スクロールの長さを取得
   # @return [Integer] スクロール長さ
@@ -312,7 +336,11 @@ class EventBase extends Extend
       progressMax = @progressMax()
       count = 1
       timer = setInterval( =>
-        @execMethod({progress: count, progressMax: progressMax})
+        @execMethod({
+          isPreview: false
+          progress: count
+          progressMax: progressMax
+        })
         count += 1
         if progressMax < count
           clearInterval(timer)
@@ -324,6 +352,7 @@ class EventBase extends Extend
     else
       # アニメーション実行
       @execMethod({
+        isPreview: false
         complete: ->
           @_isFinishedEvent = true
           if complete?

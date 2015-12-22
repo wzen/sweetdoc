@@ -138,8 +138,7 @@ Sidebar = (function() {
       emt = $('#event-config .event_temp .event').clone(true).attr('id', eId);
       $('#event-config').append(emt);
     }
-    EventConfig.updateSelectItemMenu();
-    return EventConfig.setupTimelineEventHandler(distId, teNum);
+    return EventConfig.initEventConfig(distId, teNum);
   };
 
   return Sidebar;

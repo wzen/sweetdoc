@@ -34,9 +34,8 @@ ScreenEvent = (function(superClass) {
     }
   };
 
-  ScreenEvent.prototype.changeScreenPosition = function(e, complete) {
+  ScreenEvent.prototype.changeScreenPosition = function(opt) {
     var actionType, finished_count, scale, scrollLeft, scrollTop;
-    this.updateEventBefore();
     actionType = this.getEventActionType();
     if (actionType === Constant.ActionType.CLICK) {
       finished_count = 0;
@@ -46,8 +45,8 @@ ScreenEvent = (function(superClass) {
         finished_count += 1;
         if (finished_count >= 2) {
           this._isFinishedEvent = true;
-          if (complete != null) {
-            return complete();
+          if (opt.complete != null) {
+            return opt.complete();
           }
         }
       });
@@ -59,8 +58,8 @@ ScreenEvent = (function(superClass) {
           finished_count += 1;
           if (finished_count >= 2) {
             this._isFinishedEvent = true;
-            if (complete != null) {
-              return complete();
+            if (opt.complete != null) {
+              return opt.complete();
             }
           }
         });
@@ -68,8 +67,8 @@ ScreenEvent = (function(superClass) {
         finished_count += 1;
         if (finished_count >= 2) {
           this._isFinishedEvent = true;
-          if (complete != null) {
-            return complete();
+          if (opt.complete != null) {
+            return opt.complete();
           }
         }
       }

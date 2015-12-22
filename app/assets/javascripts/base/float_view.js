@@ -11,46 +11,35 @@ FloatView = (function() {
 
     Type.DISPLAY_POSITION = 'display_position';
 
+    Type.INFO = 'info';
+
+    Type.WARN = 'warn';
+
+    Type.ERROR = 'error';
+
     return Type;
 
   })();
 
   FloatView.show = function(message, type) {
-    var messageCss, root, rootCss, screenWrapper;
+    var root, screenWrapper;
     if (!window.initDone) {
       return;
     }
     screenWrapper = $('#screen_wrapper');
-    root = $('.float_view:first', screenWrapper);
+    root = $(".float_view." + type + ":first", screenWrapper);
     if (root.length === 0) {
+      $(".float_view", screenWrapper).remove();
       $('.float_view_temp', screenWrapper).clone(true).attr('class', 'float_view').appendTo(screenWrapper);
       root = $('.float_view:first', screenWrapper);
-      if (type === this.Type.PREVIEW) {
-        rootCss = {
-          'background-color': 'black',
-          opacity: '0.3',
-          'z-index': '1999999999'
-        };
-        messageCss = {
-          color: 'white',
-          'font-size': '24px'
-        };
-      } else if (type === this.Type.DISPLAY_POSITION) {
-        rootCss = {
-          'background-color': 'black',
-          opacity: '0.3',
-          'z-index': '1999999999'
-        };
-        messageCss = {
-          color: 'white',
-          'font-size': '24px'
-        };
-      }
-      root.css(rootCss);
-      $('.message', root).css(messageCss);
-    } else {
-      root.show();
+      root.removeClass(function(index, className) {
+        return className !== 'float_view';
+      }).addClass(type);
+      $('.message', root).removeClass(function(index, className) {
+        return className !== 'message';
+      }).addClass(type);
     }
+    root.show();
     return $('.message', root).html(message);
   };
 
@@ -73,7 +62,7 @@ FloatView = (function() {
   };
 
   FloatView.displayPositionMessage = function() {
-    return 'Motion Preview';
+    return 'Running Preview';
   };
 
   return FloatView;
