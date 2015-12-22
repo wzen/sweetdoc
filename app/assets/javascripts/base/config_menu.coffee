@@ -54,8 +54,8 @@ class ConfigMenu
       if successCallback?
         successCallback(designConfigRoot)
 
-  # 変数編集コンフィグ
-  @eventVarModifyConfig = (eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) ->
+  # メソッド変数コンフィグ読み込み
+  @loadEventMethodValueConfig = (eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) ->
     if !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]]? ||
       !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables?
         # メソッド or 変数編集無し
@@ -67,7 +67,7 @@ class ConfigMenu
     valueClassName = eventConfigObj.methodClassName()
     emt = $(".value_forms .#{valueClassName}", eventConfigObj.emt)
     if emt.length > 0
-      # コンフィグの初期化
+      # 変数編集コンフィグの初期化
       eventConfigObj.initEventVarModifyConfig(itemObjClass)
       if successCallback?
         successCallback()
@@ -78,6 +78,7 @@ class ConfigMenu
         url: "/config_menu/event_var_modify_config"
         type: "POST"
         data: {
+          methodName: eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]
           modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
         }
         dataType: "json"

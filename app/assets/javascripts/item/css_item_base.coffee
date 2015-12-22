@@ -4,8 +4,8 @@
 class CssItemBase extends ItemBase
 
   if window.loadedItemToken?
-    # @property [String] ITEM_ACCESS_TOKEN アイテム種別
-    @ITEM_ACCESS_TOKEN = window.loadedItemToken
+    # @property [String] CLASS_DIST_TOKEN アイテム種別
+    @CLASS_DIST_TOKEN = window.loadedItemToken
 
   # コンストラクタ
   # @param [Array] cood 座標

@@ -11,7 +11,7 @@ PreloadItemArrow = (function(superClass) {
 
   PreloadItemArrow.NAME_PREFIX = "Arrow";
 
-  PreloadItemArrow.ITEM_ACCESS_TOKEN = 'PreloadItemArrow';
+  PreloadItemArrow.CLASS_DIST_TOKEN = 'PreloadItemArrow';
 
   HEADER_WIDTH = 100;
 
@@ -475,16 +475,16 @@ PreloadItemArrow = (function(superClass) {
 
 })(CanvasItemBase);
 
-Common.setClassToMap(false, PreloadItemArrow.ITEM_ACCESS_TOKEN, PreloadItemArrow);
+Common.setClassToMap(false, PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] == null)) {
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemArrow.ITEM_ACCESS_TOKEN);
+    EventConfig.addEventConfigContents(PreloadItemArrow.CLASS_DIST_TOKEN);
   }
   if (window.debug) {
     console.log('arrow loaded');
   }
-  window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] = function(option) {
+  window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

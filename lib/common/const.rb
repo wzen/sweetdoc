@@ -316,7 +316,7 @@ class Const
   class EventPageValueKey
     DIST_ID = 'dist_id'
     ID = 'id'
-    ITEM_ACCESS_TOKEN = 'item_access_token'
+    CLASS_DIST_TOKEN = 'item_access_token'
     ITEM_SIZE_DIFF = 'item_size_diff'
     DO_FOCUS = 'do_focus'
     COMMON_EVENT_ID = 'common_event_id'
@@ -334,6 +334,7 @@ class Const
     MODIFIABLE_VARS = 'modifiable_vars'
     IS_DRAW_BY_ANIMATION = 'isDrawByAnimation'
     EVENT_DURATION = 'eventDuration'
+    SPECIFIC_CONFIG_VALUES = 'specificConfigValues'
   end
 
   class UserPageValue
@@ -370,6 +371,7 @@ class Const
     DEFAULT_EVENT = 'defaultEvent'
     METHOD = 'method'
     DEFAULT_METHOD = 'defaultMethod'
+    SPECIFIC_METHOD_VALUES = 'specificMethodValues'
     ACTION_TYPE = 'actionType'
     SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'

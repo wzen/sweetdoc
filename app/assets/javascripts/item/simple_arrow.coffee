@@ -3,7 +3,7 @@
 class SimpleArrowItem extends ItemBase
   @NAME_PREFIX = "simplearrow"
   if window.loadedItemToken?
-    @ITEM_ACCESS_TOKEN = window.loadedItemToken
+    @CLASS_DIST_TOKEN = window.loadedItemToken
 
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 30
@@ -105,7 +105,7 @@ class SimpleArrowItem extends ItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   getMinimumObject: ->
     obj = {
-      itemToken: @constructor.ITEM_ACCESS_TOKEN
+      itemToken: @constructor.CLASS_DIST_TOKEN
       a: @itemSize
       b: @zindex
       c: @registCoord

@@ -56,7 +56,7 @@ class EventConfig
       else
         splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
         @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
-        @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN] = splitValues[1]
+        @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1]
 
     if window.isWorkTable
       # 選択枠消去
@@ -108,7 +108,7 @@ class EventConfig
       item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
       if item? && @[EventPageValueBase.PageValueKey.METHODNAME]?
         # 変数変更コンフィグ読み込み
-        ConfigMenu.eventVarModifyConfig(@, item.constructor, =>
+        ConfigMenu.loadEventMethodValueConfig(@, item.constructor, =>
           _callback.call(@)
         )
       else
@@ -117,7 +117,7 @@ class EventConfig
       # 共通イベント選択時
       objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
       if objClass
-        ConfigMenu.eventVarModifyConfig(@, objClass, =>
+        ConfigMenu.loadEventMethodValueConfig(@, objClass, =>
           _callback.call(@)
         )
       else
@@ -203,7 +203,9 @@ class EventConfig
 
   # プレビュー開始
   preview: (keepDispMag) ->
-    WorktableCommon.runPreview(@teNum, keepDispMag)
+    WorktableCommon.updatePrevEventsToAfter(@teNum, =>
+      WorktableCommon.runPreview(@teNum, keepDispMag)
+    )
 
   # プレビュー停止
   stopPreview: (callback = null) ->
@@ -232,7 +234,7 @@ class EventConfig
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       name = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
     else
-      name = @constructor.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
+      name = @constructor.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
     return name
 
   # アクションメソッド & メソッド毎の値のクラス名を取得
@@ -240,7 +242,7 @@ class EventConfig
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
     else
-      return @constructor.ITEM_VALUES_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
+      return @constructor.ITEM_VALUES_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
 
   # エラー表示
   # @param [String] message メッセージ内容
@@ -434,8 +436,8 @@ class EventConfig
           defaultValue = @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         else
           objClass = null
-          if @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]?
-            objClass = Common.getClassFromMap(false, @[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN])
+          if @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]?
+            objClass = Common.getClassFromMap(false, @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
           else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]?
             objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
           defaultValue = objClass.actionProperties.modifiables[varName].default
@@ -576,10 +578,16 @@ class EventConfig
     $('.update_event_after', emt).off('change').on('change', (e) =>
       if $(e.target).is(':checked')
         # イベント後に変更
-        WorktableCommon.updatePrevEventsToAfter(teNum)
+        $(e.target).attr('disabled', true)
+        WorktableCommon.updatePrevEventsToAfter(teNum, =>
+          $(e.target).removeAttr('disabled')
+        )
       else
         # 全アイテム再描画
-        WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
+        $(e.target).attr('disabled', true)
+        WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
+          $(e.target).removeAttr('disabled')
+        )
     )
     # 選択メニューイベント
     $('.te_item_select', emt).off('change').on('change', (e) ->

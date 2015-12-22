@@ -79,10 +79,10 @@ class ItemPreviewCommon
   @initAfterLoadItem = ->
     # 描画モード
     if window.isCodingDebug
-      window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].ITEM_ACCESS_TOKEN
+      window.selectItemMenu = window[Constant.ITEM_CODING_TEMP_CLASS_NAME].CLASS_DIST_TOKEN
     else
       itemClassName = $(".#{Constant.ITEM_GALLERY_ITEM_CLASSNAME}:first").val()
-      window.selectItemMenu = window[itemClassName].ITEM_ACCESS_TOKEN
+      window.selectItemMenu = window[itemClassName].CLASS_DIST_TOKEN
     WorktableCommon.changeMode(Constant.Mode.DRAW)
     @initEvent()
     Navbar.initItemPreviewNavbar()

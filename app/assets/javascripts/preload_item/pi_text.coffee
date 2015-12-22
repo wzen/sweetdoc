@@ -1,6 +1,6 @@
 class PreloadItemText extends CssItemBase
   @NAME_PREFIX = "text"
-  @ITEM_ACCESS_TOKEN = 'PreloadItemText'
+  @CLASS_DIST_TOKEN = 'PreloadItemText'
   @INPUT_CLASSNAME = 'pi_input_text'
   @CONTENTS_CLASSNAME = 'pi_contents_text'
 
@@ -236,14 +236,14 @@ class PreloadItemText extends CssItemBase
         _event.call(@, e.target)
     )
 
-Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText)
+Common.setClassToMap(false, PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN]?
   if EventConfig?
-    EventConfig.addEventConfigContents(PreloadItemText.ITEM_ACCESS_TOKEN)
+    EventConfig.addEventConfigContents(PreloadItemText.CLASS_DIST_TOKEN)
   if window.debug
     console.log('PreloadItemText loaded')
-  window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN] = (option = {}) ->
+  window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemText.jsLoaded?
       PreloadItemArrow.jsLoaded(option)
     #JS読み込み完了後の処理

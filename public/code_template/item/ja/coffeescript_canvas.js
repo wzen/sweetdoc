@@ -12,7 +12,7 @@ ItemPreviewTemp = (function(superClass) {
   ItemPreviewTemp.NAME_PREFIX = "ItemPreviewTemp";
 
   if (window.loadedItemToken != null) {
-    ItemPreviewTemp.ITEM_ACCESS_TOKEN = window.loadedItemToken;
+    ItemPreviewTemp.CLASS_DIST_TOKEN = window.loadedItemToken;
   }
 
   HEADER_WIDTH = 100;
@@ -477,11 +477,11 @@ ItemPreviewTemp = (function(superClass) {
 
 })(CanvasItemBase);
 
-Common.setClassToMap(false, ItemPreviewTemp.ITEM_ACCESS_TOKEN, ItemPreviewTemp);
+Common.setClassToMap(false, ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
   console.log('ItemPreviewTemp loaded');
-  window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = function(option) {
+  window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

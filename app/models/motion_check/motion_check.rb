@@ -46,7 +46,7 @@ class MotionCheck
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
         # 必要なItemTokenを調査
-        need_load_item_access_tokens = PageValueState.extract_need_load_itemaccesstokens(epd)
+        need_load_item_access_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd)
         item_access_tokens = need_load_item_access_tokens - loaded_item_access_tokens
       end
     end

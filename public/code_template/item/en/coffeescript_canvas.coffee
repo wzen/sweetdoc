@@ -4,7 +4,7 @@ class ItemPreviewTemp extends CanvasItemBase
 
   # ↓Don't Delete
   if window.loadedItemToken?
-    @ITEM_ACCESS_TOKEN = window.loadedItemToken
+    @CLASS_DIST_TOKEN = window.loadedItemToken
 
   # @property [Int] HEADER_WIDTH
   HEADER_WIDTH = 100
@@ -448,11 +448,11 @@ class ItemPreviewTemp extends CanvasItemBase
     @_rightBodyPartCoord = []
     @_drawCoodRegist = []
 
-Common.setClassToMap(false, ItemPreviewTemp.ITEM_ACCESS_TOKEN, ItemPreviewTemp)
+Common.setClassToMap(false, ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?
   console.log('ItemPreviewTemp loaded')
-  window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = (option = {}) ->
+  window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && ItemPreviewTemp.jsLoaded?
       ItemPreviewTemp.jsLoaded(option)
     #JS読み込み完了後の処理

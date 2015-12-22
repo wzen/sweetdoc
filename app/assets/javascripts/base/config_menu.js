@@ -79,7 +79,7 @@ ConfigMenu = (function() {
     }
   };
 
-  ConfigMenu.eventVarModifyConfig = function(eventConfigObj, itemObjClass, successCallback, errorCallback) {
+  ConfigMenu.loadEventMethodValueConfig = function(eventConfigObj, itemObjClass, successCallback, errorCallback) {
     var emt, valueClassName;
     if (successCallback == null) {
       successCallback = null;
@@ -106,6 +106,7 @@ ConfigMenu = (function() {
       url: "/config_menu/event_var_modify_config",
       type: "POST",
       data: {
+        methodName: eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME],
         modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
       },
       dataType: "json",

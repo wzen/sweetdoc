@@ -14,7 +14,7 @@ Chapter = (function() {
       obj = ref[i];
       isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
       id = obj[EventPageValueBase.PageValueKey.ID];
-      classMapId = isCommonEvent ? obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : obj[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN];
+      classMapId = isCommonEvent ? obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : obj[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN];
       event = Common.getInstanceFromMap(isCommonEvent, id, classMapId);
       this.eventObjList.push(event);
     }

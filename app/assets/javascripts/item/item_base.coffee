@@ -5,8 +5,8 @@ class ItemBase extends ItemEventBase
   # @property [String] NAME_PREFIX 名前プレフィックス
   @NAME_PREFIX = ""
   # @abstract
-  # @property [ItemType] ITEM_ACCESS_TOKEN アイテム種別
-  @ITEM_ACCESS_TOKEN = ""
+  # @property [ItemType] CLASS_DIST_TOKEN クラス種別
+  @CLASS_DIST_TOKEN = ""
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
   @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
@@ -21,6 +21,7 @@ class ItemBase extends ItemEventBase
       @METHOD = constant.ItemActionPropertiesKey.METHOD
       @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
       @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
+      @SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES
       @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
       @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
       @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
@@ -41,8 +42,8 @@ class ItemBase extends ItemEventBase
     super()
     # @property [Int] id ID
     @id = "i" + @constructor.NAME_PREFIX + Common.generateId()
-    # @property [ItemType] ITEM_ACCESS_TOKEN アイテム種別
-    @itemToken = @constructor.ITEM_ACCESS_TOKEN
+    # @property [ItemType] CLASS_DIST_TOKEN アイテム種別
+    @itemToken = @constructor.CLASS_DIST_TOKEN
     # @property [String] name 名前
     @name = null
     # @property [String] visible 表示状態
@@ -242,8 +243,12 @@ class ItemBase extends ItemEventBase
   @defaultActionType = ->
     return Common.getActionTypeByCodingActionType(@actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.ACTION_TYPE])
 
-  @defaultEventConfigValue = ->
-    return null
+  @defaultSpecificMethodValue = ->
+    if @actionProperties? &&
+      @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
+        return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SPECIFIC_METHOD_VALUES]
+    else
+      return null
 
   # スクロールのデフォルト有効方向
   @defaultScrollEnabledDirection = ->

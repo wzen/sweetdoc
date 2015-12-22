@@ -10,7 +10,7 @@ ItemBase = (function(superClass) {
 
   ItemBase.NAME_PREFIX = "";
 
-  ItemBase.ITEM_ACCESS_TOKEN = "";
+  ItemBase.CLASS_DIST_TOKEN = "";
 
   ItemBase.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
 
@@ -30,6 +30,8 @@ ItemBase = (function(superClass) {
       ActionPropertiesKey.DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD;
 
       ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
+
+      ActionPropertiesKey.SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES;
 
       ActionPropertiesKey.SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION;
 
@@ -68,7 +70,7 @@ ItemBase = (function(superClass) {
     }
     ItemBase.__super__.constructor.call(this);
     this.id = "i" + this.constructor.NAME_PREFIX + Common.generateId();
-    this.itemToken = this.constructor.ITEM_ACCESS_TOKEN;
+    this.itemToken = this.constructor.CLASS_DIST_TOKEN;
     this.name = null;
     this.visible = false;
     this.firstFocus = false;
@@ -294,8 +296,12 @@ ItemBase = (function(superClass) {
     return Common.getActionTypeByCodingActionType(this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.ACTION_TYPE]);
   };
 
-  ItemBase.defaultEventConfigValue = function() {
-    return null;
+  ItemBase.defaultSpecificMethodValue = function() {
+    if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
+    } else {
+      return null;
+    }
   };
 
   ItemBase.defaultScrollEnabledDirection = function() {

@@ -32,7 +32,7 @@ EPVScreenPosition = (function(superClass) {
     value[this.X] = $('.screenposition_change_x:first', emt).val();
     value[this.Y] = $('.screenposition_change_y:first', emt).val();
     value[this.Z] = $('.screenposition_change_z:first', emt).val();
-    writeValue[this.PageValueKey.VALUE] = value;
+    writeValue[this.PageValueKey.SPECIFIC_METHOD_VALUES] = value;
     if (errorMes.length === 0) {
       PageValue.setEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
@@ -48,7 +48,7 @@ EPVScreenPosition = (function(superClass) {
     }
     emt = eventConfig.emt;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
-    value = writeValue[this.PageValueKey.VALUE];
+    value = writeValue[this.PageValueKey.SPECIFIC_METHOD_VALUES];
     $('.screenposition_change_x:first', emt).val(value[this.X]);
     $('.screenposition_change_y:first', emt).val(value[this.Y]);
     $('.screenposition_change_z:first', emt).val(value[this.Z]);

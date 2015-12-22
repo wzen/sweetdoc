@@ -25,6 +25,10 @@ class ConfigMenu
     return _modifiables_vars_config(controller, modifiables, false)
   end
 
+  def self.event_specific_config(controller, method_name)
+
+  end
+
   def self._modifiables_vars_config(controller, modifiables, isDesign)
     ret = nil
     dir = isDesign ? 'design' : 'event'

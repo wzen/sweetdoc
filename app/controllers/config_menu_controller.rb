@@ -13,11 +13,19 @@ class ConfigMenuController < ApplicationController
     render 'ret'
   end
 
-  def event_var_modify_config
+  # def event_var_modify_config
+  #   modifiables = params.fetch('modifiables', {})
+  #   @result_success = true
+  #   @html = ConfigMenu.event_var_modify_config(self, modifiables)
+  #   render 'ret'
+  # end
+
+  def method_values_config
+    method_name = params.require('methodName')
     modifiables = params.fetch('modifiables', {})
     @result_success = true
-    @html = ConfigMenu.event_var_modify_config(self, modifiables)
-    render 'ret'
+    @modify_html = ConfigMenu.event_var_modify_config(self, modifiables)
+    @specific_html = ConfigMenu.event_specific_config(self, method_name)
   end
 
   def preload_image_path_select_config

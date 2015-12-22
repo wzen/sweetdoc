@@ -2,7 +2,7 @@
 # @extend CanvasItemBase
 class PreloadItemArrow extends CanvasItemBase
   @NAME_PREFIX = "Arrow"
-  @ITEM_ACCESS_TOKEN = 'PreloadItemArrow'
+  @CLASS_DIST_TOKEN = 'PreloadItemArrow'
 
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100
@@ -457,14 +457,14 @@ class PreloadItemArrow extends CanvasItemBase
     @_rightBodyPartCoord = []
     @_drawCoodRegist = []
 
-Common.setClassToMap(false, PreloadItemArrow.ITEM_ACCESS_TOKEN, PreloadItemArrow)
+Common.setClassToMap(false, PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN]?
   if EventConfig?
-    EventConfig.addEventConfigContents(PreloadItemArrow.ITEM_ACCESS_TOKEN)
+    EventConfig.addEventConfigContents(PreloadItemArrow.CLASS_DIST_TOKEN)
   if window.debug
     console.log('arrow loaded')
-  window.itemInitFuncList[PreloadItemArrow.ITEM_ACCESS_TOKEN] = (option = {}) ->
+  window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemArrow.jsLoaded?
       PreloadItemArrow.jsLoaded(option)
     #JS読み込み完了後の処理

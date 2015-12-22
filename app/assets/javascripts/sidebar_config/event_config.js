@@ -53,7 +53,7 @@ EventConfig = (function() {
       } else {
         splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
         this[EventPageValueBase.PageValueKey.ID] = splitValues[0];
-        this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN] = splitValues[1];
+        this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1];
       }
     }
     if (window.isWorkTable) {
@@ -98,7 +98,7 @@ EventConfig = (function() {
     if (!this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]) {
       item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
       if ((item != null) && (this[EventPageValueBase.PageValueKey.METHODNAME] != null)) {
-        return ConfigMenu.eventVarModifyConfig(this, item.constructor, (function(_this) {
+        return ConfigMenu.loadEventMethodValueConfig(this, item.constructor, (function(_this) {
           return function() {
             return _callback.call(_this);
           };
@@ -109,7 +109,7 @@ EventConfig = (function() {
     } else {
       objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
       if (objClass) {
-        return ConfigMenu.eventVarModifyConfig(this, objClass, (function(_this) {
+        return ConfigMenu.loadEventMethodValueConfig(this, objClass, (function(_this) {
           return function() {
             return _callback.call(_this);
           };
@@ -194,7 +194,11 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.preview = function(keepDispMag) {
-    return WorktableCommon.runPreview(this.teNum, keepDispMag);
+    return WorktableCommon.updatePrevEventsToAfter(this.teNum, (function(_this) {
+      return function() {
+        return WorktableCommon.runPreview(_this.teNum, keepDispMag);
+      };
+    })(this));
   };
 
   EventConfig.prototype.stopPreview = function(callback) {
@@ -231,7 +235,7 @@ EventConfig = (function() {
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       name = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
     } else {
-      name = this.constructor.ITEM_ACTION_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]);
+      name = this.constructor.ITEM_ACTION_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
     }
     return name;
   };
@@ -240,7 +244,7 @@ EventConfig = (function() {
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       return this.constructor.COMMON_VALUES_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
     } else {
-      return this.constructor.ITEM_VALUES_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
+      return this.constructor.ITEM_VALUES_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
     }
   };
 
@@ -459,8 +463,8 @@ EventConfig = (function() {
           defaultValue = this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
         } else {
           objClass = null;
-          if (this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN] != null) {
-            objClass = Common.getClassFromMap(false, this[EventPageValueBase.PageValueKey.ITEM_ACCESS_TOKEN]);
+          if (this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] != null) {
+            objClass = Common.getClassFromMap(false, this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
           } else if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] != null) {
             objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
           }
@@ -627,9 +631,15 @@ EventConfig = (function() {
     $('.update_event_after', emt).off('change').on('change', (function(_this) {
       return function(e) {
         if ($(e.target).is(':checked')) {
-          return WorktableCommon.updatePrevEventsToAfter(teNum);
+          $(e.target).attr('disabled', true);
+          return WorktableCommon.updatePrevEventsToAfter(teNum, function() {
+            return $(e.target).removeAttr('disabled');
+          });
         } else {
-          return WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
+          $(e.target).attr('disabled', true);
+          return WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
+            return $(e.target).removeAttr('disabled');
+          });
         }
       };
     })(this));

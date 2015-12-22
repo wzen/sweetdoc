@@ -18,6 +18,7 @@ class EventBase extends Extend
     @_doPreviewLoop = false
     @_enabledDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @_forwardDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
+    @_specificMethodValues = @_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES]
 
     # スクロールイベント
     if @getEventActionType() == Constant.ActionType.SCROLL

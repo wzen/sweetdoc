@@ -199,7 +199,7 @@ class PageValueState
           epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
 
           # 必要なItemTokenを調査
-          item_access_tokens = PageValueState.extract_need_load_itemaccesstokens(epd[key])
+          item_access_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd[key])
           item_access_tokens -= loaded_item_access_tokens
         end
       end
@@ -442,24 +442,24 @@ class PageValueState
     end
   end
 
-  def self.extract_need_load_itemaccesstokens(event_page_value)
-    access_tokens = []
+  def self.extract_need_load_itemclassdisttokens(event_page_value)
+    dist_tokens = []
     epv = event_page_value.kind_of?(String)? JSON.parse(event_page_value) : event_page_value
     epv.each do |kk, vv|
       if kk.index(Const::PageValueKey::E_MASTER_ROOT) || kk.index(Const::PageValueKey::EF_PREFIX)
         vv.each do |k, v|
           if k.index(Const::PageValueKey::E_NUM_PREFIX).present?
-            token = v[Const::EventPageValueKey::ITEM_ACCESS_TOKEN]
+            token = v[Const::EventPageValueKey::CLASS_DIST_TOKEN]
             if token.present?
-              unless access_tokens.include?(token)
-                access_tokens << token
+              unless dist_tokens.include?(token)
+                dist_tokens << token
               end
             end
           end
         end
       end
     end
-    return access_tokens
+    return dist_tokens
   end
 
   def self.save_gallery_footprint(user_id, gallery_access_token, page_value)

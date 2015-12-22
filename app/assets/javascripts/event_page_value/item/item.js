@@ -22,7 +22,7 @@ EPVItem = (function(superClass) {
     writeValue = {};
     writeValue[this.PageValueKey.DIST_ID] = distId;
     writeValue[this.PageValueKey.ID] = item.id;
-    writeValue[this.PageValueKey.ITEM_ACCESS_TOKEN] = item.constructor.ITEM_ACCESS_TOKEN;
+    writeValue[this.PageValueKey.CLASS_DIST_TOKEN] = item.constructor.CLASS_DIST_TOKEN;
     writeValue[this.PageValueKey.ITEM_SIZE_DIFF] = {
       x: 0,
       y: 0,
@@ -47,7 +47,7 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection();
     writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
     writeValue[this.PageValueKey.EVENT_DURATION] = item.constructor.defaultClickDuration();
-    writeValue[this.PageValueKey.VALUE] = item.constructor.defaultEventConfigValue();
+    writeValue[this.PageValueKey.SPECIFIC_METHOD_VALUES] = item.constructor.defaultSpecificMethodValue();
     writeValue[this.PageValueKey.MODIFIABLE_VARS] = {};
     if (errorMes.length === 0) {
       PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum), writeValue);

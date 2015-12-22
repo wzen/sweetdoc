@@ -26,6 +26,7 @@ EventBase = (function(superClass) {
     this._doPreviewLoop = false;
     this._enabledDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this._forwardDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
+    this._specificMethodValues = this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES];
     if (this.getEventActionType() === Constant.ActionType.SCROLL) {
       return this.scrollEvent = this.scrollHandlerFunc;
     } else if (this.getEventActionType() === Constant.ActionType.CLICK) {

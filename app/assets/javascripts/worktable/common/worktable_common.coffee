@@ -427,7 +427,7 @@ class WorktableCommon
     , pageNum)
 
   # 指定イベント以前をイベント適用後の状態に変更
-  @updatePrevEventsToAfter = (teNum) ->
+  @updatePrevEventsToAfter = (teNum, callback = null) ->
     # 状態変更フラグON
     window.worktableItemsChangedState = true
     Common.updateAllEventsToBefore( =>
@@ -444,6 +444,8 @@ class WorktableCommon
           if idx < teNum - 1
             # イベント後の状態に変更
             item.updateEventAfter()
+      if callback?
+        callback()
     )
 
   # プレビュー実行

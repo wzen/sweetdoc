@@ -28,8 +28,8 @@ ScreenEvent = (function(superClass) {
     var methodName, scrollLeft, scrollTop;
     methodName = this.getEventMethodName();
     if (methodName === 'changeScreenPosition') {
-      scrollTop = parseInt(this._event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
-      scrollLeft = parseInt(this._event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
+      scrollTop = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.X]);
+      scrollLeft = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.Y]);
       return Common.updateScrollContentsPosition(this.beforeScrollTop + scrollTop, this.beforeScrollLeft + scrollLeft);
     }
   };
@@ -39,8 +39,8 @@ ScreenEvent = (function(superClass) {
     actionType = this.getEventActionType();
     if (actionType === Constant.ActionType.CLICK) {
       finished_count = 0;
-      scrollLeft = parseInt(this._event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X]);
-      scrollTop = parseInt(this._event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y]);
+      scrollLeft = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.X]);
+      scrollTop = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.Y]);
       Common.updateScrollContentsPosition(scrollContents.scrollTop() + scrollTop, scrollContents.scrollLeft() + scrollLeft, false, function() {
         finished_count += 1;
         if (finished_count >= 2) {
@@ -50,7 +50,7 @@ ScreenEvent = (function(superClass) {
           }
         }
       });
-      scale = this._event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z];
+      scale = this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.Z];
       if (scale !== 0) {
         return this.getJQueryElement().transition({
           scale: "+=" + scale

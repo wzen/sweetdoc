@@ -14,7 +14,7 @@ PreloadItemImage = (function(superClass) {
 
   PreloadItemImage.NAME_PREFIX = "image";
 
-  PreloadItemImage.ITEM_ACCESS_TOKEN = 'PreloadItemImage';
+  PreloadItemImage.CLASS_DIST_TOKEN = 'PreloadItemImage';
 
   PreloadItemImage.actionProperties = {
     modifiables: {
@@ -186,16 +186,16 @@ PreloadItemImage = (function(superClass) {
 
 })(ItemBase);
 
-Common.setClassToMap(false, PreloadItemImage.ITEM_ACCESS_TOKEN, PreloadItemImage);
+Common.setClassToMap(false, PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] == null)) {
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemImage.ITEM_ACCESS_TOKEN);
+    EventConfig.addEventConfigContents(PreloadItemImage.CLASS_DIST_TOKEN);
   }
   if (window.debug) {
     console.log('PreloadImage loaded');
   }
-  window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN] = function(option) {
+  window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

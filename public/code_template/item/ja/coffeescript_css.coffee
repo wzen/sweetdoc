@@ -4,7 +4,7 @@ class ItemPreviewTemp extends CssItemBase
 
   # ↓ Don't Delete
   if window.loadedItemToken?
-    @ITEM_ACCESS_TOKEN = window.loadedItemToken
+    @CLASS_DIST_TOKEN = window.loadedItemToken
 
   @actionProperties =
   {
@@ -226,12 +226,12 @@ class ItemPreviewTemp extends CssItemBase
       @getJQueryElement().css('opacity', 1)
 
 
-Common.setClassToMap(false, ItemPreviewTemp.ITEM_ACCESS_TOKEN, ItemPreviewTemp)
+Common.setClassToMap(false, ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 
 # Don't Delete
-if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?
   console.log('ItemPreviewTemp loaded')
-  window.itemInitFuncList[ItemPreviewTemp.ITEM_ACCESS_TOKEN] = (option = {}) ->
+  window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && ItemPreviewTemp.jsLoaded?
       ItemPreviewTemp.jsLoaded(option)
     if window.debug

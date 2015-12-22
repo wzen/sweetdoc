@@ -430,7 +430,7 @@ class Gallery < ActiveRecord::Base
       end
 
       # 必要なItemを調査
-      item_access_tokens = PageValueState.extract_need_load_itemaccesstokens(pagevalues['event_pagevalue_data'])
+      item_access_tokens = PageValueState.extract_need_load_itemclassdisttokens(pagevalues['event_pagevalue_data'])
       item_js_list = ItemJs.get_item_gallery(item_access_tokens)
 
       # 閲覧数 & ブックマーク数を取得
@@ -495,7 +495,7 @@ class Gallery < ActiveRecord::Base
         epd = JSON.parse(pagevalue['event_pagevalue_data'])
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
-        need_load_item_access_tokens = PageValueState.extract_need_load_itemaccesstokens(epd)
+        need_load_item_access_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd)
         item_access_tokens = need_load_item_access_tokens - loaded_item_access_tokens
       end
       item_js_list = ItemJs.get_item_gallery(item_access_tokens)

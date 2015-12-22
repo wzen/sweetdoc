@@ -7,7 +7,7 @@ CssItemBase = (function(superClass) {
   extend(CssItemBase, superClass);
 
   if (window.loadedItemToken != null) {
-    CssItemBase.ITEM_ACCESS_TOKEN = window.loadedItemToken;
+    CssItemBase.CLASS_DIST_TOKEN = window.loadedItemToken;
   }
 
   function CssItemBase(cood) {

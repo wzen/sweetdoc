@@ -12,16 +12,16 @@ class EventPageValueBase
       @DIST_ID = constant.EventPageValueKey.DIST_ID
       # @property [String] ID オブジェクトID
       @ID = constant.EventPageValueKey.ID
-      # @property [String] ITEM_ACCESS_TOKEN アイテムID
-      @ITEM_ACCESS_TOKEN = constant.EventPageValueKey.ITEM_ACCESS_TOKEN
+      # @property [String] CLASS_DIST_TOKEN クラス識別TOKEN
+      @CLASS_DIST_TOKEN = constant.EventPageValueKey.CLASS_DIST_TOKEN
       # @property [String] ITEM_SIZE_DIFF アイテムサイズ
       @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
       # @property [String] DO_FOCUS フォーカス
       @DO_FOCUS = constant.EventPageValueKey.DO_FOCUS
       # @property [String] COMMON_EVENT_ID 共通イベントID
       @COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID
-      # @property [String] VALUE イベント値
-      @VALUE = constant.EventPageValueKey.VALUE
+      # @property [String] SPECIFIC_METHOD_VALUES メソッド固有値
+      @SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES
       # @property [String] IS_COMMON_EVENT 共通イベント判定
       @IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT
       # @property [String] ORDER ソート番号
@@ -122,7 +122,7 @@ class EventPageValueBase
       if eventConfig[@PageValueKey.IS_COMMON_EVENT]
         selectItemValue = "#{EventConfig.EVENT_COMMON_PREFIX}#{eventConfig[@PageValueKey.COMMON_EVENT_ID]}"
       else
-        selectItemValue = "#{eventConfig[@PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{eventConfig[@PageValueKey.ITEM_ACCESS_TOKEN]}"
+        selectItemValue = "#{eventConfig[@PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{eventConfig[@PageValueKey.CLASS_DIST_TOKEN]}"
       $('.te_item_select', eventConfig.emt).val(selectItemValue)
 
       # 選択メソッドタイプ
@@ -130,7 +130,7 @@ class EventPageValueBase
       if eventConfig[@PageValueKey.IS_COMMON_EVENT]
         actionFormName = EventConfig.EVENT_COMMON_PREFIX + eventConfig[@PageValueKey.COMMON_EVENT_ID]
       else
-        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', eventConfig[@PageValueKey.ITEM_ACCESS_TOKEN])
+        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', eventConfig[@PageValueKey.CLASS_DIST_TOKEN])
       $(".#{actionFormName} .radio", eventConfig.emt).each((e) ->
         methodName = $(@).find('input.method_name').val()
         if methodName == eventConfig[EventPageValueBase.PageValueKey.METHODNAME]

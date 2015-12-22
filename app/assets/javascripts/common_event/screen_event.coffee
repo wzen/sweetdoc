@@ -17,8 +17,8 @@ class ScreenEvent extends CommonEvent
   updateEventAfter: ->
     methodName = @getEventMethodName()
     if methodName == 'changeScreenPosition'
-      scrollTop = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
-      scrollLeft = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
+      scrollTop = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.X])
+      scrollLeft = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.Y])
       Common.updateScrollContentsPosition(@beforeScrollTop + scrollTop, @beforeScrollLeft + scrollLeft)
 
   # 画面移動イベント
@@ -28,8 +28,8 @@ class ScreenEvent extends CommonEvent
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.CLICK
       finished_count = 0
-      scrollLeft = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.X])
-      scrollTop = parseInt(@_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Y])
+      scrollLeft = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.X])
+      scrollTop = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.Y])
       Common.updateScrollContentsPosition(scrollContents.scrollTop() + scrollTop, scrollContents.scrollLeft() + scrollLeft, false, ->
         finished_count += 1
         if finished_count >= 2
@@ -38,7 +38,7 @@ class ScreenEvent extends CommonEvent
             opt.complete()
       )
 
-      scale = @_event[EventPageValueBase.PageValueKey.VALUE][EPVScreenPosition.Z]
+      scale = @_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][EPVScreenPosition.Z]
       if scale != 0
         @getJQueryElement().transition({scale: "+=#{scale}"}, 'normal', 'linear', ->
           finished_count += 1

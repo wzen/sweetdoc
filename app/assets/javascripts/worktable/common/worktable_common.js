@@ -487,15 +487,17 @@ WorktableCommon = (function() {
     }, pageNum);
   };
 
-  WorktableCommon.updatePrevEventsToAfter = function(teNum) {
+  WorktableCommon.updatePrevEventsToAfter = function(teNum, callback) {
+    if (callback == null) {
+      callback = null;
+    }
     window.worktableItemsChangedState = true;
     return Common.updateAllEventsToBefore((function(_this) {
       return function() {
-        var idx, item, l, len, results, te, tes;
+        var idx, item, l, len, te, tes;
         PageValue.removeAllFootprint();
         tes = PageValue.getEventPageValueSortedListByNum();
         teNum = parseInt(teNum);
-        results = [];
         for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
           te = tes[idx];
           item = window.instanceMap[te.id];
@@ -503,15 +505,13 @@ WorktableCommon = (function() {
             item.initEvent(te);
             PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
             if (idx < teNum - 1) {
-              results.push(item.updateEventAfter());
-            } else {
-              results.push(void 0);
+              item.updateEventAfter();
             }
-          } else {
-            results.push(void 0);
           }
         }
-        return results;
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
   };

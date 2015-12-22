@@ -15,7 +15,7 @@ class EPVItem extends EventPageValueBase
     writeValue = {}
     writeValue[@PageValueKey.DIST_ID] = distId
     writeValue[@PageValueKey.ID] = item.id
-    writeValue[@PageValueKey.ITEM_ACCESS_TOKEN] = item.constructor.ITEM_ACCESS_TOKEN
+    writeValue[@PageValueKey.CLASS_DIST_TOKEN] = item.constructor.CLASS_DIST_TOKEN
     writeValue[@PageValueKey.ITEM_SIZE_DIFF] = {x: 0, y: 0, w: 0, h: 0}
     writeValue[@PageValueKey.DO_FOCUS] = true
     writeValue[@PageValueKey.COMMON_EVENT_ID] = null
@@ -34,7 +34,7 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.SCROLL_ENABLED_DIRECTIONS] = item.constructor.defaultScrollEnabledDirection()
     writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection()
     writeValue[@PageValueKey.EVENT_DURATION] = item.constructor.defaultClickDuration()
-    writeValue[@PageValueKey.VALUE] = item.constructor.defaultEventConfigValue()
+    writeValue[@PageValueKey.SPECIFIC_METHOD_VALUES] = item.constructor.defaultSpecificMethodValue()
     writeValue[@PageValueKey.MODIFIABLE_VARS] = {}
 
     if errorMes.length == 0

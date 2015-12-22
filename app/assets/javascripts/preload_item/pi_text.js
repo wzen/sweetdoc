@@ -10,7 +10,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.NAME_PREFIX = "text";
 
-  PreloadItemText.ITEM_ACCESS_TOKEN = 'PreloadItemText';
+  PreloadItemText.CLASS_DIST_TOKEN = 'PreloadItemText';
 
   PreloadItemText.INPUT_CLASSNAME = 'pi_input_text';
 
@@ -143,16 +143,16 @@ PreloadItemText = (function(superClass) {
 
 })(CssItemBase);
 
-Common.setClassToMap(false, PreloadItemText.ITEM_ACCESS_TOKEN, PreloadItemText);
+Common.setClassToMap(false, PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] == null)) {
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemText.ITEM_ACCESS_TOKEN);
+    EventConfig.addEventConfigContents(PreloadItemText.CLASS_DIST_TOKEN);
   }
   if (window.debug) {
     console.log('PreloadItemText loaded');
   }
-  window.itemInitFuncList[PreloadItemText.ITEM_ACCESS_TOKEN] = function(option) {
+  window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

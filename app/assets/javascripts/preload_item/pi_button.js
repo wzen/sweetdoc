@@ -12,7 +12,7 @@ PreloadItemButton = (function(superClass) {
 
   PreloadItemButton.NAME_PREFIX = "Button";
 
-  PreloadItemButton.ITEM_ACCESS_TOKEN = 'PreloadItemButton';
+  PreloadItemButton.CLASS_DIST_TOKEN = 'PreloadItemButton';
 
   PreloadItemButton.actionProperties = {
     defaultEvent: {
@@ -215,16 +215,16 @@ PreloadItemButton = (function(superClass) {
 
 })(CssItemBase);
 
-Common.setClassToMap(false, PreloadItemButton.ITEM_ACCESS_TOKEN, PreloadItemButton);
+Common.setClassToMap(false, PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
 
-if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN] == null)) {
+if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] == null)) {
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemButton.ITEM_ACCESS_TOKEN);
+    EventConfig.addEventConfigContents(PreloadItemButton.CLASS_DIST_TOKEN);
   }
   if (window.debug) {
     console.log('button loaded');
   }
-  window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN] = function(option) {
+  window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }

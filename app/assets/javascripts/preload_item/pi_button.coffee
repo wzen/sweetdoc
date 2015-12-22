@@ -3,7 +3,7 @@
 class PreloadItemButton extends CssItemBase
   # @property [String] NAME_PREFIX アイテム識別名
   @NAME_PREFIX = "Button"
-  @ITEM_ACCESS_TOKEN = 'PreloadItemButton'
+  @CLASS_DIST_TOKEN = 'PreloadItemButton'
 
   @actionProperties =
     {
@@ -230,15 +230,15 @@ class PreloadItemButton extends CssItemBase
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 
-Common.setClassToMap(false, PreloadItemButton.ITEM_ACCESS_TOKEN, PreloadItemButton)
+Common.setClassToMap(false, PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton)
 
 # 初期化
-if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN]?
   if EventConfig?
-    EventConfig.addEventConfigContents(PreloadItemButton.ITEM_ACCESS_TOKEN)
+    EventConfig.addEventConfigContents(PreloadItemButton.CLASS_DIST_TOKEN)
   if window.debug
     console.log('button loaded')
-  window.itemInitFuncList[PreloadItemButton.ITEM_ACCESS_TOKEN] = (option = {}) ->
+  window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemButton.jsLoaded?
       PreloadItemButton.jsLoaded(option)
     #JS読み込み完了

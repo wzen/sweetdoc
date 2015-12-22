@@ -3,7 +3,7 @@ class PreloadItemImage extends ItemBase
   UPLOAD_FORM_HEIGHT = 200
 
   @NAME_PREFIX = "image"
-  @ITEM_ACCESS_TOKEN = 'PreloadItemImage'
+  @CLASS_DIST_TOKEN = 'PreloadItemImage'
 
   @actionProperties =
   {
@@ -145,14 +145,14 @@ class PreloadItemImage extends ItemBase
   _initModalEvent = (emt) ->
     @initModifiableSelectFile(emt)
 
-Common.setClassToMap(false, PreloadItemImage.ITEM_ACCESS_TOKEN, PreloadItemImage)
+Common.setClassToMap(false, PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage)
 
-if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN]?
+if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN]?
   if EventConfig?
-    EventConfig.addEventConfigContents(PreloadItemImage.ITEM_ACCESS_TOKEN)
+    EventConfig.addEventConfigContents(PreloadItemImage.CLASS_DIST_TOKEN)
   if window.debug
     console.log('PreloadImage loaded')
-  window.itemInitFuncList[PreloadItemImage.ITEM_ACCESS_TOKEN] = (option = {}) ->
+  window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && PreloadItemImage.jsLoaded?
       PreloadItemArrow.jsLoaded(option)
     #JS読み込み完了後の処理
