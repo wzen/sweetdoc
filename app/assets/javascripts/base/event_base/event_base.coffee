@@ -178,7 +178,7 @@ class EventBase extends Extend
     if !@_runningPreview? || !@_runningPreview
       @_runningPreview = false
       if callback?
-        callback()
+        callback(false)
       return
 
     _stop = ->
@@ -188,7 +188,7 @@ class EventBase extends Extend
         @_previewTimer = null
         @_runningPreview = false
       if callback?
-        callback()
+        callback(true)
 
     if @_doPreviewLoop
       @_doPreviewLoop = false

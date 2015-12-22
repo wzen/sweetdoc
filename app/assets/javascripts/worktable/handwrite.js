@@ -90,7 +90,7 @@ Handwrite = (function() {
   };
 
   Handwrite.mouseDownDrawing = function(loc) {
-    WorktableCommon.reDrawAllInstanceItemIfChanging();
+    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
     if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
       this.item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
       window.instanceMap[this.item.id] = this.item;

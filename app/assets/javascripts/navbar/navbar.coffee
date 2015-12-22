@@ -70,7 +70,7 @@ class Navbar
       selected = $(@).html()
       $('#header_items_selected_menu_span').html(selected)
       # プレビューを停止して再描画
-      WorktableCommon.reDrawAllInstanceItemIfChanging()
+      WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
       # 選択枠削除
       WorktableCommon.clearSelectedBorder()
       emtId = $(this).attr('id')

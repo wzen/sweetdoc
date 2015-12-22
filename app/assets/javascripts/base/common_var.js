@@ -68,6 +68,7 @@ CommonVar = (function() {
     window.messageTimer = null;
     window.flushMessageTimer = null;
     window.selectedObjId = null;
+    window.worktableItemsChangedState = false;
     return this.updateWorktableBaseElement(PageValue.getPageNum());
   };
 

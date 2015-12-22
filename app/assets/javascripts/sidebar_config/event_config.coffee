@@ -32,12 +32,11 @@ class EventConfig
     @setupTimelineEventHandler(distId, teNum)
 
   clearAllChange: ->
-    # 表示を元に戻す
-    Common.clearAllEventAction( =>
-      # プレビューボタンに切り替え
-      @emt.find('.button_preview_wrapper').show()
-      @emt.find('.button_stop_preview_wrapper').hide()
-    )
+    # 全アイテム再描画
+    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
+    # プレビューボタンに切り替え
+    @emt.find('.button_preview_wrapper').show()
+    @emt.find('.button_stop_preview_wrapper').hide()
 
   # イベントタイプ選択
   # @param [Object] e 選択オブジェクト
@@ -371,7 +370,7 @@ class EventConfig
     )
     $('.push.button.stop_preview', @emt).off('click').on('click', (e) =>
       @clearError()
-      Common.clearAllEventAction( =>
+      Common.updateAllEventsToBefore( =>
         $(e.target).closest('.button_div').find('.button_preview_wrapper').show()
         $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide()
       )
@@ -570,11 +569,24 @@ class EventConfig
     emt = $('#' + eId)
     # Configクラス作成 & イベントハンドラの設定
     config = new @(emt, teNum, distId)
-    do =>
-      # 変更を元に戻す
-      config.clearAllChange()
-      # 選択メニューイベント
-      $('.te_item_select', emt).off('change').on('change', (e) ->
-        config.clearError()
-        config.selectItem(@)
-      )
+    # 変更を元に戻す
+    config.clearAllChange()
+    # UpdateEventAfterイベント初期化
+    $('.update_event_after', emt).removeAttr('checked')
+    $('.update_event_after', emt).off('change').on('change', (e) =>
+      if $(e.target).is(':checked')
+        # イベント後に変更
+        WorktableCommon.updatePrevEventsToAfter(teNum)
+      else
+        # 全アイテム再描画
+        WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
+    )
+    # 選択メニューイベント
+    $('.te_item_select', emt).off('change').on('change', (e) ->
+      config.clearError()
+      config.selectItem(@)
+    )
+    window.drawingCanvas.one('click.setupTimelineEventHandler', (e) =>
+      # メイン画面クリックで全アイテム再描画
+      @reDrawAllItemsFromInstancePageValueIfChanging()
+    )

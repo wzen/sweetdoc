@@ -164,15 +164,24 @@ class WorktableCommon
       @changeMode(window.beforeMode)
       window.beforeMode = null
 
-  # アイテム描画が変更されている場合にインスタンス全アイテム再描画
+  # アイテム描画が変更されている場合にインスタンスから全アイテム再描画
   # @param [Integer] pn ページ番号
-  @reDrawAllInstanceItemIfChanging = (pn = PageValue.getPageNum()) ->
+  @reDrawAllItemsFromInstancePageValueIfChanging = (pn = PageValue.getPageNum(), callback = null) ->
+    callbackCount = 0
     # イベント停止
-    @stopAllEventPreview( ->
-      items = Common.itemInstancesInPage(pn)
-      for item in items
-        # イベント適用前の状態で描画
-        item.reDrawWithEventBefore()
+    @stopAllEventPreview( (noRunningPreview) ->
+      if window.worktableItemsChangedState || !noRunningPreview
+        # アイテムの状態に変更がある場合は再描画処理
+        items = Common.itemInstancesInPage(pn)
+        for item in items
+          item.reDrawFromInstancePageValue(true, ->
+            callbackCount += 1
+            if callbackCount >= items.length
+              # アイテム状態変更フラグOFF
+              window.worktableItemsChangedState = false
+              if callback?
+                callback()
+          )
     )
 
   # 非表示をクリア
@@ -378,7 +387,7 @@ class WorktableCommon
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutSetting()
-    Common.clearAllEventAction( =>
+    Common.updateAllEventsToBefore( =>
       Common.removeAllItem()
       EventConfig.removeAllConfig()
       PageValue.removeAllGeneralAndInstanceAndEventPageValue()
@@ -392,7 +401,7 @@ class WorktableCommon
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutGeneralAndSetting()
-    Common.clearAllEventAction( =>
+    Common.updateAllEventsToBefore( =>
       Common.removeAllItem(PageValue.getPageNum())
       EventConfig.removeAllConfig()
       PageValue.removeAllInstanceAndEventPageValueOnPage()
@@ -417,43 +426,62 @@ class WorktableCommon
         callback()
     , pageNum)
 
-  # プレビュー実行
-  # @param [Integer] te_num 実行するイベント番号
-  @runPreview = (te_num, keepDispMag = false) ->
-    Common.clearAllEventAction( ->
+  # 指定イベント以前をイベント適用後の状態に変更
+  @updatePrevEventsToAfter = (teNum) ->
+    # 状態変更フラグON
+    window.worktableItemsChangedState = true
+    Common.updateAllEventsToBefore( =>
       # 操作履歴削除
       PageValue.removeAllFootprint()
       tes = PageValue.getEventPageValueSortedListByNum()
-      te_num = parseInt(te_num)
+      teNum = parseInt(teNum)
       for te, idx in tes
         item = window.instanceMap[te.id]
         if item? && item.preview?
           item.initEvent(te)
           # インスタンスの状態を保存
           PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
-          if idx < te_num - 1
+          if idx < teNum - 1
+            # イベント後の状態に変更
             item.updateEventAfter()
-          else if idx == te_num - 1
-            # プレビュー実行
-            item.preview(te, keepDispMag)
-            break
     )
+
+  # プレビュー実行
+  # @param [Integer] te_num 実行するイベント番号
+  @runPreview = (teNum, keepDispMag = false) ->
+    tes = PageValue.getEventPageValueSortedListByNum()
+    teNum = parseInt(teNum)
+    te = tes[teNum - 1]
+    if te?
+      item = window.instanceMap[te.id]
+      item.initEvent(te)
+      # プレビュー実行
+      item.preview(te, keepDispMag)
+      # 状態変更フラグON
+      window.worktableItemsChangedState = true
+      window.drawingCanvas.one('click.runPreview', (e) =>
+        # メイン画面クリックでプレビューアイテムを再描画
+        item.reDraw()
+      )
 
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック
   @stopAllEventPreview: (callback = null) ->
     count = 0
     length = Object.keys(window.instanceMap).length
+    noRunningPreview = true
     for k, v of window.instanceMap
       if v.stopPreview?
-        v.stopPreview( ->
+        v.stopPreview( (wasRunningPreview) ->
           count += 1
+          if wasRunningPreview
+            noRunningPreview = false
           if length <= count && callback?
-            callback()
+            callback(noRunningPreview)
             return
         )
       else
         count += 1
         if length <= count && callback?
-          callback()
+          callback(noRunningPreview)
           return

@@ -405,9 +405,9 @@ class Common
         ret[k] = v
     return ret
 
-  # 全てのアクションを元に戻す
+  # 全てのアイテムをイベント適用前に戻す
   # @param [Function] callback コールバック
-  @clearAllEventAction: (callback = null) ->
+  @updateAllEventsToBefore: (callback = null) ->
     # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
     self = @
     tesArray = []
@@ -417,7 +417,6 @@ class Common
       for i in [1..forkNum]
         # フォークデータを含める
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i))
-    callbackCount = 0
 
     _updateEventBefore = ->
       for tes in tesArray
@@ -431,7 +430,7 @@ class Common
           callback()
 
     if window.isWorkTable
-      # 全プレビュー停止
+      # プレビュー実行中の場合、全停止
       WorktableCommon.stopAllEventPreview( =>
         _updateEventBefore.call(@)
       )

@@ -83,7 +83,7 @@ class Handwrite
   # @param [Array] loc Canvas座標
   @mouseDownDrawing = (loc) ->
     # プレビューを停止して再描画
-    WorktableCommon.reDrawAllInstanceItemIfChanging()
+    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
     if selectItemMenu?
       # インスタンス作成
       @item = new (Common.getClassFromMap(false, selectItemMenu))(loc)

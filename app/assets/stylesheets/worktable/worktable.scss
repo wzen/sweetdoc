@@ -457,6 +457,16 @@ div.scroll_background, div.scroll_inside {
     color: #fff;
     text-align: center;
   }
+  div.event-config_statechange-headliner {
+    background-image: image-url("sidebar/timeline_option_headline.jpg");
+    background-repeat: no-repeat;
+    -moz-background-size: 100% 100%;
+    background-size: 100% 100%;
+    margin-bottom: 10px;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+  }
   div.settingedit-headliner {
     background-image: image-url("sidebar/timeline_option_headline.jpg");
     background-repeat: no-repeat;

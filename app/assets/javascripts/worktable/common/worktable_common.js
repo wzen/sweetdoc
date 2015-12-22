@@ -200,19 +200,34 @@ WorktableCommon = (function() {
     }
   };
 
-  WorktableCommon.reDrawAllInstanceItemIfChanging = function(pn) {
+  WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging = function(pn, callback) {
+    var callbackCount;
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
-    return this.stopAllEventPreview(function() {
+    if (callback == null) {
+      callback = null;
+    }
+    callbackCount = 0;
+    return this.stopAllEventPreview(function(noRunningPreview) {
       var item, items, l, len, results;
-      items = Common.itemInstancesInPage(pn);
-      results = [];
-      for (l = 0, len = items.length; l < len; l++) {
-        item = items[l];
-        results.push(item.reDrawWithEventBefore());
+      if (window.worktableItemsChangedState || !noRunningPreview) {
+        items = Common.itemInstancesInPage(pn);
+        results = [];
+        for (l = 0, len = items.length; l < len; l++) {
+          item = items[l];
+          results.push(item.reDrawFromInstancePageValue(true, function() {
+            callbackCount += 1;
+            if (callbackCount >= items.length) {
+              window.worktableItemsChangedState = false;
+              if (callback != null) {
+                return callback();
+              }
+            }
+          }));
+        }
+        return results;
       }
-      return results;
     });
   };
 
@@ -418,7 +433,7 @@ WorktableCommon = (function() {
     }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
-    return Common.clearAllEventAction((function(_this) {
+    return Common.updateAllEventsToBefore((function(_this) {
       return function() {
         Common.removeAllItem();
         EventConfig.removeAllConfig();
@@ -437,7 +452,7 @@ WorktableCommon = (function() {
     }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutGeneralAndSetting();
-    return Common.clearAllEventAction((function(_this) {
+    return Common.updateAllEventsToBefore((function(_this) {
       return function() {
         Common.removeAllItem(PageValue.getPageNum());
         EventConfig.removeAllConfig();
@@ -472,59 +487,81 @@ WorktableCommon = (function() {
     }, pageNum);
   };
 
-  WorktableCommon.runPreview = function(te_num, keepDispMag) {
-    if (keepDispMag == null) {
-      keepDispMag = false;
-    }
-    return Common.clearAllEventAction(function() {
-      var idx, item, l, len, results, te, tes;
-      PageValue.removeAllFootprint();
-      tes = PageValue.getEventPageValueSortedListByNum();
-      te_num = parseInt(te_num);
-      results = [];
-      for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
-        te = tes[idx];
-        item = window.instanceMap[te.id];
-        if ((item != null) && (item.preview != null)) {
-          item.initEvent(te);
-          PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
-          if (idx < te_num - 1) {
-            results.push(item.updateEventAfter());
-          } else if (idx === te_num - 1) {
-            item.preview(te, keepDispMag);
-            break;
+  WorktableCommon.updatePrevEventsToAfter = function(teNum) {
+    window.worktableItemsChangedState = true;
+    return Common.updateAllEventsToBefore((function(_this) {
+      return function() {
+        var idx, item, l, len, results, te, tes;
+        PageValue.removeAllFootprint();
+        tes = PageValue.getEventPageValueSortedListByNum();
+        teNum = parseInt(teNum);
+        results = [];
+        for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
+          te = tes[idx];
+          item = window.instanceMap[te.id];
+          if ((item != null) && (item.preview != null)) {
+            item.initEvent(te);
+            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
+            if (idx < teNum - 1) {
+              results.push(item.updateEventAfter());
+            } else {
+              results.push(void 0);
+            }
           } else {
             results.push(void 0);
           }
-        } else {
-          results.push(void 0);
         }
-      }
-      return results;
-    });
+        return results;
+      };
+    })(this));
+  };
+
+  WorktableCommon.runPreview = function(teNum, keepDispMag) {
+    var item, te, tes;
+    if (keepDispMag == null) {
+      keepDispMag = false;
+    }
+    tes = PageValue.getEventPageValueSortedListByNum();
+    teNum = parseInt(teNum);
+    te = tes[teNum - 1];
+    if (te != null) {
+      item = window.instanceMap[te.id];
+      item.initEvent(te);
+      item.preview(te, keepDispMag);
+      window.worktableItemsChangedState = true;
+      return window.drawingCanvas.one('click.runPreview', (function(_this) {
+        return function(e) {
+          return item.reDraw();
+        };
+      })(this));
+    }
   };
 
   WorktableCommon.stopAllEventPreview = function(callback) {
-    var count, k, length, ref, v;
+    var count, k, length, noRunningPreview, ref, v;
     if (callback == null) {
       callback = null;
     }
     count = 0;
     length = Object.keys(window.instanceMap).length;
+    noRunningPreview = true;
     ref = window.instanceMap;
     for (k in ref) {
       v = ref[k];
       if (v.stopPreview != null) {
-        v.stopPreview(function() {
+        v.stopPreview(function(wasRunningPreview) {
           count += 1;
+          if (wasRunningPreview) {
+            noRunningPreview = false;
+          }
           if (length <= count && (callback != null)) {
-            callback();
+            callback(noRunningPreview);
           }
         });
       } else {
         count += 1;
         if (length <= count && (callback != null)) {
-          callback();
+          callback(noRunningPreview);
           return;
         }
       }

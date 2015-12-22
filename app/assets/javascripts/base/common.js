@@ -509,8 +509,8 @@ Common = (function() {
     return ret;
   };
 
-  Common.clearAllEventAction = function(callback) {
-    var _updateEventBefore, callbackCount, forkNum, i, j, ref, self, tesArray;
+  Common.updateAllEventsToBefore = function(callback) {
+    var _updateEventBefore, forkNum, i, j, ref, self, tesArray;
     if (callback == null) {
       callback = null;
     }
@@ -523,7 +523,6 @@ Common = (function() {
         tesArray.push(PageValue.getEventPageValueSortedListByNum(i));
       }
     }
-    callbackCount = 0;
     _updateEventBefore = function() {
       var idx, item, l, len, m, ref1, results, te, tes;
       results = [];

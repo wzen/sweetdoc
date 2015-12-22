@@ -200,10 +200,13 @@ ItemBase = (function(superClass) {
     }
   };
 
-  ItemBase.prototype.reDrawWithEventBefore = function(show) {
+  ItemBase.prototype.reDrawFromInstancePageValue = function(show, callback) {
     var obj;
     if (show == null) {
       show = true;
+    }
+    if (callback == null) {
+      callback = null;
     }
     if (window.runDebug) {
       console.log('ItemBase reDrawWithEventBefore id:' + this.id);
@@ -212,7 +215,7 @@ ItemBase = (function(superClass) {
     if (obj) {
       this.setMiniumObject(obj);
     }
-    return this.reDraw(show);
+    return this.reDraw(show, callback);
   };
 
   ItemBase.prototype.saveObj = function(newCreated) {

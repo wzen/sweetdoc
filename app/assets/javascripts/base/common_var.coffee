@@ -66,6 +66,7 @@ class CommonVar
     window.messageTimer = null
     window.flushMessageTimer = null
     window.selectedObjId = null
+    window.worktableItemsChangedState = false
     @updateWorktableBaseElement(PageValue.getPageNum())
 
   # 実行画面共通変数

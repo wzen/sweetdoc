@@ -162,7 +162,7 @@ class ItemBase extends ItemEventBase
   # インスタンス変数で描画
   # データから読み込んで描画する処理に使用
   # @param [Boolean] show 要素作成後に表示するか
-  reDrawWithEventBefore: (show = true) ->
+  reDrawFromInstancePageValue: (show = true, callback = null) ->
     if window.runDebug
       console.log('ItemBase reDrawWithEventBefore id:' + @id)
 
@@ -170,7 +170,7 @@ class ItemBase extends ItemEventBase
     obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
     if obj
       @setMiniumObject(obj)
-    @reDraw(show)
+    @reDraw(show, callback)
 
   # アイテムの情報をアイテムリストと操作履歴に保存
   # @param [Boolean] newCreated 新規作成か

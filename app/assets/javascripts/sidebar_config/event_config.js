@@ -31,12 +31,9 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.clearAllChange = function() {
-    return Common.clearAllEventAction((function(_this) {
-      return function() {
-        _this.emt.find('.button_preview_wrapper').show();
-        return _this.emt.find('.button_stop_preview_wrapper').hide();
-      };
-    })(this));
+    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
+    this.emt.find('.button_preview_wrapper').show();
+    return this.emt.find('.button_stop_preview_wrapper').hide();
   };
 
   EventConfig.prototype.selectItem = function(e) {
@@ -392,7 +389,7 @@ EventConfig = (function() {
     return $('.push.button.stop_preview', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
-        return Common.clearAllEventAction(function() {
+        return Common.updateAllEventsToBefore(function() {
           $(e.target).closest('.button_div').find('.button_preview_wrapper').show();
           return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide();
         });
@@ -625,15 +622,26 @@ EventConfig = (function() {
     eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
     emt = $('#' + eId);
     config = new this(emt, teNum, distId);
-    return (function(_this) {
-      return function() {
-        config.clearAllChange();
-        return $('.te_item_select', emt).off('change').on('change', function(e) {
-          config.clearError();
-          return config.selectItem(this);
-        });
+    config.clearAllChange();
+    $('.update_event_after', emt).removeAttr('checked');
+    $('.update_event_after', emt).off('change').on('change', (function(_this) {
+      return function(e) {
+        if ($(e.target).is(':checked')) {
+          return WorktableCommon.updatePrevEventsToAfter(teNum);
+        } else {
+          return WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
+        }
       };
-    })(this)();
+    })(this));
+    $('.te_item_select', emt).off('change').on('change', function(e) {
+      config.clearError();
+      return config.selectItem(this);
+    });
+    return window.drawingCanvas.one('click.setupTimelineEventHandler', (function(_this) {
+      return function(e) {
+        return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+      };
+    })(this));
   };
 
   return EventConfig;

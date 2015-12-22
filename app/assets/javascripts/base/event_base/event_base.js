@@ -208,7 +208,7 @@ EventBase = (function(superClass) {
     if ((this._runningPreview == null) || !this._runningPreview) {
       this._runningPreview = false;
       if (callback != null) {
-        callback();
+        callback(false);
       }
       return;
     }
@@ -220,7 +220,7 @@ EventBase = (function(superClass) {
         this._runningPreview = false;
       }
       if (callback != null) {
-        return callback();
+        return callback(true);
       }
     };
     if (this._doPreviewLoop) {
