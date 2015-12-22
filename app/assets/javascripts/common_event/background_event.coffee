@@ -2,6 +2,7 @@
 class BackgroundEvent extends CommonEvent
   class @PrivateClass extends CommonEvent.PrivateClass
     @EVENT_ID = '1'
+    @CLASS_DIST_TOKEN = "PI_BackgroundEvent"
 
     @actionProperties =
     {
@@ -52,7 +53,7 @@ class BackgroundEvent extends CommonEvent
       methodName = @getEventMethodName()
       if methodName == 'changeBackgroundColor'
         window.scrollInside.css('backgroundColor', @backgroundColor)
-  #
+
     # イベント後の表示状態にする
     updateEventAfter: ->
       super()

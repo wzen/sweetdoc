@@ -7,7 +7,6 @@ class ConfigMenu
     class @Action
       @PRELOAD_IMAGE_PATH_SELECT = constant.ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT
 
-
   # デザインコンフィグ
   @getDesignConfig = (obj, successCallback = null, errorCallback = null) ->
     designConfigRoot = $('#' + obj.getDesignConfigId())
@@ -75,29 +74,30 @@ class ConfigMenu
 
     $.ajax(
       {
-        url: "/config_menu/event_var_modify_config"
+        url: "/config_menu/method_values_config"
         type: "POST"
         data: {
-          methodName: eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]
+          classDistToken: itemObjClass.CLASS_DIST_TOKEN
           modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
         }
         dataType: "json"
         success: (data) ->
           if data.resultSuccess
             # コンフィグ追加
-            $(".value_forms", eventConfigObj.emt).append($("<div class='#{valueClassName}'>#{data.html}</div>"))
+            $(".value_forms", eventConfigObj.emt).append($("<div class='#{valueClassName}'><div class='#{eventConfigObj.constructor.METHOD_VALUE_MODIFY_ROOT}'>#{data.modify_html}</div><div class='#{eventConfigObj.constructor.METHOD_VALUE_SPECIFIC_ROOT}'>#{data.specific_html}</div></div>"))
             # コンフィグの初期化
             eventConfigObj.initEventVarModifyConfig(itemObjClass)
+            eventConfigObj.initEventSpecificConfig()
             if successCallback?
               successCallback(data)
           else
             if errorCallback?
               errorCallback(data)
-            console.log('/config_menu/event_var_modify_config server error')
+            console.log('/config_menu/method_values_config server error')
         error: (data) ->
           if errorCallback?
             errorCallback(data)
-          console.log('/config_menu/event_var_modify_config ajax error')
+          console.log('/config_menu/method_values_config ajax error')
       }
     )
 

@@ -19,6 +19,8 @@ BackgroundEvent = (function(superClass) {
 
     PrivateClass.EVENT_ID = '1';
 
+    PrivateClass.CLASS_DIST_TOKEN = "PI_BackgroundEvent";
+
     PrivateClass.actionProperties = {
       defaultMethod: 'changeBackgroundColor',
       modifiables: {

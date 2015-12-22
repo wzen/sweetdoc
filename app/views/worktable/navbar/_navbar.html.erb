@@ -39,7 +39,7 @@
                             <ul class="dropdown-menu">
                                 <% if @preload_items.present? %>
                                     <% @preload_items.each do |p| %>
-                                        <li><a id="menu-item-<%= p.access_token %>" class="menu-item"><%= p.title %></a></li>
+                                        <li><a id="menu-item-<%= p.dist_token %>" class="menu-item"><%= p.title %></a></li>
                                     <% end %>
                                 <% else %>
                                     <li><a class="menu-item">No item</a></li>

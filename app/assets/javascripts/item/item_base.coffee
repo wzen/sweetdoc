@@ -4,9 +4,6 @@ class ItemBase extends ItemEventBase
   # @abstract
   # @property [String] NAME_PREFIX 名前プレフィックス
   @NAME_PREFIX = ""
-  # @abstract
-  # @property [ItemType] CLASS_DIST_TOKEN クラス種別
-  @CLASS_DIST_TOKEN = ""
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
   @DESIGN_CONFIG_ROOT_ID = 'design_config_@id'
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot

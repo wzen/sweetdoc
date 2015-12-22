@@ -18,6 +18,9 @@ class EventConfig
     # @property [String] EVENT_COMMON_PREFIX 共通イベントプレフィックス
     @EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX
 
+    @METHOD_VALUE_MODIFY_ROOT = 'modify'
+    @METHOD_VALUE_SPECIFIC_ROOT = 'specific'
+
   # コンストラクタ
   # @param [Object] @emt コンフィグRoot
   # @param [Integer] @teNum イベント番号
@@ -450,6 +453,10 @@ class EventConfig
         else if v.type == Constant.ItemDesignOptionType.SELECT
           @settingModifiableSelect(varName, defaultValue, v['options[]'])
 
+  initEventSpecificConfig: ->
+    # FIXME: 必要であれば実装
+    # またはinitEventVarModifyConfigのイベントを再利用
+
   # 変数変更値が存在するか
   hasModifiableVar: (varName = null) ->
     ret = @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? != 'undefined'
@@ -465,7 +472,7 @@ class EventConfig
   # @param [Int] stepValue 進捗数
   settingModifiableVarSlider: (varName, defaultValue, min = 0, max = 100, stepValue = 1) ->
     meterClassName = "#{varName}_meter"
-    meterElement = $(".#{meterClassName}", @emt)
+    meterElement = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{meterClassName}", @emt)
     valueElement = meterElement.prev('input:first')
     valueElement.val(defaultValue)
     valueElement.html(defaultValue)
@@ -488,8 +495,8 @@ class EventConfig
   # 変数編集テキストボックスの作成
   # @param [String] varName 変数名
   settingModifiableString: (varName, defaultValue) ->
-    $(".#{varName}_text", @emt).val(defaultValue)
-    $(".#{varName}_text", @emt).off('change').on('change', =>
+    $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).val(defaultValue)
+    $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).off('change').on('change', =>
       if !@hasModifiableVar(varName)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(@).val()
@@ -499,7 +506,7 @@ class EventConfig
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
   settingModifiableColor: (varName, defaultValue) ->
-    emt = $(".#{varName}_color", @emt)
+    emt = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_color", @emt)
     ColorPickerUtil.initColorPicker(
       $(emt),
       defaultValue,
@@ -524,7 +531,7 @@ class EventConfig
       else
         return value
 
-    selectEmt = $(".#{varName}_select", @emt)
+    selectEmt = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_select", @emt)
     if selectEmt.children('option').length == 0
       # 選択項目の作成
       for option in selectOptions

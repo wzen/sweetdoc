@@ -103,17 +103,18 @@ ConfigMenu = (function() {
       return;
     }
     return $.ajax({
-      url: "/config_menu/event_var_modify_config",
+      url: "/config_menu/method_values_config",
       type: "POST",
       data: {
-        methodName: eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME],
+        classDistToken: itemObjClass.CLASS_DIST_TOKEN,
         modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
       },
       dataType: "json",
       success: function(data) {
         if (data.resultSuccess) {
-          $(".value_forms", eventConfigObj.emt).append($("<div class='" + valueClassName + "'>" + data.html + "</div>"));
+          $(".value_forms", eventConfigObj.emt).append($("<div class='" + valueClassName + "'><div class='" + eventConfigObj.constructor.METHOD_VALUE_MODIFY_ROOT + "'>" + data.modify_html + "</div><div class='" + eventConfigObj.constructor.METHOD_VALUE_SPECIFIC_ROOT + "'>" + data.specific_html + "</div></div>"));
           eventConfigObj.initEventVarModifyConfig(itemObjClass);
+          eventConfigObj.initEventSpecificConfig();
           if (successCallback != null) {
             return successCallback(data);
           }
@@ -121,14 +122,14 @@ ConfigMenu = (function() {
           if (errorCallback != null) {
             errorCallback(data);
           }
-          return console.log('/config_menu/event_var_modify_config server error');
+          return console.log('/config_menu/method_values_config server error');
         }
       },
       error: function(data) {
         if (errorCallback != null) {
           errorCallback(data);
         }
-        return console.log('/config_menu/event_var_modify_config ajax error');
+        return console.log('/config_menu/method_values_config ajax error');
       }
     });
   };

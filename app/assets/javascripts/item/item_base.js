@@ -10,8 +10,6 @@ ItemBase = (function(superClass) {
 
   ItemBase.NAME_PREFIX = "";
 
-  ItemBase.CLASS_DIST_TOKEN = "";
-
   ItemBase.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
 
   ItemBase.DESIGN_PAGEVALUE_ROOT = 'designs';

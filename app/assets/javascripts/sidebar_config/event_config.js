@@ -13,6 +13,8 @@ EventConfig = (function() {
     EventConfig.COMMON_VALUES_CLASS = constant.EventConfig.COMMON_VALUES_CLASS;
     EventConfig.ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS;
     EventConfig.EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX;
+    EventConfig.METHOD_VALUE_MODIFY_ROOT = 'modify';
+    EventConfig.METHOD_VALUE_SPECIFIC_ROOT = 'specific';
   }
 
   function EventConfig(emt1, teNum1, distId1) {
@@ -486,6 +488,8 @@ EventConfig = (function() {
     }
   };
 
+  EventConfig.prototype.initEventSpecificConfig = function() {};
+
   EventConfig.prototype.hasModifiableVar = function(varName) {
     var ret;
     if (varName == null) {
@@ -511,7 +515,7 @@ EventConfig = (function() {
       stepValue = 1;
     }
     meterClassName = varName + "_meter";
-    meterElement = $("." + meterClassName, this.emt);
+    meterElement = $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + meterClassName, this.emt);
     valueElement = meterElement.prev('input:first');
     valueElement.val(defaultValue);
     valueElement.html(defaultValue);
@@ -539,8 +543,8 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.settingModifiableString = function(varName, defaultValue) {
-    $("." + varName + "_text", this.emt).val(defaultValue);
-    return $("." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
+    $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_text", this.emt).val(defaultValue);
+    return $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
       return function() {
         if (!_this.hasModifiableVar(varName)) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
@@ -552,7 +556,7 @@ EventConfig = (function() {
 
   EventConfig.prototype.settingModifiableColor = function(varName, defaultValue) {
     var emt;
-    emt = $("." + varName + "_color", this.emt);
+    emt = $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_color", this.emt);
     return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
       return function(a, b, d, e) {
         if (!_this.hasModifiableVar(varName)) {
@@ -579,7 +583,7 @@ EventConfig = (function() {
         return value;
       }
     };
-    selectEmt = $("." + varName + "_select", this.emt);
+    selectEmt = $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_select", this.emt);
     if (selectEmt.children('option').length === 0) {
       for (j = 0, len = selectOptions.length; j < len; j++) {
         option = selectOptions[j];

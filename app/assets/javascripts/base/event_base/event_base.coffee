@@ -1,5 +1,8 @@
 # イベントリスナー Extend
 class EventBase extends Extend
+  # @abstract
+  # @property [String] CLASS_DIST_TOKEN クラス種別
+  @CLASS_DIST_TOKEN = ""
 
   @STEP_INTERVAL_DURATION = 0.01
 

@@ -99,7 +99,7 @@ Rails.application.routes.draw do
 
   # ConfigMenu
   post 'config_menu/design_config'
-  post 'config_menu/event_var_modify_config'
+  post 'config_menu/method_values_config'
   post 'config_menu/preload_image_path_select_config'
 
   # ItemImage

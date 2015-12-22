@@ -25,8 +25,20 @@ class ConfigMenu
     return _modifiables_vars_config(controller, modifiables, false)
   end
 
-  def self.event_specific_config(controller, method_name)
-
+  def self.event_specific_config(controller, class_dist_token)
+    dir = 'sidebar_menu/event/specific_values'
+    temp_name = class_dist_token.to_s.downcase
+    # テンプレート存在チェック
+    # TODO: 初期値を設定できるようにする
+    if lookup_context.exists?(temp_name, dir, true)
+      temp = "#{dir}/#{temp_name}"
+      ret = controller.render_to_string(
+          partial: temp
+      )
+      return ret
+    else
+      return ''
+    end
   end
 
   def self._modifiables_vars_config(controller, modifiables, isDesign)

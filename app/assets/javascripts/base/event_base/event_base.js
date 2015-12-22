@@ -6,6 +6,8 @@ var EventBase,
 EventBase = (function(superClass) {
   extend(EventBase, superClass);
 
+  EventBase.CLASS_DIST_TOKEN = "";
+
   EventBase.STEP_INTERVAL_DURATION = 0.01;
 
   function EventBase() {
