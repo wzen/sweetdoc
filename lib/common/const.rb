@@ -17,6 +17,15 @@ class Const
     OPTION = 2
   end
 
+  class EventInputPointingMode
+    # @property [Int] NOT_SELECT 未選択
+    NOT_SELECT = -1
+    # @property [Int] DRAW 描画
+    DRAW = 0
+    # @property [Int] ITEM_TOUCH アイテム選択
+    ITEM_TOUCH = 1
+  end
+
   # ZIndex
   class Zindex
     # @porperty EVENTBOTTOM イベントz-idex最小値

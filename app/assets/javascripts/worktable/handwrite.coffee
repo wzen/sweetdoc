@@ -17,7 +17,6 @@ class Handwrite
     @queueLoc = null
     @zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
     MOVE_FREQUENCY = 7
-    @zoom = 1
 
     # ウィンドウ座標からCanvas座標に変換する
     # @param [Object] canvas Canvas
@@ -34,8 +33,9 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       # @return [Array] Canvas座標
       _calcCanvasLoc = (e) =>
-        x = (e.x || e.clientX) / @zoom
-        y = (e.y || e.clientY) / @zoom
+        zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
+        x = (e.x || e.clientX) / zoom
+        y = (e.y || e.clientY) / zoom
         return _windowToCanvas(drawingCanvas, x, y)
 
       # 座標の状態を保存
@@ -48,11 +48,10 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmousedown = (e) =>
         if e.which == 1 #左クリック
-          @zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
           loc = _calcCanvasLoc.call(@, e)
           _saveLastLoc(loc)
           @click = true
-          if mode == Constant.Mode.DRAW
+          if _isDrawMode.call(@)
             e.preventDefault()
             @mouseDownDrawing(loc)
 
@@ -63,7 +62,7 @@ class Handwrite
           loc = _calcCanvasLoc.call(@, e)
           if @click &&
               Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
-            if mode == Constant.Mode.DRAW
+            if _isDrawMode.call(@)
               e.preventDefault()
               @mouseMoveDrawing(loc)
             _saveLastLoc(loc)
@@ -72,7 +71,7 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmouseup = (e) =>
         if e.which == 1 #左クリック
-          if @drag && mode == Constant.Mode.DRAW
+          if @drag && _isDrawMode.call(@)
             e.preventDefault()
             @mouseUpDrawing()
         @drag = false
@@ -82,12 +81,18 @@ class Handwrite
   # マウスダウン時の描画イベント
   # @param [Array] loc Canvas座標
   @mouseDownDrawing = (loc) ->
-    # プレビューを停止して再描画
-    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
-    if selectItemMenu?
-      # インスタンス作成
-      @item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
-      window.instanceMap[@item.id] = @item
+    if window.mode == Constant.Mode.DRAW
+      # 通常描画
+      # プレビューを停止して再描画
+      WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
+      if selectItemMenu?
+        # インスタンス作成
+        @item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
+        window.instanceMap[@item.id] = @item
+        @item.mouseDownDrawing()
+    else if window.eventPointingMode == Constant.EventInputPointingMode.DRAW
+      # イベント入力描画
+      @item = new EventDragPointing(loc)
       @item.mouseDownDrawing()
 
   # マウスドラッグ時の描画イベント
@@ -116,3 +121,6 @@ class Handwrite
       @item.mouseUpDrawing(@zindex, =>
         @zindex += 1
       )
+
+  _isDrawMode = ->
+    return window.mode == Constant.Mode.DRAW || window.eventPointingMode == Constant.EventInputPointingMode.DRAW

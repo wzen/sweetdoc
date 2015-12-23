@@ -44,6 +44,19 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     })();
 
+    Constant.EventInputPointingMode = (function() {
+      function EventInputPointingMode() {}
+
+      EventInputPointingMode.NOT_SELECT = constant.EventInputPointingMode.NOT_SELECT;
+
+      EventInputPointingMode.DRAW = constant.EventInputPointingMode.DRAW;
+
+      EventInputPointingMode.ITEM_TOUCH = constant.EventInputPointingMode.ITEM_TOUCH;
+
+      return EventInputPointingMode;
+
+    })();
+
     Constant.ItemDrawType = (function() {
       function ItemDrawType() {}
 

@@ -2,6 +2,8 @@
 var Handwrite;
 
 Handwrite = (function() {
+  var _isDrawMode;
+
   function Handwrite() {}
 
   Handwrite.item = null;
@@ -27,7 +29,6 @@ Handwrite = (function() {
     this.queueLoc = null;
     this.zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
     MOVE_FREQUENCY = 7;
-    this.zoom = 1;
     _windowToCanvas = function(canvas, x, y) {
       var bbox;
       bbox = canvas.getBoundingClientRect();
@@ -40,9 +41,10 @@ Handwrite = (function() {
       return function() {
         var _calcCanvasLoc, _saveLastLoc;
         _calcCanvasLoc = function(e) {
-          var x, y;
-          x = (e.x || e.clientX) / _this.zoom;
-          y = (e.y || e.clientY) / _this.zoom;
+          var x, y, zoom;
+          zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
+          x = (e.x || e.clientX) / zoom;
+          y = (e.y || e.clientY) / zoom;
           return _windowToCanvas(drawingCanvas, x, y);
         };
         _saveLastLoc = function(loc) {
@@ -52,11 +54,10 @@ Handwrite = (function() {
         drawingCanvas.onmousedown = function(e) {
           var loc;
           if (e.which === 1) {
-            _this.zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
             loc = _calcCanvasLoc.call(_this, e);
             _saveLastLoc(loc);
             _this.click = true;
-            if (mode === Constant.Mode.DRAW) {
+            if (_isDrawMode.call(_this)) {
               e.preventDefault();
               return _this.mouseDownDrawing(loc);
             }
@@ -67,7 +68,7 @@ Handwrite = (function() {
           if (e.which === 1) {
             loc = _calcCanvasLoc.call(_this, e);
             if (_this.click && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY) {
-              if (mode === Constant.Mode.DRAW) {
+              if (_isDrawMode.call(_this)) {
                 e.preventDefault();
                 _this.mouseMoveDrawing(loc);
               }
@@ -77,7 +78,7 @@ Handwrite = (function() {
         };
         return drawingCanvas.onmouseup = function(e) {
           if (e.which === 1) {
-            if (_this.drag && mode === Constant.Mode.DRAW) {
+            if (_this.drag && _isDrawMode.call(_this)) {
               e.preventDefault();
               _this.mouseUpDrawing();
             }
@@ -90,10 +91,15 @@ Handwrite = (function() {
   };
 
   Handwrite.mouseDownDrawing = function(loc) {
-    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
-    if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
-      this.item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
-      window.instanceMap[this.item.id] = this.item;
+    if (window.mode === Constant.Mode.DRAW) {
+      WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
+      if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
+        this.item = new (Common.getClassFromMap(false, selectItemMenu))(loc);
+        window.instanceMap[this.item.id] = this.item;
+        return this.item.mouseDownDrawing();
+      }
+    } else if (window.eventPointingMode === Constant.EventInputPointingMode.DRAW) {
+      this.item = new EventDragPointing(loc);
       return this.item.mouseDownDrawing();
     }
   };
@@ -125,6 +131,10 @@ Handwrite = (function() {
         };
       })(this));
     }
+  };
+
+  _isDrawMode = function() {
+    return window.mode === Constant.Mode.DRAW || window.eventPointingMode === Constant.EventInputPointingMode.DRAW;
   };
 
   return Handwrite;

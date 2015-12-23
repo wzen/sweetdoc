@@ -31,6 +31,15 @@ if gon?
       # @property [Int] OPTION アイテムオプション
       @OPTION = constant.Mode.OPTION
 
+    # イベントコンフィグ入力用操作モード
+    class @EventInputPointingMode
+      # @property [Int] NOT_SELECT 未選択
+      @NOT_SELECT = constant.EventInputPointingMode.NOT_SELECT
+      # @property [Int] DRAW 描画
+      @DRAW = constant.EventInputPointingMode.DRAW
+      # @property [Int] ITEM_TOUCH アイテム選択
+      @ITEM_TOUCH = constant.EventInputPointingMode.ITEM_TOUCH
+
     # アイテム種別
     class @ItemDrawType
       # @property [Int] CANVAS CANVAS

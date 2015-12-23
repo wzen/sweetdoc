@@ -67,6 +67,8 @@
 //= require worktable/common/worktable_setting
 //= require worktable/util/colorpicker
 //= require worktable/event/timeline
+//= require worktable/event/pointing/event_drag_pointing
+//= require worktable/event/pointing/event_item_touch_pointing
 //= require worktable/handwrite
 //= require worktable/worktable
 // require_tree .
