@@ -631,7 +631,7 @@ EventConfig = (function() {
       id = item.value.id;
       name = item.value.name;
       classDistToken = item.value.classDistToken;
-      if (classDistToken != null) {
+      if (window.instanceMap[id] instanceof ItemBase) {
         itemSelectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + classDistToken + "'>\n  " + name + "\n</option>";
       } else {
         commonSelectOptions += "<option value='" + (this.COMMON_ACTION_CLASS.replace('@commoneventid', item.value.eventId)) + "'>\n  " + name + "\n</option>";

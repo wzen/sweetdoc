@@ -568,7 +568,7 @@ class EventConfig
       id = item.value.id
       name = item.value.name
       classDistToken = item.value.classDistToken
-      if classDistToken?
+      if window.instanceMap[id] instanceof ItemBase
         # アイテム
         itemSelectOptions += """
             <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{classDistToken}'>

@@ -757,7 +757,8 @@ class Common
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
     needclassDistTokens = []
     for k, obj of pageValues
-      if obj.value.classDistToken?
+      if window.instanceMap[obj.value.id]? && window.instanceMap[obj.value.id] instanceof ItemBase
+        # アイテムの場合
         if $.inArray(obj.value.classDistToken, needclassDistTokens) < 0
           needclassDistTokens.push(obj.value.classDistToken)
 
