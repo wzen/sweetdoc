@@ -27,7 +27,7 @@ class ItemBase extends ItemEventBase
     # @property [Int] id ID
     @id = "i" + @constructor.NAME_PREFIX + Common.generateId()
     # @property [ItemType] CLASS_DIST_TOKEN アイテム種別
-    @itemToken = @constructor.CLASS_DIST_TOKEN
+    @classDistToken = @constructor.CLASS_DIST_TOKEN
     # @property [String] name 名前
     @name = null
     # @property [String] visible 表示状態

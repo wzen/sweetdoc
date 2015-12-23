@@ -79,8 +79,8 @@ PageValue = (function() {
 
       Key.ITEM_LOADED_PREFIX = 'itemloaded';
 
-      Key.itemLoaded = function(itemToken) {
-        return "" + this.ITEM_LOADED_PREFIX + this.PAGE_VALUES_SEPERATOR + itemToken;
+      Key.itemLoaded = function(classDistToken) {
+        return "" + this.ITEM_LOADED_PREFIX + this.PAGE_VALUES_SEPERATOR + classDistToken;
       };
 
       Key.E_ROOT = constant.PageValueKey.E_ROOT;
@@ -207,8 +207,8 @@ PageValue = (function() {
     })();
   }
 
-  PageValue.addItemInfo = function(itemToken) {
-    return this.setInstancePageValue(this.Key.itemLoaded(itemToken), true);
+  PageValue.addItemInfo = function(classDistToken) {
+    return this.setInstancePageValue(this.Key.itemLoaded(classDistToken), true);
   };
 
   PageValue.getGeneralPageValue = function(key) {
@@ -462,7 +462,7 @@ PageValue = (function() {
     return eventObjList;
   };
 
-  PageValue.getLoadeditemTokens = function() {
+  PageValue.getLoadedclassDistTokens = function() {
     var itemInfoPageValues, k, ret, v;
     ret = [];
     itemInfoPageValues = PageValue.getInstancePageValue(this.Key.ITEM_LOADED_PREFIX);

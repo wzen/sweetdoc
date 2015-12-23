@@ -237,7 +237,7 @@ EventConfig = (function() {
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       name = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
     } else {
-      name = this.constructor.ITEM_ACTION_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+      name = this.constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
     }
     return name;
   };
@@ -246,7 +246,7 @@ EventConfig = (function() {
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       return this.constructor.COMMON_VALUES_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
     } else {
-      return this.constructor.ITEM_VALUES_CLASS.replace('@itemtoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
+      return this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
     }
   };
 
@@ -413,11 +413,11 @@ EventConfig = (function() {
     return $('#event-config').children('.event').remove();
   };
 
-  EventConfig.addEventConfigContents = function(item_access_token) {
+  EventConfig.addEventConfigContents = function(distToken) {
     var actionParent, action_forms, className, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
-    itemClass = Common.getClassFromMap(false, item_access_token);
+    itemClass = Common.getClassFromMap(false, distToken);
     if ((itemClass != null) && (itemClass.actionProperties != null)) {
-      className = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', item_access_token);
+      className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken);
       action_forms = $('#event-config .action_forms');
       if (action_forms.find("." + className).length === 0) {
         actionParent = $("<div class='" + className + "' style='display:none'></div>");
@@ -439,7 +439,7 @@ EventConfig = (function() {
             span = methodClone.find('label:first').children('span:first');
             span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name']);
             methodClone.find('input.method_name:first').val(methodName);
-            valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName);
+            valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@classdisttoken', distToken).replace('@methodname', methodName);
             methodClone.find('input[type=radio]').attr('name', className);
             methodClone.find('input.value_class_name:first').val(valueClassName);
             actionParent.append(methodClone);
@@ -620,25 +620,32 @@ EventConfig = (function() {
   };
 
   EventConfig.updateSelectItemMenu = function() {
-    var id, item, itemOptgroupClassName, itemToken, items, k, name, selectOptions, teItemSelect, teItemSelects;
+    var classDistToken, commonOptgroupClassName, commonSelectOptions, id, item, itemOptgroupClassName, itemSelectOptions, items, k, name, teItemSelect, teItemSelects;
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
-    selectOptions = '';
+    itemSelectOptions = '';
+    commonSelectOptions = '';
     items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix());
     for (k in items) {
       item = items[k];
       id = item.value.id;
       name = item.value.name;
-      itemToken = item.value.itemToken;
-      if (itemToken != null) {
-        selectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + itemToken + "'>\n  " + name + "\n</option>";
+      classDistToken = item.value.classDistToken;
+      if (classDistToken != null) {
+        itemSelectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + classDistToken + "'>\n  " + name + "\n</option>";
+      } else {
+        commonSelectOptions += "<option value='" + (this.COMMON_ACTION_CLASS.replace('@commoneventid', item.value.eventId)) + "'>\n  " + name + "\n</option>";
       }
     }
+    commonOptgroupClassName = 'common_optgroup_class_name';
+    commonSelectOptions = ("<optgroup class='" + commonOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.common")) + "'>") + commonSelectOptions + '</optgroup>';
     itemOptgroupClassName = 'item_optgroup_class_name';
-    selectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + selectOptions + '</optgroup>';
+    itemSelectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + itemSelectOptions + '</optgroup>';
     return teItemSelects.each(function() {
+      $(this).find("." + commonOptgroupClassName).remove();
       $(this).find("." + itemOptgroupClassName).remove();
-      return $(this).append($(selectOptions));
+      $(this).append($(commonSelectOptions));
+      return $(this).append($(itemSelectOptions));
     });
   };
 

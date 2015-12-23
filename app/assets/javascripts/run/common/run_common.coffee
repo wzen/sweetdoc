@@ -17,7 +17,7 @@ class RunCommon
       @CONTENTS_TAGS_CLASSNAME = constant.Run.AttributeName.CONTENTS_TAGS_CLASSNAME
     class @Key
       @TARGET_PAGES = constant.Run.Key.TARGET_PAGES
-      @LOADED_ITEM_ACCESS_TOKENS = constant.Run.Key.LOADED_ITEM_ACCESS_TOKENS
+      @LOADED_CLASS_DIST_TOKENS = constant.Run.Key.LOADED_CLASS_DIST_TOKENS
       @PROJECT_ID = constant.Run.Key.PROJECT_ID
       @ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN
       @RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID
@@ -194,7 +194,7 @@ class RunCommon
 
     data = {}
     data[RunCommon.Key.TARGET_PAGES] = targetPages
-    data[RunCommon.Key.LOADED_ITEM_ACCESS_TOKENS] = JSON.stringify(PageValue.getLoadeditemTokens())
+    data[RunCommon.Key.LOADED_CLASS_DIST_TOKENS] = JSON.stringify(PageValue.getLoadedclassDistTokens())
     locationPaths = window.location.pathname.split('/')
     data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
     data[RunCommon.Key.RUNNING_USER_PAGEVALUE_ID] = PageValue.getGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID)

@@ -1,7 +1,3 @@
-<%
-   common_actions = @common_actions
-   common_actions = [] if common_actions.nil?
-%>
 <div class="config">
   <div class="configBox">
     <div class="event-config-headliner">Target</div>
@@ -10,11 +6,6 @@
       <!-- ワークスペース読み込み時に設定 -->
       <select class="form-control te_item_select" name="te_item_select">
         <option value="">(Select)</option>
-        <optgroup label="<%= I18n.t('config.select_opt_group.common') %>">
-          <% common_actions.each do |c| %>
-              <option value="<%= Const::EventConfig::COMMON_ACTION_CLASS.sub('@commoneventid', c.id.to_s) %>"><%= t(c.name) %></option>
-          <% end %>
-        </optgroup>
       </select>
     </div>
   </div>

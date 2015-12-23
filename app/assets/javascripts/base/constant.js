@@ -12,7 +12,7 @@ if (typeof gon !== "undefined" && gon !== null) {
 
     Constant.ITEM_GALLERY_ITEM_CLASSNAME = constant.ITEM_GALLERY_ITEM_CLASSNAME;
 
-    Constant.ITEM_PREVIEW_ITEM_ACCESS_TOKEN = 'dummy';
+    Constant.ITEM_PREVIEW_CLASS_DIST_TOKEN = 'dummy';
 
     Constant.CANVAS_ITEM_COORDINATE_VAR_SURFIX = 'Coord';
 

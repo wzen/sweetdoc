@@ -42,7 +42,7 @@ ItemBase = (function(superClass) {
     }
     ItemBase.__super__.constructor.call(this);
     this.id = "i" + this.constructor.NAME_PREFIX + Common.generateId();
-    this.itemToken = this.constructor.CLASS_DIST_TOKEN;
+    this.classDistToken = this.constructor.CLASS_DIST_TOKEN;
     this.name = null;
     this.visible = false;
     this.firstFocus = false;

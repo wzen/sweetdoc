@@ -3,11 +3,11 @@ require 'item/item_js'
 require 'pagevalue/page_value_state'
 
 class MotionCheck
-  def self.paging(user_id, user_pagevalue_id, target_pages, loaded_item_access_tokens = [])
+  def self.paging(user_id, user_pagevalue_id, target_pages, loaded_class_dist_tokens = [])
     gen = {}
     ins = {}
     ent = {}
-    item_access_tokens = []
+    class_dist_tokens = []
 
     # DBから読み込み
     pages = "(#{target_pages.join(',')})"
@@ -46,12 +46,12 @@ class MotionCheck
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
         # 必要なItemTokenを調査
-        need_load_item_access_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd)
-        item_access_tokens = need_load_item_access_tokens - loaded_item_access_tokens
+        need_load_class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd)
+        class_dist_tokens = need_load_class_dist_tokens - loaded_class_dist_tokens
       end
     end
 
-    item_js_list = ItemJs.get_item_gallery(item_access_tokens)
+    item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
     return true, {
         general_pagevalue: gen,
         instance_pagevalue: ins,

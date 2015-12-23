@@ -146,7 +146,7 @@ EventPageValueBase = (function() {
       if (eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
         actionFormName = EventConfig.EVENT_COMMON_PREFIX + eventConfig[this.PageValueKey.COMMON_EVENT_ID];
       } else {
-        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]);
+        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]);
       }
       $("." + actionFormName + " .radio", eventConfig.emt).each(function(e) {
         var methodName;

@@ -237,7 +237,7 @@ class EventConfig
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       name = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
     else
-      name = @constructor.ITEM_ACTION_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
+      name = @constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
     return name
 
   # アクションメソッド & メソッド毎の値のクラス名を取得
@@ -245,7 +245,7 @@ class EventConfig
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
     else
-      return @constructor.ITEM_VALUES_CLASS.replace('@itemtoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
+      return @constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
 
   # エラー表示
   # @param [String] message メッセージ内容
@@ -390,13 +390,12 @@ class EventConfig
     $('#event-config').children('.event').remove()
 
   # アクションイベント情報をコンフィグに追加
-  # @param [Integer] item_access_token アイテムID
-  @addEventConfigContents = (item_access_token) ->
-    itemClass = Common.getClassFromMap(false, item_access_token)
+  # @param [Integer] distToken アイテム識別ID
+  @addEventConfigContents = (distToken) ->
+    itemClass = Common.getClassFromMap(false, distToken)
 
     if itemClass? && itemClass.actionProperties?
-      className = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', item_access_token)
-      #handler_forms = $('#event-config .handler_div .configBox')
+      className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken)
       action_forms = $('#event-config .action_forms')
       if action_forms.find(".#{className}").length == 0
         actionParent = $("<div class='#{className}' style='display:none'></div>")
@@ -417,7 +416,7 @@ class EventConfig
             span = methodClone.find('label:first').children('span:first')
             span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
             methodClone.find('input.method_name:first').val(methodName)
-            valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@itemtoken', item_access_token).replace('@methodname', methodName)
+            valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@classdisttoken', distToken).replace('@methodname', methodName)
             methodClone.find('input[type=radio]').attr('name', className)
             methodClone.find('input.value_class_name:first').val(valueClassName)
             actionParent.append(methodClone)
@@ -562,25 +561,38 @@ class EventConfig
     # 作成されたアイテムの一覧を取得
     teItemSelects = $('#event-config .te_item_select')
     teItemSelect = teItemSelects[0]
-    selectOptions = ''
+    itemSelectOptions = ''
+    commonSelectOptions = ''
     items = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix())
     for k, item of items
       id = item.value.id
       name = item.value.name
-      itemToken = item.value.itemToken
-      if itemToken?
-        selectOptions += """
-            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{itemToken}'>
+      classDistToken = item.value.classDistToken
+      if classDistToken?
+        # アイテム
+        itemSelectOptions += """
+            <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{classDistToken}'>
+              #{name}
+            </option>
+          """
+      else
+        # 共通イベント
+        commonSelectOptions += """
+            <option value='#{@COMMON_ACTION_CLASS.replace('@commoneventid', item.value.eventId)}'>
               #{name}
             </option>
           """
 
+    commonOptgroupClassName = 'common_optgroup_class_name'
+    commonSelectOptions = "<optgroup class='#{commonOptgroupClassName}' label='#{I18n.t("config.select_opt_group.common")}'>" + commonSelectOptions + '</optgroup>'
     itemOptgroupClassName = 'item_optgroup_class_name'
-    selectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + selectOptions + '</optgroup>'
+    itemSelectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + itemSelectOptions + '</optgroup>'
     # メニューを入れ替え
     teItemSelects.each( ->
+      $(@).find(".#{commonOptgroupClassName}").remove()
       $(@).find(".#{itemOptgroupClassName}").remove()
-      $(@).append($(selectOptions))
+      $(@).append($(commonSelectOptions))
+      $(@).append($(itemSelectOptions))
     )
 
   # イベントハンドラー設定

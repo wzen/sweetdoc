@@ -130,7 +130,7 @@ class EventPageValueBase
       if eventConfig[@PageValueKey.IS_COMMON_EVENT]
         actionFormName = EventConfig.EVENT_COMMON_PREFIX + eventConfig[@PageValueKey.COMMON_EVENT_ID]
       else
-        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@itemtoken', eventConfig[@PageValueKey.CLASS_DIST_TOKEN])
+        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[@PageValueKey.CLASS_DIST_TOKEN])
       $(".#{actionFormName} .radio", eventConfig.emt).each((e) ->
         methodName = $(@).find('input.method_name').val()
         if methodName == eventConfig[EventPageValueBase.PageValueKey.METHODNAME]

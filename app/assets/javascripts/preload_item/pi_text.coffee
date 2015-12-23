@@ -219,7 +219,7 @@ class PreloadItemText extends CssItemBase
       @_editing = false
       @saveObj()
       # モードを描画モードに
-      Navbar.setModeDraw(@itemToken, =>
+      Navbar.setModeDraw(@classDistToken, =>
         WorktableCommon.changeMode(Constant.Mode.DRAW)
         @reDraw(true, =>
           # イベント設定

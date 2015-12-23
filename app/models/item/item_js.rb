@@ -14,7 +14,7 @@ class ItemJs
     item_gallery_all.each do |item_gallery|
       ret <<
           {
-              item_access_token: item_gallery['item_gallery_access_token'],
+              class_dist_token: item_gallery['item_gallery_access_token'],
               js_src: _js_path(item_gallery['created_user_access_token'], item_gallery['file_name']),
               class_name: item_gallery['class_name']
           }

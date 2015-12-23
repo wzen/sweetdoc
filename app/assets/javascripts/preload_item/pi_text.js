@@ -115,7 +115,7 @@ PreloadItemText = (function(superClass) {
       this.inputText = $(target).val();
       this._editing = false;
       this.saveObj();
-      return Navbar.setModeDraw(this.itemToken, (function(_this) {
+      return Navbar.setModeDraw(this.classDistToken, (function(_this) {
         return function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
           return _this.reDraw(true, function() {

@@ -97,7 +97,7 @@ class ServerStorage
         type: "POST"
         data: {
           user_pagevalue_id: user_pagevalue_id
-          loaded_item_access_tokens : JSON.stringify(PageValue.getLoadeditemTokens())
+          loaded_class_dist_tokens : JSON.stringify(PageValue.getLoadedclassDistTokens())
         }
         dataType: "json"
         success: (data)->

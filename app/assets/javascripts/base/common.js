@@ -286,7 +286,7 @@ Common = (function() {
       instance = instances[key];
       value = instance.value;
       if (withCreateInstance) {
-        classMapId = value.itemToken;
+        classMapId = value.classDistToken;
         if (classMapId == null) {
           classMapId = value.eventId;
         }
@@ -849,46 +849,46 @@ Common = (function() {
     }
   };
 
-  Common.loadItemJs = function(itemTokens, callback) {
-    var callbackCount, data, itemToken, j, len, needReaditemTokens;
+  Common.loadItemJs = function(classDistTokens, callback) {
+    var callbackCount, classDistToken, data, j, len, needReadclassDistTokens;
     if (callback == null) {
       callback = null;
     }
-    if (jQuery.type(itemTokens) !== "array") {
-      itemTokens = [itemTokens];
+    if (jQuery.type(classDistTokens) !== "array") {
+      classDistTokens = [classDistTokens];
     }
-    itemTokens = $.grep(itemTokens, function(n) {
+    classDistTokens = $.grep(classDistTokens, function(n) {
       return window.itemInitFuncList[n] == null;
     });
-    if (itemTokens.length === 0) {
+    if (classDistTokens.length === 0) {
       if (callback != null) {
         callback();
       }
       return;
     }
     callbackCount = 0;
-    needReaditemTokens = [];
-    for (j = 0, len = itemTokens.length; j < len; j++) {
-      itemToken = itemTokens[j];
-      if (itemToken != null) {
-        if (window.itemInitFuncList[itemToken] != null) {
-          window.itemInitFuncList[itemToken]();
+    needReadclassDistTokens = [];
+    for (j = 0, len = classDistTokens.length; j < len; j++) {
+      classDistToken = classDistTokens[j];
+      if (classDistToken != null) {
+        if (window.itemInitFuncList[classDistToken] != null) {
+          window.itemInitFuncList[classDistToken]();
           callbackCount += 1;
-          if (callbackCount >= itemTokens.length) {
+          if (callbackCount >= classDistTokens.length) {
             if (callback != null) {
               callback();
             }
             return;
           }
         } else {
-          needReaditemTokens.push(itemToken);
+          needReadclassDistTokens.push(classDistToken);
         }
       } else {
         callbackCount += 1;
       }
     }
     data = {};
-    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReaditemTokens;
+    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReadclassDistTokens;
     return $.ajax({
       url: "/item_js/index",
       type: "POST",
@@ -902,11 +902,11 @@ Common = (function() {
           _cb = function(d) {
             var option;
             option = {};
-            return Common.availJs(d.item_access_token, d.js_src, option, (function(_this) {
+            return Common.availJs(d.class_dist_token, d.js_src, option, (function(_this) {
               return function() {
-                PageValue.addItemInfo(d.item_access_token);
+                PageValue.addItemInfo(d.class_dist_token);
                 if (window.isWorkTable && (typeof EventConfig !== "undefined" && EventConfig !== null)) {
-                  EventConfig.addEventConfigContents(d.item_access_token);
+                  EventConfig.addEventConfigContents(d.class_dist_token);
                 }
                 dataIdx += 1;
                 if (dataIdx >= data.indexes.length) {
@@ -931,7 +931,7 @@ Common = (function() {
   };
 
   Common.loadJsFromInstancePageValue = function(callback, pageNum) {
-    var k, needitemTokens, obj, pageValues;
+    var k, needclassDistTokens, obj, pageValues;
     if (callback == null) {
       callback = null;
     }
@@ -939,23 +939,23 @@ Common = (function() {
       pageNum = PageValue.getPageNum();
     }
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum));
-    needitemTokens = [];
+    needclassDistTokens = [];
     for (k in pageValues) {
       obj = pageValues[k];
-      if (obj.value.itemToken != null) {
-        if ($.inArray(obj.value.itemToken, needitemTokens) < 0) {
-          needitemTokens.push(obj.value.itemToken);
+      if (obj.value.classDistToken != null) {
+        if ($.inArray(obj.value.classDistToken, needclassDistTokens) < 0) {
+          needclassDistTokens.push(obj.value.classDistToken);
         }
       }
     }
-    return this.loadItemJs(needitemTokens, function() {
+    return this.loadItemJs(needclassDistTokens, function() {
       if (callback != null) {
         return callback();
       }
     });
   };
 
-  Common.availJs = function(itemToken, jsSrc, option, callback) {
+  Common.availJs = function(classDistToken, jsSrc, option, callback) {
     var firstScript, s, t;
     if (option == null) {
       option = {};
@@ -963,16 +963,16 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    window.loadedItemToken = itemToken;
+    window.loadedItemToken = classDistToken;
     s = document.createElement('script');
     s.type = 'text/javascript';
     s.src = jsSrc;
     firstScript = document.getElementsByTagName('script')[0];
     firstScript.parentNode.insertBefore(s, firstScript);
     return t = setInterval(function() {
-      if (window.itemInitFuncList[itemToken] != null) {
+      if (window.itemInitFuncList[classDistToken] != null) {
         clearInterval(t);
-        window.itemInitFuncList[itemToken](option);
+        window.itemInitFuncList[classDistToken](option);
         window.loadedItemToken = null;
         if (callback != null) {
           return callback();
@@ -1000,14 +1000,14 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    _addItem = function(item_access_token) {
-      if (item_access_token == null) {
-        item_access_token = null;
+    _addItem = function(class_dist_token) {
+      if (class_dist_token == null) {
+        class_dist_token = null;
       }
-      if (item_access_token != null) {
-        PageValue.addItemInfo(item_access_token);
+      if (class_dist_token != null) {
+        PageValue.addItemInfo(class_dist_token);
         if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-          return EventConfig.addEventConfigContents(item_access_token);
+          return EventConfig.addEventConfigContents(class_dist_token);
         }
       }
     };
@@ -1020,10 +1020,10 @@ Common = (function() {
     loadedIndex = 0;
     d = itemJsList[loadedIndex];
     _func = function() {
-      var itemToken, option;
-      itemToken = d.item_access_token;
-      if (window.itemInitFuncList[itemToken] != null) {
-        window.itemInitFuncList[itemToken]();
+      var classDistToken, option;
+      classDistToken = d.class_dist_token;
+      if (window.itemInitFuncList[classDistToken] != null) {
+        window.itemInitFuncList[classDistToken]();
         loadedIndex += 1;
         if (loadedIndex >= itemJsList.length) {
           if (callback != null) {
@@ -1036,8 +1036,8 @@ Common = (function() {
         return;
       }
       option = {};
-      return Common.availJs(itemToken, d.js_src, option, function() {
-        _addItem.call(this, itemToken);
+      return Common.availJs(classDistToken, d.js_src, option, function() {
+        _addItem.call(this, classDistToken);
         loadedIndex += 1;
         if (loadedIndex >= itemJsList.length) {
           if (callback != null) {

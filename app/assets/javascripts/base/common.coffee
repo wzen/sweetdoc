@@ -215,7 +215,7 @@ class Common
     for key, instance of instances
       value = instance.value
       if withCreateInstance
-        classMapId = value.itemToken
+        classMapId = value.classDistToken
         if !classMapId?
           classMapId = value.eventId
         obj = Common.getInstanceFromMap(value.eventId?, value.id, classMapId)
@@ -682,44 +682,44 @@ class Common
       CommonEvent.deleteAllInstance()
 
   # JSファイルをサーバから読み込む
-  # @param [Int] itemToken アイテム種別
+  # @param [Int] classDistToken アイテム種別
   # @param [Function] callback コールバック関数
-  @loadItemJs = (itemTokens, callback = null) ->
-    if jQuery.type(itemTokens) != "array"
-      itemTokens = [itemTokens]
+  @loadItemJs = (classDistTokens, callback = null) ->
+    if jQuery.type(classDistTokens) != "array"
+      classDistTokens = [classDistTokens]
 
-    itemTokens = $.grep(itemTokens, (n) ->
+    classDistTokens = $.grep(classDistTokens, (n) ->
       # 読み込み済みのものは除外
       return !window.itemInitFuncList[n]?
     )
     # 読み込むIDがない場合はコールバック実行して終了
-    if itemTokens.length == 0
+    if classDistTokens.length == 0
       if callback?
         callback()
       return
 
     callbackCount = 0
-    needReaditemTokens = []
-    for itemToken in itemTokens
-      if itemToken?
-        if window.itemInitFuncList[itemToken]?
+    needReadclassDistTokens = []
+    for classDistToken in classDistTokens
+      if classDistToken?
+        if window.itemInitFuncList[classDistToken]?
           # 読み込み済みなアイテムIDの場合
-          window.itemInitFuncList[itemToken]()
+          window.itemInitFuncList[classDistToken]()
           callbackCount += 1
-          if callbackCount >= itemTokens.length
+          if callbackCount >= classDistTokens.length
             if callback?
               # 既に全て読み込まれている場合はコールバック実行して終了
               callback()
             return
         else
           # Ajaxでjs読み込みが必要なアイテムID
-          needReaditemTokens.push(itemToken)
+          needReadclassDistTokens.push(classDistToken)
       else
         callbackCount += 1
 
     # js読み込み
     data = {}
-    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReaditemTokens
+    data[Constant.ItemGallery.Key.ITEM_GALLERY_ACCESS_TOKEN] = needReadclassDistTokens
     $.ajax(
       {
         url: "/item_js/index"
@@ -732,10 +732,10 @@ class Common
             dataIdx = 0
             _cb = (d) ->
               option = {}
-              Common.availJs(d.item_access_token, d.js_src, option, =>
-                PageValue.addItemInfo(d.item_access_token)
+              Common.availJs(d.class_dist_token, d.js_src, option, =>
+                PageValue.addItemInfo(d.class_dist_token)
                 if window.isWorkTable && EventConfig?
-                  EventConfig.addEventConfigContents(d.item_access_token)
+                  EventConfig.addEventConfigContents(d.class_dist_token)
                 dataIdx += 1
                 if dataIdx >= data.indexes.length
                   if callback?
@@ -755,24 +755,24 @@ class Common
   # イベントPageValueから全てのJSを取得
   @loadJsFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
-    needitemTokens = []
+    needclassDistTokens = []
     for k, obj of pageValues
-      if obj.value.itemToken?
-        if $.inArray(obj.value.itemToken, needitemTokens) < 0
-          needitemTokens.push(obj.value.itemToken)
+      if obj.value.classDistToken?
+        if $.inArray(obj.value.classDistToken, needclassDistTokens) < 0
+          needclassDistTokens.push(obj.value.classDistToken)
 
-    @loadItemJs(needitemTokens, ->
+    @loadItemJs(needclassDistTokens, ->
       # コールバック
       if callback?
         callback()
     )
 
   # JSファイルを設定
-  # @param [String] itemToken アイテムID
+  # @param [String] classDistToken アイテムID
   # @param [String] jsSrc jsファイル名
   # @param [Function] callback 設定後のコールバック
-  @availJs = (itemToken, jsSrc, option = {}, callback = null) ->
-    window.loadedItemToken = itemToken
+  @availJs = (classDistToken, jsSrc, option = {}, callback = null) ->
+    window.loadedItemToken = classDistToken
     s = document.createElement('script');
     s.type = 'text/javascript';
     # TODO: 認証コードの比較
@@ -780,9 +780,9 @@ class Common
     firstScript = document.getElementsByTagName('script')[0];
     firstScript.parentNode.insertBefore(s, firstScript);
     t = setInterval( ->
-      if window.itemInitFuncList[itemToken]?
+      if window.itemInitFuncList[classDistToken]?
         clearInterval(t)
-        window.itemInitFuncList[itemToken](option)
+        window.itemInitFuncList[classDistToken](option)
         window.loadedItemToken = null
         if callback?
           callback()
@@ -801,11 +801,11 @@ class Common
   # JSファイルを適用する
   @setupJsByList = (itemJsList, callback = null) ->
 
-    _addItem = (item_access_token = null) ->
-      if item_access_token?
-        PageValue.addItemInfo(item_access_token)
+    _addItem = (class_dist_token = null) ->
+      if class_dist_token?
+        PageValue.addItemInfo(class_dist_token)
         if EventConfig?
-          EventConfig.addEventConfigContents(item_access_token)
+          EventConfig.addEventConfigContents(class_dist_token)
 
 
     if itemJsList.length == 0
@@ -816,11 +816,11 @@ class Common
     loadedIndex = 0
     d = itemJsList[loadedIndex]
     _func = ->
-      itemToken = d.item_access_token
-      if window.itemInitFuncList[itemToken]?
+      classDistToken = d.class_dist_token
+      if window.itemInitFuncList[classDistToken]?
           # 既に読み込まれている場合
-        window.itemInitFuncList[itemToken]()
-        #_addItem.call(@, itemToken)
+        window.itemInitFuncList[classDistToken]()
+        #_addItem.call(@, classDistToken)
         loadedIndex += 1
         if loadedIndex >= itemJsList.length
           # 全て読み込んだ後
@@ -832,8 +832,8 @@ class Common
         return
 
       option = {}
-      Common.availJs(itemToken, d.js_src, option, ->
-        _addItem.call(@, itemToken)
+      Common.availJs(classDistToken, d.js_src, option, ->
+        _addItem.call(@, classDistToken)
         loadedIndex += 1
         if loadedIndex >= itemJsList.length
           # 全て読み込んだ後

@@ -126,8 +126,8 @@ class PageValueState
 
   # ユーザの保存データを読み込む
   # @param [String] user_id ユーザID
-  # @param [Array] loaded_item_access_tokens 読み込み済みのアイテムID一覧
-  def self.load_state(user_id, user_pagevalue_id, loaded_item_access_tokens)
+  # @param [Array] loaded_class_dist_tokens 読み込み済みのアイテムID一覧
+  def self.load_state(user_id, user_pagevalue_id, loaded_class_dist_tokens)
     sql = <<-"SQL"
       SELECT p.id as project_id, p.title as project_title, p.screen_width as project_screen_width, p.screen_height as project_screen_height,
              ip.data as instance_pagevalue_data,
@@ -186,7 +186,7 @@ class PageValueState
 
       ipd = {}
       epd = {}
-      item_access_tokens = []
+      class_dist_tokens = []
       pagevalues.each do |pagevalue|
         key = Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s
         if pagevalue['general_pagevalue_data'].present?
@@ -199,12 +199,12 @@ class PageValueState
           epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
 
           # 必要なItemTokenを調査
-          item_access_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd[key])
-          item_access_tokens -= loaded_item_access_tokens
+          class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd[key])
+          class_dist_tokens -= loaded_class_dist_tokens
         end
       end
 
-      item_js_list = ItemJs.get_item_gallery(item_access_tokens)
+      item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
       return true, item_js_list, gpd, ipd, epd, spd, message, pagevalues.first['user_pagevalues_updated_at']
     end
   end

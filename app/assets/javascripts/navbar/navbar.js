@@ -71,15 +71,15 @@ Navbar = (function() {
     });
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
     $('.menu-item', itemsSelectMenuEmt).off('click').on('click', function() {
-      var emtId, itemToken, selected;
+      var classDistToken, emtId, selected;
       selected = $(this).html();
       $('#header_items_selected_menu_span').html(selected);
       WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
       WorktableCommon.clearSelectedBorder();
       emtId = $(this).attr('id');
       if (emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0) {
-        itemToken = emtId.replace(Navbar.ITEM_MENU_PREFIX, '');
-        return Navbar.setModeDraw(itemToken, (function(_this) {
+        classDistToken = emtId.replace(Navbar.ITEM_MENU_PREFIX, '');
+        return Navbar.setModeDraw(classDistToken, (function(_this) {
           return function() {
             return WorktableCommon.changeMode(Constant.Mode.DRAW);
           };
@@ -148,19 +148,19 @@ Navbar = (function() {
     });
   };
 
-  Navbar.setModeDraw = function(itemToken, callback) {
+  Navbar.setModeDraw = function(classDistToken, callback) {
     var emtId, itemsSelectMenuEmt, menuItem;
     if (callback == null) {
       callback = null;
     }
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li');
     itemsSelectMenuEmt.removeClass('active');
-    emtId = "menu-item-" + itemToken;
+    emtId = "menu-item-" + classDistToken;
     menuItem = $("#" + emtId);
     menuItem.parent('li').addClass('active');
     $('#header_items_selected_menu_span').html(menuItem.html());
-    window.selectItemMenu = itemToken;
-    return Common.loadItemJs(itemToken, callback);
+    window.selectItemMenu = classDistToken;
+    return Common.loadItemJs(classDistToken, callback);
   };
 
   Navbar.setModeEdit = function() {

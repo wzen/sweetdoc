@@ -92,6 +92,10 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.actionProperties = ScreenEvent.PrivateClass.actionProperties;
 
+  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
+    EventConfig.addEventConfigContents(ScreenEvent.PrivateClass.CLASS_DIST_TOKEN);
+  }
+
   return ScreenEvent;
 
 })(CommonEvent);

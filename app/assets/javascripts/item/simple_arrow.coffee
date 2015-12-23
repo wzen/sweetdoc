@@ -105,7 +105,7 @@ class SimpleArrowItem extends ItemBase
   # @return [Array] アイテムオブジェクトの最小限データ
   getMinimumObject: ->
     obj = {
-      itemToken: @constructor.CLASS_DIST_TOKEN
+      classDistToken: @constructor.CLASS_DIST_TOKEN
       a: @itemSize
       b: @zindex
       c: @registCoord

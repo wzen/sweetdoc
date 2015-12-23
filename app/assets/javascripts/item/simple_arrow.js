@@ -111,7 +111,7 @@ SimpleArrowItem = (function(superClass) {
   SimpleArrowItem.prototype.getMinimumObject = function() {
     var obj;
     obj = {
-      itemToken: this.constructor.CLASS_DIST_TOKEN,
+      classDistToken: this.constructor.CLASS_DIST_TOKEN,
       a: this.itemSize,
       b: this.zindex,
       c: this.registCoord,

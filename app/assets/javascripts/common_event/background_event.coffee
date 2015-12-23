@@ -68,5 +68,8 @@ class BackgroundEvent extends CommonEvent
   @EVENT_ID = @PrivateClass.EVENT_ID
   @actionProperties = @PrivateClass.actionProperties
 
+  if EventConfig?
+    EventConfig.addEventConfigContents(@PrivateClass.CLASS_DIST_TOKEN)
+
 Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)
 

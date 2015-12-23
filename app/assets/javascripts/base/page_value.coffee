@@ -56,7 +56,7 @@ class PageValue
       @instanceDesign = (objId, designKey) -> @instanceDesignRoot(objId) + @PAGE_VALUES_SEPERATOR + designKey
       # @property [String] ITEM_LOADED_PREFIX アイテム読み込み済みプレフィックス
       @ITEM_LOADED_PREFIX = 'itemloaded'
-      @itemLoaded = (itemToken) -> "#{@ITEM_LOADED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{itemToken}"
+      @itemLoaded = (classDistToken) -> "#{@ITEM_LOADED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{classDistToken}"
       # @property [String] E_ROOT イベント値ルート
       @E_ROOT = constant.PageValueKey.E_ROOT
       # @property [String] E_SUB_ROOT イベントプレフィックス
@@ -113,9 +113,9 @@ class PageValue
       @FORK_STACK = "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
 
   # サーバから読み込んだアイテム情報を追加
-  # @param [Integer] itemToken アイテムID
-  @addItemInfo = (itemToken) ->
-    @setInstancePageValue(@Key.itemLoaded(itemToken), true)
+  # @param [Integer] classDistToken アイテムID
+  @addItemInfo = (classDistToken) ->
+    @setInstancePageValue(@Key.itemLoaded(classDistToken), true)
 
   # 汎用値を取得
   # @param [String] key キー値
@@ -368,8 +368,8 @@ class PageValue
 
     return eventObjList
 
-  # 読み込み済みitemToken取得
-  @getLoadeditemTokens = ->
+  # 読み込み済みclassDistToken取得
+  @getLoadedclassDistTokens = ->
     ret = []
     # インスタンスPageValueを参照
     itemInfoPageValues = PageValue.getInstancePageValue(@Key.ITEM_LOADED_PREFIX)
