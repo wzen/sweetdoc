@@ -47,7 +47,7 @@ EPVItem = (function(superClass) {
     writeValue[this.PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection();
     writeValue[this.PageValueKey.EVENT_DURATION] = item.constructor.defaultClickDuration();
     writeValue[this.PageValueKey.SPECIFIC_METHOD_VALUES] = item.constructor.defaultSpecificMethodValue();
-    writeValue[this.PageValueKey.MODIFIABLE_VARS] = {};
+    writeValue[this.PageValueKey.MODIFIABLE_VARS] = item.constructor.defaultModifiableVars();
     if (errorMes.length === 0) {
       PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum), writeValue);
       PageValue.setEventPageValue(PageValue.Key.eventCount(), teNum);

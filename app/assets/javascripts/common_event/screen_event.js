@@ -18,6 +18,21 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.CLASS_DIST_TOKEN = "PI_ScreenEvent";
 
+    PrivateClass.actionProperties = {
+      methods: {
+        changeScreenPosition: {
+          options: {
+            id: 'changeScreenPosition',
+            name: 'Changing position',
+            ja: {
+              name: '表示位置変更'
+            }
+          },
+          specificValues: {}
+        }
+      }
+    };
+
     function PrivateClass() {
       this.changeScreenPosition = bind(this.changeScreenPosition, this);
       PrivateClass.__super__.constructor.call(this);

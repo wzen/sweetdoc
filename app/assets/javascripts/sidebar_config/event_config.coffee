@@ -120,7 +120,7 @@ class EventConfig
         _callback.call(@)
 
   # 入力値を適用する
-  applyAction: ->
+  writeToEventPageValue: ->
     if !@[EventPageValueBase.PageValueKey.ACTIONTYPE]?
       if window.debug
         console.log('validation error')
@@ -185,22 +185,48 @@ class EventConfig
         commonEvent.setItemAllPropToPageValue()
       @[EventPageValueBase.PageValueKey.ID] = commonEvent.id
 
+    specificValues = {}
+    specificRoot = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT}")
+    specificRoot.find('input').each( =>
+      if !$(@).hasClass('fixed_value')
+        classNames = $(@).get(p).className.split(' ')
+        className = $.grep(classNames, (n) -> n != 'fixed_value')[0]
+        specificValues[className] = $(@).val()
+    )
+    @[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] = specificValues
+
     errorMes = @writeToPageValue()
     if errorMes? && errorMes.length > 0
       # エラー発生時
       @showError(errorMes)
       return false
 
-    # イベントの色を変更
-    Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
-    # キャッシュに保存
-    LocalStorage.saveAllPageValues()
     return true
+
+  applyAction: ->
+    # プレビュー停止
+    @stopPreview( =>
+      # 入力値書き込み
+      if @writeToEventPageValue()
+        # イベントの色を変更
+        #Timeline.changeTimelineColor(@teNum, @[EventPageValueBase.PageValueKey.ACTIONTYPE])
+        # キャッシュに保存
+        LocalStorage.saveAllPageValues()
+        # 通知
+        FloatView.show('Applied', FloatView.Type.INFO)
+        # イベントを更新
+        Timeline.refreshAllTimeline()
+    )
 
   # プレビュー開始
   preview: (keepDispMag) ->
-    WorktableCommon.updatePrevEventsToAfter(@teNum, =>
-      WorktableCommon.runPreview(@teNum, keepDispMag)
+    # 対象のEventPageValueを一時的に退避
+    WorktableCommon.stashEventPageValueForPreview(@teNum, =>
+      # 入力値を書き込み
+      @writeToEventPageValue()
+      WorktableCommon.updatePrevEventsToAfter(@teNum, =>
+        WorktableCommon.runPreview(@teNum, keepDispMag)
+      )
     )
 
   # プレビュー停止
@@ -248,7 +274,7 @@ class EventConfig
   # 対応するEventPageValueクラスを取得
   # @return [Class] EventPageValueクラス
   _getEventPageValueClass = ->
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == null
+    if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]?
       return null
 
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
@@ -349,11 +375,7 @@ class EventConfig
     $('.push.button.apply', @emt).off('click').on('click', (e) =>
       @clearError()
       # 入力値を適用する
-      if @applyAction()
-        # 通知
-        FloatView.show('Applied', FloatView.Type.INFO)
-        # イベントを更新
-        Timeline.refreshAllTimeline()
+      @applyAction()
     )
     $('.push.button.stop_preview', @emt).off('click').on('click', (e) =>
       @clearError()
@@ -408,11 +430,11 @@ class EventConfig
   # 変数編集コンフィグの初期化
   initEventVarModifyConfig: (objClass) ->
     if !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]]? ||
-      !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables?
+      !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS]?
         # メソッド or 変数編集無し
         return
 
-    mod = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
+    mod = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS]
     if mod?
       for varName, v of mod
         defaultValue = null
@@ -422,7 +444,7 @@ class EventConfig
           objClass = null
           if @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]?
             objClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
-          defaultValue = objClass.actionProperties.modifiables[varName].default
+          defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName].default
         if v.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
         else if v.type == Constant.ItemDesignOptionType.STRING
@@ -441,8 +463,9 @@ class EventConfig
 
     sp = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES]
     # 変数と同じクラス名のInputに設定(現状textのみ)
+    # 'fixed_value'は除外
     for varName, v of sp
-      e = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT} .#{varName}")
+      e = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT} .#{varName}:not('.fixed_value')")
       if e.length > 0
         e.val(v)
 

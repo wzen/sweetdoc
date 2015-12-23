@@ -70,7 +70,8 @@ CommonVar = (function() {
     window.selectedObjId = null;
     window.worktableItemsChangedState = false;
     this.updateWorktableBaseElement(PageValue.getPageNum());
-    return window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT;
+    window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT;
+    return window.previewRunning = false;
   };
 
   CommonVar.runCommonVar = function() {

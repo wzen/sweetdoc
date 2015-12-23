@@ -43,7 +43,7 @@ ConfigMenu = (function() {
         data: {
           designConfig: obj.constructor.actionProperties.designConfig,
           itemType: itemType,
-          modifiables: obj.constructor.actionProperties.modifiables
+          modifiables: obj.constructor.actionProperties[obj.constructor.ActionPropertiesKey.MODIFIABLE_VARS]
         },
         dataType: "json",
         success: function(data) {
@@ -87,7 +87,7 @@ ConfigMenu = (function() {
     if (errorCallback == null) {
       errorCallback = null;
     }
-    if ((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables == null)) {
+    if ((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS] == null)) {
       if (successCallback != null) {
         successCallback();
       }
@@ -107,7 +107,7 @@ ConfigMenu = (function() {
       type: "POST",
       data: {
         classDistToken: itemObjClass.CLASS_DIST_TOKEN,
-        modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
+        modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS]
       },
       dataType: "json",
       success: function(data) {

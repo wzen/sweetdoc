@@ -6,26 +6,13 @@ class BackgroundEvent extends CommonEvent
 
     @actionProperties =
     {
-      defaultMethod: 'changeBackgroundColor'
-      modifiables: {
-        backgroundColor: {
-          name: "Background Color"
-          default: 'transparent'
-          type: 'color'
-          colorType: 'rgb'
-          ja :{
-            name: "背景色"
-          }
-        }
-      }
       methods: {
         changeBackgroundColor: {
-          actionType: 'scroll'
           options: {
             id: 'changeColorClick_Design'
-            name: 'Changing color by click'
+            name: 'Changing backgroundcolor'
             ja: {
-              name: 'クリックで色変更'
+              name: '背景色変更'
             }
           }
           modifiables: {

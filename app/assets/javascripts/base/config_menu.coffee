@@ -26,7 +26,7 @@ class ConfigMenu
           data: {
             designConfig: obj.constructor.actionProperties.designConfig
             itemType: itemType
-            modifiables: obj.constructor.actionProperties.modifiables
+            modifiables: obj.constructor.actionProperties[obj.constructor.ActionPropertiesKey.MODIFIABLE_VARS]
           }
           dataType: "json"
           success: (data) ->
@@ -56,7 +56,7 @@ class ConfigMenu
   # メソッド変数コンフィグ読み込み
   @loadEventMethodValueConfig = (eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) ->
     if !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]]? ||
-      !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables?
+      !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS]?
         # メソッド or 変数編集無し
         if successCallback?
           successCallback()
@@ -78,7 +78,7 @@ class ConfigMenu
         type: "POST"
         data: {
           classDistToken: itemObjClass.CLASS_DIST_TOKEN
-          modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]].modifiables
+          modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS]
         }
         dataType: "json"
         success: (data) ->

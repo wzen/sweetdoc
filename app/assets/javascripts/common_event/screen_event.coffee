@@ -4,6 +4,25 @@ class ScreenEvent extends CommonEvent
     @EVENT_ID = '2'
     @CLASS_DIST_TOKEN = "PI_ScreenEvent"
 
+
+    @actionProperties =
+    {
+      methods: {
+        changeScreenPosition: {
+          options: {
+            id: 'changeScreenPosition'
+            name: 'Changing position'
+            ja: {
+              name: '表示位置変更'
+            }
+          }
+          specificValues: {
+
+          }
+        }
+      }
+    }
+
     constructor: ->
       super()
       @beforeScrollTop = scrollContents.scrollTop()

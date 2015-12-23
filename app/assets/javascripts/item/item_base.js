@@ -269,10 +269,30 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.defaultSpecificMethodValue = function() {
+    var ret;
     if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
-      return this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
+      ret = this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
+      if (ret != null) {
+        return ret;
+      } else {
+        return {};
+      }
     } else {
-      return null;
+      return {};
+    }
+  };
+
+  ItemBase.defaultModifiableVars = function() {
+    var mod;
+    if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
+      mod = this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.MODIFIABLE_VARS];
+      if (mod != null) {
+        return mod;
+      } else {
+        return {};
+      }
+    } else {
+      return {};
     }
   };
 

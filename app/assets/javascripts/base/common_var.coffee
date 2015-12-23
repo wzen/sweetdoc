@@ -69,6 +69,7 @@ class CommonVar
     window.worktableItemsChangedState = false
     @updateWorktableBaseElement(PageValue.getPageNum())
     window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT
+    window.previewRunning = false
 
   # 実行画面共通変数
   @runCommonVar = ->

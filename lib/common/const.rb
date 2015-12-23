@@ -382,6 +382,7 @@ class Const
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
     OPTIONS = 'options'
     EVENT_DURATION = 'eventDuration'
+    MODIFIABLE_VARS = 'modifiables'
   end
 
   class Run

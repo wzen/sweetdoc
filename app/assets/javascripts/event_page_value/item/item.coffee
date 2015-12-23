@@ -34,7 +34,7 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.SCROLL_FORWARD_DIRECTIONS] = item.constructor.defaultScrollForwardDirection()
     writeValue[@PageValueKey.EVENT_DURATION] = item.constructor.defaultClickDuration()
     writeValue[@PageValueKey.SPECIFIC_METHOD_VALUES] = item.constructor.defaultSpecificMethodValue()
-    writeValue[@PageValueKey.MODIFIABLE_VARS] = {}
+    writeValue[@PageValueKey.MODIFIABLE_VARS] = item.constructor.defaultModifiableVars()
 
     if errorMes.length == 0
       # イベントとイベント数をPageValueに書き込み

@@ -116,8 +116,8 @@ EventConfig = (function() {
     }
   };
 
-  EventConfig.prototype.applyAction = function() {
-    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, topEmt;
+  EventConfig.prototype.writeToEventPageValue = function() {
+    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, specificRoot, specificValues, topEmt;
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
       if (window.debug) {
         console.log('validation error');
@@ -179,20 +179,48 @@ EventConfig = (function() {
       }
       this[EventPageValueBase.PageValueKey.ID] = commonEvent.id;
     }
+    specificValues = {};
+    specificRoot = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT);
+    specificRoot.find('input').each((function(_this) {
+      return function() {
+        var className, classNames;
+        if (!$(_this).hasClass('fixed_value')) {
+          classNames = $(_this).get(p).className.split(' ');
+          className = $.grep(classNames, function(n) {
+            return n !== 'fixed_value';
+          })[0];
+          return specificValues[className] = $(_this).val();
+        }
+      };
+    })(this));
+    this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] = specificValues;
     errorMes = this.writeToPageValue();
     if ((errorMes != null) && errorMes.length > 0) {
       this.showError(errorMes);
       return false;
     }
-    Timeline.changeTimelineColor(this.teNum, this[EventPageValueBase.PageValueKey.ACTIONTYPE]);
-    LocalStorage.saveAllPageValues();
     return true;
   };
 
-  EventConfig.prototype.preview = function(keepDispMag) {
-    return WorktableCommon.updatePrevEventsToAfter(this.teNum, (function(_this) {
+  EventConfig.prototype.applyAction = function() {
+    return this.stopPreview((function(_this) {
       return function() {
-        return WorktableCommon.runPreview(_this.teNum, keepDispMag);
+        if (_this.writeToEventPageValue()) {
+          LocalStorage.saveAllPageValues();
+          FloatView.show('Applied', FloatView.Type.INFO);
+          return Timeline.refreshAllTimeline();
+        }
+      };
+    })(this));
+  };
+
+  EventConfig.prototype.preview = function(keepDispMag) {
+    return WorktableCommon.stashEventPageValueForPreview(this.teNum, (function(_this) {
+      return function() {
+        _this.writeToEventPageValue();
+        return WorktableCommon.updatePrevEventsToAfter(_this.teNum, function() {
+          return WorktableCommon.runPreview(_this.teNum, keepDispMag);
+        });
       };
     })(this));
   };
@@ -248,7 +276,7 @@ EventConfig = (function() {
   };
 
   _getEventPageValueClass = function() {
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === null) {
+    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == null) {
       return null;
     }
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
@@ -365,10 +393,7 @@ EventConfig = (function() {
     $('.push.button.apply', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
-        if (_this.applyAction()) {
-          FloatView.show('Applied', FloatView.Type.INFO);
-          return Timeline.refreshAllTimeline();
-        }
+        return _this.applyAction();
       };
     })(this));
     return $('.push.button.stop_preview', this.emt).off('click').on('click', (function(_this) {
@@ -431,10 +456,10 @@ EventConfig = (function() {
 
   EventConfig.prototype.initEventVarModifyConfig = function(objClass) {
     var defaultValue, mod, results, v, varName;
-    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables == null)) {
+    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS] == null)) {
       return;
     }
-    mod = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]].modifiables;
+    mod = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS];
     if (mod != null) {
       results = [];
       for (varName in mod) {
@@ -447,7 +472,7 @@ EventConfig = (function() {
           if (this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] != null) {
             objClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
           }
-          defaultValue = objClass.actionProperties.modifiables[varName]["default"];
+          defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName]["default"];
         }
         if (v.type === Constant.ItemDesignOptionType.NUMBER) {
           results.push(this.settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue));
@@ -474,7 +499,7 @@ EventConfig = (function() {
     results = [];
     for (varName in sp) {
       v = sp[varName];
-      e = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT + " ." + varName);
+      e = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT + " ." + varName + ":not('.fixed_value')");
       if (e.length > 0) {
         results.push(e.val(v));
       } else {

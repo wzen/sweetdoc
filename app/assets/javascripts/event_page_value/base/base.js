@@ -123,7 +123,7 @@ EventPageValueBase = (function() {
   };
 
   EventPageValueBase.readFromPageValue = function(eventConfig) {
-    var actionFormName, bottomEmt, duration, enabled, eventDuration, fn, handlerDiv, item, k, leftEmt, parallel, ref, rightEmt, selectItemValue, topEmt, v, writeValue;
+    var actionFormName, bottomEmt, className, duration, enabled, eventDuration, fn, handlerDiv, item, k, leftEmt, parallel, ref, rightEmt, selectItemValue, specificRoot, specificValues, topEmt, v, value, writeValue;
     writeValue = PageValue.getEventPageValue(PageValue.Key.eventNumber(eventConfig.teNum));
     if (writeValue != null) {
       ref = this.PageValueKey;
@@ -233,6 +233,14 @@ EventPageValueBase = (function() {
         fn = enabled ? eventConfig[this.PageValueKey.CHANGE_FORKNUM] : 1;
         $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn));
         $('.fork_select:first', handlerDiv).parent('div').css('display', enabled ? 'block' : 'none');
+      }
+      specificValues = eventConfig[this.PageValueKey.SPECIFIC_METHOD_VALUES];
+      specificRoot = $(eventConfig.emt).find("." + (eventConfig.methodClassName()) + " ." + eventConfig.constructor.METHOD_VALUE_SPECIFIC_ROOT);
+      if (specificValues != null) {
+        for (className in specificValues) {
+          value = specificValues[className];
+          specificRoot.find("." + className + ":first").val(value);
+        }
       }
       return true;
     } else {

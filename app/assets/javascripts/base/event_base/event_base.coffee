@@ -19,11 +19,12 @@ class EventBase extends Extend
       @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
       @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
       @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
+      @MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS
 
   constructor: ->
     # modifiables変数の初期化
-    if @constructor.actionProperties.modifiables?
-      for varName, value of @constructor.actionProperties.modifiables
+    if @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]?
+      for varName, value of @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
         @[varName] = value.default
 
   # イベントの初期化
@@ -83,7 +84,7 @@ class EventBase extends Extend
 
   # プレビュー開始
   # @param [Object] event 設定イベント
-  preview: (event, keepDispMag = false) ->
+  preview: (event, keepDispMag = false, loopFinishCallback = null) ->
     if window.runDebug
       console.log('EventBase preview id:' + @id)
 
@@ -149,6 +150,8 @@ class EventBase extends Extend
             if @previewFinished?
               @previewFinished()
               @previewFinished = null
+            if loopFinishCallback?
+              loopFinishCallback()
 
         _draw.call(@)
 
@@ -176,6 +179,8 @@ class EventBase extends Extend
             if @previewFinished?
               @previewFinished()
               @previewFinished = null
+            if loopFinishCallback?
+              loopFinishCallback()
 
         @execMethod({
           isPreview: true
@@ -419,7 +424,7 @@ class EventBase extends Extend
     # NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
     progressPercentage = progressValue / progressMax
     eventBeforeObj = @getMinimumObjectEventBefore()
-    mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
+    mod = @constructor.actionProperties.methods[@getEventMethodName()][@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
     for varName, value of mod
       if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
         before = eventBeforeObj[varName]
@@ -434,7 +439,7 @@ class EventBase extends Extend
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
-                  colorType = @constructor.actionProperties.modifiables[varName].colorType
+                  colorType = @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
@@ -449,7 +454,7 @@ class EventBase extends Extend
     ed = @eventDuration()
     progressMax = @progressMax()
     eventBeforeObj = @getMinimumObjectEventBefore()
-    mod = @constructor.actionProperties.methods[@getEventMethodName()].modifiables
+    mod = @constructor.actionProperties.methods[@getEventMethodName()][@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
     if immediate
       for varName, value of mod
         if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
@@ -472,7 +477,7 @@ class EventBase extends Extend
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
-                  colorType = @constructor.actionProperties.modifiables[varName].colorType
+                  colorType = @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)

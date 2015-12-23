@@ -230,9 +230,24 @@ class ItemBase extends ItemEventBase
   @defaultSpecificMethodValue = ->
     if @actionProperties? &&
       @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
-        return @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SPECIFIC_METHOD_VALUES]
+        ret = @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.SPECIFIC_METHOD_VALUES]
+        if ret?
+          return ret
+        else
+          return {}
     else
-      return null
+      return {}
+
+  @defaultModifiableVars = ->
+    if @actionProperties? &&
+      @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
+        mod = @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.MODIFIABLE_VARS]
+        if mod?
+          return mod
+        else
+          return {}
+    else
+      return {}
 
   # スクロールのデフォルト有効方向
   @defaultScrollEnabledDirection = ->

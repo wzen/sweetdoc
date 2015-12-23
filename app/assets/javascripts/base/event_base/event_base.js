@@ -37,6 +37,8 @@ EventBase = (function(superClass) {
 
       ActionPropertiesKey.EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION;
 
+      ActionPropertiesKey.MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS;
+
       return ActionPropertiesKey;
 
     })();
@@ -44,8 +46,8 @@ EventBase = (function(superClass) {
 
   function EventBase() {
     var ref, value, varName;
-    if (this.constructor.actionProperties.modifiables != null) {
-      ref = this.constructor.actionProperties.modifiables;
+    if (this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS] != null) {
+      ref = this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
       for (varName in ref) {
         value = ref[varName];
         this[varName] = value["default"];
@@ -108,10 +110,13 @@ EventBase = (function(superClass) {
     return this._skipEvent = false;
   };
 
-  EventBase.prototype.preview = function(event, keepDispMag) {
+  EventBase.prototype.preview = function(event, keepDispMag, loopFinishCallback) {
     var _preview;
     if (keepDispMag == null) {
       keepDispMag = false;
+    }
+    if (loopFinishCallback == null) {
+      loopFinishCallback = null;
     }
     if (window.runDebug) {
       console.log('EventBase preview id:' + this.id);
@@ -183,7 +188,10 @@ EventBase = (function(superClass) {
             } else {
               if (_this.previewFinished != null) {
                 _this.previewFinished();
-                return _this.previewFinished = null;
+                _this.previewFinished = null;
+              }
+              if (loopFinishCallback != null) {
+                return loopFinishCallback();
               }
             }
           };
@@ -213,7 +221,10 @@ EventBase = (function(superClass) {
             } else {
               if (_this.previewFinished != null) {
                 _this.previewFinished();
-                return _this.previewFinished = null;
+                _this.previewFinished = null;
+              }
+              if (loopFinishCallback != null) {
+                return loopFinishCallback();
               }
             }
           };
@@ -478,7 +489,7 @@ EventBase = (function(superClass) {
     }
     progressPercentage = progressValue / progressMax;
     eventBeforeObj = this.getMinimumObjectEventBefore();
-    mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
+    mod = this.constructor.actionProperties.methods[this.getEventMethodName()][this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
     results = [];
     for (varName in mod) {
       value = mod[varName];
@@ -495,7 +506,7 @@ EventBase = (function(superClass) {
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChange__Cache";
                 if (this[colorCacheVarName] == null) {
-                  colorType = this.constructor.actionProperties.modifiables[varName].colorType;
+                  colorType = this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType;
                   if (colorType == null) {
                     colorType = 'hex';
                   }
@@ -530,7 +541,7 @@ EventBase = (function(superClass) {
     ed = this.eventDuration();
     progressMax = this.progressMax();
     eventBeforeObj = this.getMinimumObjectEventBefore();
-    mod = this.constructor.actionProperties.methods[this.getEventMethodName()].modifiables;
+    mod = this.constructor.actionProperties.methods[this.getEventMethodName()][this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
     if (immediate) {
       for (varName in mod) {
         value = mod[varName];
@@ -560,7 +571,7 @@ EventBase = (function(superClass) {
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChange__Cache";
                   if (_this[colorCacheVarName] == null) {
-                    colorType = _this.constructor.actionProperties.modifiables[varName].colorType;
+                    colorType = _this.constructor.actionProperties[_this.constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType;
                     if (colorType == null) {
                       colorType = 'hex';
                     }

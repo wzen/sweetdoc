@@ -450,6 +450,11 @@ class WorktableCommon
   # プレビュー実行
   # @param [Integer] te_num 実行するイベント番号
   @runPreview = (teNum, keepDispMag = false) ->
+    if window.previewRunning? && window.previewRunning
+      # 二重実行は無視
+      return
+
+    window.previewRunning = true
     tes = PageValue.getEventPageValueSortedListByNum()
     teNum = parseInt(teNum)
     te = tes[teNum - 1]
@@ -457,32 +462,88 @@ class WorktableCommon
       item = window.instanceMap[te.id]
       item.initEvent(te)
       # プレビュー実行
-      item.preview(te, keepDispMag)
+      item.preview(te, keepDispMag, =>
+        # プレビューの実行回数超過
+        window.previewRunning = false
+        # EventPageValueの退避がある場合戻す
+        @reverseStashEventPageValueForPreviewIfNeeded( =>
+          # アイテム再描画
+          @reDrawAllItemsFromInstancePageValueIfChanging()
+        )
+      )
       # 状態変更フラグON
       window.worktableItemsChangedState = true
       window.drawingCanvas.one('click.runPreview', (e) =>
-        # メイン画面クリックでプレビューアイテムを再描画
-        item.reDraw()
+        # メイン画面クリックでプレビュー停止 & アイテムを再描画
+        @stopAllEventPreview( =>
+          @reDrawAllItemsFromInstancePageValueIfChanging()
+        )
       )
 
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック
   @stopAllEventPreview: (callback = null) ->
-    count = 0
-    length = Object.keys(window.instanceMap).length
-    noRunningPreview = true
-    for k, v of window.instanceMap
-      if v.stopPreview?
-        v.stopPreview( (wasRunningPreview) ->
+    if !window.previewRunning? || !window.previewRunning
+      # プレビューが動作していない場合は処理無し
+      if callback?
+        callback()
+      return
+
+    # EventPageValueの退避がある場合戻す
+    @reverseStashEventPageValueForPreviewIfNeeded( =>
+      count = 0
+      length = Object.keys(window.instanceMap).length
+      noRunningPreview = true
+      for k, v of window.instanceMap
+        if v.stopPreview?
+          v.stopPreview( (wasRunningPreview) ->
+            count += 1
+            if wasRunningPreview
+              noRunningPreview = false
+            if length <= count
+              window.previewRunning = false
+              if callback?
+                callback(noRunningPreview)
+              return
+          )
+        else
           count += 1
-          if wasRunningPreview
-            noRunningPreview = false
-          if length <= count && callback?
-            callback(noRunningPreview)
+          if length <= count
+            window.previewRunning = false
+            if callback?
+              callback(noRunningPreview)
             return
-        )
-      else
-        count += 1
-        if length <= count && callback?
-          callback(noRunningPreview)
-          return
+    )
+
+  @stashEventPageValueForPreview: (teNum, callback = null) ->
+    _callback = ->
+      window.stashedEventPageValueForPreview = {
+        pageNum: PageValue.getPageNum()
+        forkNum: PageValue.getForkNum()
+        teNum: teNum
+        value: PageValue.getEventPageValue(PageValue.Key.eventNumber(teNum))
+      }
+
+    if window.stashedEventPageValueForPreview?
+      # 既ににある場合は一度戻す
+      @reverseStashEventPageValueForPreviewIfNeeded( =>
+        _callback.call(@)
+      )
+    else
+      _callback.call(@)
+
+  @reverseStashEventPageValueForPreviewIfNeeded: (callback = null) ->
+    if !window.stashedEventPageValueForPreview?
+      # 無い場合は終了
+      if callback?
+        callback()
+      return
+
+    pageNum = window.stashedEventPageValueForPreview.pageNum
+    forkNum = window.stashedEventPageValueForPreview.forkNum
+    teNum = window.stashedEventPageValueForPreview.teNum
+    value = window.stashedEventPageValueForPreview.value
+    PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum, forkNum, pageNum), value)
+    window.stashedEventPageValueForPreview = null
+    if callback?
+      callback()

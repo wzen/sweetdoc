@@ -208,6 +208,12 @@ class EventPageValueBase
         $('.fork_select:first', handlerDiv).val(Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', fn))
         $('.fork_select:first', handlerDiv).parent('div').css('display', if enabled then 'block' else 'none')
 
+      specificValues = eventConfig[@PageValueKey.SPECIFIC_METHOD_VALUES]
+      specificRoot = $(eventConfig.emt).find(".#{eventConfig.methodClassName()} .#{eventConfig.constructor.METHOD_VALUE_SPECIFIC_ROOT}")
+      if specificValues?
+        for className, value of specificValues
+          specificRoot.find(".#{className}:first").val(value)
+
       return true
     else
       return false

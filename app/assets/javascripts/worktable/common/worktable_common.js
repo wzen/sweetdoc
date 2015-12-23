@@ -521,50 +521,125 @@ WorktableCommon = (function() {
     if (keepDispMag == null) {
       keepDispMag = false;
     }
+    if ((window.previewRunning != null) && window.previewRunning) {
+      return;
+    }
+    window.previewRunning = true;
     tes = PageValue.getEventPageValueSortedListByNum();
     teNum = parseInt(teNum);
     te = tes[teNum - 1];
     if (te != null) {
       item = window.instanceMap[te.id];
       item.initEvent(te);
-      item.preview(te, keepDispMag);
+      item.preview(te, keepDispMag, (function(_this) {
+        return function() {
+          window.previewRunning = false;
+          return _this.reverseStashEventPageValueForPreviewIfNeeded(function() {
+            return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+          });
+        };
+      })(this));
       window.worktableItemsChangedState = true;
       return window.drawingCanvas.one('click.runPreview', (function(_this) {
         return function(e) {
-          return item.reDraw();
+          return _this.stopAllEventPreview(function() {
+            return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+          });
         };
       })(this));
     }
   };
 
   WorktableCommon.stopAllEventPreview = function(callback) {
-    var count, k, length, noRunningPreview, ref, v;
     if (callback == null) {
       callback = null;
     }
-    count = 0;
-    length = Object.keys(window.instanceMap).length;
-    noRunningPreview = true;
-    ref = window.instanceMap;
-    for (k in ref) {
-      v = ref[k];
-      if (v.stopPreview != null) {
-        v.stopPreview(function(wasRunningPreview) {
-          count += 1;
-          if (wasRunningPreview) {
-            noRunningPreview = false;
-          }
-          if (length <= count && (callback != null)) {
-            callback(noRunningPreview);
-          }
-        });
-      } else {
-        count += 1;
-        if (length <= count && (callback != null)) {
-          callback(noRunningPreview);
-          return;
-        }
+    if ((window.previewRunning == null) || !window.previewRunning) {
+      if (callback != null) {
+        callback();
       }
+      return;
+    }
+    return this.reverseStashEventPageValueForPreviewIfNeeded((function(_this) {
+      return function() {
+        var count, k, length, noRunningPreview, ref, v;
+        count = 0;
+        length = Object.keys(window.instanceMap).length;
+        noRunningPreview = true;
+        ref = window.instanceMap;
+        for (k in ref) {
+          v = ref[k];
+          if (v.stopPreview != null) {
+            v.stopPreview(function(wasRunningPreview) {
+              count += 1;
+              if (wasRunningPreview) {
+                noRunningPreview = false;
+              }
+              if (length <= count) {
+                window.previewRunning = false;
+                if (callback != null) {
+                  callback(noRunningPreview);
+                }
+              }
+            });
+          } else {
+            count += 1;
+            if (length <= count) {
+              window.previewRunning = false;
+              if (callback != null) {
+                callback(noRunningPreview);
+              }
+              return;
+            }
+          }
+        }
+      };
+    })(this));
+  };
+
+  WorktableCommon.stashEventPageValueForPreview = function(teNum, callback) {
+    var _callback;
+    if (callback == null) {
+      callback = null;
+    }
+    _callback = function() {
+      return window.stashedEventPageValueForPreview = {
+        pageNum: PageValue.getPageNum(),
+        forkNum: PageValue.getForkNum(),
+        teNum: teNum,
+        value: PageValue.getEventPageValue(PageValue.Key.eventNumber(teNum))
+      };
+    };
+    if (window.stashedEventPageValueForPreview != null) {
+      return this.reverseStashEventPageValueForPreviewIfNeeded((function(_this) {
+        return function() {
+          return _callback.call(_this);
+        };
+      })(this));
+    } else {
+      return _callback.call(this);
+    }
+  };
+
+  WorktableCommon.reverseStashEventPageValueForPreviewIfNeeded = function(callback) {
+    var forkNum, pageNum, teNum, value;
+    if (callback == null) {
+      callback = null;
+    }
+    if (window.stashedEventPageValueForPreview == null) {
+      if (callback != null) {
+        callback();
+      }
+      return;
+    }
+    pageNum = window.stashedEventPageValueForPreview.pageNum;
+    forkNum = window.stashedEventPageValueForPreview.forkNum;
+    teNum = window.stashedEventPageValueForPreview.teNum;
+    value = window.stashedEventPageValueForPreview.value;
+    PageValue.setEventPageValue(PageValue.Key.eventNumber(teNum, forkNum, pageNum), value);
+    window.stashedEventPageValueForPreview = null;
+    if (callback != null) {
+      return callback();
     }
   };
 
