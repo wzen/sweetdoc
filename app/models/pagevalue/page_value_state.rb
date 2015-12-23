@@ -198,7 +198,7 @@ class PageValueState
         if pagevalue['event_pagevalue_data'].present?
           epd[key] = JSON.parse(pagevalue['event_pagevalue_data'])
 
-          # 必要なItemTokenを調査
+          # 必要なClassDistTokenを調査
           class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd[key])
           class_dist_tokens -= loaded_class_dist_tokens
         end

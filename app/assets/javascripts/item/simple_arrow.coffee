@@ -2,8 +2,8 @@
 # @extend ItemBase
 class SimpleArrowItem extends ItemBase
   @NAME_PREFIX = "simplearrow"
-  if window.loadedItemToken?
-    @CLASS_DIST_TOKEN = window.loadedItemToken
+  if window.loadedClassDistToken?
+    @CLASS_DIST_TOKEN = window.loadedClassDistToken
 
   # @property [Int] ARROW_WIDTH 矢印幅
   ARROW_WIDTH = 30

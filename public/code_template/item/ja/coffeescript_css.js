@@ -12,8 +12,8 @@ ItemPreviewTemp = (function(superClass) {
 
   ItemPreviewTemp.NAME_PREFIX = "ItemPreviewTemp";
 
-  if (window.loadedItemToken != null) {
-    ItemPreviewTemp.CLASS_DIST_TOKEN = window.loadedItemToken;
+  if (window.loadedClassDistToken != null) {
+    ItemPreviewTemp.CLASS_DIST_TOKEN = window.loadedClassDistToken;
   }
 
   ItemPreviewTemp.actionProperties = {

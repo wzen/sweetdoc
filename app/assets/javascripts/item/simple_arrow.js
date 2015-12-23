@@ -10,8 +10,8 @@ SimpleArrowItem = (function(superClass) {
 
   SimpleArrowItem.NAME_PREFIX = "simplearrow";
 
-  if (window.loadedItemToken != null) {
-    SimpleArrowItem.CLASS_DIST_TOKEN = window.loadedItemToken;
+  if (window.loadedClassDistToken != null) {
+    SimpleArrowItem.CLASS_DIST_TOKEN = window.loadedClassDistToken;
   }
 
   ARROW_WIDTH = 30;

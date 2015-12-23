@@ -3,8 +3,8 @@ class ItemPreviewTemp extends CanvasItemBase
   @NAME_PREFIX = "ItemPreviewTemp"
 
   # ↓Don't Delete
-  if window.loadedItemToken?
-    @CLASS_DIST_TOKEN = window.loadedItemToken
+  if window.loadedClassDistToken?
+    @CLASS_DIST_TOKEN = window.loadedClassDistToken
 
   # @property [Int] HEADER_WIDTH 矢印の頭の幅
   HEADER_WIDTH = 100

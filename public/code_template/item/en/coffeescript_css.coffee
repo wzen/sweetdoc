@@ -3,8 +3,8 @@ class ItemPreviewTemp extends CssItemBase
   @NAME_PREFIX = "ItemPreviewTemp"
 
   # ↓ Don't Delete
-  if window.loadedItemToken?
-    @CLASS_DIST_TOKEN = window.loadedItemToken
+  if window.loadedClassDistToken?
+    @CLASS_DIST_TOKEN = window.loadedClassDistToken
 
   @actionProperties =
   {

@@ -307,7 +307,7 @@ class Common
 
   # クラスハッシュ配列からクラスを取り出し
   # @param [Boolean] isCommon 共通イベントか
-  # @param [Integer] dist EventIdまたはItemToken
+  # @param [Integer] dist EventIdまたはClassDistToken
   # @return [Object] 対象クラス
   @getClassFromMap = (isCommon, dist) ->
     if !window.classMap?
@@ -331,7 +331,7 @@ class Common
 
   # クラスをハッシュ配列に保存
   # @param [Boolean] isCommon 共通イベントか
-  # @param [Integer] id EventIdまたはItemToken
+  # @param [Integer] id EventIdまたはClassDistToken
   # @param [Class] value クラス
   @setClassToMap = (isCommon, dist, value) ->
     c = isCommon
@@ -355,7 +355,7 @@ class Common
   # インスタンス取得
   # @param [Boolean] isCommonEvent 共通イベントか
   # @param [Integer] id イベントID
-  # @param [Integer] classMapId EventIdまたはItemToken
+  # @param [Integer] classMapId EventIdまたはClassDistToken
   # @return [Object] インスタンス
   @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
     if typeof isCommonEvent == "boolean"
@@ -373,7 +373,7 @@ class Common
   # インスタンス設定(上書きはしない)
   # @param [Boolean] isCommonEvent 共通イベントか
   # @param [Integer] id イベントID
-  # @param [Integer] classMapId EventIdまたはItemToken
+  # @param [Integer] classMapId EventIdまたはClassDistToken
   @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
     if typeof isCommonEvent == "boolean"
       if isCommonEvent
@@ -772,7 +772,7 @@ class Common
   # @param [String] jsSrc jsファイル名
   # @param [Function] callback 設定後のコールバック
   @availJs = (classDistToken, jsSrc, option = {}, callback = null) ->
-    window.loadedItemToken = classDistToken
+    window.loadedClassDistToken = classDistToken
     s = document.createElement('script');
     s.type = 'text/javascript';
     # TODO: 認証コードの比較
@@ -783,7 +783,7 @@ class Common
       if window.itemInitFuncList[classDistToken]?
         clearInterval(t)
         window.itemInitFuncList[classDistToken](option)
-        window.loadedItemToken = null
+        window.loadedClassDistToken = null
         if callback?
           callback()
     , 500)

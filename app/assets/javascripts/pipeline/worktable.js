@@ -40,6 +40,9 @@
 //= require base/config_menu
 // require_directory util
 //= require util/color/color_change
+//= require sidebar_config/event_config.js
+//= require sidebar_config/sidebar_ui.js
+//= require sidebar_config/state_config.js
 //= require common_event/common_event
 //= require common_event/background_event
 //= require common_event/screen_event
@@ -56,9 +59,6 @@
 //= require paging_animation/pageflip
 //= require motion_check/motion_check_common
 //= require coding/coding_common
-//= require sidebar_config/event_config.js
-//= require sidebar_config/sidebar_ui.js
-//= require sidebar_config/state_config.js
 //= require worktable/common/worktable_common
 //= require worktable/common/message.js
 //= require worktable/common/history

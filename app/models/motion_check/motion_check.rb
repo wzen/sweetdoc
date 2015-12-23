@@ -45,7 +45,7 @@ class MotionCheck
         epd = JSON.parse(pagevalue['event_pagevalue_data'])
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
 
-        # 必要なItemTokenを調査
+        # 必要なClassDistTokenを調査
         need_load_class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(epd)
         class_dist_tokens = need_load_class_dist_tokens - loaded_class_dist_tokens
       end

@@ -6,8 +6,8 @@ var CssItemBase,
 CssItemBase = (function(superClass) {
   extend(CssItemBase, superClass);
 
-  if (window.loadedItemToken != null) {
-    CssItemBase.CLASS_DIST_TOKEN = window.loadedItemToken;
+  if (window.loadedClassDistToken != null) {
+    CssItemBase.CLASS_DIST_TOKEN = window.loadedClassDistToken;
   }
 
   function CssItemBase(cood) {

@@ -963,7 +963,7 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    window.loadedItemToken = classDistToken;
+    window.loadedClassDistToken = classDistToken;
     s = document.createElement('script');
     s.type = 'text/javascript';
     s.src = jsSrc;
@@ -973,7 +973,7 @@ Common = (function() {
       if (window.itemInitFuncList[classDistToken] != null) {
         clearInterval(t);
         window.itemInitFuncList[classDistToken](option);
-        window.loadedItemToken = null;
+        window.loadedClassDistToken = null;
         if (callback != null) {
           return callback();
         }
