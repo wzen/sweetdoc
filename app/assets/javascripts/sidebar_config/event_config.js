@@ -8,9 +8,7 @@ EventConfig = (function() {
     constant = gon["const"];
     EventConfig.ITEM_ROOT_ID = 'event_@distId';
     EventConfig.EVENT_ITEM_SEPERATOR = "&";
-    EventConfig.COMMON_ACTION_CLASS = constant.EventConfig.COMMON_ACTION_CLASS;
     EventConfig.ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS;
-    EventConfig.COMMON_VALUES_CLASS = constant.EventConfig.COMMON_VALUES_CLASS;
     EventConfig.ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS;
     EventConfig.EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX;
     EventConfig.METHOD_VALUE_MODIFY_ROOT = 'modify';
@@ -50,13 +48,9 @@ EventConfig = (function() {
         return;
       }
       this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) === 0;
-      if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-        this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length));
-      } else {
-        splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
-        this[EventPageValueBase.PageValueKey.ID] = splitValues[0];
-        this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1];
-      }
+      splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
+      this[EventPageValueBase.PageValueKey.ID] = splitValues[0];
+      this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1];
     }
     if (window.isWorkTable) {
       WorktableCommon.clearSelectedBorder();
@@ -97,7 +91,7 @@ EventConfig = (function() {
       }
       return _setApplyClickEvent.call(this);
     };
-    if (!this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]) {
+    if (!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
       item = window.instanceMap[this[EventPageValueBase.PageValueKey.ID]];
       if ((item != null) && (this[EventPageValueBase.PageValueKey.METHODNAME] != null)) {
         return ConfigMenu.loadEventMethodValueConfig(this, item.constructor, (function(_this) {
@@ -232,22 +226,11 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.actionClassName = function() {
-    var name;
-    name = '';
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      name = this.constructor.COMMON_ACTION_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
-    } else {
-      name = this.constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
-    }
-    return name;
+    return this.constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
   };
 
   EventConfig.prototype.methodClassName = function() {
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      return this.constructor.COMMON_VALUES_CLASS.replace('@commoneventid', this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
-    } else {
-      return this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
-    }
+    return this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', this[EventPageValueBase.PageValueKey.METHODNAME]);
   };
 
   EventConfig.prototype.showError = function(message) {
@@ -269,11 +252,7 @@ EventConfig = (function() {
       return null;
     }
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] === Constant.CommonActionEventChangeType.SCREEN) {
-        return EPVScreenPosition;
-      } else {
-        return EventPageValueBase;
-      }
+      return EventPageValueBase;
     } else {
       return EPVItem;
     }
@@ -618,7 +597,7 @@ EventConfig = (function() {
   };
 
   EventConfig.updateSelectItemMenu = function() {
-    var classDistToken, commonOptgroupClassName, commonSelectOptions, id, item, itemOptgroupClassName, itemSelectOptions, items, k, name, teItemSelect, teItemSelects;
+    var classDistToken, commonOptgroupClassName, commonSelectOptions, id, item, itemOptgroupClassName, itemSelectOptions, items, k, name, option, teItemSelect, teItemSelects;
     teItemSelects = $('#event-config .te_item_select');
     teItemSelect = teItemSelects[0];
     itemSelectOptions = '';
@@ -629,10 +608,11 @@ EventConfig = (function() {
       id = item.value.id;
       name = item.value.name;
       classDistToken = item.value.classDistToken;
+      option = "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + classDistToken + "'>\n  " + name + "\n</option>";
       if (window.instanceMap[id] instanceof ItemBase) {
-        itemSelectOptions += "<option value='" + id + EventConfig.EVENT_ITEM_SEPERATOR + classDistToken + "'>\n  " + name + "\n</option>";
+        itemSelectOptions += option;
       } else {
-        commonSelectOptions += "<option value='" + (this.COMMON_ACTION_CLASS.replace('@commoneventid', item.value.eventId)) + "'>\n  " + name + "\n</option>";
+        commonSelectOptions += option;
       }
     }
     commonOptgroupClassName = 'common_optgroup_class_name';

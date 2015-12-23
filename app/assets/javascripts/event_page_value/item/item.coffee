@@ -18,7 +18,6 @@ class EPVItem extends EventPageValueBase
     writeValue[@PageValueKey.CLASS_DIST_TOKEN] = item.constructor.CLASS_DIST_TOKEN
     writeValue[@PageValueKey.ITEM_SIZE_DIFF] = {x: 0, y: 0, w: 0, h: 0}
     writeValue[@PageValueKey.DO_FOCUS] = true
-    writeValue[@PageValueKey.COMMON_EVENT_ID] = null
     writeValue[@PageValueKey.IS_COMMON_EVENT] = false
     writeValue[@PageValueKey.METHODNAME] = item.constructor.defaultMethodName()
     actionType = item.constructor.defaultActionType()

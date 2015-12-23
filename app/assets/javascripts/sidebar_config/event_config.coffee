@@ -7,12 +7,8 @@ class EventConfig
     @ITEM_ROOT_ID = 'event_@distId'
     # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
     @EVENT_ITEM_SEPERATOR = "&"
-    # @property [String] COMMON_ACTION_CLASS イベント共通アクションクラス名
-    @COMMON_ACTION_CLASS = constant.EventConfig.COMMON_ACTION_CLASS
     # @property [String] ITEM_ACTION_CLASS イベントアイテムアクションクラス名
     @ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS
-    # @property [String] COMMON_VALUES_CLASS 共通イベントクラス名
-    @COMMON_VALUES_CLASS = constant.EventConfig.COMMON_VALUES_CLASS
     # @property [String] ITEM_VALUES_CLASS アイテムイベントクラス名
     @ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS
     # @property [String] EVENT_COMMON_PREFIX 共通イベントプレフィックス
@@ -54,12 +50,9 @@ class EventConfig
         return
 
       @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) == 0
-      if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-        @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] = parseInt(value.substring(EventConfig.EVENT_COMMON_PREFIX.length))
-      else
-        splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
-        @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
-        @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1]
+      splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
+      @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
+      @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1]
 
     if window.isWorkTable
       # 選択枠消去
@@ -106,7 +99,7 @@ class EventConfig
 
       _setApplyClickEvent.call(@)
 
-    if !@[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]
+    if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # アイテム選択時
       item = window.instanceMap[@[EventPageValueBase.PageValueKey.ID]]
       if item? && @[EventPageValueBase.PageValueKey.METHODNAME]?
@@ -233,19 +226,11 @@ class EventConfig
 
   # アクションメソッドクラス名を取得
   actionClassName: ->
-    name = ''
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      name = @constructor.COMMON_ACTION_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
-    else
-      name = @constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
-    return name
+    return @constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
 
   # アクションメソッド & メソッド毎の値のクラス名を取得
   methodClassName: ->
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      return @constructor.COMMON_VALUES_CLASS.replace('@commoneventid', @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
-    else
-      return @constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
+    return @constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', @[EventPageValueBase.PageValueKey.METHODNAME])
 
   # エラー表示
   # @param [String] message メッセージ内容
@@ -267,10 +252,7 @@ class EventConfig
       return null
 
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] == Constant.CommonActionEventChangeType.SCREEN
-        return EPVScreenPosition
-      else
-        return EventPageValueBase
+      return EventPageValueBase
     else
       return EPVItem
 
@@ -566,20 +548,17 @@ class EventConfig
       id = item.value.id
       name = item.value.name
       classDistToken = item.value.classDistToken
-      if window.instanceMap[id] instanceof ItemBase
-        # アイテム
-        itemSelectOptions += """
+      option = """
             <option value='#{id}#{EventConfig.EVENT_ITEM_SEPERATOR}#{classDistToken}'>
               #{name}
             </option>
           """
+      if window.instanceMap[id] instanceof ItemBase
+        # アイテム
+        itemSelectOptions += option
       else
         # 共通イベント
-        commonSelectOptions += """
-            <option value='#{@COMMON_ACTION_CLASS.replace('@commoneventid', item.value.eventId)}'>
-              #{name}
-            </option>
-          """
+        commonSelectOptions += option
 
     commonOptgroupClassName = 'common_optgroup_class_name'
     commonSelectOptions = "<optgroup class='#{commonOptgroupClassName}' label='#{I18n.t("config.select_opt_group.common")}'>" + commonSelectOptions + '</optgroup>'

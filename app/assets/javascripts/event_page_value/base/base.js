@@ -22,8 +22,6 @@ EventPageValueBase = (function() {
 
       PageValueKey.DO_FOCUS = constant.EventPageValueKey.DO_FOCUS;
 
-      PageValueKey.COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID;
-
       PageValueKey.SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES;
 
       PageValueKey.IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT;
@@ -135,19 +133,9 @@ EventPageValueBase = (function() {
           eventConfig[v] = writeValue[v];
         }
       }
-      selectItemValue = '';
-      if (eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
-        selectItemValue = "" + EventConfig.EVENT_COMMON_PREFIX + eventConfig[this.PageValueKey.COMMON_EVENT_ID];
-      } else {
-        selectItemValue = "" + eventConfig[this.PageValueKey.ID] + EventConfig.EVENT_ITEM_SEPERATOR + eventConfig[this.PageValueKey.CLASS_DIST_TOKEN];
-      }
+      selectItemValue = "" + eventConfig[this.PageValueKey.ID] + EventConfig.EVENT_ITEM_SEPERATOR + eventConfig[this.PageValueKey.CLASS_DIST_TOKEN];
       $('.te_item_select', eventConfig.emt).val(selectItemValue);
-      actionFormName = '';
-      if (eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
-        actionFormName = EventConfig.EVENT_COMMON_PREFIX + eventConfig[this.PageValueKey.COMMON_EVENT_ID];
-      } else {
-        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]);
-      }
+      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]);
       $("." + actionFormName + " .radio", eventConfig.emt).each(function(e) {
         var methodName;
         methodName = $(this).find('input.method_name').val();

@@ -18,8 +18,6 @@ class EventPageValueBase
       @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
       # @property [String] DO_FOCUS フォーカス
       @DO_FOCUS = constant.EventPageValueKey.DO_FOCUS
-      # @property [String] COMMON_EVENT_ID 共通イベントID
-      @COMMON_EVENT_ID = constant.EventPageValueKey.COMMON_EVENT_ID
       # @property [String] SPECIFIC_METHOD_VALUES メソッド固有値
       @SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES
       # @property [String] IS_COMMON_EVENT 共通イベント判定
@@ -118,19 +116,11 @@ class EventPageValueBase
           eventConfig[v] = writeValue[v]
 
       # 選択イベントタイプ
-      selectItemValue = ''
-      if eventConfig[@PageValueKey.IS_COMMON_EVENT]
-        selectItemValue = "#{EventConfig.EVENT_COMMON_PREFIX}#{eventConfig[@PageValueKey.COMMON_EVENT_ID]}"
-      else
-        selectItemValue = "#{eventConfig[@PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{eventConfig[@PageValueKey.CLASS_DIST_TOKEN]}"
+      selectItemValue = "#{eventConfig[@PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{eventConfig[@PageValueKey.CLASS_DIST_TOKEN]}"
       $('.te_item_select', eventConfig.emt).val(selectItemValue)
 
       # 選択メソッドタイプ
-      actionFormName = ''
-      if eventConfig[@PageValueKey.IS_COMMON_EVENT]
-        actionFormName = EventConfig.EVENT_COMMON_PREFIX + eventConfig[@PageValueKey.COMMON_EVENT_ID]
-      else
-        actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[@PageValueKey.CLASS_DIST_TOKEN])
+      actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[@PageValueKey.CLASS_DIST_TOKEN])
       $(".#{actionFormName} .radio", eventConfig.emt).each((e) ->
         methodName = $(@).find('input.method_name').val()
         if methodName == eventConfig[EventPageValueBase.PageValueKey.METHODNAME]
