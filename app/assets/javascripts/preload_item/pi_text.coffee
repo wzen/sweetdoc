@@ -236,7 +236,7 @@ class PreloadItemText extends CssItemBase
         _event.call(@, e.target)
     )
 
-Common.setClassToMap(false, PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText)
+Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN]?
   if EventConfig?

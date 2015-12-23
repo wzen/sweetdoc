@@ -226,7 +226,7 @@ class ItemPreviewTemp extends CssItemBase
       @getJQueryElement().css('opacity', 1)
 
 
-Common.setClassToMap(false, ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
+Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 
 # Don't Delete
 if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?

@@ -66,10 +66,11 @@ class BackgroundEvent extends CommonEvent
       window.scrollInside.css('backgroundColor', @backgroundColor)
 
   @EVENT_ID = @PrivateClass.EVENT_ID
+  @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
   @actionProperties = @PrivateClass.actionProperties
 
   if EventConfig?
     EventConfig.addEventConfigContents(@PrivateClass.CLASS_DIST_TOKEN)
 
-Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent)
+Common.setClassToMap(BackgroundEvent.CLASS_DIST_TOKEN, BackgroundEvent)
 

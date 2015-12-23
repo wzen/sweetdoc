@@ -215,10 +215,7 @@ class Common
     for key, instance of instances
       value = instance.value
       if withCreateInstance
-        classMapId = value.classDistToken
-        if !classMapId?
-          classMapId = value.eventId
-        obj = Common.getInstanceFromMap(value.eventId?, value.id, classMapId)
+        obj = Common.getInstanceFromMap(value.id, value.classDistToken)
         if withInitFromPageValue
           obj.setMiniumObject(value)
       else
@@ -306,81 +303,42 @@ class Common
       return str
 
   # クラスハッシュ配列からクラスを取り出し
-  # @param [Boolean] isCommon 共通イベントか
-  # @param [Integer] dist EventIdまたはClassDistToken
+  # @param [Integer] dist ClassDistToken
   # @return [Object] 対象クラス
-  @getClassFromMap = (isCommon, dist) ->
+  @getClassFromMap = (dist) ->
     if !window.classMap?
       window.classMap = {}
-
-    c = isCommon
-    i = dist
-    if typeof c == "boolean"
-      if c
-        c = "1"
-      else
-        c = "0"
-
-    if typeof i != "string"
-      i = String(dist)
-
-    if !window.classMap[c]? || !window.classMap[c][i]?
-      return null
-
-    return window.classMap[c][i]
+    d = dist
+    if typeof d != "string"
+      d = String(dist)
+    return window.classMap[d]
 
   # クラスをハッシュ配列に保存
-  # @param [Boolean] isCommon 共通イベントか
   # @param [Integer] id EventIdまたはClassDistToken
   # @param [Class] value クラス
-  @setClassToMap = (isCommon, dist, value) ->
-    c = isCommon
-    i = dist
-    if typeof c == "boolean"
-      if c
-        c = "1"
-      else
-        c = "0"
-
-    if typeof i != "string"
-      i = String(dist)
+  @setClassToMap = (dist, value) ->
+    d = dist
+    if typeof d != "string"
+      d = String(dist)
 
     if !window.classMap?
       window.classMap = {}
-    if !window.classMap[c]?
-      window.classMap[c] = {}
-
-    window.classMap[c][i] = value
+    window.classMap[d] = value
 
   # インスタンス取得
-  # @param [Boolean] isCommonEvent 共通イベントか
   # @param [Integer] id イベントID
-  # @param [Integer] classMapId EventIdまたはClassDistToken
+  # @param [Integer] classDistId
   # @return [Object] インスタンス
-  @getInstanceFromMap = (isCommonEvent, id, classMapId) ->
-    if typeof isCommonEvent == "boolean"
-      if isCommonEvent
-        isCommonEvent = "1"
-      else
-        isCommonEvent = "0"
-
+  @getInstanceFromMap = (id, classDistId) ->
     if typeof id != "string"
       id = String(id)
-
-    Common.setInstanceFromMap(isCommonEvent, id, classMapId)
+    Common.setInstanceFromMap(id, classDistId)
     return window.instanceMap[id]
 
   # インスタンス設定(上書きはしない)
-  # @param [Boolean] isCommonEvent 共通イベントか
   # @param [Integer] id イベントID
-  # @param [Integer] classMapId EventIdまたはClassDistToken
-  @setInstanceFromMap = (isCommonEvent, id, classMapId) ->
-    if typeof isCommonEvent == "boolean"
-      if isCommonEvent
-        isCommonEvent = "1"
-      else
-        isCommonEvent = "0"
-
+  # @param [Integer] classDistId
+  @setInstanceFromMap = (id, classDistId) ->
     if typeof id != "string"
       id = String(id)
 
@@ -388,7 +346,7 @@ class Common
       window.instanceMap = {}
     if !window.instanceMap[id]?
       # インスタンスを保存する
-      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))()
+      instance = new (Common.getClassFromMap(classDistId))()
       instance.id = id
       # インスタンス値が存在する場合、初期化
       obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))

@@ -57,9 +57,10 @@ class ScreenEvent extends CommonEvent
               opt.complete()
 
   @EVENT_ID = @PrivateClass.EVENT_ID
+  @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
   @actionProperties = @PrivateClass.actionProperties
 
   if EventConfig?
     EventConfig.addEventConfigContents(@PrivateClass.CLASS_DIST_TOKEN)
 
-Common.setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent)
+Common.setClassToMap(ScreenEvent.CLASS_DIST_TOKEN, ScreenEvent)

@@ -87,7 +87,7 @@ class Handwrite
       WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
       if selectItemMenu?
         # インスタンス作成
-        @item = new (Common.getClassFromMap(false, selectItemMenu))(loc)
+        @item = new (Common.getClassFromMap(selectItemMenu))(loc)
         window.instanceMap[@item.id] = @item
         @item.mouseDownDrawing()
     else if window.eventPointingMode == Constant.EventInputPointingMode.DRAW

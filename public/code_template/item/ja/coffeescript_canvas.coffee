@@ -460,7 +460,7 @@ class ItemPreviewTemp extends CanvasItemBase
     @_rightBodyPartCoord = []
     @_drawCoodRegist = []
 
-Common.setClassToMap(false, ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
+Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?
   console.log('ItemPreviewTemp loaded')

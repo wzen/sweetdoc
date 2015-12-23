@@ -17,6 +17,8 @@ class CommonEvent
       @id = "c" + @constructor.EVENT_ID + Common.generateId()
       # @property [Int] eventId 共通イベントID
       @eventId =  @constructor.EVENT_ID
+      # @property [ItemType] CLASS_DIST_TOKEN アイテム種別
+      @classDistToken = @constructor.CLASS_DIST_TOKEN
 
     getJQueryElement: ->
       return $('#common_event_click_overlay')

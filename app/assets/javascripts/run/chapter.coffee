@@ -10,11 +10,10 @@ class Chapter
     @num = list.num
     @eventObjList = []
     for obj in @eventList
-      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       id = obj[EventPageValueBase.PageValueKey.ID]
-      classMapId = if isCommonEvent then obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] else obj[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]
+      distId = obj[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]
       # インスタンス作成
-      event = Common.getInstanceFromMap(isCommonEvent, id, classMapId)
+      event = Common.getInstanceFromMap(id, distId)
       @eventObjList.push(event)
 
     @doMoveChapter = false

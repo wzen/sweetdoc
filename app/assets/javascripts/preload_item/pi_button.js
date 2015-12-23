@@ -215,7 +215,7 @@ PreloadItemButton = (function(superClass) {
 
 })(CssItemBase);
 
-Common.setClassToMap(false, PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
+Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] == null)) {
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {

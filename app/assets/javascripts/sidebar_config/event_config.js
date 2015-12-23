@@ -109,7 +109,7 @@ EventConfig = (function() {
         return _callback.call(this);
       }
     } else {
-      objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
+      objClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
       if (objClass) {
         return ConfigMenu.loadEventMethodValueConfig(this, objClass, (function(_this) {
           return function() {
@@ -177,7 +177,7 @@ EventConfig = (function() {
       }
     }
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      commonEventClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
+      commonEventClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
       commonEvent = new commonEventClass();
       if (instanceMap[commonEvent.id] == null) {
         instanceMap[commonEvent.id] = commonEvent;
@@ -415,7 +415,7 @@ EventConfig = (function() {
 
   EventConfig.addEventConfigContents = function(distToken) {
     var actionParent, action_forms, className, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
-    itemClass = Common.getClassFromMap(false, distToken);
+    itemClass = Common.getClassFromMap(distToken);
     if ((itemClass != null) && (itemClass.actionProperties != null)) {
       className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken);
       action_forms = $('#event-config .action_forms');
@@ -466,9 +466,7 @@ EventConfig = (function() {
         } else {
           objClass = null;
           if (this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] != null) {
-            objClass = Common.getClassFromMap(false, this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
-          } else if (this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] != null) {
-            objClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
+            objClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
           }
           defaultValue = objClass.actionProperties.modifiables[varName]["default"];
         }

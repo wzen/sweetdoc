@@ -90,6 +90,8 @@ ScreenEvent = (function(superClass) {
 
   ScreenEvent.EVENT_ID = ScreenEvent.PrivateClass.EVENT_ID;
 
+  ScreenEvent.CLASS_DIST_TOKEN = ScreenEvent.PrivateClass.CLASS_DIST_TOKEN;
+
   ScreenEvent.actionProperties = ScreenEvent.PrivateClass.actionProperties;
 
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
@@ -100,6 +102,6 @@ ScreenEvent = (function(superClass) {
 
 })(CommonEvent);
 
-Common.setClassToMap(true, ScreenEvent.EVENT_ID, ScreenEvent);
+Common.setClassToMap(ScreenEvent.CLASS_DIST_TOKEN, ScreenEvent);
 
 //# sourceMappingURL=screen_event.js.map

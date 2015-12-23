@@ -230,7 +230,7 @@ class PreloadItemButton extends CssItemBase
       # ボタンを表示
       @getJQueryElement().css('opacity', 1)
 
-Common.setClassToMap(false, PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton)
+Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton)
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN]?

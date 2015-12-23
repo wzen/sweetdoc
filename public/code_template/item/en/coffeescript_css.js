@@ -213,7 +213,7 @@ ItemPreviewTemp = (function(superClass) {
 
 })(CssItemBase);
 
-Common.setClassToMap(false, ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
+Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
   console.log('ItemPreviewTemp loaded');

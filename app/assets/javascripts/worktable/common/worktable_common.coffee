@@ -32,7 +32,6 @@ class WorktableCommon
       pageValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(objId))
       if pageValue?
         instance = window.instanceMap[objId]
-        #instance = Common.getInstanceFromMap(false, objId, pageValue.classDistToken)
         if instance instanceof ItemBase
           window.copiedInstance = Common.makeClone(instance.getMinimumObject())
           if isCopyOperation
@@ -47,7 +46,7 @@ class WorktableCommon
   # アイテムの貼り付け (Ctrl + v)
   @pasteItem = ->
     if window.copiedInstance?
-      instance = new (Common.getClassFromMap(false, window.copiedInstance.classDistToken))()
+      instance = new (Common.getClassFromMap(window.copiedInstance.classDistToken))()
       window.instanceMap[instance.id] = instance
       obj = Common.makeClone(window.copiedInstance)
       obj.id = instance.id

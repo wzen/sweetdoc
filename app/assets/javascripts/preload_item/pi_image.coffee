@@ -145,7 +145,7 @@ class PreloadItemImage extends ItemBase
   _initModalEvent = (emt) ->
     @initModifiableSelectFile(emt)
 
-Common.setClassToMap(false, PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage)
+Common.setClassToMap(PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN]?
   if EventConfig?

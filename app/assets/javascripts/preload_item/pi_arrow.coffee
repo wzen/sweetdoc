@@ -457,7 +457,7 @@ class PreloadItemArrow extends CanvasItemBase
     @_rightBodyPartCoord = []
     @_drawCoodRegist = []
 
-Common.setClassToMap(false, PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow)
+Common.setClassToMap(PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN]?
   if EventConfig?

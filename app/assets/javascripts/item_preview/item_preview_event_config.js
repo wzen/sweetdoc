@@ -65,7 +65,7 @@ ItemPreviewEventConfig = (function(superClass) {
       }
     }
     if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      commonEventClass = Common.getClassFromMap(true, this[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]);
+      commonEventClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
       commonEvent = new commonEventClass();
       if (instanceMap[commonEvent.id] == null) {
         instanceMap[commonEvent.id] = commonEvent;

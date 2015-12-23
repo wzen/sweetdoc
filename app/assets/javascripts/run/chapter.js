@@ -5,17 +5,16 @@ Chapter = (function() {
   Chapter.guideTimer = null;
 
   function Chapter(list) {
-    var classMapId, event, i, id, isCommonEvent, len, obj, ref;
+    var distId, event, i, id, len, obj, ref;
     this.eventList = list.eventList;
     this.num = list.num;
     this.eventObjList = [];
     ref = this.eventList;
     for (i = 0, len = ref.length; i < len; i++) {
       obj = ref[i];
-      isCommonEvent = obj[EventPageValueBase.PageValueKey.IS_COMMON_EVENT];
       id = obj[EventPageValueBase.PageValueKey.ID];
-      classMapId = isCommonEvent ? obj[EventPageValueBase.PageValueKey.COMMON_EVENT_ID] : obj[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN];
-      event = Common.getInstanceFromMap(isCommonEvent, id, classMapId);
+      distId = obj[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN];
+      event = Common.getInstanceFromMap(id, distId);
       this.eventObjList.push(event);
     }
     this.doMoveChapter = false;

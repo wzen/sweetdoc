@@ -475,7 +475,7 @@ PreloadItemArrow = (function(superClass) {
 
 })(CanvasItemBase);
 
-Common.setClassToMap(false, PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow);
+Common.setClassToMap(PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] == null)) {
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {

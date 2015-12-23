@@ -118,7 +118,7 @@ class EventConfig
         _callback.call(@)
     else
       # 共通イベント選択時
-      objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
+      objClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
       if objClass
         ConfigMenu.loadEventMethodValueConfig(@, objClass, =>
           _callback.call(@)
@@ -184,7 +184,7 @@ class EventConfig
 
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # 共通イベントはここでインスタンス生成
-      commonEventClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
+      commonEventClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
       commonEvent = new commonEventClass()
       if !instanceMap[commonEvent.id]?
         # ※インスタンスが存在しない場合のみsetInstanceする
@@ -392,7 +392,7 @@ class EventConfig
   # アクションイベント情報をコンフィグに追加
   # @param [Integer] distToken アイテム識別ID
   @addEventConfigContents = (distToken) ->
-    itemClass = Common.getClassFromMap(false, distToken)
+    itemClass = Common.getClassFromMap(distToken)
 
     if itemClass? && itemClass.actionProperties?
       className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken)
@@ -439,9 +439,7 @@ class EventConfig
         else
           objClass = null
           if @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]?
-            objClass = Common.getClassFromMap(false, @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
-          else if @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID]?
-            objClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
+            objClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
           defaultValue = objClass.actionProperties.modifiables[varName].default
         if v.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)

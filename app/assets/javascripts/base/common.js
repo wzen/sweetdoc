@@ -270,7 +270,7 @@ Common = (function() {
   };
 
   Common.instancesInPage = function(pn, withCreateInstance, withInitFromPageValue) {
-    var classMapId, instance, instances, key, obj, ret, value;
+    var instance, instances, key, obj, ret, value;
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
@@ -286,11 +286,7 @@ Common = (function() {
       instance = instances[key];
       value = instance.value;
       if (withCreateInstance) {
-        classMapId = value.classDistToken;
-        if (classMapId == null) {
-          classMapId = value.eventId;
-        }
-        obj = Common.getInstanceFromMap(value.eventId != null, value.id, classMapId);
+        obj = Common.getInstanceFromMap(value.id, value.classDistToken);
         if (withInitFromPageValue) {
           obj.setMiniumObject(value);
         }
@@ -410,76 +406,40 @@ Common = (function() {
     }
   };
 
-  Common.getClassFromMap = function(isCommon, dist) {
-    var c, i;
+  Common.getClassFromMap = function(dist) {
+    var d;
     if (window.classMap == null) {
       window.classMap = {};
     }
-    c = isCommon;
-    i = dist;
-    if (typeof c === "boolean") {
-      if (c) {
-        c = "1";
-      } else {
-        c = "0";
-      }
+    d = dist;
+    if (typeof d !== "string") {
+      d = String(dist);
     }
-    if (typeof i !== "string") {
-      i = String(dist);
-    }
-    if ((window.classMap[c] == null) || (window.classMap[c][i] == null)) {
-      return null;
-    }
-    return window.classMap[c][i];
+    return window.classMap[d];
   };
 
-  Common.setClassToMap = function(isCommon, dist, value) {
-    var c, i;
-    c = isCommon;
-    i = dist;
-    if (typeof c === "boolean") {
-      if (c) {
-        c = "1";
-      } else {
-        c = "0";
-      }
-    }
-    if (typeof i !== "string") {
-      i = String(dist);
+  Common.setClassToMap = function(dist, value) {
+    var d;
+    d = dist;
+    if (typeof d !== "string") {
+      d = String(dist);
     }
     if (window.classMap == null) {
       window.classMap = {};
     }
-    if (window.classMap[c] == null) {
-      window.classMap[c] = {};
-    }
-    return window.classMap[c][i] = value;
+    return window.classMap[d] = value;
   };
 
-  Common.getInstanceFromMap = function(isCommonEvent, id, classMapId) {
-    if (typeof isCommonEvent === "boolean") {
-      if (isCommonEvent) {
-        isCommonEvent = "1";
-      } else {
-        isCommonEvent = "0";
-      }
-    }
+  Common.getInstanceFromMap = function(id, classDistId) {
     if (typeof id !== "string") {
       id = String(id);
     }
-    Common.setInstanceFromMap(isCommonEvent, id, classMapId);
+    Common.setInstanceFromMap(id, classDistId);
     return window.instanceMap[id];
   };
 
-  Common.setInstanceFromMap = function(isCommonEvent, id, classMapId) {
+  Common.setInstanceFromMap = function(id, classDistId) {
     var instance, obj;
-    if (typeof isCommonEvent === "boolean") {
-      if (isCommonEvent) {
-        isCommonEvent = "1";
-      } else {
-        isCommonEvent = "0";
-      }
-    }
     if (typeof id !== "string") {
       id = String(id);
     }
@@ -487,7 +447,7 @@ Common = (function() {
       window.instanceMap = {};
     }
     if (window.instanceMap[id] == null) {
-      instance = new (Common.getClassFromMap(isCommonEvent, classMapId))();
+      instance = new (Common.getClassFromMap(classDistId))();
       instance.id = id;
       obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id));
       if (obj) {

@@ -60,7 +60,7 @@ WorktableCommon = (function() {
   WorktableCommon.pasteItem = function() {
     var instance, obj;
     if (window.copiedInstance != null) {
-      instance = new (Common.getClassFromMap(false, window.copiedInstance.classDistToken))();
+      instance = new (Common.getClassFromMap(window.copiedInstance.classDistToken))();
       window.instanceMap[instance.id] = instance;
       obj = Common.makeClone(window.copiedInstance);
       obj.id = instance.id;

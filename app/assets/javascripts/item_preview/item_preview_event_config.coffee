@@ -59,7 +59,7 @@ class ItemPreviewEventConfig extends EventConfig
 
     if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # 共通イベントはここでインスタンス生成
-      commonEventClass = Common.getClassFromMap(true, @[EventPageValueBase.PageValueKey.COMMON_EVENT_ID])
+      commonEventClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
       commonEvent = new commonEventClass()
       if !instanceMap[commonEvent.id]?
         # ※インスタンスが存在しない場合のみsetInstanceする

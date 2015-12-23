@@ -186,7 +186,7 @@ PreloadItemImage = (function(superClass) {
 
 })(ItemBase);
 
-Common.setClassToMap(false, PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage);
+Common.setClassToMap(PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] == null)) {
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {

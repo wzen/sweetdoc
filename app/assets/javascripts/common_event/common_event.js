@@ -21,6 +21,7 @@ CommonEvent = (function() {
       PrivateClass.__super__.constructor.call(this);
       this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
       this.eventId = this.constructor.EVENT_ID;
+      this.classDistToken = this.constructor.CLASS_DIST_TOKEN;
     }
 
     PrivateClass.prototype.getJQueryElement = function() {

@@ -90,6 +90,8 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.EVENT_ID = BackgroundEvent.PrivateClass.EVENT_ID;
 
+  BackgroundEvent.CLASS_DIST_TOKEN = BackgroundEvent.PrivateClass.CLASS_DIST_TOKEN;
+
   BackgroundEvent.actionProperties = BackgroundEvent.PrivateClass.actionProperties;
 
   if (typeof EventConfig !== "undefined" && EventConfig !== null) {
@@ -100,6 +102,6 @@ BackgroundEvent = (function(superClass) {
 
 })(CommonEvent);
 
-Common.setClassToMap(true, BackgroundEvent.EVENT_ID, BackgroundEvent);
+Common.setClassToMap(BackgroundEvent.CLASS_DIST_TOKEN, BackgroundEvent);
 
 //# sourceMappingURL=background_event.js.map
