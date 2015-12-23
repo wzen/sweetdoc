@@ -580,6 +580,18 @@ div.css_item_base > div {
   left: 0;
 }
 
+#main.draw_mode, #main.draw_pointing {
+  .canvas_container {
+    cursor: image_url('base/drag_cursor24.png') !important;
+  }
+}
+
+#main.click_pointing {
+  .item {
+    cursor: image_url('base/click_cursor24.png') !important;
+  }
+}
+
 .canvas {
   color: transparent;
 }

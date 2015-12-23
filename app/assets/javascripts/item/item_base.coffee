@@ -227,6 +227,7 @@ class ItemBase extends ItemEventBase
   @defaultActionType = ->
     return Common.getActionTypeByCodingActionType(@actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.ACTION_TYPE])
 
+  # 独自コンフィグのデフォルト
   @defaultSpecificMethodValue = ->
     if @actionProperties? &&
       @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
@@ -238,6 +239,7 @@ class ItemBase extends ItemEventBase
     else
       return {}
 
+  # 変数編集コンフィグのデフォルト
   @defaultModifiableVars = ->
     if @actionProperties? &&
       @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?

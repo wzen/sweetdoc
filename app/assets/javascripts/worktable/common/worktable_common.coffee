@@ -146,6 +146,8 @@ class WorktableCommon
       window.scrollContents.find('.item.draggable').removeClass('edit_mode')
       window.scrollInsideWrapper.removeClass('edit_mode')
 
+    @setModeClassToMainDiv(afterMode)
+
     if window.mode != afterMode
       # 変更前のモードを保存
       window.beforeMode = window.mode
@@ -156,6 +158,21 @@ class WorktableCommon
       for item in items
         if item.changeMode?
           item.changeMode(afterMode)
+
+  # ID=MainのDivにクラス名を設定
+  @setModeClassToMainDiv = (mode) ->
+    classes = [
+      'draw_mode'
+      'draw_pointing'
+      'click_pointing'
+    ]
+    $('#main').removeClass(classes.join(' '))
+    if mode == Constant.Mode.DRAW
+      $('#main').addClass('draw_mode')
+    else if mode == Constant.EventInputPointingMode.DRAW
+      $('#main').addClass('draw_pointing')
+    else if mode == Constant.EventInputPointingMode.ITEM_TOUCH
+      $('#main').addClass('click_pointing')
 
   # モードを一つ前に戻す
   @putbackMode = ->

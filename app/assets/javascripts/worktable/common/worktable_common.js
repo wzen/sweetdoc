@@ -176,6 +176,7 @@ WorktableCommon = (function() {
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInsideWrapper.removeClass('edit_mode');
     }
+    this.setModeClassToMainDiv(afterMode);
     if (window.mode !== afterMode) {
       window.beforeMode = window.mode;
       window.mode = afterMode;
@@ -190,6 +191,19 @@ WorktableCommon = (function() {
         }
       }
       return results;
+    }
+  };
+
+  WorktableCommon.setModeClassToMainDiv = function(mode) {
+    var classes;
+    classes = ['draw_mode', 'draw_pointing', 'click_pointing'];
+    $('#main').removeClass(classes.join(' '));
+    if (mode === Constant.Mode.DRAW) {
+      return $('#main').addClass('draw_mode');
+    } else if (mode === Constant.EventInputPointingMode.DRAW) {
+      return $('#main').addClass('draw_pointing');
+    } else if (mode === Constant.EventInputPointingMode.ITEM_TOUCH) {
+      return $('#main').addClass('click_pointing');
     }
   };
 
