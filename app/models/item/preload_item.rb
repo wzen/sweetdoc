@@ -4,7 +4,7 @@ class PreloadItem < ActiveRecord::Base
 
   def self.get_all
     ret = Rails.cache.fetch('preload_items_all') do
-      self.all.select('title, access_token')
+      self.all.select('title, dist_token')
     end
     return ret
   end

@@ -1,7 +1,9 @@
 one:
   id: 1
-  name: background
+  title: background
+  dist_token: 'PI_BackgroundEvent'
 
 two:
   id: 2
   name: screen
+  dist_token: 'PI_ScreenEvent'

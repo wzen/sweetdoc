@@ -1,5 +1,8 @@
 <script type="text/javascript">
-    <% @preload_items.each do |p| %>
-      window.loadedClassDistToken[p.dist_token] = true
-    <% end %>
+  <% @common_actions.each do |p| %>
+    window.loadedClassDistToken[p.dist_token] = true
+  <% end %>
+  <% @preload_items.each do |p| %>
+    window.loadedClassDistToken[p.dist_token] = true
+  <% end %>
 </script>
