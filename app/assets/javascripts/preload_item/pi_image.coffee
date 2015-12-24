@@ -53,9 +53,9 @@ class PreloadItemImage extends ItemBase
     @removeItemElement()
     @createItemElement( =>
       @itemDraw(show)
-      if @setupDragAndResizeEvents?
-        # ドラッグ & リサイズイベント設定
-        @setupDragAndResizeEvents()
+      if @setupItemEvents?
+        # アイテムのイベント設定
+        @setupItemEvents()
       @reDrawing = false
       if @reDrawStack? && @reDrawStack
         # スタックが存在する場合再度描画
@@ -148,8 +148,6 @@ class PreloadItemImage extends ItemBase
 Common.setClassToMap(PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN]?
-  if EventConfig?
-    EventConfig.addEventConfigContents(PreloadItemImage.CLASS_DIST_TOKEN)
   if window.debug
     console.log('PreloadImage loaded')
   window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] = (option = {}) ->

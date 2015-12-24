@@ -675,6 +675,8 @@ EventBase = (function(superClass) {
     return window.instanceMap[this.id] = this;
   };
 
+  EventBase.initSpecificConfig = function(specificRoot) {};
+
   return EventBase;
 
 })(Extend);

@@ -73,8 +73,8 @@ PreloadItemImage = (function(superClass) {
     return this.createItemElement((function(_this) {
       return function() {
         _this.itemDraw(show);
-        if (_this.setupDragAndResizeEvents != null) {
-          _this.setupDragAndResizeEvents();
+        if (_this.setupItemEvents != null) {
+          _this.setupItemEvents();
         }
         _this.reDrawing = false;
         if ((_this.reDrawStack != null) && _this.reDrawStack) {
@@ -189,9 +189,6 @@ PreloadItemImage = (function(superClass) {
 Common.setClassToMap(PreloadItemImage.CLASS_DIST_TOKEN, PreloadItemImage);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemImage.CLASS_DIST_TOKEN] == null)) {
-  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemImage.CLASS_DIST_TOKEN);
-  }
   if (window.debug) {
     console.log('PreloadImage loaded');
   }

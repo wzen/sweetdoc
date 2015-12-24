@@ -47,7 +47,15 @@ class ScreenEvent extends CommonEvent
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
-      # TODO: オーバーレイを表示
+      if opt.isPreview && opt.keepDispMag
+        overlay = $('#preview_position_overlay')
+        if !overlay? || overlay.length == 0
+          # オーバーレイを被せる
+          canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
+          window.drawingCanvas.parent().append(canvas)
+          overlay = $('#preview_position_overlay')
+        # オーバーレイ描画
+        overlay
 
       actionType = @getEventActionType()
       if actionType == Constant.ActionType.CLICK
@@ -78,11 +86,27 @@ class ScreenEvent extends CommonEvent
             if opt.complete?
               opt.complete()
 
+    # プレビューを停止
+    # @param [Function] callback コールバック
+    stopPreview: (callback = null) ->
+      # オーバーレイを削除
+      $('#preview_position_overlay').remove()
+      super(callback)
+
+    # 独自コンフィグのイベント初期化
+    @initSpecificConfig = (specificRoot) ->
+      emt = specificRoot['changeScreenPosition']
+      emt.find('event_pointing:first').off('click').on('click', (e) =>
+        window.eventPointingMode = Constant.EventInputPointingMode.DRAW
+        # 全体の入力を不可に
+
+        FloatView.showFixed('Drag position', FloatView.Type.INFO, =>
+          window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT
+        )
+      )
+
   @EVENT_ID = @PrivateClass.EVENT_ID
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
   @actionProperties = @PrivateClass.actionProperties
-
-  if EventConfig?
-    EventConfig.addEventConfigContents(@PrivateClass.CLASS_DIST_TOKEN)
 
 Common.setClassToMap(ScreenEvent.CLASS_DIST_TOKEN, ScreenEvent)

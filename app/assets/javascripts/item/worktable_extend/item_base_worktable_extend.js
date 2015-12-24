@@ -23,7 +23,7 @@ itemBaseWorktableExtend = {
     this.restoreAllDrawingSurface();
     return this.endDraw(zindex, true, (function(_this) {
       return function() {
-        _this.setupDragAndResizeEvents();
+        _this.setupItemEvents();
         WorktableCommon.changeMode(Constant.Mode.DRAW);
         _this.saveObj(true);
         _this.firstFocus = Common.firstFocusItemObj() === null;
@@ -71,8 +71,8 @@ itemBaseWorktableExtend = {
     return this.createItemElement((function(_this) {
       return function(createdElement) {
         _this.itemDraw(show);
-        if (_this.setupDragAndResizeEvents != null) {
-          _this.setupDragAndResizeEvents();
+        if (_this.setupItemEvents != null) {
+          _this.setupItemEvents();
         }
         if (callback != null) {
           return callback();
@@ -132,112 +132,121 @@ itemBaseWorktableExtend = {
     $('#design-config').show();
     return $('#' + this.getDesignConfigId()).show();
   },
-  setupDragAndResizeEvents: function() {
-    var self;
-    self = this;
-    (function() {
-      var contextSelector, menu;
-      menu = [];
-      contextSelector = ".context_base";
-      menu.push({
-        title: "Edit",
-        cmd: "edit",
-        uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {
-          return Sidebar.openItemEditConfig(event.target);
+  setupContextMenu: function() {
+    var contextSelector, menu;
+    menu = [];
+    contextSelector = ".context_base";
+    menu.push({
+      title: "Edit",
+      cmd: "edit",
+      uiIcon: "ui-icon-scissors",
+      func: function(event, ui) {
+        return Sidebar.openItemEditConfig(event.target);
+      }
+    });
+    menu.push({
+      title: I18n.t('context_menu.copy'),
+      cmd: "copy",
+      uiIcon: "ui-icon-scissors",
+      func: function(event, ui) {
+        WorktableCommon.copyItem();
+        return WorktableCommon.setMainContainerContext();
+      }
+    });
+    menu.push({
+      title: I18n.t('context_menu.cut'),
+      cmd: "cut",
+      uiIcon: "ui-icon-scissors",
+      func: function(event, ui) {
+        WorktableCommon.cutItem();
+        return WorktableCommon.setMainContainerContext();
+      }
+    });
+    menu.push({
+      title: I18n.t('context_menu.float'),
+      cmd: "float",
+      uiIcon: "ui-icon-scissors",
+      func: function(event, ui) {
+        var objId;
+        objId = $(event.target).attr('id');
+        WorktableCommon.floatItem(objId);
+        LocalStorage.saveAllPageValues();
+        return OperationHistory.add();
+      }
+    });
+    menu.push({
+      title: I18n.t('context_menu.rear'),
+      cmd: "rear",
+      uiIcon: "ui-icon-scissors",
+      func: function(event, ui) {
+        var objId;
+        objId = $(event.target).attr('id');
+        WorktableCommon.rearItem(objId);
+        LocalStorage.saveAllPageValues();
+        return OperationHistory.add();
+      }
+    });
+    menu.push({
+      title: I18n.t('context_menu.delete'),
+      cmd: "delete",
+      uiIcon: "ui-icon-scissors",
+      func: function(event, ui) {
+        if (window.confirm(I18n.t('message.dialog.delete_item'))) {
+          return WorktableCommon.removeSingleItem(event.target);
         }
-      });
-      menu.push({
-        title: I18n.t('context_menu.copy'),
-        cmd: "copy",
-        uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {
-          WorktableCommon.copyItem();
-          return WorktableCommon.setMainContainerContext();
-        }
-      });
-      menu.push({
-        title: I18n.t('context_menu.cut'),
-        cmd: "cut",
-        uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {
-          WorktableCommon.cutItem();
-          return WorktableCommon.setMainContainerContext();
-        }
-      });
-      menu.push({
-        title: I18n.t('context_menu.float'),
-        cmd: "float",
-        uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {
-          var objId;
-          objId = $(event.target).attr('id');
-          WorktableCommon.floatItem(objId);
-          LocalStorage.saveAllPageValues();
-          return OperationHistory.add();
-        }
-      });
-      menu.push({
-        title: I18n.t('context_menu.rear'),
-        cmd: "rear",
-        uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {
-          var objId;
-          objId = $(event.target).attr('id');
-          WorktableCommon.rearItem(objId);
-          LocalStorage.saveAllPageValues();
-          return OperationHistory.add();
-        }
-      });
-      menu.push({
-        title: I18n.t('context_menu.delete'),
-        cmd: "delete",
-        uiIcon: "ui-icon-scissors",
-        func: function(event, ui) {
-          if (window.confirm(I18n.t('message.dialog.delete_item'))) {
-            return WorktableCommon.removeSingleItem(event.target);
+      }
+    });
+    return WorktableCommon.setupContextMenu(this.getJQueryElement(), contextSelector, menu);
+  },
+  setupDragAndResizeEvent: function() {
+    this.getJQueryElement().draggable({
+      containment: scrollInside,
+      drag: (function(_this) {
+        return function(event, ui) {
+          if (_this.drag != null) {
+            return _this.drag();
           }
-        }
-      });
-      return WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu);
-    })();
-    (function() {
-      return self.getJQueryElement().mousedown(function(e) {
-        if (e.which === 1) {
-          e.stopPropagation();
-          WorktableCommon.clearSelectedBorder();
-          return WorktableCommon.setSelectedBorder(this, "edit");
-        }
-      });
-    })();
-    return (function() {
-      self.getJQueryElement().draggable({
-        containment: scrollInside,
-        drag: function(event, ui) {
-          if (self.drag != null) {
-            return self.drag();
+        };
+      })(this),
+      stop: (function(_this) {
+        return function(event, ui) {
+          if (_this.dragComplete != null) {
+            return _this.dragComplete();
           }
-        },
-        stop: function(event, ui) {
-          if (self.dragComplete != null) {
-            return self.dragComplete();
+        };
+      })(this)
+    });
+    return this.getJQueryElement().resizable({
+      containment: scrollInside,
+      resize: (function(_this) {
+        return function(event, ui) {
+          if (_this.resize != null) {
+            return _this.resize();
           }
-        }
-      });
-      return self.getJQueryElement().resizable({
-        containment: scrollInside,
-        resize: function(event, ui) {
-          if (self.resize != null) {
-            return self.resize();
+        };
+      })(this),
+      stop: (function(_this) {
+        return function(event, ui) {
+          if (_this.resizeComplete != null) {
+            return _this.resizeComplete();
           }
-        },
-        stop: function(event, ui) {
-          if (self.resizeComplete != null) {
-            return self.resizeComplete();
-          }
-        }
-      });
-    })();
+        };
+      })(this)
+    });
+  },
+  setupClickEvent: function() {
+    return this.getJQueryElement().mousedown(function(e) {
+      if (e.which === 1) {
+        e.stopPropagation();
+        WorktableCommon.clearSelectedBorder();
+        return WorktableCommon.setSelectedBorder(this, "edit");
+      }
+    });
+  },
+  setupItemEvents: function() {
+    this.setupContextMenu();
+    this.setupClickEvent();
+    return this.setupDragAndResizeEvent();
   },
   drag: function() {
     var element;

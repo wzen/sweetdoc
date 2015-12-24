@@ -16,7 +16,7 @@ ItemPreviewHandwrite = (function(superClass) {
         this.item.restoreAllDrawingSurface();
         this.item.endDraw(this.zindex, true, (function(_this) {
           return function() {
-            _this.item.setupDragAndResizeEvents();
+            _this.item.setupItemEvents();
             _this.item.saveObj(true);
             _this.zindex += 1;
             Sidebar.initItemEditConfig(_this.item);

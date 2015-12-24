@@ -409,4 +409,22 @@ div.item_wrapper {
       font-size: 13px;
     }
   }
+
+  &.fixed {
+    .contents_wrapper {
+      width: 100%;
+      float: left;
+      > div {
+        margin-right: 40px;
+      }
+    }
+    .close_button_wrapper {
+      float: right;
+      width: 40px;
+      margin-left: -40px;
+      .close_button {
+        background-image: image_url('base/floatview_exit.png');
+      }
+    }
+  }
 }

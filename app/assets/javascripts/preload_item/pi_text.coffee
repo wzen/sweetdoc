@@ -154,7 +154,7 @@ class PreloadItemText extends CssItemBase
     # 編集状態で描画
     @_editing = true
     @endDraw(zindex, true, =>
-      @setupDragAndResizeEvents()
+      @setupItemEvents()
       @saveObj(true)
       # フォーカス設定
       @firstFocus = Common.firstFocusItemObj() == null
@@ -239,8 +239,6 @@ class PreloadItemText extends CssItemBase
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN]?
-  if EventConfig?
-    EventConfig.addEventConfigContents(PreloadItemText.CLASS_DIST_TOKEN)
   if window.debug
     console.log('PreloadItemText loaded')
   window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] = (option = {}) ->

@@ -478,9 +478,6 @@ PreloadItemArrow = (function(superClass) {
 Common.setClassToMap(PreloadItemArrow.CLASS_DIST_TOKEN, PreloadItemArrow);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemArrow.CLASS_DIST_TOKEN] == null)) {
-  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemArrow.CLASS_DIST_TOKEN);
-  }
   if (window.debug) {
     console.log('arrow loaded');
   }

@@ -44,7 +44,45 @@ FloatView = (function() {
   };
 
   FloatView.hide = function() {
-    return $(".float_view").fadeOut('fast');
+    return $(".float_view:not('.fixed')").fadeOut('fast');
+  };
+
+  FloatView.showFixed = function(message, type, closeFunc) {
+    var root, screenWrapper;
+    if (closeFunc == null) {
+      closeFunc = null;
+    }
+    if (!window.initDone) {
+      return;
+    }
+    screenWrapper = $('#screen_wrapper');
+    root = $(".float_view.fixed." + type + ":first", screenWrapper);
+    if (root.length > 0) {
+      return;
+    }
+    $(".float_view", screenWrapper).remove();
+    $('.float_view_fixed_temp', screenWrapper).clone(true).attr('class', 'float_view fixed').appendTo(screenWrapper);
+    root = $('.float_view.fixed:first', screenWrapper);
+    root.find('.close_button').off('click').on('click', (function(_this) {
+      return function(e) {
+        if (closeFunc != null) {
+          closeFunc();
+        }
+        return _this.hideFixed();
+      };
+    })(this));
+    root.removeClass(function(index, className) {
+      return className !== 'float_view' && className !== 'fixed';
+    }).addClass(type);
+    $('.message', root).removeClass(function(index, className) {
+      return className !== 'message';
+    }).addClass(type);
+    root.show();
+    return $('.message', root).html(message);
+  };
+
+  FloatView.hideFixed = function() {
+    return $(".float_view.fixed").fadeOut('fast');
   };
 
   FloatView.scrollMessage = function(top, left) {

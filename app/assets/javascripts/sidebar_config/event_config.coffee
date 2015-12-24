@@ -53,6 +53,8 @@ class EventConfig
       splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
       @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
       @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1]
+      # コンフィグ作成
+      @constructor.addEventConfigContents(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
 
     if window.isWorkTable
       # 選択枠消去
@@ -397,7 +399,6 @@ class EventConfig
   # @param [Integer] distToken アイテム識別ID
   @addEventConfigContents = (distToken) ->
     itemClass = Common.getClassFromMap(distToken)
-
     if itemClass? && itemClass.actionProperties?
       className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken)
       action_forms = $('#event-config .action_forms')
@@ -458,7 +459,7 @@ class EventConfig
   initEventSpecificConfig: (objClass) ->
     if !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]]? ||
       !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES]?
-        # メソッド or 変数編集無し
+        # メソッド or 独自コンフィグ無し
         return
 
     sp = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES]
@@ -469,7 +470,12 @@ class EventConfig
       if e.length > 0
         e.val(v)
 
-    # FIXME: イベント必要であれば実装
+    # イベント初期化呼び出し
+    initSpecificConfigParam = {}
+    for methodName, v of objClass.actionProperties.methods
+      methodClassName = @constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', methodName)
+      initSpecificConfigParam[methodName] = @emt.find(".#{methodClassName} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT}:first")
+    objClass.initSpecificConfig(initSpecificConfigParam)
 
   # 変数変更値が存在するか
   hasModifiableVar: (varName = null) ->

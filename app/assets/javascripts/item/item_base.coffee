@@ -111,9 +111,9 @@ class ItemBase extends ItemEventBase
     @removeItemElement()
     @createItemElement( =>
       @itemDraw(show)
-      if @setupDragAndResizeEvents?
-        # ドラッグ & リサイズイベント設定
-        @setupDragAndResizeEvents()
+      if @setupItemEvents?
+        # アイテムのイベント設定
+        @setupItemEvents()
       @reDrawing = false
       if @reDrawStack? && @reDrawStack
         # スタックが存在する場合再度描画

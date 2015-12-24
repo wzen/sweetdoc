@@ -25,9 +25,10 @@ class ConfigMenu
     return _modifiables_vars_config(controller, modifiables, false)
   end
 
-  def self.event_specific_config(controller, class_dist_token)
+  def self.event_specific_config(controller, class_dist_token, method_name)
     dir = 'sidebar_menu/event/specific_values'
-    temp_name = class_dist_token.to_s.downcase
+    temp_name = "#{class_dist_token.to_s.downcase}_#{method_name.to_s.downcase}"
+    # TODO: 生HTMLを取得できるようにする
     # テンプレート存在チェック
     if lookup_context.exists?(temp_name, dir, true)
       temp = "#{dir}/#{temp_name}"
@@ -40,9 +41,9 @@ class ConfigMenu
     end
   end
 
-  def self._modifiables_vars_config(controller, modifiables, isDesign)
+  def self._modifiables_vars_config(controller, modifiables, is_design)
     ret = nil
-    dir = isDesign ? 'design' : 'event'
+    dir = is_design ? 'design' : 'event'
     modifiables.each do |var, v|
       temp_name = ''
       if v['type'] == Const::ItemDesignOptionType::NUMBER

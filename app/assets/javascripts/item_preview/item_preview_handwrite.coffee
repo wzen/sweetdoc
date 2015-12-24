@@ -6,7 +6,7 @@ class ItemPreviewHandwrite extends Handwrite
       if window.scrollInside.find('.item').length == 0
         @item.restoreAllDrawingSurface()
         @item.endDraw(@zindex, true, =>
-          @item.setupDragAndResizeEvents()
+          @item.setupItemEvents()
           @item.saveObj(true)
           @zindex += 1
           # デザインコンフィグを初期化

@@ -234,8 +234,6 @@ Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton)
 
 # 初期化
 if window.itemInitFuncList? && !window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN]?
-  if EventConfig?
-    EventConfig.addEventConfigContents(PreloadItemButton.CLASS_DIST_TOKEN)
   if window.debug
     console.log('button loaded')
   window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] = (option = {}) ->

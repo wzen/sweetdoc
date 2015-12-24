@@ -218,9 +218,6 @@ PreloadItemButton = (function(superClass) {
 Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemButton.CLASS_DIST_TOKEN] == null)) {
-  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemButton.CLASS_DIST_TOKEN);
-  }
   if (window.debug) {
     console.log('button loaded');
   }

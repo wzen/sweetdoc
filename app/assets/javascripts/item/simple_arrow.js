@@ -100,7 +100,7 @@ SimpleArrowItem = (function(superClass) {
     }
     $('#' + this.canvasElementId()).attr('width', $('#' + this.id).width());
     $('#' + this.canvasElementId()).attr('height', $('#' + this.id).height());
-    this.setupDragAndResizeEvents();
+    this.setupItemEvents();
     if (show) {
       drawingCanvas = document.getElementById(this.canvasElementId());
       drawingContext = drawingCanvas.getContext('2d');

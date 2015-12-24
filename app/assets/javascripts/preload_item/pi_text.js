@@ -67,7 +67,7 @@ PreloadItemText = (function(superClass) {
     this._editing = true;
     return this.endDraw(zindex, true, (function(_this) {
       return function() {
-        _this.setupDragAndResizeEvents();
+        _this.setupItemEvents();
         _this.saveObj(true);
         _this.firstFocus = Common.firstFocusItemObj() === null;
         Navbar.setModeEdit();
@@ -146,9 +146,6 @@ PreloadItemText = (function(superClass) {
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[PreloadItemText.CLASS_DIST_TOKEN] == null)) {
-  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(PreloadItemText.CLASS_DIST_TOKEN);
-  }
   if (window.debug) {
     console.log('PreloadItemText loaded');
   }

@@ -81,10 +81,6 @@ BackgroundEvent = (function(superClass) {
 
   BackgroundEvent.actionProperties = BackgroundEvent.PrivateClass.actionProperties;
 
-  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(BackgroundEvent.PrivateClass.CLASS_DIST_TOKEN);
-  }
-
   return BackgroundEvent;
 
 })(CommonEvent);

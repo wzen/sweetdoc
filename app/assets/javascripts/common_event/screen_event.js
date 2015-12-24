@@ -65,7 +65,16 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
-      var actionType, finished_count, scale, scrollLeft, scrollTop;
+      var actionType, canvas, finished_count, overlay, scale, scrollLeft, scrollTop;
+      if (opt.isPreview && opt.keepDispMag) {
+        overlay = $('#preview_position_overlay');
+        if ((overlay == null) || overlay.length === 0) {
+          canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
+          window.drawingCanvas.parent().append(canvas);
+          overlay = $('#preview_position_overlay');
+        }
+        overlay;
+      }
       actionType = this.getEventActionType();
       if (actionType === Constant.ActionType.CLICK) {
         finished_count = 0;
@@ -105,6 +114,27 @@ ScreenEvent = (function(superClass) {
       }
     };
 
+    PrivateClass.prototype.stopPreview = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
+      $('#preview_position_overlay').remove();
+      return PrivateClass.__super__.stopPreview.call(this, callback);
+    };
+
+    PrivateClass.initSpecificConfig = function(specificRoot) {
+      var emt;
+      emt = specificRoot['changeScreenPosition'];
+      return emt.find('event_pointing:first').off('click').on('click', (function(_this) {
+        return function(e) {
+          window.eventPointingMode = Constant.EventInputPointingMode.DRAW;
+          return FloatView.showFixed('Drag position', FloatView.Type.INFO, function() {
+            return window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT;
+          });
+        };
+      })(this));
+    };
+
     return PrivateClass;
 
   })(CommonEvent.PrivateClass);
@@ -114,10 +144,6 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.CLASS_DIST_TOKEN = ScreenEvent.PrivateClass.CLASS_DIST_TOKEN;
 
   ScreenEvent.actionProperties = ScreenEvent.PrivateClass.actionProperties;
-
-  if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-    EventConfig.addEventConfigContents(ScreenEvent.PrivateClass.CLASS_DIST_TOKEN);
-  }
 
   return ScreenEvent;
 

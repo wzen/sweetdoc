@@ -126,8 +126,8 @@ ItemBase = (function(superClass) {
     return this.createItemElement((function(_this) {
       return function() {
         _this.itemDraw(show);
-        if (_this.setupDragAndResizeEvents != null) {
-          _this.setupDragAndResizeEvents();
+        if (_this.setupItemEvents != null) {
+          _this.setupItemEvents();
         }
         _this.reDrawing = false;
         if ((_this.reDrawStack != null) && _this.reDrawStack) {

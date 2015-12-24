@@ -692,8 +692,6 @@ class Common
               option = {}
               Common.availJs(d.class_dist_token, d.js_src, option, =>
                 PageValue.addItemInfo(d.class_dist_token)
-                if window.isWorkTable && EventConfig?
-                  EventConfig.addEventConfigContents(d.class_dist_token)
                 dataIdx += 1
                 if dataIdx >= data.indexes.length
                   if callback?
@@ -763,9 +761,6 @@ class Common
     _addItem = (class_dist_token = null) ->
       if class_dist_token?
         PageValue.addItemInfo(class_dist_token)
-        if EventConfig?
-          EventConfig.addEventConfigContents(class_dist_token)
-
 
     if itemJsList.length == 0
       if callback?

@@ -6,9 +6,32 @@ class EventDragPointing
   constructor: (cood = null) ->
     return @constructor.getInstance(cood)
 
-  class @PrivateClass
+  class @PrivateClass extends CssItemBase
+
     setDrawEndCallback: (callback) ->
       @drawEndCallback = callback
+
+    setDragCallback: (callback) ->
+      @dragCallback = callback
+
+    setResizeCallback: (callback) ->
+      @resizeCallback = callback
+
+    # 枠のみのエレメント描画
+    cssItemHtml: ->
+      return '<div class="drag_pointing"></div>'
+
+    # マウスダウン時の描画イベント
+    # @param [Array] loc Canvas座標
+    mouseDownDrawing: (callback = null) ->
+      # アイテム削除
+      @removeItemElement()
+      if callback?
+        callback()
+
+    # マウスアップ時の描画イベント
+    mouseUpDrawing: (zindex, callback = null) ->
+      @endDraw(callback)
 
     startCood: (cood) ->
       if cood?
@@ -31,31 +54,36 @@ class EventDragPointing
         @itemSize.y = cood.y
       drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
-    endDraw: ->
-      # Canvasに枠を描く
+    endDraw: (callback = null) ->
+      @zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1
 
-      if @drawEndCallback?
-        @drawEndCallback(@itemSize)
+      @reDraw(true, =>
+        @setupDragAndResizeEvent()
+        if @drawEndCallback?
+          @drawEndCallback(@itemSize)
+        if callback?
+          callback()
+      )
+
+    drag: ->
+      if @dragCallback?
+        @dragCallback(@itemSize)
+
+    resize: ->
+      if @resizeCallback?
+        @resizeCallback(@itemSize)
+
+    # 以下の処理はなし
+    saveObj: (newCreated = false) ->
+    getItemPropFromPageValue : (prop, isCache = false) ->
+    setItemPropToPageValue : (prop, value, isCache = false) ->
+    applyDefaultDesign: ->
+    makeCss: (forceUpdate = false) ->
+
+    @include(itemBaseWorktableExtend)
 
   @getInstance: (cood = null) ->
     if !instance?
       instance = new @PrivateClass()
     instance.startCood(cood)
     return instance
-
-  # マウスダウン時の描画イベント
-  # @param [Array] loc Canvas座標
-  mouseDownDrawing: (callback = null) ->
-
-  # マウスアップ時の描画イベント
-  mouseUpDrawing: (zindex, callback = null) ->
-    @endDraw(zindex)
-
-  # ドラッグ描画(枠)
-  # @param [Array] cood 座標
-  draw: (cood) ->
-    instance.draw(cood)
-
-  # ドラッグ終了
-  endDraw: (zindex, show = true, callback = null) ->
-    instance.endDraw()

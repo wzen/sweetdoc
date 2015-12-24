@@ -93,7 +93,7 @@ class SimpleArrowItem extends ItemBase
     #$(ElementCode.get().createItemElement(@)).appendTo(window.scrollInside)
     $('#' + @canvasElementId()).attr('width', $('#' + @id).width())
     $('#' + @canvasElementId()).attr('height', $('#' + @id).height())
-    @setupDragAndResizeEvents()
+    @setupItemEvents()
 
     if show
       # 新しいCanvasに描画

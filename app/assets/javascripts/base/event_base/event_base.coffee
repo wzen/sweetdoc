@@ -548,3 +548,7 @@ class EventBase extends Extend
           typeof v != 'function'
             @[k] = Common.makeClone(v)
     window.instanceMap[@id] = @
+
+  # 独自コンフィグのイベント初期化
+  # @abstract
+  @initSpecificConfig = (specificRoot) ->

@@ -115,6 +115,9 @@ class EventPageValueBase
         if writeValue[v]?
           eventConfig[v] = writeValue[v]
 
+      # コンフィグ作成
+      eventConfig.constructor.addEventConfigContents(eventConfig[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
+
       # 選択イベントタイプ
       selectItemValue = "#{eventConfig[@PageValueKey.ID]}#{EventConfig.EVENT_ITEM_SEPERATOR}#{eventConfig[@PageValueKey.CLASS_DIST_TOKEN]}"
       $('.te_item_select', eventConfig.emt).val(selectItemValue)

@@ -51,6 +51,7 @@ EventConfig = (function() {
       splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
       this[EventPageValueBase.PageValueKey.ID] = splitValues[0];
       this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1];
+      this.constructor.addEventConfigContents(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
     }
     if (window.isWorkTable) {
       WorktableCommon.clearSelectedBorder();
@@ -491,22 +492,26 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.initEventSpecificConfig = function(objClass) {
-    var e, results, sp, v, varName;
+    var e, initSpecificConfigParam, methodClassName, methodName, ref, sp, v, varName;
     if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES] == null)) {
       return;
     }
     sp = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.SPECIFIC_METHOD_VALUES];
-    results = [];
     for (varName in sp) {
       v = sp[varName];
       e = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT + " ." + varName + ":not('.fixed_value')");
       if (e.length > 0) {
-        results.push(e.val(v));
-      } else {
-        results.push(void 0);
+        e.val(v);
       }
     }
-    return results;
+    initSpecificConfigParam = {};
+    ref = objClass.actionProperties.methods;
+    for (methodName in ref) {
+      v = ref[methodName];
+      methodClassName = this.constructor.ITEM_VALUES_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]).replace('@methodname', methodName);
+      initSpecificConfigParam[methodName] = this.emt.find("." + methodClassName + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT + ":first");
+    }
+    return objClass.initSpecificConfig(initSpecificConfigParam);
   };
 
   EventConfig.prototype.hasModifiableVar = function(varName) {

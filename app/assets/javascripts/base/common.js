@@ -865,9 +865,6 @@ Common = (function() {
             return Common.availJs(d.class_dist_token, d.js_src, option, (function(_this) {
               return function() {
                 PageValue.addItemInfo(d.class_dist_token);
-                if (window.isWorkTable && (typeof EventConfig !== "undefined" && EventConfig !== null)) {
-                  EventConfig.addEventConfigContents(d.class_dist_token);
-                }
                 dataIdx += 1;
                 if (dataIdx >= data.indexes.length) {
                   if (callback != null) {
@@ -965,10 +962,7 @@ Common = (function() {
         class_dist_token = null;
       }
       if (class_dist_token != null) {
-        PageValue.addItemInfo(class_dist_token);
-        if (typeof EventConfig !== "undefined" && EventConfig !== null) {
-          return EventConfig.addEventConfigContents(class_dist_token);
-        }
+        return PageValue.addItemInfo(class_dist_token);
       }
     };
     if (itemJsList.length === 0) {

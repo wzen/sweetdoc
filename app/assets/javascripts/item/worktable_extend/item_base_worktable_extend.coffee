@@ -17,7 +17,7 @@ itemBaseWorktableExtend =
   mouseUpDrawing: (zindex, callback = null) ->
     @restoreAllDrawingSurface()
     @endDraw(zindex, true, =>
-      @setupDragAndResizeEvents()
+      @setupItemEvents()
       WorktableCommon.changeMode(Constant.Mode.DRAW)
       @saveObj(true)
       # フォーカス設定
@@ -59,9 +59,9 @@ itemBaseWorktableExtend =
     @itemSize.y += scrollContents.scrollTop()
     @createItemElement((createdElement) =>
       @itemDraw(show)
-      if @setupDragAndResizeEvents?
-        # ドラッグ & リサイズイベント設定
-        @setupDragAndResizeEvents()
+      if @setupItemEvents?
+        # アイテムのイベント設定
+        @setupItemEvents()
       if callback?
         callback()
     )
@@ -114,87 +114,90 @@ itemBaseWorktableExtend =
     $('#design-config').show()
     $('#' + @getDesignConfigId()).show()
 
+  # コンテキストメニュー設定
+  setupContextMenu: ->
+    menu = []
+    contextSelector = ".context_base"
+    menu.push({
+      title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # アイテム編集
+        Sidebar.openItemEditConfig(event.target)
+    })
+    menu.push({
+      title: I18n.t('context_menu.copy'), cmd: "copy", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # コピー
+        WorktableCommon.copyItem()
+        WorktableCommon.setMainContainerContext()
+    })
+    menu.push({
+      title: I18n.t('context_menu.cut'), cmd: "cut", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # 切り取り
+        WorktableCommon.cutItem()
+        WorktableCommon.setMainContainerContext()
+    })
+    menu.push({
+      title: I18n.t('context_menu.float'), cmd: "float", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # 最前面移動
+        objId = $(event.target).attr('id')
+        WorktableCommon.floatItem(objId)
+        # キャッシュ保存
+        LocalStorage.saveAllPageValues()
+        # 履歴保存
+        OperationHistory.add()
+    })
+    menu.push({
+      title: I18n.t('context_menu.rear'), cmd: "rear", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # 最背面移動
+        objId = $(event.target).attr('id')
+        WorktableCommon.rearItem(objId)
+        # キャッシュ保存
+        LocalStorage.saveAllPageValues()
+        # 履歴保存
+        OperationHistory.add()
+    })
+    menu.push({
+      title: I18n.t('context_menu.delete'), cmd: "delete", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+        # アイテム削除
+        if window.confirm(I18n.t('message.dialog.delete_item'))
+          WorktableCommon.removeSingleItem(event.target)
+    })
+    WorktableCommon.setupContextMenu(@getJQueryElement(), contextSelector, menu)
+
   # アイテムに対してドラッグ&リサイズイベントを設定する
-  setupDragAndResizeEvents: ->
-    self = @
-    # コンテキストメニュー設定
-    do ->
-      menu = []
-      contextSelector = ".context_base"
-      menu.push({
-        title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
-          # アイテム編集
-          Sidebar.openItemEditConfig(event.target)
-      })
-      menu.push({
-        title: I18n.t('context_menu.copy'), cmd: "copy", uiIcon: "ui-icon-scissors", func: (event, ui) ->
-          # コピー
-          WorktableCommon.copyItem()
-          WorktableCommon.setMainContainerContext()
-      })
-      menu.push({
-        title: I18n.t('context_menu.cut'), cmd: "cut", uiIcon: "ui-icon-scissors", func: (event, ui) ->
-          # 切り取り
-          WorktableCommon.cutItem()
-          WorktableCommon.setMainContainerContext()
-      })
-      menu.push({
-        title: I18n.t('context_menu.float'), cmd: "float", uiIcon: "ui-icon-scissors", func: (event, ui) ->
-          # 最前面移動
-          objId = $(event.target).attr('id')
-          WorktableCommon.floatItem(objId)
-          # キャッシュ保存
-          LocalStorage.saveAllPageValues()
-          # 履歴保存
-          OperationHistory.add()
-      })
-      menu.push({
-        title: I18n.t('context_menu.rear'), cmd: "rear", uiIcon: "ui-icon-scissors", func: (event, ui) ->
-          # 最背面移動
-          objId = $(event.target).attr('id')
-          WorktableCommon.rearItem(objId)
-          # キャッシュ保存
-          LocalStorage.saveAllPageValues()
-          # 履歴保存
-          OperationHistory.add()
-      })
-      menu.push({
-        title: I18n.t('context_menu.delete'), cmd: "delete", uiIcon: "ui-icon-scissors", func: (event, ui) ->
-          # アイテム削除
-          if window.confirm(I18n.t('message.dialog.delete_item'))
-            WorktableCommon.removeSingleItem(event.target)
-      })
-      WorktableCommon.setupContextMenu(self.getJQueryElement(), contextSelector, menu)
+  setupDragAndResizeEvent: ->
+    @getJQueryElement().draggable({
+      containment: scrollInside
+      drag: (event, ui) =>
+        if @drag?
+          @drag()
+      stop: (event, ui) =>
+        if @dragComplete?
+          @dragComplete()
+    })
+    @getJQueryElement().resizable({
+      containment: scrollInside
+      resize: (event, ui) =>
+        if @resize?
+          @resize()
+      stop: (event, ui) =>
+        if @resizeComplete?
+          @resizeComplete()
+    })
 
-    # クリックイベント設定
-    do ->
-      self.getJQueryElement().mousedown((e)->
-        if e.which == 1 #左クリック
-          e.stopPropagation()
-          WorktableCommon.clearSelectedBorder()
-          WorktableCommon.setSelectedBorder(@, "edit")
-      )
+  # クリックイベント設定
+  setupClickEvent: ->
+    @getJQueryElement().mousedown((e) ->
+      if e.which == 1 #左クリック
+        e.stopPropagation()
+        WorktableCommon.clearSelectedBorder()
+        WorktableCommon.setSelectedBorder(@, "edit")
+    )
 
-    # JQueryUIのドラッグイベントとリサイズ設定
-    do ->
-      self.getJQueryElement().draggable({
-        containment: scrollInside
-        drag: (event, ui) ->
-          if self.drag?
-            self.drag()
-        stop: (event, ui) ->
-          if self.dragComplete?
-            self.dragComplete()
-      })
-      self.getJQueryElement().resizable({
-        containment: scrollInside
-        resize: (event, ui) ->
-          if self.resize?
-            self.resize()
-        stop: (event, ui) ->
-          if self.resizeComplete?
-            self.resizeComplete()
-      })
+  # アイテムにイベントを設定する
+  setupItemEvents: ->
+    @setupContextMenu()
+    @setupClickEvent()
+    @setupDragAndResizeEvent()
 
   # ドラッグ中イベント
   drag: ->

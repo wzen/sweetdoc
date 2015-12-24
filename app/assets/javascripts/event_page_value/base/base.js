@@ -133,6 +133,7 @@ EventPageValueBase = (function() {
           eventConfig[v] = writeValue[v];
         }
       }
+      eventConfig.constructor.addEventConfigContents(eventConfig[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
       selectItemValue = "" + eventConfig[this.PageValueKey.ID] + EventConfig.EVENT_ITEM_SEPERATOR + eventConfig[this.PageValueKey.CLASS_DIST_TOKEN];
       $('.te_item_select', eventConfig.emt).val(selectItemValue);
       actionFormName = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', eventConfig[this.PageValueKey.CLASS_DIST_TOKEN]);

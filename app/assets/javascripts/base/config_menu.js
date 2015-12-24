@@ -107,6 +107,7 @@ ConfigMenu = (function() {
       type: "POST",
       data: {
         classDistToken: itemObjClass.CLASS_DIST_TOKEN,
+        methodName: eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME],
         modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS]
       },
       dataType: "json",

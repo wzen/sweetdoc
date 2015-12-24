@@ -15,10 +15,11 @@ class ConfigMenuController < ApplicationController
 
   def method_values_config
     class_dist_token = params.require('classDistToken')
+    method_name = params.require('methodName')
     modifiables = params.fetch('modifiables', {})
     @result_success = true
     @modify_html = ConfigMenu.event_var_modify_config(self, modifiables)
-    @specific_html = ConfigMenu.event_specific_config(self, class_dist_token)
+    @specific_html = ConfigMenu.event_specific_config(self, class_dist_token, method_name)
   end
 
   def preload_image_path_select_config
