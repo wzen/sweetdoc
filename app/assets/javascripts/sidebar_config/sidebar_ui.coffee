@@ -115,5 +115,14 @@ class Sidebar
 
   # 操作不可にする
   @disabledOperation = (flg) ->
+    if flg
+      if $('#sidebar .cover_touch_overlay').length == 0
+        $('#sidebar').append("<div class='config_overlay'></div>")
+        $('.cover_touch_overlay').off('click').on('click', (e) ->
+          e.preventDefault()
+          return
+        )
+    else
+      $('#sidebar .cover_touch_overlay').remove()
 
 

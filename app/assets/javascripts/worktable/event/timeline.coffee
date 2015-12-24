@@ -209,3 +209,12 @@ class Timeline
 
   # 操作不可にする
   @disabledOperation = (flg) ->
+    if flg
+      if $('#timeline_container .cover_touch_overlay').length == 0
+        $('#timeline_container').append("<div class='config_overlay'></div>")
+        $('.cover_touch_overlay').off('click').on('click', (e) ->
+          e.preventDefault()
+          return
+        )
+    else
+      $('#timeline_container .cover_touch_overlay').remove()

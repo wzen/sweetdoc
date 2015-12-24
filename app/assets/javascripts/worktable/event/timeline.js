@@ -201,7 +201,18 @@ Timeline = (function() {
     return this.refreshAllTimeline();
   };
 
-  Timeline.disabledOperation = function(flg) {};
+  Timeline.disabledOperation = function(flg) {
+    if (flg) {
+      if ($('#timeline_container .cover_touch_overlay').length === 0) {
+        $('#timeline_container').append("<div class='config_overlay'></div>");
+        return $('.cover_touch_overlay').off('click').on('click', function(e) {
+          e.preventDefault();
+        });
+      }
+    } else {
+      return $('#timeline_container .cover_touch_overlay').remove();
+    }
+  };
 
   return Timeline;
 

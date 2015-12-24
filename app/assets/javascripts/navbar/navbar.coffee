@@ -225,3 +225,12 @@ class Navbar
 
   # 操作不可にする
   @disabledOperation = (flg) ->
+    if flg
+      if $("##{@NAVBAR_ROOT} .cover_touch_overlay").length == 0
+        $("##{@NAVBAR_ROOT}").append("<div class='config_overlay'></div>")
+        $('.cover_touch_overlay').off('click').on('click', (e) ->
+          e.preventDefault()
+          return
+        )
+    else
+      $("##{@NAVBAR_ROOT} .cover_touch_overlay").remove()

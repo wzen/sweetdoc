@@ -42,6 +42,7 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.constructor.call(this);
       this.beforeScrollTop = scrollContents.scrollTop();
       this.beforeScrollLeft = scrollContents.scrollLeft();
+      this.beforeZoom = 1.0;
     }
 
     PrivateClass.prototype.updateEventBefore = function() {
@@ -65,21 +66,50 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
-      var actionType, canvas, finished_count, overlay, scale, scrollLeft, scrollTop;
-      if (opt.isPreview && opt.keepDispMag) {
-        overlay = $('#preview_position_overlay');
-        if ((overlay == null) || overlay.length === 0) {
-          canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
-          window.drawingCanvas.parent().append(canvas);
+      var _drawOverlay, actionType, canvas, canvasContext, finished_count, overlay, scale, scrollLeft, scrollTop, x, y;
+      _drawOverlay = function(context, x, y, scale) {
+        var _rect, left, screenSize, top;
+        _rect = function(context, x, y, w, h) {
+          context.beginPath();
+          context.moveTo(x, y);
+          context.lineTo(x + w, y);
+          context.lineTo(x + w, y + h);
+          context.lineTo(x, y + h);
+          return context.closePath();
+        };
+        context.fillStyle = 'gray';
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        context.save();
+        context.rect(0, 0, context.canvas.width, context.canvas.height);
+        screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+        top = y - (screenSize.height * scale) / 2.0;
+        left = x - (screenSize.width * scale) / 2.0;
+        _rect(context, left, top, screenSize.width * scale, screenSize.height * scale);
+        context.fill();
+        return context.restore();
+      };
+      x = (this._specificMethodValues.afterX - this.beforeScrollLeft) * (opt.progress / opt.progressMax) + this.beforeScrollLeft;
+      y = (this._specificMethodValues.afterY - this.beforeScrollTop) * (opt.progress / opt.progressMax) + this.beforeScrollTop;
+      scale = (this._specificMethodValues.afterZ - this.beforeZoom) * (opt.progress / opt.progressMax) + this.beforeZoom;
+      if (opt.isPreview) {
+        if (opt.keepDispMag && scale < 1.0) {
           overlay = $('#preview_position_overlay');
+          if ((overlay == null) || overlay.length === 0) {
+            canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
+            window.drawingCanvas.parent().append(canvas);
+            overlay = $('#preview_position_overlay');
+          }
+          canvasContext = overlay[0].getContent('2d');
+          _drawOverlay.call(canvasContext, x, y, scale);
+        } else {
+          $('#preview_position_overlay').remove();
         }
-        overlay;
       }
       actionType = this.getEventActionType();
       if (actionType === Constant.ActionType.CLICK) {
         finished_count = 0;
-        scrollLeft = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
-        scrollTop = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
+        scrollLeft = parseInt(x);
+        scrollTop = parseInt(y);
         Common.updateScrollContentsPosition(scrollTop, scrollLeft, false, function() {
           finished_count += 1;
           if (finished_count >= 2) {
@@ -89,20 +119,9 @@ ScreenEvent = (function(superClass) {
             }
           }
         });
-        scale = this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ;
-        if (scale !== 0) {
-          return this.getJQueryElement().transition({
-            scale: "" + scale
-          }, 'normal', 'linear', function() {
-            finished_count += 1;
-            if (finished_count >= 2) {
-              this._isFinishedEvent = true;
-              if (opt.complete != null) {
-                return opt.complete();
-              }
-            }
-          });
-        } else {
+        return this.getJQueryElement().transition({
+          scale: "" + scale
+        }, 'normal', 'linear', function() {
           finished_count += 1;
           if (finished_count >= 2) {
             this._isFinishedEvent = true;
@@ -110,7 +129,7 @@ ScreenEvent = (function(superClass) {
               return opt.complete();
             }
           }
-        }
+        });
       }
     };
 
@@ -123,10 +142,36 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {
-      var emt;
+      var _updateConfigInput, emt;
+      _updateConfigInput = function(emt, pointingSize) {
+        var screenSize, x, y, z;
+        x = pointingSize.x + pointingSize.w / 2.0;
+        y = pointingSize.y + pointingSize.h / 2.0;
+        z = null;
+        screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+        if (pointingSize.w > pointingSize.h) {
+          z = pointingSize.w / screenSize.width;
+        } else {
+          z = pointingSize.h / screenSize.height;
+        }
+        emt.find('.afterX:first').val(x);
+        emt.find('.afterY:first').val(y);
+        return emt.find('.afterZ:first').val(z);
+      };
       emt = specificRoot['changeScreenPosition'];
       return emt.find('event_pointing:first').off('click').on('click', (function(_this) {
         return function(e) {
+          var pointing;
+          pointing = new EventDragPointing();
+          pointing.setDrawEndCallback(function(pointingSize) {
+            return _updateConfigInput.call(_this, emt, pointingSize);
+          });
+          pointing.setDragCallback(function(pointingSize) {
+            return _updateConfigInput.call(_this, emt, pointingSize);
+          });
+          pointing.setResizeCallback(function(pointingSize) {
+            return _updateConfigInput.call(_this, emt, pointingSize);
+          });
           WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
           return FloatView.showFixed('Drag position', FloatView.Type.INFO, function() {
             return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);

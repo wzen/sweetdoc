@@ -141,7 +141,18 @@ Sidebar = (function() {
     return EventConfig.initEventConfig(distId, teNum);
   };
 
-  Sidebar.disabledOperation = function(flg) {};
+  Sidebar.disabledOperation = function(flg) {
+    if (flg) {
+      if ($('#sidebar .cover_touch_overlay').length === 0) {
+        $('#sidebar').append("<div class='config_overlay'></div>");
+        return $('.cover_touch_overlay').off('click').on('click', function(e) {
+          e.preventDefault();
+        });
+      }
+    } else {
+      return $('#sidebar .cover_touch_overlay').remove();
+    }
+  };
 
   return Sidebar;
 

@@ -244,7 +244,18 @@ Navbar = (function() {
     return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).html((I18n.t('header_menu.etc.last_update_date')) + " : " + (Common.displayLastUpdateTime(update_at)));
   };
 
-  Navbar.disabledOperation = function(flg) {};
+  Navbar.disabledOperation = function(flg) {
+    if (flg) {
+      if ($("#" + this.NAVBAR_ROOT + " .cover_touch_overlay").length === 0) {
+        $("#" + this.NAVBAR_ROOT).append("<div class='config_overlay'></div>");
+        return $('.cover_touch_overlay').off('click').on('click', function(e) {
+          e.preventDefault();
+        });
+      }
+    } else {
+      return $("#" + this.NAVBAR_ROOT + " .cover_touch_overlay").remove();
+    }
+  };
 
   return Navbar;
 

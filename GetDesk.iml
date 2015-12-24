@@ -90,6 +90,8 @@
     <orderEntry type="library" scope="PROVIDED" name="rails-erd (v1.1.0@9ccb09, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="railties (v4.1.12, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="raindrops (v0.15.0, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rake (v10.4.2, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rdoc (v4.2.0, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="redis (v3.2.2, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="redis-actionpack (v4.0.1, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="redis-activesupport (v4.1.5, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
