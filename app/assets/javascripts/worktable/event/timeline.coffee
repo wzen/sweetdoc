@@ -207,5 +207,5 @@ class Timeline
     # タイムライン再作成
     @refreshAllTimeline()
 
-
-
+  # 操作不可にする
+  @disabledOperation = (flg) ->

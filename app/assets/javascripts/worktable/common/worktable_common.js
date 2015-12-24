@@ -194,6 +194,24 @@ WorktableCommon = (function() {
     }
   };
 
+  WorktableCommon.changeEventPointingMode = function(afterMode) {
+    if (afterMode === Constant.EventInputPointingMode.NOT_SELECT) {
+      Timeline.disabledOperation(false);
+      Sidebar.disabledOperation(false);
+      Navbar.disabledOperation(false);
+    } else if (afterMode === Constant.EventInputPointingMode.DRAW) {
+      Timeline.disabledOperation(true);
+      Sidebar.disabledOperation(true);
+      Navbar.disabledOperation(true);
+    } else if (afterMode === Constant.EventInputPointingMode.ITEM_TOUCH) {
+      Timeline.disabledOperation(true);
+      Sidebar.disabledOperation(true);
+      Navbar.disabledOperation(true);
+    }
+    this.setModeClassToMainDiv(afterMode);
+    return window.eventPointingMode = afterMode;
+  };
+
   WorktableCommon.setModeClassToMainDiv = function(mode) {
     var classes;
     classes = ['draw_mode', 'draw_pointing', 'click_pointing'];

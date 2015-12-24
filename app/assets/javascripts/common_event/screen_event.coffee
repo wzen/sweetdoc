@@ -97,11 +97,9 @@ class ScreenEvent extends CommonEvent
     @initSpecificConfig = (specificRoot) ->
       emt = specificRoot['changeScreenPosition']
       emt.find('event_pointing:first').off('click').on('click', (e) =>
-        window.eventPointingMode = Constant.EventInputPointingMode.DRAW
-        # 全体の入力を不可に
-
+        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
         FloatView.showFixed('Drag position', FloatView.Type.INFO, =>
-          window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT
+          WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
         )
       )
 

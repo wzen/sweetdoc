@@ -244,6 +244,8 @@ Navbar = (function() {
     return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).html((I18n.t('header_menu.etc.last_update_date')) + " : " + (Common.displayLastUpdateTime(update_at)));
   };
 
+  Navbar.disabledOperation = function(flg) {};
+
   return Navbar;
 
 })();

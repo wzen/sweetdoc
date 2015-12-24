@@ -223,4 +223,5 @@ class Navbar
   @setLastUpdateTime = (update_at) ->
     $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").html("#{I18n.t('header_menu.etc.last_update_date')} : #{Common.displayLastUpdateTime(update_at)}")
 
-
+  # 操作不可にする
+  @disabledOperation = (flg) ->

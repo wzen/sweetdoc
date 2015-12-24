@@ -201,6 +201,8 @@ Timeline = (function() {
     return this.refreshAllTimeline();
   };
 
+  Timeline.disabledOperation = function(flg) {};
+
   return Timeline;
 
 })();

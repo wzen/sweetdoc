@@ -141,6 +141,8 @@ Sidebar = (function() {
     return EventConfig.initEventConfig(distId, teNum);
   };
 
+  Sidebar.disabledOperation = function(flg) {};
+
   return Sidebar;
 
 })();

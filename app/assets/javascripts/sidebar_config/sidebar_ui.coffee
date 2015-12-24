@@ -113,4 +113,7 @@ class Sidebar
     # イベントコンフィグメニュー初期化
     EventConfig.initEventConfig(distId, teNum)
 
+  # 操作不可にする
+  @disabledOperation = (flg) ->
+
 

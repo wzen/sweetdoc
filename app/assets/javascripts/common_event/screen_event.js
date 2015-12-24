@@ -127,9 +127,9 @@ ScreenEvent = (function(superClass) {
       emt = specificRoot['changeScreenPosition'];
       return emt.find('event_pointing:first').off('click').on('click', (function(_this) {
         return function(e) {
-          window.eventPointingMode = Constant.EventInputPointingMode.DRAW;
+          WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
           return FloatView.showFixed('Drag position', FloatView.Type.INFO, function() {
-            return window.eventPointingMode = Constant.EventInputPointingMode.NOT_SELECT;
+            return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
           });
         };
       })(this));
