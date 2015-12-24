@@ -97,6 +97,9 @@ gem 'remotipart', '1.2.1'
 # メンテナンス画面の表示
 gem 'turnout'
 
+# 環境変数管理
+gem 'dotenv-rails'
+
 #gem "facets", require: false
 #gem 'fastimage'
 

@@ -21,3 +21,4 @@
 .idea/dataSources.local.xml
 .idea/watcherTasks.xml
 .idea/workspace.xml
+.env
