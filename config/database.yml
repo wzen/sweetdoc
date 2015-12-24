@@ -8,15 +8,15 @@ default: &default
   adapter: mysql2
   pool: 5
   timeout: 5000
-  username: root
-  password: wzen1983
+  username: <%= ENV['DB_NAME'] || 'example' %>
+  password: <%= ENV['DB_PASS'] %>
   socket: /tmp/mysql.sock
 
 development:
   <<: *default
   database: revolver_dev
-  username: root
-  password: wzen1983
+  username: <%= ENV['DB_NAME'] || 'example' %>
+  password: <%= ENV['DB_PASS'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -24,11 +24,11 @@ development:
 test:
   <<: *default
   database: revolver_test
-  username: root
-  password: wzen1983
+  username: <%= ENV['DB_NAME'] || 'example' %>
+  password: <%= ENV['DB_PASS'] %>
 
 production:
   <<: *default
   database: revolver_production
-  username: root
-  password: wzen1983
+  username: <%= ENV['DB_NAME'] || 'example' %>
+  password: <%= ENV['DB_PASS'] %>
