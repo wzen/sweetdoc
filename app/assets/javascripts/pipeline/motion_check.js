@@ -32,7 +32,6 @@
 //= require item/css_item_base
 //= require item/canvas_item_base
 //= require event_page_value/base/base.js
-//= require event_page_value/common/screenposition.js
 //= require event_page_value/item/item.js
 //= require navbar/navbar.js
 //= require paging_animation/pageflip

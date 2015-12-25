@@ -31,8 +31,8 @@ ScreenEvent = (function(superClass) {
             }
           },
           specificValues: {
-            afterX: scrollContents.scrollTop(),
-            afterY: scrollContents.scrollLeft(),
+            afterX: 0,
+            afterY: 0,
             afterZ: 1
           }
         }

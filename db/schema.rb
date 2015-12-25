@@ -20,21 +20,9 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.datetime "updated_at"
   end
 
-  create_table "common_action_events", force: true do |t|
-    t.integer  "common_action_id",                   null: false
-    t.integer  "user_auth_strength_min",             null: false
-    t.integer  "common_action_event_target_type_id", null: false
-    t.integer  "action_type_id",                     null: false
-    t.text     "method_name",                        null: false
-    t.text     "scroll_enabled_direction"
-    t.text     "scroll_forward_direction"
-    t.text     "options"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "common_actions", force: true do |t|
-    t.string   "name"
+    t.string   "title",      null: false
+    t.string   "dist_token", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -279,14 +267,6 @@ ActiveRecord::Schema.define(version: 20151209141157) do
     t.datetime "updated_at"
   end
 
-  create_table "localize_common_action_events", force: true do |t|
-    t.integer  "common_action_event_id", null: false
-    t.integer  "locale_id",              null: false
-    t.text     "options"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "localize_items", force: true do |t|
     t.integer  "item_id",    null: false
     t.integer  "locale_id",  null: false
@@ -298,7 +278,7 @@ ActiveRecord::Schema.define(version: 20151209141157) do
   create_table "preload_items", force: true do |t|
     t.string   "title",          null: false
     t.text     "caption"
-    t.string   "access_token",   null: false
+    t.string   "dist_token",     null: false
     t.integer  "create_user_id", null: false
     t.integer  "modify_user_id", null: false
     t.datetime "created_at"

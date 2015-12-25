@@ -5,5 +5,5 @@ one:
 
 two:
   id: 2
-  name: screen
+  title: screen
   dist_token: 'PI_ScreenEvent'
