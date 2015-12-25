@@ -497,8 +497,8 @@ class WorktableCommon
     return @eventProgressRoute(finishTeNum, finishFn).length > 0
 
   # 指定イベント以前をイベント適用後の状態に変更
-  @updatePrevEventsToAfter = (teNum, callback = null) ->
-    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, false, false, callback)
+  @updatePrevEventsToAfter = (teNum, keepDispMag = false, callback = null) ->
+    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, keepDispMag, false, callback)
 
   # プレビュー実行
   # @param [Integer] te_num 実行するイベント番号
@@ -523,7 +523,7 @@ class WorktableCommon
       for te, idx in tes
         item = window.instanceMap[te.id]
         if item?
-          item.initEvent(te)
+          item.initEvent(te, keepDispMag)
           if idx < tes.length - 1
             # インスタンスの状態を保存
             PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
@@ -532,7 +532,7 @@ class WorktableCommon
           else if doRunPreview
             window.previewRunning = true
             # プレビュー実行
-            item.preview(te, keepDispMag, =>
+            item.preview(te, =>
               # プレビューの実行回数超過
               window.previewRunning = false
               # EventPageValueの退避がある場合戻す

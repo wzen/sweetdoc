@@ -110,11 +110,8 @@ EventBase = (function(superClass) {
     return this._skipEvent = false;
   };
 
-  EventBase.prototype.preview = function(event, keepDispMag, loopFinishCallback) {
+  EventBase.prototype.preview = function(event, loopFinishCallback) {
     var _preview;
-    if (keepDispMag == null) {
-      keepDispMag = false;
-    }
     if (loopFinishCallback == null) {
       loopFinishCallback = null;
     }
@@ -147,8 +144,7 @@ EventBase = (function(superClass) {
                 _this.execMethod({
                   isPreview: true,
                   progress: p,
-                  progressMax: progressMax,
-                  keepDispMag: keepDispMag
+                  progressMax: progressMax
                 });
                 p += 1;
                 if (p >= progressMax) {
@@ -214,8 +210,7 @@ EventBase = (function(superClass) {
                 _this.willChapter();
                 return _this.execMethod({
                   isPreview: true,
-                  complete: _loop,
-                  keepDispMag: keepDispMag
+                  complete: _loop
                 });
               }, loopDelay);
             } else {
@@ -231,8 +226,7 @@ EventBase = (function(superClass) {
         })(this);
         return this.execMethod({
           isPreview: true,
-          complete: _loop,
-          keepDispMag: keepDispMag
+          complete: _loop
         });
       }
     };

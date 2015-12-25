@@ -84,7 +84,7 @@ class EventBase extends Extend
 
   # プレビュー開始
   # @param [Object] event 設定イベント
-  preview: (event, keepDispMag = false, loopFinishCallback = null) ->
+  preview: (event, loopFinishCallback = null) ->
     if window.runDebug
       console.log('EventBase preview id:' + @id)
 
@@ -115,7 +115,6 @@ class EventBase extends Extend
                 isPreview: true
                 progress: p
                 progressMax: progressMax
-                keepDispMag: keepDispMag
               })
               p += 1
               if p >= progressMax
@@ -172,7 +171,6 @@ class EventBase extends Extend
               @execMethod({
                 isPreview: true
                 complete: _loop
-                keepDispMag: keepDispMag
               })
             , loopDelay)
           else
@@ -185,7 +183,6 @@ class EventBase extends Extend
         @execMethod({
           isPreview: true
           complete: _loop
-          keepDispMag: keepDispMag
         })
 
     @stopPreview( =>

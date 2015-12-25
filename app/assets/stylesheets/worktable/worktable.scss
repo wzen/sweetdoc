@@ -936,6 +936,13 @@ form.item_image_form {
   background-color: transparent;
 }
 
+.keep_mag_base {
+  border: 5px darkgreen;
+  background-color: transparent;
+  pointer-events: none;
+  z-index: 9999999;
+}
+
 div.cover_touch_overlay {
   background: #e9e9e9;
   position: absolute;

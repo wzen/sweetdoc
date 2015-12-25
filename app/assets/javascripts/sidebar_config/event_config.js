@@ -675,7 +675,7 @@ EventConfig = (function() {
         return function(e) {
           if ($(e.target).is(':checked')) {
             $(e.target).attr('disabled', true);
-            return WorktableCommon.updatePrevEventsToAfter(teNum, function() {
+            return WorktableCommon.updatePrevEventsToAfter(teNum, true, function() {
               return $(e.target).removeAttr('disabled');
             });
           } else {

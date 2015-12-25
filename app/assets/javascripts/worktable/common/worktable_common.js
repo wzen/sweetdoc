@@ -576,11 +576,14 @@ WorktableCommon = (function() {
     return this.eventProgressRoute(finishTeNum, finishFn).length > 0;
   };
 
-  WorktableCommon.updatePrevEventsToAfter = function(teNum, callback) {
+  WorktableCommon.updatePrevEventsToAfter = function(teNum, keepDispMag, callback) {
+    if (keepDispMag == null) {
+      keepDispMag = false;
+    }
     if (callback == null) {
       callback = null;
     }
-    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, false, false, callback);
+    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, false, callback);
   };
 
   WorktableCommon.runPreview = function(teNum, keepDispMag, callback) {
@@ -615,13 +618,13 @@ WorktableCommon = (function() {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {
-            item.initEvent(te);
+            item.initEvent(te, keepDispMag);
             if (idx < tes.length - 1) {
               PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
               item.updateEventAfter();
             } else if (doRunPreview) {
               window.previewRunning = true;
-              item.preview(te, keepDispMag, function() {
+              item.preview(te, function() {
                 window.previewRunning = false;
                 return _this.reverseStashEventPageValueForPreviewIfNeeded(function() {
                   return _this.reDrawAllItemsFromInstancePageValueIfChanging();

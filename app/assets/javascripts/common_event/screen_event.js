@@ -12,6 +12,8 @@ ScreenEvent = (function(superClass) {
   }
 
   ScreenEvent.PrivateClass = (function(superClass1) {
+    var _drawKeepDispRect;
+
     extend(PrivateClass, superClass1);
 
     PrivateClass.EVENT_ID = '2';
@@ -45,6 +47,11 @@ ScreenEvent = (function(superClass) {
       this.beforeZoom = 1.0;
     }
 
+    PrivateClass.prototype.initEvent = function(event, keepDispMag) {
+      this.keepDispMag = keepDispMag != null ? keepDispMag : false;
+      return PrivateClass.__super__.initEvent.call(this, event);
+    };
+
     PrivateClass.prototype.updateEventBefore = function() {
       var methodName;
       PrivateClass.__super__.updateEventBefore.call(this);
@@ -63,6 +70,19 @@ ScreenEvent = (function(superClass) {
         scrollLeft = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         return Common.updateScrollContentsPosition(scrollTop, scrollLeft);
       }
+    };
+
+    _drawKeepDispRect = function(x, y, scale) {
+      var emt, height, left, screenSize, style, top, width;
+      $('.keep_mag_base').remove();
+      screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+      width = screenSize.width * scale;
+      height = screenSize.height * scale;
+      top = y - height / 2.0;
+      left = x - width / 2.0;
+      style = "position:absolute;top:" + top + "px;left:" + left + "px;width:" + width + "px;height:" + height + "px;";
+      emt = $("<div class='keep_mag_base' style='" + style + "'></div>");
+      return window.scrollInside.append(emt);
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
@@ -92,7 +112,7 @@ ScreenEvent = (function(superClass) {
       y = (this._specificMethodValues.afterY - this.beforeScrollTop) * (opt.progress / opt.progressMax) + this.beforeScrollTop;
       scale = (this._specificMethodValues.afterZ - this.beforeZoom) * (opt.progress / opt.progressMax) + this.beforeZoom;
       if (opt.isPreview) {
-        if (opt.keepDispMag && scale < 1.0) {
+        if (this.keepDispMag && scale < 1.0) {
           overlay = $('#preview_position_overlay');
           if ((overlay == null) || overlay.length === 0) {
             canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");

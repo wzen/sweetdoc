@@ -30,6 +30,11 @@ class ScreenEvent extends CommonEvent
       @beforeScrollLeft = scrollContents.scrollLeft()
       @beforeZoom = 1.0
 
+    # イベントの初期化
+    # @param [Object] event 設定イベント
+    initEvent: (event, @keepDispMag = false) ->
+      super(event)
+
     # イベント前の表示状態にする
     updateEventBefore: ->
       super()
@@ -45,6 +50,17 @@ class ScreenEvent extends CommonEvent
         scrollTop = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
         scrollLeft = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         Common.updateScrollContentsPosition(scrollTop, scrollLeft)
+
+    _drawKeepDispRect = (x, y, scale) ->
+      $('.keep_mag_base').remove()
+      screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+      width = screenSize.width * scale
+      height = screenSize.height * scale
+      top = y - height / 2.0
+      left = x - width / 2.0
+      style = "position:absolute;top:#{top}px;left:#{left}px;width:#{width}px;height:#{height}px;"
+      emt = $("<div class='keep_mag_base' style='#{style}'></div>")
+      window.scrollInside.append(emt)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
@@ -73,7 +89,7 @@ class ScreenEvent extends CommonEvent
       y = (@_specificMethodValues.afterY - @beforeScrollTop) * (opt.progress / opt.progressMax) + @beforeScrollTop
       scale = (@_specificMethodValues.afterZ - @beforeZoom) * (opt.progress / opt.progressMax) + @beforeZoom
       if opt.isPreview
-        if opt.keepDispMag && scale < 1.0
+        if @keepDispMag && scale < 1.0
           overlay = $('#preview_position_overlay')
           if !overlay? || overlay.length == 0
             # オーバーレイを被せる

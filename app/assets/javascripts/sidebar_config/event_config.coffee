@@ -620,9 +620,9 @@ class EventConfig
       $('.update_event_after', emt).removeAttr('disabled')
       $('.update_event_after', emt).off('change').on('change', (e) =>
         if $(e.target).is(':checked')
-          # イベント後に変更
+          # イベント後に変更 ※表示倍率はキープする
           $(e.target).attr('disabled', true)
-          WorktableCommon.updatePrevEventsToAfter(teNum, =>
+          WorktableCommon.updatePrevEventsToAfter(teNum, true, =>
             $(e.target).removeAttr('disabled')
           )
         else
