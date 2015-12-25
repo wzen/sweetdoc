@@ -476,10 +476,15 @@ class WorktableCommon
       for te, idx in tes
         routes.push(te)
         if idx + 1 == finishTeNum && forkNum == finishFn
+          # 発見
           result = true
           break
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
         if changeForkNum?
+          if forkNum == finishFn
+            # 終了フォークと違うフォークに行った場合は未発見とする
+            # ※同じフォークには戻ってこない前提
+            break
           _trace.call(changeForkNum)
           break
     _trace.call(PageValue.Key.EF_MASTER_FORKNUM)

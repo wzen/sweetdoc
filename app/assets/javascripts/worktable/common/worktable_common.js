@@ -543,6 +543,9 @@ WorktableCommon = (function() {
         }
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
         if (changeForkNum != null) {
+          if (forkNum === finishFn) {
+            break;
+          }
           _trace.call(changeForkNum);
           break;
         } else {
