@@ -132,15 +132,9 @@ class ScreenEvent extends CommonEvent
       emt = specificRoot['changeScreenPosition']
       emt.find('event_pointing:first').off('click').on('click', (e) =>
         pointing = new EventDragPointing()
-        pointing.setDrawEndCallback((pointingSize) =>
+        pointing.setDrawCallback((pointingSize) =>
           _updateConfigInput.call(@, emt, pointingSize)
         )
-        pointing.setDragCallback((pointingSize) =>
-          _updateConfigInput.call(@, emt, pointingSize)
-        )
-        pointing.setResizeCallback((pointingSize) =>
-          _updateConfigInput.call(@, emt, pointingSize)
-        )        
 
         WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
         FloatView.showFixed('Drag position', FloatView.Type.INFO, =>

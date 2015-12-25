@@ -219,9 +219,7 @@ EventConfig = (function() {
     return WorktableCommon.stashEventPageValueForPreview(this.teNum, (function(_this) {
       return function() {
         _this.writeToEventPageValue();
-        return WorktableCommon.updatePrevEventsToAfter(_this.teNum, function() {
-          return WorktableCommon.runPreview(_this.teNum, keepDispMag);
-        });
+        return WorktableCommon.runPreview(_this.teNum, keepDispMag);
       };
     })(this));
   };

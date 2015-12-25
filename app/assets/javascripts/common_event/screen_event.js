@@ -163,13 +163,7 @@ ScreenEvent = (function(superClass) {
         return function(e) {
           var pointing;
           pointing = new EventDragPointing();
-          pointing.setDrawEndCallback(function(pointingSize) {
-            return _updateConfigInput.call(_this, emt, pointingSize);
-          });
-          pointing.setDragCallback(function(pointingSize) {
-            return _updateConfigInput.call(_this, emt, pointingSize);
-          });
-          pointing.setResizeCallback(function(pointingSize) {
+          pointing.setDrawCallback(function(pointingSize) {
             return _updateConfigInput.call(_this, emt, pointingSize);
           });
           WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);

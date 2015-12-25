@@ -22,16 +22,8 @@ EventDragPointing = (function() {
       return PrivateClass.__super__.constructor.apply(this, arguments);
     }
 
-    PrivateClass.prototype.setDrawEndCallback = function(callback) {
-      return this.drawEndCallback = callback;
-    };
-
-    PrivateClass.prototype.setDragCallback = function(callback) {
-      return this.dragCallback = callback;
-    };
-
-    PrivateClass.prototype.setResizeCallback = function(callback) {
-      return this.resizeCallback = callback;
+    PrivateClass.prototype.setDrawCallback = function(callback) {
+      return this.drawCallback = callback;
     };
 
     PrivateClass.prototype.cssItemHtml = function() {
@@ -95,8 +87,8 @@ EventDragPointing = (function() {
       return this.reDraw(true, (function(_this) {
         return function() {
           _this.setupDragAndResizeEvent();
-          if (_this.drawEndCallback != null) {
-            _this.drawEndCallback(_this.itemSize);
+          if (_this.drawCallback != null) {
+            _this.drawCallback(_this.itemSize);
           }
           if (callback != null) {
             return callback();
@@ -106,14 +98,14 @@ EventDragPointing = (function() {
     };
 
     PrivateClass.prototype.drag = function() {
-      if (this.dragCallback != null) {
-        return this.dragCallback(this.itemSize);
+      if (this.drawCallback != null) {
+        return this.drawCallback(this.itemSize);
       }
     };
 
     PrivateClass.prototype.resize = function() {
-      if (this.resizeCallback != null) {
-        return this.resizeCallback(this.itemSize);
+      if (this.drawCallback != null) {
+        return this.drawCallback(this.itemSize);
       }
     };
 

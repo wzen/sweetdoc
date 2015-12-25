@@ -462,60 +462,89 @@ class WorktableCommon
         callback()
     , pageNum)
 
+  # イベント進行ルートを取得
+  # @param [Integer] finishTeNum 終了イベント番号
+  # @param [Integer] finishFn 終了フォーク番号
+  # @return [Array] EventPageValue配列 無い場合は空配列
+  @eventProgressRoute = (finishTeNum, finishFn = PageValue.getForkNum()) ->
+    finishTeNum = parseInt(finishTeNum)
+    finishFn = parseInt(finishFn)
+    routes = []
+    result = false
+    _trace = (forkNum) ->
+      tes = PageValue.getEventPageValueSortedListByNum(forkNum)
+      for te, idx in tes
+        routes.push(te)
+        if idx + 1 == finishTeNum && forkNum == finishFn
+          result = true
+          break
+        changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
+        if changeForkNum?
+          _trace.call(changeForkNum)
+          break
+    _trace.call(PageValue.Key.EF_MASTER_FORKNUM)
+    return if result then routes else []
+
+  # イベント進行ルートが繋がっているか
+  @isConnectedEventProgressRoute = (finishTeNum, finishFn = PageValue.getForkNum()) ->
+    return @eventProgressRoute(finishTeNum, finishFn).length > 0
+
   # 指定イベント以前をイベント適用後の状態に変更
   @updatePrevEventsToAfter = (teNum, callback = null) ->
+    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, false, false, callback)
+
+  # プレビュー実行
+  # @param [Integer] te_num 実行するイベント番号
+  @runPreview = (teNum, keepDispMag = false, callback = null) ->
+    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, keepDispMag, true, callback)
+
+  _updatePrevEventsToAfterAndRunPreview = (teNum, keepDispMag, doRunPreview, callback = null) ->
+    if doRunPreview && window.previewRunning? && window.previewRunning
+      # プレビュー二重実行は無視
+      return
+    tes = @eventProgressRoute(teNum)
+    if tes.length == 0
+      # 設定が繋がっていない場合は無視
+      return
+
     # 状態変更フラグON
     window.worktableItemsChangedState = true
     Common.updateAllEventsToBefore( =>
       # 操作履歴削除
       PageValue.removeAllFootprint()
-      tes = PageValue.getEventPageValueSortedListByNum()
       teNum = parseInt(teNum)
       for te, idx in tes
         item = window.instanceMap[te.id]
-        if item? && item.preview?
+        if item?
           item.initEvent(te)
-          # インスタンスの状態を保存
-          PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
-          if idx < teNum - 1
+          if idx < tes.length - 1
+            # インスタンスの状態を保存
+            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
             # イベント後の状態に変更
             item.updateEventAfter()
+          else if doRunPreview
+            window.previewRunning = true
+            # プレビュー実行
+            item.preview(te, keepDispMag, =>
+              # プレビューの実行回数超過
+              window.previewRunning = false
+              # EventPageValueの退避がある場合戻す
+              @reverseStashEventPageValueForPreviewIfNeeded( =>
+                # アイテム再描画
+                @reDrawAllItemsFromInstancePageValueIfChanging()
+              )
+            )
+            # 状態変更フラグON
+            window.worktableItemsChangedState = true
+            window.drawingCanvas.one('click.runPreview', (e) =>
+              # メイン画面クリックでプレビュー停止 & アイテムを再描画
+              @stopAllEventPreview( =>
+                @reDrawAllItemsFromInstancePageValueIfChanging()
+              )
+            )
       if callback?
         callback()
     )
-
-  # プレビュー実行
-  # @param [Integer] te_num 実行するイベント番号
-  @runPreview = (teNum, keepDispMag = false) ->
-    if window.previewRunning? && window.previewRunning
-      # 二重実行は無視
-      return
-
-    window.previewRunning = true
-    tes = PageValue.getEventPageValueSortedListByNum()
-    teNum = parseInt(teNum)
-    te = tes[teNum - 1]
-    if te?
-      item = window.instanceMap[te.id]
-      item.initEvent(te)
-      # プレビュー実行
-      item.preview(te, keepDispMag, =>
-        # プレビューの実行回数超過
-        window.previewRunning = false
-        # EventPageValueの退避がある場合戻す
-        @reverseStashEventPageValueForPreviewIfNeeded( =>
-          # アイテム再描画
-          @reDrawAllItemsFromInstancePageValueIfChanging()
-        )
-      )
-      # 状態変更フラグON
-      window.worktableItemsChangedState = true
-      window.drawingCanvas.one('click.runPreview', (e) =>
-        # メイン画面クリックでプレビュー停止 & アイテムを再描画
-        @stopAllEventPreview( =>
-          @reDrawAllItemsFromInstancePageValueIfChanging()
-        )
-      )
 
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック

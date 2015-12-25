@@ -226,9 +226,7 @@ class EventConfig
     WorktableCommon.stashEventPageValueForPreview(@teNum, =>
       # 入力値を書き込み
       @writeToEventPageValue()
-      WorktableCommon.updatePrevEventsToAfter(@teNum, =>
-        WorktableCommon.runPreview(@teNum, keepDispMag)
-      )
+      WorktableCommon.runPreview(@teNum, keepDispMag)
     )
 
   # プレビュー停止

@@ -2,6 +2,8 @@
 var WorktableCommon;
 
 WorktableCommon = (function() {
+  var _updatePrevEventsToAfterAndRunPreview;
+
   function WorktableCommon() {}
 
   WorktableCommon.setSelectedBorder = function(target, selectedBorderType) {
@@ -519,25 +521,108 @@ WorktableCommon = (function() {
     }, pageNum);
   };
 
+  WorktableCommon.eventProgressRoute = function(finishTeNum, finishFn) {
+    var _trace, result, routes;
+    if (finishFn == null) {
+      finishFn = PageValue.getForkNum();
+    }
+    finishTeNum = parseInt(finishTeNum);
+    finishFn = parseInt(finishFn);
+    routes = [];
+    result = false;
+    _trace = function(forkNum) {
+      var changeForkNum, idx, l, len, results, te, tes;
+      tes = PageValue.getEventPageValueSortedListByNum(forkNum);
+      results = [];
+      for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
+        te = tes[idx];
+        routes.push(te);
+        if (idx + 1 === finishTeNum && forkNum === finishFn) {
+          result = true;
+          break;
+        }
+        changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
+        if (changeForkNum != null) {
+          _trace.call(changeForkNum);
+          break;
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    };
+    _trace.call(PageValue.Key.EF_MASTER_FORKNUM);
+    if (result) {
+      return routes;
+    } else {
+      return [];
+    }
+  };
+
+  WorktableCommon.isConnectedEventProgressRoute = function(finishTeNum, finishFn) {
+    if (finishFn == null) {
+      finishFn = PageValue.getForkNum();
+    }
+    return this.eventProgressRoute(finishTeNum, finishFn).length > 0;
+  };
+
   WorktableCommon.updatePrevEventsToAfter = function(teNum, callback) {
     if (callback == null) {
       callback = null;
     }
+    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, false, false, callback);
+  };
+
+  WorktableCommon.runPreview = function(teNum, keepDispMag, callback) {
+    if (keepDispMag == null) {
+      keepDispMag = false;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, true, callback);
+  };
+
+  _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, doRunPreview, callback) {
+    var tes;
+    if (callback == null) {
+      callback = null;
+    }
+    if (doRunPreview && (window.previewRunning != null) && window.previewRunning) {
+      return;
+    }
+    tes = this.eventProgressRoute(teNum);
+    if (tes.length === 0) {
+      return;
+    }
     window.worktableItemsChangedState = true;
     return Common.updateAllEventsToBefore((function(_this) {
       return function() {
-        var idx, item, l, len, te, tes;
+        var idx, item, l, len, te;
         PageValue.removeAllFootprint();
-        tes = PageValue.getEventPageValueSortedListByNum();
         teNum = parseInt(teNum);
         for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
           te = tes[idx];
           item = window.instanceMap[te.id];
-          if ((item != null) && (item.preview != null)) {
+          if (item != null) {
             item.initEvent(te);
-            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
-            if (idx < teNum - 1) {
+            if (idx < tes.length - 1) {
+              PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
               item.updateEventAfter();
+            } else if (doRunPreview) {
+              window.previewRunning = true;
+              item.preview(te, keepDispMag, function() {
+                window.previewRunning = false;
+                return _this.reverseStashEventPageValueForPreviewIfNeeded(function() {
+                  return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+                });
+              });
+              window.worktableItemsChangedState = true;
+              window.drawingCanvas.one('click.runPreview', function(e) {
+                return _this.stopAllEventPreview(function() {
+                  return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+                });
+              });
             }
           }
         }
@@ -546,40 +631,6 @@ WorktableCommon = (function() {
         }
       };
     })(this));
-  };
-
-  WorktableCommon.runPreview = function(teNum, keepDispMag) {
-    var item, te, tes;
-    if (keepDispMag == null) {
-      keepDispMag = false;
-    }
-    if ((window.previewRunning != null) && window.previewRunning) {
-      return;
-    }
-    window.previewRunning = true;
-    tes = PageValue.getEventPageValueSortedListByNum();
-    teNum = parseInt(teNum);
-    te = tes[teNum - 1];
-    if (te != null) {
-      item = window.instanceMap[te.id];
-      item.initEvent(te);
-      item.preview(te, keepDispMag, (function(_this) {
-        return function() {
-          window.previewRunning = false;
-          return _this.reverseStashEventPageValueForPreviewIfNeeded(function() {
-            return _this.reDrawAllItemsFromInstancePageValueIfChanging();
-          });
-        };
-      })(this));
-      window.worktableItemsChangedState = true;
-      return window.drawingCanvas.one('click.runPreview', (function(_this) {
-        return function(e) {
-          return _this.stopAllEventPreview(function() {
-            return _this.reDrawAllItemsFromInstancePageValueIfChanging();
-          });
-        };
-      })(this));
-    }
   };
 
   WorktableCommon.stopAllEventPreview = function(callback) {

@@ -8,14 +8,8 @@ class EventDragPointing
 
   class @PrivateClass extends CssItemBase
 
-    setDrawEndCallback: (callback) ->
-      @drawEndCallback = callback
-
-    setDragCallback: (callback) ->
-      @dragCallback = callback
-
-    setResizeCallback: (callback) ->
-      @resizeCallback = callback
+    setDrawCallback: (callback) ->
+      @drawCallback = callback
 
     # 枠のみのエレメント描画
     cssItemHtml: ->
@@ -59,19 +53,19 @@ class EventDragPointing
 
       @reDraw(true, =>
         @setupDragAndResizeEvent()
-        if @drawEndCallback?
-          @drawEndCallback(@itemSize)
+        if @drawCallback?
+          @drawCallback(@itemSize)
         if callback?
           callback()
       )
 
     drag: ->
-      if @dragCallback?
-        @dragCallback(@itemSize)
+      if @drawCallback?
+        @drawCallback(@itemSize)
 
     resize: ->
-      if @resizeCallback?
-        @resizeCallback(@itemSize)
+      if @drawCallback?
+        @drawCallback(@itemSize)
 
     # 以下の処理はなし
     saveObj: (newCreated = false) ->
