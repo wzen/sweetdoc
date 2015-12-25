@@ -11,6 +11,8 @@ ScreenEvent = (function(superClass) {
     return ScreenEvent.__super__.constructor.apply(this, arguments);
   }
 
+  ScreenEvent.instance = {};
+
   ScreenEvent.PrivateClass = (function(superClass1) {
     var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect;
 
@@ -47,6 +49,7 @@ ScreenEvent = (function(superClass) {
       this.changeScreenPosition = bind(this.changeScreenPosition, this);
       var cood;
       PrivateClass.__super__.constructor.call(this);
+      this.name = 'Screen';
       this.beforeScale = 1.0;
       cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this.beforeScale);
       this.beforeX = cood.x;

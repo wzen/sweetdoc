@@ -4,9 +4,7 @@ var CommonEvent,
   hasProp = {}.hasOwnProperty;
 
 CommonEvent = (function() {
-  var instance;
-
-  instance = {};
+  CommonEvent.instance = null;
 
   function CommonEvent() {
     return this.constructor.getInstance();
@@ -47,19 +45,20 @@ CommonEvent = (function() {
   })(CommonEventBase);
 
   CommonEvent.getInstance = function() {
-    if (instance[PageValue.getPageNum()] == null) {
-      instance[PageValue.getPageNum()] = new this.PrivateClass();
+    if (this.instance[PageValue.getPageNum()] == null) {
+      this.instance[PageValue.getPageNum()] = new this.PrivateClass();
     }
-    return instance[PageValue.getPageNum()];
+    return this.instance[PageValue.getPageNum()];
   };
 
   CommonEvent.deleteInstance = function(objId) {
-    var k, results, v;
+    var k, ref, results, v;
+    ref = this.instance;
     results = [];
-    for (k in instance) {
-      v = instance[k];
+    for (k in ref) {
+      v = ref[k];
       if (v.id === objId) {
-        results.push(delete instance[k]);
+        results.push(delete this.instance[k]);
       } else {
         results.push(void 0);
       }
@@ -68,16 +67,19 @@ CommonEvent = (function() {
   };
 
   CommonEvent.deleteAllInstance = function() {
-    var k, results, v;
+    var k, ref, results, v;
+    ref = this.instance;
     results = [];
-    for (k in instance) {
-      v = instance[k];
-      results.push(delete instance[k]);
+    for (k in ref) {
+      v = ref[k];
+      results.push(delete this.instance[k]);
     }
     return results;
   };
 
   CommonEvent.EVENT_ID = CommonEvent.PrivateClass.EVENT_ID;
+
+  CommonEvent.CLASS_DIST_TOKEN = CommonEvent.PrivateClass.CLASS_DIST_TOKEN;
 
   CommonEvent.actionProperties = CommonEvent.PrivateClass.actionProperties;
 

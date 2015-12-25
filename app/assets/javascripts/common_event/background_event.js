@@ -10,18 +10,27 @@ BackgroundEvent = (function(superClass) {
     return BackgroundEvent.__super__.constructor.apply(this, arguments);
   }
 
+  BackgroundEvent.instance = {};
+
   BackgroundEvent.PrivateClass = (function(superClass1) {
     extend(PrivateClass, superClass1);
-
-    function PrivateClass() {
-      return PrivateClass.__super__.constructor.apply(this, arguments);
-    }
 
     PrivateClass.EVENT_ID = '1';
 
     PrivateClass.CLASS_DIST_TOKEN = "PI_BackgroundEvent";
 
     PrivateClass.actionProperties = {
+      modifiables: {
+        backgroundColor: {
+          name: "Background Color",
+          "default": 'transparent',
+          type: 'color',
+          colorType: 'rgb',
+          ja: {
+            name: "背景色"
+          }
+        }
+      },
       methods: {
         changeBackgroundColor: {
           options: {
@@ -44,6 +53,11 @@ BackgroundEvent = (function(superClass) {
         }
       }
     };
+
+    function PrivateClass() {
+      PrivateClass.__super__.constructor.call(this);
+      this.name = 'Background';
+    }
 
     PrivateClass.prototype.initEvent = function(event) {
       return PrivateClass.__super__.initEvent.call(this, event);

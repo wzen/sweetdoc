@@ -11,7 +11,7 @@ ItemPreviewEventConfig = (function(superClass) {
   }
 
   ItemPreviewEventConfig.prototype.applyAction = function() {
-    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, topEmt;
+    var bottomEmt, checked, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, topEmt;
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
       if (window.debug) {
         console.log('ItemPreviewEventConfig validation error');
@@ -63,15 +63,6 @@ ItemPreviewEventConfig = (function(superClass) {
         prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
         this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
       }
-    }
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      commonEventClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
-      commonEvent = new commonEventClass();
-      if (instanceMap[commonEvent.id] == null) {
-        instanceMap[commonEvent.id] = commonEvent;
-        commonEvent.setItemAllPropToPageValue();
-      }
-      this[EventPageValueBase.PageValueKey.ID] = commonEvent.id;
     }
     errorMes = EventPageValueBase.writeToPageValue(this);
     if ((errorMes != null) && errorMes.length > 0) {

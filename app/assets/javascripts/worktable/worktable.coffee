@@ -44,6 +44,8 @@ $ ->
       # 描画
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+        # 共通イベントのインスタンス作成
+        WorktableCommon.createCommonEventInstancesIfNeeded()
         _callback.call(@)
         # 初期化終了
         window.initDone = true

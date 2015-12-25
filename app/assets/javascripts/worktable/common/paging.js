@@ -100,6 +100,7 @@ Paging = (function() {
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();
       return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+        WorktableCommon.createCommonEventInstancesIfNeeded();
         WorktableCommon.changeMode(window.mode);
         Timeline.refreshAllTimeline();
         return pageFlip.startRender(function() {

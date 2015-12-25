@@ -1,5 +1,7 @@
 # 画面表示イベント
 class ScreenEvent extends CommonEvent
+  @instance = {}
+
   class @PrivateClass extends CommonEvent.PrivateClass
     @EVENT_ID = '2'
     @CLASS_DIST_TOKEN = "PI_ScreenEvent"
@@ -29,6 +31,7 @@ class ScreenEvent extends CommonEvent
 
     constructor: ->
       super()
+      @name = 'Screen'
       @beforeScale = 1.0
       cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @beforeScale)
       @beforeX = cood.x

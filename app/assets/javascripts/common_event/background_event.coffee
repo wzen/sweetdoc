@@ -1,11 +1,24 @@
 # 背景イベント
 class BackgroundEvent extends CommonEvent
+  @instance = {}
+
   class @PrivateClass extends CommonEvent.PrivateClass
     @EVENT_ID = '1'
     @CLASS_DIST_TOKEN = "PI_BackgroundEvent"
 
     @actionProperties =
     {
+      modifiables: {
+        backgroundColor: {
+          name: "Background Color"
+          default: 'transparent'
+          type: 'color'
+          colorType: 'rgb'
+          ja :{
+            name: "背景色"
+          }
+        }
+      }
       methods: {
         changeBackgroundColor: {
           options: {
@@ -28,6 +41,10 @@ class BackgroundEvent extends CommonEvent
         }
       }
     }
+
+    constructor: ->
+      super()
+      @name = 'Background'
 
     # イベントの初期化
     # @param [Object] event 設定イベント

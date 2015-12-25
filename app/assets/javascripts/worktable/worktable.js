@@ -31,6 +31,7 @@ $(function() {
     if (existedCache) {
       PageValue.adjustInstanceAndEventOnPage();
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+        WorktableCommon.createCommonEventInstancesIfNeeded();
         _callback.call(this);
         return window.initDone = true;
       });

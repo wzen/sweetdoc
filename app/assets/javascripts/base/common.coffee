@@ -325,20 +325,28 @@ class Common
       window.classMap = {}
     window.classMap[d] = value
 
+  # 実体のクラスを取得(共通イベントの場合はPrivateClassを参照する)
+  @getContentClass = (classDistToken) ->
+    cls = @getClassFromMap(classDistToken)
+    if cls.prototype instanceof CommonEvent
+      return cls.PrivateClass
+    else
+      return cls
+
   # インスタンス取得
   # @param [Integer] id イベントID
-  # @param [Integer] classDistId
+  # @param [Integer] classDistToken
   # @return [Object] インスタンス
-  @getInstanceFromMap = (id, classDistId) ->
+  @getInstanceFromMap = (id, classDistToken) ->
     if typeof id != "string"
       id = String(id)
-    Common.setInstanceFromMap(id, classDistId)
+    Common.setInstanceFromMap(id, classDistToken)
     return window.instanceMap[id]
 
   # インスタンス設定(上書きはしない)
   # @param [Integer] id イベントID
-  # @param [Integer] classDistId
-  @setInstanceFromMap = (id, classDistId) ->
+  # @param [Integer] classDistToken
+  @setInstanceFromMap = (id, classDistToken) ->
     if typeof id != "string"
       id = String(id)
 
@@ -346,7 +354,7 @@ class Common
       window.instanceMap = {}
     if !window.instanceMap[id]?
       # インスタンスを保存する
-      instance = new (Common.getClassFromMap(classDistId))()
+      instance = new (Common.getClassFromMap(classDistToken))()
       instance.id = id
       # インスタンス値が存在する場合、初期化
       obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id))
@@ -624,7 +632,7 @@ class Common
       items = @instancesInPage(pageNum)
       for item in items
         if item?
-          if item instanceof CommonEvent
+          if item instanceof CommonEventBase
             # Singletonのキャッシュを削除
             CommonEvent.deleteInstance(item.id)
           else

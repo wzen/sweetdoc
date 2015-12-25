@@ -57,16 +57,6 @@ class ItemPreviewEventConfig extends EventConfig
         prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
         @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
 
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      # 共通イベントはここでインスタンス生成
-      commonEventClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
-      commonEvent = new commonEventClass()
-      if !instanceMap[commonEvent.id]?
-        # ※インスタンスが存在しない場合のみsetInstanceする
-        instanceMap[commonEvent.id] = commonEvent
-        commonEvent.setItemAllPropToPageValue()
-      @[EventPageValueBase.PageValueKey.ID] = commonEvent.id
-
     errorMes = EventPageValueBase.writeToPageValue(@)
     if errorMes? && errorMes.length > 0
       # エラー発生時

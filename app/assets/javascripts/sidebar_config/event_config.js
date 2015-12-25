@@ -37,7 +37,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.selectItem = function(e) {
-    var actionClassName, splitValues, vEmt, value;
+    var actionClassName, objId, splitValues, vEmt, value;
     if (e == null) {
       e = null;
     }
@@ -47,10 +47,11 @@ EventConfig = (function() {
         $(".config.te_div", this.emt).hide();
         return;
       }
-      this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) === 0;
       splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR);
-      this[EventPageValueBase.PageValueKey.ID] = splitValues[0];
+      objId = splitValues[0];
+      this[EventPageValueBase.PageValueKey.ID] = objId;
       this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1];
+      this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = window.instanceMap[objId] instanceof CommonEventBase;
       this.constructor.addEventConfigContents(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
     }
     if (window.isWorkTable) {
@@ -104,7 +105,7 @@ EventConfig = (function() {
         return _callback.call(this);
       }
     } else {
-      objClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+      objClass = Common.getContentClass(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
       if (objClass) {
         return ConfigMenu.loadEventMethodValueConfig(this, objClass, (function(_this) {
           return function() {
@@ -118,7 +119,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.writeToEventPageValue = function() {
-    var bottomEmt, checked, commonEvent, commonEventClass, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, specificRoot, specificValues, topEmt;
+    var bottomEmt, checked, errorMes, handlerDiv, leftEmt, parallel, prefix, rightEmt, specificRoot, specificValues, topEmt;
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] == null) {
       if (window.debug) {
         console.log('validation error');
@@ -170,15 +171,6 @@ EventConfig = (function() {
         prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '');
         this[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''));
       }
-    }
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      commonEventClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
-      commonEvent = new commonEventClass();
-      if (instanceMap[commonEvent.id] == null) {
-        instanceMap[commonEvent.id] = commonEvent;
-        commonEvent.setItemAllPropToPageValue();
-      }
-      this[EventPageValueBase.PageValueKey.ID] = commonEvent.id;
     }
     specificValues = {};
     specificRoot = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT);
@@ -398,7 +390,7 @@ EventConfig = (function() {
 
   EventConfig.addEventConfigContents = function(distToken) {
     var actionParent, action_forms, className, itemClass, methodClone, methodName, methods, prop, props, span, valueClassName;
-    itemClass = Common.getClassFromMap(distToken);
+    itemClass = Common.getContentClass(distToken);
     if ((itemClass != null) && (itemClass.actionProperties != null)) {
       className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken);
       action_forms = $('#event-config .action_forms');
@@ -449,7 +441,7 @@ EventConfig = (function() {
         } else {
           objClass = null;
           if (this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] != null) {
-            objClass = Common.getClassFromMap(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
+            objClass = Common.getContentClass(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
           }
           defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName]["default"];
         }

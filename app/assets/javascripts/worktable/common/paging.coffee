@@ -115,6 +115,8 @@ class Paging
       WorktableCommon.initMainContainer()
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
+        # 共通イベントのインスタンス作成
+        WorktableCommon.createCommonEventInstancesIfNeeded()
         # 作成ページのモード設定
         WorktableCommon.changeMode(window.mode)
         # タイムライン更新

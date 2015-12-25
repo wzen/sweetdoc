@@ -13,6 +13,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/pointing/event_drag_pointing.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/state_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
@@ -41,7 +42,6 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/paging_guide/arrow_paging_guide.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
@@ -71,6 +71,7 @@
       </sourceFilesUrls>
     </properties>
     <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
@@ -82,6 +83,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/pointing/event_drag_pointing.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/state_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
@@ -110,7 +112,6 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/guide/click.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/paging_guide/arrow_paging_guide.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_setting.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/event_page_value/common/screenposition.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/css_item_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/paging.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />

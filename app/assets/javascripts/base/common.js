@@ -430,15 +430,25 @@ Common = (function() {
     return window.classMap[d] = value;
   };
 
-  Common.getInstanceFromMap = function(id, classDistId) {
+  Common.getContentClass = function(classDistToken) {
+    var cls;
+    cls = this.getClassFromMap(classDistToken);
+    if (cls.prototype instanceof CommonEvent) {
+      return cls.PrivateClass;
+    } else {
+      return cls;
+    }
+  };
+
+  Common.getInstanceFromMap = function(id, classDistToken) {
     if (typeof id !== "string") {
       id = String(id);
     }
-    Common.setInstanceFromMap(id, classDistId);
+    Common.setInstanceFromMap(id, classDistToken);
     return window.instanceMap[id];
   };
 
-  Common.setInstanceFromMap = function(id, classDistId) {
+  Common.setInstanceFromMap = function(id, classDistToken) {
     var instance, obj;
     if (typeof id !== "string") {
       id = String(id);
@@ -447,7 +457,7 @@ Common = (function() {
       window.instanceMap = {};
     }
     if (window.instanceMap[id] == null) {
-      instance = new (Common.getClassFromMap(classDistId))();
+      instance = new (Common.getClassFromMap(classDistToken))();
       instance.id = id;
       obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(id));
       if (obj) {
@@ -785,7 +795,7 @@ Common = (function() {
       for (j = 0, len = items.length; j < len; j++) {
         item = items[j];
         if (item != null) {
-          if (item instanceof CommonEvent) {
+          if (item instanceof CommonEventBase) {
             CommonEvent.deleteInstance(item.id);
           } else {
             item.removeItemElement();

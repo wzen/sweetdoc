@@ -499,6 +499,30 @@ WorktableCommon = (function() {
     })(this));
   };
 
+  WorktableCommon.createCommonEventInstancesIfNeeded = function(pn) {
+    var cls, clsToken, instance, ref, results;
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    ref = window.classMap;
+    results = [];
+    for (clsToken in ref) {
+      cls = ref[clsToken];
+      if (cls.prototype instanceof CommonEvent) {
+        instance = new (Common.getClassFromMap(cls.CLASS_DIST_TOKEN))();
+        if (window.instanceMap[instance.id] == null) {
+          Common.setInstanceFromMap(instance.id, instance.constructor.CLASS_DIST_TOKEN);
+          results.push(instance.setItemAllPropToPageValue());
+        } else {
+          results.push(void 0);
+        }
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
+  };
+
   WorktableCommon.createAllInstanceAndDrawFromInstancePageValue = function(callback, pageNum) {
     if (callback == null) {
       callback = null;

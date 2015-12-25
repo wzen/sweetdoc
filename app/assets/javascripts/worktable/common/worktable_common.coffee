@@ -446,6 +446,15 @@ class WorktableCommon
         callback()
     )
 
+  # 共通イベントインスタンス作成
+  @createCommonEventInstancesIfNeeded = (pn = PageValue.getPageNum()) ->
+    for clsToken, cls of window.classMap
+      if cls.prototype instanceof CommonEvent
+        instance = new (Common.getClassFromMap(cls.CLASS_DIST_TOKEN))()
+        if !window.instanceMap[instance.id]?
+          Common.setInstanceFromMap(instance.id, instance.constructor.CLASS_DIST_TOKEN)
+          instance.setItemAllPropToPageValue()
+
   # PageValueから全てのインスタンスを作成
   # @param [Function] callback コールバック
   # @param [Integer] pageNum 描画するPageValueのページ番号

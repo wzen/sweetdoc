@@ -2,8 +2,9 @@
 class CommonEvent
 
   # インスタンスはページ毎持つ
-  # 必要に応じてサブクラスで変更
-  instance = {}
+  # TODO: サブクラスでオブジェクト宣言
+  # @abstract
+  @instance = null
 
   constructor: ->
     return @constructor.getInstance()
@@ -35,17 +36,21 @@ class CommonEvent
         $('#common_event_click_overlay').remove()
 
   @getInstance: ->
-    if !instance[PageValue.getPageNum()]?
-      instance[PageValue.getPageNum()] = new @PrivateClass()
-    return instance[PageValue.getPageNum()]
+    if !@instance[PageValue.getPageNum()]?
+      @instance[PageValue.getPageNum()] = new @PrivateClass()
+    return @instance[PageValue.getPageNum()]
 
   @deleteInstance: (objId) ->
-    for k, v of instance
+    for k, v of @instance
       if v.id == objId
-        delete instance[k]
+        delete @instance[k]
   @deleteAllInstance: ->
-    for k, v of instance
-      delete instance[k]
+    for k, v of @instance
+      delete @instance[k]
 
+  # TODO: サブクラスで定義必須
+  # @abstract
   @EVENT_ID = @PrivateClass.EVENT_ID
+  @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
   @actionProperties = @PrivateClass.actionProperties
+

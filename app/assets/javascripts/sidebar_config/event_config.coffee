@@ -49,10 +49,11 @@ class EventConfig
         $(".config.te_div", @emt).hide()
         return
 
-      @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = value.indexOf(EventConfig.EVENT_COMMON_PREFIX) == 0
       splitValues = value.split(EventConfig.EVENT_ITEM_SEPERATOR)
-      @[EventPageValueBase.PageValueKey.ID] = splitValues[0]
+      objId = splitValues[0]
+      @[EventPageValueBase.PageValueKey.ID] = objId
       @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] = splitValues[1]
+      @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] = window.instanceMap[objId] instanceof CommonEventBase
       # コンフィグ作成
       @constructor.addEventConfigContents(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
 
@@ -113,7 +114,7 @@ class EventConfig
         _callback.call(@)
     else
       # 共通イベント選択時
-      objClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
+      objClass = Common.getContentClass(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
       if objClass
         ConfigMenu.loadEventMethodValueConfig(@, objClass, =>
           _callback.call(@)
@@ -176,16 +177,6 @@ class EventConfig
       if checked? && checked
         prefix = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', '')
         @[EventPageValueBase.PageValueKey.CHANGE_FORKNUM] = parseInt(handlerDiv.find('.fork_select:first').val().replace(prefix, ''))
-
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      # 共通イベントはここでインスタンス生成
-      commonEventClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
-      commonEvent = new commonEventClass()
-      if !instanceMap[commonEvent.id]?
-        # ※インスタンスが存在しない場合のみsetInstanceする
-        instanceMap[commonEvent.id] = commonEvent
-        commonEvent.setItemAllPropToPageValue()
-      @[EventPageValueBase.PageValueKey.ID] = commonEvent.id
 
     specificValues = {}
     specificRoot = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT}")
@@ -378,7 +369,7 @@ class EventConfig
   # アクションイベント情報をコンフィグに追加
   # @param [Integer] distToken アイテム識別ID
   @addEventConfigContents = (distToken) ->
-    itemClass = Common.getClassFromMap(distToken)
+    itemClass = Common.getContentClass(distToken)
     if itemClass? && itemClass.actionProperties?
       className = EventConfig.ITEM_ACTION_CLASS.replace('@classdisttoken', distToken)
       action_forms = $('#event-config .action_forms')
@@ -424,8 +415,9 @@ class EventConfig
         else
           objClass = null
           if @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]?
-            objClass = Common.getClassFromMap(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
+            objClass = Common.getContentClass(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
           defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName].default
+
         if v.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
         else if v.type == Constant.ItemDesignOptionType.STRING
