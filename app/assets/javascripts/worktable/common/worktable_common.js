@@ -535,7 +535,7 @@ WorktableCommon = (function() {
       for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
         te = tes[idx];
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
-        if (changeForkNum != null) {
+        if ((changeForkNum != null) && changeForkNum !== forkNum) {
           ret = _trace.call(this, changeForkNum);
           result = ret.result;
           if (result) {

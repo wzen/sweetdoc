@@ -100,9 +100,6 @@ class EventPageValueBase
       if parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum
         PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum)
 
-      # Storageに保存
-      LocalStorage.saveAllPageValues()
-
     return errorMes
 
   # PageValueからConfigにデータを読み込み

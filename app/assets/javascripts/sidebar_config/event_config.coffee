@@ -232,7 +232,11 @@ class EventConfig
 
   # プレビュー停止
   stopPreview: (callback = null) ->
-    WorktableCommon.stopAllEventPreview(callback)
+    WorktableCommon.stopAllEventPreview( ->
+      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
+      if callback?
+        callback()
+    )
 
   # アクションメソッドクラス名を取得
   actionClassName: ->
@@ -355,9 +359,9 @@ class EventConfig
       # 入力値を適用する
       @applyAction()
     )
-    $('.push.button.stop_preview', @emt).off('click').on('click', (e) =>
+    $('.push.button.preview_stop', @emt).off('click').on('click', (e) =>
       @clearError()
-      Common.updateAllEventsToBefore( =>
+      @stopPreview( =>
         $(e.target).closest('.button_div').find('.button_preview_wrapper').show()
         $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide()
       )

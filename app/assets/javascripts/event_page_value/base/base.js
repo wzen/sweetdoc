@@ -117,7 +117,6 @@ EventPageValueBase = (function() {
       if (parseInt(PageValue.getEventPageValue(PageValue.Key.eventCount())) < eventConfig.teNum) {
         PageValue.setEventPageValue(PageValue.Key.eventCount(), eventConfig.teNum);
       }
-      LocalStorage.saveAllPageValues();
     }
     return errorMes;
   };
