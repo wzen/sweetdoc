@@ -230,7 +230,12 @@ EventConfig = (function() {
     if (callback == null) {
       callback = null;
     }
-    return WorktableCommon.stopAllEventPreview(callback);
+    return WorktableCommon.stopAllEventPreview(function() {
+      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
+      if (callback != null) {
+        return callback();
+      }
+    });
   };
 
   EventConfig.prototype.actionClassName = function() {
@@ -370,10 +375,10 @@ EventConfig = (function() {
         return _this.applyAction();
       };
     })(this));
-    return $('.push.button.stop_preview', this.emt).off('click').on('click', (function(_this) {
+    return $('.push.button.preview_stop', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
-        return Common.updateAllEventsToBefore(function() {
+        return _this.stopPreview(function() {
           $(e.target).closest('.button_div').find('.button_preview_wrapper').show();
           return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide();
         });

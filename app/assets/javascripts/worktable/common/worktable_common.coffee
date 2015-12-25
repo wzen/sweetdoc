@@ -474,7 +474,7 @@ class WorktableCommon
       tes = PageValue.getEventPageValueSortedListByNum(forkNum)
       for te, idx in tes
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
-        if changeForkNum?
+        if changeForkNum? && changeForkNum != forkNum
           ret = _trace.call(@, changeForkNum)
           result = ret.result
           if result
