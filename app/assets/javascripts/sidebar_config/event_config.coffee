@@ -222,12 +222,13 @@ class EventConfig
 
   # プレビュー開始
   preview: (keepDispMag) ->
-    # 対象のEventPageValueを一時的に退避
-    WorktableCommon.stashEventPageValueForPreview(@teNum, =>
-      # 入力値を書き込み
-      @writeToEventPageValue()
-      WorktableCommon.runPreview(@teNum, keepDispMag)
-    )
+    if WorktableCommon.isConnectedEventProgressRoute(@teNum)
+      # 対象のEventPageValueを一時的に退避
+      WorktableCommon.stashEventPageValueForPreview(@teNum, =>
+        # 入力値を書き込み
+        @writeToEventPageValue()
+        WorktableCommon.runPreview(@teNum, keepDispMag)
+      )
 
   # プレビュー停止
   stopPreview: (callback = null) ->
@@ -364,14 +365,19 @@ class EventConfig
       $('.fork_handler_wrapper', handler).hide()
 
   _setApplyClickEvent = ->
-    $('.push.button.preview', @emt).off('click').on('click', (e) =>
-      @clearError()
-      # UIの入力値を初期化
-      keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked')
-      @preview(keepDispMag)
-      $(e.target).closest('.button_div').find('.button_preview_wrapper').hide()
-      $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show()
-    )
+    if WorktableCommon.isConnectedEventProgressRoute(@teNum)
+      $('.push.button.preview', @emt).removeAttr('disabled')
+      $('.push.button.preview', @emt).off('click').on('click', (e) =>
+        @clearError()
+        # UIの入力値を初期化
+        keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked')
+        @preview(keepDispMag)
+        $(e.target).closest('.button_div').find('.button_preview_wrapper').hide()
+        $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show()
+      )
+    else
+      # イベントの設定が接続されていない場合はdisabled
+      $('.push.button.preview', @emt).attr('disabled', true)
     $('.push.button.apply', @emt).off('click').on('click', (e) =>
       @clearError()
       # 入力値を適用する
@@ -610,20 +616,26 @@ class EventConfig
     config.clearAllChange()
     # UpdateEventAfterイベント初期化
     $('.update_event_after', emt).removeAttr('checked')
-    $('.update_event_after', emt).off('change').on('change', (e) =>
-      if $(e.target).is(':checked')
-        # イベント後に変更
-        $(e.target).attr('disabled', true)
-        WorktableCommon.updatePrevEventsToAfter(teNum, =>
-          $(e.target).removeAttr('disabled')
-        )
-      else
-        # 全アイテム再描画
-        $(e.target).attr('disabled', true)
-        WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
-          $(e.target).removeAttr('disabled')
-        )
-    )
+    if WorktableCommon.isConnectedEventProgressRoute(teNum)
+      $('.update_event_after', emt).removeAttr('disabled')
+      $('.update_event_after', emt).off('change').on('change', (e) =>
+        if $(e.target).is(':checked')
+          # イベント後に変更
+          $(e.target).attr('disabled', true)
+          WorktableCommon.updatePrevEventsToAfter(teNum, =>
+            $(e.target).removeAttr('disabled')
+          )
+        else
+          # 全アイテム再描画
+          $(e.target).attr('disabled', true)
+          WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
+            $(e.target).removeAttr('disabled')
+          )
+      )
+    else
+      # イベントの設定が繋がっていない場合はdisabled
+      $('.update_event_after', emt).attr('disabled', true)
+
     # 選択メニューイベント
     $('.te_item_select', emt).off('change').on('change', (e) ->
       config.clearError()

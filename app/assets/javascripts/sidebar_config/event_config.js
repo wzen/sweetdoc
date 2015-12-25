@@ -216,12 +216,14 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.preview = function(keepDispMag) {
-    return WorktableCommon.stashEventPageValueForPreview(this.teNum, (function(_this) {
-      return function() {
-        _this.writeToEventPageValue();
-        return WorktableCommon.runPreview(_this.teNum, keepDispMag);
-      };
-    })(this));
+    if (WorktableCommon.isConnectedEventProgressRoute(this.teNum)) {
+      return WorktableCommon.stashEventPageValueForPreview(this.teNum, (function(_this) {
+        return function() {
+          _this.writeToEventPageValue();
+          return WorktableCommon.runPreview(_this.teNum, keepDispMag);
+        };
+      })(this));
+    }
   };
 
   EventConfig.prototype.stopPreview = function(callback) {
@@ -379,16 +381,21 @@ EventConfig = (function() {
   };
 
   _setApplyClickEvent = function() {
-    $('.push.button.preview', this.emt).off('click').on('click', (function(_this) {
-      return function(e) {
-        var keepDispMag;
-        _this.clearError();
-        keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
-        _this.preview(keepDispMag);
-        $(e.target).closest('.button_div').find('.button_preview_wrapper').hide();
-        return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show();
-      };
-    })(this));
+    if (WorktableCommon.isConnectedEventProgressRoute(this.teNum)) {
+      $('.push.button.preview', this.emt).removeAttr('disabled');
+      $('.push.button.preview', this.emt).off('click').on('click', (function(_this) {
+        return function(e) {
+          var keepDispMag;
+          _this.clearError();
+          keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
+          _this.preview(keepDispMag);
+          $(e.target).closest('.button_div').find('.button_preview_wrapper').hide();
+          return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show();
+        };
+      })(this));
+    } else {
+      $('.push.button.preview', this.emt).attr('disabled', true);
+    }
     $('.push.button.apply', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
@@ -662,21 +669,26 @@ EventConfig = (function() {
     config = new this(emt, teNum, distId);
     config.clearAllChange();
     $('.update_event_after', emt).removeAttr('checked');
-    $('.update_event_after', emt).off('change').on('change', (function(_this) {
-      return function(e) {
-        if ($(e.target).is(':checked')) {
-          $(e.target).attr('disabled', true);
-          return WorktableCommon.updatePrevEventsToAfter(teNum, function() {
-            return $(e.target).removeAttr('disabled');
-          });
-        } else {
-          $(e.target).attr('disabled', true);
-          return WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
-            return $(e.target).removeAttr('disabled');
-          });
-        }
-      };
-    })(this));
+    if (WorktableCommon.isConnectedEventProgressRoute(teNum)) {
+      $('.update_event_after', emt).removeAttr('disabled');
+      $('.update_event_after', emt).off('change').on('change', (function(_this) {
+        return function(e) {
+          if ($(e.target).is(':checked')) {
+            $(e.target).attr('disabled', true);
+            return WorktableCommon.updatePrevEventsToAfter(teNum, function() {
+              return $(e.target).removeAttr('disabled');
+            });
+          } else {
+            $(e.target).attr('disabled', true);
+            return WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
+              return $(e.target).removeAttr('disabled');
+            });
+          }
+        };
+      })(this));
+    } else {
+      $('.update_event_after', emt).attr('disabled', true);
+    }
     $('.te_item_select', emt).off('change').on('change', function(e) {
       config.clearError();
       return config.selectItem(this);
