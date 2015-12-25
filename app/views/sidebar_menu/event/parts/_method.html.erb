@@ -1,5 +1,10 @@
+<% type = 'normal' if type.nil? %>
 <div class='radio'>
-  <label><input type='radio' name=''><span></span></label>
-  <input class='method_name' type='hidden' value=''>
-  <input class='value_class_name' type='hidden' value=''>
+  <% if type != 'none' %>
+      <label><input type='radio' name=''><span></span></label>
+      <input class='method_name' type='hidden' value=''>
+      <input class='value_class_name' type='hidden' value=''>
+  <% else %>
+      <label><input type='radio' name='' checked><span class='none'>none</span></label>
+<% end %>
 </div>

@@ -67,7 +67,7 @@ class ItemPreviewEventConfig extends EventConfig
         commonEvent.setItemAllPropToPageValue()
       @[EventPageValueBase.PageValueKey.ID] = commonEvent.id
 
-    errorMes = @writeToPageValue()
+    errorMes = EventPageValueBase.writeToPageValue(@)
     if errorMes? && errorMes.length > 0
       # エラー発生時
       @showError(errorMes)

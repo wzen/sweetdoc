@@ -197,7 +197,7 @@ class EventConfig
     )
     @[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] = specificValues
 
-    errorMes = @writeToPageValue()
+    errorMes = EventPageValueBase.writeToPageValue(@)
     if errorMes? && errorMes.length > 0
       # エラー発生時
       @showError(errorMes)
@@ -234,23 +234,6 @@ class EventConfig
   stopPreview: (callback = null) ->
     WorktableCommon.stopAllEventPreview(callback)
 
-  # 画面値に書き込み
-  writeToPageValue: ->
-    errorMes = "Not implemented"
-    writeValue = null
-    tle = _getEventPageValueClass.call(@)
-    if tle?
-      errorMes = tle.writeToPageValue(@)
-    return errorMes
-
-  # 画面値から読み込み
-  readFromPageValue: ->
-    tle = _getEventPageValueClass.call(@)
-    if tle?
-      return tle.readFromPageValue(@)
-    else
-      return false
-
   # アクションメソッドクラス名を取得
   actionClassName: ->
     return @constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
@@ -271,17 +254,6 @@ class EventConfig
     eventConfigError = $('.event_config_error', @emt)
     eventConfigError.find('p').html('')
     eventConfigError.hide()
-
-  # 対応するEventPageValueクラスを取得
-  # @return [Class] EventPageValueクラス
-  _getEventPageValueClass = ->
-    if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]?
-      return null
-
-    if @[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
-      return EventPageValueBase
-    else
-      return EPVItem
 
   _setMethodActionEvent = ->
     actionClassName = @actionClassName()
@@ -392,7 +364,7 @@ class EventConfig
     )
 
   _setupFromPageValues = ->
-    if @readFromPageValue()
+    if EventPageValueBase.readFromPageValue(@)
       @selectItem()
 
   # 追加されたコンフィグを全て消去
@@ -641,7 +613,7 @@ class EventConfig
       config.clearError()
       config.selectItem(@)
     )
-    window.drawingCanvas.one('click.setupTimelineEventHandler', (e) =>
+    $(window.drawingCanvas).one('click.setupTimelineEventHandler', (e) =>
       # メイン画面クリックで全アイテム再描画
-      @refreshAllItemsFromInstancePageValueIfChanging()
+      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
     )

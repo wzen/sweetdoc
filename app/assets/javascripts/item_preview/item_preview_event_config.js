@@ -73,7 +73,7 @@ ItemPreviewEventConfig = (function(superClass) {
       }
       this[EventPageValueBase.PageValueKey.ID] = commonEvent.id;
     }
-    errorMes = this.writeToPageValue();
+    errorMes = EventPageValueBase.writeToPageValue(this);
     if ((errorMes != null) && errorMes.length > 0) {
       this.showError(errorMes);
       return;

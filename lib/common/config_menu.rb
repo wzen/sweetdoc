@@ -30,7 +30,7 @@ class ConfigMenu
     temp_name = "#{class_dist_token.to_s.downcase}_#{method_name.to_s.downcase}"
     # TODO: 生HTMLを取得できるようにする
     # テンプレート存在チェック
-    if lookup_context.exists?(temp_name, dir, true)
+    if ActionController::Base.helpers.lookup_context.exists?(temp_name, dir, true)
       temp = "#{dir}/#{temp_name}"
       ret = controller.render_to_string(
           partial: temp

@@ -631,7 +631,7 @@ WorktableCommon = (function() {
                 });
               });
               window.worktableItemsChangedState = true;
-              window.drawingCanvas.one('click.runPreview', function(e) {
+              $(window.drawingCanvas).one('click.runPreview', function(e) {
                 return _this.stopAllEventPreview(function() {
                   return _this.refreshAllItemsFromInstancePageValueIfChanging();
                 });
@@ -699,12 +699,15 @@ WorktableCommon = (function() {
       callback = null;
     }
     _callback = function() {
-      return window.stashedEventPageValueForPreview = {
+      window.stashedEventPageValueForPreview = {
         pageNum: PageValue.getPageNum(),
         forkNum: PageValue.getForkNum(),
         teNum: teNum,
         value: PageValue.getEventPageValue(PageValue.Key.eventNumber(teNum))
       };
+      if (callback != null) {
+        return callback();
+      }
     };
     if (window.stashedEventPageValueForPreview != null) {
       return this.reverseStashEventPageValueForPreviewIfNeeded((function(_this) {

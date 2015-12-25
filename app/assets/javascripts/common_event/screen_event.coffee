@@ -99,7 +99,7 @@ class ScreenEvent extends CommonEvent
           if !overlay? || overlay.length == 0
             # オーバーレイを被せる
             canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
-            window.drawingCanvas.parent().append(canvas)
+            $(window.drawingCanvas).parent().append(canvas)
             overlay = $('#preview_position_overlay')
           # オーバーレイ描画
           canvasContext = overlay[0].getContent('2d')

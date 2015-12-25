@@ -129,7 +129,7 @@ ScreenEvent = (function(superClass) {
           overlay = $('#preview_position_overlay');
           if ((overlay == null) || overlay.length === 0) {
             canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
-            window.drawingCanvas.parent().append(canvas);
+            $(window.drawingCanvas).parent().append(canvas);
             overlay = $('#preview_position_overlay');
           }
           canvasContext = overlay[0].getContent('2d');

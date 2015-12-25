@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _getEventPageValueClass, _setApplyClickEvent, _setForkSelect, _setHandlerRadioEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
+  var _setApplyClickEvent, _setForkSelect, _setHandlerRadioEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
@@ -195,7 +195,7 @@ EventConfig = (function() {
       };
     })(this));
     this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] = specificValues;
-    errorMes = this.writeToPageValue();
+    errorMes = EventPageValueBase.writeToPageValue(this);
     if ((errorMes != null) && errorMes.length > 0) {
       this.showError(errorMes);
       return false;
@@ -233,27 +233,6 @@ EventConfig = (function() {
     return WorktableCommon.stopAllEventPreview(callback);
   };
 
-  EventConfig.prototype.writeToPageValue = function() {
-    var errorMes, tle, writeValue;
-    errorMes = "Not implemented";
-    writeValue = null;
-    tle = _getEventPageValueClass.call(this);
-    if (tle != null) {
-      errorMes = tle.writeToPageValue(this);
-    }
-    return errorMes;
-  };
-
-  EventConfig.prototype.readFromPageValue = function() {
-    var tle;
-    tle = _getEventPageValueClass.call(this);
-    if (tle != null) {
-      return tle.readFromPageValue(this);
-    } else {
-      return false;
-    }
-  };
-
   EventConfig.prototype.actionClassName = function() {
     return this.constructor.ITEM_ACTION_CLASS.replace('@classdisttoken', this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
   };
@@ -274,17 +253,6 @@ EventConfig = (function() {
     eventConfigError = $('.event_config_error', this.emt);
     eventConfigError.find('p').html('');
     return eventConfigError.hide();
-  };
-
-  _getEventPageValueClass = function() {
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == null) {
-      return null;
-    }
-    if (this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      return EventPageValueBase;
-    } else {
-      return EPVItem;
-    }
   };
 
   _setMethodActionEvent = function() {
@@ -414,7 +382,7 @@ EventConfig = (function() {
   };
 
   _setupFromPageValues = function() {
-    if (this.readFromPageValue()) {
+    if (EventPageValueBase.readFromPageValue(this)) {
       return this.selectItem();
     }
   };
@@ -693,9 +661,9 @@ EventConfig = (function() {
       config.clearError();
       return config.selectItem(this);
     });
-    return window.drawingCanvas.one('click.setupTimelineEventHandler', (function(_this) {
+    return $(window.drawingCanvas).one('click.setupTimelineEventHandler', (function(_this) {
       return function(e) {
-        return _this.refreshAllItemsFromInstancePageValueIfChanging();
+        return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
       };
     })(this));
   };

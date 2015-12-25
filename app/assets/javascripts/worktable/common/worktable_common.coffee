@@ -543,7 +543,7 @@ class WorktableCommon
             )
             # 状態変更フラグON
             window.worktableItemsChangedState = true
-            window.drawingCanvas.one('click.runPreview', (e) =>
+            $(window.drawingCanvas).one('click.runPreview', (e) =>
               # メイン画面クリックでプレビュー停止 & アイテムを再描画
               @stopAllEventPreview( =>
                 @refreshAllItemsFromInstancePageValueIfChanging()
@@ -596,6 +596,8 @@ class WorktableCommon
         teNum: teNum
         value: PageValue.getEventPageValue(PageValue.Key.eventNumber(teNum))
       }
+      if callback?
+        callback()
 
     if window.stashedEventPageValueForPreview?
       # 既ににある場合は一度戻す
