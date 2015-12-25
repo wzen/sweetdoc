@@ -469,26 +469,28 @@ class WorktableCommon
   @eventProgressRoute = (finishTeNum, finishFn = PageValue.getForkNum()) ->
     finishTeNum = parseInt(finishTeNum)
     finishFn = parseInt(finishFn)
-    routes = []
-    result = false
     _trace = (forkNum) ->
+      routes = []
       tes = PageValue.getEventPageValueSortedListByNum(forkNum)
       for te, idx in tes
-        routes.push(te)
-        if idx + 1 == finishTeNum && forkNum == finishFn
-          # 発見
-          result = true
-          break
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
         if changeForkNum?
-          if forkNum == finishFn
-            # 終了フォークと違うフォークに行った場合は未発見とする
-            # ※同じフォークには戻ってこない前提
-            break
-          _trace.call(changeForkNum)
-          break
-    _trace.call(PageValue.Key.EF_MASTER_FORKNUM)
-    return if result then routes else []
+          ret = _trace.call(@, changeForkNum)
+          result = ret.result
+          if result
+            routes.push(te)
+            $.merge(routes, ret.routes)
+            return {result: result, routes: routes}
+        else
+          routes.push(te)
+          if idx + 1 == finishTeNum && forkNum == finishFn
+            # 発見
+            return {result: true, routes: routes}
+
+      return {result: false, routes: []}
+
+    ret = _trace.call(@, PageValue.Key.EF_MASTER_FORKNUM)
+    return if ret.result then ret.routes else []
 
   # イベント進行ルートが繋がっているか
   @isConnectedEventProgressRoute = (finishTeNum, finishFn = PageValue.getForkNum()) ->

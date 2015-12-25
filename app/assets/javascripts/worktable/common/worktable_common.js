@@ -522,41 +522,48 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.eventProgressRoute = function(finishTeNum, finishFn) {
-    var _trace, result, routes;
+    var _trace, ret;
     if (finishFn == null) {
       finishFn = PageValue.getForkNum();
     }
     finishTeNum = parseInt(finishTeNum);
     finishFn = parseInt(finishFn);
-    routes = [];
-    result = false;
     _trace = function(forkNum) {
-      var changeForkNum, idx, l, len, results, te, tes;
+      var changeForkNum, idx, l, len, result, ret, routes, te, tes;
+      routes = [];
       tes = PageValue.getEventPageValueSortedListByNum(forkNum);
-      results = [];
       for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
         te = tes[idx];
-        routes.push(te);
-        if (idx + 1 === finishTeNum && forkNum === finishFn) {
-          result = true;
-          break;
-        }
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
         if (changeForkNum != null) {
-          if (forkNum === finishFn) {
-            break;
+          ret = _trace.call(this, changeForkNum);
+          result = ret.result;
+          if (result) {
+            routes.push(te);
+            $.merge(routes, ret.routes);
+            return {
+              result: result,
+              routes: routes
+            };
           }
-          _trace.call(changeForkNum);
-          break;
         } else {
-          results.push(void 0);
+          routes.push(te);
+          if (idx + 1 === finishTeNum && forkNum === finishFn) {
+            return {
+              result: true,
+              routes: routes
+            };
+          }
         }
       }
-      return results;
+      return {
+        result: false,
+        routes: []
+      };
     };
-    _trace.call(PageValue.Key.EF_MASTER_FORKNUM);
-    if (result) {
-      return routes;
+    ret = _trace.call(this, PageValue.Key.EF_MASTER_FORKNUM);
+    if (ret.result) {
+      return ret.routes;
     } else {
       return [];
     }
