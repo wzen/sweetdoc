@@ -481,6 +481,8 @@ class WorktableCommon
     _trace = (forkNum) ->
       routes = []
       tes = PageValue.getEventPageValueSortedListByNum(forkNum)
+      if tes.length == 0
+        return {result: true, routes: []}
       for te, idx in tes
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM]
         if changeForkNum? && changeForkNum != forkNum
@@ -489,7 +491,7 @@ class WorktableCommon
           if result
             routes.push(te)
             $.merge(routes, ret.routes)
-            return {result: result, routes: routes}
+            return {result: true, routes: routes}
         else
           routes.push(te)
           if idx + 1 == finishTeNum && forkNum == finishFn
@@ -498,12 +500,12 @@ class WorktableCommon
 
       return {result: false, routes: []}
 
-    ret = _trace.call(@, PageValue.Key.EF_MASTER_FORKNUM)
-    return if ret.result then ret.routes else []
+    return _trace.call(@, PageValue.Key.EF_MASTER_FORKNUM)
 
   # イベント進行ルートが繋がっているか
   @isConnectedEventProgressRoute = (finishTeNum, finishFn = PageValue.getForkNum()) ->
-    return @eventProgressRoute(finishTeNum, finishFn).length > 0
+    ret = @eventProgressRoute(finishTeNum, finishFn)
+    return ret.result
 
   # 指定イベント以前をイベント適用後の状態に変更
   @updatePrevEventsToAfter = (teNum, keepDispMag = false, callback = null) ->
@@ -518,10 +520,11 @@ class WorktableCommon
     if doRunPreview && window.previewRunning? && window.previewRunning
       # プレビュー二重実行は無視
       return
-    tes = @eventProgressRoute(teNum)
-    if tes.length == 0
+    epr = @eventProgressRoute(teNum)
+    if !epr.result
       # 設定が繋がっていない場合は無視
       return
+    tes = epr.routes
 
     # 状態変更フラグON
     window.worktableItemsChangedState = true

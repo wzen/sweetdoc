@@ -546,7 +546,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.eventProgressRoute = function(finishTeNum, finishFn) {
-    var _trace, ret;
+    var _trace;
     if (finishFn == null) {
       finishFn = PageValue.getForkNum();
     }
@@ -556,6 +556,12 @@ WorktableCommon = (function() {
       var changeForkNum, idx, l, len, result, ret, routes, te, tes;
       routes = [];
       tes = PageValue.getEventPageValueSortedListByNum(forkNum);
+      if (tes.length === 0) {
+        return {
+          result: true,
+          routes: []
+        };
+      }
       for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
         te = tes[idx];
         changeForkNum = te[EventPageValueBase.PageValueKey.CHANGE_FORKNUM];
@@ -566,7 +572,7 @@ WorktableCommon = (function() {
             routes.push(te);
             $.merge(routes, ret.routes);
             return {
-              result: result,
+              result: true,
               routes: routes
             };
           }
@@ -585,19 +591,16 @@ WorktableCommon = (function() {
         routes: []
       };
     };
-    ret = _trace.call(this, PageValue.Key.EF_MASTER_FORKNUM);
-    if (ret.result) {
-      return ret.routes;
-    } else {
-      return [];
-    }
+    return _trace.call(this, PageValue.Key.EF_MASTER_FORKNUM);
   };
 
   WorktableCommon.isConnectedEventProgressRoute = function(finishTeNum, finishFn) {
+    var ret;
     if (finishFn == null) {
       finishFn = PageValue.getForkNum();
     }
-    return this.eventProgressRoute(finishTeNum, finishFn).length > 0;
+    ret = this.eventProgressRoute(finishTeNum, finishFn);
+    return ret.result;
   };
 
   WorktableCommon.updatePrevEventsToAfter = function(teNum, keepDispMag, callback) {
@@ -621,17 +624,18 @@ WorktableCommon = (function() {
   };
 
   _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, doRunPreview, callback) {
-    var tes;
+    var epr, tes;
     if (callback == null) {
       callback = null;
     }
     if (doRunPreview && (window.previewRunning != null) && window.previewRunning) {
       return;
     }
-    tes = this.eventProgressRoute(teNum);
-    if (tes.length === 0) {
+    epr = this.eventProgressRoute(teNum);
+    if (!epr.result) {
       return;
     }
+    tes = epr.routes;
     window.worktableItemsChangedState = true;
     return Common.updateAllEventsToBefore((function(_this) {
       return function() {
