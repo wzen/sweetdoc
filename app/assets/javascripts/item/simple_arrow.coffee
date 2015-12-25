@@ -80,7 +80,7 @@ class SimpleArrowItem extends ItemBase
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
-  reDraw: (show = true) ->
+  refresh: (show = true) ->
     @drawAndMakeConfigs(show)
 
   # CanvasのHTML要素を作成
@@ -202,7 +202,7 @@ class SimpleArrowItem extends ItemBase
   # @private
   clearArrow = ->
     # 保存したキャンパスを張り付け
-    @restoreDrawingSurface(@itemSize)
+    @restoreRefreshingSurface(@itemSize)
 
   # 矢印のサイズ更新
   # @private

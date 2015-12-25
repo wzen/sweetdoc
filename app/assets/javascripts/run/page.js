@@ -403,7 +403,7 @@ Page = (function() {
     for (j = 0, len = objs.length; j < len; j++) {
       obj = objs[j];
       waitDraw = true;
-      obj.reDrawIfItemNotExist(obj.visible, (function(_this) {
+      obj.refreshIfItemNotExist(obj.visible, (function(_this) {
         return function() {
           if (obj.firstFocus) {
             window.disabledEventHandler = true;

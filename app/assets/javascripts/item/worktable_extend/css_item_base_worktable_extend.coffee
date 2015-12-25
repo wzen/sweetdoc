@@ -16,7 +16,7 @@ cssItemBaseWorktableExtend =
   # @return [Boolean] 処理結果
   drawAndMakeConfigs: (show = true, callback = null) ->
     # ボタン設置
-    @reDraw(show)
+    @refresh(show)
     # コンフィグ作成
     ConfigMenu.getDesignConfig(@, ->
       if callback?

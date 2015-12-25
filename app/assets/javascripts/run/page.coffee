@@ -356,7 +356,7 @@ class Page
       #if obj.visible
       waitDraw = true
       # 初期表示
-      obj.reDrawIfItemNotExist(obj.visible, =>
+      obj.refreshIfItemNotExist(obj.visible, =>
         if obj.firstFocus
           # 初期フォーカス
           window.disabledEventHandler = true

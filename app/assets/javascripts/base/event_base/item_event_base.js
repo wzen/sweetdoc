@@ -17,15 +17,6 @@ ItemEventBase = (function(superClass) {
 
   ItemEventBase.prototype.initEventPrepare = function() {};
 
-  ItemEventBase.prototype.reDraw = function(show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-  };
-
   ItemEventBase.prototype.execMethod = function(opt) {
     var methodName;
     ItemEventBase.__super__.execMethod.call(this, opt);
@@ -33,7 +24,7 @@ ItemEventBase = (function(superClass) {
     if (methodName !== EventPageValueBase.NO_METHOD) {
       return this.constructor.prototype[methodName].call(this, opt);
     } else {
-      return this.reDraw();
+      return this.refresh();
     }
   };
 

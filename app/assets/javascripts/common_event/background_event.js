@@ -49,6 +49,19 @@ BackgroundEvent = (function(superClass) {
       return PrivateClass.__super__.initEvent.call(this, event);
     };
 
+    PrivateClass.prototype.refresh = function(show, callback) {
+      if (show == null) {
+        show = true;
+      }
+      if (callback == null) {
+        callback = null;
+      }
+      window.scrollInside.css('backgroundColor', '');
+      if (callback != null) {
+        return callback();
+      }
+    };
+
     PrivateClass.prototype.updateEventBefore = function() {
       var methodName;
       PrivateClass.__super__.updateEventBefore.call(this);

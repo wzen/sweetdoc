@@ -31,7 +31,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.clearAllChange = function() {
-    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
+    WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
     this.emt.find('.button_preview_wrapper').show();
     return this.emt.find('.button_stop_preview_wrapper').hide();
   };
@@ -680,7 +680,7 @@ EventConfig = (function() {
             });
           } else {
             $(e.target).attr('disabled', true);
-            return WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
+            return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
               return $(e.target).removeAttr('disabled');
             });
           }
@@ -695,7 +695,7 @@ EventConfig = (function() {
     });
     return window.drawingCanvas.one('click.setupTimelineEventHandler', (function(_this) {
       return function(e) {
-        return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+        return _this.refreshAllItemsFromInstancePageValueIfChanging();
       };
     })(this));
   };

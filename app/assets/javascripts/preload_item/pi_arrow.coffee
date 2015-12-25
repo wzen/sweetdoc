@@ -144,14 +144,14 @@ class PreloadItemArrow extends CanvasItemBase
     super()
     methodName = @getEventMethodName()
     if methodName == 'changeDraw'
-      @reDraw(false)
+      @refresh(false)
 
   # イベント後の表示状態にする
   updateEventAfter: ->
     super()
     methodName = @getEventMethodName()
     if methodName == 'changeDraw'
-      @reDraw()
+      @refresh()
 
   # 描画イベント ※アクションイベント
   changeDraw : (opt) ->
@@ -398,7 +398,7 @@ class PreloadItemArrow extends CanvasItemBase
     # パスの描画
     _drawPath.call(@, moveCood)
     # 描画した矢印をクリア
-    @restoreDrawingSurface(@itemSize)
+    @restoreRefreshingSurface(@itemSize)
     # 線の描画
     _drawLine.call(@)
 

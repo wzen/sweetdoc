@@ -144,7 +144,7 @@ ItemPreviewTemp = (function(superClass) {
     ItemPreviewTemp.__super__.updateEventBefore.call(this);
     methodName = this.getEventMethodName();
     if (methodName === 'changeDraw') {
-      return this.reDraw(false);
+      return this.refresh(false);
     }
   };
 
@@ -153,7 +153,7 @@ ItemPreviewTemp = (function(superClass) {
     ItemPreviewTemp.__super__.updateEventAfter.call(this);
     methodName = this.getEventMethodName();
     if (methodName === 'changeDraw') {
-      return this.reDraw();
+      return this.refresh();
     }
   };
 
@@ -402,7 +402,7 @@ ItemPreviewTemp = (function(superClass) {
     this.registCoord.push(moveCood);
     _updateArrowRect.call(this, moveCood);
     _drawPath.call(this, moveCood);
-    this.restoreDrawingSurface(this.itemSize);
+    this.restoreRefreshingSurface(this.itemSize);
     return _drawLine.call(this);
   };
 

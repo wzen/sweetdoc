@@ -55,6 +55,33 @@ EventBase = (function(superClass) {
     }
   }
 
+  EventBase.prototype.refresh = function(show, callback) {
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+  };
+
+  EventBase.prototype.refreshFromInstancePageValue = function(show, callback) {
+    var obj;
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    if (window.runDebug) {
+      console.log('EventBase refreshWithEventBefore id:' + this.id);
+    }
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
+    if (obj) {
+      this.setMiniumObject(obj);
+    }
+    return this.refresh(show, callback);
+  };
+
   EventBase.prototype.initEvent = function(event) {
     this._event = event;
     this._isFinishedEvent = false;

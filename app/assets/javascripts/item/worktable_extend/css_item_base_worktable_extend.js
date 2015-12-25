@@ -22,7 +22,7 @@ cssItemBaseWorktableExtend = {
     if (callback == null) {
       callback = null;
     }
-    this.reDraw(show);
+    this.refresh(show);
     return ConfigMenu.getDesignConfig(this, function() {
       if (callback != null) {
         return callback();

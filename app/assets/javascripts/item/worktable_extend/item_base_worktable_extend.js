@@ -36,7 +36,7 @@ itemBaseWorktableExtend = {
   startDraw: function() {},
   draw: function(cood) {
     if (this.itemSize !== null) {
-      this.restoreDrawingSurface(this.itemSize);
+      this.restoreRefreshingSurface(this.itemSize);
     }
     this.itemSize = {
       x: null,
@@ -117,7 +117,7 @@ itemBaseWorktableExtend = {
     if (window.runDebug) {
       console.log('ItemBase drawAndMakeConfigs');
     }
-    this.reDraw(show);
+    this.refresh(show);
     return ConfigMenu.getDesignConfig(this, function() {
       if (callback != null) {
         return callback();

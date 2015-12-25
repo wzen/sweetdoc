@@ -84,7 +84,7 @@ class Handwrite
     if window.mode == Constant.Mode.DRAW
       # 通常描画
       # プレビューを停止して再描画
-      WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
+      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
       if selectItemMenu?
         # インスタンス作成
         @item = new (Common.getClassFromMap(selectItemMenu))(loc)

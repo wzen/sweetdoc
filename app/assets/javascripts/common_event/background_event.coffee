@@ -34,6 +34,12 @@ class BackgroundEvent extends CommonEvent
     initEvent: (event) ->
       super(event)
 
+    # 変更を戻して再表示
+    refresh: (show = true, callback = null) ->
+      window.scrollInside.css('backgroundColor', '')
+      if callback?
+        callback()
+
     # イベント前の表示状態にする
     updateEventBefore: ->
       super()

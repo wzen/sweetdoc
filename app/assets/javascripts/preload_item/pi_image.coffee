@@ -40,29 +40,29 @@ class PreloadItemImage extends ItemBase
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null) ->
-    if @reDrawing? && @reDrawing
+  refresh: (show = true, callback = null) ->
+    if @refreshing? && @refreshing
       # createItemElementが重い時のため
       # 描画中はスタックに登録
-      @reDrawStack = true
+      @refreshStack = true
       if window.debug
         console.log('add stack')
       return
 
-    @reDrawing = true
+    @refreshing = true
     @removeItemElement()
     @createItemElement( =>
       @itemDraw(show)
       if @setupItemEvents?
         # アイテムのイベント設定
         @setupItemEvents()
-      @reDrawing = false
-      if @reDrawStack? && @reDrawStack
+      @refreshing = false
+      if @refreshStack? && @refreshStack
         # スタックが存在する場合再度描画
-        @reDrawStack = false
+        @refreshStack = false
         if window.debug
           console.log('stack redraw')
-        @reDraw(show, callback)
+        @refresh(show, callback)
       else
         if callback?
           callback()
@@ -105,7 +105,7 @@ class PreloadItemImage extends ItemBase
               d = JSON.parse(data.responseText)
               @imagePath = d.image_url
               @saveObj()
-              @reDraw()
+              @refresh()
             )
             _initModalEvent.call(@, modalEmt)
             if callback?
@@ -132,7 +132,7 @@ class PreloadItemImage extends ItemBase
       # 読み込み失敗 -> NoImageに変更
       @imagePath = null
       @_image = null
-      @reDraw()
+      @refresh()
 
   _sizeOfKeepAspect = ->
     if @itemSize.w / @itemSize.h > @_image.naturalWidth / @_image.naturalHeight

@@ -234,7 +234,7 @@ WorktableCommon = (function() {
     }
   };
 
-  WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging = function(pn, callback) {
+  WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging = function(pn, callback) {
     var callbackCount;
     if (pn == null) {
       pn = PageValue.getPageNum();
@@ -246,11 +246,11 @@ WorktableCommon = (function() {
     return this.stopAllEventPreview(function(noRunningPreview) {
       var item, items, l, len, results;
       if (window.worktableItemsChangedState || !noRunningPreview) {
-        items = Common.itemInstancesInPage(pn);
+        items = Common.instancesInPage(pn);
         results = [];
         for (l = 0, len = items.length; l < len; l++) {
           item = items[l];
-          results.push(item.reDrawFromInstancePageValue(true, function() {
+          results.push(item.refreshFromInstancePageValue(true, function() {
             callbackCount += 1;
             if (callbackCount >= items.length) {
               window.worktableItemsChangedState = false;
@@ -627,13 +627,13 @@ WorktableCommon = (function() {
               item.preview(te, function() {
                 window.previewRunning = false;
                 return _this.reverseStashEventPageValueForPreviewIfNeeded(function() {
-                  return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+                  return _this.refreshAllItemsFromInstancePageValueIfChanging();
                 });
               });
               window.worktableItemsChangedState = true;
               window.drawingCanvas.one('click.runPreview', function(e) {
                 return _this.stopAllEventPreview(function() {
-                  return _this.reDrawAllItemsFromInstancePageValueIfChanging();
+                  return _this.refreshAllItemsFromInstancePageValueIfChanging();
                 });
               });
             }

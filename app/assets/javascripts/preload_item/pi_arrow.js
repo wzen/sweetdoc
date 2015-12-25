@@ -152,7 +152,7 @@ PreloadItemArrow = (function(superClass) {
     PreloadItemArrow.__super__.updateEventBefore.call(this);
     methodName = this.getEventMethodName();
     if (methodName === 'changeDraw') {
-      return this.reDraw(false);
+      return this.refresh(false);
     }
   };
 
@@ -161,7 +161,7 @@ PreloadItemArrow = (function(superClass) {
     PreloadItemArrow.__super__.updateEventAfter.call(this);
     methodName = this.getEventMethodName();
     if (methodName === 'changeDraw') {
-      return this.reDraw();
+      return this.refresh();
     }
   };
 
@@ -410,7 +410,7 @@ PreloadItemArrow = (function(superClass) {
     this.registCoord.push(moveCood);
     _updateArrowRect.call(this, moveCood);
     _drawPath.call(this, moveCood);
-    this.restoreDrawingSurface(this.itemSize);
+    this.restoreRefreshingSurface(this.itemSize);
     return _drawLine.call(this);
   };
 

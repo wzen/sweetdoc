@@ -202,15 +202,15 @@ class WorktableCommon
 
   # アイテム描画が変更されている場合にインスタンスから全アイテム再描画
   # @param [Integer] pn ページ番号
-  @reDrawAllItemsFromInstancePageValueIfChanging = (pn = PageValue.getPageNum(), callback = null) ->
+  @refreshAllItemsFromInstancePageValueIfChanging = (pn = PageValue.getPageNum(), callback = null) ->
     callbackCount = 0
     # イベント停止
     @stopAllEventPreview( (noRunningPreview) ->
       if window.worktableItemsChangedState || !noRunningPreview
         # アイテムの状態に変更がある場合は再描画処理
-        items = Common.itemInstancesInPage(pn)
+        items = Common.instancesInPage(pn)
         for item in items
-          item.reDrawFromInstancePageValue(true, ->
+          item.refreshFromInstancePageValue(true, ->
             callbackCount += 1
             if callbackCount >= items.length
               # アイテム状態変更フラグOFF
@@ -538,7 +538,7 @@ class WorktableCommon
               # EventPageValueの退避がある場合戻す
               @reverseStashEventPageValueForPreviewIfNeeded( =>
                 # アイテム再描画
-                @reDrawAllItemsFromInstancePageValueIfChanging()
+                @refreshAllItemsFromInstancePageValueIfChanging()
               )
             )
             # 状態変更フラグON
@@ -546,7 +546,7 @@ class WorktableCommon
             window.drawingCanvas.one('click.runPreview', (e) =>
               # メイン画面クリックでプレビュー停止 & アイテムを再描画
               @stopAllEventPreview( =>
-                @reDrawAllItemsFromInstancePageValueIfChanging()
+                @refreshAllItemsFromInstancePageValueIfChanging()
               )
             )
       if callback?

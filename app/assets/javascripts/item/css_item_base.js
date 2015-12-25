@@ -114,14 +114,14 @@ CssItemBase = (function(superClass) {
     return this.applyDesignChange(false);
   };
 
-  CssItemBase.prototype.reDraw = function(show, callback) {
+  CssItemBase.prototype.refresh = function(show, callback) {
     if (show == null) {
       show = true;
     }
     if (callback == null) {
       callback = null;
     }
-    return CssItemBase.__super__.reDraw.call(this, show, (function(_this) {
+    return CssItemBase.__super__.refresh.call(this, show, (function(_this) {
       return function() {
         _this.makeCss();
         if (callback != null) {

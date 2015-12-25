@@ -74,7 +74,7 @@ Navbar = (function() {
       var classDistToken, emtId, selected;
       selected = $(this).html();
       $('#header_items_selected_menu_span').html(selected);
-      WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging();
+      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
       WorktableCommon.clearSelectedBorder();
       emtId = $(this).attr('id');
       if (emtId.indexOf(Navbar.ITEM_MENU_PREFIX) >= 0) {

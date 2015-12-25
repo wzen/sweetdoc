@@ -24,6 +24,9 @@ class ScreenEvent extends CommonEvent
       }
     }
 
+    getJQueryElement: ->
+      return window.mainWrapper
+
     constructor: ->
       super()
       @beforeScrollTop = scrollContents.scrollTop()
@@ -34,6 +37,15 @@ class ScreenEvent extends CommonEvent
     # @param [Object] event 設定イベント
     initEvent: (event, @keepDispMag = false) ->
       super(event)
+
+    # 変更を戻して再表示
+    refresh: (show = true, callback = null) ->
+      displayPosition = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
+      Common.updateScrollContentsPosition(displayPosition.top, displayPosition.left, true, ->
+        if callback?
+          callback()
+      )
+      $('.keep_mag_base').remove()
 
     # イベント前の表示状態にする
     updateEventBefore: ->
@@ -85,9 +97,9 @@ class ScreenEvent extends CommonEvent
         context.fill()
         context.restore()
 
-      x = (@_specificMethodValues.afterX - @beforeScrollLeft) * (opt.progress / opt.progressMax) + @beforeScrollLeft
-      y = (@_specificMethodValues.afterY - @beforeScrollTop) * (opt.progress / opt.progressMax) + @beforeScrollTop
-      scale = (@_specificMethodValues.afterZ - @beforeZoom) * (opt.progress / opt.progressMax) + @beforeZoom
+      x = (parseInt(@_specificMethodValues.afterX) - @beforeScrollLeft) * (opt.progress / opt.progressMax) + @beforeScrollLeft
+      y = (parseInt(@_specificMethodValues.afterY) - @beforeScrollTop) * (opt.progress / opt.progressMax) + @beforeScrollTop
+      scale = (parseFloat(@_specificMethodValues.afterZ) - @beforeZoom) * (opt.progress / opt.progressMax) + @beforeZoom
       if opt.isPreview
         if @keepDispMag && scale < 1.0
           overlay = $('#preview_position_overlay')
@@ -103,25 +115,11 @@ class ScreenEvent extends CommonEvent
           # オーバーレイ削除
           $('#preview_position_overlay').remove()
 
-      actionType = @getEventActionType()
-      if actionType == Constant.ActionType.CLICK
-        finished_count = 0
-        scrollLeft = parseInt(x)
-        scrollTop = parseInt(y)
-        Common.updateScrollContentsPosition(scrollTop, scrollLeft, false, ->
-          finished_count += 1
-          if finished_count >= 2
-            @_isFinishedEvent = true
-            if opt.complete?
-              opt.complete()
-        )
-        @getJQueryElement().transition({scale: "#{scale}"}, 'normal', 'linear', ->
-          finished_count += 1
-          if finished_count >= 2
-            @_isFinishedEvent = true
-            if opt.complete?
-              opt.complete()
-        )
+      screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+      top = y - (screenSize.height * scale) / 2.0
+      left = x - (screenSize.width * scale) / 2.0
+      Common.updateScrollContentsPosition(top, left, true)
+      @getJQueryElement().css('scale', scale)
 
     # プレビューを停止
     # @param [Function] callback コールバック

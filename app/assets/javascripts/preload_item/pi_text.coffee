@@ -201,7 +201,7 @@ class PreloadItemText extends CssItemBase
     emt = @getJQueryElement().find(".#{@constructor.CONTENTS_CLASSNAME}:first")
     emt.off('dblclick').on('dblclick', (e) =>
       @_editing = true
-      @reDraw(true, =>
+      @refresh(true, =>
         # テキストイベント設定
         _settingInputEvent.call(@)
         # テキストを選択状態に
@@ -221,7 +221,7 @@ class PreloadItemText extends CssItemBase
       # モードを描画モードに
       Navbar.setModeDraw(@classDistToken, =>
         WorktableCommon.changeMode(Constant.Mode.DRAW)
-        @reDraw(true, =>
+        @refresh(true, =>
           # イベント設定
           _settingTextDbclickEvent.call(@)
         )

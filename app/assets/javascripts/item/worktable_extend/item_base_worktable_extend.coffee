@@ -34,7 +34,7 @@ itemBaseWorktableExtend =
   # @param [Array] cood 座標
   draw: (cood) ->
     if @itemSize != null
-      @restoreDrawingSurface(@itemSize)
+      @restoreRefreshingSurface(@itemSize)
 
     @itemSize = {x: null, y: null, w: null, h: null}
     @itemSize.w = Math.abs(cood.x - @_moveLoc.x);
@@ -98,7 +98,7 @@ itemBaseWorktableExtend =
       console.log('ItemBase drawAndMakeConfigs')
 
     # ボタン設置
-    @reDraw(show)
+    @refresh(show)
     # コンフィグ作成
     ConfigMenu.getDesignConfig(@, ->
       if callback?

@@ -32,7 +32,7 @@ class EventConfig
 
   clearAllChange: ->
     # 全アイテム再描画
-    WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging()
+    WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
     # プレビューボタンに切り替え
     @emt.find('.button_preview_wrapper').show()
     @emt.find('.button_stop_preview_wrapper').hide()
@@ -628,7 +628,7 @@ class EventConfig
         else
           # 全アイテム再描画
           $(e.target).attr('disabled', true)
-          WorktableCommon.reDrawAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
+          WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
             $(e.target).removeAttr('disabled')
           )
       )
@@ -643,5 +643,5 @@ class EventConfig
     )
     window.drawingCanvas.one('click.setupTimelineEventHandler', (e) =>
       # メイン画面クリックで全アイテム再描画
-      @reDrawAllItemsFromInstancePageValueIfChanging()
+      @refreshAllItemsFromInstancePageValueIfChanging()
     )

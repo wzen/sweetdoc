@@ -8,15 +8,11 @@ class ItemEventBase extends EventBase
     # 描画してアイテムを作成
     # 表示非表示はwillChapterで切り替え
     # 何故必要か調査中
-    #@reDraw(false)
+    #@refresh(false)
 
   # initEvent前の処理
   # @abstract
   initEventPrepare: ->
-
-  # 再描画
-  # @abstract
-  reDraw: (show = true, callback = null) ->
 
   # メソッド実行
   execMethod: (opt) ->
@@ -26,4 +22,4 @@ class ItemEventBase extends EventBase
       (@constructor.prototype[methodName]).call(@, opt)
     else
       # 再描画してアイテム状態を反映
-      @reDraw()
+      @refresh()

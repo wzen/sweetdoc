@@ -104,7 +104,7 @@ class CssItemBase extends ItemBase
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
   # @param [Function] callback コールバック
-  reDraw: (show = true, callback = null) ->
+  refresh: (show = true, callback = null) ->
     super(show, =>
       # CSS作成
       @makeCss()
@@ -114,7 +114,7 @@ class CssItemBase extends ItemBase
 
   # デザイン反映
   applyDesignChange: (doStyleSave) ->
-    #@reDraw()
+    #@refresh()
     @_cssDesignToolStyle.text(@_cssDesignToolCode.text())
     if (addStyle = @cssStyle())?
       @_cssRoot.append($("<style type='text/css'>#{addStyle}</style>"))

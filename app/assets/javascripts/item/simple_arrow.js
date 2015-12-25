@@ -86,7 +86,7 @@ SimpleArrowItem = (function(superClass) {
     return true;
   };
 
-  SimpleArrowItem.prototype.reDraw = function(show) {
+  SimpleArrowItem.prototype.refresh = function(show) {
     if (show == null) {
       show = true;
     }
@@ -209,7 +209,7 @@ SimpleArrowItem = (function(superClass) {
   };
 
   clearArrow = function() {
-    return this.restoreDrawingSurface(this.itemSize);
+    return this.restoreRefreshingSurface(this.itemSize);
   };
 
   updateArrowRect = function(cood) {

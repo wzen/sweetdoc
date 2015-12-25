@@ -84,7 +84,7 @@ EventDragPointing = (function() {
         callback = null;
       }
       this.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1;
-      return this.reDraw(true, (function(_this) {
+      return this.refresh(true, (function(_this) {
         return function() {
           _this.setupDragAndResizeEvent();
           if (_this.drawCallback != null) {

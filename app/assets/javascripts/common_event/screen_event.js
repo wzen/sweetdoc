@@ -39,6 +39,10 @@ ScreenEvent = (function(superClass) {
       }
     };
 
+    PrivateClass.prototype.getJQueryElement = function() {
+      return window.mainWrapper;
+    };
+
     function PrivateClass() {
       this.changeScreenPosition = bind(this.changeScreenPosition, this);
       PrivateClass.__super__.constructor.call(this);
@@ -50,6 +54,23 @@ ScreenEvent = (function(superClass) {
     PrivateClass.prototype.initEvent = function(event, keepDispMag) {
       this.keepDispMag = keepDispMag != null ? keepDispMag : false;
       return PrivateClass.__super__.initEvent.call(this, event);
+    };
+
+    PrivateClass.prototype.refresh = function(show, callback) {
+      var displayPosition;
+      if (show == null) {
+        show = true;
+      }
+      if (callback == null) {
+        callback = null;
+      }
+      displayPosition = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
+      Common.updateScrollContentsPosition(displayPosition.top, displayPosition.left, true, function() {
+        if (callback != null) {
+          return callback();
+        }
+      });
+      return $('.keep_mag_base').remove();
     };
 
     PrivateClass.prototype.updateEventBefore = function() {
@@ -86,7 +107,7 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
-      var _drawOverlay, actionType, canvas, canvasContext, finished_count, overlay, scale, scrollLeft, scrollTop, x, y;
+      var _drawOverlay, canvas, canvasContext, left, overlay, scale, screenSize, top, x, y;
       _drawOverlay = function(context, x, y, scale) {
         var _rect, left, screenSize, top;
         _rect = function(context, x, y, w, h) {
@@ -108,9 +129,9 @@ ScreenEvent = (function(superClass) {
         context.fill();
         return context.restore();
       };
-      x = (this._specificMethodValues.afterX - this.beforeScrollLeft) * (opt.progress / opt.progressMax) + this.beforeScrollLeft;
-      y = (this._specificMethodValues.afterY - this.beforeScrollTop) * (opt.progress / opt.progressMax) + this.beforeScrollTop;
-      scale = (this._specificMethodValues.afterZ - this.beforeZoom) * (opt.progress / opt.progressMax) + this.beforeZoom;
+      x = (parseInt(this._specificMethodValues.afterX) - this.beforeScrollLeft) * (opt.progress / opt.progressMax) + this.beforeScrollLeft;
+      y = (parseInt(this._specificMethodValues.afterY) - this.beforeScrollTop) * (opt.progress / opt.progressMax) + this.beforeScrollTop;
+      scale = (parseFloat(this._specificMethodValues.afterZ) - this.beforeZoom) * (opt.progress / opt.progressMax) + this.beforeZoom;
       if (opt.isPreview) {
         if (this.keepDispMag && scale < 1.0) {
           overlay = $('#preview_position_overlay');
@@ -125,32 +146,11 @@ ScreenEvent = (function(superClass) {
           $('#preview_position_overlay').remove();
         }
       }
-      actionType = this.getEventActionType();
-      if (actionType === Constant.ActionType.CLICK) {
-        finished_count = 0;
-        scrollLeft = parseInt(x);
-        scrollTop = parseInt(y);
-        Common.updateScrollContentsPosition(scrollTop, scrollLeft, false, function() {
-          finished_count += 1;
-          if (finished_count >= 2) {
-            this._isFinishedEvent = true;
-            if (opt.complete != null) {
-              return opt.complete();
-            }
-          }
-        });
-        return this.getJQueryElement().transition({
-          scale: "" + scale
-        }, 'normal', 'linear', function() {
-          finished_count += 1;
-          if (finished_count >= 2) {
-            this._isFinishedEvent = true;
-            if (opt.complete != null) {
-              return opt.complete();
-            }
-          }
-        });
-      }
+      screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+      top = y - (screenSize.height * scale) / 2.0;
+      left = x - (screenSize.width * scale) / 2.0;
+      Common.updateScrollContentsPosition(top, left, true);
+      return this.getJQueryElement().css('scale', scale);
     };
 
     PrivateClass.prototype.stopPreview = function(callback) {

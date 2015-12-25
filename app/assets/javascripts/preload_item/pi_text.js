@@ -100,7 +100,7 @@ PreloadItemText = (function(superClass) {
     return emt.off('dblclick').on('dblclick', (function(_this) {
       return function(e) {
         _this._editing = true;
-        return _this.reDraw(true, function() {
+        return _this.refresh(true, function() {
           _settingInputEvent.call(_this);
           _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").focus();
           return _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").select();
@@ -118,7 +118,7 @@ PreloadItemText = (function(superClass) {
       return Navbar.setModeDraw(this.classDistToken, (function(_this) {
         return function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
-          return _this.reDraw(true, function() {
+          return _this.refresh(true, function() {
             return _settingTextDbclickEvent.call(_this);
           });
         };

@@ -54,21 +54,21 @@ PreloadItemImage = (function(superClass) {
     return img.height(size.height);
   };
 
-  PreloadItemImage.prototype.reDraw = function(show, callback) {
+  PreloadItemImage.prototype.refresh = function(show, callback) {
     if (show == null) {
       show = true;
     }
     if (callback == null) {
       callback = null;
     }
-    if ((this.reDrawing != null) && this.reDrawing) {
-      this.reDrawStack = true;
+    if ((this.refreshing != null) && this.refreshing) {
+      this.refreshStack = true;
       if (window.debug) {
         console.log('add stack');
       }
       return;
     }
-    this.reDrawing = true;
+    this.refreshing = true;
     this.removeItemElement();
     return this.createItemElement((function(_this) {
       return function() {
@@ -76,13 +76,13 @@ PreloadItemImage = (function(superClass) {
         if (_this.setupItemEvents != null) {
           _this.setupItemEvents();
         }
-        _this.reDrawing = false;
-        if ((_this.reDrawStack != null) && _this.reDrawStack) {
-          _this.reDrawStack = false;
+        _this.refreshing = false;
+        if ((_this.refreshStack != null) && _this.refreshStack) {
+          _this.refreshStack = false;
           if (window.debug) {
             console.log('stack redraw');
           }
-          return _this.reDraw(show, callback);
+          return _this.refresh(show, callback);
         } else {
           if (callback != null) {
             return callback();
@@ -128,7 +128,7 @@ PreloadItemImage = (function(superClass) {
                 d = JSON.parse(data.responseText);
                 _this.imagePath = d.image_url;
                 _this.saveObj();
-                return _this.reDraw();
+                return _this.refresh();
               });
               _initModalEvent.call(_this, modalEmt);
               if (callback != null) {
@@ -159,7 +159,7 @@ PreloadItemImage = (function(superClass) {
       return function() {
         _this.imagePath = null;
         _this._image = null;
-        return _this.reDraw();
+        return _this.refresh();
       };
     })(this);
   };

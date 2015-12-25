@@ -51,7 +51,7 @@ class EventDragPointing
     endDraw: (callback = null) ->
       @zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1
 
-      @reDraw(true, =>
+      @refresh(true, =>
         @setupDragAndResizeEvent()
         if @drawCallback?
           @drawCallback(@itemSize)

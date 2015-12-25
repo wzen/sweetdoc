@@ -27,6 +27,23 @@ class EventBase extends Extend
       for varName, value of @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
         @[varName] = value.default
 
+  # 変更を戻して再表示
+  # @abstract
+  refresh: (show = true, callback = null) ->
+
+  # インスタンス変数で描画
+  # データから読み込んで描画する処理に使用
+  # @param [Boolean] show 要素作成後に表示するか
+  refreshFromInstancePageValue: (show = true, callback = null) ->
+    if window.runDebug
+      console.log('EventBase refreshWithEventBefore id:' + @id)
+
+    # インスタンス値初期化
+    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))
+    if obj
+      @setMiniumObject(obj)
+    @refresh(show, callback)
+
   # イベントの初期化
   # @param [Object] event 設定イベント
   initEvent: (event) ->

@@ -92,7 +92,7 @@ ItemBase = (function(superClass) {
     return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0);
   };
 
-  ItemBase.prototype.restoreDrawingSurface = function(size) {
+  ItemBase.prototype.restoreRefreshingSurface = function(size) {
     var padding;
     padding = 5;
     return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
@@ -104,7 +104,7 @@ ItemBase = (function(superClass) {
     }
   };
 
-  ItemBase.prototype.reDraw = function(show, callback) {
+  ItemBase.prototype.refresh = function(show, callback) {
     if (show == null) {
       show = true;
     }
@@ -112,16 +112,16 @@ ItemBase = (function(superClass) {
       callback = null;
     }
     if (window.runDebug) {
-      console.log('ItemBase reDraw id:' + this.id);
+      console.log('ItemBase refresh id:' + this.id);
     }
-    if ((this.reDrawing != null) && this.reDrawing) {
-      this.reDrawStack = true;
+    if ((this.refreshing != null) && this.refreshing) {
+      this.refreshStack = true;
       if (window.debug) {
         console.log('add stack');
       }
       return;
     }
-    this.reDrawing = true;
+    this.refreshing = true;
     this.removeItemElement();
     return this.createItemElement((function(_this) {
       return function() {
@@ -129,13 +129,13 @@ ItemBase = (function(superClass) {
         if (_this.setupItemEvents != null) {
           _this.setupItemEvents();
         }
-        _this.reDrawing = false;
-        if ((_this.reDrawStack != null) && _this.reDrawStack) {
-          _this.reDrawStack = false;
+        _this.refreshing = false;
+        if ((_this.refreshStack != null) && _this.refreshStack) {
+          _this.refreshStack = false;
           if (window.debug) {
             console.log('stack redraw');
           }
-          return _this.reDraw(show, callback);
+          return _this.refresh(show, callback);
         } else {
           if (callback != null) {
             return callback();
@@ -145,7 +145,7 @@ ItemBase = (function(superClass) {
     })(this));
   };
 
-  ItemBase.prototype.reDrawIfItemNotExist = function(show, callback) {
+  ItemBase.prototype.refreshIfItemNotExist = function(show, callback) {
     if (show == null) {
       show = true;
     }
@@ -153,10 +153,10 @@ ItemBase = (function(superClass) {
       callback = null;
     }
     if (window.runDebug) {
-      console.log('ItemBase reDrawIfItemNotExist id:' + this.id);
+      console.log('ItemBase refreshIfItemNotExist id:' + this.id);
     }
     if (this.getJQueryElement().length === 0) {
-      return this.reDraw(show, callback);
+      return this.refresh(show, callback);
     } else {
       if (callback != null) {
         return callback();
@@ -168,28 +168,10 @@ ItemBase = (function(superClass) {
     if (doStyleSave == null) {
       doStyleSave = true;
     }
-    this.reDraw();
+    this.refresh();
     if (doStyleSave) {
       return this.saveDesign();
     }
-  };
-
-  ItemBase.prototype.reDrawFromInstancePageValue = function(show, callback) {
-    var obj;
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    if (window.runDebug) {
-      console.log('ItemBase reDrawWithEventBefore id:' + this.id);
-    }
-    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-    if (obj) {
-      this.setMiniumObject(obj);
-    }
-    return this.reDraw(show, callback);
   };
 
   ItemBase.prototype.saveObj = function(newCreated) {
