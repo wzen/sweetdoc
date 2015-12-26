@@ -30,6 +30,9 @@ class RunController < ApplicationController
     user_id = current_or_guest_user.id
     gallery_access_token = params.require(Const::Run::Key::ACCESS_TOKEN)
     footprint_page_values = params.fetch(Const::Run::Key::FOOTPRINT_PAGE_VALUE, nil)
+    if footprint_page_values.present?
+      footprint_page_values = JSON.parse(footprint_page_values)
+    end
     @result_success, @message = PageValueState.save_gallery_footprint(user_id, gallery_access_token, footprint_page_values)
   end
 

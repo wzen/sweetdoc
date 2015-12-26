@@ -200,7 +200,12 @@ PageValue = (function() {
         return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceDiffAfter";
       };
 
-      Key.FORK_STACK = "" + Key.F_PREFIX + Key.PAGE_VALUES_SEPERATOR + "fork_stack";
+      Key.forkStack = function(pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + "fork_stack";
+      };
 
       return Key;
 

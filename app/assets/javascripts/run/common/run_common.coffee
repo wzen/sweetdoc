@@ -236,24 +236,19 @@ class RunCommon
     )
 
   @getForkStack = (pn) ->
-    if !window.forkNumStacks?
-      window.forkNumStacks = {}
-    return window.forkNumStacks[pn]
+    PageValue.getFootprintPageValue(PageValue.Key.forkStack(pn))
 
   @setForkStack = (obj, pn) ->
-    if !window.forkNumStacks?
-      window.forkNumStacks = {}
-    window.forkNumStacks[pn] = [obj]
+    PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), [obj])
 
   # フォーク番号スタック初期化
   # @return [Boolean] 処理正常終了か
   @initForkStack = (forkNum, pn) ->
+    # PageValueに書き込み
     @setForkStack({
       changedChapterIndex: 0
       forkNum: forkNum
     }, pn)
-    # PageValueに書き込み
-    PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
     return true
 
   # フォーク番号をスタックに追加
@@ -270,7 +265,7 @@ class RunCommon
         }
       )
       # PageValueに書き込み
-      PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks)
+      PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), stack)
       return true
     else
       return false
@@ -278,12 +273,7 @@ class RunCommon
   # スタックから最新フォークオブジェクトを取得
   # @return [Integer] 取得値
   @getLastObjestFromStack = (pn) ->
-    if !window.forkNumStacks?
-      # PageValueから読み込み
-      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK)
-      if !window.forkNumStacks?
-        return null
-    stack = window.forkNumStacks[pn]
+    stack = @getForkStack(pn)
     if stack? && stack.length > 0
       return stack[stack.length - 1]
     else
@@ -301,12 +291,7 @@ class RunCommon
   # スタックから以前のフォークオブジェクトを取得
   # @return [Integer] 取得値
   @getOneBeforeObjestFromStack = (pn) ->
-    if !window.forkNumStacks?
-      # PageValueから読み込み
-      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK)
-      if !window.forkNumStacks?
-        return null
-    stack = window.forkNumStacks[pn]
+    stack = @getForkStack(pn)
     if stack? && stack.length > 1
       return stack[stack.length - 2]
     else
@@ -315,12 +300,10 @@ class RunCommon
   # スタックから最新フォーク番号を削除
   # @return [Boolean] 処理正常終了か
   @popLastForkNumInStack = (pn) ->
-    if !window.forkNumStacks?
-      # PageValueから読み込み
-      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK)
-      if !window.forkNumStacks?
-        return false
-    window.forkNumStacks[pn].pop()
+    stack = @getForkStack(pn)
+    stack[pn].pop()
+    # PageValueに書き込み
+    PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), stack)
     return true
 
   # ギャラリーアップロードビュー表示処理
@@ -431,7 +414,7 @@ class RunCommon
       data = {}
       locationPaths = window.location.pathname.split('/')
       data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0]
-      data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX)
+      data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = JSON.stringify(PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX))
       $.ajax(
         {
           url: "/run/save_gallery_footprint"

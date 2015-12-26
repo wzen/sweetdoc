@@ -206,7 +206,7 @@ class EventConfig
         # キャッシュに保存
         LocalStorage.saveAllPageValues()
         # 通知
-        FloatView.show('Applied', FloatView.Type.APPLY)
+        FloatView.show('Applied', FloatView.Type.APPLY, 3.0)
         # イベントを更新
         Timeline.refreshAllTimeline()
     )

@@ -472,7 +472,8 @@ class PageValueState
 
           # 履歴保存
           page_value.each do |k, v|
-            if k.index(Const::PageValueKey::P_PREFIX) >= 0
+            p_search = k.index(Const::PageValueKey::P_PREFIX)
+            if p_search.present?
               # ページ保存
               page_num = k.gsub(Const::PageValueKey::P_PREFIX, '').to_i
               p = UserGalleryFootprintPaging.find_by(user_id: user_id, gallery_id: gallery_id, page_num: page_num, del_flg: false)
@@ -502,7 +503,8 @@ class PageValueState
 
           page_num = nil
           page_value.each do |k, v|
-            if k.index(Const::PageValueKey::P_PREFIX) < 0
+            p_search = k.index(Const::PageValueKey::P_PREFIX)
+            if p_search.blank?
               if k == Const::PageValueKey::PAGE_NUM
                 page_num = v
               end

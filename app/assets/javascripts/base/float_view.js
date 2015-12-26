@@ -73,7 +73,7 @@ FloatView = (function() {
     return $(".float_view:not('.fixed')").fadeOut('fast');
   };
 
-  FloatView.showFixed = function(message, type, closeFunc) {
+  FloatView.showWithCloseButton = function(message, type, closeFunc) {
     var root, screenWrapper;
     if (closeFunc == null) {
       closeFunc = null;
@@ -94,7 +94,7 @@ FloatView = (function() {
         if (closeFunc != null) {
           closeFunc();
         }
-        return _this.hideFixed();
+        return $(".float_view.fixed").fadeOut('fast');
       };
     })(this));
     root.removeClass(function(index, className) {
@@ -105,10 +105,6 @@ FloatView = (function() {
     }).addClass(type);
     root.show();
     return $('.message', root).html(message);
-  };
-
-  FloatView.hideFixed = function() {
-    return $(".float_view.fixed").fadeOut('fast');
   };
 
   FloatView.scrollMessage = function(top, left) {
@@ -126,7 +122,7 @@ FloatView = (function() {
   };
 
   FloatView.displayPositionMessage = function() {
-    return 'Running Preview';
+    return 'Preview';
   };
 
   return FloatView;

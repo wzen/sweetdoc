@@ -109,8 +109,8 @@ class PageValue
       @footprintInstanceDiffBefore = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceDiffBefore"
       # @property [return] インスタンスDiff履歴(変更後)
       @footprintInstanceDiffAfter = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceDiffAfter"
-      # @property [String] FORK_STACK フォーク番号スタック
-      @FORK_STACK = "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}fork_stack"
+      # @property [return] フォーク番号スタック
+      @forkStack = (pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}fork_stack"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] classDistToken アイテムID

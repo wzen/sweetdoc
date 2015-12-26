@@ -47,7 +47,7 @@ class FloatView
   @hide = ->
     $(".float_view:not('.fixed')").fadeOut('fast')
 
-  @showFixed = (message, type, closeFunc = null) ->
+  @showWithCloseButton = (message, type, closeFunc = null) ->
     if !window.initDone
       return
 
@@ -63,7 +63,7 @@ class FloatView
     root.find('.close_button').off('click').on('click', (e) =>
       if closeFunc?
         closeFunc()
-      @hideFixed()
+      $(".float_view.fixed").fadeOut('fast')
     )
     root.removeClass((index, className) ->
       return className != 'float_view' && className != 'fixed'
@@ -74,9 +74,6 @@ class FloatView
     root.show()
 
     $('.message', root).html(message)
-
-  @hideFixed = ->
-    $(".float_view.fixed").fadeOut('fast')
 
   @scrollMessage = (top, left) ->
     if !window.initDone
@@ -89,4 +86,4 @@ class FloatView
     return ''
 
   @displayPositionMessage = ->
-    return 'Running Preview'
+    return 'Preview'

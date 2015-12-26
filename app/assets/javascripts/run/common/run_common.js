@@ -275,17 +275,11 @@ RunCommon = (function() {
   };
 
   RunCommon.getForkStack = function(pn) {
-    if (window.forkNumStacks == null) {
-      window.forkNumStacks = {};
-    }
-    return window.forkNumStacks[pn];
+    return PageValue.getFootprintPageValue(PageValue.Key.forkStack(pn));
   };
 
   RunCommon.setForkStack = function(obj, pn) {
-    if (window.forkNumStacks == null) {
-      window.forkNumStacks = {};
-    }
-    return window.forkNumStacks[pn] = [obj];
+    return PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), [obj]);
   };
 
   RunCommon.initForkStack = function(forkNum, pn) {
@@ -293,7 +287,6 @@ RunCommon = (function() {
       changedChapterIndex: 0,
       forkNum: forkNum
     }, pn);
-    PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
     return true;
   };
 
@@ -306,7 +299,7 @@ RunCommon = (function() {
         changedChapterIndex: cIndex,
         forkNum: forkNum
       });
-      PageValue.setFootprintPageValue(PageValue.Key.FORK_STACK, window.forkNumStacks);
+      PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), stack);
       return true;
     } else {
       return false;
@@ -315,13 +308,7 @@ RunCommon = (function() {
 
   RunCommon.getLastObjestFromStack = function(pn) {
     var stack;
-    if (window.forkNumStacks == null) {
-      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK);
-      if (window.forkNumStacks == null) {
-        return null;
-      }
-    }
-    stack = window.forkNumStacks[pn];
+    stack = this.getForkStack(pn);
     if ((stack != null) && stack.length > 0) {
       return stack[stack.length - 1];
     } else {
@@ -341,13 +328,7 @@ RunCommon = (function() {
 
   RunCommon.getOneBeforeObjestFromStack = function(pn) {
     var stack;
-    if (window.forkNumStacks == null) {
-      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK);
-      if (window.forkNumStacks == null) {
-        return null;
-      }
-    }
-    stack = window.forkNumStacks[pn];
+    stack = this.getForkStack(pn);
     if ((stack != null) && stack.length > 1) {
       return stack[stack.length - 2];
     } else {
@@ -356,13 +337,10 @@ RunCommon = (function() {
   };
 
   RunCommon.popLastForkNumInStack = function(pn) {
-    if (window.forkNumStacks == null) {
-      window.forkNumStacks = PageValue.getFootprintPageValue(PageValue.Key.FORK_STACK);
-      if (window.forkNumStacks == null) {
-        return false;
-      }
-    }
-    window.forkNumStacks[pn].pop();
+    var stack;
+    stack = this.getForkStack(pn);
+    stack[pn].pop();
+    PageValue.setFootprintPageValue(PageValue.Key.forkStack(pn), stack);
     return true;
   };
 
@@ -487,7 +465,7 @@ RunCommon = (function() {
       data = {};
       locationPaths = window.location.pathname.split('/');
       data[RunCommon.Key.ACCESS_TOKEN] = locationPaths[locationPaths.length - 1].split('?')[0];
-      data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX);
+      data[RunCommon.Key.FOOTPRINT_PAGE_VALUE] = JSON.stringify(PageValue.getFootprintPageValue(PageValue.Key.F_PREFIX));
       return $.ajax({
         url: "/run/save_gallery_footprint",
         type: "POST",

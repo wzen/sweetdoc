@@ -490,7 +490,9 @@ class Gallery < ActiveRecord::Base
         gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['general_pagevalue_data'])
         ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['instance_pagevalue_data'])
         if load_footprint
-          fot[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['user_gallery_footprint_data'])
+          if pagevalue['user_gallery_footprint_data'].present?
+            fot[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['user_gallery_footprint_data'])
+          end
         end
         epd = JSON.parse(pagevalue['event_pagevalue_data'])
         ent[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = epd
