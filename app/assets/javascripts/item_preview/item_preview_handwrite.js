@@ -11,17 +11,18 @@ ItemPreviewHandwrite = (function(superClass) {
   }
 
   ItemPreviewHandwrite.mouseUpDrawing = function() {
-    if (this.item != null) {
+    if (window.handwritingItem != null) {
       if (window.scrollInside.find('.item').length === 0) {
-        this.item.restoreAllDrawingSurface();
-        this.item.endDraw(this.zindex, true, (function(_this) {
+        window.handwritingItem.restoreAllDrawingSurface();
+        window.handwritingItem.endDraw(this.zindex, true, (function(_this) {
           return function() {
-            _this.item.setupItemEvents();
-            _this.item.saveObj(true);
+            window.handwritingItem.setupItemEvents();
+            window.handwritingItem.saveObj(true);
             _this.zindex += 1;
-            Sidebar.initItemEditConfig(_this.item);
-            ItemPreviewEventConfig.addEventConfigContents(_this.item.classDistToken);
-            return Sidebar.initEventConfig(Common.generateId());
+            Sidebar.initItemEditConfig(window.handwritingItem);
+            ItemPreviewEventConfig.addEventConfigContents(window.handwritingItem.classDistToken);
+            Sidebar.initEventConfig(Common.generateId());
+            return window.handwritingItem = null;
           };
         })(this));
       }
