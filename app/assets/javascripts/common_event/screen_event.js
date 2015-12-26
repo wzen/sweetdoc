@@ -69,7 +69,7 @@ ScreenEvent = (function(superClass) {
       if (callback == null) {
         callback = null;
       }
-      displayPosition = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
+      displayPosition = PageValue.getScrollContentsPosition();
       Common.updateScrollContentsPosition(displayPosition.top, displayPosition.left, true, function() {
         if (callback != null) {
           return callback();

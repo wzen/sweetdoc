@@ -44,7 +44,7 @@ class ScreenEvent extends CommonEvent
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      displayPosition = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
+      displayPosition = PageValue.getScrollContentsPosition()
       Common.updateScrollContentsPosition(displayPosition.top, displayPosition.left, true, ->
         if callback?
           callback()
