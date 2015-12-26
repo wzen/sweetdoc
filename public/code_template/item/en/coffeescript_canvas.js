@@ -470,16 +470,12 @@ ItemPreviewTemp = (function(superClass) {
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp);
 
 if ((window.itemInitFuncList != null) && (window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] == null)) {
-  console.log('ItemPreviewTemp loaded');
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = function(option) {
     if (option == null) {
       option = {};
     }
     if (window.isWorkTable && (ItemPreviewTemp.jsLoaded != null)) {
-      ItemPreviewTemp.jsLoaded(option);
-    }
-    if (window.debug) {
-      return console.log('ItemPreviewTemp init Finish');
+      return ItemPreviewTemp.jsLoaded(option);
     }
   };
 }

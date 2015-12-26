@@ -451,10 +451,6 @@ class ItemPreviewTemp extends CanvasItemBase
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 
 if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?
-  console.log('ItemPreviewTemp loaded')
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && ItemPreviewTemp.jsLoaded?
       ItemPreviewTemp.jsLoaded(option)
-    #JS読み込み完了後の処理
-    if window.debug
-      console.log('ItemPreviewTemp init Finish')

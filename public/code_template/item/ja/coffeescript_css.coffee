@@ -230,10 +230,6 @@ Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 
 # Don't Delete
 if window.itemInitFuncList? && !window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN]?
-  console.log('ItemPreviewTemp loaded')
   window.itemInitFuncList[ItemPreviewTemp.CLASS_DIST_TOKEN] = (option = {}) ->
     if window.isWorkTable && ItemPreviewTemp.jsLoaded?
       ItemPreviewTemp.jsLoaded(option)
-    if window.debug
-      console.log('ItemPreviewTemp init finished')
-
