@@ -8,6 +8,8 @@ ItemBase = (function(superClass) {
 
   extend(ItemBase, superClass);
 
+  ItemBase.ID_PREFIX = "i";
+
   ItemBase.NAME_PREFIX = "";
 
   ItemBase.DESIGN_CONFIG_ROOT_ID = 'design_config_@id';
@@ -41,7 +43,7 @@ ItemBase = (function(superClass) {
       cood = null;
     }
     ItemBase.__super__.constructor.call(this);
-    this.id = "i" + this.constructor.NAME_PREFIX + Common.generateId();
+    this.id = this.constructor.ID_PREFIX + this.constructor.NAME_PREFIX + Common.generateId();
     this.classDistToken = this.constructor.CLASS_DIST_TOKEN;
     this.name = null;
     this.visible = false;

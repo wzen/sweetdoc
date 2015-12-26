@@ -13,11 +13,13 @@ CommonEvent = (function() {
   CommonEvent.PrivateClass = (function(superClass) {
     extend(PrivateClass, superClass);
 
+    PrivateClass.ID_PREFIX = "c";
+
     PrivateClass.actionProperties = null;
 
     function PrivateClass() {
       PrivateClass.__super__.constructor.call(this);
-      this.id = "c" + this.constructor.EVENT_ID + Common.generateId();
+      this.id = this.constructor.ID_PREFIX + this.constructor.EVENT_ID + Common.generateId();
       this.eventId = this.constructor.EVENT_ID;
       this.classDistToken = this.constructor.CLASS_DIST_TOKEN;
     }

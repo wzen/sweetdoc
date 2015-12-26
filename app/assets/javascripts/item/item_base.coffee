@@ -1,6 +1,8 @@
 # アイテム基底
 # @abstract
 class ItemBase extends ItemEventBase
+  # @property [String] ID_PREFIX IDプレフィックス
+  @ID_PREFIX = "i"
   # @abstract
   # @property [String] NAME_PREFIX 名前プレフィックス
   @NAME_PREFIX = ""
@@ -25,7 +27,7 @@ class ItemBase extends ItemEventBase
   constructor: (cood = null)->
     super()
     # @property [Int] id ID
-    @id = "i" + @constructor.NAME_PREFIX + Common.generateId()
+    @id = @constructor.ID_PREFIX + @constructor.NAME_PREFIX + Common.generateId()
     # @property [ItemType] CLASS_DIST_TOKEN アイテム種別
     @classDistToken = @constructor.CLASS_DIST_TOKEN
     # @property [String] name 名前

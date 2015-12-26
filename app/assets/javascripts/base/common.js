@@ -909,7 +909,7 @@ Common = (function() {
     needclassDistTokens = [];
     for (k in pageValues) {
       obj = pageValues[k];
-      if ((window.instanceMap[obj.value.id] != null) && window.instanceMap[obj.value.id] instanceof ItemBase) {
+      if (obj.value.id.indexOf(ItemBase.ID_PREFIX) === 0) {
         if ($.inArray(obj.value.classDistToken, needclassDistTokens) < 0) {
           needclassDistTokens.push(obj.value.classDistToken);
         }

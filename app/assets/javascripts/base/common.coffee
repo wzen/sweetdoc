@@ -716,12 +716,12 @@ class Common
       }
     )
 
-  # イベントPageValueから全てのJSを取得
+  # インスタンスPageValueから全てのJSを取得
   @loadJsFromInstancePageValue: (callback = null, pageNum = PageValue.getPageNum()) ->
     pageValues = PageValue.getInstancePageValue(PageValue.Key.instancePagePrefix(pageNum))
     needclassDistTokens = []
     for k, obj of pageValues
-      if window.instanceMap[obj.value.id]? && window.instanceMap[obj.value.id] instanceof ItemBase
+      if obj.value.id.indexOf(ItemBase.ID_PREFIX) == 0
         # アイテムの場合
         if $.inArray(obj.value.classDistToken, needclassDistTokens) < 0
           needclassDistTokens.push(obj.value.classDistToken)

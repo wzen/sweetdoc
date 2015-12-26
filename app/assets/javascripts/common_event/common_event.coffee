@@ -10,12 +10,14 @@ class CommonEvent
     return @constructor.getInstance()
 
   class @PrivateClass extends CommonEventBase
+    # @property [String] ID_PREFIX IDプレフィックス
+    @ID_PREFIX = "c"
     @actionProperties = null
 
     constructor: ->
       super()
       # @property [Int] id ID
-      @id = "c" + @constructor.EVENT_ID + Common.generateId()
+      @id = @constructor.ID_PREFIX + @constructor.EVENT_ID + Common.generateId()
       # @property [Int] eventId 共通イベントID
       @eventId =  @constructor.EVENT_ID
       # @property [ItemType] CLASS_DIST_TOKEN アイテム種別
