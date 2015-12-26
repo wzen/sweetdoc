@@ -27,7 +27,7 @@ class ItemBase extends ItemEventBase
   constructor: (cood = null)->
     super()
     # @property [Int] id ID
-    @id = @constructor.ID_PREFIX + @constructor.NAME_PREFIX + Common.generateId()
+    @id = @constructor.ID_PREFIX + '_' + @constructor.NAME_PREFIX + '_' + Common.generateId()
     # @property [ItemType] CLASS_DIST_TOKEN アイテム種別
     @classDistToken = @constructor.CLASS_DIST_TOKEN
     # @property [String] name 名前

@@ -201,11 +201,14 @@ WorktableCommon = (function() {
       Timeline.disabledOperation(false);
       Sidebar.disabledOperation(false);
       Navbar.disabledOperation(false);
-    } else if (afterMode === Constant.EventInputPointingMode.DRAW) {
-      Timeline.disabledOperation(true);
-      Sidebar.disabledOperation(true);
-      Navbar.disabledOperation(true);
-    } else if (afterMode === Constant.EventInputPointingMode.ITEM_TOUCH) {
+      $(window.scrollInside).find('.item').each(function() {
+        var sp;
+        sp = $(this).attr('id').split('_');
+        if (sp[0] === ItemBase.ID_PREFIX && sp[1] === EventDragPointing.PrivateClass.NAME_PREFIX) {
+          return $(this).remove();
+        }
+      });
+    } else if (afterMode === Constant.EventInputPointingMode.DRAW || afterMode === Constant.EventInputPointingMode.ITEM_TOUCH) {
       Timeline.disabledOperation(true);
       Sidebar.disabledOperation(true);
       Navbar.disabledOperation(true);

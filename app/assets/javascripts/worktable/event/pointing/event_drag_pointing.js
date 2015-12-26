@@ -18,22 +18,18 @@ EventDragPointing = (function() {
   EventDragPointing.PrivateClass = (function(superClass) {
     extend(PrivateClass, superClass);
 
+    function PrivateClass() {
+      return PrivateClass.__super__.constructor.apply(this, arguments);
+    }
+
     PrivateClass.NAME_PREFIX = "EDPointing";
 
     PrivateClass.CLASS_DIST_TOKEN = 'EDPointing';
-
-    function PrivateClass(cood) {
-      PrivateClass.__super__.constructor.call(this, cood);
-    }
 
     PrivateClass.include(itemBaseWorktableExtend);
 
     PrivateClass.prototype.setDrawCallback = function(callback) {
       return this.drawCallback = callback;
-    };
-
-    PrivateClass.prototype.cssItemHtml = function() {
-      return '<div class="drag_pointing"></div>';
     };
 
     PrivateClass.prototype.mouseDownDrawing = function(callback) {
@@ -94,9 +90,12 @@ EventDragPointing = (function() {
       if (callback == null) {
         callback = null;
       }
+      this.itemSize.x += scrollContents.scrollLeft();
+      this.itemSize.y += scrollContents.scrollTop();
       this.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1;
       return this.refresh(true, (function(_this) {
         return function() {
+          _this.getJQueryElement().addClass('drag_pointing');
           _this.setupDragAndResizeEvent();
           if (_this.drawCallback != null) {
             _this.drawCallback(_this.itemSize);

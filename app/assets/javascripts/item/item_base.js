@@ -43,7 +43,7 @@ ItemBase = (function(superClass) {
       cood = null;
     }
     ItemBase.__super__.constructor.call(this);
-    this.id = this.constructor.ID_PREFIX + this.constructor.NAME_PREFIX + Common.generateId();
+    this.id = this.constructor.ID_PREFIX + '_' + this.constructor.NAME_PREFIX + '_' + Common.generateId();
     this.classDistToken = this.constructor.CLASS_DIST_TOKEN;
     this.name = null;
     this.visible = false;

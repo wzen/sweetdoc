@@ -14,6 +14,7 @@ class FloatView
 
   @show = (message, type, showSeconds = -1) ->
     if !window.initDone
+      # 初期化が終了していない場合は無視
       return
 
     screenWrapper = $('#screen_wrapper')

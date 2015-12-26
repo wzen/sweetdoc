@@ -181,9 +181,9 @@ class EventConfig
 
     specificValues = {}
     specificRoot = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT}")
-    specificRoot.find('input').each( =>
+    specificRoot.find('input').each( ->
       if !$(@).hasClass('fixed_value')
-        classNames = $(@).get(p).className.split(' ')
+        classNames = $(@).get(0).className.split(' ')
         className = $.grep(classNames, (n) -> n != 'fixed_value')[0]
         specificValues[className] = $(@).val()
     )

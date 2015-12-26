@@ -32,7 +32,9 @@ CssItemBase = (function(superClass) {
     return this.appendAnimationCssIfNeeded();
   };
 
-  CssItemBase.prototype.cssItemHtml = function() {};
+  CssItemBase.prototype.cssItemHtml = function() {
+    return '';
+  };
 
   CssItemBase.prototype.createItemElement = function(callback) {
     var element;

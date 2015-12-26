@@ -10,17 +10,10 @@ class EventDragPointing
     @NAME_PREFIX = "EDPointing"
     @CLASS_DIST_TOKEN = 'EDPointing'
 
-    constructor: (cood) ->
-      super(cood)
-
     @include(itemBaseWorktableExtend)
 
     setDrawCallback: (callback) ->
       @drawCallback = callback
-
-    # 枠のみのエレメント描画
-    cssItemHtml: ->
-      return '<div class="drag_pointing"></div>'
 
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
@@ -61,9 +54,12 @@ class EventDragPointing
       drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
 
     endDraw: (callback = null) ->
+      @itemSize.x += scrollContents.scrollLeft()
+      @itemSize.y += scrollContents.scrollTop()
       @zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1
 
       @refresh(true, =>
+        @getJQueryElement().addClass('drag_pointing')
         @setupDragAndResizeEvent()
         if @drawCallback?
           @drawCallback(@itemSize)

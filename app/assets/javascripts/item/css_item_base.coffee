@@ -28,6 +28,7 @@ class CssItemBase extends ItemBase
   # HTML要素
   # @abstract
   cssItemHtml: ->
+    return ''
 
   # アイテム用のテンプレートHTMLを読み込み
   # @return [String] HTML

@@ -175,18 +175,16 @@ EventConfig = (function() {
     }
     specificValues = {};
     specificRoot = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT);
-    specificRoot.find('input').each((function(_this) {
-      return function() {
-        var className, classNames;
-        if (!$(_this).hasClass('fixed_value')) {
-          classNames = $(_this).get(p).className.split(' ');
-          className = $.grep(classNames, function(n) {
-            return n !== 'fixed_value';
-          })[0];
-          return specificValues[className] = $(_this).val();
-        }
-      };
-    })(this));
+    specificRoot.find('input').each(function() {
+      var className, classNames;
+      if (!$(this).hasClass('fixed_value')) {
+        classNames = $(this).get(0).className.split(' ');
+        className = $.grep(classNames, function(n) {
+          return n !== 'fixed_value';
+        })[0];
+        return specificValues[className] = $(this).val();
+      }
+    });
     this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] = specificValues;
     errorMes = EventPageValueBase.writeToPageValue(this);
     if ((errorMes != null) && errorMes.length > 0) {
