@@ -46,7 +46,7 @@ EventBase = (function(superClass) {
 
   function EventBase() {
     var ref, value, varName;
-    if (this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS] != null) {
+    if ((this.constructor.actionProperties != null) && (this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS] != null)) {
       ref = this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
       for (varName in ref) {
         value = ref[varName];

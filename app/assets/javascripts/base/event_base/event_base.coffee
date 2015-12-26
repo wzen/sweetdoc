@@ -23,7 +23,7 @@ class EventBase extends Extend
 
   constructor: ->
     # modifiables変数の初期化
-    if @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]?
+    if @constructor.actionProperties? && @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]?
       for varName, value of @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
         @[varName] = value.default
 

@@ -68,6 +68,7 @@ en:
     rear: "Rear"
     delete: "Delete"
     edit: "Edit"
+    preview: "Preview"
   config:
     state:
       page_num: "Page number"

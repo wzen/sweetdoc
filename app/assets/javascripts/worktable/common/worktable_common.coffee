@@ -498,7 +498,10 @@ class WorktableCommon
             # 発見
             return {result: true, routes: routes}
 
-      return {result: false, routes: []}
+      if tes.length + 1 == finishTeNum && forkNum == finishFn
+        return {result: true, routes: routes}
+      else
+        return {result: false, routes: []}
 
     return _trace.call(@, PageValue.Key.EF_MASTER_FORKNUM)
 

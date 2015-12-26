@@ -45,6 +45,7 @@ ja:
     rear: "再背面に移動"
     delete: "削除"
     edit: "編集"
+    preview: "プレビュー"
   config:
     state:
       page_num: "ページ番号"

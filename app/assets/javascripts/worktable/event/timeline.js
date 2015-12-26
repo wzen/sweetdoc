@@ -91,8 +91,8 @@ Timeline = (function() {
       });
       menu = [
         {
-          title: I18n.t('context_menu.edit'),
-          cmd: "edit",
+          title: I18n.t('context_menu.preview'),
+          cmd: "preview",
           uiIcon: "ui-icon-scissors"
         }
       ];
@@ -108,11 +108,12 @@ Timeline = (function() {
         preventSelect: true,
         menu: menu,
         select: function(event, ui) {
-          var target;
+          var target, te_num;
           target = event.target;
           switch (ui.cmd) {
-            case "edit":
-              return _initEventConfig.call(self, target);
+            case "preview":
+              te_num = $(target).find('input.te_num').val();
+              return WorktableCommon.runPreview(te_num);
             case "delete":
               return _deleteTimeline.call(self, target);
           }
@@ -120,17 +121,12 @@ Timeline = (function() {
       });
     };
     _clickTimelineEvent = function(e) {
-      var te_num;
       if ($(e).is('.ui-sortable-helper')) {
         return;
       }
       WorktableCommon.clearSelectedBorder();
       WorktableCommon.setSelectedBorder(e, "timeline");
-      if (Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.TimelineActionTypeClassName.BLANK)) {
-        _initEventConfig.call(this, e);
-      }
-      te_num = $(e).find('input.te_num').val();
-      return WorktableCommon.runPreview(te_num);
+      return _initEventConfig.call(this, e);
     };
     _deleteTimeline = function(target) {
       var eNum;

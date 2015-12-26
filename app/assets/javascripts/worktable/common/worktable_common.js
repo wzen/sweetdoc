@@ -586,10 +586,17 @@ WorktableCommon = (function() {
           }
         }
       }
-      return {
-        result: false,
-        routes: []
-      };
+      if (tes.length + 1 === finishTeNum && forkNum === finishFn) {
+        return {
+          result: true,
+          routes: routes
+        };
+      } else {
+        return {
+          result: false,
+          routes: []
+        };
+      }
     };
     return _trace.call(this, PageValue.Key.EF_MASTER_FORKNUM);
   };

@@ -18,8 +18,12 @@ EventDragPointing = (function() {
   EventDragPointing.PrivateClass = (function(superClass) {
     extend(PrivateClass, superClass);
 
-    function PrivateClass() {
-      return PrivateClass.__super__.constructor.apply(this, arguments);
+    PrivateClass.NAME_PREFIX = "EDPointing";
+
+    PrivateClass.CLASS_DIST_TOKEN = 'EDPointing';
+
+    function PrivateClass(cood) {
+      PrivateClass.__super__.constructor.call(this, cood);
     }
 
     PrivateClass.prototype.setDrawCallback = function(callback) {

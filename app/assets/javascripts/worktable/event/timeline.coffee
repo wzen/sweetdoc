@@ -94,7 +94,7 @@ class Timeline
             Timeline.changeSortTimeline(beforeNum, afterNum)
       })
       # イベントの右クリック
-      menu = [{title: I18n.t('context_menu.edit'), cmd: "edit", uiIcon: "ui-icon-scissors"}]
+      menu = [{title: I18n.t('context_menu.preview'), cmd: "preview", uiIcon: "ui-icon-scissors"}]
       menu.push({
         title: I18n.t('context_menu.delete')
         cmd: "delete"
@@ -110,8 +110,9 @@ class Timeline
           select: (event, ui) ->
             target = event.target
             switch ui.cmd
-              when "edit"
-                _initEventConfig.call(self, target)
+              when "preview"
+                te_num = $(target).find('input.te_num').val()
+                WorktableCommon.runPreview(te_num)
               when "delete"
                 _deleteTimeline.call(self, target)
               else
@@ -130,14 +131,8 @@ class Timeline
       # 選択枠切り替え
       WorktableCommon.clearSelectedBorder()
       WorktableCommon.setSelectedBorder(e, "timeline")
-
-      if Sidebar.isOpenedConfigSidebar() || $(e).hasClass(Constant.TimelineActionTypeClassName.BLANK)
-        # サイドバー表示時 or Blankの場合はコンフィグを設定&表示
-        _initEventConfig.call(@, e)
-
-      # プレビュー
-      te_num = $(e).find('input.te_num').val()
-      WorktableCommon.runPreview(te_num)
+      # コンフィグを開く
+      _initEventConfig.call(@, e)
 
     # タイムライン削除
     _deleteTimeline = (target) ->

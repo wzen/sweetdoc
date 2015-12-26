@@ -7,6 +7,12 @@ class EventDragPointing
     return @constructor.getInstance(cood)
 
   class @PrivateClass extends CssItemBase
+    @NAME_PREFIX = "EDPointing"
+    @CLASS_DIST_TOKEN = 'EDPointing'
+
+    constructor: (cood) ->
+      super(cood)
+
 
     setDrawCallback: (callback) ->
       @drawCallback = callback
