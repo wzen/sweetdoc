@@ -52,7 +52,5 @@ class CommonEvent
 
   # TODO: サブクラスで定義必須
   # @abstract
-  @EVENT_ID = @PrivateClass.EVENT_ID
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
-  @actionProperties = @PrivateClass.actionProperties
 

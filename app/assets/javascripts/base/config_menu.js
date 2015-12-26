@@ -87,7 +87,7 @@ ConfigMenu = (function() {
     if (errorCallback == null) {
       errorCallback = null;
     }
-    if ((itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS] == null)) {
+    if (itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]] == null) {
       if (successCallback != null) {
         successCallback();
       }

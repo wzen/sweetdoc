@@ -138,7 +138,7 @@ class ScreenEvent extends CommonEvent
         emt.find('.afterZ:first').val(z)
 
       emt = specificRoot['changeScreenPosition']
-      emt.find('event_pointing:first').off('click').on('click', (e) =>
+      emt.find('.event_pointing:first').off('click').on('click', (e) =>
         pointing = new EventDragPointing()
         pointing.setDrawCallback((pointingSize) =>
           _updateConfigInput.call(@, emt, pointingSize)
@@ -175,8 +175,6 @@ class ScreenEvent extends CommonEvent
       x = left + width / 2.0
       return {x: x, y: y}
 
-  @EVENT_ID = @PrivateClass.EVENT_ID
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
-  @actionProperties = @PrivateClass.actionProperties
 
 Common.setClassToMap(ScreenEvent.CLASS_DIST_TOKEN, ScreenEvent)

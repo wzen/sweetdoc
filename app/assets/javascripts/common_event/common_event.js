@@ -79,11 +79,7 @@ CommonEvent = (function() {
     return results;
   };
 
-  CommonEvent.EVENT_ID = CommonEvent.PrivateClass.EVENT_ID;
-
   CommonEvent.CLASS_DIST_TOKEN = CommonEvent.PrivateClass.CLASS_DIST_TOKEN;
-
-  CommonEvent.actionProperties = CommonEvent.PrivateClass.actionProperties;
 
   return CommonEvent;
 

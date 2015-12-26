@@ -67,5 +67,7 @@ class ItemPreviewEventConfig extends EventConfig
     LocalStorage.saveAllPageValues()
     # Run開始
     ItemPreviewCommon.switchRun()
+    # サイドメニューのスクロールをTopに
+    window.sidebarWrapper.scrollTop(0)
 
 window.EventConfig = ItemPreviewEventConfig

@@ -102,11 +102,7 @@ BackgroundEvent = (function(superClass) {
 
   })(CommonEvent.PrivateClass);
 
-  BackgroundEvent.EVENT_ID = BackgroundEvent.PrivateClass.EVENT_ID;
-
   BackgroundEvent.CLASS_DIST_TOKEN = BackgroundEvent.PrivateClass.CLASS_DIST_TOKEN;
-
-  BackgroundEvent.actionProperties = BackgroundEvent.PrivateClass.actionProperties;
 
   return BackgroundEvent;
 

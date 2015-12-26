@@ -55,12 +55,11 @@ class ConfigMenu
 
   # メソッド変数コンフィグ読み込み
   @loadEventMethodValueConfig = (eventConfigObj, itemObjClass, successCallback = null, errorCallback = null) ->
-    if !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]]? ||
-      !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS]?
-        # メソッド or 変数編集無し
-        if successCallback?
-          successCallback()
-        return
+    if !itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]]?
+      # メソッド無し
+      if successCallback?
+        successCallback()
+      return
 
     # HTML存在チェック
     valueClassName = eventConfigObj.methodClassName()

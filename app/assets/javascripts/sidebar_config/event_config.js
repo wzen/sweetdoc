@@ -69,6 +69,7 @@ EventConfig = (function() {
       $('.item_common_div', this.emt).show();
     }
     $(".config.handler_div", this.emt).show();
+    $('.action_div .action_forms > div').hide();
     $(".action_div", this.emt).show();
     actionClassName = this.actionClassName();
     $(".action_div ." + actionClassName, this.emt).show();
@@ -616,14 +617,22 @@ EventConfig = (function() {
       }
     }
     commonOptgroupClassName = 'common_optgroup_class_name';
-    commonSelectOptions = ("<optgroup class='" + commonOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.common")) + "'>") + commonSelectOptions + '</optgroup>';
+    if (commonSelectOptions.length > 0) {
+      commonSelectOptions = ("<optgroup class='" + commonOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.common")) + "'>") + commonSelectOptions + '</optgroup>';
+    }
     itemOptgroupClassName = 'item_optgroup_class_name';
-    itemSelectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + itemSelectOptions + '</optgroup>';
+    if (itemSelectOptions.length > 0) {
+      itemSelectOptions = ("<optgroup class='" + itemOptgroupClassName + "' label='" + (I18n.t("config.select_opt_group.item")) + "'>") + itemSelectOptions + '</optgroup>';
+    }
     return teItemSelects.each(function() {
       $(this).find("." + commonOptgroupClassName).remove();
       $(this).find("." + itemOptgroupClassName).remove();
-      $(this).append($(commonSelectOptions));
-      return $(this).append($(itemSelectOptions));
+      if (commonSelectOptions.length > 0) {
+        $(this).append($(commonSelectOptions));
+      }
+      if (itemSelectOptions.length > 0) {
+        return $(this).append($(itemSelectOptions));
+      }
     });
   };
 

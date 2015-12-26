@@ -79,6 +79,7 @@ class EventConfig
     # Handler表示
     $(".config.handler_div", @emt).show()
     # Action表示
+    $('.action_div .action_forms > div').hide()
     $(".action_div", @emt).show()
     actionClassName = @actionClassName()
     $(".action_div .#{actionClassName}", @emt).show()
@@ -562,15 +563,19 @@ class EventConfig
         commonSelectOptions += option
 
     commonOptgroupClassName = 'common_optgroup_class_name'
-    commonSelectOptions = "<optgroup class='#{commonOptgroupClassName}' label='#{I18n.t("config.select_opt_group.common")}'>" + commonSelectOptions + '</optgroup>'
+    if commonSelectOptions.length > 0
+      commonSelectOptions = "<optgroup class='#{commonOptgroupClassName}' label='#{I18n.t("config.select_opt_group.common")}'>" + commonSelectOptions + '</optgroup>'
     itemOptgroupClassName = 'item_optgroup_class_name'
-    itemSelectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + itemSelectOptions + '</optgroup>'
+    if itemSelectOptions.length > 0
+      itemSelectOptions = "<optgroup class='#{itemOptgroupClassName}' label='#{I18n.t("config.select_opt_group.item")}'>" + itemSelectOptions + '</optgroup>'
     # メニューを入れ替え
     teItemSelects.each( ->
       $(@).find(".#{commonOptgroupClassName}").remove()
       $(@).find(".#{itemOptgroupClassName}").remove()
-      $(@).append($(commonSelectOptions))
-      $(@).append($(itemSelectOptions))
+      if commonSelectOptions.length > 0
+        $(@).append($(commonSelectOptions))
+      if itemSelectOptions.length > 0
+        $(@).append($(itemSelectOptions))
     )
 
   # イベントハンドラー設定

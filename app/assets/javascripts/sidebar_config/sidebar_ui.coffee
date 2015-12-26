@@ -43,7 +43,7 @@ class Sidebar
       WorktableCommon.clearSelectedBorder()
       if !Sidebar.isClosedConfigSidebar()
         main = $('#main')
-        $('#sidebar').fadeOut('500', ->
+        $('#sidebar').fadeOut('200', ->
           main.removeClass('col-xs-9')
           main.addClass('col-xs-12')
           WorktableCommon.resizeMainContainerEvent()

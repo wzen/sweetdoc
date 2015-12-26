@@ -29,14 +29,15 @@ class ConfigMenu
     dir = 'sidebar_menu/event/specific_values'
     temp_name = "#{class_dist_token.to_s.downcase}_#{method_name.to_s.downcase}"
     # TODO: 生HTMLを取得できるようにする
-    # テンプレート存在チェック
-    if ActionController::Base.helpers.lookup_context.exists?(temp_name, dir, true)
+    # FIXME: lookup_contextで判定できなかったため、暫定として例外を使用
+    begin
       temp = "#{dir}/#{temp_name}"
       ret = controller.render_to_string(
           partial: temp
       )
       return ret
-    else
+    rescue => e
+      # テンプレート無し
       return ''
     end
   end

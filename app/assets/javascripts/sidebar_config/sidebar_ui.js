@@ -65,7 +65,7 @@ Sidebar = (function() {
       WorktableCommon.clearSelectedBorder();
       if (!Sidebar.isClosedConfigSidebar()) {
         main = $('#main');
-        return $('#sidebar').fadeOut('500', function() {
+        return $('#sidebar').fadeOut('200', function() {
           main.removeClass('col-xs-9');
           main.addClass('col-xs-12');
           WorktableCommon.resizeMainContainerEvent();

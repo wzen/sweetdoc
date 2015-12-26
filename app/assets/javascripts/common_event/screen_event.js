@@ -172,7 +172,7 @@ ScreenEvent = (function(superClass) {
         return emt.find('.afterZ:first').val(z);
       };
       emt = specificRoot['changeScreenPosition'];
-      return emt.find('event_pointing:first').off('click').on('click', (function(_this) {
+      return emt.find('.event_pointing:first').off('click').on('click', (function(_this) {
         return function(e) {
           var pointing;
           pointing = new EventDragPointing();
@@ -230,11 +230,7 @@ ScreenEvent = (function(superClass) {
 
   })(CommonEvent.PrivateClass);
 
-  ScreenEvent.EVENT_ID = ScreenEvent.PrivateClass.EVENT_ID;
-
   ScreenEvent.CLASS_DIST_TOKEN = ScreenEvent.PrivateClass.CLASS_DIST_TOKEN;
-
-  ScreenEvent.actionProperties = ScreenEvent.PrivateClass.actionProperties;
 
   return ScreenEvent;
 

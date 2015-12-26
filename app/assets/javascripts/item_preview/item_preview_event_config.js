@@ -70,7 +70,8 @@ ItemPreviewEventConfig = (function(superClass) {
       return;
     }
     LocalStorage.saveAllPageValues();
-    return ItemPreviewCommon.switchRun();
+    ItemPreviewCommon.switchRun();
+    return window.sidebarWrapper.scrollTop(0);
   };
 
   return ItemPreviewEventConfig;
