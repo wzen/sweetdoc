@@ -595,7 +595,11 @@ class EventConfig
         if $(e.target).is(':checked')
           # イベント後に変更 ※表示倍率はキープする
           $(e.target).attr('disabled', true)
-          WorktableCommon.updatePrevEventsToAfter(teNum, true, =>
+          # Blankのコンフィグか判定
+          blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val()
+          configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '')
+          fromBlankEventConfig = blankDistId == configDistId
+          WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, =>
             $(e.target).removeAttr('disabled')
           )
         else

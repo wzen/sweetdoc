@@ -511,15 +511,15 @@ class WorktableCommon
     return ret.result
 
   # 指定イベント以前をイベント適用後の状態に変更
-  @updatePrevEventsToAfter = (teNum, keepDispMag = false, callback = null) ->
-    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, keepDispMag, false, callback)
+  @updatePrevEventsToAfter = (teNum, keepDispMag = false, fromBlankEventConfig = false, callback = null) ->
+    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, keepDispMag, fromBlankEventConfig, false, callback)
 
   # プレビュー実行
   # @param [Integer] te_num 実行するイベント番号
   @runPreview = (teNum, keepDispMag = false, callback = null) ->
-    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, keepDispMag, true, callback)
+    _updatePrevEventsToAfterAndRunPreview.call(@, teNum, keepDispMag, false, true, callback)
 
-  _updatePrevEventsToAfterAndRunPreview = (teNum, keepDispMag, doRunPreview, callback = null) ->
+  _updatePrevEventsToAfterAndRunPreview = (teNum, keepDispMag, fromBlankEventConfig, doRunPreview, callback = null) ->
     if doRunPreview && window.previewRunning? && window.previewRunning
       # プレビュー二重実行は無視
       return
@@ -539,7 +539,7 @@ class WorktableCommon
         item = window.instanceMap[te.id]
         if item?
           item.initEvent(te, keepDispMag)
-          if idx < tes.length - 1
+          if idx < tes.length - 1 || fromBlankEventConfig
             # インスタンスの状態を保存
             PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
             # イベント後の状態に変更

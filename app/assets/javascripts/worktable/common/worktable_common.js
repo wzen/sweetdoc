@@ -610,14 +610,17 @@ WorktableCommon = (function() {
     return ret.result;
   };
 
-  WorktableCommon.updatePrevEventsToAfter = function(teNum, keepDispMag, callback) {
+  WorktableCommon.updatePrevEventsToAfter = function(teNum, keepDispMag, fromBlankEventConfig, callback) {
     if (keepDispMag == null) {
       keepDispMag = false;
+    }
+    if (fromBlankEventConfig == null) {
+      fromBlankEventConfig = false;
     }
     if (callback == null) {
       callback = null;
     }
-    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, false, callback);
+    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, fromBlankEventConfig, false, callback);
   };
 
   WorktableCommon.runPreview = function(teNum, keepDispMag, callback) {
@@ -627,10 +630,10 @@ WorktableCommon = (function() {
     if (callback == null) {
       callback = null;
     }
-    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, true, callback);
+    return _updatePrevEventsToAfterAndRunPreview.call(this, teNum, keepDispMag, false, true, callback);
   };
 
-  _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, doRunPreview, callback) {
+  _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, fromBlankEventConfig, doRunPreview, callback) {
     var epr, tes;
     if (callback == null) {
       callback = null;
@@ -654,7 +657,7 @@ WorktableCommon = (function() {
           item = window.instanceMap[te.id];
           if (item != null) {
             item.initEvent(te, keepDispMag);
-            if (idx < tes.length - 1) {
+            if (idx < tes.length - 1 || fromBlankEventConfig) {
               PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
               item.updateEventAfter();
             } else if (doRunPreview) {

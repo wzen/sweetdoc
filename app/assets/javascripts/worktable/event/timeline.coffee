@@ -123,11 +123,9 @@ class Timeline
     # クリックイベント内容
     # @param [Object] e イベントオブジェクト
     _clickTimelineEvent = (e) ->
-
       if $(e).is('.ui-sortable-helper')
         # ドラッグの場合はクリック反応なし
         return
-
       # 選択枠切り替え
       WorktableCommon.clearSelectedBorder()
       WorktableCommon.setSelectedBorder(e, "timeline")

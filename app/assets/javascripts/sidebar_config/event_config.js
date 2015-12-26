@@ -647,9 +647,13 @@ EventConfig = (function() {
       $('.update_event_after', emt).removeAttr('disabled');
       $('.update_event_after', emt).off('change').on('change', (function(_this) {
         return function(e) {
+          var blankDistId, configDistId, fromBlankEventConfig;
           if ($(e.target).is(':checked')) {
             $(e.target).attr('disabled', true);
-            return WorktableCommon.updatePrevEventsToAfter(teNum, true, function() {
+            blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val();
+            configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '');
+            fromBlankEventConfig = blankDistId === configDistId;
+            return WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, function() {
               return $(e.target).removeAttr('disabled');
             });
           } else {
