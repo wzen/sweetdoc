@@ -180,7 +180,7 @@ ScreenEvent = (function(superClass) {
             return _updateConfigInput.call(_this, emt, pointingSize);
           });
           WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
-          return FloatView.showFixed('Drag position', FloatView.Type.INFO, function() {
+          return FloatView.showFixed('Drag position', FloatView.Type.POINTING_DRAG, function() {
             return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
           });
         };

@@ -1,12 +1,18 @@
 class FloatView
+
+  @showTimer = null
+
   class @Type
     @PREVIEW = 'preview'
     @DISPLAY_POSITION = 'display_position'
     @INFO = 'info'
     @WARN = 'warn'
     @ERROR = 'error'
+    @APPLY = 'apply'
+    @POINTING_CLICK =  'pointing_click'
+    @POINTING_DRAG =  'pointing_drag'
 
-  @show = (message, type) ->
+  @show = (message, type, showSeconds = -1) ->
     if !window.initDone
       return
 
@@ -22,9 +28,21 @@ class FloatView
       $('.message', root).removeClass((index, className) ->
         return className != 'message'
       ).addClass(type)
-    root.show()
-
+      root.fadeIn('fast')
+    else
+      root.show()
     $('.message', root).html(message)
+
+    if showSeconds >= 0
+      # 非表示タイマーセット
+      if @showTimer?
+        clearTimeout(@showTimer)
+        @showTimer = null
+      @showTimer = setTimeout( =>
+        @hide()
+        clearTimeout(@showTimer)
+        @showTimer = null
+      , showSeconds * 1000)
 
   @hide = ->
     $(".float_view:not('.fixed')").fadeOut('fast')

@@ -16,6 +16,7 @@
  *= require bootstrap_custom
  *= require non-responsive
  *= require common/common
+ *= require common/float_view
  *= require common/modal_view.css
  *= require common/indicator
  *= require paging_animation/pageflip

@@ -4,6 +4,8 @@ var FloatView;
 FloatView = (function() {
   function FloatView() {}
 
+  FloatView.showTimer = null;
+
   FloatView.Type = (function() {
     function Type() {}
 
@@ -17,12 +19,21 @@ FloatView = (function() {
 
     Type.ERROR = 'error';
 
+    Type.APPLY = 'apply';
+
+    Type.POINTING_CLICK = 'pointing_click';
+
+    Type.POINTING_DRAG = 'pointing_drag';
+
     return Type;
 
   })();
 
-  FloatView.show = function(message, type) {
+  FloatView.show = function(message, type, showSeconds) {
     var root, screenWrapper;
+    if (showSeconds == null) {
+      showSeconds = -1;
+    }
     if (!window.initDone) {
       return;
     }
@@ -38,9 +49,24 @@ FloatView = (function() {
       $('.message', root).removeClass(function(index, className) {
         return className !== 'message';
       }).addClass(type);
+      root.fadeIn('fast');
+    } else {
+      root.show();
     }
-    root.show();
-    return $('.message', root).html(message);
+    $('.message', root).html(message);
+    if (showSeconds >= 0) {
+      if (this.showTimer != null) {
+        clearTimeout(this.showTimer);
+        this.showTimer = null;
+      }
+      return this.showTimer = setTimeout((function(_this) {
+        return function() {
+          _this.hide();
+          clearTimeout(_this.showTimer);
+          return _this.showTimer = null;
+        };
+      })(this), showSeconds * 1000);
+    }
   };
 
   FloatView.hide = function() {

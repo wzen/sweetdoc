@@ -1,0 +1,123 @@
+.float_view {
+  //display: none;
+  //position: fixed;
+  //bottom: 0;
+  //right: 0;
+  z-index: 1999999999;
+  //-webkit-border-radius: 8px;
+  //-moz-border-radius: 8px;
+  //border-radius: 8px;
+  background-color: black;
+  opacity: 0.3;
+  height: 70px;
+
+  &.preview {
+    .icon {
+      background-image: image_url('float_view/floatview_preview64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #3F51B5;
+    }
+  }
+  &.info {
+    .icon {
+      background-image: image_url('float_view/floatview_info64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #3F51B5;
+    }
+  }
+  &.display_position {
+    .icon {
+      background-image: image_url('float_view/floatview_position64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #3F51B5;
+    }
+  }
+  &.apply {
+    .icon {
+      background-image: image_url('float_view/floatview_apply64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #4CAF50;
+    }
+  }
+  &.error {
+    .icon {
+      background-image: image_url('float_view/floatview_error64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #E91E63;
+    }
+  }
+  &.warn {
+    .icon {
+      background-image: image_url('float_view/floatview_warn64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #FFEB3B;
+    }
+  }
+  &.pointing_click {
+    .icon {
+      background-image: image_url('float_view/floatview_touch64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #FF9800;
+    }
+  }
+  &.pointing_drag {
+    .icon {
+      background-image: image_url('float_view/floatview_drag64.png');
+      background-repeat: no-repeat;
+    }
+    .message {
+      color: #FF9800;
+    }
+  }
+
+  .icon_wrapper {
+    float: left;
+    width: 64px;
+    margin-right: -64px;
+  }
+  .contents_wrapper {
+    width: 100%;
+    float: left;
+    > div {
+      margin-left: 64px;
+    }
+  }
+
+  &.fixed {
+    .icon_wrapper {
+      float: left;
+      width: 64px;
+      margin-right: -64px;
+    }
+    .contents_wrapper {
+      width: 100%;
+      float: left;
+      > div {
+        margin-left: 64px;
+        margin-right: 40px;
+      }
+    }
+    .close_button_wrapper {
+      float: right;
+      width: 40px;
+      margin-left: -40px;
+      .close_button {
+        background-image: image_url('base/floatview_exit.png');
+      }
+    }
+  }
+}

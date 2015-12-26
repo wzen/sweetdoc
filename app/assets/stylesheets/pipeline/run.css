@@ -15,6 +15,7 @@
  *= require css/layout
  *= require bootstrap_custom
  *= require common/common
+ *= require common/float_view
  *= require common/modal_view.css
  *= require paging_animation/pageflip
  *= require run/run

@@ -145,7 +145,7 @@ class ScreenEvent extends CommonEvent
         )
 
         WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
-        FloatView.showFixed('Drag position', FloatView.Type.INFO, =>
+        FloatView.showFixed('Drag position', FloatView.Type.POINTING_DRAG, =>
           WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
         )
       )

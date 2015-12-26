@@ -17,6 +17,7 @@
  *= require non-responsive
  *= require themes/default/jstree_style
  *= require common/common
+ *= require common/float_view
  *= require common/modal_view.css
  *= require common/indicator
  *= require item_gallery/item_gallery

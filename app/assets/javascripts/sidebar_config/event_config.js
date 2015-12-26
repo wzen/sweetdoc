@@ -200,7 +200,7 @@ EventConfig = (function() {
       return function() {
         if (_this.writeToEventPageValue()) {
           LocalStorage.saveAllPageValues();
-          FloatView.show('Applied', FloatView.Type.INFO);
+          FloatView.show('Applied', FloatView.Type.APPLY);
           return Timeline.refreshAllTimeline();
         }
       };
