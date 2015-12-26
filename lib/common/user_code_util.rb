@@ -1,6 +1,6 @@
 class UserCodeUtil
   USER_CODE_PATH = '/user_code/'
-  ITEM_GALLERY_PATH = '/item_gallery/'
+  ITEM_GALLERY_PATH = '/update_user_item_gallery/'
   COFFEESCRIPT_SUFFIX = '__cbase'
 
   module CODE_TYPE
