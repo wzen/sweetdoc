@@ -26,6 +26,8 @@ EventDragPointing = (function() {
       PrivateClass.__super__.constructor.call(this, cood);
     }
 
+    PrivateClass.include(itemBaseWorktableExtend);
+
     PrivateClass.prototype.setDrawCallback = function(callback) {
       return this.drawCallback = callback;
     };
@@ -38,6 +40,7 @@ EventDragPointing = (function() {
       if (callback == null) {
         callback = null;
       }
+      this.saveDrawingSurface();
       this.removeItemElement();
       if (callback != null) {
         return callback();
@@ -48,6 +51,7 @@ EventDragPointing = (function() {
       if (callback == null) {
         callback = null;
       }
+      this.restoreAllDrawingSurface();
       return this.endDraw(callback);
     };
 
@@ -62,6 +66,9 @@ EventDragPointing = (function() {
     };
 
     PrivateClass.prototype.draw = function(cood) {
+      if (this.itemSize !== null) {
+        this.restoreRefreshingSurface(this.itemSize);
+      }
       this.itemSize = {
         x: null,
         y: null,
@@ -138,8 +145,6 @@ EventDragPointing = (function() {
         forceUpdate = false;
       }
     };
-
-    PrivateClass.include(itemBaseWorktableExtend);
 
     return PrivateClass;
 

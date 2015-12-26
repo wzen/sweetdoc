@@ -179,8 +179,10 @@ ScreenEvent = (function(superClass) {
           pointing.setDrawCallback(function(pointingSize) {
             return _updateConfigInput.call(_this, emt, pointingSize);
           });
+          PointingHandwrite.initHandwrite();
           WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
           return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, function() {
+            Handwrite.initHandwrite();
             return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
           });
         };

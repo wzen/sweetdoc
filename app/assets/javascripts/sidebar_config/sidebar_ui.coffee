@@ -29,10 +29,14 @@ class Sidebar
             WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType)
 
         # 閉じるイベント設定
-        $(window.drawingCanvas).one('click.sidebar_close', (e) =>
-          Sidebar.closeSidebar()
-          # モードを変更以前に戻す
-          WorktableCommon.putbackMode()
+        $(window.drawingCanvas).off('click.sidebar_close').on('click.sidebar_close', (e) =>
+          # イベント用選択モードの場合は閉じない
+          if window.eventPointingMode == Constant.EventInputPointingMode.NOT_SELECT
+            Sidebar.closeSidebar()
+            # モードを変更以前に戻す
+            WorktableCommon.putbackMode()
+            # イベントを消去
+            $(window.drawingCanvas).off('click.sidebar_close')
         )
 
   # サイドバーをクローズ
@@ -117,7 +121,7 @@ class Sidebar
   @disabledOperation = (flg) ->
     if flg
       if $('#sidebar .cover_touch_overlay').length == 0
-        $('#sidebar').append("<div class='config_overlay'></div>")
+        $('#sidebar').append("<div class='cover_touch_overlay'></div>")
         $('.cover_touch_overlay').off('click').on('click', (e) ->
           e.preventDefault()
           return

@@ -1,6 +1,6 @@
 class Handwrite
 
-  @item = null
+  #@item = null
   @drag = false
   @click = false
   @enableMoveEvent = true
@@ -11,7 +11,7 @@ class Handwrite
   @initHandwrite = ->
     @drag = false
     @click = false
-    @item = null
+    window.handwritingItem = null
     lastX = null; lastY = null
     @enableMoveEvent = true
     @queueLoc = null
@@ -51,7 +51,7 @@ class Handwrite
           loc = _calcCanvasLoc.call(@, e)
           _saveLastLoc(loc)
           @click = true
-          if _isDrawMode.call(@)
+          if @isDrawMode(@)
             e.preventDefault()
             @mouseDownDrawing(loc)
 
@@ -62,7 +62,7 @@ class Handwrite
           loc = _calcCanvasLoc.call(@, e)
           if @click &&
               Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY
-            if _isDrawMode.call(@)
+            if @isDrawMode(@)
               e.preventDefault()
               @mouseMoveDrawing(loc)
             _saveLastLoc(loc)
@@ -71,7 +71,7 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmouseup = (e) =>
         if e.which == 1 #左クリック
-          if @drag && _isDrawMode.call(@)
+          if @drag && @isDrawMode(@)
             e.preventDefault()
             @mouseUpDrawing()
         @drag = false
@@ -87,28 +87,24 @@ class Handwrite
       WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
       if selectItemMenu?
         # インスタンス作成
-        @item = new (Common.getClassFromMap(selectItemMenu))(loc)
-        window.instanceMap[@item.id] = @item
-        @item.mouseDownDrawing()
-    else if window.eventPointingMode == Constant.EventInputPointingMode.DRAW
-      # イベント入力描画
-      @item = new EventDragPointing(loc)
-      @item.mouseDownDrawing()
+        window.handwritingItem = new (Common.getClassFromMap(selectItemMenu))(loc)
+        window.instanceMap[window.handwritingItem.id] = window.handwritingItem
+        window.handwritingItem.mouseDownDrawing()
 
   # マウスドラッグ時の描画イベント
   # @param [Array] loc Canvas座標
   @mouseMoveDrawing = (loc) ->
-    if @item?
+    if window.handwritingItem?
       if @enableMoveEvent
         @enableMoveEvent = false
         @drag = true
-        @item.draw(loc)
+        window.handwritingItem.draw(loc)
 
         # 待ちキューがある場合はもう一度実行
         if @queueLoc != null
           q = @queueLoc
           @queueLoc = null
-          @item.draw(q)
+          window.handwritingItem.draw(q)
 
         @enableMoveEvent = true
       else
@@ -117,10 +113,11 @@ class Handwrite
 
   # マウスアップ時の描画イベント
   @mouseUpDrawing = ->
-    if @item?
-      @item.mouseUpDrawing(@zindex, =>
+    if window.handwritingItem?
+      window.handwritingItem.mouseUpDrawing(@zindex, =>
         @zindex += 1
+        window.handwritingItem = null
       )
 
-  _isDrawMode = ->
-    return window.mode == Constant.Mode.DRAW || window.eventPointingMode == Constant.EventInputPointingMode.DRAW
+  @isDrawMode = ->
+    return window.mode == Constant.Mode.DRAW

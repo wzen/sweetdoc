@@ -110,7 +110,7 @@ class ItemPreviewCommon
         WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( =>
           window.initDone = true
           # コンフィグのイベントを全て有効化
-          $('#sidebar').find('.config_overlay').remove()
+          $('#sidebar').find('.cover_touch_overlay').remove()
           WorktableCommon.changeMode(Constant.Mode.EDIT)
           $('#run_btn_wrapper').show()
           $('#stop_btn_wrapper').hide()
@@ -146,8 +146,8 @@ class ItemPreviewCommon
 
   @coverOverlayOnConfig = ->
     style = "top:#{$('#myTabContent').position().top}px;left:#{$('#myTabContent').position().left}px;width:#{$('#myTabContent').width()}px;height:#{$('#myTabContent').height()}px;"
-    $('#sidebar').append("<div class='config_overlay' style='#{style}'></div>")
-    $('.config_overlay').off('click').on('click', (e) ->
+    $('#sidebar').append("<div class='cover_touch_overlay' style='#{style}'></div>")
+    $('.cover_touch_overlay').off('click').on('click', (e) ->
       e.preventDefault()
       return
     )

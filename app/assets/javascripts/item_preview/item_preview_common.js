@@ -128,7 +128,7 @@ ItemPreviewCommon = (function() {
         return function() {
           return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
             window.initDone = true;
-            $('#sidebar').find('.config_overlay').remove();
+            $('#sidebar').find('.cover_touch_overlay').remove();
             WorktableCommon.changeMode(Constant.Mode.EDIT);
             $('#run_btn_wrapper').show();
             $('#stop_btn_wrapper').hide();
@@ -173,8 +173,8 @@ ItemPreviewCommon = (function() {
   ItemPreviewCommon.coverOverlayOnConfig = function() {
     var style;
     style = "top:" + ($('#myTabContent').position().top) + "px;left:" + ($('#myTabContent').position().left) + "px;width:" + ($('#myTabContent').width()) + "px;height:" + ($('#myTabContent').height()) + "px;";
-    $('#sidebar').append("<div class='config_overlay' style='" + style + "'></div>");
-    return $('.config_overlay').off('click').on('click', function(e) {
+    $('#sidebar').append("<div class='cover_touch_overlay' style='" + style + "'></div>");
+    return $('.cover_touch_overlay').off('click').on('click', function(e) {
       e.preventDefault();
     });
   };

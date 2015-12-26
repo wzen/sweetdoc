@@ -227,7 +227,7 @@ class Navbar
   @disabledOperation = (flg) ->
     if flg
       if $("##{@NAVBAR_ROOT} .cover_touch_overlay").length == 0
-        $("##{@NAVBAR_ROOT}").append("<div class='config_overlay'></div>")
+        $("##{@NAVBAR_ROOT}").append("<div class='cover_touch_overlay'></div>")
         $('.cover_touch_overlay').off('click').on('click', (e) ->
           e.preventDefault()
           return

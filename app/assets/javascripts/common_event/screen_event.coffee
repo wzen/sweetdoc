@@ -143,9 +143,11 @@ class ScreenEvent extends CommonEvent
         pointing.setDrawCallback((pointingSize) =>
           _updateConfigInput.call(@, emt, pointingSize)
         )
+        PointingHandwrite.initHandwrite()
 
         WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
         FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
+          Handwrite.initHandwrite()
           WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
         )
       )

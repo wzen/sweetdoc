@@ -46,10 +46,13 @@ Sidebar = (function() {
             WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
           }
         }
-        return $(window.drawingCanvas).one('click.sidebar_close', (function(_this) {
+        return $(window.drawingCanvas).off('click.sidebar_close').on('click.sidebar_close', (function(_this) {
           return function(e) {
-            Sidebar.closeSidebar();
-            return WorktableCommon.putbackMode();
+            if (window.eventPointingMode === Constant.EventInputPointingMode.NOT_SELECT) {
+              Sidebar.closeSidebar();
+              WorktableCommon.putbackMode();
+              return $(window.drawingCanvas).off('click.sidebar_close');
+            }
           };
         })(this));
       }
@@ -144,7 +147,7 @@ Sidebar = (function() {
   Sidebar.disabledOperation = function(flg) {
     if (flg) {
       if ($('#sidebar .cover_touch_overlay').length === 0) {
-        $('#sidebar').append("<div class='config_overlay'></div>");
+        $('#sidebar').append("<div class='cover_touch_overlay'></div>");
         return $('.cover_touch_overlay').off('click').on('click', function(e) {
           e.preventDefault();
         });

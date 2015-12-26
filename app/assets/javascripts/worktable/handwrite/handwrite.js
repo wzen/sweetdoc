@@ -2,11 +2,7 @@
 var Handwrite;
 
 Handwrite = (function() {
-  var _isDrawMode;
-
   function Handwrite() {}
-
-  Handwrite.item = null;
 
   Handwrite.drag = false;
 
@@ -22,7 +18,7 @@ Handwrite = (function() {
     var MOVE_FREQUENCY, _windowToCanvas, lastX, lastY;
     this.drag = false;
     this.click = false;
-    this.item = null;
+    window.handwritingItem = null;
     lastX = null;
     lastY = null;
     this.enableMoveEvent = true;
@@ -57,7 +53,7 @@ Handwrite = (function() {
             loc = _calcCanvasLoc.call(_this, e);
             _saveLastLoc(loc);
             _this.click = true;
-            if (_isDrawMode.call(_this)) {
+            if (_this.isDrawMode(_this)) {
               e.preventDefault();
               return _this.mouseDownDrawing(loc);
             }
@@ -68,7 +64,7 @@ Handwrite = (function() {
           if (e.which === 1) {
             loc = _calcCanvasLoc.call(_this, e);
             if (_this.click && Math.abs(loc.x - lastX) + Math.abs(loc.y - lastY) >= MOVE_FREQUENCY) {
-              if (_isDrawMode.call(_this)) {
+              if (_this.isDrawMode(_this)) {
                 e.preventDefault();
                 _this.mouseMoveDrawing(loc);
               }
@@ -78,7 +74,7 @@ Handwrite = (function() {
         };
         return drawingCanvas.onmouseup = function(e) {
           if (e.which === 1) {
-            if (_this.drag && _isDrawMode.call(_this)) {
+            if (_this.drag && _this.isDrawMode(_this)) {
               e.preventDefault();
               _this.mouseUpDrawing();
             }
@@ -94,27 +90,24 @@ Handwrite = (function() {
     if (window.mode === Constant.Mode.DRAW) {
       WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
       if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
-        this.item = new (Common.getClassFromMap(selectItemMenu))(loc);
-        window.instanceMap[this.item.id] = this.item;
-        return this.item.mouseDownDrawing();
+        window.handwritingItem = new (Common.getClassFromMap(selectItemMenu))(loc);
+        window.instanceMap[window.handwritingItem.id] = window.handwritingItem;
+        return window.handwritingItem.mouseDownDrawing();
       }
-    } else if (window.eventPointingMode === Constant.EventInputPointingMode.DRAW) {
-      this.item = new EventDragPointing(loc);
-      return this.item.mouseDownDrawing();
     }
   };
 
   Handwrite.mouseMoveDrawing = function(loc) {
     var q;
-    if (this.item != null) {
+    if (window.handwritingItem != null) {
       if (this.enableMoveEvent) {
         this.enableMoveEvent = false;
         this.drag = true;
-        this.item.draw(loc);
+        window.handwritingItem.draw(loc);
         if (this.queueLoc !== null) {
           q = this.queueLoc;
           this.queueLoc = null;
-          this.item.draw(q);
+          window.handwritingItem.draw(q);
         }
         return this.enableMoveEvent = true;
       } else {
@@ -124,17 +117,18 @@ Handwrite = (function() {
   };
 
   Handwrite.mouseUpDrawing = function() {
-    if (this.item != null) {
-      return this.item.mouseUpDrawing(this.zindex, (function(_this) {
+    if (window.handwritingItem != null) {
+      return window.handwritingItem.mouseUpDrawing(this.zindex, (function(_this) {
         return function() {
-          return _this.zindex += 1;
+          _this.zindex += 1;
+          return window.handwritingItem = null;
         };
       })(this));
     }
   };
 
-  _isDrawMode = function() {
-    return window.mode === Constant.Mode.DRAW || window.eventPointingMode === Constant.EventInputPointingMode.DRAW;
+  Handwrite.isDrawMode = function() {
+    return window.mode === Constant.Mode.DRAW;
   };
 
   return Handwrite;

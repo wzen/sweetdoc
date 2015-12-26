@@ -13,6 +13,7 @@ class EventDragPointing
     constructor: (cood) ->
       super(cood)
 
+    @include(itemBaseWorktableExtend)
 
     setDrawCallback: (callback) ->
       @drawCallback = callback
@@ -24,6 +25,7 @@ class EventDragPointing
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
     mouseDownDrawing: (callback = null) ->
+      @saveDrawingSurface()
       # アイテム削除
       @removeItemElement()
       if callback?
@@ -31,6 +33,7 @@ class EventDragPointing
 
     # マウスアップ時の描画イベント
     mouseUpDrawing: (zindex, callback = null) ->
+      @restoreAllDrawingSurface()
       @endDraw(callback)
 
     startCood: (cood) ->
@@ -41,6 +44,9 @@ class EventDragPointing
     # ドラッグ描画(枠)
     # @param [Array] cood 座標
     draw: (cood) ->
+      if @itemSize != null
+        @restoreRefreshingSurface(@itemSize)
+
       @itemSize = {x: null, y: null, w: null, h: null}
       @itemSize.w = Math.abs(cood.x - @_moveLoc.x);
       @itemSize.h = Math.abs(cood.y - @_moveLoc.y);
@@ -79,8 +85,6 @@ class EventDragPointing
     setItemPropToPageValue : (prop, value, isCache = false) ->
     applyDefaultDesign: ->
     makeCss: (forceUpdate = false) ->
-
-    @include(itemBaseWorktableExtend)
 
   @getInstance: (cood = null) ->
     if !instance?

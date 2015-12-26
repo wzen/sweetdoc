@@ -204,7 +204,7 @@ class Timeline
   @disabledOperation = (flg) ->
     if flg
       if $('#timeline_container .cover_touch_overlay').length == 0
-        $('#timeline_container').append("<div class='config_overlay'></div>")
+        $('#timeline_container').append("<div class='cover_touch_overlay'></div>")
         $('.cover_touch_overlay').off('click').on('click', (e) ->
           e.preventDefault()
           return

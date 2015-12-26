@@ -247,7 +247,7 @@ Navbar = (function() {
   Navbar.disabledOperation = function(flg) {
     if (flg) {
       if ($("#" + this.NAVBAR_ROOT + " .cover_touch_overlay").length === 0) {
-        $("#" + this.NAVBAR_ROOT).append("<div class='config_overlay'></div>");
+        $("#" + this.NAVBAR_ROOT).append("<div class='cover_touch_overlay'></div>");
         return $('.cover_touch_overlay').off('click').on('click', function(e) {
           e.preventDefault();
         });

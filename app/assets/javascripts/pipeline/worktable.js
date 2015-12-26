@@ -68,6 +68,7 @@
 //= require worktable/event/timeline
 //= require worktable/event/pointing/event_drag_pointing
 //= require worktable/event/pointing/event_item_touch_pointing
-//= require worktable/handwrite
+//= require worktable/handwrite/handwrite
+//= require worktable/handwrite/pointing_handwrite
 //= require worktable/worktable
 // require_tree .
