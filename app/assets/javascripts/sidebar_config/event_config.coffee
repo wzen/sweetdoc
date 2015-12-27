@@ -94,10 +94,10 @@ class EventConfig
   # @param [Object] e 選択オブジェクト
   clickMethod: (e = null) ->
     _callback = ->
+      $(".value_forms", @emt).children("div").hide()
       if @[EventPageValueBase.PageValueKey.METHODNAME]?
         # 変更値表示
         valueClassName = @methodClassName()
-        $(".value_forms", @emt).children("div").hide()
         $(".value_forms .#{valueClassName}", @emt).show()
         $(".config.values_div", @emt).show()
 

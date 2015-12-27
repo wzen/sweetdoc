@@ -86,9 +86,9 @@ EventConfig = (function() {
     }
     _callback = function() {
       var valueClassName;
+      $(".value_forms", this.emt).children("div").hide();
       if (this[EventPageValueBase.PageValueKey.METHODNAME] != null) {
         valueClassName = this.methodClassName();
-        $(".value_forms", this.emt).children("div").hide();
         $(".value_forms ." + valueClassName, this.emt).show();
         $(".config.values_div", this.emt).show();
       }
