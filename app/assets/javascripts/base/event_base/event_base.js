@@ -151,7 +151,6 @@ EventBase = (function(superClass) {
       drawDelay = this.constructor.STEP_INTERVAL_DURATION * 1000;
       loopDelay = 1000;
       loopMaxCount = 5;
-      this.initEvent(event);
       progressMax = this.progressMax();
       this.willChapter();
       this._doPreviewLoop = true;

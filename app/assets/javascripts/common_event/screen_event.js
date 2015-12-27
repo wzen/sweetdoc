@@ -51,7 +51,7 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
       this.beforeScale = 1.0;
-      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this.beforeScale);
+      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft());
       this.beforeX = cood.x;
       this.beforeY = cood.y;
     }
@@ -62,15 +62,16 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
-      var displayPosition;
+      var pos;
       if (show == null) {
         show = true;
       }
       if (callback == null) {
         callback = null;
       }
-      displayPosition = PageValue.getScrollContentsPosition();
-      Common.updateScrollContentsPosition(displayPosition.top, displayPosition.left, true, function() {
+      pos = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY);
+      this.getJQueryElement().css('scale', this.beforeScale);
+      Common.updateScrollContentsPosition(pos.top, pos.left, true, function() {
         if (callback != null) {
           return callback();
         }
@@ -83,7 +84,8 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.updateEventBefore.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY, this.beforeScale);
+        this.getJQueryElement().css('scale', this.beforeScale);
+        size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY);
         _drawKeepDispRect.call(this, this.beforeX, this.beforeY, this.beforeScale);
         return Common.updateScrollContentsPosition(size.top, size.left);
       }
@@ -97,7 +99,7 @@ ScreenEvent = (function(superClass) {
         x = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
         y = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         scale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
-        size = _convertCenterCoodToSize.call(this, x, y, scale);
+        size = _convertCenterCoodToSize.call(this, x, y);
         _drawKeepDispRect.call(this, x, y, scale);
         return Common.updateScrollContentsPosition(size.top, size.left);
       }
@@ -105,7 +107,7 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
       var _drawOverlay, canvas, canvasContext, overlay, scale, size, x, y;
-      _drawOverlay = function(context, x, y, scale) {
+      _drawOverlay = function(context, x, y, width, height, scale) {
         var _rect, size;
         _rect = function(context, x, y, w, h) {
           context.beginPath();
@@ -116,34 +118,37 @@ ScreenEvent = (function(superClass) {
           return context.closePath();
         };
         context.fillStyle = 'gray';
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        context.clearRect(0, 0, width, height);
         context.save();
-        context.rect(0, 0, context.canvas.width, context.canvas.height);
-        size = _convertCenterCoodToSize.call(this, x, y, scale);
-        _rect.call(this, context, size.left, size.top, size.width, size.height);
-        context.fill();
-        return context.restore();
+        context.rect(0, 0, width, height);
+        size = _convertCenterCoodToSize.call(this, x, y);
+        _rect.call(this, context, size.left, size.top, size.width / scale, size.height / scale);
+        return context.fill();
       };
-      x = (parseInt(this._specificMethodValues.afterX) - this.beforeX) * (opt.progress / opt.progressMax) + this.beforeX;
-      y = (parseInt(this._specificMethodValues.afterY) - this.beforeY) * (opt.progress / opt.progressMax) + this.beforeY;
       scale = (parseFloat(this._specificMethodValues.afterZ) - this.beforeScale) * (opt.progress / opt.progressMax) + this.beforeScale;
+      x = ((parseFloat(this._specificMethodValues.afterX) - this.beforeX) * (opt.progress / opt.progressMax)) + this.beforeX;
+      y = ((parseFloat(this._specificMethodValues.afterY) - this.beforeY) * (opt.progress / opt.progressMax)) + this.beforeY;
       if (opt.isPreview) {
-        if (this.keepDispMag && scale < 1.0) {
+        if (this.keepDispMag && scale > 1.0) {
           overlay = $('#preview_position_overlay');
           if ((overlay == null) || overlay.length === 0) {
-            canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
+            canvas = $("<canvas id='preview_position_overlay' style='width: 100%; height: 100%; z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
             $(window.drawingCanvas).parent().append(canvas);
             overlay = $('#preview_position_overlay');
           }
-          canvasContext = overlay[0].getContent('2d');
-          _drawOverlay.call(canvasContext, x, y, scale);
+          canvasContext = overlay[0].getContext('2d');
+          _drawOverlay.call(this, canvasContext, x, y, overlay.width(), overlay.height(), scale);
         } else {
           $('#preview_position_overlay').remove();
         }
       }
-      size = _convertCenterCoodToSize.call(this, x, y, scale);
-      Common.updateScrollContentsPosition(size.top, size.left, true);
-      return this.getJQueryElement().css('scale', scale);
+      if (!this.keepDispMag) {
+        this.getJQueryElement().css('scale', scale);
+      } else {
+        this.getJQueryElement().css('scale', 1.0);
+      }
+      size = _convertCenterCoodToSize.call(this, x, y);
+      return Common.updateScrollContentsPosition(size.top, size.left, true);
     };
 
     PrivateClass.prototype.stopPreview = function(callback) {
@@ -163,9 +168,9 @@ ScreenEvent = (function(superClass) {
         z = null;
         screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
         if (pointingSize.w > pointingSize.h) {
-          z = pointingSize.w / screenSize.width;
+          z = screenSize.width / pointingSize.w;
         } else {
-          z = pointingSize.h / screenSize.height;
+          z = screenSize.height / pointingSize.h;
         }
         emt.find('.afterX:first').val(x);
         emt.find('.afterY:first').val(y);
@@ -192,19 +197,19 @@ ScreenEvent = (function(superClass) {
     _drawKeepDispRect = function(x, y, scale) {
       var emt, size, style;
       $('.keep_mag_base').remove();
-      if (scale < 1.0) {
-        size = _convertCenterCoodToSize.call(this, x, y, scale);
+      if (scale > 1.0) {
+        size = _convertCenterCoodToSize.call(this, x, y);
         style = "position:absolute;top:" + size.top + "px;left:" + size.left + "px;width:" + size.width + "px;height:" + size.height + "px;";
         emt = $("<div class='keep_mag_base' style='" + style + "'></div>");
         return window.scrollInside.append(emt);
       }
     };
 
-    _convertCenterCoodToSize = function(x, y, scale) {
+    _convertCenterCoodToSize = function(x, y) {
       var height, left, screenSize, top, width;
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-      width = screenSize.width * scale;
-      height = screenSize.height * scale;
+      width = screenSize.width;
+      height = screenSize.height;
       top = y - height / 2.0;
       left = x - width / 2.0;
       return {
@@ -215,11 +220,11 @@ ScreenEvent = (function(superClass) {
       };
     };
 
-    _convertTopLeftToCenterCood = function(top, left, scale) {
+    _convertTopLeftToCenterCood = function(top, left) {
       var height, screenSize, width, x, y;
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-      width = screenSize.width * scale;
-      height = screenSize.height * scale;
+      width = screenSize.width;
+      height = screenSize.height;
       y = top + height / 2.0;
       x = left + width / 2.0;
       return {

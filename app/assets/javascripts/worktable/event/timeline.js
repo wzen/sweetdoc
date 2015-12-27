@@ -132,6 +132,7 @@ Timeline = (function() {
       var eNum;
       eNum = parseInt($(target).find('.te_num:first').val());
       PageValue.removeEventPageValue(eNum);
+      LocalStorage.saveAllPageValues();
       return Timeline.refreshAllTimeline();
     };
     _initEventConfig = function(e) {

@@ -33,7 +33,7 @@ class ScreenEvent extends CommonEvent
       super()
       @name = 'Screen'
       @beforeScale = 1.0
-      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @beforeScale)
+      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft())
       @beforeX = cood.x
       @beforeY = cood.y
 
@@ -44,8 +44,9 @@ class ScreenEvent extends CommonEvent
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      displayPosition = PageValue.getScrollContentsPosition()
-      Common.updateScrollContentsPosition(displayPosition.top, displayPosition.left, true, ->
+      pos = _convertCenterCoodToSize.call(@, @beforeX, @beforeY)
+      @getJQueryElement().css('scale', @beforeScale)
+      Common.updateScrollContentsPosition(pos.top, pos.left, true, ->
         if callback?
           callback()
       )
@@ -56,7 +57,8 @@ class ScreenEvent extends CommonEvent
       super()
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY, @beforeScale)
+        @getJQueryElement().css('scale', @beforeScale)
+        size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY)
         _drawKeepDispRect.call(@, @beforeX, @beforeY, @beforeScale)
         Common.updateScrollContentsPosition(size.top, size.left)
 
@@ -68,13 +70,13 @@ class ScreenEvent extends CommonEvent
         x = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
         y = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         scale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
-        size = _convertCenterCoodToSize.call(@, x, y, scale)
+        size = _convertCenterCoodToSize.call(@, x, y)
         _drawKeepDispRect.call(@, x, y, scale)
         Common.updateScrollContentsPosition(size.top, size.left)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
-      _drawOverlay = (context, x, y, scale) ->
+      _drawOverlay = (context, x, y, width, height, scale) ->
         _rect = (context, x, y, w, h) ->
           context.beginPath();
           context.moveTo(x, y);
@@ -84,36 +86,39 @@ class ScreenEvent extends CommonEvent
           context.closePath();
 
         context.fillStyle = 'gray'
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        context.clearRect(0, 0, width, height);
         context.save()
-        context.rect(0, 0, context.canvas.width, context.canvas.height);
-        # projectサイズで枠を作成
-        size = _convertCenterCoodToSize.call(@, x, y, scale)
-        _rect.call(@, context, size.left, size.top, size.width, size.height)
+        context.rect(0, 0, width, height);
+        # 枠を作成
+        size = _convertCenterCoodToSize.call(@, x, y)
+        _rect.call(@, context, size.left, size.top, size.width / scale, size.height / scale)
         context.fill()
-        context.restore()
+        #context.restore()
 
-      x = (parseInt(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax) + @beforeX
-      y = (parseInt(@_specificMethodValues.afterY) - @beforeY) * (opt.progress / opt.progressMax) + @beforeY
       scale = (parseFloat(@_specificMethodValues.afterZ) - @beforeScale) * (opt.progress / opt.progressMax) + @beforeScale
+      x = ((parseFloat(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax)) + @beforeX
+      y = ((parseFloat(@_specificMethodValues.afterY) - @beforeY) * (opt.progress / opt.progressMax)) + @beforeY
       if opt.isPreview
-        if @keepDispMag && scale < 1.0
+        if @keepDispMag && scale > 1.0
           overlay = $('#preview_position_overlay')
           if !overlay? || overlay.length == 0
             # オーバーレイを被せる
-            canvas = $("<canvas id='preview_position_overlay' style='background-color: transparent; width: 100%; height: 100%; z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
+            canvas = $("<canvas id='preview_position_overlay' style='width: 100%; height: 100%; z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
             $(window.drawingCanvas).parent().append(canvas)
             overlay = $('#preview_position_overlay')
           # オーバーレイ描画
-          canvasContext = overlay[0].getContent('2d')
-          _drawOverlay.call(canvasContext, x, y, scale)
+          canvasContext = overlay[0].getContext('2d')
+          _drawOverlay.call(@, canvasContext, x, y, overlay.width(), overlay.height(), scale)
         else
           # オーバーレイ削除
           $('#preview_position_overlay').remove()
 
-      size = _convertCenterCoodToSize.call(@, x, y, scale)
+      if !@keepDispMag
+        @getJQueryElement().css('scale', scale)
+      else
+        @getJQueryElement().css('scale', 1.0)
+      size = _convertCenterCoodToSize.call(@, x, y)
       Common.updateScrollContentsPosition(size.top, size.left, true)
-      @getJQueryElement().css('scale', scale)
 
     # プレビューを停止
     # @param [Function] callback コールバック
@@ -130,9 +135,9 @@ class ScreenEvent extends CommonEvent
         z = null
         screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
         if pointingSize.w > pointingSize.h
-          z = pointingSize.w / screenSize.width
+          z = screenSize.width / pointingSize.w
         else
-          z = pointingSize.h / screenSize.height
+          z = screenSize.height / pointingSize.h
         emt.find('.afterX:first').val(x)
         emt.find('.afterY:first').val(y)
         emt.find('.afterZ:first').val(z)
@@ -155,24 +160,24 @@ class ScreenEvent extends CommonEvent
     _drawKeepDispRect = (x, y, scale) ->
       $('.keep_mag_base').remove()
 
-      if scale < 1.0
-        size = _convertCenterCoodToSize.call(@, x, y, scale)
+      if scale > 1.0
+        size = _convertCenterCoodToSize.call(@, x, y)
         style = "position:absolute;top:#{size.top}px;left:#{size.left}px;width:#{size.width}px;height:#{size.height}px;"
         emt = $("<div class='keep_mag_base' style='#{style}'></div>")
         window.scrollInside.append(emt)
 
-    _convertCenterCoodToSize = (x, y, scale) ->
+    _convertCenterCoodToSize = (x, y) ->
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-      width = screenSize.width * scale
-      height = screenSize.height * scale
+      width = screenSize.width
+      height = screenSize.height
       top = y - height / 2.0
       left = x - width / 2.0
       return {top: top, left: left, width: width, height: height}
 
-    _convertTopLeftToCenterCood = (top, left, scale) ->
+    _convertTopLeftToCenterCood = (top, left) ->
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-      width = screenSize.width * scale
-      height = screenSize.height * scale
+      width = screenSize.width
+      height = screenSize.height
       y = top + height / 2.0
       x = left + width / 2.0
       return {x: x, y: y}

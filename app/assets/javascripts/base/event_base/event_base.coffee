@@ -111,7 +111,7 @@ class EventBase extends Extend
       loopDelay = 1000 # 1秒毎イベント実行
       loopMaxCount = 5 # ループ5回
       # イベント初期化
-      @initEvent(event)
+      #@initEvent(event)
       progressMax = @progressMax()
       @willChapter()
       # イベントループ

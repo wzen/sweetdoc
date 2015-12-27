@@ -137,6 +137,8 @@ class Timeline
       eNum = parseInt($(target).find('.te_num:first').val())
       # EventPageValueを削除
       PageValue.removeEventPageValue(eNum)
+      # キャッシュ更新
+      LocalStorage.saveAllPageValues()
       # タイムライン表示更新
       Timeline.refreshAllTimeline()
 
