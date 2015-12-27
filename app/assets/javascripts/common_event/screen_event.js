@@ -110,7 +110,6 @@ ScreenEvent = (function(superClass) {
       _drawOverlay = function(context, x, y, width, height, scale) {
         var _rect, h, left, size, top, w;
         _rect = function(context, x, y, w, h) {
-          context.beginPath();
           context.moveTo(x, y);
           context.lineTo(x, y + h);
           context.lineTo(x + w, y + h);
@@ -119,7 +118,8 @@ ScreenEvent = (function(superClass) {
         };
         context.clearRect(0, 0, width, height);
         context.save();
-        context.fillStyle = 'gray';
+        context.fillStyle = "rgba(33, 33, 33, 0.5)";
+        context.beginPath();
         context.rect(0, 0, width, height);
         size = _convertCenterCoodToSize.call(this, x, y);
         w = size.width / scale;

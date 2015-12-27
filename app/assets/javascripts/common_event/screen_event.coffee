@@ -78,7 +78,6 @@ class ScreenEvent extends CommonEvent
     changeScreenPosition: (opt) =>
       _drawOverlay = (context, x, y, width, height, scale) ->
         _rect = (context, x, y, w, h) ->
-          context.beginPath();
           context.moveTo(x, y);
           context.lineTo(x, y + h);
           context.lineTo(x + w, y + h);
@@ -90,7 +89,8 @@ class ScreenEvent extends CommonEvent
 
         context.clearRect(0, 0, width, height);
         context.save()
-        context.fillStyle = 'gray'
+        context.fillStyle = "rgba(33, 33, 33, 0.5)";
+        context.beginPath();
         context.rect(0, 0, width, height);
         # 枠を作成
         size = _convertCenterCoodToSize.call(@, x, y)
