@@ -551,14 +551,18 @@ class WorktableCommon
             item.preview(te, =>
               # プレビューの実行回数超過
               window.previewRunning = false
-              # EventPageValueの退避がある場合戻す
-              @reverseStashEventPageValueForPreviewIfNeeded( =>
+              # ボタン変更「StopPreview」->「Preview」
+              EventConfig.switchPreviewButton(true)
+              # プレビュー停止
+              @stopAllEventPreview( =>
                 # アイテム再描画
                 @refreshAllItemsFromInstancePageValueIfChanging()
               )
             )
             # 状態変更フラグON
             window.worktableItemsChangedState = true
+            # ボタン変更「Preview」->「StopPreview」
+            EventConfig.switchPreviewButton(false)
             $(window.drawingCanvas).one('click.runPreview', (e) =>
               # メイン画面クリックでプレビュー停止 & アイテムを再描画
               @stopAllEventPreview( =>
@@ -585,12 +589,14 @@ class WorktableCommon
       noRunningPreview = true
       for k, v of window.instanceMap
         if v.stopPreview?
-          v.stopPreview( (wasRunningPreview) ->
+          v.stopPreview(null, (wasRunningPreview) ->
             count += 1
             if wasRunningPreview
               noRunningPreview = false
             if length <= count
               window.previewRunning = false
+              # ボタン変更「StopPreview」->「Preview」
+              EventConfig.switchPreviewButton(true)
               if callback?
                 callback(noRunningPreview)
               return
@@ -599,6 +605,8 @@ class WorktableCommon
           count += 1
           if length <= count
             window.previewRunning = false
+            # ボタン変更「StopPreview」->「Preview」
+            EventConfig.switchPreviewButton(true)
             if callback?
               callback(noRunningPreview)
             return

@@ -667,11 +667,13 @@ WorktableCommon = (function() {
               window.previewRunning = true;
               item.preview(te, function() {
                 window.previewRunning = false;
-                return _this.reverseStashEventPageValueForPreviewIfNeeded(function() {
+                EventConfig.switchPreviewButton(true);
+                return _this.stopAllEventPreview(function() {
                   return _this.refreshAllItemsFromInstancePageValueIfChanging();
                 });
               });
               window.worktableItemsChangedState = true;
+              EventConfig.switchPreviewButton(false);
               $(window.drawingCanvas).one('click.runPreview', function(e) {
                 return _this.stopAllEventPreview(function() {
                   return _this.refreshAllItemsFromInstancePageValueIfChanging();
@@ -707,13 +709,14 @@ WorktableCommon = (function() {
         for (k in ref) {
           v = ref[k];
           if (v.stopPreview != null) {
-            v.stopPreview(function(wasRunningPreview) {
+            v.stopPreview(null, function(wasRunningPreview) {
               count += 1;
               if (wasRunningPreview) {
                 noRunningPreview = false;
               }
               if (length <= count) {
                 window.previewRunning = false;
+                EventConfig.switchPreviewButton(true);
                 if (callback != null) {
                   callback(noRunningPreview);
                 }
@@ -723,6 +726,7 @@ WorktableCommon = (function() {
             count += 1;
             if (length <= count) {
               window.previewRunning = false;
+              EventConfig.switchPreviewButton(true);
               if (callback != null) {
                 callback(noRunningPreview);
               }

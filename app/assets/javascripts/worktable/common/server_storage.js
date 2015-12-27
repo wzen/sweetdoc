@@ -50,6 +50,9 @@ ServerStorage = (function() {
     if (callback == null) {
       callback = null;
     }
+    if ((window.previewRunning != null) && window.previewRunning) {
+      return;
+    }
     if ((window.isItemPreview != null) && window.isItemPreview) {
       return;
     }

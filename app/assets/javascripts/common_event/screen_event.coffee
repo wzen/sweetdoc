@@ -80,20 +80,27 @@ class ScreenEvent extends CommonEvent
         _rect = (context, x, y, w, h) ->
           context.beginPath();
           context.moveTo(x, y);
+#          context.lineTo(x, y + h);
+#          context.lineTo(x + w, y + h);
+#          context.lineTo(x + w, y);
           context.lineTo(x + w, y);
           context.lineTo(x + w, y + h);
           context.lineTo(x, y + h);
           context.closePath();
 
-        context.fillStyle = 'gray'
         context.clearRect(0, 0, width, height);
         context.save()
+        context.fillStyle = 'gray'
         context.rect(0, 0, width, height);
         # 枠を作成
         size = _convertCenterCoodToSize.call(@, x, y)
-        _rect.call(@, context, size.left, size.top, size.width / scale, size.height / scale)
+        w = size.width / scale
+        h = size.height / scale
+        top = y - h / 2.0
+        left = x - w / 2.0
+        _rect.call(@, context, left - window.scrollContents.scrollLeft(), top - window.scrollContents.scrollTop(), w, h)
         context.fill()
-        #context.restore()
+        context.restore()
 
       scale = (parseFloat(@_specificMethodValues.afterZ) - @beforeScale) * (opt.progress / opt.progressMax) + @beforeScale
       x = ((parseFloat(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax)) + @beforeX
@@ -103,7 +110,9 @@ class ScreenEvent extends CommonEvent
           overlay = $('#preview_position_overlay')
           if !overlay? || overlay.length == 0
             # オーバーレイを被せる
-            canvas = $("<canvas id='preview_position_overlay' style='width: 100%; height: 100%; z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
+            w = $(window.drawingCanvas).attr('width')
+            h = $(window.drawingCanvas).attr('height')
+            canvas = $("<canvas id='preview_position_overlay' class='canvas_container canvas' width='#{w}' height='#{h}' style='z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
             $(window.drawingCanvas).parent().append(canvas)
             overlay = $('#preview_position_overlay')
           # オーバーレイ描画
@@ -115,17 +124,17 @@ class ScreenEvent extends CommonEvent
 
       if !@keepDispMag
         @getJQueryElement().css('scale', scale)
+        size = _convertCenterCoodToSize.call(@, x, y)
+        Common.updateScrollContentsPosition(size.top, size.left, true)
       else
         @getJQueryElement().css('scale', 1.0)
-      size = _convertCenterCoodToSize.call(@, x, y)
-      Common.updateScrollContentsPosition(size.top, size.left, true)
 
     # プレビューを停止
     # @param [Function] callback コールバック
-    stopPreview: (callback = null) ->
+    stopPreview: (loopFinishCallback = null, callback = null) ->
       # オーバーレイを削除
       $('#preview_position_overlay').remove()
-      super(callback)
+      super(loopFinishCallback, callback)
 
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->

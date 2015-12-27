@@ -149,7 +149,7 @@ class EventBase extends Extend
           if @_doPreviewLoop
             loopCount += 1
             if loopCount >= loopMaxCount
-              @stopPreview()
+              @stopPreview(loopFinishCallback)
 
             if @_previewTimer?
               clearTimeout(@_previewTimer)
@@ -161,13 +161,11 @@ class EventBase extends Extend
               _draw.call(@)
             , loopDelay)
             if !@_doPreviewLoop
-              @stopPreview()
+              @stopPreview(loopFinishCallback)
           else
             if @previewFinished?
               @previewFinished()
               @previewFinished = null
-            if loopFinishCallback?
-              loopFinishCallback()
 
         _draw.call(@)
 
@@ -176,7 +174,7 @@ class EventBase extends Extend
           if @_doPreviewLoop
             loopCount += 1
             if loopCount >= loopMaxCount
-              @stopPreview()
+              @stopPreview(loopFinishCallback)
 
             if @_previewTimer?
               clearTimeout(@_previewTimer)
@@ -194,21 +192,19 @@ class EventBase extends Extend
             if @previewFinished?
               @previewFinished()
               @previewFinished = null
-            if loopFinishCallback?
-              loopFinishCallback()
 
         @execMethod({
           isPreview: true
           complete: _loop
         })
 
-    @stopPreview( =>
+    @stopPreview(loopFinishCallback, =>
       _preview.call(@, event)
     )
 
   # プレビューを停止
   # @param [Function] callback コールバック
-  stopPreview: (callback = null) ->
+  stopPreview: (loopFinishCallback = null, callback = null) ->
     if window.runDebug
       console.log('EventBase stopPreview id:' + @id)
 
@@ -224,6 +220,8 @@ class EventBase extends Extend
         FloatView.hide()
         @_previewTimer = null
         @_runningPreview = false
+      if loopFinishCallback?
+        loopFinishCallback()
       if callback?
         callback(true)
 

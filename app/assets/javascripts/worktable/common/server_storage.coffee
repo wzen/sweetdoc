@@ -24,8 +24,11 @@ class ServerStorage
 
   # サーバにアイテムの情報を保存
   @save = (callback = null) ->
+    if window.previewRunning? && window.previewRunning
+      # プレビュー時は処理しない
+      return
     if window.isItemPreview? && window.isItemPreview
-      # アイテムプレビュー時は処理しない
+      # アイテムプレビュー画面では処理しない
       return
 
     window.workingAutoSave = true

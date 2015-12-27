@@ -352,9 +352,7 @@ EventConfig = (function() {
           var keepDispMag;
           _this.clearError();
           keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked');
-          _this.preview(keepDispMag);
-          $(e.target).closest('.button_div').find('.button_preview_wrapper').hide();
-          return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show();
+          return _this.preview(keepDispMag);
         };
       })(this));
     } else {
@@ -369,10 +367,7 @@ EventConfig = (function() {
     return $('.push.button.preview_stop', this.emt).off('click').on('click', (function(_this) {
       return function(e) {
         _this.clearError();
-        return _this.stopPreview(function() {
-          $(e.target).closest('.button_div').find('.button_preview_wrapper').show();
-          return $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide();
-        });
+        return _this.stopPreview();
       };
     })(this));
   };
@@ -380,6 +375,16 @@ EventConfig = (function() {
   _setupFromPageValues = function() {
     if (EventPageValueBase.readFromPageValue(this)) {
       return this.selectItem();
+    }
+  };
+
+  EventConfig.switchPreviewButton = function(enabled) {
+    if (enabled) {
+      $("#event-config").find('.event .button_div .button_preview_wrapper').show();
+      return $("#event-config").find('.event .button_div .button_stop_preview_wrapper').hide();
+    } else {
+      $("#event-config").find('.event .button_div .button_preview_wrapper').hide();
+      return $("#event-config").find('.event .button_div .button_stop_preview_wrapper').show();
     }
   };
 

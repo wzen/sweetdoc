@@ -193,7 +193,7 @@ EventBase = (function(superClass) {
             if (_this._doPreviewLoop) {
               loopCount += 1;
               if (loopCount >= loopMaxCount) {
-                _this.stopPreview();
+                _this.stopPreview(loopFinishCallback);
               }
               if (_this._previewTimer != null) {
                 clearTimeout(_this._previewTimer);
@@ -205,15 +205,12 @@ EventBase = (function(superClass) {
                 return _draw.call(_this);
               }, loopDelay);
               if (!_this._doPreviewLoop) {
-                return _this.stopPreview();
+                return _this.stopPreview(loopFinishCallback);
               }
             } else {
               if (_this.previewFinished != null) {
                 _this.previewFinished();
-                _this.previewFinished = null;
-              }
-              if (loopFinishCallback != null) {
-                return loopFinishCallback();
+                return _this.previewFinished = null;
               }
             }
           };
@@ -225,7 +222,7 @@ EventBase = (function(superClass) {
             if (_this._doPreviewLoop) {
               loopCount += 1;
               if (loopCount >= loopMaxCount) {
-                _this.stopPreview();
+                _this.stopPreview(loopFinishCallback);
               }
               if (_this._previewTimer != null) {
                 clearTimeout(_this._previewTimer);
@@ -242,10 +239,7 @@ EventBase = (function(superClass) {
             } else {
               if (_this.previewFinished != null) {
                 _this.previewFinished();
-                _this.previewFinished = null;
-              }
-              if (loopFinishCallback != null) {
-                return loopFinishCallback();
+                return _this.previewFinished = null;
               }
             }
           };
@@ -256,15 +250,18 @@ EventBase = (function(superClass) {
         });
       }
     };
-    return this.stopPreview((function(_this) {
+    return this.stopPreview(loopFinishCallback, (function(_this) {
       return function() {
         return _preview.call(_this, event);
       };
     })(this));
   };
 
-  EventBase.prototype.stopPreview = function(callback) {
+  EventBase.prototype.stopPreview = function(loopFinishCallback, callback) {
     var _stop;
+    if (loopFinishCallback == null) {
+      loopFinishCallback = null;
+    }
     if (callback == null) {
       callback = null;
     }
@@ -284,6 +281,9 @@ EventBase = (function(superClass) {
         FloatView.hide();
         this._previewTimer = null;
         this._runningPreview = false;
+      }
+      if (loopFinishCallback != null) {
+        loopFinishCallback();
       }
       if (callback != null) {
         return callback(true);

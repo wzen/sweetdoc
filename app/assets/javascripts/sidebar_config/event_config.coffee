@@ -340,8 +340,6 @@ class EventConfig
         # UIの入力値を初期化
         keepDispMag = $(e.target).closest('div').find('.keep_disp_mag').is(':checked')
         @preview(keepDispMag)
-        $(e.target).closest('.button_div').find('.button_preview_wrapper').hide()
-        $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').show()
       )
     else
       # イベントの設定が接続されていない場合はdisabled
@@ -353,15 +351,21 @@ class EventConfig
     )
     $('.push.button.preview_stop', @emt).off('click').on('click', (e) =>
       @clearError()
-      @stopPreview( =>
-        $(e.target).closest('.button_div').find('.button_preview_wrapper').show()
-        $(e.target).closest('.button_div').find('.button_stop_preview_wrapper').hide()
-      )
+      @stopPreview()
     )
 
   _setupFromPageValues = ->
     if EventPageValueBase.readFromPageValue(@)
       @selectItem()
+
+  # 「Preview」ボタンの切り替え
+  @switchPreviewButton: (enabled) ->
+    if enabled
+      $("#event-config").find('.event .button_div .button_preview_wrapper').show()
+      $("#event-config").find('.event .button_div .button_stop_preview_wrapper').hide()
+    else
+      $("#event-config").find('.event .button_div .button_preview_wrapper').hide()
+      $("#event-config").find('.event .button_div .button_stop_preview_wrapper').show()
 
   # 追加されたコンフィグを全て消去
   @removeAllConfig: ->
