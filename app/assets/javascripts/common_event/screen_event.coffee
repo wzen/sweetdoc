@@ -18,9 +18,9 @@ class ScreenEvent extends CommonEvent
             }
           }
           specificValues: {
-            afterX: 0
-            afterY: 0
-            afterZ: 1
+            afterX: ''
+            afterY: ''
+            afterZ: ''
           }
         }
       }
@@ -50,6 +50,8 @@ class ScreenEvent extends CommonEvent
         if callback?
           callback()
       )
+      # オーバーレイ削除
+      $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
 
     # イベント前の表示状態にする
@@ -58,9 +60,10 @@ class ScreenEvent extends CommonEvent
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
         @getJQueryElement().css('scale', @beforeScale)
-        size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY)
-        _drawKeepDispRect.call(@, @beforeX, @beforeY, @beforeScale)
-        Common.updateScrollContentsPosition(size.top, size.left)
+        _overlay.call(@, @beforeX, @beforeY, @beforeScale)
+        if !@keepDispMag
+          size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY)
+          Common.updateScrollContentsPosition(size.top, size.left)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
@@ -70,64 +73,24 @@ class ScreenEvent extends CommonEvent
         x = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
         y = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         scale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
-        size = _convertCenterCoodToSize.call(@, x, y)
-        _drawKeepDispRect.call(@, x, y, scale)
-        Common.updateScrollContentsPosition(size.top, size.left)
+        _overlay.call(@, x, y, scale)
+        if !@keepDispMag
+          size = _convertCenterCoodToSize.call(@, x, y)
+          Common.updateScrollContentsPosition(size.top, size.left)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
-      _drawOverlay = (context, x, y, width, height, scale) ->
-        _rect = (context, x, y, w, h) ->
-          context.moveTo(x, y);
-          context.lineTo(x, y + h);
-          context.lineTo(x + w, y + h);
-          context.lineTo(x + w, y);
-#          context.lineTo(x + w, y);
-#          context.lineTo(x + w, y + h);
-#          context.lineTo(x, y + h);
-          context.closePath();
-
-        context.clearRect(0, 0, width, height);
-        context.save()
-        context.fillStyle = "rgba(33, 33, 33, 0.5)";
-        context.beginPath();
-        context.rect(0, 0, width, height);
-        # 枠を作成
-        size = _convertCenterCoodToSize.call(@, x, y)
-        w = size.width / scale
-        h = size.height / scale
-        top = y - h / 2.0
-        left = x - w / 2.0
-        _rect.call(@, context, left - window.scrollContents.scrollLeft(), top - window.scrollContents.scrollTop(), w, h)
-        context.fill()
-        context.restore()
-
       scale = (parseFloat(@_specificMethodValues.afterZ) - @beforeScale) * (opt.progress / opt.progressMax) + @beforeScale
       x = ((parseFloat(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax)) + @beforeX
       y = ((parseFloat(@_specificMethodValues.afterY) - @beforeY) * (opt.progress / opt.progressMax)) + @beforeY
       if opt.isPreview
-        if @keepDispMag && scale > 1.0
-          overlay = $('#preview_position_overlay')
-          if !overlay? || overlay.length == 0
-            # オーバーレイを被せる
-            w = $(window.drawingCanvas).attr('width')
-            h = $(window.drawingCanvas).attr('height')
-            canvas = $("<canvas id='preview_position_overlay' class='canvas_container canvas' width='#{w}' height='#{h}' style='z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
-            $(window.drawingCanvas).parent().append(canvas)
-            overlay = $('#preview_position_overlay')
-          # オーバーレイ描画
-          canvasContext = overlay[0].getContext('2d')
-          _drawOverlay.call(@, canvasContext, x, y, overlay.width(), overlay.height(), scale)
-        else
-          # オーバーレイ削除
-          $('#preview_position_overlay').remove()
+        _overlay.call(@, x, y, scale)
+        @getJQueryElement().css('scale', 1.0)
 
       if !@keepDispMag
         @getJQueryElement().css('scale', scale)
         size = _convertCenterCoodToSize.call(@, x, y)
         Common.updateScrollContentsPosition(size.top, size.left, true)
-      else
-        @getJQueryElement().css('scale', 1.0)
 
     # プレビューを停止
     # @param [Function] callback コールバック
@@ -160,13 +123,52 @@ class ScreenEvent extends CommonEvent
           _updateConfigInput.call(@, emt, pointingSize)
         )
         PointingHandwrite.initHandwrite()
-
         WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
         FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
           Handwrite.initHandwrite()
           WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
         )
       )
+
+    _overlay = (x, y, scale) ->
+      _drawOverlay = (context, x, y, width, height, scale) ->
+        _rect = (context, x, y, w, h) ->
+          context.moveTo(x, y);
+          context.lineTo(x, y + h);
+          context.lineTo(x + w, y + h);
+          context.lineTo(x + w, y);
+          context.closePath();
+
+        context.clearRect(0, 0, width, height);
+        context.save()
+        context.fillStyle = "rgba(33, 33, 33, 0.5)";
+        context.beginPath();
+        context.rect(0, 0, width, height);
+        # 枠を作成
+        size = _convertCenterCoodToSize.call(@, x, y)
+        w = size.width / scale
+        h = size.height / scale
+        top = y - h / 2.0
+        left = x - w / 2.0
+        _rect.call(@, context, left - window.scrollContents.scrollLeft(), top - window.scrollContents.scrollTop(), w, h)
+        context.fill()
+        context.restore()
+
+      if @keepDispMag && scale > 1.0
+        overlay = $('#preview_position_overlay')
+        if !overlay? || overlay.length == 0
+          # オーバーレイを被せる
+          w = $(window.drawingCanvas).attr('width')
+          h = $(window.drawingCanvas).attr('height')
+          canvas = $("<canvas id='preview_position_overlay' class='canvas_container canvas' width='#{w}' height='#{h}' style='z-index: #{Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1}'></canvas>")
+          $(window.drawingCanvas).parent().append(canvas)
+          overlay = $('#preview_position_overlay')
+        # オーバーレイ描画
+        canvasContext = overlay[0].getContext('2d')
+        _drawOverlay.call(@, canvasContext, x, y, overlay.width(), overlay.height(), scale)
+      else
+        # オーバーレイ削除
+        $('#preview_position_overlay').remove()
 
     _drawKeepDispRect = (x, y, scale) ->
       $('.keep_mag_base').remove()

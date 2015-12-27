@@ -14,7 +14,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect;
+    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _overlay;
 
     extend(PrivateClass, superClass1);
 
@@ -33,9 +33,9 @@ ScreenEvent = (function(superClass) {
             }
           },
           specificValues: {
-            afterX: 0,
-            afterY: 0,
-            afterZ: 1
+            afterX: '',
+            afterY: '',
+            afterZ: ''
           }
         }
       }
@@ -76,6 +76,7 @@ ScreenEvent = (function(superClass) {
           return callback();
         }
       });
+      $('#preview_position_overlay').remove();
       return $('.keep_mag_base').remove();
     };
 
@@ -85,9 +86,11 @@ ScreenEvent = (function(superClass) {
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
         this.getJQueryElement().css('scale', this.beforeScale);
-        size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY);
-        _drawKeepDispRect.call(this, this.beforeX, this.beforeY, this.beforeScale);
-        return Common.updateScrollContentsPosition(size.top, size.left);
+        _overlay.call(this, this.beforeX, this.beforeY, this.beforeScale);
+        if (!this.keepDispMag) {
+          size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY);
+          return Common.updateScrollContentsPosition(size.top, size.left);
+        }
       }
     };
 
@@ -99,62 +102,27 @@ ScreenEvent = (function(superClass) {
         x = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
         y = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         scale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
-        size = _convertCenterCoodToSize.call(this, x, y);
-        _drawKeepDispRect.call(this, x, y, scale);
-        return Common.updateScrollContentsPosition(size.top, size.left);
+        _overlay.call(this, x, y, scale);
+        if (!this.keepDispMag) {
+          size = _convertCenterCoodToSize.call(this, x, y);
+          return Common.updateScrollContentsPosition(size.top, size.left);
+        }
       }
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
-      var _drawOverlay, canvas, canvasContext, h, overlay, scale, size, w, x, y;
-      _drawOverlay = function(context, x, y, width, height, scale) {
-        var _rect, h, left, size, top, w;
-        _rect = function(context, x, y, w, h) {
-          context.moveTo(x, y);
-          context.lineTo(x, y + h);
-          context.lineTo(x + w, y + h);
-          context.lineTo(x + w, y);
-          return context.closePath();
-        };
-        context.clearRect(0, 0, width, height);
-        context.save();
-        context.fillStyle = "rgba(33, 33, 33, 0.5)";
-        context.beginPath();
-        context.rect(0, 0, width, height);
-        size = _convertCenterCoodToSize.call(this, x, y);
-        w = size.width / scale;
-        h = size.height / scale;
-        top = y - h / 2.0;
-        left = x - w / 2.0;
-        _rect.call(this, context, left - window.scrollContents.scrollLeft(), top - window.scrollContents.scrollTop(), w, h);
-        context.fill();
-        return context.restore();
-      };
+      var scale, size, x, y;
       scale = (parseFloat(this._specificMethodValues.afterZ) - this.beforeScale) * (opt.progress / opt.progressMax) + this.beforeScale;
       x = ((parseFloat(this._specificMethodValues.afterX) - this.beforeX) * (opt.progress / opt.progressMax)) + this.beforeX;
       y = ((parseFloat(this._specificMethodValues.afterY) - this.beforeY) * (opt.progress / opt.progressMax)) + this.beforeY;
       if (opt.isPreview) {
-        if (this.keepDispMag && scale > 1.0) {
-          overlay = $('#preview_position_overlay');
-          if ((overlay == null) || overlay.length === 0) {
-            w = $(window.drawingCanvas).attr('width');
-            h = $(window.drawingCanvas).attr('height');
-            canvas = $("<canvas id='preview_position_overlay' class='canvas_container canvas' width='" + w + "' height='" + h + "' style='z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
-            $(window.drawingCanvas).parent().append(canvas);
-            overlay = $('#preview_position_overlay');
-          }
-          canvasContext = overlay[0].getContext('2d');
-          _drawOverlay.call(this, canvasContext, x, y, overlay.width(), overlay.height(), scale);
-        } else {
-          $('#preview_position_overlay').remove();
-        }
+        _overlay.call(this, x, y, scale);
+        this.getJQueryElement().css('scale', 1.0);
       }
       if (!this.keepDispMag) {
         this.getJQueryElement().css('scale', scale);
         size = _convertCenterCoodToSize.call(this, x, y);
         return Common.updateScrollContentsPosition(size.top, size.left, true);
-      } else {
-        return this.getJQueryElement().css('scale', 1.0);
       }
     };
 
@@ -204,6 +172,47 @@ ScreenEvent = (function(superClass) {
           });
         };
       })(this));
+    };
+
+    _overlay = function(x, y, scale) {
+      var _drawOverlay, canvas, canvasContext, h, overlay, w;
+      _drawOverlay = function(context, x, y, width, height, scale) {
+        var _rect, h, left, size, top, w;
+        _rect = function(context, x, y, w, h) {
+          context.moveTo(x, y);
+          context.lineTo(x, y + h);
+          context.lineTo(x + w, y + h);
+          context.lineTo(x + w, y);
+          return context.closePath();
+        };
+        context.clearRect(0, 0, width, height);
+        context.save();
+        context.fillStyle = "rgba(33, 33, 33, 0.5)";
+        context.beginPath();
+        context.rect(0, 0, width, height);
+        size = _convertCenterCoodToSize.call(this, x, y);
+        w = size.width / scale;
+        h = size.height / scale;
+        top = y - h / 2.0;
+        left = x - w / 2.0;
+        _rect.call(this, context, left - window.scrollContents.scrollLeft(), top - window.scrollContents.scrollTop(), w, h);
+        context.fill();
+        return context.restore();
+      };
+      if (this.keepDispMag && scale > 1.0) {
+        overlay = $('#preview_position_overlay');
+        if ((overlay == null) || overlay.length === 0) {
+          w = $(window.drawingCanvas).attr('width');
+          h = $(window.drawingCanvas).attr('height');
+          canvas = $("<canvas id='preview_position_overlay' class='canvas_container canvas' width='" + w + "' height='" + h + "' style='z-index: " + (Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1) + "'></canvas>");
+          $(window.drawingCanvas).parent().append(canvas);
+          overlay = $('#preview_position_overlay');
+        }
+        canvasContext = overlay[0].getContext('2d');
+        return _drawOverlay.call(this, canvasContext, x, y, overlay.width(), overlay.height(), scale);
+      } else {
+        return $('#preview_position_overlay').remove();
+      }
     };
 
     _drawKeepDispRect = function(x, y, scale) {

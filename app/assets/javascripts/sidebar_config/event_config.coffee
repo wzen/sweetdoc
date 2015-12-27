@@ -445,7 +445,10 @@ class EventConfig
     for varName, v of sp
       e = @emt.find(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_SPECIFIC_ROOT} .#{varName}:not('.fixed_value')")
       if e.length > 0
-        e.val(v)
+        if @hasSpecificVar(varName)
+          e.val(@[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName])
+        else
+          e.val(v)
 
     # イベント初期化呼び出し
     initSpecificConfigParam = {}
@@ -459,6 +462,14 @@ class EventConfig
     ret = @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? != 'undefined'
     if varName?
       return ret && @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
+    else
+      return ret
+
+  # 変数変更値が存在するか
+  hasSpecificVar: (varName = null) ->
+    ret = @[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES]? && @[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES]? != 'undefined'
+    if varName?
+      return ret && @[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName]?
     else
       return ret
 

@@ -475,7 +475,11 @@ EventConfig = (function() {
       v = sp[varName];
       e = this.emt.find("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_SPECIFIC_ROOT + " ." + varName + ":not('.fixed_value')");
       if (e.length > 0) {
-        e.val(v);
+        if (this.hasSpecificVar(varName)) {
+          e.val(this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName]);
+        } else {
+          e.val(v);
+        }
       }
     }
     initSpecificConfigParam = {};
@@ -496,6 +500,19 @@ EventConfig = (function() {
     ret = (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) !== 'undefined';
     if (varName != null) {
       return ret && (this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null);
+    } else {
+      return ret;
+    }
+  };
+
+  EventConfig.prototype.hasSpecificVar = function(varName) {
+    var ret;
+    if (varName == null) {
+      varName = null;
+    }
+    ret = (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] != null) && (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES] != null) !== 'undefined';
+    if (varName != null) {
+      return ret && (this[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES][varName] != null);
     } else {
       return ret;
     }
