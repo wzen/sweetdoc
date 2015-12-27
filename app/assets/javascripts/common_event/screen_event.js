@@ -112,9 +112,9 @@ ScreenEvent = (function(superClass) {
         _rect = function(context, x, y, w, h) {
           context.beginPath();
           context.moveTo(x, y);
-          context.lineTo(x + w, y);
-          context.lineTo(x + w, y + h);
           context.lineTo(x, y + h);
+          context.lineTo(x + w, y + h);
+          context.lineTo(x + w, y);
           return context.closePath();
         };
         context.clearRect(0, 0, width, height);
@@ -165,7 +165,9 @@ ScreenEvent = (function(superClass) {
       if (callback == null) {
         callback = null;
       }
-      $('#preview_position_overlay').remove();
+      setTimeout(function() {
+        return $('#preview_position_overlay').remove();
+      }, 0);
       return PrivateClass.__super__.stopPreview.call(this, loopFinishCallback, callback);
     };
 

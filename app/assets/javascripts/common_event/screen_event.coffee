@@ -80,12 +80,12 @@ class ScreenEvent extends CommonEvent
         _rect = (context, x, y, w, h) ->
           context.beginPath();
           context.moveTo(x, y);
-#          context.lineTo(x, y + h);
-#          context.lineTo(x + w, y + h);
-#          context.lineTo(x + w, y);
-          context.lineTo(x + w, y);
-          context.lineTo(x + w, y + h);
           context.lineTo(x, y + h);
+          context.lineTo(x + w, y + h);
+          context.lineTo(x + w, y);
+#          context.lineTo(x + w, y);
+#          context.lineTo(x + w, y + h);
+#          context.lineTo(x, y + h);
           context.closePath();
 
         context.clearRect(0, 0, width, height);
@@ -132,8 +132,10 @@ class ScreenEvent extends CommonEvent
     # プレビューを停止
     # @param [Function] callback コールバック
     stopPreview: (loopFinishCallback = null, callback = null) ->
-      # オーバーレイを削除
-      $('#preview_position_overlay').remove()
+      setTimeout( ->
+        # オーバーレイを削除
+        $('#preview_position_overlay').remove()
+      , 0)
       super(loopFinishCallback, callback)
 
     # 独自コンフィグのイベント初期化

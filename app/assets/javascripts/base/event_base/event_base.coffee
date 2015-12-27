@@ -128,22 +128,21 @@ class EventBase extends Extend
               clearTimeout(@_previewTimer)
               @_previewTimer = null
             @_previewTimer = setTimeout( =>
-              @execMethod({
-                isPreview: true
-                progress: p
-                progressMax: progressMax
-              })
-              p += 1
-              if p >= progressMax
-                p = 0
-                _loop.call(@)
-              else
-                _draw.call(@)
+              if @_runningPreview
+                @execMethod({
+                  isPreview: true
+                  progress: p
+                  progressMax: progressMax
+                })
+                p += 1
+                if p >= progressMax
+                  p = 0
+                  _loop.call(@)
+                else
+                  _draw.call(@)
             , drawDelay)
           else
-            if @previewFinished?
-              @previewFinished()
-              @previewFinished = null
+            @stopPreview(loopFinishCallback)
 
         _loop = =>
           if @_doPreviewLoop
@@ -155,17 +154,16 @@ class EventBase extends Extend
               clearTimeout(@_previewTimer)
               @_previewTimer = null
             @_previewTimer = setTimeout( =>
-              # 状態を変更前に戻す
-              @resetEvent()
-              @willChapter()
-              _draw.call(@)
+              if @_runningPreview
+                # 状態を変更前に戻す
+                @resetEvent()
+                @willChapter()
+                _draw.call(@)
             , loopDelay)
             if !@_doPreviewLoop
               @stopPreview(loopFinishCallback)
           else
-            if @previewFinished?
-              @previewFinished()
-              @previewFinished = null
+            @stopPreview(loopFinishCallback)
 
         _draw.call(@)
 
@@ -180,18 +178,17 @@ class EventBase extends Extend
               clearTimeout(@_previewTimer)
               @_previewTimer = null
             @_previewTimer = setTimeout( =>
-              # 状態を変更前に戻す
-              @resetEvent()
-              @willChapter()
-              @execMethod({
-                isPreview: true
-                complete: _loop
-              })
+              if @_runningPreview
+                # 状態を変更前に戻す
+                @resetEvent()
+                @willChapter()
+                @execMethod({
+                  isPreview: true
+                  complete: _loop
+                })
             , loopDelay)
           else
-            if @previewFinished?
-              @previewFinished()
-              @previewFinished = null
+            @stopPreview(loopFinishCallback)
 
         @execMethod({
           isPreview: true
@@ -209,29 +206,21 @@ class EventBase extends Extend
       console.log('EventBase stopPreview id:' + @id)
 
     if !@_runningPreview? || !@_runningPreview
-      @_runningPreview = false
+      # 停止済み
       if callback?
         callback(false)
       return
+    @_runningPreview = false
 
-    _stop = ->
+    do =>
       if @_previewTimer?
         clearTimeout(@_previewTimer)
         FloatView.hide()
         @_previewTimer = null
-        @_runningPreview = false
       if loopFinishCallback?
         loopFinishCallback()
       if callback?
         callback(true)
-
-    if @_doPreviewLoop
-      @_doPreviewLoop = false
-      @previewFinished = =>
-        _stop.call(@)
-
-    else
-      _stop.call(@)
 
   # JQueryエレメントを取得
   # @abstract

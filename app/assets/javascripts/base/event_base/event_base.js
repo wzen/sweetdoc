@@ -167,24 +167,23 @@ EventBase = (function(superClass) {
                 _this._previewTimer = null;
               }
               return _this._previewTimer = setTimeout(function() {
-                _this.execMethod({
-                  isPreview: true,
-                  progress: p,
-                  progressMax: progressMax
-                });
-                p += 1;
-                if (p >= progressMax) {
-                  p = 0;
-                  return _loop.call(_this);
-                } else {
-                  return _draw.call(_this);
+                if (_this._runningPreview) {
+                  _this.execMethod({
+                    isPreview: true,
+                    progress: p,
+                    progressMax: progressMax
+                  });
+                  p += 1;
+                  if (p >= progressMax) {
+                    p = 0;
+                    return _loop.call(_this);
+                  } else {
+                    return _draw.call(_this);
+                  }
                 }
               }, drawDelay);
             } else {
-              if (_this.previewFinished != null) {
-                _this.previewFinished();
-                return _this.previewFinished = null;
-              }
+              return _this.stopPreview(loopFinishCallback);
             }
           };
         })(this);
@@ -200,18 +199,17 @@ EventBase = (function(superClass) {
                 _this._previewTimer = null;
               }
               _this._previewTimer = setTimeout(function() {
-                _this.resetEvent();
-                _this.willChapter();
-                return _draw.call(_this);
+                if (_this._runningPreview) {
+                  _this.resetEvent();
+                  _this.willChapter();
+                  return _draw.call(_this);
+                }
               }, loopDelay);
               if (!_this._doPreviewLoop) {
                 return _this.stopPreview(loopFinishCallback);
               }
             } else {
-              if (_this.previewFinished != null) {
-                _this.previewFinished();
-                return _this.previewFinished = null;
-              }
+              return _this.stopPreview(loopFinishCallback);
             }
           };
         })(this);
@@ -229,18 +227,17 @@ EventBase = (function(superClass) {
                 _this._previewTimer = null;
               }
               return _this._previewTimer = setTimeout(function() {
-                _this.resetEvent();
-                _this.willChapter();
-                return _this.execMethod({
-                  isPreview: true,
-                  complete: _loop
-                });
+                if (_this._runningPreview) {
+                  _this.resetEvent();
+                  _this.willChapter();
+                  return _this.execMethod({
+                    isPreview: true,
+                    complete: _loop
+                  });
+                }
               }, loopDelay);
             } else {
-              if (_this.previewFinished != null) {
-                _this.previewFinished();
-                return _this.previewFinished = null;
-              }
+              return _this.stopPreview(loopFinishCallback);
             }
           };
         })(this);
@@ -258,7 +255,6 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.stopPreview = function(loopFinishCallback, callback) {
-    var _stop;
     if (loopFinishCallback == null) {
       loopFinishCallback = null;
     }
@@ -269,36 +265,27 @@ EventBase = (function(superClass) {
       console.log('EventBase stopPreview id:' + this.id);
     }
     if ((this._runningPreview == null) || !this._runningPreview) {
-      this._runningPreview = false;
       if (callback != null) {
         callback(false);
       }
       return;
     }
-    _stop = function() {
-      if (this._previewTimer != null) {
-        clearTimeout(this._previewTimer);
-        FloatView.hide();
-        this._previewTimer = null;
-        this._runningPreview = false;
-      }
-      if (loopFinishCallback != null) {
-        loopFinishCallback();
-      }
-      if (callback != null) {
-        return callback(true);
-      }
-    };
-    if (this._doPreviewLoop) {
-      this._doPreviewLoop = false;
-      return this.previewFinished = (function(_this) {
-        return function() {
-          return _stop.call(_this);
-        };
-      })(this);
-    } else {
-      return _stop.call(this);
-    }
+    this._runningPreview = false;
+    return (function(_this) {
+      return function() {
+        if (_this._previewTimer != null) {
+          clearTimeout(_this._previewTimer);
+          FloatView.hide();
+          _this._previewTimer = null;
+        }
+        if (loopFinishCallback != null) {
+          loopFinishCallback();
+        }
+        if (callback != null) {
+          return callback(true);
+        }
+      };
+    })(this)();
   };
 
   EventBase.prototype.getJQueryElement = function() {
