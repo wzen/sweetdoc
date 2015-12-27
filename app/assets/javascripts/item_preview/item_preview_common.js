@@ -54,7 +54,9 @@ ItemPreviewCommon = (function() {
       e.preventDefault();
       top = window.scrollContents.scrollTop();
       left = window.scrollContents.scrollLeft();
-      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
+      if (jQuery(":hover")[jQuery(':hover').length - 1] === window.scrollInside.get(0)) {
+        FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
+      }
       if (window.scrollContentsScrollTimer != null) {
         clearTimeout(window.scrollContentsScrollTimer);
       }

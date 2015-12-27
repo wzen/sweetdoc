@@ -317,12 +317,13 @@ class WorktableCommon
     window.scrollInsideWrapper.height(window.scrollViewSize)
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
     # スクロールイベント設定
-    window.scrollContents.off('scroll')
-    window.scrollContents.on('scroll', (e) ->
+    window.scrollContents.off('scroll').on('scroll', (e) ->
       e.preventDefault()
       top = window.scrollContents.scrollTop()
       left = window.scrollContents.scrollLeft()
-      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
+      if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
+        # 手動スクロールした場合のみメッセージ表示
+        FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
       if window.scrollContentsScrollTimer?
         clearTimeout(window.scrollContentsScrollTimer)
       window.scrollContentsScrollTimer = setTimeout( ->

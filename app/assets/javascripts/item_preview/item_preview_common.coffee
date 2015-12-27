@@ -45,7 +45,9 @@ class ItemPreviewCommon
       e.preventDefault()
       top = window.scrollContents.scrollTop()
       left = window.scrollContents.scrollLeft()
-      FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
+      if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
+        # 手動スクロールした場合のみメッセージ表示
+        FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
       if window.scrollContentsScrollTimer?
         clearTimeout(window.scrollContentsScrollTimer)
       window.scrollContentsScrollTimer = setTimeout( ->
