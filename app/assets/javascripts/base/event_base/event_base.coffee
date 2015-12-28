@@ -235,7 +235,7 @@ class EventBase extends Extend
     # インスタンスの状態を保存
     PageValue.saveInstanceObjectToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
     # 状態をイベント前に戻す
-    #@updateEventBefore()
+    @updateEventBefore()
 
   # チャプター終了時イベント
   didChapter: ->
@@ -298,7 +298,7 @@ class EventBase extends Extend
 
     # スクロール指定範囲外なら反応させない
     if @scrollValue < sPoint
-      @scrollValue = sPoint
+      #@scrollValue = sPoint
       return
     else if @scrollValue >= ePoint
       @scrollValue = ePoint

@@ -101,12 +101,12 @@ RunCommon = (function() {
     }
     updatedProjectScreenSize.width = projectScreenSize.width * zoom;
     updatedProjectScreenSize.height = projectScreenSize.height * zoom;
-    updateMainWrapperPercent = 100 / zoom;
     $('#main').height(updateMainHeight);
     $('#project_wrapper').css({
       width: updatedProjectScreenSize.width,
       height: updatedProjectScreenSize.height
     });
+    updateMainWrapperPercent = 100 / zoom;
     return window.mainWrapper.css({
       transform: "scale(" + zoom + ", " + zoom + ")",
       width: updateMainWrapperPercent + "%",

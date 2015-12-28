@@ -297,7 +297,8 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.willChapter = function() {
-    return PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return this.updateEventBefore();
   };
 
   EventBase.prototype.didChapter = function() {
@@ -356,7 +357,6 @@ EventBase = (function(superClass) {
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
     if (this.scrollValue < sPoint) {
-      this.scrollValue = sPoint;
       return;
     } else if (this.scrollValue >= ePoint) {
       this.scrollValue = ePoint;

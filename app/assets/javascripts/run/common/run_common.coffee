@@ -80,10 +80,9 @@ class RunCommon
       zoom = 0.01
     updatedProjectScreenSize.width = projectScreenSize.width * zoom
     updatedProjectScreenSize.height = projectScreenSize.height * zoom
-    updateMainWrapperPercent = 100 / zoom
-
     $('#main').height(updateMainHeight)
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
+    updateMainWrapperPercent = 100 / zoom
     window.mainWrapper.css({transform: "scale(#{zoom}, #{zoom})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # ウィンドウの高さ設定
