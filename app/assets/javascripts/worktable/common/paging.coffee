@@ -107,8 +107,6 @@ class Paging
 
       # Mainコンテナ作成
       created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1)
-      # ページングクラス作成
-      pageFlip = new PageFlip(beforePageNum, PageValue.getPageCount() + 1)
       # ページ番号更新
       PageValue.setPageNum(PageValue.getPageCount() + 1)
       # 新規コンテナ初期化
@@ -121,25 +119,25 @@ class Paging
         WorktableCommon.changeMode(window.mode)
         # タイムライン更新
         Timeline.refreshAllTimeline()
-
-        # ページめくりアニメーション
-        pageFlip.startRender( ->
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-          section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-          section.hide()
-          Common.removeAllItem(beforePageNum)
-          Timeline.refreshAllTimeline()
-          # ページ総数 & フォーク総数の更新
-          PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
-          PageValue.updatePageCount()
-          if created
-            # 履歴に画面初期時状態を保存
-            OperationHistory.add(true)
-          # キャッシュ保存
-          LocalStorage.saveAllPageValues()
-          # 選択メニューの更新
-          self.createPageSelectMenu()
-        )
+        # ページ表示変更
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum())
+        newSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+        newSection.show()
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+        oldSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+        oldSection.hide()
+        Common.removeAllItem(beforePageNum)
+        Timeline.refreshAllTimeline()
+        # ページ総数 & フォーク総数の更新
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
+        PageValue.updatePageCount()
+        if created
+          # 履歴に画面初期時状態を保存
+          OperationHistory.add(true)
+        # キャッシュ保存
+        LocalStorage.saveAllPageValues()
+        # 選択メニューの更新
+        self.createPageSelectMenu()
       )
     )
 

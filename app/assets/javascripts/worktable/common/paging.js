@@ -86,7 +86,7 @@ Paging = (function() {
     var self;
     self = this;
     return WorktableCommon.stopAllEventPreview(function() {
-      var beforePageNum, created, pageFlip;
+      var beforePageNum, created;
       beforePageNum = PageValue.getPageNum();
       if (window.debug) {
         console.log('[createNewPage] beforePageNum:' + beforePageNum);
@@ -95,29 +95,29 @@ Paging = (function() {
       LocalStorage.clearWorktableWithoutSetting();
       EventConfig.removeAllConfig();
       created = Common.createdMainContainerIfNeeded(PageValue.getPageCount() + 1);
-      pageFlip = new PageFlip(beforePageNum, PageValue.getPageCount() + 1);
       PageValue.setPageNum(PageValue.getPageCount() + 1);
       WorktableCommon.initMainContainer();
       PageValue.adjustInstanceAndEventOnPage();
       return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
+        var className, newSection, oldSection;
         WorktableCommon.createCommonEventInstancesIfNeeded();
         WorktableCommon.changeMode(window.mode);
         Timeline.refreshAllTimeline();
-        return pageFlip.startRender(function() {
-          var className, section;
-          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-          section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-          section.hide();
-          Common.removeAllItem(beforePageNum);
-          Timeline.refreshAllTimeline();
-          PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
-          PageValue.updatePageCount();
-          if (created) {
-            OperationHistory.add(true);
-          }
-          LocalStorage.saveAllPageValues();
-          return self.createPageSelectMenu();
-        });
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', PageValue.getPageNum());
+        newSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        newSection.show();
+        className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+        oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+        oldSection.hide();
+        Common.removeAllItem(beforePageNum);
+        Timeline.refreshAllTimeline();
+        PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
+        PageValue.updatePageCount();
+        if (created) {
+          OperationHistory.add(true);
+        }
+        LocalStorage.saveAllPageValues();
+        return self.createPageSelectMenu();
       });
     });
   };

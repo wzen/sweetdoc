@@ -69,7 +69,8 @@ class RunCommon
       # 縮小
       updatedProjectScreenSize.height = updateMainHeight - 10
 
-    # FIXME: 今は画面縮小に対応しないが残しておく
+    # FIXME: 拡大縮小で正確に動作しないため使用しない
+    # 今は対応しないが残しておく
     # Zoom 修正
 #    widthRate = updatedProjectScreenSize.width / projectScreenSize.width
 #    heightRate = updatedProjectScreenSize.height / projectScreenSize.height
