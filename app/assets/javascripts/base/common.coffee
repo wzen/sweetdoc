@@ -250,8 +250,11 @@ class Common
   # @param [Object] target 対象アイテム
   # @param [Fucntion] callback コールバック
   @focusToTarget = (target, callback = null, immediate = false) ->
-    # col-xs-9 → 75% padding → 15px
+    if !target? || target.length == 0
+      # ターゲット無し
+      return
 
+    # col-xs-9 → 75% padding → 15px
     diff =
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft

@@ -314,7 +314,7 @@ class Page
 
   # チャプターのイベントを初期化
   initChapterEvent: ->
-    for chapter in @getProgressChapterList()
+    for chapter in @getAllChapterList()
       for i in [0..(chapter.eventObjList.length - 1)]
         event = chapter.eventObjList[i]
         event.initEvent(chapter.eventList[i])

@@ -327,7 +327,7 @@ Page = (function() {
 
   Page.prototype.initChapterEvent = function() {
     var chapter, event, i, j, len, ref, results;
-    ref = this.getProgressChapterList();
+    ref = this.getAllChapterList();
     results = [];
     for (j = 0, len = ref.length; j < len; j++) {
       chapter = ref[j];

@@ -344,6 +344,9 @@ Common = (function() {
     if (immediate == null) {
       immediate = false;
     }
+    if ((target == null) || target.length === 0) {
+      return;
+    }
     diff = {
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
