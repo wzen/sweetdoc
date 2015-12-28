@@ -64,6 +64,8 @@ class Common
 
   @diffEventObject: (obj1, obj2) ->
     _func = (o1, o2) ->
+      if !o1?
+        return o2
       if typeof o1 != typeof o2
         return o2
       else if typeof o1 != 'object'
@@ -74,8 +76,8 @@ class Common
           return null
       else
         ret = {}
-        for k, v of o1
-          f = _func(v, o2[k])
+        for k, v of o2
+          f = _func(o1[k], v)
           if f?
             ret[k] = f
         return if Object.keys(ret).length > 0 then ret else null

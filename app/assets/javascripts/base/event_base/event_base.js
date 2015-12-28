@@ -201,7 +201,6 @@ EventBase = (function(superClass) {
               _this._previewTimer = setTimeout(function() {
                 if (_this._runningPreview) {
                   _this.resetEvent();
-                  _this.willChapter();
                   return _draw.call(_this);
                 }
               }, loopDelay);
@@ -229,7 +228,6 @@ EventBase = (function(superClass) {
               return _this._previewTimer = setTimeout(function() {
                 if (_this._runningPreview) {
                   _this.resetEvent();
-                  _this.willChapter();
                   return _this.execMethod({
                     isPreview: true,
                     complete: _loop
@@ -299,7 +297,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.willChapter = function() {
-    return this.updateEventBefore();
+    return PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.didChapter = function() {
@@ -455,6 +453,9 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.updateEventBefore = function() {
     var actionType;
+    if (this._event == null) {
+      return;
+    }
     if (window.runDebug) {
       console.log('EventBase updateEventBefore id:' + this.id);
     }
@@ -467,6 +468,9 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.updateEventAfter = function() {
     var actionType;
+    if (this._event == null) {
+      return;
+    }
     if (window.runDebug) {
       console.log('EventBase updateEventAfter id:' + this.id);
     }

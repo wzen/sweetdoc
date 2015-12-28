@@ -339,7 +339,7 @@ class Const
     MODIFIABLE_VARS = 'modifiable_vars'
     IS_DRAW_BY_ANIMATION = 'isDrawByAnimation'
     EVENT_DURATION = 'eventDuration'
-    SPECIFIC_CONFIG_VALUES = 'specificConfigValues'
+    SPECIFIC_METHOD_VALUES = 'specificMethodValues'
   end
 
   class UserPageValue

@@ -110,8 +110,6 @@ class EventBase extends Extend
       drawDelay = @constructor.STEP_INTERVAL_DURATION * 1000
       loopDelay = 1000 # 1秒毎イベント実行
       loopMaxCount = 5 # ループ5回
-      # イベント初期化
-      #@initEvent(event)
       progressMax = @progressMax()
       @willChapter()
       # イベントループ
@@ -157,7 +155,7 @@ class EventBase extends Extend
               if @_runningPreview
                 # 状態を変更前に戻す
                 @resetEvent()
-                @willChapter()
+                #@willChapter()
                 _draw.call(@)
             , loopDelay)
             if !@_doPreviewLoop
@@ -181,7 +179,7 @@ class EventBase extends Extend
               if @_runningPreview
                 # 状態を変更前に戻す
                 @resetEvent()
-                @willChapter()
+                #@willChapter()
                 @execMethod({
                   isPreview: true
                   complete: _loop
@@ -234,8 +232,10 @@ class EventBase extends Extend
 
   # チャプター開始前イベント
   willChapter: ->
+    # インスタンスの状態を保存
+    PageValue.saveInstanceObjectToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
     # 状態をイベント前に戻す
-    @updateEventBefore()
+    #@updateEventBefore()
 
   # チャプター終了時イベント
   didChapter: ->
@@ -391,6 +391,10 @@ class EventBase extends Extend
 
   # イベント前の表示状態にする
   updateEventBefore: ->
+    if !@_event?
+      # イベントが初期化されていない場合は無視
+      return
+
     if window.runDebug
       console.log('EventBase updateEventBefore id:' + @id)
 
@@ -401,6 +405,10 @@ class EventBase extends Extend
 
   # イベント後の表示状態にする
   updateEventAfter: ->
+    if !@_event?
+      # イベントが初期化されていない場合は無視
+      return
+
     if window.runDebug
       console.log('EventBase updateEventAfter id:' + @id)
 

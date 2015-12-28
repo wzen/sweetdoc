@@ -91,6 +91,9 @@ Common = (function() {
     var _func, obj;
     _func = function(o1, o2) {
       var f, k, ret, v;
+      if (o1 == null) {
+        return o2;
+      }
       if (typeof o1 !== typeof o2) {
         return o2;
       } else if (typeof o1 !== 'object') {
@@ -101,9 +104,9 @@ Common = (function() {
         }
       } else {
         ret = {};
-        for (k in o1) {
-          v = o1[k];
-          f = _func(v, o2[k]);
+        for (k in o2) {
+          v = o2[k];
+          f = _func(o1[k], v);
           if (f != null) {
             ret[k] = f;
           }

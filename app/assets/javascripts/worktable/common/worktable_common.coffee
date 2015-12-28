@@ -533,46 +533,51 @@ class WorktableCommon
 
     # 状態変更フラグON
     window.worktableItemsChangedState = true
-    Common.updateAllEventsToBefore( =>
-      # 操作履歴削除
-      PageValue.removeAllFootprint()
-      teNum = parseInt(teNum)
-      for te, idx in tes
-        item = window.instanceMap[te.id]
-        if item?
-          item.initEvent(te, keepDispMag)
-          if idx < tes.length - 1 || fromBlankEventConfig
-            # インスタンスの状態を保存
-            PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID])
-            # イベント後の状態に変更
-            item.updateEventAfter()
-          else if doRunPreview
-            window.previewRunning = true
-            # プレビュー実行
-            item.preview(te, =>
-              # プレビューの実行回数超過
-              window.previewRunning = false
-              # ボタン変更「StopPreview」->「Preview」
-              EventConfig.switchPreviewButton(true)
-              # プレビュー停止
-              @stopAllEventPreview( =>
-                # アイテム再描画
-                @refreshAllItemsFromInstancePageValueIfChanging()
-              )
+    #Common.updateAllEventsToBefore( =>
+    # 操作履歴削除
+    PageValue.removeAllFootprint()
+    teNum = parseInt(teNum)
+    for te, idx in tes
+      item = window.instanceMap[te.id]
+      if item?
+        # 全てのイベント状態を戻す
+        item.resetEvent()
+    for te, idx in tes
+      item = window.instanceMap[te.id]
+      if item?
+        item.initEvent(te, keepDispMag)
+        if idx < tes.length - 1 || fromBlankEventConfig
+          item.willChapter()
+          # イベント後の状態に変更
+          item.updateEventAfter()
+          item.didChapter()
+        else if doRunPreview
+          window.previewRunning = true
+          # プレビュー実行
+          item.preview(te, =>
+            # プレビューの実行回数超過
+            window.previewRunning = false
+            # ボタン変更「StopPreview」->「Preview」
+            EventConfig.switchPreviewButton(true)
+            # プレビュー停止
+            @stopAllEventPreview( =>
+              # アイテム再描画
+              @refreshAllItemsFromInstancePageValueIfChanging()
             )
-            # 状態変更フラグON
-            window.worktableItemsChangedState = true
-            # ボタン変更「Preview」->「StopPreview」
-            EventConfig.switchPreviewButton(false)
-            $(window.drawingCanvas).one('click.runPreview', (e) =>
-              # メイン画面クリックでプレビュー停止 & アイテムを再描画
-              @stopAllEventPreview( =>
-                @refreshAllItemsFromInstancePageValueIfChanging()
-              )
+          )
+          # 状態変更フラグON
+          window.worktableItemsChangedState = true
+          # ボタン変更「Preview」->「StopPreview」
+          EventConfig.switchPreviewButton(false)
+          $(window.drawingCanvas).one('click.runPreview', (e) =>
+            # メイン画面クリックでプレビュー停止 & アイテムを再描画
+            @stopAllEventPreview( =>
+              @refreshAllItemsFromInstancePageValueIfChanging()
             )
-      if callback?
-        callback()
-    )
+          )
+    if callback?
+      callback()
+    #)
 
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック

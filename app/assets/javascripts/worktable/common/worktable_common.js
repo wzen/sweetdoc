@@ -638,7 +638,7 @@ WorktableCommon = (function() {
   };
 
   _updatePrevEventsToAfterAndRunPreview = function(teNum, keepDispMag, fromBlankEventConfig, doRunPreview, callback) {
-    var epr, tes;
+    var epr, idx, item, l, len, len1, m, te, tes;
     if (callback == null) {
       callback = null;
     }
@@ -651,43 +651,50 @@ WorktableCommon = (function() {
     }
     tes = epr.routes;
     window.worktableItemsChangedState = true;
-    return Common.updateAllEventsToBefore((function(_this) {
-      return function() {
-        var idx, item, l, len, te;
-        PageValue.removeAllFootprint();
-        teNum = parseInt(teNum);
-        for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
-          te = tes[idx];
-          item = window.instanceMap[te.id];
-          if (item != null) {
-            item.initEvent(te, keepDispMag);
-            if (idx < tes.length - 1 || fromBlankEventConfig) {
-              PageValue.saveInstanceObjectToFootprint(item.id, true, item._event[EventPageValueBase.PageValueKey.DIST_ID]);
-              item.updateEventAfter();
-            } else if (doRunPreview) {
-              window.previewRunning = true;
-              item.preview(te, function() {
-                window.previewRunning = false;
-                EventConfig.switchPreviewButton(true);
-                return _this.stopAllEventPreview(function() {
-                  return _this.refreshAllItemsFromInstancePageValueIfChanging();
-                });
+    PageValue.removeAllFootprint();
+    teNum = parseInt(teNum);
+    for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
+      te = tes[idx];
+      item = window.instanceMap[te.id];
+      if (item != null) {
+        item.resetEvent();
+      }
+    }
+    for (idx = m = 0, len1 = tes.length; m < len1; idx = ++m) {
+      te = tes[idx];
+      item = window.instanceMap[te.id];
+      if (item != null) {
+        item.initEvent(te, keepDispMag);
+        if (idx < tes.length - 1 || fromBlankEventConfig) {
+          item.willChapter();
+          item.updateEventAfter();
+          item.didChapter();
+        } else if (doRunPreview) {
+          window.previewRunning = true;
+          item.preview(te, (function(_this) {
+            return function() {
+              window.previewRunning = false;
+              EventConfig.switchPreviewButton(true);
+              return _this.stopAllEventPreview(function() {
+                return _this.refreshAllItemsFromInstancePageValueIfChanging();
               });
-              window.worktableItemsChangedState = true;
-              EventConfig.switchPreviewButton(false);
-              $(window.drawingCanvas).one('click.runPreview', function(e) {
-                return _this.stopAllEventPreview(function() {
-                  return _this.refreshAllItemsFromInstancePageValueIfChanging();
-                });
+            };
+          })(this));
+          window.worktableItemsChangedState = true;
+          EventConfig.switchPreviewButton(false);
+          $(window.drawingCanvas).one('click.runPreview', (function(_this) {
+            return function(e) {
+              return _this.stopAllEventPreview(function() {
+                return _this.refreshAllItemsFromInstancePageValueIfChanging();
               });
-            }
-          }
+            };
+          })(this));
         }
-        if (callback != null) {
-          return callback();
-        }
-      };
-    })(this));
+      }
+    }
+    if (callback != null) {
+      return callback();
+    }
   };
 
   WorktableCommon.stopAllEventPreview = function(callback) {

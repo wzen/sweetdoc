@@ -14,13 +14,15 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _overlay;
+    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _overlay, _takeScaleFromMainwrapper;
 
     extend(PrivateClass, superClass1);
 
     PrivateClass.EVENT_ID = '2';
 
     PrivateClass.CLASS_DIST_TOKEN = "PI_ScreenEvent";
+
+    PrivateClass.TAKE_SCALE_FROM_MAINWRAPPER = 0.0000;
 
     PrivateClass.actionProperties = {
       methods: {
@@ -50,15 +52,34 @@ ScreenEvent = (function(superClass) {
       var cood;
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      this.beforeScale = 1.0;
+      this._originalScale = $(window.mainWrapper).css('scale');
       cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft());
-      this.beforeX = cood.x;
-      this.beforeY = cood.y;
+      this._originalX = cood.x;
+      this._originalY = cood.y;
+      this.initScale = this.constructor.TAKE_SCALE_FROM_MAINWRAPPER;
+      this.initX = null;
+      this.initY = null;
+      this.beforeX = null;
+      this.beforeY = null;
+      this.beforeScale = null;
     }
 
     PrivateClass.prototype.initEvent = function(event, keepDispMag) {
       this.keepDispMag = keepDispMag != null ? keepDispMag : false;
       return PrivateClass.__super__.initEvent.call(this, event);
+    };
+
+    _takeScaleFromMainwrapper = function() {
+      var cood;
+      if (this.initScale === this.constructor.TAKE_SCALE_FROM_MAINWRAPPER) {
+        this.initScale = $(window.mainWrapper).css('scale');
+        cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft());
+        this.initX = cood.x;
+        this.initY = cood.y;
+        this.beforeX = this.initX;
+        this.beforeY = this.initY;
+        return this.beforeScale = this.initScale;
+      }
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
@@ -69,8 +90,8 @@ ScreenEvent = (function(superClass) {
       if (callback == null) {
         callback = null;
       }
-      pos = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY);
-      this.getJQueryElement().css('scale', this.beforeScale);
+      pos = _convertCenterCoodToSize.call(this, this._originalX, this._originalY);
+      this.getJQueryElement().css('scale', this._originalScale);
       Common.updateScrollContentsPosition(pos.top, pos.left, true, function() {
         if (callback != null) {
           return callback();
@@ -83,6 +104,7 @@ ScreenEvent = (function(superClass) {
     PrivateClass.prototype.updateEventBefore = function() {
       var methodName, size;
       PrivateClass.__super__.updateEventBefore.call(this);
+      _takeScaleFromMainwrapper.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
         this.getJQueryElement().css('scale', this.beforeScale);
@@ -95,33 +117,37 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.updateEventAfter = function() {
-      var methodName, scale, size, x, y;
+      var methodName, size;
       PrivateClass.__super__.updateEventAfter.call(this);
+      _takeScaleFromMainwrapper.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        x = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
-        y = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
-        scale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
-        _overlay.call(this, x, y, scale);
+        this._nowX = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
+        this._nowY = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
+        this._nowScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
+        _overlay.call(this, this._nowX, this._nowY, this._nowScale);
         if (!this.keepDispMag) {
-          size = _convertCenterCoodToSize.call(this, x, y);
+          size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY);
           return Common.updateScrollContentsPosition(size.top, size.left);
         }
       }
     };
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
-      var scale, size, x, y;
-      scale = (parseFloat(this._specificMethodValues.afterZ) - this.beforeScale) * (opt.progress / opt.progressMax) + this.beforeScale;
-      x = ((parseFloat(this._specificMethodValues.afterX) - this.beforeX) * (opt.progress / opt.progressMax)) + this.beforeX;
-      y = ((parseFloat(this._specificMethodValues.afterY) - this.beforeY) * (opt.progress / opt.progressMax)) + this.beforeY;
+      var size;
+      _takeScaleFromMainwrapper.call(this);
+      this._nowScale = (parseFloat(this._specificMethodValues.afterZ) - this.beforeScale) * (opt.progress / opt.progressMax) + this.beforeScale;
+      this._nowX = ((parseFloat(this._specificMethodValues.afterX) - this.beforeX) * (opt.progress / opt.progressMax)) + this.beforeX;
+      this._nowY = ((parseFloat(this._specificMethodValues.afterY) - this.beforeY) * (opt.progress / opt.progressMax)) + this.beforeY;
       if (opt.isPreview) {
-        _overlay.call(this, x, y, scale);
-        this.getJQueryElement().css('scale', 1.0);
+        _overlay.call(this, this._nowX, this._nowY, this._nowScale);
+        if (this.keepDispMag) {
+          this.getJQueryElement().css('scale', 1.0);
+        }
       }
       if (!this.keepDispMag) {
-        this.getJQueryElement().css('scale', scale);
-        size = _convertCenterCoodToSize.call(this, x, y);
+        this.getJQueryElement().css('scale', this._nowScale);
+        size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY);
         return Common.updateScrollContentsPosition(size.top, size.left, true);
       }
     };
@@ -137,6 +163,13 @@ ScreenEvent = (function(superClass) {
         return $('#preview_position_overlay').remove();
       }, 0);
       return PrivateClass.__super__.stopPreview.call(this, loopFinishCallback, callback);
+    };
+
+    PrivateClass.prototype.didChapter = function() {
+      this.beforeX = this._nowX;
+      this.beforeY = this._nowY;
+      this.beforeScale = this._nowScale;
+      return PrivateClass.__super__.didChapter.call(this);
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {

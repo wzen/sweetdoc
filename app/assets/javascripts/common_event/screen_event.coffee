@@ -5,6 +5,7 @@ class ScreenEvent extends CommonEvent
   class @PrivateClass extends CommonEvent.PrivateClass
     @EVENT_ID = '2'
     @CLASS_DIST_TOKEN = "PI_ScreenEvent"
+    @TAKE_SCALE_FROM_MAINWRAPPER = 0.0000
 
     @actionProperties =
     {
@@ -32,20 +33,36 @@ class ScreenEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Screen'
-      @beforeScale = 1.0
+      @_originalScale = $(window.mainWrapper).css('scale')
       cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft())
-      @beforeX = cood.x
-      @beforeY = cood.y
+      @_originalX = cood.x
+      @_originalY = cood.y
+      @initScale = @constructor.TAKE_SCALE_FROM_MAINWRAPPER
+      @initX = null
+      @initY = null
+      @beforeX = null
+      @beforeY = null
+      @beforeScale = null
 
     # イベントの初期化
     # @param [Object] event 設定イベント
     initEvent: (event, @keepDispMag = false) ->
       super(event)
 
+    _takeScaleFromMainwrapper = ->
+      if @initScale == @constructor.TAKE_SCALE_FROM_MAINWRAPPER
+        @initScale = $(window.mainWrapper).css('scale')
+        cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft())
+        @initX = cood.x
+        @initY = cood.y
+        @beforeX = @initX
+        @beforeY = @initY
+        @beforeScale = @initScale
+
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      pos = _convertCenterCoodToSize.call(@, @beforeX, @beforeY)
-      @getJQueryElement().css('scale', @beforeScale)
+      pos = _convertCenterCoodToSize.call(@, @_originalX, @_originalY)
+      @getJQueryElement().css('scale', @_originalScale)
       Common.updateScrollContentsPosition(pos.top, pos.left, true, ->
         if callback?
           callback()
@@ -57,6 +74,7 @@ class ScreenEvent extends CommonEvent
     # イベント前の表示状態にする
     updateEventBefore: ->
       super()
+      _takeScaleFromMainwrapper.call(@)
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
         @getJQueryElement().css('scale', @beforeScale)
@@ -68,28 +86,31 @@ class ScreenEvent extends CommonEvent
     # イベント後の表示状態にする
     updateEventAfter: ->
       super()
+      _takeScaleFromMainwrapper.call(@)
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        x = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
-        y = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
-        scale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
-        _overlay.call(@, x, y, scale)
+        @_nowX = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
+        @_nowY = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
+        @_nowScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
+        _overlay.call(@, @_nowX, @_nowY, @_nowScale)
         if !@keepDispMag
-          size = _convertCenterCoodToSize.call(@, x, y)
+          size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY)
           Common.updateScrollContentsPosition(size.top, size.left)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
-      scale = (parseFloat(@_specificMethodValues.afterZ) - @beforeScale) * (opt.progress / opt.progressMax) + @beforeScale
-      x = ((parseFloat(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax)) + @beforeX
-      y = ((parseFloat(@_specificMethodValues.afterY) - @beforeY) * (opt.progress / opt.progressMax)) + @beforeY
+      _takeScaleFromMainwrapper.call(@)
+      @_nowScale = (parseFloat(@_specificMethodValues.afterZ) - @beforeScale) * (opt.progress / opt.progressMax) + @beforeScale
+      @_nowX = ((parseFloat(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax)) + @beforeX
+      @_nowY = ((parseFloat(@_specificMethodValues.afterY) - @beforeY) * (opt.progress / opt.progressMax)) + @beforeY
       if opt.isPreview
-        _overlay.call(@, x, y, scale)
-        @getJQueryElement().css('scale', 1.0)
+        _overlay.call(@, @_nowX, @_nowY, @_nowScale)
+        if @keepDispMag
+          @getJQueryElement().css('scale', 1.0)
 
       if !@keepDispMag
-        @getJQueryElement().css('scale', scale)
-        size = _convertCenterCoodToSize.call(@, x, y)
+        @getJQueryElement().css('scale', @_nowScale)
+        size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY)
         Common.updateScrollContentsPosition(size.top, size.left, true)
 
     # プレビューを停止
@@ -100,6 +121,18 @@ class ScreenEvent extends CommonEvent
         $('#preview_position_overlay').remove()
       , 0)
       super(loopFinishCallback, callback)
+
+#    willChapter: ->
+#      @beforeX = @_nowX
+#      @beforeY = @_nowY
+#      @beforeScale = @_nowScale
+#      super()
+
+    didChapter: ->
+      @beforeX = @_nowX
+      @beforeY = @_nowY
+      @beforeScale = @_nowScale
+      super()
 
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->
