@@ -69,21 +69,22 @@ class RunCommon
       # 縮小
       updatedProjectScreenSize.height = updateMainHeight - 10
 
+    # FIXME: 今は画面縮小に対応しないが残しておく
     # Zoom 修正
-    widthRate = updatedProjectScreenSize.width / projectScreenSize.width
-    heightRate = updatedProjectScreenSize.height / projectScreenSize.height
-    if widthRate < heightRate
-      zoom = widthRate
-    else
-      zoom = heightRate
-    if zoom == 0.0
-      zoom = 0.01
-    updatedProjectScreenSize.width = projectScreenSize.width * zoom
-    updatedProjectScreenSize.height = projectScreenSize.height * zoom
-    $('#main').height(updateMainHeight)
-    $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
-    updateMainWrapperPercent = 100 / zoom
-    window.mainWrapper.css({transform: "scale(#{zoom}, #{zoom})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
+#    widthRate = updatedProjectScreenSize.width / projectScreenSize.width
+#    heightRate = updatedProjectScreenSize.height / projectScreenSize.height
+#    if widthRate < heightRate
+#      zoom = widthRate
+#    else
+#      zoom = heightRate
+#    if zoom == 0.0
+#      zoom = 0.01
+#    updatedProjectScreenSize.width = projectScreenSize.width * zoom
+#    updatedProjectScreenSize.height = projectScreenSize.height * zoom
+#    $('#main').height(updateMainHeight)
+#    $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
+#    updateMainWrapperPercent = 100
+#    window.mainWrapper.css({transform: "scale(#{zoom}, #{zoom})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->

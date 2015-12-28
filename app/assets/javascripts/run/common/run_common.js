@@ -71,7 +71,7 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    var heightRate, i, infoHeight, padding, projectScreenSize, updateMainHeight, updateMainWidth, updateMainWrapperPercent, updatedProjectScreenSize, widthRate, zoom;
+    var i, infoHeight, padding, projectScreenSize, updateMainHeight, updateMainWidth, updatedProjectScreenSize;
     updateMainWidth = $('#contents').width();
     infoHeight = 0;
     padding = 0;
@@ -87,31 +87,8 @@ RunCommon = (function() {
       updatedProjectScreenSize.width = updateMainWidth - 30;
     }
     if (updateMainHeight < projectScreenSize.height + 10) {
-      updatedProjectScreenSize.height = updateMainHeight - 10;
+      return updatedProjectScreenSize.height = updateMainHeight - 10;
     }
-    widthRate = updatedProjectScreenSize.width / projectScreenSize.width;
-    heightRate = updatedProjectScreenSize.height / projectScreenSize.height;
-    if (widthRate < heightRate) {
-      zoom = widthRate;
-    } else {
-      zoom = heightRate;
-    }
-    if (zoom === 0.0) {
-      zoom = 0.01;
-    }
-    updatedProjectScreenSize.width = projectScreenSize.width * zoom;
-    updatedProjectScreenSize.height = projectScreenSize.height * zoom;
-    $('#main').height(updateMainHeight);
-    $('#project_wrapper').css({
-      width: updatedProjectScreenSize.width,
-      height: updatedProjectScreenSize.height
-    });
-    updateMainWrapperPercent = 100 / zoom;
-    return window.mainWrapper.css({
-      transform: "scale(" + zoom + ", " + zoom + ")",
-      width: updateMainWrapperPercent + "%",
-      height: updateMainWrapperPercent + "%"
-    });
   };
 
   RunCommon.resizeMainContainerEvent = function() {
