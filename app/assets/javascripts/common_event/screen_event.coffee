@@ -33,7 +33,7 @@ class ScreenEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Screen'
-      @_originalScale = $(window.mainWrapper).css('scale')
+      @_originalScale = _getScale.call(@)
       cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft())
       @_originalX = cood.x
       @_originalY = cood.y
@@ -51,7 +51,7 @@ class ScreenEvent extends CommonEvent
 
     _takeScaleFromMainwrapper = ->
       if @initScale == @constructor.TAKE_SCALE_FROM_MAINWRAPPER
-        @initScale = $(window.mainWrapper).css('scale')
+        @initScale = _getScale.call(@)
         cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft())
         @initX = cood.x
         @initY = cood.y
@@ -62,7 +62,7 @@ class ScreenEvent extends CommonEvent
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
       pos = _convertCenterCoodToSize.call(@, @_originalX, @_originalY)
-      @getJQueryElement().css('scale', @_originalScale)
+      _setScale.call(@, @_originalScale)
       Common.updateScrollContentsPosition(pos.top, pos.left, true, ->
         if callback?
           callback()
@@ -77,7 +77,7 @@ class ScreenEvent extends CommonEvent
       _takeScaleFromMainwrapper.call(@)
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        @getJQueryElement().css('scale', @beforeScale)
+        _setScale.call(@, @beforeScale)
         _overlay.call(@, @beforeX, @beforeY, @beforeScale)
         if !@keepDispMag
           size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY)
@@ -106,10 +106,10 @@ class ScreenEvent extends CommonEvent
       if opt.isPreview
         _overlay.call(@, @_nowX, @_nowY, @_nowScale)
         if @keepDispMag
-          @getJQueryElement().css('scale', 1.0)
+          _setScale.call(@, 1.0)
 
       if !@keepDispMag
-        @getJQueryElement().css('scale', @_nowScale)
+        _setScale.call(@, @_nowScale)
         size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY)
         Common.updateScrollContentsPosition(size.top, size.left, true)
 
@@ -227,6 +227,14 @@ class ScreenEvent extends CommonEvent
       y = top + height / 2.0
       x = left + width / 2.0
       return {x: x, y: y}
+
+    _setScale = (scale) ->
+      @getJQueryElement().css('transform', "scale(#{scale}, #{scale})")
+
+    _getScale = ->
+      matrix = @getJQueryElement().css('transform')
+      values = matrix.match(/-?[\d\.]+/g);
+      return parseFloat(values[0])
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 

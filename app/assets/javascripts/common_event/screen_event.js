@@ -14,7 +14,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _overlay, _takeScaleFromMainwrapper;
+    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _getScale, _overlay, _setScale, _takeScaleFromMainwrapper;
 
     extend(PrivateClass, superClass1);
 
@@ -52,7 +52,7 @@ ScreenEvent = (function(superClass) {
       var cood;
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      this._originalScale = $(window.mainWrapper).css('scale');
+      this._originalScale = _getScale.call(this);
       cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft());
       this._originalX = cood.x;
       this._originalY = cood.y;
@@ -72,7 +72,7 @@ ScreenEvent = (function(superClass) {
     _takeScaleFromMainwrapper = function() {
       var cood;
       if (this.initScale === this.constructor.TAKE_SCALE_FROM_MAINWRAPPER) {
-        this.initScale = $(window.mainWrapper).css('scale');
+        this.initScale = _getScale.call(this);
         cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft());
         this.initX = cood.x;
         this.initY = cood.y;
@@ -91,7 +91,7 @@ ScreenEvent = (function(superClass) {
         callback = null;
       }
       pos = _convertCenterCoodToSize.call(this, this._originalX, this._originalY);
-      this.getJQueryElement().css('scale', this._originalScale);
+      _setScale.call(this, this._originalScale);
       Common.updateScrollContentsPosition(pos.top, pos.left, true, function() {
         if (callback != null) {
           return callback();
@@ -107,7 +107,7 @@ ScreenEvent = (function(superClass) {
       _takeScaleFromMainwrapper.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        this.getJQueryElement().css('scale', this.beforeScale);
+        _setScale.call(this, this.beforeScale);
         _overlay.call(this, this.beforeX, this.beforeY, this.beforeScale);
         if (!this.keepDispMag) {
           size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY);
@@ -142,11 +142,11 @@ ScreenEvent = (function(superClass) {
       if (opt.isPreview) {
         _overlay.call(this, this._nowX, this._nowY, this._nowScale);
         if (this.keepDispMag) {
-          this.getJQueryElement().css('scale', 1.0);
+          _setScale.call(this, 1.0);
         }
       }
       if (!this.keepDispMag) {
-        this.getJQueryElement().css('scale', this._nowScale);
+        _setScale.call(this, this._nowScale);
         size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY);
         return Common.updateScrollContentsPosition(size.top, size.left, true);
       }
@@ -285,6 +285,17 @@ ScreenEvent = (function(superClass) {
         x: x,
         y: y
       };
+    };
+
+    _setScale = function(scale) {
+      return this.getJQueryElement().css('transform', "scale(" + scale + ", " + scale + ")");
+    };
+
+    _getScale = function() {
+      var matrix, values;
+      matrix = this.getJQueryElement().css('transform');
+      values = matrix.match(/-?[\d\.]+/g);
+      return parseFloat(values[0]);
     };
 
     return PrivateClass;
