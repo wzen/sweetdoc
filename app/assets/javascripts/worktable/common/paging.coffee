@@ -180,8 +180,6 @@ class Paging
       EventConfig.removeAllConfig()
       # Mainコンテナ作成
       created = Common.createdMainContainerIfNeeded(selectedPageNum, beforePageNum > selectedPageNum)
-      # ページングクラス作成
-      pageFlip = new PageFlip(beforePageNum, selectedPageNum)
       # ページ番号更新
       PageValue.setPageNum(selectedPageNum)
       # 新規コンテナ初期化
@@ -194,26 +192,25 @@ class Paging
           WorktableCommon.changeMode(window.mode, selectedPageNum)
           # タイムライン更新
           Timeline.refreshAllTimeline()
-
-          # ページめくりアニメーション
-          pageFlip.startRender( ->
-            # 隠したビューを非表示にする
-            className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
-            section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-            section.hide()
-            if window.debug
-              console.log('[selectPage] deleted pageNum:' + beforePageNum)
-            # 隠したビューのアイテムを削除
-            Common.removeAllItem(beforePageNum)
-            #Timeline.refreshAllTimeline()
-            if created
-              # 履歴に画面初期時状態を保存
-              OperationHistory.add(true)
-            # キャッシュ保存
-            LocalStorage.saveAllPageValues()
-            # 選択メニューの更新
-            self.createPageSelectMenu()
-          )
+          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', selectedPageNum)
+          newSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+          newSection.show()
+          # 隠したビューを非表示にする
+          className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
+          oldSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
+          oldSection.hide()
+          if window.debug
+            console.log('[selectPage] deleted pageNum:' + beforePageNum)
+          # 隠したビューのアイテムを削除
+          Common.removeAllItem(beforePageNum)
+          #Timeline.refreshAllTimeline()
+          if created
+            # 履歴に画面初期時状態を保存
+            OperationHistory.add(true)
+          # キャッシュ保存
+          LocalStorage.saveAllPageValues()
+          # 選択メニューの更新
+          self.createPageSelectMenu()
         )
       )
     )
