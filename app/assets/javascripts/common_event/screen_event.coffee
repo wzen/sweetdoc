@@ -34,7 +34,7 @@ class ScreenEvent extends CommonEvent
       super()
       @name = 'Screen'
       @_originalScale = _getScale.call(@)
-      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft())
+      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @_originalScale)
       @_originalX = cood.x
       @_originalY = cood.y
       @initScale = @constructor.TAKE_SCALE_FROM_MAINWRAPPER
@@ -52,7 +52,7 @@ class ScreenEvent extends CommonEvent
     _takeScaleFromMainwrapper = ->
       if @initScale == @constructor.TAKE_SCALE_FROM_MAINWRAPPER
         @initScale = _getScale.call(@)
-        cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft())
+        cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @initScale)
         @initX = cood.x
         @initY = cood.y
         @beforeX = @initX
@@ -61,7 +61,7 @@ class ScreenEvent extends CommonEvent
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      pos = _convertCenterCoodToSize.call(@, @_originalX, @_originalY)
+      pos = _convertCenterCoodToSize.call(@, @_originalX, @_originalY, @_originalScale)
       _setScale.call(@, @_originalScale)
       Common.updateScrollContentsPosition(pos.top, pos.left, true, ->
         if callback?
@@ -80,7 +80,7 @@ class ScreenEvent extends CommonEvent
         _setScale.call(@, @beforeScale)
         _overlay.call(@, @beforeX, @beforeY, @beforeScale)
         if !@keepDispMag
-          size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY)
+          size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY, @beforeScale)
           Common.updateScrollContentsPosition(size.top, size.left)
 
     # イベント後の表示状態にする
@@ -94,7 +94,7 @@ class ScreenEvent extends CommonEvent
         @_nowScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
         _overlay.call(@, @_nowX, @_nowY, @_nowScale)
         if !@keepDispMag
-          size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY)
+          size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
           Common.updateScrollContentsPosition(size.top, size.left)
 
     # 画面移動イベント
@@ -110,7 +110,7 @@ class ScreenEvent extends CommonEvent
 
       if !@keepDispMag
         _setScale.call(@, @_nowScale)
-        size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY)
+        size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
         Common.updateScrollContentsPosition(size.top, size.left, true)
 
     # プレビューを停止
@@ -121,12 +121,6 @@ class ScreenEvent extends CommonEvent
         $('#preview_position_overlay').remove()
       , 0)
       super(loopFinishCallback, callback)
-
-#    willChapter: ->
-#      @beforeX = @_nowX
-#      @beforeY = @_nowY
-#      @beforeScale = @_nowScale
-#      super()
 
     didChapter: ->
       @beforeX = @_nowX
@@ -178,7 +172,7 @@ class ScreenEvent extends CommonEvent
         context.beginPath();
         context.rect(0, 0, width, height);
         # 枠を作成
-        size = _convertCenterCoodToSize.call(@, x, y)
+        size = _convertCenterCoodToSize.call(@, x, y, 1.0)
         w = size.width / scale
         h = size.height / scale
         top = y - h / 2.0
@@ -207,23 +201,23 @@ class ScreenEvent extends CommonEvent
       $('.keep_mag_base').remove()
 
       if scale > 1.0
-        size = _convertCenterCoodToSize.call(@, x, y)
+        size = _convertCenterCoodToSize.call(@, x, y, scale)
         style = "position:absolute;top:#{size.top}px;left:#{size.left}px;width:#{size.width}px;height:#{size.height}px;"
         emt = $("<div class='keep_mag_base' style='#{style}'></div>")
         window.scrollInside.append(emt)
 
-    _convertCenterCoodToSize = (x, y) ->
+    _convertCenterCoodToSize = (x, y, scale) ->
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-      width = screenSize.width
-      height = screenSize.height
+      width = screenSize.width / scale
+      height = screenSize.height / scale
       top = y - height / 2.0
       left = x - width / 2.0
       return {top: top, left: left, width: width, height: height}
 
-    _convertTopLeftToCenterCood = (top, left) ->
+    _convertTopLeftToCenterCood = (top, left, scale) ->
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
-      width = screenSize.width
-      height = screenSize.height
+      width = screenSize.width / scale
+      height = screenSize.height / scale
       y = top + height / 2.0
       x = left + width / 2.0
       return {x: x, y: y}
@@ -233,6 +227,8 @@ class ScreenEvent extends CommonEvent
 
     _getScale = ->
       matrix = @getJQueryElement().css('transform')
+      if matrix == 'none'
+        return 1.0
       values = matrix.match(/-?[\d\.]+/g);
       return parseFloat(values[0])
 

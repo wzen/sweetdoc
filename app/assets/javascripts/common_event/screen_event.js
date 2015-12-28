@@ -53,7 +53,7 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
       this._originalScale = _getScale.call(this);
-      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft());
+      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this._originalScale);
       this._originalX = cood.x;
       this._originalY = cood.y;
       this.initScale = this.constructor.TAKE_SCALE_FROM_MAINWRAPPER;
@@ -73,7 +73,7 @@ ScreenEvent = (function(superClass) {
       var cood;
       if (this.initScale === this.constructor.TAKE_SCALE_FROM_MAINWRAPPER) {
         this.initScale = _getScale.call(this);
-        cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft());
+        cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this.initScale);
         this.initX = cood.x;
         this.initY = cood.y;
         this.beforeX = this.initX;
@@ -90,7 +90,7 @@ ScreenEvent = (function(superClass) {
       if (callback == null) {
         callback = null;
       }
-      pos = _convertCenterCoodToSize.call(this, this._originalX, this._originalY);
+      pos = _convertCenterCoodToSize.call(this, this._originalX, this._originalY, this._originalScale);
       _setScale.call(this, this._originalScale);
       Common.updateScrollContentsPosition(pos.top, pos.left, true, function() {
         if (callback != null) {
@@ -110,7 +110,7 @@ ScreenEvent = (function(superClass) {
         _setScale.call(this, this.beforeScale);
         _overlay.call(this, this.beforeX, this.beforeY, this.beforeScale);
         if (!this.keepDispMag) {
-          size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY);
+          size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY, this.beforeScale);
           return Common.updateScrollContentsPosition(size.top, size.left);
         }
       }
@@ -127,7 +127,7 @@ ScreenEvent = (function(superClass) {
         this._nowScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
         _overlay.call(this, this._nowX, this._nowY, this._nowScale);
         if (!this.keepDispMag) {
-          size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY);
+          size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);
           return Common.updateScrollContentsPosition(size.top, size.left);
         }
       }
@@ -147,7 +147,7 @@ ScreenEvent = (function(superClass) {
       }
       if (!this.keepDispMag) {
         _setScale.call(this, this._nowScale);
-        size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY);
+        size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);
         return Common.updateScrollContentsPosition(size.top, size.left, true);
       }
     };
@@ -223,7 +223,7 @@ ScreenEvent = (function(superClass) {
         context.fillStyle = "rgba(33, 33, 33, 0.5)";
         context.beginPath();
         context.rect(0, 0, width, height);
-        size = _convertCenterCoodToSize.call(this, x, y);
+        size = _convertCenterCoodToSize.call(this, x, y, 1.0);
         w = size.width / scale;
         h = size.height / scale;
         top = y - h / 2.0;
@@ -252,18 +252,18 @@ ScreenEvent = (function(superClass) {
       var emt, size, style;
       $('.keep_mag_base').remove();
       if (scale > 1.0) {
-        size = _convertCenterCoodToSize.call(this, x, y);
+        size = _convertCenterCoodToSize.call(this, x, y, scale);
         style = "position:absolute;top:" + size.top + "px;left:" + size.left + "px;width:" + size.width + "px;height:" + size.height + "px;";
         emt = $("<div class='keep_mag_base' style='" + style + "'></div>");
         return window.scrollInside.append(emt);
       }
     };
 
-    _convertCenterCoodToSize = function(x, y) {
+    _convertCenterCoodToSize = function(x, y, scale) {
       var height, left, screenSize, top, width;
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-      width = screenSize.width;
-      height = screenSize.height;
+      width = screenSize.width / scale;
+      height = screenSize.height / scale;
       top = y - height / 2.0;
       left = x - width / 2.0;
       return {
@@ -274,11 +274,11 @@ ScreenEvent = (function(superClass) {
       };
     };
 
-    _convertTopLeftToCenterCood = function(top, left) {
+    _convertTopLeftToCenterCood = function(top, left, scale) {
       var height, screenSize, width, x, y;
       screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-      width = screenSize.width;
-      height = screenSize.height;
+      width = screenSize.width / scale;
+      height = screenSize.height / scale;
       y = top + height / 2.0;
       x = left + width / 2.0;
       return {
@@ -294,6 +294,9 @@ ScreenEvent = (function(superClass) {
     _getScale = function() {
       var matrix, values;
       matrix = this.getJQueryElement().css('transform');
+      if (matrix === 'none') {
+        return 1.0;
+      }
       values = matrix.match(/-?[\d\.]+/g);
       return parseFloat(values[0]);
     };
