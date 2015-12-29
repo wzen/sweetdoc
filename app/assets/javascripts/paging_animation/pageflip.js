@@ -2,257 +2,166 @@
 var PageFlip;
 
 PageFlip = (function() {
-  function PageFlip() {}
+  PageFlip.DIRECTION = {};
 
-  PageFlip.start = function(callback) {
-    var canvas, height, sections, width;
+  PageFlip.DIRECTION.FORWARD = 1;
+
+  PageFlip.DIRECTION.BACK = 2;
+
+  function PageFlip(beforePageNum, afterPageNum) {
+    var className, section, zIndexMax;
+    this.PAGE_WIDTH = $('#pages').width();
+    this.PAGE_HEIGHT = $('#pages').height();
+    this.CANVAS_PADDING = 20;
+    this.flipPageNum = beforePageNum < afterPageNum ? beforePageNum : afterPageNum;
+    if (window.debug) {
+      console.log('[PageFlip constructor] flipPageNum:' + this.flipPageNum);
+    }
+    this.zIndex = Common.plusPagingZindex(0, this.flipPageNum);
+    zIndexMax = Common.plusPagingZindex(0, 0);
+    $("#" + Constant.Paging.ROOT_ID).append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:" + zIndexMax + "'><canvas id='pageflip-canvas' style='z-index:" + zIndexMax + "'></canvas></div>");
+    this.canvas = document.getElementById("pageflip-canvas");
+    this.context = this.canvas.getContext("2d");
+    this.canvas.width = this.PAGE_WIDTH + (this.CANVAS_PADDING * 2);
+    this.canvas.height = this.PAGE_HEIGHT + (this.CANVAS_PADDING * 2);
+    this.canvas.style.top = -this.CANVAS_PADDING + "px";
+    this.canvas.style.left = -this.CANVAS_PADDING + "px";
+    this.direction = beforePageNum < afterPageNum ? PageFlip.DIRECTION.FORWARD : PageFlip.DIRECTION.BACK;
+    if (window.debug) {
+      console.log('[PageFlip constructor] direction:' + this.direction);
+    }
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum);
+    section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    section.show();
+    if (this.direction === PageFlip.DIRECTION.FORWARD) {
+      section.css('width', '');
+    } else if (this.direction === PageFlip.DIRECTION.BACK) {
+      section.css('width', '0');
+    }
+  }
+
+  PageFlip.prototype.startRender = function(callback) {
+    var className, pages, point, timer;
     if (callback == null) {
       callback = null;
     }
-    width = $('#pages').width();
-    height = $('#pages').height();
-    $(this).wrap("<div class='flip_gallery'>");
-    sections = $(this).find(".section");
-    canvas = $(document.createElement("canvas")).attr({
-      width: width,
-      height: height
-    }).css({
-      margin: 0,
-      width: width + "px",
-      height: height + "px"
-    });
-    $(this).css({
-      position: "absolute",
-      left: "-9000px",
-      top: "-9000px"
-    }).after(canvas);
-    return this.run($(this).next(), width, height, sections, callback);
+    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', this.flipPageNum);
+    pages = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+    if (this.direction === PageFlip.DIRECTION.FORWARD) {
+      this.flip = {
+        progress: 1,
+        target: -0.25,
+        page: pages
+      };
+      point = this.PAGE_WIDTH;
+      return timer = setInterval((function(_this) {
+        return function() {
+          point -= 50;
+          if (point < -_this.CANVAS_PADDING) {
+            point = -_this.CANVAS_PADDING;
+            _this.flip.progress = 0;
+            _this.render(point);
+            clearInterval(timer);
+            $('#pageflip-root').remove();
+            if (callback != null) {
+              callback();
+            }
+          }
+          return _this.render(point);
+        };
+      })(this), 50);
+    } else if (this.direction === PageFlip.DIRECTION.BACK) {
+      this.flip = {
+        progress: -0.25,
+        target: 1,
+        page: pages
+      };
+      point = -this.CANVAS_PADDING;
+      return timer = setInterval((function(_this) {
+        return function() {
+          point += 50;
+          if (point > _this.PAGE_WIDTH) {
+            point = _this.PAGE_WIDTH;
+            _this.flip.progress = 1;
+            _this.render(point);
+            clearInterval(timer);
+            $('#pageflip-root').remove();
+            if (callback != null) {
+              callback();
+            }
+          }
+          return _this.render(point);
+        };
+      })(this), 50);
+    }
   };
 
-  PageFlip.run = function(canvas, width, height, sections, callback) {
-    var _cornerCurlIn, _cornerMove, _curlShape, _draw, _flip, animationTimer, background, baseFlipX, baseFlipY, basemX, basemY, canvas2, cornersTop, ctx, ctx2, curlDuration, curlSize, curling, dragging, el, flipDuration, flipping, gradientColors, inCanvas, index, init, lastmX, lastmY, loaded, mX, mY, mousedown, obj, onCorner, patterns, scale, sideLeft, startDate;
-    obj = this;
-    el = canvas.prev();
-    index = 0;
-    init = false;
-    background = 'transparent';
-    cornersTop = true;
-    gradientColors = ['#4F2727', '#FF8F8F', '#F00'];
-    curlSize = 0.1;
-    scale = 'noresize';
-    patterns = [];
-    canvas2 = canvas.clone();
-    ctx2 = canvas2[0].getContext("2d");
-    ctx = canvas[0].getContext("2d");
-    loaded = 0;
-    sections = sections.each(function(i) {
-      var section;
-      if (patterns[i]) {
-        return;
-      }
-      section = this;
-      section.onload = function() {
-        var r, rx, ry;
-        r = 1;
-        if (scale !== "noresize") {
-          rx = width / this.width;
-          ry = height / this.height;
-          if (scale === "fit") {
-            r = rx < 1 || ry < 1 ? Math.min(rx, ry) : 1;
-          }
-          if (scale === "fill") {
-            r = Math.min(rx, ry);
-          }
-        }
-        $(section).data("flip.scale", r);
-        patterns[i] = ctx.createPattern(section, "no-repeat");
-        loaded += 1;
-        if (loaded === sections.length && !init) {
-          init = true;
-          return _draw();
-        }
-      };
-      if (section.complete) {
-        return window.setTimeout(function() {
-          return section.onload();
-        }, 10);
-      }
+  PageFlip.prototype.render = function(point) {
+    if (point < -this.CANVAS_PADDING || point > this.PAGE_WIDTH) {
+      return;
+    }
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.flip.progress += (this.flip.target - this.flip.progress) * 0.2;
+    return this.drawFlip(this.flip);
+  };
+
+  PageFlip.prototype.drawFlip = function(flip) {
+    var foldGradient, foldWidth, foldX, leftShadowGradient, leftShadowWidth, paperShadowWidth, rightShadowGradient, rightShadowWidth, strength, verticalOutdent;
+    strength = 1 - Math.abs(flip.progress);
+    foldWidth = 0;
+    foldX = this.PAGE_WIDTH * flip.progress + foldWidth;
+    verticalOutdent = 20 * strength;
+    paperShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(1 - flip.progress, 0.5), 0);
+    rightShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);
+    leftShadowWidth = (this.PAGE_WIDTH * 0.5) * Math.max(Math.min(strength, 0.5), 0);
+    flip.page.css({
+      'width': Math.max(foldX, 0) + "px",
+      'z-index': this.zIndex
     });
-    mX = width;
-    mY = height;
-    basemX = mX * (1 - curlSize);
-    basemY = mY * curlSize;
-    sideLeft = false;
-    onCorner = false;
-    curlDuration = 400;
-    curling = false;
-    animationTimer = null;
-    startDate = null;
-    flipDuration = 700;
-    flipping = false;
-    baseFlipX = null;
-    baseFlipY = null;
-    lastmX = null;
-    lastmY = null;
-    inCanvas = false;
-    mousedown = false;
-    dragging = false;
-    canvas.click(function() {
-      if (onCorner && !flipping) {
-        flipping = true;
-        c.triggerHandler("mousemove");
-        window.clearInterval(animationTimer);
-        startDate = new Date().getTime();
-        baseFlipX = mX;
-        baseFlipY = mY;
-        animationTimer = window.setInterval(_flip, 10);
-        index += sideLeft ? -1 : 1;
-        if (index < 0) {
-          index = sections.length - 1;
-        }
-        if (index === sections.length) {
-          index = 0;
-        }
-        el.trigger("flip.jflip", [index, sections.length]);
-      }
-      return false;
-    });
-    _flip = function() {
-      var date, delta;
-      date = new Date();
-      delta = date.getTime() - startDate;
-      if (delta >= flipDuration) {
-        window.clearInterval(animationTimer);
-        if (sideLeft) {
-          sections.unshift(sections.pop());
-          patterns.unshift(patterns.pop());
-        } else {
-          sections.push(sections.shift());
-          patterns.push(patterns.shift());
-        }
-        mX = width;
-        mY = height;
-        _draw();
-        flipping = false;
-        if (inCanvas) {
-          startDate = new Date().getTime();
-          animationTimer = window.setInterval(_cornerCurlIn, 10);
-          c.triggerHandler("mousemove");
-        }
-        return;
-      }
-      mX = baseFlipX - 2 * width * delta / flipDuration;
-      mY = baseFlipY + 2 * height * delta / flipDuration;
-      return _draw();
-    };
-    _cornerMove = function() {
-      var date, delta, drawing;
-      date = new Date();
-      delta = date.getTime() - startDate;
-      mX = basemX + Math.sin(Math.PI * 2 * delta / 1000);
-      mY = basemY + Math.cos(Math.PI * 2 * delta / 1000);
-      drawing = true;
-      return window.setTimeout(_draw, 0);
-    };
-    _cornerCurlIn = function() {
-      var date, delta;
-      date = new Date();
-      delta = date.getTime() - startDate;
-      if (delta >= curlDuration) {
-        window.clearInterval(animationTimer);
-        startDate = new Date().getTime();
-        animationTimer = window.setInterval(_cornerMove, 10);
-      }
-      mX = width - (width - basemX) * delta / curlDuration;
-      mY = basemY * delta / curlDuration;
-      return _draw();
-    };
-    _curlShape = function(m, q) {
-      var intx0, intyW;
-      intyW = m * width + q;
-      intx0 = -q / m;
-      ctx.beginPath();
-      ctx.moveTo(width, Math.min(intyW, height));
-      ctx.lineTo(width, 0);
-      ctx.lineTo(Math.max(intx0, 0), 0);
-      if (intx0 < 0) {
-        ctx.lineTo(0, Math.min(q, height));
-        if (q < height) {
-          ctx.lineTo((height - q) / m, height);
-        }
-        return ctx.lineTo(width, height);
-      } else {
-        if (intyW < height) {
-          return ctx.lineTo(width, intyW);
-        } else {
-          ctx.lineTo((height - q) / m, height);
-          return ctx.lineTo(width, height);
-        }
-      }
-    };
-    return _draw = function() {
-      var c, d, gradient, img, int2x, int2y, intx, inty, m, m2, q, q2, r, stopHighlight, sx, sy, tx, ty;
-      if (!init) {
-        return;
-      }
-      ctx.fillStyle = background;
-      ctx.fillRect(0, 0, width, height);
-      img = sections[0];
-      r = $(img).data("flip.scale");
-      ctx.drawImage(img, (width - img.width * r) / 2, (height - img.height * r) / 2, img.width * r, img.height * r);
-      if (mY && mX !== width) {
-        m = 2;
-        q = (mY - m * (mX + width)) / 2;
-        m2 = mY / (width - mX);
-        q2 = mX * m2;
-        if (m === m2) {
-          return;
-        }
-        sx = 1;
-        sy = 1;
-        tx = 0;
-        ty = 0;
-        ctx.save();
-        if (sideLeft) {
-          tx = width;
-          sx = -1;
-        }
-        if (!cornersTop) {
-          ty = height;
-          sy = -1;
-        }
-        ctx.translate(tx, ty);
-        ctx.scale(sx, sy);
-        intx = (q2 - q) / (m - m2);
-        inty = m * intx + q;
-        int2x = (2 * inty + intx + 2 * m * mX - 2 * mY) / (2 * m + 1);
-        int2y = -int2x / m + inty + intx / m;
-        d = Math.sqrt(Math.pow(intx - int2x, 2) + Math.pow(inty - int2y, 2));
-        stopHighlight = Math.min(d * 0.5, 30);
-        c = ctx;
-        gradient = c.createLinearGradient(intx, inty, int2x, int2y);
-        gradient.addColorStop(0, gradientColors[0]);
-        gradient.addColorStop(stopHighlight / d, gradientColors[1]);
-        gradient.addColorStop(1, gradientColors[2]);
-        c.fillStyle = gradient;
-        c.beginPath();
-        c.moveTo(-q / m, 0);
-        c.quadraticCurveTo((-q / m + mX) / 2 + 0.02 * mX, mY / 2, mX, mY);
-        c.quadraticCurveTo((width + mX) / 2, (m * width + q + mY) / 2 - 0.02 * (height - mY), width, m * width + q);
-        c.fill();
-        gradient = null;
-        ctx.fillStyle = background;
-        _curlShape(m, q);
-        ctx.fill();
-        _curlShape(m, q);
-        img = sideLeft ? sections[sections.length - 1] : sections[1];
-        r = $(img).data("flip.scale");
-        ctx.save();
-        ctx.clip();
-        ctx.drawImage(img, (width - img.width * r) / 2, (height - img.height * r) / 2, img.width * r, img.height * r);
-        return ctx.restore();
-      }
-    };
+    this.context.save();
+    this.context.strokeStyle = 'rgba(0,0,0,' + (0.05 * strength) + ')';
+    this.context.lineWidth = 30 * strength;
+    this.context.beginPath();
+    this.context.moveTo(foldX - foldWidth, -verticalOutdent * 0.5);
+    this.context.lineTo(foldX - foldWidth, this.PAGE_HEIGHT + (verticalOutdent * 0.5));
+    this.context.stroke();
+    rightShadowGradient = this.context.createLinearGradient(foldX, 0, foldX + rightShadowWidth, 0);
+    rightShadowGradient.addColorStop(0, 'rgba(0,0,0,' + (strength * 0.2) + ')');
+    rightShadowGradient.addColorStop(0.8, 'rgba(0,0,0,0.0)');
+    this.context.fillStyle = rightShadowGradient;
+    this.context.beginPath();
+    this.context.moveTo(foldX, 0);
+    this.context.lineTo(foldX + rightShadowWidth, 0);
+    this.context.lineTo(foldX + rightShadowWidth, this.PAGE_HEIGHT);
+    this.context.lineTo(foldX, this.PAGE_HEIGHT);
+    this.context.fill();
+    leftShadowGradient = this.context.createLinearGradient(foldX - foldWidth - leftShadowWidth, 0, foldX - foldWidth, 0);
+    leftShadowGradient.addColorStop(0, 'rgba(0,0,0,0.0)');
+    leftShadowGradient.addColorStop(1, 'rgba(0,0,0,' + (strength * 0.15) + ')');
+    this.context.fillStyle = leftShadowGradient;
+    this.context.beginPath();
+    this.context.moveTo(foldX - foldWidth - leftShadowWidth, 0);
+    this.context.lineTo(foldX - foldWidth, 0);
+    this.context.lineTo(foldX - foldWidth, this.PAGE_HEIGHT);
+    this.context.lineTo(foldX - foldWidth - leftShadowWidth, this.PAGE_HEIGHT);
+    this.context.fill();
+    foldGradient = this.context.createLinearGradient(foldX - paperShadowWidth, 0, foldX, 0);
+    foldGradient.addColorStop(0.35, '#fafafa');
+    foldGradient.addColorStop(0.73, '#eeeeee');
+    foldGradient.addColorStop(0.9, '#fafafa');
+    foldGradient.addColorStop(1.0, '#e2e2e2');
+    this.context.fillStyle = foldGradient;
+    this.context.strokeStyle = 'rgba(0,0,0,0.06)';
+    this.context.lineWidth = 0.5;
+    this.context.beginPath();
+    this.context.moveTo(foldX, 0);
+    this.context.lineTo(foldX, this.PAGE_HEIGHT);
+    this.context.quadraticCurveTo(foldX, this.PAGE_HEIGHT + (verticalOutdent * 2), foldX - foldWidth, this.PAGE_HEIGHT + verticalOutdent);
+    this.context.lineTo(foldX - foldWidth, -verticalOutdent);
+    this.context.quadraticCurveTo(foldX, -verticalOutdent * 2, foldX, 0);
+    this.context.fill();
+    this.context.stroke();
+    return this.context.restore();
   };
 
   return PageFlip;

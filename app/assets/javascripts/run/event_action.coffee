@@ -101,6 +101,8 @@ class EventAction
             console.log('[nextPage] created page instance')
         # Mainコンテナ作成
         Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum)
+        # ページングアニメーションクラス作成
+        pageFlip = new PageFlip(beforePageNum, afterPageNum)
         # 新規コンテナ初期化
         RunCommon.initMainContainer()
         PageValue.adjustInstanceAndEventOnPage()
@@ -110,7 +112,7 @@ class EventAction
           # イベント反応無効
           @thisPage().thisChapter().disableEventHandle()
           # ページングアニメーション
-          $("#pages").jFlip($('#pages').width(), $('#pages').height(), {cornersTop:false}).on("flip.jflip",(event,index,total) ->
+          pageFlip.startRender( =>
             # 隠したビューを非表示にする
             className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
             section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
