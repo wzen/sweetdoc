@@ -9,23 +9,28 @@
         <span class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"><%= @title %></span>
     </div>
     <div class="creator">
-        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"><%= @creator %></span>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"><%= @creator.name %></span>
     </div>
 
     <% if show_page_num %>
         <div class="page">
-            <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>"></span>
-            <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"><%= @page_max %></span>
+          <span>Page:</span>
+          <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>"></span>
+          <span>/</span>
+          <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"><%= @page_max %></span>
         </div>
     <% end %>
 
     <% if show_chapter_num %>
         <div class="fork">
-            <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
+          <span>Fork:</span>
+          <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
         </div>
         <div class="chapter">
-            <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
-            <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
+          <span>Chapter:</span>
+          <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
+          <span>/</span>
+          <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
         </div>
     <% end %>
 

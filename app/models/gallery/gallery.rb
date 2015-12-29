@@ -405,48 +405,48 @@ class Gallery < ActiveRecord::Base
       LIMIT 1
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
-    pagevalues = ret_sql.to_hash
-    if pagevalues.count == 0
+    ret = ret_sql.to_hash
+    if ret.count == 0
       message = I18n.t('message.database.item_state.load.error')
       return nil
     else
-      pagevalues = pagevalues.first
+      ret = ret.first
       gpd = {}
       gpd[Const::Project::Key::SCREEN_SIZE] = {
-          width: pagevalues['screen_width'],
-          height: pagevalues['screen_height']
+          width: ret['screen_width'],
+          height: ret['screen_height']
       }
-      gpd[Const::PageValueKey::PAGE_COUNT] = pagevalues['page_max']
-      gpd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['general_pagevalue_data'])
+      gpd[Const::PageValueKey::PAGE_COUNT] = ret['page_max']
+      gpd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['general_pagevalue_data'])
       ipd = {}
-      ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['instance_pagevalue_data'])
+      ipd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['instance_pagevalue_data'])
       epd = {}
-      epd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(pagevalues['event_pagevalue_data'])
+      epd[Const::PageValueKey::P_PREFIX + page_num.to_s] = JSON.parse(ret['event_pagevalue_data'])
       fpd = {}
-      if pagevalues['footprint_page_num'].present?
-        fpd[Const::PageValueKey::PAGE_NUM] = pagevalues['footprint_page_num']
+      if ret['footprint_page_num'].present?
+        fpd[Const::PageValueKey::PAGE_NUM] = ret['footprint_page_num']
       else
         fpd[Const::PageValueKey::PAGE_NUM] = 1
       end
 
       # 必要なItemを調査
-      class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(pagevalues['event_pagevalue_data'])
+      class_dist_tokens = PageValueState.extract_need_load_itemclassdisttokens(ret['event_pagevalue_data'])
       item_js_list = ItemJs.get_item_gallery(class_dist_tokens)
 
       # 閲覧数 & ブックマーク数を取得
-      gallery_view_count = pagevalues['bookmark_count']
-      gallery_bookmark_count = pagevalues['view_count']
+      gallery_view_count = ret['bookmark_count']
+      gallery_bookmark_count = ret['view_count']
 
-      pagevalues, creator = Run.setup_data(pagevalues['user_id'].to_i, gpd, ipd, epd, fpd, page_num)
+      pagevalues, creator = Run.setup_data(ret['user_id'].to_i, gpd, ipd, epd, fpd, page_num)
 
       show_options = {}
-      show_options[Const::Gallery::Key::SHOW_GUIDE] = pagevalues['show_guide']
-      show_options[Const::Gallery::Key::SHOW_PAGE_NUM] = pagevalues['show_page_num']
-      show_options[Const::Gallery::Key::SHOW_CHAPTER_NUM] = pagevalues['show_chapter_num']
+      show_options[Const::Gallery::Key::SHOW_GUIDE] = ret['show_guide']
+      show_options[Const::Gallery::Key::SHOW_PAGE_NUM] = ret['show_page_num']
+      show_options[Const::Gallery::Key::SHOW_CHAPTER_NUM] = ret['show_chapter_num']
 
       message = I18n.t('message.database.item_state.load.success')
 
-      return pagevalues, message, pagevalues['title'], pagevalues['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options
+      return pagevalues, message, ret['title'], ret['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options
     end
   end
 
@@ -477,8 +477,8 @@ class Gallery < ActiveRecord::Base
       AND g.del_flg = 0
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
-    pagevalues = ret_sql.to_hash
-    if pagevalues.count == 0
+    ret = ret_sql.to_hash
+    if ret.count == 0
       return true, nil
     else
       gen = {}
@@ -486,7 +486,7 @@ class Gallery < ActiveRecord::Base
       ent = {}
       fot = {}
       class_dist_tokens = []
-      pagevalues.each do |pagevalue|
+      ret.each do |pagevalue|
         gen[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['general_pagevalue_data'])
         ins[Const::PageValueKey::P_PREFIX + pagevalue['page_num'].to_s] = JSON.parse(pagevalue['instance_pagevalue_data'])
         if load_footprint
