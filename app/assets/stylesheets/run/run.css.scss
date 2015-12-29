@@ -17,9 +17,10 @@ html, body {
 div#main {
   padding: 5px 15px 5px 15px;
   height: 100%;
+  background-color: #ebe9dc;
 
-  background-image: image_url('base/back2.jpg');
-  background-repeat: repeat;
+  //background-image: image_url('base/back2.jpg');
+  //background-repeat: repeat;
 
   &.fullscreen {
     padding: 0;
@@ -36,8 +37,9 @@ div#main {
 div.scroll_background {
   width: 100%;
   height: 100%;
-  background-image: image_url('base/back4.jpg');
-  background-repeat: repeat;
+  background-color: #fcf6ff;
+  //background-image: image_url('base/back4.jpg');
+  //background-repeat: repeat;
 }
 
 div.scroll_inside {
