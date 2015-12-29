@@ -30,7 +30,7 @@ PageFlip = (function() {
   };
 
   PageFlip.run = function(canvas, width, height, sections, callback) {
-    var animationTimer, background, baseFlipX, baseFlipY, basemX, basemY, c, canvas2, cornerCurlIn, cornerCurlOut, cornerMove, cornersTop, ctx, ctx2, curlDuration, curlShape, curlSize, curling, dragging, draw, el, flip, flipDuration, flipping, gradientColors, inCanvas, index, init, lastmX, lastmY, loaded, mX, mY, mousedown, obj, onCorner, patterns, scale, sideLeft, startDate;
+    var _cornerCurlIn, _cornerMove, _curlShape, _draw, _flip, animationTimer, background, baseFlipX, baseFlipY, basemX, basemY, canvas2, cornersTop, ctx, ctx2, curlDuration, curlSize, curling, dragging, el, flipDuration, flipping, gradientColors, inCanvas, index, init, lastmX, lastmY, loaded, mX, mY, mousedown, obj, onCorner, patterns, scale, sideLeft, startDate;
     obj = this;
     el = canvas.prev();
     index = 0;
@@ -66,10 +66,10 @@ PageFlip = (function() {
         }
         $(section).data("flip.scale", r);
         patterns[i] = ctx.createPattern(section, "no-repeat");
-        loaded++;
+        loaded += 1;
         if (loaded === sections.length && !init) {
           init = true;
-          return draw();
+          return _draw();
         }
       };
       if (section.complete) {
@@ -97,60 +97,7 @@ PageFlip = (function() {
     inCanvas = false;
     mousedown = false;
     dragging = false;
-    c = canvas;
-    c.mousemove(function(e) {
-      var ofset;
-      if (!ofset) {
-        ofset = canvas.offset();
-      }
-      if (mousedown && onCorner) {
-        if (!dragging) {
-          dragging = true;
-          window.clearInterval(animationTimer);
-        }
-        mX = !sideLeft ? e.pageX - ofset.left : width - (e.pageX - ofset.left);
-        mY = cornersTop ? e.pageY - ofset.top : height - (e.pageY - ofset.top);
-        window.setTimeout(draw, 0);
-        return false;
-      }
-      lastmX = e.pageX || lastmX;
-      lastmY = e.pageY || lastmY;
-      if (!flipping) {
-        sideLeft = (lastmX - ofset.left) < width / 2;
-      }
-      if (!flipping && ((lastmX - ofset.left) > basemX || (lastmX - ofset.left) < (width - basemX)) && ((cornersTop && (lastmY - ofset.top) < basemY) || (!cornersTop && (lastmY - ofset.top) > (height - basemY)))) {
-        if (!onCorner) {
-          onCorner = true;
-          c.css("cursor", "pointer");
-        }
-      } else {
-        if (onCorner) {
-          onCorner = false;
-          c.css("cursor", "default");
-        }
-      }
-      return false;
-    }).on("mouseenter", function(e) {
-      inCanvas = true;
-      if (flipping) {
-        return;
-      }
-      window.clearInterval(animationTimer);
-      startDate = new Date().getTime();
-      animationTimer = window.setInterval(cornerCurlIn, 10);
-      return false;
-    }).on("mouseleave", function(e) {
-      inCanvas = false;
-      dragging = false;
-      mousedown = false;
-      if (flipping) {
-        return;
-      }
-      window.clearInterval(animationTimer);
-      startDate = new Date().getTime();
-      animationTimer = window.setInterval(cornerCurlOut, 10);
-      return false;
-    }).click(function() {
+    canvas.click(function() {
       if (onCorner && !flipping) {
         flipping = true;
         c.triggerHandler("mousemove");
@@ -158,10 +105,8 @@ PageFlip = (function() {
         startDate = new Date().getTime();
         baseFlipX = mX;
         baseFlipY = mY;
-        animationTimer = window.setInterval(flip, 10);
-        index += typeof sideLeft === "function" ? sideLeft(-{
-          1: 1
-        }) : void 0;
+        animationTimer = window.setInterval(_flip, 10);
+        index += sideLeft ? -1 : 1;
         if (index < 0) {
           index = sections.length - 1;
         }
@@ -171,15 +116,8 @@ PageFlip = (function() {
         el.trigger("flip.jflip", [index, sections.length]);
       }
       return false;
-    }).mousedown(function() {
-      dragging = false;
-      mousedown = true;
-      return false;
-    }).mouseup(function() {
-      mousedown = false;
-      return false;
     });
-    flip = function() {
+    _flip = function() {
       var date, delta;
       date = new Date();
       delta = date.getTime() - startDate;
@@ -194,53 +132,42 @@ PageFlip = (function() {
         }
         mX = width;
         mY = height;
-        draw();
+        _draw();
         flipping = false;
         if (inCanvas) {
           startDate = new Date().getTime();
-          animationTimer = window.setInterval(cornerCurlIn, 10);
+          animationTimer = window.setInterval(_cornerCurlIn, 10);
           c.triggerHandler("mousemove");
         }
         return;
       }
       mX = baseFlipX - 2 * width * delta / flipDuration;
       mY = baseFlipY + 2 * height * delta / flipDuration;
-      return draw();
+      return _draw();
     };
-    cornerMove = function() {
+    _cornerMove = function() {
       var date, delta, drawing;
       date = new Date();
       delta = date.getTime() - startDate;
       mX = basemX + Math.sin(Math.PI * 2 * delta / 1000);
       mY = basemY + Math.cos(Math.PI * 2 * delta / 1000);
       drawing = true;
-      return window.setTimeout(draw, 0);
+      return window.setTimeout(_draw, 0);
     };
-    cornerCurlIn = function() {
+    _cornerCurlIn = function() {
       var date, delta;
       date = new Date();
       delta = date.getTime() - startDate;
       if (delta >= curlDuration) {
         window.clearInterval(animationTimer);
         startDate = new Date().getTime();
-        animationTimer = window.setInterval(cornerMove, 10);
+        animationTimer = window.setInterval(_cornerMove, 10);
       }
       mX = width - (width - basemX) * delta / curlDuration;
       mY = basemY * delta / curlDuration;
-      return draw();
+      return _draw();
     };
-    cornerCurlOut = function() {
-      var date, delta;
-      date = new Date();
-      delta = date.getTime() - startDate;
-      if (delta >= curlDuration) {
-        window.clearInterval(animationTimer);
-      }
-      mX = basemX + (width - basemX) * delta / curlDuration;
-      mY = basemY - basemY * delta / curlDuration;
-      return draw();
-    };
-    curlShape = function(m, q) {
+    _curlShape = function(m, q) {
       var intx0, intyW;
       intyW = m * width + q;
       intx0 = -q / m;
@@ -263,8 +190,8 @@ PageFlip = (function() {
         }
       }
     };
-    return draw = function() {
-      var d, gradient, img, int2x, int2y, intx, inty, m, m2, q, q2, r, stopHighlight, sx, sy, tx, ty;
+    return _draw = function() {
+      var c, d, gradient, img, int2x, int2y, intx, inty, m, m2, q, q2, r, stopHighlight, sx, sy, tx, ty;
       if (!init) {
         return;
       }
@@ -315,12 +242,9 @@ PageFlip = (function() {
         c.fill();
         gradient = null;
         ctx.fillStyle = background;
-        curlShape(m, q);
+        _curlShape(m, q);
         ctx.fill();
-        curlShape(m, q);
-        if (!$.browser.safari && !$.browser.opera) {
-          ctx.restore();
-        }
+        _curlShape(m, q);
         img = sideLeft ? sections[sections.length - 1] : sections[1];
         r = $(img).data("flip.scale");
         ctx.save();
