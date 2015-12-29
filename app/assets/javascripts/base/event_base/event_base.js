@@ -14,6 +14,8 @@ EventBase = (function(superClass) {
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
+    EventBase.BEFORE_MODIFY_VAR_SUFFIX = constant.BEFORE_MODIFY_VAR_SUFFIX;
+    EventBase.AFTER_MODIFY_VAR_SUFFIX = constant.AFTER_MODIFY_VAR_SUFFIX;
     EventBase.ActionPropertiesKey = (function() {
       function ActionPropertiesKey() {}
 
@@ -298,7 +300,8 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.willChapter = function() {
     PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
-    return this.updateEventBefore();
+    this.updateEventBefore();
+    return this.setModifyBeforeAndAfterVar();
   };
 
   EventBase.prototype.didChapter = function() {
@@ -615,6 +618,33 @@ EventBase = (function(superClass) {
         }
       };
     })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
+  };
+
+  EventBase.prototype.setModifyBeforeAndAfterVar = function() {
+    var afterObj, beforeObj, mod, results, value, varName;
+    if (this._event == null) {
+      return;
+    }
+    beforeObj = this.getMinimumObjectEventBefore();
+    mod = this.constructor.actionProperties.methods[this.getEventMethodName()][this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
+    results = [];
+    for (varName in mod) {
+      value = mod[varName];
+      if (beforeObj != null) {
+        this[varName + this.constructor.BEFORE_MODIFY_VAR_SUFFIX] = beforeObj[varName];
+      }
+      if (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) {
+        afterObj = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
+        if (afterObj != null) {
+          results.push(this[varName + this.constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj[varName]);
+        } else {
+          results.push(void 0);
+        }
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
   };
 
   EventBase.prototype.setItemAllPropToPageValue = function(isCache) {

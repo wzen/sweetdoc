@@ -4,6 +4,8 @@ class Const
   ITEM_CODING_TEMP_CLASS_NAME = 'ItemPreviewTemp'
   ITEM_GALLERY_ITEM_CLASSNAME = 'igtc'
   DEBUG_JS = ENV['RAILS_SERVE_DEBUG_JS'].present?
+  BEFORE_MODIFY_VAR_SUFFIX = '__before'
+  AFTER_MODIFY_VAR_SUFFIX = '__after'
 
   # 操作モード
   class Mode

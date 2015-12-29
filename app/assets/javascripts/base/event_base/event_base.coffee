@@ -3,11 +3,13 @@ class EventBase extends Extend
   # @abstract
   # @property [String] CLASS_DIST_TOKEN クラス種別
   @CLASS_DIST_TOKEN = ""
-
   @STEP_INTERVAL_DURATION = 0.01
 
   if gon?
     constant = gon.const
+
+    @BEFORE_MODIFY_VAR_SUFFIX = constant.BEFORE_MODIFY_VAR_SUFFIX
+    @AFTER_MODIFY_VAR_SUFFIX = constant.AFTER_MODIFY_VAR_SUFFIX
     class @ActionPropertiesKey
       @METHODS = constant.ItemActionPropertiesKey.METHODS
       @DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT
@@ -236,6 +238,8 @@ class EventBase extends Extend
     PageValue.saveInstanceObjectToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
     # 状態をイベント前に戻す
     @updateEventBefore()
+    # イベント前後の変数の設定
+    @setModifyBeforeAndAfterVar()
 
   # チャプター終了時イベント
   didChapter: ->
@@ -443,6 +447,7 @@ class EventBase extends Extend
             @[varName] = after
           else
             if value.varAutoChange
+              # 変数自動変更
               if value.type == Constant.ItemDesignOptionType.NUMBER
                 @[varName] = before + (after - before) * progressPercentage
               else if value.type == Constant.ItemDesignOptionType.COLOR
@@ -500,6 +505,21 @@ class EventBase extends Extend
             if after?
               @[varName] = after
     , @constructor.STEP_INTERVAL_DURATION * 1000)
+
+  # イベント前後の変数を設定 [xxx__before] & [xxx__after]
+  setModifyBeforeAndAfterVar: ->
+    if !@_event?
+      return
+
+    beforeObj = @getMinimumObjectEventBefore()
+    mod = @constructor.actionProperties.methods[@getEventMethodName()][@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
+    for varName, value of mod
+      if beforeObj?
+        @[varName + @constructor.BEFORE_MODIFY_VAR_SUFFIX] = beforeObj[varName]
+      if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]?
+        afterObj = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
+        if afterObj?
+          @[varName + @constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj[varName]
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか
