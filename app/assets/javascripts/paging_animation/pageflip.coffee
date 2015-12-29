@@ -1,196 +1,290 @@
-class PageFlip
 
-  @DIRECTION = {}
-  @DIRECTION.FORWARD = 1
-  @DIRECTION.BACK = 2
+Flip = (canvas,width,height,images,opts) ->
+  opts = $.extend({background:"green",cornersTop:true,scale:"noresize"},opts)
+  obj = this
+  el = canvas.prev()
+  index = 0
+  init = false
+  background = opts.background
+  cornersTop = opts.cornersTop
+  gradientColors = opts.gradientColors || ['#4F2727','#FF8F8F','#F00']
+  curlSize = opts.curlSize || 0.1
+  scale = opts.scale
+  patterns = []
+  canvas2 = canvas.clone()
+  ctx2 = canvas2[0].getContext("2d")
+  ctx = canvas[0].getContext("2d")
+  loaded = 0
+  images = images.each((i) ->
+    if(patterns[i])
+      return
+    img = this
+    img.onload = ->
+      r = 1
+      if(scale!="noresize")
+        rx = width/this.width
+        ry = height/this.height
+        if(scale=="fit")
+          r = if (rx<1 || ry<1) then Math.min(rx,ry) else 1
+        if(scale=="fill")
+          r = Math.min(rx,ry)
+      $(img).data("flip.scale",r)
+      patterns[i] = ctx.createPattern(img,"no-repeat")
+      loaded++
+      if(loaded==images.length && !init)
+        init = true
+        draw()
+    if(img.complete)
+      window.setTimeout(->
+        img.onload()
+      ,10)
+  )
 
-  # コンストラクタ
-  # @param [Integer] beforePageNum 変更前ページ番号
-  # @param [Integer] afterPageNum 変更後ページ番号
-  constructor: (beforePageNum, afterPageNum) ->
-    # Dimensions of one page in the book
-    @PAGE_WIDTH = $('#pages').width()
-    @PAGE_HEIGHT = $('#pages').height()
+  width = width
+  height = height
+  mX = width
+  mY = height
+  basemX = mX*(1-curlSize)
+  basemY = mY*curlSize
+  sideLeft = false
+  #off = null
+  onCorner = false
+  curlDuration=400
+  curling = false
+  animationTimer = null
+  startDate = null
+  flipDuration=700
+  flipping = false
+  baseFlipX = null
+  baseFlipY = null
+  lastmX = null
+  lastmY = null
+  inCanvas = false
+  mousedown = false
+  dragging = false
 
-    # The canvas size equals to the book dimensions + this padding
-    @CANVAS_PADDING = 20
+#  $(window).scroll(function(){
+#  })
 
-    @flipPageNum = if beforePageNum < afterPageNum then beforePageNum else afterPageNum
-    if window.debug
-      console.log('[PageFlip constructor] flipPageNum:' + @flipPageNum)
+  c = canvas
+  c.mousemove((e) ->
+    if(!ofset)
+      ofset = canvas.offset() #safari can't calculate correctly offset at DOM ready
 
-    @zIndex = Common.plusPagingZindex(0, @flipPageNum)
+    if(mousedown && onCorner)
+      if(!dragging)
+        dragging = true
+        window.clearInterval(animationTimer)
+      mX = if !sideLeft then e.pageX-ofset.left else width-(e.pageX-ofset.left)
+      mY = if cornersTop then e.pageY-ofset.top else height-(e.pageY-ofset.top)
+      window.setTimeout(draw,0)
+      return false
 
-    # アニメーション用Div作成
-    zIndexMax = Common.plusPagingZindex(0, 0)
-    $("##{Constant.Paging.ROOT_ID}").append("<div id='pageflip-root' style='position:absolute;top:0;left:0;width:100%;height:100%;z-index:#{zIndexMax}'><canvas id='pageflip-canvas' style='z-index:#{zIndexMax}'></canvas></div>")
+    lastmX = e.pageX||lastmX
+    lastmY = e.pageY||lastmY
+    if(!flipping)
+      sideLeft = (lastmX-ofset.left)<width/2
 
-    @canvas = document.getElementById("pageflip-canvas")
-    @context = @canvas.getContext("2d")
+    if(!flipping && ((lastmX-ofset.left)>basemX || (lastmX-ofset.left)<(width-basemX)) && ((cornersTop && (lastmY-ofset.top)<basemY) || (!cornersTop && (lastmY-ofset.top)>(height-basemY))))
+      if(!onCorner)
+        onCorner= true
+        c.css("cursor","pointer")
+    else
+      if(onCorner)
+        onCorner= false
+        c.css("cursor","default")
+    return false
+  ).bind("mouseenter",(e) ->
+    inCanvas = true
+    if(flipping)
+      return
+    window.clearInterval(animationTimer)
+    startDate = new Date().getTime()
+    animationTimer = window.setInterval(cornerCurlIn,10)
+    return false
+  ).bind("mouseleave",(e) ->
+    inCanvas = false
+    dragging = false
+    mousedown = false
+    if(flipping)
+      return
+    window.clearInterval(animationTimer)
+    startDate = new Date().getTime()
+    animationTimer = window.setInterval(cornerCurlOut,10)
+    return false
+  ).click( ->
+    if(onCorner && !flipping)
+      flipping = true
+      c.triggerHandler("mousemove")
+      window.clearInterval(animationTimer)
+      startDate = new Date().getTime()
+      baseFlipX = mX
+      baseFlipY = mY
+      animationTimer = window.setInterval(flip,10)
+      index += sideLeft?-1:1
+      if(index<0)
+        index = images.length-1
+      if(index==images.length)
+        index = 0
+      el.trigger("flip.jflip",[index,images.length])
+    return false
+  ).mousedown( ->
+    dragging = false
+    mousedown = true
+    return false
+  ).mouseup( ->
+    mousedown = false
+    return false
+  )
 
-    # Resize the canvas to match the book size
-    @canvas.width = @PAGE_WIDTH + (@CANVAS_PADDING * 2)
-    @canvas.height = @PAGE_HEIGHT + (@CANVAS_PADDING * 2)
+  flip = ->
+    date = new Date()
+    delta = date.getTime() - startDate
+    if(delta>=flipDuration)
+      window.clearInterval(animationTimer)
+      if(sideLeft)
+        images.unshift(images.pop())
+        patterns.unshift(patterns.pop())
+      else
+        images.push(images.shift())
+        patterns.push(patterns.shift())
 
-    # Offset the canvas so that it's padding is evenly spread around the book
-    @canvas.style.top = -@CANVAS_PADDING + "px"
-    @canvas.style.left = -@CANVAS_PADDING + "px"
+      mX = width
+      mY = height
+      draw()
+      flipping = false
+      if(inCanvas)
+        startDate = new Date().getTime()
+        animationTimer = window.setInterval(cornerCurlIn,10)
+        c.triggerHandler("mousemove")
+      return
+    mX = baseFlipX-2*(width)*delta/flipDuration
+    mY = baseFlipY+2*(height)*delta/flipDuration
+    draw()
 
-    @direction = if beforePageNum < afterPageNum then PageFlip.DIRECTION.FORWARD else PageFlip.DIRECTION.BACK
-    if window.debug
-      console.log('[PageFlip constructor] direction:' + @direction)
+  cornerMove = ->
+    date = new Date()
+    delta = date.getTime()-startDate
+    mX = basemX+Math.sin(Math.PI*2*delta/1000)
+    mY = basemY+Math.cos(Math.PI*2*delta/1000)
+    drawing = true
+    window.setTimeout(draw,0)
 
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', afterPageNum)
-    section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-    section.show()
-    if @direction == PageFlip.DIRECTION.FORWARD
-      section.css('width', '')
-    else if @direction == PageFlip.DIRECTION.BACK
-      section.css('width', '0')
+  cornerCurlIn = ->
+    date = new Date()
+    delta = date.getTime()-startDate
+    if(delta>=curlDuration)
+      window.clearInterval(animationTimer)
+      startDate = new Date().getTime()
+      animationTimer = window.setInterval(cornerMove,10)
+    mX = width-(width-basemX)*delta/curlDuration
+    mY = basemY*delta/curlDuration
+    draw()
 
-  # 描画開始
-  # @param [Function] callback コールバック
-  startRender: (callback = null)->
-    className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', @flipPageNum)
-    pages = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
-    if @direction == PageFlip.DIRECTION.FORWARD
-      @flip = {
-        progress: 1,
-        target: -0.25,
-        page: pages,
-      }
+  cornerCurlOut = ->
+    date = new Date()
+    delta = date.getTime()-startDate
+    if(delta>=curlDuration)
+      window.clearInterval(animationTimer)
+    mX = basemX+(width-basemX)*delta/curlDuration
+    mY = basemY-basemY*delta/curlDuration
+    draw()
 
-      point = @PAGE_WIDTH
-      timer = setInterval(=>
-        point -= 50
-        if point < -@CANVAS_PADDING
-          point = -@CANVAS_PADDING
-          @flip.progress = 0
-          @render(point)
-          clearInterval(timer)
-          $('#pageflip-root').remove()
-          if callback?
-            callback()
-        @render(point)
-      , 50)
-    else if @direction == PageFlip.DIRECTION.BACK
-      @flip = {
-        progress: -0.25,
-        target: 1,
-        page: pages,
-      }
-      point = -@CANVAS_PADDING
-      timer = setInterval(=>
-        point += 50
-        if point > @PAGE_WIDTH
-          point = @PAGE_WIDTH
-          @flip.progress = 1
-          @render(point)
-          clearInterval(timer)
-          $('#pageflip-root').remove()
-          if callback?
-            callback()
-        @render(point)
-      , 50)
-
-  # 描画
-  # @param [Integer] point 描画X位置
-  render: (point)->
-    if point < -@CANVAS_PADDING || point > @PAGE_WIDTH
+  curlShape = (m,q) ->
+    intyW = m*width+q
+    intx0 = -q/m
+    ctx.beginPath()
+    ctx.moveTo(width,Math.min(intyW,height))
+    ctx.lineTo(width,0)
+    ctx.lineTo(Math.max(intx0,0),0)
+    if(intx0<0)
+      ctx.lineTo(0,Math.min(q,height))
+      if(q<height)
+        ctx.lineTo((height-q)/m,height)
+      ctx.lineTo(width,height)
+    else
+      if(intyW<height)
+        ctx.lineTo(width,intyW)
+      else
+        ctx.lineTo((height-q)/m,height)
+        ctx.lineTo(width,height)
+  draw = ->
+    if(!init)
       return
 
-    # Reset all pixels in the canvas
-    @context.clearRect(0, 0, @canvas.width, @canvas.height)
+    ctx.fillStyle = background
+    ctx.fillRect(0,0,width,height)
+    img = images[0]
+    r = $(img).data("flip.scale")
+    ctx.drawImage(img,(width-img.width*r)/2,(height-img.height*r)/2,img.width*r,img.height*r)
 
-    # Ease progress towards the target value
-    @flip.progress += (@flip.target - @flip.progress)* 0.2
-#    if window.debug
-#      console.log('[render] progress: ' + @flip.progress)
+    if(mY && mX!=width)
+      m = 2
+      q = (mY-m*(mX+width))/2
+      m2 = mY/(width-mX)
+      q2 = mX*m2
+      if(m==m2)
+        return
 
-    @drawFlip(@flip)
+      sx=1
+      sy=1
+      tx=0
+      ty=0
+      ctx.save()
+      if(sideLeft)
+        tx = width
+        sx = -1
+      if(!cornersTop)
+        ty = height
+        sy = -1
+      ctx.translate(tx,ty)
+      ctx.scale(sx,sy)
+      intx = (q2-q)/(m-m2)
+      inty = m*intx+q
+      int2x = (2*inty+intx+2*m*mX-2*mY)/(2*m+1)
+      int2y = -int2x/m+inty+intx/m
+      d = Math.sqrt(Math.pow(intx-int2x,2)+Math.pow(inty-int2y,2))
+      stopHighlight = Math.min(d*0.5,30)
 
-  drawFlip: (flip)->
-    # Strength of the fold is strongest in the middle of the book
-    strength = 1 - Math.abs(flip.progress)
+      c = ctx
+      gradient = c.createLinearGradient(intx,inty,int2x,int2y)
+      gradient.addColorStop(0, gradientColors[0])
+      gradient.addColorStop(stopHighlight/d, gradientColors[1])
+      gradient.addColorStop(1, gradientColors[2])
+      c.fillStyle = gradient
+      c.beginPath()
+      c.moveTo(-q/m,0)
+      c.quadraticCurveTo((-q/m+mX)/2+0.02*mX,mY/2,mX,mY)
+      c.quadraticCurveTo((width+mX)/2,(m*width+q+mY)/2-0.02*(height-mY),width,m*width+q)
+      c.fill()
 
-    foldWidth = 0
+      gradient = null
+      ctx.fillStyle = background
+      curlShape(m,q)
+      ctx.fill()
+      curlShape(m,q)
+      if(!$.browser.safari && !$.browser.opera)
+        ctx.restore()
 
-    # X position of the folded paper
-    foldX = @PAGE_WIDTH * flip.progress + foldWidth
-#    if window.debug
-#      console.log('[drawFlip] foldX:' + foldX + ' progress:' + flip.progress)
+      img = if sideLeft then images[images.length-1] else images[1]
+      r = $(img).data("flip.scale")
+      ctx.save()
+      ctx.clip()
+#      ctx.scale(1/sx,1/sy)
+#      ctx.translate(-tx,-ty)
 
-    # How far the page should outdent vertically due to perspective
-    verticalOutdent = 20 * strength
+      ctx.drawImage(img,(width-img.width*r)/2,(height-img.height*r)/2,img.width*r,img.height*r)
 
-    # The maximum width of the left and right side shadows
-    paperShadowWidth = (@PAGE_WIDTH * 0.5)* Math.max(Math.min(1 - flip.progress, 0.5), 0)
-    rightShadowWidth = (@PAGE_WIDTH * 0.5)* Math.max(Math.min(strength, 0.5), 0)
-    leftShadowWidth = (@PAGE_WIDTH * 0.5)* Math.max(Math.min(strength, 0.5), 0)
+      ctx.restore()
+#      if($.browser.safari || $.browser.opera)
+#        ctx.restore()
 
-    # Change page element width to match the x position of the fold
-    flip.page.css({'width': Math.max(foldX, 0)+ "px", 'z-index': @zIndex})
-
-    @context.save()
-
-    # Draw a sharp shadow on the left side of the page
-    @context.strokeStyle = 'rgba(0,0,0,'+(0.05 * strength)+')'
-    @context.lineWidth = 30 * strength
-    @context.beginPath()
-    @context.moveTo(foldX - foldWidth, -verticalOutdent * 0.5)
-    @context.lineTo(foldX - foldWidth, @PAGE_HEIGHT + (verticalOutdent * 0.5))
-    @context.stroke()
-
-
-    # Right side drop shadow
-    rightShadowGradient = @context.createLinearGradient(foldX, 0, foldX + rightShadowWidth, 0)
-    rightShadowGradient.addColorStop(0, 'rgba(0,0,0,'+(strength*0.2)+')')
-    rightShadowGradient.addColorStop(0.8, 'rgba(0,0,0,0.0)')
-
-    @context.fillStyle = rightShadowGradient
-    @context.beginPath()
-    @context.moveTo(foldX, 0)
-    @context.lineTo(foldX + rightShadowWidth, 0)
-    @context.lineTo(foldX + rightShadowWidth, @PAGE_HEIGHT)
-    @context.lineTo(foldX, @PAGE_HEIGHT)
-    @context.fill()
-
-
-    # Left side drop shadow
-    leftShadowGradient = @context.createLinearGradient(foldX - foldWidth - leftShadowWidth, 0, foldX - foldWidth, 0)
-    leftShadowGradient.addColorStop(0, 'rgba(0,0,0,0.0)')
-    leftShadowGradient.addColorStop(1, 'rgba(0,0,0,'+(strength*0.15)+')')
-
-    @context.fillStyle = leftShadowGradient
-    @context.beginPath()
-    @context.moveTo(foldX - foldWidth - leftShadowWidth, 0)
-    @context.lineTo(foldX - foldWidth, 0)
-    @context.lineTo(foldX - foldWidth, @PAGE_HEIGHT)
-    @context.lineTo(foldX - foldWidth - leftShadowWidth, @PAGE_HEIGHT)
-    @context.fill()
-
-
-    # Gradient applied to the folded paper (highlights & shadows)
-    foldGradient = @context.createLinearGradient(foldX - paperShadowWidth, 0, foldX, 0)
-    foldGradient.addColorStop(0.35, '#fafafa')
-    foldGradient.addColorStop(0.73, '#eeeeee')
-    foldGradient.addColorStop(0.9, '#fafafa')
-    foldGradient.addColorStop(1.0, '#e2e2e2')
-
-    @context.fillStyle = foldGradient
-    @context.strokeStyle = 'rgba(0,0,0,0.06)'
-    @context.lineWidth = 0.5
-
-    # Draw the folded piece of paper
-    @context.beginPath()
-    @context.moveTo(foldX, 0)
-    @context.lineTo(foldX, @PAGE_HEIGHT)
-    @context.quadraticCurveTo(foldX, @PAGE_HEIGHT + (verticalOutdent * 2), foldX - foldWidth, @PAGE_HEIGHT + verticalOutdent)
-    @context.lineTo(foldX - foldWidth, -verticalOutdent)
-    @context.quadraticCurveTo(foldX, -verticalOutdent * 2, foldX, 0)
-
-    @context.fill()
-    @context.stroke()
-
-    @context.restore()
+$.fn.jFlip = (width,height,opts) ->
+  return this.each( ->
+    $(this).wrap("<div class='flip_gallery'>")
+    images = $(this).find("img")
+    canvas = $(document.createElement("canvas")).attr({width:width,height:height}).css({margin:0,width:width+"px",height:height+"px"})
+    $(this).css({position:"absolute",left:"-9000px",top:"-9000px"}).after(canvas)
+    new Flip($(this).next(),width || 300,height || 300,images,opts)
+  )
 

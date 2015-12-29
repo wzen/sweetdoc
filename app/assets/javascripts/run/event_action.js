@@ -94,7 +94,7 @@ EventAction = (function() {
     return RunCommon.loadPagingPageValue(afterPageNum, doLoadFootprint, (function(_this) {
       return function() {
         return Common.loadJsFromInstancePageValue(function() {
-          var _after, forkEventPageValueList, i, j, pageFlip, ref;
+          var _after, forkEventPageValueList, i, j, ref;
           if (_this.thisPage() === null) {
             forkEventPageValueList = {};
             for (i = j = 0, ref = PageValue.getForkCount(); 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
@@ -108,26 +108,25 @@ EventAction = (function() {
             }
           }
           Common.createdMainContainerIfNeeded(afterPageNum, beforePageNum > afterPageNum);
-          pageFlip = new PageFlip(beforePageNum, afterPageNum);
           RunCommon.initMainContainer();
           PageValue.adjustInstanceAndEventOnPage();
           _after = function() {
             this.thisPage().start();
             this.thisPage().thisChapter().disableEventHandle();
-            return pageFlip.startRender((function(_this) {
-              return function() {
-                var className, section;
-                className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
-                section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
-                section.hide();
-                Common.removeAllItem(beforePageNum);
-                $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
-                _this.thisPage().thisChapter().enableEventHandle();
-                if (callback != null) {
-                  return callback();
-                }
-              };
-            })(this));
+            return $("#pages").jFlip($('#pages').width(), $('#pages').height(), {
+              cornersTop: false
+            }).on("flip.jflip", function(event, index, total) {
+              var className, section;
+              className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
+              section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
+              section.hide();
+              Common.removeAllItem(beforePageNum);
+              $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
+              this.thisPage().thisChapter().enableEventHandle();
+              if (callback != null) {
+                return callback();
+              }
+            });
           };
           if (beforePageNum > afterPageNum) {
             return _this.thisPage().willPageFromRewind(function() {

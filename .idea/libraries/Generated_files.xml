@@ -49,6 +49,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/common_event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
@@ -122,6 +123,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/navbar/navbar.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/item_event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/project.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/common_event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/gallery/gallery_common.js" />
