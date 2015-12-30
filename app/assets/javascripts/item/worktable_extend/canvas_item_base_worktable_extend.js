@@ -55,8 +55,10 @@ canvasItemBaseWorktableExtend = {
         className = e.classList[0];
         colorValue = PageValue.getInstancePageValue(PageValue.Key.instanceDesign(_this.id, className + "_value"));
         return ColorPickerUtil.initColorPicker($(e), colorValue, function(a, b, d, e) {
-          _this.designs.values[className + "_value"] = b;
-          return self.applyColorChangeByPicker(className, b);
+          var value;
+          value = "" + b;
+          _this.designs.values[className + "_value"] = value;
+          return self.applyColorChangeByPicker(className, value);
         });
       };
     })(this));

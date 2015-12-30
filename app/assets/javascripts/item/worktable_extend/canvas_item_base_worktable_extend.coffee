@@ -50,8 +50,9 @@ canvasItemBaseWorktableExtend =
         $(e),
         colorValue,
         (a, b, d, e) =>
-          @designs.values["#{className}_value"] = b
-          self.applyColorChangeByPicker(className, b)
+          value = "#{b}"
+          @designs.values["#{className}_value"] = value
+          self.applyColorChangeByPicker(className, value)
       )
     )
 
