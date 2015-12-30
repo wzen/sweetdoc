@@ -22,6 +22,8 @@ class EventBase extends Extend
       @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
       @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
       @MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS
+      @MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN
+      @MODIFIABLE_CHILDREN_TRIGGERVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_TRIGGERVALUE
 
   constructor: ->
     # modifiables変数の初期化

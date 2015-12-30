@@ -374,6 +374,7 @@ class Const
   end
 
   class ItemActionPropertiesKey
+    TYPE = 'type'
     METHODS = 'methods'
     DEFAULT_EVENT = 'defaultEvent'
     METHOD = 'method'
@@ -385,6 +386,8 @@ class Const
     OPTIONS = 'options'
     EVENT_DURATION = 'eventDuration'
     MODIFIABLE_VARS = 'modifiables'
+    MODIFIABLE_CHILDREN = 'children'
+    MODIFIABLE_CHILDREN_TRIGGERVALUE = 'triggerValue'
   end
 
   class Run
@@ -456,6 +459,9 @@ class Const
     ROOT_ID = 'config_menu_temps'
     class Action
       PRELOAD_IMAGE_PATH_SELECT = 'preload_image_path_select_config'
+    end
+    class Modifiable
+      CHILDREN_WRAPPER_CLASS = 'modifiable_children_wrapper_@parentvarname'
     end
   end
 

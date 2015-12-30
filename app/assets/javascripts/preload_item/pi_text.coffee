@@ -7,6 +7,41 @@ class PreloadItemText extends CssItemBase
   @actionProperties =
   {
     modifiables: {
+      textColor: {
+        name: 'BalloonColor'
+        default: '#000'
+        colorType: 'hex'
+      }
+      showBalloon: {
+        name: 'Show Balloon'
+        default: false
+        type: 'boolean'
+        ja: {
+          name: '吹き出し表示'
+        }
+        children: {
+          triggerValue: 'true'
+          balloonColor: {
+            name: 'BalloonColor'
+            default: '#fff'
+            type: 'color'
+            colorType: 'hex'
+            ja: {
+              name: '吹き出しの色'
+            }
+          }
+          balloonRadius: {
+            name: 'BalloonRadius'
+            default: 10
+            type: 'number'
+            min: 1
+            max: 15
+            ja: {
+              name: '吹き出しの角丸'
+            }
+          }
+        }
+      }
       fontFamily: {
         name: "Select Font"
         type: 'select'
@@ -166,7 +201,7 @@ class PreloadItemText extends CssItemBase
       """
     else
       return """
-        <div class='#{@constructor.CONTENTS_CLASSNAME} change_before'><span class='text_wrapper'>#{@inputText}</span></div><div class='#{@constructor.CONTENTS_CLASSNAME} change_after'  style='opacity: 0'><span class='text_wrapper'></span></div>
+        <div class='item_wrapper'><div class='#{@constructor.CONTENTS_CLASSNAME} change_before'><span class='text_wrapper'>#{@inputText}</span></div><div class='#{@constructor.CONTENTS_CLASSNAME} change_after'  style='opacity: 0'><span class='text_wrapper'></span></div></div>
       """
 
   # マウスアップ時の描画イベント

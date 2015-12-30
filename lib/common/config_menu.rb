@@ -47,15 +47,15 @@ class ConfigMenu
     dir = is_design ? 'design' : 'event'
     modifiables.each do |var, v|
       temp_name = ''
-      if v['type'] == Const::ItemDesignOptionType::NUMBER
+      if v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::NUMBER
         temp_name = 'slider'
-      elsif v['type'] == Const::ItemDesignOptionType::STRING
+      elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::STRING
         temp_name = 'textbox'
-      elsif v['type'] == Const::ItemDesignOptionType::COLOR
+      elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::COLOR
         temp_name = 'color'
-      elsif v['type'] == Const::ItemDesignOptionType::SELECT_FILE
+      elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::SELECT_FILE
         temp_name = 'select_file'
-      elsif v['type'] == Const::ItemDesignOptionType::SELECT
+      elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::SELECT
         temp_name = 'select'
       end
       temp = "sidebar_menu/#{dir}/parts/#{temp_name}"
@@ -80,6 +80,22 @@ class ConfigMenu
                 value: value
             }
         )
+      end
+
+      if v[Const::ItemActionPropertiesKey::MODIFIABLE_CHILDREN].present?
+        mod = {}
+        # 変数データのみ抽出
+        v[Const::ItemActionPropertiesKey::MODIFIABLE_CHILDREN].each do |kk, vv|
+          if vv.is_a?(Hash)
+            mod[kk] = vv
+          end
+        end
+        # ChildrenをWrap
+        ret +=<<-"WRAPPER"
+         <div class='#{Const::ConfigMenu::Modifiable::CHILDREN_WRAPPER_CLASS.gsub('@parentvarname', var)}'>
+           #{_modifiables_vars_config(controller, mod, is_design)}
+         </div>
+        WRAPPER
       end
 
     end

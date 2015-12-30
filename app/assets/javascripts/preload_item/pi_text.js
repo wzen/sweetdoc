@@ -18,6 +18,41 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.actionProperties = {
     modifiables: {
+      textColor: {
+        name: 'BalloonColor',
+        "default": '#000',
+        colorType: 'hex'
+      },
+      showBalloon: {
+        name: 'Show Balloon',
+        "default": false,
+        type: 'boolean',
+        ja: {
+          name: '吹き出し表示'
+        },
+        children: {
+          triggerValue: 'true',
+          balloonColor: {
+            name: 'BalloonColor',
+            "default": '#fff',
+            type: 'color',
+            colorType: 'hex',
+            ja: {
+              name: '吹き出しの色'
+            }
+          },
+          balloonRadius: {
+            name: 'BalloonRadius',
+            "default": 10,
+            type: 'number',
+            min: 1,
+            max: 15,
+            ja: {
+              name: '吹き出しの角丸'
+            }
+          }
+        }
+      },
       fontFamily: {
         name: "Select Font",
         type: 'select',
@@ -76,7 +111,7 @@ PreloadItemText = (function(superClass) {
     if (this._editing) {
       return "<input type='text' class='text_wrapper " + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;height:100%;\">";
     } else {
-      return "<div class='" + this.constructor.CONTENTS_CLASSNAME + " change_before'><span class='text_wrapper'>" + this.inputText + "</span></div><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_after'  style='opacity: 0'><span class='text_wrapper'></span></div>";
+      return "<div class='item_wrapper'><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_before'><span class='text_wrapper'>" + this.inputText + "</span></div><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_after'  style='opacity: 0'><span class='text_wrapper'></span></div></div>";
     }
   };
 

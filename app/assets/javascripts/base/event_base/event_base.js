@@ -41,6 +41,10 @@ EventBase = (function(superClass) {
 
       ActionPropertiesKey.MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS;
 
+      ActionPropertiesKey.MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN;
+
+      ActionPropertiesKey.MODIFIABLE_CHILDREN_TRIGGERVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_TRIGGERVALUE;
+
       return ActionPropertiesKey;
 
     })();

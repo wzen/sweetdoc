@@ -17,6 +17,14 @@ ConfigMenu = (function() {
       return Action;
 
     })();
+    ConfigMenu.Modifiable = (function() {
+      function Modifiable() {}
+
+      Modifiable.CHILDREN_WRAPPER_CLASS = constant.ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS;
+
+      return Modifiable;
+
+    })();
   }
 
   ConfigMenu.getDesignConfig = function(obj, successCallback, errorCallback) {

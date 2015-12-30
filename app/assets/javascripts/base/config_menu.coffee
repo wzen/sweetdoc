@@ -6,6 +6,8 @@ class ConfigMenu
     @ROOT_ID = constant.ConfigMenu.ROOT_ID
     class @Action
       @PRELOAD_IMAGE_PATH_SELECT = constant.ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT
+    class @Modifiable
+      @CHILDREN_WRAPPER_CLASS = constant.ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS
 
   # デザインコンフィグ
   @getDesignConfig = (obj, successCallback = null, errorCallback = null) ->
