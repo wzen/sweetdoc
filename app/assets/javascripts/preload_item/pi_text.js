@@ -31,7 +31,7 @@ PreloadItemText = (function(superClass) {
           name: '吹き出し表示'
         },
         children: {
-          triggerValue: 'true',
+          triggerValue: true,
           balloonColor: {
             name: 'BalloonColor',
             "default": '#fff',

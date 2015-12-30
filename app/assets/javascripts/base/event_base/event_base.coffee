@@ -27,8 +27,8 @@ class EventBase extends Extend
 
   constructor: ->
     # modifiables変数の初期化
-    if @constructor.actionProperties? && @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]?
-      for varName, value of @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
+    if @constructor.actionProperties? && @constructor.actionPropertiesModifiableVars()?
+      for varName, value of @constructor.actionPropertiesModifiableVars()
         @[varName] = value.default
 
   # 変更を戻して再表示
@@ -439,7 +439,7 @@ class EventBase extends Extend
     # NOTICE: varAutoChange=falseの場合は(変数)_xxxの形で変更前、変更後、進捗を渡してdraw側で処理させる
     progressPercentage = progressValue / progressMax
     eventBeforeObj = @getMinimumObjectEventBefore()
-    mod = @constructor.actionProperties.methods[@getEventMethodName()][@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
+    mod = @constructor.actionPropertiesModifiableVars(@getEventMethodName())
     for varName, value of mod
       if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
         before = eventBeforeObj[varName]
@@ -455,7 +455,7 @@ class EventBase extends Extend
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
-                  colorType = @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType
+                  colorType = @constructor.actionPropertiesModifiableVars()[varName].colorType
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
@@ -470,7 +470,7 @@ class EventBase extends Extend
     ed = @eventDuration()
     progressMax = @progressMax()
     eventBeforeObj = @getMinimumObjectEventBefore()
-    mod = @constructor.actionProperties.methods[@getEventMethodName()][@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
+    mod = @constructor.actionPropertiesModifiableVars(@getEventMethodName())
     if immediate
       for varName, value of mod
         if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
@@ -493,7 +493,7 @@ class EventBase extends Extend
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
-                  colorType = @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType
+                  colorType = @constructor.actionPropertiesModifiableVars()[varName].colorType
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
@@ -514,7 +514,7 @@ class EventBase extends Extend
       return
 
     beforeObj = @getMinimumObjectEventBefore()
-    mod = @constructor.actionProperties.methods[@getEventMethodName()][@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
+    mod = @constructor.actionPropertiesModifiableVars(@getEventMethodName())
     for varName, value of mod
       if beforeObj?
         @[varName + @constructor.BEFORE_MODIFY_VAR_SUFFIX] = beforeObj[varName]
@@ -585,17 +585,26 @@ class EventBase extends Extend
   @initSpecificConfig = (specificRoot) ->
 
   # 編集可能変数プロパティを取得(childrenを含む)
-  @actionPropertiesModifiableVars = (modifiableRoot) ->
+  @actionPropertiesModifiableVars = (methodName = null, isDefault = false) ->
     ret = {}
-    for k, v of modifiableRoot
-      ret[k] = v
-      if v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]?
-        # Childrenを含める
-        mod = {}
-        for kk, vv of v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]
-          if vv instanceof Object
-            mod[kk] = vv
-        ret = $.extend(ret, @actionPropertiesModifiableVars(mod))
+    if methodName?
+      if isDefault
+        modifiableRoot = @actionProperties[methodName][@ActionPropertiesKey.MODIFIABLE_VARS]
+      else
+        modifiableRoot = @actionProperties.methods[methodName][@ActionPropertiesKey.MODIFIABLE_VARS]
+    else
+      modifiableRoot = @actionProperties[@ActionPropertiesKey.MODIFIABLE_VARS]
+
+    if modifiableRoot?
+      for k, v of modifiableRoot
+        ret[k] = v
+        if v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]?
+          # Childrenを含める
+          mod = {}
+          for kk, vv of v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]
+            if vv instanceof Object
+              mod[kk] = vv
+          ret = $.extend(ret, @actionPropertiesModifiableVars(mod))
     return ret
 
 

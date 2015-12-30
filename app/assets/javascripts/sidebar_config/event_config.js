@@ -431,10 +431,10 @@ EventConfig = (function() {
 
   EventConfig.prototype.initEventVarModifyConfig = function(objClass) {
     var defaultValue, mod, results, v, varName;
-    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS] == null)) {
+    if ((objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]] == null) || (objClass.actionPropertiesModifiableVars(this[EventPageValueBase.PageValueKey.METHODNAME]) == null)) {
       return;
     }
-    mod = objClass.actionProperties.methods[this[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS];
+    mod = objClass.actionPropertiesModifiableVars(this[EventPageValueBase.PageValueKey.METHODNAME]);
     if (mod != null) {
       results = [];
       for (varName in mod) {
@@ -447,8 +447,8 @@ EventConfig = (function() {
           if (this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] != null) {
             objClass = Common.getContentClass(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
           }
-          if (objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName] != null) {
-            defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName]["default"];
+          if (objClass.actionPropertiesModifiableVars()[varName] != null) {
+            defaultValue = objClass.actionPropertiesModifiableVars()[varName]["default"];
           }
         }
         if (v.type === Constant.ItemDesignOptionType.NUMBER) {

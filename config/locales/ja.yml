@@ -21,7 +21,7 @@ ja:
       preload_item: "標準アイテム"
       added_item: "追加アイテム"
       edit: "編集"
-      item_coding: "アイテム作成"
+      item_coding: "アイテム作成(開発者向け)"
     motion_check:
       title: "動作確認"
       newtab: "新タブで実行"

@@ -232,7 +232,7 @@ class ItemBase extends ItemEventBase
   @defaultModifiableVars = ->
     if @actionProperties? &&
       @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT]?
-        mod = @actionProperties[@ActionPropertiesKey.DEFAULT_EVENT][@ActionPropertiesKey.MODIFIABLE_VARS]
+        mod = @actionPropertiesModifiableVars(@ActionPropertiesKey.DEFAULT_EVENT, true)
         if mod?
           return mod
         else

@@ -512,8 +512,8 @@ itemBaseWorktableExtend = {
   settingModifiableChangeEvent: function() {
     var designConfigRoot, ref, results, value, varName;
     designConfigRoot = $('#' + this.getDesignConfigId());
-    if (this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS] != null) {
-      ref = this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
+    if (this.constructor.actionPropertiesModifiableVars() != null) {
+      ref = this.constructor.actionPropertiesModifiableVars();
       results = [];
       for (varName in ref) {
         value = ref[varName];

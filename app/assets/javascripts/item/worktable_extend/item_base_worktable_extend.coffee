@@ -446,8 +446,8 @@ itemBaseWorktableExtend =
   # 変数編集イベント設定
   settingModifiableChangeEvent: ->
     designConfigRoot = $('#' + @getDesignConfigId())
-    if @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]?
-      for varName, value of @constructor.actionProperties[@constructor.ActionPropertiesKey.MODIFIABLE_VARS]
+    if @constructor.actionPropertiesModifiableVars()?
+      for varName, value of @constructor.actionPropertiesModifiableVars()
         if value.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max)
         else if value.type == Constant.ItemDesignOptionType.STRING

@@ -52,8 +52,8 @@ EventBase = (function(superClass) {
 
   function EventBase() {
     var ref, value, varName;
-    if ((this.constructor.actionProperties != null) && (this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS] != null)) {
-      ref = this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
+    if ((this.constructor.actionProperties != null) && (this.constructor.actionPropertiesModifiableVars() != null)) {
+      ref = this.constructor.actionPropertiesModifiableVars();
       for (varName in ref) {
         value = ref[varName];
         this[varName] = value["default"];
@@ -507,7 +507,7 @@ EventBase = (function(superClass) {
     }
     progressPercentage = progressValue / progressMax;
     eventBeforeObj = this.getMinimumObjectEventBefore();
-    mod = this.constructor.actionProperties.methods[this.getEventMethodName()][this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
+    mod = this.constructor.actionPropertiesModifiableVars(this.getEventMethodName());
     results = [];
     for (varName in mod) {
       value = mod[varName];
@@ -524,7 +524,7 @@ EventBase = (function(superClass) {
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChange__Cache";
                 if (this[colorCacheVarName] == null) {
-                  colorType = this.constructor.actionProperties[this.constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType;
+                  colorType = this.constructor.actionPropertiesModifiableVars()[varName].colorType;
                   if (colorType == null) {
                     colorType = 'hex';
                   }
@@ -559,7 +559,7 @@ EventBase = (function(superClass) {
     ed = this.eventDuration();
     progressMax = this.progressMax();
     eventBeforeObj = this.getMinimumObjectEventBefore();
-    mod = this.constructor.actionProperties.methods[this.getEventMethodName()][this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
+    mod = this.constructor.actionPropertiesModifiableVars(this.getEventMethodName());
     if (immediate) {
       for (varName in mod) {
         value = mod[varName];
@@ -589,7 +589,7 @@ EventBase = (function(superClass) {
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChange__Cache";
                   if (_this[colorCacheVarName] == null) {
-                    colorType = _this.constructor.actionProperties[_this.constructor.ActionPropertiesKey.MODIFIABLE_VARS][varName].colorType;
+                    colorType = _this.constructor.actionPropertiesModifiableVars()[varName].colorType;
                     if (colorType == null) {
                       colorType = 'hex';
                     }
@@ -630,7 +630,7 @@ EventBase = (function(superClass) {
       return;
     }
     beforeObj = this.getMinimumObjectEventBefore();
-    mod = this.constructor.actionProperties.methods[this.getEventMethodName()][this.constructor.ActionPropertiesKey.MODIFIABLE_VARS];
+    mod = this.constructor.actionPropertiesModifiableVars(this.getEventMethodName());
     results = [];
     for (varName in mod) {
       value = mod[varName];
@@ -722,22 +722,39 @@ EventBase = (function(superClass) {
 
   EventBase.initSpecificConfig = function(specificRoot) {};
 
-  EventBase.actionPropertiesModifiableVars = function(modifiableRoot) {
-    var k, kk, mod, ref, ret, v, vv;
+  EventBase.actionPropertiesModifiableVars = function(methodName, isDefault) {
+    var k, kk, mod, modifiableRoot, ref, ret, v, vv;
+    if (methodName == null) {
+      methodName = null;
+    }
+    if (isDefault == null) {
+      isDefault = false;
+    }
     ret = {};
-    for (k in modifiableRoot) {
-      v = modifiableRoot[k];
-      ret[k] = v;
-      if (v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
-        mod = {};
-        ref = v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN];
-        for (kk in ref) {
-          vv = ref[kk];
-          if (vv instanceof Object) {
-            mod[kk] = vv;
+    if (methodName != null) {
+      if (isDefault) {
+        modifiableRoot = this.actionProperties[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
+      } else {
+        modifiableRoot = this.actionProperties.methods[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
+      }
+    } else {
+      modifiableRoot = this.actionProperties[this.ActionPropertiesKey.MODIFIABLE_VARS];
+    }
+    if (modifiableRoot != null) {
+      for (k in modifiableRoot) {
+        v = modifiableRoot[k];
+        ret[k] = v;
+        if (v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
+          mod = {};
+          ref = v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN];
+          for (kk in ref) {
+            vv = ref[kk];
+            if (vv instanceof Object) {
+              mod[kk] = vv;
+            }
           }
+          ret = $.extend(ret, this.actionPropertiesModifiableVars(mod));
         }
-        ret = $.extend(ret, this.actionPropertiesModifiableVars(mod));
       }
     }
     return ret;

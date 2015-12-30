@@ -407,11 +407,11 @@ class EventConfig
   # 変数編集コンフィグの初期化
   initEventVarModifyConfig: (objClass) ->
     if !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]]? ||
-      !objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS]?
+      !objClass.actionPropertiesModifiableVars(@[EventPageValueBase.PageValueKey.METHODNAME])?
         # メソッド or 変数編集無し
         return
 
-    mod = objClass.actionProperties.methods[@[EventPageValueBase.PageValueKey.METHODNAME]][objClass.ActionPropertiesKey.MODIFIABLE_VARS]
+    mod = objClass.actionPropertiesModifiableVars(@[EventPageValueBase.PageValueKey.METHODNAME])
     if mod?
       for varName, v of mod
         defaultValue = null
@@ -421,8 +421,8 @@ class EventConfig
           objClass = null
           if @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]?
             objClass = Common.getContentClass(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
-          if objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName]?
-            defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName].default
+          if objClass.actionPropertiesModifiableVars()[varName]?
+            defaultValue = objClass.actionPropertiesModifiableVars()[varName].default
 
         if v.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)

@@ -269,7 +269,7 @@ ItemBase = (function(superClass) {
   ItemBase.defaultModifiableVars = function() {
     var mod;
     if ((this.actionProperties != null) && (this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT] != null)) {
-      mod = this.actionProperties[this.ActionPropertiesKey.DEFAULT_EVENT][this.ActionPropertiesKey.MODIFIABLE_VARS];
+      mod = this.actionPropertiesModifiableVars(this.ActionPropertiesKey.DEFAULT_EVENT, true);
       if (mod != null) {
         return mod;
       } else {

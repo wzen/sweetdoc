@@ -42,7 +42,7 @@ en:
       preload_item: "Default items"
       added_item: "Added items"
       edit: "Edit"
-      item_coding: "Create Item"
+      item_coding: "Create Item(For Dev)"
     motion_check:
       title: "Motion Check"
       newtab: "New Tab"
