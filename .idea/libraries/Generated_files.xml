@@ -21,6 +21,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
         <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_canvas.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip_newver_bak.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
         <item url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
@@ -95,6 +96,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
       <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_canvas.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/paging_animation/pageflip_newver_bak.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/worktable_common.js" />
       <root url="file://$PROJECT_DIR$/public/code_template/item/en/coffeescript_css.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />

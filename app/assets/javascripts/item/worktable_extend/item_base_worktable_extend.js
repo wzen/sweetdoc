@@ -273,8 +273,8 @@ itemBaseWorktableExtend = {
         var _existFocusSetItem, focusEmt, h, name, visibleEmt, w, x, y;
         name = $('.item-name', designConfigRoot);
         name.val(_this.name);
-        name.off('change').on('change', function() {
-          _this.name = $(_this).val();
+        name.off('change').on('change', function(e) {
+          _this.name = $(e.target).val();
           return _this.setItemPropToPageValue('name', _this.name);
         });
         _existFocusSetItem = function() {
@@ -575,8 +575,8 @@ itemBaseWorktableExtend = {
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
     $("." + varName + "_text", configRoot).val(defaultValue);
     return $("." + varName + "_text", configRoot).off('change').on('change', (function(_this) {
-      return function() {
-        _this[varName] = $(_this).val();
+      return function(e) {
+        _this[varName] = $(e.target).val();
         return _this.applyDesignChange();
       };
     })(this));

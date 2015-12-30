@@ -447,7 +447,9 @@ EventConfig = (function() {
           if (this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN] != null) {
             objClass = Common.getContentClass(this[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]);
           }
-          defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName]["default"];
+          if (objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName] != null) {
+            defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName]["default"];
+          }
         }
         if (v.type === Constant.ItemDesignOptionType.NUMBER) {
           results.push(this.settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue));
@@ -560,11 +562,11 @@ EventConfig = (function() {
   EventConfig.prototype.settingModifiableString = function(varName, defaultValue) {
     $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_text", this.emt).val(defaultValue);
     return $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
-      return function() {
+      return function(e) {
         if (!_this.hasModifiableVar(varName)) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(_this).val();
+        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(e.target).val();
       };
     })(this));
   };

@@ -118,6 +118,28 @@ class PreloadItemText extends CssItemBase
         ]
       }
     }
+    methods : {
+      changeText: {
+        modifiables: {
+          inputText: {
+            name: "Text"
+            type: 'string'
+            ja: {
+              name: "文字"
+            }
+          }
+        }
+        options: {
+          id: 'changeText'
+          name: 'Text'
+          desc: "Text"
+          ja: {
+            name: 'テキスト'
+            desc: 'テキスト変更'
+          }
+        }
+      }
+    }
   }
 
   # コンストラクタ
@@ -140,11 +162,11 @@ class PreloadItemText extends CssItemBase
   cssItemHtml: ->
     if @_editing
       return """
-        <input type='text' class='#{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;height:100%;">
+        <input type='text' class='text_wrapper #{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;height:100%;">
       """
     else
       return """
-        <div class='#{@constructor.CONTENTS_CLASSNAME}'>#{@inputText}</div>
+        <div class='#{@constructor.CONTENTS_CLASSNAME} change_before'><span class='text_wrapper'>#{@inputText}</span></div><div class='#{@constructor.CONTENTS_CLASSNAME} change_after'  style='opacity: 0'><span class='text_wrapper'></span></div>
       """
 
   # マウスアップ時の描画イベント
@@ -166,6 +188,8 @@ class PreloadItemText extends CssItemBase
       # テキストを選択状態に
       @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").focus()
       @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").select()
+      # line-height設定
+      @getJQueryElement().find('.text_wrapper').css('line-height', @getJQueryElement().find('.text_wrapper').parent().height() + 'px')
 
       if callback?
         callback()
@@ -175,18 +199,32 @@ class PreloadItemText extends CssItemBase
   # TODO: CSSファイルで管理できるように修正
   cssStyle: ->
     return """
-      ##{@id} .#{@constructor.INPUT_CLASSNAME}, ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
+      ##{@id} .text_wrapper {
         font-family: '#{@fontFamily}';
         font-size: #{@fontSize}px;
         display: table-cell;
         vertical-align: middle;
       }
-      ##{@id} .css_item_base {
+      ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
+        text-align: center;
         display: table;
         width: 100%;
         height: 100%;
       }
     """
+
+  changeText: (opt) ->
+    changeBefore = @getJQueryElement().find('.change_before:first')
+    changeAfter = @getJQueryElement().find('.change_after:first')
+    if changeAfter.find('span:first').text().length == 0
+      changeBefore.find('span:first').html(@inputText__before)
+      changeBefore.css('opacity', 1)
+      changeAfter.find('span:first').html(@inputText__after)
+      changeAfter.css('opacity', 0)
+    else
+      opa = 1 * opt.progress / opt.progressMax
+      changeBefore.css('opacity', 1 - opa)
+      changeAfter.css('opacity', opa)
 
   _fontSize = ->
     if @itemSize.w > @itemSize.h
@@ -204,6 +242,8 @@ class PreloadItemText extends CssItemBase
       @refresh(true, =>
         # テキストイベント設定
         _settingInputEvent.call(@)
+        # line-height設定
+        @getJQueryElement().find('.text_wrapper').css('line-height', @getJQueryElement().find('.text_wrapper').parent().height() + 'px')
         # テキストを選択状態に
         @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").focus()
         @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").select()

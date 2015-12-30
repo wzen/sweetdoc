@@ -421,7 +421,8 @@ class EventConfig
           objClass = null
           if @[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN]?
             objClass = Common.getContentClass(@[EventPageValueBase.PageValueKey.CLASS_DIST_TOKEN])
-          defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName].default
+          if objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName]?
+            defaultValue = objClass.actionProperties[objClass.ActionPropertiesKey.MODIFIABLE_VARS][varName].default
 
         if v.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
@@ -504,10 +505,10 @@ class EventConfig
   # @param [String] varName 変数名
   settingModifiableString: (varName, defaultValue) ->
     $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).val(defaultValue)
-    $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).off('change').on('change', =>
+    $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).off('change').on('change', (e) =>
       if !@hasModifiableVar(varName)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
-      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(@).val()
+      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(e.target).val()
     )
 
   # 変数編集カラーピッカーの作成

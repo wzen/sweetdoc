@@ -226,8 +226,8 @@ itemBaseWorktableExtend =
       # アイテム名の変更
       name = $('.item-name', designConfigRoot)
       name.val(@name)
-      name.off('change').on('change', =>
-        @name = $(@).val()
+      name.off('change').on('change', (e) =>
+        @name = $(e.target).val()
         @setItemPropToPageValue('name', @name)
       )
 
@@ -492,8 +492,8 @@ itemBaseWorktableExtend =
   settingModifiableString: (configRoot, varName) ->
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     $(".#{varName}_text", configRoot).val(defaultValue)
-    $(".#{varName}_text", configRoot).off('change').on('change', =>
-      @[varName] = $(@).val()
+    $(".#{varName}_text", configRoot).off('change').on('change', (e) =>
+      @[varName] = $(e.target).val()
       @applyDesignChange()
     )
 

@@ -519,7 +519,7 @@ class EventBase extends Extend
       if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]?
         afterObj = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         if afterObj?
-          @[varName + @constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj[varName]
+          @[varName + @constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj
 
   # アイテムの情報をページ値に保存
   # @property [Boolean] isCache キャッシュとして保存するか

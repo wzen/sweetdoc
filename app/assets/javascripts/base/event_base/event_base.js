@@ -636,7 +636,7 @@ EventBase = (function(superClass) {
       if (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) {
         afterObj = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
         if (afterObj != null) {
-          results.push(this[varName + this.constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj[varName]);
+          results.push(this[varName + this.constructor.AFTER_MODIFY_VAR_SUFFIX] = afterObj);
         } else {
           results.push(void 0);
         }
