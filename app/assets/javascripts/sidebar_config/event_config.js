@@ -556,7 +556,7 @@ EventConfig = (function() {
           }
           value = ui.value;
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
-          return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
+          return _this.constructor.switchChildrenConfig(event.target, varName, openChildrenValue, value);
         };
       })(this)
     }).trigger('slide');
@@ -572,7 +572,7 @@ EventConfig = (function() {
         }
         value = $(e.target).val();
         _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
-        return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
+        return _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
       };
     })(this)).trigger('change');
   };
@@ -588,10 +588,10 @@ EventConfig = (function() {
         }
         value = "#" + b;
         _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
-        return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
+        return _this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, value);
       };
     })(this));
-    return this.constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue);
+    return this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, defaultValue);
   };
 
   EventConfig.prototype.settingModifiableSelect = function(varName, defaultValue, openChildrenValue, selectOptions) {
@@ -627,7 +627,7 @@ EventConfig = (function() {
         }
         value = _splitArray.call(_this, $(e.target).val());
         _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
-        return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
+        return _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
       };
     })(this)).trigger('change');
   };

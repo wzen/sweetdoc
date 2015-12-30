@@ -562,13 +562,16 @@ itemBaseWorktableExtend = {
       value: defaultValue,
       slide: (function(_this) {
         return function(event, ui) {
-          valueElement.val(ui.value);
-          valueElement.html(ui.value);
-          _this[varName] = ui.value;
+          var value;
+          value = ui.value;
+          valueElement.val(value);
+          valueElement.html(value);
+          _this[varName] = value;
+          _this.constructor.switchChildrenConfig(event.target, varName, openChildrenValue, value);
           return _this.applyDesignChange();
         };
       })(this)
-    });
+    }).trigger('slide');
   },
   settingModifiableString: function(configRoot, varName, openChildrenValue) {
     var defaultValue;
@@ -579,7 +582,7 @@ itemBaseWorktableExtend = {
         var value;
         value = $(e.target).val();
         _this[varName] = value;
-        _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
+        _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
     })(this)).trigger('change');
@@ -593,11 +596,11 @@ itemBaseWorktableExtend = {
         var value;
         value = "#" + b;
         _this[varName] = value;
-        _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
+        _this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
     })(this));
-    return this.constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue);
+    return this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, defaultValue);
   },
   settingModifiableSelectFile: function(configRoot, varName) {
     var form;
@@ -646,7 +649,7 @@ itemBaseWorktableExtend = {
         var value;
         value = _splitArray.call(_this, $(e.target).val());
         _this[varName] = value;
-        _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
+        _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
     })(this)).trigger('change');

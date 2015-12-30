@@ -500,7 +500,7 @@ class EventConfig
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
         value = ui.value
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
-        @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+        @constructor.switchChildrenConfig(event.target, varName, openChildrenValue, value)
     }).trigger('slide')
 
   # 変数編集テキストボックスの作成
@@ -512,7 +512,7 @@ class EventConfig
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       value = $(e.target).val()
       @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
-      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+      @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
     ).trigger('change')
 
   # 変数編集カラーピッカーの作成
@@ -528,9 +528,9 @@ class EventConfig
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
         value = "##{b}"
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
-        @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+        @constructor.switchChildrenConfig(emt, varName, openChildrenValue, value)
     )
-    @constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue)
+    @constructor.switchChildrenConfig(emt, varName, openChildrenValue, defaultValue)
 
   # 変数編集選択メニューの作成
   settingModifiableSelect: (varName, defaultValue, openChildrenValue, selectOptions) ->
@@ -559,7 +559,7 @@ class EventConfig
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       value = _splitArray.call(@, $(e.target).val())
       @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
-      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+      @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
     ).trigger('change')
 
   # アイテム選択メニューを更新

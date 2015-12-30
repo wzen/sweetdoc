@@ -480,11 +480,13 @@ itemBaseWorktableExtend =
       step: stepValue,
       value: defaultValue
       slide: (event, ui) =>
-        valueElement.val(ui.value)
-        valueElement.html(ui.value)
-        @[varName] = ui.value
+        value = ui.value
+        valueElement.val(value)
+        valueElement.html(value)
+        @[varName] = value
+        @constructor.switchChildrenConfig(event.target, varName, openChildrenValue, value)
         @applyDesignChange()
-    })
+    }).trigger('slide')
 
   # 変数編集テキストボックスの作成
   # @param [Object] configRoot コンフィグルート
@@ -495,7 +497,7 @@ itemBaseWorktableExtend =
     $(".#{varName}_text", configRoot).off('change').on('change', (e) =>
       value = $(e.target).val()
       @[varName] = value
-      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+      @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
       @applyDesignChange()
     ).trigger('change')
 
@@ -511,10 +513,10 @@ itemBaseWorktableExtend =
       (a, b, d, e) =>
         value = "##{b}"
         @[varName] = value
-        @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+        @constructor.switchChildrenConfig(emt, varName, openChildrenValue, value)
         @applyDesignChange()
     )
-    @constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue)
+    @constructor.switchChildrenConfig(emt, varName, openChildrenValue, defaultValue)
 
   # 変数編集ファイルアップロードの作成
   # @param [Object] configRoot コンフィグルート
@@ -556,7 +558,7 @@ itemBaseWorktableExtend =
     selectEmt.off('change').on('change', (e) =>
       value = _splitArray.call(@, $(e.target).val())
       @[varName] = value
-      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+      @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
       @applyDesignChange()
     ).trigger('change')
 
