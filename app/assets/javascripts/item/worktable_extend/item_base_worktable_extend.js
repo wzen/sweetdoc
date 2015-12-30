@@ -518,15 +518,15 @@ itemBaseWorktableExtend = {
       for (varName in ref) {
         value = ref[varName];
         if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-          results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max));
+          results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max));
         } else if (value.type === Constant.ItemDesignOptionType.STRING) {
-          results.push(this.settingModifiableString(designConfigRoot, varName));
+          results.push(this.settingModifiableString(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-          results.push(this.settingModifiableColor(designConfigRoot, varName));
+          results.push(this.settingModifiableColor(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
           results.push(this.settingModifiableSelectFile(designConfigRoot, varName));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT) {
-          results.push(this.settingModifiableSelect(designConfigRoot, varName, value['options[]']));
+          results.push(this.settingModifiableSelect(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value['options[]']));
         } else {
           results.push(void 0);
         }
@@ -534,7 +534,7 @@ itemBaseWorktableExtend = {
       return results;
     }
   },
-  settingModifiableVarSlider: function(configRoot, varName, min, max, stepValue) {
+  settingModifiableVarSlider: function(configRoot, varName, openChildrenValue, min, max, stepValue) {
     var defaultValue, meterElement, valueElement;
     if (min == null) {
       min = 0;
@@ -570,27 +570,34 @@ itemBaseWorktableExtend = {
       })(this)
     });
   },
-  settingModifiableString: function(configRoot, varName) {
+  settingModifiableString: function(configRoot, varName, openChildrenValue) {
     var defaultValue;
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
     $("." + varName + "_text", configRoot).val(defaultValue);
     return $("." + varName + "_text", configRoot).off('change').on('change', (function(_this) {
       return function(e) {
-        _this[varName] = $(e.target).val();
+        var value;
+        value = $(e.target).val();
+        _this[varName] = value;
+        _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
-    })(this));
+    })(this)).trigger('change');
   },
-  settingModifiableColor: function(configRoot, varName) {
+  settingModifiableColor: function(configRoot, varName, openChildrenValue) {
     var defaultValue, emt;
     emt = $("." + varName + "_color", configRoot);
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
-    return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
+    ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
       return function(a, b, d, e) {
-        _this[varName] = "#" + b;
+        var value;
+        value = "#" + b;
+        _this[varName] = value;
+        _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
     })(this));
+    return this.constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue);
   },
   settingModifiableSelectFile: function(configRoot, varName) {
     var form;
@@ -606,7 +613,7 @@ itemBaseWorktableExtend = {
       };
     })(this));
   },
-  settingModifiableSelect: function(configRoot, varName, selectOptions) {
+  settingModifiableSelect: function(configRoot, varName, openChildrenValue, selectOptions) {
     var _joinArray, _splitArray, defaultValue, j, len, option, selectEmt, v;
     _joinArray = function(value) {
       if ($.isArray(value)) {
@@ -636,10 +643,13 @@ itemBaseWorktableExtend = {
     }
     return selectEmt.off('change').on('change', (function(_this) {
       return function(e) {
-        _this[varName] = _splitArray.call(_this, $(e.target).val());
+        var value;
+        value = _splitArray.call(_this, $(e.target).val());
+        _this[varName] = value;
+        _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
-    })(this));
+    })(this)).trigger('change');
   },
   initModifiableSelectFile: function(emt) {
     $(emt).find("." + this.constructor.ImageKey.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));

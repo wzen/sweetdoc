@@ -424,14 +424,14 @@ class EventConfig
           if objClass.actionPropertiesModifiableVars()[varName]?
             defaultValue = objClass.actionPropertiesModifiableVars()[varName].default
 
-        if v.type == Constant.ItemDesignOptionType.NUMBER
-          @settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue)
-        else if v.type == Constant.ItemDesignOptionType.STRING
-          @settingModifiableString(varName, defaultValue)
-        else if v.type == Constant.ItemDesignOptionType.COLOR
-          @settingModifiableColor(varName, defaultValue)
-        else if v.type == Constant.ItemDesignOptionType.SELECT
-          @settingModifiableSelect(varName, defaultValue, v['options[]'])
+        if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.NUMBER
+          @settingModifiableVarSlider(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v.min, v.max, v.stepValue)
+        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.STRING
+          @settingModifiableString(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
+        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.COLOR
+          @settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
+        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.SELECT
+          @settingModifiableSelect(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v['options[]'])
 
   # 独自変数コンフィグの初期化
   initEventSpecificConfig: (objClass) ->
@@ -479,7 +479,7 @@ class EventConfig
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingModifiableVarSlider: (varName, defaultValue, min = 0, max = 100, stepValue = 1) ->
+  settingModifiableVarSlider: (varName, defaultValue, openChildrenValue, min = 0, max = 100, stepValue = 1) ->
     meterClassName = "#{varName}_meter"
     meterElement = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{meterClassName}", @emt)
     valueElement = meterElement.prev('input:first')
@@ -498,23 +498,27 @@ class EventConfig
         valueElement.html(ui.value)
         if !@hasModifiableVar(varName)
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
-        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = ui.value
-    })
+        value = ui.value
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
+        @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+    }).trigger('slide')
 
   # 変数編集テキストボックスの作成
   # @param [String] varName 変数名
-  settingModifiableString: (varName, defaultValue) ->
+  settingModifiableString: (varName, defaultValue, openChildrenValue) ->
     $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).val(defaultValue)
     $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).off('change').on('change', (e) =>
       if !@hasModifiableVar(varName)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
-      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(e.target).val()
-    )
+      value = $(e.target).val()
+      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
+      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+    ).trigger('change')
 
   # 変数編集カラーピッカーの作成
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
-  settingModifiableColor: (varName, defaultValue) ->
+  settingModifiableColor: (varName, defaultValue, openChildrenValue) ->
     emt = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_color", @emt)
     ColorPickerUtil.initColorPicker(
       $(emt),
@@ -522,12 +526,14 @@ class EventConfig
       (a, b, d, e) =>
         if !@hasModifiableVar(varName)
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
-        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "##{b}"
+        value = "##{b}"
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
+        @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
     )
+    @constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue)
 
   # 変数編集選択メニューの作成
-  settingModifiableSelect: (varName, defaultValue, selectOptions) ->
-
+  settingModifiableSelect: (varName, defaultValue, openChildrenValue, selectOptions) ->
     _joinArray = (value) ->
       if $.isArray(value)
         return value.join(',')
@@ -551,8 +557,10 @@ class EventConfig
     selectEmt.off('change').on('change', (e) =>
       if !@hasModifiableVar(varName)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
-      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(@, $(e.target).val())
-    )
+      value = _splitArray.call(@, $(e.target).val())
+      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
+      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
+    ).trigger('change')
 
   # アイテム選択メニューを更新
   @updateSelectItemMenu = ->
@@ -638,3 +646,20 @@ class EventConfig
       # メイン画面クリックで全アイテム再描画
       WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
     )
+
+  @switchChildrenConfig = (e, varName, openValue, targetValue) ->
+    if !openValue?
+      # 判定値無し
+      return
+
+    if typeof openValue == 'string' && (openValue == 'true' || openValue == 'false')
+      openValue = openValue == 'true'
+    if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
+      targetValue = targetValue == 'true'
+
+    root = e.closest('.event')
+    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName)
+    if openValue == targetValue
+      root.find(".#{openClassName}").show()
+    else
+      root.find(".#{openClassName}").hide()

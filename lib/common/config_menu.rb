@@ -83,17 +83,10 @@ class ConfigMenu
       end
 
       if v[Const::ItemActionPropertiesKey::MODIFIABLE_CHILDREN].present?
-        mod = {}
-        # 変数データのみ抽出
-        v[Const::ItemActionPropertiesKey::MODIFIABLE_CHILDREN].each do |kk, vv|
-          if vv.is_a?(Hash)
-            mod[kk] = vv
-          end
-        end
         # ChildrenをWrap
         ret +=<<-"WRAPPER"
          <div class='#{Const::ConfigMenu::Modifiable::CHILDREN_WRAPPER_CLASS.gsub('@parentvarname', var)}'>
-           #{_modifiables_vars_config(controller, mod, is_design)}
+           #{_modifiables_vars_config(controller, v[Const::ItemActionPropertiesKey::MODIFIABLE_CHILDREN], is_design)}
          </div>
         WRAPPER
       end

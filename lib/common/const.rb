@@ -387,7 +387,7 @@ class Const
     EVENT_DURATION = 'eventDuration'
     MODIFIABLE_VARS = 'modifiables'
     MODIFIABLE_CHILDREN = 'children'
-    MODIFIABLE_CHILDREN_TRIGGERVALUE = 'triggerValue'
+    MODIFIABLE_CHILDREN_OPENVALUE = 'openChildrenValue'
   end
 
   class Run

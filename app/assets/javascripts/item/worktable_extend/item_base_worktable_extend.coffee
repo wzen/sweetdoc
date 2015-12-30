@@ -449,15 +449,15 @@ itemBaseWorktableExtend =
     if @constructor.actionPropertiesModifiableVars()?
       for varName, value of @constructor.actionPropertiesModifiableVars()
         if value.type == Constant.ItemDesignOptionType.NUMBER
-          @settingModifiableVarSlider(designConfigRoot, varName, value.min, value.max)
+          @settingModifiableVarSlider(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max)
         else if value.type == Constant.ItemDesignOptionType.STRING
-          @settingModifiableString(designConfigRoot, varName)
+          @settingModifiableString(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.COLOR
-          @settingModifiableColor(designConfigRoot, varName)
+          @settingModifiableColor(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
           @settingModifiableSelectFile(designConfigRoot, varName)
         else if value.type == Constant.ItemDesignOptionType.SELECT
-          @settingModifiableSelect(designConfigRoot, varName, value['options[]'])
+          @settingModifiableSelect(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value['options[]'])
 
   # 変数編集スライダーの作成
   # @param [Object] configRoot コンフィグルート
@@ -465,7 +465,7 @@ itemBaseWorktableExtend =
   # @param [Int] min 最小値
   # @param [Int] max 最大値
   # @param [Int] stepValue 進捗数
-  settingModifiableVarSlider: (configRoot, varName, min = 0, max = 100, stepValue = 1) ->
+  settingModifiableVarSlider: (configRoot, varName, openChildrenValue, min = 0, max = 100, stepValue = 1) ->
     meterElement = $(".#{varName}_meter", configRoot)
     valueElement = meterElement.prev('input:first')
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
@@ -489,27 +489,32 @@ itemBaseWorktableExtend =
   # 変数編集テキストボックスの作成
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
-  settingModifiableString: (configRoot, varName) ->
+  settingModifiableString: (configRoot, varName, openChildrenValue) ->
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     $(".#{varName}_text", configRoot).val(defaultValue)
     $(".#{varName}_text", configRoot).off('change').on('change', (e) =>
-      @[varName] = $(e.target).val()
+      value = $(e.target).val()
+      @[varName] = value
+      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
       @applyDesignChange()
-    )
+    ).trigger('change')
 
   # 変数編集カラーピッカーの作成
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
-  settingModifiableColor: (configRoot, varName) ->
+  settingModifiableColor: (configRoot, varName, openChildrenValue) ->
     emt = $(".#{varName}_color", configRoot)
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     ColorPickerUtil.initColorPicker(
       $(emt),
       defaultValue,
       (a, b, d, e) =>
-        @[varName] = "##{b}"
+        value = "##{b}"
+        @[varName] = value
+        @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
         @applyDesignChange()
     )
+    @constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue)
 
   # 変数編集ファイルアップロードの作成
   # @param [Object] configRoot コンフィグルート
@@ -525,7 +530,7 @@ itemBaseWorktableExtend =
     )
 
   # 変数編集選択メニューの作成
-  settingModifiableSelect: (configRoot, varName, selectOptions) ->
+  settingModifiableSelect: (configRoot, varName, openChildrenValue, selectOptions) ->
     _joinArray = (value) ->
       if $.isArray(value)
         return value.join(',')
@@ -549,9 +554,11 @@ itemBaseWorktableExtend =
     if defaultValue?
       selectEmt.val(_joinArray.call(@, defaultValue))
     selectEmt.off('change').on('change', (e) =>
-      @[varName] = _splitArray.call(@, $(e.target).val())
+      value = _splitArray.call(@, $(e.target).val())
+      @[varName] = value
+      @constructor.switchChildrenConfig(e, varName, openChildrenValue, value)
       @applyDesignChange()
-    )
+    ).trigger('change')
 
   # 変数編集ファイルアップロードのイベント初期化
   initModifiableSelectFile: (emt) ->

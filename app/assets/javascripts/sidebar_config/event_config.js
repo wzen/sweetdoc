@@ -451,14 +451,14 @@ EventConfig = (function() {
             defaultValue = objClass.actionPropertiesModifiableVars()[varName]["default"];
           }
         }
-        if (v.type === Constant.ItemDesignOptionType.NUMBER) {
-          results.push(this.settingModifiableVarSlider(varName, defaultValue, v.min, v.max, v.stepValue));
-        } else if (v.type === Constant.ItemDesignOptionType.STRING) {
-          results.push(this.settingModifiableString(varName, defaultValue));
-        } else if (v.type === Constant.ItemDesignOptionType.COLOR) {
-          results.push(this.settingModifiableColor(varName, defaultValue));
-        } else if (v.type === Constant.ItemDesignOptionType.SELECT) {
-          results.push(this.settingModifiableSelect(varName, defaultValue, v['options[]']));
+        if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.NUMBER) {
+          results.push(this.settingModifiableVarSlider(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v.min, v.max, v.stepValue));
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.STRING) {
+          results.push(this.settingModifiableString(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.COLOR) {
+          results.push(this.settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.SELECT) {
+          results.push(this.settingModifiableSelect(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v['options[]']));
         } else {
           results.push(void 0);
         }
@@ -520,7 +520,7 @@ EventConfig = (function() {
     }
   };
 
-  EventConfig.prototype.settingModifiableVarSlider = function(varName, defaultValue, min, max, stepValue) {
+  EventConfig.prototype.settingModifiableVarSlider = function(varName, defaultValue, openChildrenValue, min, max, stepValue) {
     var meterClassName, meterElement, valueElement;
     if (min == null) {
       min = 0;
@@ -548,43 +548,53 @@ EventConfig = (function() {
       value: defaultValue,
       slide: (function(_this) {
         return function(event, ui) {
+          var value;
           valueElement.val(ui.value);
           valueElement.html(ui.value);
           if (!_this.hasModifiableVar(varName)) {
             _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
           }
-          return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = ui.value;
+          value = ui.value;
+          _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+          return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
         };
       })(this)
-    });
+    }).trigger('slide');
   };
 
-  EventConfig.prototype.settingModifiableString = function(varName, defaultValue) {
+  EventConfig.prototype.settingModifiableString = function(varName, defaultValue, openChildrenValue) {
     $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_text", this.emt).val(defaultValue);
     return $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
       return function(e) {
+        var value;
         if (!_this.hasModifiableVar(varName)) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = $(e.target).val();
+        value = $(e.target).val();
+        _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+        return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
       };
-    })(this));
+    })(this)).trigger('change');
   };
 
-  EventConfig.prototype.settingModifiableColor = function(varName, defaultValue) {
+  EventConfig.prototype.settingModifiableColor = function(varName, defaultValue, openChildrenValue) {
     var emt;
     emt = $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_color", this.emt);
-    return ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
+    ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
       return function(a, b, d, e) {
+        var value;
         if (!_this.hasModifiableVar(varName)) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = "#" + b;
+        value = "#" + b;
+        _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+        return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
       };
     })(this));
+    return this.constructor.switchChildrenConfig(e, varName, openChildrenValue, defaultValue);
   };
 
-  EventConfig.prototype.settingModifiableSelect = function(varName, defaultValue, selectOptions) {
+  EventConfig.prototype.settingModifiableSelect = function(varName, defaultValue, openChildrenValue, selectOptions) {
     var _joinArray, _splitArray, j, len, option, selectEmt, v;
     _joinArray = function(value) {
       if ($.isArray(value)) {
@@ -611,12 +621,15 @@ EventConfig = (function() {
     selectEmt.val(_joinArray.call(this, defaultValue));
     return selectEmt.off('change').on('change', (function(_this) {
       return function(e) {
+        var value;
         if (!_this.hasModifiableVar(varName)) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
-        return _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = _splitArray.call(_this, $(e.target).val());
+        value = _splitArray.call(_this, $(e.target).val());
+        _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+        return _this.constructor.switchChildrenConfig(e, varName, openChildrenValue, value);
       };
-    })(this));
+    })(this)).trigger('change');
   };
 
   EventConfig.updateSelectItemMenu = function() {
@@ -698,6 +711,26 @@ EventConfig = (function() {
         return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
       };
     })(this));
+  };
+
+  EventConfig.switchChildrenConfig = function(e, varName, openValue, targetValue) {
+    var openClassName, root;
+    if (openValue == null) {
+      return;
+    }
+    if (typeof openValue === 'string' && (openValue === 'true' || openValue === 'false')) {
+      openValue = openValue === 'true';
+    }
+    if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
+      targetValue = targetValue === 'true';
+    }
+    root = e.closest('.event');
+    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName);
+    if (openValue === targetValue) {
+      return root.find("." + openClassName).show();
+    } else {
+      return root.find("." + openClassName).hide();
+    }
   };
 
   return EventConfig;

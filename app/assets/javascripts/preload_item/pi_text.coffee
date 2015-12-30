@@ -16,11 +16,11 @@ class PreloadItemText extends CssItemBase
         name: 'Show Balloon'
         default: false
         type: 'boolean'
+        openChildrenValue: true
         ja: {
           name: '吹き出し表示'
         }
         children: {
-          triggerValue: true
           balloonColor: {
             name: 'BalloonColor'
             default: '#fff'

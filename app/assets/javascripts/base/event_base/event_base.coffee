@@ -11,6 +11,7 @@ class EventBase extends Extend
     @BEFORE_MODIFY_VAR_SUFFIX = constant.BEFORE_MODIFY_VAR_SUFFIX
     @AFTER_MODIFY_VAR_SUFFIX = constant.AFTER_MODIFY_VAR_SUFFIX
     class @ActionPropertiesKey
+      @TYPE = constant.ItemActionPropertiesKey.TYPE
       @METHODS = constant.ItemActionPropertiesKey.METHODS
       @DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT
       @METHOD = constant.ItemActionPropertiesKey.METHOD
@@ -23,7 +24,7 @@ class EventBase extends Extend
       @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
       @MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS
       @MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN
-      @MODIFIABLE_CHILDREN_TRIGGERVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_TRIGGERVALUE
+      @MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE
 
   constructor: ->
     # modifiables変数の初期化
@@ -600,11 +601,7 @@ class EventBase extends Extend
         ret[k] = v
         if v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]?
           # Childrenを含める
-          mod = {}
-          for kk, vv of v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]
-            if vv instanceof Object
-              mod[kk] = vv
-          ret = $.extend(ret, @actionPropertiesModifiableVars(mod))
+          ret = $.extend(ret, @actionPropertiesModifiableVars(v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]))
     return ret
 
 

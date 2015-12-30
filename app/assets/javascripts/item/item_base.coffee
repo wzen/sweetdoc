@@ -374,7 +374,23 @@ class ItemBase extends ItemEventBase
       count += 1
     , duration * 1000)
 
+  @switchChildrenConfig = (e, varName, openValue, targetValue) ->
+    if !openValue?
+      # 判定値無し
+      return
+
+    if typeof openValue == 'string' && (openValue == 'true' || openValue == 'false')
+      openValue = openValue == 'true'
+    if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
+      targetValue = targetValue == 'true'
+
+    root = e.closest(".#{Constant.DesignConfig.DESIGN_ROOT_CLASSNAME}")
+    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName)
+    if openValue == targetValue
+      root.find(".#{openClassName}").show()
+    else
+      root.find(".#{openClassName}").hide()
+
   if window.isWorkTable
     @include(itemBaseWorktableExtend)
-
 

@@ -19,6 +19,8 @@ EventBase = (function(superClass) {
     EventBase.ActionPropertiesKey = (function() {
       function ActionPropertiesKey() {}
 
+      ActionPropertiesKey.TYPE = constant.ItemActionPropertiesKey.TYPE;
+
       ActionPropertiesKey.METHODS = constant.ItemActionPropertiesKey.METHODS;
 
       ActionPropertiesKey.DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT;
@@ -43,7 +45,7 @@ EventBase = (function(superClass) {
 
       ActionPropertiesKey.MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN;
 
-      ActionPropertiesKey.MODIFIABLE_CHILDREN_TRIGGERVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_TRIGGERVALUE;
+      ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE;
 
       return ActionPropertiesKey;
 
@@ -723,7 +725,7 @@ EventBase = (function(superClass) {
   EventBase.initSpecificConfig = function(specificRoot) {};
 
   EventBase.actionPropertiesModifiableVars = function(methodName, isDefault) {
-    var k, kk, mod, modifiableRoot, ref, ret, v, vv;
+    var k, modifiableRoot, ret, v;
     if (methodName == null) {
       methodName = null;
     }
@@ -745,15 +747,7 @@ EventBase = (function(superClass) {
         v = modifiableRoot[k];
         ret[k] = v;
         if (v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
-          mod = {};
-          ref = v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN];
-          for (kk in ref) {
-            vv = ref[kk];
-            if (vv instanceof Object) {
-              mod[kk] = vv;
-            }
-          }
-          ret = $.extend(ret, this.actionPropertiesModifiableVars(mod));
+          ret = $.extend(ret, this.actionPropertiesModifiableVars(v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]));
         }
       }
     }

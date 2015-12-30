@@ -437,6 +437,26 @@ ItemBase = (function(superClass) {
     })(this), duration * 1000);
   };
 
+  ItemBase.switchChildrenConfig = function(e, varName, openValue, targetValue) {
+    var openClassName, root;
+    if (openValue == null) {
+      return;
+    }
+    if (typeof openValue === 'string' && (openValue === 'true' || openValue === 'false')) {
+      openValue = openValue === 'true';
+    }
+    if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
+      targetValue = targetValue === 'true';
+    }
+    root = e.closest("." + Constant.DesignConfig.DESIGN_ROOT_CLASSNAME);
+    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName);
+    if (openValue === targetValue) {
+      return root.find("." + openClassName).show();
+    } else {
+      return root.find("." + openClassName).hide();
+    }
+  };
+
   if (window.isWorkTable) {
     ItemBase.include(itemBaseWorktableExtend);
   }
