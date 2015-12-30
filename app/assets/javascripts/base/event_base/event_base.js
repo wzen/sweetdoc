@@ -722,6 +722,27 @@ EventBase = (function(superClass) {
 
   EventBase.initSpecificConfig = function(specificRoot) {};
 
+  EventBase.actionPropertiesModifiableVars = function(modifiableRoot) {
+    var k, kk, mod, ref, ret, v, vv;
+    ret = {};
+    for (k in modifiableRoot) {
+      v = modifiableRoot[k];
+      ret[k] = v;
+      if (v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
+        mod = {};
+        ref = v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN];
+        for (kk in ref) {
+          vv = ref[kk];
+          if (vv instanceof Object) {
+            mod[kk] = vv;
+          }
+        }
+        ret = $.extend(ret, this.actionPropertiesModifiableVars(mod));
+      }
+    }
+    return ret;
+  };
+
   return EventBase;
 
 })(Extend);

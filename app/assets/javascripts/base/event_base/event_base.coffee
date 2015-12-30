@@ -583,3 +583,19 @@ class EventBase extends Extend
   # 独自コンフィグのイベント初期化
   # @abstract
   @initSpecificConfig = (specificRoot) ->
+
+  # 編集可能変数プロパティを取得(childrenを含む)
+  @actionPropertiesModifiableVars = (modifiableRoot) ->
+    ret = {}
+    for k, v of modifiableRoot
+      ret[k] = v
+      if v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]?
+        # Childrenを含める
+        mod = {}
+        for kk, vv of v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]
+          if vv instanceof Object
+            mod[kk] = vv
+        ret = $.extend(ret, @actionPropertiesModifiableVars(mod))
+    return ret
+
+
