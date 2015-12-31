@@ -725,13 +725,26 @@ EventBase = (function(superClass) {
   EventBase.initSpecificConfig = function(specificRoot) {};
 
   EventBase.actionPropertiesModifiableVars = function(methodName, isDefault) {
-    var k, modifiableRoot, ret, v;
+    var _actionPropertiesModifiableVars, modifiableRoot, ret;
     if (methodName == null) {
       methodName = null;
     }
     if (isDefault == null) {
       isDefault = false;
     }
+    _actionPropertiesModifiableVars = function(modifiableRoot, ret) {
+      var k, v;
+      if (modifiableRoot != null) {
+        for (k in modifiableRoot) {
+          v = modifiableRoot[k];
+          ret[k] = v;
+          if (v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
+            ret = $.extend(ret, _actionPropertiesModifiableVars.call(this, v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN], ret));
+          }
+        }
+      }
+      return ret;
+    };
     ret = {};
     if (methodName != null) {
       if (isDefault) {
@@ -742,16 +755,7 @@ EventBase = (function(superClass) {
     } else {
       modifiableRoot = this.actionProperties[this.ActionPropertiesKey.MODIFIABLE_VARS];
     }
-    if (modifiableRoot != null) {
-      for (k in modifiableRoot) {
-        v = modifiableRoot[k];
-        ret[k] = v;
-        if (v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
-          ret = $.extend(ret, this.actionPropertiesModifiableVars(v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]));
-        }
-      }
-    }
-    return ret;
+    return _actionPropertiesModifiableVars.call(this, modifiableRoot, ret);
   };
 
   return EventBase;

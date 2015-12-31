@@ -521,6 +521,8 @@ itemBaseWorktableExtend = {
           results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max));
         } else if (value.type === Constant.ItemDesignOptionType.STRING) {
           results.push(this.settingModifiableString(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
+        } else if (value.type === Constant.ItemDesignOptionType.BOOLEAN) {
+          results.push(this.settingModifiableCheckbox(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
           results.push(this.settingModifiableColor(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
@@ -581,6 +583,24 @@ itemBaseWorktableExtend = {
       return function(e) {
         var value;
         value = $(e.target).val();
+        _this[varName] = value;
+        _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
+        return _this.applyDesignChange();
+      };
+    })(this)).trigger('change');
+  },
+  settingModifiableCheckbox: function(configRoot, varName, openChildrenValue) {
+    var defaultValue;
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
+    if (defaultValue) {
+      $("." + varName + "_checkbox", configRoot).attr('checked', true);
+    } else {
+      $("." + varName + "_checkbox", configRoot).removeAttr('checked');
+    }
+    return $("." + varName + "_checkbox", configRoot).off('change').on('change', (function(_this) {
+      return function(e) {
+        var value;
+        value = $(e.target).is(':checked');
         _this[varName] = value;
         _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
         return _this.applyDesignChange();

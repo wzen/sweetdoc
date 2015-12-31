@@ -455,6 +455,8 @@ EventConfig = (function() {
           results.push(this.settingModifiableVarSlider(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v.min, v.max, v.stepValue));
         } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.STRING) {
           results.push(this.settingModifiableString(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
+        } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.BOOLEAN) {
+          results.push(this.settingModifiableCheckbox(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.COLOR) {
           results.push(this.settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.SELECT) {
@@ -571,6 +573,25 @@ EventConfig = (function() {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         value = $(e.target).val();
+        _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
+        return _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
+      };
+    })(this)).trigger('change');
+  };
+
+  EventConfig.prototype.settingModifiableCheckbox = function(varName, defaultValue, openChildrenValue) {
+    if (defaultValue) {
+      $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_checkbox", this.emt).attr('checked', true);
+    } else {
+      $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_checkbox", this.emt).removeAttr('checked');
+    }
+    return $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_checkbox", this.emt).off('change').on('change', (function(_this) {
+      return function(e) {
+        var value;
+        if (!_this.hasModifiableVar(varName)) {
+          _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
+        }
+        value = $(e.target).is(':checked');
         _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
         return _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
       };

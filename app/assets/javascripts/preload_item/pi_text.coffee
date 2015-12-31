@@ -11,6 +11,7 @@ class PreloadItemText extends CssItemBase
         name: 'BalloonColor'
         default: '#000'
         colorType: 'hex'
+        type: 'color'
       }
       showBalloon: {
         name: 'Show Balloon'
@@ -33,7 +34,7 @@ class PreloadItemText extends CssItemBase
           balloonRadius: {
             name: 'BalloonRadius'
             default: 10
-            type: 'number'
+            type: 'integer'
             min: 1
             max: 15
             ja: {

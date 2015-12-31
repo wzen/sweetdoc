@@ -428,6 +428,8 @@ class EventConfig
           @settingModifiableVarSlider(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v.min, v.max, v.stepValue)
         else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.STRING
           @settingModifiableString(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
+        else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.BOOLEAN
+          @settingModifiableCheckbox(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.COLOR
           @settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.SELECT
@@ -511,6 +513,21 @@ class EventConfig
       if !@hasModifiableVar(varName)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       value = $(e.target).val()
+      @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
+      @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
+    ).trigger('change')
+
+  # 変数編集チェックボックスの作成
+  # @param [String] varName 変数名
+  settingModifiableCheckbox: (varName, defaultValue, openChildrenValue) ->
+    if defaultValue
+      $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_checkbox", @emt).attr('checked', true)
+    else
+      $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_checkbox", @emt).removeAttr('checked')
+    $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_checkbox", @emt).off('change').on('change', (e) =>
+      if !@hasModifiableVar(varName)
+        @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
+      value = $(e.target).is(':checked')
       @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
       @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
     ).trigger('change')

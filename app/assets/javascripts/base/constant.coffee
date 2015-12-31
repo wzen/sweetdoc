@@ -58,6 +58,8 @@ if gon?
       @DESIGN_ROOT_CLASSNAME = constant.DesignConfig.ROOT_CLASSNAME
 
     class @ItemDesignOptionType
+      # @property [Int] BOOLEAN 真偽
+      @BOOLEAN = constant.ItemDesignOptionType.BOOLEAN
       # @property [Int] INTEGER 数値
       @NUMBER = constant.ItemDesignOptionType.NUMBER
       # @property [Int] STRING 文字列

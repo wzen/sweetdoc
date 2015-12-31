@@ -21,7 +21,8 @@ PreloadItemText = (function(superClass) {
       textColor: {
         name: 'BalloonColor',
         "default": '#000',
-        colorType: 'hex'
+        colorType: 'hex',
+        type: 'color'
       },
       showBalloon: {
         name: 'Show Balloon',
@@ -44,7 +45,7 @@ PreloadItemText = (function(superClass) {
           balloonRadius: {
             name: 'BalloonRadius',
             "default": 10,
-            type: 'number',
+            type: 'integer',
             min: 1,
             max: 15,
             ja: {

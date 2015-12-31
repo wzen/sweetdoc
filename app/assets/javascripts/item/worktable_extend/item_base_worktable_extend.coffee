@@ -452,6 +452,8 @@ itemBaseWorktableExtend =
           @settingModifiableVarSlider(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max)
         else if value.type == Constant.ItemDesignOptionType.STRING
           @settingModifiableString(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
+        else if value.type == Constant.ItemDesignOptionType.BOOLEAN
+          @settingModifiableCheckbox(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.COLOR
           @settingModifiableColor(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
@@ -496,6 +498,23 @@ itemBaseWorktableExtend =
     $(".#{varName}_text", configRoot).val(defaultValue)
     $(".#{varName}_text", configRoot).off('change').on('change', (e) =>
       value = $(e.target).val()
+      @[varName] = value
+      @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
+      @applyDesignChange()
+    ).trigger('change')
+
+  # 変数編集テキストボックスの作成
+  # @param [Object] configRoot コンフィグルート
+  # @param [String] varName 変数名
+  settingModifiableCheckbox: (configRoot, varName, openChildrenValue) ->
+    defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
+    if defaultValue
+      $(".#{varName}_checkbox", configRoot).attr('checked', true)
+    else
+      $(".#{varName}_checkbox", configRoot).removeAttr('checked')
+
+    $(".#{varName}_checkbox", configRoot).off('change').on('change', (e) =>
+      value = $(e.target).is(':checked')
       @[varName] = value
       @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
       @applyDesignChange()

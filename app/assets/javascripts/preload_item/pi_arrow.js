@@ -69,7 +69,7 @@ PreloadItemArrow = (function(superClass) {
       arrowWidth: {
         name: "Arrow's width",
         "default": 37,
-        type: 'number',
+        type: 'integer',
         min: 1,
         max: 99,
         ja: {
@@ -82,7 +82,7 @@ PreloadItemArrow = (function(superClass) {
         modifiables: {
           arrowWidth: {
             name: "Arrow's width",
-            type: 'number',
+            type: 'integer',
             min: 1,
             max: 99,
             varAutoChange: true,

@@ -47,7 +47,7 @@ class ConfigMenu
     dir = is_design ? 'design' : 'event'
     modifiables.each do |var, v|
       temp_name = ''
-      if v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::NUMBER
+      if v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::INTEGER
         temp_name = 'slider'
       elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::STRING
         temp_name = 'textbox'
@@ -57,6 +57,8 @@ class ConfigMenu
         temp_name = 'select_file'
       elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::SELECT
         temp_name = 'select'
+      elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::BOOLEAN
+        temp_name = 'checkbox'
       end
       temp = "sidebar_menu/#{dir}/parts/#{temp_name}"
       value = v

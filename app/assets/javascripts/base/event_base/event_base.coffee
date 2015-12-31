@@ -587,6 +587,15 @@ class EventBase extends Extend
 
   # 編集可能変数プロパティを取得(childrenを含む)
   @actionPropertiesModifiableVars = (methodName = null, isDefault = false) ->
+    _actionPropertiesModifiableVars = (modifiableRoot, ret) ->
+      if modifiableRoot?
+        for k, v of modifiableRoot
+          ret[k] = v
+          if v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]?
+            # Childrenを含める
+            ret = $.extend(ret, _actionPropertiesModifiableVars.call(@, v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN], ret))
+      return ret
+
     ret = {}
     if methodName?
       if isDefault
@@ -596,12 +605,5 @@ class EventBase extends Extend
     else
       modifiableRoot = @actionProperties[@ActionPropertiesKey.MODIFIABLE_VARS]
 
-    if modifiableRoot?
-      for k, v of modifiableRoot
-        ret[k] = v
-        if v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]?
-          # Childrenを含める
-          ret = $.extend(ret, @actionPropertiesModifiableVars(v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]))
-    return ret
-
+    return _actionPropertiesModifiableVars.call(@, modifiableRoot, ret)
 

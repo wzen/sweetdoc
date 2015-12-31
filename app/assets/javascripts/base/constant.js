@@ -91,6 +91,8 @@ if (typeof gon !== "undefined" && gon !== null) {
     Constant.ItemDesignOptionType = (function() {
       function ItemDesignOptionType() {}
 
+      ItemDesignOptionType.BOOLEAN = constant.ItemDesignOptionType.BOOLEAN;
+
       ItemDesignOptionType.NUMBER = constant.ItemDesignOptionType.NUMBER;
 
       ItemDesignOptionType.STRING = constant.ItemDesignOptionType.STRING;

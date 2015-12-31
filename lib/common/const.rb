@@ -46,8 +46,10 @@ class Const
 
   # アイテムアクションの引数
   class ItemDesignOptionType
+    # @property [Int] BOOLEAN 真偽
+    BOOLEAN = 'boolean'
     # @property [Int] INTEGER 数値
-    NUMBER = 'number'
+    INTEGER = 'integer'
     # @property [Int] STRING 文字列
     STRING = 'string'
     # @property [Int] COLOR 色
