@@ -61,7 +61,7 @@ if gon?
       # @property [Int] BOOLEAN 真偽
       @BOOLEAN = constant.ItemDesignOptionType.BOOLEAN
       # @property [Int] INTEGER 数値
-      @NUMBER = constant.ItemDesignOptionType.NUMBER
+      @INTEGER = constant.ItemDesignOptionType.INTEGER
       # @property [Int] STRING 文字列
       @STRING = constant.ItemDesignOptionType.STRING
       # @property [Int] COLOR 色

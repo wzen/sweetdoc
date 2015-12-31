@@ -36,10 +36,10 @@ class PreloadItemText extends CssItemBase
           }
           balloonRadius: {
             name: 'BalloonRadius'
-            default: 10
+            default: 30
             type: 'integer'
             min: 1
-            max: 15
+            max: 100
             ja: {
               name: '吹き出しの角丸'
             }
@@ -237,7 +237,7 @@ class PreloadItemText extends CssItemBase
   # CSSスタイル
   # TODO: CSSファイルで管理できるように修正
   cssStyle: ->
-    return """
+    css = """
       ##{@id} .text_wrapper {
         font-family: '#{@fontFamily}';
         font-size: #{@fontSize}px;
@@ -252,6 +252,16 @@ class PreloadItemText extends CssItemBase
         height: 100%;
       }
     """
+    if @showBalloon
+      css += """
+        ##{@id} .item_wrapper {
+          border-radius: #{@balloonRadius}px;
+          background-color: #{@balloonColor};
+        }
+      """
+
+    return css
+
 
   changeText: (opt) ->
     changeBefore = @getJQueryElement().find('.change_before:first')

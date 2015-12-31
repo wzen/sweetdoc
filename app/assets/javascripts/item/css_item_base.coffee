@@ -114,11 +114,13 @@ class CssItemBase extends ItemBase
     )
 
   # デザイン反映
-  applyDesignChange: (doStyleSave) ->
+  applyDesignChange: (doStyleSave = true) ->
     #@refresh()
     @_cssDesignToolStyle.text(@_cssDesignToolCode.text())
+    styleId = "css_style_#{@id}"
+    $("##{styleId}").remove()
     if (addStyle = @cssStyle())?
-      @_cssRoot.append($("<style type='text/css'>#{addStyle}</style>"))
+      @_cssRoot.append($("<style id='#{styleId}' type='text/css'>#{addStyle}</style>"))
 
     if doStyleSave
       @saveDesign()

@@ -451,7 +451,7 @@ EventConfig = (function() {
             defaultValue = objClass.actionPropertiesModifiableVars()[varName]["default"];
           }
         }
-        if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.NUMBER) {
+        if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.INTEGER) {
           results.push(this.settingModifiableVarSlider(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v.min, v.max, v.stepValue));
         } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.STRING) {
           results.push(this.settingModifiableString(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));

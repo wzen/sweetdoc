@@ -521,7 +521,7 @@ EventBase = (function(superClass) {
             results.push(this[varName] = after);
           } else {
             if (value.varAutoChange) {
-              if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+              if (value.type === Constant.ItemDesignOptionType.INTEGER) {
                 results.push(this[varName] = before + (after - before) * progressPercentage);
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChange__Cache";
@@ -586,7 +586,7 @@ EventBase = (function(superClass) {
             after = _this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
             if ((before != null) && (after != null)) {
               if (value.varAutoChange) {
-                if (value.type === Constant.ItemDesignOptionType.NUMBER) {
+                if (value.type === Constant.ItemDesignOptionType.INTEGER) {
                   _this[varName] = before + (after - before) * progressPercentage;
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChange__Cache";

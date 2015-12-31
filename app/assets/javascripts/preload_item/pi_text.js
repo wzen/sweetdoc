@@ -47,10 +47,10 @@ PreloadItemText = (function(superClass) {
           },
           balloonRadius: {
             name: 'BalloonRadius',
-            "default": 10,
+            "default": 30,
             type: 'integer',
             min: 1,
-            max: 15,
+            max: 100,
             ja: {
               name: '吹き出しの角丸'
             }
@@ -145,7 +145,12 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.cssStyle = function() {
-    return "#" + this.id + " .text_wrapper {\n  font-family: '" + this.fontFamily + "';\n  font-size: " + this.fontSize + "px;\n  display: table-cell;\n  vertical-align: middle;\n  color: " + this.textColor + "\n}\n#" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  text-align: center;\n  display: table;\n  width: 100%;\n  height: 100%;\n}";
+    var css;
+    css = "#" + this.id + " .text_wrapper {\n  font-family: '" + this.fontFamily + "';\n  font-size: " + this.fontSize + "px;\n  display: table-cell;\n  vertical-align: middle;\n  color: " + this.textColor + "\n}\n#" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  text-align: center;\n  display: table;\n  width: 100%;\n  height: 100%;\n}";
+    if (this.showBalloon) {
+      css += "#" + this.id + " .item_wrapper {\n  border-radius: " + this.balloonRadius + "px;\n  background-color: " + this.balloonColor + ";\n}";
+    }
+    return css;
   };
 
   PreloadItemText.prototype.changeText = function(opt) {

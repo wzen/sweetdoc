@@ -93,7 +93,7 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ItemDesignOptionType.BOOLEAN = constant.ItemDesignOptionType.BOOLEAN;
 
-      ItemDesignOptionType.NUMBER = constant.ItemDesignOptionType.NUMBER;
+      ItemDesignOptionType.INTEGER = constant.ItemDesignOptionType.INTEGER;
 
       ItemDesignOptionType.STRING = constant.ItemDesignOptionType.STRING;
 
