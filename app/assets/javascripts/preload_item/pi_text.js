@@ -19,10 +19,13 @@ PreloadItemText = (function(superClass) {
   PreloadItemText.actionProperties = {
     modifiables: {
       textColor: {
-        name: 'BalloonColor',
+        name: 'TextColor',
         "default": '#000',
         colorType: 'hex',
-        type: 'color'
+        type: 'color',
+        ja: {
+          name: '文字色'
+        }
       },
       showBalloon: {
         name: 'Show Balloon',
@@ -142,7 +145,7 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.cssStyle = function() {
-    return "#" + this.id + " .text_wrapper {\n  font-family: '" + this.fontFamily + "';\n  font-size: " + this.fontSize + "px;\n  display: table-cell;\n  vertical-align: middle;\n}\n#" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  text-align: center;\n  display: table;\n  width: 100%;\n  height: 100%;\n}";
+    return "#" + this.id + " .text_wrapper {\n  font-family: '" + this.fontFamily + "';\n  font-size: " + this.fontSize + "px;\n  display: table-cell;\n  vertical-align: middle;\n  color: " + this.textColor + "\n}\n#" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  text-align: center;\n  display: table;\n  width: 100%;\n  height: 100%;\n}";
   };
 
   PreloadItemText.prototype.changeText = function(opt) {

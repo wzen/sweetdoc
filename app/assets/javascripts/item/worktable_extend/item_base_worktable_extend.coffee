@@ -119,7 +119,7 @@ itemBaseWorktableExtend =
     menu = []
     contextSelector = ".context_base"
     menu.push({
-      title: "Edit", cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
+      title: I18n.t('context_menu.edit'), cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # アイテム編集
         Sidebar.openItemEditConfig(event.target)
     })

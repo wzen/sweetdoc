@@ -86,11 +86,12 @@ class ConfigMenu
 
       if v[Const::ItemActionPropertiesKey::MODIFIABLE_CHILDREN].present?
         # ChildrenをWrap
-        ret +=<<-"WRAPPER"
+        wrapper =<<-"WRAPPER"
          <div class='#{Const::ConfigMenu::Modifiable::CHILDREN_WRAPPER_CLASS.gsub('@parentvarname', var)}'>
            #{_modifiables_vars_config(controller, v[Const::ItemActionPropertiesKey::MODIFIABLE_CHILDREN], is_design)}
          </div>
         WRAPPER
+        ret += wrapper.html_safe
       end
 
     end

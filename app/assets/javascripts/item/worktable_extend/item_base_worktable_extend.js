@@ -137,7 +137,7 @@ itemBaseWorktableExtend = {
     menu = [];
     contextSelector = ".context_base";
     menu.push({
-      title: "Edit",
+      title: I18n.t('context_menu.edit'),
       cmd: "edit",
       uiIcon: "ui-icon-scissors",
       func: function(event, ui) {

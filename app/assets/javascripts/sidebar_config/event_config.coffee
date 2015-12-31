@@ -677,6 +677,6 @@ class EventConfig
     root = e.closest('.event')
     openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName)
     if openValue == targetValue
-      root.find(".#{openClassName}").show()
+      $(root).find(".#{openClassName}").show()
     else
-      root.find(".#{openClassName}").hide()
+      $(root).find(".#{openClassName}").hide()

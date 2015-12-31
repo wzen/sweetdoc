@@ -387,9 +387,9 @@ class ItemBase extends ItemEventBase
     root = e.closest(".#{Constant.DesignConfig.DESIGN_ROOT_CLASSNAME}")
     openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName)
     if openValue == targetValue
-      root.find(".#{openClassName}").show()
+      $(root).find(".#{openClassName}").show()
     else
-      root.find(".#{openClassName}").hide()
+      $(root).find(".#{openClassName}").hide()
 
   if window.isWorkTable
     @include(itemBaseWorktableExtend)

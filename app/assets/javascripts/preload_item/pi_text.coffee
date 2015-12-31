@@ -8,10 +8,13 @@ class PreloadItemText extends CssItemBase
   {
     modifiables: {
       textColor: {
-        name: 'BalloonColor'
+        name: 'TextColor'
         default: '#000'
         colorType: 'hex'
         type: 'color'
+        ja: {
+          name: '文字色'
+        }
       }
       showBalloon: {
         name: 'Show Balloon'
@@ -240,6 +243,7 @@ class PreloadItemText extends CssItemBase
         font-size: #{@fontSize}px;
         display: table-cell;
         vertical-align: middle;
+        color: #{@textColor}
       }
       ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
         text-align: center;

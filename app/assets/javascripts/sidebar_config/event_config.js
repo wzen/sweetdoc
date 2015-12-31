@@ -748,9 +748,9 @@ EventConfig = (function() {
     root = e.closest('.event');
     openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName);
     if (openValue === targetValue) {
-      return root.find("." + openClassName).show();
+      return $(root).find("." + openClassName).show();
     } else {
-      return root.find("." + openClassName).hide();
+      return $(root).find("." + openClassName).hide();
     }
   };
 

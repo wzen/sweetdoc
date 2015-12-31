@@ -31,7 +31,6 @@ class RunCommon
     $(window.drawingCanvas).attr('height', window.canvasWrapper.height())
     # 暫定でスクロールを上に持ってくる
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
-
     # スクロールビューの大きさ
     scrollInsideWrapper.width(window.scrollViewSize)
     scrollInsideWrapper.height(window.scrollViewSize)
@@ -39,12 +38,9 @@ class RunCommon
     scrollInsideCover.height(window.scrollViewSize)
     scrollHandle.width(window.scrollViewSize)
     scrollHandle.height(window.scrollViewSize)
-
-    # スクロール位置初期化
-    Common.updateScrollContentsPosition(scrollInsideWrapper.width() * 0.5, scrollInsideWrapper.height() * 0.5)
-
     scrollHandleWrapper.scrollLeft(scrollHandle.width() * 0.5)
     scrollHandleWrapper.scrollTop(scrollHandle.height() * 0.5)
+    Common.initScrollContentsPosition()
 
   # Mainビューのサイズ更新
   @updateMainViewSize = ->

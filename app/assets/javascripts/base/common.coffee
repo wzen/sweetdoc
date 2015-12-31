@@ -131,6 +131,7 @@ class Common
     # Canvasサイズ更新
     @updateCanvasSize()
 
+  # スクロール位置初期化
   @initScrollContentsPosition = ->
     position = PageValue.getScrollContentsPosition()
     if position?
@@ -138,6 +139,7 @@ class Common
     else
       PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: 0, left: 0})
 
+  # ズーム初期化
   @initZoom = ->
     zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
     if zoom?
