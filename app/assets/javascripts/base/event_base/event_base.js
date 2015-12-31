@@ -746,6 +746,7 @@ EventBase = (function(superClass) {
       return ret;
     };
     ret = {};
+    modifiableRoot = null;
     if (methodName != null) {
       if (isDefault) {
         modifiableRoot = this.actionProperties[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];

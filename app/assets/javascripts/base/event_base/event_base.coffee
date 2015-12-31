@@ -597,6 +597,7 @@ class EventBase extends Extend
       return ret
 
     ret = {}
+    modifiableRoot = null
     if methodName?
       if isDefault
         modifiableRoot = @actionProperties[methodName][@ActionPropertiesKey.MODIFIABLE_VARS]
