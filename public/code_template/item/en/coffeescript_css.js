@@ -84,7 +84,6 @@ ItemPreviewTemp = (function(superClass) {
     },
     methods: {
       defaultClick: {
-        isDrawByAnimation: true,
         options: {
           id: 'defaultClick',
           name: 'Default click action',

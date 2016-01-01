@@ -75,7 +75,6 @@ class ItemPreviewTemp extends CssItemBase
     }
     methods: {
       defaultClick: {
-        isDrawByAnimation: true
         options: {
           id: 'defaultClick'
           name: 'Default click action'

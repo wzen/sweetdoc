@@ -44,8 +44,6 @@ class EventPageValueBase
       @CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM
       # @property [String] MODIFIABLE_VARS 変更するインスタンス変数
       @MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS
-      # @property [String] IS_DRAW_BY_ANIMATION アニメーションとしてメソッドを実行するか
-      @IS_DRAW_BY_ANIMATION = constant.EventPageValueKey.IS_DRAW_BY_ANIMATION
       # @property [String] EVENT_DURATION クリック実行時間
       @EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION
 

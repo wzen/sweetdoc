@@ -48,8 +48,6 @@ EventPageValueBase = (function() {
 
       PageValueKey.MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS;
 
-      PageValueKey.IS_DRAW_BY_ANIMATION = constant.EventPageValueKey.IS_DRAW_BY_ANIMATION;
-
       PageValueKey.EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION;
 
       return PageValueKey;
