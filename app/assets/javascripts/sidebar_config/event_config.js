@@ -278,7 +278,9 @@ EventConfig = (function() {
           options = "<option value=" + EventPageValueBase.NO_JUMPPAGE + ">" + (I18n.t('config.state.page_select_option_none')) + "</option>";
           pageCount = PageValue.getPageCount();
           for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-            options += "<option value=" + i + ">" + (I18n.t('config.state.page_select_option') + ' ' + i) + "</option>";
+            if (i !== PageValue.getPageNum(9)) {
+              options += "<option value=" + i + ">" + (I18n.t('config.state.page_select_option') + ' ' + i) + "</option>";
+            }
           }
           select.append(options);
           return $('.finish_page_wrappper', _this.emt).show();
@@ -721,6 +723,8 @@ EventConfig = (function() {
           emt = $('#' + eId);
           config = new _this(emt, teNum, distId);
           $('.update_event_after', emt).removeAttr('checked');
+          $('.button_preview_wrapper', emt).show();
+          $('.button_stop_preview_wrapper', emt).hide();
           if (WorktableCommon.isConnectedEventProgressRoute(teNum)) {
             $('.update_event_after', emt).removeAttr('disabled');
             $('.update_event_after', emt).off('change').on('change', function(e) {

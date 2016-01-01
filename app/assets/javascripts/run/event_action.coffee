@@ -113,8 +113,9 @@ class EventAction
 
         _after = ->
           @thisPage().start()
-          # イベント反応無効
-          @thisPage().thisChapter().disableEventHandle()
+          if @thisPage().thisChapter()?
+            # イベント反応無効
+            @thisPage().thisChapter().disableEventHandle()
           # ページングアニメーション
           pageFlip.startRender( =>
             # 次ページインデックスを初期化
@@ -127,8 +128,9 @@ class EventAction
             Common.removeAllItem(beforePageNum)
             # CSS削除
             $("##{RunCommon.RUN_CSS.replace('@pagenum', beforePageNum)}").remove()
-            # イベント反応有効
-            @thisPage().thisChapter().enableEventHandle()
+            if @thisPage().thisChapter()?
+              # イベント反応有効
+              @thisPage().thisChapter().enableEventHandle()
             # コールバック
             if callback?
               callback()

@@ -212,7 +212,6 @@ class ItemPreviewTemp extends CssItemBase
       }
     }
     """
-
     return keyframe
 
   willChapter: ->

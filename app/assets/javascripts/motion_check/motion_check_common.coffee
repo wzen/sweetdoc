@@ -1,8 +1,6 @@
 class MotionCheckCommon
   # 新タブで閲覧を実行する
   @run = (newWindow = false) ->
-    # プレビュー停止
-
     _operation = ->
       # イベント存在チェック
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT)
@@ -43,6 +41,7 @@ class MotionCheckCommon
         Message.showWarn('No event')
 
     if window.isWorkTable
+      # プレビュー停止
       WorktableCommon.stopAllEventPreview(_operation)
     else
       _operation.call(@)

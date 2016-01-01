@@ -15,8 +15,8 @@ ClickChapter = (function(superClass) {
     ClickChapter.__super__.willChapter.call(this);
     this.eventObjList.forEach((function(_this) {
       return function(event) {
-        event.getJQueryElement().off('click');
-        return event.getJQueryElement().on('click', function(e) {
+        event.clickTargetElement().off('click');
+        return event.clickTargetElement().on('click', function(e) {
           return _this.clickEvent(e);
         });
       };
@@ -32,20 +32,20 @@ ClickChapter = (function(superClass) {
   };
 
   ClickChapter.prototype.clickEvent = function(e) {
-    var self;
-    self = this;
     this.hideGuide();
     if (window.disabledEventHandler) {
       return;
     }
     return this.eventObjList.forEach(function(event) {
-      if (event.getJQueryElement().get(0) === $(e.currentTarget).get(0)) {
-        return event.clickEvent(e, function() {
-          self.changeForkNum = event.getChangeForkNum();
-          if (window.eventAction != null) {
-            return window.eventAction.thisPage().nextChapter();
-          }
-        });
+      if (event.clickTargetElement().get(0) === $(e.currentTarget).get(0)) {
+        return event.clickEvent(e, (function(_this) {
+          return function() {
+            _this.changeForkNum = event.getChangeForkNum();
+            if (window.eventAction != null) {
+              return window.eventAction.thisPage().nextChapter();
+            }
+          };
+        })(this));
       }
     });
   };

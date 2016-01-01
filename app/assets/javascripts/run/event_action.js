@@ -118,7 +118,9 @@ EventAction = (function() {
           PageValue.adjustInstanceAndEventOnPage();
           _after = function() {
             this.thisPage().start();
-            this.thisPage().thisChapter().disableEventHandle();
+            if (this.thisPage().thisChapter() != null) {
+              this.thisPage().thisChapter().disableEventHandle();
+            }
             return pageFlip.startRender((function(_this) {
               return function() {
                 var className, section;
@@ -128,7 +130,9 @@ EventAction = (function() {
                 section.hide();
                 Common.removeAllItem(beforePageNum);
                 $("#" + (RunCommon.RUN_CSS.replace('@pagenum', beforePageNum))).remove();
-                _this.thisPage().thisChapter().enableEventHandle();
+                if (_this.thisPage().thisChapter() != null) {
+                  _this.thisPage().thisChapter().enableEventHandle();
+                }
                 if (callback != null) {
                   return callback();
                 }

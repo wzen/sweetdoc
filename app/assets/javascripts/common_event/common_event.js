@@ -28,11 +28,17 @@ CommonEvent = (function() {
       return $('#common_event_click_overlay');
     };
 
+    PrivateClass.prototype.clickTargetElement = function() {
+      return $('#common_event_click_overlay');
+    };
+
     PrivateClass.prototype.willChapter = function() {
       var z_index;
       if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
         z_index = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT);
-        $('body').append("<div id='common_event_click_overlay' style='z-index:" + z_index + "'></div>");
+        if ($('#common_event_click_overlay').length === 0) {
+          $('body').append("<div id='common_event_click_overlay' style='z-index:" + z_index + "'></div>");
+        }
       }
       return PrivateClass.__super__.willChapter.call(this);
     };

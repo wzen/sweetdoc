@@ -201,10 +201,14 @@ class EventBase extends Extend
     if callback?
       callback(true)
 
-  # JQueryエレメントを取得
+  # アイテムのJQueryエレメントを取得
   # @abstract
   getJQueryElement: ->
     return null
+
+  # アイテムのクリック対象を取得
+  clickTargetElement: ->
+    @getJQueryElement()
 
   # チャプター開始前イベント
   willChapter: ->
@@ -359,9 +363,11 @@ class EventBase extends Extend
         if @_event[EventPageValueBase.PageValueKey.FINISH_PAGE]
           # ページ遷移
           if @_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] != EventPageValueBase.NO_JUMPPAGE
+            # 指定ページに遷移
             window.eventAction.thisPage().finishAllChapters(@_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1)
           else
-            window.eventAction.thisPage().finishAllChapters()
+            # 全ページ終了
+            window.eventAction.finishAllPages()
         else
           if @_handlerFuncComplete?
             @_handlerFuncComplete()

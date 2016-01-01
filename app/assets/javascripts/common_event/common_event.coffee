@@ -26,11 +26,15 @@ class CommonEvent
     getJQueryElement: ->
       return $('#common_event_click_overlay')
 
+    clickTargetElement: ->
+      return $('#common_event_click_overlay')
+
     willChapter: ->
       if @_event[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.CLICK
         # クリック用オーバーレイを追加
         z_index = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT)
-        $('body').append("<div id='common_event_click_overlay' style='z-index:#{z_index}'></div>")
+        if $('#common_event_click_overlay').length == 0
+          $('body').append("<div id='common_event_click_overlay' style='z-index:#{z_index}'></div>")
       super()
 
     didChapter: ->

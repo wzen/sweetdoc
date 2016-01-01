@@ -276,6 +276,10 @@ EventBase = (function(superClass) {
     return null;
   };
 
+  EventBase.prototype.clickTargetElement = function() {
+    return this.getJQueryElement();
+  };
+
   EventBase.prototype.willChapter = function() {
     this.setModifyBeforeAndAfterVar();
     return PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
@@ -433,7 +437,7 @@ EventBase = (function(superClass) {
           if (this._event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] !== EventPageValueBase.NO_JUMPPAGE) {
             return window.eventAction.thisPage().finishAllChapters(this._event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1);
           } else {
-            return window.eventAction.thisPage().finishAllChapters();
+            return window.eventAction.finishAllPages();
           }
         } else {
           if (this._handlerFuncComplete != null) {

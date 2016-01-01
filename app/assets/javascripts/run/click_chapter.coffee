@@ -10,11 +10,10 @@ class ClickChapter extends Chapter
   # チャプターの前処理
   willChapter: ->
     super()
-
     # イベント設定
     @eventObjList.forEach((event) =>
-      event.getJQueryElement().off('click')
-      event.getJQueryElement().on('click', (e) =>
+      event.clickTargetElement().off('click')
+      event.clickTargetElement().on('click', (e) =>
         @clickEvent(e)
       )
     )
@@ -30,17 +29,14 @@ class ClickChapter extends Chapter
   # クリックイベント
   # @param [Object] e クリックオブジェクト
   clickEvent: (e) ->
-    self = @
-
     @hideGuide()
     if window.disabledEventHandler
       return
-
     @eventObjList.forEach((event) ->
-      if event.getJQueryElement().get(0) == $(e.currentTarget).get(0)
-        event.clickEvent(e, ->
+      if event.clickTargetElement().get(0) == $(e.currentTarget).get(0)
+        event.clickEvent(e, =>
           # クリックしたイベントのフォーク番号を保存
-          self.changeForkNum = event.getChangeForkNum()
+          @changeForkNum = event.getChangeForkNum()
           if window.eventAction?
             # 次のチャプターへ
             window.eventAction.thisPage().nextChapter()
