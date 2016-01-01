@@ -1,0 +1,16 @@
+<div class="config te_div common_state_div" style="display: none">
+  <div class="configBox">
+    <div class="event-config-headliner">Event Change</div>
+    <div class="forms">
+      <!-- 終了 & 遷移ページ -->
+      <div>
+        <label><input class="finish_page" name="finish_page" type="checkbox"><%= I18n.t('config.state.finish_page') %></label>
+        <div class="finish_page_wrappper" style="display: none">
+          <%= I18n.t('config.state.jump_to') %>:
+          <select class="finish_page_select">
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

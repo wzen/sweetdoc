@@ -17,6 +17,9 @@ class ItemPreviewEventConfig extends EventConfig
       h: parseInt($('.item_diff_height:first', @emt).val())
     }
 
+    @[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', @emt).is(":checked")
+    @[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', @emt).val()
+
     @[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', @emt).prop('checked')
 
     @[EventPageValueBase.PageValueKey.IS_SYNC] = false

@@ -75,6 +75,10 @@ en:
       display_position: "Display Position"
       zoom: "Zoom rate"
       created_item_list: "Created item's list"
+      page_select_option: 'Page'
+      page_select_option_none: 'None(Finish)'
+      finish_page: 'Finish page'
+      jump_to: 'Jump to'
     select_opt_group:
       common: "Common Event"
       item: "Item"

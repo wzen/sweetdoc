@@ -72,9 +72,11 @@ class EventConfig
     # 一度全て非表示にする
     $(".config.te_div", @emt).hide()
 
+    # 共通情報表示
+    $('.common_state_div', @emt).show()
     if !@[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]
       # アイテム共通情報表示
-      $('.item_common_div', @emt).show()
+      $('.item_common_div, .item_state_div', @emt).show()
 
     # Handler表示
     $(".config.handler_div", @emt).show()
@@ -85,6 +87,7 @@ class EventConfig
     $(".action_div .#{actionClassName}", @emt).show()
 
     # イベント設定
+    _setCommonStateEvent.call(@)
     _setHandlerRadioEvent.call(@)
     _setScrollDirectionEvent.call(@)
     _setForkSelect.call(@)
@@ -264,6 +267,24 @@ class EventConfig
         $('.button_div', @emt).show()
     )
     $(".action_forms .#{actionClassName} input[type=radio]:checked", @emt).trigger('click')
+
+  _setCommonStateEvent = ->
+    $('.finish_page', @emt).off('change').on('change', (e) =>
+      if $(e.target).is(':checked')
+        # Selectメニュー更新
+        select = $('.finish_page_select', @emt)
+        select.empty()
+        options = "<option value=#{EventPageValueBase.NO_JUMPPAGE}>#{I18n.t('config.state.page_select_option_none')}</option>"
+        pageCount = PageValue.getPageCount()
+        for i in [1..pageCount]
+          options += "<option value=#{i}>#{I18n.t('config.state.page_select_option') + ' ' + i}</option>"
+        select.append(options)
+        $('.finish_page_wrappper', @emt).show()
+      else
+        # 選択なし
+        $('.finish_page_select', @emt).val(EventPageValueBase.NO_JUMPPAGE)
+        $('.finish_page_wrappper', @emt).hide()
+    )
 
   _setHandlerRadioEvent = ->
     $('.handler_div input[type=radio]', @emt).off('click').on('click', (e) =>

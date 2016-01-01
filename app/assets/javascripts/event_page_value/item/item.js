@@ -31,6 +31,7 @@ EPVItem = (function(superClass) {
     };
     writeValue[this.PageValueKey.DO_FOCUS] = true;
     writeValue[this.PageValueKey.IS_COMMON_EVENT] = false;
+    writeValue[this.PageValueKey.FINISH_PAGE] = false;
     writeValue[this.PageValueKey.METHODNAME] = item.constructor.defaultMethodName();
     actionType = item.constructor.defaultActionType();
     writeValue[this.PageValueKey.ACTIONTYPE] = actionType;

@@ -9,6 +9,7 @@ EventPageValueBase = (function() {
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     EventPageValueBase.NO_METHOD = constant.EventPageValue.NO_METHOD;
+    EventPageValueBase.NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE;
     EventPageValueBase.PageValueKey = (function() {
       function PageValueKey() {}
 
@@ -32,7 +33,9 @@ EventPageValueBase = (function() {
 
       PageValueKey.ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE;
 
-      PageValueKey.ANIAMTIONTYPE = constant.EventPageValueKey.ANIAMTIONTYPE;
+      PageValueKey.FINISH_PAGE = constant.EventPageValueKey.FINISH_PAGE;
+
+      PageValueKey.JUMPPAGE_NUM = constant.EventPageValueKey.JUMPPAGE_NUM;
 
       PageValueKey.IS_SYNC = constant.EventPageValueKey.IS_SYNC;
 
@@ -141,6 +144,16 @@ EventPageValueBase = (function() {
           return $(this).find('input[type=radio]').prop('checked', true);
         }
       });
+      if ((eventConfig[this.PageValueKey.FINISH_PAGE] != null) && eventConfig[this.PageValueKey.FINISH_PAGE]) {
+        $('.finish_page', eventConfig.emt).attr('checked', true);
+      } else {
+        $('.finish_page', eventConfig.emt).removeAttr('checked');
+      }
+      if (eventConfig[this.PageValueKey.JUMPPAGE_NUM] != null) {
+        $('.finish_page_select', eventConfig.emt).val(eventConfig[this.PageValueKey.JUMPPAGE_NUM]);
+      } else {
+        $('.finish_page_select', eventConfig.emt).val(EventPageValueBase.NO_JUMPPAGE);
+      }
       if (!eventConfig[this.PageValueKey.IS_COMMON_EVENT]) {
         if (eventConfig[this.PageValueKey.ITEM_SIZE_DIFF] && eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].x) {
           $('.item_position_diff_x', eventConfig.emt).val(eventConfig[this.PageValueKey.ITEM_SIZE_DIFF].x);

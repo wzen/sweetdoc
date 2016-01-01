@@ -272,8 +272,6 @@ class PreloadItemText extends CssItemBase
 
     return css
 
-
-
   changeText: (opt) ->
     changeBefore = @getJQueryElement().find('.change_before:first')
     changeAfter = @getJQueryElement().find('.change_after:first')

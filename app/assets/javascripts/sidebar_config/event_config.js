@@ -2,7 +2,7 @@
 var EventConfig;
 
 EventConfig = (function() {
-  var _setApplyClickEvent, _setForkSelect, _setHandlerRadioEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
+  var _setApplyClickEvent, _setCommonStateEvent, _setForkSelect, _setHandlerRadioEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
@@ -65,14 +65,16 @@ EventConfig = (function() {
       }
     }
     $(".config.te_div", this.emt).hide();
+    $('.common_state_div', this.emt).show();
     if (!this[EventPageValueBase.PageValueKey.IS_COMMON_EVENT]) {
-      $('.item_common_div', this.emt).show();
+      $('.item_common_div, .item_state_div', this.emt).show();
     }
     $(".config.handler_div", this.emt).show();
     $('.action_div .action_forms > div').hide();
     $(".action_div", this.emt).show();
     actionClassName = this.actionClassName();
     $(".action_div ." + actionClassName, this.emt).show();
+    _setCommonStateEvent.call(this);
     _setHandlerRadioEvent.call(this);
     _setScrollDirectionEvent.call(this);
     _setForkSelect.call(this);
@@ -268,6 +270,28 @@ EventConfig = (function() {
       };
     })(this));
     return $(".action_forms ." + actionClassName + " input[type=radio]:checked", this.emt).trigger('click');
+  };
+
+  _setCommonStateEvent = function() {
+    return $('.finish_page', this.emt).off('change').on('change', (function(_this) {
+      return function(e) {
+        var i, j, options, pageCount, ref, select;
+        if ($(e.target).is(':checked')) {
+          select = $('.finish_page_select', _this.emt);
+          select.empty();
+          options = "<option value=" + EventPageValueBase.NO_JUMPPAGE + ">" + (I18n.t('config.state.page_select_option_none')) + "</option>";
+          pageCount = PageValue.getPageCount();
+          for (i = j = 1, ref = pageCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
+            options += "<option value=" + i + ">" + (I18n.t('config.state.page_select_option') + ' ' + i) + "</option>";
+          }
+          select.append(options);
+          return $('.finish_page_wrappper', _this.emt).show();
+        } else {
+          $('.finish_page_select', _this.emt).val(EventPageValueBase.NO_JUMPPAGE);
+          return $('.finish_page_wrappper', _this.emt).hide();
+        }
+      };
+    })(this));
   };
 
   _setHandlerRadioEvent = function() {

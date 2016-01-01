@@ -27,6 +27,8 @@ ItemPreviewEventConfig = (function(superClass) {
       w: parseInt($('.item_diff_width:first', this.emt).val()),
       h: parseInt($('.item_diff_height:first', this.emt).val())
     };
+    this[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', this.emt).is(":checked");
+    this[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', this.emt).val();
     this[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', this.emt).prop('checked');
     this[EventPageValueBase.PageValueKey.IS_SYNC] = false;
     parallel = $(".parallel_div .parallel", this.emt);

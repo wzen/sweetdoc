@@ -320,6 +320,8 @@ class Const
   class EventPageValue
     # @property [String] NO_METHOD メソッド無し名
     NO_METHOD = '__no_method'
+    # @property [Integer] NO_JUMPPAGE ページ遷移先なし
+    NO_JUMPPAGE = -1
   end
 
   class EventPageValueKey
@@ -332,6 +334,8 @@ class Const
     VALUE = 'value'
     IS_COMMON_EVENT = 'is_common_event'
     ORDER = 'order'
+    FINISH_PAGE = 'finishpage'
+    JUMPPAGE_NUM = 'jumppage_num'
     METHODNAME = 'methodname'
     ACTIONTYPE = 'actiontype'
     IS_SYNC = 'is_sync'

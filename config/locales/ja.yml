@@ -52,6 +52,10 @@ ja:
       display_position: "表示位置"
       zoom: "表示倍率"
       created_item_list: "作成アイテム一覧"
+      page_select_option: 'ページ'
+      page_select_option_none: '遷移なし(終了)'
+      finish_page: 'ページ終了'
+      jump_to: 'ページ遷移'
     select_opt_group:
       common: "共通イベント"
       item: "アイテム"

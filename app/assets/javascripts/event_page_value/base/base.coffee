@@ -6,6 +6,7 @@ class EventPageValueBase
     constant = gon.const
 
     @NO_METHOD = constant.EventPageValue.NO_METHOD
+    @NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE
 
     class @PageValueKey
       # @property [String] DIST_ID 一意のイベント識別ID
@@ -28,8 +29,10 @@ class EventPageValueBase
       @METHODNAME = constant.EventPageValueKey.METHODNAME
       # @property [String] ACTIONTYPE アクションタイプ名
       @ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE
-      # @property [String] ANIAMTIONTYPE アニメーションタイプ名
-      @ANIAMTIONTYPE = constant.EventPageValueKey.ANIAMTIONTYPE
+      # @property [String] FINISH_PAGE ページ終了フラグ
+      @FINISH_PAGE = constant.EventPageValueKey.FINISH_PAGE
+      # @property [String] JUMPPAGE_NUM ページ遷移先番号
+      @JUMPPAGE_NUM = constant.EventPageValueKey.JUMPPAGE_NUM
       # @property [String] IS_SYNC 同時実行
       @IS_SYNC = constant.EventPageValueKey.IS_SYNC
       # @property [String] SCROLL_TIME スクロール実行開始位置
@@ -124,6 +127,17 @@ class EventPageValueBase
         if methodName == eventConfig[EventPageValueBase.PageValueKey.METHODNAME]
           $(@).find('input[type=radio]').prop('checked', true)
       )
+
+      # 共通情報
+      # ページ終了フラグ & ページ遷移
+      if eventConfig[@PageValueKey.FINISH_PAGE]? && eventConfig[@PageValueKey.FINISH_PAGE]
+        $('.finish_page', eventConfig.emt).attr('checked', true)
+      else
+        $('.finish_page', eventConfig.emt).removeAttr('checked')
+      if eventConfig[@PageValueKey.JUMPPAGE_NUM]?
+        $('.finish_page_select', eventConfig.emt).val(eventConfig[@PageValueKey.JUMPPAGE_NUM])
+      else
+        $('.finish_page_select', eventConfig.emt).val(EventPageValueBase.NO_JUMPPAGE)
 
       # 画面位置&サイズ
       if !eventConfig[@PageValueKey.IS_COMMON_EVENT]
