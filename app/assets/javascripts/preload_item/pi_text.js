@@ -144,6 +144,20 @@ PreloadItemText = (function(superClass) {
     })(this));
   };
 
+  PreloadItemText.prototype.refresh = function(show, callback) {
+    if (show == null) {
+      show = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    return PreloadItemText.__super__.refresh.call(this, show, function() {
+      if (callback != null) {
+        return callback();
+      }
+    });
+  };
+
   PreloadItemText.prototype.cssStyle = function() {
     var css;
     css = "#" + this.id + " .text_wrapper {\n  font-family: '" + this.fontFamily + "';\n  font-size: " + this.fontSize + "px;\n  display: table-cell;\n  vertical-align: middle;\n  color: " + this.textColor + "\n}\n#" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  text-align: center;\n  display: table;\n  width: 100%;\n  height: 100%;\n}";

@@ -82,7 +82,6 @@ PreloadItemButton = (function(superClass) {
     },
     methods: {
       defaultClick: {
-        isDrawByAnimation: true,
         options: {
           id: 'defaultClick',
           name: 'Default click action',
@@ -162,30 +161,22 @@ PreloadItemButton = (function(superClass) {
   };
 
   PreloadItemButton.prototype.defaultClick = function(opt) {
+    this.disableHandleResponse();
     this.getJQueryElement().find('.item_contents:first').addClass('defaultClick_' + this.id);
-    this.getJQueryElement().off('webkitAnimationEnd animationend');
-    return this.getJQueryElement().on('webkitAnimationEnd animationend', (function(_this) {
+    return this.getJQueryElement().off('webkitAnimationEnd animationend').on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + _this.id);
-        if (opt.complete != null) {
-          return opt.complete();
-        }
+        return _this.finishChapter();
       };
     })(this));
   };
 
   PreloadItemButton.prototype.changeColorScroll = function(opt) {
-    this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
-    if (opt.complete != null) {
-      return opt.complete();
-    }
+    return this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
   };
 
   PreloadItemButton.prototype.changeColorClick = function(opt) {
-    this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
-    if (opt.complete != null) {
-      return opt.complete();
-    }
+    return this.getJQueryElement().find('.css_item_base').css('background', "#" + this.backgroundColor);
   };
 
   PreloadItemButton.prototype.cssAnimationKeyframe = function() {

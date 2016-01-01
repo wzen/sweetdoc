@@ -74,7 +74,6 @@ class PreloadItemButton extends CssItemBase
       }
       methods: {
         defaultClick: {
-          isDrawByAnimation: true
           options: {
             id: 'defaultClick'
             name: 'Default click action'
@@ -151,26 +150,21 @@ class PreloadItemButton extends CssItemBase
 
   # 共通クリックイベント ※アクションイベント
   defaultClick : (opt) ->
+    @disableHandleResponse()
     # ボタン凹むアクション
     @getJQueryElement().find('.item_contents:first').addClass('defaultClick_' + @id)
-    @getJQueryElement().off('webkitAnimationEnd animationend')
-    @getJQueryElement().on('webkitAnimationEnd animationend', (e) =>
-      #console.log('css-anim end')
+    @getJQueryElement().off('webkitAnimationEnd animationend').on('webkitAnimationEnd animationend', (e) =>
       @getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + @id)
-      if opt.complete?
-        opt.complete()
+      # イベント終了
+      @finishChapter()
     )
 
   # *アクションイベント
   changeColorScroll: (opt) ->
     @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
-    if opt.complete?
-      opt.complete()
 
   changeColorClick: (opt) ->
     @getJQueryElement().find('.css_item_base').css('background', "##{@backgroundColor}")
-    if opt.complete?
-      opt.complete()
 
   # CSSアニメーションの定義(必要な場合)
   cssAnimationKeyframe : ->

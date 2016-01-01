@@ -94,15 +94,32 @@ EventBase = (function(superClass) {
     this._event = event;
     this._isFinishedEvent = false;
     this._skipEvent = true;
+    this._runningClickEvent = false;
     this._doPreviewLoop = false;
+    this._handlerFuncComplete = null;
     this._enabledDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS];
     this._forwardDirections = this._event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS];
-    this._specificMethodValues = this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES];
-    if (this.getEventActionType() === Constant.ActionType.SCROLL) {
-      return this.scrollEvent = this.scrollHandlerFunc;
-    } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
-      return this.clickEvent = this.clickHandlerFunc;
+    return this._specificMethodValues = this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES];
+  };
+
+  EventBase.prototype.scrollEvent = function(x, y, complete) {
+    if (complete == null) {
+      complete = null;
     }
+    if (this._handlerFuncComplete == null) {
+      this._handlerFuncComplete = complete;
+    }
+    return this.scrollHandlerFunc(false, x, y);
+  };
+
+  EventBase.prototype.clickEvent = function(e, complete) {
+    if (complete == null) {
+      complete = null;
+    }
+    if (this._handlerFuncComplete == null) {
+      this._handlerFuncComplete = complete;
+    }
+    return this.clickHandlerFunc(false, e);
   };
 
   EventBase.prototype.getEventMethodName = function() {
@@ -142,7 +159,8 @@ EventBase = (function(superClass) {
   EventBase.prototype.resetEvent = function() {
     this.updateEventBefore();
     this._isFinishedEvent = false;
-    return this._skipEvent = false;
+    this._skipEvent = false;
+    return this._runningClickEvent = false;
   };
 
   EventBase.prototype.preview = function(event, loopFinishCallback) {
@@ -154,104 +172,74 @@ EventBase = (function(superClass) {
       console.log('EventBase preview id:' + this.id);
     }
     _preview = function(event) {
-      var _draw, _loop, drawDelay, loopCount, loopDelay, loopMaxCount, p, progressMax;
+      var _draw, _loop, loopCount, loopDelay, loopMaxCount, p, progressMax;
       this._runningPreview = true;
-      drawDelay = this.constructor.STEP_INTERVAL_DURATION * 1000;
       loopDelay = 1000;
       loopMaxCount = 5;
       progressMax = this.progressMax();
       this.willChapter();
       this._doPreviewLoop = true;
+      this._skipEvent = false;
       loopCount = 0;
       this._previewTimer = null;
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW);
-      if (!this.isDrawByAnimationMethod()) {
-        p = 0;
-        _draw = (function(_this) {
-          return function() {
-            if (_this._doPreviewLoop) {
-              if (_this._previewTimer != null) {
-                clearTimeout(_this._previewTimer);
-                _this._previewTimer = null;
-              }
-              return _this._previewTimer = setTimeout(function() {
-                if (_this._runningPreview) {
-                  _this.execMethod({
-                    isPreview: true,
-                    progress: p,
-                    progressMax: progressMax
-                  });
-                  p += 1;
-                  if (p >= progressMax) {
-                    p = 0;
-                    return _loop.call(_this);
-                  } else {
-                    return _draw.call(_this);
-                  }
-                }
-              }, drawDelay);
-            } else {
-              return _this.stopPreview(loopFinishCallback);
+      p = 0;
+      _draw = (function(_this) {
+        return function() {
+          if (_this._doPreviewLoop) {
+            if (_this._previewTimer != null) {
+              clearTimeout(_this._previewTimer);
+              _this._previewTimer = null;
             }
-          };
-        })(this);
-        _loop = (function(_this) {
-          return function() {
-            if (_this._doPreviewLoop) {
-              loopCount += 1;
-              if (loopCount >= loopMaxCount) {
-                _this.stopPreview(loopFinishCallback);
+            return _this._previewTimer = setTimeout(function() {
+              if (_this._runningPreview) {
+                _this._handlerFuncComplete = _loop;
               }
-              if (_this._previewTimer != null) {
-                clearTimeout(_this._previewTimer);
-                _this._previewTimer = null;
-              }
-              _this._previewTimer = setTimeout(function() {
-                if (_this._runningPreview) {
-                  _this.resetEvent();
+              if (_this.getEventActionType() === Constant.ActionType.SCROLL) {
+                _this.scrollHandlerFunc(true);
+                p += 1;
+                if (p >= progressMax) {
+                  p = 0;
+                  return _loop.call(_this);
+                } else {
                   return _draw.call(_this);
                 }
-              }, loopDelay);
-              if (!_this._doPreviewLoop) {
-                return _this.stopPreview(loopFinishCallback);
+              } else if (_this.getEventActionType() === Constant.ActionType.CLICK) {
+                return _this.clickHandlerFunc(true);
               }
-            } else {
+            }, _this.constructor.STEP_INTERVAL_DURATION * 1000);
+          } else {
+            return _this.stopPreview(loopFinishCallback);
+          }
+        };
+      })(this);
+      _loop = (function(_this) {
+        return function() {
+          if (_this._doPreviewLoop) {
+            loopCount += 1;
+            if (loopCount >= loopMaxCount) {
+              _this.stopPreview(loopFinishCallback);
+            }
+            if (_this._previewTimer != null) {
+              clearTimeout(_this._previewTimer);
+              _this._previewTimer = null;
+            }
+            _this._previewTimer = setTimeout(function() {
+              if (_this._runningPreview) {
+                _this.resetEvent();
+                _this.willChapter();
+                return _draw.call(_this);
+              }
+            }, loopDelay);
+            if (!_this._doPreviewLoop) {
               return _this.stopPreview(loopFinishCallback);
             }
-          };
-        })(this);
-        return _draw.call(this);
-      } else {
-        _loop = (function(_this) {
-          return function() {
-            if (_this._doPreviewLoop) {
-              loopCount += 1;
-              if (loopCount >= loopMaxCount) {
-                _this.stopPreview(loopFinishCallback);
-              }
-              if (_this._previewTimer != null) {
-                clearTimeout(_this._previewTimer);
-                _this._previewTimer = null;
-              }
-              return _this._previewTimer = setTimeout(function() {
-                if (_this._runningPreview) {
-                  _this.resetEvent();
-                  return _this.execMethod({
-                    isPreview: true,
-                    complete: _loop
-                  });
-                }
-              }, loopDelay);
-            } else {
-              return _this.stopPreview(loopFinishCallback);
-            }
-          };
-        })(this);
-        return this.execMethod({
-          isPreview: true,
-          complete: _loop
-        });
-      }
+          } else {
+            return _this.stopPreview(loopFinishCallback);
+          }
+        };
+      })(this);
+      return _draw.call(this);
     };
     return this.stopPreview(loopFinishCallback, (function(_this) {
       return function() {
@@ -277,31 +265,25 @@ EventBase = (function(superClass) {
       return;
     }
     this._runningPreview = false;
-    return (function(_this) {
-      return function() {
-        if (_this._previewTimer != null) {
-          clearTimeout(_this._previewTimer);
-          FloatView.hide();
-          _this._previewTimer = null;
-        }
-        if (loopFinishCallback != null) {
-          loopFinishCallback();
-        }
-        if (callback != null) {
-          return callback(true);
-        }
-      };
-    })(this)();
+    if (this._previewTimer != null) {
+      clearTimeout(this._previewTimer);
+      FloatView.hide();
+      this._previewTimer = null;
+    }
+    if (this._clickIntervalTimer != null) {
+      clearInterval(this._clickIntervalTimer);
+      this._clickIntervalTimer = null;
+    }
+    if (loopFinishCallback != null) {
+      loopFinishCallback();
+    }
+    if (callback != null) {
+      return callback(true);
+    }
   };
 
   EventBase.prototype.getJQueryElement = function() {
     return null;
-  };
-
-  EventBase.prototype.nextChapter = function() {
-    if (window.eventAction != null) {
-      return window.eventAction.thisPage().progressChapter();
-    }
   };
 
   EventBase.prototype.willChapter = function() {
@@ -322,21 +304,19 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.execMethod = function(opt) {
-    if (!this.isDrawByAnimationMethod()) {
-      return this.updateInstanceParamByStep(opt.progress);
-    } else {
-      return setTimeout((function(_this) {
-        return function() {
-          return _this.updateInstanceParamByAnimation();
-        };
-      })(this), 0);
-    }
+    return this.updateInstanceParamByStep(opt.progress);
   };
 
-  EventBase.prototype.scrollHandlerFunc = function(x, y, complete) {
+  EventBase.prototype.scrollHandlerFunc = function(isPreview, x, y) {
     var ePoint, plusX, plusY, sPoint;
-    if (complete == null) {
-      complete = null;
+    if (isPreview == null) {
+      isPreview = false;
+    }
+    if (x == null) {
+      x = 0;
+    }
+    if (y == null) {
+      y = 0;
     }
     if (this._isFinishedEvent || this._skipEvent) {
       return;
@@ -344,112 +324,121 @@ EventBase = (function(superClass) {
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    plusX = 0;
-    plusY = 0;
-    if (x > 0 && this._enabledDirections.right) {
-      plusX = parseInt((x + 9) / 10);
-    } else if (x < 0 && this._enabledDirections.left) {
-      plusX = parseInt((x - 9) / 10);
+    if (isPreview) {
+      this.stepValue += 1;
+    } else {
+      plusX = 0;
+      plusY = 0;
+      if (x > 0 && this._enabledDirections.right) {
+        plusX = parseInt((x + 9) / 10);
+      } else if (x < 0 && this._enabledDirections.left) {
+        plusX = parseInt((x - 9) / 10);
+      }
+      if (y > 0 && this._enabledDirections.bottom) {
+        plusY = parseInt((y + 9) / 10);
+      } else if (y < 0 && this._enabledDirections.top) {
+        plusY = parseInt((y - 9) / 10);
+      }
+      if ((plusX > 0 && !this._forwardDirections.right) || (plusX < 0 && this._forwardDirections.left)) {
+        plusX = -plusX;
+      }
+      if ((plusY > 0 && !this._forwardDirections.bottom) || (plusY < 0 && this._forwardDirections.top)) {
+        plusY = -plusY;
+      }
+      this.stepValue += plusX + plusY;
     }
-    if (y > 0 && this._enabledDirections.bottom) {
-      plusY = parseInt((y + 9) / 10);
-    } else if (y < 0 && this._enabledDirections.top) {
-      plusY = parseInt((y - 9) / 10);
-    }
-    if ((plusX > 0 && !this._forwardDirections.right) || (plusX < 0 && this._forwardDirections.left)) {
-      plusX = -plusX;
-    }
-    if ((plusY > 0 && !this._forwardDirections.bottom) || (plusY < 0 && this._forwardDirections.top)) {
-      plusY = -plusY;
-    }
-    this.scrollValue += plusX + plusY;
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
-    if (this.scrollValue < sPoint) {
+    if (this.stepValue < sPoint) {
       return;
-    } else if (this.scrollValue >= ePoint) {
-      this.scrollValue = ePoint;
+    } else if (this.stepValue >= ePoint) {
+      this.stepValue = ePoint;
       if (!this._isFinishedEvent) {
-        if (!this.isDrawByAnimationMethod()) {
-          this._isFinishedEvent = true;
+        this.finishChapter();
+        if (!isPreview) {
           ScrollGuide.hideGuide();
-          if (complete != null) {
-            complete();
-          }
-        } else {
-          this._skipEvent = true;
-          this.execMethod({
-            isPreview: false,
-            complete: function() {
-              this._isFinishedEvent = true;
-              ScrollGuide.hideGuide();
-              if (complete != null) {
-                return complete();
-              }
-            }
-          });
         }
       }
       return;
     }
-    this.canForward = this.scrollValue < ePoint;
-    this.canReverse = this.scrollValue > sPoint;
-    if (!this.isDrawByAnimationMethod()) {
-      return this.execMethod({
-        isPreview: false,
-        progress: this.scrollValue - sPoint,
-        progressMax: this.progressMax()
-      });
-    }
+    this.canForward = this.stepValue < ePoint;
+    this.canReverse = this.stepValue > sPoint;
+    return this.execMethod({
+      isPreview: isPreview,
+      progress: this.stepValue - sPoint,
+      progressMax: this.progressMax()
+    });
   };
 
   EventBase.prototype.scrollLength = function() {
     return parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) - parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
   };
 
-  EventBase.prototype.clickHandlerFunc = function(e, complete) {
-    var count, progressMax, timer;
-    if (complete == null) {
-      complete = null;
+  EventBase.prototype.clickHandlerFunc = function(isPreview, e) {
+    var progressMax;
+    if (isPreview == null) {
+      isPreview = false;
     }
-    e.preventDefault();
-    if (this._isFinishedEvent || this._skipEvent) {
+    if (e == null) {
+      e = null;
+    }
+    if (e != null) {
+      e.preventDefault();
+    }
+    if (this._isFinishedEvent || this._skipEvent || this._runningClickEvent) {
       return;
     }
-    this._skipEvent = true;
+    this._runningClickEvent = true;
     if (window.eventAction != null) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
-    if (!this.isDrawByAnimationMethod()) {
-      progressMax = this.progressMax();
-      count = 1;
-      return timer = setInterval((function(_this) {
-        return function() {
+    progressMax = this.progressMax();
+    this.stepValue = 1;
+    return this._clickIntervalTimer = setInterval((function(_this) {
+      return function() {
+        if (!_this._skipEvent) {
           _this.execMethod({
-            isPreview: false,
-            progress: count,
+            isPreview: isPreview,
+            progress: _this.stepValue,
             progressMax: progressMax
           });
-          count += 1;
-          if (progressMax < count) {
-            clearInterval(timer);
-            _this._isFinishedEvent = true;
-            if (complete != null) {
-              return complete();
-            }
-          }
-        };
-      })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
-    } else {
-      return this.execMethod({
-        isPreview: false,
-        complete: function() {
-          this._isFinishedEvent = true;
-          if (complete != null) {
-            return complete();
+          _this.stepValue += 1;
+          if (progressMax < _this.stepValue) {
+            clearInterval(_this._clickIntervalTimer);
+            return _this.finishChapter();
           }
         }
-      });
+      };
+    })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
+  };
+
+  EventBase.prototype.resetProgress = function(withResetFinishedEventFlg) {
+    if (withResetFinishedEventFlg == null) {
+      withResetFinishedEventFlg = true;
+    }
+    this.stepValue = 0;
+    if (withResetFinishedEventFlg) {
+      return this._isFinishedEvent = false;
+    }
+  };
+
+  EventBase.prototype.enableHandleResponse = function() {
+    return this._skipEvent = false;
+  };
+
+  EventBase.prototype.disableHandleResponse = function() {
+    return this._skipEvent = true;
+  };
+
+  EventBase.prototype.finishChapter = function() {
+    this._isFinishedEvent = true;
+    if (this._clickIntervalTimer != null) {
+      clearInterval(this._clickIntervalTimer);
+      this._clickIntervalTimer = null;
+    }
+    if (this._handlerFuncComplete != null) {
+      this._handlerFuncComplete();
+      return this._handlerFuncComplete = null;
     }
   };
 
@@ -461,7 +450,6 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.updateEventBefore = function() {
-    var actionType;
     if (this._event == null) {
       return;
     }
@@ -469,10 +457,7 @@ EventBase = (function(superClass) {
       console.log('EventBase updateEventBefore id:' + this.id);
     }
     this.setMiniumObject(this.getMinimumObjectEventBefore());
-    actionType = this.getEventActionType();
-    if (actionType === Constant.ActionType.SCROLL) {
-      return this.scrollValue = 0;
-    }
+    return this.resetProgress();
   };
 
   EventBase.prototype.updateEventAfter = function() {
@@ -485,13 +470,9 @@ EventBase = (function(superClass) {
     }
     actionType = this.getEventActionType();
     if (actionType === Constant.ActionType.SCROLL) {
-      this.scrollValue = this.scrollLength();
+      this.stepValue = this.scrollLength();
     }
-    if (!this.isDrawByAnimationMethod()) {
-      this.updateInstanceParamByStep(null, true);
-    } else {
-      this.updateInstanceParamByAnimation(true);
-    }
+    this.updateInstanceParamByStep(null, true);
     return PageValue.saveInstanceObjectToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
@@ -661,14 +642,6 @@ EventBase = (function(superClass) {
     prefix_key = isCache ? PageValue.Key.instanceValueCache(this.id) : PageValue.Key.instanceValue(this.id);
     obj = this.getMinimumObject();
     return PageValue.setInstancePageValue(prefix_key, obj);
-  };
-
-  EventBase.prototype.isDrawByAnimationMethod = function() {
-    if (this.getEventMethodName() !== EventPageValueBase.NO_METHOD) {
-      return (this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION] != null) && this.constructor.actionProperties.methods[this.getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION];
-    } else {
-      return false;
-    }
   };
 
   EventBase.prototype.progressMax = function() {

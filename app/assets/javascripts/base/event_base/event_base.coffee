@@ -55,17 +55,24 @@ class EventBase extends Extend
     @_event = event
     @_isFinishedEvent = false
     @_skipEvent = true
+    @_runningClickEvent = false
     @_doPreviewLoop = false
+    @_handlerFuncComplete = null
     @_enabledDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_ENABLED_DIRECTIONS]
     @_forwardDirections = @_event[EventPageValueBase.PageValueKey.SCROLL_FORWARD_DIRECTIONS]
     @_specificMethodValues = @_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES]
 
-    # スクロールイベント
-    if @getEventActionType() == Constant.ActionType.SCROLL
-      @scrollEvent = @scrollHandlerFunc
-    # クリックイベント
-    else if @getEventActionType() == Constant.ActionType.CLICK
-      @clickEvent = @clickHandlerFunc
+  # スクロールイベント
+  scrollEvent: (x, y, complete = null) ->
+    if !@_handlerFuncComplete?
+      @_handlerFuncComplete = complete
+    @scrollHandlerFunc(false, x, y)
+
+  # クリックイベント
+  clickEvent: (e, complete = null) ->
+    if !@_handlerFuncComplete?
+      @_handlerFuncComplete = complete
+    @clickHandlerFunc(false, e)
 
   # 設定されているイベントメソッド名を取得
   # @return [String] メソッド名
@@ -103,6 +110,7 @@ class EventBase extends Extend
     @updateEventBefore()
     @_isFinishedEvent = false
     @_skipEvent = false
+    @_runningClickEvent = false
 
   # プレビュー開始
   # @param [Object] event 設定イベント
@@ -112,91 +120,62 @@ class EventBase extends Extend
 
     _preview = (event) ->
       @_runningPreview = true
-      drawDelay = @constructor.STEP_INTERVAL_DURATION * 1000
       loopDelay = 1000 # 1秒毎イベント実行
       loopMaxCount = 5 # ループ5回
       progressMax = @progressMax()
       @willChapter()
       # イベントループ
       @_doPreviewLoop = true
+      @_skipEvent = false
       loopCount = 0
       @_previewTimer = null
       # FloatView表示
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW)
-      if !@isDrawByAnimationMethod()
-        p = 0
-        _draw = =>
-          if @_doPreviewLoop
-            if @_previewTimer?
-              clearTimeout(@_previewTimer)
-              @_previewTimer = null
-            @_previewTimer = setTimeout( =>
-              if @_runningPreview
-                @execMethod({
-                  isPreview: true
-                  progress: p
-                  progressMax: progressMax
-                })
+      p = 0
+      _draw = =>
+        if @_doPreviewLoop
+          if @_previewTimer?
+            clearTimeout(@_previewTimer)
+            @_previewTimer = null
+          @_previewTimer = setTimeout( =>
+            if @_runningPreview
+              @_handlerFuncComplete = _loop
+            if @getEventActionType() == Constant.ActionType.SCROLL
+                @scrollHandlerFunc(true)
                 p += 1
                 if p >= progressMax
                   p = 0
                   _loop.call(@)
                 else
                   _draw.call(@)
-            , drawDelay)
-          else
+            else if @getEventActionType() == Constant.ActionType.CLICK
+              @clickHandlerFunc(true)
+          , @constructor.STEP_INTERVAL_DURATION * 1000)
+        else
+          @stopPreview(loopFinishCallback)
+
+      _loop = =>
+        if @_doPreviewLoop
+          loopCount += 1
+          if loopCount >= loopMaxCount
             @stopPreview(loopFinishCallback)
 
-        _loop = =>
-          if @_doPreviewLoop
-            loopCount += 1
-            if loopCount >= loopMaxCount
-              @stopPreview(loopFinishCallback)
-
-            if @_previewTimer?
-              clearTimeout(@_previewTimer)
-              @_previewTimer = null
-            @_previewTimer = setTimeout( =>
-              if @_runningPreview
-                # 状態を変更前に戻す
-                @resetEvent()
-                #@willChapter()
-                _draw.call(@)
-            , loopDelay)
-            if !@_doPreviewLoop
-              @stopPreview(loopFinishCallback)
-          else
+          if @_previewTimer?
+            clearTimeout(@_previewTimer)
+            @_previewTimer = null
+          @_previewTimer = setTimeout( =>
+            if @_runningPreview
+              # 状態を変更前に戻す
+              @resetEvent()
+              @willChapter()
+              _draw.call(@)
+          , loopDelay)
+          if !@_doPreviewLoop
             @stopPreview(loopFinishCallback)
+        else
+          @stopPreview(loopFinishCallback)
 
-        _draw.call(@)
-
-      else
-        _loop = =>
-          if @_doPreviewLoop
-            loopCount += 1
-            if loopCount >= loopMaxCount
-              @stopPreview(loopFinishCallback)
-
-            if @_previewTimer?
-              clearTimeout(@_previewTimer)
-              @_previewTimer = null
-            @_previewTimer = setTimeout( =>
-              if @_runningPreview
-                # 状態を変更前に戻す
-                @resetEvent()
-                #@willChapter()
-                @execMethod({
-                  isPreview: true
-                  complete: _loop
-                })
-            , loopDelay)
-          else
-            @stopPreview(loopFinishCallback)
-
-        @execMethod({
-          isPreview: true
-          complete: _loop
-        })
+      _draw.call(@)
 
     @stopPreview(loopFinishCallback, =>
       _preview.call(@, event)
@@ -215,25 +194,22 @@ class EventBase extends Extend
       return
     @_runningPreview = false
 
-    do =>
-      if @_previewTimer?
-        clearTimeout(@_previewTimer)
-        FloatView.hide()
-        @_previewTimer = null
-      if loopFinishCallback?
-        loopFinishCallback()
-      if callback?
-        callback(true)
+    if @_previewTimer?
+      clearTimeout(@_previewTimer)
+      FloatView.hide()
+      @_previewTimer = null
+    if @_clickIntervalTimer?
+      clearInterval(@_clickIntervalTimer)
+      @_clickIntervalTimer = null
+    if loopFinishCallback?
+      loopFinishCallback()
+    if callback?
+      callback(true)
 
   # JQueryエレメントを取得
   # @abstract
   getJQueryElement: ->
     return null
-
-  # チャプターを進める
-  nextChapter: ->
-    if window.eventAction?
-      window.eventAction.thisPage().progressChapter()
 
   # チャプター開始前イベント
   willChapter: ->
@@ -256,19 +232,13 @@ class EventBase extends Extend
   # メソッド実行
   execMethod: (opt) ->
     # メソッド共通処理
-    if !@isDrawByAnimationMethod()
-      # アイテム位置&サイズ更新
-      @updateInstanceParamByStep(opt.progress)
-    else
-      setTimeout( =>
-        @updateInstanceParamByAnimation()
-      , 0)
+    # アイテム位置&サイズ更新
+    @updateInstanceParamByStep(opt.progress)
 
   # スクロール基底メソッド
   # @param [Integer] x スクロール横座標
   # @param [Integer] y スクロール縦座標
-  # @param [Function] complete イベント終了後コールバック
-  scrollHandlerFunc: (x, y, complete = null) ->
+  scrollHandlerFunc: (isPreview = false, x = 0, y = 0) ->
     if @_isFinishedEvent || @_skipEvent
       # 終了済みorイベントを反応させない場合
       return
@@ -277,68 +247,58 @@ class EventBase extends Extend
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
-    # スクロール値更新
-    #if window.debug
-      #console.log("y:#{y}")
-    plusX = 0
-    plusY = 0
-    if x > 0 && @_enabledDirections.right
-      plusX = parseInt((x + 9) / 10)
-    else if x < 0 && @_enabledDirections.left
-      plusX = parseInt((x - 9) / 10)
-    if y > 0 && @_enabledDirections.bottom
-      plusY = parseInt((y + 9) / 10)
-    else if y < 0 && @_enabledDirections.top
-      plusY = parseInt((y - 9) / 10)
+    if isPreview
+      # プレビュー時は1ずつ実行
+      @stepValue += 1
+    else
+      # スクロール値更新
+      #if window.debug
+        #console.log("y:#{y}")
+      plusX = 0
+      plusY = 0
+      if x > 0 && @_enabledDirections.right
+        plusX = parseInt((x + 9) / 10)
+      else if x < 0 && @_enabledDirections.left
+        plusX = parseInt((x - 9) / 10)
+      if y > 0 && @_enabledDirections.bottom
+        plusY = parseInt((y + 9) / 10)
+      else if y < 0 && @_enabledDirections.top
+        plusY = parseInt((y - 9) / 10)
 
-    if (plusX > 0 && !@_forwardDirections.right) ||
-      (plusX < 0 && @_forwardDirections.left)
-        plusX = -plusX
-    if (plusY > 0 && !@_forwardDirections.bottom) ||
-      (plusY < 0 && @_forwardDirections.top)
-        plusY = -plusY
+      if (plusX > 0 && !@_forwardDirections.right) ||
+        (plusX < 0 && @_forwardDirections.left)
+          plusX = -plusX
+      if (plusY > 0 && !@_forwardDirections.bottom) ||
+        (plusY < 0 && @_forwardDirections.top)
+          plusY = -plusY
 
-    @scrollValue += plusX + plusY
+      @stepValue += plusX + plusY
 
     sPoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
     ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
 
     # スクロール指定範囲外なら反応させない
-    if @scrollValue < sPoint
-      #@scrollValue = sPoint
+    if @stepValue < sPoint
+      #@stepValue = sPoint
       return
-    else if @scrollValue >= ePoint
-      @scrollValue = ePoint
+    else if @stepValue >= ePoint
+      @stepValue = ePoint
       if !@_isFinishedEvent
-        if !@isDrawByAnimationMethod()
-          # 終了イベント
-          @_isFinishedEvent = true
+        # 終了イベント
+        @finishChapter()
+        if !isPreview
           ScrollGuide.hideGuide()
-          if complete?
-            complete()
-        else
-          # アニメーション実行は1回のみ
-          @_skipEvent = true
-          @execMethod({
-            isPreview: false
-            complete: ->
-              @_isFinishedEvent = true
-              ScrollGuide.hideGuide()
-              if complete?
-                complete()
-          })
       return
 
-    @canForward = @scrollValue < ePoint
-    @canReverse = @scrollValue > sPoint
+    @canForward = @stepValue < ePoint
+    @canReverse = @stepValue > sPoint
 
-    if !@isDrawByAnimationMethod()
-      # ステップ実行
-      @execMethod({
-        isPreview: false
-        progress: @scrollValue - sPoint
-        progressMax: @progressMax()
-      })
+    # ステップ実行
+    @execMethod({
+      isPreview: isPreview
+      progress: @stepValue - sPoint
+      progressMax: @progressMax()
+    })
 
   # スクロールの長さを取得
   # @return [Integer] スクロール長さ
@@ -347,48 +307,61 @@ class EventBase extends Extend
 
   # クリック基底メソッド
   # @param [Object] e クリックオブジェクト
-  # @param [Function] complete イベント終了後コールバック
-  clickHandlerFunc: (e, complete = null) ->
-    e.preventDefault()
+  clickHandlerFunc: (isPreview = false, e = null) ->
+    if e?
+      e.preventDefault()
 
-    if @_isFinishedEvent || @_skipEvent
+    if @_isFinishedEvent || @_skipEvent || @_runningClickEvent
       # 終了済みorイベントを反応させない場合
       return
 
-    # イベントは一回のみ実行
-    @_skipEvent = true
+    # クリックイベントは一回のみ実行
+    @_runningClickEvent = true
 
     # 動作済みフラグON
     if window.eventAction?
       window.eventAction.thisPage().thisChapter().doMoveChapter = true
 
-    if !@isDrawByAnimationMethod()
-      # ステップ実行
-      progressMax = @progressMax()
-      count = 1
-      timer = setInterval( =>
+    # ステップ実行
+    progressMax = @progressMax()
+    @stepValue = 1
+    @_clickIntervalTimer = setInterval( =>
+      if !@_skipEvent
         @execMethod({
-          isPreview: false
-          progress: count
+          isPreview: isPreview
+          progress: @stepValue
           progressMax: progressMax
         })
-        count += 1
-        if progressMax < count
-          clearInterval(timer)
+        @stepValue += 1
+        if progressMax < @stepValue
+          clearInterval(@_clickIntervalTimer)
           # 終了イベント
-          @_isFinishedEvent = true
-          if complete?
-            complete()
-      , @constructor.STEP_INTERVAL_DURATION * 1000)
-    else
-      # アニメーション実行
-      @execMethod({
-        isPreview: false
-        complete: ->
-          @_isFinishedEvent = true
-          if complete?
-            complete()
-      })
+          @finishChapter()
+    , @constructor.STEP_INTERVAL_DURATION * 1000)
+
+  # Step値を戻す
+  resetProgress: (withResetFinishedEventFlg = true) ->
+    @stepValue = 0
+    if withResetFinishedEventFlg
+      @_isFinishedEvent = false
+
+  # UIの反応を有効にする
+  enableHandleResponse: ->
+    @_skipEvent = false
+
+  # UIの反応を無効にする
+  disableHandleResponse: ->
+    @_skipEvent = true
+
+  # チャプターを終了する
+  finishChapter: ->
+    @_isFinishedEvent = true
+    if @_clickIntervalTimer?
+      clearInterval(@_clickIntervalTimer)
+      @_clickIntervalTimer = null
+    if @_handlerFuncComplete?
+      @_handlerFuncComplete()
+      @_handlerFuncComplete = null
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->
@@ -406,9 +379,7 @@ class EventBase extends Extend
       console.log('EventBase updateEventBefore id:' + @id)
 
     @setMiniumObject(@getMinimumObjectEventBefore())
-    actionType = @getEventActionType()
-    if actionType == Constant.ActionType.SCROLL
-      @scrollValue = 0
+    @resetProgress()
 
   # イベント後の表示状態にする
   updateEventAfter: ->
@@ -421,11 +392,8 @@ class EventBase extends Extend
 
     actionType = @getEventActionType()
     if actionType == Constant.ActionType.SCROLL
-      @scrollValue = @scrollLength()
-    if !@isDrawByAnimationMethod()
-      @updateInstanceParamByStep(null, true)
-    else
-      @updateInstanceParamByAnimation(true)
+      @stepValue = @scrollLength()
+    @updateInstanceParamByStep(null, true)
     # インスタンスの状態を保存
     PageValue.saveInstanceObjectToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
@@ -530,13 +498,6 @@ class EventBase extends Extend
     prefix_key = if isCache then PageValue.Key.instanceValueCache(@id) else PageValue.Key.instanceValue(@id)
     obj = @getMinimumObject()
     PageValue.setInstancePageValue(prefix_key, obj)
-
-  # メソッドがアニメーションとして実行するか
-  isDrawByAnimationMethod: ->
-    if @getEventMethodName() != EventPageValueBase.NO_METHOD
-      return @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]? && @constructor.actionProperties.methods[@getEventMethodName()][EventPageValueBase.PageValueKey.IS_DRAW_BY_ANIMATION]
-    else
-      return false
 
   # ステップ数最大値
   progressMax: ->

@@ -234,6 +234,16 @@ class PreloadItemText extends CssItemBase
         callback()
     )
 
+  # 再描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
+  # @param [Function] callback コールバック
+  refresh: (show = true, callback = null) ->
+    super(show, ->
+      if callback?
+        callback()
+      # TODO: 吹き出しの端を描画
+    )
+
   # CSSスタイル
   # TODO: CSSファイルで管理できるように修正
   cssStyle: ->
@@ -261,6 +271,7 @@ class PreloadItemText extends CssItemBase
       """
 
     return css
+
 
 
   changeText: (opt) ->
