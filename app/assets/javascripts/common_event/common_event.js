@@ -30,18 +30,18 @@ CommonEvent = (function() {
 
     PrivateClass.prototype.willChapter = function() {
       var z_index;
-      PrivateClass.__super__.willChapter.call(this);
       if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
         z_index = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT);
-        return $('body').append("<div id='common_event_click_overlay' style='z-index:" + z_index + "'></div>");
+        $('body').append("<div id='common_event_click_overlay' style='z-index:" + z_index + "'></div>");
       }
+      return PrivateClass.__super__.willChapter.call(this);
     };
 
     PrivateClass.prototype.didChapter = function() {
-      PrivateClass.__super__.didChapter.call(this);
       if (this._event[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.CLICK) {
-        return $('#common_event_click_overlay').remove();
+        $('#common_event_click_overlay').remove();
       }
+      return PrivateClass.__super__.didChapter.call(this);
     };
 
     return PrivateClass;

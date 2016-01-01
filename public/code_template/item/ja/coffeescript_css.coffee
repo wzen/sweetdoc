@@ -216,14 +216,13 @@ class ItemPreviewTemp extends CssItemBase
     return keyframe
 
   willChapter: ->
-    super()
     if @getEventMethodName() == 'defaultClick'
-# ボタンを表示
+      # ボタンを表示
       @getJQueryElement().css('opacity', 1)
     else if @getEventMethodName() == 'changeColorClick' || @getEventMethodName() == 'changeColorScroll'
-# ボタンを表示
+      # ボタンを表示
       @getJQueryElement().css('opacity', 1)
-
+    super()
 
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)
 

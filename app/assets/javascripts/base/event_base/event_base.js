@@ -277,9 +277,8 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.willChapter = function() {
-    PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
-    this.updateEventBefore();
-    return this.setModifyBeforeAndAfterVar();
+    this.setModifyBeforeAndAfterVar();
+    return PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.didChapter = function() {

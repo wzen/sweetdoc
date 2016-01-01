@@ -533,6 +533,7 @@ class WorktableCommon
 
     # 状態変更フラグON
     window.worktableItemsChangedState = true
+    # 全ての状態をイベント適応前にする
     Common.updateAllEventsToBefore( =>
       # 操作履歴削除
       PageValue.removeAllFootprint()

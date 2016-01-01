@@ -208,12 +208,10 @@ class EventBase extends Extend
 
   # チャプター開始前イベント
   willChapter: ->
-    # インスタンスの状態を保存
-    PageValue.saveInstanceObjectToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
-    # 状態をイベント前に戻す
-    @updateEventBefore()
     # イベント前後の変数の設定
     @setModifyBeforeAndAfterVar()
+    # インスタンスの状態を保存
+    PageValue.saveInstanceObjectToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # チャプター終了時イベント
   didChapter: ->

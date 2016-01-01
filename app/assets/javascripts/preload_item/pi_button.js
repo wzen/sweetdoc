@@ -194,12 +194,12 @@ PreloadItemButton = (function(superClass) {
   };
 
   PreloadItemButton.prototype.willChapter = function() {
-    PreloadItemButton.__super__.willChapter.call(this);
     if (this.getEventMethodName() === 'defaultClick') {
-      return this.getJQueryElement().css('opacity', 1);
+      this.getJQueryElement().css('opacity', 1);
     } else if (this.getEventMethodName() === 'changeColorClick' || this.getEventMethodName() === 'changeColorScroll') {
-      return this.getJQueryElement().css('opacity', 1);
+      this.getJQueryElement().css('opacity', 1);
     }
+    return PreloadItemButton.__super__.willChapter.call(this);
   };
 
   return PreloadItemButton;
