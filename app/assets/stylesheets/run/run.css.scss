@@ -463,6 +463,7 @@ div.contents_info {
   //height: 50px;
   z-index:1999999999;
   width: 100%;
+  display: none;
 
   > div {
     color: white;
@@ -496,4 +497,11 @@ div.contents_info {
   .chapter {
     font-size: 14px;
   }
+}
+div.contents_info_show_button {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+  //height: 50px;
+  z-index:1999999998;
 }

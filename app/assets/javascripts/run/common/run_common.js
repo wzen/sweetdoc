@@ -101,6 +101,29 @@ RunCommon = (function() {
     return RunCommon.resizeMainContainerEvent();
   };
 
+  RunCommon.showCreatorInfo = function() {
+    var info;
+    info = $('#contents').find('.contents_info:first');
+    info.fadeIn('500');
+    setTimeout(function() {
+      return info.fadeOut('500');
+    }, 3000);
+    $('#contents .contents_info_show_button:first').off('click').on('click', (function(_this) {
+      return function(e) {
+        if (!info.is(':visible')) {
+          return info.fadeIn('200');
+        }
+      };
+    })(this));
+    return info.off('click').on('click', (function(_this) {
+      return function(e) {
+        if (info.is(':visible')) {
+          return info.fadeOut('200');
+        }
+      };
+    })(this));
+  };
+
   RunCommon.initEventAction = function() {
     var forkEventPageValueList, i, j, k, l, page, pageCount, pageList, pageNum, ref, ref1;
     pageCount = PageValue.getPageCount();

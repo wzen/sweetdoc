@@ -93,6 +93,24 @@ class RunCommon
   @resizeEvent = ->
     RunCommon.resizeMainContainerEvent()
 
+  # 詳細情報を表示
+  @showCreatorInfo = ->
+    info = $('#contents').find('.contents_info:first')
+    info.fadeIn('500')
+    setTimeout( ->
+      info.fadeOut('500')
+    , 3000)
+    # iボタンで情報表示
+    $('#contents .contents_info_show_button:first').off('click').on('click', (e)=>
+      if !info.is(':visible')
+        info.fadeIn('200')
+    )
+    # 情報ビュークリックで非表示
+    info.off('click').on('click', (e) =>
+      if info.is(':visible')
+        info.fadeOut('200')
+    )
+
   # イベント作成
   @initEventAction = ->
     # アクションのイベントを取得

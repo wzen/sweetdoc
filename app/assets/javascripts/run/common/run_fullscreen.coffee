@@ -1,9 +1,9 @@
 class RunFullScreen
   @showCreatorInfo = ->
     @showModalOverlay()
-    $('#main').find('.popup_creator_wrapper').fadeIn('500')
+    $('#main').find('.popup_creator_wrapper').fadeIn('200')
     setTimeout(->
-      $('#main').find('.popup_creator_wrapper').fadeOut('500', ->
+      $('#main').find('.popup_creator_wrapper').fadeOut('200', ->
         $('#modal-overlay').hide()
       )
     , 3000)

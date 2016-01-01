@@ -54,7 +54,11 @@ $(function() {
     GalleryCommon.initGridView();
     return GalleryGrid.initEvent();
   });
-  return $('.gallery.detail, .gallery.run_window').ready(function() {
+  $('.gallery.detail').ready(function() {
+    RunCommon.showCreatorInfo();
+    return RunCommon.start();
+  });
+  return $('.gallery.run_window').ready(function() {
     RunFullScreen.showCreatorInfo();
     return RunCommon.start();
   });

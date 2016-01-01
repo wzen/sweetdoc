@@ -51,7 +51,12 @@ $ ->
     # イベント設定
     GalleryGrid.initEvent()
 
-  $('.gallery.detail, .gallery.run_window').ready ->
+  $('.gallery.detail').ready ->
+    # 作成者情報を表示
+    RunCommon.showCreatorInfo()
+    RunCommon.start()
+
+  $('.gallery.run_window').ready ->
     # 作成者情報を表示
     RunFullScreen.showCreatorInfo()
     RunCommon.start()
