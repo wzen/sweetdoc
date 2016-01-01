@@ -5,6 +5,7 @@ class EventAction
   # @param [Integer] @pageIndex ページ番号
   constructor: (@pageList, @pageIndex) ->
     @finishedAllPages = false
+    @nextPageIndex = null
 
   # 現在のページインスタンスを取得
   # @return [Object] 現在のページインスタンス
@@ -49,7 +50,10 @@ class EventAction
       # 全ページ終了の場合
       @finishAllPages()
     else
-      @pageIndex += 1
+      if @nextPageIndex?
+        @pageIndex = @nextPageIndex
+      else
+        @pageIndex += 1
       # ページ番号更新
       RunCommon.setPageNum(@thisPageNum())
       PageValue.setPageNum(@thisPageNum())
@@ -66,7 +70,7 @@ class EventAction
       PageValue.setPageNum(@thisPageNum())
       @changePaging(beforePageIndex, @pageIndex, callback)
     else
-      # 動作させている場合はページのアクションを元に戻す
+      # 動作させている場合はページのイベントを元に戻して初めから
       # ページ前処理
       @thisPage().willPage( =>
         @thisPage().start()
@@ -113,6 +117,8 @@ class EventAction
           @thisPage().thisChapter().disableEventHandle()
           # ページングアニメーション
           pageFlip.startRender( =>
+            # 次ページインデックスを初期化
+            @nextPageIndex = null
             # 隠したビューを非表示にする
             className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum)
             section = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")

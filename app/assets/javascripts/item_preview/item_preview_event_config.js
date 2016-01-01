@@ -37,8 +37,6 @@ ItemPreviewEventConfig = (function(superClass) {
     }
     handlerDiv = $(".handler_div", this.emt);
     if (this[EventPageValueBase.PageValueKey.ACTIONTYPE] === Constant.ActionType.SCROLL) {
-      this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = '';
-      this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = "";
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val();
       this[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val();
       topEmt = handlerDiv.find('.scroll_enabled_top:first');

@@ -445,9 +445,18 @@ Page = (function() {
     });
   };
 
-  Page.prototype.finishAllChapters = function() {
+  Page.prototype.finishAllChapters = function(nextPageIndex) {
+    if (nextPageIndex == null) {
+      nextPageIndex = null;
+    }
     if (window.runDebug) {
       console.log('Page finishAllChapters');
+      if (nextPageIndex != null) {
+        console.log('nextPageIndex: ' + nextPageIndex);
+      }
+    }
+    if (nextPageIndex != null) {
+      window.eventAction.nextPageIndex = nextPageIndex;
     }
     this.finishedAllChapters = true;
     if (window.eventAction.hasNextPage()) {

@@ -19,18 +19,13 @@ class ItemPreviewEventConfig extends EventConfig
 
     @[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', @emt).is(":checked")
     @[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', @emt).val()
-
     @[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', @emt).prop('checked')
-
     @[EventPageValueBase.PageValueKey.IS_SYNC] = false
     parallel = $(".parallel_div .parallel", @emt)
     if parallel?
       @[EventPageValueBase.PageValueKey.IS_SYNC] = parallel.is(":checked")
-
     handlerDiv = $(".handler_div", @emt)
     if @[EventPageValueBase.PageValueKey.ACTIONTYPE] == Constant.ActionType.SCROLL
-      @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = ''
-      @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = ""
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_START] = handlerDiv.find('.scroll_point_start:first').val()
       @[EventPageValueBase.PageValueKey.SCROLL_POINT_END] = handlerDiv.find('.scroll_point_end:first').val()
 

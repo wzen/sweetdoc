@@ -6,6 +6,7 @@ EventAction = (function() {
     this.pageList = pageList;
     this.pageIndex = pageIndex;
     this.finishedAllPages = false;
+    this.nextPageIndex = null;
   }
 
   EventAction.prototype.thisPage = function() {
@@ -52,7 +53,11 @@ EventAction = (function() {
     if (this.pageList.length <= this.pageIndex + 1) {
       return this.finishAllPages();
     } else {
-      this.pageIndex += 1;
+      if (this.nextPageIndex != null) {
+        this.pageIndex = this.nextPageIndex;
+      } else {
+        this.pageIndex += 1;
+      }
       RunCommon.setPageNum(this.thisPageNum());
       PageValue.setPageNum(this.thisPageNum());
       return this.changePaging(beforePageIndex, this.pageIndex, callback);
@@ -117,6 +122,7 @@ EventAction = (function() {
             return pageFlip.startRender((function(_this) {
               return function() {
                 var className, section;
+                _this.nextPageIndex = null;
                 className = Constant.Paging.MAIN_PAGING_SECTION_CLASS.replace('@pagenum', beforePageNum);
                 section = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
                 section.hide();

@@ -391,9 +391,14 @@ class Page
     )
 
   # イベント終了イベント
-  finishAllChapters: ->
+  finishAllChapters: (nextPageIndex = null) ->
     if window.runDebug
       console.log('Page finishAllChapters')
+      if nextPageIndex?
+        console.log('nextPageIndex: ' + nextPageIndex)
+
+    if nextPageIndex?
+      window.eventAction.nextPageIndex = nextPageIndex
 
     @finishedAllChapters = true
     if window.eventAction.hasNextPage()

@@ -354,7 +354,7 @@ EventBase = (function(superClass) {
     } else if (this.stepValue >= ePoint) {
       this.stepValue = ePoint;
       if (!this._isFinishedEvent) {
-        this.finishChapter();
+        this.finishEvent();
         if (!isPreview) {
           ScrollGuide.hideGuide();
         }
@@ -405,7 +405,7 @@ EventBase = (function(superClass) {
           _this.stepValue += 1;
           if (progressMax < _this.stepValue) {
             clearInterval(_this._clickIntervalTimer);
-            return _this.finishChapter();
+            return _this.finishEvent();
           }
         }
       };
@@ -430,7 +430,7 @@ EventBase = (function(superClass) {
     return this._skipEvent = true;
   };
 
-  EventBase.prototype.finishChapter = function() {
+  EventBase.prototype.finishEvent = function() {
     this._isFinishedEvent = true;
     if (this._clickIntervalTimer != null) {
       clearInterval(this._clickIntervalTimer);
@@ -438,7 +438,12 @@ EventBase = (function(superClass) {
     }
     if (this._handlerFuncComplete != null) {
       this._handlerFuncComplete();
-      return this._handlerFuncComplete = null;
+      this._handlerFuncComplete = null;
+    }
+    if (window.eventAction != null) {
+      if (this._event[EventPageValueBase.PageValueKey.FINISH_PAGE] && this._event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] !== EventPageValueBase.NO_JUMPPAGE) {
+        return window.eventAction.thisPage().finishAllChapters(this._event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1);
+      }
     }
   };
 

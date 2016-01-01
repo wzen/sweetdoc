@@ -285,7 +285,7 @@ class EventBase extends Extend
       @stepValue = ePoint
       if !@_isFinishedEvent
         # 終了イベント
-        @finishChapter()
+        @finishEvent()
         if !isPreview
           ScrollGuide.hideGuide()
       return
@@ -336,7 +336,7 @@ class EventBase extends Extend
         if progressMax < @stepValue
           clearInterval(@_clickIntervalTimer)
           # 終了イベント
-          @finishChapter()
+          @finishEvent()
     , @constructor.STEP_INTERVAL_DURATION * 1000)
 
   # Step値を戻す
@@ -353,8 +353,8 @@ class EventBase extends Extend
   disableHandleResponse: ->
     @_skipEvent = true
 
-  # チャプターを終了する
-  finishChapter: ->
+  # イベントを終了する
+  finishEvent: ->
     @_isFinishedEvent = true
     if @_clickIntervalTimer?
       clearInterval(@_clickIntervalTimer)
@@ -362,6 +362,10 @@ class EventBase extends Extend
     if @_handlerFuncComplete?
       @_handlerFuncComplete()
       @_handlerFuncComplete = null
+    if window.eventAction?
+      if @_event[EventPageValueBase.PageValueKey.FINISH_PAGE] && @_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] != EventPageValueBase.NO_JUMPPAGE
+        # ページ遷移
+        window.eventAction.thisPage().finishAllChapters(@_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1)
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->
