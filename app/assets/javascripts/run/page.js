@@ -459,7 +459,7 @@ Page = (function() {
       window.eventAction.nextPageIndex = nextPageIndex;
     }
     this.finishedAllChapters = true;
-    if (window.eventAction.hasNextPage()) {
+    if (nextPageIndex || window.eventAction.hasNextPage()) {
       return this.floatPageScrollHandleCanvas();
     } else {
       return window.eventAction.finishAllPages();

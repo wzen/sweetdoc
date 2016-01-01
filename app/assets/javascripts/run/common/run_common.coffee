@@ -474,9 +474,11 @@ class RunCommon
       if is_reload?
         LocalStorage.loadAllPageValues()
       else
-        LocalStorage.saveAllPageValues()
         # 1ページから開始
         PageValue.setPageNum(1)
+        # footprintを初期化
+        PageValue.removeAllFootprint()
+        LocalStorage.saveAllPageValues()
 
     # Mainコンテナ作成
     Common.createdMainContainerIfNeeded(PageValue.getPageNum())

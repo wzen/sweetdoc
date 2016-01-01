@@ -30,12 +30,10 @@ class Navbar
         # 初期モーダル表示
         Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
     )
-
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', ->
       # モーダル表示
       Common.showModalView(Constant.ModalViewType.ADMIN_PROJECTS, true, Project.initAdminProjectModal)
     )
-
     menuSave = $('.menu-save', fileMenuEmt)
     menuSave.off('click').on('click', ->
       ServerStorage.save()
@@ -52,11 +50,9 @@ class Navbar
       ul = @closest('ul')
       $('.pop', ul).remove()
     )
-
     $('.menu-load', fileMenuEmt).off('mouseenter').on('mouseenter', ->
       Navbar.get_load_list()
     )
-
     etcMenuEmt = $('#header_etc_select_menu .dropdown-menu > li')
     $('.menu-about', etcMenuEmt).off('click').on('click', ->
       Common.showModalView(Constant.ModalViewType.ABOUT)
@@ -64,7 +60,6 @@ class Navbar
     $('.menu-backtomainpage', etcMenuEmt).off('click').on('click', ->
       window.location.href = '/'
     )
-
     itemsSelectMenuEmt = $('#header_items_select_menu .dropdown-menu > li')
     $('.menu-item', itemsSelectMenuEmt).off('click').on('click', ->
       selected = $(@).html()
@@ -80,12 +75,10 @@ class Navbar
           WorktableCommon.changeMode(Constant.Mode.DRAW)
         )
     )
-
     $('#menu-action-edit').off('click').on('click', ->
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
     )
-
     $('#menu_sidebar_toggle').off('click').on('click', ->
       if Sidebar.isOpenedConfigSidebar()
         Sidebar.closeSidebar()
@@ -99,7 +92,6 @@ class Navbar
   # Runナビバー初期化
   @initRunNavbar = ->
     navEmt = $('#nav')
-
     $('.menu-showguide', navEmt).off('click').on('click', ->
       RunSetting.toggleShowGuide()
     )

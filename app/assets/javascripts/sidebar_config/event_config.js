@@ -30,12 +30,6 @@ EventConfig = (function() {
     return this.setupTimelineEventHandler(distId, teNum);
   };
 
-  EventConfig.prototype.clearAllChange = function() {
-    WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
-    this.emt.find('.button_preview_wrapper').show();
-    return this.emt.find('.button_stop_preview_wrapper').hide();
-  };
-
   EventConfig.prototype.selectItem = function(e) {
     var actionClassName, objId, splitValues, vEmt, value;
     if (e == null) {
@@ -138,6 +132,8 @@ EventConfig = (function() {
       w: parseInt($('.item_diff_width:first', this.emt).val()),
       h: parseInt($('.item_diff_height:first', this.emt).val())
     };
+    this[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', this.emt).is(":checked");
+    this[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', this.emt).val();
     this[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', this.emt).prop('checked');
     this[EventPageValueBase.PageValueKey.IS_SYNC] = false;
     parallel = $(".parallel_div .parallel", this.emt);
@@ -291,7 +287,7 @@ EventConfig = (function() {
           return $('.finish_page_wrappper', _this.emt).hide();
         }
       };
-    })(this));
+    })(this)).trigger('change');
   };
 
   _setHandlerRadioEvent = function() {
@@ -717,43 +713,44 @@ EventConfig = (function() {
   };
 
   EventConfig.setupTimelineEventHandler = function(distId, teNum) {
-    var config, eId, emt;
-    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
-    emt = $('#' + eId);
-    config = new this(emt, teNum, distId);
-    config.clearAllChange();
-    $('.update_event_after', emt).removeAttr('checked');
-    if (WorktableCommon.isConnectedEventProgressRoute(teNum)) {
-      $('.update_event_after', emt).removeAttr('disabled');
-      $('.update_event_after', emt).off('change').on('change', (function(_this) {
-        return function(e) {
-          var blankDistId, configDistId, fromBlankEventConfig;
-          if ($(e.target).is(':checked')) {
-            $(e.target).attr('disabled', true);
-            blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val();
-            configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '');
-            fromBlankEventConfig = blankDistId === configDistId;
-            return WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, function() {
-              return $(e.target).removeAttr('disabled');
+    return WorktableCommon.stopAllEventPreview((function(_this) {
+      return function() {
+        return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
+          var config, eId, emt;
+          eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId);
+          emt = $('#' + eId);
+          config = new _this(emt, teNum, distId);
+          $('.update_event_after', emt).removeAttr('checked');
+          if (WorktableCommon.isConnectedEventProgressRoute(teNum)) {
+            $('.update_event_after', emt).removeAttr('disabled');
+            $('.update_event_after', emt).off('change').on('change', function(e) {
+              var blankDistId, configDistId, fromBlankEventConfig;
+              if ($(e.target).is(':checked')) {
+                $(e.target).attr('disabled', true);
+                blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val();
+                configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '');
+                fromBlankEventConfig = blankDistId === configDistId;
+                return WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, function() {
+                  return $(e.target).removeAttr('disabled');
+                });
+              } else {
+                $(e.target).attr('disabled', true);
+                return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
+                  return $(e.target).removeAttr('disabled');
+                });
+              }
             });
           } else {
-            $(e.target).attr('disabled', true);
-            return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), function() {
-              return $(e.target).removeAttr('disabled');
-            });
+            $('.update_event_after', emt).attr('disabled', true);
           }
-        };
-      })(this));
-    } else {
-      $('.update_event_after', emt).attr('disabled', true);
-    }
-    $('.te_item_select', emt).off('change').on('change', function(e) {
-      config.clearError();
-      return config.selectItem(this);
-    });
-    return $(window.drawingCanvas).one('click.setupTimelineEventHandler', (function(_this) {
-      return function(e) {
-        return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
+          $('.te_item_select', emt).off('change').on('change', function(e) {
+            config.clearError();
+            return config.selectItem(this);
+          });
+          return $(window.drawingCanvas).one('click.setupTimelineEventHandler', function(e) {
+            return WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
+          });
+        });
       };
     })(this));
   };

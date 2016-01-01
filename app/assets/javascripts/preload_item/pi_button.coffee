@@ -156,7 +156,7 @@ class PreloadItemButton extends CssItemBase
     @getJQueryElement().off('webkitAnimationEnd animationend').on('webkitAnimationEnd animationend', (e) =>
       @getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + @id)
       # イベント終了
-      @finishChapter()
+      @finishEvent()
     )
 
   # *アクションイベント

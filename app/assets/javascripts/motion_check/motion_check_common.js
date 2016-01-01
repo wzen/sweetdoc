@@ -14,7 +14,6 @@ MotionCheckCommon = (function() {
       h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
       if ((h != null) && Object.keys(h).length > 0) {
         LocalStorage.clearRun();
-        PageValue.removeAllFootprint();
         target = '';
         if (newWindow) {
           size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);

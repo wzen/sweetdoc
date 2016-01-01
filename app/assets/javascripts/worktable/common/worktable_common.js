@@ -671,7 +671,7 @@ WorktableCommon = (function() {
           item.didChapter();
         } else if (doRunPreview) {
           window.previewRunning = true;
-          item.preview(te, (function(_this) {
+          item.preview((function(_this) {
             return function() {
               window.previewRunning = false;
               EventConfig.switchPreviewButton(true);

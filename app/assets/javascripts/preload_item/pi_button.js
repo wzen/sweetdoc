@@ -166,7 +166,7 @@ PreloadItemButton = (function(superClass) {
     return this.getJQueryElement().off('webkitAnimationEnd animationend').on('webkitAnimationEnd animationend', (function(_this) {
       return function(e) {
         _this.getJQueryElement().find('.item_contents:first').removeClass('defaultClick_' + _this.id);
-        return _this.finishChapter();
+        return _this.finishEvent();
       };
     })(this));
   };

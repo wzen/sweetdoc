@@ -515,8 +515,9 @@ RunCommon = (function() {
       if (is_reload != null) {
         LocalStorage.loadAllPageValues();
       } else {
-        LocalStorage.saveAllPageValues();
         PageValue.setPageNum(1);
+        PageValue.removeAllFootprint();
+        LocalStorage.saveAllPageValues();
       }
     }
     Common.createdMainContainerIfNeeded(PageValue.getPageNum());

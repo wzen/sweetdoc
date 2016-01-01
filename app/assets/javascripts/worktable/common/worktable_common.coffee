@@ -554,7 +554,7 @@ class WorktableCommon
         else if doRunPreview
           window.previewRunning = true
           # プレビュー実行
-          item.preview(te, =>
+          item.preview( =>
             # プレビューの実行回数超過
             window.previewRunning = false
             # ボタン変更「StopPreview」->「Preview」

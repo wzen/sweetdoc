@@ -401,7 +401,7 @@ class Page
       window.eventAction.nextPageIndex = nextPageIndex
 
     @finishedAllChapters = true
-    if window.eventAction.hasNextPage()
+    if nextPageIndex || window.eventAction.hasNextPage()
       # ページ移動のためのスクロールイベントを取るようにする
       @floatPageScrollHandleCanvas()
     else

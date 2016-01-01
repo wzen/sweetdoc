@@ -113,77 +113,71 @@ class EventBase extends Extend
     @_runningClickEvent = false
 
   # プレビュー開始
-  # @param [Object] event 設定イベント
-  preview: (event, loopFinishCallback = null) ->
+  preview: (@loopFinishCallback = null) ->
     if window.runDebug
       console.log('EventBase preview id:' + @id)
 
-    _preview = (event) ->
+    @stopPreview( =>
       @_runningPreview = true
-      loopDelay = 1000 # 1秒毎イベント実行
-      loopMaxCount = 5 # ループ5回
-      progressMax = @progressMax()
       @willChapter()
       # イベントループ
       @_doPreviewLoop = true
       @_skipEvent = false
-      loopCount = 0
+      @_loopCount = 0
       @_previewTimer = null
       # FloatView表示
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW)
-      p = 0
-      _draw = =>
-        if @_doPreviewLoop
-          if @_previewTimer?
-            clearTimeout(@_previewTimer)
-            @_previewTimer = null
-          @_previewTimer = setTimeout( =>
-            if @_runningPreview
-              @_handlerFuncComplete = _loop
-            if @getEventActionType() == Constant.ActionType.SCROLL
-                @scrollHandlerFunc(true)
-                p += 1
-                if p >= progressMax
-                  p = 0
-                  _loop.call(@)
-                else
-                  _draw.call(@)
-            else if @getEventActionType() == Constant.ActionType.CLICK
-              @clickHandlerFunc(true)
-          , @constructor.STEP_INTERVAL_DURATION * 1000)
-        else
-          @stopPreview(loopFinishCallback)
-
-      _loop = =>
-        if @_doPreviewLoop
-          loopCount += 1
-          if loopCount >= loopMaxCount
-            @stopPreview(loopFinishCallback)
-
-          if @_previewTimer?
-            clearTimeout(@_previewTimer)
-            @_previewTimer = null
-          @_previewTimer = setTimeout( =>
-            if @_runningPreview
-              # 状態を変更前に戻す
-              @resetEvent()
-              @willChapter()
-              _draw.call(@)
-          , loopDelay)
-          if !@_doPreviewLoop
-            @stopPreview(loopFinishCallback)
-        else
-          @stopPreview(loopFinishCallback)
-
-      _draw.call(@)
-
-    @stopPreview(loopFinishCallback, =>
-      _preview.call(@, event)
+      @_progress = 0
+      @previewStepDraw()
     )
+
+  # プレビューStep実行
+  previewStepDraw: ->
+    if @_doPreviewLoop
+      if @_previewTimer?
+        clearTimeout(@_previewTimer)
+        @_previewTimer = null
+      @_previewTimer = setTimeout( =>
+        if @getEventActionType() == Constant.ActionType.SCROLL
+          @scrollHandlerFunc(true)
+          @_progress += 1
+          if @_progress >= @progressMax()
+            @_progress = 0
+            @previewLoop()
+          else
+            @previewStepDraw()
+        else if @getEventActionType() == Constant.ActionType.CLICK
+          @clickHandlerFunc(true)
+      , @constructor.STEP_INTERVAL_DURATION * 1000)
+    else
+      @stopPreview()
+
+  # プレビュー実行ループ
+  previewLoop: ->
+    loopDelay = 1000 # 1秒毎イベント実行
+    loopMaxCount = 5 # ループ5回
+    if @_doPreviewLoop
+      @_loopCount += 1
+      if @_loopCount >= loopMaxCount
+        @stopPreview()
+      if @_previewTimer?
+        clearTimeout(@_previewTimer)
+        @_previewTimer = null
+      @_previewTimer = setTimeout( =>
+        if @_runningPreview
+          # 状態を変更前に戻す
+          @resetEvent()
+          @willChapter()
+          @previewStepDraw()
+      , loopDelay)
+      if !@_doPreviewLoop
+        @stopPreview()
+    else
+      @stopPreview()
 
   # プレビューを停止
   # @param [Function] callback コールバック
-  stopPreview: (loopFinishCallback = null, callback = null) ->
+  stopPreview: (callback = null) ->
     if window.runDebug
       console.log('EventBase stopPreview id:' + @id)
 
@@ -201,8 +195,9 @@ class EventBase extends Extend
     if @_clickIntervalTimer?
       clearInterval(@_clickIntervalTimer)
       @_clickIntervalTimer = null
-    if loopFinishCallback?
-      loopFinishCallback()
+    if @loopFinishCallback?
+      @loopFinishCallback()
+      @loopFinishCallback = null
     if callback?
       callback(true)
 
@@ -359,13 +354,20 @@ class EventBase extends Extend
     if @_clickIntervalTimer?
       clearInterval(@_clickIntervalTimer)
       @_clickIntervalTimer = null
-    if @_handlerFuncComplete?
-      @_handlerFuncComplete()
-      @_handlerFuncComplete = null
-    if window.eventAction?
-      if @_event[EventPageValueBase.PageValueKey.FINISH_PAGE] && @_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] != EventPageValueBase.NO_JUMPPAGE
-        # ページ遷移
-        window.eventAction.thisPage().finishAllChapters(@_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1)
+    if @_runningPreview
+      @previewLoop()
+    else
+      if window.eventAction?
+        if @_event[EventPageValueBase.PageValueKey.FINISH_PAGE]
+          # ページ遷移
+          if @_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] != EventPageValueBase.NO_JUMPPAGE
+            window.eventAction.thisPage().finishAllChapters(@_event[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] - 1)
+          else
+            window.eventAction.thisPage().finishAllChapters()
+        else
+          if @_handlerFuncComplete?
+            @_handlerFuncComplete()
+            @_handlerFuncComplete = null
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->

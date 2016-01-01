@@ -30,13 +30,6 @@ class EventConfig
     # イベントハンドラの設定
     @setupTimelineEventHandler(distId, teNum)
 
-  clearAllChange: ->
-    # 全アイテム再描画
-    WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
-    # プレビューボタンに切り替え
-    @emt.find('.button_preview_wrapper').show()
-    @emt.find('.button_stop_preview_wrapper').hide()
-
   # イベントタイプ選択
   # @param [Object] e 選択オブジェクト
   selectItem: (e = null) ->
@@ -143,7 +136,8 @@ class EventConfig
       w: parseInt($('.item_diff_width:first', @emt).val())
       h: parseInt($('.item_diff_height:first', @emt).val())
     }
-
+    @[EventPageValueBase.PageValueKey.FINISH_PAGE] = $('.finish_page', @emt).is(":checked")
+    @[EventPageValueBase.PageValueKey.JUMPPAGE_NUM] = $('.finish_page_select', @emt).val()
     @[EventPageValueBase.PageValueKey.DO_FOCUS] = $('.do_focus', @emt).prop('checked')
     @[EventPageValueBase.PageValueKey.IS_SYNC] = false
     parallel = $(".parallel_div .parallel", @emt)
@@ -284,7 +278,7 @@ class EventConfig
         # 選択なし
         $('.finish_page_select', @emt).val(EventPageValueBase.NO_JUMPPAGE)
         $('.finish_page_wrappper', @emt).hide()
-    )
+    ).trigger('change')
 
   _setHandlerRadioEvent = ->
     $('.handler_div input[type=radio]', @emt).off('click').on('click', (e) =>
@@ -643,46 +637,49 @@ class EventConfig
   # イベントハンドラー設定
   # @param [Integer] distId イベント番号
   @setupTimelineEventHandler = (distId, teNum) ->
-    eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
-    emt = $('#' + eId)
-    # Configクラス作成 & イベントハンドラの設定
-    config = new @(emt, teNum, distId)
-    # 変更を元に戻す
-    config.clearAllChange()
-    # UpdateEventAfterイベント初期化
-    $('.update_event_after', emt).removeAttr('checked')
-    if WorktableCommon.isConnectedEventProgressRoute(teNum)
-      $('.update_event_after', emt).removeAttr('disabled')
-      $('.update_event_after', emt).off('change').on('change', (e) =>
-        if $(e.target).is(':checked')
-          # イベント後に変更 ※表示倍率はキープする
-          $(e.target).attr('disabled', true)
-          # Blankのコンフィグか判定
-          blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val()
-          configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '')
-          fromBlankEventConfig = blankDistId == configDistId
-          WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, =>
-            $(e.target).removeAttr('disabled')
+    # 再描画
+    WorktableCommon.stopAllEventPreview( =>
+      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
+        eId = EventConfig.ITEM_ROOT_ID.replace('@distId', distId)
+        emt = $('#' + eId)
+        # Configクラス作成 & イベントハンドラの設定
+        config = new @(emt, teNum, distId)
+        # UpdateEventAfterイベント初期化
+        $('.update_event_after', emt).removeAttr('checked')
+        if WorktableCommon.isConnectedEventProgressRoute(teNum)
+          $('.update_event_after', emt).removeAttr('disabled')
+          $('.update_event_after', emt).off('change').on('change', (e) =>
+            if $(e.target).is(':checked')
+              # イベント後に変更 ※表示倍率はキープする
+              $(e.target).attr('disabled', true)
+              # Blankのコンフィグか判定
+              blankDistId = $('#timeline_events > .timeline_event.blank:first').find('.dist_id:first').val()
+              configDistId = $(e.target).closest('.event').attr('id').replace(EventConfig.ITEM_ROOT_ID.replace('@distId', ''), '')
+              fromBlankEventConfig = blankDistId == configDistId
+              WorktableCommon.updatePrevEventsToAfter(teNum, true, fromBlankEventConfig, =>
+                $(e.target).removeAttr('disabled')
+              )
+            else
+              # 全アイテム再描画
+              $(e.target).attr('disabled', true)
+              WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
+                $(e.target).removeAttr('disabled')
+              )
           )
         else
-          # 全アイテム再描画
-          $(e.target).attr('disabled', true)
-          WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging(PageValue.getPageNum(), =>
-            $(e.target).removeAttr('disabled')
-          )
-      )
-    else
-      # イベントの設定が繋がっていない場合はdisabled
-      $('.update_event_after', emt).attr('disabled', true)
+          # イベントの設定が繋がっていない場合はdisabled
+          $('.update_event_after', emt).attr('disabled', true)
 
-    # 選択メニューイベント
-    $('.te_item_select', emt).off('change').on('change', (e) ->
-      config.clearError()
-      config.selectItem(@)
-    )
-    $(window.drawingCanvas).one('click.setupTimelineEventHandler', (e) =>
-      # メイン画面クリックで全アイテム再描画
-      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
+        # 選択メニューイベント
+        $('.te_item_select', emt).off('change').on('change', (e) ->
+          config.clearError()
+          config.selectItem(@)
+        )
+        $(window.drawingCanvas).one('click.setupTimelineEventHandler', (e) =>
+          # メイン画面クリックで全アイテム再描画
+          WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
+        )
+      )
     )
 
   @switchChildrenConfig = (e, varName, openValue, targetValue) ->
