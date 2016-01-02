@@ -395,7 +395,7 @@
 }
 .jstree-default-dark .jstree-node,
 .jstree-default-dark .jstree-icon {
-  background-image: image-url('/images/jstree/themes/default/32px.png');
+  background-image: url('/images/jstree/themes/default/32px.png');
 }
 .jstree-default-dark .jstree-node {
   background-position: -292px -4px;
