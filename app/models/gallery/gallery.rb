@@ -364,7 +364,7 @@ class Gallery < ActiveRecord::Base
     end
   end
 
-  def self.firstload_contents(access_token, page_num = 1)
+  def self.firstload_contents(access_token, hostname, page_num = 1)
     sql = <<-"SQL".strip_heredoc
       SELECT
         g.title as title,
@@ -445,7 +445,7 @@ class Gallery < ActiveRecord::Base
       show_options[Const::Gallery::Key::SHOW_CHAPTER_NUM] = ret['show_chapter_num']
 
       message = I18n.t('message.database.item_state.load.success')
-      embed_link = self.embed_link(gpd, access_token)
+      embed_link = self.embed_link(gpd, access_token, hostname)
 
       return pagevalues, message, ret['title'], ret['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, embed_link
     end
@@ -784,8 +784,8 @@ class Gallery < ActiveRecord::Base
     return ret_sql.to_hash
   end
 
-  def self.embed_link(gpd, access_token)
-    src = "#{Rails.root}/gallery/detail/w/#{access_token}"
+  def self.embed_link(gpd, access_token, hostname)
+    src = "http://#{hostname}/gallery/detail/w/#{access_token}"
     size = gpd[Const::Project::Key::SCREEN_SIZE]
     return """
     <iframe src='#{src}' width='#{size['width']}' height='#{size['height']}' frameborder='0' marginwidth='0' marginheight='0' scrolling='no' style='border:1px solid #CCC; border-width:1px; max-width: 100%;'></iframe>
