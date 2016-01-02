@@ -74,7 +74,6 @@ class RunCommon
       @baseScale = heightRate
     if @baseScale == 0.0
       @baseScale = 0.01
-
     updatedProjectScreenSize.width = projectScreenSize.width * @baseScale
     updatedProjectScreenSize.height = projectScreenSize.height * @baseScale
     $('#main').height(updateMainHeight)

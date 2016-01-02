@@ -173,10 +173,8 @@ class Page
   rewindChapter: ->
     if window.runDebug
       console.log('Page rewindChapter')
-
     # 全ガイド非表示
     @hideAllGuide()
-
     @resetChapter(@getChapterIndex())
     if !@thisChapter().doMoveChapter
       if @getChapterIndex() > 0
