@@ -17,6 +17,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_fullscreen.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />
@@ -93,6 +94,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/item_base.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_fullscreen.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/page.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/scroll_chapter.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common_var.js" />

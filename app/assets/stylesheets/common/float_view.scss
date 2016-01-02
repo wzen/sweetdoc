@@ -1,12 +1,10 @@
-.float_view {
-  //display: none;
-  //position: fixed;
-  //bottom: 0;
-  //right: 0;
+div.float_view {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 5px;
+  margin-right: 5px;
   z-index: 1999999999;
-  //-webkit-border-radius: 8px;
-  //-moz-border-radius: 8px;
-  //border-radius: 8px;
   background-color: rgba(33, 33, 33, 0.2);
   height: 58px;
   border-radius: 5px;

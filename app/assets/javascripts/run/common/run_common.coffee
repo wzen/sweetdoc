@@ -65,23 +65,22 @@ class RunCommon
       # 縮小
       updatedProjectScreenSize.height = updateMainHeight - 10
 
-    # FIXME: 拡大縮小で正確に動作しないため使用しない
-    # 今は対応しないが残しておく
     # Zoom 修正
-#    widthRate = updatedProjectScreenSize.width / projectScreenSize.width
-#    heightRate = updatedProjectScreenSize.height / projectScreenSize.height
-#    if widthRate < heightRate
-#      zoom = widthRate
-#    else
-#      zoom = heightRate
-#    if zoom == 0.0
-#      zoom = 0.01
-#    updatedProjectScreenSize.width = projectScreenSize.width * zoom
-#    updatedProjectScreenSize.height = projectScreenSize.height * zoom
-#    $('#main').height(updateMainHeight)
-#    $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
-#    updateMainWrapperPercent = 100
-#    window.mainWrapper.css({transform: "scale(#{zoom}, #{zoom})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
+    widthRate = updatedProjectScreenSize.width / projectScreenSize.width
+    heightRate = updatedProjectScreenSize.height / projectScreenSize.height
+    if widthRate < heightRate
+      @baseScale = widthRate
+    else
+      @baseScale = heightRate
+    if @baseScale == 0.0
+      @baseScale = 0.01
+
+    updatedProjectScreenSize.width = projectScreenSize.width * @baseScale
+    updatedProjectScreenSize.height = projectScreenSize.height * @baseScale
+    $('#main').height(updateMainHeight)
+    $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
+    updateMainWrapperPercent = 100 / @baseScale
+    window.mainWrapper.css({transform: "scale(#{@baseScale}, #{@baseScale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->

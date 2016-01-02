@@ -52,8 +52,12 @@ ScreenEvent = (function(superClass) {
       var cood;
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      this._originalScale = _getScale.call(this);
-      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this._originalScale);
+      if (window.isWorkTable) {
+        this._mainViewResizingScale = 1.0;
+      } else {
+        this._mainViewResizingScale = RunCommon.baseScale;
+      }
+      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), 1.0);
       this._originalX = cood.x;
       this._originalY = cood.y;
       this.initScale = this.constructor.TAKE_SCALE_FROM_MAINWRAPPER;
@@ -90,8 +94,8 @@ ScreenEvent = (function(superClass) {
       if (callback == null) {
         callback = null;
       }
-      pos = _convertCenterCoodToSize.call(this, this._originalX, this._originalY, this._originalScale);
-      _setScale.call(this, this._originalScale);
+      pos = _convertCenterCoodToSize.call(this, this._originalX, this._originalY, 1.0);
+      _setScale.call(this, 1.0);
       Common.updateScrollContentsPosition(pos.top, pos.left, true, function() {
         if (callback != null) {
           return callback();
@@ -288,7 +292,7 @@ ScreenEvent = (function(superClass) {
     };
 
     _setScale = function(scale) {
-      return this.getJQueryElement().css('transform', "scale(" + scale + ", " + scale + ")");
+      return this.getJQueryElement().css('transform', "scale(" + (scale * this._mainViewResizingScale) + ", " + (scale * this._mainViewResizingScale) + ")");
     };
 
     _getScale = function() {
@@ -298,7 +302,7 @@ ScreenEvent = (function(superClass) {
         return 1.0;
       }
       values = matrix.match(/-?[\d\.]+/g);
-      return parseFloat(values[0]);
+      return parseFloat(values[0]) / this._mainViewResizingScale;
     };
 
     return PrivateClass;

@@ -33,8 +33,11 @@ class ScreenEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Screen'
-      @_originalScale = _getScale.call(@)
-      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @_originalScale)
+      if window.isWorkTable
+        @_mainViewResizingScale = 1.0
+      else
+        @_mainViewResizingScale = RunCommon.baseScale
+      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), 1.0)
       @_originalX = cood.x
       @_originalY = cood.y
       @initScale = @constructor.TAKE_SCALE_FROM_MAINWRAPPER
@@ -61,8 +64,8 @@ class ScreenEvent extends CommonEvent
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      pos = _convertCenterCoodToSize.call(@, @_originalX, @_originalY, @_originalScale)
-      _setScale.call(@, @_originalScale)
+      pos = _convertCenterCoodToSize.call(@, @_originalX, @_originalY, 1.0)
+      _setScale.call(@, 1.0)
       Common.updateScrollContentsPosition(pos.top, pos.left, true, ->
         if callback?
           callback()
@@ -223,14 +226,14 @@ class ScreenEvent extends CommonEvent
       return {x: x, y: y}
 
     _setScale = (scale) ->
-      @getJQueryElement().css('transform', "scale(#{scale}, #{scale})")
+      @getJQueryElement().css('transform', "scale(#{scale * @_mainViewResizingScale}, #{scale * @_mainViewResizingScale})")
 
     _getScale = ->
       matrix = @getJQueryElement().css('transform')
       if matrix == 'none'
         return 1.0
       values = matrix.match(/-?[\d\.]+/g);
-      return parseFloat(values[0])
+      return parseFloat(values[0]) / @_mainViewResizingScale
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 
