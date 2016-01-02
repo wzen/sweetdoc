@@ -107,6 +107,11 @@ Rails.application.configure do
   #   end
   # end
 
+  # iframe許可
+  config.action_dispatch.default_headers = {
+      'X-Frame-Options' => 'ALLOWALL'
+  }
+
   # Devise
   config.to_prepare do
     Devise::SessionsController.layout "user"
