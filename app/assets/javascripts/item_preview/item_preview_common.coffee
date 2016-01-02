@@ -147,8 +147,11 @@ class ItemPreviewCommon
       )
 
   @coverOverlayOnConfig = ->
-    style = "top:#{$('#myTabContent').position().top}px;left:#{$('#myTabContent').position().left}px;width:#{$('#myTabContent').width()}px;height:#{$('#myTabContent').height()}px;"
-    $('#sidebar').append("<div class='cover_touch_overlay' style='#{style}'></div>")
+    tabContent = $('#myTabContent')
+    nav = $('#tab-config ul.nav')
+    top = -(nav.height())
+    style = "top:#{top}px;left:0;width:#{tabContent.width()}px;height:#{tabContent.height() + nav.height()}px;"
+    tabContent.append("<div class='cover_touch_overlay' style='#{style}'></div>")
     $('.cover_touch_overlay').off('click').on('click', (e) ->
       e.preventDefault()
       return

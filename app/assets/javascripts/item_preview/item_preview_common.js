@@ -173,9 +173,12 @@ ItemPreviewCommon = (function() {
   };
 
   ItemPreviewCommon.coverOverlayOnConfig = function() {
-    var style;
-    style = "top:" + ($('#myTabContent').position().top) + "px;left:" + ($('#myTabContent').position().left) + "px;width:" + ($('#myTabContent').width()) + "px;height:" + ($('#myTabContent').height()) + "px;";
-    $('#sidebar').append("<div class='cover_touch_overlay' style='" + style + "'></div>");
+    var nav, style, tabContent, top;
+    tabContent = $('#myTabContent');
+    nav = $('#tab-config ul.nav');
+    top = -(nav.height());
+    style = "top:" + top + "px;left:0;width:" + (tabContent.width()) + "px;height:" + (tabContent.height() + nav.height()) + "px;";
+    tabContent.append("<div class='cover_touch_overlay' style='" + style + "'></div>");
     return $('.cover_touch_overlay').off('click').on('click', function(e) {
       e.preventDefault();
     });
