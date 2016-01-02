@@ -125,7 +125,7 @@ RunCommon = (function() {
   };
 
   RunCommon.showCreatorInfo = function() {
-    var info;
+    var info, share;
     info = $('#contents').find('.contents_info:first');
     info.fadeIn('500');
     setTimeout(function() {
@@ -138,13 +138,33 @@ RunCommon = (function() {
         }
       };
     })(this));
-    return info.off('click').on('click', (function(_this) {
+    info.off('click').on('click', (function(_this) {
       return function(e) {
         if (info.is(':visible')) {
           return info.fadeOut('200');
         }
       };
     })(this));
+    share = $('#contents').find('.share_info:first');
+    $('#contents .contents_share_show_button:first').off('click').on('click', (function(_this) {
+      return function(e) {
+        if (!share.is(':visible')) {
+          return share.fadeIn('200');
+        }
+      };
+    })(this));
+    share.off('click').on('click', (function(_this) {
+      return function(e) {
+        if (share.is(':visible')) {
+          return share.fadeOut('200');
+        }
+      };
+    })(this));
+    return $('#contents').find('textarea.embed').off('click.close').on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return $(this).select();
+    });
   };
 
   RunCommon.initEventAction = function() {

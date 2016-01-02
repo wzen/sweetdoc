@@ -25,7 +25,7 @@ class GalleryController < ApplicationController
     # ViewCountをupdate
     Gallery.add_view_statistic_count(access_token, Date.today)
     # データを取得
-    @pagevalues, @message, @title, @caption, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options = Gallery.firstload_contents(access_token)
+    @pagevalues, @message, @title, @caption, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @embed_link = Gallery.firstload_contents(access_token)
   end
 
   def run_window
@@ -33,7 +33,7 @@ class GalleryController < ApplicationController
     # ViewCountをupdate
     Gallery.add_view_statistic_count(access_token, Date.today)
     # データを取得
-    @pagevalues, @message, @title, @caption, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options = Gallery.firstload_contents(access_token)
+    @pagevalues, @message, @title, @caption, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @embed_link = Gallery.firstload_contents(access_token)
     render layout: 'application'
   end
 

@@ -108,6 +108,22 @@ class RunCommon
       if info.is(':visible')
         info.fadeOut('200')
     )
+    # Share情報表示
+    share = $('#contents').find('.share_info:first')
+    $('#contents .contents_share_show_button:first').off('click').on('click', (e)=>
+      if !share.is(':visible')
+        share.fadeIn('200')
+    )
+    # Share情報クリックで非表示
+    share.off('click').on('click', (e) =>
+      if share.is(':visible')
+        share.fadeOut('200')
+    )
+    $('#contents').find('textarea.embed').off('click.close').on('click', (e) ->
+      e.preventDefault()
+      e.stopPropagation()
+      $(@).select()
+    )
 
   # イベント作成
   @initEventAction = ->

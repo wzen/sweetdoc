@@ -4,15 +4,7 @@ var RunFullScreen;
 RunFullScreen = (function() {
   function RunFullScreen() {}
 
-  RunFullScreen.showCreatorInfo = function() {
-    this.showModalOverlay();
-    $('#main').find('.popup_creator_wrapper').fadeIn('200');
-    return setTimeout(function() {
-      return $('#main').find('.popup_creator_wrapper').fadeOut('200', function() {
-        return $('#modal-overlay').hide();
-      });
-    }, 3000);
-  };
+  RunFullScreen.showCreatorInfo = function() {};
 
   RunFullScreen.showPopupInfo = function() {
     $('#popup_info_wrapper').fadeIn('500');
