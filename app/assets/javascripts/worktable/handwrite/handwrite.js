@@ -39,6 +39,9 @@ Handwrite = (function() {
         _calcCanvasLoc = function(e) {
           var scaleFromStateConfig, x, y;
           scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
+          if (!scaleFromStateConfig) {
+            scaleFromStateConfig = 1.0;
+          }
           x = (e.x || e.clientX) / scaleFromStateConfig;
           y = (e.y || e.clientY) / scaleFromStateConfig;
           return _windowToCanvas(drawingCanvas, x, y);

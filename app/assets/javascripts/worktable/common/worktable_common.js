@@ -377,10 +377,12 @@ WorktableCommon = (function() {
           clearTimeout(window.scrollContentsScrollTimer);
         }
         return window.scrollContentsScrollTimer = setTimeout(function() {
-          PageValue.setDisplayPosition(top, left);
-          LocalStorage.saveGeneralPageValue();
-          FloatView.hide();
-          return window.scrollContentsScrollTimer = null;
+          return setTimeout(function() {
+            FloatView.hide();
+            PageValue.setDisplayPosition(top, left);
+            LocalStorage.saveAllPageValues();
+            return window.scrollContentsScrollTimer = null;
+          }, 0);
         }, 500);
       }
     });

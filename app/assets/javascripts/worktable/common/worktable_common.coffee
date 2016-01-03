@@ -327,10 +327,12 @@ class WorktableCommon
         if window.scrollContentsScrollTimer?
           clearTimeout(window.scrollContentsScrollTimer)
         window.scrollContentsScrollTimer = setTimeout( ->
-          PageValue.setDisplayPosition(top, left)
-          LocalStorage.saveGeneralPageValue()
-          FloatView.hide()
-          window.scrollContentsScrollTimer = null
+          setTimeout( ->
+            FloatView.hide()
+            PageValue.setDisplayPosition(top, left)
+            LocalStorage.saveAllPageValues()
+            window.scrollContentsScrollTimer = null
+          , 0)
         , 500)
     )
     # ドロップダウン

@@ -178,10 +178,7 @@ Common = (function() {
     if (position != null) {
       return this.updateScrollContentsPosition(position.top, position.left);
     } else {
-      return PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {
-        top: 0,
-        left: 0
-      });
+      return PageValue.setDisplayPosition(0, 0);
     }
   };
 

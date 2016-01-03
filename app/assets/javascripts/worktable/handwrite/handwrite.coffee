@@ -34,6 +34,8 @@ class Handwrite
       # @return [Array] Canvas座標
       _calcCanvasLoc = (e) =>
         scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
+        if !scaleFromStateConfig
+          scaleFromStateConfig = 1.0
         x = (e.x || e.clientX) / scaleFromStateConfig
         y = (e.y || e.clientY) / scaleFromStateConfig
         return _windowToCanvas(drawingCanvas, x, y)

@@ -40,6 +40,8 @@ class StateConfig
 
     # Zoom (1〜5)
     scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
+    if !scaleFromStateConfig
+      scaleFromStateConfig = 1.0
     $('.zoom', rootEmt).val(scaleFromStateConfig)
     $('.zoom', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
       if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
