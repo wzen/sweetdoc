@@ -11,7 +11,51 @@ StateConfig = (function() {
     StateConfig.ROOT_ID_NAME = constant.StateConfig.ROOT_ID_NAME;
   }
 
-  StateConfig.initConfig = function() {};
+  StateConfig.initConfig = function() {
+    (function(_this) {
+      return (function() {
+        var be, emt;
+        emt = $("#" + _this.ROOT_ID_NAME + " .configBox.background");
+        be = new BackgroundEvent();
+        return ColorPickerUtil.initColorPicker(emt.find('.colorPicker:first'), be.backgroundColor, function(a, b, d, e) {
+          be = new BackgroundEvent();
+          return be.backgroundColor = "#" + b;
+        });
+      });
+    })(this)();
+    return (function(_this) {
+      return function() {
+        var _updateConfigInput, emt, se;
+        emt = $("#" + _this.ROOT_ID_NAME + " .configBox.screen_event");
+        se = new ScreenEvent();
+        $('.initX:first', emt).val(se.initX);
+        $('.initY:first', emt).val(se.initY);
+        $('.initScale:first', emt).val(se.initScale);
+        $('input', emt).off('change').on('change', function(e) {
+          se = new ScreenEvent();
+          return se[$(e.target).attr('class')] = $(e.target).val();
+        });
+        _updateConfigInput = function(emt, pointingSize) {
+          var screenSize, x, y, z;
+          x = pointingSize.x + pointingSize.w / 2.0;
+          y = pointingSize.y + pointingSize.h / 2.0;
+          z = null;
+          screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+          if (pointingSize.w > pointingSize.h) {
+            z = screenSize.width / pointingSize.w;
+          } else {
+            z = screenSize.height / pointingSize.h;
+          }
+          emt.find('.initX:first').val(x);
+          emt.find('.initY:first').val(y);
+          return emt.find('.initScale:first').val(z);
+        };
+        return emt.find('.event_pointing:first').eventDragPointing(function(pointingSize) {
+          return _updateConfigInput.call(_this, emt, pointingSize);
+        });
+      };
+    })(this)();
+  };
 
   return StateConfig;
 

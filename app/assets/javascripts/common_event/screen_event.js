@@ -172,19 +172,9 @@ ScreenEvent = (function(superClass) {
         return emt.find('.afterZ:first').val(z);
       };
       emt = specificRoot['changeScreenPosition'];
-      return emt.find('.event_pointing:first').off('click').on('click', (function(_this) {
-        return function(e) {
-          var pointing;
-          pointing = new EventDragPointing();
-          pointing.setDrawCallback(function(pointingSize) {
-            return _updateConfigInput.call(_this, emt, pointingSize);
-          });
-          PointingHandwrite.initHandwrite();
-          WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
-          return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, function() {
-            Handwrite.initHandwrite();
-            return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
-          });
+      return emt.find('.event_pointing:first').eventDragPointing((function(_this) {
+        return function(pointingSize) {
+          return _updateConfigInput.call(_this, emt, pointingSize);
         };
       })(this));
     };

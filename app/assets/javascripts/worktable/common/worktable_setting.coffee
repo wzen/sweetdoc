@@ -268,17 +268,17 @@ class WorktableSetting
     scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
     if !scaleFromStateConfig
       scaleFromStateConfig = 1.0
-    $('.zoom', rootEmt).val(scaleFromStateConfig)
-    $('.zoom', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
+    $('.scale', rootEmt).val(scaleFromStateConfig)
+    $('.scale', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
       if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
         # Zoom実行
-        scaleFromStateConfig = $('.zoom', rootEmt).val()
+        scaleFromStateConfig = $('.scale', rootEmt).val()
         if scaleFromStateConfig < 1
           scaleFromStateConfig = 1
         else if scaleFromStateConfig > 5
           scaleFromStateConfig = 5
 
-        $('.zoom', rootEmt).val(scaleFromStateConfig)
+        $('.scale', rootEmt).val(scaleFromStateConfig)
         PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), scaleFromStateConfig)
         Common.applyViewScale()
         LocalStorage.saveGeneralPageValue()
@@ -287,4 +287,4 @@ class WorktableSetting
     # limit
     $('.display_position_left_limit', rootEmt).html("(#{leftMin} 〜 #{leftMax})")
     $('.display_position_top_limit', rootEmt).html("(#{topMin} 〜 #{topMax})")
-    $('.display_position_zoom_limit', rootEmt).html("(1 〜 5)")
+    $('.display_position_scale_limit', rootEmt).html("(1 〜 5)")

@@ -164,4 +164,22 @@ EventDragPointing = (function() {
 
 })();
 
+$.fn.eventDragPointing = function(endDrawCallback) {
+  return $(this).off('click').on('click', (function(_this) {
+    return function(e) {
+      var pointing;
+      pointing = new EventDragPointing();
+      pointing.setDrawCallback(function(pointingSize) {
+        return endDrawCallback(pointingSize);
+      });
+      PointingHandwrite.initHandwrite();
+      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
+      return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, function() {
+        Handwrite.initHandwrite();
+        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+      });
+    };
+  })(this));
+};
+
 //# sourceMappingURL=event_drag_pointing.js.map

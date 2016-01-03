@@ -1,6 +1,6 @@
 <div id="<%= Const::StateConfig::ROOT_ID_NAME %>">
   <div class="config">
-    <div class="configBox" style="display: none;">
+    <div class="configBox background" style="display: none;">
       <div class="settingedit-headliner"><%= I18n.t('config.state.background') %></div>
       <div class="forms" style="display:table">
         <div style="display: table-cell">
@@ -9,7 +9,7 @@
         </div>
       </div>
     </div>
-    <div class="configBox" style="display: none;">
+    <div class="configBox screen_event" style="display: none;">
       <div class="settingedit-headliner"><%= I18n.t('config.state.screen_state') %></div>
       <div class="forms" style="display:table">
         <div style="display: table-cell">
@@ -22,17 +22,17 @@
           </div>
           <div>
             <div style="float: left">X:</div>
-            <div style="float: left"><input type="number" class="beforeX" disabled></div>
+            <div style="float: left"><input type="number" class="initX" disabled></div>
             <br style="clear: both">
           </div>
           <div>
             <div style="float: left">Y:</div>
-            <div style="float: left"><input type="number" class="beforeY" disabled></div>
+            <div style="float: left"><input type="number" class="initY" disabled></div>
             <br style="clear: both">
           </div>
           <div>
-            <div style="float: left">Zoom:</div>
-            <div style="float: left"><input type="number" class="beforeZ" disabled></div>
+            <div style="float: left">Scale:</div>
+            <div style="float: left"><input type="number" class="initScale" disabled></div>
             <br style="clear: both">
           </div>
         </div>

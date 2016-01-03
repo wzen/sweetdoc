@@ -132,17 +132,8 @@ class ScreenEvent extends CommonEvent
         emt.find('.afterZ:first').val(z)
 
       emt = specificRoot['changeScreenPosition']
-      emt.find('.event_pointing:first').off('click').on('click', (e) =>
-        pointing = new EventDragPointing()
-        pointing.setDrawCallback((pointingSize) =>
-          _updateConfigInput.call(@, emt, pointingSize)
-        )
-        PointingHandwrite.initHandwrite()
-        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
-        FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
-          Handwrite.initHandwrite()
-          WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
-        )
+      emt.find('.event_pointing:first').eventDragPointing( (pointingSize) =>
+        _updateConfigInput.call(@, emt, pointingSize)
       )
 
     _overlay = (x, y, scale) ->

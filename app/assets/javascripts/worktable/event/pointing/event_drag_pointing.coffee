@@ -87,3 +87,17 @@ class EventDragPointing
       instance = new @PrivateClass()
     instance.startCood(cood)
     return instance
+
+$.fn.eventDragPointing = (endDrawCallback) ->
+  $(@).off('click').on('click', (e) =>
+    pointing = new EventDragPointing()
+    pointing.setDrawCallback((pointingSize) =>
+      endDrawCallback(pointingSize)
+    )
+    PointingHandwrite.initHandwrite()
+    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
+    FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
+      Handwrite.initHandwrite()
+      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+    )
+  )
