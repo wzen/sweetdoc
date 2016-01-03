@@ -322,15 +322,15 @@ class WorktableCommon
       top = window.scrollContents.scrollTop()
       left = window.scrollContents.scrollLeft()
       if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
-        # 手動スクロールした場合のみメッセージ表示
+        # 手動スクロールした場合のみメッセージ & 画面位置更新
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
-      if window.scrollContentsScrollTimer?
-        clearTimeout(window.scrollContentsScrollTimer)
-      window.scrollContentsScrollTimer = setTimeout( ->
-        PageValue.setDisplayPosition(top, left)
-        FloatView.hide()
-        window.scrollContentsScrollTimer = null
-      , 500)
+        if window.scrollContentsScrollTimer?
+          clearTimeout(window.scrollContentsScrollTimer)
+        window.scrollContentsScrollTimer = setTimeout( ->
+          PageValue.setDisplayPosition(top, left)
+          FloatView.hide()
+          window.scrollContentsScrollTimer = null
+        , 500)
     )
     # ドロップダウン
     $('.dropdown-toggle').dropdown()
@@ -551,21 +551,16 @@ class WorktableCommon
               window.previewRunning = false
               # ボタン変更「StopPreview」->「Preview」
               EventConfig.switchPreviewButton(true)
-              # プレビュー停止
-              @stopAllEventPreview( =>
-                # アイテム再描画
-                @refreshAllItemsFromInstancePageValueIfChanging()
-              )
+              # アイテム再描画
+              @refreshAllItemsFromInstancePageValueIfChanging()
             )
             # 状態変更フラグON
             window.worktableItemsChangedState = true
             # ボタン変更「Preview」->「StopPreview」
             EventConfig.switchPreviewButton(false)
             $(window.drawingCanvas).one('click.runPreview', (e) =>
-              # メイン画面クリックでプレビュー停止 & アイテムを再描画
-              @stopAllEventPreview( =>
-                @refreshAllItemsFromInstancePageValueIfChanging()
-              )
+              # アイテムを再描画
+              @refreshAllItemsFromInstancePageValueIfChanging()
             )
       if callback?
         callback()

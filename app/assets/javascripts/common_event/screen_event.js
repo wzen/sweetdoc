@@ -84,20 +84,14 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
-      var pos;
       if (show == null) {
         show = true;
       }
       if (callback == null) {
         callback = null;
       }
-      pos = _convertCenterCoodToSize.call(this, this._originalX, this._originalY, 1.0);
+      Common.updateScrollContentsFromPagevalue();
       _setScale.call(this, 1.0);
-      Common.updateScrollContentsPosition(pos.top, pos.left, true, function() {
-        if (callback != null) {
-          return callback();
-        }
-      });
       $('#preview_position_overlay').remove();
       return $('.keep_mag_base').remove();
     };

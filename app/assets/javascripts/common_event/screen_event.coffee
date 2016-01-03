@@ -61,12 +61,8 @@ class ScreenEvent extends CommonEvent
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      pos = _convertCenterCoodToSize.call(@, @_originalX, @_originalY, 1.0)
+      Common.updateScrollContentsFromPagevalue()
       _setScale.call(@, 1.0)
-      Common.updateScrollContentsPosition(pos.top, pos.left, true, ->
-        if callback?
-          callback()
-      )
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()

@@ -371,7 +371,6 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    PageValue.setDisplayPosition(top, left);
     if (immediate) {
       window.scrollContents.scrollTop(top);
       window.scrollContents.scrollLeft(left);

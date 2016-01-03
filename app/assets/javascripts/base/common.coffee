@@ -270,7 +270,6 @@ class Common
 
   # スクロール位置の更新
   @updateScrollContentsPosition: (top, left, immediate = true, callback = null) ->
-    PageValue.setDisplayPosition(top, left)
     if immediate
       window.scrollContents.scrollTop(top)
       window.scrollContents.scrollLeft(left)
@@ -287,6 +286,7 @@ class Common
           callback()
       )
 
+  # 画面位置をPageValueから初期化
   @updateScrollContentsFromPagevalue: ->
     position = PageValue.getScrollContentsPosition()
     if !position?
