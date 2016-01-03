@@ -101,8 +101,8 @@ class Common
     @initScreenSize()
     # スクロール位置設定
     @initScrollContentsPosition()
-    # Zoom
-    @initBaseScale()
+    # スケール設定
+    @applyViewScale()
 
   # 環境の反映をリセット
   @resetEnvironment = ->
@@ -141,14 +141,14 @@ class Common
     else
       PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: 0, left: 0})
 
-  # 基本スケール初期化
-  @initBaseScale = ->
-    scale = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
-    if scale?
-      scale *= Common.scaleFromViewRate
-      window.mainWrapper.css('transform', "scale(#{scale}, #{scale})")
-    else
-      PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), 1)
+  # 画面スケールの設定
+  @applyViewScale = ->
+    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
+    if !scaleFromStateConfig?
+      scaleFromStateConfig = 1.0
+    scale = scaleFromStateConfig * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale
+    updateMainWrapperPercent = 100 / Common.scaleFromViewRate
+    window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
   # Canvasサイズ更新
   @updateCanvasSize = ->

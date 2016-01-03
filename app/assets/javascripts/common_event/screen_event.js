@@ -24,6 +24,8 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.TAKE_SCALE_FROM_MAINWRAPPER = 0.0000;
 
+    PrivateClass.scale = 1.0;
+
     PrivateClass.actionProperties = {
       methods: {
         changeScreenPosition: {
@@ -287,17 +289,12 @@ ScreenEvent = (function(superClass) {
     };
 
     _setScale = function(scale) {
-      return this.getJQueryElement().css('transform', "scale(" + (scale * Common.scaleFromViewRate) + ", " + (scale * Common.scaleFromViewRate) + ")");
+      this.constructor.scale = scale;
+      return Common.applyViewScale();
     };
 
     _getScale = function() {
-      var matrix, values;
-      matrix = this.getJQueryElement().css('transform');
-      if (matrix === 'none') {
-        return 1.0;
-      }
-      values = matrix.match(/-?[\d\.]+/g);
-      return parseFloat(values[0]) / Common.scaleFromViewRate;
+      return this.constructor.scale;
     };
 
     return PrivateClass;

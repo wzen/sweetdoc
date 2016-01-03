@@ -136,7 +136,7 @@ Common = (function() {
     Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();
     this.initScrollContentsPosition();
-    return this.initBaseScale();
+    return this.applyViewScale();
   };
 
   Common.resetEnvironment = function() {
@@ -185,15 +185,19 @@ Common = (function() {
     }
   };
 
-  Common.initBaseScale = function() {
-    var scale;
-    scale = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
-    if (scale != null) {
-      scale *= Common.scaleFromViewRate;
-      return window.mainWrapper.css('transform', "scale(" + scale + ", " + scale + ")");
-    } else {
-      return PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), 1);
+  Common.applyViewScale = function() {
+    var scale, scaleFromStateConfig, updateMainWrapperPercent;
+    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
+    if (scaleFromStateConfig == null) {
+      scaleFromStateConfig = 1.0;
     }
+    scale = scaleFromStateConfig * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale;
+    updateMainWrapperPercent = 100 / Common.scaleFromViewRate;
+    return window.mainWrapper.css({
+      transform: "scale(" + scale + ", " + scale + ")",
+      width: updateMainWrapperPercent + "%",
+      height: updateMainWrapperPercent + "%"
+    });
   };
 
   Common.updateCanvasSize = function() {

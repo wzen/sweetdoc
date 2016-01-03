@@ -59,7 +59,7 @@ StateConfig = (function() {
         }
         $('.zoom', rootEmt).val(scaleFromStateConfig);
         PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), scaleFromStateConfig);
-        window.mainWrapper.css('transform', "scale(" + (scaleFromStateConfig * Common.scaleFromViewRate) + ", " + (scaleFromStateConfig * Common.scaleFromViewRate) + ")");
+        Common.applyViewScale();
         return LocalStorage.saveGeneralPageValue();
       }
     });

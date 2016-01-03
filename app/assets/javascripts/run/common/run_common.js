@@ -71,7 +71,7 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    var heightRate, i, infoHeight, padding, projectScreenSize, scaleFromStateConfig, scaleFromViewRate, updateMainHeight, updateMainWidth, updateMainWrapperPercent, updatedProjectScreenSize, widthRate;
+    var heightRate, i, infoHeight, padding, projectScreenSize, scaleFromViewRate, updateMainHeight, updateMainWidth, updatedProjectScreenSize, widthRate;
     updateMainWidth = $('#contents').width();
     infoHeight = 0;
     padding = 0;
@@ -99,6 +99,7 @@ RunCommon = (function() {
     if (scaleFromViewRate === 0.0) {
       scaleFromViewRate = 0.01;
     }
+    Common.scaleFromViewRate = scaleFromViewRate;
     updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate;
     updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate;
     $('#main').height(updateMainHeight);
@@ -106,14 +107,7 @@ RunCommon = (function() {
       width: updatedProjectScreenSize.width,
       height: updatedProjectScreenSize.height
     });
-    updateMainWrapperPercent = 100 / scaleFromViewRate;
-    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
-    window.mainWrapper.css({
-      transform: "scale(" + (scaleFromStateConfig * scaleFromViewRate) + ", " + (scaleFromStateConfig * scaleFromViewRate) + ")",
-      width: updateMainWrapperPercent + "%",
-      height: updateMainWrapperPercent + "%"
-    });
-    return Common.scaleFromViewRate = scaleFromViewRate;
+    return Common.applyViewScale();
   };
 
   RunCommon.resizeMainContainerEvent = function() {

@@ -74,14 +74,12 @@ class RunCommon
       scaleFromViewRate = heightRate
     if scaleFromViewRate == 0.0
       scaleFromViewRate = 0.01
+    Common.scaleFromViewRate = scaleFromViewRate
     updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate
     updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
     $('#main').height(updateMainHeight)
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
-    updateMainWrapperPercent = 100 / scaleFromViewRate
-    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
-    window.mainWrapper.css({transform: "scale(#{scaleFromStateConfig * scaleFromViewRate}, #{scaleFromStateConfig * scaleFromViewRate})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
-    Common.scaleFromViewRate = scaleFromViewRate
+    Common.applyViewScale()
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->

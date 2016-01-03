@@ -6,6 +6,7 @@ class ScreenEvent extends CommonEvent
     @EVENT_ID = '2'
     @CLASS_DIST_TOKEN = "PI_ScreenEvent"
     @TAKE_SCALE_FROM_MAINWRAPPER = 0.0000
+    @scale = 1.0
 
     @actionProperties =
     {
@@ -222,14 +223,11 @@ class ScreenEvent extends CommonEvent
       return {x: x, y: y}
 
     _setScale = (scale) ->
-      @getJQueryElement().css('transform', "scale(#{scale * Common.scaleFromViewRate}, #{scale * Common.scaleFromViewRate})")
+      @constructor.scale = scale
+      Common.applyViewScale()
 
     _getScale = ->
-      matrix = @getJQueryElement().css('transform')
-      if matrix == 'none'
-        return 1.0
-      values = matrix.match(/-?[\d\.]+/g);
-      return parseFloat(values[0]) / Common.scaleFromViewRate
+      return @constructor.scale
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 
