@@ -238,18 +238,17 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging = function(pn, callback) {
-    var callbackCount;
     if (pn == null) {
       pn = PageValue.getPageNum();
     }
     if (callback == null) {
       callback = null;
     }
-    callbackCount = 0;
     return this.stopAllEventPreview(function(noRunningPreview) {
-      var item, items, l, len, results;
+      var callbackCount, item, items, l, len, results;
       if (window.worktableItemsChangedState || !noRunningPreview) {
         items = Common.instancesInPage(pn);
+        callbackCount = 0;
         results = [];
         for (l = 0, len = items.length; l < len; l++) {
           item = items[l];
@@ -264,6 +263,10 @@ WorktableCommon = (function() {
           }));
         }
         return results;
+      } else {
+        if (callback != null) {
+          return callback();
+        }
       }
     });
   };

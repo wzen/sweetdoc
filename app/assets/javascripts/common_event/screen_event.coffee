@@ -66,6 +66,8 @@ class ScreenEvent extends CommonEvent
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
+      if callback?
+        callback()
 
     # イベント前の表示状態にする
     updateEventBefore: ->

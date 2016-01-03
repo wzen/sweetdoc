@@ -204,12 +204,12 @@ class WorktableCommon
   # アイテム描画が変更されている場合にインスタンスから全アイテム再描画
   # @param [Integer] pn ページ番号
   @refreshAllItemsFromInstancePageValueIfChanging = (pn = PageValue.getPageNum(), callback = null) ->
-    callbackCount = 0
     # イベント停止
     @stopAllEventPreview( (noRunningPreview) ->
       if window.worktableItemsChangedState || !noRunningPreview
         # アイテムの状態に変更がある場合は再描画処理
         items = Common.instancesInPage(pn)
+        callbackCount = 0
         for item in items
           item.refreshFromInstancePageValue(true, ->
             callbackCount += 1
@@ -219,6 +219,9 @@ class WorktableCommon
               if callback?
                 callback()
           )
+      else
+        if callback?
+          callback()
     )
 
   # 非表示をクリア

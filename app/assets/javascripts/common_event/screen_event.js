@@ -93,7 +93,10 @@ ScreenEvent = (function(superClass) {
       Common.updateScrollContentsFromPagevalue();
       _setScale.call(this, 1.0);
       $('#preview_position_overlay').remove();
-      return $('.keep_mag_base').remove();
+      $('.keep_mag_base').remove();
+      if (callback != null) {
+        return callback();
+      }
     };
 
     PrivateClass.prototype.updateEventBefore = function() {
