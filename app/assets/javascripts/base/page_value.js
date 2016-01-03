@@ -776,17 +776,13 @@ PageValue = (function() {
   };
 
   PageValue.saveInstanceObjectToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
-    var baseObj, diff, key, obj;
+    var key, obj;
     if (pageNum == null) {
       pageNum = PageValue.getPageNum();
     }
-    baseObj = this.getInstancePageValue(PageValue.Key.instanceValue(targetObjId));
     obj = window.instanceMap[targetObjId];
-    diff = Common.diffEventObject(baseObj, obj.getMinimumObject());
-    if (diff != null) {
-      key = isChangeBefore ? this.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
-      return this.setFootprintPageValue(key, diff);
-    }
+    key = isChangeBefore ? this.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
+    return this.setFootprintPageValue(key, obj.getMinimumObject());
   };
 
   PageValue.removeAllFootprint = function() {

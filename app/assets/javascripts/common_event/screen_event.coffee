@@ -32,6 +32,8 @@ class ScreenEvent extends CommonEvent
 
     constructor: ->
       super()
+
+      # FIXME: 位置が決定してから取るようにする
       @name = 'Screen'
       @initScale = _getScale.call(@)
       cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @initScale)

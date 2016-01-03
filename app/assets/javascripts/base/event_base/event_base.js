@@ -453,10 +453,7 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.getMinimumObjectEventBefore = function() {
-    var diff, obj;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-    return $.extend(true, obj, diff);
+    return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
   };
 
   EventBase.prototype.updateEventBefore = function() {

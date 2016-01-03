@@ -222,10 +222,8 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.prototype.originalItemElementSize = function() {
-    var diff, obj;
-    diff = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
-    obj = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id));
-    $.extend(true, obj, diff);
+    var obj;
+    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     return obj.itemSize;
   };
 

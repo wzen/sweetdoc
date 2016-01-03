@@ -617,12 +617,9 @@ class PageValue
 
   # インスタンスの変数値を保存
   @saveInstanceObjectToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
-    baseObj = @getInstancePageValue(PageValue.Key.instanceValue(targetObjId))
     obj = window.instanceMap[targetObjId]
-    diff = Common.diffEventObject(baseObj, obj.getMinimumObject())
-    if diff?
-      key = if isChangeBefore then @Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) else @Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum)
-      @setFootprintPageValue(key, diff)
+    key = if isChangeBefore then @Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) else @Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum)
+    @setFootprintPageValue(key, obj.getMinimumObject())
 
   # 全ての操作履歴を削除
   @removeAllFootprint: ->
