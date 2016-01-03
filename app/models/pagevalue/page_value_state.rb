@@ -141,13 +141,14 @@ class PageValueState
       LEFT JOIN setting_pagevalues sp ON up.setting_pagevalue_id = sp.id AND sp.del_flg = 0
       INNER JOIN user_project_maps upm ON up.user_project_map_id = upm.id
       INNER JOIN projects p ON upm.project_id = p.id
-      LEFT JOIN general_common_pagevalues gcp ON up.id = gcp.user_pagevalue_id AND gcp.del_flg = 0
-      LEFT JOIN general_pagevalue_pagings gpp ON up.id = gpp.user_pagevalue_id AND gpp.del_flg = 0
-      LEFT JOIN general_pagevalues gp ON gpp.general_pagevalue_id = gp.id AND gp.del_flg = 0
-      LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND gpp.page_num = ipp.page_num AND ipp.del_flg = 0
+      LEFT JOIN instance_pagevalue_pagings ipp ON up.id = ipp.user_pagevalue_id AND ipp.del_flg = 0
       LEFT JOIN instance_pagevalues ip ON ipp.instance_pagevalue_id = ip.id AND ip.del_flg = 0
       LEFT JOIN event_pagevalue_pagings epp ON up.id = epp.user_pagevalue_id AND ipp.page_num = epp.page_num AND epp.del_flg = 0
       LEFT JOIN event_pagevalues ep ON epp.event_pagevalue_id = ep.id AND ep.del_flg = 0
+      LEFT JOIN general_common_pagevalues gcp ON up.id = gcp.user_pagevalue_id AND gcp.del_flg = 0
+      LEFT JOIN general_pagevalue_pagings gpp ON up.id = gpp.user_pagevalue_id AND gpp.page_num = ipp.page_num  AND gpp.del_flg = 0
+      LEFT JOIN general_pagevalues gp ON gpp.general_pagevalue_id = gp.id AND gp.del_flg = 0
+
       WHERE
         up.id = #{user_pagevalue_id}
       AND
@@ -337,22 +338,20 @@ class PageValueState
       # 新規データをInsert
       (1..page_count).each do |page_num|
         pagevalue = page[page_num.to_s]
-        select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+        if pagevalue.present?
+          select_saved_record = saved_record.select{|s| s['page_num'] == page_num}.first
+          if select_saved_record.blank?
+            # 新規作成
+            ip = GeneralPagevalue.new({data: pagevalue.to_json})
+            ip.save!
+            ipp = GeneralPagevaluePaging.new({
+                                                 user_pagevalue_id: update_user_pagevalue_id,
+                                                 page_num: page_num,
+                                                 general_pagevalue_id: ip.id
+                                             })
+            ipp.save!
 
-        if select_saved_record.blank?
-          # 新規作成
-          ip = GeneralPagevalue.new({data: pagevalue.to_json})
-          ip.save!
-          ipp = GeneralPagevaluePaging.new({
-                                                user_pagevalue_id: update_user_pagevalue_id,
-                                                page_num: page_num,
-                                                general_pagevalue_id: ip.id
-                                            })
-          ipp.save!
-
-        else
-          # 既存レコードに存在 & 送信されたpagevalueがnilの場合は更新しない
-          if pagevalue.present?
+          else
             # 更新
             general_pagevalue_id = select_saved_record['general_pagevalue_id']
             ip = GeneralPagevalue.find(general_pagevalue_id)
