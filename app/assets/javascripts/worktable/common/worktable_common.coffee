@@ -425,28 +425,24 @@ class WorktableCommon
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutSetting()
-    Common.updateAllEventsToBefore( =>
-      Common.removeAllItem()
-      EventConfig.removeAllConfig()
-      PageValue.removeAllGeneralAndInstanceAndEventPageValue()
-      Timeline.refreshAllTimeline()
-      if callback?
-        callback()
-    )
+    Common.removeAllItem()
+    EventConfig.removeAllConfig()
+    PageValue.removeAllGeneralAndInstanceAndEventPageValue()
+    Timeline.refreshAllTimeline()
+    if callback?
+      callback()
 
   # ページ内の全てのアイテムとイベントを削除
   @removeAllItemAndEventOnThisPage = (callback = null) ->
     Sidebar.closeSidebar()
     # WebStorageのアイテム&イベント情報を消去
     LocalStorage.clearWorktableWithoutGeneralAndSetting()
-    Common.updateAllEventsToBefore( =>
-      Common.removeAllItem(PageValue.getPageNum())
-      EventConfig.removeAllConfig()
-      PageValue.removeAllInstanceAndEventPageValueOnPage()
-      Timeline.refreshAllTimeline()
-      if callback?
-        callback()
-    )
+    Common.removeAllItem(PageValue.getPageNum())
+    EventConfig.removeAllConfig()
+    PageValue.removeAllInstanceAndEventPageValueOnPage()
+    Timeline.refreshAllTimeline()
+    if callback?
+      callback()
 
   # 共通イベントインスタンス作成
   @createCommonEventInstancesIfNeeded = (pn = PageValue.getPageNum()) ->
@@ -538,11 +534,6 @@ class WorktableCommon
       # 操作履歴削除
       PageValue.removeAllFootprint()
       teNum = parseInt(teNum)
-      for te, idx in tes
-        item = window.instanceMap[te.id]
-        if item?
-          # 全てのイベント状態を戻す
-          item.resetEvent()
       for te, idx in tes
         item = window.instanceMap[te.id]
         if item?

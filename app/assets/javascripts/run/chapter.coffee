@@ -96,7 +96,8 @@ class Chapter
       console.log('Chapter resetAllEvents')
 
     @eventObjList.forEach((e) =>
-      e.resetEvent()
+      e.updateEventBefore()
+      e.resetProgress()
     )
 
   # チャプターのイベントを実行後にする

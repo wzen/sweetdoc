@@ -156,13 +156,6 @@ EventBase = (function(superClass) {
     }
   };
 
-  EventBase.prototype.resetEvent = function() {
-    this.updateEventBefore();
-    this._isFinishedEvent = false;
-    this._skipEvent = false;
-    return this._runningClickEvent = false;
-  };
-
   EventBase.prototype.preview = function(loopFinishCallback) {
     this.loopFinishCallback = loopFinishCallback != null ? loopFinishCallback : null;
     if (window.runDebug) {
@@ -171,6 +164,7 @@ EventBase = (function(superClass) {
     return this.stopPreview((function(_this) {
       return function() {
         _this._runningPreview = true;
+        _this.updateEventBefore();
         _this.willChapter();
         _this._doPreviewLoop = true;
         _this._skipEvent = false;
@@ -178,6 +172,9 @@ EventBase = (function(superClass) {
         _this._previewTimer = null;
         FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW);
         _this._progress = 0;
+        if (window.debug) {
+          console.log('start previewStepDraw');
+        }
         return _this.previewStepDraw();
       };
     })(this));
@@ -212,6 +209,9 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.previewLoop = function() {
     var loopDelay, loopMaxCount;
+    if (window.debug) {
+      console.log('_loopCount:' + this._loopCount);
+    }
     loopDelay = 1000;
     loopMaxCount = 5;
     if (this._doPreviewLoop) {
@@ -226,7 +226,7 @@ EventBase = (function(superClass) {
       this._previewTimer = setTimeout((function(_this) {
         return function() {
           if (_this._runningPreview) {
-            _this.resetEvent();
+            _this.updateEventBefore();
             _this.willChapter();
             return _this.previewStepDraw();
           }
@@ -282,6 +282,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.willChapter = function() {
     this.setModifyBeforeAndAfterVar();
+    this.resetProgress();
     return PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
@@ -410,6 +411,8 @@ EventBase = (function(superClass) {
       withResetFinishedEventFlg = true;
     }
     this.stepValue = 0;
+    this._skipEvent = false;
+    this._runningClickEvent = false;
     if (withResetFinishedEventFlg) {
       return this._isFinishedEvent = false;
     }
@@ -429,7 +432,7 @@ EventBase = (function(superClass) {
       clearInterval(this._clickIntervalTimer);
       this._clickIntervalTimer = null;
     }
-    if (this._runningPreview) {
+    if (this._runningPreview && this.getEventActionType() === Constant.ActionType.CLICK) {
       return this.previewLoop();
     } else {
       if (window.eventAction != null) {

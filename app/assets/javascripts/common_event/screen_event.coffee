@@ -92,6 +92,7 @@ class ScreenEvent extends CommonEvent
         @_nowX = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
         @_nowY = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         @_nowScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
+        _setScale.call(@, @_nowScale)
         _overlay.call(@, @_nowX, @_nowY, @_nowScale)
         if !@keepDispMag
           size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
@@ -228,6 +229,7 @@ class ScreenEvent extends CommonEvent
 
     _getScale = ->
       return @constructor.scale
+
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 

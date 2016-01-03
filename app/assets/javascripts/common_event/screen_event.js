@@ -126,6 +126,7 @@ ScreenEvent = (function(superClass) {
         this._nowX = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
         this._nowY = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         this._nowScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
+        _setScale.call(this, this._nowScale);
         _overlay.call(this, this._nowX, this._nowY, this._nowScale);
         if (!this.keepDispMag) {
           size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);

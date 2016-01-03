@@ -471,17 +471,13 @@ WorktableCommon = (function() {
     }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutSetting();
-    return Common.updateAllEventsToBefore((function(_this) {
-      return function() {
-        Common.removeAllItem();
-        EventConfig.removeAllConfig();
-        PageValue.removeAllGeneralAndInstanceAndEventPageValue();
-        Timeline.refreshAllTimeline();
-        if (callback != null) {
-          return callback();
-        }
-      };
-    })(this));
+    Common.removeAllItem();
+    EventConfig.removeAllConfig();
+    PageValue.removeAllGeneralAndInstanceAndEventPageValue();
+    Timeline.refreshAllTimeline();
+    if (callback != null) {
+      return callback();
+    }
   };
 
   WorktableCommon.removeAllItemAndEventOnThisPage = function(callback) {
@@ -490,17 +486,13 @@ WorktableCommon = (function() {
     }
     Sidebar.closeSidebar();
     LocalStorage.clearWorktableWithoutGeneralAndSetting();
-    return Common.updateAllEventsToBefore((function(_this) {
-      return function() {
-        Common.removeAllItem(PageValue.getPageNum());
-        EventConfig.removeAllConfig();
-        PageValue.removeAllInstanceAndEventPageValueOnPage();
-        Timeline.refreshAllTimeline();
-        if (callback != null) {
-          return callback();
-        }
-      };
-    })(this));
+    Common.removeAllItem(PageValue.getPageNum());
+    EventConfig.removeAllConfig();
+    PageValue.removeAllInstanceAndEventPageValueOnPage();
+    Timeline.refreshAllTimeline();
+    if (callback != null) {
+      return callback();
+    }
   };
 
   WorktableCommon.createCommonEventInstancesIfNeeded = function(pn) {
@@ -653,17 +645,10 @@ WorktableCommon = (function() {
     window.worktableItemsChangedState = true;
     return Common.updateAllEventsToBefore((function(_this) {
       return function() {
-        var idx, item, l, len, len1, m, te;
+        var idx, item, l, len, te;
         PageValue.removeAllFootprint();
         teNum = parseInt(teNum);
         for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
-          te = tes[idx];
-          item = window.instanceMap[te.id];
-          if (item != null) {
-            item.resetEvent();
-          }
-        }
-        for (idx = m = 0, len1 = tes.length; m < len1; idx = ++m) {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {

@@ -108,7 +108,8 @@ Chapter = (function() {
     }
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        return e.resetEvent();
+        e.updateEventBefore();
+        return e.resetProgress();
       };
     })(this));
   };

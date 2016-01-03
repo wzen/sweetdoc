@@ -105,13 +105,6 @@ class EventBase extends Extend
     else
       return null
 
-  # リセット(アクション前に戻す)
-  resetEvent: ->
-    @updateEventBefore()
-    @_isFinishedEvent = false
-    @_skipEvent = false
-    @_runningClickEvent = false
-
   # プレビュー開始
   preview: (@loopFinishCallback = null) ->
     if window.runDebug
@@ -119,6 +112,7 @@ class EventBase extends Extend
 
     @stopPreview( =>
       @_runningPreview = true
+      @updateEventBefore()
       @willChapter()
       # イベントループ
       @_doPreviewLoop = true
@@ -128,6 +122,8 @@ class EventBase extends Extend
       # FloatView表示
       FloatView.show(FloatView.displayPositionMessage(), FloatView.Type.PREVIEW)
       @_progress = 0
+      if window.debug
+        console.log('start previewStepDraw')
       @previewStepDraw()
     )
 
@@ -154,6 +150,8 @@ class EventBase extends Extend
 
   # プレビュー実行ループ
   previewLoop: ->
+    if window.debug
+      console.log('_loopCount:' + @_loopCount)
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
     if @_doPreviewLoop
@@ -165,8 +163,7 @@ class EventBase extends Extend
         @_previewTimer = null
       @_previewTimer = setTimeout( =>
         if @_runningPreview
-          # 状態を変更前に戻す
-          @resetEvent()
+          @updateEventBefore()
           @willChapter()
           @previewStepDraw()
       , loopDelay)
@@ -214,6 +211,8 @@ class EventBase extends Extend
   willChapter: ->
     # イベント前後の変数の設定
     @setModifyBeforeAndAfterVar()
+    # ステータス値初期化
+    @resetProgress()
     # インスタンスの状態を保存
     PageValue.saveInstanceObjectToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
@@ -339,6 +338,8 @@ class EventBase extends Extend
   # Step値を戻す
   resetProgress: (withResetFinishedEventFlg = true) ->
     @stepValue = 0
+    @_skipEvent = false
+    @_runningClickEvent = false
     if withResetFinishedEventFlg
       @_isFinishedEvent = false
 
@@ -356,7 +357,7 @@ class EventBase extends Extend
     if @_clickIntervalTimer?
       clearInterval(@_clickIntervalTimer)
       @_clickIntervalTimer = null
-    if @_runningPreview
+    if @_runningPreview && @getEventActionType() == Constant.ActionType.CLICK
       @previewLoop()
     else
       if window.eventAction?
