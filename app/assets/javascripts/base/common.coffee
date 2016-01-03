@@ -137,10 +137,10 @@ class Common
   @initScrollContentsPosition = ->
     position = PageValue.getScrollContentsPosition()
     if position?
+      PageValue.setDisplayPosition(position.top, position.left)
       @updateScrollContentsPosition(position.top, position.left)
     else
       PageValue.setDisplayPosition(0, 0)
-      #PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: 0, left: 0})
 
   # 画面スケールの設定
   @applyViewScale = ->

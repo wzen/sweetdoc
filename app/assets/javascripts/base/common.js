@@ -176,6 +176,7 @@ Common = (function() {
     var position;
     position = PageValue.getScrollContentsPosition();
     if (position != null) {
+      PageValue.setDisplayPosition(position.top, position.left);
       return this.updateScrollContentsPosition(position.top, position.left);
     } else {
       return PageValue.setDisplayPosition(0, 0);
