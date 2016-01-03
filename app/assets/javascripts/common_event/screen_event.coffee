@@ -5,7 +5,6 @@ class ScreenEvent extends CommonEvent
   class @PrivateClass extends CommonEvent.PrivateClass
     @EVENT_ID = '2'
     @CLASS_DIST_TOKEN = "PI_ScreenEvent"
-    @TAKE_SCALE_FROM_MAINWRAPPER = 0.0000
     @scale = 1.0
 
     @actionProperties =
@@ -34,35 +33,25 @@ class ScreenEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Screen'
-      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), 1.0)
+      @initScale = _getScale.call(@)
+      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @initScale)
       @_originalX = cood.x
       @_originalY = cood.y
-      @initScale = @constructor.TAKE_SCALE_FROM_MAINWRAPPER
-      @initX = null
-      @initY = null
-      @beforeX = null
-      @beforeY = null
-      @beforeScale = null
+      @initX = cood.x
+      @initY = cood.y
+      @beforeX = @initX
+      @beforeY = @initY
+      @beforeScale = @initScale
 
     # イベントの初期化
     # @param [Object] event 設定イベント
     initEvent: (event, @keepDispMag = false) ->
       super(event)
 
-    _takeScaleFromMainwrapper = ->
-      if @initScale == @constructor.TAKE_SCALE_FROM_MAINWRAPPER
-        @initScale = _getScale.call(@)
-        cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @initScale)
-        @initX = cood.x
-        @initY = cood.y
-        @beforeX = @initX
-        @beforeY = @initY
-        @beforeScale = @initScale
-
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
       Common.updateScrollContentsFromPagevalue()
-      _setScale.call(@, 1.0)
+      _setScale.call(@, Common.scaleFromViewRate)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
@@ -72,40 +61,38 @@ class ScreenEvent extends CommonEvent
     # イベント前の表示状態にする
     updateEventBefore: ->
       super()
-      _takeScaleFromMainwrapper.call(@)
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        _setScale.call(@, @beforeScale)
-        _overlay.call(@, @beforeX, @beforeY, @beforeScale)
         if !@keepDispMag
+          _setScale.call(@, @beforeScale)
           size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY, @beforeScale)
           Common.updateScrollContentsPosition(size.top, size.left)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
       super()
-      _takeScaleFromMainwrapper.call(@)
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
         @_nowX = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
         @_nowY = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         @_nowScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
-        _setScale.call(@, @_nowScale)
-        _overlay.call(@, @_nowX, @_nowY, @_nowScale)
-        if !@keepDispMag
+        if @keepDispMag
+          _setScale.call(@, Common.scaleFromViewRate)
+          _overlay.call(@, @_nowX, @_nowY, @_nowScale)
+        else
+          _setScale.call(@, @_nowScale)
           size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
           Common.updateScrollContentsPosition(size.top, size.left)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
-      _takeScaleFromMainwrapper.call(@)
       @_nowScale = (parseFloat(@_specificMethodValues.afterZ) - @beforeScale) * (opt.progress / opt.progressMax) + @beforeScale
       @_nowX = ((parseFloat(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax)) + @beforeX
       @_nowY = ((parseFloat(@_specificMethodValues.afterY) - @beforeY) * (opt.progress / opt.progressMax)) + @beforeY
       if opt.isPreview
         _overlay.call(@, @_nowX, @_nowY, @_nowScale)
         if @keepDispMag
-          _setScale.call(@, 1.0)
+          _setScale.call(@, Common.scaleFromViewRate)
 
       if !@keepDispMag
         _setScale.call(@, @_nowScale)
@@ -171,7 +158,7 @@ class ScreenEvent extends CommonEvent
         context.beginPath();
         context.rect(0, 0, width, height);
         # 枠を作成
-        size = _convertCenterCoodToSize.call(@, x, y, 1.0)
+        size = _convertCenterCoodToSize.call(@, x, y, Common.scaleFromViewRate)
         w = size.width / scale
         h = size.height / scale
         top = y - h / 2.0
@@ -180,7 +167,7 @@ class ScreenEvent extends CommonEvent
         context.fill()
         context.restore()
 
-      if @keepDispMag && scale > 1.0
+      if @keepDispMag && scale > Common.scaleFromViewRate
         overlay = $('#preview_position_overlay')
         if !overlay? || overlay.length == 0
           # オーバーレイを被せる
@@ -199,7 +186,7 @@ class ScreenEvent extends CommonEvent
     _drawKeepDispRect = (x, y, scale) ->
       $('.keep_mag_base').remove()
 
-      if scale > 1.0
+      if scale > Common.scaleFromViewRate
         size = _convertCenterCoodToSize.call(@, x, y, scale)
         style = "position:absolute;top:#{size.top}px;left:#{size.left}px;width:#{size.width}px;height:#{size.height}px;"
         emt = $("<div class='keep_mag_base' style='#{style}'></div>")

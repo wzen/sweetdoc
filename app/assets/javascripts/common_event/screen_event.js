@@ -14,15 +14,13 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _getScale, _overlay, _setScale, _takeScaleFromMainwrapper;
+    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _getScale, _overlay, _setScale;
 
     extend(PrivateClass, superClass1);
 
     PrivateClass.EVENT_ID = '2';
 
     PrivateClass.CLASS_DIST_TOKEN = "PI_ScreenEvent";
-
-    PrivateClass.TAKE_SCALE_FROM_MAINWRAPPER = 0.0000;
 
     PrivateClass.scale = 1.0;
 
@@ -54,33 +52,20 @@ ScreenEvent = (function(superClass) {
       var cood;
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), 1.0);
+      this.initScale = _getScale.call(this);
+      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this.initScale);
       this._originalX = cood.x;
       this._originalY = cood.y;
-      this.initScale = this.constructor.TAKE_SCALE_FROM_MAINWRAPPER;
-      this.initX = null;
-      this.initY = null;
-      this.beforeX = null;
-      this.beforeY = null;
-      this.beforeScale = null;
+      this.initX = cood.x;
+      this.initY = cood.y;
+      this.beforeX = this.initX;
+      this.beforeY = this.initY;
+      this.beforeScale = this.initScale;
     }
 
     PrivateClass.prototype.initEvent = function(event, keepDispMag) {
       this.keepDispMag = keepDispMag != null ? keepDispMag : false;
       return PrivateClass.__super__.initEvent.call(this, event);
-    };
-
-    _takeScaleFromMainwrapper = function() {
-      var cood;
-      if (this.initScale === this.constructor.TAKE_SCALE_FROM_MAINWRAPPER) {
-        this.initScale = _getScale.call(this);
-        cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this.initScale);
-        this.initX = cood.x;
-        this.initY = cood.y;
-        this.beforeX = this.initX;
-        this.beforeY = this.initY;
-        return this.beforeScale = this.initScale;
-      }
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
@@ -91,7 +76,7 @@ ScreenEvent = (function(superClass) {
         callback = null;
       }
       Common.updateScrollContentsFromPagevalue();
-      _setScale.call(this, 1.0);
+      _setScale.call(this, Common.scaleFromViewRate);
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
       if (callback != null) {
@@ -102,12 +87,10 @@ ScreenEvent = (function(superClass) {
     PrivateClass.prototype.updateEventBefore = function() {
       var methodName, size;
       PrivateClass.__super__.updateEventBefore.call(this);
-      _takeScaleFromMainwrapper.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        _setScale.call(this, this.beforeScale);
-        _overlay.call(this, this.beforeX, this.beforeY, this.beforeScale);
         if (!this.keepDispMag) {
+          _setScale.call(this, this.beforeScale);
           size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY, this.beforeScale);
           return Common.updateScrollContentsPosition(size.top, size.left);
         }
@@ -117,15 +100,16 @@ ScreenEvent = (function(superClass) {
     PrivateClass.prototype.updateEventAfter = function() {
       var methodName, size;
       PrivateClass.__super__.updateEventAfter.call(this);
-      _takeScaleFromMainwrapper.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
         this._nowX = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
         this._nowY = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         this._nowScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
-        _setScale.call(this, this._nowScale);
-        _overlay.call(this, this._nowX, this._nowY, this._nowScale);
-        if (!this.keepDispMag) {
+        if (this.keepDispMag) {
+          _setScale.call(this, Common.scaleFromViewRate);
+          return _overlay.call(this, this._nowX, this._nowY, this._nowScale);
+        } else {
+          _setScale.call(this, this._nowScale);
           size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);
           return Common.updateScrollContentsPosition(size.top, size.left);
         }
@@ -134,14 +118,13 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
       var size;
-      _takeScaleFromMainwrapper.call(this);
       this._nowScale = (parseFloat(this._specificMethodValues.afterZ) - this.beforeScale) * (opt.progress / opt.progressMax) + this.beforeScale;
       this._nowX = ((parseFloat(this._specificMethodValues.afterX) - this.beforeX) * (opt.progress / opt.progressMax)) + this.beforeX;
       this._nowY = ((parseFloat(this._specificMethodValues.afterY) - this.beforeY) * (opt.progress / opt.progressMax)) + this.beforeY;
       if (opt.isPreview) {
         _overlay.call(this, this._nowX, this._nowY, this._nowScale);
         if (this.keepDispMag) {
-          _setScale.call(this, 1.0);
+          _setScale.call(this, Common.scaleFromViewRate);
         }
       }
       if (!this.keepDispMag) {
@@ -222,7 +205,7 @@ ScreenEvent = (function(superClass) {
         context.fillStyle = "rgba(33, 33, 33, 0.5)";
         context.beginPath();
         context.rect(0, 0, width, height);
-        size = _convertCenterCoodToSize.call(this, x, y, 1.0);
+        size = _convertCenterCoodToSize.call(this, x, y, Common.scaleFromViewRate);
         w = size.width / scale;
         h = size.height / scale;
         top = y - h / 2.0;
@@ -231,7 +214,7 @@ ScreenEvent = (function(superClass) {
         context.fill();
         return context.restore();
       };
-      if (this.keepDispMag && scale > 1.0) {
+      if (this.keepDispMag && scale > Common.scaleFromViewRate) {
         overlay = $('#preview_position_overlay');
         if ((overlay == null) || overlay.length === 0) {
           w = $(window.drawingCanvas).attr('width');
@@ -250,7 +233,7 @@ ScreenEvent = (function(superClass) {
     _drawKeepDispRect = function(x, y, scale) {
       var emt, size, style;
       $('.keep_mag_base').remove();
-      if (scale > 1.0) {
+      if (scale > Common.scaleFromViewRate) {
         size = _convertCenterCoodToSize.call(this, x, y, scale);
         style = "position:absolute;top:" + size.top + "px;left:" + size.left + "px;width:" + size.width + "px;height:" + size.height + "px;";
         emt = $("<div class='keep_mag_base' style='" + style + "'></div>");
