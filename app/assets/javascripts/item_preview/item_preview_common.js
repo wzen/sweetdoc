@@ -56,15 +56,15 @@ ItemPreviewCommon = (function() {
       left = window.scrollContents.scrollLeft();
       if (jQuery(":hover")[jQuery(':hover').length - 1] === window.scrollInside.get(0)) {
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
+        if (window.scrollContentsScrollTimer != null) {
+          clearTimeout(window.scrollContentsScrollTimer);
+        }
+        return window.scrollContentsScrollTimer = setTimeout(function() {
+          PageValue.setDisplayPosition(top, left);
+          FloatView.hide();
+          return window.scrollContentsScrollTimer = null;
+        }, 500);
       }
-      if (window.scrollContentsScrollTimer != null) {
-        clearTimeout(window.scrollContentsScrollTimer);
-      }
-      return window.scrollContentsScrollTimer = setTimeout(function() {
-        PageValue.setDisplayPosition(top, left);
-        FloatView.hide();
-        return window.scrollContentsScrollTimer = null;
-      }, 500);
     });
     ItemPreviewHandwrite.initHandwrite();
     Common.applyEnvironmentFromPagevalue();

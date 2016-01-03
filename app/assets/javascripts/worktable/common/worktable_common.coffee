@@ -328,6 +328,7 @@ class WorktableCommon
           clearTimeout(window.scrollContentsScrollTimer)
         window.scrollContentsScrollTimer = setTimeout( ->
           PageValue.setDisplayPosition(top, left)
+          LocalStorage.saveGeneralPageValue()
           FloatView.hide()
           window.scrollContentsScrollTimer = null
         , 500)

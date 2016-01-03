@@ -378,6 +378,7 @@ WorktableCommon = (function() {
         }
         return window.scrollContentsScrollTimer = setTimeout(function() {
           PageValue.setDisplayPosition(top, left);
+          LocalStorage.saveGeneralPageValue();
           FloatView.hide();
           return window.scrollContentsScrollTimer = null;
         }, 500);
