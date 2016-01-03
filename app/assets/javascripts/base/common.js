@@ -134,7 +134,7 @@ Common = (function() {
     Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();
     this.initScrollContentsPosition();
-    return this.initZoom();
+    return this.initBaseScale();
   };
 
   Common.resetEnvironment = function() {
@@ -183,7 +183,7 @@ Common = (function() {
     }
   };
 
-  Common.initZoom = function() {
+  Common.initBaseScale = function() {
     var zoom;
     zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
     if (zoom != null) {

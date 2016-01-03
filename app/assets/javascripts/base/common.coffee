@@ -100,7 +100,7 @@ class Common
     # スクロール位置設定
     @initScrollContentsPosition()
     # Zoom
-    @initZoom()
+    @initBaseScale()
 
   # 環境の反映をリセット
   @resetEnvironment = ->
@@ -139,8 +139,8 @@ class Common
     else
       PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: 0, left: 0})
 
-  # ズーム初期化
-  @initZoom = ->
+  # 基本スケール初期化
+  @initBaseScale = ->
     zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
     if zoom?
       window.mainWrapper.css('transform', "scale(#{zoom}, #{zoom})")
