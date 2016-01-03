@@ -65,21 +65,23 @@ class RunCommon
       # 縮小
       updatedProjectScreenSize.height = updateMainHeight - 10
 
-    # Zoom 修正
+    # BaseScale 修正
     widthRate = updatedProjectScreenSize.width / projectScreenSize.width
     heightRate = updatedProjectScreenSize.height / projectScreenSize.height
     if widthRate < heightRate
-      @baseScale = widthRate
+      scaleFromViewRate = widthRate
     else
-      @baseScale = heightRate
-    if @baseScale == 0.0
-      @baseScale = 0.01
-    updatedProjectScreenSize.width = projectScreenSize.width * @baseScale
-    updatedProjectScreenSize.height = projectScreenSize.height * @baseScale
+      scaleFromViewRate = heightRate
+    if scaleFromViewRate == 0.0
+      scaleFromViewRate = 0.01
+    updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate
+    updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
     $('#main').height(updateMainHeight)
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
-    updateMainWrapperPercent = 100 / @baseScale
-    window.mainWrapper.css({transform: "scale(#{@baseScale}, #{@baseScale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
+    updateMainWrapperPercent = 100 / scaleFromViewRate
+    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
+    window.mainWrapper.css({transform: "scale(#{scaleFromStateConfig * scaleFromViewRate}, #{scaleFromStateConfig * scaleFromViewRate})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
+    Common.scaleFromViewRate = scaleFromViewRate
 
   # ウィンドウの高さ設定
   @resizeMainContainerEvent = ->

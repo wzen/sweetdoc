@@ -33,10 +33,6 @@ class ScreenEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Screen'
-      if window.isWorkTable
-        @_mainViewResizingScale = 1.0
-      else
-        @_mainViewResizingScale = RunCommon.baseScale
       cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), 1.0)
       @_originalX = cood.x
       @_originalY = cood.y
@@ -226,14 +222,14 @@ class ScreenEvent extends CommonEvent
       return {x: x, y: y}
 
     _setScale = (scale) ->
-      @getJQueryElement().css('transform', "scale(#{scale * @_mainViewResizingScale}, #{scale * @_mainViewResizingScale})")
+      @getJQueryElement().css('transform', "scale(#{scale * Common.scaleFromViewRate}, #{scale * Common.scaleFromViewRate})")
 
     _getScale = ->
       matrix = @getJQueryElement().css('transform')
       if matrix == 'none'
         return 1.0
       values = matrix.match(/-?[\d\.]+/g);
-      return parseFloat(values[0]) / @_mainViewResizingScale
+      return parseFloat(values[0]) / Common.scaleFromViewRate
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 

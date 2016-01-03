@@ -6,6 +6,8 @@ Common = (function() {
 
   function Common() {}
 
+  Common.scaleFromViewRate = 1.0;
+
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     Common.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
@@ -184,12 +186,13 @@ Common = (function() {
   };
 
   Common.initBaseScale = function() {
-    var zoom;
-    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom());
-    if (zoom != null) {
-      return window.mainWrapper.css('transform', "scale(" + zoom + ", " + zoom + ")");
+    var scale;
+    scale = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
+    if (scale != null) {
+      scale *= Common.scaleFromViewRate;
+      return window.mainWrapper.css('transform', "scale(" + scale + ", " + scale + ")");
     } else {
-      return PageValue.setGeneralPageValue(PageValue.Key.zoom(), 1);
+      return PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), 1);
     }
   };
 

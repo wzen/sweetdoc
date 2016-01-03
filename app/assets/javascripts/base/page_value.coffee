@@ -94,7 +94,7 @@ class PageValue
        # @property [return] プロジェクト表示位置
       @displayPosition = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}display_position"
       # @property [return] Zoom
-      @zoom = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}zoom"
+      @scaleFromStateConfig = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}scale_from_state_config"
       # @property [return] アイテム表示状態
       @itemVisible = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}item_visible"
       # @property [String] F_ROOT 履歴情報ルート

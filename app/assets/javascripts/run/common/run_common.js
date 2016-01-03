@@ -71,7 +71,7 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    var heightRate, i, infoHeight, padding, projectScreenSize, updateMainHeight, updateMainWidth, updateMainWrapperPercent, updatedProjectScreenSize, widthRate;
+    var heightRate, i, infoHeight, padding, projectScreenSize, scaleFromStateConfig, scaleFromViewRate, updateMainHeight, updateMainWidth, updateMainWrapperPercent, updatedProjectScreenSize, widthRate;
     updateMainWidth = $('#contents').width();
     infoHeight = 0;
     padding = 0;
@@ -92,26 +92,28 @@ RunCommon = (function() {
     widthRate = updatedProjectScreenSize.width / projectScreenSize.width;
     heightRate = updatedProjectScreenSize.height / projectScreenSize.height;
     if (widthRate < heightRate) {
-      this.baseScale = widthRate;
+      scaleFromViewRate = widthRate;
     } else {
-      this.baseScale = heightRate;
+      scaleFromViewRate = heightRate;
     }
-    if (this.baseScale === 0.0) {
-      this.baseScale = 0.01;
+    if (scaleFromViewRate === 0.0) {
+      scaleFromViewRate = 0.01;
     }
-    updatedProjectScreenSize.width = projectScreenSize.width * this.baseScale;
-    updatedProjectScreenSize.height = projectScreenSize.height * this.baseScale;
+    updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate;
+    updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate;
     $('#main').height(updateMainHeight);
     $('#project_wrapper').css({
       width: updatedProjectScreenSize.width,
       height: updatedProjectScreenSize.height
     });
-    updateMainWrapperPercent = 100 / this.baseScale;
-    return window.mainWrapper.css({
-      transform: "scale(" + this.baseScale + ", " + this.baseScale + ")",
+    updateMainWrapperPercent = 100 / scaleFromViewRate;
+    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
+    window.mainWrapper.css({
+      transform: "scale(" + (scaleFromStateConfig * scaleFromViewRate) + ", " + (scaleFromStateConfig * scaleFromViewRate) + ")",
       width: updateMainWrapperPercent + "%",
       height: updateMainWrapperPercent + "%"
     });
+    return Common.scaleFromViewRate = scaleFromViewRate;
   };
 
   RunCommon.resizeMainContainerEvent = function() {

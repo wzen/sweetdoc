@@ -52,11 +52,6 @@ ScreenEvent = (function(superClass) {
       var cood;
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      if (window.isWorkTable) {
-        this._mainViewResizingScale = 1.0;
-      } else {
-        this._mainViewResizingScale = RunCommon.baseScale;
-      }
       cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), 1.0);
       this._originalX = cood.x;
       this._originalY = cood.y;
@@ -292,7 +287,7 @@ ScreenEvent = (function(superClass) {
     };
 
     _setScale = function(scale) {
-      return this.getJQueryElement().css('transform', "scale(" + (scale * this._mainViewResizingScale) + ", " + (scale * this._mainViewResizingScale) + ")");
+      return this.getJQueryElement().css('transform', "scale(" + (scale * Common.scaleFromViewRate) + ", " + (scale * Common.scaleFromViewRate) + ")");
     };
 
     _getScale = function() {
@@ -302,7 +297,7 @@ ScreenEvent = (function(superClass) {
         return 1.0;
       }
       values = matrix.match(/-?[\d\.]+/g);
-      return parseFloat(values[0]) / this._mainViewResizingScale;
+      return parseFloat(values[0]) / Common.scaleFromViewRate;
     };
 
     return PrivateClass;

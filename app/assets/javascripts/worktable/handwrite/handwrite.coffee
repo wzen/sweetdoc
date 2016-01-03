@@ -33,9 +33,9 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       # @return [Array] Canvas座標
       _calcCanvasLoc = (e) =>
-        zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
-        x = (e.x || e.clientX) / zoom
-        y = (e.y || e.clientY) / zoom
+        scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
+        x = (e.x || e.clientX) / scaleFromStateConfig
+        y = (e.y || e.clientY) / scaleFromStateConfig
         return _windowToCanvas(drawingCanvas, x, y)
 
       # 座標の状態を保存

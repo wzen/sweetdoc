@@ -159,11 +159,11 @@ PageValue = (function() {
         return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "display_position";
       };
 
-      Key.zoom = function(pn) {
+      Key.scaleFromStateConfig = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "zoom";
+        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "scale_from_state_config";
       };
 
       Key.itemVisible = function(pn) {

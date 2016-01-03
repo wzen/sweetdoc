@@ -39,20 +39,20 @@ class StateConfig
     )
 
     # Zoom (1〜5)
-    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
-    $('.zoom', rootEmt).val(zoom)
+    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
+    $('.zoom', rootEmt).val(scaleFromStateConfig)
     $('.zoom', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
       if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
         # Zoom実行
-        zoom = $('.zoom', rootEmt).val()
-        if zoom < 1
-          zoom = 1
-        else if zoom > 5
-          zoom = 5
+        scaleFromStateConfig = $('.zoom', rootEmt).val()
+        if scaleFromStateConfig < 1
+          scaleFromStateConfig = 1
+        else if scaleFromStateConfig > 5
+          scaleFromStateConfig = 5
 
-        $('.zoom', rootEmt).val(zoom)
-        PageValue.setGeneralPageValue(PageValue.Key.zoom(), zoom)
-        window.mainWrapper.css('transform', "scale(#{zoom}, #{zoom})")
+        $('.zoom', rootEmt).val(scaleFromStateConfig)
+        PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), scaleFromStateConfig)
+        window.mainWrapper.css('transform', "scale(#{scaleFromStateConfig * Common.scaleFromViewRate}, #{scaleFromStateConfig * Common.scaleFromViewRate})")
         LocalStorage.saveGeneralPageValue()
     )
 

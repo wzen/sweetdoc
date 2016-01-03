@@ -1,5 +1,7 @@
 # アプリ内の共通メソッドクラス
 class Common
+  @scaleFromViewRate = 1.0
+
   if gon?
     constant = gon.const
     # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
@@ -141,11 +143,12 @@ class Common
 
   # 基本スケール初期化
   @initBaseScale = ->
-    zoom = PageValue.getGeneralPageValue(PageValue.Key.zoom())
-    if zoom?
-      window.mainWrapper.css('transform', "scale(#{zoom}, #{zoom})")
+    scale = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
+    if scale?
+      scale *= Common.scaleFromViewRate
+      window.mainWrapper.css('transform', "scale(#{scale}, #{scale})")
     else
-      PageValue.setGeneralPageValue(PageValue.Key.zoom(), 1)
+      PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), 1)
 
   # Canvasサイズ更新
   @updateCanvasSize = ->
