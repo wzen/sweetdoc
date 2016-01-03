@@ -86,6 +86,7 @@ class Navbar
         Sidebar.switchSidebarConfig(Sidebar.Type.STATE)
         StateConfig.initConfig()
         WorktableSetting.initConfig()
+        ItemStateConfig.initConfig()
         Sidebar.openConfigSidebar()
     )
 

@@ -72,16 +72,20 @@ en:
   config:
     state:
       page_num: "Page number"
-      display_position: "Display Position"
-      zoom: "Zoom rate"
-      created_item_list: "Created item's list"
       page_select_option: 'Page'
       page_select_option_none: 'None(Finish)'
       finish_page: 'Finish page'
       jump_to: 'Jump to'
+      background: 'Background'
+      screen_state: 'Screen State'
+    worktable_setting:
+      display_position: "Display Position"
+      zoom: "Zoom rate"
     select_opt_group:
       common: "Common Event"
       item: "Item"
+    item_state:
+      created_item_list: "Created item's list"
   upload_confirm:
     title: "Title name"
     caption: "Caption"

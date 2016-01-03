@@ -3,24 +3,32 @@
         <div id="sidebar-wrapper" style="overflow: auto">
             <div id="<%= Const::ElementAttribute::SIDEBAR_TAB_ROOT %>" class="sidebar-config" style="display: none">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab1" data-toggle="tab">State</a></li>
-                    <li><a href="#tab2" data-toggle="tab">Setting</a></li>
+                  <li class="active"><a href="#tab1" data-toggle="tab">Beginning State</a></li>
+                  <li><a href="#tab2" data-toggle="tab">Worktable Setting</a></li>
+                  <li><a href="#tab3" data-toggle="tab">Item State</a></li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
-                    <div class="tab-pane fade in active" id="tab1" >
-                        <div class="scroll_y_content border">
-                            <p>
-                                <%= render 'sidebar_menu/state/state' %>
-                            </p>
-                        </div>
+                  <div class="tab-pane fade in active" id="tab1" >
+                      <div class="scroll_y_content border">
+                          <p>
+                              <%= render 'sidebar_menu/state/state' %>
+                          </p>
+                      </div>
+                  </div>
+                  <div class="tab-pane fade" id="tab2">
+                      <div class="scroll_y_content border">
+                          <p>
+                              <%= render 'sidebar_menu/setting/setting' %>
+                          </p>
+                      </div>
+                  </div>
+                  <div class="tab-pane fade" id="tab3">
+                    <div class="scroll_y_content border">
+                      <p>
+                        <%= render 'sidebar_menu/items/item' %>
+                      </p>
                     </div>
-                    <div class="tab-pane fade" id="tab2">
-                        <div class="scroll_y_content border">
-                            <p>
-                                <%= render 'sidebar_menu/setting/setting' %>
-                            </p>
-                        </div>
-                    </div>
+                  </div>
                 </div>
             </div>
 

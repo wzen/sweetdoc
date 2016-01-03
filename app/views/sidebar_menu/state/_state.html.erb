@@ -1,60 +1,42 @@
 <div id="<%= Const::StateConfig::ROOT_ID_NAME %>">
-    <div class="config">
-        <div class="configBox">
-            <div class="settingedit-headliner"><%= I18n.t('config.state.page_num') %></div>
-            <div style="display:table">
-                <!-- ページ番号 -->
-                <div style="display: table-cell">
-                    <%= I18n.t('config.state.page_num') %>: <span class="page_num"></span>
-                </div>
-            </div>
+  <div class="config">
+    <div class="configBox" style="display: none;">
+      <div class="settingedit-headliner"><%= I18n.t('config.state.background') %></div>
+      <div class="forms" style="display:table">
+        <div style="display: table-cell">
+          <!-- Background -->
+          <div class="background colorPicker rgb"></div>
         </div>
-        <div class="configBox">
-            <div class="settingedit-headliner"><%= I18n.t('config.state.display_position') %></div>
-            <div class="forms">
-                <!-- ワークテーブル座標 -->
-                <div>
-                    X: <input type="number" class="display_position_x" value="">
-                </div>
-                <div>
-                    <div class="display_position_left_limit" style="float: right">
-                    </div>
-                    <br style="clear: both">
-                </div>
-                <div>
-                    Y: <input type="number" class="display_position_y" value="">
-                </div>
-                <div>
-                    <div class="display_position_top_limit" style="float: right">
-                    </div>
-                    <br style="clear: both">
-                </div>
-            </div>
-        </div>
-        <div class="configBox">
-            <div class="settingedit-headliner"><%= I18n.t('config.state.zoom') %></div>
-            <div style="display:table">
-                <!-- Zoom -->
-                <div>
-                    Zoom: <input type="number" class="zoom" value="">
-                </div>
-                <div>
-                    <div class="display_position_zoom_limit" style="float: right">
-                    </div>
-                    <br style="clear: both">
-                </div>
-            </div>
-        </div>
-        <div class="configBox" style="display: none;">
-            <div class="settingedit-headliner"><%= I18n.t('config.state.created_item_list') %></div>
-            <div class="forms" style="display:table">
-                <div style="display: table-cell">
-                    <!-- 作成アイテム一覧 -->
-                    <div class="created_item_list">
-                    </div>
-                    <%= render 'sidebar_menu/state/item_temp' %>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="configBox" style="display: none;">
+      <div class="settingedit-headliner"><%= I18n.t('config.state.screen_state') %></div>
+      <div class="forms" style="display:table">
+        <div style="display: table-cell">
+          <!-- ScreenEvent -->
+          <div style="display: inline-block">Select:</div>
+          <div style="display: inline-block">
+            <a class="event_pointing">
+              <%= image_tag 'sidebar/event_pointing_drag32.png', size: '24x24' %>
+            </a>
+          </div>
+          <div>
+            <div style="float: left">X:</div>
+            <div style="float: left"><input type="number" class="beforeX" disabled></div>
+            <br style="clear: both">
+          </div>
+          <div>
+            <div style="float: left">Y:</div>
+            <div style="float: left"><input type="number" class="beforeY" disabled></div>
+            <br style="clear: both">
+          </div>
+          <div>
+            <div style="float: left">Zoom:</div>
+            <div style="float: left"><input type="number" class="beforeZ" disabled></div>
+            <br style="clear: both">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

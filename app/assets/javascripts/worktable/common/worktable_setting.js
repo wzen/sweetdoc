@@ -13,7 +13,8 @@ WorktableSetting = (function() {
 
   WorktableSetting.initConfig = function() {
     this.Grid.initConfig();
-    return this.IdleSaveTimer.initConfig();
+    this.IdleSaveTimer.initConfig();
+    return this.PositionAndScale.initConfig();
   };
 
   WorktableSetting.Grid = (function() {
@@ -267,6 +268,72 @@ WorktableSetting = (function() {
     return IdleSaveTimer;
 
   })();
+
+  WorktableSetting.PositionAndScale = (function() {
+    function PositionAndScale() {}
+
+    return PositionAndScale;
+
+  })();
+
+  WorktableSetting.initConfig = function() {
+    var leftMax, leftMin, position, rootEmt, scaleFromStateConfig, topMax, topMin;
+    rootEmt = $("#" + this.ROOT_ID_NAME);
+    position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
+    $('.display_position_x', rootEmt).val(parseInt(position.left));
+    $('.display_position_y', rootEmt).val(parseInt(position.top));
+    leftMin = -window.scrollInsideWrapper.width() * 0.5;
+    leftMax = window.scrollInsideWrapper.width() * 0.5;
+    topMin = -window.scrollInsideWrapper.height() * 0.5;
+    topMax = window.scrollInsideWrapper.height() * 0.5;
+    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
+      var left, top;
+      if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
+        left = $('.display_position_x', rootEmt).val();
+        top = $('.display_position_y', rootEmt).val();
+        if (left < leftMin) {
+          left = leftMin;
+        } else if (left > leftMax) {
+          left = leftMax;
+        }
+        if (top < topMin) {
+          top = topMin;
+        } else if (top > topMax) {
+          top = topMax;
+        }
+        $('.display_position_x', rootEmt).val(left);
+        $('.display_position_y', rootEmt).val(top);
+        PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {
+          top: top,
+          left: left
+        });
+        Common.updateScrollContentsFromPagevalue();
+        return LocalStorage.saveGeneralPageValue();
+      }
+    });
+    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
+    if (!scaleFromStateConfig) {
+      scaleFromStateConfig = 1.0;
+    }
+    $('.zoom', rootEmt).val(scaleFromStateConfig);
+    $('.zoom', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
+      if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
+        scaleFromStateConfig = $('.zoom', rootEmt).val();
+        if (scaleFromStateConfig < 1) {
+          scaleFromStateConfig = 1;
+        } else if (scaleFromStateConfig > 5) {
+          scaleFromStateConfig = 5;
+        }
+        $('.zoom', rootEmt).val(scaleFromStateConfig);
+        PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), scaleFromStateConfig);
+        Common.applyViewScale();
+        return LocalStorage.saveGeneralPageValue();
+      }
+    });
+    $('.display_position_left_limit', rootEmt).html("(" + leftMin + " 〜 " + leftMax + ")");
+    $('.display_position_top_limit', rootEmt).html("(" + topMin + " 〜 " + topMax + ")");
+    return $('.display_position_zoom_limit', rootEmt).html("(1 〜 5)");
+  };
 
   return WorktableSetting;
 

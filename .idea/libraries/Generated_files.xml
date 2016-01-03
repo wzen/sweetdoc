@@ -3,6 +3,7 @@
     <properties>
       <sourceFilesUrls>
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/item_state_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
@@ -68,8 +69,8 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/item_base_worktable_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/event_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_text.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/event_base.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />
@@ -80,6 +81,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/simple_arrow.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/item_state_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/upload/upload_item.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/worktable.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/page_value.js" />
@@ -145,8 +147,8 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/item_base_worktable_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/event_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check.js.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_text.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/motion_check/motion_check_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/event_base/event_base.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/chapter.js" />

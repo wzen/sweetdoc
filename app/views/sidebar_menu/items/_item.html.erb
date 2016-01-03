@@ -1,0 +1,17 @@
+<div id="<%= Const::ItemStateConfig::ROOT_ID_NAME %>">
+  <div class="config">
+    <div class="configBox">
+    </div>
+    <div class="configBox" style="display: none;">
+      <div class="settingedit-headliner"><%= I18n.t('config.item_state.created_item_list') %></div>
+      <div class="forms" style="display:table">
+        <div style="display: table-cell">
+          <!-- 作成アイテム一覧 -->
+          <div class="created_item_list">
+          </div>
+          <%= render 'sidebar_menu/items/item_temp' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

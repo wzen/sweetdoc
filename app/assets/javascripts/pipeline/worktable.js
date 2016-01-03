@@ -43,6 +43,7 @@
 //= require sidebar_config/event_config.js
 //= require sidebar_config/sidebar_ui.js
 //= require sidebar_config/state_config.js
+//= require sidebar_config/item_state_config
 //= require common_event/common_event
 //= require common_event/background_event
 //= require common_event/screen_event

@@ -57,6 +57,7 @@ BackgroundEvent = (function(superClass) {
     function PrivateClass() {
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Background';
+      this.backgroundColor = 'transparent';
     }
 
     PrivateClass.prototype.initEvent = function(event) {

@@ -1,28 +1,64 @@
 <div id="<%= Const::Setting::ROOT_ID_NAME %>">
     <div class="config">
-        <div class="configBox">
-            <div class="settingedit-headliner">Grid</div>
-            <div class="forms" style="display:table">
-                <!-- グリッド線 -->
-                <div style="display: table-cell">
-                    <label><input class="<%= Const::Setting::GRID_CLASS_NAME %>" type="checkbox">Show Grid</label>
-                </div>
-                <div class="<%= Const::Setting::GRID_STEP_DIV_CLASS_NAME %>" style="display: table-cell">
-                    <input type="number" min="1" max="99" size="5" pattern="^[0-9]+$" class="<%= Const::Setting::GRID_STEP_CLASS_NAME %>">px (1〜99)
-                </div>
+      <div class="configBox">
+        <div class="settingedit-headliner"><%= I18n.t('config.worktable_setting.display_position') %></div>
+        <div class="forms">
+          <!-- ワークテーブル座標 -->
+          <div>
+            X: <input type="number" class="display_position_x" value="">
+          </div>
+          <div>
+            <div class="display_position_left_limit" style="float: right">
             </div>
-        </div>
-        <div class="configBox">
-            <div class="settingedit-headliner">Auto save</div>
-            <div class="forms" style="display:table">
-                <!-- 自動セーブ -->
-                <div style="display: table-cell">
-                    <label><input class="<%= Const::Setting::AUTOSAVE_CLASS_NAME %>" type="checkbox">Enable</label>
-                </div>
-                <div class="<%= Const::Setting::AUTOSAVE_TIME_DIV_CLASS_NAME %>" style="display: table-cell">
-                    <input type="number" min="1" max="99" size="5" pattern="^[0-9]+$" class="<%= Const::Setting::AUTOSAVE_TIME_CLASS_NAME %>">sec (1〜99)
-                </div>
+            <br style="clear: both">
+          </div>
+          <div>
+            Y: <input type="number" class="display_position_y" value="">
+          </div>
+          <div>
+            <div class="display_position_top_limit" style="float: right">
             </div>
+            <br style="clear: both">
+          </div>
         </div>
+      </div>
+      <div class="configBox">
+        <div class="settingedit-headliner"><%= I18n.t('config.worktable_setting.zoom') %></div>
+        <div style="display:table">
+          <!-- Zoom -->
+          <div>
+            Zoom: <input type="number" class="zoom" value="">
+          </div>
+          <div>
+            <div class="display_position_zoom_limit" style="float: right">
+            </div>
+            <br style="clear: both">
+          </div>
+        </div>
+      </div>
+      <div class="configBox">
+          <div class="settingedit-headliner">Grid</div>
+          <div class="forms" style="display:table">
+              <!-- グリッド線 -->
+              <div style="display: table-cell">
+                  <label><input class="<%= Const::Setting::GRID_CLASS_NAME %>" type="checkbox">Show Grid</label>
+              </div>
+              <div class="<%= Const::Setting::GRID_STEP_DIV_CLASS_NAME %>" style="display: table-cell">
+                  <input type="number" min="1" max="99" size="5" pattern="^[0-9]+$" class="<%= Const::Setting::GRID_STEP_CLASS_NAME %>">px (1〜99)
+              </div>
+          </div>
+      </div>
+      <div class="configBox">
+          <div class="settingedit-headliner">Auto save</div>
+          <div class="forms" style="display:table">
+              <!-- 自動セーブ -->
+              <div style="display: table-cell">
+                  <label><input class="<%= Const::Setting::AUTOSAVE_CLASS_NAME %>" type="checkbox">Enable</label>
+              </div>
+              <div class="<%= Const::Setting::AUTOSAVE_TIME_DIV_CLASS_NAME %>" style="display: table-cell">
+                  <input type="number" min="1" max="99" size="5" pattern="^[0-9]+$" class="<%= Const::Setting::AUTOSAVE_TIME_CLASS_NAME %>">sec (1〜99)
+              </div>
+          </div>
+      </div>
     </div>
 </div>

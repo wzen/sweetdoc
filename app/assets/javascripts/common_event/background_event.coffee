@@ -45,6 +45,7 @@ class BackgroundEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Background'
+      @backgroundColor = 'transparent'
 
     # イベントの初期化
     # @param [Object] event 設定イベント
