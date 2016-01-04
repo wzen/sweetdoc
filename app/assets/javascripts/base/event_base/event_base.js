@@ -164,7 +164,6 @@ EventBase = (function(superClass) {
     return this.stopPreview((function(_this) {
       return function() {
         _this._runningPreview = true;
-        _this.updateEventBefore();
         _this.willChapter();
         _this._doPreviewLoop = true;
         _this._skipEvent = false;

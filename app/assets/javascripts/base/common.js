@@ -348,7 +348,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
-    var diff;
+    var diff, se;
     if (callback == null) {
       callback = null;
     }
@@ -361,9 +361,10 @@ Common = (function() {
     if ((target == null) || target.length === 0) {
       return;
     }
+    se = new ScreenEvent();
     diff = {
-      top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
-      left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+      top: (scrollContents.scrollTop() + ((scrollContents.height() / se.getNowScale()) - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
+      left: (scrollContents.scrollLeft() + ((scrollContents.width() / se.getNowScale()) - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
     };
     return this.updateScrollContentsPosition(scrollContents.scrollTop() + (window.scrollContents.height() * 0.5) - diff.top, scrollContents.scrollLeft() + (window.scrollContents.width() * 0.5) - diff.left, immediate, withUpdatePageValue, callback);
   };

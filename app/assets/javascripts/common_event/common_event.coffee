@@ -48,6 +48,9 @@ class CommonEvent
       @instance[PageValue.getPageNum()] = new @PrivateClass()
     return @instance[PageValue.getPageNum()]
 
+  @hasInstanceCache: (pn = PageValue.getPageNum()) ->
+    return @instance[pn]?
+
   @deleteInstance: (objId) ->
     for k, v of @instance
       if v.id == objId

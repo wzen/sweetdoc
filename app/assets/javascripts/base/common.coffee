@@ -265,9 +265,10 @@ class Common
       return
 
     # col-xs-9 → 75% padding → 15px
+    se = new ScreenEvent()
     diff =
-      top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop
-      left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+      top: (scrollContents.scrollTop() + ((scrollContents.height() / se.getNowScale()) - $(target).height()) * 0.5) - $(target).get(0).offsetTop
+      left: (scrollContents.scrollLeft() + ((scrollContents.width() / se.getNowScale()) - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
 
     @updateScrollContentsPosition(scrollContents.scrollTop() + (window.scrollContents.height() * 0.5) - diff.top, scrollContents.scrollLeft() + (window.scrollContents.width() * 0.5) - diff.left, immediate, withUpdatePageValue, callback)
 

@@ -261,7 +261,8 @@ WorktableCommon = (function() {
             }
           });
         }
-        return Common.updateWorktableScrollContentsFromPageValue();
+        Common.updateWorktableScrollContentsFromPageValue();
+        return PageValue.removeAllFootprint();
       } else {
         if (callback != null) {
           return callback();

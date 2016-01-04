@@ -222,6 +222,8 @@ class WorktableCommon
 
         # アイテムフォーカスしてる場合があるので表示位置を戻す
         Common.updateWorktableScrollContentsFromPageValue()
+        # Footprint履歴削除
+        PageValue.removeAllFootprint()
       else
         if callback?
           callback()

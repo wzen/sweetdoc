@@ -61,6 +61,13 @@ CommonEvent = (function() {
     return this.instance[PageValue.getPageNum()];
   };
 
+  CommonEvent.hasInstanceCache = function(pn) {
+    if (pn == null) {
+      pn = PageValue.getPageNum();
+    }
+    return this.instance[pn] != null;
+  };
+
   CommonEvent.deleteInstance = function(objId) {
     var k, ref, results, v;
     ref = this.instance;

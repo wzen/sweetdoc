@@ -112,7 +112,7 @@ class EventBase extends Extend
 
     @stopPreview( =>
       @_runningPreview = true
-      @updateEventBefore()
+      #@updateEventBefore()
       @willChapter()
       # イベントループ
       @_doPreviewLoop = true

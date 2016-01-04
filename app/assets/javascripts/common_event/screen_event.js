@@ -14,7 +14,7 @@ ScreenEvent = (function(superClass) {
   ScreenEvent.instance = {};
 
   ScreenEvent.PrivateClass = (function(superClass1) {
-    var _convertCenterCoodToSize, _convertTopLeftToCenterCood, _drawKeepDispRect, _getScale, _overlay, _setScale;
+    var _convertCenterCoodToSize, _drawKeepDispRect, _getScale, _overlay, _setScale;
 
     extend(PrivateClass, superClass1);
 
@@ -86,7 +86,7 @@ ScreenEvent = (function(superClass) {
         if (!this.keepDispMag) {
           _setScale.call(this, this.nowScale);
           size = _convertCenterCoodToSize.call(this, this.nowX, this.nowY, this.nowScale);
-          return Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false);
+          return Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false);
         }
       }
     };
@@ -96,8 +96,8 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.updateEventAfter.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        this._progressX = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
-        this._progressY = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
+        this._progressX = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
+        this._progressY = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         this._progressScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
         if (this.keepDispMag) {
           _setScale.call(this, Common.scaleFromViewRate);
@@ -105,7 +105,7 @@ ScreenEvent = (function(superClass) {
         } else {
           _setScale.call(this, this._progressScale);
           size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-          return Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false);
+          return Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false);
         }
       }
     };
@@ -124,7 +124,7 @@ ScreenEvent = (function(superClass) {
       if (!this.keepDispMag) {
         _setScale.call(this, this._progressScale);
         size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-        return Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false);
+        return Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false);
       }
     };
 
@@ -145,14 +145,15 @@ ScreenEvent = (function(superClass) {
       this.nowX = this._progressX;
       this.nowY = this._progressY;
       this.nowScale = this._progressScale;
+      this.scale = this.nowScale;
       return PrivateClass.__super__.didChapter.call(this);
     };
 
     PrivateClass.prototype.getNowScale = function() {
-      if (this.nowScale == null) {
-        this.nowScale = this.initConfigScale;
+      if (this.scale == null) {
+        this.scale = this.initConfigScale;
       }
-      return this.nowScale;
+      return this.scale;
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {
@@ -182,10 +183,12 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.setNowXAndY = function(x, y) {
       var se;
-      se = new ScreenEvent();
-      se.nowX = x;
-      se.nowY = y;
-      return se.setItemAllPropToPageValue();
+      if (ScreenEvent.hasInstanceCache()) {
+        se = new ScreenEvent();
+        se.nowX = x;
+        se.nowY = y;
+        return se.setItemAllPropToPageValue();
+      }
     };
 
     _overlay = function(x, y, scale) {
@@ -255,26 +258,13 @@ ScreenEvent = (function(superClass) {
       };
     };
 
-    _convertTopLeftToCenterCood = function(top, left, scale) {
-      var height, screenSize, width, x, y;
-      screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-      width = screenSize.width / scale;
-      height = screenSize.height / scale;
-      y = top + height / 2.0;
-      x = left + width / 2.0;
-      return {
-        x: x,
-        y: y
-      };
-    };
-
     _setScale = function(scale) {
-      this.nowScale = scale;
+      this.scale = scale;
       return Common.applyViewScale();
     };
 
     _getScale = function() {
-      return this.nowScale;
+      return this.scale;
     };
 
     return PrivateClass;
