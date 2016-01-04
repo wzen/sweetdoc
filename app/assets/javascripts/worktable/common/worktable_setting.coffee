@@ -232,59 +232,58 @@ class WorktableSetting
 
   class @PositionAndScale
     # コンフィグ初期化
-  @initConfig = ->
-    rootEmt = $("##{@ROOT_ID_NAME}")
+    @initConfig = ->
+      rootEmt = $("##{@ROOT_ID_NAME}")
+      # 画面座標
+      position = PageValue.getGeneralPageValue(PageValue.Key.worktableDisplayPosition())
+      $('.display_position_x', rootEmt).val(parseInt(position.left))
+      $('.display_position_y', rootEmt).val(parseInt(position.top))
+      leftMin = -window.scrollInsideWrapper.width() * 0.5
+      leftMax = window.scrollInsideWrapper.width() * 0.5
+      topMin = -window.scrollInsideWrapper.height() * 0.5
+      topMax = window.scrollInsideWrapper.height() * 0.5
+      # Inputイベント
+      $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
+        if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
+          # スクロール位置変更
+          left = $('.display_position_x', rootEmt).val()
+          top = $('.display_position_y', rootEmt).val()
+          if left < leftMin
+            left = leftMin
+          else if left > leftMax
+            left = leftMax
+          if top < topMin
+            top = topMin
+          else if top > topMax
+            top = topMax
+          $('.display_position_x', rootEmt).val(left)
+          $('.display_position_y', rootEmt).val(top)
+          PageValue.setGeneralPageValue(PageValue.Key.worktableDisplayPosition(), {top: top, left: left})
+          Common.updateWorktableScrollContentsFromPageValue()
+          LocalStorage.saveGeneralPageValue()
+      )
 
-    # 画面座標
-    position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
-    $('.display_position_x', rootEmt).val(parseInt(position.left))
-    $('.display_position_y', rootEmt).val(parseInt(position.top))
-    leftMin = -window.scrollInsideWrapper.width() * 0.5
-    leftMax = window.scrollInsideWrapper.width() * 0.5
-    topMin = -window.scrollInsideWrapper.height() * 0.5
-    topMax = window.scrollInsideWrapper.height() * 0.5
-    # Inputイベント
-    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
-      if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
-        # スクロール位置変更
-        left = $('.display_position_x', rootEmt).val()
-        top = $('.display_position_y', rootEmt).val()
-        if left < leftMin
-          left = leftMin
-        else if left > leftMax
-          left = leftMax
-        if top < topMin
-          top = topMin
-        else if top > topMax
-          top = topMax
-        $('.display_position_x', rootEmt).val(left)
-        $('.display_position_y', rootEmt).val(top)
-        PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {top: top, left: left})
-        Common.updateScrollContentsFromPagevalue()
-        LocalStorage.saveGeneralPageValue()
-    )
+      # Zoom (1〜5)
+      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
+      if !worktableScale
+        worktableScale = 1.0
+      $('.scale', rootEmt).val(worktableScale)
+      $('.scale', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
+        if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
+          # Zoom実行
+          worktableScale = $('.scale', rootEmt).val()
+          if worktableScale < 1
+            worktableScale = 1
+          else if worktableScale > 5
+            worktableScale = 5
 
-    # Zoom (1〜5)
-    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
-    if !scaleFromStateConfig
-      scaleFromStateConfig = 1.0
-    $('.scale', rootEmt).val(scaleFromStateConfig)
-    $('.scale', rootEmt).off('keypress focusout').on('keypress focusout', (e) ->
-      if (e.type == 'keypress' && e.keyCode == Constant.KeyboardKeyCode.ENTER) || e.type == 'focusout'
-        # Zoom実行
-        scaleFromStateConfig = $('.scale', rootEmt).val()
-        if scaleFromStateConfig < 1
-          scaleFromStateConfig = 1
-        else if scaleFromStateConfig > 5
-          scaleFromStateConfig = 5
+          $('.scale', rootEmt).val(worktableScale)
+          PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), worktableScale)
+          Common.applyViewScale()
+          LocalStorage.saveGeneralPageValue()
+      )
 
-        $('.scale', rootEmt).val(scaleFromStateConfig)
-        PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), scaleFromStateConfig)
-        Common.applyViewScale()
-        LocalStorage.saveGeneralPageValue()
-    )
-
-    # limit
-    $('.display_position_left_limit', rootEmt).html("(#{leftMin} 〜 #{leftMax})")
-    $('.display_position_top_limit', rootEmt).html("(#{topMin} 〜 #{topMax})")
-    $('.display_position_scale_limit', rootEmt).html("(1 〜 5)")
+      # limit
+      $('.display_position_left_limit', rootEmt).html("(#{leftMin} 〜 #{leftMax})")
+      $('.display_position_top_limit', rootEmt).html("(#{topMin} 〜 #{topMax})")
+      $('.display_position_scale_limit', rootEmt).html("(1 〜 5)")

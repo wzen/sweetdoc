@@ -33,13 +33,7 @@ ItemStateConfig = (function() {
       $('.focus_enabled > a').off('click').on('click', function(e) {
         var objId;
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
-        return Common.focusToTarget($("#" + objId), function() {
-          var position, rootEmt;
-          rootEmt = $("#" + StateConfig.ROOT_ID_NAME);
-          position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
-          $('.display_position_x', rootEmt).val(parseInt(position.left));
-          return $('.display_position_y', rootEmt).val(parseInt(position.top));
-        });
+        return Common.focusToTarget($("#" + objId));
       });
       $('a.item_edit', rootEmt).off('click').on('click', function(e) {
         var objId;

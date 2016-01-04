@@ -28,9 +28,9 @@ StateConfig = (function() {
         var _updateConfigInput, emt, se;
         emt = $("#" + _this.ROOT_ID_NAME + " .configBox.screen_event");
         se = new ScreenEvent();
-        $('.initX:first', emt).val(se.initX);
-        $('.initY:first', emt).val(se.initY);
-        $('.initScale:first', emt).val(se.initScale);
+        $('.initConfigX:first', emt).val(se.initConfigX);
+        $('.initConfigY:first', emt).val(se.initConfigY);
+        $('.initConfigScale:first', emt).val(se.initConfigScale);
         $('input', emt).off('change').on('change', function(e) {
           se = new ScreenEvent();
           return se[$(e.target).attr('class')] = $(e.target).val();
@@ -46,9 +46,9 @@ StateConfig = (function() {
           } else {
             z = screenSize.height / pointingSize.h;
           }
-          emt.find('.initX:first').val(x);
-          emt.find('.initY:first').val(y);
-          return emt.find('.initScale:first').val(z);
+          emt.find('.initConfigX:first').val(x);
+          emt.find('.initConfigY:first').val(y);
+          return emt.find('.initConfigScale:first').val(z);
         };
         return emt.find('.event_pointing:first').eventDragPointing(function(pointingSize) {
           return _updateConfigInput.call(_this, emt, pointingSize);

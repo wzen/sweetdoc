@@ -25,12 +25,7 @@ class ItemStateConfig
       $('.focus_enabled > a').off('click').on('click', (e) ->
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         # アイテムにフォーカス
-        Common.focusToTarget($("##{objId}"), ->
-          rootEmt = $("##{StateConfig.ROOT_ID_NAME}")
-          position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition())
-          $('.display_position_x', rootEmt).val(parseInt(position.left))
-          $('.display_position_y', rootEmt).val(parseInt(position.top))
-        )
+        Common.focusToTarget($("##{objId}"))
       )
 
       $('a.item_edit', rootEmt).off('click').on('click', (e) ->

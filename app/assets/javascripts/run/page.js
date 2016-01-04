@@ -409,7 +409,7 @@ Page = (function() {
             window.disabledEventHandler = true;
             Common.focusToTarget(obj.getJQueryElement(), function() {
               return window.disabledEventHandler = false;
-            }, true);
+            }, true, true);
           }
           if (callback != null) {
             return callback();

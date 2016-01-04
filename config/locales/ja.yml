@@ -54,7 +54,8 @@ ja:
       finish_page: 'ページ終了'
       jump_to: 'ページ遷移'
       background: '背景'
-      screen_state: 'スクリーン状態'
+      screen_state: '画面初期表示状態'
+      screen_state_warn: "アイテムのフォーカスが設定されている場合、画面初期位置はフォーカスが優先されます。"
     worktable_setting:
       display_position: "表示位置"
       zoom: "表示倍率"

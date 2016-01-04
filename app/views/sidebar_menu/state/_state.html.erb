@@ -14,6 +14,9 @@
       <div class="forms" style="display:table">
         <div style="display: table-cell">
           <!-- ScreenEvent -->
+          <div>
+            <label style="color: red"><%= I18n.t('config.state.screen_state_warn') %></label>
+          </div>
           <div style="display: inline-block">Select:</div>
           <div style="display: inline-block">
             <a class="event_pointing">
@@ -22,17 +25,17 @@
           </div>
           <div>
             <div style="float: left">X:</div>
-            <div style="float: left"><input type="number" class="initX" disabled></div>
+            <div style="float: left"><input type="number" class="initConfigX" disabled></div>
             <br style="clear: both">
           </div>
           <div>
             <div style="float: left">Y:</div>
-            <div style="float: left"><input type="number" class="initY" disabled></div>
+            <div style="float: left"><input type="number" class="initConfigY" disabled></div>
             <br style="clear: both">
           </div>
           <div>
             <div style="float: left">Scale:</div>
-            <div style="float: left"><input type="number" class="initScale" disabled></div>
+            <div style="float: left"><input type="number" class="initConfigScale" disabled></div>
             <br style="clear: both">
           </div>
         </div>

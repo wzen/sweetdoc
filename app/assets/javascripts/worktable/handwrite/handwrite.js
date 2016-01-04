@@ -37,13 +37,13 @@ Handwrite = (function() {
       return function() {
         var _calcCanvasLoc, _saveLastLoc;
         _calcCanvasLoc = function(e) {
-          var scaleFromStateConfig, x, y;
-          scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
-          if (!scaleFromStateConfig) {
-            scaleFromStateConfig = 1.0;
+          var worktableScale, x, y;
+          worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
+          if (!worktableScale) {
+            worktableScale = 1.0;
           }
-          x = (e.x || e.clientX) / scaleFromStateConfig;
-          y = (e.y || e.clientY) / scaleFromStateConfig;
+          x = (e.x || e.clientX) / worktableScale;
+          y = (e.y || e.clientY) / worktableScale;
           return _windowToCanvas(drawingCanvas, x, y);
         };
         _saveLastLoc = function(loc) {

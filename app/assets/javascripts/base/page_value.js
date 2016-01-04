@@ -152,18 +152,18 @@ PageValue = (function() {
         return this.G_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
       };
 
-      Key.displayPosition = function(pn) {
+      Key.worktableDisplayPosition = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "display_position";
+        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "ws_display_position";
       };
 
-      Key.scaleFromStateConfig = function(pn) {
+      Key.worktableScale = function(pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "scale_from_state_config";
+        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "ws_scale";
       };
 
       Key.itemVisible = function(pn) {
@@ -686,10 +686,11 @@ PageValue = (function() {
     return ret;
   };
 
-  PageValue.getScrollContentsPosition = function() {
-    var l, position, screenSize, t;
+  PageValue.getWorktableScrollContentsPosition = function() {
+    var key, l, position, screenSize, t;
     if (window.scrollContents != null) {
-      position = this.getGeneralPageValue(this.Key.displayPosition());
+      key = this.Key.worktableDisplayPosition();
+      position = this.getGeneralPageValue(key);
       if (position == null) {
         position = {
           top: 0,
@@ -714,8 +715,8 @@ PageValue = (function() {
     }
   };
 
-  PageValue.setDisplayPosition = function(top, left) {
-    var l, screenSize, t;
+  PageValue.setWorktableDisplayPosition = function(top, left) {
+    var key, l, screenSize, t;
     screenSize = this.getGeneralPageValue(this.Key.SCREEN_SIZE);
     if (screenSize == null) {
       screenSize = {
@@ -725,7 +726,8 @@ PageValue = (function() {
     }
     t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top;
     l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left;
-    return this.setGeneralPageValue(this.Key.displayPosition(), {
+    key = this.key.worktableDisplayPosition();
+    return this.setGeneralPageValue(key, {
       top: t,
       left: l
     });

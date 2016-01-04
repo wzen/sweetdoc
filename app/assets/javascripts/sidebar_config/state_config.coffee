@@ -22,9 +22,9 @@ class StateConfig
       # ScreenEvent
       emt = $("##{@ROOT_ID_NAME} .configBox.screen_event")
       se = new ScreenEvent()
-      $('.initX:first', emt).val(se.initX)
-      $('.initY:first', emt).val(se.initY)
-      $('.initScale:first', emt).val(se.initScale)
+      $('.initConfigX:first', emt).val(se.initConfigX)
+      $('.initConfigY:first', emt).val(se.initConfigY)
+      $('.initConfigScale:first', emt).val(se.initConfigScale)
       $('input', emt).off('change').on('change', (e) =>
         se = new ScreenEvent()
         se[$(e.target).attr('class')] = $(e.target).val()
@@ -39,9 +39,9 @@ class StateConfig
           z = screenSize.width / pointingSize.w
         else
           z = screenSize.height / pointingSize.h
-        emt.find('.initX:first').val(x)
-        emt.find('.initY:first').val(y)
-        emt.find('.initScale:first').val(z)
+        emt.find('.initConfigX:first').val(x)
+        emt.find('.initConfigY:first').val(y)
+        emt.find('.initConfigScale:first').val(z)
 
       emt.find('.event_pointing:first').eventDragPointing((pointingSize) =>
         _updateConfigInput.call(@, emt, pointingSize)

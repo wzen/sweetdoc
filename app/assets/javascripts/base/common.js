@@ -174,22 +174,26 @@ Common = (function() {
 
   Common.initScrollContentsPosition = function() {
     var position;
-    position = PageValue.getScrollContentsPosition();
+    position = PageValue.getWorktableScrollContentsPosition();
     if (position != null) {
-      PageValue.setDisplayPosition(position.top, position.left);
       return this.updateScrollContentsPosition(position.top, position.left);
     } else {
-      return PageValue.setDisplayPosition(0, 0);
+      this.updateScrollContentsPosition(0, 0);
+      ScreenEvent.PrivateClass.left = 0;
+      return ScreenEvent.PrivateClass.top = 0;
     }
   };
 
   Common.applyViewScale = function() {
-    var scale, scaleFromStateConfig, updateMainWrapperPercent;
-    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
-    if (scaleFromStateConfig == null) {
-      scaleFromStateConfig = 1.0;
+    var scale, updateMainWrapperPercent, worktableScale;
+    worktableScale = 1.0;
+    if (window.isWorkTable) {
+      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
+      if (worktableScale == null) {
+        worktableScale = 1.0;
+      }
     }
-    scale = scaleFromStateConfig * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale;
+    scale = worktableScale * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale;
     updateMainWrapperPercent = 100 / Common.scaleFromViewRate;
     return window.mainWrapper.css({
       transform: "scale(" + scale + ", " + scale + ")",
@@ -344,13 +348,16 @@ Common = (function() {
     return $(contents).wrap(w).closest('.item');
   };
 
-  Common.focusToTarget = function(target, callback, immediate) {
+  Common.focusToTarget = function(target, callback, immediate, withUpdateScreenEventVar) {
     var diff;
     if (callback == null) {
       callback = null;
     }
     if (immediate == null) {
       immediate = false;
+    }
+    if (withUpdateScreenEventVar == null) {
+      withUpdateScreenEventVar = false;
     }
     if ((target == null) || target.length === 0) {
       return;
@@ -359,15 +366,24 @@ Common = (function() {
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
     };
-    return this.updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, callback);
+    return this.updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdateScreenEventVar, callback);
   };
 
-  Common.updateScrollContentsPosition = function(top, left, immediate, callback) {
+  Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
+    var se;
     if (immediate == null) {
       immediate = true;
     }
+    if (withUpdateScreenEventVar == null) {
+      withUpdateScreenEventVar = true;
+    }
     if (callback == null) {
       callback = null;
+    }
+    if (withUpdateScreenEventVar) {
+      se = new ScreenEvent();
+      se.beforeX = left;
+      se.beforeY = top;
     }
     if (immediate) {
       window.scrollContents.scrollTop(top);
@@ -387,15 +403,21 @@ Common = (function() {
     }
   };
 
-  Common.updateScrollContentsFromPagevalue = function() {
+  Common.updateScrollContentsFromScreenEventVar = function() {
+    var se;
+    se = new ScreenEvent();
+    return this.updateScrollContentsPosition(se.beforeY, se.beforeX);
+  };
+
+  Common.updateWorktableScrollContentsFromPageValue = function() {
     var position;
-    position = PageValue.getScrollContentsPosition();
+    position = PageValue.getWorktableScrollContentsPosition();
     if (position == null) {
       position = {
         top: window.scrollInsideWrapper.height() * 0.5,
         left: window.scrollInsideWrapper.width() * 0.5
       };
-      PageValue.setDisplayPosition(position.top, position.left);
+      PageValue.setWorktableDisplayPosition(position.top, position.left);
     }
     return this.updateScrollContentsPosition(position.top, position.left);
   };

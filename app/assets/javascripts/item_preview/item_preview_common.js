@@ -60,7 +60,7 @@ ItemPreviewCommon = (function() {
           clearTimeout(window.scrollContentsScrollTimer);
         }
         return window.scrollContentsScrollTimer = setTimeout(function() {
-          PageValue.setDisplayPosition(top, left);
+          PageValue.setWorktableDisplayPosition(top, left);
           FloatView.hide();
           return window.scrollContentsScrollTimer = null;
         }, 500);

@@ -22,8 +22,6 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.CLASS_DIST_TOKEN = "PI_ScreenEvent";
 
-    PrivateClass.scale = 1.0;
-
     PrivateClass.actionProperties = {
       methods: {
         changeScreenPosition: {
@@ -49,18 +47,14 @@ ScreenEvent = (function(superClass) {
 
     function PrivateClass() {
       this.changeScreenPosition = bind(this.changeScreenPosition, this);
-      var cood;
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      this.initScale = _getScale.call(this);
-      cood = _convertTopLeftToCenterCood.call(this, scrollContents.scrollTop(), scrollContents.scrollLeft(), this.initScale);
-      this._originalX = cood.x;
-      this._originalY = cood.y;
-      this.initX = cood.x;
-      this.initY = cood.y;
-      this.beforeX = this.initX;
-      this.beforeY = this.initY;
-      this.beforeScale = this.initScale;
+      this.initConfigX = null;
+      this.initConfigY = null;
+      this.initConfigScale = null;
+      this.beforeX = null;
+      this.beforeY = null;
+      this.beforeScale = null;
     }
 
     PrivateClass.prototype.initEvent = function(event, keepDispMag) {
@@ -75,7 +69,7 @@ ScreenEvent = (function(superClass) {
       if (callback == null) {
         callback = null;
       }
-      Common.updateScrollContentsFromPagevalue();
+      Common.updateWorktableScrollContentsFromPageValue();
       _setScale.call(this, Common.scaleFromViewRate);
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
@@ -92,7 +86,7 @@ ScreenEvent = (function(superClass) {
         if (!this.keepDispMag) {
           _setScale.call(this, this.beforeScale);
           size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY, this.beforeScale);
-          return Common.updateScrollContentsPosition(size.top, size.left);
+          return Common.updateScrollContentsPosition(size.top, size.left, true, false);
         }
       }
     };
@@ -111,7 +105,7 @@ ScreenEvent = (function(superClass) {
         } else {
           _setScale.call(this, this._nowScale);
           size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);
-          return Common.updateScrollContentsPosition(size.top, size.left);
+          return Common.updateScrollContentsPosition(size.top, size.left, true, false);
         }
       }
     };
@@ -130,7 +124,7 @@ ScreenEvent = (function(superClass) {
       if (!this.keepDispMag) {
         _setScale.call(this, this._nowScale);
         size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);
-        return Common.updateScrollContentsPosition(size.top, size.left, true);
+        return Common.updateScrollContentsPosition(size.top, size.left, true, false);
       }
     };
 

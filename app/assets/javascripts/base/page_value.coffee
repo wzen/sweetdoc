@@ -91,10 +91,10 @@ class PageValue
       @UPDATED = 'updated'
       # @property [return] 設定値ページプレフィックスを取得
       @generalPagePrefix = (pn = PageValue.getPageNum()) -> @G_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
-       # @property [return] プロジェクト表示位置
-      @displayPosition = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}display_position"
+      # @property [return] Worktableプロジェクト表示位置
+      @worktableDisplayPosition = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}ws_display_position"
       # @property [return] Zoom
-      @scaleFromStateConfig = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}scale_from_state_config"
+      @worktableScale = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}ws_scale"
       # @property [return] アイテム表示状態
       @itemVisible = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}item_visible"
       # @property [String] F_ROOT 履歴情報ルート
@@ -556,10 +556,11 @@ class PageValue
 
     return ret
 
-  # 画面表示位置を取得する
-  @getScrollContentsPosition = ->
+  # ワークテーブル画面表示位置を取得する
+  @getWorktableScrollContentsPosition = ->
     if window.scrollContents?
-      position = @getGeneralPageValue(@Key.displayPosition())
+      key = @Key.worktableDisplayPosition()
+      position = @getGeneralPageValue(key)
       if !position?
         position = {top: 0, left: 0}
       screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
@@ -571,17 +572,18 @@ class PageValue
     else
       return null
 
-  # 画面表示位置を設定する
+  # ワークテーブル画面表示位置を設定する
   # @param [Float] top ScrollViewのY座標
   # @param [Float] left ScrollViewのX座標
-  @setDisplayPosition = (top, left) ->
+  @setWorktableDisplayPosition = (top, left) ->
     screenSize = @getGeneralPageValue(@Key.SCREEN_SIZE)
     if !screenSize?
       screenSize = {width: window.mainWrapper.width(), height: window.mainWrapper.height()}
     t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top
     l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left
     # 中央位置からの差を設定
-    @setGeneralPageValue(@Key.displayPosition(), {top: t, left: l})
+    key = @key.worktableDisplayPosition()
+    @setGeneralPageValue(key, {top: t, left: l})
 
   # 対象イベントを削除する
   # @param [Integer] eNum 削除するイベント番号

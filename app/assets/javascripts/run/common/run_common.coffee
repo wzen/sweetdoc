@@ -81,11 +81,11 @@ class RunCommon
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
     Common.applyViewScale()
 
-  # ウィンドウの高さ設定
+  # 画面リサイズイベント
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
     Common.updateCanvasSize()
-    Common.updateScrollContentsFromPagevalue()
+    Common.updateScrollContentsFromScreenEventVar()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->
@@ -161,8 +161,7 @@ class RunCommon
     lastTop = window.scrollHandleWrapper.scrollTop()
     stopTimer = null
 
-    window.scrollHandleWrapper.off('scroll')
-    window.scrollHandleWrapper.on('scroll', (e) ->
+    window.scrollHandleWrapper.off('scroll').on('scroll', (e) ->
       e.preventDefault()
 
       if !RunCommon.enabledScroll()

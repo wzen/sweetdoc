@@ -135,19 +135,22 @@ class Common
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->
-    position = PageValue.getScrollContentsPosition()
+    position = PageValue.getWorktableScrollContentsPosition()
     if position?
-      PageValue.setDisplayPosition(position.top, position.left)
       @updateScrollContentsPosition(position.top, position.left)
     else
-      PageValue.setDisplayPosition(0, 0)
+      @updateScrollContentsPosition(0, 0)
+      ScreenEvent.PrivateClass.left = 0
+      ScreenEvent.PrivateClass.top = 0
 
   # 画面スケールの設定
   @applyViewScale = ->
-    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig())
-    if !scaleFromStateConfig?
-      scaleFromStateConfig = 1.0
-    scale = scaleFromStateConfig * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale
+    worktableScale = 1.0
+    if window.isWorkTable
+      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
+      if !worktableScale?
+        worktableScale = 1.0
+    scale = worktableScale * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale
     updateMainWrapperPercent = 100 / Common.scaleFromViewRate
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
@@ -257,7 +260,7 @@ class Common
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
   # @param [Fucntion] callback コールバック
-  @focusToTarget = (target, callback = null, immediate = false) ->
+  @focusToTarget = (target, callback = null, immediate = false, withUpdateScreenEventVar = false) ->
     if !target? || target.length == 0
       # ターゲット無し
       return
@@ -267,10 +270,14 @@ class Common
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
 
-    @updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, callback)
+    @updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdateScreenEventVar, callback)
 
   # スクロール位置の更新
-  @updateScrollContentsPosition: (top, left, immediate = true, callback = null) ->
+  @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
+    if withUpdateScreenEventVar
+      se = new ScreenEvent()
+      se.beforeX = left
+      se.beforeY = top
     if immediate
       window.scrollContents.scrollTop(top)
       window.scrollContents.scrollLeft(left)
@@ -287,12 +294,17 @@ class Common
           callback()
       )
 
-  # 画面位置をPageValueから初期化
-  @updateScrollContentsFromPagevalue: ->
-    position = PageValue.getScrollContentsPosition()
+  # 画面位置をScreenEvent変数から初期化
+  @updateScrollContentsFromScreenEventVar: ->
+    se = new ScreenEvent()
+    @updateScrollContentsPosition(se.beforeY, se.beforeX)
+
+  # ワークテーブル画面位置をPageValueから初期化
+  @updateWorktableScrollContentsFromPageValue: ->
+    position = PageValue.getWorktableScrollContentsPosition()
     if !position?
       position = {top: window.scrollInsideWrapper.height() * 0.5, left: window.scrollInsideWrapper.width() * 0.5}
-      PageValue.setDisplayPosition(position.top, position.left)
+      PageValue.setWorktableDisplayPosition(position.top, position.left)
     @updateScrollContentsPosition(position.top, position.left)
 
   # サニタイズ エンコード

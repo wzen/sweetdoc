@@ -288,7 +288,7 @@ class WorktableCommon
   @resizeMainContainerEvent = ->
     @updateMainViewSize()
     Common.updateCanvasSize()
-    Common.updateScrollContentsFromPagevalue()
+    Common.updateScrollContentsFromScreenEventVar()
 
   # ウィンドウリサイズイベント
   @resizeEvent = ->
@@ -332,7 +332,7 @@ class WorktableCommon
         window.scrollContentsScrollTimer = setTimeout( ->
           setTimeout( ->
             FloatView.hide()
-            PageValue.setDisplayPosition(top, left)
+            PageValue.setWorktableDisplayPosition(top, left)
             LocalStorage.saveAllPageValues()
             window.scrollContentsScrollTimer = null
           , 0)

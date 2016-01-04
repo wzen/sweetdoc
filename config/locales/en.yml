@@ -77,7 +77,8 @@ en:
       finish_page: 'Finish page'
       jump_to: 'Jump to'
       background: 'Background'
-      screen_state: 'Screen State'
+      screen_state: 'First Screen State'
+      screen_state_warn: "A point to notice that item's focus takes position priority."
     worktable_setting:
       display_position: "Display Position"
       zoom: "Zoom rate"

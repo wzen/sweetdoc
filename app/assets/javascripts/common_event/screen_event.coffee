@@ -5,7 +5,6 @@ class ScreenEvent extends CommonEvent
   class @PrivateClass extends CommonEvent.PrivateClass
     @EVENT_ID = '2'
     @CLASS_DIST_TOKEN = "PI_ScreenEvent"
-    @scale = 1.0
 
     @actionProperties =
     {
@@ -32,18 +31,13 @@ class ScreenEvent extends CommonEvent
 
     constructor: ->
       super()
-
-      # FIXME: 位置が決定してから取るようにする
       @name = 'Screen'
-      @initScale = _getScale.call(@)
-      cood = _convertTopLeftToCenterCood.call(@, scrollContents.scrollTop(), scrollContents.scrollLeft(), @initScale)
-      @_originalX = cood.x
-      @_originalY = cood.y
-      @initX = cood.x
-      @initY = cood.y
-      @beforeX = @initX
-      @beforeY = @initY
-      @beforeScale = @initScale
+      @initConfigX = null
+      @initConfigY = null
+      @initConfigScale = null
+      @beforeX = null
+      @beforeY = null
+      @beforeScale = null
 
     # イベントの初期化
     # @param [Object] event 設定イベント
@@ -52,7 +46,7 @@ class ScreenEvent extends CommonEvent
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
-      Common.updateScrollContentsFromPagevalue()
+      Common.updateWorktableScrollContentsFromPageValue()
       _setScale.call(@, Common.scaleFromViewRate)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
@@ -68,7 +62,7 @@ class ScreenEvent extends CommonEvent
         if !@keepDispMag
           _setScale.call(@, @beforeScale)
           size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY, @beforeScale)
-          Common.updateScrollContentsPosition(size.top, size.left)
+          Common.updateScrollContentsPosition(size.top, size.left, true, false)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
@@ -84,7 +78,7 @@ class ScreenEvent extends CommonEvent
         else
           _setScale.call(@, @_nowScale)
           size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
-          Common.updateScrollContentsPosition(size.top, size.left)
+          Common.updateScrollContentsPosition(size.top, size.left, true, false)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
@@ -99,7 +93,7 @@ class ScreenEvent extends CommonEvent
       if !@keepDispMag
         _setScale.call(@, @_nowScale)
         size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
-        Common.updateScrollContentsPosition(size.top, size.left, true)
+        Common.updateScrollContentsPosition(size.top, size.left, true, false)
 
     # プレビューを停止
     # @param [Function] callback コールバック
@@ -207,7 +201,6 @@ class ScreenEvent extends CommonEvent
 
     _getScale = ->
       return @constructor.scale
-
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 

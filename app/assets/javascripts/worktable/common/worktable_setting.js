@@ -272,68 +272,68 @@ WorktableSetting = (function() {
   WorktableSetting.PositionAndScale = (function() {
     function PositionAndScale() {}
 
+    PositionAndScale.initConfig = function() {
+      var leftMax, leftMin, position, rootEmt, topMax, topMin, worktableScale;
+      rootEmt = $("#" + this.ROOT_ID_NAME);
+      position = PageValue.getGeneralPageValue(PageValue.Key.worktableDisplayPosition());
+      $('.display_position_x', rootEmt).val(parseInt(position.left));
+      $('.display_position_y', rootEmt).val(parseInt(position.top));
+      leftMin = -window.scrollInsideWrapper.width() * 0.5;
+      leftMax = window.scrollInsideWrapper.width() * 0.5;
+      topMin = -window.scrollInsideWrapper.height() * 0.5;
+      topMax = window.scrollInsideWrapper.height() * 0.5;
+      $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
+        var left, top;
+        if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
+          left = $('.display_position_x', rootEmt).val();
+          top = $('.display_position_y', rootEmt).val();
+          if (left < leftMin) {
+            left = leftMin;
+          } else if (left > leftMax) {
+            left = leftMax;
+          }
+          if (top < topMin) {
+            top = topMin;
+          } else if (top > topMax) {
+            top = topMax;
+          }
+          $('.display_position_x', rootEmt).val(left);
+          $('.display_position_y', rootEmt).val(top);
+          PageValue.setGeneralPageValue(PageValue.Key.worktableDisplayPosition(), {
+            top: top,
+            left: left
+          });
+          Common.updateWorktableScrollContentsFromPageValue();
+          return LocalStorage.saveGeneralPageValue();
+        }
+      });
+      worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
+      if (!worktableScale) {
+        worktableScale = 1.0;
+      }
+      $('.scale', rootEmt).val(worktableScale);
+      $('.scale', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
+        if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
+          worktableScale = $('.scale', rootEmt).val();
+          if (worktableScale < 1) {
+            worktableScale = 1;
+          } else if (worktableScale > 5) {
+            worktableScale = 5;
+          }
+          $('.scale', rootEmt).val(worktableScale);
+          PageValue.setGeneralPageValue(PageValue.Key.worktableScale(), worktableScale);
+          Common.applyViewScale();
+          return LocalStorage.saveGeneralPageValue();
+        }
+      });
+      $('.display_position_left_limit', rootEmt).html("(" + leftMin + " 〜 " + leftMax + ")");
+      $('.display_position_top_limit', rootEmt).html("(" + topMin + " 〜 " + topMax + ")");
+      return $('.display_position_scale_limit', rootEmt).html("(1 〜 5)");
+    };
+
     return PositionAndScale;
 
   })();
-
-  WorktableSetting.initConfig = function() {
-    var leftMax, leftMin, position, rootEmt, scaleFromStateConfig, topMax, topMin;
-    rootEmt = $("#" + this.ROOT_ID_NAME);
-    position = PageValue.getGeneralPageValue(PageValue.Key.displayPosition());
-    $('.display_position_x', rootEmt).val(parseInt(position.left));
-    $('.display_position_y', rootEmt).val(parseInt(position.top));
-    leftMin = -window.scrollInsideWrapper.width() * 0.5;
-    leftMax = window.scrollInsideWrapper.width() * 0.5;
-    topMin = -window.scrollInsideWrapper.height() * 0.5;
-    topMax = window.scrollInsideWrapper.height() * 0.5;
-    $('.display_position_x, .display_position_y', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
-      var left, top;
-      if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
-        left = $('.display_position_x', rootEmt).val();
-        top = $('.display_position_y', rootEmt).val();
-        if (left < leftMin) {
-          left = leftMin;
-        } else if (left > leftMax) {
-          left = leftMax;
-        }
-        if (top < topMin) {
-          top = topMin;
-        } else if (top > topMax) {
-          top = topMax;
-        }
-        $('.display_position_x', rootEmt).val(left);
-        $('.display_position_y', rootEmt).val(top);
-        PageValue.setGeneralPageValue(PageValue.Key.displayPosition(), {
-          top: top,
-          left: left
-        });
-        Common.updateScrollContentsFromPagevalue();
-        return LocalStorage.saveGeneralPageValue();
-      }
-    });
-    scaleFromStateConfig = PageValue.getGeneralPageValue(PageValue.Key.scaleFromStateConfig());
-    if (!scaleFromStateConfig) {
-      scaleFromStateConfig = 1.0;
-    }
-    $('.scale', rootEmt).val(scaleFromStateConfig);
-    $('.scale', rootEmt).off('keypress focusout').on('keypress focusout', function(e) {
-      if ((e.type === 'keypress' && e.keyCode === Constant.KeyboardKeyCode.ENTER) || e.type === 'focusout') {
-        scaleFromStateConfig = $('.scale', rootEmt).val();
-        if (scaleFromStateConfig < 1) {
-          scaleFromStateConfig = 1;
-        } else if (scaleFromStateConfig > 5) {
-          scaleFromStateConfig = 5;
-        }
-        $('.scale', rootEmt).val(scaleFromStateConfig);
-        PageValue.setGeneralPageValue(PageValue.Key.scaleFromStateConfig(), scaleFromStateConfig);
-        Common.applyViewScale();
-        return LocalStorage.saveGeneralPageValue();
-      }
-    });
-    $('.display_position_left_limit', rootEmt).html("(" + leftMin + " 〜 " + leftMax + ")");
-    $('.display_position_top_limit', rootEmt).html("(" + topMin + " 〜 " + topMax + ")");
-    return $('.display_position_scale_limit', rootEmt).html("(1 〜 5)");
-  };
 
   return WorktableSetting;
 

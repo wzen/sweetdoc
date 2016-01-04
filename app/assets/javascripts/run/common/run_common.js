@@ -113,7 +113,7 @@ RunCommon = (function() {
   RunCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
     Common.updateCanvasSize();
-    return Common.updateScrollContentsFromPagevalue();
+    return Common.updateScrollContentsFromScreenEventVar();
   };
 
   RunCommon.resizeEvent = function() {
@@ -197,8 +197,7 @@ RunCommon = (function() {
     lastLeft = window.scrollHandleWrapper.scrollLeft();
     lastTop = window.scrollHandleWrapper.scrollTop();
     stopTimer = null;
-    window.scrollHandleWrapper.off('scroll');
-    return window.scrollHandleWrapper.on('scroll', function(e) {
+    return window.scrollHandleWrapper.off('scroll').on('scroll', function(e) {
       var distX, distY, x, y;
       e.preventDefault();
       if (!RunCommon.enabledScroll()) {

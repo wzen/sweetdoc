@@ -360,7 +360,7 @@ class Page
           window.disabledEventHandler = true
           Common.focusToTarget(obj.getJQueryElement(), ->
             window.disabledEventHandler = false
-          , true)
+          , true, true)
         if callback?
           callback()
       )

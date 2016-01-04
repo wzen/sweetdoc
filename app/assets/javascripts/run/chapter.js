@@ -64,7 +64,7 @@ Chapter = (function() {
       if (type === 'center') {
         return Common.focusToTarget(item.getJQueryElement(), function() {
           return window.disabledEventHandler = false;
-        }, isImmediate);
+        }, isImmediate, true);
       }
     } else {
       return window.disabledEventHandler = false;

@@ -51,7 +51,7 @@ class ItemPreviewCommon
         if window.scrollContentsScrollTimer?
           clearTimeout(window.scrollContentsScrollTimer)
         window.scrollContentsScrollTimer = setTimeout( ->
-          PageValue.setDisplayPosition(top, left)
+          PageValue.setWorktableDisplayPosition(top, left)
           FloatView.hide()
           window.scrollContentsScrollTimer = null
         , 500)

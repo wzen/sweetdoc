@@ -336,7 +336,7 @@ WorktableCommon = (function() {
   WorktableCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
     Common.updateCanvasSize();
-    return Common.updateScrollContentsFromPagevalue();
+    return Common.updateScrollContentsFromScreenEventVar();
   };
 
   WorktableCommon.resizeEvent = function() {
@@ -382,7 +382,7 @@ WorktableCommon = (function() {
         return window.scrollContentsScrollTimer = setTimeout(function() {
           return setTimeout(function() {
             FloatView.hide();
-            PageValue.setDisplayPosition(top, left);
+            PageValue.setWorktableDisplayPosition(top, left);
             LocalStorage.saveAllPageValues();
             return window.scrollContentsScrollTimer = null;
           }, 0);
