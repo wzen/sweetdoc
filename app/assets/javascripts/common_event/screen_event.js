@@ -190,11 +190,13 @@ ScreenEvent = (function(superClass) {
       if (ScreenEvent.hasInstanceCache()) {
         se = new ScreenEvent();
         ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id));
-        ins.nowX = x;
-        ins.nowY = y;
+        if (ins != null) {
+          ins.nowX = x;
+          ins.nowY = y;
+          PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins);
+        }
         se.nowX = x;
-        se.nowY = y;
-        return PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins);
+        return se.nowY = y;
       }
     };
 

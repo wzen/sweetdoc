@@ -145,11 +145,12 @@ class ScreenEvent extends CommonEvent
       if ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
         ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id))
-        ins.nowX = x
-        ins.nowY = y
+        if ins?
+          ins.nowX = x
+          ins.nowY = y
+          PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins)
         se.nowX = x
         se.nowY = y
-        PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins)
 
     @resetNowScale = ->
       if ScreenEvent.hasInstanceCache()
