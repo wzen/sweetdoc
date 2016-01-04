@@ -55,7 +55,7 @@ EventConfig = (function() {
       vEmt = $('#' + this[EventPageValueBase.PageValueKey.ID]);
       if (window.isWorkTable) {
         WorktableCommon.setSelectedBorder(vEmt, 'timeline');
-        Common.focusToTarget(vEmt);
+        Common.focusToTarget(vEmt, null, true);
       }
     }
     $(".config.te_div", this.emt).hide();

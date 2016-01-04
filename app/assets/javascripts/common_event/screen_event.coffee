@@ -62,7 +62,7 @@ class ScreenEvent extends CommonEvent
         if !@keepDispMag
           _setScale.call(@, @nowScale)
           size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
-          Common.updateScrollContentsPosition(size.top, size.left, true, false)
+          Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
@@ -78,7 +78,7 @@ class ScreenEvent extends CommonEvent
         else
           _setScale.call(@, @_progressScale)
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-          Common.updateScrollContentsPosition(size.top, size.left, true, false)
+          Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
@@ -93,7 +93,7 @@ class ScreenEvent extends CommonEvent
       if !@keepDispMag
         _setScale.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-        Common.updateScrollContentsPosition(size.top, size.left, true, false)
+        Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false)
 
     # プレビューを停止
     # @param [Function] callback コールバック
@@ -134,6 +134,12 @@ class ScreenEvent extends CommonEvent
       emt.find('.event_pointing:first').eventDragPointing( (pointingSize) =>
         _updateConfigInput.call(@, emt, pointingSize)
       )
+
+    @setNowXAndY = (x, y) ->
+      se = new ScreenEvent()
+      se.nowX = x
+      se.nowY = y
+      se.setItemAllPropToPageValue()
 
     _overlay = (x, y, scale) ->
       _drawOverlay = (context, x, y, width, height, scale) ->

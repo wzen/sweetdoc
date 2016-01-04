@@ -26,7 +26,7 @@ class Sidebar
             WorktableCommon.resizeMainContainerEvent()
           )
           if target != null
-            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType)
+            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true)
 
         # 閉じるイベント設定
         $(window.drawingCanvas).off('click.sidebar_close').on('click.sidebar_close', (e) =>

@@ -86,7 +86,7 @@ ScreenEvent = (function(superClass) {
         if (!this.keepDispMag) {
           _setScale.call(this, this.nowScale);
           size = _convertCenterCoodToSize.call(this, this.nowX, this.nowY, this.nowScale);
-          return Common.updateScrollContentsPosition(size.top, size.left, true, false);
+          return Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false);
         }
       }
     };
@@ -105,7 +105,7 @@ ScreenEvent = (function(superClass) {
         } else {
           _setScale.call(this, this._progressScale);
           size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-          return Common.updateScrollContentsPosition(size.top, size.left, true, false);
+          return Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false);
         }
       }
     };
@@ -124,7 +124,7 @@ ScreenEvent = (function(superClass) {
       if (!this.keepDispMag) {
         _setScale.call(this, this._progressScale);
         size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
-        return Common.updateScrollContentsPosition(size.top, size.left, true, false);
+        return Common.updateScrollContentsPosition(size.top + size.height * 0.5, size.left + size.width * 0.5, true, false);
       }
     };
 
@@ -178,6 +178,14 @@ ScreenEvent = (function(superClass) {
           return _updateConfigInput.call(_this, emt, pointingSize);
         };
       })(this));
+    };
+
+    PrivateClass.setNowXAndY = function(x, y) {
+      var se;
+      se = new ScreenEvent();
+      se.nowX = x;
+      se.nowY = y;
+      return se.setItemAllPropToPageValue();
     };
 
     _overlay = function(x, y, scale) {

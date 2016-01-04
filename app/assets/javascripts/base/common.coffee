@@ -269,14 +269,16 @@ class Common
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
 
-    @updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdatePageValue, callback)
+    @updateScrollContentsPosition(scrollContents.scrollTop() + (window.scrollContents.height() * 0.5) - diff.top, scrollContents.scrollLeft() + (window.scrollContents.width() * 0.5) - diff.left, immediate, withUpdatePageValue, callback)
 
   # スクロール位置の更新
+  # @param [Float] top Y中央値
+  # @param [Float] left X中央値
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
     if withUpdateScreenEventVar
-      se = new ScreenEvent()
-      se.nowX = left
-      se.nowY = top
+      ScreenEvent.PrivateClass.setNowXAndY(left, top)
+    top -= window.scrollContents.height() * 0.5
+    left -= window.scrollContents.width() * 0.5
     if immediate
       window.scrollContents.scrollTop(top)
       window.scrollContents.scrollLeft(left)

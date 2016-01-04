@@ -365,11 +365,10 @@ Common = (function() {
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
     };
-    return this.updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdatePageValue, callback);
+    return this.updateScrollContentsPosition(scrollContents.scrollTop() + (window.scrollContents.height() * 0.5) - diff.top, scrollContents.scrollLeft() + (window.scrollContents.width() * 0.5) - diff.left, immediate, withUpdatePageValue, callback);
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
-    var se;
     if (immediate == null) {
       immediate = true;
     }
@@ -380,10 +379,10 @@ Common = (function() {
       callback = null;
     }
     if (withUpdateScreenEventVar) {
-      se = new ScreenEvent();
-      se.nowX = left;
-      se.nowY = top;
+      ScreenEvent.PrivateClass.setNowXAndY(left, top);
     }
+    top -= window.scrollContents.height() * 0.5;
+    left -= window.scrollContents.width() * 0.5;
     if (immediate) {
       window.scrollContents.scrollTop(top);
       window.scrollContents.scrollLeft(left);

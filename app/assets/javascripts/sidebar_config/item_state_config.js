@@ -33,7 +33,7 @@ ItemStateConfig = (function() {
       $('.focus_enabled > a').off('click').on('click', function(e) {
         var objId;
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
-        return Common.focusToTarget($("#" + objId));
+        return Common.focusToTarget($("#" + objId), null, true);
       });
       $('a.item_edit', rootEmt).off('click').on('click', function(e) {
         var objId;

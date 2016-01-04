@@ -240,10 +240,10 @@ class WorktableCommon
   # 対象アイテムに対してフォーカスする(サイドバーオープン時)
   # @param [Object] target 対象アイテム
   # @param [String] selectedBorderType 選択枠タイプ
-  @focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit") ->
+  @focusToTargetWhenSidebarOpen = (target, selectedBorderType = "edit", immediate = false) ->
     # 選択枠設定
     @setSelectedBorder(target, selectedBorderType)
-    Common.focusToTarget(target)
+    Common.focusToTarget(target, null, immediate)
 
   # キーイベント初期化
   @initKeyEvent = ->
@@ -333,8 +333,8 @@ class WorktableCommon
     # スクロールイベント設定
     window.scrollContents.off('scroll').on('scroll', (e) ->
       e.preventDefault()
-      top = window.scrollContents.scrollTop()
-      left = window.scrollContents.scrollLeft()
+      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5
+      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5
       if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
         # 手動スクロールした場合のみメッセージ & 画面位置更新
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
@@ -344,6 +344,7 @@ class WorktableCommon
           setTimeout( ->
             FloatView.hide()
             PageValue.setWorktableDisplayPosition(top, left)
+            ScreenEvent.PrivateClass.setNowXAndY(top, left)
             LocalStorage.saveAllPageValues()
             window.scrollContentsScrollTimer = null
           , 0)

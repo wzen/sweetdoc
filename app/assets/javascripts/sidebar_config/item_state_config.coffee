@@ -25,7 +25,7 @@ class ItemStateConfig
       $('.focus_enabled > a').off('click').on('click', (e) ->
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         # アイテムにフォーカス
-        Common.focusToTarget($("##{objId}"))
+        Common.focusToTarget($("##{objId}"), null, true)
       )
 
       $('a.item_edit', rootEmt).off('click').on('click', (e) ->

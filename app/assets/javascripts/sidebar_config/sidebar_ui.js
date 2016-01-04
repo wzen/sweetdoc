@@ -43,7 +43,7 @@ Sidebar = (function() {
             return WorktableCommon.resizeMainContainerEvent();
           });
           if (target !== null) {
-            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType);
+            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true);
           }
         }
         return $(window.drawingCanvas).off('click.sidebar_close').on('click.sidebar_close', (function(_this) {

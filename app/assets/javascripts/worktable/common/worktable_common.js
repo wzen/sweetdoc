@@ -281,12 +281,15 @@ WorktableCommon = (function() {
     return $('.colorPicker').ColorPickerHide();
   };
 
-  WorktableCommon.focusToTargetWhenSidebarOpen = function(target, selectedBorderType) {
+  WorktableCommon.focusToTargetWhenSidebarOpen = function(target, selectedBorderType, immediate) {
     if (selectedBorderType == null) {
       selectedBorderType = "edit";
     }
+    if (immediate == null) {
+      immediate = false;
+    }
     this.setSelectedBorder(target, selectedBorderType);
-    return Common.focusToTarget(target);
+    return Common.focusToTarget(target, null, immediate);
   };
 
   WorktableCommon.initKeyEvent = function() {
@@ -381,8 +384,8 @@ WorktableCommon = (function() {
     window.scrollContents.off('scroll').on('scroll', function(e) {
       var left, top;
       e.preventDefault();
-      top = window.scrollContents.scrollTop();
-      left = window.scrollContents.scrollLeft();
+      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5;
+      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5;
       if (jQuery(":hover")[jQuery(':hover').length - 1] === window.scrollInside.get(0)) {
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
         if (window.scrollContentsScrollTimer != null) {
@@ -392,6 +395,7 @@ WorktableCommon = (function() {
           return setTimeout(function() {
             FloatView.hide();
             PageValue.setWorktableDisplayPosition(top, left);
+            ScreenEvent.PrivateClass.setNowXAndY(top, left);
             LocalStorage.saveAllPageValues();
             return window.scrollContentsScrollTimer = null;
           }, 0);

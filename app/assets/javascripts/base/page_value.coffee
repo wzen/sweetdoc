@@ -586,7 +586,7 @@ class PageValue
     t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top
     l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left
     # 中央位置からの差を設定
-    key = @key.worktableDisplayPosition()
+    key = @Key.worktableDisplayPosition()
     @setGeneralPageValue(key, {top: t, left: l})
 
   # 対象イベントを削除する

@@ -740,7 +740,7 @@ PageValue = (function() {
     }
     t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top;
     l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left;
-    key = this.key.worktableDisplayPosition();
+    key = this.Key.worktableDisplayPosition();
     return this.setGeneralPageValue(key, {
       top: t,
       left: l
