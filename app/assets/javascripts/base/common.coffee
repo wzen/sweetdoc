@@ -307,6 +307,8 @@ class Common
     if ScreenEvent.hasInstanceCache()
       se = new ScreenEvent()
       scale = se.getNowScale()
+      if se.keepDispMag? && se.keepDispMag
+        scale = 1.0
     return {
       width: window.scrollContents.width() / scale
       height: window.scrollContents.height() / scale

@@ -186,14 +186,13 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.setNowXAndY = function(x, y) {
-      var se;
+      var ins, se;
       if (ScreenEvent.hasInstanceCache()) {
         se = new ScreenEvent();
-        se.nowX = x;
-        se.nowY = y;
-        se.nowScale = 1.0;
-        se.scale = 1.0;
-        return se.setItemAllPropToPageValue();
+        ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id));
+        ins.nowX = x;
+        ins.nowY = y;
+        return PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins);
       }
     };
 

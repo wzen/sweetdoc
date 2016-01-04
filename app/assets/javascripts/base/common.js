@@ -417,6 +417,9 @@ Common = (function() {
     if (ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
       scale = se.getNowScale();
+      if ((se.keepDispMag != null) && se.keepDispMag) {
+        scale = 1.0;
+      }
     }
     return {
       width: window.scrollContents.width() / scale,

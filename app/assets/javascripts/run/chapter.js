@@ -120,7 +120,8 @@ Chapter = (function() {
     }
     return this.eventObjList.forEach((function(_this) {
       return function(e) {
-        return e.updateEventAfter();
+        e.updateEventAfter();
+        return e.didChapter();
       };
     })(this));
   };

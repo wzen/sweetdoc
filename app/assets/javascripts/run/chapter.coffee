@@ -108,6 +108,7 @@ class Chapter
     # とりあえずフォーカスはなし
     @eventObjList.forEach((e) =>
       e.updateEventAfter()
+      e.didChapter()
     )
 
   # ガイド表示

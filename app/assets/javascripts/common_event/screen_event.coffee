@@ -144,13 +144,10 @@ class ScreenEvent extends CommonEvent
     @setNowXAndY = (x, y) ->
       if ScreenEvent.hasInstanceCache()
         se = new ScreenEvent()
-        se.nowX = x
-        se.nowY = y
-        # ⇣のプロパティは保存しないため初期化
-        se.nowScale = 1.0
-        se.scale = 1.0
-
-        se.setItemAllPropToPageValue()
+        ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id))
+        ins.nowX = x
+        ins.nowY = y
+        PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins)
 
     @resetNowScale = ->
       if ScreenEvent.hasInstanceCache()
