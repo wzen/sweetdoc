@@ -49,12 +49,13 @@ ScreenEvent = (function(superClass) {
       this.changeScreenPosition = bind(this.changeScreenPosition, this);
       PrivateClass.__super__.constructor.call(this);
       this.name = 'Screen';
-      this.initConfigX = null;
-      this.initConfigY = null;
-      this.initConfigScale = null;
+      this.initConfigX = 0;
+      this.initConfigY = 0;
+      this.initConfigScale = 1.0;
       this.beforeX = null;
       this.beforeY = null;
       this.beforeScale = null;
+      this.nowScale = null;
     }
 
     PrivateClass.prototype.initEvent = function(event, keepDispMag) {
@@ -146,6 +147,13 @@ ScreenEvent = (function(superClass) {
       this.beforeY = this._nowY;
       this.beforeScale = this._nowScale;
       return PrivateClass.__super__.didChapter.call(this);
+    };
+
+    PrivateClass.prototype.getNowScale = function() {
+      if (this.nowScale == null) {
+        this.nowScale = this.initConfigScale;
+      }
+      return this.nowScale;
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {
@@ -254,12 +262,12 @@ ScreenEvent = (function(superClass) {
     };
 
     _setScale = function(scale) {
-      this.constructor.scale = scale;
+      this.nowScale = scale;
       return Common.applyViewScale();
     };
 
     _getScale = function() {
-      return this.constructor.scale;
+      return this.nowScale;
     };
 
     return PrivateClass;

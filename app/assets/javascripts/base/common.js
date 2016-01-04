@@ -173,19 +173,17 @@ Common = (function() {
   };
 
   Common.initScrollContentsPosition = function() {
-    var position;
-    position = PageValue.getWorktableScrollContentsPosition();
-    if (position != null) {
-      return this.updateScrollContentsPosition(position.top, position.left);
+    var se;
+    if (window.isWorkTable) {
+      return WorktableCommon.initScrollContentsPosition();
     } else {
-      this.updateScrollContentsPosition(0, 0);
-      ScreenEvent.PrivateClass.left = 0;
-      return ScreenEvent.PrivateClass.top = 0;
+      se = new ScreenEvent();
+      return this.updateScrollContentsPosition(se.initConfigY, se.initConfigX);
     }
   };
 
   Common.applyViewScale = function() {
-    var scale, updateMainWrapperPercent, worktableScale;
+    var scale, se, updateMainWrapperPercent, worktableScale;
     worktableScale = 1.0;
     if (window.isWorkTable) {
       worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
@@ -193,7 +191,8 @@ Common = (function() {
         worktableScale = 1.0;
       }
     }
-    scale = worktableScale * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale;
+    se = new ScreenEvent();
+    scale = worktableScale * Common.scaleFromViewRate * se.getNowScale();
     updateMainWrapperPercent = 100 / Common.scaleFromViewRate;
     return window.mainWrapper.css({
       transform: "scale(" + scale + ", " + scale + ")",
@@ -348,7 +347,7 @@ Common = (function() {
     return $(contents).wrap(w).closest('.item');
   };
 
-  Common.focusToTarget = function(target, callback, immediate, withUpdateScreenEventVar) {
+  Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
     var diff;
     if (callback == null) {
       callback = null;
@@ -356,8 +355,8 @@ Common = (function() {
     if (immediate == null) {
       immediate = false;
     }
-    if (withUpdateScreenEventVar == null) {
-      withUpdateScreenEventVar = false;
+    if (withUpdatePageValue == null) {
+      withUpdatePageValue = false;
     }
     if ((target == null) || target.length === 0) {
       return;
@@ -366,7 +365,7 @@ Common = (function() {
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
     };
-    return this.updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdateScreenEventVar, callback);
+    return this.updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdatePageValue, callback);
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {

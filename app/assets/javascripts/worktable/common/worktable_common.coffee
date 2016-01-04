@@ -287,6 +287,14 @@ class WorktableCommon
     window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
     $('#sidebar').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - (borderWidth * 2))
 
+  # スクロール位置初期化
+  @initScrollContentsPosition = ->
+    position = PageValue.getWorktableScrollContentsPosition()
+    if position?
+      @updateScrollContentsPosition(position.top, position.left)
+    else
+      @updateScrollContentsPosition(0, 0)
+
   # 画面サイズ設定
   @resizeMainContainerEvent = ->
     @updateMainViewSize()

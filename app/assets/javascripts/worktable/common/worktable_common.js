@@ -332,6 +332,16 @@ WorktableCommon = (function() {
     return $('#sidebar').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - (borderWidth * 2));
   };
 
+  WorktableCommon.initScrollContentsPosition = function() {
+    var position;
+    position = PageValue.getWorktableScrollContentsPosition();
+    if (position != null) {
+      return this.updateScrollContentsPosition(position.top, position.left);
+    } else {
+      return this.updateScrollContentsPosition(0, 0);
+    }
+  };
+
   WorktableCommon.resizeMainContainerEvent = function() {
     this.updateMainViewSize();
     Common.updateCanvasSize();

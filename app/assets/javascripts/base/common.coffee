@@ -135,13 +135,11 @@ class Common
 
   # スクロール位置初期化
   @initScrollContentsPosition = ->
-    position = PageValue.getWorktableScrollContentsPosition()
-    if position?
-      @updateScrollContentsPosition(position.top, position.left)
+    if window.isWorkTable
+      WorktableCommon.initScrollContentsPosition()
     else
-      @updateScrollContentsPosition(0, 0)
-      ScreenEvent.PrivateClass.left = 0
-      ScreenEvent.PrivateClass.top = 0
+      se = new ScreenEvent()
+      @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
 
   # 画面スケールの設定
   @applyViewScale = ->
@@ -150,7 +148,8 @@ class Common
       worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
       if !worktableScale?
         worktableScale = 1.0
-    scale = worktableScale * Common.scaleFromViewRate * ScreenEvent.PrivateClass.scale
+    se = new ScreenEvent()
+    scale = worktableScale * Common.scaleFromViewRate * se.getNowScale()
     updateMainWrapperPercent = 100 / Common.scaleFromViewRate
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 
@@ -260,7 +259,7 @@ class Common
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
   # @param [Fucntion] callback コールバック
-  @focusToTarget = (target, callback = null, immediate = false, withUpdateScreenEventVar = false) ->
+  @focusToTarget = (target, callback = null, immediate = false, withUpdatePageValue = false) ->
     if !target? || target.length == 0
       # ターゲット無し
       return
@@ -270,7 +269,7 @@ class Common
       top: (scrollContents.scrollTop() + (scrollContents.height() - $(target).height()) * 0.5) - $(target).get(0).offsetTop
       left: (scrollContents.scrollLeft() + (scrollContents.width() - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
 
-    @updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdateScreenEventVar, callback)
+    @updateScrollContentsPosition(scrollContents.scrollTop() - diff.top, scrollContents.scrollLeft() - diff.left, immediate, withUpdatePageValue, callback)
 
   # スクロール位置の更新
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->

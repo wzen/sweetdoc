@@ -32,12 +32,13 @@ class ScreenEvent extends CommonEvent
     constructor: ->
       super()
       @name = 'Screen'
-      @initConfigX = null
-      @initConfigY = null
-      @initConfigScale = null
+      @initConfigX = 0
+      @initConfigY = 0
+      @initConfigScale = 1.0
       @beforeX = null
       @beforeY = null
       @beforeScale = null
+      @nowScale = null
 
     # イベントの初期化
     # @param [Object] event 設定イベント
@@ -109,6 +110,11 @@ class ScreenEvent extends CommonEvent
       @beforeY = @_nowY
       @beforeScale = @_nowScale
       super()
+
+    getNowScale: ->
+      if !@nowScale?
+        @nowScale = @initConfigScale
+      return @nowScale
 
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->
@@ -196,11 +202,11 @@ class ScreenEvent extends CommonEvent
       return {x: x, y: y}
 
     _setScale = (scale) ->
-      @constructor.scale = scale
+      @nowScale = scale
       Common.applyViewScale()
 
     _getScale = ->
-      return @constructor.scale
+      return @nowScale
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 
