@@ -52,9 +52,8 @@ ScreenEvent = (function(superClass) {
       this.initConfigX = 0;
       this.initConfigY = 0;
       this.initConfigScale = 1.0;
-      this.beforeX = null;
-      this.beforeY = null;
-      this.beforeScale = null;
+      this.nowX = null;
+      this.nowY = null;
       this.nowScale = null;
     }
 
@@ -85,8 +84,8 @@ ScreenEvent = (function(superClass) {
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
         if (!this.keepDispMag) {
-          _setScale.call(this, this.beforeScale);
-          size = _convertCenterCoodToSize.call(this, this.beforeX, this.beforeY, this.beforeScale);
+          _setScale.call(this, this.nowScale);
+          size = _convertCenterCoodToSize.call(this, this.nowX, this.nowY, this.nowScale);
           return Common.updateScrollContentsPosition(size.top, size.left, true, false);
         }
       }
@@ -97,15 +96,15 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.updateEventAfter.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        this._nowX = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
-        this._nowY = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
-        this._nowScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
+        this._progressX = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
+        this._progressY = parseInt(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
+        this._progressScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
         if (this.keepDispMag) {
           _setScale.call(this, Common.scaleFromViewRate);
-          return _overlay.call(this, this._nowX, this._nowY, this._nowScale);
+          return _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         } else {
-          _setScale.call(this, this._nowScale);
-          size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);
+          _setScale.call(this, this._progressScale);
+          size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
           return Common.updateScrollContentsPosition(size.top, size.left, true, false);
         }
       }
@@ -113,18 +112,18 @@ ScreenEvent = (function(superClass) {
 
     PrivateClass.prototype.changeScreenPosition = function(opt) {
       var size;
-      this._nowScale = (parseFloat(this._specificMethodValues.afterZ) - this.beforeScale) * (opt.progress / opt.progressMax) + this.beforeScale;
-      this._nowX = ((parseFloat(this._specificMethodValues.afterX) - this.beforeX) * (opt.progress / opt.progressMax)) + this.beforeX;
-      this._nowY = ((parseFloat(this._specificMethodValues.afterY) - this.beforeY) * (opt.progress / opt.progressMax)) + this.beforeY;
+      this._progressScale = (parseFloat(this._specificMethodValues.afterZ) - this.nowScale) * (opt.progress / opt.progressMax) + this.nowScale;
+      this._progressX = ((parseFloat(this._specificMethodValues.afterX) - this.nowX) * (opt.progress / opt.progressMax)) + this.nowX;
+      this._progressY = ((parseFloat(this._specificMethodValues.afterY) - this.nowY) * (opt.progress / opt.progressMax)) + this.nowY;
       if (opt.isPreview) {
-        _overlay.call(this, this._nowX, this._nowY, this._nowScale);
+        _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         if (this.keepDispMag) {
           _setScale.call(this, Common.scaleFromViewRate);
         }
       }
       if (!this.keepDispMag) {
-        _setScale.call(this, this._nowScale);
-        size = _convertCenterCoodToSize.call(this, this._nowX, this._nowY, this._nowScale);
+        _setScale.call(this, this._progressScale);
+        size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
         return Common.updateScrollContentsPosition(size.top, size.left, true, false);
       }
     };
@@ -143,9 +142,9 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.didChapter = function() {
-      this.beforeX = this._nowX;
-      this.beforeY = this._nowY;
-      this.beforeScale = this._nowScale;
+      this.nowX = this._progressX;
+      this.nowY = this._progressY;
+      this.nowScale = this._progressScale;
       return PrivateClass.__super__.didChapter.call(this);
     };
 

@@ -381,8 +381,8 @@ Common = (function() {
     }
     if (withUpdateScreenEventVar) {
       se = new ScreenEvent();
-      se.beforeX = left;
-      se.beforeY = top;
+      se.nowX = left;
+      se.nowY = top;
     }
     if (immediate) {
       window.scrollContents.scrollTop(top);
@@ -405,7 +405,7 @@ Common = (function() {
   Common.updateScrollContentsFromScreenEventVar = function() {
     var se;
     se = new ScreenEvent();
-    return this.updateScrollContentsPosition(se.beforeY, se.beforeX);
+    return this.updateScrollContentsPosition(se.nowY, se.nowX);
   };
 
   Common.updateWorktableScrollContentsFromPageValue = function() {

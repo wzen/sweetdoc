@@ -275,8 +275,8 @@ class Common
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
     if withUpdateScreenEventVar
       se = new ScreenEvent()
-      se.beforeX = left
-      se.beforeY = top
+      se.nowX = left
+      se.nowY = top
     if immediate
       window.scrollContents.scrollTop(top)
       window.scrollContents.scrollLeft(left)
@@ -296,7 +296,7 @@ class Common
   # 画面位置をScreenEvent変数から初期化
   @updateScrollContentsFromScreenEventVar: ->
     se = new ScreenEvent()
-    @updateScrollContentsPosition(se.beforeY, se.beforeX)
+    @updateScrollContentsPosition(se.nowY, se.nowX)
 
   # ワークテーブル画面位置をPageValueから初期化
   @updateWorktableScrollContentsFromPageValue: ->

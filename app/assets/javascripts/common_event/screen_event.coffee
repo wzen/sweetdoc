@@ -35,9 +35,8 @@ class ScreenEvent extends CommonEvent
       @initConfigX = 0
       @initConfigY = 0
       @initConfigScale = 1.0
-      @beforeX = null
-      @beforeY = null
-      @beforeScale = null
+      @nowX = null
+      @nowY = null
       @nowScale = null
 
     # イベントの初期化
@@ -61,8 +60,8 @@ class ScreenEvent extends CommonEvent
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
         if !@keepDispMag
-          _setScale.call(@, @beforeScale)
-          size = _convertCenterCoodToSize.call(@, @beforeX, @beforeY, @beforeScale)
+          _setScale.call(@, @nowScale)
+          size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
           Common.updateScrollContentsPosition(size.top, size.left, true, false)
 
     # イベント後の表示状態にする
@@ -70,30 +69,30 @@ class ScreenEvent extends CommonEvent
       super()
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        @_nowX = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
-        @_nowY = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
-        @_nowScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
+        @_progressX = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
+        @_progressY = parseInt(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
+        @_progressScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
         if @keepDispMag
           _setScale.call(@, Common.scaleFromViewRate)
-          _overlay.call(@, @_nowX, @_nowY, @_nowScale)
+          _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         else
-          _setScale.call(@, @_nowScale)
-          size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
+          _setScale.call(@, @_progressScale)
+          size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
           Common.updateScrollContentsPosition(size.top, size.left, true, false)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
-      @_nowScale = (parseFloat(@_specificMethodValues.afterZ) - @beforeScale) * (opt.progress / opt.progressMax) + @beforeScale
-      @_nowX = ((parseFloat(@_specificMethodValues.afterX) - @beforeX) * (opt.progress / opt.progressMax)) + @beforeX
-      @_nowY = ((parseFloat(@_specificMethodValues.afterY) - @beforeY) * (opt.progress / opt.progressMax)) + @beforeY
+      @_progressScale = (parseFloat(@_specificMethodValues.afterZ) - @nowScale) * (opt.progress / opt.progressMax) + @nowScale
+      @_progressX = ((parseFloat(@_specificMethodValues.afterX) - @nowX) * (opt.progress / opt.progressMax)) + @nowX
+      @_progressY = ((parseFloat(@_specificMethodValues.afterY) - @nowY) * (opt.progress / opt.progressMax)) + @nowY
       if opt.isPreview
-        _overlay.call(@, @_nowX, @_nowY, @_nowScale)
+        _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         if @keepDispMag
           _setScale.call(@, Common.scaleFromViewRate)
 
       if !@keepDispMag
-        _setScale.call(@, @_nowScale)
-        size = _convertCenterCoodToSize.call(@, @_nowX, @_nowY, @_nowScale)
+        _setScale.call(@, @_progressScale)
+        size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
         Common.updateScrollContentsPosition(size.top, size.left, true, false)
 
     # プレビューを停止
@@ -106,9 +105,9 @@ class ScreenEvent extends CommonEvent
       super(loopFinishCallback, callback)
 
     didChapter: ->
-      @beforeX = @_nowX
-      @beforeY = @_nowY
-      @beforeScale = @_nowScale
+      @nowX = @_progressX
+      @nowY = @_progressY
+      @nowScale = @_progressScale
       super()
 
     getNowScale: ->
