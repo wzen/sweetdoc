@@ -336,9 +336,9 @@ WorktableCommon = (function() {
     var position;
     position = PageValue.getWorktableScrollContentsPosition();
     if (position != null) {
-      return this.updateScrollContentsPosition(position.top, position.left);
+      return Common.updateScrollContentsPosition(position.top, position.left);
     } else {
-      return this.updateScrollContentsPosition(0, 0);
+      return Common.updateScrollContentsPosition(0, 0);
     }
   };
 

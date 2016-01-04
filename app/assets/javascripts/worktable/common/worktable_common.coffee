@@ -291,9 +291,9 @@ class WorktableCommon
   @initScrollContentsPosition = ->
     position = PageValue.getWorktableScrollContentsPosition()
     if position?
-      @updateScrollContentsPosition(position.top, position.left)
+      Common.updateScrollContentsPosition(position.top, position.left)
     else
-      @updateScrollContentsPosition(0, 0)
+      Common.updateScrollContentsPosition(0, 0)
 
   # 画面サイズ設定
   @resizeMainContainerEvent = ->

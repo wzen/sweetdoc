@@ -235,7 +235,7 @@ class WorktableSetting
     @initConfig = ->
       rootEmt = $("##{@ROOT_ID_NAME}")
       # 画面座標
-      position = PageValue.getGeneralPageValue(PageValue.Key.worktableDisplayPosition())
+      position = PageValue.getWorktableScrollContentsPosition()
       $('.display_position_x', rootEmt).val(parseInt(position.left))
       $('.display_position_y', rootEmt).val(parseInt(position.top))
       leftMin = -window.scrollInsideWrapper.width() * 0.5
