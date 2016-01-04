@@ -624,7 +624,7 @@ class PageValue
   # Footprintに保存
   @saveToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
     @saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum)
-    @saveCommonStateToFootprint(isChangeBefore, eventDistNum, pageNum)
+    #@saveCommonStateToFootprint(isChangeBefore, eventDistNum, pageNum)
 
   # インスタンスの変数値を保存
   @saveInstanceObjectToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
@@ -634,6 +634,7 @@ class PageValue
     @setFootprintPageValue(key, obj.getMinimumObject())
 
   # 共通インスタンスの変数値を保存
+  # FIXME: 未使用
   @saveCommonStateToFootprint: (isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
     # 画面State
     se = new ScreenEvent()

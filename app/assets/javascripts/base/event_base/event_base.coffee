@@ -378,14 +378,6 @@ class EventBase extends Extend
   getMinimumObjectEventBefore: ->
     return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
 
-  # 共通インスタンスを戻す
-  # FIXME: とりあえずここで
-  updateCommonEventBefore: ->
-    for k, v of PageValue.getFootprintPageValue(PageValue.Key.footprintCommonBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID]))
-      obj = window.instanceMap[k]
-      if obj?
-        obj.setMiniumObject(v)
-
   # イベント前の表示状態にする
   updateEventBefore: ->
     if !@_event?
@@ -397,9 +389,6 @@ class EventBase extends Extend
 
     # インスタンスを戻す
     @setMiniumObject(@getMinimumObjectEventBefore())
-    # 共通インスタンスを戻す
-    # FIXME: とりあえずここで
-    @updateCommonEventBefore()
     @resetProgress()
 
   # イベント後の表示状態にする

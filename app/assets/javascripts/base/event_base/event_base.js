@@ -456,22 +456,6 @@ EventBase = (function(superClass) {
     return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
   };
 
-  EventBase.prototype.updateCommonEventBefore = function() {
-    var k, obj, ref, results, v;
-    ref = PageValue.getFootprintPageValue(PageValue.Key.footprintCommonBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID]));
-    results = [];
-    for (k in ref) {
-      v = ref[k];
-      obj = window.instanceMap[k];
-      if (obj != null) {
-        results.push(obj.setMiniumObject(v));
-      } else {
-        results.push(void 0);
-      }
-    }
-    return results;
-  };
-
   EventBase.prototype.updateEventBefore = function() {
     if (this._event == null) {
       return;
@@ -480,7 +464,6 @@ EventBase = (function(superClass) {
       console.log('EventBase updateEventBefore id:' + this.id);
     }
     this.setMiniumObject(this.getMinimumObjectEventBefore());
-    this.updateCommonEventBefore();
     return this.resetProgress();
   };
 

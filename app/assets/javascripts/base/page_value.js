@@ -795,8 +795,7 @@ PageValue = (function() {
     if (pageNum == null) {
       pageNum = PageValue.getPageNum();
     }
-    this.saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum);
-    return this.saveCommonStateToFootprint(isChangeBefore, eventDistNum, pageNum);
+    return this.saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum);
   };
 
   PageValue.saveInstanceObjectToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {

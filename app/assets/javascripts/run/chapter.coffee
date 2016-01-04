@@ -105,6 +105,7 @@ class Chapter
     if window.runDebug
       console.log('Chapter forwardAllEvents')
 
+    # とりあえずフォーカスはなし
     @eventObjList.forEach((e) =>
       e.updateEventAfter()
     )
