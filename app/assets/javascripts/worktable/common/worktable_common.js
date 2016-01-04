@@ -679,16 +679,13 @@ WorktableCommon = (function() {
           if (item != null) {
             item.initEvent(te, keepDispMag);
             if (item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]) {
-              focusTargetItem = item;
+              Common.focusToTarget(item.getJQueryElement(), null, true, true);
             }
             if (idx < tes.length - 1 || fromBlankEventConfig) {
               item.willChapter();
               item.updateEventAfter();
               item.didChapter();
             } else if (doRunPreview) {
-              if (focusTargetItem != null) {
-                Common.focusToTarget(focusTargetItem.getJQueryElement(), null, true, true);
-              }
               window.previewRunning = true;
               item.preview(function() {
                 window.previewRunning = false;
@@ -701,11 +698,6 @@ WorktableCommon = (function() {
                 return _this.refreshAllItemsFromInstancePageValueIfChanging();
               });
             }
-          }
-        }
-        if (!doRunPreview) {
-          if (focusTargetItem != null) {
-            Common.focusToTarget(focusTargetItem.getJQueryElement(), null, true, true);
           }
         }
         if (callback != null) {

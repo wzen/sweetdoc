@@ -147,6 +147,8 @@ class ScreenEvent extends CommonEvent
         ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id))
         ins.nowX = x
         ins.nowY = y
+        se.nowX = x
+        se.nowY = y
         PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins)
 
     @resetNowScale = ->

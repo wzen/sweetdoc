@@ -565,16 +565,14 @@ class WorktableCommon
         if item?
           item.initEvent(te, keepDispMag)
           if item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]
-            focusTargetItem = item
+            # アイテムにフォーカス
+            Common.focusToTarget(item.getJQueryElement(), null, true, true)
           if idx < tes.length - 1 || fromBlankEventConfig
             item.willChapter()
             # イベント後の状態に変更
             item.updateEventAfter()
             item.didChapter()
           else if doRunPreview
-            if focusTargetItem?
-              # アイテムにフォーカス
-              Common.focusToTarget(focusTargetItem.getJQueryElement(), null, true, true)
             window.previewRunning = true
             # プレビュー実行
             item.preview( =>
@@ -593,10 +591,6 @@ class WorktableCommon
               # アイテムを再描画
               @refreshAllItemsFromInstancePageValueIfChanging()
             )
-      if !doRunPreview
-        if focusTargetItem?
-          # アイテムにフォーカス
-          Common.focusToTarget(focusTargetItem.getJQueryElement(), null, true, true)
       if callback?
         callback()
     )

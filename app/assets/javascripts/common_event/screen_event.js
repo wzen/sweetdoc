@@ -192,6 +192,8 @@ ScreenEvent = (function(superClass) {
         ins = PageValue.getInstancePageValue(PageValue.Key.instanceValue(se.id));
         ins.nowX = x;
         ins.nowY = y;
+        se.nowX = x;
+        se.nowY = y;
         return PageValue.setInstancePageValue(PageValue.Key.instanceValue(se.id), ins);
       }
     };
