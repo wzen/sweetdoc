@@ -138,8 +138,9 @@ class Common
     if window.isWorkTable
       WorktableCommon.initScrollContentsPosition()
     else
-      se = new ScreenEvent()
-      @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
+      if ScreenEvent.hasInstanceCache()
+        se = new ScreenEvent()
+        @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
 
   # 画面スケールの設定
   @applyViewScale = ->
@@ -148,8 +149,11 @@ class Common
       worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
       if !worktableScale?
         worktableScale = 1.0
-    se = new ScreenEvent()
-    scale = worktableScale * Common.scaleFromViewRate * se.getNowScale()
+    seScale = 1.0
+    if ScreenEvent.hasInstanceCache()
+      se = new ScreenEvent()
+      seScale = se.getNowScale()
+    scale = worktableScale * Common.scaleFromViewRate * seScale
     updateMainWrapperPercent = 100 / Common.scaleFromViewRate
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})
 

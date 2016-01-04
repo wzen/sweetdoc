@@ -191,6 +191,8 @@ ScreenEvent = (function(superClass) {
         se = new ScreenEvent();
         se.nowX = x;
         se.nowY = y;
+        se.nowScale = 1.0;
+        se.scale = 1.0;
         return se.setItemAllPropToPageValue();
       }
     };

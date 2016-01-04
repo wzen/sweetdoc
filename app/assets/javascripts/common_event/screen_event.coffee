@@ -146,6 +146,10 @@ class ScreenEvent extends CommonEvent
         se = new ScreenEvent()
         se.nowX = x
         se.nowY = y
+        # ⇣のプロパティは保存しないため初期化
+        se.nowScale = 1.0
+        se.scale = 1.0
+
         se.setItemAllPropToPageValue()
 
     @resetNowScale = ->
