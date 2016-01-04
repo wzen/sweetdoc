@@ -60,7 +60,7 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.pasteItem = function() {
-    var instance, obj;
+    var instance, obj, scrollContentsSize;
     if (window.copiedInstance != null) {
       instance = new (Common.getClassFromMap(window.copiedInstance.classDistToken))();
       window.instanceMap[instance.id] = instance;
@@ -70,8 +70,9 @@ WorktableCommon = (function() {
       if ((obj.isCopy != null) && obj.isCopy) {
         instance.name = instance.name + ' (Copy)';
       }
-      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0);
-      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0);
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0);
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0);
       if (instance.drawAndMakeConfigs != null) {
         instance.drawAndMakeConfigs();
       }
@@ -262,6 +263,7 @@ WorktableCommon = (function() {
           });
         }
         Common.updateWorktableScrollContentsFromPageValue();
+        ScreenEvent.PrivateClass.resetNowScale;
         return PageValue.removeAllFootprint();
       } else {
         if (callback != null) {
@@ -325,13 +327,14 @@ WorktableCommon = (function() {
   };
 
   WorktableCommon.updateMainViewSize = function() {
-    var borderWidth, timelineTopPadding;
+    var borderWidth, scrollContentsSize, timelineTopPadding;
     borderWidth = 5;
     timelineTopPadding = 5;
+    scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
     $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
     window.scrollContentsSize = {
-      width: window.scrollContents.width(),
-      height: window.scrollContents.height()
+      width: scrollContentsSize.width,
+      height: scrollContentsSize.height
     };
     return $('#sidebar').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - (borderWidth * 2));
   };
@@ -383,10 +386,11 @@ WorktableCommon = (function() {
     window.scrollInsideWrapper.height(window.scrollViewSize);
     window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
     window.scrollContents.off('scroll').on('scroll', function(e) {
-      var left, top;
+      var left, scrollContentsSize, top;
       e.preventDefault();
-      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5;
-      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5;
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
+      top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5;
+      left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
       if (jQuery(":hover")[jQuery(':hover').length - 1] === window.scrollInside.get(0)) {
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
         if (window.scrollContentsScrollTimer != null) {

@@ -348,7 +348,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
-    var diff, se;
+    var diff, scrollContentsSize, se;
     if (callback == null) {
       callback = null;
     }
@@ -361,15 +361,17 @@ Common = (function() {
     if ((target == null) || target.length === 0) {
       return;
     }
+    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
     se = new ScreenEvent();
     diff = {
-      top: (scrollContents.scrollTop() + ((scrollContents.height() / se.getNowScale()) - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
-      left: (scrollContents.scrollLeft() + ((scrollContents.width() / se.getNowScale()) - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+      top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
+      left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
     };
-    return this.updateScrollContentsPosition(scrollContents.scrollTop() + (window.scrollContents.height() * 0.5) - diff.top, scrollContents.scrollLeft() + (window.scrollContents.width() * 0.5) - diff.left, immediate, withUpdatePageValue, callback);
+    return this.updateScrollContentsPosition(scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top, scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left, immediate, withUpdatePageValue, callback);
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
+    var scrollContentsSize;
     if (immediate == null) {
       immediate = true;
     }
@@ -379,11 +381,12 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
+    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
     if (withUpdateScreenEventVar) {
       ScreenEvent.PrivateClass.setNowXAndY(left, top);
     }
-    top -= window.scrollContents.height() * 0.5;
-    left -= window.scrollContents.width() * 0.5;
+    top -= scrollContentsSize.height * 0.5;
+    left -= scrollContentsSize.width * 0.5;
     if (immediate) {
       window.scrollContents.scrollTop(top);
       window.scrollContents.scrollLeft(left);
@@ -400,6 +403,19 @@ Common = (function() {
         }
       });
     }
+  };
+
+  Common.scrollContentsSizeUnderScreenEventScale = function() {
+    var scale, se;
+    scale = 1.0;
+    if (ScreenEvent.hasInstanceCache()) {
+      se = new ScreenEvent();
+      scale = se.getNowScale();
+    }
+    return {
+      width: window.scrollContents.width() / scale,
+      height: window.scrollContents.height() / scale
+    };
   };
 
   Common.updateScrollContentsFromScreenEventVar = function() {

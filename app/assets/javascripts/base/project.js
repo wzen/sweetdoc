@@ -380,11 +380,12 @@ Project = (function() {
         modalEmt.find('.am_list:first').html(admin_html);
         _updateActive.call(_this);
         modalEmt.find('.am_row .edit_button').off('click').on('click', function(e) {
-          var scrollContents, scrollWrapper;
+          var scrollContents, scrollContentsSize, scrollWrapper;
           scrollWrapper = modalEmt.find('.am_scroll_wrapper:first');
           scrollContents = scrollWrapper.children('div:first');
+          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
           scrollWrapper.animate({
-            scrollLeft: scrollContents.width()
+            scrollLeft: scrollContentsSize.width
           }, 200);
           _initEditInput.call(_this);
           return _loadEditInput($(e.target), function(project) {

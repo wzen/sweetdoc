@@ -51,6 +51,8 @@ class ScreenEvent extends CommonEvent
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
+      # 倍率を戻す
+      @scale = 1.0
       if callback?
         callback()
 
@@ -62,7 +64,8 @@ class ScreenEvent extends CommonEvent
         if !@keepDispMag
           _setScale.call(@, @nowScale)
           size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
-          Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
+          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # イベント後の表示状態にする
     updateEventAfter: ->
@@ -78,7 +81,8 @@ class ScreenEvent extends CommonEvent
         else
           _setScale.call(@, @_progressScale)
           size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-          Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
+          scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+          Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # 画面移動イベント
     changeScreenPosition: (opt) =>
@@ -93,7 +97,8 @@ class ScreenEvent extends CommonEvent
       if !@keepDispMag
         _setScale.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
-        Common.updateScrollContentsPosition(size.top + window.scrollContents.height() * 0.5, size.left + window.scrollContents.width() * 0.5, true, false)
+        scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+        Common.updateScrollContentsPosition(size.top + scrollContentsSize.height * 0.5, size.left + scrollContentsSize.width * 0.5, true, false)
 
     # プレビューを停止
     # @param [Function] callback コールバック
@@ -142,6 +147,11 @@ class ScreenEvent extends CommonEvent
         se.nowX = x
         se.nowY = y
         se.setItemAllPropToPageValue()
+
+    @resetNowScale = ->
+      if ScreenEvent.hasInstanceCache()
+        se = new ScreenEvent()
+        se.scale = 1.0
 
     _overlay = (x, y, scale) ->
       _drawOverlay = (context, x, y, width, height, scale) ->

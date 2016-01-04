@@ -265,21 +265,23 @@ class Common
       return
 
     # col-xs-9 → 75% padding → 15px
+    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     se = new ScreenEvent()
     diff =
-      top: (scrollContents.scrollTop() + ((scrollContents.height() / se.getNowScale()) - $(target).height()) * 0.5) - $(target).get(0).offsetTop
-      left: (scrollContents.scrollLeft() + ((scrollContents.width() / se.getNowScale()) - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+      top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop
+      left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
 
-    @updateScrollContentsPosition(scrollContents.scrollTop() + (window.scrollContents.height() * 0.5) - diff.top, scrollContents.scrollLeft() + (window.scrollContents.width() * 0.5) - diff.left, immediate, withUpdatePageValue, callback)
+    @updateScrollContentsPosition(scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top, scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left, immediate, withUpdatePageValue, callback)
 
   # スクロール位置の更新
   # @param [Float] top Y中央値
   # @param [Float] left X中央値
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
+    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     if withUpdateScreenEventVar
       ScreenEvent.PrivateClass.setNowXAndY(left, top)
-    top -= window.scrollContents.height() * 0.5
-    left -= window.scrollContents.width() * 0.5
+    top -= scrollContentsSize.height * 0.5
+    left -= scrollContentsSize.width * 0.5
     if immediate
       window.scrollContents.scrollTop(top)
       window.scrollContents.scrollLeft(left)
@@ -295,6 +297,16 @@ class Common
         if callback?
           callback()
       )
+
+  @scrollContentsSizeUnderScreenEventScale = ->
+    scale = 1.0
+    if ScreenEvent.hasInstanceCache()
+      se = new ScreenEvent()
+      scale = se.getNowScale()
+    return {
+      width: window.scrollContents.width() / scale
+      height: window.scrollContents.height() / scale
+    }
 
   # 画面位置をScreenEvent変数から初期化
   @updateScrollContentsFromScreenEventVar: ->

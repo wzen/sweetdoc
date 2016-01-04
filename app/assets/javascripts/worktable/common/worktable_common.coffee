@@ -54,8 +54,9 @@ class WorktableCommon
       if obj.isCopy? && obj.isCopy
         instance.name = instance.name + ' (Copy)'
       # 画面中央に貼り付け
-      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (window.scrollContents.width() - instance.itemSize.w) / 2.0)
-      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (window.scrollContents.height() - instance.itemSize.h) / 2.0)
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+      instance.itemSize.x = parseInt(window.scrollContents.scrollLeft() + (scrollContentsSize.width - instance.itemSize.w) / 2.0)
+      instance.itemSize.y = parseInt(window.scrollContents.scrollTop() + (scrollContentsSize.height - instance.itemSize.h) / 2.0)
       if instance.drawAndMakeConfigs?
         instance.drawAndMakeConfigs()
       instance.setItemAllPropToPageValue()
@@ -222,6 +223,8 @@ class WorktableCommon
 
         # アイテムフォーカスしてる場合があるので表示位置を戻す
         Common.updateWorktableScrollContentsFromPageValue()
+        # 倍率を戻す
+        ScreenEvent.PrivateClass.resetNowScale
         # Footprint履歴削除
         PageValue.removeAllFootprint()
       else
@@ -285,8 +288,9 @@ class WorktableCommon
   @updateMainViewSize = ->
     borderWidth = 5
     timelineTopPadding = 5
+    scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
     $('#main').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2))
-    window.scrollContentsSize = {width: window.scrollContents.width(), height: window.scrollContents.height()}
+    window.scrollContentsSize = {width: scrollContentsSize.width, height: scrollContentsSize.height}
     $('#sidebar').height($('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - (borderWidth * 2))
 
   # スクロール位置初期化
@@ -335,8 +339,9 @@ class WorktableCommon
     # スクロールイベント設定
     window.scrollContents.off('scroll').on('scroll', (e) ->
       e.preventDefault()
-      top = window.scrollContents.scrollTop() + window.scrollContents.height() * 0.5
-      left = window.scrollContents.scrollLeft() + window.scrollContents.width() * 0.5
+      scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
+      top = window.scrollContents.scrollTop() + scrollContentsSize.height * 0.5
+      left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5
       if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
         # 手動スクロールした場合のみメッセージ & 画面位置更新
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
