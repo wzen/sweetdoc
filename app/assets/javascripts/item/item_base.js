@@ -223,7 +223,7 @@ ItemBase = (function(superClass) {
 
   ItemBase.prototype.originalItemElementSize = function() {
     var obj;
-    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     return obj.itemSize;
   };
 

@@ -186,18 +186,32 @@ PageValue = (function() {
         return "" + this.F_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
       };
 
-      Key.footprintInstanceDiffBefore = function(eventDistNum, objId, pn) {
+      Key.footprintInstanceBefore = function(eventDistNum, objId, pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceDiffBefore";
+        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceBefore";
       };
 
-      Key.footprintInstanceDiffAfter = function(eventDistNum, objId, pn) {
+      Key.footprintInstanceAfter = function(eventDistNum, objId, pn) {
         if (pn == null) {
           pn = PageValue.getPageNum();
         }
-        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceDiffAfter";
+        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceAfter";
+      };
+
+      Key.footprintCommonBefore = function(eventDistNum, pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + "commonInstanceBefore";
+      };
+
+      Key.footprintCommonAfter = function(eventDistNum, pn) {
+        if (pn == null) {
+          pn = PageValue.getPageNum();
+        }
+        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + "commonInstanceAfter";
       };
 
       Key.forkStack = function(pn) {
@@ -777,14 +791,34 @@ PageValue = (function() {
     return results;
   };
 
+  PageValue.saveToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
+    if (pageNum == null) {
+      pageNum = PageValue.getPageNum();
+    }
+    this.saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum);
+    return this.saveCommonStateToFootprint(isChangeBefore, eventDistNum, pageNum);
+  };
+
   PageValue.saveInstanceObjectToFootprint = function(targetObjId, isChangeBefore, eventDistNum, pageNum) {
     var key, obj;
     if (pageNum == null) {
       pageNum = PageValue.getPageNum();
     }
     obj = window.instanceMap[targetObjId];
-    key = isChangeBefore ? this.Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum);
+    key = isChangeBefore ? this.Key.footprintInstanceBefore(eventDistNum, targetObjId, pageNum) : this.Key.footprintInstanceAfter(eventDistNum, targetObjId, pageNum);
     return this.setFootprintPageValue(key, obj.getMinimumObject());
+  };
+
+  PageValue.saveCommonStateToFootprint = function(isChangeBefore, eventDistNum, pageNum) {
+    var footprint, key, se;
+    if (pageNum == null) {
+      pageNum = PageValue.getPageNum();
+    }
+    se = new ScreenEvent();
+    footprint = {};
+    footprint[se.id] = se.getMinimumObject();
+    key = isChangeBefore ? this.Key.footprintCommonBefore(eventDistNum, pageNum) : this.Key.footprintCommonAfter(eventDistNum, pageNum);
+    return this.setFootprintPageValue(key, footprint);
   };
 
   PageValue.removeAllFootprint = function() {

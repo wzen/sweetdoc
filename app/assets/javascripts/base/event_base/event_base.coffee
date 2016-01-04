@@ -214,7 +214,7 @@ class EventBase extends Extend
     # ステータス値初期化
     @resetProgress()
     # インスタンスの状態を保存
-    PageValue.saveInstanceObjectToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+    PageValue.saveToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # チャプター終了時イベント
   didChapter: ->
@@ -223,7 +223,7 @@ class EventBase extends Extend
       if k.lastIndexOf('__Cache') >= 0
         delete @[k]
     # インスタンスの状態を保存
-    PageValue.saveInstanceObjectToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+    PageValue.saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # メソッド実行
   execMethod: (opt) ->
@@ -376,7 +376,15 @@ class EventBase extends Extend
 
   # イベント前のインスタンスオブジェクトを取得
   getMinimumObjectEventBefore: ->
-    return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+
+  # 共通インスタンスを戻す
+  # FIXME: とりあえずここで
+  updateCommonEventBefore: ->
+    for k, v of PageValue.getFootprintPageValue(PageValue.Key.footprintCommonBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID]))
+      obj = window.instanceMap[k]
+      if obj?
+        obj.setMiniumObject(v)
 
   # イベント前の表示状態にする
   updateEventBefore: ->
@@ -387,7 +395,11 @@ class EventBase extends Extend
     if window.runDebug
       console.log('EventBase updateEventBefore id:' + @id)
 
+    # インスタンスを戻す
     @setMiniumObject(@getMinimumObjectEventBefore())
+    # 共通インスタンスを戻す
+    # FIXME: とりあえずここで
+    @updateCommonEventBefore()
     @resetProgress()
 
   # イベント後の表示状態にする
@@ -404,7 +416,7 @@ class EventBase extends Extend
       @stepValue = @scrollLength()
     @updateInstanceParamByStep(null, true)
     # インスタンスの状態を保存
-    PageValue.saveInstanceObjectToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
+    PageValue.saveToFootprint(@id, false, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # ステップ実行によるアイテム状態更新
   updateInstanceParamByStep: (progressValue, immediate = false)->

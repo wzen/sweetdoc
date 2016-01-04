@@ -245,14 +245,13 @@ WorktableCommon = (function() {
       callback = null;
     }
     return this.stopAllEventPreview(function(noRunningPreview) {
-      var callbackCount, item, items, l, len, results;
+      var callbackCount, item, items, l, len;
       if (window.worktableItemsChangedState || !noRunningPreview) {
         items = Common.instancesInPage(pn);
         callbackCount = 0;
-        results = [];
         for (l = 0, len = items.length; l < len; l++) {
           item = items[l];
-          results.push(item.refreshFromInstancePageValue(true, function() {
+          item.refreshFromInstancePageValue(true, function() {
             callbackCount += 1;
             if (callbackCount >= items.length) {
               window.worktableItemsChangedState = false;
@@ -260,9 +259,9 @@ WorktableCommon = (function() {
                 return callback();
               }
             }
-          }));
+          });
         }
-        return results;
+        return Common.updateWorktableScrollContentsFromPageValue();
       } else {
         if (callback != null) {
           return callback();
@@ -651,19 +650,26 @@ WorktableCommon = (function() {
     window.worktableItemsChangedState = true;
     return Common.updateAllEventsToBefore((function(_this) {
       return function() {
-        var idx, item, l, len, te;
+        var focusTargetItem, idx, item, l, len, te;
         PageValue.removeAllFootprint();
         teNum = parseInt(teNum);
+        focusTargetItem = null;
         for (idx = l = 0, len = tes.length; l < len; idx = ++l) {
           te = tes[idx];
           item = window.instanceMap[te.id];
           if (item != null) {
             item.initEvent(te, keepDispMag);
+            if (item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]) {
+              focusTargetItem = item;
+            }
             if (idx < tes.length - 1 || fromBlankEventConfig) {
               item.willChapter();
               item.updateEventAfter();
               item.didChapter();
             } else if (doRunPreview) {
+              if (focusTargetItem != null) {
+                Common.focusToTarget(focusTargetItem.getJQueryElement(), null, true, true);
+              }
               window.previewRunning = true;
               item.preview(function() {
                 window.previewRunning = false;
@@ -676,6 +682,11 @@ WorktableCommon = (function() {
                 return _this.refreshAllItemsFromInstancePageValueIfChanging();
               });
             }
+          }
+        }
+        if (!doRunPreview) {
+          if (focusTargetItem != null) {
+            Common.focusToTarget(focusTargetItem.getJQueryElement(), null, true, true);
           }
         }
         if (callback != null) {

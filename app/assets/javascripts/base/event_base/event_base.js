@@ -283,7 +283,7 @@ EventBase = (function(superClass) {
   EventBase.prototype.willChapter = function() {
     this.setModifyBeforeAndAfterVar();
     this.resetProgress();
-    return PageValue.saveInstanceObjectToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return PageValue.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.didChapter = function() {
@@ -294,7 +294,7 @@ EventBase = (function(superClass) {
         delete this[k];
       }
     }
-    return PageValue.saveInstanceObjectToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return PageValue.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.execMethod = function(opt) {
@@ -453,7 +453,23 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.getMinimumObjectEventBefore = function() {
-    return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    return PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+  };
+
+  EventBase.prototype.updateCommonEventBefore = function() {
+    var k, obj, ref, results, v;
+    ref = PageValue.getFootprintPageValue(PageValue.Key.footprintCommonBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID]));
+    results = [];
+    for (k in ref) {
+      v = ref[k];
+      obj = window.instanceMap[k];
+      if (obj != null) {
+        results.push(obj.setMiniumObject(v));
+      } else {
+        results.push(void 0);
+      }
+    }
+    return results;
   };
 
   EventBase.prototype.updateEventBefore = function() {
@@ -464,6 +480,7 @@ EventBase = (function(superClass) {
       console.log('EventBase updateEventBefore id:' + this.id);
     }
     this.setMiniumObject(this.getMinimumObjectEventBefore());
+    this.updateCommonEventBefore();
     return this.resetProgress();
   };
 
@@ -480,7 +497,7 @@ EventBase = (function(superClass) {
       this.stepValue = this.scrollLength();
     }
     this.updateInstanceParamByStep(null, true);
-    return PageValue.saveInstanceObjectToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return PageValue.saveToFootprint(this.id, false, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
   };
 
   EventBase.prototype.updateInstanceParamByStep = function(progressValue, immediate) {

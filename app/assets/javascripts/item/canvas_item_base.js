@@ -127,7 +127,7 @@ CanvasItemBase = (function(superClass) {
 
   CanvasItemBase.prototype.originalItemElementSize = function() {
     var itemSize, obj, originalScale;
-    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
     itemSize = obj.itemSize;
     originalScale = obj.scale;
     return {

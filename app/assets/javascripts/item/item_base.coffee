@@ -189,7 +189,7 @@ class ItemBase extends ItemEventBase
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
-    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
     return obj.itemSize
 
   # アイテムサイズ更新

@@ -105,10 +105,14 @@ class PageValue
       @FED_PREFIX = constant.PageValueKey.FED_PREFIX
       # @property [return] 履歴ページルート
       @footprintPageRoot = (pn = PageValue.getPageNum()) -> "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
-      # @property [return] インスタンスDiff履歴(変更前)
-      @footprintInstanceDiffBefore = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceDiffBefore"
-      # @property [return] インスタンスDiff履歴(変更後)
-      @footprintInstanceDiffAfter = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceDiffAfter"
+      # @property [return] インスタンス履歴(変更前)
+      @footprintInstanceBefore = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceBefore"
+      # @property [return] インスタンス履歴(変更後)
+      @footprintInstanceAfter = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceAfter"
+      # @property [return] 共通インスタンス履歴(変更前)
+      @footprintCommonBefore = (eventDistNum, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}commonInstanceBefore"
+      # @property [return] 共通インスタンス履歴(変更後)
+      @footprintCommonAfter = (eventDistNum, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}commonInstanceAfter"
       # @property [return] フォーク番号スタック
       @forkStack = (pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}fork_stack"
 
@@ -617,11 +621,26 @@ class PageValue
           dFlg = false
           type = null
 
+  # Footprintに保存
+  @saveToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
+    @saveInstanceObjectToFootprint(targetObjId, isChangeBefore, eventDistNum, pageNum)
+    @saveCommonStateToFootprint(isChangeBefore, eventDistNum, pageNum)
+
   # インスタンスの変数値を保存
   @saveInstanceObjectToFootprint: (targetObjId, isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
+    # オブジェクト
     obj = window.instanceMap[targetObjId]
-    key = if isChangeBefore then @Key.footprintInstanceDiffBefore(eventDistNum, targetObjId, pageNum) else @Key.footprintInstanceDiffAfter(eventDistNum, targetObjId, pageNum)
+    key = if isChangeBefore then @Key.footprintInstanceBefore(eventDistNum, targetObjId, pageNum) else @Key.footprintInstanceAfter(eventDistNum, targetObjId, pageNum)
     @setFootprintPageValue(key, obj.getMinimumObject())
+
+  # 共通インスタンスの変数値を保存
+  @saveCommonStateToFootprint: (isChangeBefore, eventDistNum, pageNum = PageValue.getPageNum()) ->
+    # 画面State
+    se = new ScreenEvent()
+    footprint = {}
+    footprint[se.id] = se.getMinimumObject()
+    key = if isChangeBefore then @Key.footprintCommonBefore(eventDistNum, pageNum) else @Key.footprintCommonAfter(eventDistNum, pageNum)
+    @setFootprintPageValue(key, footprint)
 
   # 全ての操作履歴を削除
   @removeAllFootprint: ->

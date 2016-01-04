@@ -113,7 +113,7 @@ class CanvasItemBase extends ItemBase
 
   # アニメーション変更前のアイテムサイズ
   originalItemElementSize: ->
-    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceDiffBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
     itemSize = obj.itemSize
     originalScale = obj.scale
     return {
