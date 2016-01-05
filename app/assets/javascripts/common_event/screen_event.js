@@ -78,7 +78,7 @@ ScreenEvent = (function(superClass) {
       _setScale.call(this, 1.0);
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
-      this.scale = 1.0;
+      this._scale = 1.0;
       if (callback != null) {
         return callback();
       }
@@ -151,7 +151,7 @@ ScreenEvent = (function(superClass) {
     };
 
     PrivateClass.prototype.willChapter = function() {
-      this.nowScale = this.scale;
+      this.nowScale = this._scale;
       return PrivateClass.__super__.willChapter.call(this);
     };
 
@@ -160,7 +160,7 @@ ScreenEvent = (function(superClass) {
       this.nowY = this._progressY;
       this.nowScale = this._progressScale;
       this._progressScale = null;
-      this.scale = this.nowScale;
+      this._scale = this.nowScale;
       return PrivateClass.__super__.didChapter.call(this);
     };
 
@@ -168,16 +168,17 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.setMiniumObject.call(this, obj);
       if (!window.isWorkTable && !this._initDone) {
         _setScale.call(this, this.initConfigScale);
+        this.nowScale = this.initConfigScale;
         Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
         return this._initDone = true;
       }
     };
 
     PrivateClass.prototype.getNowScale = function() {
-      if (this.scale == null) {
-        this.scale = this.initConfigScale;
+      if (this._scale == null) {
+        this._scale = this.initConfigScale;
       }
-      return this.scale;
+      return this._scale;
     };
 
     PrivateClass.prototype.getNowProgressScale = function() {
@@ -304,12 +305,12 @@ ScreenEvent = (function(superClass) {
     };
 
     _setScale = function(scale) {
-      this.scale = scale;
+      this._scale = scale;
       return Common.applyViewScale();
     };
 
     _getScale = function() {
-      return this.scale;
+      return this._scale;
     };
 
     return PrivateClass;

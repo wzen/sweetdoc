@@ -56,7 +56,7 @@ class ScreenEvent extends CommonEvent
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
       # 倍率を戻す
-      @scale = 1.0
+      @_scale = 1.0
       if callback?
         callback()
 
@@ -114,7 +114,7 @@ class ScreenEvent extends CommonEvent
       super(loopFinishCallback, callback)
 
     willChapter: ->
-      @nowScale = @scale
+      @nowScale = @_scale
       super()
 
     didChapter: ->
@@ -122,20 +122,21 @@ class ScreenEvent extends CommonEvent
       @nowY = @_progressY
       @nowScale = @_progressScale
       @_progressScale = null
-      @scale = @nowScale
+      @_scale = @nowScale
       super()
 
     setMiniumObject: (obj) ->
       super(obj)
       if !window.isWorkTable && !@_initDone
         _setScale.call(@, @initConfigScale)
+        @nowScale = @initConfigScale
         Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
         @_initDone = true
 
     getNowScale: ->
-      if !@scale?
-        @scale = @initConfigScale
-      return @scale
+      if !@_scale?
+        @_scale = @initConfigScale
+      return @_scale
 
     getNowProgressScale: ->
       if @_progressScale?
@@ -238,11 +239,11 @@ class ScreenEvent extends CommonEvent
       return {top: top, left: left, width: width, height: height}
 
     _setScale = (scale) ->
-      @scale = scale
+      @_scale = scale
       Common.applyViewScale()
 
     _getScale = ->
-      return @scale
+      return @_scale
 
   @CLASS_DIST_TOKEN = @PrivateClass.CLASS_DIST_TOKEN
 
