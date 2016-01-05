@@ -35,9 +35,13 @@ class ScreenEvent extends CommonEvent
       @initConfigX = 0
       @initConfigY = 0
       @initConfigScale = 1.0
+      if window.scrollContents?
+        @initConfigX = window.scrollInside.height() * 0.5
+        @initConfigY = window.scrollInside.width() * 0.5
       @nowX = null
       @nowY = null
       @nowScale = null
+      @_initDone = false
 
     # イベントの初期化
     # @param [Object] event 設定イベント
@@ -120,6 +124,13 @@ class ScreenEvent extends CommonEvent
       @_progressScale = null
       @scale = @nowScale
       super()
+
+    setMiniumObject: (obj) ->
+      super(obj)
+      if !window.isWorkTable && !@_initDone
+        _setScale.call(@, @initConfigScale)
+        Common.updateScrollContentsPosition(@initConfigY, @initConfigX)
+        @_initDone = true
 
     getNowScale: ->
       if !@scale?

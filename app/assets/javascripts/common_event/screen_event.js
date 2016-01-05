@@ -52,9 +52,14 @@ ScreenEvent = (function(superClass) {
       this.initConfigX = 0;
       this.initConfigY = 0;
       this.initConfigScale = 1.0;
+      if (window.scrollContents != null) {
+        this.initConfigX = window.scrollInside.height() * 0.5;
+        this.initConfigY = window.scrollInside.width() * 0.5;
+      }
       this.nowX = null;
       this.nowY = null;
       this.nowScale = null;
+      this._initDone = false;
     }
 
     PrivateClass.prototype.initEvent = function(event, keepDispMag) {
@@ -157,6 +162,15 @@ ScreenEvent = (function(superClass) {
       this._progressScale = null;
       this.scale = this.nowScale;
       return PrivateClass.__super__.didChapter.call(this);
+    };
+
+    PrivateClass.prototype.setMiniumObject = function(obj) {
+      PrivateClass.__super__.setMiniumObject.call(this, obj);
+      if (!window.isWorkTable && !this._initDone) {
+        _setScale.call(this, this.initConfigScale);
+        Common.updateScrollContentsPosition(this.initConfigY, this.initConfigX);
+        return this._initDone = true;
+      }
     };
 
     PrivateClass.prototype.getNowScale = function() {
