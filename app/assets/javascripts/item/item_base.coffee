@@ -69,6 +69,12 @@ class ItemBase extends ItemEventBase
 
   # ScrollInsideに要素追加
   addContentsToScrollInside: (contents, callback = null) ->
+    if @getJQueryElement()? && @getJQueryElement().length > 0
+      # 既に存在する場合は追加しない
+      if callback?
+        callback()
+      return
+
     createdElement = Common.wrapCreateItemElement(@, $(contents))
     $(createdElement).appendTo(window.scrollInside)
     if callback?

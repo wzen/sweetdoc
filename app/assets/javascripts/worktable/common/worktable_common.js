@@ -157,6 +157,16 @@ WorktableCommon = (function() {
     return PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex));
   };
 
+  WorktableCommon.editItem = function(objId) {
+    var item;
+    item = window.instanceMap[objId];
+    if ((item != null) && (item.launchEdit != null)) {
+      return item.launchEdit();
+    } else {
+      return Sidebar.openItemEditConfig($("#" + objId));
+    }
+  };
+
   WorktableCommon.changeMode = function(afterMode, pn) {
     var item, items, l, len, results;
     if (pn == null) {

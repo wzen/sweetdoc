@@ -121,7 +121,7 @@ itemBaseWorktableExtend =
     menu.push({
       title: I18n.t('context_menu.edit'), cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # アイテム編集
-        Sidebar.openItemEditConfig(event.target)
+        WorktableCommon.editItem($(event.target).id)
     })
     menu.push({
       title: I18n.t('context_menu.copy'), cmd: "copy", uiIcon: "ui-icon-scissors", func: (event, ui) ->

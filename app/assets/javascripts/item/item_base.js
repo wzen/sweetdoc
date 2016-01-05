@@ -79,6 +79,12 @@ ItemBase = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
+    if ((this.getJQueryElement() != null) && this.getJQueryElement().length > 0) {
+      if (callback != null) {
+        callback();
+      }
+      return;
+    }
     createdElement = Common.wrapCreateItemElement(this, $(contents));
     $(createdElement).appendTo(window.scrollInside);
     if (callback != null) {

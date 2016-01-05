@@ -141,7 +141,7 @@ itemBaseWorktableExtend = {
       cmd: "edit",
       uiIcon: "ui-icon-scissors",
       func: function(event, ui) {
-        return Sidebar.openItemEditConfig(event.target);
+        return WorktableCommon.editItem($(event.target).id);
       }
     });
     menu.push({

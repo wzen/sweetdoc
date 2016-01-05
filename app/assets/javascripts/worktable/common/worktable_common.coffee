@@ -124,6 +124,16 @@ class WorktableCommon
     $("##{objId}").css('z-index', minZIndex)
     PageValue.setInstancePageValue(PageValue.Key.instanceValue(objId) + PageValue.Key.PAGE_VALUES_SEPERATOR + 'zindex', Common.minusPagingZindex(minZIndex))
 
+  # アイテム編集
+  @editItem = (objId) ->
+    item = window.instanceMap[objId]
+    if item? && item.launchEdit?
+      # launchEditメソッドが宣言されている場合は呼ぶ
+      item.launchEdit()
+    else
+      # それ以外はアイテム編集サイドメニューを開く
+      Sidebar.openItemEditConfig($("##{objId}"))
+
   # モードチェンジ
   # @param [Mode] afterMode 変更後画面モード
   @changeMode = (afterMode, pn = PageValue.getPageNum()) ->
@@ -160,6 +170,7 @@ class WorktableCommon
         if item.changeMode?
           item.changeMode(afterMode)
 
+  # 画面Pointingモードに変更
   @changeEventPointingMode = (afterMode) ->
     if afterMode == Constant.EventInputPointingMode.NOT_SELECT
       # 全入力を有効

@@ -111,13 +111,22 @@ PreloadItemText = (function(superClass) {
     return PreloadItemText.__super__.updateItemSize.call(this, w, h);
   };
 
-  PreloadItemText.prototype.cssItemHtml = function() {
-    if (this._editing) {
-      return "<input type='text' class='text_wrapper " + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;height:100%;\">";
-    } else {
-      return "<div class='item_wrapper'><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_before'><span class='text_wrapper'>" + this.inputText + "</span></div><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_after'  style='opacity: 0'><span class='text_wrapper'></span></div></div>";
-    }
+  PreloadItemText.prototype.createItemElement = function(callback) {
+    var element;
+    return element = "<div class='css_item_base context_base put_center'>" + (this.cssItemHtml()) + "</div>";
   };
+
+  PreloadItemText.prototype.cssItemHtml = function() {
+    var element;
+    if (this._editing) {
+      element = "<input type='text' class='text_wrapper " + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;height:100%;\">";
+    } else {
+      element = "<canvas\n<div class='item_wrapper'><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_before'><span class='text_wrapper'>" + this.inputText + "</span></div><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_after' style='opacity: 0'><span class='text_wrapper'></span></div></div>";
+    }
+    return this.addContentsToScrollInside(element, callback);
+  };
+
+  PreloadItemText.prototype.launchEdit = function() {};
 
   PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {
     if (callback == null) {
@@ -239,7 +248,7 @@ PreloadItemText = (function(superClass) {
 
   return PreloadItemText;
 
-})(CssItemBase);
+})(ItemBase);
 
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText);
 

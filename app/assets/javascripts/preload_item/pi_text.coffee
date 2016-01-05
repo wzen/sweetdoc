@@ -1,4 +1,4 @@
-class PreloadItemText extends CssItemBase
+class PreloadItemText extends ItemBase
   @NAME_PREFIX = "text"
   @CLASS_DIST_TOKEN = 'PreloadItemText'
   @INPUT_CLASSNAME = 'pi_input_text'
@@ -195,18 +195,31 @@ class PreloadItemText extends CssItemBase
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     super(w, h)
-    # フォントサイズ変更
+    # FIXME: フォントサイズ変更
+
+
+  # アイテム用のテンプレートHTMLを読み込み
+  # @return [String] HTML
+  createItemElement: (callback) ->
+    element = "<div class='css_item_base context_base put_center'>#{@cssItemHtml()}</div>"
 
   # HTML要素
   cssItemHtml: ->
     if @_editing
-      return """
+      element = """
         <input type='text' class='text_wrapper #{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;height:100%;">
       """
     else
-      return """
-        <div class='item_wrapper'><div class='#{@constructor.CONTENTS_CLASSNAME} change_before'><span class='text_wrapper'>#{@inputText}</span></div><div class='#{@constructor.CONTENTS_CLASSNAME} change_after'  style='opacity: 0'><span class='text_wrapper'></span></div></div>
+      element = """
+        <canvas
+        <div class='item_wrapper'><div class='#{@constructor.CONTENTS_CLASSNAME} change_before'><span class='text_wrapper'>#{@inputText}</span></div><div class='#{@constructor.CONTENTS_CLASSNAME} change_after' style='opacity: 0'><span class='text_wrapper'></span></div></div>
       """
+    @addContentsToScrollInside(element, callback)
+
+
+  # アイテム編集
+  launchEdit: ->
+
 
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->

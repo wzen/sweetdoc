@@ -33,7 +33,7 @@ class ItemStateConfig
       $('a.item_edit', rootEmt).off('click').on('click', (e) ->
         e.preventDefault()
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
-        Sidebar.openItemEditConfig($("##{objId}"))
+        WorktableCommon.editItem(objId)
       )
 
       $('.item_visible > a, .item_invisible > a', rootEmt).off('click').on('click', (e) ->

@@ -40,7 +40,7 @@ ItemStateConfig = (function() {
         var objId;
         e.preventDefault();
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
-        return Sidebar.openItemEditConfig($("#" + objId));
+        return WorktableCommon.editItem(objId);
       });
       return $('.item_visible > a, .item_invisible > a', rootEmt).off('click').on('click', function(e) {
         e.preventDefault();
