@@ -143,7 +143,7 @@ class Common
         @updateScrollContentsPosition(se.initConfigY, se.initConfigX)
 
   # 画面スケールの設定
-  @applyViewScale = ->
+  @applyViewScale = (isViewResize = false) ->
     worktableScale = 1.0
     if window.isWorkTable
       worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale())
@@ -152,7 +152,10 @@ class Common
     seScale = 1.0
     if ScreenEvent.hasInstanceCache()
       se = new ScreenEvent()
-      seScale = se.getNowScale()
+      if isViewResize
+        seScale = se.getNowProgressScale()
+      else
+        seScale = se.getNowScale()
     scale = worktableScale * Common.scaleFromViewRate * seScale
     updateMainWrapperPercent = 100 / Common.scaleFromViewRate
     window.mainWrapper.css({transform: "scale(#{scale}, #{scale})", width: "#{updateMainWrapperPercent}%", height: "#{updateMainWrapperPercent}%"})

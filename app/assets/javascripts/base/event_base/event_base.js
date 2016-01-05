@@ -725,12 +725,16 @@ EventBase = (function(superClass) {
       return ret;
     };
     ret = {};
-    modifiableRoot = null;
+    modifiableRoot = {};
     if (methodName != null) {
       if (isDefault) {
-        modifiableRoot = this.actionProperties[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
+        if (this.actionProperties[methodName] != null) {
+          modifiableRoot = this.actionProperties[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
+        }
       } else {
-        modifiableRoot = this.actionProperties.methods[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
+        if (this.actionProperties.methods[methodName] != null) {
+          modifiableRoot = this.actionProperties.methods[methodName][this.ActionPropertiesKey.MODIFIABLE_VARS];
+        }
       }
     } else {
       modifiableRoot = this.actionProperties[this.ActionPropertiesKey.MODIFIABLE_VARS];

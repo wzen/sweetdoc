@@ -107,7 +107,7 @@ RunCommon = (function() {
       width: updatedProjectScreenSize.width,
       height: updatedProjectScreenSize.height
     });
-    return Common.applyViewScale();
+    return Common.applyViewScale(true);
   };
 
   RunCommon.resizeMainContainerEvent = function() {

@@ -403,15 +403,17 @@ class EventConfig
           return
 
         # アクションメソッドConfig追加
-        methodClone = $('#event-config .method_none_temp').children(':first').clone(true)
-        methodClone.find('input[type=radio]').attr('name', className)
-        actionParent.append(methodClone)
-        methods = props[ItemBase.ActionPropertiesKey.METHODS]
+        if itemClass instanceof ItemBase
+          # 'none'が選択できるのはアイテムのみ
+          methodClone = $('#event-config .method_none_temp').children(':first').clone(true)
+          methodClone.find('input[type=radio]').attr('name', className)
+          actionParent.append(methodClone)
+        methods = props[EventBase.ActionPropertiesKey.METHODS]
         if methods?
           for methodName, prop of methods
             methodClone = $('#event-config .method_temp').children(':first').clone(true)
             span = methodClone.find('label:first').children('span:first')
-            span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name'])
+            span.html(prop[EventBase.ActionPropertiesKey.OPTIONS]['name'])
             methodClone.find('input.method_name:first').val(methodName)
             valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@classdisttoken', distToken).replace('@methodname', methodName)
             methodClone.find('input[type=radio]').attr('name', className)

@@ -429,16 +429,18 @@ EventConfig = (function() {
           }
           return;
         }
-        methodClone = $('#event-config .method_none_temp').children(':first').clone(true);
-        methodClone.find('input[type=radio]').attr('name', className);
-        actionParent.append(methodClone);
-        methods = props[ItemBase.ActionPropertiesKey.METHODS];
+        if (itemClass instanceof ItemBase) {
+          methodClone = $('#event-config .method_none_temp').children(':first').clone(true);
+          methodClone.find('input[type=radio]').attr('name', className);
+          actionParent.append(methodClone);
+        }
+        methods = props[EventBase.ActionPropertiesKey.METHODS];
         if (methods != null) {
           for (methodName in methods) {
             prop = methods[methodName];
             methodClone = $('#event-config .method_temp').children(':first').clone(true);
             span = methodClone.find('label:first').children('span:first');
-            span.html(prop[ItemBase.ActionPropertiesKey.OPTIONS]['name']);
+            span.html(prop[EventBase.ActionPropertiesKey.OPTIONS]['name']);
             methodClone.find('input.method_name:first').val(methodName);
             valueClassName = EventConfig.ITEM_VALUES_CLASS.replace('@classdisttoken', distToken).replace('@methodname', methodName);
             methodClone.find('input[type=radio]').attr('name', className);

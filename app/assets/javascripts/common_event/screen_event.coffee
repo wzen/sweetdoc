@@ -109,10 +109,15 @@ class ScreenEvent extends CommonEvent
       , 0)
       super(loopFinishCallback, callback)
 
+    willChapter: ->
+      @nowScale = @scale
+      super()
+
     didChapter: ->
       @nowX = @_progressX
       @nowY = @_progressY
       @nowScale = @_progressScale
+      @_progressScale = null
       @scale = @nowScale
       super()
 
@@ -120,6 +125,13 @@ class ScreenEvent extends CommonEvent
       if !@scale?
         @scale = @initConfigScale
       return @scale
+
+    getNowProgressScale: ->
+      if @_progressScale?
+        return @_progressScale
+      else
+        # 動作中でない場合はnowScaleを返却
+        @getNowScale()
 
     # 独自コンフィグのイベント初期化
     @initSpecificConfig = (specificRoot) ->

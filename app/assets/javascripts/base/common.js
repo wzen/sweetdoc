@@ -184,8 +184,11 @@ Common = (function() {
     }
   };
 
-  Common.applyViewScale = function() {
+  Common.applyViewScale = function(isViewResize) {
     var scale, se, seScale, updateMainWrapperPercent, worktableScale;
+    if (isViewResize == null) {
+      isViewResize = false;
+    }
     worktableScale = 1.0;
     if (window.isWorkTable) {
       worktableScale = PageValue.getGeneralPageValue(PageValue.Key.worktableScale());
@@ -196,7 +199,11 @@ Common = (function() {
     seScale = 1.0;
     if (ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
-      seScale = se.getNowScale();
+      if (isViewResize) {
+        seScale = se.getNowProgressScale();
+      } else {
+        seScale = se.getNowScale();
+      }
     }
     scale = worktableScale * Common.scaleFromViewRate * seScale;
     updateMainWrapperPercent = 100 / Common.scaleFromViewRate;

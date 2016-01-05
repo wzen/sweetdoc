@@ -145,10 +145,16 @@ ScreenEvent = (function(superClass) {
       return PrivateClass.__super__.stopPreview.call(this, loopFinishCallback, callback);
     };
 
+    PrivateClass.prototype.willChapter = function() {
+      this.nowScale = this.scale;
+      return PrivateClass.__super__.willChapter.call(this);
+    };
+
     PrivateClass.prototype.didChapter = function() {
       this.nowX = this._progressX;
       this.nowY = this._progressY;
       this.nowScale = this._progressScale;
+      this._progressScale = null;
       this.scale = this.nowScale;
       return PrivateClass.__super__.didChapter.call(this);
     };
@@ -158,6 +164,14 @@ ScreenEvent = (function(superClass) {
         this.scale = this.initConfigScale;
       }
       return this.scale;
+    };
+
+    PrivateClass.prototype.getNowProgressScale = function() {
+      if (this._progressScale != null) {
+        return this._progressScale;
+      } else {
+        return this.getNowScale();
+      }
     };
 
     PrivateClass.initSpecificConfig = function(specificRoot) {

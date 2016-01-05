@@ -79,7 +79,8 @@ class RunCommon
     updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
     $('#main').height(updateMainHeight)
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
-    Common.applyViewScale()
+    # FIXME: 表示位置もScaleに合わせて直す
+    Common.applyViewScale(true)
 
   # 画面リサイズイベント
   @resizeMainContainerEvent = ->
