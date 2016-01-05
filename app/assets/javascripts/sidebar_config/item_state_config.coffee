@@ -7,6 +7,8 @@ class ItemStateConfig
 
   # 設定値初期化
   @initConfig: ->
+    rootEmt = $("##{@ROOT_ID_NAME}")
+
     # 作成アイテム一覧
     createdItemList = $('.created_item_list', rootEmt)
     createdItemList.children().remove()
@@ -22,7 +24,7 @@ class ItemStateConfig
           temp.find('.item_invisible').show()
         createdItemList.append(temp)
 
-      $('.focus_enabled > a').off('click').on('click', (e) ->
+      $('.focus_enabled > a', rootEmt).off('click').on('click', (e) ->
         objId = $(@).closest('.wrapper').find('.item_obj_id').val()
         # アイテムにフォーカス
         Common.focusToTarget($("##{objId}"), null, true)

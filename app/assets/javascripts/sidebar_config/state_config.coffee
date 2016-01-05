@@ -28,6 +28,7 @@ class StateConfig
       $('input', emt).off('change').on('change', (e) =>
         se = new ScreenEvent()
         se[$(e.target).attr('class')] = $(e.target).val()
+        se.setItemAllPropToPageValue()
       )
 
       _updateConfigInput = (emt, pointingSize) ->
@@ -42,6 +43,11 @@ class StateConfig
         emt.find('.initConfigX:first').val(x)
         emt.find('.initConfigY:first').val(y)
         emt.find('.initConfigScale:first').val(z)
+        se = new ScreenEvent()
+        se.initConfigX = x
+        se.initConfigY = y
+        se.initConfigScale = z
+        se.setItemAllPropToPageValue()
 
       emt.find('.event_pointing:first').eventDragPointing((pointingSize) =>
         _updateConfigInput.call(@, emt, pointingSize)

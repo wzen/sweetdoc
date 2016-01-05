@@ -55,7 +55,8 @@ class FloatView
     screenWrapper = $('#screen_wrapper')
     root = $(".float_view.fixed.#{type}:first", screenWrapper)
     if root.length > 0
-      # 既に表示されている場合は無視
+      # 既に表示されている場合はshow
+      root.show()
       return
 
     $(".float_view", screenWrapper).remove()

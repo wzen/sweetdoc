@@ -47,7 +47,7 @@ class ScreenEvent extends CommonEvent
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
       Common.updateWorktableScrollContentsFromPageValue()
-      _setScale.call(@, Common.scaleFromViewRate)
+      _setScale.call(@, 1.0)
       # オーバーレイ削除
       $('#preview_position_overlay').remove()
       $('.keep_mag_base').remove()
@@ -76,7 +76,7 @@ class ScreenEvent extends CommonEvent
         @_progressY = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         @_progressScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
         if @keepDispMag
-          _setScale.call(@, Common.scaleFromViewRate)
+          _setScale.call(@, 1.0)
           _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         else
           _setScale.call(@, @_progressScale)
@@ -92,7 +92,7 @@ class ScreenEvent extends CommonEvent
       if opt.isPreview
         _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         if @keepDispMag
-          _setScale.call(@, Common.scaleFromViewRate)
+          _setScale.call(@, 1.0)
 
       if !@keepDispMag
         _setScale.call(@, @_progressScale)

@@ -33,7 +33,8 @@ StateConfig = (function() {
         $('.initConfigScale:first', emt).val(se.initConfigScale);
         $('input', emt).off('change').on('change', function(e) {
           se = new ScreenEvent();
-          return se[$(e.target).attr('class')] = $(e.target).val();
+          se[$(e.target).attr('class')] = $(e.target).val();
+          return se.setItemAllPropToPageValue();
         });
         _updateConfigInput = function(emt, pointingSize) {
           var screenSize, x, y, z;
@@ -48,7 +49,12 @@ StateConfig = (function() {
           }
           emt.find('.initConfigX:first').val(x);
           emt.find('.initConfigY:first').val(y);
-          return emt.find('.initConfigScale:first').val(z);
+          emt.find('.initConfigScale:first').val(z);
+          se = new ScreenEvent();
+          se.initConfigX = x;
+          se.initConfigY = y;
+          se.initConfigScale = z;
+          return se.setItemAllPropToPageValue();
         };
         return emt.find('.event_pointing:first').eventDragPointing(function(pointingSize) {
           return _updateConfigInput.call(_this, emt, pointingSize);

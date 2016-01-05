@@ -84,6 +84,7 @@ FloatView = (function() {
     screenWrapper = $('#screen_wrapper');
     root = $(".float_view.fixed." + type + ":first", screenWrapper);
     if (root.length > 0) {
+      root.show();
       return;
     }
     $(".float_view", screenWrapper).remove();

@@ -70,7 +70,7 @@ ScreenEvent = (function(superClass) {
         callback = null;
       }
       Common.updateWorktableScrollContentsFromPageValue();
-      _setScale.call(this, Common.scaleFromViewRate);
+      _setScale.call(this, 1.0);
       $('#preview_position_overlay').remove();
       $('.keep_mag_base').remove();
       this.scale = 1.0;
@@ -102,7 +102,7 @@ ScreenEvent = (function(superClass) {
         this._progressY = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         this._progressScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
         if (this.keepDispMag) {
-          _setScale.call(this, Common.scaleFromViewRate);
+          _setScale.call(this, 1.0);
           return _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         } else {
           _setScale.call(this, this._progressScale);
@@ -121,7 +121,7 @@ ScreenEvent = (function(superClass) {
       if (opt.isPreview) {
         _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         if (this.keepDispMag) {
-          _setScale.call(this, Common.scaleFromViewRate);
+          _setScale.call(this, 1.0);
         }
       }
       if (!this.keepDispMag) {

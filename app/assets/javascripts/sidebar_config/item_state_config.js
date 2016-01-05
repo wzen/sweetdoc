@@ -13,7 +13,8 @@ ItemStateConfig = (function() {
   }
 
   ItemStateConfig.initConfig = function() {
-    var createdItemList, items, k, temp, v;
+    var createdItemList, items, k, rootEmt, temp, v;
+    rootEmt = $("#" + this.ROOT_ID_NAME);
     createdItemList = $('.created_item_list', rootEmt);
     createdItemList.children().remove();
     items = PageValue.getCreatedItems();
@@ -30,7 +31,7 @@ ItemStateConfig = (function() {
         }
         createdItemList.append(temp);
       }
-      $('.focus_enabled > a').off('click').on('click', function(e) {
+      $('.focus_enabled > a', rootEmt).off('click').on('click', function(e) {
         var objId;
         objId = $(this).closest('.wrapper').find('.item_obj_id').val();
         return Common.focusToTarget($("#" + objId), null, true);
