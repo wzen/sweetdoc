@@ -117,11 +117,21 @@ en:
         save:
           success: ""
           error: ""
+    project:
+      error:
+        project_name: "Project name not inputed"
+        display_size: "Display size not inputed"
   common_action:
     background: "Background"
     screen: "Screen"
+  activerecord:
+    attributes:
+      user:
+        name: 'Name'
+        password: 'Password'
+        password_confirmation: 'Password Confirm'
+        email: 'Mail Address'
   test: "testok"
-
   account:
     in_use_as_guest: 'In use as guest'
     login_or_create_account: 'Login or Create account'

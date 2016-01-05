@@ -95,6 +95,10 @@ ja:
         save:
           success: ""
           error: ""
+    project:
+      error:
+        project_name: "プロジェクト名が入力されていません。"
+        display_size: "画面サイズが入力されていません。"
   common_action:
     background: "背景"
     screen: "画面表示"

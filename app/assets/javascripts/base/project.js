@@ -20,21 +20,17 @@ Project = (function() {
       callback = null;
     }
     _modalSize = function(type) {
-      var height, width;
+      var width;
       if (type === 'new') {
         width = 424;
-        height = 179;
       } else {
         width = 424;
-        height = 118;
       }
       return {
-        width: width,
-        height: height
+        width: width
       };
     };
-    $('.project_create_wrapper input[type=radio]', modalEmt).off('click');
-    $('.project_create_wrapper input[type=radio]', modalEmt).on('click', function() {
+    $('.project_create_wrapper input[type=radio]', modalEmt).off('click').on('click', function() {
       var size;
       $('.display_project_new_wrapper', modalEmt).css('display', $(this).val() === 'new' ? 'block' : 'none');
       $('.display_project_select_wrapper', modalEmt).css('display', $(this).val() === 'select' ? 'block' : 'none');
@@ -48,22 +44,11 @@ Project = (function() {
       });
       Common.modalCentering(true, size);
       $('.button_wrapper span', modalEmt).hide();
-      return $(".button_wrapper ." + ($(this).val()), modalEmt).show();
+      $(".button_wrapper ." + ($(this).val()), modalEmt).show();
+      return Project.hideError(modalEmt);
     });
-    $('.display_size_wrapper input[type=radio]', modalEmt).off('click');
-    $('.display_size_wrapper input[type=radio]', modalEmt).on('click', function() {
-      var height;
-      $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
-      if ($(this).val() === 'input') {
-        height = 199;
-      } else {
-        height = 179;
-      }
-      return modalEmt.animate({
-        height: height + "px"
-      }, {
-        duration: 300
-      });
+    $('.display_size_wrapper input[type=radio]', modalEmt).off('click').on('click', function() {
+      return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
     });
     $('.default_window_size', modalEmt).html((window.mainWrapper.width()) + " X " + (window.mainWrapper.height()));
     Project.load_data_order_last_updated(function(data) {
@@ -117,19 +102,20 @@ Project = (function() {
         }
       }
     });
-    $('.create_button', modalEmt).off('click');
-    $('.create_button', modalEmt).on('click', function() {
+    $('.create_button', modalEmt).off('click').on('click', function() {
       var height, projectName, width;
       projectName = $('.project_name').val();
       width = $('#screen_wrapper').width();
       height = $('#screen_wrapper').height();
       if ((projectName == null) || projectName.length === 0) {
+        Project.showError(modalEmt, I18n.t('message.project.error.project_name'));
         return;
       }
       if ($('.display_size_wrapper input[value=input]').is(':checked')) {
         width = $('.display_size_input_width', modalEmt).val();
         height = $('.display_size_input_height', modalEmt).val();
         if ((width == null) || width.length === 0 || (height == null) || height.length === 0) {
+          Project.showError(modalEmt, I18n.t('message.project.error.display_size'));
           return;
         }
       }
@@ -145,8 +131,7 @@ Project = (function() {
         return Common.hideModalView();
       });
     });
-    $('.open_button', modalEmt).off('click');
-    $('.open_button', modalEmt).on('click', function() {
+    $('.open_button', modalEmt).off('click').on('click', function() {
       var user_pagevalue_id;
       user_pagevalue_id = $('.project_select', modalEmt).val();
       return ServerStorage.load(user_pagevalue_id, function(data) {
@@ -165,10 +150,10 @@ Project = (function() {
         return Common.hideModalView();
       });
     });
-    $('.back_button', modalEmt).off('click');
-    return $('.back_button', modalEmt).on('click', function() {
+    $('.back_button', modalEmt).off('click').on('click', function() {
       return window.location.href = '/';
     });
+    return Project.hideError(modalEmt);
   };
 
   Project.load_data_order_last_updated = function(successCallback, errorCallback) {
@@ -421,6 +406,16 @@ Project = (function() {
         }
       };
     })(this));
+  };
+
+  Project.showError = function(modalEmt, message) {
+    modalEmt.find('.error_wrapper .error:first').html(message);
+    return modalEmt.find('.error_wrapper').show();
+  };
+
+  Project.hideError = function(modalEmt) {
+    modalEmt.find('.error_wrapper').hide();
+    return modalEmt.find('.error_wrapper .error:first').html('');
   };
 
   return Project;

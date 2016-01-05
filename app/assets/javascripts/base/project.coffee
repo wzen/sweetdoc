@@ -18,15 +18,12 @@ class Project
     _modalSize = (type) ->
       if type == 'new'
         width = 424
-        height = 179
       else
         width = 424
-        height = 118
-      return {width: width, height: height}
+      return {width: width}
 
     # ラジオボタンイベント
-    $('.project_create_wrapper input[type=radio]', modalEmt).off('click')
-    $('.project_create_wrapper input[type=radio]', modalEmt).on('click', ->
+    $('.project_create_wrapper input[type=radio]', modalEmt).off('click').on('click', ->
       $('.display_project_new_wrapper', modalEmt).css('display', if $(@).val() == 'new' then 'block' else 'none')
       $('.display_project_select_wrapper', modalEmt).css('display', if $(@).val() == 'select' then 'block' else 'none')
       size = _modalSize($(@).val())
@@ -34,16 +31,11 @@ class Project
       Common.modalCentering(true, size)
       $('.button_wrapper span', modalEmt).hide()
       $(".button_wrapper .#{$(@).val()}", modalEmt).show()
+      Project.hideError(modalEmt)
     )
 
-    $('.display_size_wrapper input[type=radio]', modalEmt).off('click')
-    $('.display_size_wrapper input[type=radio]', modalEmt).on('click', ->
+    $('.display_size_wrapper input[type=radio]', modalEmt).off('click').on('click', ->
       $('.display_size_input_wrapper', modalEmt).css('display', if $(@).val() == 'input' then 'block' else 'none')
-      if $(@).val() == 'input'
-        height = 199
-      else
-        height = 179
-      modalEmt.animate({height: "#{height}px"}, {duration: 300})
     )
 
     # ウィンドウサイズ
@@ -91,20 +83,21 @@ class Project
     )
 
     # Createボタンイベント
-    $('.create_button', modalEmt).off('click')
-    $('.create_button', modalEmt).on('click', ->
+    $('.create_button', modalEmt).off('click').on('click', ->
       # プロジェクト新規作成
       projectName = $('.project_name').val()
       width = $('#screen_wrapper').width()
       height = $('#screen_wrapper').height()
       if !projectName? || projectName.length == 0
         # エラー
+        Project.showError(modalEmt, I18n.t('message.project.error.project_name'))
         return
       if $('.display_size_wrapper input[value=input]').is(':checked')
         width = $('.display_size_input_width', modalEmt).val()
         height = $('.display_size_input_height', modalEmt).val()
         if !width? || width.length == 0 || !height? || height.length == 0
           # エラー
+          Project.showError(modalEmt, I18n.t('message.project.error.display_size'))
           return
 
       # プロジェクト更新
@@ -127,8 +120,7 @@ class Project
       )
     )
     # Openボタンイベント
-    $('.open_button', modalEmt).off('click')
-    $('.open_button', modalEmt).on('click', ->
+    $('.open_button', modalEmt).off('click').on('click', ->
       # プロジェクト選択
       user_pagevalue_id = $('.project_select', modalEmt).val()
       ServerStorage.load(user_pagevalue_id, (data) ->
@@ -150,10 +142,12 @@ class Project
     )
 
     # MainPageに遷移
-    $('.back_button', modalEmt).off('click')
-    $('.back_button', modalEmt).on('click', ->
+    $('.back_button', modalEmt).off('click').on('click', ->
       window.location.href = '/'
     )
+
+    # Error非表示
+    Project.hideError(modalEmt)
 
   # プロジェクト一覧を更新順に取得
   @load_data_order_last_updated: (successCallback = null, errorCallback = null) ->
@@ -378,3 +372,9 @@ class Project
         callback()
     )
 
+  @showError = (modalEmt, message) ->
+    modalEmt.find('.error_wrapper .error:first').html(message)
+    modalEmt.find('.error_wrapper').show()
+  @hideError = (modalEmt) ->
+    modalEmt.find('.error_wrapper').hide()
+    modalEmt.find('.error_wrapper .error:first').html('')
