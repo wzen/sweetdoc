@@ -5,7 +5,17 @@ class ColorPickerUtil
   # @param [Color] colorValue 変更色
   # @param [Function] onChange 変更時に呼ばれるメソッド
   @initColorPicker = (element, colorValue, onChange) ->
-    element.css("backgroundColor", "#" + colorValue)
+    setColor = null
+    if typeof colorValue == 'string'
+      if colorValue.indexOf('rgb') == 0
+        colorValue = Common.colorFormatChangeRgbToHex(colorValue)
+        setColor = colorValue
+      else
+        setColor = colorValue.replace('#', '')
+        setColor = "##{setColor}"
+    else
+      setColor = "rgb(#{colorValue.r}, #{colorValue.g}, #{colorValue.b})"
+    element.css("backgroundColor", setColor)
     element.ColorPicker({})
     element.ColorPickerSetColor(colorValue)
     element.ColorPickerResetOnChange( (a, b, d, e) ->

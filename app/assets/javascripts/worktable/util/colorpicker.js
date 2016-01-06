@@ -5,7 +5,20 @@ ColorPickerUtil = (function() {
   function ColorPickerUtil() {}
 
   ColorPickerUtil.initColorPicker = function(element, colorValue, onChange) {
-    element.css("backgroundColor", "#" + colorValue);
+    var setColor;
+    setColor = null;
+    if (typeof colorValue === 'string') {
+      if (colorValue.indexOf('rgb') === 0) {
+        colorValue = Common.colorFormatChangeRgbToHex(colorValue);
+        setColor = colorValue;
+      } else {
+        setColor = colorValue.replace('#', '');
+        setColor = "#" + setColor;
+      }
+    } else {
+      setColor = "rgb(" + colorValue.r + ", " + colorValue.g + ", " + colorValue.b + ")";
+    }
+    element.css("backgroundColor", setColor);
     element.ColorPicker({});
     element.ColorPickerSetColor(colorValue);
     element.ColorPickerResetOnChange(function(a, b, d, e) {
