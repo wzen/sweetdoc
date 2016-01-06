@@ -226,12 +226,19 @@ PreloadItemText = (function(superClass) {
   };
 
   _calcTextPositionAndFont = function(width, height) {
-    var a, c, fontSize, i, j, len, len1, newLineCount, posIndex, ref, ref1, results, results1, x, y;
+    var a, c, fontSize, h, i, j, len, len1, newLineCount, posIndex, ref, ref1, results, results1, w, x, y;
     a = this.inputText.length;
     this.inputText = this.inputText.replace(/\n+$/g, '');
     if (!this.isFixedFontSize) {
       newLineCount = this.inputText.split('\n').length - 1;
-      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (width * 4 * (a + 1)) / height) - newLineCount) * (a + 1) / height * 2;
+      if (this.isDrawHorizontal) {
+        w = height;
+        h = width;
+      } else {
+        w = width;
+        h = height;
+      }
+      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * (a + 1) / h * 2;
       if (debug) {
         console.log(fontSize);
       }

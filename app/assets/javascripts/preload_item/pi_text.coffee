@@ -316,7 +316,13 @@ class PreloadItemText extends CanvasItemBase
     if !@isFixedFontSize
       # フォントサイズを計算
       newLineCount = @inputText.split('\n').length - 1
-      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (width * 4 * (a + 1)) / height) - newLineCount) * (a + 1) / height * 2
+      if @isDrawHorizontal
+        w = height
+        h = width
+      else  
+        w = width
+        h = height
+      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * (a + 1) / h * 2
       if debug
         console.log(fontSize)
       @fontSize = parseInt(fontSize)
