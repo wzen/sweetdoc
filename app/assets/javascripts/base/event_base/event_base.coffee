@@ -17,6 +17,7 @@ class EventBase extends Extend
       @METHOD = constant.ItemActionPropertiesKey.METHOD
       @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
       @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
+      @COLOR_TYPE = constant.ItemActionPropertiesKey.COLOR_TYPE
       @SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES
       @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
       @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION

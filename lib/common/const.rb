@@ -391,6 +391,7 @@ class Const
     DEFAULT_METHOD = 'defaultMethod'
     SPECIFIC_METHOD_VALUES = 'specificValues'
     ACTION_TYPE = 'actionType'
+    COLOR_TYPE = 'colorType'
     SCROLL_ENABLED_DIRECTION = 'scrollEnabledDirection'
     SCROLL_FORWARD_DIRECTION = 'scrollForwardDirection'
     OPTIONS = 'options'

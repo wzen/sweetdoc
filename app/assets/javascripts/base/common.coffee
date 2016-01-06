@@ -865,6 +865,23 @@ class Common
     $.extend(data, option)
     element.contextmenu(data)
 
+  @colorFormatChangeRgbToHex = (data) ->
+    # 'rgb(r, g, b)'または'rgba(r, g, b, a)'のフォーマットを分解
+    cColors = data.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',')
+    for val, index in cColors
+      cColors[index] = parseInt(val)
+    return "##{cColors[0].toString(16)}#{cColors[1].toString(16)}#{cColors[2].toString(16)}"
+
+  @colorFormatChangeHexToRgb = (data) ->
+    # 'xxxxxxのフォーマットを分解'
+    data = data.replace('#', '')
+    cColors[0] = data.substring(0, 2)
+    cColors[1] = data.substring(2, 4)
+    cColors[2] = data.substring(4, 6)
+    for val, index in cColors
+      cColors[index] = parseInt(val, 16)
+    return "rgb(#{cColors[0]},#{cColors[1]},#{cColors[2]})"
+
   # 色変更差分のキャッシュを取得
   @colorChangeCacheData = (beforeColor, afterColor, length, colorType = 'hex') ->
     ret = []

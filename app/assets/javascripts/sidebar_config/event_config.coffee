@@ -449,7 +449,7 @@ class EventConfig
         else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.BOOLEAN
           @settingModifiableCheckbox(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.COLOR
-          @settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
+          @settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.COLOR_TYPE], v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if v[objClass.ActionPropertiesKey.TYPE] == Constant.ItemDesignOptionType.SELECT
           @settingModifiableSelect(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v['options[]'])
 
@@ -553,7 +553,7 @@ class EventConfig
   # 変数編集カラーピッカーの作成
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
-  settingModifiableColor: (varName, defaultValue, openChildrenValue) ->
+  settingModifiableColor: (varName, defaultValue, colorType, openChildrenValue) ->
     emt = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_color", @emt)
     ColorPickerUtil.initColorPicker(
       $(emt),
@@ -562,6 +562,8 @@ class EventConfig
         if !@hasModifiableVar(varName)
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
         value = "##{b}"
+        if colorType? && colorType == 'rgb'
+          value = Common.colorFormatChangeHexToRgb(value)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
         @constructor.switchChildrenConfig(emt, varName, openChildrenValue, value)
     )

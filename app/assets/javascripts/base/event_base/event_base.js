@@ -31,6 +31,8 @@ EventBase = (function(superClass) {
 
       ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
 
+      ActionPropertiesKey.COLOR_TYPE = constant.ItemActionPropertiesKey.COLOR_TYPE;
+
       ActionPropertiesKey.SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES;
 
       ActionPropertiesKey.SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION;

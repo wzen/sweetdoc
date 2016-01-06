@@ -482,7 +482,7 @@ EventConfig = (function() {
         } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.BOOLEAN) {
           results.push(this.settingModifiableCheckbox(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.COLOR) {
-          results.push(this.settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
+          results.push(this.settingModifiableColor(varName, defaultValue, v[objClass.ActionPropertiesKey.COLOR_TYPE], v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (v[objClass.ActionPropertiesKey.TYPE] === Constant.ItemDesignOptionType.SELECT) {
           results.push(this.settingModifiableSelect(varName, defaultValue, v[objClass.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], v['options[]']));
         } else {
@@ -622,7 +622,7 @@ EventConfig = (function() {
     })(this)).trigger('change');
   };
 
-  EventConfig.prototype.settingModifiableColor = function(varName, defaultValue, openChildrenValue) {
+  EventConfig.prototype.settingModifiableColor = function(varName, defaultValue, colorType, openChildrenValue) {
     var emt;
     emt = $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_color", this.emt);
     ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
@@ -632,6 +632,9 @@ EventConfig = (function() {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         value = "#" + b;
+        if ((colorType != null) && colorType === 'rgb') {
+          value = Common.colorFormatChangeHexToRgb(value);
+        }
         _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
         return _this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, value);
       };

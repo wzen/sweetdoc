@@ -42,8 +42,8 @@ PreloadItemText = (function(superClass) {
     modifiables: {
       textColor: {
         name: 'TextColor',
-        "default": '#000',
-        colorType: 'hex',
+        "default": 'rgb(0, 0, 0)',
+        colorType: 'rgb',
         type: 'color',
         ja: {
           name: '文字色'
@@ -198,7 +198,8 @@ PreloadItemText = (function(superClass) {
   _setTextStyle = function() {
     var canvas, context;
     canvas = document.getElementById(this.canvasElementId());
-    return context = drawingCanvas.getContext('2d');
+    context = drawingCanvas.getContext('2d');
+    return context.fillStyle = this.textColor;
   };
 
   _setTextToCanvas = function() {

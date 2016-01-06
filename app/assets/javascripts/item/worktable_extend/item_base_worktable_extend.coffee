@@ -455,7 +455,7 @@ itemBaseWorktableExtend =
         else if value.type == Constant.ItemDesignOptionType.BOOLEAN
           @settingModifiableCheckbox(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.COLOR
-          @settingModifiableColor(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
+          @settingModifiableColor(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.COLOR_TYPE], value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
           @settingModifiableSelectFile(designConfigRoot, varName)
         else if value.type == Constant.ItemDesignOptionType.SELECT
@@ -523,7 +523,7 @@ itemBaseWorktableExtend =
   # 変数編集カラーピッカーの作成
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
-  settingModifiableColor: (configRoot, varName, openChildrenValue) ->
+  settingModifiableColor: (configRoot, varName, colorType, openChildrenValue) ->
     emt = $(".#{varName}_color", configRoot)
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     ColorPickerUtil.initColorPicker(
@@ -531,6 +531,8 @@ itemBaseWorktableExtend =
       defaultValue,
       (a, b, d, e) =>
         value = "##{b}"
+        if colorType? && colorType == 'rgb'
+          value = Common.colorFormatChangeHexToRgb(value)
         @[varName] = value
         @constructor.switchChildrenConfig(emt, varName, openChildrenValue, value)
         @applyDesignChange()

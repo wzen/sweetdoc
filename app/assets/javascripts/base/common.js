@@ -1089,6 +1089,29 @@ Common = (function() {
     return element.contextmenu(data);
   };
 
+  Common.colorFormatChangeRgbToHex = function(data) {
+    var cColors, index, j, len, val;
+    cColors = data.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',');
+    for (index = j = 0, len = cColors.length; j < len; index = ++j) {
+      val = cColors[index];
+      cColors[index] = parseInt(val);
+    }
+    return "#" + (cColors[0].toString(16)) + (cColors[1].toString(16)) + (cColors[2].toString(16));
+  };
+
+  Common.colorFormatChangeHexToRgb = function(data) {
+    var index, j, len, val;
+    data = data.replace('#', '');
+    cColors[0] = data.substring(0, 2);
+    cColors[1] = data.substring(2, 4);
+    cColors[2] = data.substring(4, 6);
+    for (index = j = 0, len = cColors.length; j < len; index = ++j) {
+      val = cColors[index];
+      cColors[index] = parseInt(val, 16);
+    }
+    return "rgb(" + cColors[0] + "," + cColors[1] + "," + cColors[2] + ")";
+  };
+
   Common.colorChangeCacheData = function(beforeColor, afterColor, length, colorType) {
     var b, bColors, bPer, bp, cColors, g, gPer, gp, i, index, j, l, len, len1, len2, len3, m, o, p, q, r, rPer, ref, ref1, ret, rp, u, val;
     if (colorType == null) {

@@ -524,7 +524,7 @@ itemBaseWorktableExtend = {
         } else if (value.type === Constant.ItemDesignOptionType.BOOLEAN) {
           results.push(this.settingModifiableCheckbox(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
-          results.push(this.settingModifiableColor(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
+          results.push(this.settingModifiableColor(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.COLOR_TYPE], value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
           results.push(this.settingModifiableSelectFile(designConfigRoot, varName));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT) {
@@ -607,7 +607,7 @@ itemBaseWorktableExtend = {
       };
     })(this)).trigger('change');
   },
-  settingModifiableColor: function(configRoot, varName, openChildrenValue) {
+  settingModifiableColor: function(configRoot, varName, colorType, openChildrenValue) {
     var defaultValue, emt;
     emt = $("." + varName + "_color", configRoot);
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
@@ -615,6 +615,9 @@ itemBaseWorktableExtend = {
       return function(a, b, d, e) {
         var value;
         value = "#" + b;
+        if ((colorType != null) && colorType === 'rgb') {
+          value = Common.colorFormatChangeHexToRgb(value);
+        }
         _this[varName] = value;
         _this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, value);
         return _this.applyDesignChange();

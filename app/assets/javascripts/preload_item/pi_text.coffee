@@ -19,8 +19,8 @@ class PreloadItemText extends CanvasItemBase
     modifiables: {
       textColor: {
         name: 'TextColor'
-        default: '#000'
-        colorType: 'hex'
+        default: 'rgb(0, 0, 0)'
+        colorType: 'rgb'
         type: 'color'
         ja: {
           name: '文字色'
@@ -288,7 +288,7 @@ class PreloadItemText extends CanvasItemBase
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
     context = drawingCanvas.getContext('2d')
-
+    context.fillStyle = @textColor
 
   _setTextToCanvas = ->
     canvas = document.getElementById(@canvasElementId())
@@ -319,7 +319,7 @@ class PreloadItemText extends CanvasItemBase
       if @isDrawHorizontal
         w = height
         h = width
-      else  
+      else
         w = width
         h = height
       fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * (a + 1) / h * 2
