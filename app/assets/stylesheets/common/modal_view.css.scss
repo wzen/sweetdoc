@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-.modal-content{
+.modal-content {
   margin:0;
   padding:10px 20px;
   border:2px solid #aaa;
@@ -79,6 +79,192 @@
       width: 90%;
     }
   }
+
+  &.init_project, &.admin_projects {
+    .content {
+      > div {
+        display: table;
+        > div {
+          display: table-cell;
+          vertical-align: top;
+        }
+      }
+    }
+
+    label {
+      width:100%;
+      float:left;
+      font-size:12px;
+      line-height:24px;
+      font-weight:bold;
+
+    }
+
+    input {
+      line-height:18px;
+    }
+
+    input[type=text] {
+      width:300px;
+      margin-bottom:8px;
+      padding:2px 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      border:1px solid #CCC;
+    }
+
+    .button_wrapper {
+      width: 100%;
+      text-align: center;
+      margin-top: 15px;
+
+      span {
+        display: none;
+      }
+      .create_button, .open_button, .update_button {
+        width: 25%;
+      }
+      .back_button, .cancel_button {
+        width: 40%;
+        margin-left: 10px;
+      }
+    }
+
+    .error_wrapper {
+      padding: 8px;
+    }
+    .error {
+      font-size: 12px;
+      color: red;
+    }
+  }
+
+
+  &.admin_projects {
+    width: 40% !important;
+    .am_scroll_wrapper {
+      overflow: hidden;
+      .am_wrapper {
+        width: 200%;
+        .am_list_wrapper {
+          float: left;
+          width: 50%;
+          .am_list {
+            width: 100%;
+            .am_row {
+              width: 100%;
+              padding: 5px;
+              .am_title_wrapper {
+                float: left;
+                width: 100%;
+                height: 30px;
+                .am_title {
+                  font-size: 16px;
+                  line-height: 30px;
+                  vertical-align: middle;
+                  margin-right: 150px;
+                  &.opened {
+                    color: blue;
+                  }
+                }
+              }
+              .am_button_wrapper {
+                float: right;
+                width: 150px;
+                margin-left: -150px;
+                .am_edit_wrapper {
+                  float: left;
+                  width: 50%;
+                  text-align: center;
+                }
+                .am_remove_wrapper {
+                  float: left;
+                  width: 50%;
+                  text-align: center;
+                }
+              }
+            }
+          }
+        }
+        .am_input_wrapper {
+          width: 50%;
+          display: none;
+          float: left;
+        }
+      }
+    }
+  }
+
+  &.create_user_code, &.notice_login {
+    .content {
+      > div {
+        display: table;
+        > div {
+          display: table-cell;
+          vertical-align: top;
+        }
+      }
+    }
+
+    label {
+      width:100%;
+      float:left;
+      font-size:12px;
+      line-height:24px;
+      font-weight:bold;
+
+    }
+
+    input {
+      line-height:18px;
+    }
+
+    input[type=text] {
+      width:300px;
+      margin-bottom:8px;
+      padding:2px 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      border:1px solid #CCC;
+    }
+
+    .button_wrapper {
+      width: 100%;
+      text-align: center;
+      margin-top: 15px;
+
+      span {
+        display: none;
+      }
+    }
+  }
+
+  &.item_text_editing {
+    .content {
+      > div {
+        display: table;
+        > div {
+          display: table-cell;
+          vertical-align: top;
+        }
+      }
+    }
+    .textarea {
+      width: 100%;
+      height: 100%;
+    }
+    .button_wrapper {
+      width: 100%;
+      text-align: center;
+      margin-top: 15px;
+
+      span {
+        display: none;
+      }
+    }
+  }
 }
 
 #modal-overlay{
@@ -91,165 +277,4 @@
   z-index:1999999998;
   background-color: transparent;
   opacity: 0.3;
-}
-
-.modal-content.init_project, .modal-content.admin_projects {
-
-  .content {
-    > div {
-      display: table;
-      > div {
-        display: table-cell;
-        vertical-align: top;
-      }
-    }
-  }
-
-  label {
-    width:100%;
-    float:left;
-    font-size:12px;
-    line-height:24px;
-    font-weight:bold;
-
-  }
-
-  input {
-    line-height:18px;
-  }
-
-  input[type=text] {
-    width:300px;
-    margin-bottom:8px;
-    padding:2px 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border:1px solid #CCC;
-  }
-
-  .button_wrapper {
-    width: 100%;
-    text-align: center;
-    margin-top: 15px;
-
-    span {
-      display: none;
-    }
-    .create_button, .open_button, .update_button {
-      width: 25%;
-    }
-    .back_button, .cancel_button {
-      width: 40%;
-      margin-left: 10px;
-    }
-  }
-
-  .error_wrapper {
-    padding: 8px;
-  }
-  .error {
-    font-size: 12px;
-    color: red;
-  }
-}
-
-.modal-content.admin_projects {
-  width: 40% !important;
-  .am_scroll_wrapper {
-    overflow: hidden;
-    .am_wrapper {
-      width: 200%;
-      .am_list_wrapper {
-        float: left;
-        width: 50%;
-        .am_list {
-          width: 100%;
-          .am_row {
-            width: 100%;
-            padding: 5px;
-            .am_title_wrapper {
-              float: left;
-              width: 100%;
-              height: 30px;
-              .am_title {
-                font-size: 16px;
-                line-height: 30px;
-                vertical-align: middle;
-                margin-right: 150px;
-                &.opened {
-                  color: blue;
-                }
-              }
-            }
-            .am_button_wrapper {
-              float: right;
-              width: 150px;
-              margin-left: -150px;
-              .am_edit_wrapper {
-                float: left;
-                width: 50%;
-                text-align: center;
-              }
-              .am_remove_wrapper {
-                float: left;
-                width: 50%;
-                text-align: center;
-              }
-            }
-          }
-        }
-      }
-      .am_input_wrapper {
-        width: 50%;
-        display: none;
-        float: left;
-      }
-    }
-  }
-}
-
-.modal-content.create_user_code, .modal-content.notice_login {
-  .content {
-    > div {
-      display: table;
-      > div {
-        display: table-cell;
-        vertical-align: top;
-      }
-    }
-  }
-
-  label {
-    width:100%;
-    float:left;
-    font-size:12px;
-    line-height:24px;
-    font-weight:bold;
-
-  }
-
-  input {
-    line-height:18px;
-  }
-
-  input[type=text] {
-    width:300px;
-    margin-bottom:8px;
-    padding:2px 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    border:1px solid #CCC;
-  }
-
-  .button_wrapper {
-    width: 100%;
-    text-align: center;
-    margin-top: 15px;
-
-    span {
-      display: none;
-    }
-  }
 }

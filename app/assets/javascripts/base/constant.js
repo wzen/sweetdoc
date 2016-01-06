@@ -172,6 +172,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ModalViewType.ITEM_IMAGE_UPLOAD = constant.ModalViewType.ITEM_IMAGE_UPLOAD;
 
+      ModalViewType.ITEM_TEXT_EDITING = constant.ModalViewType.ITEM_TEXT_EDITING;
+
       ModalViewType.NOTICE_LOGIN = constant.ModalViewType.NOTICE_LOGIN;
 
       return ModalViewType;

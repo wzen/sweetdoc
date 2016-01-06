@@ -1,8 +1,18 @@
-class PreloadItemText extends ItemBase
+class PreloadItemText extends CanvasItemBase
   @NAME_PREFIX = "text"
   @CLASS_DIST_TOKEN = 'PreloadItemText'
   @INPUT_CLASSNAME = 'pi_input_text'
   @CONTENTS_CLASSNAME = 'pi_contents_text'
+
+  if gon?
+    constant = gon.const
+    class @BalloonType
+      @NONE = constant.PreloadItemText.BalloonType.NONE
+      @FREE = constant.PreloadItemText.BalloonType.FREE
+      @NORMAL = constant.PreloadItemText.BalloonType.NORMAL
+      @RECT = constant.PreloadItemText.BalloonType.RECT
+      @THINK = constant.PreloadItemText.BalloonType.THINK
+      @SHOUT = constant.PreloadItemText.BalloonType.SHOUT
 
   @actionProperties =
   {
@@ -185,48 +195,35 @@ class PreloadItemText extends ItemBase
   # @param [Array] cood 座標
   constructor: (cood = null)->
     super(cood)
-    @fontFamily = 'Times New Roman'
-    @fontSize = null
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
-    @_editing = false
+    #@_editing = false
     @inputText = 'Input text'
+    @isDrawHorizontal = true
+    @fontFamily = 'Times New Roman'
+    @fontSize = null
+    @isFixedFontSize = false
+    @isDrawBalloon = false
+    @balloonType = @constructor.BalloonType.NONE
+    @textPositions = null
 
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     super(w, h)
-    # FIXME: フォントサイズ変更
+    # FIXME: フォントサイズ(and枠)変更
 
-
-  # アイテム用のテンプレートHTMLを読み込み
-  # @return [String] HTML
-  createItemElement: (callback) ->
-    element = "<div class='css_item_base context_base put_center'>#{@cssItemHtml()}</div>"
-
-  # HTML要素
-  cssItemHtml: ->
-    if @_editing
-      element = """
-        <input type='text' class='text_wrapper #{@constructor.INPUT_CLASSNAME}' value='#{@inputText}' style="width:100%;height:100%;">
-      """
-    else
-      element = """
-        <canvas
-        <div class='item_wrapper'><div class='#{@constructor.CONTENTS_CLASSNAME} change_before'><span class='text_wrapper'>#{@inputText}</span></div><div class='#{@constructor.CONTENTS_CLASSNAME} change_after' style='opacity: 0'><span class='text_wrapper'></span></div></div>
-      """
-    @addContentsToScrollInside(element, callback)
-
-
-  # アイテム編集
-  launchEdit: ->
-
+  # アイテム描画
+  # @param [Boolean] show 要素作成後に表示するか
+  itemDraw: (show = true) ->
+    super(show)
+    # 描画
+    _draw.call(@)
 
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->
     @restoreAllDrawingSurface()
-    @fontSize = _fontSize.call(@)
+    #@fontSize = _fontSize.call(@)
     # 編集状態で描画
-    @_editing = true
     @endDraw(zindex, true, =>
       @setupItemEvents()
       @saveObj(true)
@@ -235,26 +232,10 @@ class PreloadItemText extends ItemBase
       # 編集モード
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
-      # テキストイベント設定
-      _settingInputEvent.call(@)
-      # テキストを選択状態に
-      @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").focus()
-      @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").select()
-      # line-height設定
-      @getJQueryElement().find('.text_wrapper').css('line-height', @getJQueryElement().find('.text_wrapper').parent().height() + 'px')
-
+      # テキストModal表示
+      _showInputModal.call(@)
       if callback?
         callback()
-    )
-
-  # 再描画処理
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @param [Function] callback コールバック
-  refresh: (show = true, callback = null) ->
-    super(show, ->
-      if callback?
-        callback()
-      # TODO: 吹き出しの端を描画
     )
 
   # CSSスタイル
@@ -298,54 +279,123 @@ class PreloadItemText extends ItemBase
       changeBefore.css('opacity', 1 - opa)
       changeAfter.css('opacity', opa)
 
-  _fontSize = ->
-    if @itemSize.w > @itemSize.h
-      # 高さに合わせる
-      return parseInt(@itemSize.h / 3)
+  _draw = ->
+    # スタイル設定
+    _setTextStyle.call(@)
+    # 文字配置 & フォント設定
+    _setTextToCanvas.call(@ ,$(drawingCanvas).attr('width'), $(drawingCanvas).attr('height'))
+
+  _setTextStyle = ->
+    canvas = document.getElementById(@canvasElementId())
+    context = drawingCanvas.getContext('2d')
+
+
+  _setTextToCanvas = ->
+    canvas = document.getElementById(@canvasElementId())
+    context = drawingCanvas.getContext('2d')
+    canvasWidth = $(canvas).attr('width')
+    canvasHeight = $(canvas).attr('height')
+    # FIXME: 枠がある場合は中のサイズを取るようにする
+    _calcTextPositionAndFont.call(@, canvasWidth, canvasHeight)
+    context.font = "#{@fontSize}px #{@fontFamily}"
+    for p in @textPositions
+      context.save()
+      context.beginPath()
+      if !@isDrawHorizontal && p.char.charCodeAt(0) < 256
+        # 縦書き & 英語の場合、90°回転
+        context.translate(canvas.width / 2, canvas.height / 2);
+        context.rotate(Math.PI / 90);
+      context.fillText(p.char, p.x, p.y)
+      context.restore()
+
+  _calcTextPositionAndFont = (width, height) ->
+    # 文字数計算
+    a = @inputText.length
+    # 文末の改行を削除
+    @inputText = @inputText.replace(/\n+$/g,'')
+    if !@isFixedFontSize
+      # フォントサイズを計算
+      newLineCount = @inputText.split('\n').length - 1
+      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (width * 4 * (a + 1)) / height) - newLineCount) * (a + 1) / height * 2
+      if debug
+        console.log(fontSize)
+      @fontSize = parseInt(fontSize)
+    # 描画位置を計算
+    @textPositions = []
+    posIndex = 0
+    if @isDrawHorizontal
+      # 横書き
+      x = 0
+      y = 0
+      for c in @inputText.split('')
+        if c != '\n'
+          x = 0
+          y += @fontSize
+        else
+          @textPositions[posIndex] = {
+            char: c
+            x: x
+            y: y
+          }
+          posIndex += 1
+          x += @fontSize
+          if x >= width
+            x = 0
+            y += @fontSize
     else
-      # 幅に合わせる
-      return parseInt(@itemSize.w / 3)
+      # 縦書き
+      x = width - @fontSize
+      y = 0
+      for c in @inputText.split('')
+        if c != '\n'
+          y = 0
+          x -= @fontSize
+        else
+          @textPositions[posIndex] = {
+            char: c
+            x: x
+            y: y
+          }
+          posIndex += 1
+          y += @fontSize
+          if y >= height
+            y = 0
+            x -= @fontSize
+
+  _showInputModal = ->
+    Common.showModalView(Constant.ModalViewType.ITEM_TEXT_EDITING, false, (modalEmt, params, callback = null) =>
+      _prepareEditModal.call(@ ,modalEmt)
+      if callback?
+        callback()
+    )
 
   _settingTextDbclickEvent = ->
     # ダブルクリックでEditに変更
     emt = @getJQueryElement().find(".#{@constructor.CONTENTS_CLASSNAME}:first")
     emt.off('dblclick').on('dblclick', (e) =>
-      @_editing = true
       @refresh(true, =>
-        # テキストイベント設定
-        _settingInputEvent.call(@)
-        # line-height設定
-        @getJQueryElement().find('.text_wrapper').css('line-height', @getJQueryElement().find('.text_wrapper').parent().height() + 'px')
-        # テキストを選択状態に
-        @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").focus()
-        @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first").select()
-
+        # Modal表示
+        _showInputModal.call(@)
       )
     )
 
-  _settingInputEvent = ->
-    # テキストイベント設定
-    _event = (target) ->
-      @inputText = $(target).val()
-      # 編集終了
-      @_editing = false
-      @saveObj()
+  _prepareEditModal = (modalEmt) ->
+    $('.create_button', modalEmt).off('click').on('click', (e) =>
+      # Inputを反映して再表示
+      emt = $(e.target).closest('.modal-content')
+      @inputText = $('.textarea:first', emt).val()
       # モードを描画モードに
       Navbar.setModeDraw(@classDistToken, =>
         WorktableCommon.changeMode(Constant.Mode.DRAW)
         @refresh(true, =>
           # イベント設定
           _settingTextDbclickEvent.call(@)
+          Common.hideModalView()
         )
       )
-
-    input = @getJQueryElement().find(".#{@constructor.INPUT_CLASSNAME}:first")
-    input.off('focusout').on('focusout', (e) =>
-      _event.call(@, e.target)
     )
-    input.off('keypress').on('keypress', (e) =>
-      if e.keyCode == 13
-        _event.call(@, e.target)
+    $('.back_button', modalEmt).off('click').on('click', (e) =>
+      Common.hideModalView()
     )
 
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText)

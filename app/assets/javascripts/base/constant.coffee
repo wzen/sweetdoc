@@ -115,6 +115,7 @@ if gon?
       @ADMIN_PROJECTS = constant.ModalViewType.ADMIN_PROJECTS
       @CREATE_USER_CODE = constant.ModalViewType.CREATE_USER_CODE
       @ITEM_IMAGE_UPLOAD = constant.ModalViewType.ITEM_IMAGE_UPLOAD
+      @ITEM_TEXT_EDITING = constant.ModalViewType.ITEM_TEXT_EDITING
       @NOTICE_LOGIN = constant.ModalViewType.NOTICE_LOGIN
 
     # ページング

@@ -363,6 +363,7 @@ class Const
     ADMIN_PROJECTS = 'admin_projects'
     CREATE_USER_CODE = 'create_user_code'
     ITEM_IMAGE_UPLOAD = 'item_image_upload'
+    ITEM_TEXT_EDITING = 'item_text_editing'
     NOTICE_LOGIN = 'notice_login'
     ABOUT = 'about'
   end
@@ -483,6 +484,17 @@ class Const
       SELECT_FILE = 'sef'
       SELECT_FILE_DELETE = 'sef_del'
       URL = 'url'
+    end
+  end
+
+  class PreloadItemText
+    class BalloonType
+      NONE = 0
+      FREE = 999999
+      NORMAL = 1
+      RECT = 2
+      THINK = 3
+      SHOUT = 4
     end
   end
 

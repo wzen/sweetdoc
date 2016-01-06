@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _fontSize, _settingInputEvent, _settingTextDbclickEvent;
+  var _calcTextPositionAndFont, _draw, _prepareEditModal, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -15,6 +15,28 @@ PreloadItemText = (function(superClass) {
   PreloadItemText.INPUT_CLASSNAME = 'pi_input_text';
 
   PreloadItemText.CONTENTS_CLASSNAME = 'pi_contents_text';
+
+  if (typeof gon !== "undefined" && gon !== null) {
+    constant = gon["const"];
+    PreloadItemText.BalloonType = (function() {
+      function BalloonType() {}
+
+      BalloonType.NONE = constant.PreloadItemText.BalloonType.NONE;
+
+      BalloonType.FREE = constant.PreloadItemText.BalloonType.FREE;
+
+      BalloonType.NORMAL = constant.PreloadItemText.BalloonType.NORMAL;
+
+      BalloonType.RECT = constant.PreloadItemText.BalloonType.RECT;
+
+      BalloonType.THINK = constant.PreloadItemText.BalloonType.THINK;
+
+      BalloonType.SHOUT = constant.PreloadItemText.BalloonType.SHOUT;
+
+      return BalloonType;
+
+    })();
+  }
 
   PreloadItemText.actionProperties = {
     modifiables: {
@@ -95,46 +117,39 @@ PreloadItemText = (function(superClass) {
       cood = null;
     }
     PreloadItemText.__super__.constructor.call(this, cood);
-    this.fontFamily = 'Times New Roman';
-    this.fontSize = null;
     if (cood !== null) {
       this._moveLoc = {
         x: cood.x,
         y: cood.y
       };
     }
-    this._editing = false;
     this.inputText = 'Input text';
+    this.isDrawHorizontal = true;
+    this.fontFamily = 'Times New Roman';
+    this.fontSize = null;
+    this.isFixedFontSize = false;
+    this.isDrawBalloon = false;
+    this.balloonType = this.constructor.BalloonType.NONE;
+    this.textPositions = null;
   }
 
   PreloadItemText.prototype.updateItemSize = function(w, h) {
     return PreloadItemText.__super__.updateItemSize.call(this, w, h);
   };
 
-  PreloadItemText.prototype.createItemElement = function(callback) {
-    var element;
-    return element = "<div class='css_item_base context_base put_center'>" + (this.cssItemHtml()) + "</div>";
-  };
-
-  PreloadItemText.prototype.cssItemHtml = function() {
-    var element;
-    if (this._editing) {
-      element = "<input type='text' class='text_wrapper " + this.constructor.INPUT_CLASSNAME + "' value='" + this.inputText + "' style=\"width:100%;height:100%;\">";
-    } else {
-      element = "<canvas\n<div class='item_wrapper'><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_before'><span class='text_wrapper'>" + this.inputText + "</span></div><div class='" + this.constructor.CONTENTS_CLASSNAME + " change_after' style='opacity: 0'><span class='text_wrapper'></span></div></div>";
+  PreloadItemText.prototype.itemDraw = function(show) {
+    if (show == null) {
+      show = true;
     }
-    return this.addContentsToScrollInside(element, callback);
+    PreloadItemText.__super__.itemDraw.call(this, show);
+    return _draw.call(this);
   };
-
-  PreloadItemText.prototype.launchEdit = function() {};
 
   PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {
     if (callback == null) {
       callback = null;
     }
     this.restoreAllDrawingSurface();
-    this.fontSize = _fontSize.call(this);
-    this._editing = true;
     return this.endDraw(zindex, true, (function(_this) {
       return function() {
         _this.setupItemEvents();
@@ -142,29 +157,12 @@ PreloadItemText = (function(superClass) {
         _this.firstFocus = Common.firstFocusItemObj() === null;
         Navbar.setModeEdit();
         WorktableCommon.changeMode(Constant.Mode.EDIT);
-        _settingInputEvent.call(_this);
-        _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").focus();
-        _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").select();
-        _this.getJQueryElement().find('.text_wrapper').css('line-height', _this.getJQueryElement().find('.text_wrapper').parent().height() + 'px');
+        _showInputModal.call(_this);
         if (callback != null) {
           return callback();
         }
       };
     })(this));
-  };
-
-  PreloadItemText.prototype.refresh = function(show, callback) {
-    if (show == null) {
-      show = true;
-    }
-    if (callback == null) {
-      callback = null;
-    }
-    return PreloadItemText.__super__.refresh.call(this, show, function() {
-      if (callback != null) {
-        return callback();
-      }
-    });
   };
 
   PreloadItemText.prototype.cssStyle = function() {
@@ -192,12 +190,124 @@ PreloadItemText = (function(superClass) {
     }
   };
 
-  _fontSize = function() {
-    if (this.itemSize.w > this.itemSize.h) {
-      return parseInt(this.itemSize.h / 3);
-    } else {
-      return parseInt(this.itemSize.w / 3);
+  _draw = function() {
+    _setTextStyle.call(this);
+    return _setTextToCanvas.call(this, $(drawingCanvas).attr('width'), $(drawingCanvas).attr('height'));
+  };
+
+  _setTextStyle = function() {
+    var canvas, context;
+    canvas = document.getElementById(this.canvasElementId());
+    return context = drawingCanvas.getContext('2d');
+  };
+
+  _setTextToCanvas = function() {
+    var canvas, canvasHeight, canvasWidth, context, i, len, p, ref, results;
+    canvas = document.getElementById(this.canvasElementId());
+    context = drawingCanvas.getContext('2d');
+    canvasWidth = $(canvas).attr('width');
+    canvasHeight = $(canvas).attr('height');
+    _calcTextPositionAndFont.call(this, canvasWidth, canvasHeight);
+    context.font = this.fontSize + "px " + this.fontFamily;
+    ref = this.textPositions;
+    results = [];
+    for (i = 0, len = ref.length; i < len; i++) {
+      p = ref[i];
+      context.save();
+      context.beginPath();
+      if (!this.isDrawHorizontal && p.char.charCodeAt(0) < 256) {
+        context.translate(canvas.width / 2, canvas.height / 2);
+        context.rotate(Math.PI / 90);
+      }
+      context.fillText(p.char, p.x, p.y);
+      results.push(context.restore());
     }
+    return results;
+  };
+
+  _calcTextPositionAndFont = function(width, height) {
+    var a, c, fontSize, i, j, len, len1, newLineCount, posIndex, ref, ref1, results, results1, x, y;
+    a = this.inputText.length;
+    this.inputText = this.inputText.replace(/\n+$/g, '');
+    if (!this.isFixedFontSize) {
+      newLineCount = this.inputText.split('\n').length - 1;
+      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (width * 4 * (a + 1)) / height) - newLineCount) * (a + 1) / height * 2;
+      if (debug) {
+        console.log(fontSize);
+      }
+      this.fontSize = parseInt(fontSize);
+    }
+    this.textPositions = [];
+    posIndex = 0;
+    if (this.isDrawHorizontal) {
+      x = 0;
+      y = 0;
+      ref = this.inputText.split('');
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        c = ref[i];
+        if (c !== '\n') {
+          x = 0;
+          results.push(y += this.fontSize);
+        } else {
+          this.textPositions[posIndex] = {
+            char: c,
+            x: x,
+            y: y
+          };
+          posIndex += 1;
+          x += this.fontSize;
+          if (x >= width) {
+            x = 0;
+            results.push(y += this.fontSize);
+          } else {
+            results.push(void 0);
+          }
+        }
+      }
+      return results;
+    } else {
+      x = width - this.fontSize;
+      y = 0;
+      ref1 = this.inputText.split('');
+      results1 = [];
+      for (j = 0, len1 = ref1.length; j < len1; j++) {
+        c = ref1[j];
+        if (c !== '\n') {
+          y = 0;
+          results1.push(x -= this.fontSize);
+        } else {
+          this.textPositions[posIndex] = {
+            char: c,
+            x: x,
+            y: y
+          };
+          posIndex += 1;
+          y += this.fontSize;
+          if (y >= height) {
+            y = 0;
+            results1.push(x -= this.fontSize);
+          } else {
+            results1.push(void 0);
+          }
+        }
+      }
+      return results1;
+    }
+  };
+
+  _showInputModal = function() {
+    return Common.showModalView(Constant.ModalViewType.ITEM_TEXT_EDITING, false, (function(_this) {
+      return function(modalEmt, params, callback) {
+        if (callback == null) {
+          callback = null;
+        }
+        _prepareEditModal.call(_this, modalEmt);
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   _settingTextDbclickEvent = function() {
@@ -205,50 +315,38 @@ PreloadItemText = (function(superClass) {
     emt = this.getJQueryElement().find("." + this.constructor.CONTENTS_CLASSNAME + ":first");
     return emt.off('dblclick').on('dblclick', (function(_this) {
       return function(e) {
-        _this._editing = true;
         return _this.refresh(true, function() {
-          _settingInputEvent.call(_this);
-          _this.getJQueryElement().find('.text_wrapper').css('line-height', _this.getJQueryElement().find('.text_wrapper').parent().height() + 'px');
-          _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").focus();
-          return _this.getJQueryElement().find("." + _this.constructor.INPUT_CLASSNAME + ":first").select();
+          return _showInputModal.call(_this);
         });
       };
     })(this));
   };
 
-  _settingInputEvent = function() {
-    var _event, input;
-    _event = function(target) {
-      this.inputText = $(target).val();
-      this._editing = false;
-      this.saveObj();
-      return Navbar.setModeDraw(this.classDistToken, (function(_this) {
-        return function() {
+  _prepareEditModal = function(modalEmt) {
+    $('.create_button', modalEmt).off('click').on('click', (function(_this) {
+      return function(e) {
+        var emt;
+        emt = $(e.target).closest('.modal-content');
+        _this.inputText = $('.textarea:first', emt).val();
+        return Navbar.setModeDraw(_this.classDistToken, function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
           return _this.refresh(true, function() {
-            return _settingTextDbclickEvent.call(_this);
+            _settingTextDbclickEvent.call(_this);
+            return Common.hideModalView();
           });
-        };
-      })(this));
-    };
-    input = this.getJQueryElement().find("." + this.constructor.INPUT_CLASSNAME + ":first");
-    input.off('focusout').on('focusout', (function(_this) {
-      return function(e) {
-        return _event.call(_this, e.target);
+        });
       };
     })(this));
-    return input.off('keypress').on('keypress', (function(_this) {
+    return $('.back_button', modalEmt).off('click').on('click', (function(_this) {
       return function(e) {
-        if (e.keyCode === 13) {
-          return _event.call(_this, e.target);
-        }
+        return Common.hideModalView();
       };
     })(this));
   };
 
   return PreloadItemText;
 
-})(ItemBase);
+})(CanvasItemBase);
 
 Common.setClassToMap(PreloadItemText.CLASS_DIST_TOKEN, PreloadItemText);
 
