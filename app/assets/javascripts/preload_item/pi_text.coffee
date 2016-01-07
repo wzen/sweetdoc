@@ -317,10 +317,7 @@ class PreloadItemText extends CanvasItemBase
         context.measureText('M').width
 
     _calcVerticalColumnHeight = (columnText) ->
-      ret = 0
-      for i in [0..(columnText.length - 1)]
-        ret += context.measureText(columnText.charAt(i)).height
-      return ret
+      return columnText.length * context.measureText('あ').height
 
     column = ['']
     line = 0

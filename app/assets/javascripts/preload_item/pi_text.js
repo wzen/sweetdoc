@@ -228,12 +228,7 @@ PreloadItemText = (function(superClass) {
       }
     };
     _calcVerticalColumnHeight = function(columnText) {
-      var i, k, ref, ret;
-      ret = 0;
-      for (i = k = 0, ref = columnText.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
-        ret += context.measureText(columnText.charAt(i)).height;
-      }
-      return ret;
+      return columnText.length * context.measureText('あ').height;
     };
     column = [''];
     line = 0;
