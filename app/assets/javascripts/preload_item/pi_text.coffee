@@ -239,34 +239,6 @@ class PreloadItemText extends CanvasItemBase
         callback()
     )
 
-#  # CSSスタイル
-#  # TODO: CSSファイルで管理できるように修正
-#  cssStyle: ->
-#    css = """
-#      ##{@id} .text_wrapper {
-#        font-family: '#{@fontFamily}';
-#        font-size: #{@fontSize}px;
-#        display: table-cell;
-#        vertical-align: middle;
-#        color: #{@textColor}
-#      }
-#      ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
-#        text-align: center;
-#        display: table;
-#        width: 100%;
-#        height: 100%;
-#      }
-#    """
-#    if @showBalloon
-#      css += """
-#        ##{@id} .item_wrapper {
-#          border-radius: #{@balloonRadius}px;
-#          background-color: #{@balloonColor};
-#        }
-#      """
-#
-#    return css
-
   changeText: (opt) ->
     changeBefore = @getJQueryElement().find('.change_before:first')
     changeAfter = @getJQueryElement().find('.change_after:first')
@@ -390,6 +362,8 @@ class PreloadItemText extends CanvasItemBase
       # Inputを反映して再表示
       emt = $(e.target).closest('.modal-content')
       @inputText = $('.textarea:first', emt).val()
+      # データ保存
+      @saveObj()
       # モードを描画モードに
       Navbar.setModeDraw(@classDistToken, =>
         WorktableCommon.changeMode(Constant.Mode.DRAW)
