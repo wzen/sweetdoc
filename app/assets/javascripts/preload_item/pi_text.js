@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcTextPositionAndFont, _draw, _prepareEditModal, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _draw, _drawText, _prepareEditModal, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -191,36 +191,74 @@ PreloadItemText = (function(superClass) {
   _setTextStyle = function() {
     var canvas, context;
     canvas = document.getElementById(this.canvasElementId());
-    context = drawingCanvas.getContext('2d');
+    context = canvas.getContext('2d');
     return context.fillStyle = this.textColor;
   };
 
   _setTextToCanvas = function() {
-    var canvas, canvasHeight, canvasWidth, context, i, len, p, ref, results;
+    var canvas, canvasHeight, canvasWidth, context;
     canvas = document.getElementById(this.canvasElementId());
-    context = drawingCanvas.getContext('2d');
+    context = canvas.getContext('2d');
     canvasWidth = $(canvas).attr('width');
     canvasHeight = $(canvas).attr('height');
-    _calcTextPositionAndFont.call(this, canvasWidth, canvasHeight);
+    if (this.fontSize == null) {
+      _calcFontSizeAbout.call(this, canvasWidth, canvasHeight);
+    }
     context.font = this.fontSize + "px " + this.fontFamily;
-    ref = this.textPositions;
-    results = [];
-    for (i = 0, len = ref.length; i < len; i++) {
-      p = ref[i];
-      context.save();
-      context.beginPath();
-      if (!this.isDrawHorizontal && p.char.charCodeAt(0) < 256) {
-        context.translate(canvas.width / 2, canvas.height / 2);
-        context.rotate(Math.PI / 90);
+    context.save();
+    _drawText.call(this, context, this.inputText, canvasWidth, canvasHeight);
+    return context.restore();
+  };
+
+  _drawText = function(context, text, width, height) {
+    var _calcSize, char, column, i, j, k, l, line, ref, ref1, results, sizeSum, verticalLineHeight, verticalLineWidth;
+    _calcSize = function(column) {
+      var hasJapanease, i, k, ref;
+      hasJapanease = false;
+      for (i = k = 0, ref = column.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+        if (column[i].charCodeAt(0) >= 256) {
+          hasJapanease = true;
+          break;
+        }
       }
-      context.fillText(p.char, p.x, p.y);
-      results.push(context.restore());
+      if (hasJapanease) {
+        return context.measureText('あ').width;
+      } else {
+        return context.measureText('M').width;
+      }
+    };
+    column = [''];
+    line = 0;
+    text = text.replace("{br}", "\n", "gm");
+    for (i = k = 0, ref = text.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+      char = text.charAt(i);
+      if (char === "\n" || (this.isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!this.isDrawHorizontal && context.measureText(column[line] + char).height > height)) {
+        line += 1;
+        column[line] = '';
+        if (char === "\n") {
+          char = '';
+        }
+      }
+      column[line] += char;
+    }
+    sizeSum = 0;
+    verticalLineWidth = context.measureText('あ').width;
+    verticalLineHeight = context.measureText('あ').height;
+    results = [];
+    for (j = l = 0, ref1 = column.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; j = 0 <= ref1 ? ++l : --l) {
+      if (this.isDrawHorizontal) {
+        sizeSum += _calcSize.call(this, column[j]);
+        results.push(context.fillText(column[j], 0, sizeSum));
+      } else {
+        sizeSum += verticalLineWidth;
+        results.push(context.fillText(column[j], width - sizeSum, verticalLineHeight));
+      }
     }
     return results;
   };
 
-  _calcTextPositionAndFont = function(width, height) {
-    var a, c, fontSize, h, i, j, len, len1, newLineCount, posIndex, ref, ref1, results, results1, w, x, y;
+  _calcFontSizeAbout = function(width, height) {
+    var a, fontSize, h, newLineCount, w;
     a = this.inputText.length;
     this.inputText = this.inputText.replace(/\n+$/g, '');
     if (!this.isFixedFontSize) {
@@ -236,67 +274,10 @@ PreloadItemText = (function(superClass) {
       if (debug) {
         console.log(fontSize);
       }
-      this.fontSize = parseInt(fontSize);
+      this.fontSize = parseInt(fontSize / 1.5);
       if (this.fontSize < 1) {
-        this.fontSize = 1;
+        return this.fontSize = 1;
       }
-    }
-    this.textPositions = [];
-    posIndex = 0;
-    if (this.isDrawHorizontal) {
-      x = 0;
-      y = 0;
-      ref = this.inputText.split('');
-      results = [];
-      for (i = 0, len = ref.length; i < len; i++) {
-        c = ref[i];
-        if (c === '\n') {
-          x = 0;
-          results.push(y += this.fontSize);
-        } else {
-          this.textPositions[posIndex] = {
-            char: c,
-            x: x,
-            y: y
-          };
-          posIndex += 1;
-          x += this.fontSize;
-          if (x >= width) {
-            x = 0;
-            results.push(y += this.fontSize);
-          } else {
-            results.push(void 0);
-          }
-        }
-      }
-      return results;
-    } else {
-      x = width - this.fontSize;
-      y = 0;
-      ref1 = this.inputText.split('');
-      results1 = [];
-      for (j = 0, len1 = ref1.length; j < len1; j++) {
-        c = ref1[j];
-        if (c === '\n') {
-          y = 0;
-          results1.push(x -= this.fontSize);
-        } else {
-          this.textPositions[posIndex] = {
-            char: c,
-            x: x,
-            y: y
-          };
-          posIndex += 1;
-          y += this.fontSize;
-          if (y >= height) {
-            y = 0;
-            results1.push(x -= this.fontSize);
-          } else {
-            results1.push(void 0);
-          }
-        }
-      }
-      return results1;
     }
   };
 

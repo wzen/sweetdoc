@@ -288,28 +288,58 @@ class PreloadItemText extends CanvasItemBase
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
-    context = drawingCanvas.getContext('2d')
+    context = canvas.getContext('2d')
     context.fillStyle = @textColor
 
   _setTextToCanvas = ->
     canvas = document.getElementById(@canvasElementId())
-    context = drawingCanvas.getContext('2d')
+    context = canvas.getContext('2d')
     canvasWidth = $(canvas).attr('width')
     canvasHeight = $(canvas).attr('height')
     # FIXME: 枠がある場合は中のサイズを取るようにする
-    _calcTextPositionAndFont.call(@, canvasWidth, canvasHeight)
+    if !@fontSize?
+      _calcFontSizeAbout.call(@, canvasWidth, canvasHeight)
     context.font = "#{@fontSize}px #{@fontFamily}"
-    for p in @textPositions
-      context.save()
-      context.beginPath()
-      if !@isDrawHorizontal && p.char.charCodeAt(0) < 256
-        # 縦書き & 英語の場合、90°回転
-        context.translate(canvas.width / 2, canvas.height / 2);
-        context.rotate(Math.PI / 90);
-      context.fillText(p.char, p.x, p.y)
-      context.restore()
+    context.save()
+    _drawText.call(@, context, @inputText, canvasWidth, canvasHeight)
+    context.restore()
 
-  _calcTextPositionAndFont = (width, height) ->
+  _drawText = (context, text, width, height) ->
+    _calcSize = (column) ->
+      hasJapanease = false
+      for i in [0..(column.length - 1)]
+        if column[i].charCodeAt(0) >= 256
+          hasJapanease = true
+          break
+      if hasJapanease
+        return context.measureText('あ').width
+      else
+        context.measureText('M').width
+
+    column = ['']
+    line = 0
+    text = text.replace("{br}", "\n", "gm")
+    for i in [0..(text.length - 1)]
+      char = text.charAt(i)
+      if char == "\n" || (@isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!@isDrawHorizontal && context.measureText(column[line] + char).height > height)
+        line += 1
+        column[line] = ''
+        if char == "\n"
+          char = ''
+      column[line] += char
+    sizeSum = 0
+    verticalLineWidth =  context.measureText('あ').width
+    verticalLineHeight = context.measureText('あ').height
+    for j in [0..(column.length - 1)]
+      if @isDrawHorizontal
+        sizeSum += _calcSize.call(@, column[j])
+        context.fillText(column[j], 0, sizeSum)
+      else
+        sizeSum += verticalLineWidth
+        context.fillText(column[j], width - sizeSum, verticalLineHeight)
+
+  # 描画枠から大体のフォントサイズを計算
+  _calcFontSizeAbout = (width, height) ->
     # 文字数計算
     a = @inputText.length
     # 文末の改行を削除
@@ -326,50 +356,10 @@ class PreloadItemText extends CanvasItemBase
       fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2)
       if debug
         console.log(fontSize)
-      @fontSize = parseInt(fontSize)
+      # FontSizeは暫定
+      @fontSize = parseInt(fontSize / 1.5)
       if @fontSize < 1
         @fontSize = 1
-    # 描画位置を計算
-    @textPositions = []
-    posIndex = 0
-    if @isDrawHorizontal
-      # 横書き
-      x = 0
-      y = 0
-      for c in @inputText.split('')
-        if c == '\n'
-          x = 0
-          y += @fontSize
-        else
-          @textPositions[posIndex] = {
-            char: c
-            x: x
-            y: y
-          }
-          posIndex += 1
-          x += @fontSize
-          if x >= width
-            x = 0
-            y += @fontSize
-    else
-      # 縦書き
-      x = width - @fontSize
-      y = 0
-      for c in @inputText.split('')
-        if c == '\n'
-          y = 0
-          x -= @fontSize
-        else
-          @textPositions[posIndex] = {
-            char: c
-            x: x
-            y: y
-          }
-          posIndex += 1
-          y += @fontSize
-          if y >= height
-            y = 0
-            x -= @fontSize
 
   _showInputModal = ->
     Common.showModalView(Constant.ModalViewType.ITEM_TEXT_EDITING, false, (modalEmt, params, callback = null) =>
