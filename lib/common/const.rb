@@ -497,6 +497,11 @@ class Const
       THINK = 3
       SHOUT = 4
     end
+    class WordAlign
+      LEFT = 1
+      CENTER = 2
+      RIGHT = 3
+    end
   end
 
 end

@@ -36,6 +36,18 @@ PreloadItemText = (function(superClass) {
       return BalloonType;
 
     })();
+    PreloadItemText.WordAlign = (function() {
+      function WordAlign() {}
+
+      WordAlign.LEFT = constant.PreloadItemText.WordAlign.LEFT;
+
+      WordAlign.CENTER = constant.PreloadItemText.WordAlign.CENTER;
+
+      WordAlign.RIGHT = constant.PreloadItemText.WordAlign.RIGHT;
+
+      return WordAlign;
+
+    })();
   }
 
   PreloadItemText.actionProperties = {
@@ -131,6 +143,7 @@ PreloadItemText = (function(superClass) {
     this.isDrawBalloon = false;
     this.balloonType = this.constructor.BalloonType.NONE;
     this.textPositions = null;
+    this.wordAlign = this.constructor.WordAlign.LEFT;
   }
 
   PreloadItemText.prototype.updateItemSize = function(w, h) {
@@ -211,7 +224,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height) {
-    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnWidth, char, column, heightLine, i, j, k, l, line, m, ref, ref1, ref2, results, results1, sizeSum, widthLine, wordWidth;
+    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, char, column, h, heightLine, heightMax, i, j, k, l, line, m, ref, ref1, ref2, results, results1, sizeSum, w, widthLine, widthMax, wordWidth;
     _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
       hasJapanease = false;
@@ -240,6 +253,30 @@ PreloadItemText = (function(superClass) {
     _calcVerticalColumnHeight = function(columnText) {
       return columnText.length * context.measureText('あ').width;
     };
+    _calcVerticalColumnWidthMax = function(columns) {
+      var c, k, len, r, ret;
+      ret = 0;
+      for (k = 0, len = columns.length; k < len; k++) {
+        c = columns[k];
+        r = _calcVerticalColumnWidth.call(this, c);
+        if (ret < r) {
+          ret = r;
+        }
+      }
+      return ret;
+    };
+    _calcVerticalColumnHeightMax = function(columns) {
+      var c, k, len, r, ret;
+      ret = 0;
+      for (k = 0, len = columns.length; k < len; k++) {
+        c = columns[k];
+        r = _calcVerticalColumnHeight.call(this, c);
+        if (ret < r) {
+          ret = r;
+        }
+      }
+      return ret;
+    };
     column = [''];
     line = 0;
     text = text.replace("{br}", "\n", "gm");
@@ -258,18 +295,36 @@ PreloadItemText = (function(superClass) {
     wordWidth = context.measureText('あ').width;
     if (this.isDrawHorizontal) {
       heightLine = (height - wordWidth * column.length) * 0.5;
+      widthMax = _calcVerticalColumnWidthMax.call(this, column);
       results = [];
       for (j = l = 0, ref1 = column.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; j = 0 <= ref1 ? ++l : --l) {
         heightLine += wordWidth;
-        results.push(context.fillText(column[j], (width - _calcVerticalColumnWidth.call(this, column[j])) * 0.5, heightLine));
+        w = null;
+        if (this.wordAlign === this.constructor.WordAlign.LEFT) {
+          w = (width - widthMax) * 0.5;
+        } else if (this.wordAlign === this.constructor.WordAlign.CENTER) {
+          w = (width - _calcVerticalColumnWidth.call(this, column[j])) * 0.5;
+        } else {
+          w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(this, column[j]);
+        }
+        results.push(context.fillText(column[j], w, heightLine));
       }
       return results;
     } else {
       widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth;
+      heightMax = _calcVerticalColumnHeightMax.call(this, column);
       results1 = [];
       for (j = m = 0, ref2 = column.length - 1; 0 <= ref2 ? m <= ref2 : m >= ref2; j = 0 <= ref2 ? ++m : --m) {
         widthLine -= wordWidth;
-        results1.push(context.fillText(column[j], widthLine, (height - _calcVerticalColumnHeight.call(this, column[j])) * 0.5 + wordWidth));
+        h = null;
+        if (this.wordAlign === this.constructor.WordAlign.LEFT) {
+          h = (height - heightMax) * 0.5;
+        } else if (this.wordAlign === this.constructor.WordAlign.CENTER) {
+          h = (height - _calcVerticalColumnHeight.call(this, column[j])) * 0.5;
+        } else {
+          h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(this, column[j]);
+        }
+        results1.push(context.fillText(column[j], widthLine, h + wordWidth));
       }
       return results1;
     }

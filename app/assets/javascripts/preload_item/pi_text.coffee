@@ -13,6 +13,10 @@ class PreloadItemText extends CanvasItemBase
       @RECT = constant.PreloadItemText.BalloonType.RECT
       @THINK = constant.PreloadItemText.BalloonType.THINK
       @SHOUT = constant.PreloadItemText.BalloonType.SHOUT
+    class @WordAlign
+      @LEFT = constant.PreloadItemText.WordAlign.LEFT
+      @CENTER = constant.PreloadItemText.WordAlign.CENTER
+      @RIGHT = constant.PreloadItemText.WordAlign.RIGHT
 
   @actionProperties =
   {
@@ -206,6 +210,7 @@ class PreloadItemText extends CanvasItemBase
     @isDrawBalloon = false
     @balloonType = @constructor.BalloonType.NONE
     @textPositions = null
+    @wordAlign = @constructor.WordAlign.LEFT
 
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
@@ -296,6 +301,20 @@ class PreloadItemText extends CanvasItemBase
     _calcVerticalColumnHeight = (columnText) ->
       # 暫定で日本語の高さに合わせる
       return columnText.length * context.measureText('あ').width
+    _calcVerticalColumnWidthMax = (columns) ->
+      ret = 0
+      for c in columns
+        r = _calcVerticalColumnWidth.call(@, c)
+        if ret < r
+          ret = r
+      return ret
+    _calcVerticalColumnHeightMax = (columns) ->
+      ret = 0
+      for c in columns
+        r = _calcVerticalColumnHeight.call(@, c)
+        if ret < r
+          ret = r
+      return ret
 
     column = ['']
     line = 0
@@ -312,14 +331,32 @@ class PreloadItemText extends CanvasItemBase
     wordWidth =  context.measureText('あ').width
     if @isDrawHorizontal
       heightLine = (height - wordWidth * column.length) * 0.5
+      widthMax = _calcVerticalColumnWidthMax.call(@, column)
       for j in [0..(column.length - 1)]
         heightLine += wordWidth
-        context.fillText(column[j], (width - _calcVerticalColumnWidth.call(@, column[j])) * 0.5, heightLine)
+        w = null
+        if @wordAlign == @constructor.WordAlign.LEFT
+          w = (width - widthMax) * 0.5
+        else if @wordAlign == @constructor.WordAlign.CENTER
+          w = (width - _calcVerticalColumnWidth.call(@, column[j])) * 0.5
+        else
+          # RIGHT
+          w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(@, column[j])
+        context.fillText(column[j], w, heightLine)
     else
       widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth
+      heightMax = _calcVerticalColumnHeightMax.call(@, column)
       for j in [0..(column.length - 1)]
         widthLine -= wordWidth
-        context.fillText(column[j], widthLine, (height - _calcVerticalColumnHeight.call(@, column[j])) * 0.5 + wordWidth)
+        h = null
+        if @wordAlign == @constructor.WordAlign.LEFT
+          h = (height - heightMax) * 0.5
+        else if @wordAlign == @constructor.WordAlign.CENTER
+          h = (height - _calcVerticalColumnHeight.call(@, column[j])) * 0.5
+        else
+          # RIGHT
+          h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(@, column[j])
+        context.fillText(column[j], widthLine, h + wordWidth)
 
   # 描画枠から大体のフォントサイズを計算
   _calcFontSizeAbout = (width, height) ->
