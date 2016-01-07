@@ -288,8 +288,14 @@ class PreloadItemText extends CanvasItemBase
       else
         context.measureText('M').width
 
+    _calcVerticalColumnWidth = (columnText) ->
+      sum = 0
+      for char in columnText.split('')
+        sum += context.measureText(char).width
+      return sum
     _calcVerticalColumnHeight = (columnText) ->
-      return columnText.length * context.measureText('あ').height
+      # 暫定で日本語の高さに合わせる
+      return columnText.length * context.measureText('あ').width
 
     column = ['']
     line = 0
@@ -303,15 +309,17 @@ class PreloadItemText extends CanvasItemBase
           char = ''
       column[line] += char
     sizeSum = 0
-    verticalLineWidth =  context.measureText('あ').width
-    verticalLineHeight = context.measureText('あ').height
-    for j in [0..(column.length - 1)]
-      if @isDrawHorizontal
-        sizeSum += _calcSize.call(@, column[j])
-        context.fillText(column[j], 0, sizeSum)
-      else
-        sizeSum += verticalLineWidth
-        context.fillText(column[j], width - sizeSum, verticalLineHeight)
+    wordWidth =  context.measureText('あ').width
+    if @isDrawHorizontal
+      heightLine = (height - wordWidth * column.length) * 0.5
+      for j in [0..(column.length - 1)]
+        heightLine += wordWidth
+        context.fillText(column[j], (width - _calcVerticalColumnWidth.call(@, column[j])) * 0.5, heightLine)
+    else
+      widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth
+      for j in [0..(column.length - 1)]
+        widthLine -= wordWidth
+        context.fillText(column[j], widthLine, (height - _calcVerticalColumnHeight.call(@, column[j])) * 0.5 + wordWidth)
 
   # 描画枠から大体のフォントサイズを計算
   _calcFontSizeAbout = (width, height) ->

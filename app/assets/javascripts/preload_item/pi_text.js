@@ -211,7 +211,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height) {
-    var _calcSize, _calcVerticalColumnHeight, char, column, i, j, k, l, line, ref, ref1, results, sizeSum, verticalLineHeight, verticalLineWidth;
+    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnWidth, char, column, heightLine, i, j, k, l, line, m, ref, ref1, ref2, results, results1, sizeSum, widthLine, wordWidth;
     _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
       hasJapanease = false;
@@ -227,8 +227,18 @@ PreloadItemText = (function(superClass) {
         return context.measureText('M').width;
       }
     };
+    _calcVerticalColumnWidth = function(columnText) {
+      var char, k, len, ref, sum;
+      sum = 0;
+      ref = columnText.split('');
+      for (k = 0, len = ref.length; k < len; k++) {
+        char = ref[k];
+        sum += context.measureText(char).width;
+      }
+      return sum;
+    };
     _calcVerticalColumnHeight = function(columnText) {
-      return columnText.length * context.measureText('あ').height;
+      return columnText.length * context.measureText('あ').width;
     };
     column = [''];
     line = 0;
@@ -245,19 +255,24 @@ PreloadItemText = (function(superClass) {
       column[line] += char;
     }
     sizeSum = 0;
-    verticalLineWidth = context.measureText('あ').width;
-    verticalLineHeight = context.measureText('あ').height;
-    results = [];
-    for (j = l = 0, ref1 = column.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; j = 0 <= ref1 ? ++l : --l) {
-      if (this.isDrawHorizontal) {
-        sizeSum += _calcSize.call(this, column[j]);
-        results.push(context.fillText(column[j], 0, sizeSum));
-      } else {
-        sizeSum += verticalLineWidth;
-        results.push(context.fillText(column[j], width - sizeSum, verticalLineHeight));
+    wordWidth = context.measureText('あ').width;
+    if (this.isDrawHorizontal) {
+      heightLine = (height - wordWidth * column.length) * 0.5;
+      results = [];
+      for (j = l = 0, ref1 = column.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; j = 0 <= ref1 ? ++l : --l) {
+        heightLine += wordWidth;
+        results.push(context.fillText(column[j], (width - _calcVerticalColumnWidth.call(this, column[j])) * 0.5, heightLine));
       }
+      return results;
+    } else {
+      widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth;
+      results1 = [];
+      for (j = m = 0, ref2 = column.length - 1; 0 <= ref2 ? m <= ref2 : m >= ref2; j = 0 <= ref2 ? ++m : --m) {
+        widthLine -= wordWidth;
+        results1.push(context.fillText(column[j], widthLine, (height - _calcVerticalColumnHeight.call(this, column[j])) * 0.5 + wordWidth));
+      }
+      return results1;
     }
-    return results;
   };
 
   _calcFontSizeAbout = function(width, height) {
