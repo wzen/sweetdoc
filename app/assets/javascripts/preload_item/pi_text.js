@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _draw, _drawText, _prepareEditModal, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _draw, _drawText, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -12,9 +12,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.CLASS_DIST_TOKEN = 'PreloadItemText';
 
-  PreloadItemText.INPUT_CLASSNAME = 'pi_input_text';
-
-  PreloadItemText.CONTENTS_CLASSNAME = 'pi_contents_text';
+  PreloadItemText.NO_TEXT = 'No Text';
 
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
@@ -155,9 +153,24 @@ PreloadItemText = (function(superClass) {
       show = true;
     }
     PreloadItemText.__super__.itemDraw.call(this, show);
-    if (this.inputText != null) {
-      return _draw.call(this);
+    return _draw.call(this);
+  };
+
+  PreloadItemText.prototype.refresh = function(show, callback) {
+    if (show == null) {
+      show = true;
     }
+    if (callback == null) {
+      callback = null;
+    }
+    return PreloadItemText.__super__.refresh.call(this, show, (function(_this) {
+      return function() {
+        _settingTextDbclickEvent.call(_this);
+        if (callback != null) {
+          return callback();
+        }
+      };
+    })(this));
   };
 
   PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {
@@ -197,8 +210,16 @@ PreloadItemText = (function(superClass) {
   };
 
   _draw = function() {
-    _setTextStyle.call(this);
-    return _setTextToCanvas.call(this, $(drawingCanvas).attr('width'), $(drawingCanvas).attr('height'));
+    if (this.inputText != null) {
+      _setTextStyle.call(this);
+    } else {
+      _setNoTextStyle.call(this);
+    }
+    if (this.inputText != null) {
+      return _setTextToCanvas.call(this, this.inputText);
+    } else {
+      return _setTextToCanvas.call(this, this.constructor.NO_TEXT);
+    }
   };
 
   _setTextStyle = function() {
@@ -208,18 +229,25 @@ PreloadItemText = (function(superClass) {
     return context.fillStyle = this.textColor;
   };
 
-  _setTextToCanvas = function() {
+  _setNoTextStyle = function() {
+    var canvas, context;
+    canvas = document.getElementById(this.canvasElementId());
+    context = canvas.getContext('2d');
+    return context.fillStyle = 'rgba(33, 33, 33, 0.3)';
+  };
+
+  _setTextToCanvas = function(text) {
     var canvas, canvasHeight, canvasWidth, context;
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
     canvasWidth = $(canvas).attr('width');
     canvasHeight = $(canvas).attr('height');
     if (this.fontSize == null) {
-      _calcFontSizeAbout.call(this, canvasWidth, canvasHeight);
+      _calcFontSizeAbout.call(this, text, canvasWidth, canvasHeight);
     }
     context.font = this.fontSize + "px " + this.fontFamily;
     context.save();
-    _drawText.call(this, context, this.inputText, canvasWidth, canvasHeight);
+    _drawText.call(this, context, text, canvasWidth, canvasHeight);
     return context.restore();
   };
 
@@ -330,12 +358,12 @@ PreloadItemText = (function(superClass) {
     }
   };
 
-  _calcFontSizeAbout = function(width, height) {
+  _calcFontSizeAbout = function(text, width, height) {
     var a, fontSize, h, newLineCount, w;
-    a = this.inputText.length;
-    this.inputText = this.inputText.replace(/\n+$/g, '');
+    a = text.length;
+    text = text.replace(/\n+$/g, '');
     if (!this.isFixedFontSize) {
-      newLineCount = this.inputText.split('\n').length - 1;
+      newLineCount = text.split('\n').length - 1;
       if (this.isDrawHorizontal) {
         w = height;
         h = width;
@@ -369,13 +397,10 @@ PreloadItemText = (function(superClass) {
   };
 
   _settingTextDbclickEvent = function() {
-    var emt;
-    emt = this.getJQueryElement().find("." + this.constructor.CONTENTS_CLASSNAME + ":first");
-    return emt.off('dblclick').on('dblclick', (function(_this) {
+    return this.getJQueryElement().off('dblclick').on('dblclick', (function(_this) {
       return function(e) {
-        return _this.refresh(true, function() {
-          return _showInputModal.call(_this);
-        });
+        e.preventDefault();
+        return _showInputModal.call(_this);
       };
     })(this));
   };
@@ -395,7 +420,6 @@ PreloadItemText = (function(superClass) {
         return Navbar.setModeDraw(_this.classDistToken, function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
           return _this.refresh(true, function() {
-            _settingTextDbclickEvent.call(_this);
             return Common.hideModalView();
           });
         });

@@ -1,8 +1,7 @@
 class PreloadItemText extends CanvasItemBase
   @NAME_PREFIX = "text"
   @CLASS_DIST_TOKEN = 'PreloadItemText'
-  @INPUT_CLASSNAME = 'pi_input_text'
-  @CONTENTS_CLASSNAME = 'pi_contents_text'
+  @NO_TEXT = 'No Text'
 
   if gon?
     constant = gon.const
@@ -201,7 +200,6 @@ class PreloadItemText extends CanvasItemBase
     super(cood)
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
-    #@_editing = false
     @inputText = null
     @isDrawHorizontal = true
     @fontFamily = 'Times New Roman'
@@ -221,14 +219,22 @@ class PreloadItemText extends CanvasItemBase
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
     super(show)
-    if @inputText?
-      # 描画
-      _draw.call(@)
+    # 描画
+    _draw.call(@)
+
+  # 再描画処理
+  # @param [boolean] show 要素作成後に描画を表示するか
+  # @param [Function] callback コールバック
+  refresh: (show = true, callback = null) ->
+    super(show, =>
+      _settingTextDbclickEvent.call(@)
+      if callback?
+        callback()
+    )
 
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->
     @restoreAllDrawingSurface()
-    #@fontSize = _fontSize.call(@)
     # 編集状態で描画
     @endDraw(zindex, true, =>
       @setupItemEvents()
@@ -259,26 +265,37 @@ class PreloadItemText extends CanvasItemBase
 
   _draw = ->
     # スタイル設定
-    _setTextStyle.call(@)
+    if @inputText?
+      _setTextStyle.call(@)
+    else
+      _setNoTextStyle.call(@)
     # 文字配置 & フォント設定
-    _setTextToCanvas.call(@ ,$(drawingCanvas).attr('width'), $(drawingCanvas).attr('height'))
+    if @inputText?
+      _setTextToCanvas.call(@ , @inputText)
+    else
+      _setTextToCanvas.call(@ , @constructor.NO_TEXT)
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
     context.fillStyle = @textColor
 
-  _setTextToCanvas = ->
+  _setNoTextStyle = ->
+    canvas = document.getElementById(@canvasElementId())
+    context = canvas.getContext('2d')
+    context.fillStyle = 'rgba(33, 33, 33, 0.3)'
+
+  _setTextToCanvas = (text) ->
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
     canvasWidth = $(canvas).attr('width')
     canvasHeight = $(canvas).attr('height')
     # FIXME: 枠がある場合は中のサイズを取るようにする
     if !@fontSize?
-      _calcFontSizeAbout.call(@, canvasWidth, canvasHeight)
+      _calcFontSizeAbout.call(@, text, canvasWidth, canvasHeight)
     context.font = "#{@fontSize}px #{@fontFamily}"
     context.save()
-    _drawText.call(@, context, @inputText, canvasWidth, canvasHeight)
+    _drawText.call(@, context, text, canvasWidth, canvasHeight)
     context.restore()
 
   _drawText = (context, text, width, height) ->
@@ -359,14 +376,14 @@ class PreloadItemText extends CanvasItemBase
         context.fillText(column[j], widthLine, h + wordWidth)
 
   # 描画枠から大体のフォントサイズを計算
-  _calcFontSizeAbout = (width, height) ->
+  _calcFontSizeAbout = (text, width, height) ->
     # 文字数計算
-    a = @inputText.length
+    a = text.length
     # 文末の改行を削除
-    @inputText = @inputText.replace(/\n+$/g,'')
+    text = text.replace(/\n+$/g,'')
     if !@isFixedFontSize
       # フォントサイズを計算
-      newLineCount = @inputText.split('\n').length - 1
+      newLineCount = text.split('\n').length - 1
       if @isDrawHorizontal
         w = height
         h = width
@@ -390,12 +407,10 @@ class PreloadItemText extends CanvasItemBase
 
   _settingTextDbclickEvent = ->
     # ダブルクリックでEditに変更
-    emt = @getJQueryElement().find(".#{@constructor.CONTENTS_CLASSNAME}:first")
-    emt.off('dblclick').on('dblclick', (e) =>
-      @refresh(true, =>
-        # Modal表示
-        _showInputModal.call(@)
-      )
+    @getJQueryElement().off('dblclick').on('dblclick', (e) =>
+      e.preventDefault()
+      # Modal表示
+      _showInputModal.call(@)
     )
 
   _prepareEditModal = (modalEmt) ->
@@ -413,8 +428,6 @@ class PreloadItemText extends CanvasItemBase
       Navbar.setModeDraw(@classDistToken, =>
         WorktableCommon.changeMode(Constant.Mode.DRAW)
         @refresh(true, =>
-          # イベント設定
-          _settingTextDbclickEvent.call(@)
           Common.hideModalView()
         )
       )
