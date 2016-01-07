@@ -242,7 +242,11 @@
   }
 
   &.item_text_editing {
+    width: 550px;
+    height: 250px;
     .content {
+      position: relative;
+      height: 100%;
       > div {
         display: table;
         > div {
@@ -251,11 +255,17 @@
         }
       }
     }
-    .textarea {
+    .textarea_wrapper {
       width: 100%;
-      height: 100%;
+      height: 85%;
+      .textarea {
+        width: 100%;
+        height: 100%;
+      }
     }
     .button_wrapper {
+      position: absolute;
+      bottom: 0;
       width: 100%;
       text-align: center;
       margin-top: 15px;

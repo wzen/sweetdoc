@@ -35,7 +35,7 @@ Project = (function() {
       $('.display_project_new_wrapper', modalEmt).css('display', $(this).val() === 'new' ? 'block' : 'none');
       $('.display_project_select_wrapper', modalEmt).css('display', $(this).val() === 'select' ? 'block' : 'none');
       size = _modalSize($(this).val());
-      modalEmt.animate({
+      modalEmt.animate(null, {
         width: size.width + "px",
         height: size.height + "px"
       }, {

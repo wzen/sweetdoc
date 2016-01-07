@@ -123,7 +123,7 @@ PreloadItemText = (function(superClass) {
         y: cood.y
       };
     }
-    this.inputText = 'Input text';
+    this.inputText = null;
     this.isDrawHorizontal = true;
     this.fontFamily = 'Times New Roman';
     this.fontSize = null;
@@ -142,7 +142,9 @@ PreloadItemText = (function(superClass) {
       show = true;
     }
     PreloadItemText.__super__.itemDraw.call(this, show);
-    return _draw.call(this);
+    if (this.inputText != null) {
+      return _draw.call(this);
+    }
   };
 
   PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {
@@ -163,15 +165,6 @@ PreloadItemText = (function(superClass) {
         }
       };
     })(this));
-  };
-
-  PreloadItemText.prototype.cssStyle = function() {
-    var css;
-    css = "#" + this.id + " .text_wrapper {\n  font-family: '" + this.fontFamily + "';\n  font-size: " + this.fontSize + "px;\n  display: table-cell;\n  vertical-align: middle;\n  color: " + this.textColor + "\n}\n#" + this.id + " ." + this.constructor.CONTENTS_CLASSNAME + " {\n  text-align: center;\n  display: table;\n  width: 100%;\n  height: 100%;\n}";
-    if (this.showBalloon) {
-      css += "#" + this.id + " .item_wrapper {\n  border-radius: " + this.balloonRadius + "px;\n  background-color: " + this.balloonColor + ";\n}";
-    }
-    return css;
   };
 
   PreloadItemText.prototype.changeText = function(opt) {
@@ -239,11 +232,14 @@ PreloadItemText = (function(superClass) {
         w = width;
         h = height;
       }
-      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * (a + 1) / h * 2;
+      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2);
       if (debug) {
         console.log(fontSize);
       }
       this.fontSize = parseInt(fontSize);
+      if (this.fontSize < 1) {
+        this.fontSize = 1;
+      }
     }
     this.textPositions = [];
     posIndex = 0;
@@ -254,7 +250,7 @@ PreloadItemText = (function(superClass) {
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         c = ref[i];
-        if (c !== '\n') {
+        if (c === '\n') {
           x = 0;
           results.push(y += this.fontSize);
         } else {
@@ -281,7 +277,7 @@ PreloadItemText = (function(superClass) {
       results1 = [];
       for (j = 0, len1 = ref1.length; j < len1; j++) {
         c = ref1[j];
-        if (c !== '\n') {
+        if (c === '\n') {
           y = 0;
           results1.push(x -= this.fontSize);
         } else {
@@ -331,6 +327,11 @@ PreloadItemText = (function(superClass) {
   };
 
   _prepareEditModal = function(modalEmt) {
+    if (this.inputText != null) {
+      $('.textarea:first', modalEmt).val(this.inputText);
+    } else {
+      $('.textarea:first', modalEmt).val('');
+    }
     $('.create_button', modalEmt).off('click').on('click', (function(_this) {
       return function(e) {
         var emt;

@@ -198,7 +198,7 @@ class PreloadItemText extends CanvasItemBase
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
     #@_editing = false
-    @inputText = 'Input text'
+    @inputText = null
     @isDrawHorizontal = true
     @fontFamily = 'Times New Roman'
     @fontSize = null
@@ -216,8 +216,9 @@ class PreloadItemText extends CanvasItemBase
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
     super(show)
-    # 描画
-    _draw.call(@)
+    if @inputText?
+      # 描画
+      _draw.call(@)
 
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->
@@ -238,33 +239,33 @@ class PreloadItemText extends CanvasItemBase
         callback()
     )
 
-  # CSSスタイル
-  # TODO: CSSファイルで管理できるように修正
-  cssStyle: ->
-    css = """
-      ##{@id} .text_wrapper {
-        font-family: '#{@fontFamily}';
-        font-size: #{@fontSize}px;
-        display: table-cell;
-        vertical-align: middle;
-        color: #{@textColor}
-      }
-      ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
-        text-align: center;
-        display: table;
-        width: 100%;
-        height: 100%;
-      }
-    """
-    if @showBalloon
-      css += """
-        ##{@id} .item_wrapper {
-          border-radius: #{@balloonRadius}px;
-          background-color: #{@balloonColor};
-        }
-      """
-
-    return css
+#  # CSSスタイル
+#  # TODO: CSSファイルで管理できるように修正
+#  cssStyle: ->
+#    css = """
+#      ##{@id} .text_wrapper {
+#        font-family: '#{@fontFamily}';
+#        font-size: #{@fontSize}px;
+#        display: table-cell;
+#        vertical-align: middle;
+#        color: #{@textColor}
+#      }
+#      ##{@id} .#{@constructor.CONTENTS_CLASSNAME} {
+#        text-align: center;
+#        display: table;
+#        width: 100%;
+#        height: 100%;
+#      }
+#    """
+#    if @showBalloon
+#      css += """
+#        ##{@id} .item_wrapper {
+#          border-radius: #{@balloonRadius}px;
+#          background-color: #{@balloonColor};
+#        }
+#      """
+#
+#    return css
 
   changeText: (opt) ->
     changeBefore = @getJQueryElement().find('.change_before:first')
@@ -322,10 +323,12 @@ class PreloadItemText extends CanvasItemBase
       else
         w = width
         h = height
-      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * (a + 1) / h * 2
+      fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2)
       if debug
         console.log(fontSize)
       @fontSize = parseInt(fontSize)
+      if @fontSize < 1
+        @fontSize = 1
     # 描画位置を計算
     @textPositions = []
     posIndex = 0
@@ -334,7 +337,7 @@ class PreloadItemText extends CanvasItemBase
       x = 0
       y = 0
       for c in @inputText.split('')
-        if c != '\n'
+        if c == '\n'
           x = 0
           y += @fontSize
         else
@@ -353,7 +356,7 @@ class PreloadItemText extends CanvasItemBase
       x = width - @fontSize
       y = 0
       for c in @inputText.split('')
-        if c != '\n'
+        if c == '\n'
           y = 0
           x -= @fontSize
         else
@@ -386,6 +389,10 @@ class PreloadItemText extends CanvasItemBase
     )
 
   _prepareEditModal = (modalEmt) ->
+    if @inputText?
+      $('.textarea:first', modalEmt).val(@inputText)
+    else
+      $('.textarea:first', modalEmt).val('')
     $('.create_button', modalEmt).off('click').on('click', (e) =>
       # Inputを反映して再表示
       emt = $(e.target).closest('.modal-content')

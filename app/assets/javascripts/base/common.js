@@ -733,7 +733,7 @@ Common = (function() {
     _show = function() {
       $("body").append('<div id="modal-overlay"></div>');
       $("#modal-overlay").show();
-      Common.modalCentering.call(this);
+      Common.modalCentering.call(this, type);
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
       emt.show();
       return $("#modal-overlay,#modal-close").unbind().click(function() {
@@ -780,8 +780,11 @@ Common = (function() {
     }
   };
 
-  Common.modalCentering = function(animation, b, c) {
+  Common.modalCentering = function(type, animation, b, c) {
     var callback, ch, cw, emt, h, height, w, width;
+    if (type == null) {
+      type = null;
+    }
     if (animation == null) {
       animation = false;
     }
@@ -791,7 +794,11 @@ Common = (function() {
     if (c == null) {
       c = null;
     }
-    emt = $('body').children(".modal-content");
+    if (type == null) {
+      emt = $('body').children(".modal-content:visible");
+    } else {
+      emt = $('body').children(".modal-content." + type);
+    }
     if (emt != null) {
       w = $(window).width();
       h = $(window).height();

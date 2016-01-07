@@ -580,7 +580,7 @@ class Common
       $("body").append( '<div id="modal-overlay"></div>' )
       $("#modal-overlay").show()
       # センタリング
-      Common.modalCentering.call(@)
+      Common.modalCentering.call(@, type)
       # ビューの高さ
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
       emt.show()
@@ -625,8 +625,12 @@ class Common
         _show.call(self)
 
   # 中央センタリング
-  @modalCentering = (animation = false, b = null, c = null) ->
-    emt = $('body').children(".modal-content")
+  @modalCentering = (type = null, animation = false, b = null, c = null) ->
+    if !type?
+      # 表示しているモーダルを対象にする
+      emt = $('body').children(".modal-content:visible")
+    else
+      emt = $('body').children(".modal-content.#{type}")
     if emt?
       w = $(window).width()
       h = $(window).height()

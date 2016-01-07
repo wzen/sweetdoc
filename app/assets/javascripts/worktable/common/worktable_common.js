@@ -375,7 +375,7 @@ WorktableCommon = (function() {
     PageValue.removeInstancePageValue(targetId);
     PageValue.removeEventPageValueSync(targetId);
     if (window.instanceMap[targetId] != null) {
-      window.instanceMap[targetId].removeItemElement();
+      window.instanceMap[targetId].getJQueryElement().remove();
     }
     PageValue.adjustInstanceAndEventOnPage();
     Timeline.refreshAllTimeline();

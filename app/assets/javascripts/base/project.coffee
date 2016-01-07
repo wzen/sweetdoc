@@ -27,7 +27,7 @@ class Project
       $('.display_project_new_wrapper', modalEmt).css('display', if $(@).val() == 'new' then 'block' else 'none')
       $('.display_project_select_wrapper', modalEmt).css('display', if $(@).val() == 'select' then 'block' else 'none')
       size = _modalSize($(@).val())
-      modalEmt.animate({width: "#{size.width}px", height: "#{size.height}px"}, {duration: 300, queue: false})
+      modalEmt.animate(null, {width: "#{size.width}px", height: "#{size.height}px"}, {duration: 300, queue: false})
       Common.modalCentering(true, size)
       $('.button_wrapper span', modalEmt).hide()
       $(".button_wrapper .#{$(@).val()}", modalEmt).show()

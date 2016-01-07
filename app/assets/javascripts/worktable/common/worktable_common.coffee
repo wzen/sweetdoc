@@ -328,7 +328,7 @@ class WorktableCommon
     PageValue.removeInstancePageValue(targetId)
     PageValue.removeEventPageValueSync(targetId)
     if window.instanceMap[targetId]?
-      window.instanceMap[targetId].removeItemElement()
+      window.instanceMap[targetId].getJQueryElement().remove()
     PageValue.adjustInstanceAndEventOnPage()
     Timeline.refreshAllTimeline()
     LocalStorage.saveAllPageValues()
