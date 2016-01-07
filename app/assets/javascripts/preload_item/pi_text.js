@@ -211,12 +211,12 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height) {
-    var _calcSize, char, column, i, j, k, l, line, ref, ref1, results, sizeSum, verticalLineHeight, verticalLineWidth;
-    _calcSize = function(column) {
+    var _calcSize, _calcVerticalColumnHeight, char, column, i, j, k, l, line, ref, ref1, results, sizeSum, verticalLineHeight, verticalLineWidth;
+    _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
       hasJapanease = false;
-      for (i = k = 0, ref = column.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
-        if (column[i].charCodeAt(0) >= 256) {
+      for (i = k = 0, ref = columnText.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+        if (columnText.charAt(i).charCodeAt(0) >= 256) {
           hasJapanease = true;
           break;
         }
@@ -227,12 +227,20 @@ PreloadItemText = (function(superClass) {
         return context.measureText('M').width;
       }
     };
+    _calcVerticalColumnHeight = function(columnText) {
+      var i, k, ref, ret;
+      ret = 0;
+      for (i = k = 0, ref = columnText.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+        ret += context.measureText(columnText.charAt(i)).height;
+      }
+      return ret;
+    };
     column = [''];
     line = 0;
     text = text.replace("{br}", "\n", "gm");
     for (i = k = 0, ref = text.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
       char = text.charAt(i);
-      if (char === "\n" || (this.isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!this.isDrawHorizontal && context.measureText(column[line] + char).height > height)) {
+      if (char === "\n" || (this.isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!this.isDrawHorizontal && _calcVerticalColumnHeight.call(this, column[line] + char) > height)) {
         line += 1;
         column[line] = '';
         if (char === "\n") {

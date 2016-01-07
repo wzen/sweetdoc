@@ -305,10 +305,10 @@ class PreloadItemText extends CanvasItemBase
     context.restore()
 
   _drawText = (context, text, width, height) ->
-    _calcSize = (column) ->
+    _calcSize = (columnText) ->
       hasJapanease = false
-      for i in [0..(column.length - 1)]
-        if column[i].charCodeAt(0) >= 256
+      for i in [0..(columnText.length - 1)]
+        if columnText.charAt(i).charCodeAt(0) >= 256
           hasJapanease = true
           break
       if hasJapanease
@@ -316,12 +316,18 @@ class PreloadItemText extends CanvasItemBase
       else
         context.measureText('M').width
 
+    _calcVerticalColumnHeight = (columnText) ->
+      ret = 0
+      for i in [0..(columnText.length - 1)]
+        ret += context.measureText(columnText.charAt(i)).height
+      return ret
+
     column = ['']
     line = 0
     text = text.replace("{br}", "\n", "gm")
     for i in [0..(text.length - 1)]
       char = text.charAt(i)
-      if char == "\n" || (@isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!@isDrawHorizontal && context.measureText(column[line] + char).height > height)
+      if char == "\n" || (@isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!@isDrawHorizontal && _calcVerticalColumnHeight.call(@, column[line] + char) > height)
         line += 1
         column[line] = ''
         if char == "\n"
