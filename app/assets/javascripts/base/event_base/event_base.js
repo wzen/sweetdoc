@@ -282,9 +282,9 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.willChapter = function() {
+    PageValue.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
     this.setModifyBeforeAndAfterVar();
-    this.resetProgress();
-    return PageValue.saveToFootprint(this.id, true, this._event[EventPageValueBase.PageValueKey.DIST_ID]);
+    return this.resetProgress();
   };
 
   EventBase.prototype.didChapter = function() {
@@ -343,7 +343,7 @@ EventBase = (function(superClass) {
       this.stepValue += plusX + plusY;
     }
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
-    ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]);
+    ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
     if (this.stepValue < sPoint) {
       return;
     } else if (this.stepValue >= ePoint) {

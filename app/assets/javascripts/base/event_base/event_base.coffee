@@ -210,12 +210,12 @@ class EventBase extends Extend
 
   # チャプター開始前イベント
   willChapter: ->
+    # インスタンスの状態を保存
+    PageValue.saveToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
     # イベント前後の変数の設定
     @setModifyBeforeAndAfterVar()
     # ステータス値初期化
     @resetProgress()
-    # インスタンスの状態を保存
-    PageValue.saveToFootprint(@id, true, @_event[EventPageValueBase.PageValueKey.DIST_ID])
 
   # チャプター終了時イベント
   didChapter: ->
@@ -272,7 +272,7 @@ class EventBase extends Extend
       @stepValue += plusX + plusY
 
     sPoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_START])
-    ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END])
+    ePoint = parseInt(@_event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1
 
     # スクロール指定範囲外なら反応させない
     if @stepValue < sPoint

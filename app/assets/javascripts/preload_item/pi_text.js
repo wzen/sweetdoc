@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _draw, _drawText, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _drawText, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -111,11 +111,22 @@ PreloadItemText = (function(superClass) {
         },
         options: {
           id: 'changeText',
-          name: 'Text',
-          desc: "Text",
+          name: 'changeText',
+          desc: "changeText",
           ja: {
             name: 'テキスト',
             desc: 'テキスト変更'
+          }
+        }
+      },
+      writeText: {
+        options: {
+          id: 'writeText',
+          name: 'writeText',
+          desc: "writeText",
+          ja: {
+            name: 'テキスト',
+            desc: 'テキスト描画'
           }
         }
       }
@@ -153,7 +164,16 @@ PreloadItemText = (function(superClass) {
       show = true;
     }
     PreloadItemText.__super__.itemDraw.call(this, show);
-    return _draw.call(this);
+    if (this.inputText != null) {
+      _setTextStyle.call(this);
+    } else {
+      _setNoTextStyle.call(this);
+    }
+    if (this.inputText != null) {
+      return _setTextToCanvas.call(this, this.inputText);
+    } else {
+      return _setTextToCanvas.call(this, this.constructor.NO_TEXT);
+    }
   };
 
   PreloadItemText.prototype.refresh = function(show, callback) {
@@ -194,31 +214,28 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.changeText = function(opt) {
-    var changeAfter, changeBefore, opa;
-    changeBefore = this.getJQueryElement().find('.change_before:first');
-    changeAfter = this.getJQueryElement().find('.change_after:first');
-    if (changeAfter.find('span:first').text().length === 0) {
-      changeBefore.find('span:first').html(this.inputText__before);
-      changeBefore.css('opacity', 1);
-      changeAfter.find('span:first').html(this.inputText__after);
-      return changeAfter.css('opacity', 0);
-    } else {
-      opa = 1 * opt.progress / opt.progressMax;
-      changeBefore.css('opacity', 1 - opa);
-      return changeAfter.css('opacity', opa);
-    }
+    var canvas, context, opa;
+    opa = opt.progress / opt.progressMax;
+    canvas = document.getElementById(this.canvasElementId());
+    context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = this.textColor;
+    context.globalAlpha = 1 - opa;
+    _setTextToCanvas.call(this, this.inputText__before);
+    context.globalAlpha = opa;
+    return _setTextToCanvas.call(this, this.inputText__after);
   };
 
-  _draw = function() {
-    if (this.inputText != null) {
+  PreloadItemText.prototype.writeText = function(opt) {
+    var canvas, context, subText;
+    canvas = document.getElementById(this.canvasElementId());
+    context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    if ((this.inputText != null) && this.inputText.length > 0) {
       _setTextStyle.call(this);
-    } else {
-      _setNoTextStyle.call(this);
-    }
-    if (this.inputText != null) {
-      return _setTextToCanvas.call(this, this.inputText);
-    } else {
-      return _setTextToCanvas.call(this, this.constructor.NO_TEXT);
+      subText = this.inputText.substring(0, parseInt(this.inputText.length * opt.progress / opt.progressMax));
+      console.log(opt.progress);
+      return _setTextToCanvas.call(this, subText);
     }
   };
 
@@ -238,6 +255,9 @@ PreloadItemText = (function(superClass) {
 
   _setTextToCanvas = function(text) {
     var canvas, canvasHeight, canvasWidth, context;
+    if (text == null) {
+      return;
+    }
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
     canvasWidth = $(canvas).attr('width');
@@ -265,7 +285,7 @@ PreloadItemText = (function(superClass) {
       if (hasJapanease) {
         return context.measureText('あ').width;
       } else {
-        return context.measureText('M').width;
+        return context.measureText('W').width;
       }
     };
     _calcVerticalColumnWidth = function(columnText) {
@@ -335,6 +355,7 @@ PreloadItemText = (function(superClass) {
         } else {
           w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(this, column[j]);
         }
+        context.beginPath();
         results.push(context.fillText(column[j], w, heightLine));
       }
       return results;
@@ -352,6 +373,7 @@ PreloadItemText = (function(superClass) {
         } else {
           h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(this, column[j]);
         }
+        context.beginPath();
         results1.push(context.fillText(column[j], widthLine, h + wordWidth));
       }
       return results1;

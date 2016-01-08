@@ -183,11 +183,22 @@ class PreloadItemText extends CanvasItemBase
         }
         options: {
           id: 'changeText'
-          name: 'Text'
-          desc: "Text"
+          name: 'changeText'
+          desc: "changeText"
           ja: {
             name: 'テキスト'
             desc: 'テキスト変更'
+          }
+        }
+      }
+      writeText: {
+        options: {
+          id: 'writeText'
+          name: 'writeText'
+          desc: "writeText"
+          ja: {
+            name: 'テキスト'
+            desc: 'テキスト描画'
           }
         }
       }
@@ -219,8 +230,16 @@ class PreloadItemText extends CanvasItemBase
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
     super(show)
-    # 描画
-    _draw.call(@)
+    # スタイル設定
+    if @inputText?
+      _setTextStyle.call(@)
+    else
+      _setNoTextStyle.call(@)
+    # 文字配置 & フォント設定
+    if @inputText?
+      _setTextToCanvas.call(@ , @inputText)
+    else
+      _setTextToCanvas.call(@ , @constructor.NO_TEXT)
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -251,29 +270,25 @@ class PreloadItemText extends CanvasItemBase
     )
 
   changeText: (opt) ->
-    changeBefore = @getJQueryElement().find('.change_before:first')
-    changeAfter = @getJQueryElement().find('.change_after:first')
-    if changeAfter.find('span:first').text().length == 0
-      changeBefore.find('span:first').html(@inputText__before)
-      changeBefore.css('opacity', 1)
-      changeAfter.find('span:first').html(@inputText__after)
-      changeAfter.css('opacity', 0)
-    else
-      opa = 1 * opt.progress / opt.progressMax
-      changeBefore.css('opacity', 1 - opa)
-      changeAfter.css('opacity', opa)
+    opa = opt.progress / opt.progressMax
+    canvas = document.getElementById(@canvasElementId())
+    context = canvas.getContext('2d')
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.fillStyle = @textColor
+    context.globalAlpha = 1 - opa
+    _setTextToCanvas.call(@ , @inputText__before)
+    context.globalAlpha = opa
+    _setTextToCanvas.call(@ , @inputText__after)
 
-  _draw = ->
-    # スタイル設定
-    if @inputText?
+  writeText: (opt) ->
+    canvas = document.getElementById(@canvasElementId())
+    context = canvas.getContext('2d')
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    if @inputText? && @inputText.length > 0
       _setTextStyle.call(@)
-    else
-      _setNoTextStyle.call(@)
-    # 文字配置 & フォント設定
-    if @inputText?
-      _setTextToCanvas.call(@ , @inputText)
-    else
-      _setTextToCanvas.call(@ , @constructor.NO_TEXT)
+      subText = @inputText.substring(0, parseInt(@inputText.length * opt.progress / opt.progressMax))
+      console.log(opt.progress)
+      _setTextToCanvas.call(@ , subText)
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
@@ -286,6 +301,9 @@ class PreloadItemText extends CanvasItemBase
     context.fillStyle = 'rgba(33, 33, 33, 0.3)'
 
   _setTextToCanvas = (text) ->
+    if !text?
+      return
+
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
     canvasWidth = $(canvas).attr('width')
@@ -308,7 +326,7 @@ class PreloadItemText extends CanvasItemBase
       if hasJapanease
         return context.measureText('あ').width
       else
-        context.measureText('M').width
+        context.measureText('W').width
 
     _calcVerticalColumnWidth = (columnText) ->
       sum = 0
@@ -359,6 +377,7 @@ class PreloadItemText extends CanvasItemBase
         else
           # RIGHT
           w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(@, column[j])
+        context.beginPath()
         context.fillText(column[j], w, heightLine)
     else
       widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth
@@ -373,6 +392,7 @@ class PreloadItemText extends CanvasItemBase
         else
           # RIGHT
           h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(@, column[j])
+        context.beginPath()
         context.fillText(column[j], widthLine, h + wordWidth)
 
   # 描画枠から大体のフォントサイズを計算
