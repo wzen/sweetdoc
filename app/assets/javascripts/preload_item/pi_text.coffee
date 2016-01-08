@@ -2,6 +2,7 @@ class PreloadItemText extends CanvasItemBase
   @NAME_PREFIX = "text"
   @CLASS_DIST_TOKEN = 'PreloadItemText'
   @NO_TEXT = 'No Text'
+  @WRITE_TEXT_BLUR_LENGTH = 3
 
   if gon?
     constant = gon.const
@@ -286,7 +287,7 @@ class PreloadItemText extends CanvasItemBase
     context.clearRect(0, 0, canvas.width, canvas.height)
     if @inputText? && @inputText.length > 0
       _setTextStyle.call(@)
-      _setTextToCanvas.call(@ , @inputText, parseInt(@inputText.length * opt.progress / opt.progressMax))
+      _setTextToCanvas.call(@ , @inputText, @inputText.length * opt.progress / opt.progressMax)
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
@@ -357,6 +358,13 @@ class PreloadItemText extends CanvasItemBase
           spaceStr += ' '
       return spaceStr
 
+    _preTextStyle = (context, percent) ->
+      if percent < 0
+        percent = 0
+      else if percent > 1
+        percent = 1
+      context.globalAlpha = (1 - percent) * 0.7
+
     column = ['']
     line = 0
     text = text.replace("{br}", "\n", "gm")
@@ -369,7 +377,7 @@ class PreloadItemText extends CanvasItemBase
           char = ''
       column[line] += char
     sizeSum = 0
-    wordWidth =  context.measureText('あ').width
+    wordWidth = context.measureText('あ').width
     wordSum = 0
     if @isDrawHorizontal
       heightLine = (height - wordWidth * column.length) * 0.5
@@ -385,13 +393,30 @@ class PreloadItemText extends CanvasItemBase
           # RIGHT
           w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(@, column[j])
         context.beginPath()
-        wl = writingLength - wordSum
-        if wl > column[j].length
-          wl = column[j].length
-        visibleStr = column[j].substring(0, wl)
-        hiddenStr = _replaceWordToSpace.call(@, column[j].substr(wl))
+        viewLengthAtLine = parseInt(writingLength - wordSum)
+        if viewLengthAtLine > column[j].length
+          viewLengthAtLine = column[j].length
+        else if viewLengthAtLine < 0
+          viewLengthAtLine = 0
+        if writingLength > 0
+          writeLengthAtLine = parseInt(writingLength + @constructor.WRITE_TEXT_BLUR_LENGTH - wordSum)
+          if writeLengthAtLine > column[j].length
+            writeLengthAtLine = column[j].length
+          else if writeLengthAtLine < 0
+            writeLengthAtLine = 0
+        else
+          writeLengthAtLine = 0
+        visibleStr = column[j].substring(0, writeLengthAtLine)
+        hiddenStr = _replaceWordToSpace.call(@, column[j].substr(writeLengthAtLine))
         t = visibleStr + hiddenStr
-        context.fillText(t, w, heightLine)
+        context.save()
+        wl = 0
+        for c, idx in t.split('')
+          if idx >= viewLengthAtLine && idx < writeLengthAtLine
+            _preTextStyle(context, (idx - (writingLength - wordSum)) / @constructor.WRITE_TEXT_BLUR_LENGTH)
+          context.fillText(c, w + wl, heightLine)
+          wl += context.measureText(c).width
+        context.restore()
         wordSum += t.length
     else
       widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth

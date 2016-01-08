@@ -14,6 +14,8 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.NO_TEXT = 'No Text';
 
+  PreloadItemText.WRITE_TEXT_BLUR_LENGTH = 3;
+
   if (typeof gon !== "undefined" && gon !== null) {
     constant = gon["const"];
     PreloadItemText.BalloonType = (function() {
@@ -52,7 +54,11 @@ PreloadItemText = (function(superClass) {
     modifiables: {
       textColor: {
         name: 'TextColor',
-        "default": 'rgb(0, 0, 0)',
+        "default": {
+          r: 0,
+          g: 0,
+          b: 0
+        },
         colorType: 'rgb',
         type: 'color',
         ja: {
@@ -219,7 +225,7 @@ PreloadItemText = (function(superClass) {
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = this.textColor;
+    context.fillStyle = "rgb(" + this.textColor.r + "," + this.textColor.g + "," + this.textColor.b + ")";
     context.globalAlpha = 1 - opa;
     _setTextToCanvas.call(this, this.inputText__before);
     context.globalAlpha = opa;
@@ -233,7 +239,7 @@ PreloadItemText = (function(superClass) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     if ((this.inputText != null) && this.inputText.length > 0) {
       _setTextStyle.call(this);
-      return _setTextToCanvas.call(this, this.inputText, parseInt(this.inputText.length * opt.progress / opt.progressMax));
+      return _setTextToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
     }
   };
 
@@ -268,7 +274,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height, writingLength) {
-    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _replaceWordToSpace, c, char, column, h, heightLine, heightMax, hiddenStr, hl, i, j, k, l, len, line, m, n, ref, ref1, ref2, ref3, results, results1, sizeSum, t, visibleStr, w, widthLine, widthMax, wl, wordSum, wordWidth;
+    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _replaceWordToSpace, c, char, column, h, heightLine, heightMax, hiddenStr, hl, i, idx, j, k, l, len, len1, line, m, n, o, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, t, viewLengthAtLine, visibleStr, w, widthLine, widthMax, wl, wordSum, wordWidth, writeLengthAtLine;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -338,6 +344,14 @@ PreloadItemText = (function(superClass) {
       }
       return spaceStr;
     };
+    _preTextStyle = function(context, percent) {
+      if (percent < 0) {
+        percent = 0;
+      } else if (percent > 1) {
+        percent = 1;
+      }
+      return context.globalAlpha = (1 - percent) * 0.7;
+    };
     column = [''];
     line = 0;
     text = text.replace("{br}", "\n", "gm");
@@ -370,14 +384,37 @@ PreloadItemText = (function(superClass) {
           w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(this, column[j]);
         }
         context.beginPath();
-        wl = writingLength - wordSum;
-        if (wl > column[j].length) {
-          wl = column[j].length;
+        viewLengthAtLine = parseInt(writingLength - wordSum);
+        if (viewLengthAtLine > column[j].length) {
+          viewLengthAtLine = column[j].length;
+        } else if (viewLengthAtLine < 0) {
+          viewLengthAtLine = 0;
         }
-        visibleStr = column[j].substring(0, wl);
-        hiddenStr = _replaceWordToSpace.call(this, column[j].substr(wl));
+        if (writingLength > 0) {
+          writeLengthAtLine = parseInt(writingLength + this.constructor.WRITE_TEXT_BLUR_LENGTH - wordSum);
+          if (writeLengthAtLine > column[j].length) {
+            writeLengthAtLine = column[j].length;
+          } else if (writeLengthAtLine < 0) {
+            writeLengthAtLine = 0;
+          }
+        } else {
+          writeLengthAtLine = 0;
+        }
+        visibleStr = column[j].substring(0, writeLengthAtLine);
+        hiddenStr = _replaceWordToSpace.call(this, column[j].substr(writeLengthAtLine));
         t = visibleStr + hiddenStr;
-        context.fillText(t, w, heightLine);
+        context.save();
+        wl = 0;
+        ref2 = t.split('');
+        for (idx = m = 0, len = ref2.length; m < len; idx = ++m) {
+          c = ref2[idx];
+          if (idx >= viewLengthAtLine && idx < writeLengthAtLine) {
+            _preTextStyle(context, (idx - (writingLength - wordSum)) / this.constructor.WRITE_TEXT_BLUR_LENGTH);
+          }
+          context.fillText(c, w + wl, heightLine);
+          wl += context.measureText(c).width;
+        }
+        context.restore();
         results.push(wordSum += t.length);
       }
       return results;
@@ -385,7 +422,7 @@ PreloadItemText = (function(superClass) {
       widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth;
       heightMax = _calcVerticalColumnHeightMax.call(this, column);
       results1 = [];
-      for (j = m = 0, ref2 = column.length - 1; 0 <= ref2 ? m <= ref2 : m >= ref2; j = 0 <= ref2 ? ++m : --m) {
+      for (j = n = 0, ref3 = column.length - 1; 0 <= ref3 ? n <= ref3 : n >= ref3; j = 0 <= ref3 ? ++n : --n) {
         widthLine -= wordWidth;
         h = null;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
@@ -404,9 +441,9 @@ PreloadItemText = (function(superClass) {
         hiddenStr = _replaceWordToSpace.call(this, column[j].substr(wl));
         t = visibleStr + hiddenStr;
         hl = 0;
-        ref3 = t.split('');
-        for (n = 0, len = ref3.length; n < len; n++) {
-          c = ref3[n];
+        ref4 = t.split('');
+        for (o = 0, len1 = ref4.length; o < len1; o++) {
+          c = ref4[o];
           context.fillText(c, widthLine, h + wordWidth + hl);
           hl += wordWidth;
         }
