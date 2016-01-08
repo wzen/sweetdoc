@@ -286,9 +286,7 @@ class PreloadItemText extends CanvasItemBase
     context.clearRect(0, 0, canvas.width, canvas.height)
     if @inputText? && @inputText.length > 0
       _setTextStyle.call(@)
-      subText = @inputText.substring(0, parseInt(@inputText.length * opt.progress / opt.progressMax))
-      console.log(opt.progress)
-      _setTextToCanvas.call(@ , subText)
+      _setTextToCanvas.call(@ , @inputText, parseInt(@inputText.length * opt.progress / opt.progressMax))
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
@@ -300,23 +298,21 @@ class PreloadItemText extends CanvasItemBase
     context = canvas.getContext('2d')
     context.fillStyle = 'rgba(33, 33, 33, 0.3)'
 
-  _setTextToCanvas = (text) ->
+  _setTextToCanvas = (text, writingLength) ->
     if !text?
       return
 
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
-    canvasWidth = $(canvas).attr('width')
-    canvasHeight = $(canvas).attr('height')
     # FIXME: 枠がある場合は中のサイズを取るようにする
     if !@fontSize?
-      _calcFontSizeAbout.call(@, text, canvasWidth, canvasHeight)
+      _calcFontSizeAbout.call(@, text, canvas.width, canvas.height)
     context.font = "#{@fontSize}px #{@fontFamily}"
     context.save()
-    _drawText.call(@, context, text, canvasWidth, canvasHeight)
+    _drawText.call(@, context, text, canvas.width, canvas.height, writingLength)
     context.restore()
 
-  _drawText = (context, text, width, height) ->
+  _drawText = (context, text, width, height, writingLength = text.length) ->
     _calcSize = (columnText) ->
       hasJapanease = false
       for i in [0..(columnText.length - 1)]
@@ -350,6 +346,16 @@ class PreloadItemText extends CanvasItemBase
         if ret < r
           ret = r
       return ret
+    _replaceWordToSpace = (text) ->
+      spaceStr = ''
+      for char in text.split('')
+        if char.charCodeAt(0) >= 256
+          # 全角スペース
+          spaceStr += ' '
+        else
+          # 半角スペース
+          spaceStr += ' '
+      return spaceStr
 
     column = ['']
     line = 0
@@ -364,6 +370,7 @@ class PreloadItemText extends CanvasItemBase
       column[line] += char
     sizeSum = 0
     wordWidth =  context.measureText('あ').width
+    wordSum = 0
     if @isDrawHorizontal
       heightLine = (height - wordWidth * column.length) * 0.5
       widthMax = _calcVerticalColumnWidthMax.call(@, column)
@@ -378,7 +385,14 @@ class PreloadItemText extends CanvasItemBase
           # RIGHT
           w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(@, column[j])
         context.beginPath()
-        context.fillText(column[j], w, heightLine)
+        wl = writingLength - wordSum
+        if wl > column[j].length
+          wl = column[j].length
+        visibleStr = column[j].substring(0, wl)
+        hiddenStr = _replaceWordToSpace.call(@, column[j].substr(wl))
+        t = visibleStr + hiddenStr
+        context.fillText(t, w, heightLine)
+        wordSum += t.length
     else
       widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth
       heightMax = _calcVerticalColumnHeightMax.call(@, column)
@@ -393,7 +407,17 @@ class PreloadItemText extends CanvasItemBase
           # RIGHT
           h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(@, column[j])
         context.beginPath()
-        context.fillText(column[j], widthLine, h + wordWidth)
+        wl = writingLength - wordSum
+        if wl > column[j].length
+          wl = column[j].length
+        visibleStr = column[j].substring(0, wl)
+        hiddenStr = _replaceWordToSpace.call(@, column[j].substr(wl))
+        t = visibleStr + hiddenStr
+        hl = 0
+        for c in t.split('')
+          context.fillText(c, widthLine, h + wordWidth + hl)
+          hl += wordWidth
+        wordSum += t.length
 
   # 描画枠から大体のフォントサイズを計算
   _calcFontSizeAbout = (text, width, height) ->
