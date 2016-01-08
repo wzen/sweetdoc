@@ -446,6 +446,9 @@ ItemBase = (function(superClass) {
     if (openValue == null) {
       return;
     }
+    if (typeof targetValue === 'object') {
+      return;
+    }
     if (typeof openValue === 'string' && (openValue === 'true' || openValue === 'false')) {
       openValue = openValue === 'true';
     }

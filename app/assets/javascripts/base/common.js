@@ -1098,7 +1098,11 @@ Common = (function() {
 
   Common.colorFormatChangeRgbToHex = function(data) {
     var cColors, index, j, len, val;
-    cColors = data.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',');
+    if (typeof data === 'string') {
+      cColors = data.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',');
+    } else {
+      cColors = [data.r, data.g.data.b];
+    }
     for (index = j = 0, len = cColors.length; j < len; index = ++j) {
       val = cColors[index];
       cColors[index] = parseInt(val);
@@ -1116,7 +1120,11 @@ Common = (function() {
       val = cColors[index];
       cColors[index] = parseInt(val, 16);
     }
-    return "rgb(" + cColors[0] + "," + cColors[1] + "," + cColors[2] + ")";
+    return {
+      r: cColors[0],
+      g: cColors[1],
+      b: cColors[2]
+    };
   };
 
   Common.colorChangeCacheData = function(beforeColor, afterColor, length, colorType) {

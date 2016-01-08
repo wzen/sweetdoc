@@ -22,7 +22,7 @@ class PreloadItemText extends CanvasItemBase
     modifiables: {
       textColor: {
         name: 'TextColor'
-        default: 'rgb(0, 0, 0)'
+        default: {r:0, g:0, b:0}
         colorType: 'rgb'
         type: 'color'
         ja: {
@@ -274,7 +274,7 @@ class PreloadItemText extends CanvasItemBase
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
     context.clearRect(0, 0, canvas.width, canvas.height)
-    context.fillStyle = @textColor
+    context.fillStyle = "rgb(#{@textColor.r},#{@textColor.g},#{@textColor.b})"
     context.globalAlpha = 1 - opa
     _setTextToCanvas.call(@ , @inputText__before)
     context.globalAlpha = opa

@@ -693,6 +693,9 @@ class EventConfig
     if !openValue?
       # 判定値無し
       return
+    if typeof targetValue == 'object'
+      # オブジェクトの場合は判定しない
+      return
 
     if typeof openValue == 'string' && (openValue == 'true' || openValue == 'false')
       openValue = openValue == 'true'

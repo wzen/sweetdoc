@@ -870,8 +870,11 @@ class Common
     element.contextmenu(data)
 
   @colorFormatChangeRgbToHex = (data) ->
-    # 'rgb(r, g, b)'または'rgba(r, g, b, a)'のフォーマットを分解
-    cColors = data.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',')
+    if typeof data == 'string'
+      # 'rgb(r, g, b)'または'rgba(r, g, b, a)'のフォーマットを分解
+      cColors = data.replace('rgba', '').replace('rgb', '').replace('(', '').replace(')', '').split(',')
+    else
+      cColors = [data.r, data.g. data.b]
     for val, index in cColors
       cColors[index] = parseInt(val)
     return "##{cColors[0].toString(16)}#{cColors[1].toString(16)}#{cColors[2].toString(16)}"
@@ -884,7 +887,11 @@ class Common
     cColors[2] = data.substring(4, 6)
     for val, index in cColors
       cColors[index] = parseInt(val, 16)
-    return "rgb(#{cColors[0]},#{cColors[1]},#{cColors[2]})"
+    return {
+      r: cColors[0]
+      g: cColors[1]
+      b: cColors[2]
+    }
 
   # 色変更差分のキャッシュを取得
   @colorChangeCacheData = (beforeColor, afterColor, length, colorType = 'hex') ->
