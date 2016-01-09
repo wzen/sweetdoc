@@ -492,10 +492,12 @@ class Const
     class BalloonType
       NONE = 0
       FREE = 999999
-      NORMAL = 1
+      ARC = 1
       RECT = 2
-      THINK = 3
-      SHOUT = 4
+      BROKEN_ARC = 3
+      BROKEN_RECT = 4
+      SHOUT = 5
+      THINK = 6
     end
     class WordAlign
       LEFT = 1

@@ -9,10 +9,12 @@ class PreloadItemText extends CanvasItemBase
     class @BalloonType
       @NONE = constant.PreloadItemText.BalloonType.NONE
       @FREE = constant.PreloadItemText.BalloonType.FREE
-      @NORMAL = constant.PreloadItemText.BalloonType.NORMAL
+      @ARC = constant.PreloadItemText.BalloonType.ARC
       @RECT = constant.PreloadItemText.BalloonType.RECT
-      @THINK = constant.PreloadItemText.BalloonType.THINK
+      @BROKEN_ARC = constant.PreloadItemText.BalloonType.BROKEN_ARC
+      @BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT
       @SHOUT = constant.PreloadItemText.BalloonType.SHOUT
+      @THINK = constant.PreloadItemText.BalloonType.THINK
     class @WordAlign
       @LEFT = constant.PreloadItemText.WordAlign.LEFT
       @CENTER = constant.PreloadItemText.WordAlign.CENTER
@@ -314,6 +316,79 @@ class PreloadItemText extends CanvasItemBase
     _drawText.call(@, context, text, canvas.width, canvas.height, writingLength)
     context.restore()
 
+  _drawBalloon = (context, width, height) ->
+    _drawArc = ->
+      # 円
+      context.save()
+      context.beginPath()
+      context.translate(width * 0.5, height * 0.5)
+      if width > height
+        context.scale(width / height, 1)
+        context.arc(0, 0, height * 0.5, 0, Math.PI * 2)
+      else
+        context.scale(1, height / width)
+        context.arc(0, 0, width * 0.5, 0, Math.PI * 2)
+      context.restore()
+    _drawRect = ->
+      # 四角
+      context.beginPath()
+      # FIXME: 描画オプション追加
+      context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+      context.fillRect(0, 0, width, height);
+    _drawBArc = ->
+      # 円 破線
+      context.save()
+      context.beginPath()
+      context.translate(width * 0.5, height * 0.5)
+      per = Math.PI * 2 / 360
+      if width > height
+        context.scale(width / height, 1)
+        sum = 0
+        x = 0
+        while sum < Math.PI * 2
+          l = ((2 * Math.cos(x)) + 1) * per
+          y = x + l
+          context.arc(0, 0, height * 0.5, x, y)
+          sum += l
+          # 空白
+          l = ((1 * Math.cos(x)) + 1) * per
+          y = x + l
+          sum += l
+      else
+        context.scale(1, height / width)
+        sum = 0
+        x = 0
+        while sum < Math.PI * 2
+          l = ((2 * Math.sin(x)) + 1) * per
+          y = x + l
+          context.arc(0, 0, height * 0.5, x, y)
+          sum += l
+          # 空白
+          l = ((1 * Math.sin(x)) + 1) * per
+          y = x + l
+          sum += l
+        context.arc(0, 0, width * 0.5, 0, Math.PI * 2)
+      context.restore()
+    _drawBRect = ->
+      # 四角 破線
+    _drawShout = ->
+      # 叫び
+    _drawThink = ->
+      # 考え中
+
+    if @balloonType == @constructor.BalloonType.ARC
+      _drawArc.call(@)
+    else if @balloonType == @constructor.BalloonType.RECT
+      _drawRect.call(@)
+    else if @balloonType == @constructor.BalloonType.BROKEN_ARC
+      _drawBArc.call(@)
+    else if @balloonType == @constructor.BalloonType.BROKEN_RECT
+      _drawBRect.call(@)
+    else if @balloonType == @constructor.BalloonType.SHOUT
+      _drawShout.call(@)
+    else if @balloonType == @constructor.BalloonType.THINK
+      _drawThink.call(@)
+
   _drawText = (context, text, width, height, writingLength = text.length) ->
     _calcSize = (columnText) ->
       hasJapanease = false
@@ -453,6 +528,7 @@ class PreloadItemText extends CanvasItemBase
             context.save()
             context.beginPath()
             context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height)
+            # デバッグ用の円
             #context.arc(0, 0, 20, 0, Math.PI*2, false);
             #context.stroke();
             context.rotate(Math.PI / 2)

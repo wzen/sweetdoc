@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _calcWordMeasure, _drawText, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -25,13 +25,17 @@ PreloadItemText = (function(superClass) {
 
       BalloonType.FREE = constant.PreloadItemText.BalloonType.FREE;
 
-      BalloonType.NORMAL = constant.PreloadItemText.BalloonType.NORMAL;
+      BalloonType.ARC = constant.PreloadItemText.BalloonType.ARC;
 
       BalloonType.RECT = constant.PreloadItemText.BalloonType.RECT;
 
-      BalloonType.THINK = constant.PreloadItemText.BalloonType.THINK;
+      BalloonType.BROKEN_ARC = constant.PreloadItemText.BalloonType.BROKEN_ARC;
+
+      BalloonType.BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT;
 
       BalloonType.SHOUT = constant.PreloadItemText.BalloonType.SHOUT;
+
+      BalloonType.THINK = constant.PreloadItemText.BalloonType.THINK;
 
       return BalloonType;
 
@@ -274,8 +278,82 @@ PreloadItemText = (function(superClass) {
     return context.restore();
   };
 
+  _drawBalloon = function(context, width, height) {
+    var _drawArc, _drawBArc, _drawBRect, _drawRect, _drawShout, _drawThink;
+    _drawArc = function() {
+      context.save();
+      context.beginPath();
+      context.translate(width * 0.5, height * 0.5);
+      if (width > height) {
+        context.scale(width / height, 1);
+        context.arc(0, 0, height * 0.5, 0, Math.PI * 2);
+      } else {
+        context.scale(1, height / width);
+        context.arc(0, 0, width * 0.5, 0, Math.PI * 2);
+      }
+      return context.restore();
+    };
+    _drawRect = function() {
+      context.beginPath();
+      context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+      return context.fillRect(0, 0, width, height);
+    };
+    _drawBArc = function() {
+      var l, per, sum, x, y;
+      context.save();
+      context.beginPath();
+      context.translate(width * 0.5, height * 0.5);
+      per = Math.PI * 2 / 360;
+      if (width > height) {
+        context.scale(width / height, 1);
+        sum = 0;
+        x = 0;
+        while (sum < Math.PI * 2) {
+          l = ((2 * Math.cos(x)) + 1) * per;
+          y = x + l;
+          context.arc(0, 0, height * 0.5, x, y);
+          sum += l;
+          l = ((1 * Math.cos(x)) + 1) * per;
+          y = x + l;
+          sum += l;
+        }
+      } else {
+        context.scale(1, height / width);
+        sum = 0;
+        x = 0;
+        while (sum < Math.PI * 2) {
+          l = ((2 * Math.sin(x)) + 1) * per;
+          y = x + l;
+          context.arc(0, 0, height * 0.5, x, y);
+          sum += l;
+          l = ((1 * Math.sin(x)) + 1) * per;
+          y = x + l;
+          sum += l;
+        }
+        context.arc(0, 0, width * 0.5, 0, Math.PI * 2);
+      }
+      return context.restore();
+    };
+    _drawBRect = function() {};
+    _drawShout = function() {};
+    _drawThink = function() {};
+    if (this.balloonType === this.constructor.BalloonType.ARC) {
+      return _drawArc.call(this);
+    } else if (this.balloonType === this.constructor.BalloonType.RECT) {
+      return _drawRect.call(this);
+    } else if (this.balloonType === this.constructor.BalloonType.BROKEN_ARC) {
+      return _drawBArc.call(this);
+    } else if (this.balloonType === this.constructor.BalloonType.BROKEN_RECT) {
+      return _drawBRect.call(this);
+    } else if (this.balloonType === this.constructor.BalloonType.SHOUT) {
+      return _drawShout.call(this);
+    } else if (this.balloonType === this.constructor.BalloonType.THINK) {
+      return _drawThink.call(this);
+    }
+  };
+
   _drawText = function(context, text, width, height, writingLength) {
-    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _replaceWordToSpace, _writeLength, c, char, column, h, heightLine, heightMax, hiddenStr, hl, i, idx, j, k, l, len, len1, line, m, measure, n, o, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, t, viewLengthAtLine, visibleStr, w, widthLine, widthMax, wl, wordSum, wordWidth, writeLengthAtLine;
+    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _replaceWordToSpace, _writeLength, c, char, column, h, heightLine, heightMax, hiddenStr, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, t, viewLengthAtLine, visibleStr, w, widthLine, widthMax, wl, wordSum, wordWidth, writeLengthAtLine;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -384,7 +462,7 @@ PreloadItemText = (function(superClass) {
       heightLine = (height - wordWidth * column.length) * 0.5;
       widthMax = _calcVerticalColumnWidthMax.call(this, column);
       results = [];
-      for (j = l = 0, ref1 = column.length - 1; 0 <= ref1 ? l <= ref1 : l >= ref1; j = 0 <= ref1 ? ++l : --l) {
+      for (j = m = 0, ref1 = column.length - 1; 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
         heightLine += wordWidth;
         w = null;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
@@ -406,7 +484,7 @@ PreloadItemText = (function(superClass) {
         t = visibleStr + hiddenStr;
         wl = 0;
         ref2 = t.split('');
-        for (idx = m = 0, len = ref2.length; m < len; idx = ++m) {
+        for (idx = n = 0, len = ref2.length; n < len; idx = ++n) {
           c = ref2[idx];
           if (idx >= viewLengthAtLine && idx < writeLengthAtLine) {
             _preTextStyle(context, (idx - (writingLength - wordSum)) / this.constructor.WRITE_TEXT_BLUR_LENGTH);
@@ -421,7 +499,7 @@ PreloadItemText = (function(superClass) {
       widthLine = (width + wordWidth * column.length) * 0.5;
       heightMax = _calcVerticalColumnHeightMax.call(this, column);
       results1 = [];
-      for (j = n = 0, ref3 = column.length - 1; 0 <= ref3 ? n <= ref3 : n >= ref3; j = 0 <= ref3 ? ++n : --n) {
+      for (j = o = 0, ref3 = column.length - 1; 0 <= ref3 ? o <= ref3 : o >= ref3; j = 0 <= ref3 ? ++o : --o) {
         widthLine -= wordWidth;
         h = null;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
@@ -443,7 +521,7 @@ PreloadItemText = (function(superClass) {
         t = visibleStr + hiddenStr;
         hl = 0;
         ref4 = t.split('');
-        for (idx = o = 0, len1 = ref4.length; o < len1; idx = ++o) {
+        for (idx = p = 0, len1 = ref4.length; p < len1; idx = ++p) {
           c = ref4[idx];
           measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
           if (idx >= viewLengthAtLine && idx < writeLengthAtLine) {
