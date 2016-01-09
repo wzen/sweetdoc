@@ -213,7 +213,7 @@ class PreloadItemText extends CanvasItemBase
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
     @inputText = null
-    @isDrawHorizontal = true
+    @isDrawHorizontal = false
     @fontFamily = 'Times New Roman'
     @fontSize = null
     @isFixedFontSize = false
@@ -221,6 +221,7 @@ class PreloadItemText extends CanvasItemBase
     @balloonType = @constructor.BalloonType.NONE
     @textPositions = null
     @wordAlign = @constructor.WordAlign.LEFT
+    @_fontMeatureCache = {}
 
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
@@ -417,7 +418,7 @@ class PreloadItemText extends CanvasItemBase
           wl += context.measureText(c).width
         wordSum += t.length
     else
-      widthLine = (width + wordWidth * column.length) * 0.5 + wordWidth
+      widthLine = (width + wordWidth * column.length) * 0.5
       heightMax = _calcVerticalColumnHeightMax.call(@, column)
       for j in [0..(column.length - 1)]
         widthLine -= wordWidth
@@ -442,9 +443,89 @@ class PreloadItemText extends CanvasItemBase
         for c, idx in t.split('')
           if idx >= viewLengthAtLine && idx < writeLengthAtLine
             _preTextStyle(context, (idx - (writingLength - wordSum)) / @constructor.WRITE_TEXT_BLUR_LENGTH)
-          context.fillText(c, widthLine, h + wordWidth + hl)
+          if _isWordSmallJapanease.call(@, c)
+            # 小文字は右上に置く
+            measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
+            context.fillText(c, widthLine + wordWidth - measure.width, h + wordWidth + hl - (wordWidth - measure.height))
+          else if _isWordNeedRotate.call(@, c)
+            # 90°回転
+            measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
+            context.save()
+            context.translate(widthLine, h + measure.width - measure.height + hl);
+            context.rotate(Math.PI / 2)
+            heightDiff = (measure.width - measure.height) * 0.5
+            widthDiff = wordWidth - measure.width
+            context.fillText(c, -measure.width * 0.5 + widthDiff, -measure.height * 0.5 + heightDiff)
+            context.restore()
+          else
+            context.fillText(c, widthLine, h + wordWidth + hl)
           hl += wordWidth
         wordSum += t.length
+
+  _calcWordMeasure = (char, fontSize, fontFamily, wordSize) ->
+    fontSizeKey = "#{fontSize}"
+    if @_fontMeatureCache[fontSizeKey]? && @_fontMeatureCache[fontSizeKey][fontFamily]? && @_fontMeatureCache[fontSizeKey][fontFamily][char]?
+      return @_fontMeatureCache[fontSizeKey][fontFamily][char]
+
+    nCanvas = document.createElement('canvas')
+    nCanvas.width = wordSize
+    nCanvas.height = wordSize
+    nContext = nCanvas.getContext('2d')
+    nContext.font = "#{fontSize}px #{fontFamily}"
+    nContext.textBaseline = 'top'
+    nContext.fillStyle = nCanvas.strokeStyle = '#ff0000';
+    nContext.fillText(char, 0, 0)
+    writedImage = nContext.getImageData(0, 0, wordSize, wordSize)
+    mi = _measureImage.call(@, writedImage)
+
+    if window.debug
+      console.log('char: ' + char + ' textWidth:' + mi.width + ' textHeight:' + mi.height)
+
+    if !@_fontMeatureCache[fontSizeKey]?
+      @_fontMeatureCache[fontSizeKey] = {}
+    if !@_fontMeatureCache[fontSizeKey][fontFamily]?
+      @_fontMeatureCache[fontSizeKey][fontFamily] = {}
+    @_fontMeatureCache[fontSizeKey][fontFamily][char] = mi
+
+    return mi
+
+  _measureImage = (_writedImage) ->
+    w = _writedImage.width
+    x = 0
+    y = 0
+    minX = 0
+    maxX = 1
+    minY = 0
+    maxY = 1
+    for i in [0..(_writedImage.data.length - 1)] by 4
+      if _writedImage.data[i + 0] > 128
+        if x < minX
+          minX = x
+        if x > maxX
+          maxX = x
+        if y < minY
+          minY = y
+        if y > maxY
+          maxY = y
+      x += 1
+      if x >= w
+        x = 0
+        y += 1
+    return {
+      width : maxX - minX + 1
+      height: maxY - minY + 1
+    }
+
+  _isWordSmallJapanease = (char) ->
+    list = '、。ぁぃぅぇぉっゃゅょゎァィゥェォっャュョヮヵヶ'.split('')
+    list = list.concat([',', '\\.'])
+    regex = new RegExp(list.join('|'))
+    return char.match(regex)
+
+  _isWordNeedRotate = (char) ->
+    list = 'ー＝'
+    regex = new RegExp(list.split('').join('|'))
+    return char.match(regex)
 
   # 描画枠から大体のフォントサイズを計算
   _calcFontSizeAbout = (text, width, height) ->
