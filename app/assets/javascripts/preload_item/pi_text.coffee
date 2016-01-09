@@ -288,7 +288,7 @@ class PreloadItemText extends CanvasItemBase
     context.clearRect(0, 0, canvas.width, canvas.height)
     if @inputText? && @inputText.length > 0
       _setTextStyle.call(@)
-      _setTextToCanvas.call(@ , @inputText, @inputText.length * opt.progress / opt.progressMax)
+      _setTextToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
@@ -364,7 +364,7 @@ class PreloadItemText extends CanvasItemBase
         percent = 0
       else if percent > 1
         percent = 1
-      context.globalAlpha = (1 - percent) * 0.7
+      context.globalAlpha = (1 - percent) * 0.8 * (1 - percent)
 
     _writeLength = (column, writingLength, wordSum) ->
       v = parseInt(writingLength - wordSum)
@@ -454,7 +454,7 @@ class PreloadItemText extends CanvasItemBase
             context.translate(widthLine, h + measure.width - measure.height + hl);
             context.rotate(Math.PI / 2)
             heightDiff = (measure.width - measure.height) * 0.5
-            widthDiff = wordWidth - measure.width
+            widthDiff = measure.height * 0.5
             context.fillText(c, -measure.width * 0.5 + widthDiff, -measure.height * 0.5 + heightDiff)
             context.restore()
           else

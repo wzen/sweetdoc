@@ -351,7 +351,7 @@ PreloadItemText = (function(superClass) {
       } else if (percent > 1) {
         percent = 1;
       }
-      return context.globalAlpha = (1 - percent) * 0.7;
+      return context.globalAlpha = (1 - percent) * 0.8 * (1 - percent);
     };
     _writeLength = function(column, writingLength, wordSum) {
       var v;
@@ -457,7 +457,7 @@ PreloadItemText = (function(superClass) {
             context.translate(widthLine, h + measure.width - measure.height + hl);
             context.rotate(Math.PI / 2);
             heightDiff = (measure.width - measure.height) * 0.5;
-            widthDiff = wordWidth - measure.width;
+            widthDiff = measure.height * 0.5;
             context.fillText(c, -measure.width * 0.5 + widthDiff, -measure.height * 0.5 + heightDiff);
             context.restore();
           } else {
