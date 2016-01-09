@@ -275,7 +275,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height, writingLength) {
-    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _replaceWordToSpace, _writeLength, c, char, column, h, heightDiff, heightLine, heightMax, hiddenStr, hl, i, idx, j, k, l, len, len1, line, m, measure, n, o, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, t, viewLengthAtLine, visibleStr, w, widthDiff, widthLine, widthMax, wl, wordSum, wordWidth, writeLengthAtLine;
+    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _replaceWordToSpace, _writeLength, c, char, column, h, heightLine, heightMax, hiddenStr, hl, i, idx, j, k, l, len, len1, line, m, measure, n, o, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, t, viewLengthAtLine, visibleStr, w, widthLine, widthMax, wl, wordSum, wordWidth, writeLengthAtLine;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -454,11 +454,10 @@ PreloadItemText = (function(superClass) {
           } else if (_isWordNeedRotate.call(this, c)) {
             measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
             context.save();
-            context.translate(widthLine, h + measure.width - measure.height + hl);
+            context.beginPath();
+            context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height);
             context.rotate(Math.PI / 2);
-            heightDiff = (measure.width - measure.height) * 0.5;
-            widthDiff = measure.height * 0.5;
-            context.fillText(c, -measure.width * 0.5 + widthDiff, -measure.height * 0.5 + heightDiff);
+            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5);
             context.restore();
           } else {
             context.fillText(c, widthLine, h + wordWidth + hl);

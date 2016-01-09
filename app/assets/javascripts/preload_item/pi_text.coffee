@@ -451,11 +451,13 @@ class PreloadItemText extends CanvasItemBase
             # 90°回転
             measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
             context.save()
-            context.translate(widthLine, h + measure.width - measure.height + hl);
+            context.beginPath()
+            context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height)
+            #context.arc(0, 0, 20, 0, Math.PI*2, false);
+            #context.stroke();
             context.rotate(Math.PI / 2)
-            heightDiff = (measure.width - measure.height) * 0.5
-            widthDiff = measure.height * 0.5
-            context.fillText(c, -measure.width * 0.5 + widthDiff, -measure.height * 0.5 + heightDiff)
+            # 「wordWidth * 0.75」は調整用の値
+            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5)
             context.restore()
           else
             context.fillText(c, widthLine, h + wordWidth + hl)
