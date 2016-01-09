@@ -445,24 +445,25 @@ PreloadItemText = (function(superClass) {
         ref4 = t.split('');
         for (idx = o = 0, len1 = ref4.length; o < len1; idx = ++o) {
           c = ref4[idx];
+          measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
           if (idx >= viewLengthAtLine && idx < writeLengthAtLine) {
             _preTextStyle(context, (idx - (writingLength - wordSum)) / this.constructor.WRITE_TEXT_BLUR_LENGTH);
           }
           if (_isWordSmallJapanease.call(this, c)) {
-            measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
-            context.fillText(c, widthLine + wordWidth - measure.width, h + wordWidth + hl - (wordWidth - measure.height));
+            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height));
+            hl += measure.height;
           } else if (_isWordNeedRotate.call(this, c)) {
-            measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
             context.save();
             context.beginPath();
             context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height);
             context.rotate(Math.PI / 2);
             context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5);
             context.restore();
+            hl += measure.width;
           } else {
             context.fillText(c, widthLine, h + wordWidth + hl);
+            hl += measure.height;
           }
-          hl += wordWidth;
         }
         results1.push(wordSum += t.length);
       }
@@ -545,6 +546,9 @@ PreloadItemText = (function(superClass) {
 
   _isWordNeedRotate = function(char) {
     var list, regex;
+    if (char.charCodeAt(0) < 256) {
+      return true;
+    }
     list = 'ー＝';
     regex = new RegExp(list.split('').join('|'));
     return char.match(regex);

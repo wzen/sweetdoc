@@ -441,15 +441,15 @@ class PreloadItemText extends CanvasItemBase
         t = visibleStr + hiddenStr
         hl = 0
         for c, idx in t.split('')
+          measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
           if idx >= viewLengthAtLine && idx < writeLengthAtLine
             _preTextStyle(context, (idx - (writingLength - wordSum)) / @constructor.WRITE_TEXT_BLUR_LENGTH)
           if _isWordSmallJapanease.call(@, c)
-            # 小文字は右上に置く
-            measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
-            context.fillText(c, widthLine + wordWidth - measure.width, h + wordWidth + hl - (wordWidth - measure.height))
+            # 小文字は右上に寄せる
+            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height))
+            hl += measure.height
           else if _isWordNeedRotate.call(@, c)
             # 90°回転
-            measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
             context.save()
             context.beginPath()
             context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height)
@@ -459,9 +459,10 @@ class PreloadItemText extends CanvasItemBase
             # 「wordWidth * 0.75」は調整用の値
             context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5)
             context.restore()
+            hl += measure.width
           else
             context.fillText(c, widthLine, h + wordWidth + hl)
-          hl += wordWidth
+            hl += measure.height
         wordSum += t.length
 
   _calcWordMeasure = (char, fontSize, fontFamily, wordSize) ->
@@ -525,6 +526,10 @@ class PreloadItemText extends CanvasItemBase
     return char.match(regex)
 
   _isWordNeedRotate = (char) ->
+    if char.charCodeAt(0) < 256
+      # 英字は回転
+      return true
+
     list = 'ー＝'
     regex = new RegExp(list.split('').join('|'))
     return char.match(regex)
