@@ -31,7 +31,10 @@ class EventBase extends Extend
     # modifiables変数の初期化
     if @constructor.actionProperties? && @constructor.actionPropertiesModifiableVars()?
       for varName, value of @constructor.actionPropertiesModifiableVars()
-        @[varName] = value.default
+        @setInstanceVar(varName, value.default)
+
+  setInstanceVar: (varName, value) ->
+    @[varName] = value
 
   # 変更を戻して再表示
   # @abstract
@@ -426,12 +429,12 @@ class EventBase extends Extend
         after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         if before? && after?
           if immediate
-            @[varName] = after
+            @setInstanceVar(varName, after)
           else
             if value.varAutoChange
               # 変数自動変更
               if value.type == Constant.ItemDesignOptionType.INTEGER
-                @[varName] = before + (after - before) * progressPercentage
+                @setInstanceVar(varName, before + (after - before) * progressPercentage)
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
@@ -439,7 +442,7 @@ class EventBase extends Extend
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
-                @[varName] = @[colorCacheVarName][progressValue]
+                @setInstanceVar(varName, @[colorCacheVarName][progressValue])
 
   # アニメーションによるアイテム状態更新
   updateInstanceParamByAnimation: (immediate = false) ->
@@ -456,7 +459,7 @@ class EventBase extends Extend
         if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
           after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
           if after?
-            @[varName] = after
+            @setInstanceVar(varName, after)
       return
 
     count = 1
@@ -469,7 +472,7 @@ class EventBase extends Extend
           if before? && after?
             if value.varAutoChange
               if value.type == Constant.ItemDesignOptionType.INTEGER
-                @[varName] = before + (after - before) * progressPercentage
+                @setInstanceVar(varName, before + (after - before) * progressPercentage)
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
@@ -477,7 +480,7 @@ class EventBase extends Extend
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
-                @[varName] = @[colorCacheVarName][count]
+                @setInstanceVar(varName, @[colorCacheVarName][count])
       count += 1
       if count > progressMax
         clearInterval(timer)
@@ -485,7 +488,7 @@ class EventBase extends Extend
           if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
             after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
             if after?
-              @[varName] = after
+              @setInstanceVar(varName, after)
     , @constructor.STEP_INTERVAL_DURATION * 1000)
 
   # イベント前後の変数を設定 [xxx__before] & [xxx__after]

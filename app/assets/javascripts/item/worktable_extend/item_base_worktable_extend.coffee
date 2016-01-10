@@ -485,7 +485,7 @@ itemBaseWorktableExtend =
         value = ui.value
         valueElement.val(value)
         valueElement.html(value)
-        @[varName] = value
+        @setInstanceVar(varName, value)
         @constructor.switchChildrenConfig(event.target, varName, openChildrenValue, value)
         @applyDesignChange()
     }).trigger('slide')
@@ -498,7 +498,7 @@ itemBaseWorktableExtend =
     $(".#{varName}_text", configRoot).val(defaultValue)
     $(".#{varName}_text", configRoot).off('change').on('change', (e) =>
       value = $(e.target).val()
-      @[varName] = value
+      @setInstanceVar(varName, value)
       @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
       @applyDesignChange()
     ).trigger('change')
@@ -515,7 +515,7 @@ itemBaseWorktableExtend =
 
     $(".#{varName}_checkbox", configRoot).off('change').on('change', (e) =>
       value = $(e.target).is(':checked')
-      @[varName] = value
+      @setInstanceVar(varName, value)
       @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
       @applyDesignChange()
     ).trigger('change')
@@ -533,7 +533,7 @@ itemBaseWorktableExtend =
         value = "##{b}"
         if colorType? && colorType == 'rgb'
           value = Common.colorFormatChangeHexToRgb(value)
-        @[varName] = value
+        @setInstanceVar(varName, value)
         @constructor.switchChildrenConfig(emt, varName, openChildrenValue, value)
         @applyDesignChange()
     )
@@ -547,7 +547,7 @@ itemBaseWorktableExtend =
     @initModifiableSelectFile(form)
     form.off().on('ajax:complete', (e, data, status, error) =>
       d = JSON.parse(data.responseText)
-      @[varName] = d.image_url
+      @setInstanceVar(varName, d.image_url)
       @saveObj()
       @applyDesignChange()
     )
@@ -578,7 +578,7 @@ itemBaseWorktableExtend =
       selectEmt.val(_joinArray.call(@, defaultValue))
     selectEmt.off('change').on('change', (e) =>
       value = _splitArray.call(@, $(e.target).val())
-      @[varName] = value
+      @setInstanceVar(varName, value)
       @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
       @applyDesignChange()
     ).trigger('change')

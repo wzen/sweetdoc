@@ -568,7 +568,7 @@ itemBaseWorktableExtend = {
           value = ui.value;
           valueElement.val(value);
           valueElement.html(value);
-          _this[varName] = value;
+          _this.setInstanceVar(varName, value);
           _this.constructor.switchChildrenConfig(event.target, varName, openChildrenValue, value);
           return _this.applyDesignChange();
         };
@@ -583,7 +583,7 @@ itemBaseWorktableExtend = {
       return function(e) {
         var value;
         value = $(e.target).val();
-        _this[varName] = value;
+        _this.setInstanceVar(varName, value);
         _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
@@ -601,7 +601,7 @@ itemBaseWorktableExtend = {
       return function(e) {
         var value;
         value = $(e.target).is(':checked');
-        _this[varName] = value;
+        _this.setInstanceVar(varName, value);
         _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
@@ -618,7 +618,7 @@ itemBaseWorktableExtend = {
         if ((colorType != null) && colorType === 'rgb') {
           value = Common.colorFormatChangeHexToRgb(value);
         }
-        _this[varName] = value;
+        _this.setInstanceVar(varName, value);
         _this.constructor.switchChildrenConfig(emt, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
@@ -633,7 +633,7 @@ itemBaseWorktableExtend = {
       return function(e, data, status, error) {
         var d;
         d = JSON.parse(data.responseText);
-        _this[varName] = d.image_url;
+        _this.setInstanceVar(varName, d.image_url);
         _this.saveObj();
         return _this.applyDesignChange();
       };
@@ -671,7 +671,7 @@ itemBaseWorktableExtend = {
       return function(e) {
         var value;
         value = _splitArray.call(_this, $(e.target).val());
-        _this[varName] = value;
+        _this.setInstanceVar(varName, value);
         _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
         return _this.applyDesignChange();
       };
