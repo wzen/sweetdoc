@@ -266,7 +266,7 @@ class Common
   # アイテムに対してフォーカスする
   # @param [Object] target 対象アイテム
   # @param [Fucntion] callback コールバック
-  @focusToTarget = (target, callback = null, immediate = false, withUpdatePageValue = false) ->
+  @focusToTarget = (target, callback = null, immediate = false, withUpdatePageValue = true) ->
     if !target? || target.length == 0
       # ターゲット無し
       return

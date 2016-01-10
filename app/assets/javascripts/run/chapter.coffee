@@ -61,7 +61,7 @@ class Chapter
       if type == 'center'
         Common.focusToTarget(item.getJQueryElement(), ->
           window.disabledEventHandler = false
-        , isImmediate, true)
+        , isImmediate)
     else
       # フォーカスなし
       window.disabledEventHandler = false

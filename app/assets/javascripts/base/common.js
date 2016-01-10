@@ -369,7 +369,7 @@ Common = (function() {
       immediate = false;
     }
     if (withUpdatePageValue == null) {
-      withUpdatePageValue = false;
+      withUpdatePageValue = true;
     }
     if ((target == null) || target.length === 0) {
       return;

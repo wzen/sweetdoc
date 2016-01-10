@@ -577,7 +577,7 @@ class WorktableCommon
           item.initEvent(te, keepDispMag)
           if item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]
             # アイテムにフォーカス
-            Common.focusToTarget(item.getJQueryElement(), null, true, true)
+            Common.focusToTarget(item.getJQueryElement(), null, true)
           if idx < tes.length - 1 || fromBlankEventConfig
             item.willChapter()
             # イベント後の状態に変更

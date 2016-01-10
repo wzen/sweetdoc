@@ -689,7 +689,7 @@ WorktableCommon = (function() {
           if (item != null) {
             item.initEvent(te, keepDispMag);
             if (item instanceof ItemBase && te[EventPageValueBase.PageValueKey.DO_FOCUS]) {
-              Common.focusToTarget(item.getJQueryElement(), null, true, true);
+              Common.focusToTarget(item.getJQueryElement(), null, true);
             }
             if (idx < tes.length - 1 || fromBlankEventConfig) {
               item.willChapter();
