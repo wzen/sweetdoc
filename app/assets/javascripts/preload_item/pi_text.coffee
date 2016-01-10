@@ -56,7 +56,7 @@ class PreloadItemText extends CanvasItemBase
           balloonType: {
             name: 'BalloonType'
             type: 'select'
-            'options[]': [
+            options: [
               {name: 'Arc', value: @BalloonType.ARC}
               {name: 'Broken Arc', value: @BalloonType.BROKEN_ARC}
               {name: 'Rect', value: @BalloonType.RECT}
@@ -86,7 +86,7 @@ class PreloadItemText extends CanvasItemBase
         ja: {
           name: 'フォント選択'
         }
-        'options[]': [
+        options: [
           'sans-serif'
           'arial'
           'arial black'
@@ -207,7 +207,7 @@ class PreloadItemText extends CanvasItemBase
       wordAlign: {
         name: "Word Align"
         type: 'select'
-        'options[]': [
+        options: [
           {name: 'left', value: @WordAlign.LEFT}
           {name: 'center', value: @WordAlign.CENTER}
           {name: 'right', value: @WordAlign.RIGHT}

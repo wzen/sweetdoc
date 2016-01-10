@@ -5,7 +5,7 @@
       <div>
         <select class="<%= var_name + '_select' %>">
           <% if value['options'].present? %>
-            <% value['options'].first.values.each do |o| %>
+            <% value['options'].each do |o| %>
               <% if o.is_a?(Hash) %>
                 <option value="<%= o['value'] %>"><%= o['name'] %></option>
               <% elsif o.is_a?(Array) %>

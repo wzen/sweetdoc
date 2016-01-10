@@ -51,7 +51,7 @@ ConfigMenu = (function() {
         data: {
           designConfig: obj.constructor.actionProperties.designConfig,
           itemType: itemType,
-          modifiables: obj.constructor.actionProperties[obj.constructor.ActionPropertiesKey.MODIFIABLE_VARS]
+          modifiables: JSON.stringify(obj.constructor.actionProperties[obj.constructor.ActionPropertiesKey.MODIFIABLE_VARS])
         },
         dataType: "json",
         success: function(data) {
@@ -116,7 +116,7 @@ ConfigMenu = (function() {
       data: {
         classDistToken: itemObjClass.CLASS_DIST_TOKEN,
         methodName: eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME],
-        modifiables: itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS]
+        modifiables: JSON.stringify(itemObjClass.actionProperties.methods[eventConfigObj[EventPageValueBase.PageValueKey.METHODNAME]][itemObjClass.ActionPropertiesKey.MODIFIABLE_VARS])
       },
       dataType: "json",
       success: function(data) {
