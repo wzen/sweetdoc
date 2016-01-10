@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _getCircumPos, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -278,6 +278,21 @@ PreloadItemText = (function(superClass) {
     return context.restore();
   };
 
+  _getCircumPos = function() {
+    return {
+      x: function(d, r, cx) {
+        return Math.cos(Math.PI / 180 * d) * r + cx;
+      },
+      y: function(d, r, cy) {
+        return Math.sin(Math.PI / 180 * d) * r + cy;
+      }
+    };
+  };
+
+  _getRandomInt = function(max, min) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  };
+
   _drawBalloon = function(context, width, height) {
     var _drawArc, _drawBArc, _drawBRect, _drawRect, _drawShout, _drawThink;
     _drawArc = function() {
@@ -334,9 +349,113 @@ PreloadItemText = (function(superClass) {
       }
       return context.restore();
     };
-    _drawBRect = function() {};
-    _drawShout = function() {};
-    _drawThink = function() {};
+    _drawBRect = function() {
+      var _draw, dashLength;
+      dashLength = 5;
+      _draw = function(sx, sy, ex, ey) {
+        var deltaX, deltaY, i, k, numDashes, ref, results;
+        deltaX = ex - sx;
+        deltaY = ey - sy;
+        numDashes = Math.floor(Math.sqrt(deltaX * deltaX + deltaY * deltaY) / dashLength);
+        results = [];
+        for (i = k = 0, ref = numDashes - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+          if (i % 2 === 0) {
+            results.push(context.moveTo(sx + (deltaX / numDashes) * i, sy + (deltaY / numDashes) * i));
+          } else {
+            results.push(context.lineTo(sx + (deltaX / numDashes) * i, sy + (deltaY / numDashes) * i));
+          }
+        }
+        return results;
+      };
+      _draw.call(this, 0, 0, width, 0);
+      _draw.call(this, width, 0, width, height);
+      _draw.call(this, width, height, 0, height);
+      return _draw.call(this, 0, height, 0, 0);
+    };
+    _drawShout = (function(_this) {
+      return function() {
+        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, fillStyle, i, k, lineWidth, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, strokeStyle;
+        num = 18;
+        radiusX = 120;
+        radiusY = 80;
+        num = 18;
+        cx = 120;
+        cy = 100;
+        punkLineMax = 30;
+        punkLineMin = 20;
+        fillStyle = 'rgba(255,255,255,0.9)';
+        strokeStyle = 'black';
+        lineWidth = 3;
+        deg = 0;
+        addDeg = 360 / num;
+        context.beginPath();
+        context.lineJoin = 'round';
+        context.lineCap = 'round';
+        context.fillStyle = fillStyle;
+        context.strokeStyle = strokeStyle;
+        context.lineWidth = lineWidth;
+        for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+          deg += addDeg;
+          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          beginX = _getCircumPos.x(deg, radiusX, cx);
+          beginY = _getCircumPos.y(deg, radiusY, cy);
+          endX = _getCircumPos.x(deg + addDeg, radiusX, cx);
+          endY = _getCircumPos.y(deg + addDeg, radiusY, cy);
+          cp1x = _getCircumPos.x(deg, radiusX - random, cx);
+          cp1y = _getCircumPos.y(deg, radiusY - random, cy);
+          cp2x = _getCircumPos.x(deg + addDeg, radiusX - random, cx);
+          cp2y = _getCircumPos.y(deg + addDeg, radiusY - random, cy);
+          if (i === 0) {
+            context.arcTo(beginX, beginY, endX, endY, punkLineMax);
+          }
+          context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+        }
+        context.fill();
+        return context.stroke();
+      };
+    })(this);
+    _drawThink = (function(_this) {
+      return function() {
+        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, fillStyle, i, k, lineWidth, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, strokeStyle;
+        num = 18;
+        radiusX = 120;
+        radiusY = 80;
+        num = 18;
+        cx = 120;
+        cy = 100;
+        punkLineMax = 30;
+        punkLineMin = 20;
+        fillStyle = 'rgba(255,255,255,0.9)';
+        strokeStyle = 'black';
+        lineWidth = 3;
+        deg = 0;
+        addDeg = 360 / num;
+        context.beginPath();
+        context.lineJoin = 'round';
+        context.lineCap = 'round';
+        context.fillStyle = fillStyle;
+        context.strokeStyle = strokeStyle;
+        context.lineWidth = lineWidth;
+        for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
+          deg += addDeg;
+          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          beginX = _getCircumPos.x(deg, radiusX, cx);
+          beginY = _getCircumPos.y(deg, radiusY, cy);
+          endX = _getCircumPos.x(deg + addDeg, radiusX, cx);
+          endY = _getCircumPos.y(deg + addDeg, radiusY, cy);
+          cp1x = _getCircumPos.x(deg, radiusX + random, cx);
+          cp1y = _getCircumPos.y(deg, radiusY + random, cy);
+          cp2x = _getCircumPos.x(deg + addDeg, radiusX + random, cx);
+          cp2y = _getCircumPos.y(deg + addDeg, radiusY + random, cy);
+          if (i === 0) {
+            context.arcTo(beginX, beginY, endX, endY, punkLineMax);
+          }
+          context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+        }
+        context.fill();
+        return context.stroke();
+      };
+    })(this);
     if (this.balloonType === this.constructor.BalloonType.ARC) {
       return _drawArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.RECT) {
