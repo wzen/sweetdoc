@@ -155,7 +155,7 @@ PreloadItemText = (function(superClass) {
       };
     }
     this.inputText = null;
-    this.isDrawHorizontal = false;
+    this.isDrawHorizontal = true;
     this.fontFamily = 'Times New Roman';
     this.fontSize = null;
     this.isFixedFontSize = false;
@@ -353,7 +353,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height, writingLength) {
-    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _replaceWordToSpace, _writeLength, c, char, column, h, heightLine, heightMax, hiddenStr, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, t, viewLengthAtLine, visibleStr, w, widthLine, widthMax, wl, wordSum, wordWidth, writeLengthAtLine;
+    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -409,27 +409,19 @@ PreloadItemText = (function(superClass) {
       }
       return ret;
     };
-    _replaceWordToSpace = function(text) {
-      var char, k, len, ref, spaceStr;
-      spaceStr = '';
-      ref = text.split('');
-      for (k = 0, len = ref.length; k < len; k++) {
-        char = ref[k];
-        if (char.charCodeAt(0) >= 256) {
-          spaceStr += ' ';
-        } else {
-          spaceStr += ' ';
+    _preTextStyle = function(context, idx, writingLength) {
+      var ga;
+      if (writingLength === 0) {
+        return context.globalAlpha = 0;
+      } else if (idx <= writingLength) {
+        return context.globalAlpha = 1;
+      } else {
+        ga = 1 - ((idx - writingLength) / this.constructor.WRITE_TEXT_BLUR_LENGTH);
+        if (ga < 0) {
+          ga = 0;
         }
+        return context.globalAlpha = ga;
       }
-      return spaceStr;
-    };
-    _preTextStyle = function(context, percent) {
-      if (percent < 0) {
-        percent = 0;
-      } else if (percent > 1) {
-        percent = 1;
-      }
-      return context.globalAlpha = (1 - percent) * 0.8 * (1 - percent);
     };
     _writeLength = function(column, writingLength, wordSum) {
       var v;
@@ -473,26 +465,15 @@ PreloadItemText = (function(superClass) {
           w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(this, column[j]);
         }
         context.beginPath();
-        viewLengthAtLine = _writeLength.call(this, column[j], writingLength, wordSum);
-        if (writingLength > 0) {
-          writeLengthAtLine = _writeLength.call(this, column[j], writingLength + this.constructor.WRITE_TEXT_BLUR_LENGTH, wordSum);
-        } else {
-          writeLengthAtLine = 0;
-        }
-        visibleStr = column[j].substring(0, writeLengthAtLine);
-        hiddenStr = _replaceWordToSpace.call(this, column[j].substr(writeLengthAtLine));
-        t = visibleStr + hiddenStr;
         wl = 0;
-        ref2 = t.split('');
+        ref2 = column[j].split('');
         for (idx = n = 0, len = ref2.length; n < len; idx = ++n) {
           c = ref2[idx];
-          if (idx >= viewLengthAtLine && idx < writeLengthAtLine) {
-            _preTextStyle(context, (idx - (writingLength - wordSum)) / this.constructor.WRITE_TEXT_BLUR_LENGTH);
-          }
+          _preTextStyle.call(this, context, idx + wordSum + 1, writingLength);
           context.fillText(c, w + wl, heightLine);
           wl += context.measureText(c).width;
         }
-        results.push(wordSum += t.length);
+        results.push(wordSum += column[j].length);
       }
       return results;
     } else {
@@ -510,23 +491,12 @@ PreloadItemText = (function(superClass) {
           h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(this, column[j]);
         }
         context.beginPath();
-        viewLengthAtLine = _writeLength.call(this, column[j], writingLength, wordSum);
-        if (writingLength > 0) {
-          writeLengthAtLine = _writeLength.call(this, column[j], writingLength + this.constructor.WRITE_TEXT_BLUR_LENGTH, wordSum);
-        } else {
-          writeLengthAtLine = 0;
-        }
-        visibleStr = column[j].substring(0, writeLengthAtLine);
-        hiddenStr = _replaceWordToSpace.call(this, column[j].substr(writeLengthAtLine));
-        t = visibleStr + hiddenStr;
         hl = 0;
-        ref4 = t.split('');
+        ref4 = column[j].split('');
         for (idx = p = 0, len1 = ref4.length; p < len1; idx = ++p) {
           c = ref4[idx];
           measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
-          if (idx >= viewLengthAtLine && idx < writeLengthAtLine) {
-            _preTextStyle(context, (idx - (writingLength - wordSum)) / this.constructor.WRITE_TEXT_BLUR_LENGTH);
-          }
+          _preTextStyle.call(this, context, idx + wordSum + 1, writingLength);
           if (_isWordSmallJapanease.call(this, c)) {
             context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height));
             hl += measure.height;
@@ -543,7 +513,7 @@ PreloadItemText = (function(superClass) {
             hl += measure.height;
           }
         }
-        results1.push(wordSum += t.length);
+        results1.push(wordSum += column[j].length);
       }
       return results1;
     }

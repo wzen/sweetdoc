@@ -215,7 +215,7 @@ class PreloadItemText extends CanvasItemBase
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
     @inputText = null
-    @isDrawHorizontal = false
+    @isDrawHorizontal = true
     @fontFamily = 'Times New Roman'
     @fontSize = null
     @isFixedFontSize = false
@@ -423,23 +423,17 @@ class PreloadItemText extends CanvasItemBase
         if ret < r
           ret = r
       return ret
-    _replaceWordToSpace = (text) ->
-      spaceStr = ''
-      for char in text.split('')
-        if char.charCodeAt(0) >= 256
-          # 全角スペース
-          spaceStr += ' '
-        else
-          # 半角スペース
-          spaceStr += ' '
-      return spaceStr
 
-    _preTextStyle = (context, percent) ->
-      if percent < 0
-        percent = 0
-      else if percent > 1
-        percent = 1
-      context.globalAlpha = (1 - percent) * 0.8 * (1 - percent)
+    _preTextStyle = (context, idx, writingLength) ->
+      if writingLength == 0
+        context.globalAlpha = 0
+      else if idx <= writingLength
+        context.globalAlpha = 1
+      else
+        ga = 1 - ((idx - writingLength) / @constructor.WRITE_TEXT_BLUR_LENGTH)
+        if ga < 0
+          ga = 0
+        context.globalAlpha = ga
 
     _writeLength = (column, writingLength, wordSum) ->
       v = parseInt(writingLength - wordSum)
@@ -477,21 +471,12 @@ class PreloadItemText extends CanvasItemBase
           # RIGHT
           w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(@, column[j])
         context.beginPath()
-        viewLengthAtLine = _writeLength.call(@, column[j], writingLength , wordSum)
-        if writingLength > 0
-          writeLengthAtLine = _writeLength.call(@, column[j], writingLength + @constructor.WRITE_TEXT_BLUR_LENGTH , wordSum)
-        else
-          writeLengthAtLine = 0
-        visibleStr = column[j].substring(0, writeLengthAtLine)
-        hiddenStr = _replaceWordToSpace.call(@, column[j].substr(writeLengthAtLine))
-        t = visibleStr + hiddenStr
         wl = 0
-        for c, idx in t.split('')
-          if idx >= viewLengthAtLine && idx < writeLengthAtLine
-            _preTextStyle(context, (idx - (writingLength - wordSum)) / @constructor.WRITE_TEXT_BLUR_LENGTH)
+        for c, idx in column[j].split('')
+          _preTextStyle.call(@, context, idx + wordSum + 1, writingLength)
           context.fillText(c, w + wl, heightLine)
           wl += context.measureText(c).width
-        wordSum += t.length
+        wordSum += column[j].length
     else
       widthLine = (width + wordWidth * column.length) * 0.5
       heightMax = _calcVerticalColumnHeightMax.call(@, column)
@@ -506,19 +491,10 @@ class PreloadItemText extends CanvasItemBase
           # RIGHT
           h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(@, column[j])
         context.beginPath()
-        viewLengthAtLine = _writeLength.call(@, column[j], writingLength , wordSum)
-        if writingLength > 0
-          writeLengthAtLine = _writeLength.call(@, column[j], writingLength + @constructor.WRITE_TEXT_BLUR_LENGTH , wordSum)
-        else
-          writeLengthAtLine = 0
-        visibleStr = column[j].substring(0, writeLengthAtLine)
-        hiddenStr = _replaceWordToSpace.call(@, column[j].substr(writeLengthAtLine))
-        t = visibleStr + hiddenStr
         hl = 0
-        for c, idx in t.split('')
+        for c, idx in column[j].split('')
           measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
-          if idx >= viewLengthAtLine && idx < writeLengthAtLine
-            _preTextStyle(context, (idx - (writingLength - wordSum)) / @constructor.WRITE_TEXT_BLUR_LENGTH)
+          _preTextStyle.call(@, context, idx + wordSum + 1, writingLength)
           if _isWordSmallJapanease.call(@, c)
             # 小文字は右上に寄せる
             context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height))
@@ -539,7 +515,7 @@ class PreloadItemText extends CanvasItemBase
           else
             context.fillText(c, widthLine, h + wordWidth + hl)
             hl += measure.height
-        wordSum += t.length
+        wordSum += column[j].length
 
   _calcWordMeasure = (char, fontSize, fontFamily, wordSize) ->
     fontSizeKey = "#{fontSize}"
