@@ -141,7 +141,7 @@ itemBaseWorktableExtend = {
       cmd: "edit",
       uiIcon: "ui-icon-scissors",
       func: function(event, ui) {
-        return WorktableCommon.editItem($(event.target).id);
+        return WorktableCommon.editItem(event.target.id);
       }
     });
     menu.push({
@@ -640,7 +640,7 @@ itemBaseWorktableExtend = {
     })(this));
   },
   settingModifiableSelect: function(configRoot, varName, openChildrenValue, selectOptions) {
-    var _joinArray, _splitArray, defaultValue, j, len, option, selectEmt, v;
+    var _joinArray, _splitArray, defaultValue, selectEmt;
     _joinArray = function(value) {
       if ($.isArray(value)) {
         return value.join(',');
@@ -656,13 +656,6 @@ itemBaseWorktableExtend = {
       }
     };
     selectEmt = $("." + varName + "_select", configRoot);
-    if (selectEmt.children('option').length === 0) {
-      for (j = 0, len = selectOptions.length; j < len; j++) {
-        option = selectOptions[j];
-        v = _joinArray.call(this, option);
-        selectEmt.append("<option value='" + v + "'>" + v + "</option>");
-      }
-    }
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(this.id))[varName];
     if (defaultValue != null) {
       selectEmt.val(_joinArray.call(this, defaultValue));
@@ -671,6 +664,11 @@ itemBaseWorktableExtend = {
       return function(e) {
         var value;
         value = _splitArray.call(_this, $(e.target).val());
+        if (value.match(/^-?[0-9]+\.[0-9]+$/)) {
+          value = parseFloat(value);
+        } else if (value.match(/^-?[0-9]+$/)) {
+          value = parseInt(value);
+        }
         _this.setInstanceVar(varName, value);
         _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
         return _this.applyDesignChange();

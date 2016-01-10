@@ -121,7 +121,7 @@ itemBaseWorktableExtend =
     menu.push({
       title: I18n.t('context_menu.edit'), cmd: "edit", uiIcon: "ui-icon-scissors", func: (event, ui) ->
         # アイテム編集
-        WorktableCommon.editItem($(event.target).id)
+        WorktableCommon.editItem(event.target.id)
     })
     menu.push({
       title: I18n.t('context_menu.copy'), cmd: "copy", uiIcon: "ui-icon-scissors", func: (event, ui) ->
@@ -567,17 +567,17 @@ itemBaseWorktableExtend =
         return value
 
     selectEmt = $(".#{varName}_select", configRoot)
-    if selectEmt.children('option').length == 0
-      # 選択項目の作成
-      for option in selectOptions
-        v = _joinArray.call(@, option)
-        selectEmt.append("<option value='#{v}'>#{v}</option>")
-
     defaultValue = PageValue.getInstancePageValue(PageValue.Key.instanceValue(@id))[varName]
     if defaultValue?
       selectEmt.val(_joinArray.call(@, defaultValue))
     selectEmt.off('change').on('change', (e) =>
       value = _splitArray.call(@, $(e.target).val())
+      if value.match(/^-?[0-9]+\.[0-9]+$/)
+        # 小数
+        value = parseFloat(value)
+      else if value.match(/^-?[0-9]+$/)
+        # 整数
+        value = parseInt(value)
       @setInstanceVar(varName, value)
       @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
       @applyDesignChange()

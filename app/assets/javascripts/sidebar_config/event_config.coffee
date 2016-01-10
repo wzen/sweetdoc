@@ -584,17 +584,17 @@ class EventConfig
         return value
 
     selectEmt = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_select", @emt)
-    if selectEmt.children('option').length == 0
-      # 選択項目の作成
-      for option in selectOptions
-        v = _joinArray.call(@, option)
-        selectEmt.append("<option value='#{v}'>#{v}</option>")
-
     selectEmt.val(_joinArray.call(@, defaultValue))
     selectEmt.off('change').on('change', (e) =>
       if !@hasModifiableVar(varName)
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       value = _splitArray.call(@, $(e.target).val())
+      if value.match(/^-?[0-9]+\.[0-9]+$/)
+        # 小数
+        value = parseFloat(value)
+      else if value.match(/^-?[0-9]+$/)
+        # 整数
+        value = parseInt(value)
       @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
       @constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value)
     ).trigger('change')
@@ -697,14 +697,18 @@ class EventConfig
       # オブジェクトの場合は判定しない
       return
 
-    if typeof openValue == 'string' && (openValue == 'true' || openValue == 'false')
-      openValue = openValue == 'true'
+    if typeof openValue != 'array'
+      openValue = [openValue]
+
+    for o, idx in openValue
+      if typeof o == 'string' && (o == 'true' || o == 'false')
+        openValue[idx] = o == 'true'
     if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
       targetValue = targetValue == 'true'
 
     root = e.closest('.event')
     openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName)
-    if openValue == targetValue
+    if $.inArray(targetValue, openValue) >= 0
       $(root).find(".#{openClassName}").show()
     else
       $(root).find(".#{openClassName}").hide()

@@ -643,7 +643,7 @@ EventConfig = (function() {
   };
 
   EventConfig.prototype.settingModifiableSelect = function(varName, defaultValue, openChildrenValue, selectOptions) {
-    var _joinArray, _splitArray, j, len, option, selectEmt, v;
+    var _joinArray, _splitArray, selectEmt;
     _joinArray = function(value) {
       if ($.isArray(value)) {
         return value.join(',');
@@ -659,13 +659,6 @@ EventConfig = (function() {
       }
     };
     selectEmt = $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_select", this.emt);
-    if (selectEmt.children('option').length === 0) {
-      for (j = 0, len = selectOptions.length; j < len; j++) {
-        option = selectOptions[j];
-        v = _joinArray.call(this, option);
-        selectEmt.append("<option value='" + v + "'>" + v + "</option>");
-      }
-    }
     selectEmt.val(_joinArray.call(this, defaultValue));
     return selectEmt.off('change').on('change', (function(_this) {
       return function(e) {
@@ -674,6 +667,11 @@ EventConfig = (function() {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         value = _splitArray.call(_this, $(e.target).val());
+        if (value.match(/^-?[0-9]+\.[0-9]+$/)) {
+          value = parseFloat(value);
+        } else if (value.match(/^-?[0-9]+$/)) {
+          value = parseInt(value);
+        }
         _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value;
         return _this.constructor.switchChildrenConfig(e.target, varName, openChildrenValue, value);
       };
@@ -765,22 +763,28 @@ EventConfig = (function() {
   };
 
   EventConfig.switchChildrenConfig = function(e, varName, openValue, targetValue) {
-    var openClassName, root;
+    var idx, j, len, o, openClassName, root;
     if (openValue == null) {
       return;
     }
     if (typeof targetValue === 'object') {
       return;
     }
-    if (typeof openValue === 'string' && (openValue === 'true' || openValue === 'false')) {
-      openValue = openValue === 'true';
+    if (typeof openValue !== 'array') {
+      openValue = [openValue];
+    }
+    for (idx = j = 0, len = openValue.length; j < len; idx = ++j) {
+      o = openValue[idx];
+      if (typeof o === 'string' && (o === 'true' || o === 'false')) {
+        openValue[idx] = o === 'true';
+      }
     }
     if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
       targetValue = targetValue === 'true';
     }
     root = e.closest('.event');
     openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName);
-    if (openValue === targetValue) {
+    if ($.inArray(targetValue, openValue) >= 0) {
       return $(root).find("." + openClassName).show();
     } else {
       return $(root).find("." + openClassName).hide();

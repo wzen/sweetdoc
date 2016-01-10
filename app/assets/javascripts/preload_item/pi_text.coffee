@@ -7,7 +7,6 @@ class PreloadItemText extends CanvasItemBase
   if gon?
     constant = gon.const
     class @BalloonType
-      @NONE = constant.PreloadItemText.BalloonType.NONE
       @FREE = constant.PreloadItemText.BalloonType.FREE
       @ARC = constant.PreloadItemText.BalloonType.ARC
       @RECT = constant.PreloadItemText.BalloonType.RECT
@@ -32,6 +31,10 @@ class PreloadItemText extends CanvasItemBase
           name: '文字色'
         }
       }
+      isDrawHorizontal: {
+        name: 'Horizontal'
+        type: 'boolean'
+      }
       showBalloon: {
         name: 'Show Balloon'
         default: false
@@ -50,14 +53,29 @@ class PreloadItemText extends CanvasItemBase
               name: '吹き出しの色'
             }
           }
-          balloonRadius: {
-            name: 'BalloonRadius'
-            default: 30
-            type: 'integer'
-            min: 1
-            max: 100
-            ja: {
-              name: '吹き出しの角丸'
+          balloonType: {
+            name: 'BalloonType'
+            type: 'select'
+            'options[]': [
+              {name: 'Arc', value: @BalloonType.ARC}
+              {name: 'Broken Arc', value: @BalloonType.BROKEN_ARC}
+              {name: 'Rect', value: @BalloonType.RECT}
+              {name: 'Broken Rect', value: @BalloonType.BROKEN_RECT}
+              {name: 'Shout', value: @BalloonType.SHOUT}
+              {name: 'Think', value: @BalloonType.THINK}
+            ]
+            openChildrenValue: [@BalloonType.RECT, @BalloonType.BROKEN_RECT]
+            children: {
+              balloonRadius: {
+                name: 'BalloonRadius'
+                default: 30
+                type: 'integer'
+                min: 1
+                max: 100
+                ja: {
+                  name: '吹き出しの角丸'
+                }
+              }
             }
           }
         }
@@ -172,6 +190,29 @@ class PreloadItemText extends CanvasItemBase
           'Meiryo UI'
         ]
       }
+      isFixedFontSize: {
+        name: "Font Size Fixed"
+        type: 'boolean'
+        default: false
+        openChildrenValue: true
+        children: {
+          fontSize: {
+            type: 'integer'
+            name: "Font Size"
+            min: 1
+            max: 100
+          }
+        }
+      }
+      wordAlign: {
+        name: "Word Align"
+        type: 'select'
+        'options[]': [
+          {name: 'left', value: @WordAlign.LEFT}
+          {name: 'center', value: @WordAlign.CENTER}
+          {name: 'right', value: @WordAlign.RIGHT}
+        ]
+      }
     }
     methods : {
       changeText: {
@@ -219,8 +260,9 @@ class PreloadItemText extends CanvasItemBase
     @fontFamily = 'Times New Roman'
     @fontSize = null
     @isFixedFontSize = false
-    @isDrawBalloon = false
-    @balloonType = @constructor.BalloonType.NONE
+    @showBalloon = false
+    @balloonValue = {}
+    @balloonType = null
     @textPositions = null
     @wordAlign = @constructor.WordAlign.LEFT
     @_fontMeatureCache = {}
@@ -254,6 +296,16 @@ class PreloadItemText extends CanvasItemBase
       if callback?
         callback()
     )
+
+  setInstanceVar: (varName, value)->
+    if varName == 'isDrawHorizontal' && @isDrawHorizontal != value
+      # Canvas縦横変更
+      canvas = document.getElementById(@canvasElementId())
+      width = canvas.width
+      height = canvas.height
+      $(canvas).css({width: "#{height}px", height: "#{width}px"})
+      $(canvas).attr({width: height, height: width})
+    super(varName, value)
 
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->
@@ -312,6 +364,9 @@ class PreloadItemText extends CanvasItemBase
     if !@fontSize?
       _calcFontSizeAbout.call(@, text, canvas.width, canvas.height)
     context.font = "#{@fontSize}px #{@fontFamily}"
+    if @showBalloon
+      # 枠
+      _drawBalloon.call(@, context, canvas.width, canvas.height)
     context.save()
     _drawText.call(@, context, text, canvas.width, canvas.height, writingLength)
     context.restore()
@@ -328,24 +383,36 @@ class PreloadItemText extends CanvasItemBase
     return Math.floor(Math.random() * (max - min)) + min
 
   _drawBalloon = (context, width, height) ->
+    if !@showBalloon
+      return
+
     _drawArc = ->
       # 円
       context.save()
       context.beginPath()
       context.translate(width * 0.5, height * 0.5)
+      # 調整
+      diff = 3.0
       if width > height
         context.scale(width / height, 1)
-        context.arc(0, 0, height * 0.5, 0, Math.PI * 2)
+        context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2)
       else
         context.scale(1, height / width)
-        context.arc(0, 0, width * 0.5, 0, Math.PI * 2)
+        context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2)
+
+      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
+      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+      context.fill()
+      context.stroke()
       context.restore()
     _drawRect = ->
       # 四角
+      context.save()
       context.beginPath()
       # FIXME: 描画オプション追加
       context.fillStyle = 'rgba(0, 0, 255, 0.5)';
       context.fillRect(0, 0, width, height);
+      context.restore()
     _drawBArc = ->
       # 円 破線
       context.save()
@@ -380,7 +447,9 @@ class PreloadItemText extends CanvasItemBase
           sum += l
         context.arc(0, 0, width * 0.5, 0, Math.PI * 2)
       context.restore()
+
     _drawBRect = ->
+      context.save()
       # 四角 破線
       dashLength = 5
       _draw = (sx, sy, ex, ey) ->
@@ -397,6 +466,7 @@ class PreloadItemText extends CanvasItemBase
       _draw.call(@, width, 0, width, height)
       _draw.call(@, width, height, 0, height)
       _draw.call(@, 0, height, 0, 0)
+      context.restore()
 
     _drawShout = =>
       # 叫び
@@ -422,7 +492,9 @@ class PreloadItemText extends CanvasItemBase
       context.lineWidth = lineWidth
       for i in [0..(num-1)]
         deg += addDeg
-        random = _getRandomInt.call(@, punkLineMax, punkLineMin)
+        if !@balloonValue['balloonRandomInt']?
+          @balloonValue['balloonRandomInt'] = _getRandomInt.call(@, punkLineMax, punkLineMin)
+        random = @balloonValue['balloonRandomInt']
         # 始点・終点
         beginX = _getCircumPos.x(deg, radiusX, cx)
         beginY = _getCircumPos.y(deg, radiusY, cy)
@@ -466,7 +538,9 @@ class PreloadItemText extends CanvasItemBase
       context.lineWidth = lineWidth
       for i in [0..(num-1)]
         deg += addDeg
-        random = _getRandomInt.call(@, punkLineMax, punkLineMin)
+        if !@balloonValue['balloonRandomInt']?
+          @balloonValue['balloonRandomInt'] = _getRandomInt.call(@, punkLineMax, punkLineMin)
+        random = @balloonValue['balloonRandomInt']
         # 始点・終点
         beginX = _getCircumPos.x(deg, radiusX, cx)
         beginY = _getCircumPos.y(deg, radiusY, cy)
@@ -500,6 +574,7 @@ class PreloadItemText extends CanvasItemBase
       _drawThink.call(@)
 
   _drawText = (context, text, width, height, writingLength = text.length) ->
+    wordWidth = context.measureText('あ').width
     _calcSize = (columnText) ->
       hasJapanease = false
       for i in [0..(columnText.length - 1)]
@@ -511,7 +586,7 @@ class PreloadItemText extends CanvasItemBase
       else
         context.measureText('W').width
 
-    _calcVerticalColumnWidth = (columnText) ->
+    _calcHorizontalColumnWidth = (columnText) ->
       sum = 0
       for char in columnText.split('')
         sum += context.measureText(char).width
@@ -519,10 +594,18 @@ class PreloadItemText extends CanvasItemBase
     _calcVerticalColumnHeight = (columnText) ->
       # 暫定で日本語の高さに合わせる
       return columnText.length * context.measureText('あ').width
-    _calcVerticalColumnWidthMax = (columns) ->
+    _calcHorizontalColumnHeightMax = (columnText) ->
+      ret = 0
+      for c in columnText.split('')
+        measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
+        r = measure.height
+        if ret < r
+          ret = r
+      return ret
+    _calcHorizontalColumnWidthMax = (columns) ->
       ret = 0
       for c in columns
-        r = _calcVerticalColumnWidth.call(@, c)
+        r = _calcHorizontalColumnWidth.call(@, c)
         if ret < r
           ret = r
       return ret
@@ -565,21 +648,20 @@ class PreloadItemText extends CanvasItemBase
           char = ''
       column[line] += char
     sizeSum = 0
-    wordWidth = context.measureText('あ').width
     wordSum = 0
     if @isDrawHorizontal
       heightLine = (height - wordWidth * column.length) * 0.5
-      widthMax = _calcVerticalColumnWidthMax.call(@, column)
+      widthMax = _calcHorizontalColumnWidthMax.call(@, column)
       for j in [0..(column.length - 1)]
-        heightLine += wordWidth
+        heightLine += _calcHorizontalColumnHeightMax.call(@, column[j])
         w = null
         if @wordAlign == @constructor.WordAlign.LEFT
           w = (width - widthMax) * 0.5
         else if @wordAlign == @constructor.WordAlign.CENTER
-          w = (width - _calcVerticalColumnWidth.call(@, column[j])) * 0.5
+          w = (width - _calcHorizontalColumnWidth.call(@, column[j])) * 0.5
         else
           # RIGHT
-          w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(@, column[j])
+          w = (width + widthMax) * 0.5 - _calcHorizontalColumnWidth.call(@, column[j])
         context.beginPath()
         wl = 0
         for c, idx in column[j].split('')

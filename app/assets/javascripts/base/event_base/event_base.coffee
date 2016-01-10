@@ -33,6 +33,7 @@ class EventBase extends Extend
       for varName, value of @constructor.actionPropertiesModifiableVars()
         @setInstanceVar(varName, value.default)
 
+  # インスタンス値セッター
   setInstanceVar: (varName, value) ->
     @[varName] = value
 

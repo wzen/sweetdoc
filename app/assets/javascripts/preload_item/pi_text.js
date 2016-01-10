@@ -21,8 +21,6 @@ PreloadItemText = (function(superClass) {
     PreloadItemText.BalloonType = (function() {
       function BalloonType() {}
 
-      BalloonType.NONE = constant.PreloadItemText.BalloonType.NONE;
-
       BalloonType.FREE = constant.PreloadItemText.BalloonType.FREE;
 
       BalloonType.ARC = constant.PreloadItemText.BalloonType.ARC;
@@ -69,6 +67,10 @@ PreloadItemText = (function(superClass) {
           name: '文字色'
         }
       },
+      isDrawHorizontal: {
+        name: 'Horizontal',
+        type: 'boolean'
+      },
       showBalloon: {
         name: 'Show Balloon',
         "default": false,
@@ -87,14 +89,42 @@ PreloadItemText = (function(superClass) {
               name: '吹き出しの色'
             }
           },
-          balloonRadius: {
-            name: 'BalloonRadius',
-            "default": 30,
-            type: 'integer',
-            min: 1,
-            max: 100,
-            ja: {
-              name: '吹き出しの角丸'
+          balloonType: {
+            name: 'BalloonType',
+            type: 'select',
+            'options[]': [
+              {
+                name: 'Arc',
+                value: PreloadItemText.BalloonType.ARC
+              }, {
+                name: 'Broken Arc',
+                value: PreloadItemText.BalloonType.BROKEN_ARC
+              }, {
+                name: 'Rect',
+                value: PreloadItemText.BalloonType.RECT
+              }, {
+                name: 'Broken Rect',
+                value: PreloadItemText.BalloonType.BROKEN_RECT
+              }, {
+                name: 'Shout',
+                value: PreloadItemText.BalloonType.SHOUT
+              }, {
+                name: 'Think',
+                value: PreloadItemText.BalloonType.THINK
+              }
+            ],
+            openChildrenValue: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT],
+            children: {
+              balloonRadius: {
+                name: 'BalloonRadius',
+                "default": 30,
+                type: 'integer',
+                min: 1,
+                max: 100,
+                ja: {
+                  name: '吹き出しの角丸'
+                }
+              }
             }
           }
         }
@@ -106,6 +136,36 @@ PreloadItemText = (function(superClass) {
           name: 'フォント選択'
         },
         'options[]': ['sans-serif', 'arial', 'arial black', 'arial narrow', 'arial unicode ms', 'Century Gothic', 'Franklin Gothic Medium', 'Gulim', 'Dotum', 'Haettenschweiler', 'Impact', 'Ludica Sans Unicode', 'Microsoft Sans Serif', 'MS Sans Serif', 'MV Boil', 'New Gulim', 'Tahoma', 'Trebuchet', 'Verdana', 'serif', 'Batang', 'Book Antiqua', 'Bookman Old Style', 'Century', 'Estrangelo Edessa', 'Garamond', 'Gautami', 'Georgia', 'Gungsuh', 'Latha', 'Mangal', 'MS Serif', 'PMingLiU', 'Palatino Linotype', 'Raavi', 'Roman', 'Shruti', 'Sylfaen', 'Times New Roman', 'Tunga', 'monospace', 'BatangChe', 'Courier', 'Courier New', 'DotumChe', 'GulimChe', 'GungsuhChe', 'HG行書体', 'Lucida Console', 'MingLiU', 'ＭＳ ゴシック', 'ＭＳ 明朝', 'OCRB', 'SimHei', 'SimSun', 'Small Fonts', 'Terminal', 'fantasy', 'alba', 'alba matter', 'alba super', 'baby kruffy', 'Chick', 'Croobie', 'Fat', 'Freshbot', 'Frosty', 'Gloo Gun', 'Jokewood', 'Modern', 'Monotype Corsiva', 'Poornut', 'Pussycat Snickers', 'Weltron Urban', 'cursive', 'Comic Sans MS', 'HGP行書体', 'HG正楷書体-PRO', 'Jenkins v2.0', 'Script', ['ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro'], ['ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN'], ['ヒラギノ角ゴ Pro W6', 'HiraKakuPro-W6'], ['ヒラギノ角ゴ ProN W6', 'HiraKakuProN-W6'], ['ヒラギノ角ゴ Std W8', 'Hiragino Kaku Gothic Std'], ['ヒラギノ角ゴ StdN W8', 'Hiragino Kaku Gothic StdN'], ['ヒラギノ丸ゴ Pro W4', 'Hiragino Maru Gothic Pro'], ['ヒラギノ丸ゴ ProN W4', 'Hiragino Maru Gothic ProN'], ['ヒラギノ明朝 Pro W3', 'Hiragino Mincho Pro'], ['ヒラギノ明朝 ProN W3', 'Hiragino Mincho ProN'], ['ヒラギノ明朝 Pro W6', 'HiraMinPro-W6'], ['ヒラギノ明朝 ProN W6', 'HiraMinProN-W6'], 'Osaka', ['Osaka－等幅', 'Osaka-Mono'], 'MS UI Gothic', ['ＭＳ Ｐゴシック', 'MS PGothic'], ['ＭＳ ゴシック', 'MS Gothic'], ['ＭＳ Ｐ明朝', 'MS PMincho'], ['ＭＳ 明朝', 'MS Mincho'], ['メイリオ', 'Meiryo'], 'Meiryo UI']
+      },
+      isFixedFontSize: {
+        name: "Font Size Fixed",
+        type: 'boolean',
+        "default": false,
+        openChildrenValue: true,
+        children: {
+          fontSize: {
+            type: 'integer',
+            name: "Font Size",
+            min: 1,
+            max: 100
+          }
+        }
+      },
+      wordAlign: {
+        name: "Word Align",
+        type: 'select',
+        'options[]': [
+          {
+            name: 'left',
+            value: PreloadItemText.WordAlign.LEFT
+          }, {
+            name: 'center',
+            value: PreloadItemText.WordAlign.CENTER
+          }, {
+            name: 'right',
+            value: PreloadItemText.WordAlign.RIGHT
+          }
+        ]
       }
     },
     methods: {
@@ -159,8 +219,9 @@ PreloadItemText = (function(superClass) {
     this.fontFamily = 'Times New Roman';
     this.fontSize = null;
     this.isFixedFontSize = false;
-    this.isDrawBalloon = false;
-    this.balloonType = this.constructor.BalloonType.NONE;
+    this.showBalloon = false;
+    this.balloonValue = {};
+    this.balloonType = null;
     this.textPositions = null;
     this.wordAlign = this.constructor.WordAlign.LEFT;
     this._fontMeatureCache = {};
@@ -202,6 +263,24 @@ PreloadItemText = (function(superClass) {
         }
       };
     })(this));
+  };
+
+  PreloadItemText.prototype.setInstanceVar = function(varName, value) {
+    var canvas, height, width;
+    if (varName === 'isDrawHorizontal' && this.isDrawHorizontal !== value) {
+      canvas = document.getElementById(this.canvasElementId());
+      width = canvas.width;
+      height = canvas.height;
+      $(canvas).css({
+        width: height + "px",
+        height: width + "px"
+      });
+      $(canvas).attr({
+        width: height,
+        height: width
+      });
+    }
+    return PreloadItemText.__super__.setInstanceVar.call(this, varName, value);
   };
 
   PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {
@@ -273,6 +352,9 @@ PreloadItemText = (function(superClass) {
       _calcFontSizeAbout.call(this, text, canvas.width, canvas.height);
     }
     context.font = this.fontSize + "px " + this.fontFamily;
+    if (this.showBalloon) {
+      _drawBalloon.call(this, context, canvas.width, canvas.height);
+    }
     context.save();
     _drawText.call(this, context, text, canvas.width, canvas.height, writingLength);
     return context.restore();
@@ -295,23 +377,34 @@ PreloadItemText = (function(superClass) {
 
   _drawBalloon = function(context, width, height) {
     var _drawArc, _drawBArc, _drawBRect, _drawRect, _drawShout, _drawThink;
+    if (!this.showBalloon) {
+      return;
+    }
     _drawArc = function() {
+      var diff;
       context.save();
       context.beginPath();
       context.translate(width * 0.5, height * 0.5);
+      diff = 3.0;
       if (width > height) {
         context.scale(width / height, 1);
-        context.arc(0, 0, height * 0.5, 0, Math.PI * 2);
+        context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2);
       } else {
         context.scale(1, height / width);
-        context.arc(0, 0, width * 0.5, 0, Math.PI * 2);
+        context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2);
       }
+      context.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      context.fill();
+      context.stroke();
       return context.restore();
     };
     _drawRect = function() {
+      context.save();
       context.beginPath();
       context.fillStyle = 'rgba(0, 0, 255, 0.5)';
-      return context.fillRect(0, 0, width, height);
+      context.fillRect(0, 0, width, height);
+      return context.restore();
     };
     _drawBArc = function() {
       var l, per, sum, x, y;
@@ -351,6 +444,7 @@ PreloadItemText = (function(superClass) {
     };
     _drawBRect = function() {
       var _draw, dashLength;
+      context.save();
       dashLength = 5;
       _draw = function(sx, sy, ex, ey) {
         var deltaX, deltaY, i, k, numDashes, ref, results;
@@ -370,7 +464,8 @@ PreloadItemText = (function(superClass) {
       _draw.call(this, 0, 0, width, 0);
       _draw.call(this, width, 0, width, height);
       _draw.call(this, width, height, 0, height);
-      return _draw.call(this, 0, height, 0, 0);
+      _draw.call(this, 0, height, 0, 0);
+      return context.restore();
     };
     _drawShout = (function(_this) {
       return function() {
@@ -396,7 +491,10 @@ PreloadItemText = (function(superClass) {
         context.lineWidth = lineWidth;
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          if (_this.balloonValue['balloonRandomInt'] == null) {
+            _this.balloonValue['balloonRandomInt'] = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          }
+          random = _this.balloonValue['balloonRandomInt'];
           beginX = _getCircumPos.x(deg, radiusX, cx);
           beginY = _getCircumPos.y(deg, radiusY, cy);
           endX = _getCircumPos.x(deg + addDeg, radiusX, cx);
@@ -438,7 +536,10 @@ PreloadItemText = (function(superClass) {
         context.lineWidth = lineWidth;
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          if (_this.balloonValue['balloonRandomInt'] == null) {
+            _this.balloonValue['balloonRandomInt'] = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          }
+          random = _this.balloonValue['balloonRandomInt'];
           beginX = _getCircumPos.x(deg, radiusX, cx);
           beginY = _getCircumPos.y(deg, radiusY, cy);
           endX = _getCircumPos.x(deg + addDeg, radiusX, cx);
@@ -472,10 +573,11 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height, writingLength) {
-    var _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _calcVerticalColumnWidth, _calcVerticalColumnWidthMax, _preTextStyle, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _preTextStyle, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
     if (writingLength == null) {
       writingLength = text.length;
     }
+    wordWidth = context.measureText('あ').width;
     _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
       hasJapanease = false;
@@ -491,7 +593,7 @@ PreloadItemText = (function(superClass) {
         return context.measureText('W').width;
       }
     };
-    _calcVerticalColumnWidth = function(columnText) {
+    _calcHorizontalColumnWidth = function(columnText) {
       var char, k, len, ref, sum;
       sum = 0;
       ref = columnText.split('');
@@ -504,12 +606,26 @@ PreloadItemText = (function(superClass) {
     _calcVerticalColumnHeight = function(columnText) {
       return columnText.length * context.measureText('あ').width;
     };
-    _calcVerticalColumnWidthMax = function(columns) {
+    _calcHorizontalColumnHeightMax = function(columnText) {
+      var c, k, len, measure, r, ref, ret;
+      ret = 0;
+      ref = columnText.split('');
+      for (k = 0, len = ref.length; k < len; k++) {
+        c = ref[k];
+        measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
+        r = measure.height;
+        if (ret < r) {
+          ret = r;
+        }
+      }
+      return ret;
+    };
+    _calcHorizontalColumnWidthMax = function(columns) {
       var c, k, len, r, ret;
       ret = 0;
       for (k = 0, len = columns.length; k < len; k++) {
         c = columns[k];
-        r = _calcVerticalColumnWidth.call(this, c);
+        r = _calcHorizontalColumnWidth.call(this, c);
         if (ret < r) {
           ret = r;
         }
@@ -567,21 +683,20 @@ PreloadItemText = (function(superClass) {
       column[line] += char;
     }
     sizeSum = 0;
-    wordWidth = context.measureText('あ').width;
     wordSum = 0;
     if (this.isDrawHorizontal) {
       heightLine = (height - wordWidth * column.length) * 0.5;
-      widthMax = _calcVerticalColumnWidthMax.call(this, column);
+      widthMax = _calcHorizontalColumnWidthMax.call(this, column);
       results = [];
       for (j = m = 0, ref1 = column.length - 1; 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
-        heightLine += wordWidth;
+        heightLine += _calcHorizontalColumnHeightMax.call(this, column[j]);
         w = null;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
           w = (width - widthMax) * 0.5;
         } else if (this.wordAlign === this.constructor.WordAlign.CENTER) {
-          w = (width - _calcVerticalColumnWidth.call(this, column[j])) * 0.5;
+          w = (width - _calcHorizontalColumnWidth.call(this, column[j])) * 0.5;
         } else {
-          w = (width + widthMax) * 0.5 - _calcVerticalColumnWidth.call(this, column[j]);
+          w = (width + widthMax) * 0.5 - _calcHorizontalColumnWidth.call(this, column[j]);
         }
         context.beginPath();
         wl = 0;

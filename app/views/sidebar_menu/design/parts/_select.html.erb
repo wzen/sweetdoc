@@ -4,6 +4,17 @@
     <div class="forms">
       <div>
         <select class="<%= var_name + '_select' %>">
+          <% if value['options'].present? %>
+            <% value['options'].first.values.each do |o| %>
+              <% if o.is_a?(Hash) %>
+                <option value="<%= o['value'] %>"><%= o['name'] %></option>
+              <% elsif o.is_a?(Array) %>
+                <option value="<%= o.join(',') %>"><%= o.join(',') %></option>
+              <% else %>
+                <option value="<%= o %>"><%= o %></option>
+              <% end %>
+            <% end %>
+          <% end %>
         </select>
       </div>
     </div>
