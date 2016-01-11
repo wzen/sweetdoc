@@ -172,6 +172,7 @@ class PreloadItemText extends CanvasItemBase
     @textPositions = null
     @wordAlign = @constructor.WordAlign.LEFT
     @_fontMeatureCache = {}
+    @_fixedTextAlpha = null
 
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
@@ -189,9 +190,9 @@ class PreloadItemText extends CanvasItemBase
       _setNoTextStyle.call(@)
     # 文字配置 & フォント設定
     if @inputText?
-      _setTextToCanvas.call(@ , @inputText)
+      _drawTextAndBalloonToCanvas.call(@ , @inputText)
     else
-      _setTextToCanvas.call(@ , @constructor.NO_TEXT)
+      _drawTextAndBalloonToCanvas.call(@ , @constructor.NO_TEXT)
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -244,18 +245,19 @@ class PreloadItemText extends CanvasItemBase
     context = canvas.getContext('2d')
     context.clearRect(0, 0, canvas.width, canvas.height)
     context.fillStyle = "rgb(#{@textColor.r},#{@textColor.g},#{@textColor.b})"
-    context.globalAlpha = 1 - opa
-    _setTextToCanvas.call(@ , @inputText__before)
-    context.globalAlpha = opa
-    _setTextToCanvas.call(@ , @inputText__after)
+    @_fixedTextAlpha = 1 - opa
+    _drawTextAndBalloonToCanvas.call(@ , @inputText__before)
+    @_fixedTextAlpha = opa
+    _drawTextAndBalloonToCanvas.call(@ , @inputText__after)
 
   writeText: (opt) ->
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
     context.clearRect(0, 0, canvas.width, canvas.height)
+    @_fixedTextAlpha = null
     if @inputText? && @inputText.length > 0
       _setTextStyle.call(@)
-      _setTextToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
+      _drawTextAndBalloonToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
@@ -267,22 +269,13 @@ class PreloadItemText extends CanvasItemBase
     context = canvas.getContext('2d')
     context.fillStyle = 'rgba(33, 33, 33, 0.3)'
 
-  _setTextToCanvas = (text, writingLength) ->
+  _drawTextAndBalloonToCanvas = (text, writingLength) ->
     if !text?
       return
-
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
-    # FIXME: 枠がある場合は中のサイズを取るようにする
-    if !@fontSize?
-      _calcFontSizeAbout.call(@, text, canvas.width, canvas.height)
-    context.font = "#{@fontSize}px #{@fontFamily}"
-    if @showBalloon
-      # 枠
-      _drawBalloon.call(@, context, canvas.width, canvas.height)
-    context.save()
+    _drawBalloon.call(@, context, canvas.width, canvas.height)
     _drawText.call(@, context, text, canvas.width, canvas.height, writingLength)
-    context.restore()
 
   _getRandomInt = (max, min) ->
     return Math.floor(Math.random() * (max - min)) + min
@@ -485,6 +478,13 @@ class PreloadItemText extends CanvasItemBase
     context.restore()
 
   _drawText = (context, text, width, height, writingLength = text.length) ->
+    context.save()
+
+    # FIXME: 枠がある場合は中のサイズを取るようにする
+    if !@fontSize?
+      _calcFontSizeAbout.call(@, text, canvas.width, canvas.height)
+    context.font = "#{@fontSize}px #{@fontFamily}"
+
     wordWidth = context.measureText('あ').width
 
     _calcSize = (columnText) ->
@@ -529,7 +529,11 @@ class PreloadItemText extends CanvasItemBase
           ret = r
       return ret
 
-    _preTextStyle = (context, idx, writingLength) ->
+    _setTextAlpha = (context, idx, writingLength) ->
+      if @_fixedTextAlpha?
+        context.globalAlpha = @_fixedTextAlpha
+        return
+
       if writingLength == 0
         context.globalAlpha = 0
       else if idx <= writingLength
@@ -577,7 +581,7 @@ class PreloadItemText extends CanvasItemBase
         context.beginPath()
         wl = 0
         for c, idx in column[j].split('')
-          _preTextStyle.call(@, context, idx + wordSum + 1, writingLength)
+          _setTextAlpha.call(@, context, idx + wordSum + 1, writingLength)
           context.fillText(c, w + wl, heightLine)
           wl += context.measureText(c).width
         wordSum += column[j].length
@@ -598,7 +602,7 @@ class PreloadItemText extends CanvasItemBase
         hl = 0
         for c, idx in column[j].split('')
           measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
-          _preTextStyle.call(@, context, idx + wordSum + 1, writingLength)
+          _setTextAlpha.call(@, context, idx + wordSum + 1, writingLength)
           if _isWordSmallJapanease.call(@, c)
             # 小文字は右上に寄せる
             context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height))
@@ -623,6 +627,7 @@ class PreloadItemText extends CanvasItemBase
             else
               hl += measure.height
         wordSum += column[j].length
+    context.restore()
 
   _calcWordMeasure = (char, fontSize, fontFamily, wordSize) ->
     fontSizeKey = "#{fontSize}"
@@ -640,8 +645,8 @@ class PreloadItemText extends CanvasItemBase
     writedImage = nContext.getImageData(0, 0, wordSize, wordSize)
     mi = _measureImage.call(@, writedImage)
 
-    if window.debug
-      console.log('char: ' + char + ' textWidth:' + mi.width + ' textHeight:' + mi.height)
+#    if window.debug
+#      console.log('char: ' + char + ' textWidth:' + mi.width + ' textHeight:' + mi.height)
 
     if !@_fontMeatureCache[fontSizeKey]?
       @_fontMeatureCache[fontSizeKey] = {}
@@ -709,8 +714,8 @@ class PreloadItemText extends CanvasItemBase
         w = width
         h = height
       fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2)
-      if debug
-        console.log(fontSize)
+#      if debug
+#        console.log(fontSize)
       # FontSizeは暫定
       @fontSize = parseInt(fontSize / 1.5)
       if @fontSize < 1

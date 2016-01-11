@@ -6,7 +6,12 @@ class ConfigMenuController < ApplicationController
 
   def design_config
     design_config = params.fetch('designConfig', false)
-    modifiables = JSON.parse(params.fetch('modifiables', ''))
+    mod = params.fetch('modifiables', nil)
+    if mod.present?
+      modifiables = JSON.parse(mod)
+    else
+      modifiables = {}
+    end
     item_type = params.fetch('itemType', 'other')
     @result_success = true
     @html = ConfigMenu.design_config(self, design_config, item_type, modifiables)
@@ -16,7 +21,12 @@ class ConfigMenuController < ApplicationController
   def method_values_config
     class_dist_token = params.require('classDistToken')
     method_name = params.require('methodName')
-    modifiables = JSON.parse(params.fetch('modifiables', ''))
+    mod = params.fetch('modifiables', nil)
+    if mod.present?
+      modifiables = JSON.parse(mod)
+    else
+      modifiables = {}
+    end
     @result_success = true
     @modify_html = ConfigMenu.event_var_modify_config(self, modifiables)
     @specific_html = ConfigMenu.event_specific_config(self, class_dist_token, method_name)

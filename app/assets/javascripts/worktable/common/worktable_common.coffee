@@ -356,17 +356,9 @@ class WorktableCommon
       if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
         # 手動スクロールした場合のみメッセージ & 画面位置更新
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
-        if window.scrollContentsScrollTimer?
-          clearTimeout(window.scrollContentsScrollTimer)
-        window.scrollContentsScrollTimer = setTimeout( ->
-          setTimeout( ->
-            FloatView.hide()
-            PageValue.setWorktableDisplayPosition(top, left)
-            ScreenEvent.PrivateClass.setNowXAndY(top, left)
-            LocalStorage.saveAllPageValues()
-            window.scrollContentsScrollTimer = null
-          , 0)
-        , 500)
+        Common.saveDisplayPosition(top, left, false, ->
+          FloatView.hide()
+        )
     )
     # ドロップダウン
     $('.dropdown-toggle').dropdown()

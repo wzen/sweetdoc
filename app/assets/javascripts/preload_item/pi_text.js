@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -234,6 +234,7 @@ PreloadItemText = (function(superClass) {
     this.textPositions = null;
     this.wordAlign = this.constructor.WordAlign.LEFT;
     this._fontMeatureCache = {};
+    this._fixedTextAlpha = null;
   }
 
   PreloadItemText.prototype.updateItemSize = function(w, h) {
@@ -251,9 +252,9 @@ PreloadItemText = (function(superClass) {
       _setNoTextStyle.call(this);
     }
     if (this.inputText != null) {
-      return _setTextToCanvas.call(this, this.inputText);
+      return _drawTextAndBalloonToCanvas.call(this, this.inputText);
     } else {
-      return _setTextToCanvas.call(this, this.constructor.NO_TEXT);
+      return _drawTextAndBalloonToCanvas.call(this, this.constructor.NO_TEXT);
     }
   };
 
@@ -327,10 +328,10 @@ PreloadItemText = (function(superClass) {
     context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = "rgb(" + this.textColor.r + "," + this.textColor.g + "," + this.textColor.b + ")";
-    context.globalAlpha = 1 - opa;
-    _setTextToCanvas.call(this, this.inputText__before);
-    context.globalAlpha = opa;
-    return _setTextToCanvas.call(this, this.inputText__after);
+    this._fixedTextAlpha = 1 - opa;
+    _drawTextAndBalloonToCanvas.call(this, this.inputText__before);
+    this._fixedTextAlpha = opa;
+    return _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
@@ -338,9 +339,10 @@ PreloadItemText = (function(superClass) {
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
+    this._fixedTextAlpha = null;
     if ((this.inputText != null) && this.inputText.length > 0) {
       _setTextStyle.call(this);
-      return _setTextToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
+      return _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
     }
   };
 
@@ -358,23 +360,15 @@ PreloadItemText = (function(superClass) {
     return context.fillStyle = 'rgba(33, 33, 33, 0.3)';
   };
 
-  _setTextToCanvas = function(text, writingLength) {
+  _drawTextAndBalloonToCanvas = function(text, writingLength) {
     var canvas, context;
     if (text == null) {
       return;
     }
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
-    if (this.fontSize == null) {
-      _calcFontSizeAbout.call(this, text, canvas.width, canvas.height);
-    }
-    context.font = this.fontSize + "px " + this.fontFamily;
-    if (this.showBalloon) {
-      _drawBalloon.call(this, context, canvas.width, canvas.height);
-    }
-    context.save();
-    _drawText.call(this, context, text, canvas.width, canvas.height, writingLength);
-    return context.restore();
+    _drawBalloon.call(this, context, canvas.width, canvas.height);
+    return _drawText.call(this, context, text, canvas.width, canvas.height, writingLength);
   };
 
   _getRandomInt = function(max, min) {
@@ -581,10 +575,15 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, width, height, writingLength) {
-    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _preTextStyle, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, results, results1, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
     if (writingLength == null) {
       writingLength = text.length;
     }
+    context.save();
+    if (this.fontSize == null) {
+      _calcFontSizeAbout.call(this, text, canvas.width, canvas.height);
+    }
+    context.font = this.fontSize + "px " + this.fontFamily;
     wordWidth = context.measureText('あ').width;
     _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
@@ -652,8 +651,12 @@ PreloadItemText = (function(superClass) {
       }
       return ret;
     };
-    _preTextStyle = function(context, idx, writingLength) {
+    _setTextAlpha = function(context, idx, writingLength) {
       var ga;
+      if (this._fixedTextAlpha != null) {
+        context.globalAlpha = this._fixedTextAlpha;
+        return;
+      }
       if (writingLength === 0) {
         return context.globalAlpha = 0;
       } else if (idx <= writingLength) {
@@ -695,7 +698,6 @@ PreloadItemText = (function(superClass) {
     if (this.isDrawHorizontal) {
       heightLine = (height - wordWidth * column.length) * 0.5;
       widthMax = _calcHorizontalColumnWidthMax.call(this, column);
-      results = [];
       for (j = m = 0, ref1 = column.length - 1; 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
         heightLine += _calcHorizontalColumnHeightMax.call(this, column[j]);
         w = null;
@@ -711,17 +713,15 @@ PreloadItemText = (function(superClass) {
         ref2 = column[j].split('');
         for (idx = n = 0, len = ref2.length; n < len; idx = ++n) {
           c = ref2[idx];
-          _preTextStyle.call(this, context, idx + wordSum + 1, writingLength);
+          _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
           context.fillText(c, w + wl, heightLine);
           wl += context.measureText(c).width;
         }
-        results.push(wordSum += column[j].length);
+        wordSum += column[j].length;
       }
-      return results;
     } else {
       widthLine = (width + wordWidth * column.length) * 0.5;
       heightMax = _calcVerticalColumnHeightMax.call(this, column);
-      results1 = [];
       for (j = o = 0, ref3 = column.length - 1; 0 <= ref3 ? o <= ref3 : o >= ref3; j = 0 <= ref3 ? ++o : --o) {
         widthLine -= wordWidth;
         h = null;
@@ -738,7 +738,7 @@ PreloadItemText = (function(superClass) {
         for (idx = p = 0, len1 = ref4.length; p < len1; idx = ++p) {
           c = ref4[idx];
           measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
-          _preTextStyle.call(this, context, idx + wordSum + 1, writingLength);
+          _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
           if (_isWordSmallJapanease.call(this, c)) {
             context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height));
             hl += measure.height;
@@ -759,10 +759,10 @@ PreloadItemText = (function(superClass) {
             }
           }
         }
-        results1.push(wordSum += column[j].length);
+        wordSum += column[j].length;
       }
-      return results1;
     }
+    return context.restore();
   };
 
   _calcWordMeasure = function(char, fontSize, fontFamily, wordSize) {
@@ -781,9 +781,6 @@ PreloadItemText = (function(superClass) {
     nContext.fillText(char, 0, 0);
     writedImage = nContext.getImageData(0, 0, wordSize, wordSize);
     mi = _measureImage.call(this, writedImage);
-    if (window.debug) {
-      console.log('char: ' + char + ' textWidth:' + mi.width + ' textHeight:' + mi.height);
-    }
     if (this._fontMeatureCache[fontSizeKey] == null) {
       this._fontMeatureCache[fontSizeKey] = {};
     }
@@ -862,9 +859,6 @@ PreloadItemText = (function(superClass) {
         h = height;
       }
       fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2);
-      if (debug) {
-        console.log(fontSize);
-      }
       this.fontSize = parseInt(fontSize / 1.5);
       if (this.fontSize < 1) {
         return this.fontSize = 1;

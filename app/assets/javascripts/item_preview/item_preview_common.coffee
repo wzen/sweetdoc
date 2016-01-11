@@ -48,13 +48,9 @@ class ItemPreviewCommon
       if jQuery(":hover")[jQuery(':hover').length - 1] == window.scrollInside.get(0)
         # 手動スクロールした場合のみメッセージ表示
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION)
-        if window.scrollContentsScrollTimer?
-          clearTimeout(window.scrollContentsScrollTimer)
-        window.scrollContentsScrollTimer = setTimeout( ->
-          PageValue.setWorktableDisplayPosition(top, left)
+        Common.saveDisplayPosition(top, left, false, ->
           FloatView.hide()
-          window.scrollContentsScrollTimer = null
-        , 500)
+        )
     )
     # ドラッグ描画イベント
     ItemPreviewHandwrite.initHandwrite()

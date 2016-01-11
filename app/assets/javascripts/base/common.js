@@ -384,7 +384,7 @@ Common = (function() {
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
-    var scrollContentsSize;
+    var _callback;
     if (immediate == null) {
       immediate = true;
     }
@@ -394,27 +394,73 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
-    if (withUpdateScreenEventVar) {
-      ScreenEvent.PrivateClass.setNowXAndY(left, top);
-    }
-    top -= scrollContentsSize.height * 0.5;
-    left -= scrollContentsSize.width * 0.5;
-    if (immediate) {
-      window.scrollContents.scrollTop(top);
-      window.scrollContents.scrollLeft(left);
-      if (callback != null) {
-        return callback();
-      }
-    } else {
-      return window.scrollContents.animate({
-        scrollTop: top,
-        scrollLeft: left
-      }, 500, function() {
+    _callback = function() {
+      var scrollContentsSize;
+      scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
+      top -= scrollContentsSize.height * 0.5;
+      left -= scrollContentsSize.width * 0.5;
+      if (immediate) {
+        window.scrollContents.scrollTop(top);
+        window.scrollContents.scrollLeft(left);
         if (callback != null) {
           return callback();
         }
-      });
+      } else {
+        return window.scrollContents.animate({
+          scrollTop: top,
+          scrollLeft: left
+        }, 500, function() {
+          if (callback != null) {
+            return callback();
+          }
+        });
+      }
+    };
+    if (withUpdateScreenEventVar) {
+      return Common.saveDisplayPosition(top, left, immediate, (function(_this) {
+        return function() {
+          return _callback.call(_this);
+        };
+      })(this));
+    } else {
+      return _callback.call(this);
+    }
+  };
+
+  Common.saveDisplayPosition = function(top, left, immediate, callback) {
+    var _save;
+    if (immediate == null) {
+      immediate = true;
+    }
+    if (callback == null) {
+      callback = null;
+    }
+    _save = function() {
+      if (typeof ScreenEvent !== "undefined" && ScreenEvent !== null) {
+        ScreenEvent.PrivateClass.setNowXAndY(left, top);
+      }
+      if (window.isWorkTable) {
+        PageValue.setWorktableDisplayPosition(top, left);
+      }
+      LocalStorage.saveAllPageValues();
+      if (callback != null) {
+        return callback();
+      }
+    };
+    if (immediate) {
+      return _save.call(this);
+    } else {
+      if (window.scrollContentsScrollTimer != null) {
+        clearTimeout(window.scrollContentsScrollTimer);
+      }
+      return window.scrollContentsScrollTimer = setTimeout(function() {
+        return setTimeout((function(_this) {
+          return function() {
+            _save.call(_this);
+            return window.scrollContentsScrollTimer = null;
+          };
+        })(this), 0);
+      }, 500);
     }
   };
 

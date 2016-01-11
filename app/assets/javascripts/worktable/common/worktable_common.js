@@ -403,18 +403,9 @@ WorktableCommon = (function() {
       left = window.scrollContents.scrollLeft() + scrollContentsSize.width * 0.5;
       if (jQuery(":hover")[jQuery(':hover').length - 1] === window.scrollInside.get(0)) {
         FloatView.show(FloatView.scrollMessage(top, left), FloatView.Type.DISPLAY_POSITION);
-        if (window.scrollContentsScrollTimer != null) {
-          clearTimeout(window.scrollContentsScrollTimer);
-        }
-        return window.scrollContentsScrollTimer = setTimeout(function() {
-          return setTimeout(function() {
-            FloatView.hide();
-            PageValue.setWorktableDisplayPosition(top, left);
-            ScreenEvent.PrivateClass.setNowXAndY(top, left);
-            LocalStorage.saveAllPageValues();
-            return window.scrollContentsScrollTimer = null;
-          }, 0);
-        }, 500);
+        return Common.saveDisplayPosition(top, left, false, function() {
+          return FloatView.hide();
+        });
       }
     });
     $('.dropdown-toggle').dropdown();
