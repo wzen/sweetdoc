@@ -329,6 +329,9 @@ class PreloadItemText extends CanvasItemBase
         callback()
     )
 
+  @isJapanease = (c) ->
+    return c.charCodeAt(0) >= 256
+
   changeText: (opt) ->
     opa = opt.progress / opt.progressMax
     canvas = document.getElementById(@canvasElementId())
@@ -419,37 +422,51 @@ class PreloadItemText extends CanvasItemBase
       context.restore()
     _drawBArc = ->
       # 円 破線
+
+      # 調整
+      diff = 3.0
       context.save()
-      context.beginPath()
       context.translate(width * 0.5, height * 0.5)
-      per = Math.PI * 2 / 360
+      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
+      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+      per = Math.PI * 2 / 100
       if width > height
         context.scale(width / height, 1)
         sum = 0
         x = 0
         while sum < Math.PI * 2
-          l = ((2 * Math.cos(x)) + 1) * per
+          context.beginPath()
+          l = ((2 * Math.abs(Math.cos(x))) + 1) * per
           y = x + l
-          context.arc(0, 0, height * 0.5, x, y)
+          context.arc(0, 0, height * 0.5 - diff, x, y)
+          context.fill()
+          context.stroke()
           sum += l
+          x = y
           # 空白
-          l = ((1 * Math.cos(x)) + 1) * per
+          l = ((1 * Math.abs(Math.cos(x))) + 1) * per
           y = x + l
           sum += l
+          x = y
+
       else
         context.scale(1, height / width)
         sum = 0
         x = 0
         while sum < Math.PI * 2
-          l = ((2 * Math.sin(x)) + 1) * per
+          context.beginPath()
+          l = ((2 * Math.abs(Math.sin(x))) + 1) * per
           y = x + l
-          context.arc(0, 0, height * 0.5, x, y)
+          context.arc(0, 0, width * 0.5 - diff, x, y)
+          context.fill()
+          context.stroke()
           sum += l
+          x = y
           # 空白
-          l = ((1 * Math.sin(x)) + 1) * per
+          l = ((1 * Math.abs(Math.sin(x))) + 1) * per
           y = x + l
           sum += l
-        context.arc(0, 0, width * 0.5, 0, Math.PI * 2)
+          x = y
       context.restore()
 
     _drawBRect = ->
@@ -579,10 +596,11 @@ class PreloadItemText extends CanvasItemBase
 
   _drawText = (context, text, width, height, writingLength = text.length) ->
     wordWidth = context.measureText('あ').width
+
     _calcSize = (columnText) ->
       hasJapanease = false
       for i in [0..(columnText.length - 1)]
-        if columnText.charAt(i).charCodeAt(0) >= 256
+        if PreloadItemText.isJapanease(columnText.charAt(i))
           hasJapanease = true
           break
       if hasJapanease
@@ -710,7 +728,10 @@ class PreloadItemText extends CanvasItemBase
             hl += measure.width
           else
             context.fillText(c, widthLine, h + wordWidth + hl)
-            hl += measure.height
+            if PreloadItemText.isJapanease(c)
+              hl += wordWidth
+            else
+              hl += measure.height
         wordSum += column[j].length
 
   _calcWordMeasure = (char, fontSize, fontFamily, wordSize) ->
@@ -774,7 +795,7 @@ class PreloadItemText extends CanvasItemBase
     return char.match(regex)
 
   _isWordNeedRotate = (char) ->
-    if char.charCodeAt(0) < 256
+    if !PreloadItemText.isJapanease(char)
       # 英字は回転
       return true
 
