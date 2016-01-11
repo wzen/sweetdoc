@@ -305,6 +305,10 @@ class PreloadItemText extends CanvasItemBase
       height = canvas.height
       $(canvas).css({width: "#{height}px", height: "#{width}px"})
       $(canvas).attr({width: height, height: width})
+      w = @itemSize.w
+      h = @itemSize.h
+      @itemSize.w = h
+      @itemSize.h = w
     super(varName, value)
 
   # マウスアップ時の描画イベント
@@ -774,7 +778,7 @@ class PreloadItemText extends CanvasItemBase
       # 英字は回転
       return true
 
-    list = 'ー＝'
+    list = 'ー＝〜・'
     regex = new RegExp(list.split('').join('|'))
     return char.match(regex)
 

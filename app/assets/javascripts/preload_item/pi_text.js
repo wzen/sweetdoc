@@ -266,7 +266,7 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.setInstanceVar = function(varName, value) {
-    var canvas, height, width;
+    var canvas, h, height, w, width;
     if (varName === 'isDrawHorizontal' && this.isDrawHorizontal !== value) {
       canvas = document.getElementById(this.canvasElementId());
       width = canvas.width;
@@ -279,6 +279,10 @@ PreloadItemText = (function(superClass) {
         width: height,
         height: width
       });
+      w = this.itemSize.w;
+      h = this.itemSize.h;
+      this.itemSize.w = h;
+      this.itemSize.h = w;
     }
     return PreloadItemText.__super__.setInstanceVar.call(this, varName, value);
   };
@@ -831,7 +835,7 @@ PreloadItemText = (function(superClass) {
     if (char.charCodeAt(0) < 256) {
       return true;
     }
-    list = 'ー＝';
+    list = 'ー＝〜・';
     regex = new RegExp(list.split('').join('|'));
     return char.match(regex);
   };
