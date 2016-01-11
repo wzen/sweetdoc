@@ -4,8 +4,8 @@
     <div class="forms">
       <div>
         <select class="<%= var_name + '_select' %>">
-          <% if value['options'].present? %>
-              <% value['options'].each do |o| %>
+          <% if value[Const::ItemActionPropertiesKey::OPTIONS].present? %>
+              <% value[Const::ItemActionPropertiesKey::OPTIONS].each do |o| %>
                   <% if o.is_a?(Hash) %>
                       <option value="<%= o['value'] %>"><%= o['name'] %></option>
                   <% elsif o.is_a?(Array) %>

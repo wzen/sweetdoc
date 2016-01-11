@@ -44,7 +44,7 @@ class Const
     CSS = 1
   end
 
-  # アイテムアクションの引数
+  # アイテムオプション種別
   class ItemDesignOptionType
     # @property [Int] BOOLEAN 真偽
     BOOLEAN = 'boolean'
@@ -60,6 +60,11 @@ class Const
     SELECT_FILE = 'select_file'
     # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
     DESIGN_TOOL = 'design_tool'
+  end
+
+  # アイテムオプションテンプレート種別
+  class ItemOptionTempType
+    FONTFAMILY = 'fontFamily'
   end
 
   # アクションイベント種別
@@ -386,6 +391,7 @@ class Const
   class ItemActionPropertiesKey
     TYPE = 'type'
     METHODS = 'methods'
+    TEMP = 'temp'
     DEFAULT_EVENT = 'defaultEvent'
     METHOD = 'method'
     DEFAULT_METHOD = 'defaultMethod'
