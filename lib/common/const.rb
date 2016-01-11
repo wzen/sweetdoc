@@ -48,8 +48,8 @@ class Const
   class ItemDesignOptionType
     # @property [Int] BOOLEAN 真偽
     BOOLEAN = 'boolean'
-    # @property [Int] INTEGER 数値
-    INTEGER = 'integer'
+    # @property [Int] NUMBER 数値
+    NUMBER = 'number'
     # @property [Int] STRING 文字列
     STRING = 'string'
     # @property [Int] COLOR 色
@@ -509,6 +509,10 @@ class Const
       LEFT = 1
       CENTER = 2
       RIGHT = 3
+    end
+    class ShowAnimationType
+      POPUP = 1
+      BLUR = 2
     end
   end
 

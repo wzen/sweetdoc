@@ -50,6 +50,16 @@ PreloadItemText = (function(superClass) {
       return WordAlign;
 
     })();
+    PreloadItemText.ShowAnimationType = (function() {
+      function ShowAnimationType() {}
+
+      ShowAnimationType.POPUP = constant.PreloadItemText.ShowAnimationType.POPUP;
+
+      ShowAnimationType.BLUR = constant.PreloadItemText.ShowAnimationType.BLUR;
+
+      return ShowAnimationType;
+
+    })();
   }
 
   PreloadItemText.actionProperties = {
@@ -65,6 +75,37 @@ PreloadItemText = (function(superClass) {
         type: 'color',
         ja: {
           name: '文字色'
+        }
+      },
+      showWithAnimation: {
+        name: 'Show with animation',
+        "default": false,
+        type: 'boolean',
+        openChildrenValue: true,
+        ja: {
+          name: 'アニメーション表示'
+        },
+        children: {
+          showAnimetionType: {
+            name: 'AnimationType',
+            type: 'select',
+            options: [
+              {
+                name: 'Popup',
+                value: PreloadItemText.ShowAnimationType.POPUP
+              }, {
+                name: 'Blur',
+                value: PreloadItemText.ShowAnimationType.BLUR
+              }
+            ]
+          },
+          showAnimationDuration: {
+            type: 'number',
+            name: "Animation Duration",
+            min: 0.1,
+            max: 3.0,
+            stepValue: 0.1
+          }
         }
       },
       isDrawHorizontal: {
@@ -118,7 +159,7 @@ PreloadItemText = (function(superClass) {
               balloonRadius: {
                 name: 'BalloonRadius',
                 "default": 30,
-                type: 'integer',
+                type: 'number',
                 min: 1,
                 max: 100,
                 ja: {
@@ -144,7 +185,7 @@ PreloadItemText = (function(superClass) {
         openChildrenValue: true,
         children: {
           fontSize: {
-            type: 'integer',
+            type: 'number',
             name: "Font Size",
             min: 1,
             max: 100

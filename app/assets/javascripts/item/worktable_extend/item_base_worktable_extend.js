@@ -517,7 +517,7 @@ itemBaseWorktableExtend = {
       results = [];
       for (varName in ref) {
         value = ref[varName];
-        if (value.type === Constant.ItemDesignOptionType.INTEGER) {
+        if (value.type === Constant.ItemDesignOptionType.NUMBER) {
           results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max));
         } else if (value.type === Constant.ItemDesignOptionType.STRING) {
           results.push(this.settingModifiableString(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));

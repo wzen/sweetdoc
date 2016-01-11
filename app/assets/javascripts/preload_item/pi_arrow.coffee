@@ -62,7 +62,7 @@ class PreloadItemArrow extends CanvasItemBase
         arrowWidth: {
           name: "Arrow's width"
           default: 37
-          type: 'integer'
+          type: 'number'
           min: 1
           max: 99
           ja: {
@@ -75,7 +75,7 @@ class PreloadItemArrow extends CanvasItemBase
           modifiables: {
             arrowWidth: {
               name: "Arrow's width"
-              type: 'integer'
+              type: 'number'
               min: 1
               max: 99
               varAutoChange: true

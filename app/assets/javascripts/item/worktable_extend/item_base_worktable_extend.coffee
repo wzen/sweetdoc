@@ -448,7 +448,7 @@ itemBaseWorktableExtend =
     designConfigRoot = $('#' + @getDesignConfigId())
     if @constructor.actionPropertiesModifiableVars()?
       for varName, value of @constructor.actionPropertiesModifiableVars()
-        if value.type == Constant.ItemDesignOptionType.INTEGER
+        if value.type == Constant.ItemDesignOptionType.NUMBER
           @settingModifiableVarSlider(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max)
         else if value.type == Constant.ItemDesignOptionType.STRING
           @settingModifiableString(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])

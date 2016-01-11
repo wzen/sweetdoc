@@ -153,7 +153,7 @@ class ConfigMenu
     dir = is_design ? 'design' : 'event'
     modifiables.each do |var, v|
       temp_name = ''
-      if v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::INTEGER
+      if v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::NUMBER
         temp_name = 'slider'
       elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::STRING
         temp_name = 'textbox'

@@ -18,6 +18,9 @@ class PreloadItemText extends CanvasItemBase
       @LEFT = constant.PreloadItemText.WordAlign.LEFT
       @CENTER = constant.PreloadItemText.WordAlign.CENTER
       @RIGHT = constant.PreloadItemText.WordAlign.RIGHT
+    class @ShowAnimationType
+      @POPUP = constant.PreloadItemText.ShowAnimationType.POPUP
+      @BLUR = constant.PreloadItemText.ShowAnimationType.BLUR
 
   @actionProperties =
   {
@@ -29,6 +32,32 @@ class PreloadItemText extends CanvasItemBase
         type: 'color'
         ja: {
           name: '文字色'
+        }
+      }
+      showWithAnimation: {
+        name: 'Show with animation'
+        default: false
+        type: 'boolean'
+        openChildrenValue: true
+        ja: {
+          name: 'アニメーション表示'
+        }
+        children: {
+          showAnimetionType: {
+            name: 'AnimationType'
+            type: 'select'
+            options: [
+              {name: 'Popup', value: @ShowAnimationType.POPUP}
+              {name: 'Blur', value: @ShowAnimationType.BLUR}
+            ]
+          }
+          showAnimationDuration: {
+            type: 'number'
+            name: "Animation Duration"
+            min: 0.1
+            max: 3.0
+            stepValue: 0.1
+          }
         }
       }
       isDrawHorizontal: {
@@ -69,7 +98,7 @@ class PreloadItemText extends CanvasItemBase
               balloonRadius: {
                 name: 'BalloonRadius'
                 default: 30
-                type: 'integer'
+                type: 'number'
                 min: 1
                 max: 100
                 ja: {
@@ -95,7 +124,7 @@ class PreloadItemText extends CanvasItemBase
         openChildrenValue: true
         children: {
           fontSize: {
-            type: 'integer'
+            type: 'number'
             name: "Font Size"
             min: 1
             max: 100
