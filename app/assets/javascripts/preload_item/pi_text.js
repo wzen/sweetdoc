@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _getCircumPos, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _setTextToCanvas, _settingTextDbclickEvent, _showInputModal, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -203,6 +203,15 @@ PreloadItemText = (function(superClass) {
     }
   };
 
+  PreloadItemText.getCircumPos = {
+    x: function(d, r, cx) {
+      return Math.cos(Math.PI / 180 * d) * r + cx;
+    },
+    y: function(d, r, cy) {
+      return Math.sin(Math.PI / 180 * d) * r + cy;
+    }
+  };
+
   function PreloadItemText(cood) {
     if (cood == null) {
       cood = null;
@@ -368,17 +377,6 @@ PreloadItemText = (function(superClass) {
     return context.restore();
   };
 
-  _getCircumPos = function() {
-    return {
-      x: function(d, r, cx) {
-        return Math.cos(Math.PI / 180 * d) * r + cx;
-      },
-      y: function(d, r, cy) {
-        return Math.sin(Math.PI / 180 * d) * r + cy;
-      }
-    };
-  };
-
   _getRandomInt = function(max, min) {
     return Math.floor(Math.random() * (max - min)) + min;
   };
@@ -390,7 +388,6 @@ PreloadItemText = (function(superClass) {
     }
     _drawArc = function() {
       var diff;
-      context.save();
       context.beginPath();
       context.translate(width * 0.5, height * 0.5);
       diff = 3.0;
@@ -404,20 +401,17 @@ PreloadItemText = (function(superClass) {
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
       context.fill();
-      context.stroke();
-      return context.restore();
+      return context.stroke();
     };
     _drawRect = function() {
-      context.save();
       context.beginPath();
-      context.fillStyle = 'rgba(0, 0, 255, 0.5)';
-      context.fillRect(0, 0, width, height);
-      return context.restore();
+      context.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      return context.fillRect(0, 0, width, height);
     };
     _drawBArc = function() {
-      var diff, l, per, sum, x, y;
+      var diff, l, per, results, results1, sum, x, y;
       diff = 3.0;
-      context.save();
       context.translate(width * 0.5, height * 0.5);
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
@@ -426,6 +420,7 @@ PreloadItemText = (function(superClass) {
         context.scale(width / height, 1);
         sum = 0;
         x = 0;
+        results = [];
         while (sum < Math.PI * 2) {
           context.beginPath();
           l = ((2 * Math.abs(Math.cos(x))) + 1) * per;
@@ -438,12 +433,14 @@ PreloadItemText = (function(superClass) {
           l = ((1 * Math.abs(Math.cos(x))) + 1) * per;
           y = x + l;
           sum += l;
-          x = y;
+          results.push(x = y);
         }
+        return results;
       } else {
         context.scale(1, height / width);
         sum = 0;
         x = 0;
+        results1 = [];
         while (sum < Math.PI * 2) {
           context.beginPath();
           l = ((2 * Math.abs(Math.sin(x))) + 1) * per;
@@ -456,15 +453,16 @@ PreloadItemText = (function(superClass) {
           l = ((1 * Math.abs(Math.sin(x))) + 1) * per;
           y = x + l;
           sum += l;
-          x = y;
+          results1.push(x = y);
         }
+        return results1;
       }
-      return context.restore();
     };
     _drawBRect = function() {
       var _draw, dashLength;
       context.save();
       dashLength = 5;
+      context.beginPath();
       _draw = function(sx, sy, ex, ey) {
         var deltaX, deltaY, i, k, numDashes, ref, results;
         deltaX = ex - sx;
@@ -484,44 +482,41 @@ PreloadItemText = (function(superClass) {
       _draw.call(this, width, 0, width, height);
       _draw.call(this, width, height, 0, height);
       _draw.call(this, 0, height, 0, 0);
+      context.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      context.fillRect(0, 0, width, height);
+      context.stroke();
       return context.restore();
     };
     _drawShout = (function(_this) {
       return function() {
-        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, fillStyle, i, k, lineWidth, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, strokeStyle;
+        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
         num = 18;
-        radiusX = 120;
-        radiusY = 80;
-        num = 18;
-        cx = 120;
-        cy = 100;
+        radiusX = width / 2;
+        radiusY = height / 2;
+        cx = width / 2;
+        cy = height / 2;
         punkLineMax = 30;
         punkLineMin = 20;
-        fillStyle = 'rgba(255,255,255,0.9)';
-        strokeStyle = 'black';
-        lineWidth = 3;
         deg = 0;
         addDeg = 360 / num;
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
-        context.fillStyle = fillStyle;
-        context.strokeStyle = strokeStyle;
-        context.lineWidth = lineWidth;
+        context.fillStyle = 'rgba(255,255,255,0.9)';
+        context.strokeStyle = 'black';
+        context.lineWidth = 3;
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          if (_this.balloonValue['balloonRandomInt'] == null) {
-            _this.balloonValue['balloonRandomInt'] = _getRandomInt.call(_this, punkLineMax, punkLineMin);
-          }
-          random = _this.balloonValue['balloonRandomInt'];
-          beginX = _getCircumPos.x(deg, radiusX, cx);
-          beginY = _getCircumPos.y(deg, radiusY, cy);
-          endX = _getCircumPos.x(deg + addDeg, radiusX, cx);
-          endY = _getCircumPos.y(deg + addDeg, radiusY, cy);
-          cp1x = _getCircumPos.x(deg, radiusX - random, cx);
-          cp1y = _getCircumPos.y(deg, radiusY - random, cy);
-          cp2x = _getCircumPos.x(deg + addDeg, radiusX - random, cx);
-          cp2y = _getCircumPos.y(deg + addDeg, radiusY - random, cy);
+          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx);
+          beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
+          endX = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx);
+          endY = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy);
+          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX - random, cx);
+          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY - random, cy);
+          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random, cx);
+          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random, cy);
           if (i === 0) {
             context.arcTo(beginX, beginY, endX, endY, punkLineMax);
           }
@@ -533,40 +528,34 @@ PreloadItemText = (function(superClass) {
     })(this);
     _drawThink = (function(_this) {
       return function() {
-        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, fillStyle, i, k, lineWidth, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref, strokeStyle;
-        num = 18;
-        radiusX = 120;
-        radiusY = 80;
-        num = 18;
-        cx = 120;
-        cy = 100;
+        var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
+        num = 10;
+        diff = 40.0;
+        radiusX = (width - diff) / 2;
+        radiusY = (height - diff) / 2;
+        cx = width / 2;
+        cy = height / 2;
         punkLineMax = 30;
         punkLineMin = 20;
-        fillStyle = 'rgba(255,255,255,0.9)';
-        strokeStyle = 'black';
-        lineWidth = 3;
         deg = 0;
         addDeg = 360 / num;
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
-        context.fillStyle = fillStyle;
-        context.strokeStyle = strokeStyle;
-        context.lineWidth = lineWidth;
+        context.fillStyle = 'rgba(255,255,255,0.9)';
+        context.strokeStyle = 'black';
+        context.lineWidth = 3;
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          if (_this.balloonValue['balloonRandomInt'] == null) {
-            _this.balloonValue['balloonRandomInt'] = _getRandomInt.call(_this, punkLineMax, punkLineMin);
-          }
-          random = _this.balloonValue['balloonRandomInt'];
-          beginX = _getCircumPos.x(deg, radiusX, cx);
-          beginY = _getCircumPos.y(deg, radiusY, cy);
-          endX = _getCircumPos.x(deg + addDeg, radiusX, cx);
-          endY = _getCircumPos.y(deg + addDeg, radiusY, cy);
-          cp1x = _getCircumPos.x(deg, radiusX + random, cx);
-          cp1y = _getCircumPos.y(deg, radiusY + random, cy);
-          cp2x = _getCircumPos.x(deg + addDeg, radiusX + random, cx);
-          cp2y = _getCircumPos.y(deg + addDeg, radiusY + random, cy);
+          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx);
+          beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
+          endX = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx);
+          endY = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy);
+          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random, cx);
+          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random, cy);
+          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random, cx);
+          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random, cy);
           if (i === 0) {
             context.arcTo(beginX, beginY, endX, endY, punkLineMax);
           }
@@ -576,19 +565,21 @@ PreloadItemText = (function(superClass) {
         return context.stroke();
       };
     })(this);
+    context.save();
     if (this.balloonType === this.constructor.BalloonType.ARC) {
-      return _drawArc.call(this);
+      _drawArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.RECT) {
-      return _drawRect.call(this);
+      _drawRect.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.BROKEN_ARC) {
-      return _drawBArc.call(this);
+      _drawBArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.BROKEN_RECT) {
-      return _drawBRect.call(this);
+      _drawBRect.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.SHOUT) {
-      return _drawShout.call(this);
+      _drawShout.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.THINK) {
-      return _drawThink.call(this);
+      _drawThink.call(this);
     }
+    return context.restore();
   };
 
   _drawText = function(context, text, width, height, writingLength) {

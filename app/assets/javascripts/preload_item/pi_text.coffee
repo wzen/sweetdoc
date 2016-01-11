@@ -249,6 +249,14 @@ class PreloadItemText extends CanvasItemBase
     }
   }
 
+  @getCircumPos =
+    {
+      x: (d, r, cx) ->
+        return Math.cos(Math.PI / 180 * d) * r + cx
+      y: (d, r, cy) ->
+        return Math.sin(Math.PI / 180 * d) * r + cy
+    }
+
   # コンストラクタ
   # @param [Array] cood 座標
   constructor: (cood = null)->
@@ -378,14 +386,6 @@ class PreloadItemText extends CanvasItemBase
     _drawText.call(@, context, text, canvas.width, canvas.height, writingLength)
     context.restore()
 
-  _getCircumPos = ->
-    {
-     x: (d, r, cx) ->
-       return Math.cos(Math.PI / 180 * d) * r + cx
-     y: (d, r, cy) ->
-       return Math.sin(Math.PI / 180 * d) * r + cy
-    }
-
   _getRandomInt = (max, min) ->
     return Math.floor(Math.random() * (max - min)) + min
 
@@ -395,7 +395,6 @@ class PreloadItemText extends CanvasItemBase
 
     _drawArc = ->
       # 円
-      context.save()
       context.beginPath()
       context.translate(width * 0.5, height * 0.5)
       # 調整
@@ -411,21 +410,20 @@ class PreloadItemText extends CanvasItemBase
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
       context.fill()
       context.stroke()
-      context.restore()
+
     _drawRect = ->
       # 四角
-      context.save()
       context.beginPath()
       # FIXME: 描画オプション追加
-      context.fillStyle = 'rgba(0, 0, 255, 0.5)';
+      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
+      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
       context.fillRect(0, 0, width, height);
-      context.restore()
+
     _drawBArc = ->
       # 円 破線
 
       # 調整
       diff = 3.0
-      context.save()
       context.translate(width * 0.5, height * 0.5)
       context.fillStyle = 'rgba(255, 255, 255, 0.5)'
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
@@ -467,12 +465,12 @@ class PreloadItemText extends CanvasItemBase
           y = x + l
           sum += l
           x = y
-      context.restore()
 
     _drawBRect = ->
       context.save()
       # 四角 破線
       dashLength = 5
+      context.beginPath()
       _draw = (sx, sy, ex, ey) ->
         deltaX = ex - sx
         deltaY = ey - sy
@@ -487,45 +485,43 @@ class PreloadItemText extends CanvasItemBase
       _draw.call(@, width, 0, width, height)
       _draw.call(@, width, height, 0, height)
       _draw.call(@, 0, height, 0, 0)
+      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
+      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+      context.fillRect(0, 0, width, height);
+      context.stroke();
       context.restore()
 
     _drawShout = =>
       # 叫び
       num = 18
-      radiusX = 120
-      radiusY = 80
-      num = 18
-      cx = 120
-      cy = 100
+      radiusX = width / 2
+      radiusY = height / 2
+      cx = width / 2
+      cy = height / 2
       punkLineMax = 30
       punkLineMin = 20
-      fillStyle = 'rgba(255,255,255,0.9)'
-      strokeStyle = 'black'
-      lineWidth = 3      
       deg = 0
       addDeg = 360 / num
       # 共通設定
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
-      context.fillStyle = fillStyle
-      context.strokeStyle = strokeStyle
-      context.lineWidth = lineWidth
-      for i in [0..(num-1)]
+      context.fillStyle = 'rgba(255,255,255,0.9)'
+      context.strokeStyle = 'black'
+      context.lineWidth = 3
+      for i in [0..(num - 1)]
         deg += addDeg
-        if !@balloonValue['balloonRandomInt']?
-          @balloonValue['balloonRandomInt'] = _getRandomInt.call(@, punkLineMax, punkLineMin)
-        random = @balloonValue['balloonRandomInt']
+        random = _getRandomInt.call(@, punkLineMax, punkLineMin)
         # 始点・終点
-        beginX = _getCircumPos.x(deg, radiusX, cx)
-        beginY = _getCircumPos.y(deg, radiusY, cy)
-        endX   = _getCircumPos.x(deg + addDeg, radiusX, cx)
-        endY   = _getCircumPos.y(deg + addDeg, radiusY, cy)
+        beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx)
+        beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy)
+        endX   = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx)
+        endY   = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy)
         # 制御値
-        cp1x = _getCircumPos.x(deg, radiusX - random, cx)
-        cp1y = _getCircumPos.y(deg, radiusY - random, cy)
-        cp2x = _getCircumPos.x(deg + addDeg, radiusX - random, cx)
-        cp2y = _getCircumPos.y(deg + addDeg, radiusY - random, cy)
+        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX - random, cx)
+        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY - random, cy)
+        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random, cx)
+        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random, cy)
 
         # 開始点と最終点のズレを調整する
         if i == 0
@@ -537,41 +533,37 @@ class PreloadItemText extends CanvasItemBase
 
     _drawThink = =>
       # 考え中
-      num = 18
-      radiusX = 120
-      radiusY = 80
-      num = 18
-      cx = 120
-      cy = 100
+      num = 10
+      diff = 40.0
+      radiusX = (width - diff) / 2
+      radiusY = (height - diff) / 2
+      cx = (width) / 2
+      cy = (height) / 2
       punkLineMax = 30
       punkLineMin = 20
-      fillStyle = 'rgba(255,255,255,0.9)'
-      strokeStyle = 'black'
-      lineWidth = 3
       deg = 0
       addDeg = 360 / num
       # 共通設定
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
-      context.fillStyle = fillStyle
-      context.strokeStyle = strokeStyle
-      context.lineWidth = lineWidth
-      for i in [0..(num-1)]
+      context.fillStyle = 'rgba(255,255,255,0.9)'
+      context.strokeStyle = 'black'
+      context.lineWidth = 3
+
+      for i in [0..(num - 1)]
         deg += addDeg
-        if !@balloonValue['balloonRandomInt']?
-          @balloonValue['balloonRandomInt'] = _getRandomInt.call(@, punkLineMax, punkLineMin)
-        random = @balloonValue['balloonRandomInt']
+        random = _getRandomInt.call(@, punkLineMax, punkLineMin)
         # 始点・終点
-        beginX = _getCircumPos.x(deg, radiusX, cx)
-        beginY = _getCircumPos.y(deg, radiusY, cy)
-        endX   = _getCircumPos.x(deg + addDeg, radiusX, cx)
-        endY   = _getCircumPos.y(deg + addDeg, radiusY, cy)
+        beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx)
+        beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy)
+        endX   = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx)
+        endY   = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy)
         # 制御値
-        cp1x = _getCircumPos.x(deg, radiusX + random, cx)
-        cp1y = _getCircumPos.y(deg, radiusY + random, cy)
-        cp2x = _getCircumPos.x(deg + addDeg, radiusX + random, cx)
-        cp2y = _getCircumPos.y(deg + addDeg, radiusY + random, cy)
+        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random, cx)
+        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random, cy)
+        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random, cx)
+        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random, cy)
 
         # 開始点と最終点のズレを調整する
         if i == 0
@@ -581,6 +573,7 @@ class PreloadItemText extends CanvasItemBase
       context.fill()
       context.stroke()
 
+    context.save()
     if @balloonType == @constructor.BalloonType.ARC
       _drawArc.call(@)
     else if @balloonType == @constructor.BalloonType.RECT
@@ -593,6 +586,7 @@ class PreloadItemText extends CanvasItemBase
       _drawShout.call(@)
     else if @balloonType == @constructor.BalloonType.THINK
       _drawThink.call(@)
+    context.restore()
 
   _drawText = (context, text, width, height, writingLength = text.length) ->
     wordWidth = context.measureText('あ').width
