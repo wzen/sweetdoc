@@ -384,7 +384,7 @@ Common = (function() {
   };
 
   Common.updateScrollContentsPosition = function(top, left, immediate, withUpdateScreenEventVar, callback) {
-    var _callback;
+    var scrollContentsSize;
     if (immediate == null) {
       immediate = true;
     }
@@ -394,36 +394,27 @@ Common = (function() {
     if (callback == null) {
       callback = null;
     }
-    _callback = function() {
-      var scrollContentsSize;
-      scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
-      top -= scrollContentsSize.height * 0.5;
-      left -= scrollContentsSize.width * 0.5;
-      if (immediate) {
-        window.scrollContents.scrollTop(top);
-        window.scrollContents.scrollLeft(left);
+    if (withUpdateScreenEventVar) {
+      Common.saveDisplayPosition(top, left, true);
+    }
+    scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
+    top -= scrollContentsSize.height * 0.5;
+    left -= scrollContentsSize.width * 0.5;
+    if (immediate) {
+      window.scrollContents.scrollTop(top);
+      window.scrollContents.scrollLeft(left);
+      if (callback != null) {
+        return callback();
+      }
+    } else {
+      return window.scrollContents.animate({
+        scrollTop: top,
+        scrollLeft: left
+      }, 500, function() {
         if (callback != null) {
           return callback();
         }
-      } else {
-        return window.scrollContents.animate({
-          scrollTop: top,
-          scrollLeft: left
-        }, 500, function() {
-          if (callback != null) {
-            return callback();
-          }
-        });
-      }
-    };
-    if (withUpdateScreenEventVar) {
-      return Common.saveDisplayPosition(top, left, immediate, (function(_this) {
-        return function() {
-          return _callback.call(_this);
-        };
-      })(this));
-    } else {
-      return _callback.call(this);
+      });
     }
   };
 

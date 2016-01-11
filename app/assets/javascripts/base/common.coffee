@@ -284,33 +284,27 @@ class Common
   # @param [Float] top Y中央値
   # @param [Float] left X中央値
   @updateScrollContentsPosition: (top, left, immediate = true, withUpdateScreenEventVar = true, callback = null) ->
+    if withUpdateScreenEventVar
+      Common.saveDisplayPosition(top, left, true)
 
-    _callback = ->
-      scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
-      top -= scrollContentsSize.height * 0.5
-      left -= scrollContentsSize.width * 0.5
-      if immediate
-        window.scrollContents.scrollTop(top)
-        window.scrollContents.scrollLeft(left)
+    scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
+    top -= scrollContentsSize.height * 0.5
+    left -= scrollContentsSize.width * 0.5
+    if immediate
+      window.scrollContents.scrollTop(top)
+      window.scrollContents.scrollLeft(left)
+      if callback?
+        callback()
+    else
+      window.scrollContents.animate(
+        {
+          scrollTop: top
+          scrollLeft: left
+        }
+      , 500, ->
         if callback?
           callback()
-      else
-        window.scrollContents.animate(
-          {
-            scrollTop: top
-            scrollLeft: left
-          }
-        , 500, ->
-          if callback?
-            callback()
-        )
-
-    if withUpdateScreenEventVar
-      Common.saveDisplayPosition(top, left, immediate, =>
-        _callback.call(@)
       )
-    else
-      _callback.call(@)
 
   @saveDisplayPosition = (top, left, immediate = true, callback = null) ->
     _save = ->
