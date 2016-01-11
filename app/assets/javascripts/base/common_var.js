@@ -14,7 +14,7 @@ CommonVar = (function() {
   };
 
   CommonVar.initCommonVar = function() {
-    window.appName = 'SugerDoc';
+    window.appName = 'SweetDoc';
     window.scrollViewSize = 30000;
     return window.pageNumMax = 10000;
   };
