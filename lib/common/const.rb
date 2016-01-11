@@ -496,8 +496,8 @@ class Const
       RECT = 2
       BROKEN_ARC = 3
       BROKEN_RECT = 4
-      SHOUT = 5
-      THINK = 6
+      FLASH = 5
+      CLOUD = 6
     end
     class WordAlign
       LEFT = 1

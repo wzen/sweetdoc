@@ -31,9 +31,9 @@ PreloadItemText = (function(superClass) {
 
       BalloonType.BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT;
 
-      BalloonType.SHOUT = constant.PreloadItemText.BalloonType.SHOUT;
+      BalloonType.FLASH = constant.PreloadItemText.BalloonType.FLASH;
 
-      BalloonType.THINK = constant.PreloadItemText.BalloonType.THINK;
+      BalloonType.CLOUD = constant.PreloadItemText.BalloonType.CLOUD;
 
       return BalloonType;
 
@@ -106,11 +106,11 @@ PreloadItemText = (function(superClass) {
                 name: 'Broken Rect',
                 value: PreloadItemText.BalloonType.BROKEN_RECT
               }, {
-                name: 'Shout',
-                value: PreloadItemText.BalloonType.SHOUT
+                name: 'FLASH',
+                value: PreloadItemText.BalloonType.FLASH
               }, {
-                name: 'Think',
-                value: PreloadItemText.BalloonType.THINK
+                name: 'Cloud',
+                value: PreloadItemText.BalloonType.CLOUD
               }
             ],
             openChildrenValue: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT],
@@ -505,7 +505,6 @@ PreloadItemText = (function(superClass) {
         context.lineCap = 'round';
         context.fillStyle = 'rgba(255,255,255,0.9)';
         context.strokeStyle = 'black';
-        context.lineWidth = 3;
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
           random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
@@ -513,10 +512,10 @@ PreloadItemText = (function(superClass) {
           beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
           endX = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx);
           endY = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy);
-          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX - random, cx);
-          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY - random, cy);
-          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random, cx);
-          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random, cy);
+          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX - random * 0.6, cx);
+          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY - random * 0.6, cy);
+          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random * 0.6, cx);
+          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random * 0.6, cy);
           if (i === 0) {
             context.arcTo(beginX, beginY, endX, endY, punkLineMax);
           }
@@ -544,7 +543,6 @@ PreloadItemText = (function(superClass) {
         context.lineCap = 'round';
         context.fillStyle = 'rgba(255,255,255,0.9)';
         context.strokeStyle = 'black';
-        context.lineWidth = 3;
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
           random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
@@ -552,10 +550,10 @@ PreloadItemText = (function(superClass) {
           beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
           endX = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx);
           endY = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy);
-          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random, cx);
-          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random, cy);
-          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random, cx);
-          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random, cy);
+          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random * 0.8, cx);
+          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random * 0.8, cy);
+          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.8, cx);
+          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.8, cy);
           if (i === 0) {
             context.arcTo(beginX, beginY, endX, endY, punkLineMax);
           }
@@ -574,9 +572,9 @@ PreloadItemText = (function(superClass) {
       _drawBArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.BROKEN_RECT) {
       _drawBRect.call(this);
-    } else if (this.balloonType === this.constructor.BalloonType.SHOUT) {
+    } else if (this.balloonType === this.constructor.BalloonType.FLASH) {
       _drawShout.call(this);
-    } else if (this.balloonType === this.constructor.BalloonType.THINK) {
+    } else if (this.balloonType === this.constructor.BalloonType.CLOUD) {
       _drawThink.call(this);
     }
     return context.restore();

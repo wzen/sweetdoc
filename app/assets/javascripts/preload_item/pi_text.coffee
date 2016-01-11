@@ -12,8 +12,8 @@ class PreloadItemText extends CanvasItemBase
       @RECT = constant.PreloadItemText.BalloonType.RECT
       @BROKEN_ARC = constant.PreloadItemText.BalloonType.BROKEN_ARC
       @BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT
-      @SHOUT = constant.PreloadItemText.BalloonType.SHOUT
-      @THINK = constant.PreloadItemText.BalloonType.THINK
+      @FLASH = constant.PreloadItemText.BalloonType.FLASH
+      @CLOUD = constant.PreloadItemText.BalloonType.CLOUD
     class @WordAlign
       @LEFT = constant.PreloadItemText.WordAlign.LEFT
       @CENTER = constant.PreloadItemText.WordAlign.CENTER
@@ -61,8 +61,8 @@ class PreloadItemText extends CanvasItemBase
               {name: 'Broken Arc', value: @BalloonType.BROKEN_ARC}
               {name: 'Rect', value: @BalloonType.RECT}
               {name: 'Broken Rect', value: @BalloonType.BROKEN_RECT}
-              {name: 'Shout', value: @BalloonType.SHOUT}
-              {name: 'Think', value: @BalloonType.THINK}
+              {name: 'FLASH', value: @BalloonType.FLASH}
+              {name: 'Cloud', value: @BalloonType.CLOUD}
             ]
             openChildrenValue: [@BalloonType.RECT, @BalloonType.BROKEN_RECT]
             children: {
@@ -508,7 +508,6 @@ class PreloadItemText extends CanvasItemBase
       context.lineCap = 'round'
       context.fillStyle = 'rgba(255,255,255,0.9)'
       context.strokeStyle = 'black'
-      context.lineWidth = 3
       for i in [0..(num - 1)]
         deg += addDeg
         random = _getRandomInt.call(@, punkLineMax, punkLineMin)
@@ -518,10 +517,10 @@ class PreloadItemText extends CanvasItemBase
         endX   = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx)
         endY   = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy)
         # 制御値
-        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX - random, cx)
-        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY - random, cy)
-        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random, cx)
-        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random, cy)
+        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX - random * 0.6, cx)
+        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY - random * 0.6, cy)
+        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random * 0.6, cx)
+        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random * 0.6, cy)
 
         # 開始点と最終点のズレを調整する
         if i == 0
@@ -549,7 +548,6 @@ class PreloadItemText extends CanvasItemBase
       context.lineCap = 'round'
       context.fillStyle = 'rgba(255,255,255,0.9)'
       context.strokeStyle = 'black'
-      context.lineWidth = 3
 
       for i in [0..(num - 1)]
         deg += addDeg
@@ -560,10 +558,10 @@ class PreloadItemText extends CanvasItemBase
         endX   = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx)
         endY   = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy)
         # 制御値
-        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random, cx)
-        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random, cy)
-        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random, cx)
-        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random, cy)
+        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random * 0.8, cx)
+        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random * 0.8, cy)
+        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.8, cx)
+        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.8, cy)
 
         # 開始点と最終点のズレを調整する
         if i == 0
@@ -582,9 +580,9 @@ class PreloadItemText extends CanvasItemBase
       _drawBArc.call(@)
     else if @balloonType == @constructor.BalloonType.BROKEN_RECT
       _drawBRect.call(@)
-    else if @balloonType == @constructor.BalloonType.SHOUT
+    else if @balloonType == @constructor.BalloonType.FLASH
       _drawShout.call(@)
-    else if @balloonType == @constructor.BalloonType.THINK
+    else if @balloonType == @constructor.BalloonType.CLOUD
       _drawThink.call(@)
     context.restore()
 
