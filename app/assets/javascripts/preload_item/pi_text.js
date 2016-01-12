@@ -357,20 +357,26 @@ PreloadItemText = (function(superClass) {
     })(this));
   };
 
-  PreloadItemText.prototype.startOpenAnimation = function() {
-    this._timemax = 30;
+  PreloadItemText.prototype.startOpenAnimation = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    this._timemax = 15;
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
     return requestAnimationFrame((function(_this) {
       return function() {
-        return _startOpenAnimation.call(_this);
+        return _startOpenAnimation.call(_this, callback);
       };
     })(this));
   };
 
-  _startOpenAnimation = function() {
+  _startOpenAnimation = function(callback) {
     var emt, fontSize, height, progressPercent, step1, step2, step3, width, writingLength, x, y;
+    if (callback == null) {
+      callback = null;
+    }
     if (this._canvas == null) {
       this._canvas = document.getElementById(this.canvasElementId());
       this._context = this._canvas.getContext('2d');
@@ -383,8 +389,8 @@ PreloadItemText = (function(superClass) {
     width = null;
     height = null;
     if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
-      step1 = 0.7;
-      step2 = 0.8;
+      step1 = 0.5;
+      step2 = 0.7;
       step3 = 1;
       if (this._time / this._timemax < step1) {
         progressPercent = this._time / (this._timemax * step1);
@@ -401,10 +407,10 @@ PreloadItemText = (function(superClass) {
         this._time1 = this._time;
       } else if (this._time / this._timemax < step2) {
         progressPercent = (this._time - this._time1) / (this._timemax * (step2 - step1));
-        x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.8) * 0.5) - this._step1.x) * progressPercent;
-        y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.8) * 0.5) - this._step1.y) * progressPercent;
-        width = this._step1.w + (this.itemSize.w * 0.8 - this._step1.w) * progressPercent;
-        height = this._step1.h + (this.itemSize.h * 0.8 - this._step1.h) * progressPercent;
+        x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.6) * 0.5) - this._step1.x) * progressPercent;
+        y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.6) * 0.5) - this._step1.y) * progressPercent;
+        width = this._step1.w + (this.itemSize.w * 0.6 - this._step1.w) * progressPercent;
+        height = this._step1.h + (this.itemSize.h * 0.6 - this._step1.h) * progressPercent;
         this._step2 = {
           x: x,
           y: y,
@@ -426,7 +432,7 @@ PreloadItemText = (function(superClass) {
         this._context.globalAlpha = progressPercent;
       }
     }
-    _drawBalloon.call(this, this._context, x, y, width, height);
+    _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
     writingLength = this.getEventMethodName() === 'changeText' ? this.inputText.length : 0;
     fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
     _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, writingLength);
@@ -434,29 +440,38 @@ PreloadItemText = (function(superClass) {
     if (this._time <= this._timemax) {
       return requestAnimationFrame((function(_this) {
         return function() {
-          return _startOpenAnimation.call(_this);
+          return _startOpenAnimation.call(_this, callback);
         };
       })(this));
     } else {
       this._context.restore();
-      return this.enableHandleResponse();
+      this.enableHandleResponse();
+      if (callback != null) {
+        return callback();
+      }
     }
   };
 
-  PreloadItemText.prototype.startCloseAnimation = function() {
-    this._timemax = 50;
+  PreloadItemText.prototype.startCloseAnimation = function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
+    this._timemax = 15;
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
     return requestAnimationFrame((function(_this) {
       return function() {
-        return _startCloseAnimation.call(_this);
+        return _startCloseAnimation.call(_this, callback);
       };
     })(this));
   };
 
-  _startCloseAnimation = function() {
-    var emt, fontSize, height, progressPercent, step1, width, x, y;
+  _startCloseAnimation = function(callback) {
+    var canvas, context, emt, fontSize, height, progressPercent, step1, step2, step3, width, x, y;
+    if (callback == null) {
+      callback = null;
+    }
     if (this._canvas == null) {
       this._canvas = document.getElementById(this.canvasElementId());
       this._context = this._canvas.getContext('2d');
@@ -469,13 +484,41 @@ PreloadItemText = (function(superClass) {
     width = null;
     height = null;
     if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
-      step1 = 1;
+      step1 = 0.2;
+      step2 = 0.5;
+      step3 = 1;
       if (this._time / this._timemax < step1) {
         progressPercent = this._time / (this._timemax * step1);
-        x = (this.itemSize.w * 0.5) * progressPercent;
-        y = (this.itemSize.h * 0.5) * progressPercent;
-        width = this.itemSize.w - this.itemSize.w * progressPercent;
-        height = this.itemSize.h - this.itemSize.h * progressPercent;
+        x = (this.itemSize.w - this.itemSize.w * 0.5) * 0.5 * progressPercent;
+        y = (this.itemSize.h - this.itemSize.h * 0.5) * 0.5 * progressPercent;
+        width = this.itemSize.w + (this.itemSize.w * 0.5 - this.itemSize.w) * progressPercent;
+        height = this.itemSize.h + (this.itemSize.h * 0.5 - this.itemSize.h) * progressPercent;
+        this._step1 = {
+          x: x,
+          y: y,
+          w: width,
+          h: height
+        };
+        this._time1 = this._time;
+      } else if (this._time / this._timemax < step2) {
+        progressPercent = (this._time - this._time1) / (this._timemax * (step2 - step1));
+        x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.9) * 0.5) - this._step1.x) * progressPercent;
+        y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.9) * 0.5) - this._step1.y) * progressPercent;
+        width = this._step1.w + (this.itemSize.w * 0.9 - this._step1.w) * progressPercent;
+        height = this._step1.h + (this.itemSize.h * 0.9 - this._step1.h) * progressPercent;
+        this._step2 = {
+          x: x,
+          y: y,
+          w: width,
+          h: height
+        };
+        this._time2 = this._time;
+      } else if (this._time / this._timemax < step3) {
+        progressPercent = (this._time - this._time2) / (this._timemax * (step3 - step2));
+        x = this._step2.x + (this.itemSize.w * 0.5 - this._step2.x) * progressPercent;
+        y = this._step2.y + (this.itemSize.h * 0.5 - this._step2.y) * progressPercent;
+        width = this._step2.w - this._step2.w * progressPercent;
+        height = this._step2.h - this._step2.h * progressPercent;
       }
     } else if (this.showAnimetionType === this.constructor.ShowAnimationType.BLUR) {
       step1 = 1;
@@ -484,22 +527,31 @@ PreloadItemText = (function(superClass) {
         this._context.globalAlpha = progressPercent;
       }
     }
-    _drawBalloon.call(this, this._context, x, y, width, height);
+    _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
     fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
-    if (window.debug) {
-      console.log('startCloseAnimation -- x:' + x + ' y:' + y + ' width:' + width + ' height:' + height);
-    }
     _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, this.inputText.length);
     this._time += this._pertime;
     if (this._time <= this._timemax) {
       return requestAnimationFrame((function(_this) {
         return function() {
-          return _startCloseAnimation.call(_this);
+          return _startCloseAnimation.call(_this, callback);
         };
       })(this));
     } else {
       this._context.restore();
-      return this.enableHandleResponse();
+      canvas = document.getElementById(this.canvasElementId());
+      context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      this.enableHandleResponse();
+      if (!this._isFinishedEvent) {
+        this.finishEvent();
+        if (typeof ScrollGuide !== "undefined" && ScrollGuide !== null) {
+          ScrollGuide.hideGuide();
+        }
+      }
+      if (callback != null) {
+        return callback();
+      }
     }
   };
 
@@ -519,11 +571,12 @@ PreloadItemText = (function(superClass) {
   PreloadItemText.prototype.changeText = function(opt) {
     var canvas, context, opa;
     if (opt.progress === 0 && this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
-      this.startOpenAnimation();
-      return this._animationFlg['startOpenAnimation'] = true;
-    } else if (opt.progress === opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
-      this.startCloseAnimation();
-      return this._animationFlg['startCloseAnimation'] = true;
+      this.startOpenAnimation((function(_this) {
+        return function() {
+          return _this.changeText(opt);
+        };
+      })(this));
+      this._animationFlg['startOpenAnimation'] = true;
     } else {
       opa = opt.progress / opt.progressMax;
       canvas = document.getElementById(this.canvasElementId());
@@ -533,18 +586,23 @@ PreloadItemText = (function(superClass) {
       this._fixedTextAlpha = 1 - opa;
       _drawTextAndBalloonToCanvas.call(this, this.inputText__before);
       this._fixedTextAlpha = opa;
-      return _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
+      _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
+    }
+    if (opt.progress === opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
+      this.startCloseAnimation();
+      return this._animationFlg['startCloseAnimation'] = true;
     }
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
     var canvas, context;
     if (opt.progress === 0 && this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
-      this.startOpenAnimation();
-      return this._animationFlg['startOpenAnimation'] = true;
-    } else if (opt.progress === opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
-      this.startCloseAnimation();
-      return this._animationFlg['startCloseAnimation'] = true;
+      this.startOpenAnimation((function(_this) {
+        return function() {
+          return _this.writeText(opt);
+        };
+      })(this));
+      this._animationFlg['startOpenAnimation'] = true;
     } else {
       canvas = document.getElementById(this.canvasElementId());
       context = canvas.getContext('2d');
@@ -552,8 +610,12 @@ PreloadItemText = (function(superClass) {
       this._fixedTextAlpha = null;
       if ((this.inputText != null) && this.inputText.length > 0) {
         _setTextStyle.call(this);
-        return _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
+        _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
       }
+    }
+    if (opt.progress === opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
+      this.startCloseAnimation();
+      return this._animationFlg['startCloseAnimation'] = true;
     }
   };
 
@@ -589,21 +651,30 @@ PreloadItemText = (function(superClass) {
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
-  _drawBalloon = function(context, x, y, width, height) {
+  _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
     var _drawArc, _drawBArc, _drawBRect, _drawRect, _drawShout, _drawThink;
+    if (canvasWidth == null) {
+      canvasWidth = width;
+    }
+    if (canvasHeight == null) {
+      canvasHeight = height;
+    }
     if (!this.showBalloon) {
+      return;
+    }
+    if (width <= 0 || height <= 0) {
       return;
     }
     _drawArc = function() {
       var diff;
       context.beginPath();
-      context.translate(width * 0.5, height * 0.5);
+      context.translate(canvasWidth * 0.5, canvasHeight * 0.5);
       diff = 3.0;
       if (width > height) {
-        context.scale(width / height, 1);
+        context.scale(canvasWidth / canvasHeight, 1);
         context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2);
       } else {
-        context.scale(1, height / width);
+        context.scale(1, canvasHeight / canvasWidth);
         context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2);
       }
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
@@ -620,12 +691,12 @@ PreloadItemText = (function(superClass) {
     _drawBArc = function() {
       var diff, l, per, results, results1, sum;
       diff = 3.0;
-      context.translate(width * 0.5, height * 0.5);
+      context.translate(canvasWidth * 0.5, canvasHeight * 0.5);
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
       per = Math.PI * 2 / 100;
       if (width > height) {
-        context.scale(width / height, 1);
+        context.scale(canvasWidth / canvasHeight, 1);
         sum = 0;
         x = 0;
         results = [];
@@ -645,7 +716,7 @@ PreloadItemText = (function(superClass) {
         }
         return results;
       } else {
-        context.scale(1, height / width);
+        context.scale(1, canvasHeight / canvasWidth);
         sum = 0;
         x = 0;
         results1 = [];
@@ -699,9 +770,6 @@ PreloadItemText = (function(superClass) {
     _drawShout = (function(_this) {
       return function() {
         var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
-        if (width <= 0 || height <= 0) {
-          return;
-        }
         num = 18;
         radiusX = width / 2;
         radiusY = height / 2;
@@ -742,9 +810,6 @@ PreloadItemText = (function(superClass) {
     _drawThink = (function(_this) {
       return function() {
         var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
-        if (width <= 0 || height <= 0) {
-          return;
-        }
         num = 10;
         diff = 40.0;
         radiusX = (width - diff) / 2;

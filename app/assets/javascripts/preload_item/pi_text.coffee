@@ -263,15 +263,15 @@ class PreloadItemText extends CanvasItemBase
         callback()
     )
 
-  startOpenAnimation: ->
-    @_timemax = 30
+  startOpenAnimation: (callback = null) ->
+    @_timemax = 15
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
     requestAnimationFrame( =>
-      _startOpenAnimation.call(@)
+      _startOpenAnimation.call(@, callback)
     )
-  _startOpenAnimation = ->
+  _startOpenAnimation = (callback = null) ->
     if !@_canvas?
       @_canvas = document.getElementById(@canvasElementId())
       @_context = @_canvas.getContext('2d')
@@ -283,8 +283,8 @@ class PreloadItemText extends CanvasItemBase
     width = null
     height = null
     if @showAnimetionType == @constructor.ShowAnimationType.POPUP
-      step1 = 0.7
-      step2 = 0.8
+      step1 = 0.5
+      step2 = 0.7
       step3 = 1
       if @_time / @_timemax < step1
         progressPercent = @_time / (@_timemax * step1)
@@ -296,10 +296,10 @@ class PreloadItemText extends CanvasItemBase
         @_time1 = @_time
       else if  @_time / @_timemax < step2
         progressPercent = (@_time - @_time1) / (@_timemax * (step2 - step1))
-        x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.8) * 0.5) - @_step1.x) * progressPercent
-        y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.8) * 0.5) - @_step1.y) * progressPercent
-        width = @_step1.w + (@itemSize.w * 0.8 - @_step1.w) * progressPercent
-        height = @_step1.h + (@itemSize.h * 0.8 - @_step1.h) * progressPercent
+        x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.6) * 0.5) - @_step1.x) * progressPercent
+        y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.6) * 0.5) - @_step1.y) * progressPercent
+        width = @_step1.w + (@itemSize.w * 0.6 - @_step1.w) * progressPercent
+        height = @_step1.h + (@itemSize.h * 0.6 - @_step1.h) * progressPercent
         @_step2 = {x: x, y: y, w: width, h: height}
         @_time2 = @_time
       else if  @_time / @_timemax < step3
@@ -314,28 +314,30 @@ class PreloadItemText extends CanvasItemBase
         progressPercent = @_time / (@_timemax * step1)
         @_context.globalAlpha = progressPercent
 
-    _drawBalloon.call(@, @_context, x, y, width, height)
+    _drawBalloon.call(@, @_context, x, y, width, height,  @_canvas.width, @_canvas.height)
     writingLength = if @getEventMethodName() == 'changeText' then @inputText.length else 0
     fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
     _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, writingLength)
     @_time += @_pertime
     if @_time <= @_timemax
       requestAnimationFrame( =>
-        _startOpenAnimation.call(@)
+        _startOpenAnimation.call(@, callback)
       )
     else
       @_context.restore()
       @enableHandleResponse()
+      if callback?
+        callback()
 
-  startCloseAnimation: ->
-    @_timemax = 50
+  startCloseAnimation: (callback = null) ->
+    @_timemax = 15
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
     requestAnimationFrame( =>
-      _startCloseAnimation.call(@)
+      _startCloseAnimation.call(@, callback)
     )
-  _startCloseAnimation = ->
+  _startCloseAnimation = (callback = null) ->
     if !@_canvas?
       @_canvas = document.getElementById(@canvasElementId())
       @_context = @_canvas.getContext('2d')
@@ -347,32 +349,60 @@ class PreloadItemText extends CanvasItemBase
     width = null
     height = null
     if @showAnimetionType == @constructor.ShowAnimationType.POPUP
-      step1 = 1
+      step1 = 0.2
+      step2 = 0.5
+      step3 = 1
       if @_time / @_timemax < step1
         progressPercent = @_time / (@_timemax * step1)
-        x = (@itemSize.w * 0.5) * progressPercent
-        y = (@itemSize.h * 0.5) * progressPercent
-        width = @itemSize.w - @itemSize.w * progressPercent
-        height = @itemSize.h - @itemSize.h * progressPercent
+        x = (@itemSize.w - @itemSize.w * 0.5) * 0.5 * progressPercent
+        y = (@itemSize.h - @itemSize.h * 0.5) * 0.5  * progressPercent
+        width = @itemSize.w + (@itemSize.w * 0.5 - @itemSize.w) * progressPercent
+        height = @itemSize.h + (@itemSize.h * 0.5 - @itemSize.h) * progressPercent
+        @_step1 = {x: x, y: y, w: width, h: height}
+        @_time1 = @_time
+      else if  @_time / @_timemax < step2
+        progressPercent = (@_time - @_time1) / (@_timemax * (step2 - step1))
+        x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.9) * 0.5) - @_step1.x) * progressPercent
+        y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.9) * 0.5) - @_step1.y) * progressPercent
+        width = @_step1.w + (@itemSize.w * 0.9 - @_step1.w) * progressPercent
+        height = @_step1.h + (@itemSize.h * 0.9 - @_step1.h) * progressPercent
+        @_step2 = {x: x, y: y, w: width, h: height}
+        @_time2 = @_time
+      else if  @_time / @_timemax < step3
+        progressPercent = (@_time - @_time2) / (@_timemax * (step3 - step2))
+        x = @_step2.x + (@itemSize.w * 0.5 - @_step2.x) * progressPercent
+        y = @_step2.y + (@itemSize.h * 0.5 - @_step2.y) * progressPercent
+        width = @_step2.w - @_step2.w * progressPercent
+        height = @_step2.h - @_step2.h * progressPercent
     else if @showAnimetionType == @constructor.ShowAnimationType.BLUR
       step1 = 1
       if @_time / @_timemax < step1
         progressPercent = 1 - (@_time / (@_timemax * step1))
         @_context.globalAlpha = progressPercent
 
-    _drawBalloon.call(@, @_context, x, y, width, height)
+    _drawBalloon.call(@, @_context, x, y, width, height, @_canvas.width, @_canvas.height)
     fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
-    if window.debug
-      console.log('startCloseAnimation -- x:' + x + ' y:' + y + ' width:' + width + ' height:' + height)
+#    if window.debug
+#      console.log('startCloseAnimation -- x:' + x + ' y:' + y + ' width:' + width + ' height:' + height)
     _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, @inputText.length)
     @_time += @_pertime
     if @_time <= @_timemax
       requestAnimationFrame( =>
-        _startCloseAnimation.call(@)
+        _startCloseAnimation.call(@, callback)
       )
     else
       @_context.restore()
+      canvas = document.getElementById(@canvasElementId())
+      context = canvas.getContext('2d')
+      context.clearRect(0, 0, canvas.width, canvas.height)
       @enableHandleResponse()
+      if !@_isFinishedEvent
+        # 終了イベント
+        @finishEvent()
+        if ScrollGuide?
+          ScrollGuide.hideGuide()
+      if callback?
+        callback()
 
   willChapter: ->
     super()
@@ -387,11 +417,10 @@ class PreloadItemText extends CanvasItemBase
 
   changeText: (opt) ->
     if opt.progress == 0 && @showWithAnimation && !@_animationFlg['startOpenAnimation']?
-      @startOpenAnimation()
+      @startOpenAnimation( =>
+        @changeText(opt)
+      )
       @_animationFlg['startOpenAnimation'] = true
-    else if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
-      @startCloseAnimation()
-      @_animationFlg['startCloseAnimation'] = true
     else
       opa = opt.progress / opt.progressMax
       canvas = document.getElementById(@canvasElementId())
@@ -403,13 +432,16 @@ class PreloadItemText extends CanvasItemBase
       @_fixedTextAlpha = opa
       _drawTextAndBalloonToCanvas.call(@ , @inputText__after)
 
-  writeText: (opt) ->
-    if opt.progress == 0 && @showWithAnimation && !@_animationFlg['startOpenAnimation']?
-      @startOpenAnimation()
-      @_animationFlg['startOpenAnimation'] = true
-    else if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
+    if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
       @startCloseAnimation()
       @_animationFlg['startCloseAnimation'] = true
+
+  writeText: (opt) ->
+    if opt.progress == 0 && @showWithAnimation && !@_animationFlg['startOpenAnimation']?
+      @startOpenAnimation( =>
+        @writeText(opt)
+      )
+      @_animationFlg['startOpenAnimation'] = true
     else
       canvas = document.getElementById(@canvasElementId())
       context = canvas.getContext('2d')
@@ -418,6 +450,10 @@ class PreloadItemText extends CanvasItemBase
       if @inputText? && @inputText.length > 0
         _setTextStyle.call(@)
         _drawTextAndBalloonToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
+
+    if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
+      @startCloseAnimation()
+      @_animationFlg['startCloseAnimation'] = true
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
@@ -442,21 +478,24 @@ class PreloadItemText extends CanvasItemBase
   _getRandomInt = (max, min) ->
     return Math.floor(Math.random() * (max - min)) + min
 
-  _drawBalloon = (context, x, y, width, height) ->
+  _drawBalloon = (context, x, y, width, height, canvasWidth = width, canvasHeight = height) ->
     if !@showBalloon
+      return
+    if width <= 0 || height <= 0
+      # サイズが無い場合は描画無し
       return
 
     _drawArc = ->
       # 円
       context.beginPath()
-      context.translate(width * 0.5, height * 0.5)
+      context.translate(canvasWidth * 0.5, canvasHeight * 0.5)
       # 調整
       diff = 3.0
       if width > height
-        context.scale(width / height, 1)
+        context.scale(canvasWidth / canvasHeight, 1)
         context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2)
       else
-        context.scale(1, height / width)
+        context.scale(1, canvasHeight / canvasWidth)
         context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2)
 
       context.fillStyle = 'rgba(255, 255, 255, 0.5)'
@@ -477,12 +516,12 @@ class PreloadItemText extends CanvasItemBase
 
       # 調整
       diff = 3.0
-      context.translate(width * 0.5, height * 0.5)
+      context.translate(canvasWidth * 0.5, canvasHeight * 0.5)
       context.fillStyle = 'rgba(255, 255, 255, 0.5)'
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
       per = Math.PI * 2 / 100
       if width > height
-        context.scale(width / height, 1)
+        context.scale(canvasWidth / canvasHeight, 1)
         sum = 0
         x = 0
         while sum < Math.PI * 2
@@ -501,7 +540,7 @@ class PreloadItemText extends CanvasItemBase
           x = y
 
       else
-        context.scale(1, height / width)
+        context.scale(1, canvasHeight / canvasWidth)
         sum = 0
         x = 0
         while sum < Math.PI * 2
@@ -545,10 +584,6 @@ class PreloadItemText extends CanvasItemBase
       context.restore()
 
     _drawShout = =>
-      if width <= 0 || height <= 0
-        # サイズが無い場合は描画無し
-        return
-
       # 叫び
       num = 18
       radiusX = width / 2
@@ -591,10 +626,6 @@ class PreloadItemText extends CanvasItemBase
 
     _drawThink = =>
       # 考え中
-
-      if width <= 0 || height <= 0
-        # サイズが無い場合は描画無し
-        return
       num = 10
       diff = 40.0
       radiusX = (width - diff) / 2
