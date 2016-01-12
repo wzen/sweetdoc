@@ -358,21 +358,25 @@ PreloadItemText = (function(superClass) {
   };
 
   PreloadItemText.prototype.startOpenAnimation = function() {
-    this._timemax = 50;
+    this._timemax = 30;
     this._time = 0;
     this._pertime = 1;
-    this.disableEventHandle();
-    return Common.requestAnimationFrame(_startOpenAnimation);
+    this.disableHandleResponse();
+    return requestAnimationFrame((function(_this) {
+      return function() {
+        return _startOpenAnimation.call(_this);
+      };
+    })(this));
   };
 
   _startOpenAnimation = function() {
-    var emt, height, progressPercent, step1, step2, step3, width, writingLength, x, y;
+    var emt, fontSize, height, progressPercent, step1, step2, step3, width, writingLength, x, y;
     if (this._canvas == null) {
       this._canvas = document.getElementById(this.canvasElementId());
       this._context = this._canvas.getContext('2d');
       this._context.save();
     }
-    this._context.clearRect(0, 0, canvas.width, canvas.height);
+    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     emt = this.getJQueryElement();
     x = null;
     y = null;
@@ -391,8 +395,8 @@ PreloadItemText = (function(superClass) {
         this._step1 = {
           x: x,
           y: y,
-          width: width,
-          height: height
+          w: width,
+          h: height
         };
         this._time1 = this._time;
       } else if (this._time / this._timemax < step2) {
@@ -400,12 +404,12 @@ PreloadItemText = (function(superClass) {
         x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.8) * 0.5) - this._step1.x) * progressPercent;
         y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.8) * 0.5) - this._step1.y) * progressPercent;
         width = this._step1.w + (this.itemSize.w * 0.8 - this._step1.w) * progressPercent;
-        height = this._step1.h((this.itemSize.h * 0.8 - this._step1.h) * progressPercent);
+        height = this._step1.h + (this.itemSize.h * 0.8 - this._step1.h) * progressPercent;
         this._step2 = {
           x: x,
           y: y,
-          width: width,
-          height: height
+          w: width,
+          h: height
         };
         this._time2 = this._time;
       } else if (this._time / this._timemax < step3) {
@@ -424,13 +428,18 @@ PreloadItemText = (function(superClass) {
     }
     _drawBalloon.call(this, this._context, x, y, width, height);
     writingLength = this.getEventMethodName() === 'changeText' ? this.inputText.length : 0;
-    _drawText.call(this, this._context, text, x, y, width, height, writingLength);
+    fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
+    _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, writingLength);
     this._time += this._pertime;
     if (this._time <= this._timemax) {
-      return Common.requestAnimationFrame(_startOpenAnimation);
+      return requestAnimationFrame((function(_this) {
+        return function() {
+          return _startOpenAnimation.call(_this);
+        };
+      })(this));
     } else {
       this._context.restore();
-      return this.enableEventHandle();
+      return this.enableHandleResponse();
     }
   };
 
@@ -438,18 +447,22 @@ PreloadItemText = (function(superClass) {
     this._timemax = 50;
     this._time = 0;
     this._pertime = 1;
-    this.disableEventHandle();
-    return Common.requestAnimationFrame(_startCloseAnimation);
+    this.disableHandleResponse();
+    return requestAnimationFrame((function(_this) {
+      return function() {
+        return _startCloseAnimation.call(_this);
+      };
+    })(this));
   };
 
   _startCloseAnimation = function() {
-    var emt, height, progressPercent, step1, width, x, y;
+    var emt, fontSize, height, progressPercent, step1, width, x, y;
     if (this._canvas == null) {
       this._canvas = document.getElementById(this.canvasElementId());
       this._context = this._canvas.getContext('2d');
       this._context.save();
     }
-    this._context.clearRect(0, 0, canvas.width, canvas.height);
+    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     emt = this.getJQueryElement();
     x = null;
     y = null;
@@ -472,13 +485,21 @@ PreloadItemText = (function(superClass) {
       }
     }
     _drawBalloon.call(this, this._context, x, y, width, height);
-    _drawText.call(this, this._context, text, x, y, width, height, this.inputText.length);
+    fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
+    if (window.debug) {
+      console.log('startCloseAnimation -- x:' + x + ' y:' + y + ' width:' + width + ' height:' + height);
+    }
+    _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, this.inputText.length);
     this._time += this._pertime;
     if (this._time <= this._timemax) {
-      return Common.requestAnimationFrame(_startOpenAnimation);
+      return requestAnimationFrame((function(_this) {
+        return function() {
+          return _startCloseAnimation.call(_this);
+        };
+      })(this));
     } else {
       this._context.restore();
-      return this.enableEventHandle();
+      return this.enableHandleResponse();
     }
   };
 
@@ -487,7 +508,8 @@ PreloadItemText = (function(superClass) {
     PreloadItemText.__super__.willChapter.call(this);
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
-    return context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    return this._animationFlg = {};
   };
 
   PreloadItemText.isJapanease = function(c) {
@@ -496,38 +518,42 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.changeText = function(opt) {
     var canvas, context, opa;
-    if (opt.progress === 0 && this.showWithAnimation) {
+    if (opt.progress === 0 && this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation();
-    }
-    opa = opt.progress / opt.progressMax;
-    canvas = document.getElementById(this.canvasElementId());
-    context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillStyle = "rgb(" + this.textColor.r + "," + this.textColor.g + "," + this.textColor.b + ")";
-    this._fixedTextAlpha = 1 - opa;
-    _drawTextAndBalloonToCanvas.call(this, this.inputText__before);
-    this._fixedTextAlpha = opa;
-    _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
-    if (opt.progress === opt.progressMax && this.showWithAnimation) {
-      return this.startCloseAnimation();
+      return this._animationFlg['startOpenAnimation'] = true;
+    } else if (opt.progress === opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
+      this.startCloseAnimation();
+      return this._animationFlg['startCloseAnimation'] = true;
+    } else {
+      opa = opt.progress / opt.progressMax;
+      canvas = document.getElementById(this.canvasElementId());
+      context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = "rgb(" + this.textColor.r + "," + this.textColor.g + "," + this.textColor.b + ")";
+      this._fixedTextAlpha = 1 - opa;
+      _drawTextAndBalloonToCanvas.call(this, this.inputText__before);
+      this._fixedTextAlpha = opa;
+      return _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
     }
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
     var canvas, context;
-    if (opt.progress === 0 && this.showWithAnimation) {
+    if (opt.progress === 0 && this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation();
-    }
-    canvas = document.getElementById(this.canvasElementId());
-    context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    this._fixedTextAlpha = null;
-    if ((this.inputText != null) && this.inputText.length > 0) {
-      _setTextStyle.call(this);
-      _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
-    }
-    if (opt.progress === opt.progressMax && this.showWithAnimation) {
-      return this.startCloseAnimation();
+      return this._animationFlg['startOpenAnimation'] = true;
+    } else if (opt.progress === opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
+      this.startCloseAnimation();
+      return this._animationFlg['startCloseAnimation'] = true;
+    } else {
+      canvas = document.getElementById(this.canvasElementId());
+      context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      this._fixedTextAlpha = null;
+      if ((this.inputText != null) && this.inputText.length > 0) {
+        _setTextStyle.call(this);
+        return _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
+      }
     }
   };
 
@@ -553,7 +579,10 @@ PreloadItemText = (function(superClass) {
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
     _drawBalloon.call(this, context, 0, 0, canvas.width, canvas.height);
-    return _drawText.call(this, context, text, 0, 0, canvas.width, canvas.height, writingLength);
+    if (this.fontSize == null) {
+      this.fontSize = _calcFontSizeAbout.call(this, text, canvas.width, canvas.height, this.isFixedFontSize, this.isDrawHorizontal);
+    }
+    return _drawText.call(this, context, text, 0, 0, canvas.width, canvas.height, this.fontSize, writingLength);
   };
 
   _getRandomInt = function(max, min) {
@@ -572,10 +601,10 @@ PreloadItemText = (function(superClass) {
       diff = 3.0;
       if (width > height) {
         context.scale(width / height, 1);
-        context.arc(x, y, height * 0.5 - diff, 0, Math.PI * 2);
+        context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2);
       } else {
         context.scale(1, height / width);
-        context.arc(x, y, width * 0.5 - diff, 0, Math.PI * 2);
+        context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2);
       }
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
@@ -604,7 +633,7 @@ PreloadItemText = (function(superClass) {
           context.beginPath();
           l = ((2 * Math.abs(Math.cos(x))) + 1) * per;
           y = x + l;
-          context.arc(x, y, height * 0.5 - diff, x, y);
+          context.arc(0, 0, height * 0.5 - diff, x, y);
           context.fill();
           context.stroke();
           sum += l;
@@ -624,7 +653,7 @@ PreloadItemText = (function(superClass) {
           context.beginPath();
           l = ((2 * Math.abs(Math.sin(x))) + 1) * per;
           y = x + l;
-          context.arc(x, y, width * 0.5 - diff, x, y);
+          context.arc(0, 0, width * 0.5 - diff, x, y);
           context.fill();
           context.stroke();
           sum += l;
@@ -670,11 +699,14 @@ PreloadItemText = (function(superClass) {
     _drawShout = (function(_this) {
       return function() {
         var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
+        if (width <= 0 || height <= 0) {
+          return;
+        }
         num = 18;
         radiusX = width / 2;
         radiusY = height / 2;
-        cx = width / 2;
-        cy = height / 2;
+        cx = x + width / 2;
+        cy = y + height / 2;
         punkLineMax = 30;
         punkLineMin = 20;
         deg = 0;
@@ -710,12 +742,15 @@ PreloadItemText = (function(superClass) {
     _drawThink = (function(_this) {
       return function() {
         var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
+        if (width <= 0 || height <= 0) {
+          return;
+        }
         num = 10;
         diff = 40.0;
         radiusX = (width - diff) / 2;
         radiusY = (height - diff) / 2;
-        cx = width / 2;
-        cy = height / 2;
+        cx = x + width / 2;
+        cy = y + height / 2;
         punkLineMax = 30;
         punkLineMin = 20;
         deg = 0;
@@ -765,16 +800,13 @@ PreloadItemText = (function(superClass) {
     return context.restore();
   };
 
-  _drawText = function(context, text, x, y, width, height, writingLength) {
-    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
+  _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
     if (writingLength == null) {
       writingLength = text.length;
     }
     context.save();
-    if (this.fontSize == null) {
-      _calcFontSizeAbout.call(this, text, width, height);
-    }
-    context.font = this.fontSize + "px " + this.fontFamily;
+    context.font = fontSize + "px " + this.fontFamily;
     wordWidth = context.measureText('あ').width;
     _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
@@ -804,13 +836,13 @@ PreloadItemText = (function(superClass) {
     _calcVerticalColumnHeight = function(columnText) {
       return columnText.length * context.measureText('あ').width;
     };
-    _calcHorizontalColumnHeightMax = function(columnText) {
+    _calcHorizontalColumnHeightMax = function(columnText, fontSize) {
       var c, k, len, measure, r, ref, ret;
       ret = 0;
       ref = columnText.split('');
       for (k = 0, len = ref.length; k < len; k++) {
         c = ref[k];
-        measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
+        measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
         r = measure.height;
         if (ret < r) {
           ret = r;
@@ -829,6 +861,15 @@ PreloadItemText = (function(superClass) {
         }
       }
       return ret;
+    };
+    _calcHorizontalColumnHeightSum = function(columns, fontSize) {
+      var c, k, len, sum;
+      sum = 0;
+      for (k = 0, len = columns.length; k < len; k++) {
+        c = columns[k];
+        sum += _calcHorizontalColumnHeightMax.call(this, c, fontSize);
+      }
+      return sum;
     };
     _calcVerticalColumnHeightMax = function(columns) {
       var c, k, len, r, ret;
@@ -887,10 +928,10 @@ PreloadItemText = (function(superClass) {
     sizeSum = 0;
     wordSum = 0;
     if (this.isDrawHorizontal) {
-      heightLine = (height - wordWidth * column.length) * 0.5;
+      heightLine = y + (height - _calcHorizontalColumnHeightSum.call(this, column, fontSize)) * 0.5;
       widthMax = _calcHorizontalColumnWidthMax.call(this, column);
       for (j = m = 0, ref1 = column.length - 1; 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
-        heightLine += _calcHorizontalColumnHeightMax.call(this, column[j]);
+        heightLine += _calcHorizontalColumnHeightMax.call(this, column[j], fontSize);
         w = x;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
           w += (width - widthMax) * 0.5;
@@ -911,7 +952,7 @@ PreloadItemText = (function(superClass) {
         wordSum += column[j].length;
       }
     } else {
-      widthLine = (width + wordWidth * column.length) * 0.5;
+      widthLine = x + (width + wordWidth * column.length) * 0.5;
       heightMax = _calcVerticalColumnHeightMax.call(this, column);
       for (j = o = 0, ref3 = column.length - 1; 0 <= ref3 ? o <= ref3 : o >= ref3; j = 0 <= ref3 ? ++o : --o) {
         widthLine -= wordWidth;
@@ -1036,13 +1077,13 @@ PreloadItemText = (function(superClass) {
     return char.match(regex);
   };
 
-  _calcFontSizeAbout = function(text, width, height) {
+  _calcFontSizeAbout = function(text, width, height, isFixedFontSize, isDrawHorizontal) {
     var a, fontSize, h, newLineCount, w;
     a = text.length;
     text = text.replace(/\n+$/g, '');
-    if (!this.isFixedFontSize) {
+    if (!isFixedFontSize) {
       newLineCount = text.split('\n').length - 1;
-      if (this.isDrawHorizontal) {
+      if (isDrawHorizontal) {
         w = height;
         h = width;
       } else {
@@ -1050,11 +1091,12 @@ PreloadItemText = (function(superClass) {
         h = height;
       }
       fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2);
-      this.fontSize = parseInt(fontSize / 1.5);
-      if (this.fontSize < 1) {
-        return this.fontSize = 1;
+      fontSize = parseInt(fontSize / 1.5);
+      if (fontSize < 1) {
+        fontSize = 1;
       }
     }
+    return fontSize;
   };
 
   _showInputModal = function() {

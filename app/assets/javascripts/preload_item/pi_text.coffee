@@ -264,17 +264,19 @@ class PreloadItemText extends CanvasItemBase
     )
 
   startOpenAnimation: ->
-    @_timemax = 50
+    @_timemax = 30
     @_time = 0
     @_pertime = 1
-    @disableEventHandle()
-    Common.requestAnimationFrame(_startOpenAnimation)
+    @disableHandleResponse()
+    requestAnimationFrame( =>
+      _startOpenAnimation.call(@)
+    )
   _startOpenAnimation = ->
     if !@_canvas?
       @_canvas = document.getElementById(@canvasElementId())
       @_context = @_canvas.getContext('2d')
       @_context.save()
-    @_context.clearRect(0, 0, canvas.width, canvas.height)
+    @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     emt = @getJQueryElement()
     x = null
     y = null
@@ -290,15 +292,15 @@ class PreloadItemText extends CanvasItemBase
         y = (@itemSize.h * 0.5) + (((@itemSize.h - @itemSize.h * 0.9) * 0.5) - (@itemSize.h * 0.5)) * progressPercent
         width = (@itemSize.w * 0.9) * progressPercent
         height = (@itemSize.h * 0.9) * progressPercent
-        @_step1 = {x: x, y: y, width: width, height: height}
+        @_step1 = {x: x, y: y, w: width, h: height}
         @_time1 = @_time
       else if  @_time / @_timemax < step2
         progressPercent = (@_time - @_time1) / (@_timemax * (step2 - step1))
         x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.8) * 0.5) - @_step1.x) * progressPercent
         y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.8) * 0.5) - @_step1.y) * progressPercent
         width = @_step1.w + (@itemSize.w * 0.8 - @_step1.w) * progressPercent
-        height = @_step1.h (@itemSize.h * 0.8 - @_step1.h) * progressPercent
-        @_step2 = {x: x, y: y, width: width, height: height}
+        height = @_step1.h + (@itemSize.h * 0.8 - @_step1.h) * progressPercent
+        @_step2 = {x: x, y: y, w: width, h: height}
         @_time2 = @_time
       else if  @_time / @_timemax < step3
         progressPercent = (@_time - @_time2) / (@_timemax * (step3 - step2))
@@ -314,26 +316,31 @@ class PreloadItemText extends CanvasItemBase
 
     _drawBalloon.call(@, @_context, x, y, width, height)
     writingLength = if @getEventMethodName() == 'changeText' then @inputText.length else 0
-    _drawText.call(@, @_context, text, x, y, width, height, writingLength)
+    fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
+    _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, writingLength)
     @_time += @_pertime
     if @_time <= @_timemax
-      Common.requestAnimationFrame(_startOpenAnimation)
+      requestAnimationFrame( =>
+        _startOpenAnimation.call(@)
+      )
     else
       @_context.restore()
-      @enableEventHandle()
+      @enableHandleResponse()
 
   startCloseAnimation: ->
     @_timemax = 50
     @_time = 0
     @_pertime = 1
-    @disableEventHandle()
-    Common.requestAnimationFrame(_startCloseAnimation)
+    @disableHandleResponse()
+    requestAnimationFrame( =>
+      _startCloseAnimation.call(@)
+    )
   _startCloseAnimation = ->
     if !@_canvas?
       @_canvas = document.getElementById(@canvasElementId())
       @_context = @_canvas.getContext('2d')
       @_context.save()
-    @_context.clearRect(0, 0, canvas.width, canvas.height)
+    @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     emt = @getJQueryElement()
     x = null
     y = null
@@ -354,13 +361,18 @@ class PreloadItemText extends CanvasItemBase
         @_context.globalAlpha = progressPercent
 
     _drawBalloon.call(@, @_context, x, y, width, height)
-    _drawText.call(@, @_context, text, x, y, width, height, @inputText.length)
+    fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
+    if window.debug
+      console.log('startCloseAnimation -- x:' + x + ' y:' + y + ' width:' + width + ' height:' + height)
+    _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, @inputText.length)
     @_time += @_pertime
     if @_time <= @_timemax
-      Common.requestAnimationFrame(_startOpenAnimation)
+      requestAnimationFrame( =>
+        _startCloseAnimation.call(@)
+      )
     else
       @_context.restore()
-      @enableEventHandle()
+      @enableHandleResponse()
 
   willChapter: ->
     super()
@@ -368,41 +380,44 @@ class PreloadItemText extends CanvasItemBase
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
     context.clearRect(0, 0, canvas.width, canvas.height)
+    @_animationFlg = {}
 
   @isJapanease = (c) ->
     return c.charCodeAt(0) >= 256
 
   changeText: (opt) ->
-    if opt.progress == 0 && @showWithAnimation
+    if opt.progress == 0 && @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation()
-
-    opa = opt.progress / opt.progressMax
-    canvas = document.getElementById(@canvasElementId())
-    context = canvas.getContext('2d')
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    context.fillStyle = "rgb(#{@textColor.r},#{@textColor.g},#{@textColor.b})"
-    @_fixedTextAlpha = 1 - opa
-    _drawTextAndBalloonToCanvas.call(@ , @inputText__before)
-    @_fixedTextAlpha = opa
-    _drawTextAndBalloonToCanvas.call(@ , @inputText__after)
-
-    if opt.progress == opt.progressMax && @showWithAnimation
+      @_animationFlg['startOpenAnimation'] = true
+    else if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
       @startCloseAnimation()
+      @_animationFlg['startCloseAnimation'] = true
+    else
+      opa = opt.progress / opt.progressMax
+      canvas = document.getElementById(@canvasElementId())
+      context = canvas.getContext('2d')
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      context.fillStyle = "rgb(#{@textColor.r},#{@textColor.g},#{@textColor.b})"
+      @_fixedTextAlpha = 1 - opa
+      _drawTextAndBalloonToCanvas.call(@ , @inputText__before)
+      @_fixedTextAlpha = opa
+      _drawTextAndBalloonToCanvas.call(@ , @inputText__after)
 
   writeText: (opt) ->
-    if opt.progress == 0 && @showWithAnimation
+    if opt.progress == 0 && @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation()
-
-    canvas = document.getElementById(@canvasElementId())
-    context = canvas.getContext('2d')
-    context.clearRect(0, 0, canvas.width, canvas.height)
-    @_fixedTextAlpha = null
-    if @inputText? && @inputText.length > 0
-      _setTextStyle.call(@)
-      _drawTextAndBalloonToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
-
-    if opt.progress == opt.progressMax && @showWithAnimation
+      @_animationFlg['startOpenAnimation'] = true
+    else if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
       @startCloseAnimation()
+      @_animationFlg['startCloseAnimation'] = true
+    else
+      canvas = document.getElementById(@canvasElementId())
+      context = canvas.getContext('2d')
+      context.clearRect(0, 0, canvas.width, canvas.height)
+      @_fixedTextAlpha = null
+      if @inputText? && @inputText.length > 0
+        _setTextStyle.call(@)
+        _drawTextAndBalloonToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
 
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
@@ -420,7 +435,9 @@ class PreloadItemText extends CanvasItemBase
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
     _drawBalloon.call(@, context, 0, 0, canvas.width, canvas.height)
-    _drawText.call(@, context, text, 0, 0, canvas.width, canvas.height, writingLength)
+    if !@fontSize?
+      @fontSize = _calcFontSizeAbout.call(@, text, canvas.width, canvas.height, @isFixedFontSize, @isDrawHorizontal)
+    _drawText.call(@, context, text, 0, 0, canvas.width, canvas.height, @fontSize, writingLength)
 
   _getRandomInt = (max, min) ->
     return Math.floor(Math.random() * (max - min)) + min
@@ -437,10 +454,10 @@ class PreloadItemText extends CanvasItemBase
       diff = 3.0
       if width > height
         context.scale(width / height, 1)
-        context.arc(x, y, height * 0.5 - diff, 0, Math.PI * 2)
+        context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2)
       else
         context.scale(1, height / width)
-        context.arc(x, y, width * 0.5 - diff, 0, Math.PI * 2)
+        context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2)
 
       context.fillStyle = 'rgba(255, 255, 255, 0.5)'
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
@@ -472,7 +489,7 @@ class PreloadItemText extends CanvasItemBase
           context.beginPath()
           l = ((2 * Math.abs(Math.cos(x))) + 1) * per
           y = x + l
-          context.arc(x, y, height * 0.5 - diff, x, y)
+          context.arc(0, 0, height * 0.5 - diff, x, y)
           context.fill()
           context.stroke()
           sum += l
@@ -491,7 +508,7 @@ class PreloadItemText extends CanvasItemBase
           context.beginPath()
           l = ((2 * Math.abs(Math.sin(x))) + 1) * per
           y = x + l
-          context.arc(x, y, width * 0.5 - diff, x, y)
+          context.arc(0, 0, width * 0.5 - diff, x, y)
           context.fill()
           context.stroke()
           sum += l
@@ -528,12 +545,16 @@ class PreloadItemText extends CanvasItemBase
       context.restore()
 
     _drawShout = =>
+      if width <= 0 || height <= 0
+        # サイズが無い場合は描画無し
+        return
+
       # 叫び
       num = 18
       radiusX = width / 2
       radiusY = height / 2
-      cx = width / 2
-      cy = height / 2
+      cx = x + width / 2
+      cy = y + height / 2
       punkLineMax = 30
       punkLineMin = 20
       deg = 0
@@ -570,12 +591,16 @@ class PreloadItemText extends CanvasItemBase
 
     _drawThink = =>
       # 考え中
+
+      if width <= 0 || height <= 0
+        # サイズが無い場合は描画無し
+        return
       num = 10
       diff = 40.0
       radiusX = (width - diff) / 2
       radiusY = (height - diff) / 2
-      cx = (width) / 2
-      cy = (height) / 2
+      cx = x + (width) / 2
+      cy = y + (height) / 2
       punkLineMax = 30
       punkLineMin = 20
       deg = 0
@@ -626,13 +651,9 @@ class PreloadItemText extends CanvasItemBase
       _drawThink.call(@)
     context.restore()
 
-  _drawText = (context, text, x, y, width, height, writingLength = text.length) ->
+  _drawText = (context, text, x, y, width, height, fontSize, writingLength = text.length) ->
     context.save()
-
-    # FIXME: 枠がある場合は中のサイズを取るようにする
-    if !@fontSize?
-      _calcFontSizeAbout.call(@, text, width, height)
-    context.font = "#{@fontSize}px #{@fontFamily}"
+    context.font = "#{fontSize}px #{@fontFamily}"
 
     wordWidth = context.measureText('あ').width
 
@@ -655,10 +676,10 @@ class PreloadItemText extends CanvasItemBase
     _calcVerticalColumnHeight = (columnText) ->
       # 暫定で日本語の高さに合わせる
       return columnText.length * context.measureText('あ').width
-    _calcHorizontalColumnHeightMax = (columnText) ->
+    _calcHorizontalColumnHeightMax = (columnText, fontSize) ->
       ret = 0
       for c in columnText.split('')
-        measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
+        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily, wordWidth)
         r = measure.height
         if ret < r
           ret = r
@@ -670,6 +691,11 @@ class PreloadItemText extends CanvasItemBase
         if ret < r
           ret = r
       return ret
+    _calcHorizontalColumnHeightSum = (columns, fontSize) ->
+      sum = 0
+      for c in columns
+        sum += _calcHorizontalColumnHeightMax.call(@, c, fontSize)
+      return sum
     _calcVerticalColumnHeightMax = (columns) ->
       ret = 0
       for c in columns
@@ -715,10 +741,10 @@ class PreloadItemText extends CanvasItemBase
     sizeSum = 0
     wordSum = 0
     if @isDrawHorizontal
-      heightLine = (height - wordWidth * column.length) * 0.5
+      heightLine = y + (height - _calcHorizontalColumnHeightSum.call(@, column, fontSize)) * 0.5
       widthMax = _calcHorizontalColumnWidthMax.call(@, column)
       for j in [0..(column.length - 1)]
-        heightLine += _calcHorizontalColumnHeightMax.call(@, column[j])
+        heightLine += _calcHorizontalColumnHeightMax.call(@, column[j], fontSize)
         w = x
         if @wordAlign == @constructor.WordAlign.LEFT
           w += (width - widthMax) * 0.5
@@ -735,7 +761,7 @@ class PreloadItemText extends CanvasItemBase
           wl += context.measureText(c).width
         wordSum += column[j].length
     else
-      widthLine = (width + wordWidth * column.length) * 0.5
+      widthLine = x + (width + wordWidth * column.length) * 0.5
       heightMax = _calcVerticalColumnHeightMax.call(@, column)
       for j in [0..(column.length - 1)]
         widthLine -= wordWidth
@@ -762,7 +788,7 @@ class PreloadItemText extends CanvasItemBase
             context.beginPath()
             context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height)
             # デバッグ用の円
-            #context.arc(x, y, 20, 0, Math.PI*2, false)
+            #context.arc(0, 0, 20, 0, Math.PI*2, false)
             #context.stroke()
             context.rotate(Math.PI / 2)
             # 「wordWidth * 0.75」は調整用の値
@@ -848,15 +874,15 @@ class PreloadItemText extends CanvasItemBase
     return char.match(regex)
 
   # 描画枠から大体のフォントサイズを計算
-  _calcFontSizeAbout = (text, width, height) ->
+  _calcFontSizeAbout = (text, width, height, isFixedFontSize, isDrawHorizontal) ->
     # 文字数計算
     a = text.length
     # 文末の改行を削除
     text = text.replace(/\n+$/g,'')
-    if !@isFixedFontSize
+    if !isFixedFontSize
       # フォントサイズを計算
       newLineCount = text.split('\n').length - 1
-      if @isDrawHorizontal
+      if isDrawHorizontal
         w = height
         h = width
       else
@@ -866,9 +892,10 @@ class PreloadItemText extends CanvasItemBase
 #      if debug
 #        console.log(fontSize)
       # FontSizeは暫定
-      @fontSize = parseInt(fontSize / 1.5)
-      if @fontSize < 1
-        @fontSize = 1
+      fontSize = parseInt(fontSize / 1.5)
+      if fontSize < 1
+        fontSize = 1
+    return fontSize
 
   _showInputModal = ->
     Common.showModalView(Constant.ModalViewType.ITEM_TEXT_EDITING, false, (modalEmt, params, callback = null) =>
