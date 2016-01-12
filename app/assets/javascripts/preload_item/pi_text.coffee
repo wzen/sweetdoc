@@ -52,14 +52,6 @@ class PreloadItemText extends CanvasItemBase
               {name: 'Blur', value: @ShowAnimationType.BLUR}
             ]
           }
-          showAnimationDuration: {
-            type: 'number'
-            name: "Animation Duration"
-            default: 0.5
-            min: 0.1
-            max: 3.0
-            stepValue: 0.1
-          }
         }
       }
       isDrawHorizontal: {
@@ -264,7 +256,6 @@ class PreloadItemText extends CanvasItemBase
     )
 
   startOpenAnimation: (callback = null) ->
-    @_timemax = 15
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
@@ -283,44 +274,51 @@ class PreloadItemText extends CanvasItemBase
     width = null
     height = null
     if @showAnimetionType == @constructor.ShowAnimationType.POPUP
+      timemax = 15
       step1 = 0.5
       step2 = 0.7
       step3 = 1
-      if @_time / @_timemax < step1
-        progressPercent = @_time / (@_timemax * step1)
+      if @_time / timemax < step1
+        progressPercent = @_time / (timemax * step1)
         x = (@itemSize.w * 0.5) + (((@itemSize.w - @itemSize.w * 0.9) * 0.5) - (@itemSize.w * 0.5)) * progressPercent
         y = (@itemSize.h * 0.5) + (((@itemSize.h - @itemSize.h * 0.9) * 0.5) - (@itemSize.h * 0.5)) * progressPercent
         width = (@itemSize.w * 0.9) * progressPercent
         height = (@itemSize.h * 0.9) * progressPercent
         @_step1 = {x: x, y: y, w: width, h: height}
         @_time1 = @_time
-      else if  @_time / @_timemax < step2
-        progressPercent = (@_time - @_time1) / (@_timemax * (step2 - step1))
+      else if  @_time / timemax < step2
+        progressPercent = (@_time - @_time1) / (timemax * (step2 - step1))
         x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.6) * 0.5) - @_step1.x) * progressPercent
         y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.6) * 0.5) - @_step1.y) * progressPercent
         width = @_step1.w + (@itemSize.w * 0.6 - @_step1.w) * progressPercent
         height = @_step1.h + (@itemSize.h * 0.6 - @_step1.h) * progressPercent
         @_step2 = {x: x, y: y, w: width, h: height}
         @_time2 = @_time
-      else if  @_time / @_timemax < step3
-        progressPercent = (@_time - @_time2) / (@_timemax * (step3 - step2))
+      else if  @_time / timemax < step3
+        progressPercent = (@_time - @_time2) / (timemax * (step3 - step2))
         x = @_step2.x - @_step2.x * progressPercent
         y = @_step2.y - @_step2.y * progressPercent
         width = @_step2.w + (@itemSize.w - @_step2.w) * progressPercent
         height = @_step2.h + (@itemSize.h - @_step2.h) * progressPercent
+      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
     else if @showAnimetionType == @constructor.ShowAnimationType.BLUR
+      timemax = 30
       step1 = 1
-      if @_time / @_timemax < step1
-        progressPercent = @_time / (@_timemax * step1)
-        @_context.globalAlpha = progressPercent
+      fontSize = @fontSize
+      x = 0
+      y = 0
+      width = @_canvas.width
+      height = @_canvas.height
+      if @_time / timemax < step1
+        progressPercent = @_time / (timemax * step1)
+        @_fixedBalloonAlpha = progressPercent
 
     @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     _drawBalloon.call(@, @_context, x, y, width, height,  @_canvas.width, @_canvas.height)
     writingLength = if @getEventMethodName() == 'changeText' then @inputText.length else 0
-    fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
     _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, writingLength)
     @_time += @_pertime
-    if @_time <= @_timemax
+    if @_time <= timemax
       requestAnimationFrame( =>
         _startOpenAnimation.call(@, callback)
       )
@@ -331,7 +329,6 @@ class PreloadItemText extends CanvasItemBase
         callback()
 
   startCloseAnimation: (callback = null) ->
-    @_timemax = 15
     @_time = 0
     @_pertime = 1
     @disableHandleResponse()
@@ -350,44 +347,52 @@ class PreloadItemText extends CanvasItemBase
     width = null
     height = null
     if @showAnimetionType == @constructor.ShowAnimationType.POPUP
+      timemax = 15
       step1 = 0.2
       step2 = 0.5
       step3 = 1
-      if @_time / @_timemax < step1
-        progressPercent = @_time / (@_timemax * step1)
+      if @_time / timemax < step1
+        progressPercent = @_time / (timemax * step1)
         x = (@itemSize.w - @itemSize.w * 0.5) * 0.5 * progressPercent
         y = (@itemSize.h - @itemSize.h * 0.5) * 0.5  * progressPercent
         width = @itemSize.w + (@itemSize.w * 0.5 - @itemSize.w) * progressPercent
         height = @itemSize.h + (@itemSize.h * 0.5 - @itemSize.h) * progressPercent
         @_step1 = {x: x, y: y, w: width, h: height}
         @_time1 = @_time
-      else if  @_time / @_timemax < step2
-        progressPercent = (@_time - @_time1) / (@_timemax * (step2 - step1))
+      else if  @_time / timemax < step2
+        progressPercent = (@_time - @_time1) / (timemax * (step2 - step1))
         x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.9) * 0.5) - @_step1.x) * progressPercent
         y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.9) * 0.5) - @_step1.y) * progressPercent
         width = @_step1.w + (@itemSize.w * 0.9 - @_step1.w) * progressPercent
         height = @_step1.h + (@itemSize.h * 0.9 - @_step1.h) * progressPercent
         @_step2 = {x: x, y: y, w: width, h: height}
         @_time2 = @_time
-      else if  @_time / @_timemax < step3
-        progressPercent = (@_time - @_time2) / (@_timemax * (step3 - step2))
+      else if  @_time / timemax < step3
+        progressPercent = (@_time - @_time2) / (timemax * (step3 - step2))
         x = @_step2.x + (@itemSize.w * 0.5 - @_step2.x) * progressPercent
         y = @_step2.y + (@itemSize.h * 0.5 - @_step2.y) * progressPercent
         width = @_step2.w - @_step2.w * progressPercent
         height = @_step2.h - @_step2.h * progressPercent
+      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
     else if @showAnimetionType == @constructor.ShowAnimationType.BLUR
+      timemax = 30
       step1 = 1
-      if @_time / @_timemax < step1
-        progressPercent = 1 - (@_time / (@_timemax * step1))
-        @_context.globalAlpha = progressPercent
+      fontSize = @fontSize
+      x = 0
+      y = 0
+      width = @_canvas.width
+      height = @_canvas.height
+      if @_time / timemax < step1
+        progressPercent = 1 - (@_time / (timemax * step1))
+        @_fixedBalloonAlpha = progressPercent
+        @_fixedTextAlpha = progressPercent
 
     _drawBalloon.call(@, @_context, x, y, width, height, @_canvas.width, @_canvas.height)
-    fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
 #    if window.debug
 #      console.log('startCloseAnimation -- x:' + x + ' y:' + y + ' width:' + width + ' height:' + height)
     _drawText.call(@, @_context, @inputText, x, y, width, height, fontSize, @inputText.length)
     @_time += @_pertime
-    if @_time <= @_timemax
+    if @_time <= timemax
       requestAnimationFrame( =>
         _startCloseAnimation.call(@, callback)
       )
@@ -417,7 +422,7 @@ class PreloadItemText extends CanvasItemBase
     return c.charCodeAt(0) >= 256
 
   changeText: (opt) ->
-    if opt.progress == 0 && @showWithAnimation && !@_animationFlg['startOpenAnimation']?
+    if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation( =>
         @changeText(opt)
       )
@@ -438,7 +443,7 @@ class PreloadItemText extends CanvasItemBase
       @_animationFlg['startCloseAnimation'] = true
 
   writeText: (opt) ->
-    if opt.progress == 0 && @showWithAnimation && !@_animationFlg['startOpenAnimation']?
+    if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation( =>
         @writeText(opt)
       )
@@ -452,7 +457,7 @@ class PreloadItemText extends CanvasItemBase
         _setTextStyle.call(@)
         _drawTextAndBalloonToCanvas.call(@ , @inputText, (@inputText.length * opt.progress / opt.progressMax))
 
-    if opt.progress == opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
+    if opt.progress >= opt.progressMax && @showWithAnimation && !@_animationFlg['startCloseAnimation']?
       @startCloseAnimation()
       @_animationFlg['startCloseAnimation'] = true
 
@@ -672,6 +677,7 @@ class PreloadItemText extends CanvasItemBase
       context.stroke()
 
     context.save()
+    context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
     if @balloonType == @constructor.BalloonType.ARC
       _drawArc.call(@)
     else if @balloonType == @constructor.BalloonType.RECT

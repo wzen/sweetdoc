@@ -51,6 +51,7 @@ class CanvasItemBase extends ItemBase
   # アイテム描画
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
+    super(show)
     # キャンパスに対する初期化
     @initCanvas()
     # 空の画面状態を保存

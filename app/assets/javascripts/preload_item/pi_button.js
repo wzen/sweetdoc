@@ -192,15 +192,6 @@ PreloadItemButton = (function(superClass) {
     return keyframe;
   };
 
-  PreloadItemButton.prototype.willChapter = function() {
-    if (this.getEventMethodName() === 'defaultClick') {
-      this.getJQueryElement().css('opacity', 1);
-    } else if (this.getEventMethodName() === 'changeColorClick' || this.getEventMethodName() === 'changeColorScroll') {
-      this.getJQueryElement().css('opacity', 1);
-    }
-    return PreloadItemButton.__super__.willChapter.call(this);
-  };
-
   return PreloadItemButton;
 
 })(CssItemBase);

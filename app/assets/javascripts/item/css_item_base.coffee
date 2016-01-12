@@ -40,14 +40,6 @@ class CssItemBase extends ItemBase
   @jsLoaded: (option) ->
     # ワークテーブルの初期化処理
 
-  # アイテム描画
-  # @param [Boolean] show 要素作成後に表示するか
-  itemDraw: (show = true) ->
-    if !show
-      @getJQueryElement().css('opacity', 0)
-    else
-      @getJQueryElement().css('opacity', 1)
-
   # CSSのルートのIDを取得
   # @return [String] CSSルートID
   getCssRootElementId: ->

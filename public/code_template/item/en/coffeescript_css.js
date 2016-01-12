@@ -199,15 +199,6 @@ ItemPreviewTemp = (function(superClass) {
     return keyframe;
   };
 
-  ItemPreviewTemp.prototype.willChapter = function() {
-    if (this.getEventMethodName() === 'defaultClick') {
-      this.getJQueryElement().css('opacity', 1);
-    } else if (this.getEventMethodName() === 'changeColorClick' || this.getEventMethodName() === 'changeColorScroll') {
-      this.getJQueryElement().css('opacity', 1);
-    }
-    return ItemPreviewTemp.__super__.willChapter.call(this);
-  };
-
   return ItemPreviewTemp;
 
 })(CssItemBase);

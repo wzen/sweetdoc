@@ -99,6 +99,15 @@ class ItemBase extends ItemEventBase
   # @abstract
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
+    if !show
+      @getJQueryElement().css('opacity', 0)
+    else
+      @getJQueryElement().css('opacity', 1)
+
+  willChapter: ->
+    # チャプター開始時に表示
+    @getJQueryElement().css('opacity', 1)
+    super()
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか

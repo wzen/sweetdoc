@@ -44,17 +44,6 @@ CssItemBase = (function(superClass) {
 
   CssItemBase.jsLoaded = function(option) {};
 
-  CssItemBase.prototype.itemDraw = function(show) {
-    if (show == null) {
-      show = true;
-    }
-    if (!show) {
-      return this.getJQueryElement().css('opacity', 0);
-    } else {
-      return this.getJQueryElement().css('opacity', 1);
-    }
-  };
-
   CssItemBase.prototype.getCssRootElementId = function() {
     return "css_" + this.id;
   };

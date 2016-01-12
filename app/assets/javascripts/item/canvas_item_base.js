@@ -51,6 +51,7 @@ CanvasItemBase = (function(superClass) {
     if (show == null) {
       show = true;
     }
+    CanvasItemBase.__super__.itemDraw.call(this, show);
     this.initCanvas();
     return this.saveNewDrawingSurface();
   };

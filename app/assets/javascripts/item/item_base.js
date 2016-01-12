@@ -110,6 +110,16 @@ ItemBase = (function(superClass) {
     if (show == null) {
       show = true;
     }
+    if (!show) {
+      return this.getJQueryElement().css('opacity', 0);
+    } else {
+      return this.getJQueryElement().css('opacity', 1);
+    }
+  };
+
+  ItemBase.prototype.willChapter = function() {
+    this.getJQueryElement().css('opacity', 1);
+    return ItemBase.__super__.willChapter.call(this);
   };
 
   ItemBase.prototype.refresh = function(show, callback) {

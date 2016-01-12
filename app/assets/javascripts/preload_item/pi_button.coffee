@@ -214,15 +214,6 @@ class PreloadItemButton extends CssItemBase
 
     return keyframe
 
-  willChapter: ->
-    if @getEventMethodName() == 'defaultClick'
-      # ボタンを表示
-      @getJQueryElement().css('opacity', 1)
-    else if @getEventMethodName() == 'changeColorClick' || @getEventMethodName() == 'changeColorScroll'
-      # ボタンを表示
-      @getJQueryElement().css('opacity', 1)
-    super()
-
 Common.setClassToMap(PreloadItemButton.CLASS_DIST_TOKEN, PreloadItemButton)
 
 # 初期化

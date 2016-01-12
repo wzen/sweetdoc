@@ -213,7 +213,7 @@ EventBase = (function(superClass) {
         this.clickHandlerFunc(true);
         return this._doPreviewLoop = false;
       }
-    } else if (!this._isFinishedEvent && ((this._stepLoopCount == null) || this._stepLoopCount < 50)) {
+    } else if (!this._isFinishedEvent && ((this._stepLoopCount == null) || this._stepLoopCount < 20)) {
       if (this._stepLoopCount == null) {
         this._stepLoopCount = 0;
       }

@@ -99,14 +99,6 @@ PreloadItemText = (function(superClass) {
                 value: PreloadItemText.ShowAnimationType.BLUR
               }
             ]
-          },
-          showAnimationDuration: {
-            type: 'number',
-            name: "Animation Duration",
-            "default": 0.5,
-            min: 0.1,
-            max: 3.0,
-            stepValue: 0.1
           }
         }
       },
@@ -361,7 +353,6 @@ PreloadItemText = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
-    this._timemax = 15;
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
@@ -373,7 +364,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _startOpenAnimation = function(callback) {
-    var emt, fontSize, height, progressPercent, step1, step2, step3, width, writingLength, x, y;
+    var emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, writingLength, x, y;
     if (callback == null) {
       callback = null;
     }
@@ -388,11 +379,12 @@ PreloadItemText = (function(superClass) {
     width = null;
     height = null;
     if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
+      timemax = 15;
       step1 = 0.5;
       step2 = 0.7;
       step3 = 1;
-      if (this._time / this._timemax < step1) {
-        progressPercent = this._time / (this._timemax * step1);
+      if (this._time / timemax < step1) {
+        progressPercent = this._time / (timemax * step1);
         x = (this.itemSize.w * 0.5) + (((this.itemSize.w - this.itemSize.w * 0.9) * 0.5) - (this.itemSize.w * 0.5)) * progressPercent;
         y = (this.itemSize.h * 0.5) + (((this.itemSize.h - this.itemSize.h * 0.9) * 0.5) - (this.itemSize.h * 0.5)) * progressPercent;
         width = (this.itemSize.w * 0.9) * progressPercent;
@@ -404,8 +396,8 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time1 = this._time;
-      } else if (this._time / this._timemax < step2) {
-        progressPercent = (this._time - this._time1) / (this._timemax * (step2 - step1));
+      } else if (this._time / timemax < step2) {
+        progressPercent = (this._time - this._time1) / (timemax * (step2 - step1));
         x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.6) * 0.5) - this._step1.x) * progressPercent;
         y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.6) * 0.5) - this._step1.y) * progressPercent;
         width = this._step1.w + (this.itemSize.w * 0.6 - this._step1.w) * progressPercent;
@@ -417,27 +409,33 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time2 = this._time;
-      } else if (this._time / this._timemax < step3) {
-        progressPercent = (this._time - this._time2) / (this._timemax * (step3 - step2));
+      } else if (this._time / timemax < step3) {
+        progressPercent = (this._time - this._time2) / (timemax * (step3 - step2));
         x = this._step2.x - this._step2.x * progressPercent;
         y = this._step2.y - this._step2.y * progressPercent;
         width = this._step2.w + (this.itemSize.w - this._step2.w) * progressPercent;
         height = this._step2.h + (this.itemSize.h - this._step2.h) * progressPercent;
       }
+      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
     } else if (this.showAnimetionType === this.constructor.ShowAnimationType.BLUR) {
+      timemax = 30;
       step1 = 1;
-      if (this._time / this._timemax < step1) {
-        progressPercent = this._time / (this._timemax * step1);
-        this._context.globalAlpha = progressPercent;
+      fontSize = this.fontSize;
+      x = 0;
+      y = 0;
+      width = this._canvas.width;
+      height = this._canvas.height;
+      if (this._time / timemax < step1) {
+        progressPercent = this._time / (timemax * step1);
+        this._fixedBalloonAlpha = progressPercent;
       }
     }
     this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
     writingLength = this.getEventMethodName() === 'changeText' ? this.inputText.length : 0;
-    fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
     _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, writingLength);
     this._time += this._pertime;
-    if (this._time <= this._timemax) {
+    if (this._time <= timemax) {
       return requestAnimationFrame((function(_this) {
         return function() {
           return _startOpenAnimation.call(_this, callback);
@@ -456,7 +454,6 @@ PreloadItemText = (function(superClass) {
     if (callback == null) {
       callback = null;
     }
-    this._timemax = 15;
     this._time = 0;
     this._pertime = 1;
     this.disableHandleResponse();
@@ -468,7 +465,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _startCloseAnimation = function(callback) {
-    var canvas, context, emt, fontSize, height, progressPercent, step1, step2, step3, width, x, y;
+    var canvas, context, emt, fontSize, height, progressPercent, step1, step2, step3, timemax, width, x, y;
     if (callback == null) {
       callback = null;
     }
@@ -484,11 +481,12 @@ PreloadItemText = (function(superClass) {
     width = null;
     height = null;
     if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
+      timemax = 15;
       step1 = 0.2;
       step2 = 0.5;
       step3 = 1;
-      if (this._time / this._timemax < step1) {
-        progressPercent = this._time / (this._timemax * step1);
+      if (this._time / timemax < step1) {
+        progressPercent = this._time / (timemax * step1);
         x = (this.itemSize.w - this.itemSize.w * 0.5) * 0.5 * progressPercent;
         y = (this.itemSize.h - this.itemSize.h * 0.5) * 0.5 * progressPercent;
         width = this.itemSize.w + (this.itemSize.w * 0.5 - this.itemSize.w) * progressPercent;
@@ -500,8 +498,8 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time1 = this._time;
-      } else if (this._time / this._timemax < step2) {
-        progressPercent = (this._time - this._time1) / (this._timemax * (step2 - step1));
+      } else if (this._time / timemax < step2) {
+        progressPercent = (this._time - this._time1) / (timemax * (step2 - step1));
         x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.9) * 0.5) - this._step1.x) * progressPercent;
         y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.9) * 0.5) - this._step1.y) * progressPercent;
         width = this._step1.w + (this.itemSize.w * 0.9 - this._step1.w) * progressPercent;
@@ -513,25 +511,32 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time2 = this._time;
-      } else if (this._time / this._timemax < step3) {
-        progressPercent = (this._time - this._time2) / (this._timemax * (step3 - step2));
+      } else if (this._time / timemax < step3) {
+        progressPercent = (this._time - this._time2) / (timemax * (step3 - step2));
         x = this._step2.x + (this.itemSize.w * 0.5 - this._step2.x) * progressPercent;
         y = this._step2.y + (this.itemSize.h * 0.5 - this._step2.y) * progressPercent;
         width = this._step2.w - this._step2.w * progressPercent;
         height = this._step2.h - this._step2.h * progressPercent;
       }
+      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
     } else if (this.showAnimetionType === this.constructor.ShowAnimationType.BLUR) {
+      timemax = 30;
       step1 = 1;
-      if (this._time / this._timemax < step1) {
-        progressPercent = 1 - (this._time / (this._timemax * step1));
-        this._context.globalAlpha = progressPercent;
+      fontSize = this.fontSize;
+      x = 0;
+      y = 0;
+      width = this._canvas.width;
+      height = this._canvas.height;
+      if (this._time / timemax < step1) {
+        progressPercent = 1 - (this._time / (timemax * step1));
+        this._fixedBalloonAlpha = progressPercent;
+        this._fixedTextAlpha = progressPercent;
       }
     }
     _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
-    fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
     _drawText.call(this, this._context, this.inputText, x, y, width, height, fontSize, this.inputText.length);
     this._time += this._pertime;
-    if (this._time <= this._timemax) {
+    if (this._time <= timemax) {
       return requestAnimationFrame((function(_this) {
         return function() {
           return _startCloseAnimation.call(_this, callback);
@@ -570,7 +575,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.changeText = function(opt) {
     var canvas, context, opa;
-    if (opt.progress === 0 && this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
+    if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation((function(_this) {
         return function() {
           return _this.changeText(opt);
@@ -596,7 +601,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.writeText = function(opt) {
     var canvas, context;
-    if (opt.progress === 0 && this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
+    if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation((function(_this) {
         return function() {
           return _this.writeText(opt);
@@ -613,7 +618,7 @@ PreloadItemText = (function(superClass) {
         _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
       }
     }
-    if (opt.progress === opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
+    if (opt.progress >= opt.progressMax && this.showWithAnimation && (this._animationFlg['startCloseAnimation'] == null)) {
       this.startCloseAnimation();
       return this._animationFlg['startCloseAnimation'] = true;
     }
@@ -852,6 +857,7 @@ PreloadItemText = (function(superClass) {
       };
     })(this);
     context.save();
+    context.globalAlpha = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
     if (this.balloonType === this.constructor.BalloonType.ARC) {
       _drawArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.RECT) {

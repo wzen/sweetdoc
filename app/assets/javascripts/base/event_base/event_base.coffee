@@ -156,11 +156,11 @@ class EventBase extends Extend
       else if @getEventActionType() == Constant.ActionType.CLICK
         @clickHandlerFunc(true)
         @_doPreviewLoop = false
-    else if !@_isFinishedEvent && (!@_stepLoopCount? || @_stepLoopCount < 50)
+    else if !@_isFinishedEvent && (!@_stepLoopCount? || @_stepLoopCount < 20)
       if !@_stepLoopCount?
         @_stepLoopCount = 0
       setTimeout( =>
-        # 0.3秒後に再実行
+        # 0.3秒毎に再実行
         @_stepLoopCount += 1
         @previewStepDraw()
       , 300)
