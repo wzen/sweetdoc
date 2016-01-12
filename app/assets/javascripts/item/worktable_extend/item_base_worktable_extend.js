@@ -518,7 +518,7 @@ itemBaseWorktableExtend = {
       for (varName in ref) {
         value = ref[varName];
         if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-          results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max));
+          results.push(this.settingModifiableVarSlider(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max, value.stepValue));
         } else if (value.type === Constant.ItemDesignOptionType.STRING) {
           results.push(this.settingModifiableString(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.BOOLEAN) {

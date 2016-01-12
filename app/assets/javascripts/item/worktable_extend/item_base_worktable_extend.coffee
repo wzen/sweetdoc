@@ -449,7 +449,7 @@ itemBaseWorktableExtend =
     if @constructor.actionPropertiesModifiableVars()?
       for varName, value of @constructor.actionPropertiesModifiableVars()
         if value.type == Constant.ItemDesignOptionType.NUMBER
-          @settingModifiableVarSlider(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max)
+          @settingModifiableVarSlider(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value.min, value.max, value.stepValue)
         else if value.type == Constant.ItemDesignOptionType.STRING
           @settingModifiableString(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.BOOLEAN
