@@ -171,7 +171,7 @@ EventBase = (function(superClass) {
       return function() {
         _this._runningPreview = true;
         _this.willChapter();
-        _this._doPreviewLoop = true;
+        _this._doPreviewLoop = false;
         _this._skipEvent = false;
         _this._loopCount = 0;
         _this._previewTimer = null;
@@ -186,63 +186,71 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.previewStepDraw = function() {
-    if (this._doPreviewLoop) {
-      if (this._previewTimer != null) {
-        clearTimeout(this._previewTimer);
-        this._previewTimer = null;
-      }
-      return this._previewTimer = setTimeout((function(_this) {
-        return function() {
-          if (_this.getEventActionType() === Constant.ActionType.SCROLL) {
+    if (!this._skipEvent) {
+      if (this.getEventActionType() === Constant.ActionType.SCROLL) {
+        if (this._previewTimer != null) {
+          clearTimeout(this._previewTimer);
+          this._previewTimer = null;
+        }
+        return this._previewTimer = setTimeout((function(_this) {
+          return function() {
             _this.scrollHandlerFunc(true);
             _this._progress += 1;
-            if (_this._progress >= _this.progressMax()) {
-              _this._progress = 0;
+            if (_this._progress > _this.progressMax()) {
+              _this._doPreviewLoop = false;
+              clearTimeout(_this._previewTimer);
+              _this._previewTimer = null;
               return _this.previewLoop();
             } else {
               return _this.previewStepDraw();
             }
-          } else if (_this.getEventActionType() === Constant.ActionType.CLICK) {
-            return _this.clickHandlerFunc(true);
-          }
+          };
+        })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
+      } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
+        return this.clickHandlerFunc(true);
+      }
+    } else if (!this._isFinishedEvent) {
+      return setTimeout((function(_this) {
+        return function() {
+          return _this.previewStepDraw();
         };
-      })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
-    } else {
-      return this.stopPreview();
+      })(this), 300);
     }
   };
 
   EventBase.prototype.previewLoop = function() {
     var loopDelay, loopMaxCount;
+    if (this._doPreviewLoop) {
+      return;
+    }
     if (window.debug) {
       console.log('_loopCount:' + this._loopCount);
     }
     loopDelay = 1000;
     loopMaxCount = 5;
-    if (this._doPreviewLoop) {
-      this._loopCount += 1;
-      if (this._loopCount >= loopMaxCount) {
-        this.stopPreview();
+    this._doPreviewLoop = true;
+    this._loopCount += 1;
+    if (this._loopCount >= loopMaxCount) {
+      this.stopPreview();
+      if (this.loopFinishCallback != null) {
+        this.loopFinishCallback();
+        this.loopFinishCallback = null;
       }
-      if (this._previewTimer != null) {
-        clearTimeout(this._previewTimer);
-        this._previewTimer = null;
-      }
-      this._previewTimer = setTimeout((function(_this) {
-        return function() {
-          if (_this._runningPreview) {
-            _this.updateEventBefore();
-            _this.willChapter();
-            return _this.previewStepDraw();
-          }
-        };
-      })(this), loopDelay);
-      if (!this._doPreviewLoop) {
-        return this.stopPreview();
-      }
-    } else {
-      return this.stopPreview();
     }
+    if (this._previewTimer != null) {
+      clearTimeout(this._previewTimer);
+      this._previewTimer = null;
+    }
+    return this._previewTimer = setTimeout((function(_this) {
+      return function() {
+        if (_this._runningPreview) {
+          _this.updateEventBefore();
+          _this.willChapter();
+          _this._progress = 0;
+          return _this.previewStepDraw();
+        }
+      };
+    })(this), loopDelay);
   };
 
   EventBase.prototype.stopPreview = function(callback) {
@@ -267,10 +275,6 @@ EventBase = (function(superClass) {
     if (this._clickIntervalTimer != null) {
       clearInterval(this._clickIntervalTimer);
       this._clickIntervalTimer = null;
-    }
-    if (this.loopFinishCallback != null) {
-      this.loopFinishCallback();
-      this.loopFinishCallback = null;
     }
     if (callback != null) {
       return callback(true);
@@ -432,12 +436,15 @@ EventBase = (function(superClass) {
   };
 
   EventBase.prototype.finishEvent = function() {
+    if (this._isFinishedEvent) {
+      return;
+    }
     this._isFinishedEvent = true;
     if (this._clickIntervalTimer != null) {
       clearInterval(this._clickIntervalTimer);
       this._clickIntervalTimer = null;
     }
-    if (this._runningPreview && this.getEventActionType() === Constant.ActionType.CLICK) {
+    if (this._runningPreview) {
       return this.previewLoop();
     } else {
       if (window.eventAction != null) {

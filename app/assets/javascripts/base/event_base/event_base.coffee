@@ -117,10 +117,8 @@ class EventBase extends Extend
 
     @stopPreview( =>
       @_runningPreview = true
-      #@updateEventBefore()
       @willChapter()
-      # イベントループ
-      @_doPreviewLoop = true
+      @_doPreviewLoop = false
       @_skipEvent = false
       @_loopCount = 0
       @_previewTimer = null
@@ -134,48 +132,58 @@ class EventBase extends Extend
 
   # プレビューStep実行
   previewStepDraw: ->
-    if @_doPreviewLoop
-      if @_previewTimer?
-        clearTimeout(@_previewTimer)
-        @_previewTimer = null
-      @_previewTimer = setTimeout( =>
-        if @getEventActionType() == Constant.ActionType.SCROLL
+    if !@_skipEvent
+      # イベントハンドリング有効時のみ
+      if @getEventActionType() == Constant.ActionType.SCROLL
+        if @_previewTimer?
+          clearTimeout(@_previewTimer)
+          @_previewTimer = null
+        @_previewTimer = setTimeout( =>
           @scrollHandlerFunc(true)
           @_progress += 1
-          if @_progress >= @progressMax()
-            @_progress = 0
+          if @_progress > @progressMax()
+            @_doPreviewLoop = false
+            clearTimeout(@_previewTimer)
+            @_previewTimer = null
             @previewLoop()
           else
             @previewStepDraw()
-        else if @getEventActionType() == Constant.ActionType.CLICK
-          @clickHandlerFunc(true)
-      , @constructor.STEP_INTERVAL_DURATION * 1000)
-    else
-      @stopPreview()
+        , @constructor.STEP_INTERVAL_DURATION * 1000)
+      else if @getEventActionType() == Constant.ActionType.CLICK
+        @clickHandlerFunc(true)
+    else if !@_isFinishedEvent
+      setTimeout( =>
+        # 0.3秒後に再実行
+        @previewStepDraw()
+      , 300)
 
   # プレビュー実行ループ
   previewLoop: ->
+    if @_doPreviewLoop
+      # 二重実行はしない
+      return
+
     if window.debug
       console.log('_loopCount:' + @_loopCount)
     loopDelay = 1000 # 1秒毎イベント実行
     loopMaxCount = 5 # ループ5回
-    if @_doPreviewLoop
-      @_loopCount += 1
-      if @_loopCount >= loopMaxCount
-        @stopPreview()
-      if @_previewTimer?
-        clearTimeout(@_previewTimer)
-        @_previewTimer = null
-      @_previewTimer = setTimeout( =>
-        if @_runningPreview
-          @updateEventBefore()
-          @willChapter()
-          @previewStepDraw()
-      , loopDelay)
-      if !@_doPreviewLoop
-        @stopPreview()
-    else
+    @_doPreviewLoop = true
+    @_loopCount += 1
+    if @_loopCount >= loopMaxCount
       @stopPreview()
+      if @loopFinishCallback?
+        @loopFinishCallback()
+        @loopFinishCallback = null
+    if @_previewTimer?
+      clearTimeout(@_previewTimer)
+      @_previewTimer = null
+    @_previewTimer = setTimeout( =>
+      if @_runningPreview
+        @updateEventBefore()
+        @willChapter()
+        @_progress = 0
+        @previewStepDraw()
+    , loopDelay)
 
   # プレビューを停止
   # @param [Function] callback コールバック
@@ -197,9 +205,6 @@ class EventBase extends Extend
     if @_clickIntervalTimer?
       clearInterval(@_clickIntervalTimer)
       @_clickIntervalTimer = null
-    if @loopFinishCallback?
-      @loopFinishCallback()
-      @loopFinishCallback = null
     if callback?
       callback(true)
 
@@ -358,11 +363,15 @@ class EventBase extends Extend
 
   # イベントを終了する
   finishEvent: ->
+    if @_isFinishedEvent
+      # 二重でコールしない
+      return
+
     @_isFinishedEvent = true
     if @_clickIntervalTimer?
       clearInterval(@_clickIntervalTimer)
       @_clickIntervalTimer = null
-    if @_runningPreview && @getEventActionType() == Constant.ActionType.CLICK
+    if @_runningPreview
       @previewLoop()
     else
       if window.eventAction?
