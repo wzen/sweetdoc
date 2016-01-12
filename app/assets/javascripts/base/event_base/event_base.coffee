@@ -139,18 +139,21 @@ class EventBase extends Extend
           clearTimeout(@_previewTimer)
           @_previewTimer = null
         @_previewTimer = setTimeout( =>
-          @scrollHandlerFunc(true)
-          @_progress += 1
-          if @_progress > @progressMax()
+          if @_progress + 1 > @progressMax()
             @_doPreviewLoop = false
             clearTimeout(@_previewTimer)
             @_previewTimer = null
+
+          @scrollHandlerFunc(true)
+          @_progress += 1
+          if @_progress > @progressMax()
             @previewLoop()
           else
             @previewStepDraw()
         , @constructor.STEP_INTERVAL_DURATION * 1000)
       else if @getEventActionType() == Constant.ActionType.CLICK
         @clickHandlerFunc(true)
+        @_doPreviewLoop = false
     else if !@_isFinishedEvent
       setTimeout( =>
         # 0.3秒後に再実行
@@ -163,12 +166,12 @@ class EventBase extends Extend
       # 二重実行はしない
       return
 
-    if window.debug
-      console.log('_loopCount:' + @_loopCount)
     loopDelay = 1000 # 1秒毎イベント実行
-    loopMaxCount = 5 # ループ5回
+    loopMaxCount = 3 # ループ2回(全部で3回実行)
     @_doPreviewLoop = true
     @_loopCount += 1
+    if window.debug
+      console.log('_loopCount:' + @_loopCount)
     if @_loopCount >= loopMaxCount
       @stopPreview()
       if @loopFinishCallback?
@@ -330,7 +333,7 @@ class EventBase extends Extend
 
     # ステップ実行
     progressMax = @progressMax()
-    @stepValue = 1
+    @stepValue = 0
     @_clickIntervalTimer = setInterval( =>
       if !@_skipEvent
         @execMethod({

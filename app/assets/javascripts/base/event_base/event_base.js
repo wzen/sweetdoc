@@ -194,12 +194,14 @@ EventBase = (function(superClass) {
         }
         return this._previewTimer = setTimeout((function(_this) {
           return function() {
-            _this.scrollHandlerFunc(true);
-            _this._progress += 1;
-            if (_this._progress > _this.progressMax()) {
+            if (_this._progress + 1 > _this.progressMax()) {
               _this._doPreviewLoop = false;
               clearTimeout(_this._previewTimer);
               _this._previewTimer = null;
+            }
+            _this.scrollHandlerFunc(true);
+            _this._progress += 1;
+            if (_this._progress > _this.progressMax()) {
               return _this.previewLoop();
             } else {
               return _this.previewStepDraw();
@@ -207,7 +209,8 @@ EventBase = (function(superClass) {
           };
         })(this), this.constructor.STEP_INTERVAL_DURATION * 1000);
       } else if (this.getEventActionType() === Constant.ActionType.CLICK) {
-        return this.clickHandlerFunc(true);
+        this.clickHandlerFunc(true);
+        return this._doPreviewLoop = false;
       }
     } else if (!this._isFinishedEvent) {
       return setTimeout((function(_this) {
@@ -223,13 +226,13 @@ EventBase = (function(superClass) {
     if (this._doPreviewLoop) {
       return;
     }
+    loopDelay = 1000;
+    loopMaxCount = 3;
+    this._doPreviewLoop = true;
+    this._loopCount += 1;
     if (window.debug) {
       console.log('_loopCount:' + this._loopCount);
     }
-    loopDelay = 1000;
-    loopMaxCount = 5;
-    this._doPreviewLoop = true;
-    this._loopCount += 1;
     if (this._loopCount >= loopMaxCount) {
       this.stopPreview();
       if (this.loopFinishCallback != null) {
@@ -396,7 +399,7 @@ EventBase = (function(superClass) {
       window.eventAction.thisPage().thisChapter().doMoveChapter = true;
     }
     progressMax = this.progressMax();
-    this.stepValue = 1;
+    this.stepValue = 0;
     return this._clickIntervalTimer = setInterval((function(_this) {
       return function() {
         if (!_this._skipEvent) {
