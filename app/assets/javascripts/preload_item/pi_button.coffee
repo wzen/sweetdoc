@@ -169,7 +169,6 @@ class PreloadItemButton extends CssItemBase
   # CSSアニメーションの定義(必要な場合)
   cssAnimationKeyframe : ->
     methodName = @getEventMethodName()
-    funcName = "#{methodName}_#{@id}"
     keyFrameName = "#{@id}_frame"
     emt = @getJQueryElement().find('.item_contents:first')
     top = emt.css('top')

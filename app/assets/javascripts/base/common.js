@@ -132,6 +132,48 @@ Common = (function() {
     return (typeof obj === "object") && (obj.length === 1) && (obj.get(0).nodeType === 1) && (typeof obj.get(0).style === "object") && (typeof obj.get(0).ownerDocument === "object");
   };
 
+  Common.requestAnimationFrame = function() {
+    var callback, geckoVersion, index, originalWebkitRequestAnimationFrame, self, userAgent, wrapper;
+    originalWebkitRequestAnimationFrame = void 0;
+    wrapper = void 0;
+    callback = void 0;
+    geckoVersion = 0;
+    userAgent = navigator.userAgent;
+    index = 0;
+    self = this;
+    if (window.webkitRequestAnimationFrame) {
+      wrapper = function(time) {
+        if (time == null) {
+          time = +new Date();
+        }
+        return self.callback(time);
+      };
+      originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame;
+      window.webkitRequestAnimationFrame = function(callback, element) {
+        self.callback = callback;
+        return originalWebkitRequestAnimationFrame(wrapper, element);
+      };
+    }
+    if (window.mozRequestAnimationFrame) {
+      index = userAgent.indexOf('rv:');
+      if (userAgent.indexOf('Gecko') !== -1) {
+        geckoVersion = userAgent.substr(index + 3, 3);
+        if (geckoVersion === '2.0') {
+          window.mozRequestAnimationFrame = void 0;
+        }
+      }
+    }
+    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
+      return window.setTimeout(function() {
+        var finish, start;
+        start = +new Date();
+        callback(start);
+        finish = +new Date();
+        return self.timeout = 1000 / 60 - (finish - start);
+      }, self.timeout);
+    };
+  };
+
   Common.applyEnvironmentFromPagevalue = function() {
     Common.setTitle(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_NAME));
     this.initScreenSize();

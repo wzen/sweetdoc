@@ -93,6 +93,48 @@ class Common
   @isElement: (obj) ->
     return (typeof obj == "object") && (obj.length == 1) && (obj.get(0).nodeType ==1) && (typeof obj.get(0).style == "object") && (typeof obj.get(0).ownerDocument == "object")
 
+  # requestAnimationFrameラッパー
+  @requestAnimationFrame: ->
+    originalWebkitRequestAnimationFrame = undefined
+    wrapper = undefined
+    callback = undefined
+    geckoVersion = 0
+    userAgent = navigator.userAgent
+    index = 0
+    self = @
+
+    if window.webkitRequestAnimationFrame
+      wrapper = (time) ->
+        if !time?
+          time = +new Date()
+        self.callback(time);
+
+      originalWebkitRequestAnimationFrame = window.webkitRequestAnimationFrame
+      window.webkitRequestAnimationFrame = (callback, element) ->
+        self.callback = callback
+        originalWebkitRequestAnimationFrame(wrapper, element)
+
+    if window.mozRequestAnimationFrame
+      index = userAgent.indexOf('rv:')
+
+      if userAgent.indexOf('Gecko') != -1
+        geckoVersion = userAgent.substr(index + 3, 3);
+        if geckoVersion == '2.0'
+          window.mozRequestAnimationFrame = undefined;
+
+    return window.requestAnimationFrame   ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame    ||
+        window.oRequestAnimationFrame      ||
+        window.msRequestAnimationFrame     ||
+        (callback, element) ->
+          window.setTimeout( ->
+            start = +new Date()
+            callback(start);
+            finish = +new Date();
+            self.timeout = 1000 / 60 - (finish - start)
+          , self.timeout)
+
   # Pagevalueから環境を反映
   @applyEnvironmentFromPagevalue = ->
     # タイトル名設定

@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _settingTextDbclickEvent, _showInputModal, constant;
+  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -89,6 +89,7 @@ PreloadItemText = (function(superClass) {
           showAnimetionType: {
             name: 'AnimationType',
             type: 'select',
+            "default": PreloadItemText.ShowAnimationType.POPUP,
             options: [
               {
                 name: 'Popup',
@@ -102,6 +103,7 @@ PreloadItemText = (function(superClass) {
           showAnimationDuration: {
             type: 'number',
             name: "Animation Duration",
+            "default": 0.5,
             min: 0.1,
             max: 3.0,
             stepValue: 0.1
@@ -272,15 +274,12 @@ PreloadItemText = (function(superClass) {
     this.showBalloon = false;
     this.balloonValue = {};
     this.balloonType = null;
+    this.balloonRandomIntValue = null;
     this.textPositions = null;
     this.wordAlign = this.constructor.WordAlign.LEFT;
     this._fontMeatureCache = {};
     this._fixedTextAlpha = null;
   }
-
-  PreloadItemText.prototype.updateItemSize = function(w, h) {
-    return PreloadItemText.__super__.updateItemSize.call(this, w, h);
-  };
 
   PreloadItemText.prototype.itemDraw = function(show) {
     if (show == null) {
@@ -358,12 +357,148 @@ PreloadItemText = (function(superClass) {
     })(this));
   };
 
+  PreloadItemText.prototype.startOpenAnimation = function() {
+    this._timemax = 50;
+    this._time = 0;
+    this._pertime = 1;
+    this.disableEventHandle();
+    return Common.requestAnimationFrame(_startOpenAnimation);
+  };
+
+  _startOpenAnimation = function() {
+    var emt, height, progressPercent, step1, step2, step3, width, writingLength, x, y;
+    if (this._canvas == null) {
+      this._canvas = document.getElementById(this.canvasElementId());
+      this._context = this._canvas.getContext('2d');
+      this._context.save();
+    }
+    this._context.clearRect(0, 0, canvas.width, canvas.height);
+    emt = this.getJQueryElement();
+    x = null;
+    y = null;
+    width = null;
+    height = null;
+    if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
+      step1 = 0.7;
+      step2 = 0.8;
+      step3 = 1;
+      if (this._time / this._timemax < step1) {
+        progressPercent = this._time / (this._timemax * step1);
+        x = (this.itemSize.w * 0.5) + (((this.itemSize.w - this.itemSize.w * 0.9) * 0.5) - (this.itemSize.w * 0.5)) * progressPercent;
+        y = (this.itemSize.h * 0.5) + (((this.itemSize.h - this.itemSize.h * 0.9) * 0.5) - (this.itemSize.h * 0.5)) * progressPercent;
+        width = (this.itemSize.w * 0.9) * progressPercent;
+        height = (this.itemSize.h * 0.9) * progressPercent;
+        this._step1 = {
+          x: x,
+          y: y,
+          width: width,
+          height: height
+        };
+        this._time1 = this._time;
+      } else if (this._time / this._timemax < step2) {
+        progressPercent = (this._time - this._time1) / (this._timemax * (step2 - step1));
+        x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.8) * 0.5) - this._step1.x) * progressPercent;
+        y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.8) * 0.5) - this._step1.y) * progressPercent;
+        width = this._step1.w + (this.itemSize.w * 0.8 - this._step1.w) * progressPercent;
+        height = this._step1.h((this.itemSize.h * 0.8 - this._step1.h) * progressPercent);
+        this._step2 = {
+          x: x,
+          y: y,
+          width: width,
+          height: height
+        };
+        this._time2 = this._time;
+      } else if (this._time / this._timemax < step3) {
+        progressPercent = (this._time - this._time2) / (this._timemax * (step3 - step2));
+        x = this._step2.x - this._step2.x * progressPercent;
+        y = this._step2.y - this._step2.y * progressPercent;
+        width = this._step2.w + (this.itemSize.w - this._step2.w) * progressPercent;
+        height = this._step2.h + (this.itemSize.h - this._step2.h) * progressPercent;
+      }
+    } else if (this.showAnimetionType === this.constructor.ShowAnimationType.BLUR) {
+      step1 = 1;
+      if (this._time / this._timemax < step1) {
+        progressPercent = this._time / (this._timemax * step1);
+        this._context.globalAlpha = progressPercent;
+      }
+    }
+    _drawBalloon.call(this, this._context, x, y, width, height);
+    writingLength = this.getEventMethodName() === 'changeText' ? this.inputText.length : 0;
+    _drawText.call(this, this._context, text, x, y, width, height, writingLength);
+    this._time += this._pertime;
+    if (this._time <= this._timemax) {
+      return Common.requestAnimationFrame(_startOpenAnimation);
+    } else {
+      this._context.restore();
+      return this.enableEventHandle();
+    }
+  };
+
+  PreloadItemText.prototype.startCloseAnimation = function() {
+    this._timemax = 50;
+    this._time = 0;
+    this._pertime = 1;
+    this.disableEventHandle();
+    return Common.requestAnimationFrame(_startCloseAnimation);
+  };
+
+  _startCloseAnimation = function() {
+    var emt, height, progressPercent, step1, width, x, y;
+    if (this._canvas == null) {
+      this._canvas = document.getElementById(this.canvasElementId());
+      this._context = this._canvas.getContext('2d');
+      this._context.save();
+    }
+    this._context.clearRect(0, 0, canvas.width, canvas.height);
+    emt = this.getJQueryElement();
+    x = null;
+    y = null;
+    width = null;
+    height = null;
+    if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
+      step1 = 1;
+      if (this._time / this._timemax < step1) {
+        progressPercent = this._time / (this._timemax * step1);
+        x = (this.itemSize.w * 0.5) * progressPercent;
+        y = (this.itemSize.h * 0.5) * progressPercent;
+        width = this.itemSize.w - this.itemSize.w * progressPercent;
+        height = this.itemSize.h - this.itemSize.h * progressPercent;
+      }
+    } else if (this.showAnimetionType === this.constructor.ShowAnimationType.BLUR) {
+      step1 = 1;
+      if (this._time / this._timemax < step1) {
+        progressPercent = 1 - (this._time / (this._timemax * step1));
+        this._context.globalAlpha = progressPercent;
+      }
+    }
+    _drawBalloon.call(this, this._context, x, y, width, height);
+    _drawText.call(this, this._context, text, x, y, width, height, this.inputText.length);
+    this._time += this._pertime;
+    if (this._time <= this._timemax) {
+      return Common.requestAnimationFrame(_startOpenAnimation);
+    } else {
+      this._context.restore();
+      return this.enableEventHandle();
+    }
+  };
+
+  PreloadItemText.prototype.willChapter = function() {
+    var canvas, context;
+    PreloadItemText.__super__.willChapter.call(this);
+    canvas = document.getElementById(this.canvasElementId());
+    context = canvas.getContext('2d');
+    return context.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
   PreloadItemText.isJapanease = function(c) {
     return c.charCodeAt(0) >= 256;
   };
 
   PreloadItemText.prototype.changeText = function(opt) {
     var canvas, context, opa;
+    if (opt.progress === 0 && this.showWithAnimation) {
+      this.startOpenAnimation();
+    }
     opa = opt.progress / opt.progressMax;
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
@@ -372,18 +507,27 @@ PreloadItemText = (function(superClass) {
     this._fixedTextAlpha = 1 - opa;
     _drawTextAndBalloonToCanvas.call(this, this.inputText__before);
     this._fixedTextAlpha = opa;
-    return _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
+    _drawTextAndBalloonToCanvas.call(this, this.inputText__after);
+    if (opt.progress === opt.progressMax && this.showWithAnimation) {
+      return this.startCloseAnimation();
+    }
   };
 
   PreloadItemText.prototype.writeText = function(opt) {
     var canvas, context;
+    if (opt.progress === 0 && this.showWithAnimation) {
+      this.startOpenAnimation();
+    }
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     this._fixedTextAlpha = null;
     if ((this.inputText != null) && this.inputText.length > 0) {
       _setTextStyle.call(this);
-      return _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
+      _drawTextAndBalloonToCanvas.call(this, this.inputText, this.inputText.length * opt.progress / opt.progressMax);
+    }
+    if (opt.progress === opt.progressMax && this.showWithAnimation) {
+      return this.startCloseAnimation();
     }
   };
 
@@ -408,15 +552,15 @@ PreloadItemText = (function(superClass) {
     }
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
-    _drawBalloon.call(this, context, canvas.width, canvas.height);
-    return _drawText.call(this, context, text, canvas.width, canvas.height, writingLength);
+    _drawBalloon.call(this, context, 0, 0, canvas.width, canvas.height);
+    return _drawText.call(this, context, text, 0, 0, canvas.width, canvas.height, writingLength);
   };
 
   _getRandomInt = function(max, min) {
     return Math.floor(Math.random() * (max - min)) + min;
   };
 
-  _drawBalloon = function(context, width, height) {
+  _drawBalloon = function(context, x, y, width, height) {
     var _drawArc, _drawBArc, _drawBRect, _drawRect, _drawShout, _drawThink;
     if (!this.showBalloon) {
       return;
@@ -428,10 +572,10 @@ PreloadItemText = (function(superClass) {
       diff = 3.0;
       if (width > height) {
         context.scale(width / height, 1);
-        context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2);
+        context.arc(x, y, height * 0.5 - diff, 0, Math.PI * 2);
       } else {
         context.scale(1, height / width);
-        context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2);
+        context.arc(x, y, width * 0.5 - diff, 0, Math.PI * 2);
       }
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
@@ -442,10 +586,10 @@ PreloadItemText = (function(superClass) {
       context.beginPath();
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-      return context.fillRect(0, 0, width, height);
+      return context.fillRect(x, y, width, height);
     };
     _drawBArc = function() {
-      var diff, l, per, results, results1, sum, x, y;
+      var diff, l, per, results, results1, sum;
       diff = 3.0;
       context.translate(width * 0.5, height * 0.5);
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
@@ -460,7 +604,7 @@ PreloadItemText = (function(superClass) {
           context.beginPath();
           l = ((2 * Math.abs(Math.cos(x))) + 1) * per;
           y = x + l;
-          context.arc(0, 0, height * 0.5 - diff, x, y);
+          context.arc(x, y, height * 0.5 - diff, x, y);
           context.fill();
           context.stroke();
           sum += l;
@@ -480,7 +624,7 @@ PreloadItemText = (function(superClass) {
           context.beginPath();
           l = ((2 * Math.abs(Math.sin(x))) + 1) * per;
           y = x + l;
-          context.arc(0, 0, width * 0.5 - diff, x, y);
+          context.arc(x, y, width * 0.5 - diff, x, y);
           context.fill();
           context.stroke();
           sum += l;
@@ -513,13 +657,13 @@ PreloadItemText = (function(superClass) {
         }
         return results;
       };
-      _draw.call(this, 0, 0, width, 0);
-      _draw.call(this, width, 0, width, height);
-      _draw.call(this, width, height, 0, height);
-      _draw.call(this, 0, height, 0, 0);
+      _draw.call(this, x, y, width, y);
+      _draw.call(this, width, y, width, height);
+      _draw.call(this, width, height, x, height);
+      _draw.call(this, x, height, x, y);
       context.fillStyle = 'rgba(255, 255, 255, 0.5)';
       context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-      context.fillRect(0, 0, width, height);
+      context.fillRect(x, y, width, height);
       context.stroke();
       return context.restore();
     };
@@ -542,7 +686,10 @@ PreloadItemText = (function(superClass) {
         context.strokeStyle = 'black';
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          if (_this.balloonRandomIntValue == null) {
+            _this.balloonRandomIntValue = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          }
+          random = _this.balloonRandomIntValue;
           beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx);
           beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
           endX = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx);
@@ -580,7 +727,10 @@ PreloadItemText = (function(superClass) {
         context.strokeStyle = 'black';
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
-          random = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          if (_this.balloonRandomIntValue == null) {
+            _this.balloonRandomIntValue = _getRandomInt.call(_this, punkLineMax, punkLineMin);
+          }
+          random = _this.balloonRandomIntValue;
           beginX = PreloadItemText.getCircumPos.x(deg, radiusX, cx);
           beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
           endX = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx);
@@ -615,14 +765,14 @@ PreloadItemText = (function(superClass) {
     return context.restore();
   };
 
-  _drawText = function(context, text, width, height, writingLength) {
+  _drawText = function(context, text, x, y, width, height, writingLength) {
     var _calcHorizontalColumnHeightMax, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
     if (writingLength == null) {
       writingLength = text.length;
     }
     context.save();
     if (this.fontSize == null) {
-      _calcFontSizeAbout.call(this, text, canvas.width, canvas.height);
+      _calcFontSizeAbout.call(this, text, width, height);
     }
     context.font = this.fontSize + "px " + this.fontFamily;
     wordWidth = context.measureText('あ').width;
@@ -741,13 +891,13 @@ PreloadItemText = (function(superClass) {
       widthMax = _calcHorizontalColumnWidthMax.call(this, column);
       for (j = m = 0, ref1 = column.length - 1; 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
         heightLine += _calcHorizontalColumnHeightMax.call(this, column[j]);
-        w = null;
+        w = x;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
-          w = (width - widthMax) * 0.5;
+          w += (width - widthMax) * 0.5;
         } else if (this.wordAlign === this.constructor.WordAlign.CENTER) {
-          w = (width - _calcHorizontalColumnWidth.call(this, column[j])) * 0.5;
+          w += (width - _calcHorizontalColumnWidth.call(this, column[j])) * 0.5;
         } else {
-          w = (width + widthMax) * 0.5 - _calcHorizontalColumnWidth.call(this, column[j]);
+          w += (width + widthMax) * 0.5 - _calcHorizontalColumnWidth.call(this, column[j]);
         }
         context.beginPath();
         wl = 0;
@@ -765,13 +915,13 @@ PreloadItemText = (function(superClass) {
       heightMax = _calcVerticalColumnHeightMax.call(this, column);
       for (j = o = 0, ref3 = column.length - 1; 0 <= ref3 ? o <= ref3 : o >= ref3; j = 0 <= ref3 ? ++o : --o) {
         widthLine -= wordWidth;
-        h = null;
+        h = y;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
-          h = (height - heightMax) * 0.5;
+          h += (height - heightMax) * 0.5;
         } else if (this.wordAlign === this.constructor.WordAlign.CENTER) {
-          h = (height - _calcVerticalColumnHeight.call(this, column[j])) * 0.5;
+          h += (height - _calcVerticalColumnHeight.call(this, column[j])) * 0.5;
         } else {
-          h = (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(this, column[j]);
+          h += (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(this, column[j]);
         }
         context.beginPath();
         hl = 0;

@@ -180,9 +180,8 @@ PreloadItemButton = (function(superClass) {
   };
 
   PreloadItemButton.prototype.cssAnimationKeyframe = function() {
-    var emt, funcName, height, keyFrameName, keyframe, left, methodName, top, width;
+    var emt, height, keyFrameName, keyframe, left, methodName, top, width;
     methodName = this.getEventMethodName();
-    funcName = methodName + "_" + this.id;
     keyFrameName = this.id + "_frame";
     emt = this.getJQueryElement().find('.item_contents:first');
     top = emt.css('top');
