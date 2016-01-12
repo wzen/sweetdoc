@@ -276,7 +276,7 @@ class PreloadItemText extends CanvasItemBase
       @_canvas = document.getElementById(@canvasElementId())
       @_context = @_canvas.getContext('2d')
       @_context.save()
-    @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
+
     emt = @getJQueryElement()
     x = null
     y = null
@@ -314,6 +314,7 @@ class PreloadItemText extends CanvasItemBase
         progressPercent = @_time / (@_timemax * step1)
         @_context.globalAlpha = progressPercent
 
+    @_context.clearRect(0, 0, @_canvas.width, @_canvas.height)
     _drawBalloon.call(@, @_context, x, y, width, height,  @_canvas.width, @_canvas.height)
     writingLength = if @getEventMethodName() == 'changeText' then @inputText.length else 0
     fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
@@ -470,6 +471,7 @@ class PreloadItemText extends CanvasItemBase
       return
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
+    context.clearRect(0, 0, canvas.width, canvas.height)
     _drawBalloon.call(@, context, 0, 0, canvas.width, canvas.height)
     if !@fontSize?
       @fontSize = _calcFontSizeAbout.call(@, text, canvas.width, canvas.height, @isFixedFontSize, @isDrawHorizontal)
@@ -618,6 +620,7 @@ class PreloadItemText extends CanvasItemBase
 
         # 開始点と最終点のズレを調整する
         if i == 0
+          context.moveTo(beginX, beginY)
           context.arcTo(beginX, beginY, endX, endY, punkLineMax)
         context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY)
 
@@ -661,6 +664,7 @@ class PreloadItemText extends CanvasItemBase
 
         # 開始点と最終点のズレを調整する
         if i == 0
+          context.moveTo(beginX, beginY)
           context.arcTo(beginX, beginY, endX, endY, punkLineMax)
         context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY)
 

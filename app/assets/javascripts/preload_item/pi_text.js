@@ -382,7 +382,6 @@ PreloadItemText = (function(superClass) {
       this._context = this._canvas.getContext('2d');
       this._context.save();
     }
-    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     emt = this.getJQueryElement();
     x = null;
     y = null;
@@ -432,6 +431,7 @@ PreloadItemText = (function(superClass) {
         this._context.globalAlpha = progressPercent;
       }
     }
+    this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
     _drawBalloon.call(this, this._context, x, y, width, height, this._canvas.width, this._canvas.height);
     writingLength = this.getEventMethodName() === 'changeText' ? this.inputText.length : 0;
     fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
@@ -640,6 +640,7 @@ PreloadItemText = (function(superClass) {
     }
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
     _drawBalloon.call(this, context, 0, 0, canvas.width, canvas.height);
     if (this.fontSize == null) {
       this.fontSize = _calcFontSizeAbout.call(this, text, canvas.width, canvas.height, this.isFixedFontSize, this.isDrawHorizontal);
@@ -799,6 +800,7 @@ PreloadItemText = (function(superClass) {
           cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX - random * 0.6, cx);
           cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY - random * 0.6, cy);
           if (i === 0) {
+            context.moveTo(beginX, beginY);
             context.arcTo(beginX, beginY, endX, endY, punkLineMax);
           }
           context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
@@ -840,6 +842,7 @@ PreloadItemText = (function(superClass) {
           cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.8, cx);
           cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.8, cy);
           if (i === 0) {
+            context.moveTo(beginX, beginY);
             context.arcTo(beginX, beginY, endX, endY, punkLineMax);
           }
           context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);

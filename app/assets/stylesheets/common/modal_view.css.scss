@@ -248,9 +248,7 @@
       position: relative;
       height: 100%;
       > div {
-        display: table;
         > div {
-          display: table-cell;
           vertical-align: top;
         }
       }
@@ -264,11 +262,15 @@
       }
     }
     .button_wrapper {
+      display: table;
       position: absolute;
       bottom: 0;
       width: 100%;
       text-align: center;
       margin-top: 15px;
+      > div {
+        display: table-cell;
+      }
 
       span {
         display: none;
