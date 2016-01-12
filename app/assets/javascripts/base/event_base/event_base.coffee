@@ -132,8 +132,10 @@ class EventBase extends Extend
 
   # プレビューStep実行
   previewStepDraw: ->
+    # イベントハンドリング有効時のみ
     if !@_skipEvent
-      # イベントハンドリング有効時のみ
+      @_stepLoopCount = 0
+
       if @getEventActionType() == Constant.ActionType.SCROLL
         if @_previewTimer?
           clearTimeout(@_previewTimer)
@@ -154,9 +156,12 @@ class EventBase extends Extend
       else if @getEventActionType() == Constant.ActionType.CLICK
         @clickHandlerFunc(true)
         @_doPreviewLoop = false
-    else if !@_isFinishedEvent
+    else if !@_isFinishedEvent && (!@_stepLoopCount? || @_stepLoopCount < 50)
+      if !@_stepLoopCount?
+        @_stepLoopCount = 0
       setTimeout( =>
         # 0.3秒後に再実行
+        @_stepLoopCount += 1
         @previewStepDraw()
       , 300)
 

@@ -187,6 +187,7 @@ EventBase = (function(superClass) {
 
   EventBase.prototype.previewStepDraw = function() {
     if (!this._skipEvent) {
+      this._stepLoopCount = 0;
       if (this.getEventActionType() === Constant.ActionType.SCROLL) {
         if (this._previewTimer != null) {
           clearTimeout(this._previewTimer);
@@ -212,9 +213,13 @@ EventBase = (function(superClass) {
         this.clickHandlerFunc(true);
         return this._doPreviewLoop = false;
       }
-    } else if (!this._isFinishedEvent) {
+    } else if (!this._isFinishedEvent && ((this._stepLoopCount == null) || this._stepLoopCount < 50)) {
+      if (this._stepLoopCount == null) {
+        this._stepLoopCount = 0;
+      }
       return setTimeout((function(_this) {
         return function() {
+          _this._stepLoopCount += 1;
           return _this.previewStepDraw();
         };
       })(this), 300);
