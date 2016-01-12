@@ -776,7 +776,7 @@ class PreloadItemText extends CanvasItemBase
         context.beginPath()
         hl = 0
         for c, idx in column[j].split('')
-          measure = _calcWordMeasure.call(@, c, @fontSize, @fontFamily, wordWidth)
+          measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily, wordWidth)
           _setTextAlpha.call(@, context, idx + wordSum + 1, writingLength)
           if _isWordSmallJapanease.call(@, c)
             # 小文字は右上に寄せる

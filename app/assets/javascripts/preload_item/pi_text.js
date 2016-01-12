@@ -969,7 +969,7 @@ PreloadItemText = (function(superClass) {
         ref4 = column[j].split('');
         for (idx = p = 0, len1 = ref4.length; p < len1; idx = ++p) {
           c = ref4[idx];
-          measure = _calcWordMeasure.call(this, c, this.fontSize, this.fontFamily, wordWidth);
+          measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
           if (_isWordSmallJapanease.call(this, c)) {
             context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height));
