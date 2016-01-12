@@ -585,6 +585,7 @@ class WorktableCommon
               EventConfig.switchPreviewButton(true)
               # アイテム再描画
               @refreshAllItemsFromInstancePageValueIfChanging()
+              FloatView.hide()
             )
             # 状態変更フラグON
             window.worktableItemsChangedState = true

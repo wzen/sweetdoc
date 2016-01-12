@@ -92,7 +92,7 @@ class PreloadItemText extends CanvasItemBase
               {name: 'Broken Arc', value: @BalloonType.BROKEN_ARC}
               {name: 'Rect', value: @BalloonType.RECT}
               {name: 'Broken Rect', value: @BalloonType.BROKEN_RECT}
-              {name: 'FLASH', value: @BalloonType.FLASH}
+              {name: 'Flash', value: @BalloonType.FLASH}
               {name: 'Cloud', value: @BalloonType.CLOUD}
             ]
             openChildrenValue: [@BalloonType.RECT, @BalloonType.BROKEN_RECT]

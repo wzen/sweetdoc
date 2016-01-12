@@ -691,7 +691,8 @@ WorktableCommon = (function() {
               item.preview(function() {
                 window.previewRunning = false;
                 EventConfig.switchPreviewButton(true);
-                return _this.refreshAllItemsFromInstancePageValueIfChanging();
+                _this.refreshAllItemsFromInstancePageValueIfChanging();
+                return FloatView.hide();
               });
               window.worktableItemsChangedState = true;
               EventConfig.switchPreviewButton(false);

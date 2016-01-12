@@ -149,7 +149,7 @@ PreloadItemText = (function(superClass) {
                 name: 'Broken Rect',
                 value: PreloadItemText.BalloonType.BROKEN_RECT
               }, {
-                name: 'FLASH',
+                name: 'Flash',
                 value: PreloadItemText.BalloonType.FLASH
               }, {
                 name: 'Cloud',
