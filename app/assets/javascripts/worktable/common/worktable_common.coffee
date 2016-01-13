@@ -177,12 +177,6 @@ class WorktableCommon
       Timeline.disabledOperation(false)
       Sidebar.disabledOperation(false)
       Navbar.disabledOperation(false)
-      # 画面上のポイントアイテムを削除
-      $(window.scrollInside).find('.item').each( ->
-        sp = $(@).attr('id').split('_')
-        if sp[0] == ItemBase.ID_PREFIX && sp[1] == EventDragPointing.PrivateClass.NAME_PREFIX
-          $(@).remove()
-      )
     else if afterMode == Constant.EventInputPointingMode.DRAW || afterMode == Constant.EventInputPointingMode.ITEM_TOUCH
       # 全入力を無効に
       Timeline.disabledOperation(true)

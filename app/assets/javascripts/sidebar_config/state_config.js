@@ -56,7 +56,7 @@ StateConfig = (function() {
           se.initConfigScale = z;
           return se.setItemAllPropToPageValue();
         };
-        return emt.find('.event_pointing:first').eventDragPointing(function(pointingSize) {
+        return emt.find('.event_pointing:first').eventDragPointingRect(function(pointingSize) {
           return _updateConfigInput.call(_this, emt, pointingSize);
         });
       };

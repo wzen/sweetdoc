@@ -95,7 +95,7 @@ FloatView = (function() {
         if (closeFunc != null) {
           closeFunc();
         }
-        return $(".float_view.fixed").fadeOut('fast');
+        return FloatView.hideWithCloseButtonView();
       };
     })(this));
     root.removeClass(function(index, className) {
@@ -106,6 +106,48 @@ FloatView = (function() {
     }).addClass(type);
     root.show();
     return $('.message', root).html(message);
+  };
+
+  FloatView.hideWithCloseButtonView = function() {
+    $(".float_view.fixed").fadeOut('fast');
+    return this.hidePointingController();
+  };
+
+  FloatView.showPointingController = function(pointintObj) {
+    var root, screenWrapper;
+    if (!window.initDone) {
+      return;
+    }
+    root = $(".float_view.fixed:visible", screenWrapper);
+    if (root.length === 0) {
+      return;
+    }
+    screenWrapper = $('#screen_wrapper');
+    root = $(".float_view.pointing_controller:first", screenWrapper);
+    if (root.length > 0) {
+      root.show();
+      return;
+    }
+    $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper);
+    root = $('.float_view.pointing_controller:first', screenWrapper);
+    root.find('.clear_button').off('click').on('click', (function(_this) {
+      return function(e) {
+        pointintObj.clearDraw();
+        return FloatView.hidePointingController();
+      };
+    })(this));
+    root.find('.apply_button').off('click').on('click', (function(_this) {
+      return function(e) {
+        pointintObj.applyDraw();
+        pointintObj.getJQueryElement().remove();
+        return FloatView.hideWithCloseButtonView();
+      };
+    })(this));
+    return root.show();
+  };
+
+  FloatView.hidePointingController = function() {
+    return $(".float_view.pointing_controller").fadeOut('fast');
   };
 
   FloatView.scrollMessage = function(top, left) {

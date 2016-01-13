@@ -207,7 +207,7 @@ ScreenEvent = (function(superClass) {
         return emt.find('.afterZ:first').val(z);
       };
       emt = specificRoot['changeScreenPosition'];
-      return emt.find('.event_pointing:first').eventDragPointing((function(_this) {
+      return emt.find('.event_pointing:first').eventDragPointingRect((function(_this) {
         return function(pointingSize) {
           return _updateConfigInput.call(_this, emt, pointingSize);
         };

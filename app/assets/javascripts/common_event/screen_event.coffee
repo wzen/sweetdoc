@@ -161,7 +161,7 @@ class ScreenEvent extends CommonEvent
         emt.find('.afterZ:first').val(z)
 
       emt = specificRoot['changeScreenPosition']
-      emt.find('.event_pointing:first').eventDragPointing( (pointingSize) =>
+      emt.find('.event_pointing:first').eventDragPointingRect( (pointingSize) =>
         _updateConfigInput.call(@, emt, pointingSize)
       )
 

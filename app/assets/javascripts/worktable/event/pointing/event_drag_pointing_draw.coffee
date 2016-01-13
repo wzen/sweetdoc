@@ -1,4 +1,4 @@
-class EventDragPointing
+class EventDragPointingDraw
   # SingleTon
 
   instance = null
@@ -7,13 +7,25 @@ class EventDragPointing
     return @constructor.getInstance(cood)
 
   class @PrivateClass extends CssItemBase
-    @NAME_PREFIX = "EDPointing"
-    @CLASS_DIST_TOKEN = 'EDPointing'
+    @NAME_PREFIX = "EDPointingDraw"
+    @CLASS_DIST_TOKEN = 'EDPointingDraw'
 
     @include(itemBaseWorktableExtend)
 
-    setDrawCallback: (callback) ->
-      @drawCallback = callback
+    setApplyCallback: (callback) ->
+      @applyCallback = callback
+
+    clearDraw: ->
+      # アイテム削除
+      @removeItemElement()
+      @drawPaths = []
+
+    applyDraw: ->
+      if @applyCallback?
+        @applyCallback(@itemSize)
+
+    initData: ->
+      @drawPaths = []
 
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
@@ -34,7 +46,7 @@ class EventDragPointing
         @_moveLoc = {x: cood.x, y: cood.y}
       @itemSize = null
 
-    # ドラッグ描画(枠)
+    # ドラッグ描画(線)
     # @param [Array] cood 座標
     draw: (cood) ->
       if @itemSize != null
@@ -61,19 +73,19 @@ class EventDragPointing
       @refresh(true, =>
         @getJQueryElement().addClass('drag_pointing')
         @setupDragAndResizeEvent()
-        if @drawCallback?
-          @drawCallback(@itemSize)
+        # コントローラ表示
+        FloatView.showPointingController(@)
         if callback?
           callback()
       )
 
     drag: ->
-      if @drawCallback?
-        @drawCallback(@itemSize)
+      if @applyCallback?
+        @applyCallback(@itemSize)
 
     resize: ->
-      if @drawCallback?
-        @drawCallback(@itemSize)
+      if @applyCallback?
+        @applyCallback(@itemSize)
 
     # 以下の処理はなし
     saveObj: (newCreated = false) ->
@@ -88,16 +100,21 @@ class EventDragPointing
     instance.startCood(cood)
     return instance
 
-$.fn.eventDragPointing = (endDrawCallback) ->
+$.fn.eventDragPointingDraw = (applyDrawCallback, multiDraw = false) ->
   $(@).off('click').on('click', (e) =>
-    pointing = new EventDragPointing()
-    pointing.setDrawCallback((pointingSize) =>
-      endDrawCallback(pointingSize)
+    pointing = new EventDragPointingDraw()
+    pointing.setApplyCallback((pointingPaths) =>
+      applyDrawCallback(pointingPaths)
     )
-    PointingHandwrite.initHandwrite()
+    pointing.initData()
+    PointingHandwrite.initHandwrite(EventDragPointingDraw)
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
     FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
+      # 画面上のポイントアイテムを削除
+      pointing = new EventDragPointingDraw()
+      pointing.getJQueryElement().remove()
       Handwrite.initHandwrite()
       WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
     )
+
   )

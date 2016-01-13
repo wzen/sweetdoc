@@ -1,3 +1,7 @@
+div.float_view_temp, div.float_view_fixed_temp, div.float_view_pointing_controller_temp {
+  display: none;
+}
+
 div.float_view {
   position: fixed;
   bottom: 0;
@@ -146,6 +150,41 @@ div.float_view {
         height: 100%;
         background-image: image_url('float_view/floatview_exit32.png');
         background-repeat: no-repeat;
+      }
+    }
+  }
+  &.pointing_controller {
+    bottom: 58px;
+    .contents {
+      width: 100%;
+      height: 100%;
+      float: right;
+      > div {
+        height: 100%;
+      }
+      .clear_button_wrapper {
+        float: left;
+        width: 50px;
+        height: 100%;
+        .clear_button {
+          width: 50px;
+          height: 50px;
+          background-size: contain;
+          background-image: image_url('float_view/floatview_clear64.png');
+          background-repeat: no-repeat;
+        }
+      }
+      .apply_button_wrapper {
+        float: left;
+        width: 50px;
+        height: 100%;
+        .apply_button {
+          width: 50px;
+          height: 50px;
+          background-size: contain;
+          background-image: image_url('float_view/floatview_apply64.png');
+          background-repeat: no-repeat;
+        }
       }
     }
   }

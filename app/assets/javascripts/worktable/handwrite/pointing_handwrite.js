@@ -10,9 +10,14 @@ PointingHandwrite = (function(superClass) {
     return PointingHandwrite.__super__.constructor.apply(this, arguments);
   }
 
+  PointingHandwrite.initHandwrite = function(targetClass) {
+    this.targetClass = targetClass;
+    return PointingHandwrite.__super__.constructor.initHandwrite.call(this);
+  };
+
   PointingHandwrite.mouseDownDrawing = function(loc) {
     if (window.eventPointingMode === Constant.EventInputPointingMode.DRAW) {
-      window.handwritingItem = new EventDragPointing(loc);
+      window.handwritingItem = new this.targetClass(loc);
       return window.handwritingItem.mouseDownDrawing();
     }
   };

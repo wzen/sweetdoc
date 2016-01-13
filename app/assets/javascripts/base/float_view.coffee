@@ -65,7 +65,7 @@ class FloatView
     root.find('.close_button').off('click').on('click', (e) =>
       if closeFunc?
         closeFunc()
-      $(".float_view.fixed").fadeOut('fast')
+      FloatView.hideWithCloseButtonView()
     )
     root.removeClass((index, className) ->
       return className != 'float_view' && className != 'fixed'
@@ -76,6 +76,47 @@ class FloatView
     root.show()
 
     $('.message', root).html(message)
+
+  @hideWithCloseButtonView = ->
+    $(".float_view.fixed").fadeOut('fast')
+    # コントローラも消去
+    @hidePointingController()
+
+  @showPointingController = (pointintObj) ->
+    if !window.initDone
+      return
+    root = $(".float_view.fixed:visible", screenWrapper)
+    if root.length == 0
+      # Fixedビューが表示されていない場合は無視
+      return
+
+    screenWrapper = $('#screen_wrapper')
+    root = $(".float_view.pointing_controller:first", screenWrapper)
+    if root.length > 0
+      # 既に表示されている場合はshow
+      root.show()
+      return
+
+    $('.float_view_pointing_controller_temp', screenWrapper).clone(true).attr('class', 'float_view pointing_controller').appendTo(screenWrapper)
+    root = $('.float_view.pointing_controller:first', screenWrapper)
+    root.find('.clear_button').off('click').on('click', (e) =>
+      # 描画を削除
+      pointintObj.clearDraw()
+      # コントローラー非表示
+      FloatView.hidePointingController()
+    )
+    root.find('.apply_button').off('click').on('click', (e) =>
+      # 描画を適用
+      pointintObj.applyDraw()
+      # 画面上のポイントアイテムを削除
+      pointintObj.getJQueryElement().remove()
+      # ビュー非表示
+      FloatView.hideWithCloseButtonView()
+    )
+    root.show()
+
+  @hidePointingController = ->
+    $(".float_view.pointing_controller").fadeOut('fast')
 
   @scrollMessage = (top, left) ->
     if !window.initDone

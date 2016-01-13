@@ -49,7 +49,7 @@ class StateConfig
         se.initConfigScale = z
         se.setItemAllPropToPageValue()
 
-      emt.find('.event_pointing:first').eventDragPointing((pointingSize) =>
+      emt.find('.event_pointing:first').eventDragPointingRect((pointingSize) =>
         _updateConfigInput.call(@, emt, pointingSize)
       )
 
