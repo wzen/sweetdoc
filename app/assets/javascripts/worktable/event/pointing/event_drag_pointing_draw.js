@@ -16,6 +16,8 @@ EventDragPointingDraw = (function() {
   }
 
   EventDragPointingDraw.PrivateClass = (function(superClass) {
+    var _callbackParam;
+
     extend(PrivateClass, superClass);
 
     function PrivateClass() {
@@ -32,19 +34,26 @@ EventDragPointingDraw = (function() {
       return this.applyCallback = callback;
     };
 
+    PrivateClass.prototype.setEndDrawCallback = function(callback) {
+      return this.endDrawCallback = callback;
+    };
+
     PrivateClass.prototype.clearDraw = function() {
       this.removeItemElement();
-      return this.drawPaths = [];
+      this.drawPaths = [];
+      return this.drawPathIndex = 0;
     };
 
     PrivateClass.prototype.applyDraw = function() {
       if (this.applyCallback != null) {
-        return this.applyCallback(this.itemSize);
+        return this.applyCallback(_callbackParam.call(this));
       }
     };
 
-    PrivateClass.prototype.initData = function() {
-      return this.drawPaths = [];
+    PrivateClass.prototype.initData = function(multiDraw1) {
+      this.multiDraw = multiDraw1;
+      this.drawPaths = [];
+      return this.drawPathIndex = 0;
     };
 
     PrivateClass.prototype.mouseDownDrawing = function(callback) {
@@ -73,63 +82,53 @@ EventDragPointingDraw = (function() {
           y: cood.y
         };
       }
+      if (this.multiDraw) {
+        this.drawPathIndex += 1;
+      } else {
+        this.drawPathIndex = 0;
+      }
+      this.drawPaths[this.drawPathIndex] = [];
       return this.itemSize = null;
     };
 
     PrivateClass.prototype.draw = function(cood) {
-      if (this.itemSize !== null) {
-        this.restoreRefreshingSurface(this.itemSize);
+      var d, i, idx, j, len, len1, p, ref, results;
+      drawPaths[this.drawPathIndex].push(cood);
+      this.restoreRefreshingSurface(this.itemSize);
+      ref = this.drawPaths;
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        d = ref[i];
+        drawingContext.beginPath();
+        for (idx = j = 0, len1 = d.length; j < len1; idx = ++j) {
+          p = d[idx];
+          if (idx === 0) {
+            drawingContext.moveTo(p.x, p.y);
+          } else {
+            drawingContext.lineTo(p.x, p.y);
+          }
+        }
+        results.push(drawingContext.stroke());
       }
-      this.itemSize = {
-        x: null,
-        y: null,
-        w: null,
-        h: null
-      };
-      this.itemSize.w = Math.abs(cood.x - this._moveLoc.x);
-      this.itemSize.h = Math.abs(cood.y - this._moveLoc.y);
-      if (cood.x > this._moveLoc.x) {
-        this.itemSize.x = this._moveLoc.x;
-      } else {
-        this.itemSize.x = cood.x;
-      }
-      if (cood.y > this._moveLoc.y) {
-        this.itemSize.y = this._moveLoc.y;
-      } else {
-        this.itemSize.y = cood.y;
-      }
-      return drawingContext.strokeRect(this.itemSize.x, this.itemSize.y, this.itemSize.w, this.itemSize.h);
+      return results;
     };
 
     PrivateClass.prototype.endDraw = function(callback) {
       if (callback == null) {
         callback = null;
       }
-      this.itemSize.x += scrollContents.scrollLeft();
-      this.itemSize.y += scrollContents.scrollTop();
       this.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1;
       return this.refresh(true, (function(_this) {
         return function() {
           _this.getJQueryElement().addClass('drag_pointing');
           _this.setupDragAndResizeEvent();
+          _this.endDrawCallback(_callbackParam.call(_this));
           FloatView.showPointingController(_this);
           if (callback != null) {
             return callback();
           }
         };
       })(this));
-    };
-
-    PrivateClass.prototype.drag = function() {
-      if (this.applyCallback != null) {
-        return this.applyCallback(this.itemSize);
-      }
-    };
-
-    PrivateClass.prototype.resize = function() {
-      if (this.applyCallback != null) {
-        return this.applyCallback(this.itemSize);
-      }
     };
 
     PrivateClass.prototype.saveObj = function(newCreated) {
@@ -158,6 +157,15 @@ EventDragPointingDraw = (function() {
       }
     };
 
+    _callbackParam = function() {
+      var m;
+      m = this.drawPaths;
+      if (!this.multiDraw) {
+        m = this.drawPaths[0];
+      }
+      return m;
+    };
+
     return PrivateClass;
 
   })(CssItemBase);
@@ -177,7 +185,7 @@ EventDragPointingDraw = (function() {
 
 })();
 
-$.fn.eventDragPointingDraw = function(applyDrawCallback, multiDraw) {
+$.fn.eventDragPointingDraw = function(endDrawCallback, applyDrawCallback, multiDraw) {
   if (multiDraw == null) {
     multiDraw = false;
   }
@@ -187,6 +195,9 @@ $.fn.eventDragPointingDraw = function(applyDrawCallback, multiDraw) {
       pointing = new EventDragPointingDraw();
       pointing.setApplyCallback(function(pointingPaths) {
         return applyDrawCallback(pointingPaths);
+      });
+      pointing.setEndDrawCallback(function(pointingPaths) {
+        return endDrawCallback(pointingPaths);
       });
       pointing.initData();
       PointingHandwrite.initHandwrite(EventDragPointingDraw);

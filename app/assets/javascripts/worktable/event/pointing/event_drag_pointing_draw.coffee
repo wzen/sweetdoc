@@ -15,17 +15,22 @@ class EventDragPointingDraw
     setApplyCallback: (callback) ->
       @applyCallback = callback
 
+    setEndDrawCallback: (callback) ->
+      @endDrawCallback = callback
+
     clearDraw: ->
       # アイテム削除
       @removeItemElement()
       @drawPaths = []
+      @drawPathIndex = 0
 
     applyDraw: ->
       if @applyCallback?
-        @applyCallback(@itemSize)
+        @applyCallback(_callbackParam.call(@))
 
-    initData: ->
+    initData: (@multiDraw) ->
       @drawPaths = []
+      @drawPathIndex = 0
 
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
@@ -44,48 +49,40 @@ class EventDragPointingDraw
     startCood: (cood) ->
       if cood?
         @_moveLoc = {x: cood.x, y: cood.y}
+      if @multiDraw
+        @drawPathIndex += 1
+      else
+        @drawPathIndex = 0
+      @drawPaths[@drawPathIndex] = []
       @itemSize = null
 
     # ドラッグ描画(線)
     # @param [Array] cood 座標
     draw: (cood) ->
-      if @itemSize != null
-        @restoreRefreshingSurface(@itemSize)
+      drawPaths[@drawPathIndex].push(cood)
+      @restoreRefreshingSurface(@itemSize)
 
-      @itemSize = {x: null, y: null, w: null, h: null}
-      @itemSize.w = Math.abs(cood.x - @_moveLoc.x);
-      @itemSize.h = Math.abs(cood.y - @_moveLoc.y);
-      if cood.x > @_moveLoc.x
-        @itemSize.x = @_moveLoc.x
-      else
-        @itemSize.x = cood.x
-      if cood.y > @_moveLoc.y
-        @itemSize.y = @_moveLoc.y
-      else
-        @itemSize.y = cood.y
-      drawingContext.strokeRect(@itemSize.x, @itemSize.y, @itemSize.w, @itemSize.h)
+      for d in @drawPaths
+        drawingContext.beginPath()
+        for p, idx in d
+          if idx == 0
+            drawingContext.moveTo(p.x, p.y)
+          else
+            drawingContext.lineTo(p.x, p.y)
+        drawingContext.stroke()
 
     endDraw: (callback = null) ->
-      @itemSize.x += scrollContents.scrollLeft()
-      @itemSize.y += scrollContents.scrollTop()
       @zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1
 
       @refresh(true, =>
         @getJQueryElement().addClass('drag_pointing')
         @setupDragAndResizeEvent()
+        @endDrawCallback(_callbackParam.call(@))
         # コントローラ表示
         FloatView.showPointingController(@)
         if callback?
           callback()
       )
-
-    drag: ->
-      if @applyCallback?
-        @applyCallback(@itemSize)
-
-    resize: ->
-      if @applyCallback?
-        @applyCallback(@itemSize)
 
     # 以下の処理はなし
     saveObj: (newCreated = false) ->
@@ -94,17 +91,26 @@ class EventDragPointingDraw
     applyDefaultDesign: ->
     makeCss: (forceUpdate = false) ->
 
+    _callbackParam = ->
+      m = @drawPaths
+      if !@multiDraw
+        m = @drawPaths[0]
+      return m
+
   @getInstance: (cood = null) ->
     if !instance?
       instance = new @PrivateClass()
     instance.startCood(cood)
     return instance
 
-$.fn.eventDragPointingDraw = (applyDrawCallback, multiDraw = false) ->
+$.fn.eventDragPointingDraw = (endDrawCallback, applyDrawCallback, multiDraw = false) ->
   $(@).off('click').on('click', (e) =>
     pointing = new EventDragPointingDraw()
     pointing.setApplyCallback((pointingPaths) =>
       applyDrawCallback(pointingPaths)
+    )
+    pointing.setEndDrawCallback((pointingPaths) =>
+      endDrawCallback(pointingPaths)
     )
     pointing.initData()
     PointingHandwrite.initHandwrite(EventDragPointingDraw)
