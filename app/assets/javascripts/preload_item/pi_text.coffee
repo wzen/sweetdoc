@@ -250,50 +250,65 @@ class PreloadItemText extends CanvasItemBase
       h = @itemSize.h
       @itemSize.w = h
       @itemSize.h = w
-    else if varName == 'balloonType' && @balloonType? && @balloonType != value && @balloonType != @constructor.BalloonType.FREE
-      opt = {
-        multiDraw: true
-        applyDrawCallback: (drawPaths) =>
-          # キャンパスサイズ拡張
-          @originalItemSize = $.extend({}, @itemSize)
-          minX = 999999
-          maxX = -1
-          minY = 999999
-          maxY = -1
-          for dp in drawPaths
-            for d in dp
-              if minX > d.x
-                minX = d.x
-              if minY > d.y
-                minY = d.y
-              if maxX < d.x
-                maxX = d.x
-              if maxY < d.y
-                maxY = d.y
-          # drawPaths値更新
-          for dp, idx1 in drawPaths
-            for d, idx2 in dp
-              drawPaths[idx1][idx2] = {
-                x: d.x - minX + @_freeHandDrawPadding
-                y: d.y - minY + @_freeHandDrawPadding
-              }
+    else if varName == 'balloonType' && @balloonType? && @balloonType != value
+      if @balloonType != @constructor.BalloonType.FREE
+        # パスを消去して新規作成する
+        @freeHandDrawPaths = null
+        opt = {
+          multiDraw: true
+          applyDrawCallback: (drawPaths) =>
+            # キャンパスサイズ拡張
+            @originalItemSize = $.extend({}, @itemSize)
+            minX = 999999
+            maxX = -1
+            minY = 999999
+            maxY = -1
+            for dp in drawPaths
+              for d in dp
+                if minX > d.x
+                  minX = d.x
+                if minY > d.y
+                  minY = d.y
+                if maxX < d.x
+                  maxX = d.x
+                if maxY < d.y
+                  maxY = d.y
+            # drawPaths値更新
+            for dp, idx1 in drawPaths
+              for d, idx2 in dp
+                drawPaths[idx1][idx2] = {
+                  x: d.x - minX + @_freeHandDrawPadding
+                  y: d.y - minY + @_freeHandDrawPadding
+                }
 
-          @itemSize.x = window.scrollContents.scrollLeft() + minX - @_freeHandDrawPadding
-          @itemSize.y = window.scrollContents.scrollTop()  + minY - @_freeHandDrawPadding
-          @itemSize.w = maxX - minX + @_freeHandDrawPadding * 2
-          @itemSize.h = maxY - minY + @_freeHandDrawPadding * 2
+            @itemSize.x = window.scrollContents.scrollLeft() + minX - @_freeHandDrawPadding
+            @itemSize.y = window.scrollContents.scrollTop()  + minY - @_freeHandDrawPadding
+            @itemSize.w = maxX - minX + @_freeHandDrawPadding * 2
+            @itemSize.h = maxY - minY + @_freeHandDrawPadding * 2
+            @getJQueryElement().remove()
+            @createItemElement( =>
+              @freeHandItemSize = $.extend({}, @itemSize)
+              @freeHandDrawPaths = drawPaths
+              @saveObj()
+              @itemDraw(true)
+              if @setupItemEvents?
+                # アイテムのイベント設定
+                @setupItemEvents()
+            )
+        }
+        EventDragPointingDraw.run(opt)
+      else
+        # アイテムのサイズを戻す
+        if @originalItemSize?
+          @itemSize = $.extend({}, @originalItemSize)
           @getJQueryElement().remove()
           @createItemElement( =>
-            @freeHandItemSize = $.extend({}, @itemSize)
-            @freeHandDrawPaths = drawPaths
             @saveObj()
-            @itemDraw(true)
             if @setupItemEvents?
               # アイテムのイベント設定
               @setupItemEvents()
           )
-      }
-      EventDragPointingDraw.run(opt)
+
     super(varName, value)
 
   # マウスアップ時の描画イベント
@@ -552,10 +567,6 @@ class PreloadItemText extends CanvasItemBase
       # サイズが無い場合は描画無し
       return
 
-    _itemSizeToOriginal = ->
-      if @originalItemSize?
-        @itemSize = $.extend({}, @originalItemSize)
-
     _drawArc = ->
       # 円
       context.beginPath()
@@ -745,9 +756,6 @@ class PreloadItemText extends CanvasItemBase
 
     context.save()
     context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
-    if window.isWorkTable && @balloonType != @constructor.BalloonType.FREE
-      # 編集のためサイズをオリジナルに戻す
-      _itemSizeToOriginal.call(@)
     if @balloonType == @constructor.BalloonType.ARC
       _drawArc.call(@)
     else if @balloonType == @constructor.BalloonType.RECT

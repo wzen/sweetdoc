@@ -348,63 +348,79 @@ PreloadItemText = (function(superClass) {
       h = this.itemSize.h;
       this.itemSize.w = h;
       this.itemSize.h = w;
-    } else if (varName === 'balloonType' && (this.balloonType != null) && this.balloonType !== value && this.balloonType !== this.constructor.BalloonType.FREE) {
-      opt = {
-        multiDraw: true,
-        applyDrawCallback: (function(_this) {
-          return function(drawPaths) {
-            var d, dp, idx1, idx2, k, len, len1, len2, len3, m, maxX, maxY, minX, minY, n, o;
-            _this.originalItemSize = $.extend({}, _this.itemSize);
-            minX = 999999;
-            maxX = -1;
-            minY = 999999;
-            maxY = -1;
-            for (k = 0, len = drawPaths.length; k < len; k++) {
-              dp = drawPaths[k];
-              for (m = 0, len1 = dp.length; m < len1; m++) {
-                d = dp[m];
-                if (minX > d.x) {
-                  minX = d.x;
-                }
-                if (minY > d.y) {
-                  minY = d.y;
-                }
-                if (maxX < d.x) {
-                  maxX = d.x;
-                }
-                if (maxY < d.y) {
-                  maxY = d.y;
+    } else if (varName === 'balloonType' && (this.balloonType != null) && this.balloonType !== value) {
+      if (this.balloonType !== this.constructor.BalloonType.FREE) {
+        this.freeHandDrawPaths = null;
+        opt = {
+          multiDraw: true,
+          applyDrawCallback: (function(_this) {
+            return function(drawPaths) {
+              var d, dp, idx1, idx2, k, len, len1, len2, len3, m, maxX, maxY, minX, minY, n, o;
+              _this.originalItemSize = $.extend({}, _this.itemSize);
+              minX = 999999;
+              maxX = -1;
+              minY = 999999;
+              maxY = -1;
+              for (k = 0, len = drawPaths.length; k < len; k++) {
+                dp = drawPaths[k];
+                for (m = 0, len1 = dp.length; m < len1; m++) {
+                  d = dp[m];
+                  if (minX > d.x) {
+                    minX = d.x;
+                  }
+                  if (minY > d.y) {
+                    minY = d.y;
+                  }
+                  if (maxX < d.x) {
+                    maxX = d.x;
+                  }
+                  if (maxY < d.y) {
+                    maxY = d.y;
+                  }
                 }
               }
-            }
-            for (idx1 = n = 0, len2 = drawPaths.length; n < len2; idx1 = ++n) {
-              dp = drawPaths[idx1];
-              for (idx2 = o = 0, len3 = dp.length; o < len3; idx2 = ++o) {
-                d = dp[idx2];
-                drawPaths[idx1][idx2] = {
-                  x: d.x - minX + _this._freeHandDrawPadding,
-                  y: d.y - minY + _this._freeHandDrawPadding
-                };
+              for (idx1 = n = 0, len2 = drawPaths.length; n < len2; idx1 = ++n) {
+                dp = drawPaths[idx1];
+                for (idx2 = o = 0, len3 = dp.length; o < len3; idx2 = ++o) {
+                  d = dp[idx2];
+                  drawPaths[idx1][idx2] = {
+                    x: d.x - minX + _this._freeHandDrawPadding,
+                    y: d.y - minY + _this._freeHandDrawPadding
+                  };
+                }
               }
-            }
-            _this.itemSize.x = window.scrollContents.scrollLeft() + minX - _this._freeHandDrawPadding;
-            _this.itemSize.y = window.scrollContents.scrollTop() + minY - _this._freeHandDrawPadding;
-            _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
-            _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
-            _this.getJQueryElement().remove();
-            return _this.createItemElement(function() {
-              _this.freeHandItemSize = $.extend({}, _this.itemSize);
-              _this.freeHandDrawPaths = drawPaths;
+              _this.itemSize.x = window.scrollContents.scrollLeft() + minX - _this._freeHandDrawPadding;
+              _this.itemSize.y = window.scrollContents.scrollTop() + minY - _this._freeHandDrawPadding;
+              _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
+              _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
+              _this.getJQueryElement().remove();
+              return _this.createItemElement(function() {
+                _this.freeHandItemSize = $.extend({}, _this.itemSize);
+                _this.freeHandDrawPaths = drawPaths;
+                _this.saveObj();
+                _this.itemDraw(true);
+                if (_this.setupItemEvents != null) {
+                  return _this.setupItemEvents();
+                }
+              });
+            };
+          })(this)
+        };
+        EventDragPointingDraw.run(opt);
+      } else {
+        if (this.originalItemSize != null) {
+          this.itemSize = $.extend({}, this.originalItemSize);
+          this.getJQueryElement().remove();
+          this.createItemElement((function(_this) {
+            return function() {
               _this.saveObj();
-              _this.itemDraw(true);
               if (_this.setupItemEvents != null) {
                 return _this.setupItemEvents();
               }
-            });
-          };
-        })(this)
-      };
-      EventDragPointingDraw.run(opt);
+            };
+          })(this));
+        }
+      }
     }
     return PreloadItemText.__super__.changeInstanceVarByConfig.call(this, varName, value);
   };
@@ -739,7 +755,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
-    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink, _itemSizeToOriginal;
+    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
     if (canvasWidth == null) {
       canvasWidth = width;
     }
@@ -752,11 +768,6 @@ PreloadItemText = (function(superClass) {
     if (width <= 0 || height <= 0) {
       return;
     }
-    _itemSizeToOriginal = function() {
-      if (this.originalItemSize != null) {
-        return this.itemSize = $.extend({}, this.originalItemSize);
-      }
-    };
     _drawArc = function() {
       var diff;
       context.beginPath();
@@ -951,9 +962,6 @@ PreloadItemText = (function(superClass) {
     })(this);
     context.save();
     context.globalAlpha = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
-    if (window.isWorkTable && this.balloonType !== this.constructor.BalloonType.FREE) {
-      _itemSizeToOriginal.call(this);
-    }
     if (this.balloonType === this.constructor.BalloonType.ARC) {
       _drawArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.RECT) {
