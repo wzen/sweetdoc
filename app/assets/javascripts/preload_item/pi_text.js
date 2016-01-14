@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, constant;
+  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _freeHandBalloonDraw, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -272,6 +272,10 @@ PreloadItemText = (function(superClass) {
     this.balloonRandomIntValue = null;
     this.textPositions = null;
     this.wordAlign = this.constructor.WordAlign.LEFT;
+    this.originalItemSize = null;
+    this.freeHandItemSize = null;
+    this.freeHandDrawPaths = null;
+    this._freeHandDrawPadding = 5;
     this._fontMeatureCache = {};
     this._fixedTextAlpha = null;
   }
@@ -661,7 +665,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
-    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
+    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink, _itemSizeToOriginal;
     if (canvasWidth == null) {
       canvasWidth = width;
     }
@@ -674,6 +678,11 @@ PreloadItemText = (function(superClass) {
     if (width <= 0 || height <= 0) {
       return;
     }
+    _itemSizeToOriginal = function() {
+      if (this.originalItemSize != null) {
+        return this.itemSize = $.extend({}, this.originalItemSize);
+      }
+    };
     _drawArc = function() {
       var diff;
       context.beginPath();
@@ -861,11 +870,60 @@ PreloadItemText = (function(superClass) {
     })(this);
     _drawFreeHand = (function(_this) {
       return function() {
-        return EventDragPointingDraw.run(opt);
+        var opt;
+        if (window.isWorkTable) {
+          opt = {
+            multiDraw: true,
+            applyDrawCallback: function(drawPaths) {
+              var canvas, d, dp, k, len, len1, m, maxX, maxY, minX, minY;
+              _this.originalItemSize = $.extend({}, _this.itemSize);
+              minX = 999999;
+              maxX = -1;
+              minY = 999999;
+              maxY = -1;
+              for (k = 0, len = drawPaths.length; k < len; k++) {
+                dp = drawPaths[k];
+                for (m = 0, len1 = dp.length; m < len1; m++) {
+                  d = dp[m];
+                  if (minX > d.x) {
+                    minX = d.x;
+                  }
+                  if (minY > d.y) {
+                    minY = d.y;
+                  }
+                  if (maxX < d.x) {
+                    maxX = d.x;
+                  }
+                  if (maxY < d.y) {
+                    maxY = d.y;
+                  }
+                }
+              }
+              _this.itemSize.x = minX - _this._freeHandDrawPadding;
+              _this.itemSize.y = minY - _this._freeHandDrawPadding;
+              _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
+              _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
+              canvas = document.getElementById(_this.canvasElementId());
+              canvas.width = _this.itemSize.w;
+              canvas.height = _this.itemSize.h;
+              _freeHandBalloonDraw.call(_this, context, drawPaths);
+              _this.freeHandItemSize = $.extend({}, _this.itemSize);
+              return _this.freeHandDrawPaths = $.extend(true, {}, drawPaths);
+            }
+          };
+          return EventDragPointingDraw.run(opt);
+        } else {
+          if (_this.freeHandDrawPaths != null) {
+            return _freeHandBalloonDraw.call(_this, context, _this.freeHandDrawPaths);
+          }
+        }
       };
     })(this);
     context.save();
     context.globalAlpha = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
+    if (window.isWorkTable) {
+      _itemSizeToOriginal.call(this);
+    }
     if (this.balloonType === this.constructor.BalloonType.ARC) {
       _drawArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.RECT) {
@@ -882,6 +940,29 @@ PreloadItemText = (function(superClass) {
       _drawFreeHand.call(this);
     }
     return context.restore();
+  };
+
+  _freeHandBalloonDraw = function(context, drawPaths) {
+    var d, dp, idx, k, len, len1, m;
+    context.beginPath();
+    for (k = 0, len = drawPaths.length; k < len; k++) {
+      dp = drawPaths[k];
+      for (idx = m = 0, len1 = dp.length; m < len1; idx = ++m) {
+        d = dp[idx];
+        if (idx === 0) {
+          context.moveTo(d.x + this._freeHandDrawPadding, d.y + this._freeHandDrawPadding);
+        } else {
+          context.lineTo(d.x + this._freeHandDrawPadding, d.y + this._freeHandDrawPadding);
+        }
+      }
+    }
+    context.closePath();
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
+    context.fillStyle = 'rgba(255,255,255,0.9)';
+    context.strokeStyle = 'black';
+    context.fill();
+    return context.stroke();
   };
 
   _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {

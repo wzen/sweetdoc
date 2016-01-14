@@ -77,7 +77,8 @@ class EventDragPointingDraw
       @refresh(true, =>
         @getJQueryElement().addClass('drag_pointing')
         @setupDragAndResizeEvent()
-        @endDrawCallback(_callbackParam.call(@))
+        if @endDrawCallback?
+          @endDrawCallback(_callbackParam.call(@))
         # コントローラ表示
         FloatView.showPointingController(@)
         if callback?

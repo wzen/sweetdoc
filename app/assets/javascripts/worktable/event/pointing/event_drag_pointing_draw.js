@@ -122,7 +122,9 @@ EventDragPointingDraw = (function() {
         return function() {
           _this.getJQueryElement().addClass('drag_pointing');
           _this.setupDragAndResizeEvent();
-          _this.endDrawCallback(_callbackParam.call(_this));
+          if (_this.endDrawCallback != null) {
+            _this.endDrawCallback(_callbackParam.call(_this));
+          }
           FloatView.showPointingController(_this);
           if (callback != null) {
             return callback();

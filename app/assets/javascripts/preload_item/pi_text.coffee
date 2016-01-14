@@ -196,6 +196,10 @@ class PreloadItemText extends CanvasItemBase
     @balloonRandomIntValue = null
     @textPositions = null
     @wordAlign = @constructor.WordAlign.LEFT
+    @originalItemSize = null
+    @freeHandItemSize = null
+    @freeHandDrawPaths = null
+    @_freeHandDrawPadding = 5
     @_fontMeatureCache = {}
     @_fixedTextAlpha = null
 
@@ -493,6 +497,10 @@ class PreloadItemText extends CanvasItemBase
       # サイズが無い場合は描画無し
       return
 
+    _itemSizeToOriginal = ->
+      if @originalItemSize?
+        @itemSize = $.extend({}, @originalItemSize)
+
     _drawArc = ->
       # 円
       context.beginPath()
@@ -521,8 +529,7 @@ class PreloadItemText extends CanvasItemBase
 
     _drawBArc = ->
       # 円 破線
-
-      # 調整
+      # 調整値
       diff = 3.0
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5)
       context.fillStyle = 'rgba(255, 255, 255, 0.5)'
@@ -678,11 +685,50 @@ class PreloadItemText extends CanvasItemBase
       context.stroke()
 
     _drawFreeHand = =>
+      if window.isWorkTable
+        opt = {
+          multiDraw: true
+          applyDrawCallback: (drawPaths) =>
+            # キャンパスサイズ拡張
+            @originalItemSize = $.extend({}, @itemSize)
+            minX = 999999
+            maxX = -1
+            minY = 999999
+            maxY = -1
+            for dp in drawPaths
+              for d in dp
+                if minX > d.x
+                  minX = d.x
+                if minY > d.y
+                  minY = d.y
+                if maxX < d.x
+                  maxX = d.x
+                if maxY < d.y
+                  maxY = d.y
 
-      EventDragPointingDraw.run(opt)
+            @itemSize.x = minX - @_freeHandDrawPadding
+            @itemSize.y = minY - @_freeHandDrawPadding
+            @itemSize.w = maxX - minX + @_freeHandDrawPadding * 2
+            @itemSize.h = maxY - minY + @_freeHandDrawPadding * 2
+            canvas = document.getElementById(@canvasElementId())
+            canvas.width = @itemSize.w
+            canvas.height = @itemSize.h
+
+            _freeHandBalloonDraw.call(@, context, drawPaths)
+
+            @freeHandItemSize = $.extend({}, @itemSize)
+            @freeHandDrawPaths = $.extend(true, {}, drawPaths)
+        }
+        EventDragPointingDraw.run(opt)
+      else
+        if @freeHandDrawPaths?
+          _freeHandBalloonDraw.call(@, context, @freeHandDrawPaths)
 
     context.save()
     context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
+    if window.isWorkTable
+      # 編集のためサイズをオリジナルに戻す
+      _itemSizeToOriginal.call(@)
     if @balloonType == @constructor.BalloonType.ARC
       _drawArc.call(@)
     else if @balloonType == @constructor.BalloonType.RECT
@@ -698,6 +744,23 @@ class PreloadItemText extends CanvasItemBase
     else if @balloonType == @constructor.BalloonType.FREE
       _drawFreeHand.call(@)
     context.restore()
+
+  _freeHandBalloonDraw = (context, drawPaths) ->
+    # 描画
+    context.beginPath()
+    for dp in drawPaths
+      for d, idx in dp
+        if idx == 0
+          context.moveTo(d.x + @_freeHandDrawPadding, d.y + @_freeHandDrawPadding)
+        else
+          context.lineTo(d.x + @_freeHandDrawPadding, d.y + @_freeHandDrawPadding)
+    context.closePath()
+    context.lineJoin = 'round'
+    context.lineCap = 'round'
+    context.fillStyle = 'rgba(255,255,255,0.9)'
+    context.strokeStyle = 'black'
+    context.fill()
+    context.stroke()
 
   _drawText = (context, text, x, y, width, height, fontSize, writingLength = text.length) ->
     context.save()
