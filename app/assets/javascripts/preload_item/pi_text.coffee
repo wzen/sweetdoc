@@ -740,7 +740,7 @@ class PreloadItemText extends CanvasItemBase
 
     _drawFreeHand = =>
       if @freeHandDrawPaths?
-        _freeHandBalloonDraw.call(@, context, @freeHandDrawPaths)
+        _freeHandBalloonDraw.call(@, context, x, y, width, height, canvasWidth, canvasHeight, @freeHandDrawPaths)
 
     context.save()
     context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
@@ -763,15 +763,19 @@ class PreloadItemText extends CanvasItemBase
       _drawFreeHand.call(@)
     context.restore()
 
-  _freeHandBalloonDraw = (context, drawPaths) ->
+  _freeHandBalloonDraw = (context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) ->
     # 描画
     context.beginPath()
+    sx = (canvasWidth - width) * 0.5
+    sy = (canvasHeight - height) * 0.5
     for dp in drawPaths
       for d, idx in dp
+        dx = sx + x + d.x + @_freeHandDrawPadding
+        dy = sy + y + d.y + @_freeHandDrawPadding
         if idx == 0
-          context.moveTo(d.x + @_freeHandDrawPadding, d.y + @_freeHandDrawPadding)
+          context.moveTo(dx, dy)
         else
-          context.lineTo(d.x + @_freeHandDrawPadding, d.y + @_freeHandDrawPadding)
+          context.lineTo(dx, dy)
     context.closePath()
     context.lineJoin = 'round'
     context.lineCap = 'round'

@@ -944,7 +944,7 @@ PreloadItemText = (function(superClass) {
     _drawFreeHand = (function(_this) {
       return function() {
         if (_this.freeHandDrawPaths != null) {
-          return _freeHandBalloonDraw.call(_this, context, _this.freeHandDrawPaths);
+          return _freeHandBalloonDraw.call(_this, context, x, y, width, height, canvasWidth, canvasHeight, _this.freeHandDrawPaths);
         }
       };
     })(this);
@@ -971,17 +971,21 @@ PreloadItemText = (function(superClass) {
     return context.restore();
   };
 
-  _freeHandBalloonDraw = function(context, drawPaths) {
-    var d, dp, idx, k, len, len1, m;
+  _freeHandBalloonDraw = function(context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) {
+    var d, dp, dx, dy, idx, k, len, len1, m, sx, sy;
     context.beginPath();
+    sx = (canvasWidth - width) * 0.5;
+    sy = (canvasHeight - height) * 0.5;
     for (k = 0, len = drawPaths.length; k < len; k++) {
       dp = drawPaths[k];
       for (idx = m = 0, len1 = dp.length; m < len1; idx = ++m) {
         d = dp[idx];
+        dx = sx + x + d.x + this._freeHandDrawPadding;
+        dy = sy + y + d.y + this._freeHandDrawPadding;
         if (idx === 0) {
-          context.moveTo(d.x + this._freeHandDrawPadding, d.y + this._freeHandDrawPadding);
+          context.moveTo(dx, dy);
         } else {
-          context.lineTo(d.x + this._freeHandDrawPadding, d.y + this._freeHandDrawPadding);
+          context.lineTo(dx, dy);
         }
       }
     }
