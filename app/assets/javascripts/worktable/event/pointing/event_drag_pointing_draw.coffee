@@ -103,9 +103,13 @@ class EventDragPointingDraw
     instance.startCood(cood)
     return instance
 
-$.fn.eventDragPointingDraw = (endDrawCallback, applyDrawCallback, multiDraw = false) ->
-  $(@).off('click').on('click', (e) =>
-    pointing = new EventDragPointingDraw()
+  @run: (opt) ->
+    endDrawCallback = opt.endDrawCallback
+    applyDrawCallback = opt.applyDrawCallback
+    multiDraw = opt.multiDraw
+    if !multiDraw?
+      multiDraw = false
+    pointing = new @()
     pointing.setApplyCallback((pointingPaths) =>
       applyDrawCallback(pointingPaths)
     )
@@ -113,14 +117,23 @@ $.fn.eventDragPointingDraw = (endDrawCallback, applyDrawCallback, multiDraw = fa
       endDrawCallback(pointingPaths)
     )
     pointing.initData()
-    PointingHandwrite.initHandwrite(EventDragPointingDraw)
+    PointingHandwrite.initHandwrite(@)
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
     FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
       # 画面上のポイントアイテムを削除
-      pointing = new EventDragPointingDraw()
+      pointing = new @()
       pointing.getJQueryElement().remove()
       Handwrite.initHandwrite()
       WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
     )
 
-  )
+$.fn.eventDragPointingDraw = (opt, eventType = 'click') ->
+  if eventType == 'click'
+    $(@).off('click.event_pointing_draw').on('click.event_pointing_draw', (e) =>
+      EventDragPointingDraw.run(opt)
+    )
+  else if eventType == 'change'
+    $(@).off('change.event_pointing_draw').on('change.event_pointing_draw', (e) =>
+      if $(e.target).val == opt.targetValue
+        EventDragPointingDraw.run(opt)
+    )

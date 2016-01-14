@@ -181,35 +181,61 @@ EventDragPointingDraw = (function() {
     return instance;
   };
 
+  EventDragPointingDraw.run = function(opt) {
+    var applyDrawCallback, endDrawCallback, multiDraw, pointing;
+    endDrawCallback = opt.endDrawCallback;
+    applyDrawCallback = opt.applyDrawCallback;
+    multiDraw = opt.multiDraw;
+    if (multiDraw == null) {
+      multiDraw = false;
+    }
+    pointing = new this();
+    pointing.setApplyCallback((function(_this) {
+      return function(pointingPaths) {
+        return applyDrawCallback(pointingPaths);
+      };
+    })(this));
+    pointing.setEndDrawCallback((function(_this) {
+      return function(pointingPaths) {
+        return endDrawCallback(pointingPaths);
+      };
+    })(this));
+    pointing.initData();
+    PointingHandwrite.initHandwrite(this);
+    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
+    return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, (function(_this) {
+      return function() {
+        pointing = new _this();
+        pointing.getJQueryElement().remove();
+        Handwrite.initHandwrite();
+        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+      };
+    })(this));
+  };
+
   return EventDragPointingDraw;
 
 })();
 
-$.fn.eventDragPointingDraw = function(endDrawCallback, applyDrawCallback, multiDraw) {
-  if (multiDraw == null) {
-    multiDraw = false;
+$.fn.eventDragPointingDraw = function(opt, eventType) {
+  if (eventType == null) {
+    eventType = 'click';
   }
-  return $(this).off('click').on('click', (function(_this) {
-    return function(e) {
-      var pointing;
-      pointing = new EventDragPointingDraw();
-      pointing.setApplyCallback(function(pointingPaths) {
-        return applyDrawCallback(pointingPaths);
-      });
-      pointing.setEndDrawCallback(function(pointingPaths) {
-        return endDrawCallback(pointingPaths);
-      });
-      pointing.initData();
-      PointingHandwrite.initHandwrite(EventDragPointingDraw);
-      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
-      return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, function() {
-        pointing = new EventDragPointingDraw();
-        pointing.getJQueryElement().remove();
-        Handwrite.initHandwrite();
-        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
-      });
-    };
-  })(this));
+  if (eventType === 'click') {
+    return $(this).off('click.event_pointing_draw').on('click.event_pointing_draw', (function(_this) {
+      return function(e) {
+        return EventDragPointingDraw.run(opt);
+      };
+    })(this));
+  } else if (eventType === 'change') {
+    return $(this).off('change.event_pointing_draw').on('change.event_pointing_draw', (function(_this) {
+      return function(e) {
+        if ($(e.target).val === opt.targetValue) {
+          return EventDragPointingDraw.run(opt);
+        }
+      };
+    })(this));
+  }
 };
 
 //# sourceMappingURL=event_drag_pointing_draw.js.map

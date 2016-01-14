@@ -88,21 +88,27 @@ class EventDragPointingRect
     instance.startCood(cood)
     return instance
 
-$.fn.eventDragPointingRect = (applyDrawCallback) ->
-  $(@).off('click').on('click', (e) =>
-    pointing = new EventDragPointingRect()
+  @run: (opt) ->
+    applyDrawCallback = opt.applyDrawCallback
+    pointing = new @()
     pointing.setApplyCallback((pointingSize) =>
       applyDrawCallback(pointingSize)
       Handwrite.initHandwrite()
       WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
     )
-    PointingHandwrite.initHandwrite(EventDragPointingRect)
+    PointingHandwrite.initHandwrite(@)
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
     FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>
       # 画面上のポイントアイテムを削除
-      pointing = new EventDragPointingRect()
+      pointing = new @()
       pointing.getJQueryElement().remove()
       Handwrite.initHandwrite()
       WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
     )
-  )
+
+$.fn.eventDragPointingRect = (opt, eventType = 'click') ->
+  if eventType == 'click'
+    $(@).off('click.event_pointing_rect').on('click.event_pointing_rect', (e) =>
+      EventDragPointingRect.run(opt)
+    )
+

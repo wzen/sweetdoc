@@ -146,6 +146,9 @@ PreloadItemText = (function(superClass) {
               }, {
                 name: 'Cloud',
                 value: PreloadItemText.BalloonType.CLOUD
+              }, {
+                name: 'FreeHand',
+                value: PreloadItemText.BalloonType.FREE
               }
             ],
             openChildrenValue: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT],
@@ -658,7 +661,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
-    var _drawArc, _drawBArc, _drawBRect, _drawRect, _drawShout, _drawThink;
+    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
     if (canvasWidth == null) {
       canvasWidth = width;
     }
@@ -856,6 +859,11 @@ PreloadItemText = (function(superClass) {
         return context.stroke();
       };
     })(this);
+    _drawFreeHand = (function(_this) {
+      return function() {
+        return EventDragPointingDraw.run(opt);
+      };
+    })(this);
     context.save();
     context.globalAlpha = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
     if (this.balloonType === this.constructor.BalloonType.ARC) {
@@ -870,6 +878,8 @@ PreloadItemText = (function(superClass) {
       _drawShout.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.CLOUD) {
       _drawThink.call(this);
+    } else if (this.balloonType === this.constructor.BalloonType.FREE) {
+      _drawFreeHand.call(this);
     }
     return context.restore();
   };

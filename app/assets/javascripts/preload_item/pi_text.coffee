@@ -86,6 +86,7 @@ class PreloadItemText extends CanvasItemBase
               {name: 'Broken Rect', value: @BalloonType.BROKEN_RECT}
               {name: 'Flash', value: @BalloonType.FLASH}
               {name: 'Cloud', value: @BalloonType.CLOUD}
+              {name: 'FreeHand', value: @BalloonType.FREE}
             ]
             openChildrenValue: [@BalloonType.RECT, @BalloonType.BROKEN_RECT]
             children: {
@@ -676,6 +677,10 @@ class PreloadItemText extends CanvasItemBase
       context.fill()
       context.stroke()
 
+    _drawFreeHand = =>
+
+      EventDragPointingDraw.run(opt)
+
     context.save()
     context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
     if @balloonType == @constructor.BalloonType.ARC
@@ -690,6 +695,8 @@ class PreloadItemText extends CanvasItemBase
       _drawShout.call(@)
     else if @balloonType == @constructor.BalloonType.CLOUD
       _drawThink.call(@)
+    else if @balloonType == @constructor.BalloonType.FREE
+      _drawFreeHand.call(@)
     context.restore()
 
   _drawText = (context, text, x, y, width, height, fontSize, writingLength = text.length) ->

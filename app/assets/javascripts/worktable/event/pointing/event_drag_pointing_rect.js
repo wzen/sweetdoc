@@ -156,30 +156,44 @@ EventDragPointingRect = (function() {
     return instance;
   };
 
+  EventDragPointingRect.run = function(opt) {
+    var applyDrawCallback, pointing;
+    applyDrawCallback = opt.applyDrawCallback;
+    pointing = new this();
+    pointing.setApplyCallback((function(_this) {
+      return function(pointingSize) {
+        applyDrawCallback(pointingSize);
+        Handwrite.initHandwrite();
+        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+      };
+    })(this));
+    PointingHandwrite.initHandwrite(this);
+    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
+    return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, (function(_this) {
+      return function() {
+        pointing = new _this();
+        pointing.getJQueryElement().remove();
+        Handwrite.initHandwrite();
+        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+      };
+    })(this));
+  };
+
   return EventDragPointingRect;
 
 })();
 
-$.fn.eventDragPointingRect = function(applyDrawCallback) {
-  return $(this).off('click').on('click', (function(_this) {
-    return function(e) {
-      var pointing;
-      pointing = new EventDragPointingRect();
-      pointing.setApplyCallback(function(pointingSize) {
-        applyDrawCallback(pointingSize);
-        Handwrite.initHandwrite();
-        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
-      });
-      PointingHandwrite.initHandwrite(EventDragPointingRect);
-      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
-      return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, function() {
-        pointing = new EventDragPointingRect();
-        pointing.getJQueryElement().remove();
-        Handwrite.initHandwrite();
-        return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
-      });
-    };
-  })(this));
+$.fn.eventDragPointingRect = function(opt, eventType) {
+  if (eventType == null) {
+    eventType = 'click';
+  }
+  if (eventType === 'click') {
+    return $(this).off('click.event_pointing_rect').on('click.event_pointing_rect', (function(_this) {
+      return function(e) {
+        return EventDragPointingRect.run(opt);
+      };
+    })(this));
+  }
 };
 
 //# sourceMappingURL=event_drag_pointing_rect.js.map
