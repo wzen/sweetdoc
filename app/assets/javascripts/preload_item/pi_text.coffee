@@ -337,7 +337,7 @@ class PreloadItemText extends CanvasItemBase
       step1 = 0.5
       step2 = 0.7
       step3 = 1
-      if @_time / timemax < step1
+      if @_time / timemax <= step1
         progressPercent = @_time / (timemax * step1)
         x = (@itemSize.w * 0.5) + (((@itemSize.w - @itemSize.w * 0.9) * 0.5) - (@itemSize.w * 0.5)) * progressPercent
         y = (@itemSize.h * 0.5) + (((@itemSize.h - @itemSize.h * 0.9) * 0.5) - (@itemSize.h * 0.5)) * progressPercent
@@ -345,7 +345,7 @@ class PreloadItemText extends CanvasItemBase
         height = (@itemSize.h * 0.9) * progressPercent
         @_step1 = {x: x, y: y, w: width, h: height}
         @_time1 = @_time
-      else if  @_time / timemax < step2
+      else if  @_time / timemax <= step2
         progressPercent = (@_time - @_time1) / (timemax * (step2 - step1))
         x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.6) * 0.5) - @_step1.x) * progressPercent
         y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.6) * 0.5) - @_step1.y) * progressPercent
@@ -353,7 +353,7 @@ class PreloadItemText extends CanvasItemBase
         height = @_step1.h + (@itemSize.h * 0.6 - @_step1.h) * progressPercent
         @_step2 = {x: x, y: y, w: width, h: height}
         @_time2 = @_time
-      else if  @_time / timemax < step3
+      else if  @_time / timemax <= step3
         progressPercent = (@_time - @_time2) / (timemax * (step3 - step2))
         x = @_step2.x - @_step2.x * progressPercent
         y = @_step2.y - @_step2.y * progressPercent
@@ -368,7 +368,7 @@ class PreloadItemText extends CanvasItemBase
       y = 0
       width = @_canvas.width
       height = @_canvas.height
-      if @_time / timemax < step1
+      if @_time / timemax <= step1
         progressPercent = @_time / (timemax * step1)
         @_fixedBalloonAlpha = progressPercent
 
@@ -405,12 +405,13 @@ class PreloadItemText extends CanvasItemBase
     y = null
     width = null
     height = null
+    fontSize = null
     if @showAnimetionType == @constructor.ShowAnimationType.POPUP
       timemax = 15
       step1 = 0.2
       step2 = 0.5
       step3 = 1
-      if @_time / timemax < step1
+      if @_time / timemax <= step1
         progressPercent = @_time / (timemax * step1)
         x = (@itemSize.w - @itemSize.w * 0.5) * 0.5 * progressPercent
         y = (@itemSize.h - @itemSize.h * 0.5) * 0.5  * progressPercent
@@ -418,7 +419,7 @@ class PreloadItemText extends CanvasItemBase
         height = @itemSize.h + (@itemSize.h * 0.5 - @itemSize.h) * progressPercent
         @_step1 = {x: x, y: y, w: width, h: height}
         @_time1 = @_time
-      else if  @_time / timemax < step2
+      else if  @_time / timemax <= step2
         progressPercent = (@_time - @_time1) / (timemax * (step2 - step1))
         x = @_step1.x + (((@itemSize.w - @itemSize.w * 0.9) * 0.5) - @_step1.x) * progressPercent
         y = @_step1.y + (((@itemSize.h - @itemSize.h * 0.9) * 0.5) - @_step1.y) * progressPercent
@@ -426,7 +427,7 @@ class PreloadItemText extends CanvasItemBase
         height = @_step1.h + (@itemSize.h * 0.9 - @_step1.h) * progressPercent
         @_step2 = {x: x, y: y, w: width, h: height}
         @_time2 = @_time
-      else if  @_time / timemax < step3
+      else if  @_time / timemax <= step3
         progressPercent = (@_time - @_time2) / (timemax * (step3 - step2))
         x = @_step2.x + (@itemSize.w * 0.5 - @_step2.x) * progressPercent
         y = @_step2.y + (@itemSize.h * 0.5 - @_step2.y) * progressPercent
@@ -441,7 +442,7 @@ class PreloadItemText extends CanvasItemBase
       y = 0
       width = @_canvas.width
       height = @_canvas.height
-      if @_time / timemax < step1
+      if @_time / timemax <= step1
         progressPercent = 1 - (@_time / (timemax * step1))
         @_fixedBalloonAlpha = progressPercent
         @_fixedTextAlpha = progressPercent
@@ -764,14 +765,25 @@ class PreloadItemText extends CanvasItemBase
     context.restore()
 
   _freeHandBalloonDraw = (context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) ->
+    cx = canvasWidth * 0.5
+    cy = canvasHeight * 0.5
+    # 座標修正
+    percent = width / canvasWidth
+    modDP = []
+    for dp, i1 in drawPaths
+      modDP[i1] = []
+      for d, i2 in dp
+        modDP[i1][i2] = {
+          x: cx - (cx - d.x) * percent
+          y: cy - (cy - d.y) * percent
+        }
+
     # 描画
     context.beginPath()
-    sx = (canvasWidth - width) * 0.5
-    sy = (canvasHeight - height) * 0.5
-    for dp in drawPaths
+    for dp in modDP
       for d, idx in dp
-        dx = sx + x + d.x + @_freeHandDrawPadding
-        dy = sy + y + d.y + @_freeHandDrawPadding
+        dx = d.x
+        dy = d.y
         if idx == 0
           context.moveTo(dx, dy)
         else
@@ -1008,6 +1020,9 @@ class PreloadItemText extends CanvasItemBase
 
   # 描画枠から大体のフォントサイズを計算
   _calcFontSizeAbout = (text, width, height, isFixedFontSize, isDrawHorizontal) ->
+    if width <= 0 || height <= 0
+      return
+
     # 文字数計算
     a = text.length
     # 文末の改行を削除
@@ -1023,7 +1038,8 @@ class PreloadItemText extends CanvasItemBase
         h = height
       fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2)
 #      if debug
-#        console.log(fontSize)
+#        console.log('fontSize:' + fontSize)
+
       # FontSizeは暫定
       fontSize = parseInt(fontSize / 1.5)
       if fontSize < 1

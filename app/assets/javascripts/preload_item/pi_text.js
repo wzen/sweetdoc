@@ -463,7 +463,7 @@ PreloadItemText = (function(superClass) {
       step1 = 0.5;
       step2 = 0.7;
       step3 = 1;
-      if (this._time / timemax < step1) {
+      if (this._time / timemax <= step1) {
         progressPercent = this._time / (timemax * step1);
         x = (this.itemSize.w * 0.5) + (((this.itemSize.w - this.itemSize.w * 0.9) * 0.5) - (this.itemSize.w * 0.5)) * progressPercent;
         y = (this.itemSize.h * 0.5) + (((this.itemSize.h - this.itemSize.h * 0.9) * 0.5) - (this.itemSize.h * 0.5)) * progressPercent;
@@ -476,7 +476,7 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time1 = this._time;
-      } else if (this._time / timemax < step2) {
+      } else if (this._time / timemax <= step2) {
         progressPercent = (this._time - this._time1) / (timemax * (step2 - step1));
         x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.6) * 0.5) - this._step1.x) * progressPercent;
         y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.6) * 0.5) - this._step1.y) * progressPercent;
@@ -489,7 +489,7 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time2 = this._time;
-      } else if (this._time / timemax < step3) {
+      } else if (this._time / timemax <= step3) {
         progressPercent = (this._time - this._time2) / (timemax * (step3 - step2));
         x = this._step2.x - this._step2.x * progressPercent;
         y = this._step2.y - this._step2.y * progressPercent;
@@ -505,7 +505,7 @@ PreloadItemText = (function(superClass) {
       y = 0;
       width = this._canvas.width;
       height = this._canvas.height;
-      if (this._time / timemax < step1) {
+      if (this._time / timemax <= step1) {
         progressPercent = this._time / (timemax * step1);
         this._fixedBalloonAlpha = progressPercent;
       }
@@ -560,12 +560,13 @@ PreloadItemText = (function(superClass) {
     y = null;
     width = null;
     height = null;
+    fontSize = null;
     if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
       timemax = 15;
       step1 = 0.2;
       step2 = 0.5;
       step3 = 1;
-      if (this._time / timemax < step1) {
+      if (this._time / timemax <= step1) {
         progressPercent = this._time / (timemax * step1);
         x = (this.itemSize.w - this.itemSize.w * 0.5) * 0.5 * progressPercent;
         y = (this.itemSize.h - this.itemSize.h * 0.5) * 0.5 * progressPercent;
@@ -578,7 +579,7 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time1 = this._time;
-      } else if (this._time / timemax < step2) {
+      } else if (this._time / timemax <= step2) {
         progressPercent = (this._time - this._time1) / (timemax * (step2 - step1));
         x = this._step1.x + (((this.itemSize.w - this.itemSize.w * 0.9) * 0.5) - this._step1.x) * progressPercent;
         y = this._step1.y + (((this.itemSize.h - this.itemSize.h * 0.9) * 0.5) - this._step1.y) * progressPercent;
@@ -591,7 +592,7 @@ PreloadItemText = (function(superClass) {
           h: height
         };
         this._time2 = this._time;
-      } else if (this._time / timemax < step3) {
+      } else if (this._time / timemax <= step3) {
         progressPercent = (this._time - this._time2) / (timemax * (step3 - step2));
         x = this._step2.x + (this.itemSize.w * 0.5 - this._step2.x) * progressPercent;
         y = this._step2.y + (this.itemSize.h * 0.5 - this._step2.y) * progressPercent;
@@ -607,7 +608,7 @@ PreloadItemText = (function(superClass) {
       y = 0;
       width = this._canvas.width;
       height = this._canvas.height;
-      if (this._time / timemax < step1) {
+      if (this._time / timemax <= step1) {
         progressPercent = 1 - (this._time / (timemax * step1));
         this._fixedBalloonAlpha = progressPercent;
         this._fixedTextAlpha = progressPercent;
@@ -972,16 +973,29 @@ PreloadItemText = (function(superClass) {
   };
 
   _freeHandBalloonDraw = function(context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) {
-    var d, dp, dx, dy, idx, k, len, len1, m, sx, sy;
+    var cx, cy, d, dp, dx, dy, i1, i2, idx, k, len, len1, len2, len3, m, modDP, n, o, percent;
+    cx = canvasWidth * 0.5;
+    cy = canvasHeight * 0.5;
+    percent = width / canvasWidth;
+    modDP = [];
+    for (i1 = k = 0, len = drawPaths.length; k < len; i1 = ++k) {
+      dp = drawPaths[i1];
+      modDP[i1] = [];
+      for (i2 = m = 0, len1 = dp.length; m < len1; i2 = ++m) {
+        d = dp[i2];
+        modDP[i1][i2] = {
+          x: cx - (cx - d.x) * percent,
+          y: cy - (cy - d.y) * percent
+        };
+      }
+    }
     context.beginPath();
-    sx = (canvasWidth - width) * 0.5;
-    sy = (canvasHeight - height) * 0.5;
-    for (k = 0, len = drawPaths.length; k < len; k++) {
-      dp = drawPaths[k];
-      for (idx = m = 0, len1 = dp.length; m < len1; idx = ++m) {
+    for (n = 0, len2 = modDP.length; n < len2; n++) {
+      dp = modDP[n];
+      for (idx = o = 0, len3 = dp.length; o < len3; idx = ++o) {
         d = dp[idx];
-        dx = sx + x + d.x + this._freeHandDrawPadding;
-        dy = sy + y + d.y + this._freeHandDrawPadding;
+        dx = d.x;
+        dy = d.y;
         if (idx === 0) {
           context.moveTo(dx, dy);
         } else {
@@ -1277,6 +1291,9 @@ PreloadItemText = (function(superClass) {
 
   _calcFontSizeAbout = function(text, width, height, isFixedFontSize, isDrawHorizontal) {
     var a, fontSize, h, newLineCount, w;
+    if (width <= 0 || height <= 0) {
+      return;
+    }
     a = text.length;
     text = text.replace(/\n+$/g, '');
     if (!isFixedFontSize) {
