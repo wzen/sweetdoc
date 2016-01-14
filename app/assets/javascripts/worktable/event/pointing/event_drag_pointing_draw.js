@@ -16,8 +16,6 @@ EventDragPointingDraw = (function() {
   }
 
   EventDragPointingDraw.PrivateClass = (function(superClass) {
-    var _callbackParam;
-
     extend(PrivateClass, superClass);
 
     function PrivateClass() {
@@ -39,14 +37,15 @@ EventDragPointingDraw = (function() {
     };
 
     PrivateClass.prototype.clearDraw = function() {
-      this.removeItemElement();
+      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
       this.drawPaths = [];
       return this.drawPathIndex = 0;
     };
 
     PrivateClass.prototype.applyDraw = function() {
+      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
       if (this.applyCallback != null) {
-        return this.applyCallback(_callbackParam.call(this));
+        return this.applyCallback(this.drawPaths);
       }
     };
 
@@ -60,8 +59,6 @@ EventDragPointingDraw = (function() {
       if (callback == null) {
         callback = null;
       }
-      this.saveDrawingSurface();
-      this.removeItemElement();
       if (callback != null) {
         return callback();
       }
@@ -71,7 +68,6 @@ EventDragPointingDraw = (function() {
       if (callback == null) {
         callback = null;
       }
-      this.restoreAllDrawingSurface();
       return this.endDraw(callback);
     };
 
@@ -117,20 +113,13 @@ EventDragPointingDraw = (function() {
       if (callback == null) {
         callback = null;
       }
-      this.zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1;
-      return this.refresh(true, (function(_this) {
-        return function() {
-          _this.getJQueryElement().addClass('drag_pointing');
-          _this.setupDragAndResizeEvent();
-          if (_this.endDrawCallback != null) {
-            _this.endDrawCallback(_callbackParam.call(_this));
-          }
-          FloatView.showPointingController(_this);
-          if (callback != null) {
-            return callback();
-          }
-        };
-      })(this));
+      if (this.endDrawCallback != null) {
+        this.endDrawCallback(this.drawPaths);
+      }
+      FloatView.showPointingController(this);
+      if (callback != null) {
+        return callback();
+      }
     };
 
     PrivateClass.prototype.saveObj = function(newCreated) {
@@ -159,15 +148,6 @@ EventDragPointingDraw = (function() {
       }
     };
 
-    _callbackParam = function() {
-      var m;
-      m = this.drawPaths;
-      if (!this.multiDraw) {
-        m = this.drawPaths[0];
-      }
-      return m;
-    };
-
     return PrivateClass;
 
   })(CssItemBase);
@@ -194,12 +174,20 @@ EventDragPointingDraw = (function() {
     pointing = new this();
     pointing.setApplyCallback((function(_this) {
       return function(pointingPaths) {
-        return applyDrawCallback(pointingPaths);
+        pointing = new _this();
+        pointing.getJQueryElement().remove();
+        Handwrite.initHandwrite();
+        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        if (applyDrawCallback != null) {
+          return applyDrawCallback(pointingPaths);
+        }
       };
     })(this));
     pointing.setEndDrawCallback((function(_this) {
       return function(pointingPaths) {
-        return endDrawCallback(pointingPaths);
+        if (endDrawCallback != null) {
+          return endDrawCallback(pointingPaths);
+        }
       };
     })(this));
     pointing.initData();

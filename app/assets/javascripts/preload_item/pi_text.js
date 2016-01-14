@@ -159,8 +159,7 @@ PreloadItemText = (function(superClass) {
                 }
               ],
               openChildrenValue: {
-                one: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT],
-                two: PreloadItemText.BalloonType.FREE
+                one: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT]
               },
               children: {
                 one: {
@@ -174,8 +173,7 @@ PreloadItemText = (function(superClass) {
                       name: '吹き出しの角丸'
                     }
                   }
-                },
-                two: {}
+                }
               }
             }
           }
@@ -350,12 +348,12 @@ PreloadItemText = (function(superClass) {
       h = this.itemSize.h;
       this.itemSize.w = h;
       this.itemSize.h = w;
-    } else if (varName === 'balloonType' && this.balloonType === this.constructor.BalloonType.FREE) {
+    } else if (varName === 'balloonType' && (this.balloonType != null) && this.balloonType !== value && this.balloonType !== this.constructor.BalloonType.FREE) {
       opt = {
         multiDraw: true,
         applyDrawCallback: (function(_this) {
           return function(drawPaths) {
-            var d, dp, k, len, len1, m, maxX, maxY, minX, minY;
+            var d, dp, idx1, idx2, k, len, len1, len2, len3, m, maxX, maxY, minX, minY, n, o;
             _this.originalItemSize = $.extend({}, _this.itemSize);
             minX = 999999;
             maxX = -1;
@@ -379,16 +377,30 @@ PreloadItemText = (function(superClass) {
                 }
               }
             }
-            _this.itemSize.x = minX - _this._freeHandDrawPadding;
-            _this.itemSize.y = minY - _this._freeHandDrawPadding;
+            for (idx1 = n = 0, len2 = drawPaths.length; n < len2; idx1 = ++n) {
+              dp = drawPaths[idx1];
+              for (idx2 = o = 0, len3 = dp.length; o < len3; idx2 = ++o) {
+                d = dp[idx2];
+                drawPaths[idx1][idx2] = {
+                  x: d.x - minX + _this._freeHandDrawPadding,
+                  y: d.y - minY + _this._freeHandDrawPadding
+                };
+              }
+            }
+            _this.itemSize.x = window.scrollContents.scrollLeft() + minX - _this._freeHandDrawPadding;
+            _this.itemSize.y = window.scrollContents.scrollTop() + minY - _this._freeHandDrawPadding;
             _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
             _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
-            canvas = document.getElementById(_this.canvasElementId());
-            canvas.width = _this.itemSize.w;
-            canvas.height = _this.itemSize.h;
-            _freeHandBalloonDraw.call(_this, context, drawPaths);
-            _this.freeHandItemSize = $.extend({}, _this.itemSize);
-            return _this.freeHandDrawPaths = $.extend(true, {}, drawPaths);
+            _this.getJQueryElement().remove();
+            return _this.createItemElement(function() {
+              _this.freeHandItemSize = $.extend({}, _this.itemSize);
+              _this.freeHandDrawPaths = drawPaths;
+              _this.saveObj();
+              _this.itemDraw(true);
+              if (_this.setupItemEvents != null) {
+                return _this.setupItemEvents();
+              }
+            });
           };
         })(this)
       };
@@ -938,7 +950,7 @@ PreloadItemText = (function(superClass) {
     })(this);
     context.save();
     context.globalAlpha = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
-    if (window.isWorkTable) {
+    if (window.isWorkTable && this.balloonType !== this.constructor.BalloonType.FREE) {
       _itemSizeToOriginal.call(this);
     }
     if (this.balloonType === this.constructor.BalloonType.ARC) {

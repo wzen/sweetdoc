@@ -20,13 +20,15 @@ class EventDragPointingDraw
 
     clearDraw: ->
       # アイテム削除
-      @removeItemElement()
+      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
       @drawPaths = []
       @drawPathIndex = 0
 
     applyDraw: ->
+      # アイテム削除
+      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height)
       if @applyCallback?
-        @applyCallback(_callbackParam.call(@))
+        @applyCallback(@drawPaths)
 
     initData: (@multiDraw) ->
       @drawPaths = []
@@ -35,15 +37,13 @@ class EventDragPointingDraw
     # マウスダウン時の描画イベント
     # @param [Array] loc Canvas座標
     mouseDownDrawing: (callback = null) ->
-      @saveDrawingSurface()
-      # アイテム削除
-      @removeItemElement()
+      #@saveDrawingSurface()
       if callback?
         callback()
 
     # マウスアップ時の描画イベント
     mouseUpDrawing: (zindex, callback = null) ->
-      @restoreAllDrawingSurface()
+      #@restoreAllDrawingSurface()
       @endDraw(callback)
 
     startCood: (cood) ->
@@ -73,18 +73,12 @@ class EventDragPointingDraw
         drawingContext.stroke()
 
     endDraw: (callback = null) ->
-      @zindex = Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT) + 1
-
-      @refresh(true, =>
-        @getJQueryElement().addClass('drag_pointing')
-        @setupDragAndResizeEvent()
-        if @endDrawCallback?
-          @endDrawCallback(_callbackParam.call(@))
-        # コントローラ表示
-        FloatView.showPointingController(@)
-        if callback?
-          callback()
-      )
+      if @endDrawCallback?
+        @endDrawCallback(@drawPaths)
+      # コントローラ表示
+      FloatView.showPointingController(@)
+      if callback?
+        callback()
 
     # 以下の処理はなし
     saveObj: (newCreated = false) ->
@@ -92,12 +86,6 @@ class EventDragPointingDraw
     setItemPropToPageValue : (prop, value, isCache = false) ->
     applyDefaultDesign: ->
     makeCss: (forceUpdate = false) ->
-
-    _callbackParam = ->
-      m = @drawPaths
-      if !@multiDraw
-        m = @drawPaths[0]
-      return m
 
   @getInstance: (cood = null) ->
     if !instance?
@@ -113,10 +101,16 @@ class EventDragPointingDraw
       multiDraw = false
     pointing = new @()
     pointing.setApplyCallback((pointingPaths) =>
-      applyDrawCallback(pointingPaths)
+      pointing = new @()
+      pointing.getJQueryElement().remove()
+      Handwrite.initHandwrite()
+      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+      if applyDrawCallback?
+        applyDrawCallback(pointingPaths)
     )
     pointing.setEndDrawCallback((pointingPaths) =>
-      endDrawCallback(pointingPaths)
+      if endDrawCallback?
+        endDrawCallback(pointingPaths)
     )
     pointing.initData()
     PointingHandwrite.initHandwrite(@)
