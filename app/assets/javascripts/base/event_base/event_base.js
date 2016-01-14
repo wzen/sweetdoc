@@ -60,12 +60,12 @@ EventBase = (function(superClass) {
       ref = this.constructor.actionPropertiesModifiableVars();
       for (varName in ref) {
         value = ref[varName];
-        this.setInstanceVar(varName, value["default"]);
+        this.changeInstanceVarByConfig(varName, value["default"]);
       }
     }
   }
 
-  EventBase.prototype.setInstanceVar = function(varName, value) {
+  EventBase.prototype.changeInstanceVarByConfig = function(varName, value) {
     return this[varName] = value;
   };
 
@@ -526,11 +526,11 @@ EventBase = (function(superClass) {
         after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
         if ((before != null) && (after != null)) {
           if (immediate) {
-            results.push(this.setInstanceVar(varName, after));
+            results.push(this.changeInstanceVarByConfig(varName, after));
           } else {
             if (value.varAutoChange) {
               if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-                results.push(this.setInstanceVar(varName, before + (after - before) * progressPercentage));
+                results.push(this.changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage));
               } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                 colorCacheVarName = varName + "ColorChange__Cache";
                 if (this[colorCacheVarName] == null) {
@@ -540,7 +540,7 @@ EventBase = (function(superClass) {
                   }
                   this[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType);
                 }
-                results.push(this.setInstanceVar(varName, this[colorCacheVarName][progressValue]));
+                results.push(this.changeInstanceVarByConfig(varName, this[colorCacheVarName][progressValue]));
               } else {
                 results.push(void 0);
               }
@@ -576,7 +576,7 @@ EventBase = (function(superClass) {
         if ((this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
           after = this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
           if (after != null) {
-            this.setInstanceVar(varName, after);
+            this.changeInstanceVarByConfig(varName, after);
           }
         }
       }
@@ -595,7 +595,7 @@ EventBase = (function(superClass) {
             if ((before != null) && (after != null)) {
               if (value.varAutoChange) {
                 if (value.type === Constant.ItemDesignOptionType.NUMBER) {
-                  _this.setInstanceVar(varName, before + (after - before) * progressPercentage);
+                  _this.changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage);
                 } else if (value.type === Constant.ItemDesignOptionType.COLOR) {
                   colorCacheVarName = varName + "ColorChange__Cache";
                   if (_this[colorCacheVarName] == null) {
@@ -605,7 +605,7 @@ EventBase = (function(superClass) {
                     }
                     _this[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType);
                   }
-                  _this.setInstanceVar(varName, _this[colorCacheVarName][count]);
+                  _this.changeInstanceVarByConfig(varName, _this[colorCacheVarName][count]);
                 }
               }
             }
@@ -620,7 +620,7 @@ EventBase = (function(superClass) {
             if ((_this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] != null) && (_this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] != null)) {
               after = _this._event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName];
               if (after != null) {
-                results.push(_this.setInstanceVar(varName, after));
+                results.push(_this.changeInstanceVarByConfig(varName, after));
               } else {
                 results.push(void 0);
               }
@@ -733,13 +733,19 @@ EventBase = (function(superClass) {
       isDefault = false;
     }
     _actionPropertiesModifiableVars = function(modifiableRoot, ret) {
-      var k, v;
+      var ck, cv, k, ref, v;
       if (modifiableRoot != null) {
         for (k in modifiableRoot) {
           v = modifiableRoot[k];
           ret[k] = v;
           if (v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN] != null) {
-            ret = $.extend(ret, _actionPropertiesModifiableVars.call(this, v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN], ret));
+            ref = v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN];
+            for (ck in ref) {
+              cv = ref[ck];
+              if (cv != null) {
+                ret = $.extend(ret, _actionPropertiesModifiableVars.call(this, cv, ret));
+              }
+            }
           }
         }
       }

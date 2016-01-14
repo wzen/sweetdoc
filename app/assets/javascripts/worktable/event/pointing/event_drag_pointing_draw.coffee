@@ -49,9 +49,10 @@ class EventDragPointingDraw
     startCood: (cood) ->
       if cood?
         @_moveLoc = {x: cood.x, y: cood.y}
-      if @multiDraw
+      if @multiDraw && @drawPaths.length > 0
         @drawPathIndex += 1
       else
+        @drawPaths = []
         @drawPathIndex = 0
       @drawPaths[@drawPathIndex] = []
       @itemSize = null
@@ -59,8 +60,8 @@ class EventDragPointingDraw
     # ドラッグ描画(線)
     # @param [Array] cood 座標
     draw: (cood) ->
-      drawPaths[@drawPathIndex].push(cood)
-      @restoreRefreshingSurface(@itemSize)
+      @drawPaths[@drawPathIndex].push(cood)
+      #@restoreRefreshingSurface(@itemSize)
 
       for d in @drawPaths
         drawingContext.beginPath()

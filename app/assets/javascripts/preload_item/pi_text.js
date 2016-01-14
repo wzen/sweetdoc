@@ -81,24 +81,28 @@ PreloadItemText = (function(superClass) {
         name: 'Show with animation',
         "default": false,
         type: 'boolean',
-        openChildrenValue: true,
+        openChildrenValue: {
+          one: true
+        },
         ja: {
           name: 'アニメーション表示'
         },
         children: {
-          showAnimetionType: {
-            name: 'AnimationType',
-            type: 'select',
-            "default": PreloadItemText.ShowAnimationType.POPUP,
-            options: [
-              {
-                name: 'Popup',
-                value: PreloadItemText.ShowAnimationType.POPUP
-              }, {
-                name: 'Blur',
-                value: PreloadItemText.ShowAnimationType.BLUR
-              }
-            ]
+          one: {
+            showAnimetionType: {
+              name: 'AnimationType',
+              type: 'select',
+              "default": PreloadItemText.ShowAnimationType.POPUP,
+              options: [
+                {
+                  name: 'Popup',
+                  value: PreloadItemText.ShowAnimationType.POPUP
+                }, {
+                  name: 'Blur',
+                  value: PreloadItemText.ShowAnimationType.BLUR
+                }
+              ]
+            }
           }
         }
       },
@@ -110,58 +114,68 @@ PreloadItemText = (function(superClass) {
         name: 'Show Balloon',
         "default": false,
         type: 'boolean',
-        openChildrenValue: true,
+        openChildrenValue: {
+          one: true
+        },
         ja: {
           name: '吹き出し表示'
         },
         children: {
-          balloonColor: {
-            name: 'BalloonColor',
-            "default": '#fff',
-            type: 'color',
-            colorType: 'hex',
-            ja: {
-              name: '吹き出しの色'
-            }
-          },
-          balloonType: {
-            name: 'BalloonType',
-            type: 'select',
-            options: [
-              {
-                name: 'Arc',
-                value: PreloadItemText.BalloonType.ARC
-              }, {
-                name: 'Broken Arc',
-                value: PreloadItemText.BalloonType.BROKEN_ARC
-              }, {
-                name: 'Rect',
-                value: PreloadItemText.BalloonType.RECT
-              }, {
-                name: 'Broken Rect',
-                value: PreloadItemText.BalloonType.BROKEN_RECT
-              }, {
-                name: 'Flash',
-                value: PreloadItemText.BalloonType.FLASH
-              }, {
-                name: 'Cloud',
-                value: PreloadItemText.BalloonType.CLOUD
-              }, {
-                name: 'FreeHand',
-                value: PreloadItemText.BalloonType.FREE
+          one: {
+            balloonColor: {
+              name: 'BalloonColor',
+              "default": '#fff',
+              type: 'color',
+              colorType: 'hex',
+              ja: {
+                name: '吹き出しの色'
               }
-            ],
-            openChildrenValue: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT],
-            children: {
-              balloonRadius: {
-                name: 'BalloonRadius',
-                "default": 30,
-                type: 'number',
-                min: 1,
-                max: 100,
-                ja: {
-                  name: '吹き出しの角丸'
+            },
+            balloonType: {
+              name: 'BalloonType',
+              type: 'select',
+              options: [
+                {
+                  name: 'Arc',
+                  value: PreloadItemText.BalloonType.ARC
+                }, {
+                  name: 'Broken Arc',
+                  value: PreloadItemText.BalloonType.BROKEN_ARC
+                }, {
+                  name: 'Rect',
+                  value: PreloadItemText.BalloonType.RECT
+                }, {
+                  name: 'Broken Rect',
+                  value: PreloadItemText.BalloonType.BROKEN_RECT
+                }, {
+                  name: 'Flash',
+                  value: PreloadItemText.BalloonType.FLASH
+                }, {
+                  name: 'Cloud',
+                  value: PreloadItemText.BalloonType.CLOUD
+                }, {
+                  name: 'FreeHand',
+                  value: PreloadItemText.BalloonType.FREE
                 }
+              ],
+              openChildrenValue: {
+                one: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT],
+                two: PreloadItemText.BalloonType.FREE
+              },
+              children: {
+                one: {
+                  balloonRadius: {
+                    name: 'BalloonRadius',
+                    "default": 30,
+                    type: 'number',
+                    min: 1,
+                    max: 100,
+                    ja: {
+                      name: '吹き出しの角丸'
+                    }
+                  }
+                },
+                two: {}
               }
             }
           }
@@ -179,13 +193,17 @@ PreloadItemText = (function(superClass) {
         name: "Font Size Fixed",
         type: 'boolean',
         "default": false,
-        openChildrenValue: true,
+        openChildrenValue: {
+          one: true
+        },
         children: {
-          fontSize: {
-            type: 'number',
-            name: "Font Size",
-            min: 1,
-            max: 100
+          one: {
+            fontSize: {
+              type: 'number',
+              name: "Font Size",
+              min: 1,
+              max: 100
+            }
           }
         }
       },
@@ -314,8 +332,8 @@ PreloadItemText = (function(superClass) {
     })(this));
   };
 
-  PreloadItemText.prototype.setInstanceVar = function(varName, value) {
-    var canvas, h, height, w, width;
+  PreloadItemText.prototype.changeInstanceVarByConfig = function(varName, value) {
+    var canvas, h, height, opt, w, width;
     if (varName === 'isDrawHorizontal' && this.isDrawHorizontal !== value) {
       canvas = document.getElementById(this.canvasElementId());
       width = canvas.width;
@@ -332,8 +350,51 @@ PreloadItemText = (function(superClass) {
       h = this.itemSize.h;
       this.itemSize.w = h;
       this.itemSize.h = w;
+    } else if (varName === 'balloonType' && this.balloonType === this.constructor.BalloonType.FREE) {
+      opt = {
+        multiDraw: true,
+        applyDrawCallback: (function(_this) {
+          return function(drawPaths) {
+            var d, dp, k, len, len1, m, maxX, maxY, minX, minY;
+            _this.originalItemSize = $.extend({}, _this.itemSize);
+            minX = 999999;
+            maxX = -1;
+            minY = 999999;
+            maxY = -1;
+            for (k = 0, len = drawPaths.length; k < len; k++) {
+              dp = drawPaths[k];
+              for (m = 0, len1 = dp.length; m < len1; m++) {
+                d = dp[m];
+                if (minX > d.x) {
+                  minX = d.x;
+                }
+                if (minY > d.y) {
+                  minY = d.y;
+                }
+                if (maxX < d.x) {
+                  maxX = d.x;
+                }
+                if (maxY < d.y) {
+                  maxY = d.y;
+                }
+              }
+            }
+            _this.itemSize.x = minX - _this._freeHandDrawPadding;
+            _this.itemSize.y = minY - _this._freeHandDrawPadding;
+            _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
+            _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
+            canvas = document.getElementById(_this.canvasElementId());
+            canvas.width = _this.itemSize.w;
+            canvas.height = _this.itemSize.h;
+            _freeHandBalloonDraw.call(_this, context, drawPaths);
+            _this.freeHandItemSize = $.extend({}, _this.itemSize);
+            return _this.freeHandDrawPaths = $.extend(true, {}, drawPaths);
+          };
+        })(this)
+      };
+      EventDragPointingDraw.run(opt);
     }
-    return PreloadItemText.__super__.setInstanceVar.call(this, varName, value);
+    return PreloadItemText.__super__.changeInstanceVarByConfig.call(this, varName, value);
   };
 
   PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {
@@ -870,52 +931,8 @@ PreloadItemText = (function(superClass) {
     })(this);
     _drawFreeHand = (function(_this) {
       return function() {
-        var opt;
-        if (window.isWorkTable) {
-          opt = {
-            multiDraw: true,
-            applyDrawCallback: function(drawPaths) {
-              var canvas, d, dp, k, len, len1, m, maxX, maxY, minX, minY;
-              _this.originalItemSize = $.extend({}, _this.itemSize);
-              minX = 999999;
-              maxX = -1;
-              minY = 999999;
-              maxY = -1;
-              for (k = 0, len = drawPaths.length; k < len; k++) {
-                dp = drawPaths[k];
-                for (m = 0, len1 = dp.length; m < len1; m++) {
-                  d = dp[m];
-                  if (minX > d.x) {
-                    minX = d.x;
-                  }
-                  if (minY > d.y) {
-                    minY = d.y;
-                  }
-                  if (maxX < d.x) {
-                    maxX = d.x;
-                  }
-                  if (maxY < d.y) {
-                    maxY = d.y;
-                  }
-                }
-              }
-              _this.itemSize.x = minX - _this._freeHandDrawPadding;
-              _this.itemSize.y = minY - _this._freeHandDrawPadding;
-              _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
-              _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
-              canvas = document.getElementById(_this.canvasElementId());
-              canvas.width = _this.itemSize.w;
-              canvas.height = _this.itemSize.h;
-              _freeHandBalloonDraw.call(_this, context, drawPaths);
-              _this.freeHandItemSize = $.extend({}, _this.itemSize);
-              return _this.freeHandDrawPaths = $.extend(true, {}, drawPaths);
-            }
-          };
-          return EventDragPointingDraw.run(opt);
-        } else {
-          if (_this.freeHandDrawPaths != null) {
-            return _freeHandBalloonDraw.call(_this, context, _this.freeHandDrawPaths);
-          }
+        if (_this.freeHandDrawPaths != null) {
+          return _freeHandBalloonDraw.call(_this, context, _this.freeHandDrawPaths);
         }
       };
     })(this);

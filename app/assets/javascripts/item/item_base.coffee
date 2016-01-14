@@ -388,24 +388,25 @@ class ItemBase extends ItemEventBase
     , duration * 1000)
 
   @switchChildrenConfig = (e, varName, openValue, targetValue) ->
-    if !openValue?
-      # 判定値無し
-      return
-    if typeof targetValue == 'object'
-      # オブジェクトの場合は判定しない
-      return
+    for cKey, cValue of openValue
+      if !cValue?
+        # 判定値無し
+        return
+      if typeof targetValue == 'object'
+        # オブジェクトの場合は判定しない
+        return
 
-    if typeof openValue == 'string' && (openValue == 'true' || openValue == 'false')
-      openValue = openValue == 'true'
-    if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
-      targetValue = targetValue == 'true'
+      if typeof cValue == 'string' && (cValue == 'true' || cValue == 'false')
+        cValue = cValue == 'true'
+      if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
+        targetValue = targetValue == 'true'
 
-    root = e.closest(".#{Constant.DesignConfig.DESIGN_ROOT_CLASSNAME}")
-    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName)
-    if openValue == targetValue
-      $(root).find(".#{openClassName}").show()
-    else
-      $(root).find(".#{openClassName}").hide()
+      root = e.closest(".#{Constant.DesignConfig.DESIGN_ROOT_CLASSNAME}")
+      openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName).replace('@childrenkey', cKey)
+      if cValue == targetValue
+        $(root).find(".#{openClassName}").show()
+      else
+        $(root).find(".#{openClassName}").hide()
 
   if window.isWorkTable
     @include(itemBaseWorktableExtend)

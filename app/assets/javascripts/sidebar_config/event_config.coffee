@@ -690,25 +690,26 @@ class EventConfig
     )
 
   @switchChildrenConfig = (e, varName, openValue, targetValue) ->
-    if !openValue?
-      # 判定値無し
-      return
-    if typeof targetValue == 'object'
-      # オブジェクトの場合は判定しない
-      return
+    for cKey, cValue of openValue
+      if !cValue?
+        # 判定値無し
+        return
+      if typeof targetValue == 'object'
+        # オブジェクトの場合は判定しない
+        return
 
-    if typeof openValue != 'array'
-      openValue = [openValue]
+      if typeof cValue != 'array'
+        cValue = [cValue]
 
-    for o, idx in openValue
-      if typeof o == 'string' && (o == 'true' || o == 'false')
-        openValue[idx] = o == 'true'
-    if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
-      targetValue = targetValue == 'true'
+      for o, idx in cValue
+        if typeof o == 'string' && (o == 'true' || o == 'false')
+          cValue[idx] = o == 'true'
+      if typeof targetValue == 'string' && (targetValue == 'true' || targetValue == 'false')
+        targetValue = targetValue == 'true'
 
-    root = e.closest('.event')
-    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName)
-    if $.inArray(targetValue, openValue) >= 0
-      $(root).find(".#{openClassName}").show()
-    else
-      $(root).find(".#{openClassName}").hide()
+      root = e.closest('.event')
+      openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName).replace('@childrenkey', cKey)
+      if $.inArray(targetValue, cValue) >= 0
+        $(root).find(".#{openClassName}").show()
+      else
+        $(root).find(".#{openClassName}").hide()

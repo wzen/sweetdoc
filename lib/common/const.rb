@@ -478,7 +478,7 @@ class Const
       PRELOAD_IMAGE_PATH_SELECT = 'preload_image_path_select_config'
     end
     class Modifiable
-      CHILDREN_WRAPPER_CLASS = 'modifiable_children_wrapper_@parentvarname'
+      CHILDREN_WRAPPER_CLASS = 'modifiable_children_wrapper_@parentvarname_@childrenkey'
     end
   end
 

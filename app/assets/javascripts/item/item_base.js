@@ -452,25 +452,28 @@ ItemBase = (function(superClass) {
   };
 
   ItemBase.switchChildrenConfig = function(e, varName, openValue, targetValue) {
-    var openClassName, root;
-    if (openValue == null) {
-      return;
-    }
-    if (typeof targetValue === 'object') {
-      return;
-    }
-    if (typeof openValue === 'string' && (openValue === 'true' || openValue === 'false')) {
-      openValue = openValue === 'true';
-    }
-    if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
-      targetValue = targetValue === 'true';
-    }
-    root = e.closest("." + Constant.DesignConfig.DESIGN_ROOT_CLASSNAME);
-    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName);
-    if (openValue === targetValue) {
-      return $(root).find("." + openClassName).show();
-    } else {
-      return $(root).find("." + openClassName).hide();
+    var cKey, cValue, openClassName, root;
+    for (cKey in openValue) {
+      cValue = openValue[cKey];
+      if (cValue == null) {
+        return;
+      }
+      if (typeof targetValue === 'object') {
+        return;
+      }
+      if (typeof cValue === 'string' && (cValue === 'true' || cValue === 'false')) {
+        cValue = cValue === 'true';
+      }
+      if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
+        targetValue = targetValue === 'true';
+      }
+      root = e.closest("." + Constant.DesignConfig.DESIGN_ROOT_CLASSNAME);
+      openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName).replace('@childrenkey', cKey);
+      if (cValue === targetValue) {
+        $(root).find("." + openClassName).show();
+      } else {
+        $(root).find("." + openClassName).hide();
+      }
     }
   };
 

@@ -763,31 +763,34 @@ EventConfig = (function() {
   };
 
   EventConfig.switchChildrenConfig = function(e, varName, openValue, targetValue) {
-    var idx, j, len, o, openClassName, root;
-    if (openValue == null) {
-      return;
-    }
-    if (typeof targetValue === 'object') {
-      return;
-    }
-    if (typeof openValue !== 'array') {
-      openValue = [openValue];
-    }
-    for (idx = j = 0, len = openValue.length; j < len; idx = ++j) {
-      o = openValue[idx];
-      if (typeof o === 'string' && (o === 'true' || o === 'false')) {
-        openValue[idx] = o === 'true';
+    var cKey, cValue, idx, j, len, o, openClassName, root;
+    for (cKey in openValue) {
+      cValue = openValue[cKey];
+      if (cValue == null) {
+        return;
       }
-    }
-    if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
-      targetValue = targetValue === 'true';
-    }
-    root = e.closest('.event');
-    openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName);
-    if ($.inArray(targetValue, openValue) >= 0) {
-      return $(root).find("." + openClassName).show();
-    } else {
-      return $(root).find("." + openClassName).hide();
+      if (typeof targetValue === 'object') {
+        return;
+      }
+      if (typeof cValue !== 'array') {
+        cValue = [cValue];
+      }
+      for (idx = j = 0, len = cValue.length; j < len; idx = ++j) {
+        o = cValue[idx];
+        if (typeof o === 'string' && (o === 'true' || o === 'false')) {
+          cValue[idx] = o === 'true';
+        }
+      }
+      if (typeof targetValue === 'string' && (targetValue === 'true' || targetValue === 'false')) {
+        targetValue = targetValue === 'true';
+      }
+      root = e.closest('.event');
+      openClassName = ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS.replace('@parentvarname', varName).replace('@childrenkey', cKey);
+      if ($.inArray(targetValue, cValue) >= 0) {
+        $(root).find("." + openClassName).show();
+      } else {
+        $(root).find("." + openClassName).hide();
+      }
     }
   };
 

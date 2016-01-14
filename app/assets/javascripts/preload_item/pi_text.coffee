@@ -38,19 +38,21 @@ class PreloadItemText extends CanvasItemBase
         name: 'Show with animation'
         default: false
         type: 'boolean'
-        openChildrenValue: true
+        openChildrenValue: {one: true}
         ja: {
           name: 'アニメーション表示'
         }
         children: {
-          showAnimetionType: {
-            name: 'AnimationType'
-            type: 'select'
-            default: @ShowAnimationType.POPUP
-            options: [
-              {name: 'Popup', value: @ShowAnimationType.POPUP}
-              {name: 'Blur', value: @ShowAnimationType.BLUR}
-            ]
+          one: {
+            showAnimetionType: {
+              name: 'AnimationType'
+              type: 'select'
+              default: @ShowAnimationType.POPUP
+              options: [
+                {name: 'Popup', value: @ShowAnimationType.POPUP}
+                {name: 'Blur', value: @ShowAnimationType.BLUR}
+              ]
+            }
           }
         }
       }
@@ -62,42 +64,52 @@ class PreloadItemText extends CanvasItemBase
         name: 'Show Balloon'
         default: false
         type: 'boolean'
-        openChildrenValue: true
+        openChildrenValue: { one: true}
         ja: {
           name: '吹き出し表示'
         }
         children: {
-          balloonColor: {
-            name: 'BalloonColor'
-            default: '#fff'
-            type: 'color'
-            colorType: 'hex'
-            ja: {
-              name: '吹き出しの色'
+          one: {
+            balloonColor: {
+              name: 'BalloonColor'
+              default: '#fff'
+              type: 'color'
+              colorType: 'hex'
+              ja: {
+                name: '吹き出しの色'
+              }
             }
-          }
-          balloonType: {
-            name: 'BalloonType'
-            type: 'select'
-            options: [
-              {name: 'Arc', value: @BalloonType.ARC}
-              {name: 'Broken Arc', value: @BalloonType.BROKEN_ARC}
-              {name: 'Rect', value: @BalloonType.RECT}
-              {name: 'Broken Rect', value: @BalloonType.BROKEN_RECT}
-              {name: 'Flash', value: @BalloonType.FLASH}
-              {name: 'Cloud', value: @BalloonType.CLOUD}
-              {name: 'FreeHand', value: @BalloonType.FREE}
-            ]
-            openChildrenValue: [@BalloonType.RECT, @BalloonType.BROKEN_RECT]
-            children: {
-              balloonRadius: {
-                name: 'BalloonRadius'
-                default: 30
-                type: 'number'
-                min: 1
-                max: 100
-                ja: {
-                  name: '吹き出しの角丸'
+            balloonType: {
+              name: 'BalloonType'
+              type: 'select'
+              options: [
+                {name: 'Arc', value: @BalloonType.ARC}
+                {name: 'Broken Arc', value: @BalloonType.BROKEN_ARC}
+                {name: 'Rect', value: @BalloonType.RECT}
+                {name: 'Broken Rect', value: @BalloonType.BROKEN_RECT}
+                {name: 'Flash', value: @BalloonType.FLASH}
+                {name: 'Cloud', value: @BalloonType.CLOUD}
+                {name: 'FreeHand', value: @BalloonType.FREE}
+              ]
+              openChildrenValue: {
+                one: [@BalloonType.RECT, @BalloonType.BROKEN_RECT]
+                two: @BalloonType.FREE
+              }
+              children: {
+                one: {
+                  balloonRadius: {
+                    name: 'BalloonRadius'
+                    default: 30
+                    type: 'number'
+                    min: 1
+                    max: 100
+                    ja: {
+                      name: '吹き出しの角丸'
+                    }
+                  }
+                }
+                two: {
+
                 }
               }
             }
@@ -116,13 +128,15 @@ class PreloadItemText extends CanvasItemBase
         name: "Font Size Fixed"
         type: 'boolean'
         default: false
-        openChildrenValue: true
+        openChildrenValue: {one: true}
         children: {
-          fontSize: {
-            type: 'number'
-            name: "Font Size"
-            min: 1
-            max: 100
+          one: {
+            fontSize: {
+              type: 'number'
+              name: "Font Size"
+              min: 1
+              max: 100
+            }
           }
         }
       }
@@ -228,7 +242,7 @@ class PreloadItemText extends CanvasItemBase
         callback()
     )
 
-  setInstanceVar: (varName, value)->
+  changeInstanceVarByConfig: (varName, value)->
     if varName == 'isDrawHorizontal' && @isDrawHorizontal != value
       # Canvas縦横変更
       canvas = document.getElementById(@canvasElementId())
@@ -240,6 +254,41 @@ class PreloadItemText extends CanvasItemBase
       h = @itemSize.h
       @itemSize.w = h
       @itemSize.h = w
+    else if varName == 'balloonType' && @balloonType == @constructor.BalloonType.FREE
+      opt = {
+        multiDraw: true
+        applyDrawCallback: (drawPaths) =>
+          # キャンパスサイズ拡張
+          @originalItemSize = $.extend({}, @itemSize)
+          minX = 999999
+          maxX = -1
+          minY = 999999
+          maxY = -1
+          for dp in drawPaths
+            for d in dp
+              if minX > d.x
+                minX = d.x
+              if minY > d.y
+                minY = d.y
+              if maxX < d.x
+                maxX = d.x
+              if maxY < d.y
+                maxY = d.y
+
+          @itemSize.x = minX - @_freeHandDrawPadding
+          @itemSize.y = minY - @_freeHandDrawPadding
+          @itemSize.w = maxX - minX + @_freeHandDrawPadding * 2
+          @itemSize.h = maxY - minY + @_freeHandDrawPadding * 2
+          canvas = document.getElementById(@canvasElementId())
+          canvas.width = @itemSize.w
+          canvas.height = @itemSize.h
+
+          _freeHandBalloonDraw.call(@, context, drawPaths)
+
+          @freeHandItemSize = $.extend({}, @itemSize)
+          @freeHandDrawPaths = $.extend(true, {}, drawPaths)
+      }
+      EventDragPointingDraw.run(opt)
     super(varName, value)
 
   # マウスアップ時の描画イベント
@@ -685,44 +734,8 @@ class PreloadItemText extends CanvasItemBase
       context.stroke()
 
     _drawFreeHand = =>
-      if window.isWorkTable
-        opt = {
-          multiDraw: true
-          applyDrawCallback: (drawPaths) =>
-            # キャンパスサイズ拡張
-            @originalItemSize = $.extend({}, @itemSize)
-            minX = 999999
-            maxX = -1
-            minY = 999999
-            maxY = -1
-            for dp in drawPaths
-              for d in dp
-                if minX > d.x
-                  minX = d.x
-                if minY > d.y
-                  minY = d.y
-                if maxX < d.x
-                  maxX = d.x
-                if maxY < d.y
-                  maxY = d.y
-
-            @itemSize.x = minX - @_freeHandDrawPadding
-            @itemSize.y = minY - @_freeHandDrawPadding
-            @itemSize.w = maxX - minX + @_freeHandDrawPadding * 2
-            @itemSize.h = maxY - minY + @_freeHandDrawPadding * 2
-            canvas = document.getElementById(@canvasElementId())
-            canvas.width = @itemSize.w
-            canvas.height = @itemSize.h
-
-            _freeHandBalloonDraw.call(@, context, drawPaths)
-
-            @freeHandItemSize = $.extend({}, @itemSize)
-            @freeHandDrawPaths = $.extend(true, {}, drawPaths)
-        }
-        EventDragPointingDraw.run(opt)
-      else
-        if @freeHandDrawPaths?
-          _freeHandBalloonDraw.call(@, context, @freeHandDrawPaths)
+      if @freeHandDrawPaths?
+        _freeHandBalloonDraw.call(@, context, @freeHandDrawPaths)
 
     context.save()
     context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1

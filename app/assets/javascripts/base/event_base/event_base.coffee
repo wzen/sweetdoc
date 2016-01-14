@@ -31,10 +31,10 @@ class EventBase extends Extend
     # modifiables変数の初期化
     if @constructor.actionProperties? && @constructor.actionPropertiesModifiableVars()?
       for varName, value of @constructor.actionPropertiesModifiableVars()
-        @setInstanceVar(varName, value.default)
+        @changeInstanceVarByConfig(varName, value.default)
 
   # インスタンス値セッター
-  setInstanceVar: (varName, value) ->
+  changeInstanceVarByConfig: (varName, value) ->
     @[varName] = value
 
   # 変更を戻して再表示
@@ -447,12 +447,12 @@ class EventBase extends Extend
         after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
         if before? && after?
           if immediate
-            @setInstanceVar(varName, after)
+            @changeInstanceVarByConfig(varName, after)
           else
             if value.varAutoChange
               # 変数自動変更
               if value.type == Constant.ItemDesignOptionType.NUMBER
-                @setInstanceVar(varName, before + (after - before) * progressPercentage)
+                @changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage)
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
@@ -460,7 +460,7 @@ class EventBase extends Extend
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
-                @setInstanceVar(varName, @[colorCacheVarName][progressValue])
+                @changeInstanceVarByConfig(varName, @[colorCacheVarName][progressValue])
 
   # アニメーションによるアイテム状態更新
   updateInstanceParamByAnimation: (immediate = false) ->
@@ -477,7 +477,7 @@ class EventBase extends Extend
         if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
           after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
           if after?
-            @setInstanceVar(varName, after)
+            @changeInstanceVarByConfig(varName, after)
       return
 
     count = 1
@@ -490,7 +490,7 @@ class EventBase extends Extend
           if before? && after?
             if value.varAutoChange
               if value.type == Constant.ItemDesignOptionType.NUMBER
-                @setInstanceVar(varName, before + (after - before) * progressPercentage)
+                @changeInstanceVarByConfig(varName, before + (after - before) * progressPercentage)
               else if value.type == Constant.ItemDesignOptionType.COLOR
                 colorCacheVarName = "#{varName}ColorChange__Cache"
                 if !@[colorCacheVarName]?
@@ -498,7 +498,7 @@ class EventBase extends Extend
                   if !colorType?
                     colorType = 'hex'
                   @[colorCacheVarName] = Common.colorChangeCacheData(before, after, progressMax, colorType)
-                @setInstanceVar(varName, @[colorCacheVarName][count])
+                @changeInstanceVarByConfig(varName, @[colorCacheVarName][count])
       count += 1
       if count > progressMax
         clearInterval(timer)
@@ -506,7 +506,7 @@ class EventBase extends Extend
           if @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS]? && @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]?
             after = @_event[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName]
             if after?
-              @setInstanceVar(varName, after)
+              @changeInstanceVarByConfig(varName, after)
     , @constructor.STEP_INTERVAL_DURATION * 1000)
 
   # イベント前後の変数を設定 [xxx__before] & [xxx__after]
@@ -586,7 +586,9 @@ class EventBase extends Extend
           ret[k] = v
           if v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]?
             # Childrenを含める
-            ret = $.extend(ret, _actionPropertiesModifiableVars.call(@, v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN], ret))
+            for ck, cv of v[EventBase.ActionPropertiesKey.MODIFIABLE_CHILDREN]
+              if cv?
+                ret = $.extend(ret, _actionPropertiesModifiableVars.call(@, cv, ret))
       return ret
 
     ret = {}

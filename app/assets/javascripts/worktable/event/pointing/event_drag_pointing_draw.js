@@ -82,9 +82,10 @@ EventDragPointingDraw = (function() {
           y: cood.y
         };
       }
-      if (this.multiDraw) {
+      if (this.multiDraw && this.drawPaths.length > 0) {
         this.drawPathIndex += 1;
       } else {
+        this.drawPaths = [];
         this.drawPathIndex = 0;
       }
       this.drawPaths[this.drawPathIndex] = [];
@@ -93,8 +94,7 @@ EventDragPointingDraw = (function() {
 
     PrivateClass.prototype.draw = function(cood) {
       var d, i, idx, j, len, len1, p, ref, results;
-      drawPaths[this.drawPathIndex].push(cood);
-      this.restoreRefreshingSurface(this.itemSize);
+      this.drawPaths[this.drawPathIndex].push(cood);
       ref = this.drawPaths;
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
