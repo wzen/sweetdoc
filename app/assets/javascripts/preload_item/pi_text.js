@@ -184,11 +184,12 @@ PreloadItemText = (function(superClass) {
         },
         children: {
           one: {
-            fontSize: {
+            fixedFontSize: {
               type: 'number',
               name: "Font Size",
               min: 1,
-              max: 100
+              max: 100,
+              "default": 14
             }
           }
         }
@@ -392,6 +393,10 @@ PreloadItemText = (function(superClass) {
       h = this.itemSize.h;
       this.itemSize.w = h;
       this.itemSize.h = w;
+    } else if (varName === 'showBalloon' && this.showBalloon !== value && !this.isFixedFontSize) {
+      this.fontSize = null;
+    } else if (varName === 'isFixedFontSize' || varName === 'fixedFontSize') {
+      this.fontSize = null;
     } else if (varName === 'balloonType' && (this.balloonType != null) && this.balloonType !== value) {
       if (value === this.constructor.BalloonType.FREE) {
         this.freeHandDrawPaths = null;
@@ -832,7 +837,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawBalloon = function(context, x, y, width, height, canvasWidth, canvasHeight) {
-    var _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
+    var _balloonStyle, _drawArc, _drawBArc, _drawBRect, _drawFreeHand, _drawRect, _drawShout, _drawThink;
     if (canvasWidth == null) {
       canvasWidth = width;
     }
@@ -845,11 +850,19 @@ PreloadItemText = (function(superClass) {
     if (width <= 0 || height <= 0) {
       return;
     }
+    _balloonStyle = function(context) {
+      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
+      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
+      context.shadowColor = 'rgba(0,0,0,0.5)';
+      context.shadowOffsetX = 2;
+      context.shadowOffsetY = 2;
+      return context.shadowBlur = 7;
+    };
     _drawArc = function() {
       var diff;
       context.beginPath();
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5);
-      diff = 3.0;
+      diff = 10.0;
       if (width > height) {
         context.scale(canvasWidth / canvasHeight, 1);
         context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2);
@@ -857,23 +870,17 @@ PreloadItemText = (function(superClass) {
         context.scale(1, canvasHeight / canvasWidth);
         context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2);
       }
-      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
-      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       context.fill();
       return context.stroke();
     };
     _drawRect = function() {
       context.beginPath();
-      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
-      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       return context.fillRect(x, y, width, height);
     };
     _drawBArc = function() {
       var diff, l, per, results, results1, sum;
-      diff = 3.0;
+      diff = 10.0;
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5);
-      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
-      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       per = Math.PI * 2 / 100;
       if (width > height) {
         context.scale(canvasWidth / canvasHeight, 1);
@@ -941,8 +948,6 @@ PreloadItemText = (function(superClass) {
       _draw.call(this, width, y, width, height);
       _draw.call(this, width, height, x, height);
       _draw.call(this, x, height, x, y);
-      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
-      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       context.fillRect(x, y, width, height);
       context.stroke();
       return context.restore();
@@ -962,8 +967,6 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
-        context.fillStyle = "rgba(" + _this.balloonColor.r + "," + _this.balloonColor.g + "," + _this.balloonColor.b + ", 0.9)";
-        context.strokeStyle = "rgba(" + _this.balloonBorderColor.r + "," + _this.balloonBorderColor.g + "," + _this.balloonBorderColor.b + ", 0.9)";
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
           if (_this.balloonRandomIntValue == null) {
@@ -1004,8 +1007,6 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
-        context.fillStyle = "rgba(" + _this.balloonColor.r + "," + _this.balloonColor.g + "," + _this.balloonColor.b + ", 0.9)";
-        context.strokeStyle = "rgba(" + _this.balloonBorderColor.r + "," + _this.balloonBorderColor.g + "," + _this.balloonBorderColor.b + ", 0.9)";
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
           if (_this.balloonRandomIntValue == null) {
@@ -1039,6 +1040,7 @@ PreloadItemText = (function(superClass) {
     })(this);
     context.save();
     context.globalAlpha = this._fixedBalloonAlpha != null ? this._fixedBalloonAlpha : 1;
+    _balloonStyle.call(this, context);
     if (this.balloonType === this.constructor.BalloonType.ARC) {
       _drawArc.call(this);
     } else if (this.balloonType === this.constructor.BalloonType.RECT) {
@@ -1144,8 +1146,6 @@ PreloadItemText = (function(superClass) {
     context.closePath();
     context.lineJoin = 'round';
     context.lineCap = 'round';
-    context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
-    context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
     context.fill();
     return context.stroke();
   };
@@ -1341,7 +1341,7 @@ PreloadItemText = (function(superClass) {
             context.beginPath();
             context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height);
             context.rotate(Math.PI / 2);
-            context.fillText(c, -widthLine * 0.5, wordWidth * 0.75 * 0.5);
+            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5);
             context.restore();
             hl += measure.width;
           } else {
@@ -1460,8 +1460,13 @@ PreloadItemText = (function(superClass) {
       if (fontSize < 1) {
         fontSize = 1;
       }
+      if (this.showBalloon && fontSize >= 6) {
+        fontSize -= 5;
+      }
+      return fontSize;
+    } else {
+      return this.fixedFontSize;
     }
-    return fontSize;
   };
 
   _showInputModal = function() {

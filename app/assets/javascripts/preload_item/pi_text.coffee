@@ -114,11 +114,12 @@ class PreloadItemText extends CanvasItemBase
         openChildrenValue: {one: true}
         children: {
           one: {
-            fontSize: {
+            fixedFontSize: {
               type: 'number'
               name: "Font Size"
               min: 1
               max: 100
+              default: 14
             }
           }
         }
@@ -283,6 +284,12 @@ class PreloadItemText extends CanvasItemBase
       h = @itemSize.h
       @itemSize.w = h
       @itemSize.h = w
+    else if varName == 'showBalloon' && @showBalloon != value && !@isFixedFontSize
+      # FontSizeを撮り直す
+      @fontSize = null
+    else if varName == 'isFixedFontSize' || varName == 'fixedFontSize'
+      # FontSizeを撮り直す
+      @fontSize = null
     else if varName == 'balloonType' && @balloonType? && @balloonType != value
       if value == @constructor.BalloonType.FREE
         # パスを消去して新規作成する
@@ -632,12 +639,21 @@ class PreloadItemText extends CanvasItemBase
       # サイズが無い場合は描画無し
       return
 
+    _balloonStyle = (context) ->
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
+      # 影
+      context.shadowColor = 'rgba(0,0,0,0.5)'
+      context.shadowOffsetX = 2
+      context.shadowOffsetY = 2
+      context.shadowBlur = 7
+
     _drawArc = ->
       # 円
       context.beginPath()
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5)
       # 調整
-      diff = 3.0
+      diff = 10.0
       if width > height
         context.scale(canvasWidth / canvasHeight, 1)
         context.arc(0, 0, height * 0.5 - diff, 0, Math.PI * 2)
@@ -645,8 +661,6 @@ class PreloadItemText extends CanvasItemBase
         context.scale(1, canvasHeight / canvasWidth)
         context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2)
 
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       context.fill()
       context.stroke()
 
@@ -654,17 +668,13 @@ class PreloadItemText extends CanvasItemBase
       # 四角
       context.beginPath()
       # FIXME: 描画オプション追加
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       context.fillRect(x, y, width, height);
 
     _drawBArc = ->
       # 円 破線
       # 調整値
-      diff = 3.0
+      diff = 10.0
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5)
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       per = Math.PI * 2 / 100
       if width > height
         context.scale(canvasWidth / canvasHeight, 1)
@@ -723,8 +733,6 @@ class PreloadItemText extends CanvasItemBase
       _draw.call(@, width, y, width, height)
       _draw.call(@, width, height, x, height)
       _draw.call(@, x, height, x, y)
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       context.fillRect(x, y, width, height);
       context.stroke();
       context.restore()
@@ -744,8 +752,6 @@ class PreloadItemText extends CanvasItemBase
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       for i in [0..(num - 1)]
         deg += addDeg
         if !@balloonRandomIntValue?
@@ -787,8 +793,6 @@ class PreloadItemText extends CanvasItemBase
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
 
       for i in [0..(num - 1)]
         deg += addDeg
@@ -821,6 +825,7 @@ class PreloadItemText extends CanvasItemBase
 
     context.save()
     context.globalAlpha = if @_fixedBalloonAlpha? then @_fixedBalloonAlpha else 1
+    _balloonStyle.call(@, context)
     if @balloonType == @constructor.BalloonType.ARC
       _drawArc.call(@)
     else if @balloonType == @constructor.BalloonType.RECT
@@ -906,8 +911,6 @@ class PreloadItemText extends CanvasItemBase
     context.closePath()
     context.lineJoin = 'round'
     context.lineCap = 'round'
-    context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-    context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
     context.fill()
     context.stroke()
 
@@ -1058,7 +1061,7 @@ class PreloadItemText extends CanvasItemBase
 #            context.stroke()
             context.rotate(Math.PI / 2)
             # 「wordWidth * 0.75」は調整用の値
-            context.fillText(c, -widthLine * 0.5, wordWidth * 0.75 * 0.5)
+            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5)
             context.restore()
             hl += measure.width
           else
@@ -1165,7 +1168,11 @@ class PreloadItemText extends CanvasItemBase
       fontSize = parseInt(fontSize / 1.5)
       if fontSize < 1
         fontSize = 1
-    return fontSize
+      if @showBalloon && fontSize >= 6
+        fontSize -= 5
+      return fontSize
+    else
+      return @fixedFontSize
 
   _showInputModal = ->
     Common.showModalView(Constant.ModalViewType.ITEM_TEXT_EDITING, false, (modalEmt, params, callback = null) =>
