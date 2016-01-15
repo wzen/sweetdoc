@@ -34,28 +34,6 @@ class PreloadItemText extends CanvasItemBase
           name: '文字色'
         }
       }
-      showWithAnimation: {
-        name: 'Show with animation'
-        default: false
-        type: 'boolean'
-        openChildrenValue: {one: true}
-        ja: {
-          name: 'アニメーション表示'
-        }
-        children: {
-          one: {
-            showAnimetionType: {
-              name: 'AnimationType'
-              type: 'select'
-              default: @ShowAnimationType.POPUP
-              options: [
-                {name: 'Popup', value: @ShowAnimationType.POPUP}
-                {name: 'Blur', value: @ShowAnimationType.BLUR}
-              ]
-            }
-          }
-        }
-      }
       isDrawHorizontal: {
         name: 'Horizontal'
         type: 'boolean'
@@ -165,6 +143,28 @@ class PreloadItemText extends CanvasItemBase
               name: "文字"
             }
           }
+          showWithAnimation: {
+            name: 'Show with animation'
+            default: false
+            type: 'boolean'
+            openChildrenValue: {one: true}
+            ja: {
+              name: 'アニメーション表示'
+            }
+            children: {
+              one: {
+                showAnimationType: {
+                  name: 'AnimationType'
+                  type: 'select'
+                  default: @ShowAnimationType.POPUP
+                  options: [
+                    {name: 'Popup', value: @ShowAnimationType.POPUP}
+                    {name: 'Blur', value: @ShowAnimationType.BLUR}
+                  ]
+                }
+              }
+            }
+          }
         }
         options: {
           id: 'changeText'
@@ -177,6 +177,30 @@ class PreloadItemText extends CanvasItemBase
         }
       }
       writeText: {
+        modifiables: {
+          showWithAnimation: {
+            name: 'Show with animation'
+            default: false
+            type: 'boolean'
+            openChildrenValue: {one: true}
+            ja: {
+              name: 'アニメーション表示'
+            }
+            children: {
+              one: {
+                showAnimationType: {
+                  name: 'AnimationType'
+                  type: 'select'
+                  default: @ShowAnimationType.POPUP
+                  options: [
+                    {name: 'Popup', value: @ShowAnimationType.POPUP}
+                    {name: 'Blur', value: @ShowAnimationType.BLUR}
+                  ]
+                }
+              }
+            }
+          }
+        }
         options: {
           id: 'writeText'
           name: 'writeText'
@@ -383,7 +407,7 @@ class PreloadItemText extends CanvasItemBase
     y = null
     width = null
     height = null
-    if @showAnimetionType == @constructor.ShowAnimationType.POPUP
+    if @showAnimationType == @constructor.ShowAnimationType.POPUP
       timemax = 15
       step1 = 0.5
       step2 = 0.7
@@ -411,7 +435,7 @@ class PreloadItemText extends CanvasItemBase
         width = @_step2.w + (@itemSize.w - @_step2.w) * progressPercent
         height = @_step2.h + (@itemSize.h - @_step2.h) * progressPercent
       fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
-    else if @showAnimetionType == @constructor.ShowAnimationType.BLUR
+    else if @showAnimationType == @constructor.ShowAnimationType.BLUR
       timemax = 30
       step1 = 1
       fontSize = @fontSize
@@ -457,7 +481,7 @@ class PreloadItemText extends CanvasItemBase
     width = null
     height = null
     fontSize = null
-    if @showAnimetionType == @constructor.ShowAnimationType.POPUP
+    if @showAnimationType == @constructor.ShowAnimationType.POPUP
       timemax = 15
       step1 = 0.2
       step2 = 0.5
@@ -485,7 +509,7 @@ class PreloadItemText extends CanvasItemBase
         width = @_step2.w - @_step2.w * progressPercent
         height = @_step2.h - @_step2.h * progressPercent
       fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
-    else if @showAnimetionType == @constructor.ShowAnimationType.BLUR
+    else if @showAnimationType == @constructor.ShowAnimationType.BLUR
       timemax = 30
       step1 = 1
       fontSize = @fontSize
@@ -533,6 +557,9 @@ class PreloadItemText extends CanvasItemBase
     return c.charCodeAt(0) >= 256
 
   changeText: (opt) ->
+    @showWithAnimation = @showWithAnimation__after
+    @showAnimationType = @showAnimationType__after
+    @showAnimationType
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation( =>
         @changeText(opt)
@@ -554,6 +581,8 @@ class PreloadItemText extends CanvasItemBase
       @_animationFlg['startCloseAnimation'] = true
 
   writeText: (opt) ->
+    @showWithAnimation = @showWithAnimation__after
+    @showAnimationType = @showAnimationType__after
     if @showWithAnimation && !@_animationFlg['startOpenAnimation']?
       @startOpenAnimation( =>
         @writeText(opt)

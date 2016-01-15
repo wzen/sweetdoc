@@ -516,7 +516,7 @@ class EventConfig
       slide: (event, ui) =>
         valueElement.val(ui.value)
         valueElement.html(ui.value)
-        if !@hasModifiableVar(varName)
+        if !@hasModifiableVar()
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
         value = ui.value
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
@@ -528,7 +528,7 @@ class EventConfig
   settingModifiableString: (varName, defaultValue, openChildrenValue) ->
     $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).val(defaultValue)
     $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_text", @emt).off('change').on('change', (e) =>
-      if !@hasModifiableVar(varName)
+      if !@hasModifiableVar()
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       value = $(e.target).val()
       @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
@@ -543,7 +543,7 @@ class EventConfig
     else
       $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_checkbox", @emt).removeAttr('checked')
     $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_checkbox", @emt).off('change').on('change', (e) =>
-      if !@hasModifiableVar(varName)
+      if !@hasModifiableVar()
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       value = $(e.target).is(':checked')
       @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS][varName] = value
@@ -559,7 +559,7 @@ class EventConfig
       $(emt),
       defaultValue,
       (a, b, d, e) =>
-        if !@hasModifiableVar(varName)
+        if !@hasModifiableVar()
           @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
         value = "##{b}"
         if colorType? && colorType == 'rgb'
@@ -586,7 +586,7 @@ class EventConfig
     selectEmt = $(".#{@methodClassName()} .#{EventConfig.METHOD_VALUE_MODIFY_ROOT} .#{varName}_select", @emt)
     selectEmt.val(_joinArray.call(@, defaultValue))
     selectEmt.off('change').on('change', (e) =>
-      if !@hasModifiableVar(varName)
+      if !@hasModifiableVar()
         @[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {}
       value = _splitArray.call(@, $(e.target).val())
       if value.match(/^-?[0-9]+\.[0-9]+$/)

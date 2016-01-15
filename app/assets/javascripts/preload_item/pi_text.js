@@ -77,35 +77,6 @@ PreloadItemText = (function(superClass) {
           name: '文字色'
         }
       },
-      showWithAnimation: {
-        name: 'Show with animation',
-        "default": false,
-        type: 'boolean',
-        openChildrenValue: {
-          one: true
-        },
-        ja: {
-          name: 'アニメーション表示'
-        },
-        children: {
-          one: {
-            showAnimetionType: {
-              name: 'AnimationType',
-              type: 'select',
-              "default": PreloadItemText.ShowAnimationType.POPUP,
-              options: [
-                {
-                  name: 'Popup',
-                  value: PreloadItemText.ShowAnimationType.POPUP
-                }, {
-                  name: 'Blur',
-                  value: PreloadItemText.ShowAnimationType.BLUR
-                }
-              ]
-            }
-          }
-        }
-      },
       isDrawHorizontal: {
         name: 'Horizontal',
         type: 'boolean'
@@ -248,6 +219,35 @@ PreloadItemText = (function(superClass) {
             ja: {
               name: "文字"
             }
+          },
+          showWithAnimation: {
+            name: 'Show with animation',
+            "default": false,
+            type: 'boolean',
+            openChildrenValue: {
+              one: true
+            },
+            ja: {
+              name: 'アニメーション表示'
+            },
+            children: {
+              one: {
+                showAnimationType: {
+                  name: 'AnimationType',
+                  type: 'select',
+                  "default": PreloadItemText.ShowAnimationType.POPUP,
+                  options: [
+                    {
+                      name: 'Popup',
+                      value: PreloadItemText.ShowAnimationType.POPUP
+                    }, {
+                      name: 'Blur',
+                      value: PreloadItemText.ShowAnimationType.BLUR
+                    }
+                  ]
+                }
+              }
+            }
           }
         },
         options: {
@@ -261,6 +261,37 @@ PreloadItemText = (function(superClass) {
         }
       },
       writeText: {
+        modifiables: {
+          showWithAnimation: {
+            name: 'Show with animation',
+            "default": false,
+            type: 'boolean',
+            openChildrenValue: {
+              one: true
+            },
+            ja: {
+              name: 'アニメーション表示'
+            },
+            children: {
+              one: {
+                showAnimationType: {
+                  name: 'AnimationType',
+                  type: 'select',
+                  "default": PreloadItemText.ShowAnimationType.POPUP,
+                  options: [
+                    {
+                      name: 'Popup',
+                      value: PreloadItemText.ShowAnimationType.POPUP
+                    }, {
+                      name: 'Blur',
+                      value: PreloadItemText.ShowAnimationType.BLUR
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
         options: {
           id: 'writeText',
           name: 'writeText',
@@ -515,7 +546,7 @@ PreloadItemText = (function(superClass) {
     y = null;
     width = null;
     height = null;
-    if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
+    if (this.showAnimationType === this.constructor.ShowAnimationType.POPUP) {
       timemax = 15;
       step1 = 0.5;
       step2 = 0.7;
@@ -554,7 +585,7 @@ PreloadItemText = (function(superClass) {
         height = this._step2.h + (this.itemSize.h - this._step2.h) * progressPercent;
       }
       fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
-    } else if (this.showAnimetionType === this.constructor.ShowAnimationType.BLUR) {
+    } else if (this.showAnimationType === this.constructor.ShowAnimationType.BLUR) {
       timemax = 30;
       step1 = 1;
       fontSize = this.fontSize;
@@ -618,7 +649,7 @@ PreloadItemText = (function(superClass) {
     width = null;
     height = null;
     fontSize = null;
-    if (this.showAnimetionType === this.constructor.ShowAnimationType.POPUP) {
+    if (this.showAnimationType === this.constructor.ShowAnimationType.POPUP) {
       timemax = 15;
       step1 = 0.2;
       step2 = 0.5;
@@ -657,7 +688,7 @@ PreloadItemText = (function(superClass) {
         height = this._step2.h - this._step2.h * progressPercent;
       }
       fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
-    } else if (this.showAnimetionType === this.constructor.ShowAnimationType.BLUR) {
+    } else if (this.showAnimationType === this.constructor.ShowAnimationType.BLUR) {
       timemax = 30;
       step1 = 1;
       fontSize = this.fontSize;
@@ -713,6 +744,9 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.changeText = function(opt) {
     var canvas, context, opa;
+    this.showWithAnimation = this.showWithAnimation__after;
+    this.showAnimationType = this.showAnimationType__after;
+    this.showAnimationType;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation((function(_this) {
         return function() {
@@ -739,6 +773,8 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.writeText = function(opt) {
     var canvas, context;
+    this.showWithAnimation = this.showWithAnimation__after;
+    this.showAnimationType = this.showAnimationType__after;
     if (this.showWithAnimation && (this._animationFlg['startOpenAnimation'] == null)) {
       this.startOpenAnimation((function(_this) {
         return function() {

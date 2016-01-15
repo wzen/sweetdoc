@@ -577,7 +577,7 @@ EventConfig = (function() {
           var value;
           valueElement.val(ui.value);
           valueElement.html(ui.value);
-          if (!_this.hasModifiableVar(varName)) {
+          if (!_this.hasModifiableVar()) {
             _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
           }
           value = ui.value;
@@ -593,7 +593,7 @@ EventConfig = (function() {
     return $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_text", this.emt).off('change').on('change', (function(_this) {
       return function(e) {
         var value;
-        if (!_this.hasModifiableVar(varName)) {
+        if (!_this.hasModifiableVar()) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         value = $(e.target).val();
@@ -612,7 +612,7 @@ EventConfig = (function() {
     return $("." + (this.methodClassName()) + " ." + EventConfig.METHOD_VALUE_MODIFY_ROOT + " ." + varName + "_checkbox", this.emt).off('change').on('change', (function(_this) {
       return function(e) {
         var value;
-        if (!_this.hasModifiableVar(varName)) {
+        if (!_this.hasModifiableVar()) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         value = $(e.target).is(':checked');
@@ -628,7 +628,7 @@ EventConfig = (function() {
     ColorPickerUtil.initColorPicker($(emt), defaultValue, (function(_this) {
       return function(a, b, d, e) {
         var value;
-        if (!_this.hasModifiableVar(varName)) {
+        if (!_this.hasModifiableVar()) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         value = "#" + b;
@@ -663,7 +663,7 @@ EventConfig = (function() {
     return selectEmt.off('change').on('change', (function(_this) {
       return function(e) {
         var value;
-        if (!_this.hasModifiableVar(varName)) {
+        if (!_this.hasModifiableVar()) {
           _this[EventPageValueBase.PageValueKey.MODIFIABLE_VARS] = {};
         }
         value = _splitArray.call(_this, $(e.target).val());
