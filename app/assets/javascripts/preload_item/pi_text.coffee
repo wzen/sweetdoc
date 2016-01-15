@@ -904,9 +904,15 @@ class PreloadItemText extends CanvasItemBase
       for char in columnText.split('')
         sum += context.measureText(char).width
       return sum
-    _calcVerticalColumnHeight = (columnText) ->
-      # 暫定で日本語の高さに合わせる
-      return columnText.length * context.measureText('あ').width
+    _calcVerticalColumnHeight = (columnText, fontSize) ->
+      ret = 0
+      for c in columnText.split('')
+        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily, wordWidth)
+        if _isWordNeedRotate(c)
+          ret += measure.width
+        else
+          ret += measure.height
+      return ret
     _calcHorizontalColumnHeightMax = (columnText, fontSize) ->
       ret = 0
       for c in columnText.split('')
@@ -927,10 +933,10 @@ class PreloadItemText extends CanvasItemBase
       for c in columns
         sum += _calcHorizontalColumnHeightMax.call(@, c, fontSize)
       return sum
-    _calcVerticalColumnHeightMax = (columns) ->
+    _calcVerticalColumnHeightMax = (columns, fontSize) ->
       ret = 0
       for c in columns
-        r = _calcVerticalColumnHeight.call(@, c)
+        r = _calcVerticalColumnHeight.call(@, c, fontSize)
         if ret < r
           ret = r
       return ret
@@ -963,7 +969,7 @@ class PreloadItemText extends CanvasItemBase
     text = text.replace("{br}", "\n", "gm")
     for i in [0..(text.length - 1)]
       char = text.charAt(i)
-      if char == "\n" || (@isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!@isDrawHorizontal && _calcVerticalColumnHeight.call(@, column[line] + char) > height)
+      if char == "\n" || (@isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!@isDrawHorizontal && _calcVerticalColumnHeight.call(@, column[line] + char, fontSize) > height)
         line += 1
         column[line] = ''
         if char == "\n"
@@ -993,17 +999,17 @@ class PreloadItemText extends CanvasItemBase
         wordSum += column[j].length
     else
       widthLine = x + (width + wordWidth * column.length) * 0.5
-      heightMax = _calcVerticalColumnHeightMax.call(@, column)
+      heightMax = _calcVerticalColumnHeightMax.call(@, column, fontSize)
       for j in [0..(column.length - 1)]
         widthLine -= wordWidth
         h = y
         if @wordAlign == @constructor.WordAlign.LEFT
           h += (height - heightMax) * 0.5
         else if @wordAlign == @constructor.WordAlign.CENTER
-          h += (height - _calcVerticalColumnHeight.call(@, column[j])) * 0.5
+          h += (height - _calcVerticalColumnHeight.call(@, column[j], fontSize)) * 0.5
         else
           # RIGHT
-          h += (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(@, column[j])
+          h += (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(@, column[j], fontSize)
         context.beginPath()
         hl = 0
         for c, idx in column[j].split('')
@@ -1019,11 +1025,11 @@ class PreloadItemText extends CanvasItemBase
             context.beginPath()
             context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height)
             # デバッグ用の円
-            #context.arc(0, 0, 20, 0, Math.PI*2, false)
-            #context.stroke()
+#            context.arc(0, 0, 20, 0, Math.PI*2, false)
+#            context.stroke()
             context.rotate(Math.PI / 2)
             # 「wordWidth * 0.75」は調整用の値
-            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5)
+            context.fillText(c, -widthLine * 0.5, wordWidth * 0.75 * 0.5)
             context.restore()
             hl += measure.width
           else

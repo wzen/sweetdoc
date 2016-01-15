@@ -1147,8 +1147,20 @@ PreloadItemText = (function(superClass) {
       }
       return sum;
     };
-    _calcVerticalColumnHeight = function(columnText) {
-      return columnText.length * context.measureText('あ').width;
+    _calcVerticalColumnHeight = function(columnText, fontSize) {
+      var c, k, len, measure, ref, ret;
+      ret = 0;
+      ref = columnText.split('');
+      for (k = 0, len = ref.length; k < len; k++) {
+        c = ref[k];
+        measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
+        if (_isWordNeedRotate(c)) {
+          ret += measure.width;
+        } else {
+          ret += measure.height;
+        }
+      }
+      return ret;
     };
     _calcHorizontalColumnHeightMax = function(columnText, fontSize) {
       var c, k, len, measure, r, ref, ret;
@@ -1185,12 +1197,12 @@ PreloadItemText = (function(superClass) {
       }
       return sum;
     };
-    _calcVerticalColumnHeightMax = function(columns) {
+    _calcVerticalColumnHeightMax = function(columns, fontSize) {
       var c, k, len, r, ret;
       ret = 0;
       for (k = 0, len = columns.length; k < len; k++) {
         c = columns[k];
-        r = _calcVerticalColumnHeight.call(this, c);
+        r = _calcVerticalColumnHeight.call(this, c, fontSize);
         if (ret < r) {
           ret = r;
         }
@@ -1230,7 +1242,7 @@ PreloadItemText = (function(superClass) {
     text = text.replace("{br}", "\n", "gm");
     for (i = k = 0, ref = text.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
       char = text.charAt(i);
-      if (char === "\n" || (this.isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!this.isDrawHorizontal && _calcVerticalColumnHeight.call(this, column[line] + char) > height)) {
+      if (char === "\n" || (this.isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!this.isDrawHorizontal && _calcVerticalColumnHeight.call(this, column[line] + char, fontSize) > height)) {
         line += 1;
         column[line] = '';
         if (char === "\n") {
@@ -1267,16 +1279,16 @@ PreloadItemText = (function(superClass) {
       }
     } else {
       widthLine = x + (width + wordWidth * column.length) * 0.5;
-      heightMax = _calcVerticalColumnHeightMax.call(this, column);
+      heightMax = _calcVerticalColumnHeightMax.call(this, column, fontSize);
       for (j = p = 0, ref3 = column.length - 1; 0 <= ref3 ? p <= ref3 : p >= ref3; j = 0 <= ref3 ? ++p : --p) {
         widthLine -= wordWidth;
         h = y;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
           h += (height - heightMax) * 0.5;
         } else if (this.wordAlign === this.constructor.WordAlign.CENTER) {
-          h += (height - _calcVerticalColumnHeight.call(this, column[j])) * 0.5;
+          h += (height - _calcVerticalColumnHeight.call(this, column[j], fontSize)) * 0.5;
         } else {
-          h += (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(this, column[j]);
+          h += (height + heightMax) * 0.5 - _calcVerticalColumnHeight.call(this, column[j], fontSize);
         }
         context.beginPath();
         hl = 0;
@@ -1293,7 +1305,7 @@ PreloadItemText = (function(superClass) {
             context.beginPath();
             context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height);
             context.rotate(Math.PI / 2);
-            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5);
+            context.fillText(c, -widthLine * 0.5, wordWidth * 0.75 * 0.5);
             context.restore();
             hl += measure.width;
           } else {
