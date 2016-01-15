@@ -353,10 +353,6 @@ PreloadItemText = (function(superClass) {
       canvas = document.getElementById(this.canvasElementId());
       width = canvas.width;
       height = canvas.height;
-      $(canvas).css({
-        width: height + "px",
-        height: width + "px"
-      });
       $(canvas).attr({
         width: height,
         height: width
@@ -445,6 +441,29 @@ PreloadItemText = (function(superClass) {
       }
     }
     return PreloadItemText.__super__.changeInstanceVarByConfig.call(this, varName, value);
+  };
+
+  PreloadItemText.prototype.updateItemSize = function(w, h) {
+    var canvas, element, scaleH, scaleW;
+    element = $('#' + this.id);
+    element.css({
+      width: w,
+      height: h
+    });
+    canvas = $('#' + this.canvasElementId());
+    scaleW = element.width() / this.itemSize.w;
+    scaleH = element.height() / this.itemSize.h;
+    canvas.attr('width', element.width());
+    canvas.attr('height', element.height());
+    this.itemSize.w = w;
+    this.itemSize.h = h;
+    return this.refresh();
+  };
+
+  PreloadItemText.prototype.originalItemElementSize = function() {
+    var obj;
+    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(this._event[EventPageValueBase.PageValueKey.DIST_ID], this.id));
+    return obj.itemSize;
   };
 
   PreloadItemText.prototype.mouseUpDrawing = function(zindex, callback) {

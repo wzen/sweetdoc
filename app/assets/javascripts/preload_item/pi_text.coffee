@@ -253,7 +253,7 @@ class PreloadItemText extends CanvasItemBase
       canvas = document.getElementById(@canvasElementId())
       width = canvas.width
       height = canvas.height
-      $(canvas).css({width: "#{height}px", height: "#{width}px"})
+      #$(canvas).css({width: "#{height}px", height: "#{width}px"})
       $(canvas).attr({width: height, height: width})
       w = @itemSize.w
       h = @itemSize.h
@@ -327,6 +327,25 @@ class PreloadItemText extends CanvasItemBase
           )
 
     super(varName, value)
+
+  # テキストはCanvasの伸縮をさせないため、メソッド上書き
+  updateItemSize: (w, h) ->
+    element = $('#' + @id)
+    element.css({width: w, height: h})
+    canvas = $('#' + @canvasElementId())
+    scaleW = element.width() / @itemSize.w
+    scaleH = element.height() / @itemSize.h
+    canvas.attr('width',  element.width())
+    canvas.attr('height', element.height())
+    @itemSize.w = w
+    @itemSize.h = h
+    @refresh()
+
+  # アニメーション変更前のアイテムサイズ
+  # テキストはCanvasの伸縮をさせないため、メソッド上書き
+  originalItemElementSize: ->
+    obj = PageValue.getFootprintPageValue(PageValue.Key.footprintInstanceBefore(@_event[EventPageValueBase.PageValueKey.DIST_ID], @id))
+    return obj.itemSize
 
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->
