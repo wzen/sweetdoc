@@ -267,29 +267,10 @@ class PreloadItemText extends CanvasItemBase
           multiDraw: true
           applyDrawCallback: (drawPaths) =>
             # 配列調整
-            i = drawPaths.length - 1
-            while i >= 0
-              if drawPaths[i].length == 0
-                drawPaths.splice(i, 1)
-              i -= 1
-
-            # サブパス間のパスを追加
-            sPath = []
-            for dp, idx in drawPaths
-              for i in [0, dp.length - 1]
-                mLen = 999999
-                m = null
-                for dp2, idx2 in drawPaths
-                  for j in [0, dp2.length - 1]
-                    # 一番距離が近いサブパスを検索
-                    if idx != idx2
-                      sq = Math.pow(dp2[j].x - dp[i].x, 2) + Math.pow(dp2[j].y - dp[i].y, 2)
-                      if sq < mLen
-                        mLen = sq
-                        m = {x: dp2[j].x, y: dp2[j].y}
-                if m?
-                  sPath.push([dp[i], m])
-            $.merge(drawPaths, sPath)
+            drawPaths = _adjustFreeHandPath.call(@, drawPaths)
+            if !drawPaths?
+              # 調整失敗
+              return false
 
             # キャンパスサイズ拡張
             @originalItemSize = $.extend({}, @itemSize)
@@ -328,7 +309,9 @@ class PreloadItemText extends CanvasItemBase
               if @setupItemEvents?
                 # アイテムのイベント設定
                 @setupItemEvents()
+
             )
+            return true
         }
         EventDragPointingDraw.run(opt)
       else
@@ -805,6 +788,48 @@ class PreloadItemText extends CanvasItemBase
     else if @balloonType == @constructor.BalloonType.FREE
       _drawFreeHand.call(@)
     context.restore()
+
+  _adjustFreeHandPath = (drawPaths) ->
+    i = drawPaths.length - 1
+    while i >= 0
+      # 不要なパスの削除
+      if drawPaths[i].length == 0
+        drawPaths.splice(i, 1)
+      i -= 1
+
+    # サブパス間のパスを追加
+    retArray = [drawPaths[0]]
+    searchedIndex = [0]
+    _search = (targetIndex, isTail) ->
+      searchTarget = drawPaths[targetIndex]
+      targetCood = if isTail then searchTarget[searchTarget.length - 1] else searchTarget[0]
+      mLen = 999999
+      m = null
+      i = null
+      it = null
+      for dp, idx in drawPaths
+        for j in [0, dp.length - 1]
+          # 一番距離が近いサブパスを検索
+          if searchedIndex.indexOf(idx) < 0
+            sq = Math.pow(dp[j].x - targetCood.x, 2) + Math.pow(dp[j].y - targetCood.y, 2)
+            if sq < mLen
+              mLen = sq
+              m = {x: dp[j].x, y: dp[j].y}
+              it = j != 0
+              i = idx
+      if m?
+        a = drawPaths[i].concat()
+        if it
+          # 配列を反転させる
+          a = a.reverse()
+        searchedIndex.push(i)
+        retArray.push([targetCood, m])
+        retArray.push(a)
+        _search.call(@, i, !it)
+
+    _search(0, true)
+
+    return retArray
 
   _freeHandBalloonDraw = (context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) ->
     cx = canvasWidth * 0.5

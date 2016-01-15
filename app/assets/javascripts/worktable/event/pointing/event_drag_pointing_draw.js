@@ -174,12 +174,19 @@ EventDragPointingDraw = (function() {
     pointing = new this();
     pointing.setApplyCallback((function(_this) {
       return function(pointingPaths) {
-        pointing = new _this();
-        pointing.getJQueryElement().remove();
-        Handwrite.initHandwrite();
-        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        var _cb;
+        _cb = function() {
+          pointing = new _this();
+          pointing.getJQueryElement().remove();
+          Handwrite.initHandwrite();
+          return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
+        };
         if (applyDrawCallback != null) {
-          return applyDrawCallback(pointingPaths);
+          if (applyDrawCallback(pointingPaths)) {
+            return _cb.call(_this);
+          }
+        } else {
+          return _cb.call(_this);
         }
       };
     })(this));

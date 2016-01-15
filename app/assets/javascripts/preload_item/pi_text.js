@@ -4,7 +4,7 @@ var PreloadItemText,
   hasProp = {}.hasOwnProperty;
 
 PreloadItemText = (function(superClass) {
-  var _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _freeHandBalloonDraw, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, constant;
+  var _adjustFreeHandPath, _calcFontSizeAbout, _calcWordMeasure, _drawBalloon, _drawText, _drawTextAndBalloonToCanvas, _freeHandBalloonDraw, _getRandomInt, _isWordNeedRotate, _isWordSmallJapanease, _measureImage, _prepareEditModal, _setNoTextStyle, _setTextStyle, _settingTextDbclickEvent, _showInputModal, _startCloseAnimation, _startOpenAnimation, constant;
 
   extend(PreloadItemText, superClass);
 
@@ -372,54 +372,20 @@ PreloadItemText = (function(superClass) {
           multiDraw: true,
           applyDrawCallback: (function(_this) {
             return function(drawPaths) {
-              var d, dp, dp2, i, idx, idx1, idx2, j, k, len, len1, len2, len3, len4, len5, len6, len7, m, mLen, maxX, maxY, minX, minY, n, o, p, q, ref, ref1, s, sPath, sq, t, u;
-              i = drawPaths.length - 1;
-              while (i >= 0) {
-                if (drawPaths[i].length === 0) {
-                  drawPaths.splice(i, 1);
-                }
-                i -= 1;
+              var d, dp, idx1, idx2, k, len, len1, len2, len3, maxX, maxY, minX, minY, n, o, p;
+              drawPaths = _adjustFreeHandPath.call(_this, drawPaths);
+              if (drawPaths == null) {
+                return false;
               }
-              sPath = [];
-              for (idx = k = 0, len = drawPaths.length; k < len; idx = ++k) {
-                dp = drawPaths[idx];
-                ref = [0, dp.length - 1];
-                for (n = 0, len1 = ref.length; n < len1; n++) {
-                  i = ref[n];
-                  mLen = 999999;
-                  m = null;
-                  for (idx2 = o = 0, len2 = drawPaths.length; o < len2; idx2 = ++o) {
-                    dp2 = drawPaths[idx2];
-                    ref1 = [0, dp2.length - 1];
-                    for (p = 0, len3 = ref1.length; p < len3; p++) {
-                      j = ref1[p];
-                      if (idx !== idx2) {
-                        sq = Math.pow(dp2[j].x - dp[i].x, 2) + Math.pow(dp2[j].y - dp[i].y, 2);
-                        if (sq < mLen) {
-                          mLen = sq;
-                          m = {
-                            x: dp2[j].x,
-                            y: dp2[j].y
-                          };
-                        }
-                      }
-                    }
-                  }
-                  if (m != null) {
-                    sPath.push([dp[i], m]);
-                  }
-                }
-              }
-              $.merge(drawPaths, sPath);
               _this.originalItemSize = $.extend({}, _this.itemSize);
               minX = 999999;
               maxX = -1;
               minY = 999999;
               maxY = -1;
-              for (q = 0, len4 = drawPaths.length; q < len4; q++) {
-                dp = drawPaths[q];
-                for (s = 0, len5 = dp.length; s < len5; s++) {
-                  d = dp[s];
+              for (k = 0, len = drawPaths.length; k < len; k++) {
+                dp = drawPaths[k];
+                for (n = 0, len1 = dp.length; n < len1; n++) {
+                  d = dp[n];
                   if (minX > d.x) {
                     minX = d.x;
                   }
@@ -434,9 +400,9 @@ PreloadItemText = (function(superClass) {
                   }
                 }
               }
-              for (idx1 = t = 0, len6 = drawPaths.length; t < len6; idx1 = ++t) {
+              for (idx1 = o = 0, len2 = drawPaths.length; o < len2; idx1 = ++o) {
                 dp = drawPaths[idx1];
-                for (idx2 = u = 0, len7 = dp.length; u < len7; idx2 = ++u) {
+                for (idx2 = p = 0, len3 = dp.length; p < len3; idx2 = ++p) {
                   d = dp[idx2];
                   drawPaths[idx1][idx2] = {
                     x: d.x - minX + _this._freeHandDrawPadding,
@@ -449,7 +415,7 @@ PreloadItemText = (function(superClass) {
               _this.itemSize.w = maxX - minX + _this._freeHandDrawPadding * 2;
               _this.itemSize.h = maxY - minY + _this._freeHandDrawPadding * 2;
               _this.getJQueryElement().remove();
-              return _this.createItemElement(function() {
+              _this.createItemElement(function() {
                 _this.freeHandItemSize = $.extend({}, _this.itemSize);
                 _this.freeHandDrawPaths = drawPaths;
                 _this.saveObj();
@@ -458,6 +424,7 @@ PreloadItemText = (function(superClass) {
                   return _this.setupItemEvents();
                 }
               });
+              return true;
             };
           })(this)
         };
@@ -1033,6 +1000,59 @@ PreloadItemText = (function(superClass) {
       _drawFreeHand.call(this);
     }
     return context.restore();
+  };
+
+  _adjustFreeHandPath = function(drawPaths) {
+    var _search, i, retArray, searchedIndex;
+    i = drawPaths.length - 1;
+    while (i >= 0) {
+      if (drawPaths[i].length === 0) {
+        drawPaths.splice(i, 1);
+      }
+      i -= 1;
+    }
+    retArray = [drawPaths[0]];
+    searchedIndex = [0];
+    _search = function(targetIndex, isTail) {
+      var a, dp, idx, it, j, k, len, len1, m, mLen, n, ref, searchTarget, sq, targetCood;
+      searchTarget = drawPaths[targetIndex];
+      targetCood = isTail ? searchTarget[searchTarget.length - 1] : searchTarget[0];
+      mLen = 999999;
+      m = null;
+      i = null;
+      it = null;
+      for (idx = k = 0, len = drawPaths.length; k < len; idx = ++k) {
+        dp = drawPaths[idx];
+        ref = [0, dp.length - 1];
+        for (n = 0, len1 = ref.length; n < len1; n++) {
+          j = ref[n];
+          if (searchedIndex.indexOf(idx) < 0) {
+            sq = Math.pow(dp[j].x - targetCood.x, 2) + Math.pow(dp[j].y - targetCood.y, 2);
+            if (sq < mLen) {
+              mLen = sq;
+              m = {
+                x: dp[j].x,
+                y: dp[j].y
+              };
+              it = j !== 0;
+              i = idx;
+            }
+          }
+        }
+      }
+      if (m != null) {
+        a = drawPaths[i].concat();
+        if (it) {
+          a = a.reverse();
+        }
+        searchedIndex.push(i);
+        retArray.push([targetCood, m]);
+        retArray.push(a);
+        return _search.call(this, i, !it);
+      }
+    };
+    _search(0, true);
+    return retArray;
   };
 
   _freeHandBalloonDraw = function(context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) {

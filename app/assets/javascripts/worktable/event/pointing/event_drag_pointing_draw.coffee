@@ -101,12 +101,16 @@ class EventDragPointingDraw
       multiDraw = false
     pointing = new @()
     pointing.setApplyCallback((pointingPaths) =>
-      pointing = new @()
-      pointing.getJQueryElement().remove()
-      Handwrite.initHandwrite()
-      WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
+      _cb = =>
+        pointing = new @()
+        pointing.getJQueryElement().remove()
+        Handwrite.initHandwrite()
+        WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
       if applyDrawCallback?
-        applyDrawCallback(pointingPaths)
+        if applyDrawCallback(pointingPaths)
+          _cb.call(@)
+      else
+        _cb.call(@)
     )
     pointing.setEndDrawCallback((pointingPaths) =>
       if endDrawCallback?
