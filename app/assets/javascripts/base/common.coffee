@@ -316,9 +316,11 @@ class Common
     # col-xs-9 → 75% padding → 15px
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
     se = new ScreenEvent()
-    diff =
-      top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop
-      left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+    diff = {top: 0, left: 0}
+    if $(target).get(0).offsetParent?
+      diff =
+        top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop
+        left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
 
     @updateScrollContentsPosition(scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top, scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left, immediate, withUpdatePageValue, callback)
 

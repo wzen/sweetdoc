@@ -52,7 +52,7 @@ CssItemBase = (function(superClass) {
     return "css_anim_style";
   };
 
-  CssItemBase.prototype.makeCss = function(forceUpdate) {
+  CssItemBase.prototype.makeDesignConfigCss = function(forceUpdate) {
     var _applyCss, rootEmt;
     if (forceUpdate == null) {
       forceUpdate = false;
@@ -101,20 +101,24 @@ CssItemBase = (function(superClass) {
     this._cssRoot = $('#' + this.getCssRootElementId());
     this._cssDesignToolCache = $(".css_design_tool_cache", this._cssRoot);
     this._cssDesignToolCode = $(".css_design_tool_code", this._cssRoot);
-    this._cssDesignToolStyle = $(".css_design_tool_style", this._cssRoot);
-    return this.applyDesignChange(false);
+    return this._cssDesignToolStyle = $(".css_design_tool_style", this._cssRoot);
   };
 
-  CssItemBase.prototype.refresh = function(show, callback) {
+  CssItemBase.prototype.refresh = function(show, callback, doApplyDesignChange) {
     if (show == null) {
       show = true;
     }
     if (callback == null) {
       callback = null;
     }
+    if (doApplyDesignChange == null) {
+      doApplyDesignChange = true;
+    }
+    if (doApplyDesignChange) {
+      this.applyDesignChange(false, false);
+    }
     return CssItemBase.__super__.refresh.call(this, show, (function(_this) {
       return function() {
-        _this.makeCss();
         if (callback != null) {
           return callback();
         }
@@ -122,11 +126,15 @@ CssItemBase = (function(superClass) {
     })(this));
   };
 
-  CssItemBase.prototype.applyDesignChange = function(doStyleSave) {
+  CssItemBase.prototype.applyDesignChange = function(doStyleSave, doRefresh) {
     var addStyle, styleId;
     if (doStyleSave == null) {
       doStyleSave = true;
     }
+    if (doRefresh == null) {
+      doRefresh = true;
+    }
+    this.makeDesignConfigCss();
     this._cssDesignToolStyle.text(this._cssDesignToolCode.text());
     styleId = "css_style_" + this.id;
     $("#" + styleId).remove();
@@ -134,7 +142,10 @@ CssItemBase = (function(superClass) {
       this._cssRoot.append($("<style id='" + styleId + "' type='text/css'>" + addStyle + "</style>"));
     }
     if (doStyleSave) {
-      return this.saveDesign();
+      this.saveDesign();
+    }
+    if (doRefresh) {
+      return this.refresh(true, null, false);
     }
   };
 

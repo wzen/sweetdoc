@@ -510,19 +510,18 @@ div.scroll_background, div.scroll_inside {
 }
 
 div.css_item_base {
-  position: relative;
   width: 100%;
   height: 100%;
 }
 
-div.css_item_base > div {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  margin: auto;
-}
+//div.css_item_base > div {
+//  position: absolute;
+//  top: 0;
+//  left: 0;
+//  bottom: 0;
+//  right: 0;
+//  margin: auto;
+//}
 
 .selection-box {
   position: absolute;

@@ -419,9 +419,15 @@ Common = (function() {
     scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
     se = new ScreenEvent();
     diff = {
-      top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
-      left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+      top: 0,
+      left: 0
     };
+    if ($(target).get(0).offsetParent != null) {
+      diff = {
+        top: (scrollContents.scrollTop() + (scrollContentsSize.height - $(target).height()) * 0.5) - $(target).get(0).offsetTop,
+        left: (scrollContents.scrollLeft() + (scrollContentsSize.width - $(target).width()) * 0.5) - $(target).get(0).offsetLeft
+      };
+    }
     return this.updateScrollContentsPosition(scrollContents.scrollTop() + (scrollContentsSize.height * 0.5) - diff.top, scrollContents.scrollLeft() + (scrollContentsSize.width * 0.5) - diff.left, immediate, withUpdatePageValue, callback);
   };
 

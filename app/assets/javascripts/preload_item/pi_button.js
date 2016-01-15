@@ -75,8 +75,49 @@ PreloadItemButton = (function(superClass) {
         name: "Background Color",
         "default": 'ffffff',
         type: 'color',
+        colorType: 'hex',
         ja: {
           name: "背景色"
+        }
+      },
+      text: {
+        name: "Text",
+        type: 'string',
+        "default": 'Button',
+        ja: {
+          name: "文字"
+        }
+      },
+      textColor: {
+        name: 'TextColor',
+        "default": {
+          r: 0,
+          g: 0,
+          b: 0
+        },
+        type: 'color',
+        colorType: 'rgb',
+        ja: {
+          name: '文字色'
+        }
+      },
+      fontFamily: {
+        name: "Select Font",
+        type: 'select',
+        temp: 'fontFamily',
+        "default": 'Times New Roman',
+        ja: {
+          name: 'フォント選択'
+        }
+      },
+      fontSize: {
+        type: 'number',
+        name: "FontSize",
+        "default": 14,
+        min: 1,
+        max: 100,
+        ja: {
+          name: 'フォントサイズ'
         }
       }
     },
@@ -131,7 +172,11 @@ PreloadItemButton = (function(superClass) {
   };
 
   PreloadItemButton.prototype.cssItemHtml = function() {
-    return "<div></div>";
+    return "<div class='content_table'><div class='content_table_cell'>" + this.text + "</div></div>";
+  };
+
+  PreloadItemButton.prototype.cssStyle = function() {
+    return "#" + this.id + " .content_table {\n  width: 100%;\n  height: 100%;\n  display: table;\n}\n#" + this.id + " .content_table_cell {\n  display: table-cell;\n  vertical-align: middle;\n  text-align: center;\n  font-family: " + this.fontFamily + ";\n  font-size: " + this.fontSize + "px;\n  color: rgb(" + this.textColor.r + ", " + this.textColor.g + ", " + this.textColor.b + ");\n}";
   };
 
   PreloadItemButton.prototype.updateEventBefore = function() {

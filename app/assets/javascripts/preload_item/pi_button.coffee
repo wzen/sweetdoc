@@ -67,8 +67,45 @@ class PreloadItemButton extends CssItemBase
           name: "Background Color"
           default: 'ffffff'
           type: 'color'
+          colorType: 'hex'
           ja :{
             name: "背景色"
+          }
+        }
+        text: {
+          name: "Text"
+          type: 'string'
+          default: 'Button'
+          ja: {
+            name: "文字"
+          }
+        }
+        textColor: {
+          name: 'TextColor'
+          default: {r:0, g:0, b:0}
+          type: 'color'
+          colorType: 'rgb'
+          ja: {
+            name: '文字色'
+          }
+        }
+        fontFamily: {
+          name: "Select Font"
+          type: 'select'
+          temp: 'fontFamily'
+          default: 'Times New Roman'
+          ja: {
+            name: 'フォント選択'
+          }
+        }
+        fontSize: {
+          type: 'number'
+          name: "FontSize"
+          default: 14
+          min: 1
+          max: 100
+          ja: {
+            name: 'フォントサイズ'
           }
         }
       }
@@ -127,7 +164,25 @@ class PreloadItemButton extends CssItemBase
   # HTML要素
   cssItemHtml: ->
     return """
-      <div></div>
+      <div class='content_table'><div class='content_table_cell'>#{@text}</div></div>
+    """
+
+  # CSSスタイル
+  cssStyle: ->
+    return """
+      ##{@id} .content_table {
+        width: 100%;
+        height: 100%;
+        display: table;
+      }
+      ##{@id} .content_table_cell {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        font-family: #{@fontFamily};
+        font-size: #{@fontSize}px;
+        color: rgb(#{@textColor.r}, #{@textColor.g}, #{@textColor.b});
+      }
     """
 
   # イベント前の表示状態にする
