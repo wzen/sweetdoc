@@ -15,6 +15,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/sidebar_ui.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite/handwrite.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/pointing/event_drag_pointing_rect.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/state_config.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
@@ -95,6 +96,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/sidebar_ui.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/handwrite/handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/pointing/event_drag_pointing_rect.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/message.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/sidebar_config/state_config.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/event_action.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/extend.js" />
