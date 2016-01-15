@@ -190,7 +190,7 @@ EventDragPointingDraw = (function() {
         }
       };
     })(this));
-    pointing.initData();
+    pointing.initData(multiDraw);
     PointingHandwrite.initHandwrite(this);
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW);
     return FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, (function(_this) {

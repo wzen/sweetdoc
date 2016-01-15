@@ -124,11 +124,28 @@ PreloadItemText = (function(superClass) {
           one: {
             balloonColor: {
               name: 'BalloonColor',
-              "default": '#fff',
+              "default": {
+                r: 255,
+                g: 255,
+                b: 255
+              },
               type: 'color',
-              colorType: 'hex',
+              colorType: 'rgb',
               ja: {
                 name: '吹き出しの色'
+              }
+            },
+            balloonBorderColor: {
+              name: 'BalloonBorderColor',
+              "default": {
+                r: 0,
+                g: 0,
+                b: 0
+              },
+              type: 'color',
+              colorType: 'rgb',
+              ja: {
+                name: '吹き出し枠の色'
               }
             },
             balloonType: {
@@ -159,7 +176,7 @@ PreloadItemText = (function(superClass) {
                 }
               ],
               openChildrenValue: {
-                one: [PreloadItemText.BalloonType.RECT, PreloadItemText.BalloonType.BROKEN_RECT]
+                one: PreloadItemText.BalloonType.RECT
               },
               children: {
                 one: {
@@ -349,22 +366,60 @@ PreloadItemText = (function(superClass) {
       this.itemSize.w = h;
       this.itemSize.h = w;
     } else if (varName === 'balloonType' && (this.balloonType != null) && this.balloonType !== value) {
-      if (this.balloonType !== this.constructor.BalloonType.FREE) {
+      if (value === this.constructor.BalloonType.FREE) {
         this.freeHandDrawPaths = null;
         opt = {
           multiDraw: true,
           applyDrawCallback: (function(_this) {
             return function(drawPaths) {
-              var d, dp, idx1, idx2, k, len, len1, len2, len3, m, maxX, maxY, minX, minY, n, o;
+              var d, dp, dp2, i, idx, idx1, idx2, j, k, len, len1, len2, len3, len4, len5, len6, len7, m, mLen, maxX, maxY, minX, minY, n, o, p, q, ref, ref1, s, sPath, sq, t, u;
+              i = drawPaths.length - 1;
+              while (i >= 0) {
+                if (drawPaths[i].length === 0) {
+                  drawPaths.splice(i, 1);
+                }
+                i -= 1;
+              }
+              sPath = [];
+              for (idx = k = 0, len = drawPaths.length; k < len; idx = ++k) {
+                dp = drawPaths[idx];
+                ref = [0, dp.length - 1];
+                for (n = 0, len1 = ref.length; n < len1; n++) {
+                  i = ref[n];
+                  mLen = 999999;
+                  m = null;
+                  for (idx2 = o = 0, len2 = drawPaths.length; o < len2; idx2 = ++o) {
+                    dp2 = drawPaths[idx2];
+                    ref1 = [0, dp2.length - 1];
+                    for (p = 0, len3 = ref1.length; p < len3; p++) {
+                      j = ref1[p];
+                      if (idx !== idx2) {
+                        sq = Math.pow(dp2[j].x - dp[i].x, 2) + Math.pow(dp2[j].y - dp[i].y, 2);
+                        if (sq < mLen) {
+                          mLen = sq;
+                          m = {
+                            x: dp2[j].x,
+                            y: dp2[j].y
+                          };
+                        }
+                      }
+                    }
+                  }
+                  if (m != null) {
+                    sPath.push([dp[i], m]);
+                  }
+                }
+              }
+              $.merge(drawPaths, sPath);
               _this.originalItemSize = $.extend({}, _this.itemSize);
               minX = 999999;
               maxX = -1;
               minY = 999999;
               maxY = -1;
-              for (k = 0, len = drawPaths.length; k < len; k++) {
-                dp = drawPaths[k];
-                for (m = 0, len1 = dp.length; m < len1; m++) {
-                  d = dp[m];
+              for (q = 0, len4 = drawPaths.length; q < len4; q++) {
+                dp = drawPaths[q];
+                for (s = 0, len5 = dp.length; s < len5; s++) {
+                  d = dp[s];
                   if (minX > d.x) {
                     minX = d.x;
                   }
@@ -379,9 +434,9 @@ PreloadItemText = (function(superClass) {
                   }
                 }
               }
-              for (idx1 = n = 0, len2 = drawPaths.length; n < len2; idx1 = ++n) {
+              for (idx1 = t = 0, len6 = drawPaths.length; t < len6; idx1 = ++t) {
                 dp = drawPaths[idx1];
-                for (idx2 = o = 0, len3 = dp.length; o < len3; idx2 = ++o) {
+                for (idx2 = u = 0, len7 = dp.length; u < len7; idx2 = ++u) {
                   d = dp[idx2];
                   drawPaths[idx1][idx2] = {
                     x: d.x - minX + _this._freeHandDrawPadding,
@@ -430,6 +485,7 @@ PreloadItemText = (function(superClass) {
       callback = null;
     }
     this.restoreAllDrawingSurface();
+    _showInputModal.call(this);
     return this.endDraw(zindex, true, (function(_this) {
       return function() {
         _this.setupItemEvents();
@@ -437,7 +493,6 @@ PreloadItemText = (function(superClass) {
         _this.firstFocus = Common.firstFocusItemObj() === null;
         Navbar.setModeEdit();
         WorktableCommon.changeMode(Constant.Mode.EDIT);
-        _showInputModal.call(_this);
         if (callback != null) {
           return callback();
         }
@@ -725,14 +780,14 @@ PreloadItemText = (function(superClass) {
     var canvas, context;
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
-    return context.fillStyle = this.textColor;
+    return context.fillStyle = "rgb(" + this.textColor.r + "," + this.textColor.g + "," + this.textColor.b + ")";
   };
 
   _setNoTextStyle = function() {
     var canvas, context;
     canvas = document.getElementById(this.canvasElementId());
     context = canvas.getContext('2d');
-    return context.fillStyle = 'rgba(33, 33, 33, 0.3)';
+    return context.fillStyle = "rgba(" + this.textColor.r + "," + this.textColor.g + "," + this.textColor.b + ", 0.3)";
   };
 
   _drawTextAndBalloonToCanvas = function(text, writingLength) {
@@ -780,23 +835,23 @@ PreloadItemText = (function(superClass) {
         context.scale(1, canvasHeight / canvasWidth);
         context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2);
       }
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)';
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
+      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       context.fill();
       return context.stroke();
     };
     _drawRect = function() {
       context.beginPath();
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)';
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
+      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       return context.fillRect(x, y, width, height);
     };
     _drawBArc = function() {
       var diff, l, per, results, results1, sum;
       diff = 3.0;
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5);
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)';
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
+      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       per = Math.PI * 2 / 100;
       if (width > height) {
         context.scale(canvasWidth / canvasHeight, 1);
@@ -864,8 +919,8 @@ PreloadItemText = (function(superClass) {
       _draw.call(this, width, y, width, height);
       _draw.call(this, width, height, x, height);
       _draw.call(this, x, height, x, y);
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)';
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
+      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
       context.fillRect(x, y, width, height);
       context.stroke();
       return context.restore();
@@ -885,8 +940,8 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
-        context.fillStyle = 'rgba(255,255,255,0.9)';
-        context.strokeStyle = 'black';
+        context.fillStyle = "rgba(" + _this.balloonColor.r + "," + _this.balloonColor.g + "," + _this.balloonColor.b + ", 0.9)";
+        context.strokeStyle = "rgba(" + _this.balloonBorderColor.r + "," + _this.balloonBorderColor.g + "," + _this.balloonBorderColor.b + ", 0.9)";
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
           if (_this.balloonRandomIntValue == null) {
@@ -927,8 +982,8 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         context.lineJoin = 'round';
         context.lineCap = 'round';
-        context.fillStyle = 'rgba(255,255,255,0.9)';
-        context.strokeStyle = 'black';
+        context.fillStyle = "rgba(" + _this.balloonColor.r + "," + _this.balloonColor.g + "," + _this.balloonColor.b + ", 0.9)";
+        context.strokeStyle = "rgba(" + _this.balloonBorderColor.r + "," + _this.balloonBorderColor.g + "," + _this.balloonBorderColor.b + ", 0.9)";
         for (i = k = 0, ref = num - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
           deg += addDeg;
           if (_this.balloonRandomIntValue == null) {
@@ -981,7 +1036,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _freeHandBalloonDraw = function(context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) {
-    var cx, cy, d, dp, dx, dy, i1, i2, idx, k, len, len1, len2, len3, m, modDP, n, o, percent;
+    var cx, cy, d, dp, dx, dy, i1, i2, idx1, idx2, k, len, len1, len2, len3, modDP, n, o, p, percent;
     cx = canvasWidth * 0.5;
     cy = canvasHeight * 0.5;
     percent = width / canvasWidth;
@@ -989,7 +1044,7 @@ PreloadItemText = (function(superClass) {
     for (i1 = k = 0, len = drawPaths.length; k < len; i1 = ++k) {
       dp = drawPaths[i1];
       modDP[i1] = [];
-      for (i2 = m = 0, len1 = dp.length; m < len1; i2 = ++m) {
+      for (i2 = n = 0, len1 = dp.length; n < len1; i2 = ++n) {
         d = dp[i2];
         modDP[i1][i2] = {
           x: cx - (cx - d.x) * percent,
@@ -998,13 +1053,13 @@ PreloadItemText = (function(superClass) {
       }
     }
     context.beginPath();
-    for (n = 0, len2 = modDP.length; n < len2; n++) {
-      dp = modDP[n];
-      for (idx = o = 0, len3 = dp.length; o < len3; idx = ++o) {
-        d = dp[idx];
+    for (idx1 = o = 0, len2 = modDP.length; o < len2; idx1 = ++o) {
+      dp = modDP[idx1];
+      for (idx2 = p = 0, len3 = dp.length; p < len3; idx2 = ++p) {
+        d = dp[idx2];
         dx = d.x;
         dy = d.y;
-        if (idx === 0) {
+        if (idx1 === 0 && idx2 === 0) {
           context.moveTo(dx, dy);
         } else {
           context.lineTo(dx, dy);
@@ -1014,14 +1069,14 @@ PreloadItemText = (function(superClass) {
     context.closePath();
     context.lineJoin = 'round';
     context.lineCap = 'round';
-    context.fillStyle = 'rgba(255,255,255,0.9)';
-    context.strokeStyle = 'black';
+    context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
+    context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
     context.fill();
     return context.stroke();
   };
 
   _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {
-    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, m, measure, n, o, p, ref, ref1, ref2, ref3, ref4, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, o, p, q, ref, ref1, ref2, ref3, ref4, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -1150,7 +1205,7 @@ PreloadItemText = (function(superClass) {
     if (this.isDrawHorizontal) {
       heightLine = y + (height - _calcHorizontalColumnHeightSum.call(this, column, fontSize)) * 0.5;
       widthMax = _calcHorizontalColumnWidthMax.call(this, column);
-      for (j = m = 0, ref1 = column.length - 1; 0 <= ref1 ? m <= ref1 : m >= ref1; j = 0 <= ref1 ? ++m : --m) {
+      for (j = n = 0, ref1 = column.length - 1; 0 <= ref1 ? n <= ref1 : n >= ref1; j = 0 <= ref1 ? ++n : --n) {
         heightLine += _calcHorizontalColumnHeightMax.call(this, column[j], fontSize);
         w = x;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
@@ -1163,7 +1218,7 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         wl = 0;
         ref2 = column[j].split('');
-        for (idx = n = 0, len = ref2.length; n < len; idx = ++n) {
+        for (idx = o = 0, len = ref2.length; o < len; idx = ++o) {
           c = ref2[idx];
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
           context.fillText(c, w + wl, heightLine);
@@ -1174,7 +1229,7 @@ PreloadItemText = (function(superClass) {
     } else {
       widthLine = x + (width + wordWidth * column.length) * 0.5;
       heightMax = _calcVerticalColumnHeightMax.call(this, column);
-      for (j = o = 0, ref3 = column.length - 1; 0 <= ref3 ? o <= ref3 : o >= ref3; j = 0 <= ref3 ? ++o : --o) {
+      for (j = p = 0, ref3 = column.length - 1; 0 <= ref3 ? p <= ref3 : p >= ref3; j = 0 <= ref3 ? ++p : --p) {
         widthLine -= wordWidth;
         h = y;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
@@ -1187,7 +1242,7 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         hl = 0;
         ref4 = column[j].split('');
-        for (idx = p = 0, len1 = ref4.length; p < len1; idx = ++p) {
+        for (idx = q = 0, len1 = ref4.length; q < len1; idx = ++q) {
           c = ref4[idx];
           measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);

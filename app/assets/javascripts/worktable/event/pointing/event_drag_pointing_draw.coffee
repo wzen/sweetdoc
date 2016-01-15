@@ -112,7 +112,7 @@ class EventDragPointingDraw
       if endDrawCallback?
         endDrawCallback(pointingPaths)
     )
-    pointing.initData()
+    pointing.initData(multiDraw)
     PointingHandwrite.initHandwrite(@)
     WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.DRAW)
     FloatView.showWithCloseButton('Drag position', FloatView.Type.POINTING_DRAG, =>

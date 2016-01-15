@@ -1190,8 +1190,9 @@ Common = (function() {
   };
 
   Common.colorFormatChangeHexToRgb = function(data) {
-    var index, j, len, val;
+    var cColors, index, j, len, val;
     data = data.replace('#', '');
+    cColors = new Array(3);
     cColors[0] = data.substring(0, 2);
     cColors[1] = data.substring(2, 4);
     cColors[2] = data.substring(4, 6);

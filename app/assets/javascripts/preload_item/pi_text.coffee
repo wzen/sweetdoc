@@ -72,11 +72,20 @@ class PreloadItemText extends CanvasItemBase
           one: {
             balloonColor: {
               name: 'BalloonColor'
-              default: '#fff'
+              default: {r:255, g:255, b:255}
               type: 'color'
-              colorType: 'hex'
+              colorType: 'rgb'
               ja: {
                 name: '吹き出しの色'
+              }
+            }
+            balloonBorderColor: {
+              name: 'BalloonBorderColor'
+              default: {r:0, g:0, b:0}
+              type: 'color'
+              colorType: 'rgb'
+              ja: {
+                name: '吹き出し枠の色'
               }
             }
             balloonType: {
@@ -92,7 +101,7 @@ class PreloadItemText extends CanvasItemBase
                 {name: 'FreeHand', value: @BalloonType.FREE}
               ]
               openChildrenValue: {
-                one: [@BalloonType.RECT, @BalloonType.BROKEN_RECT]
+                one: @BalloonType.RECT
               }
               children: {
                 one: {
@@ -251,12 +260,37 @@ class PreloadItemText extends CanvasItemBase
       @itemSize.w = h
       @itemSize.h = w
     else if varName == 'balloonType' && @balloonType? && @balloonType != value
-      if @balloonType != @constructor.BalloonType.FREE
+      if value == @constructor.BalloonType.FREE
         # パスを消去して新規作成する
         @freeHandDrawPaths = null
         opt = {
           multiDraw: true
           applyDrawCallback: (drawPaths) =>
+            # 配列調整
+            i = drawPaths.length - 1
+            while i >= 0
+              if drawPaths[i].length == 0
+                drawPaths.splice(i, 1)
+              i -= 1
+
+            # サブパス間のパスを追加
+            sPath = []
+            for dp, idx in drawPaths
+              for i in [0, dp.length - 1]
+                mLen = 999999
+                m = null
+                for dp2, idx2 in drawPaths
+                  for j in [0, dp2.length - 1]
+                    # 一番距離が近いサブパスを検索
+                    if idx != idx2
+                      sq = Math.pow(dp2[j].x - dp[i].x, 2) + Math.pow(dp2[j].y - dp[i].y, 2)
+                      if sq < mLen
+                        mLen = sq
+                        m = {x: dp2[j].x, y: dp2[j].y}
+                if m?
+                  sPath.push([dp[i], m])
+            $.merge(drawPaths, sPath)
+
             # キャンパスサイズ拡張
             @originalItemSize = $.extend({}, @itemSize)
             minX = 999999
@@ -314,6 +348,8 @@ class PreloadItemText extends CanvasItemBase
   # マウスアップ時の描画イベント
   mouseUpDrawing: (zindex, callback = null) ->
     @restoreAllDrawingSurface()
+    # テキストModal表示
+    _showInputModal.call(@)
     # 編集状態で描画
     @endDraw(zindex, true, =>
       @setupItemEvents()
@@ -323,8 +359,6 @@ class PreloadItemText extends CanvasItemBase
       # 編集モード
       Navbar.setModeEdit()
       WorktableCommon.changeMode(Constant.Mode.EDIT)
-      # テキストModal表示
-      _showInputModal.call(@)
       if callback?
         callback()
     )
@@ -539,12 +573,12 @@ class PreloadItemText extends CanvasItemBase
   _setTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
-    context.fillStyle = @textColor
+    context.fillStyle = "rgb(#{@textColor.r},#{@textColor.g},#{@textColor.b})"
 
   _setNoTextStyle = ->
     canvas = document.getElementById(@canvasElementId())
     context = canvas.getContext('2d')
-    context.fillStyle = 'rgba(33, 33, 33, 0.3)'
+    context.fillStyle = "rgba(#{@textColor.r},#{@textColor.g},#{@textColor.b}, 0.3)"
 
   _drawTextAndBalloonToCanvas = (text, writingLength) ->
     if !text?
@@ -580,8 +614,8 @@ class PreloadItemText extends CanvasItemBase
         context.scale(1, canvasHeight / canvasWidth)
         context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2)
 
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       context.fill()
       context.stroke()
 
@@ -589,8 +623,8 @@ class PreloadItemText extends CanvasItemBase
       # 四角
       context.beginPath()
       # FIXME: 描画オプション追加
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       context.fillRect(x, y, width, height);
 
     _drawBArc = ->
@@ -598,8 +632,8 @@ class PreloadItemText extends CanvasItemBase
       # 調整値
       diff = 3.0
       context.translate(canvasWidth * 0.5, canvasHeight * 0.5)
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       per = Math.PI * 2 / 100
       if width > height
         context.scale(canvasWidth / canvasHeight, 1)
@@ -658,8 +692,8 @@ class PreloadItemText extends CanvasItemBase
       _draw.call(@, width, y, width, height)
       _draw.call(@, width, height, x, height)
       _draw.call(@, x, height, x, y)
-      context.fillStyle = 'rgba(255, 255, 255, 0.5)'
-      context.strokeStyle = 'rgba(0, 0, 0, 0.5)'
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       context.fillRect(x, y, width, height);
       context.stroke();
       context.restore()
@@ -679,8 +713,8 @@ class PreloadItemText extends CanvasItemBase
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
-      context.fillStyle = 'rgba(255,255,255,0.9)'
-      context.strokeStyle = 'black'
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       for i in [0..(num - 1)]
         deg += addDeg
         if !@balloonRandomIntValue?
@@ -722,8 +756,8 @@ class PreloadItemText extends CanvasItemBase
       context.beginPath()
       context.lineJoin = 'round'
       context.lineCap = 'round'
-      context.fillStyle = 'rgba(255,255,255,0.9)'
-      context.strokeStyle = 'black'
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
 
       for i in [0..(num - 1)]
         deg += addDeg
@@ -788,19 +822,19 @@ class PreloadItemText extends CanvasItemBase
 
     # 描画
     context.beginPath()
-    for dp in modDP
-      for d, idx in dp
+    for dp, idx1 in modDP
+      for d, idx2 in dp
         dx = d.x
         dy = d.y
-        if idx == 0
+        if idx1 == 0 && idx2 == 0
           context.moveTo(dx, dy)
         else
           context.lineTo(dx, dy)
     context.closePath()
     context.lineJoin = 'round'
     context.lineCap = 'round'
-    context.fillStyle = 'rgba(255,255,255,0.9)'
-    context.strokeStyle = 'black'
+    context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
+    context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
     context.fill()
     context.stroke()
 
