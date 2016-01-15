@@ -16,4 +16,4 @@
 //= require upload/upload_contents
 //= require upload/upload_item
 //= require upload/upload_common
-//= require upload/upload.js
+//= require upload/upload

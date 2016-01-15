@@ -33,6 +33,6 @@
 //= require base/local_storage
 //= require base/float_view
 //= require base/config_menu
-//= require navbar/navbar.js
+//= require navbar/navbar
 //= require coding/coding_common
 //= require coding/coding

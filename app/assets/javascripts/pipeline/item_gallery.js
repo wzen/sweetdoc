@@ -24,7 +24,7 @@
 //= require base/local_storage
 //= require base/float_view
 //= require base/config_menu
-//= require navbar/navbar.js
+//= require navbar/navbar
 //= require gallery/gallery_common
 //= require gallery/gallery_sidebar
 //= require gallery/gallery

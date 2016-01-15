@@ -22,4 +22,4 @@
 //= require base/config_menu
 //= require gallery/gallery_sidebar
 //= require my_page/my_page_common
-//= require my_page/my_page.js
+//= require my_page/my_page

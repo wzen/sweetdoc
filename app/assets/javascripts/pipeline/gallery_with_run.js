@@ -31,9 +31,9 @@
 //= require item/item_base
 //= require item/css_item_base
 //= require item/canvas_item_base
-//= require event_page_value/base/base.js
-//= require event_page_value/item/item.js
-//= require navbar/navbar.js
+//= require event_page_value/base/base
+//= require event_page_value/item/item
+//= require navbar/navbar
 //= require paging_animation/pageflip
 //= require run/common/run_setting
 //= require run/common/run_common
@@ -42,7 +42,7 @@
 //= require run/scroll_chapter
 //= require run/click_chapter
 //= require run/page
-//= require run/event_action.js
+//= require run/event_action
 //= require run/guide/base
 //= require run/guide/scroll
 //= require run/guide/click
