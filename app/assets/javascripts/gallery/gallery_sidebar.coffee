@@ -35,7 +35,7 @@ class GallerySidebar
         $(@).stop().animate({opacity: 0.7}, 100, 'linear')
     )
 
-    $(".wrapper .circle.#{GallerySidebar.SEARCH}, .wrapper .circle.#{GallerySidebar.VIEW}", root).click((e) ->
+    $(".wrapper .circle.#{GallerySidebar.SEARCH}", root).click((e) ->
       type = _type.call(@)
       popup = $("#sidebar_wrapper .sidebar_popup#{type}")
       if popup.is(':visible')

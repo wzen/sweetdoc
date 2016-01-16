@@ -17,7 +17,8 @@ html, body {
 }
 
 body {
-  background-color: #ebe9dc;
+  //background-color: #ebe9dc;
+  background-color: #FAFAFA;
 }
 
 div#contents {
@@ -99,6 +100,11 @@ div#sidebar_wrapper {
       }
       .list {
         background-image: image-url("gallery/sidebar/list.png");
+      }
+      .circle {
+        background-repeat: no-repeat;
+        -moz-background-size: 50px 50px;
+        background-size: 50px 50px;
       }
     }
 

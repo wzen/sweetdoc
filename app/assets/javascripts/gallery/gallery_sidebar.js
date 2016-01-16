@@ -51,7 +51,7 @@ GallerySidebar = (function() {
         }, 100, 'linear');
       }
     });
-    return $(".wrapper .circle." + GallerySidebar.SEARCH + ", .wrapper .circle." + GallerySidebar.VIEW, root).click(function(e) {
+    return $(".wrapper .circle." + GallerySidebar.SEARCH, root).click(function(e) {
       var popup, self, type;
       type = _type.call(this);
       popup = $("#sidebar_wrapper .sidebar_popup" + type);
