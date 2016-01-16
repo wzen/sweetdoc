@@ -112,7 +112,7 @@ EventDragPointingRect = (function() {
             return callback();
           }
         };
-      })(this));
+      })(this), false);
     };
 
     PrivateClass.prototype.saveObj = function(newCreated) {

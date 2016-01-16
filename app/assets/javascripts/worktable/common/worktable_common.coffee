@@ -552,7 +552,7 @@ class WorktableCommon
     # 状態変更フラグON
     window.worktableItemsChangedState = true
     # 全ての状態をイベント適応前にする
-    Common.updateAllEventsToBefore( =>
+    @updateAllEventsToBefore(keepDispMag, =>
       # 操作履歴削除
       PageValue.removeAllFootprint()
       teNum = parseInt(teNum)
@@ -593,6 +593,34 @@ class WorktableCommon
         callback()
     )
 
+  # 全てのアイテムをイベント適用前に戻す
+  # @param [Function] callback コールバック
+  @updateAllEventsToBefore: (keepDispMag, callback = null) ->
+    # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
+    self = @
+    tesArray = []
+    tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM))
+    forkNum = PageValue.getForkNum()
+    if forkNum > 0
+      for i in [1..forkNum]
+        # フォークデータを含める
+        tesArray.push(PageValue.getEventPageValueSortedListByNum(i))
+
+    _updateEventBefore = ->
+      for tes in tesArray
+        for idx in [tes.length - 1 .. 0] by -1
+          te = tes[idx]
+          item = window.instanceMap[te.id]
+          if item?
+            item.initEvent(te, keepDispMag)
+            item.updateEventBefore()
+        if callback?
+          callback()
+
+    @stopAllEventPreview( =>
+      _updateEventBefore.call(@)
+    )
+
   # 全イベントのプレビューを停止
   # @param [Function] callback コールバック
   @stopAllEventPreview: (callback = null) ->
@@ -609,7 +637,7 @@ class WorktableCommon
       noRunningPreview = true
       for k, v of window.instanceMap
         if v.stopPreview?
-          v.stopPreview(null, (wasRunningPreview) ->
+          v.stopPreview((wasRunningPreview) ->
             count += 1
             if wasRunningPreview
               noRunningPreview = false

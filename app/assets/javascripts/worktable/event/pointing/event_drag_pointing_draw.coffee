@@ -61,7 +61,6 @@ class EventDragPointingDraw
     # @param [Array] cood 座標
     draw: (cood) ->
       @drawPaths[@drawPathIndex].push(cood)
-      #@restoreRefreshingSurface(@itemSize)
 
       for d in @drawPaths
         drawingContext.beginPath()

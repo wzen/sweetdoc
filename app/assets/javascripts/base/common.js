@@ -509,7 +509,7 @@ Common = (function() {
     if (ScreenEvent.hasInstanceCache()) {
       se = new ScreenEvent();
       scale = se.getNowScale();
-      if ((se.keepDispMag != null) && se.keepDispMag) {
+      if ((se._keepDispMag != null) && se._keepDispMag) {
         scale = 1.0;
       }
     }
@@ -625,52 +625,6 @@ Common = (function() {
       }
     }
     return ret;
-  };
-
-  Common.updateAllEventsToBefore = function(callback) {
-    var _updateEventBefore, forkNum, i, j, ref, self, tesArray;
-    if (callback == null) {
-      callback = null;
-    }
-    self = this;
-    tesArray = [];
-    tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM));
-    forkNum = PageValue.getForkNum();
-    if (forkNum > 0) {
-      for (i = j = 1, ref = forkNum; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
-        tesArray.push(PageValue.getEventPageValueSortedListByNum(i));
-      }
-    }
-    _updateEventBefore = function() {
-      var idx, item, l, len, m, ref1, results, te, tes;
-      results = [];
-      for (l = 0, len = tesArray.length; l < len; l++) {
-        tes = tesArray[l];
-        for (idx = m = ref1 = tes.length - 1; m >= 0; idx = m += -1) {
-          te = tes[idx];
-          item = window.instanceMap[te.id];
-          if (item != null) {
-            item.initEvent(te);
-            item.updateEventBefore();
-          }
-        }
-        if (callback != null) {
-          results.push(callback());
-        } else {
-          results.push(void 0);
-        }
-      }
-      return results;
-    };
-    if (window.isWorkTable) {
-      return WorktableCommon.stopAllEventPreview((function(_this) {
-        return function() {
-          return _updateEventBefore.call(_this);
-        };
-      })(this));
-    } else {
-      return _updateEventBefore.call(this);
-    }
   };
 
   Common.getActionTypeClassNameByActionType = function(actionType) {

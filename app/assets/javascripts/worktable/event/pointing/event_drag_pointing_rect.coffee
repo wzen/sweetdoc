@@ -73,7 +73,7 @@ class EventDragPointingRect
         FloatView.showPointingController(@)
         if callback?
           callback()
-      )
+      , false)
 
     # 以下の処理はなし
     saveObj: (newCreated = false) ->

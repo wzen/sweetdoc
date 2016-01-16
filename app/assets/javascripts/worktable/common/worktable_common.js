@@ -661,7 +661,7 @@ WorktableCommon = (function() {
     }
     tes = epr.routes;
     window.worktableItemsChangedState = true;
-    return Common.updateAllEventsToBefore((function(_this) {
+    return this.updateAllEventsToBefore(keepDispMag, (function(_this) {
       return function() {
         var focusTargetItem, idx, item, l, len, te;
         PageValue.removeAllFootprint();
@@ -702,6 +702,48 @@ WorktableCommon = (function() {
     })(this));
   };
 
+  WorktableCommon.updateAllEventsToBefore = function(keepDispMag, callback) {
+    var _updateEventBefore, forkNum, i, l, ref, self, tesArray;
+    if (callback == null) {
+      callback = null;
+    }
+    self = this;
+    tesArray = [];
+    tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM));
+    forkNum = PageValue.getForkNum();
+    if (forkNum > 0) {
+      for (i = l = 1, ref = forkNum; 1 <= ref ? l <= ref : l >= ref; i = 1 <= ref ? ++l : --l) {
+        tesArray.push(PageValue.getEventPageValueSortedListByNum(i));
+      }
+    }
+    _updateEventBefore = function() {
+      var idx, item, len, m, n, ref1, results, te, tes;
+      results = [];
+      for (m = 0, len = tesArray.length; m < len; m++) {
+        tes = tesArray[m];
+        for (idx = n = ref1 = tes.length - 1; n >= 0; idx = n += -1) {
+          te = tes[idx];
+          item = window.instanceMap[te.id];
+          if (item != null) {
+            item.initEvent(te, keepDispMag);
+            item.updateEventBefore();
+          }
+        }
+        if (callback != null) {
+          results.push(callback());
+        } else {
+          results.push(void 0);
+        }
+      }
+      return results;
+    };
+    return this.stopAllEventPreview((function(_this) {
+      return function() {
+        return _updateEventBefore.call(_this);
+      };
+    })(this));
+  };
+
   WorktableCommon.stopAllEventPreview = function(callback) {
     if (callback == null) {
       callback = null;
@@ -722,7 +764,7 @@ WorktableCommon = (function() {
         for (k in ref) {
           v = ref[k];
           if (v.stopPreview != null) {
-            v.stopPreview(null, function(wasRunningPreview) {
+            v.stopPreview(function(wasRunningPreview) {
               count += 1;
               if (wasRunningPreview) {
                 noRunningPreview = false;

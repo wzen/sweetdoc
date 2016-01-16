@@ -162,6 +162,8 @@ EventBase = (function(superClass) {
     }
   };
 
+  EventBase.prototype.initPreview = function() {};
+
   EventBase.prototype.preview = function(loopFinishCallback) {
     this.loopFinishCallback = loopFinishCallback != null ? loopFinishCallback : null;
     if (window.runDebug) {
@@ -170,6 +172,7 @@ EventBase = (function(superClass) {
     return this.stopPreview((function(_this) {
       return function() {
         _this._runningPreview = true;
+        _this.initPreview();
         _this.willChapter();
         _this._doPreviewLoop = false;
         _this._skipEvent = false;
@@ -253,6 +256,7 @@ EventBase = (function(superClass) {
       return function() {
         if (_this._runningPreview) {
           _this.updateEventBefore();
+          _this.initPreview();
           _this.willChapter();
           _this._progress = 0;
           return _this.previewStepDraw();

@@ -377,7 +377,7 @@ class Common
     if ScreenEvent.hasInstanceCache()
       se = new ScreenEvent()
       scale = se.getNowScale()
-      if se.keepDispMag? && se.keepDispMag
+      if se._keepDispMag? && se._keepDispMag
         scale = 1.0
     return {
       width: window.scrollContents.width() / scale
@@ -483,38 +483,6 @@ class Common
       if v instanceof CommonEventBase == false
         ret[k] = v
     return ret
-
-  # 全てのアイテムをイベント適用前に戻す
-  # @param [Function] callback コールバック
-  @updateAllEventsToBefore: (callback = null) ->
-    # EventPageValueを読み込み、全てイベント実行前(updateEventBefore)にする
-    self = @
-    tesArray = []
-    tesArray.push(PageValue.getEventPageValueSortedListByNum(PageValue.Key.EF_MASTER_FORKNUM))
-    forkNum = PageValue.getForkNum()
-    if forkNum > 0
-      for i in [1..forkNum]
-        # フォークデータを含める
-        tesArray.push(PageValue.getEventPageValueSortedListByNum(i))
-
-    _updateEventBefore = ->
-      for tes in tesArray
-        for idx in [tes.length - 1 .. 0] by -1
-          te = tes[idx]
-          item = window.instanceMap[te.id]
-          if item?
-            item.initEvent(te)
-            item.updateEventBefore()
-        if callback?
-          callback()
-
-    if window.isWorkTable
-      # プレビュー実行中の場合、全停止
-      WorktableCommon.stopAllEventPreview( =>
-        _updateEventBefore.call(@)
-      )
-    else
-      _updateEventBefore.call(@)
 
   # アクションタイプからアクションタイプクラス名を取得
   # @param [Integer] actionType アクションタイプID

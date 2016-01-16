@@ -62,9 +62,13 @@ ScreenEvent = (function(superClass) {
       this._initDone = false;
     }
 
-    PrivateClass.prototype.initEvent = function(event, keepDispMag) {
-      this.keepDispMag = keepDispMag != null ? keepDispMag : false;
+    PrivateClass.prototype.initEvent = function(event, _keepDispMag) {
+      this._keepDispMag = _keepDispMag != null ? _keepDispMag : false;
       return PrivateClass.__super__.initEvent.call(this, event);
+    };
+
+    PrivateClass.prototype.initPreview = function() {
+      return this._scale = this.initConfigScale;
     };
 
     PrivateClass.prototype.refresh = function(show, callback) {
@@ -89,7 +93,7 @@ ScreenEvent = (function(superClass) {
       PrivateClass.__super__.updateEventBefore.call(this);
       methodName = this.getEventMethodName();
       if (methodName === 'changeScreenPosition') {
-        if (!this.keepDispMag) {
+        if (!this._keepDispMag && (this.nowScale != null)) {
           _setScale.call(this, this.nowScale);
           size = _convertCenterCoodToSize.call(this, this.nowX, this.nowY, this.nowScale);
           scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
@@ -106,7 +110,7 @@ ScreenEvent = (function(superClass) {
         this._progressX = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX);
         this._progressY = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY);
         this._progressScale = parseFloat(this._event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ);
-        if (this.keepDispMag) {
+        if (this._keepDispMag) {
           _setScale.call(this, 1.0);
           return _overlay.call(this, this._progressX, this._progressY, this._progressScale);
         } else {
@@ -125,11 +129,11 @@ ScreenEvent = (function(superClass) {
       this._progressY = ((parseFloat(this._specificMethodValues.afterY) - this.nowY) * (opt.progress / opt.progressMax)) + this.nowY;
       if (opt.isPreview) {
         _overlay.call(this, this._progressX, this._progressY, this._progressScale);
-        if (this.keepDispMag) {
+        if (this._keepDispMag) {
           _setScale.call(this, 1.0);
         }
       }
-      if (!this.keepDispMag) {
+      if (!this._keepDispMag) {
         _setScale.call(this, this._progressScale);
         size = _convertCenterCoodToSize.call(this, this._progressX, this._progressY, this._progressScale);
         scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
@@ -137,17 +141,14 @@ ScreenEvent = (function(superClass) {
       }
     };
 
-    PrivateClass.prototype.stopPreview = function(loopFinishCallback, callback) {
-      if (loopFinishCallback == null) {
-        loopFinishCallback = null;
-      }
+    PrivateClass.prototype.stopPreview = function(callback) {
       if (callback == null) {
         callback = null;
       }
       setTimeout(function() {
         return $('#preview_position_overlay').remove();
       }, 0);
-      return PrivateClass.__super__.stopPreview.call(this, loopFinishCallback, callback);
+      return PrivateClass.__super__.stopPreview.call(this, callback);
     };
 
     PrivateClass.prototype.willChapter = function() {
@@ -264,7 +265,7 @@ ScreenEvent = (function(superClass) {
         context.fill();
         return context.restore();
       };
-      if (this.keepDispMag && scale > Common.scaleFromViewRate) {
+      if (this._keepDispMag && scale > Common.scaleFromViewRate) {
         overlay = $('#preview_position_overlay');
         if ((overlay == null) || overlay.length === 0) {
           w = $(window.drawingCanvas).attr('width');

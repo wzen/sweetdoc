@@ -45,8 +45,12 @@ class ScreenEvent extends CommonEvent
 
     # イベントの初期化
     # @param [Object] event 設定イベント
-    initEvent: (event, @keepDispMag = false) ->
+    initEvent: (event, @_keepDispMag = false) ->
       super(event)
+
+    initPreview: ->
+      # initConfigの値を適用
+      @_scale = @initConfigScale
 
     # 変更を戻して再表示
     refresh: (show = true, callback = null) ->
@@ -65,7 +69,7 @@ class ScreenEvent extends CommonEvent
       super()
       methodName = @getEventMethodName()
       if methodName == 'changeScreenPosition'
-        if !@keepDispMag
+        if !@_keepDispMag && @nowScale?
           _setScale.call(@, @nowScale)
           size = _convertCenterCoodToSize.call(@, @nowX, @nowY, @nowScale)
           scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
@@ -79,7 +83,7 @@ class ScreenEvent extends CommonEvent
         @_progressX = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterX)
         @_progressY = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterY)
         @_progressScale = parseFloat(@_event[EventPageValueBase.PageValueKey.SPECIFIC_METHOD_VALUES].afterZ)
-        if @keepDispMag
+        if @_keepDispMag
           _setScale.call(@, 1.0)
           _overlay.call(@, @_progressX, @_progressY, @_progressScale)
         else
@@ -95,10 +99,10 @@ class ScreenEvent extends CommonEvent
       @_progressY = ((parseFloat(@_specificMethodValues.afterY) - @nowY) * (opt.progress / opt.progressMax)) + @nowY
       if opt.isPreview
         _overlay.call(@, @_progressX, @_progressY, @_progressScale)
-        if @keepDispMag
+        if @_keepDispMag
           _setScale.call(@, 1.0)
 
-      if !@keepDispMag
+      if !@_keepDispMag
         _setScale.call(@, @_progressScale)
         size = _convertCenterCoodToSize.call(@, @_progressX, @_progressY, @_progressScale)
         scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale()
@@ -106,12 +110,12 @@ class ScreenEvent extends CommonEvent
 
     # プレビューを停止
     # @param [Function] callback コールバック
-    stopPreview: (loopFinishCallback = null, callback = null) ->
+    stopPreview: (callback = null) ->
       setTimeout( ->
         # オーバーレイを削除
         $('#preview_position_overlay').remove()
       , 0)
-      super(loopFinishCallback, callback)
+      super(callback)
 
     willChapter: ->
       @nowScale = @_scale
@@ -206,7 +210,7 @@ class ScreenEvent extends CommonEvent
         context.fill()
         context.restore()
 
-      if @keepDispMag && scale > Common.scaleFromViewRate
+      if @_keepDispMag && scale > Common.scaleFromViewRate
         overlay = $('#preview_position_overlay')
         if !overlay? || overlay.length == 0
           # オーバーレイを被せる

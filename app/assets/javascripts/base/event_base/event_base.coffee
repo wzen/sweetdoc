@@ -110,6 +110,10 @@ class EventBase extends Extend
     else
       return null
 
+  # プレビュー実行前の処理があれば記入
+  # @abstract
+  initPreview: ->
+
   # プレビュー開始
   preview: (@loopFinishCallback = null) ->
     if window.runDebug
@@ -117,6 +121,7 @@ class EventBase extends Extend
 
     @stopPreview( =>
       @_runningPreview = true
+      @initPreview()
       @willChapter()
       @_doPreviewLoop = false
       @_skipEvent = false
@@ -188,6 +193,7 @@ class EventBase extends Extend
     @_previewTimer = setTimeout( =>
       if @_runningPreview
         @updateEventBefore()
+        @initPreview()
         @willChapter()
         @_progress = 0
         @previewStepDraw()
