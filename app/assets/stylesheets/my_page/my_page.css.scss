@@ -14,6 +14,7 @@ div#user_wrapper {
   height: 100%;
   float: left;
   margin-top: 51px;
+  position: relative;
 
   &.my {
     background-color: #aa3f39;
@@ -33,6 +34,18 @@ div#user_wrapper {
       -webkit-border-radius: 15px;
       -moz-border-radius: 15px;
       border-radius: 15px;;
+    }
+  }
+  .footer_wrapper {
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 5px;
+    text-align: center;
+    width: 100%;
+    > div {
+      float: left;
+      width: 50%;
+      text-align: center;
     }
   }
 }

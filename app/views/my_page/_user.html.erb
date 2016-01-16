@@ -5,11 +5,17 @@
         </div>
     </div>
     <% if @is_accessed_myself_page %>
-      <div class="edit">
-        <%= link_to I18n.t('account.edit'), edit_user_registration_path %>
-      </div>
-      <div class="logout">
-        <%= link_to I18n.t('account.logout'),  destroy_user_session_path, method: :delete %>
+      <div class="footer_wrapper">
+        <div class="edit">
+          <%= link_to edit_user_registration_path do %>
+              <%= image_tag 'gallery/sidebar/edit64.png' ,size:'45x45' %>
+          <% end %>
+        </div>
+        <div class="logout">
+          <%= link_to destroy_user_session_path, method: :delete do %>
+              <%= image_tag 'gallery/sidebar/logout64.png' ,size:'45x45' %>
+          <% end %>
+        </div>
       </div>
     <% end %>
 
