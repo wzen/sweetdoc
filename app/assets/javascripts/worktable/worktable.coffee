@@ -40,8 +40,8 @@ $ ->
       # ページング
       Paging.initPaging()
 
-    if existedCache
-      # 描画
+    if existedCache && PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)?
+      # プロジェクト作成済みのキャッシュが存在する場合
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # 共通イベントのインスタンス作成
@@ -56,6 +56,5 @@ $ ->
       LocalStorage.clearWorktable()
       Timeline.refreshAllTimeline()
       _callback.call(@)
-
       # プロジェクトモーダル表示
       Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)

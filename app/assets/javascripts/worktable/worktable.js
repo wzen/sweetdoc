@@ -28,7 +28,7 @@ $(function() {
       PageValue.updateForkCount();
       return Paging.initPaging();
     };
-    if (existedCache) {
+    if (existedCache && (PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID) != null)) {
       PageValue.adjustInstanceAndEventOnPage();
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         WorktableCommon.createCommonEventInstancesIfNeeded();
