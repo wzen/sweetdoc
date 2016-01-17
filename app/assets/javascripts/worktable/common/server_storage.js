@@ -151,6 +151,9 @@ ServerStorage = (function() {
                 }
                 PageValue.adjustInstanceAndEventOnPage();
                 LocalStorage.saveAllPageValues();
+                Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+                WorktableCommon.initMainContainer();
+                Common.initResize(WorktableCommon.resizeEvent);
                 return WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
                   Timeline.refreshAllTimeline();
                   PageValue.updatePageCount();

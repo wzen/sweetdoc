@@ -50,7 +50,7 @@ Project = (function() {
     $('.display_size_wrapper input[type=radio]', modalEmt).off('click').on('click', function() {
       return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
     });
-    $('.default_window_size', modalEmt).html((window.mainWrapper.width()) + " X " + (window.mainWrapper.height()));
+    $('.default_window_size', modalEmt).html(($('#screen_wrapper').width()) + " X " + ($('#screen_wrapper').height()));
     Project.load_data_order_last_updated(function(data) {
       var d, e, i, len, list, n, p, projectSelect, size, user_pagevalue_list;
       user_pagevalue_list = data.user_pagevalue_list;
@@ -119,6 +119,9 @@ Project = (function() {
           return;
         }
       }
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+      WorktableCommon.initMainContainer();
+      Common.initResize(WorktableCommon.resizeEvent);
       Project.updateProjectInfo({
         projectName: projectName,
         screenWidth: width,

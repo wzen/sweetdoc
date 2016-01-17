@@ -121,6 +121,12 @@ class ServerStorage
 
                 PageValue.adjustInstanceAndEventOnPage()
                 LocalStorage.saveAllPageValues()
+                # Mainコンテナ作成
+                Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+                # コンテナ初期化
+                WorktableCommon.initMainContainer()
+                # リサイズイベント
+                Common.initResize(WorktableCommon.resizeEvent)
                 WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
                   Timeline.refreshAllTimeline()
                   PageValue.updatePageCount()

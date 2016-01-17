@@ -38,7 +38,7 @@ class Project
     )
 
     # ウィンドウサイズ
-    $('.default_window_size', modalEmt).html("#{window.mainWrapper.width()} X #{window.mainWrapper.height()}")
+    $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} X #{$('#screen_wrapper').height()}")
 
     # 作成済みプロジェクト一覧取得
     Project.load_data_order_last_updated((data) ->
@@ -99,6 +99,12 @@ class Project
           Project.showError(modalEmt, I18n.t('message.project.error.display_size'))
           return
 
+      # Mainコンテナ作成
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+      # コンテナ初期化
+      WorktableCommon.initMainContainer()
+      # リサイズイベント
+      Common.initResize(WorktableCommon.resizeEvent)
       # プロジェクト更新
       Project.updateProjectInfo({
         projectName: projectName

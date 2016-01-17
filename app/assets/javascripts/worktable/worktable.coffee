@@ -23,12 +23,6 @@ $ ->
     # 変数初期化
     CommonVar.initVarWhenLoadedView()
     CommonVar.initCommonVar()
-    # Mainコンテナ作成
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum())
-    # コンテナ初期化
-    WorktableCommon.initMainContainer()
-    # リサイズイベント
-    Common.initResize(WorktableCommon.resizeEvent)
 
     _callback = ->
       # 履歴に画面初期時を状態を保存
@@ -42,6 +36,12 @@ $ ->
 
     if existedCache && PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)?
       # プロジェクト作成済みのキャッシュが存在する場合
+      # Mainコンテナ作成
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum())
+      # コンテナ初期化
+      WorktableCommon.initMainContainer()
+      # リサイズイベント
+      Common.initResize(WorktableCommon.resizeEvent)
       PageValue.adjustInstanceAndEventOnPage()
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue( ->
         # 共通イベントのインスタンス作成
@@ -58,3 +58,5 @@ $ ->
       _callback.call(@)
       # プロジェクトモーダル表示
       Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
+      # モーダル用にリサイズイベントを設定
+      Common.initResize()

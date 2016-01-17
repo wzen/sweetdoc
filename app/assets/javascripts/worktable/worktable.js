@@ -19,9 +19,6 @@ $(function() {
     }
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
-    Common.createdMainContainerIfNeeded(PageValue.getPageNum());
-    WorktableCommon.initMainContainer();
-    Common.initResize(WorktableCommon.resizeEvent);
     _callback = function() {
       OperationHistory.add(true);
       PageValue.updatePageCount();
@@ -29,6 +26,9 @@ $(function() {
       return Paging.initPaging();
     };
     if (existedCache && (PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID) != null)) {
+      Common.createdMainContainerIfNeeded(PageValue.getPageNum());
+      WorktableCommon.initMainContainer();
+      Common.initResize(WorktableCommon.resizeEvent);
       PageValue.adjustInstanceAndEventOnPage();
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         WorktableCommon.createCommonEventInstancesIfNeeded();
@@ -40,7 +40,8 @@ $(function() {
       LocalStorage.clearWorktable();
       Timeline.refreshAllTimeline();
       _callback.call(this);
-      return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
+      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
+      return Common.initResize();
     }
   });
 });
