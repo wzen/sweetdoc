@@ -1,5 +1,4 @@
 class Timeline
-
   # タイムラインを作成
   # @param [Integer] teNum 作成するイベント番号
   @createTimelineEvent = (teNum) ->

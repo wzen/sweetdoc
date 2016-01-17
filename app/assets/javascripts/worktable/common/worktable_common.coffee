@@ -418,8 +418,12 @@ class WorktableCommon
       PageValue.updatePageCount()
       # フォーク総数更新
       PageValue.updateForkCount()
-      # ページング
-      Paging.initPaging()
+      # プロジェクトビュー & タイムラインを閉じる
+      $('#project_wrapper').hide()
+      $('#timeline').hide()
+#      # ページング
+#      Paging.initPaging()
+
     )
 
   # コンテキストメニュー初期化

@@ -1,5 +1,6 @@
 html, body {
-  background-color: #F9F6EA !important;
+  //background-color: #F9F6EA !important;
+  background-color: #FAFAFA !important;
 }
 
 div#main {
@@ -8,8 +9,9 @@ div#main {
 }
 
 div.scroll_background {
-  background-image: none !important;
-  background-repeat: no-repeat !important;
+  background-color: #fcf6ff;
+  //background-image: none !important;
+  //background-repeat: no-repeat !important;
 }
 
 div#run_btn_wrapper, div#stop_btn_wrapper {

@@ -167,9 +167,13 @@ class Common
         height: size.height
       }
       $('#project_wrapper').css(css)
+      # プロジェクトビュー & タイムラインを閉じる
+      $('#project_wrapper').show()
+      $('#timeline').show()
     else
-      # width,height -> 100%
-      $('#project_wrapper').removeAttr('style')
+      # プロジェクトビュー & タイムラインを閉じる
+      $('#project_wrapper').hide()
+      $('#timeline').hide()
       PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {})
 
     # Canvasサイズ更新

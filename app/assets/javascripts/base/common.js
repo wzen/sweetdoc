@@ -207,8 +207,11 @@ Common = (function() {
         height: size.height
       };
       $('#project_wrapper').css(css);
+      $('#project_wrapper').show();
+      $('#timeline').show();
     } else {
-      $('#project_wrapper').removeAttr('style');
+      $('#project_wrapper').hide();
+      $('#timeline').hide();
       PageValue.setGeneralPageValue(PageValue.Key.SCREEN_SIZE, {});
     }
     return this.updateCanvasSize();

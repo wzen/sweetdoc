@@ -1,5 +1,4 @@
 class Project
-
   # プロジェクト更新
   @updateProjectInfo = (info) ->
     projectName = info.projectName

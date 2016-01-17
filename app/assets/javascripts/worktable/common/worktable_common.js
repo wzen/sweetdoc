@@ -451,7 +451,8 @@ WorktableCommon = (function() {
         OperationHistory.add(true);
         PageValue.updatePageCount();
         PageValue.updateForkCount();
-        return Paging.initPaging();
+        $('#project_wrapper').hide();
+        return $('#timeline').hide();
       };
     })(this));
   };
