@@ -19,6 +19,7 @@ $(function() {
     }
     CommonVar.initVarWhenLoadedView();
     CommonVar.initCommonVar();
+    Navbar.initWorktableNavbar();
     _callback = function() {
       OperationHistory.add(true);
       PageValue.updatePageCount();
@@ -33,6 +34,7 @@ $(function() {
       WorktableCommon.createAllInstanceAndDrawFromInstancePageValue(function() {
         WorktableCommon.createCommonEventInstancesIfNeeded();
         _callback.call(this);
+        Navbar.switchWorktableNavbarWhenProjectCreated(true);
         return window.initDone = true;
       });
       return Timeline.refreshAllTimeline();
@@ -40,7 +42,7 @@ $(function() {
       LocalStorage.clearWorktable();
       Timeline.refreshAllTimeline();
       _callback.call(this);
-      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
+      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
       return Common.initResize();
     }
   });

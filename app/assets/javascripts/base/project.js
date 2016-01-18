@@ -130,6 +130,7 @@ Project = (function() {
       return Project.create(projectName, width, height, function(data) {
         WorktableCommon.createCommonEventInstancesIfNeeded();
         Navbar.setLastUpdateTime(data.updated_at);
+        Navbar.switchWorktableNavbarWhenProjectCreated(true);
         window.initDone = true;
         return Common.hideModalView();
       });
@@ -149,6 +150,7 @@ Project = (function() {
         });
         $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
         window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
+        Navbar.switchWorktableNavbarWhenProjectCreated(true);
         window.initDone = true;
         return Common.hideModalView();
       });
@@ -396,7 +398,7 @@ Project = (function() {
               if (parseInt(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID)) === parseInt(deletedProjectId)) {
                 Common.hideModalView();
                 WorktableCommon.resetWorktable();
-                return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
+                return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
               } else {
                 return modalEmt.find('.am_list:first').empty().html(admin_html);
               }

@@ -27,11 +27,13 @@ Navbar = (function() {
         }
         if (window.confirm(I18n.t('message.dialog.change_project') + lastSaveTimeStr)) {
           WorktableCommon.resetWorktable();
-          return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
+          Navbar.switchWorktableNavbarWhenProjectCreated(false);
+          return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
         }
       } else {
         WorktableCommon.resetWorktable();
-        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal);
+        Navbar.switchWorktableNavbarWhenProjectCreated(false);
+        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
       }
     });
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', function() {
@@ -101,6 +103,26 @@ Navbar = (function() {
         return Sidebar.openConfigSidebar();
       }
     });
+  };
+
+  Navbar.switchWorktableNavbarWhenProjectCreated = function(flg) {
+    var root;
+    if (flg) {
+      root = $('#header_items_file_menu');
+      $(".menu-save-li", root).show();
+      $('#header_items_select_menu').show();
+      $('#header_items_motion_check').show();
+      $('#menu_sidebar_toggle').show();
+      $("#" + Constant.Paging.NAV_ROOT_ID).show();
+      return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).closest('li').show();
+    } else {
+      $(".menu-save-li", root).hide();
+      $('#header_items_select_menu').hide();
+      $('#header_items_motion_check').hide();
+      $('#menu_sidebar_toggle').hide();
+      $("#" + Constant.Paging.NAV_ROOT_ID).hide();
+      return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).closest('li').hide();
+    }
   };
 
   Navbar.initRunNavbar = function() {

@@ -962,3 +962,23 @@ div.cover_touch_overlay {
   width: 100%;
   height: 100%;
 }
+
+div#nav {
+  .menu-save-li {
+    display: none;
+  }
+  #header_items_select_menu, #header_items_motion_check {
+    display: none;
+  }
+  .navbar-right {
+    .last_update_time_li {
+      display: none;
+    }
+    #header-pageing-menu {
+      display: none;
+    }
+    #menu_sidebar_toggle_li {
+      display: none;
+    }
+  }
+}

@@ -23,7 +23,7 @@ en:
   hello: "Hello world"
   header_menu:
     file:
-      changeproject: "Change Project"
+      changeproject: "Create Project"
       adminproject: "Project Manager"
       file: "File"
       open: "Open"
@@ -119,8 +119,10 @@ en:
           error: ""
     project:
       error:
-        project_name: "Project name not inputed"
-        display_size: "Display size not inputed"
+        project_name: "Project name not inputed."
+        display_size: "Display size not inputed."
+        not_exist: "Created project is nothing."
+        get_error: "Error"
   common_action:
     background: "Background"
     screen: "Screen"

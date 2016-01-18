@@ -93,7 +93,22 @@ class Project < ActiveRecord::Base
                 list: list
             }
         )
+      else
+        admin_html = controller.render_to_string(
+            partial: 'project/admin_no_menu',
+            locals: {
+                list: list
+            }
+        )
       end
+    end
+    if admin_html.length == 0
+      admin_html = controller.render_to_string(
+          partial: 'project/admin_no_menu',
+          locals: {
+              list: list
+          }
+      )
     end
     return result_success, admin_html
   end

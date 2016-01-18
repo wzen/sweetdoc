@@ -23,6 +23,8 @@ $ ->
     # 変数初期化
     CommonVar.initVarWhenLoadedView()
     CommonVar.initCommonVar()
+    # ナビバーイベント
+    Navbar.initWorktableNavbar()
 
     _callback = ->
       # 履歴に画面初期時を状態を保存
@@ -47,6 +49,8 @@ $ ->
         # 共通イベントのインスタンス作成
         WorktableCommon.createCommonEventInstancesIfNeeded()
         _callback.call(@)
+        # ナビバーをプロジェクト作成後状態に
+        Navbar.switchWorktableNavbarWhenProjectCreated(true)
         # 初期化終了
         window.initDone = true
       )
@@ -57,6 +61,6 @@ $ ->
       Timeline.refreshAllTimeline()
       _callback.call(@)
       # プロジェクトモーダル表示
-      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
+      Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
       # モーダル用にリサイズイベントを設定
       Common.initResize()

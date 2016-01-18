@@ -23,12 +23,16 @@ class Navbar
           lastSaveTimeStr = '\n' + I18n.t('message.dialog.last_savetime') + lastSaveTime
         if window.confirm(I18n.t('message.dialog.change_project') + lastSaveTimeStr)
           WorktableCommon.resetWorktable()
+          # ナビバーをプロジェクト作成前状態に
+          Navbar.switchWorktableNavbarWhenProjectCreated(false)
           # 初期モーダル表示
-          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
+          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
       else
         WorktableCommon.resetWorktable()
+        # ナビバーをプロジェクト作成前状態に
+        Navbar.switchWorktableNavbarWhenProjectCreated(false)
         # 初期モーダル表示
-        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
+        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
     )
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', ->
       # モーダル表示
@@ -90,6 +94,24 @@ class Navbar
         Sidebar.openConfigSidebar()
     )
 
+  @switchWorktableNavbarWhenProjectCreated = (flg) ->
+    if flg
+      root = $('#header_items_file_menu')
+      # プロジェクト作成後のナビバーに表示変更
+      $(".menu-save-li", root).show()
+      $('#header_items_select_menu').show()
+      $('#header_items_motion_check').show()
+      $('#menu_sidebar_toggle').show()
+      $("##{Constant.Paging.NAV_ROOT_ID}").show()
+      $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").closest('li').show()
+    else
+      # プロジェクト作成前のナビバーに表示変更
+      $(".menu-save-li", root).hide()
+      $('#header_items_select_menu').hide()
+      $('#header_items_motion_check').hide()
+      $('#menu_sidebar_toggle').hide()
+      $("##{Constant.Paging.NAV_ROOT_ID}").hide()
+      $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").closest('li').hide()
   # Runナビバー初期化
   @initRunNavbar = ->
     navEmt = $('#nav')

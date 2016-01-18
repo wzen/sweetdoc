@@ -2,7 +2,7 @@ ja:
   hello: "こんにちは"
   header_menu:
     file:
-      changeproject: "プロジェクト切替"
+      changeproject: "プロジェクト作成・読み込み"
       adminproject: "プロジェクト管理"
       file: "ファイル"
       open: "開く"
@@ -99,6 +99,8 @@ ja:
       error:
         project_name: "プロジェクト名が入力されていません。"
         display_size: "画面サイズが入力されていません。"
+        not_exist: "作成済みのプロジェクトは存在しません。"
+        get_error: "情報取得エラー"
   common_action:
     background: "背景"
     screen: "画面表示"

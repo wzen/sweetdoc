@@ -118,6 +118,8 @@ class Project
         WorktableCommon.createCommonEventInstancesIfNeeded()
         # 更新日時設定
         Navbar.setLastUpdateTime(data.updated_at)
+        # ナビバーをプロジェクト作成後状態に
+        Navbar.switchWorktableNavbarWhenProjectCreated(true)
         # 初期化終了
         window.initDone = true
         # モーダルを削除
@@ -139,6 +141,8 @@ class Project
         $('#pages .section:first').css({'backgroundColor': Constant.DEFAULT_BACKGROUNDCOLOR, 'z-index': Common.plusPagingZindex(0, PageValue.getPageNum())})
         $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
         window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1))
+        # ナビバーをプロジェクト作成後状態に
+        Navbar.switchWorktableNavbarWhenProjectCreated(true)
         # 初期化終了
         window.initDone = true
         # モーダルを削除
@@ -366,7 +370,7 @@ class Project
               Common.hideModalView()
               WorktableCommon.resetWorktable()
               # 初期モーダル表示
-              Common.showModalView(Constant.ModalViewType.INIT_PROJECT, false, Project.initProjectModal)
+              Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
             else
               # 削除完了 -> リスト再表示
               modalEmt.find('.am_list:first').empty().html(admin_html)
