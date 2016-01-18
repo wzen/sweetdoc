@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
   before_filter :init_const
   before_filter :configure_permitted_parameters, if: :devise_controller?
+  after_filter :store_location
 
   def init_const
     # Constantの設定
@@ -78,6 +79,30 @@ class ApplicationController < ActionController::Base
   def destroy_current_user
     @_current_user = nil
     session[:user_id] = nil
+  end
+
+  def store_location
+    return unless request.get?
+    if (request.path != "/user/sign_in" &&
+        request.path != "/user/sign_in?" &&
+        request.path != "/user/sign_up" &&
+        request.path != "/user/password/new" &&
+        request.path != "/user/password/edit" &&
+        request.path != "/user/confirmation" &&
+        request.path != "/user/sign_out" &&
+        !request.xhr?) # don't store ajax calls
+      session[:previous_url] = request.fullpath
+    end
+  end
+
+  #ログイン後のリダイレクトをログイン前のページにする
+  def after_sign_in_path_for(resource)
+    session[:previous_url] || root_path
+  end
+
+  #ログアウト後のリダイレクトをログアウト前のページにする
+  def after_sign_out_path_for(resource)
+    session[:previous_url] || root_path
   end
 
   def set_locale
