@@ -119,13 +119,13 @@ ja:
     logout: 'ログアウト'
     continue_as_guest: 'ゲストのまま継続'
   modal:
-    project_name: "プロジェクト名"
-    display_size: "表示サイズ"
+    project_name: "名前"
+    display_size: "サイズ"
     width: "幅"
     height: "高さ"
     project_create: "プロジェクト作成"
     project_select: "プロジェクト選択"
-    fit: "現在の画面サイズに合わせる"
+    fit: "画面サイズに合わせる"
     input: "入力"
     select_project: "プロジェクト選択"
     button:

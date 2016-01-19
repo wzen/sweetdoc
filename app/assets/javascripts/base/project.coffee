@@ -38,7 +38,7 @@ class Project
     )
 
     # ウィンドウサイズ
-    $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} X #{$('#screen_wrapper').height()}")
+    $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} x #{$('#screen_wrapper').height()}")
 
     # 作成済みプロジェクト一覧取得
     Project.load_data_order_last_updated((data) ->

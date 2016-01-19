@@ -84,6 +84,7 @@
     .content {
       > div {
         display: table;
+        width: 100%;
         > div {
           display: table-cell;
           vertical-align: top;
@@ -99,13 +100,16 @@
       font-weight:bold;
 
     }
+    .label_div {
+      width: 20%;
+    }
 
     input {
       line-height:18px;
     }
 
     input[type=text] {
-      width:300px;
+      width:100%;
       margin-bottom:8px;
       padding:2px 5px;
       -webkit-border-radius: 5px;
