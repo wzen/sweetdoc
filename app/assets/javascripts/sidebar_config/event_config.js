@@ -349,7 +349,7 @@ EventConfig = (function() {
       selectOptions = '';
       for (i = j = 1, ref = forkCount; 1 <= ref ? j <= ref : j >= ref; i = 1 <= ref ? ++j : --j) {
         if (i !== forkNum) {
-          name = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', i);
+          name = (I18n.t('header_menu.page.fork')) + " " + i;
           value = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', i);
           selectOptions += "<option value='" + value + "'>" + name + "</option>";
         }

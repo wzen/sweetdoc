@@ -9,27 +9,26 @@ Paging = (function() {
   };
 
   Paging.createPageSelectMenu = function() {
-    var active, divider, forkCount, forkNum, i, j, k, l, menu, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
+    var active, divider, forkCount, forkNum, i, j, k, l, name, navForkClass, navForkName, navPageClass, navPageName, newForkMenu, newPageMenu, nowMenuName, pageCount, pageMenu, ref, ref1, root, selectRoot, self, subActive, subMenu;
     self = this;
     pageCount = PageValue.getPageCount();
     root = $("#" + Constant.Paging.NAV_ROOT_ID);
     selectRoot = $("." + Constant.Paging.NAV_SELECT_ROOT_CLASS, root);
-    menu = "<li><a class='" + Constant.Paging.NAV_MENU_PAGE_CLASS + " menu-item'>" + Constant.Paging.NAV_MENU_PAGE_NAME + "</a></li>";
     divider = "<li class='divider'></li>";
-    newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>Add page</a></li>";
-    newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>Add fork</a></li>";
+    newPageMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDPAGE_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_page')) + "</a></li>";
+    newForkMenu = "<li><a class='" + Constant.Paging.NAV_MENU_ADDFORK_CLASS + " menu-item'>" + (I18n.t('header_menu.page.add_fork')) + "</a></li>";
     pageMenu = '';
     for (i = k = 1, ref = pageCount; 1 <= ref ? k <= ref : k >= ref; i = 1 <= ref ? ++k : --k) {
       navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i);
-      navPageName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', i);
+      navPageName = (I18n.t('header_menu.page.page')) + " " + i;
       forkCount = PageValue.getForkCount(i);
       forkNum = PageValue.getForkNum(i);
       active = forkNum === PageValue.Key.EF_MASTER_FORKNUM ? 'class="active"' : '';
-      subMenu = "<li " + active + "><a class='" + navPageClass + " menu-item '>Master</a></li>";
+      subMenu = "<li " + active + "><a class='" + navPageClass + " menu-item '>" + (I18n.t('header_menu.page.master')) + "</a></li>";
       if (forkCount > 0) {
         for (j = l = 1, ref1 = forkCount; 1 <= ref1 ? l <= ref1 : l >= ref1; j = 1 <= ref1 ? ++l : --l) {
           navForkClass = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', j);
-          navForkName = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', j);
+          navForkName = (I18n.t('header_menu.page.fork')) + " " + j;
           subActive = j === forkNum ? 'class="active"' : '';
           subMenu += "<li " + subActive + "><a class='" + navPageClass + " " + navForkClass + " menu-item '>" + navForkName + "</a></li>";
         }
@@ -40,9 +39,10 @@ Paging = (function() {
     pageMenu += divider + newPageMenu;
     selectRoot.children().remove();
     $(pageMenu).appendTo(selectRoot);
-    nowMenuName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', PageValue.getPageNum());
+    nowMenuName = (I18n.t('header_menu.page.page')) + " " + (PageValue.getPageNum());
     if (PageValue.getForkNum() > 0) {
-      nowMenuName += " - (" + (Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', PageValue.getForkNum())) + ")";
+      name = (I18n.t('header_menu.page.fork')) + " " + (PageValue.getForkNum());
+      nowMenuName += " - (" + name + ")";
     }
     $("." + Constant.Paging.NAV_SELECTED_CLASS, root).html(nowMenuName);
     selectRoot.find(".menu-item").off('click');

@@ -13,24 +13,23 @@ class Paging
     selectRoot = $(".#{Constant.Paging.NAV_SELECT_ROOT_CLASS}", root)
 
     # ページ選択メニュー
-    menu = "<li><a class='#{Constant.Paging.NAV_MENU_PAGE_CLASS} menu-item'>#{Constant.Paging.NAV_MENU_PAGE_NAME}</a></li>"
     divider = "<li class='divider'></li>"
-    newPageMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS} menu-item'>Add page</a></li>"
-    newForkMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDFORK_CLASS} menu-item'>Add fork</a></li>"
+    newPageMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDPAGE_CLASS} menu-item'>#{I18n.t('header_menu.page.add_page')}</a></li>"
+    newForkMenu = "<li><a class='#{Constant.Paging.NAV_MENU_ADDFORK_CLASS} menu-item'>#{I18n.t('header_menu.page.add_fork')}</a></li>"
     pageMenu = ''
     for i in [1..pageCount]
       navPageClass = Constant.Paging.NAV_MENU_PAGE_CLASS.replace('@pagenum', i)
-      navPageName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', i)
+      navPageName = "#{I18n.t('header_menu.page.page')} #{i}"
 
       # サブ選択メニュー
       forkCount = PageValue.getForkCount(i)
       forkNum = PageValue.getForkNum(i)
       active = if forkNum == PageValue.Key.EF_MASTER_FORKNUM then 'class="active"' else ''
-      subMenu = "<li #{active}><a class='#{navPageClass} menu-item '>Master</a></li>"
+      subMenu = "<li #{active}><a class='#{navPageClass} menu-item '>#{I18n.t('header_menu.page.master')}</a></li>"
       if forkCount > 0
         for j in [1..forkCount]
           navForkClass = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', j)
-          navForkName = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', j)
+          navForkName = "#{I18n.t('header_menu.page.fork')} #{j}"
           subActive = if j == forkNum then 'class="active"' else ''
           subMenu += """
             <li #{subActive}><a class='#{navPageClass} #{navForkClass} menu-item '>#{navForkName}</a></li>
@@ -50,9 +49,10 @@ class Paging
     $(pageMenu).appendTo(selectRoot)
 
     # 現在のページ
-    nowMenuName = Constant.Paging.NAV_MENU_PAGE_NAME.replace('@pagenum', PageValue.getPageNum())
+    nowMenuName = "#{I18n.t('header_menu.page.page')} #{PageValue.getPageNum()}"
     if PageValue.getForkNum() > 0
-      nowMenuName += " - (#{Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', PageValue.getForkNum())})"
+      name = "#{I18n.t('header_menu.page.fork')} #{PageValue.getForkNum()}"
+      nowMenuName += " - (#{name})"
     $(".#{Constant.Paging.NAV_SELECTED_CLASS}", root).html(nowMenuName)
 
     # イベント設定

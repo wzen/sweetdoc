@@ -193,10 +193,6 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       Paging.NAV_SELECT_ROOT_CLASS = constant.Paging.NAV_SELECT_ROOT_CLASS;
 
-      Paging.NAV_MENU_PAGE_NAME = 'Page @pagenum';
-
-      Paging.NAV_MENU_FORK_NAME = 'Fork @forknum';
-
       Paging.NAV_MENU_PAGE_CLASS = 'paging-@pagenum';
 
       Paging.NAV_MENU_FORK_CLASS = 'fork-@forknum';

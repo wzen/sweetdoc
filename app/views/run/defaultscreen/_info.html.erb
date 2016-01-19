@@ -14,7 +14,7 @@
 
     <% if show_page_num %>
         <div class="page">
-          <span>Page:</span>
+          <span><%= I18n.t('contents_info.page') %>:</span>
           <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_NUM_CLASSNAME %>"></span>
           <span>/</span>
           <span class="<%= Const::Run::AttributeName::CONTENTS_PAGE_MAX_CLASSNAME %>"><%= @page_max %></span>
@@ -23,11 +23,11 @@
 
     <% if show_chapter_num %>
         <div class="fork">
-          <span>Fork:</span>
+          <span><%= I18n.t('contents_info.fork') %>:</span>
           <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
         </div>
         <div class="chapter">
-          <span>Chapter:</span>
+          <span><%= I18n.t('contents_info.chapter') %>:</span>
           <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
           <span>/</span>
           <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>

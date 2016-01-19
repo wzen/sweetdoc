@@ -125,8 +125,6 @@ if gon?
       @NAV_ROOT_ID = constant.Paging.NAV_ROOT_ID
       @NAV_SELECTED_CLASS = constant.Paging.NAV_SELECTED_CLASS
       @NAV_SELECT_ROOT_CLASS = constant.Paging.NAV_SELECT_ROOT_CLASS
-      @NAV_MENU_PAGE_NAME = 'Page @pagenum'
-      @NAV_MENU_FORK_NAME = 'Fork @forknum'
       @NAV_MENU_PAGE_CLASS = 'paging-@pagenum'
       @NAV_MENU_FORK_CLASS = 'fork-@forknum'
       @NAV_MENU_ADDPAGE_CLASS = 'paging-new'

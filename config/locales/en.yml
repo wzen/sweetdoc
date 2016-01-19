@@ -47,6 +47,12 @@ en:
       title: "Motion Check"
       newtab: "New Tab"
       newwindow: "Run with Window"
+    page:
+      page: 'Page'
+      add_page: 'Add page'
+      fork: 'Fork'
+      add_fork: 'Add fork'
+      master: 'Base'
     etc:
       etc: "Etc"
       language: "Language"
@@ -184,3 +190,7 @@ en:
       create: "Create"
       open: "Open"
       back: "Back to gallery"
+  contents_info:
+    page: 'Page'
+    fork: 'Fork'
+    chapter: 'Chapter'

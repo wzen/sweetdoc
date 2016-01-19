@@ -332,7 +332,7 @@ class EventConfig
       selectOptions = ''
       for i in [1..forkCount]
         if i != forkNum # 現在のフォークは選択肢に含めない
-          name = Constant.Paging.NAV_MENU_FORK_NAME.replace('@forknum', i)
+          name = "#{I18n.t('header_menu.page.fork')} #{i}"
           value = Constant.Paging.NAV_MENU_FORK_CLASS.replace('@forknum', i)
           selectOptions += "<option value='#{value}'>#{name}</option>"
 
