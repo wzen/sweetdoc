@@ -403,9 +403,11 @@ EventConfig = (function() {
   EventConfig.switchPreviewButton = function(enabled) {
     if (enabled) {
       $("#event-config").find('.event .button_div .button_preview_wrapper').show();
+      $("#event-config").find('.event .button_div .apply_wrapper').show();
       return $("#event-config").find('.event .button_div .button_stop_preview_wrapper').hide();
     } else {
       $("#event-config").find('.event .button_div .button_preview_wrapper').hide();
+      $("#event-config").find('.event .button_div .apply_wrapper').hide();
       return $("#event-config").find('.event .button_div .button_stop_preview_wrapper').show();
     }
   };
@@ -727,6 +729,7 @@ EventConfig = (function() {
           config = new _this(emt, teNum, distId);
           $('.update_event_after', emt).removeAttr('checked');
           $('.button_preview_wrapper', emt).show();
+          $('.apply_wrapper', emt).show();
           $('.button_stop_preview_wrapper', emt).hide();
           if (WorktableCommon.isConnectedEventProgressRoute(teNum)) {
             $('.update_event_after', emt).removeAttr('disabled');
