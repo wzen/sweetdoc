@@ -727,6 +727,34 @@ div#event-config {
       }
     }
 
+    .event-config-headliner {
+      margin-top: 10px;
+    }
+
+    .item_position_wrapper, .item_diff_wrapper {
+      display: inline-block;
+      width: 40%;
+    }
+    .item_position_wrapper {
+      input {
+        width: 60%;
+      }
+    }
+    .item_diff_wrapper {
+      input {
+        width: 40%;
+      }
+    }
+
+    .scroll_point_start_wrapper, .scroll_point_end_wrapper {
+      display: inline-block;
+      width: 40%;
+    }
+
+    .scroll_point_start, .scroll_point_end {
+      width: 60%;
+    }
+
     .action_forms {
       .radio {
         .scroll {
