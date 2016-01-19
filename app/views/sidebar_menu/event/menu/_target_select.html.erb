@@ -1,11 +1,11 @@
 <div class="config">
   <div class="configBox">
-    <div class="event-config-headliner">Target</div>
+    <div class="event-config-headliner"><%= I18n.t('config.event.action.target_select.target_select') %></div>
     <div class="forms">
       <!-- イベント対象一覧 -->
       <!-- ワークスペース読み込み時に設定 -->
       <select class="form-control te_item_select" name="te_item_select">
-        <option value="">(Select)</option>
+        <option value=""><%= I18n.t('config.event.action.target_select.default') %></option>
       </select>
     </div>
   </div>

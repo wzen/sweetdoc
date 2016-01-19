@@ -64,6 +64,29 @@ ja:
       item: "アイテム"
     item_state:
       created_item_list: "作成アイテム一覧"
+    event:
+      action:
+        action : "アクション"
+        preview: "プレビュー"
+        stop_preview: "プレビュー停止"
+        keep_mag: "画面の表示倍率を保持"
+        apply: "適用"
+        common_state: "共通状態変更"
+        kick:
+          kick_type: "実行タイプ"
+          scroll: "スクロール"
+          click: "クリック"
+        item_common:
+          item_common: "アイテム状態変更"
+          position: "画面表示位置"
+          size: "アイテムサイズ"
+        sync_before: "イベント同時実行"
+        target_select:
+          target_select: "イベント対象"
+          default: "(未選択)"
+        display_state:
+          display_state: "表示状態"
+          applied_state: "画面をイベント適用後に変更"
   upload_confirm:
     title: "タイトル名"
     caption: "説明"
