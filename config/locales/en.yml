@@ -140,3 +140,17 @@ en:
     edit: 'Edit account'
     logout: 'Logout'
     continue_as_guest: 'Continue as guest'
+  modal:
+    project_name: "Project name"
+    display_size: "Display size"
+    width: "Width"
+    height: "Height"
+    project_create: "Create"
+    project_select: "Select"
+    fit: "Fit"
+    input: "Input"
+    select_project: "Select project"
+    button:
+      create: "Create"
+      open: "Open"
+      back: "Back to gallery"

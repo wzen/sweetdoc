@@ -3,16 +3,16 @@
         <div class="project_create_wrapper">
             <div>
                 <div style="display: inline-block">
-                    <label><input type="radio" name="project_create" value="select" checked>Select</label>
+                    <label><input type="radio" name="project_create" value="select" checked><%= I18n.t('modal.project_select') %></label>
                 </div>
                 <div style="display: inline-block">
-                    <label><input type="radio" name="project_create" value="new">Create</label>
+                    <label><input type="radio" name="project_create" value="new"><%= I18n.t('modal.project_create') %></label>
                 </div>
             </div>
         </div>
         <div class="display_project_new_wrapper">
             <div class="cell_label">
-                <label>Project name:</label>
+                <label><%= I18n.t('modal.project_name') %>:</label>
             </div>
             <div>
                 <input name="project_name" class="project_name" type="text" required="required"><br />
@@ -20,30 +20,30 @@
         </div>
         <div class="display_project_new_wrapper">
             <div>
-                <label>Display Size:</label>
+                <label><%= I18n.t('modal.display_size') %>:</label>
             </div>
             <div>
                 <div class="display_size_wrapper">
                     <label>
-                        <input type="radio" name="project_size" value="default" checked>Fit (<span class="default_window_size"></span>)
+                        <input type="radio" name="project_size" value="default" checked><%= I18n.t('modal.fit') %> (<span class="default_window_size"></span>)
                     </label>
                     <label>
-                        <input type="radio" name="project_size" value="input">Input
+                        <input type="radio" name="project_size" value="input"><%= I18n.t('modal.input') %>
                     </label>
                 </div>
                 <div class="display_size_input_wrapper" style="display: none">
                     <div style="display: inline-block">
-                        Width:<input class="display_size_input_width" type="number" value="" maxlength="4" style="max-width: 50px">
+                        <%= I18n.t('modal.width') %>:<input class="display_size_input_width" type="number" value="" maxlength="4" style="max-width: 50px">
                     </div>
                     <div style="display: inline-block">
-                        Height:<input class="display_size_input_height" type="number" value="" maxlength="4" style="max-width: 50px">
+                      <%= I18n.t('modal.height') %>:<input class="display_size_input_height" type="number" value="" maxlength="4" style="max-width: 50px">
                     </div>
                 </div>
             </div>
         </div>
         <div class="display_project_select_wrapper">
             <div class="cell_label">
-                <label>Select project:</label>
+                <label><%= I18n.t('modal.select_project') %>:</label>
             </div>
             <div style="vertical-align: middle">
                 <select class="project_select"></select>
@@ -51,9 +51,9 @@
         </div>
         <div class="button_wrapper">
             <div>
-                <span class="new"><button class="create_button width90per" value="Create">Create</button></span>
-                <span class="select"><button class="open_button width90per" value="Open">Open</button></span>
-                <button class="back_button width90per" value="Back to MainPage">Back to MainPage</button>
+                <span class="new"><button class="create_button width90per" value="Create"><%= I18n.t('modal.button.create') %></button></span>
+                <span class="select"><button class="open_button width90per" value="Open"><%= I18n.t('modal.button.open') %></button></span>
+                <button class="back_button width90per" value="Back to MainPage"><%= I18n.t('modal.button.back') %></button>
             </div>
         </div>
       <div class="error_wrapper" style="display: none">
