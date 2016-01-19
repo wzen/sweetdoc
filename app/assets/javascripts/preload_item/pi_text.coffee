@@ -20,7 +20,7 @@ class PreloadItemText extends CanvasItemBase
       @RIGHT = constant.PreloadItemText.WordAlign.RIGHT
     class @ShowAnimationType
       @POPUP = constant.PreloadItemText.ShowAnimationType.POPUP
-      @BLUR = constant.PreloadItemText.ShowAnimationType.BLUR
+      @FADE = constant.PreloadItemText.ShowAnimationType.FADE
 
   @actionProperties =
   {
@@ -37,6 +37,9 @@ class PreloadItemText extends CanvasItemBase
       isDrawHorizontal: {
         name: 'Horizontal'
         type: 'boolean'
+        ja: {
+          name: '横書き'
+        }
       }
       showBalloon: {
         name: 'Show Balloon'
@@ -78,6 +81,9 @@ class PreloadItemText extends CanvasItemBase
                 {name: 'Cloud', value: @BalloonType.CLOUD}
                 {name: 'FreeHand', value: @BalloonType.FREE}
               ]
+              ja: {
+                name: '吹き出しのタイプ'
+              }
               openChildrenValue: {
                 one: @BalloonType.RECT
               }
@@ -112,6 +118,9 @@ class PreloadItemText extends CanvasItemBase
         type: 'boolean'
         default: false
         openChildrenValue: {one: true}
+        ja: {
+          name: 'フォントサイズ'
+        }
         children: {
           one: {
             fixedFontSize: {
@@ -132,6 +141,9 @@ class PreloadItemText extends CanvasItemBase
           {name: 'center', value: @WordAlign.CENTER}
           {name: 'right', value: @WordAlign.RIGHT}
         ]
+        ja: {
+          name: '文字寄せ'
+        }
       }
     }
     methods : {
@@ -160,7 +172,7 @@ class PreloadItemText extends CanvasItemBase
                   default: @ShowAnimationType.POPUP
                   options: [
                     {name: 'Popup', value: @ShowAnimationType.POPUP}
-                    {name: 'Blur', value: @ShowAnimationType.BLUR}
+                    {name: 'Fade', value: @ShowAnimationType.FADE}
                   ]
                 }
               }
@@ -195,7 +207,7 @@ class PreloadItemText extends CanvasItemBase
                   default: @ShowAnimationType.POPUP
                   options: [
                     {name: 'Popup', value: @ShowAnimationType.POPUP}
-                    {name: 'Blur', value: @ShowAnimationType.BLUR}
+                    {name: 'Blur', value: @ShowAnimationType.FADE}
                   ]
                 }
               }
@@ -442,7 +454,7 @@ class PreloadItemText extends CanvasItemBase
         width = @_step2.w + (@itemSize.w - @_step2.w) * progressPercent
         height = @_step2.h + (@itemSize.h - @_step2.h) * progressPercent
       fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
-    else if @showAnimationType == @constructor.ShowAnimationType.BLUR
+    else if @showAnimationType == @constructor.ShowAnimationType.FADE
       timemax = 30
       step1 = 1
       fontSize = @fontSize
@@ -516,7 +528,7 @@ class PreloadItemText extends CanvasItemBase
         width = @_step2.w - @_step2.w * progressPercent
         height = @_step2.h - @_step2.h * progressPercent
       fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
-    else if @showAnimationType == @constructor.ShowAnimationType.BLUR
+    else if @showAnimationType == @constructor.ShowAnimationType.FADE
       timemax = 30
       step1 = 1
       fontSize = @fontSize

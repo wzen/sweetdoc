@@ -512,7 +512,7 @@ class Const
     end
     class ShowAnimationType
       POPUP = 1
-      BLUR = 2
+      FADE = 2
     end
   end
 

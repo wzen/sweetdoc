@@ -55,7 +55,7 @@ PreloadItemText = (function(superClass) {
 
       ShowAnimationType.POPUP = constant.PreloadItemText.ShowAnimationType.POPUP;
 
-      ShowAnimationType.BLUR = constant.PreloadItemText.ShowAnimationType.BLUR;
+      ShowAnimationType.FADE = constant.PreloadItemText.ShowAnimationType.FADE;
 
       return ShowAnimationType;
 
@@ -79,7 +79,10 @@ PreloadItemText = (function(superClass) {
       },
       isDrawHorizontal: {
         name: 'Horizontal',
-        type: 'boolean'
+        type: 'boolean',
+        ja: {
+          name: '横書き'
+        }
       },
       showBalloon: {
         name: 'Show Balloon',
@@ -146,6 +149,9 @@ PreloadItemText = (function(superClass) {
                   value: PreloadItemText.BalloonType.FREE
                 }
               ],
+              ja: {
+                name: '吹き出しのタイプ'
+              },
               openChildrenValue: {
                 one: PreloadItemText.BalloonType.RECT
               },
@@ -182,6 +188,9 @@ PreloadItemText = (function(superClass) {
         openChildrenValue: {
           one: true
         },
+        ja: {
+          name: 'フォントサイズ'
+        },
         children: {
           one: {
             fixedFontSize: {
@@ -208,7 +217,10 @@ PreloadItemText = (function(superClass) {
             name: 'right',
             value: PreloadItemText.WordAlign.RIGHT
           }
-        ]
+        ],
+        ja: {
+          name: '文字寄せ'
+        }
       }
     },
     methods: {
@@ -242,8 +254,8 @@ PreloadItemText = (function(superClass) {
                       name: 'Popup',
                       value: PreloadItemText.ShowAnimationType.POPUP
                     }, {
-                      name: 'Blur',
-                      value: PreloadItemText.ShowAnimationType.BLUR
+                      name: 'Fade',
+                      value: PreloadItemText.ShowAnimationType.FADE
                     }
                   ]
                 }
@@ -285,7 +297,7 @@ PreloadItemText = (function(superClass) {
                       value: PreloadItemText.ShowAnimationType.POPUP
                     }, {
                       name: 'Blur',
-                      value: PreloadItemText.ShowAnimationType.BLUR
+                      value: PreloadItemText.ShowAnimationType.FADE
                     }
                   ]
                 }
@@ -590,7 +602,7 @@ PreloadItemText = (function(superClass) {
         height = this._step2.h + (this.itemSize.h - this._step2.h) * progressPercent;
       }
       fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
-    } else if (this.showAnimationType === this.constructor.ShowAnimationType.BLUR) {
+    } else if (this.showAnimationType === this.constructor.ShowAnimationType.FADE) {
       timemax = 30;
       step1 = 1;
       fontSize = this.fontSize;
@@ -693,7 +705,7 @@ PreloadItemText = (function(superClass) {
         height = this._step2.h - this._step2.h * progressPercent;
       }
       fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
-    } else if (this.showAnimationType === this.constructor.ShowAnimationType.BLUR) {
+    } else if (this.showAnimationType === this.constructor.ShowAnimationType.FADE) {
       timemax = 30;
       step1 = 1;
       fontSize = this.fontSize;
