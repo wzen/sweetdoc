@@ -46,7 +46,7 @@ Sidebar = (function() {
             WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true);
           }
         }
-        return $(window.drawingCanvas).off('click.sidebar_close').on('click.sidebar_close', (function(_this) {
+        return $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (function(_this) {
           return function(e) {
             if (window.eventPointingMode === Constant.EventInputPointingMode.NOT_SELECT) {
               Sidebar.closeSidebar();

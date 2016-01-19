@@ -29,7 +29,7 @@ class Sidebar
             WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true)
 
         # 閉じるイベント設定
-        $(window.drawingCanvas).off('click.sidebar_close').on('click.sidebar_close', (e) =>
+        $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (e) =>
           # イベント用選択モードの場合は閉じない
           if window.eventPointingMode == Constant.EventInputPointingMode.NOT_SELECT
             Sidebar.closeSidebar()

@@ -89,27 +89,34 @@ en:
       created_item_list: "Created item's list"
     event:
       action:
-        action : "Action"
+        action: "Action"
         preview: "Preview"
         stop_preview: "Stop previewing"
         keep_mag: "Keep display's magnification"
         apply: "Apply"
         common_state: "Change common state"
-        kick:
-          kick_type: "Action kick type"
-          scroll: "Scroll"
-          click: "Click"
-        item_common:
-          item_common: "Change item state"
-          position: "Display's position"
-          size: "Item Size"
-        sync_before: "Sync with before"
-        target_select:
-          target_select: "Select event target"
-          default: "(Select)"
-        display_state:
-          display_state: "Display state"
-          applied_state: "Update display into events applied"
+      kick:
+        kick_type: "Action kick type"
+        scroll: "Scroll"
+        click: "Click"
+        scroll_point: 'Scroll value'
+        scroll_direction: 'Scroll direction'
+        click_duration: 'Click duration'
+        fork: 'Event fork'
+      item_common:
+        item_common: "Change item state"
+        position: "Display's position"
+        size: "Item Size"
+      item_state:
+        item_state: 'Item state'
+        focus: 'Focus'
+      sync_before: "Sync with before"
+      target_select:
+        target_select: "Select event target"
+        default: "(Select)"
+      display_state:
+        display_state: "Display state"
+        applied_state: "Update display into events applied"
   upload_confirm:
     title: "Title name"
     caption: "Caption"
