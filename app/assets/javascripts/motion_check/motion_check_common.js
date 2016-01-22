@@ -10,39 +10,34 @@ MotionCheckCommon = (function() {
       newWindow = false;
     }
     _operation = function() {
-      var h, left, navbarHeight, size, target, top;
-      h = PageValue.getEventPageValue(PageValue.Key.E_SUB_ROOT);
-      if ((h != null) && Object.keys(h).length > 0) {
-        LocalStorage.clearRun();
-        target = '';
-        if (newWindow) {
-          size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
-          navbarHeight = $("#" + Navbar.NAVBAR_ROOT).outerHeight(true);
-          left = Number((window.screen.width - size.width) / 2);
-          top = Number((window.screen.height - (size.height + navbarHeight)) / 2);
-          target = "_runwindow";
-          window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + (size.height + navbarHeight) + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
-          document.run_form.action = '/motion_check/new_window';
-        } else {
-          target = "_runtab";
-          window.open("about:blank", target);
-          document.run_form.action = '/motion_check';
-        }
-        document.run_form.target = target;
-        if (window.isWorkTable) {
-          return ServerStorage.save(function(data) {
-            if (data.resultSuccess) {
-              PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id);
-              return document.run_form.submit();
-            } else {
-              return console.log('ServerStorage save error');
-            }
-          });
-        } else {
-          return document.run_form.submit();
-        }
+      var left, navbarHeight, size, target, top;
+      LocalStorage.clearRun();
+      target = '';
+      if (newWindow) {
+        size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+        navbarHeight = $("#" + Navbar.NAVBAR_ROOT).outerHeight(true);
+        left = Number((window.screen.width - size.width) / 2);
+        top = Number((window.screen.height - (size.height + navbarHeight)) / 2);
+        target = "_runwindow";
+        window.open("about:blank", target, "top=" + top + ",left=" + left + ",width=" + size.width + ",height=" + (size.height + navbarHeight) + ",menubar=no,toolbar=no,location=no,status=no,resizable=no,scrollbars=no");
+        document.run_form.action = '/motion_check/new_window';
       } else {
-        return Message.showWarn('No event');
+        target = "_runtab";
+        window.open("about:blank", target);
+        document.run_form.action = '/motion_check';
+      }
+      document.run_form.target = target;
+      if (window.isWorkTable) {
+        return ServerStorage.save(function(data) {
+          if (data.resultSuccess) {
+            PageValue.setGeneralPageValue(PageValue.Key.RUNNING_USER_PAGEVALUE_ID, data.updated_user_pagevalue_id);
+            return document.run_form.submit();
+          } else {
+            return console.log('ServerStorage save error');
+          }
+        });
+      } else {
+        return document.run_form.submit();
       }
     };
     if (window.isWorkTable) {

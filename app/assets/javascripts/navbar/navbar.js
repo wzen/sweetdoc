@@ -114,6 +114,7 @@ Navbar = (function() {
       $('#header_items_motion_check').show();
       $('#menu_sidebar_toggle').show();
       $("#" + Constant.Paging.NAV_ROOT_ID).show();
+      $('#menu_sidebar_toggle_li').show();
       return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).closest('li').show();
     } else {
       $(".menu-save-li", root).hide();
@@ -121,6 +122,7 @@ Navbar = (function() {
       $('#header_items_motion_check').hide();
       $('#menu_sidebar_toggle').hide();
       $("#" + Constant.Paging.NAV_ROOT_ID).hide();
+      $('#menu_sidebar_toggle_li').hide();
       return $("#" + this.NAVBAR_ROOT + " ." + this.LAST_UPDATE_TIME_CLASS).closest('li').hide();
     }
   };

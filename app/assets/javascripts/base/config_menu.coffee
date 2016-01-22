@@ -44,10 +44,12 @@ class ConfigMenu
               if errorCallback?
                 errorCallback(data)
               console.log('/config_menu/design_config server error')
+              Common.ajaxError(data)
           error: (data) ->
             if errorCallback?
               errorCallback(data)
             console.log('/config_menu/design_config ajax error')
+            Common.ajaxError(data)
         }
       )
 
@@ -96,10 +98,12 @@ class ConfigMenu
             if errorCallback?
               errorCallback(data)
             console.log('/config_menu/method_values_config server error')
+            Common.ajaxError(data)
         error: (data) ->
           if errorCallback?
             errorCallback(data)
           console.log('/config_menu/method_values_config ajax error')
+          Common.ajaxError(data)
       }
     )
 

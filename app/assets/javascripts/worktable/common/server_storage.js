@@ -101,16 +101,12 @@ ServerStorage = (function() {
             return window.workingAutoSave = false;
           } else {
             console.log('/page_value_state/save_state server error');
-            if (window.debug) {
-              return console.log(data.message);
-            }
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
           console.log('/page_value_state/save_state ajax error');
-          if (window.debug) {
-            return console.log(data.message);
-          }
+          return Common.ajaxError(data);
         }
       });
     }
@@ -170,16 +166,12 @@ ServerStorage = (function() {
           });
         } else {
           console.log('/page_value_state/load_state server error');
-          if (window.debug) {
-            return console.log(data.message);
-          }
+          return Common.ajaxError(data);
         }
       },
       error: function(data) {
         console.log('/page_value_state/load_state ajax error');
-        if (window.debug) {
-          return console.log(data.message);
-        }
+        return Common.ajaxError(data);
       }
     });
   };
@@ -209,6 +201,7 @@ ServerStorage = (function() {
           }
         } else {
           console.log('/page_value_state/user_pagevalue_list_sorted_update server error');
+          Common.ajaxError(data);
           if (errorCallback != null) {
             return errorCallback();
           }
@@ -216,6 +209,7 @@ ServerStorage = (function() {
       },
       error: function(data) {
         console.log('/page_value_state/user_pagevalue_list_sorted_update ajax error');
+        Common.ajaxError(data);
         if (errorCallback != null) {
           return errorCallback();
         }

@@ -93,6 +93,11 @@ class Common
   @isElement: (obj) ->
     return (typeof obj == "object") && (obj.length == 1) && obj.get? && (obj.get(0).nodeType ==1) && (typeof obj.get(0).style == "object") && (typeof obj.get(0).ownerDocument == "object")
 
+  @ajaxError: (responseData) ->
+    if responseData.status == '422'
+      # 再表示
+      location.reload(false)
+
   # requestAnimationFrameラッパー
   @requestAnimationFrame: ->
     originalWebkitRequestAnimationFrame = undefined
@@ -651,8 +656,10 @@ class Common
               else
                 _show.call(self)
                 console.log('/modal_view/show server error')
+                Common.ajaxError(data)
           error: (data) ->
             console.log('/modal_view/show ajax error')
+            Common.ajaxError(data)
         }
       )
     else
@@ -799,9 +806,11 @@ class Common
             _cb.call(@, data.indexes[dataIdx])
           else
             console.log('/item_js/index server error')
+            Common.ajaxError(data)
 
         error: (data) ->
           console.log('/item_js/index ajax error')
+          Common.ajaxError(data)
       }
     )
 

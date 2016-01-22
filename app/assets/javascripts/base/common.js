@@ -132,6 +132,12 @@ Common = (function() {
     return (typeof obj === "object") && (obj.length === 1) && (obj.get != null) && (obj.get(0).nodeType === 1) && (typeof obj.get(0).style === "object") && (typeof obj.get(0).ownerDocument === "object");
   };
 
+  Common.ajaxError = function(responseData) {
+    if (responseData.status === '422') {
+      return location.reload(false);
+    }
+  };
+
   Common.requestAnimationFrame = function() {
     var callback, geckoVersion, index, originalWebkitRequestAnimationFrame, self, userAgent, wrapper;
     originalWebkitRequestAnimationFrame = void 0;
@@ -803,12 +809,14 @@ Common = (function() {
               });
             } else {
               _show.call(self);
-              return console.log('/modal_view/show server error');
+              console.log('/modal_view/show server error');
+              return Common.ajaxError(data);
             }
           }
         },
         error: function(data) {
-          return console.log('/modal_view/show ajax error');
+          console.log('/modal_view/show ajax error');
+          return Common.ajaxError(data);
         }
       });
     } else {
@@ -1000,11 +1008,13 @@ Common = (function() {
           };
           return _cb.call(this, data.indexes[dataIdx]);
         } else {
-          return console.log('/item_js/index server error');
+          console.log('/item_js/index server error');
+          return Common.ajaxError(data);
         }
       },
       error: function(data) {
-        return console.log('/item_js/index ajax error');
+        console.log('/item_js/index ajax error');
+        return Common.ajaxError(data);
       }
     });
   };

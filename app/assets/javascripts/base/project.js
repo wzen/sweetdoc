@@ -181,14 +181,16 @@ Project = (function() {
           if (errorCallback != null) {
             errorCallback();
           }
-          return console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated server error');
+          console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated server error');
+          return Common.ajaxError(data);
         }
       },
       error: function(data) {
         if (errorCallback != null) {
           errorCallback();
         }
-        return console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated ajax error');
+        console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated ajax error');
+        return Common.ajaxError(data);
       }
     });
   };
@@ -216,11 +218,13 @@ Project = (function() {
             return callback(data);
           }
         } else {
-          return console.log('project/create server error');
+          console.log('project/create server error');
+          return Common.ajaxError(data);
         }
       },
       error: function(data) {
-        return console.log('project/create ajax error');
+        console.log('project/create ajax error');
+        return Common.ajaxError(data);
       }
     });
   };
@@ -247,11 +251,13 @@ Project = (function() {
           if (data.resultSuccess) {
             return callback(data.admin_html);
           } else {
-            return console.log('/project/admin_menu server error');
+            console.log('/project/admin_menu server error');
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
-          return console.log('/project/admin_menu ajax error');
+          console.log('/project/admin_menu ajax error');
+          return Common.ajaxError(data);
         }
       });
     };
@@ -268,11 +274,13 @@ Project = (function() {
           if (data.resultSuccess) {
             return callback(data.project);
           } else {
-            return console.log('/project/get_project_by_user_pagevalue_id server error');
+            console.log('/project/get_project_by_user_pagevalue_id server error');
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
-          return console.log('/project/get_project_by_user_pagevalue_id ajax error');
+          console.log('/project/get_project_by_user_pagevalue_id ajax error');
+          return Common.ajaxError(data);
         }
       });
     };
@@ -295,11 +303,13 @@ Project = (function() {
           if (data.resultSuccess) {
             return callback(data.updated_project_info, data.admin_html);
           } else {
-            return console.log('/project/remove server error');
+            console.log('/project/remove server error');
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
-          return console.log('/project/remove ajax error');
+          console.log('/project/remove ajax error');
+          return Common.ajaxError(data);
         }
       });
     };
@@ -316,11 +326,13 @@ Project = (function() {
           if (data.resultSuccess) {
             return callback(data.admin_html);
           } else {
-            return console.log('/project/remove server error');
+            console.log('/project/remove server error');
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
-          return console.log('/project/remove ajax error');
+          console.log('/project/remove ajax error');
+          return Common.ajaxError(data);
         }
       });
     };

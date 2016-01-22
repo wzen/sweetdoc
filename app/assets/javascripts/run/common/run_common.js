@@ -303,11 +303,13 @@ RunCommon = (function() {
             }
           });
         } else {
-          return console.log('/run/paging server error');
+          console.log('/run/paging server error');
+          return Common.ajaxError(data);
         }
       },
       error: function(data) {
-        return console.log('/run/paging ajax error');
+        console.log('/run/paging ajax error');
+        return Common.ajaxError(data);
       }
     });
   };
@@ -515,11 +517,13 @@ RunCommon = (function() {
               return callback();
             }
           } else {
-            return console.log('/run/save_gallery_footprint server error');
+            console.log('/run/save_gallery_footprint server error');
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
-          return console.log('/run/save_gallery_footprint ajax error');
+          console.log('/run/save_gallery_footprint ajax error');
+          return Common.ajaxError(data);
         }
       });
     }
@@ -551,11 +555,13 @@ RunCommon = (function() {
               return callback();
             }
           } else {
-            return console.log('/run/load_common_gallery_footprint server error');
+            console.log('/run/load_common_gallery_footprint server error');
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
-          return console.log('/run/load_common_gallery_footprint ajax error');
+          console.log('/run/load_common_gallery_footprint ajax error');
+          return Common.ajaxError(data);
         }
       });
     }

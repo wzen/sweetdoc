@@ -42,16 +42,15 @@ Sidebar = (function() {
           $('#sidebar').fadeIn('500', function() {
             return WorktableCommon.resizeMainContainerEvent();
           });
-          if (target !== null) {
-            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true);
-          }
         }
         return $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (function(_this) {
           return function(e) {
-            if (window.eventPointingMode === Constant.EventInputPointingMode.NOT_SELECT) {
-              Sidebar.closeSidebar();
-              WorktableCommon.putbackMode();
-              return $(window.drawingCanvas).off('click.sidebar_close');
+            if (Sidebar.isOpenedConfigSidebar()) {
+              if (window.eventPointingMode === Constant.EventInputPointingMode.NOT_SELECT) {
+                Sidebar.closeSidebar();
+                WorktableCommon.putbackMode();
+                return $(window.drawingCanvas).off('click.sidebar_close');
+              }
             }
           };
         })(this));

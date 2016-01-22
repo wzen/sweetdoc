@@ -27,11 +27,10 @@ class UploadItem extends UploadBase
             window.location.href = "/my_page/created_items"
           else
             console.log('gallery/save_state server error')
-            alert(data.message)
+            Common.ajaxError(data)
         error: (data) ->
           console.log('gallery/save_state ajax error')
-          # Error
-          alert(data.message)
+          Common.ajaxError(data)
       })
 
     # 確認ダイアログ

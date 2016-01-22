@@ -103,6 +103,7 @@ class Navbar
       $('#header_items_motion_check').show()
       $('#menu_sidebar_toggle').show()
       $("##{Constant.Paging.NAV_ROOT_ID}").show()
+      $('#menu_sidebar_toggle_li').show()
       $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").closest('li').show()
     else
       # プロジェクト作成前のナビバーに表示変更
@@ -111,6 +112,7 @@ class Navbar
       $('#header_items_motion_check').hide()
       $('#menu_sidebar_toggle').hide()
       $("##{Constant.Paging.NAV_ROOT_ID}").hide()
+      $('#menu_sidebar_toggle_li').hide()
       $("##{@NAVBAR_ROOT} .#{@LAST_UPDATE_TIME_CLASS}").closest('li').hide()
   # Runナビバー初期化
   @initRunNavbar = ->

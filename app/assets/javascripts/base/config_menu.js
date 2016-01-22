@@ -70,14 +70,16 @@ ConfigMenu = (function() {
             if (errorCallback != null) {
               errorCallback(data);
             }
-            return console.log('/config_menu/design_config server error');
+            console.log('/config_menu/design_config server error');
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
           if (errorCallback != null) {
             errorCallback(data);
           }
-          return console.log('/config_menu/design_config ajax error');
+          console.log('/config_menu/design_config ajax error');
+          return Common.ajaxError(data);
         }
       });
     } else {
@@ -131,14 +133,16 @@ ConfigMenu = (function() {
           if (errorCallback != null) {
             errorCallback(data);
           }
-          return console.log('/config_menu/method_values_config server error');
+          console.log('/config_menu/method_values_config server error');
+          return Common.ajaxError(data);
         }
       },
       error: function(data) {
         if (errorCallback != null) {
           errorCallback(data);
         }
-        return console.log('/config_menu/method_values_config ajax error');
+        console.log('/config_menu/method_values_config ajax error');
+        return Common.ajaxError(data);
       }
     });
   };

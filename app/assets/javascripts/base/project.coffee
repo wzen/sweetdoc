@@ -173,10 +173,12 @@ class Project
             if errorCallback?
               errorCallback()
             console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated server error')
+            Common.ajaxError(data)
         error: (data)->
           if errorCallback?
             errorCallback()
           console.log('/page_value_state/user_pagevalues_and_projects_sorted_updated ajax error')
+          Common.ajaxError(data)
       }
     )
 
@@ -202,8 +204,10 @@ class Project
               callback(data)
           else
             console.log('project/create server error')
+            Common.ajaxError(data)
         error: (data) ->
           console.log('project/create ajax error')
+          Common.ajaxError(data)
       }
     )
 
@@ -228,8 +232,10 @@ class Project
               callback(data.admin_html)
             else
               console.log('/project/admin_menu server error')
+              Common.ajaxError(data)
           error: (data)->
             console.log('/project/admin_menu ajax error')
+            Common.ajaxError(data)
         }
       )
 
@@ -247,8 +253,10 @@ class Project
               callback(data.project)
             else
               console.log('/project/get_project_by_user_pagevalue_id server error')
+              Common.ajaxError(data)
           error: (data)->
             console.log('/project/get_project_by_user_pagevalue_id ajax error')
+            Common.ajaxError(data)
         }
       )
 
@@ -272,8 +280,10 @@ class Project
               callback(data.updated_project_info, data.admin_html)
             else
               console.log('/project/remove server error')
+              Common.ajaxError(data)
           error: (data)->
             console.log('/project/remove ajax error')
+            Common.ajaxError(data)
         }
       )
 
@@ -291,8 +301,10 @@ class Project
               callback(data.admin_html)
             else
               console.log('/project/remove server error')
+              Common.ajaxError(data)
           error: (data)->
             console.log('/project/remove ajax error')
+            Common.ajaxError(data)
         }
       )
 

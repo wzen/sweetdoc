@@ -60,7 +60,7 @@ class EventConfig
         # 選択枠設定
         WorktableCommon.setSelectedBorder(vEmt, 'timeline')
         # フォーカス
-        Common.focusToTarget(vEmt, null, true)
+        #Common.focusToTarget(vEmt, null, true)
 
     # 一度全て非表示にする
     $(".config.te_div", @emt).hide()

@@ -27,11 +27,10 @@ class UploadContents extends UploadBase
             window.location.href = "/gallery/detail/#{data.access_token}"
           else
             console.log('gallery/save_state server error')
-            alert(data.message)
+            Common.ajaxError(data)
         error: (data) ->
           console.log('gallery/save_state ajax error')
-          # Error
-          alert(data.message)
+          Common.ajaxError(data)
       })
 
     # 確認ダイアログ

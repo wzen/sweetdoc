@@ -261,10 +261,12 @@ class CodingCommon
               if errorCallback?
                 errorCallback(data)
               console.log('/coding/save_all server error')
+              Common.ajaxError(data)
           error: (data) ->
             if errorCallback?
               errorCallback(data)
             console.log('/coding/save_all ajax error')
+            Common.ajaxError(data)
         }
       )
 
@@ -283,10 +285,12 @@ class CodingCommon
               successCallback(data)
           else
             console.log('/coding/save_tree server error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         error: (data) ->
           console.log('/coding/save_tree ajax error')
+          Common.ajaxError(data)
           if errorCallback?
             errorCallback(data)
       }
@@ -318,10 +322,12 @@ class CodingCommon
                 successCallback(data)
             else
               console.log('/coding/save_code server error')
+              Common.ajaxError(data)
               if errorCallback?
                 errorCallback(data)
           error: (data) ->
             console.log('/coding/save_code ajax error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         }
@@ -353,10 +359,12 @@ class CodingCommon
                 successCallback(data)
             else
               console.log('/coding/save_code server error')
+              Common.ajaxError(data)
               if errorCallback?
                 errorCallback(data)
           error: (data) ->
             console.log('/coding/save_code ajax error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         }
@@ -377,10 +385,12 @@ class CodingCommon
               successCallback(data)
           else
             console.log('coding/load_code server error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         error: (data) ->
           console.log('coding/load_code ajax error')
+          Common.ajaxError(data)
           if errorCallback?
             errorCallback(data)
       }
@@ -398,10 +408,12 @@ class CodingCommon
               successCallback(data)
           else
             console.log('/coding/load_tree server error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         error: (data) ->
           console.log('/coding/load_tree ajax error')
+          Common.ajaxError(data)
           if errorCallback?
             errorCallback(data)
       }
@@ -508,10 +520,12 @@ class CodingCommon
               successCallback(data)
           else
             console.log('/coding/add_new_file server error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         error: (data) ->
           console.log('/coding/add_new_file ajax error')
+          Common.ajaxError(data)
           if errorCallback?
             errorCallback(data)
       }
@@ -549,10 +563,12 @@ class CodingCommon
               successCallback(data)
           else
             console.log('/coding/add_new_folder server error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         error: (data) ->
           console.log('/coding/add_new_folder ajax error')
+          Common.ajaxError(data)
           if errorCallback?
             errorCallback(data)
       }
@@ -573,10 +589,12 @@ class CodingCommon
               successCallback(data)
           else
             console.log('/coding/delete_node server error')
+            Common.ajaxError(data)
             if errorCallback?
               errorCallback(data)
         error: (data) ->
           console.log('/coding/delete_node ajax error')
+          Common.ajaxError(data)
           if errorCallback?
             errorCallback(data)
       }
@@ -654,8 +672,10 @@ class CodingCommon
               window.saveEditorStateNowSaving = false
             else
               console.log('/coding/save_state server error')
+              Common.ajaxError(data)
           error: (data) ->
             console.log('/coding/save_state ajax error')
+            Common.ajaxError(data)
             window.saveEditorStateNowSaving = false
         }
       )

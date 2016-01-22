@@ -41,12 +41,12 @@ UploadContents = (function(superClass) {
             return window.location.href = "/gallery/detail/" + data.access_token;
           } else {
             console.log('gallery/save_state server error');
-            return alert(data.message);
+            return Common.ajaxError(data);
           }
         },
         error: function(data) {
           console.log('gallery/save_state ajax error');
-          return alert(data.message);
+          return Common.ajaxError(data);
         }
       });
     };

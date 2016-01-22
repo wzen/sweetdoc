@@ -25,18 +25,19 @@ class Sidebar
           $('#sidebar').fadeIn('500', ->
             WorktableCommon.resizeMainContainerEvent()
           )
-          if target != null
-            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true)
+#          if target != null
+#            WorktableCommon.focusToTargetWhenSidebarOpen(target, selectedBorderType, true)
 
         # 閉じるイベント設定
         $('#screen_wrapper').off('click.sidebar_close').on('click.sidebar_close', (e) =>
-          # イベント用選択モードの場合は閉じない
-          if window.eventPointingMode == Constant.EventInputPointingMode.NOT_SELECT
-            Sidebar.closeSidebar()
-            # モードを変更以前に戻す
-            WorktableCommon.putbackMode()
-            # イベントを消去
-            $(window.drawingCanvas).off('click.sidebar_close')
+          if Sidebar.isOpenedConfigSidebar()
+            # イベント用選択モードの場合は閉じない
+            if window.eventPointingMode == Constant.EventInputPointingMode.NOT_SELECT
+              Sidebar.closeSidebar()
+              # モードを変更以前に戻す
+              WorktableCommon.putbackMode()
+              # イベントを消去
+              $(window.drawingCanvas).off('click.sidebar_close')
         )
 
   # サイドバーをクローズ

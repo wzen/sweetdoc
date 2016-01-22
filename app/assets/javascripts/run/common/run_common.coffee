@@ -259,8 +259,10 @@ class RunCommon
             )
           else
             console.log('/run/paging server error')
+            Common.ajaxError(data)
         error: (data) ->
           console.log('/run/paging ajax error')
+          Common.ajaxError(data)
       }
     )
 
@@ -456,8 +458,10 @@ class RunCommon
                 callback()
             else
               console.log('/run/save_gallery_footprint server error')
+              Common.ajaxError(data)
           error: (data) ->
             console.log('/run/save_gallery_footprint ajax error')
+            Common.ajaxError(data)
         }
       )
 
@@ -486,8 +490,10 @@ class RunCommon
                 callback()
             else
               console.log('/run/load_common_gallery_footprint server error')
+              Common.ajaxError(data)
           error: (data) ->
             console.log('/run/load_common_gallery_footprint ajax error')
+            Common.ajaxError(data)
         }
       )
 
