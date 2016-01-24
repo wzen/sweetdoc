@@ -161,6 +161,8 @@ class ConfigMenu
         temp_name = 'color'
       elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::SELECT_FILE
         temp_name = 'select_file'
+      elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::SELECT_IMAGE_FILE
+        temp_name = 'select_image_file'
       elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::SELECT
         temp_name = 'select'
       elsif v[Const::ItemActionPropertiesKey::TYPE] == Const::ItemDesignOptionType::BOOLEAN

@@ -72,6 +72,8 @@ if gon?
       @DESIGN_TOOL = constant.ItemDesignOptionType.DESIGN_TOOL
       # @property [Int] SELECT_FILE ファイル選択
       @SELECT_FILE = constant.ItemDesignOptionType.SELECT_FILE
+      # @property [Int] SELECT_IMAGE_FILE 画像ファイル選択
+      @SELECT_IMAGE_FILE = constant.ItemDesignOptionType.SELECT_IMAGE_FILE
 
     # アクションイベントクラス名
     class @TimelineActionTypeClassName

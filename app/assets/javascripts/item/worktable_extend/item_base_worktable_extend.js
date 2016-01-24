@@ -527,6 +527,8 @@ itemBaseWorktableExtend = {
           results.push(this.settingModifiableColor(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.COLOR_TYPE], value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE]));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT_FILE) {
           results.push(this.settingModifiableSelectFile(designConfigRoot, varName));
+        } else if (value.type === Constant.ItemDesignOptionType.SELECT_IMAGE_FILE) {
+          results.push(this.settingModifiableSelectImageFile(designConfigRoot, varName));
         } else if (value.type === Constant.ItemDesignOptionType.SELECT) {
           results.push(this.settingModifiableSelect(designConfigRoot, varName, value[this.constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value['options[]']));
         } else {
@@ -639,6 +641,23 @@ itemBaseWorktableExtend = {
       };
     })(this));
   },
+  settingModifiableSelectImageFile: function(configRoot, varName) {
+    var form;
+    form = $("form.item_image_form_" + varName, configRoot);
+    this.initModifiableSelectImageFile(form);
+    return form.off().on('ajax:complete', (function(_this) {
+      return function(e, data, status, error) {
+        var d;
+        d = JSON.parse(data.responseText);
+        _this.changeInstanceVarByConfig(varName, d.image_url);
+        _this.initModifiableSelectImageFile(e.target);
+        $(e.target).find("." + _this.constructor.ImageKey.SELECT_FILE + ":first").trigger('change');
+        $(e.target).find("." + _this.constructor.ImageKey.URL + ":first").trigger('change');
+        _this.saveObj();
+        return _this.applyDesignChange();
+      };
+    })(this));
+  },
   settingModifiableSelect: function(configRoot, varName, openChildrenValue, selectOptions) {
     var _joinArray, _splitArray, defaultValue, selectEmt;
     _joinArray = function(value) {
@@ -678,7 +697,27 @@ itemBaseWorktableExtend = {
   initModifiableSelectFile: function(emt) {
     $(emt).find("." + this.constructor.ImageKey.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
     $(emt).find("." + this.constructor.ImageKey.ITEM_OBJ_ID).val(this.id);
-    $(emt).find("." + this.constructor.ImageKey.SELECT_FILE + ":first").off().on('change', (function(_this) {
+    return $(emt).find("." + this.constructor.ImageKey.SELECT_FILE + ":first").off().on('change', (function(_this) {
+      return function(e) {
+        var del, target;
+        target = e.target;
+        if (target.value && target.value.length > 0) {
+          del = $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE_DELETE + ":first");
+          del.off('click').on('click', function() {
+            $(target).val('');
+            return $(target).trigger('change');
+          });
+          return del.show();
+        } else {
+          return $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE_DELETE + ":first").hide();
+        }
+      };
+    })(this));
+  },
+  initModifiableSelectImageFile: function(emt) {
+    $(emt).find("." + this.constructor.ImageKey.PROJECT_ID).val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID));
+    $(emt).find("." + this.constructor.ImageKey.ITEM_OBJ_ID).val(this.id);
+    $(emt).find("." + this.constructor.ImageKey.SELECT_FILE + ":first").off('change').on('change', (function(_this) {
       return function(e) {
         var del, el, target;
         target = e.target;
@@ -691,16 +730,16 @@ itemBaseWorktableExtend = {
             $(target).val('');
             return $(target).trigger('change');
           });
-          return del.show();
+          return del.parent('div').show();
         } else {
           el = $(emt).find("." + _this.constructor.ImageKey.URL + ":first");
           el.removeAttr('disabled');
           el.css('backgroundColor', 'white');
-          return $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE_DELETE + ":first").hide();
+          return $(emt).find("." + _this.constructor.ImageKey.SELECT_FILE_DELETE + ":first").parent('div').hide();
         }
       };
     })(this));
-    return $(emt).find("." + this.constructor.ImageKey.URL + ":first").off().on('change', (function(_this) {
+    return $(emt).find("." + this.constructor.ImageKey.URL + ":first").off('change').on('change', (function(_this) {
       return function(e) {
         var target;
         target = e.target;

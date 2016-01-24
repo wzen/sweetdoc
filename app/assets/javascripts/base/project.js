@@ -132,7 +132,8 @@ Project = (function() {
         Navbar.setLastUpdateTime(data.updated_at);
         Navbar.switchWorktableNavbarWhenProjectCreated(true);
         window.initDone = true;
-        return Common.hideModalView();
+        Common.hideModalView();
+        return FloatView.show('Project created', FloatView.Type.APPLY, 3.0);
       });
     });
     $('.open_button', modalEmt).off('click').on('click', function() {
@@ -152,7 +153,8 @@ Project = (function() {
         window.scrollInsideWrapper.css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + 1));
         Navbar.switchWorktableNavbarWhenProjectCreated(true);
         window.initDone = true;
-        return Common.hideModalView();
+        Common.hideModalView();
+        return FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0);
       });
     });
     $('.back_button', modalEmt).off('click').on('click', function() {

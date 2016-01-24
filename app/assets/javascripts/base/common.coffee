@@ -627,7 +627,7 @@ class Common
       Common.modalCentering.call(@, type)
       # ビューの高さ
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
-      emt.show()
+      emt.fadeIn('fast')
       $("#modal-overlay,#modal-close").unbind().click( ->
         if enableOverlayClose
           Common.hideModalView()
@@ -704,7 +704,7 @@ class Common
 
   # モーダル非表示
   @hideModalView = ->
-    $(".modal-content,#modal-overlay").hide()
+    $(".modal-content,#modal-overlay").fadeOut('fast')
     $('#modal-overlay').remove()
 
   # Zindexにページ分のZindexを加算

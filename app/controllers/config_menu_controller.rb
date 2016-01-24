@@ -35,7 +35,7 @@ class ConfigMenuController < ApplicationController
   def preload_image_path_select_config
     @result_success = true
     @html = render_to_string(
-        partial: 'sidebar_menu/design/parts/select_file'
+        partial: 'sidebar_menu/design/parts/select_image_file'
     )
     render 'ret'
   end

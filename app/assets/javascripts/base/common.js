@@ -783,7 +783,7 @@ Common = (function() {
       $("#modal-overlay").show();
       Common.modalCentering.call(this, type);
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
-      emt.show();
+      emt.fadeIn('fast');
       return $("#modal-overlay,#modal-close").unbind().click(function() {
         if (enableOverlayClose) {
           return Common.hideModalView();
@@ -886,7 +886,7 @@ Common = (function() {
   };
 
   Common.hideModalView = function() {
-    $(".modal-content,#modal-overlay").hide();
+    $(".modal-content,#modal-overlay").fadeOut('fast');
     return $('#modal-overlay').remove();
   };
 

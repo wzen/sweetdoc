@@ -20,7 +20,7 @@ PreloadItemImage = (function(superClass) {
     modifiables: {
       imagePath: {
         name: "Select image",
-        type: 'select_file',
+        type: 'select_image_file',
         ja: {
           name: "画像を選択"
         }

@@ -458,6 +458,8 @@ itemBaseWorktableExtend =
           @settingModifiableColor(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.COLOR_TYPE], value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE])
         else if value.type == Constant.ItemDesignOptionType.SELECT_FILE
           @settingModifiableSelectFile(designConfigRoot, varName)
+        else if value.type == Constant.ItemDesignOptionType.SELECT_IMAGE_FILE
+          @settingModifiableSelectImageFile(designConfigRoot, varName)
         else if value.type == Constant.ItemDesignOptionType.SELECT
           @settingModifiableSelect(designConfigRoot, varName, value[@constructor.ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE], value['options[]'])
 
@@ -539,7 +541,7 @@ itemBaseWorktableExtend =
     )
     @constructor.switchChildrenConfig(emt, varName, openChildrenValue, defaultValue)
 
-  # 変数編集ファイルアップロードの作成
+  # 変数編集ファイルアップロードの作成 FIXME
   # @param [Object] configRoot コンフィグルート
   # @param [String] varName 変数名
   settingModifiableSelectFile: (configRoot, varName) ->
@@ -548,6 +550,22 @@ itemBaseWorktableExtend =
     form.off().on('ajax:complete', (e, data, status, error) =>
       d = JSON.parse(data.responseText)
       @changeInstanceVarByConfig(varName, d.image_url)
+      @saveObj()
+      @applyDesignChange()
+    )
+
+  # 変数編集画像ファイルアップロードの作成
+  # @param [Object] configRoot コンフィグルート
+  # @param [String] varName 変数名
+  settingModifiableSelectImageFile: (configRoot, varName) ->
+    form = $("form.item_image_form_#{varName}", configRoot)
+    @initModifiableSelectImageFile(form)
+    form.off().on('ajax:complete', (e, data, status, error) =>
+      d = JSON.parse(data.responseText)
+      @changeInstanceVarByConfig(varName, d.image_url)
+      @initModifiableSelectImageFile(e.target)
+      $(e.target).find(".#{@constructor.ImageKey.SELECT_FILE}:first").trigger('change')
+      $(e.target).find(".#{@constructor.ImageKey.URL}:first").trigger('change')
       @saveObj()
       @applyDesignChange()
     )
@@ -591,10 +609,7 @@ itemBaseWorktableExtend =
       target = e.target
       if target.value && target.value.length > 0
         # 選択時
-        # URL入力を無効
-        el = $(emt).find(".#{@constructor.ImageKey.URL}:first")
-        el.attr('disabled', true)
-        el.css('backgroundColor', 'gray')
+        # Deleteボタン表示
         del = $(emt).find(".#{@constructor.ImageKey.SELECT_FILE_DELETE}:first")
         del.off('click').on('click', ->
           $(target).val('')
@@ -603,13 +618,37 @@ itemBaseWorktableExtend =
         del.show()
       else
         # 未選択
-        # URL入力を有効
+        # Deleteボタン表示
+        $(emt).find(".#{@constructor.ImageKey.SELECT_FILE_DELETE}:first").hide()
+    )
+
+  # 変数編集画像ファイルアップロードのイベント初期化
+  initModifiableSelectImageFile: (emt) ->
+    $(emt).find(".#{@constructor.ImageKey.PROJECT_ID}").val(PageValue.getGeneralPageValue(PageValue.Key.PROJECT_ID))
+    $(emt).find(".#{@constructor.ImageKey.ITEM_OBJ_ID}").val(@id)
+    $(emt).find(".#{@constructor.ImageKey.SELECT_FILE}:first").off('change').on('change', (e) =>
+      target = e.target
+      if target.value && target.value.length > 0
+        # 選択時
+        # URL入力を無効 & Deleteボタン表示
+        el = $(emt).find(".#{@constructor.ImageKey.URL}:first")
+        el.attr('disabled', true)
+        el.css('backgroundColor', 'gray')
+        del = $(emt).find(".#{@constructor.ImageKey.SELECT_FILE_DELETE}:first")
+        del.off('click').on('click', ->
+          $(target).val('')
+          $(target).trigger('change')
+        )
+        del.parent('div').show()
+      else
+        # 未選択
+        # URL入力を有効 & Deleteボタン非表示
         el = $(emt).find(".#{@constructor.ImageKey.URL}:first")
         el.removeAttr('disabled')
         el.css('backgroundColor', 'white')
-        $(emt).find(".#{@constructor.ImageKey.SELECT_FILE_DELETE}:first").hide()
+        $(emt).find(".#{@constructor.ImageKey.SELECT_FILE_DELETE}:first").parent('div').hide()
     )
-    $(emt).find(".#{@constructor.ImageKey.URL}:first").off().on('change', (e) =>
+    $(emt).find(".#{@constructor.ImageKey.URL}:first").off('change').on('change', (e) =>
       target = e.target
       if $(target).val().length > 0
         # 入力時

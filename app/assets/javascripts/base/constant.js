@@ -105,6 +105,8 @@ if (typeof gon !== "undefined" && gon !== null) {
 
       ItemDesignOptionType.SELECT_FILE = constant.ItemDesignOptionType.SELECT_FILE;
 
+      ItemDesignOptionType.SELECT_IMAGE_FILE = constant.ItemDesignOptionType.SELECT_IMAGE_FILE;
+
       return ItemDesignOptionType;
 
     })();

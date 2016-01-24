@@ -58,6 +58,8 @@ class Const
     SELECT = 'select'
     # @property [Int] SELECT_FILE ファイル選択
     SELECT_FILE = 'select_file'
+    # @property [Int] SELECT_IMAGE_FILE 画像ファイル選択
+    SELECT_IMAGE_FILE = 'select_image_file'
     # @property [Int] CSS_DESIGN_TOOL CSSデザインツール
     DESIGN_TOOL = 'design_tool'
   end

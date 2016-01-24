@@ -124,6 +124,8 @@ class Project
         window.initDone = true
         # モーダルを削除
         Common.hideModalView()
+        # 通知
+        FloatView.show('Project created', FloatView.Type.APPLY, 3.0)
       )
     )
     # Openボタンイベント
@@ -147,6 +149,8 @@ class Project
         window.initDone = true
         # モーダルを削除
         Common.hideModalView()
+        # 通知
+        FloatView.show('Project loaded', FloatView.Type.APPLY, 3.0)
       )
     )
 
