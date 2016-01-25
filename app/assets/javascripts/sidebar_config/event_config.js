@@ -4,16 +4,21 @@ var EventConfig;
 EventConfig = (function() {
   var _setApplyClickEvent, _setCommonStateEvent, _setForkSelect, _setHandlerRadioEvent, _setMethodActionEvent, _setScrollDirectionEvent, _setupFromPageValues, constant;
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    EventConfig.ITEM_ROOT_ID = 'event_@distId';
-    EventConfig.EVENT_ITEM_SEPERATOR = "&";
-    EventConfig.ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS;
-    EventConfig.ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS;
-    EventConfig.EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX;
-    EventConfig.METHOD_VALUE_MODIFY_ROOT = 'modify';
-    EventConfig.METHOD_VALUE_SPECIFIC_ROOT = 'specific';
-  }
+  constant = gon["const"];
+
+  EventConfig.ITEM_ROOT_ID = 'event_@distId';
+
+  EventConfig.EVENT_ITEM_SEPERATOR = "&";
+
+  EventConfig.ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS;
+
+  EventConfig.ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS;
+
+  EventConfig.EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX;
+
+  EventConfig.METHOD_VALUE_MODIFY_ROOT = 'modify';
+
+  EventConfig.METHOD_VALUE_SPECIFIC_ROOT = 'specific';
 
   function EventConfig(emt1, teNum1, distId1) {
     this.emt = emt1;

@@ -6,11 +6,11 @@ ItemPreviewCommon = (function() {
 
   function ItemPreviewCommon() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    ItemPreviewCommon.MAIN_TEMP_WORKTABLE_CLASS = constant.ElementAttribute.MAIN_TEMP_WORKTABLE_CLASS;
-    ItemPreviewCommon.MAIN_TEMP_RUN_CLASS = constant.ElementAttribute.MAIN_TEMP_RUN_CLASS;
-  }
+  constant = gon["const"];
+
+  ItemPreviewCommon.MAIN_TEMP_WORKTABLE_CLASS = constant.ElementAttribute.MAIN_TEMP_WORKTABLE_CLASS;
+
+  ItemPreviewCommon.MAIN_TEMP_RUN_CLASS = constant.ElementAttribute.MAIN_TEMP_RUN_CLASS;
 
   ItemPreviewCommon.createdMainContainerIfNeeded = function() {
     var container, markClass, pageSection, root, sectionClass, temp;

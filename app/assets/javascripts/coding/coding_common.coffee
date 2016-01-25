@@ -1,24 +1,22 @@
 class CodingCommon
-
-  if gon?
-    constant = gon.const
-    @DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME
-    @NOT_SAVED_PREFIX = '* '
-    class @Key
-      @LANG = constant.Coding.Key.LANG
-      @PUBLIC = constant.Coding.Key.PUBLIC
-      @CODE = constant.Coding.Key.CODE
-      @CODES = constant.Coding.Key.CODES
-      @USER_CODING_ID = constant.Coding.Key.USER_CODING_ID
-      @TREE_DATA = constant.Coding.Key.TREE_DATA
-      @SUB_TREE = constant.Coding.Key.SUB_TREE
-      @NODE_PATH = constant.Coding.Key.NODE_PATH
-      @DRAW_TYPE = constant.Coding.Key.DRAW_TYPE
-      @IS_OPENED = constant.Coding.Key.IS_OPENED
-      @PARENT_NODE_PATH = constant.Coding.Key.PARENT_NODE_PATH
-    class @Lang
-      @JAVASCRIPT = constant.Coding.Lang.JAVASCRIPT
-      @COFFEESCRIPT = constant.Coding.Lang.COFFEESCRIPT
+  constant = gon.const
+  @DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME
+  @NOT_SAVED_PREFIX = '* '
+  class @Key
+    @LANG = constant.Coding.Key.LANG
+    @PUBLIC = constant.Coding.Key.PUBLIC
+    @CODE = constant.Coding.Key.CODE
+    @CODES = constant.Coding.Key.CODES
+    @USER_CODING_ID = constant.Coding.Key.USER_CODING_ID
+    @TREE_DATA = constant.Coding.Key.TREE_DATA
+    @SUB_TREE = constant.Coding.Key.SUB_TREE
+    @NODE_PATH = constant.Coding.Key.NODE_PATH
+    @DRAW_TYPE = constant.Coding.Key.DRAW_TYPE
+    @IS_OPENED = constant.Coding.Key.IS_OPENED
+    @PARENT_NODE_PATH = constant.Coding.Key.PARENT_NODE_PATH
+  class @Lang
+    @JAVASCRIPT = constant.Coding.Lang.JAVASCRIPT
+    @COFFEESCRIPT = constant.Coding.Lang.COFFEESCRIPT
 
   @init = ->
     window.editing = {}

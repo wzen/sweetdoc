@@ -1,26 +1,24 @@
 class ServerStorage
+  # 定数
+  constant = gon.const
+  # ページ内値保存キー
+  class @Key
+    @PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID
+    @PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT
+    @GENERAL_COMMON_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_COMMON_PAGE_VALUE
+    @GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE
+    @INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE
+    @EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE
+    @SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE
 
-  if gon?
-    # 定数
-    constant = gon.const
-    # ページ内値保存キー
-    class @Key
-      @PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID
-      @PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT
-      @GENERAL_COMMON_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_COMMON_PAGE_VALUE
-      @GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE
-      @INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE
-      @EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE
-      @SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE
-
-    class @ElementAttribute
-      @FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS
-      @LOAD_LIST_UPDATED_FLG = 'load_list_updated'
-      @LOADED_LOCALTIME = 'loaded_localtime'
-      @LOAD_LIST_INTERVAL_SECONDS = 60
-
-    # 60秒が過ぎたらLoadリスト一覧を取得可にする
+  class @ElementAttribute
+    @FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS
+    @LOAD_LIST_UPDATED_FLG = 'load_list_updated'
+    @LOADED_LOCALTIME = 'loaded_localtime'
     @LOAD_LIST_INTERVAL_SECONDS = 60
+
+  # 60秒が過ぎたらLoadリスト一覧を取得可にする
+  @LOAD_LIST_INTERVAL_SECONDS = 60
 
   # サーバにアイテムの情報を保存
   @save = (callback = null) ->

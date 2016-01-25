@@ -6,11 +6,11 @@ ItemStateConfig = (function() {
 
   function ItemStateConfig() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    ItemStateConfig.ROOT_ID_NAME = constant.ItemStateConfig.ROOT_ID_NAME;
-    ItemStateConfig.ITEM_TEMP_CLASS_NAME = constant.ItemStateConfig.ITEM_TEMP_CLASS_NAME;
-  }
+  constant = gon["const"];
+
+  ItemStateConfig.ROOT_ID_NAME = constant.ItemStateConfig.ROOT_ID_NAME;
+
+  ItemStateConfig.ITEM_TEMP_CLASS_NAME = constant.ItemStateConfig.ITEM_TEMP_CLASS_NAME;
 
   ItemStateConfig.initConfig = function() {
     var createdItemList, items, k, rootEmt, temp, v;

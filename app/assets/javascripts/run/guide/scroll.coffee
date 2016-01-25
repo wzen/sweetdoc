@@ -1,12 +1,10 @@
 class ScrollGuide extends GuideBase
-
-  if gon?
-    # 定数
-    constant = gon.const
-    @TOP_ROOT_ID = constant.RunGuide.TOP_ROOT_ID
-    @BOTTOM_ROOT_ID = constant.RunGuide.BOTTOM_ROOT_ID
-    @LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID
-    @RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID
+  # 定数
+  constant = gon.const
+  @TOP_ROOT_ID = constant.RunGuide.TOP_ROOT_ID
+  @BOTTOM_ROOT_ID = constant.RunGuide.BOTTOM_ROOT_ID
+  @LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID
+  @RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID
 
   # ガイド表示
   @showGuide: (enableDirection, forwardDirection, canForward, canReverse) ->

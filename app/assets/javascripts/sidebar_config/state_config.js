@@ -6,10 +6,9 @@ StateConfig = (function() {
 
   function StateConfig() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    StateConfig.ROOT_ID_NAME = constant.StateConfig.ROOT_ID_NAME;
-  }
+  constant = gon["const"];
+
+  StateConfig.ROOT_ID_NAME = constant.StateConfig.ROOT_ID_NAME;
 
   StateConfig.initConfig = function() {
     (function(_this) {

@@ -6,14 +6,17 @@ GallerySidebar = (function() {
 
   function GallerySidebar() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    GallerySidebar.USER = constant.Gallery.Sidebar.USER;
-    GallerySidebar.WORKTABLE = constant.Gallery.Sidebar.WORKTABLE;
-    GallerySidebar.VIEW = constant.Gallery.Sidebar.VIEW;
-    GallerySidebar.SEARCH = constant.Gallery.Sidebar.SEARCH;
-    GallerySidebar.LOGO = constant.Gallery.Sidebar.LOGO;
-  }
+  constant = gon["const"];
+
+  GallerySidebar.USER = constant.Gallery.Sidebar.USER;
+
+  GallerySidebar.WORKTABLE = constant.Gallery.Sidebar.WORKTABLE;
+
+  GallerySidebar.VIEW = constant.Gallery.Sidebar.VIEW;
+
+  GallerySidebar.SEARCH = constant.Gallery.Sidebar.SEARCH;
+
+  GallerySidebar.LOGO = constant.Gallery.Sidebar.LOGO;
 
   GallerySidebar.initMenu = function() {
     var _type, root;

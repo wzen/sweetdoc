@@ -1,8 +1,7 @@
 class ItemPreviewCommon
-  if gon?
-    constant = gon.const
-    @MAIN_TEMP_WORKTABLE_CLASS = constant.ElementAttribute.MAIN_TEMP_WORKTABLE_CLASS
-    @MAIN_TEMP_RUN_CLASS = constant.ElementAttribute.MAIN_TEMP_RUN_CLASS
+  constant = gon.const
+  @MAIN_TEMP_WORKTABLE_CLASS = constant.ElementAttribute.MAIN_TEMP_WORKTABLE_CLASS
+  @MAIN_TEMP_RUN_CLASS = constant.ElementAttribute.MAIN_TEMP_RUN_CLASS
 
   # Mainコンテナを作成
   # @return [Boolean] ページを作成したか

@@ -16,27 +16,26 @@ ItemBase = (function(superClass) {
 
   ItemBase.DESIGN_PAGEVALUE_ROOT = 'designs';
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    ItemBase.ImageKey = (function() {
-      function ImageKey() {}
+  constant = gon["const"];
 
-      ImageKey.PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID;
+  ItemBase.ImageKey = (function() {
+    function ImageKey() {}
 
-      ImageKey.ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID;
+    ImageKey.PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID;
 
-      ImageKey.EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID;
+    ImageKey.ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID;
 
-      ImageKey.SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE;
+    ImageKey.EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID;
 
-      ImageKey.URL = constant.PreloadItemImage.Key.URL;
+    ImageKey.SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE;
 
-      ImageKey.SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE;
+    ImageKey.URL = constant.PreloadItemImage.Key.URL;
 
-      return ImageKey;
+    ImageKey.SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE;
 
-    })();
-  }
+    return ImageKey;
+
+  })();
 
   function ItemBase(cood) {
     if (cood == null) {

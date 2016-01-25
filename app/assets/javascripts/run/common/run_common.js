@@ -6,54 +6,55 @@ RunCommon = (function() {
 
   function RunCommon() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    RunCommon.RUN_CSS = constant.ElementAttribute.RUN_CSS;
-    RunCommon.AttributeName = (function() {
-      function AttributeName() {}
+  constant = gon["const"];
 
-      AttributeName.CONTENTS_CREATOR_CLASSNAME = constant.Run.AttributeName.CONTENTS_CREATOR_CLASSNAME;
+  RunCommon.RUN_CSS = constant.ElementAttribute.RUN_CSS;
 
-      AttributeName.CONTENTS_TITLE_CLASSNAME = constant.Run.AttributeName.CONTENTS_TITLE_CLASSNAME;
+  RunCommon.AttributeName = (function() {
+    function AttributeName() {}
 
-      AttributeName.CONTENTS_CAPTION_CLASSNAME = constant.Run.AttributeName.CONTENTS_CAPTION_CLASSNAME;
+    AttributeName.CONTENTS_CREATOR_CLASSNAME = constant.Run.AttributeName.CONTENTS_CREATOR_CLASSNAME;
 
-      AttributeName.CONTENTS_PAGE_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_NUM_CLASSNAME;
+    AttributeName.CONTENTS_TITLE_CLASSNAME = constant.Run.AttributeName.CONTENTS_TITLE_CLASSNAME;
 
-      AttributeName.CONTENTS_PAGE_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_MAX_CLASSNAME;
+    AttributeName.CONTENTS_CAPTION_CLASSNAME = constant.Run.AttributeName.CONTENTS_CAPTION_CLASSNAME;
 
-      AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME;
+    AttributeName.CONTENTS_PAGE_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_NUM_CLASSNAME;
 
-      AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME;
+    AttributeName.CONTENTS_PAGE_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_PAGE_MAX_CLASSNAME;
 
-      AttributeName.CONTENTS_FORK_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_FORK_NUM_CLASSNAME;
+    AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_NUM_CLASSNAME;
 
-      AttributeName.CONTENTS_TAGS_CLASSNAME = constant.Run.AttributeName.CONTENTS_TAGS_CLASSNAME;
+    AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME = constant.Run.AttributeName.CONTENTS_CHAPTER_MAX_CLASSNAME;
 
-      return AttributeName;
+    AttributeName.CONTENTS_FORK_NUM_CLASSNAME = constant.Run.AttributeName.CONTENTS_FORK_NUM_CLASSNAME;
 
-    })();
-    RunCommon.Key = (function() {
-      function Key() {}
+    AttributeName.CONTENTS_TAGS_CLASSNAME = constant.Run.AttributeName.CONTENTS_TAGS_CLASSNAME;
 
-      Key.TARGET_PAGES = constant.Run.Key.TARGET_PAGES;
+    return AttributeName;
 
-      Key.LOADED_CLASS_DIST_TOKENS = constant.Run.Key.LOADED_CLASS_DIST_TOKENS;
+  })();
 
-      Key.PROJECT_ID = constant.Run.Key.PROJECT_ID;
+  RunCommon.Key = (function() {
+    function Key() {}
 
-      Key.ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN;
+    Key.TARGET_PAGES = constant.Run.Key.TARGET_PAGES;
 
-      Key.RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID;
+    Key.LOADED_CLASS_DIST_TOKENS = constant.Run.Key.LOADED_CLASS_DIST_TOKENS;
 
-      Key.FOOTPRINT_PAGE_VALUE = constant.Run.Key.FOOTPRINT_PAGE_VALUE;
+    Key.PROJECT_ID = constant.Run.Key.PROJECT_ID;
 
-      Key.LOAD_FOOTPRINT = constant.Run.Key.LOAD_FOOTPRINT;
+    Key.ACCESS_TOKEN = constant.Run.Key.ACCESS_TOKEN;
 
-      return Key;
+    Key.RUNNING_USER_PAGEVALUE_ID = constant.Run.Key.RUNNING_USER_PAGEVALUE_ID;
 
-    })();
-  }
+    Key.FOOTPRINT_PAGE_VALUE = constant.Run.Key.FOOTPRINT_PAGE_VALUE;
+
+    Key.LOAD_FOOTPRINT = constant.Run.Key.LOAD_FOOTPRINT;
+
+    return Key;
+
+  })();
 
   RunCommon.initView = function() {
     $(window.drawingCanvas).attr('width', window.canvasWrapper.width());

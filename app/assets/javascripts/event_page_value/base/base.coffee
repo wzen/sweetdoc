@@ -1,54 +1,52 @@
 # PageValue基底
 class EventPageValueBase
-
-  if gon?
   # 定数
-    constant = gon.const
+  constant = gon.const
 
-    @NO_METHOD = constant.EventPageValue.NO_METHOD
-    @NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE
+  @NO_METHOD = constant.EventPageValue.NO_METHOD
+  @NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE
 
-    class @PageValueKey
-      # @property [String] DIST_ID 一意のイベント識別ID
-      @DIST_ID = constant.EventPageValueKey.DIST_ID
-      # @property [String] ID オブジェクトID
-      @ID = constant.EventPageValueKey.ID
-      # @property [String] CLASS_DIST_TOKEN クラス識別TOKEN
-      @CLASS_DIST_TOKEN = constant.EventPageValueKey.CLASS_DIST_TOKEN
-      # @property [String] ITEM_SIZE_DIFF アイテムサイズ
-      @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
-      # @property [String] DO_FOCUS フォーカス
-      @DO_FOCUS = constant.EventPageValueKey.DO_FOCUS
-      # @property [String] SPECIFIC_METHOD_VALUES メソッド固有値
-      @SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES
-      # @property [String] IS_COMMON_EVENT 共通イベント判定
-      @IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT
-      # @property [String] ORDER ソート番号
-      @ORDER = constant.EventPageValueKey.ORDER
-      # @property [String] METHODNAME イベント名
-      @METHODNAME = constant.EventPageValueKey.METHODNAME
-      # @property [String] ACTIONTYPE アクションタイプ名
-      @ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE
-      # @property [String] FINISH_PAGE ページ終了フラグ
-      @FINISH_PAGE = constant.EventPageValueKey.FINISH_PAGE
-      # @property [String] JUMPPAGE_NUM ページ遷移先番号
-      @JUMPPAGE_NUM = constant.EventPageValueKey.JUMPPAGE_NUM
-      # @property [String] IS_SYNC 同時実行
-      @IS_SYNC = constant.EventPageValueKey.IS_SYNC
-      # @property [String] SCROLL_TIME スクロール実行開始位置
-      @SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START
-      # @property [String] SCROLL_TIME スクロール実行終了位置
-      @SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END
-      # @property [String] SCROLL_ENABLED_DIRECTIONS スクロール可能方向
-      @SCROLL_ENABLED_DIRECTIONS = constant.EventPageValueKey.SCROLL_ENABLED_DIRECTIONS
-      # @property [String] SCROLL_FORWARD_DIRECTIONS スクロール進行方向
-      @SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS
-      # @property [String] CHANGE_FORKNUM フォーク番号
-      @CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM
-      # @property [String] MODIFIABLE_VARS 変更するインスタンス変数
-      @MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS
-      # @property [String] EVENT_DURATION クリック実行時間
-      @EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION
+  class @PageValueKey
+    # @property [String] DIST_ID 一意のイベント識別ID
+    @DIST_ID = constant.EventPageValueKey.DIST_ID
+    # @property [String] ID オブジェクトID
+    @ID = constant.EventPageValueKey.ID
+    # @property [String] CLASS_DIST_TOKEN クラス識別TOKEN
+    @CLASS_DIST_TOKEN = constant.EventPageValueKey.CLASS_DIST_TOKEN
+    # @property [String] ITEM_SIZE_DIFF アイテムサイズ
+    @ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF
+    # @property [String] DO_FOCUS フォーカス
+    @DO_FOCUS = constant.EventPageValueKey.DO_FOCUS
+    # @property [String] SPECIFIC_METHOD_VALUES メソッド固有値
+    @SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES
+    # @property [String] IS_COMMON_EVENT 共通イベント判定
+    @IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT
+    # @property [String] ORDER ソート番号
+    @ORDER = constant.EventPageValueKey.ORDER
+    # @property [String] METHODNAME イベント名
+    @METHODNAME = constant.EventPageValueKey.METHODNAME
+    # @property [String] ACTIONTYPE アクションタイプ名
+    @ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE
+    # @property [String] FINISH_PAGE ページ終了フラグ
+    @FINISH_PAGE = constant.EventPageValueKey.FINISH_PAGE
+    # @property [String] JUMPPAGE_NUM ページ遷移先番号
+    @JUMPPAGE_NUM = constant.EventPageValueKey.JUMPPAGE_NUM
+    # @property [String] IS_SYNC 同時実行
+    @IS_SYNC = constant.EventPageValueKey.IS_SYNC
+    # @property [String] SCROLL_TIME スクロール実行開始位置
+    @SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START
+    # @property [String] SCROLL_TIME スクロール実行終了位置
+    @SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END
+    # @property [String] SCROLL_ENABLED_DIRECTIONS スクロール可能方向
+    @SCROLL_ENABLED_DIRECTIONS = constant.EventPageValueKey.SCROLL_ENABLED_DIRECTIONS
+    # @property [String] SCROLL_FORWARD_DIRECTIONS スクロール進行方向
+    @SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS
+    # @property [String] CHANGE_FORKNUM フォーク番号
+    @CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM
+    # @property [String] MODIFIABLE_VARS 変更するインスタンス変数
+    @MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS
+    # @property [String] EVENT_DURATION クリック実行時間
+    @EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION
 
   # コンフィグ初期設定
   # @param [Object] eventConfig イベントコンフィグオブジェクト

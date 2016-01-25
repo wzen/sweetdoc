@@ -6,10 +6,9 @@ WorktableSetting = (function() {
 
   function WorktableSetting() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    WorktableSetting.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
-  }
+  constant = gon["const"];
+
+  WorktableSetting.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
 
   WorktableSetting.initConfig = function() {
     this.Grid.initConfig();

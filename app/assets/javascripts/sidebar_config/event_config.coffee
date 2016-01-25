@@ -1,21 +1,19 @@
 class EventConfig
+  # 定数
+  constant = gon.const
+  # @property [String] TE_ITEM_ROOT_ID イベントRoot
+  @ITEM_ROOT_ID = 'event_@distId'
+  # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
+  @EVENT_ITEM_SEPERATOR = "&"
+  # @property [String] ITEM_ACTION_CLASS イベントアイテムアクションクラス名
+  @ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS
+  # @property [String] ITEM_VALUES_CLASS アイテムイベントクラス名
+  @ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS
+  # @property [String] EVENT_COMMON_PREFIX 共通イベントプレフィックス
+  @EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX
 
-  if gon?
-    # 定数
-    constant = gon.const
-    # @property [String] TE_ITEM_ROOT_ID イベントRoot
-    @ITEM_ROOT_ID = 'event_@distId'
-    # @property [String] EVENT_ITEM_SEPERATOR イベント(アイテム)値のセパレータ
-    @EVENT_ITEM_SEPERATOR = "&"
-    # @property [String] ITEM_ACTION_CLASS イベントアイテムアクションクラス名
-    @ITEM_ACTION_CLASS = constant.EventConfig.ITEM_ACTION_CLASS
-    # @property [String] ITEM_VALUES_CLASS アイテムイベントクラス名
-    @ITEM_VALUES_CLASS = constant.EventConfig.ITEM_VALUES_CLASS
-    # @property [String] EVENT_COMMON_PREFIX 共通イベントプレフィックス
-    @EVENT_COMMON_PREFIX = constant.EventConfig.EVENT_COMMON_PREFIX
-
-    @METHOD_VALUE_MODIFY_ROOT = 'modify'
-    @METHOD_VALUE_SPECIFIC_ROOT = 'specific'
+  @METHOD_VALUE_MODIFY_ROOT = 'modify'
+  @METHOD_VALUE_SPECIFIC_ROOT = 'specific'
 
   # コンストラクタ
   # @param [Object] @emt コンフィグRoot

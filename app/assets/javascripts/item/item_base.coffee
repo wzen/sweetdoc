@@ -11,16 +11,14 @@ class ItemBase extends ItemEventBase
   # @property [String] DESIGN_CONFIG_ROOT_ID デザインコンフィグRoot
   @DESIGN_PAGEVALUE_ROOT = 'designs'
 
-  if gon?
-    constant = gon.const
-
-    class @ImageKey
-      @PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID
-      @ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID
-      @EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID
-      @SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE
-      @URL = constant.PreloadItemImage.Key.URL
-      @SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE
+  constant = gon.const
+  class @ImageKey
+    @PROJECT_ID = constant.PreloadItemImage.Key.PROJECT_ID
+    @ITEM_OBJ_ID = constant.PreloadItemImage.Key.ITEM_OBJ_ID
+    @EVENT_DIST_ID = constant.PreloadItemImage.Key.EVENT_DIST_ID
+    @SELECT_FILE = constant.PreloadItemImage.Key.SELECT_FILE
+    @URL = constant.PreloadItemImage.Key.URL
+    @SELECT_FILE_DELETE = constant.PreloadItemImage.Key.SELECT_FILE_DELETE
 
   # コンストラクタ
   # @param [Array] cood 座標

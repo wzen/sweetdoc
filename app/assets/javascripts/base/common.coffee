@@ -2,10 +2,9 @@
 class Common
   @scaleFromViewRate = 1.0
 
-  if gon?
-    constant = gon.const
-    # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
-    @MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID
+  constant = gon.const
+  # @property [String] MAIN_TEMP_ID mainコンテンツテンプレート
+  @MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID
 
   # ブラウザ対応のチェック
   # @return [Boolean] 処理結果

@@ -16,51 +16,52 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.WRITE_TEXT_BLUR_LENGTH = 3;
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    PreloadItemText.BalloonType = (function() {
-      function BalloonType() {}
+  constant = gon["const"];
 
-      BalloonType.FREE = constant.PreloadItemText.BalloonType.FREE;
+  PreloadItemText.BalloonType = (function() {
+    function BalloonType() {}
 
-      BalloonType.ARC = constant.PreloadItemText.BalloonType.ARC;
+    BalloonType.FREE = constant.PreloadItemText.BalloonType.FREE;
 
-      BalloonType.RECT = constant.PreloadItemText.BalloonType.RECT;
+    BalloonType.ARC = constant.PreloadItemText.BalloonType.ARC;
 
-      BalloonType.BROKEN_ARC = constant.PreloadItemText.BalloonType.BROKEN_ARC;
+    BalloonType.RECT = constant.PreloadItemText.BalloonType.RECT;
 
-      BalloonType.BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT;
+    BalloonType.BROKEN_ARC = constant.PreloadItemText.BalloonType.BROKEN_ARC;
 
-      BalloonType.FLASH = constant.PreloadItemText.BalloonType.FLASH;
+    BalloonType.BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT;
 
-      BalloonType.CLOUD = constant.PreloadItemText.BalloonType.CLOUD;
+    BalloonType.FLASH = constant.PreloadItemText.BalloonType.FLASH;
 
-      return BalloonType;
+    BalloonType.CLOUD = constant.PreloadItemText.BalloonType.CLOUD;
 
-    })();
-    PreloadItemText.WordAlign = (function() {
-      function WordAlign() {}
+    return BalloonType;
 
-      WordAlign.LEFT = constant.PreloadItemText.WordAlign.LEFT;
+  })();
 
-      WordAlign.CENTER = constant.PreloadItemText.WordAlign.CENTER;
+  PreloadItemText.WordAlign = (function() {
+    function WordAlign() {}
 
-      WordAlign.RIGHT = constant.PreloadItemText.WordAlign.RIGHT;
+    WordAlign.LEFT = constant.PreloadItemText.WordAlign.LEFT;
 
-      return WordAlign;
+    WordAlign.CENTER = constant.PreloadItemText.WordAlign.CENTER;
 
-    })();
-    PreloadItemText.ShowAnimationType = (function() {
-      function ShowAnimationType() {}
+    WordAlign.RIGHT = constant.PreloadItemText.WordAlign.RIGHT;
 
-      ShowAnimationType.POPUP = constant.PreloadItemText.ShowAnimationType.POPUP;
+    return WordAlign;
 
-      ShowAnimationType.FADE = constant.PreloadItemText.ShowAnimationType.FADE;
+  })();
 
-      return ShowAnimationType;
+  PreloadItemText.ShowAnimationType = (function() {
+    function ShowAnimationType() {}
 
-    })();
-  }
+    ShowAnimationType.POPUP = constant.PreloadItemText.ShowAnimationType.POPUP;
+
+    ShowAnimationType.FADE = constant.PreloadItemText.ShowAnimationType.FADE;
+
+    return ShowAnimationType;
+
+  })();
 
   PreloadItemText.actionProperties = {
     modifiables: {

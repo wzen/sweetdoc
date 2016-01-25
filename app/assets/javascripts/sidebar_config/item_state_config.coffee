@@ -1,9 +1,8 @@
 class ItemStateConfig
-  if gon?
-    # 定数
-    constant = gon.const
-    @ROOT_ID_NAME = constant.ItemStateConfig.ROOT_ID_NAME
-    @ITEM_TEMP_CLASS_NAME = constant.ItemStateConfig.ITEM_TEMP_CLASS_NAME
+  # 定数
+  constant = gon.const
+  @ROOT_ID_NAME = constant.ItemStateConfig.ROOT_ID_NAME
+  @ITEM_TEMP_CLASS_NAME = constant.ItemStateConfig.ITEM_TEMP_CLASS_NAME
 
   # 設定値初期化
   @initConfig: ->

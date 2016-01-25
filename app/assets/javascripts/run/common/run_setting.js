@@ -6,18 +6,18 @@ RunSetting = (function() {
 
   function RunSetting() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    RunSetting.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
-    RunSetting.PageValueKey = (function() {
-      function PageValueKey() {}
+  constant = gon["const"];
 
-      PageValueKey.SHOW_GUIDE = PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + 'show_guide';
+  RunSetting.ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME;
 
-      return PageValueKey;
+  RunSetting.PageValueKey = (function() {
+    function PageValueKey() {}
 
-    })();
-  }
+    PageValueKey.SHOW_GUIDE = PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + 'show_guide';
+
+    return PageValueKey;
+
+  })();
 
   RunSetting.isShowGuide = function() {
     var ret;

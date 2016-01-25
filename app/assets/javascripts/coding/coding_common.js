@@ -6,49 +6,51 @@ CodingCommon = (function() {
 
   function CodingCommon() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    CodingCommon.DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME;
-    CodingCommon.NOT_SAVED_PREFIX = '* ';
-    CodingCommon.Key = (function() {
-      function Key() {}
+  constant = gon["const"];
 
-      Key.LANG = constant.Coding.Key.LANG;
+  CodingCommon.DEFAULT_FILENAME = constant.Coding.DEFAULT_FILENAME;
 
-      Key.PUBLIC = constant.Coding.Key.PUBLIC;
+  CodingCommon.NOT_SAVED_PREFIX = '* ';
 
-      Key.CODE = constant.Coding.Key.CODE;
+  CodingCommon.Key = (function() {
+    function Key() {}
 
-      Key.CODES = constant.Coding.Key.CODES;
+    Key.LANG = constant.Coding.Key.LANG;
 
-      Key.USER_CODING_ID = constant.Coding.Key.USER_CODING_ID;
+    Key.PUBLIC = constant.Coding.Key.PUBLIC;
 
-      Key.TREE_DATA = constant.Coding.Key.TREE_DATA;
+    Key.CODE = constant.Coding.Key.CODE;
 
-      Key.SUB_TREE = constant.Coding.Key.SUB_TREE;
+    Key.CODES = constant.Coding.Key.CODES;
 
-      Key.NODE_PATH = constant.Coding.Key.NODE_PATH;
+    Key.USER_CODING_ID = constant.Coding.Key.USER_CODING_ID;
 
-      Key.DRAW_TYPE = constant.Coding.Key.DRAW_TYPE;
+    Key.TREE_DATA = constant.Coding.Key.TREE_DATA;
 
-      Key.IS_OPENED = constant.Coding.Key.IS_OPENED;
+    Key.SUB_TREE = constant.Coding.Key.SUB_TREE;
 
-      Key.PARENT_NODE_PATH = constant.Coding.Key.PARENT_NODE_PATH;
+    Key.NODE_PATH = constant.Coding.Key.NODE_PATH;
 
-      return Key;
+    Key.DRAW_TYPE = constant.Coding.Key.DRAW_TYPE;
 
-    })();
-    CodingCommon.Lang = (function() {
-      function Lang() {}
+    Key.IS_OPENED = constant.Coding.Key.IS_OPENED;
 
-      Lang.JAVASCRIPT = constant.Coding.Lang.JAVASCRIPT;
+    Key.PARENT_NODE_PATH = constant.Coding.Key.PARENT_NODE_PATH;
 
-      Lang.COFFEESCRIPT = constant.Coding.Lang.COFFEESCRIPT;
+    return Key;
 
-      return Lang;
+  })();
 
-    })();
-  }
+  CodingCommon.Lang = (function() {
+    function Lang() {}
+
+    Lang.JAVASCRIPT = constant.Coding.Lang.JAVASCRIPT;
+
+    Lang.COFFEESCRIPT = constant.Coding.Lang.COFFEESCRIPT;
+
+    return Lang;
+
+  })();
 
   CodingCommon.init = function() {
     window.editing = {};

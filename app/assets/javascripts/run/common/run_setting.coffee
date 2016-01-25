@@ -1,12 +1,9 @@
 class RunSetting
-  if gon?
-    # 定数
-    constant = gon.const
-
-    @ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME
-
-    class @PageValueKey
-      @SHOW_GUIDE = PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + 'show_guide'
+  # 定数
+  constant = gon.const
+  @ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME
+  class @PageValueKey
+    @SHOW_GUIDE = PageValue.Key.ST_PREFIX + PageValue.Key.PAGE_VALUES_SEPERATOR + 'show_guide'
 
   # ガイド表示
   @isShowGuide = ->

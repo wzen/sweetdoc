@@ -5,27 +5,25 @@ class EventBase extends Extend
   @CLASS_DIST_TOKEN = ""
   @STEP_INTERVAL_DURATION = 0.01
 
-  if gon?
-    constant = gon.const
-
-    @BEFORE_MODIFY_VAR_SUFFIX = constant.BEFORE_MODIFY_VAR_SUFFIX
-    @AFTER_MODIFY_VAR_SUFFIX = constant.AFTER_MODIFY_VAR_SUFFIX
-    class @ActionPropertiesKey
-      @TYPE = constant.ItemActionPropertiesKey.TYPE
-      @METHODS = constant.ItemActionPropertiesKey.METHODS
-      @DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT
-      @METHOD = constant.ItemActionPropertiesKey.METHOD
-      @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
-      @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
-      @COLOR_TYPE = constant.ItemActionPropertiesKey.COLOR_TYPE
-      @SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES
-      @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
-      @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
-      @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
-      @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
-      @MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS
-      @MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN
-      @MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE
+  constant = gon.const
+  @BEFORE_MODIFY_VAR_SUFFIX = constant.BEFORE_MODIFY_VAR_SUFFIX
+  @AFTER_MODIFY_VAR_SUFFIX = constant.AFTER_MODIFY_VAR_SUFFIX
+  class @ActionPropertiesKey
+    @TYPE = constant.ItemActionPropertiesKey.TYPE
+    @METHODS = constant.ItemActionPropertiesKey.METHODS
+    @DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT
+    @METHOD = constant.ItemActionPropertiesKey.METHOD
+    @DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD
+    @ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE
+    @COLOR_TYPE = constant.ItemActionPropertiesKey.COLOR_TYPE
+    @SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES
+    @SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION
+    @SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION
+    @OPTIONS = constant.ItemActionPropertiesKey.OPTIONS
+    @EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION
+    @MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS
+    @MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN
+    @MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE
 
   constructor: ->
     # modifiables変数の初期化

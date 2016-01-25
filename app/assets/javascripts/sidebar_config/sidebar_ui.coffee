@@ -1,9 +1,7 @@
 class Sidebar
-
-  if gon?
-    # 定数
-    constant = gon.const
-    @SIDEBAR_TAB_ROOT = constant.ElementAttribute.SIDEBAR_TAB_ROOT
+  # 定数
+  constant = gon.const
+  @SIDEBAR_TAB_ROOT = constant.ElementAttribute.SIDEBAR_TAB_ROOT
 
   class @Type
     @STATE = 'state'

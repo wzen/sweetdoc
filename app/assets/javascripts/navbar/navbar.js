@@ -6,13 +6,15 @@ Navbar = (function() {
 
   function Navbar() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    Navbar.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
-    Navbar.ITEM_MENU_PREFIX = 'menu-item-';
-    Navbar.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
-    Navbar.LAST_UPDATE_TIME_CLASS = constant.ElementAttribute.LAST_UPDATE_TIME_CLASS;
-  }
+  constant = gon["const"];
+
+  Navbar.NAVBAR_ROOT = constant.ElementAttribute.NAVBAR_ROOT;
+
+  Navbar.ITEM_MENU_PREFIX = 'menu-item-';
+
+  Navbar.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
+
+  Navbar.LAST_UPDATE_TIME_CLASS = constant.ElementAttribute.LAST_UPDATE_TIME_CLASS;
 
   Navbar.initWorktableNavbar = function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt, menuSave;

@@ -12,13 +12,15 @@ ScrollGuide = (function(superClass) {
     return ScrollGuide.__super__.constructor.apply(this, arguments);
   }
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    ScrollGuide.TOP_ROOT_ID = constant.RunGuide.TOP_ROOT_ID;
-    ScrollGuide.BOTTOM_ROOT_ID = constant.RunGuide.BOTTOM_ROOT_ID;
-    ScrollGuide.LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID;
-    ScrollGuide.RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID;
-  }
+  constant = gon["const"];
+
+  ScrollGuide.TOP_ROOT_ID = constant.RunGuide.TOP_ROOT_ID;
+
+  ScrollGuide.BOTTOM_ROOT_ID = constant.RunGuide.BOTTOM_ROOT_ID;
+
+  ScrollGuide.LEFT_ROOT_ID = constant.RunGuide.LEFT_ROOT_ID;
+
+  ScrollGuide.RIGHT_ROOT_ID = constant.RunGuide.RIGHT_ROOT_ID;
 
   ScrollGuide.showGuide = function(enableDirection, forwardDirection, canForward, canReverse) {
     var base, emt;

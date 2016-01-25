@@ -86,8 +86,7 @@ do ->
   window.itemInitFuncList = {}
 
   window.debug = false
-  if gon?
-    constant = gon.const
-    window.debug = constant.DEBUG_JS
+  constant = gon.const
+  window.debug = constant.DEBUG_JS
 
   window.runDebug = false

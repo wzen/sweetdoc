@@ -6,225 +6,224 @@ PageValue = (function() {
 
   function PageValue() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    PageValue.Key = (function() {
-      function Key() {}
+  constant = gon["const"];
 
-      Key.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
+  PageValue.Key = (function() {
+    function Key() {}
 
-      Key.G_ROOT = constant.PageValueKey.G_ROOT;
+    Key.PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR;
 
-      Key.G_PREFIX = constant.PageValueKey.G_PREFIX;
+    Key.G_ROOT = constant.PageValueKey.G_ROOT;
 
-      Key.P_PREFIX = constant.PageValueKey.P_PREFIX;
+    Key.G_PREFIX = constant.PageValueKey.G_PREFIX;
 
-      Key.pageRoot = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return this.P_PREFIX + pn;
-      };
+    Key.P_PREFIX = constant.PageValueKey.P_PREFIX;
 
-      Key.ST_ROOT = constant.PageValueKey.ST_ROOT;
+    Key.pageRoot = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return this.P_PREFIX + pn;
+    };
 
-      Key.ST_PREFIX = constant.PageValueKey.ST_PREFIX;
+    Key.ST_ROOT = constant.PageValueKey.ST_ROOT;
 
-      Key.PAGE_COUNT = constant.PageValueKey.PAGE_COUNT;
+    Key.ST_PREFIX = constant.PageValueKey.ST_PREFIX;
 
-      Key.PAGE_NUM = constant.PageValueKey.PAGE_NUM;
+    Key.PAGE_COUNT = constant.PageValueKey.PAGE_COUNT;
 
-      Key.FORK_COUNT = constant.PageValueKey.FORK_COUNT;
+    Key.PAGE_NUM = constant.PageValueKey.PAGE_NUM;
 
-      Key.FORK_NUM = constant.PageValueKey.FORK_NUM;
+    Key.FORK_COUNT = constant.PageValueKey.FORK_COUNT;
 
-      Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
+    Key.FORK_NUM = constant.PageValueKey.FORK_NUM;
 
-      Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.PROJECT_ID;
+    Key.IS_ROOT = constant.PageValueKey.IS_ROOT;
 
-      Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.TITLE;
+    Key.PROJECT_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.PROJECT_ID;
 
-      Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.SCREEN_SIZE;
+    Key.PROJECT_NAME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.TITLE;
 
-      Key.LAST_SAVE_TIME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "last_save_time";
+    Key.SCREEN_SIZE = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.SCREEN_SIZE;
 
-      Key.RUNNING_USER_PAGEVALUE_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.USER_PAGEVALUE_ID;
+    Key.LAST_SAVE_TIME = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + "last_save_time";
 
-      Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
+    Key.RUNNING_USER_PAGEVALUE_ID = "" + Key.G_PREFIX + Key.PAGE_VALUES_SEPERATOR + Constant.Project.Key.USER_PAGEVALUE_ID;
 
-      Key.instancePagePrefix = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
-      };
+    Key.INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX;
 
-      Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
+    Key.instancePagePrefix = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return this.INSTANCE_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
+    };
 
-      Key.instanceValue = function(objId) {
-        return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
-      };
+    Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
 
-      Key.instanceValueCache = function(objId) {
-        return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + 'cache' + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
-      };
+    Key.instanceValue = function(objId) {
+      return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
+    };
 
-      Key.instanceDesignRoot = function(objId) {
-        return this.instanceValue(objId) + this.PAGE_VALUES_SEPERATOR + 'designs';
-      };
+    Key.instanceValueCache = function(objId) {
+      return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + 'cache' + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
+    };
 
-      Key.instanceDesign = function(objId, designKey) {
-        return this.instanceDesignRoot(objId) + this.PAGE_VALUES_SEPERATOR + designKey;
-      };
+    Key.instanceDesignRoot = function(objId) {
+      return this.instanceValue(objId) + this.PAGE_VALUES_SEPERATOR + 'designs';
+    };
 
-      Key.ITEM_LOADED_PREFIX = 'itemloaded';
+    Key.instanceDesign = function(objId, designKey) {
+      return this.instanceDesignRoot(objId) + this.PAGE_VALUES_SEPERATOR + designKey;
+    };
 
-      Key.itemLoaded = function(classDistToken) {
-        return "" + this.ITEM_LOADED_PREFIX + this.PAGE_VALUES_SEPERATOR + classDistToken;
-      };
+    Key.ITEM_LOADED_PREFIX = 'itemloaded';
 
-      Key.E_ROOT = constant.PageValueKey.E_ROOT;
+    Key.itemLoaded = function(classDistToken) {
+      return "" + this.ITEM_LOADED_PREFIX + this.PAGE_VALUES_SEPERATOR + classDistToken;
+    };
 
-      Key.E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT;
+    Key.E_ROOT = constant.PageValueKey.E_ROOT;
 
-      Key.E_MASTER_ROOT = constant.PageValueKey.E_MASTER_ROOT;
+    Key.E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT;
 
-      Key.E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT;
+    Key.E_MASTER_ROOT = constant.PageValueKey.E_MASTER_ROOT;
 
-      Key.eventPageRoot = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + this.E_SUB_ROOT + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
-      };
+    Key.E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT;
 
-      Key.eventPageMainRoot = function(fn, pn) {
-        var root;
-        if (fn == null) {
-          fn = PageValue.getForkNum();
-        }
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        root = '';
-        if (fn > 0) {
-          root = this.EF_PREFIX + fn;
-        } else {
-          root = this.E_MASTER_ROOT;
-        }
-        return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + root;
-      };
+    Key.eventPageRoot = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + this.E_SUB_ROOT + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
+    };
 
-      Key.eventNumber = function(num, fn, pn) {
-        if (fn == null) {
-          fn = PageValue.getForkNum();
-        }
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.eventPageMainRoot(fn, pn)) + this.PAGE_VALUES_SEPERATOR + this.E_NUM_PREFIX + num;
-      };
+    Key.eventPageMainRoot = function(fn, pn) {
+      var root;
+      if (fn == null) {
+        fn = PageValue.getForkNum();
+      }
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      root = '';
+      if (fn > 0) {
+        root = this.EF_PREFIX + fn;
+      } else {
+        root = this.E_MASTER_ROOT;
+      }
+      return "" + (this.eventPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + root;
+    };
 
-      Key.eventCount = function(fn, pn) {
-        if (fn == null) {
-          fn = PageValue.getForkNum();
-        }
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.eventPageMainRoot(fn, pn)) + this.PAGE_VALUES_SEPERATOR + "count";
-      };
+    Key.eventNumber = function(num, fn, pn) {
+      if (fn == null) {
+        fn = PageValue.getForkNum();
+      }
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.eventPageMainRoot(fn, pn)) + this.PAGE_VALUES_SEPERATOR + this.E_NUM_PREFIX + num;
+    };
 
-      Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
+    Key.eventCount = function(fn, pn) {
+      if (fn == null) {
+        fn = PageValue.getForkNum();
+      }
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.eventPageMainRoot(fn, pn)) + this.PAGE_VALUES_SEPERATOR + "count";
+    };
 
-      Key.EF_PREFIX = constant.PageValueKey.EF_PREFIX;
+    Key.E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX;
 
-      Key.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
+    Key.EF_PREFIX = constant.PageValueKey.EF_PREFIX;
 
-      Key.EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM;
+    Key.IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD;
 
-      Key.UPDATED = 'updated';
+    Key.EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM;
 
-      Key.generalPagePrefix = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return this.G_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
-      };
+    Key.UPDATED = 'updated';
 
-      Key.worktableDisplayPosition = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "ws_display_position";
-      };
+    Key.generalPagePrefix = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return this.G_PREFIX + this.PAGE_VALUES_SEPERATOR + this.pageRoot(pn);
+    };
 
-      Key.worktableScale = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "ws_scale";
-      };
+    Key.worktableDisplayPosition = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "ws_display_position";
+    };
 
-      Key.itemVisible = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "item_visible";
-      };
+    Key.worktableScale = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "ws_scale";
+    };
 
-      Key.F_ROOT = constant.PageValueKey.F_ROOT;
+    Key.itemVisible = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.generalPagePrefix(pn)) + this.PAGE_VALUES_SEPERATOR + "item_visible";
+    };
 
-      Key.F_PREFIX = constant.PageValueKey.F_PREFIX;
+    Key.F_ROOT = constant.PageValueKey.F_ROOT;
 
-      Key.FED_PREFIX = constant.PageValueKey.FED_PREFIX;
+    Key.F_PREFIX = constant.PageValueKey.F_PREFIX;
 
-      Key.footprintPageRoot = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + this.F_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
-      };
+    Key.FED_PREFIX = constant.PageValueKey.FED_PREFIX;
 
-      Key.footprintInstanceBefore = function(eventDistNum, objId, pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceBefore";
-      };
+    Key.footprintPageRoot = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + this.F_PREFIX + this.PAGE_VALUES_SEPERATOR + (this.pageRoot(pn));
+    };
 
-      Key.footprintInstanceAfter = function(eventDistNum, objId, pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceAfter";
-      };
+    Key.footprintInstanceBefore = function(eventDistNum, objId, pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceBefore";
+    };
 
-      Key.footprintCommonBefore = function(eventDistNum, pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + "commonInstanceBefore";
-      };
+    Key.footprintInstanceAfter = function(eventDistNum, objId, pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + "instanceAfter";
+    };
 
-      Key.footprintCommonAfter = function(eventDistNum, pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + "commonInstanceAfter";
-      };
+    Key.footprintCommonBefore = function(eventDistNum, pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + "commonInstanceBefore";
+    };
 
-      Key.forkStack = function(pn) {
-        if (pn == null) {
-          pn = PageValue.getPageNum();
-        }
-        return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + "fork_stack";
-      };
+    Key.footprintCommonAfter = function(eventDistNum, pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + this.FED_PREFIX + this.PAGE_VALUES_SEPERATOR + eventDistNum + this.PAGE_VALUES_SEPERATOR + "commonInstanceAfter";
+    };
 
-      return Key;
+    Key.forkStack = function(pn) {
+      if (pn == null) {
+        pn = PageValue.getPageNum();
+      }
+      return "" + (this.footprintPageRoot(pn)) + this.PAGE_VALUES_SEPERATOR + "fork_stack";
+    };
 
-    })();
-  }
+    return Key;
+
+  })();
 
   PageValue.addItemInfo = function(classDistToken) {
     return this.setInstancePageValue(this.Key.itemLoaded(classDistToken), true);

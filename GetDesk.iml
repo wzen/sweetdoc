@@ -22,7 +22,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="jQuery-2.0.0" level="application" />
     <orderEntry type="library" name="jQuery UI-1.10.2" level="application" />
-    <orderEntry type="library" name="Generated files" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="ace-rails-ap (v4.0.1, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actionmailer (v4.1.12, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="actionpack (v4.1.12, RVM: ruby-2.2.3 [global] (1)) [gem]" level="application" />

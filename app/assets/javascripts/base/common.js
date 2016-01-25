@@ -8,10 +8,9 @@ Common = (function() {
 
   Common.scaleFromViewRate = 1.0;
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    Common.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
-  }
+  constant = gon["const"];
+
+  Common.MAIN_TEMP_ID = constant.ElementAttribute.MAIN_TEMP_ID;
 
   Common.checkBlowserEnvironment = function() {
     var c, e;

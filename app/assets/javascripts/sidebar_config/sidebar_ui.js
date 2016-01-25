@@ -6,10 +6,9 @@ Sidebar = (function() {
 
   function Sidebar() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    Sidebar.SIDEBAR_TAB_ROOT = constant.ElementAttribute.SIDEBAR_TAB_ROOT;
-  }
+  constant = gon["const"];
+
+  Sidebar.SIDEBAR_TAB_ROOT = constant.ElementAttribute.SIDEBAR_TAB_ROOT;
 
   Sidebar.Type = (function() {
     function Type() {}

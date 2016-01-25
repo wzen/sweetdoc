@@ -6,57 +6,58 @@ EventPageValueBase = (function() {
 
   function EventPageValueBase() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    EventPageValueBase.NO_METHOD = constant.EventPageValue.NO_METHOD;
-    EventPageValueBase.NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE;
-    EventPageValueBase.PageValueKey = (function() {
-      function PageValueKey() {}
+  constant = gon["const"];
 
-      PageValueKey.DIST_ID = constant.EventPageValueKey.DIST_ID;
+  EventPageValueBase.NO_METHOD = constant.EventPageValue.NO_METHOD;
 
-      PageValueKey.ID = constant.EventPageValueKey.ID;
+  EventPageValueBase.NO_JUMPPAGE = constant.EventPageValue.NO_JUMPPAGE;
 
-      PageValueKey.CLASS_DIST_TOKEN = constant.EventPageValueKey.CLASS_DIST_TOKEN;
+  EventPageValueBase.PageValueKey = (function() {
+    function PageValueKey() {}
 
-      PageValueKey.ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF;
+    PageValueKey.DIST_ID = constant.EventPageValueKey.DIST_ID;
 
-      PageValueKey.DO_FOCUS = constant.EventPageValueKey.DO_FOCUS;
+    PageValueKey.ID = constant.EventPageValueKey.ID;
 
-      PageValueKey.SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES;
+    PageValueKey.CLASS_DIST_TOKEN = constant.EventPageValueKey.CLASS_DIST_TOKEN;
 
-      PageValueKey.IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT;
+    PageValueKey.ITEM_SIZE_DIFF = constant.EventPageValueKey.ITEM_SIZE_DIFF;
 
-      PageValueKey.ORDER = constant.EventPageValueKey.ORDER;
+    PageValueKey.DO_FOCUS = constant.EventPageValueKey.DO_FOCUS;
 
-      PageValueKey.METHODNAME = constant.EventPageValueKey.METHODNAME;
+    PageValueKey.SPECIFIC_METHOD_VALUES = constant.EventPageValueKey.SPECIFIC_METHOD_VALUES;
 
-      PageValueKey.ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE;
+    PageValueKey.IS_COMMON_EVENT = constant.EventPageValueKey.IS_COMMON_EVENT;
 
-      PageValueKey.FINISH_PAGE = constant.EventPageValueKey.FINISH_PAGE;
+    PageValueKey.ORDER = constant.EventPageValueKey.ORDER;
 
-      PageValueKey.JUMPPAGE_NUM = constant.EventPageValueKey.JUMPPAGE_NUM;
+    PageValueKey.METHODNAME = constant.EventPageValueKey.METHODNAME;
 
-      PageValueKey.IS_SYNC = constant.EventPageValueKey.IS_SYNC;
+    PageValueKey.ACTIONTYPE = constant.EventPageValueKey.ACTIONTYPE;
 
-      PageValueKey.SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START;
+    PageValueKey.FINISH_PAGE = constant.EventPageValueKey.FINISH_PAGE;
 
-      PageValueKey.SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END;
+    PageValueKey.JUMPPAGE_NUM = constant.EventPageValueKey.JUMPPAGE_NUM;
 
-      PageValueKey.SCROLL_ENABLED_DIRECTIONS = constant.EventPageValueKey.SCROLL_ENABLED_DIRECTIONS;
+    PageValueKey.IS_SYNC = constant.EventPageValueKey.IS_SYNC;
 
-      PageValueKey.SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS;
+    PageValueKey.SCROLL_POINT_START = constant.EventPageValueKey.SCROLL_POINT_START;
 
-      PageValueKey.CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM;
+    PageValueKey.SCROLL_POINT_END = constant.EventPageValueKey.SCROLL_POINT_END;
 
-      PageValueKey.MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS;
+    PageValueKey.SCROLL_ENABLED_DIRECTIONS = constant.EventPageValueKey.SCROLL_ENABLED_DIRECTIONS;
 
-      PageValueKey.EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION;
+    PageValueKey.SCROLL_FORWARD_DIRECTIONS = constant.EventPageValueKey.SCROLL_FORWARD_DIRECTIONS;
 
-      return PageValueKey;
+    PageValueKey.CHANGE_FORKNUM = constant.EventPageValueKey.CHANGE_FORKNUM;
 
-    })();
-  }
+    PageValueKey.MODIFIABLE_VARS = constant.EventPageValueKey.MODIFIABLE_VARS;
+
+    PageValueKey.EVENT_DURATION = constant.EventPageValueKey.EVENT_DURATION;
+
+    return PageValueKey;
+
+  })();
 
   EventPageValueBase.initConfigValue = function(eventConfig) {
     var _scrollLength, duration, end, endDiv, eventDuration, handlerDiv, item, s, start, startDiv;

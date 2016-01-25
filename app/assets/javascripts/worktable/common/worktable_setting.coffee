@@ -1,9 +1,8 @@
 # 設定値
 class WorktableSetting
-  if gon?
-    # 定数
-    constant = gon.const
-    @ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME
+  # 定数
+  constant = gon.const
+  @ROOT_ID_NAME = constant.Setting.ROOT_ID_NAME
 
   # 設定値初期化
   @initConfig: ->

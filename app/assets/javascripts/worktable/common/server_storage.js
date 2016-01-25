@@ -6,44 +6,45 @@ ServerStorage = (function() {
 
   function ServerStorage() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    ServerStorage.Key = (function() {
-      function Key() {}
+  constant = gon["const"];
 
-      Key.PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID;
+  ServerStorage.Key = (function() {
+    function Key() {}
 
-      Key.PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT;
+    Key.PROJECT_ID = constant.ServerStorage.Key.PROJECT_ID;
 
-      Key.GENERAL_COMMON_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_COMMON_PAGE_VALUE;
+    Key.PAGE_COUNT = constant.ServerStorage.Key.PAGE_COUNT;
 
-      Key.GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE;
+    Key.GENERAL_COMMON_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_COMMON_PAGE_VALUE;
 
-      Key.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
+    Key.GENERAL_PAGE_VALUE = constant.ServerStorage.Key.GENERAL_PAGE_VALUE;
 
-      Key.EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE;
+    Key.INSTANCE_PAGE_VALUE = constant.ServerStorage.Key.INSTANCE_PAGE_VALUE;
 
-      Key.SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE;
+    Key.EVENT_PAGE_VALUE = constant.ServerStorage.Key.EVENT_PAGE_VALUE;
 
-      return Key;
+    Key.SETTING_PAGE_VALUE = constant.ServerStorage.Key.SETTING_PAGE_VALUE;
 
-    })();
-    ServerStorage.ElementAttribute = (function() {
-      function ElementAttribute() {}
+    return Key;
 
-      ElementAttribute.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
+  })();
 
-      ElementAttribute.LOAD_LIST_UPDATED_FLG = 'load_list_updated';
+  ServerStorage.ElementAttribute = (function() {
+    function ElementAttribute() {}
 
-      ElementAttribute.LOADED_LOCALTIME = 'loaded_localtime';
+    ElementAttribute.FILE_LOAD_CLASS = constant.ElementAttribute.FILE_LOAD_CLASS;
 
-      ElementAttribute.LOAD_LIST_INTERVAL_SECONDS = 60;
+    ElementAttribute.LOAD_LIST_UPDATED_FLG = 'load_list_updated';
 
-      return ElementAttribute;
+    ElementAttribute.LOADED_LOCALTIME = 'loaded_localtime';
 
-    })();
-    ServerStorage.LOAD_LIST_INTERVAL_SECONDS = 60;
-  }
+    ElementAttribute.LOAD_LIST_INTERVAL_SECONDS = 60;
+
+    return ElementAttribute;
+
+  })();
+
+  ServerStorage.LOAD_LIST_INTERVAL_SECONDS = 60;
 
   ServerStorage.save = function(callback) {
     var data, event, eventPagevalues, general, generalCommonPagevalues, generalPagevalues, instance, instancePagevalues, k, pageNum, v;

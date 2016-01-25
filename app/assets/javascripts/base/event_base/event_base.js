@@ -12,47 +12,48 @@ EventBase = (function(superClass) {
 
   EventBase.STEP_INTERVAL_DURATION = 0.01;
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    EventBase.BEFORE_MODIFY_VAR_SUFFIX = constant.BEFORE_MODIFY_VAR_SUFFIX;
-    EventBase.AFTER_MODIFY_VAR_SUFFIX = constant.AFTER_MODIFY_VAR_SUFFIX;
-    EventBase.ActionPropertiesKey = (function() {
-      function ActionPropertiesKey() {}
+  constant = gon["const"];
 
-      ActionPropertiesKey.TYPE = constant.ItemActionPropertiesKey.TYPE;
+  EventBase.BEFORE_MODIFY_VAR_SUFFIX = constant.BEFORE_MODIFY_VAR_SUFFIX;
 
-      ActionPropertiesKey.METHODS = constant.ItemActionPropertiesKey.METHODS;
+  EventBase.AFTER_MODIFY_VAR_SUFFIX = constant.AFTER_MODIFY_VAR_SUFFIX;
 
-      ActionPropertiesKey.DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT;
+  EventBase.ActionPropertiesKey = (function() {
+    function ActionPropertiesKey() {}
 
-      ActionPropertiesKey.METHOD = constant.ItemActionPropertiesKey.METHOD;
+    ActionPropertiesKey.TYPE = constant.ItemActionPropertiesKey.TYPE;
 
-      ActionPropertiesKey.DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD;
+    ActionPropertiesKey.METHODS = constant.ItemActionPropertiesKey.METHODS;
 
-      ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
+    ActionPropertiesKey.DEFAULT_EVENT = constant.ItemActionPropertiesKey.DEFAULT_EVENT;
 
-      ActionPropertiesKey.COLOR_TYPE = constant.ItemActionPropertiesKey.COLOR_TYPE;
+    ActionPropertiesKey.METHOD = constant.ItemActionPropertiesKey.METHOD;
 
-      ActionPropertiesKey.SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES;
+    ActionPropertiesKey.DEFAULT_METHOD = constant.ItemActionPropertiesKey.DEFAULT_METHOD;
 
-      ActionPropertiesKey.SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION;
+    ActionPropertiesKey.ACTION_TYPE = constant.ItemActionPropertiesKey.ACTION_TYPE;
 
-      ActionPropertiesKey.SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION;
+    ActionPropertiesKey.COLOR_TYPE = constant.ItemActionPropertiesKey.COLOR_TYPE;
 
-      ActionPropertiesKey.OPTIONS = constant.ItemActionPropertiesKey.OPTIONS;
+    ActionPropertiesKey.SPECIFIC_METHOD_VALUES = constant.ItemActionPropertiesKey.SPECIFIC_METHOD_VALUES;
 
-      ActionPropertiesKey.EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION;
+    ActionPropertiesKey.SCROLL_ENABLED_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_ENABLED_DIRECTION;
 
-      ActionPropertiesKey.MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS;
+    ActionPropertiesKey.SCROLL_FORWARD_DIRECTION = constant.ItemActionPropertiesKey.SCROLL_FORWARD_DIRECTION;
 
-      ActionPropertiesKey.MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN;
+    ActionPropertiesKey.OPTIONS = constant.ItemActionPropertiesKey.OPTIONS;
 
-      ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE;
+    ActionPropertiesKey.EVENT_DURATION = constant.ItemActionPropertiesKey.EVENT_DURATION;
 
-      return ActionPropertiesKey;
+    ActionPropertiesKey.MODIFIABLE_VARS = constant.ItemActionPropertiesKey.MODIFIABLE_VARS;
 
-    })();
-  }
+    ActionPropertiesKey.MODIFIABLE_CHILDREN = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN;
+
+    ActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE = constant.ItemActionPropertiesKey.MODIFIABLE_CHILDREN_OPENVALUE;
+
+    return ActionPropertiesKey;
+
+  })();
 
   function EventBase() {
     var ref, value, varName;

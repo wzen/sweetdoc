@@ -1,12 +1,11 @@
 class GallerySidebar
-  if gon?
-    # 定数
-    constant = gon.const
-    @USER = constant.Gallery.Sidebar.USER
-    @WORKTABLE = constant.Gallery.Sidebar.WORKTABLE
-    @VIEW = constant.Gallery.Sidebar.VIEW
-    @SEARCH = constant.Gallery.Sidebar.SEARCH
-    @LOGO = constant.Gallery.Sidebar.LOGO
+  # 定数
+  constant = gon.const
+  @USER = constant.Gallery.Sidebar.USER
+  @WORKTABLE = constant.Gallery.Sidebar.WORKTABLE
+  @VIEW = constant.Gallery.Sidebar.VIEW
+  @SEARCH = constant.Gallery.Sidebar.SEARCH
+  @LOGO = constant.Gallery.Sidebar.LOGO
 
   @initMenu = ->
     root = $('#sidebar_wrapper')

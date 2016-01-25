@@ -3,24 +3,22 @@ class PreloadItemText extends CanvasItemBase
   @CLASS_DIST_TOKEN = 'PreloadItemText'
   @NO_TEXT = 'No Text'
   @WRITE_TEXT_BLUR_LENGTH = 3
-
-  if gon?
-    constant = gon.const
-    class @BalloonType
-      @FREE = constant.PreloadItemText.BalloonType.FREE
-      @ARC = constant.PreloadItemText.BalloonType.ARC
-      @RECT = constant.PreloadItemText.BalloonType.RECT
-      @BROKEN_ARC = constant.PreloadItemText.BalloonType.BROKEN_ARC
-      @BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT
-      @FLASH = constant.PreloadItemText.BalloonType.FLASH
-      @CLOUD = constant.PreloadItemText.BalloonType.CLOUD
-    class @WordAlign
-      @LEFT = constant.PreloadItemText.WordAlign.LEFT
-      @CENTER = constant.PreloadItemText.WordAlign.CENTER
-      @RIGHT = constant.PreloadItemText.WordAlign.RIGHT
-    class @ShowAnimationType
-      @POPUP = constant.PreloadItemText.ShowAnimationType.POPUP
-      @FADE = constant.PreloadItemText.ShowAnimationType.FADE
+  constant = gon.const
+  class @BalloonType
+    @FREE = constant.PreloadItemText.BalloonType.FREE
+    @ARC = constant.PreloadItemText.BalloonType.ARC
+    @RECT = constant.PreloadItemText.BalloonType.RECT
+    @BROKEN_ARC = constant.PreloadItemText.BalloonType.BROKEN_ARC
+    @BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT
+    @FLASH = constant.PreloadItemText.BalloonType.FLASH
+    @CLOUD = constant.PreloadItemText.BalloonType.CLOUD
+  class @WordAlign
+    @LEFT = constant.PreloadItemText.WordAlign.LEFT
+    @CENTER = constant.PreloadItemText.WordAlign.CENTER
+    @RIGHT = constant.PreloadItemText.WordAlign.RIGHT
+  class @ShowAnimationType
+    @POPUP = constant.PreloadItemText.ShowAnimationType.POPUP
+    @FADE = constant.PreloadItemText.ShowAnimationType.FADE
 
   @actionProperties =
   {

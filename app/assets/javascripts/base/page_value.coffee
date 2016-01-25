@@ -1,120 +1,118 @@
 # PageValue
 class PageValue
-
-  if gon?
   # 定数
-    constant = gon.const
-    # ページ内値保存キー
-    class @Key
-      # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
-      @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
-      # @property [String] G_ROOT 汎用情報ルート
-      @G_ROOT = constant.PageValueKey.G_ROOT
-      # @property [String] G_ROOT 汎用情報プレフィックス
-      @G_PREFIX = constant.PageValueKey.G_PREFIX
-      # @property [String] P_PREFIX ページ番号プレフィックス
-      @P_PREFIX = constant.PageValueKey.P_PREFIX
-      # @property [return] 現在のページのページ番号ルート
-      @pageRoot = (pn = PageValue.getPageNum()) -> @P_PREFIX + pn
-      # @property [String] ST_ROOT 設定Root
-      @ST_ROOT = constant.PageValueKey.ST_ROOT
-      # @property [String] ST_PREFIX 設定プレフィックス
-      @ST_PREFIX = constant.PageValueKey.ST_PREFIX
-      # @property [String] PAGE_COUNT ページ総数
-      @PAGE_COUNT = constant.PageValueKey.PAGE_COUNT
-      # @property [String] PAGE_NUM 現在のページ番号
-      @PAGE_NUM = constant.PageValueKey.PAGE_NUM
-      # @property [String] FORK_NUM フォーク総数
-      @FORK_COUNT = constant.PageValueKey.FORK_COUNT
-      # @property [String] FORK_NUM 現在のフォーク番号
-      @FORK_NUM = constant.PageValueKey.FORK_NUM
-      # @property [String] IS_ROOT ページ値ルート
-      @IS_ROOT = constant.PageValueKey.IS_ROOT
-      # @property [String] PROJECT_NAME プロジェクトID
-      @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.PROJECT_ID}"
-      # @property [String] PROJECT_NAME プロジェクト名
-      @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.TITLE}"
-      # @property [String] SCREEN_SIZE プロジェクトサイズ
-      @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
-      # @property [String] LAST_SAVE_TIME 最終保存時刻
-      @LAST_SAVE_TIME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}last_save_time"
-      # @property [String] LAST_SAVE_TIME 最終保存時刻
-      @RUNNING_USER_PAGEVALUE_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.USER_PAGEVALUE_ID}"
-      # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
-      @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
-      # @property [return] インスタンスページプレフィックスを取得
-      @instancePagePrefix = (pn = PageValue.getPageNum()) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
-      # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
-      @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
-      # @property [return] インスタンス値
-      @instanceValue = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
-      # @property [return] インスタンスキャッシュ値
-      @instanceValueCache = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + 'cache' + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
-      # @property [return] インスタンスデザインRoot
-      @instanceDesignRoot = (objId) -> @instanceValue(objId) + @PAGE_VALUES_SEPERATOR + 'designs'
-      # @property [return] インスタンスデザイン
-      @instanceDesign = (objId, designKey) -> @instanceDesignRoot(objId) + @PAGE_VALUES_SEPERATOR + designKey
-      # @property [String] ITEM_LOADED_PREFIX アイテム読み込み済みプレフィックス
-      @ITEM_LOADED_PREFIX = 'itemloaded'
-      @itemLoaded = (classDistToken) -> "#{@ITEM_LOADED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{classDistToken}"
-      # @property [String] E_ROOT イベント値ルート
-      @E_ROOT = constant.PageValueKey.E_ROOT
-      # @property [String] E_SUB_ROOT イベントプレフィックス
-      @E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT
-      # @property [String] E_MASTER_ROOT イベントコンテンツルート
-      @E_MASTER_ROOT = constant.PageValueKey.E_MASTER_ROOT
-      # @property [String] E_FORK_ROOT イベントフォークルート
-      @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
-      # @property [return] イベントページルート
-      @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
-      # @property [return] イベントページプレフィックス
-      @eventPageMainRoot = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) ->
-        root = ''
-        if fn > 0
-          root = @EF_PREFIX + fn
-        else
-          root = @E_MASTER_ROOT
-        return "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{root}"
-      # @property [return] イベントページプレフィックス
-      @eventNumber = (num, fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
-      # @property [return] イベント数
-      @eventCount = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}count"
-      # @property [String] E_NUM_PREFIX イベント番号プレフィックス
-      @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
-      # @property [String] EF_PREFIX イベントフォークプレフィックス
-      @EF_PREFIX = constant.PageValueKey.EF_PREFIX
-      # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
-      @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
-      # @property [String] EF_MASTER_FORKNUM Masterのフォーク番号
-      @EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM
-      # @property [String] UPDATED 更新フラグ
-      @UPDATED = 'updated'
-      # @property [return] 設定値ページプレフィックスを取得
-      @generalPagePrefix = (pn = PageValue.getPageNum()) -> @G_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
-      # @property [return] Worktableプロジェクト表示位置
-      @worktableDisplayPosition = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}ws_display_position"
-      # @property [return] Zoom
-      @worktableScale = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}ws_scale"
-      # @property [return] アイテム表示状態
-      @itemVisible = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}item_visible"
-      # @property [String] F_ROOT 履歴情報ルート
-      @F_ROOT = constant.PageValueKey.F_ROOT
-      # @property [String] F_PREFIX 履歴情報プレフィックス
-      @F_PREFIX = constant.PageValueKey.F_PREFIX
-      # @property [String] F_PREFIX 履歴情報イベント一意IDプレフィックス
-      @FED_PREFIX = constant.PageValueKey.FED_PREFIX
-      # @property [return] 履歴ページルート
-      @footprintPageRoot = (pn = PageValue.getPageNum()) -> "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
-      # @property [return] インスタンス履歴(変更前)
-      @footprintInstanceBefore = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceBefore"
-      # @property [return] インスタンス履歴(変更後)
-      @footprintInstanceAfter = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceAfter"
-      # @property [return] 共通インスタンス履歴(変更前)
-      @footprintCommonBefore = (eventDistNum, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}commonInstanceBefore"
-      # @property [return] 共通インスタンス履歴(変更後)
-      @footprintCommonAfter = (eventDistNum, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}commonInstanceAfter"
-      # @property [return] フォーク番号スタック
-      @forkStack = (pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}fork_stack"
+  constant = gon.const
+  # ページ内値保存キー
+  class @Key
+    # @property [String] PAGE_VALUES_SEPERATOR ページ値のセパレータ
+    @PAGE_VALUES_SEPERATOR = constant.PageValueKey.PAGE_VALUES_SEPERATOR
+    # @property [String] G_ROOT 汎用情報ルート
+    @G_ROOT = constant.PageValueKey.G_ROOT
+    # @property [String] G_ROOT 汎用情報プレフィックス
+    @G_PREFIX = constant.PageValueKey.G_PREFIX
+    # @property [String] P_PREFIX ページ番号プレフィックス
+    @P_PREFIX = constant.PageValueKey.P_PREFIX
+    # @property [return] 現在のページのページ番号ルート
+    @pageRoot = (pn = PageValue.getPageNum()) -> @P_PREFIX + pn
+    # @property [String] ST_ROOT 設定Root
+    @ST_ROOT = constant.PageValueKey.ST_ROOT
+    # @property [String] ST_PREFIX 設定プレフィックス
+    @ST_PREFIX = constant.PageValueKey.ST_PREFIX
+    # @property [String] PAGE_COUNT ページ総数
+    @PAGE_COUNT = constant.PageValueKey.PAGE_COUNT
+    # @property [String] PAGE_NUM 現在のページ番号
+    @PAGE_NUM = constant.PageValueKey.PAGE_NUM
+    # @property [String] FORK_NUM フォーク総数
+    @FORK_COUNT = constant.PageValueKey.FORK_COUNT
+    # @property [String] FORK_NUM 現在のフォーク番号
+    @FORK_NUM = constant.PageValueKey.FORK_NUM
+    # @property [String] IS_ROOT ページ値ルート
+    @IS_ROOT = constant.PageValueKey.IS_ROOT
+    # @property [String] PROJECT_NAME プロジェクトID
+    @PROJECT_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.PROJECT_ID}"
+    # @property [String] PROJECT_NAME プロジェクト名
+    @PROJECT_NAME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.TITLE}"
+    # @property [String] SCREEN_SIZE プロジェクトサイズ
+    @SCREEN_SIZE = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.SCREEN_SIZE}"
+    # @property [String] LAST_SAVE_TIME 最終保存時刻
+    @LAST_SAVE_TIME = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}last_save_time"
+    # @property [String] LAST_SAVE_TIME 最終保存時刻
+    @RUNNING_USER_PAGEVALUE_ID = "#{@G_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{Constant.Project.Key.USER_PAGEVALUE_ID}"
+    # @property [String] INSTANCE_PREFIX インスタンスプレフィックス
+    @INSTANCE_PREFIX = constant.PageValueKey.INSTANCE_PREFIX
+    # @property [return] インスタンスページプレフィックスを取得
+    @instancePagePrefix = (pn = PageValue.getPageNum()) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
+    # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
+    @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
+    # @property [return] インスタンス値
+    @instanceValue = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
+    # @property [return] インスタンスキャッシュ値
+    @instanceValueCache = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + 'cache' + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
+    # @property [return] インスタンスデザインRoot
+    @instanceDesignRoot = (objId) -> @instanceValue(objId) + @PAGE_VALUES_SEPERATOR + 'designs'
+    # @property [return] インスタンスデザイン
+    @instanceDesign = (objId, designKey) -> @instanceDesignRoot(objId) + @PAGE_VALUES_SEPERATOR + designKey
+    # @property [String] ITEM_LOADED_PREFIX アイテム読み込み済みプレフィックス
+    @ITEM_LOADED_PREFIX = 'itemloaded'
+    @itemLoaded = (classDistToken) -> "#{@ITEM_LOADED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{classDistToken}"
+    # @property [String] E_ROOT イベント値ルート
+    @E_ROOT = constant.PageValueKey.E_ROOT
+    # @property [String] E_SUB_ROOT イベントプレフィックス
+    @E_SUB_ROOT = constant.PageValueKey.E_SUB_ROOT
+    # @property [String] E_MASTER_ROOT イベントコンテンツルート
+    @E_MASTER_ROOT = constant.PageValueKey.E_MASTER_ROOT
+    # @property [String] E_FORK_ROOT イベントフォークルート
+    @E_FORK_ROOT = constant.PageValueKey.E_FORK_ROOT
+    # @property [return] イベントページルート
+    @eventPageRoot = (pn = PageValue.getPageNum()) -> "#{@E_SUB_ROOT}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
+    # @property [return] イベントページプレフィックス
+    @eventPageMainRoot = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) ->
+      root = ''
+      if fn > 0
+        root = @EF_PREFIX + fn
+      else
+        root = @E_MASTER_ROOT
+      return "#{@eventPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{root}"
+    # @property [return] イベントページプレフィックス
+    @eventNumber = (num, fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}#{@E_NUM_PREFIX}#{num}"
+    # @property [return] イベント数
+    @eventCount = (fn = PageValue.getForkNum(), pn = PageValue.getPageNum()) -> "#{@eventPageMainRoot(fn, pn)}#{@PAGE_VALUES_SEPERATOR}count"
+    # @property [String] E_NUM_PREFIX イベント番号プレフィックス
+    @E_NUM_PREFIX = constant.PageValueKey.E_NUM_PREFIX
+    # @property [String] EF_PREFIX イベントフォークプレフィックス
+    @EF_PREFIX = constant.PageValueKey.EF_PREFIX
+    # @property [String] IS_RUNWINDOW_RELOAD Runビューをリロードしたか
+    @IS_RUNWINDOW_RELOAD = constant.PageValueKey.IS_RUNWINDOW_RELOAD
+    # @property [String] EF_MASTER_FORKNUM Masterのフォーク番号
+    @EF_MASTER_FORKNUM = constant.PageValueKey.EF_MASTER_FORKNUM
+    # @property [String] UPDATED 更新フラグ
+    @UPDATED = 'updated'
+    # @property [return] 設定値ページプレフィックスを取得
+    @generalPagePrefix = (pn = PageValue.getPageNum()) -> @G_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
+    # @property [return] Worktableプロジェクト表示位置
+    @worktableDisplayPosition = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}ws_display_position"
+    # @property [return] Zoom
+    @worktableScale = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}ws_scale"
+    # @property [return] アイテム表示状態
+    @itemVisible = (pn = PageValue.getPageNum()) -> "#{@generalPagePrefix(pn)}#{@PAGE_VALUES_SEPERATOR}item_visible"
+    # @property [String] F_ROOT 履歴情報ルート
+    @F_ROOT = constant.PageValueKey.F_ROOT
+    # @property [String] F_PREFIX 履歴情報プレフィックス
+    @F_PREFIX = constant.PageValueKey.F_PREFIX
+    # @property [String] F_PREFIX 履歴情報イベント一意IDプレフィックス
+    @FED_PREFIX = constant.PageValueKey.FED_PREFIX
+    # @property [return] 履歴ページルート
+    @footprintPageRoot = (pn = PageValue.getPageNum()) -> "#{@F_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{@pageRoot(pn)}"
+    # @property [return] インスタンス履歴(変更前)
+    @footprintInstanceBefore = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceBefore"
+    # @property [return] インスタンス履歴(変更後)
+    @footprintInstanceAfter = (eventDistNum, objId, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}#{objId}#{@PAGE_VALUES_SEPERATOR}instanceAfter"
+    # @property [return] 共通インスタンス履歴(変更前)
+    @footprintCommonBefore = (eventDistNum, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}commonInstanceBefore"
+    # @property [return] 共通インスタンス履歴(変更後)
+    @footprintCommonAfter = (eventDistNum, pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}#{@FED_PREFIX}#{@PAGE_VALUES_SEPERATOR}#{eventDistNum}#{@PAGE_VALUES_SEPERATOR}commonInstanceAfter"
+    # @property [return] フォーク番号スタック
+    @forkStack = (pn = PageValue.getPageNum()) -> "#{@footprintPageRoot(pn)}#{@PAGE_VALUES_SEPERATOR}fork_stack"
 
   # サーバから読み込んだアイテム情報を追加
   # @param [Integer] classDistToken アイテムID

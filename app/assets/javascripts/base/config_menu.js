@@ -6,26 +6,27 @@ ConfigMenu = (function() {
 
   function ConfigMenu() {}
 
-  if (typeof gon !== "undefined" && gon !== null) {
-    constant = gon["const"];
-    ConfigMenu.ROOT_ID = constant.ConfigMenu.ROOT_ID;
-    ConfigMenu.Action = (function() {
-      function Action() {}
+  constant = gon["const"];
 
-      Action.PRELOAD_IMAGE_PATH_SELECT = constant.ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT;
+  ConfigMenu.ROOT_ID = constant.ConfigMenu.ROOT_ID;
 
-      return Action;
+  ConfigMenu.Action = (function() {
+    function Action() {}
 
-    })();
-    ConfigMenu.Modifiable = (function() {
-      function Modifiable() {}
+    Action.PRELOAD_IMAGE_PATH_SELECT = constant.ConfigMenu.Action.PRELOAD_IMAGE_PATH_SELECT;
 
-      Modifiable.CHILDREN_WRAPPER_CLASS = constant.ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS;
+    return Action;
 
-      return Modifiable;
+  })();
 
-    })();
-  }
+  ConfigMenu.Modifiable = (function() {
+    function Modifiable() {}
+
+    Modifiable.CHILDREN_WRAPPER_CLASS = constant.ConfigMenu.Modifiable.CHILDREN_WRAPPER_CLASS;
+
+    return Modifiable;
+
+  })();
 
   ConfigMenu.getDesignConfig = function(obj, successCallback, errorCallback) {
     var designConfigRoot, itemType;
