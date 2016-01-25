@@ -50,7 +50,7 @@ loadFacebookSDK = function() {
 
 initializeFacebookSDK = function() {
   return FB.init({
-    appId: window.ENV.fbAppId,
+    appId: window.ENV.RailsEnv.OMNIAUTH_FACEBOOK_KEY,
     channelUrl: document.domain + "/sb/fb_channel.html",
     status: true,
     cookie: true,
