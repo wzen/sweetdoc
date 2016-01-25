@@ -63,6 +63,7 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/css_item_base_worktable_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/canvas_item_base_worktable_extend.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/social_button.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_handwrite.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding_common.js" />
@@ -145,6 +146,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/css_item_base_worktable_extend.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/canvas_item_base_worktable_extend.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/social_button/social_button.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_handwrite.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding_common.js" />

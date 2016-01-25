@@ -12,6 +12,7 @@
 // IDE not aware under vendor/asset/
 //= require_directory ./../i18n
 //= require base/constant
+//= require base/env
 //= require base/common
 //= require base/common_var
 //= require base/page_value

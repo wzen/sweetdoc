@@ -20,5 +20,6 @@
  *= require common/float_view
  *= require common/modal_view.css
  *= require common/indicator
+ *= require common/social_button
  *= require item_gallery/item_gallery
  */

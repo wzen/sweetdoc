@@ -71,7 +71,7 @@ class PreloadItemImage extends ItemBase
   # アイテム削除 ※コールバックは無くていい
   removeItemElement: ->
     super()
-    # レコード削除
+    # TODO: レコード削除
 
 
   # アイテム用のテンプレートHTMLを読み込み

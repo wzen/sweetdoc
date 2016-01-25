@@ -10,6 +10,7 @@
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
 //= require base/constant
+//= require base/env
 //= require base/common
 //= require base/common_var
 //= require base/page_value
@@ -20,6 +21,7 @@
 //= require base/local_storage
 //= require base/float_view
 //= require base/config_menu
+//= require base/social_button/social_button
 //= require gallery/gallery_common
 //= require gallery/gallery_sidebar
 //= require gallery/gallery
