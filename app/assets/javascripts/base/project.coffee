@@ -32,14 +32,11 @@ class Project
       $(".button_wrapper .#{$(@).val()}", modalEmt).show()
       Project.hideError(modalEmt)
     )
-
     $('.display_size_wrapper input[type=radio]', modalEmt).off('click').on('click', ->
       $('.display_size_input_wrapper', modalEmt).css('display', if $(@).val() == 'input' then 'block' else 'none')
     )
-
     # ウィンドウサイズ
     $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} x #{$('#screen_wrapper').height()}")
-
     # 作成済みプロジェクト一覧取得
     Project.load_data_order_last_updated((data) ->
       user_pagevalue_list = data.user_pagevalue_list

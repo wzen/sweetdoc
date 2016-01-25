@@ -53,7 +53,7 @@ loadFacebookSDK = ->
 
 initializeFacebookSDK = ->
   FB.init
-    appId     : window.ENV.RailsEnv.OMNIAUTH_FACEBOOK_KEY
+    appId     : serverenv.OMNIAUTH_FACEBOOK_KEY
     channelUrl: "#{document.domain}/sb/fb_channel.html"
     status    : true
     cookie    : true

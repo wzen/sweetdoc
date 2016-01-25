@@ -14,18 +14,21 @@ class ApplicationController < ActionController::Base
   def init_const
     # Constantの設定
     gon.const  = const_values(Const, {})
+    gon.serverenv  = ENV
   end
 
   def const_values(const_class, obj)
-    const_class.constants.each do |c|
-      v = const_class.const_get(c)
-      if v.is_a? Class
-        obj[c] = const_values(v, {})
-      else
-        obj[c] = v
+    if const_class.is_a?(Class)
+      const_class.constants.each do |c|
+        v = const_class.const_get(c)
+        if v.is_a? Class
+          obj[c] = const_values(v, {})
+        else
+          obj[c] = v
+        end
       end
+      return obj
     end
-    return obj
   end
 
   def current_or_guest_user

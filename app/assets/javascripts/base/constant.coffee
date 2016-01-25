@@ -1,4 +1,5 @@
 constant = gon.const
+serverenv = gon.serverenv
 
 # アプリ共通定数
 class Constant

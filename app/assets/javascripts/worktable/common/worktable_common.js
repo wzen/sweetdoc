@@ -334,12 +334,12 @@ WorktableCommon = (function() {
     borderWidth = 5;
     timelineTopPadding = 5;
     scrollContentsSize = Common.scrollContentsSizeUnderScreenEventScale();
-    $('#main').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
+    $('#main').height($('#contents').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2));
     window.scrollContentsSize = {
       width: scrollContentsSize.width,
       height: scrollContentsSize.height
     };
-    return $('#sidebar').height($('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - (borderWidth * 2));
+    return $('#sidebar').height($('#contents').height() - (borderWidth * 2));
   };
 
   WorktableCommon.initScrollContentsPosition = function() {

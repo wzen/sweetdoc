@@ -14,7 +14,6 @@
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
 //= require base/constant
-//= require base/env
 //= require base/common
 //= require base/common_var
 //= require base/page_value
