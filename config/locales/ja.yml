@@ -37,7 +37,7 @@ ja:
       language: "言語"
       introduction: "自己紹介"
       about: "このサイトについて"
-      back_to_mainpage: "メインページに戻る"
+      back_to_gallery: "ギャラリーに戻る"
       last_update_date: "最新更新時間"
     setting:
       show_guide: "モーションガイド切り替え"

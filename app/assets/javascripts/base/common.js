@@ -794,8 +794,7 @@ Common = (function() {
         url: "/modal_view/show",
         type: "GET",
         data: {
-          type: type,
-          parentUrl: window.location.href
+          type: type
         },
         dataType: "json",
         success: function(data) {

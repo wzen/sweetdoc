@@ -1,10 +1,6 @@
 <%
   twitter_title = '' if twitter_title.nil?
-  from_modal = false if from_modal.nil?
   url = request.original_url
-  if from_modal
-    url = @parent_url
-  end
 %>
 
 <div class="social clearfix">

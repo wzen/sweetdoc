@@ -58,7 +58,7 @@ en:
       language: "Language"
       introduction: "introduction"
       about: "About"
-      back_to_mainpage: "Back to MainPage"
+      back_to_gallery: "Back to gallery"
       last_update_date: "Last update"
     setting:
       show_guide: "Toggle Guide"
