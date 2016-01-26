@@ -62,11 +62,15 @@ ItemPreviewCommon = (function() {
       }
     });
     ItemPreviewHandwrite.initHandwrite();
-    Common.applyEnvironmentFromPagevalue();
+    this.applyEnvironmentFromPagevalue();
     WorktableCommon.updateMainViewSize();
     if (callback != null) {
       return callback();
     }
+  };
+
+  ItemPreviewCommon.applyEnvironmentFromPagevalue = function() {
+    return Common.initScrollContentsPosition();
   };
 
   ItemPreviewCommon.initMainContainerAsRun = function(callback) {

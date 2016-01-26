@@ -54,12 +54,16 @@ class ItemPreviewCommon
     # ドラッグ描画イベント
     ItemPreviewHandwrite.initHandwrite()
     # 環境設定
-    Common.applyEnvironmentFromPagevalue()
+    @applyEnvironmentFromPagevalue()
     # Mainビュー高さ設定
     WorktableCommon.updateMainViewSize()
 
     if callback?
       callback()
+
+  @applyEnvironmentFromPagevalue = ->
+    # スクロール位置設定
+    Common.initScrollContentsPosition()
 
   @initMainContainerAsRun = (callback = null) ->
     CommonVar.runCommonVar()
