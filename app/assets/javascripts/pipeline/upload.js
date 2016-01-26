@@ -10,6 +10,7 @@
 //= require ../../../../vendor/assets/jquery_readyselector/jquery.readyselector
 //= require_directory ./../i18n
 //= require ../../../../vendor/assets/html2canvas/html2canvas_custom.min
+//= require base/social_button/social_button
 //= require markitup/sets/html/set
 //= require base/constant
 //= require upload/upload_base

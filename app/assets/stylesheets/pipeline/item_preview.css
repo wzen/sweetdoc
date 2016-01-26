@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require css/colorpicker
+ *= require common/social_button
  *= require worktable/worktable
  *= require run/run
  *= require item_preview/item_preview

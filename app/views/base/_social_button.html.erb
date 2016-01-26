@@ -1,10 +1,19 @@
+<%
+  twitter_title = '' if twitter_title.nil?
+  from_modal = false if from_modal.nil?
+  url = request.original_url
+  if from_modal
+    url = @parent_url
+  end
+%>
+
 <div class="social clearfix">
 
   <!-- Facebook -->
   <div class="button facebook">
     <div id="fb-root"></div>
     <div class="fb-like"
-         data-href="<%= request.original_url %>"
+         data-href="<%= url %>"
          data-layout="button_count"
          data-send="false"
          data-width="120"
@@ -16,8 +25,8 @@
   <div class="button twitter">
     <a href="https://twitter.com/share" class="twitter-share-button"
        data-lang="en"
-       data-url="<%= request.original_url %>"
-       data-text="<%= @post.title %>"
+       data-url="<%= url %>"
+       data-text="<%= twitter_title %>"
     >Tweet</a>
   </div>
 
@@ -25,7 +34,7 @@
   <div class="button pocket">
     <a href="https://getpocket.com/save" class="pocket-btn"
        data-lang="en"
-       data-save-url="<%= request.original_url %>"
+       data-save-url="<%= url %>"
        data-pocket-count="horizontal"
        data-pocket-align="left"
     >Pocket</a>
@@ -35,13 +44,13 @@
   <div class="button google">
     <div class="g-plusone"
          data-size="medium"
-         data-href="<%= request.original_url %>">
+         data-href="<%= url %>">
     </div>
   </div>
 
   <!-- Hatena -->
   <div class="button hatena">
-    <a href="http://b.hatena.ne.jp/entry/<%= request.original_url %>"
+    <a href="http://b.hatena.ne.jp/entry/<%= url %>"
        class="hatena-bookmark-button"
        data-hatena-bookmark-layout="standard"
        data-hatena-bookmark-lang="ja"

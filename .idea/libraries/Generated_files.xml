@@ -32,7 +32,6 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
@@ -63,9 +62,10 @@
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/css_item_base_worktable_extend.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item/worktable_extend/canvas_item_base_worktable_extend.js" />
-        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/social_button.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/social_button/social_button.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_handwrite.js" />
+        <item url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding_common.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
         <item url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />
@@ -115,7 +115,6 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/local_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/server_storage.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/float_view.js" />
-      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/common/history.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/common_event/background_event.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/preload_item/pi_button.js" />
@@ -149,6 +148,7 @@
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/social_button/social_button.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/item_preview/item_preview_handwrite.js" />
+      <root url="file://$PROJECT_DIR$/app/assets/javascripts/base/constant.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/coding/coding_common.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/worktable/event/timeline.js" />
       <root url="file://$PROJECT_DIR$/app/assets/javascripts/run/common/run_common.js" />

@@ -17,13 +17,11 @@
 </head>
 <body class="<%= controller_name -%> <%= action_name -%>">
 *** Temporary ***
-
-    <%= javascript_include_tag 'pipeline/upload', 'data-turbolinks-track' => true %>
-
     <div id="contents">
         <%= yield %>
     </div>
 
+    <%= javascript_include_tag 'pipeline/upload', 'data-turbolinks-track' => true %>
     <script type="text/javascript">
         I18n.defaultLocale = "<%= I18n.default_locale %>";
         I18n.locale = "<%= I18n.locale %>";

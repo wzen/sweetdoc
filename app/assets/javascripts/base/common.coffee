@@ -641,6 +641,7 @@ class Common
           type: "GET"
           data: {
             type: type
+            parentUrl: window.location.href
           }
           dataType: "json"
           success: (data)->

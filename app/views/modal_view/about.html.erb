@@ -1,18 +1,29 @@
 <div class="modal-content <%= Const::ModalViewType::ABOUT %>">
-    <div class="content">
-      <%= render 'base/copyright' %>
-      <%= render 'base/myinfo'%>
+  <div class="content">
+    <%= render 'base/copyright' %>
+    <%= render 'base/myinfo'%>
 
-      <br/>
-      <div>Icons made by</div>
-      <div><a href="http://www.freepik.com" title="Freepik">Freepik</a></div>
-      <div><a href="http://www.flaticon.com/authors/simpleicon" title="SimpleIcon">SimpleIcon</a></div>
-      <div><a href="http://www.flaticon.com/authors/victor-erixon" title="Victor Erixon">Victor Erixon</a></div>
-      <div><a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a></div>
-      <div><a href="http://www.flaticon.com/authors/zurb" title="Zurb">Zurb</a></div>
-      <div><a href="http://www.flaticon.com/authors/yannick" title="Yannick">Yannick</a></div>
-      <div><a href="http://www.flaticon.com/authors/appzgear" title="Appzgear">Appzgear</a></div>
-      <div><a href="http://www.flaticon.com/authors/ocha" title="OCHA">OCHA</a></div>
-      <div>from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
-    </div>
+    <br/>
+
+    <%= render 'base/social_button', from_modal: true %>
+
+    <br />
+
+    <div>Icons made by</div>
+    <div><a href="http://www.freepik.com" title="Freepik">Freepik</a></div>
+    <div><a href="http://www.flaticon.com/authors/simpleicon" title="SimpleIcon">SimpleIcon</a></div>
+    <div><a href="http://www.flaticon.com/authors/victor-erixon" title="Victor Erixon">Victor Erixon</a></div>
+    <div><a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a></div>
+    <div><a href="http://www.flaticon.com/authors/zurb" title="Zurb">Zurb</a></div>
+    <div><a href="http://www.flaticon.com/authors/yannick" title="Yannick">Yannick</a></div>
+    <div><a href="http://www.flaticon.com/authors/appzgear" title="Appzgear">Appzgear</a></div>
+    <div><a href="http://www.flaticon.com/authors/ocha" title="OCHA">OCHA</a></div>
+    <div>from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+  </div>
+  <script type="text/javascript">
+    var twitterTitle = $(".modal-context.<%= Const::ModalViewType::ABOUT %>");
+    if (twitterTitle.length > 0) {
+      twitterTitle.attr('data-text', $('title').text())
+    }
+  </script>
 </div>

@@ -38,6 +38,7 @@
 //= require base/project
 //= require base/float_view
 //= require base/config_menu
+//= require base/social_button/social_button
 // require_directory util
 //= require util/color/color_change
 //= require sidebar_config/event_config
