@@ -7,7 +7,6 @@ ready = function() {
     bindFacebookEvents();
   }
   loadGoogleSDK();
-  gapi.plusone.go();
   loadTwitterSDK();
   if (!twttr_events_bound) {
     bindTwitterEventHandlers();

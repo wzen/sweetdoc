@@ -6,7 +6,7 @@ ready = ->
 
   # Google
   loadGoogleSDK()
-  gapi.plusone.go()
+  #gapi.plusone.go()
 
   # Twitter
   loadTwitterSDK()
