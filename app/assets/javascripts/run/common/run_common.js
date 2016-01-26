@@ -81,7 +81,7 @@ RunCommon = (function() {
       infoHeight = i.height();
       padding = 9;
     }
-    updateMainHeight = $('#contents').height() - $("#" + Navbar.NAVBAR_ROOT).height() - infoHeight - padding;
+    updateMainHeight = $('#contents').height() - infoHeight - padding;
     projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
     if (updateMainWidth < projectScreenSize.width + 30) {

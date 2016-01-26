@@ -10,10 +10,16 @@ html, body {
   overflow: hidden;
 }
 
-#contents {
-  margin-top: 54px;
-  height: 100%;
+body {
   position: relative;
+}
+
+#contents {
+  position: absolute;
+  top: 51px;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 #modal-overlay{

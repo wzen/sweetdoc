@@ -51,7 +51,7 @@ class RunCommon
     if i?
       infoHeight = i.height()
       padding = 9
-    updateMainHeight = $('#contents').height() - $("##{Navbar.NAVBAR_ROOT}").height() - infoHeight - padding
+    updateMainHeight = $('#contents').height() - infoHeight - padding
 
     # スクリーンサイズ修正
     projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)

@@ -50,7 +50,7 @@ Project = (function() {
     $('.display_size_wrapper input[type=radio]', modalEmt).off('click').on('click', function() {
       return $('.display_size_input_wrapper', modalEmt).css('display', $(this).val() === 'input' ? 'block' : 'none');
     });
-    $('.default_window_size', modalEmt).html(($('#screen_wrapper').width()) + " x " + ($('#screen_wrapper').height()));
+    $('.default_window_size', modalEmt).html(($('#screen_wrapper').width()) + " x " + (Project.calcOriginalViewHeight()));
     Project.load_data_order_last_updated(function(data) {
       var d, e, i, len, list, n, p, projectSelect, size, user_pagevalue_list;
       user_pagevalue_list = data.user_pagevalue_list;
@@ -106,7 +106,7 @@ Project = (function() {
       var height, projectName, width;
       projectName = $('.project_name').val();
       width = $('#screen_wrapper').width();
-      height = $('#screen_wrapper').height();
+      height = Project.calcOriginalViewHeight();
       if ((projectName == null) || projectName.length === 0) {
         Project.showError(modalEmt, I18n.t('message.project.error.project_name'));
         return;
@@ -425,6 +425,13 @@ Project = (function() {
         }
       };
     })(this));
+  };
+
+  Project.calcOriginalViewHeight = function() {
+    var borderWidth, timelineTopPadding;
+    borderWidth = 5;
+    timelineTopPadding = 5;
+    return $('#screen_wrapper').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2);
   };
 
   Project.showError = function(modalEmt, message) {

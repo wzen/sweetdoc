@@ -9,9 +9,16 @@ html, body {
   overflow: hidden;
 }
 
+body {
+  position: relative;
+}
+
 #contents {
-  margin-top: 54px;
-  height: 100%;
+  position: absolute;
+  top: 51px;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 div#main {

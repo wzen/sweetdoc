@@ -36,7 +36,7 @@ class Project
       $('.display_size_input_wrapper', modalEmt).css('display', if $(@).val() == 'input' then 'block' else 'none')
     )
     # ウィンドウサイズ
-    $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} x #{$('#screen_wrapper').height()}")
+    $('.default_window_size', modalEmt).html("#{$('#screen_wrapper').width()} x #{Project.calcOriginalViewHeight()}")
     # 作成済みプロジェクト一覧取得
     Project.load_data_order_last_updated((data) ->
       user_pagevalue_list = data.user_pagevalue_list
@@ -83,7 +83,7 @@ class Project
       # プロジェクト新規作成
       projectName = $('.project_name').val()
       width = $('#screen_wrapper').width()
-      height = $('#screen_wrapper').height()
+      height = Project.calcOriginalViewHeight()
       if !projectName? || projectName.length == 0
         # エラー
         Project.showError(modalEmt, I18n.t('message.project.error.project_name'))
@@ -393,6 +393,13 @@ class Project
       if callback?
         callback()
     )
+
+  # Mainビューの高さ計算
+  # TODO: デザインが変わったら修正
+  @calcOriginalViewHeight = ->
+    borderWidth = 5
+    timelineTopPadding = 5
+    return $('#screen_wrapper').height() - $('#timeline').height() - timelineTopPadding - (borderWidth * 2)
 
   @showError = (modalEmt, message) ->
     modalEmt.find('.error_wrapper .error:first').html(message)
