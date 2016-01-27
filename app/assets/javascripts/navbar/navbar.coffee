@@ -14,23 +14,22 @@ class Navbar
   @initWorktableNavbar = ->
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li')
     $('.menu-changeproject', fileMenuEmt).off('click').on('click', ->
+      _cbk = ->
+        WorktableCommon.resetWorktable()
+        # ナビバーをプロジェクト作成前状態に
+        Navbar.switchWorktableNavbarWhenProjectCreated(false)
+        # 初期モーダル表示
+        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+
       if Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2
         lastSaveTimeStr = ''
         lastSaveTime = Common.displayLastUpdateDiffAlmostTime()
         if lastSaveTime?
           lastSaveTimeStr = '\n' + I18n.t('message.dialog.last_savetime') + lastSaveTime
         if window.confirm(I18n.t('message.dialog.change_project') + lastSaveTimeStr)
-          WorktableCommon.resetWorktable()
-          # ナビバーをプロジェクト作成前状態に
-          Navbar.switchWorktableNavbarWhenProjectCreated(false)
-          # 初期モーダル表示
-          Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+          _cbk.call(@)
       else
-        WorktableCommon.resetWorktable()
-        # ナビバーをプロジェクト作成前状態に
-        Navbar.switchWorktableNavbarWhenProjectCreated(false)
-        # 初期モーダル表示
-        Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal)
+        _cbk.call(@)
     )
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', ->
       # モーダル表示

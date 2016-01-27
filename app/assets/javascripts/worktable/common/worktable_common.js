@@ -445,6 +445,7 @@ WorktableCommon = (function() {
         CommonVar.initCommonVar();
         Common.createdMainContainerIfNeeded(PageValue.getPageNum());
         WorktableCommon.initMainContainer();
+        $('#main').css('height', '');
         LocalStorage.clearWorktableWithoutSetting();
         Timeline.refreshAllTimeline();
         PageValue.setPageNum(1);

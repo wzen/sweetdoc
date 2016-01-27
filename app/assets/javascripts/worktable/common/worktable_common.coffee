@@ -406,6 +406,8 @@ class WorktableCommon
       Common.createdMainContainerIfNeeded(PageValue.getPageNum())
       # コンテナ初期化
       WorktableCommon.initMainContainer()
+      # Mainビューの高さを初期化
+      $('#main').css('height', '')
       # キャッシュ削除
       LocalStorage.clearWorktableWithoutSetting()
       # タイムライン更新
@@ -421,9 +423,6 @@ class WorktableCommon
       # プロジェクトビュー & タイムラインを閉じる
       $('#project_wrapper').hide()
       $('#timeline').hide()
-#      # ページング
-#      Paging.initPaging()
-
     )
 
   # コンテキストメニュー初期化

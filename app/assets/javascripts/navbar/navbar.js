@@ -20,7 +20,12 @@ Navbar = (function() {
     var etcMenuEmt, fileMenuEmt, itemsSelectMenuEmt, menuSave;
     fileMenuEmt = $('#header_items_file_menu .dropdown-menu > li');
     $('.menu-changeproject', fileMenuEmt).off('click').on('click', function() {
-      var lastSaveTime, lastSaveTimeStr;
+      var _cbk, lastSaveTime, lastSaveTimeStr;
+      _cbk = function() {
+        WorktableCommon.resetWorktable();
+        Navbar.switchWorktableNavbarWhenProjectCreated(false);
+        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+      };
       if (Object.keys(window.instanceMap).length > 0 || PageValue.getPageCount() >= 2) {
         lastSaveTimeStr = '';
         lastSaveTime = Common.displayLastUpdateDiffAlmostTime();
@@ -28,14 +33,10 @@ Navbar = (function() {
           lastSaveTimeStr = '\n' + I18n.t('message.dialog.last_savetime') + lastSaveTime;
         }
         if (window.confirm(I18n.t('message.dialog.change_project') + lastSaveTimeStr)) {
-          WorktableCommon.resetWorktable();
-          Navbar.switchWorktableNavbarWhenProjectCreated(false);
-          return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+          return _cbk.call(this);
         }
       } else {
-        WorktableCommon.resetWorktable();
-        Navbar.switchWorktableNavbarWhenProjectCreated(false);
-        return Common.showModalView(Constant.ModalViewType.INIT_PROJECT, true, Project.initProjectModal);
+        return _cbk.call(this);
       }
     });
     $('.menu-adminproject', fileMenuEmt).off('click').on('click', function() {
