@@ -12,9 +12,6 @@ ready = ->
   loadTwitterSDK()
   bindTwitterEventHandlers() unless twttr_events_bound
 
-  # Hatena
-  loadHatenaSDK()
-
   # Pocket
   loadPocketSDK()
 
@@ -85,13 +82,6 @@ loadTwitterSDK = ->
 
 loadGoogleSDK = ->
   $.getScript("https://apis.google.com/js/plusone.js")
-
-# ----------------------------------------- #
-# Hatena
-# ----------------------------------------- #
-
-loadHatenaSDK = ->
-  $.getScript("//b.st-hatena.com/js/bookmark_button_wo_al.js")
 
 # ----------------------------------------- #
 # Pocket

@@ -52,6 +52,11 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
+  # 動作テストのためiframe許可
+  config.action_dispatch.default_headers = {
+      'X-Frame-Options' => 'ALLOWALL'
+  }
+
   # Devise
   config.to_prepare do
     Devise::SessionsController.layout "user"
