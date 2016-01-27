@@ -203,6 +203,9 @@ div#guide_right{
       -moz-animation-name: scrollpointer_top_blink;
       -moz-animation-duration: 3.0s;
       -moz-animation-iteration-count: infinite;
+      animation-name: scrollpointer_top_blink;
+      animation-duration: 3.0s;
+      animation-iteration-count: infinite;
 
       &.top {
         background-image: image_url('run_guide/arrow-up.png');
@@ -234,6 +237,8 @@ div#guide_right{
       -webkit-animation-iteration-count: infinite;
       -moz-animation-duration: 3.0s;
       -moz-animation-iteration-count: infinite;
+      animation-duration: 3.0s;
+      animation-iteration-count: infinite;
 
       &.forward {
         background-image: image_url('run_guide/scroll_forward.png');
@@ -247,24 +252,28 @@ div#guide_right{
         height: 100%;
         -webkit-animation-name: scrollpointer_top_blink;
         -moz-animation-name: scrollpointer_top_blink;
+        animation-name: scrollpointer_top_blink;
       }
       &.bottom {
         width: 80px;
         height: 100%;
         -webkit-animation-name: scrollpointer_bottom_blink;
         -moz-animation-name: scrollpointer_bottom_blink;
+        animation-name: scrollpointer_bottom_blink;
       }
       &.left {
         width: 100%;
         height: 80px;
         -webkit-animation-name: scrollpointer_left_blink;
         -moz-animation-name: scrollpointer_left_blink;
+        animation-name: scrollpointer_left_blink;
       }
       &.right {
         width: 100%;
         height: 80px;
         -webkit-animation-name: scrollpointer_right_blink;
         -moz-animation-name: scrollpointer_right_blink;
+        animation-name: scrollpointer_right_blink;
       }
 
     }
@@ -315,7 +324,7 @@ div#guide_right{
   }
 }
 
-@-webkit-keyframes scrollpointer_top_blink {
+@keyframes scrollpointer_top_blink {
   0% {
     top: 0;
     opacity: 0;
@@ -330,7 +339,7 @@ div#guide_right{
   }
 }
 
-@-webkit-keyframes scrollpointer_bottom_blink {
+@keyframes scrollpointer_bottom_blink {
   0% {
     top: 0;
     opacity: 0;
@@ -345,7 +354,7 @@ div#guide_right{
   }
 }
 
-@-webkit-keyframes scrollpointer_left_blink {
+@keyframes scrollpointer_left_blink {
   0% {
     left: 0;
     opacity: 0;
@@ -360,7 +369,7 @@ div#guide_right{
   }
 }
 
-@-webkit-keyframes scrollpointer_right_blink {
+@keyframes scrollpointer_right_blink {
   0% {
     left: 0;
     opacity: 0;
