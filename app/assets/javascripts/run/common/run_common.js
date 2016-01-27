@@ -189,8 +189,8 @@ RunCommon = (function() {
   };
 
   RunCommon.initHandleScrollPoint = function() {
-    window.scrollHandleWrapper.scrollLeft(window.scrollHandleWrapper.width() * 0.5);
-    return window.scrollHandleWrapper.scrollTop(window.scrollHandleWrapper.height() * 0.5);
+    window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5);
+    return window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5);
   };
 
   RunCommon.setupScrollEvent = function() {

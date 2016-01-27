@@ -152,8 +152,8 @@ class RunCommon
 
   # Handleスクロール位置の初期化
   @initHandleScrollPoint = ->
-    window.scrollHandleWrapper.scrollLeft(window.scrollHandleWrapper.width() * 0.5)
-    window.scrollHandleWrapper.scrollTop(window.scrollHandleWrapper.height() * 0.5)
+    window.scrollHandleWrapper.scrollLeft(window.scrollHandle.width() * 0.5)
+    window.scrollHandleWrapper.scrollTop(window.scrollHandle.height() * 0.5)
 
   # スクロールイベントの初期化
   @setupScrollEvent = ->
