@@ -196,13 +196,6 @@ div#guide_right{
       opacity: 1;
       background-size: 50px 50px;
       background-repeat: no-repeat;
-
-      -webkit-animation-name: scrollpointer_top_blink;
-      -webkit-animation-duration: 3.0s;
-      -webkit-animation-iteration-count: infinite;
-      -moz-animation-name: scrollpointer_top_blink;
-      -moz-animation-duration: 3.0s;
-      -moz-animation-iteration-count: infinite;
       animation-name: scrollpointer_top_blink;
       animation-duration: 3.0s;
       animation-iteration-count: infinite;
@@ -232,11 +225,6 @@ div#guide_right{
       margin: auto;
       opacity: 1;
       background-repeat: no-repeat;
-
-      -webkit-animation-duration: 3.0s;
-      -webkit-animation-iteration-count: infinite;
-      -moz-animation-duration: 3.0s;
-      -moz-animation-iteration-count: infinite;
       animation-duration: 3.0s;
       animation-iteration-count: infinite;
 
@@ -250,29 +238,21 @@ div#guide_right{
       &.top {
         width: 80px;
         height: 100%;
-        -webkit-animation-name: scrollpointer_top_blink;
-        -moz-animation-name: scrollpointer_top_blink;
         animation-name: scrollpointer_top_blink;
       }
       &.bottom {
         width: 80px;
         height: 100%;
-        -webkit-animation-name: scrollpointer_bottom_blink;
-        -moz-animation-name: scrollpointer_bottom_blink;
         animation-name: scrollpointer_bottom_blink;
       }
       &.left {
         width: 100%;
         height: 80px;
-        -webkit-animation-name: scrollpointer_left_blink;
-        -moz-animation-name: scrollpointer_left_blink;
         animation-name: scrollpointer_left_blink;
       }
       &.right {
         width: 100%;
         height: 80px;
-        -webkit-animation-name: scrollpointer_right_blink;
-        -moz-animation-name: scrollpointer_right_blink;
         animation-name: scrollpointer_right_blink;
       }
 
@@ -305,10 +285,8 @@ div#guide_right{
   opacity: 0;
   background-repeat: no-repeat;
   background-position: center center;
-  -webkit-animation-duration: 3.0s;
-  -webkit-animation-iteration-count: infinite;
-  -moz-animation-duration: 3.0s;
-  -moz-animation-iteration-count: infinite;
+  animation-duration: 3.0s;
+  animation-iteration-count: infinite;
 
   &.red {
     background-image: image_url('run_guide/click_red.png');
@@ -395,8 +373,6 @@ div#popup_info_wrapper {
   height: 90%;
   padding: 2px;
   display: none;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
   border-radius: 10px;
   z-index:1999999999;
   background-color: rgba(0, 0, 0, 0.8);
@@ -428,8 +404,6 @@ div.popup_creator_wrapper {
   margin: auto;
   padding: 2px;
   display: none;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
   border-radius: 10px;
   z-index:1999999999;
   background-color: rgba(0, 0, 0, 0.8);
