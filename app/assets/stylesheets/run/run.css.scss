@@ -515,4 +515,7 @@ div.contents_share_show_button {
   right: 5px;
   bottom: 5px;
   z-index:1999999998;
+  > div {
+    float: left;
+  }
 }

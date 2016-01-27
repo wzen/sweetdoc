@@ -55,7 +55,6 @@
 
 <div class="share_info">
   <div>
-    <%= render 'base/social_button', twitter_title: @title %>
     <div class="embed_wrapper">
       <div class="label">
         Embed:
@@ -68,6 +67,11 @@
 <div class="contents_info_show_button">
   <%= image_tag("run/popup_info_32.png", size:'32x32') %>
 </div>
-<div class="contents_share_show_button">
-  <%= image_tag("run/share32.png", size:'32x32') %>
+<div class="contents_share_show_button clearfix">
+  <div>
+    <%= render 'base/social_button', twitter_title: @title %>
+  </div>
+  <div>
+    <%= image_tag("run/share32.png", size:'32x32') %>
+  </div>
 </div>
