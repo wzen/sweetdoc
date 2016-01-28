@@ -374,6 +374,8 @@ class WorktableCommon
     @updateMainViewSize()
     # 共通設定
     WorktableSetting.initConfig()
+    # 選択アイテム初期化
+    WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT)
 
   # Mainコンテナのコンテキストメニューを設定
   @setMainContainerContext: ->

@@ -414,7 +414,8 @@ WorktableCommon = (function() {
     })(this));
     Common.applyEnvironmentFromPagevalue();
     this.updateMainViewSize();
-    return WorktableSetting.initConfig();
+    WorktableSetting.initConfig();
+    return WorktableCommon.changeEventPointingMode(Constant.EventInputPointingMode.NOT_SELECT);
   };
 
   WorktableCommon.setMainContainerContext = function() {
