@@ -1,7 +1,7 @@
 class PreloadItemText extends CanvasItemBase
   @NAME_PREFIX = "text"
   @CLASS_DIST_TOKEN = 'PreloadItemText'
-  @NO_TEXT = 'No Text'
+  @NO_TEXT = 'Blank text'
   @WRITE_TEXT_BLUR_LENGTH = 3
   constant = gon.const
   class @BalloonType
@@ -1157,6 +1157,10 @@ class PreloadItemText extends CanvasItemBase
     if width <= 0 || height <= 0
       return
 
+    if !@inputText?
+      # Blankの場合は小さめのフォントで表示
+      return 12
+
     # 文字数計算
     a = text.length
     # 文末の改行を削除
@@ -1208,6 +1212,7 @@ class PreloadItemText extends CanvasItemBase
       # Inputを反映して再表示
       emt = $(e.target).closest('.modal-content')
       @inputText = $('.textarea:first', emt).val()
+      @isDrawHorizontal = $('.isDrawHorizontal_checkbox:first', emt).is(':checked')
       # fontSizeを撮り直す
       @fontSize = null
       # データ保存

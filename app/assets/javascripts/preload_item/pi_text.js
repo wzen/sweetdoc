@@ -12,7 +12,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.CLASS_DIST_TOKEN = 'PreloadItemText';
 
-  PreloadItemText.NO_TEXT = 'No Text';
+  PreloadItemText.NO_TEXT = 'Blank text';
 
   PreloadItemText.WRITE_TEXT_BLUR_LENGTH = 3;
 
@@ -1457,6 +1457,9 @@ PreloadItemText = (function(superClass) {
     if (width <= 0 || height <= 0) {
       return;
     }
+    if (this.inputText == null) {
+      return 12;
+    }
     a = text.length;
     text = text.replace(/\n+$/g, '');
     if (!isFixedFontSize) {
@@ -1516,6 +1519,7 @@ PreloadItemText = (function(superClass) {
         var emt;
         emt = $(e.target).closest('.modal-content');
         _this.inputText = $('.textarea:first', emt).val();
+        _this.isDrawHorizontal = $('.isDrawHorizontal_checkbox:first', emt).is(':checked');
         _this.fontSize = null;
         _this.saveObj();
         return Navbar.setModeDraw(_this.classDistToken, function() {
