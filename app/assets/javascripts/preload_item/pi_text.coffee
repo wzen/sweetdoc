@@ -1208,6 +1208,8 @@ class PreloadItemText extends CanvasItemBase
       # Inputを反映して再表示
       emt = $(e.target).closest('.modal-content')
       @inputText = $('.textarea:first', emt).val()
+      # fontSizeを撮り直す
+      @fontSize = null
       # データ保存
       @saveObj()
       # モードを描画モードに

@@ -1516,6 +1516,7 @@ PreloadItemText = (function(superClass) {
         var emt;
         emt = $(e.target).closest('.modal-content');
         _this.inputText = $('.textarea:first', emt).val();
+        _this.fontSize = null;
         _this.saveObj();
         return Navbar.setModeDraw(_this.classDistToken, function() {
           WorktableCommon.changeMode(Constant.Mode.DRAW);
