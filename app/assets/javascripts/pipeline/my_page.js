@@ -20,7 +20,6 @@
 //= require base/local_storage
 //= require base/float_view
 //= require base/config_menu
-//= require base/social_button/social_button
 //= require gallery/gallery_sidebar
 //= require my_page/my_page_common
 //= require my_page/my_page

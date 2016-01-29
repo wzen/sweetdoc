@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
     # Constantの設定
     gon.const  = const_values(Const, {})
     gon.serverenv  = ENV
+    gon.locale = I18n.locale
   end
 
   def const_values(const_class, obj)

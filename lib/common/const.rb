@@ -507,6 +507,10 @@ class Const
       FLASH = 5
       CLOUD = 6
     end
+    class WriteDirectionType
+      HORIZONTAL = 0
+      VERTICAL = 1
+    end
     class WordAlign
       LEFT = 1
       CENTER = 2

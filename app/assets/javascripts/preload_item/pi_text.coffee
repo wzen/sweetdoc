@@ -12,6 +12,9 @@ class PreloadItemText extends CanvasItemBase
     @BROKEN_RECT = constant.PreloadItemText.BalloonType.BROKEN_RECT
     @FLASH = constant.PreloadItemText.BalloonType.FLASH
     @CLOUD = constant.PreloadItemText.BalloonType.CLOUD
+  class @WriteDirectionType
+    @HORIZONTAL = constant.PreloadItemText.WriteDirectionType.HORIZONTAL
+    @VERTICAL = constant.PreloadItemText.WriteDirectionType.VERTICAL
   class @WordAlign
     @LEFT = constant.PreloadItemText.WordAlign.LEFT
     @CENTER = constant.PreloadItemText.WordAlign.CENTER
@@ -32,11 +35,27 @@ class PreloadItemText extends CanvasItemBase
           name: '文字色'
         }
       }
-      isDrawHorizontal: {
-        name: 'Horizontal'
-        type: 'boolean'
+      drawHorizontal: {
+        name: 'Horizontal / Vertical'
+        type: 'select'
+        options: [
+          {
+            name: 'Horizontal'
+            value: @WriteDirectionType.HORIZONTAL
+            ja: {
+              name: '横書き'
+            }
+          }
+          {
+            name: 'Vertical'
+            value: @WriteDirectionType.VERTICAL
+            ja: {
+              name: '縦書き'
+            }
+          }
+        ]
         ja: {
-          name: '横書き'
+          name: '横書き / 縦書き'
         }
       }
       showBalloon: {
@@ -240,7 +259,7 @@ class PreloadItemText extends CanvasItemBase
     if cood != null
       @_moveLoc = {x:cood.x, y:cood.y}
     @inputText = null
-    @isDrawHorizontal = true
+    @drawHorizontal =  @constructor.WriteDirectionType.HORIZONTAL
     @fontFamily = 'Times New Roman'
     @fontSize = null
     @isFixedFontSize = false
@@ -283,7 +302,7 @@ class PreloadItemText extends CanvasItemBase
     )
 
   changeInstanceVarByConfig: (varName, value)->
-    if varName == 'isDrawHorizontal' && @isDrawHorizontal != value
+    if varName == 'drawHorizontal' && @drawHorizontal != value
       # Canvas縦横変更
       canvas = document.getElementById(@canvasElementId())
       width = canvas.width
@@ -451,7 +470,7 @@ class PreloadItemText extends CanvasItemBase
         y = @_step2.y - @_step2.y * progressPercent
         width = @_step2.w + (@itemSize.w - @_step2.w) * progressPercent
         height = @_step2.h + (@itemSize.h - @_step2.h) * progressPercent
-      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
+      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @drawHorizontal)
     else if @showAnimationType == @constructor.ShowAnimationType.FADE
       timemax = 30
       step1 = 1
@@ -525,7 +544,7 @@ class PreloadItemText extends CanvasItemBase
         y = @_step2.y + (@itemSize.h * 0.5 - @_step2.y) * progressPercent
         width = @_step2.w - @_step2.w * progressPercent
         height = @_step2.h - @_step2.h * progressPercent
-      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @isDrawHorizontal)
+      fontSize = _calcFontSizeAbout.call(@, @inputText, width, height, @isFixedFontSize, @drawHorizontal)
     else if @showAnimationType == @constructor.ShowAnimationType.FADE
       timemax = 30
       step1 = 1
@@ -636,7 +655,7 @@ class PreloadItemText extends CanvasItemBase
     context.clearRect(0, 0, canvas.width, canvas.height)
     _drawBalloon.call(@, context, 0, 0, canvas.width, canvas.height)
     if !@fontSize?
-      @fontSize = _calcFontSizeAbout.call(@, text, canvas.width, canvas.height, @isFixedFontSize, @isDrawHorizontal)
+      @fontSize = _calcFontSizeAbout.call(@, text, canvas.width, canvas.height, @isFixedFontSize, @drawHorizontal)
     _drawText.call(@, context, text, 0, 0, canvas.width, canvas.height, @fontSize, writingLength)
 
   _getRandomInt = (max, min) ->
@@ -1011,7 +1030,7 @@ class PreloadItemText extends CanvasItemBase
     text = text.replace("{br}", "\n", "gm")
     for i in [0..(text.length - 1)]
       char = text.charAt(i)
-      if char == "\n" || (@isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!@isDrawHorizontal && _calcVerticalColumnHeight.call(@, column[line] + char, fontSize) > height)
+      if char == "\n" || (@drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL && context.measureText(column[line] + char).width > width) || (@drawHorizontal == @constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(@, column[line] + char, fontSize) > height)
         line += 1
         column[line] = ''
         if char == "\n"
@@ -1019,7 +1038,7 @@ class PreloadItemText extends CanvasItemBase
       column[line] += char
     sizeSum = 0
     wordSum = 0
-    if @isDrawHorizontal
+    if @drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL
       heightLine = y + (height - _calcHorizontalColumnHeightSum.call(@, column, fontSize)) * 0.5
       widthMax = _calcHorizontalColumnWidthMax.call(@, column)
       for j in [0..(column.length - 1)]
@@ -1153,7 +1172,7 @@ class PreloadItemText extends CanvasItemBase
     return char.match(regex)
 
   # 描画枠から大体のフォントサイズを計算
-  _calcFontSizeAbout = (text, width, height, isFixedFontSize, isDrawHorizontal) ->
+  _calcFontSizeAbout = (text, width, height, isFixedFontSize, drawHorizontal) ->
     if width <= 0 || height <= 0
       return
 
@@ -1168,7 +1187,7 @@ class PreloadItemText extends CanvasItemBase
     if !isFixedFontSize
       # フォントサイズを計算
       newLineCount = text.split('\n').length - 1
-      if isDrawHorizontal
+      if drawHorizontal == @constructor.WriteDirectionType.HORIZONTAL
         w = height
         h = width
       else
@@ -1208,11 +1227,18 @@ class PreloadItemText extends CanvasItemBase
       $('.textarea:first', modalEmt).val(@inputText)
     else
       $('.textarea:first', modalEmt).val('')
+    directionSelect = $('.drawHorizontal_select:first', modalEmt)
+    if directionSelect.children().length == 0
+      for o in @constructor.actionProperties.modifiables.drawHorizontal.options
+        $.extend(o, o[window.locale])
+        directionSelect.append("<option value='#{o.value}'>#{o.name}</option>")
+    directionSelect.val('')
+
     $('.create_button', modalEmt).off('click').on('click', (e) =>
       # Inputを反映して再表示
       emt = $(e.target).closest('.modal-content')
       @inputText = $('.textarea:first', emt).val()
-      @isDrawHorizontal = $('.isDrawHorizontal_checkbox:first', emt).is(':checked')
+      @drawHorizontal = parseInt($('.drawHorizontal_select:first', emt).val())
       # fontSizeを撮り直す
       @fontSize = null
       # データ保存

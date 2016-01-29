@@ -19,7 +19,6 @@
  *= require common/common
  *= require common/float_view
  *= require common/modal_view.css
- *= require common/social_button
  *= require common/indicator
   *= require coding/coding
  */

@@ -39,6 +39,17 @@ PreloadItemText = (function(superClass) {
 
   })();
 
+  PreloadItemText.WriteDirectionType = (function() {
+    function WriteDirectionType() {}
+
+    WriteDirectionType.HORIZONTAL = constant.PreloadItemText.WriteDirectionType.HORIZONTAL;
+
+    WriteDirectionType.VERTICAL = constant.PreloadItemText.WriteDirectionType.VERTICAL;
+
+    return WriteDirectionType;
+
+  })();
+
   PreloadItemText.WordAlign = (function() {
     function WordAlign() {}
 
@@ -78,11 +89,26 @@ PreloadItemText = (function(superClass) {
           name: '文字色'
         }
       },
-      isDrawHorizontal: {
-        name: 'Horizontal',
-        type: 'boolean',
+      drawHorizontal: {
+        name: 'Horizontal / Vertical',
+        type: 'select',
+        options: [
+          {
+            name: 'Horizontal',
+            value: PreloadItemText.WriteDirectionType.HORIZONTAL,
+            ja: {
+              name: '横書き'
+            }
+          }, {
+            name: 'Vertical',
+            value: PreloadItemText.WriteDirectionType.VERTICAL,
+            ja: {
+              name: '縦書き'
+            }
+          }
+        ],
         ja: {
-          name: '横書き'
+          name: '横書き / 縦書き'
         }
       },
       showBalloon: {
@@ -340,7 +366,7 @@ PreloadItemText = (function(superClass) {
       };
     }
     this.inputText = null;
-    this.isDrawHorizontal = true;
+    this.drawHorizontal = this.constructor.WriteDirectionType.HORIZONTAL;
     this.fontFamily = 'Times New Roman';
     this.fontSize = null;
     this.isFixedFontSize = false;
@@ -394,7 +420,7 @@ PreloadItemText = (function(superClass) {
 
   PreloadItemText.prototype.changeInstanceVarByConfig = function(varName, value) {
     var canvas, h, height, opt, w, width;
-    if (varName === 'isDrawHorizontal' && this.isDrawHorizontal !== value) {
+    if (varName === 'drawHorizontal' && this.drawHorizontal !== value) {
       canvas = document.getElementById(this.canvasElementId());
       width = canvas.width;
       height = canvas.height;
@@ -417,7 +443,7 @@ PreloadItemText = (function(superClass) {
           multiDraw: true,
           applyDrawCallback: (function(_this) {
             return function(drawPaths) {
-              var d, dp, idx1, idx2, k, len, len1, len2, len3, maxX, maxY, minX, minY, n, o, p;
+              var d, dp, idx1, idx2, k, len, len1, len2, len3, maxX, maxY, minX, minY, n, p, q;
               drawPaths = _adjustFreeHandPath.call(_this, drawPaths);
               if (drawPaths == null) {
                 return false;
@@ -445,9 +471,9 @@ PreloadItemText = (function(superClass) {
                   }
                 }
               }
-              for (idx1 = o = 0, len2 = drawPaths.length; o < len2; idx1 = ++o) {
+              for (idx1 = p = 0, len2 = drawPaths.length; p < len2; idx1 = ++p) {
                 dp = drawPaths[idx1];
-                for (idx2 = p = 0, len3 = dp.length; p < len3; idx2 = ++p) {
+                for (idx2 = q = 0, len3 = dp.length; q < len3; idx2 = ++q) {
                   d = dp[idx2];
                   drawPaths[idx1][idx2] = {
                     x: d.x - minX + _this._freeHandDrawPadding,
@@ -602,7 +628,7 @@ PreloadItemText = (function(superClass) {
         width = this._step2.w + (this.itemSize.w - this._step2.w) * progressPercent;
         height = this._step2.h + (this.itemSize.h - this._step2.h) * progressPercent;
       }
-      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
+      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.drawHorizontal);
     } else if (this.showAnimationType === this.constructor.ShowAnimationType.FADE) {
       timemax = 30;
       step1 = 1;
@@ -705,7 +731,7 @@ PreloadItemText = (function(superClass) {
         width = this._step2.w - this._step2.w * progressPercent;
         height = this._step2.h - this._step2.h * progressPercent;
       }
-      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.isDrawHorizontal);
+      fontSize = _calcFontSizeAbout.call(this, this.inputText, width, height, this.isFixedFontSize, this.drawHorizontal);
     } else if (this.showAnimationType === this.constructor.ShowAnimationType.FADE) {
       timemax = 30;
       step1 = 1;
@@ -840,7 +866,7 @@ PreloadItemText = (function(superClass) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     _drawBalloon.call(this, context, 0, 0, canvas.width, canvas.height);
     if (this.fontSize == null) {
-      this.fontSize = _calcFontSizeAbout.call(this, text, canvas.width, canvas.height, this.isFixedFontSize, this.isDrawHorizontal);
+      this.fontSize = _calcFontSizeAbout.call(this, text, canvas.width, canvas.height, this.isFixedFontSize, this.drawHorizontal);
     }
     return _drawText.call(this, context, text, 0, 0, canvas.width, canvas.height, this.fontSize, writingLength);
   };
@@ -1126,7 +1152,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _freeHandBalloonDraw = function(context, x, y, width, height, canvasWidth, canvasHeight, drawPaths) {
-    var cx, cy, d, dp, dx, dy, i1, i2, idx1, idx2, k, len, len1, len2, len3, modDP, n, o, p, percent;
+    var cx, cy, d, dp, dx, dy, i1, i2, idx1, idx2, k, len, len1, len2, len3, modDP, n, p, percent, q;
     cx = canvasWidth * 0.5;
     cy = canvasHeight * 0.5;
     percent = width / canvasWidth;
@@ -1143,9 +1169,9 @@ PreloadItemText = (function(superClass) {
       }
     }
     context.beginPath();
-    for (idx1 = o = 0, len2 = modDP.length; o < len2; idx1 = ++o) {
+    for (idx1 = p = 0, len2 = modDP.length; p < len2; idx1 = ++p) {
       dp = modDP[idx1];
-      for (idx2 = p = 0, len3 = dp.length; p < len3; idx2 = ++p) {
+      for (idx2 = q = 0, len3 = dp.length; q < len3; idx2 = ++q) {
         d = dp[idx2];
         dx = d.x;
         dy = d.y;
@@ -1164,7 +1190,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {
-    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, o, p, q, ref, ref1, ref2, ref3, ref4, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, p, q, ref, ref1, ref2, ref3, ref4, s, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -1291,7 +1317,7 @@ PreloadItemText = (function(superClass) {
     text = text.replace("{br}", "\n", "gm");
     for (i = k = 0, ref = text.length - 1; 0 <= ref ? k <= ref : k >= ref; i = 0 <= ref ? ++k : --k) {
       char = text.charAt(i);
-      if (char === "\n" || (this.isDrawHorizontal && context.measureText(column[line] + char).width > width) || (!this.isDrawHorizontal && _calcVerticalColumnHeight.call(this, column[line] + char, fontSize) > height)) {
+      if (char === "\n" || (this.drawHorizontal === this.constructor.WriteDirectionType.HORIZONTAL && context.measureText(column[line] + char).width > width) || (this.drawHorizontal === this.constructor.WriteDirectionType.VERTICAL && _calcVerticalColumnHeight.call(this, column[line] + char, fontSize) > height)) {
         line += 1;
         column[line] = '';
         if (char === "\n") {
@@ -1302,7 +1328,7 @@ PreloadItemText = (function(superClass) {
     }
     sizeSum = 0;
     wordSum = 0;
-    if (this.isDrawHorizontal) {
+    if (this.drawHorizontal === this.constructor.WriteDirectionType.HORIZONTAL) {
       heightLine = y + (height - _calcHorizontalColumnHeightSum.call(this, column, fontSize)) * 0.5;
       widthMax = _calcHorizontalColumnWidthMax.call(this, column);
       for (j = n = 0, ref1 = column.length - 1; 0 <= ref1 ? n <= ref1 : n >= ref1; j = 0 <= ref1 ? ++n : --n) {
@@ -1318,7 +1344,7 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         wl = 0;
         ref2 = column[j].split('');
-        for (idx = o = 0, len = ref2.length; o < len; idx = ++o) {
+        for (idx = p = 0, len = ref2.length; p < len; idx = ++p) {
           c = ref2[idx];
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
           context.fillText(c, w + wl, heightLine);
@@ -1329,7 +1355,7 @@ PreloadItemText = (function(superClass) {
     } else {
       widthLine = x + (width + wordWidth * column.length) * 0.5;
       heightMax = _calcVerticalColumnHeightMax.call(this, column, fontSize);
-      for (j = p = 0, ref3 = column.length - 1; 0 <= ref3 ? p <= ref3 : p >= ref3; j = 0 <= ref3 ? ++p : --p) {
+      for (j = q = 0, ref3 = column.length - 1; 0 <= ref3 ? q <= ref3 : q >= ref3; j = 0 <= ref3 ? ++q : --q) {
         widthLine -= wordWidth;
         h = y;
         if (this.wordAlign === this.constructor.WordAlign.LEFT) {
@@ -1342,7 +1368,7 @@ PreloadItemText = (function(superClass) {
         context.beginPath();
         hl = 0;
         ref4 = column[j].split('');
-        for (idx = q = 0, len1 = ref4.length; q < len1; idx = ++q) {
+        for (idx = s = 0, len1 = ref4.length; s < len1; idx = ++s) {
           c = ref4[idx];
           measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
@@ -1452,7 +1478,7 @@ PreloadItemText = (function(superClass) {
     return char.match(regex);
   };
 
-  _calcFontSizeAbout = function(text, width, height, isFixedFontSize, isDrawHorizontal) {
+  _calcFontSizeAbout = function(text, width, height, isFixedFontSize, drawHorizontal) {
     var a, fontSize, h, newLineCount, w;
     if (width <= 0 || height <= 0) {
       return;
@@ -1464,7 +1490,7 @@ PreloadItemText = (function(superClass) {
     text = text.replace(/\n+$/g, '');
     if (!isFixedFontSize) {
       newLineCount = text.split('\n').length - 1;
-      if (isDrawHorizontal) {
+      if (drawHorizontal === this.constructor.WriteDirectionType.HORIZONTAL) {
         w = height;
         h = width;
       } else {
@@ -1509,17 +1535,28 @@ PreloadItemText = (function(superClass) {
   };
 
   _prepareEditModal = function(modalEmt) {
+    var directionSelect, k, len, o, ref;
     if (this.inputText != null) {
       $('.textarea:first', modalEmt).val(this.inputText);
     } else {
       $('.textarea:first', modalEmt).val('');
     }
+    directionSelect = $('.drawHorizontal_select:first', modalEmt);
+    if (directionSelect.children().length === 0) {
+      ref = this.constructor.actionProperties.modifiables.drawHorizontal.options;
+      for (k = 0, len = ref.length; k < len; k++) {
+        o = ref[k];
+        $.extend(o, o[window.locale]);
+        directionSelect.append("<option value='" + o.value + "'>" + o.name + "</option>");
+      }
+    }
+    directionSelect.val('');
     $('.create_button', modalEmt).off('click').on('click', (function(_this) {
       return function(e) {
         var emt;
         emt = $(e.target).closest('.modal-content');
         _this.inputText = $('.textarea:first', emt).val();
-        _this.isDrawHorizontal = $('.isDrawHorizontal_checkbox:first', emt).is(':checked');
+        _this.drawHorizontal = parseInt($('.drawHorizontal_select:first', emt).val());
         _this.fontSize = null;
         _this.saveObj();
         return Navbar.setModeDraw(_this.classDistToken, function() {
