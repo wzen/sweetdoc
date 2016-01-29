@@ -787,9 +787,10 @@ class Gallery < ActiveRecord::Base
   def self.embed_link(gpd, access_token, hostname)
     src = "http://#{hostname}/gallery/detail/w/#{access_token}"
     size = gpd[Const::Project::Key::SCREEN_SIZE]
-    return """
-    <iframe src='#{src}' width='#{size['width']}' height='#{size['height']}' frameborder='0' marginwidth='0' marginheight='0' scrolling='no' style='border:1px solid #CCC; border-width:1px; max-width: 100%;'></iframe>
+    link = """
+    <iframe src='#{src}' width='#{size[:width]}' height='#{size[:height]}' frameborder='0' marginwidth='0' marginheight='0' scrolling='no' style='border:1px solid #CCC; border-width:1px; max-width: 100%;'></iframe>
     """.strip
+    return link
   end
 
   def self._update_item_images_column(user_project_map_id, gallery_id)
