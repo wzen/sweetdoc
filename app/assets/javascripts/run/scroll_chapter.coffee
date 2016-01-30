@@ -4,7 +4,8 @@ class ScrollChapter extends Chapter
   willChapter: ->
     super()
     @floatScrollHandleCanvas()
-
+    # スクロール位置初期化
+    RunCommon.initHandleScrollPoint()
     # ガイド表示
     @showGuide(true)
 

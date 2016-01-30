@@ -13,6 +13,7 @@ ScrollChapter = (function(superClass) {
   ScrollChapter.prototype.willChapter = function() {
     ScrollChapter.__super__.willChapter.call(this);
     this.floatScrollHandleCanvas();
+    RunCommon.initHandleScrollPoint();
     return this.showGuide(true);
   };
 
