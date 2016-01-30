@@ -8,7 +8,8 @@
   position:fixed;
   display:none;
   z-index:1999999999;
-  overflow-y: scroll;
+  //overflow-y: scroll;
+  overflow: hidden;
 
   .button-link{
     color:#00f;
