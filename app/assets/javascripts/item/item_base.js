@@ -105,19 +105,33 @@ ItemBase = (function(superClass) {
     return window.drawingContext.putImageData(this._drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2));
   };
 
+  ItemBase.prototype.showItem = function() {
+    return this.getJQueryElement().css({
+      'opacity': 1,
+      'z-index': Common.plusPagingZindex(this.zindex)
+    });
+  };
+
+  ItemBase.prototype.hideItem = function() {
+    return this.getJQueryElement().css({
+      'opacity': 0,
+      'z-index': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)
+    });
+  };
+
   ItemBase.prototype.itemDraw = function(show) {
     if (show == null) {
       show = true;
     }
     if (!show) {
-      return this.getJQueryElement().css('opacity', 0);
+      return this.hideItem();
     } else {
-      return this.getJQueryElement().css('opacity', 1);
+      return this.showItem();
     }
   };
 
   ItemBase.prototype.willChapter = function() {
-    this.getJQueryElement().css('opacity', 1);
+    this.showItem();
     return ItemBase.__super__.willChapter.call(this);
   };
 

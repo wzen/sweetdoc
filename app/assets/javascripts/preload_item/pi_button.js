@@ -182,7 +182,7 @@ PreloadItemButton = (function(superClass) {
   PreloadItemButton.prototype.updateEventBefore = function() {
     var methodName;
     PreloadItemButton.__super__.updateEventBefore.call(this);
-    this.getJQueryElement().css('opacity', 0);
+    this.hideItem();
     methodName = this.getEventMethodName();
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration');
@@ -194,7 +194,7 @@ PreloadItemButton = (function(superClass) {
   PreloadItemButton.prototype.updateEventAfter = function() {
     var methodName;
     PreloadItemButton.__super__.updateEventAfter.call(this);
-    this.getJQueryElement().css('opacity', 1);
+    this.showItem();
     methodName = this.getEventMethodName();
     if (methodName === 'defaultClick') {
       return this.getJQueryElement().css({

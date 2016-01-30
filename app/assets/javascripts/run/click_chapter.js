@@ -13,21 +13,20 @@ ClickChapter = (function(superClass) {
 
   ClickChapter.prototype.willChapter = function() {
     ClickChapter.__super__.willChapter.call(this);
+    this.disableScrollHandleViewEvent();
     this.eventObjList.forEach((function(_this) {
       return function(event) {
-        event.clickTargetElement().off('click');
-        return event.clickTargetElement().on('click', function(e) {
+        return event.clickTargetElement().off('click').on('click', function(e) {
           return _this.clickEvent(e);
         });
       };
     })(this));
-    this.floatAllChapterEvents();
     return this.showGuide();
   };
 
   ClickChapter.prototype.didChapter = function() {
     ClickChapter.__super__.didChapter.call(this);
-    this.floatScrollHandleCanvas();
+    this.enableScrollHandleViewEvent();
     return this.hideGuide();
   };
 

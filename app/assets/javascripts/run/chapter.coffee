@@ -66,29 +66,17 @@ class Chapter
       # フォーカスなし
       window.disabledEventHandler = false
 
-  # イベントアイテムを前面に表示
-  floatAllChapterEvents: ->
+  # スクロールイベント用のCanvasを反応させない
+  disableScrollHandleViewEvent: ->
     if window.runDebug
       console.log('Chapter floatAllChapterEvents')
+    window.scrollHandleWrapper.css('pointer-events', 'none')
 
-    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off)
-    window.scrollContents.css('z-index', scrollViewSwitchZindex.on)
-    @eventObjList.forEach((e) ->
-      if e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-        e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT))
-    )
-
-  # スクロールイベント用のCanvasを前面に表示
-  floatScrollHandleCanvas: ->
+  # スクロールイベント用のCanvasを反応させる
+  enableScrollHandleViewEvent: ->
     if window.runDebug
       console.log('Chapter floatScrollHandleCanvas')
-
-    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on)
-    window.scrollContents.css('z-index', scrollViewSwitchZindex.off)
-    @eventObjList.forEach((e) =>
-      if e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] == false
-        e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + @num))
-    )
+    window.scrollHandleWrapper.css('pointer-events', '')
 
   # チャプターのイベントをリセットする
   resetAllEvents: (takeStateCapture = false) ->

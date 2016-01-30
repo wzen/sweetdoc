@@ -128,7 +128,7 @@ class ItemPreviewTemp extends CssItemBase
   # イベント前の表示状態にする
   updateEventBefore: ->
     super()
-    @getJQueryElement().css('opacity', 0)
+    @hideItem()
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
@@ -138,7 +138,7 @@ class ItemPreviewTemp extends CssItemBase
 # イベント後の表示状態にする
   updateEventAfter: ->
     super()
-    @getJQueryElement().css('opacity', 1)
+    @showItem()
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})
@@ -217,10 +217,10 @@ class ItemPreviewTemp extends CssItemBase
   willChapter: ->
     if @getEventMethodName() == 'defaultClick'
       # ボタンを表示
-      @getJQueryElement().css('opacity', 1)
+      @showItem()
     else if @getEventMethodName() == 'changeColorClick' || @getEventMethodName() == 'changeColorScroll'
       # ボタンを表示
-      @getJQueryElement().css('opacity', 1)
+      @showItem()
     super()
 
 Common.setClassToMap(ItemPreviewTemp.CLASS_DIST_TOKEN, ItemPreviewTemp)

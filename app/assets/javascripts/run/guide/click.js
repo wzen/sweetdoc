@@ -40,7 +40,7 @@ ClickGuide = (function(superClass) {
       color = this.focusColor(item);
       guideClassName = "click_guide_" + item.id;
       style = '';
-      results.push(item.getJQueryElement().append($("<div class='guide_click " + color + " " + guideClassName + "' style='" + style + "' data-html2canvas-ignore='true'></div>")));
+      results.push(item.getJQueryElement().append($("<div class='guide guide_click " + color + " " + guideClassName + "' style='" + style + "' data-html2canvas-ignore='true'></div>")));
     }
     return results;
   };

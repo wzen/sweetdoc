@@ -54,7 +54,7 @@ class ClickGuide extends GuideBase
       color = @focusColor(item)
       guideClassName = "click_guide_#{item.id}"
       style = '' # "width:#{item.itemSize.w}px;height:#{item.itemSize.h}px;"
-      item.getJQueryElement().append($("<div class='guide_click #{color} #{guideClassName}' style='#{style}' data-html2canvas-ignore='true'></div>"))
+      item.getJQueryElement().append($("<div class='guide guide_click #{color} #{guideClassName}' style='#{style}' data-html2canvas-ignore='true'></div>"))
 
   # ガイド非表示
   @hideGuide: ->

@@ -188,7 +188,7 @@ class PreloadItemButton extends CssItemBase
   # イベント前の表示状態にする
   updateEventBefore: ->
     super()
-    @getJQueryElement().css('opacity', 0)
+    @hideItem()
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
       @getJQueryElement().removeClass('-webkit-animation-duration').removeClass('-moz-animation-duration')
@@ -198,7 +198,7 @@ class PreloadItemButton extends CssItemBase
   # イベント後の表示状態にする
   updateEventAfter: ->
     super()
-    @getJQueryElement().css('opacity', 1)
+    @showItem()
     methodName = @getEventMethodName()
     if methodName == 'defaultClick'
       @getJQueryElement().css({'-webkit-animation-duration':'0', '-moz-animation-duration', '0'})

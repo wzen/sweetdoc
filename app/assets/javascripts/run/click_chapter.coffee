@@ -10,20 +10,19 @@ class ClickChapter extends Chapter
   # チャプターの前処理
   willChapter: ->
     super()
+    @disableScrollHandleViewEvent()
     # イベント設定
     @eventObjList.forEach((event) =>
-      event.clickTargetElement().off('click')
-      event.clickTargetElement().on('click', (e) =>
+      event.clickTargetElement().off('click').on('click', (e) =>
         @clickEvent(e)
       )
     )
-    @floatAllChapterEvents()
     @showGuide()
 
   # チャプターの後処理
   didChapter: ->
     super()
-    @floatScrollHandleCanvas()
+    @enableScrollHandleViewEvent()
     @hideGuide()
 
   # クリックイベント

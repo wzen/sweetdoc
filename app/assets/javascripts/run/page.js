@@ -272,7 +272,7 @@ Page = (function() {
     scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
     scrollContents.css('z-index', scrollViewSwitchZindex.off);
     return this.getForkChapterList().forEach(function(chapter) {
-      return chapter.floatScrollHandleCanvas();
+      return chapter.enableScrollHandleViewEvent();
     });
   };
 

@@ -247,6 +247,14 @@ div.item_wrapper {
   }
 }
 
+// クリックイベント等を妨害させない
+div.item_wrapper {
+  pointer-events: none;
+  * {
+    pointer-events: none;
+  }
+}
+
 .scroll_x_content {
   overflow-x: scroll;
 }

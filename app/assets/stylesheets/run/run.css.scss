@@ -127,6 +127,10 @@ div.css_item_base {
   height: 100%;
 }
 
+div.guide {
+  pointer-events: none;
+}
+
 div#guide_top{
   position: absolute;
   top:0;

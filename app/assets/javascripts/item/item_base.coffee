@@ -93,18 +93,25 @@ class ItemBase extends ItemEventBase
     padding = 5
     window.drawingContext.putImageData(@_drawingSurfaceImageData, 0, 0, size.x - padding, size.y - padding, size.w + (padding * 2), size.h + (padding * 2))
 
+  # アイテム表示
+  showItem: ->
+    @getJQueryElement().css({'opacity': 1, 'z-index': Common.plusPagingZindex(@zindex)})
+  # アイテム非表示
+  hideItem: ->
+    @getJQueryElement().css({'opacity': 0, 'z-index': Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM)})
+
   # アイテム描画
   # @abstract
   # @param [Boolean] show 要素作成後に表示するか
   itemDraw: (show = true) ->
     if !show
-      @getJQueryElement().css('opacity', 0)
+      @hideItem()
     else
-      @getJQueryElement().css('opacity', 1)
+      @showItem()
 
   willChapter: ->
     # チャプター開始時に表示
-    @getJQueryElement().css('opacity', 1)
+    @showItem()
     super()
 
   # 再描画処理

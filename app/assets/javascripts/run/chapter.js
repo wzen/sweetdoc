@@ -71,32 +71,18 @@ Chapter = (function() {
     }
   };
 
-  Chapter.prototype.floatAllChapterEvents = function() {
+  Chapter.prototype.disableScrollHandleViewEvent = function() {
     if (window.runDebug) {
       console.log('Chapter floatAllChapterEvents');
     }
-    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.off);
-    window.scrollContents.css('z-index', scrollViewSwitchZindex.on);
-    return this.eventObjList.forEach(function(e) {
-      if (e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-        return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT));
-      }
-    });
+    return window.scrollHandleWrapper.css('pointer-events', 'none');
   };
 
-  Chapter.prototype.floatScrollHandleCanvas = function() {
+  Chapter.prototype.enableScrollHandleViewEvent = function() {
     if (window.runDebug) {
       console.log('Chapter floatScrollHandleCanvas');
     }
-    window.scrollHandleWrapper.css('z-index', scrollViewSwitchZindex.on);
-    window.scrollContents.css('z-index', scrollViewSwitchZindex.off);
-    return this.eventObjList.forEach((function(_this) {
-      return function(e) {
-        if (e._event[EventPageValueBase.PageValueKey.IS_COMMON_EVENT] === false) {
-          return e.getJQueryElement().css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM + _this.num));
-        }
-      };
-    })(this));
+    return window.scrollHandleWrapper.css('pointer-events', '');
   };
 
   Chapter.prototype.resetAllEvents = function(takeStateCapture) {
