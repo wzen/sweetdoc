@@ -297,7 +297,7 @@ class EventBase extends Extend
 
     # スクロール指定範囲外なら反応させない
     if @stepValue < sPoint
-      #@stepValue = sPoint
+      @stepValue = sPoint
       return
     else if @stepValue >= ePoint
       @stepValue = ePoint

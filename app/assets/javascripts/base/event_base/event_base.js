@@ -366,6 +366,7 @@ EventBase = (function(superClass) {
     sPoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_START]);
     ePoint = parseInt(this._event[EventPageValueBase.PageValueKey.SCROLL_POINT_END]) + 1;
     if (this.stepValue < sPoint) {
+      this.stepValue = sPoint;
       return;
     } else if (this.stepValue >= ePoint) {
       this.stepValue = ePoint;
