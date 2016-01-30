@@ -68,8 +68,10 @@ Rails.application.routes.draw do
   get 'gallery/grid'
   get 'gallery/detail'
   match 'gallery/detail/:g_at' => 'gallery#detail', via: :get
-  get 'gallery/run_window'
-  match 'gallery/detail/w/:g_at' => 'gallery#run_window', via: :get
+  get 'gallery/full_window'
+  match 'gallery/detail/w/:g_at' => 'gallery#full_window', via: :get
+  get 'gallery/embed'
+  match 'gallery/detail/e/:g_at' => 'gallery#embed', via: :get
   post 'gallery/save_state'
   post 'gallery/update_last_state'
   get 'gallery/get_contents'

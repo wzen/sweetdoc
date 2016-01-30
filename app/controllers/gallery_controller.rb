@@ -21,6 +21,18 @@ class GalleryController < ApplicationController
   end
 
   def detail
+    _take_gallery_data
+  end
+
+  def full_window
+    _full_window
+  end
+
+  def embed
+    _full_window
+  end
+
+  def _take_gallery_data
     access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     # ViewCountをupdate
     Gallery.add_view_statistic_count(access_token, Date.today)
@@ -28,12 +40,8 @@ class GalleryController < ApplicationController
     @pagevalues, @message, @title, @caption, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @embed_link = Gallery.firstload_contents(access_token, request.host)
   end
 
-  def run_window
-    access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
-    # ViewCountをupdate
-    Gallery.add_view_statistic_count(access_token, Date.today)
-    # データを取得
-    @pagevalues, @message, @title, @caption, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @embed_link = Gallery.firstload_contents(access_token, request.host)
+  def _full_window
+    _take_gallery_data
     render layout: 'application'
   end
 
@@ -106,5 +114,7 @@ class GalleryController < ApplicationController
       send_data(g.thumbnail_img, type: g.thumbnail_img_contents_type, disposition: :inline)
     end
   end
+
+  private :_take_gallery_data, :_full_window
 
 end

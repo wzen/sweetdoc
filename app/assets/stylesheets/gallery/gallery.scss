@@ -237,7 +237,7 @@ div#gallery_contents_wrapper {
   }
 }
 
-body.run_window {
+body.full_window, body.embed {
   div#contents {
     top: 0 !important;
   }

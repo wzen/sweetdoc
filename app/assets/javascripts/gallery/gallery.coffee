@@ -4,19 +4,16 @@ class GalleryGrid
     @initContentsHover()
 
   @initContentsHover = ->
-    $('.grid_contents_wrapper').off('mouseenter')
-    $('.grid_contents_wrapper').on('mouseenter', (e) ->
+    $('.grid_contents_wrapper').off('mouseenter').on('mouseenter', (e) ->
       e.preventDefault()
       $(@).find('.hover_overlay').stop(true, true).fadeIn('100')
     )
-    $('.grid_contents_wrapper').off('mouseleave')
-    $('.grid_contents_wrapper').on('mouseleave', (e) ->
+    $('.grid_contents_wrapper').off('mouseleave').on('mouseleave', (e) ->
       e.preventDefault()
       $(@).find('.hover_overlay').stop(true, true).fadeOut('300')
     )
 
-    $('.new_window').off('click')
-    $('.new_window').on('click', (e) ->
+    $('.new_window').off('click').on('click', (e) ->
       e.preventDefault()
       e.stopPropagation()
       root = $(@).closest('.grid_contents_wrapper')
@@ -56,7 +53,12 @@ $ ->
     RunCommon.showCreatorInfo()
     RunCommon.start()
 
-  $('.gallery.run_window').ready ->
+  $('.gallery.full_window').ready ->
+    # 作成者情報を表示
+    RunFullScreen.showCreatorInfo()
+    RunCommon.start()
+
+  $('.gallery.embed').ready ->
     # 作成者情報を表示
     RunFullScreen.showCreatorInfo()
     RunCommon.start()

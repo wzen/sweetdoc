@@ -785,7 +785,7 @@ class Gallery < ActiveRecord::Base
   end
 
   def self.embed_link(gpd, access_token, hostname)
-    src = "http://#{hostname}/gallery/detail/w/#{access_token}"
+    src = "http://#{hostname}/gallery/detail/e/#{access_token}"
     size = gpd[Const::Project::Key::SCREEN_SIZE]
     link = """
     <iframe src='#{src}' width='#{size[:width]}' height='#{size[:height]}' frameborder='0' marginwidth='0' marginheight='0' scrolling='no' style='border:1px solid #CCC; border-width:1px; max-width: 100%;'></iframe>
