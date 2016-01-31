@@ -43,25 +43,19 @@ class RunCommon
   # Mainビューのサイズ更新
   @updateMainViewSize = ->
     # mainビュー高さ修正
-    updateMainWidth = $('#contents').width()
-    infoHeight = 0
-    padding = 0
-    i = $('.contents_info:first')
-    if i?
-      infoHeight = i.height()
-      padding = 9
-    updateMainHeight = $('#contents').height() - infoHeight - padding
+    contentsWidth = $('#contents').width()
+    contentsHeight = $('#contents').height()
 
     # スクリーンサイズ修正
     projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
     # Paddingを考慮して比較
-    if updateMainWidth < projectScreenSize.width + 30
+    if contentsWidth < projectScreenSize.width + 30
       # 縮小
-      updatedProjectScreenSize.width = updateMainWidth - 30
-    if updateMainHeight < projectScreenSize.height + 10
+      updatedProjectScreenSize.width = contentsWidth - 30
+    if contentsHeight < projectScreenSize.height + 10
       # 縮小
-      updatedProjectScreenSize.height = updateMainHeight - 10
+      updatedProjectScreenSize.height = contentsHeight - 10
 
     # BaseScale 修正
     widthRate = updatedProjectScreenSize.width / projectScreenSize.width
@@ -75,7 +69,6 @@ class RunCommon
     Common.scaleFromViewRate = scaleFromViewRate
     updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate
     updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate
-    $('#main').height(updateMainHeight)
     $('#project_wrapper').css({width: updatedProjectScreenSize.width, height: updatedProjectScreenSize.height})
     # FIXME: 表示位置もScaleに合わせて直す
     Common.applyViewScale(true)

@@ -459,10 +459,13 @@ div.contents_info {
     height: auto;
   }
   .title {
-    font-size: 18px;
+    font-size: 28px;
+    display: inline-block;
   }
   .creator {
     font-size: 16px;
+    margin-left: 5px;
+    display: inline-block;
   }
   .caption {
     font-size: 14px;
@@ -470,13 +473,16 @@ div.contents_info {
   .page {
     font-size: 14px;
   }
-  .fork {
-    display: none;
-    color: darkorange;
-    font-size: 14px;
-  }
   .chapter {
     font-size: 14px;
+    display: inline-block;
+  }
+  .fork {
+    color: darkorange;
+    font-size: 14px;
+    margin-left: 5px;
+    //display: inline-block;
+    display: none;
   }
 }
 div.share_info {

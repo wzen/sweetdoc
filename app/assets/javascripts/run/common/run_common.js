@@ -71,23 +71,16 @@ RunCommon = (function() {
   };
 
   RunCommon.updateMainViewSize = function() {
-    var heightRate, i, infoHeight, padding, projectScreenSize, scaleFromViewRate, updateMainHeight, updateMainWidth, updatedProjectScreenSize, widthRate;
-    updateMainWidth = $('#contents').width();
-    infoHeight = 0;
-    padding = 0;
-    i = $('.contents_info:first');
-    if (i != null) {
-      infoHeight = i.height();
-      padding = 9;
-    }
-    updateMainHeight = $('#contents').height() - infoHeight - padding;
+    var contentsHeight, contentsWidth, heightRate, projectScreenSize, scaleFromViewRate, updatedProjectScreenSize, widthRate;
+    contentsWidth = $('#contents').width();
+    contentsHeight = $('#contents').height();
     projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
-    if (updateMainWidth < projectScreenSize.width + 30) {
-      updatedProjectScreenSize.width = updateMainWidth - 30;
+    if (contentsWidth < projectScreenSize.width + 30) {
+      updatedProjectScreenSize.width = contentsWidth - 30;
     }
-    if (updateMainHeight < projectScreenSize.height + 10) {
-      updatedProjectScreenSize.height = updateMainHeight - 10;
+    if (contentsHeight < projectScreenSize.height + 10) {
+      updatedProjectScreenSize.height = contentsHeight - 10;
     }
     widthRate = updatedProjectScreenSize.width / projectScreenSize.width;
     heightRate = updatedProjectScreenSize.height / projectScreenSize.height;
@@ -102,7 +95,6 @@ RunCommon = (function() {
     Common.scaleFromViewRate = scaleFromViewRate;
     updatedProjectScreenSize.width = projectScreenSize.width * scaleFromViewRate;
     updatedProjectScreenSize.height = projectScreenSize.height * scaleFromViewRate;
-    $('#main').height(updateMainHeight);
     $('#project_wrapper').css({
       width: updatedProjectScreenSize.width,
       height: updatedProjectScreenSize.height

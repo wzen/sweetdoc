@@ -5,11 +5,13 @@
 
 <div class="contents_info">
   <div>
-    <div class="title">
-        <span class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"><%= @title %></span>
-    </div>
-    <div class="creator">
-        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"><%= @creator.name %></span>
+    <div>
+      <div class="title">
+          <span class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"><%= @title %></span>
+      </div>
+      <div class="creator">
+          <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>">Created by <%= @creator.name %></span>
+      </div>
     </div>
 
     <% if show_page_num %>
@@ -22,15 +24,17 @@
     <% end %>
 
     <% if show_chapter_num %>
-        <div class="fork">
-          <span><%= I18n.t('contents_info.fork') %>:</span>
-          <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
-        </div>
-        <div class="chapter">
-          <span><%= I18n.t('contents_info.chapter') %>:</span>
-          <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
-          <span>/</span>
-          <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
+        <div>
+          <div class="chapter">
+            <span><%= I18n.t('contents_info.chapter') %>:</span>
+            <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_NUM_CLASSNAME %>"></span>
+            <span>/</span>
+            <span class="<%= Const::Run::AttributeName::CONTENTS_CHAPTER_MAX_CLASSNAME %>"><%= @chapter_max %></span>
+          </div>
+          <div class="fork">
+            <span><%= I18n.t('contents_info.fork') %>:</span>
+            <span class="<%= Const::Run::AttributeName::CONTENTS_FORK_NUM_CLASSNAME %>"></span>
+          </div>
         </div>
     <% end %>
 
