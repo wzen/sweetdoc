@@ -1,15 +1,17 @@
 <%= stylesheet_link_tag 'pipeline/gallery', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'pipeline/gallery_with_run', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'pipeline/preload_item', 'data-turbolinks-track' => true %>
 <div id="main_gallery_wrapper">
     <div id="gallery_contents_wrapper">
         <div class="wrapper">
             <div id="contents">
-                <%= render 'run/fullscreen/fullscreen' %>
-                <%= render 'base/csscode' %>
-                <%= render 'base/values', pagevalues: @pagevalues, is_runwindow_reload: @is_runwindow_reload %>
+              <form name="send_form">
+                <%= render 'run/fullscreen/fullscreen_button', access_token: @access_token, screen_size_width: @screen_size[:width], screen_size_height: @screen_size[:height] %>
+              </form>
+              <%= render 'run/fullscreen/fullscreen' %>
+              <%= render 'base/csscode' %>
+              <%= render 'base/values', pagevalues: @pagevalues, is_runwindow_reload: @is_runwindow_reload %>
             </div>
         </div>
     </div>
 </div>
-
-<%= javascript_include_tag 'pipeline/gallery_with_run', 'data-turbolinks-track' => true %>
-<%= javascript_include_tag 'pipeline/preload_item', 'data-turbolinks-track' => true %>

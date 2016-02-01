@@ -30,13 +30,13 @@ div#main {
   //background-image: image_url('base/back2.jpg');
   //background-repeat: repeat;
 
-  &.fullscreen {
+  &.fullscreen, &.embed {
     padding: 0;
 
     .info_wrapper {
       position: absolute;
       top: 5px;
-      right: 5px;
+      left: 5px;
       z-index: 1999999998;
     }
   }
