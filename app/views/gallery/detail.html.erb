@@ -1,8 +1,15 @@
 <div id="contents">
-    <%= render 'run/defaultscreen/main' %>
-    <%= render 'run/defaultscreen/info' %>
-    <%= render 'base/csscode' %>
-    <%= render 'base/values', pagevalues: @pagevalues %>
+  <form name="send_form">
+    <div class="new_window" onclick="GalleryCommon.showWithFullScreen(this); return false;">
+      <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= @access_token %>" />
+      <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_WIDTH %>" value="<%= @screen_size[:width] %>" />
+      <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_HEIGHT %>" value="<%= @screen_size[:height]%>" />
+    </div>
+  </form>
+  <%= render 'run/defaultscreen/main' %>
+  <%= render 'run/defaultscreen/info' %>
+  <%= render 'base/csscode' %>
+  <%= render 'base/values', pagevalues: @pagevalues %>
 </div>
 
 <%= javascript_include_tag 'pipeline/gallery_with_run', 'data-turbolinks-track' => true %>

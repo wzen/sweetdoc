@@ -447,7 +447,7 @@ class Gallery < ActiveRecord::Base
       message = I18n.t('message.database.item_state.load.success')
       embed_link = self.embed_link(gpd, access_token, hostname)
 
-      return pagevalues, message, ret['title'], ret['caption'], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, embed_link
+      return pagevalues, message, ret['title'], ret['caption'], gpd[Const::Project::Key::SCREEN_SIZE], creator, item_js_list, gallery_view_count, gallery_bookmark_count, show_options, embed_link
     end
   end
 

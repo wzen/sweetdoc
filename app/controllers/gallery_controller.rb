@@ -33,11 +33,11 @@ class GalleryController < ApplicationController
   end
 
   def _take_gallery_data
-    access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
+    @access_token = params.require(Const::Gallery::Key::GALLERY_ACCESS_TOKEN)
     # ViewCountをupdate
-    Gallery.add_view_statistic_count(access_token, Date.today)
+    Gallery.add_view_statistic_count(@access_token, Date.today)
     # データを取得
-    @pagevalues, @message, @title, @caption, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @embed_link = Gallery.firstload_contents(access_token, request.host)
+    @pagevalues, @message, @title, @caption, @screen_size, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @embed_link = Gallery.firstload_contents(@access_token, request.host)
   end
 
   def _full_window

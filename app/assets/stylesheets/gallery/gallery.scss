@@ -19,6 +19,17 @@ html, body {
 body {
   //background-color: #ebe9dc;
   background-color: #FAFAFA;
+  &.detail #contents .new_window{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background-image: image_url('gallery/open_new_window24.png');
+    background-size: 30px 30px;
+    z-index: 2;
+    cursor: pointer;
+  }
 }
 
 div#contents {

@@ -86,20 +86,31 @@ class RunCommon
   # 詳細情報を表示
   @showCreatorInfo = ->
     info = $('#contents').find('.contents_info:first')
-    info.fadeIn('500')
-    setTimeout( ->
-      info.fadeOut('500')
-    , 3000)
+
+    _setClose = (info) ->
+      # ビュークリックで非表示
+      $('#contents').off('click.contents_info').on('click.contents_info', (e) ->
+        if info.is(':visible')
+          info.fadeOut('200')
+          $('#contents').off('click.contents_info')
+      )
+
+    info.fadeIn('500', ->
+      # ビュークリックで非表示
+      _setClose.call(@, info)
+      setTimeout( ->
+        info.fadeOut('500')
+      , 3000)
+    )
     # iボタンで情報表示
-    $('#contents .contents_info_show_button:first').off('click').on('click', (e)=>
+    $('#contents .contents_info_show_button:first').off('click').on('click', (e) =>
       if !info.is(':visible')
-        info.fadeIn('200')
+        info.fadeIn('200', =>
+          # ビュークリックで非表示
+          _setClose.call(@, info)
+        )
     )
-    # 情報ビュークリックで非表示
-    info.off('click').on('click', (e) =>
-      if info.is(':visible')
-        info.fadeOut('200')
-    )
+
     # Share情報表示
     share = $('#contents').find('.share_info:first')
     $('#contents .contents_share_show_button:first').off('click').on('click', (e)=>

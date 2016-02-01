@@ -113,23 +113,28 @@ RunCommon = (function() {
   };
 
   RunCommon.showCreatorInfo = function() {
-    var info, share;
+    var _setClose, info, share;
     info = $('#contents').find('.contents_info:first');
-    info.fadeIn('500');
-    setTimeout(function() {
-      return info.fadeOut('500');
-    }, 3000);
+    _setClose = function(info) {
+      return $('#contents').off('click.contents_info').on('click.contents_info', function(e) {
+        if (info.is(':visible')) {
+          info.fadeOut('200');
+          return $('#contents').off('click.contents_info');
+        }
+      });
+    };
+    info.fadeIn('500', function() {
+      _setClose.call(this, info);
+      return setTimeout(function() {
+        return info.fadeOut('500');
+      }, 3000);
+    });
     $('#contents .contents_info_show_button:first').off('click').on('click', (function(_this) {
       return function(e) {
         if (!info.is(':visible')) {
-          return info.fadeIn('200');
-        }
-      };
-    })(this));
-    info.off('click').on('click', (function(_this) {
-      return function(e) {
-        if (info.is(':visible')) {
-          return info.fadeOut('200');
+          return info.fadeIn('200', function() {
+            return _setClose.call(_this, info);
+          });
         }
       };
     })(this));

@@ -15,7 +15,11 @@
             <%= image_tag(thumbnail_gallery_path(content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]), class: 'thumbnail_img', style: thumbnail_style)%>
         </div>
         <div class="hover_overlay">
-            <div class="new_window"></div>
+            <div class="new_window" onclick="GalleryCommon.showWithFullScreen(this); return false;">
+              <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN] %>" />
+              <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_WIDTH %>" value="<%= content[Const::Gallery::Key::SCREEN_SIZE_WIDTH] %>" />
+              <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_HEIGHT %>" value="<%= content[Const::Gallery::Key::SCREEN_SIZE_HEIGHT] %>" />
+            </div>
             <div class="info">
                 <div class="title_wrapper">
                     <% if !content[Const::Gallery::Key::TITLE].nil? %>
@@ -38,7 +42,4 @@
             <a class="detail_link" href="<%= "/gallery/detail/#{content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN]}" %>" ></a>
         </div>
     </div>
-    <input type="hidden" class="<%= Const::Gallery::Key::GALLERY_ACCESS_TOKEN %>" value="<%= content[Const::Gallery::Key::GALLERY_ACCESS_TOKEN] %>" />
-    <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_WIDTH %>" value="<%= content[Const::Gallery::Key::SCREEN_SIZE_WIDTH] %>" />
-    <input type="hidden" class="<%= Const::Gallery::Key::SCREEN_SIZE_HEIGHT %>" value="<%= content[Const::Gallery::Key::SCREEN_SIZE_HEIGHT] %>" />
 </div>
