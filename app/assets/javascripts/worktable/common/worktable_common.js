@@ -173,19 +173,19 @@ WorktableCommon = (function() {
       pn = PageValue.getPageNum();
     }
     if (afterMode === Constant.Mode.NOT_SELECT) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn));
+      $(window.drawingCanvas).css('pointer-events', '');
       window.scrollInsideWrapper.removeClass('edit_mode');
     } else if (afterMode === Constant.Mode.DRAW) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn));
+      $(window.drawingCanvas).css('pointer-events', '');
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInsideWrapper.removeClass('edit_mode');
     } else if (afterMode === Constant.Mode.EDIT) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTBOTTOM, pn));
+      $(window.drawingCanvas).css('pointer-events', 'none');
       window.scrollContents.find('.item.draggable').addClass('edit_mode');
       window.scrollInsideWrapper.addClass('edit_mode');
       Navbar.setModeEdit();
     } else if (afterMode === Constant.Mode.OPTION) {
-      $(window.drawingCanvas).css('z-index', Common.plusPagingZindex(Constant.Zindex.EVENTFLOAT, pn));
+      $(window.drawingCanvas).css('pointer-events', '');
       window.scrollContents.find('.item.draggable').removeClass('edit_mode');
       window.scrollInsideWrapper.removeClass('edit_mode');
     }
