@@ -1,7 +1,7 @@
 <div id="wrapper">
     <div class="content_wrapper">
         <div id="new-wrapper">
-            <div id="header"><%= I18n.t('user.edit_account') %> <%= resource_name.to_s.humanize %></div>
+            <div id="header"><%= I18n.t('user.edit_account') %></div>
 
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
                 <%= devise_error_messages! %>

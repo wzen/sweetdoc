@@ -207,3 +207,5 @@ en:
     cancel_account: 'Cancel my account'
     update: 'Update'
     send_me_reset_password_instructions: 'Send me reset password instructions'
+    resend_confirmation_instructions: 'Resend confirmation instructions'
+    do_resend_confirmation_instructions: 'Resend'
