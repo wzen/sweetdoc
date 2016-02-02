@@ -1,7 +1,7 @@
 <div id="wrapper">
     <div class="content_wrapper">
         <div id="login-wrapper">
-            <div id="header">Sign In</div>
+            <div id="header"><%= I18n.t('user.sign_in') %></div>
             <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
                 <div class="form-item">
                     <%= f.label :email %><br />
@@ -21,7 +21,7 @@
                 <% end -%>
 
                 <div class="button-panel submit">
-                    <%= f.submit 'Sign In', class:'button', title:'Sign In' %>
+                    <%= f.submit I18n.t('user.do_sign_in'), class:'button', title:'Sign In' %>
                 </div>
             <% end %>
         </div>
@@ -34,7 +34,7 @@
 
         <div id="socialLogin">
             <div id="header">
-                Sign In with a Social Network
+                <%= I18n.t('user.sign_in_with_social') %>
             </div>
 
             <div class="social_wrapper">

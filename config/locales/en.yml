@@ -169,6 +169,8 @@ en:
         password: 'Password'
         password_confirmation: 'Password Confirm'
         email: 'Mail Address'
+        remember_me: 'Remember me'
+
   test: "testok"
   account:
     in_use_as_guest: 'In use as guest'
@@ -194,3 +196,14 @@ en:
     page: 'Page'
     fork: 'Fork'
     chapter: 'Chapter'
+  user:
+    sign_in: 'Sign in to SweetDoc'
+    do_sign_in: 'Sign in'
+    sign_in_with_social: 'Sign In with a Social Network'
+    sign_up: 'Create an account'
+    do_sign_up: 'Create'
+    forgot_your_password: 'Forgot your password?'
+    edit_account: 'Edit an account'
+    cancel_account: 'Cancel my account'
+    update: 'Update'
+    send_me_reset_password_instructions: 'Send me reset password instructions'

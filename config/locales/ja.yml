@@ -147,6 +147,7 @@ ja:
         password: 'パスワード'
         password_confirmation: 'パスワード確認'
         email: 'メールアドレス'
+        remember_me: 'セッションを保持'
 
   account:
     in_use_as_guest: 'ゲストとして使用中'
@@ -172,3 +173,14 @@ ja:
     page: 'ページ'
     fork: 'フォーク'
     chapter: 'チャプター'
+  user:
+    sign_in: 'SweetDocにログイン'
+    do_sign_in: 'ログイン'
+    sign_in_with_social: 'ソーシャルボタンでログイン'
+    sign_up: '新規アカウントを作成'
+    do_sign_up: 'アカウント作成'
+    forgot_your_password: 'Forgot your password?'
+    edit_account: 'アカウント編集'
+    cancel_account: 'アカウント削除'
+    update: '更新'
+    send_me_reset_password_instructions: 'パスワードリセットをリクエスト'

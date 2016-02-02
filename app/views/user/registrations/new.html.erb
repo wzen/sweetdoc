@@ -1,7 +1,7 @@
 <div id="wrapper">
     <div class="content_wrapper">
         <div id="new-wrapper">
-            <div id="header">Sign Up</div>
+            <div id="header"><%= I18n.t('user.sign_up') %></div>
 
             <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
                 <%= devise_error_messages! %>
@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="button-panel submit">
-                    <%= f.submit 'Sign Up', class:'button', title:'Sign Up' %>
+                    <%= f.submit I18n.t('user.do_sign_up'), class:'button', title:'Sign Up' %>
                 </div>
             <% end %>
             <%= render "user/shared/links" %>
