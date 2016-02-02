@@ -42,7 +42,14 @@ class ApplicationController < ActionController::Base
       return @_current_user
     else
       if session[:user_id]
-        @_current_user ||= User.find(session[:user_id])
+        u = User.find_by(:id => session[:user_id])
+        if u.present?
+          @_current_user  = u
+        else
+          # セッション削除
+          reset_session
+          @_current_user = guest_user
+        end
       else
         @_current_user = guest_user
       end
