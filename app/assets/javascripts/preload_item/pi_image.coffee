@@ -32,10 +32,20 @@ class PreloadItemImage extends ItemBase
   # アイテムサイズ更新
   updateItemSize: (w, h) ->
     super(w, h)
-    size = _sizeOfKeepAspect.call(@)
-    img = @getJQueryElement().find('img')
-    img.width(size.width)
-    img.height(size.height)
+    if @isKeepAspect
+      size = _sizeOfKeepAspect.call(@)
+      width = size.width
+      height = size.height
+    else
+      width = @itemSize.w
+      height = @itemSize.h
+    imageCanvas = @getJQueryElement().find('canvas').get(0)
+    imageCanvas.width = @itemSize.w
+    imageCanvas.height = @itemSize.h
+    imageContext = imageCanvas.getContext('2d')
+    left = (@itemSize.w - width) * 0.5
+    top = (@itemSize.h - height) * 0.5
+    imageContext.drawImage(@_image, left, top, width, height)
 
   # 再描画処理
   # @param [boolean] show 要素作成後に描画を表示するか
@@ -86,10 +96,14 @@ class PreloadItemImage extends ItemBase
         else
           width = @itemSize.w
           height = @itemSize.h
-        contents = """
-          <img class='put_center' src='#{@imagePath}' width='#{width}' height='#{height}' />
-        """
-        @addContentsToScrollInside(contents, callback)
+        imageCanvas = document.createElement('canvas')
+        imageCanvas.width = @itemSize.w
+        imageCanvas.height = @itemSize.h
+        imageContext = imageCanvas.getContext('2d')
+        left = (@itemSize.w - width) * 0.5
+        top = (@itemSize.h - height) * 0.5
+        imageContext.drawImage(@_image, left, top, width, height)
+        @addContentsToScrollInside(imageCanvas, callback)
       else
         # 画像未設定時表示
         contents = """

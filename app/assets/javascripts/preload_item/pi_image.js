@@ -46,12 +46,23 @@ PreloadItemImage = (function(superClass) {
   }
 
   PreloadItemImage.prototype.updateItemSize = function(w, h) {
-    var img, size;
+    var height, imageCanvas, imageContext, left, size, top, width;
     PreloadItemImage.__super__.updateItemSize.call(this, w, h);
-    size = _sizeOfKeepAspect.call(this);
-    img = this.getJQueryElement().find('img');
-    img.width(size.width);
-    return img.height(size.height);
+    if (this.isKeepAspect) {
+      size = _sizeOfKeepAspect.call(this);
+      width = size.width;
+      height = size.height;
+    } else {
+      width = this.itemSize.w;
+      height = this.itemSize.h;
+    }
+    imageCanvas = this.getJQueryElement().find('canvas').get(0);
+    imageCanvas.width = this.itemSize.w;
+    imageCanvas.height = this.itemSize.h;
+    imageContext = imageCanvas.getContext('2d');
+    left = (this.itemSize.w - width) * 0.5;
+    top = (this.itemSize.h - height) * 0.5;
+    return imageContext.drawImage(this._image, left, top, width, height);
   };
 
   PreloadItemImage.prototype.refresh = function(show, callback) {
@@ -102,7 +113,7 @@ PreloadItemImage = (function(superClass) {
     }
     return _makeImageObjectIfNeed.call(this, (function(_this) {
       return function() {
-        var contents, height, size, width;
+        var contents, height, imageCanvas, imageContext, left, size, top, width;
         if (_this._image != null) {
           if (_this.isKeepAspect) {
             size = _sizeOfKeepAspect.call(_this);
@@ -112,8 +123,14 @@ PreloadItemImage = (function(superClass) {
             width = _this.itemSize.w;
             height = _this.itemSize.h;
           }
-          contents = "<img class='put_center' src='" + _this.imagePath + "' width='" + width + "' height='" + height + "' />";
-          return _this.addContentsToScrollInside(contents, callback);
+          imageCanvas = document.createElement('canvas');
+          imageCanvas.width = _this.itemSize.w;
+          imageCanvas.height = _this.itemSize.h;
+          imageContext = imageCanvas.getContext('2d');
+          left = (_this.itemSize.w - width) * 0.5;
+          top = (_this.itemSize.h - height) * 0.5;
+          imageContext.drawImage(_this._image, left, top, width, height);
+          return _this.addContentsToScrollInside(imageCanvas, callback);
         } else {
           contents = "<div class='no_image'><div class='center_image put_center'></div></div>";
           _this.addContentsToScrollInside(contents, callback);
