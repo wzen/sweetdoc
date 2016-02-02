@@ -1,21 +1,21 @@
 # Additional translations at https://github.com/plataformatec/devise/wiki/I18n
 
-en:
+ja:
   devise:
     confirmations:
       confirmed: "Your email address has been successfully confirmed."
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
     failure:
-      already_authenticated: "You are already signed in."
-      inactive: "Your account is not activated yet."
-      invalid: "Invalid %{authentication_keys} or password."
-      locked: "Your account is locked."
+      already_authenticated: "既にログインしています。"
+      inactive: "アカウントが有効ではありません。"
+      invalid: "%{authentication_keys} または password が一致しません。"
+      locked: "アカウントはロックされています。"
       last_attempt: "You have one more attempt before your account is locked."
-      not_found_in_database: "Invalid %{authentication_keys} or password."
-      timeout: "Your session expired. Please sign in again to continue."
-      unauthenticated: "You need to sign in or sign up before continuing."
-      unconfirmed: "You have to confirm your email address before continuing."
+      not_found_in_database: "%{authentication_keys} または password が一致しません。"
+      timeout: "セッションが切れました。もう一度ログインしてください。"
+      unauthenticated: "続けるにはアカウントのログインが必要です。"
+      unconfirmed: "続けるにはアカウントのメール認証が必要です。"
     mailer:
       confirmation_instructions:
         subject: "Confirmation instructions"
