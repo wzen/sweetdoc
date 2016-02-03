@@ -25,9 +25,9 @@ module GetDesk
     # Encoding
     config.encoding = 'utf-8'
 
-    # 全Modelをロード
+    # 全Modelを検索パスに含める
     config.autoload_paths += Dir["#{config.root}/app/models/**/"]
-    # lib以下のコードをロード
+    # lib以下のコードを検索パスに含める
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
