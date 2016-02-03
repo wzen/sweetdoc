@@ -21,7 +21,13 @@ class GalleryController < ApplicationController
   end
 
   def detail
-    _take_gallery_data
+    ua = request.env["HTTP_USER_AGENT"]
+    if ua.include?('Mobile') || ua.include?('Android')
+      # スマートフォンは全画面で表示
+      full_window
+    else
+      _take_gallery_data
+    end
   end
 
   def full_window

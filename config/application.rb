@@ -25,8 +25,11 @@ module GetDesk
     # Encoding
     config.encoding = 'utf-8'
 
+    # 全Modelをロード
+    config.autoload_paths += Dir["#{config.root}/app/models/**/"]
     # lib以下のコードをロード
-    config.autoload_paths += %W(#{config.root}/lib/common)
+    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
     # params.requireエラーで例外を発生させる
     config.action_controller.action_on_unpermitted_parameters = :raise
