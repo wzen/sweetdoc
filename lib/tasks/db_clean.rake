@@ -1,4 +1,50 @@
 namespace :db_clean do
+  desc "DB user session delete task"
+  task :erase_user_session => :environment do
+    begin
+      ActiveRecord::Base.transaction do
+        from = Time.now.advance(:minutes => -(ENV['SESSION_EXPIRE_MINUTES']).to_i)
+        p from
+        guests = User.where("guest = ? AND updated_at < ?", true, from)
+        if guests.present? && guests.length > 0
+          guest_ids = guests.pluck(:id)
+          # 削除フラグを立てる
+          User.where(id: guest_ids).update_all(del_flg: true)
+          upm = UserProjectMap.where(user_id: guest_ids)
+          upm.update_all(del_flg: true)
+          Project.where(id: upm.pluck(:project_id)).update_all(del_flg: true)
+          UserCodingTree.where(user_id: guest_ids).update_all(del_flg: true)
+          UserCoding.where(user_id: guest_ids).update_all(del_flg: true)
+          ugfp = UserGalleryFootprintPaging.where(user_id: guest_ids)
+          ugfp.update_all(del_flg: true)
+          UserGalleryFootprintPagevalue.where(id: ugfp.pluck(:user_gallery_footprint_pagevalue_id)).update_all(del_flg: true)
+          UserGalleryFootprint.where(user_id: guest_ids).update_all(del_flg: true)
+          uigm = UserItemGalleryMap.where(user_id: guest_ids)
+          uigm.update_all(del_flg: true)
+          ItemGallery.where(id: uigm.pluck(:item_gallery_id)).update_all(del_flg: true)
+          up = UserPagevalue.where(user_project_map_id: upm.pluck(:id))
+          up.update_all(del_flg: true)
+          SettingPagevalue.where(id: up.pluck(:setting_pagevalue_id)).update_all(del_flg: true)
+          up_ids = up.pluck(:id)
+          GeneralCommonPagevalue.where(user_pagevalue_id: up_ids).update_all(del_flg: true)
+          gpp = GeneralPagevaluePaging.where(user_pagevalue_id: up_ids)
+          gpp.update_all(del_flg: true)
+          GeneralPagevalue.where(id: gpp.pluck(:general_pagevalue_id)).update_all(del_flg: true)
+          ipp = InstancePagevaluePaging.where(user_pagevalue_id: up_ids)
+          ipp.update_all(del_flg: true)
+          InstancePagevalue.where(id: ipp.pluck(:instance_pagevalue_id)).update_all(del_flg: true)
+          epp = EventPagevaluePaging.where(user_pagevalue_id: up_ids)
+          epp.update_all(del_flg: true)
+          EventPagevalue.where(id: epp.pluck(:event_pagevalue_id)).update_all(del_flg: true)
+        end
+      end
+    rescue => e
+      p e
+    end
+  end
+end
+
+namespace :db_clean do
   desc "DB delete flg clean task"
   task :erase_del_flg => :environment do
     begin
@@ -39,52 +85,6 @@ namespace :db_clean do
       UserPagevalue.destroy_all(del_flg: true)
       UserProjectMap.destroy_all(del_flg: true)
       User.destroy_all(del_flg: true)
-    rescue => e
-      p e
-    end
-  end
-end
-
-namespace :db_clean do
-  desc "DB user session delete task"
-  task :erase_user_session => :environment do
-    begin
-      ActiveRecord::Base.transaction do
-        from = Time.now.advance(:minutes => -(ENV['SESSION_EXPIRE_MINUTES']).to_i)
-        p from
-        guests = User.where("guest = ? AND updated_at < ?", true, from)
-        if guests.present? && guests.length > 0
-          guest_ids = guests.pluck(:id)
-          # 削除フラグを立てる
-          User.where(id: guest_ids).update_all(del_flg: true)
-          upm = UserProjectMap.where(user_id: guest_ids)
-          upm.update_all(del_flg: true)
-          Project.where(id: upm.pluck(:project_id)).update_all(del_flg: true)
-          UserCodingTree.where(user_id: guest_ids).update_all(del_flg: true)
-          UserCoding.where(user_id: guest_ids).update_all(del_flg: true)
-          ugfp = UserGalleryFootprintPaging.where(user_id: guest_ids)
-          ugfp.update_all(del_flg: true)
-          UserGalleryFootprintPagevalue.where(id: ugfp.pluck(:user_gallery_footprint_pagevalue_id)).update_all(del_flg: true)
-          UserGalleryFootprint.where(user_id: guest_ids).update_all(del_flg: true)
-          uigm = UserItemGalleryMap.where(user_id: guest_ids)
-          uigm.update_all(del_flg: true)
-          ItemGallery.where(id: uigm.pluck(:item_gallery_id)).update_all(del_flg: true)
-          up = UserPagevalue.where(user_project_map_id: upm.pluck(:id))
-          up.update_all(del_flg: true)
-          SettingPagevalue.where(id: up.pluck(:setting_pagevalue_id)).update_all(del_flg: true)
-          up_ids = up.pluck(:id)
-          GeneralCommonPagevalue.where(user_pagevalue_id: up_ids).update_all(del_flg: true)
-          gpp = GeneralPagevaluePaging.where(user_pagevalue_id: up_ids)
-          gpp.update_all(del_flg: true)
-          GeneralPagevalue.where(id: gpp.pluck(:general_pagevalue_id)).update_all(del_flg: true)
-          ipp = InstancePagevaluePaging.where(user_pagevalue_id: up_ids)
-          ipp.update_all(del_flg: true)
-          InstancePagevalue.where(id: ipp.pluck(:instance_pagevalue_id)).update_all(del_flg: true)
-          epp = EventPagevaluePaging.where(user_pagevalue_id: up_ids)
-          epp.update_all(del_flg: true)
-          EventPagevalue.where(id: epp.pluck(:event_pagevalue_id)).update_all(del_flg: true)
-        end
-      end
     rescue => e
       p e
     end

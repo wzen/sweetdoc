@@ -110,5 +110,8 @@ gem 'dotenv-rails'
 #normalgem 'massive_record'
 #normal
 
+# For Batch
+gem 'whenever', '0.9.4'
+
 #gem 'ruby-debug-ide'
 
