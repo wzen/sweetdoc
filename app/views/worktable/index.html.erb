@@ -12,3 +12,7 @@
     <%= render 'base/config_menu_temp' %>
     <%= render 'worktable/footer_message' %>
 </div>
+
+<script type="text/javascript">
+  window.changeUser = <%= (@do_login.present? && @do_login) || (@do_logout.present? && @do_logout) %>
+</script>

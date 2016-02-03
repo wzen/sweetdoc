@@ -24,6 +24,21 @@ class WorktableCommon
     # 選択アイテムID解除
     window.selectedObjId = null
 
+  # キャッシュからWorktableを作成するか判定
+  @checkLoadWorktableFromCache = ->
+    if LocalStorage.isOverWorktableSaveTimeLimit()
+      # キャッシュ期限切れ
+      return false
+    if window.changeUser? && window.changeUser
+      # ユーザが変更された場合
+      return false
+    generals = LocalStorage.loadGeneralValue()
+    if !generals[PageValue.Key.PROJECT_ID]?
+      # プロジェクトが存在しない場合
+      return false
+
+    return true
+
   # 選択アイテムの複製処理 (Ctrl + c)
   # @param [Integer] objId コピーするアイテムのオブジェクトID
   # @param [Boolean] isCopyOperation コピー = true, 切り取り = false

@@ -196,11 +196,16 @@ class LocalStorage
       lstorage.setItem(@savetimeKey(), $.now())
 
   # キャッシュから共通値を読み込み
-  @loadGeneralPageValue: ->
+  @loadGeneralValue: ->
     lstorage = localStorage
     l = lstorage.getItem(@generalKey())
     if l?
-      h = JSON.parse(l)
+      return JSON.parse(l)
+    else
+      return null
+  @loadGeneralPageValue: ->
+    h = @loadGeneralValue()
+    if h?
       PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, h)
 
   # キャッシュにインスタンス値を保存

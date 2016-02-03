@@ -220,12 +220,21 @@ LocalStorage = (function() {
     }
   };
 
-  LocalStorage.loadGeneralPageValue = function() {
-    var h, l, lstorage;
+  LocalStorage.loadGeneralValue = function() {
+    var l, lstorage;
     lstorage = localStorage;
     l = lstorage.getItem(this.generalKey());
     if (l != null) {
-      h = JSON.parse(l);
+      return JSON.parse(l);
+    } else {
+      return null;
+    }
+  };
+
+  LocalStorage.loadGeneralPageValue = function() {
+    var h;
+    h = this.loadGeneralValue();
+    if (h != null) {
       return PageValue.setGeneralPageValue(PageValue.Key.G_PREFIX, h);
     }
   };

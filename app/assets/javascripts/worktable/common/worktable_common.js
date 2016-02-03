@@ -29,6 +29,21 @@ WorktableCommon = (function() {
     return window.selectedObjId = null;
   };
 
+  WorktableCommon.checkLoadWorktableFromCache = function() {
+    var generals;
+    if (LocalStorage.isOverWorktableSaveTimeLimit()) {
+      return false;
+    }
+    if ((window.changeUser != null) && window.changeUser) {
+      return false;
+    }
+    generals = LocalStorage.loadGeneralValue();
+    if (generals[PageValue.Key.PROJECT_ID] == null) {
+      return false;
+    }
+    return true;
+  };
+
   WorktableCommon.copyItem = function(objId, isCopyOperation) {
     var instance, pageValue;
     if (objId == null) {
