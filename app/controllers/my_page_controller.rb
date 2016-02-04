@@ -2,6 +2,7 @@ require 'gallery/gallery'
 require 'item_gallery/item_gallery'
 
 class MyPageController < ApplicationController
+  before_filter :redirect_if_guest
 
   def created_contents
     user_id = _get_user_id

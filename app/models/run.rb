@@ -10,7 +10,19 @@ class Run
     instance_pagevalues = make_pagevalue_with_pagenum(instance, Const::PageValueKey::INSTANCE_PREFIX, page_num)
     event_pagevalues = make_pagevalue_with_pagenum(event, Const::PageValueKey::E_SUB_ROOT, page_num)
     footprint_pagevalues = make_pagevalue(footprint, Const::PageValueKey::F_PREFIX)
-    creator = User.find(user_id)
+    creator = nil
+    if user_id.present?
+      c = User.find(user_id)
+      creator = {
+          name: c.name,
+          thumbnail_img: c.thumbnail_img
+      }
+    else
+      creator = {
+          name: 'Guest',
+          thumbnail_img: ActionController::Base.helpers.asset_path('base/guest_user.png')
+      }
+    end
     return {
         general_pagevalues: general_pagevalues,
         instance_pagevalues: instance_pagevalues,

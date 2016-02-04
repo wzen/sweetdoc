@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
     gon.const  = const_values(Const, {})
     gon.serverenv  = ENV
     gon.locale = I18n.locale
+    gon.user_logined = !current_or_guest_user.guest
   end
 
   def const_values(const_class, obj)
@@ -117,7 +118,6 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    #I18n.locale = params[:locale] || I18n.default_locale
     locale = params[:locale] || locale_from_accept_language || locale_from_ip
     I18n.locale = (I18n::available_locales.include? locale.to_sym) ? locale.to_sym : I18n.default_locale
   end
@@ -125,6 +125,14 @@ class ApplicationController < ActionController::Base
   # ActiveRecord Like エスケープ
   def escape_like(string)
     string.gsub(/[\\%_]/){|m| "\\#{m}"}
+  end
+
+  # ゲストの場合はリダイレクト
+  def redirect_if_guest
+    if current_or_guest_user.guest
+      # ゲストの場合リダイレクト
+      redirect_to 'gallery/grid'
+    end
   end
 
   protected

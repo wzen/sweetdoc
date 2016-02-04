@@ -1,6 +1,7 @@
 constant = gon.const
 serverenv = gon.serverenv
 locale = gon.locale
+userLogined = gon.user_logined
 
 # アプリ共通定数
 class Constant

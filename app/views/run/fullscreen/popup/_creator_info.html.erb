@@ -3,8 +3,8 @@
         <span class="<%= Const::Run::AttributeName::CONTENTS_TITLE_CLASSNAME %>"><%= @title %></span>
     </div>
     <div class="creator">
-        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"><%= @creator.name %></span>
-        <span class="circle"><%= @creator.thumbnail_img %></span>
+        <span class="<%= Const::Run::AttributeName::CONTENTS_CREATOR_CLASSNAME %>"><%= @creator[:name] %></span>
+        <span class="circle"><%= @creator[:thumbnail_img] %></span>
     </div>
     <% if @caption.nil? == false %>
         <div class="caption">
