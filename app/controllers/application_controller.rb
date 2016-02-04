@@ -5,11 +5,12 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  # Locale
-  before_filter :set_locale
-  before_filter :init_const
-  before_filter :configure_permitted_parameters, if: :devise_controller?
-  after_filter :store_location
+  # action
+  before_action :set_locale
+  before_action :init_const
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :touch_if_guest
+  after_action :store_location
 
   def init_const
     # Constantの設定
@@ -159,6 +160,17 @@ class ApplicationController < ActionController::Base
     end
 
     locale_from_ip
+  end
+
+  def touch_if_guest
+    if current_or_guest_user.guest
+      # ゲストの場合Userテーブルの更新日を更新
+      u = User.find_by(id: current_or_guest_user.id)
+      if u.present?
+        u.touch
+        u.save
+      end
+    end
   end
 
 end

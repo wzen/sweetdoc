@@ -1,7 +1,7 @@
 require 'item_gallery/item_gallery'
 
 class ItemGalleryController < ApplicationController
-  before_filter :redirect_if_guest
+  before_action :redirect_if_guest
 
   def index
     @popular_tags = ItemGallery.popular_tags(Const::ItemGallery::POPULAR_TAG_MENU_SHOW_MAX)
