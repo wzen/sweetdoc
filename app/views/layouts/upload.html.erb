@@ -22,10 +22,6 @@
     </div>
 
     <%= javascript_include_tag 'pipeline/upload', 'data-turbolinks-track' => true %>
-    <script type="text/javascript">
-        I18n.defaultLocale = "<%= I18n.default_locale %>";
-        I18n.locale = "<%= I18n.locale %>";
-        I18n.fallbacks = true;
-    </script>
+    <%= render 'base/js_init' %>
 </body>
 </html>
