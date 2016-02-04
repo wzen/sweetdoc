@@ -385,9 +385,9 @@ class Gallery < ActiveRecord::Base
         gvs.count as view_count,
         ugf.page_num as footprint_page_num
       FROM galleries g
-      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id
-      LEFT JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
-      LEFT JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
+      INNER JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
       LEFT JOIN gallery_general_pagevalue_pagings ggpp ON g.id = ggpp.gallery_id AND ggpp.page_num = #{page_num} AND ggpp.del_flg = 0
       LEFT JOIN gallery_general_pagevalues ggp ON ggpp.gallery_general_pagevalue_id = ggp.id AND ggp.del_flg = 0
       LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = ggpp.page_num AND gipp.del_flg = 0
@@ -399,7 +399,6 @@ class Gallery < ActiveRecord::Base
       LEFT JOIN user_gallery_footprints ugf ON ugf.user_id = u.id AND ugf.gallery_id = g.id AND ugf.del_flg = 0
       WHERE g.access_token = '#{access_token}'
       AND g.del_flg = 0
-      AND pgm.del_flg = 0
       LIMIT 1
     SQL
     ret_sql = ActiveRecord::Base.connection.select_all(sql)
@@ -465,6 +464,9 @@ class Gallery < ActiveRecord::Base
     sql = <<-"SQL"
       SELECT ggp.data as general_pagevalue_data, gip.data as instance_pagevalue_data, gep.data as event_pagevalue_data, gipp.page_num as page_num #{footprint_sql_select}
       FROM galleries g
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
+      INNER JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
       LEFT JOIN gallery_general_pagevalue_pagings ggpp ON g.id = ggpp.gallery_id AND ggpp.page_num IN #{pages} AND ggpp.del_flg = 0
       LEFT JOIN gallery_general_pagevalues ggp ON ggpp.gallery_general_pagevalue_id = ggp.id AND ggp.del_flg = 0
       LEFT JOIN gallery_instance_pagevalue_pagings gipp ON g.id = gipp.gallery_id AND gipp.page_num = ggpp.page_num AND gipp.del_flg = 0
@@ -542,6 +544,9 @@ class Gallery < ActiveRecord::Base
       SELECT gt.category as category
       FROM gallery_bookmarks gb
       INNER JOIN galleries g ON g.id = gb.gallery_id AND g.del_flg = 0
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
+      INNER JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
       LEFT JOIN gallery_tag_maps gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
       LEFT JOIN gallery_tags gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
       WHERE gb.user_id = #{user_id}
@@ -598,6 +603,9 @@ class Gallery < ActiveRecord::Base
     sql =<<-"SQL"
      SELECT #{grid_contents_select(Const::Gallery::SearchType::CREATED)}
      FROM #{table} g
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
+      INNER JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
      LEFT JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
      LEFT JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
     SQL
@@ -624,6 +632,9 @@ class Gallery < ActiveRecord::Base
     sql =<<-"SQL"
       SELECT #{grid_contents_select(Const::Gallery::SearchType::VIEW_COUNT)}
       FROM galleries g
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
+      INNER JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
       INNER JOIN gallery_view_statistics as gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       LEFT JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
       LEFT JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
@@ -653,6 +664,9 @@ class Gallery < ActiveRecord::Base
     sql =<<-"SQL"
       SELECT #{grid_contents_select(Const::Gallery::SearchType::BOOKMARK_COUNT)}
       FROM galleries g
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
+      INNER JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
       INNER JOIN gallery_bookmark_statistics as gbs ON g.id = gbs.gallery_id AND gbs.del_flg = 0
       LEFT JOIN gallery_tag_maps as gtm ON g.id = gtm.gallery_id AND gtm.del_flg = 0
       LEFT JOIN gallery_tags as gt ON gtm.gallery_tag_id = gt.id AND gt.del_flg = 0
@@ -674,6 +688,9 @@ class Gallery < ActiveRecord::Base
     sql =<<-"SQL"
       SELECT #{grid_contents_select(Const::Gallery::SearchType::USER_BOOKMARK)}
       FROM galleries g
+      INNER JOIN project_gallery_maps pgm ON g.id = pgm.gallery_id AND pgm.del_flg = 0
+      INNER JOIN user_project_maps upm ON pgm.user_project_map_id = upm.id AND upm.del_flg = 0
+      INNER JOIN users u ON upm.user_id = u.id AND u.del_flg = 0
       INNER JOIN gallery_bookmarks as gb ON g.id = gb.gallery_id AND gb.user_id = #{user_id}
       WHERE g.del_flg = 0
       ORDER BY g.updated_at

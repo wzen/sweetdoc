@@ -19,8 +19,8 @@ class Run
       }
     else
       creator = {
-          name: 'Guest',
-          thumbnail_img: ActionController::Base.helpers.asset_path('base/guest_user.png')
+          name: '',
+          thumbnail_img: ''
       }
     end
     return {
