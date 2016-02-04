@@ -1,3 +1,7 @@
+<%
+  new_tab_link = false if new_tab_link.nil?
+%>
+
 <div id="deleted_page">
   <div class="deleted_wrapper put_center">
     <div class="icon_wrapper">
@@ -9,10 +13,18 @@
       </div>
     </div>
     <div class="link">
-      <%= link_to '/' do %>
-          <div class="button-panel other">
-            <input type="button" class="button" value="Back to top" />
-          </div>
+      <% if new_tab_link %>
+        <%= link_to '/', target: '_grid' do %>
+            <div class="button-panel other">
+              <input type="button" class="button" value="Show contents list" />
+            </div>
+        <% end %>
+      <% else %>
+          <%= link_to '/' do %>
+              <div class="button-panel other">
+                <input type="button" class="button" value="Show contents list" />
+              </div>
+          <% end %>
       <% end %>
     </div>
   </div>
