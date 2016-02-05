@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     gon.const  = const_values(Const, {})
     gon.serverenv  = ENV
     gon.locale = I18n.locale
-    gon.user_logined = !current_or_guest_user.guest
+    gon.user_logined = user_signed_in?
   end
 
   def const_values(const_class, obj)
@@ -95,6 +95,8 @@ class ApplicationController < ActionController::Base
   end
 
   def store_location
+    return if do_through
+
     return unless request.get?
     if request.path != "/user/sign_in" &&
         request.path != "/user/sign_in?" &&
@@ -119,6 +121,8 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
+    return if do_through
+
     locale = params[:locale] || locale_from_accept_language || locale_from_ip
     I18n.locale = (I18n::available_locales.include? locale.to_sym) ? locale.to_sym : I18n.default_locale
   end
@@ -128,9 +132,11 @@ class ApplicationController < ActionController::Base
     string.gsub(/[\\%_]/){|m| "\\#{m}"}
   end
 
-  # ゲストの場合はリダイレクト
-  def redirect_if_guest
-    if current_or_guest_user.guest
+  # 未ログインの場合はリダイレクト
+  def redirect_if_not_login
+    return if do_through
+
+    if !user_signed_in?
       # ゲストの場合リダイレクト
       redirect_to 'gallery/grid'
     end
@@ -138,6 +144,8 @@ class ApplicationController < ActionController::Base
 
   protected
   def configure_permitted_parameters
+    return if do_through
+
     #strong parametersを設定し、nameを許可
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:name, :email, :password, :password_confirmation) }
   end
@@ -148,7 +156,6 @@ class ApplicationController < ActionController::Base
 
   def locale_from_ip
     locale_from_ip = nil
-
     geoip ||= GeoIP.new(Rails.root.join( "db/GeoIP.dat" ))
     country = geoip.country(request.remote_ip)
     code = country.country_code2.downcase
@@ -163,7 +170,9 @@ class ApplicationController < ActionController::Base
   end
 
   def touch_if_guest
-    if current_or_guest_user.guest
+    return if do_through
+
+    if !user_signed_in? && current_or_guest_user.guest
       # ゲストの場合Userテーブルの更新日を更新
       u = User.find_by(id: current_or_guest_user.id)
       if u.present?
@@ -171,6 +180,20 @@ class ApplicationController < ActionController::Base
         u.save
       end
     end
+  end
+
+  private
+  def do_through
+    # 以下のリクエストの場合は処理しない
+    pass_list = [
+        {controller: 'gallery', action: 'thumbnail'}
+    ]
+    pass_list.each do |p|
+      if controller_name == p[:controller] && action_name == p[:action]
+        return true
+      end
+    end
+    return false
   end
 
 end

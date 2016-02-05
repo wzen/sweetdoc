@@ -1,7 +1,7 @@
 require 'coding/coding'
 
 class CodingController < ApplicationController
-  before_action :redirect_if_guest
+  before_action :redirect_if_not_login
 
   def save_all
     user_id = current_or_guest_user.id
