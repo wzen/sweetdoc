@@ -85,8 +85,6 @@ class Handwrite
   @mouseDownDrawing = (loc) ->
     if window.mode == Constant.Mode.DRAW
       # 通常描画
-      # プレビューを停止して再描画
-      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging()
       if selectItemMenu?
         # インスタンス作成
         window.handwritingItem = new (Common.getClassFromMap(selectItemMenu))(loc)

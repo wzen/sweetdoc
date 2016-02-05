@@ -34,12 +34,14 @@ Timeline = (function() {
       if (ePageValues.length > 0) {
         if (onlyTail) {
           idx = ePageValues.length - 1;
-          _createEvent.call(this, ePageValues[idx], idx);
+          _createEvent.call(this, timelineEvents, ePageValues[idx], idx);
+          timelineEvents = $('#timeline_events').children('.timeline_event');
         } else {
           for (idx = j = 0, len = ePageValues.length; j < len; idx = ++j) {
             pageValue = ePageValues[idx];
-            _createEvent.call(this, pageValue, idx);
+            _createEvent.call(this, timelineEvents, pageValue, idx);
           }
+          timelineEvents = $('#timeline_events').children('.timeline_event');
           if (ePageValues.length < timelineEvents.length - 1) {
             for (i = l = ref = ePageValues.length, ref1 = timelineEvents.length - 1; ref <= ref1 ? l <= ref1 : l >= ref1; i = ref <= ref1 ? ++l : --l) {
               emt = timelineEvents.get(i);
@@ -114,13 +116,12 @@ Timeline = (function() {
         })(this)
       });
     };
-    _createEvent = function(pageValue, idx) {
-      var actionType, emt, teNum, timelineEvents;
+    _createEvent = function(timelineEvents, pageValue, idx) {
+      var actionType, emt, teNum;
       teNum = idx + 1;
       emt = timelineEvents.eq(idx);
       if (emt.length === 0) {
         this.createTimelineEvent(teNum);
-        timelineEvents = $('#timeline_events').children('.timeline_event');
       }
       $('.te_num', emt).val(teNum);
       $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID]);

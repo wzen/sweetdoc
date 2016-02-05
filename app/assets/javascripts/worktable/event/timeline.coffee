@@ -32,11 +32,13 @@ class Timeline
       if ePageValues.length > 0
         if onlyTail
           idx = ePageValues.length - 1
-          _createEvent.call(@, ePageValues[idx], idx)
+          _createEvent.call(@, timelineEvents, ePageValues[idx], idx)
+          timelineEvents = $('#timeline_events').children('.timeline_event')
         else
           # 色、数値、Sync線を更新
           for pageValue, idx in ePageValues
-            _createEvent.call(@, pageValue, idx)
+            _createEvent.call(@, timelineEvents, pageValue, idx)
+          timelineEvents = $('#timeline_events').children('.timeline_event')
           # 不要なタイムラインイベントを削除
           if ePageValues.length < timelineEvents.length - 1
             for i in [(ePageValues.length)..(timelineEvents.length - 1)]
@@ -105,13 +107,12 @@ class Timeline
       )
 
     # イベント作成
-    _createEvent = (pageValue, idx) ->
+    _createEvent = (timelineEvents, pageValue, idx) ->
       teNum = idx + 1
       emt = timelineEvents.eq(idx)
       if emt.length == 0
         # 無い場合は新規作成
         @createTimelineEvent(teNum)
-        timelineEvents = $('#timeline_events').children('.timeline_event')
       $('.te_num', emt).val(teNum)
       $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID])
       actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]

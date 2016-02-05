@@ -23,11 +23,10 @@ cssItemBaseWorktableExtend = {
       callback = null;
     }
     this.refresh(show);
-    return ConfigMenu.getDesignConfig(this, function() {
-      if (callback != null) {
-        return callback();
-      }
-    });
+    ConfigMenu.getDesignConfig(this);
+    if (callback != null) {
+      return callback();
+    }
   },
   setupDesignToolOptionMenu: function() {
     var btnBgColor, btnGradientStep, btnShadowColor, designConfigRoot, self;

@@ -101,10 +101,9 @@ itemBaseWorktableExtend =
     # ボタン設置
     @refresh(show)
     # コンフィグ作成
-    ConfigMenu.getDesignConfig(@, ->
-      if callback?
-        callback()
-    )
+    ConfigMenu.getDesignConfig(@)
+    if callback?
+      callback()
 
   # オプションメニューを開く
   showOptionMenu: ->

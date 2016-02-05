@@ -118,11 +118,10 @@ itemBaseWorktableExtend = {
       console.log('ItemBase drawAndMakeConfigs');
     }
     this.refresh(show);
-    return ConfigMenu.getDesignConfig(this, function() {
-      if (callback != null) {
-        return callback();
-      }
-    });
+    ConfigMenu.getDesignConfig(this);
+    if (callback != null) {
+      return callback();
+    }
   },
   showOptionMenu: function() {
     var sc;

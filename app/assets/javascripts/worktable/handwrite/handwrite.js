@@ -91,7 +91,6 @@ Handwrite = (function() {
 
   Handwrite.mouseDownDrawing = function(loc) {
     if (window.mode === Constant.Mode.DRAW) {
-      WorktableCommon.refreshAllItemsFromInstancePageValueIfChanging();
       if (typeof selectItemMenu !== "undefined" && selectItemMenu !== null) {
         window.handwritingItem = new (Common.getClassFromMap(selectItemMenu))(loc);
         window.instanceMap[window.handwritingItem.id] = window.handwritingItem;

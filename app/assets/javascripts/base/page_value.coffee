@@ -44,8 +44,10 @@ class PageValue
     @instancePagePrefix = (pn = PageValue.getPageNum()) -> @INSTANCE_PREFIX + @PAGE_VALUES_SEPERATOR + @pageRoot(pn)
     # @property [String] INSTANCE_VALUE_ROOT インスタンスROOT
     @INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT
+    # @property [return] インスタンス値Root
+    @instanceObjRoot = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + objId
     # @property [return] インスタンス値
-    @instanceValue = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
+    @instanceValue = (objId) -> @instanceObjRoot(objId) + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
     # @property [return] インスタンスキャッシュ値
     @instanceValueCache = (objId) -> @instancePagePrefix() + @PAGE_VALUES_SEPERATOR + 'cache' + @PAGE_VALUES_SEPERATOR + objId + @PAGE_VALUES_SEPERATOR + @INSTANCE_VALUE_ROOT
     # @property [return] インスタンスデザインRoot
@@ -395,14 +397,24 @@ class PageValue
 
   # InstancePageValueとEventPageValueを最適化
   @adjustInstanceAndEventOnPage = ->
-    # Instanceに無いイベントを削除
-
+    # Instance調整
     iPageValues = @getInstancePageValue(PageValue.Key.instancePagePrefix())
+    killKeyList = []
     instanceObjIds = []
     for k, v of iPageValues
-      if $.inArray(v.value.id, instanceObjIds) < 0
+      if v.value? && v.value.id? && $.inArray(v.value.id, instanceObjIds) < 0
+        # IDが存在する & 重複してない
         instanceObjIds.push(v.value.id)
+      else
+        if !v.value? || !v.value.id?
+          # IDがNULLのものはInstanceから削除
+          killKeyList.push(k)
+    # Instanceを更新
+    for key in killKeyList
+      delete iPageValues[key]
+    @setInstancePageValue(PageValue.Key.instancePagePrefix(), iPageValues)
 
+    # Instanceに無いイベントを削除
     ePageValueRoot = @getEventPageValue(PageValue.Key.eventPageRoot())
     for kk, ePageValues of ePageValueRoot
       if @isContentsRoot(kk)

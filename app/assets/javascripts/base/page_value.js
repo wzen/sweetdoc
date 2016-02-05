@@ -61,8 +61,12 @@ PageValue = (function() {
 
     Key.INSTANCE_VALUE_ROOT = constant.PageValueKey.INSTANCE_VALUE_ROOT;
 
+    Key.instanceObjRoot = function(objId) {
+      return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + objId;
+    };
+
     Key.instanceValue = function(objId) {
-      return this.instancePagePrefix() + this.PAGE_VALUES_SEPERATOR + objId + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
+      return this.instanceObjRoot(objId) + this.PAGE_VALUES_SEPERATOR + this.INSTANCE_VALUE_ROOT;
     };
 
     Key.instanceValueCache = function(objId) {
@@ -505,15 +509,25 @@ PageValue = (function() {
   };
 
   PageValue.adjustInstanceAndEventOnPage = function() {
-    var adjust, ePageValueRoot, ePageValues, i, iPageValues, instanceObjIds, j, k, kNum, kk, max, min, obj, ref, ref1, results, teCount, v;
+    var adjust, ePageValueRoot, ePageValues, i, iPageValues, instanceObjIds, j, k, kNum, key, killKeyList, kk, len, m, max, min, obj, ref, ref1, results, teCount, v;
     iPageValues = this.getInstancePageValue(PageValue.Key.instancePagePrefix());
+    killKeyList = [];
     instanceObjIds = [];
     for (k in iPageValues) {
       v = iPageValues[k];
-      if ($.inArray(v.value.id, instanceObjIds) < 0) {
+      if ((v.value != null) && (v.value.id != null) && $.inArray(v.value.id, instanceObjIds) < 0) {
         instanceObjIds.push(v.value.id);
+      } else {
+        if ((v.value == null) || (v.value.id == null)) {
+          killKeyList.push(k);
+        }
       }
     }
+    for (j = 0, len = killKeyList.length; j < len; j++) {
+      key = killKeyList[j];
+      delete iPageValues[key];
+    }
+    this.setInstancePageValue(PageValue.Key.instancePagePrefix(), iPageValues);
     ePageValueRoot = this.getEventPageValue(PageValue.Key.eventPageRoot());
     results = [];
     for (kk in ePageValueRoot) {
@@ -538,7 +552,7 @@ PageValue = (function() {
         }
         teCount = 0;
         if (min <= max) {
-          for (i = j = ref = min, ref1 = max; ref <= ref1 ? j <= ref1 : j >= ref1; i = ref <= ref1 ? ++j : --j) {
+          for (i = m = ref = min, ref1 = max; ref <= ref1 ? m <= ref1 : m >= ref1; i = ref <= ref1 ? ++m : --m) {
             obj = ePageValues[this.Key.E_NUM_PREFIX + i];
             if ((obj != null) && $.inArray(obj[EventPageValueBase.PageValueKey.ID], instanceObjIds) >= 0) {
               teCount += 1;
