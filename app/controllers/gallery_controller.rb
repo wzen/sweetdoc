@@ -21,21 +21,22 @@ class GalleryController < ApplicationController
   end
 
   def detail
+    _take_gallery_data
     ua = request.env["HTTP_USER_AGENT"]
     if ua.include?('Mobile') || ua.include?('Android')
       # スマートフォンは全画面で表示
-      full_window
-    else
-      _take_gallery_data
+      render layout: 'gallery_fullwindow', action: 'full_window'
     end
   end
 
   def full_window
-    _full_window
+    _take_gallery_data
+    render layout: 'gallery_fullwindow'
   end
 
   def embed
-    _full_window
+    _take_gallery_data
+    render layout: 'gallery_fullwindow'
   end
 
   def _take_gallery_data
@@ -44,11 +45,6 @@ class GalleryController < ApplicationController
     Gallery.add_view_statistic_count(@access_token, Date.today)
     # データを取得
     @pagevalues, @message, @title, @caption, @screen_size, @creator, @item_js_list, @gallery_view_count, @gallery_bookmark_count, @show_options, @embed_link = Gallery.firstload_contents(@access_token, request.host)
-  end
-
-  def _full_window
-    _take_gallery_data
-    render layout: 'application'
   end
 
   def save_state
@@ -121,6 +117,6 @@ class GalleryController < ApplicationController
     end
   end
 
-  private :_take_gallery_data, :_full_window
+  private :_take_gallery_data
 
 end
