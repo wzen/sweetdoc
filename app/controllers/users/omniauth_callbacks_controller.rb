@@ -4,6 +4,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.find_for_facebook_oauth(request.env["omniauth.auth"], current_user)
 
     if @user.persisted?
+      set_current_user(@user)
+      @do_login = true
       set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
       sign_in_and_redirect @user, :event => :authentication
     else
@@ -17,6 +19,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.find_for_twitter_oauth(request.env["omniauth.auth"], current_user)
 
     if @user.persisted?
+      set_current_user(@user)
+      @do_login = true
       set_flash_message(:notice, :success, :kind => "Twitter") if is_navigational_format?
       sign_in_and_redirect @user, :event => :authentication
     else
@@ -29,6 +33,8 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.find_for_google_oauth2(request.env["omniauth.auth"])
 
     if @user.persisted?
+      set_current_user(@user)
+      @do_login = true
       set_flash_message(:notice, :success, :kind => "Google") if is_navigational_format?
       sign_in_and_redirect @user, :event => :authentication
     else

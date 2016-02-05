@@ -761,7 +761,7 @@ Common = (function() {
   };
 
   Common.showModalView = function(type, enableOverlayClose, prepareShowFunc, prepareShowFuncParams) {
-    var _show, emt, self;
+    var _show, allEmt, emt, self;
     if (enableOverlayClose == null) {
       enableOverlayClose = true;
     }
@@ -771,8 +771,20 @@ Common = (function() {
     if (prepareShowFuncParams == null) {
       prepareShowFuncParams = {};
     }
-    self = this;
+    if ((window.modalRun != null) && window.modalRun) {
+      return;
+    }
+    window.modalRun = true;
+    setTimeout(function() {
+      return window.modalRun = false;
+    }, 3000);
     emt = $('body').children(".modal-content." + type);
+    allEmt = $('body').children(".modal-content");
+    if (emt.length !== allEmt.length) {
+      this.hideModalView(true);
+      emt = $('body').children(".modal-content." + type);
+    }
+    self = this;
     $(this).blur();
     if ($("#modal-overlay")[0] != null) {
       return false;
@@ -782,7 +794,9 @@ Common = (function() {
       $("#modal-overlay").show();
       Common.modalCentering.call(this, type);
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE);
-      emt.fadeIn('fast');
+      emt.fadeIn('fast', function() {
+        return window.modalRun = false;
+      });
       return $("#modal-overlay,#modal-close").unbind().click(function() {
         if (enableOverlayClose) {
           return Common.hideModalView();
@@ -809,13 +823,15 @@ Common = (function() {
             } else {
               _show.call(self);
               console.log('/modal_view/show server error');
-              return Common.ajaxError(data);
+              Common.ajaxError(data);
+              return window.modalRun = false;
             }
           }
         },
         error: function(data) {
           console.log('/modal_view/show ajax error');
-          return Common.ajaxError(data);
+          Common.ajaxError(data);
+          return window.modalRun = false;
         }
       });
     } else {
@@ -884,8 +900,15 @@ Common = (function() {
     }
   };
 
-  Common.hideModalView = function() {
-    $(".modal-content,#modal-overlay").fadeOut('fast');
+  Common.hideModalView = function(immediately) {
+    if (immediately == null) {
+      immediately = false;
+    }
+    if (immediately) {
+      $(".modal-content,#modal-overlay").stop().hide();
+    } else {
+      $(".modal-content,#modal-overlay").fadeOut('fast');
+    }
     return $('#modal-overlay').remove();
   };
 

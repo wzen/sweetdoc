@@ -98,13 +98,8 @@ class ApplicationController < ActionController::Base
     return if do_through
 
     return unless request.get?
-    if request.path != "/user/sign_in" &&
-        request.path != "/user/sign_in?" &&
-        request.path != "/user/sign_up" &&
-        request.path != "/user/password/new" &&
-        request.path != "/user/password/edit" &&
-        request.path != "/user/confirmation" &&
-        request.path != "/user/sign_out" &&
+    if request.path !~ /^\/user.*/ &&
+        request.path !~ /^\/my_page.*/ &&
         !request.xhr? # don't store ajax calls
       session[:previous_url] = request.fullpath
     end

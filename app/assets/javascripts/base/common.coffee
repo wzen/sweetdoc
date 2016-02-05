@@ -611,9 +611,24 @@ class Common
   # @param [Integer] type モーダルビュータイプ
   # @param [Function] prepareShowFunc 表示前処理
   @showModalView = (type, enableOverlayClose = true, prepareShowFunc = null, prepareShowFuncParams = {}) ->
-    self = @
-    emt = $('body').children(".modal-content.#{type}")
+    if window.modalRun? && window.modalRun
+      # 処理中は反応なし
+      return
 
+    window.modalRun = true
+    setTimeout(->
+      window.modalRun = false
+    , 3000)
+
+    emt = $('body').children(".modal-content.#{type}")
+    allEmt = $('body').children(".modal-content")
+
+    if emt.length != allEmt.length
+      # 表示中のモーダルを非表示
+      @hideModalView(true)
+      emt = $('body').children(".modal-content.#{type}")
+
+    self = @
     $(@).blur()
     if $("#modal-overlay")[0]?
       return false
@@ -626,7 +641,9 @@ class Common
       Common.modalCentering.call(@, type)
       # ビューの高さ
       emt.css('max-height', $(window).height() * Constant.ModalView.HEIGHT_RATE)
-      emt.fadeIn('fast')
+      emt.fadeIn('fast', ->
+        window.modalRun = false
+      )
       $("#modal-overlay,#modal-close").unbind().click( ->
         if enableOverlayClose
           Common.hideModalView()
@@ -656,9 +673,11 @@ class Common
                 _show.call(self)
                 console.log('/modal_view/show server error')
                 Common.ajaxError(data)
+                window.modalRun = false
           error: (data) ->
             console.log('/modal_view/show ajax error')
             Common.ajaxError(data)
+            window.modalRun = false
         }
       )
     else
@@ -702,8 +721,11 @@ class Common
         emt.css({"left": ((w - cw)/2) + "px","top": ((h - ch)/2 - 80) + "px"})
 
   # モーダル非表示
-  @hideModalView = ->
-    $(".modal-content,#modal-overlay").fadeOut('fast')
+  @hideModalView = (immediately = false) ->
+    if immediately
+      $(".modal-content,#modal-overlay").stop().hide()
+    else
+      $(".modal-content,#modal-overlay").fadeOut('fast')
     $('#modal-overlay').remove()
 
   # Zindexにページ分のZindexを加算
