@@ -47,7 +47,7 @@ class RunCommon
     contentsHeight = $('#contents').height()
 
     # スクリーンサイズ修正
-    projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+    projectScreenSize = Common.getScreenSize()
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
     # Paddingを考慮して比較
     if contentsWidth < projectScreenSize.width + 30

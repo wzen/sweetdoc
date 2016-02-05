@@ -162,6 +162,17 @@ class Common
       if !window.isWorkTable
         RunCommon.setTitle(title_name)
 
+  # スクリーンサイズを取得
+  @getScreenSize = ->
+    if $('body').hasClass('full_window')
+      # 全画面の場合
+      return {
+        width: $(window).width()
+        height: $(window).height()
+      }
+    else
+      return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+
   # プロジェクト表示サイズ設定
   @initScreenSize = (reset = false) ->
     size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
@@ -323,7 +334,6 @@ class Common
 
     # col-xs-9 → 75% padding → 15px
     scrollContentsSize = @scrollContentsSizeUnderScreenEventScale()
-    se = new ScreenEvent()
     diff = {top: 0, left: 0}
     if $(target).get(0).offsetParent?
       diff =

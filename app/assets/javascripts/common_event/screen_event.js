@@ -197,7 +197,7 @@ ScreenEvent = (function(superClass) {
         x = pointingSize.x + pointingSize.w / 2.0;
         y = pointingSize.y + pointingSize.h / 2.0;
         z = null;
-        screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+        screenSize = Common.getScreenSize();
         if (pointingSize.w > pointingSize.h) {
           z = screenSize.width / pointingSize.w;
         } else {
@@ -294,7 +294,7 @@ ScreenEvent = (function(superClass) {
 
     _convertCenterCoodToSize = function(x, y, scale) {
       var height, left, screenSize, top, width;
-      screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+      screenSize = Common.getScreenSize();
       width = screenSize.width / scale;
       height = screenSize.height / scale;
       top = y - height / 2.0;

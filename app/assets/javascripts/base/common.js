@@ -200,6 +200,17 @@ Common = (function() {
     }
   };
 
+  Common.getScreenSize = function() {
+    if ($('body').hasClass('full_window')) {
+      return {
+        width: $(window).width(),
+        height: $(window).height()
+      };
+    } else {
+      return PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+    }
+  };
+
   Common.initScreenSize = function(reset) {
     var css, size;
     if (reset == null) {
@@ -411,7 +422,7 @@ Common = (function() {
   };
 
   Common.focusToTarget = function(target, callback, immediate, withUpdatePageValue) {
-    var diff, scrollContentsSize, se;
+    var diff, scrollContentsSize;
     if (callback == null) {
       callback = null;
     }
@@ -425,7 +436,6 @@ Common = (function() {
       return;
     }
     scrollContentsSize = this.scrollContentsSizeUnderScreenEventScale();
-    se = new ScreenEvent();
     diff = {
       top: 0,
       left: 0

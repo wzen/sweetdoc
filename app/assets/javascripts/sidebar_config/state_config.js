@@ -40,7 +40,7 @@ StateConfig = (function() {
           x = pointingSize.x + pointingSize.w / 2.0;
           y = pointingSize.y + pointingSize.h / 2.0;
           z = null;
-          screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+          screenSize = Common.getScreenSize();
           if (pointingSize.w > pointingSize.h) {
             z = screenSize.width / pointingSize.w;
           } else {

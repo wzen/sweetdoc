@@ -74,7 +74,7 @@ RunCommon = (function() {
     var contentsHeight, contentsWidth, heightRate, projectScreenSize, scaleFromViewRate, updatedProjectScreenSize, widthRate;
     contentsWidth = $('#contents').width();
     contentsHeight = $('#contents').height();
-    projectScreenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+    projectScreenSize = Common.getScreenSize();
     updatedProjectScreenSize = $.extend(true, {}, projectScreenSize);
     if (contentsWidth < projectScreenSize.width + 30) {
       updatedProjectScreenSize.width = contentsWidth - 30;

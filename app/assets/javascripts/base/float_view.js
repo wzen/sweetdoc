@@ -155,7 +155,7 @@ FloatView = (function() {
     if (!window.initDone) {
       return '';
     }
-    screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+    screenSize = Common.getScreenSize();
     if (screenSize != null) {
       t = (window.scrollInsideWrapper.height() + screenSize.height) * 0.5 - top;
       l = (window.scrollInsideWrapper.width() + screenSize.width) * 0.5 - left;

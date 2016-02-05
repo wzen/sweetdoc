@@ -155,7 +155,7 @@ class ScreenEvent extends CommonEvent
         x = pointingSize.x + pointingSize.w / 2.0
         y = pointingSize.y + pointingSize.h / 2.0
         z = null
-        screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+        screenSize = Common.getScreenSize()
         if pointingSize.w > pointingSize.h
           z = screenSize.width / pointingSize.w
         else
@@ -236,7 +236,7 @@ class ScreenEvent extends CommonEvent
         window.scrollInside.append(emt)
 
     _convertCenterCoodToSize = (x, y, scale) ->
-      screenSize = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE)
+      screenSize = Common.getScreenSize()
       width = screenSize.width / scale
       height = screenSize.height / scale
       top = y - height / 2.0

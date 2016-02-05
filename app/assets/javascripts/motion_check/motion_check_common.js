@@ -14,7 +14,7 @@ MotionCheckCommon = (function() {
       LocalStorage.clearRun();
       target = '';
       if (newWindow) {
-        size = PageValue.getGeneralPageValue(PageValue.Key.SCREEN_SIZE);
+        size = Common.getScreenSize();
         navbarHeight = $("#" + Navbar.NAVBAR_ROOT).outerHeight(true);
         left = Number((window.screen.width - size.width) / 2);
         top = Number((window.screen.height - (size.height + navbarHeight)) / 2);
