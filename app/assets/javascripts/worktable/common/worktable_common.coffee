@@ -431,8 +431,6 @@ class WorktableCommon
       $('#main').css('height', '')
       # キャッシュ削除
       LocalStorage.clearWorktableWithoutSetting()
-      # タイムライン更新
-      Timeline.refreshAllTimeline()
       # ページ数初期化
       PageValue.setPageNum(1)
       # 履歴に画面初期時を状態を保存

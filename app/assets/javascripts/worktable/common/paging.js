@@ -110,7 +110,6 @@ Paging = (function() {
         oldSection = $("#" + Constant.Paging.ROOT_ID).find("." + className + ":first");
         oldSection.hide();
         Common.removeAllItem(beforePageNum);
-        Timeline.refreshAllTimeline();
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0);
         PageValue.updatePageCount();
         if (created) {

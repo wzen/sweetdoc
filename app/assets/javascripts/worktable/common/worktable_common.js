@@ -463,7 +463,6 @@ WorktableCommon = (function() {
         WorktableCommon.initMainContainer();
         $('#main').css('height', '');
         LocalStorage.clearWorktableWithoutSetting();
-        Timeline.refreshAllTimeline();
         PageValue.setPageNum(1);
         OperationHistory.add(true);
         PageValue.updatePageCount();

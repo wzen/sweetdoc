@@ -21,8 +21,7 @@ class Timeline
     pEmt.append(newEmt)
 
   # タイムラインのイベント設定
-  @setupTimelineEventConfig = ->
-    self = @
+  @setupTimelineEventConfig = (onlyTail) ->
     te = null
 
     # 設定開始
@@ -31,44 +30,30 @@ class Timeline
       timelineEvents = $('#timeline_events').children('.timeline_event')
       emt = null
       if ePageValues.length > 0
-        # 色、数値、Sync線を更新
-        for pageValue, idx in ePageValues
-          teNum = idx + 1
-          emt = timelineEvents.eq(idx)
-          if emt.length == 0
-            # 無い場合は新規作成
-            self.createTimelineEvent(teNum)
-            timelineEvents = $('#timeline_events').children('.timeline_event')
-          $('.te_num', emt).val(teNum)
-          $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID])
-          actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
-          Timeline.changeTimelineColor(teNum, actionType)
-
-          # 同期線
-          if pageValue[EventPageValueBase.PageValueKey.IS_SYNC]
-            # 線表示
-            timelineEvents.eq(idx).before("<div class='sync_line #{Common.getActionTypeClassNameByActionType(actionType)}'></div>")
-          else
-            # 線消去
-            timelineEvents.eq(idx).prev('.sync_line').remove()
-
-        # 不要なタイムラインイベントを削除
-        if ePageValues.length < timelineEvents.length - 1
-          for i in [(ePageValues.length)..(timelineEvents.length - 1)]
-            emt = timelineEvents.get(i)
-            emt.remove()
+        if onlyTail
+          idx = ePageValues.length - 1
+          _createEvent.call(@, ePageValues[idx], idx)
+        else
+          # 色、数値、Sync線を更新
+          for pageValue, idx in ePageValues
+            _createEvent.call(@, pageValue, idx)
+          # 不要なタイムラインイベントを削除
+          if ePageValues.length < timelineEvents.length - 1
+            for i in [(ePageValues.length)..(timelineEvents.length - 1)]
+              emt = timelineEvents.get(i)
+              emt.remove()
       else
         @createTimelineEvent(1)
 
       # blankイベントを新規作成
-      self.createTimelineEvent(ePageValues.length + 1)
+      @createTimelineEvent(ePageValues.length + 1)
 
       # 再取得
       timelineEvents = $('#timeline_events').children('.timeline_event')
 
       # イベントのクリック
-      timelineEvents.off('click').on('click', (e) ->
-        _clickTimelineEvent.call(self, @)
+      timelineEvents.off('click').on('click', (e) =>
+        _clickTimelineEvent.call(@, $(e.target))
       )
       # イベントのD&D
       $('#timeline_events').sortable({
@@ -106,18 +91,39 @@ class Timeline
           preventContextMenuForPopup: true
           preventSelect: true
           menu: menu
-          select: (event, ui) ->
+          select: (event, ui) =>
             target = event.target
             switch ui.cmd
               when "preview"
                 te_num = $(target).find('input.te_num').val()
                 WorktableCommon.runPreview(te_num)
               when "delete"
-                _deleteTimeline.call(self, target)
+                _deleteTimeline.call(@, target)
               else
                 return
         }
       )
+
+    # イベント作成
+    _createEvent = (pageValue, idx) ->
+      teNum = idx + 1
+      emt = timelineEvents.eq(idx)
+      if emt.length == 0
+        # 無い場合は新規作成
+        @createTimelineEvent(teNum)
+        timelineEvents = $('#timeline_events').children('.timeline_event')
+      $('.te_num', emt).val(teNum)
+      $('.dist_id', emt).val(pageValue[EventPageValueBase.PageValueKey.DIST_ID])
+      actionType = pageValue[EventPageValueBase.PageValueKey.ACTIONTYPE]
+      Timeline.changeTimelineColor(teNum, actionType)
+
+      # 同期線
+      if pageValue[EventPageValueBase.PageValueKey.IS_SYNC]
+        # 線表示
+        timelineEvents.eq(idx).before("<div class='sync_line #{Common.getActionTypeClassNameByActionType(actionType)}'></div>")
+      else
+        # 線消去
+        timelineEvents.eq(idx).prev('.sync_line').remove()
 
     # クリックイベント内容
     # @param [Object] e イベントオブジェクト
@@ -156,7 +162,7 @@ class Timeline
       # サイドバー表示
       Sidebar.openConfigSidebar()
 
-    _setupTimelineEvent.call(self)
+    _setupTimelineEvent.call(@)
 
   # タイムラインイベントの色を変更
   # @param [Integer] teNum イベント番号
@@ -183,15 +189,20 @@ class Timeline
 
     # 非同期で実行
     setTimeout( =>
+      # 全消去
       pEmt = $('#timeline_events')
       pEmt.children().each((e) ->
         emt = $(@)
         if emt.hasClass('timeline_event_temp') == false
           emt.remove()
       )
-      @setupTimelineEventConfig()
+      @setupTimelineEventConfig(false)
       Indicator.hideIndicator(Indicator.Type.TIMELINE)
     , 0)
+
+  # イベントを追加
+  @addEvent: ->
+    @setupTimelineEventConfig(true)
 
   # タイムラインソートイベント
   @changeSortTimeline: (beforeNum, afterNum) ->

@@ -127,7 +127,6 @@ class Paging
         oldSection = $("##{Constant.Paging.ROOT_ID}").find(".#{className}:first")
         oldSection.hide()
         Common.removeAllItem(beforePageNum)
-        Timeline.refreshAllTimeline()
         # ページ総数 & フォーク総数の更新
         PageValue.setEventPageValue(PageValue.Key.eventCount(), 0)
         PageValue.updatePageCount()
@@ -203,7 +202,6 @@ class Paging
             console.log('[selectPage] deleted pageNum:' + beforePageNum)
           # 隠したビューのアイテムを削除
           Common.removeAllItem(beforePageNum)
-          #Timeline.refreshAllTimeline()
           if created
             # 履歴に画面初期時状態を保存
             OperationHistory.add(true)
