@@ -89,21 +89,22 @@ class Sidebar
     emt = $(target)
     obj = instanceMap[emt.attr('id')]
     # アイテム編集メニュー初期化
-    @initItemEditConfig(obj)
-    if obj? && obj.showOptionMenu?
-      # オプションメニュー表示処理
-      obj.showOptionMenu()
-    # オプションメニューを表示
-    @openConfigSidebar(target)
+    @initItemEditConfig(obj, =>
+      if obj? && obj.showOptionMenu?
+        # オプションメニュー表示処理
+        obj.showOptionMenu()
+      # オプションメニューを表示
+      @openConfigSidebar(target)
+    )
 
   # アイテム編集メニュー初期化
-  @initItemEditConfig = (obj) ->
+  @initItemEditConfig = (obj, callback = null) ->
     # カラーピッカー値を初期化
     ColorPickerUtil.initColorPickerValue()
     # オプションメニューの値を初期化
     if obj? && obj.setupOptionMenu?
       # 初期化関数を呼び出す
-      obj.setupOptionMenu()
+      obj.setupOptionMenu(callback)
 
   # イベントコンフィグ初期化
   @initEventConfig = (distId, teNum = 1)->

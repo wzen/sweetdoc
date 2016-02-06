@@ -114,17 +114,23 @@ Sidebar = (function() {
     var emt, obj;
     emt = $(target);
     obj = instanceMap[emt.attr('id')];
-    this.initItemEditConfig(obj);
-    if ((obj != null) && (obj.showOptionMenu != null)) {
-      obj.showOptionMenu();
-    }
-    return this.openConfigSidebar(target);
+    return this.initItemEditConfig(obj, (function(_this) {
+      return function() {
+        if ((obj != null) && (obj.showOptionMenu != null)) {
+          obj.showOptionMenu();
+        }
+        return _this.openConfigSidebar(target);
+      };
+    })(this));
   };
 
-  Sidebar.initItemEditConfig = function(obj) {
+  Sidebar.initItemEditConfig = function(obj, callback) {
+    if (callback == null) {
+      callback = null;
+    }
     ColorPickerUtil.initColorPickerValue();
     if ((obj != null) && (obj.setupOptionMenu != null)) {
-      return obj.setupOptionMenu();
+      return obj.setupOptionMenu(callback);
     }
   };
 

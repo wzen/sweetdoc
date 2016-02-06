@@ -11,17 +11,6 @@ cssItemBaseWorktableExtend =
     @applyDefaultDesign()
     @drawAndMakeConfigsAndWritePageValue(show, callback)
 
-  # 描画&コンフィグ作成
-  # @param [boolean] show 要素作成後に描画を表示するか
-  # @return [Boolean] 処理結果
-  drawAndMakeConfigs: (show = true, callback = null) ->
-    # ボタン設置
-    @refresh(show)
-    # コンフィグ作成
-    ConfigMenu.getDesignConfig(@)
-    if callback?
-      callback()
-
   # デザインツールメニュー設定
   setupDesignToolOptionMenu: ->
     self = @

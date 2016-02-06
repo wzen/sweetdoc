@@ -118,7 +118,6 @@ itemBaseWorktableExtend = {
       console.log('ItemBase drawAndMakeConfigs');
     }
     this.refresh(show);
-    ConfigMenu.getDesignConfig(this);
     if (callback != null) {
       return callback();
     }
@@ -266,7 +265,10 @@ itemBaseWorktableExtend = {
   resizeComplete: function() {
     return this.saveObj();
   },
-  setupOptionMenu: function() {
+  setupOptionMenu: function(callback) {
+    if (callback == null) {
+      callback = null;
+    }
     return ConfigMenu.getDesignConfig(this, (function(_this) {
       return function(designConfigRoot) {
         var _existFocusSetItem, focusEmt, h, name, visibleEmt, w, x, y;
@@ -344,7 +346,10 @@ itemBaseWorktableExtend = {
         if ((_this.constructor.actionProperties.designConfig != null) && _this.constructor.actionProperties.designConfig) {
           _this.setupDesignToolOptionMenu();
         }
-        return _this.settingModifiableChangeEvent();
+        _this.settingModifiableChangeEvent();
+        if (callback != null) {
+          return callback();
+        }
       };
     })(this));
   },

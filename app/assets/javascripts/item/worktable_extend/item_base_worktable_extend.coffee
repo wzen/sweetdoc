@@ -97,11 +97,8 @@ itemBaseWorktableExtend =
   drawAndMakeConfigs: (show = true, callback = null) ->
     if window.runDebug
       console.log('ItemBase drawAndMakeConfigs')
-
-    # ボタン設置
+    # アイテム描画
     @refresh(show)
-    # コンフィグ作成
-    ConfigMenu.getDesignConfig(@)
     if callback?
       callback()
 
@@ -221,7 +218,7 @@ itemBaseWorktableExtend =
 
 
   # CSSボタンコントロール初期化
-  setupOptionMenu: ->
+  setupOptionMenu: (callback = null) ->
     ConfigMenu.getDesignConfig(@, (designConfigRoot) =>
       # アイテム名の変更
       name = $('.item-name', designConfigRoot)
@@ -300,6 +297,9 @@ itemBaseWorktableExtend =
 
       # 変数編集コンフィグ
       @settingModifiableChangeEvent()
+
+      if callback?
+        callback()
     )
 
   # デザインスライダーの作成
