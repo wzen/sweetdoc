@@ -892,10 +892,10 @@ PreloadItemText = (function(superClass) {
     _balloonStyle = function(context) {
       context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
       context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
-      context.shadowColor = 'rgba(0,0,0,0.5)';
+      context.shadowColor = 'rgba(0,0,0,0.3)';
       context.shadowOffsetX = 2;
       context.shadowOffsetY = 2;
-      return context.shadowBlur = 7;
+      return context.shadowBlur = 3;
     };
     _drawArc = function() {
       var diff;
@@ -1190,13 +1190,12 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {
-    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, p, q, ref, ref1, ref2, ref3, ref4, s, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth;
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightDiff, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, p, q, ref, ref1, ref2, ref3, ref4, s, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth, ww;
     if (writingLength == null) {
       writingLength = text.length;
     }
     context.save();
     context.font = fontSize + "px " + this.fontFamily;
-    context.textBaseline = 'bottom';
     wordWidth = context.measureText('あ').width;
     _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
@@ -1377,23 +1376,27 @@ PreloadItemText = (function(superClass) {
           c = ref4[idx];
           measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily);
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
-          if (_isWordSmallJapanease.call(this, c)) {
-            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height));
+          if (PreloadItemText.isJapanease(c)) {
+            hl += wordWidth;
+          } else {
             hl += measure.height;
+          }
+          if (_isWordSmallJapanease.call(this, c)) {
+            heightDiff = wordWidth * 0.1;
+            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + hl - heightDiff);
           } else if (_isWordNeedRotate.call(this, c)) {
             context.save();
             context.beginPath();
-            context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height);
+            if (PreloadItemText.isJapanease(c)) {
+              ww = wordWidth;
+            } else {
+              ww = measure.height;
+            }
+            context.translate(widthLine + wordWidth * 0.5, h + hl - ww * 0.5);
             context.rotate(Math.PI / 2);
             context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5);
             context.restore();
-            hl += measure.width;
           } else {
-            if (PreloadItemText.isJapanease(c)) {
-              hl += wordWidth;
-            } else {
-              hl += measure.height;
-            }
             context.fillText(c, widthLine, h + hl);
           }
         }
@@ -1467,7 +1470,7 @@ PreloadItemText = (function(superClass) {
 
   _isWordSmallJapanease = function(char) {
     var list, regex;
-    list = '、。ぁぃぅぇぉっゃゅょゎァィゥェォっャュョヮヵヶ'.split('');
+    list = '、。ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ'.split('');
     list = list.concat([',', '\\.']);
     regex = new RegExp(list.join('|'));
     return char.match(regex);

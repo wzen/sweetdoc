@@ -672,10 +672,10 @@ class PreloadItemText extends CanvasItemBase
       context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
       context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
       # 影
-      context.shadowColor = 'rgba(0,0,0,0.5)'
+      context.shadowColor = 'rgba(0,0,0,0.3)'
       context.shadowOffsetX = 2
       context.shadowOffsetY = 2
-      context.shadowBlur = 7
+      context.shadowBlur = 3
 
     _drawArc = ->
       # 円
@@ -689,7 +689,6 @@ class PreloadItemText extends CanvasItemBase
       else
         context.scale(1, canvasHeight / canvasWidth)
         context.arc(0, 0, width * 0.5 - diff, 0, Math.PI * 2)
-
       context.fill()
       context.stroke()
 
@@ -946,8 +945,6 @@ class PreloadItemText extends CanvasItemBase
   _drawText = (context, text, x, y, width, height, fontSize, writingLength = text.length) ->
     context.save()
     context.font = "#{fontSize}px #{@fontFamily}"
-    context.textBaseline = 'bottom'
-
     wordWidth = context.measureText('あ').width
 
     _calcSize = (columnText) ->
@@ -1080,28 +1077,31 @@ class PreloadItemText extends CanvasItemBase
         for c, idx in column[j].split('')
           measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
           _setTextAlpha.call(@, context, idx + wordSum + 1, writingLength)
+          if PreloadItemText.isJapanease(c)
+            hl += wordWidth
+          else
+            hl += measure.height
           if _isWordSmallJapanease.call(@, c)
             # 小文字は右上に寄せる
-            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height))
-            hl += measure.height
+            heightDiff = wordWidth * 0.1
+            context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + hl - heightDiff)
           else if _isWordNeedRotate.call(@, c)
             # 90°回転
             context.save()
             context.beginPath()
-            context.translate(widthLine + wordWidth * 0.5, h + hl + measure.height)
+            if PreloadItemText.isJapanease(c)
+              ww = wordWidth
+            else
+              ww = measure.height
+            context.translate(widthLine + wordWidth * 0.5, h + hl - ww * 0.5)
             # デバッグ用の円
-#            context.arc(0, 0, 20, 0, Math.PI*2, false)
-#            context.stroke()
+            #context.arc(0, 0, 20, 0, Math.PI*2, false)
+            #context.stroke()
             context.rotate(Math.PI / 2)
             # 「wordWidth * 0.75」は調整用の値
             context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5)
             context.restore()
-            hl += measure.width
           else
-            if PreloadItemText.isJapanease(c)
-              hl += wordWidth
-            else
-              hl += measure.height
             context.fillText(c, widthLine, h + hl)
         wordSum += column[j].length
     context.restore()
@@ -1161,7 +1161,7 @@ class PreloadItemText extends CanvasItemBase
     }
 
   _isWordSmallJapanease = (char) ->
-    list = '、。ぁぃぅぇぉっゃゅょゎァィゥェォっャュョヮヵヶ'.split('')
+    list = '、。ぁぃぅぇぉっゃゅょゎァィゥェォッャュョヮヵヶ'.split('')
     list = list.concat([',', '\\.'])
     regex = new RegExp(list.join('|'))
     return char.match(regex)
