@@ -1190,7 +1190,7 @@ PreloadItemText = (function(superClass) {
   };
 
   _drawText = function(context, text, x, y, width, height, fontSize, writingLength) {
-    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, h, heightDiff, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, p, q, ref, ref1, ref2, ref3, ref4, s, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth, ww;
+    var _calcHorizontalColumnHeightMax, _calcHorizontalColumnHeightSum, _calcHorizontalColumnWidth, _calcHorizontalColumnWidthMax, _calcSize, _calcVerticalColumnHeight, _calcVerticalColumnHeightMax, _setTextAlpha, _writeLength, c, char, column, engDiff, h, heightDiff, heightLine, heightMax, hl, i, idx, j, k, len, len1, line, measure, n, p, q, ref, ref1, ref2, ref3, ref4, s, sizeSum, w, widthLine, widthMax, wl, wordSum, wordWidth, ww;
     if (writingLength == null) {
       writingLength = text.length;
     }
@@ -1229,14 +1229,10 @@ PreloadItemText = (function(superClass) {
       for (k = 0, len = ref.length; k < len; k++) {
         c = ref[k];
         measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily);
-        if (_isWordNeedRotate(c)) {
-          ret += measure.width;
+        if (PreloadItemText.isJapanease(c)) {
+          ret += wordWidth;
         } else {
-          if (PreloadItemText.isJapanease(c)) {
-            ret += wordWidth;
-          } else {
-            ret += measure.height;
-          }
+          ret += measure.height;
         }
       }
       return ret;
@@ -1394,7 +1390,8 @@ PreloadItemText = (function(superClass) {
             }
             context.translate(widthLine + wordWidth * 0.5, h + hl - ww * 0.5);
             context.rotate(Math.PI / 2);
-            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5);
+            engDiff = wordWidth - ww;
+            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5 - engDiff * 0.5);
             context.restore();
           } else {
             context.fillText(c, widthLine, h + hl);

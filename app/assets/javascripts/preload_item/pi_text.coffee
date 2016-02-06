@@ -967,13 +967,10 @@ class PreloadItemText extends CanvasItemBase
       ret = 0
       for c in columnText.split('')
         measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
-        if _isWordNeedRotate(c)
-          ret += measure.width
+        if PreloadItemText.isJapanease(c)
+          ret += wordWidth
         else
-          if PreloadItemText.isJapanease(c)
-            ret += wordWidth
-          else
-            ret += measure.height
+          ret += measure.height
       return ret
     _calcHorizontalColumnHeightMax = (columnText, fontSize) ->
       ret = 0
@@ -1099,7 +1096,9 @@ class PreloadItemText extends CanvasItemBase
             #context.stroke()
             context.rotate(Math.PI / 2)
             # 「wordWidth * 0.75」は調整用の値
-            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5)
+            # engDiffは英字の調整
+            engDiff = wordWidth - ww
+            context.fillText(c, -measure.width * 0.5, wordWidth * 0.75 * 0.5 - engDiff * 0.5)
             context.restore()
           else
             context.fillText(c, widthLine, h + hl)
