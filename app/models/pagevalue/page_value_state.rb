@@ -73,6 +73,7 @@ class PageValueState
             else
               # 更新
               up.setting_pagevalue_id = sp.id
+              up.touch
               up.save!
               last_save_time = up.updated_at
             end

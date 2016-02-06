@@ -38,7 +38,7 @@ WorktableCommon = (function() {
       return false;
     }
     generals = LocalStorage.loadGeneralValue();
-    if (generals[PageValue.Key.PROJECT_ID] == null) {
+    if (generals[Constant.Project.Key.PROJECT_ID] == null) {
       return false;
     }
     return true;

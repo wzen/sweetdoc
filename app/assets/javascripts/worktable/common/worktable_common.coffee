@@ -33,7 +33,7 @@ class WorktableCommon
       # ユーザが変更された場合
       return false
     generals = LocalStorage.loadGeneralValue()
-    if !generals[PageValue.Key.PROJECT_ID]?
+    if !generals[Constant.Project.Key.PROJECT_ID]?
       # プロジェクトが存在しない場合
       return false
 
