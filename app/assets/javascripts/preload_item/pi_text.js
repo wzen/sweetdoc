@@ -1196,6 +1196,7 @@ PreloadItemText = (function(superClass) {
     }
     context.save();
     context.font = fontSize + "px " + this.fontFamily;
+    context.textBaseline = 'bottom';
     wordWidth = context.measureText('あ').width;
     _calcSize = function(columnText) {
       var hasJapanease, i, k, ref;
@@ -1228,11 +1229,15 @@ PreloadItemText = (function(superClass) {
       ref = columnText.split('');
       for (k = 0, len = ref.length; k < len; k++) {
         c = ref[k];
-        measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
+        measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily);
         if (_isWordNeedRotate(c)) {
           ret += measure.width;
         } else {
-          ret += measure.height;
+          if (PreloadItemText.isJapanease(c)) {
+            ret += wordWidth;
+          } else {
+            ret += measure.height;
+          }
         }
       }
       return ret;
@@ -1243,7 +1248,7 @@ PreloadItemText = (function(superClass) {
       ref = columnText.split('');
       for (k = 0, len = ref.length; k < len; k++) {
         c = ref[k];
-        measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
+        measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily);
         r = measure.height;
         if (ret < r) {
           ret = r;
@@ -1370,7 +1375,7 @@ PreloadItemText = (function(superClass) {
         ref4 = column[j].split('');
         for (idx = s = 0, len1 = ref4.length; s < len1; idx = ++s) {
           c = ref4[idx];
-          measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily, wordWidth);
+          measure = _calcWordMeasure.call(this, c, fontSize, this.fontFamily);
           _setTextAlpha.call(this, context, idx + wordSum + 1, writingLength);
           if (_isWordSmallJapanease.call(this, c)) {
             context.fillText(c, widthLine + (wordWidth - measure.width) * 0.5, h + wordWidth + hl - (wordWidth - measure.height));
@@ -1384,12 +1389,12 @@ PreloadItemText = (function(superClass) {
             context.restore();
             hl += measure.width;
           } else {
-            context.fillText(c, widthLine, h + wordWidth + hl);
             if (PreloadItemText.isJapanease(c)) {
               hl += wordWidth;
             } else {
               hl += measure.height;
             }
+            context.fillText(c, widthLine, h + hl);
           }
         }
         wordSum += column[j].length;
@@ -1398,21 +1403,21 @@ PreloadItemText = (function(superClass) {
     return context.restore();
   };
 
-  _calcWordMeasure = function(char, fontSize, fontFamily, wordSize) {
+  _calcWordMeasure = function(char, fontSize, fontFamily) {
     var fontSizeKey, mi, nCanvas, nContext, writedImage;
     fontSizeKey = "" + fontSize;
     if ((this._fontMeatureCache[fontSizeKey] != null) && (this._fontMeatureCache[fontSizeKey][fontFamily] != null) && (this._fontMeatureCache[fontSizeKey][fontFamily][char] != null)) {
       return this._fontMeatureCache[fontSizeKey][fontFamily][char];
     }
     nCanvas = document.createElement('canvas');
-    nCanvas.width = wordSize;
-    nCanvas.height = wordSize;
+    nCanvas.width = 500;
+    nCanvas.height = 500;
     nContext = nCanvas.getContext('2d');
     nContext.font = fontSize + "px " + fontFamily;
     nContext.textBaseline = 'top';
     nContext.fillStyle = nCanvas.strokeStyle = '#ff0000';
     nContext.fillText(char, 0, 0);
-    writedImage = nContext.getImageData(0, 0, wordSize, wordSize);
+    writedImage = nContext.getImageData(0, 0, nCanvas.width, nCanvas.height);
     mi = _measureImage.call(this, writedImage);
     if (this._fontMeatureCache[fontSizeKey] == null) {
       this._fontMeatureCache[fontSizeKey] = {};
@@ -1429,10 +1434,10 @@ PreloadItemText = (function(superClass) {
     w = _writedImage.width;
     x = 0;
     y = 0;
-    minX = 0;
-    maxX = 1;
-    minY = 0;
-    maxY = 1;
+    minX = 9999;
+    maxX = 0;
+    minY = 9999;
+    maxY = 0;
     for (i = k = 0, ref = _writedImage.data.length - 1; k <= ref; i = k += 4) {
       if (_writedImage.data[i + 0] > 128) {
         if (x < minX) {
@@ -1498,7 +1503,7 @@ PreloadItemText = (function(superClass) {
         h = height;
       }
       fontSize = (Math.sqrt(Math.pow(newLineCount, 2) + (w * 4 * (a + 1)) / h) - newLineCount) * h / ((a + 1) * 2);
-      fontSize = parseInt(fontSize / 1.5);
+      fontSize = parseInt(fontSize / 1.8);
       if (fontSize < 1) {
         fontSize = 1;
       }

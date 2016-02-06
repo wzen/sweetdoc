@@ -946,6 +946,7 @@ class PreloadItemText extends CanvasItemBase
   _drawText = (context, text, x, y, width, height, fontSize, writingLength = text.length) ->
     context.save()
     context.font = "#{fontSize}px #{@fontFamily}"
+    context.textBaseline = 'bottom'
 
     wordWidth = context.measureText('あ').width
 
@@ -968,16 +969,19 @@ class PreloadItemText extends CanvasItemBase
     _calcVerticalColumnHeight = (columnText, fontSize) ->
       ret = 0
       for c in columnText.split('')
-        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily, wordWidth)
+        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
         if _isWordNeedRotate(c)
           ret += measure.width
         else
-          ret += measure.height
+          if PreloadItemText.isJapanease(c)
+            ret += wordWidth
+          else
+            ret += measure.height
       return ret
     _calcHorizontalColumnHeightMax = (columnText, fontSize) ->
       ret = 0
       for c in columnText.split('')
-        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily, wordWidth)
+        measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
         r = measure.height
         if ret < r
           ret = r
@@ -1074,7 +1078,7 @@ class PreloadItemText extends CanvasItemBase
         context.beginPath()
         hl = 0
         for c, idx in column[j].split('')
-          measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily, wordWidth)
+          measure = _calcWordMeasure.call(@, c, fontSize, @fontFamily)
           _setTextAlpha.call(@, context, idx + wordSum + 1, writingLength)
           if _isWordSmallJapanease.call(@, c)
             # 小文字は右上に寄せる
@@ -1094,28 +1098,28 @@ class PreloadItemText extends CanvasItemBase
             context.restore()
             hl += measure.width
           else
-            context.fillText(c, widthLine, h + wordWidth + hl)
             if PreloadItemText.isJapanease(c)
               hl += wordWidth
             else
               hl += measure.height
+            context.fillText(c, widthLine, h + hl)
         wordSum += column[j].length
     context.restore()
 
-  _calcWordMeasure = (char, fontSize, fontFamily, wordSize) ->
+  _calcWordMeasure = (char, fontSize, fontFamily) ->
     fontSizeKey = "#{fontSize}"
     if @_fontMeatureCache[fontSizeKey]? && @_fontMeatureCache[fontSizeKey][fontFamily]? && @_fontMeatureCache[fontSizeKey][fontFamily][char]?
       return @_fontMeatureCache[fontSizeKey][fontFamily][char]
 
     nCanvas = document.createElement('canvas')
-    nCanvas.width = wordSize
-    nCanvas.height = wordSize
+    nCanvas.width = 500
+    nCanvas.height = 500
     nContext = nCanvas.getContext('2d')
     nContext.font = "#{fontSize}px #{fontFamily}"
     nContext.textBaseline = 'top'
     nContext.fillStyle = nCanvas.strokeStyle = '#ff0000'
     nContext.fillText(char, 0, 0)
-    writedImage = nContext.getImageData(0, 0, wordSize, wordSize)
+    writedImage = nContext.getImageData(0, 0, nCanvas.width, nCanvas.height)
     mi = _measureImage.call(@, writedImage)
 
 #    if window.debug
@@ -1133,10 +1137,10 @@ class PreloadItemText extends CanvasItemBase
     w = _writedImage.width
     x = 0
     y = 0
-    minX = 0
-    maxX = 1
-    minY = 0
-    maxY = 1
+    minX = 9999
+    maxX = 0
+    minY = 9999
+    maxY = 0
     for i in [0..(_writedImage.data.length - 1)] by 4
       if _writedImage.data[i + 0] > 128
         if x < minX
@@ -1198,7 +1202,7 @@ class PreloadItemText extends CanvasItemBase
 #        console.log('fontSize:' + fontSize)
 
       # FontSizeは暫定
-      fontSize = parseInt(fontSize / 1.5)
+      fontSize = parseInt(fontSize / 1.8)
       if fontSize < 1
         fontSize = 1
       if @showBalloon && fontSize >= 6
