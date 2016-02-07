@@ -81,6 +81,7 @@ GEM
     execjs (2.6.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
+    geoip (1.6.1)
     gon (6.0.1)
       actionpack (>= 3.0)
       json
@@ -287,6 +288,7 @@ DEPENDENCIES
   coffee-rails (= 4.1.0)
   devise (= 3.5.3)
   dotenv-rails
+  geoip
   gon (= 6.0.1)
   i18n (= 0.7.0)
   i18n-js (= 2.1.2)

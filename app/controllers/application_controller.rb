@@ -126,6 +126,9 @@ class ApplicationController < ActionController::Base
     return if do_through
 
     locale = params[:locale] || locale_from_accept_language || locale_from_ip
+    if locale.blank?
+      locale = 'en'
+    end
     I18n.locale = (I18n::available_locales.include? locale.to_sym) ? locale.to_sym : I18n.default_locale
   end
 
@@ -153,7 +156,10 @@ class ApplicationController < ActionController::Base
   end
 
   def locale_from_accept_language
-    request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+    if request.env['HTTP_ACCEPT_LANGUAGE'].present?
+      request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+    end
+    nil
   end
 
   def locale_from_ip

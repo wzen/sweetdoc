@@ -113,5 +113,7 @@ gem 'dotenv-rails'
 # For Batch
 gem 'whenever', '0.9.4'
 
+gem 'geoip'
+
 #gem 'ruby-debug-ide'
 
