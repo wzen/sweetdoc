@@ -23,7 +23,6 @@ Handwrite = (function() {
     lastY = null;
     this.enableMoveEvent = true;
     this.queueLoc = null;
-    this.zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
     MOVE_FREQUENCY = 7;
     _windowToCanvas = function(canvas, x, y) {
       var bbox;
@@ -53,6 +52,7 @@ Handwrite = (function() {
         drawingCanvas.onmousedown = function(e) {
           var loc;
           if (e.which === 1) {
+            _this.zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1;
             loc = _calcCanvasLoc.call(_this, e);
             _saveLastLoc(loc);
             _this.click = true;

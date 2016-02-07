@@ -669,13 +669,13 @@ class PreloadItemText extends CanvasItemBase
       return
 
     _balloonStyle = (context) ->
-      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.9)"
-      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.9)"
+      context.fillStyle = "rgba(#{@balloonColor.r},#{@balloonColor.g},#{@balloonColor.b}, 0.95)"
+      context.strokeStyle = "rgba(#{@balloonBorderColor.r},#{@balloonBorderColor.g},#{@balloonBorderColor.b}, 0.95)"
       # 影
       context.shadowColor = 'rgba(0,0,0,0.3)'
-      context.shadowOffsetX = 2
-      context.shadowOffsetY = 2
-      context.shadowBlur = 3
+      context.shadowOffsetX = 3
+      context.shadowOffsetY = 3
+      context.shadowBlur = 4
 
     _drawArc = ->
       # 円
@@ -807,8 +807,8 @@ class PreloadItemText extends CanvasItemBase
 
     _drawThink = =>
       # 考え中
-      num = 10
-      diff = 40.0
+      num = 8
+      diff = 20.0
       radiusX = (width - diff) / 2
       radiusY = (height - diff) / 2
       cx = x + (width) / 2
@@ -833,10 +833,10 @@ class PreloadItemText extends CanvasItemBase
         endX   = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx)
         endY   = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy)
         # 制御値
-        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random * 0.8, cx)
-        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random * 0.8, cy)
-        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.8, cx)
-        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.8, cy)
+        cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random * 0.7, cx)
+        cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random * 0.7, cy)
+        cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.7, cx)
+        cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.7, cy)
 
         # 開始点と最終点のズレを調整する
         if i == 0

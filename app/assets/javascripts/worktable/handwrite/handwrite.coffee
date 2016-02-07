@@ -15,7 +15,6 @@ class Handwrite
     lastX = null; lastY = null
     @enableMoveEvent = true
     @queueLoc = null
-    @zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
     MOVE_FREQUENCY = 7
 
     # ウィンドウ座標からCanvas座標に変換する
@@ -28,7 +27,6 @@ class Handwrite
 
     # 手書きイベントを設定
     do =>
-
       # 画面のウィンドウ座標からCanvas座標に変換
       # @param [Array] e ウィンドウ座標
       # @return [Array] Canvas座標
@@ -50,6 +48,7 @@ class Handwrite
       # @param [Array] e ウィンドウ座標
       drawingCanvas.onmousedown = (e) =>
         if e.which == 1 #左クリック
+          @zindex = Constant.Zindex.EVENTBOTTOM + window.scrollInside.children().length + 1
           loc = _calcCanvasLoc.call(@, e)
           _saveLastLoc(loc)
           @click = true

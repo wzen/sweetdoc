@@ -890,12 +890,12 @@ PreloadItemText = (function(superClass) {
       return;
     }
     _balloonStyle = function(context) {
-      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.9)";
-      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.9)";
+      context.fillStyle = "rgba(" + this.balloonColor.r + "," + this.balloonColor.g + "," + this.balloonColor.b + ", 0.95)";
+      context.strokeStyle = "rgba(" + this.balloonBorderColor.r + "," + this.balloonBorderColor.g + "," + this.balloonBorderColor.b + ", 0.95)";
       context.shadowColor = 'rgba(0,0,0,0.3)';
-      context.shadowOffsetX = 2;
-      context.shadowOffsetY = 2;
-      return context.shadowBlur = 3;
+      context.shadowOffsetX = 3;
+      context.shadowOffsetY = 3;
+      return context.shadowBlur = 4;
     };
     _drawArc = function() {
       var diff;
@@ -1033,8 +1033,8 @@ PreloadItemText = (function(superClass) {
     _drawThink = (function(_this) {
       return function() {
         var addDeg, beginX, beginY, cp1x, cp1y, cp2x, cp2y, cx, cy, deg, diff, endX, endY, i, k, num, punkLineMax, punkLineMin, radiusX, radiusY, random, ref;
-        num = 10;
-        diff = 40.0;
+        num = 8;
+        diff = 20.0;
         radiusX = (width - diff) / 2;
         radiusY = (height - diff) / 2;
         cx = x + width / 2;
@@ -1056,10 +1056,10 @@ PreloadItemText = (function(superClass) {
           beginY = PreloadItemText.getCircumPos.y(deg, radiusY, cy);
           endX = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX, cx);
           endY = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY, cy);
-          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random * 0.8, cx);
-          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random * 0.8, cy);
-          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.8, cx);
-          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.8, cy);
+          cp1x = PreloadItemText.getCircumPos.x(deg, radiusX + random * 0.7, cx);
+          cp1y = PreloadItemText.getCircumPos.y(deg, radiusY + random * 0.7, cy);
+          cp2x = PreloadItemText.getCircumPos.x(deg + addDeg, radiusX + random * 0.7, cx);
+          cp2y = PreloadItemText.getCircumPos.y(deg + addDeg, radiusY + random * 0.7, cy);
           if (i === 0) {
             context.moveTo(beginX, beginY);
             context.arcTo(beginX, beginY, endX, endY, punkLineMax);
