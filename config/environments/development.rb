@@ -45,15 +45,23 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  # Memcached
-  #config.cache_store = :dalli_store
   # Redis
   config.cache_store = :redis_store, {
-      host: 'localhost',
-      port: 6379,
-      password: 'Hf5rGsF1NOerSWFJ',
-      db: 0,
+      host: ENV['REDIS_DEVELOPMENT_SERVER'],
+      port: ENV['REDIS_DEVELOPMENT_PORT'],
+      password: ENV['REDIS_DEVELOPMENT_PASS'],
+      db: ENV['REDIS_DEVELOPMENT_DBNUM'],
       namespace: 'cache'
+  }
+  config.session_store :redis_store, {
+      servers: {
+          host: ENV['REDIS_DEVELOPMENT_SERVER'],
+          port: ENV['REDIS_DEVELOPMENT_PORT'],
+          password: ENV['REDIS_DEVELOPMENT_PASS'],
+          db: ENV['REDIS_DEVELOPMENT_DBNUM'],
+          namespace: 'session'
+      },
+      :expire_after => 1.month
   }
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
@@ -71,17 +79,5 @@ Rails.application.configure do
     Devise::UnlocksController.layout "user"
     Devise::PasswordsController.layout "user"
   end
-
-  # セッションにRedisを使用
-  config.session_store :redis_store, {
-      servers: {
-          host: 'localhost',
-          port: 6379,
-          password: 'Hf5rGsF1NOerSWFJ',
-          db: 0,
-          namespace: 'session'
-      },
-      :expire_after => 1.month
-  }
 
 end

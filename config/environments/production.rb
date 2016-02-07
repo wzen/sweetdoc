@@ -81,15 +81,23 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # Memcached
-  #config.cache_store = :dalli_store
   # Redis
   config.cache_store = :redis_store, {
-      host: 'localhost',
-      port: 6379,
-      password: 'Hf5rGsF1NOerSWFJ',
-      db: 0,
+      host: ENV['REDIS_PRODUCTION_SERVER'],
+      port: ENV['REDIS_PRODUCTION_PORT'],
+      password: ENV['REDIS_PRODUCTION_PASS'],
+      db: ENV['REDIS_PRODUCTION_DBNUM'],
       namespace: 'cache'
+  }
+  config.session_store :redis_store, {
+      servers: {
+          host: ENV['REDIS_PRODUCTION_SERVER'],
+          port: ENV['REDIS_PRODUCTION_PORT'],
+          password: ENV['REDIS_PRODUCTION_PASS'],
+          db: ENV['REDIS_PRODUCTION_DBNUM'],
+          namespace: 'session'
+      },
+      :expire_after => 1.month
   }
 
   # FIXME:
@@ -129,18 +137,5 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   config.action_mailer.raise_delivery_errors = false
-
-  # セッションにRedisを使用
-  # TODO: Redis用サーバが作成されたら修正
-  config.session_store :redis_store, {
-      servers: {
-          host: 'localhost',
-          port: 6379,
-          password: 'Hf5rGsF1NOerSWFJ',
-          db: 0,
-          namespace: 'session'
-      },
-      :expire_after => 1.month
-  }
 
 end
