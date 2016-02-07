@@ -1,5 +1,5 @@
 <div class="notice_login_caption">
   現在ゲストユーザーとして使用中です。<br/>
-  ゲストユーザーでは、30分間接続にブランクが発生した場合<br/>
+  ゲストユーザーでは、<%= ENV['GUEST_SESSION_EXPIRE_MINUTES'] %>分間接続にブランクが発生した場合<br/>
   データが削除されますのでご注意ください。
 </div>

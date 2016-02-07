@@ -36,11 +36,6 @@ class ApplicationController < ActionController::Base
 
   def current_or_guest_user
     if @_current_user
-      if session[:guest_user_id] && session[:guest_user_id] != @_current_user.id
-        # Guestキャッシュ削除
-        guest_user(with_retry = false).try(:destroy)
-        session[:guest_user_id] = nil
-       end
       return @_current_user
     else
       if session[:user_id]
@@ -49,7 +44,7 @@ class ApplicationController < ActionController::Base
           @_current_user  = u
         else
           # セッション削除
-          reset_session
+          destroy_current_user
           @_current_user = guest_user
         end
       else
@@ -61,6 +56,10 @@ class ApplicationController < ActionController::Base
 
   # 現在のセッションと関連づく guest_user オブジェクトを探す
   def guest_user(with_retry = true)
+    if session[:guest_user_id].present? && session[:guest_expire_date] < Time.now
+      # 期限が切れている場合、セッション削除してゲスト再生成
+      destroy_current_user
+    end
     @cached_guest_user ||= User.find(session[:guest_user_id] ||= create_guest_user.id)
   rescue ActiveRecord::RecordNotFound # if session[:guest_user_id] invalid
     session[:guest_user_id] = nil
@@ -81,17 +80,25 @@ class ApplicationController < ActionController::Base
     guest = User.new_guest
     guest.save!(:validate => false)
     session[:guest_user_id] = guest.id
+    session[:guest_expire_date] = Time.now + ENV['GUEST_SESSION_EXPIRE_MINUTES'].to_i.minutes
     return guest
   end
 
   def set_current_user(user)
     @_current_user = user
     session[:user_id] = user.id
+    unless user.guest && session[:guest_user_id].present?
+      # Guestキャッシュ削除
+      guest_user(with_retry = false).try(:destroy)
+      session[:guest_user_id] = nil
+    end
   end
 
   def destroy_current_user
     @_current_user = nil
     session[:user_id] = nil
+    session[:guest_user_id] = nil
+    reset_session
   end
 
   def store_location

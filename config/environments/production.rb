@@ -84,7 +84,13 @@ Rails.application.configure do
   # Memcached
   #config.cache_store = :dalli_store
   # Redis
-  config.cache_store = :redis_store
+  config.cache_store = :redis_store, {
+      host: 'localhost',
+      port: 6379,
+      password: 'Hf5rGsF1NOerSWFJ',
+      db: 0,
+      namespace: 'cache'
+  }
 
   # FIXME:
   #config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
@@ -123,5 +129,18 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   config.action_mailer.raise_delivery_errors = false
+
+  # セッションにRedisを使用
+  # TODO: Redis用サーバが作成されたら修正
+  config.session_store :redis_store, {
+      servers: {
+          host: 'localhost',
+          port: 6379,
+          password: 'Hf5rGsF1NOerSWFJ',
+          db: 0,
+          namespace: 'session'
+      },
+      :expire_after => 1.month
+  }
 
 end

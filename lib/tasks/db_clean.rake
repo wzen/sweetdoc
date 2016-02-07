@@ -3,7 +3,7 @@ namespace :db_clean do
   task :erase_user_session => :environment do
     begin
       ActiveRecord::Base.transaction do
-        from = Time.now.advance(:minutes => -(ENV['SESSION_EXPIRE_MINUTES']).to_i)
+        from = Time.now.advance(:minutes => -(ENV['GUEST_SESSION_EXPIRE_MINUTES']).to_i)
         p from
         guests = User.where("guest = ? AND updated_at < ?", true, from)
         if guests.present? && guests.length > 0
